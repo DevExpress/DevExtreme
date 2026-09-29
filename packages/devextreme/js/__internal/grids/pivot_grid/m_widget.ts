@@ -310,15 +310,6 @@ class PivotGrid extends Widget {
     });
   }
 
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    this._deprecatedOptions = {
-      ...this._deprecatedOptions,
-      // @ts-expect-error ts-error
-      'loadPanel.indicatorSrc': { since: '25.2', alias: 'loadPanel.indicatorOptions.src' },
-    };
-  }
-
   _updateCalculatedOptions(fields) {
     const that = this;
     each(fields, (_, field) => {
@@ -399,8 +390,6 @@ class PivotGrid extends Widget {
 
     super._init();
     that._initDataController();
-
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
 
     that._scrollLeft = that._scrollTop = null;
     that._initActions();

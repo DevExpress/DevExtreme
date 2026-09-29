@@ -1,7 +1,7 @@
-const $ = require('jquery');
-const dblclickEvent = require('common/core/events/dblclick');
-const { dblClick } = require('__internal/events/dblclick');
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import dblclickEvent from 'common/core/events/dblclick';
+import { dblClick } from '__internal/events/dblclick';
+import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {
     const markup =

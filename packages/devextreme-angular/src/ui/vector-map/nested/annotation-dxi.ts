@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
 import type { dxVectorMapAnnotationConfig } from 'devextreme/viz/vector_map';
 
@@ -284,7 +279,6 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
         return 'annotations';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -305,11 +299,9 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

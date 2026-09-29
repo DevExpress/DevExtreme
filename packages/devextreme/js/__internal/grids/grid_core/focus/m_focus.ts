@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
+import type { Callback } from '@js/core/utils/callbacks';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
@@ -9,9 +10,11 @@ import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/data_controller';
+import type { DataChange } from '../data_controller/types';
 import type { EditingController } from '../editing/m_editing';
 import { isNewRowTempKey } from '../editing/m_editing_utils';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
+import { combineFilters } from '../filter/utils';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import core from '../m_modules';
 import type { ModuleType } from '../m_types';
@@ -20,11 +23,18 @@ import type { RowsView } from '../views/m_rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
 import type { FocusDataSourceControllerExtension } from './extenders/focus_data_source_controller';
 import { UiGridCoreFocusUtils } from './m_focus_utils';
+import type { FocusDataControllerExtension } from './types';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
 const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
 const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+
+type FocusDataController = DataController
+& Partial<VirtualScrollingDataControllerExtension>
+& FocusDataControllerExtension;
+
+type FocusDataSourceController = DataSourceController & FocusDataSourceControllerExtension;
 
 export class FocusController extends core.ViewController {
   // TODO getController
@@ -35,17 +45,121 @@ export class FocusController extends core.ViewController {
     return this.getController('keyboardNavigation');
   }
 
-  private getDataController(): DataController
-  & Partial<VirtualScrollingDataControllerExtension> {
+  private getDataController(): FocusDataController {
+    // @ts-expect-error
     return this.getController('data');
   }
 
-  private getDataSourceController(): DataSourceController {
+  private getDataSourceController(): FocusDataSourceController {
+    // @ts-expect-error
     return this.getController('dataSource');
   }
 
-  public init() {
+  public init(): void {
     this.component._optionsByReference.focusedRowKey = true;
+
+    const dataController = this.getDataController();
+    dataController.afterChanged.remove(this.handleDataChanged);
+    dataController.afterChanged.add(this.handleDataChanged);
+
+    const lastChange = dataController.getLastChange();
+    if (lastChange) {
+      this.handleDataChanged(lastChange);
+    }
+  }
+
+  public handleDataChanged = (e: DataChange): void => {
+    const dataController = this.getDataController();
+    const dataSourceController = this.getDataSourceController();
+    const forceUpdateFocusedRow = dataSourceController.consumeDataPushed();
+
+    if (!this.option('focusedRowEnabled') || !dataSourceController.hasAdapter()) {
+      return;
+    }
+
+    const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
+    const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.includes('remove');
+    const isRefreshWithItems = e.changeType === 'refresh' && !!e.items?.length;
+    const isAppendOrPrepend = e.changeType === 'append' || e.changeType === 'prepend';
+
+    if (forceUpdateFocusedRow && dataController.isEmpty()) {
+      this._resetFocusedRow();
+    } else if (isRefreshWithItems || isPartialUpdateWithDeleting) {
+      dataController._updatePageIndexes();
+      this.updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
+    } else if (isAppendOrPrepend) {
+      dataController._updatePageIndexes();
+    } else if (isPartialUpdate) {
+      this.updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
+      this.resetStaleFocusedRowAfterPartialUpdate(e);
+    }
+  };
+
+  private resetStaleFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
+    const focusedRowKey = this.option('focusedRowKey');
+
+    if (!isDefined(focusedRowKey)) {
+      return;
+    }
+
+    const focusedRowIndex = this.getDataController().getRowIndexByKey(focusedRowKey);
+    const isFocusedRowVisible = focusedRowIndex >= 0;
+    const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
+
+    if (isFocusedRowVisible && isFocusedRowInChange) {
+      this.updateFocusedRow({ focusedRowKey, preventScroll: true });
+    }
+  }
+
+  private updateFocusedRowIfNeeded(e: DataChange, forceUpdate = false): void {
+    const operationTypes = e.operationTypes || {};
+    const {
+      reload, fullReload, pageIndex, paging,
+    } = operationTypes;
+    const isVirtualScrolling = this.getKeyboardController()._isVirtualScrolling();
+    const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
+    const focusedRowKey = this.option('focusedRowKey');
+    const isAutoNavigate = this.isAutoNavigateToFocusedRow();
+    const isReload = reload && pageIndex === false;
+    const rowIndexByKey = this.getDataController().getRowIndexByKey(focusedRowKey);
+
+    switch (true) {
+      case forceUpdate: {
+        this._focusRowByKeyOrIndex();
+        break;
+      }
+      case isReload && !fullReload && isDefined(focusedRowKey): {
+        this._navigateToRow(focusedRowKey, true)
+          .done((focusedRowIndex) => {
+            if (focusedRowIndex < 0) {
+              this._focusRowByIndex(undefined, operationTypes);
+            }
+          });
+        break;
+      }
+      case pagingWithoutVirtualScrolling && isAutoNavigate: {
+        const focusedRowIndex = this.option('focusedRowIndex')!;
+        const isValidRowIndexByKey = rowIndexByKey >= 0;
+        const isValidFocusedRowIndex = focusedRowIndex >= 0;
+        const isSameRowIndex = focusedRowIndex === rowIndexByKey;
+
+        if (isValidFocusedRowIndex && (isSameRowIndex || !isValidRowIndexByKey)) {
+          this._focusRowByIndex(focusedRowIndex, operationTypes);
+        }
+        break;
+      }
+      case pagingWithoutVirtualScrolling && !isAutoNavigate && (rowIndexByKey < 0): {
+        this.option('focusedRowIndex', -1);
+        break;
+      }
+      case operationTypes.fullReload: {
+        this._focusRowByKeyOrIndex();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   }
 
   public optionChanged(args) {
@@ -576,21 +690,16 @@ export const columns = (Base: ModuleType<ColumnsController>) => class FocusColum
 export const focusDataControllerExtender = (
   Base: ModuleType<DataController & Partial<VirtualScrollingDataControllerExtension>>,
 ) => class FocusDataControllerExtender extends Base {
-  protected declare dataSourceController: DataSourceController
-  & FocusDataSourceControllerExtension;
-
   private _lastRenderingPageIndex?: number;
 
   private _isPagingByRendering?: boolean;
 
-  protected _focusController!: FocusController;
+  private lastChange?: DataChange;
 
-  protected keyboardNavigationController!: KeyboardNavigationController;
+  public afterChanged!: Callback<[DataChange]>;
 
-  public init(): void {
-    this._focusController = this.getController('focus');
-    this.keyboardNavigationController = this.getController('keyboardNavigation');
-    super.init();
+  protected callbackNames(): string[] {
+    return [...super.callbackNames(), 'afterChanged'];
   }
 
   protected _applyChange(change) {
@@ -600,50 +709,17 @@ export const focusDataControllerExtender = (
     return super._applyChange.apply(this, arguments);
   }
 
-  protected _fireChanged(e) {
+  protected _fireChanged(e: DataChange): void {
     super._fireChanged(e);
-
-    const forceUpdateFocusedRow = this.dataSourceController.consumeDataPushed();
-
-    if (this.option('focusedRowEnabled') && this._dataSource) {
-      const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
-      const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
-      const isRefreshWithItems = e.changeType === 'refresh' && !!e.items.length;
-      const isAppendOrPrepend = e.changeType === 'append' || e.changeType === 'prepend';
-
-      if (forceUpdateFocusedRow && this.isEmpty()) {
-        this._focusController._resetFocusedRow();
-      } else if (isRefreshWithItems || isPartialUpdateWithDeleting) {
-        this._updatePageIndexes();
-        this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
-      } else if (isAppendOrPrepend) {
-        this._updatePageIndexes();
-      } else if (isPartialUpdate) {
-        this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
-        // on a partial render the previously focused row may not be re-rendered, so its
-        // focused class survives and two rows look focused; reset the focused row to drop it
-        this._resetStaleFocusedRowAfterPartialUpdate(e);
-      }
-    }
+    this.lastChange = e;
+    this.afterChanged.fire(e);
   }
 
-  private _resetStaleFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
-    const focusedRowKey = this.option('focusedRowKey');
-
-    if (!isDefined(focusedRowKey)) {
-      return;
-    }
-
-    const focusedRowIndex = this.getRowIndexByKey(focusedRowKey);
-    const isFocusedRowVisible = focusedRowIndex >= 0;
-    const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
-
-    if (isFocusedRowVisible && isFocusedRowInChange) {
-      this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
-    }
+  public getLastChange(): DataChange | undefined {
+    return this.lastChange;
   }
 
-  private _updatePageIndexes() {
+  public _updatePageIndexes() {
     const prevRenderingPageIndex = this._lastRenderingPageIndex || 0;
     const renderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0;
 
@@ -653,57 +729,6 @@ export const focusDataControllerExtender = (
 
   private isPagingByRendering() {
     return this._isPagingByRendering;
-  }
-
-  private _updateFocusedRowIfNeeded(e, forceUpdate = false) {
-    const operationTypes = e.operationTypes || {};
-    const {
-      reload, fullReload, pageIndex, paging,
-    } = operationTypes;
-    const isVirtualScrolling = this.keyboardNavigationController._isVirtualScrolling();
-    const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
-    const focusedRowKey = this.option('focusedRowKey');
-    const isAutoNavigate = this._focusController.isAutoNavigateToFocusedRow();
-    const isReload = reload && pageIndex === false;
-    const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
-
-    switch (true) {
-      case forceUpdate: {
-        this._focusController._focusRowByKeyOrIndex();
-        break;
-      }
-      case isReload && !fullReload && isDefined(focusedRowKey): {
-        this._focusController._navigateToRow(focusedRowKey, true)
-          .done((focusedRowIndex) => {
-            if (focusedRowIndex < 0) {
-              this._focusController._focusRowByIndex(undefined, operationTypes);
-            }
-          });
-        break;
-      }
-      case pagingWithoutVirtualScrolling && isAutoNavigate: {
-        const focusedRowIndex = this.option('focusedRowIndex')!;
-        const isValidRowIndexByKey = rowIndexByKey >= 0;
-        const isValidFocusedRowIndex = focusedRowIndex >= 0;
-        const isSameRowIndex = focusedRowIndex === rowIndexByKey;
-
-        if (isValidFocusedRowIndex && (isSameRowIndex || !isValidRowIndexByKey)) {
-          this._focusController._focusRowByIndex(focusedRowIndex, operationTypes);
-        }
-        break;
-      }
-      case pagingWithoutVirtualScrolling && !isAutoNavigate && (rowIndexByKey < 0): {
-        this.option('focusedRowIndex', -1);
-        break;
-      }
-      case operationTypes.fullReload: {
-        this._focusController._focusRowByKeyOrIndex();
-        break;
-      }
-      default: {
-        break;
-      }
-    }
   }
 
   /**
@@ -722,7 +747,7 @@ export const focusDataControllerExtender = (
   }
 
   private getGlobalRowIndexByKey(key) {
-    if (this._dataSource!.group()) {
+    if (this.dataSourceController.getAdapter()!.group()) {
       // @ts-expect-error
       return this._calculateGlobalRowIndexByGroupedData(key);
     }
@@ -733,7 +758,7 @@ export const focusDataControllerExtender = (
   protected _calculateGlobalRowIndexByFlatData(key, groupFilter, useGroup) {
     // @ts-expect-error
     const deferred = new Deferred();
-    const dataSource = this._dataSource!;
+    const dataSourceAdapter = this.dataSourceController.getAdapter()!;
 
     if (Array.isArray(key) || isNewRowTempKey(key)) {
       return deferred.resolve(-1).promise();
@@ -741,25 +766,25 @@ export const focusDataControllerExtender = (
 
     let filter = this._generateFilterByKey(key);
 
-    dataSource.customLoader.load({
+    dataSourceAdapter.customLoader.load({
       filter: this._concatWithCombinedFilter(filter),
       skip: 0,
       take: 1,
     }).done(({ data }) => {
-      if (this._dataSource !== dataSource) {
+      if (this.dataSourceController.getAdapter() !== dataSourceAdapter) {
         deferred.resolve(-1);
         return;
       }
       if (data.length > 0) {
         filter = this._generateOperationFilterByKey(key, data[0], useGroup);
 
-        dataSource.customLoader.load({
+        dataSourceAdapter.customLoader.load({
           filter: this._concatWithCombinedFilter(filter, groupFilter),
           skip: 0,
           take: 1,
           requireTotalCount: true,
         }).done(({ extra }) => {
-          if (this._dataSource !== dataSource) {
+          if (this.dataSourceController.getAdapter() !== dataSourceAdapter) {
             deferred.resolve(-1);
             return;
           }
@@ -775,7 +800,7 @@ export const focusDataControllerExtender = (
 
   protected _concatWithCombinedFilter(filter, groupFilter?) {
     const combinedFilter = this.getCombinedFilter();
-    return gridCoreUtils.combineFilters([filter, combinedFilter, groupFilter]);
+    return combineFilters([filter, combinedFilter, groupFilter]);
   }
 
   private _generateBooleanFilter(selector, value, sortInfo) {
@@ -797,17 +822,17 @@ export const focusDataControllerExtender = (
   // TODO Vinogradov: Move this method implementation to the UiGridCoreFocusUtils
   // and cover with unit tests.
   private _generateOperationFilterByKey(key, rowData, useGroup) {
-    const that = this;
-    const dateSerializationFormat = that.option('dateSerializationFormat');
-    const isRemoteFiltering = that._dataSource!.remoteOperations().filtering;
-    const isRemoteSorting = that._dataSource!.remoteOperations().sorting;
+    const dateSerializationFormat = this.option('dateSerializationFormat');
+    const remoteOperations = this.dataSourceController.remoteOperations();
+    const isRemoteFiltering = remoteOperations.filtering;
+    const isRemoteSorting = remoteOperations.sorting;
 
-    let filter = that._generateFilterByKey(key, '<');
+    let filter = this._generateFilterByKey(key, '<');
     // @ts-expect-error
-    let sort = that._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
+    let sort = this._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
 
     if (useGroup) {
-      const group = that._columnsController.getGroupDataSourceParameters(!isRemoteFiltering);
+      const group = this._columnsController.getGroupDataSourceParameters(!isRemoteFiltering);
       if (group) {
         sort = sort ? group.concat(sort) : group;
       }
@@ -822,14 +847,14 @@ export const focusDataControllerExtender = (
           {
             isRemoteFiltering,
             dateSerializationFormat,
-            getSelector: (selector) => that._columnsController.columnOption(selector, 'selector'),
+            getSelector: (selector) => this._columnsController.columnOption(selector, 'selector'),
           },
         );
 
         filter = [[selector, '=', safeValue], 'and', filter];
 
         if (rawValue === null || isBoolean(rawValue)) {
-          const booleanFilter = that._generateBooleanFilter(selector, safeValue, desc);
+          const booleanFilter = this._generateBooleanFilter(selector, safeValue, desc);
 
           if (booleanFilter) {
             filter = [booleanFilter, 'or', filter];
@@ -861,7 +886,7 @@ export const focusDataControllerExtender = (
   }
 
   protected _generateFilterByKey(key, operation?) {
-    const dataSourceKey = this._dataSource!.key();
+    const dataSourceKey = this.dataSourceController.getAdapter()!.key();
     let filter: any = [];
 
     if (!operation) {

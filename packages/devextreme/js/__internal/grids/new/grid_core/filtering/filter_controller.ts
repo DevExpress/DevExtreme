@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { computed } from '@ts/core/state_manager/index';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import { getColumnByIndexOrName } from '@ts/grids/new/grid_core/columns_controller/utils';
 import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/controller';
@@ -96,7 +96,7 @@ export class FilterController {
         this.filterSyncEnabled.value,
       );
 
-      return gridCoreUtils.combineFilters(appliedFilterExpressions) ?? null;
+      return combineFilters(appliedFilterExpressions) ?? null;
     },
   );
 

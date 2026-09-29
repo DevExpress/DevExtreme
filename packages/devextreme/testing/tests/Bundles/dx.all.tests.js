@@ -1,6 +1,6 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('bundles/dx.all.js');
+import 'bundles/dx.all.js';
 
 QUnit.test('DevExpress namespaces', function(assert) {
     const namespaces = [
@@ -19,10 +19,10 @@ QUnit.test('DevExpress namespaces', function(assert) {
     assert.ok(DevExpress.utils.readyCallbacks, 'readyCallbacks namespace');
 });
 
-require('./bundlesParts/core.tests.js');
-require('./bundlesParts/events.tests.js');
-require('./bundlesParts/data.tests.js');
-require('./bundlesParts/data.odata.tests.js');
-require('./bundlesParts/animation.tests.js');
-require('./bundlesParts/widgets-base.tests.js');
-require('./bundlesParts/widgets-web.tests.js');
+import './bundlesParts/core.tests.js';
+import './bundlesParts/events.tests.js';
+import './bundlesParts/data.tests.js';
+import './bundlesParts/data.odata.tests.js';
+import './bundlesParts/animation.tests.js';
+import './bundlesParts/widgets-base.tests.js';
+import './bundlesParts/widgets-web.tests.js';

@@ -97,7 +97,7 @@ interface AjaxRequestOptions {
   url: string;
   data: Record<string, unknown> | string;
   dataType: string;
-  jsonp: string | boolean | undefined;
+  jsonp: string | false | undefined;
   method: string;
   async: boolean;
   timeout: number;

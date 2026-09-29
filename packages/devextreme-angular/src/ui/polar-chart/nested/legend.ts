@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DashStyle, LegendItem, Font, LegendHoverMode } from 'devextreme/common/charts';
 import type { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-legend',
@@ -221,7 +214,6 @@ export class DxoPolarChartLegendComponent extends NestedOption implements OnDest
         return 'legend';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -237,7 +229,6 @@ export class DxoPolarChartLegendComponent extends NestedOption implements OnDest
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

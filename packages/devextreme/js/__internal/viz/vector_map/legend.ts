@@ -119,11 +119,11 @@ Legend.prototype = _extend(clone(_BaseLegend.prototype), {
   },
 });
 
-export function LegendsControl(parameters) {
+export let LegendsControl = function (parameters) {
   this._params = parameters;
   this._items = [];
   parameters.container.virtualLink('legend-base');
-}
+};
 
 LegendsControl.prototype = {
   constructor: LegendsControl,
@@ -169,4 +169,10 @@ exports._TESTS_stubLegendType = function (stub) {
 exports._TESTS_restoreLegendType = function () {
   Legend = originalLegend;
 };
+/// #ENDDEBUG
+
+/// #DEBUG
+export function DEBUG_set_LegendsControl(value: typeof LegendsControl): void {
+  LegendsControl = value;
+}
 /// #ENDDEBUG

@@ -15,6 +15,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
@@ -230,9 +231,6 @@ export class ColumnChooserView extends ColumnsView {
     const columnChooser = this.option('columnChooser')!;
     const isSelectMode = this.isSelectMode();
 
-    const searchEnabled = isDefined(columnChooser.allowSearch) ? columnChooser.allowSearch : columnChooser.search?.enabled;
-    const searchTimeout = isDefined(columnChooser.searchTimeout) ? columnChooser.searchTimeout : columnChooser.search?.timeout;
-
     const treeViewConfig: any = {
       dataStructure: 'plain',
       activeStateEnabled: true,
@@ -241,8 +239,8 @@ export class ColumnChooserView extends ColumnsView {
       itemTemplate: 'item',
       showCheckBoxesMode: 'none',
       rootValue: null,
-      searchEnabled,
-      searchTimeout,
+      searchEnabled: columnChooser.search?.enabled,
+      searchTimeout: columnChooser.search?.timeout,
       searchEditorOptions: columnChooser.search?.editorOptions,
     };
 
@@ -577,7 +575,12 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
 };
 
 const columns = (Base: ModuleType<ColumnsController>) => class ColumnsChooserColumnsControllerExtender extends Base {
-  public allowMoveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
+  public allowMoveColumn(
+    fromVisibleIndex,
+    toVisibleIndex,
+    sourceLocation: DropLocationNames,
+    targetLocation: DropLocationNames,
+  ) {
     const isSelectMode = this.option('columnChooser.mode') === 'select';
     const isMoveColumnDisallowed = isSelectMode && targetLocation === 'columnChooser';
 

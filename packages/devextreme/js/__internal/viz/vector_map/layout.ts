@@ -207,7 +207,8 @@ function applyLayout(canvas, items) {
   }
 }
 
-export function LayoutControl(widget) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let LayoutControl = function (widget) {
   const that = this;
   that._items = [];
   that._suspended = 0;
@@ -215,7 +216,7 @@ export function LayoutControl(widget) {
   that._updateLayout = function () {
     that._update();
   };
-}
+};
 
 LayoutControl.prototype = {
   constructor: LayoutControl,
@@ -266,3 +267,9 @@ LayoutControl.prototype = {
     }
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_LayoutControl(value: typeof LayoutControl): void {
+  LayoutControl = value;
+}
+/// #ENDDEBUG

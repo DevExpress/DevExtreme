@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,21 +8,15 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig } from 'devextreme/common/grids';
-import type { SearchMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-column-header-filter',
@@ -34,14 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridColumnHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
@@ -83,14 +67,6 @@ export class DxoDataGridColumnHeaderFilterComponent extends NestedOption impleme
     }
 
     @Input()
-    get searchMode(): SearchMode {
-        return this._getOption('searchMode');
-    }
-    set searchMode(value: SearchMode) {
-        this._setOption('searchMode', value);
-    }
-
-    @Input()
     get width(): number | string | undefined {
         return this._getOption('width');
     }
@@ -102,7 +78,6 @@ export class DxoDataGridColumnHeaderFilterComponent extends NestedOption impleme
     protected get _optionPath() {
         return 'headerFilter';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -119,7 +94,6 @@ export class DxoDataGridColumnHeaderFilterComponent extends NestedOption impleme
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

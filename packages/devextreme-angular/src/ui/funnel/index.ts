@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -28,7 +25,6 @@ import type { HatchDirection, DashStyle, Font, LabelPosition, TextOverflow, Word
 import type { Format } from 'devextreme/common/core/localization';
 
 import DxFunnel from 'devextreme/viz/funnel';
-
 
 import {
     DxComponent,
@@ -91,7 +87,6 @@ import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/neste
 
 /**
  * [descr:dxFunnel]
-
  */
 @Component({
     selector: 'dx-funnel',
@@ -112,7 +107,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.adaptiveLayout]
-    
      */
     @Input()
     get adaptiveLayout(): { height?: number, keepLabels?: boolean, width?: number } {
@@ -122,10 +116,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('adaptiveLayout', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.algorithm]
-    
      */
     @Input()
     get algorithm(): FunnelAlgorithm {
@@ -135,10 +127,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('algorithm', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.argumentField]
-    
      */
     @Input()
     get argumentField(): string {
@@ -148,10 +138,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('argumentField', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.colorField]
-    
      */
     @Input()
     get colorField(): string {
@@ -161,10 +149,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('colorField', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
@@ -174,10 +160,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -187,10 +171,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -200,10 +182,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -213,10 +193,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -226,10 +204,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.hoverEnabled]
-    
      */
     @Input()
     get hoverEnabled(): boolean {
@@ -239,10 +215,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('hoverEnabled', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.inverted]
-    
      */
     @Input()
     get inverted(): boolean {
@@ -252,10 +226,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('inverted', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.item]
-    
      */
     @Input()
     get item(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } } {
@@ -265,10 +237,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('item', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.label]
-    
      */
     @Input()
     get label(): { backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, horizontalAlignment?: HorizontalEdge, horizontalOffset?: number, position?: LabelPosition, showForZeroValues?: boolean, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
@@ -278,10 +248,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.legend]
-    
      */
     @Input()
     get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined }, text?: string | undefined, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
@@ -291,10 +259,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('legend', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
@@ -304,10 +270,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('loadingIndicator', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -317,10 +281,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('margin', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.neckHeight]
-    
      */
     @Input()
     get neckHeight(): number {
@@ -330,10 +292,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('neckHeight', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.neckWidth]
-    
      */
     @Input()
     get neckWidth(): number {
@@ -343,10 +303,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('neckWidth', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.palette]
-    
      */
     @Input()
     get palette(): Array<string> | Palette {
@@ -356,10 +314,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('palette', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.paletteExtensionMode]
-    
      */
     @Input()
     get paletteExtensionMode(): PaletteExtensionMode {
@@ -369,10 +325,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('paletteExtensionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -382,10 +336,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -395,10 +347,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('redrawOnResize', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
-    
      */
     @Input()
     get resolveLabelOverlapping(): ShiftLabelOverlap {
@@ -408,10 +358,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('resolveLabelOverlapping', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -421,10 +369,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleMultipleOrNone {
@@ -434,10 +380,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -447,10 +391,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.sortData]
-    
      */
     @Input()
     get sortData(): boolean {
@@ -460,10 +402,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('sortData', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -473,10 +413,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -486,10 +424,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -499,10 +435,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('tooltip', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.valueField]
-    
      */
     @Input()
     get valueField(): string {
@@ -513,320 +447,219 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     }
 
     /**
-    
      * [descr:dxFunnelOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onDrawn]
-    
-    
      */
     @Output() onDrawn: EventEmitter<DrawnEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onExported]
-    
-    
      */
     @Output() onExported: EventEmitter<ExportedEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onExporting]
-    
-    
      */
     @Output() onExporting: EventEmitter<ExportingEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onFileSaving]
-    
-    
      */
     @Output() onFileSaving: EventEmitter<FileSavingEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onHoverChanged]
-    
-    
      */
     @Output() onHoverChanged: EventEmitter<HoverChangedEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onIncidentOccurred]
-    
-    
      */
     @Output() onIncidentOccurred: EventEmitter<IncidentOccurredEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onLegendClick]
-    
-    
      */
     @Output() onLegendClick: EventEmitter<LegendClickEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxFunnelOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() adaptiveLayoutChange: EventEmitter<{ height?: number, keepLabels?: boolean, width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() algorithmChange: EventEmitter<FunnelAlgorithm>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() argumentFieldChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() colorFieldChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() encodeHtmlChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() invertedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelChange: EventEmitter<{ backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, horizontalAlignment?: HorizontalEdge, horizontalOffset?: number, position?: LabelPosition, showForZeroValues?: boolean, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() legendChange: EventEmitter<{ backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined }, text?: string | undefined, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loadingIndicatorChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() marginChange: EventEmitter<{ bottom?: number, left?: number, right?: number, top?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() neckHeightChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() neckWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() paletteChange: EventEmitter<Array<string> | Palette>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() paletteExtensionModeChange: EventEmitter<PaletteExtensionMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pathModifiedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() redrawOnResizeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() resolveLabelOverlappingChange: EventEmitter<ShiftLabelOverlap>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<SingleMultipleOrNone>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sortDataChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() themeChange: EventEmitter<Theme>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueFieldChange: EventEmitter<string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

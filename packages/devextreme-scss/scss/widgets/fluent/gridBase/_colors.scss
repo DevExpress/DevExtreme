@@ -17,7 +17,6 @@ $datagrid-border-color: $base-border-color !default;
 * $type color
 */
 $datagrid-columnchooser-item-color: $datagrid-base-color !default;
-$datagrid-block-separator-bg: null !default;
 
 /**
 * $name 25. Header text weight
@@ -173,7 +172,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
     $datagrid-row-focused-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -1deg, $saturation: 0%, $lightness: 26.47%) !default;
     $datagrid-filter-row-background-color: $base-typography-bg !default;
   }
-  $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: -12%, $space: hsl) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
@@ -184,7 +182,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
 @if $mode == "dark" {
   $datagrid-row-focused-bg: #0c3b5e !default;
   $datagrid-filter-row-background-color: color.adjust($datagrid-base-background-color, $lightness: 2%, $space: hsl) !default;
-  $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: 12%, $space: hsl) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
   $datagrid-columnchooser-item-bg: color.adjust($datagrid-columnchooser-bg, $lightness: 3%, $space: hsl) !default;

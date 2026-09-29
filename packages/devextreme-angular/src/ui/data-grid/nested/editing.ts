@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { default as dxDataGrid, dxDataGridRowObject } from 'devextreme/ui/data_grid';
 import type { DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
 import type { dxFormOptions } from 'devextreme/ui/form';
@@ -200,7 +194,6 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
         return 'editing';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -222,7 +215,6 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

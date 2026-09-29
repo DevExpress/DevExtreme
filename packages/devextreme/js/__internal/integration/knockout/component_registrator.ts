@@ -3,8 +3,8 @@ import $ from '@js/core/renderer';
 import Widget from '@js/ui/widget/ui.widget';
 import {
   componentRegistratorCallbacks as registerComponentCallbacks,
-} from '@ts/core/m_component_registrator_callbacks';
-import config from '@ts/core/m_config';
+} from '@ts/core/component_registrator_callbacks';
+import config from '@ts/core/config';
 import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
 import Callbacks from '@ts/core/utils/m_callbacks';
 import { Locker } from '@ts/core/utils/m_locker';

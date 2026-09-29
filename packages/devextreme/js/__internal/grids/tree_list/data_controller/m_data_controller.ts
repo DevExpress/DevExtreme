@@ -4,11 +4,11 @@ import { extend } from '@js/core/utils/extend';
 import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { RowKey } from '@ts/grids/grid_core/m_types';
 
-import type { DataSourceAdapterTreeList } from '../data_source_adapter/m_data_source_adapter';
+import type { TreeListDataSourceController } from '../data_source/data_source_controller';
 import treeListCore from '../m_core';
 
 export class TreeListDataController extends DataController {
-  public declare _dataSource?: DataSourceAdapterTreeList | null;
+  protected declare dataSourceController: TreeListDataSourceController;
 
   private _getNodeLevel(node) {
     let level = -1;
@@ -33,7 +33,7 @@ export class TreeListDataController extends DataController {
   }
 
   private _loadOnOptionChange() {
-    this._dataSource!.load();
+    this.dataSourceController.getAdapter()!.load();
   }
 
   protected isSameRowState(item1, item2): boolean {
@@ -84,7 +84,9 @@ export class TreeListDataController extends DataController {
   }
 
   private changeRowExpand(key) {
-    if (this._dataSource) {
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+
+    if (dataSourceAdapter) {
       const args: any = {
         key,
       };
@@ -93,7 +95,7 @@ export class TreeListDataController extends DataController {
       this.executeAction(isExpanded ? 'onRowCollapsing' : 'onRowExpanding', args);
 
       if (!args.cancel) {
-        return this._dataSource.changeRowExpand(key).done(() => {
+        return dataSourceAdapter.changeRowExpand(key).done(() => {
           this.executeAction(isExpanded ? 'onRowCollapsed' : 'onRowExpanded', args);
         });
       }
@@ -104,7 +106,7 @@ export class TreeListDataController extends DataController {
   }
 
   private isRowExpanded(key, cache?) {
-    return this._dataSource && this._dataSource.isRowExpanded(key, cache);
+    return this.dataSourceController.getAdapter()?.isRowExpanded(key, cache);
   }
 
   private expandRow(key) {
@@ -124,7 +126,7 @@ export class TreeListDataController extends DataController {
   }
 
   private getRootNode() {
-    return this._dataSource && this._dataSource.getRootNode();
+    return this.dataSourceController.getAdapter()?.getRootNode();
   }
 
   public optionChanged(args) {
@@ -143,12 +145,15 @@ export class TreeListDataController extends DataController {
         args.handled = true;
         break;
       case 'expandedRowKeys':
-      case 'onNodesInitialized':
-        if (this._dataSource && !this._dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
+      case 'onNodesInitialized': {
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
+
+        if (dataSourceAdapter && !dataSourceAdapter._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
           this._loadOnOptionChange();
         }
         args.handled = true;
         break;
+      }
       case 'maxFilterLengthInRequest':
         args.handled = true;
         break;
@@ -158,31 +163,19 @@ export class TreeListDataController extends DataController {
   }
 
   private getNodeByKey(key) {
-    if (!this._dataSource) {
-      return;
-    }
-
-    return this._dataSource.getNodeByKey(key);
+    return this.dataSourceController.getAdapter()?.getNodeByKey(key);
   }
 
   private getChildNodeKeys(parentKey) {
-    if (!this._dataSource) {
-      return;
-    }
-
-    return this._dataSource.getChildNodeKeys(parentKey);
+    return this.dataSourceController.getAdapter()?.getChildNodeKeys(parentKey);
   }
 
   private loadDescendants(keys, childrenOnly) {
-    if (!this._dataSource) {
-      return;
-    }
-
-    return this._dataSource.loadDescendants(keys, childrenOnly);
+    return this.dataSourceController.getAdapter()?.loadDescendants(keys, childrenOnly);
   }
 
   private forEachNode() {
-    this._dataSource!.forEachNode.apply(this, arguments as any);
+    this.dataSourceController.getAdapter()!.forEachNode.apply(this, arguments as any);
   }
 
   // Collect keys by walking the loaded node tree (depth-first, parent before
@@ -190,7 +183,7 @@ export class TreeListDataController extends DataController {
   public getAllDataRowKeys(): Promise<RowKey[]> {
     const keys: RowKey[] = [];
 
-    this._dataSource?.forEachNode((node) => {
+    this.dataSourceController.getAdapter()?.forEachNode((node) => {
       keys.push(node.key);
     });
 

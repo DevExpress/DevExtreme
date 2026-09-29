@@ -5,6 +5,7 @@ import { Axis as VizMocksAxis, Renderer as VizMocksRenderer } from '../../helper
 import dxLinearGauge from 'viz/linear_gauge';
 import axisModule from 'viz/axes/base_axis';
 import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const factory = dxLinearGauge.prototype._factory;
 
@@ -100,9 +101,9 @@ class TestPointerElement extends TestElement {
 }
 
 (function linearGauge() {
-    rendererModule.Renderer = sinon.stub();
+    rendererModule.DEBUG_set_Renderer(sinon.stub());
 
-    sinon.stub(axisModule, 'Axis').callsFake(function(parameters) {
+    stubSeam(axisModule, 'Axis', 'DEBUG_set_Axis').callsFake(function(parameters) {
         const axis = new VizMocksAxis(parameters);
         axis.measureLabels = sinon.stub().returns({
             width: 30,

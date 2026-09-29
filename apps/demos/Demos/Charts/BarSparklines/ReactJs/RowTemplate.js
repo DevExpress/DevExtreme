@@ -1,6 +1,7 @@
 import React from 'react';
 import Sparkline, { Tooltip } from 'devextreme-react/sparkline';
 
+const tooltipFormat = { type: 'currency', precision: 2 };
 export default function RowTemplate(props) {
   return (
     <tr>
@@ -14,7 +15,7 @@ export default function RowTemplate(props) {
           valueField={`copper${props.year}`}
           type="bar"
         >
-          <Tooltip format={{ type: 'currency', precision: 2 }} />
+          <Tooltip format={tooltipFormat} />
         </Sparkline>
       </td>
       <td>
@@ -30,7 +31,7 @@ export default function RowTemplate(props) {
           minColor="#9ab57e"
           maxColor="#8076bb"
         >
-          <Tooltip format={{ type: 'currency', precision: 2 }} />
+          <Tooltip format={tooltipFormat} />
         </Sparkline>
       </td>
       <td>
@@ -44,7 +45,7 @@ export default function RowTemplate(props) {
           firstLastColor="#ebdd8f"
           pointColor="#e8c267"
         >
-          <Tooltip format={{ type: 'currency', precision: 2 }} />
+          <Tooltip format={tooltipFormat} />
         </Sparkline>
       </td>
     </tr>

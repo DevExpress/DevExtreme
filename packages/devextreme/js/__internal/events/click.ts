@@ -7,7 +7,7 @@ import { addNamespace, fireEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
 import domUtils from '@ts/core/utils/m_dom';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';

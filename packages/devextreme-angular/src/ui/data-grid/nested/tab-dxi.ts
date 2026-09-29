@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -14,10 +12,7 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
@@ -31,6 +26,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -141,7 +137,6 @@ export class DxiDataGridTabComponent extends CollectionNestedOption implements A
         return 'tabs';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -162,11 +157,9 @@ export class DxiDataGridTabComponent extends CollectionNestedOption implements A
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -31,7 +28,6 @@ import type { PageLoadMode, SearchMode, SelectAllMode, SingleMultipleAllOrNone, 
 import type { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
 import DxList from 'devextreme/ui/list';
-
 
 import {
     DxComponent,
@@ -59,15 +55,14 @@ import { DxiListMenuItemModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListOptionsModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_menuItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_menuItems,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxList]
-
  */
 @Component({
     selector: 'dx-list',
@@ -102,7 +97,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -112,10 +106,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxListOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -125,10 +117,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.allowItemDeleting]
-    
      */
     @Input()
     get allowItemDeleting(): boolean {
@@ -138,10 +128,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('allowItemDeleting', value);
     }
 
-
     /**
      * [descr:dxListOptions.bounceEnabled]
-    
      */
     @Input()
     get bounceEnabled(): boolean {
@@ -151,10 +139,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('bounceEnabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.collapsibleGroups]
-    
      */
     @Input()
     get collapsibleGroups(): boolean {
@@ -164,10 +150,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('collapsibleGroups', value);
     }
 
-
     /**
      * [descr:dxListOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxListItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -177,10 +161,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -190,10 +172,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string | undefined {
@@ -203,10 +183,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('displayExpr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -216,10 +194,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxListOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -229,10 +205,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.grouped]
-    
      */
     @Input()
     get grouped(): boolean {
@@ -242,10 +216,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('grouped', value);
     }
 
-
     /**
      * [descr:dxListOptions.groupTemplate]
-    
      */
     @Input()
     get groupTemplate(): any {
@@ -255,10 +227,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('groupTemplate', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -268,10 +238,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -281,10 +249,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxListOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -294,10 +260,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.indicateLoading]
-    
      */
     @Input()
     get indicateLoading(): boolean {
@@ -307,10 +271,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('indicateLoading', value);
     }
 
-
     /**
      * [descr:dxListOptions.itemDeleteMode]
-    
      */
     @Input()
     get itemDeleteMode(): ItemDeleteMode {
@@ -320,10 +282,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemDeleteMode', value);
     }
 
-
     /**
      * [descr:dxListOptions.itemDragging]
-    
      */
     @Input()
     get itemDragging(): dxSortableOptions {
@@ -333,10 +293,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemDragging', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -346,10 +304,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxListOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxListItem | string> {
@@ -359,10 +315,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -372,10 +326,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any) => any) | null | string {
@@ -385,10 +337,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:dxListOptions.menuItems]
-    
      */
     @Input()
     get menuItems(): { action?: ((itemElement: any, itemData: any) => void), text?: string }[] {
@@ -398,10 +348,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('menuItems', value);
     }
 
-
     /**
      * [descr:dxListOptions.menuMode]
-    
      */
     @Input()
     get menuMode(): ListMenuMode {
@@ -411,10 +359,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('menuMode', value);
     }
 
-
     /**
      * [descr:dxListOptions.nextButtonText]
-    
      */
     @Input()
     get nextButtonText(): string {
@@ -424,10 +370,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('nextButtonText', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -437,10 +381,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:dxListOptions.pageLoadingText]
-    
      */
     @Input()
     get pageLoadingText(): string {
@@ -450,10 +392,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('pageLoadingText', value);
     }
 
-
     /**
      * [descr:dxListOptions.pageLoadMode]
-    
      */
     @Input()
     get pageLoadMode(): PageLoadMode {
@@ -463,10 +403,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('pageLoadMode', value);
     }
 
-
     /**
      * [descr:dxListOptions.pulledDownText]
-    
      */
     @Input()
     get pulledDownText(): string {
@@ -476,10 +414,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('pulledDownText', value);
     }
 
-
     /**
      * [descr:dxListOptions.pullingDownText]
-    
      */
     @Input()
     get pullingDownText(): string {
@@ -489,10 +425,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('pullingDownText', value);
     }
 
-
     /**
      * [descr:dxListOptions.pullRefreshEnabled]
-    
      */
     @Input()
     get pullRefreshEnabled(): boolean {
@@ -502,10 +436,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('pullRefreshEnabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.refreshingText]
-    
      */
     @Input()
     get refreshingText(): string {
@@ -515,10 +447,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('refreshingText', value);
     }
 
-
     /**
      * [descr:dxListOptions.repaintChangesOnly]
-    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -528,10 +458,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('repaintChangesOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -541,10 +469,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.scrollByContent]
-    
      */
     @Input()
     get scrollByContent(): boolean {
@@ -554,10 +480,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('scrollByContent', value);
     }
 
-
     /**
      * [descr:dxListOptions.scrollByThumb]
-    
      */
     @Input()
     get scrollByThumb(): boolean {
@@ -567,10 +491,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('scrollByThumb', value);
     }
 
-
     /**
      * [descr:dxListOptions.scrollingEnabled]
-    
      */
     @Input()
     get scrollingEnabled(): boolean {
@@ -580,10 +502,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('scrollingEnabled', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchEditorOptions]
-    
      */
     @Input()
     get searchEditorOptions(): dxTextBoxOptions<any> {
@@ -593,10 +513,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('searchEditorOptions', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchEnabled]
-    
      */
     @Input()
     get searchEnabled(): boolean {
@@ -606,10 +524,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('searchEnabled', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchExpr]
-    
      */
     @Input()
     get searchExpr(): Array<Function | string> | Function | string {
@@ -619,10 +535,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('searchExpr', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchMode]
-    
      */
     @Input()
     get searchMode(): SearchMode {
@@ -632,10 +546,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('searchMode', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number | undefined {
@@ -645,10 +557,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('searchTimeout', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchValue]
-    
      */
     @Input()
     get searchValue(): string {
@@ -658,10 +568,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('searchValue', value);
     }
 
-
     /**
      * [descr:dxListOptions.selectAllMode]
-    
      */
     @Input()
     get selectAllMode(): SelectAllMode {
@@ -671,10 +579,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectAllMode', value);
     }
 
-
     /**
      * [descr:dxListOptions.selectAllText]
-    
      */
     @Input()
     get selectAllText(): string {
@@ -684,10 +590,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectAllText', value);
     }
 
-
     /**
      * [descr:dxListOptions.selectByClick]
-    
      */
     @Input()
     get selectByClick(): boolean {
@@ -697,10 +601,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectByClick', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
-    
      */
     @Input()
     get selectedItemKeys(): Array<any> {
@@ -710,10 +612,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedItemKeys', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
-    
      */
     @Input()
     get selectedItems(): Array<any> {
@@ -723,10 +623,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedItems', value);
     }
 
-
     /**
      * [descr:dxListOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleMultipleAllOrNone {
@@ -736,10 +634,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:dxListOptions.showScrollbar]
-    
      */
     @Input()
     get showScrollbar(): ScrollbarMode {
@@ -749,10 +645,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('showScrollbar', value);
     }
 
-
     /**
      * [descr:dxListOptions.showSelectionControls]
-    
      */
     @Input()
     get showSelectionControls(): boolean {
@@ -762,10 +656,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('showSelectionControls', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -775,10 +667,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxListOptions.useNativeScrolling]
-    
      */
     @Input()
     get useNativeScrolling(): boolean {
@@ -788,10 +678,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('useNativeScrolling', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -801,10 +689,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -815,544 +701,374 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     }
 
     /**
-    
      * [descr:dxListOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxListOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxListOptions.onGroupRendered]
-    
-    
      */
     @Output() onGroupRendered: EventEmitter<GroupRenderedEvent>;
 
     /**
-    
      * [descr:dxListOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxListOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxListOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxListOptions.onItemDeleted]
-    
-    
      */
     @Output() onItemDeleted: EventEmitter<ItemDeletedEvent>;
 
     /**
-    
      * [descr:dxListOptions.onItemDeleting]
-    
-    
      */
     @Output() onItemDeleting: EventEmitter<ItemDeletingEvent>;
 
     /**
-    
      * [descr:dxListOptions.onItemHold]
-    
-    
      */
     @Output() onItemHold: EventEmitter<ItemHoldEvent>;
 
     /**
-    
      * [descr:dxListOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxListOptions.onItemReordered]
-    
-    
      */
     @Output() onItemReordered: EventEmitter<ItemReorderedEvent>;
 
     /**
-    
      * [descr:dxListOptions.onItemSwipe]
-    
-    
      */
     @Output() onItemSwipe: EventEmitter<ItemSwipeEvent>;
 
     /**
-    
      * [descr:dxListOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxListOptions.onPageLoading]
-    
-    
      */
     @Output() onPageLoading: EventEmitter<PageLoadingEvent>;
 
     /**
-    
      * [descr:dxListOptions.onPullRefresh]
-    
-    
      */
     @Output() onPullRefresh: EventEmitter<PullRefreshEvent>;
 
     /**
-    
      * [descr:dxListOptions.onScroll]
-    
-    
      */
     @Output() onScroll: EventEmitter<ScrollEvent>;
 
     /**
-    
      * [descr:dxListOptions.onSelectAllValueChanged]
-    
-    
      */
     @Output() onSelectAllValueChanged: EventEmitter<SelectAllValueChangedEvent>;
 
     /**
-    
      * [descr:dxListOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxListOptions.onSelectionChanging]
-    
-    
      */
     @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowItemDeletingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() bounceEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() collapsibleGroupsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any | dxListItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() displayExprChange: EventEmitter<((item: any) => string) | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() indicateLoadingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemDeleteModeChange: EventEmitter<ItemDeleteMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemDraggingChange: EventEmitter<dxSortableOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxListItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyExprChange: EventEmitter<((item: any) => any) | null | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() menuItemsChange: EventEmitter<{ action?: ((itemElement: any, itemData: any) => void), text?: string }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() menuModeChange: EventEmitter<ListMenuMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nextButtonTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pageLoadingTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pageLoadModeChange: EventEmitter<PageLoadMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pulledDownTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pullingDownTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pullRefreshEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() refreshingTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() repaintChangesOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollByContentChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollByThumbChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollingEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchEditorOptionsChange: EventEmitter<dxTextBoxOptions<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchExprChange: EventEmitter<Array<Function | string> | Function | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchModeChange: EventEmitter<SearchMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchTimeoutChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchValueChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectAllModeChange: EventEmitter<SelectAllMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectAllTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectByClickChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemKeysChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemsChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<SingleMultipleAllOrNone>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showScrollbarChange: EventEmitter<ScrollbarMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showSelectionControlsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() useNativeScrollingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

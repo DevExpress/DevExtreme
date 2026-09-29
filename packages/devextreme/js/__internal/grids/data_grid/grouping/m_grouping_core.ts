@@ -1,6 +1,7 @@
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import gridCore from '../m_core';
@@ -33,13 +34,13 @@ export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
         }
       }
     }
-    filter.push(gridCore.combineFilters(filterElement));
+    filter.push(combineFilters(filterElement));
   }
 
   // @ts-expect-error
-  filter = gridCore.combineFilters(filter, 'or');
+  filter = combineFilters(filter, 'or');
 
-  return gridCore.combineFilters([filter, storeLoadOptions.filter]);
+  return combineFilters([filter, storeLoadOptions.filter]);
 }
 
 const findGroupInfoByKey = function (groupsInfo, key) {
@@ -103,7 +104,7 @@ const calculateItemsCount = function (that, items, groupsCount) {
 };
 
 export class GroupingHelper {
-  public readonly _dataSource: GroupingDataSourceAdapter;
+  public readonly dataSourceAdapter: GroupingDataSourceAdapter;
 
   private _groupsInfo: any;
 
@@ -112,7 +113,7 @@ export class GroupingHelper {
   protected _group: any;
 
   constructor(dataSourceAdapter: GroupingDataSourceAdapter) {
-    this._dataSource = dataSourceAdapter;
+    this.dataSourceAdapter = dataSourceAdapter;
     this.reset();
   }
 
@@ -134,14 +135,13 @@ export class GroupingHelper {
   }
 
   public _isVirtualPaging() {
-    const scrollingMode = this._dataSource.option('scrolling.mode');
+    const scrollingMode = this.dataSourceAdapter.option('scrolling.mode');
 
     return scrollingMode === 'virtual' || scrollingMode === 'infinite';
   }
 
   private itemsCount() {
-    const dataSourceAdapter = this._dataSource;
-    const dataSource = dataSourceAdapter._dataSource;
+    const dataSource = this.dataSourceAdapter._dataSource;
     const groupCount = gridCore.normalizeSortingInfo(dataSource.group() || []).length;
     const itemsCount = calculateItemsCount(this, dataSource.items(), groupCount);
 

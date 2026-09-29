@@ -19,6 +19,11 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 type ColumnWithSelector = Column & { selector?: unknown };
 
+type ColumnConfig = NonNullable<DataGridProperties['columns']>[number];
+
+// `deserializeValue` and its neighbors are internal options, absent from the public column type.
+const internalColumn = (column: Column): ColumnConfig => column as ColumnConfig;
+
 const DATA = [
   {
     id: 1, name: 'Alex', age: 15, city: 'Berlin',
@@ -107,6 +112,69 @@ describe('DataController combined filter', () => {
       });
 
       expect(getDataFieldFilter(instance)).toEqual(['!', ['age', '=', 15]]);
+    });
+
+    it('should take a value that is already a filter expression as is', async () => {
+      const { instance } = await createGrid({
+        columns: [{ dataField: 'age', filterValues: [['age', '>', 15]] }, 'name'],
+      });
+
+      expect(getDataFieldFilter(instance)).toEqual(['age', '>', 15]);
+    });
+
+    it('should mix ready expressions with plain values', async () => {
+      const { instance } = await createGrid({
+        columns: [{ dataField: 'age', filterValues: [['age', '>', 15], 20] }, 'name'],
+      });
+
+      expect(getDataFieldFilter(instance)).toEqual([
+        ['age', '>', 15], 'or', ['age', '=', 20],
+      ]);
+    });
+
+    it('should deserialize a value of a serialized column', async () => {
+      const { instance } = await createGrid({
+        columns: [
+          internalColumn({
+            dataField: 'name',
+            deserializeValue: (value): string => `${value as string}`.toUpperCase(),
+            filterValues: ['alex'],
+          }),
+          'age',
+        ],
+      });
+
+      expect(getDataFieldFilter(instance)).toEqual(['name', '=', 'ALEX']);
+    });
+
+    it('should keep the value of a date column as is', async () => {
+      const birthDate = new Date(2000, 0, 1);
+      const { instance } = await createGrid({
+        dataSource: [{ id: 1, birthDate }],
+        columns: [
+          internalColumn({
+            dataField: 'birthDate',
+            dataType: 'date',
+            deserializeValue: (): string => 'deserialized',
+            filterValues: [birthDate],
+          }),
+        ],
+      });
+
+      expect(getDataFieldFilter(instance)).toEqual([
+        ['birthDate', '>=', birthDate], 'and', ['birthDate', '<', new Date(2000, 0, 2)],
+      ]);
+    });
+
+    it('should skip a column that does not allow header filtering', async () => {
+      const { instance } = await createGrid({
+        columns: [
+          { dataField: 'age', filterValues: [15], allowHeaderFiltering: false },
+          { dataField: 'name', filterValue: 'Alex' },
+        ],
+      });
+
+      expect(getDataFieldFilter(instance)).toEqual(['name', 'contains', 'Alex']);
     });
   });
 

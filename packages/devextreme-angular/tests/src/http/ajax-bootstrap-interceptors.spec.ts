@@ -6,7 +6,7 @@ import {
   HttpInterceptorFn,
   HttpClient,
 } from '@angular/common/http';
-import { ApplicationRef, Component } from '@angular/core';
+import { ApplicationRef, Component, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxHttpModule } from 'devextreme-angular/http';
 import DataSource from 'devextreme/data/data_source';
@@ -65,6 +65,7 @@ describe('Using DxHttpModule in application with interceptors provided in bootst
 
     const appRef = await bootstrapApplication(TestAppComponent, {
       providers: [
+        provideZoneChangeDetection(),
         provideHttpClient(withInterceptors([testInterceptorFn])),
         { provide: HttpClientTestingModule },
       ],

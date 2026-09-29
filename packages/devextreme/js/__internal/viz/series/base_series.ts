@@ -179,7 +179,8 @@ function mergePointOptions(base, extra) {
   return options;
 }
 
-export function Series(settings, options) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Series = function (settings, options) {
   const that = this;
   that.fullState = 0;
   that._extGroups = settings;
@@ -191,7 +192,7 @@ export function Series(settings, options) {
 
   that._legendCallback = _noop;
   that.updateOptions(options, settings);
-}
+};
 
 function getData(pointData) {
   return pointData.data;
@@ -1382,3 +1383,11 @@ Series.prototype = {
 };
 // @ts-expect-error
 export const mixins = seriesNS.mixins;
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_Series(value: typeof Series): void {
+  Series = value;
+}
+/// #ENDDEBUG

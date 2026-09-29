@@ -113,7 +113,7 @@ describe('downloadArtifactFile', () => {
 
   it('follows the redirect to blob storage WITHOUT forwarding the credential', async () => {
     mockFetch((url) => {
-      if (url.startsWith('https://api.github.com')) {
+      if (new URL(url).origin === 'https://api.github.com') {
         return new Response(null, {
           status: 302,
           headers: { location: 'https://blob.example/zip' },

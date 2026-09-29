@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
 import type { AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, RelativePosition, ScaleBreak, ScaleBreakLineStyle, TextOverflow, TimeInterval, ValueAxisVisualRangeUpdateMode, VisualRange, WordWrap } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
@@ -28,6 +22,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_valueAxis } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_breaks,
     PROPERTY_TOKEN_constantLines,
@@ -465,7 +460,6 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
         return 'valueAxis';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -483,7 +477,6 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

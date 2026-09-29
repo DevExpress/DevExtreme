@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
-
 
 @Component({
     selector: 'dxo-common-series-settings',
@@ -102,7 +95,6 @@ export class DxoCommonSeriesSettingsComponent extends DxoChartCommonSeriesSettin
         return 'commonSeriesSettings';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -118,7 +110,6 @@ export class DxoCommonSeriesSettingsComponent extends DxoChartCommonSeriesSettin
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

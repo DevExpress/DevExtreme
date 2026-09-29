@@ -45,7 +45,7 @@ const teardownModule = function() {
     this.dispose();
 };
 
-const createDataSource = function(context, config, remoteOperations) {
+const createDataSourceAdapter = function(context, config, remoteOperations) {
     const dataSource = new DataSource(config);
     const dataAdapter = dataSourceAdapter.create(context);
     dataAdapter.init(dataSource, remoteOperations);
@@ -86,9 +86,9 @@ QUnit.module('initialization', { beforeEach: setupModule, afterEach: teardownMod
             dataItem[this.columns[i].dataField] = 'test';
         }
 
-        const dataSource = createDataSource(this, [ dataItem ]);
+        const dataSource = createDataSourceAdapter(this, [ dataItem ]);
         dataSource.load().done(() => {
-            this.columnsController.applyDataSource(dataSource);
+            this.columnsController.applyDataSourceAdapter(dataSource);
 
             assert.strictEqual(this.getColumns().length, 50, 'column count');
             assert.strictEqual(this.getVisibleColumns().length, 11, 'visible column count');

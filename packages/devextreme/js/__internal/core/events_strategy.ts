@@ -2,13 +2,12 @@ import { each } from '@js/core/utils/iterator';
 import { isFunction, isPlainObject } from '@js/core/utils/type';
 import { Callbacks } from '@ts/core/utils/m_callbacks';
 
-type EventHandler = Function;
+export type EventHandler = Function;
 
-type EventHandlers = Record<string, EventHandler | undefined>;
+export type EventHandlers = Record<string, EventHandler | undefined>;
 
 interface EventCallbacks {
   add: (fn?: EventHandler) => void;
-  originalAdd?: (fn?: EventHandler) => void;
   remove: (fn?: EventHandler) => void;
   has: () => boolean;
   empty: () => void;
@@ -78,8 +77,7 @@ export class EventsStrategy implements EventsStrategyInterface {
         this._events[eventName] = callbacks;
       }
 
-      const addFn = callbacks.originalAdd || callbacks.add;
-      addFn.call(callbacks, eventHandler);
+      callbacks.add(eventHandler);
     }
   }
 

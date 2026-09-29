@@ -1,0 +1,140 @@
+[
+  {
+    "file": "scss/widgets/base/_gallery.scss",
+    "property": "margin",
+    "selector": ".dx-gallery-indicator-item",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "width",
+    "selector": ".dx-colorview-container",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "margin",
+    "selector": ".dx-colorview-container label.dx-colorview-label-hex",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "width",
+    "selector": ".dx-colorview-container label.dx-colorview-alpha-channel-label",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "width",
+    "selector": ".dx-colorview-container label .dx-texteditor",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "margin",
+    "selector": ".dx-colorview-container label .dx-texteditor",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "margin-top",
+    "selector": ".dx-colorview-container-row.dx-colorview-alpha-channel-row",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "width",
+    "selector": ".dx-colorview-hue-scale",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "height",
+    "selector": ".dx-colorview-hue-scale",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "width",
+    "selector": ".dx-colorview-palette",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "height",
+    "selector": ".dx-colorview-palette",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "width",
+    "selector": ".dx-colorview-alpha-channel-scale",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "height",
+    "selector": ".dx-colorview-hue-scale-wrapper",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "width",
+    "selector": ".dx-colorview-controls-container",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "width",
+    "selector": ".dx-colorview-color-preview",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "height",
+    "selector": ".dx-colorview-color-preview",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/colorView/_index.scss",
+    "property": "width",
+    "selector": ".dx-colorview-alpha-channel-cell",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/dataGrid/_index.scss",
+    "property": "outline",
+    "selector": ".dx-command-ai-header-button .dx-button.dx-state-focused",
+    "reason": "the winner sits in treeList; a ThemeBuilder build without TreeList still needs this declaration"
+  },
+  {
+    "file": "scss/widgets/base/dataGrid/_index.scss",
+    "property": "outline-color",
+    "selector": ".dx-command-ai-header-button .dx-button.dx-state-focused",
+    "reason": "the winner sits in treeList; a ThemeBuilder build without TreeList still needs this declaration"
+  },
+  {
+    "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
+    "property": "font-size",
+    "selector": ".dx-scheduler-agenda-nodata",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/scheduler/views/_index.scss",
+    "property": "font-size",
+    "selector": ".dx-scheduler-header-panel",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/scheduler/views/_index.scss",
+    "property": "font-size",
+    "selector": ".dx-scheduler-time-panel",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  },
+  {
+    "file": "scss/widgets/base/_recurrenceEditor.scss",
+    "property": "margin-top",
+    "selector": ".dx-recurrence-numberbox-interval-label",
+    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
+  }
+]

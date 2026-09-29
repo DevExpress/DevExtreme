@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -58,10 +55,9 @@ import { DxoFilterBuilderFormatModule } from 'devextreme-angular/ui/filter-build
 import { DxoFilterBuilderGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { 
-           PROPERTY_TOKEN_customOperations,
-           PROPERTY_TOKEN_fields,
-     } from 'devextreme-angular/core/tokens';
-
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -71,7 +67,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 };
 /**
  * [descr:dxFilterBuilder]
-
  */
 @Component({
     selector: 'dx-filter-builder',
@@ -102,7 +97,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -112,10 +106,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -125,10 +117,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.allowHierarchicalFields]
-    
      */
     @Input()
     get allowHierarchicalFields(): boolean {
@@ -138,10 +128,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('allowHierarchicalFields', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.customOperations]
-    
      */
     @Input()
     get customOperations(): Array<dxFilterBuilderCustomOperation> {
@@ -151,10 +139,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('customOperations', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -164,10 +150,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -177,10 +161,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.fields]
-    
      */
     @Input()
     get fields(): Array<dxFilterBuilderField> {
@@ -190,10 +172,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('fields', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.filterOperationDescriptions]
-    
      */
     @Input()
     get filterOperationDescriptions(): { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
@@ -203,10 +183,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('filterOperationDescriptions', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -216,10 +194,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.groupOperationDescriptions]
-    
      */
     @Input()
     get groupOperationDescriptions(): { and?: string, notAnd?: string, notOr?: string, or?: string } {
@@ -229,10 +205,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('groupOperationDescriptions', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.groupOperations]
-    
      */
     @Input()
     get groupOperations(): Array<GroupOperation> {
@@ -242,10 +216,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('groupOperations', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -255,10 +227,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -268,10 +238,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -281,10 +249,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.maxGroupLevel]
-    
      */
     @Input()
     get maxGroupLevel(): number | undefined {
@@ -294,10 +260,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('maxGroupLevel', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -307,10 +271,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -320,10 +282,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.value]
-    
      */
     @Input()
     get value(): Array<any> | Function | string {
@@ -333,10 +293,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -346,10 +304,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -360,213 +316,146 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     }
 
     /**
-    
      * [descr:dxFilterBuilderOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxFilterBuilderOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxFilterBuilderOptions.onEditorPrepared]
-    
-    
      */
     @Output() onEditorPrepared: EventEmitter<EditorPreparedEvent>;
 
     /**
-    
      * [descr:dxFilterBuilderOptions.onEditorPreparing]
-    
-    
      */
     @Output() onEditorPreparing: EventEmitter<EditorPreparingEvent>;
 
     /**
-    
      * [descr:dxFilterBuilderOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxFilterBuilderOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxFilterBuilderOptions.onValueChanged]
-    
-    
      */
     @Output() onValueChanged: EventEmitter<ValueChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowHierarchicalFieldsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customOperationsChange: EventEmitter<Array<dxFilterBuilderCustomOperation>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fieldsChange: EventEmitter<Array<dxFilterBuilderField>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterOperationDescriptionsChange: EventEmitter<{ between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupOperationDescriptionsChange: EventEmitter<{ and?: string, notAnd?: string, notOr?: string, or?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupOperationsChange: EventEmitter<Array<GroupOperation>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxGroupLevelChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<Array<any> | Function | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

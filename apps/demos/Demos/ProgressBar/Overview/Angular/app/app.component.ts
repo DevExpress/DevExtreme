@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxButtonModule, DxProgressBarModule } from 'devextreme-angular';
 
 @Pipe({ name: 'time', standalone: true })
@@ -34,6 +36,8 @@ export class AppComponent {
 
   intervalId: number;
 
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
+
   onButtonClick() {
     if (this.inProgress) {
       this.buttonText = 'Continue progress';
@@ -57,6 +61,8 @@ export class AppComponent {
       this.inProgress = !this.inProgress;
       clearInterval(this.intervalId);
     }
+
+    this.changeDetectorRef.detectChanges();
   }
 
   format(ratio) {

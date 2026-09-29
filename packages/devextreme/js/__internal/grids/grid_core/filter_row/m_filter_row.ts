@@ -6,7 +6,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
+import { map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Menu from '@js/ui/menu';
@@ -16,10 +16,11 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type {
+  DataFilter, FilterSourceContext,
+} from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -27,6 +28,8 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
+
+import { createFilterRowExpressions } from './utils';
 
 const OPERATION_ICONS = {
   '=': 'filter-operation-equals',
@@ -816,33 +819,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const filterController = (
-  Base: ModuleType<FilterController>,
-) => class FilterControllerFilterRowExtender extends Base {
-  private skipCalculateColumnFilters() {
-    return false;
-  }
-
-  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
-    if (this.skipCalculateColumnFilters()) {
-      return super.getAdditionalFilter(excludedColumn);
-    }
-
-    const filters = [super.getAdditionalFilter(excludedColumn)];
-    const columns = this.columnsController.getVisibleColumns(null, true);
-
-    each(columns, function () {
-      const shouldSkip = excludedColumn?.index === this.index;
-      if (this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue) && !shouldSkip) {
-        const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
-        filters.push(filter);
-      }
-    });
-
-    return gridCoreUtils.combineFilters(filters);
-  }
-};
-
 export class ApplyFilterViewController extends modules.ViewController {
   private _headerPanel: any;
 
@@ -850,6 +826,19 @@ export class ApplyFilterViewController extends modules.ViewController {
 
   public init() {
     this._columnsController = this.getController('columns');
+  }
+
+  public isFilterSourceActive({ columnSourcesActive }: FilterSourceContext): boolean {
+    return columnSourcesActive;
+  }
+
+  public getFilterExpressions({
+    excludedColumn,
+    columnsController,
+  }: FilterSourceContext): DataFilter[] {
+    const columns: Column[] = columnsController.getVisibleColumns(null, true);
+
+    return createFilterRowExpressions(columns, excludedColumn);
   }
 
   private _getHeaderPanel() {
@@ -1051,7 +1040,6 @@ export const filterRowModule = {
   },
   extenders: {
     controllers: {
-      filter: filterController,
       columnsResizer,
       editing,
     },

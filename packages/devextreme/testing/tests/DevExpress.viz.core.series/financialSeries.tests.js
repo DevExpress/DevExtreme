@@ -5,6 +5,7 @@ import {
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const Series = SeriesModule.Series;
 
@@ -29,7 +30,7 @@ const environment = {
         this.data = [
             { date: 'arg1', high: 'high1', low: 'low1', open: 'open1', close: 'close1' }
         ];
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);

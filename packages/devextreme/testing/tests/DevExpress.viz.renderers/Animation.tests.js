@@ -2,10 +2,11 @@
 
 import $ from 'jquery';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import animationModule from 'viz/core/renderers/animation';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import {
     stubClass
 } from '../../helpers/vizMocks.js';
@@ -49,10 +50,10 @@ import {
             this.animationController.dispose();
         },
         mockRequestAnimationFrame: function(callback) {
-            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake(callback);
+            this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake(callback);
         },
         mockCancelAnimationFrame: function(callback) {
-            this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake(callback);
+            this.cancelAnimationFrameStub = stubSeam(animationFrame, 'cancelAnimationFrame', 'DEBUG_set_cancelAnimationFrame').callsFake(callback);
         }
     });
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -28,7 +25,6 @@ import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEven
 
 import DxValidationSummary from 'devextreme/ui/validation_summary';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -44,13 +40,12 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiValidationSummaryItemModule } from 'devextreme-angular/ui/validation-summary/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxValidationSummary]
-
  */
 @Component({
     selector: 'dx-validation-summary',
@@ -75,7 +70,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -85,10 +79,8 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -98,10 +90,8 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.items]
-    
      */
     @Input()
     get items(): Array<any | CollectionWidgetItem | string> {
@@ -111,10 +101,8 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -124,10 +112,8 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxValidationSummaryOptions.validationGroup]
-    
      */
     @Input()
     get validationGroup(): string {
@@ -138,82 +124,54 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     }
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | CollectionWidgetItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationGroupChange: EventEmitter<string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

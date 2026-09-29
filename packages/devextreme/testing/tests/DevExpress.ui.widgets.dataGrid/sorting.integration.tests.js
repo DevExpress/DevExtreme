@@ -83,8 +83,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        assert.deepEqual(dataGrid.getController('data')._dataSource.group(), [{ selector: 'field1', desc: false, isExpanded: true }]);
-        assert.deepEqual(dataGrid.getController('data')._dataSource.sort(), [{ selector: 'field2', desc: false }]);
+        assert.deepEqual(dataGrid.getController('dataSource').getAdapter().group(), [{ selector: 'field1', desc: false, isExpanded: true }]);
+        assert.deepEqual(dataGrid.getController('dataSource').getAdapter().sort(), [{ selector: 'field2', desc: false }]);
     });
 
     // T859208

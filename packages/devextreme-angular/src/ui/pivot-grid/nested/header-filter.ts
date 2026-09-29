@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { HeaderFilterSearchConfig } from 'devextreme/common/grids';
 
 import {
@@ -21,7 +15,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pivot-grid-header-filter',
@@ -31,14 +24,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPivotGridHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
@@ -61,14 +46,6 @@ export class DxoPivotGridHeaderFilterComponent extends NestedOption implements O
     }
     set search(value: HeaderFilterSearchConfig) {
         this._setOption('search', value);
-    }
-
-    @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
     }
 
     @Input()
@@ -100,7 +77,6 @@ export class DxoPivotGridHeaderFilterComponent extends NestedOption implements O
         return 'headerFilter';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -116,7 +92,6 @@ export class DxoPivotGridHeaderFilterComponent extends NestedOption implements O
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
@@ -139,7 +134,6 @@ export class DxiSplitterItemComponent extends CollectionNestedOption implements 
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -160,11 +154,9 @@ export class DxiSplitterItemComponent extends CollectionNestedOption implements 
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

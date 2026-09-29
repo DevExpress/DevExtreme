@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import legendModule from 'viz/components/legend';
 import titleModule from 'viz/core/title';
 import dxChart from 'viz/chart';
@@ -12,7 +13,7 @@ import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
-const seriesFamilyNativeConstructor = { ...seriesFamilyModule }.SeriesFamily;
+const seriesFamilyNativeConstructor = seriesFamilyModule.SeriesFamily;
 setupSeriesFamily();
 QUnit.testStart(function() {
     const markup =
@@ -1381,6 +1382,137 @@ QUnit.test('Reject the visualRange less then minVisualRangeLength, numeric, star
     assert.ok(onZoomEnd.getCall(0).args[0].cancel);
 });
 
+QUnit.test('T1335913. Chart is redrawn with the restored visualRange when a range rejected by minVisualRangeLength is set together with other axis options', function(assert) {
+    this.$container.css({ width: '1000px', height: '400px' });
+    const dataSource = [];
+    for(let i = 0; i <= 100; i++) {
+        dataSource.push({ arg: i, val: i % 10 });
+    }
+    const onZoomEnd = sinon.spy();
+
+    const chart = this.createChart({
+        size: { width: 1000, height: 400 },
+        dataSource,
+        series: { type: 'line', point: { visible: false } },
+        argumentAxis: {
+            minVisualRangeLength: 10,
+            visualRange: [20, 60],
+            valueMarginsEnabled: false
+        },
+        onZoomEnd
+    });
+
+    chart.option({
+        'argumentAxis.visualRange': [30, 32],
+        'argumentAxis.tickInterval': 5
+    });
+
+    const ticks = chart.getArgumentAxis().getTicksValues().majorTicksValues;
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 20, endValue: 60 }, 'visualRange is restored');
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), [20, 60], 'visualRange option is restored');
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.ok(onZoomEnd.firstCall.args[0].cancel, 'zoomEnd is canceled');
+    assert.deepEqual(ticks, [20, 25, 30, 35, 40, 45, 50, 55, 60], 'axis is drawn for the restored visualRange with the new tickInterval');
+    assert.equal(chart.getAllSeries()[0].getVisiblePoints().length, 41, 'points of the restored visualRange are drawn');
+});
+
+QUnit.test('T1335913. Points and trackers are recreated when a range rejected by minVisualRangeLength is set together with dataSource for aggregated series', function(assert) {
+    this.$container.css({ width: '1000px', height: '400px' });
+    const clock = sinon.useFakeTimers();
+    const createData = (count) => {
+        const data = [];
+        for(let i = 0; i < count; i++) {
+            data.push({ arg: i, val: i % 10 });
+        }
+        return data;
+    };
+    const onZoomEnd = sinon.spy();
+
+    try {
+        const chart = this.createChart({
+            size: { width: 1000, height: 400 },
+            dataSource: createData(1000),
+            series: { type: 'line', point: { visible: false }, aggregation: { enabled: true } },
+            argumentAxis: {
+                minVisualRangeLength: 100,
+                visualRange: [500, 700],
+                visualRangeUpdateMode: 'keep',
+                aggregationGroupWidth: 40,
+                valueMarginsEnabled: false
+            },
+            tooltip: { enabled: true },
+            onZoomEnd
+        });
+
+        chart.option({
+            dataSource: createData(1001),
+            'argumentAxis.visualRange': [600, 650]
+        });
+
+        const series = chart.getAllSeries()[0];
+        const drawnPoints = series.getVisiblePoints();
+
+        assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 500, endValue: 700 }, 'visualRange is restored');
+        assert.equal(onZoomEnd.callCount, 1);
+        assert.ok(onZoomEnd.firstCall.args[0].cancel, 'zoomEnd is canceled');
+        assert.ok(drawnPoints.length > 0, 'points are drawn');
+        assert.ok(drawnPoints.every((p) => p.getOptions()), 'drawn points are not disposed');
+
+        const rootOffset = chart._renderer.getRootOffset();
+        pointerMock(this.$container.find('.dxc-trackers > path').eq(0)).start().move(rootOffset.left + 500, rootOffset.top + 200);
+        clock.tick(50);
+
+        assert.ok(series.isHovered(), 'series is hovered');
+
+        chart.option({
+            dataSource: createData(1002),
+            'argumentAxis.visualRange': [610, 660]
+        });
+        pointerMock(this.$container.find('.dxc-trackers > path').eq(0)).start().move(rootOffset.left + 300, rootOffset.top + 200);
+        clock.tick(50);
+
+        assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 500, endValue: 700 }, 'visualRange is restored after the next update');
+        assert.equal(onZoomEnd.callCount, 2);
+        assert.ok(series.getVisiblePoints().every((p) => p.getOptions()), 'drawn points are not disposed after the next update');
+    } finally {
+        clock.restore();
+    }
+});
+
+QUnit.test('T1335913. Chart is redrawn with the previous visualRange when zoomEnd is canceled for a range set together with dataSource', function(assert) {
+    this.$container.css({ width: '1000px', height: '400px' });
+    const dataSource = [{ arg: 1, val: 4 }, { arg: 2, val: 5 }, { arg: 5, val: 7 }, { arg: 8, val: 3 }, { arg: 11, val: 8 }];
+    const onZoomEnd = sinon.spy((e) => {
+        e.cancel = true;
+    });
+
+    const chart = this.createChart({
+        size: { width: 1000, height: 400 },
+        dataSource,
+        series: { type: 'line' },
+        argumentAxis: {
+            visualRange: [2, 8],
+            visualRangeUpdateMode: 'keep',
+            valueMarginsEnabled: false
+        },
+        onZoomEnd
+    });
+
+    chart.option({
+        dataSource: dataSource.concat([{ arg: 14, val: 6 }]),
+        'argumentAxis.visualRange': [5, 14]
+    });
+
+    const ticks = chart.getArgumentAxis().getTicksValues().majorTicksValues;
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 2, endValue: 8 }, 'visualRange is restored');
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.deepEqual(onZoomEnd.firstCall.args[0].range, { startValue: 5, endValue: 14 });
+    assert.deepEqual([ticks[0], ticks[ticks.length - 1]], [2, 8], 'axis is drawn for the restored visualRange');
+    assert.equal(chart.getAllSeries()[0].getVisiblePoints().length, 3, 'points of the restored visualRange are drawn');
+});
+
 QUnit.test('Reset axis viewport', function(assert) {
     this.$container.css({ width: '1000px', height: '600px' });
 
@@ -2325,7 +2457,7 @@ QUnit.test('check horizontal alignment === center', function(assert) {
 QUnit.module('Auto hide point markers', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
-        seriesFamilyModule.SeriesFamily = seriesFamilyNativeConstructor;
+        seriesFamilyModule.DEBUG_set_SeriesFamily(seriesFamilyNativeConstructor);
         const dataSource = [];
         for(let i = 0; i < 500000; i += 250) {
             const y1 = Math.sin(i);
@@ -3300,7 +3432,7 @@ QUnit.module('Option changing in onDrawn after zooming', {
     beforeEach: function() {
         this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, 'move');
         this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, 'move');
-        sinon.stub(rendererModule, 'Renderer').callsFake(function() {
+        stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(function() {
             return new Renderer();
         });
     },
@@ -3641,6 +3773,35 @@ QUnit.test('Set/reset the visualRange by API methods', function(assert) {
     assert.deepEqual(chart.option('valueAxis.visualRange'), visualRange);
     assert.notOk(chart.option().valueAxis._customVisualRange);
     assert.deepEqual(valueAxis.getOptions()._customVisualRange, {});
+});
+
+QUnit.test('T1335913. zoomEnd is raised for the valueAxis visualRange set together with dataSource', function(assert) {
+    this.$container.css({ width: '500px', height: '500px' });
+    const dataSource = [{ arg: 0, val: 4 }, { arg: 90, val: 5 }, { arg: 180, val: 7 }, { arg: 270, val: 3 }, { arg: 360, val: 8 }];
+    const onZoomEnd = sinon.spy();
+
+    const chart = this.createPolarChart({
+        dataSource,
+        series: { type: 'line', point: { visible: false } },
+        valueAxis: { visualRange: [3, 8] },
+        onZoomEnd
+    });
+
+    chart.option({
+        dataSource: dataSource.slice(),
+        'valueAxis.visualRange': [4, 7]
+    });
+
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.deepEqual(onZoomEnd.firstCall.args[0].previousRange, { startValue: 3, endValue: 8 });
+    assert.deepEqual(onZoomEnd.firstCall.args[0].range, { startValue: 4, endValue: 7 });
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 4, endValue: 7 });
+
+    chart.option('valueAxis.visualRange', [5, 6]);
+
+    assert.equal(onZoomEnd.callCount, 2);
+    assert.deepEqual(onZoomEnd.secondCall.args[0].previousRange, { startValue: 4, endValue: 7 }, 'previousRange of the next zoom is the range applied by the batch');
+    assert.deepEqual(onZoomEnd.secondCall.args[0].range, { startValue: 5, endValue: 6 });
 });
 
 QUnit.test('Set the visualRange option by the different ways', function(assert) {
@@ -4901,7 +5062,7 @@ QUnit.test('Reset axes animation before adjusting position of vertical axes (fix
 QUnit.module('SeriesFamily', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
-        seriesFamilyModule.SeriesFamily = seriesFamilyNativeConstructor;
+        seriesFamilyModule.DEBUG_set_SeriesFamily(seriesFamilyNativeConstructor);
     }
 }));
 
@@ -5149,5 +5310,105 @@ QUnit.test('encodeHtml is applied on option changing (T1334517)', function(asser
         axisLabels: ['<A>', 'B'],
         legend: ['<North America> | Total'],
         tooltip: '<North America> | Total - 850'
+    });
+});
+
+QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
+    beforeEach() {
+        moduleSetup.beforeEach.call(this);
+
+        const workdays = [];
+        for(let day = 1; day <= 31; day++) {
+            const date = new Date(1994, 2, day);
+            if(date.getDay() !== 0 && date.getDay() !== 6) {
+                workdays.push({ date: date, val: day });
+            }
+        }
+
+        this.options = {
+            dataSource: workdays,
+            series: [{ argumentField: 'date', valueField: 'val' }],
+            scrollBar: { visible: true },
+            legend: { visible: false },
+            argumentAxis: {
+                visualRange: {
+                    startValue: new Date(1994, 2, 9),
+                    endValue: new Date(1994, 2, 18)
+                }
+            }
+        };
+    },
+    createChart(options) {
+        return moduleSetup.createChart.call(this, $.extend(true, {}, this.options, options));
+    },
+    setVisualRange(chart, firstDay) {
+        const axis = chart.getArgumentAxis();
+
+        axis.visualRange({
+            startValue: new Date(1994, 2, firstDay),
+            endValue: new Date(1994, 2, firstDay + 9)
+        });
+
+        const $thumb = this.$container.find('.dxc-scroll-bar rect');
+        const barArea = chart._scrollBar._translator.getCanvasVisibleArea();
+        const wholeRange = axis.getTranslator().getBusinessRange();
+
+        return {
+            position: parseFloat($thumb.attr('y')),
+            barShare: parseFloat($thumb.attr('height')) / (barArea.max - barArea.min),
+            contentShare: axis.getVisualRangeLengthWithoutBreaks()
+                / axis.getVisualRangeLengthWithoutBreaks({ minVisible: wholeRange.min, maxVisible: wholeRange.max })
+        };
+    },
+    checkThumbSlidesSmoothly(assert, chart) {
+        const thumbs = [];
+
+        for(let firstDay = 1; firstDay <= 22; firstDay++) {
+            thumbs.push(this.setVisualRange(chart, firstDay));
+        }
+
+        for(let i = 1; i < thumbs.length; i++) {
+            assert.ok(thumbs[i].position >= thumbs[i - 1].position,
+                `thumb never moves back on March ${i + 1} (${thumbs[i - 1].position} -> ${thumbs[i].position})`);
+            assert.roughEqual(thumbs[i].barShare, thumbs[i].contentShare, 0.005,
+                `thumb size matches the rendered content on March ${i + 1}`);
+        }
+
+        assert.ok(thumbs[thumbs.length - 1].position > thumbs[0].position, 'the thumb did move');
+    }
+}), () => {
+    QUnit.test('Thumb must not jump when the visual range starts inside a weekend break', function(assert) {
+        const chart = this.createChart({ argumentAxis: { workdaysOnly: true } });
+
+        const beforeBreak = this.setVisualRange(chart, 11);
+        const insideBreak = this.setVisualRange(chart, 12);
+
+        assert.ok(insideBreak.position > beforeBreak.position,
+            `thumb moves forward instead of jumping to the beginning of the scroll bar (${beforeBreak.position} -> ${insideBreak.position})`);
+        assert.roughEqual(insideBreak.barShare, insideBreak.contentShare, 0.005,
+            'thumb size matches the rendered content');
+    });
+
+    QUnit.test('Thumb must slide smoothly over weekend breaks (workdaysOnly)', function(assert) {
+        this.checkThumbSlidesSmoothly(assert, this.createChart({ argumentAxis: { workdaysOnly: true } }));
+    });
+
+    QUnit.test('Thumb must slide smoothly over a user-defined scale break', function(assert) {
+        const chart = this.createChart({
+            argumentAxis: {
+                breaks: [{
+                    startValue: new Date(1994, 2, 12),
+                    endValue: new Date(1994, 2, 14)
+                }]
+            }
+        });
+
+        assert.ok(this.$container.find('.dxc-arg-breaks path').length > 0, 'the scale break is applied');
+
+        this.checkThumbSlidesSmoothly(assert, chart);
+    });
+
+    QUnit.test('Thumb must slide smoothly when there are no scale breaks', function(assert) {
+        this.checkThumbSlidesSmoothly(assert, this.createChart({}));
     });
 });

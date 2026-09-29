@@ -312,7 +312,6 @@ $transparent-border: 1px solid transparent !default;
 
   &.ql-blank {
     &::before {
-      color: rgba(0, 0, 0, 0.6);
       content: attr(data-placeholder);
       font-style: italic;
       left: 15px;
@@ -342,8 +341,6 @@ $transparent-border: 1px solid transparent !default;
 
 .dx-suggestion-list-wrapper {
   .dx-list {
-    min-height: 35px;
-
     .dx-scrollable-content {
       margin: 0;
     }

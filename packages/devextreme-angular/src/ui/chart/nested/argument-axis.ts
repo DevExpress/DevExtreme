@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type * as CommonChartTypes from 'devextreme/common/charts';
 import type { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import type { TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, AxisScaleType, VisualRangeUpdateMode } from 'devextreme/common/charts';
@@ -470,7 +464,6 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
         return 'argumentAxis';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -491,7 +484,6 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

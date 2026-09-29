@@ -7,6 +7,10 @@ import ItemOptionAction from '@ts/ui/form/form.item_option_action';
 import type { PreparedGroupedItem } from '@ts/ui/form/form.items_runtime_info';
 import { getFullOptionName } from '@ts/ui/form/form.utils';
 
+interface RulesValidator {
+  option: (name: 'validationRules', value?: ValidationRule[]) => ValidationRule[] | undefined;
+}
+
 export type ItemOptionActionType = WidgetOptionItemOptionAction
   | ValidationRulesItemOptionAction
   | CssClassItemOptionAction
@@ -82,7 +86,7 @@ class ValidationRulesItemOptionAction extends ItemOptionAction<
   tryExecute(): boolean {
     const { item } = this._options;
     const instance = this.findInstance();
-    const validator = instance && data(instance.$element()[0], 'dxValidator');
+    const validator = instance && data<RulesValidator | undefined>(instance.$element()[0], 'dxValidator');
     if (validator && item) {
       const filterRequired = (validationRule: ValidationRule): boolean => validationRule.type === 'required';
       const oldContainsRequired = (validator.option('validationRules') || []).some(filterRequired);

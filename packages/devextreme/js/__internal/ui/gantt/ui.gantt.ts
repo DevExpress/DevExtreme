@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -137,8 +136,6 @@ class Gantt extends Widget<Properties> {
 
   _init(): void {
     super._init();
-
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
 
     this._initGantt();
     this._isGanttRendered = false;

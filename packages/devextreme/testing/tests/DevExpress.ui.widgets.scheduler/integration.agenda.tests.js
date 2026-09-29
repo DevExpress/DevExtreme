@@ -1,6 +1,6 @@
 import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dblclickEvent from 'common/core/events/dblclick';
 import fx from 'common/core/animation/fx';

@@ -1,7 +1,7 @@
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { getOuterHeight } from 'core/utils/size';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';

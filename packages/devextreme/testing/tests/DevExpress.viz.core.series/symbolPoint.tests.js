@@ -33,9 +33,10 @@ const environment = {
             return !this.draw.calledWith(false);
         });
 
-        this.labelFactory = labelModule.Label = sinon.spy(function() {
+        this.labelFactory = sinon.spy(function() {
             return that.label;
         });
+        labelModule.DEBUG_set_Label(this.labelFactory);
         this.options = {
             widgetType: 'chart',
             visible: true,
@@ -71,7 +72,7 @@ const environment = {
         };
     },
     afterEach: function() {
-        labelModule.Label = originalLabel;
+        labelModule.DEBUG_set_Label(originalLabel);
     }
 };
 const translateXData = { 'canvas_position_default': 'x0', 1: 'x1', 2: 'x2', 3: 'x3', 4: 'x4', 5: 'x5' };

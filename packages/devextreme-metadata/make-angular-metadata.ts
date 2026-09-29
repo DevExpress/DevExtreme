@@ -74,6 +74,7 @@ Ng.makeMetadata({
     removeMembers(/\/stepper:/),
     removeMembers(/\/speech_to_text:/),
     removeMembers(/\/tree_list:dxTreeListColumnButton.onClick/),
+    removeMembers(/\/(data_grid|tree_list):.*Options\.rowDragging/),
   ],
   variables: {
     CollectionItems: [...commonSmdCollectionItems],

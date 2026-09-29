@@ -18,6 +18,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import typeUtils from 'core/utils/type';
 import plaqueModule from 'viz/core/plaque';
+import { stubSeam, spySeam } from '../../helpers/moduleSeam.js';
 
 import '__internal/viz/vector_map/vector_map';
 
@@ -26,7 +27,7 @@ const stubLayersEnvironment = $.extend({}, environment, {
         environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
         this.tracker.on = sinon.stub().returns(noop);
-        sinon.stub(plaqueModule, 'Plaque').returns({ draw: sinon.stub(), hitTest: sinon.stub(), clear: sinon.stub() });
+        stubSeam(plaqueModule, 'Plaque', 'DEBUG_set_Plaque').returns({ draw: sinon.stub(), hitTest: sinon.stub(), clear: sinon.stub() });
     },
     afterEach: function() {
         plaqueModule.Plaque.restore();
@@ -36,7 +37,7 @@ const stubLayersEnvironment = $.extend({}, environment, {
 QUnit.module('Map - elements', stubLayersEnvironment);
 
 QUnit.test('Renderer', function(assert) {
-    const spy = sinon.spy(rendererModule, 'Renderer');
+    const spy = spySeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer');
 
     this.createMap({ pathModified: 'path-modified' });
 
@@ -63,7 +64,7 @@ QUnit.test('Background', function(assert) {
 });
 
 QUnit.test('Layer collection', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
 
     this.createMap({
         layers: [{ tag: 'layer-1', dataSource: 'data-1' }, { tag: 'layer-2', dataSource: 'data-2' }]
@@ -90,7 +91,7 @@ QUnit.test('Layer collection', function(assert) {
 });
 
 QUnit.test('Set bounds when data ready called. Without bounds in options', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
@@ -113,7 +114,7 @@ QUnit.test('Set bounds when data ready called. Without bounds in options', funct
 });
 
 QUnit.test('Projection by data. Default bounds are include common bounds', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
@@ -134,7 +135,7 @@ QUnit.test('Projection by data. Default bounds are include common bounds', funct
 });
 
 QUnit.test('Projection by data. Without projection in options', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
@@ -157,7 +158,7 @@ QUnit.test('Projection by data. Without projection in options', function(assert)
 });
 
 QUnit.test('Projection by data. Projection in options', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
@@ -178,7 +179,7 @@ QUnit.test('Projection by data. Projection in options', function(assert) {
 });
 
 QUnit.test('Bounds by data. Empty bbox', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [];
 
     this.layerCollection.stub('items').returns(layers);
@@ -195,7 +196,7 @@ QUnit.test('Bounds by data. Empty bbox', function(assert) {
 });
 
 QUnit.test('Set bounds when data ready called. With bounds in options', function(assert) {
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() {
@@ -232,7 +233,7 @@ QUnit.test('Layer collection - object option', function(assert) {
 });
 
 QUnit.test('Projection', function(assert) {
-    const spy = sinon.spy(projectionModule, 'Projection');
+    const spy = spySeam(projectionModule, 'Projection', 'DEBUG_set_Projection');
 
     this.createMap({
         projection: 'projection',
@@ -256,7 +257,7 @@ QUnit.test('Projection', function(assert) {
 });
 
 QUnit.test('DataExchanger', function(assert) {
-    const spy = sinon.spy(dataExchangerModule, 'DataExchanger');
+    const spy = spySeam(dataExchangerModule, 'DataExchanger', 'DEBUG_set_DataExchanger');
 
     this.createMap();
 
@@ -264,7 +265,7 @@ QUnit.test('DataExchanger', function(assert) {
 });
 
 QUnit.test('GestureHandler', function(assert) {
-    const spy = sinon.spy(gestureHandlerModule, 'GestureHandler');
+    const spy = spySeam(gestureHandlerModule, 'GestureHandler', 'DEBUG_set_GestureHandler');
 
     this.createMap({
         panningEnabled: 1,
@@ -282,7 +283,7 @@ QUnit.test('GestureHandler', function(assert) {
 });
 
 QUnit.test('LayoutControl', function(assert) {
-    const spy = sinon.spy(layoutModule, 'LayoutControl');
+    const spy = spySeam(layoutModule, 'LayoutControl', 'DEBUG_set_LayoutControl');
 
     const map = this.createMap({ layers: {} });
 
@@ -297,7 +298,7 @@ QUnit.test('LayoutControl', function(assert) {
 });
 
 QUnit.test('Tracker', function(assert) {
-    const spy = sinon.spy(trackerModule, 'Tracker');
+    const spy = spySeam(trackerModule, 'Tracker', 'DEBUG_set_Tracker');
 
     this.createMap({
         touchEnabled: 0,
@@ -315,7 +316,7 @@ QUnit.test('Tracker', function(assert) {
 });
 
 QUnit.test('Control bar', function(assert) {
-    const spy = sinon.spy(controlBarModule, 'ControlBar');
+    const spy = spySeam(controlBarModule, 'ControlBar', 'DEBUG_set_ControlBar');
     this.themeManager.theme.withArgs('controlBar').returns({ theme: 'control-bar' });
 
     this.createMap({
@@ -339,7 +340,7 @@ QUnit.test('Control bar', function(assert) {
 });
 
 QUnit.test('Legends', function(assert) {
-    const spy = sinon.spy(legendModule, 'LegendsControl');
+    const spy = spySeam(legendModule, 'LegendsControl', 'DEBUG_set_LegendsControl');
 
     const map = this.createMap({
         legends: {
@@ -362,7 +363,7 @@ QUnit.test('Legends', function(assert) {
 });
 
 QUnit.test('TooltipViewer', function(assert) {
-    const spy = sinon.spy(tooltipViewerModule, 'TooltipViewer');
+    const spy = spySeam(tooltipViewerModule, 'TooltipViewer', 'DEBUG_set_TooltipViewer');
 
     this.createMap();
 
@@ -437,8 +438,8 @@ QUnit.test('Should created group for annotations', function(assert) {
 });
 
 QUnit.test('Should created group for annotations before controll bar and legend', function(assert) {
-    const spyLegend = sinon.spy(legendModule, 'LegendsControl');
-    const spyControlBar = sinon.spy(controlBarModule, 'ControlBar');
+    const spyLegend = spySeam(legendModule, 'LegendsControl', 'DEBUG_set_LegendsControl');
+    const spyControlBar = spySeam(controlBarModule, 'ControlBar', 'DEBUG_set_ControlBar');
     this.createMap();
 
     assert.ok(this.renderer.g.returnValues[1].attr.calledBefore(spyControlBar));
@@ -548,7 +549,7 @@ QUnit.test('Applying bounds by data', function(assert) {
             };
         }
     }];
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     this.createMap({
         getBoundsFromData: true
     });
@@ -1019,7 +1020,7 @@ QUnit.module('drawn', stubLayersEnvironment);
 
 QUnit.test('call drawn after layer collection ready', function(assert) {
     const onDrawn = sinon.spy();
-    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
     this.createMap({
         onDrawn: onDrawn
     });

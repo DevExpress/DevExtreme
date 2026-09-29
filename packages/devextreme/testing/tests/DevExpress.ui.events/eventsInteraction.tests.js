@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { noop } from '__internal/core/utils/m_common';
 import domUtils from '__internal/core/utils/m_dom';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import eventUtils from 'common/core/events/utils/index';
 import Emitter from 'common/core/events/core/emitter';
 import GestureEmitter from 'common/core/events/gesture/emitter.gesture';

@@ -1,6 +1,6 @@
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
 import type { EmitterEvent, EmitterEventPointer } from '@ts/events/core/emitter';
 import type { PointerStrategyEventArgs } from '@ts/events/pointer/base';
 import BaseStrategy from '@ts/events/pointer/base';

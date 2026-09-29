@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import type { ChartsDataType, DiscreteAxisDivisionMode, Font, LabelOverlap, ScaleBreak, ScaleBreakLineStyle, TimeInterval } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
@@ -331,7 +325,6 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
         return 'scale';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -347,7 +340,6 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

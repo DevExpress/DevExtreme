@@ -10,6 +10,7 @@ import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import xyMethods from '__internal/viz/axes/xy_axes';
 import { isFunction, isDeferred } from 'core/utils/type';
+import { stubSeam, spySeam } from '../../helpers/moduleSeam.js';
 
 const StubTranslator = stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
@@ -29,7 +30,7 @@ const environment = {
                 tickInterval: that.generatedTickInterval
             };
         });
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
+        this.tickGenerator = stubSeam(tickGeneratorModule, 'tickGenerator', 'DEBUG_set_tickGenerator').callsFake(function() {
             return that.tickGeneratorSpy;
         });
 
@@ -175,7 +176,7 @@ QUnit.module('API', {
     beforeEach: function() {
         const that = this;
 
-        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
+        stubSeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D').callsFake(function() {
             return that.translator;
         });
         environment.beforeEach.call(this);
@@ -1195,7 +1196,7 @@ QUnit.test('Validate visualRange, option is set', function(assert) {
 QUnit.module('Zoom', {
     beforeEach: function() {
         const that = this;
-        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
+        stubSeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D').callsFake(function() {
             return that.translator;
         });
 
@@ -1698,7 +1699,7 @@ QUnit.test('Get visualRange. visualRange is defined', function(assert) {
 
 const dataMarginsEnvironment = {
     beforeEach: function() {
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
 
         environment.beforeEach.call(this);
 
@@ -3597,7 +3598,7 @@ QUnit.test('Do not correct zero level if max > 0', function(assert) {
 QUnit.module('Set business range', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
 
         this.axis = new Axis({
             renderer: this.renderer,
@@ -4442,7 +4443,7 @@ QUnit.test('Logarithmic axis. Do not allowNegatives if option is not set and min
 QUnit.module('Set business range. Value axis', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
 
         this.axis = new Axis({
             renderer: this.renderer,
@@ -4608,7 +4609,7 @@ QUnit.test('Value axis ignores visual range on update option', function(assert) 
 QUnit.module('Visual range on update. Argument axis', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
 
         this.axis = new Axis({
             renderer: this.renderer,
@@ -4992,7 +4993,7 @@ QUnit.test('Auto. Discrete axis - reset if visualRange consist of all old catego
 QUnit.module('Get scroll bounds', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
 
         this.axis = new Axis({
             renderer: this.renderer,

@@ -1,5 +1,4 @@
 import { isDefined } from '@js/core/utils/type';
-import type { CustomOperation } from '@js/ui/filter_builder';
 import {
   addItem,
   getMatchedConditions,
@@ -10,11 +9,14 @@ import type {
   Column, ColumnUserState, FilterField,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/data_controller/types';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type {
+  FilterValue, FilterValueCondition,
+} from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 
-import { anyOf, noneOf } from './m_filter_custom_operations';
+import type { OptionChanged } from '../m_types';
+import { FILTER_TYPES_EXCLUDE } from './const';
 import {
   checkForErrors,
   getColumnIdentifier,
@@ -24,6 +26,7 @@ import {
   getFilterValueWithFilterRow,
   getFilterValueWithHeaderFilter,
   getHeaderFilterFromCondition,
+  parseColumnPropertyName,
 } from './utils';
 
 export class FilterSyncController extends modules.Controller {
@@ -49,20 +52,18 @@ export class FilterSyncController extends modules.Controller {
     }
   }
 
-  public publicMethods(): string[] {
-    return ['getCustomFilterOperations'];
-  }
-
   public isSyncingColumnOptions(): boolean {
     return this.skipSyncColumnOptions;
   }
 
   public withColumnOptionsSync<T>(sync: () => T): T {
+    const wasSyncing = this.skipSyncColumnOptions;
+
     this.skipSyncColumnOptions = true;
     try {
-      return sync();
+      return this.filterController.suspendColumnSources(sync);
     } finally {
-      this.skipSyncColumnOptions = false;
+      this.skipSyncColumnOptions = wasSyncing;
     }
   }
 
@@ -130,6 +131,30 @@ export class FilterSyncController extends modules.Controller {
     this.dataController.pageIndex(pageIndex);
   }
 
+  private syncColumnOptionCore(
+    column: Column,
+    propertyName: string | null,
+    value: unknown,
+    previousValue: unknown,
+  ): void {
+    const hasExcludeFilterType = value === FILTER_TYPES_EXCLUDE
+      || previousValue === FILTER_TYPES_EXCLUDE;
+    const isExcludeFilterTypeToggled = propertyName === 'filterType' && hasExcludeFilterType;
+    const needSyncHeaderFilter = isExcludeFilterTypeToggled || propertyName === 'filterValues';
+    const needSyncFilterRow = propertyName === 'filterValue'
+      || propertyName === 'selectedFilterOperation';
+
+    if (needSyncHeaderFilter) {
+      this.syncHeaderFilter(column);
+
+      return;
+    }
+
+    if (needSyncFilterRow) {
+      this.syncFilterRow(column);
+    }
+  }
+
   public getFilterValueFromColumns(
     columns: ColumnUserState[] | undefined,
   ): FilterValue {
@@ -154,6 +179,18 @@ export class FilterSyncController extends modules.Controller {
     return getNormalizedFilter(filterValue) as FilterValue;
   }
 
+  public syncColumnOption(fullName: string, value: unknown, previousValue: unknown): void {
+    const column: Column = this.columnsController.getColumnByPath(fullName);
+
+    if (!column || !this.filterController.isFilterSyncActive() || this.isSyncingColumnOptions()) {
+      return;
+    }
+
+    this.filterController.suspendColumnSources(() => {
+      this.syncColumnOptionCore(column, parseColumnPropertyName(fullName), value, previousValue);
+    });
+  }
+
   public syncFilterRow(column: Column): void {
     const filterValue = this.option('filterValue');
     const syncedFilterValue = getFilterValueWithFilterRow(filterValue, column);
@@ -168,14 +205,14 @@ export class FilterSyncController extends modules.Controller {
     this.option('filterValue', syncedFilterValue);
   }
 
-  // Override in the private API WA [T1232532]
-  public getCustomFilterOperations(): CustomOperation[] {
-    const filterBuilderCustomOperations = this.option('filterBuilder.customOperations') ?? [];
-
-    return [
-      anyOf(this.component),
-      noneOf(this.component),
-      ...filterBuilderCustomOperations,
-    ];
+  public optionChanged(args: OptionChanged): void {
+    switch (args.name) {
+      case 'columns':
+        this.syncColumnOption(args.fullName, args.value, args.previousValue);
+        super.optionChanged(args);
+        break;
+      default:
+        super.optionChanged(args);
+    }
   }
 }

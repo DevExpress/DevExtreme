@@ -1,13 +1,20 @@
+/* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import { isDefined } from '@js/core/utils/type';
+import type { CustomOperation } from '@js/ui/filter_builder';
 import FilterBuilder from '@js/ui/filter_builder';
 import Popup from '@js/ui/popup/ui.popup';
 import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
+import { getFilterExpression, removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import modules from '@ts/grids/grid_core/m_modules';
+
+import type { DataFilter, FilterSourceContext } from '../filter/types';
+import { anyOf, noneOf } from '../filter_sync/m_filter_custom_operations';
+import { getColumnIdentifier } from '../filter_sync/utils';
 
 export class FilterBuilderView extends modules.View {
   private _filterBuilderPopup: any;
@@ -16,12 +23,12 @@ export class FilterBuilderView extends modules.View {
 
   private _columnsController!: ColumnsController;
 
-  private _filterSyncController!: FilterSyncController;
+  private filterBuilderController?: FilterBuilderController;
 
   public init() {
     super.init();
     this._columnsController = this.getController('columns');
-    this._filterSyncController = this.getController('filterSync');
+    this.filterBuilderController = this.getController('filterBuilder');
   }
 
   public optionChanged(args) {
@@ -90,7 +97,7 @@ export class FilterBuilderView extends modules.View {
       value: this.option('filterValue'),
       fields: this._columnsController.getFilteringColumns(),
     }, this.option('filterBuilder'), {
-      customOperations: this._filterSyncController.getCustomFilterOperations(),
+      customOperations: this.filterBuilderController?.getCustomFilterOperations(),
     }));
 
     this._createComponent($contentElement, ScrollView, { direction: 'both' });
@@ -127,6 +134,47 @@ export class FilterBuilderView extends modules.View {
   }
 }
 
+export class FilterBuilderController extends modules.Controller {
+  public publicMethods(): string[] {
+    return ['getCustomFilterOperations'];
+  }
+
+  public isFilterSourceActive({ columnsController }: FilterSourceContext): boolean {
+    return !!columnsController.getFilteringColumns()?.length
+      && this.option('filterPanel.filterEnabled') !== false;
+  }
+
+  public getFilterExpressions(
+    {
+      excludedColumn,
+      columnsController,
+      filterSyncActive,
+    }: FilterSourceContext,
+  ): DataFilter[] {
+    const currentFilterValue = this.option('filterValue');
+    const shouldExcludeColumn = filterSyncActive && isDefined(excludedColumn);
+    const filterValue = shouldExcludeColumn
+      ? removeFieldConditionsFromFilter(currentFilterValue, getColumnIdentifier(excludedColumn))
+      : currentFilterValue;
+    const columns = columnsController.getFilteringColumns();
+    const customOperations = this.getCustomFilterOperations();
+    const filterExpression: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
+
+    return filterExpression ? [filterExpression] : [];
+  }
+
+  // Override in the private API WA [T1232532]
+  public getCustomFilterOperations(): CustomOperation[] {
+    const filterBuilderCustomOperations = this.option('filterBuilder.customOperations') ?? [];
+
+    return [
+      anyOf(this.component),
+      noneOf(this.component),
+      ...filterBuilderCustomOperations,
+    ];
+  }
+}
+
 export const filterBuilderModule = {
   defaultOptions() {
     return {
@@ -156,6 +204,9 @@ export const filterBuilderModule = {
 
       filterBuilderPopup: {},
     };
+  },
+  controllers: {
+    filterBuilder: FilterBuilderController,
   },
   views: {
     filterBuilderView: FilterBuilderView,

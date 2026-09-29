@@ -1,5 +1,7 @@
-/* eslint-disable prefer-destructuring */
+import type { DataType, HorizontalAlignment } from '@js/common';
+import type { Format } from '@js/common/core/localization';
 import numberLocalization from '@js/common/core/localization/number';
+import type { ColumnBase, ColumnCustomizeTextArg } from '@js/common/grids';
 import { normalizeIndexes } from '@js/core/utils/array';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
@@ -16,6 +18,7 @@ import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
+import type DataSourceAdapter from '../data_source_adapter/m_data_source_adapter';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
@@ -34,7 +37,8 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 import type {
-  Column, ColumnIndex, ColumnsChanges, DropLocationNames,
+  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionGetter, ColumnOptionSetter,
+  ColumnsChanges, ColumnUserState, DropLocationNames, ValueSerializers,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
@@ -61,87 +65,127 @@ const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns
   }
 };
 
-export const setFilterOperationsAsDefaultValues = function (column) {
+export const setFilterOperationsAsDefaultValues = (column: Column): void => {
   column.filterOperations = column.defaultFilterOperations;
 };
 
 let globalColumnId = 1;
 
-export const createColumn = function (that: ColumnsController, columnOptions, userStateColumnOptions?, bandColumn?): any {
-  let commonColumnOptions = {};
-
-  if (columnOptions) {
-    if (isString(columnOptions)) {
-      columnOptions = {
-        dataField: columnOptions,
-      };
-    }
-
-    that.setName(columnOptions);
-
-    let result = {};
-    if (columnOptions.command) {
-      result = deepExtendArraySafe(commonColumnOptions, columnOptions);
-    } else {
-      commonColumnOptions = that.getCommonSettings(columnOptions);
-      if (userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
-        columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
-      }
-      const calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
-      if (!columnOptions.type) {
-        result = { headerId: `dx-col-${globalColumnId++}` };
-      }
-      result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS, false, true);
-      deepExtendArraySafe(result, commonColumnOptions, false, true);
-      deepExtendArraySafe(result, calculatedColumnOptions, false, true);
-      deepExtendArraySafe(result, columnOptions, false, true);
-      deepExtendArraySafe(result, { selector: null }, false, true);
-    }
-    if (columnOptions.filterOperations === columnOptions.defaultFilterOperations) {
-      setFilterOperationsAsDefaultValues(result);
-    }
-    return result;
+export const createColumn = (
+  that: ColumnsController,
+  columnOptions: Column | string | undefined,
+  userStateColumnOptions?: ColumnUserState,
+  bandColumn?: Column,
+): Column | undefined => {
+  if (!columnOptions) {
+    return undefined;
   }
-};
 
-export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?, createdColumnCount?) {
-  let result: any = [];
+  const options: Column = isString(columnOptions) ? { dataField: columnOptions } : columnOptions;
+  let result: Column = {};
 
-  if (columnsOptions) {
-    each(columnsOptions, (index, columnOptions) => {
-      const currentIndex = (createdColumnCount ?? 0) + result.length;
-      const userStateColumnOptions = that._columnsUserState
-        && checkUserStateColumn(columnOptions, that._columnsUserState[currentIndex])
-        && that._columnsUserState[currentIndex];
-      const column: any = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
+  that.setName(options);
 
-      if (column) {
-        if (bandColumn) {
-          column.ownerBand = bandColumn;
-        }
-        result.push(column);
+  if (options.command) {
+    result = deepExtendArraySafe({}, options);
+  } else {
+    const commonColumnOptions = that.getCommonSettings(options);
+    const userStateDataField = userStateColumnOptions?.name && userStateColumnOptions.dataField;
+    const optionsWithUserState: Column = userStateDataField
+      ? extend({}, options, { dataField: userStateDataField })
+      : options;
+    const calculatedColumnOptions = that._createCalculatedColumnOptions(
+      optionsWithUserState,
+      bandColumn,
+    );
 
-        if (column.columns) {
-          warnFixedInChildColumnsOnce(that, column.columns);
-          result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
-          delete column.columns;
-          column.hasColumns = true;
-        }
-      }
-    });
+    if (!optionsWithUserState.type) {
+      result = { headerId: `dx-col-${globalColumnId}` };
+      globalColumnId += 1;
+    }
+
+    deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS, false, true);
+    deepExtendArraySafe(result, commonColumnOptions, false, true);
+    deepExtendArraySafe(result, calculatedColumnOptions, false, true);
+    deepExtendArraySafe(result, optionsWithUserState, false, true);
+    deepExtendArraySafe(result, { selector: null }, false, true);
+  }
+
+  if (options.filterOperations === options.defaultFilterOperations) {
+    setFilterOperationsAsDefaultValues(result);
   }
 
   return result;
 };
 
-export const getParentBandColumns = function (columnIndex, columnParentByIndex) {
-  const result: any = [];
-  let parent = columnParentByIndex[columnIndex];
+export function isUserStateColumn(
+  column: ColumnUserState | undefined,
+  userStateColumn: ColumnUserState | undefined,
+): boolean {
+  if (!column || !userStateColumn) {
+    return false;
+  }
+
+  const isNameMatched = userStateColumn.name === (column.name || column.dataField);
+  const isDataFieldMatched = userStateColumn.dataField === column.dataField;
+
+  return isNameMatched && (isDataFieldMatched || !!column.name);
+}
+
+export const createColumnsFromOptions = (
+  that: ColumnsController,
+  columnsOptions: (Column | string)[] | undefined,
+  bandColumn?: Column,
+  createdColumnCount = 0,
+): Column[] => {
+  if (!columnsOptions) {
+    return [];
+  }
+
+  const result: Column[] = [];
+
+  columnsOptions.forEach((columnOptions) => {
+    const currentIndex = createdColumnCount + result.length;
+    const userStateColumnOptions = that._columnsUserState
+      && isUserStateColumn(columnOptions as ColumnUserState, that._columnsUserState[currentIndex])
+      && that._columnsUserState[currentIndex];
+    const column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
+
+    if (!column) {
+      return;
+    }
+
+    if (bandColumn) {
+      // @ts-expect-error ownerBand holds the band column until updateColumnIndexes sets its index
+      column.ownerBand = bandColumn;
+    }
+
+    result.push(column);
+
+    if (!column.columns) {
+      return;
+    }
+
+    warnFixedInChildColumnsOnce(that, column.columns);
+    const childColumns = createColumnsFromOptions(that, column.columns, column, result.length);
+    delete column.columns;
+    column.hasColumns = true;
+    result.push(...childColumns);
+  });
+
+  return result;
+};
+
+export const getParentBandColumns = function (
+  columnIndex: number | undefined,
+  columnParentByIndex: Record<number, Column>,
+): Column[] {
+  const result: Column[] = [];
+  let parent = isDefined(columnIndex) ? columnParentByIndex[columnIndex] : undefined;
 
   while (parent) {
     result.unshift(parent);
-    columnIndex = parent.index;
-    parent = columnParentByIndex[columnIndex];
+    parent = isDefined(parent.index) ? columnParentByIndex[parent.index] : undefined;
   }
 
   return result;
@@ -262,20 +306,30 @@ export const processBandColumns = function (that: ColumnsController, columns, ba
   }
 };
 
-export const getValueDataType = function (value) {
-  let dataType: any = type(value);
-  if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
-    dataType = undefined;
+export const getValueDataType = (value: unknown): Exclude<DataType, 'datetime'> | undefined => {
+  const dataType = type(value);
+
+  if (
+    dataType === 'string'
+    || dataType === 'boolean'
+    || dataType === 'number'
+    || dataType === 'date'
+    || dataType === 'object'
+  ) {
+    return dataType;
   }
-  return dataType;
+
+  return undefined;
 };
 
-export const getSerializationFormat = function (dataType, value): any {
-  // eslint-disable-next-line default-case
+export const getSerializationFormat = (
+  dataType: string | undefined,
+  value: unknown,
+): string | null | undefined => {
   switch (dataType) {
     case 'date':
     case 'datetime':
-      return dateSerialization.getDateSerializationFormat(value);
+      return dateSerialization.getDateSerializationFormat(value) as string;
     case 'number':
       if (isString(value)) {
         return 'string';
@@ -284,33 +338,54 @@ export const getSerializationFormat = function (dataType, value): any {
       if (isNumeric(value)) {
         return null;
       }
+
+      return undefined;
+    default:
+      return undefined;
   }
 };
 
-export const updateSerializers = function (options, dataType) {
-  if (!options.deserializeValue) {
-    if (gridCoreUtils.isDateType(dataType)) {
-      options.deserializeValue = function (value) {
-        return dateSerialization.deserializeDate(value);
-      };
-      options.serializeValue = function (value) {
-        return isString(value) ? value : dateSerialization.serializeDate(value, this.serializationFormat);
-      };
-    }
-    if (dataType === 'number') {
-      options.deserializeValue = function (value) {
-        const parsedValue = parseFloat(value);
-        return isNaN(parsedValue) ? value : parsedValue;
-      };
-      options.serializeValue = function (value, target) {
-        if (target === 'filter') return value;
-        return isDefined(value) && this.serializationFormat === 'string' ? value.toString() : value;
-      };
-    }
+export const updateSerializers = (
+  options: ValueSerializers,
+  dataType: string | undefined,
+): void => {
+  if (options.deserializeValue) {
+    return;
+  }
+
+  if (gridCoreUtils.isDateType(dataType)) {
+    options.deserializeValue = dateSerialization.deserializeDate;
+    options.serializeValue = function serializeDateValue(
+      this: ValueSerializers,
+      value: unknown,
+    ): unknown {
+      return isString(value)
+        ? value
+        : dateSerialization.serializeDate(value, this.serializationFormat);
+    };
+  }
+  if (dataType === 'number') {
+    options.deserializeValue = (value): unknown => {
+      const parsedValue = parseFloat(value as string);
+      return isNaN(parsedValue) ? value : parsedValue;
+    };
+    options.serializeValue = function serializeNumberValue(
+      this: ValueSerializers,
+      value: unknown,
+      target: string | undefined,
+    ): unknown {
+      if (target === 'filter') {
+        return value;
+      }
+      return isDefined(value) && this.serializationFormat === 'string' ? (value as number | string).toString() : value;
+    };
   }
 };
 
-export const getAlignmentByDataType = function (dataType, isRTL) {
+export const getAlignmentByDataType = (
+  dataType: string | undefined,
+  isRTL?: boolean,
+): HorizontalAlignment => {
   switch (dataType) {
     case 'number':
       return 'right';
@@ -321,7 +396,7 @@ export const getAlignmentByDataType = function (dataType, isRTL) {
   }
 };
 
-export const customizeTextForBooleanDataType = function (e) {
+export const customizeTextForBooleanDataType = function (this: ColumnBase, e: ColumnCustomizeTextArg): string {
   if (e.value === true) {
     return this.trueText || 'true';
   } if (e.value === false) {
@@ -330,35 +405,38 @@ export const customizeTextForBooleanDataType = function (e) {
   return e.valueText || '';
 };
 
-export const getCustomizeTextByDataType = function (dataType): any {
+export const getCustomizeTextByDataType = (dataType: string | undefined): ColumnBase['customizeText'] => {
   if (dataType === 'boolean') {
     return customizeTextForBooleanDataType;
   }
+
+  return undefined;
 };
 
-export const createColumnsFromDataSource = function (that: ColumnsController, dataSource) {
-  const firstItems = that._getFirstItems(dataSource);
-  let fieldName;
-  const processedFields = {};
-  const result: any = [];
+export const createColumnsFromDataSourceAdapter = (
+  that: ColumnsController,
+  dataSourceAdapter: DataSourceAdapter,
+): Column[] => {
+  const fieldNames: Record<string, true> = {};
 
-  for (let i = 0; i < firstItems.length; i++) {
-    if (firstItems[i]) {
-      for (fieldName in firstItems[i]) {
-        if (!isFunction(firstItems[i][fieldName]) || variableWrapper.isWrapped(firstItems[i][fieldName])) {
-          processedFields[fieldName] = true;
-        }
+  that._getFirstItems(dataSourceAdapter).forEach((item) => {
+    if (!item) {
+      return;
+    }
+
+    // eslint-disable-next-line guard-for-in -- inherited fields become columns too
+    for (const fieldName in item) {
+      const value = item[fieldName];
+
+      if (!isFunction(value) || variableWrapper.isWrapped(value)) {
+        fieldNames[fieldName] = true;
       }
     }
-  }
+  });
 
-  for (fieldName in processedFields) {
-    if (fieldName.indexOf('__') !== 0) {
-      const column = createColumn(that, fieldName);
-      result.push(column);
-    }
-  }
-  return result;
+  return Object.keys(fieldNames)
+    .filter((fieldName) => !fieldName.startsWith('__'))
+    .map((fieldName) => createColumn(that, fieldName) as Column);
 };
 
 export const updateColumnIndexes = function (that: ColumnsController) {
@@ -493,106 +571,48 @@ export const moveColumnToGroup = function (that: ColumnsController, column, grou
   return groupIndex;
 };
 
-function checkUserStateColumn(column, userStateColumn) {
-  return column && userStateColumn && (userStateColumn.name === (column.name || column.dataField)) && (userStateColumn.dataField === column.dataField || column.name);
+function copyColumnStateField<T extends keyof ColumnUserState>(
+  column: Column,
+  columnState: ColumnUserState,
+  fieldName: T,
+): void {
+  column[fieldName] = columnState[fieldName];
 }
 
-export const applyUserState = function (that: ColumnsController) {
-  const columnsUserState = that._columnsUserState;
-  const ignoreColumnOptionNames = that._ignoreColumnOptionNames || [];
-  const columns = that._columns;
-  const columnCountById = {};
-  let resultColumns: any = [];
-  let allColumnsHaveState = true;
-  const userStateColumnIndexes: any = [];
-  let column;
-  let userStateColumnIndex;
-  let i;
-
-  function applyFieldsState(column, userStateColumn) {
-    if (!userStateColumn) return;
-
-    for (let index = 0; index < USER_STATE_FIELD_NAMES.length; index++) {
-      const fieldName = USER_STATE_FIELD_NAMES[index];
-
-      if (ignoreColumnOptionNames.includes(fieldName)) continue;
-
-      if (fieldName === 'dataType') {
-        column[fieldName] = column[fieldName] || userStateColumn[fieldName];
-      } else if ((USER_STATE_FIELD_NAMES_15_1 as readonly string[]).includes(fieldName)) {
-        if (fieldName in userStateColumn) {
-          column[fieldName] = userStateColumn[fieldName];
-        }
-      } else {
-        if (fieldName === 'selectedFilterOperation' && userStateColumn[fieldName]) {
-          column.defaultSelectedFilterOperation = column[fieldName] || null;
-        }
-        column[fieldName] = userStateColumn[fieldName];
-      }
-    }
+export function applyColumnStateFields(
+  column: Column,
+  columnState: ColumnUserState | undefined,
+  ignoreColumnOptionNames: string[],
+): void {
+  if (!columnState) {
+    return;
   }
 
-  function findUserStateColumn(columnsUserState, column) {
-    const id = column.name || column.dataField;
-    let count = columnCountById[id] || 0;
+  USER_STATE_FIELD_NAMES.forEach((fieldName) => {
+    if (ignoreColumnOptionNames.includes(fieldName)) {
+      return;
+    }
 
-    for (let j = 0; j < columnsUserState.length; j++) {
-      if (checkUserStateColumn(column, columnsUserState[j])) {
-        if (count) {
-          count--;
-        } else {
-          columnCountById[id] = columnCountById[id] || 0;
-          columnCountById[id]++;
-          return j;
-        }
+    if (fieldName === 'dataType') {
+      column.dataType = column.dataType || columnState.dataType;
+    } else if ((USER_STATE_FIELD_NAMES_15_1 as readonly string[]).includes(fieldName)) {
+      if (fieldName in columnState) {
+        copyColumnStateField(column, columnState, fieldName);
       }
-    }
-    return -1;
-  }
-
-  if (columnsUserState) {
-    for (i = 0; i < columns.length; i++) {
-      userStateColumnIndex = findUserStateColumn(columnsUserState, columns[i]);
-      allColumnsHaveState = allColumnsHaveState && userStateColumnIndex >= 0;
-      userStateColumnIndexes.push(userStateColumnIndex);
-    }
-
-    for (i = 0; i < columns.length; i++) {
-      column = columns[i];
-      userStateColumnIndex = userStateColumnIndexes[i];
-      if (that._hasUserState || allColumnsHaveState) {
-        applyFieldsState(column, columnsUserState[userStateColumnIndex]);
+    } else {
+      if (fieldName === 'selectedFilterOperation' && columnState.selectedFilterOperation) {
+        column.defaultSelectedFilterOperation = column.selectedFilterOperation || null;
       }
-      if (userStateColumnIndex >= 0 && isDefined(columnsUserState[userStateColumnIndex].initialIndex)) {
-        resultColumns[userStateColumnIndex] = column;
-      } else {
-        resultColumns.push(column);
-      }
+      copyColumnStateField(column, columnState, fieldName);
     }
+  });
+}
 
-    let hasAddedBands = false;
-    for (i = 0; i < columnsUserState.length; i++) {
-      const columnUserState = columnsUserState[i];
-      if (columnUserState.added && findUserStateColumn(columns, columnUserState) < 0) {
-        column = createColumn(that, columnUserState.added);
-        applyFieldsState(column, columnUserState);
-        resultColumns.push(column);
-        if (columnUserState.added.columns) {
-          hasAddedBands = true;
-        }
-      }
-    }
-
-    if (hasAddedBands) {
-      updateColumnIndexes(that);
-      resultColumns = createColumnsFromOptions(that, resultColumns);
-    }
-
-    assignColumns(that, resultColumns);
-  }
+export const resetBandColumnsCache = (that: ColumnsController): void => {
+  that._bandColumnsCache = undefined;
 };
 
-export const updateIndexes = function (that: ColumnsController, column?) {
+export const updateIndexes = (that: ColumnsController, column?: Column): void => {
   updateColumnIndexes(that);
   updateColumnGroupIndexes(that, column);
   updateColumnSortIndexes(that, column);
@@ -605,7 +625,7 @@ export const resetColumnsCache = function (that: ColumnsController) {
   that.resetColumnsCache();
 };
 
-export function assignColumns(that, columns) {
+export function assignColumns(that: ColumnsController, columns: Column[]): void {
   that._previousColumns = that._columns;
   that._columns = columns;
   resetColumnsCache(that);
@@ -614,7 +634,7 @@ export function assignColumns(that, columns) {
 
 export const updateColumnChanges = (
   that: ColumnsController,
-  changeType: Exclude<keyof ColumnsChanges['changeTypes'], 'length'>,
+  changeType: ColumnChangeType,
   optionName?: string,
   columnIndex?: number,
 ): void => {
@@ -626,19 +646,18 @@ export const updateColumnChanges = (
 
   const normalizedOptionName = (optionName ?? 'all').split('.')[0] as keyof Column | 'all';
 
-  const { changeTypes } = columnChanges;
+  const { changeTypes, optionNames } = columnChanges;
 
   if (changeType && !changeTypes[changeType]) {
     changeTypes[changeType] = true;
-    changeTypes.length++;
+    changeTypes.length += 1;
   }
-
-  const { optionNames } = columnChanges;
 
   if (normalizedOptionName && !optionNames[normalizedOptionName]) {
     optionNames[normalizedOptionName] = true;
-    optionNames.length++;
+    optionNames.length += 1;
   }
+
   if (columnIndex === undefined || columnIndex !== columnChanges.columnIndex) {
     if (isDefined(columnIndex)) {
       columnChanges.columnIndices ??= [];
@@ -652,6 +671,7 @@ export const updateColumnChanges = (
 
     delete columnChanges.columnIndex;
   }
+
   that._columnChanges = columnChanges;
   resetColumnsCache(that);
 };
@@ -715,39 +735,50 @@ export const fireOptionChanged = function (that: ColumnsController, options) {
   }
 };
 
-export const columnOptionCore = function (that: ColumnsController, column, optionName, value?, notFireEvent?) {
-  const optionGetter = compileGetter(optionName);
-  const columnIndex = column.index;
-  let columns;
-  let changeType;
-  let initialColumn;
+export const resolveChangeType = (optionName: string): ColumnChangeType => {
+  switch (optionName) {
+    case 'groupIndex':
+    case 'calculateGroupValue':
+      return 'grouping';
+    case 'sortIndex':
+    case 'sortOrder':
+    case 'calculateSortValue':
+      return 'sorting';
+    default:
+      return 'columns';
+  }
+};
+
+// will be converted to method, no need to create special name for func
+// eslint-disable-next-line func-names
+export const columnOptionCore = function (
+  that: ColumnsController,
+  column: Column,
+  optionName: string,
+  value?: unknown,
+  notFireEvent?: boolean,
+): unknown {
+  const optionGetter = compileGetter(optionName) as ColumnOptionGetter;
 
   if (arguments.length === 3) {
-    // @ts-expect-error
     return optionGetter(column, { functionsAsIs: true });
   }
-  // @ts-expect-error
   const prevValue = optionGetter(column, { functionsAsIs: true });
   if (!equalByValue(prevValue, value, { maxDepth: 5 })) {
+    const changeType = resolveChangeType(optionName);
+    const columnIndex = column.index;
+
     if (optionName === 'groupIndex') {
-      changeType = 'grouping';
       updateSortOrderWhenGrouping(that, column, value, prevValue);
-    } else if (optionName === 'calculateGroupValue') {
-      changeType = 'grouping';
-    } else if (optionName === 'sortIndex' || optionName === 'sortOrder' || optionName === 'calculateSortValue') {
-      changeType = 'sorting';
-    } else {
-      changeType = 'columns';
     }
 
-    const optionSetter = compileSetter(optionName);
-    // @ts-expect-error
+    const optionSetter = compileSetter(optionName) as ColumnOptionSetter;
     optionSetter(column, value, { functionsAsIs: true });
     const fullOptionName = getColumnFullPath(that, column);
 
     if (COLUMN_INDEX_OPTIONS[optionName]) {
       updateIndexes(that, column);
-      // @ts-expect-error
+      // eslint-disable-next-line no-param-reassign
       value = optionGetter(column);
     }
 
@@ -755,20 +786,21 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       that._checkColumns();
     }
 
-    if (!isDefined(prevValue) && !isDefined(value) && optionName.indexOf('buffer') !== 0 && notFireEvent !== false) {
+    if (!isDefined(prevValue) && !isDefined(value) && !optionName.startsWith('buffer') && notFireEvent !== false) {
+      // eslint-disable-next-line no-param-reassign
       notFireEvent = true;
     }
 
     if (!notFireEvent) {
       // T346972
-      if (!USER_STATE_FIELD_NAMES.includes(optionName) && optionName !== 'visibleWidth') {
-        columns = that.option('columns');
-        initialColumn = that.getColumnByPath(fullOptionName, columns);
-        if (isString(initialColumn)) {
-          initialColumn = columns[columnIndex] = { dataField: initialColumn };
+      if (!(USER_STATE_FIELD_NAMES as readonly string[]).includes(optionName) && optionName !== 'visibleWidth') {
+        const columns = that.option('columns');
+        let initialColumn = that.getColumnByPath(fullOptionName, columns);
+        if (columns && isString(initialColumn)) {
+          initialColumn = { dataField: initialColumn };
+          columns[columnIndex as number] = initialColumn;
         }
-        if (initialColumn && checkUserStateColumn(initialColumn, column)) {
-          // @ts-expect-error
+        if (initialColumn && isUserStateColumn(initialColumn, column)) {
           optionSetter(initialColumn, value, { functionsAsIs: true });
         }
       }
@@ -777,17 +809,21 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       resetColumnsCache(that);
     }
 
-    fullOptionName && fireOptionChanged(that, {
-      fullOptionName,
-      optionName,
-      value,
-      prevValue,
-    });
+    if (fullOptionName) {
+      fireOptionChanged(that, {
+        fullOptionName,
+        optionName,
+        value,
+        prevValue,
+      });
+    }
 
     if (column.type === AI_COLUMN_NAME) {
       that.aiColumnOptionChanged.fire(column, optionName, value);
     }
   }
+
+  return undefined;
 };
 
 export function isSortOrderValid(sortOrder) {
@@ -974,30 +1010,34 @@ export const convertOwnerBandToColumnReference = (columns) => {
   });
 };
 
-export const resetBandColumnsCache = (that: ColumnsController) => {
-  that._bandColumnsCache = undefined;
-};
-
-export const findColumn = (columns, identifier) => {
-  const identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(':'));
-  let column;
-
-  if (identifier === undefined) return;
-
-  if (identifierOptionName) {
-    identifier = identifier.substr(identifierOptionName.length + 1);
+export const findColumn = (
+  columns: Column[],
+  identifier: ColumnIdentifier | undefined,
+): Column | undefined => {
+  if (identifier === undefined) {
+    return undefined;
   }
 
-  if (identifierOptionName) {
-    column = columns.filter((column) => `${column[identifierOptionName]}` === identifier)[0];
-  } else {
-    ['index', 'name', 'dataField', 'caption'].some((optionName) => {
-      column = columns.filter((column) => column[optionName] === identifier)[0];
-      return !!column;
-    });
+  if (isString(identifier)) {
+    const separatorIndex = identifier.indexOf(':');
+
+    if (separatorIndex > 0) {
+      const optionName = identifier.slice(0, separatorIndex);
+      const optionValue = identifier.slice(separatorIndex + 1);
+
+      return columns.find((column) => `${column[optionName]}` === optionValue);
+    }
   }
 
-  return column;
+  for (const optionName of ['index', 'name', 'dataField', 'caption'] as const) {
+    const foundColumn = columns.find((column) => column[optionName] === identifier);
+
+    if (foundColumn) {
+      return foundColumn;
+    }
+  }
+
+  return undefined;
 };
 
 export const sortColumns = (columns, sortOrder) => {
@@ -1017,7 +1057,7 @@ export const sortColumns = (columns, sortOrder) => {
   return columns;
 };
 
-export const strictParseNumber = function (text, format): any {
+export const strictParseNumber = (text: string, format: Format): number | undefined => {
   const parsedValue = numberLocalization.parse(text);
 
   if (isNumeric(parsedValue)) {
@@ -1028,6 +1068,8 @@ export const strictParseNumber = function (text, format): any {
       return parsedValue;
     }
   }
+
+  return undefined;
 };
 
 const isFirstOrLastBandColumn = function (
@@ -1084,9 +1126,11 @@ export const isFirstOrLastColumn = function (
 ): boolean {
   const targetColumnIndex = targetColumn.index;
   const bandColumnsCache = that.getBandColumnsCache();
-  const parentBandColumns = !isDefined(targetColumn.type) && getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
+  const parentBandColumns = isDefined(targetColumn.type)
+    ? []
+    : getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
 
-  if (parentBandColumns?.length) {
+  if (parentBandColumns.length) {
     return isFirstOrLastBandColumn(that, parentBandColumns.concat([targetColumn]), onlyWithinBandColumn, isLast, fixedPosition);
   }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
 import type { HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
@@ -88,7 +82,6 @@ export class DxoHtmlEditorImageUploadComponent extends NestedOption implements O
         return 'imageUpload';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -104,7 +97,6 @@ export class DxoHtmlEditorImageUploadComponent extends NestedOption implements O
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

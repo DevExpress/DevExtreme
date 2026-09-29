@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { DataChange } from 'devextreme/common/grids';
 import type { dxFormOptions } from 'devextreme/ui/form';
 import type { EditingTexts } from 'devextreme/ui/card_view';
@@ -121,7 +115,6 @@ export class DxoCardViewEditingComponent extends NestedOption implements OnDestr
         return 'editing';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -137,7 +130,6 @@ export class DxoCardViewEditingComponent extends NestedOption implements OnDestr
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { dxFileManagerDetailsColumn } from 'devextreme/ui/file_manager';
 
 import {
@@ -55,7 +49,6 @@ export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnIn
         return 'details';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -71,7 +64,6 @@ export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnIn
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

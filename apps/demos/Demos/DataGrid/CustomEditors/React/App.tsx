@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import DataGrid, {
   Paging,
@@ -73,36 +73,41 @@ function calculateFilterExpression(
 
 const onRowInserted = (e: DataGridTypes.RowInsertedEvent) => e.component.navigateToRow(e.key);
 
-const statusEditorRender = (cell: DataGridTypes.ColumnEditCellTemplateData) => {
-  const onValueChanged = (e: SelectBoxTypes.ValueChangedEvent) => cell.setValue(e.value);
+const statusEditorRender = (cell: DataGridTypes.ColumnEditCellTemplateData) => <StatusEditor cell={cell} />;
 
-  const itemRender = (data: { id: number, name: string } | null) => {
-    if (data) {
-      const imageSource = `images/icons/status-${data.id}.svg`;
+const statusItemRender = (data: { id: number, name: string } | null) => {
+  if (data) {
+    const imageSource = `images/icons/status-${data.id}.svg`;
 
-      return (
-        <div>
-          <img src={imageSource} className="status-icon middle"></img>
-          <span className="middle">{data.name}</span>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <img src={imageSource} className="status-icon middle"></img>
+        <span className="middle">{data.name}</span>
+      </div>
+    );
+  }
 
-    return <span>(All)</span>;
-  };
+  return <span>(All)</span>;
+};
 
+const StatusEditor = ({ cell }: { cell: DataGridTypes.ColumnEditCellTemplateData }) => {
   const lookupDataSource = cell.column.lookup?.dataSource;
   const dataSource = typeof lookupDataSource === 'function'
     ? lookupDataSource({ data: cell.data, key: cell.row.key })
     : lookupDataSource;
+  const onValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+    cell.setValue(e.value);
+  }, [cell]);
 
   return (
     <SelectBox
       defaultValue={cell.value}
       dataSource={dataSource}
+      displayExpr="name"
+      valueExpr="id"
       onValueChanged={onValueChanged}
       inputAttr={statusLabel}
-      itemRender={itemRender} />
+      itemRender={statusItemRender} />
   );
 };
 

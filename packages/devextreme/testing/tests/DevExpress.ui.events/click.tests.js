@@ -4,7 +4,7 @@ import clickEvent from 'common/core/events/click';
 import { removeEvent } from 'common/core/events/remove';
 import domUtils from '__internal/core/utils/m_dom';
 import support from '__internal/core/utils/m_support';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 

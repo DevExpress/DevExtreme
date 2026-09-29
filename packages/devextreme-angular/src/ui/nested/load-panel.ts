@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,18 +8,14 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { Mode } from 'devextreme/common';
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-load-panel',
@@ -45,14 +39,6 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
     }
     set height(value: number | string) {
         this._setOption('height', value);
-    }
-
-    @Input()
-    get indicatorSrc(): string {
-        return this._getOption('indicatorSrc');
-    }
-    set indicatorSrc(value: string) {
-        this._setOption('indicatorSrc', value);
     }
 
     @Input()
@@ -103,11 +89,18 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
         this._setOption('width', value);
     }
 
+    @Input()
+    get indicatorOptions(): LoadPanelIndicatorProperties {
+        return this._getOption('indicatorOptions');
+    }
+    set indicatorOptions(value: LoadPanelIndicatorProperties) {
+        this._setOption('indicatorOptions', value);
+    }
+
 
     protected get _optionPath() {
         return 'loadPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -124,7 +117,6 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

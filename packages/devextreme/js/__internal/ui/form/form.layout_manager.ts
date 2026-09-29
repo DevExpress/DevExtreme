@@ -378,6 +378,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   _sortItems(): void {
+    // @ts-expect-error normalizeIndexes does not guard against undefined items
     normalizeIndexes(this._items, 'visibleIndex');
     this._sortIndexes();
   }

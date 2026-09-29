@@ -34,7 +34,6 @@ import {
   VIRTUAL_ROW_CLASS,
 } from './const';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
-import type { GroupCountableDataSource } from './utils/items';
 import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
@@ -675,7 +674,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
     let $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed, position);
 
-    $virtualRow = this._wrapRowIfNeed($table, $virtualRow);
+    $virtualRow = this._wrapRowIfNeed($virtualRow);
 
     this._appendEmptyRow($table, $virtualRow, location);
   }
@@ -734,7 +733,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
           itemSize = 0;
         }
         lastLoadIndex = currentItem.loadIndex;
-      } else if (isItemCountableByDataSource(currentItem, dataSourceAdapter as unknown as GroupCountableDataSource)) {
+      } else if (isItemCountableByDataSource(currentItem, dataSourceAdapter)) {
         if (firstCountableItem) {
           firstCountableItem = false;
         } else {

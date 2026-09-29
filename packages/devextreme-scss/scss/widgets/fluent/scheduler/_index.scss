@@ -30,14 +30,11 @@
   $scheduler-panel-text-color: $scheduler-panel-text-color,
   $scheduler-left-column-width: $scheduler-left-column-width,
   $scheduler-timeline-cell-height: $scheduler-timeline-cell-height,
-  $scheduler-workspace-active-cell-color: $scheduler-workspace-active-cell-color,
-  $scheduler-workspace-hovered-cell-color: $scheduler-workspace-hovered-cell-color,
   $scheduler-workspace-focused-cell-color: $scheduler-workspace-focused-cell-color,
   $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-background-color,
   $scheduler-appointment-text-color: $scheduler-appointment-text-color,
   $scheduler-fill-focused-appointment: $scheduler-fill-focused-appointment,
   $scheduler-is-shadow-color-for-focused-state: $scheduler-is-shadow-color-for-focused-state,
-  $scheduler-dd-appointment-hover-text-color: $scheduler-dd-appointment-hover-text-color,
 
   $agenda-appointment-recurrence-icon-color: $agenda-appointment-recurrence-icon-color,
   $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
@@ -464,14 +461,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px !default;
 
     .dx-rtl & {
       text-align: right;
-    }
-  }
-
-  .dx-scheduler-header-panel-current-time-cell {
-    .dx-scheduler-header-panel-cell-date343 {
-      border-radius: initial;
-      background-color: initial;
-      color: $scheduler-current-time-cell-color;
     }
   }
 

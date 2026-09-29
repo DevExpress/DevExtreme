@@ -9,9 +9,23 @@ const TEMPLATE_TAGS = [
 
 const LOCAL_SRC_RE = /src=["'](?!https?:|\/|\.\.\/)[\w.-]+\.js["']/i;
 
-const HEAD_TAG_RE = /<link\b[^>]*?>|<script\b[\s\S]*?<\/script\s*>/gi;
+const HEAD_TAG_RE = /<link\b[^>]*?>|<script\b[\s\S]*?<\/script\b[^>]*>/gi;
 
 const COMMENT_RE = /<!--[\s\S]*?-->/g;
+
+const SCRIPT_TAG_RE = /<\/?script\b[^>]*>/gi;
+
+const SCRIPT_BLOCK_RE = /<script\b[\s\S]*?<\/script\b[^>]*>/gi;
+
+function stripUntilStable(value, pattern) {
+  let current = value;
+  let previous;
+  do {
+    previous = current;
+    current = current.replace(pattern, '');
+  } while (current !== previous);
+  return current;
+}
 
 function normalizeTag(tag) {
   const collapsed = tag.replace(/\s+/g, ' ').trim();
@@ -21,7 +35,7 @@ function normalizeTag(tag) {
 
 // A bundled demo has no reason to run code from <head> — its entry point is the bundle.
 function warnDroppedInline(tag, context) {
-  const body = tag.replace(/<\/?script[^>]*>/gi, '').trim();
+  const body = stripUntilStable(tag, SCRIPT_TAG_RE).trim();
   if (!body) return;
   const where = context ? ` in ${context}` : '';
   console.warn(`demo-html: dropping inline <head> script${where} — move it into the demo's entry point so esbuild bundles it:\n  ${body.split('\n')[0].trim()}`);
@@ -32,7 +46,7 @@ function extractHeadExtras(html, context) {
   if (!headMatch) return [];
 
   // Commented-out tags must not come back to life.
-  const tags = headMatch[1].replace(COMMENT_RE, '').match(HEAD_TAG_RE) || [];
+  const tags = stripUntilStable(headMatch[1], COMMENT_RE).match(HEAD_TAG_RE) || [];
   const extras = [];
   const seen = new Set();
 
@@ -54,12 +68,7 @@ function extractHeadExtras(html, context) {
 function extractBodyInner(html) {
   const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
   if (!bodyMatch) return null;
-  let withoutScripts = bodyMatch[1];
-  let previous;
-  do {
-    previous = withoutScripts;
-    withoutScripts = withoutScripts.replace(/<script\b[\s\S]*?<\/script\b[^>]*>/gi, '');
-  } while (withoutScripts !== previous);
+  const withoutScripts = stripUntilStable(bodyMatch[1], SCRIPT_BLOCK_RE);
   return withoutScripts.trim() || null;
 }
 

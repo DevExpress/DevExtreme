@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-classes-per-file */
 
-import { infernoRenderer } from '@ts/core/m_inferno_renderer';
+import { infernoRenderer } from '@ts/core/inferno_renderer';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/base_component';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { effect } from '@ts/core/state_manager/index';

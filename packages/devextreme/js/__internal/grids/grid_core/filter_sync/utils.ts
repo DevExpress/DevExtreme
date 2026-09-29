@@ -7,7 +7,7 @@ import {
   syncFilters,
 } from '@ts/filter_builder/m_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/data_controller/types';
+import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/filter/types';
 
 import { FILTER_ROW_OPERATIONS, FILTER_TYPES_EXCLUDE, FILTER_TYPES_INCLUDE } from './const';
 import type {
@@ -33,6 +33,12 @@ export const getColumnIdentifier = (
   column: FilterSyncColumn,
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 ): string | undefined => column.name || column.dataField;
+
+export const parseColumnPropertyName = (fullName: string): string | null => {
+  const matched = /.*\.(.*)/.exec(fullName);
+
+  return matched ? matched[1] : null;
+};
 
 const canSyncHeaderFilterWithFilterRow = (column: FilterSyncColumn): boolean => {
   const { filterValues } = column;

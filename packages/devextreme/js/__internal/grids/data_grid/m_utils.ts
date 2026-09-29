@@ -1,6 +1,6 @@
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import { isDefined } from '@ts/core/utils/m_type';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import type { Column } from './types';
 
@@ -16,7 +16,7 @@ export function createGroupFilter(path, storeLoadOptions) {
   if (storeLoadOptions.filter) {
     filter.push(storeLoadOptions.filter);
   }
-  return gridCoreUtils.combineFilters(filter);
+  return combineFilters(filter);
 }
 
 export const isDataColumn = (column?: Column): boolean => {

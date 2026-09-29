@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { extend } from '@js/core/utils/extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -35,10 +36,10 @@ virtualScrollingModule.extenders.views.rowsView = (Base: ModuleType<RowsView>) =
 };
 
 virtualScrollingModule.extenders.controllers.data = (Base: ModuleType<DataController>) => class TreeListVirtualScrollingDataControllerExtender extends virtualScrollingDataControllerExtender(Base) {
-  public declare _dataSource?: VirtualScrollingDataSourceAdapter | null;
+  protected declare dataSourceController: DataSourceController<VirtualScrollingDataSourceAdapter>;
 
   protected _loadOnOptionChange() {
-    const virtualScrollController = this._dataSource?._virtualScrollController;
+    const virtualScrollController = this.dataSourceController.getAdapter()?._virtualScrollController;
 
     virtualScrollController?.reset();
     // @ts-expect-error

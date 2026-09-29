@@ -7,6 +7,13 @@
 
 import { noop } from '@js/core/utils/common';
 import DataHelperMixin from '@js/data_helper';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+
+export interface DataSourcePluginMembers {
+  _dataIsLoaded: () => boolean;
+  _dataSourceItems: () => ThemeValue;
+  _updateDataSource: () => void;
+}
 // @ts-expect-error
 const { postCtor } = DataHelperMixin;
 let name;

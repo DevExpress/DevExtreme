@@ -3,5 +3,5 @@
     * @type boolean
     * @hidden
     */
-import configMethod from '../__internal/core/m_config';
+import configMethod from '../__internal/core/config';
 export default configMethod;

@@ -24,6 +24,8 @@ export class DataSourceController<
 
   public pushed!: Callback<[StoreChange[]]>;
 
+  public adapterChanged!: Callback<[]>;
+
   private readonly dataPushedHandlerProxy = this.dataPushedHandler.bind(this);
 
   /**
@@ -34,7 +36,7 @@ export class DataSourceController<
   }
 
   protected callbackNames(): string[] {
-    return ['pushed'];
+    return ['pushed', 'adapterChanged'];
   }
 
   public publicMethods(): string[] {
@@ -92,6 +94,8 @@ export class DataSourceController<
 
     adapter.pushed.add(this.dataPushedHandlerProxy);
 
+    this.adapterChanged.fire();
+
     return adapter;
   }
 
@@ -104,9 +108,15 @@ export class DataSourceController<
   }
 
   public disposeAdapter(): void {
+    const hadAdapter = this.adapter !== null;
+
     this.adapter?.pushed.remove(this.dataPushedHandlerProxy);
     this.adapter?.dispose(this.isShared);
     this.adapter = null;
+
+    if (hadAdapter) {
+      this.adapterChanged.fire();
+    }
   }
 
   /**
@@ -155,6 +165,10 @@ export class DataSourceController<
 
   public loadingOperationTypes(): OperationTypes {
     return this.adapter?.loadingOperationTypes() ?? {};
+  }
+
+  public isLoaded(): boolean {
+    return this.adapter ? this.adapter.isLoaded() : true;
   }
 
   public isLoading(): boolean {

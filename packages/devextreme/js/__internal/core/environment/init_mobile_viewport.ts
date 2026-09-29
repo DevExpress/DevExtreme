@@ -1,6 +1,6 @@
 import $ from '@js/core/renderer';
-import devices from '@ts/core/m_devices';
-import domAdapter from '@ts/core/m_dom_adapter';
+import devices from '@ts/core/devices';
+import domAdapter from '@ts/core/dom_adapter';
 import { extend } from '@ts/core/utils/m_extend';
 import resizeCallbacks from '@ts/core/utils/m_resize_callbacks';
 import { getWidth, setWidth } from '@ts/core/utils/m_size';
@@ -77,7 +77,6 @@ export const initMobileViewport = function (
   }
 
   if (realDevice.ios) {
-    // @ts-expect-error
     const isPhoneGap = domAdapter.getLocation().protocol === 'file:';
 
     if (!isPhoneGap) {

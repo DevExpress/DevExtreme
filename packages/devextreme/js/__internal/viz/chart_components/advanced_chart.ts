@@ -21,6 +21,8 @@ import { isDefined as _isDefined, type } from '@js/core/utils/type';
 // @ts-expect-error
 import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
 import { Axis } from '@ts/viz/axes/base_axis';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { SeriesFamily } from '@ts/viz/core/series_family';
 import {
   convertVisualRangeObject, map as _map,
@@ -38,6 +40,10 @@ const FONT = 'font';
 const COMMON_AXIS_SETTINGS = 'commonAxisSettings';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
+
+function returnFalse(): boolean {
+  return false;
+}
 
 function prepareAxis(axisOptions) {
   if (isArray(axisOptions)) {
@@ -109,32 +115,34 @@ function wrapVisualRange(fullName, value) {
   return undefined;
 }
 
-export const AdvancedChart = BaseChart.inherit({
+/* eslint-disable @typescript-eslint/method-signature-style */
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
+export interface AdvancedChart {
+  _axesReinitialized: boolean;
+  _panesClipRects: ThemeValue;
+  _valueAxes: ThemeValue[];
+  defaultPane: string;
+  panes: ThemeValue[];
+  skipOptionsRollBack: boolean;
 
-  _fontFields: [`${COMMON_AXIS_SETTINGS}.label.${FONT}`, `${COMMON_AXIS_SETTINGS}.title.${FONT}`],
+  _applyVisualRangeByVirtualAxes(axis?, range?): boolean;
+  _correctValueAxes(needCorrectAxes?): void;
+  _getAxisRenderingOptions(isArgumentAxes?): ThemeValue;
+  _getSeriesForPane(paneName): ThemeValue[];
+  _prepareAxisOptions(typeSelector, userOptions, rotated): ThemeValue;
+}
 
-  _partialOptionChangesMap: {
-    visualRange: VISUAL_RANGE,
-    _customVisualRange: VISUAL_RANGE,
-    strips: 'REFRESH_AXES',
-    constantLines: 'REFRESH_AXES',
-  },
-
-  _partialOptionChangesPath: {
-    argumentAxis: ['strips', 'constantLines', 'visualRange', '_customVisualRange'],
-    valueAxis: ['strips', 'constantLines', 'visualRange', '_customVisualRange'],
-  },
-
-  _initCore() {
+export class AdvancedChart extends BaseChart {
+  _initCore(): void {
     this._panesClipRects = {};
-    this.callBase();
-  },
+    super._initCore();
+  }
 
-  _disposeCore() {
+  _disposeCore(): void {
     const disposeObjectsInArray = this._disposeObjectsInArray;
     const panesClipRects = this._panesClipRects;
 
-    this.callBase();
+    super._disposeCore();
     disposeObjectsInArray.call(panesClipRects, 'fixed');
     disposeObjectsInArray.call(panesClipRects, 'base');
     disposeObjectsInArray.call(panesClipRects, 'wide');
@@ -142,14 +150,14 @@ export const AdvancedChart = BaseChart.inherit({
     this._labelsAxesGroup.linkOff();
     this._labelsAxesGroup.dispose();
     this._labelsAxesGroup = null;
-  },
+  }
 
-  _dispose() {
+  _dispose(): void {
     const disposeObjectsInArray = this._disposeObjectsInArray;
 
-    this.callBase();
+    super._dispose();
 
-    this.panes = null;
+    Object.assign(this, { panes: null });
     if (this._legend) {
       this._legend.dispose();
       this._legend = null;
@@ -157,50 +165,50 @@ export const AdvancedChart = BaseChart.inherit({
     disposeObjectsInArray.call(this, 'panesBackground');
     disposeObjectsInArray.call(this, 'seriesFamilies');
     this._disposeAxes();
-  },
+  }
 
-  _createPanes() {
+  _createPanes(): ThemeValue {
     this._cleanPanesClipRects('fixed');
     this._cleanPanesClipRects('base');
     this._cleanPanesClipRects('wide');
-  },
+  }
 
-  _cleanPanesClipRects(clipArrayName) {
+  _cleanPanesClipRects(clipArrayName: string): void {
     const clipArray = this._panesClipRects[clipArrayName];
     (clipArray || []).forEach((clipRect) => {
       clipRect?.dispose();
     });
     this._panesClipRects[clipArrayName] = [];
-  },
+  }
 
-  _getElementsClipRectID(paneName) {
+  _getElementsClipRectID(paneName?: string): ThemeValue {
     const clipShape = this._panesClipRects.fixed[this._getPaneIndex(paneName)];
     return clipShape?.id;
-  },
+  }
 
-  _getPaneIndex(paneName) {
+  _getPaneIndex(paneName?: string): ThemeValue {
     const name = paneName || DEFAULT_PANE_NAME;
 
     return this.panes.findIndex((pane) => pane.name === name);
-  },
+  }
 
-  _updateSize(forceUpdateCanvas: boolean) {
-    this.callBase();
+  _updateSize(forceUpdateCanvas?: boolean): void {
+    super._updateSize();
 
     if (forceUpdateCanvas && areCanvasesDifferent(this.__currentCanvas, this._canvas)) {
       this.__currentCanvas = floorCanvasDimensions(this._canvas);
     }
 
     setCanvasValues(this._canvas);
-  },
+  }
 
-  _reinitAxes() {
+  _reinitAxes(): void {
     this.panes = this._createPanes();
     this._populateAxes();
     this._axesReinitialized = true;
-  },
+  }
 
-  _populateAxes() {
+  _populateAxes(): void {
     const { panes } = this;
     const rotated = this._isRotated();
     const argumentAxesOptions = prepareAxis(this.option('argumentAxis') || {})[0];
@@ -279,9 +287,9 @@ export const AdvancedChart = BaseChart.inherit({
 
     this._redesignAxes(argumentAxesPopulatedOptions, true, paneWithNonVirtualAxis);
     this._redesignAxes(valueAxesPopulatedOptions, false);
-  },
+  }
 
-  _redesignAxes(options, isArgumentAxes, paneWithNonVirtualAxis) {
+  _redesignAxes(options: ThemeValue, isArgumentAxes: boolean, paneWithNonVirtualAxis?: ThemeValue): void {
     const axesBasis = [];
     let axes = isArgumentAxes ? this._argumentAxes : this._valueAxes;
 
@@ -331,9 +339,9 @@ export const AdvancedChart = BaseChart.inherit({
       }
       axis.applyVisualRangeSetter(this._getVisualRangeSetter());
     });
-  },
+  }
 
-  _disposeAxis(index, isArgumentAxis) {
+  _disposeAxis(index: number, isArgumentAxis: boolean): void {
     const axes = isArgumentAxis ? this._argumentAxes : this._valueAxes;
     const axis = axes[index];
 
@@ -341,23 +349,24 @@ export const AdvancedChart = BaseChart.inherit({
 
     axis.dispose();
     axes.splice(index, 1);
-  },
+  }
 
-  _disposeAxes() {
+  _disposeAxes(): void {
     const disposeObjectsInArray = this._disposeObjectsInArray;
     disposeObjectsInArray.call(this, '_argumentAxes');
     disposeObjectsInArray.call(this, '_valueAxes');
-  },
+  }
 
-  _appendAdditionalSeriesGroups() {
+  _appendAdditionalSeriesGroups(): void {
     this._crosshairCursorGroup.linkAppend();
     // this._legendGroup.linkAppend();
     if (this._scrollBar) {
       // TODO: Must be appended in the same place where removed (chart)
       this._scrollBarGroup.linkAppend();
     }
-  },
-  _getLegendTargets() {
+  }
+
+  _getLegendTargets(): ThemeValue {
     return (this.series || []).map((s) => {
       const item = this._getLegendOptions(s);
       item.legendData.series = s;
@@ -366,15 +375,14 @@ export const AdvancedChart = BaseChart.inherit({
       }
       return item;
     });
-  },
-  _legendItemTextField: 'name',
+  }
 
-  _seriesPopulatedHandlerCore() {
+  _seriesPopulatedHandlerCore(): void {
     this._processSeriesFamilies();
     this._processValueAxisFormat();
-  },
+  }
 
-  _renderTrackers() {
+  _renderTrackers(): void {
     for (let i = 0; i < this.series.length; i += 1) {
       this.series[i].drawTrackers();
     }
@@ -382,13 +390,13 @@ export const AdvancedChart = BaseChart.inherit({
     // if (that._legend) {
     //    legendHasInsidePosition && that._legendGroup.append(that._renderer.root);
     // }
-  },
+  }
 
-  _specialProcessSeries() {
+  _specialProcessSeries(): void {
     this._processSeriesFamilies();
-  },
+  }
 
-  _processSeriesFamilies() {
+  _processSeriesFamilies(): void {
     const types = [];
     const families = [];
     let paneSeries;
@@ -438,9 +446,9 @@ export const AdvancedChart = BaseChart.inherit({
       });
     });
     this.seriesFamilies = families;
-  },
+  }
 
-  _updateSeriesDimensions() {
+  _updateSeriesDimensions(): void {
     const seriesFamilies = this.seriesFamilies || [];
 
     for (let i = 0; i < seriesFamilies.length; i += 1) {
@@ -449,13 +457,13 @@ export const AdvancedChart = BaseChart.inherit({
       family.updateSeriesValues();
       family.adjustSeriesDimensions();
     }
-  },
+  }
 
-  _getLegendCallBack(series) {
+  _getLegendCallBack(series: ThemeValue): ThemeValue {
     return this._legend?.getActionCallback(series);
-  },
+  }
 
-  _appendAxesGroups() {
+  _appendAxesGroups(): void {
     this._stripsGroup.linkAppend();
     this._gridGroup.linkAppend();
     this._axesGroup.linkAppend();
@@ -463,9 +471,9 @@ export const AdvancedChart = BaseChart.inherit({
     this._constantLinesGroup.linkAppend();
     this._stripLabelAxesGroup.linkAppend();
     this._scaleBreaksGroup.linkAppend();
-  },
+  }
 
-  _populateMarginOptions() {
+  _populateMarginOptions(): void {
     const bubbleSize = estimateBubbleSize(this.getSize(), this.panes.length, this._themeManager.getOptions('maxBubbleSize'), this._isRotated());
     let argumentMarginOptions = {};
 
@@ -486,9 +494,9 @@ export const AdvancedChart = BaseChart.inherit({
     });
 
     this._argumentAxes.forEach((a) => a.setMarginOptions(argumentMarginOptions));
-  },
+  }
 
-  _populateBusinessRange(updatedAxis, keepRange) {
+  _populateBusinessRange(updatedAxis: ThemeValue, keepRange: boolean): void {
     const rotated = this._isRotated();
     const series = this._getVisibleSeries();
     const argRanges = {};
@@ -539,21 +547,21 @@ export const AdvancedChart = BaseChart.inherit({
     }
 
     this._populateMarginOptions();
-  },
+  }
 
-  getArgumentAxis() {
+  getArgumentAxis(): ThemeValue {
     return (this._argumentAxes || []).find((a) => !a.isVirtual);
-  },
+  }
 
-  getValueAxis(name) {
+  getValueAxis(name?: string): ThemeValue {
     return (this._valueAxes || []).find(
       _isDefined(name)
         ? (a) => a.name === name
         : (a) => a.pane === this.defaultPane,
     );
-  },
+  }
 
-  _getGroupsData() {
+  _getGroupsData(): ThemeValue {
     const groups = [];
 
     this._valueAxes.forEach((axis) => {
@@ -569,14 +577,14 @@ export const AdvancedChart = BaseChart.inherit({
       argumentAxes: this._argumentAxes,
       argumentOptions: this._argumentAxes[0].getOptions(),
     };
-  },
+  }
 
-  _groupSeries() {
+  _groupSeries(): void {
     this._correctValueAxes(false);
     this._groupsData = this._getGroupsData();
-  },
+  }
 
-  _processValueAxisFormat() {
+  _processValueAxisFormat(): void {
     const axesWithFullStackedFormat = [];
 
     this.series.forEach((series) => {
@@ -592,9 +600,9 @@ export const AdvancedChart = BaseChart.inherit({
         axis.resetAutoLabelFormat(); // B239299
       }
     });
-  },
+  }
 
-  _populateAxesOptions(typeSelector, userOptions, axisOptions, rotated, virtual) {
+  _populateAxesOptions(typeSelector: string, userOptions: ThemeValue, axisOptions: ThemeValue, rotated?: boolean, virtual?: boolean): ThemeValue {
     const preparedUserOptions = this._prepareStripsAndConstantLines(
       typeSelector,
       userOptions,
@@ -616,13 +624,13 @@ export const AdvancedChart = BaseChart.inherit({
     }
 
     return options;
-  },
+  }
 
-  _getValFilter(series) {
+  _getValFilter(series: ThemeValue): ThemeValue {
     return rangeDataCalculator.getViewPortFilter(series.getValueAxis().visualRange() || {});
-  },
+  }
 
-  _createAxis(isArgumentAxes, options, virtual) {
+  _createAxis(isArgumentAxes: boolean, options: ThemeValue, virtual?: boolean): ThemeValue {
     const typeSelector = isArgumentAxes ? 'argumentAxis' : 'valueAxis';
     const renderingSettings = _extend({
       renderer: this._renderer,
@@ -645,19 +653,15 @@ export const AdvancedChart = BaseChart.inherit({
     axis.isVirtual = virtual;
 
     return axis;
-  },
+  }
 
-  _applyVisualRangeByVirtualAxes() {
-    return false;
-  },
-
-  _applyCustomVisualRangeOption(axis, range) {
+  _applyCustomVisualRangeOption(axis: ThemeValue, range?: ThemeValue): void {
     if (axis.getOptions().optionPath) {
       this._parseVisualRangeOption(`${axis.getOptions().optionPath}.visualRange`, range);
     }
-  },
+  }
 
-  _getVisualRangeSetter() {
+  _getVisualRangeSetter(): ThemeValue {
     return (axis, { skipEventRising, range }) => {
       this._applyCustomVisualRangeOption(axis, range);
       axis.setCustomVisualRange(range);
@@ -672,15 +676,15 @@ export const AdvancedChart = BaseChart.inherit({
         }
       }
     };
-  },
+  }
 
-  _getTrackerSettings() {
-    return _extend(this.callBase(), {
+  _getTrackerSettings(): ThemeValue {
+    return _extend(super._getTrackerSettings(), {
       argumentAxis: this.getArgumentAxis(),
     });
-  },
+  }
 
-  _prepareStripsAndConstantLines(typeSelector, userOptions, rotated) {
+  _prepareStripsAndConstantLines(typeSelector: string, userOptions: ThemeValue, rotated?: boolean): ThemeValue {
     userOptions = this._themeManager.getOptions(typeSelector, userOptions, rotated);
     if (userOptions.strips) {
       userOptions.strips.forEach((line, i) => {
@@ -693,14 +697,14 @@ export const AdvancedChart = BaseChart.inherit({
       });
     }
     return userOptions;
-  },
+  }
 
-  refresh() {
+  refresh(): void {
     this._disposeAxes();
-    this.callBase();
-  },
+    super.refresh();
+  }
 
-  _layoutAxes(drawAxes) {
+  _layoutAxes(drawAxes: ThemeValue): void {
     drawAxes();
     const needSpace = this.checkForMoreSpaceForPanesCanvas();
 
@@ -713,19 +717,18 @@ export const AdvancedChart = BaseChart.inherit({
 
       drawAxes(needSpace);
     }
-  },
+  }
 
-  checkForMoreSpaceForPanesCanvas() {
+  checkForMoreSpaceForPanesCanvas(): ThemeValue {
     return this
       .layoutManager
       .needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
-  },
+  }
 
-  _parseVisualRangeOption(fullName, value) {
+  _parseVisualRangeOption(fullName: string, value: ThemeValue): void {
     const name = fullName.split(/[.[]/)[0];
-    let index = fullName.match(/\d+/g);
-
-    index = _isDefined(index) ? parseInt(index[0], 10) : index;
+    const indexMatch = fullName.match(/\d+/g);
+    const index = _isDefined(indexMatch) ? parseInt(indexMatch[0], 10) : null;
 
     if (fullName.split('.').indexOf('visualRange') > 0) {
       if (type(value) !== 'object') {
@@ -743,9 +746,9 @@ export const AdvancedChart = BaseChart.inherit({
         });
       }
     }
-  },
+  }
 
-  _setCustomVisualRange(axesName, index, value) {
+  _setCustomVisualRange(axesName: string, index: number | null, value: ThemeValue): void {
     const options = this._options.silent(axesName);
 
     if (!options) {
@@ -759,28 +762,28 @@ export const AdvancedChart = BaseChart.inherit({
     }
 
     this._axesReinitialized = true;
-  },
+  }
 
-  _raiseZoomEndHandlers() {
+  _raiseZoomEndHandlers(): void {
     this._valueAxes.forEach((axis) => axis.handleZoomEnd());
-  },
+  }
 
-  _setOptionsByReference() {
-    this.callBase();
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
 
     _extend(this._optionsByReference, {
       'valueAxis.visualRange': true,
     });
-  },
+  }
 
-  _notifyOptionChanged(option, value) {
-    this.callBase.apply(this, arguments);
+  _notifyOptionChanged(option: string, value: ThemeValue, previousValue?: ThemeValue): void {
+    super._notifyOptionChanged(option, value, previousValue);
     if (!this._optionChangedLocker) {
       this._parseVisualRangeOption(option, value);
     }
-  },
+  }
 
-  _notifyVisualRange() {
+  _notifyVisualRange(): void {
     this._valueAxes.forEach((axis) => {
       const axisPath = axis.getOptions().optionPath;
       if (axisPath) {
@@ -804,10 +807,10 @@ export const AdvancedChart = BaseChart.inherit({
         }
       }
     });
-  },
+  }
 
-  _notify() {
-    this.callBase();
+  _notify(): void {
+    super._notify();
     this._axesReinitialized = false;
 
     if (this.option('disableTwoWayBinding') !== true) { // for dashboards T732396
@@ -815,15 +818,15 @@ export const AdvancedChart = BaseChart.inherit({
       this._notifyVisualRange();
       this.skipOptionsRollBack = false;
     }
-  },
+  }
 
-  _getAxesForScaling() {
+  _getAxesForScaling(): ThemeValue {
     return this._valueAxes;
-  },
+  }
 
-  _getAxesByOptionPath(arg, isDirectOption, optionName) {
+  _getAxesByOptionPath(arg: ThemeValue, isDirectOption: boolean, optionName: string): ThemeValue {
     const sourceAxes = this._getAxesForScaling();
-    let axes = [];
+    let axes: ThemeValue[] = [];
 
     if (isDirectOption) {
       let axisPath;
@@ -843,13 +846,13 @@ export const AdvancedChart = BaseChart.inherit({
     }
 
     return axes;
-  },
+  }
 
-  _optionChanged(arg) {
+  _optionChanged(arg: ThemeValue): void {
     if (!this._optionChangedLocker) {
       const optionName = 'visualRange';
       const isDirectOption = arg.fullName.split('.').indexOf(optionName) > 0 ? true
-        : this.getPartialChangeOptionsName(arg).indexOf(optionName) > -1 ? false : undefined;
+        : this.getPartialChangeOptionsName(arg).includes(optionName) ? false : undefined;
 
       if (_isDefined(isDirectOption)) {
         const axes: (typeof Axis)[] = this._getAxesByOptionPath(arg, isDirectOption, optionName);
@@ -865,10 +868,17 @@ export const AdvancedChart = BaseChart.inherit({
         }
       }
     }
-    this.callBase(arg);
-  },
+    super._optionChanged(arg);
+  }
 
-  _change_VISUAL_RANGE() {
+  _change_FULL_RENDER(): void {
+    super._change_FULL_RENDER();
+    if (this._changes.has(VISUAL_RANGE)) {
+      this._raiseZoomEndHandlers();
+    }
+  }
+
+  _change_VISUAL_RANGE(): void {
     this._recreateSizeDependentObjects(false);
     if (!this._changes.has('FULL_RENDER')) {
       const resizePanesOnZoom = this.option('resizePanesOnZoom');
@@ -881,20 +891,41 @@ export const AdvancedChart = BaseChart.inherit({
       });
       this._raiseZoomEndHandlers();
     }
-  },
+  }
 
   // API
-  resetVisualRange() {
+
+  resetVisualRange(): void {
     this._valueAxes.forEach((axis) => {
       axis.resetVisualRange(false); // T602156
       this._applyCustomVisualRangeOption(axis);
     });
     this._requestChange([VISUAL_RANGE]);
+  }
+
+  _getCrosshairMargins(): ThemeValue {
+    return { x: 0, y: 0 };
+  }
+}
+
+setupWidgetPrototype(AdvancedChart, {
+  _applyVisualRangeByVirtualAxes: returnFalse,
+
+  _fontFields: [`${COMMON_AXIS_SETTINGS}.label.${FONT}`, `${COMMON_AXIS_SETTINGS}.title.${FONT}`],
+
+  _partialOptionChangesMap: {
+    visualRange: VISUAL_RANGE,
+    _customVisualRange: VISUAL_RANGE,
+    strips: 'REFRESH_AXES',
+    constantLines: 'REFRESH_AXES',
   },
 
-  _getCrosshairMargins() {
-    return { x: 0, y: 0 };
+  _partialOptionChangesPath: {
+    argumentAxis: ['strips', 'constantLines', 'visualRange', '_customVisualRange'],
+    valueAxis: ['strips', 'constantLines', 'visualRange', '_customVisualRange'],
   },
+
+  _legendItemTextField: 'name',
 
   _legendDataField: 'series',
 

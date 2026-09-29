@@ -16,7 +16,7 @@ import type {
   Item,
   SubmenuShowMode,
 } from '@js/ui/menu';
-import type { ActionArguments } from '@ts/core/m_action';
+import type { ActionArguments } from '@ts/core/action';
 import { render } from '@ts/core/utils/ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';

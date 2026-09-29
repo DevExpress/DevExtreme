@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { SingleMultipleOrNone } from 'devextreme/common';
 import type { Font, Palette } from 'devextreme/common/charts';
 import type { Store } from 'devextreme/data';
@@ -277,7 +271,6 @@ export class DxiLayerComponent extends CollectionNestedOption {
         return 'layers';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -290,7 +283,6 @@ export class DxiLayerComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

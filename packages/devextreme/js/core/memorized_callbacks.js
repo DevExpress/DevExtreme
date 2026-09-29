@@ -1,3 +1,3 @@
 // deprecated
-import { MemorizedCallbacks } from '../__internal/core/m_memorized_callbacks';
+import { MemorizedCallbacks } from '../__internal/core/memorized_callbacks';
 export default MemorizedCallbacks;
