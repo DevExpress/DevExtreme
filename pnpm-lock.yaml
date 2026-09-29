@@ -186,6 +186,7 @@ overrides:
   brace-expansion@<3.0.0: ^2.1.4
   brace-expansion@>=3.0.0 <5.0.9: ^5.0.9
   yaml@>=2.0.0 <2.8.3: ^2.8.3
+  less@<4.8.0: ^4.8.0
   '@babel/core@<7.29.1': ^7.29.1
   uuid@<14.0.0: ~14.0.0
   postcss@<8.5.23: ^8.5.23
@@ -2419,7 +2420,7 @@ packages:
       '@angular/service-worker': ^21.0.0
       '@angular/ssr': ^21.2.24
       karma: ^6.4.0
-      less: ^4.2.0
+      less: ^4.8.0
       ng-packagr: ^21.0.0
       postcss: ^8.5.23
       tailwindcss: ^2.0.0 || ^3.0.0 || ^4.0.0
@@ -2466,7 +2467,7 @@ packages:
       '@angular/ssr': ^22.1.7
       istanbul-lib-instrument: ^6.0.0
       karma: ^6.4.0
-      less: ^4.2.0
+      less: ^4.8.0
       ng-packagr: ^22.0.0
       postcss: ^8.5.23
       rollup: ^4.59.0
@@ -12680,7 +12681,7 @@ packages:
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@rspack/core': 0.x || ^1.0.0 || ^2.0.0-0
-      less: ^3.5.0 || ^4.0.0
+      less: ^4.8.0
       webpack: ^5.0.0
     peerDependenciesMeta:
       '@rspack/core':
@@ -12693,7 +12694,7 @@ packages:
     engines: {node: '>= 22.11.0'}
     peerDependencies:
       '@rspack/core': 0.x || ^1.0.0 || ^2.0.0-0
-      less: ^3.5.0 || ^4.0.0
+      less: ^4.8.0
       webpack: ^5.0.0
     peerDependenciesMeta:
       '@rspack/core':
@@ -16395,7 +16396,7 @@ packages:
     peerDependencies:
       '@types/node': ^20.19.0 || >=22.12.0
       jiti: '>=1.21.0'
-      less: ^4.0.0
+      less: ^4.8.0
       lightningcss: ^1.21.0
       sass: ^1.70.0
       sass-embedded: ^1.70.0
@@ -16437,7 +16438,7 @@ packages:
       '@vitejs/devtools': ^0.1.18
       esbuild: ^0.28.1
       jiti: '>=1.21.0'
-      less: ^4.0.0
+      less: ^4.8.0
       sass: ^1.70.0
       sass-embedded: ^1.70.0
       stylus: '>=0.54.8'
@@ -16480,7 +16481,7 @@ packages:
       '@vitejs/devtools': ^0.3.0
       esbuild: ^0.28.1
       jiti: '>=1.21.0'
-      less: ^4.0.0
+      less: ^4.8.0
       sass: ^1.70.0
       sass-embedded: ^1.70.0
       stylus: '>=0.54.8'
