@@ -1,4 +1,5 @@
 import type { ColumnAIOptions, ColumnBase, ColumnLookup } from '@js/common/grids';
+import type { Callback } from '@js/core/utils/callbacks';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
@@ -78,6 +79,8 @@ export interface InternalColumnOptions extends ValueSerializers {
   command?: string;
   headerId?: string;
   showWhenGrouped?: boolean;
+  allowGrouping?: boolean;
+  resizedCallbacks?: Callback<[number]>;
   rowspan?: number;
   colspan?: number;
   lastSortOrder?: ColumnBase['sortOrder'];
