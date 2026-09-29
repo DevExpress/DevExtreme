@@ -1700,12 +1700,11 @@ export class ColumnsController extends modules.Controller {
 
   public setUserState(state): void {
     const dataSourceAdapter = this.appliedDataSourceAdapter;
-    const ignoreColumnOptionNames = this.getIgnoreColumnOptionNames();
 
     state?.forEach(this.setName);
 
     this._columnsUserState = state;
-    this._ignoreColumnOptionNames = ignoreColumnOptionNames;
+    this._ignoreColumnOptionNames = this.getIgnoreColumnOptionNames();
     this._hasUserState = !!state;
 
     updateColumnChanges(this, 'filtering');
