@@ -156,3 +156,9 @@ export type ColumnOptionSetter = (
   value: unknown,
   options: { functionsAsIs: boolean },
 ) => void;
+
+export interface BandColumnsCache {
+  isPlain: boolean;
+  columnChildrenByIndex: Record<number, Column[]>;
+  columnParentByIndex: Record<number, Column>;
+}

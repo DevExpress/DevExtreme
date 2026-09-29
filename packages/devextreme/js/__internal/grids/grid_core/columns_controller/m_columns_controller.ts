@@ -844,12 +844,17 @@ export class ColumnsController extends modules.Controller {
           }
         }
 
-        if (parentBandColumns.length) {
+        // normalizeIndexes gives every band and band child a numeric visibleIndex
+        if (parentBandColumns.length && isNumeric(targetIndex)) {
           targetIndex = numberToString(targetIndex, columnDigitsCount);
 
           for (let i = parentBandColumns.length - 1; i >= 0; i -= 1) {
             const { visibleIndex: parentVisibleIndex } = parentBandColumns[i];
-            targetIndex = `${numberToString(parentVisibleIndex, columnDigitsCount)}${targetIndex}`;
+
+            if (isNumeric(parentVisibleIndex)) {
+              const parentTargetIndex = numberToString(parentVisibleIndex, columnDigitsCount);
+              targetIndex = `${parentTargetIndex}${targetIndex}`;
+            }
           }
         }
 
@@ -1620,7 +1625,7 @@ export class ColumnsController extends modules.Controller {
 
       if (column.isBand) {
         const childIndexes = that.getChildrenByBandColumn(column.index).map((column) => column.index);
-        that._columns = that._columns.filter((column) => childIndexes.indexOf(column.index) < 0);
+        that._columns = that._columns.filter((column) => !childIndexes.includes(column.index));
       }
 
       updateIndexes(that);
@@ -1948,7 +1953,9 @@ export class ColumnsController extends modules.Controller {
     if (onlyVisibleDirectChildren) {
       return result
         .filter((column) => column.visible && !column.command)
-        .sort((column1, column2) => column1.visibleIndex - column2.visibleIndex);
+        .sort((column1, column2) => (
+          (column1.visibleIndex as number) - (column2.visibleIndex as number)
+        ));
     }
 
     return result;
