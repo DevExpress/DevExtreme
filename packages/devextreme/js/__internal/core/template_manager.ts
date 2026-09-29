@@ -64,6 +64,16 @@ export type WatchMethod = (
   options?: WatchOptions,
 ) => () => void;
 
+export interface IntegrationOptions {
+  watchMethod?: WatchMethod;
+  templates?: Record<string, TemplateLike>;
+  useDeferUpdateForTemplates?: boolean;
+  createTemplate?: CreateElement;
+  skipTemplates?: string[];
+  renderedOnServer?: boolean;
+  isControlledMode?: boolean;
+}
+
 interface PolymorphWidgetModel {
   widget?: string;
   options?: Record<string, unknown>;

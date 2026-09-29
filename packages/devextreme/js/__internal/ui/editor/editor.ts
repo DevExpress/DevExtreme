@@ -45,7 +45,7 @@ export type ValueChangedEvent<TNativeEvent = Event> = NativeEventInfo<Editor, TN
   & ValueChangedInfo;
 
 export interface EditorInternalProperties {
-  integrationOptions?: Record<string, unknown>;
+  integrationOptions?: WidgetProperties['integrationOptions'];
   onKeyboardHandled?: WidgetProperties['onKeyboardHandled'];
   validationMessageOffset?: { h: number; v: number };
   validationBoundary?: dxElementWrapper;
