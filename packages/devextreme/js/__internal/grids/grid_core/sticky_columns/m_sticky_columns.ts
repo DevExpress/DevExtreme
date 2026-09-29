@@ -549,11 +549,11 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
         return $cell.offset()?.left ?? 0;
       }
 
-      const $nextCell = $cell.next();
-      const isNextCellPinnedToRight = $nextCell.length > 0
-        && GridCoreStickyColumnsDom.isFixedCellPinnedToRight($nextCell, $container, addWidgetPrefix);
+      const nextColumnIndex = this._resizingInfo?.nextColumnIndex;
+      const $nextCell = this._columnHeadersView.getColumnElements()?.eq(nextColumnIndex);
 
-      if (isNextCellPinnedToRight) {
+      if ($nextCell?.length
+        && GridCoreStickyColumnsDom.isFixedCellPinnedToRight($nextCell, $container, addWidgetPrefix)) {
         return $nextCell.offset()?.left ?? 0;
       }
     }
