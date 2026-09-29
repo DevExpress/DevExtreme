@@ -191,8 +191,7 @@ if (ko) {
           optionChangedCallbacks.add(handleOptionChanged);
           $element
             .data(CREATED_WITH_KO_DATA_KEY, true)
-            // @ts-expect-error
-            .data(LOCKS_DATA_KEY, new Locker());
+            .data(LOCKS_DATA_KEY, Locker());
 
           // eslint-disable-next-line no-new,new-cap
           new componentClass($element, ctorOptions);
