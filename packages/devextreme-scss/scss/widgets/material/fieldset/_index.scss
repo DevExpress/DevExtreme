@@ -29,7 +29,6 @@
   .dx-field-value {
     &.dx-attention {
       color: $fieldset-field-value-invalid-color;
-      padding-left: $material-fieldset-attention-icon-offset;
 
       &::before {
         @include dx-invalid-material-badge();

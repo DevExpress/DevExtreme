@@ -1,3 +1,3 @@
 // deprecated
-import { browser } from '../../__internal/core/utils/m_browser';
+import { browser } from '../../__internal/core/utils/browser';
 export default browser;

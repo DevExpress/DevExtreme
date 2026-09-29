@@ -1,11 +1,10 @@
-import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
 import { Deferred } from 'core/utils/deferred';
 import { isPromise } from 'core/utils/type';
 
-const Validator = Class.inherit({
-    validate: function() { }
-});
+class Validator {
+    validate() { }
+}
 
 const testInvalidRule = function(rule, invalidValue, assert, name) {
     const result = ValidationEngine.validate(invalidValue, [rule], name);

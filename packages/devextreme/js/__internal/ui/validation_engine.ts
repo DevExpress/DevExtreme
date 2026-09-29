@@ -238,7 +238,9 @@ class NumericRuleValidator extends SyncRuleValidator {
       return true;
     }
     if (rule.useCultureSettings && isString(value)) {
-      return !isNaN(numberLocalization.parse(value));
+      const parsedValue = numberLocalization.parse(value);
+
+      return parsedValue === null || (parsedValue !== undefined && !isNaN(parsedValue));
     }
     return isNumeric(value);
   }

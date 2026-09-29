@@ -2,8 +2,8 @@ import type { FilterPanel } from '@js/common/grids';
 import $ from '@js/core/renderer';
 import type { Properties as FilterBuilderProperties } from '@js/ui/filter_builder';
 import type { Properties as PopupProperties } from '@js/ui/popup';
-import type { FilterBuilderView as OldFilterBuilderView } from '@ts/grids/grid_core/filter/m_filter_builder';
-import type { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter/m_filter_panel';
+import type { FilterBuilderView as OldFilterBuilderView } from '@ts/grids/grid_core/filter_builder/m_filter_builder';
+import type { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter_panel/m_filter_panel';
 import { Component, createRef } from 'inferno';
 
 import { CLASSES } from '../../const';

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useMemo, useState, useRef } from 'react';
 import Chat from 'devextreme-react/chat';
 import type { ChatTypes } from 'devextreme-react/chat';
 import { Switch, type SwitchTypes } from 'devextreme-react/switch';
@@ -64,7 +64,9 @@ export default function App() {
     }
   }, [alerts.length, insertMessage, processAIRequest]);
 
-  const suggestions = { items: suggestionList, onItemClick: onSuggestionClick, disabled: isDisabled };
+  const suggestions = useMemo(() => ({ items: suggestionList, onItemClick: onSuggestionClick, disabled: isDisabled }), [suggestionList, onSuggestionClick, isDisabled]);
+  const onSendImmediatelyChanged = useCallback((e: SwitchTypes.ValueChangedEvent) => { sendImmediately.current = e.value; }, []);
+  const onHideAfterUseChanged = useCallback((e: SwitchTypes.ValueChangedEvent) => { hideAfterUse.current = e.value; }, []);
 
   const onMessageEntered = useCallback(async ({ message, event }: ChatTypes.MessageEnteredEvent): Promise<void> => {
     if (isDisabled) return;
@@ -110,14 +112,14 @@ export default function App() {
           <div className='option'>
             <Switch
               defaultValue={false}
-              onValueChanged={(e: SwitchTypes.ValueChangedEvent) => { sendImmediately.current = e.value; }}
+              onValueChanged={onSendImmediatelyChanged}
             />
             <span>Send Immediately</span>
           </div>
           <div className='option'>
             <Switch
               defaultValue={false}
-              onValueChanged={(e: SwitchTypes.ValueChangedEvent) => { hideAfterUse.current = e.value; }}
+              onValueChanged={onHideAfterUseChanged}
             />
             <span>Hide After Use</span>
           </div>

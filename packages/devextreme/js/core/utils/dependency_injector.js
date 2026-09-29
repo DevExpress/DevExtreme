@@ -1,3 +1,3 @@
 // deprecated
-import { injector } from '../../__internal/core/utils/m_dependency_injector';
+import { injector } from '../../__internal/core/utils/dependency_injector';
 export default injector;

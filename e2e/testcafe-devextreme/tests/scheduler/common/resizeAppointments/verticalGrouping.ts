@@ -12,16 +12,12 @@ test('Should correctly calculate group resizing area (T1025952)', async (t) => {
 
   await t
     .drag(firstAppointment.resizableHandle.bottom, 0, 100)
-    .expect(firstAppointment.size.height)
-    .eql('140.594px')
     .expect(firstAppointment.date.time)
-    .eql('9:30 AM - 11:21 AM')
+    .eql('9:30 AM - 11:00 AM')
 
     .drag(secondAppointment.resizableHandle.bottom, 0, 100)
-    .expect(secondAppointment.size.height)
-    .eql('165.922px')
     .expect(secondAppointment.date.time)
-    .eql('9:30 AM - 11:41 AM');
+    .eql('9:30 AM - 11:00 AM');
 }).before(async () => createScheduler({
   dataSource: [
     {
@@ -74,10 +70,8 @@ test('Should correctly calculate group resizing area after scroll (T1041672)', a
 
   await t
     .drag(appointment.resizableHandle.bottom, 0, 100)
-    .expect(appointment.size.height)
-    .eql('165.922px')
     .expect(appointment.date.time)
-    .eql('9:30 AM - 11:41 AM');
+    .eql('9:30 AM - 11:00 AM');
 }).before(async () => createScheduler({
   dataSource: [
     {

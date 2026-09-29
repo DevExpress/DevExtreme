@@ -1,3 +1,4 @@
+import { ClientFunction, Selector } from 'testcafe';
 import Popup from 'devextreme-testcafe-models/popup';
 import url from '../../../helpers/getPageUrl';
 import asyncForEach from '../../../helpers/asyncForEach';
@@ -132,3 +133,57 @@ test('Popup can be dragged outside of the container if dragOutsideBoundary is en
   dragOutsideBoundary: true,
   animation: undefined,
 }));
+
+const renderSwatchScope = ClientFunction(() => {
+  const host = document.createElement('div');
+
+  host.id = 'swatchHost';
+  host.innerHTML = '<div id="swatchViewPort" class="dx-viewport" style="position: absolute; top: 0; left: 0; width: 600px; height: 600px">'
+    + '<div><div class="dx-swatch-custom"><div id="swatchPopup"></div></div></div>'
+    + '</div>';
+
+  document.body.appendChild(host);
+
+  (window as any).swatchPreviousViewPort = (window as any).DevExpress.viewPort();
+  (window as any).DevExpress.viewPort('#swatchViewPort');
+});
+
+const clearSwatchScope = ClientFunction(() => {
+  (window as any).widget?.dispose();
+
+  document.querySelector('#swatchHost')?.remove();
+
+  (window as any).DevExpress.viewPort((window as any).swatchPreviousViewPort);
+});
+
+test.meta({ browserSize: [700, 700] })('Popup inside a swatch can be dragged', async (t) => {
+  const popup = new Popup(Selector('.swatch-popup'));
+
+  const topBefore = await popup.content.getBoundingClientRectProperty('top');
+  const leftBefore = await popup.content.getBoundingClientRectProperty('left');
+
+  await t
+    .drag(popup.topToolbar, 50, 50);
+
+  await t
+    .expect(await popup.content.getBoundingClientRectProperty('top'))
+    .eql(topBefore + 50);
+
+  await t
+    .expect(await popup.content.getBoundingClientRectProperty('left'))
+    .eql(leftBefore + 50);
+}).before(async () => {
+  await renderSwatchScope();
+
+  return createWidget('dxPopup', {
+    width: 100,
+    height: 100,
+    visible: true,
+    dragEnabled: true,
+    animation: undefined,
+    position: { of: '#swatchViewPort' },
+    wrapperAttr: { class: 'swatch-popup' },
+  }, '#swatchPopup');
+}).after(async () => {
+  await clearSwatchScope();
+});

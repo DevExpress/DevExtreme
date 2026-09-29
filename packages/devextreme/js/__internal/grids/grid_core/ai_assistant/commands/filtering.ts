@@ -146,7 +146,7 @@ const getFilterSuccessMessage = async (
   filterValue: FilterExprArray,
 ): Promise<string> => {
   try {
-    const customOperations = component.getController('filterSync').getCustomFilterOperations();
+    const customOperations = component.getController('filterBuilder').getCustomFilterOperations();
     const filterText: string = await when(
       component.getView('filterPanelView').getFilterText(filterValue, customOperations),
     );

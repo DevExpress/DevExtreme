@@ -942,6 +942,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       label?: string;
       /**
        * @docid
+       * @default undefined
+       */
+      parentIdExpr?: string;
+      /**
+       * @docid
        * @default false
        */
       useColorAsDefault?: boolean;

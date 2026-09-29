@@ -13,6 +13,7 @@ const overlappingRuleItems = [
   { value: 'sameResource', text: 'Different Resources' },
   { value: 'allResources', text: 'Never' },
 ];
+const formElementAttr = { class: 'hide-informer', id: 'form' };
 function getNextDay(date) {
   const next = new Date(date);
   next.setDate(next.getDate() + 1);
@@ -59,15 +60,25 @@ const assigneeIdEditorOptions = {
   },
   tagTemplate: 'tagTemplate',
 };
-const tagTemplate = (itemData) => (
-  <div
-    className="dx-tag-content"
-    style={{ backgroundColor: itemData.color, borderColor: itemData.color }}
-  >
-    {itemData.text}
-    <div className="dx-tag-remove-button"></div>
-  </div>
-);
+const TagTemplate = ({ itemData }) => {
+  const tagStyle = useMemo(
+    () => ({
+      backgroundColor: itemData.color,
+      borderColor: itemData.color,
+    }),
+    [itemData.color],
+  );
+  return (
+    <div
+      className="dx-tag-content"
+      style={tagStyle}
+    >
+      {itemData.text}
+      <div className="dx-tag-remove-button"></div>
+    </div>
+  );
+};
+const tagTemplate = (itemData) => <TagTemplate itemData={itemData} />;
 const conflictInformerRender = () => (
   <div className="conflict-informer">This time slot conflicts with another appointment.</div>
 );
@@ -76,6 +87,9 @@ const App = () => {
   const formRef = useRef(null);
   const showConflictErrorRef = useRef(false);
   const overlappingRuleRef = useRef('sameResource');
+  const onOverlappingRuleChanged = useCallback((e) => {
+    overlappingRuleRef.current = e.value;
+  }, []);
   const setConflictError = useCallback((show) => {
     showConflictErrorRef.current = show;
     formRef.current?.option('elementAttr.class', show ? '' : 'hide-informer');
@@ -201,7 +215,7 @@ const App = () => {
             labelMode="hidden"
             onInitialized={onFormInitialized}
             customizeItem={customizeItem}
-            elementAttr={{ class: 'hide-informer', id: 'form' }}
+            elementAttr={formElementAttr}
           >
             <Item
               name="conflictInformer"
@@ -244,9 +258,7 @@ const App = () => {
             valueExpr="value"
             displayExpr="text"
             defaultValue="sameResource"
-            onValueChanged={(e) => {
-              overlappingRuleRef.current = e.value;
-            }}
+            onValueChanged={onOverlappingRuleChanged}
           />
         </div>
       </div>

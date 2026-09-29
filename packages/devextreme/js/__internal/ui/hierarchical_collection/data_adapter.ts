@@ -7,7 +7,7 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import type { DisabledNodeSelectionMode } from '@js/ui/tree_view';
 import errors from '@js/ui/widget/ui.errors';
-import { getIntersection } from '@ts/core/utils/m_array';
+import { getIntersection } from '@ts/core/utils/array';
 import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/search_box_controller';
 import TextBox from '@ts/ui/text_box/text_box';
 
@@ -691,8 +691,8 @@ class DataAdapter {
     lookForParents(matches, 0);
 
     if (this.options.sort) {
+      // @ts-expect-error queryByOptions().toArray() is typed as unknown[]
       matches = storeHelper
-        // @ts-expect-error ts-error
         .queryByOptions(query(matches), {
           sort: this.options.sort,
           langParams: this.options.langParams,

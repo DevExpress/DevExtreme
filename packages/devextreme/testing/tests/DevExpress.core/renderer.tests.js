@@ -1,5 +1,5 @@
-const { setHeight, setWidth, implementationsMap } = require('core/utils/size');
-const renderer = require('core/renderer');
+import { setHeight, setWidth, implementationsMap } from 'core/utils/size';
+import renderer from 'core/renderer';
 
 QUnit.module('renderer');
 

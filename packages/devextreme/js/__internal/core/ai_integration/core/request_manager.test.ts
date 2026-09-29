@@ -13,7 +13,7 @@ import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
 const INVALID_SEND_REQUEST_ERROR_MESSAGE = 'E0122 - AIIntegration: The sendRequest method is missing.';
 
 describe('RequestManager', () => {
-  let provider = null as unknown as AIProvider;
+  let provider = null as unknown as Provider;
   let requestManager = null as unknown as RequestManager;
 
   beforeEach(() => {

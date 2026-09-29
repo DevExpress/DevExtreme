@@ -29,7 +29,7 @@ import type { ItemClickEvent, SelectionChangedEvent as ListSelectionChangedEvent
 import type { Properties } from '@js/ui/tag_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
@@ -1275,6 +1275,7 @@ class TagBox<
       return true;
     }
 
+    // @ts-expect-error getIntersection does not guard against undefined arguments
     const intersection = getIntersection(selectedItems, this._selectedItems);
 
     if (intersection.length !== this._selectedItems?.length) {
@@ -1730,11 +1731,9 @@ class TagBox<
     const currentValue = value || [];
     const existedItems = listValues.length ? getIntersection(currentValue, listValues) : [];
     const newItems = existedItems.length
-      // @ts-expect-error fix on core/m_array level
       ? removeDuplicates(listValues, currentValue)
       : listValues;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return existedItems.concat(newItems);
   }
 

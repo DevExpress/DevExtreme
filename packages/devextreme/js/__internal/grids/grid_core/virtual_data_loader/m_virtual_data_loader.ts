@@ -1,6 +1,8 @@
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isObject, isString } from '@js/core/utils/type';
 
+import type { VirtualItemsCount } from './types';
+
 const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 const needTwoPagesLoading = (that) => that.option('scrolling.loadTwoPagesOnStart') || that._controller.isVirtual() || that._controller.getViewportItemIndex() > 0;
@@ -405,7 +407,7 @@ export class VirtualDataLoader {
     return count;
   }
 
-  private virtualItemsCount() {
+  public virtualItemsCount(): VirtualItemsCount {
     let pageIndex = getBeginPageIndex(this);
     if (pageIndex < 0) {
       pageIndex = this._dataOptions.pageIndex();

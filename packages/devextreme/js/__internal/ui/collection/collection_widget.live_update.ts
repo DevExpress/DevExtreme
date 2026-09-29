@@ -160,7 +160,9 @@ class CollectionWidgetLiveUpdate<
         isItemEquals: this._isItemStrictEquals.bind(this),
         detectReorders: true,
       });
+      // @ts-expect-error DataChange requires key on inserts and data on removes
       if (result && this._itemsCache.length && !this._shouldAddNewGroup(result, this._itemsCache)) {
+        // @ts-expect-error DataChange requires key on inserts and data on removes
         this._modifyByChanges(result, true);
         this._renderEmptyMessage();
         return true;
@@ -204,7 +206,6 @@ class CollectionWidgetLiveUpdate<
     } else {
       const changedItem = items[indexByKey(keyInfo, items, change.key)];
       if (changedItem) {
-        // @ts-expect-error ts-error
         update(keyInfo, items, change.key, change.data).done(() => {
           this._renderItem(
             items.indexOf(changedItem),
@@ -224,7 +225,6 @@ class CollectionWidgetLiveUpdate<
     isPartialRefresh?: boolean,
   ): void {
     when(
-      // @ts-expect-error ts-error
       isPartialRefresh ?? insert(keyInfo, items, change.data, change.index),
     ).done(() => {
       this._beforeItemElementInserted(change);

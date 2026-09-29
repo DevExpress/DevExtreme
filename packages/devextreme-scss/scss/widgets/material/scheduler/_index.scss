@@ -28,14 +28,11 @@
   $scheduler-panel-text-color: $scheduler-panel-text-color,
   $scheduler-left-column-width: $scheduler-left-column-width,
   $scheduler-timeline-cell-height: $scheduler-timeline-cell-height,
-  $scheduler-workspace-active-cell-color: $scheduler-workspace-active-cell-color,
-  $scheduler-workspace-hovered-cell-color: $scheduler-workspace-hovered-cell-color,
   $scheduler-workspace-focused-cell-color: $scheduler-workspace-focused-cell-color,
   $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-background-color,
   $scheduler-appointment-text-color: $scheduler-appointment-text-color,
   $scheduler-fill-focused-appointment: $scheduler-fill-focused-appointment,
   $scheduler-is-shadow-color-for-focused-state: $scheduler-is-shadow-color-for-focused-state,
-  $scheduler-dd-appointment-hover-text-color: $scheduler-dd-appointment-hover-text-color,
 
   $agenda-appointment-recurrence-icon-color: $agenda-appointment-recurrence-icon-color,
   $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
@@ -53,17 +50,17 @@
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
-$scheduler-appointment-recurrence-content-padding: 5px 25px 5px 7px;
-$scheduler-appointment-recurrence-content-padding-rtl: 5px 7px 5px 25px;
+$scheduler-appointment-recurrence-content-padding: 5px 25px 5px 7px !default;
+$scheduler-appointment-recurrence-content-padding-rtl: 5px 7px 5px 25px !default;
 
-$material-scheduler-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 1.5;
-$material-scheduler-collapsed-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 0.5;
+$material-scheduler-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 1.5 !default;
+$material-scheduler-collapsed-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 0.5 !default;
 
-$material-scheduler-month-date-text-size: 14px;
+$material-scheduler-month-date-text-size: 14px !default;
 
-$scheduler-first-of-month-border: 1px solid;
+$scheduler-first-of-month-border: 1px solid !default;
 
-$material-scheduler-agenda-time-panel-cell-padding: 8px;
+$material-scheduler-agenda-time-panel-cell-padding: 8px !default;
 
 @include baseScheduler.scheduler-mixin();
 
@@ -590,6 +587,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       .dx-scheduler-group-header {
         border-bottom: none;
       }
+
+      .dx-scheduler-header-panel .dx-scheduler-group-row:has(+ .dx-scheduler-group-row) .dx-scheduler-group-header {
+        border-bottom: baseScheduler.$scheduler-base-border;
+        border-bottom-color: $scheduler-base-border-color;
+      }
     }
 
     &.dx-scheduler-agenda {
@@ -739,7 +741,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   border-right: 1px solid;
   border-right-color: $scheduler-group-separator-border-color;
 
-  &:last-child {
+  &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
     border-right: none;
   }
 
@@ -749,7 +751,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     border-right: baseScheduler.$scheduler-base-border;
     border-right-color: $scheduler-base-border-color;
 
-    &:last-child {
+    &:last-child:not(:where(.dx-scheduler-group-header-inner-column)) {
       border-left: none;
     }
   }
@@ -965,7 +967,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-timeline .dx-scheduler-group-flex-container .dx-scheduler-group-header {
-  width: 100px;
+  width: $material-scheduler-group-header-table-cell-width;
+}
+
+.dx-scheduler-timeline .dx-scheduler-group-flex-container-hierarchical .dx-scheduler-group-row > .dx-scheduler-group-header.dx-scheduler-group-header-leaf:only-child {
+  min-width: $material-scheduler-group-header-table-cell-width;
 }
 
 .dx-scheduler-header-panel-empty-cell {

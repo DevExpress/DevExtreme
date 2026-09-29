@@ -1,5 +1,6 @@
 import { GroupingHelper, updateGroupOffsets } from '../m_grouping_expanded';
 import type { DataItem, GroupInfoData, GroupItemData } from '../types';
+import { createDataSourceAdapterStub } from './m_grouping_expanded.mock';
 
 export interface GroupConfig {
   key: string;
@@ -35,7 +36,7 @@ export class GroupingTestHelper {
   private readonly savedChildren = new Map<string, GroupItemData[] | null>();
 
   constructor(groups: GroupConfig[]) {
-    this.grouping = new GroupingHelper({ option: (): undefined => undefined });
+    this.grouping = new GroupingHelper(createDataSourceAdapterStub());
     this.groupsByKey = new Map();
     this.leafCounts = new Map();
 

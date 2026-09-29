@@ -4,12 +4,15 @@ import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
-import { computed, effect, signal } from '@ts/core/state_manager/index';
+import {
+  computed, effect, signal, track,
+} from '@ts/core/state_manager/index';
 import { equalByValue } from '@ts/core/utils/m_common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
+import type { StoreLoadOptions } from '@ts/data/abstract_store';
 
-import gridCoreUtils from '../../../grid_core/m_utils';
+import { combineFilters } from '../../../grid_core/filter/utils';
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { ErrorController } from '../error_controller/error_controller';
 import { FilterController } from '../filtering/filter_controller';
@@ -161,7 +164,9 @@ export class DataController {
           );
         };
 
-        const getLoadOptionsWithoutLocalPaging = (loadOptions): unknown => {
+        const getLoadOptionsWithoutLocalPaging = (
+          loadOptions: StoreLoadOptions,
+        ): StoreLoadOptions => {
           const { skip, take, ...rest } = loadOptions;
           return rest;
         };
@@ -230,8 +235,7 @@ export class DataController {
 
     effect(
       () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        this.normalizedRemoteOptions.value;
+        track(this.normalizedRemoteOptions.value);
 
         if (this.dataSource.peek().isLoaded()) {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -317,7 +321,7 @@ export class DataController {
   }
 
   private combineFilterWithDisplayFilter(filter: FilterDescriptor): FilterDescriptor {
-    return gridCoreUtils.combineFilters([
+    return combineFilters([
       filter,
       this.normalizedDisplayFilter.peek(),
     ]);

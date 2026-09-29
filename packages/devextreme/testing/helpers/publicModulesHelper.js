@@ -1,12 +1,6 @@
-(function(root, factory) {
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            root.testGlobalExports = module.exports = factory(require('jquery'));
-        });
-    } else {
-        root.testGlobalExports = factory(root.jQuery);
-    }
-}(window, function($) {
+import $ from 'jquery';
+
+const __moduleExports = (function($) {
     return function(namespaces, fields) {
         $.each(namespaces, function(namespaceName, namespace) {
             $.each(fields, function(fieldName, fieldValue) {
@@ -17,4 +11,8 @@
             });
         });
     };
-}));
+})($);
+
+window.testGlobalExports = __moduleExports;
+
+export default __moduleExports;

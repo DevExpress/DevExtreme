@@ -1,0 +1,23 @@
+.dx-scheduler-cell-sizes-horizontal {
+  width: 100px;
+}
+
+.dx-scheduler-group-header {
+  min-width: 120px;
+}
+
+.dx-scheduler-group-header,
+.dx-scheduler-header-panel-empty-cell,
+.dx-scheduler-work-space-vertical-group-table,
+.dx-scheduler-work-space-vertical-grouped .dx-scheduler-time-panel-cell,
+.dx-scheduler-work-space-grouped:not(.dx-scheduler-work-space-vertical-grouped)
+  .dx-scheduler-header-panel-cell {
+  background-color: var(--dx-color-main-bg);
+}
+
+.dx-scheduler-group-header,
+.dx-scheduler-group-header .dx-scheduler-group-header-content {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+}

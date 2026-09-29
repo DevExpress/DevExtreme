@@ -196,7 +196,7 @@
         "dxDataGrid-columnFixingRightPosition": "Dreapta",
         "dxDataGrid-columnFixingStickyPosition": "Lipit",
         "dxDataGrid-exportTo": "Export",
-        "dxDataGrid-exportToExcel": "Exportare fișier Excel ",
+        "dxDataGrid-exportToExcel": "Exportare fișier Excel",
         "dxDataGrid-exporting": "Exportare...",
         "dxDataGrid-excelFormat": "Fișier Excel",
         "dxDataGrid-selectedRows": "Rânduri selectate",
@@ -354,7 +354,7 @@
 
         "dxScheduler-switcherTimelineDay": "Orar zilnic",
         "dxScheduler-switcherTimelineWeek": "Orar săptămânal",
-        "dxScheduler-switcherTimelineWorkWeek": "Orar de lucru săptămânal ",
+        "dxScheduler-switcherTimelineWorkWeek": "Orar de lucru săptămânal",
         "dxScheduler-switcherTimelineMonth": "Orar lunar",
 
         "dxScheduler-recurrenceRepeatOnDate": "pe data",

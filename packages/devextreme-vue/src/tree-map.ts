@@ -57,6 +57,7 @@ type AccessibleOptions = Pick<Properties,
   "dataSource" |
   "disabled" |
   "elementAttr" |
+  "encodeHtml" |
   "export" |
   "group" |
   "hoverEnabled" |
@@ -106,6 +107,7 @@ const componentConfig = {
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
+    encodeHtml: Boolean,
     export: Object as PropType<Record<string, any>>,
     group: Object as PropType<Record<string, any>>,
     hoverEnabled: Boolean,
@@ -151,6 +153,7 @@ const componentConfig = {
     "update:dataSource": null,
     "update:disabled": null,
     "update:elementAttr": null,
+    "update:encodeHtml": null,
     "update:export": null,
     "update:group": null,
     "update:hoverEnabled": null,

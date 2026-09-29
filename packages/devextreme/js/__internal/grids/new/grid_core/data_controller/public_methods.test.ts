@@ -1,8 +1,8 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import { DataSource } from '@ts/data/data_source/m_data_source';
-import ArrayStore from '@ts/data/m_array_store';
+import ArrayStore from '@js/data/array_store';
+import DataSource from '@js/data/data_source';
 
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
@@ -72,7 +72,7 @@ describe('PublicMethods', () => {
         await dataController.waitLoaded();
 
         const item = await gridCore.byKey(1);
-        expect(store.byKey).toBeCalledTimes(0);
+        expect(store.byKey).toHaveBeenCalledTimes(0);
         expect(item).toEqual({ id: 1, value: 'value 1' });
       });
     });
@@ -96,7 +96,7 @@ describe('PublicMethods', () => {
         await dataController.waitLoaded();
 
         const item = await gridCore.byKey(2);
-        expect(store.byKey).toBeCalledTimes(1);
+        expect(store.byKey).toHaveBeenCalledTimes(1);
         expect(item).toEqual({ id: 2, value: 'value 2' });
       });
     });

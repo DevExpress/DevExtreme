@@ -27,7 +27,7 @@ function SliderMarker(renderer, root, isLeftPointer) {
 
   that._group = renderer.g().attr({ class: 'slider-marker' }).append(root);
   that._area = renderer.path(null, 'area').append(that._group);
-  that._label = renderer.text().attr({ align: 'left' }).append(that._group);
+  that._label = renderer.text().append(that._group);
   that._tracker = renderer.rect().attr({ class: 'slider-marker-tracker', fill: '#000000', opacity: 0.0001 }).css({ cursor: 'pointer' }).append(that._group);
   that._border = renderer.rect(0, 0, 1, 0);
 }
@@ -180,7 +180,7 @@ SliderMarker.prototype = {
     that._colors = [options.invalidRangeColor, options.color];
     that._area.attr({ fill: options.color });
     that._border.attr({ fill: options.borderColor });
-    that._label.css(patchFontOptions(options.font));
+    that._label.attr({ align: 'left' }).css(patchFontOptions(options.font));
     that._update();
   },
 

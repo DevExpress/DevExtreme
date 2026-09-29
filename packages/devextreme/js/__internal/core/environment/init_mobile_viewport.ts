@@ -1,13 +1,14 @@
 import $ from '@js/core/renderer';
-import devices from '@ts/core/m_devices';
-import domAdapter from '@ts/core/m_dom_adapter';
+import devices from '@ts/core/devices';
+import domAdapter from '@ts/core/dom_adapter';
 import { extend } from '@ts/core/utils/m_extend';
 import resizeCallbacks from '@ts/core/utils/m_resize_callbacks';
 import { getWidth, setWidth } from '@ts/core/utils/m_size';
 import { styleProp } from '@ts/core/utils/m_style';
 import supportUtils from '@ts/core/utils/m_support';
 import { getWindow } from '@ts/core/utils/m_window';
-import eventsEngine from '@ts/events/core/m_events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
+import type { ScrollEvent } from '@ts/events/gesture/emitter.gesture.scroll';
 
 const window = getWindow();
 
@@ -63,8 +64,8 @@ export const initMobileViewport = function (
 
   if (supportUtils.touch) {
     eventsEngine.off(domAdapter.getDocument(), '.dxInitMobileViewport');
-    eventsEngine.on(domAdapter.getDocument(), 'dxpointermove.dxInitMobileViewport', (e) => {
-      const count = e.pointers.length;
+    eventsEngine.on(domAdapter.getDocument(), 'dxpointermove.dxInitMobileViewport', (e: ScrollEvent) => {
+      const count = e.pointers?.length ?? 0;
       const isTouchEvent = e.pointerType === 'touch';
       const zoomDisabled = !allowZoom && count > 1;
       const panDisabled = !allowPan && count === 1 && !e.isScrollingEvent;
@@ -76,7 +77,6 @@ export const initMobileViewport = function (
   }
 
   if (realDevice.ios) {
-    // @ts-expect-error
     const isPhoneGap = domAdapter.getLocation().protocol === 'file:';
 
     if (!isPhoneGap) {

@@ -50,7 +50,7 @@ const format = new Intl.NumberFormat('en-US', {
 }).format;
 
 </script>
-<style scoped>
+<style>
 #range-selector-demo {
   text-align: center;
 }

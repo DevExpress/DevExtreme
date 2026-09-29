@@ -1,8 +1,9 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 
 const CLASSES = {
-  container: 'dx-screen-reader-only',
+  container: SCREEN_READER_ONLY_CLASS,
 };
 
 export const createA11yStatusContainer = (statusText = ''): dxElementWrapper => $('<div>')

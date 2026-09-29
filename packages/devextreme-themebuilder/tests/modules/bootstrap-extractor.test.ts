@@ -51,6 +51,36 @@ ${collectorServiceCode}`;
     expect(result).toBe(extractor.removeImports(expectedResult));
   });
 
+  test('sassProcessor (bootstrap5 without _variables-dark.scss)', async () => {
+    const testSassString = 'test string';
+    const setterServiceCode = 'setter';
+    const collectorServiceCode = 'collector';
+    const extractor = new BootstrapExtractor(testSassString, 5);
+    const functionsPath = require.resolve('bootstrap/scss/_functions.scss');
+    const variablesPath = require.resolve('bootstrap/scss/_variables.scss');
+    const functions = readFileSync(functionsPath);
+    const variables = readFileSync(variablesPath);
+    const resolveFilePath = extractor.getFilePath.bind(extractor);
+
+    // Emulate a Bootstrap version that ships no _variables-dark.scss.
+    extractor.getFilePath = (fileName: string): string => (fileName === '_variables-dark.scss'
+      ? '/non-existent/_variables-dark.scss'
+      : resolveFilePath(fileName));
+    extractor.getSetterServiceCode = (): string => setterServiceCode;
+    extractor.getCollectorServiceCode = (): string => collectorServiceCode;
+
+    const result = await extractor.sassProcessor();
+
+    const expectedResult = `${functions.toString()}
+${variables.toString()}
+
+${testSassString}
+${setterServiceCode}
+${collectorServiceCode}`;
+
+    expect(result).toBe(extractor.removeImports(expectedResult));
+  });
+
   test('getSetterServiceCode', () => {
     const extractor = new BootstrapExtractor('', 4);
     extractor.meta = {

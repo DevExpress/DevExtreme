@@ -13,12 +13,19 @@ function imageExpr({ FullName }) {
 const selectionModeLabel = { 'aria-label': 'Selection Mode' };
 const showCheckBoxesModeLabel = { 'aria-label': 'Show Checkboxes Mode' };
 const selectAllModeLabel = { 'aria-label': 'Select All Mode' };
+const selectionModes = ['single', 'multiple'];
+const showCheckBoxesModes = ['always', 'none', 'onClick', 'onLongTap'];
+const selectAllModes = ['allPages', 'page'];
+const defaultSelectedCardKeys = [4, 6];
 const App = () => {
   const [selectionMode, setSelectionMode] = useState('multiple');
   const [allowSelectAll, setAllowSelectAll] = useState(true);
   const [showCheckBoxesMode, setShowCheckBoxesMode] = useState('always');
   const [selectAllMode, setSelectAllMode] = useState('allPages');
   const cardViewRef = useRef(null);
+  const isMultipleSelection = selectionMode === 'multiple';
+  const isSelectAllDisabled = !isMultipleSelection || !allowSelectAll;
+  const canSelectAll = !!allowSelectAll;
   const onSelectionModeChange = useCallback((value) => {
     setSelectionMode(value);
     cardViewRef.current?.instance().clearSelection();
@@ -32,7 +39,7 @@ const App = () => {
             <span>Selection Mode</span>
             <SelectBox
               inputAttr={selectionModeLabel}
-              dataSource={['single', 'multiple']}
+              dataSource={selectionModes}
               value={selectionMode}
               onValueChange={onSelectionModeChange}
             ></SelectBox>
@@ -41,20 +48,20 @@ const App = () => {
             <span>Show Checkboxes Mode</span>
             <SelectBox
               inputAttr={showCheckBoxesModeLabel}
-              dataSource={['always', 'none', 'onClick', 'onLongTap']}
+              dataSource={showCheckBoxesModes}
               value={showCheckBoxesMode}
               onValueChange={setShowCheckBoxesMode}
-              disabled={selectionMode !== 'multiple'}
+              disabled={!isMultipleSelection}
             ></SelectBox>
           </div>
           <div className="option">
             <span>Select All Mode</span>
             <SelectBox
               inputAttr={selectAllModeLabel}
-              dataSource={['allPages', 'page']}
+              dataSource={selectAllModes}
               value={selectAllMode}
               onValueChange={setSelectAllMode}
-              disabled={selectionMode !== 'multiple' || !allowSelectAll}
+              disabled={isSelectAllDisabled}
             ></SelectBox>
           </div>
           <div className="option">
@@ -62,7 +69,7 @@ const App = () => {
               text="Allow Select All"
               value={allowSelectAll}
               onValueChange={setAllowSelectAll}
-              disabled={selectionMode !== 'multiple'}
+              disabled={!isMultipleSelection}
             ></CheckBox>
           </div>
         </div>
@@ -72,7 +79,7 @@ const App = () => {
         keyExpr="ID"
         cardsPerRow="auto"
         cardMinWidth={300}
-        defaultSelectedCardKeys={[4, 6]}
+        defaultSelectedCardKeys={defaultSelectedCardKeys}
         ref={cardViewRef}
       >
         <CardCover
@@ -82,7 +89,7 @@ const App = () => {
         <Selection
           mode={selectionMode}
           showCheckBoxesMode={showCheckBoxesMode}
-          allowSelectAll={!!allowSelectAll}
+          allowSelectAll={canSelectAll}
           selectAllMode={selectAllMode}
         />
         <Column dataField="FullName" />

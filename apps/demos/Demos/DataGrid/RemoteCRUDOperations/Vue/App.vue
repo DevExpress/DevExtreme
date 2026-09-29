@@ -173,7 +173,7 @@ const clearRequests = () => {
   requests.value = [];
 };
 </script>
-<style scoped>
+<style>
 #grid {
   height: 440px;
 }

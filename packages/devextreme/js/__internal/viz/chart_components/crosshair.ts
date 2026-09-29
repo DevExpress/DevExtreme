@@ -69,13 +69,14 @@ function getLabelCheckerPosition(x, y, isHorizontal, canvas) {
   };
 }
 
-export function Crosshair(renderer, options, params, group) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Crosshair = function (renderer, options, params, group) {
   const that = this;
   that._renderer = renderer;
   that._crosshairGroup = group;
   that._options = {};
   that.update(options, params);
-}
+};
 
 Crosshair.prototype = {
   constructor: Crosshair,
@@ -323,3 +324,11 @@ Crosshair.prototype = {
     }
   },
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_Crosshair(value: typeof Crosshair): void {
+  Crosshair = value;
+}
+/// #ENDDEBUG

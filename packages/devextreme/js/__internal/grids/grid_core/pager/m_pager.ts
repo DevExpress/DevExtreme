@@ -1,6 +1,7 @@
 import messageLocalization from '@js/common/core/localization/message';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import Pagination from '@ts/pagination/wrappers/pagination';
 
 import modules from '../m_modules';
@@ -19,8 +20,12 @@ export class PagerView extends modules.View {
 
   private _pageSizes: any;
 
+  private dataSourceController!: DataSourceController;
+
   public init() {
     const dataController = this.getController('data');
+
+    this.dataSourceController = this.getController('dataSource');
 
     dataController.changed.add((e) => {
       if (e && e.repaintChangesOnly) {
@@ -29,9 +34,9 @@ export class PagerView extends modules.View {
           pager.option({
             pageIndex: getPageIndex(dataController),
             pageSize: dataController.pageSize(),
-            pageCount: dataController.pageCount(),
-            itemCount: dataController.totalCount(),
-            hasKnownLastPage: dataController.hasKnownLastPage(),
+            pageCount: this.dataSourceController.pageCount(),
+            itemCount: this.dataSourceController.totalCount(),
+            hasKnownLastPage: this.dataSourceController.hasKnownLastPage(),
           });
         } else {
           this.render();
@@ -86,7 +91,7 @@ export class PagerView extends modules.View {
     const options: any = {
       maxPagesCount: MAX_PAGES_COUNT,
       pageIndex: getPageIndex(dataController),
-      pageCount: dataController.pageCount(),
+      pageCount: that.dataSourceController.pageCount(),
       pageSize: dataController.pageSize(),
       showPageSizeSelector: pagerOptions.showPageSizeSelector,
       showInfo: pagerOptions.showInfo,
@@ -95,8 +100,8 @@ export class PagerView extends modules.View {
       showNavigationButtons: pagerOptions.showNavigationButtons,
       label: pagerOptions.label,
       allowedPageSizes: that.getPageSizes(),
-      itemCount: dataController.totalCount(),
-      hasKnownLastPage: dataController.hasKnownLastPage(),
+      itemCount: that.dataSourceController.totalCount(),
+      hasKnownLastPage: that.dataSourceController.hasKnownLastPage(),
       rtlEnabled: that.option('rtlEnabled'),
       isGridCompatibilityMode: true,
       _getParentComponentRootNode: () => this.component.element(),
@@ -164,7 +169,8 @@ export class PagerView extends modules.View {
       if (scrolling && (scrolling.mode === 'virtual' || scrolling.mode === 'infinite')) {
         pagerVisible = false;
       } else {
-        pagerVisible = dataController.pageCount() > 1 || (dataController.isLoaded() && !dataController.hasKnownLastPage());
+        pagerVisible = this.dataSourceController.pageCount() > 1
+          || (dataController.isLoaded() && !this.dataSourceController.hasKnownLastPage());
       }
     }
     return !!pagerVisible;

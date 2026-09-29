@@ -1,6 +1,17 @@
 import React, { memo } from 'react';
 import { Form, RangeRule, SimpleItem } from 'devextreme-react/form';
 
+const adultsEditorOptions = {
+  elementAttr: { id: 'adultsCount' },
+  showSpinButtons: true,
+  min: 0,
+  max: 5,
+};
+const childrenEditorOptions = { showSpinButtons: true, min: 0, max: 5 };
+const petsEditorOptions = { showSpinButtons: true, min: 0, max: 5 };
+const adultsLabel = { text: 'Adults', location: 'top' };
+const childrenLabel = { text: 'Children', location: 'top' };
+const petsLabel = { text: 'Pets', location: 'top' };
 const GuestsForm = memo(({ formData, validationGroup }) => (
   <>
     <p>
@@ -17,27 +28,22 @@ const GuestsForm = memo(({ formData, validationGroup }) => (
         isRequired
         dataField="adultsCount"
         editorType="dxNumberBox"
-        editorOptions={{
-          elementAttr: { id: 'adultsCount' },
-          showSpinButtons: true,
-          min: 0,
-          max: 5,
-        }}
-        label={{ text: 'Adults', location: 'top' }}
+        editorOptions={adultsEditorOptions}
+        label={adultsLabel}
       >
         <RangeRule min={1} />
       </SimpleItem>
       <SimpleItem
         dataField="childrenCount"
         editorType="dxNumberBox"
-        editorOptions={{ showSpinButtons: true, min: 0, max: 5 }}
-        label={{ text: 'Children', location: 'top' }}
+        editorOptions={childrenEditorOptions}
+        label={childrenLabel}
       />
       <SimpleItem
         dataField="petsCount"
         editorType="dxNumberBox"
-        editorOptions={{ showSpinButtons: true, min: 0, max: 5 }}
-        label={{ text: 'Pets', location: 'top' }}
+        editorOptions={petsEditorOptions}
+        label={petsLabel}
       />
     </Form>
   </>

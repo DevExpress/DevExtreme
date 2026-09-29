@@ -1,8 +1,8 @@
-const ko = require('knockout');
-const variableWrapper = require('core/utils/variable_wrapper');
-const objectUtils = require('core/utils/object');
+import ko from 'knockout';
+import variableWrapper from 'core/utils/variable_wrapper';
+import * as objectUtils from 'core/utils/object';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 if(QUnit.urlParams['nocsp']) {
     QUnit.module('objectUtils');

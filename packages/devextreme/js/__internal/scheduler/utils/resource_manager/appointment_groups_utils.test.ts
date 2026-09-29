@@ -3,7 +3,8 @@ import {
 } from '@jest/globals';
 import {
   complexIdResourceMock,
-  getResourceManagerMock, resourceIndexesMock, resourceItemsByIdMock,
+  getResourceManagerMock, hierarchicalRoomsConfigMock,
+  resourceIndexesMock, resourceItemsByIdMock,
 } from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import {
@@ -15,6 +16,7 @@ import {
   groupAppointmentsByGroupLeafs,
   setAppointmentGroupValues,
 } from './appointment_groups_utils';
+import type { GroupLeaf } from './types';
 
 describe('appointment groups utils', () => {
   describe('getResourceItemById', () => {
@@ -180,6 +182,43 @@ describe('appointment groups utils', () => {
           'nested.priorityId': [1],
         }, manager.groupsLeafs),
       ).toEqual([2, 5]);
+    });
+
+    describe('hierarchical resource', () => {
+      const loadLeafs = async (): Promise<GroupLeaf[]> => {
+        const manager = getResourceManagerMock([{ ...hierarchicalRoomsConfigMock }]);
+        await manager.loadGroupResources(['roomId']);
+
+        return manager.groupsLeafs;
+      };
+
+      it.each([
+        { title: 'a leaf in the middle of a branch', values: [11], expected: [0] },
+        { title: 'a leaf of the last branch', values: [21], expected: [2] },
+        { title: 'a leaf at the root level', values: ['solo'], expected: [3] },
+        { title: 'leafs of different branches', values: [12, 21], expected: [1, 2] },
+      ])('should return leaf group indexes for $title', async ({ values, expected }) => {
+        expect(getAppointmentGroupIndex({ roomId: values }, await loadLeafs()))
+          .toEqual(expected);
+      });
+
+      it.each([
+        { title: 'a parent id', values: ['board'] },
+        { title: 'an unknown id', values: [404] },
+      ])('should return no group indexes for $title', async ({ values }) => {
+        expect(getAppointmentGroupIndex({ roomId: values }, await loadLeafs()))
+          .toEqual([]);
+      });
+    });
+
+    // Regression: ids are compared by value, so non-primitive ids (valueExpr) must match
+    it('should return appointment group indexes for complex ids', async () => {
+      const manager = getResourceManagerMock(complexIdResourceMock);
+      await manager.loadGroupResources(['ownerId']);
+
+      expect(
+        getAppointmentGroupIndex({ ownerId: [{ _value: 'guid-2' }] }, manager.groupsLeafs),
+      ).toEqual([1]);
     });
   });
 

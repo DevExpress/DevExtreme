@@ -1,0 +1,23 @@
+::ng-deep .dx-scheduler-cell-sizes-horizontal {
+  width: 100px;
+}
+
+::ng-deep .dx-scheduler-group-header {
+  min-width: 120px;
+}
+
+::ng-deep .dx-scheduler-group-header,
+::ng-deep .dx-scheduler-header-panel-empty-cell,
+::ng-deep .dx-scheduler-work-space-vertical-group-table,
+::ng-deep .dx-scheduler-work-space-vertical-grouped .dx-scheduler-time-panel-cell,
+::ng-deep .dx-scheduler-work-space-grouped:not(.dx-scheduler-work-space-vertical-grouped)
+  .dx-scheduler-header-panel-cell {
+  background-color: var(--dx-color-main-bg);
+}
+
+::ng-deep .dx-scheduler-group-header,
+::ng-deep .dx-scheduler-group-header .dx-scheduler-group-header-content {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+}

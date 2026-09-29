@@ -22,6 +22,7 @@ import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
@@ -104,6 +105,8 @@ export class RowsView extends ColumnsView {
 
   protected _validatingController!: ValidatingController;
 
+  protected dataSourceController!: DataSourceController;
+
   public _columnHeadersView!: ColumnHeadersView;
 
   public _hasHeight: boolean | undefined;
@@ -135,6 +138,7 @@ export class RowsView extends ColumnsView {
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._validatingController = this.getController('validating');
+    this.dataSourceController = this.getController('dataSource');
     this._columnHeadersView = this.getView('columnHeadersView');
     this._rowHeight = 0;
     this._scrollTop = 0;
@@ -353,7 +357,7 @@ export class RowsView extends ColumnsView {
       $element.append('<div>');
     }
     if (force || !that._loadPanel) {
-      that._renderLoadPanel($element, $element.parent(), isLocalStore(that._dataController.store()));
+      that._renderLoadPanel($element, $element.parent(), isLocalStore(that.dataSourceController.store()));
     }
 
     if ((force || !that.getScrollable()) && that._dataController.isLoaded()) {
@@ -534,7 +538,7 @@ export class RowsView extends ColumnsView {
       $cell = that._createCell({
         column: columns[i], rowType: 'freeSpace', columnIndex: i, columns,
       });
-      isNumeric(height) && $cell.css('height', height);
+      isNumeric(height) && setHeight($cell, height);
 
       $row.append($cell);
     }
@@ -564,10 +568,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  private _renderFreeSpaceRow($tableElement, change) {
+  private _renderFreeSpaceRow($tableElement) {
     let $freeSpaceRowElement = this._createEmptyRow(FREE_SPACE_CLASS);
 
-    $freeSpaceRowElement = this._wrapRowIfNeed($tableElement, $freeSpaceRowElement, change?.changeType === 'refresh');
+    $freeSpaceRowElement = this._wrapRowIfNeed($freeSpaceRowElement);
 
     this._appendEmptyRow($tableElement, $freeSpaceRowElement);
   }
@@ -578,7 +582,7 @@ export class RowsView extends ColumnsView {
   protected _checkRowKeys(options) {
     const that = this;
     const rows = that._getRows(options);
-    const keyExpr = that._dataController.store()?.key();
+    const keyExpr = that.dataSourceController.store()?.key();
 
     keyExpr && rows.some((row) => {
       if (row.rowType === 'data' && row.key === undefined) {
@@ -698,7 +702,7 @@ export class RowsView extends ColumnsView {
   }
 
   protected _needWrapRow() {
-    return super._needWrapRow.apply(this, arguments as any) || !!this.option('dataRowTemplate');
+    return !!this.option('dataRowTemplate');
   }
 
   /**
@@ -791,7 +795,7 @@ export class RowsView extends ColumnsView {
 
     that._checkRowKeys(options.change);
 
-    that._renderFreeSpaceRow($table, options.change);
+    that._renderFreeSpaceRow($table);
     if (!that._hasHeight) {
       that.updateFreeSpaceRowHeight($table);
     }
@@ -811,16 +815,14 @@ export class RowsView extends ColumnsView {
    */
   protected _renderRow($table, options) {
     const { row } = options;
-    const { rowTemplate } = this.option();
     const dataRowTemplate = this.option('dataRowTemplate');
 
     if (row.rowType === 'data' && dataRowTemplate) {
       this._renderDataRowByTemplate($table, options, dataRowTemplate);
-    } else if ((row.rowType === 'data' || row.rowType === 'group') && !isDefined(row.groupIndex) && rowTemplate) {
-      this.renderTemplate($table, rowTemplate, extend({ columns: options.columns }, row), true);
-    } else {
-      super._renderRow($table, options);
+      return;
     }
+
+    super._renderRow($table, options);
   }
 
   /**
@@ -854,7 +856,7 @@ export class RowsView extends ColumnsView {
   protected _createTable() {
     const $table = super._createTable.apply(this, arguments as any);
 
-    if (this.option().rowTemplate || this.option().dataRowTemplate) {
+    if (this.option().dataRowTemplate) {
       $table.appendTo(this.component.$element());
     }
 
@@ -1000,7 +1002,7 @@ export class RowsView extends ColumnsView {
     const contentElement = this._findContentElement();
     const freeSpaceRowElements = this._getFreeSpaceRowElements($table);
 
-    if (freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
+    if (freeSpaceRowElements && contentElement && this.dataSourceController.totalCount() >= 0) {
       let isFreeSpaceRowVisible = false;
 
       if (itemCount > 0) {
@@ -1008,7 +1010,7 @@ export class RowsView extends ColumnsView {
           const freeSpaceRowCount = dataController.pageSize() - itemCount;
           const scrollingMode = this.option('scrolling.mode');
 
-          if (freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
+          if (freeSpaceRowCount > 0 && this.dataSourceController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
             setHeight(freeSpaceRowElements, freeSpaceRowCount * this._rowHeight);
             isFreeSpaceRowVisible = true;
           }
@@ -1033,7 +1035,7 @@ export class RowsView extends ColumnsView {
 
             if (showFreeSpaceRow) {
               deferRender(() => {
-                freeSpaceRowElements.css('height', resultHeight);
+                setHeight(freeSpaceRowElements, resultHeight);
                 isFreeSpaceRowVisible = true;
                 freeSpaceRowElements.show();
               });
@@ -1042,7 +1044,7 @@ export class RowsView extends ColumnsView {
           });
         }
       } else {
-        freeSpaceRowElements.css('height', 0);
+        setHeight(freeSpaceRowElements, 0);
         freeSpaceRowElements.show();
         this._updateLastRowBorder(true);
       }
@@ -1236,7 +1238,7 @@ export class RowsView extends ColumnsView {
       return;
     }
 
-    if (!loadPanel && messageText !== undefined && isLocalStore(dataController.store()) && loadPanelOptions.enabled === 'auto' && $element) {
+    if (!loadPanel && messageText !== undefined && isLocalStore(that.dataSourceController.store()) && loadPanelOptions.enabled === 'auto' && $element) {
       that._renderLoadPanel($element, $element.parent());
       loadPanel = that._loadPanel;
     }
@@ -1365,7 +1367,6 @@ export class RowsView extends ColumnsView {
       case 'showColumnLines':
       case 'showRowLines':
       case 'rowAlternationEnabled':
-      case 'rowTemplate':
       case 'dataRowTemplate':
       case 'twoWayBindingEnabled':
         that._invalidate(true, true);

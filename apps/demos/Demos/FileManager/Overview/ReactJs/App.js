@@ -7,7 +7,7 @@ const remoteProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-file-system-images',
 });
 export default function App() {
-  const [currentPath, setCurrentPath] = useState('Widescreen');
+  const [currentPath, setCurrentPath] = useState('Places');
   const [popupVisible, setPopupVisible] = useState(false);
   const [imageItemToDisplay, setImageItemToDisplay] = useState({});
   const displayImagePopup = useCallback(

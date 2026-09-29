@@ -11,7 +11,7 @@ import 'fluent_blue_light.css!';
 
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 import '__internal/scheduler/scheduler';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';

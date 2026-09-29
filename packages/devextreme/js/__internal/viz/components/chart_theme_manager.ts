@@ -1,247 +1,300 @@
-/* eslint-disable prefer-rest-params */
-/* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable no-bitwise */
-/* eslint-disable prefer-spread */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable func-names */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
-
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import {
-  isDefined as _isDefined,
+  isDefined,
   isNumeric,
   isPlainObject,
-  isString as _isString,
+  isString,
 } from '@js/core/utils/type';
+import type { BaseThemeManagerOptions, Palette, ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { BaseThemeManager } from '@ts/viz/core/base_theme_manager';
-import { extractColor, normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
+import { extractColor, normalizeEnum } from '@ts/viz/core/utils';
 
-export const ThemeManager = BaseThemeManager.inherit((function () {
-  const ctor = function (params) {
-    const that = this;
+export interface ChartThemeManagerOptions extends BaseThemeManagerOptions {
+  themeSection: string;
+  options?: ThemeValue;
+}
 
-    that.callBase.apply(that, arguments);
+interface ZoomAndPanMode {
+  pan: boolean;
+  zoom: boolean;
+  none: boolean;
+}
+
+function processTitleOptions(options: ThemeValue): ThemeValue {
+  return isString(options) ? { text: options } : options;
+}
+
+function processAxisOptions(axisOptions: ThemeValue): ThemeValue {
+  if (!axisOptions) {
+    return {};
+  }
+  const processedOptions = extend(true, {}, axisOptions);
+  processedOptions.title = processTitleOptions(processedOptions.title);
+
+  if ((processedOptions.type === 'logarithmic' && processedOptions.logarithmBase <= 0)
+    || (processedOptions.logarithmBase && !isNumeric(processedOptions.logarithmBase))) {
+    processedOptions.logarithmBase = undefined;
+    processedOptions.logarithmBaseError = true;
+  }
+  if (processedOptions.label) {
+    if (processedOptions.label.alignment) {
+      processedOptions.label.userAlignment = true;
+    }
+  }
+  return processedOptions;
+}
+
+function getAnimationUserOptions(value: ThemeValue): ThemeValue {
+  if (isPlainObject(value)) {
+    return value;
+  }
+  return isDefined(value) ? { enabled: !!value } : {};
+}
+
+function parseZoomAndPanOption(option: ThemeValue): ZoomAndPanMode {
+  const normalizedOption = normalizeEnum(option);
+  const pan = normalizedOption === 'pan' || normalizedOption === 'both';
+  const zoom = normalizedOption === 'zoom' || normalizedOption === 'both';
+
+  return {
+    pan,
+    zoom,
+    none: !pan && !zoom,
+  };
+}
+
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let ThemeManager = class ThemeManager extends BaseThemeManager {
+  declare _themeSection: string;
+
+  _userOptions: ThemeValue;
+
+  _mergeAxisTitleOptions: unknown[];
+
+  _multiPieColors: Record<string, string>;
+
+  _mergedSettings: ThemeValue;
+
+  palette!: Palette;
+
+  constructor(params: ChartThemeManagerOptions) {
+    super(params);
 
     const options = params.options || {};
-    that._userOptions = options;
-    that._mergeAxisTitleOptions = [];
-    that._multiPieColors = {};
+    this._userOptions = options;
+    this._mergeAxisTitleOptions = [];
+    this._multiPieColors = {};
 
     // This is required because chart calls "_getOption" during "_init" stage
     // TODO: Remove it when chart stops doing that
-    that._callback = noop;
-  };
+    this._callback = noop;
+  }
 
-  const dispose = function () {
-    const that = this;
-    that.palette && that.palette.dispose();
-    that.palette = that._userOptions = that._mergedSettings = that._multiPieColors = null;
-    return that.callBase.apply(that, arguments);
-  };
+  dispose(): this {
+    if (this.palette) {
+      this.palette.dispose();
+    }
+    Object.assign(this, {
+      _multiPieColors: null,
+      _mergedSettings: null,
+      _userOptions: null,
+      palette: null,
+    });
+    return super.dispose();
+  }
 
-  const resetPalette = function () {
+  refresh(): this {
+    this._mergedSettings = {};
+    return super.refresh();
+  }
+
+  _initializeTheme(): void {
+    super._initializeTheme();
+    this.updatePalette();
+  }
+
+  getOptions(name: string, ...args: ThemeValue[]): ThemeValue {
+    switch (name) {
+      case 'argumentAxis':
+      case 'valueAxis':
+        return this._getAxisOptions(name, args[0], args[1]);
+      case 'valueAxisRangeSelector':
+        return this._mergeOptions('valueAxis');
+      case 'series':
+        return this._getSeriesOptions(args[0], args[1]);
+      case 'animation':
+        return this._mergeOptions(name, getAnimationUserOptions(this._userOptions[name]));
+      case 'seriesTemplate':
+        return this._getSeriesTemplateOptions();
+      case 'zoomAndPan':
+        return this._getZoomAndPanOptions();
+      default:
+        return this._mergeOptions(name, args[0]);
+    }
+  }
+
+  resetOptions(name: string): void {
+    this._mergedSettings[name] = null;
+  }
+
+  update(options: ThemeValue): void {
+    this._userOptions = options;
+  }
+
+  updatePalette(): void {
+    this.palette = this.createPalette(this.getOptions('palette'), {
+      useHighlight: true,
+      extensionMode: this.getOptions('paletteExtensionMode'),
+    });
+  }
+
+  resetPalette(): void {
     this.palette.reset();
     this._multiPieColors = {};
-  };
+  }
 
-  const processTitleOptions = function (options) {
-    return _isString(options) ? { text: options } : options;
-  };
-
-  const processAxisOptions = function (axisOptions) {
-    if (!axisOptions) {
-      return {};
-    }
-    axisOptions = extend(true, {}, axisOptions);
-    axisOptions.title = processTitleOptions(axisOptions.title);
-
-    if (axisOptions.type === 'logarithmic' && (axisOptions.logarithmBase <= 0) || (axisOptions.logarithmBase && !isNumeric(axisOptions.logarithmBase))) {
-      axisOptions.logarithmBase = undefined;
-      axisOptions.logarithmBaseError = true;
-    }
-    if (axisOptions.label) {
-      if (axisOptions.label.alignment) {
-        axisOptions.label.userAlignment = true;
-      }
-    }
-    return axisOptions;
-  };
-
-  const applyParticularAxisOptions = function (name, userOptions, rotated) {
-    const theme = this._theme;
-    // @ts-expect-error
-    const position = !(rotated ^ (name === 'valueAxis')) ? 'horizontalAxis' : 'verticalAxis';
-    const processedUserOptions = processAxisOptions(userOptions);
-    const commonAxisSettings = processAxisOptions(this._userOptions.commonAxisSettings);
-    const mergeOptions = extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processedUserOptions);
-
-    mergeOptions.workWeek = processedUserOptions.workWeek || theme[name].workWeek;
-    // @ts-expect-error
-    mergeOptions.forceUserTickInterval |= _isDefined(processedUserOptions.tickInterval) && !_isDefined(processedUserOptions.axisDivisionFactor);
-    return mergeOptions;
-  };
-
-  const mergeOptions = function (name, userOptions?) {
-    userOptions = userOptions || this._userOptions[name];
+  _mergeOptions(name: string, userOptions?: ThemeValue): ThemeValue {
+    const options = userOptions || this._userOptions[name];
     const theme = this._theme[name];
     let result = this._mergedSettings[name];
-    if (result) { return result; }
-    if (isPlainObject(theme) && isPlainObject(userOptions)) {
-      result = extend(true, {}, theme, userOptions);
+    if (result) {
+      return result;
+    }
+    if (isPlainObject(theme) && isPlainObject(options)) {
+      result = extend(true, {}, theme, options);
     } else {
-      result = _isDefined(userOptions) ? userOptions : theme;
+      result = isDefined(options) ? options : theme;
     }
     this._mergedSettings[name] = result;
     return result;
-  };
+  }
 
-  const applyParticularTheme = {
-    base: mergeOptions,
-    argumentAxis: applyParticularAxisOptions,
-    valueAxisRangeSelector() {
-      return mergeOptions.call(this, 'valueAxis');
-    },
-    valueAxis: applyParticularAxisOptions,
-    series(name, userOptions, seriesCount) {
-      const that = this;
-      const theme = that._theme;
-      let userCommonSettings = that._userOptions.commonSeriesSettings || {};
-      const themeCommonSettings = theme.commonSeriesSettings;
-      const widgetType = that._themeSection.split('.').slice(-1)[0];
-      const type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === 'pie' && theme.type)); // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
-      const palette = that.palette;
-      const isBar = ~type.indexOf('bar');
-      const isLine = ~type.indexOf('line');
-      const isArea = ~type.indexOf('area');
-      const isBubble = type === 'bubble';
-      let mainSeriesColor;
-      const resolveLabelsOverlapping = that.getOptions('resolveLabelsOverlapping');
-      const containerBackgroundColor = that.getOptions('containerBackgroundColor');
-      const seriesTemplate = applyParticularTheme.seriesTemplate.call(this);
-      let seriesVisibility;
+  _getAxisOptions(name: string, userOptions: ThemeValue, rotated?: boolean): ThemeValue {
+    const theme = this._theme;
+    const isValueAxis = name === 'valueAxis';
+    const position = Boolean(rotated) === isValueAxis ? 'horizontalAxis' : 'verticalAxis';
+    const processedUserOptions = processAxisOptions(userOptions);
+    const commonAxisSettings = processAxisOptions(this._userOptions.commonAxisSettings);
+    const mergeOptions = extend(
+      true,
+      {},
+      theme.commonAxisSettings,
+      theme[position],
+      theme[name],
+      commonAxisSettings,
+      processedUserOptions,
+    );
 
-      if (isBar || isBubble) {
-        userOptions = extend(true, {}, userCommonSettings, userCommonSettings[type], userOptions);
-        seriesVisibility = userOptions.visible;
-        userCommonSettings = { type: {} };
-        extend(true, userOptions, userOptions.point);
-        userOptions.visible = seriesVisibility;
+    mergeOptions.workWeek = processedUserOptions.workWeek || theme[name].workWeek;
+    // eslint-disable-next-line no-bitwise
+    mergeOptions.forceUserTickInterval |= Number(
+      isDefined(processedUserOptions.tickInterval)
+      && !isDefined(processedUserOptions.axisDivisionFactor),
+    );
+    return mergeOptions;
+  }
+
+  _getSeriesOptions(userOptions: ThemeValue, seriesCount: number): ThemeValue {
+    const theme = this._theme;
+    let userCommonSettings = this._userOptions.commonSeriesSettings || {};
+    const themeCommonSettings = theme.commonSeriesSettings;
+    const widgetType = this._themeSection.split('.').slice(-1)[0];
+    // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
+    const type = normalizeEnum(
+      userOptions.type
+      || userCommonSettings.type
+      || themeCommonSettings.type
+      || (widgetType === 'pie' && theme.type),
+    );
+    const { palette } = this;
+    const isBar = type.includes('bar');
+    const isLine = type.includes('line');
+    const isArea = type.includes('area');
+    const isBubble = type === 'bubble';
+    const resolveLabelsOverlapping = this.getOptions('resolveLabelsOverlapping');
+    const containerBackgroundColor = this.getOptions('containerBackgroundColor');
+    const seriesTemplate = this._getSeriesTemplateOptions();
+    let seriesOptions = userOptions;
+
+    if (isBar || isBubble) {
+      seriesOptions = extend(true, {}, userCommonSettings, userCommonSettings[type], seriesOptions);
+      const seriesVisibility = seriesOptions.visible;
+      userCommonSettings = { type: {} };
+      extend(true, seriesOptions, seriesOptions.point);
+      seriesOptions.visible = seriesVisibility;
+    }
+
+    const settings = extend(
+      true,
+      { aggregation: {} },
+      themeCommonSettings,
+      themeCommonSettings[type],
+      userCommonSettings,
+      userCommonSettings[type],
+      seriesOptions,
+    );
+
+    settings.aggregation.enabled = widgetType === 'chart' && !!settings.aggregation.enabled;
+    settings.type = type;
+    settings.widgetType = widgetType;
+    settings.containerBackgroundColor = containerBackgroundColor;
+
+    const getMultiPieColor = (argument: ThemeValue, index: number, count: number): string => {
+      const cat = `${argument}-${index}`;
+
+      if (!this._multiPieColors[cat]) {
+        this._multiPieColors[cat] = palette.getNextColor(count);
       }
+      return this._multiPieColors[cat];
+    };
+    settings.mainSeriesColor = widgetType !== 'pie'
+      ? extractColor(settings.color, true) || palette.getNextColor(seriesCount)
+      : getMultiPieColor;
+    settings.resolveLabelsOverlapping = resolveLabelsOverlapping;
 
-      const settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
+    if (settings.label && (isLine || (isArea && type !== 'rangearea') || type === 'scatter')) {
+      settings.label.position = 'outside';
+    }
 
-      settings.aggregation.enabled = widgetType === 'chart' && !!settings.aggregation.enabled;
-      settings.type = type;
-      settings.widgetType = widgetType;
-      settings.containerBackgroundColor = containerBackgroundColor;
+    if (seriesTemplate) {
+      settings.nameField = seriesTemplate.nameField;
+    }
 
-      if (widgetType !== 'pie') {
-        mainSeriesColor = extractColor(settings.color, true) || palette.getNextColor(seriesCount);
-      } else {
-        mainSeriesColor = function (argument, index, count) {
-          const cat = `${argument}-${index}`;
+    return settings;
+  }
 
-          if (!that._multiPieColors[cat]) {
-            that._multiPieColors[cat] = palette.getNextColor(count);
-          }
-          return that._multiPieColors[cat];
-        };
-      }
-      settings.mainSeriesColor = mainSeriesColor;
-      settings.resolveLabelsOverlapping = resolveLabelsOverlapping;
+  _getSeriesTemplateOptions(): ThemeValue {
+    const value = this._mergeOptions('seriesTemplate');
+    if (value) {
+      value.nameField = value.nameField || 'series';
+    }
+    return value;
+  }
 
-      if (settings.label && (isLine || (isArea && type !== 'rangearea') || type === 'scatter')) {
-        settings.label.position = 'outside';
-      }
+  _getZoomAndPanOptions(): ThemeValue {
+    const options = this._mergeOptions('zoomAndPan');
 
-      if (seriesTemplate) {
-        settings.nameField = seriesTemplate.nameField;
-      }
+    return {
+      valueAxis: parseZoomAndPanOption(options.valueAxis),
+      argumentAxis: parseZoomAndPanOption(options.argumentAxis),
+      dragToZoom: !!options.dragToZoom,
+      dragBoxStyle: {
+        class: 'dxc-shutter',
+        fill: options.dragBoxStyle.color,
+        opacity: options.dragBoxStyle.opacity,
+      },
+      panKey: options.panKey,
+      allowMouseWheel: !!options.allowMouseWheel,
+      allowTouchGestures: !!options.allowTouchGestures,
+    };
+  }
+};
 
-      return settings;
-    },
-    animation(name) {
-      let userOptions = this._userOptions[name];
-      userOptions = isPlainObject(userOptions) ? userOptions : _isDefined(userOptions) ? { enabled: !!userOptions } : {};
-      return mergeOptions.call(this, name, userOptions);
-    },
-    seriesTemplate() {
-      const value = mergeOptions.call(this, 'seriesTemplate');
-      if (value) {
-        value.nameField = value.nameField || 'series';
-      }
-      return value;
-    },
-    zoomAndPan() {
-      function parseOption(option) {
-        option = _normalizeEnum(option);
-        const pan = option === 'pan' || option === 'both';
-        const zoom = option === 'zoom' || option === 'both';
-
-        return {
-          pan,
-          zoom,
-          none: !pan && !zoom,
-        };
-      }
-
-      const options = mergeOptions.call(this, 'zoomAndPan');
-
-      return {
-        valueAxis: parseOption(options.valueAxis),
-        argumentAxis: parseOption(options.argumentAxis),
-        dragToZoom: !!options.dragToZoom,
-        dragBoxStyle: {
-          class: 'dxc-shutter',
-          fill: options.dragBoxStyle.color,
-          opacity: options.dragBoxStyle.opacity,
-        },
-        panKey: options.panKey,
-        allowMouseWheel: !!options.allowMouseWheel,
-        allowTouchGestures: !!options.allowTouchGestures,
-      };
-    },
-  };
-
-  return {
-    _themeSection: 'chart',
-    ctor,
-    dispose,
-    resetPalette,
-    getOptions(name) {
-      return (applyParticularTheme[name] || applyParticularTheme.base).apply(this, arguments);
-    },
-    refresh() {
-      this._mergedSettings = {};
-      return this.callBase.apply(this, arguments);
-    },
-    _initializeTheme() {
-      const that = this;
-      that.callBase.apply(that, arguments);
-      that.updatePalette();
-    },
-    resetOptions(name) {
-      this._mergedSettings[name] = null;
-    },
-    update(options) {
-      this._userOptions = options;
-    },
-    updatePalette() {
-      const that = this;
-      that.palette = that.createPalette(that.getOptions('palette'), {
-        useHighlight: true,
-        extensionMode: that.getOptions('paletteExtensionMode'),
-      });
-    },
-  };
-})());
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_ThemeManager(value: typeof ThemeManager): void {
+  ThemeManager = value;
+}
+/// #ENDDEBUG

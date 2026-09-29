@@ -7,7 +7,7 @@ import messageLocalization from 'common/core/localization/message';
 import { FileManagerWrapper, createTestFileSystem, createHugeFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 import { implementationsMap } from 'core/utils/size';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 const { test } = QUnit;
 

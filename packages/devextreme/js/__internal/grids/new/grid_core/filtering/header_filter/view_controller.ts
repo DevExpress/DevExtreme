@@ -2,7 +2,7 @@
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { signal } from '@ts/core/state_manager/index';
 import { removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import { ColumnsController } from '../../columns_controller/index';
 import type { Column } from '../../columns_controller/types';
@@ -134,7 +134,7 @@ export class HeaderFilterViewController {
     if (!filterExpressions || filterExpressions.length === 0) {
       return undefined;
     }
-    return gridCoreUtils.combineFilters(filterExpressions);
+    return combineFilters(filterExpressions);
   }
 
   private getFilterExpressionWithoutCurrentColumn(column: Column): unknown {

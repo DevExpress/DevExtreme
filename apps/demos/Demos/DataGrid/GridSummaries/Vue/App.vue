@@ -65,7 +65,7 @@ import { orders } from './data.ts';
 
 const customizeDate = (itemInfo: DxDataGridTypes.SummaryItemTextInfo) => `First: ${formatDate(itemInfo.value as Date, 'MMM dd, yyyy')}`;
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

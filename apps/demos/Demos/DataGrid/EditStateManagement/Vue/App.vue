@@ -91,7 +91,7 @@ const onSaving = (e: DxDataGridTypes.SavingEvent) => {
 
 loadOrders();
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

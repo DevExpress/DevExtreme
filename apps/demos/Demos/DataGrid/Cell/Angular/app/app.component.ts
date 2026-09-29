@@ -11,12 +11,6 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Pipe({ name: 'gridCellData' })
 export class GridCellDataPipe implements PipeTransform {
   transform({ data, column }) {
@@ -26,8 +20,8 @@ export class GridCellDataPipe implements PipeTransform {
 
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [
     DxDataGridModule,

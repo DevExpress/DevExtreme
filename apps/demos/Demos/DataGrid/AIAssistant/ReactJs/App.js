@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import DataGrid, {
   Column,
   Paging,
@@ -69,16 +69,19 @@ export default function App() {
         },
       ]);
   }, []);
-  const chatOptions = {
-    onInitialized: onChatInitialized,
-    user: {
-      id: 'user',
-    },
-    suggestions: {
-      ...suggestions,
-      onItemClick: onSuggestionItemClick,
-    },
-  };
+  const chatOptions = useMemo(
+    () => ({
+      onInitialized: onChatInitialized,
+      user: {
+        id: 'user',
+      },
+      suggestions: {
+        ...suggestions,
+        onItemClick: onSuggestionItemClick,
+      },
+    }),
+    [onChatInitialized, onSuggestionItemClick],
+  );
   return (
     <DataGrid
       id="gridContainer"

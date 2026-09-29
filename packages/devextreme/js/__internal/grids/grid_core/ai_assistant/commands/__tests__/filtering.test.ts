@@ -14,6 +14,7 @@ import {
   afterTest,
   beforeTest,
   createDataGrid,
+  spyOnOption,
 } from '../../../__tests__/__mock__/helpers/utils';
 import {
   clearFilterCommand,
@@ -272,7 +273,7 @@ describe('filterValueCommand', () => {
   describe('execute', () => {
     it('calls component.option("filterValue", expression) with array format', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -293,7 +294,7 @@ describe('filterValueCommand', () => {
           { dataField: 'SaleDate', dataType: 'date' },
         ],
       });
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -317,7 +318,7 @@ describe('filterValueCommand', () => {
           { dataField: 'SaleDate', dataType: 'date' },
         ],
       });
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -333,7 +334,7 @@ describe('filterValueCommand', () => {
 
     it('converts anyof expression to the legacy array form', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -346,7 +347,7 @@ describe('filterValueCommand', () => {
 
     it('converts noneof expression to the legacy array form', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -367,7 +368,7 @@ describe('filterValueCommand', () => {
           { dataField: 'SaleDate', dataType: 'date' },
         ],
       });
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -382,7 +383,7 @@ describe('filterValueCommand', () => {
 
     it('converts a combined node into the legacy array form', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -403,7 +404,7 @@ describe('filterValueCommand', () => {
 
     it('converts a negated node into the legacy array form', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -419,7 +420,7 @@ describe('filterValueCommand', () => {
 
     it('passes undefined when expression is null (clears the filter)', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -452,7 +453,7 @@ describe('filterValueCommand', () => {
   describe('converter', () => {
     it('returns failure on duplicate node id', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -468,7 +469,7 @@ describe('filterValueCommand', () => {
 
     it('returns failure when rootId is not in nodes', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -483,7 +484,7 @@ describe('filterValueCommand', () => {
 
     it('returns failure when combined references a missing id', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -499,7 +500,7 @@ describe('filterValueCommand', () => {
 
     it('returns failure when negated references a missing id', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -514,7 +515,7 @@ describe('filterValueCommand', () => {
 
     it('returns failure on a cycle', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -530,7 +531,7 @@ describe('filterValueCommand', () => {
 
     it('returns failure when a field has no corresponding column', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -543,7 +544,7 @@ describe('filterValueCommand', () => {
 
     it('returns failure when anyof field has no corresponding column', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -562,7 +563,7 @@ describe('filterValueCommand', () => {
           { dataField: 'age', dataType: 'number', visible: false },
         ],
       });
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -575,7 +576,7 @@ describe('filterValueCommand', () => {
 
     it('tolerates unreachable extra nodes', async () => {
       const instance = await createGrid();
-      const spy = jest.spyOn(instance, 'option');
+      const spy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({

@@ -1,4 +1,4 @@
-import Chart from '../__internal/viz/m_chart';
+import Chart from '../__internal/viz/chart';
 
 export default Chart;
 

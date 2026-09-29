@@ -21,6 +21,7 @@
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
+/* eslint-disable max-classes-per-file */
 
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -100,8 +101,46 @@ function correctHoverMode(target) {
   return mode === NONE_MODE ? mode : ALL_ARGUMENT_POINTS_MODE;
 }
 
-const baseTrackerPrototype = {
-  ctor(options) {
+abstract class BaseTracker {
+  _argumentIndex;
+
+  _canvases;
+
+  _chart;
+
+  _eventTrigger;
+
+  _holdTimer;
+
+  _hoveredArgument;
+
+  _hoveredArgumentPoints;
+
+  _hoveredPoint;
+
+  _legend;
+
+  _mainCanvas;
+
+  _notifyLegendOnHoverArgument;
+
+  _outHandler;
+
+  _renderer;
+
+  _seriesGroup;
+
+  _storedSeries;
+
+  _tooltip;
+
+  hoveredPoint;
+
+  hoveredSeries;
+
+  pointAtShownTooltip;
+
+  constructor(options) {
     const that = this;
     const data = { tracker: that };
 
@@ -119,11 +158,13 @@ const baseTrackerPrototype = {
       .on(POINTER_ACTION, data, that._pointerHandler)
       .on(addNamespace(pointerEvents.up, EVENT_NS), () => clearTimeout(that._holdTimer))
       .on(addNamespace(clickEventName, EVENT_NS), data, that._clickHandler);
-  },
+  }
+
+  abstract _getArgumentHoverMode(): string;
 
   update(options) {
     this._chart = options.chart;
-  },
+  }
 
   updateSeries(series, resetDecorations) {
     const that = this;
@@ -145,12 +186,12 @@ const baseTrackerPrototype = {
         that.clearHover();
       }
     }
-  },
+  }
 
   setCanvases(mainCanvas, paneCanvases) {
     this._mainCanvas = mainCanvas;
     this._canvases = paneCanvases;
-  },
+  }
 
   repairTooltip() {
     const point = this.pointAtShownTooltip;
@@ -159,7 +200,7 @@ const baseTrackerPrototype = {
     } else {
       this._showTooltip(point);
     }
-  },
+  }
 
   _setHoveredPoint(point) {
     if (point === this._hoveredPoint) {
@@ -168,9 +209,9 @@ const baseTrackerPrototype = {
     this._releaseHoveredPoint();
     point.hover();
     this._hoveredPoint = point;
-  },
+  }
 
-  _releaseHoveredPoint(isPointerOut) {
+  _releaseHoveredPoint(isPointerOut?) {
     if (this._hoveredPoint && this._hoveredPoint.getOptions()) {
       this._hoveredPoint.clearHover();
       this._hoveredPoint = null;
@@ -178,21 +219,21 @@ const baseTrackerPrototype = {
         this._hideTooltip(this._hoveredPoint, false, isPointerOut);
       }
     }
-  },
+  }
 
   _setHoveredSeries(series, mode) {
     this._releaseHoveredSeries();
     this._releaseHoveredPoint();
     series.hover(mode);
     this.hoveredSeries = series;
-  },
+  }
 
   _releaseHoveredSeries() { // hoveredPoint only for T273289
     if (this.hoveredSeries) {
       this.hoveredSeries.clearHover();
       this.hoveredSeries = null;
     }
-  },
+  }
 
   clearSelection() {
     this._storedSeries.forEach((series) => {
@@ -201,21 +242,21 @@ const baseTrackerPrototype = {
         series.getPoints().forEach((point) => point.clearSelection());
       }
     });
-  },
+  }
 
   _clean() {
     const that = this;
     that.hoveredPoint = that.hoveredSeries = that._hoveredArgumentPoints = null;
     that._hideTooltip(that.pointAtShownTooltip);
-  },
+  }
 
-  clearHover(isPointerOut) {
+  clearHover(isPointerOut?) {
     this._resetHoveredArgument();
     this._releaseHoveredSeries();
     this._releaseHoveredPoint(isPointerOut);
-  },
+  }
 
-  _hideTooltip(point, silent, isPointerOut) {
+  _hideTooltip(point, silent?, isPointerOut?) {
     const that = this;
     if (!that._tooltip || (point && that.pointAtShownTooltip !== point)) {
       return;
@@ -224,7 +265,7 @@ const baseTrackerPrototype = {
       that.pointAtShownTooltip = null;
     }
     that._tooltip.hide(!!isPointerOut);
-  },
+  }
 
   _showTooltip(point) {
     const that = this;
@@ -246,7 +287,7 @@ const baseTrackerPrototype = {
       };
       callback(that._tooltip.show(tooltipFormatObject, coords, eventData, undefined, callback));
     }
-  },
+  }
 
   _showPointTooltip(event, point) {
     const that = event.data.tracker;
@@ -256,11 +297,11 @@ const baseTrackerPrototype = {
       that._hideTooltip(pointWithTooltip);
     }
     that._showTooltip(point);
-  },
+  }
 
   _hidePointTooltip(event, point) {
     event.data.tracker._hideTooltip(point, false, true);
-  },
+  }
 
   _enableOutHandler() {
     if (this._outHandler) {
@@ -279,25 +320,25 @@ const baseTrackerPrototype = {
 
     eventsEngine.on(domAdapter.getDocument(), POINTER_ACTION, handler);
     this._outHandler = handler;
-  },
+  }
 
   _isCursorOnTooltip(e) {
     return this._tooltip.isEnabled() && this._tooltip.isCursorOnTooltip(e.pageX, e.pageY);
-  },
+  }
 
   _disableOutHandler() {
     this._outHandler && eventsEngine.off(domAdapter.getDocument(), POINTER_ACTION, this._outHandler);
     this._outHandler = null;
-  },
+  }
 
   stopCurrentHandling() {
     this._pointerOut(true);
-  },
+  }
 
-  _pointerOut(force) {
+  _pointerOut(force?) {
     this.clearHover(true);
     (force || this._tooltip.isEnabled()) && this._hideTooltip(this.pointAtShownTooltip, false, true);
-  },
+  }
 
   _triggerLegendClick(eventArgs, elementClick) {
     const eventTrigger = this._eventTrigger;
@@ -306,7 +347,7 @@ const baseTrackerPrototype = {
       // @ts-expect-error
       !eventCanceled(eventArgs, eventArgs.target, 'legend') && eventTrigger(elementClick, eventArgs);
     });
-  },
+  }
 
   _hoverLegendItem(x, y) {
     const that = this;
@@ -323,13 +364,13 @@ const baseTrackerPrototype = {
     } else {
       that.clearHover();
     }
-  },
+  }
 
   _processArgumentHoveredPoint(argument, argumentIndex) {
     this._releaseHoveredPoint();
-  },
+  }
 
-  _hoverArgument(argument, argumentIndex) {
+  _hoverArgument(argument, argumentIndex?) {
     const that = this;
     const hoverMode = that._getArgumentHoverMode();
 
@@ -351,7 +392,7 @@ const baseTrackerPrototype = {
         },
       });
     }
-  },
+  }
 
   _resetHoveredArgument() {
     const that = this;
@@ -373,13 +414,13 @@ const baseTrackerPrototype = {
       });
       that._hoveredArgument = null;
     }
-  },
+  }
 
   _notifySeries(data) {
     this._storedSeries.forEach((series) => {
       series.notify(data);
     });
-  },
+  }
 
   _pointerHandler(e) {
     const that = e.data.tracker;
@@ -455,17 +496,17 @@ const baseTrackerPrototype = {
     }
 
     that._pointerComplete(point, x, y);
-  },
+  }
 
-  _pointerOnPoint(point, x, y) {
+  _pointerOnPoint(point, x, y, e?) {
     this._resetHoveredArgument();
     this._setHoveredPoint(point);
     this._pointerComplete(point, x, y);
-  },
+  }
 
-  _pointerComplete(point) {
+  _pointerComplete(point?, x?, y?) {
     this.pointAtShownTooltip !== point && this._tooltip.isEnabled() && this._showTooltip(point);
-  },
+  }
 
   _clickHandler(e) {
     const that = e.data.tracker;
@@ -499,21 +540,33 @@ const baseTrackerPrototype = {
         getData(e, SERIES_DATA) && that._eventTrigger(SERIES_CLICK, { target: series, event: e });
       }
     }
-  },
+  }
 
   dispose() {
     const that = this;
     that._disableOutHandler();
     that._renderer.root.off(DOT_EVENT_NS);
     that._seriesGroup.off(DOT_EVENT_NS);
-  },
-};
+  }
+}
 
-export const ChartTracker = function (options) {
-  this.ctor(options);
-};
+export class ChartTracker extends BaseTracker {
+  _argumentAxis;
 
-extend(ChartTracker.prototype, baseTrackerPrototype, {
+  _axisHoverEnabled;
+
+  _crosshair;
+
+  _hoverTimeout;
+
+  _rotated;
+
+  _stickyHovering;
+
+  _stuckSeries;
+
+  _timeoutKeeper;
+
   _pointClick(point, event) {
     const that = this;
     const eventTrigger = that._eventTrigger;
@@ -524,20 +577,17 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
       // @ts-expect-error
       !eventCanceled(eventArgs, series, 'point') && eventTrigger(SERIES_CLICK, { target: series, event });
     });
-  },
-  /// #DEBUG
-  __trackerDelay: DELAY,
-  /// #ENDDEBUG
+  }
 
   update(options) {
     const that = this;
-    baseTrackerPrototype.update.call(this, options);
+    super.update(options);
     that._argumentAxis = options.argumentAxis || {};
     that._axisHoverEnabled = that._argumentAxis && _normalizeEnum(that._argumentAxis.getOptions().hoverMode) === ALL_ARGUMENT_POINTS_MODE;
     that._rotated = options.rotated;
     that._crosshair = options.crosshair;
     that._stickyHovering = options.stickyHovering;
-  },
+  }
 
   _getCanvas(x, y) {
     const that = this;
@@ -549,28 +599,28 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
       }
     }
     return null;
-  },
+  }
 
   _isPointerOut(canvas, point) {
     return !canvas && this._stuckSeries && point?.series !== this._stuckSeries;
-  },
+  }
 
   _hideCrosshair() {
     this._crosshair?.hide();
-  },
+  }
 
   _moveCrosshair(point, x, y) {
     if (this._crosshair && point?.isVisible()) {
       this._crosshair.show({ point, x, y });
     }
-  },
+  }
 
   _clean() {
     const that = this;
-    baseTrackerPrototype._clean.call(that);
+    super._clean();
     that._resetTimer();
     that._stuckSeries = null;
-  },
+  }
 
   _getSeriesForShared(x, y) {
     const that = this;
@@ -595,7 +645,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     }
     // @ts-expect-error
     return point?.series;
-  },
+  }
 
   _setTimeout(callback, keeper) {
     const that = this;
@@ -607,19 +657,19 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
       }, DELAY);
       that._timeoutKeeper = keeper;
     }
-  },
+  }
 
   _resetTimer() {
     clearTimeout(this._hoverTimeout);
     this._timeoutKeeper = this._hoverTimeout = null;
-  },
+  }
 
   _stopEvent(e) {
     if (!isDefined(e.cancelable) || e.cancelable) {
       e.preventDefault();
       e.stopPropagation(); // T249548
     }
-  },
+  }
 
   _setStuckSeries(e, series, x, y) {
     if (e.pointerType !== 'mouse') {
@@ -628,17 +678,17 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
       this._stuckSeries = (series || this._stuckSeries) || this._getSeriesForShared(x, y);
     }
     return !!this._stuckSeries;
-  },
+  }
 
-  _pointerOut() {
+  _pointerOut(force?) {
     const that = this;
     that._stuckSeries = null;
     that._hideCrosshair();
     that._resetTimer();
-    // @ts-expect-error
-    baseTrackerPrototype._pointerOut.apply(that, arguments);
-  },
+    super._pointerOut(force);
+  }
   // @ts-expect-error
+
   _hoverArgumentAxis(x, y, e) {
     const that = this;
     that._resetHoveredArgument();
@@ -646,54 +696,55 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
       that._hoverArgument(getData(e, ARG_DATA, true));
       return true;
     }
-  },
+  }
 
-  _pointerComplete(point, x, y) {
+  _pointerComplete(point?, x?, y?) {
     const that = this;
     that.hoveredSeries && that.hoveredSeries.updateHover(x, y);
     that._resetTimer();
     that._moveCrosshair(point, x, y);
-    baseTrackerPrototype._pointerComplete.call(that, point);
-  },
+    super._pointerComplete(point);
+  }
 
   _legendClick(item, e) {
     const series = this._storedSeries[item.id];
     this._triggerLegendClick({ target: series, event: e }, SERIES_CLICK);
-  },
+  }
 
   _hoverLegendItem(x, y) {
     this._stuckSeries = null;
     this._hideCrosshair();
-    baseTrackerPrototype._hoverLegendItem.call(this, x, y);
-  },
+    super._hoverLegendItem(x, y);
+  }
 
   _pointerOnPoint(point, x, y, e) {
     this._setStuckSeries(e, point.series, x, y);
     this._releaseHoveredSeries();
-    // @ts-expect-error
-    baseTrackerPrototype._pointerOnPoint.call(this, point, x, y, e);
-  },
-
-  _notifyLegendOnHoverArgument: false,
+    super._pointerOnPoint(point, x, y, e);
+  }
 
   _getArgumentHoverMode() {
     return correctHoverMode(this._argumentAxis);
-  },
+  }
 
   dispose() {
     this._resetTimer();
-    baseTrackerPrototype.dispose.call(this);
-  },
+    super.dispose();
+  }
+}
+
+Object.assign(ChartTracker.prototype, {
+  /// #DEBUG
+  __trackerDelay: DELAY,
+  /// #ENDDEBUG
+
+  _notifyLegendOnHoverArgument: false,
 });
 
-export const PieTracker = function (options) {
-  this.ctor(options);
-};
-
-extend(PieTracker.prototype, baseTrackerPrototype, {
+export class PieTracker extends BaseTracker {
   _isPointerOut(_, point) {
     return !point;
-  },
+  }
 
   _legendClick(item, e) {
     const that = this;
@@ -701,11 +752,11 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
 
     that._storedSeries.forEach((s) => points.push.apply(points, s.getPointsByKeys(item.argument, item.argumentIndex)));
     that._eventTrigger(LEGEND_CLICK, { target: item.argument, points, event: e });
-  },
+  }
 
   _pointClick(point, e) {
     this._eventTrigger(POINT_CLICK, { target: point, event: e });
-  },
+  }
 
   _hoverLegendItem(x, y) {
     const that = this;
@@ -717,11 +768,11 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
     } else if (!item) {
       that.clearHover();
     }
-  },
+  }
 
   _getArgumentHoverMode() {
     return correctHoverMode(this._legend);
-  },
+  }
 
   _processArgumentHoveredPoint(argument, argumentIndex) {
     const points = this._storedSeries.flatMap((series) => series.getPointsByKeys(argument, argumentIndex));
@@ -731,10 +782,15 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
     } else {
       this._releaseHoveredPoint();
     }
-  },
+  }
+}
 
+Object.assign(PieTracker.prototype, {
   _hoverArgumentAxis: _noop,
+
   _setStuckSeries: _noop,
+
   _getCanvas: _noop,
+
   _notifyLegendOnHoverArgument: true,
 });

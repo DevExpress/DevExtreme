@@ -37,7 +37,7 @@ export const stateStoringDataControllerExtender = (
     return super.callbackNames().concat(['stateLoaded']);
   }
 
-  protected _refreshDataSource(): DeferredObj<unknown> | undefined {
+  protected resetDataSource(): DeferredObj<unknown> | undefined {
     if (this._stateStoringController.isEnabled() && !this._stateStoringController.isLoaded()) {
       clearTimeout(this._restoreStateTimeoutID ?? undefined);
 
@@ -49,7 +49,7 @@ export const stateStoringDataControllerExtender = (
             this._restoreStateTimeoutID = null;
           })
           .done(() => {
-            super._refreshDataSource();
+            super.resetDataSource();
 
             this.stateLoaded.fire();
             deferred.resolve();
@@ -67,7 +67,7 @@ export const stateStoringDataControllerExtender = (
     }
 
     if (!this.isStateLoading()) {
-      super._refreshDataSource();
+      super.resetDataSource();
     }
 
     return undefined;

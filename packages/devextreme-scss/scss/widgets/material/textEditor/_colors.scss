@@ -13,7 +13,7 @@ $texteditor-color: $base-text-color !default;
 * $type color
 */
 $texteditor-placeholder-color: $base-label-color !default;
-$texteditor-label-color: $texteditor-placeholder-color;
+$texteditor-label-color: $texteditor-placeholder-color !default;
 
 /**
 * $name 30. Background color
@@ -59,7 +59,7 @@ $texteditor-input-border-radius: $base-border-radius !default;
 $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
-  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms !default;
 
 @if $mode == "light" {
   $texteditor-disabled-color: rgba(0, 0, 0, 0.6) !default;

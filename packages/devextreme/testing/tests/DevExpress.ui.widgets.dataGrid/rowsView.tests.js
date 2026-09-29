@@ -8,7 +8,7 @@ import dataUtils from 'core/element_data';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import { getHeight, setHeight, setWidth, getOuterHeight, getWidth } from 'core/utils/size';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import config from 'core/config';
 import support from '__internal/core/utils/m_support';
 import browser from 'core/utils/browser';
@@ -19,7 +19,6 @@ import { setupDataGridModules, MockDataController, MockColumnsController, MockSe
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import numberLocalization from 'common/core/localization/number';
 import virtualScrollingCore from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
-import ODataStore from 'common/data/odata/store';
 import ArrayStore from 'common/data/array_store';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
@@ -742,35 +741,6 @@ QUnit.module('Rows view', {
     });
 
     // T103538
-    QUnit.test('Highlight searchText with rowTemplate', function(assert) {
-        // arrange
-        const columns = [{ allowFiltering: true, dataType: 'string' }, { allowFiltering: true, dataType: 'number' }, { allowFiltering: true, dataType: 'date' }];
-        const dataController = new MockDataController({ items: this.items });
-        const rowsView = this.createRowsView(this.items, dataController, columns);
-        const testElement = $('#container');
-        const searchTextClass = 'dx-datagrid-search-text';
-
-        this.options.searchPanel = {
-            highlightSearchText: true,
-            text: '1'
-        };
-
-        this.options.rowTemplate = function(container, options) {
-            const data = options.data;
-
-            $(container).append('<tr class=\'dx-row\'><td>' + data.name + '</td><td>' + data.id + '</td></tr>');
-        };
-
-        // act
-        rowsView.render(testElement);
-        const cells = testElement.find('td');
-
-        // assert
-        assert.equal(getNormalizeMarkup(cells.eq(0)), 'test<span class=' + searchTextClass + '>1</span>', 'cell 1');
-        assert.equal(getNormalizeMarkup(cells.eq(1)), '<span class=' + searchTextClass + '>1</span>', 'cell 2');
-    });
-
-    // T103538
     QUnit.test('Highlight searchText with dataRowTemplate', function(assert) {
         // arrange
         const columns = [{ allowFiltering: true, dataType: 'string' }, { allowFiltering: true, dataType: 'number' }, { allowFiltering: true, dataType: 'date' }];
@@ -800,7 +770,7 @@ QUnit.module('Rows view', {
     });
 
     // T106289
-    QUnit.test('Highlight searchText with rowTemplate not replace tagName', function(assert) {
+    QUnit.test('Highlight searchText with dataRowTemplate not replace tagName', function(assert) {
         // arrange
         const columns = [{ allowFiltering: true, dataType: 'string' }, { allowFiltering: true, dataType: 'number' }, { allowFiltering: true, dataType: 'date' }];
         const dataController = new MockDataController({ items: this.items });
@@ -812,10 +782,10 @@ QUnit.module('Rows view', {
             text: 't'
         };
 
-        this.options.rowTemplate = function(container, options) {
+        this.options.dataRowTemplate = function(container, options) {
             const data = options.data;
 
-            $(container).append('<tr class=\'dx-row\'><td>' + data.name + '</td><td>' + data.id + '</td><td>' + data.date + '</td></tr>');
+            $(container).append('<tr><td>' + data.name + '</td><td>' + data.id + '</td><td>' + data.date + '</td></tr>');
         };
 
         // act
@@ -827,7 +797,7 @@ QUnit.module('Rows view', {
     });
 
     // T106289
-    QUnit.test('Highlight searchText with rowTemplate not replace class', function(assert) {
+    QUnit.test('Highlight searchText with dataRowTemplate not replace class', function(assert) {
         // arrange
         const columns = [{ allowFiltering: true, dataType: 'string' }, { allowFiltering: true, dataType: 'number' }, { allowFiltering: true, dataType: 'date' }];
         const dataController = new MockDataController({ items: this.items });
@@ -839,10 +809,10 @@ QUnit.module('Rows view', {
             text: 'test'
         };
 
-        this.options.rowTemplate = function(container, options) {
+        this.options.dataRowTemplate = function(container, options) {
             const data = options.data;
 
-            $(container).append('<tr class=\'dx-row dx-test\'><td>' + data.name + '</td><td>' + data.id + '</td></tr>');
+            $(container).append('<tr class=\'dx-test\'><td>' + data.name + '</td><td>' + data.id + '</td></tr>');
         };
 
         // act
@@ -941,14 +911,18 @@ QUnit.module('Rows view', {
             { data: { name: 'aaaüaaa' }, values: ['aaaüaaa'] },
             { data: { name: 'aaaaaaü' }, values: ['aaaaaaü'] },
             { data: { name: 'üaaaaaa' }, values: ['üaaaaaa'] }];
-        const dataController = new MockDataController({ items: rows });
-        dataController.getDataSource = () => ({ loadOptions: () => ({
-            langParams: {
-                collatorOptions: {
-                    sensitivity: 'base'
-                },
+        const dataController = new MockDataController({
+            items: rows,
+            dataSource: {
+                loadOptions: () => ({
+                    langParams: {
+                        collatorOptions: {
+                            sensitivity: 'base'
+                        },
+                    }
+                })
             }
-        }) });
+        });
 
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
@@ -980,11 +954,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
-        const store = new ODataStore({ url: 'test.org' });
-
-        dataController.store = function() {
-            return store;
-        };
 
         // act
         this.options.searchPanel = {
@@ -1014,11 +983,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
-        const store = new ODataStore({ url: 'test.org' });
-
-        dataController.store = function() {
-            return store;
-        };
 
         // act
         this.options.searchPanel = {
@@ -1639,7 +1603,7 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rows, dataController, [{}]);
         const testElement = $('#container');
 
-        this.options.rowTemplate = 'test';
+        this.options.dataRowTemplate = 'test';
 
         rowsView.component._getTemplate = function(templateName) {
             if(templateName === 'test') {
@@ -1668,7 +1632,7 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rows, dataController, [{}]);
         const testElement = $('#container');
 
-        this.options.rowTemplate = 'test';
+        this.options.dataRowTemplate = 'test';
 
         rowsView.component._getTemplate = function(templateName) {
             if(templateName === 'test') {
@@ -1697,7 +1661,7 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(rows, dataController, [{}]);
         const testElement = $('#container');
 
-        this.options.rowTemplate = function(container, options) {
+        this.options.dataRowTemplate = function(container, options) {
             $(container).append('<tr' + (options.isSelected ? ' class="dx-selection"' : '') + '><td>Custom Template - ' + options.values[0] + '</td></tr>');
         };
 
@@ -3913,9 +3877,9 @@ QUnit.module('Rows view', {
             return true;
         };
         rowsView.beginUpdate();
-        rowsView.optionChanged({ name: 'rowTemplate' });
+        rowsView.optionChanged({ name: 'dataRowTemplate' });
         rowsView.optionChanged({ name: 'loadPanel' });
-        rowsView.optionChanged({ name: 'rowTemplate' });
+        rowsView.optionChanged({ name: 'dataRowTemplate' });
         rowsView.optionChanged({ name: 'loadPanel' });
         rowsView.endUpdate();
 
@@ -3938,7 +3902,7 @@ QUnit.module('Rows view', {
             return false;
         };
         rowsView.beginUpdate();
-        rowsView.optionChanged({ name: 'rowTemplate' });
+        rowsView.optionChanged({ name: 'dataRowTemplate' });
         rowsView.optionChanged({ name: 'loadPanel' });
         rowsView.endUpdate();
 
@@ -3946,7 +3910,7 @@ QUnit.module('Rows view', {
         assert.equal(renderCounter, 0, 'count of rendering');
     });
 
-    QUnit.test('Call resize method when the rowTemplate option is changed', function(assert) {
+    QUnit.test('Call resize method when the dataRowTemplate option is changed', function(assert) {
         // arrange
         const rowsView = this.createRowsView(this.items);
 
@@ -3957,7 +3921,7 @@ QUnit.module('Rows view', {
             return true;
         };
         rowsView.beginUpdate();
-        rowsView.optionChanged({ name: 'rowTemplate' });
+        rowsView.optionChanged({ name: 'dataRowTemplate' });
         rowsView.endUpdate();
 
         // assert
@@ -4002,14 +3966,14 @@ QUnit.module('Rows view', {
     });
 
     // T370318
-    QUnit.test('Render free space row with rowTemplate', function(assert) {
+    QUnit.test('Render free space row with dataRowTemplate', function(assert) {
         // arrange
         const rowsView = this.createRowsView(this.items);
         const $testElement = $('#container');
 
-        this.options.rowTemplate = function(container, options) {
+        this.options.dataRowTemplate = function(container, options) {
             const data = options.data;
-            $(container).append('<tbody><tr class=\'dx-row\'><td>' + data.name + '</td><td>' + data.id + '</td></tr></tbody>');
+            $(container).append('<tr><td>' + data.name + '</td><td>' + data.id + '</td></tr>');
         };
 
         // act
@@ -4018,9 +3982,8 @@ QUnit.module('Rows view', {
         // assert
         const $tableElement = $testElement.find('table');
 
-        // TODO is it necessary to remove our tbody? Maybe remove tbody if rowTemplate defined? Or if template define its own tbody - user must remove our tbody
-        assert.equal($tableElement.children('tbody').length, 4, 'count tbody');
-        assert.equal($tableElement.find('.dx-freespace-row').length, 1, 'count freespace row');
+        assert.equal($tableElement.children('tbody.dx-row').length, 4, 'count tbody with rows');
+        assert.equal($tableElement.find('tbody.dx-freespace-row').length, 1, 'count freespace row');
         assert.equal($tableElement.children('tbody').last().find('.dx-freespace-row').length, 1, 'has freespace row in last tbody element');
     });
 
@@ -4660,7 +4623,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         that.rowsView.resize();
 
         // assert
-        assert.equal(that.dataController.pageCount(), 3, 'page count = 3');
+        assert.equal(that.dataSourceController.pageCount(), 3, 'page count = 3');
         assert.ok(!that.rowsView._hasHeight, 'not has height');
         assert.ok(that.rowsView._rowHeight > 0, 'row height > 0');
         assert.equal(Math.round(getHeight(that.rowsView._getFreeSpaceRowElements())), Math.round(that.rowsView._rowHeight * 2), 'height free space row');
@@ -4686,7 +4649,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         that.rowsView.resize();
 
         // assert
-        assert.equal(that.dataController.pageCount(), 3, 'page count = 3');
+        assert.equal(that.dataSourceController.pageCount(), 3, 'page count = 3');
         assert.ok(!that.rowsView._hasHeight, 'not has height');
         assert.ok(that.rowsView._rowHeight > 0, 'row height > 0');
         assert.equal(getHeight(that.rowsView._getFreeSpaceRowElements()), 0, 'no height free space row');
@@ -5276,7 +5239,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
 
     // T411212
-    QUnit.test('Show master detail with rowTemplate', function(assert) {
+    QUnit.test('Show master detail with dataRowTemplate', function(assert) {
         // arrange
         const testElement = $('#container');
 
@@ -5287,8 +5250,8 @@ QUnit.module('Rows view with real dataController and columnController', {
             }
         };
 
-        this.options.rowTemplate = function(container, options) {
-            $('<tr class="dx-row"><td>+</td><td>' + options.data.name + '</td><td>' + options.data.age + '</td></tr>').appendTo(container);
+        this.options.dataRowTemplate = function(container, options) {
+            $('<tr><td>+</td><td>' + options.data.name + '</td><td>' + options.data.age + '</td></tr>').appendTo(container);
         };
 
         this.setupDataGridModules();
@@ -5320,8 +5283,8 @@ QUnit.module('Rows view with real dataController and columnController', {
                 $('<div>').addClass('test-detail').text(options.key).appendTo(container);
             }
         };
-        this.options.rowTemplate = function(container, options) {
-            $('<tbody class="dx-row dx-data-row"><tr><td>+</td><td>' + options.data.name + '</td><td>' + options.data.age + '</td></tr></tbody>').appendTo(container);
+        this.options.dataRowTemplate = function(container, options) {
+            $('<tr><td>+</td><td>' + options.data.name + '</td><td>' + options.data.age + '</td></tr>').appendTo(container);
         };
 
         this.setupDataGridModules();
@@ -5534,7 +5497,7 @@ QUnit.module('Rows view with real dataController and columnController', {
     });
 
     // T712541
-    QUnit.test('Rows should be rendered properly on scrolling when virtual scrolling is enabled and a row template is used', function(assert) {
+    QUnit.test('Rows should be rendered properly on scrolling when virtual scrolling is enabled and a data row template is used', function(assert) {
         // arrange
         const $testElement = $('#container');
         const store = new ArrayStore(generateItems(10000));
@@ -5561,8 +5524,8 @@ QUnit.module('Rows view with real dataController and columnController', {
             rowPageSize: 5,
             rowRenderingMode: 'standard'
         };
-        this.options.rowTemplate = (_, options) => {
-            return $('<tbody>').addClass('dx-row').html('<tr><td colspan=5>' + options.data.id + '</td></tr>');
+        this.options.dataRowTemplate = (_, options) => {
+            return $('<tr>').html('<td colspan=5>' + options.data.id + '</td>');
         };
 
         this.setupDataGridModules();
@@ -6230,7 +6193,7 @@ QUnit.module('Virtual scrolling', {
     });
 
     // T423722
-    QUnit.test('Render rows at end when virtual scrolling enabled and rowTemplate is defined', function(assert) {
+    QUnit.test('Render rows at end when virtual scrolling enabled and dataRowTemplate is defined', function(assert) {
         // arrange
         const options = {
             items: [
@@ -6252,13 +6215,11 @@ QUnit.module('Virtual scrolling', {
             mode: 'virtual'
         };
 
-        this.options.rowTemplate = function(container, item) {
+        this.options.dataRowTemplate = function(container, item) {
             const markup =
-                '<tbody>' +
                 '<tr>' +
                 '<td>' + item.values[0] + '</td>' +
-                '</tr>' +
-                '</tbody>';
+                '</tr>';
 
             $(container).append(markup);
         };
@@ -6295,8 +6256,8 @@ QUnit.module('Virtual scrolling', {
         assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
         assert.equal(content.children().eq(0).find('tbody > tr').length, 9, '3 data row + 3 data row + 1 freespace row + 2 virtual row');
         assert.equal(content.children().eq(0).find('tbody > tr').eq(4).text(), '4', 'row 4 text');
-        assert.roughEqual(getHeight(content.children().eq(0).find('.dx-virtual-row').eq(0)), rowHeight * 10, 1);
-        assert.roughEqual(getHeight(content.children().eq(0).find('.dx-virtual-row').eq(1)), rowHeight * 4, 1);
+        assert.roughEqual(getHeight(content.children().eq(0).find('tr.dx-virtual-row').eq(0)), rowHeight * 10, 1);
+        assert.roughEqual(getHeight(content.children().eq(0).find('tr.dx-virtual-row').eq(1)), rowHeight * 4, 1);
     });
 
 
@@ -7428,7 +7389,7 @@ QUnit.module('Bottom Load Panel', {
             showIndicator: false,
             showPane: true,
             text: 'Test',
-            indicatorSrc: 'test'
+            indicatorOptions: { src: 'test' }
         };
 
         // act
@@ -7441,7 +7402,7 @@ QUnit.module('Bottom Load Panel', {
         assert.equal(rowsView._loadPanel.option('message'), 'Test');
         assert.equal(rowsView._loadPanel.option('showIndicator'), false);
         assert.equal(rowsView._loadPanel.option('showPane'), true);
-        assert.equal(rowsView._loadPanel.option('indicatorSrc'), 'test');
+        assert.equal(rowsView._loadPanel.option('indicatorOptions.src'), 'test');
         assert.deepEqual(rowsView._loadPanel.option('container'), rowsView.element().parent());
     });
 

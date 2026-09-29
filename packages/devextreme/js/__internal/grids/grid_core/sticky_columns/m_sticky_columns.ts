@@ -244,7 +244,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
   protected _resizeCore(): void {
     const hasStickyColumns = this.hasStickyColumns();
-    const hasHidingColumnsQueue = !!this._adaptiveColumnsController
+    const hasHidingColumnsQueue = !!this.adaptiveColumnsController
       ?.getHidingColumnsQueue()?.length;
 
     super._resizeCore.apply(this);

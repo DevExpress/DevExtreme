@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 import {
@@ -79,7 +73,6 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
         return 'box';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -99,7 +92,6 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

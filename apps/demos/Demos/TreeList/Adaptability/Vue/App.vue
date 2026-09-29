@@ -46,7 +46,7 @@ import { employees } from './data.ts';
 
 const expandedRowKeys = [1];
 </script>
-<style scoped>
+<style>
 #employees {
   padding: 10px;
   max-height: 440px;

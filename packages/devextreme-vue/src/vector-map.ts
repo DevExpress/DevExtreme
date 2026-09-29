@@ -65,6 +65,7 @@ type AccessibleOptions = Pick<Properties,
   "customizeAnnotation" |
   "disabled" |
   "elementAttr" |
+  "encodeHtml" |
   "export" |
   "layers" |
   "legends" |
@@ -114,6 +115,7 @@ const componentConfig = {
     customizeAnnotation: Function as PropType<((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig)>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
+    encodeHtml: Boolean,
     export: Object as PropType<Record<string, any>>,
     layers: [Array, Object] as PropType<Array<Record<string, any>> | Record<string, any>>,
     legends: Array as PropType<Array<Record<string, any>>>,
@@ -159,6 +161,7 @@ const componentConfig = {
     "update:customizeAnnotation": null,
     "update:disabled": null,
     "update:elementAttr": null,
+    "update:encodeHtml": null,
     "update:export": null,
     "update:layers": null,
     "update:legends": null,

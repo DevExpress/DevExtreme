@@ -63,7 +63,7 @@ const dataSource = [
   'Completed',
 ];
 </script>
-<style scoped>
+<style>
 #tasks {
   max-height: 440px;
 }

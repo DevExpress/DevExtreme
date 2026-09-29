@@ -11,8 +11,8 @@
 @use "../slider/sizes" as *;
 @use "../../base/fieldset";
 
-$generic-field-min-height: $generic-base-inline-widget-height;
-$generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding + $generic-invalid-badge-size;
+$generic-field-min-height: $generic-base-inline-widget-height !default;
+$generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding + $generic-invalid-badge-size !default;
 
 @mixin dx-fieldset-styling() {
   .dx-field {
@@ -27,7 +27,6 @@ $generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding
   .dx-field-value {
     &.dx-attention {
       color: $fieldset-field-value-invalid-color;
-      padding-left: $generic-fieldset-attention-icon-offset;
 
       &::before {
         @include dx-invalid-generic-badge();

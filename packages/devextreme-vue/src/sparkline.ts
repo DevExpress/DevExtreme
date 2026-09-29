@@ -43,6 +43,7 @@ type AccessibleOptions = Pick<Properties,
   "dataSource" |
   "disabled" |
   "elementAttr" |
+  "encodeHtml" |
   "firstLastColor" |
   "ignoreEmptyPoints" |
   "lineColor" |
@@ -91,6 +92,7 @@ const componentConfig = {
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
+    encodeHtml: Boolean,
     firstLastColor: String,
     ignoreEmptyPoints: Boolean,
     lineColor: String,
@@ -135,6 +137,7 @@ const componentConfig = {
     "update:dataSource": null,
     "update:disabled": null,
     "update:elementAttr": null,
+    "update:encodeHtml": null,
     "update:firstLastColor": null,
     "update:ignoreEmptyPoints": null,
     "update:lineColor": null,

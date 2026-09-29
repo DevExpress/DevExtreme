@@ -11,6 +11,7 @@ import type { Properties } from '@js/ui/load_panel';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { InternalPositionConfig } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 
 // STYLE loadPanel
@@ -23,14 +24,15 @@ const LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content';
 const LOADPANEL_CONTENT_WRAPPER_CLASS = 'dx-loadpanel-content-wrapper';
 const LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
 
-export interface LoadPanelProperties extends Properties {}
+export interface LoadPanelProperties extends Omit<Properties, 'position'> {
+  position?: Properties['position'] | InternalPositionConfig;
+}
 
 class LoadPanel extends Overlay<LoadPanelProperties> {
   _$indicator?: dxElementWrapper;
 
   _$loadPanelContentWrapper?: dxElementWrapper;
 
-  // eslint-disable-next-line no-restricted-globals -- needed for delayed panel show
   _showTimeout?: ReturnType<typeof setTimeout>;
 
   _supportedKeys(): SupportedKeys {
@@ -49,7 +51,6 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
       // @ts-expect-error 'null' is not assignable
       animation: null,
       showIndicator: true,
-      indicatorSrc: '',
       showPane: true,
       delay: 0,
       templatesRenderAsynchronously: false,
@@ -102,15 +103,6 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     this.$element().addClass(LOADPANEL_CLASS);
     this.$wrapper()?.addClass(LOADPANEL_WRAPPER_CLASS);
     this._updateWrapperAria();
-  }
-
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    this._deprecatedOptions = {
-      ...this._deprecatedOptions,
-      // @ts-expect-error ts-error
-      indicatorSrc: { since: '25.2', alias: 'indicatorOptions.src' },
-    };
   }
 
   _updateWrapperAria(): void {
@@ -226,12 +218,12 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
         .appendTo(this._$loadPanelContentWrapper);
     }
 
-    const { indicatorOptions = {}, indicatorSrc } = this.option();
+    const { indicatorOptions = {} } = this.option();
     const { src, ...restIndicatorOptions } = indicatorOptions;
 
     this._createComponent(this._$indicator, LoadIndicator, {
       elementAttr: this._getAriaAttributes(),
-      indicatorSrc: src ?? indicatorSrc,
+      indicatorSrc: src,
       ...restIndicatorOptions,
     });
   }
@@ -261,7 +253,6 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
       case 'showPane':
         this._togglePaneVisible();
         break;
-      case 'indicatorSrc':
       case 'indicatorOptions':
         this._renderLoadIndicator();
         break;

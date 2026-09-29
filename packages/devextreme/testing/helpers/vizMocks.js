@@ -1,16 +1,16 @@
 /* global currentAssert, currentTest, sinon */
 
 import $ from 'jquery';
-import * as tooltipModule from 'viz/core/tooltip';
-import * as titleModule from 'viz/core/title';
+import tooltipModule from 'viz/core/tooltip';
+import titleModule from 'viz/core/title';
 import legendModule from 'viz/components/legend';
 import axisModule from 'viz/axes/base_axis';
-import * as pointModule from 'viz/series/points/base_point';
+import pointModule from 'viz/series/points/base_point';
 import { Series } from 'viz/series/base_series';
-import * as loadingIndicatorModule from 'viz/core/loading_indicator';
-import * as exportMenuModule from 'viz/core/export';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import exportMenuModule from 'viz/core/export';
 import rendererModule from 'viz/core/renderers/renderer_default';
-import * as errors from 'viz/core/errors_warnings';
+import errors from 'viz/core/errors_warnings';
 import * as baseWidgetUtils from '__internal/viz/core/base_widget.utils';
 import * as typeUtils from 'core/utils/type';
 
@@ -259,14 +259,24 @@ function stubClass(target, members, settings) {
     settings = settings || {};
     proto.prototype = typeof target === 'function' ? target.prototype : target;
     const stubPrototype = stub.prototype = new proto();
-    $.each(stubPrototype, function(name, member) {
-        if(typeof member === 'function' && name !== 'constructor') {
-            stubPrototype[name] = function() {
-                createStub(this, name);
-                return this[name].apply(this, arguments);
-            };
-        }
-    });
+    // Walk the prototype chain so non-enumerable methods (ES6 class methods) are
+    // stubbed too; a plain `for...in`/`$.each` only sees enumerable members.
+    const stubbedNames = {};
+    for(let currentProto = stubPrototype; currentProto && currentProto !== Object.prototype; currentProto = Object.getPrototypeOf(currentProto)) {
+        Object.getOwnPropertyNames(currentProto).forEach(function(name) {
+            if(name === 'constructor' || stubbedNames[name]) {
+                return;
+            }
+            const descriptor = Object.getOwnPropertyDescriptor(currentProto, name);
+            if(descriptor && typeof descriptor.value === 'function') {
+                stubbedNames[name] = true;
+                stubPrototype[name] = function() {
+                    createStub(this, name);
+                    return this[name].apply(this, arguments);
+                };
+            }
+        });
+    }
     settings.$extraFunctions && $.each(settings.$extraFunctions, function(_, name) {
         _members[name] = 'name' in _members ? _members[name] : function() { };
     });
@@ -367,7 +377,17 @@ const Point = stubClass(pointModule.Point);
 const Legend = stubClass(legendModule.Legend);
 const Title = stubClass(titleModule.Title);
 const Tooltip = stubClass(tooltipModule.Tooltip);
-const Axis = stubClass(axisModule.Axis);
+// ESM npm artifacts strip /// #DEBUG methods (removeDebug: true).
+// Restore the ones gauges/charts call on mocks (kept in legacy CJS transpile).
+const Axis = stubClass(axisModule.Axis, null, {
+    $extraFunctions: [
+        'shift',
+        '_getTickMarkPoints',
+        '_validateOverlappingMode',
+        '_getStep',
+        '_validateDisplayMode',
+    ],
+});
 const SeriesStub = stubClass(Series);
 
 export {

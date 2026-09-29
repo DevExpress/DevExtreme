@@ -64,14 +64,14 @@ const showDragIcons = ref(true);
 
 const tasks = ref<Task[]>(defaultTasks);
 
-const onReorder = (e: any) => {
+const onReorder = (e: DxDataGridTypes.RowDraggingReorderEvent<Task>) => {
   const visibleRows = e.component.getVisibleRows();
   const toIndex = tasks.value.findIndex((item) => item.ID === visibleRows[e.toIndex].data.ID);
-  const fromIndex = tasks.value.findIndex((item) => item.ID === e.itemData.ID);
+  const fromIndex = tasks.value.findIndex((item) => item.ID === e.itemData!.ID);
   const newTasks = [...tasks.value];
 
   newTasks.splice(fromIndex, 1);
-  newTasks.splice(toIndex, 0, e.itemData);
+  newTasks.splice(toIndex, 0, e.itemData!);
 
   tasks.value = newTasks;
 };

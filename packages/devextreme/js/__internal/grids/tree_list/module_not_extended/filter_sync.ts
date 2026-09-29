@@ -1,4 +1,4 @@
-import { filterSyncModule } from '@ts/grids/grid_core/filter/m_filter_sync';
+import { filterSyncModule } from '@ts/grids/grid_core/filter_sync/filter_sync_module';
 
 import treeListCore from '../m_core';
 

@@ -4,11 +4,11 @@
 @use "../../base/mixins" as *;
 @use "../../base/progressBar";
 
-$generic-bar-height: 6px;
-$generic-background-width: 90%;
-$generic-progressbar-border-radius: 2px;
-$generic-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
-$generic-progress-bar-border: 1px solid;
+$generic-bar-height: 6px !default;
+$generic-background-width: 90% !default;
+$generic-progressbar-border-radius: 2px !default;
+$generic-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95% !default;
+$generic-progress-bar-border: 1px solid !default;
 
 .dx-progressbar-container {
   height: $generic-bar-height;

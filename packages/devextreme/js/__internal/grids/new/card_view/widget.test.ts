@@ -98,7 +98,7 @@ describe('absence of multiple re-render', () => {
       cardTemplate.mockClear();
       cardView.columnOption('name', 'sortOrder', 'asc');
 
-      expect(cardTemplate).toBeCalledTimes(dataSource.length);
+      expect(cardTemplate).toHaveBeenCalledTimes(dataSource.length);
     });
 
     it('should render each card template not more than once per filter update', () => {
@@ -124,7 +124,7 @@ describe('absence of multiple re-render', () => {
       cardTemplate.mockClear();
       cardView.clearFilter();
 
-      expect(cardTemplate).toBeCalledTimes(dataSource.length);
+      expect(cardTemplate).toHaveBeenCalledTimes(dataSource.length);
     });
 
     it('should render each card template not more than once per search update', () => {
@@ -148,7 +148,7 @@ describe('absence of multiple re-render', () => {
       cardView.searchByText(searchValue);
       cardView.searchByText('');
 
-      expect(cardTemplate).toBeCalledTimes(calledTimes);
+      expect(cardTemplate).toHaveBeenCalledTimes(calledTimes);
     });
   });
 
@@ -170,7 +170,7 @@ describe('absence of multiple re-render', () => {
       cardFooterTemplate.mockClear();
       cardView.columnOption('name', 'sortOrder', 'asc');
 
-      expect(cardFooterTemplate).toBeCalledTimes(dataSource.length);
+      expect(cardFooterTemplate).toHaveBeenCalledTimes(dataSource.length);
     });
 
     it('should render each card template not more than once per filter update', () => {
@@ -196,7 +196,7 @@ describe('absence of multiple re-render', () => {
       cardFooterTemplate.mockClear();
       cardView.clearFilter();
 
-      expect(cardFooterTemplate).toBeCalledTimes(dataSource.length);
+      expect(cardFooterTemplate).toHaveBeenCalledTimes(dataSource.length);
     });
 
     it('should render each card template not more than once per search update', () => {
@@ -220,7 +220,7 @@ describe('absence of multiple re-render', () => {
       cardView.searchByText(searchValue);
       cardView.searchByText('');
 
-      expect(cardFooterTemplate).toBeCalledTimes(calledTimes);
+      expect(cardFooterTemplate).toHaveBeenCalledTimes(calledTimes);
     });
   });
 });
@@ -255,6 +255,6 @@ describe('reactivity to column option changes', () => {
 
     // Should be called dataSource.length times (once per card for data update),
     // not dataSource.length * 2 (which would indicate extra re-render).
-    expect(cardTemplate).toBeCalledTimes(dataSource.length);
+    expect(cardTemplate).toHaveBeenCalledTimes(dataSource.length);
   });
 });

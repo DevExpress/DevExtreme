@@ -28,8 +28,8 @@ export const selectionDataControllerExtender = (
     }
   }
 
-  protected _loadDataSource(): DeferredObj<unknown> {
-    return super._loadDataSource().always(() => {
+  protected loadDataSourceAdapter(): DeferredObj<unknown> {
+    return super.loadDataSourceAdapter().always(() => {
       this._selectionController.refresh();
     });
   }

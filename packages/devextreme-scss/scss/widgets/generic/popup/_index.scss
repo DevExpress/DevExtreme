@@ -11,8 +11,8 @@
 @use "../../base/popup";
 @use "../overlay";
 
-$generic-popup-toolbar-height: $generic-base-inline-widget-height;
-$generic-popup-toolbar-label-font-size: $generic-m-font-size;
+$generic-popup-toolbar-height: $generic-base-inline-widget-height !default;
+$generic-popup-toolbar-label-font-size: $generic-m-font-size !default;
 
 .dx-popup-wrapper {
   & > .dx-overlay-content {

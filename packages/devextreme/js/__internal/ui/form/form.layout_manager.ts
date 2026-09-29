@@ -227,7 +227,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
       if (!propertyName) return false;
 
-      return layoutData && (propertyName in layoutData);
+      return isObject(layoutData) && propertyName in layoutData;
     }
 
     return false;
@@ -378,6 +378,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   _sortItems(): void {
+    // @ts-expect-error normalizeIndexes does not guard against undefined items
     normalizeIndexes(this._items, 'visibleIndex');
     this._sortIndexes();
   }
@@ -804,7 +805,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       requiredMessageTemplate: requiredMessage,
       validationGroup,
       editorValidationBoundary: validationBoundary,
-      // @ts-expect-error ts-error
       editorStylingMode: form?.option('stylingMode'),
       showColonAfterLabel: Boolean(showColonAfterLabel),
       managerLabelLocation: labelLocation,

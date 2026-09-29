@@ -1,3 +1,3 @@
-import { setTemplateEngine } from '../__internal/core/m_set_template_engine';
+import { setTemplateEngine } from '../core/templates/template_engine_registry';
 
 export default setTemplateEngine;

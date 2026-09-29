@@ -2,7 +2,7 @@
 @use "./mixins" as *;
 @use "sass:string" as string;
 
-$colorbox-input-left-padding: 40px;
+$colorbox-input-left-padding: 40px !default;
 
 .dx-colorbox-input-container {
   &.dx-colorbox-color-is-not-defined {
@@ -47,11 +47,8 @@ $colorbox-input-left-padding: 40px;
 }
 
 .dx-colorbox-overlay {
-  padding: 20px;
-
   .dx-popup-content {
     overflow: hidden;
-    padding: 0;
   }
 
   .dx-popup-bottom {

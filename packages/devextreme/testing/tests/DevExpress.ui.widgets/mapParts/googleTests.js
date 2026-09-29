@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 import { LOCATIONS, MARKERS, ROUTES } from './utils.js';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import errorsLogger from 'core/errors';
 import errors from 'ui/widget/ui.errors';
 import GoogleProvider from '__internal/ui/map/provider.dynamic.google';

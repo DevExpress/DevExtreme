@@ -43,7 +43,7 @@ import { dataSource } from './data.ts';
 
 const range = ref(['2013/03/01', '2013/03/07']);
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 400px;
 }

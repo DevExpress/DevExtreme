@@ -35,7 +35,7 @@ export interface DropDownBoxProperties extends Omit<Properties,
 | 'onFocusIn' | 'onFocusOut'
 | 'onInput' | 'onKeyDown'
 | 'onKeyUp' | 'onPaste'
-| 'onValueChanged'
+| 'onValueChanged' | 'dropDownOptions'
 | 'validationMessagePosition'
 | 'onContentReady' | 'onDisposing'
 | 'onOptionChanged' | 'onInitialized'> {

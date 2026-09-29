@@ -91,6 +91,13 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     disabled?: boolean;
     /**
      * @docid
+     * @default false
+     * @notUsedInTheme
+     * @public
+     */
+    encodeHtml?: boolean;
+    /**
+     * @docid
      * @type object
      * @public
      */

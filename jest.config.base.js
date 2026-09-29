@@ -9,7 +9,9 @@ module.exports = {
       },
     ]
   },
-  testURL: 'http://localhost',
+  testEnvironmentOptions: {
+    url: 'http://localhost',
+  },
   testRegex: "(\\.|/)(test|spec)\\.(jsx?|tsx?)$",
   moduleFileExtensions: [
     "ts",

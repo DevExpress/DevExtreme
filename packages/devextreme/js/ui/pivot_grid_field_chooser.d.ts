@@ -123,12 +123,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     headerFilter?: {
       /**
        * @docid
-       * @default false
-       * @deprecated
-       */
-      allowSearch?: boolean;
-      /**
-       * @docid
        * @default true
        */
       allowSelectAll?: boolean;
@@ -141,12 +135,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
        * @docid
        */
       search?: HeaderFilterSearchConfig;
-      /**
-       * @docid
-       * @default 500
-       * @deprecated
-       */
-      searchTimeout?: number;
       /**
        * @docid
        * @default false

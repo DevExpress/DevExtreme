@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval, ValueAxisVisualRangeUpdateMode, VisualRange } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
 import type { ChartAxisScale } from 'devextreme/viz/range_selector';
@@ -351,7 +345,6 @@ export class DxoValueAxisComponent extends NestedOption implements OnDestroy, On
         return 'valueAxis';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -371,7 +364,6 @@ export class DxoValueAxisComponent extends NestedOption implements OnDestroy, On
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

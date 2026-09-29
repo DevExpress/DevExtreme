@@ -18,7 +18,6 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
-import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -76,8 +75,6 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   protected _columnsResizerController!: ColumnsResizerViewController;
 
-  protected _keyboardNavigationController!: KeyboardNavigationController;
-
   protected _validatingController!: ValidatingController;
 
   protected _columnHeadersView!: ColumnHeadersView;
@@ -90,7 +87,6 @@ export class EditorFactory extends ViewControllerWithMixin {
 
     this._columnsResizerController = this.getController('columnsResizer');
     this._editingController = this.getController('editing');
-    this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._columnsController = this.getController('columns');
     this._validatingController = this.getController('validating');
     this._columnHeadersView = this.getView('columnHeadersView');

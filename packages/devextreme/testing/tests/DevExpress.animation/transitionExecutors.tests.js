@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { noop } from '__internal/core/utils/m_common';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { presets as animationPresets } from 'common/core/animation/presets/presets';

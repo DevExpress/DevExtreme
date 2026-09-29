@@ -123,6 +123,7 @@ type AccessibleOptions = Pick<Properties,
   "defaultPane" |
   "disabled" |
   "elementAttr" |
+  "encodeHtml" |
   "export" |
   "legend" |
   "loadingIndicator" |
@@ -203,6 +204,7 @@ const componentConfig = {
     defaultPane: String,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
+    encodeHtml: Boolean,
     export: Object as PropType<Record<string, any>>,
     legend: Object as PropType<Record<string, any>>,
     loadingIndicator: Object as PropType<Record<string, any>>,
@@ -279,6 +281,7 @@ const componentConfig = {
     "update:defaultPane": null,
     "update:disabled": null,
     "update:elementAttr": null,
+    "update:encodeHtml": null,
     "update:export": null,
     "update:legend": null,
     "update:loadingIndicator": null,

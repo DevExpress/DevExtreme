@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { DxChatModule, DxButtonModule } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
@@ -13,16 +15,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxChatModule,
     DxButtonModule,
@@ -44,7 +40,10 @@ export class AppComponent {
 
   isDisabled: boolean;
 
-  constructor(private readonly appService: AppService) {
+  constructor(
+    private readonly appService: AppService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+  ) {
     loadMessages(this.appService.getDictionary());
 
     this.dataSource = this.appService.dataSource;
@@ -68,6 +67,8 @@ export class AppComponent {
     } else {
       event?.target.focus();
     }
+
+    this.changeDetectorRef.detectChanges();
   }
 
   async onMessageEntered(e: DxChatTypes.MessageEnteredEvent) {
@@ -89,6 +90,7 @@ export class AppComponent {
 
     setTimeout(() => {
       this.copyButtonIcon = 'copy';
+      this.changeDetectorRef.detectChanges();
     }, 2500);
   }
 
@@ -99,7 +101,9 @@ export class AppComponent {
     try {
       await this.appService.regenerate();
     } finally {
-      this.toggleDisabledState(false);
+      setTimeout(() => {
+        this.toggleDisabledState(false);
+      });
     }
   }
 }

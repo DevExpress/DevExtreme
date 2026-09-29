@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -45,7 +42,6 @@ import {
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxCalendarComponent),
@@ -53,7 +49,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 };
 /**
  * [descr:dxCalendar]
-
  */
 @Component({
     selector: 'dx-calendar',
@@ -74,7 +69,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -84,10 +78,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -97,10 +89,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.cellTemplate]
-    
      */
     @Input()
     get cellTemplate(): any {
@@ -110,10 +100,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('cellTemplate', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.dateSerializationFormat]
-    
      */
     @Input()
     get dateSerializationFormat(): string | undefined {
@@ -123,10 +111,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('dateSerializationFormat', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -136,10 +122,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.disabledDates]
-    
      */
     @Input()
     get disabledDates(): Array<Date> | ((data: DisabledDate) => boolean) | null {
@@ -149,10 +133,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('disabledDates', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -162,10 +144,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.firstDayOfWeek]
-    
      */
     @Input()
     get firstDayOfWeek(): DayOfWeek | undefined {
@@ -175,10 +155,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('firstDayOfWeek', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -188,10 +166,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -201,10 +177,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -214,10 +188,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -227,10 +199,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -240,10 +210,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -253,10 +221,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.max]
-    
      */
     @Input()
     get max(): Date | null | number | string {
@@ -266,10 +232,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('max', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.maxZoomLevel]
-    
      */
     @Input()
     get maxZoomLevel(): CalendarZoomLevel {
@@ -279,10 +243,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('maxZoomLevel', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.min]
-    
      */
     @Input()
     get min(): Date | null | number | string {
@@ -292,10 +254,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('min', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.minZoomLevel]
-    
      */
     @Input()
     get minZoomLevel(): CalendarZoomLevel {
@@ -305,10 +265,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('minZoomLevel', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -318,10 +276,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -331,10 +287,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -344,10 +298,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): CalendarSelectionMode {
@@ -357,10 +309,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.selectWeekOnClick]
-    
      */
     @Input()
     get selectWeekOnClick(): boolean {
@@ -370,10 +320,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('selectWeekOnClick', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.showTodayButton]
-    
      */
     @Input()
     get showTodayButton(): boolean {
@@ -383,10 +331,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('showTodayButton', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.showWeekNumbers]
-    
      */
     @Input()
     get showWeekNumbers(): boolean {
@@ -396,10 +342,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('showWeekNumbers', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -408,7 +352,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     
     @Input()
@@ -419,10 +362,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('todayButtonText', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -432,10 +373,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -445,10 +384,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -458,10 +395,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -471,10 +406,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -484,10 +417,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.value]
-    
      */
     @Input()
     get value(): Array<Date | null | number | string> | Date | null | number | string {
@@ -497,10 +428,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -510,10 +439,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.weekNumberRule]
-    
      */
     @Input()
     get weekNumberRule(): WeekNumberRule {
@@ -523,10 +450,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('weekNumberRule', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -536,10 +461,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('width', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.zoomLevel]
-    
      */
     @Input()
     get zoomLevel(): CalendarZoomLevel {
@@ -550,308 +473,216 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     }
 
     /**
-    
      * [descr:dxCalendarOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxCalendarOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxCalendarOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxCalendarOptions.onValueChanged]
-    
-    
      */
     @Output() onValueChanged: EventEmitter<ValueChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cellTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dateSerializationFormatChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledDatesChange: EventEmitter<Array<Date> | ((data: DisabledDate) => boolean) | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() firstDayOfWeekChange: EventEmitter<DayOfWeek | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isDirtyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isValidChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxChange: EventEmitter<Date | null | number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxZoomLevelChange: EventEmitter<CalendarZoomLevel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minChange: EventEmitter<Date | null | number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minZoomLevelChange: EventEmitter<CalendarZoomLevel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<CalendarSelectionMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectWeekOnClickChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showTodayButtonChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showWeekNumbersChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() todayButtonTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<Array<Date | null | number | string> | Date | null | number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() weekNumberRuleChange: EventEmitter<WeekNumberRule>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() zoomLevelChange: EventEmitter<CalendarZoomLevel>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

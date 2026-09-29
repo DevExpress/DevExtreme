@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets.editors/validator.tests.js');
+import '../DevExpress.ui.widgets.editors/validator.tests.js';

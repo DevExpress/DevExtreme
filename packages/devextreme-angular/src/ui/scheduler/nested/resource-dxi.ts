@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 
@@ -94,6 +88,14 @@ export class DxiSchedulerResourceComponent extends CollectionNestedOption {
     }
 
     @Input()
+    get parentIdExpr(): string {
+        return this._getOption('parentIdExpr');
+    }
+    set parentIdExpr(value: string) {
+        this._setOption('parentIdExpr', value);
+    }
+
+    @Input()
     get useColorAsDefault(): boolean {
         return this._getOption('useColorAsDefault');
     }
@@ -114,7 +116,6 @@ export class DxiSchedulerResourceComponent extends CollectionNestedOption {
         return 'resources';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -127,7 +128,6 @@ export class DxiSchedulerResourceComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

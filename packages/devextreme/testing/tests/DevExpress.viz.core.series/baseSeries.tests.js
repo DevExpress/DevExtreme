@@ -8,6 +8,7 @@ import typeUtils from 'core/utils/type';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 import { insertMockFactory, MockTranslator, MockAxis, restoreMockFactory } from '../../helpers/chartMocks.js';
+import { stubSeam, spySeam } from '../../helpers/moduleSeam.js';
 
 const Series = SeriesModule.Series;
 const mixins = SeriesModule.mixins;
@@ -67,12 +68,12 @@ const environment = {
 
         this.renderer = new Renderer();
         _this.realCreatePoint = pointModule.Point;
-        pointModule.Point = function() {
+        pointModule.DEBUG_set_Point(function() {
             _this.pointsCreatingCount++;
             const point = _this.realCreatePoint.apply(null, arguments);
             point.setInvisibility = sinon.stub();
             return point;
-        };
+        });
 
         chartSeriesNS['mocktype'] = {
             stylesHistory: [],
@@ -160,7 +161,7 @@ const environment = {
         mixins.pie['mocktype'] = mixins.chart['mocktype'];
     },
     afterEach: function() {
-        pointModule.Point = this.realCreatePoint;
+        pointModule.DEBUG_set_Point(this.realCreatePoint);
         restoreMockFactory();
     }
 };
@@ -178,7 +179,7 @@ const environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function(series, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.series = series;
             stub.argument = data.argument || 1;
@@ -794,7 +795,7 @@ QUnit.test('Pass errorBars options to point (on update). ErrorBars are visible',
 
 QUnit.module('tag to points', {
     beforeEach: function() {
-        this.spy = sinon.spy(pointModule, 'Point');
+        this.spy = spySeam(pointModule, 'Point', 'DEBUG_set_Point');
         this.data = [{ arg: 1, val: 1 }, { arg: 2, val: 2 }, { arg: 3, val: 3 }];
     },
     afterEach: function() {
@@ -2183,7 +2184,7 @@ QUnit.test('Points count > maxLabelCount', function(assert) {
 QUnit.module('Series states - excludePointsMode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -2551,7 +2552,7 @@ QUnit.test('setHoverState after Selected State in includePointsMode', function(a
 QUnit.module('Series states - nearestPoint Mode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(_, data) {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function(_, data) {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
 
@@ -2910,7 +2911,7 @@ QUnit.test('reset nearest point on select', function(assert) {
 QUnit.module('Series states - includePointsMode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -3269,7 +3270,7 @@ QUnit.test('clear selection hovered', function(assert) {
 QUnit.module('Series states - none mode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -4877,7 +4878,7 @@ QUnit.module('Legend states', {
     beforeEach: function() {
         this.legendCallback = sinon.stub();
         environment.beforeEach.call(this);
-        sinon.stub(pointModule, 'Point').callsFake(function(series) {
+        stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function(series) {
             const point = new Point();
             point.argument = 1;
             point.series = series;

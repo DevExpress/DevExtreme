@@ -181,12 +181,12 @@ QUnit.test('validationGroup string key should win Model', function(assert) {
 QUnit.test('dxValidator binding handler should be evaluated after editor binding', function(assert) {
     assert.expect(1);
 
-    registerComponent('dxTestEditor', { }, Editor.inherit({
-        ctor: function() {
-            this.callBase.apply(this, arguments);
+    registerComponent('dxTestEditor', { }, class extends Editor {
+        ctor(...args) {
+            super.ctor(...args);
             assert.ok(!this.$element().data('dxValidator'));
         }
-    }));
+    });
 
     const $editor = $('<div data-bind=\'dxValidator: { adapter: { } }, dxTestEditor: { }\'></div>').appendTo(FIXTURE_ELEMENT);
     ko.applyBindings({}, $editor.get(0));

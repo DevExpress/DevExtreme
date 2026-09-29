@@ -28,6 +28,8 @@ interface Properties extends ContextMenuProperties {
   commands?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  excludeCommands?: any;
 }
 
 class DiagramContextMenu extends ContextMenu {

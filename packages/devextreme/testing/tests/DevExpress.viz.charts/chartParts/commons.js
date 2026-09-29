@@ -32,6 +32,7 @@ import {
 } from '../../../helpers/chartMocks.js';
 import exportModule from '__internal/viz/core/exportModule';
 import { _test_prepareSegmentRectPoints } from 'viz/utils';
+import { stubSeam } from '../../../helpers/moduleSeam.js';
 
 const ThemeManager = stubClass(chartThemeManagerModule.ThemeManager);
 const LayoutManager = stubClass(layoutManagerModule.LayoutManager);
@@ -78,7 +79,7 @@ const defaultCrosshairOptions = {
 };
 
 // stubs
-sinon.stub(rendererModule, 'Renderer').callsFake((parameters) => {
+stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake((parameters) => {
     return new Renderer(parameters);
 });
 
@@ -89,7 +90,7 @@ titleModule.DEBUG_set_title(sinon.spy(function(parameters) {
     return title;
 }));
 
-sinon.stub(legendModule, 'Legend').callsFake((parameters) => {
+stubSeam(legendModule, 'Legend', '_setLegend').callsFake((parameters) => {
     const legend = new Legend(parameters);
     legend.getActionCallback = sinon.spy(function(arg) {
         return arg;
@@ -196,11 +197,11 @@ const environment = {
         that.layoutManager.layoutElements = sinon.spy(function() {
             arguments[2]();
         });
-        this.StubLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
+        this.StubLayoutManager = stubSeam(layoutManagerModule, 'LayoutManager', 'DEBUG_set_LayoutManager').callsFake(function() {
             return that.layoutManager;
         });
 
-        sinon.stub(scrollBarClassModule, 'ScrollBar').callsFake(function() {
+        stubSeam(scrollBarClassModule, 'ScrollBar', 'DEBUG_set_ScrollBar').callsFake(function() {
             const ScrollBar = stubClass(ScrollBarClass);
             const scrollBar = new ScrollBar();
             scrollBar.stub('init').returns(scrollBar);
@@ -227,11 +228,11 @@ const environment = {
             }, options.argumentAxis));
             return createChartInstance(options, this.$container);
         };
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
+        this.createThemeManager = stubSeam(chartThemeManagerModule, 'ThemeManager', 'DEBUG_set_ThemeManager').callsFake(function() {
             return that.themeManager;
         });
         const family = sinon.createStubInstance(seriesFamilyModule.SeriesFamily);
-        this.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily').callsFake(function() {
+        this.createSeriesFamily = stubSeam(seriesFamilyModule, 'SeriesFamily', 'DEBUG_set_SeriesFamily').callsFake(function() {
             family.pane = 'default';
             family.adjustSeriesDimensions = sinon.stub();
             family.adjustSeriesValues = sinon.stub();
@@ -239,14 +240,14 @@ const environment = {
             return family;
         });
         this.prepareSegmentRectPoints = _test_prepareSegmentRectPoints(function(x, y, w, h, borderOptions) { return { points: [x, y, w, h], pathType: borderOptions }; });
-        this.createCrosshair = sinon.stub(crosshairModule, 'Crosshair').callsFake(function() {
+        this.createCrosshair = stubSeam(crosshairModule, 'Crosshair', 'DEBUG_set_Crosshair').callsFake(function() {
             return sinon.createStubInstance(Crosshair);
         });
 
         tooltipModule.DEBUG_set_tooltip(sinon.spy(function(parameters) {
             return that.tooltip;
         }));
-        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes, canvas) {
+        stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
             });
@@ -287,7 +288,7 @@ const environment = {
         tooltipModule.DEBUG_set_tooltip(null);
     },
     mockValidateData: function() {
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data, groupsData) {
+        this.validateData = stubSeam(dataValidatorModule, 'validateData', 'DEBUG_set_validateData').callsFake(function(data, groupsData) {
             const categories = [];
             if(data) {
                 data.forEach(function(item) {

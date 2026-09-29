@@ -6,10 +6,10 @@
 @use "../../base/validation" as *;
 @use "../list/sizes" as *;
 
-$badge-invalid-bg: $base-invalid-color;
+$badge-invalid-bg: $base-invalid-color !default;
 $generic-dropdownlist-min-height:
   $generic-base-font-size * $generic-base-line-height +
-  2 * $generic-list-item-vertical-padding;
+  2 * $generic-list-item-vertical-padding !default;
 
 @mixin dx-base-typography() {
   @include dx-base-typography-mixin(

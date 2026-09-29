@@ -1,7 +1,10 @@
 import type { JSXTemplate } from '@ts/core/r1/types';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
-import type { GroupItem, ViewDataBase, ViewType } from '../../types';
+import type {
+  GroupHeaderPathItem, GroupItem, ViewDataBase, ViewType,
+} from '../../types';
+import type { ResourceId } from '../../utils/loader/types';
 
 export interface BaseTemplateProps {
   index: number;
@@ -32,11 +35,15 @@ export interface DateTimeCellTemplateProps extends BaseTemplateProps {
   data: DateCellTemplateData;
 }
 
-interface ResourceCellTemplateData {
+export interface ResourceCellTemplateData {
   data: GroupItem;
-  id: number | string;
+  id: ResourceId;
   text?: string;
   color?: string;
+  resourceIndex: string;
+  level: number;
+  isLeaf: boolean;
+  path: GroupHeaderPathItem[];
 }
 
 export interface ResourceCellTemplateProps extends BaseTemplateProps {

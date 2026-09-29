@@ -29,7 +29,7 @@ const ColumnsController = columnsControllerModule.controllers.columns;
 import { RowsView } from '__internal/grids/data_grid/module_not_extended/rows';
 import { GroupingHeaderPanelExtender } from '__internal/grids/data_grid/grouping/m_grouping';
 import { HeaderPanel } from '__internal/grids/data_grid/module_not_extended/header_panel';
-import Action from '__internal/core/m_action';
+import Action from '__internal/core/action';
 import { getHeight } from 'core/utils/size';
 import publicComponentUtils from 'core/utils/public_component';
 
@@ -967,6 +967,13 @@ QUnit.module('Columns resizing', {
                         { values: [2] }
                     ]
                 }),
+
+                dataSource: {
+                    key: noop,
+                    store: noop,
+                    pageCount: () => 1,
+                    totalCount: () => 0
+                },
 
                 columnsResizer: {
                     isResizing: () => true

@@ -411,7 +411,7 @@ describe('disposing', () => {
 
     component.unmount();
 
-    expect(Widget.dispose).toBeCalled();
+    expect(Widget.dispose).toHaveBeenCalled();
   });
 
   it('fires dxremove', () => {

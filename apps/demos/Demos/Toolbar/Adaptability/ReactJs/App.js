@@ -22,6 +22,10 @@ import {
   textStyleInputAttr,
 } from './data.js';
 
+function FontSizeItem({ itemData }) {
+  const style = React.useMemo(() => ({ fontSize: `${itemData.size}px` }), [itemData.size]);
+  return <div style={style}>{itemData.text}</div>;
+}
 const stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 const lineHeightDefault = lineHeights[1].lineHeight;
 const textAlignDefault = [textAlignItems[0].alignment];
@@ -107,10 +111,7 @@ function App() {
     },
     [setMultiline],
   );
-  const renderFontSize = useCallback(
-    (itemData) => <div style={{ fontSize: `${itemData.size}px` }}>{itemData.text}</div>,
-    [],
-  );
+  const renderFontSize = useCallback((itemData) => <FontSizeItem itemData={itemData} />, []);
   const renderTextAlign = useCallback(
     () => (
       <ButtonGroup

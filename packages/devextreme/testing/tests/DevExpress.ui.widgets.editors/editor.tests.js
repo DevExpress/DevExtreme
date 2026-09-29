@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { Component } from 'core/component';
 import OldEditor from 'ui/editor/editor';
 import CheckBoxEditor from '__internal/ui/check_box/editor_base/generated_wrapper';
-import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
 import hoverEvents from 'common/core/events/hover';
 import { wrapRenovatedWidget } from '../../helpers/wrapRenovatedWidget.js';
@@ -25,23 +24,25 @@ const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
     [wrapRenovatedEditor(CheckBoxEditor), 'CheckBox\'s r1 editor'],
 ].forEach(([Editor, name]) => {
     QUnit.module(name, () => {
-        const Fixture = Class.inherit({
+        class Fixture {
             createEditor(options) {
                 this.$element = $('<div/>').appendTo('#qunit-fixture');
                 const editor = new Editor(this.$element, options);
 
                 return editor;
-            },
+            }
+
             createOnlyElement() {
                 this.$element = $('<div/>').appendTo('#qunit-fixture');
 
                 return this.$element;
-            },
+            }
+
             teardown() {
                 this.$element.remove();
                 ValidationEngine.initGroups();
             }
-        });
+        }
 
         const skipForRenovated = (name, testCallback) => {
             if(!Editor.IS_RENOVATED_WIDGET) {
@@ -1121,15 +1122,16 @@ const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
             QUnit.module('"name" option', {
                 beforeEach: function() {
                     this.$element = $('<div>').appendTo('body');
-                    this.EditorInheritor = Editor.inherit({
+                    this.EditorInheritor = class extends Editor {
                         _initMarkup() {
                             this._$submitElement = $('<input type="hidden">').appendTo(this.$element());
-                            this.callBase();
-                        },
+                            super._initMarkup();
+                        }
+
                         _getSubmitElement() {
                             return this._$submitElement;
                         }
-                    });
+                    };
                 },
                 afterEach: function() {
                     this.$element.remove();

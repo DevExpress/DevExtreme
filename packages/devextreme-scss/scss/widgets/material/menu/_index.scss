@@ -9,7 +9,7 @@
 @use "../menuBase" as *;
 @use "../../base/menu";
 
-$material-menu-font-size: $material-base-font-size;
+$material-menu-font-size: $material-base-font-size !default;
 
 .dx-context-menu-container-border {
   background-color: transparent;

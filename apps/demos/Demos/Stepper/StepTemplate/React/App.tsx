@@ -6,13 +6,17 @@ import CustomStepShape from './CustomStepShape.tsx';
 import LabelOnly from './LabelOnly.tsx';
 import IconOnly from './IconOnly.tsx';
 
+const customStepShapeElementAttr = { 'aria-labelledby': 'label-customStepShape' };
+const labelOnlyElementAttr = { 'aria-labelledby': 'label-labelOnly' };
+const iconOnlyElementAttr = { 'aria-labelledby': 'label-iconOnly' };
+
 export default function App() {
   return (
     <>
       <div id="label-customStepShape" className="stepper-label">Custom Step Shape</div>
       <Stepper
         id="customStepShape"
-        elementAttr={{ 'aria-labelledby': 'label-customStepShape' }}
+        elementAttr={customStepShapeElementAttr}
         dataSource={steps}
         defaultSelectedIndex={2}
         linear={false}
@@ -21,7 +25,7 @@ export default function App() {
       <div id="label-labelOnly" className="stepper-label">Label Only</div>
       <Stepper
         id="labelOnly"
-        elementAttr={{ 'aria-labelledby': 'label-labelOnly' }}
+        elementAttr={labelOnlyElementAttr}
         dataSource={steps}
         defaultSelectedIndex={2}
         linear={false}
@@ -30,7 +34,7 @@ export default function App() {
       <div id="label-iconOnly" className="stepper-label">Icon Only</div>
       <Stepper
         id="iconOnly"
-        elementAttr={{ 'aria-labelledby': 'label-iconOnly' }}
+        elementAttr={iconOnlyElementAttr}
         dataSource={steps}
         defaultSelectedIndex={2}
         linear={false}

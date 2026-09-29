@@ -1,95 +1,85 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import { normalizeEnum } from '@ts/viz/core/utils';
+import type { RangeContainerMeasure, RangeInfo } from '@ts/viz/gauges/base_range_container';
+import BaseRangeContainer, { getMaxRangeWidth } from '@ts/viz/gauges/base_range_container';
+import type { LinearLayout } from '@ts/viz/gauges/linear_indicators';
 
-import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
-import BaseRangeContainer from '@ts/viz/gauges/base_range_container';
+class LinearRangeContainer extends BaseRangeContainer {
+  vertical?: boolean;
 
-const _Number = Number;
-const _max = Math.max;
+  _inner!: number;
 
-const LinearRangeContainer = BaseRangeContainer.inherit({
-  _processOptions() {
-    const that = this;
-    that.vertical = that._options.vertical;
-    that._inner = that._outer = 0;
-    if (that.vertical) {
-      switch (_normalizeEnum(that._options.horizontalOrientation)) {
+  _outer!: number;
+
+  _processOptions(): void {
+    this.vertical = this._options.vertical;
+    this._inner = 0;
+    this._outer = 0;
+    if (this.vertical) {
+      switch (normalizeEnum(this._options.horizontalOrientation)) {
         case 'left':
-          that._inner = 1;
+          this._inner = 1;
           break;
         case 'center':
-          that._inner = that._outer = 0.5;
+          this._inner = 0.5;
+          this._outer = 0.5;
           break;
         default:
-          that._outer = 1;
+          this._outer = 1;
           break;
       }
     } else {
-      switch (_normalizeEnum(that._options.verticalOrientation)) {
+      switch (normalizeEnum(this._options.verticalOrientation)) {
         case 'top':
-          that._inner = 1;
+          this._inner = 1;
           break;
         case 'center':
-          that._inner = that._outer = 0.5;
+          this._inner = 0.5;
+          this._outer = 0.5;
           break;
         default:
-          that._outer = 1;
+          this._outer = 1;
           break;
       }
     }
-  },
+  }
 
-  _isVisible() {
+  _isVisible(): boolean {
     return true;
-  },
+  }
 
-  _createRange(range, layout) {
-    const that = this;
-    const inner = that._inner;
-    const outer = that._outer;
-    const startPosition = that._translator.translate(range.start);
-    const endPosition = that._translator.translate(range.end);
-    let points;
-    const x = layout.x;
-    const y = layout.y;
-    const startWidth = range.startWidth;
-    const endWidth = range.endWidth;
-
-    if (that.vertical) {
-      points = [
+  _createRange(range: RangeInfo, layout: LinearLayout): ThemeValue {
+    const inner = this._inner;
+    const outer = this._outer;
+    const startPosition = this._translator.translate(range.start);
+    const endPosition = this._translator.translate(range.end);
+    const { x, y } = layout;
+    const startWidth = range.startWidth as number;
+    const endWidth = range.endWidth as number;
+    const points = this.vertical
+      ? [
         x - startWidth * inner, startPosition,
         x - endWidth * inner, endPosition,
         x + endWidth * outer, endPosition,
         x + startWidth * outer, startPosition,
-      ];
-    } else {
-      points = [
+      ]
+      : [
         startPosition, y + startWidth * outer,
         startPosition, y - startWidth * inner,
         endPosition, y - endWidth * inner,
         endPosition, y + endWidth * outer,
       ];
-    }
-    return that._renderer.path(points, 'area');
-  },
+    return this._renderer.path(points, 'area');
+  }
 
-  measure(layout) {
-    const result = {};
-    let width;
-    // @ts-expect-error
-    result.min = result.max = layout[this.vertical ? 'x' : 'y'];
-    width = this._options.width;
-    width = _Number(width) || _max(_Number(width.start), _Number(width.end));
-    // @ts-expect-error
-    result.min -= this._inner * width;
-    // @ts-expect-error
-    result.max += this._outer * width;
-    return result;
-  },
-});
+  measure(layout: LinearLayout): RangeContainerMeasure {
+    const center = layout[this.vertical ? 'x' : 'y'];
+    const width = getMaxRangeWidth(this._options.width);
+    return {
+      min: center - this._inner * width,
+      max: center + this._outer * width,
+    };
+  }
+}
 
 export default LinearRangeContainer;

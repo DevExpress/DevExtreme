@@ -72,8 +72,8 @@ describe('Widgets handler tests', () => {
     const widgetsHandler = new WidgetsHandler([], '/path/dx.light.scss', {});
     await widgetsHandler.getIndexContent();
 
-    expect(fs.promises.readFile).toBeCalledTimes(1);
-    expect(fs.promises.readFile).toBeCalledWith(join('/', 'widgets', 'generic', '_index.scss'));
+    expect(fs.promises.readFile).toHaveBeenCalledTimes(1);
+    expect(fs.promises.readFile).toHaveBeenCalledWith(join('/', 'widgets', 'generic', '_index.scss'));
     (fs.promises.readFile as jest.Mock).mockClear();
   });
 
@@ -81,8 +81,8 @@ describe('Widgets handler tests', () => {
     const widgetsHandler = new WidgetsHandler([], '/path/dx.material.blue.light.scss', {});
     await widgetsHandler.getIndexContent();
 
-    expect(fs.promises.readFile).toBeCalledTimes(1);
-    expect(fs.promises.readFile).toBeCalledWith(join('/', 'widgets', 'material', '_index.scss'));
+    expect(fs.promises.readFile).toHaveBeenCalledTimes(1);
+    expect(fs.promises.readFile).toHaveBeenCalledWith(join('/', 'widgets', 'material', '_index.scss'));
     (fs.promises.readFile as jest.Mock).mockClear();
   });
 

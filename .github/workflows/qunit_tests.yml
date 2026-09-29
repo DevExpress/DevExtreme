@@ -111,7 +111,7 @@ jobs:
       shell: bash
       env:
         DEVEXTREME_TEST_CI: "true"
-      run: pnpm exec nx build:systemjs
+      run: pnpm exec nx build:dev
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -127,7 +127,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
     timeout-minutes: 25
     strategy:
@@ -166,7 +166,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '150.0.7871.181'
+        chrome-version: '153.0.8010.52'
 
     - name: Run QUnit tests
       uses: ./.github/actions/run-qunit-tests
@@ -202,7 +202,7 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '150.0.7871.181'
+          chrome-version: '153.0.8010.52'
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests

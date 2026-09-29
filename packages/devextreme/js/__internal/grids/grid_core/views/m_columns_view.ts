@@ -193,7 +193,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _dataController!: DataController;
 
-  protected _adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsController;
 
   protected _columnChooserController!: ColumnChooserController;
 
@@ -207,7 +207,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._scrollLeft = -1;
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._columnChooserController = this.getController('columnChooser');
     this._editorFactoryController = this.getController('editorFactory');
     this._selectionController = this.getController('selection');
@@ -694,15 +694,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
   }
 
-  protected _needWrapRow($tableElement) {
-    const hasRowTemplate = !!this.option().rowTemplate;
-
-    return hasRowTemplate && !!this._getBodies($tableElement)?.filter(`.${ROW_CLASS}`).length;
+  protected _needWrapRow() {
+    return false;
   }
 
-  protected _wrapRowIfNeed($table, $row, isRefreshing?) {
-    const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
-    const needWrapRow = this._needWrapRow($tableElement);
+  protected _wrapRowIfNeed($row) {
+    const needWrapRow = this._needWrapRow();
 
     if (needWrapRow) {
       const $tbody = $('<tbody>').addClass($row.attr('class'));
@@ -789,7 +786,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
 
     const $row = this._createRow(options.row);
-    const $wrappedRow = this._wrapRowIfNeed($table, $row);
+    const $wrappedRow = this._wrapRowIfNeed($row);
     if (options.changeType !== 'remove') {
       this._renderCells($row, options);
     }
@@ -1453,8 +1450,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     tableElement = tableElement || this.getTableElement();
 
     if (tableElement) {
-      const hasRowTemplate = this.option().rowTemplate || this.option('dataRowTemplate');
-      const tBodies = hasRowTemplate && tableElement.find(`> tbody.${ROW_CLASS}`);
+      const hasDataRowTemplate = !!this.option('dataRowTemplate');
+      const tBodies = hasDataRowTemplate && tableElement.find(`> tbody.${ROW_CLASS}`);
 
       // eslint-disable-next-line no-useless-concat
       return tBodies && tBodies.length ? tBodies : tableElement.find('> tbody > ' + `.${ROW_CLASS}, > .${ROW_CLASS}`);

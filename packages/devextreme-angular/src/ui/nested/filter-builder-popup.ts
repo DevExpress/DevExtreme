@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { PositionAlignment } from 'devextreme/common';
 import type { PositionConfig } from 'devextreme/common/core/animation';
 
@@ -127,7 +121,6 @@ export class DxoFilterBuilderPopupComponent extends DxoPopupOptions implements O
         return 'filterBuilderPopup';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -150,7 +143,6 @@ export class DxoFilterBuilderPopupComponent extends DxoPopupOptions implements O
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

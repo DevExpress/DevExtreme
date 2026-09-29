@@ -2,7 +2,7 @@ import { getWidth, getHeight, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/button';
 import 'ui/button_group';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -368,6 +368,19 @@ QUnit.module('option changed', {
                 });
             });
         });
+    });
+});
+
+QUnit.module('aria accessibility', () => {
+    QUnit.test('the item wrapper is not marked as disabled', function(assert) {
+        const $buttonGroup = $('#buttonGroup').dxButtonGroup({
+            items: [{ text: 'button 1' }, { text: 'button 2' }],
+            disabled: true,
+        });
+
+        assert.strictEqual($buttonGroup.attr('aria-disabled'), 'true', 'group root is marked');
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_GROUP_CLASS}-wrapper`).attr('aria-disabled'), undefined, 'item wrapper is not marked');
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CLASS}`).first().attr('aria-disabled'), 'true', 'button is marked');
     });
 });
 

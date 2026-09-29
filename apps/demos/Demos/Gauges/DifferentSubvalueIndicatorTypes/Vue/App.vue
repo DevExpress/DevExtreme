@@ -109,7 +109,7 @@ import {
   DxCircularGauge, DxScale, DxGeometry, DxSubvalueIndicator,
 } from 'devextreme-vue/circular-gauge';
 </script>
-<style scoped>
+<style>
 #gauge-demo {
   display: flex;
   flex-wrap: wrap;

@@ -1,5 +1,5 @@
 import { getOuterWidth } from 'core/utils/size';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';

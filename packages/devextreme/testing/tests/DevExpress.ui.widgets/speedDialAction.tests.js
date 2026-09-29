@@ -1085,3 +1085,87 @@ QUnit.module('T959764 (multiple actions)', {
         assert.equal(preventDefaultStub.callCount, 1, 'there is peventDefault in outsideClickHandler when shading is true');
     });
 });
+
+QUnit.module('direction: auto', {
+    beforeEach: function() {
+        fx.off = true;
+
+        this.$container = $('<div>').attr('id', 'fab-container').css({
+            position: 'absolute',
+            top: '0px',
+            left: '0px',
+            width: '400px',
+            height: '140px'
+        }).appendTo('body');
+    },
+
+    afterEach: function() {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: 'right bottom',
+                    my: 'right bottom',
+                    offset: '-16 -16'
+                }
+            }
+        });
+
+        this.$container.remove();
+        fx.off = false;
+    },
+}, () => {
+    const createActions = () => {
+        const firstSDA = $('#fab-one').dxSpeedDialAction({ icon: 'add' }).dxSpeedDialAction('instance');
+        const secondSDA = $('#fab-two').dxSpeedDialAction({ icon: 'trash' }).dxSpeedDialAction('instance');
+
+        $(FAB_MAIN_SELECTOR).find('.dx-overlay-content').trigger('dxclick');
+
+        return [firstSDA, secondSDA];
+    };
+
+    QUnit.test('actions should be rendered above the main button if there is more free space above it', function(assert) {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: 'right bottom',
+                    my: 'right bottom',
+                    offset: '-16 -16',
+                    of: '#fab-container'
+                }
+            }
+        });
+
+        const actions = createActions();
+
+        const mainContentTop = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content').offset().top;
+        const $fabContent = $(FAB_SELECTOR).find('.dx-overlay-content');
+
+        assert.strictEqual($fabContent.eq(1).offset().top, mainContentTop - 60, 'first action is above the main button');
+        assert.strictEqual($fabContent.eq(2).offset().top, mainContentTop - 120, 'second action is above the main button');
+
+        actions.forEach((action) => action.dispose());
+    });
+
+    QUnit.test('actions should be rendered below the main button if there is more free space below it', function(assert) {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: 'right top',
+                    my: 'right top',
+                    offset: '-16 16',
+                    of: '#fab-container'
+                }
+            }
+        });
+
+        const actions = createActions();
+
+        const mainContentTop = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content').offset().top;
+        const $fabContent = $(FAB_SELECTOR).find('.dx-overlay-content');
+
+        assert.strictEqual($fabContent.eq(1).offset().top, mainContentTop + 60, 'first action is below the main button');
+        assert.strictEqual($fabContent.eq(2).offset().top, mainContentTop + 120, 'second action is below the main button');
+
+        actions.forEach((action) => action.dispose());
+    });
+});

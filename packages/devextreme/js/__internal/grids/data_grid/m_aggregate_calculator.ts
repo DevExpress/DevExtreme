@@ -3,6 +3,8 @@ import { aggregators } from '@js/common/data/utils';
 import { compileGetter } from '@js/core/utils/data';
 import { isFunction } from '@js/core/utils/type';
 
+import type { Aggregate } from './summary/types';
+
 function depthFirstSearch(i, depth, root, callback) {
   let j = 0;
   if (i < depth) {
@@ -25,7 +27,7 @@ function map(array, callback) {
   }
 
   const result = new Array(array.length);
-  // eslint-disable-next-line no-restricted-syntax, guard-for-in
+  // eslint-disable-next-line guard-for-in
   for (i in array) {
     result[i] = callback(array[i], i);
   }
@@ -65,23 +67,28 @@ function normalizeAggregate(aggregate) {
 export default class AggregateCalculator {
   private readonly _data: any;
 
-  private readonly _groupLevel: any;
+  private readonly _groupLevel: number;
 
-  private readonly _totalAggregates: any;
+  private readonly _totalAggregates: Aggregate[];
 
-  private readonly _groupAggregates: any;
+  private readonly _groupAggregates: Aggregate[];
 
-  private _totals: any;
+  private _totals: unknown[];
 
-  constructor(options) {
+  constructor(options: {
+    data: any;
+    groupLevel: number;
+    totalAggregates: Aggregate[];
+    groupAggregates: Aggregate[];
+  }) {
     this._data = options.data;
-    this._groupLevel = options.groupLevel || 0;
-    this._totalAggregates = map(options.totalAggregates || [], normalizeAggregate);
-    this._groupAggregates = map(options.groupAggregates || [], normalizeAggregate);
+    this._groupLevel = options.groupLevel;
+    this._totalAggregates = map(options.totalAggregates, normalizeAggregate);
+    this._groupAggregates = map(options.groupAggregates, normalizeAggregate);
     this._totals = [];
   }
 
-  private calculate() {
+  public calculate(): void {
     if (this._totalAggregates.length) {
       this._calculateTotals(0, { items: this._data });
     }
@@ -91,7 +98,7 @@ export default class AggregateCalculator {
     }
   }
 
-  private totalAggregates() {
+  public totalAggregates(): unknown[] {
     return this._totals;
   }
 

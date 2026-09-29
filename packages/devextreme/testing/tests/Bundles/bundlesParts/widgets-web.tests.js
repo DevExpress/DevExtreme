@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
 QUnit.test('widgets-web', function(assert) {
 

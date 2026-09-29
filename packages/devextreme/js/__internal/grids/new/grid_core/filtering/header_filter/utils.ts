@@ -2,7 +2,8 @@ import type { FilterType } from '@js/common/grids';
 import errors from '@js/core/errors';
 import { isDefined } from '@js/core/utils/type';
 import filterUtils from '@js/ui/shared/filtering';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { DataFilterExpression } from '@ts/grids/grid_core/filter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
 import type { FilterValue } from '../types';
@@ -145,10 +146,10 @@ export const getHeaderFilterInfo = (
     ? [getFilterExpression(filterValuesWithoutExpressions, column)]
     : [];
 
-  const composedFilterValues = gridCoreUtils.combineFilters(
+  const composedFilterValues = combineFilters(
     [...filterExpression, ...filterValuesWithExpressions],
     'or',
-  );
+  ) as DataFilterExpression;
 
   return {
     type: headerFilterValueType,

@@ -45,8 +45,10 @@ import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
-import type { GeometryOptions, OverlayActions } from '@ts/ui/overlay/overlay';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
+import type {
+  GeometryOptions, InternalPositionConfig, OverlayActions, OverlayInternalProperties,
+} from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 import type {
   ControllerOverlayElements,
@@ -166,7 +168,14 @@ const getHeightStrategyChangeOffset = (
   popupVerticalPaddings: number,
 ): number => (currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0);
 
-export interface PopupProperties extends Properties {
+export interface PopupProperties extends Omit<Properties, 'animation' | 'container' | 'position'>,
+  OverlayInternalProperties {
+  animation?: dxPopupAnimation | null;
+
+  container?: Properties['container'] | dxElementWrapper;
+
+  position?: Properties['position'] | InternalPositionConfig;
+
   autoResizeEnabled?: boolean;
 
   outsideDragFactor?: number;
@@ -236,10 +245,14 @@ class Popup<
     const e = options.originalEvent;
     const $target = $(e.target);
 
-    if (this._$content && !$target.is(this._$content)
-        && options.keyName === ESC_KEY_NAME
-        && !e.isDefaultPrevented()
-        && !_ignoreCloseOnChildEscape) {
+    const shouldCloseOnChildEscape = !!this._$content
+      && !$target.is(this._$content)
+      && options.keyName === ESC_KEY_NAME
+      && !e.isDefaultPrevented()
+      && !_ignoreCloseOnChildEscape
+      && !this._isEscapeHandledByOverlayAbove();
+
+    if (shouldCloseOnChildEscape) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.hide();
     }
@@ -502,7 +515,7 @@ class Popup<
       return;
     }
 
-    const contentElement = this._$content?.get(0);
+    const contentElement = this._$content?.get(0) as Element;
 
     if (shouldObserve) {
       resizeObserverSingleton.observe(contentElement, (

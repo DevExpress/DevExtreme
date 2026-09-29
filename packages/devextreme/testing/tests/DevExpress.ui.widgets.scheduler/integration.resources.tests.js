@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 import 'fluent_blue_light.css!';
 
@@ -39,7 +39,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 },
                 'appointment2': {
                     top: 202,
-                    left: 430
+                    left: 411
                 }
             }, {
                 'appointment1': {

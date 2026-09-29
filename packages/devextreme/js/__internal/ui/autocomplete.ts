@@ -9,6 +9,7 @@ import type { ItemClickEvent, PageLoadMode } from '@js/ui/list';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { isCommandKeyPressed } from '@ts/events/utils/index';
+import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
@@ -18,8 +19,8 @@ const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
 
 export interface AutocompleteProperties extends Omit<
-  Properties, 'onItemClick' | 'onSelectionChanged'
-> {
+  Properties, 'onItemClick' | 'onSelectionChanged' | 'dropDownOptions' | 'fieldTemplate'
+>, DropDownEditorInternalProperties {
 
 }
 

@@ -16,9 +16,10 @@ export const isAppointmentMatchedResources = (
 
   return groupsResources.every((resource) => {
     const value = appointmentGroupValues[resource.resourceIndex];
+    const validItems = resource.hasHierarchy ? resource.leafItems : resource.items;
 
     return value?.some(
-      (id) => resource.items.some(
+      (id) => validItems.some(
         (item) => equalByValue(id, item.id),
       ),
     );

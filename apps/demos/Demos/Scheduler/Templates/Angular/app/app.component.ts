@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ViewChild,
   enableProdMode,
@@ -30,16 +31,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [
     DxSchedulerModule,
@@ -52,6 +47,8 @@ export class AppComponent {
   private formatDate = formatDate;
 
   private service = inject(Service);
+
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   data: Data[] = this.service.getData();
 
@@ -158,6 +155,8 @@ export class AppComponent {
       form.updateData('director', movie.director);
       this.updateEndDate(movie);
     }
+
+    this.changeDetectorRef.detectChanges();
   };
 
   onCustomEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {

@@ -95,14 +95,14 @@ SelectionController & TreeListSelectionControllerExtension
     config.plainItems = (cached) => {
       let result;
       if (cached) {
-        result = this._dataController.getCachedStoreData();
+        result = this.dataSourceController.getCachedStoreData();
       }
 
       result ||= plainItems.apply(this, arguments as any).map((item) => item.data);
       return result || [];
     };
     config.isItemSelected = (item) => {
-      const key = this._dataController.keyOf(item);
+      const key = this.dataSourceController.keyOf(item);
 
       return this.isRowSelected(key);
     };

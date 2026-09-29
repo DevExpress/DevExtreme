@@ -1,13 +1,13 @@
 import $ from 'jquery';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { alert, confirm, custom } from 'ui/dialog';
 import domUtils from '__internal/core/utils/m_dom';
 import errors from 'ui/widget/ui.errors';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { value as viewPort } from 'core/utils/view_port';
-import domAdapter from '__internal/core/m_dom_adapter';
+import domAdapter from '__internal/core/dom_adapter';
 
 const { module, test, testInActiveWindow } = QUnit;
 

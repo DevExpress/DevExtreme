@@ -3,10 +3,10 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
-import config from '@js/core/config';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
+import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -20,14 +20,21 @@ import Store from '@js/data/abstract_store';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
-import type { Column, ColumnsChanges, FilterField } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
-import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
+import type {
+  Column,
+  ColumnIdentifier,
+  ColumnOptionChanged,
+  ColumnsChanges,
+  ColumnsControllerOptionChanged,
+  ColumnsOptionChanged,
+  DropLocationNames,
+  FilterField,
+} from '@ts/grids/grid_core/columns_controller/types';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { Module } from '@ts/grids/grid_core/m_types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
-import type { Module } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import {
@@ -43,12 +50,11 @@ import {
 } from './const';
 import {
   addExpandColumn,
-  applyUserState,
   assignColumns,
   columnOptionCore,
   convertOwnerBandToColumnReference,
   createColumn,
-  createColumnsFromDataSource,
+  createColumnsFromDataSourceAdapter,
   createColumnsFromOptions,
   defaultSetCellValue,
   digitsCount,
@@ -81,9 +87,11 @@ import {
   strictParseNumber,
   updateColumnChanges,
   updateColumnGroupIndexes,
+  updateColumnIndexes,
   updateIndexes,
   updateSerializers,
 } from './m_columns_controller_utils';
+import { UserStateApplier } from './user_state_applier';
 
 interface IndexedColumns {
   positiveIndexedColumns: Record<string, Column[]>[][];
@@ -101,13 +109,13 @@ export class ColumnsController extends modules.Controller {
 
   public _columnsUserState: any;
 
-  private _dataSourceApplied: any;
+  private dataSourceAdapterApplied?: boolean;
 
-  private _dataSource: any;
+  private appliedDataSourceAdapter?: DataSourceAdapter | null;
 
   public _ignoreColumnOptionNames: any;
 
-  private _dataSourceColumnsCount: any;
+  private generatedColumnsCount?: number | undefined;
 
   private _visibleColumns: any;
 
@@ -119,7 +127,7 @@ export class ColumnsController extends modules.Controller {
 
   public _reinitAfterLookupChanges: any;
 
-  private readonly _previousColumns: any;
+  public _previousColumns: any;
 
   public _hasUserState: any;
 
@@ -132,12 +140,6 @@ export class ColumnsController extends modules.Controller {
   public aiColumnOptionChanged: any;
 
   public _columnChanges?: ColumnsChanges;
-
-  protected _dataController!: DataController;
-
-  protected _focusController!: FocusController;
-
-  protected _stateStoringController!: StateStoringController;
 
   public _isWarnedAboutUnsupportedProperties?: boolean;
 
@@ -163,9 +165,6 @@ export class ColumnsController extends modules.Controller {
   }
 
   public init(isApplyingUserState?: boolean): void {
-    this._dataController = this.getController('data');
-    this._focusController = this.getController('focus');
-    this._stateStoringController = this.getController('stateStoring');
     const columns = this.option('columns');
 
     this._commandColumns = this._commandColumns || [];
@@ -174,15 +173,15 @@ export class ColumnsController extends modules.Controller {
 
     if (this._isColumnsFromOptions) {
       assignColumns(this, columns ? createColumnsFromOptions(this, columns) : []);
-      applyUserState(this);
+      this.applyUserState();
     } else {
       assignColumns(this, this._columnsUserState ? createColumnsFromOptions(this, this._columnsUserState) : this._columns);
     }
 
     addExpandColumn(this);
 
-    if (this._dataSourceApplied) {
-      this.applyDataSource(this._dataSource, true, isApplyingUserState);
+    if (this.dataSourceAdapterApplied) {
+      this.applyDataSourceAdapter(this.appliedDataSourceAdapter, true, isApplyingUserState);
     } else {
       updateIndexes(this);
     }
@@ -205,7 +204,7 @@ export class ColumnsController extends modules.Controller {
     };
   }
 
-  public _getFirstItems(dataSource) {
+  public _getFirstItems(dataSourceAdapter?: DataSourceAdapter) {
     let groupsCount;
     let items: any = [];
 
@@ -221,25 +220,25 @@ export class ColumnsController extends modules.Controller {
       }
     };
 
-    if (dataSource && dataSource.items().length > 0) {
-      groupsCount = gridCoreUtils.normalizeSortingInfo(dataSource.group()).length;
-      items = getFirstItemsCore(dataSource.items(), groupsCount) || [];
+    if (dataSourceAdapter && dataSourceAdapter.items().length > 0) {
+      groupsCount = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.group()).length;
+      items = getFirstItemsCore(dataSourceAdapter.items(), groupsCount) || [];
     }
     return items;
   }
 
-  protected _endUpdateCore() {
+  protected _endUpdateCore(): void {
     !this._skipProcessingColumnsChange && fireColumnsChanged(this);
   }
 
-  protected callbackNames() {
+  protected callbackNames(): string[] {
     return ['columnsChanged', 'aiColumnOptionChanged'];
   }
 
-  public getColumnByPath(path, columns?) {
+  public getColumnByPath(path: string, columns?) {
     const that = this;
     let column;
-    const columnIndexes: any = [];
+    const columnIndexes: number[] = [];
 
     path.replace(COLUMN_OPTION_REGEXP, (_, columnIndex) => {
       // eslint-disable-next-line radix
@@ -258,7 +257,7 @@ export class ColumnsController extends modules.Controller {
     return column;
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: ColumnsControllerOptionChanged): void {
     let needUpdateRequireResize;
 
     switch (args.name) {
@@ -275,7 +274,7 @@ export class ColumnsController extends modules.Controller {
         args.handled = true;
 
         if (!this._skipProcessingColumnsChange) {
-          if (args.name === args.fullName) {
+          if (args.fullName === 'columns') {
             this._columnsUserState = null;
             this._ignoreColumnOptionNames = null;
             this.init();
@@ -316,17 +315,14 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  private _columnOptionChanged(args) {
-    let columnOptionValue = {};
+  private _columnOptionChanged(args: ColumnOptionChanged): void {
     const column = this.getColumnByPath(args.fullName);
     const columnOptionName = this.getColumnOptionNameByFullName(args.fullName);
 
     if (column) {
-      if (columnOptionName) {
-        columnOptionValue[columnOptionName] = args.value;
-      } else {
-        columnOptionValue = args.value;
-      }
+      const columnOptionValue = columnOptionName
+        ? { [columnOptionName]: args.value }
+        : args.value;
 
       this._skipProcessingColumnsChange = args.fullName;
       this.columnOption(column.index, columnOptionValue);
@@ -334,39 +330,62 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  private _updateRequireResize(args) {
-    const { component } = this;
+  private setRequireResize(): void {
+    if (!this.component._updateLockCount || !this._updateLockCount) {
+      return;
+    }
 
-    if (args.fullName.replace(COLUMN_OPTION_REGEXP, '') === 'width' && component._updateLockCount) {
-      component._requireResize = true;
+    this.component._requireResize = true;
+    this.getController('resizing')?.resetLastResizeTime?.();
+  }
+
+  private _updateRequireResize(args: ColumnsOptionChanged | ColumnOptionChanged): void {
+    if (args.fullName.replace(COLUMN_OPTION_REGEXP, '') === 'width') {
+      this.setRequireResize();
     }
   }
 
-  public publicMethods() {
+  private _isWidthChanging(column, option, value, notFireEvent): boolean {
+    if (notFireEvent) {
+      return false;
+    }
+
+    if (isObject(option)) {
+      return 'width' in option && !equalByValue(column.width, option.width);
+    }
+
+    return option === 'width' && !equalByValue(column.width, value);
+  }
+
+  public publicMethods(): string[] {
     return ['addColumn', 'deleteColumn', 'columnOption', 'columnCount', 'clearSorting', 'clearGrouping', 'getVisibleColumns', 'getVisibleColumnIndex', 'getColumns'];
   }
 
-  public applyDataSource(dataSource, forceApplying?, isApplyingUserState?) {
+  public applyDataSourceAdapter(
+    dataSourceAdapter,
+    forceApplying?,
+    isApplyingUserState?,
+  ) {
     const that = this;
-    const isDataSourceLoaded = dataSource && dataSource.isLoaded();
+    const isDataSourceAdapterLoaded = dataSourceAdapter && dataSourceAdapter.isLoaded();
 
-    that._dataSource = dataSource;
+    that.appliedDataSourceAdapter = dataSourceAdapter;
 
-    if (!that._dataSourceApplied || that._dataSourceColumnsCount === 0 || forceApplying || that.option('regenerateColumnsByVisibleItems')) {
-      if (isDataSourceLoaded) {
+    if (!that.dataSourceAdapterApplied || that.generatedColumnsCount === 0 || forceApplying || that.option('regenerateColumnsByVisibleItems')) {
+      if (isDataSourceAdapterLoaded) {
         if (!that._isColumnsFromOptions) {
-          const columnsFromDataSource = createColumnsFromDataSource(that, dataSource);
-          if (columnsFromDataSource.length) {
-            assignColumns(that, columnsFromDataSource);
-            that._dataSourceColumnsCount = that._columns.length;
-            applyUserState(that);
+          const columnsFromDataSourceAdapter = createColumnsFromDataSourceAdapter(that, dataSourceAdapter);
+          if (columnsFromDataSourceAdapter.length) {
+            assignColumns(that, columnsFromDataSourceAdapter);
+            that.generatedColumnsCount = that._columns.length;
+            that.applyUserState();
           }
         }
-        return that.updateColumns(dataSource, forceApplying, isApplyingUserState);
+        return that.updateColumns(dataSourceAdapter, forceApplying, isApplyingUserState);
       }
-      that._dataSourceApplied = false;
+      that.dataSourceAdapterApplied = false;
       updateIndexes(that);
-    } else if (isDataSourceLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSource)) {
+    } else if (isDataSourceAdapterLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSourceAdapter)) {
       updateColumnChanges(that, 'columns');
       fireColumnsChanged(that);
       // @ts-expect-error
@@ -374,10 +393,10 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  public reset() {
-    this._dataSource = null;
-    this._dataSourceApplied = false;
-    this._dataSourceColumnsCount = undefined;
+  public reset(): void {
+    this.appliedDataSourceAdapter = null;
+    this.dataSourceAdapterApplied = false;
+    this.generatedColumnsCount = undefined;
     this.reinit();
   }
 
@@ -385,7 +404,7 @@ export class ColumnsController extends modules.Controller {
    * @extended: virtual_columns
    * @private
    */
-  public resetColumnsCache() {
+  public resetColumnsCache(): void {
     const that = this;
     that._visibleColumns = undefined;
     that._fixedColumns = undefined;
@@ -393,7 +412,7 @@ export class ColumnsController extends modules.Controller {
     resetBandColumnsCache(that);
   }
 
-  public reinit(ignoreColumnOptionNames?) {
+  public reinit(ignoreColumnOptionNames?): void {
     this._columnsUserState = this.getUserState();
     this._ignoreColumnOptionNames = ignoreColumnOptionNames || null;
     this.init();
@@ -403,12 +422,12 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  public isInitialized() {
+  public isInitialized(): boolean {
     return !!this._columns.length || !!this.option('columns');
   }
 
-  public isDataSourceApplied() {
-    return this._dataSourceApplied;
+  public isDataSourceAdapterApplied(): boolean | undefined {
+    return this.dataSourceAdapterApplied;
   }
 
   public getCommonSettings(column?) {
@@ -429,12 +448,14 @@ export class ColumnsController extends modules.Controller {
     }, commonColumnSettings);
   }
 
-  public isColumnOptionUsed(optionName): any {
-    for (let i = 0; i < this._columns.length; i++) {
-      if (this._columns[i][optionName]) {
+  public isColumnOptionUsed(optionName: string): boolean {
+    for (const column of this._columns) {
+      if (column[optionName]) {
         return true;
       }
     }
+
+    return false;
   }
 
   public isAllDataTypesDefined(checkSerializers?) {
@@ -464,7 +485,7 @@ export class ColumnsController extends modules.Controller {
     return this.getColumns().find((column) => column.name === columnName);
   }
 
-  public isBandColumnsUsed() {
+  public isBandColumnsUsed(): boolean {
     return this.getColumns().some((column) => column.isBand);
   }
 
@@ -482,7 +503,7 @@ export class ColumnsController extends modules.Controller {
   /**
    * @extended: state_storing
    */
-  protected _shouldReturnVisibleColumns() {
+  protected _shouldReturnVisibleColumns(): boolean {
     return true;
   }
 
@@ -541,7 +562,7 @@ export class ColumnsController extends modules.Controller {
   /**
    * @extended: virtual_column
    */
-  public getColumnIndexOffset() {
+  public getColumnIndexOffset(): number {
     return 0;
   }
 
@@ -725,11 +746,11 @@ export class ColumnsController extends modules.Controller {
   /**
    * @extended: adaptivity
    */
-  protected _isColumnVisible(column) {
-    return column.visible && this.isParentColumnVisible(column.index);
+  protected _isColumnVisible(column: Column): boolean {
+    return !!column.visible && this.isParentColumnVisible(column.index);
   }
 
-  private _isColumnInGroupPanel(column) {
+  private _isColumnInGroupPanel(column: Column): boolean {
     return isDefined(column.groupIndex) && !column.showWhenGrouped;
   }
 
@@ -935,7 +956,12 @@ export class ColumnsController extends modules.Controller {
   /**
    * @extended: column_chooser
    */
-  public allowMoveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
+  public allowMoveColumn(
+    fromVisibleIndex,
+    toVisibleIndex,
+    sourceLocation: DropLocationNames,
+    targetLocation: DropLocationNames,
+  ) {
     const that = this;
     const columnIndex = getColumnIndexByVisibleIndex(that, fromVisibleIndex, sourceLocation);
     const sourceColumn = that._columns[columnIndex];
@@ -962,7 +988,12 @@ export class ColumnsController extends modules.Controller {
     return false;
   }
 
-  public moveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
+  public moveColumn(
+    fromVisibleIndex,
+    toVisibleIndex,
+    sourceLocation: DropLocationNames,
+    targetLocation: DropLocationNames,
+  ) {
     const that = this;
     const options: any = {};
     let prevGroupIndex;
@@ -1200,10 +1231,10 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  public updateColumnDataTypes(dataSource) {
+  public updateColumnDataTypes(dataSourceAdapter?) {
     const that = this;
     const dateSerializationFormat = that.option('dateSerializationFormat');
-    const firstItems = that._getFirstItems(dataSource);
+    const firstItems = that._getFirstItems(dataSourceAdapter);
     let isColumnDataTypesUpdated = false;
 
     each(that._columns, (index, column) => {
@@ -1278,7 +1309,7 @@ export class ColumnsController extends modules.Controller {
     return isColumnDataTypesUpdated;
   }
 
-  private _customizeColumns(columns) {
+  private _customizeColumns(columns): void {
     const that = this;
     const customizeColumns: any = that.option('customizeColumns');
 
@@ -1294,15 +1325,19 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  public updateColumns(dataSource?, forceApplying?, isApplyingUserState?): any {
+  public updateColumns(dataSourceAdapter?, forceApplying?, isApplyingUserState?): any {
     if (!forceApplying) {
-      this.updateSortingGrouping(dataSource);
+      this.updateSortingGrouping(dataSourceAdapter);
     }
 
-    if (!dataSource || dataSource.isLoaded()) {
-      const sortParameters = dataSource ? dataSource.sort() || [] : this.getSortDataSourceParameters();
-      const groupParameters = dataSource ? dataSource.group() || [] : this.getGroupDataSourceParameters();
-      const filterParameters = dataSource?.lastLoadOptions().filter;
+    if (!dataSourceAdapter || dataSourceAdapter.isLoaded()) {
+      const sortParameters = dataSourceAdapter
+        ? (dataSourceAdapter.sort() ?? [])
+        : this.getSortDataSourceParameters();
+      const groupParameters = dataSourceAdapter
+        ? (dataSourceAdapter.group() ?? [])
+        : this.getGroupDataSourceParameters();
+      const filterParameters = dataSourceAdapter?.lastLoadOptions().filter;
 
       if (!isApplyingUserState) {
         this._customizeColumns(this._columns);
@@ -1314,19 +1349,21 @@ export class ColumnsController extends modules.Controller {
       return when(this.refresh(true)).always(() => {
         if (this._columns !== columns) return;
 
-        this._updateChanges(dataSource, { sorting: sortParameters, grouping: groupParameters, filtering: filterParameters });
+        this._updateChanges(dataSourceAdapter, {
+          sorting: sortParameters,
+          grouping: groupParameters,
+          filtering: filterParameters,
+        });
 
         fireColumnsChanged(this);
       });
     }
   }
 
-  private _updateChanges(dataSource, parameters) {
-    const langParams = dataSource?.loadOptions?.()?.langParams;
-
-    if (dataSource) {
-      this.updateColumnDataTypes(dataSource);
-      this._dataSourceApplied = true;
+  private _updateChanges(dataSourceAdapter, parameters): void {
+    if (dataSourceAdapter) {
+      this.updateColumnDataTypes(dataSourceAdapter);
+      this.dataSourceAdapterApplied = true;
     }
 
     if (!gridCoreUtils.equalSortParameters(parameters.sorting, this.getSortDataSourceParameters())) {
@@ -1336,14 +1373,13 @@ export class ColumnsController extends modules.Controller {
       updateColumnChanges(this, 'grouping');
     }
 
-    if (this._dataController
-      && !gridCoreUtils.equalFilterParameters(parameters.filtering, this._dataController.getCombinedFilter(), langParams)) {
-      updateColumnChanges(this, 'filtering');
-    }
     updateColumnChanges(this, 'columns');
+
+    this._columnChanges!.appliedFilters ??= [];
+    this._columnChanges!.appliedFilters.push(parameters.filtering);
   }
 
-  public updateSortingGrouping(dataSource, fromDataSource?: boolean): void {
+  public updateSortingGrouping(dataSourceAdapter, fromDataSource?: boolean): void {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -1398,9 +1434,9 @@ export class ColumnsController extends modules.Controller {
         }
       });
     };
-    if (dataSource) {
-      const sortParameters = gridCoreUtils.normalizeSortingInfo(dataSource.sort());
-      const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSource.group());
+    if (dataSourceAdapter) {
+      const sortParameters = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.sort());
+      const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.group());
       const columnsGroupParameters = that.getGroupDataSourceParameters();
       const columnsSortParameters = that.getSortDataSourceParameters();
       const changeTypes = this._columnChanges?.changeTypes;
@@ -1450,57 +1486,29 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  public updateFilter(filter, remoteFiltering, columnIndex?, filterValue?) {
-    const that = this;
-
-    if (!Array.isArray(filter)) return filter;
-
-    filter = extend([], filter);
-
-    columnIndex = filter.columnIndex !== undefined ? filter.columnIndex : columnIndex;
-    filterValue = filter.filterValue !== undefined ? filter.filterValue : filterValue;
-
-    if (isString(filter[0]) && filter[0] !== '!') {
-      const column = that.columnOption(filter[0]);
-
-      if (remoteFiltering) {
-        if (config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
-          filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], 'filter');
-        }
-      } else if (column && column.selector) {
-        filter[0] = column.selector;
-        filter[0].columnIndex = column.index;
-      }
-    } else if (isFunction(filter[0])) {
-      filter[0].columnIndex = columnIndex;
-      filter[0].filterValue = filterValue;
-      filter[0].selectedFilterOperation = filter.selectedFilterOperation;
-    }
-
-    for (let i = 0; i < filter.length; i++) {
-      filter[i] = that.updateFilter(filter[i], remoteFiltering, columnIndex, filterValue);
-    }
-
-    return filter;
-  }
-
-  public columnCount() {
+  public columnCount(): number {
     return this._columns ? this._columns.length : 0;
   }
 
-  public columnOption(identifier, option?, value?, notFireEvent?) {
+  public columnOption(identifier: ColumnIdentifier | undefined, option?, value?, notFireEvent?) {
     const that = this;
     const columns = that._columns.concat(that._commandColumns);
     const column = findColumn(columns, identifier);
 
-    if (column) {
-      if (arguments.length === 1) {
-        return extend({}, column);
-      }
+    if (!column) {
+      return undefined;
+    }
+
+    if (arguments.length === 1) {
+      return extend({}, column);
+    }
+
+    if (isString(option) && arguments.length === 2) {
+      return columnOptionCore(that, column, option);
+    }
+
+    const applyOptions = (): void => {
       if (isString(option)) {
-        if (arguments.length === 2) {
-          return columnOptionCore(that, column, option);
-        }
         columnOptionCore(that, column, option, value, notFireEvent);
       } else if (isObject(option)) {
         each(option, (optionName, optionValue) => {
@@ -1509,10 +1517,33 @@ export class ColumnsController extends modules.Controller {
       }
 
       fireColumnsChanged(that);
+    };
+
+    const isWidthChanging = that._isWidthChanging(column, option, value, notFireEvent);
+    const needOwnUpdateCycle = isWidthChanging
+      && !that._updateLockCount
+      && !that.component._updateLockCount;
+
+    if (needOwnUpdateCycle) {
+      that.component.beginUpdate();
+      try {
+        applyOptions();
+        that.setRequireResize();
+      } finally {
+        that.component.endUpdate();
+      }
+    } else {
+      applyOptions();
+
+      if (isWidthChanging) {
+        that.setRequireResize();
+      }
     }
+
+    return undefined;
   }
 
-  private clearSorting() {
+  private clearSorting(): void {
     const that = this;
     const columnCount = this.columnCount();
 
@@ -1521,12 +1552,12 @@ export class ColumnsController extends modules.Controller {
     for (let i = 0; i < columnCount; i++) {
       that.columnOption(i, 'sortOrder', undefined);
       // option needs to be deleted from column to prevert conflicts in syncing loadOptions from dataSource. See T1147379
-      delete findColumn(that._columns, i).sortOrder;
+      delete (findColumn(that._columns, i) as Column).sortOrder;
     }
     that.endUpdate();
   }
 
-  public clearGrouping() {
+  public clearGrouping(): void {
     const that = this;
     const columnCount = this.columnCount();
 
@@ -1555,15 +1586,15 @@ export class ColumnsController extends modules.Controller {
     return visibleColumns.indexOf(visibleColumn);
   }
 
-  public getVisibleColumnIndex(id, rowIndex?) {
+  public getVisibleColumnIndex(id: ColumnIdentifier, rowIndex?) {
     const index = this.columnOption(id, 'index');
 
     return this.getVisibleIndex(index, rowIndex);
   }
 
-  private addColumn(options) {
+  private addColumn(options): void {
     const that = this;
-    let column = createColumn(that, options);
+    let column = createColumn(that, options) as Column;
     const index = that._columns.length;
 
     that._columns.push(column);
@@ -1575,11 +1606,11 @@ export class ColumnsController extends modules.Controller {
 
     column.added = options;
     updateIndexes(that, column);
-    that.updateColumns(that._dataSource);
+    that.updateColumns(that.appliedDataSourceAdapter);
     that._checkColumns();
   }
 
-  private deleteColumn(id) {
+  private deleteColumn(id: ColumnIdentifier): void {
     const that = this;
     const column = that.columnOption(id);
 
@@ -1593,16 +1624,39 @@ export class ColumnsController extends modules.Controller {
       }
 
       updateIndexes(that);
-      that.updateColumns(that._dataSource);
+      that.updateColumns(that.appliedDataSourceAdapter);
     }
   }
 
-  public addCommandColumn(options) {
+  public addCommandColumn(options): void {
     let commandColumn = this._commandColumns.filter((column) => column.command === options.command)[0];
 
     if (!commandColumn) {
       commandColumn = options;
       this._commandColumns.push(commandColumn);
+    }
+  }
+
+  private applyUserState(): void {
+    const columnsUserState = this._columnsUserState;
+
+    if (!columnsUserState) {
+      return;
+    }
+
+    const { columns, hasAddedBands } = new UserStateApplier({
+      columns: this._columns,
+      columnsUserState,
+      ignoreColumnOptionNames: this._ignoreColumnOptionNames || [],
+      hasUserState: this._hasUserState,
+      createColumn: (columnOptions) => createColumn(this, columnOptions) as Column,
+    }).apply();
+
+    if (hasAddedBands) {
+      updateColumnIndexes(this);
+      assignColumns(this, createColumnsFromOptions(this, columns));
+    } else {
+      assignColumns(this, columns);
     }
   }
 
@@ -1624,15 +1678,15 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
-  public setName(column) {
+  public setName(column): void {
     if (!isColumnNameRequired(column)) {
       column.name = column.name || column.dataField || column.type;
     }
   }
 
-  public setUserState(state) {
+  public setUserState(state): void {
     const that = this;
-    const dataSource = that._dataSource;
+    const dataSourceAdapter = that.appliedDataSourceAdapter;
 
     let ignoreColumnOptionNames: any = that.option('stateStoring.ignoreColumnOptionNames');
 
@@ -1660,13 +1714,13 @@ export class ColumnsController extends modules.Controller {
     updateColumnChanges(that, 'filtering');
     that.init(true);
 
-    if (dataSource) {
-      dataSource.sort(that.getSortDataSourceParameters());
-      dataSource.group(that.getGroupDataSourceParameters());
+    if (dataSourceAdapter) {
+      dataSourceAdapter.sort(that.getSortDataSourceParameters());
+      dataSourceAdapter.group(that.getGroupDataSourceParameters());
     }
   }
 
-  public _checkColumns() {
+  public _checkColumns(): void {
     const usedNames = {};
     const duplicatedNames: any = [];
     let hasEditableColumnWithoutName = false;
@@ -1831,7 +1885,6 @@ export class ColumnsController extends modules.Controller {
             }
             if (isPlainObject(dataSource) || (dataSource instanceof Store) || Array.isArray(dataSource)) {
               if (that.valueExpr) {
-                // @ts-expect-error
                 const dataSourceOptions = normalizeDataSourceOptions(dataSource);
                 dataSourceOptions.paginate = false;
                 dataSource = new DataSource(dataSourceOptions);
@@ -1871,7 +1924,7 @@ export class ColumnsController extends modules.Controller {
     return this._rowCount;
   }
 
-  public getRowIndex(columnIndex, alwaysGetRowIndex?) {
+  public getRowIndex(columnIndex: number, alwaysGetRowIndex?: boolean): number {
     const column = this._columns[columnIndex];
     if (!column) {
       return 0;
@@ -1887,7 +1940,7 @@ export class ColumnsController extends modules.Controller {
     return getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex).length;
   }
 
-  public getChildrenByBandColumn(bandColumnIndex, onlyVisibleDirectChildren?) {
+  public getChildrenByBandColumn(bandColumnIndex: number, onlyVisibleDirectChildren?: boolean) {
     const that = this;
     const bandColumnsCache = that.getBandColumnsCache();
     const result = getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex, !onlyVisibleDirectChildren);
@@ -1910,7 +1963,7 @@ export class ColumnsController extends modules.Controller {
       .filter((column) => !column.isBand && column.visible);
   }
 
-  public isParentBandColumn(columnIndex, bandColumnIndex) {
+  public isParentBandColumn(columnIndex: number, bandColumnIndex: number): boolean {
     let result = false;
     const column = this._columns[columnIndex];
     const bandColumnsCache = this.getBandColumnsCache();
@@ -1928,20 +1981,20 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
-  public isParentColumnVisible(columnIndex) {
+  public isParentColumnVisible(columnIndex): boolean {
     let result = true;
     const bandColumnsCache = this.getBandColumnsCache();
     const bandColumns = columnIndex >= 0 && getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex);
 
     bandColumns && each(bandColumns, (_, bandColumn) => {
-      result = result && bandColumn.visible;
+      result = result && !!bandColumn.visible;
       return result;
     });
 
     return result;
   }
 
-  public getParentColumn(column: Column, needDirectParent = false): Column {
+  public getParentColumn(column: Column, needDirectParent = false): Column | undefined {
     const bandColumnsCache = this.getBandColumnsCache();
     const parentColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex);
     const parentColumnIndex = needDirectParent ? -1 : 0;
@@ -1971,7 +2024,7 @@ export class ColumnsController extends modules.Controller {
     return gridCoreUtils.isCustomCommandColumn(this._columns, commandColumn);
   }
 
-  public getColumnId(column) {
+  public getColumnId(column: Column): string | number | undefined {
     if (column.command && column.type === GROUP_COMMAND_COLUMN_NAME) {
       if (gridCoreUtils.isCustomCommandColumn(this._columns, column)) {
         return `type:${column.type}`;
@@ -1987,7 +2040,7 @@ export class ColumnsController extends modules.Controller {
     return getCustomizeTextByDataType(dataType);
   }
 
-  public getHeaderContentAlignment(columnAlignment) {
+  public getHeaderContentAlignment(columnAlignment: string | undefined): string | undefined {
     const rtlEnabled = this.option('rtlEnabled');
 
     if (rtlEnabled) {

@@ -56,11 +56,11 @@ import type {
   SelectionEndEvent,
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
-import type { Options } from '@ts/core/options/m_index';
+import type { Options } from '@ts/core/options/index';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { tabbable } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
-import { focus } from '@ts/events/m_short';
+import { focus } from '@ts/events/short';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';

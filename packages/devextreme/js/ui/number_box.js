@@ -1,4 +1,4 @@
-import NumberBox from '../__internal/ui/number_box/m_number_box';
+import NumberBox from '../__internal/ui/number_box/number_box';
 
 export default NumberBox;
 

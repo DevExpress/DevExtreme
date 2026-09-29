@@ -1,5 +1,5 @@
-import { BaseModel } from './base_model';
 import { OverlayModel } from './overlay';
+import { TextEditorModel } from './text_editor';
 
 const CLASSES = {
   button: 'dx-dropdowneditor-button',
@@ -10,7 +10,7 @@ const ATTR = {
   popupContent: 'aria-owns',
 };
 
-export class DropDownEditorModel extends BaseModel {
+export class DropDownEditorModel extends TextEditorModel {
   public open(): void {
     const button = this.root.querySelector<HTMLElement>(`.${CLASSES.button}`);
     const target = button ?? this.root.querySelector<HTMLElement>(`.${CLASSES.inputWrapper}`);

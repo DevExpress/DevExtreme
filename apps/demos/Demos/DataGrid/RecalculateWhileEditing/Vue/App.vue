@@ -66,7 +66,7 @@ import {
 import { orders } from './data.ts';
 
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

@@ -2,7 +2,7 @@ import $ from 'jquery';
 import '__internal/viz/range_selector/range_selector';
 import { DataSource } from 'common/data/data_source/data_source';
 import browser from 'core/utils/browser';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 QUnit.testStart(function() {
     const markup =
@@ -944,5 +944,51 @@ QUnit.module('Firefox for Android adjustments (T1296261)', {
 
         assert.roughEqual(selectedAreaLeft, expectedLeft, 1, 'Selected area left starts on the tracker end');
         assert.roughEqual(selectedAreaRight, expectedRight, 1, 'Selected area right ends where the right tracker starts');
+    });
+});
+
+QUnit.module('Slider marker text in RTL mode', function(hook) {
+    hook.beforeEach(function() {
+        this.createRangeSelector = function(options) {
+            return $('#container').dxRangeSelector($.extend({
+                scale: { startValue: 1, endValue: 11 },
+                value: [3, 8]
+            }, options)).dxRangeSelector('instance');
+        };
+    });
+
+    function checkMarkerTextInsideMarker(assert) {
+        const $markers = $('#container .slider-marker');
+
+        assert.strictEqual($markers.length, 2);
+        $markers.each(function() {
+            const areaRect = this.querySelector('path').getBoundingClientRect();
+            const textRect = this.querySelector('text').getBoundingClientRect();
+
+            assert.ok(textRect.left >= areaRect.left && textRect.right <= areaRect.right,
+                `text ${Math.round(textRect.left)}..${Math.round(textRect.right)} is inside the marker ${Math.round(areaRect.left)}..${Math.round(areaRect.right)}`);
+        });
+    }
+
+    QUnit.test('marker text is inside the marker when rtlEnabled is set on creation', function(assert) {
+        this.createRangeSelector({ rtlEnabled: true });
+
+        checkMarkerTextInsideMarker(assert);
+    });
+
+    QUnit.test('marker text is inside the marker when rtlEnabled is switched on at runtime', function(assert) {
+        const rangeSelector = this.createRangeSelector({ rtlEnabled: false });
+
+        rangeSelector.option('rtlEnabled', true);
+
+        checkMarkerTextInsideMarker(assert);
+    });
+
+    QUnit.test('marker text is inside the marker when rtlEnabled is switched off at runtime', function(assert) {
+        const rangeSelector = this.createRangeSelector({ rtlEnabled: true });
+
+        rangeSelector.option('rtlEnabled', false);
+
+        checkMarkerTextInsideMarker(assert);
     });
 });

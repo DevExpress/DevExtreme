@@ -1,3 +1,3 @@
 // deprecated
-import { renderer } from '../__internal/core/m_renderer';
+import { renderer } from '../__internal/core/renderer';
 export default renderer;

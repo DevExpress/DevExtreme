@@ -139,11 +139,11 @@ export default class StandardStrategy<
       forceCombinedFilter,
     );
 
-    let deselectedItems = [];
+    let deselectedItems: TItem[] = [];
     if (isDeselect) {
       const { selectedItems } = this.options;
+      // @ts-expect-error dataQuery().toArray() is typed as unknown[]
       deselectedItems = combinedFilter && keys.length !== selectedItems.length
-        // @ts-expect-error dataQuery
         ? dataQuery(selectedItems).filter(combinedFilter).toArray()
         : selectedItems.slice(0);
     }
@@ -213,7 +213,6 @@ export default class StandardStrategy<
     if (updatedKeys) {
       selectedItems = updatedKeys;
     } else {
-      // @ts-expect-error removeDuplicates
       selectedItems = removeDuplicates(keys, this.options.selectedItemKeys);
     }
 
@@ -281,15 +280,14 @@ export default class StandardStrategy<
       && !isDeselect
       && !isSelectAll
     ) {
+      // @ts-expect-error removeDuplicates keeps the widened element type of the spread array
       currentKeys = removeDuplicates(
-        // @ts-expect-error removeDuplicates
         [
           ...keys,
           ...this._lastRequestData.addedItems,
         ],
         this._lastRequestData?.removedItems,
       );
-      // @ts-expect-error getUniqueValues
       currentKeys = getUniqueValues(currentKeys);
     }
 

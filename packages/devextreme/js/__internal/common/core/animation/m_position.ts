@@ -2,7 +2,6 @@ import { move, resetPosition } from '@js/common/core/animation/translator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -21,7 +20,6 @@ const horzRe = /left|right/;
 const vertRe = /top|bottom/;
 const collisionRe = /fit|flip|none/;
 const scaleRe = /scale\(.+?\)/;
-const IS_SAFARI = browser.safari;
 
 const normalizeAlign = function (raw) {
   const result = {
@@ -258,14 +256,18 @@ const calculatePosition = function (what, options) {
     if (isWindow(of[0])) {
       h.atLocation = of.scrollLeft();
       v.atLocation = of.scrollTop();
-      if (devices.real().deviceType === 'phone' && of[0].visualViewport) {
+      const device = devices.real();
+
+      if (device.deviceType === 'phone' && of[0].visualViewport) {
         h.atLocation = Math.max(h.atLocation, of[0].visualViewport.offsetLeft);
         v.atLocation = Math.max(v.atLocation, of[0].visualViewport.offsetTop);
         h.atSize = of[0].visualViewport.width;
         v.atSize = of[0].visualViewport.height;
       } else {
-        h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : getWidth(of);
-        v.atSize = of[0].innerHeight > of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : getHeight(of);
+        const isIos = device.platform === 'ios';
+
+        h.atSize = getWidth(of);
+        v.atSize = isIos ? of[0].innerHeight : getHeight(of);
       }
     } else if (of[0].nodeType === 9) {
       h.atLocation = 0;

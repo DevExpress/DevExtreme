@@ -1,8 +1,8 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import { DataSource } from '@ts/data/data_source/m_data_source';
-import CustomStore from '@ts/data/m_custom_store';
+import CustomStore from '@js/data/custom_store';
+import DataSource from '@js/data/data_source';
 
 import { ResourceManager } from './resource_manager';
 
@@ -88,6 +88,41 @@ describe('ResourceManager', () => {
       expect(resources[1].resourceIndex).toBe('two');
       expect(resources[0].isLoaded()).toBe(true);
       expect(resources[1].isLoaded()).toBe(true);
+    });
+  });
+
+  describe('hierarchical resources', () => {
+    const roomData = [
+      {
+        id: 'board', text: 'Board rooms', color: '#111', parentId: null,
+      },
+      {
+        id: 'open', text: 'Open spaces', color: '#222', parentId: null,
+      },
+      {
+        id: 11, text: 'Room 11', color: '#333', parentId: 'board',
+      },
+      {
+        id: 12, text: 'Room 12', color: '#444', parentId: 'board',
+      },
+      {
+        id: 21, text: 'Room 21', color: '#555', parentId: 'open',
+      },
+    ];
+
+    it('should expose hierarchy tree and leaf items for hierarchical resource', async () => {
+      const manager = new ResourceManager([{
+        fieldExpr: 'roomId',
+        parentIdExpr: 'parentId',
+        dataSource: roomData,
+        label: 'Room',
+      }]);
+
+      await manager.loadGroupResources(['roomId']);
+
+      expect(manager.isHierarchicalResource('roomId')).toBe(true);
+      expect(manager.getResourceLeafItems('roomId').map((item) => item.id)).toEqual([11, 12, 21]);
+      expect(manager.getResourceHierarchyTree('roomId').map((node) => node.data.id)).toEqual(['board', 'open']);
     });
   });
 });

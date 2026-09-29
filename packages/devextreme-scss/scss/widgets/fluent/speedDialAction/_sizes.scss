@@ -8,13 +8,13 @@ $fluent-fa-button-size: null !default;
 @if $size == "default" {
   $fluent-main-fa-button-size: 44px !default;
   $fluent-fa-button-size: 44px !default;
-  $fluent-main-fa-button-horizontal-padding: 16px;
-  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 8px;
+  $fluent-main-fa-button-horizontal-padding: 16px !default;
+  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 8px !default;
 }
 
 @else if $size == "compact" {
   $fluent-main-fa-button-size: 32px !default;
   $fluent-fa-button-size: 32px !default;
-  $fluent-main-fa-button-horizontal-padding: 12px;
-  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 4px;
+  $fluent-main-fa-button-horizontal-padding: 12px !default;
+  $fluent-main-fa-button-label-padding: 0 $fluent-main-fa-button-horizontal-padding 0 4px !default;
 }

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -10,10 +8,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { RouteMode } from 'devextreme/ui/map';
 
 import {
@@ -23,6 +17,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_routes } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_locations,
 } from 'devextreme-angular/core/tokens';
@@ -91,7 +86,6 @@ export class DxiRouteComponent extends CollectionNestedOption {
         return 'routes';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -104,7 +98,6 @@ export class DxiRouteComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

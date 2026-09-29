@@ -39,6 +39,8 @@ function App() {
   }, []);
 
   const getAltText = useCallback((text: string): string => `${text}. Picture`, []);
+  const itemRender = useCallback((data: Product) => <Item data={data} getAltText={getAltText} />, [getAltText]);
+  const tagRender = useCallback((data: Product) => <Tag product={data} onMouseEnter={onMouseEnter} getAltText={getAltText} />, [onMouseEnter, getAltText]);
 
   return (
     <>
@@ -145,19 +147,8 @@ function App() {
               inputAttr={productLabel}
               displayExpr="Name"
               valueExpr="Id"
-              itemRender={(data) => (
-                <Item
-                  data={data}
-                  getAltText={getAltText}
-                />
-              )}
-              tagRender={(data) => (
-                <Tag
-                  product={data}
-                  onMouseEnter={onMouseEnter}
-                  getAltText={getAltText}
-                />
-              )}
+              itemRender={itemRender}
+              tagRender={tagRender}
             />
 
             <Popover

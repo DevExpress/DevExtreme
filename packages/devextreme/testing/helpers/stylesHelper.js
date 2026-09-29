@@ -1,4 +1,4 @@
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 export const getEmulatorStyles = () => {
     // Chrome DevTools device emulation

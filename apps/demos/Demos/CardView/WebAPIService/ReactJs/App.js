@@ -22,6 +22,8 @@ const dataSource = AspNetData.createStore({
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
+const popupConfig = { width: 700, height: 400 };
+const priorityOptions = { dataSource: ['Low', 'Normal', 'High', 'Urgent'] };
 const App = () => (
   <CardView
     dataSource={dataSource}
@@ -36,7 +38,7 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
-      popup={{ width: 700, height: 400 }}
+      popup={popupConfig}
     >
       <Form>
         <Item dataField="Task_Subject"></Item>
@@ -45,7 +47,7 @@ const App = () => (
         <Item
           dataField="Task_Priority"
           editorType="dxSelectBox"
-          editorOptions={{ dataSource: ['Low', 'Normal', 'High', 'Urgent'] }}
+          editorOptions={priorityOptions}
         ></Item>
         <Item dataField="Task_Status"></Item>
       </Form>
