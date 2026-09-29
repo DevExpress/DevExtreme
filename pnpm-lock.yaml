@@ -177,9 +177,7 @@ catalogs:
 overrides:
   js-yaml@<4.3.2: ^4.3.2
   axios@<1.18.0: ^1.18.0
-  semver@<5.7.2: ^5.7.2
   qs: '>=6.16.0'
-  hono@<4.13.5: ^4.13.5
   minimatch@>=9.0.0 < 9.0.7: 9.0.9
   micromatch@<4.0.8: ^4.0.8
   esbuild@<0.28.1: ^0.28.1
@@ -192,7 +190,6 @@ overrides:
   postcss@<8.5.23: ^8.5.23
   ip-address@<10.5.1: ~10.5.1
   http-proxy-middleware@>=0.16.0 <3.0.7: ^3.0.7
-  shell-quote@<=1.8.4: ^1.9.0
   smol-toml@<1.7.0: ^1.7.1
 
 patchedDependencies:
@@ -4851,7 +4848,7 @@ packages:
     resolution: {integrity: sha512-eWpQYr67tqJLeaSUl0Q+TquuYfUdTibpOJlUMV2FfUP7+KqCC5TufnwnlXL6mobZBJbGAYRd7ZvEBDCbLInjhg==}
     engines: {node: '>=20'}
     peerDependencies:
-      hono: ^4.13.5
+      hono: ^4
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
