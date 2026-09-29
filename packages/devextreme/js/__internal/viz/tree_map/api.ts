@@ -4,7 +4,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
@@ -14,6 +13,7 @@
 
 import { noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import Node from '@ts/viz/tree_map/node';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
 
@@ -27,52 +27,65 @@ proto._createProxyType = function () {
   const that = this;
   let nodes;
 
-  Proxy.prototype = {
-    constructor: Proxy,
+  class Proxy {
+    declare _id: number;
 
-    getParent() {
+    declare level: number;
+
+    declare index: number;
+
+    declare data: ThemeValue;
+
+    constructor(node: Node) {
+      node.proxy = this;
+      this._id = node._id;
+      this.level = node.level;
+      this.index = node.index;
+      this.data = node.data;
+    }
+
+    getParent(): Proxy | null {
       return nodes[this._id].parent.proxy || null;
-    },
+    }
 
-    getChild(index) {
+    getChild(index: number): Proxy | null {
       const _nodes = nodes[this._id].nodes;
       return _nodes ? _nodes[index].proxy : null;
-    },
+    }
 
-    getChildrenCount() {
+    getChildrenCount(): number {
       const _nodes = nodes[this._id].nodes;
       return _nodes ? _nodes.length : 0;
-    },
+    }
 
-    getAllChildren() {
+    getAllChildren(): Proxy[] {
       const _nodes = nodes[this._id].nodes;
       let i;
       const ii = _nodes?.length;
-      const list = [];
+      const list: Proxy[] = [];
 
       for (i = 0; i < ii; ++i) {
-        // @ts-expect-error
         list.push(_nodes[i].proxy);
       }
       return list;
-    },
+    }
 
-    getAllNodes() {
-      const list = [];
+    getAllNodes(): Proxy[] {
+      const list: Proxy[] = [];
 
       collectNodes(nodes[this._id], list);
       return list;
-    },
+    }
 
-    isLeaf() {
+    isLeaf(): boolean {
       return !nodes[this._id].isNode();
-    },
+    }
 
-    isActive() {
+    isActive(): boolean {
       return nodes[this._id].isActive();
-    },
+    }
 
-    value(arg) {
+    value(arg?: number): number | Proxy {
       const node = nodes[this._id];
       let result;
 
@@ -84,9 +97,9 @@ proto._createProxyType = function () {
         result = node.value;
       }
       return result;
-    },
+    }
 
-    label(arg) {
+    label(arg?: string): string | Proxy {
       const node = nodes[this._id];
       let result;
 
@@ -98,9 +111,9 @@ proto._createProxyType = function () {
         result = node.customLabel || node.label;
       }
       return result;
-    },
+    }
 
-    customize(settings) {
+    customize(settings: ThemeValue): Proxy {
       const node = nodes[this._id];
 
       if (settings) {
@@ -110,28 +123,18 @@ proto._createProxyType = function () {
       }
       change(node, ['TILES', 'LABELS']);
       return this;
-    },
+    }
 
-    resetCustomization() {
+    resetCustomization(): Proxy {
       const node = nodes[this._id];
 
       node._custom = node._partialState = node._partialLabelState = null;
       change(node, ['TILES', 'LABELS']);
       return this;
-    },
-  };
+    }
+  }
 
   that._extendProxyType(Proxy.prototype);
-
-  function Proxy(node) {
-    const that = this;
-
-    node.proxy = that;
-    that._id = node._id;
-    that.level = node.level;
-    that.index = node.index;
-    that.data = node.data;
-  }
 
   // TODO: Find a way to make the following methods exist one per module rather then one per instance
   that._handlers.beginBuildNodes = function () {
