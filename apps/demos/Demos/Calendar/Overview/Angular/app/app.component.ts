@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import {
   DxCheckBoxModule, DxDateBoxModule, DxSelectBoxModule,
 } from 'devextreme-angular';
@@ -47,6 +49,12 @@ export class AppComponent {
   cellTemplate = 'cell';
 
   holidays = [[1, 0], [4, 6], [25, 11]];
+
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
+
+  onZoomLevelChange() {
+    this.changeDetectorRef.detectChanges();
+  }
 
   isWeekend(date: Date) {
     const day = date.getDay();
