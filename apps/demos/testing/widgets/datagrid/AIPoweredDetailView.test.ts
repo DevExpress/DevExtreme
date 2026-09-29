@@ -22,7 +22,7 @@ runManualTest('DataGrid', 'AIPoweredDetailView', (test) => {
       .expect($('.dx-chat-suggestions').visible)
       .ok();
 
-    await testScreenshot(t, takeScreenshot, 'datagrid_ai_powered_detail_view_2_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_ai_powered_detail_view_2_desktop.png', '.input-container');
 
     await t
       .expect(compareResults.isValid())
