@@ -20,10 +20,15 @@ export interface DeprecatedOptionInfo {
 
 type DeprecatedCallback = (option: string, info: DeprecatedOptionInfo) => void;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type OptionValue = any;
+interface OptionsProperties {
+  defaultOptionsRules?: DefaultOptionsRule<object>[] | null;
+}
 
-export class Options {
+type CachedOptionName<TName extends string> = `_cached_${TName}`;
+
+type CachedOptions<TProperties> = TProperties & Record<CachedOptionName<string>, unknown>;
+
+export class Options<TProperties extends OptionsProperties = OptionsProperties> {
   _deprecatedCallback!: DeprecatedCallback;
 
   _startChangeCallback!: () => void;
@@ -222,11 +227,22 @@ export class Options {
       : equalByValue(value, initialValue);
   }
 
-  initial(name: string): OptionValue {
+  initial<TPropertyName extends keyof TProperties & string>(
+    name: TPropertyName,
+  ): TProperties[TPropertyName];
+  initial(name: string): unknown;
+  initial(name: string): unknown {
     return getNestedOptionValue(this._initial, name);
   }
 
-  option(options?: string | object, value?: unknown): OptionValue {
+  option(): TProperties;
+  option<TPropertyName extends keyof TProperties & string>(
+    name: TPropertyName,
+  ): TProperties[TPropertyName];
+  option(name: string): unknown;
+  option(options: object): void;
+  option(options: string | object, value: unknown): void;
+  option(options?: string | object, value?: unknown): unknown {
     const isGetter = arguments.length < 2 && type(options) !== 'object';
 
     if (isGetter) {
@@ -244,7 +260,14 @@ export class Options {
     return undefined;
   }
 
-  silent(options?: PropertyKey | object, value?: unknown): OptionValue {
+  silent(): TProperties;
+  silent<TPropertyName extends keyof TProperties>(
+    name: TPropertyName,
+  ): TProperties[TPropertyName];
+  silent(name: PropertyKey): unknown;
+  silent(options: object): void;
+  silent(options: PropertyKey | object, value: unknown): void;
+  silent(options?: PropertyKey | object, value?: unknown): unknown {
     const isGetter = arguments.length < 2 && type(options) !== 'object';
 
     if (isGetter) {
@@ -283,7 +306,11 @@ export class Options {
     return Object.prototype.hasOwnProperty.call(this._deprecated, name);
   }
 
-  cache(name: string, value?: unknown): OptionValue {
+  cache<TName extends string>(
+    name: TName,
+  ): CachedOptions<TProperties>[CachedOptionName<TName>];
+  cache(name: string, value: unknown): void;
+  cache(name: string, value?: unknown): unknown {
     const isGetter = arguments.length < 2;
     const optionName = `_cached_${name}`;
 
