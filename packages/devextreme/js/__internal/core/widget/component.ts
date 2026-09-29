@@ -142,7 +142,7 @@ export class Component<
     this._options.applyRules(rules);
   }
 
-  _convertRulesToOptions(rules: DefaultOptionsRule<TProperties>[]): TProperties {
+  _convertRulesToOptions(rules: DefaultOptionsRule<TProperties>[]): Partial<TProperties> {
     return convertRulesToOptions(rules);
   }
 
