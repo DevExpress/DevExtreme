@@ -30,8 +30,6 @@ export class Options {
 
   _endChangeCallback!: () => void;
 
-  _validateOptionsCallback?: ValidateOptionsCallback;
-
   _default: object;
 
   _deprecated: Record<string, DeprecatedOptionInfo>;
