@@ -22,6 +22,18 @@
     border-inline-end-width: var(--dx-button-group-item-contained-border-inline-end-width);
     border-inline-end-color: var(--dx-button-group-separator);
 
+    &.dx-button-default {
+      border-inline-end-color: var(--dx-button-group-default-separator);
+    }
+
+    &.dx-button-success {
+      border-inline-end-color: var(--dx-button-group-success-separator);
+    }
+
+    &.dx-button-danger {
+      border-inline-end-color: var(--dx-button-group-danger-separator);
+    }
+
     &.dx-buttongroup-last-item {
       border-inline-end-width: 0;
     }
