@@ -91,8 +91,9 @@ Copyright (c) 2014, Jason Chen
 Copyright (c) 2013, salesforce.com
 https://github.com/slab/quill/blob/main/LICENSE
 
-Roboto Font (Open Source - Apache 2.0)
-https://github.com/google/roboto/blob/master/LICENSE
+Roboto Font (Open Source - OFL 1.1 License)
+Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)
+https://github.com/googlefonts/roboto-3-classic/blob/main/OFL.txt
 
 rrule (Open Source - BSD-3-Clause License)
 Copyright 2010, Jakub Roztocil (jakub@roztocil.name) and Lars Sch&ouml;ning
