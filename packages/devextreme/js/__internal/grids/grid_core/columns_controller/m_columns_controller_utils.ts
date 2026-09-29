@@ -38,7 +38,8 @@ import {
 import type { ColumnsController } from './m_columns_controller';
 import type {
   BandColumnsCache, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionGetter,
-  ColumnOptionSetter, ColumnsChanges, ColumnUserState, DropLocationNames, ValueSerializers,
+  ColumnOptionSetter, ColumnsChanges, ColumnUserState, DropLocationNames, GroupColumn,
+  ValueSerializers,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
