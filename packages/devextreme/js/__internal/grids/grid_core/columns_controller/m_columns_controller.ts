@@ -28,6 +28,7 @@ import type {
   ColumnsChanges,
   ColumnsControllerOptionChanged,
   ColumnsOptionChanged,
+  ColumnUserState,
   DropLocationNames,
   FilterField,
 } from '@ts/grids/grid_core/columns_controller/types';
@@ -107,7 +108,7 @@ export class ColumnsController extends modules.Controller {
 
   private _isColumnsFromOptions!: boolean;
 
-  public _columnsUserState: any;
+  public _columnsUserState?: ColumnUserState[] | null;
 
   private dataSourceAdapterApplied?: boolean;
 
@@ -127,7 +128,7 @@ export class ColumnsController extends modules.Controller {
 
   public _reinitAfterLookupChanges?: boolean;
 
-  public _previousColumns: any;
+  public _previousColumns?: Column[];
 
   public _hasUserState!: boolean;
 
@@ -434,8 +435,8 @@ export class ColumnsController extends modules.Controller {
 
   public getCommonSettings(column?) {
     const commonColumnSettings = this.getCommonColumnSettings(column);
-    const groupingOptions: any = this.option('grouping') ?? {};
-    const groupPanelOptions: any = this.option('groupPanel') ?? {};
+    const groupingOptions: Record<string, unknown> = this.option('grouping') ?? {};
+    const groupPanelOptions: Record<string, unknown> = this.option('groupPanel') ?? {};
 
     return extend({
       allowFixing: this.option('columnFixing.enabled'),
@@ -577,10 +578,10 @@ export class ColumnsController extends modules.Controller {
 
   private _getFixedColumnsCore(): Column[][] {
     const that = this;
-    const result: any = [];
+    const result: Column[][] = [];
     const rowCount = that.getRowCount();
     const isColumnFixing = that._isColumnFixing();
-    const transparentColumn: any = { command: 'transparent' };
+    const transparentColumn = { command: 'transparent' } as Column;
     let transparentColspan = 0;
     let notFixedColumnCount;
     let transparentColumnIndex;
@@ -647,11 +648,12 @@ export class ColumnsController extends modules.Controller {
   public _isColumnFixing() {
     let isColumnFixing = this.option('columnFixing.enabled');
 
-    !isColumnFixing && each(this._columns, (_, column): any => {
+    !isColumnFixing && each(this._columns, (_, column): boolean | undefined => {
       if (column.fixed) {
         isColumnFixing = true;
         return false;
       }
+      return undefined;
     });
 
     return isColumnFixing;
@@ -664,8 +666,8 @@ export class ColumnsController extends modules.Controller {
     return this.getGroupColumns();
   }
 
-  private getExpandColumns() {
-    let expandColumns = this._getExpandColumnsCore();
+  private getExpandColumns(): Column[] {
+    let expandColumns: Column[] = this._getExpandColumnsCore();
     let expandColumn;
     const firstGroupColumn = expandColumns.filter((column) => column.groupIndex === 0)[0];
     const isFixedFirstGroupColumn = firstGroupColumn && firstGroupColumn.fixed;
@@ -695,7 +697,7 @@ export class ColumnsController extends modules.Controller {
         index: column.index,
         type: column.type || GROUP_COMMAND_COLUMN_NAME,
       },
-    ));
+    ) as Column);
 
     return expandColumns;
   }
@@ -1006,7 +1008,7 @@ export class ColumnsController extends modules.Controller {
     targetLocation: DropLocationNames,
   ) {
     const that = this;
-    const options: any = {};
+    const options: Partial<Column> = {};
     let prevGroupIndex;
     const fromIndex = getColumnIndexByVisibleIndex(that, fromVisibleIndex, sourceLocation);
     const toIndex = getColumnIndexByVisibleIndex(that, toVisibleIndex, targetLocation);
@@ -1065,12 +1067,12 @@ export class ColumnsController extends modules.Controller {
 
   public changeSortOrder(columnIndex, sortOrder) {
     const that = this;
-    const options: any = {};
+    const options: Partial<Column> = {};
     const sortingOptions = that.option('sorting');
     const sortingMode = sortingOptions?.mode;
     const needResetSorting = sortingMode === 'single' || !sortOrder;
     const column = that._columns[columnIndex];
-    const nextSortOrder = function (column) {
+    const nextSortOrder = function (column): boolean {
       if (sortOrder === 'ctrl') {
         if (!(('sortOrder' in column) && ('sortIndex' in column))) {
           return false;
@@ -1169,7 +1171,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public refresh(updateNewLookupsOnly?) {
-    const deferreds: any = [];
+    const deferreds: unknown[] = [];
 
     each(this._columns, function () {
       const { lookup } = this;
@@ -1189,15 +1191,15 @@ export class ColumnsController extends modules.Controller {
     });
   }
 
-  private _updateColumnOptions(column, columnIndex) {
-    const defaultSelector = (data) => column.calculateCellValue(data);
+  private _updateColumnOptions(column, columnIndex): void {
+    const defaultSelector = (data): unknown => column.calculateCellValue(data);
     const shouldTakeOriginalCallbackFromPrevious = this._reinitAfterLookupChanges
       && this._previousColumns?.[columnIndex];
 
     column.selector = column.selector ?? defaultSelector;
     column.selector.columnIndex = columnIndex;
     column.selector.originalCallback = shouldTakeOriginalCallbackFromPrevious
-      ? this._previousColumns[columnIndex].selector?.originalCallback ?? column.selector
+      ? this._previousColumns?.[columnIndex].selector?.originalCallback ?? column.selector
       : column.selector;
 
     each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], (_, calculateCallbackName) => {
@@ -1205,7 +1207,10 @@ export class ColumnsController extends modules.Controller {
       if (isFunction(calculateCallback)) {
         if (!calculateCallback.originalCallback) {
           const context = { column };
-          column[calculateCallbackName] = function (data) { return calculateCallback.call(context.column, data); };
+          column[calculateCallbackName] = function (data): unknown {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- column callback is untyped
+            return calculateCallback.call(context.column, data);
+          };
           column[calculateCallbackName].originalCallback = calculateCallback;
           column[calculateCallbackName].columnIndex = columnIndex;
           column[calculateCallbackName].context = context;
@@ -1324,6 +1329,7 @@ export class ColumnsController extends modules.Controller {
 
   private _customizeColumns(columns): void {
     const that = this;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- module option (never-typed)
     const customizeColumns: any = that.option('customizeColumns');
 
     if (customizeColumns) {
@@ -1662,7 +1668,7 @@ export class ColumnsController extends modules.Controller {
       columnsUserState,
       ignoreColumnOptionNames: this._ignoreColumnOptionNames || [],
       hasUserState: this._hasUserState,
-      createColumn: (columnOptions) => createColumn(this, columnOptions) as Column,
+      createColumn: (columnOptions): Column => createColumn(this, columnOptions) as Column,
     }).apply();
 
     if (hasAddedBands) {
@@ -1673,12 +1679,12 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  private getUserState() {
+  private getUserState(): ColumnUserState[] {
     const columns = this._columns;
-    const result: any = [];
+    const result: ColumnUserState[] = [];
     let i;
 
-    function handleStateField(index, value) {
+    function handleStateField(index: number, value: keyof ColumnUserState): void {
       if (columns[i][value] !== undefined) {
         result[i][value] = columns[i][value];
       }
@@ -1755,7 +1761,7 @@ export class ColumnsController extends modules.Controller {
 
   public _checkColumns(): void {
     const usedNames = {};
-    const duplicatedNames: any = [];
+    const duplicatedNames: string[] = [];
     let hasEditableColumnWithoutName = false;
     let hasColumnsWithoutRequiredNames = false;
 
@@ -1791,6 +1797,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public _createCalculatedColumnOptions(columnOptions, bandColumn) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic column options
     let calculatedColumnOptions: any = {};
     let { dataField } = columnOptions;
 
@@ -1804,13 +1811,13 @@ export class ColumnsController extends modules.Controller {
         const getter = compileGetter(dataField);
         calculatedColumnOptions = {
           caption: inflector.captionize(dataField),
-          calculateCellValue(data, skipDeserialization) {
+          calculateCellValue(data, skipDeserialization): unknown {
             // @ts-expect-error
             const value = getter(data);
             return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
           },
           setCellValue: defaultSetCellValue,
-          parseValue(text) {
+          parseValue(text): unknown {
             const column = this;
             let result;
             let parsedValue;
@@ -1844,14 +1851,19 @@ export class ColumnsController extends modules.Controller {
     } else {
       calculatedColumnOptions.allowFiltering = !!columnOptions.calculateFilterExpression;
     }
-    calculatedColumnOptions.calculateFilterExpression = function () {
-      // @ts-expect-error
-      return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
+    calculatedColumnOptions.calculateFilterExpression = function (): unknown {
+      // @ts-expect-error filterUtils is untyped
+      const expression = filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- filterUtils is untyped
+      return expression;
     };
 
     calculatedColumnOptions.defaultFilterOperation = '=';
 
-    calculatedColumnOptions.createFilterExpression = function (filterValue, selectedFilterOperation) {
+    calculatedColumnOptions.createFilterExpression = function (
+      filterValue,
+      selectedFilterOperation,
+    ): unknown {
       let result;
       if (this.calculateFilterExpression) {
         result = this.calculateFilterExpression.apply(this, arguments);
@@ -1864,6 +1876,7 @@ export class ColumnsController extends modules.Controller {
         result.filterValue = filterValue;
         result.selectedFilterOperation = selectedFilterOperation;
       }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- filter expression is untyped
       return result;
     };
 
@@ -1888,17 +1901,19 @@ export class ColumnsController extends modules.Controller {
     }
     if (columnOptions.lookup && columnOptions.type !== AI_COLUMN_NAME) {
       calculatedColumnOptions.lookup = {
-        calculateCellValue(value, skipDeserialization) {
+        calculateCellValue(value, skipDeserialization): unknown {
           if (this.valueExpr) {
             value = this.valueMap && this.valueMap[value];
           }
           return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
         },
 
-        updateValueMap() {
+        updateValueMap(): void {
           this.valueMap = {};
           if (this.items) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compileGetter result
             const calculateValue: any = compileGetter(this.valueExpr);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compileGetter result
             const calculateDisplayValue: any = compileGetter(this.displayExpr);
             for (let i = 0; i < this.items.length; i++) {
               const item = this.items[i];
@@ -1908,7 +1923,7 @@ export class ColumnsController extends modules.Controller {
             }
           }
         },
-        update() {
+        update(): unknown {
           const that = this;
           let { dataSource } = that;
 
@@ -1932,6 +1947,7 @@ export class ColumnsController extends modules.Controller {
           } else {
             that.updateValueMap && that.updateValueMap();
           }
+          return undefined;
         },
       };
     }
@@ -1941,8 +1957,8 @@ export class ColumnsController extends modules.Controller {
       calculatedColumnOptions.resizedCallbacks.add(columnOptions.resized.bind(columnOptions));
     }
 
-    each(calculatedColumnOptions, (optionName: any) => {
-      if (isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf('default') !== 0) {
+    each(calculatedColumnOptions, (optionName: string) => {
+      if (isFunction(calculatedColumnOptions[optionName]) && !optionName.startsWith('default')) {
         const defaultOptionName = `default${optionName.charAt(0).toUpperCase()}${optionName.substr(1)}`;
         calculatedColumnOptions[defaultOptionName] = calculatedColumnOptions[optionName];
       }
@@ -2006,11 +2022,12 @@ export class ColumnsController extends modules.Controller {
     const parentBandColumns = column && getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex);
 
     if (parentBandColumns) { // T416483 - fix for jquery 2.1.4
-      each(parentBandColumns, (_, bandColumn): any => {
+      each(parentBandColumns, (_, bandColumn): boolean | undefined => {
         if (bandColumn.index === bandColumnIndex) {
           result = true;
           return false;
         }
+        return undefined;
       });
     }
 

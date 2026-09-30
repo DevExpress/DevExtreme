@@ -145,9 +145,9 @@ export const createColumnsFromOptions = (
 
   columnsOptions.forEach((columnOptions) => {
     const currentIndex = createdColumnCount + result.length;
-    const userStateColumnOptions = that._columnsUserState
+    const userStateColumnOptions = (that._columnsUserState
       && isUserStateColumn(columnOptions as ColumnUserState, that._columnsUserState[currentIndex])
-      && that._columnsUserState[currentIndex];
+      && that._columnsUserState[currentIndex]) || undefined;
     const column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
 
     if (!column) {
