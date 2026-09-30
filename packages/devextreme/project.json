@@ -275,8 +275,7 @@
         ],
         "outDir": "./artifacts/transpiled",
         "copyAssets": [
-          { "from": "./js/localization/messages", "to": "./localization/messages" },
-          { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
+          { "from": "./js/localization/messages", "to": "./localization/messages" }
         ]
       },
       "configurations": {
@@ -307,8 +306,7 @@
         "outDir": "./artifacts/transpiled-esm-npm/esm",
         "removeDebug": true,
         "copyAssets": [
-          { "from": "./js/localization/messages", "to": "./localization/messages" },
-          { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
+          { "from": "./js/localization/messages", "to": "./localization/messages" }
         ]
       },
       "configurations": {
@@ -337,8 +335,7 @@
         "outDir": "./artifacts/transpiled-esm-npm/cjs",
         "removeDebug": true,
         "copyAssets": [
-          { "from": "./js/localization/messages", "to": "./localization/messages" },
-          { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
+          { "from": "./js/localization/messages", "to": "./localization/messages" }
         ]
       },
       "inputs": [
@@ -411,8 +408,7 @@
         "removeDebug": true,
         "watch": true,
         "copyAssets": [
-          { "from": "./js/localization/messages", "to": "./localization/messages" },
-          { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
+          { "from": "./js/localization/messages", "to": "./localization/messages" }
         ]
       },
       "configurations": {
@@ -1144,8 +1140,10 @@
           "cjs/bundles/**/*",
           "esm/bundles/**/*",
           "bundles/modules/parts/*.js",
-          "viz/vector_map.utils/*.js",
-          "viz/docs/*.js"
+          "cjs/viz/vector_map.utils/**/*",
+          "esm/viz/vector_map.utils/**/*",
+          "cjs/viz/docs/**/*",
+          "esm/viz/docs/**/*"
         ],
         "distExcludes": [
           "transpiled**/**/*",
@@ -1174,7 +1172,11 @@
           "js/dx-gantt*",
           "js/dx-quill*"
         ],
-        "nestedPackageJsonExcludes": ["viz/vector_map.utils/**"],
+        "nestedPackageJsonExcludes": [
+          "viz/vector_map.utils/**",
+          "cjs/viz/vector_map.utils/**",
+          "esm/viz/vector_map.utils/**"
+        ],
         "excludeLicenseValidator": "**/license/license_validation_internal.js",
         "metadataFiles": [
           { "from": "../../README.md", "to": "./README.md" },
@@ -1294,8 +1296,6 @@
           "./artifacts/npm/devextreme/cjs/bundles/**",
           "./artifacts/npm/devextreme/esm/bundles/**",
           "./artifacts/npm/devextreme/bundles/modules/parts/*.js",
-          "./artifacts/npm/devextreme/viz/vector_map.utils/*.js",
-          "./artifacts/npm/devextreme/viz/docs/*.js",
           "./artifacts/npm/devextreme/dist/**",
           "./artifacts/npm/devextreme/bin/**",
           "./artifacts/npm/devextreme/license/**"
@@ -1313,8 +1313,6 @@
             "./artifacts/npm/devextreme-internal/cjs/bundles/**",
             "./artifacts/npm/devextreme-internal/esm/bundles/**",
             "./artifacts/npm/devextreme-internal/bundles/modules/parts/*.js",
-            "./artifacts/npm/devextreme-internal/viz/vector_map.utils/*.js",
-            "./artifacts/npm/devextreme-internal/viz/docs/*.js",
             "./artifacts/npm/devextreme-internal/dist/**",
             "./artifacts/npm/devextreme-internal/bin/**",
             "./artifacts/npm/devextreme-internal/license/**"
@@ -1327,8 +1325,6 @@
             "./artifacts/npm/devextreme-internal/cjs/bundles/**",
             "./artifacts/npm/devextreme-internal/esm/bundles/**",
             "./artifacts/npm/devextreme-internal/bundles/modules/parts/*.js",
-            "./artifacts/npm/devextreme-internal/viz/vector_map.utils/*.js",
-            "./artifacts/npm/devextreme-internal/viz/docs/*.js",
             "./artifacts/npm/devextreme-internal/dist/**",
             "./artifacts/npm/devextreme-internal/bin/**",
             "./artifacts/npm/devextreme-internal/license/**"

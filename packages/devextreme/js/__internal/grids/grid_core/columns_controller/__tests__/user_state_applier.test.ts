@@ -230,15 +230,17 @@ describe('UserStateApplier', () => {
       expect(columns).toHaveLength(2);
     });
 
-    // TODO: pins the current behavior with a known bug,
-    // update the test after the fix (T1336036)
-    it('should duplicate a column that was added at runtime and then declared', () => {
+    it('should not duplicate a column that was added at runtime and then declared', () => {
+      const createColumn = jest.fn(createPlainColumn);
+
       const { columns } = applyState({
+        createColumn,
         columns: [dataColumn('id')],
         columnsUserState: [savedColumn('id', { added: 'id' })],
       });
 
-      expect(columns).toHaveLength(2);
+      expect(createColumn).not.toHaveBeenCalled();
+      expect(columns).toHaveLength(1);
     });
   });
 

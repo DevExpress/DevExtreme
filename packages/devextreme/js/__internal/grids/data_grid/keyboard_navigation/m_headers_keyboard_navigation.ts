@@ -98,7 +98,7 @@ const headersKeyboardNavigation = (
     this._columnsController.beginUpdate();
     super.ungroupAllColumns();
 
-    const rowIndex = this._columnsController.getRowIndex(focusedColumn.index, true);
+    const rowIndex = this._columnsController.getRowIndex(focusedColumn.index ?? -1, true);
     const newVisibleIndex = this.getVisibleIndex(focusedColumn);
 
     this.updateFocusPosition({

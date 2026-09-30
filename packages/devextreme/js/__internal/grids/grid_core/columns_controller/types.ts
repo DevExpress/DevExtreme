@@ -1,9 +1,10 @@
 import type { ColumnAIOptions, ColumnBase, ColumnLookup } from '@js/common/grids';
+import type { Callback } from '@js/core/utils/callbacks';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import type { DataFilter } from '../filter/types';
-import type { OptionChanged, OptionChangedFor } from '../m_types';
+import type { InternalGrid, OptionChanged, OptionChangedFor } from '../m_types';
 import type {
   COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
 } from './const';
@@ -78,6 +79,8 @@ export interface InternalColumnOptions extends ValueSerializers {
   command?: string;
   headerId?: string;
   showWhenGrouped?: boolean;
+  allowGrouping?: boolean;
+  resizedCallbacks?: Callback<[number]>;
   rowspan?: number;
   colspan?: number;
   lastSortOrder?: ColumnBase['sortOrder'];
@@ -87,9 +90,12 @@ export interface InternalColumnOptions extends ValueSerializers {
   lookup?: InternalColumnLookup;
   columns?: (Column | string)[];
   hasColumns?: boolean;
+  grouped?: boolean;
 }
 
 export type Column = ColumnBase & InternalColumnOptions;
+
+export type GroupColumn = Column & { groupIndex: number };
 
 export interface ColumnsChanges {
   changeTypes: {
@@ -135,11 +141,14 @@ export type ColumnOptionChanged = WholeColumnOptionChanged | ColumnFieldOptionCh
 
 export type ColumnIdentifier = number | string;
 
+export type ColumnsChangingEvent = ColumnsChanges & { component: InternalGrid };
+
 export interface ColumnsControllerOptions {
   adaptColumnWidthByRatio?: boolean;
   commonColumnSettings?: Partial<Column>;
   customizeColumns?: ((columns: Column[]) => void) | null;
   regenerateColumnsByVisibleItems?: boolean;
+  onColumnsChanging?: (e: ColumnsChangingEvent) => void;
 }
 
 export type ColumnsControllerOptionChanged = OptionChanged
@@ -148,3 +157,24 @@ export type ColumnsControllerOptionChanged = OptionChanged
   | ColumnOptionChanged;
 
 export type MatchCountById = Map<string, number>;
+
+export type ColumnOptionGetter = (column: Column, options?: { functionsAsIs: boolean }) => unknown;
+
+export type ColumnOptionSetter = (
+  column: Column,
+  value: unknown,
+  options: { functionsAsIs: boolean },
+) => void;
+
+export interface BandColumnsCache {
+  isPlain: boolean;
+  columnChildrenByIndex: Record<number, Column[]>;
+  columnParentByIndex: Record<number, Column>;
+}
+
+export interface ColumnOptionChangeArgs {
+  fullOptionName: string;
+  optionName: string;
+  value: unknown;
+  prevValue: unknown;
+}

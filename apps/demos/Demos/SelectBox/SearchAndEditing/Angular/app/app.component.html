@@ -26,22 +26,21 @@
         <div class="dx-field-label">Product</div>
         <div class="dx-field-value">
           <dx-select-box
-            #selectBox
             [dataSource]="productsDataSource"
             [inputAttr]="{ 'aria-label': 'Custom Product' }"
             [acceptCustomValue]="true"
             displayExpr="Name"
             valueExpr="ID"
-            [value]="product"
+            [(value)]="product"
+            [(selectedItem)]="selectedProduct"
             (onCustomItemCreating)="addCustomItem($event)"
           ></dx-select-box>
         </div>
       </div>
       <div class="dx-field current-product">
-        Current product: @if (selectBox.selectedItem) {
+        Current product: @if (selectedProduct) {
         <span class="current-value">
-          {{ selectBox.selectedItem.Name }} (ID:
-          {{ selectBox.selectedItem.ID }})
+          {{ selectedProduct.Name }} (ID: {{ selectedProduct.ID }})
         </span>
         } @else {
         <span class="current-value">Not selected</span>
