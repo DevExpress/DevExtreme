@@ -1,19 +1,21 @@
-export const titles = ['Mr.', 'Mrs.', 'Ms.'];
-export const states = ['California', 'New York', 'Texas'];
-export const positions = ['CEO', 'Sales Assistant', 'CMO', 'Manager', 'Designer', 'Developer'];
-export const colors = {
-  High: '#F1BBBC',
-  Normal: '#F9E2AE',
-  Low: '#9FD89F',
+const titles = ['Mr.', 'Mrs.', 'Ms.'];
+const states = ['California', 'New York', 'Texas'];
+const positions = ['CEO', 'Sales Assistant', 'CMO', 'Manager', 'Designer', 'Developer'];
+export const AI_SERVICE_CONFIG = {
+  dangerouslyAllowBrowser: true,
+  deployment: 'demo-mini',
+  endpoint: 'https://public-api.devexpress.com/demo-openai',
+  apiVersion: '2024-02-01',
+  apiKey: 'DEMO',
 };
-export const deployment = 'demo-mini';
-export const endpoint = 'https://public-api.devexpress.com/demo-openai';
-export const apiVersion = '2024-02-01';
-export const apiKey = 'DEMO';
+export class ChatCommandError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ChatCommandError';
+    Object.setPrototypeOf(this, ChatCommandError.prototype);
+  }
+}
 export const emptyViewMessage = 'How can I help with this page?';
-export const emptyViewPrompt =
-  'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
-export const clearButtonOptions = { icon: 'clearhistory', hint: 'Clear chat' };
 export const employee = {
   ID: 1,
   Prefix: 'Mr.',
@@ -75,14 +77,6 @@ export const tasks = [
     EmployeeID: 1,
   },
 ];
-export const formFieldOptions = [
-  { dataField: 'Prefix', label: 'Title' },
-  { dataField: 'FirstName', label: 'First Name' },
-  { dataField: 'LastName', label: 'Last Name' },
-  { dataField: 'Position', label: 'Position' },
-  { dataField: 'State', label: 'State' },
-  { dataField: 'BirthDate', label: 'Birth Date' },
-];
 export const formFieldsConfig = [
   {
     dataField: 'Prefix',
@@ -141,3 +135,7 @@ export const formFieldsConfig = [
     },
   },
 ];
+export const formFieldOptions = formFieldsConfig.map(({ dataField, label }) => ({
+  dataField: dataField ?? '',
+  label: label?.text ?? dataField ?? '',
+}));

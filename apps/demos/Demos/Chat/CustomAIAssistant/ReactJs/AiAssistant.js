@@ -6,7 +6,7 @@ import Popup, { Position } from 'devextreme-react/popup';
 import SpeedDialAction from 'devextreme-react/speed-dial-action';
 import { ArrayStore, DataSource } from 'devextreme-react/common/data';
 import { routeMessage } from './chat-router.js';
-import { clearButtonOptions, emptyViewMessage, emptyViewPrompt } from './data.js';
+import { emptyViewMessage } from './data.js';
 
 const chatStore = new ArrayStore({ key: 'id' });
 const chatDataSource = new DataSource({ store: chatStore, paginate: false });
@@ -15,18 +15,21 @@ const chatSuggestionItems = [
   { text: 'Change State to Texas', prompt: 'Change State to Texas' },
 ];
 const chatUser = { id: 'user' };
-const rightTopPosition = { x: 'right', y: 'top' };
 const popupWrapperAttr = { class: 'chat-popup' };
-const emptyViewHtml = { __html: emptyViewPrompt };
 function EmptyView() {
   return (
     <>
       <div className="dx-chat-messagelist-empty-image dx-ai-chat__empty-image" />
       <div className="ai-chat-empty-message">{emptyViewMessage}</div>
-      <div
-        className="ai-chat-empty-prompt"
-        dangerouslySetInnerHTML={emptyViewHtml}
-      />
+      <div className="ai-chat-empty-prompt">
+        <div>
+          Update employee <b>Form</b> fields.
+        </div>
+        <div>
+          Filter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and
+          sorting.
+        </div>
+      </div>
     </>
   );
 }
@@ -37,35 +40,32 @@ export default function AiAssistant({ formRef, gridRef, aiIntegration }) {
   const updateClearButtonState = useCallback(() => {
     clearButtonInstance.current?.option('disabled', chatDataSource.items().length === 0);
   }, []);
-  const pushMessage = useCallback(
-    (message) => {
-      chatStore.push([
-        {
-          type: 'insert',
-          data: { id: Date.now() + Math.random(), timestamp: new Date(), ...message },
-        },
-      ]);
-      chatDataSource.reload();
-      updateClearButtonState();
-    },
-    [updateClearButtonState],
-  );
+  const pushMessage = useCallback((message) => {
+    chatStore.push([
+      {
+        type: 'insert',
+        data: { id: Date.now() + Math.random(), timestamp: new Date(), ...message },
+      },
+    ]);
+  }, []);
   const handleUserMessage = useCallback(
     (message) => {
-      setDisabled(true);
       const form = formRef.current?.instance();
       const grid = gridRef.current?.instance();
-      if (form && grid) {
-        routeMessage(String(message.text), {
-          form,
-          gridInstance: grid,
-          aiIntegration,
-          pushMessage,
-        }).finally(() => {
-          setDisabled(false);
-          updateClearButtonState();
-        });
+      if (!form || !grid) {
+        return;
       }
+      setDisabled(true);
+      clearButtonInstance.current?.option('disabled', true);
+      routeMessage(String(message.text), {
+        form,
+        gridInstance: grid,
+        aiIntegration,
+        pushMessage,
+      }).finally(() => {
+        setDisabled(false);
+        updateClearButtonState();
+      });
     },
     [aiIntegration, formRef, gridRef, pushMessage, updateClearButtonState],
   );
@@ -81,8 +81,6 @@ export default function AiAssistant({ formRef, gridRef, aiIntegration }) {
         return;
       }
       const suggestionMessage = {
-        id: Date.now() + Math.random(),
-        timestamp: new Date(),
         author: chatUser,
         text: itemData.prompt,
       };
@@ -113,9 +111,10 @@ export default function AiAssistant({ formRef, gridRef, aiIntegration }) {
         widget: 'dxButton',
         toolbar: 'top',
         location: 'after',
+        cssClass: 'ai-chat-clear-button',
         options: {
-          cssClass: 'ai-chat-clear-button',
-          ...clearButtonOptions,
+          icon: 'clearhistory',
+          hint: 'Clear chat',
           disabled: true,
           onClick: clearChat,
           onInitialized: onClearButtonInitialized,
@@ -150,13 +149,12 @@ export default function AiAssistant({ formRef, gridRef, aiIntegration }) {
         showCloseButton={true}
         shading={false}
         wrapperAttr={popupWrapperAttr}
-        onShowing={onPopupShowing}
         onHiding={onPopupHiding}
         toolbarItems={toolbarItems}
       >
         <Position
-          my={rightTopPosition}
-          at={rightTopPosition}
+          my="right top"
+          at="right top"
           of=".demo-container"
           offset="-20 20"
         />

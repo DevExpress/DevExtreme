@@ -36,7 +36,7 @@ export function applyFormClearAction(form: EmployeeForm, formAction: FormAction 
   return { status: 'success', message: `Cleared ${fieldName}.` };
 }
 
-export function formatAiResultDetails(aiResult: AIResult): string {
+function formatAiResultDetails(aiResult: AIResult): string {
   const labelByField = new Map(getFormFieldOptions().map((field) => [field.dataField, field.label]));
 
   return Object.keys(aiResult)

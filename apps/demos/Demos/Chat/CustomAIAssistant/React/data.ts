@@ -5,16 +5,16 @@ import type { FormRef, FormTypes } from 'devextreme-react/form';
 import type { AIIntegration } from 'devextreme-react/common/ai-integration';
 import type { OpenAI } from 'openai';
 
-export type TaskPriority = 'High' | 'Normal' | 'Low';
+type TaskPriority = 'High' | 'Normal' | 'Low';
 export type RouterTarget = 'form' | 'grid' | 'mixed' | 'none';
 export type FormActionType = 'clear_field' | 'clear_all' | 'smart_paste';
-export type FilterOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'notcontains' | 'startswith' | 'endswith' | 'anyof';
+type FilterOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'notcontains' | 'startswith' | 'endswith' | 'anyof';
 
 export type TaskGrid = ReturnType<DataGridRef['instance']>;
 export type EmployeeForm = ReturnType<FormRef['instance']>;
 export type ColumnFilterExpression = [(rowData: Task) => number, FilterOperation, number];
 
-export type ChatMessage = ChatTypes.Message;
+type ChatMessage = ChatTypes.Message;
 export type AIMessage = OpenAI.ChatCompletionMessageParam;
 
 export interface Task {
@@ -28,7 +28,7 @@ export interface Task {
   EmployeeID: number;
 }
 
-export interface Employee {
+interface Employee {
   ID: number;
   Prefix: string;
   FirstName: string;
@@ -54,7 +54,7 @@ export type GridCommand = {
   execute: (grid: TaskGrid, args: GridCommandArgs, rawText?: string) => CommandResult;
 };
 
-export interface GridCommandArgs {
+interface GridCommandArgs {
   column?: string;
   operator?: FilterOperation;
   value?: string | number | boolean | string[] | Date | null;
@@ -65,10 +65,9 @@ export interface GridCommandArgs {
 export type FilterCondition = [string, FilterOperation, string | number | boolean | string[] | Date];
 export type GridFilterValue = FilterCondition | (FilterCondition | 'and')[];
 
-export interface ColumnLookup {
-  column: DataGridTypes.Column | null;
-  failure: CommandResult | null;
-}
+export type ColumnLookup =
+  | { column: DataGridTypes.Column; failure: null }
+  | { column: null; failure: CommandResult };
 
 export interface FormAction {
   type: FormActionType;
@@ -92,7 +91,7 @@ export interface OperationOutcome {
 
 export type PushMessage = (message: Partial<ChatMessage>) => void;
 
-export interface RouterContext {
+interface RouterContext {
   form: EmployeeForm;
   gridInstance: TaskGrid;
   aiIntegration: AIIntegration;
@@ -119,23 +118,27 @@ export interface TaskGridProps {
 
 export type AIResult = Record<string, unknown>;
 
-export const titles = ['Mr.', 'Mrs.', 'Ms.'];
-export const states = ['California', 'New York', 'Texas'];
-export const positions = ['CEO', 'Sales Assistant', 'CMO', 'Manager', 'Designer', 'Developer'];
-export const colors: Record<TaskPriority, string> = {
-  High: '#F1BBBC',
-  Normal: '#F9E2AE',
-  Low: '#9FD89F',
+const titles = ['Mr.', 'Mrs.', 'Ms.'];
+const states = ['California', 'New York', 'Texas'];
+const positions = ['CEO', 'Sales Assistant', 'CMO', 'Manager', 'Designer', 'Developer'];
+
+export const AI_SERVICE_CONFIG = {
+  dangerouslyAllowBrowser: true,
+  deployment: 'demo-mini',
+  endpoint: 'https://public-api.devexpress.com/demo-openai',
+  apiVersion: '2024-02-01',
+  apiKey: 'DEMO',
 };
 
-export const deployment = 'demo-mini';
-export const endpoint = 'https://public-api.devexpress.com/demo-openai';
-export const apiVersion = '2024-02-01';
-export const apiKey = 'DEMO';
+export class ChatCommandError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ChatCommandError';
+    Object.setPrototypeOf(this, ChatCommandError.prototype);
+  }
+}
 
 export const emptyViewMessage = 'How can I help with this page?';
-export const emptyViewPrompt = 'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
-export const clearButtonOptions = { icon: 'clearhistory', hint: 'Clear chat' } as const;
 
 export const employee: Employee = {
   ID: 1,
@@ -200,15 +203,6 @@ export const tasks: Task[] = [
   },
 ];
 
-export const formFieldOptions: FormFieldOption[] = [
-  { dataField: 'Prefix', label: 'Title' },
-  { dataField: 'FirstName', label: 'First Name' },
-  { dataField: 'LastName', label: 'Last Name' },
-  { dataField: 'Position', label: 'Position' },
-  { dataField: 'State', label: 'State' },
-  { dataField: 'BirthDate', label: 'Birth Date' },
-];
-
 export const formFieldsConfig: FormTypes.SimpleItem[] = [
   { dataField: 'Prefix', label: { text: 'Title' }, editorType: 'dxSelectBox', editorOptions: { items: titles, searchEnabled: true }, aiOptions: { instruction: 'Only fill this field with one of the allowed values (Mr., Mrs., Ms.) if a title is explicitly mentioned in the text. Never use this field for any part of a person\'s name.' } },
   { dataField: 'FirstName', label: { text: 'First Name' }, aiOptions: { instruction: "Only fill this field if the text clearly refers to a person's given name. Never use grid/task-related words like Subject, Priority, Status, Due Date, Completion, or generic verbs like sort/filter/show as a name." } },
@@ -216,4 +210,9 @@ export const formFieldsConfig: FormTypes.SimpleItem[] = [
   { dataField: 'Position', label: { text: 'Position' }, editorType: 'dxSelectBox', editorOptions: { items: positions, searchEnabled: true }, aiOptions: { instruction: "Only fill this field with one of the allowed job position values if the text explicitly refers to the employee's own job title/role." } },
   { dataField: 'State', label: { text: 'State' }, editorType: 'dxSelectBox', editorOptions: { items: states, searchEnabled: true }, aiOptions: { instruction: "Only fill this field with one of the allowed US state values if the text explicitly refers to the employee's home/office state." } },
   { dataField: 'BirthDate', label: { text: 'Birth Date' }, editorType: 'dxDateBox', editorOptions: { displayFormat: 'M/d/yyyy' }, aiOptions: { instruction: "Only fill this field if the text explicitly refers to the employee's own birth date or date of birth." } },
-] as const;
+];
+
+export const formFieldOptions: FormFieldOption[] = formFieldsConfig.map(({ dataField, label }) => ({
+  dataField: dataField ?? '',
+  label: label?.text ?? dataField ?? '',
+}));

@@ -7,6 +7,8 @@ import { Position, Toast } from 'devextreme-react/toast';
 import { employee, formFieldsConfig } from './data.ts';
 import type { EmployeeFormProps } from './data.ts';
 
+const bottomCenterPosition = { x: 'center', y: 'bottom' } as const;
+
 const saveButtonOptions: ButtonTypes.Properties = {
   text: 'Save',
   type: 'default',
@@ -14,9 +16,9 @@ const saveButtonOptions: ButtonTypes.Properties = {
   useSubmitBehavior: true,
   width: 120,
 };
-const bottomCenterPosition = { x: 'center', y: 'bottom' } as const;
 
 export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormProps) {
+  const [formData] = useState(() => ({ ...employee }));
   const [toastVisible, setToastVisible] = useState(false);
 
   const onOptionChanged = useCallback((event: FormTypes.OptionChangedEvent): void => {
@@ -33,7 +35,7 @@ export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormPro
     <div id="form-container">
       <Form
         ref={formRef}
-        formData={employee}
+        formData={formData}
         colCount={3}
         labelLocation="top"
         aiIntegration={aiIntegration}

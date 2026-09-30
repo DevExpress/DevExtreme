@@ -11,13 +11,13 @@ import type {
 
 const fail = (message: string): CommandResult => ({ status: 'failure', message });
 
-export const gridCommands: Record<string, GridCommand> = {
+const gridCommands: Record<string, GridCommand> = {
   filterValue: {
     description: `Apply a filter to a single column. Pass column (dataField), operator, and value.
 Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith", "anyof".
 Date values must be in "YYYY-MM-DDTHH:mm:ss" format (e.g. "2024-05-10T00:00:00").
 The "Completion" column is a boolean (task completed or not): use operator "=" with value true for completed tasks, or value false for tasks that are not completed.
-To filter a date column by a year and/or month, use operator "anyof" with value as an array of one or more strings in "YYYY" or "YYYY/M" format. Only use "anyof" when the year is known; if the year is missing, omit the action instead of guessing.`,
+To filter a date column by a year and/or month (the same thing the grid's own header filter does when you pick a year then a month), use operator "anyof" with value as an array of one or more strings in "YYYY" (whole year, e.g. "2023") or "YYYY/M" (whole month, month is 1-12 with no leading zero, e.g. "2023/5" for May 2023) format, e.g. {"column": "DueDate", "operator": "anyof", "value": ["2023/5"]} for "May 2023". Only use "anyof" when the year is known; if the year is missing and cannot be inferred from elsewhere in the request (e.g. plain "in May" with no year anywhere), do not guess it - omit this action entirely instead of adding it with a made-up year.`,
     schema: {
       type: 'object',
       properties: {
@@ -33,12 +33,11 @@ To filter a date column by a year and/or month, use operator "anyof" with value 
       required: ['column', 'operator', 'value'],
     },
     execute(grid, args, rawText) {
-      const columnLookup = getColumnOrFail(grid, args.column ?? '');
-      if (columnLookup.failure || !columnLookup.column) {
-        return columnLookup.failure ?? fail(`I couldn't find a DataGrid column named '${args.column ?? ''}'.`);
+      const { column, failure } = getColumnOrFail(grid, args.column ?? '');
+      if (failure) {
+        return failure;
       }
 
-      const column = columnLookup.column;
       const columnName = column.dataField ?? column.name ?? args.column ?? '';
       const isDateColumn = column.dataType === 'date' || column.dataType === 'datetime';
       let value = args.value;
@@ -102,14 +101,17 @@ To filter a date column by a year and/or month, use operator "anyof" with value 
       required: ['column', 'sortOrder'],
     },
     execute(grid, args) {
-      const columnLookup = getColumnOrFail(grid, args.column ?? '');
-      if (columnLookup.failure || !columnLookup.column) {
-        return columnLookup.failure ?? fail(`I couldn't find a DataGrid column named '${args.column ?? ''}'.`);
+      const { column, failure } = getColumnOrFail(grid, args.column ?? '');
+      if (failure) {
+        return failure;
       }
 
-      const column = columnLookup.column;
-      const order = args.sortOrder ?? 'asc';
+      const order = args.sortOrder;
       const caption = column.caption ?? args.column ?? '';
+
+      if (order !== 'asc' && order !== 'desc' && order !== 'none') {
+        return fail(`I couldn't sort by '${caption}'. Specify sortOrder as 'asc', 'desc', or 'none'.`);
+      }
 
       try {
         grid.columnOption(args.column ?? '', 'sortOrder', order === 'none' ? undefined : order);
@@ -146,16 +148,19 @@ To filter a date column by a year and/or month, use operator "anyof" with value 
       required: ['column', 'visible'],
     },
     execute(grid, args) {
-      const columnLookup = getColumnOrFail(grid, args.column ?? '');
-      if (columnLookup.failure || !columnLookup.column) {
-        return columnLookup.failure ?? fail(`I couldn't find a DataGrid column named '${args.column ?? ''}'.`);
+      const { column, failure } = getColumnOrFail(grid, args.column ?? '');
+      if (failure) {
+        return failure;
       }
 
-      const column = columnLookup.column;
       const caption = column.caption ?? args.column ?? '';
 
+      if (typeof args.visible !== 'boolean') {
+        return fail(`I couldn't change the visibility of '${caption}'. Specify visible as true or false.`);
+      }
+
       try {
-        grid.columnOption(args.column ?? '', 'visible', args.visible ?? false);
+        grid.columnOption(args.column ?? '', 'visible', args.visible);
         return {
           status: 'success',
           message: args.visible ? `Showed column '${caption}'.` : `Hid column '${caption}'.`,
@@ -167,7 +172,7 @@ To filter a date column by a year and/or month, use operator "anyof" with value 
   },
 };
 
-export function getFilterConditions(filterValue: unknown): FilterCondition[] {
+function getFilterConditions(filterValue: unknown): FilterCondition[] {
   if (!Array.isArray(filterValue)) {
     return [];
   }
@@ -177,7 +182,7 @@ export function getFilterConditions(filterValue: unknown): FilterCondition[] {
     : [filterValue as FilterCondition];
 }
 
-export function combineFilterConditions(existing: unknown, next: FilterCondition): GridFilterValue {
+function combineFilterConditions(existing: unknown, next: FilterCondition): GridFilterValue {
   const conditions = getFilterConditions(existing).filter(
     ([column, operator]) => column !== next[0] || operator !== next[1],
   );
@@ -189,7 +194,7 @@ export function combineFilterConditions(existing: unknown, next: FilterCondition
     : conditions.flatMap((condition, index) => (index === 0 ? [condition] : ['and', condition])) as GridFilterValue;
 }
 
-export function getColumnOrFail(grid: TaskGrid, columnName: string): ColumnLookup {
+function getColumnOrFail(grid: TaskGrid, columnName: string): ColumnLookup {
   const column = grid.columnOption(columnName) as DataGridTypes.Column | null;
 
   if (!column) {
@@ -235,7 +240,7 @@ export function buildGridPromptSection(columnNames: string[]): string {
 
   return `GRID: translate any part of the request that affects the task grid into one or more grid commands (the "actions" array).
 Available columns (dataField): ${columnNames.join(', ')}.
-CRITICAL RULE: a column mentioned in the request must clearly correspond to one of the available columns above (matching by meaning is fine, e.g. "due date" -> "DueDate"). If it does not — even if it superficially looks like it could be a column name — you must NOT invent or substitute the closest-sounding available column. Instead, still emit the action using the column name exactly as written in the request, so the app can report that the column wasn't found — never replace it with a different, existing column just to make the action valid.
+CRITICAL RULE: a column mentioned in the request must clearly correspond to one of the available columns above (matching by meaning is fine, e.g. "due date" -> "DueDate"). If it does not - even if it superficially looks like it could be a column name - you must NOT invent or substitute the closest-sounding available column. Instead, still emit the action using the column name exactly as written in the request, so the app can report that the column wasn't found - never replace it with a different, existing column just to make the action valid.
 Example: request "filter the ZXQ column by foo" - ZXQ matches no available column, so emit {"column": "ZXQ", ...} as-is (it will correctly fail as "column not found") - do NOT emit an action for 'Subject' or any other real column instead.
 The "Completion" column is a boolean: true means the task is completed, false means it is not. To filter for 'completed' tasks, use {'column': 'Completion', 'operator': '=', 'value': true}. To filter for 'not completed' tasks, use {'column': 'Completion', 'operator': '=', 'value': false}.
 Available grid commands:

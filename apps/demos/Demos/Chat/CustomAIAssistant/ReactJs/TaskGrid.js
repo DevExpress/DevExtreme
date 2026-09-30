@@ -2,14 +2,13 @@ import React from 'react';
 import DataGrid, {
   Column, FilterRow, HeaderFilter, LoadPanel,
 } from 'devextreme-react/data-grid';
-import { colors, tasks } from './data.js';
+import { tasks } from './data.js';
 
-const priorityClassNames = Object.fromEntries(
-  Object.keys(colors).map((priority) => [priority, `priority-badge--${priority.toLowerCase()}`]),
-);
+const completionEditorOptions = {
+  elementAttr: { 'aria-label': 'Completed' },
+};
 function renderPriorityCell({ value }) {
-  const priority = value;
-  return <div className={`priority-badge ${priorityClassNames[priority]}`}>{value}</div>;
+  return <div className={`priority-badge priority-badge--${value.toLowerCase()}`}>{value}</div>;
 }
 const calculateCompletion = (row) => row.Completion === 100;
 const calculateFilterExpression = (filterValue, operation) => {
@@ -53,6 +52,7 @@ export default function TaskGrid({ gridRef }) {
           caption="Completed"
           alignment="center"
           dataType="boolean"
+          editorOptions={completionEditorOptions}
           calculateCellValue={calculateCompletion}
           calculateFilterExpression={calculateFilterExpression}
         />

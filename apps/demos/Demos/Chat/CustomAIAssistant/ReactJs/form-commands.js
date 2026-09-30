@@ -27,7 +27,7 @@ export function applyFormClearAction(form, formAction) {
   form.updateData(fieldName, null);
   return { status: 'success', message: `Cleared ${fieldName}.` };
 }
-export function formatAiResultDetails(aiResult) {
+function formatAiResultDetails(aiResult) {
   const labelByField = new Map(
     getFormFieldOptions().map((field) => [field.dataField, field.label]),
   );

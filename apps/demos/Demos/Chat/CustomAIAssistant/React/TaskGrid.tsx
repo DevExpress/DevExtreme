@@ -4,16 +4,14 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import type { DataGridTypes } from 'devextreme-react/data-grid';
 import type { ColumnFilterExpression, Task, TaskGridProps } from './data.ts';
-import { colors, tasks } from './data.ts';
+import { tasks } from './data.ts';
 
-const priorityClassNames = Object.fromEntries(
-  Object.keys(colors).map((priority) => [priority, `priority-badge--${priority.toLowerCase()}`]),
-) as Record<keyof typeof colors, string>;
+const completionEditorOptions = {
+  elementAttr: { 'aria-label': 'Completed' },
+};
 
 function renderPriorityCell({ value }: DataGridTypes.ColumnCellTemplateData): React.JSX.Element {
-  const priority = value as keyof typeof colors;
-
-  return <div className={`priority-badge ${priorityClassNames[priority]}`}>{value}</div>;
+  return <div className={`priority-badge priority-badge--${value.toLowerCase()}`}>{value}</div>;
 }
 
 const calculateCompletion = (row: Task): boolean => row.Completion === 100;
@@ -47,6 +45,7 @@ export default function TaskGrid({ gridRef }: TaskGridProps) {
           caption="Completed"
           alignment="center"
           dataType="boolean"
+          editorOptions={completionEditorOptions}
           calculateCellValue={calculateCompletion}
           calculateFilterExpression={calculateFilterExpression}
         />

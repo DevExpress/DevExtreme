@@ -1,4 +1,5 @@
 import type { AIIntegration } from 'devextreme-react/common/ai-integration';
+import { ChatCommandError } from './data.ts';
 import { applyFormClearAction, applyFormSmartPaste, getFormFieldOptions } from './form-commands.ts';
 import { applyGridActions, buildGridPromptSection, buildGridResponseSchema, getGridColumnNames } from './grid-commands.ts';
 import type {
@@ -7,6 +8,7 @@ import type {
   EmployeeForm,
   ExecuteGridAssistantAction,
   FormActionType,
+  OperationOutcome,
   PushMessage,
   RouteMessageContext,
   RouterTarget,
@@ -18,25 +20,17 @@ const MAX_USER_MESSAGE_LENGTH = 2000;
 const FIELD_OR_VALUE_NOT_FOUND_MESSAGE =
   '❌ No field or column exists with such a name, or the entered value is invalid. Please check the name and value and try again.';
 
-export class ChatCommandError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'ChatCommandError';
-    Object.setPrototypeOf(this, ChatCommandError.prototype);
-  }
-}
-
-export function extractJson(text: string): unknown {
+function extractJson(text: string): unknown {
   const match = text.match(/\{[\s\S]*\}/);
 
   try {
-    return JSON.parse(match?.[0] ?? '{}');
+    return JSON.parse(match?.[0] ?? '');
   } catch {
     throw new ChatCommandError('❌ I received an unexpected response from the AI service. Please rephrase your request and try again.');
   }
 }
 
-export function executeAiCommand(text: string, aiIntegration: AIIntegration): Promise<unknown> {
+function executeAiCommand(text: string, aiIntegration: AIIntegration): Promise<unknown> {
   return new Promise((resolve, reject) => {
     aiIntegration.execute(
       { text },
@@ -62,23 +56,19 @@ function isFormActionType(type: string): type is FormActionType {
   return FORM_ACTION_TYPES.has(type as FormActionType);
 }
 
-export async function classifyRequest(
+async function classifyRequest(
   text: string,
   aiIntegration: AIIntegration,
 ): Promise<ClassificationResult> {
-  if (!aiIntegration) {
-    return { target: 'mixed', formAction: null };
-  }
-
   const prompt = [
     `Decide which UI area should handle the user's request.
 Return STRICT JSON only, without markdown fences.
-Format: {'target': 'form' | 'grid' | 'mixed' | 'none', 'formAction': <see below> | null, 'reason': 'short explanation'}
+Format: {'target': 'form' | 'grid' | 'mixed' | 'none', 'formAction': <see below> | null, 'reason': 'short explanation' }
 Rules:
-- Use 'form' for profile/customer form updates, field clearing, or smart-paste style data entry.
-- Use 'grid' for sorting, filtering, showing/hiding columns, or other DataGrid tasks.
-- Use 'mixed' when the request clearly asks for both a form change and a grid change together.
-- Use 'none' when the request is unrelated to both areas.
+- Use \`form\` for profile/customer form updates, field clearing, or smart-paste style data entry.
+- Use \`grid\` for sorting, filtering, showing/hiding columns, or other \`DataGrid\` tasks.
+- Use \`mixed\` when the request clearly asks for both a form change and a grid change together.
+- Use \`none\` when the request is unrelated to both areas.
 If you are not confident, return mixed.
 
 ${buildFormActionPromptSection()}
@@ -112,40 +102,41 @@ User request: '${text}'`,
   }
 }
 
-export function buildFormActionPromptSection(): string {
+function buildFormActionPromptSection(): string {
   const fieldList = getFormFieldOptions()
     .map((field) => `${field.dataField} (${field.label})`)
     .join(', ');
 
   return `Form fields (dataField and label): ${fieldList}.
-If the request is about the form, also set formAction to one of:
-- {type: 'clear_field', field: '<dataField>'} to clear one specific field.
-- {type: 'clear_all'} to clear/reset the whole form.
-- {type: 'smart_paste'} to fill in form data from the request text.
-Set formAction to null if the request is not about the form.`;
+If the request is about the form, also set \`formAction\` to one of:
+- \`{type: 'clear_field', field: '<dataField>'}\` to clear one specific field.
+- \`{type: 'clear_all'}\` to clear/reset the whole form.
+- \`{type: 'smart_paste'}\` to fill in form data from the request text.
+Set \`formAction\` to \`null\` if the request is not about the form.`;
 }
 
-export function buildGridSystemPrompt(columnNames: string[]): string {
+function buildGridSystemPrompt(columnNames: string[]): string {
   return `You control a task DataGrid on this page.
 This page ALSO has a separate employee/customer profile form (fields like name, title/prefix, position, state, birth date) that is handled elsewhere - it is NOT part of this grid.
 Figure out what the user's request is about and translate ONLY the part that is clearly about the task grid into the matching commands described below.
-Do NOT create a grid action just because a value could technically fit a text column.
-If the request is about the profile form, leave that part out of 'actions' entirely.
+Do NOT create a grid action just because a value could technically fit a text column (e.g. 'Subject'). If the request is about the profile form (e.g. mentions a person's name, title, job position, state, or birth date), leave that part out of 'actions' entirely - even if no other part of the request is grid-related.
 
 ${buildGridPromptSection(columnNames)}
 
-Respond with STRICT JSON only, no code fences, matching this schema:
+Respond with STRICT JSON only, no code fences, no explanations, matching this schema:
 ${JSON.stringify(buildGridResponseSchema())}
 
 If the request has nothing to do with the grid, respond with 'actions': [].`;
 }
 
-export async function buildGridResultsPromise(
+async function buildGridResultsPromise(
   grid: TaskGrid,
   aiIntegration: AIIntegration,
   text: string,
-): Promise<{ results: CommandResult[]; error: unknown }> {
+): Promise<OperationOutcome> {
   const prompt = `${buildGridSystemPrompt(getGridColumnNames(grid))}\n\nUser request: '${text}'`;
+
+  grid.beginCustomLoading('');
 
   try {
     const parsed = (await executeAiCommand(prompt, aiIntegration)) as { actions?: ExecuteGridAssistantAction[] };
@@ -160,15 +151,17 @@ export async function buildGridResultsPromise(
       error: null,
     };
   } catch (error) {
-    return { results: [], error };
+    return { results: [], error: error instanceof Error ? error : new Error(String(error)) };
+  } finally {
+    grid.endCustomLoading();
   }
 }
 
-export async function buildFormResultsPromise(
+async function buildFormResultsPromise(
   form: EmployeeForm,
   formAction: ClassificationResult['formAction'],
   text: string,
-): Promise<{ results: CommandResult[]; error: unknown }> {
+): Promise<OperationOutcome> {
   const clearResult = applyFormClearAction(form, formAction);
   if (clearResult) {
     return { results: [clearResult], error: null };
@@ -177,7 +170,7 @@ export async function buildFormResultsPromise(
   try {
     return { results: [await applyFormSmartPaste(form, text)], error: null };
   } catch (error) {
-    return { results: [], error };
+    return { results: [], error: error instanceof Error ? error : new Error(String(error)) };
   }
 }
 
@@ -189,7 +182,7 @@ function formatSucceeded(messages: string[]): string {
   return messages.map((message) => `✅ Done. ${message}`).join('\n');
 }
 
-export function joinSucceededOrThrow(results: CommandResult[], fallbackError: Error | null): string {
+function joinSucceededOrThrow(results: CommandResult[], fallbackError: Error | null): string {
   const succeeded = results.filter((result) => result.status === 'success').map((result) => result.message);
   const failed = results.filter((result) => result.status === 'failure').map((result) => result.message);
 
@@ -204,7 +197,7 @@ export function joinSucceededOrThrow(results: CommandResult[], fallbackError: Er
     : formatSucceeded(succeeded);
 }
 
-export async function runCommand(text: string, { form, gridInstance, aiIntegration }: RouteMessageContext): Promise<string> {
+async function runCommand(text: string, { form, gridInstance, aiIntegration }: RouteMessageContext): Promise<string> {
   if (text.length > MAX_USER_MESSAGE_LENGTH) {
     throw new ChatCommandError('❌ This message is too long for me to process. Please shorten it and try again.');
   }
@@ -217,24 +210,22 @@ export async function runCommand(text: string, { form, gridInstance, aiIntegrati
 
   if (target === 'form') {
     const { results, error } = await buildFormResultsPromise(form, formAction, text);
-    return joinSucceededOrThrow(results, error instanceof Error ? error : null);
+    return joinSucceededOrThrow(results, error);
   }
 
   if (target === 'grid') {
     const { results, error } = await buildGridResultsPromise(gridInstance, aiIntegration, text);
-    return joinSucceededOrThrow(results, error instanceof Error ? error : null);
+    return joinSucceededOrThrow(results, error);
   }
 
   const [formResult, gridResult] = await Promise.all([
-    buildFormResultsPromise(form, formAction, text),
+    formAction ? buildFormResultsPromise(form, formAction, text) : { results: [], error: null },
     buildGridResultsPromise(gridInstance, aiIntegration, text),
   ]);
-  const errors = [gridResult.error, formResult.error].filter((error): error is Error => error instanceof Error);
-
-  return joinSucceededOrThrow([...formResult.results, ...gridResult.results], errors[0] ?? null);
+  return joinSucceededOrThrow([...formResult.results, ...gridResult.results], gridResult.error ?? formResult.error);
 }
 
-export function reportAiResult(promise: Promise<string>, pushMessage: PushMessage): Promise<void> {
+function reportAiResult(promise: Promise<string>, pushMessage: PushMessage): Promise<void> {
   return promise
     .then((message) => {
       pushMessage({
