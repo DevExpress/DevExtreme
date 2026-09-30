@@ -1213,6 +1213,21 @@ QUnit.module('defaultOptions', {
         assert.equal(new TestComponent().option('test'), 'value', 'test option is configured for ios');
     });
 
+    QUnit.test('default options for several devices are not set for other devices', function(assert) {
+        const TestComponent = this.createClass([{
+            device: [
+                { platform: 'android' },
+                { platform: 'ios' }
+            ],
+            options: {
+                test: 'value'
+            }
+        }]);
+
+        devices._currentDevice = { platform: 'generic', deviceType: 'desktop' };
+        assert.notEqual(new TestComponent().option('test'), 'value', 'test option is not configured for desktop');
+    });
+
     QUnit.test('set default options for filtering device with custom function', function(assert) {
         const TestComponent = this.createClass([{
             device(device) {
