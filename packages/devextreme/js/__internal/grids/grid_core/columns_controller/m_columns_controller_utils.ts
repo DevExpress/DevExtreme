@@ -18,6 +18,7 @@ import errors from '@js/ui/widget/ui.errors';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type DataSourceAdapter from '../data_source_adapter/m_data_source_adapter';
+import type { RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
@@ -802,92 +803,95 @@ export const columnOptionCore = function (
     return optionGetter(column, { functionsAsIs: true });
   }
   const prevValue = optionGetter(column, { functionsAsIs: true });
-  if (!equalByValue(prevValue, value, { maxDepth: 5 })) {
-    const changeType = resolveChangeType(optionName);
-    const columnIndex = column.index;
+  if (equalByValue(prevValue, value, { maxDepth: 5 })) {
+    return undefined;
+  }
 
-    if (optionName === 'groupIndex') {
-      // @ts-expect-error value and prevValue hold groupIndex values for this option
-      updateSortOrderWhenGrouping(that, column, value, prevValue);
-    }
+  const changeType = resolveChangeType(optionName);
+  const columnIndex = column.index;
 
-    const optionSetter = compileSetter(optionName) as ColumnOptionSetter;
-    optionSetter(column, value, { functionsAsIs: true });
-    const fullOptionName = getColumnFullPath(that, column);
+  if (optionName === 'groupIndex') {
+    // @ts-expect-error value and prevValue hold groupIndex values for this option
+    updateSortOrderWhenGrouping(that, column, value, prevValue);
+  }
 
-    if (COLUMN_INDEX_OPTIONS[optionName]) {
-      updateIndexes(that, column);
-      // eslint-disable-next-line no-param-reassign
-      value = optionGetter(column);
-    }
+  const optionSetter = compileSetter(optionName) as ColumnOptionSetter;
+  optionSetter(column, value, { functionsAsIs: true });
+  const fullOptionName = getColumnFullPath(that, column);
 
-    if (optionName === 'name' || optionName === 'allowEditing') {
-      that._checkColumns();
-    }
+  if (COLUMN_INDEX_OPTIONS[optionName]) {
+    updateIndexes(that, column);
+    // eslint-disable-next-line no-param-reassign
+    value = optionGetter(column);
+  }
 
-    if (!isDefined(prevValue) && !isDefined(value) && !optionName.startsWith('buffer') && notFireEvent !== false) {
-      // eslint-disable-next-line no-param-reassign
-      notFireEvent = true;
-    }
+  if (optionName === 'name' || optionName === 'allowEditing') {
+    that._checkColumns();
+  }
 
-    if (!notFireEvent) {
-      // T346972
-      if (!(USER_STATE_FIELD_NAMES as readonly string[]).includes(optionName) && optionName !== 'visibleWidth') {
-        const columns = that.option('columns');
-        let initialColumn = that.getColumnByPath(fullOptionName, columns);
-        if (columns && isString(initialColumn)) {
-          initialColumn = { dataField: initialColumn };
-          columns[columnIndex as number] = initialColumn;
-        }
-        if (initialColumn && isUserStateColumn(initialColumn, column)) {
-          optionSetter(initialColumn, value, { functionsAsIs: true });
-        }
+  if (!isDefined(prevValue) && !isDefined(value) && !optionName.startsWith('buffer') && notFireEvent !== false) {
+    // eslint-disable-next-line no-param-reassign
+    notFireEvent = true;
+  }
+
+  if (!notFireEvent) {
+    // T346972
+    if (!(USER_STATE_FIELD_NAMES as readonly string[]).includes(optionName) && optionName !== 'visibleWidth') {
+      const columns = that.option('columns');
+      let initialColumn = that.getColumnByPath(fullOptionName, columns);
+      if (columns && isString(initialColumn)) {
+        initialColumn = { dataField: initialColumn };
+        columns[columnIndex as number] = initialColumn;
       }
-      updateColumnChanges(that, changeType, optionName, columnIndex);
-    } else {
-      that.resetColumnsCache();
+      if (initialColumn && isUserStateColumn(initialColumn, column)) {
+        optionSetter(initialColumn, value, { functionsAsIs: true });
+      }
     }
+    updateColumnChanges(that, changeType, optionName, columnIndex);
+  } else {
+    that.resetColumnsCache();
+  }
 
-    if (fullOptionName) {
-      fireOptionChanged(that, {
-        fullOptionName,
-        optionName,
-        value,
-        prevValue,
-      });
-    }
+  if (fullOptionName) {
+    fireOptionChanged(that, {
+      fullOptionName,
+      optionName,
+      value,
+      prevValue,
+    });
+  }
 
-    if (column.type === AI_COLUMN_NAME) {
-      that.aiColumnOptionChanged.fire(column, optionName, value);
-    }
+  if (column.type === AI_COLUMN_NAME) {
+    that.aiColumnOptionChanged.fire(column, optionName, value);
   }
 
   return undefined;
 };
 
-export const addExpandColumn = function (that: ColumnsController) {
+export const addExpandColumn = (that: ColumnsController): void => {
   const options = that._getExpandColumnOptions();
 
   that.addCommandColumn(options);
 };
 
-export const defaultSetCellValue = function (data, value) {
+export function defaultSetCellValue(this: Column, data: RawItemData, value: unknown): void {
   if (!this.dataField) {
     return;
   }
   const path = this.dataField.split('.');
   const dotCount = path.length - 1;
+  const serializedValue = this.serializeValue ? this.serializeValue(value) : value;
+  let targetData = data;
 
-  if (this.serializeValue) {
-    value = this.serializeValue(value);
-  }
-
-  for (let i = 0; i < dotCount; i++) {
+  for (let i = 0; i < dotCount; i += 1) {
     const name = path[i];
-    data = data[name] = data[name] || {};
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const nestedData = (targetData[name] || {}) as RawItemData;
+    targetData[name] = nestedData;
+    targetData = nestedData;
   }
-  data[path[dotCount]] = value;
-};
+  targetData[path[dotCount]] = serializedValue;
+}
 
 export const getDataColumns = (
   visibleColumnsByRow: Column[][],
@@ -914,14 +918,14 @@ export const getDataColumns = (
   return dataColumns;
 };
 
-export const getRowCount = function (that: ColumnsController) {
+export const getRowCount = (that: ColumnsController): number => {
   let rowCount = 1;
   const bandColumnsCache = that.getBandColumnsCache();
   const { columnParentByIndex } = bandColumnsCache;
 
   that._columns.forEach((column) => {
     const parents = getParentBandColumns(column.index, columnParentByIndex);
-    const invisibleParents = parents.filter((column) => !column.visible);
+    const invisibleParents = parents.filter((parent) => !parent.visible);
 
     if (column.visible && !invisibleParents.length) {
       rowCount = Math.max(rowCount, parents.length + 1);
@@ -1151,41 +1155,31 @@ export const strictParseNumber = (text: string, format: Format): number | undefi
   return undefined;
 };
 
-const isFirstOrLastBandColumn = function (
+const isFirstOrLastColumnCore = (
   that: ColumnsController,
-  bandColumns: any[],
-  onlyWithinBandColumn = false,
-  isLast = false,
-  fixedPosition?: StickyPosition,
-): boolean {
-  return bandColumns.every((column, index) => onlyWithinBandColumn && index === 0
-    || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
-};
-
-const isFirstOrLastColumnCore = function (
-  that: ColumnsController,
-  column: any,
+  column: Column,
   rowIndex: number | null,
   onlyWithinBandColumn = false,
   isLast = false,
   fixedPosition?: StickyPosition,
-): boolean {
-  const getColumns = (index: number | null): any => that.getVisibleColumns(index)
+): boolean => {
+  const getColumns = (index: number | null): Column[] => that.getVisibleColumns(index)
     .filter((col) => {
-      let res = true;
-
       if (that.isAdaptiveHiddenColumn(col)) {
         return false;
       }
 
-      if (onlyWithinBandColumn && column) {
-        res &&= col.ownerBand === column.ownerBand;
-      } else if (fixedPosition) {
-        res &&= !!col.fixed && getColumnFixedPosition(that, col) === fixedPosition;
+      if (onlyWithinBandColumn) {
+        return col.ownerBand === column.ownerBand;
       }
 
-      return res;
+      if (fixedPosition) {
+        return !!col.fixed && getColumnFixedPosition(that, col) === fixedPosition;
+      }
+
+      return true;
     });
+
   const columnIndex = column.index;
   const columns = getColumns(rowIndex);
   const visibleColumnIndex = that.getVisibleIndex(columnIndex, rowIndex);
@@ -1195,14 +1189,23 @@ const isFirstOrLastColumnCore = function (
     : visibleColumnIndex === that.getVisibleIndex(columns[0]?.index, rowIndex);
 };
 
-export const isFirstOrLastColumn = function (
+const isFirstOrLastBandColumn = (
   that: ColumnsController,
-  targetColumn: any,
+  bandColumns: Column[],
+  onlyWithinBandColumn = false,
+  isLast = false,
+  fixedPosition?: StickyPosition,
+): boolean => bandColumns.every((column, index) => (onlyWithinBandColumn && index === 0)
+  || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
+
+export const isFirstOrLastColumn = (
+  that: ColumnsController,
+  targetColumn: Column,
   rowIndex: number | null,
   onlyWithinBandColumn = false,
   isLast = false,
   fixedPosition?: StickyPosition,
-): boolean {
+): boolean => {
   const targetColumnIndex = targetColumn.index;
   const bandColumnsCache = that.getBandColumnsCache();
   const parentBandColumns = isDefined(targetColumn.type)
@@ -1210,15 +1213,28 @@ export const isFirstOrLastColumn = function (
     : getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
 
   if (parentBandColumns.length) {
-    return isFirstOrLastBandColumn(that, parentBandColumns.concat([targetColumn]), onlyWithinBandColumn, isLast, fixedPosition);
+    return isFirstOrLastBandColumn(
+      that,
+      parentBandColumns.concat([targetColumn]),
+      onlyWithinBandColumn,
+      isLast,
+      fixedPosition,
+    );
   }
 
-  return onlyWithinBandColumn || isFirstOrLastColumnCore(that, targetColumn, rowIndex, onlyWithinBandColumn, isLast, fixedPosition);
+  return onlyWithinBandColumn || isFirstOrLastColumnCore(
+    that,
+    targetColumn,
+    rowIndex,
+    onlyWithinBandColumn,
+    isLast,
+    fixedPosition,
+  );
 };
 
-export const isColumnNameRequired = function ({ type = '' }: Column): boolean {
-  return COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(type);
-};
+export const isColumnNameRequired = (column: Column): boolean => (
+  COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(column.type ?? '')
+);
 
 export const columnHasValue = (column: Column): boolean => (
   !column.command || column.type === AI_COLUMN_NAME
