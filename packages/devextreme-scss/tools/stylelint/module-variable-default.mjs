@@ -33,6 +33,8 @@ const classifyingComments = (decl) => {
   let node = decl.prev();
   let gap = decl.raws.before ?? '';
   while (node?.type === 'comment' && !/\n\s*\n/.test(gap)) {
+    const owner = node.prev();
+    if (owner && owner.source?.end?.line === node.source?.start?.line) break;
     parts.push(node.text);
     gap = node.raws.before ?? '';
     node = node.prev();

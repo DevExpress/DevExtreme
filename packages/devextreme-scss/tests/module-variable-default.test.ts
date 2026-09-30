@@ -115,3 +115,12 @@ test('a size classified by the px audit is not a knob, so the flag is not requir
   expect(classified.lint('classified.scss', source).warnings.map(({ line }) => line)).toEqual([1, 15]);
   expect(lint('unconfigured.scss', source).warnings).toHaveLength(6);
 });
+
+test('a trailing marker classifies only its own line, not the variable below it', () => {
+  const { warnings } = classified.lint('trailing.scss', scss(
+    '$fixed: 1px; // dx-fixed-size',
+    '$next: #ccc;',
+  ));
+
+  expect(warnings.map(({ line }) => line)).toEqual([2]);
+});

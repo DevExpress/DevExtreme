@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 
 const bundleNames = existsSync(artifactsCss)

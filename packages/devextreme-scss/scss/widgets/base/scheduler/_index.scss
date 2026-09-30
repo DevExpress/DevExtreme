@@ -83,7 +83,7 @@ $scheduler-hovered-appointment-top-shadow-size: 5px; // dx-fixed-size: negated a
 $scheduler-focused-cell-shadow: inset 0 0 0 1px $scheduler-appointment-base-color; // dx-shadow-geometry
 
 $scheduler-vertical-appointment-resizable-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color, inset 0 -2px 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry
-$scheduler-vertical-appointment-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color;
+$scheduler-vertical-appointment-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color !default;
 $scheduler-vertical-appointment-shadow: inset 0 2px 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry
 $scheduler-vertical-appointment-resizing-shadow: inset 0 -2px 0 0 $scheduler-appointment-start-color, $scheduler-vertical-appointment-shadow; // dx-shadow-geometry
 
@@ -91,7 +91,7 @@ $scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2) !de
 
 $scheduler-horizontal-appointment-resizable-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color, inset -2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry
 $scheduler-horizontal-appointment-resizable-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color, inset 2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry
-$scheduler-horizontal-appointment-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color;
+$scheduler-horizontal-appointment-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color !default;
 $scheduler-horizontal-appointment-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color !default;
 $scheduler-horizontal-appointment-shadow: inset 2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry
 $scheduler-horizontal-appointment-shadow-rtl: inset -2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry

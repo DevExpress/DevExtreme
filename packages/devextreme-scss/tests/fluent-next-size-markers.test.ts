@@ -5,7 +5,7 @@ import {
 import { tmpdir } from 'os';
 import { basename, join } from 'path';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const tool = join(packageRoot, 'tools', 'review', 'px-audit.mjs');
 

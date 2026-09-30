@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import postcss from 'postcss';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 
 const MODE_PROPERTY = '--dx-theme-mode';

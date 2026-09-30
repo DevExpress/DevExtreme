@@ -11,7 +11,7 @@ import registries from '../tools/naming/registries.json';
 const { rootSelectors } = registries;
 const SYSTEM_FOLDERS: string[] = registries.systemFolders ?? [];
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 
 const RESET_WITHOUT_PAINT = new Set([

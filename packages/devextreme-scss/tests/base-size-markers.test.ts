@@ -2,7 +2,7 @@ import { execFileSync } from 'child_process';
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const baseRoot = join(packageRoot, 'scss', 'widgets', 'base');
 const tool = join(packageRoot, 'tools', 'sizes', 'inventory.mjs');
 const baselinePath = join(__dirname, 'base-size-markers.baseline.json');

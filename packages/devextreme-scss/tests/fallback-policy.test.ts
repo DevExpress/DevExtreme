@@ -9,7 +9,7 @@ import { join, sep } from 'path';
 import { stripScssComments } from '../build/tokens/consumed-tokens';
 import contract from '../tools/naming/runtime-contract.json';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const widgetsRoot = join(packageRoot, 'scss', 'widgets');
 const label = (file: string): string => file.slice(widgetsRoot.length + 1).split(sep).join('/');
 

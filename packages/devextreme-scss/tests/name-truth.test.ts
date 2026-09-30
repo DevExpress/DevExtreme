@@ -2,7 +2,7 @@ import { execFileSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const tool = join(packageRoot, 'tools', 'review', 'name-truth.mjs');
 const reviewed = JSON.parse(readFileSync(join(packageRoot, 'tools', 'review', 'name-truth.json'), 'utf8'));
 

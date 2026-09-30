@@ -3,7 +3,7 @@ import { dirname, join } from 'path';
 
 import contract from '../tools/naming/accent-contract.json';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const accentStylesheet = join(packageRoot, 'scss', 'widgets', ...contract.declaredIn.split('/'));
 const generatedPalettes = join(packageRoot, 'scss', '_design-system', 'fluent', 'accents');
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');

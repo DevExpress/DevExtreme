@@ -7,7 +7,7 @@ import { join } from 'path';
 
 import { required } from './required';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const tool = join(packageRoot, 'tools', 'review', 'roles.mjs');
 const baselinePath = join(packageRoot, 'tests', 'roles.baseline.json');
 

@@ -8,7 +8,7 @@ interface Entry {
   note: string;
 }
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 const journalPath = join(packageRoot, 'tools', 'naming', 'public-renames.json');
 

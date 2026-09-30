@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import { parseDeclarations } from '../tools/tokens/report';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const generatedRoot = join(packageRoot, 'scss', '_design-system');
 const bridgePath = join(generatedRoot, 'variables', '_ds.scss');
 
