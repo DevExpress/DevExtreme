@@ -41,7 +41,7 @@ overrides:
   engine.io@>=6.6.0 <6.6.10: ^6.6.10
   fast-uri@>=3.0.0 <3.1.8: ^3.1.8
   moment@>=2.29.2 <2.31.0: ^2.31.0
-  webpack-dev-middleware@<7.4.5: ^7.4.5
+  webpack-dev-middleware@<7.4.5: ^7.4.6
   webpack-dev-middleware@>=8.0.0 <8.3.0: ^8.3.0
 catalog:
   axe-core: 4.13.0
