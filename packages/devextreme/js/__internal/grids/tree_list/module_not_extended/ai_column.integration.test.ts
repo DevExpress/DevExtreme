@@ -29,7 +29,7 @@ interface RequestResult {
   abort: () => void;
 }
 
-const createTreeList = (
+const createTreeList = async (
   options: TreeListProperties = {},
 ): Promise<{
   $container: dxElementWrapper;

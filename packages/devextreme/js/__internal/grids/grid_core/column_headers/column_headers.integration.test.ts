@@ -29,7 +29,7 @@ describe('Column Headers', () => {
           {
             dataField: 'test',
             dataType: 'number',
-            headerCellTemplate(headerElement) {
+            headerCellTemplate(headerElement): void {
               $('<span>')
                 .text('Test')
                 .appendTo(headerElement);
@@ -212,13 +212,13 @@ describe('Column Headers', () => {
         ],
       });
 
-      const columnHeadersView = (instance as any).getView('columnHeadersView');
+      const columnHeadersView = instance.getView('columnHeadersView');
 
       const $cell = columnHeadersView._getCellElement(1, 'index:2');
 
       expect($cell).toBeDefined();
-      expect($cell.length).toBe(1);
-      expect($cell.text()).toBe('Field 2');
+      expect($cell?.length).toBe(1);
+      expect($cell?.text()).toBe('Field 2');
     });
 
     it('should return correct cell for band header using string identifier', async () => {
@@ -233,11 +233,11 @@ describe('Column Headers', () => {
         ],
       });
 
-      const columnHeadersView = (instance as any).getView('columnHeadersView');
+      const columnHeadersView = instance.getView('columnHeadersView');
       const $bandCell = columnHeadersView._getCellElement(0, 'index:1');
 
       expect($bandCell).toBeDefined();
-      expect($bandCell.text()).toBe('Band');
+      expect($bandCell?.text()).toBe('Band');
     });
   });
 });
