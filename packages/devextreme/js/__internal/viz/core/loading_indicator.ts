@@ -13,6 +13,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import type { ThemeValue } from './base_theme_manager';
 import { patchFontOptions as _patchFontOptions } from './utils';
 
 const STATE_HIDDEN = 0;
@@ -23,101 +24,126 @@ const ANIMATION_DURATION = 400;
 
 const LOADING_INDICATOR_READY = 'loadingIndicatorReady';
 
-export let LoadingIndicator = function (parameters) {
-  const that = this;
-  const renderer = parameters.renderer;
-  that._group = renderer.g().attr({ class: 'dx-loading-indicator' }).linkOn(renderer.root, { name: 'loading-indicator', after: 'peripheral' });
-  that._rect = renderer.rect().attr({ opacity: 0 }).append(that._group);
-  that._text = renderer.text().attr({ align: 'center' }).append(that._group);
-  that._createStates(parameters.eventTrigger, that._group, renderer.root, parameters.notify);
-};
+type LoadingIndicatorEventTrigger = (name: string) => void;
 
-LoadingIndicator.prototype = {
-  constructor: LoadingIndicator,
+type LoadingIndicatorNotify = (state: boolean) => void;
 
-  _createStates(eventTrigger, group, root, notify) {
-    const that = this;
-    that._states = [{
+interface LoadingIndicatorParams {
+  renderer: ThemeValue;
+  eventTrigger: LoadingIndicatorEventTrigger;
+  notify: LoadingIndicatorNotify;
+}
+
+interface LoadingIndicatorState {
+  opacity: number;
+  start: () => void;
+  complete: () => void;
+}
+
+export let LoadingIndicator = class LoadingIndicator {
+  declare _group: ThemeValue;
+
+  declare _rect: ThemeValue;
+
+  declare _text: ThemeValue;
+
+  declare _states: LoadingIndicatorState[];
+
+  declare _state: number;
+
+  declare _isHiding: boolean;
+
+  declare _noHiding: boolean;
+
+  constructor(parameters: LoadingIndicatorParams) {
+    const renderer = parameters.renderer;
+    this._group = renderer.g().attr({ class: 'dx-loading-indicator' }).linkOn(renderer.root, { name: 'loading-indicator', after: 'peripheral' });
+    this._rect = renderer.rect().attr({ opacity: 0 }).append(this._group);
+    this._text = renderer.text().attr({ align: 'center' }).append(this._group);
+    this._createStates(parameters.eventTrigger, this._group, renderer.root, parameters.notify);
+  }
+
+  _createStates(eventTrigger: LoadingIndicatorEventTrigger, group: ThemeValue, root: ThemeValue, notify: LoadingIndicatorNotify): void {
+    this._states = [{
       opacity: 0,
-      start() {
+      start(): void {
         notify(false);
       },
-      complete() {
+      complete(): void {
         group.linkRemove();
         root.css({ 'pointer-events': '' });
         eventTrigger(LOADING_INDICATOR_READY);
       },
     }, {
       opacity: 0.85,
-      start() {
+      start(): void {
         group.linkAppend();
         root.css({ 'pointer-events': 'none' });
         notify(true);
       },
-      complete() {
+      complete(): void {
         eventTrigger(LOADING_INDICATOR_READY);
       },
     }];
-    that._state = STATE_HIDDEN;
-  },
+    this._state = STATE_HIDDEN;
+  }
 
-  setSize(size) {
+  setSize(size: { width: number; height: number }): void {
     const width = size.width;
     const height = size.height;
     this._rect.attr({ width, height });
     this._text.attr({ x: width / 2, y: height / 2 });
-  },
+  }
 
-  setOptions(options) {
+  setOptions(options: ThemeValue): void {
     this._rect.attr({ fill: options.backgroundColor });
     this._text.css(_patchFontOptions(options.font)).attr({ text: options.text, class: options.cssClass });
     this[options.show ? 'show' : 'hide']();
-  },
+  }
 
-  dispose() {
-    const that = this;
-    that._group.linkRemove().linkOff();
-    that._group = that._rect = that._text = that._states = null;
-  },
+  dispose(): void {
+    this._group.linkRemove().linkOff();
+    // @ts-expect-error dispose drops the references kept in non-nullable fields
+    this._group = this._rect = this._text = this._states = null;
+  }
 
-  _transit(stateId) {
-    const that = this;
-    let state;
-    if (that._state !== stateId) {
-      that._state = stateId;
-      that._isHiding = false;
-      state = that._states[stateId];
-      that._rect.stopAnimation().animate({ opacity: state.opacity }, {
+  _transit(stateId: number): void {
+    let state: LoadingIndicatorState;
+    if (this._state !== stateId) {
+      this._state = stateId;
+      this._isHiding = false;
+      state = this._states[stateId];
+      this._rect.stopAnimation().animate({ opacity: state.opacity }, {
         complete: state.complete,
         easing: ANIMATION_EASING,
         duration: ANIMATION_DURATION,
         unstoppable: true, // T261694
       });
-      that._noHiding = true;
+      this._noHiding = true;
       state.start();
-      that._noHiding = false;
+      this._noHiding = false;
     }
-  },
+  }
 
-  show() {
+  show(): void {
     this._transit(STATE_SHOWN);
-  },
+  }
 
-  hide() {
+  hide(): void {
     this._transit(STATE_HIDDEN);
-  },
+  }
 
-  scheduleHiding() {
+  scheduleHiding(): void {
     if (!this._noHiding) {
       this._isHiding = true;
     }
-  },
+  }
 
-  fulfillHiding() {
+  fulfillHiding(): void {
     if (this._isHiding) {
       this.hide();
     }
-  },
+  }
 };
 
 export const plugin = {
