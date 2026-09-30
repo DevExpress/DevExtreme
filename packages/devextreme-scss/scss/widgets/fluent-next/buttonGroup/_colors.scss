@@ -1,6 +1,3 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$button-group-separator: ds.$color-border !default;
-$button-group-default-separator: ds.$color-border-contrast !default;
-$button-group-success-separator: ds.$color-border-contrast !default;
-$button-group-danger-separator: ds.$color-border-contrast !default;
+$button-group-separator: ds.$color-border-subtle !default;
