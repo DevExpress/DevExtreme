@@ -4,7 +4,8 @@
     width: 100px;
 }
 
-::ng-deep .dx-scheduler-appointment-content {
+::ng-deep .dx-scheduler-appointment-title,
+::ng-deep .dx-scheduler-appointment-content-date {
   color: var(--dxds-color-content-on-color, white);
 }
 
