@@ -1,14 +1,11 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -16,6 +13,7 @@
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import formatHelper from '@js/format_helper';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import {
   degreesToRadians as _degreesToRadians,
   getCosAndSin as _getCosAndSin,
@@ -23,6 +21,52 @@ import {
   rotateBBox as _rotateBBox,
 } from '@ts/viz/core/utils';
 import { processDisplayFormat } from '@ts/viz/series/helpers/display_format_parser';
+
+interface LabelBBox {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+type LabelRect = LabelBBox | Record<string, never>;
+
+interface LabelStrategy {
+  isLabelInside: (bBox: LabelRect, figure: ThemeValue, isOutside: boolean) => boolean;
+  prepareLabelPoints: (bBox: LabelRect, rotatedBBox: LabelRect, isHorizontal: boolean, angle: number, figureCenter: number[]) => ThemeValue;
+  isHorizontal: (bBox: LabelRect, figure: ThemeValue) => boolean;
+  getFigureCenter: (figure: ThemeValue) => number[];
+  findFigurePoint: (figure: ThemeValue, labelPoint: number[], isHorizontal: boolean) => number[];
+  adjustPoints: (points: number[]) => number[];
+}
+
+interface LabelCoords {
+  x: number;
+  y: number;
+}
+
+interface LabelPoint {
+  hasValue: () => boolean;
+  correctLabelPosition: (label: InstanceType<typeof Label>) => void;
+  hideInsideLabel: (label: InstanceType<typeof Label>, coords: LabelCoords) => boolean;
+}
+
+interface LabelLayoutOptions {
+  alignment: ThemeValue;
+  background: boolean;
+  horizontalOffset: number;
+  verticalOffset: number;
+  radialOffset: number;
+  position: string;
+  connectorOffset: number;
+}
+
+interface LabelRenderSettings {
+  renderer: ThemeValue;
+  labelsGroup: ThemeValue;
+  point?: LabelPoint;
+  strategy?: LabelStrategy;
+}
 
 const _format = formatHelper.format;
 const _math = Math;
@@ -34,7 +78,7 @@ const CONNECTOR_LENGTH = 12;
 const LABEL_BACKGROUND_PADDING_X = 8;
 const LABEL_BACKGROUND_PADDING_Y = 4;
 
-function getClosestCoord(point, coords) {
+function getClosestCoord(point: number[], coords: number[][]): number[] {
   let closestDistance = Infinity;
   let closestCoord;
   each(coords, (_, coord) => {
@@ -50,7 +94,7 @@ function getClosestCoord(point, coords) {
   return [_floor(closestCoord[0]), _floor(closestCoord[1])];
 }
 
-function getCrossCoord(rect, coord, indexOffset) {
+function getCrossCoord(rect: number[], coord: number, indexOffset: number): number {
   return (coord - rect[0 + indexOffset]) / (rect[2 + indexOffset] - rect[0 + indexOffset])
         * (rect[3 - indexOffset] - rect[1 - indexOffset])
         + rect[1 - indexOffset];
@@ -59,13 +103,13 @@ function getCrossCoord(rect, coord, indexOffset) {
 // We could always conside center of label as label point (with appropriate connector path clipping). In that case we do not depend neither on background nor on rotation.
 
 const barPointStrategy = {
-  isLabelInside(labelPoint, figure) {
+  isLabelInside(labelPoint, figure): boolean {
     const xc = labelPoint.x + labelPoint.width / 2;
     const yc = labelPoint.y + labelPoint.height / 2;
     return figure.x <= xc && xc <= figure.x + figure.width && figure.y <= yc && yc <= figure.y + figure.height;
   },
 
-  prepareLabelPoints(bBox, rotatedBBox, isHorizontal, angle, figureCenter) {
+  prepareLabelPoints(bBox, rotatedBBox, isHorizontal, angle, figureCenter): number[][] {
     const x1 = rotatedBBox.x;
     const xc = x1 + rotatedBBox.width / 2;
     const x2 = x1 + rotatedBBox.width - 1;
@@ -104,15 +148,15 @@ const barPointStrategy = {
     return labelPoints;
   },
 
-  isHorizontal(bBox, figure) {
+  isHorizontal(bBox, figure): boolean {
     return (bBox.x > figure.x + figure.width) || (bBox.x + bBox.width < figure.x);
   },
 
-  getFigureCenter(figure) {
+  getFigureCenter(figure): number[] {
     return [_floor(figure.x + figure.width / 2), _floor(figure.y + figure.height / 2)];
   },
 
-  findFigurePoint(figure, labelPoint) {
+  findFigurePoint(figure, labelPoint): number[] {
     const figureCenter = barPointStrategy.getFigureCenter(figure);
     const point = getClosestCoord(labelPoint, [
       [figure.x, figureCenter[1]],
@@ -123,7 +167,7 @@ const barPointStrategy = {
     return point;
   },
 
-  adjustPoints(points) {
+  adjustPoints(points): number[] {
     const lineIsVertical = _abs(points[1] - points[3]) <= 1;
     const lineIsHorizontal = _abs(points[0] - points[2]) <= 1;
 
@@ -138,21 +182,21 @@ const barPointStrategy = {
 };
 
 const symbolPointStrategy = {
-  isLabelInside() {
+  isLabelInside(): boolean {
     return false;
   },
 
   prepareLabelPoints: barPointStrategy.prepareLabelPoints,
 
-  isHorizontal(bBox, figure) {
+  isHorizontal(bBox, figure): boolean {
     return (bBox.x > figure.x + figure.r) || (bBox.x + bBox.width < figure.x - figure.r);
   },
 
-  getFigureCenter(figure) {
+  getFigureCenter(figure): number[] {
     return [figure.x, figure.y];
   },
 
-  findFigurePoint(figure, labelPoint) {
+  findFigurePoint(figure, labelPoint): number[] {
     const angle = Math.atan2(figure.y - labelPoint[1], labelPoint[0] - figure.x);
     return [_round(figure.x + figure.r * Math.cos(angle)), _round(figure.y - figure.r * Math.sin(angle))];
   },
@@ -161,11 +205,11 @@ const symbolPointStrategy = {
 };
 
 const piePointStrategy = {
-  isLabelInside(_0, _1, isOutside) {
+  isLabelInside(_0, _1, isOutside): boolean {
     return !isOutside;
   },
 
-  prepareLabelPoints(bBox, rotatedBBox, isHorizontal, angle) {
+  prepareLabelPoints(bBox, rotatedBBox, isHorizontal, angle): ThemeValue {
     const xl = bBox.x;
     const xr = xl + bBox.width;
     const xc = xl + _round(bBox.width / 2);
@@ -212,13 +256,13 @@ const piePointStrategy = {
     return points;
   },
 
-  isHorizontal(bBox, figure) {
+  isHorizontal(bBox, figure): boolean {
     return bBox.x > figure.x || figure.x > (bBox.x + bBox.width);
   },
 
   getFigureCenter: symbolPointStrategy.getFigureCenter,
 
-  findFigurePoint(figure, labelPoint, isHorizontal) {
+  findFigurePoint(figure, labelPoint, isHorizontal): number[] {
     if (!isHorizontal) {
       return [figure.x, figure.y];
     }
@@ -238,29 +282,29 @@ const piePointStrategy = {
     return points;
   },
 
-  adjustPoints(points) {
+  adjustPoints(points): number[] {
     return points;
   },
 };
 
-function selectStrategy(figure) {
+function selectStrategy(figure: ThemeValue): LabelStrategy {
   return (figure.angle !== undefined && piePointStrategy) || (figure.r !== undefined && symbolPointStrategy) || barPointStrategy;
 }
 
-function disposeItem(obj, field) {
+function disposeItem(obj: ThemeValue, field: string): void {
   obj[field] && obj[field].dispose();
   obj[field] = null;
 }
 
-function checkBackground(background) {
+function checkBackground(background: ThemeValue): boolean {
   return background && ((background.fill && background.fill !== 'none') || (background['stroke-width'] > 0 && background.stroke && background.stroke !== 'none'));
 }
 
-function checkConnector(connector) {
+function checkConnector(connector: ThemeValue): boolean {
   return connector && connector['stroke-width'] > 0 && connector.stroke && connector.stroke !== 'none';
 }
 
-function formatText(data, options) {
+function formatText(data: ThemeValue, options: ThemeValue): string {
   const format = options.format;
 
   data.valueText = _format(data.value, format);
@@ -291,126 +335,168 @@ function formatText(data, options) {
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let Label = function (renderSettings) {
-  this._renderer = renderSettings.renderer;
-  this._container = renderSettings.labelsGroup;
-  this._point = renderSettings.point;
-  this._strategy = renderSettings.strategy;
-  this._rowCount = 1;
-};
+export let Label = class Label {
+  declare static _DEBUG_formatText: typeof formatText;
 
-Label.prototype = {
-  constructor: Label,
+  declare _renderer: ThemeValue;
 
-  setColor(color) {
+  declare _container: ThemeValue;
+
+  declare _point?: LabelPoint;
+
+  declare _strategy?: LabelStrategy;
+
+  declare _rowCount: number;
+
+  declare _color?: string;
+
+  declare _options: ThemeValue;
+
+  declare _data: ThemeValue;
+
+  declare _figure: ThemeValue;
+
+  declare _group: ThemeValue;
+
+  declare _insideGroup: ThemeValue;
+
+  declare _text: ThemeValue;
+
+  declare _background: ThemeValue;
+
+  declare _connector: ThemeValue;
+
+  declare _textContent: string | null;
+
+  declare _visible: boolean | null;
+
+  declare _holdVisibility: boolean;
+
+  declare _drawn: boolean;
+
+  declare _bBoxWithoutRotation: LabelBBox;
+
+  declare _bBox: LabelBBox;
+
+  declare _x: number;
+
+  declare _y: number;
+
+  constructor(renderSettings: LabelRenderSettings) {
+    this._renderer = renderSettings.renderer;
+    this._container = renderSettings.labelsGroup;
+    this._point = renderSettings.point;
+    this._strategy = renderSettings.strategy;
+    this._rowCount = 1;
+  }
+
+  setColor(color: string): void {
     this._color = color;
-  },
+  }
 
-  setOptions(options) {
+  setOptions(options: ThemeValue): void {
     this._options = options;
-  },
+  }
 
-  setData(data) {
+  setData(data: ThemeValue): void {
     this._data = data;
-  },
+  }
 
-  setDataField(fieldName, fieldValue) {
+  setDataField(fieldName: string, fieldValue: ThemeValue): void {
     // Is this laziness really required?
     this._data = this._data || {};
     this._data[fieldName] = fieldValue;
-  },
+  }
 
-  getData() {
+  getData(): ThemeValue {
     return this._data;
-  },
+  }
 
-  setFigureToDrawConnector(figure) {
+  setFigureToDrawConnector(figure: ThemeValue): void {
     this._figure = figure;
-  },
+  }
 
-  dispose() {
-    const that = this;
-    disposeItem(that, '_group');
-    that._data = that._options = that._textContent = that._visible = that._insideGroup = that._text = that._background = that._connector = that._figure = null;
-  },
+  dispose(): void {
+    disposeItem(this, '_group');
+    this._data = this._options = this._textContent = this._visible = this._insideGroup = this._text = this._background = this._connector = this._figure = null;
+  }
 
   // The following method is required because we support partial visibility for labels
   // entire labels group can be hidden and any particular label can be visible at the same time
   // in order to do that label must have visibility:"visible" attribute
-  _setVisibility(value, state) {
+  _setVisibility(value: string, state: boolean): void {
     this._group && this._group.attr({ visibility: value });
     this._visible = state;
-  },
+  }
 
-  isVisible() {
+  isVisible(): boolean | null {
     return this._visible;
-  },
+  }
 
-  hide(holdInvisible) {
+  hide(holdInvisible?: boolean): void {
     this._holdVisibility = !!holdInvisible;
     this._hide();
-  },
+  }
 
-  _hide() {
+  _hide(): void {
     this._setVisibility('hidden', false);
-  },
+  }
 
-  show(holdVisible) {
+  show(this: Label & { _point: LabelPoint }, holdVisible?: boolean): void {
     const correctPosition = !this._drawn;
     if (this._point.hasValue()) {
       this._holdVisibility = !!holdVisible;
       this._show();
       correctPosition && this._point.correctLabelPosition(this);
     }
-  },
+  }
 
-  _show() {
-    const that = this;
-    const renderer = that._renderer;
-    const container = that._container;
-    const options = that._options || {};
-    const text = that._textContent = formatText(that._data, options) || null;
+  _show(): void {
+    const renderer = this._renderer;
+    const container = this._container;
+    const options = this._options || {};
+    const text = this._textContent = formatText(this._data, options) || null;
 
     if (text) {
-      if (!that._group) {
-        that._group = renderer.g().append(container);
-        that._insideGroup = renderer.g().append(that._group);
-        that._text = renderer.text('', 0, 0).append(that._insideGroup);
+      if (!this._group) {
+        this._group = renderer.g().append(container);
+        this._insideGroup = renderer.g().append(this._group);
+        this._text = renderer.text('', 0, 0).append(this._insideGroup);
       }
-      that._text.css(options.attributes ? _patchFontOptions(options.attributes.font) : {});
+      this._text.css(options.attributes ? _patchFontOptions(options.attributes.font) : {});
 
       if (checkBackground(options.background)) {
-        that._background = that._background || renderer.rect().append(that._insideGroup).toBackground();
-        that._background.attr(options.background);
+        this._background = this._background || renderer.rect().append(this._insideGroup).toBackground();
+        this._background.attr(options.background);
         // The following is because "this._options" is shared between all labels and so cannot be modified
-        that._color && that._background.attr({ fill: that._color });
+        this._color && this._background.attr({ fill: this._color });
       } else {
-        disposeItem(that, '_background');
+        disposeItem(this, '_background');
       }
 
       if (checkConnector(options.connector)) {
-        that._connector = that._connector || renderer.path([], 'line').sharp().append(that._group).toBackground();
-        that._connector.attr(options.connector);
+        this._connector = this._connector || renderer.path([], 'line').sharp().append(this._group).toBackground();
+        this._connector.attr(options.connector);
         // The following is because "this._options" is shared between all labels and so cannot be modified
-        that._color && that._connector.attr({ stroke: that._color });
+        this._color && this._connector.attr({ stroke: this._color });
       } else {
-        disposeItem(that, '_connector');
+        disposeItem(this, '_connector');
       }
 
-      that._text.attr({ text, align: options.textAlignment, class: options.cssClass });
-      that._updateBackground(that._text.getBBox());
-      that._setVisibility('visible', true);
-      that._drawn = true;
+      this._text.attr({ text, align: options.textAlignment, class: options.cssClass });
+      this._updateBackground(this._text.getBBox());
+      this._setVisibility('visible', true);
+      this._drawn = true;
     } else {
-      that._hide();
+      this._hide();
     }
-  },
+  }
 
-  _getLabelVisibility(isVisible) {
+  _getLabelVisibility(isVisible: boolean): boolean | null {
     return this._holdVisibility ? this.isVisible() : isVisible;
-  },
+  }
 
-  draw(isVisible) {
+  draw(isVisible: boolean): this {
     if (this._getLabelVisibility(isVisible)) {
       this._show();
       this._point && this._point.correctLabelPosition(this);
@@ -419,59 +505,56 @@ Label.prototype = {
       this._hide();
     }
     return this;
-  },
+  }
 
-  _updateBackground(bBox) {
-    const that = this;
-
-    if (that._background) {
+  _updateBackground(bBox: LabelBBox): void {
+    if (this._background) {
       bBox.x -= LABEL_BACKGROUND_PADDING_X;
       bBox.y -= LABEL_BACKGROUND_PADDING_Y;
       bBox.width += 2 * LABEL_BACKGROUND_PADDING_X;
       bBox.height += 2 * LABEL_BACKGROUND_PADDING_Y;
-      that._background.attr(bBox);
+      this._background.attr(bBox);
     }
-    that._bBoxWithoutRotation = extend({}, bBox);
+    this._bBoxWithoutRotation = extend({}, bBox);
 
-    const rotationAngle = that._options.rotationAngle || 0;
+    const rotationAngle = this._options.rotationAngle || 0;
 
-    that._insideGroup.rotate(rotationAngle, bBox.x + bBox.width / 2, bBox.y + bBox.height / 2);
+    this._insideGroup.rotate(rotationAngle, bBox.x + bBox.width / 2, bBox.y + bBox.height / 2);
     // Angle is transformed from svg to right-handed cartesian space
     bBox = _rotateBBox(bBox, [bBox.x + bBox.width / 2, bBox.y + bBox.height / 2], -rotationAngle);
 
-    that._bBox = bBox;
-  },
+    this._bBox = bBox;
+  }
 
-  getFigureCenter() {
+  getFigureCenter(): number[] {
     const figure = this._figure;
     const strategy = this._strategy || selectStrategy(figure);
     return strategy.getFigureCenter(figure);
-  },
+  }
 
-  _getConnectorPoints() {
-    const that = this;
-    const figure = that._figure;
-    const options = that._options;
-    const strategy = that._strategy || selectStrategy(figure);
-    const bBox = that._shiftBBox(that._bBoxWithoutRotation);
-    const rotatedBBox = that.getBoundingRect();
+  _getConnectorPoints(): number[] {
+    const figure = this._figure;
+    const options = this._options;
+    const strategy = this._strategy || selectStrategy(figure);
+    const bBox = this._shiftBBox(this._bBoxWithoutRotation);
+    const rotatedBBox = this.getBoundingRect();
     let labelPoint;
-    let points = [];
+    let points: ThemeValue = [];
     let isHorizontal;
 
     if (!strategy.isLabelInside(bBox, figure, options.position !== 'inside')) {
       isHorizontal = strategy.isHorizontal(bBox, figure);
-      const figureCenter = that.getFigureCenter();
+      const figureCenter = this.getFigureCenter();
       points = strategy.prepareLabelPoints(bBox, rotatedBBox, isHorizontal, -options.rotationAngle || 0, figureCenter);
       labelPoint = getClosestCoord(figureCenter, points);
       points = strategy.findFigurePoint(figure, labelPoint, isHorizontal);
       points = points.concat(labelPoint);
     }
     return strategy.adjustPoints(points);
-  },
+  }
 
   // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
-  fit(maxWidth) {
+  fit(maxWidth: number): boolean {
     const padding = this._background ? 2 * LABEL_BACKGROUND_PADDING_X : 0;
     let rowCountChanged = false;
     if (this._text) {
@@ -488,56 +571,55 @@ Label.prototype = {
     }
     this._updateBackground(this._text.getBBox());
     return rowCountChanged;
-  },
+  }
 
-  resetEllipsis() {
+  resetEllipsis(): void {
     this._text && this._text.restoreText();
     this._updateBackground(this._text.getBBox());
-  },
+  }
 
-  setTrackerData(point) {
+  setTrackerData(point: ThemeValue): void {
     this._text.data({ 'chart-data-point': point });
     this._background && this._background.data({ 'chart-data-point': point });
-  },
+  }
 
-  hideInsideLabel(coords) {
+  hideInsideLabel(this: Label & { _point: LabelPoint }, coords: LabelCoords): boolean {
     return this._point.hideInsideLabel(this, coords);
-  },
+  }
 
-  getPoint() {
+  getPoint(): LabelPoint | undefined {
     return this._point;
-  },
+  }
 
   // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
-  shift(x, y) {
-    const that = this;
-    if (that._textContent) {
-      that._insideGroup.attr({
-        translateX: that._x = _round(x - that._bBox.x),
-        translateY: that._y = _round(y - that._bBox.y),
+  shift(x: number, y: number): this {
+    if (this._textContent) {
+      this._insideGroup.attr({
+        translateX: this._x = _round(x - this._bBox.x),
+        translateY: this._y = _round(y - this._bBox.y),
       });
-      if (that._connector) {
-        that._connector.attr({ points: that._getConnectorPoints() });
+      if (this._connector) {
+        this._connector.attr({ points: this._getConnectorPoints() });
       }
     }
-    return that;
-  },
+    return this;
+  }
 
   // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
-  getBoundingRect() {
+  getBoundingRect(): LabelRect {
     return this._shiftBBox(this._bBox);
-  },
+  }
 
-  _shiftBBox(bBox) {
+  _shiftBBox(bBox: LabelBBox): LabelRect {
     return this._textContent ? {
       x: bBox.x + this._x,
       y: bBox.y + this._y,
       width: bBox.width,
       height: bBox.height,
     } : {};
-  },
+  }
 
-  getLayoutOptions() {
+  getLayoutOptions(): LabelLayoutOptions {
     const options = this._options;
     return {
       alignment: options.alignment,
@@ -548,12 +630,11 @@ Label.prototype = {
       position: options.position,
       connectorOffset: (checkConnector(options.connector) ? CONNECTOR_LENGTH : 0) + (checkBackground(options.background) ? LABEL_BACKGROUND_PADDING_X : 0),
     };
-  },
+  }
 };
 
 /// #DEBUG
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(Label as any)._DEBUG_formatText = formatText;
+Label._DEBUG_formatText = formatText;
 /// #ENDDEBUG
 
 /// #DEBUG
