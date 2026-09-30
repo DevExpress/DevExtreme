@@ -2,13 +2,32 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-function drawSeriesView(root, seriesDataSource, canvas, isAnimationEnabled) {
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+
+interface RangeViewParams {
+  renderer: ThemeValue;
+  root: ThemeValue;
+  translator: ThemeValue;
+}
+
+interface RangeViewCanvas {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
+interface RangeViewSeriesDataSource {
+  getSeries: () => ThemeValue[];
+  adjustSeriesDimensions: () => void;
+  getBoundRange: () => { arg: ThemeValue; val: ThemeValue };
+  isShowChart: () => boolean;
+}
+
+function drawSeriesView(root: ThemeValue, seriesDataSource: RangeViewSeriesDataSource, canvas: RangeViewCanvas, isAnimationEnabled: boolean): void {
   const seriesList = seriesDataSource.getSeries();
   if (!seriesList.length) {
     return;
@@ -32,21 +51,30 @@ function drawSeriesView(root, seriesDataSource, canvas, isAnimationEnabled) {
   });
 }
 
-function merge(a, b) {
+function merge(a: ThemeValue, b: ThemeValue): ThemeValue {
   return a !== undefined ? a : b;
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let RangeView = function (params) {
-  this._params = params;
-  this._clipRect = params.renderer.clipRect();
-  params.root.attr({ 'clip-path': this._clipRect.id });
-};
+export let RangeView = class RangeView {
+  declare _params: RangeViewParams;
 
-RangeView.prototype = {
-  constructor: RangeView,
+  declare _clipRect: ThemeValue;
 
-  update(backgroundOption, backgroundTheme, canvas, isCompactMode, isAnimationEnabled, seriesDataSource) {
+  constructor(params: RangeViewParams) {
+    this._params = params;
+    this._clipRect = params.renderer.clipRect();
+    params.root.attr({ 'clip-path': this._clipRect.id });
+  }
+
+  update(
+    backgroundOption: ThemeValue,
+    backgroundTheme: ThemeValue,
+    canvas: RangeViewCanvas,
+    isCompactMode: boolean,
+    isAnimationEnabled: boolean,
+    seriesDataSource?: RangeViewSeriesDataSource,
+  ): void {
     const renderer = this._params.renderer;
     const root = this._params.root;
     const canvasWidth = canvas.width - canvas.left;
@@ -83,7 +111,7 @@ RangeView.prototype = {
         drawSeriesView(seriesGroup, seriesDataSource, canvas, isAnimationEnabled);
       }
     }
-  },
+  }
 };
 
 /// #DEBUG
