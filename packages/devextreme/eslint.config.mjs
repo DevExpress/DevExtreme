@@ -526,6 +526,7 @@ export default [
     // Rules for migrated from JS files
     {
         files: ['js/__internal/**/m_*.ts', 'js/__internal/**/module*/**.ts'],
+        ignores: ['js/__internal/grids/**/module_not_extended/**'],
         languageOptions: {
             parser: tsParser,
             ecmaVersion: 5,

@@ -29,7 +29,7 @@ interface RequestResult {
   abort: () => void;
 }
 
-const createTreeList = async (
+const createTreeList = (
   options: TreeListProperties = {},
 ): Promise<{
   $container: dxElementWrapper;
@@ -58,7 +58,7 @@ const beforeTest = (): void => {
 
 const afterTest = (): void => {
   const $container = $(SELECTORS.treeListContainer);
-  const treeList = ($container as any).dxTreeList('instance') as TreeList;
+  const treeList = TreeList.getInstance($container.get(0));
 
   treeList.dispose();
   $container.remove();
