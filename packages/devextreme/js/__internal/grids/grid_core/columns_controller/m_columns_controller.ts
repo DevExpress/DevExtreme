@@ -82,7 +82,6 @@ import {
   processExpandColumns,
   reserveGroupIndex,
   resetBandColumnsCache,
-  resetColumnsCache,
   setFilterOperationsAsDefaultValues,
   sortColumnsByCaption,
   strictParseNumber,
@@ -310,6 +309,8 @@ export class ColumnsController extends modules.Controller {
       }
       case 'rtlEnabled':
         this.reinit();
+        break;
+      case 'onColumnsChanging':
         break;
       default:
         super.optionChanged(args);
@@ -1183,7 +1184,9 @@ export class ColumnsController extends modules.Controller {
         }
       }
     });
-    return when.apply($, deferreds).done(resetColumnsCache.bind(null, this));
+    return when.apply($, deferreds).done(() => {
+      this.resetColumnsCache();
+    });
   }
 
   private _updateColumnOptions(column, columnIndex) {
@@ -1970,7 +1973,10 @@ export class ColumnsController extends modules.Controller {
     return getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex).length;
   }
 
-  public getChildrenByBandColumn(bandColumnIndex: number, onlyVisibleDirectChildren?: boolean) {
+  public getChildrenByBandColumn(
+    bandColumnIndex: number | undefined,
+    onlyVisibleDirectChildren?: boolean,
+  ) {
     const that = this;
     const bandColumnsCache = that.getBandColumnsCache();
     const result = getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex, !onlyVisibleDirectChildren);
