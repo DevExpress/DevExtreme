@@ -18,7 +18,8 @@ const cachedGetters: Record<string, Getter> = {};
 export const deviceMatch = (
   device: Device,
   filter: Device | Device[],
-): boolean => isEmptyObject(filter) || findBestMatches(device, [filter]).length > 0;
+): boolean => isEmptyObject(filter)
+  || findBestMatches(device, Array.isArray(filter) ? filter : [filter]).length > 0;
 
 export const convertRulesToOptions = <T>(rules: DefaultOptionsRule<T>[]): Partial<T> => {
   const currentDevice = devices.current();
