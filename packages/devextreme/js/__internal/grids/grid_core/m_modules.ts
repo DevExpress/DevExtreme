@@ -15,6 +15,7 @@ import errors from '@js/ui/widget/ui.errors';
 
 import type {
   Controllers, GridPropertyType, InternalGrid, InternalGridOptions, Module,
+  ModuleType,
   OptionChanged,
   Views,
 } from './m_types';
@@ -381,15 +382,17 @@ export class View extends ModuleItem {
 
 const MODULES_ORDER_MAX_INDEX = 1000000;
 
+type ModuleTypeExtender = (Base: ModuleType<any>) => ModuleType<any>;
+
 function getExtendedTypes(
-  types: Record<string, unknown>,
-  moduleExtenders: Record<string, unknown> = {},
-): Record<string, typeof ModuleItem> {
+  types: Record<string, ModuleType<any>>,
+  moduleExtenders: Record<string, ModuleTypeExtender | undefined> = {},
+): Record<string, ModuleType<any>> {
   const extendTypes = { };
   Object.entries(moduleExtenders)
     .forEach(([name, extender]) => {
       const currentType = types[name];
-      if (currentType && isFunction(extender)) {
+      if (currentType && extender) {
         extendTypes[name] = extender(currentType);
       }
     });
