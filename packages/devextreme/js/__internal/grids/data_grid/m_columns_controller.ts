@@ -1,7 +1,7 @@
 import { extend } from '@js/core/utils/extend';
 import { columnsControllerModule } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 
-import gridCore from './m_core';
+import gridCore from './core';
 
 gridCore.registerModule('columns', {
   defaultOptions() {

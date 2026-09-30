@@ -7,7 +7,7 @@ import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/ke
 import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
 
 const headersKeyboardNavigation: (
