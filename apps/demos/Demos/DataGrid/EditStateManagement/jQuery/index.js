@@ -34,7 +34,7 @@ $(() => {
         const editRowKey = e.component.option('editing.editRowKey');
         let changes = e.component.option('editing.changes');
 
-        $('#editRowKey').text(editRowKey === null ? 'null' : editRowKey);
+        $('#editRowKey').text(editRowKey == null ? 'null' : editRowKey);
 
         changes = changes.map((change) => ({
           type: change.type,
