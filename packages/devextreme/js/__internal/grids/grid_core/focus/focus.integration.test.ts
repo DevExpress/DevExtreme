@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { LoadResult } from '@js/common/data';
 import { CustomStore, query } from '@js/common/data';
 import $ from '@js/core/renderer';
 import type { StoreChange } from '@js/data/store';
@@ -155,6 +156,7 @@ describe('GridCore focus', () => {
     });
 
     const wait = async (ms = 0): Promise<void> => new Promise((resolve) => {
+      // eslint-disable-next-line no-restricted-globals -- this suite polls on real timers
       setTimeout(resolve, ms);
     });
 
@@ -168,11 +170,11 @@ describe('GridCore focus', () => {
     const createStore = (
       items: { id: number; name: string }[],
       holdLookupLoads = false,
-    ) => {
+    ): { store: CustomStore; heldLookupLoads: (() => void)[] } => {
       const heldLookupLoads: (() => void)[] = [];
       const store = new CustomStore({
         key: 'id',
-        load: (loadOptions) => {
+        load: (loadOptions): Promise<LoadResult> => {
           let dataQuery = query(items);
           if (loadOptions.filter) {
             dataQuery = dataQuery.filter(loadOptions.filter);
@@ -185,7 +187,7 @@ describe('GridCore focus', () => {
             totalCount: filteredItems.length,
           };
           if (take === 1 && holdLookupLoads) {
-            return new Promise<unknown>((resolve) => {
+            return new Promise<LoadResult>((resolve) => {
               heldLookupLoads.push(() => resolve(result));
             });
           }
@@ -196,7 +198,10 @@ describe('GridCore focus', () => {
       return { store, heldLookupLoads };
     };
 
-    const createGridWithHeldLookup = async () => {
+    const createGridWithHeldLookup = async (): Promise<{
+      instance: DataGrid;
+      releaseLookupLoads: () => void;
+    }> => {
       const { store, heldLookupLoads } = createStore(data, true);
       const $container = $('<div>')
         .attr('id', GRID_CONTAINER_ID)
@@ -219,7 +224,7 @@ describe('GridCore focus', () => {
 
       return {
         instance,
-        releaseLookupLoads: () => {
+        releaseLookupLoads: (): void => {
           heldLookupLoads.forEach((release) => release());
           heldLookupLoads.length = 0;
         },
