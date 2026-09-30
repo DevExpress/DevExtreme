@@ -1,11 +1,11 @@
 <div id="accordion">
   <dx-accordion
-    #accordion
     [dataSource]="companies"
-    [collapsible]="false"
-    [multiple]="false"
-    [animationDuration]="300"
-    [selectedItems]="[companies[0]]"
+    [collapsible]="collapsible"
+    [multiple]="multiple"
+    [animationDuration]="animationDuration"
+    [selectedItems]="selectedItems"
+    (selectedItemsChange)="onSelectedItemsChange($event)"
     id="accordion-container"
   >
     <div *dxTemplate="let company of 'title'">
@@ -43,18 +43,18 @@
     <div class="option">
       <dx-check-box
         text="Multiple enabled"
-        [(value)]="accordion.multiple"
+        [(value)]="multiple"
       ></dx-check-box>
     </div>
     <div class="option">
       <dx-check-box
         text="Collapsible enabled"
-        [(value)]="accordion.collapsible"
+        [(value)]="collapsible"
       ></dx-check-box>
     </div>
     <div class="option">
       <span>Animation duration</span>
-      <dx-slider [min]="0" [max]="1000" [(value)]="accordion.animationDuration">
+      <dx-slider [min]="0" [max]="1000" [(value)]="animationDuration">
         <dxo-slider-tooltip
           [enabled]="true"
           position="bottom"
@@ -67,8 +67,8 @@
       <dx-tag-box
         [dataSource]="companies"
         displayExpr="CompanyName"
-        [(value)]="accordion.selectedItems"
-        [disabled]="!accordion.multiple"
+        [(value)]="selectedItems"
+        [disabled]="!multiple"
         [inputAttr]="{ 'aria-label': 'Company' }"
       ></dx-tag-box>
     </div>
