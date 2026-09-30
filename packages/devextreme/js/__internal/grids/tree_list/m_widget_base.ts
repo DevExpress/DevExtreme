@@ -1,5 +1,5 @@
 import './module_not_extended/column_headers';
-import './m_columns_controller';
+import './columns_controller';
 import './data_source/data_source_module';
 import './module_not_extended/filter';
 import './data_controller/m_data_controller';
@@ -7,7 +7,7 @@ import './module_not_extended/sorting';
 import './rows/m_rows';
 import './module_not_extended/context_menu';
 import './module_not_extended/error_handling';
-import './m_grid_view';
+import './grid_view';
 import './module_not_extended/header_panel';
 
 import registerComponent from '@js/core/component_registrator';
