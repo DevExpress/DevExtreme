@@ -55,12 +55,14 @@ const ALL_GROUPS = Object.keys(FIELD_GROUPS);
 
 const DATA = [{ id: 1, a: 1, b: 2 }];
 
-const getColumns = (instance: DataGridInstance): Column[] => instance
+type GridInstance = Pick<DataGridInstance, 'getController'>;
+
+const getColumns = (instance: GridInstance): Column[] => instance
   .getController('columns')
-  .getColumns() as Column[];
+  .getColumns();
 
 const getColumn = (
-  instance: DataGridInstance,
+  instance: GridInstance,
   dataField: string,
 ): Column => getColumns(instance)
   .find((column) => column.dataField === dataField) as Column;
@@ -306,6 +308,48 @@ describe('ColumnsController user state', () => {
     });
   });
 
+  describe('when a band column was added at runtime', () => {
+    it('should recreate the band with its children on restore', async () => {
+      const { instance } = await createDataGrid({ dataSource: DATA, columns: ['a'] });
+
+      instance.addColumn({ caption: 'Band', columns: ['b', 'id'] });
+      jest.runAllTimers();
+      const savedState = instance.state();
+
+      instance.state(savedState);
+      jest.runAllTimers();
+
+      const band = getColumns(instance).find((column) => column.caption === 'Band');
+
+      expect(getColumns(instance).map((column) => column.caption)).toEqual(['A', 'Band', 'B', 'Id']);
+      expect(getColumn(instance, 'b').ownerBand).toBe(band?.index);
+      expect(getColumn(instance, 'id').ownerBand).toBe(band?.index);
+    });
+  });
+
+  describe('when a child was added at runtime to a declared band', () => {
+    it('should keep the child in the band on restore', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        columns: ['a', { caption: 'Band', columns: ['b'] }],
+      });
+      const bandIndex = getColumns(instance).find((column) => column.caption === 'Band')?.index;
+
+      instance.addColumn({ dataField: 'id', ownerBand: bandIndex });
+      jest.runAllTimers();
+      const savedState = instance.state();
+
+      instance.state(savedState);
+      jest.runAllTimers();
+
+      const band = getColumns(instance).find((column) => column.caption === 'Band');
+
+      expect(getColumns(instance).map((column) => column.caption)).toEqual(['A', 'Band', 'B', 'Id']);
+      expect(getColumn(instance, 'b').ownerBand).toBe(band?.index);
+      expect(getColumn(instance, 'id').ownerBand).toBe(band?.index);
+    });
+  });
+
   describe('when a runtime column has the same dataField as a declared one', () => {
     beforeEach(() => {
       jest.spyOn(errors, 'log').mockImplementation(jest.fn());
@@ -406,16 +450,12 @@ describe('TreeList user state restore', () => {
         }],
         columns: ['a', 'b'],
       } as TreeListProperties);
-      const getTreeListColumn = (dataField: string): Column => instance
-        .getController('columns')
-        .getColumns()
-        .find((column) => column.dataField === dataField) as Column;
-      const before = { ...getTreeListColumn('b') };
+      const before = { ...getColumn(instance, 'b') };
 
       instance.state({ columns: [SAVED_ENTRY_A, SAVED_ENTRY] });
       jest.runAllTimers();
 
-      const after = getTreeListColumn('b');
+      const after = getColumn(instance, 'b');
 
       expect(pickGroupFields(after)).toEqual(expectedGroupFields(before, ['sorting']));
       expect(after.visibleIndex).toBe(0);
