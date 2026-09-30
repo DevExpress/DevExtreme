@@ -15,7 +15,7 @@ import { isMaterialBased } from '@js/ui/themes';
 import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 
-import treeListCore from './m_core';
+import treeListCore from './core';
 
 const TREELIST_CLASS = 'dx-treelist';
 

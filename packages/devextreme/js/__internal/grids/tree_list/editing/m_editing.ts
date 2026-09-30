@@ -14,9 +14,9 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import type { RowsView } from '../../grid_core/views/m_rows_view';
+import treeListCore from '../core';
 import type { TreeListDataController } from '../data_controller/m_data_controller';
 import type { TreeListDataSourceController } from '../data_source/data_source_controller';
-import treeListCore from '../m_core';
 
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';

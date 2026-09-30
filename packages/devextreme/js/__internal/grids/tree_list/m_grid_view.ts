@@ -1,6 +1,6 @@
 import { gridViewModule, ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
-import treeListCore from './m_core';
+import treeListCore from './core';
 
 const TREELIST_EXPANDABLE_INSTRUCTION = 'dxTreeList-ariaExpandableInstruction';
 

@@ -4,8 +4,8 @@ import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
 import type { DataController } from '../grid_core/data_controller/data_controller';
 import type { FocusDataSourceControllerExtension } from '../grid_core/focus/extenders/focus_data_source_controller';
 import type { ModuleType } from '../grid_core/m_types';
+import core from './core';
 import type { TreeListDataSourceController } from './data_source/data_source_controller';
-import core from './m_core';
 
 function findIndex(items, callback) {
   let result = -1;

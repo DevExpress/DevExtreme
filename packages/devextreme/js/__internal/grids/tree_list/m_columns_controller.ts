@@ -2,7 +2,7 @@ import { isDefined } from '@js/core/utils/type';
 import { ColumnsController, columnsControllerModule } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
-import treeListCore from './m_core';
+import treeListCore from './core';
 
 class TreeListColumnsController extends ColumnsController {
   public _getFirstItems(dataSourceAdapter): (RawItemData | undefined)[] {

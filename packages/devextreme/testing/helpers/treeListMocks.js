@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import treeListCoreModule from '__internal/grids/tree_list/m_core';
+import treeListCoreModule from '__internal/grids/tree_list/core';
 import domUtilsModule from '__internal/core/utils/m_dom';
 import commonUtilsModule from '__internal/core/utils/m_common';
 import typeUtilsModule from '__internal/core/utils/m_type';
