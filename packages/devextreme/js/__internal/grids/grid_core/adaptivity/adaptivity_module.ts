@@ -29,6 +29,7 @@ export const adaptivityModule: Module = {
       draggingHeader: adaptivityDraggingHeaderViewControllerExtender,
       editing: adaptivityEditingViewControllerExtender,
       resizing: adaptivityResizingViewControllerExtender,
+      // @ts-expect-error the extender assumes the master detail extension of DataController
       data: adaptivityDataControllerExtender,
       editorFactory: adaptivityEditorFactoryViewControllerExtender,
       columns: adaptivityColumnsControllerExtender,
