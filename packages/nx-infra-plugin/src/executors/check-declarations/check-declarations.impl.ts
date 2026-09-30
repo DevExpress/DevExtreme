@@ -83,6 +83,12 @@ export function resolveTypeScript(
     }
   }
 
+  if (typescriptModule) {
+    throw new Error(
+      `TypeScript module '${typescriptModule}' could not be resolved from ${projectRoot}`,
+    );
+  }
+
   return require('typescript');
 }
 
@@ -132,6 +138,7 @@ export async function runDeclarationsTypeCheck(params: {
   compilerOptions?: Record<string, unknown>;
 }): Promise<void> {
   const ts = resolveTypeScript(params.projectRoot, params.typescriptModule);
+  logger.info(`Declaration type check uses TypeScript ${ts.version}`);
   const compilerOptions = buildDefaultCompilerOptions(
     params.projectRoot,
     ts,
