@@ -573,7 +573,7 @@ export const applyUserState = function (that: ColumnsController) {
     let hasAddedBands = false;
     for (i = 0; i < columnsUserState.length; i++) {
       const columnUserState = columnsUserState[i];
-      if (columnUserState.added && findUserStateColumn(columns, columnUserState) < 0) {
+      if (columnUserState.added && !userStateColumnIndexes.includes(i)) {
         column = createColumn(that, columnUserState.added);
         applyFieldsState(column, columnUserState);
         resultColumns.push(column);
