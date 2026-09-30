@@ -18,7 +18,7 @@ $max-indent: 9 !default;
  */
 $resize-handle-size: 11px;
 $touch-resize-handle-size: 15px; // dx-fixed-size: the touch variant of the same handle
-$half-resize-handle-size: math.div($resize-handle-size, 2);
+$half-resize-handle-size: math.div($resize-handle-size, 2) !default;
 $half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2) !default;
 
 $htmleditor-border-width: 1px !default;

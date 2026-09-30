@@ -6,10 +6,10 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 216,
+    "occurrences": 212,
     "byCategory": {
       "inline": 91,
-      "geometry": 65,
+      "geometry": 61,
       "local-var": 35,
       "calc": 9,
       "structural": 8,
@@ -20,7 +20,7 @@
       "colorView": 42,
       "scheduler": 33,
       "textEditor": 26,
-      "gridBase": 22,
+      "gridBase": 18,
       "htmlEditor": 15,
       "cardView": 15,
       "pivotGrid": 11,
@@ -1061,19 +1061,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 24,
-      "widget": "gridBase",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 4,
-      "marker": "dx-structural",
-      "text": "clip: rect(1px, 1px, 1px, 1px); // dx-structural: clips the a11y live region to nothing while keeping it rendered — the NOTE above; not a size",
-      "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 36,
+      "line": 28,
       "widget": "gridBase",
       "literals": [
         "5px"
@@ -1085,7 +1073,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 54,
+      "line": 46,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1097,7 +1085,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 85,
+      "line": 77,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1109,7 +1097,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 313,
+      "line": 305,
       "widget": "gridBase",
       "literals": [
         "10px"
@@ -1121,7 +1109,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 430,
+      "line": 422,
       "widget": "gridBase",
       "literals": [
         "2px"
@@ -1133,7 +1121,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 432,
+      "line": 424,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1145,7 +1133,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 480,
+      "line": 472,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1157,7 +1145,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 556,
+      "line": 548,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1169,7 +1157,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 557,
+      "line": 549,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1181,7 +1169,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 558,
+      "line": 550,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1193,7 +1181,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 559,
+      "line": 551,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1205,7 +1193,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 566,
+      "line": 558,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1217,7 +1205,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 660,
+      "line": 652,
       "widget": "gridBase",
       "literals": [
         "9px",
@@ -1231,7 +1219,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 951,
+      "line": 943,
       "widget": "gridBase",
       "literals": [
         "-2px"

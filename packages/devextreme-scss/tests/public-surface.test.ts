@@ -8,7 +8,7 @@ import { join } from 'path';
 
 interface Entry { name: string }
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 const baselinePath = join(__dirname, 'public-surface.baseline.json');
 const journalPath = join(packageRoot, 'tools', 'naming', 'public-renames.json');

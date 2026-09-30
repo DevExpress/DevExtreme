@@ -17,14 +17,6 @@
   flex: 0 0 auto;
 }
 
-.dx-gridbase-a11y-status-container {
-  position: fixed;
-  left: 0;
-  top: 0;
-  clip: rect(1px, 1px, 1px, 1px); // dx-structural: clips the a11y live region to nothing while keeping it rendered — the NOTE above; not a size
-  clip-path: polygon(0 0);
-}
-
 @mixin grid-base($widget-name, $draggable-column-opacity: 0.5, $column-chooser-item-opacity: 0.5) {
   @include grid-base-cell($widget-name);
 

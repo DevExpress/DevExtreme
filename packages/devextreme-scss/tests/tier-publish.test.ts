@@ -1,4 +1,5 @@
 import { execFileSync } from 'child_process';
+import { join } from 'path';
 
 import { stripScssComments } from '../build/tokens/consumed-tokens';
 import {
@@ -465,7 +466,7 @@ describe('parseLinksFile', () => {
 
 test('publish.mjs --check passes on the committed tree', () => {
   const output = execFileSync(process.execPath, ['tools/naming/publish.mjs', '--check'], {
-    cwd: process.cwd(),
+    cwd: join(__dirname, '..'),
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
   });

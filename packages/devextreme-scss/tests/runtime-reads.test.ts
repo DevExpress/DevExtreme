@@ -20,7 +20,7 @@ import contract from '../tools/naming/runtime-reads.json';
 /* The viz widgets paint with these, so they are the other direction as well. */
 import painted from '../tools/naming/viz-contract.json';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const repoRoot = join(packageRoot, '..', '..');
 const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');

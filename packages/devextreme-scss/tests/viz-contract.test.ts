@@ -12,7 +12,7 @@ const contract = vizContract as {
   }[];
 };
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const stylesheet = (path: string): string => readFileSync(
   join(packageRoot, 'scss', 'widgets', ...path.split('/')),
   'utf8',

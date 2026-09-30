@@ -6,7 +6,7 @@ import {
 } from 'fs';
 import { join } from 'path';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 const budgetPath = join(__dirname, 'calc-budget.json');
 const updatingBudget = process.env.UPDATE_CALC_BUDGET === '1';

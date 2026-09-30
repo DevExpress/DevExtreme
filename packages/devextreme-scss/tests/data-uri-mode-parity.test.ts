@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 
-const artifactsCss = join(process.cwd(), '..', 'devextreme', 'artifacts', 'css');
+const artifactsCss = join(__dirname, '..', '..', 'devextreme', 'artifacts', 'css');
 
 const MODE_DEPENDENT: { rule: string; property: string; reason: string }[] = [];
 

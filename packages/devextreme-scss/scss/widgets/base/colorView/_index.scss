@@ -9,7 +9,7 @@ $color-view-hue-scale-height: $color-view-palette-height !default;
 $color-view-hue-scale-wrapper-height: $color-view-hue-scale-height + 2 !default;
 
 $colorview-palette-handle-size: 28px; // dx-fixed-size: diameter of the round palette handle, drawn as rings at 6/7/12/13px
-$colorview-transparent-background-color: #ccc;
+$colorview-transparent-background-color: #ccc !default;
 
 $colorview-handle-first-side-size: 36px; // dx-fixed-size: long side of the scale handles, drawn by the inset shadows
 $colorview-handle-second-side-size: 17px; // dx-fixed-size: short side of the scale handles, drawn by the inset shadows

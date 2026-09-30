@@ -27,7 +27,7 @@ import runtimeReads from '../tools/naming/runtime-reads.json';
 import vizContract from '../tools/naming/viz-contract.json';
 import { required } from './required';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const widgetsRoot = join(packageRoot, 'scss', 'widgets');
 const themeRoot = join(widgetsRoot, 'fluent-next');
 

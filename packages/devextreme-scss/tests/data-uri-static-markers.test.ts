@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const fluentNext = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 
