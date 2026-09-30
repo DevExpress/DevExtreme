@@ -10,11 +10,13 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCore from '../m_core';
 import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
 
-const headersKeyboardNavigation = (
+const headersKeyboardNavigation: (
   Base: ModuleType<HeadersKeyboardNavigationController>,
+) => ModuleType<HeadersKeyboardNavigationController> = (
+  Base,
 ) => class HeadersKeyboardNavigationControllerExtender extends ColumnKeyboardNavigationMixin(Base) {
   private getNewFocusedColumnBeforeGrouping(
-    column,
+    column: Column,
     rowIndex: number,
   ): Column | undefined {
     if (column.showWhenGrouped) {
@@ -28,7 +30,7 @@ const headersKeyboardNavigation = (
     }
 
     if (focusableColumns.length === 1) {
-      return;
+      return undefined;
     }
 
     const visibleColumnIndex = focusableColumns.findIndex((col) => col.index === column.index);
@@ -57,7 +59,7 @@ const headersKeyboardNavigation = (
     return this._getRowIndex($cell.parent());
   }
 
-  protected getColumnFromEvent(e) {
+  protected getColumnFromEvent(e): Column | undefined {
     const $cell = $(e.originalEvent.target).closest('td');
     const rowIndex = this._getRowIndex($cell.parent());
 

@@ -5,7 +5,8 @@ import gridCore from './m_core';
 
 gridCore.registerModule('columns', {
   defaultOptions() {
-    return extend(true, {}, (columnsControllerModule as any).defaultOptions(), {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend() returns any
+    return extend(true, {}, columnsControllerModule.defaultOptions?.(), {
       commonColumnSettings: {
         allowExporting: true,
       },
