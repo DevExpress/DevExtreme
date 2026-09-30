@@ -193,3 +193,36 @@ test('DataGrid - The filterType property is reset if client state storing contai
     },
   });
 });
+
+test('A column added at runtime should not be duplicated on state restore when it is declared in the columns array (T1336036)', async (t) => {
+  // arrange, act
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(headerRow.getHeaderCells().count)
+    .eql(2)
+    .expect(headerRow.getHeaderCell(0).element.textContent)
+    .eql('Id')
+    .expect(headerRow.getHeaderCell(1).element.textContent)
+    .eql('Name');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ id: 1, name: 'a' }],
+  keyExpr: 'id',
+  columns: ['id', 'name'],
+  stateStoring: {
+    enabled: true,
+    type: 'custom',
+    customLoad() {
+      return Promise.resolve({
+        columns: [
+          { dataField: 'id' },
+          { dataField: 'name', added: 'name' },
+        ],
+      });
+    },
+  },
+}));
