@@ -75,7 +75,7 @@ export function normalizeRemoteOptions(
     case remoteOperations === true:
       return allOperationsEnabled;
     default:
-      return remoteOperations as OperationOptions;
+      return remoteOperations;
   }
 }
 
