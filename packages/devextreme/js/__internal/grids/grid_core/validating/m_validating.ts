@@ -1027,7 +1027,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     if (isCellEditMode) {
       const columns = this._columnsController.getColumns();
       const columnsWithValidatingEditors = columns.filter(
-        (col) => col.showEditorAlways && col.validationRules?.length > 0,
+        (col) => col.showEditorAlways && (col.validationRules?.length ?? 0) > 0,
       );
 
       return columnsWithValidatingEditors.length === 0;

@@ -21,7 +21,7 @@ import type { PositionAlignment } from '@js/ui/popup';
 import { getPublicElement } from '@ts/core/element';
 import { Guid } from '@ts/core/guid';
 import messageLocalization from '@ts/core/localization/message';
-import { FunctionTemplate } from '@ts/core/templates/m_function_template';
+import { FunctionTemplate } from '@ts/core/templates/function_template';
 import { ensureDefined } from '@ts/core/utils/m_common';
 import { isDefined, isObject, isPlainObject } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';

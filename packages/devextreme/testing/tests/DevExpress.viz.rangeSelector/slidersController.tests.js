@@ -138,11 +138,6 @@ QUnit.test('Slider text tracker container', function(assert) {
     assert.deepEqual(this.sliderTextTracker(1).append.lastCall.args, [this.sliderLabelRoot(1)], 'slider text tracker 2');
 });
 
-QUnit.test('Slider text initial settings', function(assert) {
-    assert.deepEqual(this.sliderText(0).attr.lastCall.args, [{ 'align': 'left' }], '1');
-    assert.deepEqual(this.sliderText(1).attr.lastCall.args, [{ 'align': 'left' }], '2');
-});
-
 QUnit.module('Appearance settings', environment);
 
 QUnit.test('Slider handle settings', function(assert) {
@@ -174,6 +169,16 @@ QUnit.test('Slider marker settings', function(assert) {
     assert.deepEqual(this.sliderCloud(1).attr.getCall(0).args, [{ fill: 'yellow' }], 'cloud 2');
     assert.deepEqual(this.sliderText(0).css.lastCall.args, [{ 'font-size': 9, 'font-family': 'fam' }], 'text 1');
     assert.deepEqual(this.sliderText(1).css.lastCall.args, [{ 'font-size': 9, 'font-family': 'fam' }], 'text 2');
+});
+
+QUnit.test('Slider text alignment is applied on every update', function(assert) {
+    const alignCalls = (i) => this.sliderText(i).attr.args.filter((args) => args[0].align === 'left').length;
+
+    this.update();
+    this.update();
+
+    assert.strictEqual(alignCalls(0), 2, 'text 1');
+    assert.strictEqual(alignCalls(1), 2, 'text 2');
 });
 
 QUnit.test('Slider text formatting', function(assert) {

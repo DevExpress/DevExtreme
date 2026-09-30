@@ -219,6 +219,11 @@ function onSuggestionClick({ itemData: suggestion, event }: DxButtonGroupTypes.I
   height: var(--dx-component-height);
 }
 
+.submit-container {
+  height: var(--dx-component-height);
+  align-content: center;
+}
+
 .output-container {
   display: grid;
   align-items: center;
@@ -234,6 +239,7 @@ function onSuggestionClick({ itemData: suggestion, event }: DxButtonGroupTypes.I
 
 .output-container .response-editor {
   border: none;
+  box-shadow: none;
   background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
@@ -263,22 +269,5 @@ function onSuggestionClick({ itemData: suggestion, event }: DxButtonGroupTypes.I
   font-size: 20px;
   margin-right: 4px;
   vertical-align: middle;
-}
-
-.dx-theme-material {
-  .submit-container {
-    height: var(--dx-component-height);
-    align-content: center;
-  }
-
-  .output-container .response-editor {
-    box-shadow: none;
-  }
-}
-
-.dx-theme-generic {
-  .output-initial-message {
-    color: #757575;
-  }
 }
 </style>
