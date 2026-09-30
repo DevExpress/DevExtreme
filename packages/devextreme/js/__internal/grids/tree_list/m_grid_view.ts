@@ -7,14 +7,16 @@ const TREELIST_EXPANDABLE_INSTRUCTION = 'dxTreeList-ariaExpandableInstruction';
 class TreeListResizingController extends ResizingController {
   protected _expandableWidgetAriaId = TREELIST_EXPANDABLE_INSTRUCTION;
 
-  protected _getWidgetAriaLabel() {
+  protected _getWidgetAriaLabel(): string {
     return 'dxTreeList-ariaTreeList';
   }
 
-  protected _toggleBestFitMode(isBestFit) {
+  protected _toggleBestFitMode(isBestFit: boolean): void {
     super._toggleBestFitMode(isBestFit);
 
     const $rowsTable = this._rowsView.getTableElement();
+    // eslint-disable-next-line @stylistic/max-len
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- unlike the base method, there is no check for a missing table
     $rowsTable!.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
   }
 }
