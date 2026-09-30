@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { name as clickEventName } from '@js/common/core/events/click';
@@ -11,21 +9,50 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointer from '@js/common/core/events/pointer';
 import { eventData as _eventData } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const downPointerEventName = pointer.down;
 const movePointerEventName = pointer.move;
 
-export function Tracker(parameters) {
-  this._initHandlers(parameters);
+interface TrackerNode {
+  setHover: () => void;
+  showTooltip: (coords: number[]) => void;
 }
 
-Tracker.prototype = {
-  constructor: Tracker,
+interface TrackerWidget {
+  _renderer: { getRootOffset: () => { left: number; top: number } };
+  _getOption: (name: string) => ThemeValue;
+  clearHover: () => void;
+  hideTooltip: () => void;
+}
 
-  _initHandlers(parameters) {
+interface TrackerClickEvent {
+  node: TrackerNode;
+  coords: number[];
+  event: ThemeValue;
+}
+
+interface TrackerParameters {
+  widget: TrackerWidget;
+  root: ThemeValue;
+  getData: (e: ThemeValue, tooltipData?: boolean) => ThemeValue;
+  getNode: (id: number) => TrackerNode;
+  click: (e: TrackerClickEvent) => void;
+  getProxy?: (index: number) => ThemeValue;
+  getCoords?: (e: ThemeValue) => number[];
+}
+
+export class Tracker {
+  declare _disposeHandlers: () => void;
+
+  constructor(parameters: TrackerParameters) {
+    this._initHandlers(parameters);
+  }
+
+  _initHandlers(parameters: TrackerParameters): void {
     const document = domAdapter.getDocument();
 
-    parameters.getCoords = function (e) {
+    parameters.getCoords = function (e): number[] {
       // TODO: Looks like "eventData" just returns e.pageX, e.pageY. Investigate and use just e.pageX, e.pageY is possible. Don't forget about touch.
       const data = _eventData(e);
       const offset = parameters.widget._renderer.getRootOffset();
@@ -36,14 +63,14 @@ Tracker.prototype = {
     parameters.root.on(downPointerEventName, downHandler);
     eventsEngine.on(document, downPointerEventName, downHandler);
     eventsEngine.on(document, movePointerEventName, moveHandler);
-    this._disposeHandlers = function () {
+    this._disposeHandlers = function (): void {
       parameters.root.off(clickEventName, clickHandler);
       parameters.root.off(downPointerEventName, downHandler);
       eventsEngine.off(document, downPointerEventName, downHandler);
       eventsEngine.off(document, movePointerEventName, moveHandler);
     };
 
-    function clickHandler(e) {
+    function clickHandler(e: ThemeValue): void {
       processClick(e, parameters);
     }
 
@@ -55,7 +82,7 @@ Tracker.prototype = {
     // (like dxScrollable) with its own scrolling behavior - dxTreeMap does not have own scrolling behavior.
     let isRootDown = false;
 
-    function downHandler(e) {
+    function downHandler(e: ThemeValue): void {
       if (isRootDown) {
         isRootDown = false;
       } else {
@@ -66,30 +93,31 @@ Tracker.prototype = {
       }
     }
 
-    function moveHandler(e) {
+    function moveHandler(e: ThemeValue): void {
       processHover(e, parameters);
       parameters.widget._getOption('tooltip').enabled && processTooltip(e, parameters);
     }
-  },
+  }
 
-  dispose() {
+  dispose(): void {
     this._disposeHandlers();
-  },
-};
+  }
+}
 
-function processClick(e, params) {
+function processClick(e: ThemeValue, params: TrackerParameters): void {
   const id = params.getData(e);
 
   if (id >= 0) {
     params.click({
       node: params.getNode(id),
+      // @ts-expect-error getCoords is optional for the caller; _initHandlers assigns it before any handler is attached
       coords: params.getCoords(e),
       event: e,
     });
   }
 }
 
-function processHover(e, params) {
+function processHover(e: ThemeValue, params: TrackerParameters): void {
   const id = params.getData(e);
 
   if (id >= 0) {
@@ -99,7 +127,7 @@ function processHover(e, params) {
   }
 }
 
-function processTooltip(e, params) {
+function processTooltip(e: ThemeValue, params: TrackerParameters): void {
   const id = params.getData(e, true);
   let coords;
 
