@@ -33,7 +33,7 @@ const DATA_GRID_FEATURE_MAP: Record<string, string> = {
   m_data_controller: 'Data',
   data_source_adapter: 'Data',
   core: 'Core',
-  m_widget: 'Core',
+  widget: 'Core',
   m_widget_base: 'Core',
   m_utils: 'Core',
   m_editing: 'Editing',
@@ -42,7 +42,7 @@ const DATA_GRID_FEATURE_MAP: Record<string, string> = {
   export: 'Export',
   keyboard_navigation: 'Navigation',
   focus: 'Navigation',
-  m_columns_controller: 'Columns',
+  columns_controller: 'Columns',
   m_aggregate_calculator: 'Data',
   module_not_extended: 'Passthrough',
 };

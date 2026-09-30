@@ -23,7 +23,7 @@ import './module_not_extended/search';
 import './module_not_extended/pager';
 import './module_not_extended/columns_resizing_reordering';
 import './module_not_extended/keyboard_navigation';
-import './keyboard_navigation/m_headers_keyboard_navigation';
+import './keyboard_navigation/headers_keyboard_navigation';
 import './keyboard_navigation/m_group_panel_keyboard_navigation';
 import './summary/summary_module';
 import './module_not_extended/sticky_columns';

@@ -1,5 +1,5 @@
 import './module_not_extended/column_headers';
-import './m_columns_controller';
+import './columns_controller';
 import './data_source/data_source_module';
 import './module_not_extended/filter';
 import './module_not_extended/data_controller';
