@@ -68,7 +68,8 @@ const createPoint = function() {
 const mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint()];
 
 function resetStub(stub) {
-    $.each(stub, function(_, stubFunc) {
+    Object.getOwnPropertyNames(stub).forEach(function(name) {
+        const stubFunc = stub[name];
         if(stubFunc) {
             if(stubFunc.resetHistory) {
                 stubFunc.resetHistory();
