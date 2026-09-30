@@ -218,6 +218,8 @@
   .dx-#{$widget-name}-columns-separator-transparent {
     border-left: 0;
     border-right: 0;
+    width: 24px;
+    pointer-events: none;
   }
 
   .dx-#{$widget-name}-tracker {
