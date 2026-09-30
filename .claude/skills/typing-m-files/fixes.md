@@ -33,7 +33,7 @@ What TypeScript infers at these places today, measured on a sample:
 
 ## Missing param type: 14%
 
-`explicit-module-boundary-types` ("Argument … should be typed"). Take the type from the module's `types.ts` or the public d.ts. Utils become typed arrows:
+`explicit-module-boundary-types` ("Argument … should be typed"). Take the type from the module's `types.ts` or the public d.ts. Type the params in place. Turning a `function` expression into an arrow isn't needed for typing. It behaves the same only if the function uses neither `this` nor `arguments` and is never called with `new`. The team's earlier PRs did it like this:
 ```ts
 -export const getChildrenByBandColumn = function (columnIndex, columnChildrenByIndex, recursive) {
 +export const getChildrenByBandColumn = (
@@ -78,31 +78,34 @@ The limit is 100. Comments count, strings and template literals don't. Put one p
 
 ## `init-declarations`: 3%
 
+Move the first assignment into the declaration, when nothing reads the variable before it:
 ```ts
 -  let rowspan;
 +  let rowspan: number = that.getRowCount();
 ```
-- If an if-chain assigns the variable, a small helper lets it be `const`: `const changeType = resolveChangeType(optionName);`.
-- A variable assigned inside a closure keeps a line disable: `let targetColumn: Column | undefined;`.
+- Otherwise, for example when an if-chain or a closure assigns it, keep a line disable with a reason: `// eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in <where>`.
+- Don't add a placeholder value. `= 0` changes what an early read gets, and `= undefined` is forbidden by `no-undef-init`.
+- Moving an if-chain into a helper so the variable can be `const` (`const changeType = resolveChangeType(optionName);`) is a refactor: only when agreed.
 
 ## `no-this-alias`: 3%
 
-Use `this` inside arrow callbacks instead of `that`:
+Use `this` instead of `that`, but only inside arrow callbacks. Inside a `function` callback, `this` is something else.
 ```ts
 -      when(that._columnsController.applyDataSource(dataSource)).done(() => {
 +      when(this._columnsController.applyDataSource(dataSource)).done(() => {
 ```
-`function (isLoading) { … }.bind(this)` becomes `(isLoading: boolean): void => { … }`.
+`function (isLoading) { … }.bind(this)` becomes `(isLoading: boolean): void => { … }`, if the body doesn't use `arguments`.
 
 ## `prefer-rest-params` / `prefer-spread`: 2%
 
-Call `super` with named params:
+Call `super` with named params, when the method declares exactly those params and neither it nor the base reads `arguments`. With named params, a call with extra arguments drops them:
 ```ts
 -  protected _processItems(items, change) {
 -    items = super._processItems.apply(this, arguments as any);
 +  protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
 +    const processedItems = super._processItems(items, change);
 ```
+- Otherwise forward everything with a rest param: `super.x(...args)`.
 - A variadic method gets overloads plus a rest param: `private filter(...filterArgs: [] | [DataFilter] | BinaryDataFilterExpression)`.
 - Forwarding: `result.resolve.apply(result, arguments)` becomes `.done((...args: unknown[]) => { result.resolve(...args); })`.
 - `arguments.length` is not flagged. If the code depends on it (a getter/setter overload), keep the `function` and its `arguments.length` check.
@@ -114,17 +117,17 @@ Call `super` with named params:
 |---|---|
 | `no-plusplus` | `i += 1`. `` `dx-col-${id++}` `` becomes `` `dx-col-${id}` `` followed by `id += 1;` |
 | `no-param-reassign` | a default param (`rowIndex = 0` instead of `rowIndex = rowIndex \|\| 0`, only when the old code treats only `undefined` as missing; see traps), or a new `const`. Mutating an object's properties is allowed |
-| `no-unused-expressions` | `a.update && a.update(x)` becomes `a.update?.(x)`; `cond && doIt()` becomes `if (cond) { doIt(); }` |
-| `@stylistic/no-mixed-operators` | a named boolean: `const isDefaultCommandColumn = column.command && !isCustom(column); if (isDefaultCommandColumn \|\| !column.fixedPosition)`. Parentheses alone also pass |
+| `no-unused-expressions` | `cond && doIt()` becomes `if (cond) { doIt(); }`, which always behaves the same. `a.update && a.update(x)` becomes `a.update?.(x)` only when `a.update` can only be a function, `null` or `undefined`. If it can be `false`, `0` or `''`, the old code skips the call but `?.()` throws, so use `if (a.update) { a.update(x); }` |
+| `@stylistic/no-mixed-operators` | parentheses that spell out the current grouping: `a && b \|\| c` becomes `(a && b) \|\| c`, since `&&` binds tighter. A named boolean also works: `const isDefaultCommandColumn = column.command && !isCustom(column); if (isDefaultCommandColumn \|\| !column.fixedPosition)` |
 | `no-shadow` | rename the inner name: `(column) =>` becomes `(commandColumn) =>` |
-| `max-depth` (3) | early `return` guards (not `continue`: `no-continue` is a strict rule too), a `forEach` callback with early returns, or a small private helper |
-| `consistent-return` | an explicit `return undefined;`/`return false;` at the end; `default: return undefined;` |
-| `prefer-for-of` | `for (const column of this._columns)` when the index is only used to read the item |
+| `max-depth` (3) | at function level: early `return` guards, or merging nested `if`s with `&&`, where the flow stays the same. Inside a loop there is no such fix, because `no-continue` is a strict rule too. Then ask the developer: an agreed refactor (a helper, a loop rewrite), or a line disable with a reason |
+| `consistent-return` | an explicit `return undefined;` at the end, and `default: return undefined;` in a switch: the function already returned `undefined` there. Not `return false;`, which changes the value |
+| `prefer-for-of` | `for (const column of this._columns)`, when the index is only used to read the item and the loop doesn't add or remove items |
 | `no-use-before-define` | move the declaration above its first use, when that doesn't change evaluation order |
 | `no-multi-assign` | two statements; `x = o.x = o.x === undefined ? d : o.x` becomes `o.x ??= d;` then `x = o.x`, only if `o.x` can't be `null` |
-| `no-non-null-assertion` | a real check: `oldItem ? map[getRowKey(oldItem)] : undefined` |
-| `no-invalid-this` | an arrow, or a typed `this` param: `function (this: ColumnBase, e: ColumnCustomizeTextArg): string` |
-| `no-floating-promises` | no agreed fix yet: a line disable with a reason |
+| `no-non-null-assertion` | a narrowing TypeScript can see, when the value provably isn't `null` or `undefined` there. If it can be, the old code threw or read a key named `'undefined'`, so a check with a new fallback (`oldItem ? map[getRowKey(oldItem)] : undefined`) changes behaviour. Ask, or keep a line disable with a reason |
+| `no-invalid-this` | a typed `this` param, which changes nothing: `function (this: ColumnBase, e: ColumnCustomizeTextArg): string`. An arrow changes what `this` is, so use one only after replacing every `this` with what it was. Core `each(items, function () {…})` calls the callback with `this` set to the item, and stops when it returns `false`, so keep `each` rather than switching to `forEach` |
+| `no-floating-promises` | a line disable with a reason. `void promise` is not an option: `no-void` forbids it |
 
 ## Class fields
 

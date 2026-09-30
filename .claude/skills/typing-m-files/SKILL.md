@@ -59,20 +59,23 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
 4. **Checks** (below).
 5. **Report:**
    - strict errors and warnings, before and after, for each file or range in the input format;
-   - every body edit a new type forced, one line each;
+   - every body edit, one line each, with why it behaves the same;
+   - what was added to the module's `types.ts`;
    - the warnings left, grouped by rule, with the reason each was left.
 
 ## Rules
 
 **Scope**
-- Touch only the given files. With a range, touch only those lines.
-- Don't edit other files to fix a type. If a new type (usually a return type) breaks callers in other files, stop and ask the developer. The options are a compile-only fix at those callers, a wider type, or agreeing it with whoever is typing those files.
+- The task's files are the given files plus the module's own `types.ts`, where new types go (create it if the module has none). With a range, touch only those lines of the given file, plus its import block.
+- Anything else needs the developer's OK before you touch it: the test file for an agreed refactor, another module's `types.ts`, or callers in other files.
+- If a new type (usually a return type) breaks callers in other files, stop and ask the developer. The options are a compile-only fix at those callers, a wider type, or agreeing it with whoever is typing those files.
 - Don't change public API: no edits to `js/**/*.d.ts`.
 
 **Typing only**
 - Annotate params, locals, returns and fields.
-- Change a body only where a new type makes it fail to compile. That means a guard, a `?? fallback` or a narrowing. A value from a source that isn't typed yet gets a directive, not a cast (see Disables).
-- Don't refactor, rename, remove dead code, rewrite loops or drop unused params, unless the developer agrees for that one function. Then tests come first: written and passing on the old code, then the change, then a mutation check that the tests catch a broken version.
+- Change a body only where a new type makes it fail to compile (a guard, a `?? fallback`, a narrowing), or where a strict rule needs it (`fixes.md`). Either way, the edit must provably behave the same for every value the code can get. A value from a source that isn't typed yet gets a directive, not a cast (see Disables).
+- Don't refactor. That means no extracting functions, rewriting loops, renaming members or functions, removing dead code or dropping unused params, unless the developer agrees for that one function. Renaming a local variable to fix `no-shadow` is fine.
+- An agreed refactor gets tests first: written and passing on the old code, then the change, then a mutation check that the tests catch a broken version. The test file is outside the task: name it when you ask for the agreement.
 - A bug found while typing is not fixed in the typing PR. Tell the developer, with file, line and why it's a bug.
 
 **Warnings**
