@@ -2,10 +2,12 @@ import { logger } from '@nx/devkit';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as _ from 'lodash';
+import * as ts from 'typescript';
 import { createExecutor } from '../../utils/create-executor';
 import { ApplyLicenseHeadersOption, VectormapExecutorSchema } from './schema';
 import {
   ensureDir,
+  exists,
   loadProjectPackageJson,
   readFileText,
   writeFileText,
@@ -41,8 +43,73 @@ const USE_STRICT_HEADER = '"use strict";\n\n';
 const DEBUG_SUFFIX = '.debug';
 const DEFAULT_PRECISION = 4;
 
+const FRAGMENT_COMPILER_OPTIONS: ts.CompilerOptions = {
+  target: ts.ScriptTarget.ESNext,
+  module: ts.ModuleKind.ESNext,
+  moduleDetection: ts.ModuleDetectionKind.Legacy,
+  alwaysStrict: false,
+  newLine: ts.NewLineKind.LineFeed,
+};
+
+const DIAGNOSTICS_FORMAT_HOST: ts.FormatDiagnosticsHost = {
+  getCanonicalFileName: (fileName) => fileName,
+  getCurrentDirectory: () => process.cwd(),
+  getNewLine: () => '\n',
+};
+
 function toArrayBuffer(buffer: Buffer): ArrayBuffer {
   return new Uint8Array(buffer).buffer;
+}
+
+async function resolveFragmentPath(sourceDir: string, name: string): Promise<string> {
+  const tsPath = path.join(sourceDir, `${name}.ts`);
+  const jsPath = path.join(sourceDir, `${name}.js`);
+  const [hasTs, hasJs] = await Promise.all([exists(tsPath), exists(jsPath)]);
+
+  if (hasTs && hasJs) {
+    throw new Error(
+      `Vectormap: ambiguous utils fragment "${name}": both "${name}.ts" and "${name}.js" `
+        + `exist in ${sourceDir}. Keep only one of them.`,
+    );
+  }
+  if (!hasTs && !hasJs) {
+    throw new Error(
+      `Vectormap: utils fragment "${name}" not found: `
+        + `expected "${name}.ts" or "${name}.js" in ${sourceDir}.`,
+    );
+  }
+
+  return hasTs ? tsPath : jsPath;
+}
+
+function transpileFragment(source: string, filePath: string): string {
+  const { outputText, diagnostics = [] } = ts.transpileModule(source, {
+    fileName: filePath,
+    compilerOptions: FRAGMENT_COMPILER_OPTIONS,
+    reportDiagnostics: true,
+  });
+
+  if (diagnostics.length > 0) {
+    throw new Error(
+      `Vectormap: failed to transpile utils fragment "${filePath}":\n`
+        + ts.formatDiagnostics(diagnostics, DIAGNOSTICS_FORMAT_HOST).trimEnd(),
+    );
+  }
+
+  if (ts.isExternalModule(ts.createSourceFile(filePath, source, ts.ScriptTarget.ESNext))) {
+    throw new Error(
+      `Vectormap: utils fragment "${filePath}" contains import/export statements. `
+        + 'Fragments are concatenated into one shared scope and must be plain scripts.',
+    );
+  }
+
+  return outputText;
+}
+
+async function readFragment(sourceDir: string, name: string): Promise<string> {
+  const filePath = await resolveFragmentPath(sourceDir, name);
+  const content = await readFileText(filePath);
+  return path.extname(filePath) === '.ts' ? transpileFragment(content, filePath) : content;
 }
 
 async function buildUtilsVariant(
@@ -53,9 +120,7 @@ async function buildUtilsVariant(
 ): Promise<void> {
   const contents: string[] = [];
   for (const file of variant.files) {
-    const filePath = path.join(sourceDir, `${file}.js`);
-    const content = await readFileText(filePath);
-    contents.push(content);
+    contents.push(await readFragment(sourceDir, file));
   }
   const concatenated = contents.join('\n');
 

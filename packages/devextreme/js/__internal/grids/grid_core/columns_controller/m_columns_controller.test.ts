@@ -84,7 +84,7 @@ describe('Column Controller', () => {
 
       const expandColumn = firstRowColumns.find((col) => col.command === 'expand');
       expect(expandColumn).toBeDefined();
-      expect(expandColumn.rowspan).toBe(2);
+      expect(expandColumn?.rowspan).toBe(2);
     });
 
     it('should place expand columns only in the first header row with grouped columns', async () => {
@@ -125,8 +125,8 @@ describe('Column Controller', () => {
       const bandColumn = firstRowColumns.find((col) => col.caption === 'Band Column 1');
 
       expect(bandColumn).toBeDefined();
-      expect(bandColumn.isBand).toBe(true);
-      expect(bandColumn.rowspan).toBeUndefined();
+      expect(bandColumn?.isBand).toBe(true);
+      expect(bandColumn?.rowspan).toBeUndefined();
 
       // Row 1: Column 3 + Band Column 2
       const secondRowColumns = columnsController.getVisibleColumns(1);
@@ -138,13 +138,13 @@ describe('Column Controller', () => {
       const column3 = secondRowColumns.find((col) => col.caption === 'Column 3');
 
       expect(column3).toBeDefined();
-      expect(column3.rowspan).toBe(2);
+      expect(column3?.rowspan).toBe(2);
 
       const bandColumn2 = secondRowColumns.find((col) => col.caption === 'Band Column 2');
 
       expect(bandColumn2).toBeDefined();
-      expect(bandColumn2.isBand).toBe(true);
-      expect(bandColumn2.rowspan).toBeUndefined();
+      expect(bandColumn2?.isBand).toBe(true);
+      expect(bandColumn2?.rowspan).toBeUndefined();
 
       // Row 2: Column 4
       const thirdRowColumns = columnsController.getVisibleColumns(2);
@@ -153,7 +153,7 @@ describe('Column Controller', () => {
 
       expect(expandColumnsInThirdRow.length).toBe(0);
       expect(column4).toBeDefined();
-      expect(column4.rowspan).toBeUndefined();
+      expect(column4?.rowspan).toBeUndefined();
     });
 
     it('should place expand columns only in the first header row with showWhenGrouped', async () => {
@@ -199,12 +199,12 @@ describe('Column Controller', () => {
       // showWhenGrouped data columns should be in the first row with rowspan=3
       const field1Col = firstRowColumns.find((col) => col.caption === 'Field 1' && !col.command);
       expect(field1Col).toBeDefined();
-      expect(field1Col.rowspan).toBe(3);
+      expect(field1Col?.rowspan).toBe(3);
 
       // band2 should be in the first row without rowspan (it has children)
       const band2Col = firstRowColumns.find((col) => col.caption === 'band2');
       expect(band2Col).toBeDefined();
-      expect(band2Col.rowspan).toBeUndefined();
+      expect(band2Col?.rowspan).toBeUndefined();
 
       // Row 1: no expand columns
       const secondRowColumns = columnsController.getVisibleColumns(1);
@@ -246,7 +246,7 @@ describe('Column Controller', () => {
       const expandColumn = visibleColumns.find((col) => col.command === 'expand' || col.type === 'groupExpand');
 
       expect(expandColumn).toBeDefined();
-      expect(expandColumn.rowspan).toBeUndefined();
+      expect(expandColumn?.rowspan).toBeUndefined();
     });
 
     it('should not set rowspan on expand column when there is a single header row', async () => {
@@ -266,7 +266,7 @@ describe('Column Controller', () => {
 
       expect(rowCount).toBe(1);
       expect(expandColumn).toBeDefined();
-      expect(expandColumn.rowspan).toBeUndefined();
+      expect(expandColumn?.rowspan).toBeUndefined();
     });
   });
 });
