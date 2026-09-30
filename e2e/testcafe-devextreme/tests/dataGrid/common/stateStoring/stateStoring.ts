@@ -203,8 +203,12 @@ test('A column added at runtime should not be duplicated on state restore when i
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(await headerRow.getHeaderTexts())
-    .eql(['Id', 'Name']);
+    .expect(headerRow.getHeaderCells().count)
+    .eql(2)
+    .expect(headerRow.getHeaderCell(0).element.textContent)
+    .eql('Id')
+    .expect(headerRow.getHeaderCell(1).element.textContent)
+    .eql('Name');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, name: 'a' }],
   keyExpr: 'id',
