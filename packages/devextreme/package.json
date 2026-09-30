@@ -139,8 +139,6 @@
     "lint-texts": "node build/linters/validate-non-latin-symbols.js",
     "build:dev": "pnpm nx build:dev devextreme",
     "build-dist": "pnpm nx build-dist devextreme",
-    "build:modular": "cd ./playground/modular && webpack",
-    "build:modular:watch": "cd ./playground/modular && webpack --watch",
     "build:community-localization": "pnpm nx build:community-localization devextreme",
     "dev": "cross-env DEVEXTREME_TEST_CI=true nx run devextreme:dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true nx run devextreme:dev-watch",
