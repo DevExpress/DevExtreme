@@ -16,8 +16,8 @@ overrides:
   "axios@<1.18.0": ^1.18.0
   "babel-traverse": "npm:@babel/traverse@^7.23.2"
   "body-parser@<1.20.6": ^1.20.6
-  "brace-expansion@<3.0.0": "^2.1.4"
-  "brace-expansion@>=3.0.0 <5.0.9": "^5.0.9"
+  "brace-expansion@<3.0.0": "^2.1.7"
+  "brace-expansion@>=3.0.0 <5.0.12": "^5.0.12"
   "braces@<3.0.3": ^3.0.3
   "cookie@<0.7.0": ^0.7.0
   "esbuild@<0.28.1": ^0.28.1
@@ -44,10 +44,13 @@ overrides:
   "yaml@>=2.0.0 <2.8.3": ^2.8.3
   "@hono/node-server@<2.0.12": ^2.0.12
   "smol-toml@<1.7.0": "^1.7.1"
-  fast-uri@>=3.0.0 <3.1.7: ^3.1.7
-  ip-address@>=10.5.0: ^10.5.1
-  undici@>=6.25.0 <6.28.1: ^6.28.1
-  undici@>=7.28.0 <7.29.1: ^7.29.1
+  "fast-uri@>=3.0.0 <3.1.8": ^3.1.8
+  "ip-address@<10.7.1": ^10.7.1
+  "undici@>=6.25.0 <6.28.1": ^6.28.1
+  "undici@>=7.28.0 <7.29.1": ^7.29.1
+  "engine.io@>=6.6.0 <6.6.10": ^6.6.10
+  "moment@>=2.29.2 <2.31.0": ^2.31.0
+  "webpack-dev-middleware@<7.4.5": ^7.4.5
 catalog:
   axe-core: ^4.12.1
   inferno: ^8.2.3
@@ -128,13 +131,4 @@ patchedDependencies:
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
-  - devextreme-quill@1.7.10
-  - terser@4.8.1
-  - elliptic@6.6.2
-  - babel-traverse@7.23.2
-  - '@angular/core@19.2.26'
-  - '@angular/common@19.2.26'
-  - '@angular/compiler@19.2.26'
-  - undici@7.28.0
-  - '@sigstore/core@3.2.1'
   - devextreme-internal-tools@20.5.0
