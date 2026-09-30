@@ -526,7 +526,8 @@
     "chat": [
       ".dx-chat",
       ".dx-messagelist-context-menu-content",
-      ".dx-chat-confirmation-popup-wrapper"
+      ".dx-chat-confirmation-popup-wrapper",
+      ".dx-chat-suggestions"
     ],
     "diagram": [
       ".dx-diagram",
