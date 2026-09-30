@@ -1,7 +1,7 @@
 import coreLocalization from '@js/common/core/localization/core';
 import config from '@js/core/config';
 import { isFunction, isPlainObject, isString } from '@js/core/utils/type';
-import type { Format } from '@js/localization';
+import type { Format, FormatObject } from '@js/localization';
 import parentLocales from '@ts/core/localization/cldr-data/parent_locales';
 import getParentLocale from '@ts/core/localization/parentLocale';
 
@@ -12,6 +12,16 @@ type GlobalFormatValue = Format | LocaleMap;
 type GlobalFormatOptionName = 'dateFormat' | 'dateTimeFormat' | 'timeFormat' | 'numberFormat';
 
 const hasOwn = Object.prototype.hasOwnProperty;
+
+const GLOBAL_FORMAT_DATA_TYPES = ['time', 'datetime', 'date'];
+
+const DEFAULT_IMPLICIT_PRESET_BY_DATA_TYPE = {
+  date: 'shortdate',
+  datetime: 'shortdateshorttime',
+  time: 'shorttime',
+};
+
+export type FormatLocale = string | (() => string);
 
 const resolveByLocaleMap = (localeMap: LocaleMap): Format | undefined => {
   let currentLocale: string | false = coreLocalization.locale();
@@ -49,6 +59,12 @@ const resolveConfigValue = (value: GlobalFormatValue): Format | undefined => {
   return undefined;
 };
 
+const resolveFormatLocaleProperty = (formatObject: FormatObject): string | undefined => {
+  const formatLocale = formatObject.locale;
+
+  return isFunction(formatLocale) ? formatLocale() : formatLocale;
+};
+
 const resolveGlobalFormat = (optionName: GlobalFormatOptionName): Format | undefined => {
   const { [optionName]: optionValue } = config();
 
@@ -68,6 +84,104 @@ export const getGlobalFormatByDataType = (dataType: string): Format | undefined 
     default:
       return undefined;
   }
+};
+
+const getOwnFormatLocale = (format: Format | undefined): string | undefined => (
+  isPlainObject(format) ? resolveFormatLocaleProperty(format as FormatObject) : undefined
+);
+
+const getFormatType = (format: Format | undefined): string | undefined => (
+  isPlainObject(format) ? (format as FormatObject).type : undefined
+);
+
+const resolveDataTypeFromGlobalConfig = (presetName: string | undefined): string | undefined => {
+  if (!presetName) {
+    return undefined;
+  }
+
+  const lowerPreset = String(presetName).toLowerCase();
+
+  for (const dataType of GLOBAL_FORMAT_DATA_TYPES) {
+    const globalFormatType = getFormatType(getGlobalFormatByDataType(dataType));
+
+    if (globalFormatType?.toLowerCase() === lowerPreset) {
+      return dataType;
+    }
+  }
+
+  for (const dataType of GLOBAL_FORMAT_DATA_TYPES) {
+    if (DEFAULT_IMPLICIT_PRESET_BY_DATA_TYPE[dataType] === lowerPreset) {
+      return dataType;
+    }
+  }
+
+  return undefined;
+};
+
+const inferDataTypeFromFormatObject = (format: Format): string | undefined => {
+  if (!isPlainObject(format)) {
+    return undefined;
+  }
+
+  const {
+    hour, minute, second, year, month, day, weekday,
+  } = format as Intl.DateTimeFormatOptions;
+  const hasTime = hour !== undefined || minute !== undefined || second !== undefined;
+  const hasDate = year !== undefined
+    || month !== undefined
+    || day !== undefined
+    || weekday !== undefined;
+
+  if (hasTime && hasDate) {
+    return 'datetime';
+  }
+
+  if (hasTime) {
+    return 'time';
+  }
+
+  if (hasDate) {
+    return 'date';
+  }
+
+  return undefined;
+};
+
+export const getFormatterOptions = (format: Format): Format => {
+  if (!isPlainObject(format) || !Object.hasOwnProperty.call(format, 'locale')) {
+    return format;
+  }
+
+  const stripped = { ...format } as FormatObject;
+  delete stripped.locale;
+
+  return stripped;
+};
+
+export const getEffectiveFormatLocale = (
+  format: Format,
+  dataType?: string,
+  presetName?: string,
+): string => {
+  const ownLocale = getOwnFormatLocale(format);
+
+  if (ownLocale) {
+    return ownLocale;
+  }
+
+  const resolvedDataType = dataType
+    ?? resolveDataTypeFromGlobalConfig(presetName ?? getFormatType(format))
+    ?? inferDataTypeFromFormatObject(format);
+
+  if (resolvedDataType) {
+    const globalFormatLocale = getOwnFormatLocale(getGlobalFormatByDataType(resolvedDataType));
+
+    if (globalFormatLocale) {
+      return globalFormatLocale;
+    }
+  }
+
+  return coreLocalization.locale();
 };
 
 export const resolvePresetOverride = (presetName: string): Format | undefined => {
@@ -90,4 +204,6 @@ export const resolvePresetOverride = (presetName: string): Format | undefined =>
 export default {
   getGlobalFormatByDataType,
   resolvePresetOverride,
+  getEffectiveFormatLocale,
+  getFormatterOptions,
 };

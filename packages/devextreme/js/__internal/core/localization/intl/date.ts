@@ -1,6 +1,10 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
-import { resolvePresetOverride } from '@ts/core/global_format_config';
+import {
+  getEffectiveFormatLocale,
+  getFormatterOptions,
+  resolvePresetOverride,
+} from '@ts/core/global_format_config';
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { DateFormatter, Format } from '@ts/core/localization/date';
 import { extend } from '@ts/core/utils/m_extend';
@@ -19,22 +23,32 @@ const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
 const NARROW_NO_BREAK_SPACE_REGEX = /[\u202F]/g;
 
 const formattersCache: Record<string, DateFormatter> = {};
-const getFormatter = (format: Intl.DateTimeFormatOptions): DateFormatter => {
-  const key = `${localizationCoreUtils.locale()}/${JSON.stringify(format)}`;
+const getFormatter = (
+  format: Intl.DateTimeFormatOptions,
+  formatLocale = localizationCoreUtils.locale(),
+): DateFormatter => {
+  const key = `${formatLocale}/${JSON.stringify(format)}`;
   if (!formattersCache[key]) {
-    formattersCache[key] = new Intl.DateTimeFormat(localizationCoreUtils.locale(), format).format;
+    formattersCache[key] = new Intl.DateTimeFormat(formatLocale, format).format;
   }
 
   return formattersCache[key];
 };
 
-function formatDateTime(date: Date, format: Intl.DateTimeFormatOptions): string {
-  return getFormatter(format)(date)
+function formatDateTime(
+  date: Date,
+  format: Intl.DateTimeFormatOptions,
+  formatLocale = localizationCoreUtils.locale(),
+): string {
+  return getFormatter(format, formatLocale)(date)
     .replace(SYMBOLS_TO_REMOVE_REGEX, '')
     .replace(NARROW_NO_BREAK_SPACE_REGEX, ' ');
 }
 
-const getIntlFormatter = (format: Intl.DateTimeFormatOptions) => (date: Date): string => {
+const getIntlFormatter = (
+  format: Intl.DateTimeFormatOptions,
+  formatLocale = localizationCoreUtils.locale(),
+) => (date: Date): string => {
   // NOTE: Intl in some browsers formates dates with timezone offset
   // which was at the moment for this date.
   // But the method "new Date" creates date using current offset.
@@ -61,14 +75,15 @@ const getIntlFormatter = (format: Intl.DateTimeFormatOptions) => (date: Date): s
     }
     const utcFormat = extend({ timeZone: 'UTC' }, format);
 
-    return formatDateTime(utcDate, utcFormat);
+    return formatDateTime(utcDate, utcFormat, formatLocale);
   }
 
-  return formatDateTime(date, format);
+  return formatDateTime(date, format, formatLocale);
 };
 
-// eslint-disable-next-line @stylistic/max-len
-const formatNumber = (number: number): string => new Intl.NumberFormat(localizationCoreUtils.locale()).format(number);
+const formatNumber = (number: number): string => new Intl.NumberFormat(
+  localizationCoreUtils.locale(),
+).format(number);
 
 const getAlternativeNumeralsMap = (() => {
   const numeralsMapCache: Record<string, false | Record<string, number>> = {};
@@ -133,7 +148,8 @@ const intlFormats = {
 
 Object.defineProperty(intlFormats, 'shortdateshorttime', {
   get() {
-    const defaultOptions = Intl.DateTimeFormat(localizationCoreUtils.locale()).resolvedOptions();
+    const formatLocale = getEffectiveFormatLocale(undefined, 'datetime');
+    const defaultOptions = Intl.DateTimeFormat(formatLocale).resolvedOptions();
 
     return {
       year: defaultOptions.year, month: defaultOptions.month, day: defaultOptions.day, hour: 'numeric', minute: 'numeric',
@@ -144,15 +160,60 @@ Object.defineProperty(intlFormats, 'shortdateshorttime', {
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const getIntlFormat = (format): Intl.DateTimeFormatOptions => typeof format === 'string' && intlFormats[format.toLowerCase()];
 
+const formatWithIntlPreset = (
+  date: Date,
+  sourceFormat: LocalizationFormat,
+  resolvedFormat: LocalizationFormat,
+  presetName: string,
+): string | undefined => {
+  const intlFormat = getIntlFormat(presetName);
+
+  if (!intlFormat) {
+    return undefined;
+  }
+
+  const formatLocale = getEffectiveFormatLocale(
+    typeof sourceFormat === 'object' ? sourceFormat : undefined,
+    undefined,
+    presetName,
+  );
+
+  return getIntlFormatter(intlFormat, formatLocale)(date);
+};
+
+const formatWithIntlOptions = (
+  date: Date,
+  format: FormatObject | Intl.DateTimeFormatOptions,
+): string => {
+  const typeFormat = (format as FormatObject).type;
+
+  if (typeFormat && typeof typeFormat === 'string') {
+    const intlPresetResult = formatWithIntlPreset(date, format, format, typeFormat);
+
+    if (intlPresetResult !== undefined) {
+      return intlPresetResult;
+    }
+  }
+
+  const formatLocale = getEffectiveFormatLocale(format, undefined, typeFormat);
+  const formatterOptions = getFormatterOptions(format) as Intl.DateTimeFormatOptions;
+
+  return getIntlFormatter(formatterOptions, formatLocale)(date);
+};
+
 const monthNameStrategies = {
   standalone(monthIndex: number, monthFormat: Intl.DateTimeFormatOptions['month']): string {
     const date = new Date(1999, monthIndex, 13, 1);
+    const messageLocale = localizationCoreUtils.locale();
 
-    return getIntlFormatter({ month: monthFormat })(date);
+    return getIntlFormatter({ month: monthFormat }, messageLocale)(date);
   },
   format(monthIndex: number, monthFormat: Intl.DateTimeFormatOptions['month']): string {
     const date = new Date(0, monthIndex, 13, 1);
-    const dateString = normalizeMonth(getIntlFormatter({ day: 'numeric', month: monthFormat })(date));
+    const messageLocale = localizationCoreUtils.locale();
+    const dateString = normalizeMonth(
+      getIntlFormatter({ day: 'numeric', month: monthFormat }, messageLocale)(date),
+    );
     const parts = dateString.split(' ').filter((part) => !part.includes('13'));
 
     if (parts.length === 1) {
@@ -188,25 +249,33 @@ export default {
   },
 
   getDayNames(format: Format): string[] {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const intlFormats: Record<Format, Intl.DateTimeFormatOptions['weekday']> = {
+    const intlDayFormats: Record<Format, Intl.DateTimeFormatOptions['weekday']> = {
       wide: 'long',
       abbreviated: 'short',
       short: 'narrow',
       narrow: 'narrow',
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const getIntlDayNames = (format: Intl.DateTimeFormatOptions['weekday']): string[] => Array.from(
+    const messageLocale = localizationCoreUtils.locale();
+    const getIntlDayNames = (
+      dayFormat: Intl.DateTimeFormatOptions['weekday'],
+    ): string[] => Array.from(
       { length: 7 },
-      (_, dayIndex) => getIntlFormatter({ weekday: format })(new Date(0, 0, dayIndex)),
+      (_, dayIndex) => getIntlFormatter(
+        { weekday: dayFormat },
+        messageLocale,
+      )(new Date(0, 0, dayIndex)),
     );
 
-    return getIntlDayNames(intlFormats[format || 'wide']);
+    return getIntlDayNames(intlDayFormats[format || 'wide']);
   },
 
   getPeriodNames(): string[] {
-    const hour12Formatter = getIntlFormatter({ hour: 'numeric', hour12: true });
+    const messageLocale = localizationCoreUtils.locale();
+    const hour12Formatter = getIntlFormatter(
+      { hour: 'numeric', hour12: true },
+      messageLocale,
+    );
 
     return [1, 13].map((hours) => {
       const hourNumberText = formatNumber(1); // NOTE: For "bn" locale
@@ -231,38 +300,51 @@ export default {
       return date;
     }
 
-    // TODO: refactor (extract code form base)
-    if (typeof format !== 'function' && !(format as FormatObject).formatter) {
-      // eslint-disable-next-line no-param-reassign
-      format = (format as FormatObject).type ?? format;
+    if (typeof format === 'function') {
+      return (format as DateFormatter)(date);
     }
 
-    if (typeof format === 'string') {
-      const presetOverride = resolvePresetOverride(format);
+    if ((format as FormatObject).formatter) {
+      return ((format as FormatObject).formatter as DateFormatter)(date);
+    }
+
+    const sourceFormat = format;
+    let resolvedFormat: LocalizationFormat = (format as FormatObject).type ?? format;
+
+    if (typeof resolvedFormat === 'string') {
+      const presetOverride = resolvePresetOverride(resolvedFormat);
 
       if (presetOverride !== undefined) {
         if (typeof presetOverride === 'function') {
           return (presetOverride as DateFormatter)(date);
         }
-        // eslint-disable-next-line no-param-reassign
-        format = presetOverride as LocalizationFormat;
+
+        resolvedFormat = presetOverride as LocalizationFormat;
       }
     }
 
-    const intlFormat = getIntlFormat(format);
+    if (typeof resolvedFormat === 'string') {
+      const intlPresetResult = formatWithIntlPreset(
+        date,
+        sourceFormat,
+        resolvedFormat,
+        resolvedFormat,
+      );
 
-    if (intlFormat) {
-      return getIntlFormatter(intlFormat)(date);
-    }
+      if (intlPresetResult !== undefined) {
+        return intlPresetResult;
+      }
 
-    const formatType = typeof format;
-    if ((format as FormatObject).formatter || formatType === 'function' || formatType === 'string') {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return this.callBase.apply(this, [date, format]);
+      return this.callBase.apply(this, [date, resolvedFormat]);
     }
 
-    // @ts-expect-error
-    return getIntlFormatter(format)(date);
+    if (typeof resolvedFormat === 'object') {
+      return formatWithIntlOptions(date, resolvedFormat as FormatObject);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this.callBase.apply(this, [date, resolvedFormat]);
   },
 
   parse(dateString: string, format?: FormatObject | string): Date | null | undefined {
@@ -295,16 +377,15 @@ export default {
 
     const dateArgs: DateArgs = this._generateDateArgs(formatParts, dateParts);
 
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const constructDate = (dateArgs: DateArgs, ampmShift: boolean): Date => {
+    const constructDate = (args: DateArgs, ampmShift: boolean): Date => {
       const hoursShift = ampmShift ? 12 : 0;
       return new Date(
-        dateArgs.year,
-        dateArgs.month,
-        dateArgs.day,
-        (dateArgs.hours + hoursShift) % 24,
-        dateArgs.minutes,
-        dateArgs.seconds,
+        args.year,
+        args.month,
+        args.day,
+        (args.hours + hoursShift) % 24,
+        args.minutes,
+        args.seconds,
       );
     };
     const constructValidDate = (ampmShift: boolean): Date | undefined => {
@@ -364,13 +445,14 @@ export default {
     return this.callBase.apply(this, [format]);
   },
   getTimeSeparator(): string {
+    const formatLocale = getEffectiveFormatLocale(undefined, 'time');
     const formatOptions: Intl.DateTimeFormatOptions = {
       hour: 'numeric',
       minute: 'numeric',
       hour12: false,
     };
     return normalizeNumerals(
-      formatDateTime(new Date(2001, 1, 1, 11, 11), formatOptions),
+      formatDateTime(new Date(2001, 1, 1, 11, 11), formatOptions, formatLocale),
     ).replace(/\d/g, '');
   },
 
@@ -381,8 +463,9 @@ export default {
       return this.callBase(format);
     }
     const intlFormat = extend({}, intlFormats[format.toLowerCase()]);
+    const messageLocale = localizationCoreUtils.locale();
     const date = new Date(2001, 2, 4, 5, 6, 7);
-    let formattedDate = getIntlFormatter(intlFormat)(date);
+    let formattedDate = getIntlFormatter(intlFormat, messageLocale)(date);
 
     formattedDate = normalizeNumerals(formattedDate);
 
