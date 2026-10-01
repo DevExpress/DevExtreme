@@ -12,4 +12,5 @@ export const NAV_KEYS = {
   rightArrow: 'ArrowRight',
   home: 'Home',
   end: 'End',
+  pageDown: 'PageDown',
 } as const;

@@ -21,6 +21,12 @@ import {
 type KeyboardNavKey = keyof typeof NAV_KEYS;
 type SelectionMode = 'single' | 'multiple' | 'none';
 
+interface AsyncTemplateArgs {
+  model: { value: unknown };
+  container: HTMLElement;
+  onRendered?: () => void;
+}
+
 describe('Keyboard Navigation', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
@@ -373,12 +379,6 @@ describe('Keyboard Navigation', () => {
     const PREVIOUS_ROW_KEY = FOCUSED_ROW_KEY - 1;
     const SCROLL_TOP = 60;
 
-    interface AsyncTemplateArgs {
-      model: { value: unknown };
-      container: HTMLElement;
-      onRendered?: () => void;
-    }
-
     const getRowKey = (element: Element | null): number | undefined => {
       const row = element?.closest<HTMLTableRowElement>('tr.dx-data-row');
 
@@ -558,5 +558,96 @@ describe('Keyboard Navigation', () => {
       expect(instance.option('focusedRowKey')).toBe(NEXT_ROW_KEY);
       expect(getRowKeys($container, 'tr.dx-row-focused')).toEqual([NEXT_ROW_KEY]);
     });
+  });
+
+  describe('Focus after the rows are re-rendered with async templates', () => {
+    const PAGE_SIZE = 3;
+    const ROWS = Array.from({ length: PAGE_SIZE * 2 }, (_, index) => ({ id: index, name: `Row ${index}` }));
+    const FOCUSED_COLUMN_INDEX = 1;
+
+    const getFocusedCell = (): { rowKey: number; columnIndex: number } | undefined => {
+      const cell = document.activeElement?.closest('td');
+      const row = cell?.closest<HTMLTableRowElement>('tr.dx-data-row');
+
+      return cell && row
+        ? { rowKey: Number(row.cells[0].textContent), columnIndex: cell.cellIndex }
+        : undefined;
+    };
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const createGridWithFocusedCell = async () => {
+      const pendingTemplates: (() => void)[] = [];
+      const renderPendingTemplates = (): void => {
+        while (pendingTemplates.length) {
+          pendingTemplates.shift()?.();
+          jest.runAllTimers();
+        }
+      };
+
+      const grid = await createDataGrid({
+        dataSource: ROWS,
+        paging: { pageSize: PAGE_SIZE },
+        columns: ['id', { dataField: 'name', cellTemplate: 'asyncTemplate' }],
+        templatesRenderAsynchronously: true,
+        integrationOptions: {
+          templates: {
+            asyncTemplate: {
+              render({ model, container, onRendered }: AsyncTemplateArgs): void {
+                pendingTemplates.push(() => {
+                  container.append(String(model.value));
+                  onRendered?.();
+                });
+              },
+            },
+          },
+        },
+      } as DataGridProperties);
+      renderPendingTemplates();
+
+      const cell = grid.component.getDataCell(0, FOCUSED_COLUMN_INDEX);
+      triggerPointerDown(cell.getElement() as HTMLElement);
+      jest.runAllTimers();
+
+      return { ...grid, renderPendingTemplates };
+    };
+
+    interface ReRenderCase {
+      action: string;
+      act: (instance: DataGridInstance) => Promise<void> | void;
+      expectedRowKey: number;
+    }
+
+    it.each<ReRenderCase>([
+      {
+        action: 'refresh',
+        act: (instance): Promise<void> => instance.refresh(),
+        expectedRowKey: 0,
+      },
+      {
+        action: 'repaint',
+        act: (instance): void => { instance.repaint(); },
+        expectedRowKey: 0,
+      },
+      {
+        action: 'pageDown',
+        act: (instance): void => { triggerKeyDown(instance, 'pageDown', document.activeElement); },
+        expectedRowKey: PAGE_SIZE,
+      },
+    ])(
+      'should focus the cell in row $expectedRowKey after $action once the new rows are rendered',
+      async ({ act, expectedRowKey }) => {
+        const { instance, renderPendingTemplates } = await createGridWithFocusedCell();
+
+        const acting = act(instance);
+        jest.runAllTimers();
+        renderPendingTemplates();
+        await acting;
+
+        expect(getFocusedCell()).toEqual({
+          rowKey: expectedRowKey,
+          columnIndex: FOCUSED_COLUMN_INDEX,
+        });
+      },
+    );
   });
 });
