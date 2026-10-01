@@ -424,9 +424,8 @@ export class ColumnsController extends modules.Controller {
     } else if (isDataSourceAdapterLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSourceAdapter)) {
       updateColumnChanges(that, 'columns');
       fireColumnsChanged(that);
-      // @ts-expect-error Deferred does not describe construction with new
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Deferred is not fully typed
-      return new Deferred().reject().promise();
+      // @ts-expect-error promise() is typed as native Promise but exposes Deferred callbacks
+      return Deferred().reject().promise();
     }
     return undefined;
   }
@@ -2010,7 +2009,7 @@ export class ColumnsController extends modules.Controller {
             }
           }
         },
-        update(): DeferredObj<RawItemData[]> | undefined {
+        update(): DeferredObj<unknown> | undefined {
           const that = this;
           let { dataSource } = that;
 
@@ -2154,7 +2153,7 @@ export class ColumnsController extends modules.Controller {
 
   public isLastColumn(
     column: Column,
-    rowIndex: number,
+    rowIndex: number | null,
     onlyWithinBandColumn = false,
     fixedPosition?: StickyPosition,
   ): boolean {
