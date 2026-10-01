@@ -593,61 +593,107 @@ const resizeSeparatorData = [
     { ID: 6, CompanyName: 'Walters', City: 'Deerfield', State: 'Illinois', Phone: '(847) 940-2500', Fax: '(847) 940-2501' },
 ];
 
-const isPinnedRight = (el: Element | null | undefined): boolean =>
-    !!el && window.getComputedStyle(el).position === 'sticky';
-
-// Variant A: keep the separator on the fixed column's edge while resizing the
-// non-fixed column before it (patches the live controller, review-only).
-const makeSeparatorStayAtEdge = (e: DataGridTypes.InitializedEvent): void => {
-    const ctrl = (e.component as any)?.getController?.('columnsResizer');
-    if (!ctrl || ctrl.__patchedStayAtEdge) { return; }
-    ctrl.__patchedStayAtEdge = true;
-
-    const original = ctrl.getSeparatorOffsetX.bind(ctrl);
-    ctrl.getSeparatorOffsetX = function ($cell: any): number {
-        if (!isPinnedRight($cell?.[0])) {
-            const nextColumnIndex = ctrl._resizingInfo?.nextColumnIndex;
-            const $nextCell = ctrl._columnHeadersView.getColumnElements()?.eq(nextColumnIndex);
-            if (isPinnedRight($nextCell?.[0])) {
-                return $nextCell.offset()?.left ?? 0;
-            }
-        }
-        return original($cell);
-    };
+type ResizeSeparatorScenario = {
+    instructions: string;
+    mode: 'nextColumn' | 'widget';
+    rtlEnabled?: boolean;
+    fixedPhone?: boolean;
+    initialScrollLeft?: number;
 };
 
-const ResizeSeparatorGrid = ({ onInitialized }: { onInitialized?: (e: DataGridTypes.InitializedEvent) => void }) => (
-    <DataGrid
-        dataSource={resizeSeparatorData}
-        keyExpr="ID"
-        columnResizingMode="widget"
-        allowColumnResizing={true}
-        columnAutoWidth={true}
-        showBorders={true}
-        width={500}
-        height={240}
-        onInitialized={onInitialized}
-    >
-        <Column dataField="CompanyName" />
-        <Column dataField="City" />
-        <Column dataField="State" />
-        <Column dataField="Phone" fixed={true} fixedPosition="right" />
-        <Column dataField="Fax" fixed={true} fixedPosition="right" />
-    </DataGrid>
-);
+const ResizeSeparatorReviewGrid = ({
+    mode,
+    rtlEnabled = false,
+    fixedPhone = false,
+    initialScrollLeft = 0,
+}: ResizeSeparatorScenario) => {
+    const scrollInitialized = useRef(false);
+    const onContentReady = (e: DataGridTypes.ContentReadyEvent): void => {
+        if (!scrollInitialized.current) {
+            scrollInitialized.current = true;
+            e.component.getScrollable()?.scrollTo({ left: initialScrollLeft });
+        }
+    };
 
-export const WidgetFixedColumnResizeSeparator: Story = {
-    name: 'Widget resize separator with right-fixed columns (A vs B)',
-    render: () => (
-        <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
-            <div>
-                <h4 style={{ margin: '0 0 8px' }}>Variant A — separator stays at the fixed column edge</h4>
-                <ResizeSeparatorGrid onInitialized={makeSeparatorStayAtEdge} />
-            </div>
-            <div>
-                <h4 style={{ margin: '0 0 8px' }}>Variant B — separator follows the column (current)</h4>
-                <ResizeSeparatorGrid />
-            </div>
+    return (
+        <DataGrid
+            dataSource={resizeSeparatorData}
+            keyExpr="ID"
+            columnResizingMode={mode}
+            allowColumnResizing={true}
+            columnWidth="auto"
+            rtlEnabled={rtlEnabled}
+            showBorders={true}
+            width={500}
+            height={300}
+            onContentReady={onContentReady}
+        >
+            <Column dataField="CompanyName" />
+            <Column dataField="City" />
+            <Column dataField="State" />
+            <Column dataField="Phone" fixed={fixedPhone} fixedPosition="right" />
+            <Column dataField="Fax" fixed={true} fixedPosition="right" />
+        </DataGrid>
+    );
+};
+
+const ResizeSeparatorReview = (scenario: ResizeSeparatorScenario) => {
+    const [resetCount, setResetCount] = useState(0);
+
+    return (
+        <div style={{ padding: 16 }}>
+            <p style={{ maxWidth: 500 }}>{scenario.instructions}</p>
+            <button type="button" onClick={() => setResetCount((count) => count + 1)}
+                style={{ marginBottom: 16 }}>
+                Reset grid
+            </button>
+            <ResizeSeparatorReviewGrid key={resetCount} {...scenario} />
         </div>
+    );
+};
+
+export const RightFixedResizeReview: Story = {
+    name: 'Resize review - right-fixed Fax',
+    render: () => (
+        <ResizeSeparatorReview
+            mode="nextColumn"
+            instructions="Hold the left border of Fax, then drag left and right. Watch whether the blue separator jumps away from the border."
+        />
+    ),
+};
+
+export const RtlFixedResizeReview: Story = {
+    name: 'Resize review - RTL fixed columns',
+    render: () => (
+        <ResizeSeparatorReview
+            mode="nextColumn"
+            rtlEnabled={true}
+            fixedPhone={true}
+            instructions="Resize the border between Phone and Fax in both directions. Watch whether the blue separator stays on the border being resized."
+        />
+    ),
+};
+
+export const WidgetResizeReview: Story = {
+    name: 'Resize review - widget containment',
+    render: () => (
+        <ResizeSeparatorReview
+            mode="widget"
+            fixedPhone={true}
+            instructions="Drag the right border of City or State through Phone and Fax and past the grid. The column can keep growing, while the blue separator should stop before Phone. Drag back to shrink it."
+        />
+    ),
+};
+
+export const RtlScrollResizeReview: Story = {
+    name: 'Resize review - RTL scroll preservation',
+    render: () => (
+        <ResizeSeparatorReview
+            mode="widget"
+            rtlEnabled={true}
+            fixedPhone={true}
+            initialScrollLeft={50}
+            instructions="The grid starts partly scrolled. Hold a visible border of a non-fixed column without moving, then drag. Watch whether the non-fixed columns jump when you press. Reset restores the starting scroll position."
+        />
     ),
 };
