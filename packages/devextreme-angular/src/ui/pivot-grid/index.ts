@@ -42,7 +42,6 @@ import { DxoFieldPanelModule } from 'devextreme-angular/ui/nested';
 import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchModule } from 'devextreme-angular/ui/nested';
 import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
-import { DxoIndicatorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
 import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 
@@ -737,7 +736,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoHeaderFilterModule,
     DxoSearchModule,
     DxoLoadPanelModule,
-    DxoIndicatorOptionsModule,
     DxoScrollingModule,
     DxoStateStoringModule,
     DxoPivotGridEmbeddedFieldChooserTextsModule,
@@ -766,7 +764,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoHeaderFilterModule,
     DxoSearchModule,
     DxoLoadPanelModule,
-    DxoIndicatorOptionsModule,
     DxoScrollingModule,
     DxoStateStoringModule,
     DxoPivotGridEmbeddedFieldChooserTextsModule,

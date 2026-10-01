@@ -9,7 +9,6 @@ import {
     Input
 } from '@angular/core';
 import type { Mode } from 'devextreme/common';
-import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import {
     DxIntegrationModule,
@@ -87,14 +86,6 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
     }
     set width(value: number | string) {
         this._setOption('width', value);
-    }
-
-    @Input()
-    get indicatorOptions(): LoadPanelIndicatorProperties {
-        return this._getOption('indicatorOptions');
-    }
-    set indicatorOptions(value: LoadPanelIndicatorProperties) {
-        this._setOption('indicatorOptions', value);
     }
 
 
