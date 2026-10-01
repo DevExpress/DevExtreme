@@ -17,10 +17,10 @@ export interface ValueSerializers {
 }
 
 type InternalColumnLookup = ColumnLookup & ValueSerializers & {
-  items?: RawItemData[];
+  items?: unknown[];
   dataType?: string;
   valueMap?: Record<string, unknown>;
-  update?: () => DeferredObj<RawItemData[]> | undefined;
+  update?: () => DeferredObj<unknown> | undefined;
   updateValueMap?: () => void;
 };
 
@@ -93,6 +93,7 @@ export interface InternalColumnOptions extends ValueSerializers {
   headerId?: string;
   showWhenGrouped?: boolean;
   allowGrouping?: boolean;
+  allowCollapsing?: boolean;
   resizedCallbacks?: Callback<[number]>;
   resized?: (width: number) => void;
   adaptiveHidden?: boolean;
