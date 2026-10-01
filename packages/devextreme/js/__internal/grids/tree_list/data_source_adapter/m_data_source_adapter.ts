@@ -14,7 +14,7 @@ import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
-import treeListCore from '../m_core';
+import treeListCore from '../core';
 import type { LoadOperation, NodeByKey, TreeNode } from './types';
 import { createIdFilter } from './utils/create_id_filter';
 import type { LoadBranchesContext } from './utils/load_branches';

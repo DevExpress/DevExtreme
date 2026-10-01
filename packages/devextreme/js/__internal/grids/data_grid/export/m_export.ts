@@ -22,7 +22,7 @@ import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
 import type { ModuleType } from '../../grid_core/m_types';
 import type { SelectionController } from '../../grid_core/selection/m_selection';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
-import dataGridCore from '../m_core';
+import dataGridCore from '../core';
 import { isDataColumn } from '../m_utils';
 
 const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';

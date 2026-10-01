@@ -1,4 +1,4 @@
-import gridCore from '@ts/grids/data_grid/m_core';
+import gridCore from '@ts/grids/data_grid/core';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 

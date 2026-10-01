@@ -18,7 +18,7 @@ import {
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import treeListCore from '../m_core';
+import treeListCore from '../core';
 
 const TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS = 'dx-treelist-select-checkbox-container';
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';

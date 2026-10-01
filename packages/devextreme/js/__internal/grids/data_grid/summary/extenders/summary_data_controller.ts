@@ -14,9 +14,9 @@ import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/c
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 
+import gridCore from '../../core';
 import type { ProcessGroupItemsOptions } from '../../grouping/types';
 import { isSameContinuationState } from '../../grouping/utils';
-import gridCore from '../../m_core';
 import { isDataColumn } from '../../m_utils';
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE, DATAGRID_TOTAL_FOOTER_ROW_TYPE } from '../const';
 import type { SummaryDataSourceAdapter } from '../m_summary';

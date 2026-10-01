@@ -5,7 +5,7 @@ import {
   columnHeadersViewExtender,
 } from '@ts/grids/grid_core/ai_column/index';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 
 gridCore.registerModule('aiColumn', {
   controllers: {

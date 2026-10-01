@@ -14,8 +14,8 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
 import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
-import gridCore from '../m_core';
-import dataSourceAdapterProvider from '../m_data_source_adapter';
+import gridCore from '../core';
+import dataSourceAdapterProvider from '../data_source_adapter';
 import {
   CLASSES,
   CONTEXT_MENU_GROUP_BY_COLUMN_ICON_NAME,

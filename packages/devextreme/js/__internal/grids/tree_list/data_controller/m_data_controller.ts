@@ -4,8 +4,8 @@ import { extend } from '@js/core/utils/extend';
 import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { RowKey } from '@ts/grids/grid_core/m_types';
 
+import treeListCore from '../core';
 import type { TreeListDataSourceController } from '../data_source/data_source_controller';
-import treeListCore from '../m_core';
 
 export class TreeListDataController extends DataController {
   protected declare dataSourceController: TreeListDataSourceController;

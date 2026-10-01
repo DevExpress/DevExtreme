@@ -8,8 +8,8 @@ import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
+import gridCore from '../core';
 import type { GroupingDataControllerExtension, GroupingDataSourceAdapter } from '../grouping/m_grouping';
-import gridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
 
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
