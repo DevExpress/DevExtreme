@@ -586,7 +586,7 @@ export const ColumnChooserStory: Story = {
 
 const ResizeReviewFrame = ({ version, scenario, theme }: {
     version: 'before' | 'after';
-    scenario: 'fixed' | 'widget';
+    scenario: 'fixed' | 'widget' | 'rtl';
     theme: string;
 }) => (
     <section>
@@ -623,6 +623,13 @@ export const ResizeSeparatorBeforeAfter: Story = {
                 <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
                     <ResizeReviewFrame version="before" scenario="widget" theme={theme} />
                     <ResizeReviewFrame version="after" scenario="widget" theme={theme} />
+                </div>
+                <h2>RTL scroll position during width measurement</h2>
+                <p>Hold the right border of City without moving. Watch whether the non-fixed columns jump when you press.</p>
+                <p>Then drag in both directions. The grid should preserve its scroll position when resizing starts, and the blue separator should follow the border.</p>
+                <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+                    <ResizeReviewFrame version="before" scenario="rtl" theme={theme} />
+                    <ResizeReviewFrame version="after" scenario="rtl" theme={theme} />
                 </div>
             </div>
         );

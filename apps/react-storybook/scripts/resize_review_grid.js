@@ -1,6 +1,6 @@
 export default function renderResizeReview(DataGrid) {
     const scenario = new URLSearchParams(window.location.search).get('scenario');
-    const rtlEnabled = false;
+    const rtlEnabled = scenario === 'rtl';
     let scrollInitialized = false;
     
     new DataGrid(document.getElementById('grid'), {
@@ -15,10 +15,10 @@ export default function renderResizeReview(DataGrid) {
         keyExpr: 'ID',
         columns: [
             'CompanyName', 'City', 'State',
-            { dataField: 'Phone', fixed: scenario === 'widget', fixedPosition: 'right' },
+            { dataField: 'Phone', fixed: scenario !== 'fixed', fixedPosition: 'right' },
             { dataField: 'Fax', fixed: true, fixedPosition: 'right' },
         ],
-        columnResizingMode: scenario === 'fixed' ? 'nextColumn' : 'widget',
+        columnResizingMode: scenario === 'widget' ? 'widget' : 'nextColumn',
         allowColumnResizing: true,
         columnWidth: 'auto',
         rtlEnabled,
