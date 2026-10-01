@@ -24,7 +24,7 @@ describe('SearchPanel', () => {
         },
       });
 
-      const headerPanel = (instance as any).getView('headerPanel');
+      const headerPanel = instance.getView('headerPanel');
       const invalidateSpy = jest.spyOn(headerPanel, '_invalidate');
 
       instance.option('searchPanel.placeholder', 'Search...');

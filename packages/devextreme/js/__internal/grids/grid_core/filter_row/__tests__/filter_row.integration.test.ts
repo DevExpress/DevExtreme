@@ -111,7 +111,7 @@ describe('FilterRow', () => {
       instance.option('filterValue', ['city', 'contains', 'Las']);
       await flushAsync();
 
-      instance.option('filterValue', null as any);
+      instance.option('filterValue', null);
       await flushAsync();
 
       const editor = component.getFilterRow().getFilterCell(0).getEditor(TextBoxModel);
