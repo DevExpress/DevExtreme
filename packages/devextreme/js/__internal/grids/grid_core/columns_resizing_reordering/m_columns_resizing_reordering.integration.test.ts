@@ -151,14 +151,17 @@ describe('Performance optimization', () => {
   });
 });
 
-describe('Widget column resize separator bounds (T1335911)', () => {
+describe('Column resize separator bounds (T1335911)', () => {
   beforeEach(beforeTest);
   afterEach(() => {
     afterTest();
     jest.restoreAllMocks();
   });
 
-  const createResizableGrid = async (fixed: boolean): ReturnType<typeof createDataGrid> => {
+  const createResizableGrid = async (
+    fixed: boolean,
+    columnResizingMode: 'widget' | 'nextColumn' = 'widget',
+  ): ReturnType<typeof createDataGrid> => {
     let grid: DataGrid | null = null;
     const fields = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
     const initialWidths = [180, 100, 100, 100, 100];
@@ -206,7 +209,7 @@ describe('Widget column resize separator bounds (T1335911)', () => {
       width: 500,
       height: 300,
       allowColumnResizing: true,
-      columnResizingMode: 'widget',
+      columnResizingMode,
     });
     grid = result.instance;
     result.$container.find('.dx-header-row').css('height', 24);
@@ -214,6 +217,25 @@ describe('Widget column resize separator bounds (T1335911)', () => {
 
     return result;
   };
+
+  it('keeps the separator between adjacent right-fixed columns in nextColumn mode (T1335911)', async () => {
+    const { $container, instance } = await createResizableGrid(true, 'nextColumn');
+    const header = $container.find('.dx-header-row > td').get(3);
+
+    fire(header, 'dxpointermove', { x: 500, y: 60, pointerType: 'mouse' });
+    fire(header, 'dxpointerdown', { x: 500, y: 60, pointerType: 'mouse' });
+    fire(header, 'dxpointermove', { x: 470, y: 60, pointerType: 'mouse' });
+
+    expect(instance.columnOption('Phone', 'width')).toBe(70);
+    expect(instance.columnOption('Fax', 'width')).toBe(130);
+    expect($container.find('.dx-datagrid-columns-separator').css('left')).toBe('370px');
+
+    fire($container.get(0), 'dxpointermove', { x: 530, y: 60, pointerType: 'mouse' });
+
+    expect(instance.columnOption('Phone', 'width')).toBe(130);
+    expect(instance.columnOption('Fax', 'width')).toBe(70);
+    expect($container.find('.dx-datagrid-columns-separator').css('left')).toBe('430px');
+  });
 
   it('keeps the separator before right-fixed columns while the resized column continues growing (T1335911)', async () => {
     const { $container, instance } = await createResizableGrid(true);
