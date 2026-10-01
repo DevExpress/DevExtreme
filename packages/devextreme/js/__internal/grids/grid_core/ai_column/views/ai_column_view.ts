@@ -11,7 +11,7 @@ import type { ModuleType } from '../../m_types';
 import type { ColumnViewTemplate } from '../../views/types';
 import { AI_COLUMN_NAME, CLASSES, ICON_NAMES } from '../const';
 import type { AIColumnController } from '../controllers/ai_column_controller';
-import type { AIPromptEditorViewController } from '../controllers/m_ai_prompt_editor_view_controller';
+import type { AIPromptEditorViewController } from '../controllers/ai_prompt_editor_view_controller';
 import { createAIHeaderContainer, createChatSparkleOutlineIcon } from '../dom';
 import {
   isAIColumnHeader,

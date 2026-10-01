@@ -14,7 +14,7 @@ import type { RowKey } from '../../m_types';
 import gridCoreUtils from '../../m_utils';
 import type { InternalRequestCallbacks } from '../types';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from '../utils';
-import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
+import { AIColumnIntegrationController } from './ai_column_integration_controller';
 
 const getDefaultCellValue = (
   column: Column,
