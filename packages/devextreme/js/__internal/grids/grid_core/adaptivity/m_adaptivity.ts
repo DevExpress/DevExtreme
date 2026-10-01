@@ -332,7 +332,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
           containerWidth,
         });
       } else {
-        return parseFloat(widthOption);
+        return parseFloat(String(widthOption));
       }
     } else {
       const columnAutoWidth = this.option('columnAutoWidth');
@@ -356,11 +356,12 @@ export class AdaptiveColumnsController extends modules.ViewController {
     const bestFitWidth = this._columnsController.columnOption(columnId, 'bestFitWidth');
 
     if (widthOption && widthOption !== 'auto' && !this._isPercentWidth(widthOption)) {
-      return parseFloat(widthOption);
+      return parseFloat(String(widthOption));
     }
 
     const colWidth = this._calculateColumnWidth(column, containerWidth, contentColumns, columnsCanFit);
 
+    // @ts-expect-error bestFitWidth can be absent; the comparison then returns false
     return colWidth < bestFitWidth ? null : colWidth;
   }
 

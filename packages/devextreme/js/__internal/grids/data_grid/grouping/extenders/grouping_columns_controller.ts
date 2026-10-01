@@ -9,7 +9,6 @@ export const groupingColumnsControllerExtender = (
   public _getExpandColumnOptions() {
     const options = super._getExpandColumnOptions();
 
-    // @ts-expect-error
     options.cellTemplate = gridCore.getExpandCellTemplate();
 
     return options;

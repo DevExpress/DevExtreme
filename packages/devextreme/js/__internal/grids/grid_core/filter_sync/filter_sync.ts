@@ -180,7 +180,7 @@ export class FilterSyncController extends modules.Controller {
   }
 
   public syncColumnOption(fullName: string, value: unknown, previousValue: unknown): void {
-    const column: Column = this.columnsController.getColumnByPath(fullName);
+    const column = this.columnsController.getColumnByPath(fullName);
 
     if (!column || !this.filterController.isFilterSyncActive() || this.isSyncingColumnOptions()) {
       return;

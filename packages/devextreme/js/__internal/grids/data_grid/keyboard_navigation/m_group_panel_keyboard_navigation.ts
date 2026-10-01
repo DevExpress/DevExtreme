@@ -15,7 +15,7 @@ import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
 import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
 
 export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNavigationMixin(ColumnKeyboardNavigationController) {
-  private isNeedToHiddenFocusAfterClick = false;
+  private isNeedToHiddenFocusAfterClick: boolean | undefined = false;
 
   private groupItemClickHandlerContext!: (event: any) => void;
 
