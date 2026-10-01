@@ -51,6 +51,30 @@ describe('getFilteringColumns', () => {
   });
 });
 
+describe('column fixing enablement', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it.each([
+    { enabled: undefined, fixed: false, expected: undefined },
+    { enabled: undefined, fixed: true, expected: true },
+    { enabled: false, fixed: false, expected: false },
+    { enabled: false, fixed: true, expected: true },
+    { enabled: true, fixed: false, expected: true },
+    { enabled: true, fixed: true, expected: true },
+  ])('preserves enabled=$enabled when fixed=$fixed', async ({ enabled, fixed, expected }) => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1 }],
+      columns: [{ dataField: 'id', fixed }],
+    });
+    instance.option('columnFixing.enabled', enabled);
+
+    const result = instance.getController('columns')._isColumnFixing();
+
+    expect(result).toBe(expected);
+  });
+});
+
 describe('Bugs', () => {
   beforeEach(() => {
     beforeTest();

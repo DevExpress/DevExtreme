@@ -29,7 +29,8 @@ export const groupingCommand = defineGridCommand({
   schema: groupingCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');
-    const column = columnsController.columnOption(args.dataField) as Column | undefined;
+    const column = columnsController.columnOption(args.dataField);
+    // @ts-expect-error GridCore and DataGrid column types are not aligned
     const defaultMessage = getGroupingDefaultMessage(args, column);
 
     if (!column || column.allowGrouping === false) {
