@@ -583,3 +583,71 @@ export const ColumnChooserStory: Story = {
         </DataGrid>
     ),
 };
+
+const resizeSeparatorData = [
+    { ID: 1, CompanyName: 'Super Mart of the West', City: 'Bentonville', State: 'Arkansas', Phone: '(800) 555-2797', Fax: '(800) 555-2171' },
+    { ID: 2, CompanyName: 'Electronics Depot', City: 'Atlanta', State: 'Georgia', Phone: '(800) 595-3232', Fax: '(800) 595-3231' },
+    { ID: 3, CompanyName: 'K&S Music', City: 'Minneapolis', State: 'Minnesota', Phone: '(612) 304-6073', Fax: '(612) 304-6074' },
+    { ID: 4, CompanyName: "Tom's Club", City: 'Issaquah', State: 'Washington', Phone: '(800) 955-2292', Fax: '(800) 955-2293' },
+    { ID: 5, CompanyName: 'E-Mart', City: 'Hoffman Estates', State: 'Illinois', Phone: '(847) 286-2500', Fax: '(847) 286-2501' },
+    { ID: 6, CompanyName: 'Walters', City: 'Deerfield', State: 'Illinois', Phone: '(847) 940-2500', Fax: '(847) 940-2501' },
+];
+
+const isPinnedRight = (el: Element | null | undefined): boolean =>
+    !!el && window.getComputedStyle(el).position === 'sticky';
+
+// Variant A: keep the separator on the fixed column's edge while resizing the
+// non-fixed column before it (patches the live controller, review-only).
+const makeSeparatorStayAtEdge = (e: DataGridTypes.InitializedEvent): void => {
+    const ctrl = (e.component as any)?.getController?.('columnsResizer');
+    if (!ctrl || ctrl.__patchedStayAtEdge) { return; }
+    ctrl.__patchedStayAtEdge = true;
+
+    const original = ctrl.getSeparatorOffsetX.bind(ctrl);
+    ctrl.getSeparatorOffsetX = function ($cell: any): number {
+        if (!isPinnedRight($cell?.[0])) {
+            const nextColumnIndex = ctrl._resizingInfo?.nextColumnIndex;
+            const $nextCell = ctrl._columnHeadersView.getColumnElements()?.eq(nextColumnIndex);
+            if (isPinnedRight($nextCell?.[0])) {
+                return $nextCell.offset()?.left ?? 0;
+            }
+        }
+        return original($cell);
+    };
+};
+
+const ResizeSeparatorGrid = ({ onInitialized }: { onInitialized?: (e: DataGridTypes.InitializedEvent) => void }) => (
+    <DataGrid
+        dataSource={resizeSeparatorData}
+        keyExpr="ID"
+        columnResizingMode="widget"
+        allowColumnResizing={true}
+        columnAutoWidth={true}
+        showBorders={true}
+        width={500}
+        height={240}
+        onInitialized={onInitialized}
+    >
+        <Column dataField="CompanyName" />
+        <Column dataField="City" />
+        <Column dataField="State" />
+        <Column dataField="Phone" fixed={true} fixedPosition="right" />
+        <Column dataField="Fax" fixed={true} fixedPosition="right" />
+    </DataGrid>
+);
+
+export const WidgetFixedColumnResizeSeparator: Story = {
+    name: 'Widget resize separator with right-fixed columns (A vs B)',
+    render: () => (
+        <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+            <div>
+                <h4 style={{ margin: '0 0 8px' }}>Variant A — separator stays at the fixed column edge</h4>
+                <ResizeSeparatorGrid onInitialized={makeSeparatorStayAtEdge} />
+            </div>
+            <div>
+                <h4 style={{ margin: '0 0 8px' }}>Variant B — separator follows the column (current)</h4>
+                <ResizeSeparatorGrid />
+            </div>
+        </div>
+    ),
+};
