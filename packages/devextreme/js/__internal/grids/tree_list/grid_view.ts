@@ -15,9 +15,8 @@ class TreeListResizingController extends ResizingController {
     super._toggleBestFitMode(isBestFit);
 
     const $rowsTable = this._rowsView.getTableElement();
-    // eslint-disable-next-line @stylistic/max-len
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- unlike the base method, there is no check for a missing table
-    $rowsTable!.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
+
+    $rowsTable?.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
   }
 }
 
