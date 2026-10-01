@@ -22,7 +22,7 @@ import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
 import type { FocusDataSourceControllerExtension } from './extenders/focus_data_source_controller';
-import { UiGridCoreFocusUtils } from './m_focus_utils';
+import { UiGridCoreFocusUtils } from './focus_utils';
 import type { FocusDataControllerExtension } from './types';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
@@ -825,7 +825,7 @@ export const focusDataControllerExtender = (
   private _generateOperationFilterByKey(key, rowData, useGroup) {
     const dateSerializationFormat = this.option('dateSerializationFormat');
     const remoteOperations = this.dataSourceController.remoteOperations();
-    const isRemoteFiltering = remoteOperations.filtering;
+    const isRemoteFiltering = Boolean(remoteOperations.filtering);
     const isRemoteSorting = remoteOperations.sorting;
 
     let filter = this._generateFilterByKey(key, '<');
@@ -843,6 +843,7 @@ export const focusDataControllerExtender = (
       sort.slice().reverse().forEach((sortInfo) => {
         const { selector, desc, compare } = sortInfo;
         const { getter, rawValue, safeValue } = UiGridCoreFocusUtils.getSortFilterValue(
+          // @ts-expect-error column selectors can be undefined; focus requires a selector
           sortInfo,
           rowData,
           {

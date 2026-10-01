@@ -1,6 +1,6 @@
 import { GroupingHelper, updateGroupOffsets } from '../m_grouping_expanded';
 import type { DataItem, GroupInfoData, GroupItemData } from '../types';
-import { createDataSourceAdapterStub } from './m_grouping_expanded.mock';
+import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 
 export interface GroupConfig {
   key: string;

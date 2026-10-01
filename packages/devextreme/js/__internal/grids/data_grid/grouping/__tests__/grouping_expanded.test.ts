@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 
-import type { GroupConfig } from './m_grouping_expanded.helpers';
-import { GroupingTestHelper } from './m_grouping_expanded.helpers';
-import { createDataSourceAdapterStub, GroupingHelperMock } from './m_grouping_expanded.mock';
+import type { GroupConfig } from './grouping_expanded.helpers';
+import { GroupingTestHelper } from './grouping_expanded.helpers';
+import { createDataSourceAdapterStub, GroupingHelperMock } from './grouping_expanded.mock';
 
 // ---------------------------------------------------------------------------
 // Test data

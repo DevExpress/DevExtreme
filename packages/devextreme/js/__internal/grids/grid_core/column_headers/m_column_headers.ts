@@ -16,6 +16,7 @@ import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/co
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import { registerKeyboardAction } from '../m_accessibility';
 import { ColumnsView } from '../views/m_columns_view';
+import type { ColumnViewTemplate } from '../views/types';
 import { CLASSES } from './const';
 
 const HEADERS_CLASS = 'headers';
@@ -197,7 +198,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     };
   }
 
-  protected _processTemplate(template, options) {
+  protected _processTemplate(template, options): ColumnViewTemplate {
     const that = this;
     let resultTemplate;
     const { column } = options;

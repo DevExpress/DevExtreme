@@ -11,8 +11,8 @@ import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
+import { ColumnFocusDispatcher } from './column_focus_dispatcher';
 import { Direction } from './const';
-import { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
 
 export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {

@@ -1,6 +1,7 @@
 import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
+import type { LoadResult } from '@js/common/data';
 import { CustomStore } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -37,7 +38,7 @@ describe('GridCore selection', () => {
   afterEach(() => {
     const $container = $(SELECTORS.gridContainer);
 
-    const dataGrid = ($container as any).dxDataGrid('instance') as DataGrid;
+    const dataGrid = DataGrid.getInstance($container.get(0));
 
     dataGrid.dispose();
     $container.remove();
@@ -122,7 +123,7 @@ describe('GridCore selection', () => {
 
           const store = new CustomStore({
             key: 'id',
-            load: (e) => {
+            load: (e): Promise<LoadResult> => {
               const skip = e.skip ?? 0;
               const take = e.take ?? data.length;
               const pageData = data.slice(skip, skip + take);
@@ -131,7 +132,7 @@ describe('GridCore selection', () => {
                 totalCount: data.length,
               });
             },
-            remove(key) {
+            remove(key): Promise<void> {
               data = data.filter((item) => item.id !== key);
               return Promise.resolve();
             },

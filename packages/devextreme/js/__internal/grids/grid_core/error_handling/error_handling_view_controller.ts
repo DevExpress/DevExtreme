@@ -11,7 +11,7 @@ import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import modules from '@ts/grids/grid_core/m_modules';
 import type { OptionChanged } from '@ts/grids/grid_core/m_types';
-import type { ToastViewController } from '@ts/grids/grid_core/toast/m_toast_controller';
+import type { ToastViewController } from '@ts/grids/grid_core/toast/toast_controller';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 

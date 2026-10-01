@@ -14,7 +14,18 @@ import type { RowKey } from '../../m_types';
 import gridCoreUtils from '../../m_utils';
 import type { InternalRequestCallbacks } from '../types';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from '../utils';
-import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
+import { AIColumnIntegrationController } from './ai_column_integration_controller';
+
+const getDefaultCellValue = (
+  column: Column,
+  cellValue: string | undefined,
+): string | null => {
+  if (cellValue === undefined) {
+    return column.ai?.emptyText ?? null;
+  }
+
+  return column.ai?.noDataText ?? null;
+};
 
 export class AIColumnController extends Controller {
   private dataController!: DataController;
@@ -53,14 +64,6 @@ export class AIColumnController extends Controller {
 
   public aiRequestRejected!: Callback;
 
-  private getDefaultCellValue(column: Column, cellValue: string | undefined): string | null {
-    if (cellValue === undefined) {
-      return column.ai?.emptyText ?? null;
-    }
-
-    return column.ai?.noDataText ?? null;
-  }
-
   private _endCustomLoadingIfNoPendingRequests(): void {
     if (!this.aiColumnIntegrationController.isAnyRequestAwaitingCompletion()) {
       this.dataController.endCustomLoading();
@@ -68,8 +71,10 @@ export class AIColumnController extends Controller {
   }
 
   private addAICommandColumn(): void {
-    const that = this;
-    const { dataSourceController, aiColumnIntegrationController } = this;
+    const {
+      dataSourceController,
+      aiColumnIntegrationController,
+    } = this;
 
     this.columnsController.addCommandColumn({
       ...getAICommandColumnDefaultOptions(),
@@ -77,7 +82,7 @@ export class AIColumnController extends Controller {
         const key = dataSourceController.keyOf(data);
         // @ts-expect-error the column name is initialized before calculateCellValue is called
         const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
-        const defaultValue = that.getDefaultCellValue(this, cellValue);
+        const defaultValue = getDefaultCellValue(this, cellValue);
 
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         return cellValue || defaultValue;
@@ -283,7 +288,7 @@ export class AIColumnController extends Controller {
 
   // API methods
 
-  public publicMethods() {
+  public publicMethods(): string[] {
     return [
       'abortAIColumnRequest',
       'sendAIColumnRequest',

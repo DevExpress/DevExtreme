@@ -15,7 +15,7 @@ import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';
 import type { InternalRequestCallbacks } from '../types';
 import { getDataFromRowItems, isKeyMissingInData, reduceDataCachedKeys } from '../utils';
-import { AIColumnCacheController } from './m_ai_column_cache_controller';
+import { AIColumnCacheController } from './ai_column_cache_controller';
 
 export class AIColumnIntegrationController extends Controller {
   private aborts: Record<string, (() => void) | undefined> = { };
