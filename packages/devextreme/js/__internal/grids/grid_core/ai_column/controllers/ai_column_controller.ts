@@ -16,6 +16,17 @@ import type { InternalRequestCallbacks } from '../types';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from '../utils';
 import { AIColumnIntegrationController } from './m_ai_column_integration_controller';
 
+const getDefaultCellValue = (
+  column: Column,
+  cellValue: string | undefined,
+): string | null => {
+  if (cellValue === undefined) {
+    return column.ai?.emptyText ?? null;
+  }
+
+  return column.ai?.noDataText ?? null;
+};
+
 export class AIColumnController extends Controller {
   private dataController!: DataController;
 
@@ -68,15 +79,17 @@ export class AIColumnController extends Controller {
   }
 
   private addAICommandColumn(): void {
-    const that = this;
-    const { dataSourceController, aiColumnIntegrationController } = this;
+    const {
+      dataSourceController,
+      aiColumnIntegrationController,
+    } = this;
 
     this.columnsController.addCommandColumn({
       ...getAICommandColumnDefaultOptions(),
       calculateCellValue(data: RawItemData) {
         const key = dataSourceController.keyOf(data);
         const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
-        const defaultValue = that.getDefaultCellValue(this, cellValue);
+        const defaultValue = getDefaultCellValue(this, cellValue);
 
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         return cellValue || defaultValue;
@@ -282,7 +295,7 @@ export class AIColumnController extends Controller {
 
   // API methods
 
-  public publicMethods() {
+  public publicMethods(): string[] {
     return [
       'abortAIColumnRequest',
       'sendAIColumnRequest',

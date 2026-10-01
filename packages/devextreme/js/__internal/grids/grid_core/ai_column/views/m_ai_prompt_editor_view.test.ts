@@ -16,7 +16,7 @@ import { AIPromptEditorModel } from '@ts/grids/grid_core/__tests__/__mock__/mode
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import { AIPromptEditor } from '../../ai_prompt_editor/ai_prompt_editor';
-import { AIPromptEditorView } from './m_ai_prompt_editor_view';
+import { AIPromptEditorView } from './ai_prompt_editor_view';
 
 jest.mock('../../ai_prompt_editor/ai_prompt_editor', (): any => {
   const original = jest.requireActual<any>('../../ai_prompt_editor/ai_prompt_editor');
