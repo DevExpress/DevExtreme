@@ -41,6 +41,7 @@ import type {
   FilterField,
   GroupColumn,
   IndexedColumns,
+  SavedColumnState,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
@@ -115,7 +116,7 @@ export class ColumnsController extends modules.Controller {
 
   private _isColumnsFromOptions!: boolean;
 
-  public _columnsUserState?: ColumnUserState[] | null;
+  public _columnsUserState?: SavedColumnState[] | null;
 
   private dataSourceAdapterApplied?: boolean;
 
@@ -1154,6 +1155,10 @@ export class ColumnsController extends modules.Controller {
    */
   public getSortDataSourceParameters(
     useLocalSelector?: boolean,
+    sortByKey?: boolean,
+  ): ColumnDataSourceParameter[] | null;
+  public getSortDataSourceParameters(
+    useLocalSelector?: boolean,
   ): ColumnDataSourceParameter[] | null {
     const that = this;
     const sortColumns: Column[] = [];
@@ -1815,7 +1820,7 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
-  public setUserState(state?: ColumnUserState[]): void {
+  public setUserState(state?: SavedColumnState[]): void {
     const dataSourceAdapter = this.appliedDataSourceAdapter;
 
     state?.forEach(this.setName);

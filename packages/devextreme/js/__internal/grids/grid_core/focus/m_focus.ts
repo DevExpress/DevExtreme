@@ -9,6 +9,7 @@ import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnDataSourceParameter } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import type { EditingController } from '../editing/m_editing';
@@ -662,7 +663,10 @@ export const columns = (Base: ModuleType<ColumnsController>) => class FocusColum
     super.init(isApplyingUserState);
   }
 
-  public getSortDataSourceParameters(_, sortByKey?) {
+  public getSortDataSourceParameters(
+    _?: boolean,
+    sortByKey?: boolean,
+  ): ColumnDataSourceParameter[] | null {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
     let key = this.dataSourceController.store()?.key();
@@ -829,7 +833,6 @@ export const focusDataControllerExtender = (
     const isRemoteSorting = remoteOperations.sorting;
 
     let filter = this._generateFilterByKey(key, '<');
-    // @ts-expect-error
     let sort = this._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
 
     if (useGroup) {
