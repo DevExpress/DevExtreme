@@ -8,8 +8,9 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnHeadersView } from '../../column_headers/m_column_headers';
 import type { ColumnsResizerViewController } from '../../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../../m_types';
+import type { ColumnViewTemplate } from '../../views/types';
 import { AI_COLUMN_NAME, CLASSES, ICON_NAMES } from '../const';
-import type { AIColumnController } from '../controllers/m_ai_column_controller';
+import type { AIColumnController } from '../controllers/ai_column_controller';
 import type { AIPromptEditorViewController } from '../controllers/m_ai_prompt_editor_view_controller';
 import { createAIHeaderContainer, createChatSparkleOutlineIcon } from '../dom';
 import {
@@ -20,7 +21,7 @@ import {
 
 export const columnHeadersViewExtender = (
   Base: ModuleType<ColumnHeadersView>,
-) => class AIColumnHeadersViewExtender extends Base {
+): ModuleType<ColumnHeadersView> => class AIColumnHeadersViewExtender extends Base {
   private aiColumnController!: AIColumnController;
 
   private aiPromptEditorController!: AIPromptEditorViewController;
@@ -29,7 +30,9 @@ export const columnHeadersViewExtender = (
 
   private activeDropDownButtonInstance!: DropDownButton | null;
 
-  private aiColumnOptionChangedHandler!: (column: Column, optionName: string, value: unknown) => void;
+  private aiColumnOptionChangedHandler!: (
+    column: Column, optionName: string, value: unknown,
+  ) => void;
 
   private getDropDownButtonItems(column: Column): Item[] {
     return [
@@ -75,6 +78,7 @@ export const columnHeadersViewExtender = (
         // eslint-disable-next-line default-case
         switch (actionName) {
           case 'autoFill':
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.aiPromptEditorController.show($container[0], column);
             break;
           case 'regenerate':
@@ -138,16 +142,17 @@ export const columnHeadersViewExtender = (
     super.getHeaderDefaultTemplate($container, options);
   }
 
-  protected _processTemplate(template, options) {
+  protected _processTemplate(template, options): ColumnViewTemplate {
     const renderingTemplate = super._processTemplate(template, options);
+    const { column } = options;
     const needToRenderHeaderDropDownButton = isAIColumnHeader(options.column, options.rowType)
       && isHeaderDropDownButtonVisible(options.column);
 
     if (renderingTemplate && needToRenderHeaderDropDownButton) {
       return {
-        render: (args) => {
+        render: (args): void => {
           renderingTemplate.render(args);
-          this.renderHeaderDropDownButton(args.model.column, $(args.container));
+          this.renderHeaderDropDownButton(column, $(args.container));
         },
       };
     }
@@ -180,7 +185,9 @@ export const columnHeadersViewExtender = (
        * when the cell resize is initiated.
        * Calling this method is necessary to fix bug T252661.
        */
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.activeDropDownButtonInstance?.close();
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.aiPromptEditorController.hide();
     });
 
