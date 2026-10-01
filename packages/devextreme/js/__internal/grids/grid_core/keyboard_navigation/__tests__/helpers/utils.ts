@@ -16,7 +16,12 @@ export function triggerPointerDown(element: HTMLElement): void {
   eventsEngine.trigger($(element), CLICK_EVENT);
 }
 
-export function triggerKeyDown(instance: DataGridInstance, keyName: string): void {
+export function triggerKeyDown(
+  instance: DataGridInstance,
+  keyName: string,
+  target?: Element | null,
+  modifiers: Partial<Pick<KeyboardEvent, 'ctrlKey' | 'shiftKey' | 'altKey' | 'metaKey'>> = {},
+): void {
   const controller = getKeyboardNavigationController(instance);
   const listenerId = controller.keyDownListener;
 
@@ -33,7 +38,8 @@ export function triggerKeyDown(instance: DataGridInstance, keyName: string): voi
     shiftKey: false,
     altKey: false,
     metaKey: false,
-    target: controller._getFocusedCell()?.get(0) ?? null,
+    ...modifiers,
+    target: target ?? controller._getFocusedCell()?.get(0) ?? null,
     type: 'keydown',
     preventDefault() {},
     isDefaultPrevented() { return false; },

@@ -1,6 +1,8 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { dxElementWrapper } from '@js/core/renderer';
+import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import {
   afterTest,
@@ -361,6 +363,200 @@ describe('Keyboard Navigation', () => {
       await repaintChangesOnly(instance);
 
       expect(keyboardNav._focusedCellPosition).toEqual({ rowIndex: 1, columnIndex: 1 });
+    });
+  });
+
+  describe('Navigation keys with virtual scrolling while the scrolled-in rows wait for async templates (T1336240)', () => {
+    const ROWS_KEYED_BY_INDEX = Array.from({ length: 200 }, (_, index) => ({ id: index, name: `Row ${index}` }));
+    const FOCUSED_ROW_KEY = 5;
+    const NEXT_ROW_KEY = FOCUSED_ROW_KEY + 1;
+    const PREVIOUS_ROW_KEY = FOCUSED_ROW_KEY - 1;
+    const SCROLL_TOP = 60;
+
+    interface AsyncTemplateArgs {
+      model: { value: unknown };
+      container: HTMLElement;
+      onRendered?: () => void;
+    }
+
+    const getRowKey = (element: Element | null): number | undefined => {
+      const row = element?.closest<HTMLTableRowElement>('tr.dx-data-row');
+
+      return row ? Number(row.cells[0].textContent) : undefined;
+    };
+
+    const getRowKeys = ($container: dxElementWrapper, selector: string): (number | undefined)[] => {
+      const container = $container.get(0) as HTMLElement;
+
+      return Array.from(container.querySelectorAll(`.dx-datagrid-rowsview ${selector}`), getRowKey);
+    };
+
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const focusRowAndScrollDown = async (focusedRowEnabled: boolean, columnIndex = 1) => {
+      const pendingTemplates: (() => void)[] = [];
+      const renderPendingTemplates = (): void => {
+        while (pendingTemplates.length) {
+          pendingTemplates.shift()?.();
+          jest.runAllTimers();
+        }
+      };
+
+      const grid = await createDataGrid({
+        dataSource: ROWS_KEYED_BY_INDEX,
+        height: 400,
+        focusedRowEnabled,
+        scrolling: { mode: 'virtual', renderAsync: true },
+        columns: ['id', { dataField: 'name', cellTemplate: 'asyncTemplate' }],
+        templatesRenderAsynchronously: true,
+        integrationOptions: {
+          templates: {
+            asyncTemplate: {
+              render({ model, container, onRendered }: AsyncTemplateArgs): void {
+                pendingTemplates.push(() => {
+                  container.append(String(model.value));
+                  onRendered?.();
+                });
+              },
+            },
+          },
+        },
+      } as DataGridProperties);
+      renderPendingTemplates();
+
+      const cell = grid.component.getDataCell(FOCUSED_ROW_KEY, columnIndex);
+      triggerPointerDown(cell.getElement() as HTMLElement);
+      jest.runAllTimers();
+
+      const dataController = grid.instance.getController('data');
+      // @ts-expect-error
+      dataController.setViewportPosition(SCROLL_TOP);
+      jest.runAllTimers();
+
+      expect(dataController.getRowIndexOffset()).toBeGreaterThan(0);
+      expect(getRowKeys(grid.$container, 'tr.dx-data-row')[0]).toBe(0);
+
+      return { ...grid, renderPendingTemplates };
+    };
+
+    it('should not move focus above the focused row while the rows are rendering', async () => {
+      const { instance } = await focusRowAndScrollDown(true);
+
+      triggerKeyDown(instance, 'downArrow', document.activeElement);
+      jest.runAllTimers();
+
+      expect(getRowKey(document.activeElement)).toBeGreaterThanOrEqual(FOCUSED_ROW_KEY);
+    });
+
+    it.each([true, false])(
+      'should keep focus on the row of focusedRowIndex while the rows are rendering (focusedRowEnabled: %s)',
+      async (focusedRowEnabled) => {
+        const { instance } = await focusRowAndScrollDown(focusedRowEnabled);
+
+        triggerKeyDown(instance, 'downArrow', document.activeElement);
+        jest.runAllTimers();
+
+        expect(getRowKey(document.activeElement)).toBe(instance.option('focusedRowIndex'));
+      },
+    );
+
+    it.each<{ keyName: KeyboardNavKey; focusedRowEnabled: boolean; expectedRowKey: number }>([
+      { keyName: 'downArrow', focusedRowEnabled: true, expectedRowKey: NEXT_ROW_KEY },
+      { keyName: 'downArrow', focusedRowEnabled: false, expectedRowKey: NEXT_ROW_KEY },
+      { keyName: 'upArrow', focusedRowEnabled: true, expectedRowKey: PREVIOUS_ROW_KEY },
+      { keyName: 'upArrow', focusedRowEnabled: false, expectedRowKey: PREVIOUS_ROW_KEY },
+    ])(
+      'should focus the adjacent row on $keyName once the rows are rendered (focusedRowEnabled: $focusedRowEnabled)',
+      async ({ keyName, focusedRowEnabled, expectedRowKey }) => {
+        const { instance, renderPendingTemplates } = await focusRowAndScrollDown(focusedRowEnabled);
+
+        triggerKeyDown(instance, keyName, document.activeElement);
+        jest.runAllTimers();
+        renderPendingTemplates();
+
+        expect(instance.option('focusedRowIndex')).toBe(expectedRowKey);
+        expect(getRowKey(document.activeElement)).toBe(expectedRowKey);
+      },
+    );
+
+    interface HorizontalNavigationCase {
+      keyName: KeyboardNavKey;
+      startColumnIndex: number;
+      expectedColumnIndex: number;
+      focusedRowEnabled: boolean;
+    }
+
+    const HORIZONTAL_NAVIGATION_CASES = [
+      { keyName: 'rightArrow', startColumnIndex: 0, expectedColumnIndex: 1 },
+      { keyName: 'leftArrow', startColumnIndex: 1, expectedColumnIndex: 0 },
+      { keyName: 'end', startColumnIndex: 0, expectedColumnIndex: 1 },
+      { keyName: 'home', startColumnIndex: 1, expectedColumnIndex: 0 },
+    ].flatMap((navigationCase) => [true, false].map((focusedRowEnabled) => ({
+      ...navigationCase,
+      focusedRowEnabled,
+    }))) as HorizontalNavigationCase[];
+
+    it.each<HorizontalNavigationCase>(HORIZONTAL_NAVIGATION_CASES)(
+      'should keep focus in the focused row on $keyName while the rows are rendering (focusedRowEnabled: $focusedRowEnabled)',
+      async ({ keyName, startColumnIndex, focusedRowEnabled }) => {
+        const { instance } = await focusRowAndScrollDown(focusedRowEnabled, startColumnIndex);
+
+        triggerKeyDown(instance, keyName, document.activeElement);
+        jest.runAllTimers();
+
+        expect(instance.option('focusedRowIndex')).toBe(FOCUSED_ROW_KEY);
+        expect(getRowKey(document.activeElement)).toBe(FOCUSED_ROW_KEY);
+      },
+    );
+
+    it.each<HorizontalNavigationCase>(HORIZONTAL_NAVIGATION_CASES)(
+      'should focus the cell in column $expectedColumnIndex on $keyName once the rows are rendered (focusedRowEnabled: $focusedRowEnabled)',
+      async ({
+        keyName, startColumnIndex, expectedColumnIndex, focusedRowEnabled,
+      }) => {
+        const { instance, renderPendingTemplates } = await focusRowAndScrollDown(
+          focusedRowEnabled,
+          startColumnIndex,
+        );
+
+        triggerKeyDown(instance, keyName, document.activeElement);
+        jest.runAllTimers();
+        renderPendingTemplates();
+
+        expect(instance.option('focusedRowIndex')).toBe(FOCUSED_ROW_KEY);
+        expect(instance.option('focusedColumnIndex')).toBe(expectedColumnIndex);
+        expect(getRowKey(document.activeElement)).toBe(FOCUSED_ROW_KEY);
+        expect(document.activeElement?.closest('td')?.cellIndex).toBe(expectedColumnIndex);
+      },
+    );
+
+    it('should keep focusedRowIndex on Ctrl+downArrow pressed while the rows are rendering (focusedRowEnabled: false)', async () => {
+      const { instance, renderPendingTemplates } = await focusRowAndScrollDown(false);
+
+      triggerKeyDown(instance, 'downArrow', document.activeElement, { ctrlKey: true });
+      jest.runAllTimers();
+      renderPendingTemplates();
+
+      expect(instance.option('focusedRowIndex')).toBe(FOCUSED_ROW_KEY);
+    });
+
+    it('should highlight the row of focusedRowKey while the rows are rendering', async () => {
+      const { instance, $container } = await focusRowAndScrollDown(true);
+
+      triggerKeyDown(instance, 'downArrow', document.activeElement);
+      jest.runAllTimers();
+
+      expect(getRowKeys($container, 'tr.dx-row-focused')).toEqual([instance.option('focusedRowKey')]);
+    });
+
+    it('should highlight only the next row once the rows are rendered', async () => {
+      const { instance, $container, renderPendingTemplates } = await focusRowAndScrollDown(true);
+
+      triggerKeyDown(instance, 'downArrow', document.activeElement);
+      jest.runAllTimers();
+      renderPendingTemplates();
+
+      expect(instance.option('focusedRowKey')).toBe(NEXT_ROW_KEY);
+      expect(getRowKeys($container, 'tr.dx-row-focused')).toEqual([NEXT_ROW_KEY]);
     });
   });
 });

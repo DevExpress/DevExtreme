@@ -78,6 +78,7 @@ import {
   MASTER_DETAIL_CELL_CLASS,
   NON_FOCUSABLE_ELEMENTS_SELECTOR,
   REVERT_BUTTON_CLASS,
+  ROWS_NAVIGATION_KEYS,
   ROWS_VIEW,
   ROWS_VIEW_CLASS,
   TABLE_CLASS,
@@ -556,15 +557,19 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return;
     }
 
-    !FUNCTIONAL_KEYS.includes(e.keyName)
-      && this._updateFocusedCellPositionByTarget(originalEvent.target);
+    const isNavigationWaitingForRows = ROWS_NAVIGATION_KEYS.includes(e.keyName)
+      && this.needWaitRowsBeforeNavigation(e);
+
+    if (!FUNCTIONAL_KEYS.includes(e.keyName) && !isNavigationWaitingForRows) {
+      this._updateFocusedCellPositionByTarget(originalEvent.target);
+    }
 
     if (!isHandled) {
       // eslint-disable-next-line default-case
       switch (e.keyName) {
         case 'leftArrow':
         case 'rightArrow':
-          this._leftRightKeysHandler(e, isEditing);
+          this.navigateWhenRowsRendered(e, () => this._leftRightKeysHandler(e, isEditing));
           isHandled = true;
           break;
 
@@ -573,7 +578,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           if (e.ctrl) {
             accessibility.selectView('rowsView', this, originalEvent);
           } else {
-            this._upDownKeysHandler(e, isEditing);
+            this.navigateWhenRowsRendered(e, () => this._upDownKeysHandler(e, isEditing));
           }
           isHandled = true;
           break;
@@ -633,7 +638,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           break;
         case 'home':
         case 'end':
-          this.homeOrEndKeyHandler(e);
+          this.navigateWhenRowsRendered(e, () => this.homeOrEndKeyHandler(e));
           break;
       }
 
@@ -701,6 +706,24 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return !!$masterDetail.get(0)
       && this.elementIsInsideGrid($masterDetail)
       && !$target.is($masterDetail);
+  }
+
+  private needWaitRowsBeforeNavigation(eventArgs): boolean {
+    return !this._editingController?.isEditing()
+      && !this.isInsideMasterDetail($(eventArgs.originalEvent.target))
+      && this._rowsView.isWaitingForAsyncTemplates();
+  }
+
+  private navigateWhenRowsRendered(eventArgs, navigate: () => void): void {
+    if (!this.needWaitRowsBeforeNavigation(eventArgs)) {
+      navigate();
+      return;
+    }
+
+    eventArgs.originalEvent.preventDefault();
+    this._rowsView.waitAsyncTemplates().done(() => {
+      this.navigateWhenRowsRendered(eventArgs, navigate);
+    });
   }
 
   private _upDownKeysHandler(eventArgs, isEditing) {
