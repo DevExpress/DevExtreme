@@ -358,4 +358,52 @@ describe('Bugs', () => {
       expect(instance.columnOption(1, 'width')).toBe(150);
     });
   });
+
+  describe('T1336036 - DataGrid - State Storing: A column added at runtime and later declared in the columns array is duplicated on every state restore', () => {
+    const STATE_WITH_ADDED_COLUMN = {
+      columns: [
+        { dataField: 'id', visibleIndex: 0 },
+        { dataField: 'name', visibleIndex: 1, added: 'name' },
+      ],
+    };
+
+    const createGrid = (columns: string[]): ReturnType<typeof createDataGrid> => createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      columns,
+      stateStoring: {
+        enabled: true,
+        type: 'custom',
+        customLoad: () => Promise.resolve({}),
+      },
+    });
+
+    const getVisibleDataFields = (
+      instance: DataGridInstance,
+    ): (string | undefined)[] => instance.getVisibleColumns().map((column) => column.dataField);
+
+    it('should not duplicate a declared column when the restored state marks it as added', async () => {
+      const { instance } = await createGrid(['id', 'name']);
+
+      instance.state(STATE_WITH_ADDED_COLUMN);
+
+      expect(getVisibleDataFields(instance)).toEqual(['id', 'name']);
+    });
+
+    it('should not duplicate a declared column when the saved state is restored again', async () => {
+      const { instance } = await createGrid(['id', 'name']);
+
+      instance.state(STATE_WITH_ADDED_COLUMN);
+      instance.state(instance.state());
+
+      expect(getVisibleDataFields(instance)).toEqual(['id', 'name']);
+    });
+
+    it('should restore an added column that is not declared', async () => {
+      const { instance } = await createGrid(['id']);
+
+      instance.state(STATE_WITH_ADDED_COLUMN);
+
+      expect(getVisibleDataFields(instance)).toEqual(['id', 'name']);
+    });
+  });
 });
