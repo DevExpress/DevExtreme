@@ -19,7 +19,7 @@ const MockDataController = dataGridMocks.MockDataController;
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const MockEditingController = dataGridMocks.MockEditingController;
 
-import gridCore from '__internal/grids/data_grid/m_core';
+import gridCore from '__internal/grids/data_grid/core';
 import dragEvents from 'common/core/events/drag';
 import columnsResizingReordering from '__internal/grids/data_grid/module_not_extended/columns_resizing_reordering';
 import { ColumnChooserView } from '__internal/grids/data_grid/module_not_extended/column_chooser';

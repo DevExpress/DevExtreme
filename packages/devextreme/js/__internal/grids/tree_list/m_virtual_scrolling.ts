@@ -14,8 +14,8 @@ import {
   virtualScrollingModule,
 } from '@ts/grids/grid_core/virtual_scrolling/index';
 
+import gridCore from './core';
 import dataSourceAdapterProvider from './data_source_adapter/m_data_source_adapter';
-import gridCore from './m_core';
 
 const oldDefaultOptions = virtualScrollingModule.defaultOptions;
 

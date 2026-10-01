@@ -1,7 +1,7 @@
 import { isDefined } from '@js/core/utils/type';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
-import treeListCore from '../../m_core';
+import treeListCore from '../../core';
 import type { LoadOperation, NodeByKey, TreeNode } from '../types';
 
 export interface NodesContext {

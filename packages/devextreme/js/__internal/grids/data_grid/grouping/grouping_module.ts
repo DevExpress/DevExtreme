@@ -1,6 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { Properties } from '@js/ui/data_grid';
-import gridCore from '@ts/grids/data_grid/m_core';
+import gridCore from '@ts/grids/data_grid/core';
 
 import { groupingColumnsControllerExtender } from './extenders/grouping_columns_controller';
 import { groupingDataControllerExtender } from './extenders/grouping_data_controller';
