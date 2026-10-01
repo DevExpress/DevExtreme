@@ -19,6 +19,7 @@ describe('GridCore master_detail', () => {
 
   describe('master detail container', () => {
     it('container is td element', async () => {
+      // eslint-disable-next-line @typescript-eslint/init-declarations
       let containerElement: HTMLElement | undefined;
 
       await createDataGrid({
@@ -38,6 +39,7 @@ describe('GridCore master_detail', () => {
     });
 
     it('container is div element when sticky columns enabled', async () => {
+      // eslint-disable-next-line @typescript-eslint/init-declarations
       let containerElement: HTMLElement | undefined;
 
       await createDataGrid({

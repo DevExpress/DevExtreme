@@ -216,12 +216,12 @@ export interface Controllers {
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   export: import('../data_grid/export/m_export').ExportController;
   filter: import('./filter/filter_controller').FilterController;
-  filterSync: import('./filter_sync/m_filter_sync').FilterSyncController;
+  filterSync: import('./filter_sync/filter_sync').FilterSyncController;
   filterBuilder: import('./filter_builder/m_filter_builder').FilterBuilderController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
-  columnFocusDispatcher: import('./keyboard_navigation/m_column_focus_dispatcher').ColumnFocusDispatcher;
+  columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/m_headers_keyboard_navigation').HeadersKeyboardNavigationController;
   groupPanelKeyboardNavigation: import('../data_grid/keyboard_navigation/m_group_panel_keyboard_navigation').GroupPanelKeyboardNavigationController;
   resizing: import('./views/m_grid_view').ResizingController;
@@ -231,9 +231,9 @@ export interface Controllers {
   stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
-  toastViewController: import('./toast/m_toast_controller').ToastViewController;
-  aiColumn: import('./ai_column/controllers/m_ai_column_controller').AIColumnController;
-  aiPromptEditor: import('./ai_column/controllers/m_ai_prompt_editor_view_controller').AIPromptEditorViewController;
+  toastViewController: import('./toast/toast_controller').ToastViewController;
+  aiColumn: import('./ai_column/controllers/ai_column_controller').AIColumnController;
+  aiPromptEditor: import('./ai_column/controllers/ai_prompt_editor_view_controller').AIPromptEditorViewController;
   aiAssistant: import('./ai_assistant/ai_assistant_controller').AIAssistantController;
   aiAssistantViewController: import('./ai_assistant/ai_assistant_view_controller').AIAssistantViewController;
 }
@@ -258,8 +258,8 @@ export interface Views {
   gridView: import('./views/m_grid_view').GridView;
   filterBuilderView: import('./filter_builder/m_filter_builder').FilterBuilderView;
   filterPanelView: import('./filter_panel/m_filter_panel').FilterPanelView;
-  toastView: import('./toast/m_toast_view').ToastView;
-  aiPromptEditorView: import('./ai_column/views/m_ai_prompt_editor_view').AIPromptEditorView;
+  toastView: import('./toast/toast_view').ToastView;
+  aiPromptEditorView: import('./ai_column/views/ai_prompt_editor_view').AIPromptEditorView;
   aiAssistantView: import('./ai_assistant/ai_assistant_view').AIAssistantView;
 }
 

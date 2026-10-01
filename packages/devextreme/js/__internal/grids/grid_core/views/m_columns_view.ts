@@ -40,6 +40,7 @@ import type { DataController } from '../data_controller/data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from './const';
+import type { ColumnViewTemplate } from './types';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
@@ -604,7 +605,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  protected _processTemplate(template, options?) {
+  protected _processTemplate(template, options?): ColumnViewTemplate {
     const that = this;
     let renderingTemplate;
 

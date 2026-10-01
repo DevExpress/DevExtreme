@@ -8,7 +8,7 @@ import type { ColumnsController } from '../../columns_controller/m_columns_contr
 import { getColumnHeaderCellSelector } from '../../columns_controller/m_columns_controller_utils';
 import { View } from '../../m_modules';
 import { AI_COLUMN_NAME } from '../const';
-import type { AIColumnController } from '../controllers/m_ai_column_controller';
+import type { AIColumnController } from '../controllers/ai_column_controller';
 import {
   isAIColumnAutoMode,
   isEditorOptions,
@@ -85,7 +85,7 @@ export class AIPromptEditorView extends View {
     }
   }
 
-  private ensureAIPromptEditorVisibility() {
+  private ensureAIPromptEditorVisibility(): void {
     const aiColumns = this.aiColumnController.getAIColumns();
     const aiColumnsWithVisiblePopup = aiColumns.filter((column) => column.ai?.popup?.visible);
     if (aiColumnsWithVisiblePopup.length > 0) {
