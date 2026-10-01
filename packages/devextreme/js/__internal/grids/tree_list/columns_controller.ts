@@ -3,7 +3,7 @@ import { ColumnsController, columnsControllerModule } from '@ts/grids/grid_core/
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
-import treeListCore from './m_core';
+import treeListCore from './core';
 
 class TreeListColumnsController extends ColumnsController {
   public _getFirstItems(dataSourceAdapter?: DataSourceAdapter): RawItemData[] {
@@ -11,12 +11,12 @@ class TreeListColumnsController extends ColumnsController {
     return super._getFirstItems(dataSourceAdapter).map((node) => node.data);
   }
 
-  public getFirstDataColumnIndex() {
+  public getFirstDataColumnIndex(): number {
     const visibleColumns = this.getVisibleColumns();
     const visibleColumnsLength = visibleColumns.length;
     let firstDataColumnIndex = 0;
 
-    for (let i = 0; i <= visibleColumnsLength - 1; i++) {
+    for (let i = 0; i <= visibleColumnsLength - 1; i += 1) {
       if (!isDefined(visibleColumns[i].command)) {
         firstDataColumnIndex = visibleColumns[i].index ?? 0;
         break;

@@ -1,6 +1,6 @@
 import { columnsResizingReorderingModule } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 
 const { views, controllers } = columnsResizingReorderingModule;
 
