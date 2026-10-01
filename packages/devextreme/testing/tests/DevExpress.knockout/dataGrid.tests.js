@@ -4,7 +4,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import { logger } from 'core/utils/console';
 import fx from 'common/core/animation/fx';
 import { isFunction } from 'core/utils/type';
-import dataSourceAdapter from '__internal/grids/data_grid/m_data_source_adapter';
+import dataSourceAdapter from '__internal/grids/data_grid/data_source_adapter';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
 import 'ui/data_grid';

@@ -3,7 +3,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import { dataMasterDetailExtenderMixin, masterDetailModule } from '@ts/grids/grid_core/master_detail/m_master_detail';
 
-import treeListCore from './m_core';
+import treeListCore from './core';
 
 const data = (Base: ModuleType<DataController>) => class DataMasterDetailTreeListExtender extends dataMasterDetailExtenderMixin(Base) {
   protected isRowExpanded() {
