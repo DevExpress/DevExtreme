@@ -27,7 +27,7 @@ import { focused } from '@ts/core/utils/m_selectors';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { RowIndexCorrection } from '@ts/grids/grid_core/data_controller/types';
+import type { DataChange, RowIndexCorrection } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -3066,8 +3066,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     }
   }
 
-  protected _renderCore(change) {
-    const deferred = super._renderCore.apply(this, arguments as any);
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
+    const deferred = super._renderCore(change);
     this._renderFocusByChange(change);
     return deferred;
   }

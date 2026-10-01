@@ -2778,9 +2778,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     clearTimeout(this._pointerDownTimeout);
   }
 
-  protected _renderCore() {
-    super._renderCore.apply(this, arguments as any);
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
+    super._renderCore(change);
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- waitAsyncTemplates is untyped
     return this.waitAsyncTemplates(true).done(() => {
       this._editingController._focusEditorIfNeed();
     });

@@ -5,12 +5,13 @@ import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { toComparable } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type TextBox from '@js/ui/text_box';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import type { DataController } from '../data_controller/data_controller';
-import type { UserState } from '../data_controller/types';
+import type { DataChange, UserState } from '../data_controller/types';
 import type { DataFilter, FilterSourceContext } from '../filter/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
@@ -295,8 +296,8 @@ const rowsView = (
     }
   }
 
-  protected _renderCore() {
-    const deferred = super._renderCore.apply(this, arguments as any);
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
+    const deferred = super._renderCore(change);
 
     // T103538
     if (this.option('dataRowTemplate')) {

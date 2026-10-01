@@ -8,6 +8,7 @@ import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect, getDefaultAlignment } from '@js/core/utils/position';
@@ -22,6 +23,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
@@ -867,7 +869,7 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search, selection, virtual_column, virtual_scrolling
    */
-  protected _renderCore(change) {
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
     const $element = this.element();
 
     $element.addClass(this.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(this.addWidgetPrefix(NOWRAP_CLASS), !this.option('wordWrapEnabled'));
@@ -881,6 +883,7 @@ export class RowsView extends ColumnsView {
     super._renderCore(change);
 
     this._lastColumnWidths = null;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- _updateContent is untyped
     return deferred;
   }
 
