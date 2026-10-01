@@ -836,9 +836,9 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     const that = this;
     const columns = this._columnsController.getColumns();
     const invisibleColumns = this._columnsController.getInvisibleColumns().filter((column) => !column.isBand);
-    const groupColumns = this._columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1);
+    const groupColumns = this._columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && !invisibleColumns.includes(column));
     const invisibleColumnValidators: any[] = [];
-    const isCellVisible = (column, rowKey) => this._dataController.getRowIndexByKey(rowKey) >= 0 && invisibleColumns.indexOf(column) < 0;
+    const isCellVisible = (column, rowKey) => this._dataController.getRowIndexByKey(rowKey) >= 0 && !invisibleColumns.includes(column);
 
     invisibleColumns.push(...groupColumns);
 
