@@ -95369,14 +95369,15 @@ const columnsResizer = Base => class ColumnResizerStickyColumnsExtender extends 
       const $container = (0, _renderer.default)(this._columnHeadersView.getContent());
       const addWidgetPrefix = this.addWidgetPrefix.bind(this);
       const isFixedCellPinnedToRight = _dom.GridCoreStickyColumnsDom.isFixedCellPinnedToRight($cell, $container, addWidgetPrefix);
-      if (isFixedCellPinnedToRight) {
-        var _$cell$offset;
-        return ((_$cell$offset = $cell.offset()) === null || _$cell$offset === void 0 ? void 0 : _$cell$offset.left) ?? 0;
-      }
       const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
       const nextColumnIndex = (_this$_resizingInfo = this._resizingInfo) === null || _this$_resizingInfo === void 0 ? void 0 : _this$_resizingInfo.nextColumnIndex;
       const $nextCell = (_this$_columnHeadersV2 = this._columnHeadersView.getColumnElements()) === null || _this$_columnHeadersV2 === void 0 ? void 0 : _this$_columnHeadersV2.eq(nextColumnIndex);
-      if (!isWidgetResizingMode && $nextCell !== null && $nextCell !== void 0 && $nextCell.length && _dom.GridCoreStickyColumnsDom.isFixedCellPinnedToRight($nextCell, $container, addWidgetPrefix)) {
+      const isNextCellPinnedToRight = !isWidgetResizingMode && $nextCell !== undefined && $nextCell.length > 0 && _dom.GridCoreStickyColumnsDom.isFixedCellPinnedToRight($nextCell, $container, addWidgetPrefix);
+      if (isFixedCellPinnedToRight) {
+        var _$cell$offset;
+        return isNextCellPinnedToRight ? super.getSeparatorOffsetX($cell) : ((_$cell$offset = $cell.offset()) === null || _$cell$offset === void 0 ? void 0 : _$cell$offset.left) ?? 0;
+      }
+      if (isNextCellPinnedToRight) {
         var _$nextCell$offset;
         return ((_$nextCell$offset = $nextCell.offset()) === null || _$nextCell$offset === void 0 ? void 0 : _$nextCell$offset.left) ?? 0;
       }
