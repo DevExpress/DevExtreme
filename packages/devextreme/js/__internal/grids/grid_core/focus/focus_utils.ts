@@ -3,20 +3,7 @@ import { isDate } from '@js/core/utils/type';
 import type { OrderingDescriptor } from '@js/data/data.types';
 
 import type { RawItemData } from '../data_source_adapter/types';
-
-type ValueGetter = (data: RawItemData) => unknown;
-
-interface SortFilterValueOptions {
-  isRemoteFiltering: boolean;
-  dateSerializationFormat: string | undefined;
-  getSelector: (selector: string) => ValueGetter | undefined;
-}
-
-interface SortFilterValue {
-  getter: ValueGetter;
-  rawValue: unknown;
-  safeValue: unknown;
-}
+import type { SortFilterValue, SortFilterValueOptions, ValueGetter } from './types';
 
 // TODO Vinogradov: Move it to ts and cover with unit tests.
 const getSortFilterValue = (
