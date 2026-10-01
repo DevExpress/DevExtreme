@@ -843,6 +843,7 @@ export const focusDataControllerExtender = (
       sort.slice().reverse().forEach((sortInfo) => {
         const { selector, desc, compare } = sortInfo;
         const { getter, rawValue, safeValue } = UiGridCoreFocusUtils.getSortFilterValue(
+          // @ts-expect-error column selectors can be undefined; focus requires a selector
           sortInfo,
           rowData,
           {
