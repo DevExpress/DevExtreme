@@ -214,12 +214,12 @@ export interface Controllers {
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   export: import('../data_grid/export/m_export').ExportController;
   filter: import('./filter/filter_controller').FilterController;
-  filterSync: import('./filter_sync/m_filter_sync').FilterSyncController;
+  filterSync: import('./filter_sync/filter_sync').FilterSyncController;
   filterBuilder: import('./filter_builder/m_filter_builder').FilterBuilderController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
-  columnFocusDispatcher: import('./keyboard_navigation/m_column_focus_dispatcher').ColumnFocusDispatcher;
+  columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/m_headers_keyboard_navigation').HeadersKeyboardNavigationController;
   groupPanelKeyboardNavigation: import('../data_grid/keyboard_navigation/m_group_panel_keyboard_navigation').GroupPanelKeyboardNavigationController;
   resizing: import('./views/m_grid_view').ResizingController;
