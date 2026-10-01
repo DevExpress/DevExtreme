@@ -392,7 +392,7 @@ export class ResizingController extends modules.ViewController {
       })
       : [];
 
-    this.isMeasuringColumns = needBestFit;
+    this.isMeasuringColumns = !!needBestFit;
 
     this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
 
