@@ -64,14 +64,6 @@ export class AIColumnController extends Controller {
 
   public aiRequestRejected!: Callback;
 
-  private getDefaultCellValue(column: Column, cellValue: string | undefined): string | null {
-    if (cellValue === undefined) {
-      return column.ai?.emptyText ?? null;
-    }
-
-    return column.ai?.noDataText ?? null;
-  }
-
   private _endCustomLoadingIfNoPendingRequests(): void {
     if (!this.aiColumnIntegrationController.isAnyRequestAwaitingCompletion()) {
       this.dataController.endCustomLoading();
