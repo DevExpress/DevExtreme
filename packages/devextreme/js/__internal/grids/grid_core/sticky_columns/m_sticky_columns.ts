@@ -531,6 +531,33 @@ const footerView = (
 ) => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerStickyColumnsExtender extends Base {
+  protected getSeparatorBounds(): { left: number; right: number } {
+    const bounds = super.getSeparatorBounds();
+
+    if (this.option('columnFixing.legacyMode') === true
+      || !this._columnsController.getStickyColumns().length) {
+      return bounds;
+    }
+
+    const $cells = this._columnHeadersView.getColumnElements();
+    const $cell = $cells?.eq(this._resizingInfo.currentColumnIndex);
+    const addWidgetPrefix = this.addWidgetPrefix.bind(this);
+
+    if (!$cells || !$cell?.length || GridCoreStickyColumnsDom.isFixedCell($cell, addWidgetPrefix)) {
+      return bounds;
+    }
+
+    const $container = $(this._columnHeadersView.getContent());
+    const { left, right } = GridCoreStickyColumnsDom
+      .getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
+    const offsetLeft = ($container.offset()?.left ?? 0) - getBoundingRect($container.get(0)).left;
+
+    return {
+      left: Math.max(bounds.left, left + offsetLeft),
+      right: Math.min(bounds.right, right + offsetLeft),
+    };
+  }
+
   protected getSeparatorOffsetX($cell: dxElementWrapper): number {
     // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
