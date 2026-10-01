@@ -570,16 +570,24 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
         $container,
         addWidgetPrefix,
       );
-      if (isFixedCellPinnedToRight) {
-        return $cell.offset()?.left ?? 0;
-      }
-
       const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
       const nextColumnIndex = this._resizingInfo?.nextColumnIndex;
       const $nextCell = this._columnHeadersView.getColumnElements()?.eq(nextColumnIndex);
+      const isNextCellPinnedToRight = !isWidgetResizingMode
+        && $nextCell !== undefined && $nextCell.length > 0
+        && GridCoreStickyColumnsDom.isFixedCellPinnedToRight(
+          $nextCell,
+          $container,
+          addWidgetPrefix,
+        );
 
-      if (!isWidgetResizingMode && $nextCell?.length
-        && GridCoreStickyColumnsDom.isFixedCellPinnedToRight($nextCell, $container, addWidgetPrefix)) {
+      if (isFixedCellPinnedToRight) {
+        return isNextCellPinnedToRight
+          ? super.getSeparatorOffsetX($cell)
+          : $cell.offset()?.left ?? 0;
+      }
+
+      if (isNextCellPinnedToRight) {
         return $nextCell.offset()?.left ?? 0;
       }
     }
