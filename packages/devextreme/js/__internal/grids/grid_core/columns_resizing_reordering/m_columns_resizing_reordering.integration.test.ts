@@ -162,6 +162,17 @@ describe('Widget column resize separator bounds (T1335911)', () => {
     let grid: DataGrid | null = null;
     const fields = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
     const initialWidths = [180, 100, 100, 100, 100];
+    const createRect = (left: number, width: number): DOMRect => ({
+      x: left,
+      y: 50,
+      width,
+      height: 24,
+      top: 50,
+      right: left + width,
+      bottom: 74,
+      left,
+      toJSON: () => ({}),
+    });
 
     jest.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function getRect(this: Element): DOMRect {
       const widths = fields.map((field, index) => Number(grid?.columnOption(field, 'width') ?? initialWidths[index]));
@@ -171,10 +182,10 @@ describe('Widget column resize separator bounds (T1335911)', () => {
           ? 600 - widths.slice(index).reduce((sum, width) => sum + width, 0)
           : 100 + widths.slice(0, index).reduce((sum, width) => sum + width, 0);
 
-        return new DOMRect(left, 50, widths[index], 24);
+        return createRect(left, widths[index]);
       }
 
-      return new DOMRect(100, 50, 500, 24);
+      return createRect(100, 500);
     });
     jest.spyOn(Element.prototype, 'getClientRects').mockImplementation(function getRects(this: Element): DOMRectList {
       return [this.getBoundingClientRect()] as unknown as DOMRectList;
