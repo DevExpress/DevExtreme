@@ -317,8 +317,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
 
     if (isString(columnIndex)) {
-      columnIndex = columnsController.columnOption(columnIndex, 'index');
-      columnIndex = columnsController.getVisibleIndex(columnIndex);
+      const index = columnsController.columnOption(columnIndex, 'index');
+      columnIndex = columnsController.getVisibleIndex(index);
     }
 
     const column = visibleColumns[columnIndex];

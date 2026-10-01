@@ -66,6 +66,7 @@ export const summaryDataControllerExtender = (
       const columnName = groupItem.showInColumn ?? groupItem.column;
       const column = this._columnsController.columnOption(columnName);
 
+      // @ts-expect-error GridCore and DataGrid column types are not aligned
       if (groupItem.showInGroupFooter && isDataColumn(column)) {
         return true;
       }

@@ -57,6 +57,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
 
     if (focusedRow) {
       for (let i = 0; i < path.length; ++i) {
+        // @ts-expect-error compileGetter also accepts function selectors at runtime
         const getter = compileGetter(groups[i] && groups[i].selector);
 
         // @ts-expect-error

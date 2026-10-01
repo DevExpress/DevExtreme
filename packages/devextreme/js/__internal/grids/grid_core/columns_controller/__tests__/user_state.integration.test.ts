@@ -131,6 +131,20 @@ describe('ColumnsController user state', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
+  it('accepts persisted entries with initialIndex and restores their order', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: DATA,
+      columns: ['a', 'b'],
+    });
+
+    instance.getController('columns').setUserState([
+      { dataField: 'b', initialIndex: 1 },
+      { dataField: 'a', initialIndex: 0 },
+    ]);
+
+    expect(getColumns(instance).map((column) => column.dataField)).toEqual(['b', 'a']);
+  });
+
   describe('when the state is restored with default grid options', () => {
     // groupIndex is restored because grouping.contextMenuEnabled is true by default in DataGrid
     it('should restore only the sorting and the grouping', async () => {
