@@ -35,6 +35,18 @@ describe('Focus columns extender', () => {
   afterEach(afterTest);
 
   describe('getSortDataSourceParameters', () => {
+    it('sorts by key when requested even if focused rows are disabled', async () => {
+      const { columnsController } = await setup({
+        dataSource: DATA,
+        focusedRowEnabled: false,
+        remoteOperations: true,
+      });
+
+      const result = columnsController.getSortDataSourceParameters(false, true);
+
+      expect(result).toEqual([{ selector: 'id', desc: false }]);
+    });
+
     it('sorts by the data index when every operation is local', async () => {
       const { columnsController, dataSourceController } = await setup({ dataSource: DATA });
 
