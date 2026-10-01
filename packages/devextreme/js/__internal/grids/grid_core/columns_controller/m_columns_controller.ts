@@ -18,6 +18,7 @@ import {
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import Store from '@js/data/abstract_store';
+import type { Grouping, GroupPanel } from '@js/ui/data_grid';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
@@ -469,8 +470,8 @@ export class ColumnsController extends modules.Controller {
 
   public getCommonSettings(column?: Column): Partial<Column> {
     const commonColumnSettings = this.getCommonColumnSettings(column);
-    const groupingOptions: Record<string, unknown> = this.option('grouping') ?? {};
-    const groupPanelOptions: Record<string, unknown> = this.option('groupPanel') ?? {};
+    const groupingOptions: Grouping = this.option('grouping') ?? {};
+    const groupPanelOptions: GroupPanel = this.option('groupPanel') ?? {};
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend has an untyped result
     return extend({
@@ -683,13 +684,9 @@ export class ColumnsController extends modules.Controller {
   public _isColumnFixing(): boolean | undefined {
     let isColumnFixing = this.option('columnFixing.enabled');
 
-    !isColumnFixing && each(this._columns, (_, column): boolean | undefined => {
-      if (column.fixed) {
-        isColumnFixing = true;
-        return false;
-      }
-      return undefined;
-    });
+    if (!isColumnFixing && this._columns.some((column) => column.fixed)) {
+      isColumnFixing = true;
+    }
 
     return isColumnFixing;
   }
@@ -714,7 +711,7 @@ export class ColumnsController extends modules.Controller {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend has an untyped result
-    expandColumns = map(expandColumns, (column): Column => extend(
+    expandColumns = map(expandColumns, (column: Column): Column => extend(
       {},
       {
         ...column,
@@ -797,7 +794,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public hasVisibleDataColumns(): boolean {
-    const columns: Column[] = this._columns;
+    const columns = this._columns;
 
     return columns.some((column) => {
       const isVisible = this._isColumnVisible(column);
@@ -1211,7 +1208,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public refresh(updateNewLookupsOnly?: boolean): DeferredObj<unknown> {
-    const deferreds: unknown[] = [];
+    const deferreds: (DeferredObj<unknown> | undefined)[] = [];
 
     each(this._columns, function (this: Column) {
       const { lookup } = this;
@@ -1463,8 +1460,10 @@ export class ColumnsController extends modules.Controller {
       indexParameterName: string,
     ): void {
       const referencedGroupValues: string[] = columns
-        .filter((column) => isString(column.calculateGroupValue))
-        .map((column): string => column.calculateGroupValue as string);
+        .filter((column): column is Column & { calculateGroupValue: string } => (
+          isString(column.calculateGroupValue)
+        ))
+        .map((column) => column.calculateGroupValue);
 
       each(columns, (_: number, column) => {
         const isReferencedAsGroupValue = indexParameterName === 'groupIndex'
