@@ -408,14 +408,18 @@ export class DataController extends modules.Controller {
       this._columnsUpdating = false;
     }
 
+    // @ts-expect-error the data layer accepts null to clear sorting
     storeLoadOptions.sort = columnsController.getSortDataSourceParameters();
+    // @ts-expect-error the data layer accepts null to clear grouping
     storeLoadOptions.group = columnsController.getGroupDataSourceParameters();
     dataSourceAdapter.sort(storeLoadOptions.sort);
     dataSourceAdapter.group(storeLoadOptions.group);
 
+    // @ts-expect-error the data layer accepts null to clear sorting
     storeLoadOptions.sort = columnsController
       .getSortDataSourceParameters(!dataSourceAdapter.remoteOperations().sorting);
 
+    // @ts-expect-error the data layer accepts null to clear grouping
     e.group = columnsController
       .getGroupDataSourceParameters(!dataSourceAdapter.remoteOperations().grouping);
   };
@@ -507,7 +511,9 @@ export class DataController extends modules.Controller {
       const dataSourceAdapter = this.dataSourceController.getAdapter();
 
       if (dataSourceAdapter && !this._columnsUpdating) {
+        // @ts-expect-error the data layer accepts null to clear grouping
         dataSourceAdapter.group(this._columnsController.getGroupDataSourceParameters());
+        // @ts-expect-error the data layer accepts null to clear sorting
         dataSourceAdapter.sort(this._columnsController.getSortDataSourceParameters());
         this.reload();
       }

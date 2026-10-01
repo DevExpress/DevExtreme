@@ -29,7 +29,7 @@ export const groupingCommand = defineGridCommand({
   schema: groupingCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');
-    const column: Column | undefined = columnsController.columnOption(args.dataField);
+    const column = columnsController.columnOption(args.dataField) as Column | undefined;
     const defaultMessage = getGroupingDefaultMessage(args, column);
 
     if (!column || column.allowGrouping === false) {

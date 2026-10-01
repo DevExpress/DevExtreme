@@ -1,5 +1,6 @@
 import type { ColumnAIOptions, ColumnBase, ColumnLookup } from '@js/common/grids';
 import type { Callback } from '@js/core/utils/callbacks';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
@@ -18,6 +19,9 @@ export interface ValueSerializers {
 type InternalColumnLookup = ColumnLookup & ValueSerializers & {
   items?: RawItemData[];
   dataType?: string;
+  valueMap?: Record<string, unknown>;
+  update?: () => DeferredObj<RawItemData[]> | undefined;
+  updateValueMap?: () => void;
 };
 
 export type DropLocationNames = typeof GROUP_LOCATION
@@ -57,10 +61,14 @@ export type ColumnSelector = ((data: RawItemData) => unknown) & {
   originalCallback?: unknown;
 };
 
+export type ColumnFilterExpression = (unknown[] | ColumnSelector)
+  & Pick<ColumnSelector, 'columnIndex' | 'filterValue' | 'selectedFilterOperation'>;
+
 type FilterTargets = 'filterRow' | 'headerFilter' | 'filterBuilder' | 'search';
 
 export interface InternalColumnOptions extends ValueSerializers {
   parseValue?: (text: string) => unknown;
+  userDataType?: ColumnBase['dataType'];
   selector?: ColumnSelector;
   createFilterExpression?: (
     filterValue: unknown,
@@ -69,11 +77,16 @@ export interface InternalColumnOptions extends ValueSerializers {
   ) => DataFilter;
   index?: number;
   groupIndex?: number;
+  calculateGroupValue?: string | ColumnBase['calculateCellValue'];
+  autoExpandGroup?: boolean;
+  displayField?: string;
+  displayValueMap?: Record<string, unknown>;
   type?: string;
   defaultFilterOperations?: string[];
   defaultFilterOperation?: string;
   defaultSelectedFilterOperation?: ColumnBase['selectedFilterOperation'] | null;
-  visibleWidth?: string | number;
+  bestFitWidth?: number;
+  visibleWidth?: ColumnBase['width'] | null;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
   command?: string;
@@ -81,6 +94,11 @@ export interface InternalColumnOptions extends ValueSerializers {
   showWhenGrouped?: boolean;
   allowGrouping?: boolean;
   resizedCallbacks?: Callback<[number]>;
+  resized?: (width: number) => void;
+  adaptiveHidden?: boolean;
+  elementAttr?: { name: string; value: string }[];
+  cellTemplate?: unknown;
+  headerCellTemplate?: unknown;
   rowspan?: number;
   colspan?: number;
   lastSortOrder?: ColumnBase['sortOrder'];
@@ -94,6 +112,21 @@ export interface InternalColumnOptions extends ValueSerializers {
 }
 
 export type Column = ColumnBase & InternalColumnOptions;
+
+export type ColumnOptionsUpdate = Partial<Column> | Record<string, unknown>;
+
+export interface ColumnDataSourceParameter {
+  selector?: string | ((data: RawItemData) => unknown);
+  desc: boolean;
+  compare?: (value1: unknown, value2: unknown) => number;
+  isExpanded?: boolean;
+}
+
+export interface ColumnsDataSourceParameters {
+  sorting: unknown;
+  grouping: unknown;
+  filtering?: DataFilter;
+}
 
 export type GroupColumn = Column & { groupIndex: number };
 
@@ -170,6 +203,11 @@ export interface BandColumnsCache {
   isPlain: boolean;
   columnChildrenByIndex: Record<number, Column[]>;
   columnParentByIndex: Record<number, Column>;
+}
+
+export interface IndexedColumns {
+  positiveIndexedColumns: Record<string, Column[]>[][];
+  negativeIndexedColumns: Record<string, Column[]>[];
 }
 
 export interface ColumnOptionChangeArgs {

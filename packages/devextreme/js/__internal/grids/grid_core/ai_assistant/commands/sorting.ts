@@ -39,7 +39,7 @@ export const sortingCommand = defineGridCommand({
 
     try {
       // Handles remote operations via data controller listening for the `sorting` change
-      columnsController.changeSortOrder(column.index, args.sortOrder);
+      columnsController.changeSortOrder(column.index as number, args.sortOrder);
 
       return Promise.resolve(success(defaultMessage));
     } catch {
