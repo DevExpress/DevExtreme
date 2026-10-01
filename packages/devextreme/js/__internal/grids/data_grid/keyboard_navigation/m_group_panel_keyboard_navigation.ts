@@ -15,7 +15,7 @@ import gridCore from '../m_core';
 import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
 
 export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNavigationMixin(ColumnKeyboardNavigationController) {
-  private isNeedToHiddenFocusAfterClick = false;
+  private isNeedToHiddenFocusAfterClick: boolean | undefined = false;
 
   private groupItemClickHandlerContext!: (event: any) => void;
 

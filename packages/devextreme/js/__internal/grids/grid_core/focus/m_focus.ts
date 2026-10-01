@@ -675,10 +675,11 @@ export const columns = (Base: ModuleType<ColumnsController>) => class FocusColum
 
       if (notSortedKeys.length) {
         result = result || [];
+        const sortParameters = result;
         if (isLocalOperations) {
           result.push({ selector: this.dataSourceController.getDataIndexGetter(), desc: false });
         } else {
-          notSortedKeys.forEach((notSortedKey) => result.push({ selector: notSortedKey, desc: false }));
+          notSortedKeys.forEach((notSortedKey) => sortParameters.push({ selector: notSortedKey, desc: false }));
         }
       }
     }

@@ -64,7 +64,7 @@ export const summaryDataControllerExtender = (
 
     for (const groupItem of groupItems) {
       const columnName = groupItem.showInColumn ?? groupItem.column;
-      const column = this._columnsController.columnOption(columnName);
+      const column = this._columnsController.columnOption(columnName) as Column | undefined;
 
       if (groupItem.showInGroupFooter && isDataColumn(column)) {
         return true;

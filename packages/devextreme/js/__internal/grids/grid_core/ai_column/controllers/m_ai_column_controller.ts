@@ -75,6 +75,7 @@ export class AIColumnController extends Controller {
       ...getAICommandColumnDefaultOptions(),
       calculateCellValue(data: RawItemData) {
         const key = dataSourceController.keyOf(data);
+        // @ts-expect-error the column name is initialized before calculateCellValue is called
         const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
         const defaultValue = that.getDefaultCellValue(this, cellValue);
 

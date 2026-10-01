@@ -491,7 +491,7 @@ export const updateColumnGroupIndexes = (that: ColumnsController, currentColumn?
 };
 
 export const isSortOrderValid = (
-  sortOrder: string | undefined,
+  sortOrder: string | null | undefined,
 ): sortOrder is SortOrder => sortOrder === 'asc' || sortOrder === 'desc';
 
 export const updateColumnSortIndexes = (that: ColumnsController, currentColumn?: Column): void => {
@@ -541,7 +541,7 @@ function getColumnsByLocation(
     case GROUP_LOCATION:
       return that.getGroupColumns() as Column[];
     case COLUMN_CHOOSER_LOCATION:
-      return that.getChooserColumns() as Column[];
+      return that.getChooserColumns();
     default:
       return that.getVisibleColumns(rowIndex);
   }
@@ -843,7 +843,7 @@ export const columnOptionCore = function (
         initialColumn = { dataField: initialColumn };
         columns[columnIndex as number] = initialColumn;
       }
-      if (initialColumn && isUserStateColumn(initialColumn, column)) {
+      if (initialColumn && !isString(initialColumn) && isUserStateColumn(initialColumn, column)) {
         optionSetter(initialColumn, value, { functionsAsIs: true });
       }
     }
