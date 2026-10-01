@@ -131,6 +131,8 @@ export class ResizingController extends modules.ViewController {
 
   private isMaxWidthSet = false;
 
+  public isMeasuringColumns = false;
+
   protected callbackNames() {
     return ['resizeCompleted'];
   }
@@ -395,6 +397,14 @@ export class ResizingController extends modules.ViewController {
     const hasUndefinedColumnWidth = visibleColumns.some((column) => !isDefined(column.width));
     const needBestFit = this._needBestFit() || visibleColumns.some((column) => column.width === 'auto');
     const hasMinWidth = visibleColumns.some((column) => !!column.minWidth);
+    const scrollPositions = needBestFit
+      ? [this._columnHeadersView, this._footerView].map((view) => {
+        const $content = view?.getContent();
+        return { $content, left: $content?.scrollLeft() };
+      })
+      : [];
+
+    this.isMeasuringColumns = needBestFit;
 
     this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
     this._setVisibleWidths(visibleColumns, []);
@@ -445,6 +455,13 @@ export class ResizingController extends modules.ViewController {
         }
 
         this._toggleContentMinHeight(false);
+
+        scrollPositions.forEach(({ $content, left }) => {
+          if (isDefined(left)) {
+            $content?.scrollLeft(left);
+          }
+        });
+        this.isMeasuringColumns = false;
       });
     });
   }
@@ -896,6 +913,10 @@ export class ResizingController extends modules.ViewController {
 
 export class SynchronizeScrollingController extends modules.ViewController {
   private _scrollChangedHandler(views, pos, viewName) {
+    if (this.getController('resizing').isMeasuringColumns) {
+      return;
+    }
+
     for (let j = 0; j < views.length; j++) {
       if (views[j] && views[j].name !== viewName) {
         views[j].scrollTo({ left: pos.left, top: pos.top });
