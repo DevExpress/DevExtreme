@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef, Component, enableProdMode, inject, provideZoneChangeDetection,
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxPopupModule, DxScrollViewModule } from 'devextreme-angular';
