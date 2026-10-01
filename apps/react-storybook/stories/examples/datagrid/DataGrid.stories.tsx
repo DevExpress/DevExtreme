@@ -583,3 +583,117 @@ export const ColumnChooserStory: Story = {
         </DataGrid>
     ),
 };
+
+const resizeSeparatorData = [
+    { ID: 1, CompanyName: 'Super Mart of the West', City: 'Bentonville', State: 'Arkansas', Phone: '(800) 555-2797', Fax: '(800) 555-2171' },
+    { ID: 2, CompanyName: 'Electronics Depot', City: 'Atlanta', State: 'Georgia', Phone: '(800) 595-3232', Fax: '(800) 595-3231' },
+    { ID: 3, CompanyName: 'K&S Music', City: 'Minneapolis', State: 'Minnesota', Phone: '(612) 304-6073', Fax: '(612) 304-6074' },
+    { ID: 4, CompanyName: "Tom's Club", City: 'Issaquah', State: 'Washington', Phone: '(800) 955-2292', Fax: '(800) 955-2293' },
+    { ID: 5, CompanyName: 'E-Mart', City: 'Hoffman Estates', State: 'Illinois', Phone: '(847) 286-2500', Fax: '(847) 286-2501' },
+    { ID: 6, CompanyName: 'Walters', City: 'Deerfield', State: 'Illinois', Phone: '(847) 940-2500', Fax: '(847) 940-2501' },
+];
+
+type ResizeSeparatorScenario = {
+    instructions: string;
+    mode: 'nextColumn' | 'widget';
+    rtlEnabled?: boolean;
+    fixedPhone?: boolean;
+    initialScrollLeft?: number;
+};
+
+const ResizeSeparatorReviewGrid = ({
+    mode,
+    rtlEnabled = false,
+    fixedPhone = false,
+    initialScrollLeft = 0,
+}: ResizeSeparatorScenario) => {
+    const scrollInitialized = useRef(false);
+    const onContentReady = (e: DataGridTypes.ContentReadyEvent): void => {
+        if (!scrollInitialized.current) {
+            scrollInitialized.current = true;
+            e.component.getScrollable()?.scrollTo({ left: initialScrollLeft });
+        }
+    };
+
+    return (
+        <DataGrid
+            dataSource={resizeSeparatorData}
+            keyExpr="ID"
+            columnResizingMode={mode}
+            allowColumnResizing={true}
+            columnWidth="auto"
+            rtlEnabled={rtlEnabled}
+            showBorders={true}
+            width={500}
+            height={300}
+            onContentReady={onContentReady}
+        >
+            <Column dataField="CompanyName" />
+            <Column dataField="City" />
+            <Column dataField="State" />
+            <Column dataField="Phone" fixed={fixedPhone} fixedPosition="right" />
+            <Column dataField="Fax" fixed={true} fixedPosition="right" />
+        </DataGrid>
+    );
+};
+
+const ResizeSeparatorReview = (scenario: ResizeSeparatorScenario) => {
+    const [resetCount, setResetCount] = useState(0);
+
+    return (
+        <div style={{ padding: 16 }}>
+            <p style={{ maxWidth: 500 }}>{scenario.instructions}</p>
+            <button type="button" onClick={() => setResetCount((count) => count + 1)}
+                style={{ marginBottom: 16 }}>
+                Reset grid
+            </button>
+            <ResizeSeparatorReviewGrid key={resetCount} {...scenario} />
+        </div>
+    );
+};
+
+export const RightFixedResizeReview: Story = {
+    name: 'Resize review - right-fixed Fax',
+    render: () => (
+        <ResizeSeparatorReview
+            mode="nextColumn"
+            instructions="Hold the left border of Fax, then drag left and right. Watch whether the blue separator jumps away from the border."
+        />
+    ),
+};
+
+export const RtlFixedResizeReview: Story = {
+    name: 'Resize review - RTL fixed columns',
+    render: () => (
+        <ResizeSeparatorReview
+            mode="nextColumn"
+            rtlEnabled={true}
+            fixedPhone={true}
+            instructions="Resize the border between Phone and Fax in both directions. Watch whether the blue separator stays on the border being resized."
+        />
+    ),
+};
+
+export const WidgetResizeReview: Story = {
+    name: 'Resize review - widget containment',
+    render: () => (
+        <ResizeSeparatorReview
+            mode="widget"
+            fixedPhone={true}
+            instructions="Drag the right border of City or State through Phone and Fax and past the grid. The column can keep growing, while the blue separator should stop before Phone. Drag back to shrink it."
+        />
+    ),
+};
+
+export const RtlScrollResizeReview: Story = {
+    name: 'Resize review - RTL scroll preservation',
+    render: () => (
+        <ResizeSeparatorReview
+            mode="widget"
+            rtlEnabled={true}
+            fixedPhone={true}
+            initialScrollLeft={50}
+            instructions="The grid starts partly scrolled. Hold a visible border of a non-fixed column without moving, then drag. Watch whether the non-fixed columns jump when you press. Reset restores the starting scroll position."
+        />
+    ),
+};
