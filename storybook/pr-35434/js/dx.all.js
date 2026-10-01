@@ -73531,6 +73531,7 @@ var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _callbacks = _interopRequireDefault(__webpack_require__(84718));
 var _extend = __webpack_require__(52576);
 var _iterator = __webpack_require__(21274);
+var _math = __webpack_require__(50254);
 var _position = __webpack_require__(41639);
 var _size = __webpack_require__(57653);
 var _type = __webpack_require__(11528);
@@ -74122,6 +74123,14 @@ class ColumnsResizerViewController extends _m_modules.default.ViewController {
     const cellOffset = ((_$cell$offset = $cell.offset()) === null || _$cell$offset === void 0 ? void 0 : _$cell$offset.left) ?? 0;
     return cellOffset + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : outerWidth);
   }
+  getSeparatorBounds() {
+    var _this$_$parentContain2;
+    const left = ((_this$_$parentContain2 = this._$parentContainer.offset()) === null || _this$_$parentContain2 === void 0 ? void 0 : _this$_$parentContain2.left) ?? 0;
+    return {
+      left,
+      right: left + (0, _size.getWidth)(this._$parentContainer)
+    };
+  }
   _moveSeparator(args) {
     var _that$_draggingHeader;
     const e = args.event;
@@ -74139,7 +74148,14 @@ class ColumnsResizerViewController extends _m_modules.default.ViewController {
         if (that._updateColumnsWidthIfNeeded(eventData.x)) {
           const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
           if ($cell.length) {
-            const offsetX = this.getSeparatorOffsetX($cell);
+            let offsetX = this.getSeparatorOffsetX($cell);
+            if (!isNextColumnMode) {
+              const {
+                left,
+                right
+              } = this.getSeparatorBounds();
+              offsetX = (0, _math.fitIntoRange)(offsetX, left, Math.max(left, right - columnsSeparatorWidth));
+            }
             that._columnsSeparatorView.moveByX(offsetX);
             that._tablePositionController.update(that._targetPoint.y);
             e.preventDefault();
@@ -95321,6 +95337,29 @@ const rowsView = Base => class RowsViewStickyColumnsExtender extends baseStickyC
 };
 const footerView = Base => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
 const columnsResizer = Base => class ColumnResizerStickyColumnsExtender extends Base {
+  getSeparatorBounds() {
+    var _$container$offset;
+    const bounds = super.getSeparatorBounds();
+    if (this.option('columnFixing.legacyMode') === true || !this._columnsController.getStickyColumns().length) {
+      return bounds;
+    }
+    const $cells = this._columnHeadersView.getColumnElements();
+    const $cell = $cells === null || $cells === void 0 ? void 0 : $cells.eq(this._resizingInfo.currentColumnIndex);
+    const addWidgetPrefix = this.addWidgetPrefix.bind(this);
+    if (!$cells || !($cell !== null && $cell !== void 0 && $cell.length) || _dom.GridCoreStickyColumnsDom.isFixedCell($cell, addWidgetPrefix)) {
+      return bounds;
+    }
+    const $container = (0, _renderer.default)(this._columnHeadersView.getContent());
+    const {
+      left,
+      right
+    } = _dom.GridCoreStickyColumnsDom.getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
+    const offsetLeft = (((_$container$offset = $container.offset()) === null || _$container$offset === void 0 ? void 0 : _$container$offset.left) ?? 0) - (0, _position.getBoundingRect)($container.get(0)).left;
+    return {
+      left: Math.max(bounds.left, left + offsetLeft),
+      right: Math.min(bounds.right, right + offsetLeft)
+    };
+  }
   getSeparatorOffsetX($cell) {
     var _this$_columnHeadersV;
     // @ts-expect-error
@@ -98840,6 +98879,7 @@ class ResizingController extends _m_modules.default.ViewController {
   constructor() {
     super(...arguments);
     this.isMaxWidthSet = false;
+    this.isMeasuringColumns = false;
   }
   callbackNames() {
     return ['resizeCompleted'];
@@ -99062,6 +99102,14 @@ class ResizingController extends _m_modules.default.ViewController {
     const hasUndefinedColumnWidth = visibleColumns.some(column => !(0, _type.isDefined)(column.width));
     const needBestFit = this._needBestFit() || visibleColumns.some(column => column.width === 'auto');
     const hasMinWidth = visibleColumns.some(column => !!column.minWidth);
+    const scrollPositions = needBestFit ? [this._columnHeadersView, this._footerView].map(view => {
+      const $content = view === null || view === void 0 ? void 0 : view.getContent();
+      return {
+        $content,
+        left: $content === null || $content === void 0 ? void 0 : $content.scrollLeft()
+      };
+    }) : [];
+    this.isMeasuringColumns = !!needBestFit;
     this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
     this._setVisibleWidths(visibleColumns, []);
     const restoreAfterBestFitMode = needBestFit && this.enableTemporaryBestFitMode();
@@ -99104,6 +99152,16 @@ class ResizingController extends _m_modules.default.ViewController {
           this._setVisibleWidths(visibleColumns, resultWidths);
         }
         this._toggleContentMinHeight(false);
+        scrollPositions.forEach(_ref2 => {
+          let {
+            $content,
+            left
+          } = _ref2;
+          if ((0, _type.isDefined)(left)) {
+            $content === null || $content === void 0 || $content.scrollLeft(left);
+          }
+        });
+        this.isMeasuringColumns = false;
       });
     });
   }
@@ -99469,6 +99527,9 @@ class ResizingController extends _m_modules.default.ViewController {
 exports.ResizingController = ResizingController;
 class SynchronizeScrollingController extends _m_modules.default.ViewController {
   _scrollChangedHandler(views, pos, viewName) {
+    if (this.getController('resizing').isMeasuringColumns) {
+      return;
+    }
     for (let j = 0; j < views.length; j++) {
       if (views[j] && views[j].name !== viewName) {
         views[j].scrollTo({

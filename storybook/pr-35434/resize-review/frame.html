@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link id="theme" rel="stylesheet">
+    <style>body { margin: 8px; } button { margin-bottom: 12px; }</style>
+</head>
+<body>
+    <button type="button" onclick="location.reload()">Reset grid</button>
+    <div id="grid"></div>
+    <script>
+        const parameters = new URLSearchParams(location.search);
+        const theme = parameters.get('theme') || 'light';
+        document.getElementById('theme').href = `../css/dx.${/^[a-z.]+$/.test(theme) ? theme : 'light'}.css`;
+        window.addEventListener('load', () => {
+            const script = document.createElement('script');
+            script.src = `${parameters.get('version') === 'before' ? 'before' : 'after'}/grid.js`;
+            document.body.appendChild(script);
+        });
+    </script>
+</body>
+</html>
