@@ -4,7 +4,7 @@ import { when } from '@js/core/utils/deferred';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 import type { GroupingDataSourceAdapter } from './m_grouping';
 import type { GroupInfoData } from './types';
 
