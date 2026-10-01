@@ -131,7 +131,7 @@ export class FilterController extends modules.Controller {
     dataField: string,
     remoteFiltering: boolean | undefined,
   ): void {
-    const column = this.columnsController.columnOption(dataField) as Column | undefined;
+    const column = this.columnsController.columnOption(dataField);
 
     if (remoteFiltering) {
       const lastIndex = filter.length - 1;
