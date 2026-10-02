@@ -1,4 +1,4 @@
-import { register } from 'safe-ts-transforms-fork';
+import { register } from '@tokens-studio/sd-transforms';
 
 function hexToPercent(hex) {
   if (typeof hex !== 'string') throw new TypeError('hex must be a string');
