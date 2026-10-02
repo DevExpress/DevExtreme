@@ -204,7 +204,7 @@ export interface Controllers {
   adaptiveColumns: import('./adaptivity/m_adaptivity').AdaptiveColumnsController;
   applyFilter: import('./filter_row/m_filter_row').ApplyFilterViewController;
   columnChooser: import('./column_chooser/m_column_chooser').ColumnChooserController;
-  columns: import('./columns_controller/m_columns_controller').ColumnsController;
+  columns: import('./columns_controller/columns_controller').ColumnsController;
   columnsResizer: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsResizerViewController;
   contextMenu: import('./context_menu/m_context_menu').ContextMenuController;
   data: import('./data_controller/data_controller').DataController;

@@ -54,17 +54,6 @@ import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import {
-  COLUMN_CHOOSER_LOCATION,
-  COLUMN_OPTION_REGEXP,
-  COMMAND_EXPAND_CLASS,
-  DATATYPE_OPERATIONS,
-  DETAIL_COMMAND_COLUMN_NAME,
-  GROUP_COMMAND_COLUMN_NAME,
-  GROUP_LOCATION,
-  MAX_SAFE_INTEGER,
-  USER_STATE_FIELD_NAMES,
-} from './const';
-import {
   addExpandColumn,
   assignColumns,
   columnOptionCore,
@@ -105,7 +94,18 @@ import {
   updateColumnIndexes,
   updateIndexes,
   updateSerializers,
-} from './m_columns_controller_utils';
+} from './columns_controller_utils';
+import {
+  COLUMN_CHOOSER_LOCATION,
+  COLUMN_OPTION_REGEXP,
+  COMMAND_EXPAND_CLASS,
+  DATATYPE_OPERATIONS,
+  DETAIL_COMMAND_COLUMN_NAME,
+  GROUP_COMMAND_COLUMN_NAME,
+  GROUP_LOCATION,
+  MAX_SAFE_INTEGER,
+  USER_STATE_FIELD_NAMES,
+} from './const';
 import { UserStateApplier } from './user_state_applier';
 
 export class ColumnsController extends modules.Controller {

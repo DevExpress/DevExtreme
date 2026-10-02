@@ -6,7 +6,7 @@ import type {
 import { getKeyHash } from '@js/core/utils/common';
 import errors from '@js/ui/widget/ui.errors';
 
-import type { ColumnsController } from '../../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../../columns_controller/columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
 import type { DataSourceController } from '../../data_source/data_source_controller';
 import type { RawItemData } from '../../data_source_adapter/types';
