@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "storybook dev -p 6006",
-    "build": "storybook build",
+    "build": "node scripts/build_resize_review.mjs && storybook build",
     "serve": "http-server storybook-static -p 6006 -c-1"
   },
   "author": "",

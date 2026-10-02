@@ -583,3 +583,55 @@ export const ColumnChooserStory: Story = {
         </DataGrid>
     ),
 };
+
+const ResizeReviewFrame = ({ version, scenario, theme }: {
+    version: 'before' | 'after';
+    scenario: 'fixed' | 'widget' | 'rtl';
+    theme: string;
+}) => (
+    <section>
+        <h3>{version === 'before' ? 'Before' : 'After'}</h3>
+        <iframe
+            title={`${scenario} resizing ${version}`}
+            src={`resize-review/frame.html?version=${version}&scenario=${scenario}&theme=${theme}`}
+            width={600}
+            height={460}
+            style={{ border: '1px solid #ddd' }}
+        />
+    </section>
+);
+
+export const ResizeSeparatorBeforeAfter: Story = {
+    name: 'Resize separator - Before and After',
+    parameters: { layout: 'fullscreen' },
+    render: (_args, context) => {
+        const theme = `${String(context.globals.theme ?? 'light').replace(/-/g, '.')}${context.globals.compact ? '.compact' : ''}`;
+
+        return (
+            <div style={{ padding: 24 }}>
+                <p>Both versions start partly scrolled. Reset grid restores the starting widths and scroll position.</p>
+                <h2>Right-fixed Fax column</h2>
+                <p>Hold the left border of Fax, then drag in both directions. Watch whether the blue separator jumps away from that border.</p>
+                <p>Also hold a visible border of City without moving. Watch whether the scrolled columns jump.</p>
+                <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+                    <ResizeReviewFrame version="before" scenario="fixed" theme={theme} />
+                    <ResizeReviewFrame version="after" scenario="fixed" theme={theme} />
+                </div>
+                <h2>Non-fixed columns in widget mode</h2>
+                <p>Drag the right border of City or State through Phone and Fax and outside the grid.</p>
+                <p>The column can keep growing, while the blue separator should stop before Phone. Drag back to shrink it.</p>
+                <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+                    <ResizeReviewFrame version="before" scenario="widget" theme={theme} />
+                    <ResizeReviewFrame version="after" scenario="widget" theme={theme} />
+                </div>
+                <h2>RTL scroll position during width measurement</h2>
+                <p>Hold the right border of City without moving. Watch whether the non-fixed columns jump when you press.</p>
+                <p>Then drag in both directions. The grid should preserve its scroll position when resizing starts, and the blue separator should follow the border.</p>
+                <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+                    <ResizeReviewFrame version="before" scenario="rtl" theme={theme} />
+                    <ResizeReviewFrame version="after" scenario="rtl" theme={theme} />
+                </div>
+            </div>
+        );
+    },
+};

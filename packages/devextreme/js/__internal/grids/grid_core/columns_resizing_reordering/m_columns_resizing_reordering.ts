@@ -15,6 +15,7 @@ import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
+import { fitIntoRange } from '@js/core/utils/math';
 import { getBoundingRect } from '@js/core/utils/position';
 import {
   getHeight, getWidth,
@@ -665,7 +666,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   public _targetPoint?: ColumnPoint | null;
 
-  private _resizingInfo: any;
+  protected _resizingInfo: any;
 
   protected _columnsController!: ColumnsController;
 
@@ -815,6 +816,12 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return cellOffset + ((isNextColumnMode || isRtlParentStyle) && rtlEnabled ? 0 : outerWidth);
   }
 
+  protected getSeparatorBounds(): { left: number; right: number } {
+    const left = this._$parentContainer.offset()?.left ?? 0;
+
+    return { left, right: left + getWidth(this._$parentContainer) };
+  }
+
   private _moveSeparator(args) {
     const e = args.event;
     const that = e.data;
@@ -833,7 +840,13 @@ export class ColumnsResizerViewController extends modules.ViewController {
           const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
 
           if ($cell.length) {
-            const offsetX = this.getSeparatorOffsetX($cell);
+            let offsetX = this.getSeparatorOffsetX($cell);
+
+            if (!isNextColumnMode) {
+              const { left, right } = this.getSeparatorBounds();
+
+              offsetX = fitIntoRange(offsetX, left, Math.max(left, right - columnsSeparatorWidth));
+            }
 
             that._columnsSeparatorView.moveByX(offsetX);
             that._tablePositionController.update(that._targetPoint.y);
