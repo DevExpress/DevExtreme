@@ -69,12 +69,24 @@ export const setFilterOperationsAsDefaultValues = (column: Column): void => {
 
 let globalColumnId = 1;
 
-export const createColumn = (
+export function createColumn(
+  that: ColumnsController,
+  columnOptions: Column,
+  userStateColumnOptions?: ColumnUserState,
+  bandColumn?: Column,
+): Column;
+export function createColumn(
   that: ColumnsController,
   columnOptions: Column | string | undefined,
   userStateColumnOptions?: ColumnUserState,
   bandColumn?: Column,
-): Column | undefined => {
+): Column | undefined;
+export function createColumn(
+  that: ColumnsController,
+  columnOptions: Column | string | undefined,
+  userStateColumnOptions?: ColumnUserState,
+  bandColumn?: Column,
+): Column | undefined {
   if (!columnOptions) {
     return undefined;
   }
@@ -114,7 +126,7 @@ export const createColumn = (
   }
 
   return result;
-};
+}
 
 export function isUserStateColumn(
   column: ColumnUserState | undefined,
@@ -665,12 +677,12 @@ export function assignColumns(that: ColumnsController, columns: Column[]): void 
   that.updateColumnDataTypes();
 }
 
-export const updateColumnChanges = (
+export function updateColumnChanges(
   that: ColumnsController,
   changeType: ColumnChangeType,
   optionName?: string,
   columnIndex?: number,
-): void => {
+): ColumnsChanges {
   const columnChanges: ColumnsChanges = that._columnChanges ?? {
     optionNames: { length: 0 },
     changeTypes: { length: 0 },
@@ -707,7 +719,8 @@ export const updateColumnChanges = (
 
   that._columnChanges = columnChanges;
   that.resetColumnsCache();
-};
+  return columnChanges;
+}
 
 export const fireColumnsChanged = (that: ColumnsController): void => {
   const { onColumnsChanging } = that.option() as ColumnsControllerOptions;
