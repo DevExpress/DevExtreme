@@ -252,4 +252,67 @@ describe('format locale integration', () => {
       dateTimeFormatSpy.mockRestore();
     });
   });
+
+  describe('date parsing', () => {
+    const date = new Date(2020, 0, 2);
+
+    it.each([
+      { type: 'shortDate', locale: 'en-US' },
+      { type: 'longDate', locale: 'en-US' },
+      { type: 'monthAndYear', locale: 'en-US' },
+      {
+        year: 'numeric', month: 'long', day: 'numeric', locale: 'en-US',
+      },
+    ])('should parse text formatted with explicit format locale %j', (format) => {
+      coreLocalization.locale('de');
+
+      const text = dateLocalization.format(date, format as never) as string;
+      const parsed = dateLocalization.parse(text, format as never) as Date;
+
+      expect(parsed.getFullYear()).toBe(2020);
+      expect(parsed.getMonth()).toBe(0);
+    });
+
+    it('should parse month names using global dateFormat locale', () => {
+      coreLocalization.locale('de');
+      config({
+        ...config(),
+        dateFormat: { default: { type: 'longDate', locale: 'en-US' } },
+      });
+
+      const parsed = dateLocalization.parse('Thursday, January 2, 2020', 'longDate') as Date;
+
+      expect(parsed).toEqual(date);
+    });
+
+    it('should keep parsing month names in message locale without format locale', () => {
+      coreLocalization.locale('de');
+
+      const text = dateLocalization.format(date, 'longDate') as string;
+
+      expect(dateLocalization.parse(text, 'longDate')).toEqual(date);
+    });
+  });
+
+  describe('currency', () => {
+    it('should parse currency using explicit format locale separators', () => {
+      coreLocalization.locale('de');
+
+      expect(numberLocalization.parse('€1,234.50', {
+        type: 'currency', currency: 'EUR', locale: 'en-US',
+      } as never)).toBe(1234.5);
+    });
+
+    it('should use global numberFormat locale for OpenXML currency format', () => {
+      coreLocalization.locale('de');
+      const messageLocaleFormat = numberLocalization.getOpenXmlCurrencyFormat('EUR');
+
+      config({
+        ...config(),
+        numberFormat: { default: { locale: 'en-US' } },
+      });
+
+      expect(numberLocalization.getOpenXmlCurrencyFormat('EUR')).not.toBe(messageLocaleFormat);
+    });
+  });
 });

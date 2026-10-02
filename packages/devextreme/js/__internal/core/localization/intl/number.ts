@@ -38,7 +38,7 @@ const getFormatter = (formatLocale: string, format: NormalizedConfig): IntlForma
 };
 
 const getCurrencyFormatter = (currency: string): Intl.NumberFormat => new Intl.NumberFormat(
-  localizationCoreUtils.locale(),
+  getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE),
   { style: 'currency', currency },
 );
 
@@ -57,16 +57,16 @@ export default {
 
     return getFormatter(formatLocale, normalizedConfig)(value);
   },
-  getDecimalSeparator(): string {
-    const formatLocale = getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
+  getDecimalSeparator(format?: FormatConfig | string): string {
+    const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
 
     return getFormatter(formatLocale, {
       minimumFractionDigits: 1,
       maximumFractionDigits: 1,
     })(1.2)[1];
   },
-  getThousandsSeparator(): string {
-    const formatLocale = getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
+  getThousandsSeparator(format?: FormatConfig | string): string {
+    const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
 
     return getFormatter(formatLocale, {})(10000)[2];
   },
@@ -191,8 +191,11 @@ export default {
     const targetCurrency = currency || dxConfig().defaultCurrency;
     const currencySymbol: string = this._getCurrencySymbolInfo(targetCurrency).symbol;
     const closestAccountingFormat: string | undefined = localizationCoreUtils
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      .getValueByClosestLocale((locale: string): string => accountingFormats[locale]);
+      .getValueByClosestLocale(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        (locale: string): string => accountingFormats[locale],
+        getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE),
+      );
 
     return openXmlCurrencyFormat(currencySymbol, closestAccountingFormat);
   },

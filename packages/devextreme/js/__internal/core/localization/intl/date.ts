@@ -7,6 +7,7 @@ import {
 } from '@ts/core/global_format_config';
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { DateFormatter, Format } from '@ts/core/localization/date';
+import { bindDatePartsToLocale } from '@ts/core/localization/ldml/date.parser';
 import { extend } from '@ts/core/utils/m_extend';
 
 interface DateArgs {
@@ -81,9 +82,10 @@ const getIntlFormatter = (
   return formatDateTime(date, format, formatLocale);
 };
 
-const formatNumber = (number: number): string => new Intl.NumberFormat(
-  localizationCoreUtils.locale(),
-).format(number);
+const formatNumber = (
+  number: number,
+  locale = localizationCoreUtils.locale(),
+): string => new Intl.NumberFormat(locale).format(number);
 
 const getAlternativeNumeralsMap = (() => {
   const numeralsMapCache: Record<string, false | Record<string, number>> = {};
@@ -201,18 +203,30 @@ const formatWithIntlOptions = (
   return getIntlFormatter(formatterOptions, formatLocale)(date);
 };
 
-const monthNameStrategies = {
-  standalone(monthIndex: number, monthFormat: Intl.DateTimeFormatOptions['month']): string {
-    const date = new Date(1999, monthIndex, 13, 1);
-    const messageLocale = localizationCoreUtils.locale();
+const getDateFormatLocale = (format: FormatObject | string): string => (
+  typeof format === 'string'
+    ? getEffectiveFormatLocale(undefined, undefined, format)
+    : getEffectiveFormatLocale(format, undefined, format.type)
+);
 
-    return getIntlFormatter({ month: monthFormat }, messageLocale)(date);
+const monthNameStrategies = {
+  standalone(
+    monthIndex: number,
+    monthFormat: Intl.DateTimeFormatOptions['month'],
+    locale: string,
+  ): string {
+    const date = new Date(1999, monthIndex, 13, 1);
+
+    return getIntlFormatter({ month: monthFormat }, locale)(date);
   },
-  format(monthIndex: number, monthFormat: Intl.DateTimeFormatOptions['month']): string {
+  format(
+    monthIndex: number,
+    monthFormat: Intl.DateTimeFormatOptions['month'],
+    locale: string,
+  ): string {
     const date = new Date(0, monthIndex, 13, 1);
-    const messageLocale = localizationCoreUtils.locale();
     const dateString = normalizeMonth(
-      getIntlFormatter({ day: 'numeric', month: monthFormat }, messageLocale)(date),
+      getIntlFormatter({ day: 'numeric', month: monthFormat }, locale)(date),
     );
     const parts = dateString.split(' ').filter((part) => !part.includes('13'));
 
@@ -222,7 +236,7 @@ const monthNameStrategies = {
       return parts[0].length > parts[1].length ? parts[0] : parts[1]; // NOTE: For "lt" locale
     }
 
-    return monthNameStrategies.standalone(monthIndex, monthFormat);
+    return monthNameStrategies.standalone(monthIndex, monthFormat, locale);
   },
 };
 
@@ -230,7 +244,11 @@ export default {
   engine(): string {
     return 'intl';
   },
-  getMonthNames(format: Format, type?: string): string[] {
+  getMonthNames(
+    format: Format,
+    type?: string,
+    locale = localizationCoreUtils.locale(),
+  ): string[] {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const intlFormats: Record<Exclude<Format, 'short'>, Intl.DateTimeFormatOptions['month']> = {
       wide: 'long',
@@ -244,11 +262,12 @@ export default {
     return Array.from(
       { length: 12 },
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      (_, monthIndex): string => monthNameStrategies[nameType](monthIndex, monthFormat),
+      (_, monthIndex): string => monthNameStrategies[nameType](monthIndex, monthFormat, locale),
     );
   },
 
-  getDayNames(format: Format): string[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDayNames(format: Format, type?: string, locale = localizationCoreUtils.locale()): string[] {
     const intlDayFormats: Record<Format, Intl.DateTimeFormatOptions['weekday']> = {
       wide: 'long',
       abbreviated: 'short',
@@ -256,29 +275,32 @@ export default {
       narrow: 'narrow',
     };
 
-    const messageLocale = localizationCoreUtils.locale();
     const getIntlDayNames = (
       dayFormat: Intl.DateTimeFormatOptions['weekday'],
     ): string[] => Array.from(
       { length: 7 },
       (_, dayIndex) => getIntlFormatter(
         { weekday: dayFormat },
-        messageLocale,
+        locale,
       )(new Date(0, 0, dayIndex)),
     );
 
     return getIntlDayNames(intlDayFormats[format || 'wide']);
   },
 
-  getPeriodNames(): string[] {
-    const messageLocale = localizationCoreUtils.locale();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getPeriodNames(
+    format?: Format,
+    type?: string,
+    locale = localizationCoreUtils.locale(),
+  ): string[] {
     const hour12Formatter = getIntlFormatter(
       { hour: 'numeric', hour12: true },
-      messageLocale,
+      locale,
     );
 
     return [1, 13].map((hours) => {
-      const hourNumberText = formatNumber(1); // NOTE: For "bn" locale
+      const hourNumberText = formatNumber(1, locale); // NOTE: For "bn" locale
       const timeParts = hour12Formatter(new Date(0, 0, 1, hours)).split(hourNumberText);
 
       if (timeParts.length !== 2) {
@@ -357,8 +379,14 @@ export default {
       formatter = (date: Date): string => normalizeMonth(this.format(date, format));
     }
 
+    const formatLocale = format ? getDateFormatLocale(format) : localizationCoreUtils.locale();
+    const dateParts = formatLocale === localizationCoreUtils.locale()
+      ? this
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      : bindDatePartsToLocale(this, formatLocale);
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.callBase(dateString, formatter ?? format);
+    return this.callBase(dateString, formatter ?? format, dateParts);
   },
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

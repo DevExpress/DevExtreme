@@ -11,6 +11,7 @@ import {
 } from '@ts/core/global_format_config';
 import type { DateFormatter, DateParser, Format } from '@ts/core/localization/date';
 import dateLocalization from '@ts/core/localization/date';
+import { bindDatePartsToLocale } from '@ts/core/localization/ldml/date.parser';
 import * as iteratorUtils from '@ts/core/utils/m_iterator';
 import { isObject } from '@ts/core/utils/m_type';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -48,6 +49,28 @@ const resolveGlobalizeLocale = (formatLocale: string): string => {
     Globalize.locale(currentLocale);
   }
 };
+
+interface GlobalizeInstance {
+  cldr: { main: (path: string) => unknown };
+  parseDate: (value: string, format?: GlobalizeDateFormatOptions | string) => Date | null;
+}
+
+const getGlobalizeByLocale = (formatLocale?: string): GlobalizeInstance => {
+  if (!formatLocale) {
+    return Globalize as GlobalizeInstance;
+  }
+
+  const resolvedLocale = resolveGlobalizeLocale(formatLocale);
+
+  return resolvedLocale === Globalize.locale().locale
+    ? Globalize as GlobalizeInstance
+    : new Globalize(resolvedLocale) as GlobalizeInstance;
+};
+
+const getCldrMain = <TValue>(
+  path: string,
+  formatLocale?: string,
+): TValue => getGlobalizeByLocale(formatLocale).cldr.main(path) as TValue;
 
 const getGlobalizeDateFormatter = (
   formatLocale: string,
@@ -179,47 +202,37 @@ if (Globalize?.formatDate) {
     },
 
     _getFormatStringByPath(path: string, formatLocale?: string): string {
-      const fullPath = `dates/calendars/gregorian/${path}`;
-      const currentLocale = Globalize.locale().locale;
-
-      if (!formatLocale) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return Globalize.locale().main(fullPath);
-      }
-
-      const resolvedLocale = resolveGlobalizeLocale(formatLocale);
-
-      if (resolvedLocale === currentLocale) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return Globalize.locale().main(fullPath);
-      }
-
-      Globalize.locale(resolvedLocale);
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return Globalize.locale().main(fullPath);
-      } finally {
-        Globalize.locale(currentLocale);
-      }
+      return getCldrMain<string>(`dates/calendars/gregorian/${path}`, formatLocale);
     },
 
-    getPeriodNames(format?: Format, type?: string): string[] {
+    getPeriodNames(format?: Format, type?: string, formatLocale?: string): string[] {
       const nameFormat = format || 'wide';
       const nameType = type === 'format' ? type : 'stand-alone';
 
-      const json: Record<string, string> = Globalize.locale().main(`dates/calendars/gregorian/dayPeriods/${nameType}/${nameFormat}`);
+      const json = getCldrMain<Record<string, string>>(
+        `dates/calendars/gregorian/dayPeriods/${nameType}/${nameFormat}`,
+        formatLocale,
+      );
       return [json.am, json.pm];
     },
 
-    getMonthNames(format: Format, type?: string): string[] {
-      const months: Record<string, string> = Globalize.locale().main(`dates/calendars/gregorian/months/${type === 'format' ? type : 'stand-alone'}/${format || 'wide'}`);
+    getMonthNames(format: Format, type?: string, formatLocale?: string): string[] {
+      const nameType = type === 'format' ? type : 'stand-alone';
+      const months = getCldrMain<Record<string, string>>(
+        `dates/calendars/gregorian/months/${nameType}/${format || 'wide'}`,
+        formatLocale,
+      );
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return iteratorUtils.map(months, (month: string): string => month);
     },
 
-    getDayNames(format: Format): string[] {
-      const days: Record<string, string> = Globalize.locale().main(`dates/calendars/gregorian/days/stand-alone/${format || 'wide'}`);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getDayNames(format: Format, type?: string, formatLocale?: string): string[] {
+      const days = getCldrMain<Record<string, string>>(
+        `dates/calendars/gregorian/days/stand-alone/${format || 'wide'}`,
+        formatLocale,
+      );
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return iteratorUtils.map(days, (day: string): string => day);
@@ -330,35 +343,45 @@ if (Globalize?.formatDate) {
         return undefined;
       }
 
-      if (!format || typeof format === 'function' || (isObject(format) && !this._isAcceptableFormat(format))) {
-        if (format) {
-          const parsedValue: Date | null | undefined = this.callBase(text, format);
-          if (parsedValue) {
-            return parsedValue;
-          }
-        }
+      if (typeof format === 'function') {
+        const parsedValue: Date | null | undefined = this.callBase(text, format);
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return parsedValue ?? Globalize.parseDate(text);
+      }
+
+      if (!format) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return Globalize.parseDate(text);
       }
 
-      if ((format as FormatObject).parser) {
-        // @ts-expect-error
-        return (format.parser as DateParser)(text);
+      const formatLocale = typeof format === 'string'
+        ? getEffectiveFormatLocale(undefined, undefined, format)
+        : getEffectiveFormatLocale(format, undefined, format.type);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const dateParts = bindDatePartsToLocale(this, formatLocale);
+      const parserFormat = getFormatterOptions(format) as FormatObject | string;
+
+      if (isObject(parserFormat) && !this._isAcceptableFormat(parserFormat)) {
+        const parsedValue: Date | null | undefined = this.callBase(text, format, dateParts);
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return parsedValue ?? getGlobalizeByLocale(formatLocale).parseDate(text);
       }
 
-      if (typeof format === 'string') {
-        // eslint-disable-next-line no-param-reassign
-        format = {
-          // @ts-expect-error
-          raw: this._getPatternByFormat(format) || format,
-        };
+      if ((parserFormat as FormatObject).parser) {
+        return ((parserFormat as FormatObject).parser as DateParser)(text);
       }
 
-      const parsedDate: Date | null | undefined = Globalize.parseDate(text, format);
+      const globalizeFormat = typeof parserFormat === 'string'
+        ? { raw: this._getPatternByFormat(parserFormat, formatLocale) || parserFormat }
+        : parserFormat;
+
+      const parsedDate: Date | null | undefined = getGlobalizeByLocale(formatLocale)
+        .parseDate(text, globalizeFormat);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return parsedDate ?? this.callBase(text, format);
+      return parsedDate ?? this.callBase(text, globalizeFormat, dateParts);
     },
 
     _isAcceptableFormat(format: FormatObject): boolean {
