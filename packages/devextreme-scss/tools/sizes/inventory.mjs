@@ -18,8 +18,8 @@
  *                    variable with no `!default`, a calc(), a @media condition. There is no knob,
  *                    so opening one means editing the shared layer, which is the base owners' call.
  *
- * The scan is tools/review/px-audit.mjs — the same module the gate and SCALES.md are built from, so
- * the inventory cannot claim a different set of places than the gate enforces.
+ * The scan is tools/review/px-audit.mjs — the same module the gate is built from, so the inventory
+ * cannot claim a different set of places than the gate enforces.
  */
 
 import { readFileSync, readdirSync, writeFileSync } from 'fs';

@@ -39,7 +39,6 @@
     "naming:check": "node tools/naming/derive-registries.mjs --check && node tools/naming/publish.mjs --check && node tools/review/reachability.mjs",
     "naming:publish": "node tools/naming/publish.mjs",
     "naming:registries": "node tools/naming/derive-registries.mjs",
-    "review:evidence": "node tools/review/evidence.mjs",
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
     "tokens:update": "node tools/tokens/update.mjs",
     "typecheck": "tsc -p tsconfig.json",
