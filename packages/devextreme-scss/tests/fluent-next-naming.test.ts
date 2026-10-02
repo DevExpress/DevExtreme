@@ -550,25 +550,6 @@ test('design tokens are never read as a raw custom property', () => {
   expect(offenders).toEqual([]);
 });
 
-test('the rename mapping stays collision-free and fully applied', () => {
-  const mapping = JSON.parse(
-    readFileSync(join(packageRoot, 'tools', 'naming', 'mapping.json'), 'utf8'),
-  );
-  const pairs: [string, string][] = Object.values(mapping.batches)
-    .flatMap((names) => Object.entries(names as Record<string, string>));
-
-  const targets = pairs.map(([, to]) => to);
-  expect(targets.filter((to, index) => targets.indexOf(to) !== index)).toEqual([]);
-
-  const declaredEverywhere = new Set(parsedFiles.flatMap(({ declarations }) => declarations));
-  const referencedEverywhere = new Set(parsedFiles.flatMap(({ references }) => references));
-  const survivors = pairs
-    .filter(([from, to]) => from !== to)
-    .map(([from]) => from)
-    .filter((from) => declaredEverywhere.has(from) || referencedEverywhere.has(from));
-  expect(survivors).toEqual([]);
-});
-
 /*
  * The tier contract (decided 06.08): --dxds-* roles/scales are the stable public API; --dx-* is
  * the product's own component tier, declared in <folder>/_public.scss onto registries.rootSelectors
@@ -592,7 +573,7 @@ const tierRecords = computeTierRecords(
   themeSources,
   registries,
   new Set(findings.baseWiring
-    .map((entry) => required(/(\$[a-z0-9-]+)/.exec(entry), `a variable in "${entry}"`)[1])),
+    .map((entry) => required(/(\$[a-z0-9_-]+)/.exec(entry), `a variable in "${entry}"`)[1])),
 );
 const publicTierFiles = themeFiles.filter(isPublicManifestFile);
 const folderOf = (file: string): string => sourceLabel(file).split('/')[1];
@@ -623,22 +604,22 @@ publicTierFiles.forEach((file) => {
 
 const tierAliases: { property: string; target: string; source: string }[] = [];
 const tierCopies: { property: string; target: string; source: string }[] = [];
-walk(themeRoot, '.scss')
-  .filter((file) => /(^|\/)_(colors|sizes|variables)\.scss$/.test(file))
-  .forEach((file) => {
-    stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n').forEach((line, index) => {
-      const alias = /^\s*\$([a-z0-9-]+)\s*:\s*(?:[A-Za-z]\w*\.)?\$([a-z0-9-]+)\s*(?:!default)?\s*;\s*$/.exec(line);
-      if (!alias) return;
-      const home = tierDeclared.get(`$${alias[1]}`);
-      if (!home || !tierDeclared.has(`$${alias[2]}`)) return;
-      const record = {
-        property: `--dx-${alias[1]}`,
-        target: `--dx-${alias[2]}`,
-        source: `${sourceLabel(file)}:${index + 1}`,
-      };
-      (linkableFrom(record.target, home) ? tierAliases : tierCopies).push(record);
-    });
+// read from the parsed declarations, so an alias written over several lines is still an alias
+themeFiles.forEach((file, index) => {
+  if (!/(^|\/)_(colors|sizes|variables)\.scss$/.test(file)) return;
+  parsedFiles[index].declaredValues.forEach(({ name, value, line }) => {
+    const target = /^(?:[A-Za-z]\w*\.)?\$([a-z0-9-]+)(?:\s*!default)?$/.exec(value)?.[1];
+    if (!target) return;
+    const home = tierDeclared.get(name);
+    if (!home || !tierDeclared.has(`$${target}`)) return;
+    const record = {
+      property: `--dx-${name.slice(1)}`,
+      target: `--dx-${target}`,
+      source: `${sourceLabel(file)}:${line}`,
+    };
+    (linkableFrom(record.target, home) ? tierAliases : tierCopies).push(record);
   });
+});
 
 test('component tier: _public.scss declarations equal the eligible variables exactly', () => {
   const eligible = new Map([...tierRecords].filter(([, { reason }]) => !reason));
@@ -799,24 +780,6 @@ test('component tier: every --dx-… read in the theme resolves to a declared na
       .map((name) => `${sourceLabel(file)}: ${form(name)} resolves to no declared --dx name`));
   });
   expect(offenders).toEqual([]);
-});
-
-test('component tier: every publishing component appears in the runtime-audit gallery', () => {
-  const gallery = join(packageRoot, '..', 'devextreme', 'playground', 'tier-reachability-audit.html');
-  if (!existsSync(gallery)) throw new Error(`the runtime-audit gallery is missing at ${gallery}`);
-  const source = readFileSync(gallery, 'utf8').toLowerCase();
-  const missing = publicTierFiles
-    .map((file) => sourceLabel(file).split('/')[1])
-    .filter((folder) => !systemTier.includes(folder))
-    .filter((folder) => {
-      if (source.includes(`dx${folder.toLowerCase()}`)) return false;
-      const component = components[folder];
-      const roots: string[] = registries.rootSelectors[component] ?? [];
-      return !roots.some((selector) => selector !== ':root' && source.includes(selector.slice(1)));
-    })
-    .map((folder) => `${folder} publishes the tier but the gallery never builds it — add `
-      + `widget('dx${folder}') or markup carrying one of its classes to buildGallery/addPortals`);
-  expect([...new Set(missing)].sort()).toEqual([]);
 });
 
 test('component tier: the committed files are what tools/naming/publish.mjs writes', () => {

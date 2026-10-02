@@ -86,9 +86,8 @@
     },
     "overrides": [
         {
-            "comment": "fluent-next follows the naming standard: strict kebab-case, no underscores and no BEM separators, so a variable name maps 1:1 onto a public --dx-* custom property. cardView is excluded because its own cross-theme BEM system is a documented exemption.",
+            "comment": "fluent-next follows the naming standard: strict kebab-case, no underscores and no BEM separators, so a variable name maps 1:1 onto a public --dx-* custom property. cardView gets the package-wide pattern back in an override below.",
             "files": ["scss/widgets/fluent-next/**/*.scss"],
-            "ignoreFiles": ["scss/widgets/fluent-next/cardView/**/*.scss"],
             "rules": {
                 "scss/dollar-variable-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
             }
@@ -113,6 +112,27 @@
             "rules": {
                 "declaration-property-value-disallowed-list": [
                     { "/.*/": ["/var\\(\\s*--dxds-/", "/var\\(\\s*--dx-/"] },
+                    { "message": "Read a design token through the ds bridge (ds.$name), not as a custom property: the bridge fails the build on an unknown name, a custom property compiles and degrades silently." }
+                ]
+            }
+        },
+        {
+            "comment": "cardView keeps its own cross-theme BEM names ($cardview-card__content-padding), a documented exemption from the kebab-case standard; only the naming rule is relaxed here, every other rule still applies.",
+            "files": ["scss/widgets/fluent-next/cardView/**/*.scss"],
+            "rules": {
+                "scss/dollar-variable-pattern": "^[a-z][0-9a-z_-]*$"
+            }
+        },
+        {
+            "comment": "cardView's declaration files read the component tier as var(--dx-card-view-…) on purpose: $cardview-* hands the live value to the shared base layer, and $card-view-a: var(--dx-card-view-b) is a live link from one tier name to another. A wrong name cannot pass silently - fluent-next-naming.test.ts requires every var(--dx-…) in the theme to resolve to a declared name - so only the raw design-token form stays banned.",
+            "files": [
+                "scss/widgets/fluent-next/cardView/_colors.scss",
+                "scss/widgets/fluent-next/cardView/_sizes.scss",
+                "scss/widgets/fluent-next/cardView/_variables.scss"
+            ],
+            "rules": {
+                "declaration-property-value-disallowed-list": [
+                    { "/.*/": ["/var\\(\\s*--dxds-/"] },
                     { "message": "Read a design token through the ds bridge (ds.$name), not as a custom property: the bridge fails the build on an unknown name, a custom property compiles and degrades silently." }
                 ]
             }
