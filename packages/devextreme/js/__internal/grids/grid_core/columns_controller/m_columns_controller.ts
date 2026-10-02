@@ -1424,7 +1424,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   private _customizeColumns(columns: Column[]): void {
-    const { customizeColumns } = this.option();
+    const customizeColumns = this.option('customizeColumns');
 
     if (customizeColumns) {
       const hasOwnerBand = columns.some((column) => isObject(column.ownerBand));
