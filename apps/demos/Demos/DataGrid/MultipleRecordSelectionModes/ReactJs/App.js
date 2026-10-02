@@ -13,7 +13,7 @@ const selectAllModes = ['allPages', 'page'];
 const App = () => {
   const [allMode, setAllMode] = useState('allPages');
   const [checkBoxesMode, setCheckBoxesMode] = useState(
-    themes.current().startsWith('generic') ? 'onClick' : 'always',
+    () => themes.current().startsWith('generic') ? 'onClick' : 'always',
   );
   const onCheckBoxesModeChanged = useCallback(({ value }) => {
     setCheckBoxesMode(value);

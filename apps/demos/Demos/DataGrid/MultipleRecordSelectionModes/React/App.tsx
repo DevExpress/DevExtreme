@@ -20,7 +20,7 @@ const selectAllModes = ['allPages', 'page'];
 const App = () => {
   const [allMode, setAllMode] = useState<DataGridTypes.SelectAllMode>('allPages');
   const [checkBoxesMode, setCheckBoxesMode] = useState<DataGridTypes.SelectionColumnDisplayMode>(
-    themes.current().startsWith('generic') ? 'onClick' : 'always',
+    () => themes.current().startsWith('generic') ? 'onClick' : 'always',
   );
 
   const onCheckBoxesModeChanged = useCallback(({ value }) => {
