@@ -2006,6 +2006,7 @@ QUnit.module('Columns resizing', {
 
         // assert
         assert.ok(resizeController._isReadyResizing, 'resizing is ready');
+        assert.equal(resizeController._columnsSeparatorView._testPointerEventsName, 'auto', 'pointerEventsName');
         assert.equal(resizeController._columnsSeparatorView._testCursorName, 'col-resize', 'cursorName');
         assert.equal(resizeController._columnsSeparatorView._testPosX, -9750 - resizeController._columnsSeparatorView.width() / 2, 'posX of columnsSeparator');
         assert.deepEqual(resizeController._targetPoint, { x: -9750, columnIndex: 1, index: 2, y: -9995 }, 'targetPoint');
@@ -2113,6 +2114,7 @@ QUnit.module('Columns resizing', {
 
         // assert
         assert.ok(!resizeController._isReadyResizing, 'resizing is not ready');
+        assert.equal(resizeController._columnsSeparatorView._testPointerEventsName, '', 'pointerEventsName');
         assert.equal(resizeController._columnsSeparatorView._testCursorName, '', 'cursorName');
         assert.strictEqual(resizeController._columnsSeparatorView._testPosX, null, 'posX'); // T1027834
         assert.equal(resizeController._pointsByColumns, null, 'points by columns is reset');
@@ -2276,6 +2278,7 @@ QUnit.module('Columns resizing', {
         // assert
         assert.ok(isPointsUpdated, 'points by columns is updated');
         assert.ok(!resizeController._columnsSeparatorView._isShown, 'columnsSeparator is hidden');
+        assert.strictEqual(resizeController._columnsSeparatorView._testPointerEventsName, '', 'pointer-events is reset');
         assert.strictEqual(resizeController._columnsSeparatorView._testCursorName, '', 'cursor is down');
         assert.ok(!resizeController._isResizing, 'columnsResizer is not resized');
         assert.ok(!resizeController._isReadyResizing, 'columnsResizer is not ready resized');
