@@ -38,7 +38,7 @@ import {
 import type { ColumnsController } from './m_columns_controller';
 import type {
   BandColumnsCache, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionChangeArgs,
-  ColumnOptionGetter, ColumnOptionSetter, ColumnsChanges, ColumnUserState,
+  ColumnOptionGetter, ColumnOptionSetter, ColumnsChanges, ColumnsControllerOptions, ColumnUserState,
   DropLocationNames, GroupColumn, ValueSerializers,
 } from './types';
 
@@ -723,7 +723,7 @@ export function updateColumnChanges(
 }
 
 export const fireColumnsChanged = (that: ColumnsController): void => {
-  const { onColumnsChanging } = that.option();
+  const { onColumnsChanging } = that.option() as ColumnsControllerOptions;
   const columnChanges = that._columnChanges;
   const reinitOptionNames = ['dataField', 'lookup', 'dataType', 'columns'] as const;
   const needReinit = (
