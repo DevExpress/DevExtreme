@@ -531,21 +531,64 @@ const footerView = (
 ) => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerStickyColumnsExtender extends Base {
+  protected getSeparatorBounds(): { left: number; right: number } {
+    const bounds = super.getSeparatorBounds();
+
+    if (this.option('columnFixing.legacyMode') === true
+      || !this._columnsController.getStickyColumns().length) {
+      return bounds;
+    }
+
+    const $cells = this._columnHeadersView.getColumnElements();
+    const $cell = $cells?.eq(this._resizingInfo.currentColumnIndex);
+    const addWidgetPrefix = this.addWidgetPrefix.bind(this);
+
+    if (!$cells || !$cell?.length || GridCoreStickyColumnsDom.isFixedCell($cell, addWidgetPrefix)) {
+      return bounds;
+    }
+
+    const $container = $(this._columnHeadersView.getContent());
+    const { left, right } = GridCoreStickyColumnsDom
+      .getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
+    const offsetLeft = ($container.offset()?.left ?? 0) - getBoundingRect($container.get(0)).left;
+
+    return {
+      left: Math.max(bounds.left, left + offsetLeft),
+      right: Math.min(bounds.right, right + offsetLeft),
+    };
+  }
+
   protected getSeparatorOffsetX($cell: dxElementWrapper): number {
     // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
 
     if (hasStickyColumns) {
       const $container = $(this._columnHeadersView.getContent());
+      const addWidgetPrefix = this.addWidgetPrefix.bind(this);
       const isFixedCellPinnedToRight = GridCoreStickyColumnsDom.isFixedCellPinnedToRight(
         $cell,
         $container,
-        this.addWidgetPrefix.bind(this),
+        addWidgetPrefix,
       );
       const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
+      const nextColumnIndex = this._resizingInfo?.nextColumnIndex;
+      const $nextCell = this._columnHeadersView.getColumnElements()?.eq(nextColumnIndex);
+      const isNextCellPinnedToRight = !isWidgetResizingMode
+        && $nextCell !== undefined && $nextCell.length > 0
+        && GridCoreStickyColumnsDom.isFixedCellPinnedToRight(
+          $nextCell,
+          $container,
+          addWidgetPrefix,
+        );
 
-      if (isWidgetResizingMode && isFixedCellPinnedToRight) {
-        return $cell.offset()?.left ?? 0;
+      if (isFixedCellPinnedToRight) {
+        return isNextCellPinnedToRight
+          ? super.getSeparatorOffsetX($cell)
+          : $cell.offset()?.left ?? 0;
+      }
+
+      if (isNextCellPinnedToRight) {
+        return $nextCell.offset()?.left ?? 0;
       }
     }
 
