@@ -10,6 +10,7 @@ import type { EventInfo } from '@js/events';
 import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
+import type { ActionConfig } from '@ts/core/widget/component';
 
 import type { EditingController } from './editing/m_editing';
 import type { FilterValue } from './filter/types';
@@ -55,14 +56,20 @@ type OptionsMethod<TOptions> = (() => TOptions)
 
 type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions>, 'option'>;
 
+export type CreateComponentOptions<TComponent> = TComponent extends {
+  _getDefaultOptions: () => infer TOptions;
+}
+  ? string extends keyof TOptions
+    ? object
+    : Partial<TOptions> & { integrationOptions?: Record<string, unknown> }
+  : TComponent extends Component<infer TOptions>
+    ? Partial<TOptions> | Record<string, unknown>
+    : Record<string, unknown>;
+
 export type CreateComponent<TComponent extends Component<any>> = (
   $container: dxElementWrapper,
   component: new (...args) => TComponent,
-  options?: TComponent extends { _getDefaultOptions: () => infer TOptions }
-    ? string extends keyof TOptions ? object : Partial<TOptions> & { integrationOptions?: Record<string, unknown> }
-    : TComponent extends Component<infer TOptions>
-      ? Partial<TOptions> | Record<string, unknown>
-      : Record<string, unknown>,
+  options?: CreateComponentOptions<TComponent>,
 ) => TComponent;
 
 export interface InternalGrid extends GridBaseType {
@@ -76,9 +83,9 @@ export interface InternalGrid extends GridBaseType {
 
   _updateLockCount: number;
 
-  _requireResize: boolean;
+  _requireResize?: boolean;
 
-  _optionCache: any;
+  _optionCache?: Record<string, unknown>;
 
   _fireContentReadyAction: any;
 
@@ -94,14 +101,18 @@ export interface InternalGrid extends GridBaseType {
 
   _disposed: any;
 
-  _createComponent: CreateComponent<any>;
+  _createComponent: <TComponent extends Component<object>>(
+    $container: dxElementWrapper,
+    component: new (...args) => TComponent,
+    options?: CreateComponentOptions<TComponent>,
+  ) => TComponent;
 
-  _createAction: any;
+  _createAction: (actionSource: unknown, config?: ActionConfig) => ModuleItemAction;
 
-  _createActionByOption: any;
-  isReady: any;
+  _createActionByOption: (optionName: string, config?: ActionConfig) => ModuleItemAction;
+  isReady: () => boolean;
 
-  _setOptionWithoutOptionChange: any;
+  _setOptionWithoutOptionChange: (name: string, value: unknown) => void;
 }
 
 type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
@@ -278,6 +289,20 @@ type ControllersExtender = {
 type ViewsExtender = {
   [P in keyof Views]: (Base: ModuleType<Views[P]>) => ModuleType<Views[P]>;
 };
+
+export interface ModuleItemCallbackFlags {
+  stopOnFalse?: boolean;
+  unique?: boolean;
+  syncStrategy?: boolean;
+}
+
+export type ModuleItemAction = (event?: unknown) => unknown;
+
+export type ComponentInstanceType = Record<string, unknown>;
+
+export type ModuleItemTypeCore = new(
+  componentInstance: ComponentInstanceType,
+) => ModuleItem & { name: string };
 
 export interface Module {
   controllers?: Partial<ControllerTypes>;

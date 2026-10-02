@@ -1,21 +1,31 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable max-classes-per-file */
-
+import type { template } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import type { Component } from '@js/core/component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
-// @ts-expect-error
-import { grep } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
+import { grep } from '@ts/core/utils/m_common';
+import type { ActionConfig } from '@ts/core/widget/component';
 
 import type {
-  Controllers, GridPropertyType, InternalGrid, InternalGridOptions, Module,
-  ModuleType,
+  ComponentInstanceType,
+  Controllers,
+  CreateComponentOptions,
+  GridPropertyType,
+  InternalGrid,
+  InternalGridOptions,
+  Module,
+  ModuleItemAction,
+  ModuleItemCallbackFlags,
+  ModuleItemTypeCore,
   OptionChanged,
   Views,
 } from './m_types';
@@ -25,53 +35,54 @@ import { updateViewsBorders } from './views/utils/update_views_borders';
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
 export class ModuleItem {
-  public _updateLockCount: any;
+  public _updateLockCount: number;
 
   public component!: InternalGrid;
 
-  public _actions: any;
+  public _actions: Record<string, ModuleItemAction | undefined>;
 
-  public _actionConfigs: any;
+  public _actionConfigs: Record<string, ActionConfig | undefined>;
 
-  constructor(component) {
-    const that = this;
-    that._updateLockCount = 0;
-    that.component = component;
-    that._actions = {};
-    that._actionConfigs = {};
+  constructor(component: InternalGrid) {
+    this._updateLockCount = 0;
+    this.component = component;
+    this._actions = {};
+    this._actionConfigs = {};
 
-    each(this.callbackNames() || [], function (index, name) {
-      const flags = that.callbackFlags(name) || {};
+    (this.callbackNames() ?? []).forEach((name) => {
+      const flags = this.callbackFlags(name) ?? {};
 
       flags.unique = true;
       flags.syncStrategy = true;
 
-      that[this] = Callbacks(flags);
+      this[name] = Callbacks(flags);
     });
   }
 
-  protected _endUpdateCore() { }
+  protected _endUpdateCore(): void { }
 
-  public init() { }
+  public init(): void { }
 
   protected callbackNames(): string[] | undefined {
     return undefined;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected callbackFlags(name): any { }
+  protected callbackFlags(name: string): ModuleItemCallbackFlags | undefined {
+    return undefined;
+  }
 
   public publicMethods(): string[] {
     return [];
   }
 
-  public beginUpdate() {
-    this._updateLockCount++;
+  public beginUpdate(): void {
+    this._updateLockCount += 1;
   }
 
-  public endUpdate() {
+  public endUpdate(): void {
     if (this._updateLockCount > 0) {
-      this._updateLockCount--;
+      this._updateLockCount -= 1;
       if (!this._updateLockCount) {
         this._endUpdateCore();
       }
@@ -80,69 +91,71 @@ export class ModuleItem {
 
   public option(): InternalGridOptions;
   public option(options: InternalGridOptions): void;
-  public option<TPropertyName extends string>(name: TPropertyName): GridPropertyType<InternalGridOptions, TPropertyName>;
-  public option<TPropertyName extends string>(name: TPropertyName, value: GridPropertyType<InternalGridOptions, TPropertyName>): void;
-  public option(name?) {
-    const { component } = this;
-    const optionCache = component._optionCache;
+  public option<TPropertyName extends string>(
+    name: TPropertyName,
+  ): GridPropertyType<InternalGridOptions, TPropertyName>;
+  public option<TPropertyName extends string>(
+    name: TPropertyName,
+    value: GridPropertyType<InternalGridOptions, TPropertyName>,
+  ): void;
+  public option(...args: unknown[]): unknown {
+    const optionCache = this.component._optionCache;
 
-    if (arguments.length === 1 && optionCache) {
+    if (args.length === 1 && optionCache) {
+      const name = args[0] as string;
       if (!(name in optionCache)) {
-        optionCache[name] = component.option(name);
+        optionCache[name] = this.component.option(name);
       }
       return optionCache[name];
     }
 
-    // @ts-expect-error
-    return component.option.apply(component, arguments);
+    // @ts-expect-error a spread argument can't match the overloads of option()
+    return this.component.option(...args);
   }
 
   protected _silentOption<TPropertyName extends string>(
     name: TPropertyName,
     value: GridPropertyType<InternalGridOptions, TPropertyName>,
   ): void {
-    const { component } = this;
-    const optionCache = component._optionCache;
+    const optionCache = this.component._optionCache;
 
     if (optionCache) {
       optionCache[name] = value;
     }
 
-    return component._setOptionWithoutOptionChange(name, value);
+    return this.component._setOptionWithoutOptionChange(name, value);
   }
 
-  protected localize(name) {
+  protected localize(name: string): string {
     const optionCache = this.component._optionCache;
 
     if (optionCache) {
       if (!(name in optionCache)) {
         optionCache[name] = messageLocalization.format(name);
       }
-      return optionCache[name];
+      return optionCache[name] as string;
     }
 
     return messageLocalization.format(name);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected on(event, callback) {
-    // @ts-expect-error
-    return this.component.on.apply(this.component, arguments);
+  protected on(event: string, callback: Function): unknown {
+    return this.component.on(event, callback);
   }
 
-  protected off() {
-    // @ts-expect-error
-    return this.component.off.apply(this.component, arguments);
+  protected off(...args: unknown[]): unknown {
+    // @ts-expect-error a spread argument can't match the overloads of off()
+    return this.component.off(...args);
   }
 
-  public optionChanged(args: OptionChanged) {
+  public optionChanged(args: OptionChanged): void {
     if (args.name in this._actions) {
       this.createAction(args.name, this._actionConfigs[args.name]);
       args.handled = true;
     }
   }
 
-  protected getAction(actionName) {
+  protected getAction(actionName: string): ModuleItemAction | undefined {
     return this._actions[actionName];
   }
 
@@ -150,7 +163,7 @@ export class ModuleItem {
     name: string,
     value: string | number | boolean | undefined,
     $target: dxElementWrapper,
-  ) {
+  ): void {
     if (!isDefined(value)) {
       return;
     }
@@ -166,14 +179,10 @@ export class ModuleItem {
     }
   }
 
-  public _createComponent<TComponent extends Component<any>>(
+  public _createComponent<TComponent extends Component<object>>(
     $container: dxElementWrapper,
     component: new (...args) => TComponent,
-    options?: TComponent extends { _getDefaultOptions: () => infer TOptions }
-      ? string extends keyof TOptions ? object : Partial<TOptions> & { integrationOptions?: Record<string, unknown> }
-      : TComponent extends Component<infer TOptions>
-        ? Partial<TOptions> | Record<string, unknown>
-        : Record<string, unknown>,
+    options?: CreateComponentOptions<TComponent>,
   ): TComponent {
     return this.component._createComponent(
       $container,
@@ -186,10 +195,15 @@ export class ModuleItem {
     return this.component._controllers[name];
   }
 
-  public createAction(actionName, config?) {
+  public createAction(actionName: string, config?: ActionConfig): undefined;
+  public createAction(actionName: Function, config?: ActionConfig): (e: unknown) => void;
+  public createAction(
+    actionName: string | Function,
+    config?: ActionConfig,
+  ): ((e: unknown) => void) | undefined {
     if (isFunction(actionName)) {
       const action = this.component._createAction(actionName.bind(this), config);
-      return function (e) {
+      return function eventHandler(e: unknown): void {
         action({ event: e });
       };
     }
@@ -199,32 +213,31 @@ export class ModuleItem {
     return undefined;
   }
 
-  public executeAction(actionName, options): unknown {
+  public executeAction(actionName: string, options: unknown): unknown {
     const action = this._actions[actionName];
 
     return action && action(options);
   }
 
-  public dispose() {
-    const that = this;
-    each(that.callbackNames() || [], function () {
-      that[this].empty();
+  public dispose(): void {
+    (this.callbackNames() ?? []).forEach((name) => {
+      this[name].empty();
     });
   }
 
-  public addWidgetPrefix(className) {
+  public addWidgetPrefix(className?: string | null): string {
     const componentName = this.component.NAME;
 
     return `dx-${componentName.slice(2).toLowerCase()}${className ? `-${className}` : ''}`;
   }
 
-  public getWidgetContainerClass() {
+  public getWidgetContainerClass(): string {
     const containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : 'container';
 
     return this.addWidgetPrefix(containerName);
   }
 
-  public elementIsInsideGrid($element) {
+  public elementIsInsideGrid($element: dxElementWrapper): boolean {
     const $gridElement = $element.closest(`.${this.getWidgetContainerClass()}`).parent();
 
     return $gridElement.is(this.component.$element());
@@ -244,33 +257,33 @@ export class ViewController extends Controller {
 }
 
 export class View extends ModuleItem {
-  protected _requireReady: any;
+  protected _requireReady?: boolean;
 
-  public _requireRender: any;
+  public _requireRender?: boolean;
 
-  public _$element: any;
+  public _$element?: dxElementWrapper;
 
-  public _$parent: any;
+  public _$parent?: dxElementWrapper;
 
-  public name: any;
+  public name!: string;
 
-  public renderCompleted: any;
+  public renderCompleted: Callback<[unknown?]>;
 
-  public isResizing: any;
+  public isResizing?: boolean;
 
-  public resizeCompleted: any;
+  public resizeCompleted: Callback<[]>;
 
-  constructor(component) {
+  constructor(component: InternalGrid) {
     super(component);
     this.renderCompleted = Callbacks();
     this.resizeCompleted = Callbacks();
   }
 
-  public _isReady() {
+  public _isReady(): boolean {
     return this.component.isReady();
   }
 
-  protected _endUpdateCore() {
+  protected _endUpdateCore(): void {
     super._endUpdateCore();
 
     if (!this._isReady() && this._requireReady) {
@@ -283,26 +296,30 @@ export class View extends ModuleItem {
     }
   }
 
-  public _invalidate(requireResize?, requireReady?) {
+  public _invalidate(requireResize?: boolean, requireReady?: boolean): void {
     this._requireRender = true;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- OR of two flags
     this.component._requireResize = hasWindow() && (this.component._requireResize || requireResize);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- OR of two flags
     this._requireReady = this._requireReady || requireReady;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _renderCore(options?): any { }
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-invalid-void-type -- a view that renders synchronously returns nothing
+  protected _renderCore(options?: unknown): DeferredObj<unknown> | void { }
 
-  protected _resizeCore() { }
+  protected _resizeCore(): void { }
 
-  public _parentElement() {
+  public _parentElement(): dxElementWrapper | undefined {
     return this._$parent;
   }
 
-  public element() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use untyped jQuery API
+  public element(): any {
     return this._$element;
   }
 
-  public getElementHeight() {
+  public getElementHeight(): number {
     const $element = this.element();
 
     if (!$element) return 0;
@@ -311,18 +328,19 @@ export class View extends ModuleItem {
     const marginBottom = parseFloat($element.css('marginBottom')) || 0;
     const { offsetHeight } = $element.get(0);
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- element() returns any
     return offsetHeight + marginTop + marginBottom;
   }
 
-  public isVisible() {
+  public isVisible(): boolean {
     return true;
   }
 
-  public getTemplate(name) {
+  public getTemplate(name: template): FunctionTemplate {
     return this.component._getTemplate(name);
   }
 
-  public getView(name) {
+  public getView<T extends keyof Views>(name: T): Views[T] {
     return this.component._views[name];
   }
 
@@ -335,18 +353,20 @@ export class View extends ModuleItem {
     };
   }
 
-  public render($parent?, options?) {
+  public render($parent?: dxElementWrapper | null, options?: unknown): void {
     let $element = this._$element;
     const isVisible = this.isVisible();
 
-    if (!$element && !$parent) return;
-
-    this._requireReady = false;
-
     if (!$element) {
-      $element = this._$element = $('<div>').appendTo($parent);
+      if (!$parent) {
+        return;
+      }
+      this._$element = $('<div>').appendTo($parent);
+      $element = this._$element;
       this._$parent = $parent;
     }
+
+    this._requireReady = false;
 
     $element.toggleClass('dx-hidden', !isVisible);
 
@@ -368,14 +388,14 @@ export class View extends ModuleItem {
     }
   }
 
-  public resize() {
+  public resize(): void {
     this.isResizing = true;
     this._resizeCore();
     this.resizeCompleted.fire();
     this.isResizing = false;
   }
 
-  public focus(preventScroll) {
+  public focus(preventScroll?: boolean): void {
     this.element().get(0).focus({ preventScroll });
   }
 }
@@ -399,13 +419,20 @@ function getExtendedTypes(
   return extendTypes;
 }
 
-function registerPublicMethods(componentInstance, name: string, moduleItem): void {
+function registerPublicMethods(
+  componentInstance: ComponentInstanceType,
+  name: string,
+  moduleItem: ModuleItem,
+): void {
   const publicMethods = moduleItem.publicMethods();
   if (publicMethods) {
-    each(publicMethods, (_, methodName) => {
+    publicMethods.forEach((methodName) => {
       if (moduleItem[methodName]) {
         if (!componentInstance[methodName]) {
-          componentInstance[methodName] = (...args: unknown[]): unknown => moduleItem[methodName](...args);
+          componentInstance[methodName] = (...args: unknown[]): unknown => (
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- looked up by name
+            moduleItem[methodName](...args)
+          );
         } else {
           throw errors.Error('E1005', methodName);
         }
@@ -415,11 +442,9 @@ function registerPublicMethods(componentInstance, name: string, moduleItem): voi
     });
   }
 }
-type ComponentInstanceType = Record<string, unknown>;
-type ModuleItemTypeCore = new(componentInstance: ComponentInstanceType) => { name: string };
 export function processModules(
   componentInstance: ComponentInstanceType,
-  componentClass: { modules: [Module & { name: string }]; modulesOrder: any },
+  componentClass: { modules: [Module & { name: string }]; modulesOrder?: string[] },
 ): void {
   const { modules } = componentClass;
   const { modulesOrder } = componentClass;
@@ -501,16 +526,24 @@ export function processModules(
   componentInstance._views = createModuleItems(viewTypes);
 }
 
-const callModuleItemsMethod = function (that, methodName, args?) {
-  args = args || [];
+const callModuleItemsMethod = function callModuleItemsMethod(
+  that: Partial<Pick<InternalGrid, '_controllers' | '_views'>>,
+  methodName: string,
+  args?: unknown[],
+): void {
+  const methodArgs = args ?? [];
   if (that._controllers) {
-    each(that._controllers, function () {
-      this[methodName] && this[methodName].apply(this, args);
+    each(that._controllers, function callControllerMethod() {
+      if (this[methodName]) {
+        this[methodName](...methodArgs);
+      }
     });
   }
   if (that._views) {
-    each(that._views, function () {
-      this[methodName] && this[methodName].apply(this, args);
+    each(that._views, function callViewMethod() {
+      if (this[methodName]) {
+        this[methodName](...methodArgs);
+      }
     });
   }
 };
@@ -524,11 +557,14 @@ export default {
 
   Controller,
 
-  registerModule(name, module) {
+  registerModule(
+    name: string,
+    module: (Module | Record<string, unknown>) & { name?: string },
+  ): void {
     const { modules } = this;
 
-    for (let i = 0; i < modules.length; i++) {
-      if (modules[i].name === name) {
+    for (const registeredModule of modules) {
+      if (registeredModule.name === name) {
         return;
       }
     }
@@ -536,12 +572,12 @@ export default {
     modules.push(module);
   },
 
-  registerModulesOrder(moduleNames) {
+  registerModulesOrder(moduleNames: string[]): void {
     this.modulesOrder = moduleNames;
   },
 
-  unregisterModule(name) {
-    this.modules = grep(this.modules, (module) => module.name !== name);
+  unregisterModule(name: string): void {
+    this.modules = grep(this.modules, (module) => module.name !== name, false);
   },
 
   processModules,

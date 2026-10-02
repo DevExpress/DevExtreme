@@ -15,6 +15,7 @@ import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helper
 
 import { AIChat } from '../../ai_chat/ai_chat';
 import type { AIChatOptions } from '../../ai_chat/types';
+import type { InternalGrid } from '../../m_types';
 import { AIAssistantView } from '../ai_assistant_view';
 import { createConfirmDialog } from '../utils';
 
@@ -99,7 +100,7 @@ const createAIAssistantView = ({
     option: optionMock,
   };
 
-  const aiAssistantView = new AIAssistantView(mockComponent);
+  const aiAssistantView = new AIAssistantView(mockComponent as unknown as InternalGrid);
   aiAssistantView.init();
   if (render) {
     aiAssistantView.render($container);

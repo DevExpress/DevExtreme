@@ -133,6 +133,7 @@ class DataGrid extends GridCoreWidget<Properties> {
     // @ts-expect-error
     gridCore.processModules(that, gridCore as any);
 
+    // @ts-expect-error the widget's _controllers and _views are private
     gridCore.callModuleItemsMethod(that, 'init');
   }
 
