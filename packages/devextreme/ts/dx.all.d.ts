@@ -697,12 +697,11 @@ declare module DevExpress {
    * [descr:DOMComponentOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface DOMComponentOptions<TComponent>
-    extends ComponentOptions<
-      DevExpress.common.core.events.EventInfo<TComponent>,
-      DevExpress.common.core.events.InitializedEventInfo<TComponent>,
-      DevExpress.DOMComponent.OptionChangedEventInfo<TComponent>
-    > {
+  export interface DOMComponentOptions<TComponent> extends ComponentOptions<
+    DevExpress.common.core.events.EventInfo<TComponent>,
+    DevExpress.common.core.events.InitializedEventInfo<TComponent>,
+    DevExpress.DOMComponent.OptionChangedEventInfo<TComponent>
+  > {
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -2070,7 +2069,15 @@ declare module DevExpress.common.charts {
   };
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
-  export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+  export type DashStyle =
+    | 'solid'
+    | 'dash'
+    | 'dot'
+    | 'longDash'
+    | `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`
+    | `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`
+    | `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`
+    | `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`;
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
   /**
    * [descr:Font]
@@ -3262,8 +3269,10 @@ declare module DevExpress.common.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface AbstractStoreOptions<TItem = any, TKey = any>
-    extends StoreOptions<TItem, TKey> {
+  export interface AbstractStoreOptions<
+    TItem = any,
+    TKey = any
+  > extends StoreOptions<TItem, TKey> {
     /**
      * [descr:StoreOptions.onLoaded]
      */
@@ -7551,9 +7560,8 @@ declare module DevExpress.core.utils {
     * [descr:DxPromise]
     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
     */
-   export type DxPromise<T = void> = {} extends PromiseType<T>
-    ? Promise<T>
-    : PromiseType<T>;
+   export type DxPromise<T = void> =
+    {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
 }
 declare module DevExpress.data {
   /**
@@ -8554,8 +8562,7 @@ declare module DevExpress.fileManagement {
    * @deprecated [depNote:CustomFileSystemProviderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface CustomFileSystemProviderOptions
-    extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
+  export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**
      * [descr:CustomFileSystemProviderOptions.abortFileUpload]
      */
@@ -8846,8 +8853,7 @@ declare module DevExpress.fileManagement {
    * @deprecated [depNote:ObjectFileSystemProviderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface ObjectFileSystemProviderOptions
-    extends FileSystemProviderBaseOptions<ObjectFileSystemProvider> {
+  export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseOptions<ObjectFileSystemProvider> {
     /**
      * [descr:ObjectFileSystemProviderOptions.contentExpr]
      */
@@ -8879,8 +8885,7 @@ declare module DevExpress.fileManagement {
    * @deprecated [depNote:RemoteFileSystemProviderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface RemoteFileSystemProviderOptions
-    extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
+  export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**
      * [descr:RemoteFileSystemProviderOptions.beforeAjaxSend]
      */
@@ -9219,7 +9224,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class DateBoxBase<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDateBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue =
+      DevExpress.ui.dxDateBox.Properties
   > extends dxDropDownEditor<TProperties> {
     /**
      * [descr:DateBoxBase.close()]
@@ -9234,8 +9240,10 @@ declare module DevExpress.ui {
    * [descr:DateBoxBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface DateBoxBaseOptions<TComponent>
-    extends Omit<dxDropDownEditorOptions<TComponent>, 'fieldAddons'> {
+  export interface DateBoxBaseOptions<TComponent> extends Omit<
+    dxDropDownEditorOptions<TComponent>,
+    'fieldAddons'
+  > {
     /**
      * [descr:DateBoxBaseOptions.applyButtonText]
      */
@@ -9297,8 +9305,9 @@ declare module DevExpress.ui {
    * [descr:DraggableBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface DraggableBaseOptions<TComponent>
-    extends DOMComponentOptions<TComponent> {
+  export interface DraggableBaseOptions<
+    TComponent
+  > extends DOMComponentOptions<TComponent> {
     /**
      * [descr:DraggableBaseOptions.autoScroll]
      */
@@ -9937,8 +9946,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxAutocompleteOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxAutocompleteOptions
-    extends dxDropDownListOptions<dxAutocomplete> {
+  export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
     /**
      * [descr:dxAutocompleteOptions.maxItemCount]
      */
@@ -11150,8 +11158,10 @@ declare module DevExpress.ui {
    * [descr:dxCardViewOptions]
    * @deprecated [depNote:dxCardViewOptions]
    */
-  export interface dxCardViewOptions<TCardData = unknown, TKey = unknown>
-    extends Omit<WidgetOptions<dxCardView>, 'onOptionChanged'> {
+  export interface dxCardViewOptions<
+    TCardData = unknown,
+    TKey = unknown
+  > extends Omit<WidgetOptions<dxCardView>, 'onOptionChanged'> {
     /**
      * [descr:dxCardViewOptions.dataSource]
      */
@@ -12102,8 +12112,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxColorBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxColorBoxOptions
-    extends dxDropDownEditorOptions<dxColorBox> {
+  export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
      * [descr:dxColorBoxOptions.applyButtonText]
      */
@@ -14437,8 +14446,10 @@ declare module DevExpress.ui {
    * @deprecated Use the DevExpress.ui.dxDataGrid.Column type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxDataGridColumn<TRowData = any, TKey = any>
-    extends DevExpress.ui.dxDataGrid.ColumnBase<TRowData> {
+  export interface dxDataGridColumn<
+    TRowData = any,
+    TKey = any
+  > extends DevExpress.ui.dxDataGrid.ColumnBase<TRowData> {
     /**
      * [descr:dxDataGridColumn.allowExporting]
      */
@@ -16706,8 +16717,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxDraggableOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxDraggableOptions
-    extends DraggableBaseOptions<dxDraggable> {
+  export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * [descr:dxDraggableOptions.clone]
      */
@@ -16975,7 +16985,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDropDownBoxOptions
-    extends DataExpressionMixinOptions<dxDropDownBox>,
+    extends
+      DataExpressionMixinOptions<dxDropDownBox>,
       dxDropDownEditorOptions<dxDropDownBox> {
     /**
      * [descr:dxDropDownBoxOptions.acceptCustomValue]
@@ -17134,8 +17145,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxDropDownButtonOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxDropDownButtonOptions
-    extends WidgetOptions<dxDropDownButton> {
+  export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * [descr:dxDropDownButtonOptions.dataSource]
      */
@@ -17279,7 +17289,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxDropDownEditor<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDropDownEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue =
+      DevExpress.ui.dxDropDownEditor.Properties
   > extends dxTextBox<TProperties> {
     /**
      * [descr:dxDropDownEditor.close()]
@@ -17324,8 +17335,10 @@ declare module DevExpress.ui {
    * [descr:dxDropDownEditorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxDropDownEditorOptions<TComponent>
-    extends Omit<dxTextBoxOptions<TComponent>, 'validationMessagePosition'> {
+  export interface dxDropDownEditorOptions<TComponent> extends Omit<
+    dxTextBoxOptions<TComponent>,
+    'validationMessagePosition'
+  > {
     /**
      * [descr:dxDropDownEditorOptions.acceptCustomValue]
      */
@@ -17431,7 +17444,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxDropDownListOptions<TComponent>
-    extends DataExpressionMixinOptions<TComponent>,
+    extends
+      DataExpressionMixinOptions<TComponent>,
       Omit<dxDropDownEditorOptions<TComponent>, 'fieldAddons'> {
     /**
      * [descr:dxDropDownListOptions.displayValue]
@@ -19168,8 +19182,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxFilterBuilderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxFilterBuilderOptions
-    extends WidgetOptions<dxFilterBuilder> {
+  export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * [descr:dxFilterBuilderOptions.allowHierarchicalFields]
      */
@@ -20864,8 +20877,10 @@ declare module DevExpress.ui {
    * [descr:dxGanttColumn]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  interface dxGanttColumnBlank<TRowData = any, TKey = any>
-    extends Omit<DevExpress.ui.dxTreeList.Column<TRowData, TKey>, 'ai'> {
+  interface dxGanttColumnBlank<TRowData = any, TKey = any> extends Omit<
+    DevExpress.ui.dxTreeList.Column<TRowData, TKey>,
+    'ai'
+  > {
     /**
      * [descr:dxGanttColumn.allowEditing]
      */
@@ -22686,7 +22701,9 @@ declare module DevExpress.ui {
   export interface dxListOptions<
     TItem extends DevExpress.ui.dxList.ItemLike = any,
     TKey = any
-  > extends CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>,
+  >
+    extends
+      CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>,
       SearchBoxMixinOptions {
     /**
      * [descr:dxListOptions.activeStateEnabled]
@@ -22949,8 +22966,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxLoadIndicatorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxLoadIndicatorOptions
-    extends WidgetOptions<dxLoadIndicator> {
+  export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
      * [descr:dxLoadIndicatorOptions.animationType]
      */
@@ -23887,9 +23903,9 @@ declare module DevExpress.ui {
     TItem extends DevExpress.ui.dxMenuBase.ItemLike = any,
     TKey = any
   > extends Omit<
-      HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>,
-      'dataSource'
-    > {
+    HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>,
+    'dataSource'
+  > {
     /**
      * [descr:dxMenuBaseOptions.activeStateEnabled]
      */
@@ -24438,8 +24454,9 @@ declare module DevExpress.ui {
    * [descr:dxOverlayOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxOverlayOptions<TComponent>
-    extends WidgetOptions<TComponent> {
+  export interface dxOverlayOptions<
+    TComponent
+  > extends WidgetOptions<TComponent> {
     /**
      * [descr:dxOverlayOptions.animation]
      */
@@ -24558,8 +24575,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxPaginationOptions]
    */
   export interface dxPaginationOptions
-    extends DevExpress.common.PagerBase,
-      WidgetOptions<dxPagination> {
+    extends DevExpress.common.PagerBase, WidgetOptions<dxPagination> {
     /**
      * [descr:dxPaginationOptions.pageIndex]
      */
@@ -24838,8 +24854,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxPivotGridFieldChooserOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPivotGridFieldChooserOptions
-    extends WidgetOptions<dxPivotGridFieldChooser> {
+  export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**
      * [descr:dxPivotGridFieldChooserOptions.allowSearch]
      */
@@ -25555,8 +25570,9 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxPopoverOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPopoverOptions<TComponent>
-    extends dxPopupOptions<TComponent> {
+  export interface dxPopoverOptions<
+    TComponent
+  > extends dxPopupOptions<TComponent> {
     /**
      * [descr:dxPopoverOptions.animation]
      */
@@ -25705,8 +25721,9 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxPopupOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPopupOptions<TComponent>
-    extends dxOverlayOptions<TComponent> {
+  export interface dxPopupOptions<
+    TComponent
+  > extends dxOverlayOptions<TComponent> {
     /**
      * [descr:dxPopupOptions.animation]
      */
@@ -25865,8 +25882,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxProgressBarOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxProgressBarOptions
-    extends dxTrackBarOptions<dxProgressBar> {
+  export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * [descr:dxProgressBarOptions.onComplete]
      */
@@ -25931,7 +25947,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxRadioGroupOptions
-    extends EditorOptions<dxRadioGroup>,
+    extends
+      EditorOptions<dxRadioGroup>,
       DataExpressionMixinOptions<dxRadioGroup> {
     /**
      * [descr:dxRadioGroupOptions.activeStateEnabled]
@@ -26018,8 +26035,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxRangeSliderOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxRangeSliderOptions
-    extends dxSliderBaseOptions<dxRangeSlider> {
+  export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
      * [descr:dxRangeSliderOptions.end]
      */
@@ -27656,11 +27672,8 @@ declare module DevExpress.ui {
      * [descr:ScrollEventInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    export interface ScrollEventInfo<T>
-      extends DevExpress.common.core.events.NativeEventInfo<
-        T,
-        WheelEvent | MouseEvent | Event
-      > {
+    export interface ScrollEventInfo<T> extends DevExpress.common.core.events
+      .NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
       /**
        * [descr:ScrollEventInfo.scrollOffset]
        */
@@ -27687,8 +27700,9 @@ declare module DevExpress.ui {
    * [descr:dxScrollableOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxScrollableOptions<TComponent>
-    extends DOMComponentOptions<TComponent> {
+  export interface dxScrollableOptions<
+    TComponent
+  > extends DOMComponentOptions<TComponent> {
     /**
      * [descr:dxScrollableOptions.bounceEnabled]
      */
@@ -27789,8 +27803,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxScrollViewOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxScrollViewOptions
-    extends dxScrollableOptions<dxScrollView> {
+  export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * [descr:dxScrollViewOptions.onPullDown]
      */
@@ -27824,7 +27837,8 @@ declare module DevExpress.ui {
    * [descr:dxSelectBox]
    */
   export class dxSelectBox<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxSelectBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue =
+      DevExpress.ui.dxSelectBox.Properties
   > extends dxDropDownList<TProperties> {}
   module dxSelectBox {
     /**
@@ -27988,8 +28002,9 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxSelectBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxSelectBoxOptions<TComponent>
-    extends dxDropDownListOptions<TComponent> {
+  export interface dxSelectBoxOptions<
+    TComponent
+  > extends dxDropDownListOptions<TComponent> {
     /**
      * [descr:dxSelectBoxOptions.acceptCustomValue]
      */
@@ -28092,8 +28107,9 @@ declare module DevExpress.ui {
    * [descr:dxSliderBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxSliderBaseOptions<TComponent>
-    extends dxTrackBarOptions<TComponent> {
+  export interface dxSliderBaseOptions<
+    TComponent
+  > extends dxTrackBarOptions<TComponent> {
     /**
      * [descr:dxSliderBaseOptions.activeStateEnabled]
      */
@@ -28800,8 +28816,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxSpeedDialActionOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxSpeedDialActionOptions
-    extends WidgetOptions<dxSpeedDialAction> {
+  export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
      * [descr:dxSpeedDialActionOptions.icon]
      */
@@ -29973,11 +29988,10 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxTagBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTagBoxOptions
-    extends Pick<
-      dxSelectBoxOptions<dxTagBox>,
-      Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>
-    > {
+  export interface dxTagBoxOptions extends Pick<
+    dxSelectBoxOptions<dxTagBox>,
+    Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>
+  > {
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
      */
@@ -30188,7 +30202,8 @@ declare module DevExpress.ui {
    * [descr:dxTextBox]
    */
   export class dxTextBox<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue =
+      DevExpress.ui.dxTextBox.Properties
   > extends dxTextEditor<TProperties> {
     /**
      * [descr:dxTextBox.reset(value)]
@@ -30318,8 +30333,9 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxTextBoxOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTextBoxOptions<TComponent>
-    extends dxTextEditorOptions<TComponent> {
+  export interface dxTextBoxOptions<
+    TComponent
+  > extends dxTextEditorOptions<TComponent> {
     /**
      * [descr:dxTextBoxOptions.maxLength]
      */
@@ -30338,7 +30354,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxTextEditor<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue =
+      DevExpress.ui.dxTextEditor.Properties
   > extends Editor<TProperties> {
     /**
      * [descr:dxTextEditor.blur()]
@@ -30367,8 +30384,9 @@ declare module DevExpress.ui {
    * [descr:dxTextEditorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTextEditorOptions<TComponent>
-    extends EditorOptions<TComponent> {
+  export interface dxTextEditorOptions<
+    TComponent
+  > extends EditorOptions<TComponent> {
     /**
      * [descr:dxTextEditorOptions.buttons]
      */
@@ -31093,8 +31111,9 @@ declare module DevExpress.ui {
    * [descr:dxTrackBarOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTrackBarOptions<TComponent>
-    extends EditorOptions<TComponent> {
+  export interface dxTrackBarOptions<
+    TComponent
+  > extends EditorOptions<TComponent> {
     /**
      * [descr:dxTrackBarOptions.max]
      */
@@ -31590,8 +31609,8 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListEditing]
      */
-    export interface Editing<TRowData = any, TKey = any>
-      extends DevExpress.common.grids.EditingBase<TRowData, TKey> {
+    export interface Editing<TRowData = any, TKey = any> extends DevExpress
+      .common.grids.EditingBase<TRowData, TKey> {
       /**
        * [descr:dxTreeListOptions.editing.allowAdding]
        */
@@ -32594,8 +32613,10 @@ declare module DevExpress.ui {
    * @deprecated Use the DevExpress.ui.dxTreeList.Column type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTreeListColumn<TRowData = any, TKey = any>
-    extends DevExpress.common.grids.ColumnBase<TRowData> {
+  export interface dxTreeListColumn<
+    TRowData = any,
+    TKey = any
+  > extends DevExpress.common.grids.ColumnBase<TRowData> {
     /**
      * [descr:dxTreeListColumn.buttons]
      */
@@ -33315,7 +33336,9 @@ declare module DevExpress.ui {
   export interface dxTreeViewOptions<
     TItem extends DevExpress.ui.dxTreeView.ItemLike = any,
     TKey = any
-  > extends Omit<
+  >
+    extends
+      Omit<
         HierarchicalCollectionWidgetOptions<
           dxTreeView<TItem, TKey>,
           TItem,
@@ -33521,8 +33544,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxValidationGroupOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxValidationGroupOptions
-    extends DOMComponentOptions<dxValidationGroup> {}
+  export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {}
   /**
    * [descr:dxValidationGroupResult]
    * @deprecated [depNote:dxValidationGroupResult]
@@ -33570,8 +33592,7 @@ declare module DevExpress.ui {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxValidationMessageOptions
-    extends dxOverlayOptions<dxValidationMessage> {
+  export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidationMessage> {
     mode?: string;
 
     validationErrors?: Array<object> | null;
@@ -33671,10 +33692,10 @@ declare module DevExpress.ui {
     TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
     TKey = any
   > extends CollectionWidgetOptions<
-      dxValidationSummary<TItem, TKey>,
-      TItem,
-      TKey
-    > {
+    dxValidationSummary<TItem, TKey>,
+    TItem,
+    TKey
+  > {
     /**
      * [descr:dxValidationSummaryOptions.validationGroup]
      */
@@ -33848,7 +33869,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Editor<
-    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.Editor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue =
+      DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
      * [descr:Editor.clear()]
@@ -34207,8 +34229,9 @@ declare module DevExpress.ui {
    * [descr:WidgetOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface WidgetOptions<TComponent>
-    extends DOMComponentOptions<TComponent> {
+  export interface WidgetOptions<
+    TComponent
+  > extends DOMComponentOptions<TComponent> {
     /**
      * [descr:WidgetOptions.accessKey]
      */
@@ -35214,16 +35237,10 @@ declare module DevExpress.ui.dxHtmlEditor {
   /**
    * [descr:AIToolbarItem]
    */
-  export interface AIToolbarItem
-    extends Omit<
-      DevExpress.ui.dxToolbar.Item,
-      | 'menuItemTemplate'
-      | 'showText'
-      | 'widget'
-      | 'options'
-      | 'template'
-      | 'html'
-    > {
+  export interface AIToolbarItem extends Omit<
+    DevExpress.ui.dxToolbar.Item,
+    'menuItemTemplate' | 'showText' | 'widget' | 'options' | 'template' | 'html'
+  > {
     /**
      * [descr:AIToolbarItem.name]
      */
@@ -35558,8 +35575,7 @@ declare module DevExpress.viz {
    * [descr:BaseChartAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartAnnotationConfig
-    extends BaseWidgetAnnotationConfig {
+  export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * [descr:BaseChartAnnotationConfig.argument]
      */
@@ -35722,8 +35738,9 @@ declare module DevExpress.viz {
    * [descr:BaseChartTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartTooltip<TPointInfo = any>
-    extends BaseWidgetTooltip {
+  export interface BaseChartTooltip<
+    TPointInfo = any
+  > extends BaseWidgetTooltip {
     /**
      * [descr:BaseChartOptions.tooltip.argumentFormat]
      */
@@ -35817,8 +35834,7 @@ declare module DevExpress.viz {
    * [descr:BaseGaugeLoadingIndicator]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseGaugeLoadingIndicator
-    extends BaseWidgetLoadingIndicator {
+  export interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     /**
      * [descr:BaseGaugeOptions.loadingIndicator.enabled]
      */
@@ -35828,8 +35844,9 @@ declare module DevExpress.viz {
    * [descr:BaseGaugeOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseGaugeOptions<TComponent>
-    extends BaseWidgetOptions<TComponent> {
+  export interface BaseGaugeOptions<
+    TComponent
+  > extends BaseWidgetOptions<TComponent> {
     /**
      * [descr:BaseGaugeOptions.animation]
      */
@@ -36329,8 +36346,9 @@ declare module DevExpress.viz {
    * [descr:BaseSparklineOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseSparklineOptions<TComponent>
-    extends BaseWidgetOptions<TComponent> {
+  export interface BaseSparklineOptions<
+    TComponent
+  > extends BaseWidgetOptions<TComponent> {
     /**
      * [descr:BaseSparklineOptions.export]
      */
@@ -36737,8 +36755,9 @@ declare module DevExpress.viz {
    * [descr:BaseWidgetOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseWidgetOptions<TComponent>
-    extends DOMComponentOptions<TComponent> {
+  export interface BaseWidgetOptions<
+    TComponent
+  > extends DOMComponentOptions<TComponent> {
     /**
      * [descr:BaseWidgetOptions.disabled]
      */
@@ -39225,8 +39244,7 @@ declare module DevExpress.viz {
    * [descr:dxChartAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartAnnotationConfig
-    extends dxChartCommonAnnotationConfig {
+  export interface dxChartAnnotationConfig extends dxChartCommonAnnotationConfig {
     /**
      * [descr:dxChartAnnotationConfig.name]
      */
@@ -39236,8 +39254,7 @@ declare module DevExpress.viz {
    * [descr:dxChartCommonAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartCommonAnnotationConfig
-    extends BaseChartAnnotationConfig {
+  export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
     /**
      * [descr:dxChartCommonAnnotationConfig.axis]
      */
@@ -39274,8 +39291,10 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartOptions
-    extends BaseChartOptions<dxChart, chartPointObject> {
+  export interface dxChartOptions extends BaseChartOptions<
+    dxChart,
+    chartPointObject
+  > {
     /**
      * [descr:dxChartOptions.adjustOnZoom]
      */
@@ -39804,8 +39823,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesAreaSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.AreaSeries.aggregation]
      */
@@ -39830,8 +39848,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesAreaSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.AreaSeries.aggregation.method]
      */
@@ -39860,8 +39877,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesBarSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesBarSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.BarSeries.aggregation]
      */
@@ -39886,8 +39902,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesBarSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.BarSeries.aggregation.method]
      */
@@ -39906,8 +39921,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesBubbleSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesBubbleSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.BubbleSeries.aggregation]
      */
@@ -39932,8 +39946,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesBubbleSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesBubbleSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.BubbleSeries.aggregation.method]
      */
@@ -39952,8 +39965,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesCandleStickSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesCandleStickSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.aggregation]
      */
@@ -39990,8 +40002,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesCandleStickSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesCandleStickSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.aggregation.method]
      */
@@ -40000,8 +40011,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesCandleStickSeriesHoverStyle
-    extends dxChartSeriesTypesCommonSeriesHoverStyle {
+  export interface dxChartSeriesTypesCandleStickSeriesHoverStyle extends dxChartSeriesTypesCommonSeriesHoverStyle {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching]
      */
@@ -40010,8 +40020,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching
-    extends dxChartSeriesTypesCommonSeriesHoverStyleHatching {
+  export interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching extends dxChartSeriesTypesCommonSeriesHoverStyleHatching {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction]
      */
@@ -40030,8 +40039,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesCandleStickSeriesSelectionStyle
-    extends dxChartSeriesTypesCommonSeriesSelectionStyle {
+  export interface dxChartSeriesTypesCandleStickSeriesSelectionStyle extends dxChartSeriesTypesCommonSeriesSelectionStyle {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching]
      */
@@ -40040,8 +40048,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching
-    extends dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
+  export interface dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching extends dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction]
      */
@@ -40434,8 +40441,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedAreaSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesFullStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.FullStackedAreaSeries.aggregation]
      */
@@ -40460,8 +40466,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedAreaSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesFullStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.FullStackedAreaSeries.aggregation.method]
      */
@@ -40490,8 +40495,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedBarSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesFullStackedBarSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.FullStackedBarSeries.aggregation]
      */
@@ -40516,8 +40520,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedBarSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesFullStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.FullStackedBarSeries.aggregation.method]
      */
@@ -40540,8 +40543,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedLineSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesFullStackedLineSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.FullStackedLineSeries.aggregation]
      */
@@ -40562,8 +40564,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedLineSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesFullStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.FullStackedLineSeries.aggregation.method]
      */
@@ -40582,8 +40583,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedSplineAreaSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesFullStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation]
      */
@@ -40608,8 +40608,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation.method]
      */
@@ -40638,8 +40637,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedSplineSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesFullStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineSeries.aggregation]
      */
@@ -40660,8 +40658,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesFullStackedSplineSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesFullStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineSeries.aggregation.method]
      */
@@ -40680,8 +40677,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesLineSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesLineSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.LineSeries.aggregation]
      */
@@ -40702,8 +40698,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesLineSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.LineSeries.aggregation.method]
      */
@@ -40722,8 +40717,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesRangeAreaSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesRangeAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.RangeAreaSeries.aggregation]
      */
@@ -40748,8 +40742,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesRangeAreaSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesRangeAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.RangeAreaSeries.aggregation.method]
      */
@@ -40778,8 +40771,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesRangeBarSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesRangeBarSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.RangeBarSeries.aggregation]
      */
@@ -40804,8 +40796,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesRangeBarSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesRangeBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.RangeBarSeries.aggregation.method]
      */
@@ -40824,8 +40815,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesScatterSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesScatterSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.ScatterSeries.aggregation]
      */
@@ -40838,8 +40828,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesScatterSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesScatterSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.ScatterSeries.aggregation.method]
      */
@@ -40858,8 +40847,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesSplineAreaSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.SplineAreaSeries.aggregation]
      */
@@ -40884,8 +40872,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesSplineAreaSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.SplineAreaSeries.aggregation.method]
      */
@@ -40914,8 +40901,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesSplineSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesSplineSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.SplineSeries.aggregation]
      */
@@ -40936,8 +40922,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesSplineSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.SplineSeries.aggregation.method]
      */
@@ -40956,8 +40941,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedAreaSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.StackedAreaSeries.aggregation]
      */
@@ -40982,8 +40966,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedAreaSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.StackedAreaSeries.aggregation.method]
      */
@@ -41012,8 +40995,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedBarSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesStackedBarSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.StackedBarSeries.aggregation]
      */
@@ -41038,8 +41020,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedBarSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.StackedBarSeries.aggregation.method]
      */
@@ -41062,8 +41043,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedLineSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesStackedLineSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.StackedLineSeries.aggregation]
      */
@@ -41084,8 +41064,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedLineSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.StackedLineSeries.aggregation.method]
      */
@@ -41104,8 +41083,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedSplineAreaSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.aggregation]
      */
@@ -41130,8 +41108,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedSplineAreaSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.aggregation.method]
      */
@@ -41160,8 +41137,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedSplineSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineSeries.aggregation]
      */
@@ -41182,8 +41158,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStackedSplineSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineSeries.aggregation.method]
      */
@@ -41202,8 +41177,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStepAreaSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesStepAreaSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.aggregation]
      */
@@ -41240,8 +41214,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStepAreaSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesStepAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.aggregation.method]
      */
@@ -41250,8 +41223,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStepAreaSeriesBorder
-    extends dxChartSeriesTypesCommonSeriesBorder {
+  export interface dxChartSeriesTypesStepAreaSeriesBorder extends dxChartSeriesTypesCommonSeriesBorder {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.border.visible]
      */
@@ -41260,8 +41232,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStepAreaSeriesHoverStyle
-    extends dxChartSeriesTypesCommonSeriesHoverStyle {
+  export interface dxChartSeriesTypesStepAreaSeriesHoverStyle extends dxChartSeriesTypesCommonSeriesHoverStyle {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.hoverStyle.border]
      */
@@ -41270,8 +41241,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStepAreaSeriesHoverStyleBorder
-    extends dxChartSeriesTypesCommonSeriesHoverStyleBorder {
+  export interface dxChartSeriesTypesStepAreaSeriesHoverStyleBorder extends dxChartSeriesTypesCommonSeriesHoverStyleBorder {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.hoverStyle.border.visible]
      */
@@ -41300,8 +41270,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStepAreaSeriesSelectionStyle
-    extends dxChartSeriesTypesCommonSeriesSelectionStyle {
+  export interface dxChartSeriesTypesStepAreaSeriesSelectionStyle extends dxChartSeriesTypesCommonSeriesSelectionStyle {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.selectionStyle.border]
      */
@@ -41310,8 +41279,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStepAreaSeriesSelectionStyleBorder
-    extends dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
+  export interface dxChartSeriesTypesStepAreaSeriesSelectionStyleBorder extends dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.selectionStyle.border.visible]
      */
@@ -41320,8 +41288,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStepLineSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesStepLineSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.StepLineSeries.aggregation]
      */
@@ -41342,8 +41309,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStepLineSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesStepLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.StepLineSeries.aggregation.method]
      */
@@ -41362,8 +41328,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStockSeries
-    extends dxChartSeriesTypesCommonSeries {
+  export interface dxChartSeriesTypesStockSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * [descr:dxChartSeriesTypes.StockSeries.aggregation]
      */
@@ -41392,8 +41357,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartSeriesTypesStockSeriesAggregation
-    extends dxChartSeriesTypesCommonSeriesAggregation {
+  export interface dxChartSeriesTypesStockSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
     /**
      * [descr:dxChartSeriesTypes.StockSeries.aggregation.method]
      */
@@ -41520,8 +41484,7 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxCircularGaugeOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxCircularGaugeOptions
-    extends BaseGaugeOptions<dxCircularGauge> {
+  export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
      * [descr:dxCircularGaugeOptions.geometry]
      */
@@ -42217,8 +42180,7 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxLinearGaugeOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxLinearGaugeOptions
-    extends BaseGaugeOptions<dxLinearGauge> {
+  export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
      * [descr:dxLinearGaugeOptions.geometry]
      */
@@ -42453,8 +42415,7 @@ declare module DevExpress.viz {
    * [descr:dxPieChartAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPieChartAnnotationConfig
-    extends dxPieChartCommonAnnotationConfig {
+  export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationConfig {
     /**
      * [descr:dxPieChartAnnotationConfig.name]
      */
@@ -42464,8 +42425,7 @@ declare module DevExpress.viz {
    * [descr:dxPieChartCommonAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPieChartCommonAnnotationConfig
-    extends BaseWidgetAnnotationConfig {
+  export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * [descr:dxPieChartCommonAnnotationConfig.location]
      */
@@ -42510,8 +42470,10 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxPieChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPieChartOptions
-    extends BaseChartOptions<dxPieChart, piePointObject> {
+  export interface dxPieChartOptions extends BaseChartOptions<
+    dxPieChart,
+    piePointObject
+  > {
     /**
      * [descr:dxPieChartOptions.adaptiveLayout]
      */
@@ -43836,8 +43798,7 @@ declare module DevExpress.viz {
    * [descr:dxPolarChartAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartAnnotationConfig
-    extends dxPolarChartCommonAnnotationConfig {
+  export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotationConfig {
     /**
      * [descr:dxPolarChartAnnotationConfig.name]
      */
@@ -43847,8 +43808,7 @@ declare module DevExpress.viz {
    * [descr:dxPolarChartCommonAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartCommonAnnotationConfig
-    extends BaseChartAnnotationConfig {
+  export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
     /**
      * [descr:dxPolarChartCommonAnnotationConfig.angle]
      */
@@ -43889,8 +43849,10 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxPolarChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartOptions
-    extends BaseChartOptions<dxPolarChart, polarPointObject> {
+  export interface dxPolarChartOptions extends BaseChartOptions<
+    dxPolarChart,
+    polarPointObject
+  > {
     /**
      * [descr:dxPolarChartOptions.adaptiveLayout]
      */
@@ -44081,8 +44043,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartSeriesTypesAreapolarseries
-    extends dxPolarChartSeriesTypesCommonPolarChartSeries {
+  export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartSeriesTypes.areapolarseries.hoverMode]
      */
@@ -44099,8 +44060,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartSeriesTypesAreapolarseriesPoint
-    extends dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
+  export interface dxPolarChartSeriesTypesAreapolarseriesPoint extends dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     /**
      * [descr:dxPolarChartSeriesTypes.areapolarseries.point.visible]
      */
@@ -44109,8 +44069,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartSeriesTypesBarpolarseries
-    extends dxPolarChartSeriesTypesCommonPolarChartSeries {
+  export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartSeriesTypes.barpolarseries.hoverMode]
      */
@@ -44609,8 +44568,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartSeriesTypesLinepolarseries
-    extends dxPolarChartSeriesTypesCommonPolarChartSeries {
+  export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartSeriesTypes.linepolarseries.hoverMode]
      */
@@ -44623,8 +44581,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartSeriesTypesStackedbarpolarseries
-    extends dxPolarChartSeriesTypesCommonPolarChartSeries {
+  export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode]
      */
@@ -44645,8 +44602,7 @@ declare module DevExpress.viz {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartSeriesTypesStackedbarpolarseriesLabel
-    extends dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
+  export interface dxPolarChartSeriesTypesStackedbarpolarseriesLabel extends dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
      * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries.label.position]
      */
@@ -44760,8 +44716,7 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxRangeSelectorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxRangeSelectorOptions
-    extends BaseWidgetOptions<dxRangeSelector> {
+  export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * [descr:dxRangeSelectorOptions.background]
      */
@@ -45932,8 +45887,7 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxSparklineOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxSparklineOptions
-    extends BaseSparklineOptions<dxSparkline> {
+  export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     /**
      * [descr:dxSparklineOptions.argumentField]
      */
@@ -46863,8 +46817,7 @@ declare module DevExpress.viz {
    * [descr:dxVectorMapAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxVectorMapAnnotationConfig
-    extends dxVectorMapCommonAnnotationConfig {
+  export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
     /**
      * [descr:dxVectorMapAnnotationConfig.name]
      */
@@ -46874,8 +46827,7 @@ declare module DevExpress.viz {
    * [descr:dxVectorMapCommonAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxVectorMapCommonAnnotationConfig
-    extends BaseWidgetAnnotationConfig {
+  export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * [descr:dxVectorMapCommonAnnotationConfig.coordinates]
      */
@@ -47427,8 +47379,7 @@ declare module DevExpress.viz {
    * [descr:PieChartSeries]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface PieChartSeries
-    extends dxPieChartSeriesTypesCommonPieChartSeries {
+  export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
     /**
      * [descr:PieChartSeries.name]
      */
@@ -47482,8 +47433,7 @@ declare module DevExpress.viz {
    * [descr:PolarChartSeries]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface PolarChartSeries
-    extends dxPolarChartSeriesTypesCommonPolarChartSeries {
+  export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * [descr:PolarChartSeries.name]
      */
