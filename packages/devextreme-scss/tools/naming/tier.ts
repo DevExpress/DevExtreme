@@ -39,6 +39,7 @@ export interface Registries {
   systemTier?: string[];
   migrated: string[];
   rootSelectors: Record<string, string[]>;
+  sassOnly?: Record<string, string>;
 }
 
 export interface TierRecord {
@@ -330,6 +331,7 @@ export const tierRecords = (
       const reasonOf = (): string | null => {
         if (marker || feeders.has(variable) || /(^|[^\w-])data-uri\(/.test(value)) return 'data-uri';
         if (wiring.has(variable)) return 'base-wiring';
+        if (registries.sassOnly?.[variable]) return 'sass-only';
         if (CSS_WIDE_KEYWORDS.has(value)) return 'css-wide-keyword';
         if (value.includes('!important')) return 'important';
         if (value === 'null') return 'null';

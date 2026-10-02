@@ -573,7 +573,7 @@ const tierRecords = computeTierRecords(
   themeSources,
   registries,
   new Set(findings.baseWiring
-    .map((entry) => required(/(\$[a-z0-9-]+)/.exec(entry), `a variable in "${entry}"`)[1])),
+    .map((entry) => required(/(\$[a-z0-9_-]+)/.exec(entry), `a variable in "${entry}"`)[1])),
 );
 const publicTierFiles = themeFiles.filter(isPublicManifestFile);
 const folderOf = (file: string): string => sourceLabel(file).split('/')[1];
