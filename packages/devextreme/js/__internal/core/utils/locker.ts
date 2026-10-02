@@ -1,18 +1,22 @@
 import errors from '@js/core/errors';
 
-const Locker = function () {
-  const info = {};
+export interface Lock {
+  obtain: (lockName: string) => void;
+  release: (lockName: string) => void;
+  locked: (lockName: string) => boolean;
+}
 
-  const currentCount = function (lockName) {
-    return info[lockName] || 0;
-  };
+export function Locker(): Lock {
+  const info: Record<string, number> = {};
+
+  const currentCount = (lockName: string): number => info[lockName] || 0;
 
   return {
-    obtain(lockName) {
+    obtain(lockName: string): void {
       info[lockName] = currentCount(lockName) + 1;
     },
 
-    release(lockName) {
+    release(lockName: string): void {
       const count = currentCount(lockName);
 
       if (count < 1) {
@@ -27,10 +31,8 @@ const Locker = function () {
       }
     },
 
-    locked(lockName) {
+    locked(lockName: string): boolean {
       return currentCount(lockName) > 0;
     },
   };
-};
-
-export { Locker };
+}

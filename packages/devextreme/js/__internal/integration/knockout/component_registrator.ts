@@ -6,8 +6,8 @@ import {
 } from '@ts/core/component_registrator_callbacks';
 import config from '@ts/core/config';
 import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
+import { Locker } from '@ts/core/utils/locker';
 import Callbacks from '@ts/core/utils/m_callbacks';
-import { Locker } from '@ts/core/utils/m_locker';
 import { isPlainObject } from '@ts/core/utils/m_type';
 import Draggable from '@ts/m_draggable';
 import Editor from '@ts/ui/editor/editor';
@@ -191,8 +191,7 @@ if (ko) {
           optionChangedCallbacks.add(handleOptionChanged);
           $element
             .data(CREATED_WITH_KO_DATA_KEY, true)
-            // @ts-expect-error
-            .data(LOCKS_DATA_KEY, new Locker());
+            .data(LOCKS_DATA_KEY, Locker());
 
           // eslint-disable-next-line no-new,new-cap
           new componentClass($element, ctorOptions);
