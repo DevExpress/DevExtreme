@@ -8,6 +8,7 @@ import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 // @ts-expect-error
 import { grep } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
@@ -288,8 +289,10 @@ export class View extends ModuleItem {
     this._requireReady = this._requireReady || requireReady;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _renderCore(options?): any { }
+  // views that render synchronously return nothing
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-invalid-void-type
+  protected _renderCore(options?: unknown): DeferredObj<unknown> | void { }
 
   protected _resizeCore() { }
 

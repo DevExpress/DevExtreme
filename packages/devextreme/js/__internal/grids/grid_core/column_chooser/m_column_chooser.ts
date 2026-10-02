@@ -2,6 +2,8 @@
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
@@ -212,7 +214,7 @@ export class ColumnChooserView extends ColumnsView {
     }
   }
 
-  protected _renderCore(change) {
+  protected _renderCore(change?: 'full'): DeferredObj<unknown> {
     if (this._popupContainer) {
       const isDragMode = !this.isSelectMode();
 
@@ -222,6 +224,8 @@ export class ColumnChooserView extends ColumnsView {
         this._updateItems();
       }
     }
+
+    return Deferred<unknown>().resolve();
   }
 
   private _renderTreeView() {

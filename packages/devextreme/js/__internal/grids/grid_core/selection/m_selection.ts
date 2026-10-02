@@ -921,7 +921,7 @@ export const selectionRowsViewExtender = (
     return !!isCommandSelect;
   }
 
-  protected _renderCore(change) {
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
     const deferred = super._renderCore(change);
     this._updateCheckboxesClass();
     return deferred;

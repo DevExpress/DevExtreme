@@ -12,6 +12,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import * as iteratorUtils from '@js/core/utils/iterator';
@@ -741,15 +742,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing, header_panel, virtual_column
    */
-  protected _renderCore(e?) {
+  protected _renderCore(e?: unknown): DeferredObj<unknown> {
     const $root = this.element().parent();
 
     if (!$root || $root.parent().length) {
       this.renderDelayedTemplates(e);
     }
 
-    // @ts-expect-error
-    return new Deferred().resolve();
+    return Deferred<unknown>().resolve();
   }
 
   /**
@@ -1139,6 +1139,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   private needWaitAsyncTemplates() {
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
+  }
+
+  public isWaitingForAsyncTemplates(): boolean {
+    return !!this.needWaitAsyncTemplates() && this._templateDeferreds?.size > 0;
   }
 
   public waitAsyncTemplates(forceWaiting = false) {

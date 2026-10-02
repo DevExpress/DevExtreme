@@ -8,6 +8,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -22,6 +23,7 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
+import type { DataChange } from '../data_controller/types';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import type { ColumnPoint, Coordinates, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -895,7 +897,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return super._getSummaryCellIndex.apply(this, arguments);
   }
 
-  protected _renderCore(change) {
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
     this._detachHoverEvents();
 
     const deferred = super._renderCore(change);

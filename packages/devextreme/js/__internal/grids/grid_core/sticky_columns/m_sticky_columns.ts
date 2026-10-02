@@ -125,7 +125,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     });
   }
 
-  protected _renderCore(options?) {
+  protected _renderCore(options?: unknown): DeferredObj<unknown> {
     const deferred = super._renderCore(options);
     const $element = this.element();
     const hasStickyColumns = this.hasStickyColumns();
