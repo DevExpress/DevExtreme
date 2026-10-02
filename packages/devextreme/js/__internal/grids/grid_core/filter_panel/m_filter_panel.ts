@@ -55,7 +55,8 @@ export class FilterPanelView extends modules.View {
   }
 
   protected _renderCore() {
-    const $element = this.element();
+    // @ts-expect-error the view is rendered here
+    const $element: dxElementWrapper = this.element();
 
     $element.empty();
 

@@ -154,6 +154,7 @@ export class ColumnChooserView extends ColumnsView {
   private _initializePopupContainer() {
     const that = this;
     const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
+    // @ts-expect-error the view is rendered here
     const $element = that.element().addClass(columnChooserClass);
     const columnChooserOptions = that.option('columnChooser')!;
     const popupPosition = this._columnChooserController.getPosition();

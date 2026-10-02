@@ -239,6 +239,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   protected focusinHandler(event: any): void {
     const $element = $(event.target);
     const isRelatedTargetInRowsView = $(event.relatedTarget).closest(
+      // @ts-expect-error the view is rendered here
       this._rowsView.element(),
     ).length;
     const isLink = $element.is('a');
@@ -319,6 +320,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isFocusedViewCorrect = this._focusedView && this._focusedView.name === this._rowsView.name;
     let needUpdateFocus = false;
     const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
+    // @ts-expect-error rendered view; get() is typed as Element
     const root = $(domAdapter.getRootNode($rowsView.get && $rowsView.get(0)));
     const $focusedElement = root.find(':focus');
     const isFocusedElementCorrect = this._isFocusedElementCorrect($focusedElement, $rowsView, e);
@@ -385,6 +387,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
       if (!isRowsViewClick && !isEditorOverlayClick && !isColumnResizing) {
         const isClickOutsideFocusedView = this._focusedView
+          // @ts-expect-error the view is rendered here
           ? $target.closest(this._focusedView.element()).length === 0
           : true;
 
@@ -1741,6 +1744,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private isInsideFocusedView($element: dxElementWrapper): boolean {
+    // @ts-expect-error closest(undefined) matches nothing
     return $element.closest(this._focusedView?.element()).length !== 0;
   }
 
@@ -1795,6 +1799,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       if ($focusViewElement) {
         $focusViewElement
           .find('.dx-row[tabindex], .dx-row > td[tabindex]')
+          // @ts-expect-error filter() is typed for selectors only
           .filter((i, node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
           .not($focusElement)
           .removeClass(CELL_FOCUS_DISABLED_CLASS)

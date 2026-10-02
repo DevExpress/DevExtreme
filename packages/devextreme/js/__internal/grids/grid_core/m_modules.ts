@@ -27,6 +27,7 @@ import type {
   ModuleItemCallbackFlags,
   ModuleItemTypeCore,
   OptionChanged,
+  RegisteredModule,
   Views,
 } from './m_types';
 import type { ViewsWithBorder } from './views/utils/update_views_borders';
@@ -314,8 +315,7 @@ export class View extends ModuleItem {
     return this._$parent;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use untyped jQuery API
-  public element(): any {
+  public element(): dxElementWrapper | undefined {
     return this._$element;
   }
 
@@ -324,11 +324,10 @@ export class View extends ModuleItem {
 
     if (!$element) return 0;
 
-    const marginTop = parseFloat($element.css('marginTop')) || 0;
-    const marginBottom = parseFloat($element.css('marginBottom')) || 0;
-    const { offsetHeight } = $element.get(0);
+    const marginTop = parseFloat($element.css('marginTop') ?? '') || 0;
+    const marginBottom = parseFloat($element.css('marginBottom') ?? '') || 0;
+    const { offsetHeight } = $element.get(0) as HTMLElement;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- element() returns any
     return offsetHeight + marginTop + marginBottom;
   }
 
@@ -396,6 +395,7 @@ export class View extends ModuleItem {
   }
 
   public focus(preventScroll?: boolean): void {
+    // @ts-expect-error rendered view; get() is typed as Element
     this.element().get(0).focus({ preventScroll });
   }
 }
@@ -444,7 +444,7 @@ function registerPublicMethods(
 }
 export function processModules(
   componentInstance: ComponentInstanceType,
-  componentClass: { modules: [Module & { name: string }]; modulesOrder?: string[] },
+  componentClass: { modules: [RegisteredModule]; modulesOrder?: string[] },
 ): void {
   const { modules } = componentClass;
   const { modulesOrder } = componentClass;
@@ -549,7 +549,7 @@ const callModuleItemsMethod = function callModuleItemsMethod(
 };
 
 export default {
-  modules: [],
+  modules: [] as RegisteredModule[],
 
   View,
 
@@ -577,7 +577,11 @@ export default {
   },
 
   unregisterModule(name: string): void {
-    this.modules = grep(this.modules, (module) => module.name !== name, false);
+    this.modules = grep(
+      this.modules,
+      (module: RegisteredModule) => module.name !== name,
+      false,
+    );
   },
 
   processModules,

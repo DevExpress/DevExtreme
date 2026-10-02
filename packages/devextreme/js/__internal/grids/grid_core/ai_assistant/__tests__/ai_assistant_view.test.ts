@@ -196,7 +196,7 @@ describe('AIAssistantView', () => {
       const { aiAssistantView } = createAIAssistantView({ initialEnabled: false });
 
       expect(AIChat).not.toHaveBeenCalled();
-      expect(aiAssistantView.element().hasClass('dx-hidden')).toBe(true);
+      expect(aiAssistantView.element()?.hasClass('dx-hidden')).toBe(true);
     });
 
     it('should create AIChat instance when aiAssistant becomes enabled', () => {
@@ -208,7 +208,7 @@ describe('AIAssistantView', () => {
       aiAssistantView.render($container);
 
       expect(AIChat).toHaveBeenCalledTimes(1);
-      expect(aiAssistantView.element().hasClass('dx-hidden')).toBe(false);
+      expect(aiAssistantView.element()?.hasClass('dx-hidden')).toBe(false);
     });
   });
 

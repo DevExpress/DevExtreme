@@ -86,7 +86,7 @@ const createAIPromptEditorView = (): {
     $container,
     cellElement: $cellElement[0],
     aiPromptEditorView,
-    aiPromptEditorPOM: new AIPromptEditorModel(aiPromptEditorView.element().get(0)),
+    aiPromptEditorPOM: new AIPromptEditorModel(aiPromptEditorView.element()?.get(0) as HTMLElement),
   };
 };
 
