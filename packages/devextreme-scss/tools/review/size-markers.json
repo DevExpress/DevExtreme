@@ -1,9 +1,9 @@
 {
   "comment": [
-    "Size-marker vocabulary. One source, three consumers:",
-    "  tools/review/px-audit.mjs  — the gate: a px literal with no marker does not pass",
-    "                               (tests/fluent-next-size-markers.test.ts runs it).",
-    "  tests/base-size-markers.test.ts  — the same scan over the shared layer scss/widgets/base/**, against a baseline: that layer cannot be marked in one go, so the count only ratchets down.",
+    "Size-marker vocabulary. One source, two consumers:",
+    "  tools/review/px-audit.mjs  — the gate: a px literal with no marker does not pass, in the theme",
+    "                               and (--layer=base) in the shared layer scss/widgets/base/**, where",
+    "                               a `!default` knob needs no marker (tests/fluent-next-size-markers.test.ts runs both).",
     "  tools/stylelint/module-variable-default.mjs — a marked declaration is exempt from the `!default` rule.",
     "The consumers cannot drift: this list is the only one.",
     "",
