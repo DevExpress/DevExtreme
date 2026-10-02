@@ -1,28 +1,71 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+
 const TOOLTIP_OFFSET = 12;
+
+interface FocusArg {
+  data: { name: string; index: number };
+  x: number;
+  y: number;
+  done: (result: boolean) => void;
+}
+
+interface TooltipTracker {
+  on: (handlers: {
+    'focus-on': (arg: FocusArg) => void;
+    'focus-move': (arg: FocusArg) => void;
+    'focus-off': () => void;
+  }) => () => void;
+}
+
+interface ViewerTooltip {
+  isEnabled: () => boolean;
+  show: (
+    target: ThemeValue,
+    coords: { x: number; y: number; offset: number },
+    eventData: { target: ThemeValue },
+    customizeTooltip: ThemeValue,
+    callback: (result: boolean) => void,
+  ) => boolean;
+  move: (x: number, y: number, offset: number) => void;
+  hide: () => void;
+}
+
+interface ViewerLayerCollection {
+  byName: (name: string) => { getProxy: (index: number) => ThemeValue } | undefined;
+}
+
+interface TooltipViewerParams {
+  tracker: TooltipTracker;
+  tooltip: ViewerTooltip;
+  layerCollection: ViewerLayerCollection;
+}
 
 // TODO: Somehow it should be merged with the core.Tooltip
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let TooltipViewer = function (params) {
-  this._subscribeToTracker(params.tracker, params.tooltip, params.layerCollection);
-};
+export let TooltipViewer = class TooltipViewer {
+  declare _offTracker: () => void;
 
-TooltipViewer.prototype = {
-  constructor: TooltipViewer,
+  constructor(params: TooltipViewerParams) {
+    this._subscribeToTracker(params.tracker, params.tooltip, params.layerCollection);
+  }
 
-  dispose() {
+  dispose(): void {
     this._offTracker();
+    // @ts-expect-error dispose releases the tracker subscription
     this._offTracker = null;
-  },
+  }
 
-  _subscribeToTracker(tracker, tooltip, layerCollection) {
+  _subscribeToTracker(
+    tracker: TooltipTracker,
+    tooltip: ViewerTooltip,
+    layerCollection: ViewerLayerCollection,
+  ): void {
     this._offTracker = tracker.on({
       'focus-on': function (arg) {
         let layer;
@@ -30,7 +73,7 @@ TooltipViewer.prototype = {
         if (tooltip.isEnabled()) {
           layer = layerCollection.byName(arg.data.name);
           proxy = layer && layer.getProxy(arg.data.index);
-          const callback = (result) => {
+          const callback = (result: boolean): void => {
             result && arg.done(result);
           };
           proxy && callback(tooltip.show(proxy, { x: arg.x, y: arg.y, offset: TOOLTIP_OFFSET }, { target: proxy }, undefined, callback));
@@ -44,7 +87,7 @@ TooltipViewer.prototype = {
         tooltip.hide();
       },
     });
-  },
+  }
 };
 
 /// #DEBUG

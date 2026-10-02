@@ -17,14 +17,14 @@ import { hasWindow } from '@js/core/utils/window';
 
 const isServerSide = !hasWindow();
 
-function Flags() {
-  this.reset();
-}
+class Flags {
+  declare _flags: Record<string, number>;
 
-Flags.prototype = {
-  constructor: Flags,
+  constructor() {
+    this.reset();
+  }
 
-  add(codes) {
+  add(codes: string[]): void {
     let i;
     const ii = codes.length;
     const flags = this._flags;
@@ -32,24 +32,24 @@ Flags.prototype = {
     for (i = 0; i < ii; ++i) {
       flags[codes[i]] = 1;
     }
-  },
+  }
 
-  has(code) {
+  has(code: string): boolean {
     return this._flags[code] > 0;
-  },
+  }
 
-  remove(code) {
+  remove(code: string): void {
     this._flags[code] = 0;
-  },
+  }
 
-  count() {
+  count(): number {
     return Object.keys(this._flags).filter((code) => this.has(code)).length;
-  },
+  }
 
-  reset() {
+  reset(): void {
     this._flags = {};
-  },
-};
+  }
+}
 
 function combineMaps(baseMap, thisMap) {
   return baseMap !== thisMap ? _extend({}, baseMap, thisMap) : _extend({}, baseMap);
@@ -199,7 +199,7 @@ export const replaceInherit = isServerSide
     widget.addPlugin = addPlugin;
   };
 
-export function changes() {
+export function changes(): Flags {
   return new Flags();
 }
 

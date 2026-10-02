@@ -1,21 +1,63 @@
 /* eslint-disable no-bitwise */
-/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { isDefined } from '@js/core/utils/type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { patchFontOptions } from '@ts/viz/core/utils';
+import type Link from '@ts/viz/sankey/link_item';
 
 const states = ['normal', 'hover'];
 
-function compileAttrs(color, itemOptions, itemBaseOptions?) {
+interface NodeAttrs {
+  fill: string;
+  'stroke-width': number;
+  stroke: string;
+  'stroke-opacity': number;
+  opacity: number;
+  hatching: ThemeValue;
+}
+
+interface NodeRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  _name: string;
+}
+
+interface NodeLayoutLink {
+  index: number;
+  weight: number;
+}
+
+interface NodeWidget {
+  _renderer: { getRootOffset: () => { left: number; top: number } };
+  _tooltip?: { show: (target: ThemeValue, coords: { x: number; y: number }) => void; hide: () => void };
+  _links: Link[];
+  _getOption: (name: string, isScalar?: boolean) => ThemeValue;
+  _suspend: () => void;
+  _resume: () => void;
+  _eventTrigger: (name: string, args: ThemeValue) => void;
+  _applyNodesAppearance: () => void;
+  _applyLinksAppearance: () => void;
+  clearHover: () => void;
+}
+
+interface NodeParams {
+  id: number;
+  color: string;
+  rect: NodeRect;
+  options: ThemeValue;
+  linksIn: NodeLayoutLink[];
+  linksOut: NodeLayoutLink[];
+}
+
+function compileAttrs(color: string, itemOptions: ThemeValue, itemBaseOptions?: ThemeValue): NodeAttrs {
   const border = itemOptions.border;
   const baseBorder = itemBaseOptions.border;
   const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
@@ -33,7 +75,7 @@ function compileAttrs(color, itemOptions, itemBaseOptions?) {
   };
 }
 
-function compileLabelAttrs(labelOptions, filter, node) {
+function compileLabelAttrs(labelOptions: ThemeValue, filter: ThemeValue, node: Node): { attr: Record<string, ThemeValue>; css: ThemeValue } {
   const _patchFontOptions = patchFontOptions;
 
   if (labelOptions.useNodeColors) {
@@ -44,12 +86,11 @@ function compileLabelAttrs(labelOptions, filter, node) {
   const borderWidth = isDefined(labelOptions.border.width) ? labelOptions.border.width : 0;
   const borderColor = isDefined(labelOptions.border.color) ? labelOptions.border.color : labelOptions.font.color;
   const borderOpacity = isDefined(labelOptions.border.opacity) ? labelOptions.border.opacity : 1;
-  const attr = {
+  const attr: Record<string, ThemeValue> = {
     filter,
   };
 
   if (borderVisible && borderWidth) {
-    // @ts-expect-error
     attr.stroke = borderColor;
     attr['stroke-width'] = borderVisible ? borderWidth : 0;
     attr['stroke-opacity'] = borderOpacity;
@@ -61,45 +102,66 @@ function compileLabelAttrs(labelOptions, filter, node) {
   };
 }
 
-function Node(widget, params) {
-  const that = this;
-  const widgetOffset = widget._renderer.getRootOffset();
+class Node {
+  declare code: number;
 
-  that.code = 0;
-  that.widget = widget;
+  declare widget: NodeWidget;
 
-  that.color = params.color;
-  that.options = params.options;
-  that.rect = params.rect;
-  that.label = params.rect._name;
-  that.coords = {
-    x: params.rect.x + params.rect.width / 2 + widgetOffset.left,
-    y: params.rect.y + params.rect.height / 2 + widgetOffset.top,
-  };
-  that.id = params.id;
-  that.linksIn = params.linksIn;
-  that.linksOut = params.linksOut;
+  declare color: string;
 
-  this.states = {
-    normal: compileAttrs(this.color, that.options, that.options),
-    hover: compileAttrs(this.color, that.options.hoverStyle, that.options),
-  };
-}
+  declare options: ThemeValue;
 
-Node.prototype = {
-  compileAttrs() {
+  declare rect: NodeRect;
+
+  declare label: string;
+
+  declare coords: { x: number; y: number };
+
+  declare id: number;
+
+  declare linksIn: NodeLayoutLink[];
+
+  declare linksOut: NodeLayoutLink[];
+
+  declare states: Record<'normal' | 'hover', NodeAttrs>;
+
+  constructor(widget: NodeWidget, params: NodeParams) {
+    const widgetOffset = widget._renderer.getRootOffset();
+
+    this.code = 0;
+    this.widget = widget;
+
+    this.color = params.color;
+    this.options = params.options;
+    this.rect = params.rect;
+    this.label = params.rect._name;
+    this.coords = {
+      x: params.rect.x + params.rect.width / 2 + widgetOffset.left,
+      y: params.rect.y + params.rect.height / 2 + widgetOffset.top,
+    };
+    this.id = params.id;
+    this.linksIn = params.linksIn;
+    this.linksOut = params.linksOut;
+
+    this.states = {
+      normal: compileAttrs(this.color, this.options, this.options),
+      hover: compileAttrs(this.color, this.options.hoverStyle, this.options),
+    };
+  }
+
+  compileAttrs(): NodeAttrs {
     return compileAttrs(this.color, this.options);
-  },
+  }
 
-  getState() {
+  getState(): string {
     return states[this.code];
-  },
+  }
 
-  isHovered() {
+  isHovered(): boolean {
     return !!(this.code & 1);
-  },
+  }
 
-  setState(code, state) {
+  setState(code: number, state: boolean): void {
     if (state) {
       this.code |= code;
     } else {
@@ -108,7 +170,7 @@ Node.prototype = {
 
     if (state) {
       this.linksIn.concat(this.linksOut).forEach((adjacentLink) => {
-        this.widget._links[adjacentLink.index].setAdjacentNodeHover(true);
+        this.widget._links[adjacentLink.index].setAdjacentNodeHover();
       });
     } else {
       this.widget._links.forEach((link) => {
@@ -119,9 +181,9 @@ Node.prototype = {
 
     this.widget._applyNodesAppearance();
     this.widget._applyLinksAppearance();
-  },
+  }
 
-  hover(state) {
+  hover(state: boolean): void {
     if (!this.widget._getOption('hoverEnabled', true) || state === this.isHovered()) {
       return;
     }
@@ -131,13 +193,13 @@ Node.prototype = {
     this.setState(1, state);
     this.widget._eventTrigger('nodeHoverChanged', { target: this });
     this.widget._resume();
-  },
+  }
 
-  setHover() {
+  setHover(): void {
     this.hover(true);
-  },
+  }
 
-  showTooltip(coords) {
+  showTooltip(coords?: number[]): void {
     this.widget._getOption('hoverEnabled', true) && this.widget._tooltip && this.widget._tooltip.show({
       type: 'node',
       info: {
@@ -147,16 +209,15 @@ Node.prototype = {
         weightOut: this.linksOut.reduce((previousValue, currentValue) => previousValue + currentValue.weight, 0),
       },
     }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);
-  },
+  }
 
-  hideTooltip() {
+  hideTooltip(): void {
     this.widget._tooltip && this.widget._tooltip.hide();
-  },
+  }
 
-  getLabelAttributes(labelSettings, filter) {
+  getLabelAttributes(labelSettings: ThemeValue, filter: ThemeValue): { attr: Record<string, ThemeValue>; css: ThemeValue } {
     return compileLabelAttrs(labelSettings, filter, this);
-  },
-
-};
+  }
+}
 
 export default Node;

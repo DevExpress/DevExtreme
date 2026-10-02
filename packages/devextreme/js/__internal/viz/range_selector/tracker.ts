@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -14,11 +12,44 @@ import domAdapter from '@js/core/dom_adapter';
 import { each } from '@js/core/utils/iterator';
 import { pointerEvents as msPointerEnabled } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { MovingHandler } from '@ts/viz/range_selector/sliders_controller';
 
 const MIN_MANUAL_SELECTING_WIDTH = 10;
 const window = getWindow();
 
-function isLeftButtonPressed(event) {
+type EventHandler = (e: ThemeValue) => void;
+
+type DocumentEvents = Record<string, EventHandler>;
+
+interface TrackerState {
+  enabled?: boolean;
+  moveSelectedRangeByClick?: boolean;
+  manualRangeSelectionEnabled?: boolean;
+}
+
+interface TrackerSlider {
+  on: (events: DocumentEvents) => void;
+}
+
+interface TrackerController {
+  getTrackerTargets: () => { area: ThemeValue; selectedArea: ThemeValue; sliders: TrackerSlider[] };
+  placeSliderAndBeginMoving: (firstPosition: number, secondPosition: number, e: ThemeValue) => MovingHandler;
+  moveSelectedArea: (screenPosition: number, e: ThemeValue) => void;
+  beginSelectedAreaMoving: (initialPosition: number) => MovingHandler;
+  beginSliderMoving: (initialIndex: number, initialPosition: number) => MovingHandler;
+  foregroundSlider: (index: number) => void;
+}
+
+interface TrackerParams {
+  renderer: {
+    root: ThemeValue;
+    getRootOffset: () => { left: number };
+  };
+  controller: TrackerController;
+}
+
+function isLeftButtonPressed(event: ThemeValue): boolean {
   const e = event || window.event;
   const originalEvent = e.originalEvent;
   const touches = e.touches;
@@ -30,7 +61,7 @@ function isLeftButtonPressed(event) {
   return (e.which === 1) || isMSPointerLeftClick || isTouches;
 }
 
-function isMultiTouches(event) {
+function isMultiTouches(event: ThemeValue): boolean | null {
   const originalEvent = event.originalEvent;
   const touches = event.touches;
   const eventTouches = originalEvent && originalEvent.touches;
@@ -38,13 +69,13 @@ function isMultiTouches(event) {
   return (touches && touches.length > 1) || (eventTouches && eventTouches.length > 1) || null;
 }
 
-function preventDefault(e) {
+function preventDefault(e: ThemeValue): void {
   if (!isMultiTouches(e)) {
     e.preventDefault();
   }
 }
 
-function stopPropagationAndPreventDefault(e) {
+function stopPropagationAndPreventDefault(e: ThemeValue): void {
   if (!isMultiTouches(e)) {
     e.stopPropagation();
     e.preventDefault();
@@ -52,11 +83,11 @@ function stopPropagationAndPreventDefault(e) {
 }
 
 // Q375042
-function isTouchEventArgs(e) {
+function isTouchEventArgs(e: ThemeValue): boolean {
   return e && e.type && e.type.indexOf('touch') === 0;
 }
 
-function getEventPageX(event) {
+function getEventPageX(event: ThemeValue): number {
   const originalEvent = event.originalEvent;
   let result = 0;
   if (event.pageX) {
@@ -74,13 +105,13 @@ function getEventPageX(event) {
   return result;
 }
 
-function initializeAreaEvents(controller, area, state, getRootOffsetLeft) {
+function initializeAreaEvents(controller: TrackerController, area: ThemeValue, state: TrackerState, getRootOffsetLeft: () => number): DocumentEvents {
   let isTouchEvent;
   let isActive = false;
   let initialPosition;
-  let movingHandler = null;
+  let movingHandler: MovingHandler | null = null;
   const docEvents = {
-    [pointerEvents.move](e) {
+    [pointerEvents.move](e: ThemeValue): void {
       let position;
       let offset;
       if (isTouchEvent !== isTouchEventArgs(e)) return;
@@ -92,14 +123,13 @@ function initializeAreaEvents(controller, area, state, getRootOffsetLeft) {
         position = getEventPageX(e);
         offset = getRootOffsetLeft();
         if (movingHandler) {
-          // @ts-expect-error
           movingHandler(position - offset, e);
         } else if (state.manualRangeSelectionEnabled && Math.abs(initialPosition - position) >= MIN_MANUAL_SELECTING_WIDTH) {
           movingHandler = controller.placeSliderAndBeginMoving(initialPosition - offset, position - offset, e);
         }
       }
     },
-    [pointerEvents.up](e) {
+    [pointerEvents.up](e: ThemeValue): void {
       let position;
       if (isActive) {
         position = getEventPageX(e);
@@ -111,11 +141,10 @@ function initializeAreaEvents(controller, area, state, getRootOffsetLeft) {
     },
   };
 
-  function cancel(e) {
+  function cancel(e: ThemeValue): void {
     if (isActive) {
       isActive = false;
       if (movingHandler) {
-        // @ts-expect-error
         movingHandler.complete(e);
         movingHandler = null;
       }
@@ -132,12 +161,12 @@ function initializeAreaEvents(controller, area, state, getRootOffsetLeft) {
   return docEvents;
 }
 
-function initializeSelectedAreaEvents(controller, area, state, getRootOffsetLeft) {
+function initializeSelectedAreaEvents(controller: TrackerController, area: ThemeValue, state: TrackerState, getRootOffsetLeft: () => number): DocumentEvents {
   let isTouchEvent;
   let isActive = false;
-  let movingHandler = null;
+  let movingHandler: MovingHandler | null = null;
   const docEvents = {
-    [pointerEvents.move](e) {
+    [pointerEvents.move](e: ThemeValue): void {
       if (isTouchEvent !== isTouchEventArgs(e)) return;
 
       if (!isLeftButtonPressed(e)) {
@@ -145,17 +174,17 @@ function initializeSelectedAreaEvents(controller, area, state, getRootOffsetLeft
       }
       if (isActive) {
         preventDefault(e);
-        // @ts-expect-error
+        // @ts-expect-error movingHandler is set whenever isActive is true
         movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
       }
     },
     [pointerEvents.up]: cancel,
   };
 
-  function cancel(e) {
+  function cancel(e: ThemeValue): void {
     if (isActive) {
       isActive = false;
-      // @ts-expect-error
+      // @ts-expect-error movingHandler is set whenever isActive is true
       movingHandler.complete(e);
       movingHandler = null;
     }
@@ -172,12 +201,12 @@ function initializeSelectedAreaEvents(controller, area, state, getRootOffsetLeft
   return docEvents;
 }
 
-function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
+function initializeSliderEvents(controller: TrackerController, sliders: TrackerSlider[], state: TrackerState, getRootOffsetLeft: () => number): DocumentEvents {
   let isTouchEvent;
   let isActive = false;
-  let movingHandler = null;
+  let movingHandler: MovingHandler | null = null;
   const docEvents = {
-    [pointerEvents.move](e) {
+    [pointerEvents.move](e: ThemeValue): void {
       if (isTouchEvent !== isTouchEventArgs(e)) return;
 
       if (!isLeftButtonPressed(e)) {
@@ -185,7 +214,7 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
       }
       if (isActive) {
         preventDefault(e);
-        // @ts-expect-error
+        // @ts-expect-error movingHandler is set whenever isActive is true
         movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
       }
     },
@@ -194,7 +223,7 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
 
   each(sliders, (i, slider) => {
     slider.on({
-      [pointerEvents.down](e) {
+      [pointerEvents.down](e: ThemeValue) {
         if (!state.enabled || !isLeftButtonPressed(e) || isActive) return;
 
         isActive = true;
@@ -210,10 +239,10 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
     });
   });
 
-  function cancel(e) {
+  function cancel(e: ThemeValue): void {
     if (isActive) {
       isActive = false;
-      // @ts-expect-error
+      // @ts-expect-error movingHandler is set whenever isActive is true
       movingHandler.complete(e);
       movingHandler = null;
     }
@@ -223,43 +252,45 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let Tracker = function (params) {
-  const state = this._state = {};
-  const targets = params.controller.getTrackerTargets();
-  if (msPointerEnabled) {
-    params.renderer.root.css({ msTouchAction: 'pinch-zoom' });
+export let Tracker = class Tracker {
+  declare _state: TrackerState;
+
+  declare _docEvents: DocumentEvents[];
+
+  constructor(params: TrackerParams) {
+    const state = this._state = {};
+    const targets = params.controller.getTrackerTargets();
+    if (msPointerEnabled) {
+      params.renderer.root.css({ msTouchAction: 'pinch-zoom' });
+    }
+    this._docEvents = [
+      initializeSelectedAreaEvents(params.controller, targets.selectedArea, state, getRootOffsetLeft),
+      initializeAreaEvents(params.controller, targets.area, state, getRootOffsetLeft),
+      initializeSliderEvents(params.controller, targets.sliders, state, getRootOffsetLeft),
+    ];
+    // TODO: 3 "move" and 3 "end" events - do we really need that much?
+    each(this._docEvents, (_, events) => {
+      // @ts-expect-error events_engine.d.ts declares no (element, events map) overload of on()
+      eventsEngine.on(domAdapter.getDocument(), events);
+    });
+
+    function getRootOffsetLeft(): number {
+      return params.renderer.getRootOffset().left;
+    }
   }
-  this._docEvents = [
-    initializeSelectedAreaEvents(params.controller, targets.selectedArea, state, getRootOffsetLeft),
-    initializeAreaEvents(params.controller, targets.area, state, getRootOffsetLeft),
-    initializeSliderEvents(params.controller, targets.sliders, state, getRootOffsetLeft),
-  ];
-  // TODO: 3 "move" and 3 "end" events - do we really need that much?
-  each(this._docEvents, (_, events) => {
-    // @ts-expect-error
-    eventsEngine.on(domAdapter.getDocument(), events);
-  });
 
-  function getRootOffsetLeft() {
-    return params.renderer.getRootOffset().left;
-  }
-};
-
-Tracker.prototype = {
-  constructor: Tracker,
-
-  dispose() {
+  dispose(): void {
     each(this._docEvents, (_, events) => {
       eventsEngine.off(domAdapter.getDocument(), events);
     });
-  },
+  }
 
-  update(enabled, behavior) {
+  update(enabled: boolean, behavior: ThemeValue): void {
     const state = this._state;
     state.enabled = enabled;
     state.moveSelectedRangeByClick = behavior.moveSelectedRangeByClick;
     state.manualRangeSelectionEnabled = behavior.manualRangeSelectionEnabled;
-  },
+  }
 };
 
 /// #DEBUG
