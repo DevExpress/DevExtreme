@@ -84,6 +84,7 @@ export class PagerView extends modules.View {
 
   protected _renderCore() {
     const that = this;
+    // @ts-expect-error the view is rendered here
     const $element = that.element().addClass(that.addWidgetPrefix(PAGER_CLASS));
     const pagerOptions = that.option('pager') ?? {};
     const dataController = that.getController('data');

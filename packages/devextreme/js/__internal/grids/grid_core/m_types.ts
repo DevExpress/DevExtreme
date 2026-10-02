@@ -316,6 +316,8 @@ export interface Module {
   defaultOptions?: () => InternalGridOptions;
 }
 
+export type RegisteredModule = Module & { name: string };
+
 export interface KeyDownEvent {
   originalEvent: KeyboardEvent;
   keyName: string;
