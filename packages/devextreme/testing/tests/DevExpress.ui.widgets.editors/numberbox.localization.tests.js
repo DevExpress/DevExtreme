@@ -258,12 +258,17 @@ QUnit.module('localization: global number format locale', localizationModuleHook
         });
         const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
 
-        assert.strictEqual($input.val(), '1,234.56');
+        assert.strictEqual($input.val(), '1,234.56', 'initial render uses en-US');
 
         dynamicLocale = 'de-DE';
-        $element.dxNumberBox('instance').option('value', 1234.56);
+        $element.dxNumberBox('instance').repaint();
 
-        assert.strictEqual($input.val(), '1.234,56');
+        assert.strictEqual($element.find(TEXTEDITOR_INPUT_CLASS).val(), '1.234,56', 'repaint re-evaluates the locale function');
+
+        dynamicLocale = 'en-US';
+        $element.dxNumberBox('instance').option('value', 99.5);
+
+        assert.strictEqual($element.find(TEXTEDITOR_INPUT_CLASS).val(), '99.50', 'new value re-evaluates the locale function');
     });
 
     QUnit.test('local format option keeps type; global numberFormat locale applies to culture', function(assert) {
