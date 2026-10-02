@@ -24,6 +24,7 @@ import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/m_dom';
 import { focused } from '@ts/core/utils/m_selectors';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -71,6 +72,7 @@ import {
   FOCUS_STATE_CLASS,
   FOCUS_TYPE_CELL,
   FOCUS_TYPE_ROW,
+  FOCUSED_CELL_KEYS,
   FOCUSED_CLASS,
   FREESPACE_ROW_CLASS,
   FUNCTIONAL_KEYS,
@@ -556,8 +558,17 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return;
     }
 
-    !FUNCTIONAL_KEYS.includes(e.keyName)
-      && this._updateFocusedCellPositionByTarget(originalEvent.target);
+    const isWaitingForRows = this.isWaitingForRowsRendering(e);
+
+    if (!FUNCTIONAL_KEYS.includes(e.keyName) && !isWaitingForRows) {
+      this._updateFocusedCellPositionByTarget(originalEvent.target);
+    }
+
+    if (isWaitingForRows && !isHandled && this.isFocusedCellKey(e)) {
+      originalEvent.preventDefault();
+      originalEvent.stopPropagation();
+      return;
+    }
 
     if (!isHandled) {
       // eslint-disable-next-line default-case
@@ -701,6 +712,24 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return !!$masterDetail.get(0)
       && this.elementIsInsideGrid($masterDetail)
       && !$target.is($masterDetail);
+  }
+
+  private isWaitingForRowsRendering(eventArgs: KeyboardKeyDownEvent): boolean {
+    return this._rowsView.isWaitingForAsyncTemplates()
+      && !this._editingController?.isEditing()
+      && !this.isInsideMasterDetail($(eventArgs.originalEvent.target));
+  }
+
+  private isFocusedCellKey(eventArgs: KeyboardKeyDownEvent): boolean {
+    const {
+      keyName, key, ctrl, alt, metaKey,
+    } = eventArgs;
+    const isViewSwitch = ctrl && (keyName === 'upArrow' || keyName === 'downArrow');
+    const isFastEditingKey = key?.length === 1
+      && !ctrl && !alt && !metaKey
+      && !!this._isFastEditingAllowed();
+
+    return !isViewSwitch && (FOCUSED_CELL_KEYS.includes(keyName) || isFastEditingKey);
   }
 
   private _upDownKeysHandler(eventArgs, isEditing) {
