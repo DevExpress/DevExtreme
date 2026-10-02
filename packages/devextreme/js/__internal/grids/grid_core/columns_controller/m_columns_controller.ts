@@ -33,7 +33,6 @@ import type {
   ColumnOptionsUpdate,
   ColumnsChanges,
   ColumnsControllerOptionChanged,
-  ColumnsControllerOptions,
   ColumnsDataSourceParameters,
   ColumnSelector,
   ColumnsOptionChanged,
@@ -153,7 +152,7 @@ export class ColumnsController extends modules.Controller {
 
   public _isWarnedAboutUnsupportedProperties?: boolean;
 
-  private getCommonColumnSettings(column?: Column): Partial<Column> {
+  private getCommonColumnSettings(column?: Column): Partial<Column> | undefined {
     switch (true) {
       case !column?.type:
         return this.option('commonColumnSettings');
@@ -579,6 +578,7 @@ export class ColumnsController extends modules.Controller {
   /**
    * @extended: virtual_column
    */
+  protected _compileVisibleColumns(rowIndex?: number | null, isBase?: boolean): Column[];
   protected _compileVisibleColumns(rowIndex?: number | null): Column[] {
     this._visibleColumns = this._visibleColumns ?? this._compileVisibleColumnsCore();
     const effectiveRowIndex = isDefined(rowIndex) ? rowIndex : this._visibleColumns.length - 1;
@@ -586,15 +586,12 @@ export class ColumnsController extends modules.Controller {
     return this._visibleColumns[effectiveRowIndex] ?? [];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getVisibleColumns(rowIndex?: number | null, isBase?: boolean): Column[] {
+  public getVisibleColumns(...args: [rowIndex?: number | null, isBase?: boolean]): Column[] {
     if (!this._shouldReturnVisibleColumns()) {
       return [];
     }
 
-    // @ts-expect-error extenders forward IArguments rather than a typed tuple
-    // eslint-disable-next-line prefer-spread, prefer-rest-params -- preserve all extender arguments
-    return this._compileVisibleColumns.apply(this, arguments);
+    return this._compileVisibleColumns(...args);
   }
 
   /**
@@ -643,64 +640,57 @@ export class ColumnsController extends modules.Controller {
     return visibleColumns.filter((column) => column.fixed);
   }
 
-  /* eslint-disable max-depth -- preserve fixed-column layout algorithm */
   private _getFixedColumnsCore(): Column[][] {
     const result: Column[][] = [];
     const rowCount = this.getRowCount();
     const isColumnFixing = this._isColumnFixing();
+    if (!isColumnFixing) {
+      return result;
+    }
     const transparentColumn: Column = { command: 'transparent' };
     let transparentColspan = 0;
+    const getColspan = (column: Column): number => (
+      column.isBand && column.colspan ? column.colspan : 1
+    );
 
-    if (isColumnFixing) {
-      for (let i = 0; i <= rowCount; i += 1) {
-        let notFixedColumnCount = 0;
-        let lastFixedPosition: Column['fixedPosition'] | null = null;
-        let transparentColumnIndex: number | null = null;
-        const visibleColumns = this.getVisibleColumns(i, true);
+    for (let i = 0; i <= rowCount; i += 1) {
+      let notFixedColumnCount = 0;
+      let lastFixedPosition: Column['fixedPosition'] | null = null;
+      let transparentColumnIndex: number | null = null;
+      const visibleColumns = this.getVisibleColumns(i, true);
 
-        for (let j = 0; j < visibleColumns.length; j += 1) {
-          const prevColumn = visibleColumns[j - 1];
-          const column = visibleColumns[j];
+      for (let j = 0; j < visibleColumns.length; j += 1) {
+        const prevColumn = visibleColumns[j - 1];
+        const column = visibleColumns[j];
 
-          if (!column.fixed || column.fixedPosition === StickyPosition.Sticky) {
-            if (i === 0) {
-              if (column.isBand && column.colspan) {
-                transparentColspan += column.colspan;
-              } else {
-                transparentColspan += 1;
-              }
-            }
+        if (!column.fixed || column.fixedPosition === StickyPosition.Sticky) {
+          transparentColspan += i === 0 ? getColspan(column) : 0;
 
-            notFixedColumnCount += 1;
-            if (!isDefined(transparentColumnIndex)) {
-              transparentColumnIndex = j;
-            }
-          } else if (prevColumn && prevColumn.fixed
+          notFixedColumnCount += 1;
+          transparentColumnIndex ??= j;
+        } else if (prevColumn && prevColumn.fixed
             && getFixedPosition(this, prevColumn) !== getFixedPosition(this, column)) {
-            if (!isDefined(transparentColumnIndex)) {
-              transparentColumnIndex = j;
-            }
-          } else {
-            lastFixedPosition = column.fixedPosition;
-          }
+          transparentColumnIndex ??= j;
+        } else {
+          lastFixedPosition = column.fixedPosition;
         }
-
-        if (i === 0
-          && (notFixedColumnCount === 0 || notFixedColumnCount >= visibleColumns.length)) {
-          return [];
-        }
-
-        if (!isDefined(transparentColumnIndex)) {
-          transparentColumnIndex = lastFixedPosition === 'right' ? 0 : visibleColumns.length;
-        }
-
-        result[i] = visibleColumns.slice(0);
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- replace zero
-        if (!transparentColumn.colspan) {
-          transparentColumn.colspan = transparentColspan;
-        }
-        result[i].splice(transparentColumnIndex, notFixedColumnCount, transparentColumn);
       }
+
+      if (i === 0
+          && (notFixedColumnCount === 0 || notFixedColumnCount >= visibleColumns.length)) {
+        return [];
+      }
+
+      if (!isDefined(transparentColumnIndex)) {
+        transparentColumnIndex = lastFixedPosition === 'right' ? 0 : visibleColumns.length;
+      }
+
+      result[i] = visibleColumns.slice(0);
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- replace zero
+      if (!transparentColumn.colspan) {
+        transparentColumn.colspan = transparentColspan;
+      }
+      result[i].splice(transparentColumnIndex, notFixedColumnCount, transparentColumn);
     }
 
     return result.map((columns) => columns.map((column) => {
@@ -711,8 +701,6 @@ export class ColumnsController extends modules.Controller {
       return newColumn;
     }));
   }
-
-  /* eslint-enable max-depth */
 
   public _isColumnFixing(): boolean | undefined {
     let isColumnFixing = this.option('columnFixing.enabled');
@@ -1343,7 +1331,6 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  /* eslint-disable max-depth -- preserve type inference and serialization order */
   public updateColumnDataTypes(dataSourceAdapter?: DataSourceAdapter): boolean {
     const dateSerializationFormat = this.option('dateSerializationFormat');
     const firstItems = this._getFirstItems(dataSourceAdapter);
@@ -1368,57 +1355,65 @@ export class ColumnsController extends modules.Controller {
         lookup.serializationFormat = dateSerializationFormat;
       }
 
+      const inferDataTypes = (): void => {
+        for (const item of firstItems) {
+          const value = column.calculateCellValue(item);
+
+          if (!column.dataType) {
+            const valueDataType = getValueDataType(value);
+            dataType = dataType ?? valueDataType;
+            if (dataType && valueDataType && dataType !== valueDataType) {
+              dataType = 'string';
+            }
+          }
+
+          if (lookup && !lookup.dataType) {
+            const valueDataType = getValueDataType(
+              gridCoreUtils.getDisplayValue(column, value, item),
+            );
+            lookupDataType = lookupDataType ?? valueDataType;
+            if (lookupDataType && valueDataType && lookupDataType !== valueDataType) {
+              lookupDataType = 'string';
+            }
+          }
+        }
+        if (dataType || lookupDataType) {
+          if (dataType) {
+            column.dataType = dataType;
+          }
+
+          if (lookup && lookupDataType) {
+            lookup.dataType = lookupDataType;
+          }
+          isColumnDataTypesUpdated = true;
+        }
+      };
+
+      const inferSerializationFormats = (): void => {
+        for (const item of firstItems) {
+          const value = column.calculateCellValue(item, true);
+
+          if (column.serializationFormat === undefined) {
+            column.serializationFormat = getSerializationFormat(column.dataType, value);
+          }
+
+          if (lookup && lookup.serializationFormat === undefined) {
+            lookup.serializationFormat = getSerializationFormat(
+              lookup.dataType,
+              lookup.calculateCellValue(value, true),
+            );
+          }
+        }
+      };
+
       if (column.calculateCellValue && firstItems.length) {
         if (!column.dataType || (lookup && !lookup.dataType)) {
-          for (const item of firstItems) {
-            const value = column.calculateCellValue(item);
-
-            if (!column.dataType) {
-              const valueDataType = getValueDataType(value);
-              dataType = dataType ?? valueDataType;
-              if (dataType && valueDataType && dataType !== valueDataType) {
-                dataType = 'string';
-              }
-            }
-
-            if (lookup && !lookup.dataType) {
-              const valueDataType = getValueDataType(
-                gridCoreUtils.getDisplayValue(column, value, item),
-              );
-              lookupDataType = lookupDataType ?? valueDataType;
-              if (lookupDataType && valueDataType && lookupDataType !== valueDataType) {
-                lookupDataType = 'string';
-              }
-            }
-          }
-          if (dataType || lookupDataType) {
-            if (dataType) {
-              column.dataType = dataType;
-            }
-
-            if (lookup && lookupDataType) {
-              lookup.dataType = lookupDataType;
-            }
-            isColumnDataTypesUpdated = true;
-          }
+          inferDataTypes();
         }
         const needsSerializationFormat = column.serializationFormat === undefined
           || (lookup && lookup.serializationFormat === undefined);
         if (needsSerializationFormat) {
-          for (const item of firstItems) {
-            const value = column.calculateCellValue(item, true);
-
-            if (column.serializationFormat === undefined) {
-              column.serializationFormat = getSerializationFormat(column.dataType, value);
-            }
-
-            if (lookup && lookup.serializationFormat === undefined) {
-              lookup.serializationFormat = getSerializationFormat(
-                lookup.dataType,
-                lookup.calculateCellValue(value, true),
-              );
-            }
-          }
+          inferSerializationFormats();
         }
       }
 
@@ -1428,10 +1423,8 @@ export class ColumnsController extends modules.Controller {
     return isColumnDataTypesUpdated;
   }
 
-  /* eslint-enable max-depth */
-
   private _customizeColumns(columns: Column[]): void {
-    const { customizeColumns } = this.option() as ColumnsControllerOptions;
+    const { customizeColumns } = this.option();
 
     if (customizeColumns) {
       const hasOwnerBand = columns.some((column) => isObject(column.ownerBand));
@@ -1507,18 +1500,19 @@ export class ColumnsController extends modules.Controller {
       updateColumnChanges(this, 'grouping');
     }
 
-    updateColumnChanges(this, 'columns');
-
-    const columnChanges = this._columnChanges as ColumnsChanges;
+    const columnChanges = updateColumnChanges(this, 'columns');
     columnChanges.appliedFilters ??= [];
     columnChanges.appliedFilters.push(parameters.filtering);
   }
 
-  /* eslint-disable max-depth -- preserve sort/group synchronization flow */
   public updateSortingGrouping(
     dataSourceAdapter?: DataSourceAdapter | null,
     fromDataSource?: boolean,
   ): void {
+    if (!dataSourceAdapter) {
+      return;
+    }
+
     let isColumnsChanged = false;
     const updateSortGroupParameterIndexes = (
       columns: Column[],
@@ -1537,117 +1531,112 @@ export class ColumnsController extends modules.Controller {
             (groupValue) => column.dataField === groupValue || column.name === groupValue,
           );
 
-        if (!isReferencedAsGroupValue) {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-          delete column[indexParameterName];
-          if (sortParameters) {
-            for (let i = 0; i < sortParameters.length; i += 1) {
-              const { selector, isExpanded } = sortParameters[i];
-
-              const isMatchingSelector = selector === column.dataField
-                || selector === column.name
-                || selector === column.displayField
-                || gridCoreUtils.isEqualSelectors(selector, column.selector)
-                || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateCellValue)
-                || gridCoreUtils.isEqualSelectors(selector, column.calculateGroupValue)
-                || (isFunction(column.calculateDisplayValue)
-                  && gridCoreUtils.isSelectorEqualWithCallback(
-                    selector,
-                    column.calculateDisplayValue,
-                  ));
-              if (isMatchingSelector) {
-                if (fromDataSource) {
-                  let { sortOrder } = column;
-                  if (!('sortOrder' in column)) {
-                    sortOrder = sortParameters[i].desc ? 'desc' : 'asc';
-                  }
-                  column.sortOrder = sortOrder;
-                } else {
-                  column.sortOrder = column.sortOrder ?? (sortParameters[i].desc ? 'desc' : 'asc');
-                }
-
-                if (isExpanded !== undefined) {
-                  column.autoExpandGroup = isExpanded;
-                }
-
-                column[indexParameterName] = i;
-                break;
-              }
-            }
-          }
+        if (isReferencedAsGroupValue) {
+          return;
         }
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete column[indexParameterName];
+        if (!sortParameters) {
+          return;
+        }
+        const parameterIndex = sortParameters.findIndex(({ selector }) => (
+          selector === column.dataField
+          || selector === column.name
+          || selector === column.displayField
+          || gridCoreUtils.isEqualSelectors(selector, column.selector)
+          || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateCellValue)
+          || gridCoreUtils.isEqualSelectors(selector, column.calculateGroupValue)
+          || (isFunction(column.calculateDisplayValue)
+            && gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateDisplayValue))
+        ));
+        if (parameterIndex < 0) {
+          return;
+        }
+
+        const { desc, isExpanded } = sortParameters[parameterIndex];
+        if (fromDataSource) {
+          let { sortOrder } = column;
+          if (!('sortOrder' in column)) {
+            sortOrder = desc ? 'desc' : 'asc';
+          }
+          column.sortOrder = sortOrder;
+        } else {
+          column.sortOrder = column.sortOrder ?? (desc ? 'desc' : 'asc');
+        }
+
+        if (isExpanded !== undefined) {
+          column.autoExpandGroup = isExpanded;
+        }
+
+        column[indexParameterName] = parameterIndex;
       });
     };
-    if (dataSourceAdapter) {
-      const sortParameters = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.sort());
-      const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.group());
-      const columnsGroupParameters = this.getGroupDataSourceParameters();
-      const columnsSortParameters = this.getSortDataSourceParameters();
-      const changeTypes = this._columnChanges?.changeTypes;
-      const sortingChanged = !gridCoreUtils.equalSortParameters(
-        sortParameters,
-        columnsSortParameters,
-      );
-      const needToApplySortingFromDataSource = fromDataSource && !changeTypes?.sorting;
-      const needToApplyGroupingFromDataSource = fromDataSource && !changeTypes?.grouping;
-      const groupingChanged = !gridCoreUtils.equalSortParameters(
-        groupParameters,
-        columnsGroupParameters,
-        true,
-      );
-      const groupExpandingChanged = !groupingChanged
+    const sortParameters = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.sort());
+    const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.group());
+    const columnsGroupParameters = this.getGroupDataSourceParameters();
+    const columnsSortParameters = this.getSortDataSourceParameters();
+    const changeTypes = this._columnChanges?.changeTypes;
+    const sortingChanged = !gridCoreUtils.equalSortParameters(
+      sortParameters,
+      columnsSortParameters,
+    );
+    const needToApplySortingFromDataSource = fromDataSource && !changeTypes?.sorting;
+    const needToApplyGroupingFromDataSource = fromDataSource && !changeTypes?.grouping;
+    const groupingChanged = !gridCoreUtils.equalSortParameters(
+      groupParameters,
+      columnsGroupParameters,
+      true,
+    );
+    const groupExpandingChanged = !groupingChanged
         && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
 
-      if (!this._columns.length) {
-        each(groupParameters, (_: number, group) => {
-          this._columns.push(group.selector);
-        });
-        each(sortParameters, (_: number, sort) => {
-          if (!isFunction(sort.selector)) {
-            this._columns.push(sort.selector);
-          }
-        });
-        assignColumns(this, createColumnsFromOptions(this, this._columns));
-      }
+    if (!this._columns.length) {
+      each(groupParameters, (_: number, group) => {
+        this._columns.push(group.selector);
+      });
+      each(sortParameters, (_: number, sort) => {
+        if (!isFunction(sort.selector)) {
+          this._columns.push(sort.selector);
+        }
+      });
+      assignColumns(this, createColumnsFromOptions(this, this._columns));
+    }
 
-      const shouldApplyGrouping = (Boolean(needToApplyGroupingFromDataSource)
+    const shouldApplyGrouping = (Boolean(needToApplyGroupingFromDataSource)
         || (!columnsGroupParameters && !this._hasUserState))
         && (groupingChanged || groupExpandingChanged);
-      if (shouldApplyGrouping) {
-        /// #DEBUG
-        this.__groupingUpdated = true;
-        /// #ENDDEBUG
-        updateSortGroupParameterIndexes(this._columns, groupParameters, 'groupIndex');
-        if (fromDataSource) {
-          if (groupingChanged) {
-            updateColumnChanges(this, 'grouping');
-          }
-          if (groupExpandingChanged) {
-            updateColumnChanges(this, 'groupExpanding');
-          }
-          isColumnsChanged = true;
+    if (shouldApplyGrouping) {
+      /// #DEBUG
+      this.__groupingUpdated = true;
+      /// #ENDDEBUG
+      updateSortGroupParameterIndexes(this._columns, groupParameters, 'groupIndex');
+      if (fromDataSource) {
+        if (groupingChanged) {
+          updateColumnChanges(this, 'grouping');
         }
-      }
-
-      const shouldApplySorting = (Boolean(needToApplySortingFromDataSource)
-        || (!columnsSortParameters && !this._hasUserState)) && sortingChanged;
-      if (shouldApplySorting) {
-        /// #DEBUG
-        this.__sortingUpdated = true;
-        /// #ENDDEBUG
-        updateSortGroupParameterIndexes(this._columns, sortParameters, 'sortIndex');
-        if (fromDataSource) {
-          updateColumnChanges(this, 'sorting');
-          isColumnsChanged = true;
+        if (groupExpandingChanged) {
+          updateColumnChanges(this, 'groupExpanding');
         }
-      }
-      if (isColumnsChanged) {
-        fireColumnsChanged(this);
+        isColumnsChanged = true;
       }
     }
-  }
 
-  /* eslint-enable max-depth */
+    const shouldApplySorting = (Boolean(needToApplySortingFromDataSource)
+        || (!columnsSortParameters && !this._hasUserState)) && sortingChanged;
+    if (shouldApplySorting) {
+      /// #DEBUG
+      this.__sortingUpdated = true;
+      /// #ENDDEBUG
+      updateSortGroupParameterIndexes(this._columns, sortParameters, 'sortIndex');
+      if (fromDataSource) {
+        updateColumnChanges(this, 'sorting');
+        isColumnsChanged = true;
+      }
+    }
+    if (isColumnsChanged) {
+      fireColumnsChanged(this);
+    }
+  }
 
   public columnCount(): number {
     return this._columns ? this._columns.length : 0;
@@ -1838,7 +1827,10 @@ export class ColumnsController extends modules.Controller {
       columnsUserState,
       ignoreColumnOptionNames: this._ignoreColumnOptionNames ?? [],
       hasUserState: this._hasUserState,
-      createColumn: (columnOptions): Column => createColumn(this, columnOptions) as Column,
+      createColumn: (columnOptions): Column => createColumn(
+        this,
+        isString(columnOptions) ? { dataField: columnOptions } : columnOptions,
+      ),
     }).apply();
 
     if (hasAddedBands) {
@@ -2034,11 +2026,10 @@ export class ColumnsController extends modules.Controller {
     } else {
       calculatedColumnOptions.allowFiltering = !!columnOptions.calculateFilterExpression;
     }
-    calculatedColumnOptions.calculateFilterExpression = function calculateFilterExpression():
-    ReturnType<NonNullable<Column['calculateFilterExpression']>> {
-      // @ts-expect-error filterUtils is untyped
-      // eslint-disable-next-line prefer-rest-params -- preserve variadic filter callback contract
-      const expression = filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
+    calculatedColumnOptions.calculateFilterExpression = function calculateFilterExpression(
+      ...args: Parameters<NonNullable<Column['calculateFilterExpression']>>
+    ): ReturnType<NonNullable<Column['calculateFilterExpression']>> {
+      const expression = filterUtils.defaultCalculateFilterExpression.call(this, ...args);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- filterUtils is untyped
       return expression;
     };
@@ -2070,13 +2061,9 @@ export class ColumnsController extends modules.Controller {
     };
 
     if (!dataField || !isString(dataField)) {
-      extend(true, calculatedColumnOptions, {
-        allowSorting: false,
-        allowGrouping: false,
-        calculateCellValue(): null {
-          return null;
-        },
-      });
+      calculatedColumnOptions.allowSorting = false;
+      calculatedColumnOptions.allowGrouping = false;
+      calculatedColumnOptions.calculateCellValue = (): null => null;
     }
 
     if (bandColumn) {
@@ -2154,7 +2141,7 @@ export class ColumnsController extends modules.Controller {
       calculatedColumnOptions.resizedCallbacks.add(columnOptions.resized.bind(columnOptions));
     }
 
-    each(calculatedColumnOptions, (optionName: string) => {
+    Object.keys(calculatedColumnOptions).forEach((optionName) => {
       if (isFunction(calculatedColumnOptions[optionName]) && !optionName.startsWith('default')) {
         const defaultOptionName = `default${optionName.charAt(0).toUpperCase()}${optionName.substr(1)}`;
         calculatedColumnOptions[defaultOptionName] = calculatedColumnOptions[optionName];
@@ -2203,7 +2190,7 @@ export class ColumnsController extends modules.Controller {
       return result
         .filter((column) => column.visible && !column.command)
         .sort((column1, column2) => (
-          (column1.visibleIndex as number) - (column2.visibleIndex as number)
+          Number(column1.visibleIndex) - Number(column2.visibleIndex)
         ));
     }
 

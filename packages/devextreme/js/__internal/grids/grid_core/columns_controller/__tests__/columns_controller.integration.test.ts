@@ -4,6 +4,7 @@ import {
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
@@ -92,6 +93,43 @@ describe('column generation', () => {
   });
 });
 
+describe('fixed column layout', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should preserve band colspan across fixed header rows without changing source columns', async () => {
+    const { instance } = await createDataGrid({ dataSource: [], columns: [] });
+    const controller = instance.getController('columns');
+    const left: Column = {
+      name: 'left', fixed: true, fixedPosition: 'left', headerId: 'left',
+    };
+    const right: Column = {
+      name: 'right', fixed: true, fixedPosition: 'right', headerId: 'right',
+    };
+    const rows: Column[][] = [
+      [left, { name: 'band', isBand: true, colspan: 2 }, right],
+      [left, { name: 'first' }, { name: 'second' }, right],
+    ];
+    jest.spyOn(controller, '_isColumnFixing').mockReturnValue(true);
+    jest.spyOn(controller, 'getRowCount').mockReturnValue(1);
+    jest.spyOn(controller, 'getVisibleColumns').mockImplementation((rowIndex) => rows[rowIndex ?? 1]);
+    controller.resetColumnsCache();
+
+    const fixedRows = [controller.getFixedColumns(0), controller.getFixedColumns(1)];
+
+    fixedRows.forEach((row) => {
+      expect(row).toEqual([
+        { ...left, headerId: 'left-fixed' },
+        { command: 'transparent', colspan: 2 },
+        { ...right, headerId: 'right-fixed' },
+      ]);
+    });
+    expect(left.headerId).toBe('left');
+    expect(right.headerId).toBe('right');
+    expect(rows.map((row) => row.length)).toEqual([3, 4]);
+  });
+});
+
 describe('getVisibleColumns', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
@@ -163,6 +201,55 @@ describe('column filter expressions', () => {
       field: 'id', value: 2, operation: '=', target: 'filterRow',
     });
     expect(instance.getVisibleRows()).toMatchObject([{ data: { id: 2 } }]);
+  });
+});
+
+describe('column data type inference', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should finish type inference before reading raw values for serialization', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [],
+      columns: ['value'],
+    });
+    const controller = instance.getController('columns');
+    const column = controller.getColumns()[0];
+    const calls: unknown[] = [];
+    const items = [{ value: 1 }, { value: '2' }];
+    jest.spyOn(controller, '_getFirstItems').mockReturnValue(items);
+    column.calculateCellValue = function calculateCellValue(
+      this: Column,
+      item: RawItemData,
+      ...args: unknown[]
+    ): unknown {
+      calls.push({
+        context: this,
+        value: item.value,
+        dataType: this.dataType,
+        skipDeserialization: args[0],
+      });
+      return item.value;
+    };
+
+    const updated = controller.updateColumnDataTypes();
+
+    expect(updated).toBe(true);
+    expect(column.dataType).toBe('string');
+    expect(calls).toEqual([
+      {
+        context: column, value: 1, dataType: undefined, skipDeserialization: undefined,
+      },
+      {
+        context: column, value: '2', dataType: undefined, skipDeserialization: undefined,
+      },
+      {
+        context: column, value: 1, dataType: 'string', skipDeserialization: true,
+      },
+      {
+        context: column, value: '2', dataType: 'string', skipDeserialization: true,
+      },
+    ]);
   });
 });
 
