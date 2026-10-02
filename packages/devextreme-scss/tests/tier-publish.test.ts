@@ -161,19 +161,22 @@ describe('eligibility', () => {
     expect(reasons(badge())).toEqual({ '$badge-bg': null, '$badge-color': null, '$badge-size': null });
   });
 
-  test('data-uri: a direct call, a feeder mixin, a commented-out feeder, and a reference to any of them', () => {
+  test('data-uri: a direct call, a feeder mixin, the marker, and a reference to any of them', () => {
     const files = [
       file('fluent-next/badge/_colors.scss', [
         '$badge-icon: data-uri("svg", "<svg/>");',
         '$badge-icon-hovered: $badge-icon;',
         '$badge-arrow: #000;',
         '$badge-arrow-active: color.change($badge-arrow, $alpha: 0.5);',
+        '$badge-static: #107c10 !default; // dx-data-uri-static: ds.$color-bg-success',
         '$badge-check: #fff;',
+        '$badge-size: 16px;',
         '$badge-bg: #eee;',
       ].join('\n')),
       file('fluent-next/badge/_mixins.scss', [
         '.dx-badge { @include icons-mixin($badge-arrow); }',
         '// .dx-badge-check { @include icon-colored($badge-check); }',
+        '.dx-badge-large { @include badge-icons-mixin($badge-size); }',
       ].join('\n')),
     ];
     expect(reasons(files)).toEqual({
@@ -181,8 +184,27 @@ describe('eligibility', () => {
       '$badge-icon-hovered': 'data-uri',
       '$badge-arrow': 'data-uri',
       '$badge-arrow-active': 'data-uri',
-      '$badge-check': 'data-uri',
+      '$badge-static': 'data-uri',
+      '$badge-check': null,
+      '$badge-size': null,
       '$badge-bg': null,
+    });
+  });
+
+  test('a declaration is read up to its semicolon, across lines and past one inside a string', () => {
+    const records = tierRecords([file('fluent-next/badge/_sizes.scss', [
+      '$badge-padding:',
+      '  2px',
+      '  4px !default;',
+      '$badge-glyph: url("data:image/svg+xml;charset=utf8,%3Csvg/%3E");',
+      '$badge-size: 16px;',
+    ].join('\n'))], registries(), new Set());
+    const values = Object.fromEntries([...records]
+      .map(([variable, { value }]) => [variable, value]));
+    expect(values).toEqual({
+      '$badge-padding': '2px 4px',
+      '$badge-glyph': 'url("data:image/svg+xml;charset=utf8,%3Csvg/%3E")',
+      '$badge-size': '16px',
     });
   });
 

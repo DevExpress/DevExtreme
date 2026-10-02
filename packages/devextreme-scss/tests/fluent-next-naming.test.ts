@@ -604,22 +604,22 @@ publicTierFiles.forEach((file) => {
 
 const tierAliases: { property: string; target: string; source: string }[] = [];
 const tierCopies: { property: string; target: string; source: string }[] = [];
-walk(themeRoot, '.scss')
-  .filter((file) => /(^|\/)_(colors|sizes|variables)\.scss$/.test(file))
-  .forEach((file) => {
-    stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n').forEach((line, index) => {
-      const alias = /^\s*\$([a-z0-9-]+)\s*:\s*(?:[A-Za-z]\w*\.)?\$([a-z0-9-]+)\s*(?:!default)?\s*;\s*$/.exec(line);
-      if (!alias) return;
-      const home = tierDeclared.get(`$${alias[1]}`);
-      if (!home || !tierDeclared.has(`$${alias[2]}`)) return;
-      const record = {
-        property: `--dx-${alias[1]}`,
-        target: `--dx-${alias[2]}`,
-        source: `${sourceLabel(file)}:${index + 1}`,
-      };
-      (linkableFrom(record.target, home) ? tierAliases : tierCopies).push(record);
-    });
+// read from the parsed declarations, so an alias written over several lines is still an alias
+themeFiles.forEach((file, index) => {
+  if (!/(^|\/)_(colors|sizes|variables)\.scss$/.test(file)) return;
+  parsedFiles[index].declaredValues.forEach(({ name, value, line }) => {
+    const target = /^(?:[A-Za-z]\w*\.)?\$([a-z0-9-]+)(?:\s*!default)?$/.exec(value)?.[1];
+    if (!target) return;
+    const home = tierDeclared.get(name);
+    if (!home || !tierDeclared.has(`$${target}`)) return;
+    const record = {
+      property: `--dx-${name.slice(1)}`,
+      target: `--dx-${target}`,
+      source: `${sourceLabel(file)}:${line}`,
+    };
+    (linkableFrom(record.target, home) ? tierAliases : tierCopies).push(record);
   });
+});
 
 test('component tier: _public.scss declarations equal the eligible variables exactly', () => {
   const eligible = new Map([...tierRecords].filter(([, { reason }]) => !reason));
