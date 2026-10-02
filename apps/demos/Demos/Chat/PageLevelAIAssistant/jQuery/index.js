@@ -1,9 +1,5 @@
 $(() => {
   DevExpress.config({
-    editorStylingMode: 'filled',
-  });
-
-  DevExpress.config({
     floatingActionButtonConfig: {
       position: {
         my: 'right bottom',
@@ -12,6 +8,7 @@ $(() => {
         offset: '-16 -16',
       },
     },
+    editorStylingMode: 'filled',
   });
 
   DevExpress.localization.loadMessages({
