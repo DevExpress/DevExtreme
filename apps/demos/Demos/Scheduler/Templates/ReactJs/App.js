@@ -7,6 +7,7 @@ import Scheduler, {
   Label,
 } from 'devextreme-react/scheduler';
 import { query } from 'devextreme-react/common/data';
+import themes from 'devextreme/ui/themes';
 import Appointment from './Appointment.js';
 import AppointmentTooltip from './AppointmentTooltip.js';
 import MovieInfoContainer from './MovieInfoContainer.js';
@@ -17,10 +18,9 @@ const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
 const getMovieById = (id) =>
   id ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null : null;
-const getEditorStylingMode = () => {
-  const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
-  return isMaterialOrFluent ? 'filled' : 'outlined';
-};
+const getEditorStylingMode = () => (
+  themes.current().startsWith('generic') ? 'outlined' : 'filled'
+);
 const priceDisplayExpr = (value) => `$${value}`;
 const colCountByScreen = { xs: 2 };
 const App = () => {

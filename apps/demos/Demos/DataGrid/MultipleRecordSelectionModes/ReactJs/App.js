@@ -3,7 +3,7 @@ import DataGrid, {
   Column, Selection, FilterRow, Paging, Pager,
 } from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';
-import themes, { isGeneric } from 'devextreme/ui/themes';
+import themes from 'devextreme/ui/themes';
 import { sales } from './data.js';
 
 const selectAllFieldLabel = { 'aria-label': 'Select All Mode' };
@@ -13,7 +13,7 @@ const selectAllModes = ['allPages', 'page'];
 const App = () => {
   const [allMode, setAllMode] = useState('allPages');
   const [checkBoxesMode, setCheckBoxesMode] = useState(
-    isGeneric(themes.current()) ? 'onClick' : 'always',
+    themes.current().startsWith('generic') ? 'onClick' : 'always',
   );
   const onCheckBoxesModeChanged = useCallback(({ value }) => {
     setCheckBoxesMode(value);
