@@ -447,7 +447,7 @@ function registerPublicMethods(
 }
 export function processModules(
   componentInstance: ComponentInstanceType,
-  componentClass: { modules: [RegisteredModule]; modulesOrder?: string[] },
+  componentClass: { modules: RegisteredModule[]; modulesOrder?: string[] },
 ): void {
   const { modules } = componentClass;
   const { modulesOrder } = componentClass;

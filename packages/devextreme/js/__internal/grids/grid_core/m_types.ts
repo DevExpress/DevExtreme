@@ -1,11 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
-
 import type {
   GridBase, GridBaseOptions, SelectionBase,
 } from '@js/common/grids';
+import type { PropertyType } from '@js/core';
 import type { Component } from '@js/core/component';
-import type { PropertyType } from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type { EventInfo } from '@js/events';
 import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
@@ -16,7 +16,9 @@ import type { EditingController } from './editing/m_editing';
 import type { FilterValue } from './filter/types';
 import type { ModuleItem } from './m_modules';
 
-export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
+export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never
+  ? never
+  : PropertyType<T, TProp> | undefined;
 
 export type ExecuteActionArgs<TEvent> = Omit<TEvent, keyof EventInfo<unknown>>;
 
@@ -40,7 +42,6 @@ export interface SelectionRange {
   selectionEnd: number;
 }
 
-// todo: move to upper .d.ts
 type OptionsMethod<TOptions> = (() => TOptions)
   & ((options: TOptions) => void)
   & (
@@ -66,7 +67,7 @@ export type CreateComponentOptions<TComponent> = TComponent extends {
     ? Partial<TOptions> | Record<string, unknown>
     : Record<string, unknown>;
 
-export type CreateComponent<TComponent extends Component<any>> = (
+export type CreateComponent<TComponent extends Component<object>> = (
   $container: dxElementWrapper,
   component: new (...args) => TComponent,
   options?: CreateComponentOptions<TComponent>,
@@ -87,19 +88,19 @@ export interface InternalGrid extends GridBaseType {
 
   _optionCache?: Record<string, unknown>;
 
-  _fireContentReadyAction: any;
+  _fireContentReadyAction: () => Promise<void> | DeferredObj<void> | void;
 
-  setAria: any;
+  setAria: (name: string, value: string, $target: dxElementWrapper) => void;
 
-  _renderDimensions: any;
+  _renderDimensions: () => void;
 
   getView: <T extends keyof Views>(name: T) => Views[T];
 
   getController: <T extends keyof Controllers>(name: T) => Controllers[T];
 
-  _optionsByReference: any;
+  _optionsByReference: Record<string, boolean>;
 
-  _disposed: any;
+  _disposed?: boolean;
 
   _createComponent: <TComponent extends Component<object>>(
     $container: dxElementWrapper,
@@ -117,6 +118,7 @@ export interface InternalGrid extends GridBaseType {
 
 type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 'onFocusedCellChanged'
+| 'dataRowTemplate'
 | 'onRowClick'
 | 'onRowDblClick'
 | 'onRowPrepared'
@@ -144,14 +146,15 @@ interface InternalSelection extends SelectionBase {
   alwaysSelectByShift?: boolean;
 }
 
-export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown>, TemporarlyOptionsTakenFromDataGrid, TemporarlyOptionsTakenFromTreeList {
-  dataRowTemplate?: any;
-
+export interface InternalGridOptions extends
+  GridBaseOptions<InternalGrid, unknown, unknown>,
+  TemporarlyOptionsTakenFromDataGrid,
+  TemporarlyOptionsTakenFromTreeList {
   loadingTimeout?: number;
 
   useLegacyKeyboardNavigation?: boolean;
 
-  forceApplyBindings?: any;
+  forceApplyBindings?: () => void;
 
   loadItemsOnExportingSelectedItems?: boolean | undefined;
 
@@ -162,16 +165,13 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   filterValue?: FilterValue;
 }
 
-// todo: move to upper .d.ts files
 type DotPrefix<T extends string> = T extends '' ? '' : `.${T}`;
 
-// todo: move to upper .d.ts files
 type DecrementalCounter = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
-// todo: move to upper .d.ts files
 type IsObject<T> = 0 extends (1 & T)
   ? false
-  : T extends any[]
+  : T extends unknown[]
     ? false
     : string extends keyof T
       ? false
@@ -179,7 +179,6 @@ type IsObject<T> = 0 extends (1 & T)
         ? true
         : false;
 
-// todo: move to upper .d.ts files
 type DotNestedKeys<T, RLIMIT extends number = 10> = (
   IsObject<T> extends true
     ? (
@@ -191,7 +190,6 @@ type DotNestedKeys<T, RLIMIT extends number = 10> = (
     : ''
 ) extends infer D ? Extract<D, string> : never;
 
-// todo: move to upper .d.ts files
 interface OptionChangedArgs<TOptions, T extends string = string> {
   name: T extends `${infer TName}.${string}` ? TName : T;
   fullName: T;
@@ -206,7 +204,6 @@ export type OptionChangedFor<TOptions> = {
   [P in DotNestedKeys<Required<TOptions>>]: OptionChangedArgs<TOptions, P>;
 }[DotNestedKeys<Required<TOptions>>];
 
-// todo: move to upper .d.ts files
 export type OptionChanged = OptionChangedFor<InternalGridOptions>;
 
 export interface Controllers {
@@ -219,10 +216,10 @@ export interface Controllers {
   data: import('./data_controller/data_controller').DataController;
   dataSource: import('./data_source/data_source_controller').DataSourceController;
   draggingHeader: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderViewController;
-  // todo: export is dataGrid-only controller
   editing: import('./editing/m_editing').EditingController;
   editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
+  // todo: export is dataGrid-only controller
   export: import('../data_grid/export/m_export').ExportController;
   filter: import('./filter/filter_controller').FilterController;
   filterSync: import('./filter_sync/filter_sync').FilterSyncController;
@@ -248,7 +245,7 @@ export interface Controllers {
 }
 
 type ControllerTypes = {
-  [ P in keyof Controllers ]: new(component: any) => Controllers[P];
+  [ P in keyof Controllers ]: new(component: InternalGrid) => Controllers[P];
 };
 
 export interface Views {
@@ -277,9 +274,10 @@ export interface EditingControllerRequired {
 }
 
 type ViewTypes = {
-  [ P in keyof Views ]: new(component: any) => Views[P];
+  [ P in keyof Views ]: new(component: InternalGrid) => Views[P];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixin constructors need any[]
 export type ModuleType<T extends ModuleItem> = (new (...args: any[]) => T);
 
 type ControllersExtender = {
