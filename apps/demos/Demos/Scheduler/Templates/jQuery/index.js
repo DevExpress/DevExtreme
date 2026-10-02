@@ -171,6 +171,6 @@ $(() => {
   }
 
   function getEditorStylingMode() {
-    return $('.dx-theme-fluent, .dx-theme-material').length > 0 ? 'filled' : 'outlined';
+    return DevExpress.ui.themes.current().startsWith('generic') ? 'outlined' : 'filled';
   }
 });
