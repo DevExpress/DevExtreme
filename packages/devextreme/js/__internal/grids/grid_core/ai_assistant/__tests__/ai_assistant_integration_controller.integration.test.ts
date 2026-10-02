@@ -21,6 +21,7 @@ import {
   beforeTest,
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
+import type { InternalGrid } from '../../m_types';
 import { AIAssistantIntegrationController } from '../ai_assistant_integration_controller';
 import type { GridContext, JsonSchema } from '../types';
 
@@ -80,7 +81,7 @@ const createController = async (
     ...options,
   } as Properties);
 
-  const controller = new AIAssistantIntegrationController(instance);
+  const controller = new AIAssistantIntegrationController(instance as unknown as InternalGrid);
   controller.init();
 
   return controller;
@@ -876,7 +877,7 @@ describe('AIAssistantIntegrationController', () => {
         aiIntegration,
       } as Properties);
 
-      const controller = new AIAssistantIntegrationController(instance);
+      const controller = new AIAssistantIntegrationController(instance as unknown as InternalGrid);
       controller.init();
 
       controller.sendRequest('test before', STUB_SCHEMA);

@@ -293,6 +293,7 @@ export class ColumnsSeparatorView extends SeparatorView {
   private moveByX(outerX) {
     const $element = this.element();
     if ($element) {
+      // @ts-expect-error render() sets _$parent together with _$element
       $element.css('left', outerX === null ? 0 : outerX - this._parentElement().offset().left);
       /// #DEBUG
       this._testPosX = outerX;
