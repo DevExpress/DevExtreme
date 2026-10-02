@@ -69,7 +69,10 @@ const saveButtonOptions = {
   disabled: true,
   useSubmitBehavior: true,
   width: '120px',
-  onClick: () => { isToastVisible.value = true; },
+  onClick: () => {
+    formRef.value?.instance.reset(formData);
+    isToastVisible.value = true;
+  },
 };
 
 function onOptionChanged(e: DxFormTypes.OptionChangedEvent): void {
