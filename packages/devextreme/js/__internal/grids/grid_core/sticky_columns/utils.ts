@@ -2,7 +2,7 @@ import { isDefined } from '@js/core/utils/type';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import { STICKY_BORDER_WIDTH, StickyPosition } from './const';
 
 export const getColumnFixedPosition = (

@@ -20,7 +20,7 @@ import type {
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { EditingController } from '../editing/m_editing';
 import { isDataRow } from '../keyboard_navigation/utils';
 import type { ViewController } from '../m_modules';
