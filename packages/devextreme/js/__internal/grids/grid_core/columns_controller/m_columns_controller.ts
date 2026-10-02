@@ -33,6 +33,7 @@ import type {
   ColumnOptionsUpdate,
   ColumnsChanges,
   ColumnsControllerOptionChanged,
+  ColumnsControllerOptions,
   ColumnsDataSourceParameters,
   ColumnSelector,
   ColumnsOptionChanged,
@@ -1424,7 +1425,9 @@ export class ColumnsController extends modules.Controller {
   }
 
   private _customizeColumns(columns: Column[]): void {
-    const customizeColumns = this.option('customizeColumns');
+    const customizeColumns = (
+      this.option('customizeColumns') as ColumnsControllerOptions['customizeColumns']
+    );
 
     if (customizeColumns) {
       const hasOwnerBand = columns.some((column) => isObject(column.ownerBand));
