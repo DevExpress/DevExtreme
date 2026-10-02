@@ -8,6 +8,7 @@ import defaultDateNames from '@ts/core/localization/default_date_names';
 import intlDateLocalization from '@ts/core/localization/intl/date';
 import { getFormat as getLDMLDateFormat } from '@ts/core/localization/ldml/date.format';
 import { getFormatter as getLDMLDateFormatter } from '@ts/core/localization/ldml/date.formatter';
+import type { LdlmDateLocalization } from '@ts/core/localization/ldml/date.parser';
 import { getParser as getLDMLDateParser } from '@ts/core/localization/ldml/date.parser';
 import numberLocalization from '@ts/core/localization/number';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
@@ -190,7 +191,11 @@ const dateLocalization = dependencyInjector({
     return formatter(date);
   },
 
-  parse(text: string, format?: FormatObject | string): Date | null | undefined {
+  parse(
+    text: string,
+    format?: FormatObject | string,
+    dateParts: LdlmDateLocalization = this,
+  ): Date | null | undefined {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -229,7 +234,7 @@ const dateLocalization = dependencyInjector({
     if (ldmlFormat) {
       // eslint-disable-next-line no-param-reassign
       text = numberLocalization.convertDigits(text, true);
-      return getLDMLDateParser(ldmlFormat, this)(text);
+      return getLDMLDateParser(ldmlFormat, dateParts)(text);
     }
 
     errors.log('W0012');

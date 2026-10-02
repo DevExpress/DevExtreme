@@ -259,11 +259,13 @@ const numberLocalizationBase = {
     };
   },
 
-  getThousandsSeparator(): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getThousandsSeparator(format?: FormatConfig | string): string {
     return this.format(10000, 'fixedPoint')[2] as string;
   },
 
-  getDecimalSeparator(): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDecimalSeparator(format?: FormatConfig | string): string {
     return this.format(1.2, { type: 'fixedPoint', precision: 1 })[1] as string;
   },
 
@@ -377,7 +379,7 @@ const numberLocalizationBase = {
       errors.log('W0011');
     }
 
-    const decimalSeparator: string = this.getDecimalSeparator();
+    const decimalSeparator: string = this.getDecimalSeparator(format);
     const regExp = new RegExp(`[^0-9${escapeRegExp(decimalSeparator)}]`, 'g');
     const cleanedText = text
       .replace(regExp, '')

@@ -10,7 +10,7 @@ import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation } from "devextreme/ui/filter_builder";
 import type { DataType, template, Format as CommonFormat } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { Format as LocalizationFormat, FormatLocale } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 
@@ -195,6 +195,7 @@ const FilterOperationDescriptions = Object.assign<typeof _componentFilterOperati
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;

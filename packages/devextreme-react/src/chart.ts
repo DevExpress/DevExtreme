@@ -11,7 +11,7 @@ import NestedOption from "./core/nested-option";
 import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMode, FinancialChartReductionLevel, chartPointObject, dxChartPointInfo, ChartTooltipLocation, ChartZoomAndPanMode, EventKeyModifier } from "devextreme/viz/chart";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, AxisScaleType, VisualRangeUpdateMode, ChartsColor, SeriesHoverMode, HatchDirection, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, LegendItem, LegendHoverMode, ValueAxisVisualRangeUpdateMode } from "devextreme/common/charts";
 import type { template, HorizontalAlignment, VerticalAlignment, Format as CommonFormat, Position, VerticalEdge, ExportFormat, Orientation } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { Format as LocalizationFormat, FormatLocale } from "devextreme/common/core/localization";
 import type { ChartSeries } from "devextreme/viz/common";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
@@ -587,6 +587,7 @@ const ArgumentAxis = Object.assign<typeof _componentArgumentAxis, NestedComponen
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;
@@ -1921,6 +1922,7 @@ const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componen
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;

@@ -24,6 +24,7 @@ import { DxoFormat } from './base/format';
     inputs: [
         'currency',
         'formatter',
+        'locale',
         'parser',
         'precision',
         'type',

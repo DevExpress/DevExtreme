@@ -14,7 +14,7 @@ import {
 import type { DxEvent, NativeEventInfo } from '@js/events';
 import type { Format, FormatObject } from '@js/localization';
 import type { Properties } from '@js/ui/number_box';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { getEffectiveFormatLocale, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { getFormat as getLDMLFormat } from '@ts/core/localization/ldml/number';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
@@ -87,6 +87,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _currentFormat?: Format;
 
+  _intlFormatLocaleCache?: string;
+
   _getDefaultOptions(): NumberBoxMaskProperties {
     return {
       ...super._getDefaultOptions(),
@@ -123,6 +125,36 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     return isDefined(format)
       ? format
       : getGlobalFormatByDataType('number');
+  }
+
+  _usesIntlFormatOption(formatOption: Format | undefined): boolean {
+    const formatObject = asFormatObject(formatOption);
+
+    return !!formatObject
+      && !isFunction(formatObject.formatter)
+      && !formatObject.type
+      && !formatObject.parser;
+  }
+
+  _getFormatArgumentForNumberLocalization(maskFormat: Format): Format {
+    const formatOption = this._getEffectiveFormatOption();
+
+    return this._usesIntlFormatOption(formatOption) ? formatOption : maskFormat;
+  }
+
+  _invalidateFormatPatternIfIntlLocaleChanged(): void {
+    const formatOption = this._getEffectiveFormatOption();
+
+    if (!this._usesIntlFormatOption(formatOption)) {
+      return;
+    }
+
+    const locale = getEffectiveFormatLocale(formatOption, 'number');
+
+    if (locale !== this._intlFormatLocaleCache) {
+      this._intlFormatLocaleCache = locale;
+      delete this._currentFormat;
+    }
   }
 
   _getTextSeparatorIndex(text: string): number {
@@ -421,9 +453,11 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       }
     }
 
+    const formatArg = this._getFormatArgumentForNumberLocalization(format);
+
     return number.parse(
       text.substr(integerPartStartIndex),
-      isString(format) ? format : asFormatObject(format),
+      isString(formatArg) ? formatArg : asFormatObject(formatArg),
     );
   }
 
@@ -434,10 +468,14 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       value: number, valueFormat: Format,
     ) => string | undefined;
 
-    return isDefined(value) ? formatter(value, format) : '';
+    const formatArg = this._getFormatArgumentForNumberLocalization(format);
+
+    return isDefined(value) ? formatter(value, formatArg) : '';
   }
 
   _getFormatPattern(): Format {
+    this._invalidateFormatPatternIfIntlLocaleChanged();
+
     if (!this._currentFormat) {
       this._updateFormat();
     }
@@ -585,7 +623,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _getParsedValue(text: string, format: Format): NumberBoxValue | undefined {
-    const signFormat = asFormatObject(format)?.formatter ?? format;
+    const formatArg = this._getFormatArgumentForNumberLocalization(format);
+    const signFormat = asFormatObject(formatArg)?.formatter ?? formatArg;
     const sign: number = number.getSign(text, signFormat);
     const textWithoutStubs = this._removeStubs(text, true);
     const parsedValue = this._parse(textWithoutStubs, format);
@@ -787,6 +826,17 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _getPrecisionLimits(pattern: string): { min: number; max: number } {
+    const formatOption = this._getEffectiveFormatOption();
+
+    if (this._usesIntlFormatOption(formatOption)) {
+      const {
+        minimumFractionDigits: min = 0,
+        maximumFractionDigits: max = min,
+      } = formatOption as Intl.NumberFormatOptions;
+
+      return { min, max };
+    }
+
     const realSeparatorIndex = getRealSeparatorIndex(pattern).index;
     const floatPart = (splitByIndex(pattern, realSeparatorIndex)[1] || '').replace(/[^#0]/g, '');
     const minPrecision = floatPart.replace(/^(0*)#*/, '$1').length;
@@ -981,6 +1031,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     delete this._lastKeyName;
     delete this._parsedValue;
     delete this._focusOutOccurs;
+    delete this._currentFormat;
+    delete this._intlFormatLocaleCache;
     clearTimeout(this._caretTimeout);
     delete this._caretTimeout;
   }

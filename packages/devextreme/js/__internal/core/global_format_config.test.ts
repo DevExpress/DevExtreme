@@ -1,17 +1,26 @@
 import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
+import coreLocalization from '@js/common/core/localization/core';
 import config from '@js/core/config';
 
-import { getGlobalFormatByDataType, resolvePresetOverride } from './global_format_config';
+import {
+  getDateFormatLocale,
+  getEffectiveFormatLocale,
+  getFormatterOptions,
+  getGlobalFormatByDataType,
+  resolvePresetOverride,
+} from './global_format_config';
 
 const GLOBAL_FORMAT_KEYS = ['dateFormat', 'timeFormat', 'dateTimeFormat', 'numberFormat', 'dateTimeFormatPresets'] as const;
 type GlobalFormatKey = typeof GLOBAL_FORMAT_KEYS[number];
 
 describe('global_format_config', () => {
   let savedValues: Partial<Record<GlobalFormatKey, unknown>> = {};
+  let savedLocale = '';
 
   beforeEach(() => {
+    savedLocale = coreLocalization.locale();
     const currentConfig = config();
 
     savedValues = {};
@@ -21,6 +30,7 @@ describe('global_format_config', () => {
   });
 
   afterEach(() => {
+    coreLocalization.locale(savedLocale);
     const currentConfig = config();
 
     GLOBAL_FORMAT_KEYS.forEach((key) => {
@@ -202,6 +212,196 @@ describe('global_format_config', () => {
       expect(resolvePresetOverride('shortDate')).toBe('dd/MM/yyyy');
       expect(resolvePresetOverride('longDate')).toBe('EEEE, dd MMMM yyyy');
       expect(resolvePresetOverride('shortTime')).toBe('HH:mm');
+    });
+  });
+
+  describe('getGlobalFormatByDataType with format locale', () => {
+    it('should resolve locale map entry by message locale', () => {
+      config({
+        ...config(),
+        numberFormat: {
+          de: { locale: 'en-US', minimumFractionDigits: 2 },
+          default: { locale: 'de-DE', minimumFractionDigits: 2 },
+        },
+      });
+      coreLocalization.locale('de');
+
+      expect(getGlobalFormatByDataType('number')).toEqual({
+        locale: 'en-US',
+        minimumFractionDigits: 2,
+      });
+    });
+
+    it('should resolve preset override from locale map', () => {
+      config({
+        ...config(),
+        dateTimeFormatPresets: {
+          shortDate: {
+            de: 'dd.MM.yyyy',
+            default: 'dd/MM/yyyy',
+          },
+        },
+      });
+      coreLocalization.locale('de');
+
+      expect(resolvePresetOverride('shortDate')).toBe('dd.MM.yyyy');
+    });
+  });
+
+  describe('getEffectiveFormatLocale - global config dataType resolution', () => {
+    it('should resolve locale via getGlobalFormatByDataType when global config type matches preset', () => {
+      config({
+        ...config(),
+        timeFormat: {
+          default: {
+            locale: 'de-DE',
+            type: 'shortTime',
+          },
+        },
+      });
+      coreLocalization.locale('en');
+
+      expect(getEffectiveFormatLocale(undefined, undefined, 'shortTime')).toBe('de-DE');
+    });
+
+    it('should resolve locale via getGlobalFormatByDataType for implicit shortDate preset', () => {
+      config({
+        ...config(),
+        dateFormat: {
+          default: {
+            locale: 'de-DE',
+          },
+        },
+      });
+      coreLocalization.locale('en');
+
+      expect(getEffectiveFormatLocale(undefined, undefined, 'shortDate')).toBe('de-DE');
+    });
+
+    it('should infer dataType from Intl format object options', () => {
+      config({
+        ...config(),
+        timeFormat: {
+          default: {
+            locale: 'de-DE',
+          },
+        },
+      });
+      coreLocalization.locale('en');
+
+      expect(getEffectiveFormatLocale({
+        hour: 'numeric',
+        minute: 'numeric',
+      })).toBe('de-DE');
+    });
+
+    it('should use explicit dataType with getGlobalFormatByDataType', () => {
+      config({
+        ...config(),
+        dateFormat: {
+          default: {
+            locale: 'de-DE',
+          },
+        },
+      });
+      coreLocalization.locale('en');
+
+      expect(getEffectiveFormatLocale(undefined, 'date')).toBe('de-DE');
+    });
+  });
+
+  describe('getEffectiveFormatLocale', () => {
+    it('should return string locale from format object', () => {
+      expect(getEffectiveFormatLocale({ locale: 'en-US' })).toBe('en-US');
+    });
+
+    it('should evaluate function locale', () => {
+      expect(getEffectiveFormatLocale({ locale: () => 'de-DE' })).toBe('de-DE');
+    });
+
+    it('should prefer own format locale over global format locale', () => {
+      config({
+        ...config(),
+        numberFormat: {
+          default: { locale: 'en-US' },
+        },
+      });
+
+      expect(getEffectiveFormatLocale({ locale: 'ja' }, 'number')).toBe('ja');
+    });
+
+    it('should fall back to global numberFormat locale', () => {
+      config({
+        ...config(),
+        numberFormat: {
+          default: { locale: 'en-US', minimumFractionDigits: 2 },
+        },
+      });
+      coreLocalization.locale('de');
+
+      expect(getEffectiveFormatLocale({ type: 'fixedPoint', precision: 0 }, 'number')).toBe('en-US');
+    });
+
+    it('should fall back to message locale when no format locale is configured', () => {
+      coreLocalization.locale('de');
+
+      expect(getEffectiveFormatLocale({ type: 'fixedPoint', precision: 0 }, 'number')).toBe('de');
+    });
+  });
+
+  describe('getDateFormatLocale', () => {
+    beforeEach(() => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        dateFormat: { default: { type: 'shortDate', locale: 'de-DE' } },
+      });
+    });
+
+    it('should resolve locale from source preset when it is aliased to another preset', () => {
+      expect(getDateFormatLocale('shortDate', 'longDate')).toBe('de-DE');
+    });
+
+    it('should resolve locale from source preset when it is aliased to Intl options', () => {
+      expect(getDateFormatLocale('shortDate', { weekday: 'long' })).toBe('de-DE');
+    });
+
+    it('should prefer source format own locale over aliased format locale', () => {
+      expect(getDateFormatLocale(
+        { type: 'shortDate', locale: 'ja' },
+        { type: 'longDate', locale: 'fr' },
+      )).toBe('ja');
+    });
+
+    it('should use aliased format own locale when source has none', () => {
+      expect(getDateFormatLocale('shortDate', { type: 'longDate', locale: 'fr' })).toBe('fr');
+    });
+
+    it('should fall back to message locale for unmapped preset', () => {
+      expect(getDateFormatLocale('longDate')).toBe('en');
+    });
+  });
+
+  describe('getFormatterOptions', () => {
+    it('should remove locale metadata from format object', () => {
+      expect(getFormatterOptions({
+        locale: 'en-US',
+        minimumFractionDigits: 2,
+      })).toEqual({
+        minimumFractionDigits: 2,
+      });
+    });
+
+    it('should return non-object format as-is', () => {
+      expect(getFormatterOptions('fixedPoint')).toBe('fixedPoint');
+    });
+
+    it('should not mutate the original format object', () => {
+      const formatObject = { locale: 'en-US', precision: 2 };
+
+      getFormatterOptions(formatObject);
+
+      expect(formatObject).toEqual({ locale: 'en-US', precision: 2 });
     });
   });
 });
