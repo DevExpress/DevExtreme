@@ -1,6 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
 import {
+  getDateFormatLocale,
   getEffectiveFormatLocale,
   getFormatterOptions,
   resolvePresetOverride,
@@ -164,9 +165,8 @@ const getIntlFormat = (format): Intl.DateTimeFormatOptions => typeof format === 
 
 const formatWithIntlPreset = (
   date: Date,
-  sourceFormat: LocalizationFormat,
-  resolvedFormat: LocalizationFormat,
   presetName: string,
+  formatLocale: string,
 ): string | undefined => {
   const intlFormat = getIntlFormat(presetName);
 
@@ -174,40 +174,28 @@ const formatWithIntlPreset = (
     return undefined;
   }
 
-  const formatLocale = getEffectiveFormatLocale(
-    typeof sourceFormat === 'object' ? sourceFormat : undefined,
-    undefined,
-    presetName,
-  );
-
   return getIntlFormatter(intlFormat, formatLocale)(date);
 };
 
 const formatWithIntlOptions = (
   date: Date,
   format: FormatObject | Intl.DateTimeFormatOptions,
+  formatLocale: string,
 ): string => {
   const typeFormat = (format as FormatObject).type;
 
   if (typeFormat && typeof typeFormat === 'string') {
-    const intlPresetResult = formatWithIntlPreset(date, format, format, typeFormat);
+    const intlPresetResult = formatWithIntlPreset(date, typeFormat, formatLocale);
 
     if (intlPresetResult !== undefined) {
       return intlPresetResult;
     }
   }
 
-  const formatLocale = getEffectiveFormatLocale(format, undefined, typeFormat);
   const formatterOptions = getFormatterOptions(format) as Intl.DateTimeFormatOptions;
 
   return getIntlFormatter(formatterOptions, formatLocale)(date);
 };
-
-const getDateFormatLocale = (format: FormatObject | string): string => (
-  typeof format === 'string'
-    ? getEffectiveFormatLocale(undefined, undefined, format)
-    : getEffectiveFormatLocale(format, undefined, format.type)
-);
 
 const monthNameStrategies = {
   standalone(
@@ -345,13 +333,10 @@ export default {
       }
     }
 
+    const formatLocale = getDateFormatLocale(sourceFormat, resolvedFormat);
+
     if (typeof resolvedFormat === 'string') {
-      const intlPresetResult = formatWithIntlPreset(
-        date,
-        sourceFormat,
-        resolvedFormat,
-        resolvedFormat,
-      );
+      const intlPresetResult = formatWithIntlPreset(date, resolvedFormat, formatLocale);
 
       if (intlPresetResult !== undefined) {
         return intlPresetResult;
@@ -362,7 +347,7 @@ export default {
     }
 
     if (typeof resolvedFormat === 'object') {
-      return formatWithIntlOptions(date, resolvedFormat as FormatObject);
+      return formatWithIntlOptions(date, resolvedFormat as FormatObject, formatLocale);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

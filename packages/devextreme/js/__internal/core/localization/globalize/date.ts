@@ -5,7 +5,7 @@ import 'globalize/date';
 
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
 import {
-  getEffectiveFormatLocale,
+  getDateFormatLocale,
   getFormatterOptions,
   resolvePresetOverride,
 } from '@ts/core/global_format_config';
@@ -284,13 +284,9 @@ if (Globalize?.formatDate) {
       let formatter: DateFormatter;
       // eslint-disable-next-line @typescript-eslint/init-declarations
       let formatCacheKey: string;
+      const formatLocale = getDateFormatLocale(sourceFormat, resolvedFormat);
 
       if (typeof resolvedFormat === 'string') {
-        const formatLocale = getEffectiveFormatLocale(
-          typeof sourceFormat === 'object' ? sourceFormat : undefined,
-          undefined,
-          resolvedFormat,
-        );
         const resolvedLocale = resolveGlobalizeLocale(formatLocale);
         formatCacheKey = `${resolvedLocale}:${resolvedFormat}`;
         formatter = formattersCache[formatCacheKey];
@@ -305,11 +301,6 @@ if (Globalize?.formatDate) {
         const typeFormat = typedFormat.type;
 
         if (typeFormat && typeof typeFormat === 'string') {
-          const formatLocale = getEffectiveFormatLocale(
-            typedFormat,
-            undefined,
-            typeFormat,
-          );
           const resolvedLocale = resolveGlobalizeLocale(formatLocale);
           formatCacheKey = `${resolvedLocale}:${typeFormat}`;
           formatter = formattersCache[formatCacheKey];
@@ -325,8 +316,6 @@ if (Globalize?.formatDate) {
           if (!this._isAcceptableFormat(formatterOptions)) {
             return undefined;
           }
-
-          const formatLocale = getEffectiveFormatLocale(typedFormat);
 
           formatter = getGlobalizeDateFormatter(formatLocale, formatterOptions);
         }
@@ -355,9 +344,7 @@ if (Globalize?.formatDate) {
         return Globalize.parseDate(text);
       }
 
-      const formatLocale = typeof format === 'string'
-        ? getEffectiveFormatLocale(undefined, undefined, format)
-        : getEffectiveFormatLocale(format, undefined, format.type);
+      const formatLocale = getDateFormatLocale(format);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const dateParts = bindDatePartsToLocale(this, formatLocale);
       const parserFormat = getFormatterOptions(format) as FormatObject | string;

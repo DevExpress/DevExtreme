@@ -187,6 +187,21 @@ describe('format locale integration', () => {
   });
 
   describe('dates', () => {
+    it.each([
+      { alias: 'longDate', expected: 'Donnerstag, 2. Januar 2020' },
+      { alias: { default: { type: 'longDate' } }, expected: 'Donnerstag, 2. Januar 2020' },
+      { alias: { default: { year: 'numeric', month: 'long', day: 'numeric' } }, expected: '2. Januar 2020' },
+    ])('should keep source preset locale when dateTimeFormatPresets aliases it to $alias', ({ alias, expected }) => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        dateFormat: { default: { type: 'shortDate', locale: 'de-DE' } },
+        dateTimeFormatPresets: { shortDate: alias },
+      } as never);
+
+      expect(dateLocalization.format(new Date(2020, 0, 2), 'shortDate')).toBe(expected);
+    });
+
     it('should format implicit shortDate using global dateFormat locale', () => {
       coreLocalization.locale('en');
       config({

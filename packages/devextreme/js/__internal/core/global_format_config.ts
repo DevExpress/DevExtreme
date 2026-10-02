@@ -184,6 +184,22 @@ export const getEffectiveFormatLocale = (
   return coreLocalization.locale();
 };
 
+export const getDateFormatLocale = (
+  sourceFormat: Format,
+  resolvedFormat: Format = sourceFormat,
+): string => {
+  const localeSource = getOwnFormatLocale(sourceFormat) ? sourceFormat : resolvedFormat;
+  const sourcePresetName = isString(sourceFormat)
+    ? sourceFormat
+    : getFormatType(sourceFormat) ?? (isString(resolvedFormat) ? resolvedFormat : undefined);
+
+  return getEffectiveFormatLocale(
+    isPlainObject(localeSource) ? localeSource : undefined,
+    undefined,
+    sourcePresetName,
+  );
+};
+
 export const resolvePresetOverride = (presetName: string): Format | undefined => {
   const { dateTimeFormatPresets: presets } = config();
 
@@ -205,5 +221,6 @@ export default {
   getGlobalFormatByDataType,
   resolvePresetOverride,
   getEffectiveFormatLocale,
+  getDateFormatLocale,
   getFormatterOptions,
 };

@@ -1003,10 +1003,7 @@ QUnit.module('Format helper', () => {
                 });
 
                 assert.strictEqual(
-                    dateLocalization.format(new Date(2020, 0, 2), {
-                        locale: 'de-DE',
-                        type: 'shortDate',
-                    }),
+                    dateLocalization.format(new Date(2020, 0, 2), 'shortDate'),
                     '2.1.2020',
                 );
             } finally {

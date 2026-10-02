@@ -5,6 +5,7 @@ import coreLocalization from '@js/common/core/localization/core';
 import config from '@js/core/config';
 
 import {
+  getDateFormatLocale,
   getEffectiveFormatLocale,
   getFormatterOptions,
   getGlobalFormatByDataType,
@@ -345,6 +346,39 @@ describe('global_format_config', () => {
       coreLocalization.locale('de');
 
       expect(getEffectiveFormatLocale({ type: 'fixedPoint', precision: 0 }, 'number')).toBe('de');
+    });
+  });
+
+  describe('getDateFormatLocale', () => {
+    beforeEach(() => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        dateFormat: { default: { type: 'shortDate', locale: 'de-DE' } },
+      });
+    });
+
+    it('should resolve locale from source preset when it is aliased to another preset', () => {
+      expect(getDateFormatLocale('shortDate', 'longDate')).toBe('de-DE');
+    });
+
+    it('should resolve locale from source preset when it is aliased to Intl options', () => {
+      expect(getDateFormatLocale('shortDate', { weekday: 'long' })).toBe('de-DE');
+    });
+
+    it('should prefer source format own locale over aliased format locale', () => {
+      expect(getDateFormatLocale(
+        { type: 'shortDate', locale: 'ja' },
+        { type: 'longDate', locale: 'fr' },
+      )).toBe('ja');
+    });
+
+    it('should use aliased format own locale when source has none', () => {
+      expect(getDateFormatLocale('shortDate', { type: 'longDate', locale: 'fr' })).toBe('fr');
+    });
+
+    it('should fall back to message locale for unmapped preset', () => {
+      expect(getDateFormatLocale('longDate')).toBe('en');
     });
   });
 
