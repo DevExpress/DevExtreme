@@ -21,7 +21,6 @@ minimumReleaseAgeExclude:
 overrides:
   "js-yaml@<4.3.2": "^4.3.2"
   "rollup@<4.59.0": "^4.59.0"
-  "axios@<1.18.0": ^1.18.0
   qs: ">=6.16.0"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
   "micromatch@<4.0.8": ^4.0.8
