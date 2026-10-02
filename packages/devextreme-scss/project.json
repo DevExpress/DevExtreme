@@ -214,7 +214,9 @@
         "build:themes"
       ],
       "inputs": [
-        "{projectRoot}/**/*"
+        "{projectRoot}/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "cache": true
     },
@@ -229,7 +231,12 @@
         "typecheck"
       ],
       "inputs": [
-        "{projectRoot}/**/*"
+        "{projectRoot}/**/*",
+        "{workspaceRoot}/apps/demos/Demos/**/*",
+        "{workspaceRoot}/packages/devextreme/js/**/*",
+        "{workspaceRoot}/packages/devextreme/playground/tier-reachability-audit.html",
+        "{workspaceRoot}/packages/devextreme/package.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
       ]
     },
     "typecheck": {
