@@ -108,7 +108,6 @@ export * from './icons';
 export * from './image-upload';
 export * from './image';
 export * from './indent';
-export * from './indicator-options';
 export * from './item-dragging';
 export * from './item-dxi';
 export * from './item-text-format';
