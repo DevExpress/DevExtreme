@@ -75,9 +75,6 @@ const getIgnoredRules = (testName) => {
   }
 
   const specificRules = {
-    'DataGrid-EditStateManagement': ['aria-required-parent'],
-    'DataGrid-RemoteCRUDOperations': ['scrollable-region-focusable'],
-
     'Diagram-Adaptability': ['aria-dialog-name', 'label'],
     'Diagram-AdvancedDataBinding': ['aria-dialog-name', 'label'],
     'Diagram-Containers': ['aria-dialog-name', 'label'],
