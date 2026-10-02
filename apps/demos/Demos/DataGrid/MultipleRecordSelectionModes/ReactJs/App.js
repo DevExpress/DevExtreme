@@ -12,8 +12,8 @@ const showCheckBoxesModes = ['none', 'onClick', 'onLongTap', 'always'];
 const selectAllModes = ['allPages', 'page'];
 const App = () => {
   const [allMode, setAllMode] = useState('allPages');
-  const [checkBoxesMode, setCheckBoxesMode] = useState(
-    () => themes.current().startsWith('generic') ? 'onClick' : 'always',
+  const [checkBoxesMode, setCheckBoxesMode] = useState(() => 
+    themes.current().startsWith('generic') ? 'onClick' : 'always',
   );
   const onCheckBoxesModeChanged = useCallback(({ value }) => {
     setCheckBoxesMode(value);
