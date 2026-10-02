@@ -16,21 +16,6 @@ import {
   collectTokenReferences,
 } from './consumed-tokens.ts';
 
-// Suppress ONE known noisy sd-transforms warning about unresolvable
-// {font-weight…} references inside math expressions. Scoped to console.warn
-// so legitimate errors/logs containing the substring are never swallowed.
-// Remove when https://github.com/tokens-studio/sd-transforms/issues/218 is
-// fixed in the (forked) sd-transforms we consume.
-{
-  const originalWarn = console.warn.bind(console);
-  console.warn = (message, ...args) => {
-    if (typeof message === 'string' && message.includes('Warning: could not resolve reference {font-weight')) {
-      return;
-    }
-    originalWarn(message, ...args);
-  };
-}
-
 registerTransforms(StyleDictionary);
 
 // The Figma export occasionally emits size-suffixed cross-component references
