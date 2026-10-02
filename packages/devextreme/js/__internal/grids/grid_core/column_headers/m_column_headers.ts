@@ -318,7 +318,8 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       return Deferred().resolve();
     }
 
-    const $container = this.element();
+    // @ts-expect-error the view is rendered here
+    const $container: dxElementWrapper = this.element();
 
     $container
       .addClass(this.addWidgetPrefix(HEADERS_CLASS))

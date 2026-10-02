@@ -172,6 +172,7 @@ export class FooterView extends ColumnsView {
     const totalItem = this._dataController.footerItems()[0];
 
     if (!change || !change.columnIndices) {
+      // @ts-expect-error the view is rendered here
       this.element()
         .empty()
         .addClass(DATAGRID_TOTAL_FOOTER_CLASS)

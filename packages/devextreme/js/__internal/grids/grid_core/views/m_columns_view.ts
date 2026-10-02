@@ -742,6 +742,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: column_fixing, header_panel, virtual_column
    */
   protected _renderCore(e?) {
+    // @ts-expect-error the view is rendered here
     const $root = this.element().parent();
 
     if (!$root || $root.parent().length) {
@@ -1130,6 +1131,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_CLASS))
       .addClass(this.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
       .append($table)
+      // @ts-expect-error the view is rendered here
       .appendTo(this.element());
 
     this.setAria('role', 'presentation', $scrollContainer);

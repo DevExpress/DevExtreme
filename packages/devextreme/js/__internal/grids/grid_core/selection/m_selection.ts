@@ -666,10 +666,12 @@ export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeader
     const $element = that.element();
     const $editor = $element?.find(`.${SELECT_CHECKBOX_CLASS}`);
 
+    // @ts-expect-error $editor is set whenever $element is
     if ($element && $editor.length && this.option('selection.mode') === 'multiple') {
       const selectAllValue = this._selectionController.isSelectAll();
       const isVisible = this._isSelectAllCheckBoxVisible();
 
+      // @ts-expect-error dxCheckBox is added to the renderer at runtime
       $editor.dxCheckBox('instance').option({
         visible: isVisible,
         value: selectAllValue,

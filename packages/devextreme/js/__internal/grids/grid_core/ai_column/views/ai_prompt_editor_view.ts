@@ -35,6 +35,7 @@ export class AIPromptEditorView extends View {
 
     return {
       prompt: column.ai?.prompt ?? '',
+      // @ts-expect-error the view is rendered here
       container: this.element(),
       createComponent: this._createComponent.bind(this),
       onSubmit: (): void => {

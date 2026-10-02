@@ -162,12 +162,6 @@ export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem 
   | { type: 'replace'; index: number; data: ProcessedItem }
   | { type: 'updateVisibility'; index: number; data: ProcessedItem };
 
-/** callbacks */
-
-export interface CallbackFlags {
-  stopOnFalse: boolean;
-}
-
 /** paging */
 
 export interface SyncPagingOptions {

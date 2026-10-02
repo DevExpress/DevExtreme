@@ -463,12 +463,14 @@ export class AdaptiveColumnsController extends modules.ViewController {
       const view = this.getView(COLUMN_VIEWS[i]);
       if (view && view.isVisible() && view.element()) {
         const viewName = view.name;
+        // @ts-expect-error the view is rendered here
         const $hiddenCommandCells = view.element().find(`.${COMMAND_ADAPTIVE_HIDDEN_CLASS}`);
         this._showHiddenCellsInView({
           viewName,
           $cells: $hiddenCommandCells,
           isCommandColumn: true,
         });
+        // @ts-expect-error the view is rendered here
         const $hiddenCells = view.element().find(`.${this.addWidgetPrefix(HIDDEN_COLUMN_CLASS)}`);
         this._showHiddenCellsInView({
           viewName,

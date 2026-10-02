@@ -608,6 +608,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     const rtlEnabled = this.option('rtlEnabled');
 
     super.setScrollerSpacing(width);
+    // @ts-expect-error the view is rendered here
     this.element().children(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`).css({
       paddingLeft: rtlEnabled ? width : '',
       paddingRight: !rtlEnabled ? width : '',
@@ -902,6 +903,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
 
     const isFixedColumns = this._isFixedColumns;
 
+    // @ts-expect-error the view is rendered here
     this.element().toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
 
     if (this.option('hoverStateEnabled') && isFixedColumns) {
@@ -917,7 +919,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
       const $contentFixedElement = this.element()?.children(`.${contentFixedClass}`);
       const $fixedTableElement = this.getFixedTableElement();
 
+      // @ts-expect-error the view is rendered here
       if ($contentFixedElement.length && $fixedTableElement?.length) {
+        // @ts-expect-error the view is rendered here
         this.setAria('owns', `${headerTableId ?? ''} ${$fixedTableElement.attr('id') ?? ''} ${footerTableId ?? ''}`.trim(), $contentFixedElement);
       }
     } else {
@@ -977,6 +981,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
   public setScrollerSpacing(vWidth, hWidth) {
     const that = this;
     const styles = { marginBottom: 0 };
+    // @ts-expect-error the view is rendered here
     const $fixedContent = that.element().children(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
 
     if ($fixedContent.length && that._fixedTableElement) {
