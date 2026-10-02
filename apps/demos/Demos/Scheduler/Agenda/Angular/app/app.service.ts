@@ -451,7 +451,7 @@ const assignees: Assignee[] = [
   }, {
     text: 'Todd Hoffman',
     id: 3,
-    color: '#2E7D32',
+    color: '#2D7C31',
   }, {
     text: 'Sandra Johnson',
     id: 4,
@@ -467,7 +467,7 @@ const priorities: Priority[] = [
   }, {
     text: 'Low',
     id: 2,
-    color: '#DD2C00',
+    color: '#CD2900',
   },
 ];
 
