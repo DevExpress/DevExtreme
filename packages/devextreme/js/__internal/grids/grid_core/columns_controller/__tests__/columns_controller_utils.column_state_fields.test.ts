@@ -4,7 +4,7 @@ import {
   it,
 } from '@jest/globals';
 
-import { applyColumnStateFields } from '../m_columns_controller_utils';
+import { applyColumnStateFields } from '../columns_controller_utils';
 import type { Column, ColumnUserState } from '../types';
 
 const dataColumn = (dataField: string, options: Partial<Column> = {}): Column => ({
