@@ -10,6 +10,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type DataGrid from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { fire } from '@ts/__tests__/utils';
 import type { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
 import {
@@ -147,5 +148,134 @@ describe('Performance optimization', () => {
         expect(getBoundingViewMock).toHaveBeenCalledTimes(1);
       });
     });
+  });
+});
+
+describe('Column resize separator bounds (T1335911)', () => {
+  beforeEach(beforeTest);
+  afterEach(() => {
+    afterTest();
+    jest.restoreAllMocks();
+  });
+
+  const createResizableGrid = async (
+    fixed: boolean,
+    columnResizingMode: 'widget' | 'nextColumn' = 'widget',
+  ): ReturnType<typeof createDataGrid> => {
+    let grid: DataGrid | null = null;
+    const fields = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+    const initialWidths = [180, 100, 100, 100, 100];
+    const createRect = (left: number, width: number): DOMRect => ({
+      x: left,
+      y: 50,
+      width,
+      height: 24,
+      top: 50,
+      right: left + width,
+      bottom: 74,
+      left,
+      toJSON: () => ({}),
+    });
+
+    jest.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function getRect(this: Element): DOMRect {
+      const widths = fields.map((field, index) => Number(grid?.columnOption(field, 'width') ?? initialWidths[index]));
+      if (this.matches('.dx-header-row > td')) {
+        const index = Array.from(this.parentElement?.children ?? []).indexOf(this);
+        const left = fixed && index >= 3
+          ? 600 - widths.slice(index).reduce((sum, width) => sum + width, 0)
+          : 100 + widths.slice(0, index).reduce((sum, width) => sum + width, 0);
+
+        return createRect(left, widths[index]);
+      }
+
+      return createRect(100, 500);
+    });
+    jest.spyOn(Element.prototype, 'getClientRects').mockImplementation(function getRects(this: Element): DOMRectList {
+      return [this.getBoundingClientRect()] as unknown as DOMRectList;
+    });
+    jest.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockImplementation(function getWidth(this: HTMLElement): number {
+      return this.getBoundingClientRect().width;
+    });
+    jest.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(24);
+
+    const result = await createDataGrid({
+      dataSource: [{ id: 1, City: 'Atlanta' }],
+      columns: fields.map((dataField, index) => ({
+        dataField,
+        width: initialWidths[index],
+        fixed: fixed && index >= 3,
+        fixedPosition: 'right',
+      })),
+      width: 500,
+      height: 300,
+      allowColumnResizing: true,
+      columnResizingMode,
+    });
+    grid = result.instance;
+    result.$container.find('.dx-header-row').css('height', 24);
+    result.$container.find('.dx-datagrid-columns-separator').css('width', 3);
+
+    return result;
+  };
+
+  it('keeps the separator between adjacent right-fixed columns in nextColumn mode (T1335911)', async () => {
+    const { $container, instance } = await createResizableGrid(true, 'nextColumn');
+    const header = $container.find('.dx-header-row > td').get(3);
+
+    fire(header, 'dxpointermove', { x: 500, y: 60, pointerType: 'mouse' });
+    fire(header, 'dxpointerdown', { x: 500, y: 60, pointerType: 'mouse' });
+    fire(header, 'dxpointermove', { x: 470, y: 60, pointerType: 'mouse' });
+
+    expect(instance.columnOption('Phone', 'width')).toBe(70);
+    expect(instance.columnOption('Fax', 'width')).toBe(130);
+    expect($container.find('.dx-datagrid-columns-separator').css('left')).toBe('370px');
+
+    fire($container.get(0), 'dxpointermove', { x: 530, y: 60, pointerType: 'mouse' });
+
+    expect(instance.columnOption('Phone', 'width')).toBe(130);
+    expect(instance.columnOption('Fax', 'width')).toBe(70);
+    expect($container.find('.dx-datagrid-columns-separator').css('left')).toBe('430px');
+  });
+
+  it('keeps the separator before right-fixed columns while the resized column continues growing (T1335911)', async () => {
+    const { $container, instance } = await createResizableGrid(true);
+    const header = $container.find('.dx-header-row > td').get(1);
+
+    fire(header, 'dxpointermove', { x: 380, y: 60, pointerType: 'mouse' });
+    fire(header, 'dxpointerdown', { x: 380, y: 60, pointerType: 'mouse' });
+    fire(header, 'dxpointermove', { x: 800, y: 60, pointerType: 'mouse' });
+
+    expect(instance.columnOption('City', 'width')).toBe(520);
+    expect($container.find('.dx-datagrid-columns-separator').css('left')).toBe('297px');
+
+    fire($container.get(0), 'dxpointermove', { x: 330, y: 60, pointerType: 'mouse' });
+
+    expect(instance.columnOption('City', 'width')).toBe(50);
+    expect($container.find('.dx-datagrid-columns-separator').css('left')).toBe('230px');
+  });
+
+  it('keeps the entire separator inside the grid without fixed columns while the resized column continues growing (T1335911)', async () => {
+    const { $container, instance } = await createResizableGrid(false);
+    const header = $container.find('.dx-header-row > td').get(1);
+
+    fire(header, 'dxpointermove', { x: 380, y: 60, pointerType: 'mouse' });
+    fire(header, 'dxpointerdown', { x: 380, y: 60, pointerType: 'mouse' });
+    fire(header, 'dxpointermove', { x: 800, y: 60, pointerType: 'mouse' });
+
+    expect(instance.columnOption('City', 'width')).toBe(520);
+    expect($container.find('.dx-datagrid-columns-separator').css('left')).toBe('497px');
+  });
+
+  it('keeps the separator before right-fixed columns when the page scrolls horizontally during resizing (T1335911)', async () => {
+    const { $container, instance } = await createResizableGrid(true);
+    const header = $container.find('.dx-header-row > td').get(1);
+
+    fire(header, 'dxpointermove', { x: 380, y: 60, pointerType: 'mouse' });
+    fire(header, 'dxpointerdown', { x: 380, y: 60, pointerType: 'mouse' });
+    jest.replaceProperty(window, 'pageXOffset', 120);
+    fire(header, 'dxpointermove', { x: 800, y: 60, pointerType: 'mouse' });
+
+    expect(instance.columnOption('City', 'width')).toBe(520);
+    expect($container.find('.dx-datagrid-columns-separator').css('left')).toBe('297px');
   });
 });
