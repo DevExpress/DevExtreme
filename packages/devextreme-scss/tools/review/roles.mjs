@@ -2,10 +2,13 @@
  * The roles report: which semantic role every colour slot of the theme reads, and what the token
  * package's component tier says the same slot should read.
  *
- *   node tools/review/roles.mjs                        # → scss/widgets/fluent-next/ROLES.md
- *   node tools/review/roles.mjs --md                   # markdown to stdout
- *   node tools/review/roles.mjs --json                 # machine-readable, for the gate
- *   node tools/review/roles.mjs --theme=<dir> --json   # another theme folder; needs --json or --md
+ *   node tools/review/roles.mjs [--md]                 # the readable report, to stdout
+ *   node tools/review/roles.mjs --json                 # machine-readable
+ *   node tools/review/roles.mjs --theme=<dir> --json   # another theme folder (--md works too)
+ *   node tools/review/roles.mjs --report=tools/review/roles.decisions.json
+ *                                                      # what moved against the banked decisions
+ *   node tools/review/roles.mjs --write=tools/review/roles.decisions.json
+ *                                                      # re-stamp them, keeping every decision
  *
  * What the theme declares and paints is collected by tools/review/roles-theme.mjs, which loads no
  * package; this file adds the package's side on top.
@@ -49,7 +52,7 @@
 import {
   readFileSync, writeFileSync, readdirSync, statSync, existsSync,
 } from 'fs';
-import { join, dirname, relative } from 'path';
+import { join, dirname } from 'path';
 import { createRequire } from 'module';
 
 import {
@@ -879,7 +882,138 @@ for (const role of [...roleNames].sort()) {
   if (Object.keys(entry).length) palette[role] = entry;
 }
 
-if (process.argv.includes('--json')) {
+/*
+ * The package's sections, as tools/review/roles.decisions.json banks them. A token bump moves
+ * these, so they are not a jest gate: --report shows what moved against the banked decisions,
+ * --write re-stamps the file keeping every decision by key.
+ */
+const PACKAGE_SECTIONS = {
+  open: {
+    key: (row) => row.name,
+    rows: () => findings
+      .filter((f) => ['cross-family', 'family-conflict'].includes(f.package?.verdict))
+      .map((f) => ({
+        name: f.name, verdict: f.package.verdict, roles: f.roles, slot: f.slot,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  },
+  rungs: {
+    key: (row) => row.name,
+    rows: () => findings
+      .filter((f) => f.rung)
+      .map((f) => ({
+        name: f.name, state: f.rung.state, roles: f.roles, oursAt: f.rung.oursAt, want: f.rung.want,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  },
+  contrast: {
+    key: (row) => row.selector,
+    fromBundle: true,
+    rows: () => lowContrast
+      .map(({
+        selector, fgRole, bgRole, contrast: measured,
+      }) => ({
+        selector, fgRole, bgRole, contrast: measured,
+      }))
+      .sort((a, b) => a.selector.localeCompare(b.selector)),
+  },
+  statePairs: {
+    key: (row) => `${row.bg} ${row.selector}`,
+    fromBundle: true,
+    nested: true,
+    rows: () => lowStatePairs
+      .map(({
+        bg, fg, fgRole, bgRole, contrast: measured, selector,
+      }) => ({
+        bg, fg, fgRole, bgRole, contrast: measured, selector,
+      }))
+      .sort((a, b) => (a.bg + a.selector).localeCompare(b.bg + b.selector)),
+  },
+};
+const DECISION_FIELDS = ['decision', 'why', 'group'];
+const withoutDecision = (row) => Object.fromEntries(Object.entries(row)
+  .filter(([field]) => !DECISION_FIELDS.includes(field)));
+const decisionOf = (row) => Object.fromEntries(Object.entries(row ?? {})
+  .filter(([field]) => DECISION_FIELDS.includes(field)));
+
+// the bundle names the package it was built against (scss-build banner)
+const bundleTokens = existsSync(bundlePath)
+  ? /Design tokens: @devexpress\/design-tokens-internal (\S+)/.exec(readFileSync(bundlePath, 'utf8').slice(0, 2000))?.[1] ?? null
+  : null;
+const bundleIsCurrent = bundleTokens === tokensVersion;
+
+const unusedRoleNames = {
+  capability: unusedRoles.capability.map((r) => r.role),
+  stale: unusedRoles.stale.map((r) => r.role),
+};
+
+const reportAgainst = (decisions) => {
+  const out = [`# Roles against the banked decisions - package ${tokensVersion}\n`];
+  if (!bundleIsCurrent) {
+    out.push(`> The bundle was built against ${bundleTokens ?? 'nothing (it is not built)'}, the package is `
+      + `${tokensVersion}: contrast and statePairs are skipped. Run \`pnpm nx build:themes devextreme-scss\` `
+      + 'and report again.\n');
+  }
+  let moved = 0;
+  Object.entries(PACKAGE_SECTIONS).forEach(([section, {
+    key, rows, fromBundle, nested,
+  }]) => {
+    if (fromBundle && !bundleIsCurrent) return;
+    const banked = nested ? decisions[section].rows : decisions[section];
+    const bankedBy = new Map(banked.map((row) => [key(row), row]));
+    const current = rows();
+    const currentKeys = new Set(current.map(key));
+    const lines = [
+      ...current.filter((row) => !bankedBy.has(key(row))).map((row) => `- new: \`${key(row)}\``),
+      ...banked.filter((row) => !currentKeys.has(key(row))).map((row) => `- gone: \`${key(row)}\``),
+      ...current.filter((row) => bankedBy.has(key(row))
+        && JSON.stringify(withoutDecision(bankedBy.get(key(row)))) !== JSON.stringify(row))
+        .map((row) => `- changed: \`${key(row)}\` - now ${JSON.stringify(row)}`),
+      ...banked.filter((row) => !row.decision).map((row) => `- undecided: \`${key(row)}\``),
+    ];
+    moved += lines.length;
+    if (lines.length) out.push(`## ${section} - ${lines.length}\n`, ...lines, '');
+  });
+  ['capability', 'stale'].forEach((kind) => {
+    const banked = new Set(decisions.unusedRoles[kind]);
+    const current = new Set(unusedRoleNames[kind]);
+    const lines = [
+      ...[...current].filter((role) => !banked.has(role)).map((role) => `- new: \`${role}\``),
+      ...[...banked].filter((role) => !current.has(role)).map((role) => `- gone: \`${role}\``),
+    ];
+    moved += lines.length;
+    if (lines.length) out.push(`## unusedRoles.${kind} - ${lines.length}\n`, ...lines, '');
+  });
+  if (!moved) out.push('Nothing moved: every banked row still holds.\n');
+  else out.push('Re-bank with `node tools/review/roles.mjs --write=<file>`, then fill in the decision of every new row.\n');
+  return out.join('\n');
+};
+
+const restamp = (decisions) => {
+  const next = { ...decisions };
+  Object.entries(PACKAGE_SECTIONS).forEach(([section, {
+    key, rows, fromBundle, nested,
+  }]) => {
+    if (fromBundle && !bundleIsCurrent) return;
+    const banked = nested ? decisions[section].rows : decisions[section];
+    const bankedBy = new Map(banked.map((row) => [key(row), row]));
+    const stamped = rows().map((row) => ({ ...row, ...decisionOf(bankedBy.get(key(row))) }));
+    next[section] = nested ? { ...decisions[section], rows: stamped } : stamped;
+  });
+  next.unusedRoles = { ...decisions.unusedRoles, ...unusedRoleNames };
+  return next;
+};
+
+const reportArg = process.argv.find((a) => a.startsWith('--report='));
+const writeArg = process.argv.find((a) => a.startsWith('--write='));
+
+if (reportArg) {
+  console.log(reportAgainst(JSON.parse(readFileSync(reportArg.slice('--report='.length), 'utf8'))));
+} else if (writeArg) {
+  const file = writeArg.slice('--write='.length);
+  writeFileSync(file, `${JSON.stringify(restamp(JSON.parse(readFileSync(file, 'utf8'))), null, 2)}\n`);
+  console.log(`${file} re-stamped${bundleIsCurrent ? '' : ' (contrast and statePairs kept: the bundle is stale)'}`);
+} else if (process.argv.includes('--json')) {
   console.log(JSON.stringify({
     summary,
     findings,
@@ -892,14 +1026,6 @@ if (process.argv.includes('--json')) {
     palette,
     coverage,
   }, null, 2));
-} else if (process.argv.includes('--md')) {
-  console.log(md());
-} else if (themeArg) {
-  console.error('--theme= is for the gate; pass --json with it');
-  process.exit(2);
 } else {
-  writeFileSync(join(themeDir, 'ROLES.md'), `${md()}\n`);
-  console.log(`declarations ${summary.declarations} | family mismatch ${summary.familyMismatch}`);
-  for (const verdict of verdicts) console.log(`  ${verdict.padEnd(16)} ${summary.byVerdict[verdict]}`);
-  console.log(`\n→ ${relative(process.cwd(), join(themeDir, 'ROLES.md'))}`);
+  console.log(md());
 }
