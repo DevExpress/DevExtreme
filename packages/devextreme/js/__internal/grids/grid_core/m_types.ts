@@ -11,6 +11,7 @@ import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } fr
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
+import type { ColumnsControllerOptions } from './columns_controller/types';
 import type { EditingController } from './editing/m_editing';
 import type { FilterValue } from './filter/types';
 import type { ModuleItem } from './m_modules';
@@ -133,7 +134,11 @@ interface InternalSelection extends SelectionBase {
   alwaysSelectByShift?: boolean;
 }
 
-export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown>, TemporarlyOptionsTakenFromDataGrid, TemporarlyOptionsTakenFromTreeList {
+export interface InternalGridOptions extends
+  GridBaseOptions<InternalGrid, unknown, unknown>,
+  TemporarlyOptionsTakenFromDataGrid,
+  TemporarlyOptionsTakenFromTreeList,
+  ColumnsControllerOptions {
   dataRowTemplate?: any;
 
   loadingTimeout?: number;
