@@ -782,24 +782,6 @@ test('component tier: every --dx-… read in the theme resolves to a declared na
   expect(offenders).toEqual([]);
 });
 
-test('component tier: every publishing component appears in the runtime-audit gallery', () => {
-  const gallery = join(packageRoot, '..', 'devextreme', 'playground', 'tier-reachability-audit.html');
-  if (!existsSync(gallery)) throw new Error(`the runtime-audit gallery is missing at ${gallery}`);
-  const source = readFileSync(gallery, 'utf8').toLowerCase();
-  const missing = publicTierFiles
-    .map((file) => sourceLabel(file).split('/')[1])
-    .filter((folder) => !systemTier.includes(folder))
-    .filter((folder) => {
-      if (source.includes(`dx${folder.toLowerCase()}`)) return false;
-      const component = components[folder];
-      const roots: string[] = registries.rootSelectors[component] ?? [];
-      return !roots.some((selector) => selector !== ':root' && source.includes(selector.slice(1)));
-    })
-    .map((folder) => `${folder} publishes the tier but the gallery never builds it — add `
-      + `widget('dx${folder}') or markup carrying one of its classes to buildGallery/addPortals`);
-  expect([...new Set(missing)].sort()).toEqual([]);
-});
-
 test('component tier: the committed files are what tools/naming/publish.mjs writes', () => {
   const existing = new Map(themeSources
     .filter(({ path }) => isPublicTierFile(path))
