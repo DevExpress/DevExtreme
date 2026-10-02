@@ -16,7 +16,7 @@ import { isMaterial } from '@js/ui/themes';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import modules from '../m_modules';

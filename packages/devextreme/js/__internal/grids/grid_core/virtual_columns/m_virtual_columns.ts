@@ -5,7 +5,7 @@ import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { ColumnsView } from '../views/m_columns_view';

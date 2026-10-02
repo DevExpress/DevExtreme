@@ -9,7 +9,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
 import { getFilterExpression, removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import modules from '@ts/grids/grid_core/m_modules';
 
 import type { DataFilter, FilterSourceContext } from '../filter/types';
