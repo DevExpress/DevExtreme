@@ -2110,5 +2110,16 @@
     "map",
     "recurrence-editor",
     "card-view"
-  ]
+  ],
+  "sassOnly": {
+    "$radio-button-size": "an argument of the base radio-button mixin (radioButton/_index.scss)",
+    "$radio-button-border-width": "an argument of the base radio-button mixin (radioButton/_index.scss)",
+    "$radio-button-dot-size": "an argument of the base radio-button mixin (radioButton/_index.scss)",
+    "$diagram-toolbar-icon-size": "read as Sass by the diagram rules and passed to the base icon mixins",
+    "$diagram-toolbar-colorbutton-border-width": "read as Sass by the diagram rules and passed to the base mixin",
+    "$file-manager-large-icon-size": "an argument of the base file-manager icons mixin, set per size mode",
+    "$text-editor-input-filled-padding": "read as Sass by the filled text-editor rule",
+    "$text-editor-label-transition": "an argument of the base label mixins (textEditor/_index.scss)",
+    "$tree-view-container-padding": "an argument of the base tree-view mixin (treeView/_index.scss)"
+  }
 }

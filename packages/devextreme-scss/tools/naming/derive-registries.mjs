@@ -659,6 +659,25 @@ const OVERRIDES = {
   ],
 
   /*
+   * Declarations the tier does not publish because nothing would read the custom property: the
+   * value reaches CSS only as Sass - an argument of a base mixin, or a rule that reads the
+   * variable itself - so `--dx-…` set by an application would move nothing, and a published name
+   * cannot be withdrawn after release. Wiring the reads through var() is what takes a name off
+   * this list.
+   */
+  sassOnly: {
+    '$radio-button-size': 'an argument of the base radio-button mixin (radioButton/_index.scss)',
+    '$radio-button-border-width': 'an argument of the base radio-button mixin (radioButton/_index.scss)',
+    '$radio-button-dot-size': 'an argument of the base radio-button mixin (radioButton/_index.scss)',
+    '$diagram-toolbar-icon-size': 'read as Sass by the diagram rules and passed to the base icon mixins',
+    '$diagram-toolbar-colorbutton-border-width': 'read as Sass by the diagram rules and passed to the base mixin',
+    '$file-manager-large-icon-size': 'an argument of the base file-manager icons mixin, set per size mode',
+    '$text-editor-input-filled-padding': 'read as Sass by the filled text-editor rule',
+    '$text-editor-label-transition': 'an argument of the base label mixins (textEditor/_index.scss)',
+    '$tree-view-container-padding': 'an argument of the base tree-view mixin (treeView/_index.scss)',
+  },
+
+  /*
    * DOM anatomy per component, filled at the moment the component migrates (reviewed diff).
    */
   // Names must not collide with a state; colliding with a part is fine (see assertParseable).
@@ -1165,6 +1184,7 @@ const build = () => {
     subElements,
     packageElementPaths: derived.packageElementPaths,
     migrated: OVERRIDES.migrated,
+    sassOnly: OVERRIDES.sassOnly,
   };
 };
 
