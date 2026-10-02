@@ -3,9 +3,11 @@ import {
 } from '@jest/globals';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import ko from 'knockout';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
@@ -90,6 +92,39 @@ describe('column generation', () => {
     jest.runAllTimers();
 
     expect(instance.getVisibleColumns().map((column) => column.dataField)).toEqual(['id', 'name']);
+  });
+});
+
+describe('observable column customization', () => {
+  beforeEach(() => {
+    beforeTest();
+    variableWrapper.inject({
+      isWrapped: ko.isObservable,
+      unwrap(value: unknown): unknown {
+        return ko.unwrap(value);
+      },
+    });
+  });
+  afterEach(() => {
+    afterTest();
+    variableWrapper.resetInjection();
+  });
+
+  it('should invoke an observable callback without replacing its value', async () => {
+    const customizeColumns = (columns: Column[]): void => {
+      columns[0].caption = 'Customized';
+    };
+    const observable = ko.observable(customizeColumns);
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1 }],
+      columns: ['id'],
+    });
+
+    instance.option('customizeColumns', observable);
+    jest.runAllTimers();
+
+    expect(instance.columnOption('id', 'caption')).toBe('Customized');
+    expect(observable()).toBe(customizeColumns);
   });
 });
 
