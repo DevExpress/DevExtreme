@@ -41,8 +41,6 @@ const baseline: string[] = JSON.parse(readFileSync(baselinePath, 'utf8'));
 const journal: { retired: Entry[] } = JSON.parse(readFileSync(journalPath, 'utf8'));
 const retired = new Set(journal.retired.map(({ name }) => name));
 
-const THEME_IS_PUBLISHED = false;
-
 const added = current.filter((name) => !baseline.includes(name));
 const removed = baseline.filter((name) => !currentSet.has(name));
 
@@ -54,9 +52,7 @@ test('every fluent-next bundle publishes the same names', () => {
   expect(differing).toEqual([]);
 });
 
-const undocumented = (): string[] => (THEME_IS_PUBLISHED
-  ? removed.filter((name) => !retired.has(name))
-  : []);
+const undocumented = (): string[] => removed.filter((name) => !retired.has(name));
 
 test('no name leaves the published surface without a journal entry', () => {
   expect(undocumented()).toEqual([]);
