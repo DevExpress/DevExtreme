@@ -43,8 +43,8 @@ catalogs:
       specifier: ~21.2.22
       version: 21.2.23
     '@angular/router':
-      specifier: ~21.2.22
-      version: 21.2.23
+      specifier: ~21.2.24
+      version: 21.2.25
     ng-packagr:
       specifier: ~21.2.7
       version: 21.2.7
@@ -199,6 +199,10 @@ overrides:
   moment@>=2.29.2 <2.31.0: ^2.31.0
   webpack-dev-middleware@<7.4.6: ^7.4.6
   webpack-dev-middleware@>=8.0.0 <8.3.0: ^8.3.0
+  '@angular/router@>=21.0.0 <21.2.24': ^21.2.24
+  axios@<1.20.0: ^1.20.0
+  dompurify@<=3.4.15: ^3.4.16
+  piscina@>=5.0.0 <5.3.2: ^5.3.2
 
 patchedDependencies:
   testcafe-hammerhead@31.7.8: 8655c07786177d3b611a05abf6b0ea87d32796eb2601f92a800ef041095f264c
@@ -293,7 +297,7 @@ importers:
         version: 21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@21.2.23)(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1)))
       '@angular/router':
         specifier: catalog:angular
-        version: 21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
+        version: 21.2.25(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
       core-js:
         specifier: ^2.6.12
         version: 2.6.12
@@ -1201,7 +1205,7 @@ importers:
         version: 21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@21.2.23)(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1)))
       '@angular/router':
         specifier: catalog:angular
-        version: 21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
+        version: 21.2.25(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
       '@babel/runtime':
         specifier: ^7.24.0
         version: 7.29.2
@@ -2670,13 +2674,13 @@ packages:
       '@angular/platform-browser': 22.1.6
       rxjs: ^6.5.3 || ^7.4.0
 
-  '@angular/router@21.2.23':
-    resolution: {integrity: sha512-cNwTd1XvCXsFZqvn4WFPv7VUci7PJzlK9Ex/git3oEyS9318sJjX7sw2IeTpvwIg01BZtF1xBvWgMTHgcXvzIA==}
+  '@angular/router@21.2.25':
+    resolution: {integrity: sha512-85ZwJCBEpaXBmezusZLlgW2JzEEByzerlWT34I6IK/ZN4AKG8m2B/vlbTkKmHuzCOGWx1L7xFtPg/URkGGKwSA==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
-      '@angular/common': 21.2.23
-      '@angular/core': 21.2.23
-      '@angular/platform-browser': 21.2.23
+      '@angular/common': 21.2.25
+      '@angular/core': 21.2.25
+      '@angular/platform-browser': 21.2.25
       rxjs: ^6.5.3 || ^7.4.0
 
   '@asamuzakjp/css-color@3.2.0':
@@ -8862,8 +8866,8 @@ packages:
     resolution: {integrity: sha512-UzGt8zg7Ny8djbYMhxl2zuEevVa7r2gJjYY5Lwr1xM7+XU2nd6CkIWFTVcCIbAP63vSz71NaVyyuSk9lHKcy0A==}
     engines: {node: '>=4'}
 
-  axios@1.18.1:
-    resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
+  axios@1.20.0:
+    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -10259,8 +10263,8 @@ packages:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
 
-  dompurify@3.4.13:
-    resolution: {integrity: sha512-2vmYIoqjze2d+kakP8S/nS5shfsl587kzwEjcGlTdiksUVgFHnFCsLYDVj/JNqJVOQZGSYBTmuycv0PodwmnMQ==}
+  dompurify@3.4.16:
+    resolution: {integrity: sha512-sqo+pNp3qRhCIpbgRi1y8Tgk27Bo2Ry7w0dC1NBeNTdZChWjz9Xb/KOoZbRP/R6pQZ80Qw8YhXw13hWWBbMRnQ==}
 
   domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
@@ -14125,12 +14129,8 @@ packages:
     resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
     engines: {node: '>= 6'}
 
-  piscina@5.2.0:
-    resolution: {integrity: sha512-DszUCKeVN/5G5QKo6jAVHL8fmKnkJvQ0ACiVgY7YGCq3TUB2oznAOayvZPIAdEThvhczkXR+qm3IHsNXpFCYfA==}
-    engines: {node: '>=20.x'}
-
-  piscina@5.3.0:
-    resolution: {integrity: sha512-9D3tPBayfoal6l9l4Y8NrMn1jkV718qJoYrla6P51+hh9h0Q+9/1c8KgEnoBQqhguyfgjay4biADI8HJG3pkoA==}
+  piscina@5.3.2:
+    resolution: {integrity: sha512-vv7l/mM7B9WgrhDaudIqv1x6v4LOBRYYmpWGdWushhpbCmVHp11sUB2v4hj1CAeTGXVxuZFz6xOU1RalAiPKfQ==}
     engines: {node: '>=20.x'}
 
   pkce-challenge@5.0.1:
@@ -17206,7 +17206,7 @@ snapshots:
       open: 11.0.0
       ora: 9.3.0
       picomatch: 4.0.4
-      piscina: 5.2.0
+      piscina: 5.3.2
       postcss: 8.5.23
       postcss-loader: 8.2.0(postcss@8.5.23)(typescript@5.9.3)(webpack@5.105.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.1))
       resolve-url-loader: 5.0.0
@@ -17297,7 +17297,7 @@ snapshots:
       open: 11.0.0
       ora: 9.3.0
       picomatch: 4.0.4
-      piscina: 5.2.0
+      piscina: 5.3.2
       postcss: 8.5.23
       postcss-loader: 8.2.0(postcss@8.5.23)(typescript@5.9.3)(webpack@5.105.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.1))
       resolve-url-loader: 5.0.0
@@ -17388,7 +17388,7 @@ snapshots:
       open: 11.0.0
       ora: 9.4.1
       picomatch: 4.0.5
-      piscina: 5.2.0
+      piscina: 5.3.2
       postcss: 8.5.25
       postcss-loader: 8.2.1(postcss@8.5.25)(typescript@6.0.3)(webpack@5.109.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25))
       resolve-url-loader: 5.0.0
@@ -17552,7 +17552,7 @@ snapshots:
       mrmime: 2.0.1
       parse5-html-rewriting-stream: 8.0.0
       picomatch: 4.0.4
-      piscina: 5.2.0
+      piscina: 5.3.2
       rolldown: 1.0.0-rc.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
       sass: 1.97.3
       semver: 7.7.4
@@ -17609,7 +17609,7 @@ snapshots:
       mrmime: 2.0.1
       parse5-html-rewriting-stream: 8.0.0
       picomatch: 4.0.4
-      piscina: 5.2.0
+      piscina: 5.3.2
       rolldown: 1.0.0-rc.4(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
       sass: 1.97.3
       semver: 7.7.4
@@ -17666,7 +17666,7 @@ snapshots:
       oxc-parser: 0.142.0
       parse5-html-rewriting-stream: 8.0.1
       picomatch: 4.0.5
-      piscina: 5.2.0
+      piscina: 5.3.2
       rolldown: 1.2.0
       sass: 1.101.0
       semver: 7.8.5
@@ -17963,7 +17963,7 @@ snapshots:
       tslib: 2.8.1
       xhr2: 0.2.1
 
-  '@angular/router@21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)':
+  '@angular/router@21.2.25(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.23(@angular/common@21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)':
     dependencies:
       '@angular/common': 21.2.23(@angular/core@21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2)
       '@angular/core': 21.2.23(@angular/compiler@21.2.23)(rxjs@7.8.2)(zone.js@0.15.1)
@@ -25806,7 +25806,7 @@ snapshots:
 
   axe-core@4.13.0: {}
 
-  axios@1.18.1:
+  axios@1.20.0:
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3)
       form-data: 4.0.6
@@ -25816,7 +25816,7 @@ snapshots:
       - debug
       - supports-color
 
-  axios@1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
+  axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3(supports-color@7.2.0))
       form-data: 4.0.6
@@ -26591,7 +26591,7 @@ snapshots:
 
   cldr-data-downloader@1.1.0:
     dependencies:
-      axios: 1.18.1
+      axios: 1.20.0
       mkdirp: 1.0.4
       nopt: 3.0.6
       q: 1.0.1
@@ -27521,7 +27521,7 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
-  dompurify@3.4.13:
+  dompurify@3.4.16:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
     optional: true
@@ -31581,7 +31581,7 @@ snapshots:
     optionalDependencies:
       canvg: 3.0.11
       core-js: 3.49.0
-      dompurify: 3.4.13
+      dompurify: 3.4.16
       html2canvas: 1.4.1
 
   jsx-ast-utils@3.3.5:
@@ -32708,7 +32708,7 @@ snapshots:
       jsonc-parser: 3.3.1
       less: 4.8.0
       ora: 9.3.0
-      piscina: 5.2.0
+      piscina: 5.3.2
       postcss: 8.5.23
       rollup-plugin-dts: 6.4.1(rollup@4.59.0)(typescript@4.9.5)
       rxjs: 7.8.2
@@ -32739,7 +32739,7 @@ snapshots:
       jsonc-parser: 3.3.1
       less: 4.9.0
       ora: 9.4.1
-      piscina: 5.3.0
+      piscina: 5.3.2
       postcss: 8.5.25
       rollup-plugin-dts: 6.4.1(rollup@4.59.0)(typescript@5.9.3)
       rxjs: 7.8.2
@@ -32939,7 +32939,7 @@ snapshots:
       ansi-styles: 4.3.0
       argparse: 2.0.1
       asynckit: 0.4.0
-      axios: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       balanced-match: 4.0.3
       base64-js: 1.5.1
       bl: 4.1.0
@@ -33522,11 +33522,7 @@ snapshots:
 
   pirates@4.0.7: {}
 
-  piscina@5.2.0:
-    optionalDependencies:
-      '@napi-rs/nice': 1.1.1
-
-  piscina@5.3.0:
+  piscina@5.3.2:
     optionalDependencies:
       '@napi-rs/nice': 1.1.1
 
