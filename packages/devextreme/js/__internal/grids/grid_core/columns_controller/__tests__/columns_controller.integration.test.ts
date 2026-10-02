@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
@@ -72,6 +73,101 @@ describe('column fixing enablement', () => {
     const result = instance.getController('columns')._isColumnFixing();
 
     expect(result).toBe(expected);
+  });
+});
+
+describe('column lint cleanup contracts', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should generate columns when an empty data source receives data', async () => {
+    const { instance } = await createDataGrid({ dataSource: [] });
+
+    expect(instance.columnCount()).toBe(0);
+
+    instance.option('dataSource', [{ id: 1, name: 'a' }]);
+    jest.runAllTimers();
+
+    expect(instance.getVisibleColumns().map((column) => column.dataField)).toEqual(['id', 'name']);
+  });
+
+  it('should exclude hidden and grouped columns from visible band children', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, name: 'a', hidden: true }],
+      columns: [{
+        caption: 'Band',
+        columns: [
+          'id',
+          { dataField: 'name', groupIndex: 0 },
+          { dataField: 'hidden', visible: false },
+        ],
+      }],
+    });
+
+    const dataFields = instance.getController('columns').getVisibleColumns()
+      .filter((column) => !column.command)
+      .map((column) => column.dataField);
+
+    expect(dataFields).toEqual(['id']);
+  });
+
+  it('should keep null row indexes equivalent to omitted indexes', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      columns: [{ caption: 'Band', columns: ['id', 'name'] }],
+    });
+
+    const visibleColumns = instance.getController('columns').getVisibleColumns(null);
+
+    expect(visibleColumns).toEqual(instance.getVisibleColumns());
+    expect(visibleColumns.map((column) => column.dataField)).toEqual(['id', 'name']);
+    expect(instance.getVisibleColumns(0).map((column) => column.caption)).toEqual(['Band']);
+  });
+
+  it('should skip empty sort and group selectors', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      columns: [
+        { dataField: 'id', sortOrder: 'asc', calculateSortValue: '' },
+        { dataField: 'name', groupIndex: 0, calculateGroupValue: '' },
+      ],
+    });
+
+    const controller = instance.getController('columns');
+
+    expect(controller.getSortDataSourceParameters()?.[0].selector).toBe('id');
+    expect(controller.getGroupDataSourceParameters()?.[0].selector).toBe('name');
+  });
+
+  it('should forward filter target and preserve column callback context', async () => {
+    const calls: unknown[] = [];
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1 }, { id: 2 }],
+      columns: [{
+        dataField: 'id',
+        calculateFilterExpression(
+          this: Column,
+          value: unknown,
+          operation: string | null,
+          target: string,
+        ): unknown[] {
+          calls.push({
+            field: this.dataField, value, operation, target,
+          });
+          return [this.dataField, operation, value];
+        },
+      }],
+      filterRow: { visible: true },
+    });
+
+    instance.columnOption('id', 'selectedFilterOperation', '=');
+    instance.columnOption('id', 'filterValue', 2);
+    jest.runAllTimers();
+
+    expect(calls).toContainEqual({
+      field: 'id', value: 2, operation: '=', target: 'filterRow',
+    });
+    expect(instance.getVisibleRows()).toMatchObject([{ data: { id: 2 } }]);
   });
 });
 
