@@ -905,7 +905,7 @@ async function runCommand(text, { form, gridInstance, aiIntegration }) {
   }
 
   if (target === 'grid') {
-    gridInstance?.beginCustomLoading();
+    gridInstance?.beginCustomLoading('');
 
     const { results: gridResults, error: gridError } =
       await buildGridResultsPromise(gridInstance, aiIntegration, text);
