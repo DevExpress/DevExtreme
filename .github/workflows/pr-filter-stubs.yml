@@ -43,13 +43,6 @@ jobs:
     steps:
       - run: exit 1
   # wrapper_tests.yml
-  wrapper_tests1:
-    name: 'check-regenerate'
-    needs: [ stubChecksReady ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
   wrapper_tests2:
     name: 'test (angular)'
     needs: [ stubChecksReady ]
