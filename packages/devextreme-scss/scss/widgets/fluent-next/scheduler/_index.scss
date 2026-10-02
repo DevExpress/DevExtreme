@@ -525,14 +525,6 @@
     }
   }
 
-  .dx-scheduler-header-panel-current-time-cell {
-    .dx-scheduler-header-panel-cell-date343 {
-      border-radius: initial;
-      background-color: initial;
-      color: var(--dx-scheduler-current-time-cell-content);
-    }
-  }
-
   .dx-scheduler-header-panel-cell { // stylelint-disable-line no-duplicate-selectors
     padding-left: var(--dx-scheduler-workspace-month-cell-left-offset);
 
