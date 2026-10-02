@@ -84,6 +84,8 @@ export interface DropDownEditorInternalProperties extends TextEditorInternalProp
   applyButtonText?: string;
 
   cancelButtonText?: string;
+
+  _cached_dropDownOptions?: InternalPopupProperties | InternalPopoverProperties;
 }
 
 export interface DropDownEditorProperties<
