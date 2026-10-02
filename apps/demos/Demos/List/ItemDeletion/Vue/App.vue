@@ -42,7 +42,7 @@ const itemDeleteMode = ref<DxListTypes.ItemDeleteMode>('toggle');
 .options {
   margin-top: 20px;
   padding: 20px;
-  background: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .options .caption {

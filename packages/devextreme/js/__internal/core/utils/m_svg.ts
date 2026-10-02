@@ -2,12 +2,15 @@ import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { isRenderer, isString } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import { copyResolvedStyles } from '@ts/core/utils/css_variables';
 
 const window = getWindow();
 
 function getMarkup(element, backgroundColor) {
   const clone = element.cloneNode(true);
   const serializer = new XMLSerializer();
+
+  copyResolvedStyles(element, clone);
 
   if (backgroundColor) {
     $(clone).css('backgroundColor', backgroundColor);

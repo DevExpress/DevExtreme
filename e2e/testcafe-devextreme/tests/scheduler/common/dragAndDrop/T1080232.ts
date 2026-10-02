@@ -17,7 +17,7 @@ test('it should correctly drag external item to the appointment after drag appoi
   await t
     .dragToElement(appt01.element, cell01, { speed: 0.5 })
     .expect((await appt01.element.boundingClientRect).top)
-    .eql(183)
+    .eql((await cell01.boundingClientRect).top + (await cell01.boundingClientRect).height)
     .dragToElement(dragItem, appt02.element, { speed: 0.5 })
     .expect(appt02.element.find('.dx-item-content').getAttribute('data-status'))
     .eql('Added');

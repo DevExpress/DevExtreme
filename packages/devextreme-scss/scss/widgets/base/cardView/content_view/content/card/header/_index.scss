@@ -7,7 +7,7 @@
   height: $cardview-card__header-height;
 
   .dx-toolbar {
-    padding: 0 12px;
+    padding: 0 12px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
     border-radius: $cardview-card-border-radius $cardview-card-border-radius 0 0;
     background-color: transparent;
 
@@ -39,8 +39,8 @@
 
   .dx-toolbar-item-content::before {
     content: "";
-    width: 20px;
-    height: 20px;
+    width: 20px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
+    height: 20px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
     display: inline-block;
     pointer-events: none;
   }

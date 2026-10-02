@@ -3,7 +3,7 @@ import type { MockHandler } from './types';
 import { salesHandler } from './handlers/sales';
 import { salesOrdersHandler } from './handlers/salesOrders';
 import { ordersHandler } from './handlers/orders';
-import { openAIHandler } from './handlers/openai';
+import { openAIHandler, openAIChatHandler } from './handlers/openai';
 import { diagramEmployeesHandler } from './handlers/diagramEmployees';
 import { temperatureDataHandler } from './handlers/temperatureData';
 import { listDataHandler } from './handlers/listData';
@@ -70,6 +70,7 @@ const handlers: MockHandler[] = [
   ordersHandler,
   // POST demo-openai chat completions (AI column)
   openAIHandler,
+  openAIChatHandler,
   // GET /api/DiagramEmployees/Employees
   diagramEmployeesHandler,
   // GET /api/TemperatureData

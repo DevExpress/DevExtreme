@@ -11,6 +11,7 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { isDefined } from '@js/core/utils/type';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { patchFontOptions } from '@ts/viz/core/utils';
 
 const states = ['normal', 'hover'];
@@ -37,7 +38,7 @@ function compileLabelAttrs(labelOptions, filter, node) {
   const _patchFontOptions = patchFontOptions;
 
   if (labelOptions.useNodeColors) {
-    labelOptions.font.color = node.color;
+    labelOptions.font.color = node.fill;
   }
 
   const borderVisible = isDefined(labelOptions.border.visible) ? labelOptions.border.visible : false;
@@ -68,7 +69,7 @@ function Node(widget, params) {
   that.code = 0;
   that.widget = widget;
 
-  that.color = params.color;
+  that.fill = params.color;
   that.options = params.options;
   that.rect = params.rect;
   that.label = params.rect._name;
@@ -81,14 +82,22 @@ function Node(widget, params) {
   that.linksOut = params.linksOut;
 
   this.states = {
-    normal: compileAttrs(this.color, that.options, that.options),
-    hover: compileAttrs(this.color, that.options.hoverStyle, that.options),
+    normal: compileAttrs(this.fill, that.options, that.options),
+    hover: compileAttrs(this.fill, that.options.hoverStyle, that.options),
   };
 }
 
 Node.prototype = {
+  get color() {
+    return paintedColor(this.fill, this.widget._renderer?.root?.element);
+  },
+
+  set color(value) {
+    this.fill = value;
+  },
+
   compileAttrs() {
-    return compileAttrs(this.color, this.options);
+    return compileAttrs(this.fill, this.options);
   },
 
   getState() {

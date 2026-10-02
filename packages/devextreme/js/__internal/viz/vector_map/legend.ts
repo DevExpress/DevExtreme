@@ -17,6 +17,7 @@
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { clone } from '@js/core/utils/object';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { Legend as _BaseLegend } from '@ts/viz/components/legend';
 
 const _extend = extend;
@@ -58,7 +59,9 @@ let Legend = function (parameters) {
     itemsGroupClass: null,
     textField: 'text',
     getFormatObject(data) {
-      return data;
+      return data.color === undefined
+        ? data
+        : { ...data, color: paintedColor(data.color, parameters.renderer.root.element) };
     },
   });
   that._onDataChanged = function (data) {

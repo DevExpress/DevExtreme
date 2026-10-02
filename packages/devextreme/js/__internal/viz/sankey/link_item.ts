@@ -8,6 +8,7 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { isDefined } from '@js/core/utils/type';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from '@ts/viz/sankey/constants';
 
 const states = ['normal', 'adjacentNodeHover', 'hover'];
@@ -44,7 +45,7 @@ function Link(widget, params) {
   that.code = 0;
   that.widget = widget;
 
-  that.color = params.color;
+  that.fill = params.color;
   that.connection = params.connection;
   that.d = params.d;
   that.options = params.options;
@@ -55,19 +56,27 @@ function Link(widget, params) {
   };
 
   that.states = {
-    normal: compileAttrs(that.color, that.options, that.options, params.gradient),
-    adjacentNodeHover: compileAttrs(that.color, { opacity: 0, border: {} }, that.options, params.gradient),
-    hover: compileAttrs(that.color, { opacity: 0, border: {} }, that.options, params.gradient),
+    normal: compileAttrs(that.fill, that.options, that.options, params.gradient),
+    adjacentNodeHover: compileAttrs(that.fill, { opacity: 0, border: {} }, that.options, params.gradient),
+    hover: compileAttrs(that.fill, { opacity: 0, border: {} }, that.options, params.gradient),
   };
 
   that.overlayStates = {
-    normal: compileAttrs(that.color, { opacity: 0, border: {} }, that.options),
-    adjacentNodeHover: compileAttrs(that.color, that.options.hoverStyle, that.options),
-    hover: compileAttrs(that.color, that.options.hoverStyle, that.options),
+    normal: compileAttrs(that.fill, { opacity: 0, border: {} }, that.options),
+    adjacentNodeHover: compileAttrs(that.fill, that.options.hoverStyle, that.options),
+    hover: compileAttrs(that.fill, that.options.hoverStyle, that.options),
   };
 }
 
 Link.prototype = {
+  get color() {
+    return paintedColor(this.fill, this.widget._renderer?.root?.element);
+  },
+
+  set color(value) {
+    this.fill = value;
+  },
+
   getState() {
     return states[this.code];
   },

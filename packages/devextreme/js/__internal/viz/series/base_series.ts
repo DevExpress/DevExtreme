@@ -24,6 +24,7 @@ import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
 import { each as _each } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, isEmptyObject as _isEmptyObject, isFunction } from '@js/core/utils/type';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import consts from '@ts/viz/components/consts';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 
@@ -1318,7 +1319,7 @@ Series.prototype = {
   },
 
   getColor() {
-    return this.getLegendStyles().normal.fill;
+    return paintedColor(this.getLegendStyles().normal.fill, this._renderer?.root?.element);
   },
 
   getOpacity() {

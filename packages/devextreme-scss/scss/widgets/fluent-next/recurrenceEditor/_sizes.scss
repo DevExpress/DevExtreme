@@ -1,0 +1,24 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$recurrence-editor-until-date-box-margin-block-start: null !default;
+$recurrence-editor-count-number-box-margin-block-start: null !default;
+$recurrence-editor-interval-number-box-margin-block-start: null !default;
+
+@if $size == "default" {
+  $recurrence-editor-until-date-box-margin-block-start: ds.$spacing-600 !default;
+  $recurrence-editor-count-number-box-margin-block-start: ds.$spacing-1000 !default;
+  $recurrence-editor-interval-number-box-margin-block-start: ds.$spacing-300 !default;
+}
+
+@else if $size == "compact" {
+  $recurrence-editor-until-date-box-margin-block-start: ds.$spacing-480 !default;
+  $recurrence-editor-count-number-box-margin-block-start: ds.$spacing-800 !default;
+  $recurrence-editor-interval-number-box-margin-block-start: ds.$spacing-220 !default;
+}
+
+$recurrence-editor-radio-group-item-padding-block-end: ds.$spacing-100 !default;
+
+$recurrence-editor-number-box-margin: ds.$spacing-110 !default;
+$recurrence-editor-button-group-padding: ds.$spacing-60 !default;
+$recurrence-editor-radio-group-margin: ds.$spacing-150 !default;

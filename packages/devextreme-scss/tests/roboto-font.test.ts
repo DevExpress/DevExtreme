@@ -60,7 +60,10 @@ const EXPECTED = {
 };
 
 const fontFileName = (weight: number, format: string): string => `Roboto-${weight}.${format}`;
-const readFont = (weight: number, format: string): Buffer => readFileSync(join(FONTS_DIR, fontFileName(weight, format)));
+const readFont = (
+  weight: number,
+  format: string,
+): Buffer => readFileSync(join(FONTS_DIR, fontFileName(weight, format)));
 const sha256 = (data: Buffer): string => createHash('sha256').update(data).digest('hex');
 
 describe('Roboto fallback fonts', () => {
@@ -135,7 +138,8 @@ describe('Roboto fallback fonts', () => {
     });
 
     test('name records are identical in every format', () => {
-      const [ttfRecords, ...otherRecords] = FORMATS.map((format) => readNameRecords(readFont(weight, format)));
+      const [ttfRecords, ...otherRecords] = FORMATS
+        .map((format) => readNameRecords(readFont(weight, format)));
 
       otherRecords.forEach((records) => {
         expect(records).toEqual(ttfRecords);

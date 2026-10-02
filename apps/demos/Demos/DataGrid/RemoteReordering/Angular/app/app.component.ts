@@ -12,7 +12,6 @@ const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridRowReordering';
 @Component({
   selector: 'demo-app',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
   imports: [
     DxDataGridModule,
   ],

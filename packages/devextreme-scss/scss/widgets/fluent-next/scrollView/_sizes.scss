@@ -1,0 +1,26 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$scroll-view-load-indicator-font-size: ds.$spacing-240 !default;
+$scroll-view-pull-down-text-margin-inline-start: ds.$spacing-100 !default;
+$scroll-view-rtl-margin-inline-end: ds.$spacing-100 !default;
+$scroll-view-scroll-bottom-image-width: ds.$spacing-240 !default;
+$scroll-view-scroll-bottom-image-height: ds.$spacing-240 !default;
+$scroll-view-load-indicator-size: ds.$spacing-440 !default;
+
+$scroll-view-pull-down-icon-font-size: ds.$spacing-240 !default;
+
+$scroll-view-top-pocket-width: ds.$spacing-400 !default;
+$scroll-view-top-pocket-height: ds.$spacing-400 !default;
+$scroll-view-pull-down-indicator-padding: ds.$spacing-40 !default;
+$scroll-view-icon-pull-down-padding: ds.$spacing-80 !default;
+$scroll-view-pull-down-indicator-width: ds.$spacing-200 !default;
+$scroll-view-pull-down-image-margin: 0 ds.$spacing-200 !default;
+$scroll-view-pull-down-image-height: ds.$spacing-520 !default;
+$scroll-view-scroll-bottom-padding: ds.$spacing-100 0 !default;
+$scroll-view-scroll-bottom-indicator-margin: 0 ds.$spacing-100 0 0 !default;
+$scroll-view-scroll-bottom-indicator-rtl-margin: 0 0 0 ds.$spacing-100 !default;
+
+$scroll-view-pull-down-height: ds.$spacing-520 !default;
+$scroll-view-pull-down-padding: ds.$spacing-150 !default;
+
+$scroll-view-pull-down-top-offset: calc(-1 * (#{$scroll-view-pull-down-height} + #{$scroll-view-pull-down-padding} * 2)) !default;

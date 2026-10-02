@@ -13,6 +13,12 @@ import { ScssBuildExecutorSchema } from './schema';
 
 const DEFAULT_BUNDLES_DIR = './scss/bundles';
 const DEFAULT_CSS_OUTPUT_DIR = '../devextreme/artifacts/css';
+const ACCENT_SOURCES_DIR = './scss/_design-system/fluent/accents';
+const ACCENT_OUTPUT_DIR_NAME = 'accents';
+const LEADING_COMMENT_REGEX = /^\s*\/\*[\s\S]*?\*\/\s*/;
+const GENERATOR_BANNER_MARKER = 'auto-generated';
+const TOKENS_PACKAGE = '@devexpress/design-tokens-internal';
+const TOKEN_BUILT_BUNDLE_PREFIX = 'dx.fluent-next.';
 const DEFAULT_DEV_BUNDLE_NAMES = [
   'light',
   'light.compact',
@@ -26,6 +32,9 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
   'fluent.blue.dark',
   'fluent.saas.light',
   'fluent.saas.dark',
+  'fluent-next.blue.light',
+  'fluent-next.blue.light.compact',
+  'fluent-next.blue.dark',
 ];
 
 interface BuildDependencies {
@@ -37,6 +46,7 @@ interface BuildDependencies {
   cleanCssSanitizeOptions: unknown;
   cleanCssDevOptions: unknown;
   devextremeVersion: string;
+  tokensVersion: string | null;
 }
 
 type MinifyProfile = 'all' | 'ci';
@@ -52,11 +62,16 @@ function readFileDataUri(filePath: string, svgEncoding?: string): string {
   return encodeDataUriContent(buffer, filePath, svgEncoding);
 }
 
-function createStarLicenseHeader(fileName: string, version: string): string {
+function createStarLicenseHeader(
+  fileName: string,
+  version: string,
+  tokensVersion?: string | null,
+): string {
   return [
     '/**',
     `* DevExtreme (${fileName.replace(/\\/g, '/')})`,
     `* Version: ${version}`,
+    ...(tokensVersion ? [`* Design tokens: ${TOKENS_PACKAGE} ${tokensVersion}`] : []),
     `* Build date: ${new Date().toDateString()}`,
     '*',
     `* Copyright (c) 2012 - ${new Date().getFullYear()} Developer Express Inc. ALL RIGHTS RESERVED`,
@@ -74,7 +89,7 @@ function prependLicenseAndMoveCharsetFirst(minifiedCss: string, license: string)
 function generateBundleName(theme: string, size: string, color: string, mode?: string): string {
   return (
     'dx'
-    + (theme === 'material' || theme === 'fluent' ? `.${theme}` : '')
+    + (theme === 'material' || theme === 'fluent' || theme === 'fluent-next' ? `.${theme}` : '')
     + `.${color}`
     + (mode ? `.${mode}` : '')
     + (size === 'default' ? '' : '.compact')
@@ -109,6 +124,27 @@ async function generateScssBundles(
   await writeFileText(path.join(resolvedBundlesDir, 'dx.common.scss'), commonTemplate);
 }
 
+export function findMissingThemeCss(cssOutputDir: string, deps: BuildDependencies): string[] {
+  const declaredCssNames = [
+    ...deps.themeOptions
+      .getThemes()
+      .map(([theme, size, color, mode]) =>
+        generateBundleName(theme, size, color, mode).replace(/\.scss$/, '.css'),
+      ),
+    'dx.common.css',
+  ];
+
+  return declaredCssNames.filter((name) => !fs.existsSync(path.join(cssOutputDir, name)));
+}
+
+function readTokensVersion(projectRequire: NodeRequire): string | null {
+  try {
+    return projectRequire(`${TOKENS_PACKAGE}/package.json`).version ?? null;
+  } catch {
+    return null;
+  }
+}
+
 function loadDependencies(projectRoot: string): BuildDependencies {
   const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
 
@@ -128,6 +164,7 @@ function loadDependencies(projectRoot: string): BuildDependencies {
     ),
     devextremeVersion: projectRequire(path.resolve(projectRoot, '../devextreme/package.json'))
       .version,
+    tokensVersion: readTokensVersion(projectRequire),
   };
 }
 
@@ -199,9 +236,46 @@ async function compileFile(
   const minified = minifier.minify(prefixed.css).styles;
 
   const outFileName = path.basename(sourceFile, '.scss') + '.css';
-  const license = createStarLicenseHeader(outFileName, deps.devextremeVersion);
+  const license = createStarLicenseHeader(
+    outFileName,
+    deps.devextremeVersion,
+    outFileName.startsWith(TOKEN_BUILT_BUNDLE_PREFIX) ? deps.tokensVersion : null,
+  );
   const withHeader = prependLicenseAndMoveCharsetFirst(minified, license);
   await writeFileText(path.join(outputDir, outFileName), withHeader);
+}
+
+async function compileAccentOverrides(
+  projectRoot: string,
+  cssOutputDir: string,
+  deps: BuildDependencies,
+): Promise<void> {
+  const accentSourcesDir = path.resolve(projectRoot, ACCENT_SOURCES_DIR);
+  const pattern = normalizeGlobPathForWindows(path.join(accentSourcesDir, '*.scss'));
+  const accentSources = await glob(pattern, { nodir: true });
+
+  if (accentSources.length === 0) {
+    throw new Error(`No accent palettes to compile in ${accentSourcesDir}`);
+  }
+
+  const accentOutputDir = path.join(cssOutputDir, ACCENT_OUTPUT_DIR_NAME);
+
+  for (const source of accentSources) {
+    logger.verbose(`Compiling accent ${source}`);
+    const compiled = deps.sass.compile(source);
+    const outFileName = `${path.basename(source, '.scss')}.css`;
+    const license = createStarLicenseHeader(
+      outFileName,
+      deps.devextremeVersion,
+      deps.tokensVersion,
+    );
+    const leadingComment = LEADING_COMMENT_REGEX.exec(compiled.css)?.[0] ?? '';
+    const css = leadingComment.includes(GENERATOR_BANNER_MARKER)
+      ? compiled.css.slice(leadingComment.length)
+      : compiled.css;
+    const withHeader = prependLicenseAndMoveCharsetFirst(css, license);
+    await writeFileText(path.join(accentOutputDir, outFileName), withHeader);
+  }
 }
 
 async function copyThemeAssets(projectRoot: string, cssOutputDir: string): Promise<void> {
@@ -277,6 +351,15 @@ async function runSingleBuild(
     logger.verbose(`Compiling ${source}`);
     await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
   }
+
+  await compileAccentOverrides(projectRoot, cssOutputDir, deps);
+
+  if (options.mode !== 'ci') {
+    const missingThemeCss = findMissingThemeCss(cssOutputDir, deps);
+    if (missingThemeCss.length > 0) {
+      throw new Error(`Declared themes produced no CSS: ${missingThemeCss.join(', ')}`);
+    }
+  }
 }
 
 function loadChokidar(projectRoot: string): {
@@ -316,6 +399,7 @@ async function runWatchBuild(
       await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
     }
 
+    await compileAccentOverrides(projectRoot, cssOutputDir, deps);
     await copyThemeAssets(projectRoot, cssOutputDir);
   };
 

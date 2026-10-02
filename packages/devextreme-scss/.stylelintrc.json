@@ -20,7 +20,11 @@
         "@stylistic/declaration-colon-space-after": "always-single-line",
         "@stylistic/declaration-colon-space-before": "never",
         "declaration-no-important": true,
-        "dx/module-variable-default": true,
+        "declaration-property-value-disallowed-list": [
+            { "/.*/": ["/var\\(\\s*--dxds-/"] },
+            { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently." }
+        ],
+        "dx/module-variable-default": [true, { "exemptMarkersFrom": "tools/review/size-markers.json" }],
         "dx/no-identical-branch-declarations": true,
         "font-family-name-quotes": "always-unless-keyword",
         "@stylistic/function-comma-space-after": "always-single-line",
@@ -57,8 +61,6 @@
         "scss/at-if-closing-brace-newline-after": null,
         "scss/at-if-closing-brace-space-after": null,
         "scss/at-if-no-null": true,
-        "scss/at-import-no-partial-leading-underscore": true,
-        "scss/at-import-partial-extension": "never",
         "scss/at-mixin-argumentless-call-parentheses": "always",
         "scss/at-mixin-parentheses-space-before": "never",
         "scss/at-mixin-pattern": "^[a-z][0-9a-z-]*$",
@@ -72,6 +74,8 @@
         "scss/dollar-variable-pattern": "^[a-z][0-9a-z_-]*$",
         "scss/double-slash-comment-empty-line-before": "always",
         "scss/double-slash-comment-whitespace-inside": "always",
+        "scss/load-no-partial-leading-underscore": true,
+        "scss/load-partial-extension": "never",
         "scss/map-keys-quotes": "always",
         "scss/no-duplicate-dollar-variables": [true, { "ignoreInsideAtRules": ["if", "else"] }],
         "scss/no-duplicate-mixins": true,
@@ -79,5 +83,39 @@
         "scss/operator-no-newline-before": true,
         "scss/operator-no-unspaced": true,
         "scss/operator-no-newline-after": null
-    }
+    },
+    "overrides": [
+        {
+            "comment": "fluent-next follows the naming standard: strict kebab-case, no underscores and no BEM separators, so a variable name maps 1:1 onto a public --dx-* custom property. cardView is excluded because its own cross-theme BEM system is a documented exemption.",
+            "files": ["scss/widgets/fluent-next/**/*.scss"],
+            "ignoreFiles": ["scss/widgets/fluent-next/cardView/**/*.scss"],
+            "rules": {
+                "scss/dollar-variable-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+            }
+        },
+        {
+            "comment": "A file that emits rules consumes the widget's own variables, so the token a value comes from is stated once, next to the other variables of that widget. Declaration files are exempted by the override below. `var(--dx-…)` is NOT banned as a form: the component tier is emitted (_public.scss projections, _public-links.scss links) and consumed (pilot rules) through it, and name validity is enforced by fluent-next-naming.test.ts against the declared tier — stylelint could only see the spelling, not whether the name exists. `@use … with ()` arguments are at-rule parameters and stay invisible to stylelint; the naming test covers that form too.",
+            "files": ["scss/widgets/fluent-next/**/*.scss"],
+            "rules": {
+                "declaration-property-value-disallowed-list": [
+                    { "/.*/": ["/var\\(\\s*--dxds-/", "/\\bds\\.\\$/"] },
+                    { "message": "Use the widget's own variable here: resolve the design token in _colors.scss or _sizes.scss. A custom property compiles even when its name is wrong." }
+                ]
+            }
+        },
+        {
+            "comment": "Turning a token into a widget variable is what these files are for, so only the raw custom-property form stays banned here.",
+            "files": [
+                "scss/widgets/fluent-next/**/_colors.scss",
+                "scss/widgets/fluent-next/**/_sizes.scss",
+                "scss/widgets/fluent-next/**/_variables.scss"
+            ],
+            "rules": {
+                "declaration-property-value-disallowed-list": [
+                    { "/.*/": ["/var\\(\\s*--dxds-/", "/var\\(\\s*--dx-/"] },
+                    { "message": "Read a design token through the ds bridge (ds.$name), not as a custom property: the bridge fails the build on an unknown name, a custom property compiles and degrades silently." }
+                ]
+            }
+        }
+    ]
 }

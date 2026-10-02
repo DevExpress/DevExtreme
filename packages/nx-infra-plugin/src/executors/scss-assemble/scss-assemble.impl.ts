@@ -4,12 +4,28 @@ import { glob } from 'glob';
 import { logger } from '@nx/devkit';
 import { createExecutor } from '../../utils/create-executor';
 import { toPosixPath } from '../../utils/path-resolver';
-import { readFileText, writeFileText, ensureDir } from '../../utils/file-operations';
+import { readFileText, writeFileText, ensureDir, exists } from '../../utils/file-operations';
 import { copyDirectory } from '../copy-files/copy-files.impl';
 import { DATA_URI_SCSS_REGEX, encodeDataUriForCssUrl } from '../../utils/scss-data-uri';
 import { ScssAssembleExecutorSchema } from './schema';
 
 const SCSS_EXTENSIONS = new Set(['.scss', '.css']);
+const INTERNAL_SCSS_PATHS_FILE = path.join('build', 'internal-scss-paths.json');
+
+export async function readInternalScssPaths(scssPackagePath: string): Promise<string[]> {
+  const listPath = path.join(scssPackagePath, INTERNAL_SCSS_PATHS_FILE);
+
+  if (!(await exists(listPath))) {
+    throw new Error(`Internal SCSS path list not found: ${listPath}`);
+  }
+
+  return JSON.parse(await readFileText(listPath)) as string[];
+}
+
+export function isInternalScssPath(relativePath: string, internalPaths: string[]): boolean {
+  const posixPath = relativePath.split('\\').join('/');
+  return internalPaths.some((internalPath) => posixPath.startsWith(internalPath));
+}
 
 async function inlineDataUri(content: string, scssRoot: string): Promise<string> {
   const matches = [...content.matchAll(DATA_URI_SCSS_REGEX)];
@@ -37,10 +53,13 @@ async function inlineDataUri(content: string, scssRoot: string): Promise<string>
 async function copyScssWithInlineDataUri(
   scssPackagePath: string,
   outputDir: string,
+  internalPaths: string[],
 ): Promise<void> {
   const scssSourceDir = path.join(scssPackagePath, 'scss');
   const cwd = toPosixPath(scssSourceDir);
-  const relPaths = await glob('**/*', { cwd, nodir: true });
+  const relPaths = (await glob('**/*', { cwd, nodir: true })).filter(
+    (relPath) => !isInternalScssPath(relPath, internalPaths),
+  );
 
   await Promise.all(
     relPaths.map(async (relPath) => {
@@ -87,8 +106,12 @@ export default createExecutor<ScssAssembleExecutorSchema, ResolvedScssAssemble>(
     return { scssPackagePath, outputDir };
   },
   run: async ({ scssPackagePath, outputDir }) => {
+    const internalPaths = await readInternalScssPaths(scssPackagePath);
+
+    await fs.rm(outputDir, { recursive: true, force: true });
+
     await Promise.all([
-      copyScssWithInlineDataUri(scssPackagePath, outputDir),
+      copyScssWithInlineDataUri(scssPackagePath, outputDir, internalPaths),
       copyFonts(scssPackagePath, outputDir),
       copyIcons(scssPackagePath, outputDir),
     ]);

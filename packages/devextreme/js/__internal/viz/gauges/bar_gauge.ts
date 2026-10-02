@@ -4,6 +4,7 @@ import registerComponent from '@js/core/component_registrator';
 import { extend } from '@js/core/utils/extend';
 import { roundFloatPart } from '@js/core/utils/math';
 import { clone } from '@js/core/utils/object';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { overlapping } from '@ts/viz/chart_components/base_chart';
 import { plugin as pluginLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -956,7 +957,7 @@ class BarGauge extends BaseGauge {
       id: bar.index,
       item: {
         value: bar.getValue(),
-        color: bar.getColor(),
+        color: paintedColor(bar.getColor(), this._renderer.root.element),
         index: bar.index,
       },
       text: formatValue(bar.getValue(), formatOptions),

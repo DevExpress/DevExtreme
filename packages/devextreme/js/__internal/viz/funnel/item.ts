@@ -7,6 +7,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { isDefined } from '@js/core/utils/type';
+import { paintedColor } from '@ts/core/utils/css_variables';
 
 const states = ['normal', 'hover', 'selection', 'selection'];
 
@@ -38,7 +39,7 @@ function Item(widget, options) {
   that.percent = options.percent;
 
   that.id = options.id;
-  that.color = options.color;
+  that.fill = options.color;
 
   that.states = {
     normal: parseStyles(options.color, options.itemOptions, options.itemOptions),
@@ -48,6 +49,14 @@ function Item(widget, options) {
 }
 
 Item.prototype = {
+  get color() {
+    return this.getColor();
+  },
+
+  set color(value) {
+    this.fill = value;
+  },
+
   getState() {
     return states[this.code];
   },
@@ -100,7 +109,7 @@ Item.prototype = {
   },
 
   getColor() {
-    return this.color;
+    return paintedColor(this.fill, this.widget._renderer?.root?.element);
   },
 
   isHovered() {

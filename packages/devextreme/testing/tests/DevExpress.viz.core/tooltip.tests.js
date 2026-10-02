@@ -9,6 +9,7 @@ import vizUtils from 'viz/core/utils_default';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import domAdapter from '__internal/core/dom_adapter';
 import { implementationsMap } from 'core/utils/size';
+import { value as viewPort, originalViewPort } from 'core/utils/view_port';
 import { initializeSizeMocks, destroySizeMocks } from '../../helpers/sizeMocks.js';
 
 const Tooltip = tooltipModule.Tooltip;
@@ -20,6 +21,10 @@ QUnit.testStart(function() {
 });
 
 const CANVAS = { left: 0, top: 0, width: 800, height: 600, bottom: 0, right: 0 };
+
+function assertViewPortIsBody(assert) {
+    assert.strictEqual(viewPort().get(0), $('body').get(0), 'the page has no .dx-viewport, so the view port a tooltip falls back to is body');
+}
 
 function getInitialOptions() {
     return {
@@ -177,6 +182,7 @@ QUnit.test('Set options. Container is incorrect', function(assert) {
     const result = tooltip.setOptions(this.options);
 
     assert.equal(tooltip, result);
+    assertViewPortIsBody(assert);
     assert.equal(tooltip._getContainer(), $('body').get(0));
 });
 
@@ -436,10 +442,46 @@ QUnit.test('Update', function(assert) {
         fill: 'rgba(147,147,147,0.7)',
         fontFamily: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fontSize: '14px',
-        fontWeight: 400,
-        opacity: null
+        fontWeight: 400
     });
     // for html text ↑
+});
+
+QUnit.test('Update. The font opacity is carried by the text colour, not by the html text group', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: { event: 'trigger' } });
+
+    tooltip.update(this.options);
+
+    const textGroup = tooltip._textGroupHtml.get(0);
+
+    assert.strictEqual(textGroup.style.opacity, '', 'the html content of the tooltip is not made translucent');
+    assert.strictEqual(textGroup.style.color, 'rgba(147, 147, 147, 0.7)', 'only the colour of its text is');
+    assert.strictEqual(tooltip._textFontStyles['fill-opacity'], undefined, 'the svg text takes the opacity from the colour as well');
+});
+
+QUnit.test('Update. A published name carries the font opacity in a mix of its own', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: { event: 'trigger' } });
+    const mixed = 'color-mix(in srgb, var(--dx-viz-tooltip-content, #ffffff) 70%, transparent)';
+
+    this.options.font.color = 'var(--dx-viz-tooltip-content, #ffffff)';
+    tooltip._textGroupHtml.css = sinon.spy();
+    tooltip.update(this.options);
+
+    const htmlStyles = tooltip._textGroupHtml.css.firstCall.args[0];
+
+    assert.strictEqual(tooltip._textFontStyles.fill, mixed, 'the svg text is filled with the name mixed toward transparent');
+    assert.strictEqual(htmlStyles.color, mixed, 'the html text is coloured the same way');
+    assert.notOk('opacity' in htmlStyles, 'and the html text group keeps no opacity of its own');
+});
+
+QUnit.test('Update. A font opacity without a colour stays on the svg text only', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: { event: 'trigger' } });
+
+    this.options.font = { opacity: 0.5 };
+    tooltip.update(this.options);
+
+    assert.strictEqual(tooltip._textFontStyles['fill-opacity'], 0.5, 'the svg text keeps the opacity');
+    assert.strictEqual(tooltip._textGroupHtml.get(0).style.opacity, '', 'the html content of the tooltip is not made translucent');
 });
 
 QUnit.test('Disposing', function(assert) {
@@ -546,6 +588,151 @@ QUnit.test('getOptions', function(assert) {
     tooltip.setOptions(this.options);
 
     assert.strictEqual(tooltip.getOptions(), this.options);
+});
+
+function themeModeScope(mode) {
+    const $scope = $('<div>').addClass(`dx-theme-mode-${mode}`);
+
+    $scope.get(0).style.setProperty('--dx-theme-mode', mode);
+
+    return $scope;
+}
+
+QUnit.module('Container and canvas', {
+    beforeEach: function() {
+        this.options = getInitialOptions();
+        this.initialViewPort = originalViewPort();
+
+        this.createTooltip = (widgetRoot) => {
+            this.tooltip = new Tooltip({ eventTrigger: sinon.spy(), widgetRoot });
+            this.tooltip.update(this.options);
+
+            return this.tooltip;
+        };
+
+        this.pageCanvas = () => {
+            const tooltip = new Tooltip({ eventTrigger: sinon.spy() });
+
+            tooltip.update($.extend({}, this.options, { container: 'body' }));
+
+            const canvas = tooltip._getCanvas();
+
+            tooltip.dispose();
+
+            return canvas;
+        };
+    },
+    afterEach: function() {
+        this.tooltip && this.tooltip.dispose();
+        viewPort(this.initialViewPort);
+    }
+});
+
+QUnit.test('Without a .dx-viewport, a widget in no scope of its own attaches the tooltip to body', function(assert) {
+    const tooltip = this.createTooltip($('<div>').appendTo('#qunit-fixture').get(0));
+
+    tooltip.show({ valueText: 'text' }, {});
+
+    assertViewPortIsBody(assert);
+    assert.strictEqual(tooltip._getContainer(), $('body').get(0), 'the tooltip falls back to body');
+    assert.strictEqual(tooltip._wrapper.parent().get(0), $('body').get(0), 'and its wrapper is appended there');
+});
+
+QUnit.test('With a .dx-viewport, a widget in no scope of its own attaches the tooltip to the view port', function(assert) {
+    const $viewPort = $('<div>').addClass('dx-viewport').appendTo('#qunit-fixture');
+
+    viewPort($viewPort);
+
+    const tooltip = this.createTooltip($('<div>').appendTo($viewPort).get(0));
+
+    tooltip.show({ valueText: 'text' }, {});
+
+    assert.strictEqual(tooltip._getContainer(), $viewPort.get(0), 'the tooltip falls back to the view port, not to body');
+    assert.strictEqual(tooltip._wrapper.parent().get(0), $viewPort.get(0), 'and its wrapper is appended there');
+});
+
+QUnit.test('With a .dx-viewport, a widget in a theme mode scope attaches the tooltip to that scope', function(assert) {
+    const $viewPort = $('<div>').addClass('dx-viewport').appendTo('#qunit-fixture');
+    const $scope = themeModeScope('dark').appendTo($viewPort);
+
+    viewPort($viewPort);
+
+    const tooltip = this.createTooltip($('<div>').appendTo($scope).get(0));
+
+    tooltip.show({ valueText: 'text' }, {});
+
+    assert.strictEqual(tooltip._getContainer(), $scope.get(0), 'the scope is a child of the view port, so the tooltip goes into it');
+    assert.strictEqual(tooltip._wrapper.parent().get(0), $scope.get(0), 'and its wrapper is appended there');
+});
+
+QUnit.test('With a .dx-viewport, a widget in a theme mode scope that clips attaches the tooltip to the view port\'s container for that mode', function(assert) {
+    const $viewPort = $('<div>').addClass('dx-viewport').appendTo('#qunit-fixture');
+    const $scope = themeModeScope('dark').css('overflow', 'hidden').appendTo($viewPort);
+
+    viewPort($viewPort);
+
+    const tooltip = this.createTooltip($('<div>').appendTo($scope).get(0));
+
+    tooltip.show({ valueText: 'text' }, {});
+
+    const container = tooltip._getContainer();
+
+    assert.notStrictEqual(container, $scope.get(0), 'the scope would clip the tooltip, so it does not host it');
+    assert.strictEqual(container.parentNode, $viewPort.get(0), 'the container is a child of the view port');
+    assert.ok($(container).hasClass('dx-theme-mode-dark'), 'that carries the mode of the scope');
+    assert.strictEqual(tooltip._wrapper.parent().get(0), container, 'and the wrapper is appended there');
+});
+
+QUnit.test('With a .dx-viewport, a widget deeper in a theme mode scope attaches the tooltip to the view port\'s container for that mode', function(assert) {
+    const $viewPort = $('<div>').addClass('dx-viewport').appendTo('#qunit-fixture');
+    const $scope = themeModeScope('dark').appendTo($('<div>').appendTo($viewPort));
+
+    viewPort($viewPort);
+
+    const tooltip = this.createTooltip($('<div>').appendTo($scope).get(0));
+
+    tooltip.show({ valueText: 'text' }, {});
+
+    const container = tooltip._getContainer();
+
+    assert.strictEqual(container.parentNode, $viewPort.get(0), 'the container is a child of the view port');
+    assert.ok($(container).hasClass('dx-theme-mode-dark'), 'that carries the mode of the scope');
+    assert.strictEqual(tooltip._wrapper.parent().get(0), container, 'and the wrapper is appended there');
+});
+
+QUnit.test('The view port the tooltip falls back to does not clip the canvas', function(assert) {
+    const $viewPort = $('<div>').addClass('dx-viewport').appendTo('#qunit-fixture');
+
+    viewPort($viewPort);
+
+    const tooltip = this.createTooltip($('<div>').appendTo($viewPort).get(0));
+
+    assert.deepEqual(tooltip._getCanvas(), this.pageCanvas(), 'the canvas is the page, as it is for a tooltip in body');
+    assert.strictEqual(tooltip.show({ valueText: 'text' }, { x: 100, y: 200, offset: 0 }), true, 'so a point outside the view port box still gets its tooltip');
+});
+
+QUnit.test('The container of a theme mode scope does not clip the canvas', function(assert) {
+    const $viewPort = $('<div>').addClass('dx-viewport').appendTo('#qunit-fixture');
+    const $scope = themeModeScope('dark').appendTo($('<div>').appendTo($viewPort));
+
+    viewPort($viewPort);
+
+    const tooltip = this.createTooltip($('<div>').appendTo($scope).get(0));
+
+    assert.deepEqual(tooltip._getCanvas(), this.pageCanvas(), 'the canvas is the page, not the empty container the view port keeps for the scope');
+    assert.strictEqual(tooltip.show({ valueText: 'text' }, { x: 100, y: 200, offset: 0 }), true, 'so the tooltip is drawn');
+});
+
+QUnit.test('A container given in the options still clips the canvas', function(assert) {
+    const $container = $('<div>').appendTo('#qunit-fixture');
+
+    this.options.container = $container.get(0);
+
+    const tooltip = this.createTooltip($('<div>').appendTo($container).get(0));
+
+    assert.notDeepEqual(tooltip._getCanvas(), this.pageCanvas(), 'the canvas is cut to the container');
+    assert.strictEqual(tooltip.show({ valueText: 'text' }, { x: 100, y: 200, offset: 0 }), false, 'so a point outside it gets no tooltip');
+    assert.strictEqual(tooltip._wrapper.parent().get(0), $container.get(0), 'and the wrapper still goes to the container');
 });
 
 QUnit.module('Manipulation', {
@@ -659,6 +846,7 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
     });
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assertViewPortIsBody(assert);
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
@@ -699,6 +887,7 @@ QUnit.test('Show preparations. W/o customize, w/ text from \'description\' filed
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assertViewPortIsBody(assert);
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
@@ -850,6 +1039,7 @@ QUnit.test('Show preparations. W/ customize w/ text, empty text', function(asser
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assertViewPortIsBody(assert);
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
@@ -881,6 +1071,7 @@ QUnit.test('Show preparations. W/ customize w/ text, w/ text', function(assert) 
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assertViewPortIsBody(assert);
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
@@ -987,6 +1178,7 @@ QUnit.test('Show preparations. W/ customize w/ html', function(assert) {
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assertViewPortIsBody(assert);
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
@@ -1019,6 +1211,7 @@ QUnit.test('Show preparations. W/ customize w/ html/text', function(assert) {
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
+    assertViewPortIsBody(assert);
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 

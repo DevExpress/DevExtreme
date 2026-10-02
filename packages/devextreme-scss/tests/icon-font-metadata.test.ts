@@ -91,7 +91,8 @@ describe('Icon fonts metadata', () => {
     });
 
     test('name records are identical in every format', () => {
-      const [ttfRecords, ...otherRecords] = FORMATS.map((format) => readNameRecords(readFont(fileName, format)));
+      const [ttfRecords, ...otherRecords] = FORMATS
+        .map((format) => readNameRecords(readFont(fileName, format)));
 
       otherRecords.forEach((records) => {
         expect(records).toEqual(ttfRecords);

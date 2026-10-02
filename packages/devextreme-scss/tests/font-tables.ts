@@ -98,8 +98,10 @@ const readWoff2Table = (font: Buffer, tag: string): Buffer | undefined => {
       const byte = font[position];
 
       position += 1;
+      // eslint-disable-next-line no-bitwise
       value = value * 128 + (byte & 0x7f);
 
+      // eslint-disable-next-line no-bitwise
       if ((byte & 0x80) === 0) {
         return value;
       }
@@ -110,8 +112,11 @@ const readWoff2Table = (font: Buffer, tag: string): Buffer | undefined => {
 
   for (let index = 0; index < count; index += 1) {
     const flags = font[position];
+    // eslint-disable-next-line no-bitwise
     const tagCode = flags & 0x3f;
+    // eslint-disable-next-line no-bitwise
     const transformVersion = flags >> 6;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let entryTag: string;
 
     position += 1;

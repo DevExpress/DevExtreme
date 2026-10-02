@@ -23,14 +23,16 @@ import { logger } from '@js/core/utils/console';
 import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
 import { HIDDEN_FOR_EXPORT } from '@js/core/utils/svg';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isString } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import {
   export as _export, image as imageExporter, pdf as pdfExporter, svg as svgExporter,
 } from '@js/exporter';
-import { getTheme } from '@js/viz/themes';
+import domAdapter from '@ts/core/dom_adapter';
+import { copyResolvedStyles, resolvedInScope } from '@ts/core/utils/css_variables';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
 import { patchFontOptions } from '@ts/viz/core/utils';
+import { getTheme } from '@ts/viz/themes';
 
 const pointerActions = [pointerEvents.down, pointerEvents.move].join(' ');
 
@@ -291,9 +293,11 @@ function createMenuItems(renderer, options) {
 }
 
 function getBackgroundColorFromMarkup(markup) {
-  const parsedMarkup = GET_COLOR_REGEX.exec(markup);
+  if (!isString(markup)) {
+    return $(markup).attr('data-backgroundcolor');
+  }
 
-  return parsedMarkup?.[1];
+  return GET_COLOR_REGEX.exec(markup)?.[1];
 }
 
 export const exportFromMarkup = function (markup, options) {
@@ -306,7 +310,7 @@ export const exportFromMarkup = function (markup, options) {
   options.fileSavingAction = options.onFileSaving;
   options.margin = isDefined(options.margin) ? options.margin : MARGIN;
   // @ts-expect-error
-  options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor;
+  options.backgroundColor = resolvedInScope(isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor, domAdapter.getDocumentElement());
   _export(markup, options, getCreatorFunc(options.format));
 };
 
@@ -335,11 +339,15 @@ export let combineMarkups = function (widgets, options = { }) {
   const exportItems = widgets.reduce((r, row, rowIndex) => {
     const rowInfo = row.reduce((r, item, colIndex) => {
       const size = item.getSize();
-      const backgroundColor = item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor;
-      const node = $(item.element())
-        .find('svg')
-        .get(0)
-        .cloneNode(true);
+      const container = $(item.element());
+      const backgroundColor = resolvedInScope(
+        item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor,
+        container.get(0),
+      );
+      const source = container.find('svg').get(0);
+      const node = source.cloneNode(true) as Element;
+
+      copyResolvedStyles(source, node);
 
       backgroundColor && r.backgroundColors.indexOf(backgroundColor) === -1 && r.backgroundColors.push(backgroundColor);
 
@@ -701,7 +709,7 @@ function getExportOptions(widget, exportOptions, fileName, format) {
   return {
     format: format || DEFAULT_EXPORT_FORMAT,
     fileName: fileName || exportOptions.fileName || 'file',
-    backgroundColor: exportOptions.backgroundColor,
+    backgroundColor: resolvedInScope(exportOptions.backgroundColor, $(widget.element()).get(0)),
     width,
     height,
     margin: exportOptions.margin,

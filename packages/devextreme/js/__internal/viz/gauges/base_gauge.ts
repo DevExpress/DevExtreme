@@ -2,6 +2,7 @@
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import formatHelper from '@js/format_helper';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
@@ -114,7 +115,7 @@ export abstract class BaseGauge extends BaseWidget {
         const formatObject = extend({
           value: tooltipParameters.value,
           valueText: tooltip.formatValue(tooltipParameters.value),
-          color: tooltipParameters.color,
+          color: paintedColor(tooltipParameters.color, renderer.root.element),
         }, info);
 
         return tooltip.show(formatObject, {

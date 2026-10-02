@@ -1,18 +1,18 @@
 @mixin dx-base-colorview-styles($handle-color, $handle-border-color) {
   .dx-colorview-palette-handle {
-    background: radial-gradient(transparent 5px, $handle-border-color 6px, $handle-color 7px, $handle-color 12px, $handle-border-color 13px);
-    box-shadow: 0 1px 1px 0 $handle-border-color;
+    background: radial-gradient(transparent 5px, $handle-border-color 6px, $handle-color 7px, $handle-color 12px, $handle-border-color 13px); // dx-fixed-size: the handle is drawn, not laid out — a transparent core to 5px, a 1px ring at 6px, fill to 12px and a 1px ring at 13px, inside the 28px diameter
+    box-shadow: 0 1px 1px 0 $handle-border-color; // dx-shadow-geometry: lifts the round handle off the palette
   }
 
   .dx-colorview-hue-scale-handle {
-    border: 1px solid;
+    border: 1px solid; // dx-line-width: hairline outline of the handle
     border-color: $handle-border-color;
-    box-shadow: inset -5px 0 0 3px $handle-color, inset 5px 0 0 3px $handle-color, inset -6px 0 1px 4px $handle-border-color, inset 6px 0 1px 4px $handle-border-color;
+    box-shadow: inset -5px 0 0 3px $handle-color, inset 5px 0 0 3px $handle-color, inset -6px 0 1px 4px $handle-border-color, inset 6px 0 1px 4px $handle-border-color; // dx-shadow-geometry: the grip is drawn entirely with inset shadows — 5px bars inset from both sides, each edged by a 1px ring at 6px
   }
 
   .dx-colorview-alpha-channel-handle {
-    border: 1px solid;
+    border: 1px solid; // dx-line-width: hairline outline of the handle
     border-color: $handle-border-color;
-    box-shadow: inset 0 -5px 0 3px $handle-color, inset 0 5px 0 3px $handle-color, inset 0 -6px 1px 4px $handle-border-color, inset 0 6px 1px 4px $handle-border-color;
+    box-shadow: inset 0 -5px 0 3px $handle-color, inset 0 5px 0 3px $handle-color, inset 0 -6px 1px 4px $handle-border-color, inset 0 6px 1px 4px $handle-border-color; // dx-shadow-geometry: the same grip turned 90deg for the horizontal scale
   }
 }

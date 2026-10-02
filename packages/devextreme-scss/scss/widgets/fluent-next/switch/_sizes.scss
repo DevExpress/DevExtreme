@@ -1,0 +1,34 @@
+@use "../sizes" as *;
+@use "colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$switch-transition: all 0.2s cubic-bezier(0.33, 0, 0.67, 1) !default;
+
+$switch-handle-border-radius: 50% !default;
+
+$switch-width: null !default;
+$switch-handle-margin: null !default;
+$switch-padding: ds.$spacing-80 !default;
+$switch-container-margin-block: 0 !default;
+$switch-height: null !default;
+$switch-handle-height: null !default;
+
+$switch-container-rtl-offset: ds.$spacing-60 !default;
+
+@if $size == "default" {
+  $switch-width: ds.$spacing-400 !default;
+  $switch-handle-height: ds.$spacing-140 !default;
+  $switch-handle-margin: ds.$spacing-30 !default;
+  $switch-height: ds.$spacing-200 !default;
+}
+
+@else if $size == "compact" {
+  $switch-width: ds.$spacing-320 !default;
+  $switch-handle-height: ds.$spacing-120 !default;
+  $switch-handle-margin: ds.$spacing-20 !default;
+  $switch-height: ds.$spacing-160 !default;
+}
+
+$switch-container-border-radius: ds.$border-radius-full !default;
+$switch-label-padding: ds.$spacing-40 0 !default;
+$switch-off-padding-block-end: ds.$spacing-100 !default;

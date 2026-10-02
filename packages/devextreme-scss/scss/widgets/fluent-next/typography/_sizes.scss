@@ -1,0 +1,63 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$typography-xl-font-size: null !default;
+$typography-l-font-size: null !default;
+$typography-m-font-size: null !default;
+$typography-s-font-size: null !default;
+$typography-xs-font-size: ds.$font-size-120 !default; // dx-no-semantic-role: a size-named utility (.dx-font-*), a ladder by size, not by meaning
+$typography-heading-1-font-size: null !default;
+$typography-heading-2-font-size: null !default;
+$typography-heading-3-font-size: null !default;
+$typography-heading-4-font-size: null !default;
+$typography-heading-5-font-size: null !default;
+$typography-heading-6-font-size: null !default;
+
+@if $size == "default" {
+  $typography-xl-font-size: ds.$spacing-340 !default; // dx-foreign-scale: 34px, the font-size scale jumps 32 -> 36, so this one utility had to borrow from spacing
+  $typography-l-font-size: ds.$font-size-280 !default; // dx-no-semantic-role: a size-named utility (.dx-font-*), a ladder by size, not by meaning
+  $typography-m-font-size: ds.$font-size-200 !default; // dx-no-semantic-role: a size-named utility (.dx-font-*), a ladder by size, not by meaning
+  $typography-s-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: a size-named utility (.dx-font-*), a ladder by size, not by meaning
+
+  $typography-heading-1-font-size: ds.$font-size-headline-xl !default;
+  $typography-heading-2-font-size: ds.$font-size-headline-lg !default;
+  $typography-heading-3-font-size: ds.$font-size-headline-md !default;
+  $typography-heading-4-font-size: ds.$font-size-headline-sm !default;
+  $typography-heading-5-font-size: ds.$font-size-title-md !default;
+  $typography-heading-6-font-size: ds.$font-size-title-sm !default;
+}
+
+@else if $size == "compact" {
+  $typography-xl-font-size: ds.$font-size-240 !default; // dx-no-semantic-role: a size-named utility (.dx-font-*), a ladder by size, not by meaning
+  $typography-l-font-size: ds.$font-size-200 !default; // dx-no-semantic-role: a size-named utility (.dx-font-*), a ladder by size, not by meaning
+  $typography-m-font-size: ds.$font-size-160 !default; // dx-no-semantic-role: a size-named utility (.dx-font-*), a ladder by size, not by meaning
+  $typography-s-font-size: ds.$font-size-140 !default; // dx-no-semantic-role: a size-named utility (.dx-font-*), a ladder by size, not by meaning
+
+  $typography-heading-1-font-size: ds.$font-size-headline-lg !default;
+  $typography-heading-2-font-size: ds.$font-size-headline-md !default;
+  $typography-heading-3-font-size: ds.$font-size-headline-sm !default;
+  $typography-heading-4-font-size: ds.$font-size-title-md !default;
+  $typography-heading-5-font-size: ds.$font-size-title-sm !default;
+  $typography-heading-6-font-size: ds.$font-size-title-xs !default;
+}
+
+:root {
+  --dx-font-size-heading-1: #{$typography-heading-1-font-size};
+  --dx-font-size-heading-2: #{$typography-heading-2-font-size};
+  --dx-font-size-heading-3: #{$typography-heading-3-font-size};
+  --dx-font-size-heading-4: #{$typography-heading-4-font-size};
+  --dx-font-size-heading-5: #{$typography-heading-5-font-size};
+  --dx-font-size-heading-6: #{$typography-heading-6-font-size};
+  --dx-font-size-xl: #{$typography-xl-font-size};
+  --dx-font-size-lg: #{$typography-l-font-size};
+  --dx-font-size-md: #{$typography-m-font-size};
+  --dx-font-size-sm: #{$typography-s-font-size};
+  --dx-font-size-xs: #{$typography-xs-font-size};
+}
+
+$typography-heading-1-font-weight: ds.$font-weight-headline-default !default;
+$typography-heading-2-font-weight: ds.$font-weight-headline-default !default;
+$typography-heading-3-font-weight: ds.$font-weight-headline-default !default;
+$typography-heading-4-font-weight: ds.$font-weight-headline-default !default;
+$typography-heading-5-font-weight: ds.$font-weight-headline-default !default;
+$typography-heading-6-font-weight: ds.$font-weight-headline-default !default;

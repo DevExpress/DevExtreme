@@ -1,0 +1,214 @@
+{
+  "$comment": [
+    "Names whose word and property disagree, reviewed one at a time. Produced by",
+    "tools/review/name-truth.mjs and held by tests/name-truth.test.ts: a new disagreement fails the",
+    "build with the row to paste here, and a row that stops disagreeing fails it too.",
+    "banked      - the colour audit has already decided it (tests/roles.baseline.json)",
+    "by-equality - one quantity written to a neighbouring property on purpose, because the two are",
+    "              the same length by construction: a gap realised with margins, an inset that is a",
+    "              padding, a square whose width is a height",
+    "defect      - a rule that looks wrong and is left as found, named here so it is not invisible"
+  ],
+  "rows": [
+    {
+      "name": "--dx-chat-file-base-section-gap",
+      "says": "gap",
+      "paints": [
+        "margin-inline-end",
+        "margin-inline-start"
+      ],
+      "decision": "by-equality",
+      "why": "A gap between the file name and the file size, realised with margins because the two are not flex children of one container. The word names the intent; there is no gap property to carry it here."
+    },
+    {
+      "name": "--dx-context-menu-padding-inline",
+      "says": "padding-inline",
+      "paints": [
+        "inset-inline-end"
+      ],
+      "decision": "by-equality",
+      "why": "Written to padding on the item, and to inset-inline-end on the popout arrow so the arrow sits exactly one padding in. The second is the first, by equality."
+    },
+    {
+      "name": "--dx-date-view-roller-padding",
+      "says": "padding",
+      "paints": [
+        "height",
+        "top"
+      ],
+      "decision": "by-equality",
+      "why": "The roller’s vertical padding is realised with spacer pseudo-elements, so it is written to their height and to the selected frame’s top."
+    },
+    {
+      "name": "--dx-diagram-selection-bg",
+      "says": "bg",
+      "paints": [
+        "fill"
+      ],
+      "decision": "banked",
+      "why": "Already reviewed by the colour audit: fill is the SVG spelling of a background (roles.baseline.json, slotLies)."
+    },
+    {
+      "name": "--dx-drop-down-editor-invalid-badge-size",
+      "says": "size",
+      "paints": [
+        "padding-inline-end",
+        "padding-left",
+        "padding-right"
+      ],
+      "decision": "by-equality",
+      "why": "The input reserves exactly the badge’s width, so the padding IS the size."
+    },
+    {
+      "name": "--dx-file-uploader-file-wrapper-border-width",
+      "says": "border-width",
+      "paints": [
+        "padding-left",
+        "padding-right"
+      ],
+      "decision": "by-equality",
+      "why": "The wrapper keeps its content clear of its own border by padding of the border’s width."
+    },
+    {
+      "name": "--dx-gantt-content",
+      "says": "content",
+      "paints": [
+        "background-color",
+        "border-color",
+        "border-left-color",
+        "border-top-color"
+      ],
+      "decision": "banked",
+      "why": "Already reviewed by the colour audit: one value painting the band and the marks that bound it."
+    },
+    {
+      "name": "--dx-grid-command-ai-button-max-width",
+      "says": "width",
+      "paints": [
+        "left",
+        "right"
+      ],
+      "decision": "by-equality",
+      "why": "The button is pinned by left and right at its own width."
+    },
+    {
+      "name": "--dx-grid-content-focused",
+      "says": "content",
+      "paints": [
+        "outline-color"
+      ],
+      "decision": "banked",
+      "why": "Already reviewed by the colour audit: the focus ring is an outline, and the name carries the content word from its family."
+    },
+    {
+      "name": "--dx-invalid-badge-padding-inline",
+      "says": "padding-inline",
+      "paints": [
+        "inset-inline-end"
+      ],
+      "decision": "by-equality",
+      "why": "The inset that centres the badge: it is the padding beside the badge, and the badge is positioned at that inset."
+    },
+    {
+      "name": "--dx-list-item-height",
+      "says": "height",
+      "paints": [
+        "width"
+      ],
+      "decision": "by-equality",
+      "why": "The select-all checkbox container is square: its width is the item’s height."
+    },
+    {
+      "name": "--dx-list-item-padding-block",
+      "says": "padding-block",
+      "paints": [
+        "padding-inline"
+      ],
+      "decision": "defect",
+      "why": "Seventeen rules use it as the block half of the item’s padding, and one - .dx-list-item-chevron-container - writes it to padding-inline, where the item’s own -padding-inline is what belongs. Left as found: changing it moves the chevron, which is a decision for whoever owns the list, and this file is where it stops being invisible."
+    },
+    {
+      "name": "--dx-menu-item-icon-gap",
+      "says": "gap",
+      "paints": [
+        "margin-inline-end",
+        "margin-inline-start"
+      ],
+      "decision": "by-equality",
+      "why": "The gap between a menu item’s icon and its text, realised with margin-inline on the icon and on the popout."
+    },
+    {
+      "name": "--dx-scheduler-appointment-start-shadow",
+      "says": "shadow",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "banked",
+      "why": "Already reviewed by the colour audit: the start mark is drawn with an inset shadow in thirteen rules, and background-color is the fourteenth."
+    },
+    {
+      "name": "--dx-scheduler-header-panel-margin",
+      "says": "margin",
+      "paints": [
+        "padding-left",
+        "padding-right"
+      ],
+      "decision": "by-equality",
+      "why": "The panel’s inline margin is realised as padding on the cell inside it."
+    },
+    {
+      "name": "--dx-splitter-bar-border",
+      "says": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "banked",
+      "why": "Already reviewed by the colour audit: a hairline drawn with a background."
+    },
+    {
+      "name": "--dx-splitter-bar-border-disabled",
+      "says": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "banked",
+      "why": "See splitter-bar-border."
+    },
+    {
+      "name": "--dx-splitter-bar-border-width",
+      "says": "border-width",
+      "paints": [
+        "width"
+      ],
+      "decision": "by-equality",
+      "why": "The splitter’s border is an element, not a border property, so its thickness is a width."
+    },
+    {
+      "name": "--dx-tabs-item-padding-block",
+      "says": "padding-block",
+      "paints": [
+        "top"
+      ],
+      "decision": "by-equality",
+      "why": "The secondary indicator is offset by exactly the item’s block padding, so top carries it."
+    },
+    {
+      "name": "--dx-text-editor-input-filled-padding-inline",
+      "says": "padding-inline",
+      "paints": [
+        "min-width"
+      ],
+      "decision": "by-equality",
+      "why": "A filled input’s minimum width is its inline padding doubled, so the padding reaches min-width."
+    },
+    {
+      "name": "--dx-text-editor-invalid-badge-size",
+      "says": "size",
+      "paints": [
+        "padding-inline-end"
+      ],
+      "decision": "by-equality",
+      "why": "See drop-down-editor-invalid-badge-size."
+    }
+  ]
+}

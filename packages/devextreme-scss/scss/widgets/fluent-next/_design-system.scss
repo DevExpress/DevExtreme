@@ -1,0 +1,58 @@
+@use "sass:meta";
+@use "colors";
+@use "../../_design-system/fluent/semantic/colors/light" as light-roles;
+@use "../../_design-system/fluent/semantic/colors/dark" as dark-roles;
+@use "../../_design-system/fluent/mode-aliases" as mode-aliases;
+
+$accent: colors.$color !default;
+
+@include meta.load-css("../../_design-system/base");
+@include meta.load-css("../../_design-system/fluent/base");
+@include meta.load-css("../../_design-system/fluent/accents/#{$accent}");
+@include meta.load-css("accent-color");
+@include meta.load-css("../../_design-system/fluent/semantic/typography");
+@include meta.load-css("../../_design-system/fluent/mode-shared");
+
+@mixin mode-values($mode) {
+  --dx-theme-mode: #{$mode};
+
+  @if $mode == "light" {
+    @include light-roles.roles();
+  } @else {
+    @include dark-roles.roles();
+  }
+
+  @include mode-aliases.aliases();
+}
+
+@mixin named-scopes($own, $other) {
+  :root,
+  .dx-theme-mode-#{$own} {
+    @include mode-values($own);
+  }
+
+  .dx-theme-mode-#{$other} {
+    @include mode-values($other);
+  }
+}
+
+@mixin inverted-scope() {
+  @container style(--dx-theme-mode: light) {
+    .dx-theme-mode-inverted {
+      @include mode-values("dark");
+    }
+  }
+
+  @container style(--dx-theme-mode: dark) {
+    .dx-theme-mode-inverted {
+      @include mode-values("light");
+    }
+  }
+}
+
+@if colors.$mode != "light" and colors.$mode != "dark" {
+  @error "fluent-next: unknown colour mode #{meta.inspect(colors.$mode)}; expected \"light\" or \"dark\".";
+}
+
+@include inverted-scope();
+@include named-scopes(colors.$mode, if(colors.$mode == "light", "dark", "light"));

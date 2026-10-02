@@ -13,6 +13,7 @@
 
 import { extend } from '@js/core/utils/extend';
 import { isDefined as _isDefined } from '@js/core/utils/type';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import consts from '@ts/viz/components/consts';
 import { getCosAndSin as _getCosAndSin, getVerticallyShiftedAngularCoords, normalizeAngle as _normalizeAngle } from '@ts/viz/core/utils';
 import symbolPoint from '@ts/viz/series/points/symbol_point';
@@ -388,7 +389,7 @@ export default _extend({}, symbolPoint, {
   },
 
   getColor() {
-    return this._styles.normal.fill;
+    return paintedColor(this._styles.normal.fill, this.series.getRenderer?.()?.root?.element);
   },
 
   coordsIn(x, y) {

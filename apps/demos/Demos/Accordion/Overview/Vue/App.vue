@@ -123,7 +123,7 @@ const selectedCompanies = computed({
   right: 0;
   width: 340px;
   top: 0;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .options > .caption {

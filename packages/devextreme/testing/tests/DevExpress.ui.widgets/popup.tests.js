@@ -143,6 +143,24 @@ const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
 const VIEWPORT_CLASS = 'dx-viewport';
 const SWATCH_CLASS = 'dx-swatch-custom';
+const THEME_MODE = 'dark';
+const THEME_MODE_CLASS = `dx-theme-mode-${THEME_MODE}`;
+
+const nestedScope = (decorate) => decorate($('<div>').appendTo($('<div>').appendTo('#qunit-fixture')));
+
+const overlayScopes = [{
+    name: 'swatch',
+    containerClass: SWATCH_CLASS,
+    decorate: ($scope) => $scope.addClass(SWATCH_CLASS)
+}, {
+    name: 'theme mode',
+    containerClass: THEME_MODE_CLASS,
+    decorate: ($scope) => {
+        $scope.get(0).style.setProperty('--dx-theme-mode', THEME_MODE);
+
+        return $scope;
+    }
+}];
 
 const viewport = function() { return $(`.${VIEWPORT_CLASS}`); };
 
@@ -2403,16 +2421,14 @@ QUnit.module('drag', {
         assert.deepEqual([this.$overlayContent[0].style.width, this.$overlayContent[0].style.height], ['auto', 'auto'], 'correct size');
     });
 
-    QUnit.module('popup inside a swatch', {
+    overlayScopes.forEach(({ name, containerClass, decorate }) => QUnit.module(`popup inside a ${name}`, {
         beforeEach: function() {
             this.popup.dispose();
 
-            this.$swatch = $('<div>')
-                .addClass(SWATCH_CLASS)
-                .appendTo($('<div>').appendTo('#qunit-fixture'));
+            this.$scope = nestedScope(decorate);
 
             this.popup = $('<div>')
-                .appendTo(this.$swatch)
+                .appendTo(this.$scope)
                 .dxPopup({
                     animation: null,
                     dragEnabled: true,
@@ -2428,10 +2444,10 @@ QUnit.module('drag', {
             this.$title = this.popup.topToolbar();
         }
     }, () => {
-        QUnit.test('markup should be rendered in a container of the viewport for the swatch', function(assert) {
+        QUnit.test('markup should be rendered in a container of the viewport for the scope', function(assert) {
             const $container = this.$overlayContent.closest(`.${POPUP_WRAPPER_CLASS}`).parent();
 
-            assert.ok($container.hasClass(SWATCH_CLASS), 'container carries the swatch class');
+            assert.ok($container.hasClass(containerClass), 'container carries the scope class');
             assert.ok($container.parent().hasClass(VIEWPORT_CLASS), 'container is a child of the viewport');
         });
 
@@ -2457,7 +2473,7 @@ QUnit.module('drag', {
             assert.strictEqual(position.top - startEvent.maxTopOffset, 0, 'popup should not be dragged above the viewport');
             assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below the viewport');
         });
-    });
+    }));
 });
 
 QUnit.module('resize', {
@@ -2655,16 +2671,14 @@ QUnit.module('resize', {
         });
     });
 
-    QUnit.module('popup inside a swatch', {
+    overlayScopes.forEach(({ name, decorate }) => QUnit.module(`popup inside a ${name}`, {
         beforeEach: function() {
             this.popup.dispose();
 
-            this.$swatch = $('<div>')
-                .addClass(SWATCH_CLASS)
-                .appendTo($('<div>').appendTo('#qunit-fixture'));
+            this.$scope = nestedScope(decorate);
 
             this.popup = $('<div>')
-                .appendTo(this.$swatch)
+                .appendTo(this.$scope)
                 .dxPopup({
                     animation: null,
                     resizeEnabled: true,
@@ -2690,7 +2704,7 @@ QUnit.module('resize', {
             assert.strictEqual(getWidth(this.$overlayContent), 260, 'width was increased');
             assert.strictEqual(getHeight(this.$overlayContent), 240, 'height was increased');
         });
-    });
+    }));
 
     QUnit.module('resizeObserver integration', {
         beforeEach: function() {

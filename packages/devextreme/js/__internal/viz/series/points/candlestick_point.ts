@@ -14,6 +14,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { extend as _extend } from '@js/core/utils/extend';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import barPoint from '@ts/viz/series/points/bar_point';
 import symbolPoint from '@ts/viz/series/points/symbol_point';
 
@@ -112,7 +113,11 @@ export default _extend({}, barPoint, {
 
   getColor() {
     const that = this;
-    return that._isReduction ? that._options.reduction.color : that._styles.normal.stroke || that.series.getColor();
+    const element = that.series.getRenderer?.()?.root?.element;
+
+    return that._isReduction
+      ? paintedColor(that._options.reduction.color, element)
+      : paintedColor(that._styles.normal.stroke, element) || that.series.getColor();
   },
 
   _drawMarkerInGroup(group, attributes, renderer) {

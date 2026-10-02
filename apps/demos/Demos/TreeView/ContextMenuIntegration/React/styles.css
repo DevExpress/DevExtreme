@@ -12,7 +12,7 @@
   padding: 20px;
   margin-left: 20px;
   font-weight: 600;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .log-container > div:first-child {

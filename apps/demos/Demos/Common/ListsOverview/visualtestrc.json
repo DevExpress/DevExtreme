@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../testing/visualtestrc-schema.json",
+  "comment": "Sub-pixel noise, measured 30.08.2026: text rendering shifts by a pixel between runs across the whole page. The looser comparison lives here, per demo, instead of being the default for every screenshot in every theme.",
+  "comparison-options": {
+    "looksSameComparisonOptions": {
+      "tolerance": 20,
+      "antialiasingTolerance": 20
+    }
+  }
+}
