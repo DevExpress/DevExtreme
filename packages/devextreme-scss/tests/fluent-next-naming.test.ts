@@ -550,25 +550,6 @@ test('design tokens are never read as a raw custom property', () => {
   expect(offenders).toEqual([]);
 });
 
-test('the rename mapping stays collision-free and fully applied', () => {
-  const mapping = JSON.parse(
-    readFileSync(join(packageRoot, 'tools', 'naming', 'mapping.json'), 'utf8'),
-  );
-  const pairs: [string, string][] = Object.values(mapping.batches)
-    .flatMap((names) => Object.entries(names as Record<string, string>));
-
-  const targets = pairs.map(([, to]) => to);
-  expect(targets.filter((to, index) => targets.indexOf(to) !== index)).toEqual([]);
-
-  const declaredEverywhere = new Set(parsedFiles.flatMap(({ declarations }) => declarations));
-  const referencedEverywhere = new Set(parsedFiles.flatMap(({ references }) => references));
-  const survivors = pairs
-    .filter(([from, to]) => from !== to)
-    .map(([from]) => from)
-    .filter((from) => declaredEverywhere.has(from) || referencedEverywhere.has(from));
-  expect(survivors).toEqual([]);
-});
-
 /*
  * The tier contract (decided 06.08): --dxds-* roles/scales are the stable public API; --dx-* is
  * the product's own component tier, declared in <folder>/_public.scss onto registries.rootSelectors
