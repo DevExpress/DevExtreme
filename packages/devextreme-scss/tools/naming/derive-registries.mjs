@@ -7,7 +7,7 @@
  *
  * Vocabularies that describe the design system (parts, states, sub-element anatomy) are DERIVED
  * from the token package, so they cannot drift from it. Judgment calls (component exceptions,
- * chassis dependents, rejected synonyms) live in OVERRIDES below and are reviewed as code.
+ * chassis dependents) live in OVERRIDES below and are reviewed as code.
  *
  * The component names come from the package's flat index rather than from generated output, so the
  * vocabulary survives the component tier no longer being emitted (it is an alias layer the theme
@@ -491,9 +491,7 @@ const OVERRIDES = {
     // and its component tokens spell them box-shadow-layer-N-color, which has no part slot at all.
     'shadow',
     // A drop shadow is two paint slots, not one: the ambient layer and the key layer carry
-    // different
-    // colours (ds.$color-shadow-ambient / -key). `rejected.parts` already redirected the legacy
-    // color1/color2 spelling here.
+    // different colours (ds.$color-shadow-ambient / -key).
     'shadow-ambient',
     'shadow-key',
   ],
@@ -636,178 +634,6 @@ const OVERRIDES = {
     'opacity', 'box-shadow', 'outline', 'outline-offset', 'outline-width',
     'column-gap', 'row-gap', 'z-index', 'transition', 'transform', 'inset',
   ],
-
-  /*
-   * Physical spellings that are only rejected in the SLOT position, i.e. as the last segment. The
-   * same words are legal variants earlier in a name (`$tabs-tab-top-border` is TabPanel's
-   * tabsPosition, `$slider-label-bottom-padding-block-end` is the label position), so a global
-   * replacement would corrupt them.
-   */
-  rejectedTrailing: {
-    // the box-model longhands have to be listed too: without them the bare `top` below matches
-    // `margin-top` and turns it into `margin-inset-block-start`
-    'margin-top': 'margin-block-start',
-    'margin-bottom': 'margin-block-end',
-    'margin-left': 'margin-inline-start',
-    'margin-right': 'margin-inline-end',
-    'padding-top': 'padding-block-start',
-    'padding-bottom': 'padding-block-end',
-    'padding-left': 'padding-inline-start',
-    'padding-right': 'padding-inline-end',
-    top: 'inset-block-start',
-    bottom: 'inset-block-end',
-    left: 'inset-inline-start',
-    right: 'inset-inline-end',
-    'border-top': 'border-block-start',
-    'border-bottom': 'border-block-end',
-    'border-left': 'border-inline-start',
-    'border-right': 'border-inline-end',
-    'border-top-width': 'border-block-start-width',
-    'border-bottom-width': 'border-block-end-width',
-    'border-left-width': 'border-inline-start-width',
-    'border-right-width': 'border-inline-end-width',
-    'border-top-left-radius': 'border-start-start-radius',
-    'border-top-right-radius': 'border-start-end-radius',
-    'border-bottom-left-radius': 'border-end-start-radius',
-    'border-bottom-right-radius': 'border-end-end-radius',
-  },
-
-  /*
-   * Segments that name nothing and are simply dropped. `root` and `element` mean "the widget's own
-   * box", which the grammar expresses by having no sub-element at all; `state` is the `.dx-state-*`
-   * class whose meaning the state suffix already carries; `common` and `renovation` are grouping
-   * and implementation words with no DOM counterpart (base's `$datagrid-common-*` family is the
-   * same thing).
-   */
-  droppedSegments: ['root', 'state', 'common', 'renovation'],
-
-  /*
-   * Squashed compounds, applied before anything else: the legacy names spell nested widgets and
-   * multi-word boxes without hyphens (`treeview-item`, `contextmenu`, `numberbox`), and every one
-   * of them has a canonical hyphenated form the registry already knows. Normalising here keeps the
-   * registry free of the non-canonical spellings.
-   */
-  rejectedSpellings: {
-    treeview: 'tree-view',
-    contextmenu: 'context-menu',
-    fileuploader: 'file-uploader',
-    filemanager: 'file-manager',
-    numberbox: 'number-box',
-    textbox: 'text-box',
-    datebox: 'date-box',
-    checkbox: 'checkbox',
-    viewmode: 'view-mode',
-    messagelist: 'message-list',
-    messagebox: 'message-box',
-    messagegroup: 'message-group',
-    typingindicator: 'typing-indicator',
-    filename: 'file-name',
-    falename: 'file-name',
-    boxshadow: 'box-shadow',
-    dropzone: 'drop-zone',
-    pagesizes: 'page-sizes',
-    pageindex: 'page-index',
-    grouppanel: 'group-panel',
-    alldaypanel: 'all-day-panel',
-    colorview: 'color-view',
-    colorbox: 'color-box',
-    radiogroup: 'radio-group',
-    radiobutton: 'radio-button',
-    tabpanel: 'tab-panel',
-    loadindicator: 'load-indicator',
-    scrollview: 'scroll-view',
-    searchbox: 'search-box',
-    holdmenu: 'hold-menu',
-    menucontent: 'menu-content',
-    aidialog: 'ai-dialog',
-    progressbar: 'progress-bar',
-    progressbox: 'progress-box',
-    // squashed in the legacy pivotGrid names; the trailing `color` then resolves like any other
-    totalcolor: 'total-color',
-    grandtotalcolor: 'grand-total-color',
-    pivotgridfieldchooser: 'field-chooser',
-    htmleditor: 'html-editor',
-    speeddialaction: 'speed-dial-action',
-    buttongroup: 'button-group',
-    dropdownbutton: 'drop-down-button',
-    dropdownmenu: 'drop-down-menu',
-    tooltipbutton: 'tooltip-button',
-  },
-
-  // old spelling -> canonical. Drives the codemod and the failure messages of the enforcer.
-  rejected: {
-    parts: {
-      background: 'bg',
-      'background-color': 'bg',
-      bgcolor: 'bg',
-      fill: 'bg',
-      'fill-color': 'bg',
-      'border-color': 'border',
-      bordercolor: 'border',
-      'text-color': 'content',
-      foreground: 'content',
-      fg: 'content',
-      'icon-color': 'icon',
-      'glyph-color': 'icon',
-      'shadow-color': 'shadow',
-      color1: 'shadow-ambient',
-      color2: 'shadow-key',
-      // the same two layers, spelled out in pivotGrid and gridBase
-      'first-shadow-color': 'shadow-ambient',
-      'second-shadow-color': 'shadow-key',
-      'shader-bg': 'backdrop',
-      scrim: 'backdrop',
-      'divider-color': 'separator',
-      'handle-bg': 'trigger',
-      'left-icon': 'start-icon',
-      'right-icon': 'end-icon',
-    },
-    // A variant word the CSS class spells with a `mode-` prefix; the option value is the canonical
-    // one.
-    modifiers: {
-      'mode-contained': 'contained',
-      'mode-outlined': 'outlined',
-      'mode-text': 'text',
-    },
-    states: {
-      hover: 'hovered',
-      focus: 'focused',
-      pressed: 'active',
-      activated: 'active',
-      readonly: 'read-only',
-      idle: 'rest',
-      'selected-hover': 'selected-hovered',
-    },
-    properties: {
-      'horizontal-padding': 'padding-inline',
-      'side-padding': 'padding-inline',
-      'padding-horizontal': 'padding-inline',
-      'vertical-padding': 'padding-block',
-      'padding-vertical': 'padding-block',
-      'padding-start': 'padding-inline-start',
-      'padding-end': 'padding-inline-end',
-      'padding-left': 'padding-inline-start',
-      'padding-right': 'padding-inline-end',
-      'padding-top': 'padding-block-start',
-      'padding-bottom': 'padding-block-end',
-      'horizontal-margin': 'margin-inline',
-      'vertical-margin': 'margin-block',
-      'margin-left': 'margin-inline-start',
-      'margin-right': 'margin-inline-end',
-      'margin-top': 'margin-block-start',
-      'margin-bottom': 'margin-block-end',
-      paddings: 'padding',
-      margins: 'margin',
-      radius: 'border-radius',
-      rounding: 'border-radius',
-      'border-size': 'border-width',
-      'min-heigth': 'min-height', // upstream typo
-      'text-size': 'font-size',
-      'text-weight': 'font-weight',
-      shadow: 'box-shadow',
-      dimension: 'size',
-    },
-  },
 
   // Components whose variables already follow the standard. Only these are checked strictly;
   // everything else is compared against the known-violations snapshot. Grows one batch at a time.
@@ -1335,11 +1161,7 @@ const build = () => {
     states: OVERRIDES.states,
     modifiers: OVERRIDES.modifiers,
     sizeSlots: OVERRIDES.sizeSlots,
-    rejected: OVERRIDES.rejected,
     embeds: OVERRIDES.embeds,
-    rejectedTrailing: OVERRIDES.rejectedTrailing,
-    rejectedSpellings: OVERRIDES.rejectedSpellings,
-    droppedSegments: OVERRIDES.droppedSegments,
     subElements,
     packageElementPaths: derived.packageElementPaths,
     migrated: OVERRIDES.migrated,
