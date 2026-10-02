@@ -52,7 +52,10 @@ export const FOCUS_TYPE_CELL = 'cell';
 export const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 export const ROWS_VIEW = 'rowsView';
 export const FUNCTIONAL_KEYS = ['shift', 'control', 'alt'];
-export const ROWS_NAVIGATION_KEYS = ['upArrow', 'downArrow', 'leftArrow', 'rightArrow', 'home', 'end'];
+export const FOCUSED_CELL_KEYS = [
+  'upArrow', 'downArrow', 'leftArrow', 'rightArrow', 'home', 'end',
+  'tab', 'enter', 'space', 'F2', 'del', 'backspace',
+];
 export const DRAG_COLUMN_NAME = 'drag';
 
 export enum Direction {

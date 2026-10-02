@@ -24,6 +24,7 @@ import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/m_dom';
 import { focused } from '@ts/core/utils/m_selectors';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -71,6 +72,7 @@ import {
   FOCUS_STATE_CLASS,
   FOCUS_TYPE_CELL,
   FOCUS_TYPE_ROW,
+  FOCUSED_CELL_KEYS,
   FOCUSED_CLASS,
   FREESPACE_ROW_CLASS,
   FUNCTIONAL_KEYS,
@@ -78,7 +80,6 @@ import {
   MASTER_DETAIL_CELL_CLASS,
   NON_FOCUSABLE_ELEMENTS_SELECTOR,
   REVERT_BUTTON_CLASS,
-  ROWS_NAVIGATION_KEYS,
   ROWS_VIEW,
   ROWS_VIEW_CLASS,
   TABLE_CLASS,
@@ -557,11 +558,16 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return;
     }
 
-    const isNavigationWaitingForRows = ROWS_NAVIGATION_KEYS.includes(e.keyName)
-      && this.needWaitRowsBeforeNavigation(e);
+    const isWaitingForRows = this.isWaitingForRowsRendering(e);
 
-    if (!FUNCTIONAL_KEYS.includes(e.keyName) && !isNavigationWaitingForRows) {
+    if (!FUNCTIONAL_KEYS.includes(e.keyName) && !isWaitingForRows) {
       this._updateFocusedCellPositionByTarget(originalEvent.target);
+    }
+
+    if (isWaitingForRows && !isHandled && this.isFocusedCellKey(e)) {
+      originalEvent.preventDefault();
+      originalEvent.stopPropagation();
+      return;
     }
 
     if (!isHandled) {
@@ -569,7 +575,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       switch (e.keyName) {
         case 'leftArrow':
         case 'rightArrow':
-          this.navigateWhenRowsRendered(e, () => this._leftRightKeysHandler(e, isEditing));
+          this._leftRightKeysHandler(e, isEditing);
           isHandled = true;
           break;
 
@@ -578,7 +584,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           if (e.ctrl) {
             accessibility.selectView('rowsView', this, originalEvent);
           } else {
-            this.navigateWhenRowsRendered(e, () => this._upDownKeysHandler(e, isEditing));
+            this._upDownKeysHandler(e, isEditing);
           }
           isHandled = true;
           break;
@@ -638,7 +644,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           break;
         case 'home':
         case 'end':
-          this.navigateWhenRowsRendered(e, () => this.homeOrEndKeyHandler(e));
+          this.homeOrEndKeyHandler(e);
           break;
       }
 
@@ -708,22 +714,22 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       && !$target.is($masterDetail);
   }
 
-  private needWaitRowsBeforeNavigation(eventArgs): boolean {
-    return !this._editingController?.isEditing()
-      && !this.isInsideMasterDetail($(eventArgs.originalEvent.target))
-      && this._rowsView.isWaitingForAsyncTemplates();
+  private isWaitingForRowsRendering(eventArgs: KeyboardKeyDownEvent): boolean {
+    return this._rowsView.isWaitingForAsyncTemplates()
+      && !this._editingController?.isEditing()
+      && !this.isInsideMasterDetail($(eventArgs.originalEvent.target));
   }
 
-  private navigateWhenRowsRendered(eventArgs, navigate: () => void): void {
-    if (!this.needWaitRowsBeforeNavigation(eventArgs)) {
-      navigate();
-      return;
-    }
+  private isFocusedCellKey(eventArgs: KeyboardKeyDownEvent): boolean {
+    const {
+      keyName, key, ctrl, alt, metaKey,
+    } = eventArgs;
+    const isViewSwitch = ctrl && (keyName === 'upArrow' || keyName === 'downArrow');
+    const isFastEditingKey = key?.length === 1
+      && !ctrl && !alt && !metaKey
+      && !!this._isFastEditingAllowed();
 
-    eventArgs.originalEvent.preventDefault();
-    this._rowsView.waitAsyncTemplates().done(() => {
-      this.navigateWhenRowsRendered(eventArgs, navigate);
-    });
+    return !isViewSwitch && (FOCUSED_CELL_KEYS.includes(keyName) || isFastEditingKey);
   }
 
   private _upDownKeysHandler(eventArgs, isEditing) {

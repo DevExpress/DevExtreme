@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
@@ -16,12 +17,17 @@ export function triggerPointerDown(element: HTMLElement): void {
   eventsEngine.trigger($(element), CLICK_EVENT);
 }
 
+export interface KeyDownEventSpies {
+  preventDefault: jest.Mock<() => void>;
+  stopPropagation: jest.Mock<() => void>;
+}
+
 export function triggerKeyDown(
   instance: DataGridInstance,
   keyName: string,
   target?: Element | null,
   modifiers: Partial<Pick<KeyboardEvent, 'ctrlKey' | 'shiftKey' | 'altKey' | 'metaKey'>> = {},
-): void {
+): KeyDownEventSpies {
   const controller = getKeyboardNavigationController(instance);
   const listenerId = controller.keyDownListener;
 
@@ -31,6 +37,8 @@ export function triggerKeyDown(
     throw new Error(`There is no keyboard processor with the '${listenerId}' id`);
   }
 
+  const preventDefault = jest.fn<() => void>();
+  const stopPropagation = jest.fn<() => void>();
   const event = {
     key: NAV_KEYS[keyName] ?? keyName,
     keyName,
@@ -41,10 +49,12 @@ export function triggerKeyDown(
     ...modifiers,
     target: target ?? controller._getFocusedCell()?.get(0) ?? null,
     type: 'keydown',
-    preventDefault() {},
+    preventDefault,
     isDefaultPrevented() { return false; },
-    stopPropagation() {},
+    stopPropagation,
   } as unknown as DxEvent<KeyboardEvent>;
 
   processor.process(event);
+
+  return { preventDefault, stopPropagation };
 }
