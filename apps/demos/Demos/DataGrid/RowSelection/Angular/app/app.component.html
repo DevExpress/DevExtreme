@@ -1,11 +1,10 @@
 <dx-data-grid
-  #grid
   id="gridContainer"
   [dataSource]="employees"
   keyExpr="ID"
   [hoverStateEnabled]="true"
   [showBorders]="true"
-  [selectedRowKeys]="[]"
+  (onSelectionChanged)="onSelectionChanged($event)"
 >
   <dxo-data-grid-selection mode="single"></dxo-data-grid-selection>
   <dxi-data-grid-column
@@ -28,15 +27,13 @@
     dataType="date"
   ></dxi-data-grid-column>
 </dx-data-grid>
-@if (grid.selectedRowKeys.length) {
+@if (selectedEmployee) {
 <div id="employeeInfo">
   <img
     class="employeePhoto"
-    [src]="grid.instance.getSelectedRowsData()[0].Picture"
+    [src]="selectedEmployee.Picture"
     alt="Employee photo"
   />
-  <p class="employeeNotes">{{
-    grid.instance.getSelectedRowsData()[0].Notes
-  }}</p>
+  <p class="employeeNotes">{{ selectedEmployee.Notes }}</p>
 </div>
 }
