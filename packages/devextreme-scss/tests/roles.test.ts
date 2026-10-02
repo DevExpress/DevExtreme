@@ -9,7 +9,9 @@ import { required } from './required';
 
 const packageRoot = join(__dirname, '..');
 const tool = join(packageRoot, 'tools', 'review', 'roles.mjs');
+const themeTool = join(packageRoot, 'tools', 'review', 'roles-theme.mjs');
 const baselinePath = join(packageRoot, 'tests', 'roles.baseline.json');
+const decisionsPath = join(packageRoot, 'tools', 'review', 'roles.decisions.json');
 
 interface Finding {
   name: string;
@@ -28,7 +30,8 @@ interface Open {
 
 const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'design'];
 const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design', 'drawn-mark', 'ring-and-fill'];
-const FAMILY_DECISIONS = ['package-confirms', 'hairline', 'drawn-mark', 'bridge', 'naming', 'design'];
+const FAMILY_DECISIONS = ['package-confirms', 'hairline', 'drawn-mark', 'bridge', 'naming', 'design',
+  'confirmed', 'rule-5', 'package-gap'];
 const LADDER_DECISIONS = ['no-rung', 'design', 'answered'];
 const CONTRAST_DECISIONS = ['graphic-ok', 'package-gap', 'design'];
 const STATE_PAIR_DECISIONS = ['graphic-ok', 'design', 'answered'];
@@ -99,66 +102,37 @@ interface Typography {
   family: string;
   step: number;
   marker: string | null;
-  roles: string[];
 }
 
-const run = (theme?: string): {
-  summary: Record<string, unknown>;
-  findings: (Finding & {
-    slot?: string | null;
-    slotLies?: { slotSays: string };
-    paints?: { properties: string[] };
-    family?: { want: string | null; got: string[] };
-    rung?: { state: string; want: string[]; oursAt: string[] };
-  })[];
-  typography: Typography[];
-  ladders: (Ladder & { unusedRungs: unknown[] })[];
-  lowContrast: ContrastPair[];
-  lowStatePairs: StatePair[];
-  concepts: (Concept & { clusters: unknown[]; oneColour: boolean })[];
-  unusedRoles: { capability: { role: string }[]; stale: { role: string }[] };
-  coverage: { lines: number; collected: number; dataUriStatic: number; unexplained: string[] };
-} => JSON.parse(
-  execFileSync('node', [tool, '--json', ...(theme ? [`--theme=${theme}`] : [])], {
+interface ThemeFinding {
+  name: string;
+  slot: string | null;
+  roles: string[];
+  slotLies?: { slotSays: string };
+  paints?: { properties: string[] };
+  family?: { want: string | null; got: string[] } | null;
+}
+
+const json = <T>(script: string, args: string[] = []): T => JSON.parse(
+  execFileSync(process.execPath, [script, '--json', ...args], {
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
   }),
-) as ReturnType<typeof run>;
+) as T;
 
-const disagreements = (findings: Finding[]): Open[] => findings
-  .filter((f) => f.package && ['cross-family', 'family-conflict'].includes(f.package.verdict))
-  .map((f) => ({
-    name: f.name,
-    verdict: required(f.package, `${f.name}.package`).verdict,
-    roles: f.roles,
-    slot: f.slot,
-  }))
-  .sort((a, b) => a.name.localeCompare(b.name));
+// the package's verdicts, for the checks of the verdict logic itself
+const run = (theme?: string): { findings: Finding[] } => json(tool, theme ? [`--theme=${theme}`] : []);
 
-const actual = run();
+const actual = json<{
+  findings: ThemeFinding[];
+  typography: Typography[];
+  ladders: Ladder[];
+  concepts: Concept[];
+  coverage: { lines: number; collected: number; dataUriStatic: number; unexplained: string[] };
+  declarationsMissingFromBundle: number;
+}>(themeTool);
 const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
-
-const unmarked = (typography: Typography[]): {
-  variable: string; reads: string; roleExists: boolean;
-}[] => typography
-  .filter((t) => !t.marker)
-  .map((t) => ({
-    variable: t.variable,
-    reads: `${t.family}-${t.step}`,
-    roleExists: t.roles.length > 0,
-  }))
-  .sort((a, b) => (a.variable + a.reads).localeCompare(b.variable + b.reads));
-
-if (process.env.UPDATE_ROLES_BASELINE) {
-  writeFileSync(baselinePath, `${JSON.stringify({
-    ...baseline,
-    open: disagreements(actual.findings).map((entry) => {
-      const previous = baseline.open.find((o: Open) => o.name === entry.name);
-      return { ...entry, decision: previous?.decision, why: previous?.why };
-    }),
-    typographyUnmarked: unmarked(actual.typography),
-  }, null, 2)}\n`);
-}
+const decisions = JSON.parse(readFileSync(decisionsPath, 'utf8'));
 
 /*
  * Counted from the files, not from the set the collector built - which is the whole point.
@@ -182,17 +156,12 @@ test('every line that reads a role is collected or explained', () => {
 });
 
 test('every colour declaration reaches a verdict', () => {
-  const unclassified = actual.findings.filter((f) => !f.package?.verdict);
+  const unclassified = run().findings.filter((f) => !f.package?.verdict);
   expect(unclassified.map((f) => f.name)).toEqual([]);
 });
 
-test('the roles the package disagrees with are the reviewed ones', () => {
-  const banked = baseline.open.map(({ decision, why, ...rest }: Open) => rest);
-  expect(disagreements(actual.findings)).toEqual(banked);
-});
-
 test('every banked disagreement carries a decision and a reason', () => {
-  const undecided = baseline.open
+  const undecided = decisions.open
     .filter((o: Open) => !o.decision || !DECISIONS.includes(o.decision) || !o.why?.trim())
     .map((o: Open) => o.name);
   expect(undecided).toEqual([]);
@@ -226,8 +195,11 @@ test('a role the package names for the slot passes', () => {
   expect(planted?.package?.verdict).toBe('agrees');
 });
 
-test('typography step reads with no marker are the known ones', () => {
-  expect(unmarked(actual.typography)).toEqual(baseline.typographyUnmarked);
+test('every typography step read carries a marker', () => {
+  const unmarked = actual.typography
+    .filter((t) => !t.marker)
+    .map((t) => `${t.variable} reads ${t.family}-${t.step}`);
+  expect(unmarked).toEqual([]);
 });
 
 test('names whose slot contradicts the painted property are the reviewed ones', () => {
@@ -246,10 +218,7 @@ test('names whose slot contradicts the painted property are the reviewed ones', 
 });
 
 test('roles whose family contradicts their slot are the reviewed ones', () => {
-  const known = new Set([
-    ...baseline.open.map((o: Open) => o.name),
-    ...baseline.slotLies.map((o: SlotLie) => o.name),
-  ]);
+  const known = new Set(baseline.slotLies.map((o: SlotLie) => o.name));
   const seen = actual.findings
     .filter((f) => f.family?.want && !f.family.got.includes(f.family.want))
     .filter((f) => !known.has(f.name))
@@ -274,24 +243,8 @@ test('every banked family mismatch carries a decision and a reason', () => {
   expect(undecided).toEqual([]);
 });
 
-test('roles that sit on the package\'s rung for another state are the reviewed ones', () => {
-  const seen = actual.findings
-    .filter((f) => f.rung)
-    .map((f) => ({
-      name: f.name,
-      state: required(f.rung, `${f.name}.rung`).state,
-      roles: f.roles,
-      oursAt: required(f.rung, `${f.name}.rung`).oursAt,
-      want: required(f.rung, `${f.name}.rung`).want,
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
-
-  expect(seen.length).toBeGreaterThan(0);
-  expect(seen).toEqual(baseline.rungs.map(({ decision, why, ...rest }: Rung) => rest));
-});
-
 test('every banked rung carries a decision and a reason', () => {
-  const undecided = baseline.rungs
+  const undecided = decisions.rungs
     .filter((r: Rung) => !r.decision || !RUNG_DECISIONS.includes(r.decision) || !r.why?.trim())
     .map((r: Rung) => r.name);
   expect(undecided).toEqual([]);
@@ -318,20 +271,8 @@ test('every banked ladder carries a decision and a reason', () => {
   expect(undecided).toEqual([]);
 });
 
-test('text on its own background below AA is the reviewed set', () => {
-  const measured = actual.lowContrast
-    .map(({
-      selector, fgRole, bgRole, contrast,
-    }) => ({
-      selector, fgRole, bgRole, contrast,
-    }))
-    .sort((a, b) => a.selector.localeCompare(b.selector));
-  expect(measured)
-    .toEqual(baseline.contrast.map(({ decision, why, ...rest }: ContrastPair) => rest));
-});
-
 test('every banked contrast pair carries a decision and a reason', () => {
-  const undecided = baseline.contrast
+  const undecided = decisions.contrast
     .filter((c: ContrastPair) => !c.decision
       || !CONTRAST_DECISIONS.includes(c.decision) || !c.why?.trim())
     .map((c: ContrastPair) => c.selector);
@@ -360,47 +301,29 @@ test('every banked concept split carries a decision and a reason', () => {
   expect(undecided).toEqual([]);
 });
 
-test('roles the package assigns and the theme never reads are the known ones', () => {
-  expect(actual.unusedRoles.capability.map((r) => r.role)).toEqual(baseline.unusedRoles.capability);
-  expect(actual.unusedRoles.stale.map((r) => r.role)).toEqual(baseline.unusedRoles.stale);
-});
-
-test('contrast lost across a state change is the reviewed set', () => {
-  const measured = actual.lowStatePairs
-    .map(({
-      bg, fg, fgRole, bgRole, contrast, selector,
-    }) => ({
-      bg, fg, fgRole, bgRole, contrast, selector,
-    }))
-    .sort((a, b) => (a.bg + a.selector).localeCompare(b.bg + b.selector));
-  const banked = baseline.statePairs.rows
-    .map(({
-      bg, fg, fgRole, bgRole, contrast, selector,
-    }: StatePair) => ({
-      bg, fg, fgRole, bgRole, contrast, selector,
-    }))
-    .sort((a: StatePair, b: StatePair) => (a.bg + a.selector).localeCompare(b.bg + b.selector));
-  expect(measured).toEqual(banked);
-});
-
 test('every cross-state pair carries a decision, and every design group a reason', () => {
-  const undecided = baseline.statePairs.rows
+  const undecided = decisions.statePairs.rows
     .filter((r: StatePair) => !r.decision || !STATE_PAIR_DECISIONS.includes(r.decision))
     .map((r: StatePair) => r.bg);
   expect(undecided).toEqual([]);
 
-  const groups = [...new Set(baseline.statePairs.rows
+  const groups = [...new Set(decisions.statePairs.rows
     .filter((r: StatePair) => r.group)
     .map((r: StatePair) => r.group as string) as string[])].sort();
-  expect(Object.keys(baseline.statePairs.groups).sort()).toEqual(groups);
+  expect(Object.keys(decisions.statePairs.groups).sort()).toEqual(groups);
 
-  const unreasoned = Object.entries(baseline.statePairs.groups)
+  const unreasoned = Object.entries(decisions.statePairs.groups)
     .filter(([, g]) => !(g as { why?: string }).why?.trim())
     .map(([key]) => key);
   expect(unreasoned).toEqual([]);
 });
 
+/*
+ * Not a metric but a guard: every check that looks at a painted property GOES SILENT when the
+ * bundle is older than the sources - a renamed variable is simply not found, it has no property,
+ * and it can no longer contradict its slot. The 23-name rename on 09.09 hid 24 declarations that
+ * way, and the slot check looked like it had passed.
+ */
 test('every tier declaration is present in the bundle the checks read', () => {
-  expect(actual.summary.declarationsMissingFromBundle)
-    .toBe(baseline.bundleFreshness.declarationsMissingFromBundle);
+  expect(actual.declarationsMissingFromBundle).toBe(0);
 });

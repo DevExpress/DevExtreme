@@ -143,8 +143,8 @@
       "paints": [
         "background-color"
       ],
-      "decision": "banked",
-      "why": "Already reviewed by the colour audit: the start mark is drawn with an inset shadow in thirteen rules, and background-color is the fourteenth."
+      "decision": "by-equality",
+      "why": "The colour of the appointment's start mark: thirteen rules draw it with an inset shadow, and background-color is the fourteenth, painting the same mark."
     },
     {
       "name": "--dx-scheduler-header-panel-margin",
