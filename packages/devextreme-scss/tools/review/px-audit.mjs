@@ -7,8 +7,8 @@
  *   node tools/review/px-audit.mjs --root=<dir>      # scan another tree; the test points this at a
  *                                                    # fixture to prove the gate still bites
  *
- * An unmarked value never reaches SCALES.md, so design never sees it and no decision about it
- * exists. The marker is the only channel to the scales card, not decoration.
+ * The marker records a decision about the value: an unmarked px literal is one nobody has
+ * classified yet.
  *
  * The shared layer scss/widgets/base/** goes through tools/sizes/inventory.mjs instead: it calls
  * scanPxLiterals directly and splits the places into theme-settable knobs and base-owned
