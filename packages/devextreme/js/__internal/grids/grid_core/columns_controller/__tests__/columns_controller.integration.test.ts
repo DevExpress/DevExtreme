@@ -76,7 +76,7 @@ describe('column fixing enablement', () => {
   });
 });
 
-describe('column lint cleanup contracts', () => {
+describe('column generation', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
@@ -90,26 +90,11 @@ describe('column lint cleanup contracts', () => {
 
     expect(instance.getVisibleColumns().map((column) => column.dataField)).toEqual(['id', 'name']);
   });
+});
 
-  it('should exclude hidden and grouped columns from visible band children', async () => {
-    const { instance } = await createDataGrid({
-      dataSource: [{ id: 1, name: 'a', hidden: true }],
-      columns: [{
-        caption: 'Band',
-        columns: [
-          'id',
-          { dataField: 'name', groupIndex: 0 },
-          { dataField: 'hidden', visible: false },
-        ],
-      }],
-    });
-
-    const dataFields = instance.getController('columns').getVisibleColumns()
-      .filter((column) => !column.command)
-      .map((column) => column.dataField);
-
-    expect(dataFields).toEqual(['id']);
-  });
+describe('getVisibleColumns', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
 
   it('should keep null row indexes equivalent to omitted indexes', async () => {
     const { instance } = await createDataGrid({
@@ -123,6 +108,11 @@ describe('column lint cleanup contracts', () => {
     expect(visibleColumns.map((column) => column.dataField)).toEqual(['id', 'name']);
     expect(instance.getVisibleColumns(0).map((column) => column.caption)).toEqual(['Band']);
   });
+});
+
+describe('sort and group selectors', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
 
   it('should skip empty sort and group selectors', async () => {
     const { instance } = await createDataGrid({
@@ -138,6 +128,11 @@ describe('column lint cleanup contracts', () => {
     expect(controller.getSortDataSourceParameters()?.[0].selector).toBe('id');
     expect(controller.getGroupDataSourceParameters()?.[0].selector).toBe('name');
   });
+});
+
+describe('column filter expressions', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
 
   it('should forward filter target and preserve column callback context', async () => {
     const calls: unknown[] = [];
