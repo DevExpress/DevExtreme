@@ -44,7 +44,7 @@ export interface SortInfo {
 export type SortByGroups = (SortInfo[] | undefined)[];
 
 export interface CustomAggregator {
-  seed: (groupIndex: number) => unknown;
+  seed: (groupIndex?: number) => unknown;
   step: (totalValue: unknown, value: unknown) => unknown;
   finalize: (totalValue: unknown) => unknown;
 }

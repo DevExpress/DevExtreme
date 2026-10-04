@@ -6,10 +6,11 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
+import type { GroupData } from '@js/ui/data_grid';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
-import type { RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { RawItemData, RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingControllerRequired, ModuleType } from '@ts/grids/grid_core/m_types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
@@ -349,7 +350,7 @@ export const summaryDataSourceAdapterExtender = (
   }
 
   private calculateTotalAggregates(
-    data,
+    data: RawItemData[] | GroupData<RawItemData>[],
     totalAggregates: Aggregate[],
     groupAggregates: Aggregate[],
     groupLevel: number,
