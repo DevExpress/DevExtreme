@@ -309,7 +309,6 @@ const subscribes = {
 
   forceMaxAppointmentPerCell(this: Scheduler): unknown {
     // @ts-expect-error Scheduler has no forceMaxAppointmentPerCell method
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.forceMaxAppointmentPerCell();
   },
 
