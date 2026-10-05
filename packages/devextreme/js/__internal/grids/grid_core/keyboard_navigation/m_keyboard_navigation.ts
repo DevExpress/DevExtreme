@@ -715,7 +715,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private isWaitingForRowsRendering(eventArgs: KeyboardKeyDownEvent): boolean {
-    return this._rowsView.isWaitingForAsyncTemplates()
+    return this._rowsView.isWaitingForRowsLayout()
       && !this._editingController?.isEditing()
       && !this.isInsideMasterDetail($(eventArgs.originalEvent.target));
   }

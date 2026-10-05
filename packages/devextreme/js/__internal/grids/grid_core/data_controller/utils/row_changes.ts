@@ -1,4 +1,5 @@
 import { equalByValue } from '@js/core/utils/common';
+import { isDefined } from '@js/core/utils/type';
 
 import type { OperationTypes } from '../../data_source_adapter/types';
 import type {
@@ -205,6 +206,19 @@ export function convertToUpdateChange(
   updateChange.changeType = 'update';
 
   attachChangedItems(updateChange, changedRows);
+}
+
+export function isInPlaceUpdate(change?: DataChange): boolean {
+  if (change?.changeType !== 'update') {
+    return false;
+  }
+
+  return !!change.changeTypes?.every((changeType, index) => {
+    // Hiding or showing a row also comes as an 'update', yet it moves the rows below.
+    const mayHideOrShowRow = isDefined(change.items?.[index]?.visible);
+
+    return changeType === 'update' && !mayHideOrShowRow;
+  });
 }
 
 function partialUpdateItemCore(

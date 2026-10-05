@@ -106,7 +106,7 @@ QUnit.module('Keyboard controller', {
                     return this._views[name];
                 },
                 renderFocusState: commonUtils.noop,
-                isWaitingForAsyncTemplates: function() {
+                isWaitingForRowsLayout: function() {
                     return false;
                 },
                 renderCompleted: $.Callbacks()

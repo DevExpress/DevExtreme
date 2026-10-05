@@ -22,6 +22,8 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import { isInPlaceUpdate } from '@ts/grids/grid_core/data_controller/utils/row_changes';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
@@ -425,6 +427,14 @@ export class RowsView extends ColumnsView {
     contentElement.empty().append(tableElement);
 
     return this._findContentElement();
+  }
+
+  public isWaitingForRowsLayout(): boolean {
+    const contentChanges: { change?: DataChange }[] = this._contentChanges;
+    const isUpdatingRowsInPlace = contentChanges.length > 0
+      && contentChanges.every(({ change }) => isInPlaceUpdate(change));
+
+    return this.isWaitingForAsyncTemplates() && !isUpdatingRowsInPlace;
   }
 
   /**
