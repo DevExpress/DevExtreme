@@ -142,7 +142,7 @@ const subscribes = {
     this: Scheduler,
     appointment: AppointmentTooltipItem['appointment'],
     targetedAppointmentRaw: TargetedAppointment,
-    format?: string,
+    format?: DateFormatType,
   ) {
     const targetedAppointment = {
       ...appointment,
@@ -158,7 +158,7 @@ const subscribes = {
 
     return {
       text: adapter.text || messageLocalization.format('dxScheduler-noSubject'),
-      formatDate: getDateText(startDate, endDate, formatType as DateFormatType),
+      formatDate: getDateText(startDate, endDate, formatType),
     };
   },
 
@@ -310,11 +310,6 @@ const subscribes = {
 
   getEndViewDate(this: Scheduler) {
     return this.getEndViewDate();
-  },
-
-  forceMaxAppointmentPerCell(this: Scheduler): unknown {
-    // @ts-expect-error Scheduler has no forceMaxAppointmentPerCell method
-    return this.forceMaxAppointmentPerCell();
   },
 
   getTargetedAppointmentData(this: Scheduler, appointment, element) {
