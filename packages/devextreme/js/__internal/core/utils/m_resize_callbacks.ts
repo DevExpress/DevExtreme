@@ -1,14 +1,23 @@
 import domAdapter from '@js/core/dom_adapter';
 import { callOnce } from '@ts/core/utils/call_once';
 
+import type { CallbackInterface } from './m_callbacks';
 // eslint-disable-next-line import/no-named-as-default
 import Callbacks from './m_callbacks';
 import readyCallbacks from './m_ready_callbacks';
 import windowModule from './m_window';
 
-const resizeCallbacks = (function () {
-  let prevSize;
-  const callbacks = Callbacks();
+interface Size {
+  width: number;
+  height: number;
+}
+
+type ResizeCallbacks = Omit<CallbackInterface, 'has'> & { has: () => boolean };
+
+const resizeCallbacks = (function (): ResizeCallbacks {
+  // eslint-disable-next-line @typescript-eslint/init-declarations -- set by setPrevSize
+  let prevSize: Size;
+  const callbacks: ResizeCallbacks = Callbacks();
   const originalCallbacksAdd = callbacks.add;
   const originalCallbacksRemove = callbacks.remove;
 
@@ -16,7 +25,7 @@ const resizeCallbacks = (function () {
     return callbacks;
   }
 
-  const formatSize = function () {
+  const formatSize = function (): Size {
     const window = windowModule.getWindow();
     return {
       width: window.innerWidth,
@@ -24,13 +33,14 @@ const resizeCallbacks = (function () {
     };
   };
 
-  const handleResize = function () {
+  const handleResize = function (): void {
     const now = formatSize();
     if (now.width === prevSize.width && now.height === prevSize.height) {
       return;
     }
 
-    let changedDimension;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set by the checks below
+    let changedDimension: 'width' | 'height' | undefined;
     if (now.width === prevSize.width) {
       changedDimension = 'height';
     }
@@ -43,18 +53,21 @@ const resizeCallbacks = (function () {
     callbacks.fire(changedDimension);
   };
 
-  const setPrevSize = callOnce(function () {
+  const setPrevSize = callOnce(() => {
     prevSize = formatSize();
   });
 
-  let removeListener;
+  // eslint-disable-next-line @typescript-eslint/init-declarations -- set when the listener is added
+  let removeListener: (() => void) | undefined;
 
-  callbacks.add = function () {
-    const result = originalCallbacksAdd.apply(callbacks, arguments);
+  callbacks.add = function (
+    ...args: Parameters<typeof originalCallbacksAdd>
+  ): ReturnType<typeof originalCallbacksAdd> {
+    const result = originalCallbacksAdd.apply(callbacks, args);
 
     setPrevSize();
 
-    readyCallbacks.add(function () {
+    readyCallbacks.add(() => {
       if (!removeListener && callbacks.has()) {
         removeListener = domAdapter.listen(windowModule.getWindow(), 'resize', handleResize);
       }
@@ -63,8 +76,10 @@ const resizeCallbacks = (function () {
     return result;
   };
 
-  callbacks.remove = function () {
-    const result = originalCallbacksRemove.apply(callbacks, arguments);
+  callbacks.remove = function (
+    ...args: Parameters<typeof originalCallbacksRemove>
+  ): ReturnType<typeof originalCallbacksRemove> {
+    const result = originalCallbacksRemove.apply(callbacks, args);
     if (!callbacks.has() && removeListener) {
       removeListener();
       removeListener = undefined;
@@ -73,7 +88,7 @@ const resizeCallbacks = (function () {
   };
 
   return callbacks;
-})();
+}());
 
 export { resizeCallbacks };
 export default resizeCallbacks;
