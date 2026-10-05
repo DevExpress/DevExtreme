@@ -18,12 +18,7 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { setOuterHeight, setOuterWidth } from '@js/core/utils/size';
 import { isDeferred, isPlainObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events/events.types';
-import type {
-  AppointmentClickEvent,
-  AppointmentContextMenuEvent,
-  AppointmentDblClickEvent,
-  AppointmentRenderedEvent,
-} from '@js/ui/scheduler';
+import type { AppointmentDblClickEvent } from '@js/ui/scheduler';
 import type { TemplateBase } from '@ts/core/templates/template_base';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -83,6 +78,11 @@ import type { DateRange } from './resizing/types';
 import { isNeedToAdd } from './utils/get_arrays_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
 
+type CollectionItemAction<K extends 'onItemRendered' | 'onItemClick' | 'onItemContextMenu'> = Exclude<
+  CollectionWidgetEditProperties<SchedulerAppointments>[K],
+  string | null | undefined
+>;
+
 export interface AppointmentCollectionOptions {
   getResourceManager: () => ResourceManager;
   getAppointmentDataSource: () => AppointmentDataSource;
@@ -95,9 +95,9 @@ export interface AppointmentCollectionOptions {
   appointmentTooltip: MobileTooltipStrategy | DesktopTooltipStrategy;
   dataAccessors: AppointmentDataAccessor;
   notifyScheduler: NotifyScheduler;
-  onItemRendered: (args: AppointmentRenderedEvent) => void;
-  onItemClick: (args: AppointmentClickEvent) => void;
-  onItemContextMenu: (args: AppointmentContextMenuEvent) => void;
+  onItemRendered: CollectionItemAction<'onItemRendered'>;
+  onItemClick: CollectionItemAction<'onItemClick'>;
+  onItemContextMenu: CollectionItemAction<'onItemContextMenu'>;
   onAppointmentDblClick: (args: AppointmentDblClickEvent) => void;
   tabIndex: number;
   focusStateEnabled: boolean;
@@ -117,14 +117,12 @@ export interface AppointmentCollectionOptions {
   onContentReady: () => void;
 }
 
-type ItemActionOptionName = 'onItemRendered' | 'onItemClick' | 'onItemContextMenu';
-
 export interface AppointmentCollectionProperties
   extends Omit<
     CollectionWidgetEditProperties<SchedulerAppointments>,
-    Exclude<keyof AppointmentCollectionOptions, ItemActionOptionName> | 'items'
+    keyof AppointmentCollectionOptions | 'items'
   >,
-  Omit<AppointmentCollectionOptions, ItemActionOptionName> {
+  AppointmentCollectionOptions {
   items?: AppointmentViewModelPlain[];
   fixedContainer?: dxElementWrapper | null;
   allDayContainer?: dxElementWrapper | null;

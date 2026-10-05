@@ -1280,12 +1280,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       ? MobileTooltipStrategy
       : DesktopTooltipStrategy)(this.getAppointmentTooltipOptions());
 
-    this._appointments = this._createComponent(
-      '<div>',
-      AppointmentCollection,
-      // @ts-expect-error item actions get the collection item event mapped by mapAppointmentFields
-      this.appointmentsConfig(),
-    );
+    this._appointments = this._createComponent('<div>', AppointmentCollection, this.appointmentsConfig());
     this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
 
     this.createAppointmentPopupForm();
@@ -1586,8 +1581,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointmentTooltip: this.appointmentTooltip,
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
+      // @ts-expect-error the collection passes its item event, mapped by mapAppointmentFields
       onItemRendered: this.getAppointmentRenderedAction(),
+      // @ts-expect-error the collection passes its item event, mapped by mapAppointmentFields
       onItemClick: this.createSchedulerAction('onAppointmentClick'),
+      // @ts-expect-error the collection passes its item event, mapped by mapAppointmentFields
       onItemContextMenu: this.createSchedulerAction('onAppointmentContextMenu'),
       onAppointmentDblClick: this.createSchedulerAction('onAppointmentDblClick'),
       tabIndex: this.option('tabIndex') ?? 0,
