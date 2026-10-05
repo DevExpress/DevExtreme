@@ -1,3 +1,4 @@
+/* eslint-disable devextreme-custom/no-deferred */
 import type { DataSource } from '@js/common/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
@@ -105,8 +106,8 @@ export class AppointmentDataSource {
     this.updatedAppointmentKeys = [];
   }
 
+  /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unsafe-return */
   add(rawAppointment: SafeAppointment): DeferredObj<SafeAppointment> {
-    // @eslint-disable-next-line
     return this.dataSource!.store().insert(rawAppointment)
     // @ts-expect-error
       .done(() => this.dataSource.load());
@@ -134,6 +135,7 @@ export class AppointmentDataSource {
     // @ts-expect-error
       .done(() => this.dataSource.load());
   }
+  /* eslint-enable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unsafe-return */
 
   destroy(): void {
     const store = this.dataSource?.store();

@@ -557,7 +557,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return undefined;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return notifyScheduler.invoke(funcName, ...args);
   }
 

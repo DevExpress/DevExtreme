@@ -147,6 +147,7 @@ export class Appointment extends DOMComponent<Appointment, AppointmentProperties
   }
 
   _getVerticalResizingRule(): ResizingRule {
+    // @ts-expect-error getCellHeight is undefined only without notifyScheduler
     const height = Math.round(this.invoke('getCellHeight'));
 
     return {
