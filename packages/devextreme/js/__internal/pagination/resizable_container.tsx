@@ -2,8 +2,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
-import { themeReadyCallback } from '@ts/ui/m_themes_callback';
-import { isPendingThemeLoaded } from '@ts/ui/themes';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import resizeCallbacks from '../../core/utils/resize_callbacks';
@@ -15,6 +13,7 @@ import type { PaginationContentProps } from './content';
 import {
   getElementContentWidth, getElementStyle, getElementWidth, isElementBlockLevel,
 } from './utils/get_element_width';
+import { onThemeReady } from './utils/on_theme_ready';
 
 interface ChildElements<T> { allowedPageSizes: T; pages: T; info: T }
 interface MainElements<T> { parent: T; allowedPageSizes: T; pages: T }
@@ -140,16 +139,11 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
   }
 
   subscribeToThemeReady(): EffectReturn {
-    if (isPendingThemeLoaded()) {
-      return undefined;
-    }
-    const callback = (): void => {
+    return onThemeReady((): void => {
       if (this.getParentWidth() > 0) {
         this.updateAdaptivityProps();
       }
-    };
-    themeReadyCallback.add(callback);
-    return (): void => { themeReadyCallback.remove(callback); };
+    });
   }
 
   effectUpdateChildProps(): void {
