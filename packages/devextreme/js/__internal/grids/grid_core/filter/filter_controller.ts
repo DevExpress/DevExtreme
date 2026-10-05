@@ -4,8 +4,8 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
-import type { Controllers } from '@ts/grids/grid_core/m_types';
 import modules from '@ts/grids/grid_core/modules/modules';
+import type { Controllers } from '@ts/grids/grid_core/types';
 
 import { SOURCE_ORDER } from './const';
 import type { FilterSourceContext } from './types';

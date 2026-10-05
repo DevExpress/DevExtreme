@@ -1,4 +1,4 @@
-import type { InternalGridOptions, Module } from '../m_types';
+import type { InternalGridOptions, Module } from '../types';
 import { adaptivityColumnsControllerExtender } from './extenders/adaptivity_columns_controller';
 import { adaptivityColumnsResizerViewControllerExtender } from './extenders/adaptivity_columns_resizer_view_controller';
 import { adaptivityDataControllerExtender } from './extenders/adaptivity_data_controller';

@@ -12,8 +12,8 @@ import type dxCheckBox from '@js/ui/check_box';
 import type { ValueChangedInfo } from '@js/ui/editor/editor';
 import type dxList from '@js/ui/list';
 import Popup from '@js/ui/popup/ui.popup';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import Modules from '@ts/grids/grid_core/modules/modules';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import List from '@ts/ui/list/list.edit.search';
 import TreeView from '@ts/ui/tree_view/tree_view.search';
 

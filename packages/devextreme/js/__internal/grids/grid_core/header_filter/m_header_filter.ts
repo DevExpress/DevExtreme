@@ -20,8 +20,8 @@ import type {
   DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import Modules from '@ts/grids/grid_core/modules/modules';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import gridCoreUtils from '../m_utils';

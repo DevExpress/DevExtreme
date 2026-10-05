@@ -13,7 +13,6 @@ import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
 import type { ActionConfig } from '@ts/core/widget/component';
-
 import type {
   Controllers,
   CreateComponentOptions,
@@ -26,7 +25,8 @@ import type {
   ModuleType,
   OptionChanged,
   Views,
-} from '../m_types';
+} from '@ts/grids/grid_core/types';
+
 import type {
   ComponentInstanceType,
   ModuleItemTypeCore,
@@ -220,7 +220,7 @@ export class ModuleItem {
   public executeAction(actionName: string, options: unknown): unknown {
     const action = this._actions[actionName];
 
-    return action && action(options);
+    return action?.(options);
   }
 
   public dispose(): void {
@@ -455,7 +455,7 @@ export function processModules(
   ): unknown {
     const moduleItems = {};
 
-    each(moduleTypes, (name, moduleType) => {
+    Object.entries(moduleTypes).forEach(([name, moduleType]) => {
       // eslint-disable-next-line new-cap
       const moduleItem = new moduleType(componentInstance);
       moduleItem.name = name;

@@ -15,7 +15,7 @@ import type {
 } from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/modules/modules';
 
-import type { OptionChanged } from '../m_types';
+import type { OptionChanged } from '../types';
 import { FILTER_TYPES_EXCLUDE } from './const';
 import {
   checkForErrors,

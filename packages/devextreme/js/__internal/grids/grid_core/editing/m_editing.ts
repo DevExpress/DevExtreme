@@ -40,11 +40,11 @@ import type {
   ProcessedItem,
 } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
-import type {
-  Controllers, ModuleType, RowKey, Views,
-} from '../m_types';
 import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
+import type {
+  Controllers, ModuleType, RowKey, Views,
+} from '../types';
 import {
   ACTION_OPTION_NAMES,
   BUTTON_NAMES,

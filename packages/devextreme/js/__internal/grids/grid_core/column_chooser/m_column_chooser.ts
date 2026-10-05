@@ -17,8 +17,8 @@ import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
-import type { ModuleType } from '../m_types';
 import modules from '../modules/modules';
+import type { ModuleType } from '../types';
 import { ColumnsView } from '../views/m_columns_view';
 import { defaultOptions } from './const';
 

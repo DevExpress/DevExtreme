@@ -19,8 +19,8 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';

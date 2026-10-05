@@ -47,7 +47,7 @@ import type {
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
-import type { Module } from '@ts/grids/grid_core/m_types';
+import type { Module } from '@ts/grids/grid_core/types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import gridCoreUtils from '../m_utils';

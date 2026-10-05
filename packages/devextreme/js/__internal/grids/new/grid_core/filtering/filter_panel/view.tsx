@@ -1,7 +1,7 @@
 import { computed, type ReadonlySignal } from '@ts/core/state_manager/index';
 import { FilterBuilderView as OldFilterBuilderView } from '@ts/grids/grid_core/filter_builder/m_filter_builder';
 import { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter_panel/m_filter_panel';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { View } from '../../core/view';
 import { WidgetMock } from '../../widget_mock';

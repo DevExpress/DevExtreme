@@ -1,5 +1,5 @@
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { StateStoringController } from '../state_storing_controller_core';
 

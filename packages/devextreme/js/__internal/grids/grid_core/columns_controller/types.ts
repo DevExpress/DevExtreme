@@ -5,7 +5,7 @@ import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import type { DataFilter } from '../filter/types';
-import type { InternalGrid, OptionChanged, OptionChangedFor } from '../m_types';
+import type { InternalGrid, OptionChanged, OptionChangedFor } from '../types';
 import type {
   COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
 } from './const';

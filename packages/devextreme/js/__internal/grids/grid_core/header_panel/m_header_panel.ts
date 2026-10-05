@@ -10,7 +10,7 @@ import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m
 import type { DefaultToolbarItem, ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
-import type { ModuleType } from '../m_types';
+import type { ModuleType } from '../types';
 import { ColumnsView } from '../views/m_columns_view';
 import type { ResizingController } from '../views/m_grid_view';
 
