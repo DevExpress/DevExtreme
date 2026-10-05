@@ -1,5 +1,5 @@
 import domAdapter from '@js/core/dom_adapter';
-import callOnce from '@js/core/utils/call_once';
+import { callOnce } from '@ts/core/utils/call_once';
 
 // eslint-disable-next-line import/no-named-as-default
 import Callbacks from './m_callbacks';
