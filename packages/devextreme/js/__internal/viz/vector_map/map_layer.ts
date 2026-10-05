@@ -110,7 +110,7 @@ interface LayerProxy {
   type?: string;
   elementType?: string;
   getElements: () => ElementProxy[];
-  clearSelection: (_noEvent?: boolean) => LayerProxy;
+  clearSelection: () => LayerProxy;
   getDataSource: () => ThemeValue;
   getBounds: () => ThemeValue;
 }
@@ -989,8 +989,8 @@ function createLayerProxy(layer, name, index) {
       return layer.getProxies();
     },
 
-    clearSelection(_noEvent) {
-      layer.clearSelection(_noEvent);
+    clearSelection() {
+      layer.clearSelection();
       return proxy;
     },
 

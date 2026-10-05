@@ -93,8 +93,6 @@ let Legend = class Legend extends _BaseLegend {
       widget: parameters.widget,
       group: root,
       backgroundClass: null,
-      // @ts-expect-error the base legend reads itemGroupClass, so this key is ignored
-      itemsGroupClass: null,
       textField: 'text',
       getFormatObject(data) {
         return data;

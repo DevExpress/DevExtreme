@@ -94,8 +94,6 @@ export let Range = class Range {
 
   declare userBreaks?: ThemeValue[];
 
-  declare stubData?: boolean;
-
   constructor(range?: RangeData) {
     range && extend(this, range);
   }
