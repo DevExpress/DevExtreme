@@ -39,6 +39,7 @@ import warnings from '@ts/viz/core/errors_warnings';
 import { changes, isDisabledOnServer, replaceInherit } from '@ts/viz/core/helpers';
 import _Layout from '@ts/viz/core/layout';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
+import type { Canvas } from '@ts/viz/core/types';
 import { parseScalar as _parseScalar } from '@ts/viz/core/utils';
 
 const { log } = warnings;
@@ -48,15 +49,6 @@ const OPTION_RTL_ENABLED = 'rtlEnabled';
 const SIZED_ELEMENT_CLASS = 'dx-sized-element';
 
 const baseOptionMethod = DOMComponent.prototype.option;
-
-interface Canvas {
-  width: number;
-  height: number;
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-}
 
 type RawCanvas = Pick<Canvas, 'width' | 'height'> & Partial<Canvas>;
 

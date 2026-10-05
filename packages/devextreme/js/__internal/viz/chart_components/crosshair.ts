@@ -8,6 +8,9 @@
 
 import { extend } from '@js/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type {
+  BBox, Bounds, Canvas, Coords,
+} from '@ts/viz/core/types';
 import { patchFontOptions } from '@ts/viz/core/utils';
 
 const math = Math;
@@ -30,37 +33,13 @@ type LabelSide = 'left' | 'right' | 'top' | 'bottom';
 type CoordName = 'x' | 'y';
 type SizeName = 'width' | 'height';
 
-interface Point {
-  x: number;
-  y: number;
-}
-
-interface BBox {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-interface Bounds {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-}
-
-interface CrosshairCanvas extends Bounds {
-  width: number;
-  height: number;
-}
-
 interface CrosshairPane {
   coords: Bounds;
   clipRect: { id: string | null };
 }
 
 interface CrosshairParams {
-  canvas: CrosshairCanvas;
+  canvas: Canvas;
   axes: ThemeValue[][];
   panes: CrosshairPane[];
 }
@@ -85,12 +64,12 @@ interface CrosshairLabel {
   axis: ThemeValue;
   options: ThemeValue;
   pos: { coord: number; side: LabelSide };
-  startXY: Point;
+  startXY: Coords;
 }
 
-type LabelPositionChecker = (bBox: BBox, position: LabelSide, coord: Point) => Point;
+type LabelPositionChecker = (bBox: BBox, position: LabelSide, coord: Coords) => Coords;
 
-export function getMargins(): Point {
+export function getMargins(): Coords {
   return {
     x: LABEL_BACKGROUND_PADDING_X,
     y: LABEL_BACKGROUND_PADDING_Y,
@@ -106,7 +85,7 @@ function getRectangleBBox(bBox: BBox): BBox {
   };
 }
 
-function getLabelCheckerPosition(x: number, y: number, isHorizontal: boolean, canvas: CrosshairCanvas): LabelPositionChecker {
+function getLabelCheckerPosition(x: number, y: number, isHorizontal: boolean, canvas: Canvas): LabelPositionChecker {
   const params: [CoordName, SizeName, CoordName, SizeName, number, number] = isHorizontal ? ['x', 'width', 'y', 'height', y, 0] : ['y', 'height', 'x', 'width', x, 1];
 
   return function (bBox, position, coord) {
@@ -139,7 +118,7 @@ export let Crosshair = class Crosshair {
 
   declare _options: Record<string, CrosshairLineSettings>;
 
-  declare _canvas: CrosshairCanvas;
+  declare _canvas: Canvas;
 
   declare _axes: ThemeValue[][];
 

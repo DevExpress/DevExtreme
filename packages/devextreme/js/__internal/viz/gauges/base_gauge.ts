@@ -10,6 +10,7 @@ import { plugin as loadingIndicatorPlugin } from '@ts/viz/core/loading_indicator
 import { plugin as titlePlugin } from '@ts/viz/core/title';
 import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
+import type { Bounds } from '@ts/viz/core/types';
 import { getAppropriateFormat } from '@ts/viz/core/utils';
 import themeManagerModule from '@ts/viz/gauges/theme_manager';
 import type { TrackerParameters } from '@ts/viz/gauges/tracker';
@@ -23,13 +24,6 @@ export interface GaugeAnimationSettings {
   easing: ThemeValue;
   step?: (pos: number) => void;
   complete?: () => void;
-}
-
-export interface Rect {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
 }
 
 export interface GaugeFormatOptions {
@@ -57,7 +51,7 @@ export abstract class BaseGauge extends BaseWidget {
 
   _tracker;
 
-  _innerRect!: Rect;
+  _innerRect!: Bounds;
 
   _area;
 

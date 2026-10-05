@@ -12,6 +12,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Size } from '@ts/viz/core/types';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import { consts, isFirefoxOnAndroid } from '@ts/viz/range_selector/common';
 
@@ -22,11 +23,6 @@ interface TextSize {
   width: number;
   height: number;
   y: number;
-}
-
-interface RectSize {
-  width: number;
-  height: number;
 }
 
 interface AreaPointsInfo {
@@ -81,7 +77,7 @@ class SliderMarker {
     this._border = renderer.rect(0, 0, 1, 0);
   }
 
-  _getRectSize(textSize: TextSize): RectSize {
+  _getRectSize(textSize: TextSize): Size {
     return {
       width: Math.round(2 * this._paddingLeftRight + textSize.width),
       height: Math.round(2 * this._paddingTopBottom + textSize.height),
@@ -185,7 +181,7 @@ class SliderMarker {
       that._textSize = currentTextSize;
     }, SLIDER_MARKER_UPDATE_DELAY);
 
-    function updateSliderMarker(size: TextSize, rectSize?: RectSize): void {
+    function updateSliderMarker(size: TextSize, rectSize?: Size): void {
       rectSize = rectSize || that._getRectSize(size);
       that._group.attr({ translateY: -(rectSize.height + POINTER_SIZE) });
       const pointsData = that._getAreaPointsInfo(size);

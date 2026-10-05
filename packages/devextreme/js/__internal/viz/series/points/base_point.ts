@@ -16,6 +16,7 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined as _isDefined } from '@js/core/utils/type';
 import consts from '@ts/viz/components/consts';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Coords } from '@ts/viz/core/types';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 import barPoint from '@ts/viz/series/points/bar_point';
 import bubblePoint from '@ts/viz/series/points/bubble_point';
@@ -52,11 +53,6 @@ interface PointSeries {
   getStackName: () => ThemeValue;
   _argumentChecker: (value: ThemeValue) => boolean;
   _valueChecker: (value: ThemeValue) => boolean;
-}
-
-interface PointCoords {
-  x: number;
-  y: number;
 }
 
 const mixins: Record<string, PointMixin> = {};
@@ -550,7 +546,7 @@ export let Point = class Point {
     this.graphic.animate(settings, { partitionDuration }, complete);
   }
 
-  getCoords(min?: boolean): PointCoords {
+  getCoords(min?: boolean): Coords {
     if (!min) {
       return { x: this.x, y: this.y };
     }
@@ -562,7 +558,7 @@ export let Point = class Point {
     return { x: this.minX - (this.x - this.minX ? 0 : 1), y: this.y };
   }
 
-  getDefaultCoords(): PointCoords {
+  getDefaultCoords(): Coords {
     return !this._options.rotated ? { x: this.x, y: this.defaultY } : { x: this.defaultX, y: this.y };
   }
 
@@ -671,7 +667,7 @@ export let Point = class Point {
     return [this._label];
   }
 
-  getCenterCoord(): PointCoords {
+  getCenterCoord(): Coords {
     return {
       x: this.x,
       y: this.y,

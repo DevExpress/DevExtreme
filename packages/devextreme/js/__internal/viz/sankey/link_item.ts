@@ -6,6 +6,7 @@
 
 import { isDefined } from '@js/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { BBox } from '@ts/viz/core/types';
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from '@ts/viz/sankey/constants';
 
 const states = ['normal', 'adjacentNodeHover', 'hover'];
@@ -27,13 +28,6 @@ interface LinkConnection {
   weight: number;
 }
 
-interface LinkRect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
 interface LinkWidget {
   _renderer: { getRootOffset: () => { left: number; top: number } };
   _tooltip?: { show: (target: ThemeValue, coords: { x: number; y: number }) => void; hide: () => void };
@@ -50,7 +44,7 @@ interface LinkParams {
   connection: LinkConnection;
   d: ThemeValue;
   options: ThemeValue;
-  boundingRect: LinkRect;
+  boundingRect: BBox;
   gradient: ThemeValue;
 }
 
@@ -92,7 +86,7 @@ class Link {
 
   declare options: ThemeValue;
 
-  declare boundingRect: LinkRect;
+  declare boundingRect: BBox;
 
   declare coords: { x: number; y: number };
 

@@ -5,8 +5,8 @@ import { clone } from '@js/core/utils/object';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { Bounds } from '@ts/viz/core/types';
 import { getCosAndSin, normalizeAngle } from '@ts/viz/core/utils';
-import type { Rect } from '@ts/viz/gauges/base_gauge';
 import { BaseGauge } from '@ts/viz/gauges/base_gauge';
 import * as circularIndicators from '@ts/viz/gauges/circular_indicators';
 import CircularRangeContainer from '@ts/viz/gauges/circular_range_container';
@@ -78,16 +78,16 @@ function getSides(startAngle: number, endAngle: number): Sides {
   };
 }
 
-function getWidth(rect: Rect): number {
+function getWidth(rect: Bounds): number {
   return rect.right - rect.left;
 }
 
-function getHeight(rect: Rect): number {
+function getHeight(rect: Bounds): number {
   return rect.bottom - rect.top;
 }
 
-function selectRectByAspectRatio(srcRect: Rect, aspectRatio: number, margins?: Margins): Rect {
-  const rect: Rect = extend({}, srcRect);
+function selectRectByAspectRatio(srcRect: Bounds, aspectRatio: number, margins?: Margins): Bounds {
+  const rect: Bounds = extend({}, srcRect);
   const currentMargins = margins || {};
   let width = 0;
   let height = 0;

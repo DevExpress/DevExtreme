@@ -4,8 +4,8 @@ import { each } from '@js/core/utils/iterator';
 import { clone } from '@js/core/utils/object';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { Bounds } from '@ts/viz/core/types';
 import { normalizeEnum } from '@ts/viz/core/utils';
-import type { Rect } from '@ts/viz/gauges/base_gauge';
 import { BaseGauge } from '@ts/viz/gauges/base_gauge';
 import type { ScaleMeasure, TicksCoefficients } from '@ts/viz/gauges/common';
 import { createIndicatorCreator, dxGauge } from '@ts/viz/gauges/common';
@@ -39,8 +39,8 @@ interface MainElementsMeasurements {
   indent: number;
 }
 
-function selectRectBySizes(srcRect: Rect, sizes: Sizes, margins?: Margins): Rect {
-  const rect: Rect = extend({}, srcRect);
+function selectRectBySizes(srcRect: Bounds, sizes: Sizes, margins?: Margins): Bounds {
+  const rect: Bounds = extend({}, srcRect);
   const currentMargins = margins || {};
   if (sizes) {
     rect.left += currentMargins.left || 0;

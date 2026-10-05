@@ -13,6 +13,7 @@ import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator
 import { plugin as TitlePlugin } from '@ts/viz/core/title';
 import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as TooltipPlugin } from '@ts/viz/core/tooltip';
+import type { Canvas } from '@ts/viz/core/types';
 import { parseScalar } from '@ts/viz/core/utils';
 import { ControlBar } from '@ts/viz/vector_map/control_bar/control_bar';
 import { DataExchanger } from '@ts/viz/vector_map/data_exchanger';
@@ -27,15 +28,6 @@ import { generateDataKey } from '@ts/viz/vector_map/vector_map.utils';
 
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 400;
-
-interface MapLayout {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  right: number;
-  bottom: number;
-}
 
 function mergeBounds(sumBounds: number[], dataBounds: number[] | undefined): number[] {
   return dataBounds ? [
@@ -277,7 +269,7 @@ class VectorMap extends BaseWidget {
   }
 
   _applySize(rect: number[]): void {
-    const layout: MapLayout = {
+    const layout: Canvas = {
       left: rect[0],
       top: rect[1],
       width: rect[2] - rect[0],
