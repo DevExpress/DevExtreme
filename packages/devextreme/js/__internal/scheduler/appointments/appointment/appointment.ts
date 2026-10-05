@@ -24,16 +24,16 @@ import {
   REDUCED_APPOINTMENT_ICON,
   REDUCED_APPOINTMENT_PARTS_CLASSES,
 } from '../../classes';
-import type { SubscribeKey, SubscribeMethods } from '../../m_subscribes';
 import { validateRRule } from '../../recurrence/validate_rule';
+import type { SubscribeKey, SubscribeMethods } from '../../subscribes';
 import type { SafeAppointment } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
-import type { AppointmentProperties, AppointmentReducedPart } from './m_types';
 import {
   getAriaDescription,
   getAriaLabel,
   getReducedIconTooltip,
 } from './text_utils';
+import type { AppointmentProperties, AppointmentReducedPart } from './types';
 
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
 const DEFAULT_VERTICAL_HANDLES = 'top bottom';

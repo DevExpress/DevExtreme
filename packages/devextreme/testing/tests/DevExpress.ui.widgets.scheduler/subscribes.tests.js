@@ -1,5 +1,5 @@
 import 'fluent_blue_light.css!';
-import '__internal/scheduler/m_subscribes';
+import '__internal/scheduler/subscribes';
 import '__internal/scheduler/scheduler';
 
 import $ from 'jquery';
