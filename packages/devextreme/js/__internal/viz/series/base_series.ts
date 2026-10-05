@@ -16,8 +16,6 @@
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
-/* eslint-disable @typescript-eslint/prefer-includes */
-/* eslint-disable @typescript-eslint/prefer-string-starts-ends-with */
 
 import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
@@ -864,6 +862,7 @@ export let Series = class Series {
   }
 
   _checkPolarBarType(widgetType: string, options: ThemeValue): boolean {
+    // eslint-disable-next-line @typescript-eslint/prefer-includes
     return widgetType === 'polar' && options.spiderWidget && this.type.indexOf('bar') !== -1;
   }
 
@@ -933,10 +932,12 @@ export let Series = class Series {
   }
 
   isFullStackedSeries(): boolean {
+    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
     return this.type.indexOf('fullstacked') === 0;
   }
 
   isStackedSeries(): boolean {
+    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
     return this.type.indexOf('stacked') === 0;
   }
 

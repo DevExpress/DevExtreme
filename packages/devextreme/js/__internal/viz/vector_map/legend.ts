@@ -56,7 +56,7 @@ function buildData(partition: number[], values: ThemeValue[], field: string): Le
   const list = [];
   let item;
   for (i = 0; i < ii; ++i) {
-    // @ts-expect-error
+    // @ts-expect-error the item gets its value, states and visibility right below
     list[i] = item = {
       start: partition[i],
       end: partition[i + 1],
