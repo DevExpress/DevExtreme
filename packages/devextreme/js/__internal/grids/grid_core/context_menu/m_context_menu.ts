@@ -95,6 +95,7 @@ export class ContextMenuView extends modules.View {
   }
 
   protected _renderCore() {
+    // @ts-expect-error the view is rendered here
     const $element = this.element().addClass(CONTEXT_MENU);
 
     this.setAria('role', 'presentation', $element);

@@ -53,6 +53,7 @@ export class AIAssistantView extends View {
     const chatOptions = this.getAIChatOptions();
 
     return {
+      // @ts-expect-error the view is rendered here
       container: this.element(),
       createComponent: this._createComponent.bind(this),
       onRegenerate: (aiMessage: AIMessage): void => {
@@ -67,6 +68,7 @@ export class AIAssistantView extends View {
     const position: PositionConfig = {
       my: 'right top',
       at: 'right top',
+      // @ts-expect-error the view is rendered here
       of: this.columnHeadersView.element(),
       collision: 'fit',
       offset: `${-AI_ASSISTANT_POPUP_OFFSET} ${AI_ASSISTANT_POPUP_OFFSET}`,

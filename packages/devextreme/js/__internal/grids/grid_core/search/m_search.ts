@@ -172,9 +172,11 @@ export class SearchPanelViewController extends modules.ViewController {
     const headerPanelClass = this.headerPanel.addWidgetPrefix(HEADER_PANEL_CLASS);
     const $searchPanel = $element
       .find(`.${this.headerPanel.addWidgetPrefix(SEARCH_PANEL_CLASS)}`)
+      // @ts-expect-error filter() is typed for selectors only
       .filter((_, el: HTMLElement) => $(el).closest(`.${headerPanelClass}`).is($element));
 
     if ($searchPanel.length) {
+      // @ts-expect-error dxTextBox is added to the renderer at runtime
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return $searchPanel.dxTextBox('instance');
     }

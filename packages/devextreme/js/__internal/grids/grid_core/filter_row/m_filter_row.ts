@@ -257,6 +257,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     if (gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'filterValues', 'filterType']) && e.columnIndex !== undefined) {
       const visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
       const column = that._columnsController.columnOption(e.columnIndex);
+      // @ts-expect-error the view is rendered here
       $cell = that._getCellElement(that.element().find(`.${that.addWidgetPrefix(FILTER_ROW_CLASS)}`).index(), visibleIndex) ?? $();
       $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
 
@@ -769,6 +770,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
     const columns = this._columnsController.getVisibleColumns();
     const dataSourceAdapter = this.dataSourceController.getAdapter();
+    // @ts-expect-error the view is rendered here
     const rowIndex = this.element().find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).index();
 
     if (rowIndex === -1) {
@@ -879,7 +881,8 @@ export class ApplyFilterViewController extends modules.ViewController {
   private removeHighLights() {
     if (isOnClickApplyFilterMode(this)) {
       // TODO getView
-      const columnHeadersViewElement = this.getView('columnHeadersView').element();
+      // @ts-expect-error the view is rendered here
+      const columnHeadersViewElement: dxElementWrapper = this.getView('columnHeadersView').element();
       columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${HIGHLIGHT_OUTLINE_CLASS}`).removeClass(HIGHLIGHT_OUTLINE_CLASS);
       columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
       this._getHeaderPanel().enableApplyButton(false);
