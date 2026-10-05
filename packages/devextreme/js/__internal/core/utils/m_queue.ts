@@ -1,20 +1,28 @@
 import errors from '@js/core/errors';
 import { when } from '@js/core/utils/deferred';
 
-function createQueue(discardPendingTasks?: boolean) {
+type Task = () => unknown;
+
+interface Queue {
+  add: (task: Task, removeTaskCallback?: (task: Task) => void) => void;
+  busy: () => boolean;
+}
+
+function createQueue(discardPendingTasks?: boolean): Queue {
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  let _tasks: any[] = [];
+  let _tasks: Task[] = [];
   // eslint-disable-next-line @typescript-eslint/naming-convention
   let _busy = false;
 
-  function exec() {
+  function exec(): void {
     while (_tasks.length) {
       _busy = true;
 
-      const task = _tasks.shift();
-      const result = task();
+      const task = _tasks.shift() as Task;
+      const result = task() as { then?: unknown } | undefined;
 
       if (result === undefined) {
+        // eslint-disable-next-line no-continue -- a task without a result lets the next one run
         continue;
       }
 
@@ -30,7 +38,7 @@ function createQueue(discardPendingTasks?: boolean) {
     _busy = false;
   }
 
-  function add(task, removeTaskCallback) {
+  function add(task: Task, removeTaskCallback?: (task: Task) => void): void {
     if (!discardPendingTasks) {
       _tasks.push(task);
     } else {
@@ -44,7 +52,7 @@ function createQueue(discardPendingTasks?: boolean) {
     }
   }
 
-  function busy() {
+  function busy(): boolean {
     return _busy;
   }
 

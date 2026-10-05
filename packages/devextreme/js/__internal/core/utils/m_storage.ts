@@ -3,6 +3,7 @@ import { getWindow } from '@js/core/utils/window';
 const window = getWindow();
 
 const getSessionStorage = function (): Storage | undefined {
+  // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the try block
   let sessionStorage: Storage | undefined;
 
   try {
