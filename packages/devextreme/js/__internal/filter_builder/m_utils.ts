@@ -25,8 +25,18 @@ import filterOperationsDictionary from './m_filter_operations_dictionary';
 type FieldValue = string | number | boolean | Date | null | undefined;
 export type ConditionValue = FieldValue | FieldValue[];
 
-export type Criteria = unknown[];
+type FilterCombiner = 'and' | 'or';
+
 export type Condition = [string, string, ...ConditionValue[]];
+
+type ValueOperand = FieldValue | ValueOperand[];
+type ValueCondition = [string, ValueOperand] | [string, string, ...ValueOperand[]];
+type ValueGroup = [] | [FilterCombiner] | ['!', ValueExpression]
+| [ValueExpression, ...(FilterCombiner | ValueExpression)[]];
+type ValueExpression = ValueCondition | ValueGroup;
+export type FilterBuilderValue = ValueExpression | null | undefined;
+
+export type Criteria = unknown[];
 type NegationGroup = ['!', Criteria];
 
 export type FilterExpression = ReturnType<NonNullable<CustomOperation['calculateFilterExpression']>>;
@@ -547,7 +557,7 @@ export function getField(dataField: string, fields: FilterBuilderField[]): Filte
   throw new errors.Error('E1047', dataField);
 }
 
-export function isGroup(criteria: unknown): criteria is Criteria {
+export function isGroup(criteria: unknown): criteria is ValueGroup {
   if (!Array.isArray(criteria)) {
     return false;
   }
@@ -729,7 +739,7 @@ function getConditionFilterExpression(
 }
 
 export function getFilterExpression(
-  value: Criteria | null | undefined,
+  value: FilterBuilderValue,
   fields: FilterBuilderField[],
   customOperations: FilterCustomOperation[],
   target: string,
@@ -784,7 +794,7 @@ export function isValidCondition(condition: Condition): boolean {
   return condition[2] !== '';
 }
 
-export function getNormalizedFilter(group: Criteria): Criteria | null {
+export function getNormalizedFilter(group: Criteria): ValueExpression | null {
   let normalizedGroup = group;
   const criteria = getGroupCriteria(normalizedGroup);
   let i = 0;
@@ -827,6 +837,7 @@ export function getNormalizedFilter(group: Criteria): Criteria | null {
     return null;
   }
 
+  // @ts-expect-error the model is normalized in place into a filter value
   return normalizedGroup;
 }
 
