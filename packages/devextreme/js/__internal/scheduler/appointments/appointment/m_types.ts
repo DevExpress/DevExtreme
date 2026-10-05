@@ -34,7 +34,7 @@ export interface AppointmentProperties extends DOMComponentProperties<Appointmen
   startDate: Date;
   cellWidth: number;
   cellHeight: number;
-  resizableConfig: Record<string, unknown>;
+  resizableConfig: object;
   groups: string[];
   partIndex?: number;
   partTotalCount: number;

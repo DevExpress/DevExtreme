@@ -317,11 +317,13 @@ const subscribes = {
     return this.getTargetedAppointment(appointment, element);
   },
 
-  getEndDayHour(this: Scheduler) {
+  getEndDayHour(this: Scheduler): number {
+    // @ts-expect-error SchedulerWorkSpaceLike.option() is untyped
     return this._workSpace.option('endDayHour') || this.option('endDayHour');
   },
 
-  getStartDayHour(this: Scheduler) {
+  getStartDayHour(this: Scheduler): number {
+    // @ts-expect-error SchedulerWorkSpaceLike.option() is untyped
     return this._workSpace.option('startDayHour') || this.option('startDayHour');
   },
 
