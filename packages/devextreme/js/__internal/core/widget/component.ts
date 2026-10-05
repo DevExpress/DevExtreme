@@ -235,7 +235,7 @@ export class Component<
     errors.log('W0001', this.NAME, option, info.since, message);
   }
 
-  _logDeprecatedComponentWarning(since: 'string', alias: 'string'): void {
+  _logDeprecatedComponentWarning(since: string, alias: string): void {
     errors.log('W0000', this.NAME, since, `Use the '${alias}' widget instead`);
   }
 

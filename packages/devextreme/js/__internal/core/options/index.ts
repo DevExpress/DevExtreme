@@ -14,7 +14,7 @@ import {
 
 export interface DeprecatedOptionInfo {
   since: string;
-  message: string;
+  message?: string;
   alias?: string;
 }
 
