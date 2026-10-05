@@ -975,7 +975,7 @@ export function getOperationValue(condition: Condition): string {
 }
 
 export function getMergedOperations(
-  customOperations: CustomOperation[],
+  customOperations: CustomOperation[] | undefined,
   betweenCaption: string | undefined,
   context: EditorFactoryOwner,
 ): FilterCustomOperation[] {

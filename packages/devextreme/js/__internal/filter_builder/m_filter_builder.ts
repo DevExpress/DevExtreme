@@ -10,12 +10,7 @@ import $, { type dxElementWrapper } from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import type {
-  CustomOperation,
-  Field,
-  GroupOperation,
-  Properties as FilterBuilderOptions,
-} from '@js/ui/filter_builder';
+import type { Field, Properties as FilterBuilderOptions } from '@js/ui/filter_builder';
 import type { ShownEvent } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
@@ -99,9 +94,6 @@ const OPERATORS: Record<string, string> = {
 
 interface FilterBuilderProperties extends FilterBuilderOptions {
   fields: Field[];
-  groupOperations: GroupOperation[];
-  customOperations: CustomOperation[];
-  allowHierarchicalFields: boolean;
   closePopupOnTargetScroll: boolean;
 }
 
@@ -778,7 +770,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
   }
 
   _getGroupOperations(criteria: Criteria): GroupMenuItem[] {
-    let groupOperations: string[] = this.option('groupOperations');
+    let groupOperations: string[] | undefined = this.option('groupOperations');
     const descriptions = this.option('groupOperationDescriptions');
     const groupOperationDescriptions: Record<string, string> = {
       and: descriptions?.and ?? messageLocalization.format('dxFilterBuilder-and'),
