@@ -65,6 +65,8 @@ export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
   cachedDataPartEnd?: RawItemData[];
   skip?: number;
   take?: number;
+  skips?: (number | undefined)[];
+  takes?: (number | undefined)[];
   mergeStoreLoadData?: boolean;
 }
 
