@@ -1,6 +1,6 @@
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { EditingController } from '../m_editing';
 

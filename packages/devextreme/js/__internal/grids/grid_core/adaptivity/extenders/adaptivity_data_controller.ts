@@ -2,9 +2,9 @@ import { isDefined } from '@js/core/utils/type';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ModuleType, RowKey } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { MasterDetailDataControllerExtension } from '@ts/grids/grid_core/master_detail/m_master_detail';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 
 import {
   ADAPTIVE_ROW_TYPE,

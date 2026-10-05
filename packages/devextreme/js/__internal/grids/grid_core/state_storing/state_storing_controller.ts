@@ -3,7 +3,7 @@ import { isDefined } from '@js/core/utils/type';
 import { extend } from '@ts/core/utils/m_extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/filter_sync';
-import type { InternalGridOptions } from '@ts/grids/grid_core/m_types';
+import type { InternalGridOptions } from '@ts/grids/grid_core/types';
 
 import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
 import { StateStoringController } from './state_storing_controller_core';

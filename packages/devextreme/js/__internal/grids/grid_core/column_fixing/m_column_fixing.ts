@@ -22,9 +22,10 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
+import type { Coordinates } from '../columns_resizing_reordering/types';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import type { ColumnPoint, Coordinates, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import type { ColumnPoint, ModuleType } from '../types';
 import type { ColumnsView } from '../views/m_columns_view';
 import { normalizeWidth } from '../views/m_columns_view';
 import type { ResizingController } from '../views/m_grid_view';

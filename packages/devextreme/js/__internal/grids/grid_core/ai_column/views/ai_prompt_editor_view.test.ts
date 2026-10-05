@@ -14,7 +14,7 @@ import Callbacks from '@js/core/utils/callbacks';
 import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helpers/wrapInstance';
 import { AIPromptEditorModel } from '@ts/grids/grid_core/__tests__/__mock__/model/ai_prompt_editor';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { AIPromptEditor } from '../../ai_prompt_editor/ai_prompt_editor';
 import { AIPromptEditorView } from './ai_prompt_editor_view';

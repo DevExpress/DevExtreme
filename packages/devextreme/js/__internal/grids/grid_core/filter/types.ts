@@ -3,7 +3,7 @@ import type { SearchOperation } from '@js/common/data.types';
 import type { ScalarFilterValue } from '@js/common/grids';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { Controllers } from '@ts/grids/grid_core/m_types';
+import type { Controllers } from '@ts/grids/grid_core/types';
 
 import type { SOURCE_ORDER } from './const';
 

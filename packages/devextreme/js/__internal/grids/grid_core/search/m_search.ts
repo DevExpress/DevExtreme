@@ -13,9 +13,9 @@ import type { DataController } from '../data_controller/data_controller';
 import type { UserState } from '../data_controller/types';
 import type { DataFilter, FilterSourceContext } from '../filter/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
-import modules from '../m_modules';
-import type { ModuleType, OptionChanged } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
+import type { ModuleType, OptionChanged } from '../types';
 import type { RowsView } from '../views/m_rows_view';
 import { allowSearch, createSearchExpression, parseValue } from './utils';
 

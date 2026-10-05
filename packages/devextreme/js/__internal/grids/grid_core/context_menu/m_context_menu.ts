@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import ContextMenu from '@js/ui/context_menu';
 
-import modules from '../m_modules';
+import modules from '../modules/modules';
 
 const CONTEXT_MENU = 'dx-context-menu';
 const GROUP_ROW_CLASS = 'dx-group-row';

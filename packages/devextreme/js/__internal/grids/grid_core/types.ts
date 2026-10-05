@@ -6,21 +6,16 @@ import type { PropertyType } from '@js/core';
 import type { Component } from '@js/core/component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import type { EventInfo } from '@js/events';
 import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 import type { ActionConfig } from '@ts/core/widget/component';
-
-import type { EditingController } from './editing/m_editing';
-import type { FilterValue } from './filter/types';
-import type { ModuleItem } from './m_modules';
+import type { FilterValue } from '@ts/grids/grid_core/filter/types';
+import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
 
 export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never
   ? never
   : PropertyType<T, TProp> | undefined;
-
-export type ExecuteActionArgs<TEvent> = Omit<TEvent, keyof EventInfo<unknown>>;
 
 // Data types
 export type RowKey = unknown;
@@ -28,11 +23,6 @@ export type RowKey = unknown;
 export interface ColumnPoint {
   index: number;
   columnIndex: number;
-  x: number;
-  y: number;
-}
-
-export interface Coordinates {
   x: number;
   y: number;
 }
@@ -269,19 +259,12 @@ export interface Views {
   aiAssistantView: import('./ai_assistant/ai_assistant_view').AIAssistantView;
 }
 
-export interface EditingControllerRequired {
-  editingController: EditingController;
-}
-
 type ViewTypes = {
   [ P in keyof Views ]: new(component: InternalGrid) => Views[P];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixin constructors need any[]
 export type ModuleType<T extends ModuleItem> = (new (...args: any[]) => T);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- each extender has its own Base
-export type ModuleTypeExtender = (Base: ModuleType<any>) => ModuleType<ModuleItem>;
 
 type ControllersExtender = {
   [P in keyof Controllers]: (Base: ModuleType<Controllers[P]>) => ModuleType<Controllers[P]>;
@@ -299,12 +282,6 @@ export interface ModuleItemCallbackFlags {
 
 export type ModuleItemAction = (event?: unknown) => unknown;
 
-export type ComponentInstanceType = Record<string, unknown>;
-
-export type ModuleItemTypeCore = new(
-  componentInstance: ComponentInstanceType,
-) => ModuleItem & { name: string };
-
 export interface Module {
   controllers?: Partial<ControllerTypes>;
   views?: Partial<ViewTypes>;
@@ -313,12 +290,4 @@ export interface Module {
     views?: Partial<ViewsExtender>;
   };
   defaultOptions?: () => InternalGridOptions;
-}
-
-export type RegisteredModule = Module & { name: string };
-
-export interface KeyDownEvent {
-  originalEvent: KeyboardEvent;
-  keyName: string;
-  shift: boolean;
 }
