@@ -11,10 +11,13 @@ import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { Field, Properties as FilterBuilderOptions } from '@js/ui/filter_builder';
-import type { ShownEvent } from '@js/ui/popup';
+import type { Properties as PopupProperties, ShownEvent } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
-import TreeView from '@js/ui/tree_view';
+import TreeView, {
+  type ContentReadyEvent, type ItemClickEvent, type ItemRenderedEvent,
+  type Properties as TreeViewProperties,
+} from '@js/ui/tree_view';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
@@ -97,27 +100,16 @@ interface FilterBuilderProperties extends FilterBuilderOptions {
   closePopupOnTargetScroll: boolean;
 }
 
-interface MenuItemEvent<TItem> {
-  itemData: TItem;
-  itemElement: Element;
-  component: {
-    selectItem: (item: TItem) => void;
-    option: (name: 'items') => TItem[];
-  };
-  event: { type: string };
-}
+type MenuItemEvent<TEvent, TItem> = TEvent & { itemData: TItem };
 
-interface MenuOptions<TItem> {
-  items: TItem[];
-  displayExpr: string;
+type MenuOptions<TItem> = Required<Pick<TreeViewProperties<TItem>, 'items' | 'displayExpr'>>
+& Pick<TreeViewProperties<TItem>, 'keyExpr' | 'dataStructure'>
+& {
   cssClass: string;
-  onItemClick: (e: MenuItemEvent<TItem>) => void;
-  keyExpr?: string;
-  parentId?: string;
-  dataStructure?: string;
-  onItemRendered?: (e: MenuItemEvent<TItem>) => void;
-  onContentReady?: (e: MenuItemEvent<TItem>) => void;
-}
+  onItemClick: (e: MenuItemEvent<ItemClickEvent<TItem>, TItem>) => void;
+  onItemRendered?: (e: MenuItemEvent<ItemRenderedEvent<TItem>, TItem>) => void;
+  onContentReady?: (e: ContentReadyEvent<TItem>) => void;
+};
 
 type MenuPosition = Omit<PositionConfig, 'of'> & { of: dxElementWrapper };
 
@@ -126,22 +118,21 @@ interface AddMenuItem {
   click: () => void;
 }
 
+type PopupOptions = Required<Pick<PopupProperties, 'onShown'>>;
+
 interface ButtonWithMenuOptions<TItem> {
   caption?: string;
-  menu: MenuOptions<TItem> & {
+  menu: MenuOptions<TItem> & Pick<PopupProperties, 'rtlEnabled' | 'onHiding' | 'onHidden'> & {
     id?: Guid;
     position?: MenuPosition;
-    rtlEnabled?: boolean;
     animation?: null;
-    onHiding?: () => void;
-    onHidden?: (...args: unknown[]) => void;
   };
-  popup?: { onShown: (info: ShownEvent) => void };
+  popup?: PopupOptions;
 }
 
 type PopupMenuOptions = ButtonWithMenuOptions<unknown> & {
   menu: { position: MenuPosition };
-  popup: { onShown: (info: ShownEvent) => void };
+  popup: PopupOptions;
 };
 
 interface KeyEvent {
@@ -527,11 +518,11 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     };
     const rtlEnabled = this.option('rtlEnabled');
     const menuOnItemClickWrapper = function (
-      handler: (e: MenuItemEvent<TItem>) => void,
-    ): (e: MenuItemEvent<TItem>) => void {
-      return function (e: MenuItemEvent<TItem>): void {
+      handler: MenuOptions<TItem>['onItemClick'],
+    ): MenuOptions<TItem>['onItemClick'] {
+      return function (e): void {
         handler(e);
-        if (e.event.type === 'dxclick') {
+        if (e.event?.type === 'dxclick') {
           removeMenu();
         }
       };
@@ -702,7 +693,6 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
         items,
         dataStructure: 'plain',
         keyExpr: 'id',
-        parentId: 'parentId',
         displayExpr: 'caption',
         onItemClick: (e) => {
           if (item !== e.itemData) {
@@ -717,6 +707,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
             $fieldButton.siblings().filter(`.${FILTER_BUILDER_ITEM_TEXT_CLASS}`).remove();
             this._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
+            // @ts-expect-error TreeView declares the items option as optional
             const caption = getFullCaption(item, e.component.option('items'));
             // @ts-expect-error text is declared without undefined
             $fieldButton.text(caption);
