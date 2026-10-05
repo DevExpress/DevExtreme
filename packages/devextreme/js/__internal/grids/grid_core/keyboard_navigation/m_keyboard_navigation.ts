@@ -46,10 +46,10 @@ import {
   FOCUSABLE_ELEMENT_SELECTOR,
   ROW_CLASS,
 } from '../editing/const';
-import type {
-  Controllers, KeyDownEvent, ModuleType, RowKey, Views,
-} from '../m_types';
 import gridCoreUtils from '../m_utils';
+import type {
+  Controllers, ModuleType, RowKey, Views,
+} from '../types';
 import type {
   FocusedCellPosition,
   ScrollOffset,
@@ -86,7 +86,9 @@ import {
 import { GridCoreKeyboardNavigationDom } from './dom';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
-import type { NavigationDirection, NavigationElementType, NavigationKeyCode } from './types';
+import type {
+  KeyDownEvent, NavigationDirection, NavigationElementType, NavigationKeyCode,
+} from './types';
 import {
   getInteractiveElement,
   getNextColumnIndex, isCellInHeaderRow,
@@ -3239,7 +3241,7 @@ const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class A
   }
 };
 
-export const keyboardNavigationModule: import('../m_types').Module = {
+export const keyboardNavigationModule: import('../types').Module = {
   defaultOptions() {
     return {
       useLegacyKeyboardNavigation: false,

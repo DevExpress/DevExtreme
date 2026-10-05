@@ -6,11 +6,11 @@ export const OUTPUT_DIR = path.resolve(__dirname, '..', '..', 'artifacts');
 export const MODULE_SUFFIX = 'Module';
 export const MODULES_PREFIX = 'modules.';
 export const MODULE_ITEM_CLASS = 'ModuleItem';
-export const M_MODULES_PATH = 'm_modules';
+export const M_MODULES_PATH = 'modules/modules';
 export const BARE_MODULE_BASES = ['Controller', 'View', 'ViewController'];
 
 export const EXCLUDED_DIRS = new Set(['__tests__', 'scripts', 'new', '__docs__']);
-export const EXCLUDED_FILE_NAMES = new Set(['m_modules.ts']);
+export const EXCLUDED_FILE_NAMES = new Set(['modules.ts']);
 
 const CORE_DIRECTORY_FEATURE_MAP: Record<string, string> = {
   data_controller: 'Data',

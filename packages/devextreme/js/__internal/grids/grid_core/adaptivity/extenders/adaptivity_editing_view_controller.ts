@@ -5,8 +5,8 @@
 /* eslint-disable prefer-rest-params */
 import { Deferred, when } from '@js/core/utils/deferred';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import {
   ADAPTIVE_ROW_TYPE,

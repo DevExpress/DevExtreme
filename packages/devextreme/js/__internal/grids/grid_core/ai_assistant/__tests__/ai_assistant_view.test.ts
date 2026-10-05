@@ -15,7 +15,7 @@ import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helper
 
 import { AIChat } from '../../ai_chat/ai_chat';
 import type { AIChatOptions } from '../../ai_chat/types';
-import type { InternalGrid } from '../../m_types';
+import type { InternalGrid } from '../../types';
 import { AIAssistantView } from '../ai_assistant_view';
 import { createConfirmDialog } from '../utils';
 

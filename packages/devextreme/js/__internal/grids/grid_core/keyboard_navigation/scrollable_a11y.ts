@@ -12,9 +12,10 @@ And to make navigation via Tab key working properly some focus event handlers ar
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
-import type { KeyDownEvent, ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { KeyboardNavigationController } from './m_keyboard_navigation';
+import type { KeyDownEvent } from './types';
 
 // eslint-disable-next-line @stylistic/max-len
 export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavigationController>): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {

@@ -6,7 +6,7 @@ import errors from '@js/ui/widget/ui.errors';
 import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 import ko from 'knockout';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';

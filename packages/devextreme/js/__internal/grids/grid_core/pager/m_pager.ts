@@ -4,7 +4,7 @@ import { hasWindow } from '@js/core/utils/window';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import Pagination from '@ts/pagination/wrappers/pagination';
 
-import modules from '../m_modules';
+import modules from '../modules/modules';
 
 const PAGER_CLASS = 'pager';
 export const MAX_PAGES_COUNT = 10;

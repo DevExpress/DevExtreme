@@ -21,7 +21,7 @@ import {
   beforeTest,
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
-import type { InternalGrid } from '../../m_types';
+import type { InternalGrid } from '../../types';
 import { AIAssistantIntegrationController } from '../ai_assistant_integration_controller';
 import type { GridContext, JsonSchema } from '../types';
 

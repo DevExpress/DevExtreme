@@ -10,7 +10,7 @@ import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
 import { getFilterExpression, removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
-import modules from '@ts/grids/grid_core/m_modules';
+import modules from '@ts/grids/grid_core/modules/modules';
 
 import type { DataFilter, FilterSourceContext } from '../filter/types';
 import { anyOf, noneOf } from '../filter_sync/m_filter_custom_operations';

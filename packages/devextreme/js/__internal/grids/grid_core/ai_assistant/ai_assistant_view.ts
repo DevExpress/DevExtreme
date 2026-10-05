@@ -5,12 +5,12 @@ import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import type { HidingEvent, Properties as PopupProperties } from '@js/ui/popup';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { OptionChanged } from '@ts/grids/grid_core/m_types';
+import type { OptionChanged } from '@ts/grids/grid_core/types';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
-import { View } from '../m_modules';
+import { View } from '../modules/modules';
 import type { AIAssistantController } from './ai_assistant_controller';
 import { AI_ASSISTANT_POPUP_OFFSET, CLASSES } from './const';
 import type { AIMessage } from './types';

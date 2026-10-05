@@ -6,7 +6,7 @@ import type { Properties as TreeListProperties } from '@js/ui/tree_list';
 import TreeList from '@js/ui/tree_list';
 import { selectionByIndexesCommand } from '@ts/grids/grid_core/ai_assistant/commands/selection';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 const CONTAINER_ID = 'treeListContainer';
 

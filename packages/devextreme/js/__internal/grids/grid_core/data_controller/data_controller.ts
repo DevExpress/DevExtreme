@@ -17,11 +17,11 @@ import type {
   ChangedEvent, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import modules from '@ts/grids/grid_core/m_modules';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import modules from '@ts/grids/grid_core/modules/modules';
 import type {
   Controllers, Module, ModuleItemCallbackFlags, OptionChanged, RowKey,
-} from '@ts/grids/grid_core/m_types';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+} from '@ts/grids/grid_core/types';
 
 import type { CustomLoadResult } from '../data_source_adapter/custom_loader';
 import type {

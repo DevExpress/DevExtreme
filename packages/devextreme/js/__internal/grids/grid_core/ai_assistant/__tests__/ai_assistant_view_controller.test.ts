@@ -7,7 +7,7 @@ import {
   jest,
 } from '@jest/globals';
 
-import type { InternalGrid } from '../../m_types';
+import type { InternalGrid } from '../../types';
 import { AIAssistantViewController } from '../ai_assistant_view_controller';
 
 interface MockVisibilityChangedCallback {

@@ -6,7 +6,7 @@ import { AIPromptEditor } from '../../ai_prompt_editor/ai_prompt_editor';
 import type { AIPromptEditorOptions } from '../../ai_prompt_editor/types';
 import type { ColumnsController } from '../../columns_controller/columns_controller';
 import { getColumnHeaderCellSelector } from '../../columns_controller/columns_controller_utils';
-import { View } from '../../m_modules';
+import { View } from '../../modules/modules';
 import { AI_COLUMN_NAME } from '../const';
 import type { AIColumnController } from '../controllers/ai_column_controller';
 import {
