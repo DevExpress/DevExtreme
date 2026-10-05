@@ -340,7 +340,7 @@ function createMenuItems(renderer: ThemeValue, options: ThemeValue): MenuItem[] 
   items = options.formats.reduce((r, format) => {
     r.push(createMenuItem(renderer, options, {
       type: 'exporting',
-      // @ts-expect-error
+      // @ts-expect-error message.d.ts types the formatter returned by getFormatter() without parameters
       text: messageLocalization.getFormatter('vizExport-exportButtonText')(format),
       format,
       itemIndex: r.length,
@@ -365,7 +365,7 @@ export const exportFromMarkup = function (markup, options) {
   options.exportedAction = options.onExported;
   options.fileSavingAction = options.onFileSaving;
   options.margin = isDefined(options.margin) ? options.margin : MARGIN;
-  // @ts-expect-error
+  // @ts-expect-error themes.d.ts requires the theme name; getTheme() without it returns the current theme
   options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor;
   _export(markup, options, getCreatorFunc(options.format));
 };

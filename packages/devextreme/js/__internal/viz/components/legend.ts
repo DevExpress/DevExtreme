@@ -324,7 +324,7 @@ function isCircle(type: ThemeValue): boolean {
 function inRect(rect: ItemRect, x: number, y: number): boolean {
   return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 }
-// @ts-expect-error
+// @ts-expect-error returns true only when the lines do not fit, undefined otherwise
 function checkLinesSize(lines: LegendLine[], layoutOptions: ItemsLayoutOptions, countItems: number, margins: ItemRect): boolean | undefined {
   const position = { x: 0, y: 0 };
   let maxMeasureLength = 0;
@@ -393,7 +393,7 @@ function getInitPositionForDirection(line: LegendLine, layoutOptions: ItemsLayou
 
   return initPosition;
 }
-// @ts-expect-error
+// @ts-expect-error the switch covers every itemTextPosition
 function getPos(layoutOptions: ItemsLayoutOptions): LayoutAlignment {
   switch (layoutOptions.itemTextPosition) {
     case BOTTOM:
@@ -469,7 +469,7 @@ function transpose<T>(array: T[][]): (T | undefined)[][] {
 
   return transposeArray;
 }
-// @ts-expect-error
+// @ts-expect-error the switch covers every position
 function getAlign(position: string): string {
   switch (position) {
     case TOP:
@@ -1345,7 +1345,7 @@ export const plugin = {
     this._legend.dispose();
   },
   customize(constructor: ThemeValue): void {
-    // @ts-expect-error
+    // @ts-expect-error returns the legend item under the point, undefined elsewhere
     constructor.prototype._proxyData.push(function (x, y) {
       if (this._legend.coordsIn(x, y)) {
         const item = this._legend.getItemByCoord(x, y);

@@ -35,7 +35,7 @@ interface LayoutCanvas {
   height: number;
 }
 
-interface LayoutRect {
+interface LayoutBounds {
   left: number;
   top: number;
   right: number;
@@ -81,7 +81,7 @@ function getCellIndex(options: LayoutOptions): number {
   return verticalAlignmentMap[options.verticalAlignment] * 3 + horizontalAlignmentMap[options.horizontalAlignment];
 }
 
-function createCells(canvas: LayoutRect, items: LayoutItem[]): LayoutCell[] {
+function createCells(canvas: LayoutBounds, items: LayoutItem[]): LayoutCell[] {
   const hStep = (canvas.right - canvas.left) / 3;
   const vStep = (canvas.bottom - canvas.top) / 2;
   const h1 = canvas.left;
@@ -243,7 +243,7 @@ function applyCellLayout(cell: LayoutCell, forceMode: boolean | undefined): bool
   return hasHiddenItems;
 }
 
-function applyLayout(canvas: LayoutRect, items: LayoutItem[]): void {
+function applyLayout(canvas: LayoutBounds, items: LayoutItem[]): void {
   const cells = createCells(canvas, items);
   if (adjustCellsAndApplyLayout(cells)) {
     adjustCellsAndApplyLayout(cells, true);

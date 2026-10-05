@@ -233,7 +233,7 @@ const piePointStrategy = {
         [xc, yb],
       ];
     } else {
-      // @ts-expect-error
+      // @ts-expect-error points switches from the rectangle sides to their crossing points
       points = points.map((pair) => pair.map((point) => [
         _round(((point[0] - xc) * cosSin.cos + (point[1] - yc) * cosSin.sin) + xc),
         _round((-(point[0] - xc) * cosSin.sin + (point[1] - yc) * cosSin.cos) + yc),
