@@ -1,13 +1,12 @@
+import type { NativeEventInfo } from '@js/common/core/events';
+import type { KeyDownInfo } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import * as accessibility from '@js/ui/shared/accessibility';
 
 import type { View } from './m_modules';
 
-interface KeyDownArgs {
-  event: unknown;
-  handled: boolean;
-}
+type KeyDownArgs = KeyDownInfo & NativeEventInfo<unknown, KeyboardEvent>;
 
 export const registerKeyboardAction = (
   viewName: string,
