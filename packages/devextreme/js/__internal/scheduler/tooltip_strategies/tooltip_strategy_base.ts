@@ -280,7 +280,6 @@ export abstract class TooltipStrategyBase {
     const itemListContent = this.createItemListContent(appointment, targetedAppointment, color);
     this._options.addDefaultTemplates({
       appointmentTooltip: new FunctionTemplate(
-        // @ts-expect-error
         (options: { container: DxElement }): dxElementWrapper => {
           const $container = $(options.container);
           $container.append(itemListContent);
@@ -301,8 +300,7 @@ export abstract class TooltipStrategyBase {
   ): FunctionTemplate {
     const isButtonClicked = Boolean(this.extraOptions?.isButtonClick);
 
-    // @ts-expect-error
-    return new FunctionTemplate((options: { container: DxElement }): DxElement => {
+    return new FunctionTemplate((options: { container: DxElement }): dxElementWrapper => {
       // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
       const { promise, resolve } = createPromise<void>();
       this.asyncTemplatePromises.add(promise);
@@ -313,7 +311,6 @@ export abstract class TooltipStrategyBase {
           isButtonClicked,
         },
         container: options.container,
-        // @ts-expect-error
         index,
         onRendered: () => {
           this.asyncTemplatePromises.delete(promise);

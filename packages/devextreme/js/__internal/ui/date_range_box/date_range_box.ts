@@ -283,8 +283,7 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
 
   _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
-      // @ts-expect-error should be fixed in FunctionTemplate definition
-      dropDownButton: new FunctionTemplate((options) => {
+      dropDownButton: new FunctionTemplate((options: { container: Element }) => {
         const $icon = $('<div>').addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
         $(options.container).append($icon);
       }),
