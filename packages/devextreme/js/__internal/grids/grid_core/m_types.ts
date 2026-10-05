@@ -280,6 +280,9 @@ type ViewTypes = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixin constructors need any[]
 export type ModuleType<T extends ModuleItem> = (new (...args: any[]) => T);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- each extender has its own Base
+export type ModuleTypeExtender = (Base: ModuleType<any>) => ModuleType<ModuleItem>;
+
 type ControllersExtender = {
   [P in keyof Controllers]: (Base: ModuleType<Controllers[P]>) => ModuleType<Controllers[P]>;
 };

@@ -12,7 +12,6 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
-import { grep } from '@ts/core/utils/m_common';
 import type { ActionConfig } from '@ts/core/widget/component';
 
 import type {
@@ -26,6 +25,8 @@ import type {
   ModuleItemAction,
   ModuleItemCallbackFlags,
   ModuleItemTypeCore,
+  ModuleType,
+  ModuleTypeExtender,
   OptionChanged,
   RegisteredModule,
   Views,
@@ -402,12 +403,10 @@ export class View extends ModuleItem {
 
 const MODULES_ORDER_MAX_INDEX = 1000000;
 
-type ModuleTypeExtender = (Base: ModuleType<any>) => ModuleType<any>;
-
 function getExtendedTypes(
-  types: Record<string, ModuleType<any>>,
+  types: Record<string, ModuleType<ModuleItem>>,
   moduleExtenders: Record<string, ModuleTypeExtender | undefined> = {},
-): Record<string, ModuleType<any>> {
+): Record<string, ModuleType<ModuleItem>> {
   const extendTypes = { };
   Object.entries(moduleExtenders)
     .forEach(([name, extender]) => {
@@ -576,12 +575,8 @@ export default {
     this.modulesOrder = moduleNames;
   },
 
-  unregisterModule(name: string): void {
-    this.modules = grep(
-      this.modules,
-      (module: RegisteredModule) => module.name !== name,
-      false,
-    );
+  unregisterModule(this: { modules: RegisteredModule[] }, name: string): void {
+    this.modules = this.modules.filter((module) => module.name !== name);
   },
 
   processModules,
