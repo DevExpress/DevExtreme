@@ -481,7 +481,7 @@ export let Point = class Point {
 
       if (oldType) {
         this._checkLabelsChanging(oldType, newType) && this.deleteLabel();
-        this._resetType(mixins[pointTypes[oldType]]);
+        this._resetType(mixins[pointTypes[widgetType][oldType]]);
       }
       this._setType(mixins[newPointTypeMixin]);
     } else {
