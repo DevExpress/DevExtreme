@@ -103,8 +103,6 @@ interface FilterBuilderProperties extends FilterBuilderOptions {
   customOperations: CustomOperation[];
   allowHierarchicalFields: boolean;
   closePopupOnTargetScroll: boolean;
-  groupOperationDescriptions: NonNullable<FilterBuilderOptions['groupOperationDescriptions']>;
-  filterOperationDescriptions: NonNullable<FilterBuilderOptions['filterOperationDescriptions']>;
 }
 
 interface MenuItemEvent<TItem> {
@@ -320,11 +318,9 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
   }
 
   _initCustomOperations(): void {
-    const { between } = this.option('filterOperationDescriptions');
-
     this._customOperations = getMergedOperations(
       this.option('customOperations'),
-      between,
+      this.option('filterOperationDescriptions')?.between,
       this,
     );
   }
@@ -785,10 +781,10 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     let groupOperations: string[] = this.option('groupOperations');
     const descriptions = this.option('groupOperationDescriptions');
     const groupOperationDescriptions: Record<string, string> = {
-      and: descriptions.and ?? messageLocalization.format('dxFilterBuilder-and'),
-      or: descriptions.or ?? messageLocalization.format('dxFilterBuilder-or'),
-      notAnd: descriptions.notAnd ?? messageLocalization.format('dxFilterBuilder-notAnd'),
-      notOr: descriptions.notOr ?? messageLocalization.format('dxFilterBuilder-notOr'),
+      and: descriptions?.and ?? messageLocalization.format('dxFilterBuilder-and'),
+      or: descriptions?.or ?? messageLocalization.format('dxFilterBuilder-or'),
+      notAnd: descriptions?.notAnd ?? messageLocalization.format('dxFilterBuilder-notAnd'),
+      notOr: descriptions?.notOr ?? messageLocalization.format('dxFilterBuilder-notOr'),
     };
 
     if (!groupOperations || !groupOperations.length) {
