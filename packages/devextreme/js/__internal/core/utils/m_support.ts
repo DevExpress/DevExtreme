@@ -7,32 +7,32 @@ import { callOnce } from '@ts/core/utils/call_once';
 const {
   maxTouchPoints,
 } = getNavigator();
-const transitionEndEventNames = {
+const transitionEndEventNames: Record<string, string> = {
   webkitTransition: 'webkitTransitionEnd',
   MozTransition: 'transitionend',
   OTransition: 'oTransitionEnd',
   transition: 'transitionend',
 };
 
-const supportProp = function (prop) {
+const supportProp = function (prop: string): boolean {
   return !!styleProp(prop);
 };
 
-const isNativeScrollingSupported = function () {
+const isNativeScrollingSupported = function (): boolean {
   const { platform, mac: isMac } = devices.real();
   const isNativeScrollDevice = platform === 'ios' || platform === 'android' || isMac;
 
   return isNativeScrollDevice;
 };
 
-const inputType = function (type) {
+const inputType = function (type?: string): boolean {
   if (type === 'text') {
     return true;
   }
 
   const input = domAdapter.createElement('input');
   try {
-    input.setAttribute('type', type);
+    input.setAttribute('type', type as string);
     // @ts-expect-error need smarter typing
     input.value = 'wrongValue';
     // @ts-expect-error need smarter typing
@@ -42,11 +42,15 @@ const inputType = function (type) {
   }
 };
 
-const detectTouchEvents = function (hasWindowProperty, maxTouchPoints) {
-  return (hasWindowProperty('ontouchstart') || !!maxTouchPoints) && !hasWindowProperty('callPhantom');
+const detectTouchEvents = function (
+  hasWindowProperty: (property: string) => boolean,
+  touchPointsCount?: number,
+): boolean {
+  return (hasWindowProperty('ontouchstart') || !!touchPointsCount)
+    && !hasWindowProperty('callPhantom');
 };
 
-const detectPointerEvent = function (hasWindowProperty) {
+const detectPointerEvent = function (hasWindowProperty: (property: string) => boolean): boolean {
   return hasWindowProperty('PointerEvent');
 };
 
@@ -69,10 +73,12 @@ export {
   touchEvents,
 };
 
-export const touch = touchEvents || pointerEvents && touchPointersPresent;
-export const transition = callOnce(function () { return supportProp('transition'); });
-export const transitionEndEventName = callOnce(function () { return transitionEndEventNames[styleProp('transition')]; });
-export const animation = callOnce(function () { return supportProp('animation'); });
+export const touch = touchEvents || (pointerEvents && touchPointersPresent);
+export const transition = callOnce(() => supportProp('transition'));
+export const transitionEndEventName = callOnce(
+  () => transitionEndEventNames[styleProp('transition')],
+);
+export const animation = callOnce(() => supportProp('animation'));
 export const nativeScrolling = isNativeScrollingSupported();
 
 export default {
