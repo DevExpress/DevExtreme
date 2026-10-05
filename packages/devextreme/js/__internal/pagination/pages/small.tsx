@@ -46,11 +46,20 @@ export class PagesSmall extends InfernoComponent<PaginationSmallPropsType> {
   }
 
   createEffects(): InfernoEffect[] {
-    return [new InfernoEffect(this.updateWidth, [this.state.minWidth])];
+    return [new InfernoEffect(this.updateWidth, this.getEffectDependencies())];
   }
 
   updateEffects(): void {
-    this._effects[0]?.update([this.state.minWidth]);
+    this._effects[0]?.update(this.getEffectDependencies());
+  }
+
+  getEffectDependencies(): unknown[] {
+    return [
+      this.props,
+      this.state.minWidth,
+      this.props.pageCount,
+      this.props.pageIndex,
+    ];
   }
 
   updateWidth(): void {

@@ -2,15 +2,19 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
+import { themeReadyCallback } from '@ts/ui/m_themes_callback';
+import { isPendingThemeLoaded } from '@ts/ui/themes';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { isDefined } from '../../core/utils/type';
-import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
+import type { DisposeEffectReturn, EffectReturn } from '../core/r1/utils/effect_return';
 import { PaginationDefaultProps, type PaginationProps } from './common/pagination_props';
 import type { RefObject } from './common/types';
 import type { PaginationContentProps } from './content';
-import { getElementContentWidth, getElementStyle, getElementWidth } from './utils/get_element_width';
+import {
+  getElementContentWidth, getElementStyle, getElementWidth, isElementBlockLevel,
+} from './utils/get_element_width';
 
 interface ChildElements<T> { allowedPageSizes: T; pages: T; info: T }
 interface MainElements<T> { parent: T; allowedPageSizes: T; pages: T }
@@ -30,6 +34,12 @@ export function calculateInfoTextVisible({
 }: AllElements<number>): boolean {
   const minimalWidth = pageSizesWidth + pagesWidth + infoWidth;
   return parentWidth - minimalWidth > 0;
+}
+
+export function isLayoutApplied({
+  allowedPageSizes, pages,
+}: Omit<MainElements<HTMLElement | null | undefined>, 'parent'>): boolean {
+  return [allowedPageSizes, pages].every((element) => !element || !isElementBlockLevel(element));
 }
 
 function getElementsWidth({
@@ -82,6 +92,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
   constructor(props) {
     super(props);
     this.subscribeToResize = this.subscribeToResize.bind(this);
+    this.subscribeToThemeReady = this.subscribeToThemeReady.bind(this);
     this.effectUpdateChildProps = this.effectUpdateChildProps.bind(this);
     this.updateAdaptivityProps = this.updateAdaptivityProps.bind(this);
   }
@@ -102,7 +113,9 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
         this.state.isLargeDisplayMode,
         this.props.paginationProps,
         this.props.contentTemplate,
-      ])];
+      ]),
+      new InfernoEffect(this.subscribeToThemeReady, []),
+    ];
   }
 
   updateEffects(): void {
@@ -124,6 +137,19 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
     };
     resizeCallbacks.add(callback);
     return (): void => { resizeCallbacks.remove(callback); };
+  }
+
+  subscribeToThemeReady(): EffectReturn {
+    if (isPendingThemeLoaded()) {
+      return undefined;
+    }
+    const callback = (): void => {
+      if (this.getParentWidth() > 0) {
+        this.updateAdaptivityProps();
+      }
+    };
+    themeReadyCallback.add(callback);
+    return (): void => { themeReadyCallback.remove(callback); };
   }
 
   effectUpdateChildProps(): void {
@@ -228,6 +254,12 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
     });
     if (this.actualInfoTextVisible !== this.state.infoTextVisible
       || this.actualIsLargeDisplayMode !== this.state.isLargeDisplayMode) {
+      return;
+    }
+    if (!isLayoutApplied({
+      allowedPageSizes: this.allowedPageSizesRef?.current,
+      pages: this.pagesRef?.current,
+    })) {
       return;
     }
     const isEmpty = !isDefined(this.elementsWidth);
