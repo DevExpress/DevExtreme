@@ -8,9 +8,9 @@ import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import type { DeferredObj } from '../../../../core/utils/deferred';
-import modules from '../m_modules';
 import type { Controllers, OptionChanged, Views } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import { Direction } from './const';
 import type { NavigationDirection } from './types';
 import { isElementDefined, isFixedColumnIndexOffsetRequired } from './utils';

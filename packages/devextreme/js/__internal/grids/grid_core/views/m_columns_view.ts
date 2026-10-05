@@ -37,8 +37,8 @@ import type { SelectionController } from '@ts/grids/grid_core/selection/m_select
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { DataController } from '../data_controller/data_controller';
-import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import { CLASSES } from './const';
 import type { ColumnViewTemplate } from './types';
 

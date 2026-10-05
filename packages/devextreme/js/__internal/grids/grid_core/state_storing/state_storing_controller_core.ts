@@ -11,8 +11,8 @@ import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { ExportController } from '@ts/grids/data_grid/export/m_export';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import modules from '@ts/grids/grid_core/m_modules';
 import type { OptionChanged } from '@ts/grids/grid_core/m_types';
+import modules from '@ts/grids/grid_core/modules/modules';
 
 import type { PersistentState } from './types';
 

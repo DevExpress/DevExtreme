@@ -1,6 +1,6 @@
 import type { Properties as ToastProperties } from '@js/ui/toast';
 
-import { ViewController } from '../m_modules';
+import { ViewController } from '../modules/modules';
 import type { ToastView } from './toast_view';
 
 export class ToastViewController extends ViewController {

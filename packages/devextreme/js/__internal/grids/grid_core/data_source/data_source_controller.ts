@@ -11,8 +11,8 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_da
 import type {
   DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData, RemoteOperationsOptions,
 } from '@ts/grids/grid_core/data_source_adapter/types';
-import modules from '@ts/grids/grid_core/m_modules';
 import type { RowKey } from '@ts/grids/grid_core/m_types';
+import modules from '@ts/grids/grid_core/modules/modules';
 
 export class DataSourceController<
   TAdapter extends DataSourceAdapter = DataSourceAdapter,

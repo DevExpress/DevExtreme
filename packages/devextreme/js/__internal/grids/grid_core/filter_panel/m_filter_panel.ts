@@ -16,9 +16,9 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/c
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
-import modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridUtils from '@ts/grids/grid_core/m_utils';
+import modules from '@ts/grids/grid_core/modules/modules';
 
 import type { FilterBuilderController } from '../filter_builder/m_filter_builder';
 

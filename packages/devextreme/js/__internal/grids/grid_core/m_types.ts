@@ -14,7 +14,7 @@ import type { ActionConfig } from '@ts/core/widget/component';
 
 import type { EditingController } from './editing/m_editing';
 import type { FilterValue } from './filter/types';
-import type { ModuleItem } from './m_modules';
+import type { ModuleItem } from './modules/modules';
 
 export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never
   ? never
@@ -280,9 +280,6 @@ type ViewTypes = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mixin constructors need any[]
 export type ModuleType<T extends ModuleItem> = (new (...args: any[]) => T);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- each extender has its own Base
-export type ModuleTypeExtender = (Base: ModuleType<any>) => ModuleType<ModuleItem>;
-
 type ControllersExtender = {
   [P in keyof Controllers]: (Base: ModuleType<Controllers[P]>) => ModuleType<Controllers[P]>;
 };
@@ -299,12 +296,6 @@ export interface ModuleItemCallbackFlags {
 
 export type ModuleItemAction = (event?: unknown) => unknown;
 
-export type ComponentInstanceType = Record<string, unknown>;
-
-export type ModuleItemTypeCore = new(
-  componentInstance: ComponentInstanceType,
-) => ModuleItem & { name: string };
-
 export interface Module {
   controllers?: Partial<ControllerTypes>;
   views?: Partial<ViewTypes>;
@@ -314,8 +305,6 @@ export interface Module {
   };
   defaultOptions?: () => InternalGridOptions;
 }
-
-export type RegisteredModule = Module & { name: string };
 
 export interface KeyDownEvent {
   originalEvent: KeyboardEvent;

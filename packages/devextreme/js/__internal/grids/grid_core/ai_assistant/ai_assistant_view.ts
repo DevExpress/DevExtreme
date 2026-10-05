@@ -10,7 +10,7 @@ import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 import { AIChat } from '../ai_chat/ai_chat';
 import type { AIChatOptions } from '../ai_chat/types';
-import { View } from '../m_modules';
+import { View } from '../modules/modules';
 import type { AIAssistantController } from './ai_assistant_controller';
 import { AI_ASSISTANT_POPUP_OFFSET, CLASSES } from './const';
 import type { AIMessage } from './types';

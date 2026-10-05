@@ -9,7 +9,7 @@ import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_pane
 import type { OptionChanged } from '@ts/grids/grid_core/m_types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
-import { ViewController } from '../m_modules';
+import { ViewController } from '../modules/modules';
 import type { AIAssistantView } from './ai_assistant_view';
 import { isEnabledOption, isTitleOption } from './utils';
 

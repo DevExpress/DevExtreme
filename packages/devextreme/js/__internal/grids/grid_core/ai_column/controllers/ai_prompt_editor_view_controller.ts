@@ -1,6 +1,6 @@
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import { ViewController } from '../../m_modules';
+import { ViewController } from '../../modules/modules';
 import type { AIPromptEditorView } from '../views/ai_prompt_editor_view';
 
 export class AIPromptEditorViewController extends ViewController {

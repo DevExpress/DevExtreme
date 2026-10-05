@@ -34,9 +34,9 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
 import type { NormalizedEditCellOptions } from '../editing/types';
-import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import {
   INVALIDATE_CLASS,
   VALIDATION_CANCELLED,

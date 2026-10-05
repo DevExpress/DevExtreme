@@ -15,7 +15,6 @@ import errors from '@js/ui/widget/ui.errors';
 import type { ActionConfig } from '@ts/core/widget/component';
 
 import type {
-  ComponentInstanceType,
   Controllers,
   CreateComponentOptions,
   GridPropertyType,
@@ -24,15 +23,18 @@ import type {
   Module,
   ModuleItemAction,
   ModuleItemCallbackFlags,
-  ModuleItemTypeCore,
   ModuleType,
-  ModuleTypeExtender,
   OptionChanged,
-  RegisteredModule,
   Views,
-} from './m_types';
-import type { ViewsWithBorder } from './views/utils/update_views_borders';
-import { updateViewsBorders } from './views/utils/update_views_borders';
+} from '../m_types';
+import type {
+  ComponentInstanceType,
+  ModuleItemTypeCore,
+  ModuleTypeExtender,
+  RegisteredModule,
+  ViewsWithBorder,
+} from './types';
+import { updateViewsBorders } from './update_views_borders';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
