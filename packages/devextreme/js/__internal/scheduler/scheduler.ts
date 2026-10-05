@@ -65,18 +65,16 @@ import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
+import type AppointmentDragBehavior from './appointment_drag_behavior';
 import type { AppointmentFormConfig } from './appointment_popup/form';
 import { AppointmentForm } from './appointment_popup/form';
 import { AppointmentPopup } from './appointment_popup/popup';
-import AppointmentCollection, { type AppointmentCollectionOptions } from './appointments/m_appointment_collection';
+import AppointmentCollection, { type AppointmentCollectionOptions } from './appointments/appointment_collection';
 import NotifyScheduler from './base/widget_notify_scheduler';
+import { CompactAppointmentsHelper } from './compact_appointments_helper';
 import { SchedulerHeader } from './header/header';
 import type { HeaderOptions } from './header/types';
 import { hide as hideLoading, show as showLoading } from './loading';
-import type AppointmentDragBehavior from './m_appointment_drag_behavior';
-import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
-import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
-import subscribes from './m_subscribes';
 import { combineRemoteFilter } from './r1/filterting/remote';
 import { createTimeZoneCalculator, type TimeZoneCalculator } from './r1/timezone_calculator/index';
 import {
@@ -88,6 +86,8 @@ import {
 } from './r1/utils/index';
 import { validateRRule } from './recurrence/validate_rule';
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
+import type { SubscribeKey, SubscribeMethods } from './subscribes';
+import subscribes from './subscribes';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobile_tooltip_strategy';
 import type { AppointmentTooltipExtraOptions, AppointmentTooltipOptions } from './tooltip_strategies/tooltip_strategy_base';
@@ -115,9 +115,9 @@ import { getAppointmentGroupValues, setAppointmentGroupValues } from './utils/re
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import type { GroupValues } from './utils/resource_manager/types';
 import timeZoneUtils, { type TimezoneLabel } from './utils_time_zone';
+import { AppointmentDataSource } from './view_model/appointment_data_source';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
 import type { CollectorCSS, RealSize } from './view_model/generate_view_model/steps/add_geometry/types';
-import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentItemViewModel, AppointmentViewModelPlain, PanelName } from './view_model/types';
 import SchedulerAgenda from './workspaces/agenda';
 import type { PositionHelper } from './workspaces/helpers/position_helper';

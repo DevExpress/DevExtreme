@@ -2,7 +2,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import { isDefined } from '@js/core/utils/type';
 
 import { formatImplicitSchedulerDate, formatImplicitSchedulerTime } from '../../utils/global_formats';
-import type { AppointmentProperties } from './m_types';
+import type { AppointmentProperties } from './types';
 
 const localizeDate = (date: Date): string => formatImplicitSchedulerDate(date);
 const localizeTime = (date: Date): string => formatImplicitSchedulerTime(date);

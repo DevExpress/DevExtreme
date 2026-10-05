@@ -5,7 +5,7 @@ import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import themes from 'ui/themes';
-import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appointments_helper';
+import { CompactAppointmentsHelper } from '__internal/scheduler/compact_appointments_helper';
 import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
 

@@ -37,8 +37,8 @@ import {
   APPOINTMENT_ITEM_CLASS,
 } from '../classes';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
-import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import type { TimeZoneCalculator } from '../r1/timezone_calculator/index';
+import type { SubscribeKey, SubscribeMethods } from '../subscribes';
 import type { DesktopTooltipStrategy } from '../tooltip_strategies/desktop_tooltip_strategy';
 import type { MobileTooltipStrategy } from '../tooltip_strategies/mobile_tooltip_strategy';
 import type {
@@ -59,7 +59,7 @@ import { getAppointmentGroupValues } from '../utils/resource_manager/appointment
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import timeZoneUtils from '../utils_time_zone';
-import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
+import type { AppointmentDataSource } from '../view_model/appointment_data_source';
 import type {
   AppointmentAgendaViewModel,
   AppointmentCollectorViewModel,
@@ -69,11 +69,11 @@ import type {
 } from '../view_model/types';
 import type ViewDataProvider from '../workspaces/view_model/view_data_provider';
 import { AgendaAppointment } from './appointment/agenda_appointment';
-import { Appointment } from './appointment/m_appointment';
-import type { AppointmentProperties } from './appointment/m_types';
-import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
-import { AppointmentsKeyboardNavigation } from './m_appointments_kbn';
-import { getAppointmentDateRange } from './resizing/m_core';
+import { Appointment } from './appointment/appointment';
+import type { AppointmentProperties } from './appointment/types';
+import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointment_layout';
+import { AppointmentsKeyboardNavigation } from './appointments_kbn';
+import { getAppointmentDateRange } from './resizing/core';
 import type { DateRange } from './resizing/types';
 import { isNeedToAdd } from './utils/get_arrays_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
