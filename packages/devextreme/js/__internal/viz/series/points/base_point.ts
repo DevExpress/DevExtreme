@@ -199,7 +199,7 @@ export let Point = class Point {
 
   declare _updateLabelData: () => void;
 
-  declare _updateLabelOptions: (type: string) => void;
+  declare _updateLabelOptions: () => void;
 
   declare _hasGraphic: () => boolean;
 
@@ -277,7 +277,7 @@ export let Point = class Point {
 
   declare getMaxValue: (noErrorBar?: boolean) => ThemeValue;
 
-  declare _drawErrorBar: (renderer: ThemeValue, group: ThemeValue, animationEnabled?: boolean) => void;
+  declare _drawErrorBar: (renderer: ThemeValue, group: ThemeValue) => void;
 
   declare getMarkerVisibility: () => boolean;
 
@@ -362,7 +362,7 @@ export let Point = class Point {
 
     this._drawLabel();
 
-    this._drawErrorBar(renderer, groups.errorBars, animationEnabled);
+    this._drawErrorBar(renderer, groups.errorBars);
     return this;
   }
 
@@ -492,7 +492,7 @@ export let Point = class Point {
     this._options = newOptions;
 
     this._fillStyle();
-    this._updateLabelOptions(newPointTypeMixin);
+    this._updateLabelOptions();
   }
 
   translate(): void {

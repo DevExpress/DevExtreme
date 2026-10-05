@@ -1055,7 +1055,6 @@ class RangeSelector extends BaseWidget {
     this._rangeView = new RangeView({
       renderer,
       root: rangeViewGroup,
-      translator: this._axis.getTranslator(),
     });
 
     this._slidersController = new SlidersController({

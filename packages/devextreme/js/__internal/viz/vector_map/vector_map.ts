@@ -449,10 +449,10 @@ class VectorMap extends BaseWidget {
     return layer ? layer.proxy : null;
   }
 
-  clearSelection(noEvent?: boolean): this {
+  clearSelection(): this {
     const layers: ThemeValue[] = this._layerCollection.items();
     layers.forEach((layer) => {
-      layer.clearSelection(noEvent);
+      layer.clearSelection();
     });
     return this;
   }

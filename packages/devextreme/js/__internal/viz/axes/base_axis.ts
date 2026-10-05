@@ -2234,7 +2234,7 @@ export let Axis = class Axis {
     let interval = 0;
     let rangeInterval;
 
-    if (dataRange.stubData || !screenDelta) {
+    if (!screenDelta) {
       return {
         startPadding: 0,
         endPadding: 0,
