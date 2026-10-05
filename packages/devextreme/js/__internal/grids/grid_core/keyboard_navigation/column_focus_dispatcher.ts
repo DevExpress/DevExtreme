@@ -1,6 +1,6 @@
 import { isDefined } from '@js/core/utils/type';
 
-import { Controller } from '../m_modules';
+import { Controller } from '../modules/modules';
 import type { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
 
 export class ColumnFocusDispatcher extends Controller {

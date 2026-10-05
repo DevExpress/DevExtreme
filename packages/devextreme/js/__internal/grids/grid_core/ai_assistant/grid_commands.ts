@@ -10,7 +10,7 @@ import {
 } from '@ts/grids/grid_core/ai_assistant/const';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
-import type { InternalGrid } from '../m_types';
+import type { InternalGrid } from '../types';
 import type {
   CommandCallbacks,
   CommandResult,

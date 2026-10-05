@@ -8,7 +8,6 @@ import { isDefined } from '@js/core/utils/type';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {
@@ -16,6 +15,7 @@ import {
   selectionRowsViewExtender,
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import treeListCore from '../core';

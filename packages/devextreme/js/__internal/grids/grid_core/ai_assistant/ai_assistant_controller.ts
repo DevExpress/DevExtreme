@@ -11,7 +11,7 @@ import { isFunction, isString } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 
-import { Controller } from '../m_modules';
+import { Controller } from '../modules/modules';
 import { AIAssistantIntegrationController } from './ai_assistant_integration_controller';
 import { coreCommands } from './commands/index';
 import { AI_ASSISTANT_AUTHOR, AI_ASSISTANT_AUTHOR_ID, MessageStatus } from './const';

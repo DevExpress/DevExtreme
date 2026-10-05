@@ -16,12 +16,12 @@ import { isMaterial } from '@js/ui/themes';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import modules from '../m_modules';
-import type { RowKey } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
+import type { RowKey } from '../types';
 import type { RowsView } from '../views/m_rows_view';
 import {
   ADAPTIVE_COLUMN_BUTTON_CLASS,
@@ -463,12 +463,14 @@ export class AdaptiveColumnsController extends modules.ViewController {
       const view = this.getView(COLUMN_VIEWS[i]);
       if (view && view.isVisible() && view.element()) {
         const viewName = view.name;
+        // @ts-expect-error the view is rendered here
         const $hiddenCommandCells = view.element().find(`.${COMMAND_ADAPTIVE_HIDDEN_CLASS}`);
         this._showHiddenCellsInView({
           viewName,
           $cells: $hiddenCommandCells,
           isCommandColumn: true,
         });
+        // @ts-expect-error the view is rendered here
         const $hiddenCells = view.element().find(`.${this.addWidgetPrefix(HIDDEN_COLUMN_CLASS)}`);
         this._showHiddenCellsInView({
           viewName,

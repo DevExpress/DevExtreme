@@ -8,10 +8,10 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { GroupData } from '@js/ui/data_grid';
 import type { DataSource } from '@ts/data/data_source/data_source';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
-import type { RawItemData, RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { EditingControllerRequired, ModuleType } from '@ts/grids/grid_core/m_types';
+import type { RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
 import type { EditingController } from '../../grid_core/editing/m_editing';
@@ -30,7 +30,7 @@ import {
   DATAGRID_TOTAL_FOOTER_CLASS,
   DATAGRID_TOTAL_FOOTER_ROW_TYPE,
 } from './const';
-import type { Aggregate, SummaryOptions } from './types';
+import type { Aggregate, EditingControllerRequired, SummaryOptions } from './types';
 import { getSummaryOptions } from './utils/get_summary_options';
 
 export type SummaryDataSourceAdapter = InstanceType<ReturnType<typeof summaryDataSourceAdapterExtender>>;
@@ -173,6 +173,7 @@ export class FooterView extends ColumnsView {
     const totalItem = this._dataController.footerItems()[0];
 
     if (!change || !change.columnIndices) {
+      // @ts-expect-error the view is rendered here
       this.element()
         .empty()
         .addClass(DATAGRID_TOTAL_FOOTER_CLASS)

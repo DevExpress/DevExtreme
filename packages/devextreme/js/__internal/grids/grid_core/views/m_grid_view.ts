@@ -21,15 +21,15 @@ import { A11yStatusContainerComponent } from '@ts/grids/grid_core/views/a11y_sta
 import type { FooterView } from '../../data_grid/summary/m_summary';
 import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import { GROUP_COMMAND_COLUMN_NAME } from '../columns_controller/const';
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { Column } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
-import modules from '../m_modules';
-import type { SelectionRange } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
+import type { SelectionRange } from '../types';
 import type { RowsView } from './m_rows_view';
 import type { ColumnWidth } from './types';
 

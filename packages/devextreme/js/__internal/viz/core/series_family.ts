@@ -11,10 +11,8 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -29,8 +27,36 @@ import { extend } from '@js/core/utils/extend';
 import { each as _each } from '@js/core/utils/iterator';
 import { sign } from '@js/core/utils/math';
 import { isDefined, isNumeric } from '@js/core/utils/type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 import { map as _map, normalizeEnum as _normalizeEnum } from './utils';
+
+interface SeriesFamilyOptions {
+  type: string;
+  pane?: string;
+  minBubbleSize?: number;
+  maxBubbleSize?: number;
+  barGroupPadding?: number;
+  barGroupWidth?: number;
+  negativesAsZeroes?: boolean;
+  rotated?: boolean;
+}
+
+interface BarParameters {
+  width: number;
+  spacing: number;
+  middleIndex: number;
+  rawWidth: number;
+}
+
+type StackValues = Record<string, Record<string, number>>;
+
+interface StackKeepers {
+  positive: StackValues;
+  negative: StackValues;
+}
+
+type StackIndexCallback = (index: number, stackCount: number) => number;
 
 const {
   round, abs, sqrt,
@@ -39,19 +65,19 @@ const _min = Math.min;
 
 const DEFAULT_BAR_GROUP_PADDING = 0.3;
 
-function validateBarPadding(barPadding) {
+function validateBarPadding(barPadding: ThemeValue): ThemeValue {
   return barPadding < 0 || barPadding > 1 ? undefined : barPadding;
 }
 
-function validateBarGroupPadding(barGroupPadding) {
+function validateBarGroupPadding(barGroupPadding: number): number {
   return barGroupPadding < 0 || barGroupPadding > 1 ? DEFAULT_BAR_GROUP_PADDING : barGroupPadding;
 }
 
-function isStackExist(series, arg) {
+function isStackExist(series: ThemeValue[], arg: ThemeValue): boolean {
   return series.some((s) => !s.getOptions().ignoreEmptyPoints || s.getPointsByArg(arg, true).some((point) => point.hasValue()));
 }
 
-function correctStackCoordinates(series, currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback) {
+function correctStackCoordinates(series: ThemeValue[], currentStacks: string[], arg: ThemeValue, stack: string, parameters: BarParameters, barsArea: number, seriesStackIndexCallback: StackIndexCallback): void {
   series.forEach((series) => {
     const stackIndex = seriesStackIndexCallback(currentStacks.indexOf(stack), currentStacks.length);
     const points = series.getPointsByArg(arg, true);
@@ -77,13 +103,13 @@ function correctStackCoordinates(series, currentStacks, arg, stack, parameters, 
   });
 }
 
-function getStackName(series) {
+function getStackName(series: ThemeValue): ThemeValue {
   return series.getStackName() || series.getBarOverlapGroup();
 }
 
-function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback) {
-  const commonStacks = [];
-  const allArguments = [];
+function adjustBarSeriesDimensionsCore(series: ThemeValue[], options: ThemeValue, seriesStackIndexCallback: StackIndexCallback): void {
+  const commonStacks: string[] = [];
+  const allArguments: ThemeValue[] = [];
   const seriesInStacks = {};
   const barGroupWidth = options.barGroupWidth;
   const argumentAxis = series[0]?.getArgumentAxis();
@@ -108,15 +134,11 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     let argument;
 
     for (argument in s.pointsByArgument) {
-      // @ts-expect-error
       if (!allArguments.includes(argument.valueOf())) {
-        // @ts-expect-error
         allArguments.push(argument.valueOf());
       }
     }
-    // @ts-expect-error
     if (!commonStacks.includes(stackName)) {
-      // @ts-expect-error
       commonStacks.push(stackName);
       seriesInStacks[stackName] = [];
     }
@@ -124,7 +146,7 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
   });
 
   allArguments.forEach((arg) => {
-    const currentStacks = commonStacks.reduce((stacks, stack) => {
+    const currentStacks = commonStacks.reduce<string[]>((stacks, stack) => {
       if (isStackExist(seriesInStacks[stack], arg)) {
         stacks.push(stack);
       }
@@ -139,7 +161,7 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
   });
 }
 
-function calculateParams(barsArea, count, percentWidth?, fixedBarWidth?) {
+function calculateParams(barsArea: number, count: number, percentWidth?: number, fixedBarWidth?: number): BarParameters {
   let spacing;
   let width;
 
@@ -159,12 +181,12 @@ function calculateParams(barsArea, count, percentWidth?, fixedBarWidth?) {
   };
 }
 
-function getOffset(stackIndex, parameters) {
+function getOffset(stackIndex: number, parameters: BarParameters): number {
   const width = parameters.rawWidth < 1 ? parameters.rawWidth : parameters.width;
   return ((stackIndex - parameters.middleIndex) + 0.5) * width - (((parameters.middleIndex - stackIndex) - 0.5) * parameters.spacing);
 }
 
-function correctPointCoordinates(points, width, offset) {
+function correctPointCoordinates(points: ThemeValue[], width: number, offset: number): void {
   _each(points, (_, point) => {
     point.correctCoordinates({
       width,
@@ -173,44 +195,44 @@ function correctPointCoordinates(points, width, offset) {
   });
 }
 
-function getValueType(value) {
+function getValueType(value: number): string {
   return value >= 0 ? 'positive' : 'negative';
 }
 
-function getVisibleSeries(that) {
+function getVisibleSeries(that: ThemeValue): ThemeValue[] {
   return that.series.filter((s) => s.isVisible());
 }
 
-function getAbsStackSumByArg(stackKeepers, stackName, argument) {
+function getAbsStackSumByArg(stackKeepers: StackKeepers, stackName: string, argument: ThemeValue): number {
   const positiveStackValue = (stackKeepers.positive[stackName] || {})[argument] || 0;
   const negativeStackValue = -(stackKeepers.negative[stackName] || {})[argument] || 0;
   return positiveStackValue + negativeStackValue;
 }
 
-function getStackSumByArg(stackKeepers, stackName, argument) {
+function getStackSumByArg(stackKeepers: StackKeepers, stackName: string, argument: ThemeValue): number {
   const positiveStackValue = (stackKeepers.positive[stackName] || {})[argument] || 0;
   const negativeStackValue = (stackKeepers.negative[stackName] || {})[argument] || 0;
   return positiveStackValue + negativeStackValue;
 }
 
-function getSeriesStackIndexCallback(inverted) {
+function getSeriesStackIndexCallback(inverted: boolean): StackIndexCallback {
   if (!inverted) {
-    return function (index) { return index; };
+    return function (index: number): number { return index; };
   } else {
-    return function (index, stackCount) { return stackCount - index - 1; };
+    return function (index: number, stackCount: number): number { return stackCount - index - 1; };
   }
 }
 
-function isInverted(series) {
+function isInverted(series: ThemeValue[]): boolean {
   return series[0] && series[0].getArgumentAxis().getTranslator().isInverted();
 }
 
-function adjustBarSeriesDimensions() {
+function adjustBarSeriesDimensions(): void {
   const series = getVisibleSeries(this);
   adjustBarSeriesDimensionsCore(series, this._options, getSeriesStackIndexCallback(isInverted(series)));
 }
 
-function getFirstValueSign(series) {
+function getFirstValueSign(series: ThemeValue): number {
   const points = series.getPoints();
   let value;
   for (let i = 0; i < points.length; i++) {
@@ -224,7 +246,7 @@ function getFirstValueSign(series) {
   return sign(value);
 }
 
-function adjustStackedSeriesValues() {
+function adjustStackedSeriesValues(): void {
   const that = this;
   const negativesAsZeroes = that._options.negativesAsZeroes;
   const series = getVisibleSeries(that);
@@ -312,7 +334,7 @@ function adjustStackedSeriesValues() {
   });
 }
 
-function updateStackedSeriesValues() {
+function updateStackedSeriesValues(): void {
   const that = this;
   const series = getVisibleSeries(that);
   const stack = that._stackKeepers;
@@ -356,7 +378,7 @@ function updateStackedSeriesValues() {
   }
 }
 
-function updateFullStackedSeriesValues(series, stackKeepers) {
+function updateFullStackedSeriesValues(series: ThemeValue[], stackKeepers: StackKeepers): void {
   _each(series, (_, singleSeries) => {
     const stackName = singleSeries.getStackName ? singleSeries.getStackName() : 'default';
 
@@ -372,7 +394,7 @@ function updateFullStackedSeriesValues(series, stackKeepers) {
   });
 }
 
-function updateRangeSeriesValues() {
+function updateRangeSeriesValues(): void {
   const that = this;
   const series = getVisibleSeries(that);
   _each(series, (_, singleSeries) => {
@@ -394,7 +416,7 @@ function updateRangeSeriesValues() {
   });
 }
 
-function updateBarSeriesValues() {
+function updateBarSeriesValues(): void {
   _each(this.series, (_, singleSeries) => {
     const minBarSize = singleSeries.getOptions().minBarSize;
     const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
@@ -410,12 +432,12 @@ function updateBarSeriesValues() {
   });
 }
 
-function adjustCandlestickSeriesDimensions() {
+function adjustCandlestickSeriesDimensions(): void {
   const series = getVisibleSeries(this);
   adjustBarSeriesDimensionsCore(series, { barGroupPadding: 0.3 }, getSeriesStackIndexCallback(isInverted(series)));
 }
 
-function adjustBubbleSeriesDimensions() {
+function adjustBubbleSeriesDimensions(): void {
   const series = getVisibleSeries(this);
 
   if (!series.length) {
@@ -459,91 +481,107 @@ function adjustBubbleSeriesDimensions() {
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let SeriesFamily = function (options) {
-  /// #DEBUG
-  debug.assert(options.type, 'type was not passed or empty');
-  /// #ENDDEBUG
+export let SeriesFamily = class SeriesFamily {
+  declare type: string;
 
-  const that = this;
+  declare pane?: string;
 
-  that.type = _normalizeEnum(options.type);
-  that.pane = options.pane;
-  that.series = [];
+  declare series: ThemeValue[] | null;
 
-  that.updateOptions(options);
+  declare fullStacked?: boolean;
 
-  switch (that.type) {
-    case 'bar':
-      that.adjustSeriesDimensions = adjustBarSeriesDimensions;
-      that.updateSeriesValues = updateBarSeriesValues;
-      that.adjustSeriesValues = adjustStackedSeriesValues;
-      break;
-    case 'rangebar':
-      that.adjustSeriesDimensions = adjustBarSeriesDimensions;
-      that.updateSeriesValues = updateRangeSeriesValues;
-      break;
+  declare _options: SeriesFamilyOptions;
 
-    case 'fullstackedbar':
-      that.fullStacked = true;
-      that.adjustSeriesDimensions = adjustBarSeriesDimensions;
-      that.adjustSeriesValues = adjustStackedSeriesValues;
-      that.updateSeriesValues = updateStackedSeriesValues;
-      break;
+  declare _stackKeepers: StackKeepers;
 
-    case 'stackedbar':
-      that.adjustSeriesDimensions = adjustBarSeriesDimensions;
-      that.adjustSeriesValues = adjustStackedSeriesValues;
-      that.updateSeriesValues = updateStackedSeriesValues;
-      break;
+  declare adjustSeriesDimensions: () => void;
 
-    case 'fullstackedarea':
-    case 'fullstackedline':
-    case 'fullstackedspline':
-    case 'fullstackedsplinearea':
-      that.fullStacked = true;
-      that.adjustSeriesValues = adjustStackedSeriesValues;
-      break;
+  declare adjustSeriesValues: () => void;
 
-    case 'stackedarea':
-    case 'stackedsplinearea':
-    case 'stackedline':
-    case 'stackedspline':
-      that.adjustSeriesValues = adjustStackedSeriesValues;
-      break;
+  declare updateSeriesValues: () => void;
 
-    case 'candlestick':
-    case 'stock':
-      that.adjustSeriesDimensions = adjustCandlestickSeriesDimensions;
-      break;
+  constructor(options: SeriesFamilyOptions) {
+    /// #DEBUG
+    debug.assert(options.type, 'type was not passed or empty');
+    /// #ENDDEBUG
 
-    case 'bubble':
-      that.adjustSeriesDimensions = adjustBubbleSeriesDimensions;
-      break;
+    this.type = _normalizeEnum(options.type);
+    this.pane = options.pane;
+    this.series = [];
+
+    this.updateOptions(options);
+
+    switch (this.type) {
+      case 'bar':
+        this.adjustSeriesDimensions = adjustBarSeriesDimensions;
+        this.updateSeriesValues = updateBarSeriesValues;
+        this.adjustSeriesValues = adjustStackedSeriesValues;
+        break;
+      case 'rangebar':
+        this.adjustSeriesDimensions = adjustBarSeriesDimensions;
+        this.updateSeriesValues = updateRangeSeriesValues;
+        break;
+
+      case 'fullstackedbar':
+        this.fullStacked = true;
+        this.adjustSeriesDimensions = adjustBarSeriesDimensions;
+        this.adjustSeriesValues = adjustStackedSeriesValues;
+        this.updateSeriesValues = updateStackedSeriesValues;
+        break;
+
+      case 'stackedbar':
+        this.adjustSeriesDimensions = adjustBarSeriesDimensions;
+        this.adjustSeriesValues = adjustStackedSeriesValues;
+        this.updateSeriesValues = updateStackedSeriesValues;
+        break;
+
+      case 'fullstackedarea':
+      case 'fullstackedline':
+      case 'fullstackedspline':
+      case 'fullstackedsplinearea':
+        this.fullStacked = true;
+        this.adjustSeriesValues = adjustStackedSeriesValues;
+        break;
+
+      case 'stackedarea':
+      case 'stackedsplinearea':
+      case 'stackedline':
+      case 'stackedspline':
+        this.adjustSeriesValues = adjustStackedSeriesValues;
+        break;
+
+      case 'candlestick':
+      case 'stock':
+        this.adjustSeriesDimensions = adjustCandlestickSeriesDimensions;
+        break;
+
+      case 'bubble':
+        this.adjustSeriesDimensions = adjustBubbleSeriesDimensions;
+        break;
+    }
+  }
+
+  updateOptions(options: SeriesFamilyOptions): void {
+    this._options = options;
+  }
+
+  dispose(): void {
+    this.series = null;
+  }
+
+  add(series: ThemeValue[]): void {
+    const type = this.type;
+    this.series = _map(series, (singleSeries) => (singleSeries.type === type ? singleSeries : null));
   }
 };
 
-SeriesFamily.prototype = {
-  constructor: SeriesFamily,
-
+Object.assign(SeriesFamily.prototype, {
   adjustSeriesDimensions: _noop,
 
   adjustSeriesValues: _noop,
 
   updateSeriesValues: _noop,
-
-  updateOptions(options) {
-    this._options = options;
-  },
-
-  dispose() {
-    this.series = null;
-  },
-
-  add(series) {
-    const type = this.type;
-    this.series = _map(series, (singleSeries) => (singleSeries.type === type ? singleSeries : null));
-  },
-};
+});
 
 /// #DEBUG
 export function DEBUG_set_SeriesFamily(value: typeof SeriesFamily): void {

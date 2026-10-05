@@ -47,23 +47,12 @@ import type {
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
-import type { Module } from '@ts/grids/grid_core/m_types';
+import type { Module } from '@ts/grids/grid_core/types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
-import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import { StickyPosition } from '../sticky_columns/const';
-import {
-  COLUMN_CHOOSER_LOCATION,
-  COLUMN_OPTION_REGEXP,
-  COMMAND_EXPAND_CLASS,
-  DATATYPE_OPERATIONS,
-  DETAIL_COMMAND_COLUMN_NAME,
-  GROUP_COMMAND_COLUMN_NAME,
-  GROUP_LOCATION,
-  MAX_SAFE_INTEGER,
-  USER_STATE_FIELD_NAMES,
-} from './const';
 import {
   addExpandColumn,
   assignColumns,
@@ -105,7 +94,18 @@ import {
   updateColumnIndexes,
   updateIndexes,
   updateSerializers,
-} from './m_columns_controller_utils';
+} from './columns_controller_utils';
+import {
+  COLUMN_CHOOSER_LOCATION,
+  COLUMN_OPTION_REGEXP,
+  COMMAND_EXPAND_CLASS,
+  DATATYPE_OPERATIONS,
+  DETAIL_COMMAND_COLUMN_NAME,
+  GROUP_COMMAND_COLUMN_NAME,
+  GROUP_LOCATION,
+  MAX_SAFE_INTEGER,
+  USER_STATE_FIELD_NAMES,
+} from './const';
 import { UserStateApplier } from './user_state_applier';
 
 export class ColumnsController extends modules.Controller {

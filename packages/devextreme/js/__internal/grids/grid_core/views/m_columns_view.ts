@@ -35,10 +35,10 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { DataController } from '../data_controller/data_controller';
-import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import { CLASSES } from './const';
 import type { ColumnViewTemplate } from './types';
 
@@ -742,6 +742,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: column_fixing, header_panel, virtual_column
    */
   protected _renderCore(e?) {
+    // @ts-expect-error the view is rendered here
     const $root = this.element().parent();
 
     if (!$root || $root.parent().length) {
@@ -1130,6 +1131,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_CLASS))
       .addClass(this.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
       .append($table)
+      // @ts-expect-error the view is rendered here
       .appendTo(this.element());
 
     this.setAria('role', 'presentation', $scrollContainer);

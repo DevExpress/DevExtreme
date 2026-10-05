@@ -6,8 +6,9 @@ import {
 } from '@ts/core/component_registrator_callbacks';
 import config from '@ts/core/config';
 import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
+import type { Lock } from '@ts/core/utils/locker';
+import { Locker } from '@ts/core/utils/locker';
 import Callbacks from '@ts/core/utils/m_callbacks';
-import { Locker } from '@ts/core/utils/m_locker';
 import { isPlainObject } from '@ts/core/utils/m_type';
 import Draggable from '@ts/m_draggable';
 import Editor from '@ts/ui/editor/editor';
@@ -128,7 +129,7 @@ if (ko) {
 
         // eslint-disable-next-line func-names
         const applyModelValueToOption = function (optionName: string, modelValue, unwrap): void {
-          const locks = $element.data(LOCKS_DATA_KEY);
+          const locks = $element.data(LOCKS_DATA_KEY) as unknown as Lock;
           const optionValue = unwrap ? ko.unwrap(modelValue) : modelValue;
 
           if (ko.isWriteableObservable(modelValue)) {
@@ -136,12 +137,10 @@ if (ko) {
           }
 
           if (component) {
-            // @ts-expect-error
             if (locks.locked(optionName)) {
               return;
             }
 
-            // @ts-expect-error
             locks.obtain(optionName);
 
             try {
@@ -151,7 +150,6 @@ if (ko) {
                 component.option(optionName, optionValue);
               }
             } finally {
-              // @ts-expect-error
               locks.release(optionName);
             }
           } else {
@@ -169,19 +167,16 @@ if (ko) {
 
           // eslint-disable-next-line @typescript-eslint/no-shadow
           const $element = this._$element as unknown as dxElementWrapper;
-          const locks = $element.data(LOCKS_DATA_KEY);
+          const locks = $element.data(LOCKS_DATA_KEY) as unknown as Lock;
 
-          // @ts-expect-error
           if (locks.locked(optionName)) {
             return;
           }
 
-          // @ts-expect-error
           locks.obtain(optionName);
           try {
             optionNameToModelMap[optionName](optionValue);
           } finally {
-            // @ts-expect-error
             locks.release(optionName);
           }
         };
@@ -191,8 +186,7 @@ if (ko) {
           optionChangedCallbacks.add(handleOptionChanged);
           $element
             .data(CREATED_WITH_KO_DATA_KEY, true)
-            // @ts-expect-error
-            .data(LOCKS_DATA_KEY, new Locker());
+            .data(LOCKS_DATA_KEY, Locker());
 
           // eslint-disable-next-line no-new,new-cap
           new componentClass($element, ctorOptions);

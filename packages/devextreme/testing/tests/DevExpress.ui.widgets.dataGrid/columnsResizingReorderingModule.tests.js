@@ -24,7 +24,7 @@ import dragEvents from 'common/core/events/drag';
 import columnsResizingReordering from '__internal/grids/data_grid/module_not_extended/columns_resizing_reordering';
 import { ColumnChooserView } from '__internal/grids/data_grid/module_not_extended/column_chooser';
 import { ColumnHeadersView } from '__internal/grids/data_grid/module_not_extended/column_headers';
-import { columnsControllerModule } from '__internal/grids/grid_core/columns_controller/m_columns_controller';
+import { columnsControllerModule } from '__internal/grids/grid_core/columns_controller/columns_controller';
 const ColumnsController = columnsControllerModule.controllers.columns;
 import { RowsView } from '__internal/grids/data_grid/module_not_extended/rows';
 import { GroupingHeaderPanelExtender } from '__internal/grids/data_grid/grouping/m_grouping';

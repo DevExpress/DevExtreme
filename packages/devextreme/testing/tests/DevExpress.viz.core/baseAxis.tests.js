@@ -69,10 +69,8 @@ const environment = {
     }
 };
 
-function Axis(settings) {
-    originalAxis.call(this, settings);
-}
-Axis.prototype = $.extend({}, originalAxis.prototype, {
+class Axis extends originalAxis {}
+$.extend(Axis.prototype, {
     _setType: noop,
 
     _setVisualRange: xyMethods.linear._setVisualRange,

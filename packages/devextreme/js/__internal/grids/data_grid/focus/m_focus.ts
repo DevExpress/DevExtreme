@@ -6,7 +6,7 @@ import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_
 import type { FocusDataSourceControllerExtension } from '@ts/grids/grid_core/focus/extenders/focus_data_source_controller';
 import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import gridCore from '../core';
 import type { GroupingDataControllerExtension, GroupingDataSourceAdapter } from '../grouping/m_grouping';

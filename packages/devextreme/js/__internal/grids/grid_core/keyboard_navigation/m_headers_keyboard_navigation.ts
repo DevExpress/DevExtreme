@@ -7,10 +7,10 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
+import type { Views } from '../types';
 import { ColumnFocusDispatcher } from './column_focus_dispatcher';
 import { Direction } from './const';
 import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';

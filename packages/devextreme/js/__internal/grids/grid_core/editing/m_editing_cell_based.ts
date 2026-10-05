@@ -14,7 +14,7 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import type { ModuleType } from '../m_types';
+import type { ModuleType } from '../types';
 import {
   ADD_ROW_BUTTON_CLASS,
   CELL_MODIFIED_CLASS,

@@ -4,9 +4,9 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import { AIPromptEditor } from '../../ai_prompt_editor/ai_prompt_editor';
 import type { AIPromptEditorOptions } from '../../ai_prompt_editor/types';
-import type { ColumnsController } from '../../columns_controller/m_columns_controller';
-import { getColumnHeaderCellSelector } from '../../columns_controller/m_columns_controller_utils';
-import { View } from '../../m_modules';
+import type { ColumnsController } from '../../columns_controller/columns_controller';
+import { getColumnHeaderCellSelector } from '../../columns_controller/columns_controller_utils';
+import { View } from '../../modules/modules';
 import { AI_COLUMN_NAME } from '../const';
 import type { AIColumnController } from '../controllers/ai_column_controller';
 import {
@@ -35,6 +35,7 @@ export class AIPromptEditorView extends View {
 
     return {
       prompt: column.ai?.prompt ?? '',
+      // @ts-expect-error the view is rendered here
       container: this.element(),
       createComponent: this._createComponent.bind(this),
       onSubmit: (): void => {

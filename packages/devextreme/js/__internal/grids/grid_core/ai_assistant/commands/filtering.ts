@@ -5,7 +5,7 @@ import type {
 import { when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
