@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { getAppointmentDateRange } from './m_core';
+import { getAppointmentDateRange } from './core';
 import type { GetAppointmentDateRangeOptions, Rect } from './types';
 
 const CELL_WIDTH = 100;
