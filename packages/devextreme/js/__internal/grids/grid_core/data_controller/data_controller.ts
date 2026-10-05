@@ -19,7 +19,7 @@ import type {
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
-  Controllers, Module, OptionChanged, RowKey,
+  Controllers, Module, ModuleItemCallbackFlags, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -30,7 +30,6 @@ import type {
 } from '../filter/types';
 import { combineFilters, equalFilterParameters } from '../filter/utils';
 import type {
-  CallbackFlags,
   DataChange,
   GeneratedItem,
   GetUpdatedColumnIndices,
@@ -168,7 +167,7 @@ export class DataController extends modules.Controller {
     return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'rowIndicesChanged'];
   }
 
-  protected callbackFlags(name?: string): CallbackFlags | undefined {
+  protected callbackFlags(name?: string): ModuleItemCallbackFlags | undefined {
     if (name === 'dataErrorOccurred') {
       return { stopOnFalse: true };
     }

@@ -335,6 +335,7 @@ export class HeaderFilterView extends Modules.View {
     };
 
     if (!isDefined(that._popupContainer)) {
+      // @ts-expect-error the view is rendered here
       that._popupContainer = that._createComponent($element, Popup, dxPopupOptions);
     } else {
       that._popupContainer.option(dxPopupOptions);
@@ -509,6 +510,7 @@ export class HeaderFilterView extends Modules.View {
   }
 
   protected _renderCore() {
+    // @ts-expect-error the view is rendered here
     this.element().addClass(HEADER_FILTER_MENU_CLASS);
   }
 }
