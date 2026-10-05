@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { map } from '@js/core/utils/iterator';
 
-type Text = string | number | null | undefined;
+type TextLike = string | number | null | undefined;
 
-const _normalize = function _normalize(text: Text): string {
+const _normalize = function _normalize(text: TextLike): string {
   if (text === undefined || text === null) {
     return '';
   }
@@ -14,21 +14,21 @@ const _upperCaseFirst = function _upperCaseFirst(text: string): string {
   return _normalize(text).charAt(0).toUpperCase() + text.substr(1);
 };
 
-const _chop = function _chop(text: Text): string[] {
+const _chop = function _chop(text: TextLike): string[] {
   return _normalize(text)
     .replace(/([a-z\d])([A-Z])/g, '$1 $2')
     .split(/[\s_-]+/);
 };
 
-export const dasherize = function dasherize(text: Text): string {
+export const dasherize = function dasherize(text: TextLike): string {
   return map(_chop(text), (p: string): string => p.toLowerCase()).join('-');
 };
 
-export const underscore = function underscore(text: Text): string {
+export const underscore = function underscore(text: TextLike): string {
   return dasherize(text).replace(/-/g, '_');
 };
 
-export const camelize = function camelize(text: Text, upperFirst?: boolean): string {
+export const camelize = function camelize(text: TextLike, upperFirst?: boolean): string {
   return map(_chop(text), (p: string, i: number): string => {
     let part = p.toLowerCase();
     if (upperFirst || i > 0) {
@@ -38,11 +38,11 @@ export const camelize = function camelize(text: Text, upperFirst?: boolean): str
   }).join('');
 };
 
-export const humanize = function humanize(text: Text): string {
+export const humanize = function humanize(text: TextLike): string {
   return _upperCaseFirst(dasherize(text).replace(/-/g, ' '));
 };
 
-export const titleize = function titleize(text: Text): string {
+export const titleize = function titleize(text: TextLike): string {
   return map(_chop(text), (p: string): string => _upperCaseFirst(p.toLowerCase())).join(' ');
 };
 

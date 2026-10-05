@@ -75,7 +75,6 @@ export function format(template: unknown, ...values: unknown[]): string {
     const replacement = isString(value) ? value.replace(/\$/g, '$$$$') : value;
 
     const placeholderReg = new RegExp(`\\{${index}\\}`, 'gm');
-    // replace() coerces a value that is not a string itself
     result = result.replace(placeholderReg, replacement as string);
   });
 

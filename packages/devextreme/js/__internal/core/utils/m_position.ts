@@ -16,7 +16,8 @@ const getBoundingRect = (element: unknown): any => {
     };
   }
 
-  return (element as Partial<Pick<Element, 'getBoundingClientRect'>>).getBoundingClientRect?.();
+  // @ts-expect-error element is not typed yet
+  return element.getBoundingClientRect?.();
 };
 
 export {

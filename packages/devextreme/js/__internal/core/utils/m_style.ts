@@ -88,7 +88,8 @@ const parsePixelValue = function parsePixelValue(value: unknown): number {
 
 const normalizeStyleProp = function normalizeStyleProp<T>(prop: string, value: T): T | string {
   if (isNumeric(value) && !pxExceptions.includes(prop)) {
-    return `${value}px`;
+    // eslint-disable-next-line prefer-template -- + converts with valueOf, a template with toString
+    return value + 'px';
   }
 
   return value;
@@ -102,7 +103,8 @@ const setDimensionProperty = function setDimensionProperty(
   value: unknown,
 ): void {
   if (elements) {
-    const dimension = isNumeric(value) ? `${value}px` : value;
+    // eslint-disable-next-line prefer-template -- + converts with valueOf, a template with toString
+    const dimension = isNumeric(value) ? value + 'px' : value;
     for (let i = 0; i < elements.length; i += 1) {
       (elements as ArrayLike<HTMLElement>)[i].style[propertyName] = dimension;
     }

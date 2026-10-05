@@ -18,14 +18,16 @@ function createQueue(discardPendingTasks?: boolean): Queue {
     while (_tasks.length) {
       _busy = true;
 
-      const task = _tasks.shift() as Task;
-      const result = task() as { then?: unknown } | undefined;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- the queue is not empty
+      const task = _tasks.shift()!;
+      const result = task();
 
       if (result === undefined) {
         // eslint-disable-next-line no-continue -- a task without a result lets the next one run
         continue;
       }
 
+      // @ts-expect-error the task result is not typed yet
       if (result.then) {
         // NOTE: immediate "then" on the next line can reset it back to false
         when(result).always(exec);
