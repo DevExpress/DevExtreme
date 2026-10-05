@@ -165,8 +165,10 @@ export class HeaderPanel extends ColumnsView {
   protected _renderCore() {
     if (!this._toolbar) {
       const $headerPanel = this.element();
+      // @ts-expect-error the view is rendered here
       $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
       const label = messageLocalization.format(this.component.NAME + TOOLBAR_ARIA_LABEL);
+      // @ts-expect-error the view is rendered here
       const $toolbar = $('<div>').appendTo($headerPanel);
 
       this.setAria('label', label, $toolbar);

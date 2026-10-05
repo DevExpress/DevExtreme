@@ -1243,6 +1243,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
 
+    // @ts-expect-error the view is rendered here
     this._rowsView.element().find(`.${invalidMessageClass}`).remove();
 
     const $overlayElement = $('<div>')
@@ -1292,6 +1293,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 
   private getValidationMessages(): dxElementWrapper {
+    // @ts-expect-error the view is rendered here
     return this._rowsView.element()?.find(this._getValidationMessagesSelector());
   }
 

@@ -70,6 +70,7 @@ export class FilterBuilderView extends modules.View {
     const that = this;
 
     that._disposePopup();
+    // @ts-expect-error the view is rendered here
     that._filterBuilderPopup = that._createComponent(that.element(), Popup, extend({
       title: messageLocalization.format('dxDataGrid-filterBuilderPopupTitle'),
       contentTemplate($contentElement) {

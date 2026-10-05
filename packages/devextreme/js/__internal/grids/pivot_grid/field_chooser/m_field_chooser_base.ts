@@ -16,6 +16,7 @@ import {
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
 } from '@ts/grids/grid_core/header_filter/m_header_filter_core';
+import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import sortingMixin from '@ts/grids/grid_core/sorting/m_sorting_mixin';
 
@@ -153,7 +154,7 @@ export class FieldChooserBase extends mixinWidget {
 
   _init() {
     super._init();
-    this._headerFilterView = new HeaderFilterView(this);
+    this._headerFilterView = new HeaderFilterView(this as unknown as InternalGrid);
     this._refreshDataSource();
     this.subscribeToEvents();
 
