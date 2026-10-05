@@ -43,11 +43,11 @@ function createHierarchicalData() {
             items: [
                 {
                     key: '1.1',
-                    items: [4, 6]
+                    items: [{ value: 4 }, { value: 6 }]
                 },
                 {
                     key: '1.2',
-                    items: [5, 4]
+                    items: [{ value: 5 }, { value: 4 }]
                 }
             ]
         },
@@ -56,7 +56,7 @@ function createHierarchicalData() {
             items: [
                 {
                     key: '2.1',
-                    items: [2, 3]
+                    items: [{ value: 2 }, { value: 3 }]
                 }
             ]
         }
@@ -65,14 +65,14 @@ function createHierarchicalData() {
 
 QUnit.test('total aggregates for plain list', function(assert) {
     const calculator = new AggregateCalculator({
-        data: [1, 2, 3],
+        data: [{ value: 1 }, { value: 2 }, { value: 3 }],
         totalAggregates: [
             { aggregator: 'count' },
-            { aggregator: 'sum', selector: 'this' },
-            { aggregator: 'max', selector: 'this' },
-            { aggregator: 'min', selector: 'this' },
-            { aggregator: 'avg', selector: 'this' },
-            { aggregator: customAggregator, selector: 'this' }
+            { aggregator: 'sum', selector: 'value' },
+            { aggregator: 'max', selector: 'value' },
+            { aggregator: 'min', selector: 'value' },
+            { aggregator: 'avg', selector: 'value' },
+            { aggregator: customAggregator, selector: 'value' }
         ],
         groupAggregates: [],
         groupLevel: 0
@@ -87,7 +87,7 @@ QUnit.test('total aggregates for grouped list', function(assert) {
     const calculator = new AggregateCalculator({
         totalAggregates: [
             { aggregator: 'count' },
-            { aggregator: 'avg', selector: 'this' }
+            { aggregator: 'avg', selector: 'value' }
         ],
         groupAggregates: [],
         data: createHierarchicalData(),
@@ -106,12 +106,12 @@ QUnit.test('group aggregates', function(assert) {
         totalAggregates: [],
         groupAggregates: [
             { aggregator: 'count' },
-            { aggregator: 'sum', selector: 'this' },
-            { aggregator: 'max', selector: 'this' },
-            { aggregator: 'min', selector: 'this' },
-            { aggregator: 'avg', selector: 'this' },
-            { aggregator: customAggregator, selector: 'this' },
-            { aggregator: customAggregatorForSecondGroup, selector: 'this' }
+            { aggregator: 'sum', selector: 'value' },
+            { aggregator: 'max', selector: 'value' },
+            { aggregator: 'min', selector: 'value' },
+            { aggregator: 'avg', selector: 'value' },
+            { aggregator: customAggregator, selector: 'value' },
+            { aggregator: customAggregatorForSecondGroup, selector: 'value' }
         ],
         groupLevel: 2
     });
@@ -165,7 +165,7 @@ QUnit.test('exception in case of incorrect aggregator name', function(assert) {
     assert.throws(
         function() {
             new AggregateCalculator({
-                data: [1],
+                data: [{ value: 1 }],
                 totalAggregates: [{ aggregator: 'Avg' }],
                 groupAggregates: [],
                 groupLevel: 0
@@ -183,10 +183,10 @@ QUnit.test('total aggregates for empty list', function(assert) {
         data: [],
         totalAggregates: [
             { aggregator: 'count' },
-            { aggregator: 'sum', selector: 'this' },
-            { aggregator: 'max', selector: 'this' },
-            { aggregator: 'min', selector: 'this' },
-            { aggregator: 'avg', selector: 'this' }
+            { aggregator: 'sum', selector: 'value' },
+            { aggregator: 'max', selector: 'value' },
+            { aggregator: 'min', selector: 'value' },
+            { aggregator: 'avg', selector: 'value' }
         ],
         groupAggregates: [],
         groupLevel: 0
@@ -208,10 +208,10 @@ QUnit.test('group aggregates for empty list', function(assert) {
         totalAggregates: [],
         groupAggregates: [
             { aggregator: 'count' },
-            { aggregator: 'sum', selector: 'this' },
-            { aggregator: 'max', selector: 'this' },
-            { aggregator: 'min', selector: 'this' },
-            { aggregator: 'avg', selector: 'this' }
+            { aggregator: 'sum', selector: 'value' },
+            { aggregator: 'max', selector: 'value' },
+            { aggregator: 'min', selector: 'value' },
+            { aggregator: 'avg', selector: 'value' }
         ],
         groupLevel: 1
     });
@@ -360,8 +360,8 @@ QUnit.test('global variables (see T353923)', function(assert) {
         data: data,
         totalAggregates: [],
         groupAggregates: [
-            { aggregator: customAggregator, selector: 'this' },
-            { aggregator: customAggregatorWithGlobal, selector: 'this' }
+            { aggregator: customAggregator, selector: 'value' },
+            { aggregator: customAggregatorWithGlobal, selector: 'value' }
         ],
         groupLevel: 2
     });
