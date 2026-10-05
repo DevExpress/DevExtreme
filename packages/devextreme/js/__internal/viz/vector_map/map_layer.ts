@@ -1,6 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable new-cap */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable max-depth */
 /* eslint-disable no-bitwise */
@@ -24,13 +23,15 @@
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
-// @ts-expect-error
+/* eslint-disable max-classes-per-file */
+// @ts-expect-error DataHelperMixin is absent from the common/data d.ts
 import { DataHelperMixin } from '@js/common/data';
 import { noop } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, isFunction as _isFunction } from '@js/core/utils/type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import {
   normalizeEnum as _normalizeEnum,
   parseScalar as _parseScalar,
@@ -68,6 +69,78 @@ const _min = Math.min;
 const _max = Math.max;
 const _sqrt = Math.sqrt;
 
+interface LayerTracker {
+  on: (handlers: Record<string, (arg: ThemeValue) => void>) => () => void;
+  reset: () => void;
+}
+
+interface LayerProjection {
+  on: (handlers: Record<string, () => void>) => () => void;
+  getTransform: () => { translateX: number; translateY: number };
+}
+
+interface MapLayerParams {
+  renderer: ThemeValue;
+  projection: LayerProjection;
+  themeManager: ThemeValue;
+  dataExchanger: ThemeValue;
+  tracker: LayerTracker;
+  dataKey: string;
+  eventTrigger: (name: string, arg: ThemeValue) => void;
+  notifyDirty: () => void;
+  notifyReady: () => void;
+  dataReady: () => void;
+  tooltip?: ThemeValue;
+  widget?: ThemeValue;
+}
+
+interface ElementProxy {
+  coordinates: () => ThemeValue;
+  attribute: (name?: string, value?: ThemeValue) => ThemeValue;
+  selected: (state?: boolean, _noEvent?: boolean) => ThemeValue;
+  applySettings: (settings: ThemeValue) => ThemeValue;
+  index?: number;
+  layer?: LayerProxy;
+  text?: string;
+}
+
+interface LayerProxy {
+  index: number;
+  name: string;
+  type?: string;
+  elementType?: string;
+  getElements: () => ElementProxy[];
+  clearSelection: (_noEvent?: boolean) => LayerProxy;
+  getDataSource: () => ThemeValue;
+  getBounds: () => ThemeValue;
+}
+
+type MapLayerElementInstance = InstanceType<typeof MapLayerElement>;
+
+type MapLayerInstance = InstanceType<typeof MapLayer>;
+
+interface LayerSelection {
+  state: Record<number, MapLayerElementInstance | null>;
+  single: number;
+}
+
+interface LayerContext {
+  name: string;
+  layer: LayerProxy;
+  renderer: ThemeValue;
+  projection: ThemeValue;
+  params: MapLayerParams;
+  dataKey: string;
+  str: ThemeValue;
+  hover: boolean;
+  selection: LayerSelection | null;
+  grouping: Record<string, ThemeValue>;
+  root: ThemeValue;
+  labelRoot?: ThemeValue;
+  settings?: ThemeValue;
+  hasSeparateLabel?: boolean;
+}
+
 export function getMaxBound(arr) {
   return arr.reduce((a, c) => (c ? [_min(a[0], c[0]),
     _min(a[1], c[1]),
@@ -76,10 +149,9 @@ export function getMaxBound(arr) {
 }
 
 function getSelection(selectionMode) {
-  let selection = _normalizeEnum(selectionMode);
+  let selection: ThemeValue = _normalizeEnum(selectionMode);
   selection = selection in SELECTIONS ? SELECTIONS[selection] : SELECTIONS.single;
   if (selection !== null) {
-    // @ts-expect-error
     selection = { state: {}, single: selection };
   }
   return selection;
@@ -89,64 +161,65 @@ function getName(opt, index) {
   return (opt[index] || {}).name;
 }
 
-function EmptySource() { }
-EmptySource.prototype.count = function () { return 0; };
-
-function ArraySource(raw) {
-  this.raw = raw;
+class EmptySource {
+  count(): number { return 0; }
 }
 
-ArraySource.prototype = {
-  constructor: ArraySource,
+class ArraySource {
+  declare raw: ThemeValue;
 
-  count() {
+  constructor(raw: ThemeValue) {
+    this.raw = raw;
+  }
+
+  count(): number {
     return this.raw.length;
-  },
+  }
 
-  item(index) {
+  item(index: number): ThemeValue {
     return this.raw[index];
-  },
+  }
 
-  geometry(item) {
+  geometry(item: ThemeValue): { coordinates: ThemeValue } {
     return { coordinates: item.coordinates };
-  },
+  }
 
-  attributes(item) {
+  attributes(item: ThemeValue): ThemeValue {
     return item.attributes;
-  },
+  }
 
-  getBBox(index) {
+  getBBox(index?: ThemeValue): ThemeValue {
     return arguments.length === 0 ? undefined : this.raw[index].bbox;
-  },
-};
-
-function GeoJsonSource(raw) {
-  this.raw = raw;
+  }
 }
 
-GeoJsonSource.prototype = {
-  constructor: GeoJsonSource,
+class GeoJsonSource {
+  declare raw: ThemeValue;
 
-  count() {
+  constructor(raw: ThemeValue) {
+    this.raw = raw;
+  }
+
+  count(): number {
     return this.raw.features.length;
-  },
+  }
 
-  item(index) {
+  item(index: number): ThemeValue {
     return this.raw.features[index];
-  },
+  }
 
-  geometry(item) {
+  geometry(item: ThemeValue): ThemeValue {
     return item.geometry;
-  },
+  }
 
-  attributes(item) {
+  attributes(item: ThemeValue): ThemeValue {
     return item.properties;
-  },
+  }
 
-  getBBox(index) {
+  getBBox(index?: ThemeValue): ThemeValue {
     return arguments.length === 0 ? this.raw.bbox : this.raw.features[index].bbox;
-  },
-};
+  }
+}
 
 function isGeoJsonObject(obj) {
   return _isArray(obj.features);
@@ -536,7 +609,7 @@ strategiesByElementType[TYPE_MARKER] = {
     },
 
     arrange(context, handles) {
-      const values = [];
+      const values: number[] = [];
       let i;
       const ii = values.length = handles.length;
       const settings = context.settings;
@@ -549,7 +622,6 @@ strategiesByElementType[TYPE_MARKER] = {
       }
 
       for (i = 0; i < ii; ++i) {
-        // @ts-expect-error
         values[i] = _max(getDataValue(handles[i].proxy, dataField) || 0, 0);
       }
       const minValue = _min.apply(null, values);
@@ -689,11 +761,10 @@ function projectPoint(projection, coordinates) {
 }
 
 function projectPointList(projection, coordinates) {
-  const output = [];
+  const output: number[][] = [];
   let i;
   const ii = output.length = coordinates.length;
   for (i = 0; i < ii; ++i) {
-    // @ts-expect-error
     output[i] = projection.project(coordinates[i]);
   }
   return output;
@@ -704,22 +775,20 @@ function projectLineString(projection, coordinates) {
 }
 
 function projectPolygon(projection, coordinates) {
-  const output = [];
+  const output: number[][][] = [];
   let i;
   const ii = output.length = coordinates.length;
   for (i = 0; i < ii; ++i) {
-    // @ts-expect-error
     output[i] = projectPointList(projection, coordinates[i]);
   }
   return output;
 }
 
 function projectMultiPolygon(projection, coordinates) {
-  const output = [];
+  const output: number[][][][] = [];
   let i;
   const ii = output.length = coordinates.length;
   for (i = 0; i < ii; ++i) {
-    // @ts-expect-error
     output[i] = projectPolygon(projection, coordinates[i]);
   }
   return _concat.apply([], output);
@@ -731,7 +800,7 @@ function transformPoint(content, projection, coordinates) {
 }
 
 function transformList(projection, coordinates) {
-  const output = [];
+  const output: number[] = [];
   let i;
   const ii = coordinates.length;
   let item;
@@ -739,20 +808,17 @@ function transformList(projection, coordinates) {
   output.length = 2 * ii;
   for (i = 0; i < ii; ++i) {
     item = projection.transform(coordinates[i]);
-    // @ts-expect-error
     output[k++] = item[0];
-    // @ts-expect-error
     output[k++] = item[1];
   }
   return output;
 }
 
 function transformPointList(content, projection, coordinates) {
-  const output = [];
+  const output: number[][] = [];
   let i;
   const ii = output.length = coordinates.length;
   for (i = 0; i < ii; ++i) {
-    // @ts-expect-error
     output[i] = transformList(projection, coordinates[i]);
   }
   content.root.attr({ points: output });
@@ -874,9 +940,8 @@ groupByColor = function (context) {
   performGrouping(context, context.settings.colorGroups, 'color', context.settings.colorGroupingField, (count) => {
     const _palette = context.params.themeManager.createDiscretePalette(context.settings.palette, count);
     let i;
-    const list = [];
+    const list: string[] = [];
     for (i = 0; i < count; ++i) {
-      // @ts-expect-error
       list.push(_palette.getColor(i));
     }
     return list;
@@ -889,14 +954,12 @@ groupBySize = function (context, valueCallback) {
     const minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0;
     const maxSize = settings.maxSize >= minSize ? _Number(settings.maxSize) : 0;
     let i = 0;
-    const sizes = [];
+    const sizes: number[] = [];
     if (count > 1) {
       for (i = 0; i < count; ++i) {
-        // @ts-expect-error
         sizes.push((minSize * (count - i - 1) + maxSize * i) / (count - 1));
       }
     } else if (count === 1) {
-      // @ts-expect-error
       sizes.push((minSize + maxSize) / 2);
     }
     return sizes;
@@ -942,44 +1005,67 @@ function createLayerProxy(layer, name, index) {
   return proxy;
 }
 
-let MapLayerElement;
+let MapLayer = class MapLayer {
+  declare _params: MapLayerParams;
 
-let MapLayer = function (params, container, name, index) {
-  const that = this;
-  that._params = params;
-  that._onProjection();
-  that.proxy = createLayerProxy(that, name, index);
-  that._context = {
-    name,
-    layer: that.proxy,
-    renderer: params.renderer,
-    projection: params.projection,
-    params,
-    dataKey: params.dataKey,
-    str: emptyStrategy,
-    hover: false,
-    selection: null,
-    grouping: {},
-    // TODO: Link name should be built upon layer index rather than name
-    root: params.renderer.g().attr({ class: 'dxm-layer' }).linkOn(container, name).linkAppend(),
-  };
-  that._container = container;
-  that._options = {};
-  // Though the `_handles` field is set in the `_createHandles` it is required here because projection events are fired before data is set
-  that._handles = [];
-  // The `_data` field may be accessed in the `setOptions` when data is not set
-  that._data = new EmptySource();
-  that._dataSourceLoaded = null;
-};
+  declare _removeHandlers: () => void;
 
-MapLayer.prototype = _extend({
-  constructor: MapLayer,
+  declare proxy: LayerProxy;
 
-  getDataReadyCallback() {
+  declare _context: LayerContext;
+
+  declare _container: ThemeValue;
+
+  declare _options: ThemeValue;
+
+  declare _handles: MapLayerElementInstance[];
+
+  declare _data: ThemeValue;
+
+  declare _dataSourceLoaded: ReturnType<typeof Deferred> | null;
+
+  declare _options_dataSource: ThemeValue;
+
+  declare _specificDataSourceOption: ThemeValue;
+
+  declare _dataSource: ThemeValue;
+
+  declare _refreshDataSource: () => void;
+
+  declare _disposeDataSource: () => void;
+
+  constructor(params: MapLayerParams, container: ThemeValue, name: string, index: number) {
+    this._params = params;
+    this._onProjection();
+    this.proxy = createLayerProxy(this, name, index);
+    this._context = {
+      name,
+      layer: this.proxy,
+      renderer: params.renderer,
+      projection: params.projection,
+      params,
+      dataKey: params.dataKey,
+      str: emptyStrategy,
+      hover: false,
+      selection: null,
+      grouping: {},
+      // TODO: Link name should be built upon layer index rather than name
+      root: params.renderer.g().attr({ class: 'dxm-layer' }).linkOn(container, name).linkAppend(),
+    };
+    this._container = container;
+    this._options = {};
+    // Though the `_handles` field is set in the `_createHandles` it is required here because projection events are fired before data is set
+    this._handles = [];
+    // The `_data` field may be accessed in the `setOptions` when data is not set
+    this._data = new EmptySource();
+    this._dataSourceLoaded = null;
+  }
+
+  getDataReadyCallback(): ReturnType<typeof Deferred> | null {
     return this._dataSourceLoaded;
-  },
+  }
 
-  _onProjection() {
+  _onProjection(): void {
     const that = this;
     that._removeHandlers = that._params.projection.on({
       engine() {
@@ -995,94 +1081,92 @@ MapLayer.prototype = _extend({
         that._transform();
       },
     });
-  },
+  }
 
-  getData() {
+  getData(): ThemeValue {
     return this._data;
-  },
+  }
 
-  _dataSourceLoadErrorHandler() {
+  _dataSourceLoadErrorHandler(): void {
     this._dataSourceChangedHandler();
-  },
+  }
 
-  _dataSourceChangedHandler() {
-    const that = this;
-    that._data = unwrapFromDataSource(that._dataSource && that._dataSource.items());
-    that._update(true);
-  },
+  _dataSourceChangedHandler(): void {
+    this._data = unwrapFromDataSource(this._dataSource && this._dataSource.items());
+    this._update(true);
+  }
 
-  _dataSourceOptions() {
+  _dataSourceOptions(): { paginate: boolean } {
     return { paginate: false };
-  },
+  }
 
-  _getSpecificDataSourceOption() {
+  _getSpecificDataSourceOption(): ThemeValue {
     return this._specificDataSourceOption;
-  },
+  }
 
-  _normalizeDataSource(dataSource) {
+  _normalizeDataSource(dataSource: ThemeValue): ThemeValue {
     const store = dataSource.store();
     if (store._loadMode === 'raw') {
       store._loadMode = undefined;
     }
     return dataSource;
-  },
+  }
 
-  _offProjection() {
+  _offProjection(): void {
     this._removeHandlers();
+    // @ts-expect-error the projection subscription is released
     this._removeHandlers = null;
-  },
+  }
 
-  dispose() {
-    const that = this;
-    that._disposeDataSource();
-    that._destroyHandles();
-    dropGrouping(that._context);
-    that._context.root.linkRemove().linkOff();
-    that._context.labelRoot && that._context.labelRoot.linkRemove().linkOff();
-    that._context.str.reset(that._context);
-    that._offProjection();
-    that._params = that._container = that._context = that.proxy = null;
-    return that;
-  },
+  dispose(): this {
+    this._disposeDataSource();
+    this._destroyHandles();
+    dropGrouping(this._context);
+    this._context.root.linkRemove().linkOff();
+    this._context.labelRoot && this._context.labelRoot.linkRemove().linkOff();
+    this._context.str.reset(this._context);
+    this._offProjection();
+    // @ts-expect-error dispose releases the parameters, the container, the context and the proxy
+    this._params = this._container = this._context = this.proxy = null;
+    return this;
+  }
 
   /// #DEBUG
-  TESTS_getContext() {
+  TESTS_getContext(): LayerContext {
     return this._context;
-  },
+  }
   /// #ENDDEBUG
 
-  setOptions(options) {
-    const that = this;
-    options = that._options = options || {};
-    that._dataSourceLoaded = Deferred();
-    if ('dataSource' in options && options.dataSource !== that._options_dataSource) {
-      that._options_dataSource = options.dataSource;
-      that._params.notifyDirty();
-      that._specificDataSourceOption = wrapToDataSource(options.dataSource);
-      that._refreshDataSource();
-    } else if (that._data.count() > 0) {
-      that._params.notifyDirty();
-      that._update((options.type !== undefined && options.type !== that._context.str.type)
-                || (options.elementType !== undefined && options.elementType !== that._context.str.elementType));
+  setOptions(options: ThemeValue): void {
+    options = this._options = options || {};
+    this._dataSourceLoaded = Deferred();
+    if ('dataSource' in options && options.dataSource !== this._options_dataSource) {
+      this._options_dataSource = options.dataSource;
+      this._params.notifyDirty();
+      this._specificDataSourceOption = wrapToDataSource(options.dataSource);
+      this._refreshDataSource();
+    } else if (this._data.count() > 0) {
+      this._params.notifyDirty();
+      this._update((options.type !== undefined && options.type !== this._context.str.type)
+                || (options.elementType !== undefined && options.elementType !== this._context.str.elementType));
     }
-    that._transformCore();
-  },
+    this._transformCore();
+  }
 
-  _update(isContextChanged) {
-    const that = this;
-    const context = that._context;
+  _update(isContextChanged: boolean): void {
+    const context = this._context;
     if (isContextChanged) {
       context.str.reset(context);
       context.root.clear();
       context.labelRoot && context.labelRoot.clear();
-      that._params.tracker.reset(); // T173037; TODO: There is no need to reset the entire tracker - only its memory about items
-      that._destroyHandles();
-      context.str = selectStrategy(that._options, that._data);
+      this._params.tracker.reset(); // T173037; TODO: There is no need to reset the entire tracker - only its memory about items
+      this._destroyHandles();
+      context.str = selectStrategy(this._options, this._data);
       context.str.setup(context);
-      that.proxy.type = context.str.type;
-      that.proxy.elementType = context.str.elementType;
+      this.proxy.type = context.str.type;
+      this.proxy.elementType = context.str.elementType;
     }
-    context.settings = processCommonSettings(context, that._options);
+    context.settings = processCommonSettings(context, this._options);
     context.hasSeparateLabel = !!(context.settings.label.enabled && context.str.hasLabelsGroup);
     context.hover = !!_parseScalar(context.settings.hoverEnabled, true);
     // There is intentionally no attempt to preserve previous selection (or part of it)
@@ -1097,30 +1181,30 @@ MapLayer.prototype = _extend({
     if (context.hasSeparateLabel) {
       if (!context.labelRoot) {
         // TODO: Link name should be built upon layer index rather than name
-        context.labelRoot = context.renderer.g().attr({ class: 'dxm-layer-labels' }).linkOn(that._container, { name: `${context.name}-labels`, after: context.name }).linkAppend();
-        that._transformCore();
+        context.labelRoot = context.renderer.g().attr({ class: 'dxm-layer-labels' }).linkOn(this._container, { name: `${context.name}-labels`, after: context.name }).linkAppend();
+        this._transformCore();
       }
     } else if (context.labelRoot) {
       context.labelRoot.linkRemove().linkOff();
       context.labelRoot = null;
     }
     if (isContextChanged) {
-      that._createHandles();
+      this._createHandles();
     }
     dropGrouping(context);
-    context.str.arrange(context, that._handles);
+    context.str.arrange(context, this._handles);
     context.str.updateGrouping(context);
-    that._updateHandles();
-    that._params.notifyReady();
-    if (that._dataSourceLoaded) { // T890687
-      that._dataSourceLoaded.resolve();
-      that._dataSourceLoaded = null;
+    this._updateHandles();
+    this._params.notifyReady();
+    if (this._dataSourceLoaded) { // T890687
+      this._dataSourceLoaded.resolve();
+      this._dataSourceLoaded = null;
     } else {
-      that._params.dataReady();
+      this._params.dataReady();
     }
-  },
+  }
 
-  getBounds() {
+  getBounds(): ThemeValue {
     return getMaxBound(this._handles.map(({ proxy }) => proxy.coordinates().map((coords) => {
       if (!_isArray(coords)) {
         return;
@@ -1134,35 +1218,33 @@ MapLayer.prototype = _extend({
 
       return coordsToBoundsSearch.reduce((min, c) => [_min(min[0], c[0]), _min(min[1], c[1]), _max(min[2], c[0]), _max(min[3], c[1])], [initValue[0], initValue[1], initValue[0], initValue[1]]);
     })).map(getMaxBound));
-  },
+  }
 
-  _destroyHandles() {
+  _destroyHandles(): void {
     this._handles.forEach((h) => h.dispose());
 
     if (this._context.selection) {
       this._context.selection.state = {};
     }
     this._handles = [];
-  },
+  }
 
-  _createHandles() {
-    const that = this;
-    const handles = that._handles = [];
-    const data = that._data;
+  _createHandles(): void {
+    const handles: MapLayerElementInstance[] = this._handles = [];
+    const data = this._data;
     let i;
     const ii = handles.length = data.count();
-    const context = that._context;
+    const context = this._context;
     const geometry = data.geometry;
     const attributes = data.attributes;
     let handle;
     let dataItem;
     for (i = 0; i < ii; ++i) {
       dataItem = data.item(i);
-      // @ts-expect-error
       handles[i] = new MapLayerElement(context, i, geometry(dataItem), attributes(dataItem));
     }
     // Customization must be performed before anything else happens to element (that is the idea of customization)
-    _isFunction(that._options.customize) && customizeHandles(that.getProxies(), that._options.customize, that._params.widget);
+    _isFunction(this._options.customize) && customizeHandles(this.getProxies(), this._options.customize, this._params.widget);
 
     for (i = 0; i < ii; ++i) {
       handle = handles[i];
@@ -1175,9 +1257,9 @@ MapLayer.prototype = _extend({
         handle && handle.restoreSelected();
       });
     }
-  },
+  }
 
-  _updateHandles() {
+  _updateHandles(): void {
     const handles = this._handles;
     let i;
     const ii = handles.length;
@@ -1192,24 +1274,24 @@ MapLayer.prototype = _extend({
         handles[i].adjustLabel();
       }
     }
-  },
+  }
 
-  _transformCore() {
+  _transformCore(): void {
     const transform = this._params.projection.getTransform();
     this._context.root.attr(transform);
     this._context.labelRoot && this._context.labelRoot.attr(transform);
-  },
+  }
 
-  _project() {
+  _project(): void {
     const handles = this._handles;
     let i;
     const ii = handles.length;
     for (i = 0; i < ii; ++i) {
       handles[i].project();
     }
-  },
+  }
 
-  _transform() {
+  _transform(): void {
     const handles = this._handles;
     let i;
     const ii = handles.length;
@@ -1217,32 +1299,32 @@ MapLayer.prototype = _extend({
     for (i = 0; i < ii; ++i) {
       handles[i].transform();
     }
-  },
+  }
 
-  getProxies() {
+  getProxies(): ElementProxy[] {
     return this._handles.map((p) => p.proxy);
-  },
+  }
 
-  getProxy(index) {
+  getProxy(index: number): ElementProxy {
     return this._handles[index].proxy;
-  },
+  }
 
-  raiseClick(i, dxEvent) {
+  raiseClick(i: number, dxEvent: ThemeValue): void {
     this._params.eventTrigger('click', {
       target: this._handles[i].proxy,
       event: dxEvent,
     });
-  },
+  }
 
-  hoverItem(i, state) {
+  hoverItem(i: number, state: boolean): void {
     this._handles[i].setHovered(state);
-  },
+  }
 
-  selectItem(i, state, _noEvent) {
+  selectItem(i: number, state: boolean, _noEvent?: boolean): void {
     this._handles[i].setSelected(state, _noEvent);
-  },
+  }
 
-  clearSelection() {
+  clearSelection(): void {
     const selection = this._context.selection;
     if (selection) {
       _each(selection.state, (_, handle) => {
@@ -1250,8 +1332,10 @@ MapLayer.prototype = _extend({
       });
       selection.state = {};
     }
-  },
-}, DataHelperMixin);
+  }
+};
+
+_extend(MapLayer.prototype, DataHelperMixin);
 
 function createProxy(handle, coords, attrs) {
   const proxy = {
@@ -1285,93 +1369,108 @@ function createProxy(handle, coords, attrs) {
   return proxy;
 }
 
-MapLayerElement = function (context, index, geometry, attributes) {
-  const that = this;
-  const proxy = that.proxy = createProxy(that, geometry.coordinates, _extend({}, attributes));
-  that._ctx = context;
-  that._index = index;
-  that._fig = that._label = null;
-  that._state = STATE_DEFAULT;
-  that._coordinates = geometry.coordinates;
-  that._settings = { label: {} };
-  // @ts-expect-error
-  proxy.index = index;
-  // @ts-expect-error
-  proxy.layer = context.layer;
-  // TODO: Replace "name" field with one referencing layer index and use layer index (instead of name) as layer id
-  // as it is more suitable, simple and consistent
-  that._data = { name: context.name, index };
-};
+let MapLayerElement = class MapLayerElement {
+  declare proxy: ElementProxy;
 
-MapLayerElement.prototype = {
-  constructor: MapLayerElement,
+  declare _ctx: LayerContext;
 
-  dispose() {
-    const that = this;
-    that._ctx = that.proxy = that._settings = that._fig = that._label = that.data = null;
-    return that;
-  },
+  declare _index: number;
 
-  project() {
+  declare _fig: ThemeValue;
+
+  declare _label: ThemeValue;
+
+  declare _state: number;
+
+  declare _coordinates: ThemeValue;
+
+  declare _settings: ThemeValue;
+
+  declare _data: { name: string; index: number };
+
+  declare _projection: ThemeValue;
+
+  declare _labelProjection: ThemeValue;
+
+  declare _styles: ThemeValue;
+
+  constructor(context: LayerContext, index: number, geometry: { coordinates: ThemeValue }, attributes: ThemeValue) {
+    const proxy: ElementProxy = this.proxy = createProxy(this, geometry.coordinates, _extend({}, attributes));
+    this._ctx = context;
+    this._index = index;
+    this._fig = this._label = null;
+    this._state = STATE_DEFAULT;
+    this._coordinates = geometry.coordinates;
+    this._settings = { label: {} };
+    proxy.index = index;
+    proxy.layer = context.layer;
+    // TODO: Replace "name" field with one referencing layer index and use layer index (instead of name) as layer id
+    // as it is more suitable, simple and consistent
+    this._data = { name: context.name, index };
+  }
+
+  dispose(): this {
+    // @ts-expect-error dispose releases the references; `data` is not a member, the element data is kept in `_data`
+    this._ctx = this.proxy = this._settings = this._fig = this._label = this.data = null;
+    return this;
+  }
+
+  project(): void {
     const context = this._ctx;
     this._projection = context.str.project(context.projection, this._coordinates);
     if (context.hasSeparateLabel && this._label) {
       this._projectLabel();
     }
-  },
+  }
 
-  _projectLabel() {
+  _projectLabel(): void {
     this._labelProjection = this._ctx.str.projectLabel(this._projection);
-  },
+  }
 
-  draw() {
-    const that = this;
+  draw(): void {
     const context = this._ctx;
-    context.str.draw(context, that._fig = {}, that._data);
-    that._fig.root.append(context.root);
-  },
+    context.str.draw(context, this._fig = {}, this._data);
+    this._fig.root.append(context.root);
+  }
 
-  transform() {
-    const that = this;
-    const context = that._ctx;
-    context.str.transform(that._fig, context.projection, that._projection);
-    if (context.hasSeparateLabel && that._label) {
-      that._transformLabel();
+  transform(): void {
+    const context = this._ctx;
+    context.str.transform(this._fig, context.projection, this._projection);
+    if (context.hasSeparateLabel && this._label) {
+      this._transformLabel();
     }
-  },
+  }
 
-  _transformLabel() {
+  _transformLabel(): void {
     this._ctx.str.transformLabel(this._label, this._ctx.projection, this._labelProjection);
-  },
+  }
 
-  refresh() {
-    const that = this;
-    const strategy = that._ctx.str;
-    const settings = getItemSettings(that._ctx, that.proxy, that._settings);
-    that._styles = strategy.getStyles(settings);
-    strategy.refresh(that._ctx, that._fig, that._data, that.proxy, settings);
-    that._refreshLabel(settings);
-    that._setState();
-  },
+  refresh(): void {
+    const strategy = this._ctx.str;
+    const settings = getItemSettings(this._ctx, this.proxy, this._settings);
+    this._styles = strategy.getStyles(settings);
+    strategy.refresh(this._ctx, this._fig, this._data, this.proxy, settings);
+    this._refreshLabel(settings);
+    this._setState();
+  }
 
-  _refreshLabel(settings) {
-    const that = this;
-    const context = that._ctx;
+  _refreshLabel(settings: ThemeValue): void {
+    const context = this._ctx;
     const labelSettings = settings.label;
-    let label = that._label;
+    let label = this._label;
     if (context.settings.label.enabled) {
       if (!label) {
-        label = that._label = {
-          root: context.labelRoot || that._fig.root,
+        label = this._label = {
+          root: context.labelRoot || this._fig.root,
           text: context.renderer.text().attr({ class: 'dxm-label' }),
           size: [0, 0],
         };
         if (context.hasSeparateLabel) {
-          that._projectLabel();
-          that._transformLabel();
+          this._projectLabel();
+          this._transformLabel();
         }
       }
-      label.value = _String(that.proxy.text || that.proxy.attribute(labelSettings.dataField) || '');
+      label.value = _String(this.proxy.text || this.proxy.attribute(labelSettings.dataField) || '');
       if (label.value) {
         // The data should be set when the element is created but it requires changes in the Renderer
         label.text.attr({ text: label.value, x: 0, y: 0 }).css(_patchFontOptions(labelSettings.font)).attr({
@@ -1379,26 +1478,26 @@ MapLayerElement.prototype = {
           stroke: labelSettings.stroke,
           'stroke-width': labelSettings['stroke-width'],
           'stroke-opacity': labelSettings['stroke-opacity'],
-        }).data(context.dataKey, that._data)
+        }).data(context.dataKey, this._data)
           .append(label.root);
         label.settings = settings;
       }
     } else if (label) {
       label.text.remove();
-      that._label = null;
+      this._label = null;
     }
-  },
+  }
 
-  measureLabel() {
+  measureLabel(): void {
     const label = this._label;
     let bBox;
     if (label.value) {
       bBox = label.text.getBBox();
       label.size = [bBox.width, bBox.height, -bBox.y - bBox.height / 2];
     }
-  },
+  }
 
-  adjustLabel() {
+  adjustLabel(): void {
     const label = this._label;
     let offset;
     if (label.value) {
@@ -1406,80 +1505,77 @@ MapLayerElement.prototype = {
       label.settings = null;
       label.text.attr({ x: offset[0], y: offset[1] + label.size[2] });
     }
-  },
+  }
 
-  update(settings) {
-    const that = this;
-    that._settings = combineSettings(that._settings, settings);
+  update(settings: ThemeValue): void {
+    this._settings = combineSettings(this._settings, settings);
     // This check is required because the method can be called during the customization stage when DOM content neither is created nor should be changed
-    if (that._fig) {
-      that.refresh();
-      if (that._label && that._label.value) {
-        that.measureLabel();
-        that.adjustLabel();
+    if (this._fig) {
+      this.refresh();
+      if (this._label && this._label.value) {
+        this.measureLabel();
+        this.adjustLabel();
       }
     }
-  },
+  }
 
-  _setState() {
+  _setState(): void {
     this._ctx.str.setState(this._fig, this._styles, STATE_TO_INDEX[this._state]);
-  },
+  }
 
-  _setForeground() {
+  _setForeground(): void {
     const root = this._fig.root;
 
     this._state ? root.toForeground() : root.toBackground();
-  },
+  }
 
-  setHovered(state) {
-    const that = this;
-    const currentState = hasFlag(that._state, STATE_HOVERED);
+  setHovered(state: boolean): this {
+    const currentState = hasFlag(this._state, STATE_HOVERED);
     const newState = !!state;
-    if (that._ctx.hover && currentState !== newState) {
-      that._state = setFlag(that._state, STATE_HOVERED, newState);
-      that._setState();
-      that._setForeground();
-      raiseChanged(that._ctx, that, newState, 'hoverChanged');
+    if (this._ctx.hover && currentState !== newState) {
+      this._state = setFlag(this._state, STATE_HOVERED, newState);
+      this._setState();
+      this._setForeground();
+      raiseChanged(this._ctx, this, newState, 'hoverChanged');
     }
-    return that;
-  },
+    return this;
+  }
 
-  setSelected(state, _noEvent) {
-    const that = this;
-    const currentState = hasFlag(that._state, STATE_SELECTED);
+  setSelected(state: boolean, _noEvent?: boolean): void {
+    const currentState = hasFlag(this._state, STATE_SELECTED);
     const newState = !!state;
-    const selection = that._ctx.selection;
+    const selection = this._ctx.selection;
     let tmp;
     if (selection && currentState !== newState) {
-      that._state = setFlag(that._state, STATE_SELECTED, newState);
+      this._state = setFlag(this._state, STATE_SELECTED, newState);
       tmp = selection.state[selection.single];
       selection.state[selection.single] = null; // This is to prevent stack overflow
       if (tmp) {
         tmp.setSelected(false);
       }
-      selection.state[selection.single || that._index] = state ? that : null;
+      selection.state[selection.single || this._index] = state ? this : null;
       // This check is required because the method can be called during the customization stage when DOM content neither is created nor should be changed
-      if (that._fig) {
-        that._setState();
-        that._setForeground();
+      if (this._fig) {
+        this._setState();
+        this._setForeground();
         if (!_noEvent) {
-          raiseChanged(that._ctx, that, newState, 'selectionChanged');
+          raiseChanged(this._ctx, this, newState, 'selectionChanged');
         }
       }
     }
-  },
+  }
 
-  isSelected() {
+  isSelected(): boolean {
     return hasFlag(this._state, STATE_SELECTED);
-  },
+  }
 
-  resetSelected() {
+  resetSelected(): void {
     this._state = setFlag(this._state, STATE_SELECTED, false);
-  },
+  }
 
-  restoreSelected() {
+  restoreSelected(): void {
     this._fig.root.toForeground();
-  },
+  }
 };
 
 // http://en.wikipedia.org/wiki/Centroid
@@ -1597,33 +1693,50 @@ function projectLineLabel(coordinates) {
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let MapLayerCollection = function (params) {
-  const that = this;
-  const renderer = params.renderer;
-  that._params = params;
-  that._layers = [];
-  // TODO: Use Set instance instead of plain object
-  that._layerByName = {};
-  that._rect = [0, 0, 0, 0];
-  that._clip = renderer.clipRect();
-  that._background = renderer.rect().attr({ class: 'dxm-background' }).data(params.dataKey, { name: 'background' }).append(renderer.root);
-  that._container = renderer.g().attr({ class: 'dxm-layers', 'clip-path': that._clip.id }).append(renderer.root).enableLinks();
-  that._subscribeToTracker(params.tracker, renderer, params.eventTrigger);
-  that._dataReady = params.dataReady;
-};
+export let MapLayerCollection = class MapLayerCollection {
+  declare _params: MapLayerParams;
 
-MapLayerCollection.prototype = {
-  constructor: MapLayerCollection,
+  declare _layers: MapLayerInstance[];
 
-  dispose() {
-    const that = this;
-    that._clip.dispose();
-    that._layers.forEach((l) => l.dispose());
-    that._offTracker();
-    that._params = that._offTracker = that._layers = that._layerByName = that._clip = that._background = that._container = null;
-  },
+  declare _layerByName: Record<string, MapLayerInstance>;
 
-  _subscribeToTracker(tracker, renderer, eventTrigger) {
+  declare _rect: number[];
+
+  declare _clip: ThemeValue;
+
+  declare _background: ThemeValue;
+
+  declare _container: ThemeValue;
+
+  declare _offTracker: () => void;
+
+  declare _dataReady: () => void;
+
+  declare _borderWidth: number;
+
+  constructor(params: MapLayerParams) {
+    const renderer = params.renderer;
+    this._params = params;
+    this._layers = [];
+    // TODO: Use Set instance instead of plain object
+    this._layerByName = {};
+    this._rect = [0, 0, 0, 0];
+    this._clip = renderer.clipRect();
+    this._background = renderer.rect().attr({ class: 'dxm-background' }).data(params.dataKey, { name: 'background' }).append(renderer.root);
+    this._container = renderer.g().attr({ class: 'dxm-layers', 'clip-path': this._clip.id }).append(renderer.root).enableLinks();
+    this._subscribeToTracker(params.tracker, renderer, params.eventTrigger);
+    this._dataReady = params.dataReady;
+  }
+
+  dispose(): void {
+    this._clip.dispose();
+    this._layers.forEach((l) => l.dispose());
+    this._offTracker();
+    // @ts-expect-error dispose releases the parameters, the subscription, the layers and the elements
+    this._params = this._offTracker = this._layers = this._layerByName = this._clip = this._background = this._container = null;
+  }
+
+  _subscribeToTracker(tracker: LayerTracker, renderer: ThemeValue, eventTrigger: MapLayerParams['eventTrigger']): void {
     const that = this;
     that._offTracker = tracker.on({
       click(arg) {
@@ -1652,26 +1765,25 @@ MapLayerCollection.prototype = {
         }
       },
     });
-  },
+  }
 
-  setOptions(options) {
-    const that = this;
+  setOptions(options: ThemeValue): void {
     const optionList = options ? _isArray(options) ? options : [options] : [];
-    let layers = that._layers;
-    let readyCallbacks = [];
+    let layers = this._layers;
+    let readyCallbacks: ThemeValue[] = [];
     const needToCreateLayers = optionList.length !== layers.length || layers.some((l, i) => {
       const name = getName(optionList, i);
       return _isDefined(name) && name !== l.proxy.name;
     });
 
     if (needToCreateLayers) {
-      that._params.tracker.reset();
-      that._layers.forEach((l) => l.dispose());
-      const layerByName = that._layerByName = {};
-      that._layers = layers = [];
+      this._params.tracker.reset();
+      this._layers.forEach((l) => l.dispose());
+      const layerByName = this._layerByName = {};
+      this._layers = layers = [];
       for (let i = 0, ii = optionList.length; i < ii; ++i) {
         const name = getName(optionList, i) || `map-layer-${i}`;
-        const layer = layers[i] = new MapLayer(that._params, that._container, name, i);
+        const layer = layers[i] = new MapLayer(this._params, this._container, name, i);
         layerByName[name] = layer;
       }
     }
@@ -1680,42 +1792,42 @@ MapLayerCollection.prototype = {
       l.setOptions(optionList[i]);
     });
     readyCallbacks = layers.map((l) => l.getDataReadyCallback());
-    readyCallbacks.length && when.apply(undefined, readyCallbacks).done(that._dataReady);
-  },
+    readyCallbacks.length && when.apply(undefined, readyCallbacks).done(this._dataReady);
+  }
 
-  _updateClip() {
+  _updateClip(): void {
     const rect = this._rect;
     const bw = this._borderWidth;
     this._clip.attr({
       x: rect[0] + bw, y: rect[1] + bw, width: _max(rect[2] - bw * 2, 0), height: _max(rect[3] - bw * 2, 0),
     });
-  },
+  }
 
-  setBackgroundOptions(options) {
+  setBackgroundOptions(options: ThemeValue): void {
     this._background.attr({ stroke: options.borderColor, 'stroke-width': options.borderWidth, fill: options.color });
     this._borderWidth = _max(options.borderWidth, 0);
     this._updateClip();
-  },
+  }
 
-  setRect(rect) {
+  setRect(rect: number[]): void {
     this._rect = rect;
     this._background.attr({
       x: rect[0], y: rect[1], width: rect[2], height: rect[3],
     });
     this._updateClip();
-  },
+  }
 
-  byIndex(index) {
+  byIndex(index: number): MapLayerInstance | undefined {
     return this._layers[index];
-  },
+  }
 
-  byName(name) {
+  byName(name: string): MapLayerInstance | undefined {
     return this._layerByName[name];
-  },
+  }
 
-  items() {
+  items(): MapLayerInstance[] {
     return this._layers;
-  },
+  }
 };
 
 /// #DEBUG

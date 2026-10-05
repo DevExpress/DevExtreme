@@ -15,8 +15,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
+/* eslint-disable max-classes-per-file */
 
 import { extend } from '@js/core/utils/extend';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 
 const _Number = Number;
@@ -41,90 +43,139 @@ const DEFAULT_CENTER = [NaN, NaN];
 
 const DEFAULT_ENGINE_NAME = 'mercator';
 
-function floatsEqual(f1, f2) {
+type ProjectMethod = (coordinates: number[]) => number[];
+
+interface EngineParameters {
+  to: ProjectMethod;
+  from?: ProjectMethod;
+  aspectRatio?: ThemeValue;
+}
+
+type EngineInstance = InstanceType<typeof Engine>;
+
+interface ProjectionParams {
+  centerChanged: (center: number[]) => void;
+  zoomChanged: (zoom: number) => void;
+}
+
+interface ProjectionCanvas {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
+function floatsEqual(f1: number, f2: number): boolean {
   return _abs(f1 - f2) < 1E-8;
 }
 
-function arraysEqual(a1, a2) {
+function arraysEqual(a1: number[], a2: number[]): boolean {
   return floatsEqual(a1[0], a2[0]) && floatsEqual(a1[1], a2[1]);
 }
 
-function parseAndClamp(value, minValue, maxValue, defaultValue) {
+function parseAndClamp(value: ThemeValue, minValue: number, maxValue: number, defaultValue: number): number {
   const val = _Number(value);
   return isFinite(val) ? _min(_max(val, minValue), maxValue) : defaultValue;
 }
 
-function parseAndClampArray(value, minValue, maxValue, defaultValue) {
+function parseAndClampArray(value: ThemeValue[], minValue: number[], maxValue: number[], defaultValue: number[]): number[] {
   return [
     parseAndClamp(value[0], minValue[0], maxValue[0], defaultValue[0]),
     parseAndClamp(value[1], minValue[1], maxValue[1], defaultValue[1]),
   ];
 }
 
-function getEngine(engine) {
+function getEngine(engine?: ThemeValue): EngineInstance {
   return (engine instanceof Engine && engine) || projection.get(engine) || projection(engine) || projection.get(DEFAULT_ENGINE_NAME);
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let Projection = function (parameters) {
-  const that = this;
-  that._initEvents();
-  that._params = parameters;
-  // @ts-expect-error
-  that._engine = getEngine();
-  that._center = that._engine.center();
-  that._adjustCenter();
-};
+export let Projection = class Projection {
+  declare _minZoom: number;
 
-Projection.prototype = {
-  constructor: Projection,
+  declare _maxZoom: number;
 
-  _minZoom: DEFAULT_MIN_ZOOM,
-  _maxZoom: DEFAULT_MAX_ZOOM,
-  _zoom: DEFAULT_MIN_ZOOM,
-  _center: DEFAULT_CENTER,
-  _canvas: {},
-  _scale: [],
+  declare _zoom: number;
 
-  dispose() {
+  declare _center: number[];
+
+  declare _canvas: ProjectionCanvas;
+
+  declare _scale: number[];
+
+  declare _eventNames: string[];
+
+  declare _params: ProjectionParams;
+
+  declare _engine: EngineInstance;
+
+  declare _x0: number;
+
+  declare _y0: number;
+
+  declare _xRadius: number;
+
+  declare _yRadius: number;
+
+  declare _xCenter: number;
+
+  declare _yCenter: number;
+
+  declare _moveCenter: number[] | null;
+
+  declare _initEvents: () => void;
+
+  declare _disposeEvents: () => void;
+
+  declare _fire: (name: string, arg?: ThemeValue) => void;
+
+  declare on: (handlers: Record<string, () => void>) => () => void;
+
+  constructor(parameters: ProjectionParams) {
+    this._initEvents();
+    this._params = parameters;
+    this._engine = getEngine();
+    this._center = this._engine.center();
+    this._adjustCenter();
+  }
+
+  dispose(): void {
     this._disposeEvents();
-  },
+  }
 
-  setEngine(value) {
-    const that = this;
+  setEngine(value: ThemeValue): void {
     const engine = getEngine(value);
-    if (that._engine !== engine) {
-      that._engine = engine;
-      that._fire('engine');
-      if (that._changeCenter(engine.center())) {
-        that._triggerCenterChanged();
+    if (this._engine !== engine) {
+      this._engine = engine;
+      this._fire('engine');
+      if (this._changeCenter(engine.center())) {
+        this._triggerCenterChanged();
       }
-      if (that._changeZoom(that._minZoom)) {
-        that._triggerZoomChanged();
+      if (this._changeZoom(this._minZoom)) {
+        this._triggerZoomChanged();
       }
-      that._adjustCenter();
-      that._setupScreen();
+      this._adjustCenter();
+      this._setupScreen();
     }
-  },
+  }
 
-  setBounds(bounds) {
+  setBounds(bounds: number[] | null | undefined): void {
     if (bounds !== undefined) {
       this.setEngine(this._engine.original().bounds(bounds));
     }
-  },
+  }
 
-  _setupScreen() {
-    const that = this;
-    const canvas = that._canvas;
+  _setupScreen(): void {
+    const canvas = this._canvas;
     const width = canvas.width;
     const height = canvas.height;
-    const engine = that._engine;
+    const engine = this._engine;
     const aspectRatio = engine.ar();
-    that._x0 = canvas.left + width / 2;
-    that._y0 = canvas.top + height / 2;
+    this._x0 = canvas.left + width / 2;
+    this._y0 = canvas.top + height / 2;
 
-    const min = [that.project([engine.min()[0], 0])[0], that.project([0, engine.min()[1]])[1]];
-    const max = [that.project([engine.max()[0], 0])[0], that.project([0, engine.max()[1]])[1]];
+    const min = [this.project([engine.min()[0], 0])[0], this.project([0, engine.min()[1]])[1]];
+    const max = [this.project([engine.max()[0], 0])[0], this.project([0, engine.max()[1]])[1]];
 
     const screenAR = width / height;
     const boundsAR = _abs(max[0] - min[0]) / _abs(max[1] - min[1]);
@@ -137,214 +188,205 @@ Projection.prototype = {
     }
 
     if (aspectRatio * boundsAR >= screenAR) {
-      that._xRadius = width / 2 / correction;
-      that._yRadius = (width / 2) / (aspectRatio * correction);
+      this._xRadius = width / 2 / correction;
+      this._yRadius = (width / 2) / (aspectRatio * correction);
     } else {
-      that._xRadius = (height / 2) * (aspectRatio / correction);
-      that._yRadius = height / 2 / correction;
+      this._xRadius = (height / 2) * (aspectRatio / correction);
+      this._yRadius = height / 2 / correction;
     }
-    that._fire('screen');
-  },
+    this._fire('screen');
+  }
 
-  setSize(canvas) {
+  setSize(canvas: ProjectionCanvas): void {
     this._canvas = canvas;
     this._setupScreen();
-  },
+  }
 
-  getCanvas() {
+  getCanvas(): ProjectionCanvas {
     return this._canvas;
-  },
+  }
 
-  _toScreen(coordinates) {
+  _toScreen(coordinates: number[]): number[] {
     return [
       this._x0 + this._xRadius * coordinates[0],
       this._y0 + this._yRadius * coordinates[1],
     ];
-  },
+  }
 
-  _fromScreen(coordinates) {
+  _fromScreen(coordinates: number[]): number[] {
     return [
       (coordinates[0] - this._x0) / this._xRadius,
       (coordinates[1] - this._y0) / this._yRadius,
     ];
-  },
+  }
 
-  _toTransformed(coordinates) {
+  _toTransformed(coordinates: number[]): number[] {
     return [
       coordinates[0] * this._zoom + this._xCenter,
       coordinates[1] * this._zoom + this._yCenter,
     ];
-  },
+  }
 
-  _toTransformedFast(coordinates) {
+  _toTransformedFast(coordinates: number[]): number[] {
     return [
       coordinates[0] * this._zoom,
       coordinates[1] * this._zoom,
     ];
-  },
+  }
 
-  _fromTransformed(coordinates) {
+  _fromTransformed(coordinates: number[]): number[] {
     return [
       (coordinates[0] - this._xCenter) / this._zoom,
       (coordinates[1] - this._yCenter) / this._zoom,
     ];
-  },
+  }
 
-  _adjustCenter() {
-    const that = this;
-    const center = that._engine.project(that._center);
-    that._xCenter = -center[0] * that._zoom || 0;
-    that._yCenter = -center[1] * that._zoom || 0;
-  },
+  _adjustCenter(): void {
+    const center = this._engine.project(this._center);
+    this._xCenter = -center[0] * this._zoom || 0;
+    this._yCenter = -center[1] * this._zoom || 0;
+  }
 
-  project(coordinates) {
+  project(coordinates: number[]): number[] {
     return this._engine.project(coordinates);
-  },
+  }
 
-  transform(coordinates) {
+  transform(coordinates: number[]): number[] {
     return this._toScreen(this._toTransformedFast(coordinates));
-  },
+  }
 
-  isInvertible() {
+  isInvertible(): boolean {
     return this._engine.isInvertible();
-  },
+  }
 
-  getSquareSize(size) {
+  getSquareSize(size: number[]): number[] {
     return [size[0] * this._zoom * this._xRadius, size[1] * this._zoom * this._yRadius];
-  },
+  }
 
-  getZoom() {
+  getZoom(): number {
     return this._zoom;
-  },
+  }
 
-  _changeZoom(value) {
-    const that = this;
-    const oldZoom = that._zoom;
-    const newZoom = that._zoom = parseAndClamp(value, that._minZoom, that._maxZoom, that._minZoom);
+  _changeZoom(value: ThemeValue): boolean {
+    const oldZoom = this._zoom;
+    const newZoom = this._zoom = parseAndClamp(value, this._minZoom, this._maxZoom, this._minZoom);
     const isChanged = !floatsEqual(oldZoom, newZoom);
     if (isChanged) {
-      that._adjustCenter();
-      that._fire('zoom');
+      this._adjustCenter();
+      this._fire('zoom');
     }
     return isChanged;
-  },
+  }
 
-  setZoom(value) {
+  setZoom(value: ThemeValue): void {
     if (this._engine.isInvertible() && this._changeZoom(value)) {
       this._triggerZoomChanged();
     }
-  },
+  }
 
-  getScaledZoom() {
+  getScaledZoom(): number {
     return _round((this._scale.length - 1) * _ln(this._zoom) / _ln(this._maxZoom));
-  },
+  }
 
-  setScaledZoom(scaledZoom) {
+  setScaledZoom(scaledZoom: number): void {
     this.setZoom(this._scale[_round(scaledZoom)]);
-  },
+  }
 
-  changeScaledZoom(deltaZoom) {
+  changeScaledZoom(deltaZoom: number): void {
     this.setZoom(this._scale[_max(_min(_round(this.getScaledZoom() + deltaZoom), this._scale.length - 1), 0)]);
-  },
+  }
 
-  getZoomScalePartition() {
+  getZoomScalePartition(): number {
     return this._scale.length - 1;
-  },
+  }
 
-  _setupScaling() {
-    const that = this;
-    const k = _max(_round(TWO_TO_LN2 * _ln(that._maxZoom)), 4);
-    const step = that._maxZoom ** (1 / k);
-    let zoom = that._minZoom;
-    that._scale = [zoom];
+  _setupScaling(): void {
+    const k = _max(_round(TWO_TO_LN2 * _ln(this._maxZoom)), 4);
+    const step = this._maxZoom ** (1 / k);
+    let zoom = this._minZoom;
+    this._scale = [zoom];
     for (let i = 1; i <= k; ++i) {
-      that._scale.push(zoom *= step);
+      this._scale.push(zoom *= step);
     }
-  },
+  }
 
-  setMaxZoom(maxZoom) {
-    const that = this;
-    that._minZoom = DEFAULT_MIN_ZOOM;
-    that._maxZoom = parseAndClamp(maxZoom, that._minZoom, _Number.MAX_VALUE, DEFAULT_MAX_ZOOM);
-    that._setupScaling();
-    if (that._zoom > that._maxZoom) {
-      that.setZoom(that._maxZoom);
+  setMaxZoom(maxZoom: ThemeValue): void {
+    this._minZoom = DEFAULT_MIN_ZOOM;
+    this._maxZoom = parseAndClamp(maxZoom, this._minZoom, _Number.MAX_VALUE, DEFAULT_MAX_ZOOM);
+    this._setupScaling();
+    if (this._zoom > this._maxZoom) {
+      this.setZoom(this._maxZoom);
     }
-    that._fire('max-zoom');
-  },
+    this._fire('max-zoom');
+  }
 
-  getCenter() {
+  getCenter(): number[] {
     return this._center.slice();
-  },
+  }
 
-  setCenter(value) {
+  setCenter(value: ThemeValue): void {
     if (this._engine.isInvertible() && this._changeCenter(value || [])) {
       this._triggerCenterChanged();
     }
-  },
+  }
 
-  _changeCenter(value) {
-    const that = this;
-    const engine = that._engine;
-    const oldCenter = that._center;
-    const newCenter = that._center = parseAndClampArray(value, engine.min(), engine.max(), engine.center());
+  _changeCenter(value: ThemeValue[]): boolean {
+    const engine = this._engine;
+    const oldCenter = this._center;
+    const newCenter = this._center = parseAndClampArray(value, engine.min(), engine.max(), engine.center());
     const isChanged = !arraysEqual(oldCenter, newCenter);
     if (isChanged) {
-      that._adjustCenter();
-      that._fire('center');
+      this._adjustCenter();
+      this._fire('center');
     }
     return isChanged;
-  },
+  }
 
-  _triggerCenterChanged() {
+  _triggerCenterChanged(): void {
     this._params.centerChanged(this.getCenter());
-  },
+  }
 
-  _triggerZoomChanged() {
+  _triggerZoomChanged(): void {
     this._params.zoomChanged(this.getZoom());
-  },
+  }
 
-  setCenterByPoint(coordinates, screenPosition) {
-    const that = this;
-    const p = that._engine.project(coordinates);
-    const q = that._fromScreen(screenPosition);
-    that.setCenter(that._engine.unproject([
-      -q[0] / that._zoom + p[0],
-      -q[1] / that._zoom + p[1],
+  setCenterByPoint(coordinates: number[], screenPosition: number[]): void {
+    const p = this._engine.project(coordinates);
+    const q = this._fromScreen(screenPosition);
+    this.setCenter(this._engine.unproject([
+      -q[0] / this._zoom + p[0],
+      -q[1] / this._zoom + p[1],
     ]));
-  },
+  }
 
-  beginMoveCenter() {
+  beginMoveCenter(): void {
     if (this._engine.isInvertible()) {
       this._moveCenter = this._center;
     }
-  },
+  }
 
-  endMoveCenter() {
-    const that = this;
-    if (that._moveCenter) {
-      if (!arraysEqual(that._moveCenter, that._center)) {
-        that._triggerCenterChanged();
+  endMoveCenter(): void {
+    if (this._moveCenter) {
+      if (!arraysEqual(this._moveCenter, this._center)) {
+        this._triggerCenterChanged();
       }
-      that._moveCenter = null;
+      this._moveCenter = null;
     }
-  },
+  }
 
-  moveCenter(shift) {
-    const that = this;
-    if (that._moveCenter) {
-      const current = that.toScreenPoint(that._center);
-      that._changeCenter(that.fromScreenPoint([current[0] + shift[0], current[1] + shift[1]]));
+  moveCenter(shift: number[]): void {
+    if (this._moveCenter) {
+      const current = this.toScreenPoint(this._center);
+      this._changeCenter(this.fromScreenPoint([current[0] + shift[0], current[1] + shift[1]]));
     }
-  },
+  }
 
-  getViewport() {
-    const that = this;
-    const unproject = that._engine.unproject;
-    const lt = unproject(that._fromTransformed([-1, -1]));
-    const lb = unproject(that._fromTransformed([-1, +1]));
-    const rt = unproject(that._fromTransformed([+1, -1]));
-    const rb = unproject(that._fromTransformed([+1, +1]));
+  getViewport(): number[] {
+    const unproject = this._engine.unproject;
+    const lt = unproject(this._fromTransformed([-1, -1]));
+    const lb = unproject(this._fromTransformed([-1, +1]));
+    const rt = unproject(this._fromTransformed([+1, -1]));
+    const rb = unproject(this._fromTransformed([+1, +1]));
     const minMax = findMinMax([
       selectFarthestPoint(lt[0], lb[0], rt[0], rb[0]),
       selectFarthestPoint(lt[1], rt[1], lb[1], rb[1]),
@@ -352,9 +394,9 @@ Projection.prototype = {
       selectFarthestPoint(rt[0], rb[0], lt[0], lb[0]),
       selectFarthestPoint(lb[1], rb[1], lt[1], rt[1]),
     ]);
-    // @ts-expect-error
+    // @ts-expect-error concat of the untyped `[]` literal (never[]) does not accept numbers
     return [].concat(minMax.min[0], minMax.max[1], minMax.max[0], minMax.min[1]);
-  },
+  }
 
   // T254127
   // There should be no expectation that if viewport is got with `getViewport` and set with `setViewport`
@@ -364,41 +406,49 @@ Projection.prototype = {
   // For example:
   // the "mercator" is non invertible - longitude is invertible, latitude is not (because of tan and log)
   // the "equirectangular" is invertible (it uses simple linear transformations)
-  setViewport(viewport) {
+  setViewport(viewport: number[] | null | undefined): void {
     const engine = this._engine;
     const data = viewport ? getZoomAndCenterFromViewport(engine.project, engine.unproject, viewport) : [this._minZoom, engine.center()];
     this.setZoom(data[0]);
     this.setCenter(data[1]);
-  },
+  }
 
-  getTransform() {
+  getTransform(): { translateX: number; translateY: number } {
     return { translateX: this._xCenter * this._xRadius, translateY: this._yCenter * this._yRadius };
-  },
+  }
 
-  fromScreenPoint(coordinates) {
+  fromScreenPoint(coordinates: number[]): number[] {
     return this._engine.unproject(this._fromTransformed(this._fromScreen(coordinates)));
-  },
+  }
 
-  toScreenPoint(coordinates) {
+  toScreenPoint(coordinates: number[]): number[] {
     return this._toScreen(this._toTransformed(this._engine.project(coordinates)));
-  },
-
-  _eventNames: ['engine', 'screen', 'center', 'zoom', 'max-zoom'],
+  }
 };
+
+Object.assign(Projection.prototype, {
+  _minZoom: DEFAULT_MIN_ZOOM,
+  _maxZoom: DEFAULT_MAX_ZOOM,
+  _zoom: DEFAULT_MIN_ZOOM,
+  _center: DEFAULT_CENTER,
+  _canvas: {},
+  _scale: [],
+  _eventNames: ['engine', 'screen', 'center', 'zoom', 'max-zoom'],
+});
 
 makeEventEmitter(Projection);
 
-function selectFarthestPoint(point1, point2, basePoint1, basePoint2) {
+function selectFarthestPoint(point1: number, point2: number, basePoint1: number, basePoint2: number): number {
   const basePoint = (basePoint1 + basePoint2) / 2;
   return _abs(point1 - basePoint) > _abs(point2 - basePoint) ? point1 : point2;
 }
 
-function selectClosestPoint(point1, point2, basePoint1, basePoint2) {
+function selectClosestPoint(point1: number, point2: number, basePoint1: number, basePoint2: number): number {
   const basePoint = (basePoint1 + basePoint2) / 2;
   return _abs(point1 - basePoint) < _abs(point2 - basePoint) ? point1 : point2;
 }
 
-function getZoomAndCenterFromViewport(project, unproject, viewport) {
+function getZoomAndCenterFromViewport(project: ProjectMethod, unproject: ProjectMethod, viewport: number[]): [number, number[]] {
   const lt = project([viewport[0], viewport[3]]);
   const lb = project([viewport[0], viewport[1]]);
   const rt = project([viewport[2], viewport[3]]);
@@ -413,32 +463,32 @@ function getZoomAndCenterFromViewport(project, unproject, viewport) {
   ];
 }
 
-function setMinMax(engine, p1, p2) {
+function setMinMax(engine: EngineInstance, p1: number[], p2: number[]): void {
   const { min, max } = findMinMax(p1, p2);
   engine.min = returnArray(min);
   engine.max = returnArray(max);
 }
 
 const Engine = class {
-  min;
+  declare min: () => number[];
 
-  max;
+  declare max: () => number[];
 
-  isInvertible;
+  declare isInvertible: () => boolean;
 
-  project;
+  declare project: ProjectMethod;
 
-  unproject;
+  declare unproject: ProjectMethod;
 
-  original;
+  declare original: () => EngineInstance;
 
-  source;
+  declare source: () => EngineParameters;
 
-  ar;
+  declare ar: () => number;
 
-  center;
+  declare center: () => number[];
 
-  constructor(parameters) {
+  constructor(parameters: EngineParameters) {
     const that = this;
     const project = createProjectMethod(parameters.to);
     const unproject = parameters.from ? createUnprojectMethod(parameters.from) : returnValue(DEFAULT_CENTER);
@@ -446,7 +496,7 @@ const Engine = class {
     that.project = project;
     that.unproject = unproject;
     that.original = returnValue(that);
-    that.source = function () {
+    that.source = function (): EngineParameters {
       return extend({}, parameters);
     };
     that.isInvertible = returnValue(!!parameters.from);
@@ -461,7 +511,7 @@ const Engine = class {
     ]);
   }
 
-  aspectRatio(aspectRatio) {
+  aspectRatio(aspectRatio: ThemeValue): EngineInstance {
     const engine = new Engine(extend(this.source(), { aspectRatio }));
     engine.original = this.original;
     engine.min = this.min;
@@ -469,7 +519,7 @@ const Engine = class {
     return engine;
   }
 
-  bounds(bounds) {
+  bounds(bounds: number[] | null | undefined): EngineInstance {
     bounds = bounds || [];
     const parameters = this.source();
     const min = this.min();
@@ -491,27 +541,27 @@ const Engine = class {
   }
 };
 
-function invertVerticalAxis(pair) {
+function invertVerticalAxis(pair: number[]): number[] {
   return [pair[0], -pair[1]];
 }
 
-function createProjectMethod(method) {
+function createProjectMethod(method: ProjectMethod): ProjectMethod {
   return (arg) => invertVerticalAxis(method(arg));
 }
 
-function createUnprojectMethod(method) {
+function createUnprojectMethod(method: ProjectMethod): ProjectMethod {
   return (arg) => method(invertVerticalAxis(arg));
 }
 
-function returnValue(value) {
+function returnValue<T>(value: T): () => T {
   return () => value;
 }
 
-function returnArray(value) {
+function returnArray(value: number[]): () => number[] {
   return () => value.slice();
 }
 
-function findMinMax(p1, p2) {
+function findMinMax(p1: number[], p2: number[]): { min: number[]; max: number[] } {
   return {
     min: [_min(p1[0], p2[0]), _min(p1[1], p2[1])],
     max: [_max(p1[0], p2[0]), _max(p1[1], p2[1])],

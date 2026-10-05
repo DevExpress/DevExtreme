@@ -9,19 +9,18 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
+/* eslint-disable max-classes-per-file */
 
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as wheelEventName } from '@js/common/core/events/core/wheel';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import { getNavigator, hasProperty } from '@js/core/utils/window';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { parseScalar } from '@ts/viz/core/utils';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 
@@ -52,41 +51,106 @@ const DRAG_COORD_THRESHOLD_TOUCH = 10;
 const WHEEL_COOLDOWN = 50;
 const WHEEL_DIRECTION_COOLDOWN = 300;
 
-let EVENTS;
-let Focus;
+interface EventNames {
+  start: string;
+  move: string;
+  end: string;
+  wheel: string;
+}
+
+interface Coords {
+  x: number;
+  y: number;
+}
+
+type EventHandler = (event: ThemeValue) => void;
+
+type FireCallback = (name: string, arg: ThemeValue) => void;
+
+interface TrackerProjection {
+  on: (handlers: { center: () => void; zoom: () => void }) => () => void;
+}
+
+interface TrackerParams {
+  root: ThemeValue;
+  projection: TrackerProjection;
+  dataKey: string;
+}
+
+interface TrackerOptions {
+  touchEnabled?: boolean;
+  wheelEnabled?: boolean;
+}
+
+interface ClickState extends Coords {
+  threshold: number;
+  time: number;
+}
+
+interface DragState extends Coords {
+  data: ThemeValue;
+  active?: boolean;
+}
+
+let EVENTS: EventNames;
 
 setupEvents();
 
-export let Tracker = function (parameters) {
-  const that = this;
-  that._root = parameters.root;
-  that._createEventHandlers(parameters.dataKey);
-  that._createProjectionHandlers(parameters.projection);
-  that._initEvents();
-  that._focus = new Focus((name, arg) => {
-    that._fire(name, arg);
-  });
-  that._attachHandlers();
-};
+export let Tracker = class Tracker {
+  declare _root: ThemeValue;
 
-Tracker.prototype = {
-  constructor: Tracker,
+  declare _focus: InstanceType<typeof Focus>;
 
-  dispose() {
-    const that = this;
-    that._detachHandlers();
-    that._disposeEvents();
-    that._focus.dispose();
-    that._root = that._focus = that._docHandlers = that._rootHandlers = null;
-  },
+  declare _docHandlers: Record<string, EventHandler>;
 
-  _eventNames: [
-    EVENT_START, EVENT_MOVE, EVENT_END, EVENT_ZOOM, EVENT_CLICK,
-    EVENT_HOVER_ON, EVENT_HOVER_OFF,
-    EVENT_FOCUS_ON, EVENT_FOCUS_OFF, EVENT_FOCUS_MOVE,
-  ],
+  declare _rootHandlers: Record<string, EventHandler>;
 
-  _startClick(event, data) {
+  declare _wheelLock: ThemeValue;
+
+  declare _clickState: ClickState | null;
+
+  declare _dragState: DragState | null;
+
+  declare _zoomState: ThemeValue;
+
+  declare _hoverState: { data: ThemeValue } | null;
+
+  declare _hoverTarget: ThemeValue;
+
+  declare _isTouchEnabled: boolean;
+
+  declare _isWheelEnabled: boolean;
+
+  declare _eventNames: string[];
+
+  declare _initEvents: () => void;
+
+  declare _disposeEvents: () => void;
+
+  declare _fire: (name: string, arg?: ThemeValue) => void;
+
+  declare on: (handlers: Record<string, (arg: ThemeValue) => void>) => () => void;
+
+  constructor(parameters: TrackerParams) {
+    this._root = parameters.root;
+    this._createEventHandlers(parameters.dataKey);
+    this._createProjectionHandlers(parameters.projection);
+    this._initEvents();
+    this._focus = new Focus((name, arg) => {
+      this._fire(name, arg);
+    });
+    this._attachHandlers();
+  }
+
+  dispose(): void {
+    this._detachHandlers();
+    this._disposeEvents();
+    this._focus.dispose();
+    // @ts-expect-error dispose releases the root, the focus and the handlers
+    this._root = this._focus = this._docHandlers = this._rootHandlers = null;
+  }
+
+  _startClick(event: ThemeValue, data: ThemeValue): void {
     if (!data) { return; }
     const coords = getEventCoords(event);
     this._clickState = {
@@ -95,9 +159,9 @@ Tracker.prototype = {
       threshold: isTouchEvent(event) ? CLICK_COORD_THRESHOLD_TOUCH : CLICK_COORD_THRESHOLD_MOUSE,
       time: Date.now(),
     };
-  },
+  }
 
-  _endClick(event, data) {
+  _endClick(event: ThemeValue, data: ThemeValue): void {
     const state = this._clickState;
     let threshold;
     let coords;
@@ -114,16 +178,16 @@ Tracker.prototype = {
       }
     }
     this._clickState = null;
-  },
+  }
 
-  _startDrag(event, data) {
+  _startDrag(event: ThemeValue, data: ThemeValue): void {
     if (!data) { return; }
     const coords = getEventCoords(event);
     const state = this._dragState = { x: coords.x, y: coords.y, data };
     this._fire(EVENT_START, { x: state.x, y: state.y, data: state.data });
-  },
+  }
 
-  _moveDrag(event, data) {
+  _moveDrag(event: ThemeValue, data: ThemeValue): void {
     const state = this._dragState;
 
     if (!state) { return; }
@@ -137,19 +201,18 @@ Tracker.prototype = {
       state.data = data || {};
       this._fire(EVENT_MOVE, { x: state.x, y: state.y, data: state.data });
     }
-  },
+  }
 
-  _endDrag() {
+  _endDrag(): void {
     const state = this._dragState;
     if (!state) { return; }
     this._dragState = null;
     this._fire(EVENT_END, { x: state.x, y: state.y, data: state.data });
-  },
+  }
 
-  _wheelZoom(event, data) {
+  _wheelZoom(event: ThemeValue, data: ThemeValue): void {
     if (!data) { return; }
-    const that = this;
-    const lock = that._wheelLock;
+    const lock = this._wheelLock;
     const time = Date.now();
 
     if (time - lock.time <= WHEEL_COOLDOWN) { return; }
@@ -163,11 +226,11 @@ Tracker.prototype = {
     if (delta === 0) { return; }
 
     const coords = getEventCoords(event);
-    that._fire(EVENT_ZOOM, { delta, x: coords.x, y: coords.y });
+    this._fire(EVENT_ZOOM, { delta, x: coords.x, y: coords.y });
     lock.time = lock.dirTime = time;
-  },
+  }
 
-  _startZoom(event, data) {
+  _startZoom(event: ThemeValue, data: ThemeValue): void {
     if (!isTouchEvent(event) || !data) {
       return;
     }
@@ -197,9 +260,9 @@ Tracker.prototype = {
         }
       }
     }
-  },
+  }
 
-  _moveZoom(event) {
+  _moveZoom(event: ThemeValue): void {
     const state = this._zoomState;
     let coords;
 
@@ -221,9 +284,9 @@ Tracker.prototype = {
         state.y2 = coords.y;
       }
     }
-  },
+  }
 
-  _endZoom(event) {
+  _endZoom(event: ThemeValue): void {
     const state = this._zoomState;
     let startDistance;
     let currentDistance;
@@ -238,75 +301,73 @@ Tracker.prototype = {
       this._fire(EVENT_ZOOM, { ratio: currentDistance / startDistance, x: (state.x1_0 + state.x2_0) / 2, y: (state.y1_0 + state.y2_0) / 2 });
     }
     this._zoomState = null;
-  },
+  }
 
-  _startHover(event, data) {
+  _startHover(event: ThemeValue, data: ThemeValue): void {
     this._doHover(event, data, true);
-  },
+  }
 
-  _moveHover(event, data) {
+  _moveHover(event: ThemeValue, data: ThemeValue): void {
     this._doHover(event, data, false);
-  },
+  }
 
-  _doHover(event, data, isTouch) {
-    const that = this;
-    if ((that._dragState && that._dragState.active) || (that._zoomState && that._zoomState.ready)) {
-      that._cancelHover();
+  _doHover(event: ThemeValue, data: ThemeValue, isTouch: boolean): void {
+    if ((this._dragState && this._dragState.active) || (this._zoomState && this._zoomState.ready)) {
+      this._cancelHover();
       return;
     }
 
-    if (isTouchEvent(event) !== isTouch || that._hoverTarget === event.target || (that._hoverState && that._hoverState.data === data)) {
+    if (isTouchEvent(event) !== isTouch || this._hoverTarget === event.target || (this._hoverState && this._hoverState.data === data)) {
       return;
     }
 
-    that._cancelHover();
+    this._cancelHover();
     if (data) {
-      that._hoverState = { data };
-      that._fire(EVENT_HOVER_ON, { data });
+      this._hoverState = { data };
+      this._fire(EVENT_HOVER_ON, { data });
     }
-    that._hoverTarget = event.target;
-  },
+    this._hoverTarget = event.target;
+  }
 
-  _cancelHover() {
+  _cancelHover(): void {
     const state = this._hoverState;
     this._hoverState = this._hoverTarget = null;
     if (state) {
       this._fire(EVENT_HOVER_OFF, { data: state.data });
     }
-  },
+  }
 
-  _startFocus(event, data) {
+  _startFocus(event: ThemeValue, data: ThemeValue): void {
     this._doFocus(event, data, true);
-  },
+  }
 
-  _moveFocus(event, data) {
+  _moveFocus(event: ThemeValue, data: ThemeValue): void {
     this._doFocus(event, data, false);
-  },
+  }
 
-  _doFocus(event, data, isTouch) {
-    const that = this;
-    if ((that._dragState && that._dragState.active) || (that._zoomState && that._zoomState.ready)) {
-      that._cancelFocus();
+  _doFocus(event: ThemeValue, data: ThemeValue, isTouch: boolean): void {
+    if ((this._dragState && this._dragState.active) || (this._zoomState && this._zoomState.ready)) {
+      this._cancelFocus();
       return;
     }
 
     if (isTouchEvent(event) !== isTouch) { return; }
 
-    that._focus.turnOff();
-    data && that._focus.turnOn(data, getEventCoords(event));
-  },
+    this._focus.turnOff();
+    data && this._focus.turnOn(data, getEventCoords(event));
+  }
 
-  _cancelFocus() {
+  _cancelFocus(): void {
     this._focus.cancel();
-  },
+  }
 
-  _createEventHandlers(DATA_KEY) {
+  _createEventHandlers(DATA_KEY: string): void {
     const that = this;
 
     that._docHandlers = {};
     that._rootHandlers = {};
 
-    that._docHandlers[EVENTS.start] = function (event) {
+    that._docHandlers[EVENTS.start] = function (event): void {
       const isTouch = isTouchEvent(event);
       const data = getData(event);
 
@@ -322,30 +383,30 @@ Tracker.prototype = {
       that._startFocus(event, data);
     };
 
-    that._docHandlers[EVENTS.move] = function (event) {
+    that._docHandlers[EVENTS.move] = function (event): void {
       const isTouch = isTouchEvent(event);
       const data = getData(event);
 
       if (isTouch && !that._isTouchEnabled) { return; }
 
       that._moveDrag(event, data);
-      that._moveZoom(event, data);
+      that._moveZoom(event);
       that._moveHover(event, data);
       that._moveFocus(event, data);
     };
 
-    that._docHandlers[EVENTS.end] = function (event) {
+    that._docHandlers[EVENTS.end] = function (event): void {
       const isTouch = isTouchEvent(event);
       const data = getData(event);
 
       if (isTouch && !that._isTouchEnabled) { return; }
 
       that._endClick(event, data);
-      that._endDrag(event, data);
-      that._endZoom(event, data);
+      that._endDrag();
+      that._endZoom(event);
     };
 
-    that._rootHandlers[EVENTS.wheel] = function (event) {
+    that._rootHandlers[EVENTS.wheel] = function (event): void {
       that._cancelFocus();
 
       if (!that._isWheelEnabled) { return; }
@@ -361,53 +422,49 @@ Tracker.prototype = {
 
     // Actually it is responsibility of the text element wrapper to handle "data" to its span elements (if there are any).
     // Now to avoid not so necessary complication of renderer text-span issue is handled on the side of the tracker.
-    function getData(event) {
+    function getData(event: ThemeValue): ThemeValue {
       const target = event.target;
       return (target.tagName === 'tspan' ? target.parentNode : target)[DATA_KEY];
     }
-  },
+  }
 
-  _createProjectionHandlers(projection) {
+  _createProjectionHandlers(projection: TrackerProjection): void {
     const that = this;
     projection.on({ center: handler, zoom: handler }); // T247841
-    function handler() {
+    function handler(): void {
       // `_cancelHover` probably should also be called here but for now let it not be so
       that._cancelFocus();
     }
-  },
+  }
 
-  reset() {
-    const that = this;
-    that._clickState = null;
-    that._endDrag();
-    that._cancelHover();
-    that._cancelFocus();
-  },
+  reset(): void {
+    this._clickState = null;
+    this._endDrag();
+    this._cancelHover();
+    this._cancelFocus();
+  }
 
-  setOptions(options) {
-    const that = this;
-    that.reset();
-    that._detachHandlers();
-    that._isTouchEnabled = !!parseScalar(options.touchEnabled, true);
-    that._isWheelEnabled = !!parseScalar(options.wheelEnabled, true);
-    that._attachHandlers();
-  },
+  setOptions(options: TrackerOptions): void {
+    this.reset();
+    this._detachHandlers();
+    this._isTouchEnabled = !!parseScalar(options.touchEnabled, true);
+    this._isWheelEnabled = !!parseScalar(options.wheelEnabled, true);
+    this._attachHandlers();
+  }
 
-  _detachHandlers() {
-    const that = this;
-    if (that._isTouchEnabled) {
-      that._root.css({ 'touch-action': '', '-webkit-user-select': '' })
+  _detachHandlers(): void {
+    if (this._isTouchEnabled) {
+      this._root.css({ 'touch-action': '', '-webkit-user-select': '' })
         .off(_addNamespace('MSHoldVisual', _NAME))
         .off(_addNamespace('contextmenu', _NAME));
     }
-    eventsEngine.off(domAdapter.getDocument(), that._docHandlers);
-    that._root.off(that._rootHandlers);
-  },
+    eventsEngine.off(domAdapter.getDocument(), this._docHandlers);
+    this._root.off(this._rootHandlers);
+  }
 
-  _attachHandlers() {
-    const that = this;
-    if (that._isTouchEnabled) {
-      that._root.css({ 'touch-action': 'none', '-webkit-user-select': 'none' })
+  _attachHandlers(): void {
+    if (this._isTouchEnabled) {
+      this._root.css({ 'touch-action': 'none', '-webkit-user-select': 'none' })
         .on(_addNamespace('MSHoldVisual', _NAME), (event) => {
           event.preventDefault();
         })
@@ -415,65 +472,84 @@ Tracker.prototype = {
           isTouchEvent(event) && event.preventDefault();
         });
     }
-    // @ts-expect-error
-    eventsEngine.on(domAdapter.getDocument(), that._docHandlers);
-    that._root.on(that._rootHandlers);
-  },
+    // @ts-expect-error eventsEngine.on also accepts an (event name -> handler) map, its d.ts lacks that overload
+    eventsEngine.on(domAdapter.getDocument(), this._docHandlers);
+    this._root.on(this._rootHandlers);
+  }
 };
 
-Focus = function (fire) {
-  let that = this;
-  let _activeData = null;
-  let _data = null;
-  let _disabled = false;
-  let _x;
-  let _y;
+Object.assign(Tracker.prototype, {
+  _eventNames: [
+    EVENT_START, EVENT_MOVE, EVENT_END, EVENT_ZOOM, EVENT_CLICK,
+    EVENT_HOVER_ON, EVENT_HOVER_OFF,
+    EVENT_FOCUS_ON, EVENT_FOCUS_OFF, EVENT_FOCUS_MOVE,
+  ],
+});
 
-  that.dispose = function () {
-    that.turnOn = that.turnOff = that.cancel = that.dispose = that = fire = _activeData = _data = null;
-  };
-  that.turnOn = function (data, coords) {
-    if (data === _data && _disabled) { return; }
-    _disabled = false;
-    _data = data;
-    if (_activeData) {
-      _x = coords.x;
-      _y = coords.y;
-      if (_data === _activeData) {
-        fire(EVENT_FOCUS_MOVE, { data: _data, x: _x, y: _y });
-        onCheck(true);
+let Focus = class Focus {
+  declare dispose: () => void;
+
+  declare turnOn: (data: ThemeValue, coords: Coords) => void;
+
+  declare turnOff: () => void;
+
+  declare cancel: () => void;
+
+  constructor(fire: FireCallback) {
+    let that = this;
+    let _activeData: ThemeValue = null;
+    let _data: ThemeValue = null;
+    let _disabled = false;
+    let _x;
+    let _y;
+
+    that.dispose = function (): void {
+      // @ts-expect-error dispose releases the methods, the callback and the state
+      that.turnOn = that.turnOff = that.cancel = that.dispose = that = fire = _activeData = _data = null;
+    };
+    that.turnOn = function (data, coords): void {
+      if (data === _data && _disabled) { return; }
+      _disabled = false;
+      _data = data;
+      if (_activeData) {
+        _x = coords.x;
+        _y = coords.y;
+        if (_data === _activeData) {
+          fire(EVENT_FOCUS_MOVE, { data: _data, x: _x, y: _y });
+          onCheck(true);
+        } else {
+          fire(EVENT_FOCUS_ON, {
+            data: _data, x: _x, y: _y, done: onCheck,
+          });
+        }
       } else {
+        _x = coords.x;
+        _y = coords.y;
         fire(EVENT_FOCUS_ON, {
           data: _data, x: _x, y: _y, done: onCheck,
         });
       }
-    } else {
-      _x = coords.x;
-      _y = coords.y;
-      fire(EVENT_FOCUS_ON, {
-        data: _data, x: _x, y: _y, done: onCheck,
-      });
-    }
-    function onCheck(result) {
-      _disabled = !result;
-      if (result) {
-        _activeData = _data;
+      function onCheck(result: boolean): void {
+        _disabled = !result;
+        if (result) {
+          _activeData = _data;
+        }
       }
-    }
-  };
-  that.turnOff = function () {
-    _data = null;
-    if (_activeData && !_disabled) {
-      fire(EVENT_FOCUS_OFF, { data: _activeData });
-      _activeData = null;
-    }
-  };
-  that.cancel = function () {
-    if (_activeData) {
-      fire(EVENT_FOCUS_OFF, { data: _activeData });
-    }
-    _activeData = _data = null;
-  };
+    };
+    that.turnOff = function (): void {
+      _data = null;
+      if (_activeData && !_disabled) {
+        fire(EVENT_FOCUS_OFF, { data: _activeData });
+        _activeData = null;
+      }
+    };
+    that.cancel = function (): void {
+      if (_activeData) {
+        fire(EVENT_FOCUS_OFF, { data: _activeData });
+      }
+      _activeData = _data = null;
+    };
+  }
 };
 
 makeEventEmitter(Tracker);
@@ -481,33 +557,33 @@ makeEventEmitter(Tracker);
 /// #DEBUG
 const originFocus = Focus;
 
-exports._DEBUG_forceEventMode = function (mode) {
-  // @ts-expect-error
+exports._DEBUG_forceEventMode = function (mode: string): void {
+  // @ts-expect-error setupEvents reads the forced mode from `arguments` in the debug build only
   setupEvents(mode);
 };
 
 export { Focus };
 
-exports._DEBUG_stubFocusType = function (focusType) {
+exports._DEBUG_stubFocusType = function (focusType: typeof Focus): void {
   Focus = focusType;
 };
 
-exports._DEBUG_restoreFocusType = function () {
+exports._DEBUG_restoreFocusType = function (): void {
   Focus = originFocus;
 };
 /// #ENDDEBUG
 
-function getDistance(x1, y1, x2, y2) {
+function getDistance(x1: number, y1: number, x2: number, y2: number): number {
   return _sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 }
 
-function isTouchEvent(event) {
-  const type = event.originalEvent.type;
+function isTouchEvent(event: ThemeValue): boolean {
+  const type: string = event.originalEvent.type;
   const pointerType = event.originalEvent.pointerType;
   return type.startsWith('touch') || (type.startsWith('MSPointer') && pointerType !== 4) || (type.startsWith('pointer') && pointerType !== 'mouse');
 }
 
-function selectItem(flags, items) {
+function selectItem(flags: boolean[], items: string[]): string {
   let i = 0;
   const ii = flags.length;
   let item;
@@ -520,8 +596,8 @@ function selectItem(flags, items) {
   return _addNamespace(item || items[i], _NAME);
 }
 
-function setupEvents() {
-  // @ts-expect-error
+function setupEvents(): void {
+  // @ts-expect-error pointerEnabled and msPointerEnabled are legacy non-standard navigator flags
   let flags = [navigator.pointerEnabled, navigator.msPointerEnabled, hasProperty('ontouchstart')];
   /// #DEBUG
   if (arguments.length) {
@@ -540,17 +616,17 @@ function setupEvents() {
   };
 }
 
-function getEventCoords(event) {
+function getEventCoords(event: ThemeValue): Coords {
   const originalEvent = event.originalEvent;
   const touch = (originalEvent.touches && originalEvent.touches[0]) || {};
   return { x: touch.pageX || originalEvent.pageX || event.pageX, y: touch.pageY || originalEvent.pageY || event.pageY };
 }
 
-function getPointerId(event) {
+function getPointerId(event: { originalEvent: { pointerId?: number } }): number | undefined {
   return event.originalEvent.pointerId;
 }
 
-function getMultitouchEventCoords(event, pointerId) {
+function getMultitouchEventCoords(event: ThemeValue, pointerId: number): Coords | null {
   let originalEvent = event.originalEvent;
   if (originalEvent.pointerId !== undefined) {
     originalEvent = originalEvent.pointerId === pointerId ? originalEvent : null;
@@ -560,7 +636,7 @@ function getMultitouchEventCoords(event, pointerId) {
   return originalEvent ? { x: originalEvent.pageX || event.pageX, y: originalEvent.pageY || event.pageY } : null;
 }
 
-function adjustWheelDelta(delta, lock) {
+function adjustWheelDelta(delta: number, lock: ThemeValue): number {
   if (delta === 0) { return 0; }
 
   let _delta = _abs(delta);
