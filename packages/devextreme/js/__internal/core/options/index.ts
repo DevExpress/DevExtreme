@@ -12,11 +12,9 @@ import {
   convertRulesToOptions, getFieldName, getNestedOptionValue, getParentName,
 } from '@ts/core/options/utils';
 
-export interface DeprecatedOptionInfo {
-  since: string;
-  message?: string;
-  alias?: string;
-}
+export type DeprecatedOptionInfo = { since: string } & (
+  { message: string; alias?: string } | { message?: string; alias: string }
+);
 
 type DeprecatedCallback = (option: string, info: DeprecatedOptionInfo) => void;
 
