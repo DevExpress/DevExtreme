@@ -202,6 +202,7 @@ export class AppointmentsKeyboardNavigation {
 
   private scrollToByItemData(itemData: SortedEntity): void {
     const date = new Date(Math.max(
+      // @ts-expect-error the start view date is defined once the work space is rendered
       this._collection.invoke('getStartViewDate').getTime(),
       itemData.source.startDate,
     ));
