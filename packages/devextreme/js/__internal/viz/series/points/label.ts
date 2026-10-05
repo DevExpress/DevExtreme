@@ -14,6 +14,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import formatHelper from '@js/format_helper';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { BBox, Coords } from '@ts/viz/core/types';
 import {
   degreesToRadians as _degreesToRadians,
   getCosAndSin as _getCosAndSin,
@@ -22,14 +23,7 @@ import {
 } from '@ts/viz/core/utils';
 import { processDisplayFormat } from '@ts/viz/series/helpers/display_format_parser';
 
-interface LabelBBox {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-type LabelRect = LabelBBox | Record<string, never>;
+type LabelRect = BBox | Record<string, never>;
 
 interface LabelStrategy {
   isLabelInside: (bBox: LabelRect, figure: ThemeValue, isOutside: boolean) => boolean;
@@ -40,15 +34,10 @@ interface LabelStrategy {
   adjustPoints: (points: number[]) => number[];
 }
 
-interface LabelCoords {
-  x: number;
-  y: number;
-}
-
 interface LabelPoint {
   hasValue: () => boolean;
   correctLabelPosition: (label: InstanceType<typeof Label>) => void;
-  hideInsideLabel: (label: InstanceType<typeof Label>, coords: LabelCoords) => boolean;
+  hideInsideLabel: (label: InstanceType<typeof Label>, coords: Coords) => boolean;
 }
 
 interface LabelLayoutOptions {
@@ -374,9 +363,9 @@ export let Label = class Label {
 
   declare _drawn: boolean;
 
-  declare _bBoxWithoutRotation: LabelBBox;
+  declare _bBoxWithoutRotation: BBox;
 
-  declare _bBox: LabelBBox;
+  declare _bBox: BBox;
 
   declare _x: number;
 
@@ -507,7 +496,7 @@ export let Label = class Label {
     return this;
   }
 
-  _updateBackground(bBox: LabelBBox): void {
+  _updateBackground(bBox: BBox): void {
     if (this._background) {
       bBox.x -= LABEL_BACKGROUND_PADDING_X;
       bBox.y -= LABEL_BACKGROUND_PADDING_Y;
@@ -583,7 +572,7 @@ export let Label = class Label {
     this._background && this._background.data({ 'chart-data-point': point });
   }
 
-  hideInsideLabel(this: Label & { _point: LabelPoint }, coords: LabelCoords): boolean {
+  hideInsideLabel(this: Label & { _point: LabelPoint }, coords: Coords): boolean {
     return this._point.hideInsideLabel(this, coords);
   }
 
@@ -610,7 +599,7 @@ export let Label = class Label {
     return this._shiftBBox(this._bBox);
   }
 
-  _shiftBBox(bBox: LabelBBox): LabelRect {
+  _shiftBBox(bBox: BBox): LabelRect {
     return this._textContent ? {
       x: bBox.x + this._x,
       y: bBox.y + this._y,

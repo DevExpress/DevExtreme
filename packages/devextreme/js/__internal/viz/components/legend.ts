@@ -31,10 +31,11 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { LayoutTargetOptions } from '@ts/viz/core/layout';
-import type { AlignedLayoutRect, LayoutAlignment, LayoutRect } from '@ts/viz/core/layout_element';
+import type { AlignedLayoutRect, LayoutAlignment } from '@ts/viz/core/layout_element';
 import { LayoutElement, WrapperLayoutElement } from '@ts/viz/core/layout_element';
 import { getFuncIri, processHatchingAttrs } from '@ts/viz/core/renderers/renderer';
 import { Title } from '@ts/viz/core/title';
+import type { BBox, Bounds } from '@ts/viz/core/types';
 import { enumParser, normalizeEnum, patchFontOptions } from '@ts/viz/core/utils';
 
 const _Number = Number;
@@ -96,20 +97,13 @@ export interface LegendDataItem {
   argumentIndex?: number;
 }
 
-interface ItemRect {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-}
-
 interface LegendTrackerData {
   id?: number;
   argument?: ThemeValue;
   argumentIndex?: number;
 }
 
-interface LegendItemTracker extends LegendTrackerData, ItemRect {}
+interface LegendItemTracker extends LegendTrackerData, Bounds {}
 
 interface CreatedLegendItem {
   label: ThemeValue;
@@ -126,9 +120,9 @@ interface CreatedLegendItem {
 
 interface LegendItem extends CreatedLegendItem {
   tracker: LegendItemTracker;
-  markerBBox: LayoutRect;
+  markerBBox: BBox;
   markerSize: number;
-  labelBBox: LayoutRect;
+  labelBBox: BBox;
   bBox: { width: number; height: number };
 }
 
@@ -136,7 +130,7 @@ interface LegendLineItem {
   width: number;
   height: number;
   element: ThemeValue;
-  bBox: LayoutRect;
+  bBox: BBox;
   pos: LayoutAlignment;
   itemIndex: number;
   offset?: number;
@@ -242,7 +236,7 @@ function parseMargins(options: ThemeValue): void {
   options.margin = margin;
 }
 
-function getSizeItem(options: ThemeValue, markerBBox: LayoutRect, labelBBox: LayoutRect): { width: number; height: number } {
+function getSizeItem(options: ThemeValue, markerBBox: BBox, labelBBox: BBox): { width: number; height: number } {
   const defaultXMargin = 7;
   const defaultTopMargin = 4;
   let width;
@@ -264,8 +258,8 @@ function getSizeItem(options: ThemeValue, markerBBox: LayoutRect, labelBBox: Lay
   return { width, height };
 }
 
-function calculateBBoxLabelAndMarker(markerBBox: LayoutRect, labelBBox: LayoutRect): ItemRect {
-  const bBox = {} as ItemRect;
+function calculateBBoxLabelAndMarker(markerBBox: BBox, labelBBox: BBox): Bounds {
+  const bBox = {} as Bounds;
   bBox.left = _min(markerBBox.x, labelBBox.x);
   bBox.top = _min(markerBBox.y, labelBBox.y);
   bBox.right = _max(markerBBox.x + markerBBox.width, labelBBox.x + labelBBox.width);
@@ -322,11 +316,11 @@ function isCircle(type: ThemeValue): boolean {
   return _normalizeEnum(type) === 'circle';
 }
 
-function inRect(rect: ItemRect, x: number, y: number): boolean {
+function inRect(rect: Bounds, x: number, y: number): boolean {
   return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 }
 // @ts-expect-error returns true only when the lines do not fit, undefined otherwise
-function checkLinesSize(lines: LegendLine[], layoutOptions: ItemsLayoutOptions, countItems: number, margins: ItemRect): boolean | undefined {
+function checkLinesSize(lines: LegendLine[], layoutOptions: ItemsLayoutOptions, countItems: number, margins: Bounds): boolean | undefined {
   const position = { x: 0, y: 0 };
   let maxMeasureLength = 0;
   let maxAltMeasureLength = 0;
@@ -1075,7 +1069,7 @@ export let Legend = class Legend extends LayoutElement {
     this._background.attr(backgroundSettings);
   }
 
-  _setBoundingRect(margin: ItemRect): void {
+  _setBoundingRect(margin: Bounds): void {
     if (!this._insideLegendGroup) {
       return;
     }
@@ -1147,7 +1141,7 @@ export let Legend = class Legend extends LayoutElement {
   }
 
   shift(x: number, y: number): this {
-    let box = {} as LayoutRect;
+    let box = {} as BBox;
 
     if (this._insideLegendGroup) {
       this._insideLegendGroup.attr({ translateX: x - this._boundingRect.x, translateY: y - this._boundingRect.y });
