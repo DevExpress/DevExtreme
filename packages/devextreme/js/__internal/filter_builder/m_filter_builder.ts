@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { PositionConfig } from '@js/common/core/animation';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
@@ -9,17 +10,37 @@ import $, { type dxElementWrapper } from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import type {
+  CustomOperation,
+  Field,
+  GroupOperation,
+  Properties as FilterBuilderOptions,
+} from '@js/ui/filter_builder';
+import type { ShownEvent } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
-import Widget from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
+import type { EditorFactoryOwner } from './m_between';
+import type {
+  Condition,
+  ConditionValue,
+  Criteria,
+  FilterBuilderField,
+  FilterCustomOperation,
+  FilterExpression,
+  GroupMenuItem,
+  OperationMenuItem,
+} from './m_utils';
 import {
   addItem, convertToInnerStructure,
   createCondition, createEmptyGroup,
   getAvailableOperations, getCaptionWithParents, getCurrentLookupValueText, getCurrentValueText,
-  getCustomOperation, getDefaultOperation, getField, getFilterExpression, getGroupCriteria, getGroupMenuItem, getGroupValue,
+  getCustomOperation, getDefaultOperation, getField, getFilterExpression, getGroupCriteria,
+  getGroupMenuItem, getGroupValue,
   getItems,
   getMergedOperations, getNormalizedFields, getNormalizedFilter,
   getOperationFromAvailable,
@@ -69,36 +90,112 @@ const ACTIONS = [{
   name: 'onValueChanged',
   config: { excludeValidators: ['disabled', 'readOnly'] },
 }];
-const OPERATORS = {
+const OPERATORS: Record<string, string> = {
   and: 'and',
   or: 'or',
   notAnd: '!and',
   notOr: '!or',
 };
 
+interface FilterBuilderProperties extends FilterBuilderOptions {
+  fields: Field[];
+  groupOperations: GroupOperation[];
+  customOperations: CustomOperation[];
+  allowHierarchicalFields: boolean;
+  closePopupOnTargetScroll: boolean;
+  groupOperationDescriptions: NonNullable<FilterBuilderOptions['groupOperationDescriptions']>;
+  filterOperationDescriptions: NonNullable<FilterBuilderOptions['filterOperationDescriptions']>;
+}
+
+interface MenuItemEvent<TItem> {
+  itemData: TItem;
+  itemElement: Element;
+  component: {
+    selectItem: (item: TItem) => void;
+    option: (name: 'items') => TItem[];
+  };
+  event: { type: string };
+}
+
+interface MenuOptions<TItem> {
+  items: TItem[];
+  displayExpr: string;
+  cssClass: string;
+  onItemClick: (e: MenuItemEvent<TItem>) => void;
+  keyExpr?: string;
+  parentId?: string;
+  dataStructure?: string;
+  onItemRendered?: (e: MenuItemEvent<TItem>) => void;
+  onContentReady?: (e: MenuItemEvent<TItem>) => void;
+}
+
+type MenuPosition = Omit<PositionConfig, 'of'> & { of: dxElementWrapper };
+
+interface AddMenuItem {
+  caption: string;
+  click: () => void;
+}
+
+interface ButtonWithMenuOptions<TItem> {
+  caption?: string;
+  menu: MenuOptions<TItem> & {
+    id?: Guid;
+    position?: MenuPosition;
+    rtlEnabled?: boolean;
+    animation?: null;
+    onHiding?: () => void;
+    onHidden?: (...args: unknown[]) => void;
+  };
+  popup?: { onShown: (info: ShownEvent) => void };
+}
+
+type PopupMenuOptions = ButtonWithMenuOptions<unknown> & {
+  menu: { position: MenuPosition };
+  popup: { onShown: (info: ShownEvent) => void };
+};
+
+interface KeyEvent {
+  type: string;
+  key: string;
+  which: number;
+  shiftKey: boolean;
+}
+
+interface ClickEvent {
+  type: string;
+  stopPropagation: () => void;
+}
+
+interface ValueEditorOptions {
+  value: ConditionValue;
+  filterOperation: string;
+  setValue: (data: ConditionValue) => void;
+  closeEditor: () => void;
+  text: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 const EditorFactory = EditorFactoryMixin(class {});
 
-class FilterBuilder extends Widget<any> {
+class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFactoryOwner {
   _disableInvalidateForValue!: boolean;
 
-  _model!: any;
+  _model!: Criteria;
 
-  _customOperations!: any;
+  _customOperations!: FilterCustomOperation[];
 
-  _editorFactory!: any;
+  _editorFactory!: EditorFactoryOwner['_editorFactory'];
 
-  _actions!: any;
+  _actions!: Record<string, (options?: Record<string, unknown>) => unknown>;
 
-  _documentKeyUpHandler!: any;
+  _documentKeyUpHandler?: (e: KeyEvent) => void;
 
-  _documentClickHandler!: any;
+  _documentClickHandler?: (e: { target: HTMLElement }) => void;
 
   _popupWithTreeView?: InstanceType<typeof Popup>;
 
-  _getDefaultOptions() {
-    // @ts-expect-error
-    return extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): FilterBuilderProperties {
+    const defaultOptions: FilterBuilderProperties = extend(super._getDefaultOptions(), {
       onEditorPreparing: undefined,
 
       onEditorPrepared: undefined,
@@ -142,9 +239,11 @@ class FilterBuilder extends Widget<any> {
         isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
       },
     });
+
+    return defaultOptions;
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<FilterBuilderProperties>): void {
     switch (args.name) {
       case 'closePopupOnTargetScroll':
         break;
@@ -181,76 +280,77 @@ class FilterBuilder extends Widget<any> {
         }
         break;
       default:
-        // @ts-expect-error
         super._optionChanged(args);
     }
   }
 
-  getFilterExpression() {
+  getFilterExpression(): FilterExpression | null {
     const fields = this._getNormalizedFields();
-    const value = extend(true, [], this._model);
+    const value: Criteria = extend(true, [], this._model);
     return getFilterExpression(getNormalizedFilter(value), fields, this._customOperations, SOURCE);
   }
 
-  _getNormalizedFields() {
+  _getNormalizedFields(): FilterBuilderField[] {
     return getNormalizedFields(this.option('fields'));
   }
 
-  _updateFilter() {
+  _updateFilter(): void {
     this._disableInvalidateForValue = true;
-    const value = extend(true, [], this._model);
+    const value: Criteria = extend(true, [], this._model);
     const normalizedValue = getNormalizedFilter(value);
     const oldValue = getNormalizedFilter(this._getModel(this.option('value')));
     if (JSON.stringify(oldValue) !== JSON.stringify(normalizedValue)) {
       this.option('value', normalizedValue);
     }
     this._disableInvalidateForValue = false;
-    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._fireContentReadyAction();
   }
 
-  _init() {
+  _init(): void {
     this._initCustomOperations();
     this._initModel();
     this._initEditorFactory();
     this._initActions();
-    // @ts-expect-error
     super._init();
   }
 
-  _initEditorFactory() {
+  _initEditorFactory(): void {
     this._editorFactory = new EditorFactory();
   }
 
-  _initCustomOperations() {
-    this._customOperations = getMergedOperations(this.option('customOperations'), this.option('filterOperationDescriptions.between'), this);
+  _initCustomOperations(): void {
+    const { between } = this.option('filterOperationDescriptions');
+
+    this._customOperations = getMergedOperations(
+      this.option('customOperations'),
+      between,
+      this,
+    );
   }
 
-  _getDefaultGroupOperation() {
+  _getDefaultGroupOperation(): string {
     return this.option('groupOperations')?.[0] ?? OPERATORS.and;
   }
 
-  _getModel(value) {
+  _getModel(value: unknown): Criteria {
     return convertToInnerStructure(value, this._customOperations, this._getDefaultGroupOperation());
   }
 
-  _initModel() {
+  _initModel(): void {
     this._model = this._getModel(this.option('value'));
   }
 
-  _initActions() {
-    const that = this;
-
-    that._actions = {};
+  _initActions(): void {
+    this._actions = {};
 
     ACTIONS.forEach((action) => {
       const actionConfig = extend({}, action.config);
-      // @ts-expect-error
-      that._actions[action.name] = that._createActionByOption(action.name, actionConfig);
+      this._actions[action.name] = this._createActionByOption(action.name, actionConfig);
     });
   }
 
-  executeAction(actionName, options) {
+  executeAction(actionName: string, options: Record<string, unknown>): unknown {
     const action = this._actions[actionName];
 
     return action && action(options);
@@ -258,7 +358,6 @@ class FilterBuilder extends Widget<any> {
 
   _initMarkup(): void {
     this.$element().addClass(FILTER_BUILDER_CLASS);
-    // @ts-expect-error
     super._initMarkup();
 
     this._addAriaAttributes(this.$element(), messageLocalization.format('dxFilterBuilder-filterAriaRootElement'), 'group');
@@ -266,14 +365,20 @@ class FilterBuilder extends Widget<any> {
       .appendTo(this.$element());
   }
 
-  _addAriaAttributes($element, ariaLabel, role, hasPopup?, hasExpanded?, ariaLevel?) {
+  _addAriaAttributes(
+    $element: dxElementWrapper,
+    ariaLabel: string,
+    role: string,
+    hasPopup?: boolean | null,
+    hasExpanded?: boolean | null,
+    ariaLevel?: number | string | null,
+  ): void {
     if (!$element || !$element.length) return;
 
-    const attributes = { role };
+    const attributes: Record<string, string> = { role };
 
     if (ariaLabel) {
       if ($element.text().length > 0) {
-        // @ts-expect-error title attr
         attributes.title = ariaLabel;
       } else {
         attributes['aria-label'] = ariaLabel;
@@ -292,23 +397,31 @@ class FilterBuilder extends Widget<any> {
       attributes['aria-level'] = `${ariaLevel}`;
     }
 
+    // @ts-expect-error attr is declared without the object form
     $element.attr(attributes);
   }
 
-  _createConditionElement(condition, parent, groupLevel?) {
+  _createConditionElement(
+    condition: Condition,
+    parent: Criteria,
+    groupLevel?: number | string,
+  ): dxElementWrapper {
     return $('<div>')
       .addClass(FILTER_BUILDER_GROUP_CLASS)
       .append(this._createConditionItem(condition, parent, groupLevel))
       .attr('role', 'group');
   }
 
-  _createGroupElementByCriteria(criteria, parent?, groupLevel = 0) {
+  _createGroupElementByCriteria(
+    criteria: Criteria,
+    parent?: Criteria,
+    groupLevel = 0,
+  ): dxElementWrapper {
     const $group = this._createGroupElement(criteria, parent, groupLevel);
     const $groupContent = $group.find(`.${FILTER_BUILDER_GROUP_CONTENT_CLASS}`);
     const groupCriteria = getGroupCriteria(criteria);
 
-    for (let i = 0; i < groupCriteria.length; i++) {
-      const innerCriteria = groupCriteria[i];
+    for (const innerCriteria of groupCriteria) {
       if (isGroup(innerCriteria)) {
         this._createGroupElementByCriteria(innerCriteria, criteria, groupLevel + 1)
           .appendTo($groupContent);
@@ -320,7 +433,11 @@ class FilterBuilder extends Widget<any> {
     return $group;
   }
 
-  _createGroupElement(criteria, parent, groupLevel) {
+  _createGroupElement(
+    criteria: Criteria,
+    parent: Criteria | undefined,
+    groupLevel: number,
+  ): dxElementWrapper {
     const $guid = new Guid();
     const $groupItem = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
     const $groupContent = $('<div>').addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS).attr('id', `${$guid}`);
@@ -369,15 +486,16 @@ class FilterBuilder extends Widget<any> {
     return $group;
   }
 
-  _createButton(caption?) {
+  _createButton(caption?: string): dxElementWrapper {
+    // @ts-expect-error text is declared without undefined
     return $('<div>').text(caption);
   }
 
-  _createGroupOperationButton(criteria) {
+  _createGroupOperationButton(criteria: Criteria): dxElementWrapper {
     const groupOperations = this._getGroupOperations(criteria);
     let groupMenuItem = getGroupMenuItem(criteria, groupOperations);
     const caption = groupMenuItem.text;
-    const $operationButton = groupOperations && groupOperations.length < 2
+    const $operationButton: dxElementWrapper = groupOperations && groupOperations.length < 2
       ? this._createButton(caption).addClass(DISABLED_STATE_CLASS)
       : this._createButtonWithMenu({
         caption,
@@ -400,23 +518,30 @@ class FilterBuilder extends Widget<any> {
         },
       });
 
-    this._addAriaAttributes($operationButton, messageLocalization.format('dxFilterBuilder-filterAriaOperationButton'), 'combobox', true, false);
+    this._addAriaAttributes(
+      $operationButton,
+      messageLocalization.format('dxFilterBuilder-filterAriaOperationButton'),
+      'combobox',
+      true,
+      false,
+    );
 
     return $operationButton.addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
       .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
       .attr('tabindex', 0);
   }
 
-  _createButtonWithMenu(options) {
-    const that = this;
-    const removeMenu = function () {
-      that.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
-      that.$element().find('.dx-overlay .dx-treeview').remove();
-      that.$element().find('.dx-overlay').remove();
+  _createButtonWithMenu<TItem>(options: ButtonWithMenuOptions<TItem>): dxElementWrapper {
+    const removeMenu = (): void => {
+      this.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
+      this.$element().find('.dx-overlay .dx-treeview').remove();
+      this.$element().find('.dx-overlay').remove();
     };
     const rtlEnabled = this.option('rtlEnabled');
-    const menuOnItemClickWrapper = function (handler) {
-      return function (e) {
+    const menuOnItemClickWrapper = function (
+      handler: (e: MenuItemEvent<TItem>) => void,
+    ): (e: MenuItemEvent<TItem>) => void {
+      return function (e: MenuItemEvent<TItem>): void {
         handler(e);
         if (e.event.type === 'dxclick') {
           removeMenu();
@@ -448,19 +573,20 @@ class FilterBuilder extends Widget<any> {
     });
 
     options.popup = {
-      onShown(info) {
+      onShown: (info: ShownEvent): void => {
         const treeViewContentElement = $(info.component.content());
         const treeViewElement = treeViewContentElement.find('.dx-treeview');
 
         if (treeViewElement.length) {
-          that._applyAccessibilityAttributes(treeViewElement);
+          this._applyAccessibilityAttributes(treeViewElement);
         }
 
-        eventsEngine.on(treeViewElement, 'keyup keydown', (e) => {
+        eventsEngine.on(treeViewElement, 'keyup keydown', (e: KeyEvent) => {
           const keyName = normalizeKeyName(e);
 
           if ((e.type === 'keydown' && keyName === TAB_KEY)
                             || (e.type === 'keyup' && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             info.component.hide();
             // @ts-expect-error eventsEngine is badly typed
             eventsEngine.trigger(options.menu.position.of, 'focus');
@@ -477,30 +603,42 @@ class FilterBuilder extends Widget<any> {
 
     this._subscribeOnClickAndEnterKey($button, () => {
       removeMenu();
-      that._createPopupWithTreeView(options, that.$element());
+      // @ts-expect-error options.menu and options.popup are extended above
+      this._createPopupWithTreeView(options, this.$element());
       $button.addClass(ACTIVE_CLASS).attr('aria-expanded', 'true');
     });
     return $button;
   }
 
-  _hasValueButton(condition) {
+  _hasValueButton(condition: Condition): boolean {
     const customOperation = getCustomOperation(this._customOperations, condition[1]);
     return customOperation
       ? customOperation.hasValue !== false
       : condition[2] !== null;
   }
 
-  _createOperationButtonWithMenu(condition, field) {
-    const that = this;
-    const availableOperations = getAvailableOperations(field, this.option('filterOperationDescriptions'), this._customOperations);
-    let currentOperation = getOperationFromAvailable(getOperationValue(condition), availableOperations);
-    const $operationButton = this._createButtonWithMenu({
+  _createOperationButtonWithMenu(
+    condition: Condition,
+    field: FilterBuilderField,
+  ): dxElementWrapper {
+    const availableOperations = getAvailableOperations(
+      field,
+      this.option('filterOperationDescriptions'),
+      this._customOperations,
+    );
+    let currentOperation = getOperationFromAvailable(
+      getOperationValue(condition),
+      availableOperations,
+    );
+    const $operationButton: dxElementWrapper = this._createButtonWithMenu<OperationMenuItem>({
       caption: currentOperation.text,
       menu: {
         items: availableOperations,
         displayExpr: 'text',
         onItemRendered(e) {
-          e.itemData.isCustom && $(e.itemElement).addClass(FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
+          if (e.itemData.isCustom) {
+            $(e.itemElement).addClass(FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
+          }
         },
         onContentReady(e) {
           e.component.selectItem(currentOperation);
@@ -508,13 +646,13 @@ class FilterBuilder extends Widget<any> {
         onItemClick: (e) => {
           if (currentOperation !== e.itemData) {
             currentOperation = e.itemData;
-            updateConditionByOperation(condition, currentOperation.value, that._customOperations);
+            updateConditionByOperation(condition, currentOperation.value, this._customOperations);
             const $valueButton = $operationButton.siblings().filter(`.${FILTER_BUILDER_ITEM_VALUE_CLASS}`);
-            if (that._hasValueButton(condition)) {
+            if (this._hasValueButton(condition)) {
               if ($valueButton.length !== 0) {
                 $valueButton.remove();
               }
-              that._createValueButton(condition, field).appendTo($operationButton.parent());
+              this._createValueButton(condition, field).appendTo($operationButton.parent());
             } else {
               $valueButton.remove();
             }
@@ -527,12 +665,22 @@ class FilterBuilder extends Widget<any> {
     }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
       .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
       .attr('tabindex', 0);
-    this._addAriaAttributes($operationButton, messageLocalization.format('dxFilterBuilder-filterAriaItemOperation'), 'combobox', true, false);
+    this._addAriaAttributes(
+      $operationButton,
+      messageLocalization.format('dxFilterBuilder-filterAriaItemOperation'),
+      'combobox',
+      true,
+      false,
+    );
 
     return $operationButton;
   }
 
-  _createOperationAndValueButtons(condition, field, $item) {
+  _createOperationAndValueButtons(
+    condition: Condition,
+    field: FilterBuilderField,
+    $item: dxElementWrapper,
+  ): void {
     this._createOperationButtonWithMenu(condition, field)
       .appendTo($item);
 
@@ -542,17 +690,25 @@ class FilterBuilder extends Widget<any> {
     }
   }
 
-  _createFieldButtonWithMenu(fields, condition, field) {
-    const that = this;
+  _createFieldButtonWithMenu(
+    fields: FilterBuilderField[],
+    condition: Condition,
+    field: FilterBuilderField,
+  ): dxElementWrapper {
     const allowHierarchicalFields = this.option('allowHierarchicalFields');
     const items = getItems(fields, allowHierarchicalFields);
     let item = getField(field.name || field.dataField, items);
-    const getFullCaption = function (item, items) {
-      return allowHierarchicalFields ? getCaptionWithParents(item, items) : item.caption;
+    const getFullCaption = function (
+      fieldItem: FilterBuilderField,
+      fieldItems: FilterBuilderField[],
+    ): string | undefined {
+      return allowHierarchicalFields
+        ? getCaptionWithParents(fieldItem, fieldItems)
+        : fieldItem.caption;
     };
     condition[0] = item.name || item.dataField;
 
-    const $fieldButton = this._createButtonWithMenu({
+    const $fieldButton: dxElementWrapper = this._createButtonWithMenu<FilterBuilderField>({
       caption: getFullCaption(item, items),
       menu: {
         items,
@@ -565,11 +721,16 @@ class FilterBuilder extends Widget<any> {
             item = e.itemData;
             condition[0] = item.name || item.dataField;
             condition[2] = item.dataType === 'object' ? null : '';
-            updateConditionByOperation(condition, getDefaultOperation(item), that._customOperations);
+            updateConditionByOperation(
+              condition,
+              getDefaultOperation(item),
+              this._customOperations,
+            );
             $fieldButton.siblings().filter(`.${FILTER_BUILDER_ITEM_TEXT_CLASS}`).remove();
-            that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
+            this._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
             const caption = getFullCaption(item, e.component.option('items'));
+            // @ts-expect-error text is declared without undefined
             $fieldButton.text(caption);
             this._updateFilter();
           }
@@ -583,12 +744,22 @@ class FilterBuilder extends Widget<any> {
       .addClass(FILTER_BUILDER_ITEM_FIELD_CLASS)
       .attr('tabindex', 0);
 
-    this._addAriaAttributes($fieldButton, messageLocalization.format('dxFilterBuilder-filterAriaItemField'), 'combobox', true, false);
+    this._addAriaAttributes(
+      $fieldButton,
+      messageLocalization.format('dxFilterBuilder-filterAriaItemField'),
+      'combobox',
+      true,
+      false,
+    );
 
     return $fieldButton;
   }
 
-  _createConditionItem(condition, parent, groupLevel?) {
+  _createConditionItem(
+    condition: Condition,
+    parent: Criteria,
+    groupLevel?: number | string,
+  ): dxElementWrapper {
     const $item = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
     const fields = this._getNormalizedFields();
     const field = getField(condition[0], fields);
@@ -610,13 +781,14 @@ class FilterBuilder extends Widget<any> {
     return $item;
   }
 
-  _getGroupOperations(criteria) {
-    let groupOperations = this.option('groupOperations');
-    const groupOperationDescriptions = {
-      and: this.option('groupOperationDescriptions.and') ?? messageLocalization.format('dxFilterBuilder-and'),
-      or: this.option('groupOperationDescriptions.or') ?? messageLocalization.format('dxFilterBuilder-or'),
-      notAnd: this.option('groupOperationDescriptions.notAnd') ?? messageLocalization.format('dxFilterBuilder-notAnd'),
-      notOr: this.option('groupOperationDescriptions.notOr') ?? messageLocalization.format('dxFilterBuilder-notOr'),
+  _getGroupOperations(criteria: Criteria): GroupMenuItem[] {
+    let groupOperations: string[] = this.option('groupOperations');
+    const descriptions = this.option('groupOperationDescriptions');
+    const groupOperationDescriptions: Record<string, string> = {
+      and: descriptions.and ?? messageLocalization.format('dxFilterBuilder-and'),
+      or: descriptions.or ?? messageLocalization.format('dxFilterBuilder-or'),
+      notAnd: descriptions.notAnd ?? messageLocalization.format('dxFilterBuilder-notAnd'),
+      notOr: descriptions.notOr ?? messageLocalization.format('dxFilterBuilder-notOr'),
     };
 
     if (!groupOperations || !groupOperations.length) {
@@ -629,28 +801,34 @@ class FilterBuilder extends Widget<any> {
     }));
   }
 
-  _createRemoveButton(handler, type?) {
+  _createRemoveButton(handler: () => void, type?: string): dxElementWrapper {
     const $removeButton = $('<div>')
       .addClass(FILTER_BUILDER_IMAGE_CLASS)
       .addClass(FILTER_BUILDER_IMAGE_REMOVE_CLASS)
       .addClass(FILTER_BUILDER_ACTION_CLASS)
       .attr('tabindex', 0);
     if (type) {
-      const removeMessage = (messageLocalization.format as any)('dxFilterBuilder-filterAriaRemoveButton', type);
+      // @ts-expect-error format is declared with one argument
+      const removeMessage = messageLocalization.format('dxFilterBuilder-filterAriaRemoveButton', type);
       this._addAriaAttributes($removeButton, removeMessage, 'button');
     }
     this._subscribeOnClickAndEnterKey($removeButton, handler);
     return $removeButton;
   }
 
-  _createAddButton(addGroupHandler, addConditionHandler, groupLevel) {
-    let $button;
+  _createAddButton(
+    addGroupHandler: () => void,
+    addConditionHandler: () => void,
+    groupLevel: number,
+  ): dxElementWrapper {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let $button: dxElementWrapper;
     const maxGroupLevel = this.option('maxGroupLevel');
     if (isDefined(maxGroupLevel) && groupLevel >= maxGroupLevel) {
       $button = this._createButton();
       this._subscribeOnClickAndEnterKey($button, addConditionHandler);
     } else {
-      $button = this._createButtonWithMenu({
+      $button = this._createButtonWithMenu<AddMenuItem>({
         menu: {
           items: [{
             caption: messageLocalization.format('dxFilterBuilder-addCondition'),
@@ -668,7 +846,13 @@ class FilterBuilder extends Widget<any> {
       });
     }
 
-    this._addAriaAttributes($button, messageLocalization.format('dxFilterBuilder-filterAriaAddButton'), 'combobox', true, false);
+    this._addAriaAttributes(
+      $button,
+      messageLocalization.format('dxFilterBuilder-filterAriaAddButton'),
+      'combobox',
+      true,
+      false,
+    );
 
     return $button.addClass(FILTER_BUILDER_IMAGE_CLASS)
       .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)
@@ -676,18 +860,27 @@ class FilterBuilder extends Widget<any> {
       .attr('tabindex', 0);
   }
 
-  _createValueText(item, field, $container) {
-    const that = this;
+  _createValueText(
+    item: Condition,
+    field: FilterBuilderField,
+    $container: dxElementWrapper,
+  ): dxElementWrapper {
     const $text = $('<div>')
       .html('&nbsp;')
       .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
       .attr('tabindex', 0)
       .appendTo($container);
-    this._addAriaAttributes($text, messageLocalization.format('dxFilterBuilder-filterAriaItemValue'), 'button', true);
+    this._addAriaAttributes(
+      $text,
+      messageLocalization.format('dxFilterBuilder-filterAriaItemValue'),
+      'button',
+      true,
+    );
     const value = item[2];
 
-    const customOperation = getCustomOperation(that._customOperations, item[1]);
+    const customOperation = getCustomOperation(this._customOperations, item[1]);
     if (!customOperation && field.lookup) {
+      // @ts-expect-error the field.lookup check above does not narrow the field
       getCurrentLookupValueText(field, value, (result) => {
         renderValueText($text, result);
       });
@@ -697,17 +890,17 @@ class FilterBuilder extends Widget<any> {
       });
     }
 
-    that._subscribeOnClickAndEnterKey($text, (e) => {
+    this._subscribeOnClickAndEnterKey($text, (e) => {
       if (e.type === 'keyup') {
         e.stopPropagation();
       }
-      that._createValueEditorWithEvents(item, field, $container);
+      this._createValueEditorWithEvents(item, field, $container);
     });
 
     return $text;
   }
 
-  _updateConditionValue(item, value, callback) {
+  _updateConditionValue(item: Condition, value: ConditionValue, callback: () => void): void {
     const areValuesDifferent = item[2] !== value;
     if (areValuesDifferent) {
       item[2] = value;
@@ -716,11 +909,11 @@ class FilterBuilder extends Widget<any> {
     this._updateFilter();
   }
 
-  _addDocumentKeyUp($editor, handler) {
+  _addDocumentKeyUp($editor: dxElementWrapper, handler: (e: KeyEvent) => void): void {
     let isComposing = false; // IME Composing going on
     let hasCompositionJustEnded = false; // Used to swallow keyup event related to compositionend
     const document = domAdapter.getDocument();
-    const documentKeyUpHandler = (e) => {
+    const documentKeyUpHandler = (e: KeyEvent): void => {
       if (isComposing || hasCompositionJustEnded) {
         // IME composing fires
         hasCompositionJustEnded = false;
@@ -744,7 +937,7 @@ class FilterBuilder extends Widget<any> {
     });
 
     // Safari on OS X may send a keydown of 229 after compositionend
-    eventsEngine.on(input, 'keydown', (event) => {
+    eventsEngine.on(input, 'keydown', (event: KeyEvent) => {
       if (event.which !== 229) {
         hasCompositionJustEnded = false;
       }
@@ -753,9 +946,9 @@ class FilterBuilder extends Widget<any> {
     this._documentKeyUpHandler = documentKeyUpHandler;
   }
 
-  _addDocumentClick($editor, closeEditorFunc) {
+  _addDocumentClick($editor: dxElementWrapper, closeEditorFunc: () => void): void {
     const document = domAdapter.getDocument();
-    const documentClickHandler = (e) => {
+    const documentClickHandler = (e: { target: HTMLElement }): void => {
       if (!this._isFocusOnEditorParts($editor, e.target)) {
         // @ts-expect-error eventsEngine is badly typed
         eventsEngine.trigger($editor.find('input'), 'change');
@@ -786,35 +979,42 @@ class FilterBuilder extends Widget<any> {
     return false;
   }
 
-  _removeEvents() {
+  _removeEvents(): void {
     const document = domAdapter.getDocument();
-    isDefined(this._documentKeyUpHandler) && eventsEngine.off(document, 'keyup', this._documentKeyUpHandler);
-    isDefined(this._documentClickHandler) && eventsEngine.off(document, 'dxpointerdown', this._documentClickHandler);
+    if (isDefined(this._documentKeyUpHandler)) {
+      eventsEngine.off(document, 'keyup', this._documentKeyUpHandler);
+    }
+    if (isDefined(this._documentClickHandler)) {
+      eventsEngine.off(document, 'dxpointerdown', this._documentClickHandler);
+    }
   }
 
-  _dispose() {
+  _dispose(): void {
     this._removeEvents();
-    // @ts-expect-error
     super._dispose();
   }
 
-  _createValueEditorWithEvents(item, field, $container) {
+  _createValueEditorWithEvents(
+    item: Condition,
+    field: FilterBuilderField,
+    $container: dxElementWrapper,
+  ): void {
     let value = item[2];
-    const createValueText = () => {
+    const createValueText = (): dxElementWrapper => {
       $container.empty();
       this._removeEvents();
       return this._createValueText(item, field, $container);
     };
-    const closeEditor = () => {
+    const closeEditor = (): void => {
       this._updateConditionValue(item, value, () => {
         createValueText();
       });
     };
 
-    const options = {
+    const options: ValueEditorOptions = {
       value: value === '' ? null : value,
       filterOperation: getOperationValue(item),
-      setValue(data) {
+      setValue(data: ConditionValue): void {
         value = data === null ? '' : data;
       },
       closeEditor,
@@ -830,7 +1030,7 @@ class FilterBuilder extends Widget<any> {
     this._removeEvents();
 
     this._addDocumentClick($editor, closeEditor);
-    this._addDocumentKeyUp($editor, (e) => {
+    this._addDocumentKeyUp($editor, (e: KeyEvent) => {
       const keyName = normalizeKeyName(e);
 
       if (keyName === TAB_KEY) {
@@ -856,11 +1056,11 @@ class FilterBuilder extends Widget<any> {
         });
       }
     });
-    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._fireContentReadyAction();
   }
 
-  _createValueButton(item, field) {
+  _createValueButton(item: Condition, field: FilterBuilderField): dxElementWrapper {
     const $valueButton = $('<div>')
       .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
       .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS);
@@ -868,10 +1068,16 @@ class FilterBuilder extends Widget<any> {
     return $valueButton;
   }
 
-  _createValueEditor($container, field, options) {
+  _createValueEditor(
+    $container: dxElementWrapper,
+    field: FilterBuilderField,
+    options: ValueEditorOptions,
+  ): dxElementWrapper {
     const $editor = $('<div>').attr('tabindex', 0).appendTo($container);
     const customOperation = getCustomOperation(this._customOperations, options.filterOperation);
-    const editorTemplate = customOperation && customOperation.editorTemplate ? customOperation.editorTemplate : field.editorTemplate;
+    const editorTemplate = customOperation && customOperation.editorTemplate
+      ? customOperation.editorTemplate
+      : field.editorTemplate;
 
     if (editorTemplate) {
       const template = this._getTemplate(editorTemplate);
@@ -897,14 +1103,14 @@ class FilterBuilder extends Widget<any> {
     }
   }
 
-  _createPopupWithTreeView(options, $container) {
+  _createPopupWithTreeView(options: PopupMenuOptions, $container: dxElementWrapper): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     const { onHidden } = options.menu;
     const $popup = $('<div>')
       .addClass(options.menu.cssClass)
       .appendTo($container);
 
-    // @ts-expect-error
     this._popupWithTreeView = this._createComponent($popup, Popup, {
       onHiding: options.menu.onHiding,
       onHidden: (...args) => {
@@ -916,7 +1122,6 @@ class FilterBuilder extends Widget<any> {
       animation: options.menu.animation,
       contentTemplate(contentElement) {
         const $menuContainer = $('<div>').appendTo(contentElement);
-        // @ts-expect-error
         that._createComponent($menuContainer, TreeView, options.menu);
 
         $menuContainer.attr('id', `${options.menu.id}`);
@@ -940,16 +1145,19 @@ class FilterBuilder extends Widget<any> {
     });
   }
 
-  _subscribeOnClickAndEnterKey($button, handler) {
+  _subscribeOnClickAndEnterKey(
+    $button: dxElementWrapper,
+    handler: (e: ClickEvent) => void,
+  ): void {
     eventsEngine.on($button, 'dxclick', handler);
-    eventsEngine.on($button, 'keyup', (e) => {
+    eventsEngine.on($button, 'keyup', (e: KeyEvent & ClickEvent) => {
       if (normalizeKeyName(e) === ENTER_KEY) {
         handler(e);
       }
     });
   }
 
-  _applyAccessibilityAttributes($element) {
+  _applyAccessibilityAttributes($element: dxElementWrapper): void {
     const treeViewPopup = $element.closest(`.${OVERLAY_CONTENT_CLASS}`);
     treeViewPopup?.removeAttr('role');
 

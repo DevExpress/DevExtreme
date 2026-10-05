@@ -23,12 +23,13 @@ import { getConfig } from './m_between';
 import filterOperationsDictionary from './m_filter_operations_dictionary';
 
 type FieldValue = string | number | boolean | Date | null | undefined;
+export type ConditionValue = FieldValue | FieldValue[];
 
 export type Criteria = unknown[];
-export type Condition = [string, string, ...unknown[]];
+export type Condition = [string, string, ...ConditionValue[]];
 type NegationGroup = ['!', Criteria];
 
-type FilterExpression = ReturnType<NonNullable<CustomOperation['calculateFilterExpression']>>;
+export type FilterExpression = ReturnType<NonNullable<CustomOperation['calculateFilterExpression']>>;
 
 type FilterExpressionCallback = (
   filterValue: unknown,
@@ -46,7 +47,7 @@ export interface FilterBuilderField extends Field {
   parentId?: string;
   lookup?: NonNullable<Field['lookup']> & {
     items?: unknown;
-    calculateCellValue?: (value: FieldValue) => string;
+    calculateCellValue?: (value: ConditionValue) => string;
   };
 }
 
@@ -280,12 +281,11 @@ export function getFilterOperations(field: OperationsField): string[] {
 
 export function getCaptionByOperation(
   operation: string,
-  filterOperationDescriptions: Record<string, string> | undefined,
+  filterOperationDescriptions: Partial<Record<string, string>> | undefined,
 ): string {
   const operationName = filterOperationsDictionary.getNameByFilterOperation(operation) as string;
-  return filterOperationDescriptions && filterOperationDescriptions[operationName]
-    ? filterOperationDescriptions[operationName]
-    : operationName;
+  const description = filterOperationDescriptions && filterOperationDescriptions[operationName];
+  return description || operationName;
 }
 
 export function getOperationFromAvailable(
@@ -311,7 +311,7 @@ export function getCustomOperation(
 
 export function getAvailableOperations(
   field: FilterBuilderField,
-  filterOperationDescriptions: Record<string, string> | undefined,
+  filterOperationDescriptions: Partial<Record<string, string>> | undefined,
   customOperations: FilterCustomOperation[],
 ): OperationMenuItem[] {
   const filterOperations = getFilterOperations(field);
@@ -386,10 +386,10 @@ export function updateConditionByOperation(
 }
 
 export function createCondition(
-  field: FilterBuilderField,
+  field: OperationsField & { dataField?: string },
   customOperations: FilterCustomOperation[],
 ): Condition {
-  const condition: Condition = [field.dataField, '', ''];
+  const condition: Condition = [field.dataField as string, '', ''];
   const filterOperation = getDefaultOperation(field);
 
   updateConditionByOperation(condition, filterOperation, customOperations);
@@ -548,7 +548,7 @@ export function getField(dataField: string, fields: FilterBuilderField[]): Filte
   throw new errors.Error('E1047', dataField);
 }
 
-export function isGroup(criteria: unknown): boolean {
+export function isGroup(criteria: unknown): criteria is Criteria {
   if (!Array.isArray(criteria)) {
     return false;
   }
@@ -755,7 +755,7 @@ export function getFilterExpression(
   for (let i = 0; i < criteria.length; i += 1) {
     const item = criteria[i];
     if (isGroup(item)) {
-      filterExpression = getFilterExpression(item as Criteria, fields, customOperations, target);
+      filterExpression = getFilterExpression(item, fields, customOperations, target);
       if (filterExpression && i) {
         result.push(groupValue);
       }
@@ -799,7 +799,7 @@ export function getNormalizedFilter(group: Criteria): Criteria | null {
   for (i = 0; i < criteria.length; i += 1) {
     const item = criteria[i];
     if (isGroup(item)) {
-      const normalizedGroupValue = getNormalizedFilter(item as Criteria);
+      const normalizedGroupValue = getNormalizedFilter(item);
       if (normalizedGroupValue) {
         criteria[i] = normalizedGroupValue;
       } else {
@@ -834,7 +834,7 @@ export function getNormalizedFilter(group: Criteria): Criteria | null {
 
 export function getCurrentLookupValueText(
   field: LookupField,
-  value: FieldValue,
+  value: ConditionValue,
   handler: (text: string) => void,
 ): void {
   if (value === '') {
@@ -1117,7 +1117,7 @@ export function filterHasField(
   }
 
   return filter.some(
-    (item) => (isCondition(item) || isGroup(item)) && filterHasField(item as Criteria, dataField),
+    (item) => (isCondition(item) || isGroup(item)) && filterHasField(item, dataField),
   );
 }
 
