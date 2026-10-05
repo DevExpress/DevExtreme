@@ -31,7 +31,7 @@ interface TitleParams {
   renderer: ThemeValue;
   cssClass?: string;
   root?: ThemeValue;
-  incidentOccurred?: (id: string) => void;
+  incidentOccurred: (id: string) => void;
 }
 
 interface TitleMargin {
@@ -322,7 +322,6 @@ export let Title = class Title extends LayoutElement {
   }
 
   freeSpace(): void {
-    // @ts-expect-error the legend creates its title without incidentOccurred
     this._params.incidentOccurred('W2103');
     this._group.linkRemove();
     this._boundingRect.width = this._boundingRect.height = 0;
