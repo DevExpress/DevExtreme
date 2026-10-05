@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import type { CustomOperation, Field } from '@js/ui/filter_builder';
 
-import { getCurrentValueText } from '../m_utils';
+import { getCurrentValueText, getFilterOperations } from '../m_utils';
 
 describe('Formatting', () => {
   it('empty string', () => {
@@ -105,5 +105,37 @@ describe('Formatting', () => {
     const value = new Date(2017, 8, 5, 12, 30, 0);
 
     expect(getCurrentValueText(field, value, null)).toBe('9/5/2017, 12:30 PM');
+  });
+});
+
+describe('getFilterOperations', () => {
+  it('returns the default operations of the data type', () => {
+    expect(getFilterOperations({ dataType: 'boolean' })).toEqual(['=', '<>', 'isblank', 'isnotblank']);
+  });
+
+  it('returns a copy of the default operations', () => {
+    getFilterOperations({ dataType: 'boolean' }).push('custom');
+
+    expect(getFilterOperations({ dataType: 'boolean' })).toEqual(['=', '<>', 'isblank', 'isnotblank']);
+  });
+
+  it('returns a copy of the field operations', () => {
+    const filterOperations = ['=', '<>'];
+
+    const result = getFilterOperations({ filterOperations });
+    result.push('custom');
+
+    expect(result).not.toBe(filterOperations);
+    expect(filterOperations).toEqual(['=', '<>']);
+  });
+
+  it('falls back to the default operations for an empty list', () => {
+    expect(getFilterOperations({ dataType: 'object', filterOperations: [] })).toEqual(['isblank', 'isnotblank']);
+  });
+
+  it('skips undefined operations', () => {
+    const filterOperations = ['=', undefined, '<>'] as string[];
+
+    expect(getFilterOperations({ filterOperations })).toEqual(['=', '<>']);
   });
 });

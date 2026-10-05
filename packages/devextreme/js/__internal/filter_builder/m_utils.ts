@@ -267,16 +267,15 @@ function getDefaultFilterOperations(field: OperationsField): string[] {
     || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
 }
 
-function containItems(entity: unknown): number | false {
-  return Array.isArray(entity) && entity.length;
+function containItems<T>(entity: readonly T[] | null | undefined): entity is readonly T[] {
+  return Array.isArray(entity) && entity.length > 0;
 }
 
 export function getFilterOperations(field: OperationsField): string[] {
   const result = containItems(field.filterOperations)
     ? field.filterOperations
     : getDefaultFilterOperations(field);
-  const operations: string[] = extend([], result);
-  return operations;
+  return [...result].filter(isDefined);
 }
 
 export function getCaptionByOperation(
@@ -589,6 +588,49 @@ function convertToInnerCondition(
   return condition;
 }
 
+function appendGroupOperationToGroup(group: Criteria, groupOperation: string): Criteria {
+  const isNegation = isNegationGroupOperation(groupOperation);
+
+  const operation = isNegation
+    ? getGroupOperationFromNegationOperation(groupOperation)
+    : groupOperation;
+  group.push(operation);
+
+  let result: Criteria = group;
+
+  if (isNegation) {
+    result = ['!', result];
+  }
+
+  return result;
+}
+
+function convertToInnerGroup(
+  group: Criteria,
+  customOperations: FilterCustomOperation[],
+  convertItem: typeof convertToInnerStructure,
+  defaultGroupOperation?: string,
+): Criteria {
+  const defaultOperation = defaultGroupOperation || AND_GROUP_OPERATION;
+  const groupOperation = getCriteriaOperation(group).toLowerCase() || defaultOperation;
+  let innerGroup: Criteria = [];
+  for (const item of group) {
+    if (isGroup(item)) {
+      innerGroup.push(convertItem(item, customOperations, defaultOperation));
+      innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
+    } else if (isCondition(item)) {
+      innerGroup.push(convertToInnerCondition(item, customOperations));
+      innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
+    }
+  }
+
+  if (innerGroup.length === 0) {
+    innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
+  }
+
+  return innerGroup;
+}
+
 export function convertToInnerStructure(
   value: unknown,
   customOperations: FilterCustomOperation[],
@@ -621,53 +663,9 @@ export function convertToInnerStructure(
         defaultOperation,
       )];
     }
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return ['!', convertToInnerGroup(innerCriteria, customOperations, defaultOperation)];
+    return ['!', convertToInnerGroup(innerCriteria, customOperations, convertToInnerStructure, defaultOperation)];
   }
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  return convertToInnerGroup(clone, customOperations, defaultOperation);
-}
-
-function appendGroupOperationToGroup(group: Criteria, groupOperation: string): Criteria {
-  const isNegation = isNegationGroupOperation(groupOperation);
-
-  const operation = isNegation
-    ? getGroupOperationFromNegationOperation(groupOperation)
-    : groupOperation;
-  group.push(operation);
-
-  let result: Criteria = group;
-
-  if (isNegation) {
-    result = ['!', result];
-  }
-
-  return result;
-}
-
-function convertToInnerGroup(
-  group: Criteria,
-  customOperations: FilterCustomOperation[],
-  defaultGroupOperation?: string,
-): Criteria {
-  const defaultOperation = defaultGroupOperation || AND_GROUP_OPERATION;
-  const groupOperation = getCriteriaOperation(group).toLowerCase() || defaultOperation;
-  let innerGroup: Criteria = [];
-  for (const item of group) {
-    if (isGroup(item)) {
-      innerGroup.push(convertToInnerStructure(item, customOperations, defaultOperation));
-      innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
-    } else if (isCondition(item)) {
-      innerGroup.push(convertToInnerCondition(item, customOperations));
-      innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
-    }
-  }
-
-  if (innerGroup.length === 0) {
-    innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
-  }
-
-  return innerGroup;
+  return convertToInnerGroup(clone, customOperations, convertToInnerStructure, defaultOperation);
 }
 
 export function getNormalizedFields(fields: Field[]): FilterBuilderField[] {
