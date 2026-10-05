@@ -10,8 +10,10 @@ interface Debug {
   assertParam: (parameter: unknown, message?: string) => void;
 }
 
-const noop = function (): void {};
-const getConsoleMethod = function (method: ConsoleMethod): (...args: unknown[]) => void {
+const noop = function noop(): void {};
+const getConsoleMethod = function getConsoleMethod(
+  method: ConsoleMethod,
+): (...args: unknown[]) => void {
   if (typeof console === 'undefined' || !isFunction(console[method])) {
     return noop;
   }
@@ -25,7 +27,7 @@ export const logger = {
   error: getConsoleMethod('error'),
 };
 
-export const debug = (function (): Debug {
+export const debug = (function createDebug(): Debug {
   function assert(condition: unknown, message?: string): void {
     if (!condition) {
       throw new Error(message);

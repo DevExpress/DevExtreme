@@ -14,18 +14,18 @@ const transitionEndEventNames: Record<string, string> = {
   transition: 'transitionend',
 };
 
-const supportProp = function (prop: string): boolean {
+const supportProp = function supportProp(prop: string): boolean {
   return !!styleProp(prop);
 };
 
-const isNativeScrollingSupported = function (): boolean {
+const isNativeScrollingSupported = function isNativeScrollingSupported(): boolean {
   const { platform, mac: isMac } = devices.real();
   const isNativeScrollDevice = platform === 'ios' || platform === 'android' || isMac;
 
   return isNativeScrollDevice;
 };
 
-const inputType = function (type?: string): boolean {
+const inputType = function inputType(type?: string): boolean {
   if (type === 'text') {
     return true;
   }
@@ -42,7 +42,7 @@ const inputType = function (type?: string): boolean {
   }
 };
 
-const detectTouchEvents = function (
+const detectTouchEvents = function detectTouchEvents(
   hasWindowProperty: (property: string) => boolean,
   touchPointsCount?: number,
 ): boolean {
@@ -50,7 +50,9 @@ const detectTouchEvents = function (
     && !hasWindowProperty('callPhantom');
 };
 
-const detectPointerEvent = function (hasWindowProperty: (property: string) => boolean): boolean {
+const detectPointerEvent = function detectPointerEvent(
+  hasWindowProperty: (property: string) => boolean,
+): boolean {
   return hasWindowProperty('PointerEvent');
 };
 

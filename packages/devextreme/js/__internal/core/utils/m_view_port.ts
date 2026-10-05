@@ -8,11 +8,11 @@ const changeCallback = callbacks();
 let $originalViewPort = $();
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- getter and setter in one function
-const value: any = (function () {
+const value: any = (function createValue() {
   // eslint-disable-next-line @typescript-eslint/init-declarations -- undefined before the first set
   let $current: dxElementWrapper | undefined;
 
-  return function (element?: Parameters<typeof $>[0]): dxElementWrapper | undefined {
+  return function getOrSetValue(element?: Parameters<typeof $>[0]): dxElementWrapper | undefined {
     if (!arguments.length) {
       return $current;
     }

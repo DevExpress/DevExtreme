@@ -3,32 +3,32 @@ import { map } from '@js/core/utils/iterator';
 
 type Text = string | number | null | undefined;
 
-const _normalize = function (text: Text): string {
+const _normalize = function _normalize(text: Text): string {
   if (text === undefined || text === null) {
     return '';
   }
   return String(text);
 };
 
-const _upperCaseFirst = function (text: string): string {
+const _upperCaseFirst = function _upperCaseFirst(text: string): string {
   return _normalize(text).charAt(0).toUpperCase() + text.substr(1);
 };
 
-const _chop = function (text: Text): string[] {
+const _chop = function _chop(text: Text): string[] {
   return _normalize(text)
     .replace(/([a-z\d])([A-Z])/g, '$1 $2')
     .split(/[\s_-]+/);
 };
 
-export const dasherize = function (text: Text): string {
+export const dasherize = function dasherize(text: Text): string {
   return map(_chop(text), (p: string): string => p.toLowerCase()).join('-');
 };
 
-export const underscore = function (text: Text): string {
+export const underscore = function underscore(text: Text): string {
   return dasherize(text).replace(/-/g, '_');
 };
 
-export const camelize = function (text: Text, upperFirst?: boolean): string {
+export const camelize = function camelize(text: Text, upperFirst?: boolean): string {
   return map(_chop(text), (p: string, i: number): string => {
     let part = p.toLowerCase();
     if (upperFirst || i > 0) {
@@ -38,17 +38,17 @@ export const camelize = function (text: Text, upperFirst?: boolean): string {
   }).join('');
 };
 
-export const humanize = function (text: Text): string {
+export const humanize = function humanize(text: Text): string {
   return _upperCaseFirst(dasherize(text).replace(/-/g, ' '));
 };
 
-export const titleize = function (text: Text): string {
+export const titleize = function titleize(text: Text): string {
   return map(_chop(text), (p: string): string => _upperCaseFirst(p.toLowerCase())).join(' ');
 };
 
 const DIGIT_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-export const captionize = function (name: string | undefined): string {
+export const captionize = function captionize(name: string | undefined): string {
   const captionList: string[] = [];
   let isPrevCharNewWord = false;
   let isNewWord = false;

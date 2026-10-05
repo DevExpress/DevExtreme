@@ -7,10 +7,10 @@ interface Quad {
   left: number;
 }
 
-export const encodeHtml = (function () {
+export const encodeHtml = (function createEncodeHtml() {
   const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
 
-  return function (str: unknown): string {
+  return function encode(str: unknown): string {
     return String(str)
       .replace(encodeRegExp[0], '&amp;')
       .replace(encodeRegExp[1], '&quot;')
@@ -21,7 +21,7 @@ export const encodeHtml = (function () {
 }());
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the parts, or the raw value itself
-const splitQuad = function (raw): any {
+const splitQuad = function splitQuad(raw): any {
   switch (typeof raw) {
     case 'string':
       return raw.split(/\s+/, 4);
@@ -38,7 +38,7 @@ const splitQuad = function (raw): any {
   }
 };
 
-export const quadToObject = function (raw: unknown): Quad {
+export const quadToObject = function quadToObject(raw: unknown): Quad {
   const quad = splitQuad(raw);
   let left = parseInt(quad && quad[0], 10);
   let top = parseInt(quad && quad[1], 10);
@@ -82,10 +82,10 @@ export function format(template: unknown, ...values: unknown[]): string {
   return result;
 }
 
-export const isEmpty = (function () {
+export const isEmpty = (function createIsEmpty() {
   const SPACE_REGEXP = /\s/g;
 
-  return function (text: string | null | undefined): boolean {
+  return function isEmptyText(text: string | null | undefined): boolean {
     return !text || !text.replace(SPACE_REGEXP, '');
   };
 }());

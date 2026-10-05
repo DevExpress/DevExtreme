@@ -14,7 +14,7 @@ const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 const componentNames = new WeakMap<object, string>();
 let nextAnonymousComponent = 0;
 
-const getName = function (componentClass: object, newName?: string): string | undefined {
+const getName = function getName(componentClass: object, newName?: string): string | undefined {
   if (isDefined(newName)) {
     componentNames.set(componentClass, newName);
     return undefined;
@@ -46,9 +46,7 @@ export function attachInstanceToElement(
     });
   }
 
-  if (!data[COMPONENT_NAMES_DATA_KEY]) {
-    data[COMPONENT_NAMES_DATA_KEY] = [];
-  }
+  data[COMPONENT_NAMES_DATA_KEY] ??= [];
 
   data[COMPONENT_NAMES_DATA_KEY].push(name);
 }
