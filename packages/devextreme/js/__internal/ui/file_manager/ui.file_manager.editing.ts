@@ -210,7 +210,6 @@ class FileManagerActionContext {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   get processingMessage() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._multipleItems
       ? format(
         this._actionMetadata.multipleItemsProcessingMessage,
@@ -226,7 +225,6 @@ class FileManagerActionContext {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   get successMessage() {
     if (this._hasCompletedItems()) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return this._multipleItems
         ? format(
           this._actionMetadata.multipleItemsSuccessMessage,
@@ -235,7 +233,6 @@ class FileManagerActionContext {
         )
         : format(this._actionMetadata.singleItemSuccessMessage, this._location);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._multipleItems
       ? format(
         this._actionMetadata.multipleItemsErrorMessage,
