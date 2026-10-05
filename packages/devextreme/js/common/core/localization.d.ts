@@ -82,10 +82,6 @@ export function parseNumber(text: string, format: Format): number;
 export type FormatLocale = string | (() => string);
 
 type ExternalFormat = (Intl.DateTimeFormatOptions | Intl.NumberFormatOptions) & {
-  /**
-   * @docid Format.locale
-   * @public
-   */
   locale?: FormatLocale;
 };
 

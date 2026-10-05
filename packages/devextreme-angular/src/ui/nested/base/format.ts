@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 
 import type { Format } from 'devextreme/common';
-import type { FormatLocale } from 'devextreme/common/core/localization';
 
 @Component({
     template: ''
@@ -24,13 +23,6 @@ export abstract class DxoFormat extends NestedOption {
     }
     set formatter(value: Function) {
         this._setOption('formatter', value);
-    }
-
-    get locale(): FormatLocale {
-        return this._getOption('locale');
-    }
-    set locale(value: FormatLocale) {
-        this._setOption('locale', value);
     }
 
     get parser(): Function {

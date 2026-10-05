@@ -1333,9 +1333,6 @@ declare module DevExpress.common {
     | Intl.DateTimeFormatOptions
     | Intl.NumberFormatOptions
   ) & {
-    /**
-     * [descr:Format.locale]
-     */
     locale?: FormatLocale;
   };
   export type FieldChooserLayout = 0 | 1 | 2;
