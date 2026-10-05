@@ -50,6 +50,7 @@ import type {
 } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
+import { DateFormatType } from '../utils/get_date_text';
 import {
   getTargetedAppointment,
   getTargetedAppointmentFromInfo,
@@ -72,7 +73,6 @@ import { Appointment } from './appointment/m_appointment';
 import type { AppointmentProperties } from './appointment/m_types';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
 import { AppointmentsKeyboardNavigation } from './m_appointments_kbn';
-import { DateFormatType } from './m_text_utils';
 import { getAppointmentDateRange } from './resizing/m_core';
 import type { DateRange } from './resizing/types';
 import { isNeedToAdd } from './utils/get_arrays_diff';
@@ -126,7 +126,6 @@ export interface AppointmentCollectionProperties
   items?: AppointmentViewModelPlain[];
   fixedContainer?: dxElementWrapper | null;
   allDayContainer?: dxElementWrapper | null;
-  resources?: unknown[];
 }
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
@@ -316,7 +315,6 @@ class SchedulerAppointments extends CollectionWidget<AppointmentCollectionProper
       allowAllDayResize: true,
       onAppointmentDblClick: null,
       groups: [],
-      resources: [],
     });
   }
 
