@@ -142,7 +142,8 @@ export class AppointmentsKeyboardNavigation {
 
     this._collection.moveAppointmentBack();
 
-    const resizableInstance = (this.$focusTarget() as any).dxResizable('instance');
+    // @ts-expect-error dxResizable is a jQuery plugin method, not declared on dxElementWrapper
+    const resizableInstance = this.$focusTarget().dxResizable('instance');
 
     if (resizableInstance) {
       resizableInstance._detachEventHandlers();

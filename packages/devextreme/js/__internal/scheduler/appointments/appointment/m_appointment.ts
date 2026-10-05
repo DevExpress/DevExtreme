@@ -3,12 +3,13 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
-import DOMComponent from '@js/core/dom_component';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import Resizable from '@js/ui/resizable';
+import DOMComponent from '@ts/core/widget/dom_component';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Resizable from '@ts/ui/resizable/resizable';
 import { hide, show } from '@ts/ui/tooltip/tooltip';
 
 import {
@@ -25,8 +26,9 @@ import {
 } from '../../classes';
 import type { SubscribeKey, SubscribeMethods } from '../../m_subscribes';
 import { validateRRule } from '../../recurrence/validate_rule';
+import type { SafeAppointment } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
-import type { AppointmentProperties } from './m_types';
+import type { AppointmentProperties, AppointmentReducedPart } from './m_types';
 import {
   getAriaDescription,
   getAriaLabel,
@@ -39,12 +41,21 @@ const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
 const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
 
-export class Appointment extends DOMComponent<AppointmentProperties> {
-  get coloredElement(): any {
+interface ResizingRule {
+  handles: string;
+  minWidth: number | undefined;
+  minHeight: number;
+  step: number;
+  roundStepValue: boolean;
+  stepPrecision?: string;
+}
+
+export class Appointment extends DOMComponent<Appointment, AppointmentProperties> {
+  get coloredElement(): dxElementWrapper {
     return this.$element();
   }
 
-  get rawAppointment(): any {
+  get rawAppointment(): SafeAppointment {
     return this.option('data');
   }
 
@@ -52,8 +63,8 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     return this.option('dataAccessors');
   }
 
-  _getDefaultOptions() {
-    // @ts-expect-error
+  _getDefaultOptions(): AppointmentProperties {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       data: {},
       groupIndex: -1,
@@ -94,7 +105,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     return notifyScheduler.invoke(funcName, ...args);
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<AppointmentProperties>): void {
     switch (args.name) {
       case 'data':
       case 'groupIndex':
@@ -116,22 +127,21 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
         this._renderDragSourceClass();
         break;
       default:
-        // @ts-expect-error
         super._optionChanged(args);
     }
   }
 
-  _getHorizontalResizingRule() {
+  _getHorizontalResizingRule(): ResizingRule {
     const reducedHandles = {
       head: this.option('rtlEnabled') ? 'right' : 'left',
       body: '',
       tail: this.option('rtlEnabled') ? 'left' : 'right',
     };
-    const getResizableStep: any = this.option('getResizableStep');
+    const getResizableStep = this.option('getResizableStep');
     const step = getResizableStep ? getResizableStep() : 0;
 
     return {
-      handles: this.option('reduced') ? reducedHandles[this.option('reduced') as any] : DEFAULT_HORIZONTAL_HANDLES,
+      handles: this.option('reduced') ? reducedHandles[this.option('reduced') as AppointmentReducedPart] : DEFAULT_HORIZONTAL_HANDLES,
       minHeight: 0,
       minWidth: this.invoke('getCellWidth'),
       step,
@@ -139,7 +149,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     };
   }
 
-  _getVerticalResizingRule() {
+  _getVerticalResizingRule(): ResizingRule {
     const height = Math.round(this.invoke('getCellHeight'));
 
     return {
@@ -151,8 +161,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     };
   }
 
-  _render() {
-    // @ts-expect-error
+  _render(): void {
     super._render();
 
     this._renderAppointmentGeometry();
@@ -172,14 +181,15 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     this._setResourceColor();
   }
 
-  _setResourceColor() {
+  _setResourceColor(): void {
     const appointmentConfig = {
       itemData: this.rawAppointment,
       groupIndex: this.option('groupIndex') ?? 0,
     };
     const resourceManager = this.option('getResourceManager')();
 
-    resourceManager.getAppointmentColor(appointmentConfig)
+    // eslint-disable-next-line no-void
+    void resourceManager.getAppointmentColor(appointmentConfig)
       .then((color) => {
         if (color) {
           this.coloredElement.css('backgroundColor', color);
@@ -208,8 +218,8 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
   }
 
   _renderAppointmentGeometry(): void {
-    const geometry: any = this.option('geometry');
-    const $element: any = this.$element();
+    const geometry = this.option('geometry');
+    const $element = this.$element();
     move($element, {
       top: geometry.top,
       left: geometry.left,
@@ -221,68 +231,70 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     });
   }
 
-  _renderEmptyClass() {
-    const geometry: any = this.option('geometry');
+  _renderEmptyClass(): void {
+    const geometry = this.option('geometry');
 
     if (geometry.empty || this.option('isCompact')) {
-      (this.$element() as any).addClass(EMPTY_APPOINTMENT_CLASS);
+      this.$element().addClass(EMPTY_APPOINTMENT_CLASS);
     }
   }
 
-  _renderReducedAppointment() {
-    const reducedPart: any = this.option('reduced');
+  _renderReducedAppointment(): void {
+    const reducedPart = this.option('reduced');
 
     if (!reducedPart || this.option('hideReducedIcon')) {
       return;
     }
 
-    (this.$element() as any)
+    this.$element()
       .toggleClass(REDUCED_APPOINTMENT_CLASS, true)
       .toggleClass(REDUCED_APPOINTMENT_PARTS_CLASSES[reducedPart], true);
 
     this._renderAppointmentReducedIcon();
   }
 
-  _renderAppointmentReducedIcon() {
+  _renderAppointmentReducedIcon(): void {
     const $icon = $('<div>')
       .addClass(REDUCED_APPOINTMENT_ICON)
       .appendTo(this.$element());
 
     eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME);
     eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, () => {
-      show({
+      // eslint-disable-next-line no-void
+      void show({
         target: $icon.get(0),
         content: getReducedIconTooltip(this.option()),
       });
     });
     eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME);
     eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME, () => {
-      hide();
+      // eslint-disable-next-line no-void
+      void hide();
     });
   }
 
-  _renderAllDayClass() {
-    (this.$element() as any).toggleClass(ALL_DAY_APPOINTMENT_CLASS, Boolean(this.option('allDay')));
+  _renderAllDayClass(): void {
+    this.$element().toggleClass(ALL_DAY_APPOINTMENT_CLASS, Boolean(this.option('allDay')));
   }
 
-  _renderDragSourceClass() {
-    (this.$element() as any).toggleClass(APPOINTMENT_DRAG_SOURCE_CLASS, Boolean(this.option('isDragSource')));
+  _renderDragSourceClass(): void {
+    this.$element().toggleClass(APPOINTMENT_DRAG_SOURCE_CLASS, Boolean(this.option('isDragSource')));
   }
 
-  _renderRecurrenceClass() {
+  _renderRecurrenceClass(): void {
     const rule = this.dataAccessors.get('recurrenceRule', this.rawAppointment);
 
     if (validateRRule(rule)) {
-      (this.$element() as any).addClass(RECURRENCE_APPOINTMENT_CLASS);
+      this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);
     }
   }
 
-  _renderDirection() {
-    (this.$element() as any).addClass(DIRECTION_APPOINTMENT_CLASSES[this.option('direction') as any]);
+  _renderDirection(): void {
+    this.$element().addClass(DIRECTION_APPOINTMENT_CLASSES[this.option('direction')]);
   }
 
-  _createResizingConfig() {
-    const config: any = this.option('direction') === 'vertical' ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
+  _createResizingConfig(): ResizingRule {
+    const config: ResizingRule = this.option('direction') === 'vertical' ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
 
     const cellHeight = Math.round(this.invoke('getCellHeight') ?? 0);
     const allDayHeight = Math.round(this.invoke('getAllDayHeight') ?? 0);
@@ -297,9 +309,8 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     return config;
   }
 
-  _renderResizable() {
+  _renderResizable(): void {
     if (this.option('allowResize')) {
-      // @ts-expect-error
       this._createComponent(
         this.$element(),
         Resizable,
@@ -311,9 +322,9 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     }
   }
 
-  _useTemplates() {
+  _useTemplates(): boolean {
     return false;
   }
 }
 
-registerComponent('dxSchedulerAppointment', Appointment as any);
+registerComponent('dxSchedulerAppointment', Appointment);
