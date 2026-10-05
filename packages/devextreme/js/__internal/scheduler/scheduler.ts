@@ -274,6 +274,7 @@ interface SchedulerWorkSpaceLike {
   getCellData: ($cell: dxElementWrapper) => DroppableCellData;
   getCellWidth: () => number;
   getCellHeight: () => number;
+  getAllDayHeight: () => number;
   getGroupCount: () => number;
   getGroupBounds: (coordinates: WorkspaceCoordinates) => GroupBoundsOffset | undefined;
   getPanelDOMSize: (panelName: PanelName) => RealSize;
@@ -2156,8 +2157,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       throw errors.Error('E1031', subject);
     }
 
-    // subscribes callbacks are not fully typed
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return (callback as (
       this: Scheduler,
       ...callbackArgs: Parameters<SubscribeMethods[Subject]>
