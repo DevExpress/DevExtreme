@@ -7,7 +7,8 @@ const getDefaultAlignment = (isRtlEnabled?: boolean): 'left' | 'right' => {
   return rtlEnabled ? 'right' : 'left';
 };
 
-const getBoundingRect = (element) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers read DOMRect members
+const getBoundingRect = (element: unknown): any => {
   if (isWindow(element)) {
     return {
       width: element.outerWidth,
@@ -15,7 +16,7 @@ const getBoundingRect = (element) => {
     };
   }
 
-  return element.getBoundingClientRect?.();
+  return (element as Partial<Pick<Element, 'getBoundingClientRect'>>).getBoundingClientRect?.();
 };
 
 export {
