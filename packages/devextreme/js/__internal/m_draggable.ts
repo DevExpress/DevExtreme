@@ -113,15 +113,15 @@ export interface DraggableProperties extends Omit<Properties, 'boundary' | 'onDi
 
   onCancelByEsc?: boolean;
 
-  onDragCancel?: DragHandler;
+  onDragCancel?: (e: DragEventArgs) => void;
 
-  onDragEnter?: DragHandler;
+  onDragEnter?: (e: DragEventArgs) => void;
 
-  onDragLeave?: DragHandler;
+  onDragLeave?: (e: DragEventArgs) => void;
 
-  onDraggableElementShown?: DragHandler;
+  onDraggableElementShown?: (e: DragElementShownArgs) => void;
 
-  onDrop?: DragHandler;
+  onDrop?: (e: DragEventArgs) => void;
 }
 
 const window = getWindow();
@@ -203,6 +203,8 @@ export type DragStartArgs = Cancelable & {
   itemElement: dxElementWrapper;
   fromData: unknown;
 };
+
+export type DragElementShownArgs = DragStartArgs & { dragElement: dxElementWrapper };
 
 type CursorOffset = DraggableBaseOptions<unknown>['cursorOffset'];
 
