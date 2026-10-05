@@ -78,19 +78,22 @@ module('Integration: collector', baseConfig, () => {
 });
 
 module('Integration: Appointments Collector Base Tests', baseConfig, () => {
+    class WidgetMock extends Widget {
+        option(options) {
+            if(options === 'appointmentCollectorTemplate') {
+                return 'appointmentCollector';
+            }
+            return super.option(options);
+        }
+
+        getAppointmentTemplate(template) {
+            return this._getTemplateByOption(template);
+        }
+    }
+    WidgetMock.prototype._dataAccessors = mockDataAccessor;
+
     const createWidget = () => {
-        return new (Widget.inherit({
-            option(options) {
-                if(options === 'appointmentCollectorTemplate') {
-                    return 'appointmentCollector';
-                }
-                return this.callBase(options);
-            },
-            getAppointmentTemplate(template) {
-                return this._getTemplateByOption(template);
-            },
-            _dataAccessors: mockDataAccessor,
-        }))($('<div>'));
+        return new WidgetMock($('<div>'));
     };
 
     const renderAppointmentsCollectorContainer = ({ widgetMock, items, options, color }) => {
