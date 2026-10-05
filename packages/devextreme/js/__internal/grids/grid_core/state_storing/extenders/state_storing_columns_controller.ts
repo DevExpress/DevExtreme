@@ -1,4 +1,4 @@
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { StateStoringController } from '../state_storing_controller_core';

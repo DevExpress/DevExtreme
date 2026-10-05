@@ -5,7 +5,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';

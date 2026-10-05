@@ -4,7 +4,7 @@ import type {
   RequestCallbacks,
 } from '@js/common/ai-integration';
 import errors from '@js/ui/widget/ui.errors';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';

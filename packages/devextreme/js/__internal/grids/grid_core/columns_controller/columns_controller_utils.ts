@@ -22,6 +22,7 @@ import type { RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
+import type { ColumnsController } from './columns_controller';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_INDEX_OPTIONS,
@@ -35,7 +36,6 @@ import {
   USER_STATE_FIELD_NAMES_15_1,
   VIRTUAL_COMMAND_COLUMN_NAME,
 } from './const';
-import type { ColumnsController } from './m_columns_controller';
 import type {
   BandColumnsCache, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionChangeArgs,
   ColumnOptionGetter, ColumnOptionSetter, ColumnsChanges, ColumnsControllerOptions, ColumnUserState,
