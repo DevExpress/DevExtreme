@@ -3446,6 +3446,17 @@ interface DragBehaviorOptions {
   filter?: string;
 }
 
+export interface DragBehaviorConfig {
+  container: dxElementWrapper;
+  dragTemplate: () => dxElementWrapper | undefined;
+  onDragStart: (e: AppointmentDraggingStartEvent) => void;
+  onDragMove: () => void;
+  onDragEnd: (e: AppointmentDraggingEndEvent) => void;
+  onDragCancel: (e: AppointmentDraggingRemoveEvent) => void;
+  cursorOffset: (() => TranslateVector) | undefined;
+  filter: string | undefined;
+}
+
 const createDragBehaviorConfig = (
   container: dxElementWrapper,
   rootElement: dxElementWrapper,
@@ -3458,16 +3469,7 @@ const createDragBehaviorConfig = (
   removeDroppableCellClass: () => void,
   getCellWidthCallback: () => number,
   options: DragBehaviorOptions,
-): {
-  container: dxElementWrapper;
-  dragTemplate: () => dxElementWrapper | undefined;
-  onDragStart: (e: AppointmentDraggingStartEvent) => void;
-  onDragMove: () => void;
-  onDragEnd: (e: AppointmentDraggingEndEvent) => void;
-  onDragCancel: (e: AppointmentDraggingRemoveEvent) => void;
-  cursorOffset: (() => TranslateVector) | undefined;
-  filter: string | undefined;
-} => {
+): DragBehaviorConfig => {
   const state: {
     dragElement: dxElementWrapper | undefined;
     itemData: unknown;

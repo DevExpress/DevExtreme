@@ -43,7 +43,7 @@ const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.l
 
 interface ResizingRule {
   handles: string;
-  minWidth: number | undefined;
+  minWidth: number;
   minHeight: number;
   step: number;
   roundStepValue: boolean;
@@ -90,6 +90,11 @@ export class Appointment extends DOMComponent<Appointment, AppointmentProperties
   ): void {
     this.invoke(funcName, ...args);
   }
+
+  invoke<Subject extends SubscribeKey>(
+    funcName: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): ReturnType<SubscribeMethods[Subject]>;
 
   invoke<Subject extends SubscribeKey>(
     funcName: Subject,
@@ -148,7 +153,6 @@ export class Appointment extends DOMComponent<Appointment, AppointmentProperties
   }
 
   _getVerticalResizingRule(): ResizingRule {
-    // @ts-expect-error getCellHeight is undefined only without notifyScheduler
     const height = Math.round(this.invoke('getCellHeight'));
 
     return {
