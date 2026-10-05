@@ -7,7 +7,7 @@ import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import { getPublicElement } from '@js/core/element';
 import type { PostponedOperations } from '@js/core/postponed_operations';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
@@ -255,7 +255,7 @@ interface SchedulerWorkSpaceLike {
   needRecalculateResizableArea: () => boolean;
   getHeaderDate: () => Date;
   updateHeaderEmptyCellWidth: () => void;
-  initDragBehavior: (scheduler: unknown) => void;
+  initDragBehavior: (scheduler: Scheduler) => void;
   attachTablesEvents: () => void;
   getWorkArea: () => dxElementWrapper;
   $element: () => dxElementWrapper;
@@ -267,6 +267,7 @@ interface SchedulerWorkSpaceLike {
   getCellData: ($cell: dxElementWrapper) => DroppableCellData;
   getCellWidth: () => number;
   getCellHeight: () => number;
+  getCellByCoordinates: (coordinates: Coordinates, allDay: boolean) => dxElementWrapper;
   getAllDayHeight: () => number;
   getGroupCount: () => number;
   getGroupBounds: (coordinates: WorkspaceCoordinates) => GroupBoundsOffset | undefined;
