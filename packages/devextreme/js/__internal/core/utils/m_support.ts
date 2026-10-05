@@ -1,8 +1,8 @@
 import devices from '@js/common/core/environment/devices';
 import domAdapter from '@js/core/dom_adapter';
-import callOnce from '@js/core/utils/call_once';
 import { styleProp, stylePropPrefix } from '@js/core/utils/style';
 import { getNavigator, hasProperty } from '@js/core/utils/window';
+import { callOnce } from '@ts/core/utils/call_once';
 
 const {
   maxTouchPoints,

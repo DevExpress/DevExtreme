@@ -39,10 +39,10 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import callOnce from '@js/core/utils/call_once';
 import { getSvgMarkup } from '@js/core/utils/svg';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import { callOnce } from '@ts/core/utils/call_once';
 import { AnimationController } from '@ts/viz/core/renderers/animation';
 import {
   getNextDefsSvgId,
