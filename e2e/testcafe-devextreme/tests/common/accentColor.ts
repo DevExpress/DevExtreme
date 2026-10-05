@@ -297,7 +297,8 @@ const paintAccentMarks = ClientFunction((color: string, throughApi: boolean) => 
   const offAccent: Record<string, string[]> = {};
 
   MARK_HOSTS.forEach((host) => {
-    const marks = Array.from(document.querySelectorAll(`#${host} ${PRIMARY_PAINT}`));
+    const marks = Array.from(document.querySelectorAll(`#${host} ${PRIMARY_PAINT}`))
+      .filter((mark) => mark.tagName !== 'g' || mark.childElementCount > 0);
     const painted = marks.map((mark) => {
       const property = mark.getAttribute('fill')?.startsWith('var(--dx-viz-primary') ? 'fill' : 'stroke';
 

@@ -100,6 +100,7 @@ if (getThemeName() === 'fluent-next') {
   const DECLARED_BG = 'rgb(22, 7, 3)';
   const DECLARED_PRIMARY = 'rgb(33, 7, 3)';
   const HANDED_OUT_BLUE = '#0b0703';
+  const HANDED_OUT_PRIMARY = '#210703';
 
   const declareTheNamesTheWidgetsRead = ClientFunction((
     blue: string,
@@ -454,11 +455,11 @@ if (getThemeName() === 'fluent-next') {
       simpleSet: HANDED_OUT_BLUE,
       gradientSet: HANDED_OUT_BLUE,
       generated: HANDED_OUT_BLUE,
-      marker: HANDED_OUT_BLUE,
-      bullet: HANDED_OUT_BLUE,
-      rangebar: HANDED_OUT_BLUE,
+      marker: HANDED_OUT_PRIMARY,
+      bullet: HANDED_OUT_PRIMARY,
+      rangebar: HANDED_OUT_PRIMARY,
       background: HANDED_OUT_BG,
-      findTheme: HANDED_OUT_BLUE,
+      findTheme: HANDED_OUT_PRIMARY,
     });
   }).before(declareTheNames);
 
@@ -510,7 +511,7 @@ if (getThemeName() === 'fluent-next') {
       pointColor: HANDED_OUT_BLUE,
       barColor: HANDED_OUT_BLUE,
       groupColor: HANDED_OUT_BLUE,
-      indicatorColor: HANDED_OUT_BLUE,
+      indicatorColor: HANDED_OUT_PRIMARY,
     });
   }).before(async () => {
     await declareTheNames();
