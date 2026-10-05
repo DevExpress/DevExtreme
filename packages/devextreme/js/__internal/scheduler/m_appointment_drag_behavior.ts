@@ -19,6 +19,7 @@ import type Scheduler from './scheduler';
 import type { SafeAppointment } from './types';
 import { isSchedulerComponent } from './utils/is_scheduler_component';
 import type { AppointmentViewModelPlain } from './view_model/types';
+import type { DragBehaviorConfig } from './workspaces/work_space';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
@@ -249,7 +250,7 @@ export default class AppointmentDragBehavior {
     };
   }
 
-  addTo(container: dxElementWrapper, config: Partial<DragBehaviorOptions>): void {
+  addTo(container: dxElementWrapper, config: DragBehaviorConfig): void {
     const appointmentDragging = this.scheduler.option('appointmentDragging') || {};
     const options: DragBehaviorOptions = extend({
       component: this.scheduler,

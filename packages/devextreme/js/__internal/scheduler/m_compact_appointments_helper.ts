@@ -79,9 +79,7 @@ export class CompactAppointmentsHelper {
     onAppointmentClick: CompactAppointmentOptions['onAppointmentClick'],
   ): (e: ItemClickEvent<AppointmentTooltipItem>) => void {
     return (e) => {
-      // @ts-expect-error _createEventArgs is typed for the context menu event, same shape
       const clickEventArgs = this.instance._createEventArgs(e);
-      // @ts-expect-error the collection passes its onItemClick action, always a function
       onAppointmentClick(clickEventArgs);
     };
   }
