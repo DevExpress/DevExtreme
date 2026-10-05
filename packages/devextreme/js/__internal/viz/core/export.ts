@@ -29,6 +29,7 @@ import {
   export as _export, image as imageExporter, pdf as pdfExporter, svg as svgExporter,
 } from '@js/exporter';
 import { getTheme } from '@js/viz/themes';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
 import { patchFontOptions } from '@ts/viz/core/utils';
 
@@ -63,6 +64,69 @@ const FORMAT_DATA_KEY = 'export-element-format';
 
 const GET_COLOR_REGEX = /data-backgroundcolor="([^"]*)"/;
 
+type IncidentOccurred = (errorOrWarningId: string, options?: ThemeValue[]) => void;
+
+interface ValidFormats {
+  unsupported: string[];
+  supported: string[];
+}
+
+interface MenuItemAttributes {
+  rect: {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  };
+  text: {
+    x: number;
+    y: number;
+  };
+  separator?: ThemeValue;
+}
+
+interface MenuItem {
+  g: ThemeValue;
+  rect: ThemeValue;
+  resetState: () => void;
+  fixPosition: () => void;
+}
+
+interface ExportMenuParams {
+  renderer: ThemeValue;
+  incidentOccurred: IncidentOccurred;
+  print: () => void;
+  exportTo: (format: string) => void;
+}
+
+interface ExportMenuLayoutOptions {
+  width: number;
+  height: number;
+  cutSide: string;
+  cutLayoutSide: string;
+}
+
+interface CombineMarkupsOptions {
+  gridLayout?: boolean;
+  verticalAlignment?: string;
+  horizontalAlignment?: string;
+}
+
+interface ExportOptions {
+  format: string;
+  fileName: string;
+  backgroundColor: ThemeValue;
+  width: number;
+  height: number;
+  margin: ThemeValue;
+  svgToCanvas: ThemeValue;
+  exportingAction: ThemeValue;
+  exportedAction: ThemeValue;
+  fileSavingAction: ThemeValue;
+  useBase64?: boolean;
+  __test?: ThemeValue;
+}
+
 function getRendererWrapper(width, height, backgroundColor) {
   const rendererContainer = $('<div>').get(0);
 
@@ -87,7 +151,7 @@ function getRendererWrapper(width, height, backgroundColor) {
   };
 }
 
-function getValidFormats() {
+function getValidFormats(): ValidFormats {
   const imageFormats = imageExporter.testFormats(ALLOWED_IMAGE_FORMATS);
   return {
     unsupported: imageFormats.unsupported,
@@ -95,7 +159,7 @@ function getValidFormats() {
   };
 }
 
-function validateFormat(format, incidentOccurred, validFormats) {
+function validateFormat(format, incidentOccurred?: IncidentOccurred, validFormats?) {
   validFormats = validFormats || getValidFormats();
   format = String(format).toUpperCase();
 
@@ -183,11 +247,11 @@ function setPrint(imageSrc, options) {
   };
 }
 
-function getItemAttributes(options, type, itemIndex) {
+function getItemAttributes(options: ThemeValue, type: string, itemIndex: number): MenuItemAttributes {
   const x = BUTTON_SIZE - LIST_WIDTH;
   const y = BUTTON_SIZE + LIST_PADDING_TOP + LIST_STROKE_WIDTH + itemIndex * MENU_ITEM_HEIGHT;
 
-  const attr = {
+  const attr: MenuItemAttributes = {
     rect: {
       width: LIST_WIDTH - LIST_STROKE_WIDTH * 2,
       height: MENU_ITEM_HEIGHT,
@@ -201,7 +265,6 @@ function getItemAttributes(options, type, itemIndex) {
   };
 
   if (type === 'printing') {
-    // @ts-expect-error
     attr.separator = {
       stroke: options.button.default.borderColor,
       'stroke-width': LIST_STROKE_WIDTH,
@@ -215,7 +278,7 @@ function getItemAttributes(options, type, itemIndex) {
   return attr;
 }
 
-function createMenuItem(renderer, options, settings) {
+function createMenuItem(renderer: ThemeValue, options: ThemeValue, settings: ThemeValue): MenuItem {
   const itemData = {};
   const { type } = settings;
   const { format } = settings;
@@ -249,7 +312,6 @@ function createMenuItem(renderer, options, settings) {
 
   if (type === 'printing') {
     renderer.path(null, 'line')
-    // @ts-expect-error
       .attr(attr.separator)
       .append(menuItem);
   }
@@ -265,11 +327,10 @@ function createMenuItem(renderer, options, settings) {
   };
 }
 
-function createMenuItems(renderer, options) {
-  let items = [];
+function createMenuItems(renderer: ThemeValue, options: ThemeValue): MenuItem[] {
+  let items: MenuItem[] = [];
 
   if (options.printingEnabled) {
-    // @ts-expect-error
     items.push(createMenuItem(renderer, options, {
       type: 'printing',
       text: messageLocalization.format('vizExport-printingButtonText'),
@@ -279,7 +340,7 @@ function createMenuItems(renderer, options) {
   items = options.formats.reduce((r, format) => {
     r.push(createMenuItem(renderer, options, {
       type: 'exporting',
-      // @ts-expect-error
+      // @ts-expect-error message.d.ts types the formatter returned by getFormatter() without parameters
       text: messageLocalization.getFormatter('vizExport-exportButtonText')(format),
       format,
       itemIndex: r.length,
@@ -297,7 +358,6 @@ function getBackgroundColorFromMarkup(markup) {
 }
 
 export const exportFromMarkup = function (markup, options) {
-  // @ts-expect-error
   options.format = validateFormat(options.format) || DEFAULT_EXPORT_FORMAT;
   options.fileName = options.fileName || 'file';
 
@@ -305,7 +365,7 @@ export const exportFromMarkup = function (markup, options) {
   options.exportedAction = options.onExported;
   options.fileSavingAction = options.onFileSaving;
   options.margin = isDefined(options.margin) ? options.margin : MARGIN;
-  // @ts-expect-error
+  // @ts-expect-error themes.d.ts requires the theme name; getTheme() without it returns the current theme
   options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor;
   _export(markup, options, getCreatorFunc(options.format));
 };
@@ -324,13 +384,12 @@ export const exportWidgets = function (widgets, options) {
   exportFromMarkup(markupInfo.root, options);
 };
 
-export let combineMarkups = function (widgets, options = { }) {
+export let combineMarkups = function (widgets, options: CombineMarkupsOptions = { }) {
   if (!Array.isArray(widgets)) {
     widgets = [[widgets]];
   } else if (!Array.isArray(widgets[0])) {
     widgets = widgets.map((item) => [item]);
   }
-  // @ts-expect-error
   const compactView = !options.gridLayout;
   const exportItems = widgets.reduce((r, row, rowIndex) => {
     const rowInfo = row.reduce((r, item, colIndex) => {
@@ -433,37 +492,69 @@ function wrapItemsToElement(width, height, backgroundColor, { exportItems, optio
   return result;
 }
 
-export let ExportMenu = function (params) {
-  const renderer = this._renderer = params.renderer;
-  this._incidentOccurred = params.incidentOccurred;
-  this._exportTo = params.exportTo;
-  this._print = params.print;
+export let ExportMenu = class ExportMenu {
+  declare _renderer: ThemeValue;
 
-  this._shadow = renderer.shadowFilter('-50%', '-50%', '200%', '200%', SHADOW_OFFSET, 6, SHADOW_BLUR);
-  this._shadow.attr({ opacity: 0.8 });
-  this._group = renderer.g().attr({
-    class: EXPORT_CSS_CLASS,
-    [HIDDEN_FOR_EXPORT]: true,
-  }).linkOn(renderer.root, { name: 'export-menu', after: 'peripheral' });
-  this._buttonGroup = renderer.g().attr({ class: `${EXPORT_CSS_CLASS}-button` }).append(this._group);
-  this._listGroup = renderer.g().attr({ class: `${EXPORT_CSS_CLASS}-list` }).append(this._group);
+  declare _incidentOccurred: IncidentOccurred;
 
-  this._overlay = renderer.rect(-LIST_WIDTH + BUTTON_SIZE, BUTTON_SIZE + LIST_PADDING_TOP, LIST_WIDTH, 0);
-  this._overlay.attr({
-    'stroke-width': LIST_STROKE_WIDTH,
-    cursor: 'pointer',
-    rx: 4,
-    ry: 4,
-    filter: this._shadow.id,
-  });
-  this._overlay.data({ 'export-element-type': 'list' });
-  this.validFormats = getValidFormats();
+  declare _exportTo: (format: string) => void;
 
-  this._subscribeEvents();
-};
+  declare _print: () => void;
 
-extend(ExportMenu.prototype, {
-  getLayoutOptions() {
+  declare _shadow: ThemeValue;
+
+  declare _group: ThemeValue;
+
+  declare _buttonGroup: ThemeValue;
+
+  declare _listGroup: ThemeValue;
+
+  declare _overlay: ThemeValue;
+
+  declare validFormats: ValidFormats;
+
+  declare _hiddenDueToLayout: boolean;
+
+  declare _options: ThemeValue;
+
+  declare _listShown: boolean;
+
+  declare _menuItems: MenuItem[];
+
+  declare _button: ThemeValue;
+
+  declare _icon: ThemeValue;
+
+  constructor(params: ExportMenuParams) {
+    const renderer = this._renderer = params.renderer;
+    this._incidentOccurred = params.incidentOccurred;
+    this._exportTo = params.exportTo;
+    this._print = params.print;
+
+    this._shadow = renderer.shadowFilter('-50%', '-50%', '200%', '200%', SHADOW_OFFSET, 6, SHADOW_BLUR);
+    this._shadow.attr({ opacity: 0.8 });
+    this._group = renderer.g().attr({
+      class: EXPORT_CSS_CLASS,
+      [HIDDEN_FOR_EXPORT]: true,
+    }).linkOn(renderer.root, { name: 'export-menu', after: 'peripheral' });
+    this._buttonGroup = renderer.g().attr({ class: `${EXPORT_CSS_CLASS}-button` }).append(this._group);
+    this._listGroup = renderer.g().attr({ class: `${EXPORT_CSS_CLASS}-list` }).append(this._group);
+
+    this._overlay = renderer.rect(-LIST_WIDTH + BUTTON_SIZE, BUTTON_SIZE + LIST_PADDING_TOP, LIST_WIDTH, 0);
+    this._overlay.attr({
+      'stroke-width': LIST_STROKE_WIDTH,
+      cursor: 'pointer',
+      rx: 4,
+      ry: 4,
+      filter: this._shadow.id,
+    });
+    this._overlay.data({ 'export-element-type': 'list' });
+    this.validFormats = getValidFormats();
+
+    this._subscribeEvents();
+  }
+
+  getLayoutOptions(): ExportMenuLayoutOptions {
     if (this._hiddenDueToLayout) {
       return {
         width: 0, height: 0, cutSide: 'vertical', cutLayoutSide: 'top',
@@ -483,13 +574,13 @@ extend(ExportMenu.prototype, {
     bBox.horizontalAlignment = 'right';
 
     return bBox;
-  },
+  }
 
-  shift(_, y) {
+  shift(_: number, y: number): void {
     this._group.attr({ translateY: this._group.attr('translateY') + y });
-  },
+  }
 
-  draw(width, height, canvas) {
+  draw(width: number, height: number, canvas: { left: number }): this {
     this._group.move(width - BUTTON_SIZE - SHADOW_OFFSET - SHADOW_BLUR + canvas.left, Math.floor(height / 2 - BUTTON_SIZE / 2));
 
     const layoutOptions = this.getLayoutOptions();
@@ -498,17 +589,17 @@ extend(ExportMenu.prototype, {
     }
 
     return this;
-  },
+  }
 
-  show() {
+  show(): void {
     this._group.linkAppend();
-  },
+  }
 
-  hide() {
+  hide(): void {
     this._group.linkRemove();
-  },
+  }
 
-  setOptions(options) {
+  setOptions(options: ThemeValue): void {
     this._options = options;
 
     if (options.formats) {
@@ -531,61 +622,61 @@ extend(ExportMenu.prototype, {
     } else {
       this.hide();
     }
-  },
+  }
 
-  dispose() {
+  dispose(): void {
     this._unsubscribeEvents();
 
     this._group.linkRemove().linkOff();
     this._group.dispose();
     this._shadow.dispose();
-  },
+  }
 
   // BaseWidget_layout_implementation
-  layoutOptions() {
+  layoutOptions(): ThemeValue {
     return this._options.enabled && { horizontalAlignment: 'right', verticalAlignment: 'top', weak: true };
-  },
+  }
 
-  measure() {
+  measure(): number[] {
     this._fillSpace();
     const { margin } = this._options.button;
     return [BUTTON_SIZE + margin.left + margin.right, BUTTON_SIZE + margin.top + margin.bottom];
-  },
+  }
 
-  move(rect) {
+  move(rect: number[]): void {
     const { margin } = this._options.button;
     this._group.attr({
       translateX: Math.round(rect[0]) + margin.left,
       translateY: Math.round(rect[1]) + margin.top,
     });
-  },
+  }
 
-  _fillSpace() {
+  _fillSpace(): void {
     this._hiddenDueToLayout = false;
     this.show();
-  },
+  }
 
-  freeSpace() {
+  freeSpace(): void {
     this._incidentOccurred('W2107');
     this._hiddenDueToLayout = true;
     this.hide();
-  },
+  }
   // BaseWidget_layout_implementation
 
-  _hideList() {
+  _hideList(): void {
     this._listGroup.remove();
     this._listShown = false;
     this._setButtonState('default');
     this._menuItems.forEach((item) => item.resetState());
-  },
+  }
 
-  _showList() {
+  _showList(): void {
     this._listGroup.append(this._group);
     this._listShown = true;
     this._menuItems.forEach((item) => item.fixPosition());
-  },
+  }
 
-  _setButtonState(state) {
+  _setButtonState(state: string): void {
     const style = this._options.button[state];
 
     this._button.attr({
@@ -594,9 +685,9 @@ extend(ExportMenu.prototype, {
     });
 
     this._icon.attr({ fill: style.color });
-  },
+  }
 
-  _subscribeEvents() {
+  _subscribeEvents(): void {
     this._renderer.root.on(`${pointerEvents.up}.export`, (e) => {
       const elementType = e.target[EXPORT_DATA_KEY];
 
@@ -629,15 +720,15 @@ extend(ExportMenu.prototype, {
     this._buttonGroup.on(pointerEvents.enter, () => this._setButtonState('hover'));
     this._buttonGroup.on(pointerEvents.leave, () => this._setButtonState(this._listShown ? 'focus' : 'default'));
     this._buttonGroup.on(`${pointerEvents.down}.export`, () => this._setButtonState('active'));
-  },
+  }
 
-  _unsubscribeEvents() {
+  _unsubscribeEvents(): void {
     this._renderer.root.off('.export');
     this._listGroup.off();
     this._buttonGroup.off();
-  },
+  }
 
-  _updateButton() {
+  _updateButton(): void {
     const renderer = this._renderer;
     const options = this._options;
     const exportData = { 'export-element-type': 'button' };
@@ -663,9 +754,9 @@ extend(ExportMenu.prototype, {
 
       this._buttonGroup.setTitle(messageLocalization.format('vizExport-titleMenuText'));
     }
-  },
+  }
 
-  _updateList() {
+  _updateList(): void {
     const options = this._options;
     const buttonDefault = options.button.default;
     const listGroup = this._listGroup;
@@ -683,17 +774,15 @@ extend(ExportMenu.prototype, {
 
     listGroup.clear();
     this._overlay.append(listGroup);
-    // @ts-expect-error
     items.forEach((item) => item.g.append(listGroup));
 
     this._menuItems = items;
-  },
-});
+  }
+};
 
 // BaseWidget.js
-function getExportOptions(widget, exportOptions, fileName, format) {
+function getExportOptions(widget: ThemeValue, exportOptions: ThemeValue, fileName?: string, format?: string): ExportOptions {
   if (format || exportOptions.format) {
-    // @ts-expect-error
     format = validateFormat(format || exportOptions.format, widget._incidentOccurred);
   }
   const { width, height } = widget.getSize();
@@ -762,11 +851,9 @@ export const plugin = {
     },
     print() {
       const menu = this._exportMenu;
-      // @ts-expect-error
       const options = getExportOptions(this, this._getOption('export') || {});
 
       /// #DEBUG
-      // @ts-expect-error
       options.__test = this._getOption('export').__test;
       /// #ENDDEBUG
 
@@ -774,10 +861,8 @@ export const plugin = {
       options.exportedAction = null;
       options.margin = 0;
       options.format = 'PNG';
-      // @ts-expect-error
       options.useBase64 = true;
       options.fileSavingAction = (eventArgs) => {
-        // @ts-expect-error
         print(`data:image/png;base64,${eventArgs.data}`, { width: options.width, __test: options.__test });
         eventArgs.cancel = true;
       };

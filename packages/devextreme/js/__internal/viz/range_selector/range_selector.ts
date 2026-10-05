@@ -961,12 +961,11 @@ class AxisWrapper {
   }
 
   getOptions(): ThemeValue {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._axis.getOptions() || {};
   }
 }
 
-each(Axis.prototype, (field: string) => {
+Object.getOwnPropertyNames(Axis.prototype).forEach((field: string) => {
   if (field !== 'constructor' && !field.startsWith('_') && isFunction(Axis.prototype[field])
     && !(field in AxisWrapper.prototype)) {
     AxisWrapper.prototype[field] = function callAxisMethod(
@@ -1008,7 +1007,6 @@ class RangeSelector extends BaseWidget {
   _toggleParentsScrollSubscription(): void {}
 
   _dataIsReady(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._dataIsLoaded();
   }
 
