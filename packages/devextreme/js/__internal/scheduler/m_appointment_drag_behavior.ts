@@ -136,7 +136,7 @@ export default class AppointmentDragBehavior {
     this.removeDroppableClasses();
   }
 
-  getItemData(appointmentElement: Element | dxElementWrapper): SafeAppointment {
+  getItemData(appointmentElement: Element | dxElementWrapper): SafeAppointment | undefined {
     const dataFromTooltip = $(appointmentElement)
       .data(LIST_ITEM_DATA_KEY) as unknown as ListItemData | undefined;
     const itemDataFromTooltip = dataFromTooltip?.appointment;
