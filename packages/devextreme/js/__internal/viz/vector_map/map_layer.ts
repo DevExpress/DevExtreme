@@ -1410,8 +1410,8 @@ let MapLayerElement = class MapLayerElement {
   }
 
   dispose(): this {
-    // @ts-expect-error dispose releases the references; `data` is not a member, the element data is kept in `_data`
-    this._ctx = this.proxy = this._settings = this._fig = this._label = this.data = null;
+    // @ts-expect-error dispose releases the references
+    this._ctx = this.proxy = this._settings = this._fig = this._label = this._data = null;
     return this;
   }
 

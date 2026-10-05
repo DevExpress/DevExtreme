@@ -2312,7 +2312,7 @@ export let Renderer = class Renderer {
     shape.clipPath = clipPath;
     /// #ENDDEBUG
 
-    shape.remove = function (): never { throw 'Not implemented'; };
+    shape.remove = function (): never { throw new Error('Not implemented'); };
     shape.dispose = function (): SvgElementInstance {
       clipPath.dispose();
       // @ts-expect-error dispose() drops the reference
