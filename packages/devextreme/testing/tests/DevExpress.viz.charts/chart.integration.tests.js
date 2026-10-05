@@ -2454,6 +2454,33 @@ QUnit.test('check horizontal alignment === center', function(assert) {
     assert.roughEqual(chart._legend._insideLegendGroup._settings.translateX, 370, 5);
 });
 
+QUnit.module('Legend title that does not fit', moduleSetup);
+
+[
+    { name: 'outside bottom', legend: { horizontalAlignment: 'center', verticalAlignment: 'bottom' } },
+    { name: 'outside right', legend: { horizontalAlignment: 'right', verticalAlignment: 'top' } },
+    { name: 'inside', legend: { position: 'inside' } }
+].forEach(function(testCase) {
+    QUnit.test(`The title is hidden and W2103 is raised, legend position - ${testCase.name}`, function(assert) {
+        const incidentOccurred = sinon.spy();
+
+        this.createChart({
+            size: { width: 400, height: 200 },
+            dataSource: [{ arg: 'a', val: 1 }],
+            series: [{}],
+            legend: $.extend({
+                visible: true,
+                title: { text: 'Legend title', font: { size: 600 } }
+            }, testCase.legend),
+            onIncidentOccurred: incidentOccurred
+        });
+
+        const incidentIds = incidentOccurred.getCalls().map(function(call) { return call.args[0].target.id; });
+        assert.notStrictEqual(incidentIds.indexOf('W2103'), -1, 'W2103 is raised');
+        assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 0, 'the legend title is not drawn');
+    });
+});
+
 QUnit.module('Auto hide point markers', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);

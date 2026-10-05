@@ -179,6 +179,7 @@ interface LegendTemplate {
 
 interface LegendWidget {
   _getTemplate: (template: ThemeValue) => LegendTemplate;
+  _incidentOccurred: (id: string) => void;
 }
 
 interface LegendSettings {
@@ -609,7 +610,12 @@ export let Legend = class Legend extends LayoutElement {
     if (this.isVisible()) {
       this._title?.dispose();
 
-      this._title = new Title({ renderer: this._renderer, cssClass: this._titleGroupClass, root: this._legendGroup });
+      this._title = new Title({
+        renderer: this._renderer,
+        cssClass: this._titleGroupClass,
+        root: this._legendGroup,
+        incidentOccurred: this._widget._incidentOccurred,
+      });
     }
 
     if (this._title) {
