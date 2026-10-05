@@ -1153,7 +1153,6 @@ export let Legend = class Legend extends LayoutElement {
       this._insideLegendGroup.attr({ translateX: x - this._boundingRect.x, translateY: y - this._boundingRect.y });
     }
 
-    // @ts-expect-error widthWithoutMargins is set by _setBoundingRect() once the legend is drawn
     this._title && this._shiftTitle(this._boundingRect.widthWithoutMargins);
     this._markersGroup && this._shiftMarkers();
 
@@ -1165,14 +1164,14 @@ export let Legend = class Legend extends LayoutElement {
     return this;
   }
 
-  _shiftTitle(boxWidth: number): void {
+  _shiftTitle(boxWidth: number | undefined): void {
     const title = this._title;
     const titleBox = title.getCorrectedLayoutOptions();
     if (!titleBox || !title.hasText()) {
       return;
     }
 
-    const width = boxWidth - (this._background ? 2 * this._options.paddingLeftRight : 0);
+    const width = boxWidth === undefined ? titleBox.width : boxWidth - (this._background ? 2 * this._options.paddingLeftRight : 0);
     const titleOptions = title.getOptions();
     let titleY = titleBox.y + titleOptions.margin.top;
     let titleX = 0;

@@ -2454,6 +2454,17 @@ QUnit.test('check horizontal alignment === center', function(assert) {
     assert.roughEqual(chart._legend._insideLegendGroup._settings.translateX, 370, 5);
 });
 
+['center', 'right'].forEach(function(horizontalAlignment) {
+    QUnit.test(`The title keeps its position when no legend item is visible, title horizontal alignment - ${horizontalAlignment}`, function(assert) {
+        const chart = this.createChart({
+            commonSeriesSettings: { showInLegend: false },
+            legend: { title: { horizontalAlignment } }
+        });
+
+        assert.strictEqual(chart._legend._title._group._settings.translateX, 0);
+    });
+});
+
 QUnit.module('Legend title that does not fit', moduleSetup);
 
 [
