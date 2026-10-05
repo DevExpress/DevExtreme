@@ -674,7 +674,7 @@ declare module DevExpress {
       previousValue: unknown
     ): void;
     _createElement(element: HTMLElement): void;
-    _validateOptions(options: TProperties): TProperties;
+    _validateOptions(options: Partial<TProperties>): Partial<TProperties>;
   }
   module DOMComponent {
     /**
