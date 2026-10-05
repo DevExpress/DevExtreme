@@ -69,7 +69,6 @@ function buildData(partition: number[], values: ThemeValue[], field: string): Le
   return list;
 }
 
-// 'var' because JSHint throws W021 error
 let Legend = class Legend extends _BaseLegend {
   declare _params: LegendParameters;
 

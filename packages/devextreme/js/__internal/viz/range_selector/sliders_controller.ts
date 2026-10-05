@@ -107,7 +107,6 @@ function dummyProcessSelectionChanged(this: SelectionState): void {
   delete this._processSelectionChanged;
 }
 
-// See tests in "rangeSelectorWithAssertion.html", "'onSelectedRangeChanged' event" module
 function suppressSetSelectedRange(controller: SelectionState): void {
   controller.setSelectedRange = noop;
   if (controller._processSelectionChanged === dummyProcessSelectionChanged) {
