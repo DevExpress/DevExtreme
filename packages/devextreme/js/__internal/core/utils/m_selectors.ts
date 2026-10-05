@@ -58,13 +58,13 @@ export const focusable = (
 ): boolean | string => focusableFn(element, $(element).attr('tabIndex'));
 export const tabbable = (index: number, element: Element): boolean | string => {
   const tabIndex = $(element).attr('tabIndex');
-  // @ts-expect-error
+  // @ts-expect-error attr() returns a string, isNaN and >= expect a number
   return (isNaN(tabIndex) || tabIndex >= 0) && focusableFn(element, tabIndex);
 };
 // note: use this method instead of is(":focus")
 export const focused = ($element: Parameters<typeof $>[0]): boolean => {
   const element = $($element).get(0);
-  // @ts-expect-error
+  // @ts-expect-error get(0) returns Element, getActiveElement expects HTMLElement
   return domAdapter.getActiveElement(element) === element;
 };
 

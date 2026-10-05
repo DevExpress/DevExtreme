@@ -308,7 +308,6 @@ export class GanttView extends Widget<GanttViewProperties> {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return dateLocalization.getQuarterNames();
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return [
       format(quarterFormat, 1),
       format(quarterFormat, 2),
