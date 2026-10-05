@@ -1,6 +1,7 @@
 import type { RowExpandingEvent } from '@js/ui/data_grid';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ExecuteActionArgs, RowKey } from '@ts/grids/grid_core/m_types';
+import type { ExecuteActionArgs } from '@ts/grids/grid_core/modules/types';
+import type { RowKey } from '@ts/grids/grid_core/types';
 
 export type ChangeRowExpandArgs = ExecuteActionArgs<RowExpandingEvent<unknown, RowKey>>
   & { expanded: boolean };

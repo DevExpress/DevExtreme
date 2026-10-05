@@ -10,7 +10,7 @@ import { stateStoringModule } from '@ts/grids/grid_core/state_storing/state_stor
 import type { GridState } from '@ts/grids/grid_core/state_storing/types';
 
 import type { DataController } from '../grid_core/data_controller/data_controller';
-import type { ModuleType } from '../grid_core/m_types';
+import type { ModuleType } from '../grid_core/types';
 import treeListCore from './core';
 
 class TreeListStateStoringController extends GridStateStoringController {

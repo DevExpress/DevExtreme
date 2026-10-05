@@ -19,9 +19,9 @@ import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import modules from '../m_modules';
-import type { RowKey } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
+import type { RowKey } from '../types';
 import type { RowsView } from '../views/m_rows_view';
 import {
   ADAPTIVE_COLUMN_BUTTON_CLASS,

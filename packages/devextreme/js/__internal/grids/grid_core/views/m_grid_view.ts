@@ -27,9 +27,9 @@ import type { Column } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
-import modules from '../m_modules';
-import type { SelectionRange } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
+import type { SelectionRange } from '../types';
 import type { RowsView } from './m_rows_view';
 import type { ColumnWidth } from './types';
 

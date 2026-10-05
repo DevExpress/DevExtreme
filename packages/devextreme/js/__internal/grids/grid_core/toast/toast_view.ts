@@ -3,7 +3,7 @@ import $ from '@js/core/renderer';
 import type { Properties as ToastProperties } from '@js/ui/toast';
 import dxToast from '@js/ui/toast';
 
-import { View } from '../m_modules';
+import { View } from '../modules/modules';
 
 export class ToastView extends View {
   private _toastInstance: dxToast | null = null;

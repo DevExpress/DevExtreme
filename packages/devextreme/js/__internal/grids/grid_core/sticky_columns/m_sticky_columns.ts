@@ -20,10 +20,10 @@ import {
   isGroupFooterRow,
   isGroupRow as isGroupRowElement,
 } from '../keyboard_navigation/utils';
-import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import { isDetailRow } from '../master_detail/utils';
+import type { ModuleType } from '../types';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { isGroupRow } from '../views/m_rows_view';

@@ -1,5 +1,5 @@
 import { extend } from '@js/core/utils/extend';
-import modules from '@ts/grids/grid_core/m_modules';
+import modules from '@ts/grids/grid_core/modules/modules';
 
 export default extend({}, modules, {
   modules: [],

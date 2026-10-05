@@ -13,9 +13,9 @@ import type { FilterController } from '@ts/grids/grid_core/filter/filter_control
 import type {
   FilterValue, FilterValueCondition,
 } from '@ts/grids/grid_core/filter/types';
-import modules from '@ts/grids/grid_core/m_modules';
+import modules from '@ts/grids/grid_core/modules/modules';
 
-import type { OptionChanged } from '../m_types';
+import type { OptionChanged } from '../types';
 import { FILTER_TYPES_EXCLUDE } from './const';
 import {
   checkForErrors,

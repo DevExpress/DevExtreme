@@ -4,7 +4,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as TreeListProperties } from '@js/ui/tree_list';
 import TreeList from '@js/ui/tree_list';
-import type { Controllers, Views } from '@ts/grids/grid_core/m_types';
+import type { Controllers, Views } from '@ts/grids/grid_core/types';
 import { TreeListModel } from '@ts/grids/tree_list/__tests__/__mock__/model/tree_list';
 
 export interface TreeListInstance extends TreeList {

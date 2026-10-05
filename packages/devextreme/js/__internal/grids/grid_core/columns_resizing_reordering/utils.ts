@@ -1,5 +1,5 @@
 import { each } from '@ts/core/utils/m_iterator';
-import type { View } from '@ts/grids/grid_core/m_modules';
+import type { View } from '@ts/grids/grid_core/modules/modules';
 
 interface DraggingPanelBoundingRect {
   draggingPanel: View;
