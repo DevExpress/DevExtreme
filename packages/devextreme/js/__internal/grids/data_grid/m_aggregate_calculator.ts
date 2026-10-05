@@ -2,14 +2,13 @@ import { errors } from '@js/common/data/errors';
 import { aggregators } from '@js/common/data/utils';
 import { compileGetter } from '@js/core/utils/data';
 import { isFunction } from '@js/core/utils/type';
-import type { GroupData } from '@js/ui/data_grid';
 
-import type { RawItemData } from '../grid_core/data_source_adapter/types';
 import type { Aggregate } from './summary/types';
 
-// NOTE: only the deepest groups hold rows in items; the groups above hold groups
+// NOTE: only the deepest groups hold rows in items; the groups above hold groups.
+// Rows can be primitives (e.g. a store of numbers with the 'this' selector)
 interface AggregateNode {
-  items: (AggregateNode | RawItemData)[];
+  items: unknown[];
   aggregates?: unknown[];
 }
 
@@ -20,7 +19,7 @@ interface Aggregator {
 }
 
 interface NormalizedAggregate {
-  selector: (data: RawItemData) => unknown;
+  selector: (data: unknown) => unknown;
   aggregator: Aggregator;
   skipEmptyValues: boolean | undefined;
 }
@@ -50,7 +49,7 @@ const isCount = (aggregator: Aggregator): boolean => aggregator === aggregators.
 
 const normalizeAggregate = (aggregate: Aggregate): NormalizedAggregate => {
   // @ts-expect-error badly typed compileGetter
-  const selector = compileGetter(aggregate.selector) as (data: RawItemData) => unknown;
+  const selector = compileGetter(aggregate.selector) as (data: unknown) => unknown;
 
   const skipEmptyValues = 'skipEmptyValues' in aggregate
     ? aggregate.skipEmptyValues
@@ -73,7 +72,7 @@ const normalizeAggregate = (aggregate: Aggregate): NormalizedAggregate => {
 };
 
 export default class AggregateCalculator {
-  private readonly _data: RawItemData[] | GroupData<RawItemData>[];
+  private readonly _data: unknown[];
 
   private readonly _groupLevel: number;
 
@@ -84,7 +83,7 @@ export default class AggregateCalculator {
   private _totals: unknown[];
 
   constructor(options: {
-    data: RawItemData[] | GroupData<RawItemData>[];
+    data: unknown[];
     groupLevel: number;
     totalAggregates: Aggregate[];
     groupAggregates: Aggregate[];
@@ -125,8 +124,7 @@ export default class AggregateCalculator {
       }
 
       for (let j = 0; j < length; j += 1) {
-        // NOTE: at the group level, items are rows
-        this._accumulate(i, aggregates[i], container, data.items[j] as RawItemData);
+        this._accumulate(i, aggregates[i], container, data.items[j]);
       }
     }
   }
@@ -196,7 +194,7 @@ export default class AggregateCalculator {
     aggregateIndex: number,
     aggregate: NormalizedAggregate,
     results: unknown[],
-    item: RawItemData,
+    item: unknown,
   ): void {
     const value = aggregate.selector(item);
     const { aggregator } = aggregate;
