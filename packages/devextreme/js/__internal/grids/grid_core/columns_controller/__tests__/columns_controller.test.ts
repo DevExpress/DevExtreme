@@ -7,7 +7,7 @@ import {
   afterTest,
   beforeTest,
   createDataGrid,
-} from '../__tests__/__mock__/helpers/utils';
+} from '../../__tests__/__mock__/helpers/utils';
 
 const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['adaptive', 'buttons', 'detailExpand', 'groupExpand', 'selection', 'drag', 'ai'];
 
