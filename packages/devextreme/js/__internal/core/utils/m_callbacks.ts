@@ -39,7 +39,7 @@ interface CallbackThis {
   fireWith: (context: unknown, args?: unknown[]) => CallbackThis | undefined;
 }
 
-const Callback = function (this: CallbackThis, options?: CallbackOptions): void {
+const Callback = function Callback(this: CallbackThis, options?: CallbackOptions): void {
   this._options = options || {};
   this._list = [];
   this._queue = [];
@@ -48,7 +48,7 @@ const Callback = function (this: CallbackThis, options?: CallbackOptions): void 
   this._firingIndexes = [];
 };
 
-Callback.prototype._fireCore = function (
+Callback.prototype._fireCore = function fireCore(
   this: CallbackThis,
   context: unknown,
   args: unknown[],
@@ -69,14 +69,14 @@ Callback.prototype._fireCore = function (
   firingIndexes.pop();
 };
 
-Callback.prototype.add = function (this: CallbackThis, fn: Handler): CallbackThis {
+Callback.prototype.add = function add(this: CallbackThis, fn: Handler): CallbackThis {
   if (typeof fn === 'function' && (!this._options.unique || !this.has(fn))) {
     this._list.push(fn);
   }
   return this;
 };
 
-Callback.prototype.remove = function (this: CallbackThis, fn: Handler): CallbackThis {
+Callback.prototype.remove = function remove(this: CallbackThis, fn: Handler): CallbackThis {
   const list = this._list;
   const firingIndexes = this._firingIndexes;
   const index = list.indexOf(fn);
@@ -97,20 +97,20 @@ Callback.prototype.remove = function (this: CallbackThis, fn: Handler): Callback
   return this;
 };
 
-Callback.prototype.has = function (this: CallbackThis, fn?: Handler): boolean {
+Callback.prototype.has = function has(this: CallbackThis, fn?: Handler): boolean {
   const list = this._list;
 
   return fn ? list.includes(fn) : !!list.length;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-Callback.prototype.empty = function (this: CallbackThis, fn?: Handler): CallbackThis {
+Callback.prototype.empty = function empty(this: CallbackThis, fn?: Handler): CallbackThis {
   this._list = [];
 
   return this;
 };
 
-Callback.prototype.fireWith = function (
+Callback.prototype.fireWith = function fireWith(
   this: CallbackThis,
   context: unknown,
   args?: unknown[],
@@ -144,16 +144,16 @@ Callback.prototype.fireWith = function (
   return this;
 };
 
-Callback.prototype.fire = function (this: CallbackThis, ...args: unknown[]): void {
+Callback.prototype.fire = function fire(this: CallbackThis, ...args: unknown[]): void {
   this.fireWith(this, args);
 };
 
-Callback.prototype.fired = function (this: CallbackThis): boolean {
+Callback.prototype.fired = function fired(this: CallbackThis): boolean {
   return this._fired;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- consumers declare their own types
-const Callbacks = function (options?: CallbackOptions): any {
+const Callbacks = function Callbacks(options?: CallbackOptions): any {
   return new Callback(options);
 };
 

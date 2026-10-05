@@ -14,7 +14,7 @@ interface Size {
 
 type ResizeCallbacks = Omit<CallbackInterface, 'has'> & { has: () => boolean };
 
-const resizeCallbacks = (function (): ResizeCallbacks {
+const resizeCallbacks = (function createResizeCallbacks(): ResizeCallbacks {
   // eslint-disable-next-line @typescript-eslint/init-declarations -- set by setPrevSize
   let prevSize: Size;
   const callbacks: ResizeCallbacks = Callbacks();
@@ -25,7 +25,7 @@ const resizeCallbacks = (function (): ResizeCallbacks {
     return callbacks;
   }
 
-  const formatSize = function (): Size {
+  const formatSize = function formatSize(): Size {
     const window = windowModule.getWindow();
     return {
       width: window.innerWidth,
@@ -33,7 +33,7 @@ const resizeCallbacks = (function (): ResizeCallbacks {
     };
   };
 
-  const handleResize = function (): void {
+  const handleResize = function handleResize(): void {
     const now = formatSize();
     if (now.width === prevSize.width && now.height === prevSize.height) {
       return;
@@ -60,7 +60,7 @@ const resizeCallbacks = (function (): ResizeCallbacks {
   // eslint-disable-next-line @typescript-eslint/init-declarations -- set when the listener is added
   let removeListener: (() => void) | undefined;
 
-  callbacks.add = function (
+  callbacks.add = function add(
     ...args: Parameters<typeof originalCallbacksAdd>
   ): ReturnType<typeof originalCallbacksAdd> {
     const result = originalCallbacksAdd.apply(callbacks, args);
@@ -76,7 +76,7 @@ const resizeCallbacks = (function (): ResizeCallbacks {
     return result;
   };
 
-  callbacks.remove = function (
+  callbacks.remove = function remove(
     ...args: Parameters<typeof originalCallbacksRemove>
   ): ReturnType<typeof originalCallbacksRemove> {
     const result = originalCallbacksRemove.apply(callbacks, args);

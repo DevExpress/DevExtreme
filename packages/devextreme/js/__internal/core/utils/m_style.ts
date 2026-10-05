@@ -14,7 +14,7 @@ const cssPrefixes: Record<string, string> = {
 };
 const getStyles = callOnce(() => domAdapter.createElement('dx').style);
 
-const forEachPrefixes = function (
+const forEachPrefixes = function forEachPrefixes(
   prop: string,
   callBack: (prefixedProp: string, jsPrefix: string) => string | undefined,
 ): string {
@@ -29,20 +29,17 @@ const forEachPrefixes = function (
     const lowerPrefixedProp = camelize(prefixedProp);
 
     result = callBack(lowerPrefixedProp, jsPrefix);
-
-    if (result === undefined) {
-      result = callBack(prefixedProp, jsPrefix);
-    }
+    result ??= callBack(prefixedProp, jsPrefix);
 
     if (result !== undefined) {
       break;
     }
   }
 
-  return result || '';
+  return result ?? '';
 };
 
-const styleProp = function (name: string): string {
+const styleProp = function styleProp(name: string): string {
   if (name in getStyles()) {
     return name;
   }
@@ -58,7 +55,7 @@ const styleProp = function (name: string): string {
   return name;
 };
 
-const stylePropPrefix = function (prop: string): string {
+const stylePropPrefix = function stylePropPrefix(prop: string): string {
   return forEachPrefixes(prop, (specific, jsPrefix): string | undefined => {
     if (specific in getStyles()) {
       return cssPrefixes[jsPrefix];
@@ -80,7 +77,7 @@ const pxExceptions = [
   'zoom',
 ];
 
-const parsePixelValue = function (value: unknown): number {
+const parsePixelValue = function parsePixelValue(value: unknown): number {
   if (isNumeric(value)) {
     return value;
   } if (isString(value)) {
@@ -89,7 +86,7 @@ const parsePixelValue = function (value: unknown): number {
   return NaN;
 };
 
-const normalizeStyleProp = function <T>(prop: string, value: T): T | string {
+const normalizeStyleProp = function normalizeStyleProp<T>(prop: string, value: T): T | string {
   if (isNumeric(value) && !pxExceptions.includes(prop)) {
     return `${value}px`;
   }
@@ -99,7 +96,7 @@ const normalizeStyleProp = function <T>(prop: string, value: T): T | string {
 
 type Elements = ArrayLike<HTMLElement> | dxElementWrapper | null | undefined;
 
-const setDimensionProperty = function (
+const setDimensionProperty = function setDimensionProperty(
   elements: Elements,
   propertyName: string,
   value: unknown,
@@ -112,15 +109,15 @@ const setDimensionProperty = function (
   }
 };
 
-const setWidth = function (elements: Elements, value: unknown): void {
+const setWidth = function setWidth(elements: Elements, value: unknown): void {
   setDimensionProperty(elements, 'width', value);
 };
 
-const setHeight = function (elements: Elements, value: unknown): void {
+const setHeight = function setHeight(elements: Elements, value: unknown): void {
   setDimensionProperty(elements, 'height', value);
 };
 
-const setStyle = function (element: Element, styleString: string, resetStyle = true): void {
+const setStyle = function setStyle(element: Element, styleString: string, resetStyle = true): void {
   if (resetStyle) {
     const styleList = [].slice.call((element as HTMLElement).style);
     styleList.forEach((propertyName) => {

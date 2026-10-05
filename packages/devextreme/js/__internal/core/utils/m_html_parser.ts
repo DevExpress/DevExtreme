@@ -42,7 +42,7 @@ tagWrappers.colgroup = tagWrappers.thead;
 tagWrappers.tbody = tagWrappers.thead;
 tagWrappers.th = tagWrappers.td;
 
-export const parseHTML = function (html: unknown): ChildNode[] | null {
+export const parseHTML = function parseHTML(html: unknown): ChildNode[] | null {
   if (typeof html !== 'string') {
     return null;
   }
@@ -64,7 +64,7 @@ export const parseHTML = function (html: unknown): ChildNode[] | null {
   return [...container.childNodes];
 };
 
-export const isTablePart = function (html: string): boolean | null {
+export const isTablePart = function isTablePart(html: string): boolean | null {
   const tags = isTagName.exec(html);
   return tags && tags[1] in tagWrappers;
 };

@@ -2,11 +2,11 @@ import domAdapter from '@js/core/dom_adapter';
 import { toComparable } from '@js/core/utils/data';
 import { isRenderer } from '@js/core/utils/type';
 
-const hasNegation = function (oldValue: number, newValue: number): boolean {
+const hasNegation = function hasNegation(oldValue: number, newValue: number): boolean {
   return (1 / oldValue) === (1 / newValue);
 };
 
-export const equals = function (oldValue: unknown, newValue: unknown): boolean {
+export const equals = function equals(oldValue: unknown, newValue: unknown): boolean {
   const oldComparable = toComparable(oldValue, true);
   const newComparable = toComparable(newValue, true);
 
