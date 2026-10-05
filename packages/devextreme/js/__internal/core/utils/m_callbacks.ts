@@ -132,7 +132,8 @@ Callback.prototype.fireWith = function fireWith(
     this._firing = true;
 
     while (queue.length) {
-      const memory = queue.shift() as [unknown, unknown[]];
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- the queue is not empty
+      const memory = queue.shift()!;
 
       this._fireCore(memory[0], memory[1]);
     }

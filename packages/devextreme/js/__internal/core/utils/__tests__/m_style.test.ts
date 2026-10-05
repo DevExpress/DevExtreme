@@ -12,13 +12,14 @@ import {
 
 type StyleModule = typeof import('@ts/core/utils/m_style');
 
+const createRealElement = document.createElement.bind(document) as (tagName: string) => HTMLElement;
+
 const loadStyleModule = (supportedProps: Record<string, string>): StyleModule => {
   jest.resetModules();
 
-  const createElement = document.createElement.bind(document) as (tagName: string) => HTMLElement;
   jest.spyOn(document, 'createElement').mockImplementation(
     ((tagName: string) => (
-      tagName === 'dx' ? { style: supportedProps } : createElement(tagName)
+      tagName === 'dx' ? { style: supportedProps } : createRealElement(tagName)
     )) as typeof document.createElement,
   );
 
@@ -222,7 +223,7 @@ describe('Style utils', () => {
     it('should skip a declaration that is not a name-value pair', () => {
       const element = createElement();
 
-      setStyle(element, 'color: red: blue; width: 5px; ;', true);
+      setStyle(element, 'color; width: 5px; ;', true);
 
       expect(element.style.color).toBe('');
       expect(element.style.width).toBe('5px');

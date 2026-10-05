@@ -78,6 +78,18 @@ describe('Public component utils', () => {
       expect(getInstanceByElement($(element), Third)).toBeUndefined();
     });
 
+    it('should store the instance under the explicit name of its class', () => {
+      const Widget = createComponentClass();
+      const element = document.createElement('div');
+      const instance = new Widget();
+
+      getComponentName(Widget, 'dxWidget');
+      attachInstanceToElement($(element), instance);
+
+      expect(elementData(element, 'dxWidget')).toBe(instance);
+      expect(elementData(element, 'dxComponents')).toEqual(['dxWidget']);
+    });
+
     it('should not share the instances between elements', () => {
       const Widget = createComponentClass();
       const element = document.createElement('div');

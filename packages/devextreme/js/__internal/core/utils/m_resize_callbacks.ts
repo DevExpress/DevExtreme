@@ -12,7 +12,9 @@ interface Size {
   height: number;
 }
 
-type ResizeCallbacks = Omit<CallbackInterface, 'has'> & { has: () => boolean };
+type ResizeCallbacks = Omit<CallbackInterface, 'has'> & {
+  has: (fn?: Parameters<CallbackInterface['has']>[0]) => boolean;
+};
 
 const resizeCallbacks = (function createResizeCallbacks(): ResizeCallbacks {
   // eslint-disable-next-line @typescript-eslint/init-declarations -- set by setPrevSize

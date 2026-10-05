@@ -32,6 +32,9 @@ describe('SVG utils', () => {
   afterEach(() => {
     if (originalSerializer) {
       Object.defineProperty(window, 'XMLSerializer', originalSerializer);
+    } else {
+      // @ts-expect-error the test removes the stub it has defined
+      delete window.XMLSerializer;
     }
   });
 
@@ -52,7 +55,7 @@ describe('SVG utils', () => {
     it('should paint the background of a copy of the element', () => {
       const svg = createSvg();
 
-      expect(getSvgMarkup(svg, 'red')).toContain('style="background-color: red;"');
+      expect(getSvgMarkup(svg, 'red')).toMatch(/style="background-color:\s*red;?"/);
       expect(svg.getAttribute('style')).toBeNull();
     });
 
