@@ -2,12 +2,12 @@ import registerEventCallbacks from '@js/common/core/events/core/event_registrato
 import domAdapter from '@js/core/dom_adapter';
 import errors from '@js/core/errors';
 import type { dxElementWrapper } from '@js/core/renderer';
-import callOnce from '@js/core/utils/call_once';
 import Callbacks from '@js/core/utils/callbacks';
 import {
   isFunction, isObject, isString, isWindow,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import { callOnce } from '@ts/core/utils/call_once';
 import type { Injectable, Injection } from '@ts/core/utils/dependency_injector';
 import { injector } from '@ts/core/utils/dependency_injector';
 import {
