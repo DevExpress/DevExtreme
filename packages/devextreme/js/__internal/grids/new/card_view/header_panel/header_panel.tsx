@@ -197,7 +197,8 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
     const columnId = getColumnIdentifier(column);
 
     const hasHeaderFilterValue = !!filterValues?.length;
-    const hasFilterSyncValue = filterHasField(filterSyncValue, columnId) as boolean;
+    // @ts-expect-error filterSyncValue is unknown
+    const hasFilterSyncValue = filterHasField(filterSyncValue, columnId);
 
     return hasHeaderFilterValue || hasFilterSyncValue;
   }

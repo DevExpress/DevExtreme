@@ -189,6 +189,7 @@ export const getFilterValueWithFilterRow = (
   const condition = getConditionFromFilterRow(column);
 
   if (isDefined(condition)) {
+    // @ts-expect-error filterValue can be undefined
     return syncFilters(filterValue, condition) as FilterValue;
   }
 
@@ -202,6 +203,7 @@ export const getFilterValueWithHeaderFilter = (
   const condition = getConditionFromHeaderFilter(column);
 
   if (condition) {
+    // @ts-expect-error filterValue can be undefined
     return syncFilters(filterValue, condition) as FilterValue;
   }
 
