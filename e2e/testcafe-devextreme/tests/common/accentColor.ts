@@ -24,6 +24,13 @@ interface MeasuredStep {
   oklch: Oklch | null;
 }
 
+interface PaintedMarks {
+  name: string;
+  primary: string;
+  counts: Record<string, number>;
+  offAccent: Record<string, string[]>;
+}
+
 interface PaintedAccent {
   name: string;
   painted: { selectedRange: string; handles: string[]; markers: string[] };
@@ -98,6 +105,9 @@ const ACCENT_RANGE = 'accent-range';
 const SELECTED_RANGE = `#${ACCENT_RANGE} .dxrs-slidersContainer > path`;
 const SLIDER_HANDLES = `#${ACCENT_RANGE} .slider > path`;
 const SLIDER_MARKERS = `#${ACCENT_RANGE} .slider-marker > path`;
+const ACCENT_MARKS = 'accent-marks';
+const MARK_HOSTS = ['accent-map', 'accent-bullet', 'accent-gauge'];
+const PRIMARY_PAINT = '[fill^="var(--dx-viz-primary"], [stroke^="var(--dx-viz-primary"]';
 const GRID_DATA = getData(5, 2);
 const SHIPPED_ACCENTS = [
   { palette: 'blue', color: '#0f6cbd' },
@@ -221,6 +231,86 @@ const paintAccentRange = ClientFunction((color: string, throughApi: boolean) => 
   },
 });
 
+const createAccentMarks = async (): Promise<void> => {
+  await appendElementTo('#container', 'div', ACCENT_MARKS, { marginTop: '8px', display: 'flex', gap: '8px' });
+
+  for (const host of MARK_HOSTS) {
+    await appendElementTo(`#${ACCENT_MARKS}`, 'div', host, {});
+  }
+
+  const points = {
+    type: 'FeatureCollection',
+    features: [20, 50, 80].map((x, index) => ({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [x, 20] },
+      properties: { value: (index + 1) * 10 },
+    })),
+  };
+
+  await createWidget('dxVectorMap', {
+    layers: [
+      { type: 'marker', elementType: 'dot', dataSource: points },
+      {
+        type: 'marker', elementType: 'bubble', dataSource: points, dataField: 'value',
+      },
+    ],
+    bounds: [0, 40, 100, 0],
+    tooltip: { enabled: false },
+    size: { width: 240, height: 120 },
+  }, `#${MARK_HOSTS[0]}`);
+  await createWidget('dxBullet', {
+    value: 40,
+    target: 60,
+    startScaleValue: 0,
+    endScaleValue: 100,
+    tooltip: { enabled: false },
+    size: { width: 240, height: 40 },
+  }, `#${MARK_HOSTS[1]}`);
+  await createWidget('dxCircularGauge', {
+    scale: { startValue: 0, endValue: 100, label: { visible: false } },
+    value: 40,
+    subvalues: [60],
+    valueIndicator: { type: 'rangebar' },
+    subvalueIndicator: { type: 'textcloud' },
+    animation: { enabled: false },
+    tooltip: { enabled: false },
+    size: { width: 240, height: 160 },
+  }, `#${MARK_HOSTS[2]}`);
+};
+
+const paintAccentMarks = ClientFunction((color: string, throughApi: boolean) => {
+  const { DevExpress } = window as any;
+
+  if (throughApi) {
+    DevExpress.ui.themes.customAccentColor(color);
+  } else {
+    document.documentElement.style.setProperty('--dx-accent-color', color);
+  }
+
+  const probe = document.createElement('div');
+  document.body.appendChild(probe);
+  probe.style.backgroundColor = 'var(--dxds-primary-100)';
+  const primary = asHex(getComputedStyle(probe).backgroundColor);
+  probe.remove();
+
+  const counts: Record<string, number> = {};
+  const offAccent: Record<string, string[]> = {};
+
+  MARK_HOSTS.forEach((host) => {
+    const marks = Array.from(document.querySelectorAll(`#${host} ${PRIMARY_PAINT}`));
+    const painted = marks.map((mark) => {
+      const property = mark.getAttribute('fill')?.startsWith('var(--dx-viz-primary') ? 'fill' : 'stroke';
+
+      return asHex(getComputedStyle(mark)[property]);
+    });
+
+    counts[host] = marks.length;
+    offAccent[host] = painted.filter((paint) => paint !== primary);
+  });
+
+  return { primary, counts, offAccent };
+}, { dependencies: { MARK_HOSTS, PRIMARY_PAINT, asHex } });
+
 const RANGE_ACCENTS = [
   ...SHIPPED_ACCENTS.map(({ palette, color }) => ({ name: palette, color, throughApi: false })),
   { name: 'custom', color: '#a703ff', throughApi: false },
@@ -338,6 +428,36 @@ fixture`Custom accent color`
     .expect(results.filter(({ inPlace }) => !inPlace).map(({ name }) => name))
     .eql([], 'every accent repaints the widget drawn first, neither re-created nor reloaded');
 }).before(createAccentRange);
+
+(isFluentNext() ? test : test.skip)('map markers, the bullet bar and the gauge value indicators paint in the accent too', async (t) => {
+  const results: PaintedMarks[] = [];
+
+  for (const { name, color, throughApi } of RANGE_ACCENTS) {
+    results.push({ name, ...await paintAccentMarks(color, throughApi) });
+  }
+
+  await t
+    .expect(results.map(({ name, counts }) => ({ name, ...counts })))
+    .eql(
+      results.map(({ name }) => ({
+        name, 'accent-map': 6, 'accent-bullet': 1, 'accent-gauge': 2,
+      })),
+      'three dot markers and three bubbles on the map, the bullet bar, and the range bar and the text cloud of the gauge are drawn with the primary name',
+    );
+
+  await t
+    .expect(results.map(({ name, offAccent }) => ({ name, ...offAccent })))
+    .eql(
+      results.map(({ name }) => ({
+        name, 'accent-map': [], 'accent-bullet': [], 'accent-gauge': [],
+      })),
+      'every one of them is painted in --dxds-primary-100 of every accent',
+    );
+
+  await t
+    .expect(new Set(results.map(({ primary }) => primary)).size)
+    .eql(RANGE_ACCENTS.length, 'no two accents paint the marks alike');
+}).before(createAccentMarks);
 
 (isFluentNext() ? test : test.skip)('a translucent accent still gives an opaque palette', async (t) => {
   const translucentAccent = '#a703ff80';

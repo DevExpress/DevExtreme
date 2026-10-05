@@ -98,11 +98,17 @@ if (getThemeName() === 'fluent-next') {
 
   const DECLARED_BLUE = 'rgb(11, 7, 3)';
   const DECLARED_BG = 'rgb(22, 7, 3)';
+  const DECLARED_PRIMARY = 'rgb(33, 7, 3)';
   const HANDED_OUT_BLUE = '#0b0703';
 
-  const declareTheNamesTheWidgetsRead = ClientFunction((blue: string, background: string) => {
+  const declareTheNamesTheWidgetsRead = ClientFunction((
+    blue: string,
+    background: string,
+    primary: string,
+  ) => {
     document.documentElement.style.setProperty('--dx-viz-blue', blue);
     document.documentElement.style.setProperty('--dx-viz-bg', background);
+    document.documentElement.style.setProperty('--dx-viz-primary', primary);
   });
 
   const colorsHandedOutByTheWidget = ClientFunction(() => {
@@ -133,7 +139,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxChart', {
       ...{
         dataSource: [{ a: 'x', v: 1 }],
@@ -167,7 +173,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(await colorsHandedOutByTheWidget())
       .eql([expected, expected], 'getColor brings the colour to sRGB instead of reading its channels as red, green and blue');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_IN_OKLCH, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_IN_OKLCH, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxChart', {
       dataSource: [{ a: 'x', v: 1 }],
       series: [{ argumentField: 'a', valueField: 'v' }],
@@ -183,7 +189,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxPieChart', {
       ...{
         dataSource: [{ a: 'x', v: 1 }],
@@ -201,7 +207,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxPolarChart', {
       ...{
         dataSource: [{ a: 'x', v: 1 }],
@@ -219,7 +225,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxFunnel', {
       ...{
         dataSource: [{ a: 'x', v: 3 }],
@@ -237,7 +243,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxSankey', {
       ...{
         dataSource: [{ source: 'A', target: 'X', weight: 1 }],
@@ -253,7 +259,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxTreeMap', {
       ...{
         dataSource: [{ name: 'a', value: 1 }],
@@ -266,10 +272,10 @@ if (getThemeName() === 'fluent-next') {
   test('dxVectorMap paints from a name the page declared, leaving no reference behind', async (t) => {
     const { svg, unresolved } = await markupOfTheWidget();
 
-    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(svg).contains(DECLARED_PRIMARY, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxVectorMap', {
       ...{
         layers: [{
@@ -292,7 +298,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BG, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxSparkline', {
       ...{
         dataSource: [1, 4, 2],
@@ -305,10 +311,10 @@ if (getThemeName() === 'fluent-next') {
   test('dxBullet paints from a name the page declared, leaving no reference behind', async (t) => {
     const { svg, unresolved } = await markupOfTheWidget();
 
-    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(svg).contains(DECLARED_PRIMARY, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxBullet', {
       ...{
         value: 40,
@@ -325,7 +331,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxBarGauge', {
       ...{
         values: [30],
@@ -341,7 +347,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BG, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxCircularGauge', {
       ...{
         value: 40,
@@ -354,10 +360,10 @@ if (getThemeName() === 'fluent-next') {
   test('dxLinearGauge paints from a name the page declared, leaving no reference behind', async (t) => {
     const { svg, unresolved } = await markupOfTheWidget();
 
-    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(svg).contains(DECLARED_PRIMARY, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxLinearGauge', {
       ...{
         value: 40,
@@ -373,7 +379,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(svg).contains(DECLARED_BG, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
     await t.expect(unresolved).eql([], 'and no reference survives into the markup');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxRangeSelector', {
       ...{
         scale: { startValue: 0, endValue: 10 },
@@ -405,7 +411,7 @@ if (getThemeName() === 'fluent-next') {
   const FINAL_COLOR = /^(#[0-9a-f]{6}|rgba\()/;
 
   const declareTheNames = async (): Promise<void> => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
   };
 
   const colorsHandedOutByTheNamespace = ClientFunction(() => {
@@ -658,7 +664,7 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(stops.filter((stop) => stop.includes('var('))).eql([], 'no stop reaches the canvas as a reference');
     await t.expect(stops[0]).eql(DECLARED_BLUE, 'the first stop carries what the page declared, neither the name nor the literal beside it');
   }).before(async () => {
-    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG, DECLARED_PRIMARY);
     await createWidget('dxSankey', {
       dataSource: [{ source: 'A', target: 'X', weight: 1 }],
       link: { colorMode: 'gradient' },

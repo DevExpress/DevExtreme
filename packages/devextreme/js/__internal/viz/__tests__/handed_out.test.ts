@@ -172,7 +172,19 @@ describe('handing the Fluent Next colours out on a page that paints the names', 
     expect(palette.getAccentColor('Fluent Next')).toBe('#0f6cbd');
     expect((palette.generateColors('Fluent Next', 6) as string[])[0]).toBe('#0b0703');
     expect(palette.createPalette('Fluent Next', {}).getNextColor(undefined)).toBe('#0b0703');
-    expect(getTheme('fluent-next.blue.light').bullet.color).toBe('#0b0703');
+    expect(getTheme('fluent-next.blue.light').treeMap.tile.color).toBe('#0b0703');
+  });
+
+  it('hands out the accent the page paints the primary name with', () => {
+    declaredPrimary = 'rgb(3, 2, 1)';
+
+    const theme = getTheme('fluent-next.blue.light');
+
+    expect(palette.getAccentColor('Fluent Next')).toBe('#030201');
+    expect(theme.bullet.color).toBe('#030201');
+    expect(theme.map['layer:marker:bubble'].color).toBe('#030201');
+    expect(theme.gauge.valueIndicators.rangebar.color).toBe('#030201');
+    expect(theme.rangeSelector.sliderHandle.color).toBe('#030201');
   });
 
   it('hands out what the browser mixes as a colour an application can parse', () => {

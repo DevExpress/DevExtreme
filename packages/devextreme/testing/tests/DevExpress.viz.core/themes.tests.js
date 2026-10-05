@@ -525,12 +525,18 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         ], 'gradientSet is mixed by the browser, so it follows the names it is mixed from');
     });
 
-    QUnit.test(`fluent-next theme should let the range selector follow the accent: ${theme}`, function(assert) {
+    QUnit.test(`fluent-next theme should let the marks that show a value follow the accent: ${theme}`, function(assert) {
         const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.rangeSelector.selectedRangeColor, PUBLISHED_PRIMARY, 'rangeSelector selected range');
         assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.color, PUBLISHED_PRIMARY, 'rangeSelector slider marker');
         assert.strictEqual(registeredTheme.rangeSelector.sliderHandle.color, PUBLISHED_PRIMARY, 'rangeSelector slider handle');
+        assert.strictEqual(registeredTheme.map['layer:marker:dot'].color, PUBLISHED_PRIMARY, 'map dot marker');
+        assert.strictEqual(registeredTheme.map['layer:marker:bubble'].color, PUBLISHED_PRIMARY, 'map bubble marker');
+        assert.strictEqual(registeredTheme.map.legend.markerColor, PUBLISHED_PRIMARY, 'map legend marker');
+        assert.strictEqual(registeredTheme.bullet.color, PUBLISHED_PRIMARY, 'bullet');
+        assert.strictEqual(registeredTheme.gauge.valueIndicators.rangebar.color, PUBLISHED_PRIMARY, 'gauge rangebar');
+        assert.strictEqual(registeredTheme.gauge.valueIndicators['textcloud'].color, PUBLISHED_PRIMARY, 'gauge textcloud');
     });
 
     QUnit.test(`fluent-next theme should mark a range that is not allowed with the published danger: ${theme}`, function(assert) {
@@ -542,12 +548,7 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
     QUnit.test(`fluent-next theme should paint the shapes that are data with the published blue: ${theme}`, function(assert) {
         const registeredTheme = getRegisteredTheme(theme);
 
-        assert.strictEqual(registeredTheme.map['layer:marker:dot'].color, PUBLISHED_BLUE, 'map dot marker');
-        assert.strictEqual(registeredTheme.map['layer:marker:bubble'].color, PUBLISHED_BLUE, 'map bubble marker');
-        assert.strictEqual(registeredTheme.map.legend.markerColor, PUBLISHED_BLUE, 'map legend marker');
-        assert.strictEqual(registeredTheme.bullet.color, PUBLISHED_BLUE, 'bullet');
-        assert.strictEqual(registeredTheme.gauge.valueIndicators.rangebar.color, PUBLISHED_BLUE, 'gauge rangebar');
-        assert.strictEqual(registeredTheme.gauge.valueIndicators['textcloud'].color, PUBLISHED_BLUE, 'gauge textcloud');
+        assert.strictEqual(registeredTheme.gauge.valueIndicators['trianglemarker'].color, PUBLISHED_BLUE, 'gauge subvalue marker');
         assert.strictEqual(registeredTheme.sparkline.lineColor, PUBLISHED_BLUE, 'sparkline line');
         assert.strictEqual(registeredTheme.sparkline.firstLastColor, PUBLISHED_BLUE, 'sparkline first and last point');
     });
@@ -640,8 +641,8 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
 
         assert.deepEqual(painted, {
             '_default.color': needle,
-            'rangebar.color': PUBLISHED_BLUE,
-            'textcloud.color': PUBLISHED_BLUE,
+            'rangebar.color': PUBLISHED_PRIMARY,
+            'textcloud.color': PUBLISHED_PRIMARY,
             'trianglemarker.color': PUBLISHED_BLUE,
             'twocolorneedle.secondColor': PUBLISHED_RED,
         });

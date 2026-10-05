@@ -238,7 +238,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
           color: paint(VIZ_CONTENT_SUBTLE),
         },
         rangebar: {
-          color: paint(VIZ_BLUE),
+          color: paint(VIZ_PRIMARY),
         },
         // eslint-disable-next-line spellcheck/spell-checker
         trianglemarker: {
@@ -250,7 +250,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
         },
         // eslint-disable-next-line spellcheck/spell-checker
         textcloud: {
-          color: paint(VIZ_BLUE),
+          color: paint(VIZ_PRIMARY),
         },
       },
     },
@@ -258,7 +258,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
       backgroundColor: paint(VIZ_BG_HIGHER),
     },
     bullet: {
-      color: paint(VIZ_BLUE),
+      color: paint(VIZ_PRIMARY),
       targetColor: paint(VIZ_CONTENT),
     },
     sankey: {
@@ -346,12 +346,12 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
         selectedColor: paint(VIZ_CONTENT),
       },
       'layer:marker:dot': {
-        color: paint(VIZ_BLUE),
+        color: paint(VIZ_PRIMARY),
         borderColor: paint(VIZ_BG),
         backColor: paint(VIZ_BG),
       },
       'layer:marker:bubble': {
-        color: paint(VIZ_BLUE),
+        color: paint(VIZ_PRIMARY),
         hoveredBorderColor: paint(VIZ_CONTENT),
         selectedBorderColor: paint(VIZ_CONTENT),
       },
@@ -360,7 +360,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
         selectedBorderColor: paint(VIZ_CONTENT),
       },
       legend: {
-        markerColor: paint(VIZ_BLUE),
+        markerColor: paint(VIZ_PRIMARY),
       },
       background: {
         borderColor: paint(VIZ_BORDER),

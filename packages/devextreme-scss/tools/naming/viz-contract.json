@@ -109,7 +109,7 @@
       "name": "--dx-viz-blue",
       "role": "color-bg-blue",
       "declaredPerMode": false,
-      "paints": "the first series colour, the near end of the gradient set the tree map and the map mix their scales from, and the shapes that are data rather than chrome: bullet bar, gauge range bar, the triangle marker a gauge puts on its scale for a subvalue, sparkline line, map markers and the map legend marker, and a tree map tile with no colour of its own - the fill a tile falls back to when the palette is not colouring the leaves"
+      "paints": "the first series colour, the near end of the gradient set the tree map and the map mix their scales from, and the data shapes that are not the one value a widget shows: the triangle marker a gauge puts on its scale for a subvalue, the sparkline line, and a tree map tile with no colour of its own - the fill a tile falls back to when the palette is not colouring the leaves"
     },
     {
       "name": "--dx-viz-gray",
@@ -175,7 +175,7 @@
       "name": "--dx-viz-primary",
       "role": "color-bg-primary",
       "declaredPerMode": false,
-      "paints": "the range selector: the selected range, the slider handle and its marker. The one place a chart follows --dx-accent-color, because the range selector is an editor and its selection is the accented control of the page it sits on"
+      "paints": "the marks that show the one value a widget is about, painted like the accented control of the page they sit on: the selected range, slider handle and slider marker of a range selector, the dot and bubble markers of a map and the marker of its legend, the bullet bar, and the range bar and text cloud a gauge points at its value with. The one name a chart follows --dx-accent-color through; the series palette and the subvalue marks stay on their own data colours"
     },
     {
       "name": "--dx-viz-tooltip-bg",
