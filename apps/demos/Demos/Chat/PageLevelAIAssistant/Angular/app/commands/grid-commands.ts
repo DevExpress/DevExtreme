@@ -9,7 +9,7 @@ import type {
   GridFilterValue,
 } from '../data';
 
-export function getFilterConditions(filterValue: unknown): FilterCondition[] {
+function getFilterConditions(filterValue: unknown): FilterCondition[] {
   if (!Array.isArray(filterValue)) return [];
 
   return Array.isArray(filterValue[0])
@@ -17,7 +17,7 @@ export function getFilterConditions(filterValue: unknown): FilterCondition[] {
     : [filterValue as FilterCondition];
 }
 
-export function combineFilterConditions(
+function combineFilterConditions(
   existingFilterValue: unknown,
   newCondition: FilterCondition,
 ): GridFilterValue {
@@ -32,7 +32,7 @@ export function combineFilterConditions(
     : conditions.flatMap((condition, index) => (index === 0 ? [condition] : ['and' as const, condition]));
 }
 
-export function getColumnOrFail(grid: DxDataGridComponent, columnName: string | undefined): ColumnLookup {
+function getColumnOrFail(grid: DxDataGridComponent, columnName: string | undefined): ColumnLookup {
   const column = grid.instance.columnOption(columnName ?? '');
 
   if (!column) {
@@ -48,7 +48,7 @@ export function getColumnOrFail(grid: DxDataGridComponent, columnName: string | 
   return { column, failure: null };
 }
 
-export const gridCommands: Record<string, GridCommand> = {
+const gridCommands: Record<string, GridCommand> = {
   filterValue: {
     description: `Apply a filter to a single column. Pass column (dataField), operator, and value.
 Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith", "anyof".
