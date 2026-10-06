@@ -4,11 +4,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import pointer from '@js/common/core/events/pointer';
-import { eventData as _eventData } from '@js/common/core/events/utils/index';
-import domAdapter from '@js/core/dom_adapter';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { name as clickEventName } from '@ts/events/click';
+import eventsEngine from '@ts/events/core/events_engine';
+import pointer from '@ts/events/pointer';
+import { eventData as _eventData } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const downPointerEventName = pointer.down;

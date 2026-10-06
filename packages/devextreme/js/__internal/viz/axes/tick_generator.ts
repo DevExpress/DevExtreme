@@ -16,10 +16,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import dateUtils from '@js/core/utils/date';
-import { extend } from '@js/core/utils/extend';
-import { adjust, sign } from '@js/core/utils/math';
-import { isDefined, isString } from '@js/core/utils/type';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { extend } from '@ts/core/utils/m_extend';
+import { adjust, sign } from '@ts/core/utils/m_math';
+import { isDefined, isString } from '@ts/core/utils/m_type';
 import {
   getCategoriesInfo,
   getLog as mathLog,
