@@ -106,8 +106,6 @@ const getIgnoredRules = (testName) => {
     'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
-
-    'Localization-UsingGlobalize': ['label'],
   };
 
   return [
