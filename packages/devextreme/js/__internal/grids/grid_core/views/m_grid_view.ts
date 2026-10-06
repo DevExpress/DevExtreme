@@ -418,6 +418,7 @@ export class ResizingController extends modules.ViewController {
         const { width } = column;
         if (width !== 'auto') {
           if (isDefined(width)) {
+            // @ts-expect-error the width is a number or a string here
             resultWidths[index] = isNumeric(width) || isPixelWidth(width) ? parseFloat(width) : width;
           } else if (!columnAutoWidth) {
             resultWidths[index] = undefined;
@@ -856,6 +857,7 @@ export class ResizingController extends modules.ViewController {
 
         each(VIEW_NAMES, (index, viewName) => {
           // TODO getView
+          // @ts-expect-error the view names are the keys of the views
           const view = that.getView(viewName);
           if (view) {
             view.resize();

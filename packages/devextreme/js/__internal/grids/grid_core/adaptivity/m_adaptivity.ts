@@ -380,6 +380,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
     let colWidth = 0;
 
     each(columns, (index, column) => {
+      // @ts-expect-error index is set for the visible columns
       if (column.index < 0 || column.command) {
         colWidth += that._columnsController.columnOption(getColumnId(that, column), 'bestFitWidth') || 0;
       }

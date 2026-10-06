@@ -1358,6 +1358,7 @@ export class ColumnsController extends modules.Controller {
 
       const inferDataTypes = (): void => {
         for (const item of firstItems) {
+          // @ts-expect-error calculateCellValue is set for the processed columns
           const value = column.calculateCellValue(item);
 
           if (!column.dataType) {
@@ -1392,6 +1393,7 @@ export class ColumnsController extends modules.Controller {
 
       const inferSerializationFormats = (): void => {
         for (const item of firstItems) {
+          // @ts-expect-error calculateCellValue is set and takes skipDeserialization
           const value = column.calculateCellValue(item, true);
 
           if (column.serializationFormat === undefined) {
@@ -1401,6 +1403,7 @@ export class ColumnsController extends modules.Controller {
           if (lookup && lookup.serializationFormat === undefined) {
             lookup.serializationFormat = getSerializationFormat(
               lookup.dataType,
+              // @ts-expect-error calculateCellValue takes skipDeserialization
               lookup.calculateCellValue(value, true),
             );
           }
@@ -1595,10 +1598,12 @@ export class ColumnsController extends modules.Controller {
 
     if (!this._columns.length) {
       each(groupParameters, (_: number, group) => {
+        // @ts-expect-error the selector of a group is added as a column
         this._columns.push(group.selector);
       });
       each(sortParameters, (_: number, sort) => {
         if (!isFunction(sort.selector)) {
+          // @ts-expect-error the selector of a sort is added as a column
           this._columns.push(sort.selector);
         }
       });

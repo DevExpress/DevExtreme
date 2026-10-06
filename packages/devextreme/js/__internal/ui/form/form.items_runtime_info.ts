@@ -61,6 +61,7 @@ export default class FormItemsRunTimeInfo {
 
     each(this._map, (_guid: Guid, { widgetInstance, item }): boolean => {
       if (condition(item)) {
+        // @ts-expect-error the widget instance is the T that the condition found
         result = widgetInstance;
 
         return false;

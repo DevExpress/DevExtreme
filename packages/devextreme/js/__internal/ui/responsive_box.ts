@@ -240,6 +240,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     ) => (item1.location.row - item2.location.row) || (item1.location.col - item2.location.col));
 
     each(this._screenItems, (index, item) => {
+      // @ts-expect-error the screen items have a location
       Object.assign(item.location, {
         row: index,
         col: 0,
@@ -318,7 +319,9 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   _spreadItems(): void {
     each(this._screenItems, (_, itemInfo) => {
       const location = itemInfo.location || {};
+      // @ts-expect-error the location is an object here
       const itemCol = location.col;
+      // @ts-expect-error the location is an object here
       const itemRow = location.row;
       const row = this._grid[itemRow];
       const itemCell = row?.[itemCol];
@@ -663,6 +666,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   _clearItemNodeTemplates(): void {
     const { items } = this.option();
     each(items, function clearTemplates() {
+      // @ts-expect-error the items have a node
       // eslint-disable-next-line @typescript-eslint/no-invalid-this
       delete this.node;
     });

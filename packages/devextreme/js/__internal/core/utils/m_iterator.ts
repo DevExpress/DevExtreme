@@ -1,15 +1,44 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers are not typed
-type MapValues = (values: any, callback: (value: any, key: any, array?: any) => any) => any[];
+type EachCallback<TThis, TKey, TValue> = (this: TThis, key: TKey, value: TValue) => unknown;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers are not typed
-type Each = (values: any, callback: (this: any, key: any, value: any) => unknown) => any;
+interface Each {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an empty literal is never[]
+  (values: never[], callback: EachCallback<any, number, any>): never[];
+  <T>(values: T[], callback: EachCallback<T, number, T>): T[];
+  <T>(values: readonly T[], callback: EachCallback<T, number, T>): readonly T[];
+  <T>(values: T[] | null | undefined, callback: EachCallback<T, number, T>): T[] | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the type of {} has no T
+  <T = any>(values: Record<string, T>, callback: EachCallback<T, string, T>): Record<string, T>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers are not typed
+  (values: any, callback: EachCallback<any, any, any>): any;
+}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers are not typed
-type ReverseEach = (array: any, callback: (this: any, key: any, value: any) => unknown) => void;
+interface ReverseEach {
+  <T>(array: ArrayLike<T> | null | undefined, callback: EachCallback<T, number, T>): void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers are not typed
+  (array: any, callback: EachCallback<any, any, any>): void;
+}
+
+interface MapValues {
+  <TResult>(
+    values: never[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an empty literal is never[]
+    callback: (value: any, index: number, array: never[]) => TResult,
+  ): TResult[];
+  <T, TResult>(
+    values: readonly T[],
+    callback: (value: T, index: number, array: readonly T[]) => TResult,
+  ): TResult[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the type of {} has no T
+  <T = any, TResult = unknown>(
+    values: Record<string, T>,
+    callback: (value: T, key: string) => TResult,
+  ): TResult[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers are not typed
+  (values: any, callback: (value: any, key: any, array?: any) => any): any[];
+}
 
 const map: MapValues = (values, callback) => {
   if (Array.isArray(values)) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- the callers are not typed
     return values.map(callback);
   }
 

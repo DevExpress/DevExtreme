@@ -177,7 +177,7 @@ class NativeStrategy<
 
   _eachScrollbar(callback: (scrollbar: Scrollbar, direction: Orientation) => void): void {
     each(this._scrollbars || {}, (direction, scrollbar) => {
-      callback(scrollbar, direction);
+      callback(scrollbar, direction as Orientation);
     });
   }
 
