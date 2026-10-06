@@ -389,6 +389,17 @@ QUnit.module('ColumnsSeparator', () => {
         assert.equal(columnsSeparator.element().css('cursor'), 'col-resize', 'cursor');
     });
 
+    QUnit.test('changePointerEvents', function(assert) {
+        // arrange
+        const columnsSeparator = createColumnsSeparator();
+
+        // act
+        columnsSeparator.changePointerEvents('auto');
+
+        // assert
+        assert.equal(columnsSeparator.element().css('pointerEvents'), 'auto', 'pointer-events');
+    });
+
     QUnit.test('Subscribe to position changed event when showColumnHeaders is false', function(assert) {
         // arrange
         const columnsSeparator = createColumnsSeparator2({ showColumnHeaders: false }, { allowReordering: true, allowResizing: true });
