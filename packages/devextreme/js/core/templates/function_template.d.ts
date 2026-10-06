@@ -1,7 +1,8 @@
-import { InternalElement } from '../element';
+import { InternalElement, UserDefinedElement } from '../element';
+import { dxElementWrapper } from '../renderer';
 
 export interface TemplateRenderOptions {
-  container?: unknown;
+  container?: string | UserDefinedElement | dxElementWrapper | null;
   model?: unknown;
   index?: number;
   transclude?: boolean;

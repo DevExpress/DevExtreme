@@ -7523,7 +7523,7 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface TemplateRenderOptions {
-    container?: unknown;
+    container?: string | UserDefinedElement | dxElementWrapper | null;
     model?: unknown;
     index?: number;
     transclude?: boolean;
