@@ -243,3 +243,7 @@ jobs:
 
       - name: Pack ${{ matrix.framework }}
         run: pnpm exec nx pack devextreme-${{ matrix.framework }}
+
+      - name: Verify ${{ matrix.framework }} declarations
+        if: matrix.framework != 'angular'
+        run: pnpm exec nx verify:dts devextreme-${{ matrix.framework }}
