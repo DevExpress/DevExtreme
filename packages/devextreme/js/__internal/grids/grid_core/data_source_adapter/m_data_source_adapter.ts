@@ -668,8 +668,8 @@ export default class DataSourceAdapter extends modules.Controller {
             this._cachedPagingData = cloneItems(options.data, groupCount);
           }
         }).fail((error) => {
-          // @ts-expect-error data holds a rejected Deferred on a load error
-          options.data = new Deferred().reject(error);
+          // @ts-expect-error badly typed Deferred
+          options.data = Deferred().reject(error);
         });
       }
 
