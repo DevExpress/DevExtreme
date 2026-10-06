@@ -189,11 +189,9 @@ export class ColumnsSeparatorView extends SeparatorView {
 
   private _isTransparent?: boolean;
 
-  /// #DEBUG
   private _testPosX?: number;
 
   private _testCursorName?: string;
-  /// #ENDDEBUG
 
   public init() {
     super.init();
@@ -410,9 +408,7 @@ export class DraggingHeaderView extends modules.View {
 
   private _onSelectStart: any;
 
-  /// #DEBUG
   private _testPointsByColumns: any;
-  /// #ENDDEBUG
 
   private getSourceDraggingPanel(): DraggingPanel {
     const {
