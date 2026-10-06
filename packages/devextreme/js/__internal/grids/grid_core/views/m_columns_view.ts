@@ -218,6 +218,15 @@ export const normalizeWidth = (width: string | number | undefined): string | und
   return width;
 };
 
+interface ScrollableOptions {
+  direction: string;
+  bounceEnabled: boolean;
+  useKeyboard: boolean;
+  useNative?: boolean | 'auto';
+  useSimulatedScrollbar?: boolean;
+  onScroll?: (e) => void;
+}
+
 export class ColumnsView extends ColumnStateMixin(modules.View) {
   protected _tableElement?: dxElementWrapper | null;
 
@@ -330,11 +339,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
     if (useNativeScrolling === 'auto') {
       delete options.useNative;
-      // @ts-expect-error the options are the scrolling options
       delete options.useSimulatedScrollbar;
     } else {
       options.useNative = !!useNativeScrolling;
-      // @ts-expect-error the options are the scrolling options
       options.useSimulatedScrollbar = !useNativeScrolling;
     }
     return options;

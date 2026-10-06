@@ -38,11 +38,11 @@ export class ScrollViewScroller extends Scroller {
 
   _$pullDown!: dxElementWrapper;
 
-  _$pullingDownText?: dxElementWrapper;
+  _$pullingDownText!: dxElementWrapper;
 
-  _$pulledDownText?: dxElementWrapper;
+  _$pulledDownText!: dxElementWrapper;
 
-  _$refreshingText?: dxElementWrapper;
+  _$refreshingText!: dxElementWrapper;
 
   _$bottomPocket!: dxElementWrapper;
 
@@ -84,7 +84,6 @@ export class ScrollViewScroller extends Scroller {
 
     each(pullDownTextItems, (_, item) => {
       const action = this._state === item.visibleState ? 'addClass' : 'removeClass';
-      // @ts-expect-error the elements of the pull down texts are set
       item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
     });
   }

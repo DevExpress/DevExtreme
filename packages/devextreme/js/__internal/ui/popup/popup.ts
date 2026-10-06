@@ -1,5 +1,6 @@
 import '@js/ui/toolbar/ui.toolbar.base';
 
+import type { ToolbarItemLocation } from '@js/common';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DeepPartial } from '@js/core';
@@ -32,7 +33,9 @@ import {
 import { isDefined, isObject } from '@js/core/utils/type';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type { dxPopupAnimation, Properties, ToolbarItem } from '@js/ui/popup';
+import type {
+  dxPopupAnimation, Properties, ToolbarItem, ToolbarLocation,
+} from '@js/ui/popup';
 import type { ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/resizable';
 import Resizable from '@js/ui/resizable';
 import {
@@ -124,11 +127,15 @@ interface HeightCssStyles {
   maxHeight: number | string;
 }
 
-const getButtonPlace = (name: string): { toolbar: string; location: string } => {
+type PopupToolbarItem = ToolbarItem & { shortcut?: string };
+
+const getButtonPlace = (
+  name: string,
+): { toolbar: ToolbarLocation; location: ToolbarItemLocation } => {
   const device = devices.current();
   const { platform } = device;
-  let toolbar = 'bottom';
-  let location = 'before';
+  let toolbar: ToolbarLocation = 'bottom';
+  let location: ToolbarItemLocation = 'before';
 
   if (platform === 'ios') {
     // eslint-disable-next-line default-case
@@ -862,11 +869,9 @@ class Popup<
 
     let index = 0;
 
-    each(toolbarItems, (_, data) => {
-      // @ts-expect-error shortcut is not in the public ToolbarItem
+    each(toolbarItems as PopupToolbarItem[] | undefined, (_, data) => {
       const isShortcut = isDefined(data.shortcut);
-      // @ts-expect-error shortcut is not in the public ToolbarItem
-      const item: ToolbarItem = isShortcut ? getButtonPlace(data.shortcut) : data;
+      const item: ToolbarItem = isShortcut ? getButtonPlace(data.shortcut as string) : data;
 
       if (isShortcut && currentPlatform === 'ios' && index < 2) {
         item.toolbar = 'top';
@@ -884,7 +889,6 @@ class Popup<
 
         const isLTROrder = currentPlatform === 'generic';
 
-        // @ts-expect-error shortcut is not in the public ToolbarItem
         if ((data.shortcut === 'done' && isLTROrder) || (data.shortcut === 'cancel' && !isLTROrder)) {
           toolbarsItems.unshift(item);
         } else {

@@ -38,8 +38,7 @@ const createNextItems = (): Record<string, number>[] => [
 const beforeTest = (): void => {
   baseBeforeTest();
   jest.spyOn(errors, 'log').mockImplementation(jest.fn());
-  // @ts-expect-error the mock returns an empty object
-  jest.spyOn(errors, 'Error').mockImplementation(() => ({}));
+  jest.spyOn(errors, 'Error').mockImplementation(() => ({}) as ReturnType<typeof errors.Error>);
 };
 
 const getAdapter = (instance: DataGridInstance): { changed: unknown } => instance

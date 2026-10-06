@@ -1,3 +1,4 @@
+import type { DataType } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import $ from '@js/core/renderer';
@@ -10,7 +11,7 @@ import {
 } from '@ts/filter_builder/utils';
 
 function baseOperation(grid) {
-  const calculateFilterExpression = function (filterValue, field, fields) {
+  const calculateFilterExpression = function (filterValue, field, fields?) {
     const result: string[] = [];
     const lastIndex = filterValue.length - 1;
     filterValue && filterValue.forEach((value, index) => {
@@ -49,7 +50,7 @@ function baseOperation(grid) {
 
   const headerFilterController = grid && grid.getController('headerFilter');
   // Override in the private API WA [T1232532]
-  const customizeText = function (fieldInfo, options) {
+  const customizeText = function (fieldInfo, options?) {
     options = options || {};
     const { value } = fieldInfo;
     let column = grid.columnOption(fieldInfo.field.dataField);
@@ -101,7 +102,7 @@ function baseOperation(grid) {
     return text;
   };
   return {
-    dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'],
+    dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'] as DataType[],
     calculateFilterExpression,
     editorTemplate(conditionInfo, container) {
       const div = $('<div>')
@@ -138,7 +139,6 @@ function baseOperation(grid) {
 }
 
 export function anyOf(grid): CustomOperation {
-  // @ts-expect-error the operation is merged with the base one
   return extend(baseOperation(grid), {
     name: 'anyof',
     icon: 'selectall',
@@ -148,9 +148,8 @@ export function anyOf(grid): CustomOperation {
 
 export function noneOf(grid): CustomOperation {
   const baseOp = baseOperation(grid);
-  // @ts-expect-error the operation is merged with the base one
   return extend({}, baseOp, {
-    calculateFilterExpression(filterValue, field, fields) {
+    calculateFilterExpression(filterValue, field, fields?) {
       const baseFilter = baseOp.calculateFilterExpression(filterValue, field, fields);
       if (!baseFilter || baseFilter.length === 0) return null;
 

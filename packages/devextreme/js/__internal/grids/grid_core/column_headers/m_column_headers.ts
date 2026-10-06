@@ -576,7 +576,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return this.isColumnReorderingEnabled(column) && columns.length > 1;
   }
 
-  protected getBoundingRect() {
+  public getBoundingRect() {
     const that = this;
     const $columnElements = that.getColumnElements();
 

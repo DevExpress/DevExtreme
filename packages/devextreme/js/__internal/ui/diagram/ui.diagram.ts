@@ -441,7 +441,6 @@ class Diagram extends Widget<Properties> {
     this._mainToolbar = this._createComponent(
       $toolbarWrapper,
       DiagramMainToolbar,
-      // @ts-expect-error the toolbar options are merged
       extend(this._getToolbarBaseOptions(), {
         commands: this.option('mainToolbar.commands'),
         skipAdjustSize: true,
@@ -462,7 +461,6 @@ class Diagram extends Widget<Properties> {
     this._historyToolbar = this._createComponent(
       $container,
       DiagramHistoryToolbar,
-      // @ts-expect-error the toolbar options are merged
       extend(this._getToolbarBaseOptions(), {
         commands: this.option('historyToolbar.commands'),
         locateInMenu: 'never',
@@ -510,7 +508,7 @@ class Diagram extends Widget<Properties> {
       isVisible: this._isToolboxVisible(),
       container: this.$element(),
       height: bounds.height,
-      // @ts-expect-error the toolbox gets an offset parent
+      // @ts-expect-error the toolbox options are not in its default options
       offsetParent: $parent,
       offsetX: bounds.offsetX,
       offsetY: bounds.offsetY,
@@ -651,7 +649,6 @@ class Diagram extends Widget<Properties> {
     this._viewToolbar = this._createComponent(
       $container,
       DiagramViewToolbar,
-      // @ts-expect-error the toolbar options are merged
       extend(this._getToolbarBaseOptions(), {
         commands: this.option('viewToolbar.commands'),
         locateInMenu: 'never',
@@ -716,7 +713,6 @@ class Diagram extends Widget<Properties> {
     this._propertiesToolbar = this._createComponent(
       $container,
       DiagramPropertiesToolbar,
-      // @ts-expect-error the toolbar options are merged
       extend(this._getToolbarBaseOptions(), {
         buttonStylingMode: 'contained',
         buttonType: 'default',
@@ -763,7 +759,7 @@ class Diagram extends Widget<Properties> {
         isMobileView: this.isMobileScreenSize(),
         isVisible: this._isPropertiesPanelVisible(),
         container: this.$element(),
-        // @ts-expect-error the toolbox gets an offset parent
+        // @ts-expect-error the properties panel options are not in its default options
         offsetParent: $parent,
         offsetX,
         offsetY,
@@ -772,7 +768,6 @@ class Diagram extends Widget<Properties> {
           e.toolbar = this._createComponent(
             e.$parent,
             DiagramToolbar,
-            // @ts-expect-error the toolbar options are merged
             extend(this._getToolbarBaseOptions(), {
               commands: e.commands,
               locateInMenu: 'never',
@@ -1890,7 +1885,6 @@ class Diagram extends Widget<Properties> {
 
   _updateFormatUnitsMethod(): void {
     const { DiagramLocalizationService } = getDiagram();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     DiagramLocalizationService.formatUnit = (value): string => numberLocalization.format(value);
   }
 
@@ -2203,7 +2197,6 @@ class Diagram extends Widget<Properties> {
   }
 
   _getDefaultOptions(): Properties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       readOnly: false,
       zoomLevel: DIAGRAM_DEFAULT_ZOOMLEVEL,

@@ -904,7 +904,7 @@ class PivotGrid extends Widget {
 
   _handleCellClick(e) {
     const that = this;
-    // @ts-expect-error the event args of a cell have a cell
+    // @ts-expect-error the event args are built for a cell or for a field
     const args: CellEventArgs = that._createEventArgs(e.currentTarget, e);
     const { cell } = args;
 
@@ -1080,7 +1080,7 @@ class PivotGrid extends Widget {
     if (e.key !== 'Enter' && e.key !== ' ') {
       return;
     }
-    // @ts-expect-error the event args of a cell have a cell
+    // @ts-expect-error the event args are built for a cell or for a field
     const args: CellEventArgs = this._createEventArgs(e.currentTarget, e);
     const { cell } = args;
     if (!cell || !isDefined(cell.expanded)) {

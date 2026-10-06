@@ -77,15 +77,14 @@ export class FilterController {
       getHeaderFilterController: (): unknown => this.headerFilterCompatibilityController,
     };
 
-    const builtInCustomOperation = [
+    const builtInCustomOperation: unknown[] = [
       anyOf(config),
       noneOf(config),
     ];
 
     return builtInCustomOperation
-      // @ts-expect-error the custom operations are merged
       .concat(this.filterBuilderCustomOperations.value)
-      .filter((o) => o) as unknown[];
+      .filter((o) => o);
   });
 
   public readonly displayFilter = computed(

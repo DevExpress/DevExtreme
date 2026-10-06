@@ -81,7 +81,6 @@ export class SliderTooltipPositionController<
   _fitIntoSlider(): void {
     const calculatedPosition = positionUtils.calculate(this._$content, this._position);
 
-    // @ts-expect-error the position has collisionSide
     const { collisionSide, oversize } = calculatedPosition.h;
     const left = this._visualPosition?.left ?? 0;
 

@@ -62,9 +62,8 @@ export class OptionsController<
     // @ts-expect-error
     this.defaults = component._getDefaultOptions?.() ?? {};
 
-    // @ts-expect-error the options are cloned
     this.internalOptions = signal({
-      options: extend(true, {}, component.option()),
+      options: extend(true, {}, component.option()) as TProps,
       changes: null,
     });
 

@@ -21,6 +21,7 @@ import {
   isDefined, isFunction, isPlainObject, isString,
 } from '@js/core/utils/type';
 import type { DxEvent, EventInfo, InitializedEventInfo } from '@js/events';
+import type { ActionEvent } from '@ts/core/action';
 import type { DeprecatedOptionInfo } from '@ts/core/options/index';
 import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -34,8 +35,8 @@ const isInnerOption = (
 ): boolean => optionName.indexOf('_', 0) === 0;
 
 export interface ActionConfig {
-  beforeExecute?: (e: Record<string, unknown>) => void;
-  afterExecute?: (e: Record<string, unknown>) => void;
+  beforeExecute?: (e: ActionEvent) => void;
+  afterExecute?: (e: ActionEvent) => void;
   excludeValidators?: ('disabled' | 'readOnly')[];
   element?: Element;
   validatingTargetName?: string;
@@ -399,7 +400,6 @@ export class Component<
         // eslint-disable-next-line no-param-reassign
         e = { actionValue: e };
       }
-      // @ts-expect-error the action options are merged
       action = action || new Action(actionSource, extend({}, config, this._defaultActionConfig()));
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

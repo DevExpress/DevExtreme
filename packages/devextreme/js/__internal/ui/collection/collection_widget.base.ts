@@ -224,7 +224,6 @@ class CollectionWidget<
       currentTarget: $target.get(0),
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return params;
   }
 
@@ -1510,13 +1509,12 @@ class CollectionWidget<
 
   _itemEventHandlerImpl(
     initiator: dxElementWrapper | Element,
-    action: (event?: Record<string, unknown>) => void,
+    action: (event?: object) => void,
     actionArgs: ActionArgs<TItem>,
   ): void {
     const $itemElement = this._closestItemElement($(initiator));
     const args = extend({}, actionArgs);
 
-    // @ts-expect-error the action args are merged
     return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
   }
 

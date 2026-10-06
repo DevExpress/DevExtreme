@@ -1,3 +1,4 @@
+import type { DateLike } from '@js/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
 import dateSerialization from '@js/core/utils/date_serialization';
 import type { Appointment } from '@js/ui/scheduler';
@@ -46,14 +47,15 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
     const { getter: commonGetter, setter: commonSetter } = this.getCommonAccessExpressions(expr);
     // TODO: check cache usage, it sets once and forever now
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let serializationFormatCache: string | undefined;
+    let serializationFormatCache: string | null | undefined;
 
     const getter = (object: Appointment): unknown => {
       const date = this.forceIsoDateParsing
-        ? dateSerialization.deserializeDate(commonGetter(object))
-        : commonGetter(object);
+        ? dateSerialization.deserializeDate(
+          commonGetter(object) as Exclude<DateLike, null> | undefined,
+        )
+        : commonGetter(object) as Exclude<DateLike, null> | undefined;
 
-      // @ts-expect-error the date is a date or a string
       return date === undefined ? date : new Date(date);
     };
 
@@ -63,7 +65,6 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
       } else if (this.forceIsoDateParsing && !serializationFormatCache) {
         const oldValue = commonGetter(object);
 
-        // @ts-expect-error the format can be null
         serializationFormatCache = dateSerialization.getDateSerializationFormat(oldValue);
       }
 

@@ -429,7 +429,7 @@ class TextEditorBase<
   ): void {
     const inputAttributes = extend(this._getDefaultAttributes(), customAttributes);
 
-    // @ts-expect-error attr takes an object of attributes
+    // @ts-expect-error attr has no overload for an object of attributes
     $input.attr(inputAttributes);
     $input.addClass(TEXTEDITOR_INPUT_CLASS);
 

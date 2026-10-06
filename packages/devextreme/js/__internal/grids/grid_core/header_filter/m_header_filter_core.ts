@@ -408,9 +408,9 @@ export class HeaderFilterView extends Modules.View {
       that._listComponent = that._createComponent(
         $('<div>').appendTo($content),
         TreeView,
-        // @ts-expect-error the list options are merged
+        // @ts-expect-error the onOptionChanged handler takes the internal TreeView
         extend(widgetOptions, {
-          showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
+          showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' as const : 'normal' as const,
           onOptionChanged: onTreeViewOptionChanged,
           keyExpr: 'id',
         }),
@@ -419,12 +419,11 @@ export class HeaderFilterView extends Modules.View {
       that._listComponent = that._createComponent(
         $('<div>').appendTo($content),
         List,
-        // @ts-expect-error the list options are merged
         extend(widgetOptions, {
           searchExpr: that._getSearchExpr(options, headerFilterOptions),
-          pageLoadMode: 'scrollBottom',
+          pageLoadMode: 'scrollBottom' as const,
           showSelectionControls: true,
-          selectionMode: needShowSelectAllCheckbox ? 'all' : 'multiple',
+          selectionMode: needShowSelectAllCheckbox ? 'all' as const : 'multiple' as const,
           onOptionChanged: onListOptionChanged,
           onSelectionChanged(event) {
             const { component: listComponent } = event;

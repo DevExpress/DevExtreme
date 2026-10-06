@@ -166,8 +166,15 @@ function _includesCSVExpression(value) {
   return !isNumeric(value);
 }
 
+interface ConvertedFormat {
+  format: unknown;
+  precision: unknown;
+  dataType: unknown;
+  currency?: unknown;
+}
+
 export const ExportFormat = {
-  formatObjectConverter(format, dataType) {
+  formatObjectConverter(format, dataType): ConvertedFormat {
     const result = {
       format,
       precision: format?.precision,

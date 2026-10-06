@@ -924,14 +924,10 @@ class DateBox<
     this.option(optionName, serializedDate);
   }
 
-  _serializeDate(date?: DateLike): Date | string | null {
+  _serializeDate(date?: DateLike): DateLike | undefined {
     const serializationFormat = this._getSerializationFormat();
 
-    // @ts-expect-error the date can be a number
-    const serializedDate: Date | string | null = dateSerialization.serializeDate(
-      date,
-      serializationFormat,
-    );
+    const serializedDate = dateSerialization.serializeDate(date, serializationFormat);
 
     return serializedDate;
   }

@@ -29,10 +29,9 @@ export default class Selection<
   _shiftFocusedItemIndex?: number;
 
   constructor(options: Partial<SelectionOptions<TItem, TKey, TDeferred>>) {
-    // @ts-expect-error the options are merged with the defaults
     this.options = extend(this._getDefaultOptions(), options, {
       selectedItemKeys: options.selectedKeys ?? [],
-    });
+    }) as SelectionOptions<TItem, TKey, TDeferred>;
 
     this._selectionStrategy = (this.options.deferred
       ? new DeferredStrategy(this.options)
