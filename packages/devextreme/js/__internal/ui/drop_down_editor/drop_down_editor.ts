@@ -12,7 +12,6 @@ import Guid from '@js/core/guid';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { FunctionTemplate } from '@js/core/templates/function_template';
 import browser from '@js/core/utils/browser';
 import {
   // @ts-expect-error fix on core/utils level
@@ -34,6 +33,7 @@ import type dxPopup from '@js/ui/popup';
 import type { InitializedEvent as PopupInitializedEvent, ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import errors from '@js/ui/widget/ui.errors';
+import { FunctionTemplate } from '@ts/core/templates/function_template';
 import { getComponentInstance } from '@ts/core/utils/m_public_component';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -638,7 +638,6 @@ class DropDownEditor<
 
   _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
-      // @ts-expect-error should be fixed in FunctionTemplate definition
       dropDownButton: new FunctionTemplate((options) => {
         const $icon = $('<div>').addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
         $(options.container).append($icon);

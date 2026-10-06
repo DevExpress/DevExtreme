@@ -213,7 +213,6 @@ export function renderFieldItem({
     template.render({
       container: getPublicElement($fieldEditorContainer),
       model: getTemplateData(item, editorOptions, formOrLayoutManager),
-      // @ts-expect-error ts-error
       onRendered(): void {
         const $validationTarget = getValidationTarget($fieldEditorContainer);
         const validationTargetInstance = tryGetValidationTargetInstance($validationTarget);
