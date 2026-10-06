@@ -18,8 +18,8 @@ import type { Properties } from '@js/ui/sortable';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type {
   DragEvent, DragEventArgs, DraggableProperties, DragStartArgs, DragTemplateArgs,
-} from '@ts/m_draggable';
-import Draggable from '@ts/m_draggable';
+} from '@ts/draggable';
+import Draggable from '@ts/draggable';
 
 import { isDefined } from '../core/utils/type';
 
