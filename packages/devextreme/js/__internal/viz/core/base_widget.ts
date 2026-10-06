@@ -68,8 +68,7 @@ function getFalse(): boolean {
 
 function defaultOnIncidentOccurred(e): void {
   if (!e.component._eventsStrategy.hasEvent('incidentOccurred')) {
-    // @ts-expect-error log takes the id and the details
-    log.apply(null, [e.target.id].concat(e.target.args || []));
+    log.apply(null, [e.target.id].concat(e.target.args || []) as [string, ...unknown[]]);
   }
 }
 

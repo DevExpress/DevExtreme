@@ -77,7 +77,6 @@ class DOMComponent<
   }
 
   _getDefaultOptions(): TProperties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       width: undefined,
       height: undefined,
@@ -209,7 +208,7 @@ class DOMComponent<
 
     delete attributes.class;
     this.$element()
-      // @ts-expect-error attr takes an object of attributes
+      // @ts-expect-error attr has no overload for an object of attributes
       .attr(attributes)
       .removeClass(this._customClass)
       .addClass(classNames);
@@ -349,25 +348,23 @@ class DOMComponent<
     const configuration = componentConfiguration ?? {};
 
     const synchronizableOptions = this._getSynchronizableOptionsForCreateComponent()
-      .filter((value) => !(value in configuration)) as (keyof TProperties)[];
+      .filter((value) => !(value in configuration)) as (keyof TProperties & string)[];
 
     const { integrationOptions } = this.option();
     let { nestedComponentOptions } = this.option();
 
     nestedComponentOptions = nestedComponentOptions ?? noop;
 
-    const nestedComponentConfig = extend(
+    const nestedComponentConfig: Record<string, unknown> = extend(
       { integrationOptions },
       nestedComponentOptions(this as unknown as TComponent),
     );
 
     synchronizableOptions.forEach((optionName) => {
       const { [optionName]: value } = this.option();
-      // @ts-expect-error the nested config gets the synchronizable options
       nestedComponentConfig[optionName] = value;
     });
 
-    // @ts-expect-error the nested config is the merged options
     this._extendConfig(configuration, nestedComponentConfig);
 
     // eslint-disable-next-line no-void

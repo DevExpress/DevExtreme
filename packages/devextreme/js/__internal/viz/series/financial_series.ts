@@ -295,9 +295,9 @@ export const candlestick = _extend({}, stock, {
 
   _parsePointStyle(style, defaultColor, innerColor) {
     const color = extractColor(style.color, true) || innerColor;
-    const base = stock._parsePointStyle.call(this, style, defaultColor, color);
+    const base: ReturnType<typeof stock._parsePointStyle> & { hatching?: unknown } = stock
+      ._parsePointStyle.call(this, style, defaultColor, color);
     base.fill = color;
-    // @ts-expect-error the style has hatching
     base.hatching = style.hatching;
     return base;
   },

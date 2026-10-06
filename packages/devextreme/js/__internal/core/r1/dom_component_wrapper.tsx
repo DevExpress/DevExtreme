@@ -138,12 +138,11 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
     const {
       valueChange,
     } = normalizedProps;
-    const properties = extend({
+    const properties: Record<string, any> = extend({
       rtlEnabled: this.getConfig()?.rtlEnabled,
       isRenovated: true,
     }, normalizedProps);
     if (valueChange) {
-      // @ts-expect-error the properties get the value handler
       properties.onValueChanged = (_ref3): any => {
         const {
           value,
@@ -153,7 +152,6 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
     }
     const templates = this.props.templateNames as any;
     templates.forEach((name) => {
-      // @ts-expect-error the properties are the merged options
       if (hasTemplate(name, properties, this)) {
         properties[name] = (item, index, container): any => {
           renderTemplate((this.props.componentProps as any)[name], {

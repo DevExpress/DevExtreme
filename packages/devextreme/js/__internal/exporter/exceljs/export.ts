@@ -77,7 +77,6 @@ export const Export = {
 
   tryConvertToExcelNumberFormat(format, dataType) {
     const newFormat = ExportFormat.formatObjectConverter(format, dataType);
-    // @ts-expect-error the converted format can have a currency
     const { currency } = newFormat;
 
     format = newFormat.format;

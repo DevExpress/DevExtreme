@@ -318,7 +318,6 @@ class Calendar<
       return undefined;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateSerialization.getDateSerializationFormat(value);
   }
 
@@ -347,7 +346,6 @@ class Calendar<
   ): void {
     const serializationFormat = this._getSerializationFormat(optionName);
     const serializedValue = this._isArrayValue(optionName, optionValue)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       ? optionValue.map((value) => dateSerialization.serializeDate(value, serializationFormat))
       : dateSerialization.serializeDate(optionValue, serializationFormat);
 

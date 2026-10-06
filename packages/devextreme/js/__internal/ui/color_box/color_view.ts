@@ -736,7 +736,7 @@ class ColorView extends Editor<ColorViewProperties> {
     const { editorType: EditorConstructor } = options;
     const { stylingMode } = this.option();
 
-    const editorOptions = extend({
+    const editorOptions: Record<string, unknown> = extend({
       value: options.value,
       onValueChanged: options.onValueChanged,
       onKeyboardHandled: (opts) => this._keyboardHandler(opts),
@@ -745,11 +745,8 @@ class ColorView extends Editor<ColorViewProperties> {
     });
 
     if (EditorConstructor === NumberBox) {
-      // @ts-expect-error the editor options get min, max and step
       editorOptions.min = options.min || 0;
-      // @ts-expect-error the editor options get min, max and step
       editorOptions.max = options.max || 255;
-      // @ts-expect-error the editor options get min, max and step
       editorOptions.step = options.step || 1;
     }
 

@@ -193,8 +193,7 @@ function _convertToLabelOptions({
   const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(
     item.editorType,
   );
-  // @ts-expect-error the label options are merged
-  const labelOptions: LabelOptions = extend(
+  const labelOptions = extend(
     {
       showColon: showColonAfterLabel,
       location: labelLocation,
@@ -210,7 +209,7 @@ function _convertToLabelOptions({
       labelTemplate,
       onLabelTemplateRendered,
     },
-  );
+  ) as LabelOptions;
 
   const editorsRequiringIdForLabel: FormItemComponent[] = [
     'dxRadioGroup',

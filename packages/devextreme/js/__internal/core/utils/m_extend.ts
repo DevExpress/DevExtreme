@@ -20,8 +20,11 @@ export const extendFromObject = function extendFromObject(
   return result;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- a void source is skipped
+type EmptySource = null | undefined | void;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
-type MergedSource<T> = 0 extends 1 & T ? any : [T] extends [null | undefined]
+type MergedSource<T> = 0 extends 1 & T ? any : [T] extends [EmptySource]
   ? unknown
   : NonNullable<T>;
 

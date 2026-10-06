@@ -101,13 +101,13 @@ describe('FilterController.normalizeFilterSelectors', () => {
   describe('when the filter array carries its own properties', () => {
     it('should carry them over to the result', async () => {
       const { instance } = await createGrid();
-      const filter = extend([], [['name', '=', 'Alex'], 'and', ['age', '=', 15]]);
+      const filter: unknown[] & TaggedSelector = extend(
+        [],
+        [['name', '=', 'Alex'], 'and', ['age', '=', 15]],
+      );
 
-      // @ts-expect-error the filter array carries the properties of a selector
       filter.columnIndex = 7;
-      // @ts-expect-error the filter array carries the properties of a selector
       filter.filterValue = 'ZZ';
-      // @ts-expect-error the filter array carries the properties of a selector
       filter.selectedFilterOperation = 'between';
 
       const result = normalizeFilterSelectors(instance, filter, false) as TaggedSelector;
@@ -120,13 +120,10 @@ describe('FilterController.normalizeFilterSelectors', () => {
     it('should pass columnIndex and filterValue down but not selectedFilterOperation', async () => {
       const { instance } = await createGrid();
       const customSelector: ColumnSelector = (): number => 1;
-      const filter = extend([], [[customSelector, '=', 'Alex']]);
+      const filter: unknown[] & TaggedSelector = extend([], [[customSelector, '=', 'Alex']]);
 
-      // @ts-expect-error the filter array carries the properties of a selector
       filter.columnIndex = 3;
-      // @ts-expect-error the filter array carries the properties of a selector
       filter.filterValue = 'inherited';
-      // @ts-expect-error the filter array carries the properties of a selector
       filter.selectedFilterOperation = 'between';
 
       normalizeFilterSelectors(instance, filter, false);

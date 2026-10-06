@@ -27,6 +27,7 @@ import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import type { ProcessedColumn } from '@ts/grids/grid_core/columns_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
@@ -842,7 +843,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     invisibleColumns.push(...groupColumns);
 
     if (!FORM_BASED_MODES.includes(this.getEditMode())) {
-      each(columns, (_, column) => {
+      each(columns as ProcessedColumn[], (_, column) => {
         changes.forEach((change) => {
           let data;
           if (isCellVisible(column, change.key)) {
@@ -864,7 +865,6 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
             const validator = this._validatingController.createValidator({
               column,
               key: change.key,
-              // @ts-expect-error calculateCellValue is set for the processed columns
               value: column.calculateCellValue(data),
             });
             if (validator) {

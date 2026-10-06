@@ -32,5 +32,4 @@ export const createComponentMock = <
     }
     return template;
   }
-// @ts-expect-error the options are cloned
-}(extend(true, {}, options));
+}(extend(true, {}, options) as TProps);

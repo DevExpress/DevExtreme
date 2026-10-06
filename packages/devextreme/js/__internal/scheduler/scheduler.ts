@@ -1697,7 +1697,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       || horizontalVirtualScrollingAllowed
       || isTimelineView(currentViewOptions.type);
 
-    // @ts-expect-error the work space options are merged
+    // @ts-expect-error the raw options are merged here and converted below
     const workSpaceOptions = extend({
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,

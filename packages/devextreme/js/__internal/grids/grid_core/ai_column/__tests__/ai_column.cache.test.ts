@@ -19,8 +19,7 @@ interface RequestResult {
 const beforeTest = (): void => {
   baseBeforeTest();
   jest.spyOn(errors, 'log').mockImplementation(jest.fn());
-  // @ts-expect-error the mock returns an empty object
-  jest.spyOn(errors, 'Error').mockImplementation(() => ({}));
+  jest.spyOn(errors, 'Error').mockImplementation(() => ({}) as ReturnType<typeof errors.Error>);
 };
 describe('Cache', () => {
   const sendRequestSpy = jest.fn();

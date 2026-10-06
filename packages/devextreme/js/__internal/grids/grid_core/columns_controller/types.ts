@@ -114,6 +114,16 @@ export interface InternalColumnOptions extends ValueSerializers {
 
 export type Column = ColumnBase & InternalColumnOptions;
 
+export type ProcessedLookup = InternalColumnLookup & {
+  calculateCellValue: (value: unknown, skipDeserialization?: boolean) => unknown;
+};
+
+export type ProcessedColumn = Column & {
+  index: number;
+  calculateCellValue: (rowData: RawItemData, skipDeserialization?: boolean) => unknown;
+  lookup?: ProcessedLookup;
+};
+
 export type ColumnOptionsUpdate = Partial<Column> | Record<string, unknown>;
 
 export interface ColumnDataSourceParameter {

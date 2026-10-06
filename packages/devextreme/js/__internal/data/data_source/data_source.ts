@@ -688,7 +688,6 @@ export class DataSource {
       }
 
       // Process result
-      // @ts-expect-error the load result is merged with the load options
       const loadResult: LoadResult = extend(normalizeLoadResult(data, extra), loadOptions);
 
       this._eventsStrategy.fireEvent('customizeLoadResult', [loadResult]);

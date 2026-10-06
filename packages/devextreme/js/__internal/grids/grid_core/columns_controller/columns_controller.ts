@@ -21,7 +21,7 @@ import type { Grouping, GroupPanel } from '@js/ui/data_grid';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
-import type { SortingInfo } from '@ts/data/utils';
+import type { SortingInfo, SortingSelector } from '@ts/data/utils';
 import type {
   BandColumnsCache,
   Column,
@@ -42,6 +42,8 @@ import type {
   FilterField,
   GroupColumn,
   IndexedColumns,
+  ProcessedColumn,
+  ProcessedLookup,
   SavedColumnState,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
@@ -107,6 +109,8 @@ import {
   USER_STATE_FIELD_NAMES,
 } from './const';
 import { UserStateApplier } from './user_state_applier';
+
+type ColumnOptionsList = (Column | SortingSelector | undefined)[];
 
 export class ColumnsController extends modules.Controller {
   public _skipProcessingColumnsChange!: string | boolean;
@@ -498,7 +502,6 @@ export class ColumnsController extends modules.Controller {
     const groupingOptions: Grouping = this.option('grouping') ?? {};
     const groupPanelOptions: GroupPanel = this.option('groupPanel') ?? {};
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend has an untyped result
     return extend({
       allowFixing: this.option('columnFixing.enabled'),
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- false -> undefined
@@ -728,7 +731,6 @@ export class ColumnsController extends modules.Controller {
     const rtlEnabled = this.option('rtlEnabled');
     const expandColumn = expandColumns.length ? this.columnOption('command:expand') : undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend has an untyped result
     expandColumns = map(expandColumns, (column: Column): Column => extend(
       {},
       {
@@ -1358,8 +1360,7 @@ export class ColumnsController extends modules.Controller {
 
       const inferDataTypes = (): void => {
         for (const item of firstItems) {
-          // @ts-expect-error calculateCellValue is set for the processed columns
-          const value = column.calculateCellValue(item);
+          const value = (column as ProcessedColumn).calculateCellValue(item);
 
           if (!column.dataType) {
             const valueDataType = getValueDataType(value);
@@ -1393,8 +1394,7 @@ export class ColumnsController extends modules.Controller {
 
       const inferSerializationFormats = (): void => {
         for (const item of firstItems) {
-          // @ts-expect-error calculateCellValue is set and takes skipDeserialization
-          const value = column.calculateCellValue(item, true);
+          const value = (column as ProcessedColumn).calculateCellValue(item, true);
 
           if (column.serializationFormat === undefined) {
             column.serializationFormat = getSerializationFormat(column.dataType, value);
@@ -1403,8 +1403,7 @@ export class ColumnsController extends modules.Controller {
           if (lookup && lookup.serializationFormat === undefined) {
             lookup.serializationFormat = getSerializationFormat(
               lookup.dataType,
-              // @ts-expect-error calculateCellValue takes skipDeserialization
-              lookup.calculateCellValue(value, true),
+              (lookup as ProcessedLookup).calculateCellValue(value, true),
             );
           }
         }
@@ -1598,13 +1597,11 @@ export class ColumnsController extends modules.Controller {
 
     if (!this._columns.length) {
       each(groupParameters, (_: number, group) => {
-        // @ts-expect-error the selector of a group is added as a column
-        this._columns.push(group.selector);
+        (this._columns as ColumnOptionsList).push(group.selector);
       });
       each(sortParameters, (_: number, sort) => {
         if (!isFunction(sort.selector)) {
-          // @ts-expect-error the selector of a sort is added as a column
-          this._columns.push(sort.selector);
+          (this._columns as ColumnOptionsList).push(sort.selector);
         }
       });
       assignColumns(this, createColumnsFromOptions(this, this._columns));

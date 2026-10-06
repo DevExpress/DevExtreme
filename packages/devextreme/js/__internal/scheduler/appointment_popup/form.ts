@@ -4,7 +4,7 @@ import '@js/ui/tag_box';
 import '@js/ui/switch';
 import '@js/ui/select_box';
 
-import type { DayOfWeek, TextEditorButton } from '@js/common';
+import type { DateLike, DayOfWeek, TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSourceOptions } from '@js/common/data';
 import { DataSource } from '@js/common/data';
@@ -208,17 +208,15 @@ export class AppointmentForm {
 
   get startDate(): Date | null {
     const { startDateExpr } = this.config.dataAccessors.expr;
-    const value = this.getFormDataField(startDateExpr);
+    const value = this.getFormDataField(startDateExpr) as DateLike | undefined;
 
-    // @ts-expect-error the value is a date or a string
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 
   get endDate(): Date | null {
     const { endDateExpr } = this.config.dataAccessors.expr;
-    const value = this.getFormDataField(endDateExpr);
+    const value = this.getFormDataField(endDateExpr) as DateLike | undefined;
 
-    // @ts-expect-error the value is a date or a string
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 

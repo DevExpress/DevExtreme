@@ -17,7 +17,7 @@ export type ActionArguments<
   validatingTargetName?: string;
 };
 
-interface ActionEvent {
+export interface ActionEvent {
   action: unknown;
   args: unknown[];
   context: unknown;

@@ -12,6 +12,7 @@ import type { ShownEvent } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
+import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import type { EngineEvent, EngineTarget } from '@ts/events/core/events_engine';
@@ -84,7 +85,7 @@ const TAB_KEY = 'tab';
 const ENTER_KEY = 'enter';
 const ESCAPE_KEY = 'escape';
 
-const ACTIONS = [{
+const ACTIONS: { name: string; config: ActionConfig }[] = [{
   name: 'onEditorPreparing',
   config: { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' },
 }, {
@@ -271,7 +272,6 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
     ACTIONS.forEach((action) => {
       const actionConfig = extend({}, action.config);
-      // @ts-expect-error the action config is merged
       this._actions[action.name] = this._createActionByOption(action.name, actionConfig);
     });
   }
