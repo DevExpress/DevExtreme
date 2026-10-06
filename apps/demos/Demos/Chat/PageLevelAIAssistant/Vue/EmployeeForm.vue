@@ -32,6 +32,7 @@
   <DxToast
     v-model:visible="isToastVisible"
     :display-time="600"
+    :max-width="568"
     :close-on-click="true"
     message="Form data is saved."
     type="success"

@@ -25,6 +25,7 @@ $(() => {
   const toastInstance = $('#toast')
     .dxToast({
       displayTime: 600,
+      maxWidth: 568,
       closeOnClick: true,
       message: 'Form data is saved.',
       type: 'success',

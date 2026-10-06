@@ -49,6 +49,7 @@ export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormPro
       </Form>
       <Toast
         visible={toastVisible}
+        maxWidth={568}
         message="Form data is saved."
         type="success"
         displayTime={600}
