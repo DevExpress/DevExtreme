@@ -49,6 +49,7 @@ const getCurrentScreenFactor = (screenFactorCallback?: (width: number) => string
   return screenFactorFunc(windowWidth);
 };
 
+// @ts-expect-error without a window the stub has only the userAgent
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- windowObject is any
 const getNavigator = (): Navigator => (hasWindow() ? windowObject?.navigator : { userAgent: '' });
 
