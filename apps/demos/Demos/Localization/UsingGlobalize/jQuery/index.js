@@ -54,9 +54,6 @@ $(() => {
       editorOptions: {
         format: 'currency',
         showClearButton: true,
-        inputAttr: {
-          'aria-label': 'Filter cell',
-        },
       },
     }, {
       dataField: 'PaymentDate',
@@ -74,6 +71,11 @@ $(() => {
         width: 700,
         height: 345,
       },
+    },
+    onEditorPreparing: (e) => {
+      if (e.dataField === 'Amount' && e.parentType === 'filterRow') {
+        e.editorOptions.inputAttr = { 'aria-label': 'Filter cell' };
+      }
     },
   };
 

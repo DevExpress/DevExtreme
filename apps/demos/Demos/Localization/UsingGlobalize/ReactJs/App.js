@@ -20,9 +20,11 @@ const editPopupOptions = {
 const amountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
+};
+const onEditorPreparing = (e) => {
+  if (e.dataField === 'Amount' && e.parentType === 'filterRow') {
+    e.editorOptions.inputAttr = { 'aria-label': 'Filter cell' };
+  }
 };
 const selectBoxInputAttr = { id: 'selectInput' };
 Globalize.load(deCldrData, ruCldrData, supplementalCldrData);
@@ -47,6 +49,7 @@ const App = () => {
       <DataGrid
         dataSource={payments}
         keyExpr="PaymentId"
+        onEditorPreparing={onEditorPreparing}
       >
         <Editing
           mode="popup"

@@ -3,6 +3,7 @@
     <DxDataGrid
       :data-source="payments"
       key-expr="PaymentId"
+      @editor-preparing="onEditorPreparing"
     >
       <DxEditing
         :allow-updating="true"
@@ -60,7 +61,7 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxEditing, DxFilterRow,
+  DxDataGrid, DxColumn, DxEditing, DxFilterRow, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import 'devextreme/common/core/localization/globalize/number';
@@ -83,9 +84,6 @@ const editPopupOptions = { width: 700, height: 345 };
 const amountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
 };
 const selectBoxInputAttr = { id: 'selectInput' };
 const formatMessage = ref((msg: string) => msg);
@@ -113,6 +111,12 @@ function initGlobalize() {
   Globalize.locale(locale);
 
   formatMessage.value = Globalize.formatMessage.bind(Globalize);
+}
+
+function onEditorPreparing(e: DxDataGridTypes.EditorPreparingEvent) {
+  if (e.dataField === 'Amount' && e.parentType === 'filterRow') {
+    e.editorOptions.inputAttr = { 'aria-label': 'Filter cell' };
+  }
 }
 
 function changeLocale({ value }: DxSelectBoxTypes.ValueChangedEvent) {

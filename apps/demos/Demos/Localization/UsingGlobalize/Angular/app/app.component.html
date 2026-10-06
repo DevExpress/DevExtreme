@@ -1,5 +1,8 @@
 <div id="data-grid-demo">
-  <dx-data-grid [dataSource]="payments">
+  <dx-data-grid
+    [dataSource]="payments"
+    (onEditorPreparing)="onEditorPreparing($event)"
+  >
     <dxi-data-grid-column
       dataField="PaymentId"
       [caption]="formatMessage('Number')"
@@ -24,8 +27,7 @@
       format="currency"
       [editorOptions]="{
         format: 'currency',
-        showClearButton: true,
-        inputAttr: { 'aria-label': 'Filter cell' }
+        showClearButton: true
       }"
     >
     </dxi-data-grid-column>
