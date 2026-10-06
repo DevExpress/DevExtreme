@@ -318,7 +318,7 @@ export class ColumnsSeparatorView extends SeparatorView {
     pointerEventsName = isDefined(pointerEventsName) ? pointerEventsName : '';
     const $element = this.element();
     if ($element) {
-      $element.css('pointer-events', pointerEventsName);
+      $element.css('pointerEvents', pointerEventsName);
       /// #DEBUG
       this._testPointerEventsName = pointerEventsName;
       /// #ENDDEBUG
@@ -989,9 +989,12 @@ export class ColumnsResizerViewController extends modules.ViewController {
       that._isResizing = true;
 
       that._tablePositionController.update(that._targetPoint.y);
-      that._columnsSeparatorView.moveByX(that._targetPoint.x);
       that._columnsSeparatorView.show();
       that._trackerView.show();
+
+      const columnsSeparatorWidth = that._columnsSeparatorView.width();
+      that._columnsSeparatorView.moveByX(that._targetPoint.x - columnsSeparatorWidth / 2);
+
       const scrollable = that.component.getScrollable();
 
       if (scrollable && that._isRtlParentStyle()) {
