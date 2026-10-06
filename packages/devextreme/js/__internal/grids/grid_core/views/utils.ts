@@ -15,3 +15,13 @@ export const getCellText = (
 export const getMaxHorizontalScrollOffset = (container: HTMLElement | undefined): number => (
   container ? Math.round(container.scrollWidth - container.clientWidth) : 0
 );
+
+// refresh() rebuilds the column objects, so they are compared by index and command,
+// not by reference.
+export const isSameColumnLayout = (
+  renderedColumns: Column[],
+  columns: Column[],
+): boolean => renderedColumns.length === columns.length
+  && renderedColumns.every((column, index) => (
+    column.index === columns[index].index && column.command === columns[index].command
+  ));

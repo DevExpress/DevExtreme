@@ -74,23 +74,16 @@ describe('RowsView renderCompleted with async templates', () => {
     return { ...grid, renderPendingTemplates, rowKeysOnRenderCompleted };
   };
 
-  it('should not fire renderCompleted while the new rows wait for async templates', async () => {
-    const { instance, rowKeysOnRenderCompleted } = await createGrid(true);
+  it('should fire renderCompleted only once the new rows waiting for async templates are in the DOM', async () => {
+    const { instance, renderPendingTemplates, rowKeysOnRenderCompleted } = await createGrid(true);
 
     const paging = instance.pageIndex(1);
     jest.runAllTimers();
     await paging;
 
     expect(rowKeysOnRenderCompleted).toEqual([]);
-  });
 
-  it('should fire renderCompleted once the new rows are in the DOM', async () => {
-    const { instance, renderPendingTemplates, rowKeysOnRenderCompleted } = await createGrid(true);
-
-    const paging = instance.pageIndex(1);
-    jest.runAllTimers();
     renderPendingTemplates();
-    await paging;
 
     expect(rowKeysOnRenderCompleted).toEqual([SECOND_PAGE_ROW_KEYS]);
   });

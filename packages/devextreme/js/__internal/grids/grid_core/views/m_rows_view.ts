@@ -3,6 +3,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import messageLocalization from '@js/common/core/localization/message';
+import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -22,8 +23,8 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
-import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
-import { isInPlaceUpdate } from '@ts/grids/grid_core/data_controller/utils/row_changes';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import { isSameItem } from '@ts/grids/grid_core/data_controller/utils/row_changes';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
@@ -38,7 +39,7 @@ import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
 import { ColumnsView } from './m_columns_view';
 import type { RowsViewScrollEvent } from './types';
-import { getCellText, getMaxHorizontalScrollOffset } from './utils';
+import { getCellText, getMaxHorizontalScrollOffset, isSameColumnLayout } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -53,6 +54,7 @@ const LAST_ROW_BORDER = 'dx-last-row-border';
 const EMPTY_CLASS = 'dx-empty';
 const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 const CONTENT_FIXED_CLASS = 'content-fixed';
+const INVISIBLE_CLASS = 'dx-state-invisible';
 export const ROW_LINES_CLASS = 'dx-row-lines';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
@@ -430,11 +432,29 @@ export class RowsView extends ColumnsView {
   }
 
   public isWaitingForRowsLayout(): boolean {
-    const contentChanges: { change?: DataChange }[] = this._contentChanges;
-    const isUpdatingRowsInPlace = contentChanges.length > 0
-      && contentChanges.every(({ change }) => isInPlaceUpdate(change));
+    return this.isWaitingForAsyncTemplates() && !this.isRenderedLayoutCurrent();
+  }
 
-    return this.isWaitingForAsyncTemplates() && !isUpdatingRowsInPlace;
+  private isRenderedLayoutCurrent(): boolean {
+    const items = this._dataController.items();
+    const rowElements: HTMLElement[] = this._getRowElements().toArray();
+    const renderedRows: (ProcessedItem & { columns: Column[] })[] = rowElements.map(
+      (rowElement) => elementData(rowElement, 'options'),
+    );
+
+    const isSameRows = renderedRows.length === items.length
+      && renderedRows.every((renderedRow, index) => {
+        const isRenderedVisible = !$(rowElements[index]).hasClass(INVISIBLE_CLASS);
+
+        return isSameItem(renderedRow, items[index], true)
+          && isRenderedVisible === (items[index].visible !== false);
+      });
+
+    if (!isSameRows || !renderedRows.length) {
+      return isSameRows;
+    }
+
+    return isSameColumnLayout(renderedRows[0].columns, this._columnsController.getVisibleColumns());
   }
 
   /**

@@ -4,7 +4,7 @@ import {
 
 import type {
   DataChange, GetUpdatedColumnIndices, ItemChange, ProcessedItem,
-  RowChangeType, RowWatch, UpdateChange,
+  RowWatch, UpdateChange,
 } from '../../types';
 import {
   attachChangedItems,
@@ -15,7 +15,6 @@ import {
   getRowKey,
   getRowOperation,
   indexRowsByKey,
-  isInPlaceUpdate,
   isSameItem,
   partialUpdateItem,
   resolveRepaintChangesOnly,
@@ -404,54 +403,6 @@ describe('convertToUpdateChange', () => {
       changeTypes: ['update', 'insert'],
       columnIndices: [[0, 2], undefined],
     });
-  });
-});
-
-describe('isInPlaceUpdate', () => {
-  const updateChange = (partial: Partial<UpdateChange> = {}): UpdateChange => ({
-    changeType: 'update',
-    rowIndices: [0, 1],
-    changeTypes: ['update', 'update'],
-    items: [row({ key: 1 }), row({ key: 2 })],
-    ...partial,
-  });
-
-  it('should accept an update that only updates rows', () => {
-    expect(isInPlaceUpdate(updateChange())).toBe(true);
-  });
-
-  it('should accept an update that changes no rows', () => {
-    const change = updateChange({ rowIndices: [], changeTypes: [], items: [] });
-
-    expect(isInPlaceUpdate(change)).toBe(true);
-  });
-
-  it.each<RowChangeType>(['insert', 'remove'])(
-    'should reject an update that has to %s a row',
-    (changeType) => {
-      expect(isInPlaceUpdate(updateChange({ changeTypes: ['update', changeType] }))).toBe(false);
-    },
-  );
-
-  it.each([
-    { action: 'hides', visible: false },
-    { action: 'shows', visible: true },
-  ])('should reject an update that $action a row', ({ visible }) => {
-    const items = [row({ key: 1 }), { visible } as ProcessedItem];
-
-    expect(isInPlaceUpdate(updateChange({ items }))).toBe(false);
-  });
-
-  it('should reject an update without row change types', () => {
-    expect(isInPlaceUpdate(updateChange({ changeTypes: undefined }))).toBe(false);
-  });
-
-  it('should reject a change that re-renders all rows', () => {
-    expect(isInPlaceUpdate({ changeType: 'refresh', items: [row({ key: 1 })] })).toBe(false);
-  });
-
-  it('should reject a missing change', () => {
-    expect(isInPlaceUpdate(undefined)).toBe(false);
   });
 });
 
