@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
-  HttpRequest, HttpInterceptor, HTTP_INTERCEPTORS, HttpHandler, HttpEvent,
+  HttpRequest, HttpInterceptor, HTTP_INTERCEPTORS, HttpHandler, HttpEvent, HttpEventType,
 } from '@angular/common/http';
 import { Component, Injectable, ViewChild } from '@angular/core';
 
@@ -276,6 +276,44 @@ describe('Ajax request using DxHttpModule', () => {
       expect(resultText).toEqual('Uploaded');
       done();
     }, 500);
+  });
+
+  it('upload onprogress should report the actual total, not a running sum of loaded values', () => {
+    const url = 'http://somefakedomain1221.com/upload-url';
+    const onprogress = createSpy();
+
+    ajax.sendRequest({
+      url,
+      method: 'POST',
+      upload: {
+        onprogress,
+      },
+      data: new FormData(),
+    });
+
+    const req = httpTestingControllerMock.expectOne(url);
+
+    req.event({
+      type: HttpEventType.UploadProgress,
+      loaded: 250000,
+      total: 1000000,
+    });
+    req.event({
+      type: HttpEventType.UploadProgress,
+      loaded: 500000,
+      total: 1000000,
+    });
+    req.event({
+      type: HttpEventType.UploadProgress,
+      loaded: 750000,
+      total: 1000000,
+    });
+
+    expect(onprogress).toHaveBeenCalledTimes(3);
+    expect(onprogress.calls.allArgs().map(([e]) => e.total)).toEqual([1000000, 1000000, 1000000]);
+    expect(onprogress.calls.allArgs().map(([e]) => e.loaded)).toEqual([250000, 500000, 750000]);
+
+    req.flush([]);
   });
 
   it('fileUploader should be aborted and callbacks are called correctly', (done) => {
