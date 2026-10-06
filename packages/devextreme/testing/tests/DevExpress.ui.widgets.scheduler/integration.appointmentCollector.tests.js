@@ -5,7 +5,7 @@ import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import themes from 'ui/themes';
-import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appointments_helper';
+import { CompactAppointmentsHelper } from '__internal/scheduler/compact_appointments_helper';
 import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
 
@@ -78,19 +78,22 @@ module('Integration: collector', baseConfig, () => {
 });
 
 module('Integration: Appointments Collector Base Tests', baseConfig, () => {
+    class WidgetMock extends Widget {
+        option(options) {
+            if(options === 'appointmentCollectorTemplate') {
+                return 'appointmentCollector';
+            }
+            return super.option(options);
+        }
+
+        getAppointmentTemplate(template) {
+            return this._getTemplateByOption(template);
+        }
+    }
+    WidgetMock.prototype._dataAccessors = mockDataAccessor;
+
     const createWidget = () => {
-        return new (Widget.inherit({
-            option(options) {
-                if(options === 'appointmentCollectorTemplate') {
-                    return 'appointmentCollector';
-                }
-                return this.callBase(options);
-            },
-            getAppointmentTemplate(template) {
-                return this._getTemplateByOption(template);
-            },
-            _dataAccessors: mockDataAccessor,
-        }))($('<div>'));
+        return new WidgetMock($('<div>'));
     };
 
     const renderAppointmentsCollectorContainer = ({ widgetMock, items, options, color }) => {
