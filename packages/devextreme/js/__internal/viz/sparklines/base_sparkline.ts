@@ -16,6 +16,7 @@ import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 // PLUGINS_SECTION
 import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
+import type { Coords } from '@ts/viz/core/types';
 import { pointInCanvas } from '@ts/viz/core/utils';
 import { Translator2D } from '@ts/viz/translators/translator2d';
 
@@ -46,18 +47,12 @@ export interface SparklineAxis {
   aggregatedPointBetweenTicks: () => boolean;
 }
 
-interface TooltipCoords {
-  x: number;
-  y: number;
-}
-
 interface PointerEventData {
   pageX: number;
   pageY: number;
 }
 
 function inCanvas({ width, height }: SparklineSize, x: number, y: number): boolean {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return pointInCanvas({
     left: 0,
     top: 0,
@@ -218,7 +213,7 @@ abstract class BaseSparkline extends BaseWidget {
     return extend(true, {}, this._themeManager.theme(), this.option());
   }
 
-  _getTooltipCoords(): TooltipCoords {
+  _getTooltipCoords(): Coords {
     const canvas = this._canvas;
     const rootOffset = this._renderer.getRootOffset();
     return {

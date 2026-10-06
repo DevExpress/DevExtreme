@@ -4,6 +4,7 @@ import type { Font } from '@js/common/charts';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Coords, Size } from '@ts/viz/core/types';
 import { extractColor, patchFontOptions } from '@ts/viz/core/utils';
 import { formatValue, getSampleText } from '@ts/viz/gauges/base_gauge';
 
@@ -53,16 +54,6 @@ interface IndicatorAnimation {
   easing: ThemeValue;
   start?: number;
   delta?: number;
-}
-
-export interface Point {
-  x: number;
-  y: number;
-}
-
-export interface Size {
-  width: number;
-  height: number;
 }
 
 export abstract class BaseElement {
@@ -421,7 +412,7 @@ export abstract class BaseTextCloudMarker extends BaseIndicator {
     };
   }
 
-  abstract _correctCloudType(type: string, position: Point, size: Size): string;
+  abstract _correctCloudType(type: string, position: Coords, size: Size): string;
 
   abstract _getTextCloudOptions(): TextCloudOptions;
 }
@@ -634,7 +625,7 @@ export abstract class BaseRangeBar extends BaseIndicator {
 
   abstract _updateLinePosition(): void;
 
-  abstract _getTooltipPosition(): Point;
+  abstract _getTooltipPosition(): Coords;
 }
 
 /// #DEBUG

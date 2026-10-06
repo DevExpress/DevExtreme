@@ -44,6 +44,7 @@ import { tickGenerator } from '@ts/viz/axes/tick_generator';
 import xyMethods from '@ts/viz/axes/xy_axes';
 import { getParser } from '@ts/viz/components/parse_utils';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Bounds } from '@ts/viz/core/types';
 
 import {
   adjustVisualRange,
@@ -122,13 +123,6 @@ interface LabelFormatObject {
   min: ThemeValue;
   max: ThemeValue;
   point?: ThemeValue;
-}
-
-interface Margins {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
 }
 
 interface OrthogonalPositions {
@@ -1152,7 +1146,7 @@ export let Axis = class Axis {
     return this._firstDrawing;
   }
 
-  getMargins(): Margins {
+  getMargins(): Bounds {
     const that = this;
     const {
       position, offset, customPosition, placeholderSize, grid, tick, crosshairMargin,
@@ -2234,7 +2228,7 @@ export let Axis = class Axis {
     let interval = 0;
     let rangeInterval;
 
-    if (dataRange.stubData || !screenDelta) {
+    if (!screenDelta) {
       return {
         startPadding: 0,
         endPadding: 0,

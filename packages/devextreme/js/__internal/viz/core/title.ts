@@ -16,8 +16,9 @@ import { extend } from '@js/core/utils/extend';
 import { isString as _isString } from '@js/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { LayoutTargetOptions } from '@ts/viz/core/layout';
-import type { AlignedLayoutRect, LayoutRect } from '@ts/viz/core/layout_element';
+import type { AlignedLayoutRect } from '@ts/viz/core/layout_element';
 import { LayoutElement } from '@ts/viz/core/layout_element';
+import type { BBox, Bounds } from '@ts/viz/core/types';
 
 import { enumParser, patchFontOptions as _patchFontOptions } from './utils';
 
@@ -31,14 +32,7 @@ interface TitleParams {
   renderer: ThemeValue;
   cssClass?: string;
   root?: ThemeValue;
-  incidentOccurred?: (id: string) => void;
-}
-
-interface TitleMargin {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
+  incidentOccurred: (id: string) => void;
 }
 
 function hasText(text: ThemeValue): boolean {
@@ -55,8 +49,8 @@ function pickMarginValue(value: ThemeValue): number {
   return value >= 0 ? _Number(value) : DEFAULT_MARGIN;
 }
 
-function validateMargin(margin: ThemeValue): TitleMargin {
-  let result: TitleMargin;
+function validateMargin(margin: ThemeValue): Bounds {
+  let result: Bounds;
   if (margin >= 0) {
     result = {
       left: _Number(margin), top: _Number(margin), right: _Number(margin), bottom: _Number(margin),
@@ -73,7 +67,7 @@ function validateMargin(margin: ThemeValue): TitleMargin {
   return result;
 }
 
-function checkRect(rect: number[], boundingRect: LayoutRect): boolean {
+function checkRect(rect: number[], boundingRect: BBox): boolean {
   return rect[2] - rect[0] < boundingRect.width || rect[3] - rect[1] < boundingRect.height;
 }
 export let Title = class Title extends LayoutElement {
@@ -322,7 +316,6 @@ export let Title = class Title extends LayoutElement {
   }
 
   freeSpace(): void {
-    // @ts-expect-error the legend creates its title without incidentOccurred
     this._params.incidentOccurred('W2103');
     this._group.linkRemove();
     this._boundingRect.width = this._boundingRect.height = 0;

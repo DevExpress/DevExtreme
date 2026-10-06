@@ -1,22 +1,16 @@
 /* eslint-disable max-classes-per-file */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Coords, Size } from '@ts/viz/core/types';
 import { normalizeEnum } from '@ts/viz/core/utils';
 import type {
   IndicatorMeasure,
-  Point,
   RangeBarPositions,
-  Size,
   TextCloudOptions,
   TooltipParameters,
   TrackerSettings,
 } from '@ts/viz/gauges/base_indicators';
 import { BaseIndicator, BaseRangeBar, BaseTextCloudMarker } from '@ts/viz/gauges/base_indicators';
-
-export interface LinearLayout {
-  x: number;
-  y: number;
-}
 
 function isInverted(options: ThemeValue): boolean {
   return options.vertical
@@ -104,7 +98,7 @@ class SimpleIndicator extends BaseIndicator {
     delete this._element;
   }
 
-  measure(layout: LinearLayout): IndicatorMeasure {
+  measure(layout: Coords): IndicatorMeasure {
     const p = this.vertical ? layout.x : layout.y;
     return {
       min: p - this._options.length / 2,
@@ -257,7 +251,7 @@ class TriangleMarker extends SimpleIndicator {
     return { points: [x1, y1, x1, y2, x2, y2, x2, y1] };
   }
 
-  measure(layout: LinearLayout): IndicatorMeasure {
+  measure(layout: Coords): IndicatorMeasure {
     const length = Number(this._options.length);
     let minBound = this.vertical ? layout.x : layout.y;
     let maxBound = minBound;
@@ -307,7 +301,7 @@ class TextCloud extends BaseTextCloudMarker {
     return { x: position, y: this._options.y, type: this._inverted ? 'right-top' : 'right-bottom' };
   }
 
-  measure(layout: LinearLayout): IndicatorMeasure {
+  measure(layout: Coords): IndicatorMeasure {
     const arrowLength = Number(this._options.arrowLength) || 0;
 
     this._measureText();
@@ -319,7 +313,7 @@ class TextCloud extends BaseTextCloudMarker {
     return { min: center - arrowLength - textSize, max: center, indent: 0 };
   }
 
-  _correctCloudType(type: string, { x, y }: Point, { width, height }: Size): string {
+  _correctCloudType(type: string, { x, y }: Coords, { width, height }: Size): string {
     let result = type;
     if (type === 'right-top' || type === 'right-bottom') {
       if ((x - width) < this._translator.getCodomainStart()) {
@@ -474,14 +468,14 @@ class RangeBar extends BaseRangeBar {
     this._line.attr({ points }).sharp();
   }
 
-  _getTooltipPosition(): Point {
+  _getTooltipPosition(): Coords {
     const crossCenter = (this._minSide + this._maxSide) / 2;
     const alongCenter = (this._basePosition + this._actualPosition) / 2;
 
     return this.vertical ? { x: crossCenter, y: alongCenter } : { x: alongCenter, y: crossCenter };
   }
 
-  measure(layout: LinearLayout): IndicatorMeasure {
+  measure(layout: Coords): IndicatorMeasure {
     const size = Number(this._options.size);
     const textIndent = Number(this._options.text.indent);
     let minBound = this.vertical ? layout.x : layout.y;

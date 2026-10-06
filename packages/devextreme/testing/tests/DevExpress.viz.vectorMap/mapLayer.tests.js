@@ -454,11 +454,10 @@ QUnit.test('Proxy - get elements', function(assert) {
 });
 
 QUnit.test('Proxy - clear selection', function(assert) {
-    const arg = { tag: 'arg' };
     const spy = sinon.spy(this.layer, 'clearSelection');
 
-    assert.strictEqual(this.layer.proxy.clearSelection(arg), this.layer.proxy, 'return value');
-    assert.deepEqual(spy.lastCall.args, [arg], 'inner method is called');
+    assert.strictEqual(this.layer.proxy.clearSelection(), this.layer.proxy, 'return value');
+    assert.deepEqual(spy.lastCall.args, [], 'inner method is called');
 });
 
 const environmentWithData = {

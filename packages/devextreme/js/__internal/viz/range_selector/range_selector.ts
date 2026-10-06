@@ -24,6 +24,7 @@ import { plugin as exportPlugin } from '@ts/viz/core/export';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
+import type { Bounds } from '@ts/viz/core/types';
 import {
   convertVisualRangeObject,
   getCategoriesInfo,
@@ -60,13 +61,6 @@ const SEMIDISCRETE_GRID_SPACING_FACTOR = 50;
 const DEFAULT_AXIS_DIVISION_FACTOR = 30;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
 const DEFAULT_LOGARITHM_BASE = 10;
-
-interface Indents {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-}
 
 interface TickIntervalsInfo {
   tickInterval: ThemeValue;
@@ -144,7 +138,7 @@ function calculateIndents(
   sliderMarkerOptions: ThemeValue,
   indentOptions: ThemeValue,
   tickIntervalsInfo: TickIntervalsInfo,
-): Indents {
+): Bounds {
   let leftScaleLabelWidth = 0;
   let rightScaleLabelWidth = 0;
   const ticks = scale.type === 'semidiscrete' ? scale.customTicks : tickIntervalsInfo.ticks;
@@ -986,11 +980,11 @@ class RangeSelector extends BaseWidget {
 
   _axis!: ThemeValue;
 
-  _rangeView;
+  declare _rangeView: InstanceType<typeof RangeView>;
 
-  _slidersController;
+  declare _slidersController: InstanceType<typeof SlidersController>;
 
-  _tracker;
+  declare _tracker: InstanceType<typeof Tracker>;
 
   _clientRect!: number[];
 
@@ -1055,7 +1049,6 @@ class RangeSelector extends BaseWidget {
     this._rangeView = new RangeView({
       renderer,
       root: rangeViewGroup,
-      translator: this._axis.getTranslator(),
     });
 
     this._slidersController = new SlidersController({
@@ -1410,7 +1403,9 @@ class RangeSelector extends BaseWidget {
     this._tracker.update(!this._axis.getTranslator().getBusinessRange().isEmpty(), behavior);
   }
 
-  _createSeriesDataSource(chartOptions: ThemeValue): ThemeValue {
+  _createSeriesDataSource(
+    chartOptions: ThemeValue,
+  ): InstanceType<typeof SeriesDataSource> | undefined {
     // TODO: This code can be executed when data source is not loaded (it is an error)!
     const dataSource = this._dataSourceItems();
     const scaleOptions = this._getOption('scale');
