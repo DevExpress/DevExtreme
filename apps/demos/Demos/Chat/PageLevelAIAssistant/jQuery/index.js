@@ -282,7 +282,7 @@ $(() => {
             useSubmitBehavior: true,
             width: '120px',
             onClick: () => {
-              const formData = formInstance.option("formData");
+              const formData = formInstance.option('formData');
               formInstance.reset(formData);
               toastInstance.show();
             },
