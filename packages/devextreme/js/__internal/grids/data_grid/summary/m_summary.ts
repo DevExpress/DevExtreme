@@ -10,7 +10,7 @@ import type { GroupData } from '@js/ui/data_grid';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
-import type { RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { RawItemData, RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
