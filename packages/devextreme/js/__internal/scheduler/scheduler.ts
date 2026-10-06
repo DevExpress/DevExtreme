@@ -1697,6 +1697,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       || horizontalVirtualScrollingAllowed
       || isTimelineView(currentViewOptions.type);
 
+    // @ts-expect-error the work space options are merged
     const workSpaceOptions = extend({
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
@@ -2371,7 +2372,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       {},
       rawAppointment,
       newRawTargetedAppointment,
-    ) as SafeAppointment;
+    );
 
     const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
 

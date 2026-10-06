@@ -1268,6 +1268,7 @@ export class FileItemsController {
     const rootDirectory = new FileSystemItem(null, '', true);
 
     const result = this._createDirectoryInfo(rootDirectory, null);
+    // @ts-expect-error the directory info gets a display name
     result.displayName = text || DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return result;

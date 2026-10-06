@@ -297,6 +297,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       disabledNodeSelectionMode: 'recursiveAndAll',
     };
 
+    // @ts-expect-error the options are merged with the defaults
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(true, defaultOptions, {
       integrationOptions: {
@@ -1805,6 +1806,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   ): void {
     const $itemElement = $(initiator).closest(`.${NODE_CLASS}`).children(`.${ITEM_CLASS}`);
 
+    // @ts-expect-error the action args are merged
     return action(extend(this._extendActionArgs($itemElement), actionArgs));
   }
 

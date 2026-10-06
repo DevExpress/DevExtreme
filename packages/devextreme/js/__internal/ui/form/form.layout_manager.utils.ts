@@ -193,6 +193,7 @@ function _convertToLabelOptions({
   const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(
     item.editorType,
   );
+  // @ts-expect-error the label options are merged
   const labelOptions: LabelOptions = extend(
     {
       showColon: showColonAfterLabel,

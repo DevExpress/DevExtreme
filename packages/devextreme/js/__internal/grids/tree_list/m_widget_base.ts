@@ -103,8 +103,10 @@ class TreeList extends GridCoreWidget<dxTreeListOptions> {
       gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
     }
 
+    // @ts-expect-error the grid is the component instance
     treeListCore.processModules(that, treeListCore);
 
+    // @ts-expect-error the grid is the component instance
     treeListCore.callModuleItemsMethod(this, 'init');
   }
 

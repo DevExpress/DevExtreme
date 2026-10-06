@@ -745,8 +745,11 @@ class ColorView extends Editor<ColorViewProperties> {
     });
 
     if (EditorConstructor === NumberBox) {
+      // @ts-expect-error the editor options get min, max and step
       editorOptions.min = options.min || 0;
+      // @ts-expect-error the editor options get min, max and step
       editorOptions.max = options.max || 255;
+      // @ts-expect-error the editor options get min, max and step
       editorOptions.step = options.step || 1;
     }
 

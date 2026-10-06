@@ -414,6 +414,7 @@ export class RowsView extends ColumnsView {
     const dxScrollableOptions = that._createScrollableOptions();
     const scrollHandler = that._handleScroll.bind(that);
 
+    // @ts-expect-error the options get the scroll handler
     dxScrollableOptions.onScroll = scrollHandler;
 
     that._scrollable = that._createComponent($element, Scrollable, dxScrollableOptions);

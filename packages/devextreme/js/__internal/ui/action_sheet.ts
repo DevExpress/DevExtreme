@@ -171,6 +171,7 @@ class ActionSheet extends CollectionWidget<Properties> {
   }
 
   _createPopover(): void {
+    // @ts-expect-error the popover options are merged
     this._popup = this._createComponent(this._$popup, Popover, extend(this._overlayConfig(), {
       width: this.option('width') || 200,
       height: this.option('height') || 'auto',

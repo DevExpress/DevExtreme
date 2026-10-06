@@ -324,6 +324,7 @@ let selectStrategy = function (options, data) {
     sample = data.geometry(data.item(0));
     type = strategiesByType[type] ? type : guessTypeByData(sample);
     _extend(strategy, strategiesByType[type]);
+    // @ts-expect-error the strategy gets its type
     strategy.fullType = strategy.type = type;
     if (strategiesByGeometry[type]) {
       _extend(strategy, strategiesByGeometry[type](sample));
@@ -331,7 +332,9 @@ let selectStrategy = function (options, data) {
     if (strategiesByElementType[type]) {
       elementType = strategiesByElementType[type][elementType] ? elementType : strategiesByElementType[type]._default;
       _extend(strategy, strategiesByElementType[type][elementType]);
+      // @ts-expect-error the strategy gets its element type
       strategy.elementType = elementType;
+      // @ts-expect-error the strategy gets its type
       strategy.fullType += `:${elementType}`;
     }
   }

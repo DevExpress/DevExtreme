@@ -20,8 +20,43 @@ export const extendFromObject = function extendFromObject(
   return result;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers use its members
-export const extend: any = function extend(...args: unknown[]) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
+type MergedSource<T> = 0 extends 1 & T ? any : [T] extends [null | undefined]
+  ? unknown
+  : NonNullable<T>;
+
+type Merged<TSources extends readonly unknown[]> = TSources extends readonly [
+  infer THead,
+  ...infer TTail,
+]
+  ? MergedSource<THead> & Merged<TTail>
+  : unknown;
+
+interface Extend {
+  <TTarget extends object, TSources extends unknown[]>(
+    target: TTarget,
+    ...sources: TSources
+  ): TTarget & Merged<TSources>;
+  <TTarget extends object, TSources extends unknown[]>(
+    deep: true,
+    target: TTarget,
+    ...sources: TSources
+  ): TTarget & Merged<TSources>;
+  <TSources extends unknown[]>(
+    deep: false | null | undefined,
+    ...sources: TSources
+  ): Merged<TSources>;
+  <TSources extends unknown[]>(
+    deep: boolean,
+    target: null | undefined,
+    ...sources: TSources
+  ): Merged<TSources>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers are not typed
+  (...args: any[]): any;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the overloads type the result
+export const extend: Extend = function extend(...args: unknown[]): any {
   let target = (args[0] || {}) as Dictionary | boolean;
 
   let i = 1;

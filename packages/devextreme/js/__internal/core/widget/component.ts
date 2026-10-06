@@ -399,6 +399,7 @@ export class Component<
         // eslint-disable-next-line no-param-reassign
         e = { actionValue: e };
       }
+      // @ts-expect-error the action options are merged
       action = action || new Action(actionSource, extend({}, config, this._defaultActionConfig()));
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
