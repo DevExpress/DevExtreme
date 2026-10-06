@@ -1845,6 +1845,9 @@ importers:
       typescript:
         specifier: catalog:tools
         version: 5.9.3
+      typescript-min:
+        specifier: npm:typescript@4.9.5
+        version: typescript@4.9.5
     publishDirectory: npm
 
   packages/devextreme-scss:
@@ -2037,6 +2040,9 @@ importers:
       typescript:
         specifier: catalog:tools
         version: 5.9.3
+      typescript-min:
+        specifier: npm:typescript@4.9.5
+        version: typescript@4.9.5
       vue:
         specifier: 3.2.47
         version: 3.2.47
