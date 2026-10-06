@@ -1,6 +1,6 @@
 import type { FilterDescriptor } from '@js/data';
 import { isString } from '@ts/core/utils/m_type';
-import { getFilterExpression } from '@ts/filter_builder/m_utils';
+import { getFilterExpression } from '@ts/filter_builder/utils';
 
 import type { Column } from '../columns_controller/types';
 import { addDataFieldToComputedColumns } from '../columns_controller/utils';
