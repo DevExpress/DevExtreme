@@ -10,21 +10,24 @@ import $ from '@js/core/renderer';
 // @ts-expect-error
 import { grep, normalizeKey } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setOuterHeight, setOuterWidth } from '@js/core/utils/size';
 import { isDeferred, isPlainObject } from '@js/core/utils/type';
-import type {
-  AppointmentClickEvent,
-  AppointmentContextMenuEvent,
-  AppointmentDblClickEvent,
-  AppointmentRenderedEvent,
-} from '@js/ui/scheduler';
+import type { DxEvent } from '@js/events/events.types';
+import type { AppointmentDblClickEvent } from '@js/ui/scheduler';
+import type { TemplateBase } from '@ts/core/templates/template_base';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
+import type Resizable from '@ts/ui/resizable/resizable';
+import type { ResizeActionArgs } from '@ts/ui/resizable/types';
 
 import type NotifyScheduler from '../base/widget_notify_scheduler';
 import {
@@ -34,12 +37,20 @@ import {
   APPOINTMENT_ITEM_CLASS,
 } from '../classes';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
+import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import type { TimeZoneCalculator } from '../r1/timezone_calculator/index';
 import type { DesktopTooltipStrategy } from '../tooltip_strategies/desktop_tooltip_strategy';
 import type { MobileTooltipStrategy } from '../tooltip_strategies/mobile_tooltip_strategy';
-import type { CompactAppointmentOptions, DOMMetaData, ScrollToGroupValuesOrOptions } from '../types';
+import type {
+  CompactAppointmentOptions,
+  DOMMetaData,
+  SafeAppointment,
+  ScrollToGroupValuesOrOptions,
+  TargetedAppointment,
+} from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
+import { DateFormatType } from '../utils/get_date_text';
 import {
   getTargetedAppointment,
   getTargetedAppointmentFromInfo,
@@ -59,12 +70,18 @@ import type {
 import type ViewDataProvider from '../workspaces/view_model/view_data_provider';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
+import type { AppointmentProperties } from './appointment/m_types';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
 import { AppointmentsKeyboardNavigation } from './m_appointments_kbn';
-import { DateFormatType } from './m_text_utils';
 import { getAppointmentDateRange } from './resizing/m_core';
+import type { DateRange } from './resizing/types';
 import { isNeedToAdd } from './utils/get_arrays_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
+
+type CollectionItemAction<K extends 'onItemRendered' | 'onItemClick' | 'onItemContextMenu'> = Exclude<
+  CollectionWidgetEditProperties<SchedulerAppointments>[K],
+  string | null | undefined
+>;
 
 export interface AppointmentCollectionOptions {
   getResourceManager: () => ResourceManager;
@@ -78,9 +95,9 @@ export interface AppointmentCollectionOptions {
   appointmentTooltip: MobileTooltipStrategy | DesktopTooltipStrategy;
   dataAccessors: AppointmentDataAccessor;
   notifyScheduler: NotifyScheduler;
-  onItemRendered: (args: AppointmentRenderedEvent) => void;
-  onItemClick: (args: AppointmentClickEvent) => void;
-  onItemContextMenu: (args: AppointmentContextMenuEvent) => void;
+  onItemRendered: CollectionItemAction<'onItemRendered'>;
+  onItemClick: CollectionItemAction<'onItemClick'>;
+  onItemContextMenu: CollectionItemAction<'onItemContextMenu'>;
   onAppointmentDblClick: (args: AppointmentDblClickEvent) => void;
   tabIndex: number;
   focusStateEnabled: boolean;
@@ -100,11 +117,36 @@ export interface AppointmentCollectionOptions {
   onContentReady: () => void;
 }
 
+export interface AppointmentCollectionProperties
+  extends Omit<
+    CollectionWidgetEditProperties<SchedulerAppointments>,
+    keyof AppointmentCollectionOptions | 'items'
+  >,
+  AppointmentCollectionOptions {
+  items?: AppointmentViewModelPlain[];
+  fixedContainer?: dxElementWrapper | null;
+  allDayContainer?: dxElementWrapper | null;
+}
+
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
 const DBLCLICK_EVENT_NAME = addNamespace(dblclickEvent, 'dxSchedulerAppointment');
 
 const toMs = dateUtils.dateToMilliseconds;
+
+type AppointmentResizeEvent = ResizeActionArgs & {
+  element: Element;
+  component: Resizable;
+};
+
+type ResizableArea = NonNullable<ReturnType<SubscribeMethods['getResizableAppointmentArea']>>
+| dxElementWrapper;
+
+interface AppointmentResizableConfig {
+  area: ResizableArea;
+  onResizeStart: (e: AppointmentResizeEvent) => void;
+  onResizeEnd: (e: AppointmentResizeEvent) => void;
+}
 
 interface ViewModelDiff {
   item: AppointmentViewModelPlain;
@@ -114,19 +156,19 @@ interface ViewModelDiff {
   needToUpdateItems?: true;
 }
 
-class SchedulerAppointments extends CollectionWidget<any> {
+class SchedulerAppointments extends CollectionWidget<AppointmentCollectionProperties> {
   // NOTE: The key of this array is `sortedIndex` of appointment rendered in Element
   $itemBySortedIndex!: dxElementWrapper[];
 
-  _appointmentClickTimeout: any;
+  _appointmentClickTimeout?: ReturnType<typeof setTimeout>;
 
   _currentAppointmentSettings?: AppointmentViewModelPlain;
 
-  _preventSingleAppointmentClick: any;
+  _preventSingleAppointmentClick!: boolean;
 
-  _initialSize: any;
+  _initialSize?: { width: number; height: number };
 
-  _initialCoordinates: any;
+  _initialCoordinates?: { left: number; top: number };
 
   private _kbn!: AppointmentsKeyboardNavigation;
 
@@ -146,38 +188,52 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return this.invoke('isVirtualScrolling');
   }
 
-  get appointmentDataSource() {
+  get appointmentDataSource(): AppointmentDataSource {
     return this.option('getAppointmentDataSource')();
   }
 
   get dataAccessors(): AppointmentDataAccessor {
-    return this.option('dataAccessors') as AppointmentDataAccessor;
+    return this.option('dataAccessors');
   }
 
   get sortedItems(): SortedEntity[] {
-    return this.option('getSortedAppointments')() as SortedEntity[];
+    return this.option('getSortedAppointments')();
   }
 
   getResourceManager(): ResourceManager {
     return this.option('getResourceManager')();
   }
 
-  notifyObserver(subject, args) {
-    const notifyScheduler: any = this.option('notifyScheduler');
+  notifyObserver<Subject extends SubscribeKey>(
+    subject: Subject,
+    args?: Parameters<SubscribeMethods[Subject]>[0] | Record<string, never>,
+  ): void {
+    const notifyScheduler = this.option('notifyScheduler');
     if (notifyScheduler) {
+      // @ts-expect-error the subscribes that are notified take a single argument object
       notifyScheduler.invoke(subject, args);
     }
   }
 
-  invoke(funcName: string, ...args) {
-    const notifyScheduler: any = this.option('notifyScheduler');
+  invoke<Subject extends SubscribeKey>(
+    funcName: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): ReturnType<SubscribeMethods[Subject]>;
+
+  invoke<Subject extends SubscribeKey>(
+    funcName: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): ReturnType<SubscribeMethods[Subject]> | undefined {
+    const notifyScheduler = this.option('notifyScheduler');
 
     if (notifyScheduler) {
       return notifyScheduler.invoke(funcName, ...args);
     }
+
+    return undefined;
   }
 
-  _dispose() {
+  _dispose(): void {
     clearTimeout(this._appointmentClickTimeout);
 
     super._dispose();
@@ -198,13 +254,13 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return $($item).data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain;
   }
 
-  _moveFocus() {}
+  _moveFocus(): void {}
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this._kbn.getFocusableItems();
   }
 
-  _renderFocusTarget() {
+  _renderFocusTarget(): void {
     if (this.$itemBySortedIndex?.length) {
       this._kbn.resetTabIndex(this._kbn.getFirstVisibleItem());
     }
@@ -231,21 +287,22 @@ class SchedulerAppointments extends CollectionWidget<any> {
     }
   }
 
-  _focusInHandler(e) {
+  _focusInHandler(e: DxEvent): void {
     super._focusInHandler(e);
     this._kbn.focusInHandler(e);
   }
 
-  _focusOutHandler(e) {
+  _focusOutHandler(e: DxEvent): void {
     this._kbn.focusOutHandler();
     super._focusOutHandler(e);
   }
 
-  _eventBindingTarget() {
+  _eventBindingTarget(): dxElementWrapper {
     return this._itemContainer();
   }
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): AppointmentCollectionProperties {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       noDataText: null,
       activeStateEnabled: true,
@@ -258,7 +315,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
       allowAllDayResize: true,
       onAppointmentDblClick: null,
       groups: [],
-      resources: [],
     });
   }
 
@@ -278,7 +334,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return diff;
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<AppointmentCollectionProperties>): void {
     switch (args.name) {
       case 'items':
         this._cleanFocusState();
@@ -438,8 +494,8 @@ class SchedulerAppointments extends CollectionWidget<any> {
     $allDayFragment: dxElementWrapper,
   ) => void): void {
     if (this.isVirtualScrolling) {
-      const $commonFragment = $(domAdapter.createDocumentFragment() as any);
-      const $allDayFragment = $(domAdapter.createDocumentFragment() as any);
+      const $commonFragment = $(domAdapter.createDocumentFragment());
+      const $allDayFragment = $(domAdapter.createDocumentFragment());
 
       renderFunction($commonFragment, $allDayFragment);
 
@@ -453,11 +509,11 @@ class SchedulerAppointments extends CollectionWidget<any> {
     }
   }
 
-  _refreshActiveDescendant() {
+  _refreshActiveDescendant(): void {
     // override to do nothing
   }
 
-  _attachAppointmentsEvents() {
+  _attachAppointmentsEvents(): void {
     this._attachClickEvent();
     this._attachHoldEvent();
     this._attachContextMenuEvent();
@@ -468,15 +524,19 @@ class SchedulerAppointments extends CollectionWidget<any> {
     this._attachHoverEvents();
   }
 
-  _clearDropDownItemsElements() {
+  _clearDropDownItemsElements(): void {
     this.invoke('clearCompactAppointments');
   }
 
-  _findItemElementByItem(item) {
-    const result: any = [];
-    const that: any = this;
+  // @ts-expect-error returns every element of the item, the base returns one element
+  _findItemElementByItem(item: unknown): dxElementWrapper[] {
+    const result: dxElementWrapper[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that = this;
 
-    (this as any).itemElements().each(function () {
+    // @ts-expect-error the each() callback may return nothing, the d.ts requires a boolean
+    this.itemElements().each(function () {
+      // eslint-disable-next-line @typescript-eslint/no-invalid-this
       const $item = $(this);
       if ($item.data(that._itemDataKey()) === item) {
         result.push($item);
@@ -486,11 +546,11 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return result;
   }
 
-  _itemClass() {
+  _itemClass(): string {
     return APPOINTMENT_ITEM_CLASS;
   }
 
-  _itemContainer() {
+  _itemContainer(): dxElementWrapper {
     const $container = super._itemContainer();
     let $result = $container;
     const $allDayContainer = this.option('allDayContainer');
@@ -502,7 +562,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return $result;
   }
 
-  _cleanItemContainer() {
+  _cleanItemContainer(): void {
     super._cleanItemContainer();
     const $allDayContainer = this.option('allDayContainer');
 
@@ -511,7 +571,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     }
   }
 
-  _init() {
+  _init(): void {
     super._init();
     this.$itemBySortedIndex = [];
     this._kbn = new AppointmentsKeyboardNavigation(this);
@@ -521,7 +581,11 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   // TODO: used externally in scheduler.ts
-  _renderAppointmentTemplate($container, appointment, model) {
+  _renderAppointmentTemplate(
+    $container: dxElementWrapper,
+    appointment: SafeAppointment,
+    model: { targetedAppointmentData: TargetedAppointment },
+  ): void {
     const config = {
       isAllDay: appointment.allDay,
       isRecurrence: appointment.recurrenceRule,
@@ -560,30 +624,36 @@ class SchedulerAppointments extends CollectionWidget<any> {
     }
   }
 
-  _executeItemRenderAction(index, itemData, itemElement) {
-    const action = (this as any)._getItemRenderAction();
+  _executeItemRenderAction(
+    index: number,
+    itemData: SafeAppointment,
+    itemElement: HTMLElement,
+  ): void {
+    const action = this._getItemRenderAction();
     if (action) {
+      // @ts-expect-error the scheduler maps the item info to the appointment event fields
       action(this.invoke('mapAppointmentFields', { itemData, itemElement }));
     }
     delete this._currentAppointmentSettings;
   }
 
-  _itemClickHandler(e) {
+  _itemClickHandler(e: DxEvent): void {
     super._itemClickHandler(e, {}, {
-      afterExecute: function (e) {
-        this._processItemClick(e.args[0].event);
+      afterExecute: function (actionInfo): void {
+        this._processItemClick(actionInfo.args[0].event);
       }.bind(this),
     });
   }
 
-  _processItemClick(e) {
+  _processItemClick(e: DxEvent): void {
     const $target = $(e.currentTarget);
-    const data = (this as any)._getItemData($target);
+    const data = this._getItemData($target);
 
     if ($target.is('.dx-scheduler-appointment-collector')) {
       return;
     }
 
+    // @ts-expect-error a keydown event returns before isFakeClickEvent reads the mouse fields
     if (e.type === 'keydown' || isFakeClickEvent(e)) {
       this.notifyObserver('showEditAppointmentPopup', { data, target: $target });
       return;
@@ -598,35 +668,38 @@ class SchedulerAppointments extends CollectionWidget<any> {
     }, 300);
   }
 
-  _extendActionArgs($itemElement) {
+  // @ts-expect-error the scheduler maps the item info to the appointment event fields
+  _extendActionArgs($itemElement: dxElementWrapper): ReturnType<SubscribeMethods['mapAppointmentFields']> {
     const args = super._extendActionArgs($itemElement);
 
     return this.invoke('mapAppointmentFields', args);
   }
 
-  _render() {
+  _render(): void {
     super._render();
     this._attachAppointmentDblClick();
   }
 
-  _attachAppointmentDblClick() {
-    const that: any = this;
+  _attachAppointmentDblClick(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that = this;
     const itemSelector = that._itemSelector();
     const itemContainer = this._itemContainer();
 
     eventsEngine.off(itemContainer, DBLCLICK_EVENT_NAME, itemSelector);
     eventsEngine.on(itemContainer, DBLCLICK_EVENT_NAME, itemSelector, (e) => {
       that._itemDXEventHandler(e, 'onAppointmentDblClick', {}, {
-        afterExecute(e) {
-          that._dblClickHandler(e.args[0].event);
+        afterExecute(actionInfo): void {
+          // @ts-expect-error args holds the arguments of the dblclick action
+          that._dblClickHandler(actionInfo.args[0].event);
         },
       });
     });
   }
 
-  _dblClickHandler(e) {
+  _dblClickHandler(e: DxEvent): void {
     const $targetAppointment = $(e.currentTarget);
-    const appointmentData = (this as any)._getItemData($targetAppointment);
+    const appointmentData = this._getItemData($targetAppointment);
 
     clearTimeout(this._appointmentClickTimeout);
     this._preventSingleAppointmentClick = true;
@@ -654,13 +727,16 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return $item;
   }
 
-  _getItemContent($itemFrame) {
+  _getItemContent($itemFrame: dxElementWrapper): dxElementWrapper {
     $itemFrame.data(APPOINTMENT_SETTINGS_KEY, this._currentAppointmentSettings);
     const $itemContent = super._getItemContent($itemFrame);
     return $itemContent;
   }
 
-  _createItemByTemplate(itemTemplate, renderArgs) {
+  _createItemByTemplate(
+    itemTemplate: TemplateBase,
+    renderArgs: ItemRenderInfo<SafeAppointment>,
+  ): dxElementWrapper {
     const { itemData, container, index } = renderArgs;
     const parent = $(container).parent();
 
@@ -670,6 +746,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
         .attr('hidden', true),
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return itemTemplate.render({
       model: {
         appointmentData: itemData,
@@ -682,12 +759,13 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
   _getAppointmentContainer(allDay: boolean): dxElementWrapper {
     const $allDayContainer = this.option('allDayContainer');
-    const $container = (this as any).itemsContainer().not($allDayContainer);
+    // @ts-expect-error not() also takes an element, the d.ts declares a selector only
+    const $container = this.itemsContainer().not($allDayContainer);
 
     return allDay && $allDayContainer ? $allDayContainer : $container;
   }
 
-  _postprocessRenderItem(args) {
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<SafeAppointment>): void {
     this.renderAppointment(
       args.itemElement,
       this._currentAppointmentSettings as AppointmentAgendaViewModel | AppointmentItemViewModel,
@@ -718,7 +796,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     }
 
     const { groups, groupsLeafs, resourceById } = this.getResourceManager();
-    const config: any = {
+    const config: Partial<AppointmentProperties> = {
       data: settings.itemData,
       groupIndex: settings.groupIndex,
       groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
@@ -733,7 +811,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
       getResourceManager: this.option('getResourceManager'),
     };
 
-    (this as any)._createComponent(element, AgendaAppointment, config);
+    this._createComponent(element, AgendaAppointment, config);
   }
 
   renderGeneralAppointment(
@@ -746,7 +824,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     const { allDay } = settings;
     const { groups, groupsLeafs, resourceById } = this.getResourceManager();
     const isGroupByDate = this.option('groupByDate');
-    const config: any = {
+    const config: Partial<AppointmentProperties> = {
       data: settings.itemData,
       groupIndex: settings.groupIndex,
       groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
@@ -773,12 +851,12 @@ class SchedulerAppointments extends CollectionWidget<any> {
       getResourceManager: this.option('getResourceManager'),
     };
 
-    (this as any)._createComponent(element, Appointment, config);
+    this._createComponent(element, Appointment, config);
   }
 
-  _applyResourceDataAttr($appointment) {
+  _applyResourceDataAttr($appointment: dxElementWrapper): void {
     const { resources } = this.getResourceManager();
-    const rawAppointment = (this as any)._getItemData($appointment);
+    const rawAppointment = this._getItemData($appointment);
     const appointmentGroups = getAppointmentGroupValues(rawAppointment, resources);
 
     Object.entries(appointmentGroups).forEach(([resourceIndex, resourceIds]) => {
@@ -790,10 +868,13 @@ class SchedulerAppointments extends CollectionWidget<any> {
     });
   }
 
-  _resizableConfig(appointmentData, itemSetting) {
+  _resizableConfig(
+    appointmentData: SafeAppointment,
+    itemSetting: AppointmentItemViewModel,
+  ): AppointmentResizableConfig {
     return {
       area: this._calculateResizableArea(itemSetting, appointmentData),
-      onResizeStart: (e) => {
+      onResizeStart: (e): void => {
         const $appointment = $(e.element);
 
         this._isResizing = true;
@@ -806,22 +887,26 @@ class SchedulerAppointments extends CollectionWidget<any> {
           );
 
           e.component.option('area', updatedArea);
+          // @ts-expect-error the resize start action passes the original drag event
           e.component._renderDragOffsets(e.event);
         }
 
         this._initialSize = { width: e.width, height: e.height };
         this._initialCoordinates = locate($appointment);
       },
-      onResizeEnd: (e) => {
+      onResizeEnd: (e): void => {
         this._isResizing = false;
         this._resizeEndHandler(e);
       },
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _calculateResizableArea(itemSetting, appointmentData) {
-    const area = (this as any).$element().closest('.dx-scrollable-content');
+  _calculateResizableArea(
+    itemSetting: { left?: number; groupIndex?: number; allDay?: boolean },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    appointmentData: unknown,
+  ): ResizableArea {
+    const area = this.$element().closest('.dx-scrollable-content');
 
     return this.invoke('getResizableAppointmentArea', {
       coordinates: {
@@ -833,18 +918,24 @@ class SchedulerAppointments extends CollectionWidget<any> {
     }) || area;
   }
 
-  _resizeEndHandler(e) {
+  _resizeEndHandler(e: AppointmentResizeEvent): void {
     const $element = $(e.element);
 
-    const { allDay, info } = $element.data(APPOINTMENT_SETTINGS_KEY) as any;
-    const sourceAppointment = (this as any)._getItemData($element);
+    const { allDay, info } = $element
+      .data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentItemViewModel;
+    const sourceAppointment = this._getItemData($element);
     const viewOffset = this.invoke('getViewOffsetMs');
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let dateRange: { startDate: Date; endDate: Date };
 
     if (allDay) {
       dateRange = this.resizeAllDay(e);
     } else {
-      const startDate = this._getEndResizeAppointmentStartDate(e, sourceAppointment, info.appointment);
+      const startDate = this._getEndResizeAppointmentStartDate(
+        e,
+        sourceAppointment,
+        info.appointment,
+      );
       const { endDate } = info.appointment;
       const shiftedStartDate = dateUtilsTs.addOffsets(startDate, -viewOffset);
       const shiftedEndDate = dateUtilsTs.addOffsets(endDate, -viewOffset);
@@ -862,16 +953,18 @@ class SchedulerAppointments extends CollectionWidget<any> {
     );
   }
 
-  resizeAllDay(e) {
+  resizeAllDay(e: AppointmentResizeEvent): DateRange {
     const $element = $(e.element);
     const timeZoneCalculator = this.option('timeZoneCalculator');
 
     return getAppointmentDateRange({
       handles: e.handles,
-      appointmentSettings: $element.data(APPOINTMENT_SETTINGS_KEY) as any,
+      appointmentSettings: $element
+        .data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentItemViewModel,
       isVerticalGroupedWorkSpace: this.option('isVerticalGroupedWorkSpace')(),
       appointmentRect: getBoundingRect($element[0]),
       parentAppointmentRect: getBoundingRect($element.parent()[0]),
+      // @ts-expect-error the work space exists while an appointment is resized
       viewDataProvider: this.option('getViewDataProvider')(),
       isDateAndTimeView: this.option('isDateAndTimeView')(),
       startDayHour: this.invoke('getStartDayHour'),
@@ -879,18 +972,19 @@ class SchedulerAppointments extends CollectionWidget<any> {
       timeZoneCalculator,
       dataAccessors: this.dataAccessors,
       rtlEnabled: this.option('rtlEnabled'),
+      // @ts-expect-error the work space exists while an appointment is resized
       DOMMetaData: this.option('getDOMElementsMetaData')(),
       viewOffset: this.invoke('getViewOffsetMs'),
     });
   }
 
   updateResizedAppointment(
-    $element,
+    $element: dxElementWrapper,
     dateRange: { startDate: Date; endDate: Date },
     dataAccessors: AppointmentDataAccessor,
-    timeZoneCalculator,
-  ) {
-    const sourceAppointment = (this as any)._getItemData($element);
+    timeZoneCalculator: TimeZoneCalculator,
+  ): void {
+    const sourceAppointment = this._getItemData($element);
     const gridAdapter = new AppointmentAdapter(
       sourceAppointment,
       dataAccessors,
@@ -909,7 +1003,8 @@ class SchedulerAppointments extends CollectionWidget<any> {
       .calculateDates(timeZoneCalculator, 'fromGrid')
       .calculateDates(timeZoneCalculator, 'toGrid');
 
-    const startDateDelta = gridAdapter.startDate.getTime() - convertedBackAdapter.startDate.getTime();
+    const startDateDelta = gridAdapter.startDate.getTime()
+      - convertedBackAdapter.startDate.getTime();
     const endDateDelta = gridAdapter.endDate.getTime() - convertedBackAdapter.endDate.getTime();
 
     gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, startDateDelta);
@@ -926,7 +1021,11 @@ class SchedulerAppointments extends CollectionWidget<any> {
     });
   }
 
-  _getEndResizeAppointmentStartDate(e, rawAppointment, appointmentInfo) {
+  _getEndResizeAppointmentStartDate(
+    e: AppointmentResizeEvent,
+    rawAppointment: SafeAppointment,
+    appointmentInfo: AppointmentItemViewModel['info']['appointment'],
+  ): Date {
     const timeZoneCalculator = this.option('timeZoneCalculator');
     const appointmentAdapter = new AppointmentAdapter(
       rawAppointment,
@@ -948,15 +1047,21 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return startDate;
   }
 
-  private getDateRange(e, startDate, endDate) {
-    const itemData = (this as any)._getItemData(e.element);
+  private getDateRange(
+    e: AppointmentResizeEvent,
+    startDate: Date,
+    endDate: Date,
+  ): { startDate: Date; endDate: Date } {
+    const itemData = this._getItemData(e.element);
     const deltaTime = this.invoke('getDeltaTime', e, this._initialSize, itemData);
     const renderingStrategyDirection = this.invoke('getRenderingStrategyDirection');
     let isStartDateChanged = false;
     const isAllDay = this.invoke('isAllDay', itemData);
     const needCorrectDates = this.invoke('needCorrectAppointmentDates') && !isAllDay;
-    let startTime;
-    let endTime;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let startTime: number;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let endTime: number;
 
     if (renderingStrategyDirection !== 'vertical' || isAllDay) {
       isStartDateChanged = this.option('rtlEnabled') ? e.handles.right : e.handles.left;
@@ -968,7 +1073,8 @@ class SchedulerAppointments extends CollectionWidget<any> {
       startTime = needCorrectDates
         ? this._correctStartDateByDelta(startDate, deltaTime)
         : startDate.getTime() - deltaTime;
-      startTime += timeZoneUtils.getTimezoneOffsetChangeInMs(startDate, endDate, startTime, endDate);
+      startTime += timeZoneUtils
+        .getTimezoneOffsetChangeInMs(startDate, endDate, startTime, endDate);
       endTime = endDate.getTime();
     } else {
       startTime = startDate.getTime();
@@ -984,7 +1090,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     };
   }
 
-  _correctEndDateByDelta(endDate, deltaTime) {
+  _correctEndDateByDelta(endDate: Date, deltaTime: number): number {
     const endDayHour = this.invoke('getEndDayHour');
     const startDayHour = this.invoke('getStartDayHour');
 
@@ -1009,7 +1115,8 @@ class SchedulerAppointments extends CollectionWidget<any> {
     if (result > maxDate.getTime() || result <= minDate.getTime()) {
       const tailOfCurrentDay = maxDate.getTime() - correctEndDate.getTime();
       const tailOfPrevDays = deltaTime - tailOfCurrentDay;
-      const correctedEndDate = new Date(correctEndDate).setDate(correctEndDate.getDate() + daysCount);
+      const correctedEndDate = new Date(correctEndDate)
+        .setDate(correctEndDate.getDate() + daysCount);
       const lastDay = new Date(correctedEndDate);
       lastDay.setHours(startDayHour, 0, 0, 0);
 
@@ -1018,7 +1125,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return result;
   }
 
-  _correctStartDateByDelta(startDate, deltaTime) {
+  _correctStartDateByDelta(startDate: Date, deltaTime: number): number {
     const endDayHour = this.invoke('getEndDayHour');
     const startDayHour = this.invoke('getStartDayHour');
 
@@ -1082,6 +1189,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
       sortedIndex: appointment.sortedIndex,
       width: appointment.width,
       height: appointment.height,
+      // @ts-expect-error onItemClick holds the scheduler onAppointmentClick action
       onAppointmentClick: this.option('onItemClick'),
       allowDrag: this.option('allowDrag'),
       isCompact: appointment.isCompact,
@@ -1118,7 +1226,9 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return result;
   }
 
-  moveAppointmentBack(dragEvent?) {
+  moveAppointmentBack(
+    dragEvent?: { cancel?: boolean | PromiseLike<boolean> | DeferredObj<boolean> } | null,
+  ): void {
     const $appointment = this._kbn.$focusTarget();
     const size = this._initialSize;
     const coords = this._initialCoordinates;
@@ -1129,6 +1239,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
       this._removeDragSourceClassFromDraggedAppointment();
 
       if (isDeferred(dragEvent.cancel)) {
+        // @ts-expect-error isDeferred() is not declared as a type guard
         dragEvent.cancel.resolve(true);
       } else {
         dragEvent.cancel = true;
@@ -1148,33 +1259,39 @@ class SchedulerAppointments extends CollectionWidget<any> {
     }
   }
 
-  focus() {
+  focus(): void {
     this._kbn.focus();
   }
 
-  _removeDragSourceClassFromDraggedAppointment() {
-    const $appointments = (this as any)._itemElements().filter(`.${APPOINTMENT_DRAG_SOURCE_CLASS}`);
+  _removeDragSourceClassFromDraggedAppointment(): void {
+    const $appointments = this._itemElements().filter(`.${APPOINTMENT_DRAG_SOURCE_CLASS}`);
 
+    // @ts-expect-error the each() callback may return nothing, the d.ts requires a boolean
     $appointments.each((_, element) => {
-      const appointmentInstance = ($(element) as any).dxSchedulerAppointment('instance');
+      // @ts-expect-error dxSchedulerAppointment is a jQuery plugin method
+      const appointmentInstance = $(element).dxSchedulerAppointment('instance');
 
       appointmentInstance.option('isDragSource', false);
     });
   }
 
-  _setDragSourceAppointment(appointment, settings) {
+  _setDragSourceAppointment(appointment: unknown, settings: AppointmentViewModelPlain): void {
     const $appointments = this._findItemElementByItem(appointment);
-    const { startDate, endDate } = settings.info.sourceAppointment;
+    const { startDate, endDate } = (settings as AppointmentItemViewModel).info.sourceAppointment;
     const { groupIndex } = settings;
 
     $appointments.forEach(($item) => {
-      const { info: itemInfo, groupIndex: itemGroupIndex } = $item.data(APPOINTMENT_SETTINGS_KEY);
+      const {
+        info: itemInfo,
+        groupIndex: itemGroupIndex,
+      } = $item.data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentItemViewModel;
 
       const {
         startDate: itemStartDate,
         endDate: itemEndDate,
       } = itemInfo.sourceAppointment;
 
+      // @ts-expect-error dxSchedulerAppointment is a jQuery plugin method
       const appointmentInstance = $item.dxSchedulerAppointment('instance');
       const isDragSource = startDate.getTime() === itemStartDate.getTime()
                 && endDate.getTime() === itemEndDate.getTime()
@@ -1184,31 +1301,33 @@ class SchedulerAppointments extends CollectionWidget<any> {
     });
   }
 
-  updateResizableArea() {
-    const $allResizableElements = (this as any).$element().find('.dx-scheduler-appointment.dx-resizable');
+  updateResizableArea(): void {
+    const $allResizableElements = this.$element().find('.dx-scheduler-appointment.dx-resizable');
 
-    const horizontalResizables = grep($allResizableElements, (el) => {
-      const $el: any = $(el);
+    const horizontalResizables = grep($allResizableElements, (el: Element): boolean => {
+      const $el = $(el);
+      // @ts-expect-error dxResizable is a jQuery plugin method
       const resizableInst = $el.dxResizable('instance');
       const { area, handles } = resizableInst.option();
 
       return (handles === 'right left' || handles === 'left right') && isPlainObject(area);
     });
 
-    each(horizontalResizables, (_, el) => {
-      const $el: any = $(el);
+    each(horizontalResizables, (_, el: Element): void => {
+      const $el = $(el);
       const position = locate($el);
-      const appointmentData = (this as any)._getItemData($el);
+      const appointmentData = this._getItemData($el);
 
       const area = this._calculateResizableArea({
         left: position.left,
       }, appointmentData);
 
+      // @ts-expect-error dxResizable is a jQuery plugin method
       $el.dxResizable('instance').option('area', area);
     });
   }
 }
 
-registerComponent('dxSchedulerAppointments', SchedulerAppointments as any);
+registerComponent('dxSchedulerAppointments', SchedulerAppointments);
 
 export default SchedulerAppointments;

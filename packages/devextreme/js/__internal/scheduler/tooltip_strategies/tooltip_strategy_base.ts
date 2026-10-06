@@ -23,6 +23,7 @@ import type {
   AppointmentTooltipItem,
   TargetedAppointment,
 } from '../types';
+import type { DateFormatType } from '../utils/get_date_text';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;
@@ -59,7 +60,7 @@ export interface AppointmentTooltipOptions {
   createFormattedDateText: (
     appointment: Appointment,
     targetedAppointment?: Appointment | TargetedAppointment,
-    format?: string,
+    format?: DateFormatType,
   ) => {
     text: string;
     formatDate: string;

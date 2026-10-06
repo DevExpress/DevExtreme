@@ -7,7 +7,7 @@ import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import { getPublicElement } from '@js/core/element';
 import type { PostponedOperations } from '@js/core/postponed_operations';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
@@ -36,7 +36,7 @@ import type { DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
 import type { CustomDialogOptions } from '@js/ui/dialog';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { ItemContextMenuEvent } from '@js/ui/list';
+import type { ItemClickEvent, ItemContextMenuEvent } from '@js/ui/list';
 import type {
   Appointment,
   AppointmentAddingEvent,
@@ -237,7 +237,10 @@ interface SchedulerWorkSpaceLike {
   positionHelper: PositionHelper;
   virtualScrollingDispatcher: VirtualScrollingDispatcherLike;
   viewDataProvider: ViewDataProvider;
-  option: (name: string | Record<string, unknown>, value?: unknown) => unknown;
+  option: {
+    <K extends keyof WorkspaceOptionsInternal>(name: K): WorkspaceOptionsInternal[K];
+    (name: string | Record<string, unknown>, value?: unknown): unknown;
+  };
   getDateRange: () => Date[];
   getCellFromDragTarget: ($dragTarget: dxElementWrapper) => dxElementWrapper | null;
   getCellFromPoint: (x: number, y: number) => dxElementWrapper | null;
@@ -255,7 +258,7 @@ interface SchedulerWorkSpaceLike {
   needRecalculateResizableArea: () => boolean;
   getHeaderDate: () => Date;
   updateHeaderEmptyCellWidth: () => void;
-  initDragBehavior: (scheduler: unknown) => void;
+  initDragBehavior: (scheduler: Scheduler) => void;
   attachTablesEvents: () => void;
   getWorkArea: () => dxElementWrapper;
   $element: () => dxElementWrapper;
@@ -267,6 +270,7 @@ interface SchedulerWorkSpaceLike {
   getCellData: ($cell: dxElementWrapper) => DroppableCellData;
   getCellWidth: () => number;
   getCellHeight: () => number;
+  getCellByCoordinates: (coordinates: Coordinates, allDay: boolean) => dxElementWrapper;
   getGroupCount: () => number;
   getGroupBounds: (coordinates: WorkspaceCoordinates) => GroupBoundsOffset | undefined;
   getPanelDOMSize: (panelName: PanelName) => RealSize;
@@ -1422,7 +1426,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _createEventArgs(
-    e: ItemContextMenuEvent<AppointmentTooltipItem>,
+    e: ItemContextMenuEvent<AppointmentTooltipItem> | ItemClickEvent<AppointmentTooltipItem>,
   ): AppointmentTooltipContextMenuEventArgs {
     const itemData = e.itemData?.appointment;
     if (!itemData) {
@@ -1579,8 +1583,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointmentTooltip: this.appointmentTooltip,
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
+      // @ts-expect-error the collection passes its item event, mapped by mapAppointmentFields
       onItemRendered: this.getAppointmentRenderedAction(),
+      // @ts-expect-error the collection passes its item event, mapped by mapAppointmentFields
       onItemClick: this.createSchedulerAction('onAppointmentClick'),
+      // @ts-expect-error the collection passes its item event, mapped by mapAppointmentFields
       onItemContextMenu: this.createSchedulerAction('onAppointmentContextMenu'),
       onAppointmentDblClick: this.createSchedulerAction('onAppointmentDblClick'),
       tabIndex: this.option('tabIndex') ?? 0,
@@ -1858,7 +1865,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     singleAppointment: SafeAppointment,
     exceptionDate: Date,
     callback: () => void,
-    isDeleted: boolean,
+    isDeleted?: boolean,
     isPopupEditing?: boolean,
     dragEvent?: SchedulerDragEvent | null,
     recurrenceEditMode?: RecurrenceEditMode,
@@ -1917,7 +1924,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     rawAppointment: SafeAppointment,
     newRawAppointment: SafeAppointment,
     exceptionDate: Date,
-    isDeleted: boolean,
+    isDeleted: boolean | undefined,
     isPopupEditing: boolean,
     dragEvent?: SchedulerDragEvent | null,
   ): void {
@@ -1989,7 +1996,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return dateSerialization.serializeDate(date, UTC_FULL_DATE_FORMAT) as string;
   }
 
-  private showRecurrenceChangeConfirm(isDeleted: boolean): DeferredObj<string> {
+  private showRecurrenceChangeConfirm(isDeleted?: boolean): DeferredObj<string> {
     const title = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteTitle' : 'dxScheduler-confirmRecurrenceEditTitle');
     const message = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteMessage' : 'dxScheduler-confirmRecurrenceEditMessage');
     const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
@@ -2142,8 +2149,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       throw errors.Error('E1031', subject);
     }
 
-    // subscribes callbacks are not fully typed
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return (callback as (
       this: Scheduler,
       ...callbackArgs: Parameters<SubscribeMethods[Subject]>
