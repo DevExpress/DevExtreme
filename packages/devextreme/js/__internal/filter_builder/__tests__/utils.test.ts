@@ -133,6 +133,18 @@ describe('getFilterOperations', () => {
     expect(getFilterOperations({ dataType: 'object', filterOperations: [] })).toEqual(['isblank', 'isnotblank']);
   });
 
+  it('returns an empty list for an unknown data type', () => {
+    expect(getFilterOperations({ dataType: 'unknown' })).toEqual([]);
+    expect(getFilterOperations({ dataType: 'unknown', filterOperations: [] })).toEqual([]);
+    expect(getFilterOperations({ dataType: 'unknown', filterOperations: null })).toEqual([]);
+  });
+
+  it('keeps null operations', () => {
+    const filterOperations = ['=', null, '<>'] as string[];
+
+    expect(getFilterOperations({ filterOperations })).toEqual(['=', null, '<>']);
+  });
+
   it('skips undefined operations', () => {
     const filterOperations = ['=', undefined, '<>'] as string[];
 
