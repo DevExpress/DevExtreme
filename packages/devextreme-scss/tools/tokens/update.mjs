@@ -204,54 +204,65 @@ const giveUp = () => {
   process.exit(1);
 };
 
-if (!reportOnly) {
-  setDependency(target);
+// once the snapshot is taken every failure rolls back, not only a child process that exits non-zero
+const bumpAndReport = () => {
+  if (!reportOnly) {
+    setDependency(target);
 
-  if (!run('pnpm', ['install', '--no-frozen-lockfile'], repoRoot)) {
-    giveUp();
+    if (!run('pnpm', ['install', '--no-frozen-lockfile'], repoRoot)) {
+      giveUp();
+    }
   }
-}
 
-const after = readFlatTokens();
-const summary = {
-  package: PACKAGE,
-  versionBefore: before.version,
-  versionAfter: after.version,
-  countBefore: before.names.length,
-  countAfter: after.names.length,
-  names: diffNames(before.names, after.names),
-  lostConsumed: findLostConsumed(
-    readConsumed(),
-    buildAvailableNames(after.names, new Set(getBridgeFiles())),
-  ),
+  const after = readFlatTokens();
+  const summary = {
+    package: PACKAGE,
+    versionBefore: before.version,
+    versionAfter: after.version,
+    countBefore: before.names.length,
+    countAfter: after.names.length,
+    names: diffNames(before.names, after.names),
+    lostConsumed: findLostConsumed(
+      readConsumed(),
+      buildAvailableNames(after.names, new Set(getBridgeFiles())),
+    ),
+  };
+
+  if (!reportOnly) {
+    process.stderr.write(`\n${renderPreamble(summary, { color: progressColor })}\n`);
+
+    if (!run('node', ['build/tokens/build-tokens.mjs'], packageRoot)) {
+      giveUp();
+    }
+  }
+
+  // read-only: the write mode would gate rootSelectors against bundles built from the old package
+  const registriesCurrent = reportOnly
+    || run('node', ['tools/naming/derive-registries.mjs', '--check'], packageRoot);
+
+  const report = { ...summary, output: diffGenerated(before.generated, readGenerated()) };
+
+  show(report);
+
+  // what the package now says about the theme's roles, against the banked decisions
+  run('node', ['tools/review/roles.mjs', '--report=tools/review/roles.decisions.json'], packageRoot);
+
+  if (!reportOnly) {
+    const registries = registriesCurrent ? ''
+      : 'The registries are stale: after build:themes run pnpm run naming:registries and review '
+        + 'tools/naming/registries.json.\n';
+    process.stderr.write('\nThis rebuilt the token layer, not the themes — '
+      + 'packages/devextreme/artifacts/css still holds the previous bundles.\n'
+      + 'Next: pnpm nx build:themes devextreme-scss, then the etalons if any value moved.\n'
+      + `${registries}\nCheck \`git diff pnpm-lock.yaml\`: anything in it beyond ${PACKAGE} is pnpm `
+      + 'normalising the lockfile, not this bump.\n');
+  }
 };
 
-if (!reportOnly) {
-  process.stderr.write(`\n${renderPreamble(summary, { color: progressColor })}\n`);
-
-  if (!run('node', ['build/tokens/build-tokens.mjs'], packageRoot)) {
-    giveUp();
-  }
-}
-
-// read-only: the write mode would gate rootSelectors against bundles built from the old package
-const registriesCurrent = reportOnly
-  || run('node', ['tools/naming/derive-registries.mjs', '--check'], packageRoot);
-
-const report = { ...summary, output: diffGenerated(before.generated, readGenerated()) };
-
-show(report);
-
-// what the package now says about the theme's roles, against the banked decisions
-run('node', ['tools/review/roles.mjs', '--report=tools/review/roles.decisions.json'], packageRoot);
-
-if (!reportOnly) {
-  const registries = registriesCurrent ? ''
-    : 'The registries are stale: after build:themes run pnpm run naming:registries and review '
-      + 'tools/naming/registries.json.\n';
-  process.stderr.write('\nThis rebuilt the token layer, not the themes — '
-    + 'packages/devextreme/artifacts/css still holds the previous bundles.\n'
-    + 'Next: pnpm nx build:themes devextreme-scss, then the etalons if any value moved.\n'
-    + `${registries}\nCheck \`git diff pnpm-lock.yaml\`: anything in it beyond ${PACKAGE} is pnpm `
-    + 'normalising the lockfile, not this bump.\n');
+try {
+  bumpAndReport();
+} catch (error) {
+  if (reportOnly) throw error;
+  process.stderr.write(`\n${error?.stack ?? error}\n`);
+  giveUp();
 }
