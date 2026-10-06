@@ -12,8 +12,10 @@ interface Size {
   height: number;
 }
 
-type ResizeCallbacks = Omit<CallbackInterface, 'has'> & {
+type ResizeCallbacks = Omit<CallbackInterface, 'has' | 'fire' | 'fireWith'> & {
   has: (fn?: Parameters<CallbackInterface['has']>[0]) => boolean;
+  fire: (...args: Parameters<CallbackInterface['fire']>) => void;
+  fireWith: (...args: Parameters<CallbackInterface['fireWith']>) => ResizeCallbacks | undefined;
 };
 
 const resizeCallbacks = (function createResizeCallbacks(): ResizeCallbacks {
