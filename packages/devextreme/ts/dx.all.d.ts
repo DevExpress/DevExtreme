@@ -7506,7 +7506,7 @@ declare module DevExpress.core {
    */
   export class Template {
     constructor(options?: dxTemplateOptions);
-    constructor(element: UserDefinedElement | InternalElement<Element>);
+    constructor(element: string | UserDefinedElement | dxElementWrapper);
 
     render(options: TemplateRenderOptions): InternalElement<HTMLElement>;
 
