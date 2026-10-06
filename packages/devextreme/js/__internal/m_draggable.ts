@@ -13,16 +13,13 @@ import {
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, needSkipEvent } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
-import domAdapter from '@js/core/dom_adapter';
+import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
-// @ts-expect-error
-import { splitPair } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
-// @ts-expect-error
-import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { dasherize } from '@js/core/utils/inflector';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -34,15 +31,70 @@ import { quadToObject } from '@js/core/utils/string';
 import { isFunction, isNumeric, isObject } from '@js/core/utils/type';
 import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
-import type { PointerInteractionEvent } from '@js/events/events.types';
-import type { Properties } from '@js/ui/draggable';
+import type { DraggableBaseOptions, Properties } from '@js/ui/draggable';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { splitPair } from '@ts/core/utils/m_common';
+import { fromPromise } from '@ts/core/utils/m_deferred';
+import type { DefaultActionArgs } from '@ts/core/widget/component';
 import DOMComponent from '@ts/core/widget/dom_component';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 import Animator from './ui/scroll_view/animator';
 
 type BoundOffset = number | string | { h?: number; v?: number };
 
+type DragHandler = ((e: never) => void) | undefined;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface DraggableBaseProperties<TComponent = any> extends Omit<DraggableBaseOptions<TComponent>, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
+  scrollSensitivity: number;
+
+  scrollSpeed: number;
+
+  allowMoveByClick?: boolean;
+
+  boundOffset?: BoundOffset | (() => BoundOffset);
+
+  boundary?: DraggableBaseOptions<TComponent>['boundary'] | dxElementWrapper;
+
+  component?: unknown;
+
+  contentTemplate?: string | null;
+
+  clone?: boolean;
+
+  dragTemplate?: Properties['dragTemplate'];
+
+  filter?: string;
+
+  immediate?: boolean;
+
+  itemData?: unknown;
+
+  onCancelByEsc?: boolean;
+
+  onDragCancel?: DragHandler;
+
+  onDragEnd?: DragHandler;
+
+  onDragEnter?: DragHandler;
+
+  onDragLeave?: DragHandler;
+
+  onDragMove?: DragHandler;
+
+  onDragStart?: DragHandler;
+
+  onDraggableElementShown?: DragHandler;
+
+  onDrop?: DragHandler;
+}
+
 export interface DraggableProperties extends Omit<Properties, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
+  scrollSensitivity: number;
+
+  scrollSpeed: number;
+
   allowMoveByClick?: boolean;
 
   boundOffset?: BoundOffset | (() => BoundOffset);
@@ -52,6 +104,24 @@ export interface DraggableProperties extends Omit<Properties, 'boundary' | 'onDi
   component?: unknown;
 
   contentTemplate?: string | null;
+
+  filter?: string;
+
+  immediate?: boolean;
+
+  itemData?: unknown;
+
+  onCancelByEsc?: boolean;
+
+  onDragCancel?: (e: DragEventArgs) => void;
+
+  onDragEnter?: (e: DragEventArgs) => void;
+
+  onDragLeave?: (e: DragEventArgs) => void;
+
+  onDraggableElementShown?: (e: DragElementShownArgs) => void;
+
+  onDrop?: (e: DragEventArgs) => void;
 }
 
 const window = getWindow();
@@ -68,15 +138,23 @@ const KEYDOWN_EVENT_NAME = addNamespace(KEYDOWN_EVENT, DRAGGABLE);
 
 const CLONE_CLASS = 'clone';
 
-let targetDraggable;
-let sourceDraggable;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyDraggable = Draggable<any>;
+
+let activeTargetDraggable: AnyDraggable | null = null;
+let activeSourceDraggable: AnyDraggable | null = null;
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
-const getMousePosition = (event) => ({
-  // @ts-expect-error
+interface MousePosition {
+  x: number;
+  y: number;
+}
+
+const getMousePosition = (event: { pageX: number; pageY: number }): MousePosition => ({
+  // @ts-expect-error scrollLeft is declared to return the wrapper
   x: event.pageX - $(window).scrollLeft(),
-  // @ts-expect-error
+  // @ts-expect-error scrollTop is declared to return the wrapper
   y: event.pageY - $(window).scrollTop(),
 });
 
@@ -94,33 +172,102 @@ interface DragEventOffset {
   y: number;
 }
 
-type DragEvent = Cancelable & PointerInteractionEvent & {
-  _cancelPreventDefault?: boolean;
+export type DragEvent = Cancelable & {
+  type: string;
+  target: Element;
+  pageX: number;
+  pageY: number;
+  key?: string;
+  originalEvent?: { target?: Element };
   offset?: DragEventOffset;
+  maxLeftOffset?: number;
+  maxRightOffset?: number;
+  maxTopOffset?: number;
+  maxBottomOffset?: number;
+  _cancelPreventDefault?: boolean;
 };
+
+export type DragEventArgs = Cancelable & {
+  event: DragEvent;
+  itemData: unknown;
+  itemElement: unknown;
+  fromComponent: unknown;
+  toComponent: unknown;
+  fromData: unknown;
+  toData: unknown;
+};
+
+export type DragStartArgs = Cancelable & {
+  event: DragEvent;
+  itemData: unknown;
+  itemElement: dxElementWrapper;
+  fromData: unknown;
+};
+
+export type DragElementShownArgs = DragStartArgs & { dragElement: dxElementWrapper };
+
+type CursorOffset = DraggableBaseOptions<unknown>['cursorOffset'];
+
+type ElementOffsetOptions = DragStartArgs & {
+  dragElement: Element | undefined;
+  initialOffset?: Offset | false;
+};
+
+type CursorOffsetCallback = (options: ElementOffsetOptions) => CursorOffset;
+
+interface BoundOffsetQuad {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+export interface DragTemplateArgs {
+  container: DxElement;
+  model: {
+    itemData: unknown;
+    itemElement: DxElement;
+    fromIndex?: number;
+  };
+}
+
+type ActionFn = (args?: object) => void;
+
+type ScrollOrientation = 'vertical' | 'horizontal';
+
+interface ScrollableInstance {
+  scrollOffset: () => Record<string, number>;
+  scrollTo: (position: Record<string, number>) => void;
+}
+
+interface ScrollHelperOwner {
+  option: () => { scrollSensitivity: number; scrollSpeed: number };
+  _dragMoveEvent?: DragEvent;
+  dragMoveHandler: (e: DragEvent) => void;
+}
 
 class ScrollHelper {
   private _preventScroll: boolean;
 
-  private readonly _component: any;
+  private readonly _component: ScrollHelperOwner;
 
-  private readonly _scrollValue: string;
+  private readonly _scrollValue: 'scrollTop' | 'scrollLeft';
 
-  private readonly _overFlowAttr: string;
+  private readonly _overFlowAttr: 'overflowY' | 'overflowX';
 
-  private readonly _sizeAttr: string;
+  private readonly _sizeAttr: 'height' | 'width';
 
-  private readonly _scrollSizeProp: string;
+  private readonly _scrollSizeProp: 'scrollHeight' | 'scrollWidth';
 
-  private readonly _clientSizeProp: string;
+  private readonly _clientSizeProp: 'clientHeight' | 'clientWidth';
 
-  private readonly _limitProps: { start: string; end: string };
+  private readonly _limitProps: { start: 'top' | 'left'; end: 'bottom' | 'right' };
 
   private _$scrollableAtPointer: dxElementWrapper | null = null;
 
   private _scrollSpeed: number | undefined;
 
-  constructor(orientation, component) {
+  constructor(orientation: ScrollOrientation, component: ScrollHelperOwner) {
     this._preventScroll = true;
     this._component = component;
 
@@ -147,7 +294,7 @@ class ScrollHelper {
     }
   }
 
-  updateScrollable(elements, mousePosition) {
+  updateScrollable(elements: Element[], mousePosition: MousePosition): void {
     let isScrollableFound = false;
 
     elements.some((element) => {
@@ -169,50 +316,52 @@ class ScrollHelper {
     }
   }
 
-  isScrolling() {
+  isScrolling(): boolean {
     return !!this._scrollSpeed;
   }
 
-  isScrollable($element) {
+  isScrollable($element: dxElementWrapper): boolean {
     return ($element.css(this._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
+            // @ts-expect-error prop is declared without the getter form
             && $element.prop(this._scrollSizeProp) > Math.ceil(this._sizeAttr === 'width' ? getWidth($element) : getHeight($element));
   }
 
-  _trySetScrollable(element, mousePosition) {
-    const that = this;
+  _trySetScrollable(element: Element, mousePosition: MousePosition): boolean {
     const $element = $(element);
-    let distanceToBorders;
-    const sensitivity = that._component.option('scrollSensitivity');
-    let isScrollable = that.isScrollable($element);
+    const { scrollSensitivity: sensitivity } = this._component.option();
+    let isScrollable = this.isScrollable($element);
 
     if (isScrollable) {
-      distanceToBorders = that._calculateDistanceToBorders($element, mousePosition);
+      const distanceToBorders = this._calculateDistanceToBorders($element, mousePosition);
+      const { start, end } = this._limitProps;
 
-      if (sensitivity > distanceToBorders[that._limitProps.start]) {
-        if (!that._preventScroll) {
-          that._scrollSpeed = -that._calculateScrollSpeed(distanceToBorders[that._limitProps.start]);
-          that._$scrollableAtPointer = $element;
+      if (sensitivity > distanceToBorders[start]) {
+        if (!this._preventScroll) {
+          this._scrollSpeed = -this._calculateScrollSpeed(distanceToBorders[start]);
+          this._$scrollableAtPointer = $element;
         }
-      } else if (sensitivity > distanceToBorders[that._limitProps.end]) {
-        if (!that._preventScroll) {
-          that._scrollSpeed = that._calculateScrollSpeed(distanceToBorders[that._limitProps.end]);
-          that._$scrollableAtPointer = $element;
+      } else if (sensitivity > distanceToBorders[end]) {
+        if (!this._preventScroll) {
+          this._scrollSpeed = this._calculateScrollSpeed(distanceToBorders[end]);
+          this._$scrollableAtPointer = $element;
         }
       } else {
         isScrollable = false;
-        that._preventScroll = false;
+        this._preventScroll = false;
       }
     }
 
     return isScrollable;
   }
 
-  _calculateDistanceToBorders($area, mousePosition) {
+  _calculateDistanceToBorders(
+    $area: dxElementWrapper,
+    mousePosition: MousePosition,
+  ): Record<string, number> {
     const area = $area.get(0);
-    let areaBoundingRect;
 
     if (area) {
-      areaBoundingRect = getBoundingRect(area);
+      const areaBoundingRect: DOMRect = getBoundingRect(area);
 
       return {
         left: mousePosition.x - areaBoundingRect.left,
@@ -224,48 +373,49 @@ class ScrollHelper {
     return {};
   }
 
-  _calculateScrollSpeed(distance) {
-    const component = this._component;
-    const sensitivity = component.option('scrollSensitivity');
-    const maxSpeed = component.option('scrollSpeed');
+  _calculateScrollSpeed(distance: number): number {
+    const { scrollSensitivity: sensitivity, scrollSpeed: maxSpeed } = this._component.option();
 
     return Math.ceil(((sensitivity - distance) / sensitivity) ** 2 * maxSpeed);
   }
 
-  scrollByStep() {
-    const that = this;
-
-    if (that._$scrollableAtPointer && that._scrollSpeed) {
-      if (that._$scrollableAtPointer.hasClass('dx-scrollable-container')) {
-        const $scrollable = that._$scrollableAtPointer.closest('.dx-scrollable');
-        const scrollableInstance: any = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
+  scrollByStep(): void {
+    if (this._$scrollableAtPointer && this._scrollSpeed) {
+      if (this._$scrollableAtPointer.hasClass('dx-scrollable-container')) {
+        const $scrollable = this._$scrollableAtPointer.closest('.dx-scrollable');
+        // @ts-expect-error data is declared without the getter form
+        const scrollableInstance: ScrollableInstance | undefined = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
 
         if (scrollableInstance) {
-          const nextScrollPosition = scrollableInstance.scrollOffset()[that._limitProps.start] + that._scrollSpeed;
+          const nextScrollPosition = scrollableInstance
+            .scrollOffset()[this._limitProps.start] + this._scrollSpeed;
 
-          scrollableInstance.scrollTo({ [that._limitProps.start]: nextScrollPosition });
+          scrollableInstance.scrollTo({ [this._limitProps.start]: nextScrollPosition });
         }
       } else {
-        const nextScrollPosition = that._$scrollableAtPointer[that._scrollValue]() + that._scrollSpeed;
+        // @ts-expect-error scrollTop and scrollLeft are declared to return the wrapper
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        const nextScrollPosition = this._$scrollableAtPointer[this._scrollValue]()
+          + this._scrollSpeed;
 
-        that._$scrollableAtPointer[that._scrollValue](nextScrollPosition);
+        this._$scrollableAtPointer[this._scrollValue](nextScrollPosition);
       }
 
-      const dragMoveEvent = that._component._dragMoveEvent;
+      const dragMoveEvent = this._component._dragMoveEvent;
 
       if (dragMoveEvent) {
-        that._component.dragMoveHandler(dragMoveEvent);
+        this._component.dragMoveHandler(dragMoveEvent);
       }
     }
   }
 
-  reset() {
+  reset(): void {
     this._$scrollableAtPointer = null;
     this._scrollSpeed = 0;
     this._preventScroll = true;
   }
 
-  isOutsideScrollable($scrollable, event) {
+  isOutsideScrollable($scrollable: dxElementWrapper | undefined, event: DragEvent): boolean {
     if (!$scrollable) {
       return false;
     }
@@ -280,10 +430,15 @@ class ScrollHelper {
   }
 }
 
-class ScrollAnimator extends Animator {
-  _strategy: any;
+interface ScrollAnimatorOwner {
+  _horizontalScrollHelper: ScrollHelper;
+  _verticalScrollHelper: ScrollHelper;
+}
 
-  constructor(strategy) {
+class ScrollAnimator extends Animator {
+  _strategy: ScrollAnimatorOwner;
+
+  constructor(strategy: ScrollAnimatorOwner) {
     super();
     this._strategy = strategy;
   }
@@ -297,7 +452,9 @@ class ScrollAnimator extends Animator {
   }
 }
 
-class Draggable extends DOMComponent<Draggable, DraggableProperties> {
+class Draggable<
+  TProperties extends DraggableBaseProperties = DraggableProperties,
+> extends DOMComponent<Draggable<TProperties>, TProperties> {
   _$sourceElement?: dxElementWrapper | null;
 
   _initScrollTop!: number;
@@ -323,30 +480,32 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
   reset(): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  dragMove(e): void {}
+  dragMove(e: DragEvent): void {}
 
-  dragEnter(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  dragEnter(e?: DragEvent): void {}
 
-  dragLeave(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  dragLeave(e?: DragEvent): void {}
 
-  dragEnd(sourceEvent): DeferredObj<unknown> {
+  dragEnd(sourceEvent: DragEventArgs): DeferredObj<unknown> | PromiseLike<void> {
     const sourceDraggable = this._getSourceDraggable();
 
+    // @ts-expect-error dragEnd passes the event args where the event is expected
     sourceDraggable._fireRemoveEvent(sourceEvent);
 
     return Deferred().resolve();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _fireRemoveEvent(sourceEvent?) {}
+  _fireRemoveEvent(sourceEvent?: DragEvent): void {}
 
-  _getDefaultOptions(): DraggableProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       onDragStart: undefined,
       onDragMove: undefined,
       onDragEnd: undefined,
-      // @ts-expect-error
       onDragEnter: undefined,
       onDragLeave: undefined,
       onDragCancel: undefined,
@@ -367,9 +526,8 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     };
   }
 
-  _setOptionsByReference() {
-    // @ts-expect-error ts-error
-    super._setOptionsByReference.apply(this, arguments);
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
 
     extend(this._optionsByReference, {
       component: true,
@@ -379,7 +537,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     });
   }
 
-  _init() {
+  _init(): void {
     super._init();
     this._attachEventHandlers();
     this._scrollAnimator = new ScrollAnimator(this);
@@ -391,39 +549,47 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     this._initScrollLeft = 0;
   }
 
-  _normalizeCursorOffset(offset) {
+  _normalizeCursorOffset(offset: CursorOffset): Offset {
+    let normalizedOffset: CursorOffset | { h?: number; v?: number } = offset;
+
     if (isObject(offset)) {
-      offset = {
-        h: (offset as any).x,
-        v: (offset as any).y,
+      normalizedOffset = {
+        h: offset.x,
+        v: offset.y,
       };
     }
-    offset = splitPair(offset).map((value) => parseFloat(value));
+    const pair = splitPair(normalizedOffset).map((value) => parseFloat(value));
 
     return {
-      left: offset[0],
-      top: offset.length === 1 ? offset[0] : offset[1],
+      left: pair[0],
+      top: pair.length === 1 ? pair[0] : pair[1],
     };
   }
 
-  _getNormalizedCursorOffset(offset, options) {
-    if (isFunction(offset)) {
-      offset = offset.call(this, options);
+  _getNormalizedCursorOffset(
+    offset: CursorOffset | CursorOffsetCallback,
+    options: ElementOffsetOptions,
+  ): Offset {
+    let cursorOffset = offset;
+
+    if (isFunction(cursorOffset)) {
+      cursorOffset = cursorOffset.call(this, options);
     }
 
-    return this._normalizeCursorOffset(offset);
+    return this._normalizeCursorOffset(cursorOffset);
   }
 
-  _calculateElementOffset(options) {
-    let elementOffset;
-    let dragElementOffset;
+  _calculateElementOffset(options: ElementOffsetOptions): Offset | undefined {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let elementOffset: Offset | undefined;
     const { event } = options;
     const $element = $(options.itemElement);
     const $dragElement = $(options.dragElement);
     const isCloned = this._dragElementIsCloned();
     const cursorOffset = this.option('cursorOffset');
     let normalizedCursorOffset = { left: 0, top: 0 };
-    const currentLocate = this._initialLocate = locate($dragElement);
+    this._initialLocate = locate($dragElement);
+    const currentLocate = this._initialLocate;
 
     if (isCloned || options.initialOffset || cursorOffset) {
       elementOffset = options.initialOffset || $element.offset();
@@ -432,23 +598,29 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
         normalizedCursorOffset = this._getNormalizedCursorOffset(cursorOffset, options);
 
         if (isFinite(normalizedCursorOffset.left)) {
+          // @ts-expect-error offset can be undefined
           elementOffset.left = event.pageX;
         }
 
         if (isFinite(normalizedCursorOffset.top)) {
+          // @ts-expect-error offset can be undefined
           elementOffset.top = event.pageY;
         }
       }
 
-      dragElementOffset = $dragElement.offset();
-      elementOffset.top -= dragElementOffset.top + (normalizedCursorOffset.top || 0) - currentLocate.top;
-      elementOffset.left -= dragElementOffset.left + (normalizedCursorOffset.left || 0) - currentLocate.left;
+      const dragElementOffset = $dragElement.offset();
+      // @ts-expect-error offset can be undefined
+      elementOffset.top -= dragElementOffset.top
+        + (normalizedCursorOffset.top || 0) - currentLocate.top;
+      // @ts-expect-error offset can be undefined
+      elementOffset.left -= dragElementOffset.left
+        + (normalizedCursorOffset.left || 0) - currentLocate.left;
     }
 
     return elementOffset;
   }
 
-  _initPosition(options) {
+  _initPosition(options: ElementOffsetOptions): void {
     const $dragElement = $(options.dragElement);
     const elementOffset = this._calculateElementOffset(options);
 
@@ -459,34 +631,36 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     this._startPosition = locate($dragElement);
   }
 
-  _startAnimator() {
+  _startAnimator(): void {
     if (!this._scrollAnimator.inProgress()) {
       this._scrollAnimator.start();
     }
   }
 
-  _stopAnimator() {
+  _stopAnimator(): void {
     this._scrollAnimator?.stop();
   }
 
-  _addWidgetPrefix(className?) {
+  _addWidgetPrefix(className?: string): string {
     const componentName = this.NAME;
 
     return dasherize(componentName) + (className ? `-${className}` : '');
   }
 
-  _getItemsSelector() {
-    return this.option('filter') || '';
+  _getItemsSelector(): string {
+    const { filter } = this.option();
+
+    return filter || '';
   }
 
-  _$content() {
+  _$content(): dxElementWrapper {
     const $element = this.$element();
     const $wrapper = $element.children('.dx-template-wrapper');
 
     return $wrapper.length ? $wrapper : $element;
   }
 
-  _attachEventHandlers() {
+  _attachEventHandlers(): void {
     if (this.option('disabled')) {
       return;
     }
@@ -497,12 +671,18 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     const data = {
       direction: this.option('dragDirection'),
       immediate: this.option('immediate'),
-      checkDropTarget: ($target, event) => {
+      checkDropTarget: (
+        $target: dxElementWrapper,
+        event: DragEvent,
+      ): boolean | string | undefined => {
         const targetGroup = this.option('group');
-        const sourceGroup = this._getSourceDraggable().option('group');
+        const sourceGroup: string | undefined = this._getSourceDraggable().option('group');
         const $scrollable = this._getScrollable($target);
 
-        if (this._verticalScrollHelper.isOutsideScrollable($scrollable, event) || this._horizontalScrollHelper.isOutsideScrollable($scrollable, event)) {
+        if (
+          this._verticalScrollHelper.isOutsideScrollable($scrollable, event)
+          || this._horizontalScrollHelper.isOutsideScrollable($scrollable, event)
+        ) {
           return false;
         }
 
@@ -515,12 +695,17 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
       eventsEngine.on($element, POINTERDOWN_EVENT_NAME, data, this._pointerDownHandler.bind(this));
     }
 
-    if (itemsSelector[0] === '>') {
-      // @ts-expect-error ts-error
+    if (itemsSelector.startsWith('>')) {
       itemsSelector = itemsSelector.slice(1);
     }
-    // @ts-expect-error
-    eventsEngine.on($element, DRAGSTART_EVENT_NAME, itemsSelector, data, this._dragStartHandler.bind(this));
+    eventsEngine.on(
+      $element,
+      DRAGSTART_EVENT_NAME,
+      itemsSelector,
+      data,
+      // @ts-expect-error eventsEngine is badly typed
+      this._dragStartHandler.bind(this),
+    );
     eventsEngine.on($element, DRAG_EVENT_NAME, data, this.dragMoveHandler.bind(this));
     eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
     eventsEngine.on($element, DRAG_ENTER_EVENT_NAME, data, this._dragEnterHandler.bind(this));
@@ -531,11 +716,11 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     }
   }
 
-  _dragElementIsCloned() {
+  _dragElementIsCloned(): boolean | undefined {
     return this._$dragElement?.hasClass(this._addWidgetPrefix(CLONE_CLASS));
   }
 
-  _getDragTemplateArgs($element, $container) {
+  _getDragTemplateArgs($element: dxElementWrapper, $container: dxElementWrapper): DragTemplateArgs {
     return {
       container: getPublicElement($container),
       model: {
@@ -545,16 +730,15 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     };
   }
 
-  _createDragElement($element) {
+  _createDragElement($element: dxElementWrapper): dxElementWrapper {
     let result = $element;
     const clone = this.option('clone');
     const $container = this._getContainer();
-    let template = this.option('dragTemplate');
+    const dragTemplate = this.option('dragTemplate');
 
-    if (template) {
-      template = this._getTemplate(template);
+    if (dragTemplate) {
+      const template = this._getTemplate(dragTemplate);
       result = $('<div>').appendTo($container);
-      // @ts-expect-error ts-error
       template.render(this._getDragTemplateArgs($element, result));
     } else if (clone) {
       result = $('<div>').appendTo($container);
@@ -566,7 +750,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
 
     return result
       .toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0))
-      .toggleClass('dx-rtl', this.option('rtlEnabled'));
+      .toggleClass('dx-rtl', this.option().rtlEnabled);
   }
 
   _resetDragElement(): void {
@@ -578,21 +762,22 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     this._$dragElement = null;
   }
 
-  _resetSourceElement() {
+  _resetSourceElement(): void {
     this._toggleDragSourceClass(false);
     this._$sourceElement = null;
   }
 
-  _detachEventHandlers() {
+  _detachEventHandlers(): void {
     eventsEngine.off(this._$content(), `.${DRAGGABLE}`);
     eventsEngine.off(this._getArea(), `.${DRAGGABLE}`);
   }
 
-  _move(position, $element?) {
+  _move(position: Partial<Offset>, $element?: dxElementWrapper | null): void {
+    // @ts-expect-error the drag element can be null
     move($element || this._$dragElement, position);
   }
 
-  _getDraggableElement(e?): dxElementWrapper {
+  _getDraggableElement(e?: DragEvent): dxElementWrapper {
     const $sourceElement = this._getSourceElement();
 
     if ($sourceElement) {
@@ -607,8 +792,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     let $target = $(e?.target);
     const itemsSelector = this._getItemsSelector();
 
-    if (itemsSelector[0] === '>') {
-      // @ts-expect-error ts-error
+    if (itemsSelector.startsWith('>')) {
       const $items = this._$content().find(itemsSelector);
       if (!$items.is($target)) {
         $target = $target.closest($items);
@@ -617,36 +801,38 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     return $target;
   }
 
-  _getSourceElement() {
+  _getSourceElement(): dxElementWrapper | null | undefined {
     const draggable = this._getSourceDraggable();
 
     return draggable._$sourceElement;
   }
 
-  _pointerDownHandler(e) {
+  _pointerDownHandler(e: DragEvent): void {
     if (needSkipEvent(e)) {
       return;
     }
 
-    const position: any = {};
+    const position: Partial<Offset> = {};
     const $element = this.$element();
     const { dragDirection } = this.option();
 
     if (dragDirection === 'horizontal' || dragDirection === 'both') {
-      // @ts-expect-error ts-error
-      position.left = e.pageX - $element.offset().left + locate($element).left - getWidth($element) / 2;
+      // @ts-expect-error offset can be undefined
+      position.left = e.pageX - $element.offset().left
+        + locate($element).left - getWidth($element) / 2;
     }
 
     if (dragDirection === 'vertical' || dragDirection === 'both') {
-      // @ts-expect-error ts-error
-      position.top = e.pageY - $element.offset().top + locate($element).top - getHeight($element) / 2;
+      // @ts-expect-error offset can be undefined
+      position.top = e.pageY - $element.offset().top
+        + locate($element).top - getHeight($element) / 2;
     }
 
     this._move(position, $element);
     this._getAction('onDragMove')(this._getEventArgs(e));
   }
 
-  _isValidElement(event, $element): boolean {
+  _isValidElement(event: DragEvent, $element: dxElementWrapper): boolean {
     const { handle } = this.option();
     const $target = $(event.originalEvent?.target);
 
@@ -661,7 +847,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     return !$element.is('.dx-state-disabled, .dx-state-disabled *');
   }
 
-  _dragStartHandler(e) {
+  _dragStartHandler(e: DragEvent): void {
     const $element = this._getDraggableElement(e);
 
     if (!this._isValidElement(e, $element)) {
@@ -674,7 +860,6 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
 
     const dragStartArgs = this._getDragStartArgs(e, $element);
     this._getAction('onDragStart')(dragStartArgs);
-    // @ts-expect-error ts-error
     if (dragStartArgs.cancel) {
       e.cancel = true;
       return;
@@ -690,11 +875,12 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     if (!this._hasClonedDraggable() && this.option('autoScroll')) {
       this._initScrollTop = this._getScrollableScrollTop();
       this._initScrollLeft = this._getScrollableScrollLeft();
-      // @ts-expect-error ts-error
+      // @ts-expect-error offset can be undefined
       initialOffset = this._getDraggableElementOffset(initialOffset.left, initialOffset.top);
     }
 
-    const $dragElement = this._$dragElement = this._createDragElement($element);
+    this._$dragElement = this._createDragElement($element);
+    const $dragElement = this._$dragElement;
 
     this._toggleDraggingClass(true);
     this._toggleDragSourceClass(true);
@@ -720,7 +906,9 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     const elementHeight = getHeight($dragElement);
 
     const startOffset = {
+      // @ts-expect-error offset can be undefined
       left: $dragElement.offset().left - areaOffset.left,
+      // @ts-expect-error offset can be undefined
       top: $dragElement.offset().top - areaOffset.top,
     };
     if ($area.length) {
@@ -735,26 +923,27 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     }
   }
 
-  _getAreaOffset($area) {
-    const offset = $area && (positionUtils as any).offset($area);
+  _getAreaOffset($area: dxElementWrapper): Offset {
+    const offset = $area && positionUtils.offset($area);
     return offset || { left: 0, top: 0 };
   }
 
-  _toggleDraggingClass(value) {
+  _toggleDraggingClass(value: boolean): void {
     this._$dragElement?.toggleClass(this._addWidgetPrefix('dragging'), value);
   }
 
-  _toggleDragSourceClass(value, $element?) {
+  _toggleDragSourceClass(value: boolean, $element?: dxElementWrapper | null): void {
     const $sourceElement = $element || this._$sourceElement;
     $sourceElement?.toggleClass(this._addWidgetPrefix('source'), value);
   }
 
-  _setGestureCoverCursor($element) {
+  _setGestureCoverCursor($element: dxElementWrapper): void {
+    // @ts-expect-error css value can be undefined
     $(`.${GESTURE_COVER_CLASS}`).css('cursor', $element.css('cursor'));
   }
 
-  _getBoundOffset() {
-    let boundOffset = this.option('boundOffset');
+  _getBoundOffset(): BoundOffsetQuad {
+    let { boundOffset } = this.option();
 
     if (isFunction(boundOffset)) {
       boundOffset = boundOffset.call(this);
@@ -764,7 +953,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
   }
 
   _getArea(): dxElementWrapper {
-    let area = this.option('boundary');
+    let { boundary: area } = this.option();
 
     if (isFunction(area)) {
       area = area.call(this);
@@ -789,7 +978,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     const scrollTop = this._getScrollableScrollTop();
     const scrollLeft = this._getScrollableScrollLeft();
 
-    const elementPosition = ($(this.element()) as any).css('position');
+    const elementPosition = $(this.element()).css('position');
     const isFixedPosition = elementPosition === 'fixed';
 
     const result: Offset = {
@@ -811,8 +1000,10 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     };
   }
 
-  _hasClonedDraggable() {
-    return this.option('clone') || this.option('dragTemplate');
+  _hasClonedDraggable(): boolean | Properties['dragTemplate'] {
+    const { clone, dragTemplate } = this.option();
+
+    return clone || dragTemplate;
   }
 
   public dragMoveHandler(e: DragEvent): void {
@@ -834,7 +1025,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
       return;
     }
 
-    this._getTargetDraggable().dragMove(e, scrollBy);
+    this._getTargetDraggable().dragMove(e);
   }
 
   // Without an active drag the gesture emitter must not call preventDefault on the
@@ -852,24 +1043,31 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
   }
 
   private _updateScrollable(e: DragEvent): void {
-    const that = this;
-
-    if (that.option('autoScroll')) {
+    if (this.option('autoScroll')) {
       const mousePosition = getMousePosition(e);
-      const allObjects = (domAdapter as any).elementsFromPoint(mousePosition.x, mousePosition.y, this.$element().get(0));
+      const allObjects = domAdapter.elementsFromPoint(
+        mousePosition.x,
+        mousePosition.y,
+        // @ts-expect-error get is declared to return Element
+        this.$element().get(0),
+      );
 
-      that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
-      that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
+      this._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
+      this._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
     }
   }
 
-  _getScrollable($element) {
-    let $scrollable;
+  _getScrollable($element: dxElementWrapper): dxElementWrapper | undefined {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let $scrollable: dxElementWrapper | undefined;
 
     $element.parents().toArray().some((parent) => {
       const $parent = $(parent);
 
-      if (this._horizontalScrollHelper.isScrollable($parent) || this._verticalScrollHelper.isScrollable($parent)) {
+      if (
+        this._horizontalScrollHelper.isScrollable($parent)
+        || this._verticalScrollHelper.isScrollable($parent)
+      ) {
         $scrollable = $parent;
 
         return true;
@@ -881,35 +1079,37 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     return $scrollable;
   }
 
-  _getScrollableScrollTop() {
+  _getScrollableScrollTop(): number {
+    // @ts-expect-error scrollTop is declared to return the wrapper
     return this._getScrollable($(this.element()))?.scrollTop() ?? 0;
   }
 
-  _getScrollableScrollLeft() {
+  _getScrollableScrollLeft(): number {
+    // @ts-expect-error scrollLeft is declared to return the wrapper
     return this._getScrollable($(this.element()))?.scrollLeft() ?? 0;
   }
 
-  _defaultActionArgs() {
-    // @ts-expect-error ts-error
-    const args = super._defaultActionArgs.apply(this, arguments);
+  _defaultActionArgs(): DefaultActionArgs<unknown> {
+    const args = super._defaultActionArgs();
     const component = this.option('component');
 
     if (component) {
       args.component = component;
-      // @ts-expect-error ts-error
+      // @ts-expect-error component is unknown
       args.element = component.element();
     }
 
     return args;
   }
 
-  _getEventArgs(e): Record<string, unknown> {
+  _getEventArgs(e: DragEvent): DragEventArgs {
     const sourceDraggable = this._getSourceDraggable();
     const targetDraggable = this._getTargetDraggable();
 
     return {
       event: e,
       itemData: sourceDraggable.option('itemData'),
+      // @ts-expect-error the source element can be null
       itemElement: getPublicElement(sourceDraggable._$sourceElement),
       fromComponent: sourceDraggable.option('component') || sourceDraggable,
       toComponent: targetDraggable.option('component') || targetDraggable,
@@ -918,7 +1118,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     };
   }
 
-  _getDragStartArgs(e, $itemElement) {
+  _getDragStartArgs(e: DragEvent, $itemElement: dxElementWrapper): DragStartArgs {
     const args = this._getEventArgs(e);
 
     return {
@@ -930,10 +1130,13 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
   }
 
   _revertItemToInitialPosition(): void {
-    !this._dragElementIsCloned() && this._move(this._initialLocate, this._$sourceElement);
+    if (!this._dragElementIsCloned()) {
+      // @ts-expect-error _initialLocate is set when the drag starts
+      this._move(this._initialLocate, this._$sourceElement);
+    }
   }
 
-  _dragEndHandler(e) {
+  _dragEndHandler(e: DragEvent): void {
     const d = Deferred();
     const dragEndEventArgs = this._getEventArgs(e);
     const dropEventArgs = this._getEventArgs(e);
@@ -973,7 +1176,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     }
   }
 
-  _isTargetOverAnotherDraggable(e) {
+  _isTargetOverAnotherDraggable(e: DragEvent): boolean {
     const sourceDraggable = this._getSourceDraggable();
 
     if (this === sourceDraggable) {
@@ -985,11 +1188,12 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     const $targetDraggableElement = this.$element();
 
     const mousePosition = getMousePosition(e);
-    const elements = (domAdapter as any).elementsFromPoint(mousePosition.x, mousePosition.y, this.element());
+    const elements = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y, this.element());
     const firstWidgetElement = elements.filter((element) => {
       const $element = $(element);
 
       if ($element.hasClass(this._addWidgetPrefix())) {
+        // @ts-expect-error $dragElement can be null
         return !$element.closest($dragElement).length;
       }
 
@@ -998,12 +1202,17 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
 
     const $sourceElement = this._getSourceElement();
     const isTargetOverItself = firstWidgetElement === $sourceDraggableElement.get(0);
+    // @ts-expect-error $sourceElement can be null
     const isTargetOverNestedDraggable = $(firstWidgetElement).closest($sourceElement).length;
 
-    return !firstWidgetElement || firstWidgetElement === $targetDraggableElement.get(0) && !isTargetOverItself && !isTargetOverNestedDraggable;
+    return !firstWidgetElement || (
+      firstWidgetElement === $targetDraggableElement.get(0)
+      && !isTargetOverItself
+      && !isTargetOverNestedDraggable
+    );
   }
 
-  _dragEnterHandler(e): void {
+  _dragEnterHandler(e: DragEvent): void {
     this._fireDragEnterEvent(e);
 
     if (this._isTargetOverAnotherDraggable(e)) {
@@ -1014,7 +1223,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     sourceDraggable.dragEnter(e);
   }
 
-  _dragLeaveHandler(e): void {
+  _dragLeaveHandler(e: DragEvent): void {
     this._fireDragLeaveEvent(e);
 
     this._resetTargetDraggable();
@@ -1027,13 +1236,13 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     sourceDraggable.dragLeave(e);
   }
 
-  _keydownHandler(e?): void {
+  _keydownHandler(e: DragEvent): void {
     if (this.dragInProgress && e.key === 'Escape') {
       this._keydownEscapeHandler(e);
     }
   }
 
-  _keydownEscapeHandler(e): void {
+  _keydownEscapeHandler(e: DragEvent): void {
     const $sourceElement = this._getSourceElement();
     if (!$sourceElement) {
       return;
@@ -1047,7 +1256,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     }
 
     this.dragInProgress = false;
-    sourceDraggable?._toggleDraggingClass(false);
+    activeSourceDraggable?._toggleDraggingClass(false);
     this._detachEventHandlers();
     this._revertItemToInitialPosition();
     const targetDraggable = this._getTargetDraggable();
@@ -1055,25 +1264,26 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     this._attachEventHandlers();
   }
 
-  _getAction(name) {
-    return this[`_${name}Action`] || this._createActionByOption(name);
+  _getAction(name: string): ActionFn {
+    const action: ActionFn | undefined = this[`_${name}Action`];
+
+    return action || this._createActionByOption(name);
   }
 
   _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
   }
 
-  _initTemplates() {
+  _initTemplates(): void {
     if (!this.option('contentTemplate')) return;
 
     this._templateManager.addDefaultTemplates({
       content: new EmptyTemplate(),
     });
-    // @ts-expect-error ts-error
-    super._initTemplates.apply(this, arguments);
+    super._initTemplates();
   }
 
-  _render() {
+  _render(): void {
     super._render();
     this.$element().addClass(this._addWidgetPrefix());
 
@@ -1088,7 +1298,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     }
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name } = args;
 
     switch (name) {
@@ -1100,6 +1310,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
       case 'onDragLeave':
       case 'onDragCancel':
       case 'onDraggableElementShown':
+        // @ts-expect-error the action properties are not declared
         this[`_${name}Action`] = this._createActionByOption(name);
         break;
       case 'dragTemplate':
@@ -1118,6 +1329,7 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
         this._attachEventHandlers();
         break;
       case 'onCancelByEsc':
+        // @ts-expect-error the event is not passed
         this._keydownHandler();
         break;
       case 'autoScroll':
@@ -1137,12 +1349,12 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     }
   }
 
-  _getTargetDraggable() {
-    return targetDraggable || this;
+  _getTargetDraggable(): AnyDraggable {
+    return activeTargetDraggable || this;
   }
 
-  _getSourceDraggable() {
-    return sourceDraggable || this;
+  _getSourceDraggable(): AnyDraggable {
+    return activeSourceDraggable || this;
   }
 
   _setTargetDraggable(): void {
@@ -1150,23 +1362,25 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     const sourceDraggable = this._getSourceDraggable();
 
     if (currentGroup && currentGroup === sourceDraggable.option('group')) {
-      targetDraggable = this;
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      activeTargetDraggable = this;
     }
   }
 
   _setSourceDraggable(): void {
-    sourceDraggable = this;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    activeSourceDraggable = this;
   }
 
   _resetSourceDraggable(): void {
-    sourceDraggable = null;
+    activeSourceDraggable = null;
   }
 
   _resetTargetDraggable(): void {
-    targetDraggable = null;
+    activeTargetDraggable = null;
   }
 
-  _resetDragOptions(targetDraggable): void {
+  _resetDragOptions(targetDraggable: AnyDraggable): void {
     this.reset();
     targetDraggable.reset();
     this._stopAnimator();
@@ -1190,13 +1404,13 @@ class Draggable extends DOMComponent<Draggable, DraggableProperties> {
     this._stopAnimator();
   }
 
-  _fireDragEnterEvent(sourceEvent): void {
+  _fireDragEnterEvent(sourceEvent: DragEvent): void {
     const args = this._getEventArgs(sourceEvent);
 
     this._getAction('onDragEnter')(args);
   }
 
-  _fireDragLeaveEvent(sourceEvent): void {
+  _fireDragLeaveEvent(sourceEvent: DragEvent): void {
     const args = this._getEventArgs(sourceEvent);
 
     this._getAction('onDragLeave')(args);
