@@ -39,6 +39,7 @@ import EdgesOption from '@ts/ui/diagram/diagram.edges_option';
 import { getDiagram } from '@ts/ui/diagram/diagram.importer';
 import NodesOption from '@ts/ui/diagram/diagram.nodes_option';
 import DiagramOptionsUpdateBar from '@ts/ui/diagram/diagram.options_update';
+import type { ToolboxGroups } from '@ts/ui/diagram/diagram.toolbox_manager';
 import DiagramToolboxManager from '@ts/ui/diagram/diagram.toolbox_manager';
 import diagramContextMenuModule from '@ts/ui/diagram/ui.diagram.context_menu';
 import DiagramContextToolbox from '@ts/ui/diagram/ui.diagram.context_toolbox';
@@ -862,7 +863,6 @@ class Diagram extends Widget<Properties> {
           const $toolboxContainer = $(e.$element);
           let isTextGroup = displayMode === 'texts';
           if (!shapes && !category && !isTextGroup) {
-            // @ts-expect-error ts-error
             const group = this._getToolboxGroups()?.filter((g) => g.category === e.category)[0];
             if (group) {
               isTextGroup = group.displayMode === 'texts';
@@ -1546,10 +1546,10 @@ class Diagram extends Widget<Properties> {
     return (customShapes ?? []) as Properties['customShapes'];
   }
 
-  _getToolboxGroups(): NonNullable<Properties['toolbox']>['groups'] {
+  _getToolboxGroups(): ToolboxGroups {
     const { toolbox } = this.option();
     // @ts-expect-error ts-error
-    return DiagramToolboxManager.getGroups(toolbox?.groups) as NonNullable<Properties['toolbox']>['groups'];
+    return DiagramToolboxManager.getGroups(toolbox?.groups);
   }
 
   _updateAllCustomShapes(): void {
