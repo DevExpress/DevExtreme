@@ -1,3 +1,5 @@
+import { extend } from '@js/core/utils/extend';
+
 interface ExportItem {
   colspan?: number;
   rowspan?: number;
@@ -10,11 +12,12 @@ type PreparedItem<T extends ExportItem> = T & {
 
 function prepareItems<T extends ExportItem>(
   items: T[][],
-  emptyCell?: Partial<T> & { colspan: number; rowspan: number },
+  emptyCell?: Partial<T>,
 ): PreparedItem<T>[][] {
   const defaultSetter = (value: number | undefined): number => (!value ? 1 : value);
   const cloneItem = (item: PreparedItem<T>): PreparedItem<T> => (
-    { ...item, ...emptyCell }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend isn't typed
+    extend({}, item, emptyCell)
   );
 
   const resultItems: PreparedItem<T>[][] = [];
