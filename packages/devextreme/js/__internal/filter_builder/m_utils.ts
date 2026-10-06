@@ -100,7 +100,7 @@ const EMPTY_MENU_ICON = 'icon-none';
 const AND_GROUP_OPERATION = 'and';
 const EQUAL_OPERATION = '=';
 const NOT_EQUAL_OPERATION = '<>';
-const DATATYPE_OPERATIONS: Record<string, string[]> = {
+const DATATYPE_OPERATIONS: Record<string, string[] | undefined> = {
   number: ['=', '<>', '<', '>', '<=', '>=', 'isblank', 'isnotblank'],
   string: ['contains', 'notcontains', 'startswith', 'endswith', '=', '<>', 'isblank', 'isnotblank'],
   date: ['=', '<>', '<', '>', '<=', '>=', 'isblank', 'isnotblank'],
@@ -272,7 +272,7 @@ export function getGroupMenuItem(
   return availableGroups.filter((item) => item.value === groupValue)[0];
 }
 
-function getDefaultFilterOperations(field: OperationsField): string[] {
+function getDefaultFilterOperations(field: OperationsField): string[] | undefined {
   return (field.lookup && LOOKUP_OPERATIONS)
     || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
 }
@@ -285,7 +285,7 @@ export function getFilterOperations(field: OperationsField): string[] {
   const result = containItems(field.filterOperations)
     ? field.filterOperations
     : getDefaultFilterOperations(field);
-  return [...result].filter(isDefined);
+  return [...(result ?? [])].filter((operation) => operation !== undefined);
 }
 
 export function getCaptionByOperation(
