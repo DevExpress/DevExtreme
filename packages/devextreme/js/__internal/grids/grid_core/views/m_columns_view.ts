@@ -1063,7 +1063,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  protected _getRows(change?: ViewDataChange): ViewRow[] {
+  public _getRows(change?: ViewDataChange): ViewRow[] {
     return [];
   }
 
@@ -1670,6 +1670,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   protected getBoundingRect(): BoundingRect | null | undefined {
     return undefined;
   }
+
+  public getContextMenuItems?(options): unknown;
 
   public getName(): string | undefined {
     return undefined;

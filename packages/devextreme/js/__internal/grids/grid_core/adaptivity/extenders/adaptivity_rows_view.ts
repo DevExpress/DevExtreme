@@ -105,7 +105,7 @@ export const adaptivityRowsViewExtender = (
     return super._getCellElement.apply(this, arguments as any);
   }
 
-  private getContextMenuItems(options) {
+  public getContextMenuItems(options) {
     if (options.row?.rowType === 'detailAdaptive') {
       const view = this._columnHeadersView;
       const formItem = $(options.targetElement).closest('.dx-field-item-label').next().data('dx-form-item');
@@ -113,7 +113,6 @@ export const adaptivityRowsViewExtender = (
       options.column = formItem ? formItem.column : options.column;
       return view.getContextMenuItems?.(options);
     }
-    // @ts-expect-error
     return super.getContextMenuItems?.(options);
   }
 

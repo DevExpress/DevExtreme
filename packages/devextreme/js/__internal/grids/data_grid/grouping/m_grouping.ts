@@ -458,7 +458,7 @@ export const GroupingHeaderPanelExtender = (
 };
 
 export const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingRowsViewExtender extends Base {
-  private getContextMenuItems(options) {
+  public getContextMenuItems(options) {
     const that = this;
     const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
     let items;
