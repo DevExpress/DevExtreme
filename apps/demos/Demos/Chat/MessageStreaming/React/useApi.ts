@@ -77,6 +77,12 @@ function createDelayedRenderer({ delay = 20, onRender }: DelayedRendererOptions)
   return { pushChunk, stop };
 }
 
+const getErrorMessage = (err: unknown): string => {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+};
+
 export const useApi = () => {
   const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);
   const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
@@ -109,9 +115,9 @@ export const useApi = () => {
     return id;
   }, []);
 
-  const alertLimitReached = useCallback((): void => {
+  const alertError = useCallback((message: string): void => {
     setAlerts([{
-      message: 'Request limit reached, try again in a minute.',
+      message,
     }]);
 
     setTimeout(() => {
@@ -167,15 +173,17 @@ export const useApi = () => {
     } catch (e: unknown) {
       setTypingUsers([]);
 
-      if ((e as Error)?.name !== 'AbortError' && assistantId !== undefined) {
-        updateMessageText(assistantId, '');
-        alertLimitReached();
+      if (!abortControllerRef.current?.signal.aborted) {
+        if (assistantId !== undefined) {
+          updateMessageText(assistantId, '');
+        }
+        alertError(getErrorMessage(e));
       }
     } finally {
       abortControllerRef.current = null;
       setIsStreaming(false);
     }
-  }, [alertLimitReached, insertAssistantPlaceholder, updateMessageText]);
+  }, [alertError, insertAssistantPlaceholder, updateMessageText]);
 
   return {
     alerts,

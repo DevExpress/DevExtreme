@@ -44,7 +44,7 @@ export class AiService {
     };
 
     try {
-      const stream = await this.chatService.chat.completions.create(params, { signal });
+      const stream = await this.chatService.chat.completions.create(params, { signal, maxRetries: 0 });
 
       for await (const event of stream) {
         const delta = event.choices?.[0]?.delta?.content;
