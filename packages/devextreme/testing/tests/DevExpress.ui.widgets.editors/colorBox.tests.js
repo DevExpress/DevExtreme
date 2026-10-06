@@ -1074,6 +1074,98 @@ QUnit.module('Regressions', {
         assert.equal(colorBox.option('value'), null);
         assert.equal(colorBox.option('text'), '');
     });
+
+    const selectColorByKeyboard = ($colorBox) => {
+        keyboardMock($colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`)).press('up');
+    };
+
+    const clearInputByBackspace = ($colorBox) => {
+        const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);
+
+        keyboardMock($input)
+            .caret({ start: 0, end: $input.val().length })
+            .press('backspace')
+            .change();
+    };
+
+    [false, true].forEach(editAlphaChannel => {
+        const createColorBox = (options) => {
+            const $colorBox = $('#color-box').dxColorBox($.extend({
+                value: '#f05b41',
+                applyValueMode: 'instantly',
+                editAlphaChannel,
+                opened: true
+            }, options));
+
+            return { $colorBox, colorBox: $colorBox.dxColorBox('instance') };
+        };
+
+        QUnit.test(`value should be cleared by backspace after color selecting if applyValueMode = instantly, editAlphaChannel = ${editAlphaChannel} (T1336404)`, function(assert) {
+            const onValueChanged = sinon.spy();
+            const { $colorBox, colorBox } = createColorBox({ onValueChanged });
+
+            selectColorByKeyboard($colorBox);
+            const selectedValue = colorBox.option('value');
+            onValueChanged.resetHistory();
+
+            clearInputByBackspace($colorBox);
+
+            assert.strictEqual(colorBox.option('value'), '');
+            assert.strictEqual(colorBox.option('text'), '');
+            assert.strictEqual(onValueChanged.callCount, 1, 'valueChanged is raised once');
+            assert.strictEqual(onValueChanged.firstCall.args[0].previousValue, selectedValue, 'previousValue');
+            assert.strictEqual(onValueChanged.firstCall.args[0].value, '', 'value');
+            assert.strictEqual(colorBox._colorView._currentColor.toHex(), '#000000', 'palette is reset');
+        });
+
+        QUnit.test(`value should be cleared by backspace without color selecting if applyValueMode = instantly, editAlphaChannel = ${editAlphaChannel} (T1336404)`, function(assert) {
+            const { $colorBox, colorBox } = createColorBox();
+
+            clearInputByBackspace($colorBox);
+
+            assert.strictEqual(colorBox.option('value'), '');
+            assert.strictEqual(colorBox._colorView._currentColor.toHex(), '#000000', 'palette is reset');
+        });
+
+        QUnit.test(`value should be cleared by backspace after color selecting and closing the popup if applyValueMode = instantly, editAlphaChannel = ${editAlphaChannel} (T1336404)`, function(assert) {
+            const { $colorBox, colorBox } = createColorBox();
+
+            selectColorByKeyboard($colorBox);
+            colorBox.close();
+            clearInputByBackspace($colorBox);
+
+            assert.strictEqual(colorBox.option('value'), '');
+            assert.strictEqual(colorBox._colorView._currentColor.toHex(), '#000000', 'palette is reset');
+        });
+
+        QUnit.test(`value should be empty after setting the value option to an empty string if applyValueMode = instantly, editAlphaChannel = ${editAlphaChannel} (T1336404)`, function(assert) {
+            const { $colorBox, colorBox } = createColorBox();
+
+            selectColorByKeyboard($colorBox);
+            colorBox.option('value', '');
+
+            assert.strictEqual(colorBox.option('value'), '');
+            assert.strictEqual(colorBox._colorView._currentColor.toHex(), '#000000', 'palette is reset');
+        });
+
+        QUnit.test(`a color should be applied after clearing by backspace if applyValueMode = instantly, editAlphaChannel = ${editAlphaChannel} (T1336404)`, function(assert) {
+            const { $colorBox, colorBox } = createColorBox();
+
+            clearInputByBackspace($colorBox);
+            selectColorByKeyboard($colorBox);
+
+            assert.notStrictEqual(colorBox.option('value'), '', 'color is applied');
+        });
+
+        QUnit.test(`palette should be reset after clearing by backspace if applyValueMode = useButtons, editAlphaChannel = ${editAlphaChannel} (T1336404)`, function(assert) {
+            const { $colorBox, colorBox } = createColorBox({ applyValueMode: 'useButtons' });
+
+            clearInputByBackspace($colorBox);
+
+            assert.strictEqual(colorBox.option('value'), '');
+            assert.strictEqual(colorBox._colorView._currentColor.toHex(), '#000000', 'palette is reset');
+        });
+    });
 });
 
 QUnit.module('valueChanged handler should receive correct event', {
