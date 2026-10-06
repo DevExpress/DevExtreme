@@ -29,4 +29,4 @@ The AI service translates grid-related requests into a list of structured comman
 - **Sorting** - sets a column's `sortOrder`, or calls [clearSorting()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#clearSorting).
 - **Column visibility** - shows or hides a column.
 
-A single request can include multiple commands (for example, "Show completed tasks and sort by priority"). The `gridCommands` object in the demo code defines the available commands and their parameters. Add a new command to this object to extend the assistant.
+The `gridCommands` object in the demo code defines the available commands and their parameters. Add a new command to this object to extend the assistant. A single request can include multiple commands (for example, "Show completed tasks and sort by priority"). 
