@@ -22,6 +22,7 @@ import {
 } from '@js/core/utils/type';
 import type { DxEvent, EventInfo, InitializedEventInfo } from '@js/events';
 import type { DeprecatedOptionInfo } from '@ts/core/options/index';
+import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 const getEventName = (
@@ -58,7 +59,7 @@ export interface ComponentProperties<TComponent> extends ComponentOptions<
   InitializedEventInfo<TComponent>,
   OptionChangedEventInfo<TComponent>
 > {
-  integrationOptions?: Record<string, unknown>;
+  integrationOptions?: IntegrationOptions;
 
   onInitializing?: ((e: [ComponentProperties<TComponent>]) => void) | undefined;
 
@@ -85,7 +86,7 @@ export class Component<
 > extends (Class.inherit({}) as new() => {}) implements PublicComponent<TProperties> {
   _deprecatedOptions!: Partial<TProperties>;
 
-  _options!: Options;
+  _options!: Options<TProperties>;
 
   _optionsByReference!: Partial<TProperties>;
 
@@ -367,7 +368,6 @@ export class Component<
     name: TPropertyName,
   ): TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : unknown;
   initialOption(name: string): unknown {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.initial(name);
   }
 
@@ -542,7 +542,6 @@ export class Component<
      @typescript-eslint/unified-signatures */
   option(...args: any[]): TProperties;
   option(...args: unknown[]): unknown {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.option(...args as [never, never]);
   }
 

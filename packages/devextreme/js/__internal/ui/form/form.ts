@@ -44,6 +44,7 @@ import type {
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
 import errors from '@js/ui/widget/ui.errors';
+import type { IntegrationOptions } from '@ts/core/template_manager';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import { logger } from '@ts/core/utils/m_console';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -1031,7 +1032,7 @@ class Form extends Widget<FormProperties> {
     componentConfiguration: TTComponent extends { _getDefaultOptions: () => infer TTProperties }
       ? string extends keyof TTProperties
         ? object
-        : Partial<TTProperties> & { integrationOptions?: Record<string, unknown> }
+        : Partial<TTProperties> & { integrationOptions?: IntegrationOptions }
       : IProperties,
   ): TTComponent {
     const { readOnly } = this.option();
