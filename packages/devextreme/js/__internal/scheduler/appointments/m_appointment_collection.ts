@@ -162,7 +162,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return this.option('getResourceManager')();
   }
 
-  notifyObserver(subject, args) {
+  notifyObserver(subject, args?) {
     const notifyScheduler: any = this.option('notifyScheduler');
     if (notifyScheduler) {
       notifyScheduler.invoke(subject, args);
