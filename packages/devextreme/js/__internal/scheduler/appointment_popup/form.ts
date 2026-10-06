@@ -210,6 +210,7 @@ export class AppointmentForm {
     const { startDateExpr } = this.config.dataAccessors.expr;
     const value = this.getFormDataField(startDateExpr);
 
+    // @ts-expect-error the value is a date or a string
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 
@@ -217,6 +218,7 @@ export class AppointmentForm {
     const { endDateExpr } = this.config.dataAccessors.expr;
     const value = this.getFormDataField(endDateExpr);
 
+    // @ts-expect-error the value is a date or a string
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 

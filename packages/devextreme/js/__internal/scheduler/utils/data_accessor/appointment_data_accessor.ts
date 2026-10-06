@@ -53,6 +53,7 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
         ? dateSerialization.deserializeDate(commonGetter(object))
         : commonGetter(object);
 
+      // @ts-expect-error the date is a date or a string
       return date === undefined ? date : new Date(date);
     };
 
@@ -62,6 +63,7 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
       } else if (this.forceIsoDateParsing && !serializationFormatCache) {
         const oldValue = commonGetter(object);
 
+        // @ts-expect-error the format can be null
         serializationFormatCache = dateSerialization.getDateSerializationFormat(oldValue);
       }
 

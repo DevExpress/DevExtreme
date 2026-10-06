@@ -560,7 +560,7 @@ class DateBox<
     const { type = 'date', dateSerializationFormat } = this.option();
     const submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[type];
     const submitValue = dateSerializationFormat
-      ? dateSerialization.serializeDate(value, dateSerializationFormat)
+      ? dateSerialization.serializeDate(value, dateSerializationFormat) as string
       : uiDateUtils.toStandardDateFormat(value, submitFormat);
 
     this._getSubmitElement().val(submitValue);
@@ -913,7 +913,7 @@ class DateBox<
   getDateOption(optionName: 'value' | 'min' | 'max'): Date | null {
     const { [optionName]: optionValue } = this.option();
 
-    const deserializedDate: Date | null = dateSerialization.deserializeDate(optionValue);
+    const deserializedDate = dateSerialization.deserializeDate(optionValue) as Date | null;
 
     return deserializedDate;
   }
@@ -927,6 +927,7 @@ class DateBox<
   _serializeDate(date?: DateLike): Date | string | null {
     const serializationFormat = this._getSerializationFormat();
 
+    // @ts-expect-error the date can be a number
     const serializedDate: Date | string | null = dateSerialization.serializeDate(
       date,
       serializationFormat,

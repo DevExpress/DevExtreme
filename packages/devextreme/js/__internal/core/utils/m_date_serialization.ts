@@ -68,8 +68,9 @@ const getIso8601Format = function getIso8601Format(
   return result;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers use the result as any
-const getDateSerializationFormat = function getDateSerializationFormat(value: unknown): any {
+const getDateSerializationFormat = function getDateSerializationFormat(
+  value: unknown,
+): string | null | undefined {
   if (typeof value === 'number') {
     return NUMBER_SERIALIZATION_FORMAT;
   } if (isString(value)) {
@@ -179,20 +180,18 @@ const dateParser = function dateParser<T>(text: T, skipISO8601Parsing?: boolean)
   return result ?? parseDate(text);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers use the result as any
-const deserializeDate = function deserializeDate(value: unknown): any {
+const deserializeDate = function deserializeDate<T>(value: T): Date | Exclude<T, number> {
   if (typeof value === 'number') {
     return new Date(value);
   }
 
-  return dateParser(value, !config().forceIsoDateParsing);
+  return dateParser(value, !config().forceIsoDateParsing) as Date | Exclude<T, number>;
 };
 
-const serializeDate = function serializeDate(
-  value: unknown,
+const serializeDate = function serializeDate<T>(
+  value: T,
   serializationFormat?: string | null,
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers use the result as any
-): any {
+): T | number | string | null {
   if (!serializationFormat) {
     return value;
   }
