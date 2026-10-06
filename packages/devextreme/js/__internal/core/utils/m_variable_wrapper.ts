@@ -2,27 +2,27 @@ import { logger } from '@js/core/utils/console';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
 
 interface VariableWrapper {
-  isWrapped: (value: any) => boolean;
-  isWritableWrapped: (value: any) => boolean;
-  wrap: (value: any) => any;
-  unwrap: (value: any) => any;
-  assign: (variable: any, value: any) => void;
+  isWrapped: (value: unknown) => boolean;
+  isWritableWrapped: (value: unknown) => boolean;
+  wrap: (value: unknown) => unknown;
+  unwrap: (value: unknown) => unknown;
+  assign: (variable: unknown, value: unknown) => void;
 }
 
 const variableWrapper = dependencyInjector<VariableWrapper>({
-  isWrapped: function () {
+  isWrapped() {
     return false;
   },
-  isWritableWrapped: function () {
+  isWritableWrapped() {
     return false;
   },
-  wrap: function (value) {
+  wrap(value) {
     return value;
   },
-  unwrap: function (value) {
+  unwrap(value) {
     return value;
   },
-  assign: function () {
+  assign() {
     logger.error('Method \'assign\' should not be used for not wrapped variables. Use \'isWrapped\' method for ensuring.');
   },
 });

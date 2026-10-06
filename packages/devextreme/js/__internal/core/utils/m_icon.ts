@@ -1,4 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
 
@@ -9,7 +10,9 @@ const NOT_URL_REGEXP = /^(?!(?:https?:\/\/)|(?:ftp:\/\/)|(?:www\.))[^\s]+$/;
 const FILE_NAME_REGEXP = /.+\/([^.]+)\..+$/;
 const SVG_TITLE_REGEXP = /<title>(.+?)<\/title>/;
 
-export const getImageSourceType = (source) => {
+type ImageSourceType = 'svg' | 'image' | 'dxIcon' | 'fontIcon';
+
+export const getImageSourceType = (source: unknown): ImageSourceType | false => {
   if (!source || typeof source !== 'string') {
     return false;
   }
@@ -33,16 +36,16 @@ export const getImageSourceType = (source) => {
   return false;
 };
 
-export const getImageContainer = (source) => {
+export const getImageContainer = (source?: string | null): dxElementWrapper | null => {
   switch (getImageSourceType(source)) {
     case 'image':
-      return $('<img>').attr('src', source).addClass(ICON_CLASS);
+      return $('<img>').attr('src', source as string).addClass(ICON_CLASS);
     case 'fontIcon':
       return $('<i>').addClass(`${ICON_CLASS} ${source}`);
     case 'dxIcon':
       return $('<i>').addClass(`${ICON_CLASS} ${ICON_CLASS}-${source}`);
     case 'svg':
-      return $('<i>').addClass(`${ICON_CLASS} ${SVG_ICON_CLASS}`).append(source);
+      return $('<i>').addClass(`${ICON_CLASS} ${SVG_ICON_CLASS}`).append(source as string);
     default:
       return null;
   }

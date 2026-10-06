@@ -97,7 +97,6 @@ const messageLocalization = dependencyInjector({
         args.unshift(message);
 
         // @ts-expect-error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return stringFormat.apply(this, args);
       };
     }

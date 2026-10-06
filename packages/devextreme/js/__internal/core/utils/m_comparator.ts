@@ -2,30 +2,31 @@ import domAdapter from '@js/core/dom_adapter';
 import { toComparable } from '@js/core/utils/data';
 import { isRenderer } from '@js/core/utils/type';
 
-const hasNegation = function (oldValue, newValue) {
+const hasNegation = function hasNegation(oldValue: number, newValue: number): boolean {
   return (1 / oldValue) === (1 / newValue);
 };
 
-export const equals = function (oldValue, newValue) {
-  oldValue = toComparable(oldValue, true);
-  newValue = toComparable(newValue, true);
+export const equals = function equals(oldValue: unknown, newValue: unknown): boolean {
+  const oldComparable = toComparable(oldValue, true);
+  const newComparable = toComparable(newValue, true);
 
-  if (oldValue && newValue && isRenderer(oldValue) && isRenderer(newValue)) {
-    return newValue.is(oldValue);
+  if (oldComparable && newComparable && isRenderer(oldComparable) && isRenderer(newComparable)) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- toComparable() is typed any
+    return newComparable.is(oldComparable);
   }
 
-  const oldValueIsNaN = oldValue !== oldValue;
-  const newValueIsNaN = newValue !== newValue;
+  const oldValueIsNaN = Number.isNaN(oldComparable);
+  const newValueIsNaN = Number.isNaN(newComparable);
   if (oldValueIsNaN && newValueIsNaN) {
     return true;
   }
 
-  if (oldValue === 0 && newValue === 0) {
-    return hasNegation(oldValue, newValue);
+  if (oldComparable === 0 && newComparable === 0) {
+    return hasNegation(oldComparable, newComparable);
   }
 
-  if (oldValue === null || typeof oldValue !== 'object' || domAdapter.isElementNode(oldValue)) {
-    return oldValue === newValue;
+  if (oldComparable === null || typeof oldComparable !== 'object' || domAdapter.isElementNode(oldComparable)) {
+    return oldComparable === newComparable;
   }
 
   return false;
