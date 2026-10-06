@@ -1074,6 +1074,31 @@ QUnit.module('Regressions', {
         assert.equal(colorBox.option('value'), null);
         assert.equal(colorBox.option('text'), '');
     });
+
+    [false, true].forEach(editAlphaChannel => {
+        QUnit.test(`value should be cleared by backspace after color selecting if applyValueMode = instantly, editAlphaChannel = ${editAlphaChannel} (T1336404)`, function(assert) {
+            const $colorBox = $('#color-box').dxColorBox({
+                value: '#f05b41',
+                applyValueMode: 'instantly',
+                editAlphaChannel,
+                opened: true,
+            });
+            const colorBox = $colorBox.dxColorBox('instance');
+            const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
+
+            keyboard.press('up');
+
+            keyboard
+                .caret({ start: 0, end: $input.val().length })
+                .press('backspace')
+                .change();
+
+            assert.strictEqual(colorBox.option('value'), '');
+            assert.strictEqual(colorBox._colorView._currentColor.toHex(), '#000000', 'palette is reset');
+            assert.strictEqual(colorBox._colorView.option('value'), editAlphaChannel ? 'rgba(0, 0, 0, 1)' : null, 'palette value is reset');
+        });
+    });
 });
 
 QUnit.module('valueChanged handler should receive correct event', {
