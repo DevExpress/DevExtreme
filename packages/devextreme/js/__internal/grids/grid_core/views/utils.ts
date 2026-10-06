@@ -10,7 +10,7 @@ export const getCellText = (
   displayValue: unknown,
 ): string => (
   columnHasValue(column)
-    ? gridCoreUtils.formatValue(displayValue, column) as string
+    ? gridCoreUtils.formatValue(displayValue, column)
     : ''
 );
 

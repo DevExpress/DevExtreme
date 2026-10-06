@@ -2,9 +2,13 @@
 
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
+import type { GroupDescriptor } from '@js/common/data';
 import DataSource from '@js/common/data/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/common/data/utils';
+import type { HeaderFilterGroupInterval } from '@js/common/grids';
+import { data as elementData } from '@js/core/element_data';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -22,8 +26,16 @@ import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { isNumeric } from '@ts/core/utils/m_type';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { ColumnPoint, SelectionRange } from '@ts/grids/grid_core/types';
+import type { SortingInfo } from '@ts/data/utils';
+import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type {
+  ColumnPoint,
+  FormatOptions,
+  LoadPanelPosition,
+  SelectionRange,
+  SummaryTextItem,
+  WidgetElementData,
+} from '@ts/grids/grid_core/types';
 
 import { AI_COLUMN_NAME } from './ai_column/const';
 import type DataSourceAdapter from './data_source_adapter/m_data_source_adapter';
@@ -43,25 +55,25 @@ const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 const SCROLLING_MODE_OPTION = 'scrolling.mode';
 const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
 const DATE_INTERVAL_SELECTORS = {
-  year(value) {
+  year(value: Date): number {
     return value && value.getFullYear();
   },
-  month(value) {
+  month(value: Date): number {
     return value && (value.getMonth() + 1);
   },
-  day(value) {
+  day(value: Date): number {
     return value && value.getDate();
   },
-  quarter(value) {
+  quarter(value: Date): number {
     return value && (Math.floor(value.getMonth() / 3) + 1);
   },
-  hour(value) {
+  hour(value: Date): number {
     return value && value.getHours();
   },
-  minute(value) {
+  minute(value: Date): number {
     return value && value.getMinutes();
   },
-  second(value) {
+  second(value: Date): number {
     return value && value.getSeconds();
   },
 };
@@ -72,19 +84,24 @@ export function isDateType(dataType: string | undefined): boolean {
   return dataType === 'date' || dataType === 'datetime';
 }
 
-const getIntervalSelector = function () {
-  const data = arguments[1];
+const getIntervalSelector = function getIntervalSelector(
+  this: Column & Required<Pick<Column, 'calculateCellValue'>>,
+  interval: HeaderFilterGroupInterval | number,
+  data: unknown,
+): number | null | undefined {
   const value = this.calculateCellValue(data);
 
   if (!isDefined(value)) {
     return null;
   } if (isDateType(this.dataType)) {
-    const nameIntervalSelector = arguments[0];
+    const nameIntervalSelector = interval as HeaderFilterGroupInterval;
     return DATE_INTERVAL_SELECTORS[nameIntervalSelector](value);
   } if (this.dataType === 'number') {
-    const groupInterval = arguments[0];
+    const groupInterval = interval as number;
     return Math.floor(Number(value) / groupInterval) * groupInterval;
   }
+
+  return undefined;
 };
 
 const getGlobalFormat = (dataType: string): Format | undefined => {
@@ -104,27 +121,31 @@ const getGlobalFormat = (dataType: string): Format | undefined => {
     : globalFormat;
 };
 
-const setEmptyText = function ($container) {
+const setEmptyText = ($container: dxElementWrapper): void => {
   $container.get(0).textContent = '\u00A0';
 };
 
-const normalizeSortingInfo = function (sort) {
-  sort = sort || [];
-  const result = normalizeSortingInfoUtility(sort);
+const normalizeSortingInfo = (sort: unknown): SortingInfo[] => {
+  const sortItems = sort || [];
+  const result = normalizeSortingInfoUtility(sortItems);
 
-  for (let i = 0; i < sort.length; i++) {
-    if (sort && sort[i] && sort[i].isExpanded !== undefined) {
-      result[i].isExpanded = sort[i].isExpanded;
-    }
-    if (sort && sort[i] && sort[i].groupInterval !== undefined) {
-      result[i].groupInterval = sort[i].groupInterval;
+  if (Array.isArray(sortItems)) {
+    for (let i = 0; i < sortItems.length; i += 1) {
+      if (sortItems?.[i]?.isExpanded !== undefined) {
+        result[i].isExpanded = sortItems[i].isExpanded;
+      }
+      if (sortItems?.[i]?.groupInterval !== undefined) {
+        result[i].groupInterval = sortItems[i].groupInterval;
+      }
     }
   }
   return result;
 };
 
-const formatValue = function (value, options) {
-  const valueText = formatHelper.format(value, options.format) || (value && value.toString()) || '';
+const formatValue = (value: unknown, options: FormatOptions): string => {
+  // @ts-expect-error typings of format() and of this || chain expect a primitive value
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string -- the value can be of any type
+  const valueText: string = formatHelper.format(value, options.format) || (value && value.toString()) || '';
   const formatObject = {
     value,
     valueText: options.getDisplayFormat ? options.getDisplayFormat(valueText) : valueText,
@@ -132,27 +153,36 @@ const formatValue = function (value, options) {
     groupInterval: options.groupInterval,
   };
 
-  return options.customizeText ? options.customizeText.call(options, formatObject) : formatObject.valueText;
+  return options.customizeText
+    ? options.customizeText.call(options, formatObject)
+    : formatObject.valueText;
 };
 
-const getSummaryText = function (summaryItem, summaryTexts) {
+const getSummaryText = (
+  summaryItem: SummaryTextItem,
+  summaryTexts: Record<string, string | undefined>,
+): string => {
   const displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[`${summaryItem.summaryType}OtherColumn`]) || summaryTexts[summaryItem.summaryType];
 
   return formatValue(summaryItem.value, {
     format: summaryItem.valueFormat,
     getDisplayFormat(valueText) {
-      return displayFormat ? format(displayFormat, valueText, summaryItem.columnCaption) : valueText;
+      return displayFormat
+        ? format(displayFormat, valueText, summaryItem.columnCaption)
+        : valueText;
     },
     customizeText: summaryItem.customizeText,
   });
 };
 
-const getWidgetInstance = function ($element) {
-  const editorData = $element?.data();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use their editor's API
+const getWidgetInstance = ($element: dxElementWrapper | undefined): any => {
+  const element = $element?.get(0);
+  const editorData: WidgetElementData | undefined = element && elementData(element);
   const dxComponents = editorData?.dxComponents;
   const widgetName = dxComponents?.[0];
 
-  return widgetName && editorData[widgetName];
+  return widgetName && editorData?.[widgetName];
 };
 
 const createPoint = <T extends ColumnPoint>(options: T): ColumnPoint => ({
@@ -162,7 +192,11 @@ const createPoint = <T extends ColumnPoint>(options: T): ColumnPoint => ({
   y: options.y,
 });
 
-const addPointIfNeed = <T extends ColumnPoint> (points: ColumnPoint[], pointProps: T, pointCreated: (point: T) => boolean): void => {
+const addPointIfNeed = <T extends ColumnPoint> (
+  points: ColumnPoint[],
+  pointProps: T,
+  pointCreated: (point: T) => boolean,
+): void => {
   let notCreatePoint = false;
 
   if (pointCreated) {
@@ -184,16 +218,16 @@ const getColumnWidths = (columns: Column[]): number[] => columns
     return isNumeric(width) ? parseFloat(width as string) : DEFAULT_COLUMN_WIDTH;
   });
 
-function normalizeGroupingLoadOptions(group) {
-  if (!Array.isArray(group)) {
-    group = [group];
-  }
+function normalizeGroupingLoadOptions(
+  group: GroupDescriptor<unknown> | GroupDescriptor<unknown>[],
+): GroupDescriptor<unknown>[] {
+  const groups = Array.isArray(group) ? group : [group];
 
-  return group.map((item, i) => {
+  return groups.map((item, i) => {
     if (isString(item)) {
       return {
         selector: item,
-        isExpanded: i < group.length - 1,
+        isExpanded: i < groups.length - 1,
       };
     }
 
@@ -202,18 +236,18 @@ function normalizeGroupingLoadOptions(group) {
 }
 
 export default {
-  renderNoDataText($element) {
-    const that = this;
-    $element = $element || this.element();
+  renderNoDataText($container?: dxElementWrapper): void {
+    const $element = $container || this.element();
 
     if (!$element) {
       return;
     }
 
-    const noDataClass = that.addWidgetPrefix(NO_DATA_CLASS);
+    const noDataClass = this.addWidgetPrefix(NO_DATA_CLASS);
     let noDataElement = $element.find(`.${noDataClass}`).last();
     const isVisible = this._dataController.isEmpty();
-    const isDefaultLoading = this._dataController.isLoading() && !this._dataController.isCustomLoading?.();
+    const isDefaultLoading = this._dataController.isLoading()
+      && !this._dataController.isCustomLoading?.();
 
     if (!noDataElement.length) {
       noDataElement = $('<span>')
@@ -227,19 +261,22 @@ export default {
     if (isVisible && !isDefaultLoading) {
       noDataElement
         .removeClass('dx-hidden')
-        .text(that._getNoDataText());
+        .text(this._getNoDataText());
     } else {
       noDataElement
         .addClass('dx-hidden');
     }
   },
 
-  renderLoadPanel($element, $container, isLocalStore) {
-    const that = this;
-    let loadPanelOptions;
-
-    that._loadPanel && that._loadPanel.$element().remove();
-    loadPanelOptions = that.option('loadPanel');
+  renderLoadPanel(
+    $element: dxElementWrapper,
+    $container: dxElementWrapper,
+    isLocalStore?: boolean,
+  ): void {
+    if (this._loadPanel) {
+      this._loadPanel.$element().remove();
+    }
+    let loadPanelOptions = this.option('loadPanel');
 
     if (loadPanelOptions && (loadPanelOptions.enabled === 'auto' ? !isLocalStore : loadPanelOptions.enabled)) {
       loadPanelOptions = extend({
@@ -249,13 +286,13 @@ export default {
         zIndex: BASE_LOAD_PANEL_Z_INDEX,
       }, loadPanelOptions);
 
-      that._loadPanel = that._createComponent($('<div>').appendTo($container), LoadPanel, loadPanelOptions);
+      this._loadPanel = this._createComponent($('<div>').appendTo($container), LoadPanel, loadPanelOptions);
     } else {
-      that._loadPanel = null;
+      this._loadPanel = null;
     }
   },
 
-  calculateLoadPanelPosition($element) {
+  calculateLoadPanelPosition($element: dxElementWrapper | undefined): LoadPanelPosition {
     const $window = $(getWindow());
     if (getHeight($element) > getHeight($window)) {
       return {
@@ -267,13 +304,13 @@ export default {
     return { of: $element };
   },
 
-  getIndexByKey(key, items, keyName?) {
+  getIndexByKey(key: unknown, items: unknown, keyName?: string | string[] | null): number {
     let index = -1;
 
     if (key !== undefined && Array.isArray(items)) {
-      keyName = arguments.length <= 2 ? 'key' : keyName;
-      for (let i = 0; i < items.length; i++) {
-        const item = isDefined(keyName) ? items[i][keyName] : items[i];
+      const keyField = arguments.length <= 2 ? 'key' : keyName;
+      for (let i = 0; i < items.length; i += 1) {
+        const item = isDefined(keyField) ? items[i][String(keyField)] : items[i];
 
         if (equalByValue(key, item)) {
           index = i;
@@ -285,12 +322,12 @@ export default {
     return index;
   },
 
-  checkChanges(changes, changeNames) {
+  checkChanges(changes: ColumnsChanges['optionNames'], changeNames: string[]): number | boolean {
     let changesWithChangeNamesCount = 0;
 
-    for (let i = 0; i < changeNames.length; i++) {
-      if (changes[changeNames[i]]) {
-        changesWithChangeNamesCount++;
+    for (const changeName of changeNames) {
+      if (changes[changeName]) {
+        changesWithChangeNamesCount += 1;
       }
     }
 
@@ -299,7 +336,10 @@ export default {
 
   formatValue,
 
-  getFormatOptionsByColumn(column, target) {
+  getFormatOptionsByColumn(
+    column: Column & Pick<FormatOptions, 'getDisplayFormat'>,
+    target: string,
+  ): FormatOptions {
     return {
       format: column.format,
       getDisplayFormat: column.getDisplayFormat,
@@ -310,11 +350,13 @@ export default {
     };
   },
 
-  getDisplayValue(column, value, data, rowType?) {
-    if (column.displayValueMap && column.displayValueMap[value] !== undefined) {
-      return column.displayValueMap[value];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use it as their own type
+  getDisplayValue(column: Column, value: unknown, data: unknown, rowType?: string): any {
+    if (column.displayValueMap?.[String(value)] !== undefined) {
+      return column.displayValueMap[String(value)];
     }
     if (column.calculateDisplayValue && data && rowType !== 'group') {
+      // @ts-expect-error after columnOption it can still be a string, and the call throws
       return column.calculateDisplayValue(data);
     }
 
@@ -323,18 +365,22 @@ export default {
       && (rowType !== 'group' || (!column.calculateGroupValue && !column.calculateDisplayValue));
 
     if (isCalculatedFromLookup) {
+      // @ts-expect-error the lookup is checked above and gets calculateCellValue on init
       return column.lookup.calculateCellValue(value);
     }
 
     return value;
   },
 
-  getGroupRowSummaryText(summaryItems, summaryTexts) {
+  getGroupRowSummaryText(
+    summaryItems: SummaryTextItem[],
+    summaryTexts: Record<string, string | undefined> | undefined,
+  ): string {
     let result = '(';
 
-    for (let i = 0; i < summaryItems.length; i++) {
+    for (let i = 0; i < summaryItems.length; i += 1) {
       const summaryItem = summaryItems[i];
-      result += (i > 0 ? ', ' : '') + getSummaryText(summaryItem, summaryTexts);
+      result += (i > 0 ? ', ' : '') + getSummaryText(summaryItem, summaryTexts ?? {});
     }
     // eslint-disable-next-line no-return-assign
     return result += ')';
