@@ -323,8 +323,7 @@ class Calendar<
   }
 
   _convertToDate(value: DateLike | undefined): Date | null {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return dateSerialization.deserializeDate(value);
+    return dateSerialization.deserializeDate(value) as Date | null;
   }
 
   _dateValue(value: Date | (Date | null)[] | null, event: DxEvent): void {
@@ -1349,7 +1348,7 @@ class Calendar<
 
     const dateValue = this._convertToDate(value);
     this._getSubmitElement()
-      .val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
+      .val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN) as string);
   }
 
   _getSubmitElement(): dxElementWrapper {
