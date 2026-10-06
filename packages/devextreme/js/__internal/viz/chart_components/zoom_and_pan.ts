@@ -12,7 +12,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import * as transformEvents from '@js/common/core/events/transform';
 import { extend } from '@ts/core/utils/m_extend';
 import { isDefined } from '@ts/core/utils/m_type';
 import { name as wheelEvent } from '@ts/events/core/wheel';
@@ -21,6 +20,7 @@ import {
   move as dragEventMove,
   start as dragEventStart,
 } from '@ts/events/drag';
+import { exportNames as transformEvents } from '@ts/events/transform';
 import { getVizRangeObject, normalizeEnum } from '@ts/viz/core/utils';
 
 const EVENTS_NS = '.zoomAndPanNS';
