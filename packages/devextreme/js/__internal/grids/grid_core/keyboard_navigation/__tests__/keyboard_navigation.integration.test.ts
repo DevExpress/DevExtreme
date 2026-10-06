@@ -594,6 +594,47 @@ describe('Keyboard Navigation', () => {
       },
     );
 
+    it('should not start editing on Meta+x pressed while the rows are rendering', async () => {
+      const { instance, renderPendingTemplates } = await focusRowAndScrollDown(
+        false,
+        1,
+        EDITING_OPTIONS,
+      );
+
+      triggerKeyDown(instance, 'x', document.activeElement, { metaKey: true });
+      jest.runAllTimers();
+      renderPendingTemplates();
+
+      expect(instance.getController('editing').isEditing()).toBe(false);
+    });
+
+    it('should select all rows on Meta+A pressed while the rows are rendering', async () => {
+      const { instance } = await focusRowAndScrollDown(false, 1, {
+        ...EDITING_OPTIONS,
+        ...SELECTION_OPTIONS,
+      });
+
+      triggerKeyDown(instance, 'a', document.activeElement, { metaKey: true });
+      jest.runAllTimers();
+
+      expect(instance.getSelectedRowKeys()).toHaveLength(ROWS_KEYED_BY_INDEX.length);
+      expect(instance.getController('editing').isEditing()).toBe(false);
+    });
+
+    it('should focus the search panel on Meta+F pressed while the rows are rendering', async () => {
+      const { instance, $container } = await focusRowAndScrollDown(false, 1, {
+        ...EDITING_OPTIONS,
+        searchPanel: { visible: true },
+      });
+
+      triggerKeyDown(instance, 'f', document.activeElement, { metaKey: true });
+      jest.runAllTimers();
+
+      const searchInput = ($container.get(0) as HTMLElement).querySelector('.dx-datagrid-search-panel input');
+      expect(document.activeElement).toBe(searchInput);
+      expect(instance.getController('editing').isEditing()).toBe(false);
+    });
+
     it('should start editing the focused cell on enter pressed once the rows are rendered', async () => {
       const { instance, renderPendingTemplates } = await focusRowAndScrollDown(
         false,

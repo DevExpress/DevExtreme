@@ -39,7 +39,9 @@ import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
 import { ColumnsView } from './m_columns_view';
 import type { RowsViewScrollEvent } from './types';
-import { getCellText, getMaxHorizontalScrollOffset, isSameColumnLayout } from './utils';
+import {
+  getCellText, getMaxHorizontalScrollOffset, isRowElementVisible, isSameColumnLayout,
+} from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';
@@ -54,7 +56,6 @@ const LAST_ROW_BORDER = 'dx-last-row-border';
 const EMPTY_CLASS = 'dx-empty';
 const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 const CONTENT_FIXED_CLASS = 'content-fixed';
-const INVISIBLE_CLASS = 'dx-state-invisible';
 export const ROW_LINES_CLASS = 'dx-row-lines';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
@@ -443,12 +444,8 @@ export class RowsView extends ColumnsView {
     );
 
     const isSameRows = renderedRows.length === items.length
-      && renderedRows.every((renderedRow, index) => {
-        const isRenderedVisible = !$(rowElements[index]).hasClass(INVISIBLE_CLASS);
-
-        return isSameItem(renderedRow, items[index], true)
-          && isRenderedVisible === (items[index].visible !== false);
-      });
+      && renderedRows.every((renderedRow, index) => isSameItem(renderedRow, items[index], true)
+        && isRowElementVisible(rowElements[index]) === (items[index].visible !== false));
 
     if (!isSameRows || !renderedRows.length) {
       return isSameRows;

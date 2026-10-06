@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import { getMaxHorizontalScrollOffset, isSameColumnLayout } from '../utils';
+import { getMaxHorizontalScrollOffset, isRowElementVisible, isSameColumnLayout } from '../utils';
 
 const createContainerMock = (
   scrollWidth: number,
@@ -67,5 +67,25 @@ describe('isSameColumnLayout', () => {
     const columns = createColumns({ command: 'adaptive' }, { index: 1 });
 
     expect(isSameColumnLayout(renderedColumns, columns)).toBe(false);
+  });
+});
+
+describe('isRowElementVisible', () => {
+  it('accepts a shown row', () => {
+    expect(isRowElementVisible(document.createElement('tr'))).toBe(true);
+  });
+
+  it('rejects a row hidden by the invisible class', () => {
+    const rowElement = document.createElement('tr');
+    rowElement.classList.add('dx-state-invisible');
+
+    expect(isRowElementVisible(rowElement)).toBe(false);
+  });
+
+  it('rejects a row hidden by an inline style', () => {
+    const rowElement = document.createElement('tr');
+    rowElement.style.display = 'none';
+
+    expect(isRowElementVisible(rowElement)).toBe(false);
   });
 });

@@ -3,6 +3,8 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import gridCoreUtils from '../m_utils';
 
+const INVISIBLE_CLASS = 'dx-state-invisible';
+
 export const getCellText = (
   column: Column,
   displayValue: unknown,
@@ -25,3 +27,8 @@ export const isSameColumnLayout = (
   && renderedColumns.every((column, index) => (
     column.index === columns[index].index && column.command === columns[index].command
   ));
+
+// Without jQuery the renderer hides rows with a class; with jQuery, with an inline style.
+export const isRowElementVisible = (rowElement: HTMLElement): boolean => (
+  rowElement.style.display !== 'none' && !rowElement.classList.contains(INVISIBLE_CLASS)
+);

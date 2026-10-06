@@ -722,11 +722,12 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private isFocusedCellKey(eventArgs: KeyboardKeyDownEvent): boolean {
     const {
-      keyName, key, ctrl, alt, metaKey,
+      keyName, key, ctrl, alt, originalEvent,
     } = eventArgs;
     const isViewSwitch = ctrl && (keyName === 'upArrow' || keyName === 'downArrow');
+    const isCommandShortcut = isCommandKeyPressed(originalEvent) && (keyName === 'A' || keyName === 'F');
     const isFastEditingKey = key?.length === 1
-      && !ctrl && !alt && !metaKey
+      && !ctrl && !alt && !isCommandShortcut
       && !!this._isFastEditingAllowed();
 
     return !isViewSwitch && (FOCUSED_CELL_KEYS.includes(keyName) || isFastEditingKey);
