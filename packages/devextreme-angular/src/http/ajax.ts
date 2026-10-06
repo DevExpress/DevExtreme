@@ -175,7 +175,6 @@ function getRequestCallbacks(options: Options, deferred: DeferredResult, xhrSurr
 }
 
 function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurrogate: XHRSurrogate) {
-  let total = 0;
   let isUploadStarted = false;
 
   return {
@@ -187,8 +186,7 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
       }
 
       if (event.type === HttpEventType.UploadProgress) {
-        total += event.loaded;
-        options.upload.onprogress?.({ ...event, total });
+        options.upload.onprogress?.(event);
       } else if (event.type === HttpEventType.Response) {
         xhrSurrogate.status = event.status;
         xhrSurrogate.statusText = event.statusText;
