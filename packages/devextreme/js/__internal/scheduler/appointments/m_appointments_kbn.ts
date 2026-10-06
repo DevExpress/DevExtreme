@@ -142,7 +142,8 @@ export class AppointmentsKeyboardNavigation {
 
     this._collection.moveAppointmentBack();
 
-    const resizableInstance = (this.$focusTarget() as any).dxResizable('instance');
+    // @ts-expect-error dxResizable is a jQuery plugin method, not declared on dxElementWrapper
+    const resizableInstance = this.$focusTarget().dxResizable('instance');
 
     if (resizableInstance) {
       resizableInstance._detachEventHandlers();
@@ -201,6 +202,7 @@ export class AppointmentsKeyboardNavigation {
 
   private scrollToByItemData(itemData: SortedEntity): void {
     const date = new Date(Math.max(
+      // @ts-expect-error the start view date is defined once the work space is rendered
       this._collection.invoke('getStartViewDate').getTime(),
       itemData.source.startDate,
     ));

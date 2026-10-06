@@ -1,6 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { ItemContextMenuEvent } from '@js/ui/list';
-import type { Appointment, Properties } from '@js/ui/scheduler';
+import type { Appointment } from '@js/ui/scheduler';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
 import type { ResourceId } from './utils/loader/types';
@@ -343,7 +343,7 @@ export interface CompactAppointmentOptions {
   sortedIndex: number;
   width: number;
   height: number;
-  onAppointmentClick: Properties['onAppointmentClick'];
+  onAppointmentClick: (e: AppointmentTooltipContextMenuEventArgs) => void;
   allowDrag: boolean;
   isCompact: boolean;
 }
