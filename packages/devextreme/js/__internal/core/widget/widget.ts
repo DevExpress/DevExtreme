@@ -184,7 +184,6 @@ class Widget<
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _bindInnerWidgetOptions(innerWidget, optionsContainer): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const syncOptions = (): void => this._options.silent(
       optionsContainer,
       extend({}, innerWidget.option()),
