@@ -11,28 +11,28 @@ interface ComponentInstance {
 
 type ComponentMember = (...args: unknown[]) => unknown;
 
-interface ComponentClass {
-  getInstance: (element: Element) => ComponentInstance | undefined;
-  new (element: Element, options?: unknown): ComponentInstance;
+interface ComponentClass<TInstance = ComponentInstance> {
+  getInstance: (element: Element) => TInstance | undefined;
+  new (element: Element, options?: unknown): TInstance;
 }
 
-type ComponentNamespace = Record<string, ComponentClass>;
+type ComponentNamespace = Record<string, ComponentClass<object>>;
 
-function registerComponent(name: string, componentClass: ComponentClass): void;
+function registerComponent(name: string, componentClass: ComponentClass<object>): void;
 function registerComponent(
   name: string,
   namespace: ComponentNamespace,
-  componentClass: ComponentClass,
+  componentClass: ComponentClass<object>,
 ): void;
 function registerComponent(
   name: string,
-  namespace: ComponentNamespace | ComponentClass,
-  componentClass?: ComponentClass,
+  namespace: ComponentNamespace | ComponentClass<object>,
+  componentClass?: ComponentClass<object>,
 ): void {
   let registeredClass = componentClass;
 
   if (!registeredClass) {
-    registeredClass = namespace as ComponentClass;
+    registeredClass = namespace as ComponentClass<object>;
   } else {
     (namespace as ComponentNamespace)[name] = registeredClass;
   }

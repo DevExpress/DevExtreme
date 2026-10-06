@@ -15,23 +15,23 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { end as hoverEventEnd, start as hoverEventStart } from '@js/common/core/events/hover';
-import pointerEvents from '@js/common/core/events/pointer';
-import messageLocalization from '@js/common/core/localization/message';
-import $ from '@js/core/renderer';
-import { logger } from '@js/core/utils/console';
-import { extend } from '@js/core/utils/extend';
-import { getWidth } from '@js/core/utils/size';
-import { HIDDEN_FOR_EXPORT } from '@js/core/utils/svg';
-import { isDefined } from '@js/core/utils/type';
-import { getWindow } from '@js/core/utils/window';
 import {
   export as _export, image as imageExporter, pdf as pdfExporter, svg as svgExporter,
 } from '@js/exporter';
-import { getTheme } from '@js/viz/themes';
+import messageLocalization from '@ts/core/localization/message';
+import { renderer as $ } from '@ts/core/renderer';
+import { logger } from '@ts/core/utils/m_console';
+import { extend } from '@ts/core/utils/m_extend';
+import { getWidth } from '@ts/core/utils/m_size';
+import { HIDDEN_FOR_EXPORT } from '@ts/core/utils/m_svg';
+import { isDefined } from '@ts/core/utils/m_type';
+import { getWindow } from '@ts/core/utils/m_window';
+import { end as hoverEventEnd, start as hoverEventStart } from '@ts/events/hover';
+import pointerEvents from '@ts/events/pointer';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
 import { patchFontOptions } from '@ts/viz/core/utils';
+import { getTheme } from '@ts/viz/themes';
 
 const pointerActions = [pointerEvents.down, pointerEvents.move].join(' ');
 
@@ -340,7 +340,6 @@ function createMenuItems(renderer: ThemeValue, options: ThemeValue): MenuItem[] 
   items = options.formats.reduce((r, format) => {
     r.push(createMenuItem(renderer, options, {
       type: 'exporting',
-      // @ts-expect-error message.d.ts types the formatter returned by getFormatter() without parameters
       text: messageLocalization.getFormatter('vizExport-exportButtonText')(format),
       format,
       itemIndex: r.length,
@@ -365,7 +364,6 @@ export const exportFromMarkup = function (markup, options) {
   options.exportedAction = options.onExported;
   options.fileSavingAction = options.onFileSaving;
   options.margin = isDefined(options.margin) ? options.margin : MARGIN;
-  // @ts-expect-error themes.d.ts requires the theme name; getTheme() without it returns the current theme
   options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor;
   _export(markup, options, getCreatorFunc(options.format));
 };

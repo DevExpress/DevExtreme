@@ -14,13 +14,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/common/core/events/drag';
-import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
-import domAdapter from '@js/core/dom_adapter';
-import { extend } from '@js/core/utils/extend';
-import { isDefined, isFunction } from '@js/core/utils/type';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined, isFunction } from '@ts/core/utils/m_type';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
+import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@ts/events/drag';
+import pointerEvents from '@ts/events/pointer';
+import { addNamespace } from '@ts/events/utils/index';
 
 import { Plaque } from './plaque';
 import { Tooltip } from './tooltip';
@@ -36,6 +37,11 @@ const POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, EVENT_NS);
 const DRAG_START_EVENT_NAME = dragEventStart + DOT_EVENT_NS;
 const DRAG_EVENT_NAME = dragEventMove + DOT_EVENT_NS;
 const DRAG_END_EVENT_NAME = dragEventEnd + DOT_EVENT_NS;
+
+interface PointerEventData extends EngineEvent {
+  pageX: number;
+  pageY: number;
+}
 
 function coreAnnotation(options, contentTemplate) {
   return {
@@ -500,7 +506,7 @@ const corePlugin = {
         .css(this._getAnnotationStyles())
         .linkOn(this._renderer.root, 'annotations')
         .linkAppend();
-      eventsEngine.on(getDocument(), POINTER_ACTION, (e) => {
+      eventsEngine.on(getDocument(), POINTER_ACTION, (e: PointerEventData) => {
         if (this._disposed) {
           return;
         }

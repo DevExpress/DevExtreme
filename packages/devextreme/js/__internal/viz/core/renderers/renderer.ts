@@ -34,14 +34,15 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-plusplus */
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import domAdapter from '@js/core/dom_adapter';
-import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
-import { getSvgMarkup } from '@js/core/utils/svg';
-import { isDefined } from '@js/core/utils/type';
-import { getWindow } from '@js/core/utils/window';
+import type { Coordinates } from '@js/core/renderer';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { renderer as $ } from '@ts/core/renderer';
+import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
 import { callOnce } from '@ts/core/utils/call_once';
+import { getSvgMarkup } from '@ts/core/utils/m_svg';
+import { isDefined } from '@ts/core/utils/m_type';
+import { getWindow } from '@ts/core/utils/m_window';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { Animation, AnimationOptions } from '@ts/viz/core/renderers/animation';
 import { AnimationController } from '@ts/viz/core/renderers/animation';
@@ -282,8 +283,7 @@ function isObjectArgument(value: ThemeValue): value is SvgAttributes {
 }
 
 function createElement(tagName: string): SvgDomElement {
-  // @ts-expect-error the public DomAdapter typings lack createElementNS (the internal adapter has it)
-  return domAdapter.createElementNS('http://www.w3.org/2000/svg', tagName);
+  return domAdapter.createElementNS('http://www.w3.org/2000/svg', tagName) as SvgDomElement;
 }
 
 export function getFuncIri(id: string, pathModified?: boolean): string;
@@ -1247,7 +1247,7 @@ export let SvgElement = class SvgElement {
 
   declare type?: string;
 
-  declare _$element?: dxElementWrapper;
+  declare _$element?: CoreRenderer;
 
   declare _links: LinkedItem[];
 
@@ -1292,7 +1292,7 @@ export let SvgElement = class SvgElement {
     }
   }
 
-  _getJQElement(): dxElementWrapper {
+  _getJQElement(): CoreRenderer {
     return (this._$element || (this._$element = $(this.element)));
   }
 
@@ -1610,7 +1610,7 @@ export let SvgElement = class SvgElement {
     const args = [this._getJQElement()];
     // @ts-expect-error push.apply forwards `arguments`, which the typings do not accept as an argument array
     args.push.apply(args, arguments);
-    // @ts-expect-error events_engine.d.ts does not declare trigger
+    // @ts-expect-error apply() passes the collected array, the typings expect the (element, event, extraParameters?) tuple
     eventsEngine.trigger.apply(eventsEngine, args);
     return this;
   }
@@ -2016,7 +2016,7 @@ export let Renderer = class Renderer {
 
   declare pathModified: boolean;
 
-  declare _$container: dxElementWrapper;
+  declare _$container: CoreRenderer;
 
   declare _locker: number;
 

@@ -258,7 +258,7 @@ export const noop = function () {};
 // @ts-expect-error only void function can be called with new
 export const asyncNoop = function () { return new Deferred().resolve().promise(); };
 
-export const grep = function (elements, checkFunction, invert) {
+export const grep = function (elements, checkFunction, invert?) {
   const result: any[] = [];
   let check;
   const expectedCheck = !invert;

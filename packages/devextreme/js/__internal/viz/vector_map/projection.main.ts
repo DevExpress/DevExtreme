@@ -17,7 +17,7 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable max-classes-per-file */
 
-import { extend } from '@js/core/utils/extend';
+import { extend } from '@ts/core/utils/m_extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 

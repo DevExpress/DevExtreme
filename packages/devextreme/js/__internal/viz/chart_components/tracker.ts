@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable prefer-rest-params */
 /* eslint-disable no-return-assign */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/prefer-for-of */
@@ -23,15 +22,15 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable max-classes-per-file */
 
-import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
-import domAdapter from '@js/core/dom_adapter';
-import { noop as _noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { each as _each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { each as _each } from '@ts/core/utils/m_iterator';
+import { isDefined } from '@ts/core/utils/m_type';
+import { name as clickEventName } from '@ts/events/click';
+import eventsEngine from '@ts/events/core/events_engine';
+import pointerEvents from '@ts/events/pointer';
+import { addNamespace } from '@ts/events/utils/index';
 import consts from '@ts/viz/components/consts';
 
 import { getDistance, normalizeEnum as _normalizeEnum, pointInCanvas as inCanvas } from '../core/utils';

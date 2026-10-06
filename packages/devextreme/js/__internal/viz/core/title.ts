@@ -12,8 +12,8 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { extend } from '@js/core/utils/extend';
-import { isString as _isString } from '@js/core/utils/type';
+import { extend } from '@ts/core/utils/m_extend';
+import { isString as _isString } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { LayoutTargetOptions } from '@ts/viz/core/layout';
 import type { AlignedLayoutRect } from '@ts/viz/core/layout_element';

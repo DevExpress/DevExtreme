@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import formatHelper from '@js/format_helper';
+import formatHelper from '@ts/core/format_helper';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
@@ -322,7 +322,7 @@ export function formatValue(
 ): string {
   const normalizedValue = Object.is(value, -0) ? 0 : value;
   const formatOptions: GaugeFormatOptions = options ?? {};
-  const text = format(normalizedValue, formatOptions.format);
+  const text: string = format(normalizedValue, formatOptions.format);
   if (typeof formatOptions.customizeText === 'function') {
     const formatObject = extend({ value: normalizedValue, valueText: text }, extra);
     return String(formatOptions.customizeText.call(formatObject, formatObject));

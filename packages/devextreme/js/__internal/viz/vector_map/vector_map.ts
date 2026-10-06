@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import '@ts/viz/vector_map/projection';
 
-import componentRegistrator from '@js/core/component_registrator';
+import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
 // PLUGINS_SECTION
 import type { AnnotationsPluginMembers } from '@ts/viz/core/annotations';
 import { plugins as annotationsPlugins } from '@ts/viz/core/annotations';

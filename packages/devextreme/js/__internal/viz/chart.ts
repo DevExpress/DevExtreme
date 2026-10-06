@@ -8,7 +8,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable consistent-return */
 /* eslint-disable max-depth */
 /* eslint-disable no-bitwise */
@@ -17,14 +16,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
 
-import registerComponent from '@js/core/component_registrator';
-import { noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
-import { each as _each } from '@js/core/utils/iterator';
-import { getPrecision } from '@js/core/utils/math';
-import { getHeight } from '@js/core/utils/size';
-import { isDefined as _isDefined, type } from '@js/core/utils/type';
-import { hasWindow } from '@js/core/utils/window';
+import { registerComponent } from '@ts/core/component_registrator';
+import { noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { each as _each } from '@ts/core/utils/m_iterator';
+import { getPrecision } from '@ts/core/utils/m_math';
+import { getHeight } from '@ts/core/utils/m_size';
+import { isDefined as _isDefined, type } from '@ts/core/utils/m_type';
+import { hasWindow } from '@ts/core/utils/m_window';
 import { Crosshair, getMargins } from '@ts/viz/chart_components/crosshair';
 import { LayoutManager } from '@ts/viz/chart_components/layout_manager';
 import multiAxesSynchronizer from '@ts/viz/chart_components/multi_axes_synchronizer';

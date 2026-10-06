@@ -1,4 +1,4 @@
-import componentRegistrator from '@js/core/component_registrator';
+import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import BaseSparkline from '@ts/viz/sparklines/base_sparkline';

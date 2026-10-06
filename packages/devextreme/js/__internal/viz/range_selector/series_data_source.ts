@@ -5,9 +5,9 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
 
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isDate, isDefined, isNumeric } from '@js/core/utils/type';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { isDate, isDefined, isNumeric } from '@ts/core/utils/m_type';
 import { ThemeManager as ChartThemeManager } from '@ts/viz/components/chart_theme_manager';
 import { validateData } from '@ts/viz/components/data_validator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

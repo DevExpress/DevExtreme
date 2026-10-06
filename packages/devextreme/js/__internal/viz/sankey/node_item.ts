@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { isDefined } from '@js/core/utils/type';
+import { isDefined } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import type Link from '@ts/viz/sankey/link_item';
