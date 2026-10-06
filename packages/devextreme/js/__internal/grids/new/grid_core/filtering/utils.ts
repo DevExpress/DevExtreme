@@ -13,12 +13,14 @@ export const getAppliedFilterExpressions = (
   filterSyncEnabled: boolean,
 ): unknown[] => {
   const filters = [
+    // @ts-expect-error AppliedFilters.filterPanel is unknown
     getFilterExpression(appliedFilters.filterPanel, addDataFieldToComputedColumns(columns), customOperations, 'filterBuilder'),
     // Note: Search filters do not contain filter expressions
     appliedFilters.search,
   ];
 
   if (!filterSyncEnabled) {
+    // @ts-expect-error AppliedFilters.headerFilter is unknown
     filters.push(getFilterExpression(appliedFilters.headerFilter, addDataFieldToComputedColumns(columns), customOperations, 'headerFilter'));
   }
 

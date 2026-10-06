@@ -159,6 +159,7 @@ export class FilterBuilderController extends modules.Controller {
       : currentFilterValue;
     const columns = columnsController.getFilteringColumns();
     const customOperations = this.getCustomFilterOperations();
+    // @ts-expect-error FilterExpression and the grid FilterField do not match DataFilter and FilterBuilderField
     const filterExpression: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
 
     return filterExpression ? [filterExpression] : [];
