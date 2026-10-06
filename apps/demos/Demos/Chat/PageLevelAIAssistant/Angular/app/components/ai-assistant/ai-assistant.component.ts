@@ -73,7 +73,9 @@ export class AiAssistantComponent {
   setDisabled(value: boolean): void {
     this.disabled = value;
     this.changeDetectorRef.detectChanges();
-    if (!value) {
+    if (value) {
+      this.clearButtonInstance?.option('disabled', true);
+    } else {
       this.updateClearButtonState();
     }
   }

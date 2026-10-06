@@ -73,6 +73,7 @@ $(() => {
 
   function handleUserMessage(message) {
     setDisabled(true);
+    clearButtonInstance?.option('disabled', true);
 
     const finish = () => {
       setDisabled(false);
