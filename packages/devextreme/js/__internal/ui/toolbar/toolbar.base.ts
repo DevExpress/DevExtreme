@@ -610,6 +610,7 @@ class ToolbarBase<
   _renderGroupedItems(): void {
     const { items: groups = [] } = this.option();
     each(groups, (groupIndex, group) => {
+      // @ts-expect-error the groups have items
       const groupItems = group.items;
       const $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS);
       const location = group.location ?? 'center';

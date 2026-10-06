@@ -122,6 +122,7 @@ export const findBestMatches = (
     const item = mapFn ? mapFn(itemSrc) : itemSrc;
 
     each(targetFilter, (paramName, targetValue) => {
+      // @ts-expect-error item is an object here
       const value = item[paramName];
 
       if (value === undefined) {

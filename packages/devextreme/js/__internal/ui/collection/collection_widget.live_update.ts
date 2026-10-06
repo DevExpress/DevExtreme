@@ -129,6 +129,7 @@ class CollectionWidgetLiveUpdate<
         if (change.type === 'insert') {
           result = true;
           each(items, (_, item) => {
+            // @ts-expect-error the items and the changes have keys
             if (change.data.key !== undefined && change.data.key === item.key) {
               result = false;
               return false;

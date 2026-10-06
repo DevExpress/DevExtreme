@@ -8,10 +8,11 @@ class MenuBaseEditStrategy extends PlainEditStrategy<Item> {
     const items = this._getItems();
 
     const result = map(items, function getMenuItems(item: Item): Item | Item[] {
+      // @ts-expect-error map returns the nested items
       return item.items ? [item].concat(map(item.items, getMenuItems)) : item;
     });
 
-    return result.flat() as Item[];
+    return result.flat();
   }
 
   static _stringifyItem(item: Item): string {

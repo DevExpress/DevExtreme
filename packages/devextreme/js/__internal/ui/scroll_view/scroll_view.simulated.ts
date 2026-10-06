@@ -84,6 +84,7 @@ export class ScrollViewScroller extends Scroller {
 
     each(pullDownTextItems, (_, item) => {
       const action = this._state === item.visibleState ? 'addClass' : 'removeClass';
+      // @ts-expect-error the elements of the pull down texts are set
       item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
     });
   }

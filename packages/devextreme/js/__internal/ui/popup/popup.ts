@@ -871,8 +871,10 @@ class Popup<
     let index = 0;
 
     each(toolbarItems, (_, data) => {
+      // @ts-expect-error shortcut is not in the public ToolbarItem
       const isShortcut = isDefined(data.shortcut);
-      const item = isShortcut ? getButtonPlace(data.shortcut) : data;
+      // @ts-expect-error shortcut is not in the public ToolbarItem
+      const item: ToolbarItem = isShortcut ? getButtonPlace(data.shortcut) : data;
 
       if (isShortcut && currentPlatform === 'ios' && index < 2) {
         item.toolbar = 'top';
@@ -890,6 +892,7 @@ class Popup<
 
         const isLTROrder = currentPlatform === 'generic';
 
+        // @ts-expect-error shortcut is not in the public ToolbarItem
         if ((data.shortcut === 'done' && isLTROrder) || (data.shortcut === 'cancel' && !isLTROrder)) {
           toolbarsItems.unshift(item);
         } else {
