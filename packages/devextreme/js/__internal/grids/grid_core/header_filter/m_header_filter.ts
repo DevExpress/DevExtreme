@@ -443,6 +443,8 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const $indicator = super._updateIndicator($cell, column, indicatorName);
 
     $indicator && this._subscribeToIndicatorEvent($indicator, column, indicatorName);
+
+    return undefined;
   }
 
   private _updateHeaderFilterIndicators() {
