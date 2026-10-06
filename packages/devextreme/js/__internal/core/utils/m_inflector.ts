@@ -48,13 +48,13 @@ export const titleize = function titleize(text: TextLike): string {
 
 const DIGIT_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-export const captionize = function captionize(name: string | undefined): string {
+export const captionize = function captionize(name: string): string {
   const captionList: string[] = [];
   let isPrevCharNewWord = false;
   let isNewWord = false;
 
-  for (let i = 0; i < (name as string).length; i += 1) {
-    let char = (name as string).charAt(i);
+  for (let i = 0; i < name.length; i += 1) {
+    let char = name.charAt(i);
     isNewWord = (char === char.toUpperCase() && char !== '-' && char !== ')' && char !== '/') || (char in DIGIT_CHARS);
     if (char === '_' || char === '.') {
       char = ' ';

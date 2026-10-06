@@ -77,7 +77,7 @@ const pxExceptions = [
   'zoom',
 ];
 
-const parsePixelValue = function parsePixelValue(value: unknown): number {
+const parsePixelValue = function parsePixelValue(value: unknown): number | string {
   if (isNumeric(value)) {
     return value;
   } if (isString(value)) {
