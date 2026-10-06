@@ -30,9 +30,11 @@ function baseOperation(config) {
     filterValue && filterValue.forEach((value, index) => {
       if (isCondition(value) || isGroup(value)) {
         const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
+        // @ts-expect-error getFilterExpression returns an expression, not a string
         result.push(filterExpression);
       } else {
         const filterExpression = getFilterExpression([field.dataField ?? field.name, '=', value], fields, [], 'headerFilter');
+        // @ts-expect-error getFilterExpression returns an expression, not a string
         result.push(filterExpression);
       }
       index !== lastIndex && result.push('or');
