@@ -21,6 +21,7 @@ import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import { getNavigator, hasProperty } from '@js/core/utils/window';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Coords } from '@ts/viz/core/types';
 import { parseScalar } from '@ts/viz/core/utils';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 
@@ -56,11 +57,6 @@ interface EventNames {
   move: string;
   end: string;
   wheel: string;
-}
-
-interface Coords {
-  x: number;
-  y: number;
 }
 
 type EventHandler = (event: ThemeValue) => void;

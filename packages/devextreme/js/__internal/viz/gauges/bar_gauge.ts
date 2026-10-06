@@ -9,6 +9,7 @@ import { plugin as pluginLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { Coords } from '@ts/viz/core/types';
 import {
   convertAngleToRendererSpace,
   getCosAndSin,
@@ -28,11 +29,6 @@ import { applyCircularMainLayout, setupCircularCodomain } from '@ts/viz/gauges/c
 const PI_DIV_180 = Math.PI / 180;
 const ARC_COORD_PREC = 5;
 const OPTION_VALUES = 'values';
-
-interface Point {
-  x: number;
-  y: number;
-}
 
 interface BarTranslator {
   translate: (value: number) => number;
@@ -78,8 +74,8 @@ interface BarTooltipParameters {
 }
 
 interface LabelCoords {
-  topLeft: Point;
-  bottomRight: Point;
+  topLeft: Coords;
+  bottomRight: Coords;
 }
 
 interface StackedBars {
@@ -102,7 +98,7 @@ function getStartCoordsArc(
   outerR: number,
   startAngleCos: number,
   startAngleSin: number,
-): Point {
+): Coords {
   return {
     x: Number((x + outerR * startAngleCos).toFixed(ARC_COORD_PREC)),
     y: Number((y - outerR * startAngleSin).toFixed(ARC_COORD_PREC)),
@@ -653,7 +649,7 @@ class BarGauge extends BaseGauge {
     }
   }
 
-  _getCenter(): Point {
+  _getCenter(): Coords {
     return { x: this._context.x, y: this._context.y };
   }
 

@@ -10,7 +10,6 @@ import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 interface RangeViewParams {
   renderer: ThemeValue;
   root: ThemeValue;
-  translator: ThemeValue;
 }
 
 interface RangeViewCanvas {

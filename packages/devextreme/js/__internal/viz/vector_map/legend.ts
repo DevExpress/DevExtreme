@@ -69,7 +69,6 @@ function buildData(partition: number[], values: ThemeValue[], field: string): Le
   return list;
 }
 
-// 'var' because JSHint throws W021 error
 let Legend = class Legend extends _BaseLegend {
   declare _params: LegendParameters;
 
@@ -93,8 +92,6 @@ let Legend = class Legend extends _BaseLegend {
       widget: parameters.widget,
       group: root,
       backgroundClass: null,
-      // @ts-expect-error the base legend reads itemGroupClass, so this key is ignored
-      itemsGroupClass: null,
       textField: 'text',
       getFormatObject(data) {
         return data;

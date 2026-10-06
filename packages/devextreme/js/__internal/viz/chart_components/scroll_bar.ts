@@ -12,6 +12,7 @@ import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Bounds, Canvas } from '@ts/viz/core/types';
 
 import { Translator2D } from '../translators/translator2d';
 
@@ -20,22 +21,6 @@ const _max = Math.max;
 const MIN_SCROLL_BAR_SIZE = 10;
 
 type ScrollBarPosition = 'left' | 'right' | 'top' | 'bottom';
-
-interface ScrollBarCanvas {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-  width: number;
-  height: number;
-}
-
-interface ScrollBarMargins {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-}
 
 interface ScrollBarLayoutOptions {
   width: number;
@@ -62,7 +47,7 @@ interface ScrollBarDragEvent {
 }
 
 function _getXCoord(
-  canvas: ScrollBarCanvas,
+  canvas: Canvas,
   pos: ScrollBarPosition,
   offset: number,
   width: number,
@@ -79,7 +64,7 @@ function _getXCoord(
 }
 
 function _getYCoord(
-  canvas: ScrollBarCanvas,
+  canvas: Canvas,
   pos: ScrollBarPosition,
   offset: number,
   width: number,
@@ -115,7 +100,7 @@ export let ScrollBar = class ScrollBar {
 
   declare _hasBreaks: boolean;
 
-  declare _canvas: ScrollBarCanvas;
+  declare _canvas: Canvas;
 
   declare pane: string;
 
@@ -267,7 +252,7 @@ export let ScrollBar = class ScrollBar {
     return this;
   }
 
-  updateSize(canvas: ScrollBarCanvas): void {
+  updateSize(canvas: Canvas): void {
     this._canvas = extend({}, canvas);
 
     const options = this._layoutOptions;
@@ -285,9 +270,9 @@ export let ScrollBar = class ScrollBar {
     return 0;
   }
 
-  estimateMargins(): ScrollBarMargins { return this.getMargins(); }
+  estimateMargins(): Bounds { return this.getMargins(); }
 
-  getMargins(): ScrollBarMargins {
+  getMargins(): Bounds {
     const options = this._layoutOptions;
     const margins = {
       left: 0, top: 0, right: 0, bottom: 0,
@@ -298,7 +283,7 @@ export let ScrollBar = class ScrollBar {
     return margins;
   }
 
-  shift(margins: ScrollBarMargins): void {
+  shift(margins: Bounds): void {
     const options = this._layoutOptions;
     const side = options.position;
     const isVertical = options.vertical;

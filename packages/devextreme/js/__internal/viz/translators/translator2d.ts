@@ -51,7 +51,6 @@ interface TranslatorBreak {
   to: ThemeValue;
   length: number;
   cumulativeWidth: number;
-  gapSize?: ThemeValue;
   start?: number;
   end?: number;
 }
@@ -334,7 +333,7 @@ let _Translator2d = class _Translator2d {
       end = this.translate(b.to);
       b.end = end;
       // @ts-expect-error breaksSize is set whenever breaks are
-      b.start = !b.gapSize ? !this.isInverted() ? end - size : end + size : end;
+      b.start = !this.isInverted() ? end - size : end + size;
     }
   }
 

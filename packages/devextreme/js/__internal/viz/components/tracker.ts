@@ -38,7 +38,6 @@ interface TrackerParameters {
   getData: (e: ThemeValue, tooltipData?: boolean) => ThemeValue;
   getNode: (id: number) => TrackerNode;
   click: (e: TrackerClickEvent) => void;
-  getProxy?: (index: number) => ThemeValue;
   getCoords?: (e: ThemeValue) => number[];
 }
 

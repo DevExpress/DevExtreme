@@ -57,7 +57,7 @@ interface NodeParams {
   linksOut: NodeLayoutLink[];
 }
 
-function compileAttrs(color: string, itemOptions: ThemeValue, itemBaseOptions?: ThemeValue): NodeAttrs {
+function compileAttrs(color: string, itemOptions: ThemeValue, itemBaseOptions: ThemeValue): NodeAttrs {
   const border = itemOptions.border;
   const baseBorder = itemBaseOptions.border;
   const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
@@ -147,10 +147,6 @@ class Node {
       normal: compileAttrs(this.color, this.options, this.options),
       hover: compileAttrs(this.color, this.options.hoverStyle, this.options),
     };
-  }
-
-  compileAttrs(): NodeAttrs {
-    return compileAttrs(this.color, this.options);
   }
 
   getState(): string {

@@ -31,6 +31,7 @@ import formatHelper from '@js/format_helper';
 import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';
 import { Renderer } from './renderers/renderer';
+import type { BBox, Canvas } from './types';
 import { normalizeEnum, patchFontOptions } from './utils';
 
 const format = formatHelper.format;
@@ -80,22 +81,6 @@ interface TooltipDrawParams {
   eventData: ThemeValue;
   isMoving?: boolean;
   templateCallback?: (isRendered: boolean) => void;
-}
-
-interface TooltipBBox {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-interface TooltipCanvas {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  right: number;
-  bottom: number;
 }
 
 function hideElement($element: ThemeValue): void {
@@ -293,7 +278,7 @@ export let Tooltip = class Tooltip {
     }, this, this._renderer.root, drawTooltip, true, (tooltip, g) => {
       const state = tooltip._state;
       if (state.html) {
-        let bBox: CSSStyleDeclaration | TooltipBBox = window.getComputedStyle(this._textHtml.get(0));
+        let bBox: CSSStyleDeclaration | BBox = window.getComputedStyle(this._textHtml.get(0));
         bBox = {
           x: 0, y: 0, width: mathCeil(parseFloat(bBox.width)), height: mathCeil(parseFloat(bBox.height)),
         };
@@ -479,7 +464,7 @@ export let Tooltip = class Tooltip {
     return !!this._options.shared;
   }
 
-  _getCanvas(): TooltipCanvas {
+  _getCanvas(): Canvas {
     const container = this._getContainer();
     const containerBox = container.getBoundingClientRect();
     const html = domAdapter.getDocumentElement();
