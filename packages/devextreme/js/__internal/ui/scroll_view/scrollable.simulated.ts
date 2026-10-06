@@ -738,7 +738,7 @@ export class SimulatedStrategy<
   _createActionByOption!: (
     optionName: string,
     config?: ActionConfig,
-  ) => (event?: Record<string, unknown>) => void;
+  ) => (event?: unknown) => void;
 
   _scrollAction?: () => void;
 
@@ -1096,7 +1096,6 @@ export class SimulatedStrategy<
 
     return (...args: unknown[]) => {
       try {
-        // @ts-expect-error the rest arguments are merged into the action args by their indexes
         actionHandler(extend(this._createActionArgs(), args));
       } catch (e) {
         logger.error(e);
