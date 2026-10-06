@@ -12,11 +12,9 @@ import {
   convertRulesToOptions, getFieldName, getNestedOptionValue, getParentName,
 } from '@ts/core/options/utils';
 
-export interface DeprecatedOptionInfo {
-  since: string;
-  message: string;
-  alias?: string;
-}
+export type DeprecatedOptionInfo = { since: string } & (
+  { message: string; alias?: string } | { message?: string; alias: string }
+);
 
 type DeprecatedCallback = (option: string, info: DeprecatedOptionInfo) => void;
 
@@ -35,8 +33,6 @@ export class Options<TProperties extends OptionsProperties = OptionsProperties> 
 
   _endChangeCallback!: () => void;
 
-  _validateOptionsCallback?: ValidateOptionsCallback;
-
   _default: object;
 
   _deprecated: Record<string, DeprecatedOptionInfo>;
@@ -53,10 +49,9 @@ export class Options<TProperties extends OptionsProperties = OptionsProperties> 
     options: object,
     defaultOptions: object,
     optionsByReference: Record<string, unknown>,
-    deprecatedOptions: Record<string, unknown>,
+    deprecatedOptions: Record<string, DeprecatedOptionInfo>,
   ) {
     this._default = defaultOptions;
-    // @ts-expect-error unknown values are not assignable to DeprecatedOptionInfo
     this._deprecated = deprecatedOptions;
 
     this._deprecatedNames = [];
@@ -200,8 +195,7 @@ export class Options<TProperties extends OptionsProperties = OptionsProperties> 
     this._optionManager.onChanged(callBack);
   }
 
-  validateOptions<TOptions extends object>(callBack: (options: TOptions) => TOptions): void {
-    // @ts-expect-error (options: TOptions) => TOptions is not assignable to ValidateOptionsCallback
+  validateOptions(callBack: ValidateOptionsCallback): void {
     this._optionManager.onValidateOptions(callBack);
   }
 

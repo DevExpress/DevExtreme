@@ -57,9 +57,9 @@ interface WatchOptions {
   skipImmediate?: boolean;
 }
 
-export type WatchMethod = (
-  fn: () => unknown,
-  callback: (value: unknown) => void,
+export type WatchMethod<T = unknown> = (
+  fn: () => T,
+  callback: (value: T) => void,
   options?: WatchOptions,
 ) => () => void;
 
