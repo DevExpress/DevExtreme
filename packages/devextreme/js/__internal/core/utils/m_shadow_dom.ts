@@ -1,10 +1,26 @@
 import config from '@js/core/config';
+import type { dxElementWrapper } from '@js/core/renderer';
 
 const DX_RULE_PREFIX = 'dx-';
 
-let ownerDocumentStyleSheet = null;
+interface RuleLike {
+  cssText: string;
+  selectorText?: string;
+  cssRules?: ArrayLike<RuleLike>;
+  name?: string;
+  style?: { fontFamily?: string };
+}
 
-function createConstructedStyleSheet(rootNode) {
+interface Queue<T> {
+  push: (this: Queue<T>, item: T) => Queue<T>;
+  shift: () => T;
+  readonly length: number;
+  readonly items: T[];
+}
+
+let ownerDocumentStyleSheet: CSSStyleSheet | null = null;
+
+function createConstructedStyleSheet(rootNode: ShadowRoot): CSSStyleSheet {
   try {
     return new CSSStyleSheet();
   } catch (err) {
@@ -12,24 +28,16 @@ function createConstructedStyleSheet(rootNode) {
 
     rootNode.appendChild(styleElement);
 
+    // @ts-expect-error the sheet is null when the root is not connected
     return styleElement.sheet;
   }
 }
 
-function processRules(targetStyleSheet, styleSheets, needApplyAllStyles) {
-  for (let i = 0; i < styleSheets.length; i++) {
-    const sheet = styleSheets[i];
-    try {
-      for (let j = 0; j < sheet.cssRules.length; j++) {
-        insertRule(targetStyleSheet, sheet.cssRules[j], needApplyAllStyles);
-      }
-    } catch (err) {
-      // NOTE: need try/catch block for not-supported cross-domain css
-    }
-  }
-}
-
-function insertRule(targetStyleSheet, rule, needApplyAllStyles) {
+function insertRule(
+  targetStyleSheet: CSSStyleSheet,
+  rule: RuleLike,
+  needApplyAllStyles: boolean,
+): void {
   const isDxRule = needApplyAllStyles
                      || rule.selectorText?.includes(DX_RULE_PREFIX)
                      || rule.cssRules?.[0]?.selectorText?.includes(DX_RULE_PREFIX)
@@ -44,14 +52,33 @@ function insertRule(targetStyleSheet, rule, needApplyAllStyles) {
   }
 }
 
+function processRules(
+  targetStyleSheet: CSSStyleSheet,
+  styleSheets: Iterable<CSSStyleSheet>,
+  needApplyAllStyles: boolean,
+): void {
+  for (const sheet of styleSheets) {
+    try {
+      for (const rule of sheet.cssRules) {
+        insertRule(targetStyleSheet, rule, needApplyAllStyles);
+      }
+    } catch (err) {
+      // NOTE: need try/catch block for not-supported cross-domain css
+    }
+  }
+}
+
 const FNV_OFFSET_BASIS = 2166136261;
-const sheetHashes = new WeakMap();
-export function computeStyleSheetsHash(styleSheets) {
+const sheetHashes = new WeakMap<CSSStyleSheet, number>();
+export function computeStyleSheetsHash(styleSheets: Iterable<CSSStyleSheet>): number {
   let hash = FNV_OFFSET_BASIS;
 
   for (const sheet of styleSheets) {
-    if (sheetHashes.has(sheet)) {
-      hash ^= sheetHashes.get(sheet);
+    const cachedHash = sheetHashes.get(sheet);
+    if (cachedHash !== undefined) {
+      // eslint-disable-next-line no-bitwise -- FNV hash
+      hash ^= cachedHash;
+      // eslint-disable-next-line no-continue -- the cached sheet is done
       continue;
     }
 
@@ -59,32 +86,40 @@ export function computeStyleSheetsHash(styleSheets) {
     try {
       for (const rule of sheet.cssRules) {
         const text = rule.cssText;
-        for (let i = 0; i < text.length; i++) {
+        // eslint-disable-next-line max-depth -- the loop over the characters of a rule
+        for (let i = 0; i < text.length; i += 1) {
+          // eslint-disable-next-line no-bitwise -- FNV hash
           localHash ^= text.charCodeAt(i);
-          localHash += (localHash << 1) + (localHash << 4) + (localHash << 7) + (localHash << 8) + (localHash << 24);
+          // eslint-disable-next-line no-bitwise -- FNV hash
+          localHash += (localHash << 1) + (localHash << 4) + (localHash << 7) + (localHash << 8)
+            // eslint-disable-next-line no-bitwise -- FNV hash
+            + (localHash << 24);
         }
       }
     } catch (_) {
       // ignore
     }
 
+    // eslint-disable-next-line no-bitwise -- FNV hash
     localHash >>>= 0;
     sheetHashes.set(sheet, localHash);
+    // eslint-disable-next-line no-bitwise -- FNV hash
     hash ^= localHash;
   }
 
+  // eslint-disable-next-line no-bitwise -- FNV hash
   return hash >>> 0;
 }
 
-const styleSheetHashes = new WeakMap();
+const styleSheetHashes = new WeakMap<ShadowRoot, number>();
 
-export function addShadowDomStyles($element) {
+export function addShadowDomStyles($element: dxElementWrapper): void {
   if (!config().copyStylesToShadowDom) {
     return;
   }
 
   const el = $element.get(0);
-  const root = el.getRootNode?.();
+  const root = el.getRootNode?.() as ShadowRoot | undefined;
   if (!root?.host) return;
 
   if (!ownerDocumentStyleSheet) {
@@ -103,49 +138,48 @@ export function addShadowDomStyles($element) {
   root.adoptedStyleSheets = [ownerDocumentStyleSheet, currentShadowDomStyleSheet];
 }
 
-function isPositionInElementRectangle(element, x, y) {
+function isPositionInElementRectangle(element: Element, x: number, y: number): boolean {
   const rect = element.getBoundingClientRect?.();
 
   return rect && x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom;
 }
 
-function createQueue() {
+function createQueue<T>(): Queue<T> {
   let shiftIndex = 0;
-  const items: any[] = [];
+  const items: T[] = [];
 
   return {
-    push(item) {
+    push(this: Queue<T>, item: T): Queue<T> {
       items.push(item);
       return this;
     },
 
-    shift() {
-      shiftIndex++;
+    shift(): T {
+      shiftIndex += 1;
       return items[shiftIndex - 1];
     },
 
-    get length() {
+    get length(): number {
       return items.length - shiftIndex;
     },
 
-    get items() {
+    get items(): T[] {
       return items;
     },
   };
 }
 
-export function getShadowElementsFromPoint(x, y, root) {
-  const elementQueue = createQueue().push(root);
+export function getShadowElementsFromPoint(x: number, y: number, root: Node): Node[] {
+  const elementQueue = createQueue<Node>().push(root);
 
   while (elementQueue.length) {
     const el = elementQueue.shift();
 
-    for (let i = 0; i < el.childNodes.length; i++) {
-      const childNode = el.childNodes[i];
+    for (const childNode of el.childNodes) {
       if (childNode.nodeType === Node.ELEMENT_NODE
-               && isPositionInElementRectangle(childNode, x, y)
+               && isPositionInElementRectangle(childNode as Element, x, y)
 
-               && getComputedStyle(childNode).pointerEvents !== 'none'
+               && getComputedStyle(childNode as Element).pointerEvents !== 'none'
       ) {
         elementQueue.push(childNode);
       }
