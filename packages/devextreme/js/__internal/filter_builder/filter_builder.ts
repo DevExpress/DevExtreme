@@ -271,6 +271,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
     ACTIONS.forEach((action) => {
       const actionConfig = extend({}, action.config);
+      // @ts-expect-error the action config is merged
       this._actions[action.name] = this._createActionByOption(action.name, actionConfig);
     });
   }
