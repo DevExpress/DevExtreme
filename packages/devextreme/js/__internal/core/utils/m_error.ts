@@ -14,11 +14,15 @@ export interface DxError extends Error {
 
 type ErrorMessages = Record<string, string>;
 
+interface ErrorFactory {
+  (id: string, ...details: unknown[]): DxError;
+  new (id: string, ...details: unknown[]): DxError;
+}
+
 interface ErrorUtils {
   ERROR_MESSAGES: ErrorMessages;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers use it as any
-  Error: (...args: unknown[]) => any;
-  log: (...args: unknown[]) => void;
+  Error: ErrorFactory;
+  log: (id: string, ...details: unknown[]) => void;
 }
 
 function error(baseErrors: ErrorMessages, errors?: ErrorMessages): ErrorUtils {
@@ -49,7 +53,6 @@ function error(baseErrors: ErrorMessages, errors?: ErrorMessages): ErrorUtils {
     const url = getErrorUrl(id);
     const message = formatMessage(id, details);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend is not typed
     return extend(new Error(message), {
       __id: id,
       __details: details,
@@ -61,9 +64,9 @@ function error(baseErrors: ErrorMessages, errors?: ErrorMessages): ErrorUtils {
 
     ERROR_MESSAGES: extend(errors, baseErrors),
 
-    Error: function Error(...args: unknown[]) {
+    Error: function Error(...args: unknown[]): DxError {
       return makeError(args);
-    },
+    } as unknown as ErrorFactory,
 
     log(...args: unknown[]): void {
       const id = args[0] as string;

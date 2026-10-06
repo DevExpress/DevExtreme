@@ -69,7 +69,7 @@ export let errorHandler: DataErrorHandler | null = null;
 export const handleError = function (error: unknown): void {
   /// #DEBUG
   const id = isObject(error) && '__id' in error ? error.__id : 'E4000';
-  errors.log(id, error);
+  errors.log(id as string, error);
   /// #ENDDEBUG
   errorHandler?.(error);
 };

@@ -616,6 +616,7 @@ export class DataController extends modules.Controller {
   }
 
   public fireError(...args: unknown[]): void {
+    // @ts-expect-error the arguments are the error id and the details
     this.dataErrorOccurred.fire(errors.Error(...args));
   }
 
