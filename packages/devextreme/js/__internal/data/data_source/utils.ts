@@ -68,16 +68,16 @@ export const mapDataRespectingGrouping = (
   return Array.isArray(mapped) ? mapped : [];
 };
 
-export interface NormalizedLoadResult extends Record<string, unknown> {
+export interface NormalizedLoadResult {
   data: unknown[];
-  extra: Record<string, unknown>;
+  extra: unknown;
 }
 
 export const normalizeLoadResult = (data: unknown, extra?: unknown): NormalizedLoadResult => {
   const loadResult: { data?: unknown } = isObject(data) ? data : {};
 
   const resultData: unknown = loadResult.data ? loadResult.data : data;
-  const resultExtra = (loadResult.data ? data : extra) as Record<string, unknown>;
+  const resultExtra: unknown = loadResult.data ? data : extra;
 
   return {
     data: Array.isArray(resultData) ? resultData : [resultData],
