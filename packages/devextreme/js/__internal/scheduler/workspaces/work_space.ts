@@ -651,7 +651,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       },
     };
 
-    return extend(super._supportedKeys(), supportedKeys) as SupportedKeys;
+    return extend(super._supportedKeys(), supportedKeys);
   }
 
   private isRTL(): boolean {
@@ -1730,7 +1730,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       allDay: cellData.allDay,
     };
 
-    return extend(true, {}, normalizedCellData) as NormalizedCellData;
+    return extend(true, {}, normalizedCellData);
   }
 
   private getSelectedCellsData(): NormalizedCellData[] {
