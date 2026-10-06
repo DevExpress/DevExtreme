@@ -4,7 +4,10 @@
  * cannot move anything this module reports; tools/review/roles.mjs adds the package's side on top.
  *
  *   node tools/review/roles-theme.mjs --json                 # machine-readable, for the gate
- *   node tools/review/roles-theme.mjs --theme=<dir> --json   # another theme folder
+ *   node tools/review/roles-theme.mjs --theme=<dir> [--bundle=<css>] --json
+ *                                                            # another theme folder; its bundle
+ *                                                            # is never assumed, so without
+ *                                                            # --bundle the paint checks are off
  *
  * The family signal lives here: a `-bg` slot must read a color-bg-* role, `-content` a
  * color-content-* one, and so on. So do the paint checks, read from the bundle (what the browser
@@ -227,7 +230,7 @@ const familyOfProperty = (property) => PROPERTY_FAMILY
 const readBundle = (bundlePath) => {
   const paints = new Map();
   const declaredInBundle = new Set();
-  if (existsSync(bundlePath)) {
+  if (bundlePath && existsSync(bundlePath)) {
     const css = readFileSync(bundlePath, 'utf8');
     for (const [, name] of css.matchAll(/(--dx-[a-z0-9-]+)\s*:/g)) declaredInBundle.add(name);
     for (const [, property, value] of css.matchAll(/([a-z-]+)\s*:\s*([^;{}]*var\(--dx-[^;{}]*)/g)) {
@@ -340,8 +343,10 @@ const conceptsOf = (declarations) => {
     || b.roles.length - a.roles.length || a.concept.localeCompare(b.concept));
 };
 
+// another theme folder gets no bundle by default: the fluent-next one would describe other CSS
 export const collectTheme = ({
-  themeDir = defaultThemeDir, bundlePath = defaultBundlePath,
+  themeDir = defaultThemeDir,
+  bundlePath = themeDir === defaultThemeDir ? defaultBundlePath : null,
 } = {}) => {
   const declarations = collectDeclarations(themeDir);
   const { paints, declaredInBundle } = readBundle(bundlePath);
@@ -353,19 +358,25 @@ export const collectTheme = ({
     typography: typographyReads(themeDir),
     ladders: laddersOf(declarations),
     concepts: conceptsOf(declarations),
-    declarationsMissingFromBundle: findings.filter((f) => !declaredInBundle.has(`--dx-${f.name}`)).length,
+    declarationsMissingFromBundle: bundlePath
+      ? findings.filter((f) => !declaredInBundle.has(`--dx-${f.name}`)).length
+      : null,
   };
 };
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const themeArg = process.argv.find((a) => a.startsWith('--theme='));
+  const bundleArg = process.argv.find((a) => a.startsWith('--bundle='));
   if (!process.argv.includes('--json')) {
     console.error('roles-theme.mjs prints JSON only: pass --json (the readable report is roles.mjs --md)');
     process.exit(2);
   }
   const {
     declarations, ladders, ...rest
-  } = collectTheme(themeArg ? { themeDir: themeArg.slice('--theme='.length) } : {});
+  } = collectTheme({
+    ...(themeArg ? { themeDir: themeArg.slice('--theme='.length) } : {}),
+    ...(bundleArg ? { bundlePath: bundleArg.slice('--bundle='.length) } : {}),
+  });
   console.log(JSON.stringify({
     ...rest,
     ladders: ladders.map(({ statesInOrder, ...ladder }) => ladder),

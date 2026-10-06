@@ -4,7 +4,9 @@
  *
  *   node tools/review/roles.mjs [--md]                 # the readable report, to stdout
  *   node tools/review/roles.mjs --json                 # machine-readable
- *   node tools/review/roles.mjs --theme=<dir> --json   # another theme folder (--md works too)
+ *   node tools/review/roles.mjs --theme=<dir> --json   # another theme folder (--md works too);
+ *                                                      # pass its CSS as --bundle=<css>, or the
+ *                                                      # bundle-based checks are off
  *   node tools/review/roles.mjs --report=tools/review/roles.decisions.json
  *                                                      # what moved against the banked decisions
  *   node tools/review/roles.mjs --write=tools/review/roles.decisions.json
@@ -61,7 +63,9 @@ import {
 
 const themeArg = process.argv.find((a) => a.startsWith('--theme='));
 const themeDir = themeArg ? themeArg.slice('--theme='.length) : defaultThemeDir;
-const bundlePath = defaultBundlePath;
+const bundleArg = process.argv.find((a) => a.startsWith('--bundle='));
+const bundlePath = bundleArg?.slice('--bundle='.length) ?? (themeArg ? null : defaultBundlePath);
+const hasBundle = Boolean(bundlePath) && existsSync(bundlePath);
 
 const require = createRequire(import.meta.url);
 const tokensRoot = dirname(require.resolve('@devexpress/design-tokens-internal/package.json'));
@@ -482,7 +486,7 @@ const roleOfTierName = new Map(declarations
   .filter((d) => !d.bridged && d.roles.length === 1)
   .map((d) => [`--dx-${d.name}`, d.roles[0]]));
 const pairs = [];
-if (existsSync(bundlePath)) {
+if (hasBundle) {
   const css = readFileSync(bundlePath, 'utf8');
   [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, selector, body]) => {
     if (selector.trim().startsWith('@')) return;
@@ -523,7 +527,7 @@ const elementKey = (selector) => selector
 
 const foregroundOf = new Map();
 const statePairs = [];
-if (existsSync(bundlePath)) {
+if (hasBundle) {
   const css = readFileSync(bundlePath, 'utf8');
   const rules = [];
   [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, selectorList, body]) => {
@@ -937,7 +941,7 @@ const decisionOf = (row) => Object.fromEntries(Object.entries(row ?? {})
   .filter(([field]) => DECISION_FIELDS.includes(field)));
 
 // the bundle names the package it was built against (scss-build banner)
-const bundleTokens = existsSync(bundlePath)
+const bundleTokens = hasBundle
   ? /Design tokens: @devexpress\/design-tokens-internal (\S+)/.exec(readFileSync(bundlePath, 'utf8').slice(0, 2000))?.[1] ?? null
   : null;
 const bundleIsCurrent = bundleTokens === tokensVersion;
