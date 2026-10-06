@@ -40,7 +40,7 @@ export class Template {
     constructor(options?: dxTemplateOptions);
     constructor(element: string | UserDefinedElement | dxElementWrapper);
 
-    render(options: TemplateRenderOptions): InternalElement<HTMLElement>;
+    render(options?: TemplateRenderOptions): InternalElement<HTMLElement>;
 
     source(): InternalElement<HTMLElement>;
 }

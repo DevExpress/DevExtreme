@@ -10,7 +10,7 @@ export interface TemplateRenderOptions {
 }
 
 export class FunctionTemplate {
-  constructor(render: (options: TemplateRenderOptions) => unknown);
+  constructor(render: (options: Omit<TemplateRenderOptions, 'onRendered'>) => unknown);
 
-  render(options: TemplateRenderOptions): InternalElement<HTMLElement>;
+  render(options?: TemplateRenderOptions): InternalElement<HTMLElement>;
 }
