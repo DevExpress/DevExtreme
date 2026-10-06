@@ -63,7 +63,14 @@ export const quadToObject = function quadToObject(raw: unknown): Quad {
   };
 };
 
-export function format(template: unknown, ...values: unknown[]): string {
+export function format(template: string, ...values: unknown[]): string;
+export function format<TResult>(
+  template: (...args: never[]) => TResult,
+  ...values: unknown[]
+): TResult;
+// eslint-disable-next-line @typescript-eslint/unified-signatures -- unknown templates stay strings
+export function format(template: unknown, ...values: unknown[]): string;
+export function format(template: unknown, ...values: unknown[]): unknown {
   if (isFunction(template)) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- the function is untyped
     return template(...values);
