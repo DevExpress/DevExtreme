@@ -183,6 +183,33 @@ describe('Selection filter utils', () => {
       expect(filter({ a: 1, b: 3 })).toBe(false);
     });
 
+    it('should normalize the selected keys of a composite key expression with the key getter', () => {
+      const filter = createFilter([{ b: 2, a: 1 }]).getLocalFilter(
+        (item: unknown) => ({ a: (item as { a: number }).a, b: (item as { b: number }).b }),
+        undefined,
+        false,
+        ['a', 'b'],
+      );
+
+      expect(filter({ a: 1, b: 2 })).toBe(true);
+    });
+
+    it('should skip the selected items when all items are selected and the keys are compared one by one', () => {
+      const selected = { a: 1 };
+      const equalKeys = (key1: unknown, key2: unknown): boolean => key1 === key2;
+      const filter = createFilter([selected], true).getLocalFilter(getId, equalKeys, true);
+
+      expect(filter({ id: selected })).toBe(false);
+      expect(filter({ id: { a: 1 } })).toBe(true);
+    });
+
+    it('should compare the keys one by one when their hash is not a string', () => {
+      const filter = createFilter([{ a: undefined }]).getLocalFilter(getId);
+
+      expect(filter({ id: { a: undefined } })).toBe(true);
+      expect(filter({ id: { b: undefined } })).toBe(false);
+    });
+
     it('should not select anything without keys', () => {
       expect(createFilter([]).getLocalFilter(getId)({ id: 1 })).toBe(false);
       expect(createFilter([], true).getLocalFilter(getId)({ id: 1 })).toBe(true);

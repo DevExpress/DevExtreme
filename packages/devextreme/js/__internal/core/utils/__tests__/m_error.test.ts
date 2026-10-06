@@ -133,9 +133,10 @@ describe('Error utils', () => {
     it('should require the id to consist of the letter and digits only', () => {
       log('E12x');
       log('E');
+      log('W');
       log('W1 ');
 
-      expect(logger.log).toHaveBeenCalledTimes(3);
+      expect(logger.log).toHaveBeenCalledTimes(4);
     });
 
     it('should not depend on the call context', () => {
