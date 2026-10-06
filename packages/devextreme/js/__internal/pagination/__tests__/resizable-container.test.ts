@@ -13,11 +13,14 @@ function createElement(style: Partial<CSSStyleDeclaration>): HTMLDivElement {
 
 interface Elements {
   parent: HTMLDivElement;
-  pages: HTMLDivElement;
+  pages?: HTMLDivElement;
   allowedPageSizes?: HTMLDivElement;
+  info?: HTMLDivElement;
 }
 
-function createContainer({ parent, pages, allowedPageSizes }: Elements): ResizableContainer {
+function createContainer({
+  parent, pages, allowedPageSizes, info,
+}: Elements): ResizableContainer {
   const container = new ResizableContainer({
     paginationProps: {},
     contentTemplate: (): null => null,
@@ -30,8 +33,9 @@ function createContainer({ parent, pages, allowedPageSizes }: Elements): Resizab
 
   Object.assign(container, {
     parentRef: { current: parent },
-    pagesRef: { current: pages },
+    pagesRef: { current: pages ?? null },
     allowedPageSizesRef: { current: allowedPageSizes ?? null },
+    infoTextRef: { current: info ?? null },
   });
 
   return container;
@@ -46,19 +50,29 @@ describe('isLayoutApplied', () => {
     const pages = createElement({ width: '1000px' });
     const allowedPageSizes = createElement({ width: '1000px' });
 
-    expect(isLayoutApplied({ pages, allowedPageSizes })).toBe(false);
+    expect(isLayoutApplied({ pages, allowedPageSizes, info: null })).toBe(false);
 
     pages.style.display = 'inline-block';
 
-    expect(isLayoutApplied({ pages, allowedPageSizes })).toBe(false);
+    expect(isLayoutApplied({ pages, allowedPageSizes, info: null })).toBe(false);
 
     allowedPageSizes.style.cssFloat = 'left';
 
-    expect(isLayoutApplied({ pages, allowedPageSizes })).toBe(true);
+    expect(isLayoutApplied({ pages, allowedPageSizes, info: null })).toBe(true);
+  });
+
+  it('is false while the info text is a plain block-level element', () => {
+    const info = createElement({ width: '1000px' });
+
+    expect(isLayoutApplied({ pages: null, allowedPageSizes: null, info })).toBe(false);
+
+    info.style.display = 'inline-block';
+
+    expect(isLayoutApplied({ pages: null, allowedPageSizes: null, info })).toBe(true);
   });
 
   it('ignores containers that are not rendered', () => {
-    expect(isLayoutApplied({ pages: null, allowedPageSizes: undefined })).toBe(true);
+    expect(isLayoutApplied({ pages: null, allowedPageSizes: undefined, info: null })).toBe(true);
   });
 });
 
@@ -115,5 +129,26 @@ describe('ResizableContainer adaptivity', () => {
     container.updateAdaptivityProps();
 
     expect(container.state.isLargeDisplayMode).toBe(false);
+  });
+
+  it('does not hide the info text from a measurement taken before the theme css is applied', () => {
+    const parent = createElement({ width: '1000px' });
+    const info = createElement({ width: '1000px' });
+    const container = createContainer({ parent, info });
+
+    container.updateAdaptivityProps();
+
+    expect(container.state.infoTextVisible).toBe(true);
+
+    info.style.display = 'inline-block';
+    info.style.width = '150px';
+    container.updateAdaptivityProps();
+
+    expect(container.state.infoTextVisible).toBe(true);
+
+    parent.style.width = '100px';
+    container.updateAdaptivityProps();
+
+    expect(container.state.infoTextVisible).toBe(false);
   });
 });

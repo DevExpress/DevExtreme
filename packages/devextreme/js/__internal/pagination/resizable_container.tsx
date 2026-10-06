@@ -36,9 +36,10 @@ export function calculateInfoTextVisible({
 }
 
 export function isLayoutApplied({
-  allowedPageSizes, pages,
-}: Omit<MainElements<HTMLElement | null | undefined>, 'parent'>): boolean {
-  return [allowedPageSizes, pages].every((element) => !element || !isElementBlockLevel(element));
+  allowedPageSizes, pages, info,
+}: ChildElements<HTMLElement | null | undefined>): boolean {
+  return [allowedPageSizes, pages, info]
+    .every((element) => !element || !isElementBlockLevel(element));
 }
 
 function getElementsWidth({
@@ -253,6 +254,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
     if (!isLayoutApplied({
       allowedPageSizes: this.allowedPageSizesRef?.current,
       pages: this.pagesRef?.current,
+      info: this.infoTextRef?.current,
     })) {
       return;
     }

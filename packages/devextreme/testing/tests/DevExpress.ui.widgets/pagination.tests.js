@@ -1347,6 +1347,35 @@ function() {
         assert.equal(isLightMode(pagination), true, 'light mode is applied for a narrow pagination');
     });
 
+    QUnit.test('Info text is not hidden from a measurement taken before the theme css is applied', function(assert) {
+        const styleSheets = Array.from(document.styleSheets);
+        styleSheets.forEach(sheet => { sheet.disabled = true; });
+
+        let $pagination;
+        try {
+            $pagination = $('#container').width(1000).dxPagination({
+                pageSize: 0,
+                pageCount: 1,
+                itemCount: 46,
+                showInfo: true,
+                infoText: 'Page {0} of {1} ({2} items)'
+            });
+        } finally {
+            styleSheets.forEach(sheet => { sheet.disabled = false; });
+        }
+
+        assert.equal($pagination.find('.dx-info').length, 1, 'the unstyled measurement is ignored');
+
+        resizeCallbacks.fire();
+
+        assert.equal($pagination.find('.dx-info').length, 1, 'the info text is visible after the css is applied');
+
+        $pagination.width(50);
+        resizeCallbacks.fire();
+
+        assert.equal($pagination.find('.dx-info').length, 0, 'the info text is hidden when it does not fit');
+    });
+
     QUnit.test('Apply light mode when pagination is first rendered', function(assert) {
         const $pagination = $('#container').width(100).dxPagination({
             maxPagesCount: 8,
