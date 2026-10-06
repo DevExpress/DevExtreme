@@ -139,7 +139,7 @@ export interface SortableProperties extends Omit<Properties, 'boundary' | 'onDis
 
   itemData?: unknown;
 
-  placeholderClassName: string;
+  placeholderClassName?: string;
 
   animation: AnimationConfig;
 
