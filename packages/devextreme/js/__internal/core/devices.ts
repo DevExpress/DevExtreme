@@ -255,7 +255,7 @@ class Devices {
       return undefined;
     }
     /// #ENDDEBUG
-    return extend({}, this._realDevice) as ResolvedDevice;
+    return extend({}, this._realDevice);
   }
 
   orientation(): Orientation | undefined {

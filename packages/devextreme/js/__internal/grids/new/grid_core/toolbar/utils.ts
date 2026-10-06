@@ -42,7 +42,7 @@ function normalizeToolbarItem(
     }
   }
 
-  return extend(true, {}, defaultProps, button) as ToolbarItem;
+  return extend(true, {}, defaultProps, button);
 }
 
 export function getSortedToolbarItems(
