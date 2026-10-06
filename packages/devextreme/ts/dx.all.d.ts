@@ -7450,12 +7450,10 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class FunctionTemplate<
-    TOptions extends TemplateRenderOptions = TemplateRenderOptions
-  > {
-    constructor(render: (options: TOptions) => unknown);
+  export class FunctionTemplate {
+    constructor(render: (options: TemplateRenderOptions) => unknown);
 
-    render(options: TOptions): InternalElement<HTMLElement>;
+    render(options: TemplateRenderOptions): InternalElement<HTMLElement>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

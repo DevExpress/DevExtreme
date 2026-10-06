@@ -1,7 +1,7 @@
 import { type DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { FunctionTemplate } from '@js/core/templates/function_template';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { isRenderer } from '@js/core/utils/type';
 import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
@@ -14,6 +14,7 @@ import type {
 import type dxOverlay from '@js/ui/overlay';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type { Appointment, Properties as SchedulerProperties } from '@js/ui/scheduler';
+import { FunctionTemplate as InternalFunctionTemplate } from '@ts/core/templates/function_template';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
 import type Tooltip from '@ts/ui/tooltip';
@@ -279,8 +280,8 @@ export abstract class TooltipStrategyBase {
   ): FunctionTemplate {
     const itemListContent = this.createItemListContent(appointment, targetedAppointment, color);
     this._options.addDefaultTemplates({
-      appointmentTooltip: new FunctionTemplate(
-        (options: { container: DxElement }): dxElementWrapper => {
+      appointmentTooltip: new InternalFunctionTemplate(
+        (options): dxElementWrapper => {
           const $container = $(options.container);
           $container.append(itemListContent);
           return $container;
@@ -300,7 +301,7 @@ export abstract class TooltipStrategyBase {
   ): FunctionTemplate {
     const isButtonClicked = Boolean(this.extraOptions?.isButtonClick);
 
-    return new FunctionTemplate((options: { container: DxElement }): dxElementWrapper => {
+    return new InternalFunctionTemplate((options): dxElementWrapper => {
       // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
       const { promise, resolve } = createPromise<void>();
       this.asyncTemplatePromises.add(promise);

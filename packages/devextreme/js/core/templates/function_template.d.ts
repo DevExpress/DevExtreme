@@ -9,8 +9,8 @@ export interface TemplateRenderOptions {
   onRendered?: () => void;
 }
 
-export class FunctionTemplate<TOptions extends TemplateRenderOptions = TemplateRenderOptions> {
-  constructor(render: (options: TOptions) => unknown);
+export class FunctionTemplate {
+  constructor(render: (options: TemplateRenderOptions) => unknown);
 
-  render(options: TOptions): InternalElement<HTMLElement>;
+  render(options: TemplateRenderOptions): InternalElement<HTMLElement>;
 }
