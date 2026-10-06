@@ -1107,7 +1107,6 @@ function() {
         assert.equal(numberBox.option('width'), Number($('.dx-page-index').css('min-width').replace('px', '')) + 40);
     });
 
-    // devextreme-private#5261
     QUnit.test('Light mode. Page index width is recalculated after the theme css is applied', function(assert) {
         const styleSheets = Array.from(document.styleSheets);
         styleSheets.forEach(sheet => { sheet.disabled = true; });
@@ -1315,7 +1314,6 @@ function() {
         assert.ok($pagination.find('.dx-info').length === 1 && $pagination.find('.dx-info').css('display') !== 'none', 'info element is visible');
     });
 
-    // devextreme-private#5261
     QUnit.test('Light mode is not applied from a measurement taken before the theme css is applied', function(assert) {
         const styleSheets = Array.from(document.styleSheets);
         styleSheets.forEach(sheet => { sheet.disabled = true; });
