@@ -5,8 +5,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @stylistic/max-len */
 
-import { extend } from '@js/core/utils/extend';
-import { isDate, isDefined, isFunction } from '@js/core/utils/type';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDate, isDefined, isFunction } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { unique } from '@ts/viz/core/utils';
 
@@ -93,8 +93,6 @@ export let Range = class Range {
   declare breaks?: ThemeValue[];
 
   declare userBreaks?: ThemeValue[];
-
-  declare stubData?: boolean;
 
   constructor(range?: RangeData) {
     range && extend(this, range);

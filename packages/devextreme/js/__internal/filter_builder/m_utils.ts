@@ -2,6 +2,7 @@ import type { Format } from '@js/common/core/localization';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { errors as dataErrors } from '@js/common/data/errors';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { compileGetter } from '@js/core/utils/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -17,17 +18,89 @@ import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
+import type { EditorFactoryOwner } from './m_between';
 import { getConfig } from './m_between';
 import filterOperationsDictionary from './m_filter_operations_dictionary';
 
 type FieldValue = string | number | boolean | Date | null | undefined;
+export type ConditionValue = FieldValue | FieldValue[];
+
+type FilterCombiner = 'and' | 'or';
+
+export type Condition = [string, string, ...ConditionValue[]];
+
+type ValueOperand = FieldValue | ValueOperand[];
+type ValueCondition = [string, ValueOperand] | [string, string, ...ValueOperand[]];
+type ValueGroup = [] | [FilterCombiner] | ['!', ValueExpression]
+| [ValueExpression, ...(FilterCombiner | ValueExpression)[]];
+type ValueExpression = ValueCondition | ValueGroup;
+export type FilterBuilderValue = ValueExpression | null | undefined;
+
+export type Criteria = unknown[];
+type NegationGroup = ['!', Criteria];
+
+export type FilterExpression = ReturnType<NonNullable<CustomOperation['calculateFilterExpression']>>;
+
+type FilterExpressionCallback = (
+  filterValue: unknown,
+  selectedFilterOperation: string,
+  target?: string,
+) => FilterExpression;
+
+export interface FilterBuilderField extends Field {
+  dataField: string;
+  calculateFilterExpression?: FilterExpressionCallback;
+  createFilterExpression?: FilterExpressionCallback;
+  defaultCalculateFilterExpression: FilterExpressionCallback;
+  defaultFilterOperation?: string;
+  id?: string;
+  parentId?: string;
+  lookup?: NonNullable<Field['lookup']> & {
+    items?: unknown;
+    calculateCellValue?: (value: ConditionValue) => string;
+  };
+}
+
+export interface FilterCustomOperation extends Omit<CustomOperation, 'name' | 'calculateFilterExpression'> {
+  name: string;
+  notForLookup?: boolean;
+  valueSeparator?: string;
+  calculateFilterExpression?: (
+    filterValue: unknown,
+    field: Field,
+    fields?: Field[],
+  ) => FilterExpression;
+}
+
+type LookupField = FilterBuilderField & {
+  lookup: NonNullable<FilterBuilderField['lookup']>;
+};
+
+export interface OperationMenuItem {
+  icon: string;
+  text: string;
+  value: string;
+  isCustom?: boolean;
+}
+
+export interface GroupMenuItem {
+  text: string;
+  value: string;
+}
+
+interface OperationsField {
+  dataType?: string;
+  defaultFilterOperation?: string;
+  filterOperations?: readonly string[] | null;
+  lookup?: object | null;
+}
 
 const DEFAULT_DATA_TYPE = 'string';
 const EMPTY_MENU_ICON = 'icon-none';
 const AND_GROUP_OPERATION = 'and';
 const EQUAL_OPERATION = '=';
 const NOT_EQUAL_OPERATION = '<>';
-const DATATYPE_OPERATIONS = {
+const DATATYPE_OPERATIONS: Record<string, string[] | undefined> = {
   number: ['=', '<>', '<', '>', '<=', '>=', 'isblank', 'isnotblank'],
   string: ['contains', 'notcontains', 'startswith', 'endswith', '=', '<>', 'isblank', 'isnotblank'],
   date: ['=', '<>', '<', '>', '<=', '>=', 'isblank', 'isnotblank'],
@@ -86,39 +159,46 @@ function getFormattedValueText(field: Field, value: FieldValue): string {
   return formatHelper.format(value, fieldFormat);
 }
 
-function isNegationGroup(group) {
+export function isCondition(criteria: unknown): criteria is Condition {
+  if (!Array.isArray(criteria)) {
+    return false;
+  }
+
+  return criteria.length > 1 && !Array.isArray(criteria[0]) && !Array.isArray(criteria[1]);
+}
+
+function isNegationGroup(group: Criteria): group is NegationGroup {
   return group
     && group.length > 1
     && group[0] === '!'
     && !isCondition(group);
 }
 
-export function getGroupCriteria(group) {
+export function getGroupCriteria(group: Criteria): Criteria {
   return isNegationGroup(group) ? group[1] : group;
 }
 
-function setGroupCriteria(group, criteria) {
+function setGroupCriteria(group: Criteria, criteria: Criteria): Criteria {
   if (isNegationGroup(group)) {
     group[1] = criteria;
-  } else {
-    group = criteria;
+    return group;
   }
-  return group;
+  return criteria;
 }
 
-function convertGroupToNewStructure(group, value) {
-  const isNegationValue = function (value) {
-    return value.indexOf('!') !== -1;
+function convertGroupToNewStructure(group: Criteria, value: string): void {
+  const isNegationValue = function (groupValue: string): boolean {
+    return groupValue.includes('!');
   };
-  const convertGroupToNegationGroup = function (group) {
-    const criteria = group.slice(0);
-    group.length = 0;
-    group.push('!', criteria);
+  const convertGroupToNegationGroup = function (target: Criteria): void {
+    const criteria = target.slice(0);
+    target.length = 0;
+    target.push('!', criteria);
   };
-  const convertNegationGroupToGroup = function (group) {
-    const criteria = getGroupCriteria(group);
-    group.length = 0;
-    [].push.apply(group, criteria);
+  const convertNegationGroupToGroup = function (target: Criteria): void {
+    const criteria = getGroupCriteria(target);
+    target.length = 0;
+    ([] as Criteria).push.apply(target, criteria);
   };
 
   if (isNegationValue(value)) {
@@ -130,55 +210,47 @@ function convertGroupToNewStructure(group, value) {
   }
 }
 
-export function setGroupValue(group, value) {
+export function setGroupValue(group: Criteria, value: string): Criteria {
   convertGroupToNewStructure(group, value);
 
   const criteria = getGroupCriteria(group);
-  let i;
-  const getNormalizedGroupValue = function (value) {
-    return value.indexOf('!') === -1 ? value : value.substring(1);
+  let i = 0;
+  const getNormalizedGroupValue = function (groupValue: string): string {
+    return groupValue.includes('!') ? groupValue.substring(1) : groupValue;
   };
-  const changeCriteriaValue = function (criteria, value) {
-    for (i = 0; i < criteria.length; i++) {
-      if (!Array.isArray(criteria[i])) {
-        criteria[i] = value;
+  const changeCriteriaValue = function (target: Criteria, newValue: string): void {
+    for (i = 0; i < target.length; i += 1) {
+      if (!Array.isArray(target[i])) {
+        target[i] = newValue;
       }
     }
   };
 
-  value = getNormalizedGroupValue(value);
-  changeCriteriaValue(criteria, value);
+  changeCriteriaValue(criteria, getNormalizedGroupValue(value));
 
   return group;
 }
 
-export function getGroupMenuItem(group, availableGroups) {
-  const groupValue = getGroupValue(group);
-
-  return availableGroups.filter((item) => item.value === groupValue)[0];
-}
-
-function getCriteriaOperation(criteria) {
+function getCriteriaOperation(criteria: Criteria): string {
   if (isCondition(criteria)) {
     return AND_GROUP_OPERATION;
   }
 
   let value = '';
-  for (let i = 0; i < criteria.length; i++) {
-    const item = criteria[i];
+  for (const item of criteria) {
     if (!Array.isArray(item)) {
       if (value && value !== item) {
         throw dataErrors.Error('E4019');
       }
       if (item !== '!') {
-        value = item;
+        value = item as string;
       }
     }
   }
   return value;
 }
 
-export function getGroupValue(group) {
+export function getGroupValue(group: Criteria): string {
   const criteria = getGroupCriteria(group);
   let value = getCriteriaOperation(criteria);
 
@@ -191,47 +263,77 @@ export function getGroupValue(group) {
   return value;
 }
 
-function getDefaultFilterOperations(field) {
-  return (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+export function getGroupMenuItem(
+  group: Criteria,
+  availableGroups: GroupMenuItem[],
+): GroupMenuItem {
+  const groupValue = getGroupValue(group);
+
+  return availableGroups.filter((item) => item.value === groupValue)[0];
 }
 
-function containItems(entity) {
-  return Array.isArray(entity) && entity.length;
+function getDefaultFilterOperations(field: OperationsField): string[] | undefined {
+  return (field.lookup && LOOKUP_OPERATIONS)
+    || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
 }
 
-export function getFilterOperations(field) {
-  const result = containItems(field.filterOperations) ? field.filterOperations : getDefaultFilterOperations(field);
-  return extend([], result);
+function containItems<T>(entity: readonly T[] | null | undefined): entity is readonly T[] {
+  return Array.isArray(entity) && entity.length > 0;
 }
 
-export function getCaptionByOperation(operation, filterOperationDescriptions) {
-  const operationName = filterOperationsDictionary.getNameByFilterOperation(operation);
-  return filterOperationDescriptions && filterOperationDescriptions[operationName] ? filterOperationDescriptions[operationName] : operationName;
+export function getFilterOperations(field: OperationsField): string[] {
+  const result = containItems(field.filterOperations)
+    ? field.filterOperations
+    : getDefaultFilterOperations(field);
+  return [...(result ?? [])].filter((operation) => operation !== undefined);
 }
 
-export function getOperationFromAvailable(operation, availableOperations) {
-  for (let i = 0; i < availableOperations.length; i++) {
-    if (availableOperations[i].value === operation) {
-      return availableOperations[i];
+export function getCaptionByOperation(
+  operation: string,
+  filterOperationDescriptions: Partial<Record<string, string>> | undefined,
+): string {
+  const operationName = filterOperationsDictionary.getNameByFilterOperation(operation) as string;
+  const description = filterOperationDescriptions && filterOperationDescriptions[operationName];
+  return description || operationName;
+}
+
+export function getOperationFromAvailable(
+  operation: string,
+  availableOperations: OperationMenuItem[],
+): OperationMenuItem {
+  for (const availableOperation of availableOperations) {
+    if (availableOperation.value === operation) {
+      return availableOperation;
     }
   }
   // @ts-expect-error wrong usage of new
   throw new errors.Error('E1048', operation);
 }
 
-export function getCustomOperation(customOperations, name) {
+export function getCustomOperation(
+  customOperations: FilterCustomOperation[],
+  name: string,
+): FilterCustomOperation | null {
   const filteredOperations = customOperations.filter((item) => item.name === name);
   return filteredOperations.length ? filteredOperations[0] : null;
 }
 
-export function getAvailableOperations(field, filterOperationDescriptions, customOperations) {
+export function getAvailableOperations(
+  field: FilterBuilderField,
+  filterOperationDescriptions: Partial<Record<string, string>> | undefined,
+  customOperations: FilterCustomOperation[],
+): OperationMenuItem[] {
   const filterOperations = getFilterOperations(field);
   const isLookupField = !!field.lookup;
   customOperations.forEach((customOperation) => {
-    if (!field.filterOperations && filterOperations.indexOf(customOperation.name) === -1) {
+    if (!field.filterOperations && !filterOperations.includes(customOperation.name)) {
       const dataTypes = customOperation && customOperation.dataTypes;
       const isOperationForbidden = isLookupField ? !!customOperation.notForLookup : false;
-      if (!isOperationForbidden && dataTypes && dataTypes.indexOf(field.dataType || DEFAULT_DATA_TYPE) >= 0) {
+      if (
+        !isOperationForbidden
+        && dataTypes
+        && dataTypes.includes(field.dataType || DEFAULT_DATA_TYPE)
+      ) {
         filterOperations.push(customOperation.name);
       }
     }
@@ -255,487 +357,15 @@ export function getAvailableOperations(field, filterOperationDescriptions, custo
   });
 }
 
-export function getDefaultOperation(field) {
+export function getDefaultOperation(field: OperationsField): string {
   return field.defaultFilterOperation || getFilterOperations(field)[0];
 }
 
-export function createCondition(field, customOperations) {
-  const condition = [field.dataField, '', ''];
-  const filterOperation = getDefaultOperation(field);
-
-  updateConditionByOperation(condition, filterOperation, customOperations);
-
-  return condition;
-}
-
-export function removeItem(group, item) {
-  const criteria = getGroupCriteria(group);
-  const index = criteria.indexOf(item);
-
-  criteria.splice(index, 1);
-
-  if (criteria.length !== 1) {
-    criteria.splice(index, 1);
-  }
-  return group;
-}
-
-export function createEmptyGroup(value) {
-  const isNegation = isNegationGroupOperation(value);
-  const groupOperation = isNegation ? getGroupOperationFromNegationOperation(value) : value;
-
-  return isNegation ? ['!', [groupOperation]] : [groupOperation];
-}
-
-export function isEmptyGroup(group) {
-  const criteria = getGroupCriteria(group);
-
-  if (isCondition(criteria)) {
-    return false;
-  }
-
-  const hasConditions = criteria.some((item) => isCondition(item));
-
-  return !hasConditions;
-}
-
-export function addItem(item, group) {
-  const criteria = getGroupCriteria(group);
-  const groupValue = getGroupValue(criteria);
-
-  criteria.length === 1 ? criteria.unshift(item) : criteria.push(item, groupValue);
-
-  return group;
-}
-
-export function getField(dataField, fields) {
-  for (let i = 0; i < fields.length; i++) {
-    if (fields[i].name === dataField) {
-      return fields[i];
-    }
-    if (fields[i].dataField.toLowerCase() === dataField.toLowerCase()) {
-      return fields[i];
-    }
-  }
-  const extendedFields = getItems(fields, true).filter((item) => item.dataField.toLowerCase() === dataField.toLowerCase());
-  if (extendedFields.length > 0) {
-    return extendedFields[0];
-  }
-  // @ts-expect-error wrong usage of new
-  throw new errors.Error('E1047', dataField);
-}
-
-export function isGroup(criteria) {
-  if (!Array.isArray(criteria)) {
-    return false;
-  }
-
-  return criteria.length < 2 || (Array.isArray(criteria[0]) || Array.isArray(criteria[1]));
-}
-
-export function isCondition(criteria) {
-  if (!Array.isArray(criteria)) {
-    return false;
-  }
-
-  return criteria.length > 1 && !Array.isArray(criteria[0]) && !Array.isArray(criteria[1]);
-}
-
-function convertToInnerGroup(group, customOperations, defaultGroupOperation) {
-  defaultGroupOperation = defaultGroupOperation || AND_GROUP_OPERATION;
-  const groupOperation = getCriteriaOperation(group).toLowerCase() || defaultGroupOperation;
-  let innerGroup: any[] = [];
-  for (let i = 0; i < group.length; i++) {
-    if (isGroup(group[i])) {
-      innerGroup.push(convertToInnerStructure(group[i], customOperations, defaultGroupOperation));
-      innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
-    } else if (isCondition(group[i])) {
-      innerGroup.push(convertToInnerCondition(group[i], customOperations));
-      innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
-    }
-  }
-
-  if (innerGroup.length === 0) {
-    innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
-  }
-
-  return innerGroup;
-}
-
-function conditionHasCustomOperation(condition, customOperations) {
-  const customOperation = getCustomOperation(customOperations, condition[1]);
-  return customOperation && customOperation.name === condition[1];
-}
-
-function convertToInnerCondition(condition, customOperations) {
-  if (conditionHasCustomOperation(condition, customOperations)) {
-    return condition;
-  }
-
-  if (condition.length < 3) {
-    // eslint-disable-next-line prefer-destructuring
-    condition[2] = condition[1];
-    condition[1] = EQUAL_OPERATION;
-  }
-  return condition;
-}
-
-function isNegationGroupOperation(operation) {
-  return operation.indexOf('not') !== -1;
-}
-
-function getGroupOperationFromNegationOperation(operation) {
-  return operation.substring(3).toLowerCase();
-}
-
-function appendGroupOperationToCriteria(criteria, groupOperation) {
-  const isNegation = isNegationGroupOperation(groupOperation);
-  groupOperation = isNegation ? getGroupOperationFromNegationOperation(groupOperation) : groupOperation;
-
-  return isNegation ? ['!', criteria, groupOperation] : [criteria, groupOperation];
-}
-
-function appendGroupOperationToGroup(group, groupOperation) {
-  const isNegation = isNegationGroupOperation(groupOperation);
-
-  groupOperation = isNegation ? getGroupOperationFromNegationOperation(groupOperation) : groupOperation;
-  group.push(groupOperation);
-
-  let result = group;
-
-  if (isNegation) {
-    result = ['!', result];
-  }
-
-  return result;
-}
-
-export function convertToInnerStructure(value, customOperations, defaultGroupOperation?) {
-  defaultGroupOperation = defaultGroupOperation || AND_GROUP_OPERATION;
-  if (!value) {
-    return createEmptyGroup(defaultGroupOperation);
-  }
-
-  value = extend(true, [], value);
-
-  if (isCondition(value)) {
-    return appendGroupOperationToCriteria(convertToInnerCondition(value, customOperations), defaultGroupOperation);
-  }
-  if (isNegationGroup(value)) {
-    return ['!', isCondition(value[1])
-      ? appendGroupOperationToCriteria(convertToInnerCondition(value[1], customOperations), defaultGroupOperation)
-      : isNegationGroup(value[1]) ? appendGroupOperationToCriteria(convertToInnerStructure(value[1], customOperations), defaultGroupOperation) : convertToInnerGroup(value[1], customOperations, defaultGroupOperation)];
-  }
-  return convertToInnerGroup(value, customOperations, defaultGroupOperation);
-}
-
-export function getNormalizedFields(fields) {
-  return fields.reduce((result, field) => {
-    if (isDefined(field.dataField)) {
-      const normalizedField: any = {};
-      // eslint-disable-next-line no-restricted-syntax
-      for (const key in field) {
-        if (field[key] && AVAILABLE_FIELD_PROPERTIES.includes(key)) {
-          normalizedField[key] = field[key];
-        }
-      }
-      normalizedField.defaultCalculateFilterExpression = filterUtils.defaultCalculateFilterExpression;
-      if (!isDefined(normalizedField.dataType)) {
-        normalizedField.dataType = DEFAULT_DATA_TYPE;
-      }
-      if (!isDefined(normalizedField.trueText)) {
-        normalizedField.trueText = messageLocalization.format('dxDataGrid-trueText');
-      }
-      if (!isDefined(normalizedField.falseText)) {
-        normalizedField.falseText = messageLocalization.format('dxDataGrid-falseText');
-      }
-      result.push(normalizedField);
-    }
-    return result;
-  }, []);
-}
-
-function getConditionFilterExpression(condition, fields, customOperations, target) {
-  const field = getField(condition[0], fields);
-  const filterExpression = convertToInnerCondition(condition, customOperations);
-  const customOperation = customOperations.length && getCustomOperation(customOperations, filterExpression[1]);
-
-  if (customOperation && customOperation.calculateFilterExpression) {
-    return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field, fields]);
-  } if (field.createFilterExpression) {
-    return field.createFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
-  } if (field.calculateFilterExpression) {
-    return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
-  }
-  return field.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
-}
-
-export function getFilterExpression(value, fields, customOperations, target) {
-  if (!isDefined(value)) {
-    return null;
-  }
-
-  if (isNegationGroup(value)) {
-    const filterExpression = getFilterExpression(value[1], fields, customOperations, target);
-    return ['!', filterExpression];
-  }
-  const criteria = getGroupCriteria(value);
-  if (isCondition(criteria)) {
-    return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
-  }
-  let result: any[] = [];
-  let filterExpression;
-  const groupValue = getGroupValue(criteria);
-
-  for (let i = 0; i < criteria.length; i++) {
-    if (isGroup(criteria[i])) {
-      filterExpression = getFilterExpression(criteria[i], fields, customOperations, target);
-      if (filterExpression) {
-        i && result.push(groupValue);
-        result.push(filterExpression);
-      }
-    } else if (isCondition(criteria[i])) {
-      filterExpression = getConditionFilterExpression(criteria[i], fields, customOperations, target);
-      if (filterExpression) {
-        result.length && result.push(groupValue);
-        result.push(filterExpression);
-      }
-    }
-  }
-
-  if (result.length === 1) {
-    // eslint-disable-next-line prefer-destructuring
-    result = result[0];
-  }
-
-  return result.length ? result : null;
-}
-
-export function getNormalizedFilter(group) {
-  const criteria = getGroupCriteria(group);
-  let i;
-
-  if (criteria.length === 0) {
-    return null;
-  }
-
-  const itemsForRemove: any[] = [];
-  for (i = 0; i < criteria.length; i++) {
-    if (isGroup(criteria[i])) {
-      const normalizedGroupValue = getNormalizedFilter(criteria[i]);
-      if (normalizedGroupValue) {
-        criteria[i] = normalizedGroupValue;
-      } else {
-        itemsForRemove.push(criteria[i]);
-      }
-    } else if (isCondition(criteria[i])) {
-      if (!isValidCondition(criteria[i])) {
-        itemsForRemove.push(criteria[i]);
-      }
-    }
-  }
-  for (i = 0; i < itemsForRemove.length; i++) {
-    removeItem(criteria, itemsForRemove[i]);
-  }
-
-  if (criteria.length === 1) {
-    return null;
-  }
-
-  criteria.splice(criteria.length - 1, 1);
-
-  if (criteria.length === 1) {
-    group = setGroupCriteria(group, criteria[0]);
-  }
-
-  if (group.length === 0) {
-    return null;
-  }
-
-  return group;
-}
-
-export function getCurrentLookupValueText(field, value, handler) {
-  if (value === '') {
-    handler('');
-    return;
-  }
-  const { lookup } = field;
-  if (lookup.items) {
-    handler(lookup.calculateCellValue(value) || '');
-  } else {
-    const lookupDataSource = isFunction(lookup.dataSource) ? lookup.dataSource({}) : lookup.dataSource;
-    const dataSource = new DataSource(lookupDataSource);
-    dataSource.loadSingle(lookup.valueExpr, value).done((result) => {
-      let valueText = '';
-
-      if (result) {
-        // @ts-expect-error compileGetter has unknown return type
-        valueText = lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result;
-      }
-
-      if (field.customizeText) {
-        valueText = field.customizeText({
-          value,
-          valueText,
-        });
-      }
-
-      handler(valueText);
-    }).fail(() => {
-      handler('');
-    });
-  }
-}
-
-function getPrimitiveValueText(
-  field: Field,
-  value: FieldValue,
-  customOperation: CustomOperation | null,
-  target: string,
-  options?,
-): string {
-  let valueText = getFormattedValueText(field, value);
-
-  if (field.customizeText) {
-    valueText = field.customizeText.call(field, {
-      // @ts-expect-error
-      value,
-      valueText,
-      target,
-    });
-  }
-
-  if (customOperation && customOperation.customizeText) {
-    valueText = customOperation.customizeText.call(customOperation, {
-      value,
-      valueText,
-      field,
-      target,
-      // @ts-expect-error
-    }, options);
-  }
-
-  return valueText;
-}
-
-function getArrayValueText(
-  field: Field,
-  value: FieldValue[],
-  customOperation: CustomOperation | null,
-  target: string,
-): string[] {
-  const options = { values: value };
-  return value.map((v) => getPrimitiveValueText(field, v, customOperation, target, options));
-}
-
-function checkDefaultValue(value: FieldValue | FieldValue[]): value is '' | null {
-  return value === '' || value === null;
-}
-
-export function getCurrentValueText(
-  field: Field,
-  value: FieldValue | FieldValue[],
-  customOperation: CustomOperation | null,
-  target = 'filterBuilder',
-): string | DeferredObj<string | string[]> {
-  if (checkDefaultValue(value)) {
-    return '';
-  }
-
-  if (Array.isArray(value)) {
-    // @ts-expect-error Deferred has badly typed ctor function
-    const result: DeferredObj<string | string[]> = new Deferred();
-    when.apply(this, getArrayValueText(field, value, customOperation, target)).done((...args) => {
-      const text: string | string[] = (args as string[]).some((item) => !checkDefaultValue(item))
-        ? (args as string[]).map((item) => (!checkDefaultValue(item) ? item : '?'))
-        : '';
-      result.resolve(text);
-    });
-    return result;
-  }
-  return getPrimitiveValueText(field, value, customOperation, target);
-}
-
-function itemExists(plainItems, parentId) {
-  return plainItems.some((item) => item.dataField === parentId);
-}
-
-function pushItemAndCheckParent(originalItems, plainItems, item) {
-  const { dataField } = item;
-  if (hasParent(dataField)) {
-    item.parentId = getParentIdFromItemDataField(dataField);
-    if (!itemExists(plainItems, item.parentId) && !itemExists(originalItems, item.parentId)) {
-      pushItemAndCheckParent(originalItems, plainItems, {
-        id: item.parentId,
-        dataType: 'object',
-        dataField: item.parentId,
-        caption: generateCaptionByDataField(item.parentId, true),
-        filterOperations: ['isblank', 'isnotblank'],
-        defaultCalculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
-      });
-    }
-  }
-  plainItems.push(item);
-}
-
-function generateCaptionByDataField(dataField, allowHierarchicalFields) {
-  let caption = '';
-
-  if (allowHierarchicalFields) {
-    dataField = dataField.substring(dataField.lastIndexOf('.') + 1);
-  } else if (hasParent(dataField)) {
-    dataField.split('.').forEach((field, index, arr) => {
-      caption += captionize(field);
-      if (index !== (arr.length - 1)) {
-        caption += '.';
-      }
-    });
-
-    return caption;
-  }
-
-  return captionize(dataField);
-}
-
-export function getItems(fields, allowHierarchicalFields): any[] {
-  const items: any[] = [];
-
-  for (let i = 0; i < fields.length; i++) {
-    const item = extend(true, { caption: generateCaptionByDataField(fields[i].dataField, allowHierarchicalFields) }, fields[i]);
-    item.id = item.name || item.dataField;
-
-    if (allowHierarchicalFields) {
-      pushItemAndCheckParent(fields, items, item);
-    } else {
-      items.push(item);
-    }
-  }
-
-  return items;
-}
-
-function hasParent(dataField) {
-  return dataField.lastIndexOf('.') !== -1;
-}
-
-function getParentIdFromItemDataField(dataField) {
-  return dataField.substring(0, dataField.lastIndexOf('.'));
-}
-
-export function getCaptionWithParents(item, plainItems) {
-  if (hasParent(item.dataField)) {
-    const parentId = getParentIdFromItemDataField(item.dataField);
-    for (let i = 0; i < plainItems.length; i++) {
-      if (plainItems[i].dataField === parentId) {
-        return `${getCaptionWithParents(plainItems[i], plainItems)}.${item.caption}`;
-      }
-    }
-  }
-  return item.caption;
-}
-
-export function updateConditionByOperation(condition, operation, customOperations) {
+export function updateConditionByOperation(
+  condition: Condition,
+  operation: string,
+  customOperations: FilterCustomOperation[],
+): Condition {
   let customOperation = getCustomOperation(customOperations, operation);
   if (customOperation) {
     if (customOperation.hasValue === false) {
@@ -764,8 +394,582 @@ export function updateConditionByOperation(condition, operation, customOperation
   return condition;
 }
 
-export function getOperationValue(condition) {
-  let caption;
+export function createCondition(
+  field: OperationsField & { dataField?: string },
+  customOperations: FilterCustomOperation[],
+): Condition {
+  const condition: Condition = [field.dataField as string, '', ''];
+  const filterOperation = getDefaultOperation(field);
+
+  updateConditionByOperation(condition, filterOperation, customOperations);
+
+  return condition;
+}
+
+export function removeItem(group: Criteria, item: unknown): Criteria {
+  const criteria = getGroupCriteria(group);
+  const index = criteria.indexOf(item);
+
+  criteria.splice(index, 1);
+
+  if (criteria.length !== 1) {
+    criteria.splice(index, 1);
+  }
+  return group;
+}
+
+function isNegationGroupOperation(operation: string): boolean {
+  return operation.includes('not');
+}
+
+function getGroupOperationFromNegationOperation(operation: string): string {
+  return operation.substring(3).toLowerCase();
+}
+
+export function createEmptyGroup(value: string): Criteria {
+  const isNegation = isNegationGroupOperation(value);
+  const groupOperation = isNegation ? getGroupOperationFromNegationOperation(value) : value;
+
+  return isNegation ? ['!', [groupOperation]] : [groupOperation];
+}
+
+export function isEmptyGroup(group: Criteria): boolean {
+  const criteria = getGroupCriteria(group);
+
+  if (isCondition(criteria)) {
+    return false;
+  }
+
+  const hasConditions = criteria.some((item) => isCondition(item));
+
+  return !hasConditions;
+}
+
+export function addItem(item: unknown, group: Criteria): Criteria {
+  const criteria = getGroupCriteria(group);
+  const groupValue = getGroupValue(criteria);
+
+  if (criteria.length === 1) {
+    criteria.unshift(item);
+  } else {
+    criteria.push(item, groupValue);
+  }
+
+  return group;
+}
+
+function hasParent(dataField: string): boolean {
+  return dataField.lastIndexOf('.') !== -1;
+}
+
+function generateCaptionByDataField(
+  dataField: string,
+  allowHierarchicalFields: boolean | undefined,
+): string {
+  let caption = '';
+  let name = dataField;
+
+  if (allowHierarchicalFields) {
+    name = dataField.substring(dataField.lastIndexOf('.') + 1);
+  } else if (hasParent(dataField)) {
+    dataField.split('.').forEach((field, index, arr) => {
+      caption += captionize(field);
+      if (index !== (arr.length - 1)) {
+        caption += '.';
+      }
+    });
+
+    return caption;
+  }
+
+  return captionize(name);
+}
+
+function getParentIdFromItemDataField(dataField: string): string {
+  return dataField.substring(0, dataField.lastIndexOf('.'));
+}
+
+function itemExists(plainItems: FilterBuilderField[], parentId: string): boolean {
+  return plainItems.some((item) => item.dataField === parentId);
+}
+
+function pushItemAndCheckParent(
+  originalItems: FilterBuilderField[],
+  plainItems: FilterBuilderField[],
+  item: FilterBuilderField,
+): void {
+  const { dataField } = item;
+  if (hasParent(dataField)) {
+    item.parentId = getParentIdFromItemDataField(dataField);
+    if (!itemExists(plainItems, item.parentId) && !itemExists(originalItems, item.parentId)) {
+      pushItemAndCheckParent(originalItems, plainItems, {
+        id: item.parentId,
+        dataType: 'object',
+        dataField: item.parentId,
+        caption: generateCaptionByDataField(item.parentId, true),
+        filterOperations: ['isblank', 'isnotblank'],
+        defaultCalculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
+      });
+    }
+  }
+  plainItems.push(item);
+}
+
+export function getItems(
+  fields: FilterBuilderField[],
+  allowHierarchicalFields: boolean | undefined,
+): FilterBuilderField[] {
+  const items: FilterBuilderField[] = [];
+
+  for (const field of fields) {
+    const item: FilterBuilderField = extend(
+      true,
+      { caption: generateCaptionByDataField(field.dataField, allowHierarchicalFields) },
+      field,
+    );
+    item.id = item.name || item.dataField;
+
+    if (allowHierarchicalFields) {
+      pushItemAndCheckParent(fields, items, item);
+    } else {
+      items.push(item);
+    }
+  }
+
+  return items;
+}
+
+export function getField(dataField: string, fields: FilterBuilderField[]): FilterBuilderField {
+  for (const field of fields) {
+    if (field.name === dataField) {
+      return field;
+    }
+    if (field.dataField.toLowerCase() === dataField.toLowerCase()) {
+      return field;
+    }
+  }
+  const extendedFields = getItems(fields, true)
+    .filter((item) => item.dataField.toLowerCase() === dataField.toLowerCase());
+  if (extendedFields.length > 0) {
+    return extendedFields[0];
+  }
+  // @ts-expect-error wrong usage of new
+  throw new errors.Error('E1047', dataField);
+}
+
+export function isGroup(criteria: unknown): criteria is ValueGroup {
+  if (!Array.isArray(criteria)) {
+    return false;
+  }
+
+  return criteria.length < 2 || (Array.isArray(criteria[0]) || Array.isArray(criteria[1]));
+}
+
+function appendGroupOperationToCriteria(criteria: Criteria, groupOperation: string): Criteria {
+  const isNegation = isNegationGroupOperation(groupOperation);
+  const operation = isNegation
+    ? getGroupOperationFromNegationOperation(groupOperation)
+    : groupOperation;
+
+  return isNegation ? ['!', criteria, operation] : [criteria, operation];
+}
+
+function conditionHasCustomOperation(
+  condition: Condition,
+  customOperations: FilterCustomOperation[],
+): boolean {
+  const customOperation = getCustomOperation(customOperations, condition[1]);
+  return !!customOperation && customOperation.name === condition[1];
+}
+
+function convertToInnerCondition(
+  condition: Condition,
+  customOperations: FilterCustomOperation[],
+): Condition {
+  if (conditionHasCustomOperation(condition, customOperations)) {
+    return condition;
+  }
+
+  if (condition.length < 3) {
+    // eslint-disable-next-line prefer-destructuring
+    condition[2] = condition[1];
+    condition[1] = EQUAL_OPERATION;
+  }
+  return condition;
+}
+
+function appendGroupOperationToGroup(group: Criteria, groupOperation: string): Criteria {
+  const isNegation = isNegationGroupOperation(groupOperation);
+
+  const operation = isNegation
+    ? getGroupOperationFromNegationOperation(groupOperation)
+    : groupOperation;
+  group.push(operation);
+
+  let result: Criteria = group;
+
+  if (isNegation) {
+    result = ['!', result];
+  }
+
+  return result;
+}
+
+function convertToInnerGroup(
+  group: Criteria,
+  customOperations: FilterCustomOperation[],
+  convertItem: typeof convertToInnerStructure,
+  defaultGroupOperation?: string,
+): Criteria {
+  const defaultOperation = defaultGroupOperation || AND_GROUP_OPERATION;
+  const groupOperation = getCriteriaOperation(group).toLowerCase() || defaultOperation;
+  let innerGroup: Criteria = [];
+  for (const item of group) {
+    if (isGroup(item)) {
+      innerGroup.push(convertItem(item, customOperations, defaultOperation));
+      innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
+    } else if (isCondition(item)) {
+      innerGroup.push(convertToInnerCondition(item, customOperations));
+      innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
+    }
+  }
+
+  if (innerGroup.length === 0) {
+    innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
+  }
+
+  return innerGroup;
+}
+
+export function convertToInnerStructure(
+  value: unknown,
+  customOperations: FilterCustomOperation[],
+  defaultGroupOperation?: string,
+): Criteria {
+  const defaultOperation = defaultGroupOperation || AND_GROUP_OPERATION;
+  if (!value) {
+    return createEmptyGroup(defaultOperation);
+  }
+
+  const clone: Criteria = extend(true, [], value);
+
+  if (isCondition(clone)) {
+    return appendGroupOperationToCriteria(
+      convertToInnerCondition(clone, customOperations),
+      defaultOperation,
+    );
+  }
+  if (isNegationGroup(clone)) {
+    const [, innerCriteria] = clone;
+    if (isCondition(innerCriteria)) {
+      return ['!', appendGroupOperationToCriteria(
+        convertToInnerCondition(innerCriteria, customOperations),
+        defaultOperation,
+      )];
+    }
+    if (isNegationGroup(innerCriteria)) {
+      return ['!', appendGroupOperationToCriteria(
+        convertToInnerStructure(innerCriteria, customOperations),
+        defaultOperation,
+      )];
+    }
+    return ['!', convertToInnerGroup(innerCriteria, customOperations, convertToInnerStructure, defaultOperation)];
+  }
+  return convertToInnerGroup(clone, customOperations, convertToInnerStructure, defaultOperation);
+}
+
+export function getNormalizedFields(fields: Field[]): FilterBuilderField[] {
+  return fields.reduce<FilterBuilderField[]>((result, field) => {
+    if (isDefined(field.dataField)) {
+      const normalizedField: Partial<FilterBuilderField> = {};
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key in field) {
+        if (field[key] && AVAILABLE_FIELD_PROPERTIES.includes(key)) {
+          normalizedField[key] = field[key];
+        }
+      }
+      normalizedField.defaultCalculateFilterExpression = filterUtils
+        .defaultCalculateFilterExpression;
+      if (!isDefined(normalizedField.dataType)) {
+        normalizedField.dataType = DEFAULT_DATA_TYPE;
+      }
+      if (!isDefined(normalizedField.trueText)) {
+        normalizedField.trueText = messageLocalization.format('dxDataGrid-trueText');
+      }
+      if (!isDefined(normalizedField.falseText)) {
+        normalizedField.falseText = messageLocalization.format('dxDataGrid-falseText');
+      }
+      result.push(normalizedField as FilterBuilderField);
+    }
+    return result;
+  }, []);
+}
+
+function getConditionFilterExpression(
+  condition: Condition,
+  fields: FilterBuilderField[],
+  customOperations: FilterCustomOperation[],
+  target: string,
+): FilterExpression {
+  const field = getField(condition[0], fields);
+  const filterExpression = convertToInnerCondition(condition, customOperations);
+  const customOperation = customOperations.length
+    && getCustomOperation(customOperations, filterExpression[1]);
+
+  if (customOperation && customOperation.calculateFilterExpression) {
+    return customOperation.calculateFilterExpression.apply(
+      customOperation,
+      [filterExpression[2], field, fields],
+    );
+  } if (field.createFilterExpression) {
+    return field.createFilterExpression.apply(
+      field,
+      [filterExpression[2], filterExpression[1], target],
+    );
+  } if (field.calculateFilterExpression) {
+    return field.calculateFilterExpression.apply(
+      field,
+      [filterExpression[2], filterExpression[1], target],
+    );
+  }
+  return field.defaultCalculateFilterExpression.apply(
+    field,
+    [filterExpression[2], filterExpression[1], target],
+  );
+}
+
+export function getFilterExpression(
+  value: FilterBuilderValue,
+  fields: FilterBuilderField[],
+  customOperations: FilterCustomOperation[],
+  target: string,
+): FilterExpression | null {
+  if (!isDefined(value)) {
+    return null;
+  }
+
+  if (isNegationGroup(value)) {
+    const filterExpression = getFilterExpression(value[1], fields, customOperations, target);
+    return ['!', filterExpression];
+  }
+  const criteria = getGroupCriteria(value);
+  if (isCondition(criteria)) {
+    return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
+  }
+  let result: FilterExpression[] = [];
+  let filterExpression: FilterExpression | null = null;
+  const groupValue = getGroupValue(criteria);
+
+  for (let i = 0; i < criteria.length; i += 1) {
+    const item = criteria[i];
+    if (isGroup(item)) {
+      filterExpression = getFilterExpression(item, fields, customOperations, target);
+      if (filterExpression && i) {
+        result.push(groupValue);
+      }
+      if (filterExpression) {
+        result.push(filterExpression);
+      }
+    } else if (isCondition(item)) {
+      filterExpression = getConditionFilterExpression(item, fields, customOperations, target);
+      if (filterExpression && result.length) {
+        result.push(groupValue);
+      }
+      if (filterExpression) {
+        result.push(filterExpression);
+      }
+    }
+  }
+
+  if (result.length === 1) {
+    // @ts-expect-error a single expression replaces the list
+    // eslint-disable-next-line prefer-destructuring
+    result = result[0];
+  }
+
+  return result.length ? result : null;
+}
+
+export function isValidCondition(condition: Condition): boolean {
+  return condition[2] !== '';
+}
+
+export function getNormalizedFilter(group: Criteria): ValueExpression | null {
+  let normalizedGroup = group;
+  const criteria = getGroupCriteria(normalizedGroup);
+  let i = 0;
+
+  if (criteria.length === 0) {
+    return null;
+  }
+
+  const itemsForRemove: unknown[] = [];
+  for (i = 0; i < criteria.length; i += 1) {
+    const item = criteria[i];
+    if (isGroup(item)) {
+      const normalizedGroupValue = getNormalizedFilter(item);
+      if (normalizedGroupValue) {
+        criteria[i] = normalizedGroupValue;
+      } else {
+        itemsForRemove.push(item);
+      }
+    } else if (isCondition(item)) {
+      if (!isValidCondition(item)) {
+        itemsForRemove.push(item);
+      }
+    }
+  }
+  for (i = 0; i < itemsForRemove.length; i += 1) {
+    removeItem(criteria, itemsForRemove[i]);
+  }
+
+  if (criteria.length === 1) {
+    return null;
+  }
+
+  criteria.splice(criteria.length - 1, 1);
+
+  if (criteria.length === 1) {
+    normalizedGroup = setGroupCriteria(normalizedGroup, criteria[0] as Criteria);
+  }
+
+  if (normalizedGroup.length === 0) {
+    return null;
+  }
+
+  // @ts-expect-error the model is normalized in place into a filter value
+  return normalizedGroup;
+}
+
+export function getCurrentLookupValueText(
+  field: LookupField,
+  value: ConditionValue,
+  handler: (text: string) => void,
+): void {
+  if (value === '') {
+    handler('');
+    return;
+  }
+  const { lookup } = field;
+  if (lookup.items) {
+    // @ts-expect-error calculateCellValue is declared only on the grid lookup
+    handler(lookup.calculateCellValue(value) || '');
+  } else {
+    const lookupDataSource = isFunction(lookup.dataSource)
+      // @ts-expect-error the lookup dataSource type has no function form
+      ? lookup.dataSource({})
+      : lookup.dataSource;
+    const dataSource = new DataSource(lookupDataSource);
+    dataSource.loadSingle(lookup.valueExpr, value).done((result) => {
+      let valueText = '';
+
+      if (result) {
+        // @ts-expect-error compileGetter has unknown return type
+        valueText = lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result;
+      }
+
+      if (field.customizeText) {
+        valueText = field.customizeText({
+          // @ts-expect-error FieldInfo.value does not admit boolean or null
+          value,
+          valueText,
+        });
+      }
+
+      handler(valueText);
+    }).fail(() => {
+      handler('');
+    });
+  }
+}
+
+function getPrimitiveValueText(
+  field: Field,
+  value: FieldValue,
+  customOperation: CustomOperation | null,
+  target: string,
+  options?: { values: FieldValue[] },
+): string {
+  let valueText = getFormattedValueText(field, value);
+
+  if (field.customizeText) {
+    valueText = field.customizeText.call(field, {
+      // @ts-expect-error FieldInfo.value does not admit boolean or null
+      value,
+      valueText,
+      target,
+    });
+  }
+
+  if (customOperation && customOperation.customizeText) {
+    valueText = customOperation.customizeText.call(customOperation, {
+      value,
+      valueText,
+      field,
+      target,
+      // @ts-expect-error customizeText is declared with one argument
+    }, options);
+  }
+
+  return valueText;
+}
+
+function getArrayValueText(
+  field: Field,
+  value: FieldValue[],
+  customOperation: CustomOperation | null,
+  target: string,
+): string[] {
+  const options = { values: value };
+  return value.map((v) => getPrimitiveValueText(field, v, customOperation, target, options));
+}
+
+function checkDefaultValue(value: FieldValue | FieldValue[]): value is '' | null {
+  return value === '' || value === null;
+}
+
+export function getCurrentValueText(
+  this: unknown,
+  field: Field,
+  value: FieldValue | FieldValue[],
+  customOperation: CustomOperation | null,
+  target = 'filterBuilder',
+): string | DeferredObj<string | string[]> {
+  if (checkDefaultValue(value)) {
+    return '';
+  }
+
+  if (Array.isArray(value)) {
+    // @ts-expect-error Deferred has badly typed ctor function
+    const result: DeferredObj<string | string[]> = new Deferred();
+    when.apply(this, getArrayValueText(field, value, customOperation, target)).done((...args) => {
+      const text: string | string[] = (args as string[]).some((item) => !checkDefaultValue(item))
+        ? (args as string[]).map((item) => (!checkDefaultValue(item) ? item : '?'))
+        : '';
+      result.resolve(text);
+    });
+    return result;
+  }
+  return getPrimitiveValueText(field, value, customOperation, target);
+}
+
+export function getCaptionWithParents(
+  item: FilterBuilderField,
+  plainItems: FilterBuilderField[],
+): string | undefined {
+  if (hasParent(item.dataField)) {
+    const parentId = getParentIdFromItemDataField(item.dataField);
+    for (const plainItem of plainItems) {
+      if (plainItem.dataField === parentId) {
+        return `${getCaptionWithParents(plainItem, plainItems)}.${item.caption}`;
+      }
+    }
+  }
+  return item.caption;
+}
+
+export function getOperationValue(condition: Condition): string {
+  let caption = '';
   if (condition[2] === null) {
     if (condition[1] === EQUAL_OPERATION) {
       caption = 'isblank';
@@ -779,12 +983,12 @@ export function getOperationValue(condition) {
   return caption;
 }
 
-export function isValidCondition(condition) {
-  return condition[2] !== '';
-}
-
-export function getMergedOperations(customOperations, betweenCaption, context) {
-  const result = extend(true, [], customOperations);
+export function getMergedOperations(
+  customOperations: CustomOperation[] | undefined,
+  betweenCaption: string | undefined,
+  context: EditorFactoryOwner,
+): FilterCustomOperation[] {
+  const result: FilterCustomOperation[] = extend(true, [], customOperations);
   let betweenIndex = -1;
   result.some((customOperation, index) => {
     if (customOperation.name === 'between') {
@@ -802,11 +1006,56 @@ export function getMergedOperations(customOperations, betweenCaption, context) {
   return result;
 }
 
-function isMatchedCondition(filter, addedFilterDataField) {
+function isMatchedCondition(filter: Criteria, addedFilterDataField: unknown): boolean {
   return filter[0] === addedFilterDataField;
 }
 
-export function removeFieldConditionsFromFilter(filter, dataField) {
+function syncConditionIntoGroup(
+  filter: Criteria,
+  addedFilter: Criteria,
+  canPush: boolean,
+): Criteria | null {
+  const result: Criteria = [];
+  const isNegation = isNegationGroup(filter);
+  let shouldPush = canPush;
+
+  filter.forEach((item) => {
+    if (isCondition(item)) {
+      if (isMatchedCondition(item, addedFilter[0])) {
+        if (shouldPush) {
+          result.push(addedFilter);
+          shouldPush = false;
+        } else {
+          result.splice(result.length - 1, 1);
+        }
+      } else {
+        result.push(item);
+      }
+    } else if (result.length || isGroup(item)) {
+      result.push(item);
+    }
+  });
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  if (shouldPush) {
+    result.push(AND_GROUP_OPERATION);
+    result.push(addedFilter);
+  }
+
+  if (isNegation) {
+    return ['!', result.length === 1 ? result[0] as Criteria : result];
+  }
+
+  return result.length === 1 ? result[0] as Criteria : result;
+}
+
+export function removeFieldConditionsFromFilter(
+  filter: Criteria | null | undefined,
+  dataField: string | undefined,
+): Criteria | null {
   if (!filter || filter.length === 0) {
     return null;
   }
@@ -818,44 +1067,10 @@ export function removeFieldConditionsFromFilter(filter, dataField) {
   return syncConditionIntoGroup(filter, [dataField], false);
 }
 
-function syncConditionIntoGroup(filter, addedFilter, canPush) {
-  const result: any[] = [];
-  const isNegation = isNegationGroup(filter);
-
-  filter.forEach((item) => {
-    if (isCondition(item)) {
-      if (isMatchedCondition(item, addedFilter[0])) {
-        if (canPush) {
-          result.push(addedFilter);
-          canPush = false;
-        } else {
-          result.splice(result.length - 1, 1);
-        }
-      } else {
-        result.push(item);
-      }
-    } else {
-      (result.length || isGroup(item)) && result.push(item);
-    }
-  });
-
-  if (result.length === 0) {
-    return null;
-  }
-
-  if (canPush) {
-    result.push(AND_GROUP_OPERATION);
-    result.push(addedFilter);
-  }
-
-  if (isNegation) {
-    return ['!', result.length === 1 ? result[0] : result];
-  }
-
-  return result.length === 1 ? result[0] : result;
-}
-
-export function syncFilters(filter, addedFilter) {
+export function syncFilters(
+  filter: Criteria | null,
+  addedFilter: Criteria,
+): Criteria | null {
   if (filter === null || filter.length === 0) {
     return addedFilter;
   }
@@ -875,7 +1090,10 @@ export function syncFilters(filter, addedFilter) {
   return syncConditionIntoGroup(filter, addedFilter, true);
 }
 
-export function getMatchedConditions(filter, dataField) {
+export function getMatchedConditions(
+  filter: Criteria | null,
+  dataField: string | undefined,
+): Criteria[] {
   if (filter === null || filter.length === 0) return [];
 
   if (isCondition(filter)) {
@@ -890,22 +1108,33 @@ export function getMatchedConditions(filter, dataField) {
     return [];
   }
 
-  const result = filter.filter((item) => isCondition(item) && isMatchedCondition(item, dataField));
+  const result = filter.filter(
+    (item): item is Condition => isCondition(item) && isMatchedCondition(item, dataField),
+  );
 
   return result;
 }
 
-export function filterHasField(filter, dataField) {
+export function filterHasField(
+  filter: Criteria | null,
+  dataField: string | undefined,
+): boolean {
   if (filter === null || filter.length === 0) return false;
 
   if (isCondition(filter)) {
     return filter[0] === dataField;
   }
 
-  return filter.some((item) => (isCondition(item) || isGroup(item)) && filterHasField(item, dataField));
+  return filter.some(
+    (item) => (isCondition(item) || isGroup(item)) && filterHasField(item, dataField),
+  );
 }
 
-export const renderValueText = function ($container, value, customOperation?) {
+export const renderValueText = function (
+  $container: dxElementWrapper,
+  value: string | string[] | undefined,
+  customOperation?: FilterCustomOperation | null,
+): void {
   if (Array.isArray(value)) {
     const lastItemIndex = value.length - 1;
     $container.empty();
@@ -917,7 +1146,11 @@ export const renderValueText = function ($container, value, customOperation?) {
       if (i !== lastItemIndex) {
         $('<span>')
           .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS)
-          .text(customOperation && customOperation.valueSeparator ? customOperation.valueSeparator : '|')
+          .text(
+            customOperation && customOperation.valueSeparator
+              ? customOperation.valueSeparator
+              : '|',
+          )
           .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS)
           .appendTo($container);
       }

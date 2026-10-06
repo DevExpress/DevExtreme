@@ -11,15 +11,11 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
-/* eslint-disable prefer-rest-params */
-/* eslint-disable prefer-spread */
 
-import { noop as _noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
-import { reverseEach as _reverseEach } from '@js/core/utils/iterator';
-import { isDefined as _isDefined, type } from '@js/core/utils/type';
-// @ts-expect-error
-import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { reverseEach as _reverseEach } from '@ts/core/utils/m_iterator';
+import { isDefined as _isDefined, type } from '@ts/core/utils/m_type';
 import { Axis } from '@ts/viz/axes/base_axis';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
@@ -30,6 +26,7 @@ import {
 } from '@ts/viz/core/utils';
 import rangeDataCalculator from '@ts/viz/series/helpers/range_data_calculator';
 import { Range } from '@ts/viz/translators/range';
+import { areCanvasesDifferent, floorCanvasDimensions } from '@ts/viz/utils';
 
 import { BaseChart } from './base_chart';
 

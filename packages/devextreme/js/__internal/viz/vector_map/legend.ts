@@ -11,8 +11,8 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
 import type { LegendDataItem } from '@ts/viz/components/legend';
 import { Legend as _BaseLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -69,7 +69,6 @@ function buildData(partition: number[], values: ThemeValue[], field: string): Le
   return list;
 }
 
-// 'var' because JSHint throws W021 error
 let Legend = class Legend extends _BaseLegend {
   declare _params: LegendParameters;
 
@@ -93,8 +92,6 @@ let Legend = class Legend extends _BaseLegend {
       widget: parameters.widget,
       group: root,
       backgroundClass: null,
-      // @ts-expect-error the base legend reads itemGroupClass, so this key is ignored
-      itemsGroupClass: null,
       textField: 'text',
       getFormatObject(data) {
         return data;

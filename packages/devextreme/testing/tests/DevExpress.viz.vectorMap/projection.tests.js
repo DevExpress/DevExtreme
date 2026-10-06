@@ -651,6 +651,21 @@ QUnit.test('toScreenPoint', function(assert) {
     assert.deepEqual(this.projection.toScreenPoint([22.5, -7.5]), [670, 275]);
 });
 
+QUnit.module('Initial zoom');
+
+QUnit.test('A new projection starts with the minimal zoom', function(assert) {
+    const zoomChanged = sinon.spy();
+    const newProjection = new Projection({ centerChanged: noop, zoomChanged: zoomChanged });
+
+    assert.strictEqual(newProjection.getZoom(), 1, 'zoom');
+
+    newProjection.setZoom(1);
+
+    assert.strictEqual(zoomChanged.callCount, 0, 'setting the initial zoom does not change it');
+
+    newProjection.dispose();
+});
+
 // TODO: Use fake engine!
 QUnit.module('Viewport', {
     beforeEach: function() {

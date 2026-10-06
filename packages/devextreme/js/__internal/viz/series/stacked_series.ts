@@ -12,10 +12,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { clone } from '@js/core/utils/object';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { clone } from '@ts/core/utils/m_object';
 import { map } from '@ts/viz/core/utils';
 
 import { chart as areaSeries } from './area_series';

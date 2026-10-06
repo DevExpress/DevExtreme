@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-const OPERATION_ICONS = {
+const OPERATION_ICONS: Record<string, string | undefined> = {
   '=': 'equal',
   '<>': 'notequal',
   '<': 'less',
@@ -14,7 +14,7 @@ const OPERATION_ICONS = {
   isnotblank: 'isnotblank',
 };
 
-const OPERATION_NAME = {
+const OPERATION_NAME: Record<string, string | undefined> = {
   '=': 'equal',
   '<>': 'notEqual',
   '<': 'lessThan',
@@ -31,11 +31,11 @@ const OPERATION_NAME = {
 };
 
 export default {
-  getIconByFilterOperation(filterOperation) {
+  getIconByFilterOperation(filterOperation: string): string | undefined {
     return OPERATION_ICONS[filterOperation];
   },
 
-  getNameByFilterOperation(filterOperation) {
+  getNameByFilterOperation(filterOperation: string): string | undefined {
     return OPERATION_NAME[filterOperation];
   },
 };

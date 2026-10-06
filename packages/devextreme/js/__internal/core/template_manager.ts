@@ -12,7 +12,6 @@ import {
   validateTemplateSource,
 } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isRenderer } from '@js/core/utils/type';
-import { EmptyTemplate } from '@ts/core/templates/empty_template';
 import { FunctionTemplate } from '@ts/core/templates/function_template';
 
 const TEXT_NODE = 3;
@@ -58,11 +57,21 @@ interface WatchOptions {
   skipImmediate?: boolean;
 }
 
-export type WatchMethod = (
-  fn: () => unknown,
-  callback: (value: unknown) => void,
+export type WatchMethod<T = unknown> = (
+  fn: () => T,
+  callback: (value: T) => void,
   options?: WatchOptions,
 ) => () => void;
+
+export interface IntegrationOptions {
+  watchMethod?: WatchMethod;
+  templates?: Record<string, TemplateLike>;
+  useDeferUpdateForTemplates?: boolean;
+  createTemplate?: CreateElement;
+  skipTemplates?: string[];
+  renderedOnServer?: boolean;
+  isControlledMode?: boolean;
+}
 
 interface PolymorphWidgetModel {
   widget?: string;
@@ -233,7 +242,7 @@ export class TemplateManager {
       );
 
       if (!isDefined(templateSourceResult)) {
-        return new EmptyTemplate();
+        return $();
       }
 
       let dispose = false;

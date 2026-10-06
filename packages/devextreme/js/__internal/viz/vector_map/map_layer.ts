@@ -26,11 +26,11 @@
 /* eslint-disable max-classes-per-file */
 // @ts-expect-error DataHelperMixin is absent from the common/data d.ts
 import { DataHelperMixin } from '@js/common/data';
-import { noop } from '@js/core/utils/common';
-import { Deferred, when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isDefined as _isDefined, isFunction as _isFunction } from '@js/core/utils/type';
+import { noop } from '@ts/core/utils/m_common';
+import { Deferred, when } from '@ts/core/utils/m_deferred';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { isDefined as _isDefined, isFunction as _isFunction } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import {
   normalizeEnum as _normalizeEnum,
@@ -110,7 +110,7 @@ interface LayerProxy {
   type?: string;
   elementType?: string;
   getElements: () => ElementProxy[];
-  clearSelection: (_noEvent?: boolean) => LayerProxy;
+  clearSelection: () => LayerProxy;
   getDataSource: () => ThemeValue;
   getBounds: () => ThemeValue;
 }
@@ -989,8 +989,8 @@ function createLayerProxy(layer, name, index) {
       return layer.getProxies();
     },
 
-    clearSelection(_noEvent) {
-      layer.clearSelection(_noEvent);
+    clearSelection() {
+      layer.clearSelection();
       return proxy;
     },
 
@@ -1410,8 +1410,8 @@ let MapLayerElement = class MapLayerElement {
   }
 
   dispose(): this {
-    // @ts-expect-error dispose releases the references; `data` is not a member, the element data is kept in `_data`
-    this._ctx = this.proxy = this._settings = this._fig = this._label = this.data = null;
+    // @ts-expect-error dispose releases the references
+    this._ctx = this.proxy = this._settings = this._fig = this._label = this._data = null;
     return this;
   }
 

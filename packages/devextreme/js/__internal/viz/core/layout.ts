@@ -127,7 +127,7 @@ function getShrink(alignment: number, size: number): number {
 function processForward(item: LayoutItem, rect: number[], minSize: number[]): boolean {
   const side = item.side;
   const size = item.element.measure([rect[2] - rect[0], rect[3] - rect[1]]);
-  const minSide = item.position === 'indside' ? 0 : minSize[side];
+  const minSide = minSize[side];
   const isValid = size[side] < rect[2 + side] - rect[side] - minSide;
 
   if (isValid) {

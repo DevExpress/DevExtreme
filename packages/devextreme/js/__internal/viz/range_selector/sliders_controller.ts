@@ -11,9 +11,9 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
-import { noop } from '@js/core/utils/common';
-import { adjust } from '@js/core/utils/math';
-import { isDefined, isNumeric } from '@js/core/utils/type';
+import { noop } from '@ts/core/utils/m_common';
+import { adjust } from '@ts/core/utils/m_math';
+import { isDefined, isNumeric } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { adjustVisualRange, normalizeEnum as _normalizeEnum, rangesAreEqual } from '@ts/viz/core/utils';
 import { consts, isFirefoxOnAndroid, utils } from '@ts/viz/range_selector/common';
@@ -107,7 +107,6 @@ function dummyProcessSelectionChanged(this: SelectionState): void {
   delete this._processSelectionChanged;
 }
 
-// See tests in "rangeSelectorWithAssertion.html", "'onSelectedRangeChanged' event" module
 function suppressSetSelectedRange(controller: SelectionState): void {
   controller.setSelectedRange = noop;
   if (controller._processSelectionChanged === dummyProcessSelectionChanged) {

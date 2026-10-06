@@ -16,21 +16,22 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import domAdapter from '@js/core/dom_adapter';
-import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
-import { replaceWith } from '@js/core/utils/dom';
-import { extend } from '@js/core/utils/extend';
-import { camelize } from '@js/core/utils/inflector';
-import { getHeight, getWidth } from '@js/core/utils/size';
-import { normalizeStyleProp } from '@js/core/utils/style';
-import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
-import { getWindow } from '@js/core/utils/window';
-import formatHelper from '@js/format_helper';
+import { domAdapter } from '@ts/core/dom_adapter';
+import formatHelper from '@ts/core/format_helper';
+import { renderer as $ } from '@ts/core/renderer';
+import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
+import { replaceWith } from '@ts/core/utils/m_dom';
+import { extend } from '@ts/core/utils/m_extend';
+import { camelize } from '@ts/core/utils/m_inflector';
+import { getHeight, getWidth } from '@ts/core/utils/m_size';
+import { normalizeStyleProp } from '@ts/core/utils/m_style';
+import { isDefined, isFunction, isPlainObject } from '@ts/core/utils/m_type';
+import { getWindow } from '@ts/core/utils/m_window';
 
 import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';
 import { Renderer } from './renderers/renderer';
+import type { BBox, Canvas } from './types';
 import { normalizeEnum, patchFontOptions } from './utils';
 
 const format = formatHelper.format;
@@ -38,7 +39,7 @@ const format = formatHelper.format;
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
 const mathMin = Math.min;
-const window = getWindow();
+const window: Window = getWindow();
 const DEFAULT_HTML_GROUP_WIDTH = 3000;
 
 type TooltipEventTrigger = (name: string, data?: ThemeValue) => void;
@@ -82,22 +83,6 @@ interface TooltipDrawParams {
   templateCallback?: (isRendered: boolean) => void;
 }
 
-interface TooltipBBox {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-interface TooltipCanvas {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  right: number;
-  bottom: number;
-}
-
 function hideElement($element: ThemeValue): void {
   $element.css({ left: '-9999px' }).detach();
 }
@@ -115,7 +100,7 @@ function getSpecialFormatOptions(options: ThemeValue, specialFormat: string): Th
   return result;
 }
 
-function createTextHtml(): dxElementWrapper {
+function createTextHtml(): CoreRenderer {
   return $('<div>').css({
     position: 'relative', display: 'inline-block', padding: 0, margin: 0, border: '0px solid transparent',
   });
@@ -293,7 +278,7 @@ export let Tooltip = class Tooltip {
     }, this, this._renderer.root, drawTooltip, true, (tooltip, g) => {
       const state = tooltip._state;
       if (state.html) {
-        let bBox: CSSStyleDeclaration | TooltipBBox = window.getComputedStyle(this._textHtml.get(0));
+        let bBox: CSSStyleDeclaration | BBox = window.getComputedStyle(this._textHtml.get(0));
         bBox = {
           x: 0, y: 0, width: mathCeil(parseFloat(bBox.width)), height: mathCeil(parseFloat(bBox.height)),
         };
@@ -479,7 +464,7 @@ export let Tooltip = class Tooltip {
     return !!this._options.shared;
   }
 
-  _getCanvas(): TooltipCanvas {
+  _getCanvas(): Canvas {
     const container = this._getContainer();
     const containerBox = container.getBoundingClientRect();
     const html = domAdapter.getDocumentElement();

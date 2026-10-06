@@ -3,8 +3,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @stylistic/max-len */
 
-import { noop } from '@js/core/utils/common';
+import { noop } from '@ts/core/utils/m_common';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { BBox } from '@ts/viz/core/types';
 
 const _round = Math.round;
 
@@ -20,19 +21,12 @@ const alignFactors = {
   top: 0,
 };
 
-export interface LayoutRect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
 export interface LayoutAlignment {
   horizontal: 'left' | 'center' | 'right';
   vertical: 'top' | 'center' | 'bottom';
 }
 
-export interface AlignedLayoutRect extends LayoutRect {
+export interface AlignedLayoutRect extends BBox {
   verticalAlignment?: string;
   horizontalAlignment?: string;
   cutLayoutSide?: string;
@@ -41,7 +35,7 @@ export interface AlignedLayoutRect extends LayoutRect {
 }
 
 interface LayoutBox {
-  getLayoutOptions: () => LayoutRect;
+  getLayoutOptions: () => BBox;
 }
 
 interface PositionedElement extends LayoutBox {
@@ -56,7 +50,7 @@ interface PositionOptions {
 }
 
 interface LayoutRenderElement {
-  getBBox: () => LayoutRect;
+  getBBox: () => BBox;
   move: (x: number, y: number) => unknown;
 }
 
@@ -87,16 +81,16 @@ Object.assign(LayoutElement.prototype, {
 class WrapperLayoutElement extends LayoutElement {
   declare _renderElement: LayoutRenderElement;
 
-  declare _cacheBBox?: LayoutRect;
+  declare _cacheBBox?: BBox;
 
-  constructor(renderElement: LayoutRenderElement | null, bBox?: LayoutRect) {
+  constructor(renderElement: LayoutRenderElement | null, bBox?: BBox) {
     super();
     // @ts-expect-error `null` comes only together with a cached bBox: such a wrapper is a static layout target that is never shifted
     this._renderElement = renderElement;
     this._cacheBBox = bBox;
   }
 
-  getLayoutOptions(): LayoutRect {
+  getLayoutOptions(): BBox {
     return this._cacheBBox || this._renderElement.getBBox();
   }
 

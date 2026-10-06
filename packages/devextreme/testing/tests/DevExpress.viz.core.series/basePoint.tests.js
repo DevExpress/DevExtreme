@@ -522,6 +522,18 @@ QUnit.test('Update range to range', function(assert) {
     assert.ok(point._bottomLabel);
 });
 
+QUnit.test('Update bar to symbol - the methods of the bar point are removed', function(assert) {
+    this.options.type = 'bar';
+    const data = { argument: 1, value: 1 };
+    const point = createPoint(this.series, data, this.options);
+
+    const newOptions = $.extend(true, {}, this.options, { type: 'line' });
+    point.update(data, newOptions);
+
+    assert.strictEqual(point._truncateCoord, undefined, 'a method only the bar point has');
+    assert.strictEqual(point.correctCoordinates, pointModule.Point.prototype.correctCoordinates, 'a bar point method the symbol point does not override');
+});
+
 QUnit.module('Draw', {
     beforeEach: function() {
         this.renderer = new Renderer();

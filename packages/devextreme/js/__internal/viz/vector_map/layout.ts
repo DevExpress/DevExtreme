@@ -9,8 +9,9 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { each } from '@js/core/utils/iterator';
+import { each } from '@ts/core/utils/m_iterator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Bounds } from '@ts/viz/core/types';
 
 const _round = Math.round;
 const _min = Math.min;
@@ -33,13 +34,6 @@ interface LayoutCanvas {
   top: number;
   width: number;
   height: number;
-}
-
-interface LayoutBounds {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
 }
 
 interface LayoutOptions {
@@ -81,7 +75,7 @@ function getCellIndex(options: LayoutOptions): number {
   return verticalAlignmentMap[options.verticalAlignment] * 3 + horizontalAlignmentMap[options.horizontalAlignment];
 }
 
-function createCells(canvas: LayoutBounds, items: LayoutItem[]): LayoutCell[] {
+function createCells(canvas: Bounds, items: LayoutItem[]): LayoutCell[] {
   const hStep = (canvas.right - canvas.left) / 3;
   const vStep = (canvas.bottom - canvas.top) / 2;
   const h1 = canvas.left;
@@ -243,7 +237,7 @@ function applyCellLayout(cell: LayoutCell, forceMode: boolean | undefined): bool
   return hasHiddenItems;
 }
 
-function applyLayout(canvas: LayoutBounds, items: LayoutItem[]): void {
+function applyLayout(canvas: Bounds, items: LayoutItem[]): void {
   const cells = createCells(canvas, items);
   if (adjustCellsAndApplyLayout(cells)) {
     adjustCellsAndApplyLayout(cells, true);

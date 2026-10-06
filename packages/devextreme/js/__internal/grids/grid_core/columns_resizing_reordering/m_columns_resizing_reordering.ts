@@ -818,7 +818,8 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return null;
   }
 
-  protected getSeparatorOffsetX($cell: dxElementWrapper): number {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected getSeparatorOffsetX($cell: dxElementWrapper, $nextCell: dxElementWrapper): number {
     const isNextColumnMode = isNextColumnResizingMode(this);
     const rtlEnabled = this.option('rtlEnabled');
     const isRtlParentStyle = this._isRtlParentStyle();
@@ -843,10 +844,12 @@ export class ColumnsResizerViewController extends modules.ViewController {
     if (that._isResizing && that._resizingInfo) {
       if ((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + getWidth(that._$parentContainer))) {
         if (that._updateColumnsWidthIfNeeded(eventData.x)) {
-          const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
+          const $cells = that._columnHeadersView.getColumnElements();
+          const $cell = $cells.eq(that._resizingInfo.currentColumnIndex);
+          const $nextCell = $cells.eq(that._resizingInfo.nextColumnIndex);
 
           if ($cell.length) {
-            const offsetX = this.getSeparatorOffsetX($cell);
+            const offsetX = this.getSeparatorOffsetX($cell, $nextCell);
 
             that._columnsSeparatorView.moveByX(offsetX);
             that._tablePositionController.update(that._targetPoint.y);

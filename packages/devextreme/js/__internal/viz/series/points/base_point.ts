@@ -11,11 +11,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { isDefined as _isDefined } from '@js/core/utils/type';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined as _isDefined } from '@ts/core/utils/m_type';
 import consts from '@ts/viz/components/consts';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Coords } from '@ts/viz/core/types';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 import barPoint from '@ts/viz/series/points/bar_point';
 import bubblePoint from '@ts/viz/series/points/bubble_point';
@@ -52,11 +53,6 @@ interface PointSeries {
   getStackName: () => ThemeValue;
   _argumentChecker: (value: ThemeValue) => boolean;
   _valueChecker: (value: ThemeValue) => boolean;
-}
-
-interface PointCoords {
-  x: number;
-  y: number;
 }
 
 const mixins: Record<string, PointMixin> = {};
@@ -199,7 +195,7 @@ export let Point = class Point {
 
   declare _updateLabelData: () => void;
 
-  declare _updateLabelOptions: (type: string) => void;
+  declare _updateLabelOptions: () => void;
 
   declare _hasGraphic: () => boolean;
 
@@ -277,7 +273,7 @@ export let Point = class Point {
 
   declare getMaxValue: (noErrorBar?: boolean) => ThemeValue;
 
-  declare _drawErrorBar: (renderer: ThemeValue, group: ThemeValue, animationEnabled?: boolean) => void;
+  declare _drawErrorBar: (renderer: ThemeValue, group: ThemeValue) => void;
 
   declare getMarkerVisibility: () => boolean;
 
@@ -362,7 +358,7 @@ export let Point = class Point {
 
     this._drawLabel();
 
-    this._drawErrorBar(renderer, groups.errorBars, animationEnabled);
+    this._drawErrorBar(renderer, groups.errorBars);
     return this;
   }
 
@@ -481,7 +477,7 @@ export let Point = class Point {
 
       if (oldType) {
         this._checkLabelsChanging(oldType, newType) && this.deleteLabel();
-        this._resetType(mixins[pointTypes[oldType]]);
+        this._resetType(mixins[pointTypes[widgetType][oldType]]);
       }
       this._setType(mixins[newPointTypeMixin]);
     } else {
@@ -492,7 +488,7 @@ export let Point = class Point {
     this._options = newOptions;
 
     this._fillStyle();
-    this._updateLabelOptions(newPointTypeMixin);
+    this._updateLabelOptions();
   }
 
   translate(): void {
@@ -550,7 +546,7 @@ export let Point = class Point {
     this.graphic.animate(settings, { partitionDuration }, complete);
   }
 
-  getCoords(min?: boolean): PointCoords {
+  getCoords(min?: boolean): Coords {
     if (!min) {
       return { x: this.x, y: this.y };
     }
@@ -562,7 +558,7 @@ export let Point = class Point {
     return { x: this.minX - (this.x - this.minX ? 0 : 1), y: this.y };
   }
 
-  getDefaultCoords(): PointCoords {
+  getDefaultCoords(): Coords {
     return !this._options.rotated ? { x: this.x, y: this.defaultY } : { x: this.defaultX, y: this.y };
   }
 
@@ -671,7 +667,7 @@ export let Point = class Point {
     return [this._label];
   }
 
-  getCenterCoord(): PointCoords {
+  getCenterCoord(): Coords {
     return {
       x: this.x,
       y: this.y,

@@ -7,7 +7,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import Callbacks from '@js/core/utils/callbacks';
+import { Callbacks } from '@ts/core/utils/m_callbacks';
 
 const eventEmitterMethods = {
   _initEvents() {

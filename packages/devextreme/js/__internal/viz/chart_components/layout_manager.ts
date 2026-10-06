@@ -12,10 +12,11 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { isNumeric as _isNumber } from '@js/core/utils/type';
+import { isNumeric as _isNumber } from '@ts/core/utils/m_type';
 import consts from '@ts/viz/components/consts';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { WrapperLayoutElement } from '@ts/viz/core/layout_element';
+import type { Canvas } from '@ts/viz/core/types';
 
 const { floor, sqrt } = Math;
 const _min = Math.min;
@@ -23,15 +24,6 @@ const _max = Math.max;
 const DEFAULT_INNER_RADIUS = 0.5;
 
 const RADIAL_LABEL_INDENT = consts.radialLabelIndent;
-
-interface LayoutCanvas {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-  width: number;
-  height: number;
-}
 
 interface PieLayout {
   centerX: number;
@@ -113,7 +105,7 @@ function getSizeLabels(series: ThemeValue[]): LabelSizes {
   });
 }
 
-function correctLabelRadius(labelSizes: LabelSizes, radius: number, series: ThemeValue[], canvas: LayoutCanvas, averageWidthLabels: number | undefined, centerX: number): void {
+function correctLabelRadius(labelSizes: LabelSizes, radius: number, series: ThemeValue[], canvas: Canvas, averageWidthLabels: number | undefined, centerX: number): void {
   let curRadius;
   let i;
   let runningWidth = 0;
@@ -148,15 +140,15 @@ function getInnerRadius({ type, innerRadius }: ThemeValue): number {
   return type === 'pie' ? 0 : _isNumber(innerRadius) ? Number(innerRadius) : DEFAULT_INNER_RADIUS;
 }
 
-function getAverageLabelWidth(centerX: number, radius: number, canvas: LayoutCanvas, sizeLabels: LabelSizes): number {
+function getAverageLabelWidth(centerX: number, radius: number, canvas: Canvas, sizeLabels: LabelSizes): number {
   return (centerX - radius - RADIAL_LABEL_INDENT - canvas.left) / sizeLabels.outerLabelsCount;
 }
 
-function getFullRadiusWithLabels(centerX: number, canvas: LayoutCanvas, sizeLabels: LabelSizes): number {
+function getFullRadiusWithLabels(centerX: number, canvas: Canvas, sizeLabels: LabelSizes): number {
   return centerX - canvas.left - (sizeLabels.outerLabelsCount > 0 ? sizeLabels.common + RADIAL_LABEL_INDENT : 0);
 }
 
-function correctAvailableRadius(availableRadius: number, canvas: LayoutCanvas, series: ThemeValue[], minR: number, paneCenterX: number, paneCenterY: number): number {
+function correctAvailableRadius(availableRadius: number, canvas: Canvas, series: ThemeValue[], minR: number, paneCenterX: number, paneCenterY: number): number {
   const sizeLabels = getSizeLabels(series);
   let averageWidthLabels;
   const fullRadiusWithLabels = getFullRadiusWithLabels(paneCenterX, canvas, sizeLabels);
@@ -172,7 +164,7 @@ function correctAvailableRadius(availableRadius: number, canvas: LayoutCanvas, s
   return availableRadius;
 }
 
-function toLayoutElementCoords(canvas: LayoutCanvas): ThemeValue {
+function toLayoutElementCoords(canvas: Canvas): ThemeValue {
   return new WrapperLayoutElement(null, {
     x: canvas.left,
     y: canvas.top,
@@ -189,7 +181,7 @@ let LayoutManager = class LayoutManager {
     this._options = options;
   }
 
-  applyPieChartSeriesLayout(canvas: LayoutCanvas, series: ThemeValue[], hideLayoutLabels: boolean): PieLayout {
+  applyPieChartSeriesLayout(canvas: Canvas, series: ThemeValue[], hideLayoutLabels: boolean): PieLayout {
     const paneSpaceHeight = canvas.height - canvas.top - canvas.bottom;
     const paneSpaceWidth = canvas.width - canvas.left - canvas.right;
     const paneCenterX = paneSpaceWidth / 2 + canvas.left;
@@ -227,7 +219,7 @@ let LayoutManager = class LayoutManager {
     };
   }
 
-  correctPieLabelRadius(series: ThemeValue[], layout: PieLayout, canvas: LayoutCanvas): void {
+  correctPieLabelRadius(series: ThemeValue[], layout: PieLayout, canvas: Canvas): void {
     const sizeLabels = getSizeLabels(series);
     let averageWidthLabels;
     const radius = layout.radiusOuter + RADIAL_LABEL_INDENT;
@@ -267,7 +259,7 @@ let LayoutManager = class LayoutManager {
     return needHorizontalSpace > 0 || needVerticalSpace > 0 ? { width: needHorizontalSpace, height: needVerticalSpace } : false;
   }
 
-  layoutInsideLegend(legend: ThemeValue, canvas: LayoutCanvas): void {
+  layoutInsideLegend(legend: ThemeValue, canvas: Canvas): void {
     const inverseAlign = {
       left: 'right',
       right: 'left',

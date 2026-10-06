@@ -14,11 +14,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @stylistic/max-len */
 
-import dateUtils from '@js/core/utils/date';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { adjust } from '@js/core/utils/math';
-import { isDate, isDefined } from '@js/core/utils/type';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { adjust } from '@ts/core/utils/m_math';
+import { isDate, isDefined } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import {
   getCategoriesInfo,
@@ -51,7 +51,6 @@ interface TranslatorBreak {
   to: ThemeValue;
   length: number;
   cumulativeWidth: number;
-  gapSize?: ThemeValue;
   start?: number;
   end?: number;
 }
@@ -334,7 +333,7 @@ let _Translator2d = class _Translator2d {
       end = this.translate(b.to);
       b.end = end;
       // @ts-expect-error breaksSize is set whenever breaks are
-      b.start = !b.gapSize ? !this.isInverted() ? end - size : end + size : end;
+      b.start = !this.isInverted() ? end - size : end + size;
     }
   }
 

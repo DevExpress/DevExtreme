@@ -2,7 +2,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { isDefined } from '@js/core/utils/type';
+import { isDefined } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const states = ['normal', 'hover', 'selection', 'selection'];

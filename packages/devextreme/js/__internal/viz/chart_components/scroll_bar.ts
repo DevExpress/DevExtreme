@@ -5,13 +5,15 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable prefer-destructuring */
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/common/core/events/drag';
-import { fireEvent } from '@js/common/core/events/utils/index';
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined } from '@ts/core/utils/m_type';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
+import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@ts/events/drag';
+import { fireEvent } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Bounds, Canvas } from '@ts/viz/core/types';
 
 import { Translator2D } from '../translators/translator2d';
 
@@ -21,22 +23,6 @@ const MIN_SCROLL_BAR_SIZE = 10;
 
 type ScrollBarPosition = 'left' | 'right' | 'top' | 'bottom';
 
-interface ScrollBarCanvas {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-  width: number;
-  height: number;
-}
-
-interface ScrollBarMargins {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-}
-
 interface ScrollBarLayoutOptions {
   width: number;
   offset: number;
@@ -44,7 +30,7 @@ interface ScrollBarLayoutOptions {
   position: ScrollBarPosition;
 }
 
-interface ScrollBarPointerEvent {
+interface ScrollBarPointerEvent extends EngineEvent {
   offset: { x: number; y: number };
 }
 
@@ -62,7 +48,7 @@ interface ScrollBarDragEvent {
 }
 
 function _getXCoord(
-  canvas: ScrollBarCanvas,
+  canvas: Canvas,
   pos: ScrollBarPosition,
   offset: number,
   width: number,
@@ -79,7 +65,7 @@ function _getXCoord(
 }
 
 function _getYCoord(
-  canvas: ScrollBarCanvas,
+  canvas: Canvas,
   pos: ScrollBarPosition,
   offset: number,
   width: number,
@@ -115,7 +101,7 @@ export let ScrollBar = class ScrollBar {
 
   declare _hasBreaks: boolean;
 
-  declare _canvas: ScrollBarCanvas;
+  declare _canvas: Canvas;
 
   declare pane: string;
 
@@ -142,14 +128,14 @@ export let ScrollBar = class ScrollBar {
       });
     });
 
-    eventsEngine.on(scrollElement, dragEventMove, (e) => {
+    eventsEngine.on(scrollElement, dragEventMove, (e: ScrollBarPointerEvent) => {
       const position = this._getDragPosition(e);
       this._applyPosition(position, position + this._thumbLength);
 
       fireEvent(this._getDragEvent('dxc-scroll-move', e, scrollElement, position));
     });
 
-    eventsEngine.on(scrollElement, dragEventEnd, (e) => {
+    eventsEngine.on(scrollElement, dragEventEnd, (e: ScrollBarPointerEvent) => {
       fireEvent(this._getDragEvent('dxc-scroll-end', e, scrollElement, this._getDragPosition(e)));
     });
   }
@@ -267,7 +253,7 @@ export let ScrollBar = class ScrollBar {
     return this;
   }
 
-  updateSize(canvas: ScrollBarCanvas): void {
+  updateSize(canvas: Canvas): void {
     this._canvas = extend({}, canvas);
 
     const options = this._layoutOptions;
@@ -285,9 +271,9 @@ export let ScrollBar = class ScrollBar {
     return 0;
   }
 
-  estimateMargins(): ScrollBarMargins { return this.getMargins(); }
+  estimateMargins(): Bounds { return this.getMargins(); }
 
-  getMargins(): ScrollBarMargins {
+  getMargins(): Bounds {
     const options = this._layoutOptions;
     const margins = {
       left: 0, top: 0, right: 0, bottom: 0,
@@ -298,7 +284,7 @@ export let ScrollBar = class ScrollBar {
     return margins;
   }
 
-  shift(margins: ScrollBarMargins): void {
+  shift(margins: Bounds): void {
     const options = this._layoutOptions;
     const side = options.position;
     const isVertical = options.vertical;

@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { isDefined } from '@js/core/utils/type';
+import { isDefined } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import type Link from '@ts/viz/sankey/link_item';
@@ -57,7 +57,7 @@ interface NodeParams {
   linksOut: NodeLayoutLink[];
 }
 
-function compileAttrs(color: string, itemOptions: ThemeValue, itemBaseOptions?: ThemeValue): NodeAttrs {
+function compileAttrs(color: string, itemOptions: ThemeValue, itemBaseOptions: ThemeValue): NodeAttrs {
   const border = itemOptions.border;
   const baseBorder = itemBaseOptions.border;
   const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
@@ -147,10 +147,6 @@ class Node {
       normal: compileAttrs(this.color, this.options, this.options),
       hover: compileAttrs(this.color, this.options.hoverStyle, this.options),
     };
-  }
-
-  compileAttrs(): NodeAttrs {
-    return compileAttrs(this.color, this.options);
   }
 
   getState(): string {

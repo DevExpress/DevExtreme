@@ -119,7 +119,9 @@ export class HeaderFilterViewController {
     excludedColumn: Column,
   ): AppliedFilters {
     const columnId = getColumnIdentifier(excludedColumn);
+    // @ts-expect-error AppliedFilters.filterPanel is unknown
     const filterPanel = removeFieldConditionsFromFilter(appliedFilters.filterPanel, columnId);
+    // @ts-expect-error AppliedFilters.headerFilter is unknown
     const headerFilter = removeFieldConditionsFromFilter(appliedFilters.headerFilter, columnId);
 
     return {

@@ -23,16 +23,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import dateUtils from '@js/core/utils/date';
-import { Deferred, when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import { adjust } from '@js/core/utils/math';
+import formatHelper from '@ts/core/format_helper';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { Deferred, when } from '@ts/core/utils/m_deferred';
+import { extend } from '@ts/core/utils/m_extend';
+import { adjust, multiplyInExponentialForm } from '@ts/core/utils/m_math';
 import {
   isDate, isDefined, isFunction, isPlainObject, type,
-} from '@js/core/utils/type';
-import formatHelper from '@js/format_helper';
-import { multiplyInExponentialForm } from '@ts/core/utils/m_math';
+} from '@ts/core/utils/m_type';
 import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import createConstantLine from '@ts/viz/axes/constant_line';
@@ -44,6 +43,7 @@ import { tickGenerator } from '@ts/viz/axes/tick_generator';
 import xyMethods from '@ts/viz/axes/xy_axes';
 import { getParser } from '@ts/viz/components/parse_utils';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Bounds } from '@ts/viz/core/types';
 
 import {
   adjustVisualRange,
@@ -122,13 +122,6 @@ interface LabelFormatObject {
   min: ThemeValue;
   max: ThemeValue;
   point?: ThemeValue;
-}
-
-interface Margins {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
 }
 
 interface OrthogonalPositions {
@@ -1152,7 +1145,7 @@ export let Axis = class Axis {
     return this._firstDrawing;
   }
 
-  getMargins(): Margins {
+  getMargins(): Bounds {
     const that = this;
     const {
       position, offset, customPosition, placeholderSize, grid, tick, crosshairMargin,
@@ -1971,7 +1964,6 @@ export let Axis = class Axis {
     const ticks = this._getTicks(range, incidentOccurred, false);
 
     if (!range.isEmpty() && options.type === constants.discrete && options.dataType === 'datetime' && !this._hasLabelFormat && ticks.ticks.length) {
-      // @ts-expect-error getDateFormatByTicks is not in the FormatHelper typings
       options.label.format = formatHelper.getDateFormatByTicks(ticks.ticks);
     }
 
@@ -2234,7 +2226,7 @@ export let Axis = class Axis {
     let interval = 0;
     let rangeInterval;
 
-    if (dataRange.stubData || !screenDelta) {
+    if (!screenDelta) {
       return {
         startPadding: 0,
         endPadding: 0,
