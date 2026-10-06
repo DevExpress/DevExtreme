@@ -12,7 +12,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { isNumeric as _isNumber } from '@js/core/utils/type';
+import { isNumeric as _isNumber } from '@ts/core/utils/m_type';
 import consts from '@ts/viz/components/consts';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { WrapperLayoutElement } from '@ts/viz/core/layout_element';

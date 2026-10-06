@@ -19,7 +19,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable prefer-destructuring */
 
-import { extend } from '@js/core/utils/extend';
+import { extend } from '@ts/core/utils/m_extend';
 import {
   isDate as _isDate,
   isDefined as _isDefined,
@@ -27,7 +27,7 @@ import {
   isNumeric as _isNumber,
   isObject as _isObject,
   isString as _isString,
-} from '@js/core/utils/type';
+} from '@ts/core/utils/m_type';
 import { getParser as _getParser } from '@ts/viz/components/parse_utils';
 import { enumParser } from '@ts/viz/core/utils';
 

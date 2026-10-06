@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
-import domAdapter from '@js/core/dom_adapter';
-import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { isFunction } from '@js/core/utils/type';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { renderer as $ } from '@ts/core/renderer';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { isFunction } from '@ts/core/utils/m_type';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
+import pointerEvents from '@ts/events/pointer';
+import { addNamespace } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 // T422022
@@ -47,7 +48,7 @@ export interface SparklineAxis {
   aggregatedPointBetweenTicks: () => boolean;
 }
 
-interface PointerEventData {
+interface PointerEventData extends EngineEvent {
   pageX: number;
   pageY: number;
 }

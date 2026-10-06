@@ -1,11 +1,10 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 
-import registerComponent from '@js/core/component_registrator';
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
+import { registerComponent } from '@ts/core/component_registrator';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined } from '@ts/core/utils/m_type';
 import { plugins } from '@ts/viz/core/annotations';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';

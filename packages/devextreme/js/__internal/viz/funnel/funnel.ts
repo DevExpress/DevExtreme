@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 // PLUGINS_SECTION
-import componentRegistrator from '@js/core/component_registrator';
-import { noop } from '@js/core/utils/common';
+import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
+import { noop } from '@ts/core/utils/m_common';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
 import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';

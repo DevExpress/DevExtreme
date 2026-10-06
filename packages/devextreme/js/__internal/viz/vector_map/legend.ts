@@ -11,8 +11,8 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
 import type { LegendDataItem } from '@ts/viz/components/legend';
 import { Legend as _BaseLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

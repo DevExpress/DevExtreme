@@ -1,7 +1,7 @@
-import registerComponent from '@js/core/component_registrator';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { clone } from '@js/core/utils/object';
+import { registerComponent } from '@ts/core/component_registrator';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { clone } from '@ts/core/utils/m_object';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';

@@ -1,4 +1,4 @@
-import { extend } from '@js/core/utils/extend';
+import { extend } from '@ts/core/utils/m_extend';
 import type { BaseThemeManagerOptions } from '@ts/viz/core/base_theme_manager';
 import { BaseThemeManager } from '@ts/viz/core/base_theme_manager';
 

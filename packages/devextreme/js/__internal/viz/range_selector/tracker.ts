@@ -6,12 +6,12 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import pointerEvents from '@js/common/core/events/pointer';
-import domAdapter from '@js/core/dom_adapter';
-import { each } from '@js/core/utils/iterator';
-import { pointerEvents as msPointerEnabled } from '@js/core/utils/support';
-import { getWindow } from '@js/core/utils/window';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { each } from '@ts/core/utils/m_iterator';
+import { pointerEvents as msPointerEnabled } from '@ts/core/utils/m_support';
+import { getWindow } from '@ts/core/utils/m_window';
+import eventsEngine from '@ts/events/core/events_engine';
+import pointerEvents from '@ts/events/pointer';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { MovingHandler } from '@ts/viz/range_selector/sliders_controller';
 
@@ -270,7 +270,6 @@ export let Tracker = class Tracker {
     ];
     // TODO: 3 "move" and 3 "end" events - do we really need that much?
     each(this._docEvents, (_, events) => {
-      // @ts-expect-error events_engine.d.ts declares no (element, events map) overload of on()
       eventsEngine.on(domAdapter.getDocument(), events);
     });
 

@@ -14,7 +14,7 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-plusplus */
 
-import { cancelAnimationFrame, requestAnimationFrame } from '@js/common/core/animation/frame';
+import { cancelAnimationFrame, requestAnimationFrame } from '@ts/common/core/animation/frame';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 type EasingFunction = (pos: number, start: number, end: number) => number;

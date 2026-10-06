@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
 
-import registerComponent from '@js/core/component_registrator';
-import { extend } from '@js/core/utils/extend';
-import { roundFloatPart } from '@js/core/utils/math';
-import { clone } from '@js/core/utils/object';
+import { registerComponent } from '@ts/core/component_registrator';
+import { extend } from '@ts/core/utils/m_extend';
+import { roundFloatPart } from '@ts/core/utils/m_math';
+import { clone } from '@ts/core/utils/m_object';
 import { overlapping } from '@ts/viz/chart_components/base_chart';
 import { plugin as pluginLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

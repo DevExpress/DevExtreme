@@ -222,7 +222,6 @@ function initContext(newContext): void {
 }
 
 function getCssClasses(themeName?: string): string[] {
-  // @ts-expect-error ts-error
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line no-param-reassign,@typescript-eslint/no-use-before-define, @typescript-eslint/prefer-nullish-coalescing
   themeName = themeName || current();
@@ -287,7 +286,7 @@ export function detachCssClasses(element: dxElementWrapper): void {
 
 // eslint-disable-next-line @stylistic/max-len
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/explicit-function-return-type,consistent-return
-export function current(options) {
+export function current(options?) {
   if (!arguments.length) {
     currentThemeName = currentThemeName || readThemeMarker();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

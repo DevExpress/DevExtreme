@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @stylistic/max-len */
 
-import { noop } from '@js/core/utils/common';
+import { noop } from '@ts/core/utils/m_common';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { BBox } from '@ts/viz/core/types';
 

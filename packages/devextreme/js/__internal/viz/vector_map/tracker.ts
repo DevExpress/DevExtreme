@@ -15,11 +15,11 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable max-classes-per-file */
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import { name as wheelEventName } from '@js/common/core/events/core/wheel';
-import { addNamespace } from '@js/common/core/events/utils/index';
-import domAdapter from '@js/core/dom_adapter';
-import { getNavigator, hasProperty } from '@js/core/utils/window';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { getNavigator, hasProperty } from '@ts/core/utils/m_window';
+import eventsEngine from '@ts/events/core/events_engine';
+import { name as wheelEventName } from '@ts/events/core/wheel';
+import { addNamespace } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { Coords } from '@ts/viz/core/types';
 import { parseScalar } from '@ts/viz/core/utils';
@@ -468,7 +468,6 @@ export let Tracker = class Tracker {
           isTouchEvent(event) && event.preventDefault();
         });
     }
-    // @ts-expect-error eventsEngine.on also accepts an (event name -> handler) map, its d.ts lacks that overload
     eventsEngine.on(domAdapter.getDocument(), this._docHandlers);
     this._root.on(this._rootHandlers);
   }

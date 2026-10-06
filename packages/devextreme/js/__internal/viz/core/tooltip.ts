@@ -16,17 +16,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import domAdapter from '@js/core/dom_adapter';
-import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
-import { replaceWith } from '@js/core/utils/dom';
-import { extend } from '@js/core/utils/extend';
-import { camelize } from '@js/core/utils/inflector';
-import { getHeight, getWidth } from '@js/core/utils/size';
-import { normalizeStyleProp } from '@js/core/utils/style';
-import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
-import { getWindow } from '@js/core/utils/window';
-import formatHelper from '@js/format_helper';
+import { domAdapter } from '@ts/core/dom_adapter';
+import formatHelper from '@ts/core/format_helper';
+import { renderer as $ } from '@ts/core/renderer';
+import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
+import { replaceWith } from '@ts/core/utils/m_dom';
+import { extend } from '@ts/core/utils/m_extend';
+import { camelize } from '@ts/core/utils/m_inflector';
+import { getHeight, getWidth } from '@ts/core/utils/m_size';
+import { normalizeStyleProp } from '@ts/core/utils/m_style';
+import { isDefined, isFunction, isPlainObject } from '@ts/core/utils/m_type';
+import { getWindow } from '@ts/core/utils/m_window';
 
 import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';
@@ -39,7 +39,7 @@ const format = formatHelper.format;
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
 const mathMin = Math.min;
-const window = getWindow();
+const window: Window = getWindow();
 const DEFAULT_HTML_GROUP_WIDTH = 3000;
 
 type TooltipEventTrigger = (name: string, data?: ThemeValue) => void;
@@ -100,7 +100,7 @@ function getSpecialFormatOptions(options: ThemeValue, specialFormat: string): Th
   return result;
 }
 
-function createTextHtml(): dxElementWrapper {
+function createTextHtml(): CoreRenderer {
   return $('<div>').css({
     position: 'relative', display: 'inline-block', padding: 0, margin: 0, border: '0px solid transparent',
   });
