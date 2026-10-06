@@ -94,6 +94,7 @@ test('the shared-layer gate reads a declaration up to its semicolon', () => {
     '@mixin fixture($size: 5px) {',
     '  margin: $size;',
     '}',
+    '@mixin fixture-inline($gap: 1px) { margin: 2px; }',
     '@mixin fixture-wide(',
     '  $gap: 6px,',
     ') {',
@@ -107,7 +108,7 @@ test('the shared-layer gate reads a declaration up to its semicolon', () => {
     unmarkedOwned: unmarkedOwned.map((place) => place.line),
     openKnobs: openKnobs.map((place) => `${place.line} ${place.variable}`),
   }).toEqual({
-    unmarkedOwned: [4, 5],
+    unmarkedOwned: [4, 8],
     openKnobs: ['2 fixture-unset-shadow', '3 fixture-unset-shadow'],
   });
 });

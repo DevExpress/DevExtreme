@@ -129,6 +129,25 @@ const mixinParameterLines = (lines) => {
   return inside;
 };
 
+// line -> the parameter list a `@mixin name(` line opens, up to its `)` if that is on the line
+const signatureOpenings = (lines) => {
+  const openings = new Map();
+  lines.forEach((line, index) => {
+    const code = codeOf(line);
+    const at = /@mixin\s+[\w-]+\s*\(/.exec(code);
+    if (!at) return;
+    let depth = 0;
+    let end = at.index + at[0].length - 1;
+    for (; end < code.length; end += 1) {
+      if (code[end] === '(') depth += 1;
+      if (code[end] === ')') depth -= 1;
+      if (depth === 0) break;
+    }
+    openings.set(index + 1, code.slice(at.index, end + 1));
+  });
+  return openings;
+};
+
 // line -> the module-level declaration it belongs to, read up to its `;` at paren depth 0
 const declarationLines = (lines, parameters) => {
   const owner = new Map();
@@ -212,10 +231,17 @@ export const auditBase = (root = baseDir) => {
       if (!linesOf.has(place.file)) {
         const lines = blankBlockComments(readFileSync(join(packageRoot, place.file), 'utf8')).split('\n');
         const parameters = mixinParameterLines(lines);
-        linesOf.set(place.file, { parameters, declarations: declarationLines(lines, parameters) });
+        linesOf.set(place.file, {
+          parameters,
+          openings: signatureOpenings(lines),
+          declarations: declarationLines(lines, parameters),
+        });
       }
-      const { parameters, declarations } = linesOf.get(place.file);
+      const { parameters, openings, declarations } = linesOf.get(place.file);
       if (parameters.has(place.line) && DECLARATION.test(codeOf(place.text))) return;
+      // a default in the signature line itself is a parameter too; a literal after it is the body's
+      const signature = openings.get(place.line);
+      if (signature && !codeOf(place.text).replace(signature, '').match(PX_LITERAL)) return;
 
       const declaration = declarations.get(place.line);
       if (declaration?.isDefault) {
