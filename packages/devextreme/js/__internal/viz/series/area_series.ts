@@ -10,8 +10,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@js/core/utils/extend';
-import { clone } from '@js/core/utils/object';
+import { extend } from '@ts/core/utils/m_extend';
+import { clone } from '@ts/core/utils/m_object';
 import { extractColor, map as _map } from '@ts/viz/core/utils';
 
 import { chart as lineSeriesChart, polar as lineSeriesPolar } from './line_series';

@@ -13,7 +13,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { extend as _extend } from '@js/core/utils/extend';
+import { extend as _extend } from '@ts/core/utils/m_extend';
 import barPoint from '@ts/viz/series/points/bar_point';
 import symbolPoint from '@ts/viz/series/points/symbol_point';
 

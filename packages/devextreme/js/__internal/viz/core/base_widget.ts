@@ -12,23 +12,21 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable prefer-spread */
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import devices from '@js/core/devices';
-import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
-import { when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { getHeight, getWidth } from '@js/core/utils/size';
+import graphicObject from '@ts/common/charts';
+import devices from '@ts/core/devices';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { renderer as $ } from '@ts/core/renderer';
+import { noop } from '@ts/core/utils/m_common';
+import { when } from '@ts/core/utils/m_deferred';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { getHeight, getWidth } from '@ts/core/utils/m_size';
 import {
   isDefined, isNumeric, isObject as _isObject, type,
-} from '@js/core/utils/type';
-import { getWindow, hasWindow } from '@js/core/utils/window';
-// @ts-expect-error
-import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
-import graphicObject from '@ts/common/charts';
-import { domAdapter } from '@ts/core/dom_adapter';
+} from '@ts/core/utils/m_type';
+import { getWindow, hasWindow } from '@ts/core/utils/m_window';
 import DOMComponent from '@ts/core/widget/dom_component';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { BaseThemeManager } from '@ts/viz/core/base_theme_manager';
 import {
@@ -41,6 +39,7 @@ import _Layout from '@ts/viz/core/layout';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
 import type { Canvas } from '@ts/viz/core/types';
 import { parseScalar as _parseScalar } from '@ts/viz/core/utils';
+import { areCanvasesDifferent, floorCanvasDimensions } from '@ts/viz/utils';
 
 const { log } = warnings;
 
@@ -507,7 +506,7 @@ class BaseWidget extends DOMComponent<any, any> {
     const scrollEvents = 'scroll.viz_widgets';
 
     if (devices.real().platform === 'generic') {
-      $parents = $parents.add(getWindow() as any);
+      $parents = $parents.add(getWindow());
     }
 
     this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler

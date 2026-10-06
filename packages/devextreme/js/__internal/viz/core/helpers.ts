@@ -10,10 +10,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-plusplus */
 
-import { noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
-import { isFunction } from '@js/core/utils/type';
-import { hasWindow } from '@js/core/utils/window';
+import { noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { isFunction } from '@ts/core/utils/m_type';
+import { hasWindow } from '@ts/core/utils/m_window';
 
 const isServerSide = !hasWindow();
 

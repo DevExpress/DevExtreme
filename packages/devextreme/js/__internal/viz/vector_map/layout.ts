@@ -9,7 +9,7 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { each } from '@js/core/utils/iterator';
+import { each } from '@ts/core/utils/m_iterator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { Bounds } from '@ts/viz/core/types';
 

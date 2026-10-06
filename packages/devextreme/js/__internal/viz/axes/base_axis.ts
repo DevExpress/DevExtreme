@@ -23,16 +23,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import dateUtils from '@js/core/utils/date';
-import { Deferred, when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import { adjust } from '@js/core/utils/math';
+import formatHelper from '@ts/core/format_helper';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { Deferred, when } from '@ts/core/utils/m_deferred';
+import { extend } from '@ts/core/utils/m_extend';
+import { adjust, multiplyInExponentialForm } from '@ts/core/utils/m_math';
 import {
   isDate, isDefined, isFunction, isPlainObject, type,
-} from '@js/core/utils/type';
-import formatHelper from '@js/format_helper';
-import { multiplyInExponentialForm } from '@ts/core/utils/m_math';
+} from '@ts/core/utils/m_type';
 import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import createConstantLine from '@ts/viz/axes/constant_line';
@@ -1965,7 +1964,6 @@ export let Axis = class Axis {
     const ticks = this._getTicks(range, incidentOccurred, false);
 
     if (!range.isEmpty() && options.type === constants.discrete && options.dataType === 'datetime' && !this._hasLabelFormat && ticks.ticks.length) {
-      // @ts-expect-error getDateFormatByTicks is not in the FormatHelper typings
       options.label.format = formatHelper.getDateFormatByTicks(ticks.ticks);
     }
 

@@ -1,7 +1,7 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { extend as _extend } from '@js/core/utils/extend';
+import { extend as _extend } from '@ts/core/utils/m_extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const updateTile = [updateLeaf, updateGroup];

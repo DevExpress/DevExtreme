@@ -11,9 +11,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { isDefined as _isDefined } from '@js/core/utils/type';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined as _isDefined } from '@ts/core/utils/m_type';
 import consts from '@ts/viz/components/consts';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { Coords } from '@ts/viz/core/types';

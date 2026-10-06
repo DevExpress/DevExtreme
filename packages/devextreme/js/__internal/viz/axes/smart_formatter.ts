@@ -15,13 +15,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import dateUtils from '@js/core/utils/date';
-import { adjust, getExponent, getPrecision } from '@js/core/utils/math';
+import formatHelper from '@ts/core/format_helper';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { adjust, getExponent, getPrecision } from '@ts/core/utils/m_math';
 import {
   isDefined, isExponential, isFunction, isObject,
-} from '@js/core/utils/type';
-import formatHelper from '@js/format_helper';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+} from '@ts/core/utils/m_type';
 import { getAdjustedLog10 as log10 } from '@ts/viz/core/utils';
 
 const _format = formatHelper.format;
@@ -165,7 +165,6 @@ function getDateTimeFormat(tick, { showTransition, ticks, tickInterval }) {
   if (showTransition && ticks.length) {
     const indexOfTick = ticks.map(Number).indexOf(+tick);
     if (ticks.length === 1 && indexOfTick === 0) {
-      // @ts-expect-error
       typeFormat = formatHelper.getDateFormatByTicks(ticks);
     } else {
       if (indexOfTick === -1) {
@@ -175,7 +174,6 @@ function getDateTimeFormat(tick, { showTransition, ticks, tickInterval }) {
         nextDateIndex = indexOfTick === 0 ? 1 : -1;
       }
       const datesDifferences = getDatesDifferences(ticks[prevDateIndex], tick, ticks[nextDateIndex], typeFormat);
-      // @ts-expect-error
       typeFormat = formatHelper.getDateFormatByDifferences(datesDifferences, typeFormat);
     }
   }
@@ -227,7 +225,6 @@ function getHighDiffFormat(diff) {
       diff[i] = true;
     }
   }
-  // @ts-expect-error
   return createFormat(formatHelper.getDateFormatByDifferences(diff));
 }
 
@@ -242,14 +239,12 @@ function getHighAndSelfDiffFormat(diff, interval) {
       diff[i] = true;
     }
   }
-  // @ts-expect-error
   return createFormat(formatHelper.getDateFormatByDifferences(diff));
 }
 
 function formatDateRange(startValue, endValue, tickInterval) {
   const diff = getDatesDifferences(startValue, endValue);
   const typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
-  // @ts-expect-error
   const diffFormatType = formatHelper.getDateFormatByDifferences(diff, typeFormat);
   const diffFormat = createFormat(diffFormatType);
   const values = [];

@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { isDefined } from '@js/core/utils/type';
+import { isDefined } from '@ts/core/utils/m_type';
 import {
   getLogExt as getLog,
   raiseToExt as raiseTo,

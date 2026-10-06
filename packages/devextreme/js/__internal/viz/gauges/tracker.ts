@@ -1,12 +1,12 @@
-import { name as wheelEventName } from '@js/common/core/events/core/wheel';
-import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
-import domAdapter from '@js/core/dom_adapter';
+import { domAdapter } from '@ts/core/dom_adapter';
 /// #DEBUG
-import { debug } from '@js/core/utils/console';
+import { debug } from '@ts/core/utils/m_console';
 /// #ENDDEBUG
-import ReadyCallbacks from '@js/core/utils/ready_callbacks';
+import { readyCallbacksModule as ReadyCallbacks } from '@ts/core/utils/m_ready_callbacks';
 import eventsEngine from '@ts/events/core/events_engine';
+import { name as wheelEventName } from '@ts/events/core/wheel';
+import pointerEvents from '@ts/events/pointer';
+import { addNamespace } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const EVENT_NS = 'gauge-tooltip';
