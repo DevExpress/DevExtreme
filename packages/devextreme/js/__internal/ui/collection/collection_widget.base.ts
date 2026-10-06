@@ -1516,6 +1516,7 @@ class CollectionWidget<
     const $itemElement = this._closestItemElement($(initiator));
     const args = extend({}, actionArgs);
 
+    // @ts-expect-error the action args are merged
     return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
   }
 

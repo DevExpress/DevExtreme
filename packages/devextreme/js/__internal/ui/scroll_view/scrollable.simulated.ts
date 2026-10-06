@@ -1096,6 +1096,7 @@ export class SimulatedStrategy<
 
     return (...args: unknown[]) => {
       try {
+        // @ts-expect-error the action args are merged
         actionHandler(extend(this._createActionArgs(), args));
       } catch (e) {
         logger.error(e);

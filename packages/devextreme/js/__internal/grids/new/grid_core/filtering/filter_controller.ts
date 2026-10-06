@@ -83,6 +83,7 @@ export class FilterController {
     ];
 
     return builtInCustomOperation
+      // @ts-expect-error the custom operations are merged
       .concat(this.filterBuilderCustomOperations.value)
       .filter((o) => o) as unknown[];
   });

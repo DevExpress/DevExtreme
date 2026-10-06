@@ -208,10 +208,9 @@ class DOMComponent<
     const classNames = attributes.class;
 
     delete attributes.class;
-    // @ts-expect-error
     this.$element()
+      // @ts-expect-error attr takes an object of attributes
       .attr(attributes)
-      // @ts-expect-error
       .removeClass(this._customClass)
       .addClass(classNames);
 
@@ -364,9 +363,11 @@ class DOMComponent<
 
     synchronizableOptions.forEach((optionName) => {
       const { [optionName]: value } = this.option();
+      // @ts-expect-error the nested config gets the synchronizable options
       nestedComponentConfig[optionName] = value;
     });
 
+    // @ts-expect-error the nested config is the merged options
     this._extendConfig(configuration, nestedComponentConfig);
 
     // eslint-disable-next-line no-void

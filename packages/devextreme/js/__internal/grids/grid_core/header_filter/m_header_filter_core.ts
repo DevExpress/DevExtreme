@@ -408,6 +408,7 @@ export class HeaderFilterView extends Modules.View {
       that._listComponent = that._createComponent(
         $('<div>').appendTo($content),
         TreeView,
+        // @ts-expect-error the list options are merged
         extend(widgetOptions, {
           showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
           onOptionChanged: onTreeViewOptionChanged,
@@ -418,6 +419,7 @@ export class HeaderFilterView extends Modules.View {
       that._listComponent = that._createComponent(
         $('<div>').appendTo($content),
         List,
+        // @ts-expect-error the list options are merged
         extend(widgetOptions, {
           searchExpr: that._getSearchExpr(options, headerFilterOptions),
           pageLoadMode: 'scrollBottom',

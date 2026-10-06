@@ -60,6 +60,7 @@ const modifyActionOptions = (action: SpeedDialAction): SpeedDialItemProperties =
     zIndex,
   } = action.option();
 
+  // @ts-expect-error the action options are merged
   const actionOptions: SpeedDialItemProperties = extend({}, {
     animation,
     actionComponent,

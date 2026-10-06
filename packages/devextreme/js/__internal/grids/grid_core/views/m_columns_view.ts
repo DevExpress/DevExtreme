@@ -330,9 +330,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
     if (useNativeScrolling === 'auto') {
       delete options.useNative;
+      // @ts-expect-error the options are the scrolling options
       delete options.useSimulatedScrollbar;
     } else {
       options.useNative = !!useNativeScrolling;
+      // @ts-expect-error the options are the scrolling options
       options.useSimulatedScrollbar = !useNativeScrolling;
     }
     return options;

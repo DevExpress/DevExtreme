@@ -125,6 +125,8 @@ function clickedOnFieldsArea($targetElement) {
   return $targetElement.closest(`.${FIELDS_CLASS}`).length || $targetElement.find(`.${FIELDS_CLASS}`).length;
 }
 
+type CellEventArgs = ReturnType<PivotGrid['_createCellArgs']> & { cancel?: boolean };
+
 class PivotGrid extends Widget {
   _dataController: any;
 
@@ -893,7 +895,8 @@ class PivotGrid extends Widget {
 
   _handleCellClick(e) {
     const that = this;
-    const args = that._createEventArgs(e.currentTarget, e);
+    // @ts-expect-error the event args of a cell have a cell
+    const args: CellEventArgs = that._createEventArgs(e.currentTarget, e);
     const { cell } = args;
 
     if (!cell || (!args.area && (args.rowIndex || args.columnIndex))) {
@@ -1081,7 +1084,8 @@ class PivotGrid extends Widget {
     if (e.key !== 'Enter' && e.key !== ' ') {
       return;
     }
-    const args = this._createEventArgs(e.currentTarget, e);
+    // @ts-expect-error the event args of a cell have a cell
+    const args: CellEventArgs = this._createEventArgs(e.currentTarget, e);
     const { cell } = args;
     if (!cell || !isDefined(cell.expanded)) {
       return;
