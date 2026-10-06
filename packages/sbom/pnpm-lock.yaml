@@ -17,8 +17,8 @@ importers:
   .:
     devDependencies:
       '@devexpress/sbom-toolkit':
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.15.0
+        version: 0.15.0
 
 packages:
 
@@ -151,8 +151,8 @@ packages:
     engines: {node: ^20 || ^22 || ^24 || ^25, pnpm: '>=10'}
     hasBin: true
 
-  '@devexpress/sbom-toolkit@0.14.0':
-    resolution: {integrity: sha512-89PWP+cuAt+BSx+Y7Lw1XOJZlxwPhuMTvIUg1LktxK7y7SG3wvCeBSNIecI2m1ARW4tccWKww3IJcACVIP9bvA==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.14.0/bac6ddb5b5cf778408ac69230896877e2a688306}
+  '@devexpress/sbom-toolkit@0.15.0':
+    resolution: {integrity: sha512-iKllq0CnfGkxMQfi3WLGIE5W9zXLWGyBZrF+QlJx5C5rj1kZcZ5tMDRR0woCvUzBWAsMoB7JzngbcyO9mFg4OQ==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.15.0/4d382aa77f17b8a7b6db17a7c8e43b5259a4258e}
     hasBin: true
 
   '@gar/promise-retry@1.0.3':
@@ -1067,7 +1067,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@devexpress/sbom-toolkit@0.14.0':
+  '@devexpress/sbom-toolkit@0.15.0':
     dependencies:
       '@cyclonedx/cdxgen': 12.5.1
       spdx-license-ids: 3.0.23
