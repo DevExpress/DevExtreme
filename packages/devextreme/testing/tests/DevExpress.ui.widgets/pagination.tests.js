@@ -1358,6 +1358,7 @@ function() {
                 pageCount: 1,
                 itemCount: 46,
                 showInfo: true,
+                showPageSizeSelector: false,
                 infoText: 'Page {0} of {1} ({2} items)'
             });
         } finally {
