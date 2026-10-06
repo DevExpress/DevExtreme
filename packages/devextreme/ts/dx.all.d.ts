@@ -674,7 +674,7 @@ declare module DevExpress {
       previousValue: unknown
     ): void;
     _createElement(element: HTMLElement): void;
-    _validateOptions(options: Partial<TProperties>): Partial<TProperties>;
+    _validateOptions(options: TProperties): TProperties;
   }
   module DOMComponent {
     /**
@@ -7452,10 +7452,10 @@ declare module DevExpress.core {
    */
   export class FunctionTemplate {
     constructor(
-      render: (options: Omit<TemplateRenderOptions, 'onRendered'>) => unknown
+      render?: (options: Omit<TemplateRenderOptions, 'onRendered'>) => unknown
     );
 
-    render(options?: TemplateRenderOptions): InternalElement<HTMLElement>;
+    render(options?: TemplateRenderOptions): DxElement;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7501,16 +7501,13 @@ declare module DevExpress.core {
     | Array<unknown>
     | null
     | undefined;
+
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Template {
     constructor(options?: dxTemplateOptions);
     constructor(element: string | UserDefinedElement | dxElementWrapper);
-
-    render(options?: TemplateRenderOptions): InternalElement<HTMLElement>;
-
-    source(): InternalElement<HTMLElement>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7523,7 +7520,7 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface TemplateRenderOptions {
-    container?: string | UserDefinedElement | dxElementWrapper | null;
+    container?: unknown;
     model?: unknown;
     index?: number;
     transclude?: boolean;

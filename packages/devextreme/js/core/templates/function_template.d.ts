@@ -1,8 +1,7 @@
-import { InternalElement, UserDefinedElement } from '../element';
-import { dxElementWrapper } from '../renderer';
+import { DxElement } from '../element';
 
 export interface TemplateRenderOptions {
-  container?: string | UserDefinedElement | dxElementWrapper | null;
+  container?: unknown;
   model?: unknown;
   index?: number;
   transclude?: boolean;
@@ -11,7 +10,7 @@ export interface TemplateRenderOptions {
 }
 
 export class FunctionTemplate {
-  constructor(render: (options: Omit<TemplateRenderOptions, 'onRendered'>) => unknown);
+  constructor(render?: (options: Omit<TemplateRenderOptions, 'onRendered'>) => unknown);
 
-  render(options?: TemplateRenderOptions): InternalElement<HTMLElement>;
+  render(options?: TemplateRenderOptions): DxElement;
 }

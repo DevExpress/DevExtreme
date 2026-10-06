@@ -10,9 +10,9 @@ export {
     DefaultOptionsRule,
 } from '../options';
 
-export function convertRulesToOptions<T>(rules: DefaultOptionsRule<T>[]): Partial<T>;
+export function convertRulesToOptions<T>(rules: DefaultOptionsRule<T>[]): T;
 
-export function normalizeOptions(options: string | object, value: unknown): { [name: string]: unknown };
+export function normalizeOptions(options: string | object, value: any): { [name: string]: string };
 
 export function deviceMatch(device: Device, filter: any): boolean;
 

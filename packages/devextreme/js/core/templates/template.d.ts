@@ -1,15 +1,10 @@
 import {
-    InternalElement,
     UserDefinedElement,
 } from '../element';
 
 import {
     dxElementWrapper,
 } from '../renderer';
-
-import {
-    TemplateRenderOptions,
-} from './function_template';
 
 export type {
     template,
@@ -36,11 +31,8 @@ export interface dxTemplateOptions {
  */
 export type dxTemplate = Template;
 
+ // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Template {
     constructor(options?: dxTemplateOptions);
     constructor(element: string | UserDefinedElement | dxElementWrapper);
-
-    render(options?: TemplateRenderOptions): InternalElement<HTMLElement>;
-
-    source(): InternalElement<HTMLElement>;
 }
