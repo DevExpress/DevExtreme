@@ -44,7 +44,7 @@
     "husky": "8.0.3",
     "jest": "30.4.2",
     "lint-staged": "14.0.1",
-    "nx": "23.0.2",
+    "nx": "23.2.1",
     "shelljs": "0.8.5",
     "stylelint": "catalog:",
     "ts-node": "10.9.2",
