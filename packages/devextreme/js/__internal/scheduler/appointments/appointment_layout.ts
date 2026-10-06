@@ -1,5 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
 import { APPOINTMENT_CONTENT_CLASSES } from '../classes';
@@ -7,8 +8,22 @@ import { APPOINTMENT_CONTENT_CLASSES } from '../classes';
 const allDayText = ` ${messageLocalization.format('dxScheduler-allDay')}: `;
 const recurringText = messageLocalization.format('dxScheduler-appointmentAriaLabel-recurring');
 
-export const createAppointmentLayout = (formatText, config) => {
-  const result = $((domAdapter as any).createDocumentFragment());
+export interface AppointmentFormatText {
+  text: string;
+  formatDate: string;
+}
+
+export interface AppointmentLayoutConfig {
+  isAllDay?: boolean;
+  isRecurrence?: string;
+  html?: string;
+}
+
+export const createAppointmentLayout = (
+  formatText: AppointmentFormatText,
+  config: AppointmentLayoutConfig,
+): dxElementWrapper => {
+  const result = $(domAdapter.createDocumentFragment());
 
   $('<div>')
     .text(formatText.text)
@@ -23,24 +38,29 @@ export const createAppointmentLayout = (formatText, config) => {
 
   $('<div>').addClass(APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_DATE).text(formatText.formatDate).appendTo($contentDetails);
 
-  config.isRecurrence
-        && $('<span>')
-          .addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`)
-          .attr('aria-label', recurringText)
-          .attr('role', 'img')
-          .appendTo(result);
+  if (config.isRecurrence) {
+    $('<span>')
+      .addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`)
+      .attr('aria-label', recurringText)
+      .attr('role', 'img')
+      .appendTo(result);
+  }
 
-  config.isAllDay
-        && $('<div>')
-          .text(allDayText)
-          .addClass(APPOINTMENT_CONTENT_CLASSES.ALL_DAY_CONTENT)
-          .prependTo($contentDetails);
+  if (config.isAllDay) {
+    $('<div>')
+      .text(allDayText)
+      .addClass(APPOINTMENT_CONTENT_CLASSES.ALL_DAY_CONTENT)
+      .prependTo($contentDetails);
+  }
 
   return result;
 };
 
-export const createAgendaAppointmentLayout = (formatText, config) => {
-  const result = $((domAdapter as any).createDocumentFragment());
+export const createAgendaAppointmentLayout = (
+  formatText: AppointmentFormatText,
+  config: AppointmentLayoutConfig,
+): dxElementWrapper => {
+  const result = $(domAdapter.createDocumentFragment());
 
   const leftLayoutContainer = $('<div>')
     .addClass('dx-scheduler-agenda-appointment-left-layout')
@@ -54,9 +74,10 @@ export const createAgendaAppointmentLayout = (formatText, config) => {
     .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER)
     .appendTo(leftLayoutContainer);
 
-  config.isRecurrence
-        && $('<span>').addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`).attr('aria-label', recurringText)
-          .appendTo(marker);
+  if (config.isRecurrence) {
+    $('<span>').addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`).attr('aria-label', recurringText)
+      .appendTo(marker);
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const text = $('<div>')

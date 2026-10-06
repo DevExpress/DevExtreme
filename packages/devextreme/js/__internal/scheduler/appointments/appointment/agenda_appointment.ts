@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import {
   APPOINTMENT_CONTENT_CLASSES,
 } from '../../classes';
-import { Appointment } from './m_appointment';
+import { Appointment } from './appointment';
 
 export class AgendaAppointment extends Appointment {
   get coloredElement(): dxElementWrapper {

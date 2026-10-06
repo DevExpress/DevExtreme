@@ -70,6 +70,7 @@ import {
 import type { GroupOrientation, ViewType } from '@ts/scheduler/types';
 import Scrollable, { type ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 
+import AppointmentDragBehavior from '../appointment_drag_behavior';
 import type NotifyScheduler from '../base/widget_notify_scheduler';
 import {
   APPOINTMENT_DRAG_SOURCE_CLASS,
@@ -81,13 +82,13 @@ import {
   VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../classes';
+import { CompactAppointmentsHelper } from '../compact_appointments_helper';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { Cache } from '../global_cache';
-import AppointmentDragBehavior from '../m_appointment_drag_behavior';
-import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
-import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
+import type Scheduler from '../scheduler';
 import type HorizontalCurrentTimeShader from '../shaders/current_time_shader_horizontal';
 import VerticalShader from '../shaders/current_time_shader_vertical';
+import type { SubscribeKey, SubscribeMethods } from '../subscribes';
 import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type {
   CellPositionData,
@@ -556,7 +557,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return undefined;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return notifyScheduler.invoke(funcName, ...args);
   }
 
@@ -2553,7 +2553,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   // DnD should be removed from work-space
   // ------------
 
-  initDragBehavior(scheduler: { element: () => Element }): void {
+  initDragBehavior(scheduler: Scheduler): void {
     if (!this.dragBehavior && scheduler) {
       this.dragBehavior = new AppointmentDragBehavior(scheduler);
 
@@ -3446,6 +3446,17 @@ interface DragBehaviorOptions {
   filter?: string;
 }
 
+export interface DragBehaviorConfig {
+  container: dxElementWrapper;
+  dragTemplate: () => dxElementWrapper | undefined;
+  onDragStart: (e: AppointmentDraggingStartEvent) => void;
+  onDragMove: () => void;
+  onDragEnd: (e: AppointmentDraggingEndEvent) => void;
+  onDragCancel: (e: AppointmentDraggingRemoveEvent) => void;
+  cursorOffset: (() => TranslateVector) | undefined;
+  filter: string | undefined;
+}
+
 const createDragBehaviorConfig = (
   container: dxElementWrapper,
   rootElement: dxElementWrapper,
@@ -3458,16 +3469,7 @@ const createDragBehaviorConfig = (
   removeDroppableCellClass: () => void,
   getCellWidthCallback: () => number,
   options: DragBehaviorOptions,
-): {
-  container: dxElementWrapper;
-  dragTemplate: () => dxElementWrapper | undefined;
-  onDragStart: (e: AppointmentDraggingStartEvent) => void;
-  onDragMove: () => void;
-  onDragEnd: (e: AppointmentDraggingEndEvent) => void;
-  onDragCancel: (e: AppointmentDraggingRemoveEvent) => void;
-  cursorOffset: (() => TranslateVector) | undefined;
-  filter: string | undefined;
-} => {
+): DragBehaviorConfig => {
   const state: {
     dragElement: dxElementWrapper | undefined;
     itemData: unknown;
