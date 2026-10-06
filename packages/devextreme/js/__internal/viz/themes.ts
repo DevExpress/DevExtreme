@@ -39,7 +39,7 @@ let defaultTheme;
 let nextCacheUid = 0;
 const widgetsCache = {};
 
-export function getTheme(themeName) {
+export function getTheme(themeName?) {
   const name = normalizeEnum(themeName);
   // @ts-expect-error
   return themes[name] || themes[themesMapping[name] || currentTheme()];
