@@ -12,7 +12,7 @@ type PreparedItem<T extends ExportItem> = T & {
 
 function prepareItems<T extends ExportItem>(
   items: T[][],
-  emptyCell?: Partial<T>,
+  emptyCell: Partial<T>,
 ): PreparedItem<T>[][] {
   const defaultSetter = (value: number | undefined): number => (!value ? 1 : value);
   const cloneItem = (item: PreparedItem<T>): PreparedItem<T> => (
