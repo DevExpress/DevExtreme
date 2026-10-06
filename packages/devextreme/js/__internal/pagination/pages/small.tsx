@@ -60,12 +60,7 @@ export class PagesSmall extends InfernoComponent<PaginationSmallPropsType> {
   }
 
   getEffectDependencies(): unknown[] {
-    return [
-      this.props,
-      this.state.minWidth,
-      this.props.pageCount,
-      this.props.pageIndex,
-    ];
+    return [this.state.minWidth, this.props.pageCount, this.props.pageIndex];
   }
 
   subscribeToThemeReady(): EffectReturn {

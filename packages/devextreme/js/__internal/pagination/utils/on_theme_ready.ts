@@ -3,7 +3,8 @@ import { themeReadyCallback } from '@ts/ui/m_themes_callback';
 import { isPendingThemeLoaded } from '@ts/ui/themes';
 
 export function onThemeReady(callback: () => void): EffectReturn {
-  if (isPendingThemeLoaded()) {
+  const isThemeLoaded = isPendingThemeLoaded();
+  if (isThemeLoaded) {
     return undefined;
   }
   themeReadyCallback.add(callback);

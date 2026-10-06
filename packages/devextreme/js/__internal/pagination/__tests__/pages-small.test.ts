@@ -15,11 +15,17 @@ jest.mock('@ts/ui/themes', () => ({
 const FALLBACK_MIN_WIDTH = 10;
 const ONE_DIGIT_WIDTH = 10;
 
-function createCompactPagination(config: object = {}): HTMLElement {
+const instances: Pagination[] = [];
+
+function createCompactPagination(config: object = {}): {
+  container: HTMLElement;
+  pagination: Pagination;
+} {
+  const root = document.createElement('div');
+  document.body.appendChild(root);
   const container = document.createElement('div');
-  document.body.appendChild(container);
-  // eslint-disable-next-line no-new
-  new Pagination(container, {
+  root.appendChild(container);
+  const pagination = new Pagination(container, {
     displayMode: 'compact',
     pageCount: 10,
     pageIndex: 1,
@@ -28,17 +34,18 @@ function createCompactPagination(config: object = {}): HTMLElement {
     pagesCountText: 'of',
     ...config,
   });
-  return container;
+  instances.push(pagination);
+  return { container, pagination };
 }
 
 afterEach(() => {
+  instances.splice(0).forEach((pagination) => pagination.dispose());
   document.body.innerHTML = '';
 });
 
 describe('compact pagination editors', () => {
   it('re-reads the css min-width of the page index after the next update', async () => {
-    const container = createCompactPagination();
-    const pagination = Pagination.getInstance(container) as Pagination;
+    const { container, pagination } = createCompactPagination();
     const pageIndex = container.querySelector('.dx-page-index') as HTMLElement;
     const numberBox = NumberBox.getInstance(pageIndex) as NumberBox;
 
@@ -52,7 +59,7 @@ describe('compact pagination editors', () => {
   });
 
   it('re-reads the css min-width of the page index when the theme is loaded', () => {
-    const container = createCompactPagination();
+    const { container } = createCompactPagination();
     const pageIndex = container.querySelector('.dx-page-index') as HTMLElement;
     const numberBox = NumberBox.getInstance(pageIndex) as NumberBox;
 
@@ -63,7 +70,7 @@ describe('compact pagination editors', () => {
   });
 
   it('re-reads the css min-width of the page sizes when the theme is loaded', () => {
-    const container = createCompactPagination({
+    const { container } = createCompactPagination({
       showPageSizeSelector: true,
       allowedPageSizes: [5, 10, 20],
     });

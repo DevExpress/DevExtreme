@@ -28,6 +28,6 @@ export function isElementBlockLevel(element: Element | null | undefined): boolea
   if (!computedStyle) {
     return false;
   }
-  const float = computedStyle.getPropertyValue('float');
-  return computedStyle.getPropertyValue('display') === 'block' && (!float || float === 'none');
+  const cssFloat = computedStyle.getPropertyValue('float');
+  return computedStyle.getPropertyValue('display') === 'block' && (!cssFloat || cssFloat === 'none');
 }
