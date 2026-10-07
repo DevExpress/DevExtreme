@@ -135,6 +135,7 @@ abstract class DynamicProvider extends Provider {
     return Promise
       .all(markers.map((options) => this._addMarker(options)))
       .then((markerObjects: MarkerObject[]) => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._fitBounds();
 
         return [false, markerObjects.map((markerObject) => markerObject.marker)];
@@ -211,6 +212,7 @@ abstract class DynamicProvider extends Provider {
 
   addRoutes(routes: RouteOptions[]): Promise<[boolean, unknown[]]> {
     return Promise.all(routes.map((options) => this._addRoute(options))).then((routeObjects) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._fitBounds();
 
       return [false, routeObjects.map((routeObject) => routeObject.instance)];
@@ -283,7 +285,7 @@ abstract class DynamicProvider extends Provider {
     }
   }
 
-  adjustViewport(): void {
+  adjustViewport(): Promise<void> {
     return this._fitBounds();
   }
 
@@ -292,7 +294,7 @@ abstract class DynamicProvider extends Provider {
     return true;
   }
 
-  abstract _fitBounds(): void;
+  abstract _fitBounds(): Promise<void>;
 
   _updateBounds(): void {
     this._clearBounds();

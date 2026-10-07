@@ -1,5 +1,4 @@
 import { addNamespace } from '@js/common/core/events/utils/index';
-import errors from '@js/core/errors';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isNumeric, isPlainObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
@@ -49,19 +48,19 @@ abstract class Provider {
     return Promise.resolve();
   }
 
-  abstract updateDimensions(): void;
+  abstract updateDimensions(): Promise<unknown>;
 
-  abstract updateMapType(): void;
+  abstract updateMapType(): Promise<unknown>;
 
-  updateDisabled(): void {
-    throw errors.Error('E0001');
+  updateDisabled(): Promise<unknown> {
+    return Promise.resolve();
   }
 
-  abstract updateBounds(): void;
+  abstract updateBounds(): Promise<unknown>;
 
-  abstract updateCenter(): void;
+  abstract updateCenter(): Promise<unknown>;
 
-  abstract updateZoom(): void;
+  abstract updateZoom(): Promise<unknown>;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateControls(markers: MarkerOptions[], routes: RouteOptions[]): Promise<unknown> {
@@ -95,7 +94,7 @@ abstract class Provider {
     return Promise.resolve();
   }
 
-  abstract adjustViewport(): void;
+  abstract adjustViewport(): Promise<unknown>;
 
   updateRoutes(
     routeOptionsToRemove: RouteOptions[],
@@ -124,7 +123,7 @@ abstract class Provider {
     return Promise.resolve();
   }
 
-  abstract clean(): void;
+  abstract clean(): Promise<unknown>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   map(): any {
