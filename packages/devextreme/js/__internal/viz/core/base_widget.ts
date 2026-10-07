@@ -68,7 +68,7 @@ function getFalse(): boolean {
 
 function defaultOnIncidentOccurred(e): void {
   if (!e.component._eventsStrategy.hasEvent('incidentOccurred')) {
-    log.apply(null, [e.target.id].concat(e.target.args || []) as [string, ...unknown[]]);
+    log(e.target.id, ...[e.target.args || []].flat());
   }
 }
 
