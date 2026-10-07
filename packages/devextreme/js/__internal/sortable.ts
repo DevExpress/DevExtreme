@@ -1,4 +1,3 @@
-import { fx } from '@js/common/core/animation';
 import { resetPosition } from '@js/common/core/animation/translator';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
@@ -12,6 +11,7 @@ import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
+import fx from '@ts/common/core/animation/fx';
 import type { Quad } from '@ts/core/utils/m_string';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Draggable from '@ts/draggable';
@@ -41,7 +41,6 @@ const animate = (element: HTMLElement | undefined, config: AnimateConfig): void 
   const top = config.to?.top || 0;
 
   element.style.transform = `translate(${left}px,${top}px)`;
-  // @ts-expect-error off is not declared
   element.style.transition = fx.off ? '' : `transform ${config.duration}ms ${config.easing}`;
 };
 
