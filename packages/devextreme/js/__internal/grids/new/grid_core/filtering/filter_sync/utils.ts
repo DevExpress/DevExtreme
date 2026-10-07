@@ -1,7 +1,7 @@
 import type { FilterType } from '@js/common/grids';
 // 🚨🚨🚨 Complex utils functions from grid_core used here for merging filters
 // TODO filterSync: move these utils to the new grid_core
-import { removeFieldConditionsFromFilter, syncFilters } from '@ts/filter_builder/m_utils';
+import { removeFieldConditionsFromFilter, syncFilters } from '@ts/filter_builder/utils';
 import type { HeaderFilterInfo } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 
 import type { FilterValue } from '../types';

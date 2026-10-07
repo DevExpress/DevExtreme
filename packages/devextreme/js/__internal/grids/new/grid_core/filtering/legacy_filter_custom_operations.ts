@@ -17,7 +17,7 @@ import { extend } from '@js/core/utils/extend';
 import errors from '@js/ui/widget/ui.errors';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
-} from '@ts/filter_builder/m_utils';
+} from '@ts/filter_builder/utils';
 
 import { getHeaderItemText } from './header_filter/legacy_header_filter';
 
