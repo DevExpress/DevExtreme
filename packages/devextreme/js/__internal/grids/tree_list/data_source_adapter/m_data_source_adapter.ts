@@ -42,13 +42,13 @@ const { queryByOptions } = storeHelper;
 
 const DEFAULT_KEY_EXPRESSION = 'id';
 
-const isFullBranchFilterMode = (that: DataSourceAdapterTreeList): boolean => that.option('filterMode') === 'fullBranch';
+const isFullBranchFilterMode = (adapter: DataSourceAdapterTreeList): boolean => adapter.option('filterMode') === 'fullBranch';
 
-const getChildKeys = (that: DataSourceAdapterTreeList, keys: RowKey[]): RowKey[] => {
+const getChildKeys = (adapter: DataSourceAdapterTreeList, keys: RowKey[]): RowKey[] => {
   const childKeys: RowKey[] = [];
 
   keys.forEach((key) => {
-    const node = that.getNodeByKey(key);
+    const node = adapter.getNodeByKey(key);
 
     if (node) {
       node.children.forEach((child) => {

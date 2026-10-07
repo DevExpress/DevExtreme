@@ -10,7 +10,7 @@ import type { CustomLoader, CustomLoadResult } from '@ts/grids/grid_core/data_so
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter, DataFilterPredicate } from '@ts/grids/grid_core/filter/types';
 
-import type { LoadOperation, TreeNode } from '../types';
+import type { DataGetter, LoadOperation, TreeNode } from '../types';
 import { createIdFilter } from './create_id_filter';
 
 const { queryByOptions } = storeHelper;
@@ -22,8 +22,8 @@ export interface LoadBranchesContext {
   maxFilterLengthInRequest: number;
   parentIdExpr: unknown;
   keyExpr: unknown;
-  _parentIdGetter: (data: unknown) => unknown;
-  _keyGetter: (data: unknown) => unknown;
+  _parentIdGetter: DataGetter;
+  _keyGetter: DataGetter;
   isRowExpanded: (key: unknown) => boolean;
   getCachedData: () => RawItemData[] | undefined;
   setCachedData: (data: RawItemData[]) => void;
