@@ -192,7 +192,6 @@ export class ColumnsSeparatorView extends SeparatorView {
   private _testCursorName?: string;
 
   private _testPointerEventsName?: string;
-  /// #ENDDEBUG
 
   public init() {
     super.init();
