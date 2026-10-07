@@ -1,7 +1,6 @@
 import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { resetPosition } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -20,6 +19,8 @@ import type {
   DragEvent, DragEventArgs, DraggableProperties, DragStartArgs, DragTemplateArgs,
 } from '@ts/draggable';
 import Draggable from '@ts/draggable';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import { isDefined } from '../core/utils/type';
 
@@ -180,7 +181,7 @@ class Sortable extends Draggable<SortableProperties> {
 
   _sourceScrollableInfo?: SourceScrollableInfo | null;
 
-  _sourceScrollHandler?: (e: Event) => void;
+  _sourceScrollHandler!: (e: EngineEvent) => void;
 
   _modifiedItemMargin?: string;
 
@@ -293,7 +294,7 @@ class Sortable extends Draggable<SortableProperties> {
     }
   }
 
-  _handleSourceScroll(e: Event): void {
+  _handleSourceScroll(e: EngineEvent): void {
     const sourceScrollableInfo = this._sourceScrollableInfo;
     if (sourceScrollableInfo) {
       (['scrollLeft', 'scrollTop'] as const).forEach((scrollProp) => {
