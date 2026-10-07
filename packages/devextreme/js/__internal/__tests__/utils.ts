@@ -17,6 +17,7 @@ interface FireOptions {
   x?: number;
   y?: number;
   ctrlKey?: boolean;
+  key?: string;
   pointerType?: 'mouse' | 'touch';
 }
 
@@ -24,7 +25,7 @@ export const fire = (
   element: Element,
   type: string,
   {
-    x = 0, y = 0, ctrlKey = false, pointerType = 'touch',
+    x = 0, y = 0, ctrlKey = false, key, pointerType = 'touch',
   }: FireOptions = {},
 ): FiredEvent => {
   // @ts-expect-error -- Event is absent from the public eventsEngine type
@@ -40,6 +41,7 @@ export const fire = (
     pointerId: 1,
     which: 1,
     ctrlKey,
+    key,
   });
 
   // @ts-expect-error -- trigger is absent from the public eventsEngine type
