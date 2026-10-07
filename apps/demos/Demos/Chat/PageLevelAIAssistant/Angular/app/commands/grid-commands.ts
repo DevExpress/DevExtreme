@@ -1,4 +1,4 @@
-import type { Column } from 'devextreme/ui/data_grid';
+import type { DxDataGridComponent, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import type {
   ColumnLookup,
   CommandResult,
@@ -7,11 +7,9 @@ import type {
   GridCommand,
   GridCommandArgs,
   GridFilterValue,
-  GridInstance,
-  Task,
-} from './data.ts';
+} from '../data';
 
-export function getFilterConditions(filterValue: unknown): FilterCondition[] {
+function getFilterConditions(filterValue: unknown): FilterCondition[] {
   if (!Array.isArray(filterValue)) return [];
 
   return Array.isArray(filterValue[0])
@@ -19,7 +17,7 @@ export function getFilterConditions(filterValue: unknown): FilterCondition[] {
     : [filterValue as FilterCondition];
 }
 
-export function combineFilterConditions(
+function combineFilterConditions(
   existingFilterValue: unknown,
   newCondition: FilterCondition,
 ): GridFilterValue {
@@ -34,8 +32,8 @@ export function combineFilterConditions(
     : conditions.flatMap((condition, index) => (index === 0 ? [condition] : ['and' as const, condition]));
 }
 
-export function getColumnOrFail(grid: GridInstance, columnName: string | undefined): ColumnLookup {
-  const column = grid.columnOption(columnName ?? '');
+function getColumnOrFail(grid: DxDataGridComponent, columnName: string | undefined): ColumnLookup {
+  const column = grid.instance.columnOption(columnName ?? '');
 
   if (!column) {
     return {
@@ -50,7 +48,7 @@ export function getColumnOrFail(grid: GridInstance, columnName: string | undefin
   return { column, failure: null };
 }
 
-export const gridCommands: Record<string, GridCommand> = {
+const gridCommands: Record<string, GridCommand> = {
   filterValue: {
     description: `Apply a filter to a single column. Pass column (dataField), operator, and value.
 Supported operators: "=", "<>", "<", "<=", ">", ">=", "contains", "notcontains", "startswith", "endswith", "anyof".
@@ -71,7 +69,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
       },
       required: ['column', 'operator', 'value'],
     },
-    execute(grid: GridInstance, args: GridCommandArgs, rawText?: string): CommandResult {
+    execute(grid: DxDataGridComponent, args: GridCommandArgs, rawText?: string): CommandResult {
       const { column, failure } = getColumnOrFail(grid, args.column);
       if (failure) return failure;
 
@@ -114,7 +112,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
 
       try {
         const newCondition: FilterCondition = [columnName, args.operator ?? '=', value ?? ''];
-        grid.option('filterValue', combineFilterConditions(grid.option('filterValue'), newCondition));
+        grid.instance.option('filterValue', combineFilterConditions(grid.instance.option('filterValue'), newCondition));
         return {
           status: 'success',
           message: `Filtered by '${caption}'.`,
@@ -131,9 +129,9 @@ To filter a date column by a year and/or month (the same thing the grid's own he
   clearFilter: {
     description: 'Clear all filters on the grid.',
     schema: { type: 'object', properties: {} },
-    execute(grid: GridInstance): CommandResult {
+    execute(grid: DxDataGridComponent): CommandResult {
       try {
-        grid.clearFilter();
+        grid.instance.clearFilter();
         return { status: 'success', message: 'Filter cleared.' };
       } catch {
         return {
@@ -154,14 +152,14 @@ To filter a date column by a year and/or month (the same thing the grid's own he
       },
       required: ['column', 'sortOrder'],
     },
-    execute(grid: GridInstance, args: GridCommandArgs): CommandResult {
+    execute(grid: DxDataGridComponent, args: GridCommandArgs): CommandResult {
       const { column, failure } = getColumnOrFail(grid, args.column);
       if (failure) return failure;
 
       const caption = column.caption ?? args.column ?? '';
 
       try {
-        grid.columnOption(
+        grid.instance.columnOption(
           args.column ?? '',
           'sortOrder',
           args.sortOrder === 'none' ? undefined : args.sortOrder,
@@ -184,9 +182,9 @@ To filter a date column by a year and/or month (the same thing the grid's own he
   clearSorting: {
     description: 'Remove sorting from all columns.',
     schema: { type: 'object', properties: {} },
-    execute(grid: GridInstance): CommandResult {
+    execute(grid: DxDataGridComponent): CommandResult {
       try {
-        grid.clearSorting();
+        grid.instance.clearSorting();
         return { status: 'success', message: 'Sorting cleared.' };
       } catch {
         return {
@@ -207,14 +205,14 @@ To filter a date column by a year and/or month (the same thing the grid's own he
       },
       required: ['column', 'visible'],
     },
-    execute(grid: GridInstance, args: GridCommandArgs): CommandResult {
+    execute(grid: DxDataGridComponent, args: GridCommandArgs): CommandResult {
       const { column, failure } = getColumnOrFail(grid, args.column);
       if (failure) return failure;
 
       const caption = column.caption ?? args.column ?? '';
 
       try {
-        grid.columnOption(args.column ?? '', 'visible', args.visible);
+        grid.instance.columnOption(args.column ?? '', 'visible', args.visible);
         return {
           status: 'success',
           message: args.visible ? `Showed column '${caption}'.` : `Hid column '${caption}'.`,
@@ -266,12 +264,12 @@ Available grid commands:
 ${commandDescriptions}`;
 }
 
-export function getGridColumnNames(gridInstance: GridInstance): string[] {
-  return (gridInstance.option('columns') as Column<Task, number>[]).map((column) => String(column.dataField));
+export function getGridColumnNames(gridInstance: DxDataGridComponent): string[] {
+  return (gridInstance.instance.option('columns') as DxDataGridTypes.Column[]).map((column) => String(column.dataField));
 }
 
 export function applyGridActions(
-  grid: GridInstance,
+  grid: DxDataGridComponent,
   actions: ExecuteGridAssistantAction[],
   rawText?: string,
 ): CommandResult[] {

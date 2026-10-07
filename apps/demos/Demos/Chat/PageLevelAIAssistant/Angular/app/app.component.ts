@@ -23,10 +23,6 @@ if (window && window.config?.packageConfigPaths) {
 }
 
 config({
-  editorStylingMode: 'filled',
-});
-
-config({
   floatingActionButtonConfig: {
     position: {
       my: 'right bottom',
@@ -35,6 +31,7 @@ config({
       offset: '-16 -16',
     },
   },
+  editorStylingMode: 'filled',
 });
 
 loadMessages({

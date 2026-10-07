@@ -49,7 +49,7 @@ export function applyFormClearAction(
   return null;
 }
 
-export function formatAiResultDetails(form: DxFormComponent, aiResult: AIResult): string {
+function formatAiResultDetails(form: DxFormComponent, aiResult: AIResult): string {
   const labelByField = new Map(getFormFieldOptions(form).map((f) => [f.dataField, f.label]));
 
   return Object.keys(aiResult)

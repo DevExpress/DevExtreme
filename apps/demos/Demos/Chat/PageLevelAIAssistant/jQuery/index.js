@@ -1,9 +1,5 @@
 $(() => {
   DevExpress.config({
-    editorStylingMode: 'filled',
-  });
-
-  DevExpress.config({
     floatingActionButtonConfig: {
       position: {
         my: 'right bottom',
@@ -12,6 +8,7 @@ $(() => {
         offset: '-16 -16',
       },
     },
+    editorStylingMode: 'filled',
   });
 
   DevExpress.localization.loadMessages({
@@ -28,6 +25,7 @@ $(() => {
   const toastInstance = $('#toast')
     .dxToast({
       displayTime: 600,
+      maxWidth: 568,
       closeOnClick: true,
       message: 'Form data is saved.',
       type: 'success',
@@ -75,6 +73,7 @@ $(() => {
 
   function handleUserMessage(message) {
     setDisabled(true);
+    clearButtonInstance?.option('disabled', true);
 
     const finish = () => {
       setDisabled(false);
@@ -283,6 +282,8 @@ $(() => {
             useSubmitBehavior: true,
             width: '120px',
             onClick: () => {
+              const formData = formInstance.option('formData');
+              formInstance.reset(formData);
               toastInstance.show();
             },
           },
@@ -905,7 +906,7 @@ async function runCommand(text, { form, gridInstance, aiIntegration }) {
   }
 
   if (target === 'grid') {
-    gridInstance?.beginCustomLoading();
+    gridInstance?.beginCustomLoading('');
 
     const { results: gridResults, error: gridError } =
       await buildGridResultsPromise(gridInstance, aiIntegration, text);

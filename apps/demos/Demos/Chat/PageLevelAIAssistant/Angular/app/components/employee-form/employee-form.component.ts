@@ -35,7 +35,10 @@ export class EmployeeFormComponent {
     disabled: true,
     useSubmitBehavior: true,
     width: '120px',
-    onClick: () => this.dxToast.instance.show(),
+    onClick: () => {
+      this.dxForm.instance.reset(this.formData);
+      this.dxToast.instance.show();
+    },
   };
 
   get formComponent(): DxFormComponent {

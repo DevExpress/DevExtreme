@@ -18,7 +18,7 @@ import {
   applyGridActions, buildGridPromptSection, buildGridResponseSchema, getGridColumnNames,
 } from './commands/grid-commands';
 
-export function extractJson(text: string): unknown {
+function extractJson(text: string): unknown {
   const match = text.match(/\{[\s\S]*\}/);
 
   try {
@@ -30,7 +30,7 @@ export function extractJson(text: string): unknown {
   }
 }
 
-export function executeAiCommand(text: string, aiIntegration: AIIntegration): Promise<unknown> {
+function executeAiCommand(text: string, aiIntegration: AIIntegration): Promise<unknown> {
   return new Promise((resolve, reject) => {
     aiIntegration.execute(
       { text },
@@ -75,7 +75,7 @@ If the request is about the form, also set \`formAction\` to one of:
 Set \`formAction\` to \`null\` if the request is not about the form.`;
 }
 
-export async function classifyRequest(
+async function classifyRequest(
   text: string,
   aiIntegration: AIIntegration,
   form: DxFormComponent,
@@ -173,7 +173,7 @@ function formatSucceeded(succeeded: string[]): string {
   return succeeded.map((message) => `✅ Done. ${message}`).join('\n');
 }
 
-export function joinSucceededOrThrow(results: CommandResult[], fallbackError: Error | null): string {
+function joinSucceededOrThrow(results: CommandResult[], fallbackError: Error | null): string {
   const succeeded = results.filter((r) => r.status === 'success').map((r) => r.message);
   const failed = results.filter((r) => r.status === 'failure').map((r) => r.message);
 
@@ -188,7 +188,7 @@ export function joinSucceededOrThrow(results: CommandResult[], fallbackError: Er
     : formatSucceeded(succeeded);
 }
 
-export async function runCommand(
+async function runCommand(
   text: string,
   { form, gridInstance, aiIntegration }: RouterContext,
 ): Promise<string> {
@@ -241,7 +241,7 @@ export async function runCommand(
   return joinSucceededOrThrow([...formResults, ...gridResults], gridError ?? formError);
 }
 
-export function reportAiResult(promise: Promise<string>, pushMessage: PushMessage): Promise<void> {
+function reportAiResult(promise: Promise<string>, pushMessage: PushMessage): Promise<void> {
   return promise
     .then((message) => {
       pushMessage({

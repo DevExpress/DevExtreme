@@ -81,9 +81,6 @@ interface AiAssistantProps {
 interface AiAssistantEmits {
   (e: 'message-submitted', message: DxChatTypes.TextMessage): void;
 }
-interface SuggestionItem extends DxButtonGroupTypes.Item {
-  prompt: string;
-}
 
 const props = defineProps<AiAssistantProps>();
 const emit = defineEmits<AiAssistantEmits>();
@@ -130,9 +127,15 @@ function clearChat(): void {
   updateClearButtonState();
 }
 
-function onSuggestionClick(e: DxButtonGroupTypes.ItemClickEvent): void {
-  const { prompt } = e.itemData as SuggestionItem;
-  const message: DxChatTypes.TextMessage = { author: chatUser, text: prompt };
+function onSuggestionClick({ itemData }: DxButtonGroupTypes.ItemClickEvent): void {
+  if (!itemData?.prompt) {
+    return;
+  }
+
+  const message = {
+    author: chatUser,
+    text: itemData.prompt,
+  };
 
   pushMessage(message);
   emit('message-submitted', message);

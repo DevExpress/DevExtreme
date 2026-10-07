@@ -32,6 +32,7 @@
   <DxToast
     v-model:visible="isToastVisible"
     :display-time="600"
+    :max-width="568"
     :close-on-click="true"
     message="Form data is saved."
     type="success"
@@ -69,7 +70,10 @@ const saveButtonOptions = {
   disabled: true,
   useSubmitBehavior: true,
   width: '120px',
-  onClick: () => { isToastVisible.value = true; },
+  onClick: () => {
+    formRef.value?.instance.reset(formData);
+    isToastVisible.value = true;
+  },
 };
 
 function onOptionChanged(e: DxFormTypes.OptionChangedEvent): void {
