@@ -250,7 +250,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _columnChooserView!: ColumnChooserView;
 
-  public init() {
+  public init(): void {
     this._scrollLeft = undefined;
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
@@ -794,9 +794,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
 
     // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
-    const templatePromise: DeferredObj<unknown> = templateDeferred.promise();
-
-    return templatePromise.always(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- promise() is typed as Promise
+    return templateDeferred.promise().always(() => {
       this._templateDeferreds.delete(templateDeferred);
     });
   }

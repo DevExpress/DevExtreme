@@ -1,6 +1,7 @@
-import $ from '@js/core/../core/renderer';
-import { extend } from '@js/core/../core/utils/extend';
+import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Sortable from '@js/ui/sortable';
@@ -152,7 +153,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     return $content;
   }
 
-  protected _renderCore(e?: DataChange): Deferred<unknown> {
+  protected _renderCore(e?: DataChange): DeferredObj<unknown> {
     const deferred = super._renderCore(e);
 
     if (e?.changeType === 'update'
@@ -164,7 +165,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return deferred;
   }
 

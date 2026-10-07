@@ -117,6 +117,8 @@ export class RowsView extends ColumnsView {
 
   public _scrollTop: any;
 
+  protected declare _scrollLeft: number;
+
   private _scrollRight: any;
 
   public _scrollable: any;
@@ -437,7 +439,7 @@ export class RowsView extends ColumnsView {
 
   private isRenderedLayoutCurrent(): boolean {
     const items = this._dataController.items();
-    const rowElements: HTMLElement[] = this._getRowElements().toArray();
+    const rowElements = this._getRowElements().toArray() as HTMLElement[];
     const renderedRows: (ProcessedItem & { columns: Column[] })[] = rowElements.map(
       (rowElement) => elementData(rowElement, 'options'),
     );
