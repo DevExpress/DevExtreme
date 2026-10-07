@@ -1,7 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 import type { CustomOperation, Field } from '@js/ui/filter_builder';
 
-import type { Condition, FilterBuilderValue, FilterExpression } from '../utils';
+import type {
+  Condition, FilterBuilderValue, FilterExpression, ValueCondition,
+} from '../utils';
 import {
   filterHasField,
   getCurrentValueText,
@@ -228,5 +230,33 @@ describe('getFilterExpression with a single custom expression', () => {
   it('should join the expressions of two conditions', () => {
     expect(createExpression(['a', '=', 1], [condition, 'and', condition]))
       .toEqual([['a', '=', 1], 'and', ['a', '=', 1]]);
+  });
+});
+
+describe('getFilterExpression with a shorthand condition', () => {
+  const fields = getNormalizedFields([{ dataField: 'a', dataType: 'number' }]);
+
+  it('should extend the shorthand [field, value] to [field, "=", value] in place', () => {
+    const condition: ValueCondition = ['a', 5];
+
+    getFilterExpression(condition, fields, [], 'filterBuilder');
+
+    expect(condition).toEqual(['a', '=', 5]);
+  });
+
+  it('should keep a condition of a custom operation without a value as it is', () => {
+    const condition: ValueCondition = ['a', 'custom'];
+    const customOperations = [{ name: 'custom', hasValue: false, calculateFilterExpression: () => 'x' }];
+
+    expect(getFilterExpression(condition, fields, customOperations, 'filterBuilder')).toBe('x');
+    expect(condition).toEqual(['a', 'custom']);
+  });
+
+  it('should keep a full condition as it is', () => {
+    const condition: ValueCondition = ['a', '>', 5];
+
+    getFilterExpression(condition, fields, [], 'filterBuilder');
+
+    expect(condition).toEqual(['a', '>', 5]);
   });
 });
