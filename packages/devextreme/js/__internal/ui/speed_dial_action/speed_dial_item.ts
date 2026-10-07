@@ -20,6 +20,7 @@ import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
+import type { SpeedDialActionProperties } from '@ts/ui/speed_dial_action/speed_dial_action';
 
 import type SpeedDialAction from './speed_dial_action';
 
@@ -36,7 +37,9 @@ export type FloatingActionButtonPosition = NonNullable<
 
 export interface SpeedDialItemProperties extends
   Omit<OverlayProperties, 'onInitialized' | 'onDisposing' | 'onContentReady' | 'position' | 'elementAttr'>,
-  Omit<Properties, 'onInitialized' | 'onDisposing' | 'onOptionChanged' | 'onContentReady' | 'width' | 'height'> {
+  Omit<Properties, 'onInitialized' | 'onDisposing' | 'onOptionChanged' | 'onContentReady' | 'width' | 'height' | 'onClick'> {
+  onClick?: SpeedDialActionProperties['onClick'];
+
   position?: FloatingActionButtonPosition;
 
   parentPosition?: FloatingActionButtonPosition;

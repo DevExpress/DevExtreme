@@ -13,7 +13,7 @@ import { getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
-import type { Column, ProcessedColumn } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
@@ -38,7 +38,10 @@ import {
   EDIT_MODE_FORM,
   EDIT_MODE_POPUP,
   EDIT_MODE_ROW,
+  FORM_ITEM_CONTENT_CLASS,
   FORM_ITEM_MODIFIED,
+  GROUP_CELL_CLASS,
+  GROUP_ROW_CLASS,
   HIDDEN_COLUMN_CLASS,
   HIDDEN_COLUMNS_WIDTH,
   MASTER_DETAIL_CELL_CLASS,
@@ -379,8 +382,8 @@ export class AdaptiveColumnsController extends modules.ViewController {
     const columns = that._columnsController.getVisibleColumns();
     let colWidth = 0;
 
-    each(columns as ProcessedColumn[], (index, column) => {
-      if (column.index < 0 || column.command) {
+    each(columns, (index, column) => {
+      if ((isDefined(column.index) && column.index < 0) || column.command) {
         colWidth += that._columnsController.columnOption(getColumnId(that, column), 'bestFitWidth') || 0;
       }
     });
@@ -502,7 +505,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
   }
 
   private _isCellValid($cell) {
-    return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS) && !$cell.hasClass(VIEW_CLASSES.groupCell);
+    return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS) && !$cell.hasClass(GROUP_CELL_CLASS);
   }
 
   private _hideVisibleColumn({ isCommandColumn, visibleIndex }: any) {
@@ -545,8 +548,8 @@ export class AdaptiveColumnsController extends modules.ViewController {
     const $rowCells = $rowElement.children();
     let visibleIndex = visibleColumnIndex;
     let cellIsInsideGroup = false;
-    if ($rowElement.hasClass(VIEW_CLASSES.groupRow)) {
-      const $groupCell = $rowElement.find(`.${VIEW_CLASSES.groupCell}`);
+    if ($rowElement.hasClass(GROUP_ROW_CLASS)) {
+      const $groupCell = $rowElement.find(`.${GROUP_CELL_CLASS}`);
       const colSpan = $groupCell.attr('colspan');
       if ($groupCell.length && isDefined(colSpan)) {
         // eslint-disable-next-line radix
@@ -711,7 +714,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
       },
       onContentReady(e) {
         userFormOptions.onContentReady && userFormOptions.onContentReady.call(this, e);
-        that._$itemContents = $container.find(`.${FIELD_ITEM_CONTENT_CLASS}`);
+        that._$itemContents = $container.find(`.${FORM_ITEM_CONTENT_CLASS}`);
       },
     }));
   }

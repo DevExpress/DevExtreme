@@ -40,7 +40,7 @@ import {
 import type {
   BandColumnsCache, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionChangeArgs,
   ColumnOptionGetter, ColumnOptionSetter, ColumnsChanges, ColumnsControllerOptions, ColumnUserState,
-  DropLocationNames, GroupColumn, ValueSerializers,
+  DropLocationNames, GroupColumn, ValueSerializers, WithCellValueCalculator,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (
@@ -63,6 +63,10 @@ const warnFixedInChildColumnsOnce = (
     }
   }
 };
+
+export const hasCellValueCalculator = <T extends { calculateCellValue?: unknown }>(
+  item: T,
+): item is WithCellValueCalculator<T> => Boolean(item.calculateCellValue);
 
 export const setFilterOperationsAsDefaultValues = (column: Column): void => {
   column.filterOperations = column.defaultFilterOperations;

@@ -37,7 +37,7 @@ type SpeedDialActionPosition = Omit<PositionConfig, 'of'> & {
 
 let speedDialMainItem: SpeedDialMainItem | null = null;
 
-const modifyActionOptions = (action: SpeedDialAction): SpeedDialItemProperties => {
+const modifyActionOptions = (action: SpeedDialAction): Partial<SpeedDialItemProperties> => {
   const {
     animation,
     actionComponent,
@@ -60,7 +60,7 @@ const modifyActionOptions = (action: SpeedDialAction): SpeedDialItemProperties =
     zIndex,
   } = action.option();
 
-  const actionOptions = extend({}, {
+  const actionOptions: Partial<SpeedDialItemProperties> = extend({}, {
     animation,
     actionComponent,
     actionVisible,
@@ -83,7 +83,7 @@ const modifyActionOptions = (action: SpeedDialAction): SpeedDialItemProperties =
   }, {
     onInitialized: null,
     onDisposing: null,
-  }) as SpeedDialItemProperties;
+  });
 
   return actionOptions;
 };
@@ -240,10 +240,10 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
     });
   }
 
-  _getCurrentOptions(actions: SpeedDialAction[]): SpeedDialItemProperties {
+  _getCurrentOptions(actions: SpeedDialAction[]): Partial<SpeedDialItemProperties> {
     const visibleActions = this._getVisibleActions(actions);
 
-    const currentOptions: SpeedDialItemProperties = visibleActions.length === 1
+    const currentOptions: Partial<SpeedDialItemProperties> = visibleActions.length === 1
       ? extend(modifyActionOptions(visibleActions[0]), { position: this._getPosition() })
       : extend(this._getDefaultOptions(), { visible: visibleActions.length !== 0 });
 

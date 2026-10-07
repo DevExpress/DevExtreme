@@ -77,16 +77,14 @@ class DOMComponent<
   }
 
   _getDefaultOptions(): TProperties {
-    return extend(super._getDefaultOptions(), {
-      width: undefined,
-      height: undefined,
+    return {
+      ...super._getDefaultOptions(),
       rtlEnabled: config().rtlEnabled,
       elementAttr: {},
       disabled: false,
       integrationOptions: {},
-    }, this._useTemplates()
-      ? TemplateManagerModule.TemplateManager.createDefaultOptions()
-      : {}) as TProperties;
+      ...this._useTemplates() ? TemplateManagerModule.TemplateManager.createDefaultOptions() : {},
+    };
   }
 
   ctor(element: Element, options: TProperties): void {
