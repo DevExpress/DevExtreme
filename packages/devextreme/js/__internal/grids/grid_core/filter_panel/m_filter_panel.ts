@@ -42,7 +42,7 @@ export class FilterPanelView extends modules.View {
 
   private dataSourceController!: DataSourceController;
 
-  private filterBuilderController?: FilterBuilderController;
+  private filterBuilderController!: FilterBuilderController;
 
   public init(): void {
     this._dataController = this.getController('data');
@@ -139,7 +139,7 @@ export class FilterPanelView extends modules.View {
     if (filterValue) {
       when(this.getFilterText(
         filterValue,
-        this.filterBuilderController?.getCustomFilterOperations(),
+        this.filterBuilderController.getCustomFilterOperations(),
       )).done((text) => {
         let filterText = text;
         const customizeText = this.option('filterPanel.customizeText');
@@ -339,7 +339,7 @@ export class FilterPanelView extends modules.View {
 
   public getFilterText(
     filterValue: FilterValueExpression,
-    customOperations: CustomOperation[] | undefined,
+    customOperations: CustomOperation[],
   ): DeferredObj<string> {
     const options: FilterTextOptions = {
       customOperations,

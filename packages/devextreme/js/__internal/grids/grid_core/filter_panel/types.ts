@@ -6,7 +6,7 @@ export type FilterOperationDescriptions = Required<
 >;
 
 export interface FilterTextOptions {
-  customOperations: CustomOperation[] | undefined;
+  customOperations: CustomOperation[];
   columns: FilterField[];
   filterOperationDescriptions: FilterOperationDescriptions;
   groupOperationDescriptions: Record<string, string>;
