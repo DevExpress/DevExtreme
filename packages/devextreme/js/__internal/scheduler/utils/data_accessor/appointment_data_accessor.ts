@@ -50,11 +50,10 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
     let serializationFormatCache: string | null | undefined;
 
     const getter = (object: Appointment): unknown => {
+      const value = commonGetter(object) as Exclude<DateLike, null> | undefined;
       const date = this.forceIsoDateParsing
-        ? dateSerialization.deserializeDate(
-          commonGetter(object) as Exclude<DateLike, null> | undefined,
-        )
-        : commonGetter(object) as Exclude<DateLike, null> | undefined;
+        ? dateSerialization.deserializeDate(value)
+        : value;
 
       return date === undefined ? date : new Date(date);
     };
