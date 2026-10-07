@@ -1,4 +1,5 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 
 /** How many virtual (not loaded) items sit before and after the loaded window. */
 export interface VirtualItemsCount {
@@ -12,13 +13,19 @@ export interface VirtualDataLoaderCacheItem {
   itemsCount: number;
 }
 
-export type ChangedCallback = (args?: unknown) => void;
-
 export interface ProcessedChange {
-  changeType?: unknown;
-  items?: unknown[];
+  changeType: 'append' | 'prepend';
+  items: unknown[];
   removeCount?: number;
 }
+
+export interface DelayedChange {
+  isDelayed: boolean;
+}
+
+export type VirtualDataLoaderChange = ProcessedChange | ChangedEvent | DelayedChange;
+
+export type ChangedCallback = (change?: VirtualDataLoaderChange) => void;
 
 export interface VirtualDataLoaderController {
   option: (name: string) => unknown;
@@ -30,20 +37,23 @@ export interface VirtualDataLoaderController {
   viewportItemSize: () => number;
   getContentOffset: () => number;
   getViewportPosition: () => number;
-  virtualItemsCount: () => VirtualItemsCount;
-  getItemSizes: () => number[];
+  virtualItemsCount: () => VirtualItemsCount | undefined;
+  getItemSizes: () => Record<number, number>;
   _setViewportPositionCore: (position: number) => void;
 }
 
 export interface VirtualDataLoaderDataOptions {
   pageSize: () => number;
-  pageIndex: (pageIndex?: number) => number;
+  pageIndex: {
+    (): number;
+    (pageIndex: number): number | undefined;
+  };
   pageCount: () => number;
   totalItemsCount: () => number;
   itemsCount: () => number;
   isLoading: () => boolean;
   hasKnownLastPage: () => boolean;
-  load: () => DeferredObj<unknown>;
+  load: () => DeferredObj<unknown> | undefined;
   items: (isBase?: boolean) => unknown[];
   viewportItems: (items?: unknown[]) => unknown[];
   updateLoading: () => void;

@@ -458,6 +458,7 @@ class VirtualScrollController {
   }
 
   public pageIndex(...args) {
+    // @ts-expect-error a spread argument can't match the overloads of pageIndex()
     return this._dataLoader.pageIndex(...args);
   }
 
