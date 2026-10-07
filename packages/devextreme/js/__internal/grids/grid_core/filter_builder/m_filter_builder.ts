@@ -1,37 +1,40 @@
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { CustomOperation } from '@js/ui/filter_builder';
 import FilterBuilder from '@js/ui/filter_builder';
+import type { OptionChangedEvent as PopupOptionChangedEvent, ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
 import { getFilterExpression, removeFieldConditionsFromFilter } from '@ts/filter_builder/utils';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import modules from '@ts/grids/grid_core/modules/modules';
+import type { InternalGridOptions, OptionChanged } from '@ts/grids/grid_core/types';
 
 import type { DataFilter, FilterSourceContext } from '../filter/types';
 import { anyOf, noneOf } from '../filter_sync/m_filter_custom_operations';
 import { getColumnIdentifier } from '../filter_sync/utils';
 
 export class FilterBuilderView extends modules.View {
-  private _filterBuilderPopup: any;
+  private _filterBuilderPopup?: Popup;
 
-  private _filterBuilder: any;
+  private _filterBuilder?: FilterBuilder;
 
   private _columnsController!: ColumnsController;
 
   private filterBuilderController?: FilterBuilderController;
 
-  public init() {
+  public init(): void {
     super.init();
     this._columnsController = this.getController('columns');
     this.filterBuilderController = this.getController('filterBuilder');
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     switch (args.name) {
       case 'filterBuilder':
       case 'filterBuilderPopup':
@@ -43,19 +46,20 @@ export class FilterBuilderView extends modules.View {
     }
   }
 
-  protected _renderCore() {
+  protected _renderCore(): void {
     this._updatePopupOptions();
   }
 
-  private _updatePopupOptions() {
+  private _updatePopupOptions(): void {
     if (this.option('filterBuilderPopup.visible')) {
       this._initPopup();
     } else if (this._filterBuilderPopup) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._filterBuilderPopup.hide();
     }
   }
 
-  private _disposePopup() {
+  private _disposePopup(): void {
     if (this._filterBuilderPopup) {
       this._filterBuilderPopup.dispose();
       this._filterBuilderPopup = undefined;
@@ -66,31 +70,29 @@ export class FilterBuilderView extends modules.View {
     }
   }
 
-  private _initPopup() {
-    const that = this;
-
-    that._disposePopup();
+  private _initPopup(): void {
+    this._disposePopup();
     // @ts-expect-error the view is rendered here
-    that._filterBuilderPopup = that._createComponent(that.element(), Popup, extend({
+    this._filterBuilderPopup = this._createComponent(this.element(), Popup, extend({
       title: messageLocalization.format('dxDataGrid-filterBuilderPopupTitle'),
-      contentTemplate($contentElement) {
-        return that._getPopupContentTemplate($contentElement);
+      contentTemplate: ($contentElement: Element): void => {
+        this._getPopupContentTemplate($contentElement);
       },
-      onOptionChanged(args) {
+      onOptionChanged: (args: PopupOptionChangedEvent): void => {
         if (args.name === 'visible') {
-          that.option('filterBuilderPopup.visible', args.value);
+          this.option('filterBuilderPopup.visible', args.value);
         }
       },
-      toolbarItems: that._getPopupToolbarItems(),
-    }, that.option('filterBuilderPopup'), {
-      onHidden() {
-        restoreFocus(that);
-        that._disposePopup();
+      toolbarItems: this._getPopupToolbarItems(),
+    }, this.option('filterBuilderPopup'), {
+      onHidden: (): void => {
+        restoreFocus(this);
+        this._disposePopup();
       },
     }));
   }
 
-  private _getPopupContentTemplate(contentElement) {
+  private _getPopupContentTemplate(contentElement: Element | dxElementWrapper): void {
     const $contentElement = $(contentElement);
     const $filterBuilderContainer = $('<div>').appendTo($(contentElement));
 
@@ -104,8 +106,7 @@ export class FilterBuilderView extends modules.View {
     this._createComponent($contentElement, ScrollView, { direction: 'both' });
   }
 
-  private _getPopupToolbarItems() {
-    const that = this;
+  private _getPopupToolbarItems(): ToolbarItem[] {
     return [
       {
         toolbar: 'bottom',
@@ -113,10 +114,14 @@ export class FilterBuilderView extends modules.View {
         widget: 'dxButton',
         options: {
           text: messageLocalization.format('OK'),
-          onClick() {
-            const filter = that._filterBuilder.option('value');
-            that.option('filterValue', filter);
-            that._filterBuilderPopup.hide();
+          onClick: (): void => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const filter = this._filterBuilder!.option('value');
+            // @ts-expect-error FilterBuilder value does not match the grid filterValue type
+            this.option('filterValue', filter);
+            // eslint-disable-next-line @stylistic/max-len
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-floating-promises
+            this._filterBuilderPopup!.hide();
           },
         },
       },
@@ -126,8 +131,10 @@ export class FilterBuilderView extends modules.View {
         widget: 'dxButton',
         options: {
           text: messageLocalization.format('Cancel'),
-          onClick() {
-            that._filterBuilderPopup.hide();
+          onClick: (): void => {
+            // eslint-disable-next-line @stylistic/max-len
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-floating-promises
+            this._filterBuilderPopup!.hide();
           },
         },
       },
@@ -159,7 +166,7 @@ export class FilterBuilderController extends modules.Controller {
       : currentFilterValue;
     const columns = columnsController.getFilteringColumns();
     const customOperations = this.getCustomFilterOperations();
-    // @ts-expect-error FilterExpression and the grid FilterField do not match DataFilter and FilterBuilderField
+    // @ts-expect-error FilterExpression and grid fields don't match DataFilter/FilterBuilderField
     const filterExpression: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
 
     return filterExpression ? [filterExpression] : [];
@@ -178,7 +185,7 @@ export class FilterBuilderController extends modules.Controller {
 }
 
 export const filterBuilderModule = {
-  defaultOptions() {
+  defaultOptions(): Pick<InternalGridOptions, 'filterBuilder' | 'filterBuilderPopup'> {
     return {
       filterBuilder: {
         groupOperationDescriptions: {
