@@ -191,7 +191,7 @@ export class StateStoringController<
   protected state(state: TState | undefined): void;
   protected state(...args: [state?: TState]): TState | void {
     if (!args.length) {
-      return extend(true, {}, this._state) as TState;
+      return extend(true, {}, this._state);
     }
 
     this._state = extend({}, args[0]) as TState;
