@@ -18,7 +18,7 @@ import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import type { ChangedEvent } from '../data_source_adapter/types';
+import type { ChangedEvent, RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
 import type { RowsViewScrollEvent } from '../views/types';
@@ -87,6 +87,8 @@ const removeEmptyRows = function ($emptyRows, className) {
 };
 
 export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class VirtualScrollingCoreDataSourceAdapterExtender extends Base {
+  protected declare _items: RawItemData[];
+
   private _totalCount: any;
 
   private _isLoaded: any;
@@ -197,6 +199,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
 
   protected dataChangedHandler(e?: ChangedEvent): void {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      // @ts-expect-error DataSource items are typed as unknown
       this._items = this._dataSource.items().slice();
       this._totalCount = this._dataSourceTotalCount(true);
       super.dataChangedHandler(e);

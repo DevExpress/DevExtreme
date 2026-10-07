@@ -16,6 +16,7 @@ import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
+import type { RowKey } from '@ts/grids/grid_core/types';
 
 import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
@@ -28,7 +29,12 @@ import {
   setPageDataToCache,
 } from './m_data_source_adapter_utils';
 import type {
-  ChangedEvent, LoadOperation, OperationTypes, RawItemData, RemoteOperationsOptions,
+  ChangedEvent,
+  LastLoadOptions,
+  LoadOperation,
+  OperationTypes,
+  RawItemData,
+  RemoteOperationsOptions,
 } from './types';
 import { normalizeRemoteOperations } from './utils/remoteOperations';
 
@@ -43,8 +49,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _currentTotalCount!: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- virtual_scrolling override
-  protected _items: any;
+  protected _items?: RawItemData[];
 
   private _cachedData!: LoadOperation['cachedData'];
 
@@ -58,7 +63,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   protected _totalCountCorrection!: number;
 
-  protected _lastLoadOptions?: LoadOperation['lastLoadOptions'];
+  protected _lastLoadOptions?: LastLoadOptions;
 
   private _dataIndexGetter?: (data: RawItemData) => number;
 
@@ -373,6 +378,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
     applyBatch({
       keyInfo,
+      // @ts-expect-error _items is set by the virtual_scrolling extender
       data: this._items,
       changes: filteredChanges,
       groupCount,
@@ -819,8 +825,8 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._operationTypes ?? null;
   }
 
-  public lastLoadOptions(): NonNullable<LoadOperation['lastLoadOptions']> {
-    return this._lastLoadOptions ?? {} as NonNullable<LoadOperation['lastLoadOptions']>;
+  public lastLoadOptions(): Partial<LastLoadOptions> {
+    return this._lastLoadOptions ?? {};
   }
 
   private isLastPage(): boolean {
@@ -838,20 +844,19 @@ export default class DataSourceAdapter extends modules.Controller {
    * @extended: virtual_scrolling, TreeLists's data_source_adapter
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _changeRowExpandCore(path?: unknown): void {}
+  protected _changeRowExpandCore(path: RowKey): void {}
 
   /**
    * @extended: TreeLists's data_source_adapter
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public changeRowExpand(path?: unknown): DeferredObj<unknown> | undefined {
+  public changeRowExpand(path: RowKey): DeferredObj<unknown> | undefined {
     return undefined;
   }
 
   public totalCount(): number {
-    const count = (this._currentTotalCount || this._dataSourceTotalCount())
-      + this._totalCountCorrection;
-    return parseInt(String(count), 10);
+    const totalCount = this._currentTotalCount || this._dataSourceTotalCount();
+    return parseInt(String(totalCount + this._totalCountCorrection), 10);
   }
 
   public totalCountCorrection(): number {
@@ -863,7 +868,7 @@ export default class DataSourceAdapter extends modules.Controller {
    * @protected
    */
   public items(): RawItemData[] {
-    return (this._items ?? []) as RawItemData[];
+    return this._items ?? [];
   }
 
   /**
