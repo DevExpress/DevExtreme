@@ -1,8 +1,10 @@
 import type { Cancelable } from '@js/common/core/events';
 import type { DxElement } from '@js/core/element';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
+import type dxDraggable from '@js/ui/draggable';
 import type { DraggableBaseOptions, DragTemplateData, Properties } from '@js/ui/draggable';
 import type { EngineEvent } from '@ts/events/core/events_engine';
+import type { DragMoveData, DragStartData } from '@ts/events/drag';
 
 export type BoundOffset = number | string | { h?: number; v?: number };
 
@@ -53,34 +55,18 @@ export interface DraggableBaseProperties<TComponent = any> extends Omit<Draggabl
   onDrop?: DragHandler;
 }
 
-export interface DraggableProperties extends Omit<Properties, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
-  scrollSensitivity: number;
-
-  scrollSpeed: number;
-
-  allowMoveByClick?: boolean;
-
-  boundOffset?: BoundOffset | (() => BoundOffset);
-
-  boundary?: Properties['boundary'] | dxElementWrapper;
-
-  component?: unknown;
-
-  contentTemplate?: string | null;
-
-  filter?: string;
-
-  immediate?: boolean;
-
-  itemData?: unknown;
-
-  onCancelByEsc?: boolean;
-
+export interface DraggableProperties extends DraggableBaseProperties<dxDraggable> {
   onDragCancel?: (e: DragEventArgs) => void;
+
+  onDragEnd?: Properties['onDragEnd'];
 
   onDragEnter?: (e: DragEventArgs) => void;
 
   onDragLeave?: (e: DragEventArgs) => void;
+
+  onDragMove?: Properties['onDragMove'];
+
+  onDragStart?: Properties['onDragStart'];
 
   onDraggableElementShown?: (e: DragElementShownArgs) => void;
 
@@ -92,28 +78,12 @@ export interface MousePosition {
   y: number;
 }
 
-export interface Offset {
-  left: number;
-  top: number;
-}
-
-export interface DragEventOffset {
-  x: number;
-  y: number;
-}
-
-export type DragEvent = EngineEvent & Cancelable & {
+export type DragEvent = EngineEvent & Cancelable & DragStartData & DragMoveData & {
   target: Element;
   pageX: number;
   pageY: number;
   key?: string;
   originalEvent?: { target?: Element };
-  offset?: DragEventOffset;
-  maxLeftOffset?: number;
-  maxRightOffset?: number;
-  maxTopOffset?: number;
-  maxBottomOffset?: number;
-  _cancelPreventDefault?: boolean;
 };
 
 export type DragEventArgs = Cancelable & {
@@ -139,17 +109,10 @@ export type CursorOffset = DraggableBaseOptions<unknown>['cursorOffset'];
 
 export type ElementOffsetOptions = DragStartArgs & {
   dragElement: Element | undefined;
-  initialOffset?: Offset | false;
+  initialOffset?: Coordinates | false;
 };
 
 export type CursorOffsetCallback = (options: ElementOffsetOptions) => CursorOffset;
-
-export interface BoundOffsetQuad {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-}
 
 export interface DragTemplateArgs {
   container: DxElement;
@@ -157,13 +120,6 @@ export interface DragTemplateArgs {
 }
 
 export type ActionFn = (args?: object) => void;
-
-export type ScrollOrientation = 'vertical' | 'horizontal';
-
-export interface ScrollableInstance {
-  scrollOffset: () => Record<string, number>;
-  scrollTo: (position: Record<string, number>) => void;
-}
 
 export interface ScrollHelperOwner {
   option: () => { scrollSensitivity: number; scrollSpeed: number };

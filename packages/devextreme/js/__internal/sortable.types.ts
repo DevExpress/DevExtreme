@@ -1,21 +1,10 @@
 import type { AnimationConfig } from '@js/common/core/animation';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type dxSortable from '@js/ui/sortable';
 import type { Properties } from '@js/ui/sortable';
 
-import type { DragEventArgs, DraggableProperties, DragStartArgs } from './draggable.types';
-
-export interface Position {
-  left: number;
-  top: number;
-}
-
-export interface Boundary {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-}
+import type { DragEventArgs, DraggableBaseProperties, DragStartArgs } from './draggable.types';
 
 export interface ItemPoint {
   dropInsideItem: boolean;
@@ -59,20 +48,24 @@ export interface OptionChangedToIndexArgs {
   fullUpdate?: boolean;
 }
 
-export interface SortableProperties extends Omit<Properties, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
-  scrollSensitivity: number;
+export interface SortableProperties extends DraggableBaseProperties<dxSortable> {
+  dragTemplate?: Properties['dragTemplate'];
 
-  scrollSpeed: number;
+  dropFeedbackMode?: Properties['dropFeedbackMode'];
 
-  boundary?: DraggableProperties['boundary'];
+  onAdd?: Properties['onAdd'];
 
-  component?: unknown;
+  onDragChange?: Properties['onDragChange'];
 
-  contentTemplate?: string | null;
+  onDragEnd?: Properties['onDragEnd'];
 
-  clone?: boolean;
+  onDragMove?: Properties['onDragMove'];
 
-  itemData?: unknown;
+  onDragStart?: Properties['onDragStart'];
+
+  onRemove?: Properties['onRemove'];
+
+  onReorder?: Properties['onReorder'];
 
   placeholderClassName?: string;
 

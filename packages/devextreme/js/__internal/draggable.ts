@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { Orientation } from '@js/common';
 import positionUtils from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
 import {
@@ -12,7 +13,7 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, needSkipEvent } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -32,16 +33,17 @@ import type { Properties } from '@js/ui/draggable';
 import { domAdapter } from '@ts/core/dom_adapter';
 import { splitPair } from '@ts/core/utils/m_common';
 import { fromPromise } from '@ts/core/utils/m_deferred';
+import type { Quad } from '@ts/core/utils/m_string';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import eventsEngine from '@ts/events/core/events_engine';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type {
-  ActionFn, BoundOffsetQuad, CursorOffset, CursorOffsetCallback, DragEvent, DragEventArgs,
+  ActionFn, CursorOffset, CursorOffsetCallback, DragEvent, DragEventArgs,
   DraggableBaseProperties, DraggableProperties, DragStartArgs, DragTemplateArgs,
-  ElementOffsetOptions, MousePosition, Offset, ScrollableInstance, ScrollHelperOwner,
-  ScrollOrientation,
+  ElementOffsetOptions, MousePosition, ScrollHelperOwner,
 } from './draggable.types';
 import Animator from './ui/scroll_view/animator';
 
@@ -99,7 +101,7 @@ class ScrollHelper {
 
   private _scrollSpeed: number | undefined;
 
-  constructor(orientation: ScrollOrientation, component: ScrollHelperOwner) {
+  constructor(orientation: Orientation, component: ScrollHelperOwner) {
     this._preventScroll = true;
     this._component = component;
 
@@ -216,7 +218,7 @@ class ScrollHelper {
       if (this._$scrollableAtPointer.hasClass('dx-scrollable-container')) {
         const $scrollable = this._$scrollableAtPointer.closest('.dx-scrollable');
         // @ts-expect-error data is declared without the getter form
-        const scrollableInstance: ScrollableInstance | undefined = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
+        const scrollableInstance: Pick<Scrollable, 'scrollOffset' | 'scrollTo'> | undefined = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
 
         if (scrollableInstance) {
           const nextScrollPosition = scrollableInstance
@@ -380,7 +382,7 @@ class Draggable<
     this._initScrollLeft = 0;
   }
 
-  _normalizeCursorOffset(offset: CursorOffset): Offset {
+  _normalizeCursorOffset(offset: CursorOffset): Coordinates {
     let normalizedOffset: CursorOffset | { h?: number; v?: number } = offset;
 
     if (isObject(offset)) {
@@ -400,7 +402,7 @@ class Draggable<
   _getNormalizedCursorOffset(
     offset: CursorOffset | CursorOffsetCallback,
     options: ElementOffsetOptions,
-  ): Offset {
+  ): Coordinates {
     let cursorOffset = offset;
 
     if (isFunction(cursorOffset)) {
@@ -410,9 +412,9 @@ class Draggable<
     return this._normalizeCursorOffset(cursorOffset);
   }
 
-  _calculateElementOffset(options: ElementOffsetOptions): Offset | undefined {
+  _calculateElementOffset(options: ElementOffsetOptions): Coordinates | undefined {
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let elementOffset: Offset | undefined;
+    let elementOffset: Coordinates | undefined;
     const { event } = options;
     const $element = $(options.itemElement);
     const $dragElement = $(options.dragElement);
@@ -610,7 +612,7 @@ class Draggable<
     eventsEngine.off(this._getArea(), `.${DRAGGABLE}`);
   }
 
-  _move(position: Partial<Offset>, $element?: dxElementWrapper | null): void {
+  _move(position: Partial<Coordinates>, $element?: dxElementWrapper | null): void {
     // @ts-expect-error the drag element can be null
     move($element || this._$dragElement, position);
   }
@@ -650,7 +652,7 @@ class Draggable<
       return;
     }
 
-    const position: Partial<Offset> = {};
+    const position: Partial<Coordinates> = {};
     const $element = this.$element();
     const { dragDirection } = this.option();
 
@@ -761,7 +763,7 @@ class Draggable<
     }
   }
 
-  _getAreaOffset($area: dxElementWrapper): Offset {
+  _getAreaOffset($area: dxElementWrapper): Coordinates {
     const offset = $area && positionUtils.offset($area);
     return offset || { left: 0, top: 0 };
   }
@@ -780,7 +782,7 @@ class Draggable<
     $(`.${GESTURE_COVER_CLASS}`).css('cursor', $element.css('cursor'));
   }
 
-  _getBoundOffset(): BoundOffsetQuad {
+  _getBoundOffset(): Quad {
     let { boundOffset } = this.option();
 
     if (isFunction(boundOffset)) {
@@ -809,7 +811,7 @@ class Draggable<
     return $(container);
   }
 
-  _getDraggableElementOffset(initialOffsetX: number, initialOffsetY: number): Offset {
+  _getDraggableElementOffset(initialOffsetX: number, initialOffsetY: number): Coordinates {
     const initScrollTop = this._initScrollTop;
     const initScrollLeft = this._initScrollLeft;
 
@@ -819,7 +821,7 @@ class Draggable<
     const elementPosition = $(this.element()).css('position');
     const isFixedPosition = elementPosition === 'fixed';
 
-    const result: Offset = {
+    const result: Coordinates = {
       left: (this._startPosition?.left ?? 0) + initialOffsetX,
       top: (this._startPosition?.top ?? 0) + initialOffsetY,
     };
