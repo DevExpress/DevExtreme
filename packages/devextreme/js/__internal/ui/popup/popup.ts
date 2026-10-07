@@ -877,9 +877,10 @@ class Popup<
 
     let index = 0;
 
-    each(toolbarItems as PopupToolbarItem[] | undefined, (_, data) => {
-      const isShortcut = isDefined(data.shortcut);
-      const item: ToolbarItem = isShortcut ? getButtonPlace(data.shortcut as string) : data;
+    each(toolbarItems, (_, data: PopupToolbarItem) => {
+      const { shortcut } = data;
+      const isShortcut = isDefined(shortcut);
+      const item: ToolbarItem = isDefined(shortcut) ? getButtonPlace(shortcut) : data;
 
       if (isShortcut && currentPlatform === 'ios' && index < 2) {
         item.toolbar = 'top';
