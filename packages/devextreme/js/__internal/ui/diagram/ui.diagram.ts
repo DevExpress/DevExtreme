@@ -503,18 +503,18 @@ class Diagram extends Widget<Properties> {
     const isServerSide = !hasWindow();
     const $toolBox = $('<div>').appendTo($parent);
     const bounds = this._getToolboxBounds($parent, isServerSide);
+    const { toolbox } = this.option();
     this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
       isMobileView: this.isMobileScreenSize(),
       isVisible: this._isToolboxVisible(),
       container: this.$element(),
       height: bounds.height,
-      // @ts-expect-error the toolbox options are not in its default options
       offsetParent: $parent,
       offsetX: bounds.offsetX,
       offsetY: bounds.offsetY,
-      showSearch: this.option('toolbox.showSearch'),
+      showSearch: toolbox?.showSearch,
       toolboxGroups: this._getToolboxGroups(),
-      toolboxWidth: this.option('toolbox.width'),
+      toolboxWidth: toolbox?.width,
 
       onShapeCategoryRendered: (e): void => {
         if (isServerSide) return;
@@ -759,7 +759,6 @@ class Diagram extends Widget<Properties> {
         isMobileView: this.isMobileScreenSize(),
         isVisible: this._isPropertiesPanelVisible(),
         container: this.$element(),
-        // @ts-expect-error the properties panel options are not in its default options
         offsetParent: $parent,
         offsetX,
         offsetY,

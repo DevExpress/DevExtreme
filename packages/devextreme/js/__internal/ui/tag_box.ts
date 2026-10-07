@@ -518,7 +518,6 @@ class TagBox<
     };
 
     this._$submitElement = $('<select>')
-      // @ts-expect-error should be fixed on renderer level
       .attr(attributes)
       .css('display', 'none')
       .appendTo(this.$element());

@@ -66,11 +66,13 @@ type Assign<TTarget, TSource> = IsAny<TTarget> extends true
   : IsAny<TSource> extends true
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
     ? any
-    : [keyof TTarget] extends [never]
-      ? TSource & object
-      : [MergedArray<TTarget, TSource>] extends [never]
-        ? AssignObject<TTarget, TSource>
-        : MergedArray<TTarget, TSource>;
+    : TTarget extends unknown
+      ? [keyof TTarget] extends [never]
+        ? TSource & object
+        : [MergedArray<TTarget, TSource>] extends [never]
+          ? AssignObject<TTarget, TSource>
+          : MergedArray<TTarget, TSource>
+      : never;
 
 type DeepValue<TTarget, TSource> = IsNestedObject<NonNullable<TTarget>> extends true
   ? IsNestedObject<NonNullable<TSource>> extends true
@@ -94,11 +96,13 @@ type DeepAssign<TTarget, TSource> = IsAny<TTarget> extends true
   : IsAny<TSource> extends true
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
     ? any
-    : [keyof TTarget] extends [never]
-      ? TSource & object
-      : [MergedArray<TTarget, TSource>] extends [never]
-        ? DeepAssignObject<TTarget, TSource>
-        : MergedArray<TTarget, TSource>;
+    : TTarget extends unknown
+      ? [keyof TTarget] extends [never]
+        ? TSource & object
+        : [MergedArray<TTarget, TSource>] extends [never]
+          ? DeepAssignObject<TTarget, TSource>
+          : MergedArray<TTarget, TSource>
+      : never;
 
 type Extended<TTarget, TSources extends readonly unknown[]> = TSources extends readonly [
   infer THead,

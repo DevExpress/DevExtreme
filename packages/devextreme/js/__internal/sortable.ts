@@ -1000,7 +1000,7 @@ class Sortable extends Draggable<SortableProperties> {
       } else if (prevPosition !== position || (fullUpdate && isDefined(position))) {
         animate(itemElement, extend({}, animationConfig, {
           to: { [positionPropName]: !isVerticalOrientation && rtlEnabled ? -position : position },
-        }) as AnimateConfig);
+        }));
       }
     }
   }

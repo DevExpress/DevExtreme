@@ -193,7 +193,7 @@ function _convertToLabelOptions({
   const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(
     item.editorType,
   );
-  const labelOptions = extend(
+  const labelOptions: LabelOptions = extend(
     {
       showColon: showColonAfterLabel,
       location: labelLocation,
@@ -209,7 +209,7 @@ function _convertToLabelOptions({
       labelTemplate,
       onLabelTemplateRendered,
     },
-  ) as LabelOptions;
+  );
 
   const editorsRequiringIdForLabel: FormItemComponent[] = [
     'dxRadioGroup',

@@ -320,9 +320,8 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
       const location = itemInfo.location || {};
       const itemCol = location.col;
       const itemRow = location.row;
-      // @ts-expect-error a location can have no row, then there is no cell
-      const row = this._grid[itemRow];
-      const itemCell = row?.[itemCol];
+      const row = itemRow === undefined ? undefined : this._grid[itemRow];
+      const itemCell = itemCol === undefined ? undefined : row?.[itemCol];
 
       this._occupyCells(itemCell, itemInfo);
     });
@@ -353,7 +352,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     }, []);
   }
 
-  _occupyCells(itemCell: GridCell, itemInfo: ResponsiveBoxItem): void {
+  _occupyCells(itemCell: GridCell | undefined, itemInfo: ResponsiveBoxItem): void {
     if (!itemCell || this._isItemCellOccupied(itemCell, itemInfo)) {
       return;
     }

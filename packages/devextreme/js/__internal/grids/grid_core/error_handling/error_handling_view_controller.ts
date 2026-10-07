@@ -94,7 +94,6 @@ export class ErrorHandlingViewController extends modules.ViewController {
       }));
 
       $('<td>')
-        // @ts-expect-error object attributes
         .attr({
           colSpan: this._columnsController.getVisibleColumns().length,
           role: 'gridcell',

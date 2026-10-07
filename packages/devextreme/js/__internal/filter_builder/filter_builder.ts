@@ -324,7 +324,6 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
       attributes['aria-level'] = `${ariaLevel}`;
     }
 
-    // @ts-expect-error attr is declared without the object form
     $element.attr(attributes);
   }
 

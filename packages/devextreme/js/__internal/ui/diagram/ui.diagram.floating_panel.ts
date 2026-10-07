@@ -10,13 +10,31 @@ import {
 } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
 import type { dxPopupAnimation } from '@js/ui/popup';
-import DiagramPanel from '@ts/ui/diagram/ui.diagram.panel';
+import DiagramPanel, { type DiagramPanelProperties } from '@ts/ui/diagram/ui.diagram.panel';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import Popup from '@ts/ui/popup/popup';
 
 const DIAGRAM_MOBILE_POPUP_CLASS = 'dx-diagram-mobile-popup';
 
-class DiagramFloatingPanel extends DiagramPanel {
+interface VisibilityEvent {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
+  component: DiagramFloatingPanel;
+  visible: boolean;
+}
+
+export interface DiagramFloatingPanelProperties extends DiagramPanelProperties {
+  isVisible?: boolean;
+  isMobileView?: boolean;
+  offsetParent?: dxElementWrapper;
+  offsetX?: number;
+  offsetY?: number;
+  onVisibilityChanging?: (e: VisibilityEvent) => void;
+  onVisibilityChanged?: (e: VisibilityEvent) => void;
+}
+
+class DiagramFloatingPanel<
+  TProperties extends DiagramFloatingPanelProperties = DiagramFloatingPanelProperties,
+> extends DiagramPanel<TProperties> {
   _popup?: Popup;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,17 +51,13 @@ class DiagramFloatingPanel extends DiagramPanel {
   }
 
   isVisible(): boolean {
-    // @ts-expect-error ts-error
     const { isVisible } = this.option();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return isVisible;
+    return Boolean(isVisible);
   }
 
   isMobileView(): boolean {
-    // @ts-expect-error ts-error
     const { isMobileView } = this.option();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return isMobileView;
+    return Boolean(isMobileView);
   }
 
   _initMarkup(): void {
@@ -280,15 +294,13 @@ class DiagramFloatingPanel extends DiagramPanel {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  _getDefaultOptions() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  _getDefaultOptions(): TProperties {
     return extend(super._getDefaultOptions(), {
       isVisible: true,
       isMobileView: false,
       offsetX: 0,
       offsetY: 0,
-    });
+    }) as TProperties;
   }
 }
 export default DiagramFloatingPanel;

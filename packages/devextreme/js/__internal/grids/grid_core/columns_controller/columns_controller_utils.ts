@@ -146,7 +146,7 @@ export function isUserStateColumn(
 
 export const createColumnsFromOptions = (
   that: ColumnsController,
-  columnsOptions: (Column | string)[] | undefined,
+  columnsOptions: (Column | string | undefined)[] | undefined,
   bandColumn?: Column,
   createdColumnCount = 0,
 ): Column[] => {
