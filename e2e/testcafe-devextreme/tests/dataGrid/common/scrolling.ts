@@ -508,6 +508,80 @@ test('Horizontal scrolling should work correctly in RTL mode with native scrolli
   await removeStylesheetRulesFromPage();
 });
 
+test('Column headers should keep the scroll position after resizing a column in RTL mode with native scrolling', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const rowsScrollContainer = dataGrid.getScrollContainer();
+  const headersScrollContainer = dataGrid.getHeadersScrollContainer();
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  const initialScrollLeft = await dataGrid.getScrollLeft();
+
+  await dataGrid.scrollTo(t, { x: initialScrollLeft - 100 });
+
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-100)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-100);
+
+  await dataGrid.resizeHeader(2, -30);
+
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-100)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-100);
+}).before(async () => createWidget('dxDataGrid', {
+  rtlEnabled: true,
+  width: 500,
+  dataSource: getData(5, 10),
+  columnAutoWidth: true,
+  allowColumnResizing: true,
+  columnResizingMode: 'nextColumn',
+  scrolling: {
+    useNative: true,
+  },
+}));
+
+test('Column headers should keep the scroll position after repaint in RTL mode with native scrolling', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const rowsScrollContainer = dataGrid.getScrollContainer();
+  const headersScrollContainer = dataGrid.getHeadersScrollContainer();
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  const initialScrollLeft = await dataGrid.getScrollLeft();
+
+  await dataGrid.scrollTo(t, { x: initialScrollLeft - 100 });
+
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-100)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-100);
+
+  await dataGrid.repaint();
+
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-100)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-100);
+}).before(async () => createWidget('dxDataGrid', {
+  rtlEnabled: true,
+  width: 500,
+  dataSource: getData(5, 10),
+  columnAutoWidth: true,
+  scrolling: {
+    useNative: true,
+  },
+}));
+
 test('Column headers should have the correct scroll position after refreshing the data twice when RTL and virtual scrolling are enabled (T1333941)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
