@@ -1271,7 +1271,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     const instance = this._itemsRunTimeInfo.findWidgetInstanceByDataField(field)
       ?? this._itemsRunTimeInfo.findWidgetInstanceByName(field);
 
-    return instance instanceof Editor ? instance : undefined;
+    return Editor.isEditor(instance) ? instance : undefined;
   }
 
   isSingleColumnMode(component?: ResponsiveBox): boolean {

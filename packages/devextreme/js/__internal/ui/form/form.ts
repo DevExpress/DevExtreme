@@ -1802,7 +1802,7 @@ class Form extends Widget<FormProperties> {
     const instance = this._itemsRunTimeInfo.findWidgetInstanceByDataField(dataField)
       ?? this._itemsRunTimeInfo.findWidgetInstanceByName(dataField);
 
-    return instance instanceof Editor ? instance : undefined;
+    return Editor.isEditor(instance) ? instance : undefined;
   }
 
   getButton(name: string): Button | undefined {
