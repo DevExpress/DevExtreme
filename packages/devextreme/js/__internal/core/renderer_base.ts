@@ -1125,11 +1125,3 @@ export default {
     return rendererWrapper;
   },
 };
-
-declare module '@js/core/renderer' {
-  // eslint-disable-next-line @typescript-eslint/naming-convention -- the merged interface
-  interface dxElementWrapper {
-    // eslint-disable-next-line @typescript-eslint/method-signature-style -- an overload of attr
-    attr(attributes: Attributes): this;
-  }
-}
