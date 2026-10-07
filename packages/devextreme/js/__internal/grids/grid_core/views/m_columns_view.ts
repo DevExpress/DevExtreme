@@ -30,10 +30,17 @@ import type { DxEvent } from '@js/events';
 import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
+import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
+import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_handling/const';
+import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
+import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { DataController } from '../data_controller/data_controller';
@@ -41,28 +48,11 @@ import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import { CLASSES } from './const';
 import type { ColumnViewTemplate } from './types';
-
-const SCROLL_CONTAINER_CLASS = 'scroll-container';
-const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
-const GROUP_SPACE_CLASS = 'group-space';
-const CONTENT_CLASS = 'content';
-const HEADER_TEXT_CONTENT_CLASS = 'text-content';
-const TABLE_CLASS = 'table';
-const TABLE_FIXED_CLASS = 'table-fixed';
-const CONTENT_FIXED_CLASS = 'content-fixed';
-const ROW_CLASS = 'dx-row';
-const GROUP_ROW_CLASS = 'dx-group-row';
-const GROUP_CELL_CLASS = 'dx-group-cell';
-const DETAIL_ROW_CLASS = 'dx-master-detail-row';
-const FILTER_ROW_CLASS = 'filter-row';
-const ERROR_ROW_CLASS = 'dx-error-row';
-const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
+import { isRowElementVisible } from './utils';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
 
 const CELL_HINT_VISIBLE = 'dxCellHintVisible';
-
-const FORM_FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 
 const appendElementTemplate = {
   render(options) {
@@ -81,7 +71,7 @@ const subscribeToRowEvents = function (that, $table) {
     }, timeout);
   }
 
-  eventsEngine.on($table, 'touchstart touchend', '.dx-row', (e) => {
+  eventsEngine.on($table, 'touchstart touchend', `.${CLASSES.row}`, (e) => {
     // NOTE: checking for target only for mocks in qunits
     if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(that, $(e.event.target))) {
       return;
@@ -97,7 +87,7 @@ const subscribeToRowEvents = function (that, $table) {
     }
   });
 
-  eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), '.dx-row', that.createAction((e) => {
+  eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), `.${CLASSES.row}`, that.createAction((e) => {
     const { event } = e;
 
     // NOTE: checking for target only for mocks in qunits
@@ -325,7 +315,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if (column.command === 'expand') {
       $cell.addClass(column.cssClass);
-      $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
+      $cell.addClass(this.addWidgetPrefix(CLASSES.groupSpace));
     }
 
     if (column.colspan > 1) {
@@ -347,7 +337,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    */
   protected _createRow(rowObject, tagName?) {
     tagName = tagName || 'tr';
-    const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
+    const $element = $(`<${tagName}>`).addClass(CLASSES.row);
 
     if (tagName === 'tr') {
       this.setAria('role', 'row', $element);
@@ -364,8 +354,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    */
   protected _createTable(columns, isAppend?) {
     const $table = $('<table>')
-      .addClass(this.addWidgetPrefix(TABLE_CLASS))
-      .addClass(this.addWidgetPrefix(TABLE_FIXED_CLASS));
+      .addClass(this.addWidgetPrefix(CLASSES.table))
+      .addClass(this.addWidgetPrefix(CLASSES.tableFixed));
 
     if (columns && !isAppend) {
       $table
@@ -398,7 +388,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
 
     if (this.option('cellHintEnabled')) {
-      eventsEngine.on($table, 'mousemove', '.dx-row > td', this.createAction((args) => {
+      eventsEngine.on($table, 'mousemove', `.${CLASSES.row} > td`, this.createAction((args) => {
         const e = args.event;
         const $element = $(e.target);
         const $cell = $(e.currentTarget);
@@ -410,11 +400,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
         const column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
 
-        const isHeaderRow = $row.hasClass('dx-header-row');
-        const isDataRow = $row.hasClass('dx-data-row');
-        const isMasterDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
-        const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
-        const isFilterRow = $row.hasClass(this.addWidgetPrefix(FILTER_ROW_CLASS));
+        const isHeaderRow = $row.hasClass(COLUMN_HEADERS_CLASSES.headerRow);
+        const isDataRow = $row.hasClass(CLASSES.dataRow);
+        const isMasterDetailRow = $row.hasClass(MASTER_DETAIL_CLASSES.detailRow);
+        const isGroupRow = $row.hasClass(CLASSES.groupRow);
+        const isFilterRow = $row.hasClass(this.addWidgetPrefix(FILTER_ROW_CLASSES.filterRow));
 
         const isDataRowWithTemplate = isDataRow && (!column || column.cellTemplate);
         const isEditorShown = isDataRow && cellOptions && (rowOptions.isEditing || cellOptions.isEditing || column?.showEditorAlways);
@@ -436,7 +426,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     const getOptions = (event) => {
       const $cell = $(event.currentTarget);
-      const $fieldItemContent = $(event.target).closest(`.${FORM_FIELD_ITEM_CONTENT_CLASS}`);
+      const $fieldItemContent = $(event.target).closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
       const $row = $cell.parent();
       const rowOptions: any = $row.data('options');
       const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
@@ -462,22 +452,22 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       return resultOptions;
     };
 
-    eventsEngine.on($table, 'mouseover', '.dx-row > td', (e) => {
+    eventsEngine.on($table, 'mouseover', `.${CLASSES.row} > td`, (e) => {
       const options = getOptions(e);
       options && this.executeAction('onCellHoverChanged', options);
     });
 
-    eventsEngine.on($table, 'mouseout', '.dx-row > td', (e) => {
+    eventsEngine.on($table, 'mouseout', `.${CLASSES.row} > td`, (e) => {
       const options = getOptions(e);
       options && this.executeAction('onCellHoverChanged', options);
     });
 
-    eventsEngine.on($table, clickEventName, '.dx-row > td', (e) => {
+    eventsEngine.on($table, clickEventName, `.${CLASSES.row} > td`, (e) => {
       const options = getOptions(e);
       options && this.executeAction('onCellClick', options);
     });
 
-    eventsEngine.on($table, dblclickEvent, '.dx-row > td', (e) => {
+    eventsEngine.on($table, dblclickEvent, `.${CLASSES.row} > td`, (e) => {
       const options = getOptions(e);
       options && this.executeAction('onCellDblClick', options);
     });
@@ -494,7 +484,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
 
     let $cellContent = $cell;
-    const headerContentClass = this.addWidgetPrefix(HEADER_TEXT_CONTENT_CLASS);
+    const headerContentClass = this.addWidgetPrefix(COLUMN_HEADERS_CLASSES.cellContent);
 
     if (isHeaderRow && !$cell.hasClass(headerContentClass)) {
       const $headerContent = $cell.find(`.${headerContentClass}`);
@@ -692,7 +682,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected _getBodies(tableElement) {
-    return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
+    return $(tableElement).children('tbody').not(`.${CLASSES.headerBody}`).not(`.${CLASSES.footerBody}`);
   }
 
   protected _needWrapRow() {
@@ -830,7 +820,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const $cells = $rowElement.children();
     const $newCells = $newRowElement.children();
     const highlightChanges = this.option('highlightChanges');
-    const cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS);
+    const cellUpdatedClass = this.addWidgetPrefix(CLASSES.cellUpdatedAnimation);
 
     if (options?.node?.hasChildren) {
       $cells.each(function () {
@@ -844,7 +834,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
       $cell.replaceWith($newCell);
 
-      if (highlightChanges && !$newCell.hasClass('dx-command-expand')) {
+      if (highlightChanges && !$newCell.hasClass(COLUMNS_CONTROLLER_CLASSES.commandExpand)) {
         $newCell.addClass(cellUpdatedClass);
       }
     });
@@ -1085,7 +1075,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   public scrollTo(pos) {
     const $element = this.element();
-    const $scrollContainer = $element && $element.children(`.${this.addWidgetPrefix(SCROLL_CONTAINER_CLASS)}`).not(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
+    const $scrollContainer = $element && $element.children(`.${this.addWidgetPrefix(CLASSES.scrollContainer)}`).not(`.${this.addWidgetPrefix(COLUMN_FIXING_CLASSES.contentFixed)}`);
 
     if (isDefined(pos) && isDefined(pos.left) && this._scrollLeft !== pos.left) {
       this._scrollLeft = pos.left;
@@ -1124,12 +1114,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const useNative = this.option('scrolling.useNative');
 
     if (useNative === false || (useNative === 'auto' && !supportUtils.nativeScrolling)) {
-      $scrollContainer.addClass(this.addWidgetPrefix(SCROLLABLE_SIMULATED_CLASS));
+      $scrollContainer.addClass(this.addWidgetPrefix(CLASSES.scrollableSimulated));
     }
     eventsEngine.on($scrollContainer, 'scroll', this.handleScroll.bind(this));
 
-    $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_CLASS))
-      .addClass(this.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
+    $scrollContainer.addClass(this.addWidgetPrefix(CLASSES.content))
+      .addClass(this.addWidgetPrefix(CLASSES.scrollContainer))
       .append($table)
       // @ts-expect-error the view is rendered here
       .appendTo(this.element());
@@ -1219,16 +1209,16 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     $tableElement = $tableElement ?? this.getTableElement();
 
     if ($tableElement) {
-      const $rows = $tableElement.children('tbody:not(.dx-header)').children();
+      const $rows = $tableElement.children(`tbody:not(.${CLASSES.headerBody})`).children();
 
       for (let i = 0; i < $rows.length; i++) {
         const $row = $rows.eq(i);
 
-        const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
-        const isDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
-        const isErrorRow = $row.hasClass(ERROR_ROW_CLASS);
+        const isGroupRow = $row.hasClass(CLASSES.groupRow);
+        const isDetailRow = $row.hasClass(MASTER_DETAIL_CLASSES.detailRow);
+        const isErrorRow = $row.hasClass(ERROR_HANDLING_CLASSES.errorRow);
 
-        const isRowVisible = ($row.get(0) as HTMLElement).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
+        const isRowVisible = isRowElementVisible($row.get(0) as HTMLElement);
         const isRelevantRow = !isGroupRow && !isDetailRow && !isErrorRow;
 
         if (isRowVisible && isRelevantRow) {
@@ -1253,8 +1243,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     $row: dxElementWrapper,
     visibleCellIndex: number,
   ) {
-    const $cell = $row.hasClass(GROUP_ROW_CLASS)
-      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
+    const $cell = $row.hasClass(CLASSES.groupRow)
+      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${CLASSES.groupCell})`)
       : $row.find('td').eq(visibleCellIndex);
 
     for (let i = 0; i < $cell.length; i += 1) {
@@ -1275,7 +1265,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       return;
     }
 
-    const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
+    const $rows = $tableElement.children().children(`.${CLASSES.row}`).not(`.${MASTER_DETAIL_CLASSES.detailRow}`);
 
     if (isDefined(rowIndex)) {
       this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), columnIndex);
@@ -1458,10 +1448,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if (tableElement) {
       const hasDataRowTemplate = !!this.option('dataRowTemplate');
-      const tBodies = hasDataRowTemplate && tableElement.find(`> tbody.${ROW_CLASS}`);
+      const tBodies = hasDataRowTemplate && tableElement.find(`> tbody.${CLASSES.row}`);
 
       // eslint-disable-next-line no-useless-concat
-      return tBodies && tBodies.length ? tBodies : tableElement.find('> tbody > ' + `.${ROW_CLASS}, > .${ROW_CLASS}`);
+      return tBodies && tBodies.length ? tBodies : tableElement.find('> tbody > ' + `.${CLASSES.row}, > .${CLASSES.row}`);
     }
 
     return $();
