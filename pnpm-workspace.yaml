@@ -43,7 +43,6 @@ overrides:
   compression@<1.8.2: ^1.8.2
   dompurify@>=3.4.13 <=3.4.15: ^3.4.16
   http-cache-semantics@<=4.2.0: ^4.2.1
-  nx@>=23.0.0 <23.2.1: ^23.2.1
   pbkdf2@<=3.1.6: ^3.1.7
   piscina@>=5.0.0 <5.3.2: ^5.3.2
   postcss-selector-parser@<7.1.6: ^7.1.6
@@ -71,8 +70,8 @@ catalog:
   eslint-plugin-no-only-tests: 3.3.0
   eslint-plugin-perfectionist: 5.9.1
   eslint-plugin-qunit: 8.2.6
-  eslint-plugin-vue: 10.4.0
-  vue-eslint-parser: 10.0.0
+  eslint-plugin-vue: 10.11.1
+  vue-eslint-parser: 10.4.1
   globals: 15.14.0
   jquery: 4.0.0
   stylelint: 16.22.0
