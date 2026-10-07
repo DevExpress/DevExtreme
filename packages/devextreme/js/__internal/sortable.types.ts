@@ -2,7 +2,6 @@ import type { AnimationConfig } from '@js/common/core/animation';
 import type { DxElement } from '@js/core/element';
 import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import type dxSortable from '@js/ui/sortable';
 import type { Properties } from '@js/ui/sortable';
 
 import type { DragEventArgs, DraggableBaseProperties, DragStartArgs } from './draggable.types';
@@ -52,7 +51,7 @@ export interface OptionChangedToIndexArgs {
   fullUpdate?: boolean;
 }
 
-export interface SortableProperties extends DraggableBaseProperties<dxSortable> {
+export interface SortableProperties extends DraggableBaseProperties {
   dragTemplate?: Properties['dragTemplate'];
 
   dropFeedbackMode?: Properties['dropFeedbackMode'];

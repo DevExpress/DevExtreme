@@ -931,11 +931,10 @@ class Draggable<
 
   _defaultActionArgs(): DefaultActionArgs<unknown> {
     const args = super._defaultActionArgs();
-    const component = this.option('component');
+    const { component } = this.option();
 
     if (component) {
       args.component = component;
-      // @ts-expect-error component is unknown
       args.element = component.element();
     }
 

@@ -1,7 +1,7 @@
 import type { Cancelable } from '@js/common/core/events';
+import type DOMComponent from '@js/core/dom_component';
 import type { DxElement } from '@js/core/element';
 import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
-import type dxDraggable from '@js/ui/draggable';
 import type { DraggableBaseOptions, DragTemplateData, Properties } from '@js/ui/draggable';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import type { DragMoveData, DragStartData } from '@ts/events/drag';
@@ -10,8 +10,7 @@ export type BoundOffset = number | string | { h?: number; v?: number };
 
 export type DragHandler = ((e: never) => void) | undefined;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface DraggableBaseProperties<TComponent = any> extends Omit<DraggableBaseOptions<TComponent>, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
+export interface DraggableBaseProperties extends Omit<DraggableBaseOptions<unknown>, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
   scrollSensitivity: number;
 
   scrollSpeed: number;
@@ -20,9 +19,9 @@ export interface DraggableBaseProperties<TComponent = any> extends Omit<Draggabl
 
   boundOffset?: BoundOffset | (() => BoundOffset);
 
-  boundary?: DraggableBaseOptions<TComponent>['boundary'] | dxElementWrapper;
+  boundary?: DraggableBaseOptions<unknown>['boundary'] | dxElementWrapper;
 
-  component?: unknown;
+  component?: Pick<DOMComponent, 'element'>;
 
   contentTemplate?: string | null;
 
@@ -55,7 +54,7 @@ export interface DraggableBaseProperties<TComponent = any> extends Omit<Draggabl
   onDrop?: DragHandler;
 }
 
-export interface DraggableProperties extends DraggableBaseProperties<dxDraggable> {
+export interface DraggableProperties extends DraggableBaseProperties {
   onDragCancel?: (e: DragEventArgs) => void;
 
   onDragEnd?: Properties['onDragEnd'];
