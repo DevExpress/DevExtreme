@@ -4,6 +4,7 @@ import {
 import { DxPopupModule } from 'devextreme-angular/ui/popup';
 import { DxChatModule } from 'devextreme-angular/ui/chat';
 import { type DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action';
 import { ArrayStore, DataSource } from 'devextreme-angular/common/data';
@@ -72,7 +73,9 @@ export class AiAssistantComponent {
   setDisabled(value: boolean): void {
     this.disabled = value;
     this.changeDetectorRef.detectChanges();
-    if (!value) {
+    if (value) {
+      this.clearButtonInstance?.option('disabled', true);
+    } else {
       this.updateClearButtonState();
     }
   }
@@ -104,14 +107,14 @@ export class AiAssistantComponent {
     this.updateClearButtonState();
   }
 
-  onSuggestionClick = ({ itemData }: { itemData?: { prompt: string } }): void => {
-    const { prompt } = itemData ?? {};
+  onSuggestionClick = ({ itemData }: DxButtonGroupTypes.ItemClickEvent): void => {
+    if (!itemData?.prompt) {
+      return;
+    }
 
-    const message: DxChatTypes.TextMessage = {
-      id: Date.now() + Math.random(),
-      timestamp: new Date(),
+    const message = {
       author: { id: 'user' },
-      text: prompt,
+      text: itemData.prompt,
     };
 
     this.pushMessage(message);

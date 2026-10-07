@@ -19,7 +19,10 @@ export default function EmployeeForm({ aiIntegration, formRef }) {
       event.component.getButton('Save')?.option('disabled', !event.value);
     }
   }, []);
-  const onSave = useCallback(() => setToastVisible(true), []);
+  const onSave = useCallback(() => {
+    formRef?.current?.instance().reset(formData);
+    setToastVisible(true);
+  }, [formData, formRef]);
   const onToastHiding = useCallback(() => setToastVisible(false), []);
   const buttonOptions = useMemo(() => ({ ...saveButtonOptions, onClick: onSave }), [onSave]);
   return (
@@ -47,6 +50,7 @@ export default function EmployeeForm({ aiIntegration, formRef }) {
       </Form>
       <Toast
         visible={toastVisible}
+        maxWidth={568}
         message="Form data is saved."
         type="success"
         displayTime={600}

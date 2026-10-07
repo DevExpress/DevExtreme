@@ -27,7 +27,10 @@ export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormPro
     }
   }, []);
 
-  const onSave = useCallback((): void => setToastVisible(true), []);
+  const onSave = useCallback((): void => {
+    formRef?.current?.instance().reset(formData);
+    setToastVisible(true);
+  }, [formData, formRef]);
   const onToastHiding = useCallback((): void => setToastVisible(false), []);
   const buttonOptions = useMemo(() => ({ ...saveButtonOptions, onClick: onSave }), [onSave]);
 
@@ -46,6 +49,7 @@ export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormPro
       </Form>
       <Toast
         visible={toastVisible}
+        maxWidth={568}
         message="Form data is saved."
         type="success"
         displayTime={600}
