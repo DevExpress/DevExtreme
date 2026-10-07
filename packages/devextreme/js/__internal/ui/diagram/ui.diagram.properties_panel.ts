@@ -3,7 +3,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getOuterHeight } from '@js/core/utils/size';
+import type { EventInfo } from '@js/events';
 import type { dxPopupAnimation } from '@js/ui/popup';
+import type { OptionAction } from '@ts/core/widget/component';
 import DiagramCommandsManager from '@ts/ui/diagram/diagram.commands_manager';
 import DiagramFloatingPanel, { type DiagramFloatingPanelProperties } from '@ts/ui/diagram/ui.diagram.floating_panel';
 import type { InternalPositionConfig } from '@ts/ui/overlay/overlay';
@@ -19,17 +21,18 @@ const DIAGRAM_PROPERTIES_PANEL_CLASS = 'dx-diagram-properties-panel';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TITLE_CLASS = 'dx-diagram-properties-panel-group-title';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TOOLBAR_CLASS = 'dx-diagram-properties-panel-group-toolbar';
 
-interface CreateToolbarEvent {
+// eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
+type CreateToolbarEvent = EventInfo<DiagramPropertiesPanel> & {
   $parent: dxElementWrapper;
   commands: unknown;
   toolbar?: unknown;
-}
+};
 
 interface DiagramPropertiesPanelProperties extends DiagramFloatingPanelProperties {
   propertyTabs?: unknown;
   onCreateToolbar?: (e: CreateToolbarEvent) => void;
   // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
-  onSelectedGroupChanged?: (e: { component: DiagramPropertiesPanel }) => void;
+  onSelectedGroupChanged?: (e: EventInfo<DiagramPropertiesPanel>) => void;
 }
 
 class DiagramPropertiesPanel extends DiagramFloatingPanel<DiagramPropertiesPanelProperties> {
@@ -49,9 +52,9 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel<DiagramPropertiesPanel
 
   private _scrollViewHeight?: number;
 
-  private _onSelectedGroupChangedAction!: (event?: unknown) => void;
+  private _onSelectedGroupChangedAction!: OptionAction<DiagramPropertiesPanelProperties['onSelectedGroupChanged']>;
 
-  private _onCreateToolbarAction!: (event?: unknown) => void;
+  private _onCreateToolbarAction!: OptionAction<DiagramPropertiesPanelProperties['onCreateToolbar']>;
 
   _init(): void {
     super._init();
