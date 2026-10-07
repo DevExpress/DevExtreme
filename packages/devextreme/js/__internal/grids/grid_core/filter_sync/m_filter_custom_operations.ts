@@ -7,7 +7,7 @@ import type { CustomOperation } from '@js/ui/filter_builder';
 import errors from '@js/ui/widget/ui.errors';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
-} from '@ts/filter_builder/m_utils';
+} from '@ts/filter_builder/utils';
 
 function baseOperation(grid) {
   const calculateFilterExpression = function (filterValue, field, fields) {

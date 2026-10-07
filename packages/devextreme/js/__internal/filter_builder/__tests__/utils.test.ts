@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import type { CustomOperation, Field } from '@js/ui/filter_builder';
 
-import { getCurrentValueText, getFilterOperations } from '../m_utils';
+import { getCurrentValueText, getFilterOperations } from '../utils';
 
 describe('Formatting', () => {
   it('empty string', () => {
