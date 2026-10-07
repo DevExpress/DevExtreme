@@ -1,11 +1,13 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isObject, isString } from '@js/core/utils/type';
+import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import type {
   ChangedCallback,
   ProcessedChange,
   VirtualDataLoaderCacheItem,
+  VirtualDataLoaderChange,
   VirtualDataLoaderController,
   VirtualDataLoaderDataOptions,
   VirtualItemsCount,
@@ -27,7 +29,11 @@ const getEndPageIndex = (that: VirtualDataLoader): number => (
   that._cache.length ? that._cache[that._cache.length - 1].pageIndex : -1
 );
 
-const fireChanged = (that: VirtualDataLoader, changed: ChangedCallback, args?: unknown): void => {
+const fireChanged = (
+  that: VirtualDataLoader,
+  changed: ChangedCallback,
+  args?: VirtualDataLoaderChange,
+): void => {
   that._isChangedFiring = true;
   changed(args);
   that._isChangedFiring = false;
@@ -36,7 +42,7 @@ const fireChanged = (that: VirtualDataLoader, changed: ChangedCallback, args?: u
 const processDelayChanged = (
   that: VirtualDataLoader,
   changed: ChangedCallback,
-  args?: unknown,
+  args?: VirtualDataLoaderChange,
 ): boolean | undefined => {
   if (that._isDelayChanged) {
     that._isDelayChanged = false;
@@ -67,6 +73,7 @@ const getViewportPageCount = (that: VirtualDataLoader): number => {
     const virtualItemsCount = that._controller.virtualItemsCount();
     const totalItemsCount = that._dataOptions.totalItemsCount();
 
+    // @ts-expect-error virtualItemsCount is defined in virtual mode
     for (let itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex += 1) {
       if (offset >= position + viewportSize) break;
 
@@ -164,14 +171,14 @@ const loadCore = (
 const processChanged = (
   that: VirtualDataLoader,
   changed: ChangedCallback,
-  changeType?: unknown,
+  changeType?: ProcessedChange['changeType'] | ChangedEvent,
   isDelayChanged?: boolean,
   removeCacheItem?: VirtualDataLoaderCacheItem,
 ): void => {
   const dataOptions = that._dataOptions;
   const items = dataOptions.items().slice();
-  let change: ProcessedChange | undefined = isObject(changeType)
-    ? changeType as ProcessedChange
+  let change: ProcessedChange | ChangedEvent | undefined = isObject(changeType)
+    ? changeType
     : undefined;
   const isPrepend = changeType === 'prepend';
   const viewportItems = dataOptions.viewportItems();
@@ -284,7 +291,9 @@ export class VirtualDataLoader {
     return this.load();
   }
 
-  public pageIndex(pageIndex?: number): number {
+  public pageIndex(): number;
+  public pageIndex(pageIndex: number): number | undefined;
+  public pageIndex(pageIndex?: number): number | undefined {
     const isVirtualMode = this._controller.isVirtualMode();
     const isAppendMode = this._controller.isAppendMode();
 
@@ -294,7 +303,9 @@ export class VirtualDataLoader {
       }
       return this._pageIndex;
     }
-    return this._dataOptions.pageIndex(pageIndex);
+    return pageIndex === undefined
+      ? this._dataOptions.pageIndex()
+      : this._dataOptions.pageIndex(pageIndex);
   }
 
   private beginPageIndex(defaultPageIndex?: number): number {
@@ -371,7 +382,7 @@ export class VirtualDataLoader {
     }
   }
 
-  private handleDataChanged(callBase: ChangedCallback, e?: { changes?: unknown }): void {
+  private handleDataChanged(callBase: ChangedCallback, e?: ChangedEvent): void {
     const dataOptions = this._dataOptions;
     let lastCacheLength = this._cache.length;
     const isVirtualMode = this._controller.isVirtualMode();
