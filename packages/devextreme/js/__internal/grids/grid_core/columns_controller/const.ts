@@ -7,7 +7,9 @@ export const USER_STATE_FIELD_NAMES = [
 ] as const;
 // eslint-disable-next-line @stylistic/max-len
 export const IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true };
-export const COMMAND_EXPAND_CLASS = 'dx-command-expand';
+export const CLASSES = {
+  commandExpand: 'dx-command-expand',
+};
 export const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 export const GROUP_COMMAND_COLUMN_NAME = 'groupExpand';
 export const VIRTUAL_COMMAND_COLUMN_NAME = 'virtual';

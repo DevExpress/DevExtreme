@@ -18,6 +18,7 @@ import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
@@ -37,6 +38,7 @@ import { isLocalStore } from '../data_source_adapter/utils/store';
 import type { EditingController } from '../editing/m_editing';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
+import { CLASSES as VIEW_CLASSES } from './const';
 import { ColumnsView } from './m_columns_view';
 import type { RowsViewScrollEvent } from './types';
 import {
@@ -44,18 +46,13 @@ import {
 } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
-const CONTENT_CLASS = 'content';
 const NOWRAP_CLASS = 'nowrap';
-const GROUP_ROW_CLASS = 'dx-group-row';
-const GROUP_CELL_CLASS = 'dx-group-cell';
-const DATA_ROW_CLASS = 'dx-data-row';
 const FREE_SPACE_CLASS = 'dx-freespace-row';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const ROW_ALTERNATION_CLASS = 'dx-row-alt';
 const LAST_ROW_BORDER = 'dx-last-row-border';
 const EMPTY_CLASS = 'dx-empty';
 const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
-const CONTENT_FIXED_CLASS = 'content-fixed';
 export const ROW_LINES_CLASS = 'dx-row-lines';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
@@ -225,7 +222,7 @@ export class RowsView extends ColumnsView {
         ? $cell.parent()
         : $cell;
 
-      $groupCell.addClass(GROUP_CELL_CLASS);
+      $groupCell.addClass(VIEW_CLASSES.groupCell);
     }
     super._updateCell.apply(this, arguments as any);
   }
@@ -259,7 +256,7 @@ export class RowsView extends ColumnsView {
       const isGroup = row.rowType === 'group';
       const isDataRow = row.rowType === 'data';
 
-      isDataRow && $row.addClass(DATA_ROW_CLASS);
+      isDataRow && $row.addClass(VIEW_CLASSES.dataRow);
       isDataRow && this.option('showRowLines') && $row.addClass(ROW_LINES_CLASS);
 
       this.option('showColumnLines') && $row.addClass(COLUMN_LINES_CLASS);
@@ -269,7 +266,7 @@ export class RowsView extends ColumnsView {
       }
 
       if (isGroup) {
-        $row.addClass(GROUP_ROW_CLASS);
+        $row.addClass(VIEW_CLASSES.groupRow);
         this.setAriaExpandedAttribute($row, row);
       }
     }
@@ -530,7 +527,7 @@ export class RowsView extends ColumnsView {
             break;
           default:
             this.setTableElement(newTableElement, isFixedTableRendering);
-            contentElement.addClass(this.addWidgetPrefix(CONTENT_CLASS));
+            contentElement.addClass(this.addWidgetPrefix(VIEW_CLASSES.content));
             this._setGridRole(contentElement);
             this._renderContent(contentElement, newTableElement, isFixedTableRendering);
             break;
@@ -963,7 +960,7 @@ export class RowsView extends ColumnsView {
     const columnID = column && column.isBand && column.index;
 
     each($rows, (rowIndex, row) => {
-      if (!$(row).hasClass(GROUP_ROW_CLASS)) {
+      if (!$(row).hasClass(VIEW_CLASSES.groupRow)) {
         for (let i = 0; i < visibleColumns.length; i++) {
           if (isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
             $rows.eq(rowIndex)
@@ -1302,7 +1299,7 @@ export class RowsView extends ColumnsView {
    * @extended: column_fixing
    */
   public toggleDraggableColumnClass(columnIndex, value) {
-    const $rows = this._getRowElements().not(`.${GROUP_ROW_CLASS}`) || [];
+    const $rows = this._getRowElements().not(`.${VIEW_CLASSES.groupRow}`) || [];
     this._toggleDraggableSourceColumnClass($rows, this.getColumns(), columnIndex, value);
   }
 
@@ -1310,7 +1307,7 @@ export class RowsView extends ColumnsView {
     const $cells = super._getCellElementsCore.apply(this, arguments as any);
 
     if ($cells) {
-      const groupCellIndex = $cells.filter(`.${GROUP_CELL_CLASS}`).index();
+      const groupCellIndex = $cells.filter(`.${VIEW_CLASSES.groupCell}`).index();
 
       if (groupCellIndex >= 0 && $cells.length > groupCellIndex + 1) {
         return $cells.slice(0, groupCellIndex + 1);
@@ -1453,7 +1450,7 @@ export class RowsView extends ColumnsView {
   public setScrollerSpacing(vScrollbarWidth?, hScrollbarWidth?) { }
 
   public getFixedContentElement(): dxElementWrapper {
-    const fixedContentClass = this.addWidgetPrefix(CONTENT_FIXED_CLASS);
+    const fixedContentClass = this.addWidgetPrefix(COLUMN_FIXING_CLASSES.contentFixed);
 
     // @ts-expect-error the view is rendered here
     return this.element()?.children(`.${fixedContentClass}`);

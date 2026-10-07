@@ -4,7 +4,9 @@ import { deferUpdate } from '@js/core/utils/common';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Sortable from '@js/ui/sortable';
+import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import gridCoreUtils from '../m_utils';
@@ -70,7 +72,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
     };
 
-    const rowSelector = '.dx-row:not(.dx-freespace-row):not(.dx-virtual-row):not(.dx-header-row):not(.dx-footer-row)';
+    const rowSelector = `.${VIEW_CLASSES.row}:not(.dx-freespace-row):not(.dx-virtual-row):not(.${COLUMN_HEADERS_CLASSES.headerRow}):not(.dx-footer-row)`;
     const filter = this.option('dataRowTemplate')
       ? `> table > tbody${rowSelector}`
       : `> table > tbody > ${rowSelector}`;
