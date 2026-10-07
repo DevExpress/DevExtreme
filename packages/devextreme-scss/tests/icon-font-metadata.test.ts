@@ -6,6 +6,7 @@ import {
   FontContainer,
   NAME_ID,
   readFontRevision,
+  readGlyphCount,
   readNameRecords,
   readNames,
   readTable,
@@ -20,6 +21,11 @@ const RELEASE_YEAR = 2000 + Number(MAJOR);
 
 const FORMATS = ['ttf', 'woff', 'woff2'] as const;
 const CONTAINERS: Record<typeof FORMATS[number], FontContainer> = { ttf: 'sfnt', woff: 'woff', woff2: 'woff2' };
+const WEB_FORMATS = ['woff', 'woff2'] as const;
+const WEB_HEADER_OFFSETS: Record<typeof WEB_FORMATS[number], { metadataLength: number; privateDataLength: number }> = {
+  woff: { metadataLength: 28, privateDataLength: 40 },
+  woff2: { metadataLength: 32, privateDataLength: 44 },
+};
 const NAME_RECORDS = {
   copyright: NAME_ID.copyright,
   family: 1,
@@ -55,6 +61,7 @@ const EXPECTED = {
 
 const readFont = (fileName: string, format: string): Buffer => readFileSync(join(ICONS_DIR, `${fileName}.${format}`));
 const readVendorId = (font: Buffer): string => readTable(font, 'OS/2').toString('latin1', 58, 62);
+const readEmbeddingPermissions = (font: Buffer): number => readTable(font, 'OS/2').readUInt16BE(8);
 
 describe('Icon fonts metadata', () => {
   test('icons/ ships exactly the checked font files', () => {
@@ -106,6 +113,20 @@ describe('Icon fonts metadata', () => {
       expect(readVendorId(readFont(fileName, format))).toBe('\0\0\0\0');
     });
 
+    test.each(FORMATS)('%s allows installable embedding', (format) => {
+      expect(readEmbeddingPermissions(readFont(fileName, format))).toBe(0);
+    });
+
+    test.each(WEB_FORMATS)('%s has no extended metadata or private data block', (format) => {
+      const font = readFont(fileName, format);
+      const { metadataLength, privateDataLength } = WEB_HEADER_OFFSETS[format];
+
+      expect({
+        metadata: font.readUInt32BE(metadataLength),
+        privateData: font.readUInt32BE(privateDataLength),
+      }).toEqual({ metadata: 0, privateData: 0 });
+    });
+
     test.each(FORMATS)('%s has the release revision', (format) => {
       expect(readFontRevision(readFont(fileName, format))).toBe(EXPECTED.fontRevision);
     });
@@ -115,6 +136,15 @@ describe('Icon fonts metadata', () => {
 
       otherRecords.forEach((records) => {
         expect(records).toEqual(ttfRecords);
+      });
+    });
+
+    test('every format has the glyph set of the ttf', () => {
+      const [ttf, ...otherFonts] = FORMATS.map((format) => readFont(fileName, format));
+
+      otherFonts.forEach((font) => {
+        expect(readGlyphCount(font)).toBe(readGlyphCount(ttf));
+        expect(readTable(font, 'cmap').equals(readTable(ttf, 'cmap'))).toBe(true);
       });
     });
   });
