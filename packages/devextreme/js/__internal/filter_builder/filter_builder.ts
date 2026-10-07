@@ -1,6 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import type { PositionConfig } from '@js/common/core/animation';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -10,29 +8,37 @@ import $, { type dxElementWrapper } from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import type { Field, Properties as FilterBuilderOptions } from '@js/ui/filter_builder';
-import type { Properties as PopupProperties, ShownEvent } from '@js/ui/popup';
+import type { ShownEvent } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
-import TreeView, {
-  type ContentReadyEvent, type ItemClickEvent, type ItemRenderedEvent,
-  type Properties as TreeViewProperties,
-} from '@js/ui/tree_view';
+import TreeView from '@js/ui/tree_view';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import type { EngineEvent, EngineTarget } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
-import type { EditorFactoryOwner } from './between';
 import type {
+  AddMenuItem,
+  ButtonWithMenuOptions,
   Condition,
   ConditionValue,
   Criteria,
+  EditorFactoryOwner,
   FilterBuilderField,
+  FilterBuilderItem,
+  FilterBuilderProperties,
   FilterCustomOperation,
   FilterExpression,
   GroupMenuItem,
+  KeyEvent,
+  MenuOptions,
   OperationMenuItem,
-} from './utils';
+  PopupMenuOptions,
+  PopupOptions,
+  ResolvedMenuOptions,
+  ValueEditorOptions,
+} from './types';
 import {
   addItem, convertToInnerStructure,
   createCondition, createEmptyGroup,
@@ -42,7 +48,7 @@ import {
   getItems,
   getMergedOperations, getNormalizedFields, getNormalizedFilter,
   getOperationFromAvailable,
-  getOperationValue, isCondition, isGroup, removeItem, renderValueText, setGroupValue,
+  getOperationValue, hasLookup, isCondition, isGroup, removeItem, renderValueText, setGroupValue,
   updateConditionByOperation,
 } from './utils';
 
@@ -95,66 +101,6 @@ const OPERATORS: Record<string, string> = {
   notOr: '!or',
 };
 
-interface FilterBuilderProperties extends FilterBuilderOptions {
-  fields: Field[];
-  closePopupOnTargetScroll: boolean;
-}
-
-type MenuItemEvent<TEvent, TItem> = TEvent & { itemData: TItem };
-
-type MenuOptions<TItem> = Required<Pick<TreeViewProperties<TItem>, 'items' | 'displayExpr'>>
-& Pick<TreeViewProperties<TItem>, 'keyExpr' | 'dataStructure'>
-& {
-  cssClass: string;
-  onItemClick: (e: MenuItemEvent<ItemClickEvent<TItem>, TItem>) => void;
-  onItemRendered?: (e: MenuItemEvent<ItemRenderedEvent<TItem>, TItem>) => void;
-  onContentReady?: (e: ContentReadyEvent<TItem>) => void;
-};
-
-type MenuPosition = Omit<PositionConfig, 'of'> & { of: dxElementWrapper };
-
-interface AddMenuItem {
-  caption: string;
-  click: () => void;
-}
-
-type PopupOptions = Required<Pick<PopupProperties, 'onShown'>>;
-
-interface ButtonWithMenuOptions<TItem> {
-  caption?: string;
-  menu: MenuOptions<TItem> & Pick<PopupProperties, 'rtlEnabled' | 'onHiding' | 'onHidden'> & {
-    id?: Guid;
-    position?: MenuPosition;
-    animation?: null;
-  };
-  popup?: PopupOptions;
-}
-
-type PopupMenuOptions = ButtonWithMenuOptions<unknown> & {
-  menu: { position: MenuPosition };
-  popup: PopupOptions;
-};
-
-interface KeyEvent {
-  type: string;
-  key: string;
-  which: number;
-  shiftKey: boolean;
-}
-
-interface ClickEvent {
-  type: string;
-  stopPropagation: () => void;
-}
-
-interface ValueEditorOptions {
-  value: ConditionValue;
-  filterOperation: string;
-  setValue: (data: ConditionValue) => void;
-  closeEditor: () => void;
-  text: string;
-}
-
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 const EditorFactory = EditorFactoryMixin(class {});
 
@@ -171,7 +117,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
   _documentKeyUpHandler?: (e: KeyEvent) => void;
 
-  _documentClickHandler?: (e: { target: HTMLElement }) => void;
+  _documentClickHandler?: (e: EngineEvent) => void;
 
   _popupWithTreeView?: InstanceType<typeof Popup>;
 
@@ -466,8 +412,9 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
   }
 
   _createButton(caption?: string): dxElementWrapper {
-    // @ts-expect-error text is declared without undefined
-    return $('<div>').text(caption);
+    const $button = $('<div>');
+
+    return caption === undefined ? $button : $button.text(caption);
   }
 
   _createGroupOperationButton(criteria: Criteria): dxElementWrapper {
@@ -532,7 +479,8 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     const $guid = new Guid();
     $button.attr('aria-controls', `${$guid}`);
 
-    extend(options.menu, {
+    const menu: ResolvedMenuOptions<TItem> = {
+      ...options.menu,
       id: $guid,
       focusStateEnabled: true,
       selectionMode: 'single',
@@ -549,9 +497,9 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
       },
       cssClass: `${FILTER_BUILDER_OVERLAY_CLASS} ${options.menu.cssClass}`,
       rtlEnabled,
-    });
+    };
 
-    options.popup = {
+    const popup: PopupOptions = {
       onShown: (info: ShownEvent): void => {
         const treeViewContentElement = $(info.component.content());
         const treeViewElement = treeViewContentElement.find('.dx-treeview');
@@ -567,8 +515,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
                             || (e.type === 'keyup' && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             info.component.hide();
-            // @ts-expect-error eventsEngine is badly typed
-            eventsEngine.trigger(options.menu.position.of, 'focus');
+            eventsEngine.trigger(menu.position.of, 'focus');
           }
         });
 
@@ -582,8 +529,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
     this._subscribeOnClickAndEnterKey($button, () => {
       removeMenu();
-      // @ts-expect-error options.menu and options.popup are extended above
-      this._createPopupWithTreeView(options, this.$element());
+      this._createPopupWithTreeView({ menu, popup }, this.$element());
       $button.addClass(ACTIVE_CLASS).attr('aria-expanded', 'true');
     });
     return $button;
@@ -678,16 +624,16 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     const items = getItems(fields, allowHierarchicalFields);
     let item = getField(field.name || field.dataField, items);
     const getFullCaption = function (
-      fieldItem: FilterBuilderField,
-      fieldItems: FilterBuilderField[],
-    ): string | undefined {
+      fieldItem: FilterBuilderItem,
+      fieldItems: FilterBuilderItem[],
+    ): string {
       return allowHierarchicalFields
         ? getCaptionWithParents(fieldItem, fieldItems)
         : fieldItem.caption;
     };
     condition[0] = item.name || item.dataField;
 
-    const $fieldButton: dxElementWrapper = this._createButtonWithMenu<FilterBuilderField>({
+    const $fieldButton: dxElementWrapper = this._createButtonWithMenu<FilterBuilderItem>({
       caption: getFullCaption(item, items),
       menu: {
         items,
@@ -707,10 +653,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
             $fieldButton.siblings().filter(`.${FILTER_BUILDER_ITEM_TEXT_CLASS}`).remove();
             this._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
-            // @ts-expect-error TreeView declares the items option as optional
-            const caption = getFullCaption(item, e.component.option('items'));
-            // @ts-expect-error text is declared without undefined
-            $fieldButton.text(caption);
+            $fieldButton.text(getFullCaption(item, items));
             this._updateFilter();
           }
         },
@@ -858,8 +801,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     const value = item[2];
 
     const customOperation = getCustomOperation(this._customOperations, item[1]);
-    if (!customOperation && field.lookup) {
-      // @ts-expect-error the field.lookup check above does not narrow the field
+    if (!customOperation && hasLookup(field)) {
       getCurrentLookupValueText(field, value, (result) => {
         renderValueText($text, result);
       });
@@ -927,9 +869,8 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
   _addDocumentClick($editor: dxElementWrapper, closeEditorFunc: () => void): void {
     const document = domAdapter.getDocument();
-    const documentClickHandler = (e: { target: HTMLElement }): void => {
+    const documentClickHandler = (e: EngineEvent): void => {
       if (!this._isFocusOnEditorParts($editor, e.target)) {
-        // @ts-expect-error eventsEngine is badly typed
         eventsEngine.trigger($editor.find('input'), 'change');
         closeEditorFunc();
       }
@@ -939,7 +880,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     this._documentClickHandler = documentClickHandler;
   }
 
-  _isFocusOnEditorParts($editor: dxElementWrapper, target?: HTMLElement): boolean {
+  _isFocusOnEditorParts($editor: dxElementWrapper, target?: EngineTarget): boolean {
     const activeElement = target || domAdapter.getActiveElement();
     const isFocusOnEditor = $(activeElement).closest($editor).length > 0;
     if (isFocusOnEditor) {
@@ -1003,7 +944,6 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     $container.empty();
 
     const $editor = this._createValueEditor($container, field, options);
-    // @ts-expect-error eventsEngine is badly typed
     eventsEngine.trigger($editor.find('input').not(':hidden').eq(0), 'focus');
 
     this._removeEvents();
@@ -1019,18 +959,15 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
         this._updateConditionValue(item, value, () => {
           createValueText();
           if (e.shiftKey) {
-            // @ts-expect-error eventsEngine is badly typed
             eventsEngine.trigger($container.prev(), 'focus');
           }
         });
       }
       if (keyName === ESCAPE_KEY) {
-        // @ts-expect-error eventsEngine is badly typed
         eventsEngine.trigger(createValueText(), 'focus');
       }
       if (keyName === ENTER_KEY) {
         this._updateConditionValue(item, value, () => {
-          // @ts-expect-error eventsEngine is badly typed
           eventsEngine.trigger(createValueText(), 'focus');
         });
       }
@@ -1074,15 +1011,18 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
   }
 
   _dimensionChanged(): void {
-    // @ts-expect-error 'of' does not exist on type 'PopupProperties'
-    const positionOf = this._popupWithTreeView?.option('position')?.of;
+    const position = this._popupWithTreeView?.option('position');
+    const positionOf = typeof position === 'object' ? position.of : undefined;
 
     if (positionOf) {
-      this._popupWithTreeView?.option('maxHeight', getElementMaxHeightByWindow(positionOf));
+      this._popupWithTreeView?.option('maxHeight', getElementMaxHeightByWindow($(positionOf)));
     }
   }
 
-  _createPopupWithTreeView(options: PopupMenuOptions, $container: dxElementWrapper): void {
+  _createPopupWithTreeView<TItem>(
+    options: PopupMenuOptions<TItem>,
+    $container: dxElementWrapper,
+  ): void {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     const { onHidden } = options.menu;
@@ -1126,10 +1066,10 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
   _subscribeOnClickAndEnterKey(
     $button: dxElementWrapper,
-    handler: (e: ClickEvent) => void,
+    handler: (e: EngineEvent) => void,
   ): void {
     eventsEngine.on($button, 'dxclick', handler);
-    eventsEngine.on($button, 'keyup', (e: KeyEvent & ClickEvent) => {
+    eventsEngine.on($button, 'keyup', (e: KeyEvent) => {
       if (normalizeKeyName(e) === ENTER_KEY) {
         handler(e);
       }
