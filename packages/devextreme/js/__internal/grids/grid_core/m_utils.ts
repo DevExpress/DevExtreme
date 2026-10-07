@@ -10,7 +10,9 @@ import type { HeaderFilterGroupInterval } from '@js/common/grids';
 import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { BrowserInfo } from '@js/core/utils/browser';
 import { equalByValue } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -26,20 +28,33 @@ import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { isNumeric } from '@ts/core/utils/m_type';
+import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo } from '@ts/data/utils';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnPoint,
+  ColumnPointProps,
+  ExpandCellTemplate,
+  ExpandCellTemplateOptions,
   FormatOptions,
+  HeaderFilterGroup,
+  HeaderFilterGroupItem,
   LoadPanelPosition,
+  LookupDataSource,
+  OptionsReader,
   SelectionRange,
   SummaryTextItem,
+  TextSelectionElement,
   WidgetElementData,
+  WrappedLookupDataSource,
 } from '@ts/grids/grid_core/types';
 
 import { AI_COLUMN_NAME } from './ai_column/const';
 import type DataSourceAdapter from './data_source_adapter/m_data_source_adapter';
+import type { RawItemData } from './data_source_adapter/types';
+import type { DataFilter } from './filter/types';
 import { combineFilters } from './filter/utils';
+import type { ModuleItem } from './modules/modules';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
 const BASE_LOAD_PANEL_Z_INDEX = 1000;
@@ -390,7 +405,7 @@ export default {
 
   normalizeSortingInfo,
 
-  getFormatByDataType(dataType) {
+  getFormatByDataType(dataType: string | undefined): Format | undefined {
     switch (dataType) {
       case 'date':
         return getGlobalFormat('date') || 'shortDate';
@@ -401,12 +416,16 @@ export default {
     }
   },
 
-  getHeaderFilterGroupParameters(column, remoteGrouping?) {
-    let result: any = [];
+  getHeaderFilterGroupParameters(
+    column: Column & Required<Pick<Column, 'calculateCellValue'>>,
+    remoteGrouping?: boolean,
+  ): HeaderFilterGroup {
     const dataField = column.dataField || column.name;
     const groupInterval = sharedFiltering.getGroupInterval(column);
 
     if (groupInterval) {
+      const result: HeaderFilterGroupItem[] = [];
+
       each(groupInterval, (index, interval) => {
         result.push(remoteGrouping ? {
           selector: dataField,
@@ -420,56 +439,75 @@ export default {
     }
 
     if (remoteGrouping) {
-      result = [{ selector: dataField, isExpanded: false }];
-    } else {
-      result = function (data) {
-        let result = column.calculateCellValue(data);
-
-        if (result === undefined || result === '') {
-          result = null;
-        }
-        return result;
-      };
-
-      if (column.sortingMethod) {
-        result = [{ selector: result, compare: column.sortingMethod.bind(column) }];
-      }
+      return [{ selector: dataField, isExpanded: false }];
     }
 
-    return result;
+    const selector = (data: unknown): unknown => {
+      let value = column.calculateCellValue(data);
+
+      if (value === undefined || value === '') {
+        value = null;
+      }
+      return value;
+    };
+
+    if (column.sortingMethod) {
+      return [{ selector, compare: column.sortingMethod.bind(column) }];
+    }
+
+    return selector;
   },
 
-  equalSortParameters(sortParameters1, sortParameters2, ignoreIsExpanded?) {
-    sortParameters1 = normalizeSortingInfo(sortParameters1);
-    sortParameters2 = normalizeSortingInfo(sortParameters2);
+  equalSortParameters(
+    sortParameters1: unknown,
+    sortParameters2: unknown,
+    ignoreIsExpanded?: boolean,
+  ): boolean {
+    const sortInfo1 = normalizeSortingInfo(sortParameters1);
+    const sortInfo2 = normalizeSortingInfo(sortParameters2);
 
-    if (Array.isArray(sortParameters1) && Array.isArray(sortParameters2)) {
-      if (sortParameters1.length !== sortParameters2.length) {
+    if (Array.isArray(sortInfo1) && Array.isArray(sortInfo2)) {
+      if (sortInfo1.length !== sortInfo2.length) {
         return false;
       }
-      for (let i = 0; i < sortParameters1.length; i++) {
-        if (!isEqualSelectors(sortParameters1[i].selector, sortParameters2[i].selector) || sortParameters1[i].desc !== sortParameters2[i].desc || sortParameters1[i].groupInterval !== sortParameters2[i].groupInterval || (!ignoreIsExpanded && Boolean(sortParameters1[i].isExpanded) !== Boolean(sortParameters2[i].isExpanded))) {
+      for (let i = 0; i < sortInfo1.length; i += 1) {
+        if (
+          !isEqualSelectors(sortInfo1[i].selector, sortInfo2[i].selector)
+          || sortInfo1[i].desc !== sortInfo2[i].desc
+          || sortInfo1[i].groupInterval !== sortInfo2[i].groupInterval
+          || (!ignoreIsExpanded
+            && Boolean(sortInfo1[i].isExpanded) !== Boolean(sortInfo2[i].isExpanded))
+        ) {
           return false;
         }
       }
 
       return true;
     }
-    return (!sortParameters1 || !sortParameters1.length) === (!sortParameters2 || !sortParameters2.length);
+    return !sortInfo1?.length === !sortInfo2?.length;
   },
 
-  getPointsByColumns<T extends ColumnPoint>(items, pointCreated: (point: T) => boolean, isVertical = false, startColumnIndex = 0, needToCheckPrevPoint = false): ColumnPoint[] {
+  getPointsByColumns(
+    items: dxElementWrapper,
+    pointCreated: (point: ColumnPointProps) => boolean,
+    isVertical = false,
+    startColumnIndex = 0,
+    needToCheckPrevPoint = false,
+  ): ColumnPoint[] {
     const result: ColumnPoint[] = [];
     const cellsLength: number = items.length;
-    let $item;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
+    let $item: dxElementWrapper | undefined;
     let offset: { left: number; top: number } = { left: 0, top: 0 };
     let itemRect: { width: number; height: number } = { width: 0, height: 0 };
     let columnIndex = startColumnIndex;
-    let rtlEnabled;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
+    let rtlEnabled: boolean | undefined;
 
-    for (let i = 0; i <= cellsLength; i++) {
+    for (let i = 0; i <= cellsLength; i += 1) {
       if (i < cellsLength) {
         $item = items.eq(i);
+        // @ts-expect-error offset() of a wrapper with an element is always defined
         offset = $item.offset();
         itemRect = getBoundingRect($item.get(0));
         rtlEnabled = $item.css('direction') === 'rtl';
@@ -478,7 +516,7 @@ export default {
       const offsetRight = offset.left + itemRect.width;
       const offsetBottom = offset.top + itemRect.height;
 
-      const pointProps: any = {
+      const pointProps: ColumnPointProps = {
         index: columnIndex,
         columnIndex,
         item: $item?.get(0),
@@ -487,6 +525,7 @@ export default {
       };
 
       if (!isVertical && i > 0) {
+        // @ts-expect-error offset() of a wrapper with an element is always defined
         const prevItemOffset: { left: number; top: number } = items.eq(i - 1).offset();
         const { width: prevItemWidth }: { width: number } = getBoundingRect(items[i - 1]);
         const prevItemOffsetX = rtlEnabled
@@ -498,12 +537,13 @@ export default {
         }
 
         if (needToCheckPrevPoint && Math.round(prevItemOffsetX) !== Math.round(pointProps.x)) {
-          const prevPointProps: any = {
+          const prevPointProps: ColumnPointProps = {
             ...pointProps,
             item: items[i - 1],
             x: prevItemOffsetX,
           };
 
+          // eslint-disable-next-line max-depth -- inside a loop; flattening needs continue
           if (rtlEnabled) {
             pointProps.isRightBoundary = true;
             prevPointProps.isLeftBoundary = true;
@@ -517,18 +557,22 @@ export default {
       }
 
       addPointIfNeed(result, pointProps, pointCreated);
-      columnIndex++;
+      columnIndex += 1;
     }
     return result;
   },
 
-  getExpandCellTemplate() {
+  getExpandCellTemplate(): ExpandCellTemplate {
     return {
       allowRenderToDetachedContainer: true,
-      render(container, options) {
+      render(container: dxElementWrapper, options: ExpandCellTemplateOptions): void {
         const $container = $(container);
 
-        if (isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.isNewRow) {
+        if (
+          isDefined(options.value)
+          && !options.data?.isContinuation
+          && !options.row.isNewRow
+        ) {
           const rowsView = options.component.getView('rowsView');
           $container
             .addClass(DATAGRID_EXPAND_CLASS)
@@ -538,7 +582,11 @@ export default {
             .addClass(options.value ? DATAGRID_GROUP_OPENED_CLASS : DATAGRID_GROUP_CLOSED_CLASS)
             .appendTo($container);
 
-          rowsView.setAria('label', options.value ? rowsView.localize('dxDataGrid-ariaCollapse') : rowsView.localize('dxDataGrid-ariaExpand'), $container);
+          rowsView.setAria(
+            'label',
+            options.value ? rowsView.localize('dxDataGrid-ariaCollapse') : rowsView.localize('dxDataGrid-ariaExpand'),
+            $container,
+          );
         } else {
           setEmptyText($container);
         }
@@ -550,12 +598,16 @@ export default {
 
   isDateType,
 
-  getSelectionRange(focusedElement): SelectionRange {
+  getSelectionRange(focusedElement: TextSelectionElement | null | undefined): SelectionRange {
     try {
       if (focusedElement) {
         return {
-          selectionStart: isNumeric(focusedElement.selectionStart) ? focusedElement.selectionStart : -1,
-          selectionEnd: isNumeric(focusedElement.selectionEnd) ? focusedElement.selectionEnd : -1,
+          selectionStart: isNumeric(focusedElement.selectionStart)
+            ? focusedElement.selectionStart as number
+            : -1,
+          selectionEnd: isNumeric(focusedElement.selectionEnd)
+            ? focusedElement.selectionEnd as number
+            : -1,
         };
       }
     } catch (e) { /* empty */ }
@@ -566,23 +618,33 @@ export default {
     };
   },
 
-  setSelectionRange(focusedElement, selectionRange: SelectionRange): void {
+  setSelectionRange(
+    focusedElement: TextSelectionElement | null | undefined,
+    selectionRange: SelectionRange,
+  ): void {
     try {
-      if (focusedElement && focusedElement.setSelectionRange && selectionRange.selectionStart >= 0 && selectionRange.selectionEnd >= 0) {
-        focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
+      if (
+        focusedElement?.setSelectionRange
+        && selectionRange.selectionStart >= 0
+        && selectionRange.selectionEnd >= 0
+      ) {
+        focusedElement.setSelectionRange(
+          selectionRange.selectionStart,
+          selectionRange.selectionEnd,
+        );
       }
     } catch (e) { /* empty */ }
   },
 
-  focusAndSelectElement(component, $element) {
+  focusAndSelectElement(component: ModuleItem, $element: dxElementWrapper): void {
     const isFocused = $element.is(':focus');
     // @ts-expect-error
     eventsEngine.trigger($element, 'focus');
 
     const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
-    const element = $element.get(0);
 
     if (!isFocused && isSelectTextOnEditingStart && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
+      const element = $element.get(0) as HTMLInputElement | HTMLTextAreaElement;
       const editor = getWidgetInstance($element.closest('.dx-texteditor'));
 
       when(editor && editor._loadItemDeferred).done(() => {
@@ -593,11 +655,13 @@ export default {
 
   getWidgetInstance,
 
-  getLastResizableColumnIndex(columns, resultWidths?) {
-    const hasResizableColumns = columns.some((column) => column && !column.command && !column.fixed && column.allowResizing !== false);
-    let lastColumnIndex;
+  getLastResizableColumnIndex(columns: Column[], resultWidths?: (number | string)[]): number {
+    const hasResizableColumns = columns.some(
+      (column) => column && !column.command && !column.fixed && column.allowResizing !== false,
+    );
+    let lastColumnIndex = columns.length - 1;
 
-    for (lastColumnIndex = columns.length - 1; columns[lastColumnIndex]; lastColumnIndex--) {
+    for (; columns[lastColumnIndex]; lastColumnIndex -= 1) {
       const column = columns[lastColumnIndex];
       const width = resultWidths && resultWidths[lastColumnIndex];
       const allowResizing = !hasResizableColumns || column.allowResizing !== false;
@@ -610,8 +674,11 @@ export default {
     return lastColumnIndex;
   },
 
-  isElementInCurrentGrid(controller, $element) {
-    if ($element && $element.length) {
+  isElementInCurrentGrid(
+    controller: ModuleItem,
+    $element: dxElementWrapper | null | undefined,
+  ): boolean {
+    if ($element?.length) {
       const $grid = $element.closest(`.${controller.getWidgetContainerClass()}`).parent();
 
       return $grid.is(controller.component.$element());
@@ -619,7 +686,7 @@ export default {
     return false;
   },
 
-  isVirtualRowRendering(that) {
+  isVirtualRowRendering(that: OptionsReader): boolean {
     const rowRenderingMode = that.option(ROW_RENDERING_MODE_OPTION);
     const isVirtualMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_VIRTUAL;
     const isAppendMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_INFINITE;
@@ -631,17 +698,17 @@ export default {
     return rowRenderingMode === SCROLLING_MODE_VIRTUAL;
   },
 
-  getPixelRatio(window) {
+  getPixelRatio(window: Window): number {
     return window.devicePixelRatio || 1;
   },
 
   /// #DEBUG
-  _setPixelRatioFn(value) {
+  _setPixelRatioFn(value: (window: Window) => number): void {
     this.getPixelRatio = value;
   },
   /// #ENDDEBUG
 
-  getContentHeightLimit(browser) {
+  getContentHeightLimit(browser: BrowserInfo): number {
     if (browser.mozilla) {
       return 8000000;
     }
@@ -649,25 +716,37 @@ export default {
     return 15000000 / this.getPixelRatio(getWindow());
   },
 
-  normalizeLookupDataSource(lookup) {
-    let lookupDataSourceOptions;
+  normalizeLookupDataSource(lookup: NonNullable<Column['lookup']>): NormalizedDataSourceOptions {
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-else
+    let lookupDataSourceOptions: typeof lookup.items | typeof lookup.dataSource;
     if (lookup.items) {
       lookupDataSourceOptions = lookup.items;
     } else {
       lookupDataSourceOptions = lookup.dataSource;
-      if (isFunction(lookupDataSourceOptions) && !variableWrapper.isWrapped(lookupDataSourceOptions)) {
+      if (
+        isFunction(lookupDataSourceOptions)
+        && !variableWrapper.isWrapped(lookupDataSourceOptions)
+      ) {
         lookupDataSourceOptions = lookupDataSourceOptions({});
       }
     }
     return normalizeDataSourceOptions(lookupDataSourceOptions);
   },
 
-  getWrappedLookupDataSource(column, dataSourceAdapter: DataSourceAdapter | null | undefined, filter) {
-    if (!dataSourceAdapter) {
+  getWrappedLookupDataSource(
+    column: Column,
+    dataSourceAdapter: DataSourceAdapter | null | undefined,
+    filter: DataFilter,
+  ): LookupDataSource {
+    const { lookup } = column;
+
+    if (!dataSourceAdapter || !lookup) {
       return [];
     }
 
-    const lookupDataSourceOptions = this.normalizeLookupDataSource(column.lookup);
+    const lookupDataSourceOptions: NormalizedDataSourceOptions = this.normalizeLookupDataSource(
+      lookup,
+    );
 
     if (column.calculateCellValue !== column.defaultCalculateCellValue) {
       return lookupDataSourceOptions;
@@ -676,29 +755,33 @@ export default {
     const hasGroupPaging = dataSourceAdapter.remoteOperations().groupPaging;
     const hasLookupOptimization = column.displayField && isString(column.displayField);
 
-    let cachedUniqueRelevantItems;
-    let previousTake;
-    let previousSkip;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in a closure
+    let cachedUniqueRelevantItems: RawItemData[] | undefined;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in a closure
+    let previousTake: number | undefined;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in a closure
+    let previousSkip: number | undefined;
 
-    const sliceItems = (items, loadOptions) => {
+    const sliceItems = (items: RawItemData[], loadOptions: StoreLoadOptions): RawItemData[] => {
       const start = loadOptions.skip ?? 0;
       const end = loadOptions.take ? start + loadOptions.take : items.length;
       return items.slice(start, end);
     };
 
-    const loadUniqueRelevantItems = (loadOptions) => {
+    const loadUniqueRelevantItems = (
+      loadOptions: StoreLoadOptions,
+    ): DeferredObj<RawItemData[]> => {
       const group = normalizeGroupingLoadOptions(
+        // @ts-expect-error a bound lookup column has dataField, and displayField is checked above
         hasLookupOptimization ? [column.dataField, column.displayField] : column.dataField,
       );
       // @ts-expect-error
       const d = new Deferred();
 
-      const canUseCache = cachedUniqueRelevantItems && (
-        !hasGroupPaging
-        || (loadOptions.skip === previousSkip && loadOptions.take === previousTake)
-      );
+      const isSamePage = !hasGroupPaging
+        || (loadOptions.skip === previousSkip && loadOptions.take === previousTake);
 
-      if (canUseCache) {
+      if (cachedUniqueRelevantItems && isSamePage) {
         d.resolve(sliceItems(cachedUniqueRelevantItems, loadOptions));
       } else {
         previousSkip = loadOptions.skip;
@@ -714,13 +797,14 @@ export default {
         }).fail(d.fail);
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- untyped new Deferred()
       return d;
     };
 
-    const lookupDataSource = {
+    const lookupDataSource: WrappedLookupDataSource = {
       ...lookupDataSourceOptions,
       __dataGridSourceFilter: filter,
-      load: (loadOptions) => {
+      load: (loadOptions: StoreLoadOptions): DeferredObj<unknown> => {
         // @ts-expect-error
         const d = new Deferred();
         loadUniqueRelevantItems(loadOptions).done((items) => {
@@ -729,9 +813,9 @@ export default {
             return;
           }
 
-          const filter = combineFilters(
+          const keysFilter = combineFilters(
             items.flatMap((data) => data.key).map((key) => [
-              column.lookup.valueExpr, key,
+              lookup.valueExpr, key,
             ]),
             'or',
           );
@@ -739,7 +823,7 @@ export default {
           const newDataSource = new DataSource({
             ...lookupDataSourceOptions,
             ...loadOptions,
-            filter: combineFilters([filter, loadOptions.filter], 'and'),
+            filter: combineFilters([keysFilter, loadOptions.filter], 'and'),
             paginate: false, // pagination is included to filter
           });
 
@@ -748,13 +832,14 @@ export default {
             .done(d.resolve)
             .fail(d.fail);
         }).fail(d.fail);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- untyped new Deferred()
         return d;
       },
-      key: column.lookup.valueExpr,
-      byKey(key) {
-        const d = Deferred();
+      key: lookup.valueExpr,
+      byKey(key: unknown): Promise<unknown> {
+        const d = Deferred<unknown>();
         this.load({
-          filter: [column.lookup.valueExpr, '=', key],
+          filter: [lookup.valueExpr, '=', key],
         }).done((arr) => {
           d.resolve(arr[0]);
         });
@@ -766,7 +851,10 @@ export default {
     return lookupDataSource;
   },
 
-  getComponentBorderWidth(that, $rowsViewElement) {
+  getComponentBorderWidth(
+    that: ModuleItem,
+    $rowsViewElement: dxElementWrapper | undefined,
+  ): number {
     const borderWidth = that.option('showBorders')
       ? Math.ceil(getOuterWidth($rowsViewElement) - getInnerWidth($rowsViewElement))
       : 0;
@@ -774,7 +862,7 @@ export default {
     return borderWidth;
   },
 
-  isCustomCommandColumn(columns, commandColumn): boolean {
+  isCustomCommandColumn(columns: Column[], commandColumn: Column): boolean {
     const customCommandColumns = columns
       .filter((column) => column.type === commandColumn.type);
 

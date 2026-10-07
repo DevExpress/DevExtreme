@@ -15,6 +15,7 @@ import type {
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 import type { ActionConfig } from '@ts/core/widget/component';
+import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { FilterValue } from '@ts/grids/grid_core/filter/types';
 import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
 
@@ -61,6 +62,56 @@ export interface LoadPanelPosition {
 }
 
 export type WidgetElementData = Record<string, unknown> & { dxComponents?: string[] };
+
+export interface ColumnPointProps extends ColumnPoint {
+  item: Element | undefined;
+  isLeftBoundary?: boolean;
+  isRightBoundary?: boolean;
+}
+
+export type HeaderFilterGroupSelector = (data: unknown) => unknown;
+
+export interface HeaderFilterGroupDescriptor {
+  selector: string | HeaderFilterGroupSelector | undefined;
+  groupInterval?: string | number;
+  isExpanded?: boolean;
+  compare?: (value1: unknown, value2: unknown) => number;
+}
+
+export type HeaderFilterGroupItem = HeaderFilterGroupDescriptor | HeaderFilterGroupSelector;
+
+export type HeaderFilterGroup = HeaderFilterGroupSelector | HeaderFilterGroupItem[];
+
+export interface ExpandCellTemplateOptions {
+  value?: unknown;
+  data?: { isContinuation?: boolean };
+  row: { isNewRow?: boolean };
+  component: InternalGrid;
+}
+
+export interface ExpandCellTemplate {
+  allowRenderToDetachedContainer: boolean;
+  render: (container: dxElementWrapper, options: ExpandCellTemplateOptions) => void;
+}
+
+export type TextSelectionElement = Element & {
+  selectionStart?: number | null;
+  selectionEnd?: number | null;
+  setSelectionRange?: (start: number, end: number) => void;
+};
+
+export interface OptionsReader {
+  option: (name: string) => unknown;
+}
+
+export type WrappedLookupDataSource = NormalizedDataSourceOptions & {
+  __dataGridSourceFilter: unknown;
+  load: (loadOptions: StoreLoadOptions) => DeferredObj<unknown>;
+  key: string | undefined;
+  byKey: (key: unknown) => Promise<unknown>;
+};
+
+export type LookupDataSource = never[] | NormalizedDataSourceOptions | WrappedLookupDataSource;
 
 type OptionsMethod<TOptions> = (() => TOptions)
   & ((options: TOptions) => void)
