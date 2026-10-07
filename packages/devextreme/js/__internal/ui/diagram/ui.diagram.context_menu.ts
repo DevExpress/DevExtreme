@@ -99,8 +99,7 @@ class DiagramContextMenuWrapper extends Widget<Properties> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _onItemClickAction?: any;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onVisibilityChangingAction?: any;
+  private _onVisibilityChangingAction!: (event?: unknown) => void;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _onInternalCommandAction?: any;
