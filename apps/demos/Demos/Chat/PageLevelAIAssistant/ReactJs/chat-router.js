@@ -1,4 +1,4 @@
-import { ChatCommandError } from './data.js';
+import { ChatCommandError, FORM_ACTION_TYPES, ROUTER_TARGETS } from './data.js';
 import { applyFormClearAction, applyFormSmartPaste, getFormFieldOptions } from './form-commands.js';
 import {
   applyGridActions,
@@ -6,7 +6,6 @@ import {
   buildGridResponseSchema,
   getGridColumnNames,
 } from './grid-commands.js';
-import { FORM_ACTION_TYPES, ROUTER_TARGETS } from './constants.js';
 
 const MAX_USER_MESSAGE_LENGTH = 2000;
 const FIELD_OR_VALUE_NOT_FOUND_MESSAGE =
@@ -129,6 +128,9 @@ async function buildGridResultsPromise(grid, aiIntegration, text) {
   }
 }
 async function buildFormResultsPromise(form, formAction, text) {
+  if (!formAction) {
+    return Promise.resolve({ results: [], error: null });
+  }
   const clearResult = applyFormClearAction(form, formAction);
   if (clearResult) {
     return { results: [clearResult], error: null };
