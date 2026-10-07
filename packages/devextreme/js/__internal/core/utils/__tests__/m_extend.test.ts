@@ -192,6 +192,44 @@ describe('Extend utils', () => {
         expect(isRequired).toBe(true);
         expect(merged).toEqual({ value: 'a' });
       });
+
+      it('should take the type of a target property from every member of a union source', () => {
+        const source = { c: 'x' } as { c: string } | { d: number };
+
+        const merged = extend({ c: 1 }, source);
+        const keepsTargetType: typeof merged extends { c: number } ? true : false = false;
+
+        expect(keepsTargetType).toBe(false);
+        expect(merged).toEqual({ c: 'x' });
+      });
+
+      it('should keep the known properties of a target with an index signature', () => {
+        const target: { [key: string]: unknown; width: number } = { width: 1 };
+
+        const { width, height }: { width: number; height: number } = extend(target, { height: 2 });
+
+        expect(width).toBe(1);
+        expect(height).toBe(2);
+      });
+
+      it('should type a deeply merged array by the items of both arrays', () => {
+        const merged = extend(true, { list: [1, 2, 3] }, { list: ['x'] });
+        const items: (number | string)[] = merged.list;
+        const hasSourceItemsOnly: typeof merged.list extends string[] ? true : false = false;
+
+        expect(hasSourceItemsOnly).toBe(false);
+        expect(items).toEqual(['x', 2, 3]);
+      });
+
+      it('should keep the target type of a nested object that a deep source can skip', () => {
+        const source = {} as { nested?: { b: number } };
+
+        const merged = extend(true, { nested: { a: 1 } }, source);
+        const hasSourceFields: typeof merged.nested extends { b: number } ? true : false = false;
+
+        expect(hasSourceFields).toBe(false);
+        expect(merged).toEqual({ nested: { a: 1 } });
+      });
     });
   });
 

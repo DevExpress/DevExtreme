@@ -51,7 +51,9 @@ type KnownKeys<T> = keyof {
   [TKey in keyof T as string extends TKey ? never : number extends TKey ? never : TKey]: unknown;
 };
 
-type KeptValues<TTarget, TSource> = Omit<TTarget, KnownKeys<TSource>>;
+type KeptValues<TTarget, TSource> = {
+  [TKey in keyof TTarget as TKey extends KnownKeys<TSource> ? never : TKey]: TTarget[TKey];
+};
 
 type AssignObject<TTarget, TSource> = KeptValues<TTarget, TSource> & {
   [TKey in keyof TSource as TKey extends keyof TTarget ? TKey : never]-?:
@@ -67,19 +69,27 @@ type Assign<TTarget, TSource> = IsAny<TTarget> extends true
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
     ? any
     : TTarget extends unknown
-      ? [keyof TTarget] extends [never]
-        ? TSource & object
-        : [MergedArray<TTarget, TSource>] extends [never]
-          ? AssignObject<TTarget, TSource>
-          : MergedArray<TTarget, TSource>
+      ? TSource extends unknown
+        ? [keyof TTarget] extends [never]
+          ? TSource & object
+          : [MergedArray<TTarget, TSource>] extends [never]
+            ? AssignObject<TTarget, TSource>
+            : MergedArray<TTarget, TSource>
+        : never
       : never;
 
-type DeepValue<TTarget, TSource> = IsNestedObject<NonNullable<TTarget>> extends true
-  ? IsNestedObject<NonNullable<TSource>> extends true
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- recursive type
-    ? DeepAssign<NonNullable<TTarget>, NonNullable<TSource>>
+type NestedValue<TTarget, TSource> = [MergedArray<TTarget, TSource>] extends [never]
+  ? IsNestedObject<TTarget> extends true
+    ? IsNestedObject<TSource> extends true
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define -- recursive type
+      ? DeepAssign<TTarget, TSource>
+      : TSource
     : TSource
-  : TSource;
+  : MergedArray<TTarget, TSource>;
+
+type DeepValue<TTarget, TSource> = NestedValue<NonNullable<TTarget>, NonNullable<TSource>>
+  | ([Extract<TTarget, null | undefined>] extends [never] ? never : NonNullable<TSource>)
+  | Extract<TSource, null | undefined>;
 
 type DeepAssignObject<TTarget, TSource> = KeptValues<TTarget, TSource> & {
   [TKey in keyof TSource as TKey extends keyof TTarget ? TKey : never]-?:
@@ -97,11 +107,13 @@ type DeepAssign<TTarget, TSource> = IsAny<TTarget> extends true
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
     ? any
     : TTarget extends unknown
-      ? [keyof TTarget] extends [never]
-        ? TSource & object
-        : [MergedArray<TTarget, TSource>] extends [never]
-          ? DeepAssignObject<TTarget, TSource>
-          : MergedArray<TTarget, TSource>
+      ? TSource extends unknown
+        ? [keyof TTarget] extends [never]
+          ? TSource & object
+          : [MergedArray<TTarget, TSource>] extends [never]
+            ? DeepAssignObject<TTarget, TSource>
+            : MergedArray<TTarget, TSource>
+        : never
       : never;
 
 type Extended<TTarget, TSources extends readonly unknown[]> = TSources extends readonly [
