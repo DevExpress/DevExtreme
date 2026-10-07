@@ -11,6 +11,7 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/c
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
 import type { EditingController } from '../../grid_core/editing/m_editing';
@@ -192,8 +193,8 @@ export class FooterView extends ColumnsView {
   protected _updateContent($newTable, change) {
     if (change && change.changeType === 'update' && change.columnIndices) {
       return this.waitAsyncTemplates().done(() => {
-        const $row = this.getTableElement()!.find('.dx-row');
-        const $newRow = $newTable.find('.dx-row');
+        const $row = this.getTableElement()!.find(`.${VIEW_CLASSES.row}`);
+        const $newRow = $newTable.find(`.${VIEW_CLASSES.row}`);
 
         this._updateCells($row, $newRow, change.columnIndices[0]);
       });

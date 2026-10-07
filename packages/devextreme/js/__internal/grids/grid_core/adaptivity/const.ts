@@ -7,7 +7,6 @@ export const ADAPTIVE_NAMESPACE = 'dxDataGridAdaptivity';
 export const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
 export const ADAPTIVE_ROW_TYPE = 'detailAdaptive';
 
-export const FORM_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 export const FORM_ITEM_MODIFIED = 'dx-item-modified';
 
 export const HIDDEN_COLUMN_CLASS = 'hidden-column';
@@ -24,8 +23,6 @@ export const EDIT_MODE_ROW = 'row';
 export const EDIT_MODE_FORM = 'form';
 export const EDIT_MODE_POPUP = 'popup';
 export const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
-export const GROUP_CELL_CLASS = 'dx-group-cell';
-export const GROUP_ROW_CLASS = 'dx-group-row';
 
 export const EXPAND_ARIA_NAME = 'dxDataGrid-ariaAdaptiveExpand';
 export const COLLAPSE_ARIA_NAME = 'dxDataGrid-ariaAdaptiveCollapse';

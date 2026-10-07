@@ -6,6 +6,7 @@ import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
@@ -27,8 +28,7 @@ import { UiGridCoreFocusUtils } from './focus_utils';
 import type { FocusDataControllerExtension } from './types';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
-const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
-const TABLE_POSTFIX_CLASS = 'table';
+const FOCUSED_ROW_SELECTOR = `.${VIEW_CLASSES.row}.${ROW_FOCUSED_CLASS}`;
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
 type FocusDataController = DataController
@@ -524,7 +524,7 @@ export class FocusController extends core.ViewController {
 
   private _clearPreviousFocusedRow($tableElement, focusedRowIndex) {
     const isNotMasterDetailFocusedRow = (_, focusedRow) => {
-      const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(TABLE_POSTFIX_CLASS)}`);
+      const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(VIEW_CLASSES.table)}`);
       return $tableElement.is($focusedRowTable);
     };
 

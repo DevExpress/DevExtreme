@@ -21,6 +21,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
@@ -34,9 +35,7 @@ import modules from '../modules/modules';
 import {
   CHECKBOXES_HIDDEN_CLASS,
   COMMAND_SELECT_CLASS,
-  DATA_ROW_CLASS,
   EDITOR_CELL_CLASS,
-  ROW_CLASS,
   ROW_SELECTION_CLASS,
   SELECT_CHECKBOX_CLASS,
   SELECTION_DISABLED_CLASS,
@@ -49,7 +48,7 @@ const processLongTap = function (that, dxEvent) {
   const rowsView = that.getView('rowsView');
   // TODO getController
   const selectionController = that.getController('selection');
-  const $row = $(dxEvent.target).closest(`.${DATA_ROW_CLASS}`);
+  const $row = $(dxEvent.target).closest(`.${VIEW_CLASSES.dataRow}`);
   const rowIndex = rowsView.getRowIndex($row);
 
   if (rowIndex < 0) return;
@@ -797,7 +796,7 @@ export const selectionRowsViewExtender = (
   private _attachCheckBoxClickEvent($element) {
     eventsEngine.on($element, clickEventName, this.createAction(function (e) {
       const { event } = e;
-      const rowIndex = this.getRowIndex($(event.currentTarget).closest(`.${ROW_CLASS}`));
+      const rowIndex = this.getRowIndex($(event.currentTarget).closest(`.${VIEW_CLASSES.row}`));
 
       if (rowIndex >= 0) {
         this._selectionController.startSelectionWithCheckboxes();
@@ -858,7 +857,7 @@ export const selectionRowsViewExtender = (
     if (selectionMode !== 'none') {
       if (that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !supportUtils.touch) {
         // TODO Not working timeout by hold when it is larger than other timeouts by hold
-        eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${DATA_ROW_CLASS}`, that.createAction((e) => {
+        eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${VIEW_CLASSES.dataRow}`, that.createAction((e) => {
           processLongTap(that.component, e.event);
 
           e.event.stopPropagation();

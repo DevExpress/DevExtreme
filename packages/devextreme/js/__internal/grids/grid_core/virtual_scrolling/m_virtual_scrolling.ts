@@ -15,6 +15,7 @@ import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -26,7 +27,6 @@ import {
   BOTTOM_LOAD_PANEL_CLASS,
   COLUMN_LINES_CLASS,
   FREESPACE_CLASS,
-  GROUP_SPACE_CLASS,
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
   PAGING_METHOD_NAMES,
@@ -819,7 +819,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     const isExpandColumn = column.command === 'expand';
 
     cssClass && classes.push(cssClass);
-    isExpandColumn && classes.push(this.addWidgetPrefix(GROUP_SPACE_CLASS));
+    isExpandColumn && classes.push(this.addWidgetPrefix(VIEW_CLASSES.groupSpace));
 
     return classes;
   }
