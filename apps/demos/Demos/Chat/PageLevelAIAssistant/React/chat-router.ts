@@ -1,5 +1,5 @@
 import type { AIIntegration } from 'devextreme-react/common/ai-integration';
-import { ChatCommandError } from './data.ts';
+import { ChatCommandError, FORM_ACTION_TYPES, ROUTER_TARGETS } from './data.ts';
 import { applyFormClearAction, applyFormSmartPaste, getFormFieldOptions } from './form-commands.ts';
 import { applyGridActions, buildGridPromptSection, buildGridResponseSchema, getGridColumnNames } from './grid-commands.ts';
 import type {
@@ -14,7 +14,6 @@ import type {
   RouterTarget,
   TaskGrid,
 } from './data.ts';
-import { FORM_ACTION_TYPES, ROUTER_TARGETS } from './constants.ts';
 
 const MAX_USER_MESSAGE_LENGTH = 2000;
 const FIELD_OR_VALUE_NOT_FOUND_MESSAGE =
@@ -165,7 +164,7 @@ async function buildFormResultsPromise(
   if (!formAction) {
     return Promise.resolve({ results: [], error: null });
   }
-  
+
   const clearResult = applyFormClearAction(form, formAction);
   if (clearResult) {
     return { results: [clearResult], error: null };
