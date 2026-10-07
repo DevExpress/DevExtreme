@@ -178,7 +178,7 @@ defineExpose({ pushMessage });
 
 .ai-chat-empty-prompt {
   font-size: 14px;
-  color: #888;
+  color: #616161;
   text-align: center;
   padding: 0 24px;
   white-space: pre-line;

@@ -162,6 +162,10 @@ async function buildFormResultsPromise(
   formAction: ClassificationResult['formAction'],
   text: string,
 ): Promise<OperationOutcome> {
+  if (!formAction) {
+    return Promise.resolve({ results: [], error: null });
+  }
+  
   const clearResult = applyFormClearAction(form, formAction);
   if (clearResult) {
     return { results: [clearResult], error: null };

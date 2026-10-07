@@ -129,6 +129,9 @@ async function buildGridResultsPromise(grid, aiIntegration, text) {
   }
 }
 async function buildFormResultsPromise(form, formAction, text) {
+  if (!formAction) {
+    return Promise.resolve({ results: [], error: null });
+  }
   const clearResult = applyFormClearAction(form, formAction);
   if (clearResult) {
     return { results: [clearResult], error: null };
