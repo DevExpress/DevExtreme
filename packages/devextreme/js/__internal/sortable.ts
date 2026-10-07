@@ -21,8 +21,8 @@ import eventsEngine from '@ts/events/core/events_engine';
 import { isDefined } from '../core/utils/type';
 import type { DragEvent, DragEventArgs, DragTemplateArgs } from './draggable.types';
 import type {
-  AnimateConfig, ItemPoint, OptionChangedToIndexArgs, SortableDragStartArgs,
-  SortableEventArgs, SortableProperties, SourceScrollableInfo,
+  AnimateConfig, ItemPoint, OptionChangedToIndexArgs, PlaceholderPreparedArgs,
+  SortableDragStartArgs, SortableEventArgs, SortableProperties, SourceScrollableInfo,
 } from './sortable.types';
 
 const window = getWindow();
@@ -596,12 +596,13 @@ class Sortable extends Draggable<SortableProperties> {
       dropInsideItem: itemPoint.dropInsideItem,
       toIndex: itemPoint.index,
     });
-    this._getAction('onPlaceholderPrepared')(extend(this._getEventArgs(e), {
+    const placeholderPreparedArgs: PlaceholderPreparedArgs = extend(this._getEventArgs(e), {
       // @ts-expect-error the placeholder element can be null
       placeholderElement: getPublicElement(this._$placeholderElement),
       // @ts-expect-error the drag element can be null
       dragElement: getPublicElement(sourceDraggable._$dragElement),
-    }));
+    });
+    this._getAction('onPlaceholderPrepared')(placeholderPreparedArgs);
     this._updateItemPoints();
   }
 

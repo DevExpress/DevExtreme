@@ -1,4 +1,5 @@
 import type { AnimationConfig } from '@js/common/core/animation';
+import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type dxSortable from '@js/ui/sortable';
@@ -34,8 +35,11 @@ export type SortableEventArgs = DragEventArgs & {
   toIndex: number | null;
   dropInsideItem: boolean;
   promise?: DeferredObj<unknown> | PromiseLike<void>;
-  placeholderElement?: unknown;
-  dragElement?: unknown;
+};
+
+export type PlaceholderPreparedArgs = SortableEventArgs & {
+  placeholderElement: DxElement;
+  dragElement: DxElement;
 };
 
 export type SortableDragStartArgs = DragStartArgs & {
@@ -95,6 +99,5 @@ export interface SortableProperties extends DraggableBaseProperties<dxSortable> 
 
   moveItemOnDrop: boolean;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onPlaceholderPrepared?: ((e: any) => void) | null;
+  onPlaceholderPrepared?: (e: PlaceholderPreparedArgs) => void;
 }
