@@ -190,7 +190,7 @@ export type DragEvent = Cancelable & {
 export type DragEventArgs = Cancelable & {
   event: DragEvent;
   itemData: unknown;
-  itemElement: unknown;
+  itemElement: DxElement;
   fromComponent: unknown;
   toComponent: unknown;
   fromData: unknown;
@@ -491,8 +491,7 @@ class Draggable<
   dragEnd(sourceEvent: DragEventArgs): DeferredObj<unknown> | PromiseLike<void> {
     const sourceDraggable = this._getSourceDraggable();
 
-    // @ts-expect-error dragEnd passes the event args where the event is expected
-    sourceDraggable._fireRemoveEvent(sourceEvent);
+    sourceDraggable._fireRemoveEvent(sourceEvent.event);
 
     return Deferred().resolve();
   }
@@ -665,7 +664,7 @@ class Draggable<
       return;
     }
 
-    let $element = this._$content();
+    const $element = this._getEventsTarget();
     let itemsSelector = this._getItemsSelector();
     const allowMoveByClick = this.option('allowMoveByClick');
     const data = {
@@ -691,7 +690,6 @@ class Draggable<
     };
 
     if (allowMoveByClick) {
-      $element = this._getArea();
       eventsEngine.on($element, POINTERDOWN_EVENT_NAME, data, this._pointerDownHandler.bind(this));
     }
 
@@ -710,6 +708,16 @@ class Draggable<
     eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
     eventsEngine.on($element, DRAG_ENTER_EVENT_NAME, data, this._dragEnterHandler.bind(this));
     eventsEngine.on($element, DRAGEND_LEAVE_EVENT_NAME, data, this._dragLeaveHandler.bind(this));
+
+    this._subscribeKeydownHandler($element);
+  }
+
+  _getEventsTarget(): dxElementWrapper {
+    return this.option('allowMoveByClick') ? this._getArea() : this._$content();
+  }
+
+  _subscribeKeydownHandler($element: dxElementWrapper): void {
+    eventsEngine.off($element, KEYDOWN_EVENT_NAME);
 
     if (this.option('onCancelByEsc')) {
       eventsEngine.on($element, KEYDOWN_EVENT_NAME, this._keydownHandler.bind(this));
@@ -732,9 +740,8 @@ class Draggable<
 
   _createDragElement($element: dxElementWrapper): dxElementWrapper {
     let result = $element;
-    const clone = this.option('clone');
     const $container = this._getContainer();
-    const dragTemplate = this.option('dragTemplate');
+    const { clone, dragTemplate } = this.option();
 
     if (dragTemplate) {
       const template = this._getTemplate(dragTemplate);
@@ -1110,7 +1117,7 @@ class Draggable<
       event: e,
       itemData: sourceDraggable.option('itemData'),
       // @ts-expect-error the source element can be null
-      itemElement: getPublicElement(sourceDraggable._$sourceElement),
+      itemElement: getPublicElement<HTMLElement>(sourceDraggable._$sourceElement),
       fromComponent: sourceDraggable.option('component') || sourceDraggable,
       toComponent: targetDraggable.option('component') || targetDraggable,
       fromData: sourceDraggable.option('data'),
@@ -1329,8 +1336,9 @@ class Draggable<
         this._attachEventHandlers();
         break;
       case 'onCancelByEsc':
-        // @ts-expect-error the event is not passed
-        this._keydownHandler();
+        if (!this.option('disabled')) {
+          this._subscribeKeydownHandler(this._getEventsTarget());
+        }
         break;
       case 'autoScroll':
         this._verticalScrollHelper.reset();
