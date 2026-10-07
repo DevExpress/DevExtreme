@@ -194,6 +194,8 @@ const StoreEventNames = {
 
 type StoreEventName = typeof StoreEventNames[keyof typeof StoreEventNames];
 
+type WorkspaceConfig = Omit<WorkspaceOptionsInternal, 'onInitialized' | 'onDisposing' | 'rowHeight'>;
+
 interface SchedulerActionMap {
   onAppointmentAdding: AppointmentAddingOptions;
   onAppointmentAdded: AppointmentCompletedOptions;
@@ -1685,7 +1687,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     });
   }
 
-  private workSpaceConfig(currentViewOptions: NormalizedView): WorkspaceOptionsInternal {
+  private workSpaceConfig(currentViewOptions: NormalizedView): WorkspaceConfig {
     const scrolling = this.getViewOption('scrolling');
     const isVirtualScrolling = scrolling.mode === 'virtual';
     const horizontalVirtualScrollingAllowed = isVirtualScrolling
@@ -1697,8 +1699,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       || horizontalVirtualScrollingAllowed
       || isTimelineView(currentViewOptions.type);
 
-    // @ts-expect-error the raw options are merged here and converted below
-    const workSpaceOptions = extend({
+    const mergedOptions = extend({
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
       getFilteredItems: () => this._layoutManager.filteredItems, // NOTE: used only in agenda
@@ -1750,27 +1751,30 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       cellDuration: this.option('cellDuration'),
       allDayExpanded: false,
       currentDate: this.getViewOption('currentDate'),
-    }, currentViewOptions) as WorkspaceOptionsInternal;
+    }, currentViewOptions);
 
-    workSpaceOptions.hoursInterval = workSpaceOptions.cellDuration / 60;
-
-    workSpaceOptions.notifyScheduler = this.notifyScheduler;
-    workSpaceOptions.groups = this.resourceManager.groupResources();
-    workSpaceOptions.onCellClick = this.createSchedulerAction('onCellClick');
-    workSpaceOptions.onCellContextMenu = this.createSchedulerAction('onCellContextMenu');
-    workSpaceOptions.skippedDays = this.getViewOption('hiddenWeekDays') as number[];
-    workSpaceOptions.dataCellTemplate = workSpaceOptions.dataCellTemplate
-      ? this._getTemplate(workSpaceOptions.dataCellTemplate) as unknown as TemplateBase
-      : null;
-    workSpaceOptions.timeCellTemplate = workSpaceOptions.timeCellTemplate
-      ? this._getTemplate(workSpaceOptions.timeCellTemplate) as unknown as TemplateBase
-      : null;
-    workSpaceOptions.resourceCellTemplate = workSpaceOptions.resourceCellTemplate
-      ? this._getTemplate(workSpaceOptions.resourceCellTemplate) as unknown as TemplateBase
-      : null;
-    workSpaceOptions.dateCellTemplate = workSpaceOptions.dateCellTemplate
-      ? this._getTemplate(workSpaceOptions.dateCellTemplate) as unknown as TemplateBase
-      : null;
+    // @ts-expect-error the startDate and the scrolling of a view are passed to the workspace as is
+    const workSpaceOptions: WorkspaceConfig = {
+      ...mergedOptions,
+      hoursInterval: mergedOptions.cellDuration / 60,
+      notifyScheduler: this.notifyScheduler,
+      groups: this.resourceManager.groupResources(),
+      onCellClick: this.createSchedulerAction('onCellClick'),
+      onCellContextMenu: this.createSchedulerAction('onCellContextMenu'),
+      skippedDays: this.getViewOption('hiddenWeekDays') as number[],
+      dataCellTemplate: mergedOptions.dataCellTemplate
+        ? this._getTemplate(mergedOptions.dataCellTemplate) as unknown as TemplateBase
+        : null,
+      timeCellTemplate: mergedOptions.timeCellTemplate
+        ? this._getTemplate(mergedOptions.timeCellTemplate) as unknown as TemplateBase
+        : null,
+      resourceCellTemplate: mergedOptions.resourceCellTemplate
+        ? this._getTemplate(mergedOptions.resourceCellTemplate) as unknown as TemplateBase
+        : null,
+      dateCellTemplate: mergedOptions.dateCellTemplate
+        ? this._getTemplate(mergedOptions.dateCellTemplate) as unknown as TemplateBase
+        : null,
+    };
 
     return workSpaceOptions;
   }

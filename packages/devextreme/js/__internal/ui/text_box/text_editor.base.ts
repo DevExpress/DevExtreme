@@ -429,7 +429,6 @@ class TextEditorBase<
   ): void {
     const inputAttributes = extend(this._getDefaultAttributes(), customAttributes);
 
-    // @ts-expect-error attr has no overload for an object of attributes
     $input.attr(inputAttributes);
     $input.addClass(TEXTEDITOR_INPUT_CLASS);
 
@@ -1002,7 +1001,6 @@ class TextEditorBase<
       case 'placeholder':
         this._renderPlaceholder();
         this._setFieldAria(true);
-        // @ts-expect-error ts-error
         this._input().attr({ placeholder: this._getPlaceholderAttr() });
         break;
       case 'label':

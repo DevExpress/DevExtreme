@@ -22,7 +22,7 @@ import type { Grouping, GroupPanel } from '@js/ui/data_grid';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
-import type { SortingInfo, SortingSelector } from '@ts/data/utils';
+import type { SortingInfo } from '@ts/data/utils';
 import type {
   BandColumnsCache,
   Column,
@@ -110,8 +110,6 @@ import {
   USER_STATE_FIELD_NAMES,
 } from './const';
 import { UserStateApplier } from './user_state_applier';
-
-type ColumnOptionsList = (Column | SortingSelector | undefined)[];
 
 export class ColumnsController extends modules.Controller {
   public _skipProcessingColumnsChange!: string | boolean;
@@ -1600,15 +1598,16 @@ export class ColumnsController extends modules.Controller {
         && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
 
     if (!this._columns.length) {
+      const columnsOptions: (Column | string | undefined)[] = this._columns;
       each(groupParameters, (_: number, group) => {
-        (this._columns as ColumnOptionsList).push(group.selector);
+        columnsOptions.push(group.selector);
       });
       each(sortParameters, (_: number, sort) => {
         if (!isFunction(sort.selector)) {
-          (this._columns as ColumnOptionsList).push(sort.selector);
+          columnsOptions.push(sort.selector);
         }
       });
-      assignColumns(this, createColumnsFromOptions(this, this._columns));
+      assignColumns(this, createColumnsFromOptions(this, columnsOptions));
     }
 
     const shouldApplyGrouping = (Boolean(needToApplyGroupingFromDataSource)

@@ -210,7 +210,6 @@ class DOMComponent<
 
     delete attributes.class;
     this.$element()
-      // @ts-expect-error attr has no overload for an object of attributes
       .attr(attributes)
       .removeClass(this._customClass)
       .addClass(classNames);

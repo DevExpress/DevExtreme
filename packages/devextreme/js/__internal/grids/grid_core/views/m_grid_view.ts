@@ -54,13 +54,12 @@ const VIEW_NAMES = [
   'pagerView',
   'draggingHeaderView',
   'contextMenuView',
-  'errorView',
   'headerFilterView',
   'filterBuilderView',
   'toastView',
   'aiPromptEditorView',
   'aiAssistantView',
-];
+] as const;
 
 const E2E_ATTRIBUTES = {
   a11yStatusContainer: 'e2e-a11y-general-status-container',
@@ -858,7 +857,6 @@ export class ResizingController extends modules.ViewController {
 
         each(VIEW_NAMES, (index, viewName) => {
           // TODO getView
-          // @ts-expect-error errorView is in the list, but no such view is registered
           const view = that.getView(viewName);
           if (view) {
             view.resize();

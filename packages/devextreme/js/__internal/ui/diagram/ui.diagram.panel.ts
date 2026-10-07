@@ -10,11 +10,14 @@ import type { PopupProperties } from '@ts/ui/popup/popup';
 const POINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxDiagramPanel');
 const PREVENT_REFOCUS_SELECTOR = '.dx-textbox';
 
-interface Properties extends PopupProperties {
+export interface DiagramPanelProperties extends PopupProperties {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
   onPointerUp?: (e: { component: DiagramPanel }) => void;
 }
 
-class DiagramPanel extends Widget<Properties> {
+class DiagramPanel<
+  TProperties extends DiagramPanelProperties = DiagramPanelProperties,
+> extends Widget<TProperties> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _onPointerUpAction!: any;
 
@@ -48,7 +51,7 @@ class DiagramPanel extends Widget<Properties> {
     this._onPointerUpAction = this._createActionByOption('onPointerUp');
   }
 
-  _optionChanged(args: OptionChanged<Properties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name } = args;
 
     switch (name) {
