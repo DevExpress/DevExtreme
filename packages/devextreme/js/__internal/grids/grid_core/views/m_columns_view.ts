@@ -1146,6 +1146,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
+  public isWaitingForAsyncTemplates(): boolean {
+    return !!this.needWaitAsyncTemplates() && this._templateDeferreds?.size > 0;
+  }
+
   public waitAsyncTemplates(forceWaiting = false) {
     // @ts-expect-error
     const result = new Deferred();

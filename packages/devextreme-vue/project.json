@@ -178,6 +178,27 @@
       ],
       "inputs": ["default"]
     },
+    "verify:dts": {
+      "executor": "devextreme-nx-infra-plugin:check-declarations",
+      "options": {
+        "mode": "modules",
+        "modulesPattern": "./npm/cjs/**/*.d.ts",
+        "typescriptModule": "typescript-min",
+        "compilerOptions": {
+          "types": [],
+          "lib": ["ES2020", "DOM"],
+          "baseUrl": "./npm",
+          "paths": { "devextreme/*": ["../../devextreme/artifacts/npm/devextreme/*"] }
+        }
+      },
+      "dependsOn": ["build:cjs"],
+      "inputs": [
+        "{projectRoot}/npm/cjs/**/*.d.ts",
+        "{workspaceRoot}/packages/devextreme/artifacts/npm/devextreme/**/*.d.ts",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ],
+      "cache": true
+    },
     "test": {
       "executor": "nx:run-script",
       "options": {
