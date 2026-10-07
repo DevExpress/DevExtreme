@@ -3,19 +3,33 @@ import query from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined, isFunction } from '@js/core/utils/type';
+import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import type Store from '@ts/data/abstract_store';
-import type { ChangingEvent } from '@ts/data/data_source/types';
+import type { StoreKey } from '@ts/data/abstract_store';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
 import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/provider';
-import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { OperationTypes as BaseOperationTypes, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { RowKey } from '@ts/grids/grid_core/types';
 
 import treeListCore from '../core';
-import type { LoadOperation, NodeByKey, TreeNode } from './types';
+import type {
+  ConvertibleData,
+  DataGetter,
+  DataSetter,
+  LoadOperation,
+  NodeByKey,
+  NodeCallback,
+  OperationTypes,
+  TreeNode,
+} from './types';
 import { createIdFilter } from './utils/create_id_filter';
 import type { LoadBranchesContext } from './utils/load_branches';
 import { loadBranches } from './utils/load_branches';
@@ -28,99 +42,106 @@ const { queryByOptions } = storeHelper;
 
 const DEFAULT_KEY_EXPRESSION = 'id';
 
-const isFullBranchFilterMode = (that) => that.option('filterMode') === 'fullBranch';
+const isFullBranchFilterMode = (that: DataSourceAdapterTreeList): boolean => that.option('filterMode') === 'fullBranch';
 
-const getChildKeys = function (that, keys) {
-  const childKeys: any[] = [];
+const getChildKeys = (that: DataSourceAdapterTreeList, keys: RowKey[]): RowKey[] => {
+  const childKeys: RowKey[] = [];
 
   keys.forEach((key) => {
     const node = that.getNodeByKey(key);
 
-    node && node.children.forEach((child) => {
-      childKeys.push(child.key);
-    });
+    if (node) {
+      node.children.forEach((child) => {
+        childKeys.push(child.key);
+      });
+    }
   });
 
   return childKeys;
 };
 
 export class DataSourceAdapterTreeList extends DataSourceAdapter {
-  private _keyGetter: any;
+  private _keyGetter!: DataGetter;
 
-  private _parentIdGetter: any;
+  private _parentIdGetter!: DataGetter;
 
-  private _hasItemsGetter: any;
+  private _hasItemsGetter?: DataGetter;
 
-  private _itemsGetter: any;
+  private _itemsGetter?: DataGetter;
 
-  private _keySetter: any;
+  private _keySetter?: DataSetter;
 
-  private _parentIdSetter: any;
+  private _parentIdSetter?: DataSetter;
 
-  private _hasItemsSetter: any;
+  private _hasItemsSetter?: DataSetter;
 
-  private _isChildrenLoaded: any;
+  private _isChildrenLoaded!: Record<string, boolean>;
 
   private _nodeByKey!: NodeByKey;
 
-  private _isReload: any;
+  private _isReload?: boolean;
 
   private _rootNode?: TreeNode;
 
   public _isNodesInitializing = false;
 
-  private _totalItemsCount: any;
+  private _totalItemsCount!: number;
 
-  private _lastExpandedRowKeys: any;
+  private _lastExpandedRowKeys?: RowKey[];
 
-  private _createKeyGetter() {
+  private _createKeyGetter(): DataGetter {
     const keyExpr = this.getKeyExpr();
 
-    return compileGetter(keyExpr as string);
+    return compileGetter(keyExpr as string) as DataGetter;
   }
 
-  private _createKeySetter() {
+  private _createKeySetter(): DataSetter {
     const keyExpr = this.getKeyExpr();
 
     if (isFunction(keyExpr)) {
+      // @ts-expect-error StoreKey type omits the function keyExpr form
       return keyExpr;
     }
 
-    return compileSetter(keyExpr as string);
+    return compileSetter(keyExpr as string) as DataSetter;
   }
 
-  public createParentIdGetter(): (data: unknown) => unknown {
-    return compileGetter(this.option('parentIdExpr')) as (data: unknown) => unknown;
+  public createParentIdGetter(): DataGetter {
+    return compileGetter(this.option('parentIdExpr')) as DataGetter;
   }
 
-  public createParentIdSetter(): (data: unknown, value: unknown) => void {
+  public createParentIdSetter(): DataSetter {
     const parentIdExpr = this.option('parentIdExpr');
 
     if (isFunction(parentIdExpr)) {
-      return parentIdExpr as (data: unknown, value: unknown) => void;
+      return parentIdExpr as DataSetter;
     }
 
-    return compileSetter(parentIdExpr) as (data: unknown, value: unknown) => void;
+    return compileSetter(parentIdExpr) as DataSetter;
   }
 
-  private _createItemsGetter() {
-    return compileGetter(this.option('itemsExpr'));
+  private _createItemsGetter(): DataGetter {
+    return compileGetter(this.option('itemsExpr')) as DataGetter;
   }
 
-  private _createHasItemsGetter() {
+  private _createHasItemsGetter(): DataGetter | undefined {
     const hasItemsExpr = this.option('hasItemsExpr');
 
-    return hasItemsExpr && compileGetter(hasItemsExpr);
+    return hasItemsExpr
+      ? compileGetter(hasItemsExpr) as DataGetter
+      : undefined;
   }
 
-  private _createHasItemsSetter() {
+  private _createHasItemsSetter(): DataSetter | undefined {
     const hasItemsExpr = this.option('hasItemsExpr');
 
     if (isFunction(hasItemsExpr)) {
-      return hasItemsExpr;
+      return hasItemsExpr as DataSetter;
     }
 
-    return hasItemsExpr && compileSetter(hasItemsExpr);
+    return hasItemsExpr
+      ? compileSetter(hasItemsExpr) as DataSetter
+      : undefined;
   }
 
   private _getNodesContext(): NodesContext {
@@ -152,46 +173,54 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     };
   }
 
-  private _convertDataToPlainStructure(data, parentId?, result?) {
-    let key;
+  private _convertDataToPlainStructure(
+    data: ConvertibleData,
+    parentId?: RowKey,
+    result?: ConvertibleData,
+  ): ConvertibleData {
+    const itemsGetter = this._itemsGetter;
 
-    if (this._itemsGetter && !data.isConverted) {
-      result = result || [];
-
-      for (let i = 0; i < data.length; i++) {
-        const item = createObjectWithChanges(data[i]);
-
-        key = this._keyGetter(item);
-        if (key === undefined) {
-          key = result.length + 1;
-          this._keySetter(item, key);
-        }
-
-        this._parentIdSetter(item, parentId === undefined ? this.option('rootValue') : parentId);
-
-        result.push(item);
-
-        const childItems = this._itemsGetter(item);
-        if (childItems && childItems.length) {
-          this._convertDataToPlainStructure(childItems, key, result);
-
-          const itemsExpr = this.option('itemsExpr');
-          if (!isFunction(itemsExpr)) {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            delete item[itemsExpr];
-          }
-        }
-      }
-
-      result.isConverted = true;
-
-      return result;
+    if (!itemsGetter || data.isConverted) {
+      return data;
     }
 
-    return data;
+    const resultData: ConvertibleData = result ?? [];
+
+    for (const dataItem of data) {
+      const item = createObjectWithChanges(dataItem) as RawItemData;
+
+      let key = this._keyGetter(item);
+      if (key === undefined) {
+        key = resultData.length + 1;
+        this._keySetter?.(item, key);
+      }
+
+      this._parentIdSetter?.(item, parentId === undefined ? this.option('rootValue') : parentId);
+
+      resultData.push(item);
+
+      const childItems = itemsGetter(item) as ConvertibleData | undefined;
+      if (childItems && childItems.length) {
+        this._convertDataToPlainStructure(childItems, key, resultData);
+
+        const itemsExpr = this.option('itemsExpr');
+        if (!isFunction(itemsExpr)) {
+          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- field name
+          delete item[itemsExpr as string];
+        }
+      }
+    }
+
+    resultData.isConverted = true;
+
+    return resultData;
   }
 
-  protected override _calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload?: boolean) {
+  protected override _calculateOperationTypes(
+    loadOptions: StoreLoadOptions,
+    lastLoadOptions: (StoreLoadOptions & { groupExpand?: boolean }) | undefined,
+    isFullReload?: boolean,
+  ): OperationTypes {
     const currentExpandedKeys = this.option('expandedRowKeys');
 
     return {
@@ -200,22 +229,29 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     };
   }
 
-  protected _customizeRemoteOperations(options, operationTypes) {
-    super._customizeRemoteOperations.apply(this, arguments as any);
+  protected _customizeRemoteOperations(
+    options: LoadOperation,
+    operationTypes: BaseOperationTypes,
+  ): void {
+    super._customizeRemoteOperations(options, operationTypes);
 
-    options.remoteOperations.paging = false;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- set before load
+    const remoteOperations = options.remoteOperations!;
+    remoteOperations.paging = false;
 
     let expandVisibleNodes = false;
 
     if (this.option('autoExpandAll')) {
-      options.remoteOperations.sorting = false;
-      options.remoteOperations.filtering = false;
-      if ((!this._lastLoadOptions || operationTypes.filtering && !options.storeLoadOptions.filter) && !options.isCustomLoading) {
+      remoteOperations.sorting = false;
+      remoteOperations.filtering = false;
+      const isFilterReset = operationTypes.filtering && !options.storeLoadOptions.filter;
+      if ((!this._lastLoadOptions || isFilterReset) && !options.isCustomLoading) {
         expandVisibleNodes = true;
       }
     }
 
     if (!options.isCustomLoading) {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- OR of flags
       this._isReload = this._isReload || operationTypes.reload;
 
       if (!options.cachedStoreData) {
@@ -226,7 +262,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
         }
       }
 
-      if (this.option('expandNodesOnFiltering') && (operationTypes.filtering || this._isReload && options.storeLoadOptions.filter)) {
+      if (this.option('expandNodesOnFiltering')
+        && (operationTypes.filtering || (this._isReload && options.storeLoadOptions.filter))) {
         if (options.storeLoadOptions.filter) {
           expandVisibleNodes = true;
         } else {
@@ -238,14 +275,14 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     options.expandVisibleNodes = expandVisibleNodes;
   }
 
-  private _getParentIdsToLoad(parentIds) {
-    const parentIdsToLoad: any[] = [];
+  private _getParentIdsToLoad(parentIds: RowKey[]): RowKey[] {
+    const parentIdsToLoad: RowKey[] = [];
 
-    for (let i = 0; i < parentIds.length; i++) {
-      const node = this.getNodeByKey(parentIds[i]);
+    for (const parentId of parentIds) {
+      const node = this.getNodeByKey(parentId);
 
-      if (!node || node.hasChildren && !node.children.length) {
-        parentIdsToLoad.push(parentIds[i]);
+      if (!node || (node.hasChildren && !node.children.length)) {
+        parentIdsToLoad.push(parentId);
       }
     }
 
@@ -255,8 +292,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  protected customizeStoreLoadOptionsHandler(options) {
-    const rootValue: any = this.option('rootValue');
+  protected customizeStoreLoadOptionsHandler(options: LoadOperation): void {
+    const rootValue: unknown = this.option('rootValue');
     const parentIdExpr = this.option('parentIdExpr');
     let { parentIds } = options.storeLoadOptions;
 
@@ -264,12 +301,14 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       options.isCustomLoading = false;
     }
 
-    super.customizeStoreLoadOptionsHandler.apply(this, arguments as any);
+    super.customizeStoreLoadOptionsHandler(options);
 
+    // @ts-expect-error remoteOperations is set before load
     if (options.remoteOperations.filtering && !options.isCustomLoading) {
-      if (isFullBranchFilterMode(this) && options.cachedStoreData || !options.storeLoadOptions.filter) {
-        const expandedRowKeys = options.collapseVisibleNodes ? [] : this.option('expandedRowKeys');
-        parentIds = [rootValue].concat(expandedRowKeys).concat(parentIds || []);
+      if ((isFullBranchFilterMode(this) && options.cachedStoreData)
+        || !options.storeLoadOptions.filter) {
+        const expandedRowKeys = (options.collapseVisibleNodes ? [] : this.option('expandedRowKeys')) as RowKey[];
+        parentIds = [rootValue].concat(expandedRowKeys).concat(parentIds ?? []);
         const parentIdsToLoad = options.data ? this._getParentIdsToLoad(parentIds) : parentIds;
 
         if (parentIdsToLoad.length) {
@@ -285,25 +324,25 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
   }
 
-  private _updateHasItemsMap(options) {
+  private _updateHasItemsMap(options: LoadOperation): void {
     const { parentIds } = options.storeLoadOptions;
 
     if (parentIds) {
-      for (let i = 0; i < parentIds.length; i++) {
-        this._isChildrenLoaded[parentIds[i]] = true;
+      for (const parentId of parentIds) {
+        this._isChildrenLoaded[parentId as string] = true;
       }
     }
   }
 
-  protected _getKeyInfo() {
+  protected _getKeyInfo(): Store {
     return {
       key: () => 'key',
       keyOf: (data: { key: unknown }) => data.key,
     } as Store;
   }
 
-  private _processChanges(changes) {
-    let processedChanges: any[] = [];
+  private _processChanges(changes: StoreChange[]): StoreChange[] {
+    let processedChanges: StoreChange[] = [];
 
     changes.forEach((change) => {
       if (change.type === 'insert') {
@@ -319,9 +358,9 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   }
 
   protected changingHandler(e: ChangingEvent): void {
-    super.changingHandler.apply(this, arguments as any);
+    super.changingHandler(e);
 
-    const processChanges = (changes) => {
+    const processChanges = (changes: StoreChange[]): StoreChange[] => {
       const changesToProcess = changes.filter((item) => item.type === 'update');
       return this._processChanges(changesToProcess);
     };
@@ -330,13 +369,13 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     e.postProcessChanges = processChanges;
   }
 
-  protected _applyBatch(changes) {
+  protected _applyBatch(changes: StoreChange[]): void {
     const processedChanges = this._processChanges(changes);
 
     super._applyBatch(processedChanges);
   }
 
-  private _setHasItems(node, value) {
+  private _setHasItems(node: TreeNode, value: boolean): void {
     const hasItemsSetter = this._hasItemsSetter;
     node.hasChildren = value;
     if (hasItemsSetter && node.data) {
@@ -344,30 +383,33 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
   }
 
-  private _applyInsert(change) {
-    const that = this;
-    const baseChanges: any[] = [];
-    const parentId = that.parentKeyOf(change.data);
-    const parentNode = that.getNodeByKey(parentId);
+  private _applyInsert(change: StoreChange): StoreChange[] {
+    const baseChanges: StoreChange[] = [];
+    const parentId = this.parentKeyOf(change.data);
+    const parentNode = this.getNodeByKey(parentId);
 
     if (parentNode) {
-      const node = convertItemToNode(change.data, that._nodeByKey, that._getNodesContext());
+      const node = convertItemToNode(change.data, this._nodeByKey, this._getNodesContext());
 
       node.hasChildren = false;
-      node.level = parentNode.level! + 1;
+      // @ts-expect-error level is set on every node when the tree is built
+      node.level = parentNode.level + 1;
       node.visible = true;
 
       parentNode.children.push(node);
 
-      that._isChildrenLoaded[node.key as string] = true;
+      this._isChildrenLoaded[node.key as string] = true;
 
-      that._setHasItems(parentNode, true);
+      this._setHasItems(parentNode, true);
 
-      if ((!parentNode.parent || that.isRowExpanded(parentNode.key)) && change.index !== undefined) {
-        // @ts-expect-error Badly typed items()
-        let index = that.items().indexOf(parentNode) + 1;
+      if ((!parentNode.parent || this.isRowExpanded(parentNode.key))
+        && change.index !== undefined) {
+        // @ts-expect-error items() is typed as loaded items, but holds tree nodes here
+        let index = this.items().indexOf(parentNode) + 1;
 
-        index += change.index >= 0 ? Math.min(change.index, parentNode.children.length) : parentNode.children.length;
+        index += change.index >= 0
+          ? Math.min(change.index, parentNode.children.length)
+          : parentNode.children.length;
 
         baseChanges.push({ type: change.type, data: node, index });
       }
@@ -376,16 +418,16 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return baseChanges;
   }
 
-  protected _needToCopyDataObject() {
+  protected _needToCopyDataObject(): boolean {
     return false;
   }
 
-  private _applyRemove(change) {
-    let baseChanges: any[] = [];
+  private _applyRemove(change: StoreChange): StoreChange[] {
+    let baseChanges: StoreChange[] = [];
     const node = this.getNodeByKey(change.key);
-    const parentNode = node && node.parent;
+    const parentNode = node?.parent;
 
-    if (parentNode) {
+    if (parentNode && node) {
       const index = parentNode.children.indexOf(node);
       if (index >= 0) {
         parentNode.children.splice(index, 1);
@@ -395,43 +437,52 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
         }
 
         baseChanges.push(change);
-        baseChanges = baseChanges.concat(this.getChildNodeKeys(change.key).map((key) => ({ type: change.type, key })));
+        baseChanges = baseChanges.concat(
+          this.getChildNodeKeys(change.key).map((key) => ({ type: change.type, key })),
+        );
       }
     }
 
     return baseChanges;
   }
 
-  public customizeLoadResultHandler(options) {
-    const data = options.data = this._convertDataToPlainStructure(options.data);
+  public customizeLoadResultHandler(options: LoadOperation): void {
+    const data = this._convertDataToPlainStructure(options.data as ConvertibleData);
+    options.data = data;
+    // @ts-expect-error remoteOperations and loadOptions are set before load
     if (!options.remoteOperations.filtering && options.loadOptions.filter) {
-      options.fullData = queryByOptions(query(options.data), { sort: options.loadOptions && options.loadOptions.sort }).toArray();
+      // @ts-expect-error query() is not generic, its rows are the loaded items
+      options.fullData = queryByOptions(
+        query(data),
+        { sort: options.loadOptions?.sort },
+      ).toArray();
     }
     this._updateHasItemsMap(options);
     super.customizeLoadResultHandler(options);
 
     if (!options.isCustomLoading) {
-      this._lastExpandedRowKeys = this.option('expandedRowKeys')?.slice();
+      this._lastExpandedRowKeys = (this.option('expandedRowKeys') as RowKey[] | undefined)?.slice();
     }
 
     if (data.isConverted && this._cachedStoreData) {
-      // @ts-expect-error
+      // @ts-expect-error isConverted flag stashed on the cached array
       this._cachedStoreData.isConverted = true;
     }
   }
 
   private _processTreeStructure(options: LoadOperation, visibleItems?: RawItemData[]): void {
     let data = options.data as RawItemData[];
+    let visibleData = visibleItems;
     const { parentIds } = options.storeLoadOptions;
 
-    if (parentIds && parentIds.length || this._isReload) {
+    if (parentIds?.length || this._isReload) {
       if (options.fullData) {
         data = options.fullData;
-        visibleItems ??= options.data as RawItemData[];
+        visibleData ??= options.data as RawItemData[];
       }
 
       const nodesContext = this._getNodesContext();
-      const { rootNode, nodeByKey } = createNodesByItems(data, visibleItems, nodesContext);
+      const { rootNode, nodeByKey } = createNodesByItems(data, visibleData, nodesContext);
 
       this._nodeByKey = nodeByKey;
       this._rootNode = rootNode;
@@ -454,31 +505,34 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
 
     const resultData = getVisibleNodes(
-      this._rootNode!.children,
+      // @ts-expect-error the root node is created on the first load
+      this._rootNode.children,
       (key) => this.isRowExpanded(key, options),
     );
 
-    // @ts-expect-error From here on the rows are nodes, not the loaded items the base type describes.
+    // @ts-expect-error rows are nodes here, not the loaded items
     options.data = resultData;
     this._totalItemsCount = resultData.length;
   }
 
   protected customizeLoadResultHandlerCore(options: LoadOperation): void {
-    const that = this;
     const { data } = options;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- filter is any
     const filter = options.storeLoadOptions.filter || options.loadOptions?.filter;
-    const filterMode = that.option('filterMode');
-    let visibleItems;
+    const filterMode = this.option('filterMode');
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned below
+    let visibleItems: RawItemData[] | undefined;
     const { parentIds } = options.storeLoadOptions;
-    const needLoadParents = filter && (!parentIds || !parentIds.length) && filterMode !== 'standard';
+    const needLoadParents = filter && !parentIds?.length && filterMode !== 'standard';
 
     if (!options.isCustomLoading) {
       if (needLoadParents) {
-        // @ts-expect-error
-        const d = options.data = new Deferred();
+        const d = Deferred();
+        // @ts-expect-error data holds a Deferred until the branches are loaded
+        options.data = d;
 
         if (filterMode === 'matchOnly') {
-          visibleItems = data;
+          visibleItems = data as RawItemData[];
         }
 
         const needLoadChildren = isFullBranchFilterMode(this);
@@ -491,15 +545,15 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
         )
           .done((loadedData) => {
             options.data = loadedData;
-            that._processTreeStructure(options, visibleItems);
-            super.customizeLoadResultHandlerCore.call(that, options);
+            this._processTreeStructure(options, visibleItems);
+            super.customizeLoadResultHandlerCore.call(this, options);
             d.resolve(options.data);
           })
-          .fail(d.reject);
+          .fail(d.reject as (...a: unknown[]) => void);
 
         return;
       }
-      that._processTreeStructure(options);
+      this._processTreeStructure(options);
     }
 
     super.customizeLoadResultHandlerCore(options);
@@ -516,8 +570,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     super.pushHandler(e);
   }
 
-  public init(dataSource) {
-    super.init(dataSource);
+  public init(dataSource?: unknown): void {
+    super.init(dataSource as DataSource);
 
     const dataStructure = this.option('dataStructure');
 
@@ -538,9 +592,9 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     this.createAction('onNodesInitialized');
   }
 
-  public getKeyExpr() {
+  public getKeyExpr(): StoreKey {
     const store = this.store();
-    const key = store && store.key();
+    const key = store?.key();
     const keyExpr = this.option('keyExpr');
 
     if (isDefined(key) && isDefined(keyExpr)) {
@@ -549,38 +603,44 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       }
     }
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back
     return key || keyExpr || DEFAULT_KEY_EXPRESSION;
   }
 
-  public keyOf(data) {
-    return this._keyGetter && this._keyGetter(data);
+  public keyOf(data: unknown): unknown {
+    return this._keyGetter?.(data);
   }
 
-  public parentKeyOf(data) {
-    return this._parentIdGetter && this._parentIdGetter(data);
+  public parentKeyOf(data: unknown): unknown {
+    return this._parentIdGetter?.(data);
   }
 
-  public getRootNode() {
+  public getRootNode(): TreeNode | undefined {
     return this._rootNode;
   }
 
-  public totalItemsCount() {
+  public totalItemsCount(): number {
     return this._totalItemsCount + this._totalCountCorrection;
   }
 
-  public isRowExpanded(key, cache?) {
+  public isRowExpanded(
+    key: RowKey,
+    cache?: Pick<LoadOperation, 'isExpandedByKey'>,
+  ): boolean {
     if (cache) {
       let { isExpandedByKey } = cache;
       if (!isExpandedByKey) {
-        const expandedRowKeys = this.option('expandedRowKeys') ?? [];
+        const expandedRowKeys = (this.option('expandedRowKeys') ?? []) as RowKey[];
+        const map: Record<string, boolean> = {};
 
-        isExpandedByKey = cache.isExpandedByKey = {};
-
-        expandedRowKeys.forEach((key) => {
-          isExpandedByKey[key] = true;
+        expandedRowKeys.forEach((expandedKey) => {
+          map[expandedKey as string] = true;
         });
+
+        isExpandedByKey = map;
+        cache.isExpandedByKey = map;
       }
-      return !!isExpandedByKey[key];
+      return !!isExpandedByKey[key as string];
     }
 
     const indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, this.option('expandedRowKeys'), null);
@@ -588,8 +648,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return indexExpandedNodeKey >= 0;
   }
 
-  protected _changeRowExpandCore(key) {
-    const expandedRowKeys = (this.option('expandedRowKeys') as any[]).slice();
+  protected _changeRowExpandCore(key: RowKey): void {
+    const expandedRowKeys = (this.option('expandedRowKeys') as RowKey[]).slice();
     const indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, expandedRowKeys, null);
 
     if (indexExpandedNodeKey < 0) {
@@ -601,101 +661,112 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     this.option('expandedRowKeys', expandedRowKeys);
   }
 
-  public changeRowExpand(key) {
+  public changeRowExpand(key: RowKey): DeferredObj<unknown> {
     this._changeRowExpandCore(key);
-    // @ts-expect-error
-    return this._isNodesInitializing ? new Deferred().resolve() : this.load();
+    return this._isNodesInitializing ? Deferred<unknown>().resolve() : this.load();
   }
 
-  public getNodeByKey(key): TreeNode | undefined {
+  public getNodeByKey(key: RowKey): TreeNode | undefined {
     if (this._nodeByKey) {
-      return this._nodeByKey[key];
+      return this._nodeByKey[key as string];
     }
 
     return undefined;
   }
 
-  private getNodeLeafKeys() {
-    const that = this;
-    const result: any[] = [];
-    const keys = that._rootNode ? [that._rootNode.key] : [];
+  private getNodeLeafKeys(): RowKey[] {
+    const result: RowKey[] = [];
+    const keys = this._rootNode ? [this._rootNode.key] : [];
 
     keys.forEach((key) => {
-      const node = that.getNodeByKey(key);
+      const node = this.getNodeByKey(key);
 
-      node && treeListCore.foreachNodes([node], (childNode) => {
-        !childNode.children.length && result.push(childNode.key);
-      });
+      if (node) {
+        treeListCore.foreachNodes([node], (childNode) => {
+          if (!childNode.children.length) {
+            result.push(childNode.key);
+          }
+        });
+      }
     });
 
     return result;
   }
 
-  public getChildNodeKeys(parentKey) {
+  public getChildNodeKeys(parentKey: RowKey): RowKey[] {
     const node = this.getNodeByKey(parentKey);
-    const childrenKeys: any[] = [];
+    const childrenKeys: RowKey[] = [];
 
-    node && treeListCore.foreachNodes(node.children, (childNode) => {
-      childrenKeys.push(childNode.key);
-    });
+    if (node) {
+      treeListCore.foreachNodes(node.children, (childNode) => {
+        childrenKeys.push(childNode.key);
+      });
+    }
 
     return childrenKeys;
   }
 
-  public loadDescendants(keys, childrenOnly) {
-    const that = this;
-    // @ts-expect-error
-    const d = new Deferred();
-    const remoteOperations = that.remoteOperations();
+  public loadDescendants(keys?: RowKey | RowKey[], childrenOnly?: boolean): DeferredObj<unknown> {
+    const d = Deferred<unknown>();
+    const remoteOperations = this.remoteOperations();
 
-    if (isDefined(keys)) {
-      keys = Array.isArray(keys) ? keys : [keys];
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-chain
+    let keyList: RowKey[];
+    if (!isDefined(keys)) {
+      keyList = this.getNodeLeafKeys();
+    } else if (Array.isArray(keys)) {
+      keyList = keys;
     } else {
-      keys = that.getNodeLeafKeys();
+      keyList = [keys];
     }
 
-    if (!remoteOperations.filtering || !keys.length) {
+    if (!remoteOperations.filtering || !keyList.length) {
       return d.resolve();
     }
 
-    const loadOptions = that._dataSource._createStoreLoadOptions();
-    loadOptions.parentIds = keys;
+    const loadOptions: LoadOperation['storeLoadOptions'] = this._dataSource._createStoreLoadOptions();
+    loadOptions.parentIds = keyList;
 
-    that.customLoader.load(loadOptions)
+    const resolve = d.resolve as (...a: unknown[]) => void;
+    const reject = d.reject as (...a: unknown[]) => void;
+
+    this.customLoader.load(loadOptions)
       .done(() => {
         if (!childrenOnly) {
-          const childKeys = getChildKeys(that, keys);
+          const childKeys = getChildKeys(this, keyList);
 
           if (childKeys.length) {
-            that.loadDescendants(childKeys, childrenOnly).done(d.resolve).fail(d.reject);
+            this.loadDescendants(childKeys, childrenOnly).done(resolve).fail(reject);
             return;
           }
         }
         d.resolve();
       })
-      .fail(d.reject);
+      .fail(reject);
 
+    // @ts-expect-error promise() is typed as Promise but callers use done/fail
     return d.promise();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  public forEachNode(nodeCallback?: (node: any) => void) {
-    let nodes: TreeNode[] = [];
-    let callback;
+  public forEachNode(callback: NodeCallback): void;
 
-    if (arguments.length === 1) {
-      // eslint-disable-next-line prefer-destructuring
-      callback = arguments[0];
+  public forEachNode(nodes: TreeNode | TreeNode[], callback: NodeCallback): void;
+
+  public forEachNode(...args: [NodeCallback] | [TreeNode | TreeNode[], NodeCallback]): void {
+    let nodes: TreeNode[] = [];
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-chain
+    let callback: NodeCallback | undefined;
+
+    if (args.length === 1) {
+      [callback] = args;
 
       const rootNode = this.getRootNode();
       nodes = rootNode?.children ?? [];
-    } else if (arguments.length === 2) {
-      // eslint-disable-next-line prefer-destructuring
-      callback = arguments[1];
+    } else if (args.length === 2) {
+      const [nodesArg, nodeCallback] = args;
+      callback = nodeCallback;
 
-      // eslint-disable-next-line prefer-destructuring
-      nodes = arguments[0];
-      nodes = Array.isArray(nodes) ? nodes : [nodes];
+      nodes = Array.isArray(nodesArg) ? nodesArg : [nodesArg];
     }
 
     treeListCore.foreachNodes(nodes, callback);
