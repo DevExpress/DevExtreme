@@ -1,3 +1,5 @@
+export const ROUTER_TARGETS = new Set(['form', 'grid', 'mixed', 'none']);
+export const FORM_ACTION_TYPES = new Set(['clear_field', 'clear_all', 'smart_paste']);
 const titles = ['Mr.', 'Mrs.', 'Ms.'];
 const states = ['California', 'New York', 'Texas'];
 const positions = ['CEO', 'Sales Assistant', 'CMO', 'Manager', 'Designer', 'Developer'];
