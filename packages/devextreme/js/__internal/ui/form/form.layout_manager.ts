@@ -30,8 +30,8 @@ import type {
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
-import type Editor from '@ts/ui/editor/editor';
 import type { EditorProperties } from '@ts/ui/editor/editor';
+import Editor from '@ts/ui/editor/editor';
 import { renderButtonItem } from '@ts/ui/form/components/button_item';
 import { renderEmptyItem } from '@ts/ui/form/components/empty_item';
 import { renderFieldItem } from '@ts/ui/form/components/field_item';
@@ -1268,8 +1268,10 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   getEditor(field: string): Editor | undefined {
-    return this._itemsRunTimeInfo.findWidgetInstanceByDataField(field)
+    const instance = this._itemsRunTimeInfo.findWidgetInstanceByDataField(field)
       ?? this._itemsRunTimeInfo.findWidgetInstanceByName(field);
+
+    return instance instanceof Editor ? instance : undefined;
   }
 
   isSingleColumnMode(component?: ResponsiveBox): boolean {

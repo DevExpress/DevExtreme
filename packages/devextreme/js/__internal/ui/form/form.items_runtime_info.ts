@@ -40,12 +40,14 @@ export interface PreparedGroupedItem extends PreparedItem<GroupItem> {
   groupContentTemplate?: FunctionTemplate;
 }
 
+export type FormWidgetInstance = Editor | TabPanel | Button;
+
 export interface FormItemRuntimeInfo<T = Item> {
   item: PreparedItem<T>;
   itemIndex?: number;
   path?: string;
   guid?: string;
-  widgetInstance?: Editor | TabPanel | Button;
+  widgetInstance?: FormWidgetInstance;
   $itemContainer?: dxElementWrapper;
   layoutManager?: LayoutManager;
   preparedItem?: PreparedItem<T>;
@@ -53,15 +55,15 @@ export interface FormItemRuntimeInfo<T = Item> {
 export default class FormItemsRunTimeInfo {
   _map: Record<string, FormItemRuntimeInfo> = {};
 
-  _findWidgetInstance<T = Editor>(
+  _findWidgetInstance(
     condition: (item: SimpleItem) => boolean,
-  ): T | undefined {
+  ): FormWidgetInstance | undefined {
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let result: T | undefined;
+    let result: FormWidgetInstance | undefined;
 
     each(this._map, (_guid: Guid, { widgetInstance, item }): boolean => {
       if (condition(item)) {
-        result = widgetInstance as T | undefined;
+        result = widgetInstance;
 
         return false;
       }
@@ -153,7 +155,7 @@ export default class FormItemsRunTimeInfo {
     }
   }
 
-  findWidgetInstanceByItem(item: Item): Editor | TabPanel | Button | undefined {
+  findWidgetInstanceByItem(item: Item): FormWidgetInstance | undefined {
     return this._findWidgetInstance((storedItem) => storedItem === item);
   }
 
@@ -165,11 +167,11 @@ export default class FormItemsRunTimeInfo {
     return this._findFieldByCondition(({ path }) => path === targetPath, 'guid');
   }
 
-  findWidgetInstanceByName<T>(name: string): T | undefined {
-    return this._findWidgetInstance<T>((item) => name === item.name);
+  findWidgetInstanceByName(name: string): FormWidgetInstance | undefined {
+    return this._findWidgetInstance((item) => name === item.name);
   }
 
-  findWidgetInstanceByDataField(dataField: string): Editor | undefined {
+  findWidgetInstanceByDataField(dataField: string): FormWidgetInstance | undefined {
     return this._findWidgetInstance(
       (item) => dataField === (isString(item) ? item : item.dataField),
     );

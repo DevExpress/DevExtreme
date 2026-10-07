@@ -189,14 +189,14 @@ export class AppointmentForm {
 
   get startDate(): Date | null {
     const { startDateExpr } = this.config.dataAccessors.expr;
-    const value = this.getFormDataField(startDateExpr) as DateLike | undefined;
+    const value = this.getFormDateField(startDateExpr);
 
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 
   get endDate(): Date | null {
     const { endDateExpr } = this.config.dataAccessors.expr;
-    const value = this.getFormDataField(endDateExpr) as DateLike | undefined;
+    const value = this.getFormDateField(endDateExpr);
 
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
@@ -214,6 +214,10 @@ export class AppointmentForm {
 
   private getFormDataField(field: string): unknown {
     return this.dxForm.option(`formData.${field}`);
+  }
+
+  private getFormDateField(field: string): DateLike | undefined {
+    return this.getFormDataField(field) as DateLike | undefined;
   }
 
   dispose(): void {

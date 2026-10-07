@@ -50,7 +50,7 @@ import { logger } from '@ts/core/utils/m_console';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
 import Widget, { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';
-import type { Button } from '@ts/ui/button/button';
+import Button from '@ts/ui/button';
 import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/drop_down_editor';
 import Editor from '@ts/ui/editor/editor';
 import { setLabelWidthByMaxLabelWidth } from '@ts/ui/form/components/label';
@@ -1799,12 +1799,16 @@ class Form extends Widget<FormProperties> {
   }
 
   getEditor(dataField: string): Editor | undefined {
-    return this._itemsRunTimeInfo.findWidgetInstanceByDataField(dataField)
-      ?? this._itemsRunTimeInfo.findWidgetInstanceByName<Editor>(dataField);
+    const instance = this._itemsRunTimeInfo.findWidgetInstanceByDataField(dataField)
+      ?? this._itemsRunTimeInfo.findWidgetInstanceByName(dataField);
+
+    return instance instanceof Editor ? instance : undefined;
   }
 
   getButton(name: string): Button | undefined {
-    return this._itemsRunTimeInfo.findWidgetInstanceByName<Button>(name);
+    const instance = this._itemsRunTimeInfo.findWidgetInstanceByName(name);
+
+    return instance instanceof Button ? instance : undefined;
   }
 
   getScrollable(): Scrollable | undefined {

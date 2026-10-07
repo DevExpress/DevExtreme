@@ -109,17 +109,28 @@ export const deferUpdater = function (func) {
   };
 };
 
-export const findBestMatches = <TFilter extends object>(
+type FilterMatch<TFilter> = { [TKey in keyof TFilter]?: unknown };
+
+export function findBestMatches<TFilter extends object, TItem>(
   targetFilter: TFilter,
-  items: unknown[],
-  mapFn?: (item: unknown) => unknown,
-): unknown[] => {
-  const bestMatches: unknown[] = [];
+  items: readonly TItem[],
+  mapFn: (item: TItem) => FilterMatch<TFilter>,
+): TItem[];
+export function findBestMatches<TFilter extends object, TItem extends FilterMatch<TFilter>>(
+  targetFilter: TFilter,
+  items: readonly TItem[],
+): TItem[];
+export function findBestMatches(
+  targetFilter: Readonly<Record<string, unknown>>,
+  items: readonly Readonly<Record<string, unknown>>[],
+  mapFn?: (item: Readonly<Record<string, unknown>>) => Readonly<Record<string, unknown>>,
+): Readonly<Record<string, unknown>>[] {
+  const bestMatches: Readonly<Record<string, unknown>>[] = [];
   let maxMatchCount = 0;
 
   each(items, (index, itemSrc) => {
     let matchCount = 0;
-    const item = (mapFn ? mapFn(itemSrc) : itemSrc) as Record<string, unknown>;
+    const item = mapFn ? mapFn(itemSrc) : itemSrc;
 
     each(targetFilter, (paramName, targetValue) => {
       const value = item[paramName];
@@ -147,7 +158,7 @@ export const findBestMatches = <TFilter extends object>(
   });
 
   return bestMatches;
-};
+}
 
 const match = function (value, targetValue) {
   if (Array.isArray(value) && Array.isArray(targetValue)) {
