@@ -1,11 +1,47 @@
+import type { AnimationConfig } from '@js/common/core/animation';
 import fx from '@js/common/core/animation/fx';
-import { Component } from '@js/core/component';
 import devices from '@js/core/devices';
-import { extend } from '@js/core/utils/extend';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
+import type { ComponentProperties } from '@ts/core/widget/component';
+import { Component } from '@ts/core/widget/component';
 
-const directionPostfixes = {
+import type { Animation } from '../fx';
+
+export type TransitionDirection = 'forward' | 'backward' | 'none';
+
+export type TransitionType = 'enter' | 'leave';
+
+export interface TransitionAnimationConfig extends Omit<AnimationConfig, 'direction'> {
+  direction?: TransitionDirection;
+  extraCssClasses?: string;
+}
+
+export type AnimationFactory = (
+  $element: dxElementWrapper,
+  configModifier: TransitionAnimationConfig,
+) => Animation;
+
+export interface TransitionAnimationFactories {
+  enter: AnimationFactory;
+  leave: AnimationFactory;
+}
+
+export type TransitionPreset = TransitionAnimationConfig & Partial<TransitionAnimationFactories>;
+
+export interface PresetConfig {
+  device?: DefaultOptionsRule<unknown>['device'];
+  animation: TransitionPreset | string;
+}
+
+interface RegisteredPreset {
+  name: string;
+  config: PresetConfig;
+}
+
+const directionPostfixes: Record<string, string> = {
   forward: ' dx-forward',
   backward: ' dx-backward',
   none: ' dx-no-direction',
@@ -14,39 +50,50 @@ const directionPostfixes = {
 
 const optionPrefix = 'preset_';
 
-interface Config {
-  type: string;
-  extraCssClasses?: string;
-  delay?: any;
-  duration?: any;
-  to?: unknown;
-  from?: unknown;
-  direction: string;
+type PresetOptionName = `${typeof optionPrefix}${string}`;
+
+export interface AnimationPresetCollectionProperties
+  extends ComponentProperties<AnimationPresetCollection> {
+  [presetOptionName: PresetOptionName]: TransitionPreset | string | undefined;
+  defaultAnimationDuration: number;
+  defaultAnimationDelay: number;
+  defaultStaggerAnimationDuration: number;
+  defaultStaggerAnimationDelay: number;
+  defaultStaggerAnimationStartDelay: number;
 }
 
-// @ts-expect-error
-const AnimationPresetCollection = Component.inherit({
-  ctor: function () {
-    this.callBase.apply(this, arguments);
+const isAndroidDevice = (): boolean => !!(
+  // @ts-expect-error devices.real is a method, `.android` on it is always undefined
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  devices.current().android || devices.real.android
+);
+
+class AnimationPresetCollection
+  extends Component<AnimationPresetCollection, AnimationPresetCollectionProperties> {
+  _registeredPresets: RegisteredPreset[];
+
+  constructor() {
+    super();
     this._registeredPresets = [];
     this.resetToDefaults();
-  },
+  }
 
-  _getDefaultOptions: function () {
-    return extend(this.callBase(), {
+  _getDefaultOptions(): AnimationPresetCollectionProperties {
+    return {
+      ...super._getDefaultOptions(),
       defaultAnimationDuration: 400,
       defaultAnimationDelay: 0,
       defaultStaggerAnimationDuration: 300,
       defaultStaggerAnimationDelay: 40,
       defaultStaggerAnimationStartDelay: 500, // hack for better animations on ipad mini
-    });
-  },
+    };
+  }
 
-  _defaultOptionsRules: function () {
-    return this.callBase().concat([
+  _defaultOptionsRules(): DefaultOptionsRule<AnimationPresetCollectionProperties>[] {
+    return super._defaultOptionsRules().concat([
       {
-        device: function (device) {
-          return device.phone;
+        device(device): boolean {
+          return !!device.phone;
         },
         options: {
           defaultStaggerAnimationDuration: 350,
@@ -55,36 +102,39 @@ const AnimationPresetCollection = Component.inherit({
         },
       },
       { // T254756
-        device: function () {
-          // @ts-expect-error
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-nullish-coalescing
-          return devices.current().android || devices.real.android;
+        device(): boolean {
+          return isAndroidDevice();
         },
         options: {
           defaultAnimationDelay: 100,
         },
       },
     ]);
-  },
+  }
 
-  _getPresetOptionName: function (animationName) {
-    return optionPrefix + animationName;
-  },
+  _getPresetOptionName(animationName: string): PresetOptionName {
+    return `${optionPrefix}${animationName}`;
+  }
 
   // T257755
-  _createAndroidSlideAnimationConfig: function (throughOpacity, widthMultiplier) {
-    const that = this;
-
-    const createBaseConfig = function (configModifier: Partial<Config>): Partial<Config> {
-      return {
-        type: 'slide',
-        delay: configModifier.delay === undefined ? that.option('defaultAnimationDelay') : configModifier.delay,
-        duration: configModifier.duration === undefined ? that.option('defaultAnimationDuration') : configModifier.duration,
-      };
-    };
+  _createAndroidSlideAnimationConfig(
+    throughOpacity: number,
+    widthMultiplier: number,
+  ): TransitionAnimationFactories {
+    const createBaseConfig = (
+      configModifier: TransitionAnimationConfig,
+    ): TransitionAnimationConfig => ({
+      type: 'slide',
+      delay: configModifier.delay === undefined
+        ? this.option('defaultAnimationDelay')
+        : configModifier.delay,
+      duration: configModifier.duration === undefined
+        ? this.option('defaultAnimationDuration')
+        : configModifier.duration,
+    });
 
     return {
-      enter: function ($element, configModifier) {
+      enter: ($element, configModifier): Animation => {
         const width = getWidth($element.parent()) * widthMultiplier;
         const { direction } = configModifier;
         const config = createBaseConfig(configModifier);
@@ -112,10 +162,10 @@ const AnimationPresetCollection = Component.inherit({
 
         return fx.createAnimation($element, config);
       },
-      leave: function ($element, configModifier: Partial<Config>) {
+      leave: ($element, configModifier): Animation => {
         const width = getWidth($element.parent()) * widthMultiplier;
         const { direction } = configModifier;
-        const config: Partial<Config> = createBaseConfig(configModifier);
+        const config = createBaseConfig(configModifier);
 
         config.from = {
           left: 0,
@@ -145,133 +195,130 @@ const AnimationPresetCollection = Component.inherit({
         return fx.createAnimation($element, config);
       },
     };
-  },
+  }
 
-  _createOpenDoorConfig: function () {
-    const that = this;
-
-    const createBaseConfig = function (configModifier: Partial<Config>): Partial<Config> {
-      return {
-        type: 'css',
-        extraCssClasses: 'dx-opendoor-animation',
-        delay: configModifier.delay === undefined ? that.option('defaultAnimationDelay') : configModifier.delay,
-        duration: configModifier.duration === undefined ? that.option('defaultAnimationDuration') : configModifier.duration,
-      };
-    };
+  _createOpenDoorConfig(): TransitionAnimationFactories {
+    const createBaseConfig = (
+      configModifier: TransitionAnimationConfig,
+    ): TransitionAnimationConfig => ({
+      type: 'css',
+      extraCssClasses: 'dx-opendoor-animation',
+      delay: configModifier.delay === undefined
+        ? this.option('defaultAnimationDelay')
+        : configModifier.delay,
+      duration: configModifier.duration === undefined
+        ? this.option('defaultAnimationDuration')
+        : configModifier.duration,
+    });
 
     return {
-      enter: function ($element, configModifier) {
+      enter: ($element, configModifier): Animation => {
         const { direction } = configModifier;
         const config = createBaseConfig(configModifier);
 
         config.delay = direction === 'none' ? config.delay : config.duration;
-        config.from = `dx-enter dx-opendoor-animation${directionPostfixes[direction]}`;
+        config.from = `dx-enter dx-opendoor-animation${directionPostfixes[String(direction)]}`;
         config.to = 'dx-enter-active';
 
         return fx.createAnimation($element, config);
       },
-      leave: function ($element, configModifier: Partial<Config>) {
+      leave: ($element, configModifier): Animation => {
         const { direction } = configModifier;
         const config = createBaseConfig(configModifier);
-        // @ts-expect-error
-        config.from = `dx-leave dx-opendoor-animation${directionPostfixes[direction]}`;
+
+        config.from = `dx-leave dx-opendoor-animation${directionPostfixes[String(direction)]}`;
         config.to = 'dx-leave-active';
 
         return fx.createAnimation($element, config);
       },
     };
-  },
+  }
 
-  _createWinPopConfig: function () {
-    const that = this;
-    const baseConfig: Partial<Config> = {
+  _createWinPopConfig(): TransitionAnimationFactories {
+    const baseConfig: TransitionAnimationConfig = {
       type: 'css',
       extraCssClasses: 'dx-win-pop-animation',
-      duration: that.option('defaultAnimationDuration'),
+      duration: this.option('defaultAnimationDuration'),
     };
 
     return {
-      enter: function ($element, configModifier) {
+      enter: ($element, configModifier): Animation => {
         const config = baseConfig;
         const { direction } = configModifier;
 
-        config.delay = direction === 'none' ? that.option('defaultAnimationDelay') : that.option('defaultAnimationDuration') / 2;
-        config.from = `dx-enter dx-win-pop-animation${directionPostfixes[direction]}`;
+        config.delay = direction === 'none' ? this.option('defaultAnimationDelay') : this.option('defaultAnimationDuration') / 2;
+        config.from = `dx-enter dx-win-pop-animation${directionPostfixes[String(direction)]}`;
         config.to = 'dx-enter-active';
 
         return fx.createAnimation($element, config);
       },
-      leave: function ($element, configModifier) {
+      leave: ($element, configModifier): Animation => {
         const config = baseConfig;
         const { direction } = configModifier;
 
-        config.delay = that.option('defaultAnimationDelay');
-        config.from = `dx-leave dx-win-pop-animation${directionPostfixes[direction]}`;
+        config.delay = this.option('defaultAnimationDelay');
+        config.from = `dx-leave dx-win-pop-animation${directionPostfixes[String(direction)]}`;
         config.to = 'dx-leave-active';
 
         return fx.createAnimation($element, config);
       },
     };
-  },
+  }
 
-  resetToDefaults: function () {
+  resetToDefaults(): void {
     this.clear();
     this.registerDefaultPresets();
     this.applyChanges();
-  },
+  }
 
-  clear: function (name) {
-    const that = this;
-    const newRegisteredPresets = [];
+  clear(name?: string): void {
+    const newRegisteredPresets: RegisteredPreset[] = [];
 
-    each(this._registeredPresets, function (index, preset) {
+    each(this._registeredPresets, (index, preset: RegisteredPreset) => {
       if (!name || name === preset.name) {
-        that.option(that._getPresetOptionName(preset.name), undefined);
+        this.option(this._getPresetOptionName(preset.name), undefined);
       } else {
-        // @ts-expect-error
         newRegisteredPresets.push(preset);
       }
     });
     this._registeredPresets = newRegisteredPresets;
     this.applyChanges();
-  },
+  }
 
-  registerPreset: function (name, config) {
+  registerPreset(name: string, config: PresetConfig): void {
     this._registeredPresets.push({
-      name: name,
-      config: config,
+      name,
+      config,
     });
-  },
+  }
 
-  applyChanges: function () {
-    const that = this;
-    const customRules = [];
+  applyChanges(): void {
+    const customRules: DefaultOptionsRule<AnimationPresetCollectionProperties>[] = [];
 
-    each(this._registeredPresets, function (index, preset) {
-      const rule = {
+    each(this._registeredPresets, (index, preset: RegisteredPreset) => {
+      const rule: DefaultOptionsRule<AnimationPresetCollectionProperties> = {
         device: preset.config.device,
         options: {},
       };
 
-      rule.options[that._getPresetOptionName(preset.name)] = preset.config.animation;
-      // @ts-expect-error
+      rule.options[this._getPresetOptionName(preset.name)] = preset.config.animation;
       customRules.push(rule);
     });
 
     this._setOptionsByDevice(customRules);
-  },
+  }
 
-  getPreset: function (name) {
-    let result = name;
+  getPreset(name: string): TransitionPreset | undefined {
+    let result: TransitionPreset | string | undefined = name;
 
     while (typeof result === 'string') {
       result = this.option(this._getPresetOptionName(result));
     }
 
     return result;
-  },
+  }
 
-  registerDefaultPresets: function () {
+  registerDefaultPresets(): void {
     this.registerPreset('pop', {
       animation: {
         extraCssClasses: 'dx-android-pop-animation',
@@ -293,17 +340,14 @@ const AnimationPresetCollection = Component.inherit({
       },
     });
     this.registerPreset('slide', {
-      device: function () {
-        // @ts-expect-error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-nullish-coalescing
-        return devices.current().android || devices.real.android;
+      device() {
+        return isAndroidDevice();
       },
       animation: this._createAndroidSlideAnimationConfig(1, 1),
     });
     this.registerPreset('slide', {
-      device: function () {
-        // @ts-expect-error
-        return !devices.current().android && !devices.real.android;
+      device() {
+        return !isAndroidDevice();
       },
       animation: {
         extraCssClasses: 'dx-slide-animation',
@@ -326,9 +370,8 @@ const AnimationPresetCollection = Component.inherit({
       },
     });
     this.registerPreset('ios7-toolbar', {
-      device: function () {
-        // @ts-expect-error
-        return !devices.current().android && !devices.real.android;
+      device() {
+        return !isAndroidDevice();
       },
       animation: {
         extraCssClasses: 'dx-ios7-toolbar-animation',
@@ -337,10 +380,8 @@ const AnimationPresetCollection = Component.inherit({
       },
     });
     this.registerPreset('ios7-toolbar', {
-      device: function () {
-        // @ts-expect-error
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        return devices.current().android || devices.real.android;
+      device() {
+        return isAndroidDevice();
       },
       animation: this._createAndroidSlideAnimationConfig(0, 0.4),
     });
@@ -408,8 +449,8 @@ const AnimationPresetCollection = Component.inherit({
         delay: this.option('defaultStaggerAnimationStartDelay'),
       },
     });
-  },
-});
+  }
+}
 
 const animationPresets = new AnimationPresetCollection();
 export {
