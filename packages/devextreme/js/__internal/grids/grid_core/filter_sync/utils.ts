@@ -5,7 +5,7 @@ import {
   getDefaultOperation,
   removeFieldConditionsFromFilter,
   syncFilters,
-} from '@ts/filter_builder/m_utils';
+} from '@ts/filter_builder/utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/filter/types';
 
