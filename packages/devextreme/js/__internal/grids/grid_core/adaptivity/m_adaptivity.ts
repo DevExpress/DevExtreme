@@ -13,7 +13,7 @@ import { getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
-import type { Column, ProcessedColumn } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
@@ -379,8 +379,8 @@ export class AdaptiveColumnsController extends modules.ViewController {
     const columns = that._columnsController.getVisibleColumns();
     let colWidth = 0;
 
-    each(columns as ProcessedColumn[], (index, column) => {
-      if (column.index < 0 || column.command) {
+    each(columns, (index, column) => {
+      if ((isDefined(column.index) && column.index < 0) || column.command) {
         colWidth += that._columnsController.columnOption(getColumnId(that, column), 'bestFitWidth') || 0;
       }
     });

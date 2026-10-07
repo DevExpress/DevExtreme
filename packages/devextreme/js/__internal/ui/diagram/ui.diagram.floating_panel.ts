@@ -295,12 +295,13 @@ class DiagramFloatingPanel<
   }
 
   _getDefaultOptions(): TProperties {
-    return extend(super._getDefaultOptions(), {
+    return {
+      ...super._getDefaultOptions(),
       isVisible: true,
       isMobileView: false,
       offsetX: 0,
       offsetY: 0,
-    }) as TProperties;
+    };
   }
 }
 export default DiagramFloatingPanel;

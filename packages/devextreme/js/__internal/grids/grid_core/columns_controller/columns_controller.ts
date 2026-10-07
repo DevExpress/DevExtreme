@@ -43,9 +43,8 @@ import type {
   FilterField,
   GroupColumn,
   IndexedColumns,
-  ProcessedColumn,
-  ProcessedLookup,
   SavedColumnState,
+  WithCellValueCalculator,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
@@ -79,6 +78,7 @@ import {
   getRowCount,
   getSerializationFormat,
   getValueDataType,
+  hasCellValueCalculator,
   isColumnFixed,
   isColumnNameRequired,
   isFirstOrLastColumn,
@@ -1360,9 +1360,9 @@ export class ColumnsController extends modules.Controller {
         lookup.serializationFormat = dateSerializationFormat;
       }
 
-      const inferDataTypes = (): void => {
+      const inferDataTypes = (processedColumn: WithCellValueCalculator<Column>): void => {
         for (const item of firstItems) {
-          const value = (column as ProcessedColumn).calculateCellValue(item);
+          const value = processedColumn.calculateCellValue(item);
 
           if (!column.dataType) {
             const valueDataType = getValueDataType(value);
@@ -1394,31 +1394,36 @@ export class ColumnsController extends modules.Controller {
         }
       };
 
-      const inferSerializationFormats = (): void => {
+      const inferSerializationFormats = (
+        processedColumn: WithCellValueCalculator<Column>,
+      ): void => {
         for (const item of firstItems) {
-          const value = (column as ProcessedColumn).calculateCellValue(item, true);
+          const value = processedColumn.calculateCellValue(item, true);
 
           if (column.serializationFormat === undefined) {
             column.serializationFormat = getSerializationFormat(column.dataType, value);
           }
 
-          if (lookup && lookup.serializationFormat === undefined) {
+          if (lookup
+            && lookup.serializationFormat === undefined
+            && hasCellValueCalculator(lookup)
+          ) {
             lookup.serializationFormat = getSerializationFormat(
               lookup.dataType,
-              (lookup as ProcessedLookup).calculateCellValue(value, true),
+              lookup.calculateCellValue(value, true),
             );
           }
         }
       };
 
-      if (column.calculateCellValue && firstItems.length) {
+      if (hasCellValueCalculator(column) && firstItems.length) {
         if (!column.dataType || (lookup && !lookup.dataType)) {
-          inferDataTypes();
+          inferDataTypes(column);
         }
         const needsSerializationFormat = column.serializationFormat === undefined
           || (lookup && lookup.serializationFormat === undefined);
         if (needsSerializationFormat) {
-          inferSerializationFormats();
+          inferSerializationFormats(column);
         }
       }
 

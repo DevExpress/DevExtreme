@@ -102,7 +102,7 @@ function baseOperation(grid) {
     return text;
   };
   return {
-    dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'] as DataType[],
+    dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'] satisfies DataType[],
     calculateFilterExpression,
     editorTemplate(conditionInfo, container) {
       const div = $('<div>')

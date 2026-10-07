@@ -418,7 +418,7 @@ export class ResizingController extends modules.ViewController {
         if (width !== 'auto') {
           if (isDefined(width)) {
             resultWidths[index] = isNumeric(width) || isPixelWidth(width)
-              ? parseFloat(width as string)
+              ? parseFloat(String(width))
               : width;
           } else if (!columnAutoWidth) {
             resultWidths[index] = undefined;
