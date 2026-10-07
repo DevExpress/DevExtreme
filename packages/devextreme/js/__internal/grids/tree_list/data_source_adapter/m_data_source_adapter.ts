@@ -99,7 +99,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     const keyExpr = this.getKeyExpr();
 
     if (isFunction(keyExpr)) {
-      // @ts-expect-error StoreKey type omits the function keyExpr form
+      // @ts-expect-error keyExpr may be a function (public API), StoreKey omits it
       return keyExpr;
     }
 
@@ -570,8 +570,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     super.pushHandler(e);
   }
 
-  public init(dataSource?: unknown): void {
-    super.init(dataSource as DataSource);
+  public init(dataSource?: DataSource): void {
+    super.init(dataSource);
 
     const dataStructure = this.option('dataStructure');
 

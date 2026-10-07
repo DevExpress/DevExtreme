@@ -4,7 +4,7 @@ import {
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import CustomStore from '@js/data/custom_store';
-import DataSource from '@js/data/data_source';
+import { DataSource } from '@ts/data/data_source/data_source';
 import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
