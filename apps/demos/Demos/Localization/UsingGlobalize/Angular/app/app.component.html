@@ -1,8 +1,5 @@
 <div id="data-grid-demo">
-  <dx-data-grid
-    [dataSource]="payments"
-    (onEditorPreparing)="onEditorPreparing($event)"
-  >
+  <dx-data-grid [dataSource]="payments">
     <dxi-data-grid-column
       dataField="PaymentId"
       [caption]="formatMessage('Number')"

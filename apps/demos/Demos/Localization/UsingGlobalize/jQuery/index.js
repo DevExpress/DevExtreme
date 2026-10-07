@@ -72,11 +72,6 @@ $(() => {
         height: 345,
       },
     },
-    onEditorPreparing: (e) => {
-      if (e.dataField === 'Amount' && e.parentType === 'filterRow') {
-        e.editorOptions.inputAttr = { 'aria-label': 'Filter cell' };
-      }
-    },
   };
 
   const selectBoxOptions = {

@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import DataGrid, {
-  Column, Editing, FilterRow, type DataGridTypes,
-} from 'devextreme-react/data-grid';
+import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 
 import 'devextreme/common/core/localization/globalize/number';
@@ -27,11 +25,6 @@ const editPopupOptions = {
 const amountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-};
-const onEditorPreparing = (e: DataGridTypes.EditorPreparingEvent) => {
-  if (e.dataField === 'Amount' && e.parentType === 'filterRow') {
-    e.editorOptions.inputAttr = { 'aria-label': 'Filter cell' };
-  }
 };
 const selectBoxInputAttr = { id: 'selectInput' };
 
@@ -61,7 +54,6 @@ const App = () => {
       <DataGrid
         dataSource={payments}
         keyExpr="PaymentId"
-        onEditorPreparing={onEditorPreparing}
       >
         <Editing
           mode="popup"

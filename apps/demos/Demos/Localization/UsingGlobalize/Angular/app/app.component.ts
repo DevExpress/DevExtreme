@@ -1,7 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxSelectBoxModule, DxDataGridModule } from 'devextreme-angular';
-import { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 
 import 'devextreme/common/core/localization/globalize/number';
 import 'devextreme/common/core/localization/globalize/date';
@@ -63,12 +62,6 @@ export class AppComponent {
     Globalize.loadMessages(deMessages);
     Globalize.loadMessages(ruMessages);
     Globalize.loadMessages(this.service.getDictionary());
-  }
-
-  onEditorPreparing(e: DxDataGridTypes.EditorPreparingEvent) {
-    if (e.dataField === 'Amount' && e.parentType === 'filterRow') {
-      e.editorOptions.inputAttr = { 'aria-label': 'Filter cell' };
-    }
   }
 
   changeLocale(data) {
