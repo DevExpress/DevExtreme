@@ -225,6 +225,20 @@ const addPointIfNeed = <T extends ColumnPoint> (
   }
 };
 
+const markBoundaryPoints = (
+  point: ColumnPointProps,
+  prevPoint: ColumnPointProps,
+  rtlEnabled: boolean,
+): void => {
+  if (rtlEnabled) {
+    point.isRightBoundary = true;
+    prevPoint.isLeftBoundary = true;
+  } else {
+    point.isLeftBoundary = true;
+    prevPoint.isRightBoundary = true;
+  }
+};
+
 const getColumnWidths = (columns: Column[]): number[] => columns
   .map((column) => {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -249,6 +263,18 @@ function normalizeGroupingLoadOptions(
     return item;
   });
 }
+
+const getLookupDataSourceOptions = (lookup: NonNullable<Column['lookup']>): unknown => {
+  if (lookup.items) {
+    return lookup.items;
+  }
+
+  const { dataSource } = lookup;
+
+  return isFunction(dataSource) && !variableWrapper.isWrapped(dataSource)
+    ? dataSource({})
+    : dataSource;
+};
 
 export default {
   renderNoDataText($container?: dxElementWrapper): void {
@@ -496,17 +522,14 @@ export default {
   ): ColumnPoint[] {
     const result: ColumnPoint[] = [];
     const cellsLength: number = items.length;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
-    let $item: dxElementWrapper | undefined;
     let offset: { left: number; top: number } = { left: 0, top: 0 };
     let itemRect: { width: number; height: number } = { width: 0, height: 0 };
     let columnIndex = startColumnIndex;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
-    let rtlEnabled: boolean | undefined;
+    let rtlEnabled = false;
 
     for (let i = 0; i <= cellsLength; i += 1) {
       if (i < cellsLength) {
-        $item = items.eq(i);
+        const $item = items.eq(i);
         // @ts-expect-error offset() of a wrapper with an element is always defined
         offset = $item.offset();
         itemRect = getBoundingRect($item.get(0));
@@ -519,7 +542,7 @@ export default {
       const pointProps: ColumnPointProps = {
         index: columnIndex,
         columnIndex,
-        item: $item?.get(0),
+        item: items[Math.min(i, cellsLength - 1)],
         x: !isVertical && rtlEnabled !== (i === cellsLength) ? offsetRight : offset.left,
         y: isVertical && i === cellsLength ? offsetBottom : offset.top,
       };
@@ -543,15 +566,7 @@ export default {
             x: prevItemOffsetX,
           };
 
-          // eslint-disable-next-line max-depth -- inside a loop; flattening needs continue
-          if (rtlEnabled) {
-            pointProps.isRightBoundary = true;
-            prevPointProps.isLeftBoundary = true;
-          } else {
-            pointProps.isLeftBoundary = true;
-            prevPointProps.isRightBoundary = true;
-          }
-
+          markBoundaryPoints(pointProps, prevPointProps, rtlEnabled);
           addPointIfNeed(result, prevPointProps, pointCreated);
         }
       }
@@ -717,20 +732,7 @@ export default {
   },
 
   normalizeLookupDataSource(lookup: NonNullable<Column['lookup']>): NormalizedDataSourceOptions {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-else
-    let lookupDataSourceOptions: typeof lookup.items | typeof lookup.dataSource;
-    if (lookup.items) {
-      lookupDataSourceOptions = lookup.items;
-    } else {
-      lookupDataSourceOptions = lookup.dataSource;
-      if (
-        isFunction(lookupDataSourceOptions)
-        && !variableWrapper.isWrapped(lookupDataSourceOptions)
-      ) {
-        lookupDataSourceOptions = lookupDataSourceOptions({});
-      }
-    }
-    return normalizeDataSourceOptions(lookupDataSourceOptions);
+    return normalizeDataSourceOptions(getLookupDataSourceOptions(lookup));
   },
 
   getWrappedLookupDataSource(
@@ -754,13 +756,7 @@ export default {
 
     const hasGroupPaging = dataSourceAdapter.remoteOperations().groupPaging;
     const hasLookupOptimization = column.displayField && isString(column.displayField);
-
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in a closure
-    let cachedUniqueRelevantItems: RawItemData[] | undefined;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in a closure
-    let previousTake: number | undefined;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in a closure
-    let previousSkip: number | undefined;
+    const cache: { items?: RawItemData[]; skip?: number; take?: number } = {};
 
     const sliceItems = (items: RawItemData[], loadOptions: StoreLoadOptions): RawItemData[] => {
       const start = loadOptions.skip ?? 0;
@@ -779,20 +775,20 @@ export default {
       const d = new Deferred();
 
       const isSamePage = !hasGroupPaging
-        || (loadOptions.skip === previousSkip && loadOptions.take === previousTake);
+        || (loadOptions.skip === cache.skip && loadOptions.take === cache.take);
 
-      if (cachedUniqueRelevantItems && isSamePage) {
-        d.resolve(sliceItems(cachedUniqueRelevantItems, loadOptions));
+      if (cache.items && isSamePage) {
+        d.resolve(sliceItems(cache.items, loadOptions));
       } else {
-        previousSkip = loadOptions.skip;
-        previousTake = loadOptions.take;
+        cache.skip = loadOptions.skip;
+        cache.take = loadOptions.take;
         dataSourceAdapter.customLoader.load({
           filter,
           group,
           take: hasGroupPaging ? loadOptions.take : undefined,
           skip: hasGroupPaging ? loadOptions.skip : undefined,
         }).done(({ data }) => {
-          cachedUniqueRelevantItems = data;
+          cache.items = data;
           d.resolve(hasGroupPaging ? data : sliceItems(data, loadOptions));
         }).fail(d.fail);
       }
