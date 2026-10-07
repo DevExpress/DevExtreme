@@ -22,6 +22,7 @@ import type { RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
+import type { ColumnsController } from './columns_controller';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_INDEX_OPTIONS,
@@ -35,7 +36,6 @@ import {
   USER_STATE_FIELD_NAMES_15_1,
   VIRTUAL_COMMAND_COLUMN_NAME,
 } from './const';
-import type { ColumnsController } from './m_columns_controller';
 import type {
   BandColumnsCache, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionChangeArgs,
   ColumnOptionGetter, ColumnOptionSetter, ColumnsChanges, ColumnsControllerOptions, ColumnUserState,
@@ -69,12 +69,24 @@ export const setFilterOperationsAsDefaultValues = (column: Column): void => {
 
 let globalColumnId = 1;
 
-export const createColumn = (
+export function createColumn(
+  that: ColumnsController,
+  columnOptions: Column,
+  userStateColumnOptions?: ColumnUserState,
+  bandColumn?: Column,
+): Column;
+export function createColumn(
   that: ColumnsController,
   columnOptions: Column | string | undefined,
   userStateColumnOptions?: ColumnUserState,
   bandColumn?: Column,
-): Column | undefined => {
+): Column | undefined;
+export function createColumn(
+  that: ColumnsController,
+  columnOptions: Column | string | undefined,
+  userStateColumnOptions?: ColumnUserState,
+  bandColumn?: Column,
+): Column | undefined {
   if (!columnOptions) {
     return undefined;
   }
@@ -114,7 +126,7 @@ export const createColumn = (
   }
 
   return result;
-};
+}
 
 export function isUserStateColumn(
   column: ColumnUserState | undefined,
@@ -665,12 +677,12 @@ export function assignColumns(that: ColumnsController, columns: Column[]): void 
   that.updateColumnDataTypes();
 }
 
-export const updateColumnChanges = (
+export function updateColumnChanges(
   that: ColumnsController,
   changeType: ColumnChangeType,
   optionName?: string,
   columnIndex?: number,
-): void => {
+): ColumnsChanges {
   const columnChanges: ColumnsChanges = that._columnChanges ?? {
     optionNames: { length: 0 },
     changeTypes: { length: 0 },
@@ -707,7 +719,8 @@ export const updateColumnChanges = (
 
   that._columnChanges = columnChanges;
   that.resetColumnsCache();
-};
+  return columnChanges;
+}
 
 export const fireColumnsChanged = (that: ColumnsController): void => {
   const { onColumnsChanging } = that.option() as ColumnsControllerOptions;

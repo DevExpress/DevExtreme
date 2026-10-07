@@ -1,5 +1,5 @@
 import { isDefined } from '@js/core/utils/type';
-import { ColumnsController, columnsControllerModule } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import { ColumnsController, columnsControllerModule } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 

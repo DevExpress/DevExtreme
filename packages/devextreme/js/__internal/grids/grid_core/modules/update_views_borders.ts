@@ -1,17 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type View = any;
-
-// TODO: Move to the grid_core/m_types views interface.
-export interface ViewsWithBorder {
-  columnHeadersView: View;
-  rowsView: View;
-  filterPanelView: View;
-  footerView: View;
-}
+import type { ViewsWithBorder } from './types';
 
 const CLASSES = {
   borderedTop: 'dx-bordered-top-view',
@@ -21,7 +11,7 @@ const CLASSES = {
 const getFirstVisibleViewElement = ({
   columnHeadersView,
   rowsView,
-}: ViewsWithBorder): dxElementWrapper => {
+}: ViewsWithBorder): dxElementWrapper | undefined => {
   if (columnHeadersView?.isVisible()) {
     return columnHeadersView.element();
   }
@@ -33,7 +23,7 @@ const getLastVisibleViewElement = ({
   filterPanelView,
   footerView,
   rowsView,
-}: ViewsWithBorder): dxElementWrapper => {
+}: ViewsWithBorder): dxElementWrapper | undefined => {
   if (filterPanelView?.isVisible()) {
     return filterPanelView.element();
   }
@@ -85,6 +75,10 @@ export const updateViewsBorders = (
   const $oldLast = getViewElementWithClass(viewsWithBorder, CLASSES.borderedBottom);
   const $newFirst = getFirstVisibleViewElement(viewsWithBorder);
   const $newLast = getLastVisibleViewElement(viewsWithBorder);
+
+  if (!isDefined($newFirst) || !isDefined($newLast)) {
+    return;
+  }
 
   if ($oldFirst && !$oldFirst.is($newFirst)) {
     $oldFirst.removeClass(CLASSES.borderedTop);

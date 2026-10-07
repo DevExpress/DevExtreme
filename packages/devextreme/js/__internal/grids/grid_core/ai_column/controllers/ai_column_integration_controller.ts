@@ -6,13 +6,13 @@ import type {
 import { getKeyHash } from '@js/core/utils/common';
 import errors from '@js/ui/widget/ui.errors';
 
-import type { ColumnsController } from '../../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../../columns_controller/columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
 import type { DataSourceController } from '../../data_source/data_source_controller';
 import type { RawItemData } from '../../data_source_adapter/types';
 import type { ErrorHandlingViewController } from '../../error_handling/error_handling_view_controller';
-import { Controller } from '../../m_modules';
-import type { RowKey } from '../../m_types';
+import { Controller } from '../../modules/modules';
+import type { RowKey } from '../../types';
 import type { InternalRequestCallbacks } from '../types';
 import { getDataFromRowItems, isKeyMissingInData, reduceDataCachedKeys } from '../utils';
 import { AIColumnCacheController } from './ai_column_cache_controller';

@@ -1,8 +1,8 @@
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Coords } from '@ts/viz/core/types';
 import { normalizeEnum } from '@ts/viz/core/utils';
 import type { RangeContainerMeasure, RangeInfo } from '@ts/viz/gauges/base_range_container';
 import BaseRangeContainer, { getMaxRangeWidth } from '@ts/viz/gauges/base_range_container';
-import type { LinearLayout } from '@ts/viz/gauges/linear_indicators';
 
 class LinearRangeContainer extends BaseRangeContainer {
   vertical?: boolean;
@@ -48,7 +48,7 @@ class LinearRangeContainer extends BaseRangeContainer {
     return true;
   }
 
-  _createRange(range: RangeInfo, layout: LinearLayout): ThemeValue {
+  _createRange(range: RangeInfo, layout: Coords): ThemeValue {
     const inner = this._inner;
     const outer = this._outer;
     const startPosition = this._translator.translate(range.start);
@@ -72,7 +72,7 @@ class LinearRangeContainer extends BaseRangeContainer {
     return this._renderer.path(points, 'area');
   }
 
-  measure(layout: LinearLayout): RangeContainerMeasure {
+  measure(layout: Coords): RangeContainerMeasure {
     const center = layout[this.vertical ? 'x' : 'y'];
     const width = getMaxRangeWidth(this._options.width);
     return {

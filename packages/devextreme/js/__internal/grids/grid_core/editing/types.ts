@@ -2,7 +2,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ProcessedItem } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
-import type { InternalGrid, RowKey } from '../m_types';
+import type { InternalGrid, RowKey } from '../types';
 import type { INSERT_INDEX } from './const';
 
 export interface NormalizedEditCellOptions {

@@ -4,14 +4,14 @@ import { isDefined } from '@ts/core/utils/m_type';
 import type Store from '@ts/data/abstract_store';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { ColumnsController } from '../../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../../columns_controller/columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
 import type { DataSourceController } from '../../data_source/data_source_controller';
 import type DataSourceAdapter from '../../data_source_adapter/m_data_source_adapter';
 import type { ChangedEvent, RawItemData } from '../../data_source_adapter/types';
-import { Controller } from '../../m_modules';
-import type { RowKey } from '../../m_types';
 import gridCoreUtils from '../../m_utils';
+import { Controller } from '../../modules/modules';
+import type { RowKey } from '../../types';
 import type { InternalRequestCallbacks } from '../types';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from '../utils';
 import { AIColumnIntegrationController } from './ai_column_integration_controller';

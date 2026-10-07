@@ -17,9 +17,9 @@
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@js/core/utils/extend';
-import { isString } from '@js/core/utils/type';
 import { Color } from '@ts/color';
+import { extend } from '@ts/core/utils/m_extend';
+import { isString } from '@ts/core/utils/m_type';
 import { normalizeEnum } from '@ts/viz/core/utils';
 
 const HIGHLIGHTING_STEP = 50;

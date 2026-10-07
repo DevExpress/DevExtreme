@@ -7,7 +7,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnHeadersView } from '../../column_headers/m_column_headers';
 import type { ColumnsResizerViewController } from '../../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { ModuleType } from '../../m_types';
+import type { ModuleType } from '../../types';
 import type { ColumnViewTemplate } from '../../views/types';
 import { AI_COLUMN_NAME, CLASSES, ICON_NAMES } from '../const';
 import type { AIColumnController } from '../controllers/ai_column_controller';

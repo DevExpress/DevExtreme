@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Coords } from '@ts/viz/core/types';
 import { convertAngleToRendererSpace, getCosAndSin, normalizeAngle } from '@ts/viz/core/utils';
 import type {
   IndicatorMeasure,
-  Point,
   RangeBarPositions,
   TextCloudOptions,
   TooltipParameters,
@@ -505,7 +505,7 @@ class RangeBar extends BaseRangeBar {
       .sharp();
   }
 
-  _getTooltipPosition(): Point {
+  _getTooltipPosition(): Coords {
     const cosSin = getCosAndSin((this._basePosition + this._actualPosition) / 2);
     const r = (this._minSide + this._maxSide) / 2;
     return { x: this._options.x + cosSin.cos * r, y: this._options.y - cosSin.sin * r };

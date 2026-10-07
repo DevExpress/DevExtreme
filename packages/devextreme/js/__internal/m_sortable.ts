@@ -1,12 +1,12 @@
 import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { resetPosition } from '@js/common/core/animation/translator';
-import type { ChangedOptionInfo } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -15,7 +15,10 @@ import {
 } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/sortable';
-import type { DraggableProperties } from '@ts/m_draggable';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type {
+  DragEvent, DragEventArgs, DraggableProperties, DragStartArgs, DragTemplateArgs,
+} from '@ts/m_draggable';
 import Draggable from '@ts/m_draggable';
 
 import { isDefined } from '../core/utils/type';
@@ -27,35 +30,92 @@ const SORTABLE = 'dxSortable';
 const PLACEHOLDER_CLASS = 'placeholder';
 const CLONE_CLASS = 'clone';
 
-const isElementVisible = (itemElement) => $(itemElement).is(':visible');
+interface Position {
+  left: number;
+  top: number;
+}
 
-const animate = (element, config) => {
+interface Boundary {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
+
+interface ItemPoint {
+  dropInsideItem: boolean;
+  index: number;
+  isValid: boolean;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  $item: dxElementWrapper;
+}
+
+interface AnimateConfig {
+  to?: { left?: number; top?: number };
+  duration?: number;
+  easing?: string;
+}
+
+interface SourceScrollableInfo {
+  element: dxElementWrapper;
+  scrollLeft: number;
+  scrollTop: number;
+}
+
+type SortableEventArgs = DragEventArgs & {
+  fromIndex: number | null;
+  toIndex: number | null;
+  dropInsideItem: boolean;
+  promise?: DeferredObj<unknown> | PromiseLike<void>;
+  placeholderElement?: unknown;
+  dragElement?: unknown;
+};
+
+type SortableDragStartArgs = DragStartArgs & {
+  fromIndex: number;
+};
+
+interface OptionChangedToIndexArgs {
+  value: number | null;
+  previousValue?: number | null;
+  fullUpdate?: boolean;
+}
+
+const isElementVisible = (itemElement: Element): boolean => $(itemElement).is(':visible');
+
+const animate = (element: HTMLElement | undefined, config: AnimateConfig): void => {
   if (!element) return;
 
   const left = config.to?.left || 0;
   const top = config.to?.top || 0;
 
   element.style.transform = `translate(${left}px,${top}px)`;
-  element.style.transition = (fx as any).off ? '' : `transform ${config.duration}ms ${config.easing}`;
+  // @ts-expect-error off is not declared
+  element.style.transition = fx.off ? '' : `transform ${config.duration}ms ${config.easing}`;
 };
 
-const stopAnimation = (element) => {
+const stopAnimation = (element: HTMLElement | undefined): void => {
   if (!element) return;
 
   element.style.transform = '';
   element.style.transition = '';
 };
 
-function getScrollableBoundary($scrollable) {
+function getScrollableBoundary($scrollable: dxElementWrapper): Boundary {
   const offset = $scrollable.offset();
-  const { style } = $scrollable[0];
+  const { style } = $scrollable[0] as HTMLElement;
   const paddingLeft = parseFloat(style.paddingLeft) || 0;
   const paddingRight = parseFloat(style.paddingRight) || 0;
   const paddingTop = parseFloat(style.paddingTop) || 0;
   // use clientWidth, because vertical scrollbar reduces content width
-  const width = $scrollable[0].clientWidth - (paddingLeft + paddingRight);
+  const width = ($scrollable[0] as HTMLElement).clientWidth - (paddingLeft + paddingRight);
   const height = getHeight($scrollable);
+  // @ts-expect-error offset can be undefined
   const left = offset.left + paddingLeft;
+  // @ts-expect-error offset can be undefined
   const top = offset.top + paddingTop;
   return {
     left,
@@ -65,6 +125,10 @@ function getScrollableBoundary($scrollable) {
   };
 }
 export interface SortableProperties extends Omit<Properties, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
+  scrollSensitivity: number;
+
+  scrollSpeed: number;
+
   boundary?: DraggableProperties['boundary'];
 
   component?: unknown;
@@ -73,42 +137,52 @@ export interface SortableProperties extends Omit<Properties, 'boundary' | 'onDis
 
   clone?: boolean;
 
+  itemData?: unknown;
+
   placeholderClassName?: string;
 
-  animation?: AnimationConfig;
+  animation: AnimationConfig;
 
-  fromIndex?: number | null;
+  fromIndex: number | null;
 
-  toIndex?: number | null;
+  toIndex: number | null;
 
-  dropInsideItem?: boolean;
+  dropInsideItem: boolean;
 
-  itemPoints?: unknown[] | null;
+  itemPoints: ItemPoint[] | null;
 
-  fromIndexOffset?: number;
+  fromIndexOffset: number;
 
-  offset?: number;
+  offset: number;
 
-  autoUpdate?: boolean;
+  autoUpdate: boolean;
 
-  draggableElementSize?: number;
+  draggableElementSize: number;
+
+  itemOrientation: NonNullable<Properties['itemOrientation']>;
+
+  allowDropInsideItem: boolean;
+
+  allowReordering: boolean;
+
+  moveItemOnDrop: boolean;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onPlaceholderPrepared?: ((e: any) => void) | null;
 }
 
-class Sortable extends Draggable {
+class Sortable extends Draggable<SortableProperties> {
   _$placeholderElement?: dxElementWrapper | null;
 
   _$scrollable?: dxElementWrapper;
 
   _$modifiedItem?: dxElementWrapper | null;
 
-  _sourceScrollableInfo?: any;
+  _sourceScrollableInfo?: SourceScrollableInfo | null;
 
-  _sourceScrollHandler?: (e) => void;
+  _sourceScrollHandler?: (e: Event) => void;
 
-  _modifiedItemMargin?: number;
+  _modifiedItemMargin?: string;
 
   _init(): void {
     super._init();
@@ -116,7 +190,6 @@ class Sortable extends Draggable {
     this._sourceScrollableInfo = null;
   }
 
-  // @ts-expect-error sortable events are not substitutable for draggable events
   _getDefaultOptions(): SortableProperties {
     return {
       ...super._getDefaultOptions(),
@@ -152,7 +225,7 @@ class Sortable extends Draggable {
     };
   }
 
-  reset() {
+  reset(): void {
     this.option({
       dropInsideItem: false,
       toIndex: null,
@@ -168,22 +241,22 @@ class Sortable extends Draggable {
     this._$placeholderElement = null;
 
     if (!this._isIndicateMode() && this._$modifiedItem) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error css value can be undefined
       this._$modifiedItem.css('marginBottom', this._modifiedItemMargin);
       this._$modifiedItem = null;
     }
   }
 
-  _getPrevVisibleItem(items, index?) {
+  _getPrevVisibleItem(items: Element[], index?: number | null): Element | undefined {
     return items
+      // @ts-expect-error slice is declared without null
       .slice(0, index)
       .reverse()
       .filter(isElementVisible)[0];
   }
 
-  _dragStartHandler(e) {
-    // @ts-expect-error ts-error
-    super._dragStartHandler.apply(this, arguments);
+  _dragStartHandler(e: DragEvent): void {
+    super._dragStartHandler(e);
 
     if (e.cancel === true) {
       return;
@@ -197,12 +270,14 @@ class Sortable extends Draggable {
     this.option('fromIndexOffset', this.option('offset'));
   }
 
-  _subscribeToSourceScroll(e) {
+  _subscribeToSourceScroll(e: DragEvent): void {
     const $scrollable = this._getScrollable($(e.target));
     if ($scrollable) {
       this._sourceScrollableInfo = {
         element: $scrollable,
+        // @ts-expect-error scrollLeft is declared to return the wrapper
         scrollLeft: $scrollable.scrollLeft(),
+        // @ts-expect-error scrollTop is declared to return the wrapper
         scrollTop: $scrollable.scrollTop(),
       };
 
@@ -211,30 +286,30 @@ class Sortable extends Draggable {
     }
   }
 
-  _unsubscribeFromSourceScroll() {
+  _unsubscribeFromSourceScroll(): void {
     if (this._sourceScrollableInfo) {
       eventsEngine.off(this._sourceScrollableInfo.element, 'scroll', this._sourceScrollHandler);
       this._sourceScrollableInfo = null;
     }
   }
 
-  _handleSourceScroll(e): void {
+  _handleSourceScroll(e: Event): void {
     const sourceScrollableInfo = this._sourceScrollableInfo;
     if (sourceScrollableInfo) {
-      ['scrollLeft', 'scrollTop'].forEach((scrollProp) => {
-        if (e.target[scrollProp] !== sourceScrollableInfo[scrollProp]) {
-          const scrollBy = e.target[scrollProp] - sourceScrollableInfo[scrollProp];
+      (['scrollLeft', 'scrollTop'] as const).forEach((scrollProp) => {
+        const target = e.target as HTMLElement;
+        if (target[scrollProp] !== sourceScrollableInfo[scrollProp]) {
+          const scrollBy = target[scrollProp] - sourceScrollableInfo[scrollProp];
           this._correctItemPoints(scrollBy);
           this._movePlaceholder();
-          sourceScrollableInfo[scrollProp] = e.target[scrollProp];
+          sourceScrollableInfo[scrollProp] = target[scrollProp];
         }
       });
     }
   }
 
-  _dragEnterHandler(e): void {
-    // @ts-expect-error ts-error
-    super._dragEnterHandler.apply(this, arguments);
+  _dragEnterHandler(e: DragEvent): void {
+    super._dragEnterHandler(e);
 
     if (this === this._getSourceDraggable()) {
       return;
@@ -247,45 +322,45 @@ class Sortable extends Draggable {
 
     if (!this._isIndicateMode()) {
       const itemPoints = this.option('itemPoints');
-      // @ts-expect-error ts-error
+      // @ts-expect-error itemPoints are set by _updateItemPoints
       const lastItemPoint = itemPoints[itemPoints.length - 1];
 
       if (lastItemPoint) {
         const $element = this.$element();
         const $sourceElement = this._getSourceElement();
         const isVertical = this._isVerticalOrientation();
-        const sourceElementSize = isVertical ? getOuterHeight($sourceElement, true) : getOuterWidth($sourceElement, true);
+        const sourceElementSize = isVertical
+          ? getOuterHeight($sourceElement, true)
+          : getOuterWidth($sourceElement, true);
         const scrollSize = $element.get(0)[isVertical ? 'scrollHeight' : 'scrollWidth'];
         const scrollPosition = $element.get(0)[isVertical ? 'scrollTop' : 'scrollLeft'];
         const positionProp = isVertical ? 'top' : 'left';
         const lastPointPosition = lastItemPoint[positionProp];
-        // @ts-expect-error ts-error
+        // @ts-expect-error offset can be undefined
         const elementPosition = $element.offset()[positionProp];
         const freeSize = elementPosition + scrollSize - scrollPosition - lastPointPosition;
 
-        if (freeSize < sourceElementSize) {
-          if (isVertical) {
-            const items = this._getItems();
-            const $lastItem = $(this._getPrevVisibleItem(items));
+        if (freeSize < sourceElementSize && isVertical) {
+          const items = this._getItems();
+          const $lastItem = $(this._getPrevVisibleItem(items));
 
-            this._$modifiedItem = $lastItem;
-            this._modifiedItemMargin = ($lastItem.get(0) as any).style.marginBottom;
+          this._$modifiedItem = $lastItem;
+          this._modifiedItemMargin = ($lastItem.get(0) as HTMLElement).style.marginBottom;
 
-            $lastItem.css('marginBottom', sourceElementSize - freeSize);
+          $lastItem.css('marginBottom', sourceElementSize - freeSize);
 
-            const $sortable = $lastItem.closest('.dx-sortable');
-            const sortable: any = $sortable.data('dxScrollable') || $sortable.data('dxScrollView');
+          const $sortable = $lastItem.closest('.dx-sortable');
+          // @ts-expect-error data is declared without the getter form
+          const sortable: { update: () => void } | undefined = $sortable.data('dxScrollable') || $sortable.data('dxScrollView');
 
-            sortable?.update();
-          }
+          sortable?.update();
         }
       }
     }
   }
 
-  _dragLeaveHandler(): void {
-    // @ts-expect-error ts-error
-    super._dragLeaveHandler.apply(this, arguments);
+  _dragLeaveHandler(e: DragEvent): void {
+    super._dragLeaveHandler(e);
 
     if (this !== this._getSourceDraggable()) {
       this._unsubscribeFromSourceScroll();
@@ -298,14 +373,14 @@ class Sortable extends Draggable {
     }
   }
 
-  dragLeave() {
+  dragLeave(): void {
     if (this !== this._getTargetDraggable()) {
       this.option('toIndex', this.option('fromIndex'));
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _allowDrop(event) {
+  _allowDrop(event?: DragEvent): boolean {
     const targetDraggable = this._getTargetDraggable();
     const $targetDraggable = targetDraggable.$element();
     const $scrollable = this._getScrollable($targetDraggable);
@@ -316,7 +391,6 @@ class Sortable extends Draggable {
       } = getScrollableBoundary($scrollable);
       const toIndex = this.option('toIndex');
       const itemPoints = this.option('itemPoints');
-      // @ts-expect-error ts-error
       const itemPoint = itemPoints?.filter((item) => item.index === toIndex)[0];
 
       if (itemPoint && itemPoint.top !== undefined) {
@@ -331,20 +405,19 @@ class Sortable extends Draggable {
     return true;
   }
 
-  dragEnd(sourceEvent) {
+  dragEnd(sourceEvent: DragEventArgs): DeferredObj<unknown> | PromiseLike<void> {
     this._unsubscribeFromSourceScroll();
 
     const $sourceElement = this._getSourceElement();
     const sourceDraggable = this._getSourceDraggable();
     const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
-    // @ts-expect-error bad options type
-    const toIndex: number = this.option('toIndex');
+    const toIndex = this.option('toIndex');
     const { event } = sourceEvent;
     const allowDrop = this._allowDrop(event);
 
     if (toIndex !== null && toIndex >= 0 && allowDrop) {
-      let cancelAdd;
-      let cancelRemove;
+      let cancelAdd: boolean | undefined = false;
+      let cancelRemove: boolean | undefined = false;
 
       if (sourceDraggable !== this) {
         cancelAdd = this._fireAddEvent(event);
@@ -355,10 +428,13 @@ class Sortable extends Draggable {
       }
 
       if (isSourceDraggable) {
+        // @ts-expect-error the source element can be null
         resetPosition($sourceElement);
       }
       if (this.option('moveItemOnDrop')) {
-        !cancelAdd && this._moveItem($sourceElement, toIndex, cancelRemove);
+        if (!cancelAdd) {
+          this._moveItem($sourceElement, toIndex, cancelRemove);
+        }
       }
 
       if (sourceDraggable === this) {
@@ -369,7 +445,7 @@ class Sortable extends Draggable {
     return Deferred().resolve();
   }
 
-  dragMove(e) {
+  dragMove(e: DragEvent): void {
     const itemPoints = this.option('itemPoints');
 
     if (!itemPoints) {
@@ -381,12 +457,18 @@ class Sortable extends Draggable {
     const cursorPosition = isVertical ? e.pageY : e.pageX;
     const rtlEnabled = this.option('rtlEnabled');
 
-    let itemPoint;
-    // @ts-expect-error ts-error
-    for (let i = itemPoints.length - 1; i >= 0; i--) {
-      const centerPosition = itemPoints[i + 1] && (itemPoints[i][axisName] + itemPoints[i + 1][axisName]) / 2;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let itemPoint: ItemPoint | undefined;
+    for (let i = itemPoints.length - 1; i >= 0; i -= 1) {
+      const centerPosition = itemPoints[i + 1]
+        && (itemPoints[i][axisName] + itemPoints[i + 1][axisName]) / 2;
 
-      if ((!isVertical && rtlEnabled ? cursorPosition > centerPosition : centerPosition > cursorPosition) || centerPosition === undefined) {
+      if (
+        (!isVertical && rtlEnabled
+          ? cursorPosition > centerPosition
+          : centerPosition > cursorPosition)
+        || centerPosition === undefined
+      ) {
         itemPoint = itemPoints[i];
       } else {
         break;
@@ -402,7 +484,6 @@ class Sortable extends Draggable {
   }
 
   private _isIndicateMode(): boolean {
-    // @ts-expect-error bad option type
     return this.option('dropFeedbackMode') === 'indicate' || this.option('allowDropInsideItem');
   }
 
@@ -411,36 +492,39 @@ class Sortable extends Draggable {
       return undefined;
     }
 
-    // @ts-expect-error bad options type
-    const customCssClass: string = this.option('placeholderClassName');
+    const customCssClass = this.option('placeholderClassName');
 
     this._$placeholderElement = $('<div>')
       .addClass(this._addWidgetPrefix(PLACEHOLDER_CLASS))
       .addClass(customCssClass ?? '')
+      // @ts-expect-error the drag element can be null
       .insertBefore(this._getSourceDraggable()._$dragElement);
 
     return this._$placeholderElement;
   }
 
-  _getItems() {
+  _getItems(): Element[] {
     const itemsSelector = this._getItemsSelector();
 
     return this._$content()
-      // @ts-expect-error ts-error
       .find(itemsSelector)
       .not(`.${this._addWidgetPrefix(PLACEHOLDER_CLASS)}`)
       .not(`.${this._addWidgetPrefix(CLONE_CLASS)}`)
       .toArray();
   }
 
-  _allowReordering() {
+  _allowReordering(): boolean {
     const sourceDraggable = this._getSourceDraggable();
     const targetDraggable = this._getTargetDraggable();
 
     return sourceDraggable !== targetDraggable || this.option('allowReordering');
   }
 
-  _isValidPoint(visibleIndex, draggableVisibleIndex, dropInsideItem) {
+  _isValidPoint(
+    visibleIndex: number,
+    draggableVisibleIndex: number,
+    dropInsideItem?: boolean,
+  ): boolean {
     const allowDropInsideItem = this.option('allowDropInsideItem');
     const allowReordering = dropInsideItem || this._allowReordering();
 
@@ -452,27 +536,32 @@ class Sortable extends Draggable {
       return true;
     }
 
-    return draggableVisibleIndex === -1 || visibleIndex !== draggableVisibleIndex && (dropInsideItem || visibleIndex !== (draggableVisibleIndex + 1));
+    return draggableVisibleIndex === -1 || (
+      visibleIndex !== draggableVisibleIndex
+      && (dropInsideItem || visibleIndex !== (draggableVisibleIndex + 1))
+    );
   }
 
-  _getItemPoints() {
-    const that = this;
-    let result: any[] = [];
-    let $item;
-    let offset;
-    let itemWidth;
-    const { rtlEnabled } = that.option();
-    const isVertical = that._isVerticalOrientation();
-    const itemElements = that._getItems();
+  _getItemPoints(): ItemPoint[] {
+    let result: ItemPoint[] = [];
+    /* eslint-disable @typescript-eslint/init-declarations */
+    let $item: dxElementWrapper | undefined;
+    let offset: Position | undefined;
+    let itemWidth: number | undefined;
+    /* eslint-enable @typescript-eslint/init-declarations */
+    const { rtlEnabled } = this.option();
+    const isVertical = this._isVerticalOrientation();
+    const itemElements = this._getItems();
     const visibleItemElements = itemElements.filter(isElementVisible);
     const visibleItemCount = visibleItemElements.length;
     const $draggableItem = this._getDraggableElement();
     const draggableVisibleIndex = visibleItemElements.indexOf($draggableItem.get(0));
 
     if (visibleItemCount) {
-      for (let i = 0; i <= visibleItemCount; i++) {
-        // @ts-expect-error ts-error
-        const needCorrectLeftPosition = !isVertical && (rtlEnabled ^ (i === visibleItemCount) as any);
+      for (let i = 0; i <= visibleItemCount; i += 1) {
+        // @ts-expect-error a boolean is used as a number operand
+        // eslint-disable-next-line no-bitwise
+        const needCorrectLeftPosition = !isVertical && (rtlEnabled ^ (i === visibleItemCount));
         const needCorrectTopPosition = isVertical && i === visibleItemCount;
 
         if (i < visibleItemCount) {
@@ -483,22 +572,26 @@ class Sortable extends Draggable {
 
         result.push({
           dropInsideItem: false,
+          // @ts-expect-error offset can be undefined
           left: offset.left + (needCorrectLeftPosition ? itemWidth : 0),
+          // @ts-expect-error offset can be undefined
           top: offset.top + (needCorrectTopPosition ? result[i - 1].height : 0),
+          // @ts-expect-error $item is assigned in the loop
           index: i === visibleItemCount ? itemElements.length : itemElements.indexOf($item.get(0)),
+          // @ts-expect-error $item is assigned in the loop
           $item,
           width: getOuterWidth($item),
           height: getOuterHeight($item),
-          // @ts-expect-error ts-error
-          isValid: that._isValidPoint(i, draggableVisibleIndex),
+          isValid: this._isValidPoint(i, draggableVisibleIndex),
         });
       }
 
       if (this.option('allowDropInsideItem')) {
         const points = result;
         result = [];
-        for (let i = 0; i < points.length; i++) {
+        for (let i = 0; i < points.length; i += 1) {
           result.push(points[i]);
+          // eslint-disable-next-line max-depth
           if (points[i + 1]) {
             result.push(extend({}, points[i], {
               dropInsideItem: true,
@@ -510,6 +603,7 @@ class Sortable extends Draggable {
         }
       }
     } else {
+      // @ts-expect-error the empty list point has no position and size
       result.push({
         dropInsideItem: false,
         index: 0,
@@ -520,60 +614,60 @@ class Sortable extends Draggable {
     return result;
   }
 
-  _updateItemPoints(forceUpdate?) {
+  _updateItemPoints(forceUpdate?: boolean): void {
     if (forceUpdate || this.option('autoUpdate') || !this.option('itemPoints')) {
       this.option('itemPoints', this._getItemPoints());
     }
   }
 
-  _correctItemPoints(scrollBy) {
+  _correctItemPoints(scrollBy: number): void {
     const itemPoints = this.option('itemPoints');
     if (scrollBy && itemPoints && !this.option('autoUpdate')) {
       const isVertical = this._isVerticalOrientation();
       const positionPropName = isVertical ? 'top' : 'left';
-      // @ts-expect-error ts-error
       itemPoints.forEach((itemPoint) => {
         itemPoint[positionPropName] -= scrollBy;
       });
     }
   }
 
-  _getElementIndex($itemElement) {
+  _getElementIndex($itemElement: dxElementWrapper | null | undefined): number {
+    // @ts-expect-error the source element can be null
     return this._getItems().indexOf($itemElement.get(0));
   }
 
-  _getDragTemplateArgs($element) {
-    // @ts-expect-error ts-error
-    const args = super._getDragTemplateArgs.apply(this, arguments);
-    // @ts-expect-error ts-error
+  _getDragTemplateArgs($element: dxElementWrapper, $container: dxElementWrapper): DragTemplateArgs {
+    const args = super._getDragTemplateArgs($element, $container);
     args.model.fromIndex = this._getElementIndex($element);
 
     return args;
   }
 
-  _togglePlaceholder(value): void {
+  _togglePlaceholder(value: boolean): void {
     this._$placeholderElement?.toggle(value);
   }
 
   _isVerticalOrientation(): boolean {
-    // @ts-expect-error ts-error
     const { itemOrientation } = this.option();
 
     return itemOrientation === 'vertical';
   }
 
-  _normalizeToIndex(toIndex, skipOffsetting) {
+  _normalizeToIndex(toIndex: number | null, skipOffsetting?: boolean): number | null {
     const isAnotherDraggable = this._getSourceDraggable() !== this._getTargetDraggable();
     const fromIndex = this._getActualFromIndex();
 
     if (toIndex === null) {
       return fromIndex;
     }
-    // @ts-expect-error ts-error
-    return Math.max(isAnotherDraggable || fromIndex >= toIndex || skipOffsetting ? toIndex : toIndex - 1, 0);
+    return Math.max(
+      // @ts-expect-error fromIndex can be null
+      isAnotherDraggable || fromIndex >= toIndex || skipOffsetting ? toIndex : toIndex - 1,
+      0,
+    );
   }
 
-  _updatePlaceholderPosition(e, itemPoint) {
+  _updatePlaceholderPosition(e: DragEvent, itemPoint: ItemPoint): void {
     const sourceDraggable = this._getSourceDraggable();
     const toIndex = this._normalizeToIndex(itemPoint.index, itemPoint.dropInsideItem);
 
@@ -582,7 +676,9 @@ class Sortable extends Draggable {
       dropInsideItem: itemPoint.dropInsideItem,
     });
 
-    itemPoint.isValid && this._getAction('onDragChange')(eventArgs);
+    if (itemPoint.isValid) {
+      this._getAction('onDragChange')(eventArgs);
+    }
 
     if (eventArgs.cancel || !itemPoint.isValid) {
       if (!itemPoint.isValid) {
@@ -599,42 +695,45 @@ class Sortable extends Draggable {
       toIndex: itemPoint.index,
     });
     this._getAction('onPlaceholderPrepared')(extend(this._getEventArgs(e), {
-      // @ts-expect-error ts-error
+      // @ts-expect-error the placeholder element can be null
       placeholderElement: getPublicElement(this._$placeholderElement),
+      // @ts-expect-error the drag element can be null
       dragElement: getPublicElement(sourceDraggable._$dragElement),
     }));
     this._updateItemPoints();
   }
 
-  _makeWidthCorrection($item, width) {
+  _makeWidthCorrection($item: dxElementWrapper, width: number | string): number | string {
     this._$scrollable = this._getScrollable($item);
+    let correctedWidth = width;
     if (this._$scrollable) {
       const scrollableWidth = getWidth(this._$scrollable);
-      // @ts-expect-error ts-error
+      // @ts-expect-error offset can be undefined
       const overflowLeft = this._$scrollable.offset().left - $item.offset().left;
       const overflowRight = getOuterWidth($item) - overflowLeft - scrollableWidth;
 
       if (overflowLeft > 0) {
-        width -= overflowLeft;
+        // @ts-expect-error width is an empty string when it was not measured
+        correctedWidth -= overflowLeft;
       }
 
       if (overflowRight > 0) {
-        width -= overflowRight;
+        // @ts-expect-error width is an empty string when it was not measured
+        correctedWidth -= overflowRight;
       }
     }
 
-    return width;
+    return correctedWidth;
   }
 
   private _updatePlaceholderSizes(
     $placeholderElement: dxElementWrapper,
     $itemElement: dxElementWrapper,
   ): void {
-    // @ts-expect-error bad options type
-    const dropInsideItem: boolean = this.option('dropInsideItem');
+    const dropInsideItem = this.option('dropInsideItem');
     const isVertical = this._isVerticalOrientation();
-    let width = '';
-    let height = '';
+    let width: number | string = '';
+    let height: number | string = '';
 
     $placeholderElement.toggleClass(this._addWidgetPrefix('placeholder-inside'), dropInsideItem);
 
@@ -650,55 +749,66 @@ class Sortable extends Draggable {
     $placeholderElement.css({ width, height });
   }
 
-  _moveItem($itemElement, index, cancelRemove) {
-    let $prevTargetItemElement;
+  _moveItem(
+    $itemElement: dxElementWrapper | null | undefined,
+    index: number,
+    cancelRemove?: boolean,
+  ): void {
+    let $item = $itemElement;
     const $itemElements = this._getItems();
     const $targetItemElement = $itemElements[index];
     const sourceDraggable = this._getSourceDraggable();
 
     if (cancelRemove) {
-      $itemElement = $itemElement.clone();
-      sourceDraggable._toggleDragSourceClass(false, $itemElement);
+      // @ts-expect-error the source element can be null
+      $item = $item.clone();
+      sourceDraggable._toggleDragSourceClass(false, $item);
     }
 
-    if (!$targetItemElement) {
-      $prevTargetItemElement = $itemElements[index - 1];
-    }
+    const $prevTargetItemElement = $targetItemElement ? undefined : $itemElements[index - 1];
 
-    this._moveItemCore($itemElement, $targetItemElement, $prevTargetItemElement);
+    this._moveItemCore($item, $targetItemElement, $prevTargetItemElement);
   }
 
-  _moveItemCore($targetItem, item, prevItem) {
+  _moveItemCore(
+    $targetItem: dxElementWrapper | null | undefined,
+    item: Element | undefined,
+    prevItem: Element | undefined,
+  ): void {
     if (!item && !prevItem) {
+      // @ts-expect-error the source element can be null
       $targetItem.appendTo(this.$element());
     } else if (prevItem) {
+      // @ts-expect-error the source element can be null
       $targetItem.insertAfter($(prevItem));
     } else {
+      // @ts-expect-error the source element can be null
       $targetItem.insertBefore($(item));
     }
   }
 
-  _getDragStartArgs(e, $itemElement) {
-    // @ts-expect-error ts-error
-    return extend(super._getDragStartArgs.apply(this, arguments), {
+  _getDragStartArgs(e: DragEvent, $itemElement: dxElementWrapper): SortableDragStartArgs {
+    const args: SortableDragStartArgs = extend(super._getDragStartArgs(e, $itemElement), {
       fromIndex: this._getElementIndex($itemElement),
     });
+
+    return args;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getEventArgs(e) {
+  _getEventArgs(e: DragEvent): SortableEventArgs {
     const sourceDraggable = this._getSourceDraggable();
     const targetDraggable = this._getTargetDraggable();
     const dropInsideItem = targetDraggable.option('dropInsideItem');
-    // @ts-expect-error ts-error
-    return extend(super._getEventArgs.apply(this, arguments), {
+    const args: SortableEventArgs = extend(super._getEventArgs(e), {
       fromIndex: sourceDraggable.option('fromIndex'),
       toIndex: this._normalizeToIndex(targetDraggable.option('toIndex'), dropInsideItem),
       dropInsideItem,
     });
+
+    return args;
   }
 
-  public _optionChanged(args: ChangedOptionInfo): void {
+  public _optionChanged(args: OptionChanged<SortableProperties>): void {
     const { name } = args;
 
     switch (name) {
@@ -713,16 +823,17 @@ class Sortable extends Draggable {
         [false, true].forEach((isDragSource) => {
           const fromIndex = isDragSource ? args.value : args.previousValue;
           if (fromIndex !== null) {
+            // @ts-expect-error previousValue can be undefined
             const $fromElement = $(this._getItems()[fromIndex]);
             this._toggleDragSourceClass(isDragSource, $fromElement);
           }
         });
         break;
       case 'dropInsideItem':
-        // @ts-expect-error ts-error
-        this._optionChangedDropInsideItem(args);
+        this._optionChangedDropInsideItem();
         break;
       case 'toIndex':
+        // @ts-expect-error the option value is typed as possibly undefined
         this._optionChangedToIndex(args);
         break;
       case 'itemOrientation':
@@ -743,22 +854,23 @@ class Sortable extends Draggable {
     }
   }
 
-  _optionChangedDropInsideItem() {
+  _optionChangedDropInsideItem(): void {
     if (this._isIndicateMode() && this._$placeholderElement) {
       this._movePlaceholder();
     }
   }
 
-  _isPositionVisible(position) {
+  _isPositionVisible(position: Position): boolean {
     const $element = this.$element();
-    let scrollContainer;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let scrollContainer: Element | undefined;
     if ($element.css('overflow') !== 'hidden') {
       scrollContainer = $element.get(0);
     } else {
-      // @ts-expect-error ts-error
-      $element.parents().each(function () {
-        if ($(this).css('overflow') !== 'visible') {
-          scrollContainer = this;
+      // @ts-expect-error each is declared with a callback that returns boolean
+      $element.parents().each((_, element) => {
+        if ($(element).css('overflow') !== 'visible') {
+          scrollContainer = element;
           return false;
         }
 
@@ -773,7 +885,10 @@ class Sortable extends Draggable {
       const end = isVerticalOrientation ? 'bottom' : 'right';
       const pageOffset = isVerticalOrientation ? window.pageYOffset : window.pageXOffset;
 
-      if (position[start] < (clientRect[start] + pageOffset) || position[start] > (clientRect[end] + pageOffset)) {
+      if (
+        position[start] < (clientRect[start] + pageOffset)
+        || position[start] > (clientRect[end] + pageOffset)
+      ) {
         return false;
       }
     }
@@ -781,7 +896,7 @@ class Sortable extends Draggable {
     return true;
   }
 
-  _optionChangedToIndex(args) {
+  _optionChangedToIndex(args: OptionChangedToIndexArgs): void {
     const toIndex = args.value;
 
     if (this._isIndicateMode()) {
@@ -797,7 +912,7 @@ class Sortable extends Draggable {
     }
   }
 
-  update() {
+  update(): void {
     if (this.option('fromIndex') === null && this.option('toIndex') === null) {
       return;
     }
@@ -810,9 +925,9 @@ class Sortable extends Draggable {
     this._optionChangedToIndex({ value: toIndex, fullUpdate: true });
   }
 
-  _updateDragSourceClass() {
+  _updateDragSourceClass(): void {
     const fromIndex = this._getActualFromIndex();
-    // @ts-expect-error ts-error
+    // @ts-expect-error fromIndex can be null
     const $fromElement = $(this._getItems()[fromIndex]);
     if ($fromElement.length) {
       this._$sourceElement = $fromElement;
@@ -820,37 +935,36 @@ class Sortable extends Draggable {
     }
   }
 
-  _makeLeftCorrection(left) {
-    const that = this;
-    const $scrollable = that._$scrollable;
+  _makeLeftCorrection(left: number): number {
+    const $scrollable = this._$scrollable;
+    let correctedLeft = left;
 
-    if ($scrollable && that._isVerticalOrientation()) {
-      // @ts-expect-error ts-error
-      const overflowLeft = $scrollable.offset().left - left;
+    if ($scrollable && this._isVerticalOrientation()) {
+      // @ts-expect-error offset can be undefined
+      const overflowLeft = $scrollable.offset().left - correctedLeft;
       if (overflowLeft > 0) {
-        left += overflowLeft;
+        correctedLeft += overflowLeft;
       }
     }
 
-    return left;
+    return correctedLeft;
   }
 
-  _movePlaceholder() {
-    const that = this;
+  _movePlaceholder(): void {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const $placeholderElement = that._$placeholderElement || that._createPlaceholder();
+    const $placeholderElement = this._$placeholderElement || this._createPlaceholder();
     if (!$placeholderElement) {
       return;
     }
 
-    const items = that._getItems();
-    const toIndex = that.option('toIndex');
-    const isVerticalOrientation = that._isVerticalOrientation();
+    const items = this._getItems();
+    const toIndex = this.option('toIndex');
+    const isVerticalOrientation = this._isVerticalOrientation();
     const rtlEnabled = this.option('rtlEnabled');
-    const dropInsideItem = that.option('dropInsideItem');
-    let position: any = null;
-    // @ts-expect-error ts-error
-    let itemElement = items[toIndex];
+    const dropInsideItem = this.option('dropInsideItem');
+    let position: Position | null | undefined = null;
+    // @ts-expect-error toIndex can be null
+    let itemElement: Element | undefined = items[toIndex];
 
     if (itemElement) {
       const $itemElement = $(itemElement);
@@ -858,25 +972,29 @@ class Sortable extends Draggable {
       position = $itemElement.offset();
 
       if (!isVerticalOrientation && rtlEnabled && !dropInsideItem) {
+        // @ts-expect-error offset can be undefined
         position.left += getOuterWidth($itemElement, true);
       }
     } else {
-      const prevVisibleItemElement = itemElement = this._getPrevVisibleItem(items, toIndex);
+      itemElement = this._getPrevVisibleItem(items, toIndex);
+      const prevVisibleItemElement = itemElement;
 
       if (prevVisibleItemElement) {
         position = $(prevVisibleItemElement).offset();
 
         if (isVerticalOrientation) {
+          // @ts-expect-error offset can be undefined
           position.top += getOuterHeight(prevVisibleItemElement, true);
         } else if (!rtlEnabled) {
+          // @ts-expect-error offset can be undefined
           position.left += getOuterWidth(prevVisibleItemElement, true);
         }
       }
     }
 
-    that._updatePlaceholderSizes($placeholderElement, $(itemElement));
+    this._updatePlaceholderSizes($placeholderElement, $(itemElement));
 
-    if (position && !that._isPositionVisible(position)) {
+    if (position && !this._isPositionVisible(position)) {
       position = null;
     }
 
@@ -884,25 +1002,31 @@ class Sortable extends Draggable {
       const isLastVerticalPosition = isVerticalOrientation && toIndex === items.length;
       const outerPlaceholderHeight = getOuterHeight($placeholderElement);
 
-      position.left = that._makeLeftCorrection(position.left);
+      position.left = this._makeLeftCorrection(position.left);
       position.top = isLastVerticalPosition && position.top >= outerPlaceholderHeight
         ? position.top - outerPlaceholderHeight
         : position.top;
 
-      that._move(position, $placeholderElement);
+      this._move(position, $placeholderElement);
     }
 
     $placeholderElement.toggle(!!position);
   }
 
-  _getPositions(items, elementSize, fromIndex, toIndex) {
-    const positions: any[] = [];
+  _getPositions(
+    items: Element[],
+    elementSize: number,
+    fromIndex: number | null,
+    toIndex: number | null,
+  ): number[] {
+    const positions: number[] = [];
 
-    for (let i = 0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i += 1) {
       let position = 0;
 
       if (toIndex === null || fromIndex === null) {
         positions.push(position);
+        // eslint-disable-next-line no-continue
         continue;
       }
 
@@ -929,7 +1053,7 @@ class Sortable extends Draggable {
     return positions;
   }
 
-  _getDraggableElementSize(isVerticalOrientation) {
+  _getDraggableElementSize(isVerticalOrientation: boolean): number {
     const $draggableItem = this._getDraggableElement();
     let size = this.option('draggableElementSize');
     if (!size) {
@@ -945,24 +1069,28 @@ class Sortable extends Draggable {
   }
 
   _getActualFromIndex(): number | null {
-    // @ts-expect-error ts-error
     const { fromIndex, fromIndexOffset, offset } = this.option();
     return fromIndex == null ? null : fromIndex + fromIndexOffset - offset;
   }
 
-  _moveItems(prevToIndex, toIndex, fullUpdate) {
+  _moveItems(
+    prevToIndex: number | null | undefined,
+    toIndex: number | null,
+    fullUpdate?: boolean,
+  ): void {
     const fromIndex = this._getActualFromIndex();
     const isVerticalOrientation = this._isVerticalOrientation();
     const positionPropName = isVerticalOrientation ? 'top' : 'left';
     const elementSize = this._getDraggableElementSize(isVerticalOrientation);
     const items = this._getItems();
+    // @ts-expect-error prevToIndex is undefined when update() is called
     const prevPositions = this._getPositions(items, elementSize, fromIndex, prevToIndex);
     const positions = this._getPositions(items, elementSize, fromIndex, toIndex);
     const animationConfig = this.option('animation');
     const rtlEnabled = this.option('rtlEnabled');
 
-    for (let i = 0; i < items.length; i++) {
-      const itemElement = items[i];
+    for (let i = 0; i < items.length; i += 1) {
+      const itemElement = items[i] as HTMLElement;
       const prevPosition = prevPositions[i];
       const position = positions[i];
 
@@ -976,10 +1104,9 @@ class Sortable extends Draggable {
     }
   }
 
-  _toggleDragSourceClass(value, $element) {
+  _toggleDragSourceClass(value: boolean, $element?: dxElementWrapper | null): void {
     const $sourceElement = $element || this._$sourceElement;
-    // @ts-expect-error ts-error
-    super._toggleDragSourceClass.apply(this, arguments);
+    super._toggleDragSourceClass(value, $element);
     if (!this._isIndicateMode()) {
       $sourceElement?.toggleClass(this._addWidgetPrefix('source-hidden'), value);
     }
@@ -990,7 +1117,7 @@ class Sortable extends Draggable {
     super._dispose();
   }
 
-  _fireAddEvent(sourceEvent) {
+  _fireAddEvent(sourceEvent: DragEvent): boolean | undefined {
     const args = this._getEventArgs(sourceEvent);
 
     this._getAction('onAdd')(args);
@@ -998,7 +1125,7 @@ class Sortable extends Draggable {
     return args.cancel;
   }
 
-  _fireRemoveEvent(sourceEvent) {
+  _fireRemoveEvent(sourceEvent: DragEvent): boolean | undefined {
     const sourceDraggable = this._getSourceDraggable();
     const args = this._getEventArgs(sourceEvent);
 
@@ -1007,7 +1134,7 @@ class Sortable extends Draggable {
     return args.cancel;
   }
 
-  _fireReorderEvent(sourceEvent) {
+  _fireReorderEvent(sourceEvent: DragEvent): DeferredObj<unknown> | PromiseLike<void> {
     const args = this._getEventArgs(sourceEvent);
 
     this._getAction('onReorder')(args);

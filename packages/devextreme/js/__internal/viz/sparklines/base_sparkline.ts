@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
-import domAdapter from '@js/core/dom_adapter';
-import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { isFunction } from '@js/core/utils/type';
+import { domAdapter } from '@ts/core/dom_adapter';
+import { renderer as $ } from '@ts/core/renderer';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { isFunction } from '@ts/core/utils/m_type';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
+import pointerEvents from '@ts/events/pointer';
+import { addNamespace } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 // T422022
@@ -16,6 +17,7 @@ import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 // PLUGINS_SECTION
 import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
+import type { Coords } from '@ts/viz/core/types';
 import { pointInCanvas } from '@ts/viz/core/utils';
 import { Translator2D } from '@ts/viz/translators/translator2d';
 
@@ -46,18 +48,12 @@ export interface SparklineAxis {
   aggregatedPointBetweenTicks: () => boolean;
 }
 
-interface TooltipCoords {
-  x: number;
-  y: number;
-}
-
-interface PointerEventData {
+interface PointerEventData extends EngineEvent {
   pageX: number;
   pageY: number;
 }
 
 function inCanvas({ width, height }: SparklineSize, x: number, y: number): boolean {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return pointInCanvas({
     left: 0,
     top: 0,
@@ -218,7 +214,7 @@ abstract class BaseSparkline extends BaseWidget {
     return extend(true, {}, this._themeManager.theme(), this.option());
   }
 
-  _getTooltipCoords(): TooltipCoords {
+  _getTooltipCoords(): Coords {
     const canvas = this._canvas;
     const rootOffset = this._renderer.getRootOffset();
     return {

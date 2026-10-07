@@ -1,28 +1,33 @@
 import domAdapter from '@js/core/dom_adapter';
-import callOnce from '@js/core/utils/call_once';
 import { hasWindow } from '@js/core/utils/window';
+import { callOnce } from '@ts/core/utils/call_once';
 import { injector } from '@ts/core/utils/dependency_injector';
 
-let callbacks: any[] = [];
+type ReadyCallback = () => void;
+
+let callbacks: ReadyCallback[] = [];
 
 const subscribeReady = callOnce(() => {
   const removeListener = domAdapter.listen(domAdapter.getDocument(), 'DOMContentLoaded', () => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- used after the definition
     readyCallbacks.fire();
     removeListener();
   });
 });
 
 const readyCallbacks = {
-  add: (callback) => {
+  add: (callback: ReadyCallback): void => {
     const windowExists = hasWindow();
     if (windowExists && domAdapter.getReadyState() !== 'loading') {
       callback();
     } else {
       callbacks.push(callback);
-      windowExists && subscribeReady();
+      if (windowExists) {
+        subscribeReady();
+      }
     }
   },
-  fire: () => {
+  fire: (): void => {
     callbacks.forEach((callback) => callback());
     callbacks = [];
   },

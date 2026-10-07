@@ -7,8 +7,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
+import { noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
 import Node from '@ts/viz/tree_map/node';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
 

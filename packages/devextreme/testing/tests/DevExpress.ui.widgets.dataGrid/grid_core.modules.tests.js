@@ -1,4 +1,4 @@
-import modules from '__internal/grids/grid_core/m_modules';
+import modules from '__internal/grids/grid_core/modules/modules';
 
 QUnit.module('Modules used class', {}, () => {
     class RootController extends modules.Controller {

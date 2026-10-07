@@ -16,11 +16,11 @@ import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/m_support';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
@@ -29,8 +29,8 @@ import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
 import { isEditRow } from '../keyboard_navigation/utils';
-import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import {
   CHECKBOXES_HIDDEN_CLASS,
   COMMAND_SELECT_CLASS,
@@ -666,10 +666,12 @@ export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeader
     const $element = that.element();
     const $editor = $element?.find(`.${SELECT_CHECKBOX_CLASS}`);
 
+    // @ts-expect-error $editor is set whenever $element is
     if ($element && $editor.length && this.option('selection.mode') === 'multiple') {
       const selectAllValue = this._selectionController.isSelectAll();
       const isVisible = this._isSelectAllCheckBoxVisible();
 
+      // @ts-expect-error dxCheckBox is added to the renderer at runtime
       $editor.dxCheckBox('instance').option({
         visible: isVisible,
         value: selectAllValue,

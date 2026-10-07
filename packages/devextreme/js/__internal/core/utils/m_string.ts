@@ -1,9 +1,16 @@
 import { isFunction, isString } from '@js/core/utils/type';
 
-export const encodeHtml = (function () {
+interface Quad {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
+export const encodeHtml = (function createEncodeHtml() {
   const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
 
-  return function (str) {
+  return function encode(str: unknown): string {
     return String(str)
       .replace(encodeRegExp[0], '&amp;')
       .replace(encodeRegExp[1], '&quot;')
@@ -11,9 +18,10 @@ export const encodeHtml = (function () {
       .replace(encodeRegExp[3], '&lt;')
       .replace(encodeRegExp[4], '&gt;');
   };
-})();
+}());
 
-const splitQuad = function (raw) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the parts, or the raw value itself
+const splitQuad = function splitQuad(raw): any {
   switch (typeof raw) {
     case 'string':
       return raw.split(/\s+/, 4);
@@ -30,7 +38,7 @@ const splitQuad = function (raw) {
   }
 };
 
-export const quadToObject = function (raw) {
+export const quadToObject = function quadToObject(raw: unknown): Quad {
   const quad = splitQuad(raw);
   let left = parseInt(quad && quad[0], 10);
   let top = parseInt(quad && quad[1], 10);
@@ -55,27 +63,35 @@ export const quadToObject = function (raw) {
   };
 };
 
-export function format(template, ...values) {
+export function format(template: string, ...values: unknown[]): string;
+export function format<TResult>(
+  template: (...args: never[]) => TResult,
+  ...values: unknown[]
+): TResult;
+// eslint-disable-next-line @typescript-eslint/unified-signatures -- unknown templates stay strings
+export function format(template: unknown, ...values: unknown[]): string;
+export function format(template: unknown, ...values: unknown[]): unknown {
   if (isFunction(template)) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- the function is untyped
     return template(...values);
   }
 
+  let result = template as string;
+
   values.forEach((value, index) => {
-    if (isString(value)) {
-      value = value.replace(/\$/g, '$$$$');
-    }
+    const replacement = isString(value) ? value.replace(/\$/g, '$$$$') : value;
 
     const placeholderReg = new RegExp(`\\{${index}\\}`, 'gm');
-    template = template.replace(placeholderReg, value);
+    result = result.replace(placeholderReg, replacement as string);
   });
 
-  return template;
+  return result;
 }
 
-export const isEmpty = (function () {
+export const isEmpty = (function createIsEmpty() {
   const SPACE_REGEXP = /\s/g;
 
-  return function (text) {
+  return function isEmptyText(text: string | null | undefined): boolean {
     return !text || !text.replace(SPACE_REGEXP, '');
   };
-})();
+}());

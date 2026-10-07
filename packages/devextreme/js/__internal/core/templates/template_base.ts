@@ -24,8 +24,7 @@ export const renderedCallbacks = Callbacks<RenderedCallbackArgs>({ syncStrategy:
 export class TemplateBase {
   _element?: TemplateElement;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  render(options: unknown): any {
+  render(options: unknown): dxElementWrapper {
     const renderOptions: TemplateRenderOptions = options || {};
 
     const { onRendered } = renderOptions;

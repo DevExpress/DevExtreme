@@ -26,7 +26,7 @@ import ValidationEngine from '@js/ui/validation_engine';
 import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/m_selectors';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -34,9 +34,9 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
 import type { NormalizedEditCellOptions } from '../editing/types';
-import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
+import type { ModuleType } from '../types';
 import {
   INVALIDATE_CLASS,
   VALIDATION_CANCELLED,
@@ -1243,6 +1243,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
 
+    // @ts-expect-error the view is rendered here
     this._rowsView.element().find(`.${invalidMessageClass}`).remove();
 
     const $overlayElement = $('<div>')
@@ -1292,6 +1293,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 
   private getValidationMessages(): dxElementWrapper {
+    // @ts-expect-error the view is rendered here
     return this._rowsView.element()?.find(this._getValidationMessagesSelector());
   }
 

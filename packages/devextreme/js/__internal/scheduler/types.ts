@@ -1,6 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { ItemContextMenuEvent } from '@js/ui/list';
 import type { Appointment, Properties } from '@js/ui/scheduler';
+import type { IntegrationOptions } from '@ts/core/template_manager';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
 import type { GroupLeaf, GroupValues, RawGroupValues } from './utils/resource_manager/types';
@@ -27,7 +28,7 @@ export type CreateComponentFn = <TTComponent, IProperties = Record<string, unkno
   componentConfiguration: TTComponent extends { _getDefaultOptions: () => infer TTProperties }
     ? string extends keyof TTProperties
       ? object
-      : Partial<TTProperties> & { integrationOptions?: Record<string, unknown> }
+      : Partial<TTProperties> & { integrationOptions?: IntegrationOptions }
     : IProperties,
 ) => TTComponent;
 

@@ -68,7 +68,7 @@ function main(): void {
   try {
     // 1. Parse module order from source
     // NOTE: registerModulesOrder defines ascending priority.
-    // processModules (m_modules.ts) sorts by: orderIndex1 - orderIndex2,
+    // processModules (modules/modules.ts) sorts by: orderIndex1 - orderIndex2,
     // which means index 0 processes first and the last index processes last.
     // Extenders are applied in the same ascending order.
     const modulesOrder = parseModulesOrder();

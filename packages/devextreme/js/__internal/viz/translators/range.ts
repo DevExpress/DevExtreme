@@ -4,12 +4,10 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { extend } from '@js/core/utils/extend';
-import { isDate, isDefined, isFunction } from '@js/core/utils/type';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDate, isDefined, isFunction } from '@ts/core/utils/m_type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { unique } from '@ts/viz/core/utils';
 
 const _isDefined = isDefined;
@@ -23,15 +21,34 @@ const maxVisibleSelector = 'maxVisible';
 const baseSelector = 'base';
 const axisTypeSelector = 'axisType';
 
-function otherLessThan(thisValue, otherValue) {
+type ValueComparer = (thisValue: ThemeValue, otherValue: ThemeValue) => boolean;
+
+export interface RangeData {
+  [key: string]: ThemeValue;
+  min?: ThemeValue;
+  max?: ThemeValue;
+  minVisible?: ThemeValue;
+  maxVisible?: ThemeValue;
+  categories?: ThemeValue[];
+  axisType?: string;
+  dataType?: string;
+  interval?: number;
+}
+
+function otherLessThan(thisValue: ThemeValue, otherValue: ThemeValue): boolean {
   return otherValue < thisValue;
 }
 
-function otherGreaterThan(thisValue, otherValue) {
+function otherGreaterThan(thisValue: ThemeValue, otherValue: ThemeValue): boolean {
   return otherValue > thisValue;
 }
 
-function compareAndReplace(thisValue, otherValue, setValue, compare) {
+function compareAndReplace(
+  thisValue: ThemeValue,
+  otherValue: ThemeValue,
+  setValue: (value: ThemeValue) => void,
+  compare: ValueComparer,
+): void {
   const otherValueDefined = _isDefined(otherValue);
 
   if (_isDefined(thisValue)) {
@@ -44,30 +61,58 @@ function compareAndReplace(thisValue, otherValue, setValue, compare) {
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let Range = function (range?) {
-  range && extend(this, range);
-};
+export let Range = class Range {
+  declare min?: ThemeValue;
 
-const _Range = Range;
+  declare max?: ThemeValue;
 
-_Range.prototype = {
-  constructor: _Range,
+  declare minVisible?: ThemeValue;
 
-  addRange(otherRange) {
+  declare maxVisible?: ThemeValue;
+
+  declare categories?: ThemeValue[];
+
+  declare axisType?: string;
+
+  declare dataType?: string;
+
+  declare base?: number;
+
+  declare invert?: boolean;
+
+  declare interval?: number;
+
+  declare containsConstantLine?: boolean;
+
+  declare isSpacedMargin?: boolean;
+
+  declare allowNegatives?: boolean;
+
+  declare linearThreshold?: number;
+
+  declare breaks?: ThemeValue[];
+
+  declare userBreaks?: ThemeValue[];
+
+  constructor(range?: RangeData) {
+    range && extend(this, range);
+  }
+
+  addRange(otherRange: RangeData): this {
     const that = this;
     const { categories } = that;
     const otherCategories = otherRange.categories;
     const isDiscrete = that[axisTypeSelector] === 'discrete';
 
-    const compareAndReplaceByField = function (field, compare) {
+    const compareAndReplaceByField = function (field: string, compare: ValueComparer): void {
       compareAndReplace(that[field], otherRange[field], (value) => { that[field] = value; }, compare);
     };
 
-    const controlValuesByVisibleBounds = function (valueField, visibleValueField, compare) {
+    const controlValuesByVisibleBounds = function (valueField: string, visibleValueField: string, compare: ValueComparer): void {
       compareAndReplace(that[valueField], that[visibleValueField], (value) => { _isDefined(that[valueField]) && (that[valueField] = value); }, compare);
     };
 
-    const checkField = function (field) {
+    const checkField = function (field: string): void {
       that[field] = that[field] || otherRange[field];
     };
 
@@ -113,20 +158,20 @@ _Range.prototype = {
     }
 
     return that;
-  },
+  }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return (!_isDefined(this[minSelector]) || !_isDefined(this[maxSelector])) && (!this.categories || this.categories.length === 0);
-  },
+  }
 
-  correctValueZeroLevel() {
+  correctValueZeroLevel(): this {
     const that = this;
 
     if (_isDate(that[maxSelector]) || _isDate(that[minSelector])) {
       return that;
     }
 
-    function setZeroLevel(min, max) {
+    function setZeroLevel(min: string, max: string): void {
       (that[min] < 0 && that[max] < 0) && (that[max] = 0);
       (that[min] > 0 && that[max] > 0) && (that[min] = 0);
     }
@@ -134,29 +179,31 @@ _Range.prototype = {
     setZeroLevel(minSelector, maxSelector);
     setZeroLevel(minVisibleSelector, maxVisibleSelector);
     return that;
-  },
+  }
 
-  sortCategories(sort) {
+  sortCategories(sort?: ThemeValue): void {
     if (sort === false || !this.categories) {
       return;
     }
 
     if (Array.isArray(sort)) {
-      const sortValues = sort.map((item) => item.valueOf());
+      const sortValues = sort.map((item): ThemeValue => item.valueOf());
       const filteredSeriesCategories = this.categories.filter((item) => !sortValues.includes(item.valueOf()));
       this.categories = sort.concat(filteredSeriesCategories);
     } else {
       const notAFunction = !_isFunction(sort);
 
       if (notAFunction && this.dataType !== 'string') {
-        sort = (a, b) => a.valueOf() - b.valueOf();
+        sort = (a, b): number => a.valueOf() - b.valueOf();
       } else if (notAFunction) {
         sort = false;
       }
       sort && this.categories.sort(sort);
     }
-  },
+  }
 };
+
+export type RangeInstance = InstanceType<typeof Range>;
 
 /// #DEBUG
 export function DEBUG_set_Range(value: typeof Range): void {

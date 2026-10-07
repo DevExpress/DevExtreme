@@ -1,7 +1,7 @@
 import { filterHasField } from '@ts/filter_builder/m_utils';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
-import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 
 import { getColumnIdentifier } from '../utils';
 
@@ -27,6 +27,7 @@ export const filterSyncColumnHeadersViewExtender = (
 
   private _isHeaderFilterEmpty(column): boolean {
     if (this.filterController.isFilterSyncActive()) {
+      // @ts-expect-error filterValue can be undefined
       return !filterHasField(this.option('filterValue'), getColumnIdentifier(column));
     }
 

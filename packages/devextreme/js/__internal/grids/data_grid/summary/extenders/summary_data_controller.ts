@@ -12,7 +12,7 @@ import type {
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 
 import gridCore from '../../core';
 import type { ProcessGroupItemsOptions } from '../../grouping/types';

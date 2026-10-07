@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { noop } from '@js/core/utils/common';
+import { noop } from '@ts/core/utils/m_common';
 import { patchFontOptions } from '@ts/viz/core/utils';
 
 const pieChartPlugin = {

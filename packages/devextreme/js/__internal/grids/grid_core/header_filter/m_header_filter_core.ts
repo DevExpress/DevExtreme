@@ -12,8 +12,8 @@ import type dxCheckBox from '@js/ui/check_box';
 import type { ValueChangedInfo } from '@js/ui/editor/editor';
 import type dxList from '@js/ui/list';
 import Popup from '@js/ui/popup/ui.popup';
-import Modules from '@ts/grids/grid_core/m_modules';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import Modules from '@ts/grids/grid_core/modules/modules';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import List from '@ts/ui/list/list.edit.search';
 import TreeView from '@ts/ui/tree_view/tree_view.search';
 
@@ -335,6 +335,7 @@ export class HeaderFilterView extends Modules.View {
     };
 
     if (!isDefined(that._popupContainer)) {
+      // @ts-expect-error the view is rendered here
       that._popupContainer = that._createComponent($element, Popup, dxPopupOptions);
     } else {
       that._popupContainer.option(dxPopupOptions);
@@ -509,6 +510,7 @@ export class HeaderFilterView extends Modules.View {
   }
 
   protected _renderCore() {
+    // @ts-expect-error the view is rendered here
     this.element().addClass(HEADER_FILTER_MENU_CLASS);
   }
 }

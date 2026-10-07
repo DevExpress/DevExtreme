@@ -13,8 +13,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop } from '@js/core/utils/common';
-import { isDefined, isObject } from '@js/core/utils/type';
+import { noop } from '@ts/core/utils/m_common';
+import { isDefined, isObject } from '@ts/core/utils/m_type';
 import { getAddFunction, getLog, unique } from '@ts/viz/core/utils';
 
 const DISCRETE = 'discrete';

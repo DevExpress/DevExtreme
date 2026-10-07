@@ -4,7 +4,7 @@ import {
   it,
 } from '@jest/globals';
 
-import { isUserStateColumn } from '../m_columns_controller_utils';
+import { isUserStateColumn } from '../columns_controller_utils';
 
 describe('isUserStateColumn', () => {
   describe('when the name and the data field are the same', () => {

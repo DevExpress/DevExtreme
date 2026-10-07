@@ -7,16 +7,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
-import { noop } from '@js/core/utils/common';
-import { adjust } from '@js/core/utils/math';
-import { isDefined, isNumeric } from '@js/core/utils/type';
+import { noop } from '@ts/core/utils/m_common';
+import { adjust } from '@ts/core/utils/m_math';
+import { isDefined, isNumeric } from '@ts/core/utils/m_type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { adjustVisualRange, normalizeEnum as _normalizeEnum, rangesAreEqual } from '@ts/viz/core/utils';
 import { consts, isFirefoxOnAndroid, utils } from '@ts/viz/range_selector/common';
 import Slider from '@ts/viz/range_selector/slider';
@@ -24,25 +22,71 @@ import Slider from '@ts/viz/range_selector/slider';
 const animationSettings = utils.animationSettings;
 const emptySliderMarkerText = consts.emptySliderMarkerText;
 
-function buildRectPoints(left, top, right, bottom) {
+interface SelectedRange {
+  startValue: ThemeValue;
+  endValue: ThemeValue;
+}
+
+interface VisualRangeInput {
+  startValue?: ThemeValue;
+  endValue?: ThemeValue;
+  length?: ThemeValue;
+}
+
+export interface MovingHandler {
+  (position: number, e?: ThemeValue): void;
+  complete: (e: ThemeValue) => void;
+}
+
+interface SlidersControllerParams {
+  renderer: ThemeValue;
+  root: ThemeValue;
+  trackersGroup: ThemeValue;
+  translator: ThemeValue;
+  axis: { getVisibleArea: () => number[] };
+  updateSelectedRange: (range: SelectedRange, lastSelectedRange: SelectedRange, e: ThemeValue) => void;
+}
+
+interface RangeBounds {
+  minRange: ThemeValue;
+  maxRange: ThemeValue;
+}
+
+interface ShutterSettings {
+  fill: string | null;
+  'fill-opacity': number | null;
+  stroke: string | null;
+  'stroke-width': number | null;
+  sharp?: string;
+}
+
+interface SelectionState {
+  _lastSelectedRange: SelectedRange;
+  _processSelectionChanged?: (e?: ThemeValue) => void;
+  setSelectedRange?: (visualRange?: VisualRangeInput | null, e?: ThemeValue) => void;
+  getSelectedRange: () => SelectedRange;
+}
+
+function buildRectPoints(left: number, top: number, right: number, bottom: number): number[] {
   return [left, top, right, top, right, bottom, left, bottom];
 }
 
-function isLess(a, b) {
+function isLess(a: ThemeValue, b: ThemeValue): boolean {
   return a < b;
 }
 
-function isGreater(a, b) {
+function isGreater(a: ThemeValue, b: ThemeValue): boolean {
   return a > b;
 }
 
-function selectClosestValue(target, values) {
+function selectClosestValue(target: ThemeValue, values: ThemeValue[] | null): ThemeValue {
   let start = 0;
   let end = values ? values.length - 1 : 0;
   let middle;
   let val = target;
   while (end - start > 1) {
     middle = (start + end) >> 1;
+    // @ts-expect-error values is not null here: without values end is 0 and the loop does not run
     val = values[middle];
     if (val === target) {
       return target;
@@ -58,132 +102,153 @@ function selectClosestValue(target, values) {
   return val;
 }
 
-function dummyProcessSelectionChanged() {
+function dummyProcessSelectionChanged(this: SelectionState): void {
   this._lastSelectedRange = this.getSelectedRange();
   delete this._processSelectionChanged;
 }
 
-// See tests in "rangeSelectorWithAssertion.html", "'onSelectedRangeChanged' event" module
-function suppressSetSelectedRange(controller) {
+function suppressSetSelectedRange(controller: SelectionState): void {
   controller.setSelectedRange = noop;
   if (controller._processSelectionChanged === dummyProcessSelectionChanged) {
     controller._processSelectionChanged();
   }
 }
 
-function restoreSetSelectedRange(controller) {
+function restoreSetSelectedRange(controller: SelectionState): void {
   delete controller.setSelectedRange;
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let SlidersController = function (params) {
-  const that = this;
-  const sliderParams = {
-    renderer: params.renderer, root: params.root, trackersGroup: params.trackersGroup, translator: params.translator,
-  };
-  that._params = params;
-  that._areaTracker = params.renderer.path(null, 'area').attr({ class: 'area-tracker', fill: '#000000', opacity: 0.0001 }).append(params.trackersGroup);
-  that._selectedAreaTracker = params.renderer.path(null, 'area').attr({ class: 'selected-area-tracker', fill: '#000000', opacity: 0.0001 }).append(params.trackersGroup);
-  // Shutter is appended before sliders because later (when they will be foregrounded) it will be at any case located before them.
-  that._shutter = params.renderer.path(null, 'area').append(params.root);
-  that._sliders = [new Slider(sliderParams, 0), new Slider(sliderParams, 1)];
-  // It seems that there is no special reasons to suppress first event - it was accidentally suppressed.
-  // Let it stay so for now.
-  that._processSelectionChanged = dummyProcessSelectionChanged;
-};
+export let SlidersController = class SlidersController {
+  declare _params: SlidersControllerParams;
 
-SlidersController.prototype = {
-  constructor: SlidersController,
+  declare _areaTracker: ThemeValue;
 
-  dispose() {
+  declare _selectedAreaTracker: ThemeValue;
+
+  declare _shutter: ThemeValue;
+
+  declare _sliders: Slider[];
+
+  declare _lastSelectedRange: SelectedRange;
+
+  declare _verticalRange: number[];
+
+  declare _minRange: ThemeValue;
+
+  declare _maxRange: ThemeValue;
+
+  declare _animationEnabled: boolean;
+
+  declare _allowSlidersSwap: boolean;
+
+  declare _values: ThemeValue[] | null;
+
+  declare _isCompactMode: boolean;
+
+  declare _shutterOffset: number;
+
+  declare _isOnMoving: boolean;
+
+  constructor(params: SlidersControllerParams) {
+    const sliderParams = {
+      renderer: params.renderer, root: params.root, trackersGroup: params.trackersGroup, translator: params.translator,
+    };
+    this._params = params;
+    this._areaTracker = params.renderer.path(null, 'area').attr({ class: 'area-tracker', fill: '#000000', opacity: 0.0001 }).append(params.trackersGroup);
+    this._selectedAreaTracker = params.renderer.path(null, 'area').attr({ class: 'selected-area-tracker', fill: '#000000', opacity: 0.0001 }).append(params.trackersGroup);
+    // Shutter is appended before sliders because later (when they will be foregrounded) it will be at any case located before them.
+    this._shutter = params.renderer.path(null, 'area').append(params.root);
+    this._sliders = [new Slider(sliderParams, 0), new Slider(sliderParams, 1)];
+    // It seems that there is no special reasons to suppress first event - it was accidentally suppressed.
+    // Let it stay so for now.
+    this._processSelectionChanged = dummyProcessSelectionChanged;
+  }
+
+  dispose(): void {
     this._sliders[0].dispose();
     this._sliders[1].dispose();
-  },
+  }
 
-  getTrackerTargets() {
+  getTrackerTargets(): { area: ThemeValue; selectedArea: ThemeValue; sliders: Slider[] } {
     return {
       area: this._areaTracker,
       selectedArea: this._selectedAreaTracker,
       sliders: this._sliders,
     };
-  },
+  }
 
-  _processSelectionChanged(e) {
-    const that = this;
-    const selectedRange = that.getSelectedRange();
-    if (!rangesAreEqual(selectedRange, that._lastSelectedRange)) {
-      that._params.updateSelectedRange(selectedRange, that._lastSelectedRange, e);
-      that._lastSelectedRange = selectedRange;
+  _processSelectionChanged(e?: ThemeValue): void {
+    const selectedRange = this.getSelectedRange();
+    if (!rangesAreEqual(selectedRange, this._lastSelectedRange)) {
+      this._params.updateSelectedRange(selectedRange, this._lastSelectedRange, e);
+      this._lastSelectedRange = selectedRange;
     }
-  },
+  }
 
-  update(verticalRange, behavior, isCompactMode, sliderHandleOptions, sliderMarkerOptions, shutterOptions, rangeBounds, fullTicks, selectedRangeColor) {
-    const that = this;
-    const screenRange = that._params.translator.getScreenRange();
+  update(verticalRange: number[], behavior: ThemeValue, isCompactMode: boolean, sliderHandleOptions: ThemeValue, sliderMarkerOptions: ThemeValue, shutterOptions: ThemeValue, rangeBounds: RangeBounds, fullTicks: ThemeValue[], selectedRangeColor: string): void {
+    const screenRange = this._params.translator.getScreenRange();
 
-    that._verticalRange = verticalRange;
-    that._minRange = rangeBounds.minRange;
-    that._maxRange = rangeBounds.maxRange;
+    this._verticalRange = verticalRange;
+    this._minRange = rangeBounds.minRange;
+    this._maxRange = rangeBounds.maxRange;
     // TODO: Investigate reasons of "renderer.animationEnabled" usage - it seems to be useless (if only for vml somehow)
-    that._animationEnabled = behavior.animationEnabled && that._params.renderer.animationEnabled();
-    that._allowSlidersSwap = behavior.allowSlidersSwap;
-    that._sliders[0].update(verticalRange, sliderHandleOptions, sliderMarkerOptions);
-    that._sliders[1].update(verticalRange, sliderHandleOptions, sliderMarkerOptions);
+    this._animationEnabled = behavior.animationEnabled && this._params.renderer.animationEnabled();
+    this._allowSlidersSwap = behavior.allowSlidersSwap;
+    this._sliders[0].update(verticalRange, sliderHandleOptions, sliderMarkerOptions);
+    this._sliders[1].update(verticalRange, sliderHandleOptions, sliderMarkerOptions);
     // This is required for placing sliders and shutter into initial position from which initial animation will be going.
-    that._sliders[0]._position = that._sliders[1]._position = screenRange[0];
+    this._sliders[0]._position = this._sliders[1]._position = screenRange[0];
 
-    that._values = !that._params.translator.isValueProlonged && behavior.snapToTicks ? fullTicks : null;
-    that._areaTracker.attr({ points: buildRectPoints(screenRange[0], verticalRange[0], screenRange[1], verticalRange[1]) });
+    this._values = !this._params.translator.isValueProlonged && behavior.snapToTicks ? fullTicks : null;
+    this._areaTracker.attr({ points: buildRectPoints(screenRange[0], verticalRange[0], screenRange[1], verticalRange[1]) });
 
     // SlidersContainer
-    that._isCompactMode = isCompactMode;
-    that._shutterOffset = sliderHandleOptions.width / 2;
-    that._updateSelectedView(shutterOptions, selectedRangeColor);
+    this._isCompactMode = isCompactMode;
+    this._shutterOffset = sliderHandleOptions.width / 2;
+    this._updateSelectedView(shutterOptions, selectedRangeColor);
 
-    that._isOnMoving = _normalizeEnum(behavior.valueChangeMode) === 'onhandlemove';
+    this._isOnMoving = _normalizeEnum(behavior.valueChangeMode) === 'onhandlemove';
 
-    that._updateSelectedRange();
+    this._updateSelectedRange();
     // This is placing sliders and shutter into initial position. They all will be animated from that position when "setSelectedRange" is called.
-    that._applyTotalPosition(false);
-  },
+    this._applyTotalPosition(false);
+  }
 
-  _updateSelectedView(shutterOptions, selectedRangeColor) {
-    const settings = {
+  _updateSelectedView(shutterOptions: ThemeValue, selectedRangeColor: string): void {
+    const settings: ShutterSettings = {
       fill: null, 'fill-opacity': null, stroke: null, 'stroke-width': null,
     };
     if (this._isCompactMode) {
       settings.stroke = selectedRangeColor;
-      // @ts-expect-error
       settings['stroke-width'] = 3;
-      // @ts-expect-error
       settings.sharp = 'v';
     } else {
       settings.fill = shutterOptions.color;
       settings['fill-opacity'] = shutterOptions.opacity;
     }
     this._shutter.attr(settings);
-  },
+  }
 
-  _updateSelectedRange() {
-    const that = this;
-    const sliders = that._sliders;
+  _updateSelectedRange(): void {
+    const sliders = this._sliders;
     sliders[0].cancelAnimation();
     sliders[1].cancelAnimation();
-    that._shutter.stopAnimation();
-    if (that._params.translator.getBusinessRange().isEmpty()) {
+    this._shutter.stopAnimation();
+    if (this._params.translator.getBusinessRange().isEmpty()) {
       sliders[0]._setText(emptySliderMarkerText);
       sliders[1]._setText(emptySliderMarkerText);
       sliders[0]._value = sliders[1]._value = undefined;
-      sliders[0]._position = that._params.translator.getScreenRange()[0];
-      sliders[1]._position = that._params.translator.getScreenRange()[1];
-      that._applyTotalPosition(false);
-      suppressSetSelectedRange(that);
+      sliders[0]._position = this._params.translator.getScreenRange()[0];
+      sliders[1]._position = this._params.translator.getScreenRange()[1];
+      this._applyTotalPosition(false);
+      suppressSetSelectedRange(this);
     } else {
-      restoreSetSelectedRange(that);
+      restoreSetSelectedRange(this);
     }
-  },
+  }
 
-  _applyTotalPosition(isAnimated) {
+  _applyTotalPosition(isAnimated: boolean): void {
     const sliders = this._sliders;
     isAnimated = this._animationEnabled && isAnimated;
     sliders[0].applyPosition(isAnimated);
@@ -200,58 +265,55 @@ SlidersController.prototype = {
         slider._tracker.attr({ transform: null });
       });
     }
-  },
+  }
 
-  _applyAreaTrackersPosition() {
-    const that = this;
-    let position1 = that._sliders[0].getPosition();
-    let position2 = that._sliders[1].getPosition();
+  _applyAreaTrackersPosition(): void {
+    let position1 = this._sliders[0].getPosition();
+    let position2 = this._sliders[1].getPosition();
 
     if (isFirefoxOnAndroid()) {
-      position1 += that._sliders[0]._tracker._originalWidth / 2;
-      position2 -= that._sliders[1]._tracker._originalWidth / 2;
+      position1 += this._sliders[0]._tracker._originalWidth / 2;
+      position2 -= this._sliders[1]._tracker._originalWidth / 2;
     }
 
-    that._selectedAreaTracker.attr({ points: buildRectPoints(position1, that._verticalRange[0], position2, that._verticalRange[1]) }).css({
-      cursor: Math.abs(that._params.translator.getScreenRange()[1] - that._params.translator.getScreenRange()[0] - position2 + position1) < 0.001 ? 'default' : 'pointer',
+    this._selectedAreaTracker.attr({ points: buildRectPoints(position1, this._verticalRange[0], position2, this._verticalRange[1]) }).css({
+      cursor: Math.abs(this._params.translator.getScreenRange()[1] - this._params.translator.getScreenRange()[0] - position2 + position1) < 0.001 ? 'default' : 'pointer',
     });
-  },
+  }
 
-  _applySelectedRangePosition(isAnimated) {
-    const that = this;
-    const verticalRange = that._verticalRange;
-    const pos1 = that._sliders[0].getPosition();
-    const pos2 = that._sliders[1].getPosition();
+  _applySelectedRangePosition(isAnimated: boolean): void {
+    const verticalRange = this._verticalRange;
+    const pos1 = this._sliders[0].getPosition();
+    const pos2 = this._sliders[1].getPosition();
     let screenRange;
     let points;
-    if (that._isCompactMode) {
-      points = [pos1 + Math.ceil(that._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2, pos2 - Math.floor(that._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2];
+    if (this._isCompactMode) {
+      points = [pos1 + Math.ceil(this._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2, pos2 - Math.floor(this._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2];
     } else {
-      screenRange = that._params.axis.getVisibleArea();
+      screenRange = this._params.axis.getVisibleArea();
       points = [
-        buildRectPoints(screenRange[0], verticalRange[0], Math.max(pos1 - Math.floor(that._shutterOffset), screenRange[0]), verticalRange[1]),
-        buildRectPoints(screenRange[1], verticalRange[0], Math.min(pos2 + Math.ceil(that._shutterOffset), screenRange[1]), verticalRange[1]),
+        buildRectPoints(screenRange[0], verticalRange[0], Math.max(pos1 - Math.floor(this._shutterOffset), screenRange[0]), verticalRange[1]),
+        buildRectPoints(screenRange[1], verticalRange[0], Math.min(pos2 + Math.ceil(this._shutterOffset), screenRange[1]), verticalRange[1]),
       ];
     }
     if (isAnimated) {
-      that._shutter.animate({ points }, animationSettings);
+      this._shutter.animate({ points }, animationSettings);
     } else {
-      that._shutter.attr({ points });
+      this._shutter.attr({ points });
     }
-  },
+  }
 
-  getSelectedRange() {
+  getSelectedRange(): SelectedRange {
     return { startValue: this._sliders[0].getValue(), endValue: this._sliders[1].getValue() };
-  },
+  }
 
-  setSelectedRange(visualRange, e) {
+  setSelectedRange(visualRange?: VisualRangeInput | null, e?: ThemeValue): void {
     visualRange = visualRange || {};
-    const that = this;
-    const translator = that._params.translator;
+    const translator = this._params.translator;
     const businessRange = translator.getBusinessRange();
-    const compare = businessRange.axisType === 'discrete' ? function (a, b) {
+    const compare = businessRange.axisType === 'discrete' ? function (a: ThemeValue, b: ThemeValue): boolean {
       return a < b;
-    } : function (a, b) {
+    } : function (a: ThemeValue, b: ThemeValue): boolean {
       return a <= b;
     };
 
@@ -272,34 +334,34 @@ SlidersController.prototype = {
     startValue = isNumeric(startValue) ? adjust(startValue) : startValue;
     endValue = isNumeric(endValue) ? adjust(endValue) : endValue;
     const values = compare(translator.to(startValue, -1), translator.to(endValue, +1)) ? [startValue, endValue] : [endValue, startValue];
-    that._sliders[0].setDisplayValue(values[0]);
-    that._sliders[1].setDisplayValue(values[1]);
-    that._sliders[0]._position = translator.to(values[0], -1);
-    that._sliders[1]._position = translator.to(values[1], +1);
-    that._applyTotalPosition(true);
-    that._processSelectionChanged(e);
-  },
+    this._sliders[0].setDisplayValue(values[0]);
+    this._sliders[1].setDisplayValue(values[1]);
+    this._sliders[0]._position = translator.to(values[0], -1);
+    this._sliders[1]._position = translator.to(values[1], +1);
+    this._applyTotalPosition(true);
+    this._processSelectionChanged(e);
+  }
 
-  beginSelectedAreaMoving(initialPosition) {
+  beginSelectedAreaMoving(initialPosition: number): MovingHandler {
     const that = this;
     const sliders = that._sliders;
     const offset = (sliders[0].getPosition() + sliders[1].getPosition()) / 2 - initialPosition;
     let currentPosition = initialPosition;
 
-    move.complete = function (e) {
+    move.complete = function (e: ThemeValue): void {
       that._dockSelectedArea(e);
     };
     return move;
 
-    function move(position, e) {
+    function move(position: number, e?: ThemeValue): void {
       if (position !== currentPosition && (position > currentPosition === position > (sliders[0].getPosition() + sliders[1].getPosition()) / 2 - offset)) {
         that._moveSelectedArea(position + offset, false, e);
       }
       currentPosition = position;
     }
-  },
+  }
 
-  _dockSelectedArea(e) {
+  _dockSelectedArea(e?: ThemeValue): void {
     const translator = this._params.translator;
     const sliders = this._sliders;
 
@@ -307,17 +369,16 @@ SlidersController.prototype = {
     sliders[1]._position = translator.to(sliders[1].getValue(), +1);
     this._applyTotalPosition(true);
     this._processSelectionChanged(e);
-  },
+  }
 
-  moveSelectedArea(screenPosition, e) {
+  moveSelectedArea(screenPosition: number, e?: ThemeValue): void {
     this._moveSelectedArea(screenPosition, true, e);
     this._dockSelectedArea(e);
-  },
+  }
 
-  _moveSelectedArea(screenPosition, isAnimated, e) {
-    const that = this;
-    const translator = that._params.translator;
-    const sliders = that._sliders;
+  _moveSelectedArea(screenPosition: number, isAnimated: boolean, e?: ThemeValue): void {
+    const translator = this._params.translator;
+    const sliders = this._sliders;
     const interval = sliders[1].getPosition() - sliders[0].getPosition();
     let startPosition = screenPosition - interval / 2;
     let endPosition = screenPosition + interval / 2;
@@ -331,38 +392,33 @@ SlidersController.prototype = {
     }
 
     // Check for "minRange" and "maxRange" is not performed because it was not performed in the previous code, though I find it strange.
-    const startValue = selectClosestValue(translator.from(startPosition, -1), that._values);
+    const startValue = selectClosestValue(translator.from(startPosition, -1), this._values);
     sliders[0].setDisplayValue(startValue);
-    sliders[1].setDisplayValue(selectClosestValue(translator.from(translator.to(startValue, -1) + interval, +1), that._values));
+    sliders[1].setDisplayValue(selectClosestValue(translator.from(translator.to(startValue, -1) + interval, +1), this._values));
     sliders[0]._position = startPosition;
     sliders[1]._position = endPosition;
-    that._applyTotalPosition(isAnimated);
-    if (that._isOnMoving) {
-      that._processSelectionChanged(e);
+    this._applyTotalPosition(isAnimated);
+    if (this._isOnMoving) {
+      this._processSelectionChanged(e);
     }
-  },
+  }
 
-  placeSliderAndBeginMoving(firstPosition, secondPosition, e) {
-    const that = this;
-    const translator = that._params.translator;
-    const sliders = that._sliders;
+  placeSliderAndBeginMoving(firstPosition: number, secondPosition: number, e?: ThemeValue): MovingHandler {
+    const translator = this._params.translator;
+    const sliders = this._sliders;
     const index = firstPosition < secondPosition ? 0 : 1;
     const dir = index > 0 ? +1 : -1;
     const compare = index > 0 ? isGreater : isLess;
     const antiCompare = index > 0 ? isLess : isGreater;
     let thresholdPosition;
-    const positions = [];
-    const values = [];
-    // @ts-expect-error
+    const positions: number[] = [];
+    const values: ThemeValue[] = [];
     values[index] = translator.from(firstPosition, dir);
-    // @ts-expect-error
     values[1 - index] = translator.from(secondPosition, -dir);
-    // @ts-expect-error
     positions[1 - index] = secondPosition;
     if (translator.isValueProlonged) {
       // Ensure that first value is strictly to the outer side from the "firstPosition".
       if (compare(firstPosition, translator.to(values[index], dir))) {
-        // @ts-expect-error
         values[index] = translator.from(firstPosition, -dir);
       }
       // Check - if "secondPosition" is closer to "firstPosition" than a span of a single category.
@@ -370,48 +426,41 @@ SlidersController.prototype = {
         values[1 - index] = values[index];
       }
     }
-    if (that._minRange) {
-      thresholdPosition = translator.to(translator.add(selectClosestValue(values[index], that._values), that._minRange, -dir), -dir);
+    if (this._minRange) {
+      thresholdPosition = translator.to(translator.add(selectClosestValue(values[index], this._values), this._minRange, -dir), -dir);
       // Check - if "secondPosition" is closer to "firstPosition" than it is allowed by "minRange".
       if (compare(secondPosition, thresholdPosition)) {
-        // @ts-expect-error
-        values[1 - index] = translator.add(values[index], that._minRange, -dir);
+        values[1 - index] = translator.add(values[index], this._minRange, -dir);
       }
-      thresholdPosition = translator.to(translator.add(translator.getRange()[1 - index], that._minRange, dir), -dir);
+      thresholdPosition = translator.to(translator.add(translator.getRange()[1 - index], this._minRange, dir), -dir);
       // Check - if "firstPosition" is closer to an end than it is allowed by "minRange".
       // So there is definitely not enough space for both sliders - the first  (as the one which is farther from the end) has to be moved away by "minRange".
       if (antiCompare(firstPosition, thresholdPosition)) {
-        // @ts-expect-error
         values[1 - index] = translator.getRange()[1 - index];
-        // @ts-expect-error
-        values[index] = translator.add(values[1 - index], that._minRange, dir);
-        // @ts-expect-error
+        values[index] = translator.add(values[1 - index], this._minRange, dir);
         positions[1 - index] = firstPosition;
       }
     }
-    // @ts-expect-error
-    values[0] = selectClosestValue(values[0], that._values);
-    // @ts-expect-error
-    values[1] = selectClosestValue(values[1], that._values);
-    // @ts-expect-error
+    values[0] = selectClosestValue(values[0], this._values);
+    values[1] = selectClosestValue(values[1], this._values);
     positions[index] = translator.to(values[index], dir);
     sliders[0].setDisplayValue(values[0]);
     sliders[1].setDisplayValue(values[1]);
     sliders[0]._position = positions[0];
     sliders[1]._position = positions[1];
-    that._applyTotalPosition(true);
-    if (that._isOnMoving) {
-      that._processSelectionChanged(e);
+    this._applyTotalPosition(true);
+    if (this._isOnMoving) {
+      this._processSelectionChanged(e);
     }
 
-    const handler = that.beginSliderMoving(1 - index, secondPosition);
+    const handler = this.beginSliderMoving(1 - index, secondPosition);
     sliders[1 - index]._sliderGroup.stopAnimation();
-    that._shutter.stopAnimation();
+    this._shutter.stopAnimation();
     handler(secondPosition);
     return handler;
-  },
+  }
 
-  beginSliderMoving(initialIndex, initialPosition) {
+  beginSliderMoving(initialIndex: number, initialPosition: number): MovingHandler {
     const that = this;
     const translator = that._params.translator;
     const sliders = that._sliders;
@@ -426,13 +475,13 @@ SlidersController.prototype = {
     let moveOffset = sliders[index].getPosition() - initialPosition;
     let swapOffset = compareMin(sliders[index].getPosition(), initialPosition) ? -moveOffset : moveOffset;
 
-    move.complete = function (e) {
+    move.complete = function (e: ThemeValue): void {
       sliders[index]._setValid(true);
       that._dockSelectedArea(e);
     };
     return move;
 
-    function move(position, e) {
+    function move(position: number, e?: ThemeValue): void {
       let isValid;
       let temp;
       let pos;
@@ -493,32 +542,31 @@ SlidersController.prototype = {
       }
       currentPosition = position;
     }
-  },
+  }
 
-  _changeMovingSlider(index) {
-    const that = this;
-    const translator = that._params.translator;
-    const sliders = that._sliders;
+  _changeMovingSlider(index: number): void {
+    const translator = this._params.translator;
+    const sliders = this._sliders;
     const position = sliders[1 - index].getPosition();
     const dir = index > 0 ? +1 : -1;
     let newValue;
-    sliders[index].setDisplayValue(selectClosestValue(translator.from(position, dir), that._values));
+    sliders[index].setDisplayValue(selectClosestValue(translator.from(position, dir), this._values));
     newValue = translator.from(position, -dir);
     if (translator.isValueProlonged) {
       newValue = translator.from(position, dir);
-    } else if (that._minRange) {
+    } else if (this._minRange) {
       // TODO: Consider adding "translator.isValid" check - that will allow to split "if-else" into two "if"
-      newValue = translator.add(newValue, that._minRange, -dir);
+      newValue = translator.add(newValue, this._minRange, -dir);
     }
-    sliders[1 - index].setDisplayValue(selectClosestValue(newValue, that._values));
+    sliders[1 - index].setDisplayValue(selectClosestValue(newValue, this._values));
     sliders[index]._setValid(true);
     sliders[index]._marker._update(); // This is to update "text" element
     sliders[0]._position = sliders[1]._position = position;
-  },
+  }
 
-  foregroundSlider(index) {
+  foregroundSlider(index: number): void {
     this._sliders[index].toForeground();
-  },
+  }
 };
 
 /// #DEBUG

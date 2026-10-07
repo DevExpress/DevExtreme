@@ -20,13 +20,13 @@ import type {
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { EditingController } from '../editing/m_editing';
 import { isDataRow } from '../keyboard_navigation/utils';
-import type { ViewController } from '../m_modules';
-import modules from '../m_modules';
-import type { Module, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import type { ViewController } from '../modules/modules';
+import modules from '../modules/modules';
+import type { Module, ModuleType } from '../types';
 import type { RowsView } from '../views/m_rows_view';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';

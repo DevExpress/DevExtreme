@@ -1,4 +1,4 @@
-import type { InternalGridOptions } from '@ts/grids/grid_core/m_types';
+import type { InternalGridOptions } from '@ts/grids/grid_core/types';
 
 import { filterSyncColumnHeadersViewExtender } from './extenders/filter_sync_column_headers_view';
 import { filterSyncDataControllerExtender } from './extenders/filter_sync_data_controller';

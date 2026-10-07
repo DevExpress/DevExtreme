@@ -4,7 +4,7 @@ import {
   getMatchedConditions,
   getNormalizedFilter,
 } from '@ts/filter_builder/m_utils';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type {
   Column, ColumnUserState, FilterField,
 } from '@ts/grids/grid_core/columns_controller/types';
@@ -13,9 +13,9 @@ import type { FilterController } from '@ts/grids/grid_core/filter/filter_control
 import type {
   FilterValue, FilterValueCondition,
 } from '@ts/grids/grid_core/filter/types';
-import modules from '@ts/grids/grid_core/m_modules';
+import modules from '@ts/grids/grid_core/modules/modules';
 
-import type { OptionChanged } from '../m_types';
+import type { OptionChanged } from '../types';
 import { FILTER_TYPES_EXCLUDE } from './const';
 import {
   checkForErrors,
