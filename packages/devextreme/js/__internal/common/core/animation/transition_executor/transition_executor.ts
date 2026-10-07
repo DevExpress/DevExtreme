@@ -11,8 +11,8 @@ import type {
   TransitionAnimationConfig,
   TransitionPreset,
   TransitionType,
-} from '@ts/common/core/animation/presets/m_presets';
-import { presets } from '@ts/common/core/animation/presets/m_presets';
+} from '@ts/common/core/animation/presets/presets';
+import { presets } from '@ts/common/core/animation/presets/presets';
 import commonUtils from '@ts/core/utils/m_common';
 
 import type { Animation } from '../fx';
