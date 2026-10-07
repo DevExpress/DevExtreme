@@ -9,18 +9,17 @@ import {
   getWidth,
 } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import type { EventInfo } from '@js/events';
 import type { dxPopupAnimation } from '@js/ui/popup';
+import type { OptionAction } from '@ts/core/widget/component';
 import DiagramPanel, { type DiagramPanelProperties } from '@ts/ui/diagram/ui.diagram.panel';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import Popup from '@ts/ui/popup/popup';
 
 const DIAGRAM_MOBILE_POPUP_CLASS = 'dx-diagram-mobile-popup';
 
-interface VisibilityEvent {
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
-  component: DiagramFloatingPanel;
-  visible: boolean;
-}
+// eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
+type VisibilityEvent = EventInfo<DiagramFloatingPanel> & { visible: boolean };
 
 export interface DiagramFloatingPanelProperties extends DiagramPanelProperties {
   isVisible?: boolean;
@@ -37,9 +36,9 @@ class DiagramFloatingPanel<
 > extends DiagramPanel<TProperties> {
   _popup?: Popup;
 
-  private _onVisibilityChangingAction!: (event?: unknown) => void;
+  private _onVisibilityChangingAction!: OptionAction<DiagramFloatingPanelProperties['onVisibilityChanging']>;
 
-  private _onVisibilityChangedAction!: (event?: unknown) => void;
+  private _onVisibilityChangedAction!: OptionAction<DiagramFloatingPanelProperties['onVisibilityChanged']>;
 
   _init(): void {
     super._init();
@@ -217,18 +216,18 @@ class DiagramFloatingPanel<
         that._renderPopupContent(that._popup?.content());
       },
       onShowing: (): void => {
-        this._onVisibilityChangingAction({ visible: true, component: this });
+        this._onVisibilityChangingAction({ visible: true });
       },
       onShown: (): void => {
         this.option('isVisible', true);
-        this._onVisibilityChangedAction({ visible: true, component: this });
+        this._onVisibilityChangedAction({ visible: true });
       },
       onHiding: (): void => {
-        this._onVisibilityChangingAction({ visible: false, component: this });
+        this._onVisibilityChangingAction({ visible: false });
       },
       onHidden: (): void => {
         this.option('isVisible', false);
-        this._onVisibilityChangedAction({ visible: false, component: this });
+        this._onVisibilityChangedAction({ visible: false });
       },
     };
   }

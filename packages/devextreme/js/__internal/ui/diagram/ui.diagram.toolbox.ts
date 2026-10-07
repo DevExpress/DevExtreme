@@ -6,8 +6,10 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import type { EventInfo } from '@js/events';
 import Accordion from '@js/ui/accordion';
 import type { dxPopupAnimation } from '@js/ui/popup';
+import type { OptionAction } from '@ts/core/widget/component';
 import { getDiagram } from '@ts/ui/diagram/diagram.importer';
 import type { ToolboxGroups } from '@ts/ui/diagram/diagram.toolbox_manager';
 import DiagramFloatingPanel, { type DiagramFloatingPanelProperties } from '@ts/ui/diagram/ui.diagram.floating_panel';
@@ -28,14 +30,18 @@ interface DiagramToolboxProperties extends DiagramFloatingPanelProperties {
   showSearch?: boolean;
   toolboxGroups?: ToolboxGroups;
   toolboxWidth?: number;
-  onShapeCategoryRendered?: (e: {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
+  onShapeCategoryRendered?: (e: EventInfo<DiagramToolbox> & {
     category: string;
     displayMode?: string;
     dataToggle: string;
     shapes?: string[];
     $element: dxElementWrapper;
   }) => void;
-  onFilterChanged?: (e: { text: string; filteringToolboxes: number | number[] }) => void;
+  onFilterChanged?: (e: EventInfo<DiagramToolbox> & {
+    text: string;
+    filteringToolboxes: number | number[] | undefined;
+  }) => void;
 }
 
 class DiagramToolbox extends DiagramFloatingPanel<DiagramToolboxProperties> {
@@ -50,9 +56,9 @@ class DiagramToolbox extends DiagramFloatingPanel<DiagramToolboxProperties> {
 
   private _accordion?: Accordion;
 
-  private _onShapeCategoryRenderedAction!: (event?: unknown) => void;
+  private _onShapeCategoryRenderedAction!: OptionAction<DiagramToolboxProperties['onShapeCategoryRendered']>;
 
-  private _onFilterChangedAction!: (event?: unknown) => void;
+  private _onFilterChangedAction!: OptionAction<DiagramToolboxProperties['onFilterChanged']>;
 
   _init(): void {
     super._init();

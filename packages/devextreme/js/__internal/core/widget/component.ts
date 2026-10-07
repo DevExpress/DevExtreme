@@ -55,6 +55,16 @@ export interface DefaultActionArgs<TComponent> {
   model?: unknown;
 }
 
+type OptionActionArgs<THandler> = THandler extends (event: infer TEvent) => unknown
+  ? Omit<TEvent, keyof EventInfo<unknown>>
+  : never;
+
+type OptionActionEventArgs<THandler> = OptionActionArgs<NonNullable<THandler>>;
+
+export type OptionAction<THandler> = Record<never, never> extends OptionActionEventArgs<THandler>
+  ? (event?: OptionActionEventArgs<THandler>) => void
+  : (event: OptionActionEventArgs<THandler>) => void;
+
 export interface ComponentProperties<TComponent> extends ComponentOptions<
   EventInfo<TComponent>,
   InitializedEventInfo<TComponent>,
