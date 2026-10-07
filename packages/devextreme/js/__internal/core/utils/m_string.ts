@@ -1,6 +1,6 @@
 import { isFunction, isString } from '@js/core/utils/type';
 
-interface Quad {
+export interface Quad {
   top: number;
   right: number;
   bottom: number;

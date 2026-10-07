@@ -96,9 +96,9 @@ import {
   updateSerializers,
 } from './columns_controller_utils';
 import {
+  CLASSES,
   COLUMN_CHOOSER_LOCATION,
   COLUMN_OPTION_REGEXP,
-  COMMAND_EXPAND_CLASS,
   DATATYPE_OPERATIONS,
   DETAIL_COMMAND_COLUMN_NAME,
   GROUP_COMMAND_COLUMN_NAME,
@@ -209,7 +209,7 @@ export class ColumnsController extends modules.Controller {
       type: 'expand',
       command: 'expand',
       width: 'auto',
-      cssClass: COMMAND_EXPAND_CLASS,
+      cssClass: CLASSES.commandExpand,
       allowEditing: false, // T165142
       allowGrouping: false,
       allowSorting: false,

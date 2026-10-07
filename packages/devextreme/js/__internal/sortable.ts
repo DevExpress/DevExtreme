@@ -1,10 +1,7 @@
-import type { AnimationConfig } from '@js/common/core/animation';
-import { fx } from '@js/common/core/animation';
 import { resetPosition } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
@@ -14,14 +11,19 @@ import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import type { Properties } from '@js/ui/sortable';
+import fx from '@ts/common/core/animation/fx';
+import type { Quad } from '@ts/core/utils/m_string';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type {
-  DragEvent, DragEventArgs, DraggableProperties, DragStartArgs, DragTemplateArgs,
-} from '@ts/draggable';
 import Draggable from '@ts/draggable';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import { isDefined } from '../core/utils/type';
+import type { DragEvent, DragEventArgs, DragTemplateArgs } from './draggable.types';
+import type {
+  AnimateConfig, ItemPoint, OptionChangedToIndexArgs, PlaceholderPreparedArgs,
+  SortableDragStartArgs, SortableEventArgs, SortableProperties, SourceScrollableInfo,
+} from './sortable.types';
 
 const window = getWindow();
 
@@ -29,60 +31,6 @@ const SORTABLE = 'dxSortable';
 
 const PLACEHOLDER_CLASS = 'placeholder';
 const CLONE_CLASS = 'clone';
-
-interface Position {
-  left: number;
-  top: number;
-}
-
-interface Boundary {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-}
-
-interface ItemPoint {
-  dropInsideItem: boolean;
-  index: number;
-  isValid: boolean;
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  $item: dxElementWrapper;
-}
-
-interface AnimateConfig {
-  to?: { left?: number; top?: number };
-  duration?: number;
-  easing?: string;
-}
-
-interface SourceScrollableInfo {
-  element: dxElementWrapper;
-  scrollLeft: number;
-  scrollTop: number;
-}
-
-type SortableEventArgs = DragEventArgs & {
-  fromIndex: number | null;
-  toIndex: number | null;
-  dropInsideItem: boolean;
-  promise?: DeferredObj<unknown> | PromiseLike<void>;
-  placeholderElement?: unknown;
-  dragElement?: unknown;
-};
-
-type SortableDragStartArgs = DragStartArgs & {
-  fromIndex: number;
-};
-
-interface OptionChangedToIndexArgs {
-  value: number | null;
-  previousValue?: number | null;
-  fullUpdate?: boolean;
-}
 
 const isElementVisible = (itemElement: Element): boolean => $(itemElement).is(':visible');
 
@@ -93,7 +41,6 @@ const animate = (element: HTMLElement | undefined, config: AnimateConfig): void 
   const top = config.to?.top || 0;
 
   element.style.transform = `translate(${left}px,${top}px)`;
-  // @ts-expect-error off is not declared
   element.style.transition = fx.off ? '' : `transform ${config.duration}ms ${config.easing}`;
 };
 
@@ -104,7 +51,7 @@ const stopAnimation = (element: HTMLElement | undefined): void => {
   element.style.transition = '';
 };
 
-function getScrollableBoundary($scrollable: dxElementWrapper): Boundary {
+function getScrollableBoundary($scrollable: dxElementWrapper): Quad {
   const offset = $scrollable.offset();
   const { style } = $scrollable[0] as HTMLElement;
   const paddingLeft = parseFloat(style.paddingLeft) || 0;
@@ -124,52 +71,6 @@ function getScrollableBoundary($scrollable: dxElementWrapper): Boundary {
     bottom: top + height,
   };
 }
-export interface SortableProperties extends Omit<Properties, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
-  scrollSensitivity: number;
-
-  scrollSpeed: number;
-
-  boundary?: DraggableProperties['boundary'];
-
-  component?: unknown;
-
-  contentTemplate?: string | null;
-
-  clone?: boolean;
-
-  itemData?: unknown;
-
-  placeholderClassName?: string;
-
-  animation: AnimationConfig;
-
-  fromIndex: number | null;
-
-  toIndex: number | null;
-
-  dropInsideItem: boolean;
-
-  itemPoints: ItemPoint[] | null;
-
-  fromIndexOffset: number;
-
-  offset: number;
-
-  autoUpdate: boolean;
-
-  draggableElementSize: number;
-
-  itemOrientation: NonNullable<Properties['itemOrientation']>;
-
-  allowDropInsideItem: boolean;
-
-  allowReordering: boolean;
-
-  moveItemOnDrop: boolean;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onPlaceholderPrepared?: ((e: any) => void) | null;
-}
 
 class Sortable extends Draggable<SortableProperties> {
   _$placeholderElement?: dxElementWrapper | null;
@@ -180,7 +81,7 @@ class Sortable extends Draggable<SortableProperties> {
 
   _sourceScrollableInfo?: SourceScrollableInfo | null;
 
-  _sourceScrollHandler?: (e: Event) => void;
+  _sourceScrollHandler!: (e: EngineEvent) => void;
 
   _modifiedItemMargin?: string;
 
@@ -293,7 +194,7 @@ class Sortable extends Draggable<SortableProperties> {
     }
   }
 
-  _handleSourceScroll(e: Event): void {
+  _handleSourceScroll(e: EngineEvent): void {
     const sourceScrollableInfo = this._sourceScrollableInfo;
     if (sourceScrollableInfo) {
       (['scrollLeft', 'scrollTop'] as const).forEach((scrollProp) => {
@@ -393,7 +294,7 @@ class Sortable extends Draggable<SortableProperties> {
       const itemPoints = this.option('itemPoints');
       const itemPoint = itemPoints?.filter((item) => item.index === toIndex)[0];
 
-      if (itemPoint && itemPoint.top !== undefined) {
+      if (itemPoint?.top !== undefined) {
         const isVertical = this._isVerticalOrientation();
         if (isVertical) {
           return top <= Math.ceil(itemPoint.top) && Math.floor(itemPoint.top) <= bottom;
@@ -546,7 +447,7 @@ class Sortable extends Draggable<SortableProperties> {
     let result: ItemPoint[] = [];
     /* eslint-disable @typescript-eslint/init-declarations */
     let $item: dxElementWrapper | undefined;
-    let offset: Position | undefined;
+    let offset: Coordinates | undefined;
     let itemWidth: number | undefined;
     /* eslint-enable @typescript-eslint/init-declarations */
     const { rtlEnabled } = this.option();
@@ -559,9 +460,8 @@ class Sortable extends Draggable<SortableProperties> {
 
     if (visibleItemCount) {
       for (let i = 0; i <= visibleItemCount; i += 1) {
-        // @ts-expect-error a boolean is used as a number operand
-        // eslint-disable-next-line no-bitwise
-        const needCorrectLeftPosition = !isVertical && (rtlEnabled ^ (i === visibleItemCount));
+        const needCorrectLeftPosition = !isVertical
+          && Boolean(rtlEnabled) !== (i === visibleItemCount);
         const needCorrectTopPosition = isVertical && i === visibleItemCount;
 
         if (i < visibleItemCount) {
@@ -694,12 +594,13 @@ class Sortable extends Draggable<SortableProperties> {
       dropInsideItem: itemPoint.dropInsideItem,
       toIndex: itemPoint.index,
     });
-    this._getAction('onPlaceholderPrepared')(extend(this._getEventArgs(e), {
+    const placeholderPreparedArgs: PlaceholderPreparedArgs = extend(this._getEventArgs(e), {
       // @ts-expect-error the placeholder element can be null
       placeholderElement: getPublicElement(this._$placeholderElement),
       // @ts-expect-error the drag element can be null
       dragElement: getPublicElement(sourceDraggable._$dragElement),
-    }));
+    });
+    this._getAction('onPlaceholderPrepared')(placeholderPreparedArgs);
     this._updateItemPoints();
   }
 
@@ -860,7 +761,7 @@ class Sortable extends Draggable<SortableProperties> {
     }
   }
 
-  _isPositionVisible(position: Position): boolean {
+  _isPositionVisible(position: Coordinates): boolean {
     const $element = this.$element();
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let scrollContainer: Element | undefined;
@@ -962,7 +863,7 @@ class Sortable extends Draggable<SortableProperties> {
     const isVerticalOrientation = this._isVerticalOrientation();
     const rtlEnabled = this.option('rtlEnabled');
     const dropInsideItem = this.option('dropInsideItem');
-    let position: Position | null | undefined = null;
+    let position: Coordinates | null | undefined = null;
     // @ts-expect-error toIndex can be null
     let itemElement: Element | undefined = items[toIndex];
 

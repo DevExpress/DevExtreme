@@ -2,12 +2,13 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { keyboard } from '@js/common/core/events/short';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
-import type { DeferredObj } from '../../../../core/utils/deferred';
 import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { Controllers, OptionChanged, Views } from '../types';
@@ -126,7 +127,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       $(this.getFocusedView()?.getContent())[0],
       scrollable.scrollOffset(),
       scrollPadding,
-      this.addWidgetPrefix('table'),
+      this.addWidgetPrefix(VIEW_CLASSES.table),
     );
   }
 
