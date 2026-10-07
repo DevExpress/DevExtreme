@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import type { PositionConfig } from '@js/common/core/animation';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -9,31 +8,36 @@ import $, { type dxElementWrapper } from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import type { Field, Properties as FilterBuilderOptions } from '@js/ui/filter_builder';
-import type { Properties as PopupProperties, ShownEvent } from '@js/ui/popup';
+import type { ShownEvent } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
-import TreeView, {
-  type ContentReadyEvent, type ItemClickEvent, type ItemRenderedEvent,
-  type Properties as TreeViewProperties,
-} from '@js/ui/tree_view';
+import TreeView from '@js/ui/tree_view';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import type { EngineEvent, EngineTarget } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
-import type { EditorFactoryOwner } from './between';
 import type {
+  AddMenuItem,
+  ButtonWithMenuOptions,
   Condition,
   ConditionValue,
   Criteria,
+  EditorFactoryOwner,
   FilterBuilderField,
+  FilterBuilderProperties,
   FilterCustomOperation,
   FilterExpression,
   GroupMenuItem,
+  KeyEvent,
+  MenuOptions,
   OperationMenuItem,
-} from './utils';
+  PopupMenuOptions,
+  PopupOptions,
+  ResolvedMenuOptions,
+  ValueEditorOptions,
+} from './types';
 import {
   addItem, convertToInnerStructure,
   createCondition, createEmptyGroup,
@@ -95,63 +99,6 @@ const OPERATORS: Record<string, string> = {
   notAnd: '!and',
   notOr: '!or',
 };
-
-interface FilterBuilderProperties extends FilterBuilderOptions {
-  fields: Field[];
-  closePopupOnTargetScroll: boolean;
-}
-
-type MenuItemEvent<TEvent, TItem> = TEvent & { itemData: TItem };
-
-type MenuOptions<TItem> = Required<Pick<TreeViewProperties<TItem>, 'items' | 'displayExpr'>>
-& Pick<TreeViewProperties<TItem>, 'keyExpr' | 'dataStructure'>
-& {
-  cssClass: string;
-  onItemClick: (e: MenuItemEvent<ItemClickEvent<TItem>, TItem>) => void;
-  onItemRendered?: (e: MenuItemEvent<ItemRenderedEvent<TItem>, TItem>) => void;
-  onContentReady?: (e: ContentReadyEvent<TItem>) => void;
-};
-
-type MenuPosition = Omit<PositionConfig, 'of'> & { of: dxElementWrapper };
-
-interface AddMenuItem {
-  caption: string;
-  click: () => void;
-}
-
-type PopupOptions = Required<Pick<PopupProperties, 'onShown'>>;
-
-interface ButtonWithMenuOptions<TItem> {
-  caption?: string;
-  menu: MenuOptions<TItem>;
-}
-
-type ResolvedMenuOptions<TItem> = MenuOptions<TItem>
-& Required<Pick<TreeViewProperties<TItem>, 'focusStateEnabled' | 'selectionMode'>>
-& Pick<PopupProperties, 'rtlEnabled' | 'onHiding' | 'onHidden'>
-& {
-  id: Guid;
-  position: MenuPosition;
-  animation: null;
-};
-
-interface PopupMenuOptions<TItem> {
-  menu: ResolvedMenuOptions<TItem>;
-  popup: PopupOptions;
-}
-
-type KeyEvent = EngineEvent & {
-  key: string;
-  shiftKey: boolean;
-};
-
-interface ValueEditorOptions {
-  value: ConditionValue;
-  filterOperation: string;
-  setValue: (data: ConditionValue) => void;
-  closeEditor: () => void;
-  text: string;
-}
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 const EditorFactory = EditorFactoryMixin(class {});

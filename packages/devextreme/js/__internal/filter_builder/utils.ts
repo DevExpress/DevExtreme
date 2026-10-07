@@ -18,82 +18,27 @@ import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
-import type { EditorFactoryOwner } from './between';
 import { getConfig } from './between';
 import filterOperationsDictionary from './filter_operations_dictionary';
-
-type FieldValue = string | number | boolean | Date | null | undefined;
-export type ConditionValue = FieldValue | FieldValue[];
-
-type FilterCombiner = 'and' | 'or';
-
-export type Condition = [string, string, ...ConditionValue[]];
-
-type ValueOperand = FieldValue | ValueOperand[];
-export type ValueCondition = [string, ValueOperand] | [string, string, ...ValueOperand[]];
-type ValueGroup = [] | [FilterCombiner] | ['!', ValueExpression]
-| [ValueExpression, ...(FilterCombiner | ValueExpression)[]];
-type ValueExpression = ValueCondition | ValueGroup;
-export type FilterBuilderValue = ValueExpression | null | undefined;
-
-export type Criteria = unknown[];
-type NegationGroup = ['!', Criteria];
-
-export type FilterExpression = ReturnType<NonNullable<CustomOperation['calculateFilterExpression']>>;
-
-type FilterExpressionCallback = (
-  filterValue: unknown,
-  selectedFilterOperation: string,
-  target?: string,
-) => FilterExpression;
-
-export interface FilterBuilderField extends Field {
-  dataField: string;
-  calculateFilterExpression?: FilterExpressionCallback;
-  createFilterExpression?: FilterExpressionCallback;
-  defaultCalculateFilterExpression: FilterExpressionCallback;
-  defaultFilterOperation?: string;
-  id?: string;
-  parentId?: string;
-  lookup?: NonNullable<Field['lookup']> & {
-    items?: unknown;
-    calculateCellValue?: (value: ConditionValue) => string;
-  };
-}
-
-export interface FilterCustomOperation extends Omit<CustomOperation, 'name' | 'calculateFilterExpression'> {
-  name: string;
-  notForLookup?: boolean;
-  valueSeparator?: string;
-  calculateFilterExpression?: (
-    filterValue: unknown,
-    field: Field,
-    fields?: Field[],
-  ) => FilterExpression;
-}
-
-type LookupField = FilterBuilderField & {
-  lookup: NonNullable<FilterBuilderField['lookup']>;
-};
-
-export interface OperationMenuItem {
-  icon: string;
-  text: string;
-  value: string;
-  isCustom?: boolean;
-}
-
-export interface GroupMenuItem {
-  text: string;
-  value: string;
-}
-
-interface OperationsField {
-  dataType?: string;
-  defaultFilterOperation?: string;
-  filterOperations?: readonly string[] | null;
-  lookup?: object | null;
-}
+import type {
+  Condition,
+  ConditionValue,
+  Criteria,
+  EditorFactoryOwner,
+  FieldValue,
+  FilterBuilderField,
+  FilterBuilderValue,
+  FilterCustomOperation,
+  FilterExpression,
+  GroupMenuItem,
+  LookupField,
+  NegationGroup,
+  OperationMenuItem,
+  OperationsField,
+  ValueCondition,
+  ValueExpression,
+  ValueGroup,
+} from './types';
 
 const DEFAULT_DATA_TYPE = 'string';
 const EMPTY_MENU_ICON = 'icon-none';

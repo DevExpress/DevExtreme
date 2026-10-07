@@ -3,7 +3,7 @@ import type { CustomOperation, Field } from '@js/ui/filter_builder';
 
 import type {
   Condition, FilterBuilderValue, FilterExpression, ValueCondition,
-} from '../utils';
+} from '../types';
 import {
   filterHasField,
   getCurrentValueText,

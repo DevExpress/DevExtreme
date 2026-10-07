@@ -1,7 +1,13 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import type { CustomOperation, Field } from '@js/ui/filter_builder';
+
+import type {
+  BetweenOperation,
+  EditorFactoryOwner,
+  RangeConditionInfo,
+  RangeValue,
+} from './types';
 
 const FILTER_BUILDER_RANGE_CLASS = 'dx-filterbuilder-range';
 const FILTER_BUILDER_RANGE_START_CLASS = `${FILTER_BUILDER_RANGE_CLASS}-start`;
@@ -9,30 +15,6 @@ const FILTER_BUILDER_RANGE_END_CLASS = `${FILTER_BUILDER_RANGE_CLASS}-end`;
 const FILTER_BUILDER_RANGE_SEPARATOR_CLASS = `${FILTER_BUILDER_RANGE_CLASS}-separator`;
 
 const SEPARATOR = '\u2013';
-
-type RangeValue = (string | number | Date | null | undefined)[];
-
-interface RangeConditionInfo {
-  field: Field;
-  value?: RangeValue;
-  setValue: (value: RangeValue) => void;
-}
-
-export interface EditorFactoryOwner {
-  _editorFactory: {
-    createEditor: (
-      this: EditorFactoryOwner,
-      container: dxElementWrapper,
-      options: object,
-    ) => void;
-  };
-}
-
-export type BetweenOperation = CustomOperation & {
-  name: string;
-  notForLookup: boolean;
-  valueSeparator: string;
-};
 
 function editorTemplate(
   this: EditorFactoryOwner,
