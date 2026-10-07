@@ -1490,6 +1490,7 @@ QUnit.module('Columns resizing', {
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._setupResizingInfo(-9850);
+        resizeController._columnsSeparatorView.show();
         resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
