@@ -1080,13 +1080,11 @@ class Diagram extends Widget<Properties> {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getNodeDataSource(): any {
-    // @ts-expect-error ts-error
     return this._nodesOption?.getDataSource();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getEdgeDataSource(): any {
-    // @ts-expect-error ts-error
     return this._edgesOption?.getDataSource();
   }
 
@@ -1099,30 +1097,24 @@ class Diagram extends Widget<Properties> {
 
   _refreshNodesDataSource(): void {
     if (this._nodesOption) {
-      // @ts-expect-error ts-error
       this._nodesOption._disposeDataSource();
       delete this._nodesOption;
     }
     if (this.option('nodes.dataSource')) {
       this._nodesOption = new NodesOption(this);
-      // @ts-expect-error ts-error
       this._nodesOption.option('dataSource', this.option('nodes.dataSource'));
-      // @ts-expect-error ts-error
       this._nodesOption._refreshDataSource();
     }
   }
 
   _refreshEdgesDataSource(): void {
     if (this._edgesOption) {
-      // @ts-expect-error ts-error
       this._edgesOption._disposeDataSource();
       delete this._edgesOption;
     }
     if (this.option('edges.dataSource')) {
       this._edgesOption = new EdgesOption(this);
-      // @ts-expect-error ts-error
       this._edgesOption.option('dataSource', this.option('edges.dataSource'));
-      // @ts-expect-error ts-error
       this._edgesOption._refreshDataSource();
     }
   }
@@ -1173,7 +1165,9 @@ class Diagram extends Widget<Properties> {
       .filter((key) => isDefined(key));
   }
 
-  _createOptionGetter(optionName: string): unknown {
+  _createOptionGetter<TValue = unknown>(
+    optionName: string,
+  ): ((item: Item) => TValue) | undefined {
     const expr = this.option(optionName);
     // @ts-expect-error ts-error
     return expr && compileGetter(expr);
