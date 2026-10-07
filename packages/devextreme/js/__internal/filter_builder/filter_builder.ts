@@ -122,18 +122,22 @@ type PopupOptions = Required<Pick<PopupProperties, 'onShown'>>;
 
 interface ButtonWithMenuOptions<TItem> {
   caption?: string;
-  menu: MenuOptions<TItem> & Pick<PopupProperties, 'rtlEnabled' | 'onHiding' | 'onHidden'> & {
-    id?: Guid;
-    position?: MenuPosition;
-    animation?: null;
-  };
-  popup?: PopupOptions;
+  menu: MenuOptions<TItem>;
 }
 
-type PopupMenuOptions = ButtonWithMenuOptions<unknown> & {
-  menu: { position: MenuPosition };
-  popup: PopupOptions;
+type ResolvedMenuOptions<TItem> = MenuOptions<TItem>
+& Required<Pick<TreeViewProperties<TItem>, 'focusStateEnabled' | 'selectionMode'>>
+& Pick<PopupProperties, 'rtlEnabled' | 'onHiding' | 'onHidden'>
+& {
+  id: Guid;
+  position: MenuPosition;
+  animation: null;
 };
+
+interface PopupMenuOptions<TItem> {
+  menu: ResolvedMenuOptions<TItem>;
+  popup: PopupOptions;
+}
 
 interface KeyEvent {
   type: string;
@@ -532,7 +536,8 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     const $guid = new Guid();
     $button.attr('aria-controls', `${$guid}`);
 
-    extend(options.menu, {
+    const menu: ResolvedMenuOptions<TItem> = {
+      ...options.menu,
       id: $guid,
       focusStateEnabled: true,
       selectionMode: 'single',
@@ -549,9 +554,9 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
       },
       cssClass: `${FILTER_BUILDER_OVERLAY_CLASS} ${options.menu.cssClass}`,
       rtlEnabled,
-    });
+    };
 
-    options.popup = {
+    const popup: PopupOptions = {
       onShown: (info: ShownEvent): void => {
         const treeViewContentElement = $(info.component.content());
         const treeViewElement = treeViewContentElement.find('.dx-treeview');
@@ -568,7 +573,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             info.component.hide();
             // @ts-expect-error eventsEngine is badly typed
-            eventsEngine.trigger(options.menu.position.of, 'focus');
+            eventsEngine.trigger(menu.position.of, 'focus');
           }
         });
 
@@ -582,8 +587,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
     this._subscribeOnClickAndEnterKey($button, () => {
       removeMenu();
-      // @ts-expect-error options.menu and options.popup are extended above
-      this._createPopupWithTreeView(options, this.$element());
+      this._createPopupWithTreeView({ menu, popup }, this.$element());
       $button.addClass(ACTIVE_CLASS).attr('aria-expanded', 'true');
     });
     return $button;
@@ -1082,7 +1086,10 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     }
   }
 
-  _createPopupWithTreeView(options: PopupMenuOptions, $container: dxElementWrapper): void {
+  _createPopupWithTreeView<TItem>(
+    options: PopupMenuOptions<TItem>,
+    $container: dxElementWrapper,
+  ): void {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     const { onHidden } = options.menu;
