@@ -27,7 +27,7 @@ export class FilterBuilderView extends modules.View {
 
   private _columnsController!: ColumnsController;
 
-  private filterBuilderController?: FilterBuilderController;
+  private filterBuilderController!: FilterBuilderController;
 
   public init(): void {
     super.init();
@@ -101,7 +101,7 @@ export class FilterBuilderView extends modules.View {
       value: this.option('filterValue'),
       fields: this._columnsController.getFilteringColumns(),
     }, this.option('filterBuilder'), {
-      customOperations: this.filterBuilderController?.getCustomFilterOperations(),
+      customOperations: this.filterBuilderController.getCustomFilterOperations(),
     }));
 
     this._createComponent($contentElement, ScrollView, { direction: 'both' });
