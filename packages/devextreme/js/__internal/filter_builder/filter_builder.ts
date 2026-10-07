@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import type { PositionConfig } from '@js/common/core/animation';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -20,6 +19,8 @@ import TreeView, {
 } from '@js/ui/tree_view';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import type { EngineEvent, EngineTarget } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
 import type { EditorFactoryOwner } from './between';
@@ -139,17 +140,10 @@ interface PopupMenuOptions<TItem> {
   popup: PopupOptions;
 }
 
-interface KeyEvent {
-  type: string;
+type KeyEvent = EngineEvent & {
   key: string;
-  which: number;
   shiftKey: boolean;
-}
-
-interface ClickEvent {
-  type: string;
-  stopPropagation: () => void;
-}
+};
 
 interface ValueEditorOptions {
   value: ConditionValue;
@@ -175,7 +169,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
   _documentKeyUpHandler?: (e: KeyEvent) => void;
 
-  _documentClickHandler?: (e: { target: HTMLElement }) => void;
+  _documentClickHandler?: (e: EngineEvent) => void;
 
   _popupWithTreeView?: InstanceType<typeof Popup>;
 
@@ -572,7 +566,6 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
                             || (e.type === 'keyup' && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             info.component.hide();
-            // @ts-expect-error eventsEngine is badly typed
             eventsEngine.trigger(menu.position.of, 'focus');
           }
         });
@@ -931,9 +924,8 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
   _addDocumentClick($editor: dxElementWrapper, closeEditorFunc: () => void): void {
     const document = domAdapter.getDocument();
-    const documentClickHandler = (e: { target: HTMLElement }): void => {
+    const documentClickHandler = (e: EngineEvent): void => {
       if (!this._isFocusOnEditorParts($editor, e.target)) {
-        // @ts-expect-error eventsEngine is badly typed
         eventsEngine.trigger($editor.find('input'), 'change');
         closeEditorFunc();
       }
@@ -943,7 +935,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     this._documentClickHandler = documentClickHandler;
   }
 
-  _isFocusOnEditorParts($editor: dxElementWrapper, target?: HTMLElement): boolean {
+  _isFocusOnEditorParts($editor: dxElementWrapper, target?: EngineTarget): boolean {
     const activeElement = target || domAdapter.getActiveElement();
     const isFocusOnEditor = $(activeElement).closest($editor).length > 0;
     if (isFocusOnEditor) {
@@ -1007,7 +999,6 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     $container.empty();
 
     const $editor = this._createValueEditor($container, field, options);
-    // @ts-expect-error eventsEngine is badly typed
     eventsEngine.trigger($editor.find('input').not(':hidden').eq(0), 'focus');
 
     this._removeEvents();
@@ -1023,18 +1014,15 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
         this._updateConditionValue(item, value, () => {
           createValueText();
           if (e.shiftKey) {
-            // @ts-expect-error eventsEngine is badly typed
             eventsEngine.trigger($container.prev(), 'focus');
           }
         });
       }
       if (keyName === ESCAPE_KEY) {
-        // @ts-expect-error eventsEngine is badly typed
         eventsEngine.trigger(createValueText(), 'focus');
       }
       if (keyName === ENTER_KEY) {
         this._updateConditionValue(item, value, () => {
-          // @ts-expect-error eventsEngine is badly typed
           eventsEngine.trigger(createValueText(), 'focus');
         });
       }
@@ -1133,10 +1121,10 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
   _subscribeOnClickAndEnterKey(
     $button: dxElementWrapper,
-    handler: (e: ClickEvent) => void,
+    handler: (e: EngineEvent) => void,
   ): void {
     eventsEngine.on($button, 'dxclick', handler);
-    eventsEngine.on($button, 'keyup', (e: KeyEvent & ClickEvent) => {
+    eventsEngine.on($button, 'keyup', (e: KeyEvent) => {
       if (normalizeKeyName(e) === ENTER_KEY) {
         handler(e);
       }

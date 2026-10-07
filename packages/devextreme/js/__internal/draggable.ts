@@ -2,7 +2,6 @@
 import positionUtils from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
 import type { Cancelable } from '@js/common/core/events';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   end as dragEventEnd,
   enter as dragEventEnter,
@@ -38,6 +37,8 @@ import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import Animator from './ui/scroll_view/animator';
 
@@ -172,8 +173,7 @@ interface DragEventOffset {
   y: number;
 }
 
-export type DragEvent = Cancelable & {
-  type: string;
+export type DragEvent = EngineEvent & Cancelable & {
   target: Element;
   pageX: number;
   pageY: number;
@@ -701,7 +701,6 @@ class Draggable<
       DRAGSTART_EVENT_NAME,
       itemsSelector,
       data,
-      // @ts-expect-error eventsEngine is badly typed
       this._dragStartHandler.bind(this),
     );
     eventsEngine.on($element, DRAG_EVENT_NAME, data, this.dragMoveHandler.bind(this));
