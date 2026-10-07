@@ -29,7 +29,7 @@ interface ValidatedObservable extends Observable {
   dxValidator?: KoDxValidator;
 }
 
-class KoDxValidator {
+export class KoDxValidator {
   target: ValidatedObservable;
 
   name: string | undefined;
