@@ -1,7 +1,9 @@
 import type { PositionConfig } from '@js/common/core/animation';
 import type Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { CustomOperation, Field, Properties as FilterBuilderOptions } from '@js/ui/filter_builder';
+import type {
+  CustomOperation, Field, FieldInfo, Properties as FilterBuilderOptions,
+} from '@js/ui/filter_builder';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import type {
   ContentReadyEvent, ItemClickEvent, ItemRenderedEvent, Properties as TreeViewProperties,
@@ -39,6 +41,20 @@ export type FilterExpressionCallback = (
   target?: string,
 ) => FilterExpression;
 
+type LookupCellValue = (value: ConditionValue) => string;
+
+interface LookupWithoutItems {
+  items?: undefined;
+  calculateCellValue?: LookupCellValue;
+}
+
+interface LookupWithItems {
+  items: unknown[];
+  calculateCellValue: LookupCellValue;
+}
+
+export type FilterBuilderLookup = NonNullable<Field['lookup']> & (LookupWithoutItems | LookupWithItems);
+
 export interface FilterBuilderField extends Field {
   dataField: string;
   calculateFilterExpression?: FilterExpressionCallback;
@@ -47,10 +63,12 @@ export interface FilterBuilderField extends Field {
   defaultFilterOperation?: string;
   id?: string;
   parentId?: string;
-  lookup?: NonNullable<Field['lookup']> & {
-    items?: unknown;
-    calculateCellValue?: (value: ConditionValue) => string;
-  };
+  lookup?: FilterBuilderLookup;
+}
+
+export interface FilterBuilderItem extends FilterBuilderField {
+  caption: string;
+  id: string;
 }
 
 export interface FilterCustomOperation extends Omit<CustomOperation, 'name' | 'calculateFilterExpression'> {
@@ -62,6 +80,10 @@ export interface FilterCustomOperation extends Omit<CustomOperation, 'name' | 'c
     field: Field,
     fields?: Field[],
   ) => FilterExpression;
+}
+
+export interface ValueTextCustomOperation extends CustomOperation {
+  customizeText?: (fieldInfo: FieldInfo, options?: { values: FieldValue[] }) => string;
 }
 
 export type LookupField = FilterBuilderField & {

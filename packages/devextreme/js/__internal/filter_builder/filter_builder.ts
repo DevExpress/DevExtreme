@@ -26,6 +26,7 @@ import type {
   Criteria,
   EditorFactoryOwner,
   FilterBuilderField,
+  FilterBuilderItem,
   FilterBuilderProperties,
   FilterCustomOperation,
   FilterExpression,
@@ -47,7 +48,7 @@ import {
   getItems,
   getMergedOperations, getNormalizedFields, getNormalizedFilter,
   getOperationFromAvailable,
-  getOperationValue, isCondition, isGroup, removeItem, renderValueText, setGroupValue,
+  getOperationValue, hasLookup, isCondition, isGroup, removeItem, renderValueText, setGroupValue,
   updateConditionByOperation,
 } from './utils';
 
@@ -411,8 +412,9 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
   }
 
   _createButton(caption?: string): dxElementWrapper {
-    // @ts-expect-error text is declared without undefined
-    return $('<div>').text(caption);
+    const $button = $('<div>');
+
+    return caption === undefined ? $button : $button.text(caption);
   }
 
   _createGroupOperationButton(criteria: Criteria): dxElementWrapper {
@@ -622,16 +624,16 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     const items = getItems(fields, allowHierarchicalFields);
     let item = getField(field.name || field.dataField, items);
     const getFullCaption = function (
-      fieldItem: FilterBuilderField,
-      fieldItems: FilterBuilderField[],
-    ): string | undefined {
+      fieldItem: FilterBuilderItem,
+      fieldItems: FilterBuilderItem[],
+    ): string {
       return allowHierarchicalFields
         ? getCaptionWithParents(fieldItem, fieldItems)
         : fieldItem.caption;
     };
     condition[0] = item.name || item.dataField;
 
-    const $fieldButton: dxElementWrapper = this._createButtonWithMenu<FilterBuilderField>({
+    const $fieldButton: dxElementWrapper = this._createButtonWithMenu<FilterBuilderItem>({
       caption: getFullCaption(item, items),
       menu: {
         items,
@@ -651,10 +653,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
             $fieldButton.siblings().filter(`.${FILTER_BUILDER_ITEM_TEXT_CLASS}`).remove();
             this._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
-            // @ts-expect-error TreeView declares the items option as optional
-            const caption = getFullCaption(item, e.component.option('items'));
-            // @ts-expect-error text is declared without undefined
-            $fieldButton.text(caption);
+            $fieldButton.text(getFullCaption(item, items));
             this._updateFilter();
           }
         },
@@ -802,8 +801,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     const value = item[2];
 
     const customOperation = getCustomOperation(this._customOperations, item[1]);
-    if (!customOperation && field.lookup) {
-      // @ts-expect-error the field.lookup check above does not narrow the field
+    if (!customOperation && hasLookup(field)) {
       getCurrentLookupValueText(field, value, (result) => {
         renderValueText($text, result);
       });
@@ -1013,11 +1011,11 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
   }
 
   _dimensionChanged(): void {
-    // @ts-expect-error 'of' does not exist on type 'PopupProperties'
-    const positionOf = this._popupWithTreeView?.option('position')?.of;
+    const position = this._popupWithTreeView?.option('position');
+    const positionOf = typeof position === 'object' ? position.of : undefined;
 
     if (positionOf) {
-      this._popupWithTreeView?.option('maxHeight', getElementMaxHeightByWindow(positionOf));
+      this._popupWithTreeView?.option('maxHeight', getElementMaxHeightByWindow($(positionOf)));
     }
   }
 

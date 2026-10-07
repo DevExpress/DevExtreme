@@ -27,6 +27,7 @@ import type {
   EditorFactoryOwner,
   FieldValue,
   FilterBuilderField,
+  FilterBuilderItem,
   FilterBuilderValue,
   FilterCustomOperation,
   FilterExpression,
@@ -38,6 +39,7 @@ import type {
   ValueCondition,
   ValueExpression,
   ValueGroup,
+  ValueTextCustomOperation,
 } from './types';
 
 const DEFAULT_DATA_TYPE = 'string';
@@ -147,7 +149,7 @@ function convertGroupToNewStructure(group: Criteria, value: string): void {
   const convertNegationGroupToGroup = function (target: Criteria): void {
     const criteria = getGroupCriteria(target);
     target.length = 0;
-    ([] as Criteria).push.apply(target, criteria);
+    target.push(...criteria);
   };
 
   if (isNegationValue(value)) {
@@ -255,8 +257,7 @@ export function getOperationFromAvailable(
       return availableOperation;
     }
   }
-  // @ts-expect-error wrong usage of new
-  throw new errors.Error('E1048', operation);
+  throw errors.Error('E1048', operation);
 }
 
 export function getCustomOperation(
@@ -444,8 +445,8 @@ function itemExists(plainItems: FilterBuilderField[], parentId: string): boolean
 
 function pushItemAndCheckParent(
   originalItems: FilterBuilderField[],
-  plainItems: FilterBuilderField[],
-  item: FilterBuilderField,
+  plainItems: FilterBuilderItem[],
+  item: FilterBuilderItem,
 ): void {
   const { dataField } = item;
   if (hasParent(dataField)) {
@@ -467,11 +468,11 @@ function pushItemAndCheckParent(
 export function getItems(
   fields: FilterBuilderField[],
   allowHierarchicalFields: boolean | undefined,
-): FilterBuilderField[] {
-  const items: FilterBuilderField[] = [];
+): FilterBuilderItem[] {
+  const items: FilterBuilderItem[] = [];
 
   for (const field of fields) {
-    const item: FilterBuilderField = extend(
+    const item: FilterBuilderItem = extend(
       true,
       { caption: generateCaptionByDataField(field.dataField, allowHierarchicalFields) },
       field,
@@ -488,7 +489,10 @@ export function getItems(
   return items;
 }
 
-export function getField(dataField: string, fields: FilterBuilderField[]): FilterBuilderField {
+export function getField<TField extends FilterBuilderField>(
+  dataField: string,
+  fields: TField[],
+): TField | FilterBuilderItem {
   for (const field of fields) {
     if (field.name === dataField) {
       return field;
@@ -502,8 +506,7 @@ export function getField(dataField: string, fields: FilterBuilderField[]): Filte
   if (extendedFields.length > 0) {
     return extendedFields[0];
   }
-  // @ts-expect-error wrong usage of new
-  throw new errors.Error('E1047', dataField);
+  throw errors.Error('E1047', dataField);
 }
 
 export function isGroup(criteria: unknown): criteria is ValueGroup {
@@ -792,6 +795,10 @@ export function getNormalizedFilter(group: Criteria): ValueExpression | null {
   return normalizedGroup;
 }
 
+export function hasLookup(field: FilterBuilderField): field is LookupField {
+  return !!field.lookup;
+}
+
 export function getCurrentLookupValueText(
   field: LookupField,
   value: ConditionValue,
@@ -803,7 +810,6 @@ export function getCurrentLookupValueText(
   }
   const { lookup } = field;
   if (lookup.items) {
-    // @ts-expect-error calculateCellValue is declared only on the grid lookup
     handler(lookup.calculateCellValue(value) || '');
   } else {
     const lookupDataSource = isFunction(lookup.dataSource)
@@ -837,7 +843,7 @@ export function getCurrentLookupValueText(
 function getPrimitiveValueText(
   field: Field,
   value: FieldValue,
-  customOperation: CustomOperation | null,
+  customOperation: ValueTextCustomOperation | null,
   target: string,
   options?: { values: FieldValue[] },
 ): string {
@@ -854,11 +860,11 @@ function getPrimitiveValueText(
 
   if (customOperation && customOperation.customizeText) {
     valueText = customOperation.customizeText.call(customOperation, {
+      // @ts-expect-error FieldInfo.value does not admit boolean or null
       value,
       valueText,
       field,
       target,
-      // @ts-expect-error customizeText is declared with one argument
     }, options);
   }
 
@@ -868,7 +874,7 @@ function getPrimitiveValueText(
 function getArrayValueText(
   field: Field,
   value: FieldValue[],
-  customOperation: CustomOperation | null,
+  customOperation: ValueTextCustomOperation | null,
   target: string,
 ): string[] {
   const options = { values: value };
@@ -883,7 +889,7 @@ export function getCurrentValueText(
   this: unknown,
   field: Field,
   value: FieldValue | FieldValue[],
-  customOperation: CustomOperation | null,
+  customOperation: ValueTextCustomOperation | null,
   target = 'filterBuilder',
 ): string | DeferredObj<string | string[]> {
   if (checkDefaultValue(value)) {
@@ -891,8 +897,7 @@ export function getCurrentValueText(
   }
 
   if (Array.isArray(value)) {
-    // @ts-expect-error Deferred has badly typed ctor function
-    const result: DeferredObj<string | string[]> = new Deferred();
+    const result = Deferred<string | string[]>();
     when.apply(this, getArrayValueText(field, value, customOperation, target)).done((...args) => {
       const text: string | string[] = (args as string[]).some((item) => !checkDefaultValue(item))
         ? (args as string[]).map((item) => (!checkDefaultValue(item) ? item : '?'))
@@ -905,9 +910,9 @@ export function getCurrentValueText(
 }
 
 export function getCaptionWithParents(
-  item: FilterBuilderField,
-  plainItems: FilterBuilderField[],
-): string | undefined {
+  item: FilterBuilderItem,
+  plainItems: FilterBuilderItem[],
+): string {
   if (hasParent(item.dataField)) {
     const parentId = getParentIdFromItemDataField(item.dataField);
     for (const plainItem of plainItems) {

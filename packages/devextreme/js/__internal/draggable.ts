@@ -69,7 +69,7 @@ let activeSourceDraggable: AnyDraggable | null = null;
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
-const getMousePosition = (event: { pageX: number; pageY: number }): MousePosition => ({
+const getMousePosition = (event: Pick<DragEvent, 'pageX' | 'pageY'>): MousePosition => ({
   // @ts-expect-error scrollLeft is declared to return the wrapper
   x: event.pageX - $(window).scrollLeft(),
   // @ts-expect-error scrollTop is declared to return the wrapper
@@ -169,12 +169,12 @@ class ScrollHelper {
       const distanceToBorders = this._calculateDistanceToBorders($element, mousePosition);
       const { start, end } = this._limitProps;
 
-      if (sensitivity > distanceToBorders[start]) {
+      if (distanceToBorders && sensitivity > distanceToBorders[start]) {
         if (!this._preventScroll) {
           this._scrollSpeed = -this._calculateScrollSpeed(distanceToBorders[start]);
           this._$scrollableAtPointer = $element;
         }
-      } else if (sensitivity > distanceToBorders[end]) {
+      } else if (distanceToBorders && sensitivity > distanceToBorders[end]) {
         if (!this._preventScroll) {
           this._scrollSpeed = this._calculateScrollSpeed(distanceToBorders[end]);
           this._$scrollableAtPointer = $element;
@@ -191,7 +191,7 @@ class ScrollHelper {
   _calculateDistanceToBorders(
     $area: dxElementWrapper,
     mousePosition: MousePosition,
-  ): Record<string, number> {
+  ): Quad | undefined {
     const area = $area.get(0);
 
     if (area) {
@@ -204,7 +204,7 @@ class ScrollHelper {
         bottom: areaBoundingRect.bottom - mousePosition.y,
       };
     }
-    return {};
+    return undefined;
   }
 
   _calculateScrollSpeed(distance: number): number {
@@ -307,9 +307,9 @@ class Draggable<
 
   _scrollAnimator!: ScrollAnimator;
 
-  _initialLocate?: { left: number; top: number };
+  _initialLocate?: Coordinates;
 
-  _startPosition?: { left: number; top: number };
+  _startPosition?: Coordinates;
 
   reset(): void {}
 

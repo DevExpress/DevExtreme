@@ -461,9 +461,8 @@ class Sortable extends Draggable<SortableProperties> {
 
     if (visibleItemCount) {
       for (let i = 0; i <= visibleItemCount; i += 1) {
-        // @ts-expect-error a boolean is used as a number operand
-        // eslint-disable-next-line no-bitwise
-        const needCorrectLeftPosition = !isVertical && (rtlEnabled ^ (i === visibleItemCount));
+        const needCorrectLeftPosition = !isVertical
+          && Boolean(rtlEnabled) !== (i === visibleItemCount);
         const needCorrectTopPosition = isVertical && i === visibleItemCount;
 
         if (i < visibleItemCount) {
