@@ -5,7 +5,7 @@ import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import errors from '@js/ui/widget/ui.errors';
-import type { FilterCustomOperation } from '@ts/filter_builder/utils';
+import type { FilterCustomOperation } from '@ts/filter_builder/types';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
 } from '@ts/filter_builder/utils';
