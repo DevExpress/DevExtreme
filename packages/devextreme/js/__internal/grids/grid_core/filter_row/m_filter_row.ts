@@ -509,12 +509,14 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
   private _getEditorOptions($editorContainer, column) {
     const that = this;
-    const accessibilityOptions = {
+    const result = extend({}, column, {
       editorOptions: {
-        inputAttr: that._getFilterInputAccessibilityAttributes(column),
+        ...column.editorOptions,
+        inputAttr: {
+          ...that._getFilterInputAccessibilityAttributes(column),
+          ...column.editorOptions?.inputAttr,
+        },
       },
-    };
-    const result = extend(accessibilityOptions, column, {
       value: getFilterValue(that, column.index, $editorContainer),
       parentType: 'filterRow',
       showAllText: that.option('filterRow.showAllText'),
