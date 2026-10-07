@@ -150,7 +150,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
   }
 
   protected _renderCore(e) {
-    super._renderCore.apply(this, arguments as any);
+    const deferred = super._renderCore.apply(this, arguments as any);
 
     if (e && e.changeType === 'update'
         && e.repaintChangesOnly
@@ -159,6 +159,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
         this._updateSortable();
       });
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return deferred;
   }
 
   private _updateSortable() {

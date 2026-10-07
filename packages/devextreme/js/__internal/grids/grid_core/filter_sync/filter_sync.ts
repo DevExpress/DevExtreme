@@ -3,7 +3,7 @@ import {
   addItem,
   getMatchedConditions,
   getNormalizedFilter,
-} from '@ts/filter_builder/m_utils';
+} from '@ts/filter_builder/utils';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type {
   Column, ColumnUserState, FilterField,
