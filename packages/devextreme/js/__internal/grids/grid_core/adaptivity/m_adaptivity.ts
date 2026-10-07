@@ -14,8 +14,6 @@ import { isDefined, isString } from '@js/core/utils/type';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
