@@ -167,6 +167,30 @@ describe('Extend utils', () => {
         expect(({} as Record<string, unknown>).polluted).toBeUndefined();
       });
     });
+
+    describe('the type of the result', () => {
+      it('should keep the properties of a source that can be skipped optional', () => {
+        const skipped = undefined as { value: string } | undefined;
+
+        const merged = extend({}, skipped);
+        const isOptional: Record<string, never> extends Pick<typeof merged, 'value'>
+          ? true
+          : false = true;
+
+        expect(isOptional).toBe(true);
+        expect(merged).toEqual({});
+      });
+
+      it('should keep the properties of a source that is always present required', () => {
+        const merged = extend({}, { value: 'a' });
+        const isRequired: Record<string, never> extends Pick<typeof merged, 'value'>
+          ? false
+          : true = true;
+
+        expect(isRequired).toBe(true);
+        expect(merged).toEqual({ value: 'a' });
+      });
+    });
   });
 
   describe('extendFromObject', () => {

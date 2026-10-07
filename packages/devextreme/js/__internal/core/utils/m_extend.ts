@@ -26,7 +26,9 @@ type EmptySource = null | undefined | void;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
 type MergedSource<T> = 0 extends 1 & T ? any : [T] extends [EmptySource]
   ? unknown
-  : NonNullable<T>;
+  : [Extract<T, EmptySource>] extends [never]
+    ? NonNullable<T>
+    : Partial<NonNullable<T>>;
 
 type Merged<TSources extends readonly unknown[]> = TSources extends readonly [
   infer THead,
