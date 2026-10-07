@@ -2,7 +2,7 @@ import { fx } from '@js/common/core/animation';
 import { resetPosition } from '@js/common/core/animation/translator';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
@@ -12,6 +12,7 @@ import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
+import type { Quad } from '@ts/core/utils/m_string';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Draggable from '@ts/draggable';
 import type { EngineEvent } from '@ts/events/core/events_engine';
@@ -20,7 +21,7 @@ import eventsEngine from '@ts/events/core/events_engine';
 import { isDefined } from '../core/utils/type';
 import type { DragEvent, DragEventArgs, DragTemplateArgs } from './draggable.types';
 import type {
-  AnimateConfig, Boundary, ItemPoint, OptionChangedToIndexArgs, Position, SortableDragStartArgs,
+  AnimateConfig, ItemPoint, OptionChangedToIndexArgs, SortableDragStartArgs,
   SortableEventArgs, SortableProperties, SourceScrollableInfo,
 } from './sortable.types';
 
@@ -51,7 +52,7 @@ const stopAnimation = (element: HTMLElement | undefined): void => {
   element.style.transition = '';
 };
 
-function getScrollableBoundary($scrollable: dxElementWrapper): Boundary {
+function getScrollableBoundary($scrollable: dxElementWrapper): Quad {
   const offset = $scrollable.offset();
   const { style } = $scrollable[0] as HTMLElement;
   const paddingLeft = parseFloat(style.paddingLeft) || 0;
@@ -447,7 +448,7 @@ class Sortable extends Draggable<SortableProperties> {
     let result: ItemPoint[] = [];
     /* eslint-disable @typescript-eslint/init-declarations */
     let $item: dxElementWrapper | undefined;
-    let offset: Position | undefined;
+    let offset: Coordinates | undefined;
     let itemWidth: number | undefined;
     /* eslint-enable @typescript-eslint/init-declarations */
     const { rtlEnabled } = this.option();
@@ -761,7 +762,7 @@ class Sortable extends Draggable<SortableProperties> {
     }
   }
 
-  _isPositionVisible(position: Position): boolean {
+  _isPositionVisible(position: Coordinates): boolean {
     const $element = this.$element();
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let scrollContainer: Element | undefined;
@@ -863,7 +864,7 @@ class Sortable extends Draggable<SortableProperties> {
     const isVerticalOrientation = this._isVerticalOrientation();
     const rtlEnabled = this.option('rtlEnabled');
     const dropInsideItem = this.option('dropInsideItem');
-    let position: Position | null | undefined = null;
+    let position: Coordinates | null | undefined = null;
     // @ts-expect-error toIndex can be null
     let itemElement: Element | undefined = items[toIndex];
 
