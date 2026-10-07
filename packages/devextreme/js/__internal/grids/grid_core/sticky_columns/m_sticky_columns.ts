@@ -531,7 +531,15 @@ const footerView = (
 ) => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerStickyColumnsExtender extends Base {
-  protected getSeparatorOffsetX($cell: dxElementWrapper): number {
+  private isNextCellPinned($nextCell: dxElementWrapper, $container: dxElementWrapper): boolean {
+    const addWidgetPrefix = this.addWidgetPrefix.bind(this);
+
+    return this.option('rtlEnabled')
+      ? GridCoreStickyColumnsDom.isFixedCellPinnedToLeft($nextCell, $container, addWidgetPrefix)
+      : GridCoreStickyColumnsDom.isFixedCellPinnedToRight($nextCell, $container, addWidgetPrefix);
+  }
+
+  protected getSeparatorOffsetX($cell: dxElementWrapper, $nextCell: dxElementWrapper): number {
     // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
 
@@ -547,9 +555,16 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
       if (isWidgetResizingMode && isFixedCellPinnedToRight) {
         return $cell.offset()?.left ?? 0;
       }
+
+      if (!isWidgetResizingMode && this.isNextCellPinned($nextCell, $container)) {
+        const nextCellOffsetX: number = $nextCell.offset()?.left ?? 0;
+        const nextCellWidth: number = $nextCell[0].getBoundingClientRect().width;
+
+        return this.option('rtlEnabled') ? nextCellOffsetX + nextCellWidth : nextCellOffsetX;
+      }
     }
 
-    return super.getSeparatorOffsetX($cell);
+    return super.getSeparatorOffsetX($cell, $nextCell);
   }
 
   protected _correctColumnIndexForPoint(point, correctionValue: number, columns): void {

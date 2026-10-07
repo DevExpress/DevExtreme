@@ -869,7 +869,12 @@ export default class DataGrid extends GridCore {
     )(CLASS.sortableDragging);
   }
 
-  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void> {
+  resizeHeader(
+    columnIndex: number,
+    offset: number,
+    needToTriggerPointerUp = true,
+    edge: 'left' | 'right' = 'left',
+  ): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -879,7 +884,8 @@ export default class DataGrid extends GridCore {
         const columnHeadersView = gridInstance.getView('columnHeadersView');
         const $header = $(columnHeadersView.getHeaderElement(columnIndex));
         const headerOffset = $header.offset();
-        const offsetX = headerOffset.left;
+        const headerWidth = edge === 'right' ? $header[0].getBoundingClientRect().width : 0;
+        const offsetX = headerOffset.left + headerWidth;
 
         triggerPointerMove($(document), offsetX, headerOffset.top + 1);
         triggerPointerDown($gridElement, offsetX, headerOffset.top + 1);
@@ -898,6 +904,7 @@ export default class DataGrid extends GridCore {
           columnIndex,
           offset,
           needToTriggerPointerUp,
+          edge,
         },
       },
     )();
