@@ -136,8 +136,8 @@ jobs:
       shell: bash
       run: |
         du -sh .nx/cache .nx/workspace-data 2>/dev/null || true
-        find .nx/cache -type f 2>/dev/null | wc -l | xargs echo "Nx cache files:" || true
-        find .nx/workspace-data -maxdepth 1 -type f 2>/dev/null | sed 's#^#Nx workspace-data file: #' || true
+        find .nx/cache -type f 2>/dev/null | wc -l | xargs echo "Nx cache files:"
+        find .nx/workspace-data -maxdepth 1 -type f 2>/dev/null | sed 's#^#Nx workspace-data file: #'
         node - <<'NODE'
         const fs = require('fs');
         const runJsonPath = '.nx/cache/run.json';
