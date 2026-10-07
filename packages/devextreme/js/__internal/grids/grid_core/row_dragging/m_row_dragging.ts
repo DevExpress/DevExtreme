@@ -4,6 +4,7 @@ import { deferUpdate } from '@js/core/utils/common';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Sortable from '@js/ui/sortable';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
@@ -151,12 +152,13 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     return $content;
   }
 
-  protected _renderCore(e) {
-    const deferred = super._renderCore.apply(this, arguments as any);
+  protected _renderCore(e?: DataChange): Deferred<unknown> {
+    const deferred = super._renderCore(e);
 
-    if (e && e.changeType === 'update'
+    if (e?.changeType === 'update'
         && e.repaintChangesOnly
         && gridCoreUtils.isVirtualRowRendering(this)) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget update
       deferUpdate(() => {
         this._updateSortable();
       });
