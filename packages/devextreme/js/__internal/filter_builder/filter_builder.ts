@@ -22,7 +22,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
-import type { EditorFactoryOwner } from './m_between';
+import type { EditorFactoryOwner } from './between';
 import type {
   Condition,
   ConditionValue,
@@ -32,7 +32,7 @@ import type {
   FilterExpression,
   GroupMenuItem,
   OperationMenuItem,
-} from './m_utils';
+} from './utils';
 import {
   addItem, convertToInnerStructure,
   createCondition, createEmptyGroup,
@@ -44,7 +44,7 @@ import {
   getOperationFromAvailable,
   getOperationValue, isCondition, isGroup, removeItem, renderValueText, setGroupValue,
   updateConditionByOperation,
-} from './m_utils';
+} from './utils';
 
 const FILTER_BUILDER_CLASS = 'dx-filterbuilder';
 const FILTER_BUILDER_GROUP_CLASS = `${FILTER_BUILDER_CLASS}-group`;

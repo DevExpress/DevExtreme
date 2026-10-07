@@ -10,7 +10,7 @@ import type { Lock } from '@ts/core/utils/locker';
 import { Locker } from '@ts/core/utils/locker';
 import Callbacks from '@ts/core/utils/m_callbacks';
 import { isPlainObject } from '@ts/core/utils/m_type';
-import Draggable from '@ts/m_draggable';
+import Draggable from '@ts/draggable';
 import Editor from '@ts/ui/editor/editor';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
 import VizWidget from '@ts/viz/core/base_widget';
