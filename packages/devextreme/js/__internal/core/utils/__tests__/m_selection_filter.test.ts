@@ -1,20 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
 import { SelectionFilterCreator } from '@ts/core/utils/m_selection_filter';
 
-interface SelectionFilter {
-  getExpr: (keyExpr?: unknown) => unknown;
-  getCombinedFilter: (keyExpr?: unknown, dataSourceFilter?: unknown, force?: boolean) => unknown;
-  getLocalFilter: (
-    keyGetter: (item: unknown) => unknown,
-    equalKeys?: (key1: unknown, key2: unknown) => boolean,
-    equalByReference?: boolean,
-    keyExpr?: unknown,
-  ) => (item: unknown) => boolean;
-}
-
-const createFilter = (keys: unknown[], isSelectAll?: boolean): SelectionFilter => new (
-  SelectionFilterCreator as unknown as new (...args: unknown[]) => SelectionFilter
-)(keys, isSelectAll);
+const createFilter = (
+  keys: unknown[],
+  isSelectAll?: boolean,
+): SelectionFilterCreator => new SelectionFilterCreator(keys, isSelectAll);
 
 describe('Selection filter utils', () => {
   describe('getExpr', () => {
@@ -22,6 +12,7 @@ describe('Selection filter utils', () => {
       const filter = createFilter([1, 2]);
 
       expect(filter.getExpr(undefined)).toBeUndefined();
+      // @ts-expect-error null is not a key expression
       expect(filter.getExpr(null)).toBeUndefined();
       expect(filter.getExpr('')).toBeUndefined();
     });

@@ -14,6 +14,8 @@ export interface DxError extends Error {
 
 type ErrorMessages = Record<string, string>;
 
+type ErrorArgs = [id: string, ...details: unknown[]];
+
 interface ErrorFactory {
   (id: string, ...details: unknown[]): DxError;
   new (id: string, ...details: unknown[]): DxError;
@@ -41,15 +43,12 @@ function error(baseErrors: ErrorMessages, errors?: ErrorMessages): ErrorUtils {
     return format.apply(this, ['{0} - {1}.\n\nFor additional information on this {2} message, see: {3}', id, details, kind, getErrorUrl(id)]);
   }
 
-  function combineMessage(args: unknown[]): string {
-    const id = args[0] as string;
-    const details = args.slice(1);
+  function combineMessage([id, ...details]: ErrorArgs): string {
     return formatMessage(id, formatDetails(id, details));
   }
 
-  function makeError(args: unknown[]): DxError {
-    const id = args[0] as string;
-    const details = formatDetails(id, args.slice(1));
+  function makeError([id, ...args]: ErrorArgs): DxError {
+    const details = formatDetails(id, args);
     const url = getErrorUrl(id);
     const message = formatMessage(id, details);
 
@@ -64,12 +63,12 @@ function error(baseErrors: ErrorMessages, errors?: ErrorMessages): ErrorUtils {
 
     ERROR_MESSAGES: extend(errors, baseErrors),
 
-    Error: function Error(...args: unknown[]): DxError {
+    Error: function Error(...args: ErrorArgs): DxError {
       return makeError(args);
-    } as unknown as ErrorFactory,
+    } as ErrorFactory,
 
-    log(...args: unknown[]): void {
-      const id = args[0] as string;
+    log(...args: ErrorArgs): void {
+      const [id] = args;
       let method: 'log' | 'error' | 'warn' = 'log';
 
       if (/^E\d+$/.test(id)) {

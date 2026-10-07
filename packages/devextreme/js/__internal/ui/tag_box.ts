@@ -45,14 +45,6 @@ function xor(a: boolean, b: boolean): boolean {
 type TagBoxItem = string | number | any;
 type SelectedItemsMap = Record<string, TagBoxItem>;
 
-interface FilterCreatorInstance {
-  getCombinedFilter: (
-    keyExpr: string | ((item: unknown) => unknown) | undefined,
-    dataSourceFilter: unknown[] | null,
-  ) => unknown[] | undefined;
-  getLocalFilter: (keyGetter: (item: unknown) => unknown) => (item: unknown) => boolean;
-}
-
 interface MultiTagPreparingArgs {
   multiTagElement: DxElement;
   selectedItems?: (string | number | unknown)[];
@@ -906,9 +898,9 @@ class TagBox<
     return $tag;
   }
 
-  _getFilter(creator: FilterCreatorInstance): unknown[] | undefined {
+  _getFilter(creator: FilterCreator): unknown[] | undefined {
     // @ts-expect-error fix argument type in m_data_controller.ts
-    const dataSourceFilter = this._dataController.filter();
+    const dataSourceFilter: unknown[] | null = this._dataController.filter();
     const { valueExpr, maxFilterQueryLength } = this.option();
     const filterExpr = creator.getCombinedFilter(valueExpr, dataSourceFilter);
     const filterQueryLength = encodeURI(JSON.stringify(filterExpr)).length;
@@ -922,7 +914,7 @@ class TagBox<
 
   _getFilteredItems(values: unknown[]): Promise<unknown> {
     this._loadFilteredItemsPromise?.reject();
-    const creator = new FilterCreator(values) as unknown as FilterCreatorInstance;
+    const creator = new FilterCreator(values);
 
     const { selectedItems: listSelectedItems } = this._list?.option() ?? {};
     const isListItemsLoaded = !!listSelectedItems && this._list?._dataController.isLoaded();

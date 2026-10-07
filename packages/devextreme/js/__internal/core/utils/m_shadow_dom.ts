@@ -3,13 +3,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 
 const DX_RULE_PREFIX = 'dx-';
 
-interface RuleLike {
-  cssText: string;
-  selectorText?: string;
-  cssRules?: ArrayLike<RuleLike>;
-  name?: string;
-  style?: { fontFamily?: string };
-}
+type RuleLike = CSSRule
+  & Partial<Pick<CSSStyleRule, 'selectorText' | 'style'>>
+  & { name?: string; cssRules?: ArrayLike<RuleLike> };
 
 interface Queue<T> {
   push: (this: Queue<T>, item: T) => Queue<T>;
@@ -20,7 +16,7 @@ interface Queue<T> {
 
 let ownerDocumentStyleSheet: CSSStyleSheet | null = null;
 
-function createConstructedStyleSheet(rootNode: ShadowRoot): CSSStyleSheet {
+function createConstructedStyleSheet(rootNode: ShadowRoot): CSSStyleSheet | null {
   try {
     return new CSSStyleSheet();
   } catch (err) {
@@ -28,10 +24,15 @@ function createConstructedStyleSheet(rootNode: ShadowRoot): CSSStyleSheet {
 
     rootNode.appendChild(styleElement);
 
-    // @ts-expect-error the sheet is null when the root is not connected
     return styleElement.sheet;
   }
 }
+
+const isShadowRoot = (node: Node | undefined): node is ShadowRoot => node !== undefined
+  && 'host' in node
+  && Boolean(node.host);
+
+const isElement = (node: Node): node is Element => node.nodeType === Node.ELEMENT_NODE;
 
 function insertRule(
   targetStyleSheet: CSSStyleSheet,
@@ -119,12 +120,14 @@ export function addShadowDomStyles($element: dxElementWrapper): void {
   }
 
   const el = $element.get(0);
-  const root = el.getRootNode?.() as ShadowRoot | undefined;
-  if (!root?.host) return;
+  const root = el.getRootNode?.();
+  if (!isShadowRoot(root)) return;
 
   if (!ownerDocumentStyleSheet) {
     ownerDocumentStyleSheet = createConstructedStyleSheet(root);
-    processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
+    if (ownerDocumentStyleSheet) {
+      processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
+    }
   }
 
   const localHash = computeStyleSheetsHash(root.styleSheets);
@@ -133,6 +136,8 @@ export function addShadowDomStyles($element: dxElementWrapper): void {
   styleSheetHashes.set(root, localHash);
 
   const currentShadowDomStyleSheet = createConstructedStyleSheet(root);
+  if (!ownerDocumentStyleSheet || !currentShadowDomStyleSheet) return;
+
   processRules(currentShadowDomStyleSheet, root.styleSheets, true);
 
   root.adoptedStyleSheets = [ownerDocumentStyleSheet, currentShadowDomStyleSheet];
@@ -176,10 +181,10 @@ export function getShadowElementsFromPoint(x: number, y: number, root: Node): No
     const el = elementQueue.shift();
 
     for (const childNode of el.childNodes) {
-      if (childNode.nodeType === Node.ELEMENT_NODE
-               && isPositionInElementRectangle(childNode as Element, x, y)
+      if (isElement(childNode)
+               && isPositionInElementRectangle(childNode, x, y)
 
-               && getComputedStyle(childNode as Element).pointerEvents !== 'none'
+               && getComputedStyle(childNode).pointerEvents !== 'none'
       ) {
         elementQueue.push(childNode);
       }

@@ -1,6 +1,7 @@
 import coreErrors from '@js/core/errors';
 import errorUtils from '@js/core/utils/error';
 import { isObject } from '@js/core/utils/type';
+import type { DxError } from '@ts/core/utils/m_error';
 
 export const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
 
@@ -66,10 +67,12 @@ export type DataErrorHandler = (error: unknown) => void;
 // eslint-disable-next-line import/no-mutable-exports
 export let errorHandler: DataErrorHandler | null = null;
 
+const isDxError = (error: unknown): error is DxError => isObject(error) && '__id' in error;
+
 export const handleError = function (error: unknown): void {
   /// #DEBUG
-  const id = isObject(error) && '__id' in error ? error.__id : 'E4000';
-  errors.log(id as string, error);
+  const id = isDxError(error) ? error.__id : 'E4000';
+  errors.log(id, error);
   /// #ENDDEBUG
   errorHandler?.(error);
 };
