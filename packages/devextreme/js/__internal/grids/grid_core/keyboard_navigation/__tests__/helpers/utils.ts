@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
+import type { DxEvent } from '@js/events';
 import { keyboard } from '@ts/events/m_short';
 import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
