@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import positionUtils from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
-import type { Cancelable } from '@js/common/core/events';
 import {
   end as dragEventEnd,
   enter as dragEventEnter,
@@ -12,7 +11,6 @@ import {
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, needSkipEvent } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
-import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -30,100 +28,22 @@ import { quadToObject } from '@js/core/utils/string';
 import { isFunction, isNumeric, isObject } from '@js/core/utils/type';
 import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
-import type { DraggableBaseOptions, Properties } from '@js/ui/draggable';
+import type { Properties } from '@js/ui/draggable';
 import { domAdapter } from '@ts/core/dom_adapter';
 import { splitPair } from '@ts/core/utils/m_common';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 
+import type {
+  ActionFn, BoundOffsetQuad, CursorOffset, CursorOffsetCallback, DragEvent, DragEventArgs,
+  DraggableBaseProperties, DraggableProperties, DragStartArgs, DragTemplateArgs,
+  ElementOffsetOptions, MousePosition, Offset, ScrollableInstance, ScrollHelperOwner,
+  ScrollOrientation,
+} from './draggable.types';
 import Animator from './ui/scroll_view/animator';
-
-type BoundOffset = number | string | { h?: number; v?: number };
-
-type DragHandler = ((e: never) => void) | undefined;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface DraggableBaseProperties<TComponent = any> extends Omit<DraggableBaseOptions<TComponent>, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
-  scrollSensitivity: number;
-
-  scrollSpeed: number;
-
-  allowMoveByClick?: boolean;
-
-  boundOffset?: BoundOffset | (() => BoundOffset);
-
-  boundary?: DraggableBaseOptions<TComponent>['boundary'] | dxElementWrapper;
-
-  component?: unknown;
-
-  contentTemplate?: string | null;
-
-  clone?: boolean;
-
-  dragTemplate?: Properties['dragTemplate'];
-
-  filter?: string;
-
-  immediate?: boolean;
-
-  itemData?: unknown;
-
-  onCancelByEsc?: boolean;
-
-  onDragCancel?: DragHandler;
-
-  onDragEnd?: DragHandler;
-
-  onDragEnter?: DragHandler;
-
-  onDragLeave?: DragHandler;
-
-  onDragMove?: DragHandler;
-
-  onDragStart?: DragHandler;
-
-  onDraggableElementShown?: DragHandler;
-
-  onDrop?: DragHandler;
-}
-
-export interface DraggableProperties extends Omit<Properties, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
-  scrollSensitivity: number;
-
-  scrollSpeed: number;
-
-  allowMoveByClick?: boolean;
-
-  boundOffset?: BoundOffset | (() => BoundOffset);
-
-  boundary?: Properties['boundary'] | dxElementWrapper;
-
-  component?: unknown;
-
-  contentTemplate?: string | null;
-
-  filter?: string;
-
-  immediate?: boolean;
-
-  itemData?: unknown;
-
-  onCancelByEsc?: boolean;
-
-  onDragCancel?: (e: DragEventArgs) => void;
-
-  onDragEnter?: (e: DragEventArgs) => void;
-
-  onDragLeave?: (e: DragEventArgs) => void;
-
-  onDraggableElementShown?: (e: DragElementShownArgs) => void;
-
-  onDrop?: (e: DragEventArgs) => void;
-}
 
 const window = getWindow();
 const KEYDOWN_EVENT = 'keydown';
@@ -147,11 +67,6 @@ let activeSourceDraggable: AnyDraggable | null = null;
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
-interface MousePosition {
-  x: number;
-  y: number;
-}
-
 const getMousePosition = (event: { pageX: number; pageY: number }): MousePosition => ({
   // @ts-expect-error scrollLeft is declared to return the wrapper
   x: event.pageX - $(window).scrollLeft(),
@@ -162,89 +77,6 @@ const getMousePosition = (event: { pageX: number; pageY: number }): MousePositio
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
-
-interface Offset {
-  left: number;
-  top: number;
-}
-
-interface DragEventOffset {
-  x: number;
-  y: number;
-}
-
-export type DragEvent = EngineEvent & Cancelable & {
-  target: Element;
-  pageX: number;
-  pageY: number;
-  key?: string;
-  originalEvent?: { target?: Element };
-  offset?: DragEventOffset;
-  maxLeftOffset?: number;
-  maxRightOffset?: number;
-  maxTopOffset?: number;
-  maxBottomOffset?: number;
-  _cancelPreventDefault?: boolean;
-};
-
-export type DragEventArgs = Cancelable & {
-  event: DragEvent;
-  itemData: unknown;
-  itemElement: DxElement;
-  fromComponent: unknown;
-  toComponent: unknown;
-  fromData: unknown;
-  toData: unknown;
-};
-
-export type DragStartArgs = Cancelable & {
-  event: DragEvent;
-  itemData: unknown;
-  itemElement: dxElementWrapper;
-  fromData: unknown;
-};
-
-export type DragElementShownArgs = DragStartArgs & { dragElement: dxElementWrapper };
-
-type CursorOffset = DraggableBaseOptions<unknown>['cursorOffset'];
-
-type ElementOffsetOptions = DragStartArgs & {
-  dragElement: Element | undefined;
-  initialOffset?: Offset | false;
-};
-
-type CursorOffsetCallback = (options: ElementOffsetOptions) => CursorOffset;
-
-interface BoundOffsetQuad {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-}
-
-export interface DragTemplateArgs {
-  container: DxElement;
-  model: {
-    itemData: unknown;
-    itemElement: DxElement;
-    fromIndex?: number;
-  };
-}
-
-type ActionFn = (args?: object) => void;
-
-type ScrollOrientation = 'vertical' | 'horizontal';
-
-interface ScrollableInstance {
-  scrollOffset: () => Record<string, number>;
-  scrollTo: (position: Record<string, number>) => void;
-}
-
-interface ScrollHelperOwner {
-  option: () => { scrollSensitivity: number; scrollSpeed: number };
-  _dragMoveEvent?: DragEvent;
-  dragMoveHandler: (e: DragEvent) => void;
-}
 
 class ScrollHelper {
   private _preventScroll: boolean;
