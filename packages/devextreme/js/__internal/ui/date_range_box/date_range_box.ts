@@ -10,7 +10,6 @@ import type { DxElement } from '@js/core/element';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { FunctionTemplate } from '@js/core/templates/function_template';
 import { getImageContainer } from '@js/core/utils/icon';
 import { camelize } from '@js/core/utils/inflector';
 import type { DxEvent } from '@js/events';
@@ -18,6 +17,7 @@ import type dxButton from '@js/ui/button';
 import type { DatePickerType, DisabledDate } from '@js/ui/date_box';
 import type { Properties } from '@js/ui/date_range_box';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
+import { FunctionTemplate } from '@ts/core/templates/function_template';
 import type { OptionChanged } from '@ts/core/widget/types';
 import {
   getDeserializedDate, isSameDateArrays, isSameDates, sortDatesArray,
@@ -283,7 +283,6 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
 
   _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
-      // @ts-expect-error should be fixed in FunctionTemplate definition
       dropDownButton: new FunctionTemplate((options) => {
         const $icon = $('<div>').addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
         $(options.container).append($icon);

@@ -100,7 +100,6 @@ export function renderLabel({
     labelTemplate.render({
       container: getPublicElement($labelContent),
       model: labelTemplateData,
-      // @ts-expect-error ts-error
       onRendered() {
         onLabelTemplateRendered?.();
       },
