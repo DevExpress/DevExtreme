@@ -204,7 +204,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   protected _columnChooserView!: ColumnChooserView;
 
   public init() {
-    this._scrollLeft = -1;
+    this._scrollLeft = undefined;
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
     this.adaptiveColumnsController = this.getController('adaptiveColumns');
@@ -1078,7 +1078,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   protected updateScrollLeftPosition(): void {
     const scrollLeft = this._scrollLeft;
 
-    if (scrollLeft >= 0) {
+    if (isDefined(scrollLeft)) {
       this._scrollLeft = 0;
       this.scrollTo({ left: scrollLeft });
     }
