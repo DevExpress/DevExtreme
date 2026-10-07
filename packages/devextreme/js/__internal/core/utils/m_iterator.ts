@@ -28,7 +28,7 @@ type Callback = (this: any, key: any, value: any, array?: any) => unknown;
 const hasLength = (values: object): values is ArrayLike<unknown> => 'length' in values;
 
 function map<TItem, TResult>(
-  values: readonly TItem[],
+  values: readonly TItem[] | null | undefined,
   callback: (value: TItem, index: number, array: readonly TItem[]) => TResult,
 ): TResult[];
 function map<TValues extends object, TResult>(
