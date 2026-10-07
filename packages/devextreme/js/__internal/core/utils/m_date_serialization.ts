@@ -93,14 +93,11 @@ const getDateSerializationFormat = function getDateSerializationFormat(
   return undefined;
 };
 
-function parseDate<T>(text: T): T | Date {
-  const isDefaultSerializationFormat = getDateSerializationFormat(text)
-    === DATE_SERIALIZATION_FORMAT;
+function parseDate(text: unknown): unknown {
+  const parsedValue = !isDate(text) && Date.parse(String(text));
 
-  const parsedValue = !isDate(text) && Date.parse(text as string);
-
-  if (!parsedValue && isDefaultSerializationFormat) {
-    const parts = DATE_SERIALIZATION_PATTERN.exec(text as string);
+  if (!parsedValue && isString(text) && getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT) {
+    const parts = DATE_SERIALIZATION_PATTERN.exec(text);
 
     if (parts) {
       const newDate = new Date(getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[3]));
@@ -117,7 +114,7 @@ function parseDate<T>(text: T): T | Date {
     return text;
   }
 
-  return isISOPartialDateString(text as string)
+  return isISOPartialDateString(String(text))
     ? createLocalDateFromUTCTimestamp(parsedValue)
     : new Date(parsedValue);
 }
@@ -169,7 +166,8 @@ function parseISO8601String(text: string): Date | undefined {
   return correctYear(new Date(year, month, day, hour, minute, second, millisecond));
 }
 
-const dateParser = function dateParser<T>(text: T, skipISO8601Parsing?: boolean): T | Date {
+function dateParser<T>(text: T, skipISO8601Parsing?: boolean): T | Date;
+function dateParser(text: unknown, skipISO8601Parsing?: boolean): unknown {
   // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if below
   let result: Date | undefined;
 
@@ -178,20 +176,31 @@ const dateParser = function dateParser<T>(text: T, skipISO8601Parsing?: boolean)
   }
 
   return result ?? parseDate(text);
-};
+}
 
-const deserializeDate = function deserializeDate<T>(value: T): Date | Exclude<T, number> {
+function deserializeDate<T>(value: T): Date | Exclude<T, number | Date>;
+function deserializeDate(value: unknown): unknown {
   if (typeof value === 'number') {
     return new Date(value);
   }
 
-  return dateParser(value, !config().forceIsoDateParsing) as Date | Exclude<T, number>;
-};
+  return dateParser(value, !config().forceIsoDateParsing);
+}
 
-const serializeDate = function serializeDate<T>(
+type SerializedDate<TFormat extends string> = TFormat extends typeof NUMBER_SERIALIZATION_FORMAT
+  ? number | null
+  : string extends TFormat ? string | number | null : string | null;
+
+function serializeDate<T>(value: T, serializationFormat?: null): T;
+function serializeDate<TFormat extends string>(
+  value: unknown,
+  serializationFormat: TFormat,
+): SerializedDate<TFormat>;
+function serializeDate<T>(
   value: T,
   serializationFormat?: string | null,
-): T | number | string | null {
+): T | string | number | null;
+function serializeDate(value: unknown, serializationFormat?: string | null): unknown {
   if (!serializationFormat) {
     return value;
   }
@@ -205,7 +214,7 @@ const serializeDate = function serializeDate<T>(
   }
 
   return getLDMLFormatter(serializationFormat, defaultDateNames)(value);
-};
+}
 
 const dateSerialization = {
   createLocalDateFromUTCTimestamp,

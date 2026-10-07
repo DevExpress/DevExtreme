@@ -52,7 +52,9 @@ describe('Extend utils', () => {
       expect(extend()).toEqual({});
       expect(extend(undefined, { a: 1 })).toEqual({ a: 1 });
       expect(extend(null, { a: 1 })).toEqual({ a: 1 });
+      // @ts-expect-error a number is not a target
       expect(extend(0, { a: 1 })).toEqual({ a: 1 });
+      // @ts-expect-error a string is not a target
       expect(extend('', { a: 1 })).toEqual({ a: 1 });
     });
 

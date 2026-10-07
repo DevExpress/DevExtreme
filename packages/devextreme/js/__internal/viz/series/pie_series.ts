@@ -246,13 +246,10 @@ export const pie = _extend({}, barSeries, {
         return point;
       }
     });
-    // @ts-expect-error
     const maxValue = points.reduce((max, p) => _max(max, Math.abs(p.initialValue)), 0);
     points.forEach((p) => {
-      // @ts-expect-error
       p.normalInitialValue = p.initialValue / (maxValue !== 0 ? maxValue : 1);
     });
-    // @ts-expect-error
     const total = points.reduce((total, point) => total + (point.isVisible() ? point.normalInitialValue : 0), 0);
     if (minSegmentSize) {
       minShownValue = this._getArrangeMinShownValue(points, total);

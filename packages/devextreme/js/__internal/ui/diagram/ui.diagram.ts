@@ -2307,7 +2307,7 @@ class Diagram extends Widget<Properties> {
       onRequestEditOperation: undefined,
 
       onRequestLayoutUpdate: undefined,
-    });
+    } satisfies Properties);
   }
 
   _raiseDataChangeAction(): void {

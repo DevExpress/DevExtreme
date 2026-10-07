@@ -150,8 +150,8 @@ class DataAdapter {
   _updateNodesKeysArray(property: typeof SELECTED | typeof EXPANDED | typeof DISABLED): ItemKey[] {
     let array: ItemKey[] = [];
 
-    each(this._getDataBySelectionMode(), (_index: number, node: InternalNode): void => {
-      if (!this._isNodeVisible(node)) {
+    each(this._getDataBySelectionMode(), (_index: number, node: InternalNode | null): void => {
+      if (!node || !this._isNodeVisible(node)) {
         return;
       }
 
@@ -189,7 +189,7 @@ class DataAdapter {
   }
 
   _setChildrenSelection(): void {
-    each(this._dataStructure, (_index: number, node: InternalNode): void => {
+    each(this._dataStructure, (_index: number, node: InternalNode | null): void => {
       if (!node?.internalFields.childrenKeys.length) {
         return;
       }
@@ -202,7 +202,7 @@ class DataAdapter {
   }
 
   _setParentSelection(): void {
-    each(this._dataStructure, (_index: number, node: InternalNode): void => {
+    each(this._dataStructure, (_index: number, node: InternalNode | null): void => {
       if (!node) return;
 
       const parent = this.options.dataConverter.getParentNode(node);
@@ -220,7 +220,7 @@ class DataAdapter {
   }
 
   _setParentExpansion(): void {
-    each(this._dataStructure, (_index: number, node: InternalNode): void => {
+    each(this._dataStructure, (_index: number, node: InternalNode | null): void => {
       if (!node?.internalFields.expanded) {
         return;
       }
@@ -441,7 +441,7 @@ class DataAdapter {
   getNodeByItem(item: ItemData): InternalNode | null {
     let result: InternalNode | null = null;
 
-    each(this._dataStructure, (_index: number, node: InternalNode): boolean => {
+    each(this._dataStructure, (_index: number, node: InternalNode | null): boolean => {
       if (node?.internalFields.item === item) {
         result = node;
         return false;
@@ -566,8 +566,8 @@ class DataAdapter {
       ? this._initialDataStructure
       : this._dataStructure;
 
-    each(dataStructure, (_index: number, node: InternalNode) => {
-      if (!this._isNodeVisible(node)) {
+    each(dataStructure, (_index: number, node: InternalNode | null) => {
+      if (!node || !this._isNodeVisible(node)) {
         return;
       }
 
@@ -630,7 +630,7 @@ class DataAdapter {
     if (!Array.isArray(selector)) {
       return [selector, operation, value];
     }
-    each(selector, (_index: number, item: string) => {
+    each(selector, (_index, item) => {
       searchFilter.push([item, operation, value], 'or');
     });
 

@@ -466,7 +466,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     return extend(config || {}, {
       crossAlign: 'stretch',
       onItemStateChanged,
-    });
+    } satisfies BoxOptions);
   }
 
   _layoutBlock(options: BlockOptions): ResponsiveBoxItem | null {

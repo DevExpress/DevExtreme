@@ -2,6 +2,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import type { FixedPosition } from '@js/common/grids';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
@@ -511,7 +512,7 @@ export class ColumnsController extends modules.Controller {
       width: this.option('columnWidth'),
       autoExpandGroup: groupingOptions.autoExpandAll,
       allowCollapsing: groupingOptions.allowCollapsing,
-      allowGrouping: (groupPanelOptions.allowColumnDragging && groupPanelOptions.visible)
+      allowGrouping: Boolean(groupPanelOptions.allowColumnDragging && groupPanelOptions.visible)
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- false fallback
         || groupingOptions.contextMenuEnabled,
     }, commonColumnSettings);
@@ -731,6 +732,9 @@ export class ColumnsController extends modules.Controller {
     const rtlEnabled = this.option('rtlEnabled');
     const expandColumn = expandColumns.length ? this.columnOption('command:expand') : undefined;
 
+    const fixedPosition: FixedPosition = rtlEnabled ? 'right' : 'left';
+
+    // @ts-expect-error minWidth and the templates are null to reset the values of the column
     expandColumns = map(expandColumns, (column: Column): Column => extend(
       {},
       {
@@ -743,7 +747,7 @@ export class ColumnsController extends modules.Controller {
         cellTemplate: !isDefined(column.groupIndex) ? column.cellTemplate : null,
         headerCellTemplate: null,
         fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
-        fixedPosition: rtlEnabled ? 'right' : 'left',
+        fixedPosition,
       },
       expandColumn,
       {

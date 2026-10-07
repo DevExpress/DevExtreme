@@ -251,6 +251,7 @@ const FrameAnimationStrategy = {
       return deferred.reject().promise();
     }
 
+    // @ts-expect-error the frame strategy gets the states as objects of properties
     each(config.to, (prop) => {
       // @ts-expect-error
       if (config.from[prop] === undefined) {

@@ -158,8 +158,8 @@ class DataConverter {
   }
 
   setChildrenKeys(): void {
-    each(this._dataStructure, (_index: number, node: InternalNode) => {
-      if (node.internalFields.parentKey === this._rootValue) return;
+    each(this._dataStructure, (_index: number, node: InternalNode | null) => {
+      if (!node || node.internalFields.parentKey === this._rootValue) return;
 
       const parent = this.getParentNode(node);
       if (parent) {
@@ -257,7 +257,10 @@ class DataConverter {
     ): InternalNode | null {
       let result: InternalNode | null = null;
 
-      each(searchData, (_index: number, element: InternalNode): boolean => {
+      each(searchData, (_index: number, element: InternalNode | null): boolean => {
+        if (!element) {
+          return true;
+        }
         const currentElementKey = element.internalFields?.key ?? element.key;
         if (currentElementKey?.toString() === searchKey.toString()) {
           result = element;
@@ -286,7 +289,8 @@ class DataConverter {
 
   updateIndexByKey(): void {
     this._indexByKey = {};
-    each(this._dataStructure, (index: number, node: InternalNode): void => {
+    each(this._dataStructure, (index: number, node: InternalNode | null): void => {
+      if (!node) return;
       this._checkForDuplicateId(node.internalFields.key);
       this._indexByKey[node.internalFields.key] = index;
     });
@@ -301,7 +305,8 @@ class DataConverter {
 
   removeChildrenKeys(): void {
     this._indexByKey = {};
-    each(this._dataStructure, (_index: number, node: InternalNode): void => {
+    each(this._dataStructure, (_index: number, node: InternalNode | null): void => {
+      if (!node) return;
       node.internalFields.childrenKeys = [];
     });
   }

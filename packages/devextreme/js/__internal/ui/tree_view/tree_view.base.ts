@@ -378,8 +378,8 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _removeSelection(): void {
-    each(this._dataAdapter.getFullData(), (_index: number, node: TreeViewNode): void => {
-      if (!this._hasChildren(node)) {
+    each(this._dataAdapter.getFullData(), (_index: number, node: InternalNode | null): void => {
+      if (!node || !this._hasChildren(node)) {
         return;
       }
 
@@ -1748,7 +1748,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _updateItemsUI(): void {
     const cache = {};
 
-    each(this._dataAdapter.getData(), (_index: number, node: InternalNode): void => {
+    each(this._dataAdapter.getData(), (_index: number, node: InternalNode | null): void => {
+      if (!node) {
+        return;
+      }
       const $node = this._getNodeElement(node, cache);
       const nodeSelection = node.internalFields.selected;
 

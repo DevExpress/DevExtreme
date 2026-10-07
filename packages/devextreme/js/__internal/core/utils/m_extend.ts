@@ -23,41 +23,115 @@ export const extendFromObject = function extendFromObject(
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- a void source is skipped
 type EmptySource = null | undefined | void;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
-type MergedSource<T> = 0 extends 1 & T ? any : [T] extends [EmptySource]
-  ? unknown
-  : [Extract<T, EmptySource>] extends [never]
-    ? NonNullable<T>
-    : Partial<NonNullable<T>>;
+type IsAny<T> = 0 extends 1 & T ? true : false;
 
-type Merged<TSources extends readonly unknown[]> = TSources extends readonly [
+type Source<T> = IsAny<T> extends true ? T : unknown extends T ? Record<string, unknown> : [T] extends [EmptySource]
+  ? Record<never, never>
+  : [Extract<T, EmptySource>] extends [never]
+    ? T
+    : NonNullable<T> extends readonly unknown[]
+      ? NonNullable<T>
+      : Partial<NonNullable<T>>;
+
+type Leaf = readonly unknown[] | ((...args: never[]) => unknown) | Date | RegExp;
+
+type IsNestedObject<T> = [T] extends [Leaf] ? false : [T] extends [object] ? true : false;
+
+type AssignedValue<TTarget, TSource, TKey extends PropertyKey> = undefined extends TSource
+  ? (TKey extends keyof TTarget ? TTarget[TKey] : never) | Exclude<TSource, undefined>
+  : TSource;
+
+type MergedArray<TTarget, TSource> = TTarget extends readonly (infer TTargetItem)[]
+  ? TSource extends readonly (infer TSourceItem)[]
+    ? (TTargetItem | TSourceItem)[]
+    : never
+  : never;
+
+type KnownKeys<T> = keyof {
+  [TKey in keyof T as string extends TKey ? never : number extends TKey ? never : TKey]: unknown;
+};
+
+type KeptValues<TTarget, TSource> = Omit<TTarget, KnownKeys<TSource>>;
+
+type AssignObject<TTarget, TSource> = KeptValues<TTarget, TSource> & {
+  [TKey in keyof TSource as TKey extends keyof TTarget ? TKey : never]-?:
+  AssignedValue<TTarget, TSource[TKey], TKey>;
+} & {
+  [TKey in keyof TSource as TKey extends keyof TTarget ? never : TKey]: TSource[TKey];
+};
+
+type Assign<TTarget, TSource> = IsAny<TTarget> extends true
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any target gives an any result
+  ? any
+  : IsAny<TSource> extends true
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
+    ? any
+    : [keyof TTarget] extends [never]
+      ? TSource & object
+      : [MergedArray<TTarget, TSource>] extends [never]
+        ? AssignObject<TTarget, TSource>
+        : MergedArray<TTarget, TSource>;
+
+type DeepValue<TTarget, TSource> = IsNestedObject<NonNullable<TTarget>> extends true
+  ? IsNestedObject<NonNullable<TSource>> extends true
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- recursive type
+    ? DeepAssign<NonNullable<TTarget>, NonNullable<TSource>>
+    : TSource
+  : TSource;
+
+type DeepAssignObject<TTarget, TSource> = KeptValues<TTarget, TSource> & {
+  [TKey in keyof TSource as TKey extends keyof TTarget ? TKey : never]-?:
+  TKey extends keyof TTarget
+    ? AssignedValue<TTarget, DeepValue<TTarget[TKey], TSource[TKey]>, TKey>
+    : never;
+} & {
+  [TKey in keyof TSource as TKey extends keyof TTarget ? never : TKey]: TSource[TKey];
+};
+
+type DeepAssign<TTarget, TSource> = IsAny<TTarget> extends true
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any target gives an any result
+  ? any
+  : IsAny<TSource> extends true
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
+    ? any
+    : [keyof TTarget] extends [never]
+      ? TSource & object
+      : [MergedArray<TTarget, TSource>] extends [never]
+        ? DeepAssignObject<TTarget, TSource>
+        : MergedArray<TTarget, TSource>;
+
+type Extended<TTarget, TSources extends readonly unknown[]> = TSources extends readonly [
   infer THead,
   ...infer TTail,
 ]
-  ? MergedSource<THead> & Merged<TTail>
-  : unknown;
+  ? Extended<Assign<TTarget, Source<THead>>, TTail>
+  : TTarget;
+
+type DeepExtended<TTarget, TSources extends readonly unknown[]> = TSources extends readonly [
+  infer THead,
+  ...infer TTail,
+]
+  ? DeepExtended<DeepAssign<TTarget, Source<THead>>, TTail>
+  : TTarget;
+
+type Target = object | null | undefined;
 
 interface Extend {
-  <TTarget extends object, TSources extends unknown[]>(
-    target: TTarget,
-    ...sources: TSources
-  ): TTarget & Merged<TSources>;
-  <TTarget extends object, TSources extends unknown[]>(
+  (): Record<never, never>;
+  <TTarget extends Target, TSources extends unknown[]>(
     deep: true,
+    target?: TTarget,
+    ...sources: TSources
+  ): DeepExtended<Source<TTarget>, TSources>;
+  <TTarget extends Target | false, TSources extends unknown[]>(
     target: TTarget,
     ...sources: TSources
-  ): TTarget & Merged<TSources>;
-  <TSources extends unknown[]>(
-    deep: false | null | undefined,
-    ...sources: TSources
-  ): Merged<TSources>;
-  <TSources extends unknown[]>(
+  ): Extended<Source<Exclude<TTarget, false>>, TSources>;
+  <TTarget extends Target, TSources extends unknown[]>(
     deep: boolean,
-    target: null | undefined,
+    target: TTarget,
     ...sources: TSources
-  ): Merged<TSources>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the callers are not typed
-  (...args: any[]): any;
+  ): Extended<Source<TTarget>, TSources> | DeepExtended<Source<TTarget>, TSources>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the overloads type the result

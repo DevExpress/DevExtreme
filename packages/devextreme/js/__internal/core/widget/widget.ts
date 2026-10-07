@@ -140,7 +140,7 @@ class Widget<
       onKeyboardHandled: null,
       ignoreParentReadOnly: false,
       useResizeObserver: true,
-    });
+    }) as TProperties;
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {

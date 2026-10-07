@@ -668,7 +668,7 @@ function getConditionFilterExpression(
   fields: FilterBuilderField[],
   customOperations: FilterCustomOperation[],
   target: string,
-): FilterExpression {
+): FilterExpression | null {
   const field = getField(condition[0], fields);
   const filterExpression = convertToInnerCondition(condition, customOperations);
   const customOperation = customOperations.length
@@ -944,7 +944,7 @@ export function getMergedOperations(
   betweenCaption: string | undefined,
   context: EditorFactoryOwner,
 ): FilterCustomOperation[] {
-  const result: FilterCustomOperation[] = extend(true, [], customOperations);
+  const result = extend(true, [], customOperations as FilterCustomOperation[] | undefined);
   let betweenIndex = -1;
   result.some((customOperation, index) => {
     if (customOperation.name === 'between') {

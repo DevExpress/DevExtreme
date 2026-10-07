@@ -109,8 +109,8 @@ export const deferUpdater = function (func) {
   };
 };
 
-export const findBestMatches = (
-  targetFilter: unknown,
+export const findBestMatches = <TFilter extends object>(
+  targetFilter: TFilter,
   items: unknown[],
   mapFn?: (item: unknown) => unknown,
 ): unknown[] => {

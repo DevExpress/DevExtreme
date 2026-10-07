@@ -236,7 +236,7 @@ export default _extend({}, symbolPoint, {
 
   _drawLabel() {
     const that = this;
-    const labels = [];
+    const labels: InstanceType<typeof Label>[] = [];
     const notInverted = that._options.rotated ? that.x >= that.minX : that.y < that.minY;
     const customVisibility = that._getCustomLabelVisibility();
     const topLabel = that._topLabel;
@@ -246,9 +246,7 @@ export default _extend({}, symbolPoint, {
     bottomLabel.pointPosition = notInverted ? 'bottom' : 'top';
 
     if ((that.series.getLabelVisibility() || customVisibility) && that.hasValue() && customVisibility !== false) {
-      // @ts-expect-error
       that.visibleTopMarker !== false && labels.push(topLabel);
-      // @ts-expect-error
       that.visibleBottomMarker !== false && labels.push(bottomLabel);
 
       each(labels, (_, label) => {

@@ -147,7 +147,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
             },
           },
         ],
-      });
+      } satisfies PopupProperties);
     }
     return options;
   }
