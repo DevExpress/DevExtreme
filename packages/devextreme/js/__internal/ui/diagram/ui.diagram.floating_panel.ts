@@ -37,11 +37,9 @@ class DiagramFloatingPanel<
 > extends DiagramPanel<TProperties> {
   _popup?: Popup;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onVisibilityChangingAction?: any;
+  private _onVisibilityChangingAction!: (event?: unknown) => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onVisibilityChangedAction?: any;
+  private _onVisibilityChangedAction!: (event?: unknown) => void;
 
   _init(): void {
     super._init();

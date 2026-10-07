@@ -50,11 +50,9 @@ class DiagramToolbox extends DiagramFloatingPanel<DiagramToolboxProperties> {
 
   private _accordion?: Accordion;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onShapeCategoryRenderedAction?: any;
+  private _onShapeCategoryRenderedAction!: (event?: unknown) => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onFilterChangedAction?: any;
+  private _onFilterChangedAction!: (event?: unknown) => void;
 
   _init(): void {
     super._init();

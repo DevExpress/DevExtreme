@@ -49,11 +49,9 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel<DiagramPropertiesPanel
 
   private _scrollViewHeight?: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onSelectedGroupChangedAction?: any;
+  private _onSelectedGroupChangedAction!: (event?: unknown) => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onCreateToolbarAction?: any;
+  private _onCreateToolbarAction!: (event?: unknown) => void;
 
   _init(): void {
     super._init();

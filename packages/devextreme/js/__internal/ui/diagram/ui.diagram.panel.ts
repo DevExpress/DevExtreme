@@ -18,8 +18,7 @@ export interface DiagramPanelProperties extends PopupProperties {
 class DiagramPanel<
   TProperties extends DiagramPanelProperties = DiagramPanelProperties,
 > extends Widget<TProperties> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _onPointerUpAction!: any;
+  _onPointerUpAction!: (event?: unknown) => void;
 
   _init(): void {
     super._init();
