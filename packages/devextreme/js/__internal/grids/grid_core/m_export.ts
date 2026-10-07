@@ -15,10 +15,8 @@ function prepareItems<T extends ExportItem>(
   emptyCell: Partial<T>,
 ): PreparedItem<T>[][] {
   const defaultSetter = (value: number | undefined): number => (!value ? 1 : value);
-  const cloneItem = (item: PreparedItem<T>): PreparedItem<T> => (
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend isn't typed
-    extend({}, item, emptyCell)
-  );
+  // @ts-expect-error the result of extend with a generic source is not resolved to the item type
+  const cloneItem = (item: PreparedItem<T>): PreparedItem<T> => extend({}, item, emptyCell);
 
   const resultItems: PreparedItem<T>[][] = [];
 

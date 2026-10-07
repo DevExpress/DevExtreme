@@ -472,12 +472,15 @@ export function getItems(
   const items: FilterBuilderItem[] = [];
 
   for (const field of fields) {
-    const item: FilterBuilderItem = extend(
+    const mergedField = extend(
       true,
       { caption: generateCaptionByDataField(field.dataField, allowHierarchicalFields) },
       field,
     );
-    item.id = item.name || item.dataField;
+    const item: FilterBuilderItem = {
+      ...mergedField,
+      id: mergedField.name || mergedField.dataField,
+    };
 
     if (allowHierarchicalFields) {
       pushItemAndCheckParent(fields, items, item);
@@ -843,7 +846,7 @@ export function getCurrentLookupValueText(
 function getPrimitiveValueText(
   field: Field,
   value: FieldValue,
-  customOperation: ValueTextCustomOperation | null,
+  customOperation: ValueTextCustomOperation | FilterCustomOperation | null,
   target: string,
   options?: { values: FieldValue[] },
 ): string {
@@ -874,7 +877,7 @@ function getPrimitiveValueText(
 function getArrayValueText(
   field: Field,
   value: FieldValue[],
-  customOperation: ValueTextCustomOperation | null,
+  customOperation: ValueTextCustomOperation | FilterCustomOperation | null,
   target: string,
 ): string[] {
   const options = { values: value };
@@ -889,7 +892,7 @@ export function getCurrentValueText(
   this: unknown,
   field: Field,
   value: FieldValue | FieldValue[],
-  customOperation: ValueTextCustomOperation | null,
+  customOperation: ValueTextCustomOperation | FilterCustomOperation | null,
   target = 'filterBuilder',
 ): string | DeferredObj<string | string[]> {
   if (checkDefaultValue(value)) {
