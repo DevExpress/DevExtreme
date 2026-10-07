@@ -30,7 +30,7 @@ type FilterCombiner = 'and' | 'or';
 export type Condition = [string, string, ...ConditionValue[]];
 
 type ValueOperand = FieldValue | ValueOperand[];
-type ValueCondition = [string, ValueOperand] | [string, string, ...ValueOperand[]];
+export type ValueCondition = [string, ValueOperand] | [string, string, ...ValueOperand[]];
 type ValueGroup = [] | [FilterCombiner] | ['!', ValueExpression]
 | [ValueExpression, ...(FilterCombiner | ValueExpression)[]];
 type ValueExpression = ValueCondition | ValueGroup;
@@ -159,12 +159,16 @@ function getFormattedValueText(field: Field, value: FieldValue): string {
   return formatHelper.format(value, fieldFormat);
 }
 
-export function isCondition(criteria: unknown): criteria is Condition {
+export function isValueCondition(criteria: unknown): criteria is ValueCondition {
   if (!Array.isArray(criteria)) {
     return false;
   }
 
   return criteria.length > 1 && !Array.isArray(criteria[0]) && !Array.isArray(criteria[1]);
+}
+
+export function isCondition(criteria: unknown): criteria is Condition {
+  return isValueCondition(criteria);
 }
 
 function isNegationGroup(group: Criteria): group is NegationGroup {
@@ -575,26 +579,32 @@ function appendGroupOperationToCriteria(criteria: Criteria, groupOperation: stri
 }
 
 function conditionHasCustomOperation(
-  condition: Condition,
+  condition: ValueCondition,
   customOperations: FilterCustomOperation[],
 ): boolean {
-  const customOperation = getCustomOperation(customOperations, condition[1]);
-  return !!customOperation && customOperation.name === condition[1];
+  const [, operation] = condition;
+
+  return isString(operation) && !!getCustomOperation(customOperations, operation);
+}
+
+function isInnerCondition(
+  condition: ValueCondition,
+  customOperations: FilterCustomOperation[],
+): condition is Condition {
+  return condition.length > 2 || conditionHasCustomOperation(condition, customOperations);
 }
 
 function convertToInnerCondition(
-  condition: Condition,
+  condition: ValueCondition,
   customOperations: FilterCustomOperation[],
 ): Condition {
-  if (conditionHasCustomOperation(condition, customOperations)) {
+  if (isInnerCondition(condition, customOperations)) {
     return condition;
   }
 
-  if (condition.length < 3) {
-    // eslint-disable-next-line prefer-destructuring
-    condition[2] = condition[1];
-    condition[1] = EQUAL_OPERATION;
-  }
+  condition.splice(1, 0, EQUAL_OPERATION);
+
+  // @ts-expect-error the shorthand [field, value] was extended to [field, '=', value] in place
   return condition;
 }
 
@@ -628,7 +638,7 @@ function convertToInnerGroup(
     if (isGroup(item)) {
       innerGroup.push(convertItem(item, customOperations, defaultOperation));
       innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
-    } else if (isCondition(item)) {
+    } else if (isValueCondition(item)) {
       innerGroup.push(convertToInnerCondition(item, customOperations));
       innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
     }
@@ -653,7 +663,7 @@ export function convertToInnerStructure(
 
   const clone: Criteria = extend(true, [], value);
 
-  if (isCondition(clone)) {
+  if (isValueCondition(clone)) {
     return appendGroupOperationToCriteria(
       convertToInnerCondition(clone, customOperations),
       defaultOperation,
@@ -661,7 +671,7 @@ export function convertToInnerStructure(
   }
   if (isNegationGroup(clone)) {
     const [, innerCriteria] = clone;
-    if (isCondition(innerCriteria)) {
+    if (isValueCondition(innerCriteria)) {
       return ['!', appendGroupOperationToCriteria(
         convertToInnerCondition(innerCriteria, customOperations),
         defaultOperation,
@@ -706,7 +716,7 @@ export function getNormalizedFields(fields: Field[]): FilterBuilderField[] {
 }
 
 function getConditionFilterExpression(
-  condition: Condition,
+  condition: ValueCondition,
   fields: FilterBuilderField[],
   customOperations: FilterCustomOperation[],
   target: string,
@@ -753,7 +763,7 @@ export function getFilterExpression(
     return ['!', filterExpression];
   }
   const criteria = getGroupCriteria(value);
-  if (isCondition(criteria)) {
+  if (isValueCondition(criteria)) {
     return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
   }
   const result: FilterExpression[] = [];
@@ -770,7 +780,7 @@ export function getFilterExpression(
       if (filterExpression) {
         result.push(filterExpression);
       }
-    } else if (isCondition(item)) {
+    } else if (isValueCondition(item)) {
       filterExpression = getConditionFilterExpression(item, fields, customOperations, target);
       if (filterExpression && result.length) {
         result.push(groupValue);
@@ -1016,7 +1026,7 @@ function syncConditionIntoGroup(
   let shouldPush = canPush;
 
   filter.forEach((item) => {
-    if (isCondition(item)) {
+    if (isValueCondition(item)) {
       if (isMatchedCondition(item, addedFilter[0])) {
         if (shouldPush) {
           result.push(addedFilter);
@@ -1056,7 +1066,7 @@ export function removeFieldConditionsFromFilter(
     return null;
   }
 
-  if (isCondition(filter)) {
+  if (isValueCondition(filter)) {
     const hasMatchedCondition = isMatchedCondition(filter, dataField);
     return !hasMatchedCondition ? filter : null;
   }
@@ -1071,7 +1081,7 @@ export function syncFilters(
     return addedFilter;
   }
 
-  if (isCondition(filter)) {
+  if (isValueCondition(filter)) {
     if (isMatchedCondition(filter, addedFilter[0])) {
       return addedFilter;
     }
@@ -1092,7 +1102,7 @@ export function getMatchedConditions(
 ): Criteria[] {
   if (!filter || filter.length === 0) return [];
 
-  if (isCondition(filter)) {
+  if (isValueCondition(filter)) {
     if (isMatchedCondition(filter, dataField)) {
       return [filter];
     }
@@ -1105,7 +1115,7 @@ export function getMatchedConditions(
   }
 
   const result = filter.filter(
-    (item): item is Condition => isCondition(item) && isMatchedCondition(item, dataField),
+    (item): item is Condition => isValueCondition(item) && isMatchedCondition(item, dataField),
   );
 
   return result;
@@ -1117,12 +1127,12 @@ export function filterHasField(
 ): boolean {
   if (!filter || filter.length === 0) return false;
 
-  if (isCondition(filter)) {
+  if (isValueCondition(filter)) {
     return filter[0] === dataField;
   }
 
   return filter.some(
-    (item) => (isCondition(item) || isGroup(item)) && filterHasField(item, dataField),
+    (item) => (isValueCondition(item) || isGroup(item)) && filterHasField(item, dataField),
   );
 }
 
