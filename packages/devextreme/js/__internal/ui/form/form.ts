@@ -1354,7 +1354,7 @@ class Form extends Widget<FormProperties> {
     return false;
   }
 
-  _tryChangeLayoutManagerItemOptions(itemPath: string, options: unknown): boolean {
+  _tryChangeLayoutManagerItemOptions(itemPath: string, options: object): boolean {
     let result = false;
     this.beginUpdate();
 

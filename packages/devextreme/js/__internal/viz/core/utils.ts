@@ -162,13 +162,13 @@ export const getPower = function (value) {
 export function map(array, callback) {
   let i = 0;
   const len = array.length;
-  const result = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the items of the series are not typed
+  const result: any[] = [];
   let value;
 
   while (i < len) {
     value = callback(array[i], i);
     if (value !== null) {
-      // @ts-expect-error
       result.push(value);
     }
     i++;
@@ -351,9 +351,7 @@ export const getCategoriesInfo = function (categories, startValue, endValue) {
   endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
 
   const categoriesValue = map(categories, (category) => category?.valueOf());
-  // @ts-expect-error
   let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
-  // @ts-expect-error
   let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
   let swapBuf;
   let inverted = false;

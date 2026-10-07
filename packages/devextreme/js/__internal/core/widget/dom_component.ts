@@ -84,7 +84,9 @@ class DOMComponent<
       elementAttr: {},
       disabled: false,
       integrationOptions: {},
-    }, this._useTemplates() ? TemplateManagerModule.TemplateManager.createDefaultOptions() : {});
+    }, this._useTemplates()
+      ? TemplateManagerModule.TemplateManager.createDefaultOptions()
+      : {}) as TProperties;
   }
 
   ctor(element: Element, options: TProperties): void {

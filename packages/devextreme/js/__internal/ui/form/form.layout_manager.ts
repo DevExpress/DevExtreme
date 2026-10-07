@@ -265,15 +265,14 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     if (isDefined(items)) {
       const processedItems: ExtendedItem[] = [];
 
-      each(items, (_index: number, item: ExtendedItem): void => {
+      each(items, (_index: number, item: Item): void => {
         if (this._isAcceptableItem(item)) {
-          // eslint-disable-next-line no-param-reassign
-          item = this._processItem(item);
+          const processedItem = this._processItem(item);
 
-          customizeItem?.(item);
+          customizeItem?.(processedItem);
 
-          if (isObject(item) && variableWrapper.unwrap(item.visible) !== false) {
-            processedItems.push(item);
+          if (isObject(processedItem) && variableWrapper.unwrap(processedItem.visible) !== false) {
+            processedItems.push(processedItem);
           }
         }
       });

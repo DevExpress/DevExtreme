@@ -232,7 +232,7 @@ class ActionSheet extends CollectionWidget<Properties> {
           },
         },
       },
-    }));
+    } satisfies PopupProperties));
 
     this._popup.$wrapper()?.addClass(ACTION_SHEET_POPUP_WRAPPER_CLASS);
   }

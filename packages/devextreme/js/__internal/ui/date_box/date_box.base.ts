@@ -560,10 +560,10 @@ class DateBox<
     const { type = 'date', dateSerializationFormat } = this.option();
     const submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[type];
     const submitValue = dateSerializationFormat
-      ? dateSerialization.serializeDate(value, dateSerializationFormat) as string
+      ? dateSerialization.serializeDate(value, dateSerializationFormat)
       : uiDateUtils.toStandardDateFormat(value, submitFormat);
 
-    this._getSubmitElement().val(submitValue);
+    this._getSubmitElement().val(submitValue ?? '');
   }
 
   _getDisplayedText(value?: DateLike): string {
@@ -913,7 +913,8 @@ class DateBox<
   getDateOption(optionName: 'value' | 'min' | 'max'): Date | null {
     const { [optionName]: optionValue } = this.option();
 
-    const deserializedDate = dateSerialization.deserializeDate(optionValue) as Date | null;
+    // @ts-expect-error a string that cannot be parsed and undefined are returned as is
+    const deserializedDate: Date | null = dateSerialization.deserializeDate(optionValue);
 
     return deserializedDate;
   }

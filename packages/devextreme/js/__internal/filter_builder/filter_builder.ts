@@ -9,6 +9,7 @@ import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { ShownEvent } from '@js/ui/popup';
+import type { GroupOperation } from '@js/ui/filter_builder';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
@@ -132,7 +133,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
       fields: [],
 
-      groupOperations: ['and', 'or', 'notAnd', 'notOr'],
+      groupOperations: ['and', 'or', 'notAnd', 'notOr'] satisfies GroupOperation[],
 
       maxGroupLevel: undefined,
 

@@ -757,7 +757,7 @@ class ContextMenu<
   _isIncludeOverlay($activeOverlay: dxElementWrapper, $allOverlays: dxElementWrapper): boolean {
     let isSame = false;
 
-    each($allOverlays, (_index: number, $overlay: dxElementWrapper) => {
+    each($allOverlays, (_index, $overlay) => {
       if ($activeOverlay.is($overlay) && !isSame) {
         isSame = true;
       }

@@ -768,10 +768,10 @@ class MenuBase<
     this._dataAdapter.toggleSelection(node.internalFields.key, value);
   }
 
-  _getElementByItem(itemData: Item): dxElementWrapper {
-    let result: dxElementWrapper = $();
+  _getElementByItem(itemData: Item): Element | dxElementWrapper {
+    let result: Element | dxElementWrapper = $();
 
-    each(this._itemElements(), (_index: number, $itemElement: dxElementWrapper) => {
+    each(this._itemElements(), (_index, $itemElement) => {
       // @ts-expect-error ts-error
       if ($($itemElement).data(this._itemDataKey()) !== itemData) {
         return true;

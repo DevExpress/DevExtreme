@@ -338,7 +338,7 @@ class BaseView<
 
     cell.className = this._getClassNameByDate(cellDate, cellIndex);
 
-    cell.setAttribute('data-value', dateSerialization.serializeDate(cellDate, coreDateUtils.getShortDateFormat()) as string);
+    cell.setAttribute('data-value', String(dateSerialization.serializeDate(cellDate, coreDateUtils.getShortDateFormat())));
     elementData(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
 
     this.setAria({

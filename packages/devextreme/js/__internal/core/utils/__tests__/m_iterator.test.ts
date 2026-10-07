@@ -70,8 +70,10 @@ describe('Iterator utils', () => {
 
       expect(each(undefined, callback)).toBeUndefined();
       expect(each(null, callback)).toBeUndefined();
+      // @ts-expect-error a number is not a collection
       expect(each(0, callback)).toBeUndefined();
       expect(each('', callback)).toBeUndefined();
+      // @ts-expect-error a boolean is not a collection
       expect(each(false, callback)).toBeUndefined();
 
       expect(callback).not.toHaveBeenCalled();
@@ -209,6 +211,7 @@ describe('Iterator utils', () => {
       const callback = jest.fn();
 
       reverseEach([], callback);
+      // @ts-expect-error an object without length is not an array-like
       reverseEach({ a: 1 }, callback);
       reverseEach({ length: 0 }, callback);
       reverseEach(null, callback);

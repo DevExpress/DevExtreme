@@ -484,7 +484,7 @@ export default {
     const that = this;
     const options = that._options;
     const errorBarOptions = options.errorBars;
-    const points = [];
+    const points: number[][] = [];
     let settings;
     const pos = that._errorBarPos;
     let high = that._highErrorCoord;
@@ -507,11 +507,8 @@ export default {
     lowErrorOnly && (high = that._baseErrorBarPos);
 
     if (displayMode !== 'none' && _isDefined(high) && _isDefined(low) && _isDefined(pos)) {
-      // @ts-expect-error
       !lowErrorOnly && points.push([pos - edgeLength, high, pos + edgeLength, high]);
-      // @ts-expect-error
       points.push([pos, high, pos, low]);
-      // @ts-expect-error
       !highErrorOnly && points.push([pos + edgeLength, low, pos - edgeLength, low]);
 
       options.rotated && each(points, (_, p) => {

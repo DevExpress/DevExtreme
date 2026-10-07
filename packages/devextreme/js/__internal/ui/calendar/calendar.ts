@@ -322,7 +322,8 @@ class Calendar<
   }
 
   _convertToDate(value: DateLike | undefined): Date | null {
-    return dateSerialization.deserializeDate(value) as Date | null;
+    // @ts-expect-error a string that cannot be parsed and undefined are returned as is
+    return dateSerialization.deserializeDate(value);
   }
 
   _dateValue(value: Date | (Date | null)[] | null, event: DxEvent): void {
@@ -1346,7 +1347,7 @@ class Calendar<
 
     const dateValue = this._convertToDate(value);
     this._getSubmitElement()
-      .val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN) as string);
+      .val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN) ?? '');
   }
 
   _getSubmitElement(): dxElementWrapper {

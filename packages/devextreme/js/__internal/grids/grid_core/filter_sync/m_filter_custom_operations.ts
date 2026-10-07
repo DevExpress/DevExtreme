@@ -4,8 +4,8 @@ import { DataSource } from '@js/common/data/data_source/data_source';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import type { CustomOperation } from '@js/ui/filter_builder';
 import errors from '@js/ui/widget/ui.errors';
+import type { FilterCustomOperation } from '@ts/filter_builder/utils';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
 } from '@ts/filter_builder/utils';
@@ -138,7 +138,7 @@ function baseOperation(grid) {
   };
 }
 
-export function anyOf(grid): CustomOperation {
+export function anyOf(grid): FilterCustomOperation {
   return extend(baseOperation(grid), {
     name: 'anyof',
     icon: 'selectall',
@@ -146,7 +146,7 @@ export function anyOf(grid): CustomOperation {
   });
 }
 
-export function noneOf(grid): CustomOperation {
+export function noneOf(grid): FilterCustomOperation {
   const baseOp = baseOperation(grid);
   return extend({}, baseOp, {
     calculateFilterExpression(filterValue, field, fields?) {
