@@ -680,7 +680,7 @@ export function convertToInnerStructure(
 
 export function getNormalizedFields(fields: Field[]): FilterBuilderField[] {
   return fields.reduce<FilterBuilderField[]>((result, field) => {
-    if (isDefined(field.dataField)) {
+    if (isDefined(field.dataField) && field.dataField !== '') {
       const normalizedField: Partial<FilterBuilderField> = {};
       // eslint-disable-next-line no-restricted-syntax
       for (const key in field) {
@@ -756,7 +756,7 @@ export function getFilterExpression(
   if (isCondition(criteria)) {
     return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
   }
-  let result: FilterExpression[] = [];
+  const result: FilterExpression[] = [];
   let filterExpression: FilterExpression | null = null;
   const groupValue = getGroupValue(criteria);
 
@@ -781,13 +781,9 @@ export function getFilterExpression(
     }
   }
 
-  if (result.length === 1) {
-    // @ts-expect-error a single expression replaces the list
-    // eslint-disable-next-line prefer-destructuring
-    result = result[0];
-  }
+  const expression = result.length === 1 ? result[0] : result;
 
-  return result.length ? result : null;
+  return isFunction(expression) || expression.length ? expression : null;
 }
 
 export function isValidCondition(condition: Condition): boolean {
@@ -1068,10 +1064,10 @@ export function removeFieldConditionsFromFilter(
 }
 
 export function syncFilters(
-  filter: Criteria | null,
+  filter: Criteria | null | undefined,
   addedFilter: Criteria,
 ): Criteria | null {
-  if (filter === null || filter.length === 0) {
+  if (!filter || filter.length === 0) {
     return addedFilter;
   }
 
@@ -1091,10 +1087,10 @@ export function syncFilters(
 }
 
 export function getMatchedConditions(
-  filter: Criteria | null,
+  filter: Criteria | null | undefined,
   dataField: string | undefined,
 ): Criteria[] {
-  if (filter === null || filter.length === 0) return [];
+  if (!filter || filter.length === 0) return [];
 
   if (isCondition(filter)) {
     if (isMatchedCondition(filter, dataField)) {
@@ -1116,10 +1112,10 @@ export function getMatchedConditions(
 }
 
 export function filterHasField(
-  filter: Criteria | null,
+  filter: Criteria | null | undefined,
   dataField: string | undefined,
 ): boolean {
-  if (filter === null || filter.length === 0) return false;
+  if (!filter || filter.length === 0) return false;
 
   if (isCondition(filter)) {
     return filter[0] === dataField;
