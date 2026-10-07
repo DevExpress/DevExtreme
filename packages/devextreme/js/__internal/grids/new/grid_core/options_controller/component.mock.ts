@@ -32,4 +32,4 @@ export const createComponentMock = <
     }
     return template;
   }
-}(extend(true, {}, options) as TProps);
+}(extend(true, {}, options));

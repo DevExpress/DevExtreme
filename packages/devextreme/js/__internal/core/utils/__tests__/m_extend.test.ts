@@ -230,6 +230,16 @@ describe('Extend utils', () => {
         expect(hasSourceFields).toBe(false);
         expect(merged).toEqual({ nested: { a: 1 } });
       });
+
+      it('should give the type of a generic source copied into an empty object', () => {
+        const copy = <T extends object>(value: T, patch: Partial<T>): T => extend({}, value, patch);
+        const deepCopy = <T extends object>(value: T): T => extend(true, {}, value);
+        const source = { a: 1, nested: { b: 2 } };
+
+        expect(copy(source, { a: 3 })).toEqual({ a: 3, nested: { b: 2 } });
+        expect(deepCopy(source)).toEqual(source);
+        expect(deepCopy(source).nested).not.toBe(source.nested);
+      });
     });
   });
 

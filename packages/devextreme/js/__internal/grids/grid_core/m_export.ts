@@ -12,10 +12,9 @@ type PreparedItem<T extends ExportItem> = T & {
 
 function prepareItems<T extends ExportItem>(
   items: T[][],
-  emptyCell: Partial<T>,
+  emptyCell: Partial<PreparedItem<T>>,
 ): PreparedItem<T>[][] {
   const defaultSetter = (value: number | undefined): number => (!value ? 1 : value);
-  // @ts-expect-error the result of extend with a generic source is not resolved to the item type
   const cloneItem = (item: PreparedItem<T>): PreparedItem<T> => extend({}, item, emptyCell);
 
   const resultItems: PreparedItem<T>[][] = [];
