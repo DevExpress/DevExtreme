@@ -122,7 +122,7 @@ export interface DragTemplateArgs {
 export type ActionFn = (args?: object) => void;
 
 export interface ScrollHelperOwner {
-  option: () => { scrollSensitivity: number; scrollSpeed: number };
+  option: () => Pick<DraggableBaseProperties, 'scrollSensitivity' | 'scrollSpeed'>;
   _dragMoveEvent?: DragEvent;
   dragMoveHandler: (e: DragEvent) => void;
 }

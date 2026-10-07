@@ -1,6 +1,6 @@
 import type { AnimationConfig } from '@js/common/core/animation';
 import type { DxElement } from '@js/core/element';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type dxSortable from '@js/ui/sortable';
 import type { Properties } from '@js/ui/sortable';
@@ -19,7 +19,7 @@ export interface ItemPoint {
 }
 
 export interface AnimateConfig {
-  to?: { left?: number; top?: number };
+  to?: Partial<Coordinates>;
   duration?: number;
   easing?: string;
 }
