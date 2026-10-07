@@ -63,7 +63,7 @@ export class OptionsController<
     this.defaults = component._getDefaultOptions?.() ?? {};
 
     this.internalOptions = signal({
-      options: extend(true, {}, component.option()) as TProps,
+      options: extend(true, {}, component.option()),
       changes: null,
     });
 

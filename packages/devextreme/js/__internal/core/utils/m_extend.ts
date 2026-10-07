@@ -132,8 +132,23 @@ type DeepExtended<TTarget, TSources extends readonly unknown[]> = TSources exten
 
 type Target = object | null | undefined;
 
+type EmptyTarget = Record<string, never>;
+
+type Patch<TSource> = Partial<NoInfer<TSource>> | null | undefined;
+
 interface Extend {
   (): Record<never, never>;
+  <TSource extends object>(
+    deep: true,
+    target: EmptyTarget,
+    source: TSource,
+    ...patches: Patch<TSource>[]
+  ): TSource;
+  <TSource extends object>(
+    target: EmptyTarget,
+    source: TSource,
+    ...patches: Patch<TSource>[]
+  ): TSource;
   <TTarget extends Target, TSources extends unknown[]>(
     deep: true,
     target?: TTarget,
