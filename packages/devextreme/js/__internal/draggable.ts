@@ -1404,6 +1404,13 @@ class Draggable<
     this._stopAnimator();
   }
 
+  /// #DEBUG
+  // Test-only accessor, removed from production builds.
+  getDragInProgress(): boolean {
+    return !!this.dragInProgress;
+  }
+  /// #ENDDEBUG
+
   _fireDragEnterEvent(sourceEvent: DragEvent): void {
     const args = this._getEventArgs(sourceEvent);
 
@@ -1415,13 +1422,6 @@ class Draggable<
 
     this._getAction('onDragLeave')(args);
   }
-
-  /// #DEBUG
-  // Test-only accessor, removed from production builds.
-  getDragInProgress(): boolean {
-    return !!this.dragInProgress;
-  }
-  /// #ENDDEBUG
 }
 
 registerComponent(DRAGGABLE, Draggable);

@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { signal } from '@ts/core/state_manager/index';
-import { removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
+import { removeFieldConditionsFromFilter } from '@ts/filter_builder/utils';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import { ColumnsController } from '../../columns_controller/index';

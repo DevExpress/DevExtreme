@@ -930,7 +930,8 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         skipImmediate: true,
       },
       /// #DEBUG
-      { createWatcherDataField: dataField },
+      // eslint-disable-next-line @stylistic/comma-dangle
+      { createWatcherDataField: dataField }
       /// #ENDDEBUG
     );
 
