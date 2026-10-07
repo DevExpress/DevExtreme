@@ -296,4 +296,47 @@ QUnit.module('localization: global number format locale', localizationModuleHook
 
         assert.strictEqual($input.val(), '1,235', 'precision from local format; en-US from global numberFormat');
     });
+
+    QUnit.test('typed format keeps its explicit locale when the mask is generated', function(assert) {
+        localization.locale('en');
+        config({
+            ...config(),
+            numberFormat: {
+                default: {
+                    locale: 'fr',
+                },
+            },
+        });
+
+        const format = {
+            type: 'fixedPoint',
+            precision: 2,
+            locale: 'de-DE',
+        };
+        const $element = $('#numberbox').dxNumberBox({
+            value: 1234.5,
+            useMaskBehavior: true,
+            format,
+        });
+        const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
+
+        assert.strictEqual($input.val(), '1.234,50', 'display uses de-DE separators, not fr');
+
+        $element.dxNumberBox('dispose');
+
+        const $empty = $('#numberbox').dxNumberBox({
+            value: null,
+            useMaskBehavior: true,
+            format,
+        });
+        const instance = $empty.dxNumberBox('instance');
+        const keyboard = keyboardMock($empty.find(TEXTEDITOR_INPUT_CLASS), true);
+
+        keyboard
+            .caret({ start: 0, end: 0 })
+            .type('1234,5')
+            .change();
+
+        assert.strictEqual(instance.option('value'), 1234.5, 'parse uses de-DE separators');
+    });
 });

@@ -7,10 +7,13 @@ import {
   getFormatterOptions,
   getGlobalFormatByDataType,
 } from '@ts/core/global_format_config';
-import type {
-  FormatConfig, LocalizationFormat, NormalizedConfig, NumberFormatter,
+import numberLocalization, {
+  type FormatConfig,
+  isLdmlPatternFormat,
+  type LocalizationFormat,
+  type NormalizedConfig,
+  type NumberFormatter,
 } from '@ts/core/localization/number';
-import numberLocalization from '@ts/core/localization/number';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Globalize from 'globalize';
 
@@ -163,7 +166,7 @@ if (Globalize?.formatNumber) {
         return undefined;
       }
 
-      if (format && (typeof format === 'string' || format.parser)) {
+      if (format && (typeof format === 'string' || format.parser || isLdmlPatternFormat(format))) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return this.callBase.apply(this, [text, format]);
       }

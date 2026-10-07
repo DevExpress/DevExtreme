@@ -47,6 +47,12 @@ export type FormatConfig = PublicFormatConfig & {
 
 export type LocalizationFormat = Format | FormatConfig;
 
+export const isLdmlPatternFormat = (format?: FormatConfig | string): boolean => {
+  const formatType = typeof format === 'string' ? format : format?.type;
+
+  return typeof formatType === 'string' && (formatType.includes('0') || formatType.includes('#'));
+};
+
 export interface NormalizedConfig {
   minimumFractionDigits?: number;
   maximumFractionDigits?: number;
@@ -252,10 +258,12 @@ const numberLocalizationBase = {
     return format;
   },
 
-  _getSeparators(): FormatterConfig {
+  _getSeparators(format?: LocalizationFormat): FormatterConfig {
+    const separatorFormat = typeof format === 'function' ? undefined : format;
+
     return {
-      decimalSeparator: this.getDecimalSeparator(),
-      thousandsSeparator: this.getThousandsSeparator(),
+      decimalSeparator: this.getDecimalSeparator(separatorFormat),
+      thousandsSeparator: this.getThousandsSeparator(separatorFormat),
     };
   },
 
@@ -289,7 +297,7 @@ const numberLocalizationBase = {
   },
 
   getNegativeEtalonRegExp(format: LocalizationFormat): RegExp {
-    const separators: FormatterConfig = this._getSeparators();
+    const separators: FormatterConfig = this._getSeparators(format);
     const digitalRegExp = new RegExp(`[0-9${escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator)}]+`, 'g');
     const specialCharacters = ['\\', '(', ')', '[', ']', '*', '+', '$', '^', '?', '|', '{', '}'];
 
@@ -350,7 +358,7 @@ const numberLocalizationBase = {
     const numberConfig: FormatObject | undefined = this._parseNumberFormatString((format as FormatConfig).type);
 
     if (!numberConfig) {
-      const formatterConfig: FormatterConfig = this._getSeparators();
+      const formatterConfig: FormatterConfig = this._getSeparators(format);
       formatterConfig.unlimitedIntegerDigits = (format as FormatConfig).unlimitedIntegerDigits;
 
       // @ts-expect-error
@@ -373,9 +381,10 @@ const numberLocalizationBase = {
 
     text = this.convertDigits(text, true);
 
-    if (format && typeof format !== 'string') {
+    if (format && typeof format !== 'string' && !isLdmlPatternFormat(format)) {
       // Current parser functionality provided as-is and
       // is independent of the most of capabilities of formatter.
+      // An LDML pattern object is the string pattern plus locale, which this parser does apply.
       errors.log('W0011');
     }
 

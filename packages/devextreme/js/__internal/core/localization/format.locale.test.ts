@@ -98,6 +98,27 @@ describe('format locale integration', () => {
       })).toBe('1.235');
     });
 
+    it('should apply explicit locale separators to an LDML format object', () => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        numberFormat: {
+          default: {
+            locale: 'fr',
+          },
+        },
+      });
+
+      expect(numberLocalization.format(1234.5, {
+        type: '#,##0.00',
+        locale: 'de-DE',
+      })).toBe('1.234,50');
+      expect(numberLocalization.parse('1.234,50', {
+        type: '#,##0.00',
+        locale: 'de-DE',
+      })).toBe(1234.5);
+    });
+
     it('should parse using effective number format locale separators', () => {
       coreLocalization.locale('de');
       config({
