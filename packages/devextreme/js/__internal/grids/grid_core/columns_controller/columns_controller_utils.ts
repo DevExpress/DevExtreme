@@ -1049,7 +1049,7 @@ export const mergeColumns = (
     );
 
     if (commandColumnIndex < 0) {
-      return extend({}, column) as Column;
+      return extend({}, column);
     }
 
     const commandColumn = commandColumns[commandColumnIndex];

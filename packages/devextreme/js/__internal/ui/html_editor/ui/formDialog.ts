@@ -104,7 +104,7 @@ export default class FormDialog extends BaseDialog {
         },
       ],
       ...this._popupConfig,
-    }) as PopupProperties;
+    });
   }
 
   protected _renderContent($contentElem: dxElementWrapper): void {
