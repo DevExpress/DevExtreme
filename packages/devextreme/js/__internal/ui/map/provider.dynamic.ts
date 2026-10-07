@@ -1,4 +1,3 @@
-import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -56,7 +55,7 @@ export interface RouteObject {
   southWest?: [number, number];
 }
 
-class DynamicProvider extends Provider {
+abstract class DynamicProvider extends Provider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _bounds?: any;
 
@@ -130,9 +129,7 @@ class DynamicProvider extends Provider {
     return Promise.resolve();
   }
 
-  _attachHandlers(): void {
-    Class.abstract();
-  }
+  abstract _attachHandlers(): void;
 
   addMarkers(markers: MarkerOptions[]): Promise<[boolean, unknown[]]> {
     return Promise
@@ -204,10 +201,7 @@ class DynamicProvider extends Provider {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _destroyMarker(marker: unknown): void {
-    Class.abstract();
-  }
+  abstract _destroyMarker(marker: unknown): void;
 
   _clearMarkers(): void {
     while (this._markers.length > 0) {
@@ -274,10 +268,7 @@ class DynamicProvider extends Provider {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _destroyRoute(routeObject: RouteObject): void {
-    Class.abstract();
-  }
+  abstract _destroyRoute(routeObject: RouteObject): void;
 
   _geocodeLocationImpl(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -301,9 +292,7 @@ class DynamicProvider extends Provider {
     return true;
   }
 
-  _fitBounds(): void {
-    Class.abstract();
-  }
+  abstract _fitBounds(): void;
 
   _updateBounds(): void {
     this._clearBounds();
@@ -330,10 +319,7 @@ class DynamicProvider extends Provider {
     this._bounds = null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _extendBounds(location: unknown): void {
-    Class.abstract();
-  }
+  abstract _extendBounds(location: unknown): void;
 }
 
 export default DynamicProvider;
