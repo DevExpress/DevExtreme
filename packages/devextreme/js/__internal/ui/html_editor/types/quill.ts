@@ -181,8 +181,10 @@ export type BaseQuillModuleConstructor = new (
 export interface BaseQuillModuleInstance {
   quill: QuillInstance;
   options?: unknown;
-  clean?: () => void;
-  option?: (name: string, value: unknown) => void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  clean?(): void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  option?(name: string, value: unknown): void;
 }
 
 export interface QuillStatic {

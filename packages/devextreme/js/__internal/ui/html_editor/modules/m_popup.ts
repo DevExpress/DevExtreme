@@ -22,7 +22,6 @@ if (Quill) {
   const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
   const MIN_HEIGHT = 100;
-  // @ts-expect-error
   ListPopupModule = class ListPopupModule extends BaseModule {
     _list!: ListType;
 
@@ -33,7 +32,6 @@ if (Quill) {
     options: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       this.options = extend({}, this._getDefaultOptions(), options);
