@@ -1,4 +1,6 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, {
+  useCallback, useMemo, useState, useRef,
+} from 'react';
 import Chat from 'devextreme-react/chat';
 import { Switch } from 'devextreme-react/switch';
 import { loadMessages } from 'devextreme-react/common/core/localization';
@@ -54,11 +56,16 @@ export default function App() {
     },
     [alerts.length, insertMessage, processAIRequest],
   );
-  const suggestions = {
-    items: suggestionList,
-    onItemClick: onSuggestionClick,
-    disabled: isDisabled,
-  };
+  const suggestions = useMemo(
+    () => ({ items: suggestionList, onItemClick: onSuggestionClick, disabled: isDisabled }),
+    [suggestionList, onSuggestionClick, isDisabled],
+  );
+  const onSendImmediatelyChanged = useCallback((e) => {
+    sendImmediately.current = e.value;
+  }, []);
+  const onHideAfterUseChanged = useCallback((e) => {
+    hideAfterUse.current = e.value;
+  }, []);
   const onMessageEntered = useCallback(
     async ({ message, event }) => {
       if (isDisabled) return;
@@ -100,18 +107,14 @@ export default function App() {
           <div className="option">
             <Switch
               defaultValue={false}
-              onValueChanged={(e) => {
-                sendImmediately.current = e.value;
-              }}
+              onValueChanged={onSendImmediatelyChanged}
             />
             <span>Send Immediately</span>
           </div>
           <div className="option">
             <Switch
               defaultValue={false}
-              onValueChanged={(e) => {
-                hideAfterUse.current = e.value;
-              }}
+              onValueChanged={onHideAfterUseChanged}
             />
             <span>Hide After Use</span>
           </div>

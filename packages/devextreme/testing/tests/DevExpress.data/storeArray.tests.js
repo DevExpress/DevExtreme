@@ -1155,6 +1155,21 @@ QUnit.test('push update preserves custom object instances inside arrays', functi
     assert.equal(updatedPerson.name, 'Will', 'person data is updated');
 });
 
+QUnit.test('push update does not corrupt a Set field', function(assert) {
+    const store = new ArrayStore({
+        key: 'id',
+        data: [{ id: 1, name: 'Bentonville', tags: new Set(['Test']) }]
+    });
+
+    store.push([{ type: 'update', key: 1, data: { name: 'Updated', tags: new Set(['TEST']) } }]);
+
+    const updatedItem = store.createQuery().toArray()[0];
+
+    assert.strictEqual(updatedItem.name, 'Updated', 'plain field is updated');
+    assert.strictEqual(updatedItem.tags.size, 1, 'Set.size is accessible after push');
+    assert.ok(updatedItem.tags.has('TEST'), 'Set contains the updated value');
+});
+
 QUnit.module('Error handling');
 
 QUnit.test('error in during query evaluation', function(assert) {

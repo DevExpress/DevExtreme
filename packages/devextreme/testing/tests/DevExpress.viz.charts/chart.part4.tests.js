@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { environment, createChartInstance } from './chartParts/commons.js';
 import vizUtils from 'viz/core/utils_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import { MockSeries, commonMethodsForTests, categories, seriesMockData } from '../../helpers/chartMocks.js';
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
@@ -276,7 +277,7 @@ QUnit.test('Create clipRects. With financial series', function(assert) {
     };
 
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
     });
     const stubSeries = new MockSeries();
@@ -338,7 +339,7 @@ QUnit.test('Create clipRects. With series with errorBars', function(assert) {
     };
 
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
     });
     const stubSeries = new MockSeries({
@@ -409,7 +410,7 @@ QUnit.test('Create clipRects. With financial series. Rotated', function(assert) 
         originalBottom: 70
     };
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
     });
     const stubSeries = new MockSeries();
@@ -471,7 +472,7 @@ QUnit.test('Create clipRects. With financial series. Two panes', function(assert
         originalBottom: 70
     };
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
         panes[1].canvas = rect;
     });
@@ -554,7 +555,7 @@ QUnit.test('Create clipRects. With financial series. For second panes', function
         originalBottom: 70
     };
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
         panes[1].canvas = rect;
     });
@@ -646,7 +647,7 @@ QUnit.test('Create clipRects. With financial series. Two panes. Rotated', functi
         originalBottom: 70
     };
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
         panes[1].canvas = rect;
     });
@@ -730,7 +731,7 @@ QUnit.test('Create clipRects. With financial series. For second panes. Rotated',
         originalBottom: 70
     };
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
         panes[1].canvas = rect;
     });
@@ -842,7 +843,7 @@ QUnit.test('Update clipRects. With financial series', function(assert) {
         originalBottom: 70
     };
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
     });
 
@@ -958,7 +959,7 @@ QUnit.test('Update clipRects. With financial series. When start series does not 
         originalBottom: 70
     };
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
     });
 
@@ -1049,7 +1050,7 @@ QUnit.test('Create clipRects with visible pane borders. With financial series', 
         originalBottom: 70
     };
     vizUtils.updatePanesCanvases.restore();
-    sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+    stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
         panes[0].canvas = rect;
     });
     const stubSeries = new MockSeries();

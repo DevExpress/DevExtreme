@@ -18,7 +18,7 @@ QUnit.testStart(function() {
 import fx from 'common/core/animation/fx';
 import eventsEngine from 'common/core/events/core/events_engine';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import dataUtils from 'core/element_data';
 import {
     setHeight,

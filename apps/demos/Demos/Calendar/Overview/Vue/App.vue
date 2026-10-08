@@ -132,7 +132,7 @@ function getCellCssClass({ date, view }: { date: Date, view: string }) {
   return cssClass;
 }
 </script>
-<style scoped>
+<style>
 #calendar-demo {
   display: flex;
 }

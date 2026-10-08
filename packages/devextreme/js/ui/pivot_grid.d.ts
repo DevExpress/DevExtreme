@@ -16,6 +16,8 @@ import PivotGridDataSource, {
     dxPivotGridSummaryCell as SummaryCell,
 } from './pivot_grid/data_source';
 
+import { LoadPanelIndicatorProperties } from './load_panel';
+
 import dxPopup from './popup';
 
 import Widget, {
@@ -401,12 +403,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     headerFilter?: {
       /**
        * @docid
-       * @default false
-       * @deprecated
-       */
-      allowSearch?: boolean;
-      /**
-       * @docid
        * @default true
        */
       allowSelectAll?: boolean;
@@ -419,12 +415,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
        * @docid
        */
       search?: HeaderFilterSearchConfig;
-      /**
-       * @docid
-       * @default 500
-       * @deprecated
-       */
-      searchTimeout?: number;
       /**
        * @docid
        * @default false
@@ -479,9 +469,8 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       height?: number;
       /**
        * @docid
-       * @default ""
        */
-      indicatorSrc?: string;
+      indicatorOptions?: LoadPanelIndicatorProperties;
       /**
        * @docid
        * @default false

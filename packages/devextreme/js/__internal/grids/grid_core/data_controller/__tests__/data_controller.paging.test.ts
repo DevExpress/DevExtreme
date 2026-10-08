@@ -38,13 +38,9 @@ const getIsPaging = (instance: DataGridInstance): unknown => {
   return dataController._isPaging as unknown;
 };
 
-// The controller's `dataSource()` is the DataSourceAdapter, not the raw DataSource.
-const getAdapter = (instance: DataGridInstance): PagingAdapter => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dataController = instance.getController('data') as any;
-
-  return dataController.dataSource() as PagingAdapter;
-};
+const getAdapter = (instance: DataGridInstance): PagingAdapter => instance
+  .getController('dataSource')
+  .getAdapter() as unknown as PagingAdapter;
 
 describe('DataController paging', () => {
   beforeEach(beforeTest);

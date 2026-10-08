@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import {
   DxSelectBoxModule,
   DxLoadIndicatorModule,
@@ -11,16 +13,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [
     DxSelectBoxModule,
@@ -44,6 +40,7 @@ export class AppComponent {
         setTimeout(() => {
           resolve(this.simpleProducts);
           this.isLoaded = true;
+          this.changeDetectorRef.detectChanges();
         }, 3000);
       });
 
@@ -51,7 +48,7 @@ export class AppComponent {
     },
   };
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.products = service.getProducts();
     this.selectedItem = this.products[0];
     this.simpleProducts = service.getSimpleProducts();

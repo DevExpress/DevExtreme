@@ -47,7 +47,7 @@ describe('HeaderFilter', () => {
       it('should pass headerFilter options', () => {
         const expectedFilterValues = ['VAL_0', 'VAL_1', 'VAL_2'];
         const expectedHeaderFilter = {
-          allowSearch: true,
+          testRandomFlag: true,
           testRandomField: 'A',
         } as HeaderFilterColumnOptions;
 

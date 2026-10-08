@@ -20,7 +20,7 @@ import ContextMenu, {
 } from '__internal/ui/context_menu/context_menu';
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import TypingIndicator from '__internal/ui/chat/typingindicator';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import localization from 'localization';
 import dateLocalization from 'common/core/localization/date';
 import resizeObserverSingleton from 'core/resize_observer';

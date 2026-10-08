@@ -12,10 +12,10 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { debug } from '@js/core/utils/console';
-import { each } from '@js/core/utils/iterator';
-import { adjust } from '@js/core/utils/math';
-import { isDefined, isNumeric } from '@js/core/utils/type';
+import { debug } from '@ts/core/utils/m_console';
+import { each } from '@ts/core/utils/m_iterator';
+import { adjust } from '@ts/core/utils/m_math';
+import { isDefined, isNumeric } from '@ts/core/utils/m_type';
 import { getLogExt, raiseToExt } from '@ts/viz/core/utils';
 
 const _math = Math;
@@ -194,28 +194,14 @@ function getAxisRange(axisInfo) {
   return (axisInfo.maxValue - axisInfo.minValue) || 1; // T153054
 }
 
-function getMainAxisInfo(axesInfo) {
-  for (let i = 0; i < axesInfo.length; i++) {
-    if (!axesInfo[i].stubData) {
-      return axesInfo[i];
-    }
-  }
-  return null;
-}
-
 function correctMinMaxValues(axesInfo) {
-  const mainAxisInfo = getMainAxisInfo(axesInfo);
+  const mainAxisInfo = axesInfo[0];
   const mainAxisRange = getAxisRange(mainAxisInfo);
 
   axesInfo.forEach((axisInfo) => {
     if (axisInfo !== mainAxisInfo) {
       if (mainAxisInfo.tickInterval && axisInfo.tickInterval) {
         const tickIntervalScale = axisInfo.tickInterval / mainAxisInfo.tickInterval;
-
-        if (axisInfo.stubData && isDefined(axisInfo.synchronizedValue)) {
-          axisInfo.oldMinValue = axisInfo.minValue = axisInfo.baseTickValue - (mainAxisInfo.baseTickValue - mainAxisInfo.minValue) * tickIntervalScale;
-          axisInfo.oldMaxValue = axisInfo.maxValue = axisInfo.baseTickValue - (mainAxisInfo.baseTickValue - mainAxisInfo.maxValue) * tickIntervalScale;
-        }
 
         axisInfo.maxValue = axisInfo.minValue + tickIntervalScale * mainAxisRange;
       }
@@ -424,7 +410,7 @@ const multiAxesSynchronizer = {
 
       const axesInfo = populateAxesInfo(axes);
 
-      if (axesInfo.length < 2 || !getMainAxisInfo(axesInfo)) {
+      if (axesInfo.length < 2) {
         return;
       }
 

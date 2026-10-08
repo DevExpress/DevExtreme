@@ -16,10 +16,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import dateUtils from '@js/core/utils/date';
-import { extend } from '@js/core/utils/extend';
-import { adjust, sign } from '@js/core/utils/math';
-import { isDefined, isString } from '@js/core/utils/type';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { extend } from '@ts/core/utils/m_extend';
+import { adjust, sign } from '@ts/core/utils/m_math';
+import { isDefined, isString } from '@ts/core/utils/m_type';
 import {
   getCategoriesInfo,
   getLog as mathLog,
@@ -806,7 +806,8 @@ function dateGenerator(options) {
   );
 }
 
-export const tickGenerator = function (options) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let tickGenerator = function (options) {
   let result;
 
   if (options.rangeIsEmpty) {
@@ -823,3 +824,11 @@ export const tickGenerator = function (options) {
 
   return result;
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_tickGenerator(value: typeof tickGenerator): void {
+  tickGenerator = value;
+}
+/// #ENDDEBUG

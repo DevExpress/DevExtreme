@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -26,7 +23,6 @@ import type { Format } from 'devextreme/common/core/localization';
 import type { BarGaugeBarInfo, BarGaugeLegendItem, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bar_gauge';
 
 import DxBarGauge from 'devextreme/viz/bar_gauge';
-
 
 import {
     DxComponent,
@@ -81,7 +77,6 @@ import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/
 
 /**
  * [descr:dxBarGauge]
-
  */
 @Component({
     selector: 'dx-bar-gauge',
@@ -102,7 +97,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.animation]
-    
      */
     @Input()
     get animation(): any | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean } {
@@ -112,10 +106,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.backgroundColor]
-    
      */
     @Input()
     get backgroundColor(): string {
@@ -125,10 +117,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('backgroundColor', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.barSpacing]
-    
      */
     @Input()
     get barSpacing(): number {
@@ -138,10 +128,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('barSpacing', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.baseValue]
-    
      */
     @Input()
     get baseValue(): number {
@@ -151,10 +139,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('baseValue', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.centerTemplate]
-    
      */
     @Input()
     get centerTemplate(): any {
@@ -164,10 +150,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('centerTemplate', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -177,10 +161,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -190,10 +172,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -203,10 +183,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.endValue]
-    
      */
     @Input()
     get endValue(): number {
@@ -216,10 +194,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('endValue', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -229,10 +205,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.geometry]
-    
      */
     @Input()
     get geometry(): { endAngle?: number, startAngle?: number } {
@@ -242,10 +216,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('geometry', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.label]
-    
      */
     @Input()
     get label(): { connectorColor?: string | undefined, connectorWidth?: number, customizeText?: ((barValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indent?: number, visible?: boolean } {
@@ -255,10 +227,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.legend]
-    
      */
     @Input()
     get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>), customizeText?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextFormat?: Format | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined }, text?: string | undefined, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
@@ -268,10 +238,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('legend', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, font?: Font, show?: boolean, text?: string } {
@@ -281,10 +249,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('loadingIndicator', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -294,10 +260,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('margin', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.palette]
-    
      */
     @Input()
     get palette(): Array<string> | Palette {
@@ -307,10 +271,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('palette', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.paletteExtensionMode]
-    
      */
     @Input()
     get paletteExtensionMode(): PaletteExtensionMode {
@@ -320,10 +282,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('paletteExtensionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -333,10 +293,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -346,10 +304,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('redrawOnResize', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.relativeInnerRadius]
-    
      */
     @Input()
     get relativeInnerRadius(): number {
@@ -359,10 +315,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('relativeInnerRadius', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.resolveLabelOverlapping]
-    
      */
     @Input()
     get resolveLabelOverlapping(): ShiftLabelOverlap {
@@ -372,10 +326,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('resolveLabelOverlapping', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -385,10 +337,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -398,10 +348,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.startValue]
-    
      */
     @Input()
     get startValue(): number {
@@ -411,10 +359,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('startValue', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -424,10 +370,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -437,10 +381,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -450,10 +392,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('tooltip', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.values]
-    
      */
     @Input()
     get values(): Array<number> {
@@ -464,283 +404,194 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     }
 
     /**
-    
      * [descr:dxBarGaugeOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxBarGaugeOptions.onDrawn]
-    
-    
      */
     @Output() onDrawn: EventEmitter<DrawnEvent>;
 
     /**
-    
      * [descr:dxBarGaugeOptions.onExported]
-    
-    
      */
     @Output() onExported: EventEmitter<ExportedEvent>;
 
     /**
-    
      * [descr:dxBarGaugeOptions.onExporting]
-    
-    
      */
     @Output() onExporting: EventEmitter<ExportingEvent>;
 
     /**
-    
      * [descr:dxBarGaugeOptions.onFileSaving]
-    
-    
      */
     @Output() onFileSaving: EventEmitter<FileSavingEvent>;
 
     /**
-    
      * [descr:dxBarGaugeOptions.onIncidentOccurred]
-    
-    
      */
     @Output() onIncidentOccurred: EventEmitter<IncidentOccurredEvent>;
 
     /**
-    
      * [descr:dxBarGaugeOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxBarGaugeOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxBarGaugeOptions.onTooltipHidden]
-    
-    
      */
     @Output() onTooltipHidden: EventEmitter<TooltipHiddenEvent>;
 
     /**
-    
      * [descr:dxBarGaugeOptions.onTooltipShown]
-    
-    
      */
     @Output() onTooltipShown: EventEmitter<TooltipShownEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationChange: EventEmitter<any | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() backgroundColorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() barSpacingChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() baseValueChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() centerTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() encodeHtmlChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() endValueChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() geometryChange: EventEmitter<{ endAngle?: number, startAngle?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelChange: EventEmitter<{ connectorColor?: string | undefined, connectorWidth?: number, customizeText?: ((barValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indent?: number, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() legendChange: EventEmitter<{ backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>), customizeText?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextFormat?: Format | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined }, text?: string | undefined, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loadingIndicatorChange: EventEmitter<{ backgroundColor?: string, font?: Font, show?: boolean, text?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() marginChange: EventEmitter<{ bottom?: number, left?: number, right?: number, top?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() paletteChange: EventEmitter<Array<string> | Palette>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() paletteExtensionModeChange: EventEmitter<PaletteExtensionMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pathModifiedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() redrawOnResizeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() relativeInnerRadiusChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() resolveLabelOverlappingChange: EventEmitter<ShiftLabelOverlap>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() startValueChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() themeChange: EventEmitter<Theme>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valuesChange: EventEmitter<Array<number>>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

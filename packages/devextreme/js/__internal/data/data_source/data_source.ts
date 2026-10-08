@@ -28,6 +28,7 @@ import type {
   ChangedEvent, DataSourceEventName, EventOptionName, LoadOperation,
   LoadResult, NormalizedDataSourceOptions, StoreLoadOptions,
 } from './types';
+import type { Mapper } from './utils';
 
 // Mirrors the coercion the global `isFinite` applies to non-numeric values.
 const isFiniteValue = (value: unknown): value is number => isFinite(Number(value));
@@ -58,11 +59,11 @@ export class DataSource {
 
   _onPushHandler: Function;
 
-  _aggregationTimeoutId?: number;
+  _aggregationTimeoutId?: ReturnType<typeof setTimeout>;
 
   _storeLoadOptions: StoreLoadOptions;
 
-  _mapFunc?: Function;
+  _mapFunc?: Mapper;
 
   _postProcessFunc?: Function;
 
@@ -567,7 +568,6 @@ export class DataSource {
         dataSourceChanges = changingArgs.postProcessChanges(dataSourceChanges);
       }
 
-      // @ts-expect-error array_utils is untyped: `applyBatch` destructures every option as required
       applyBatch({
         keyInfo: this.store(),
         data: items,
@@ -688,6 +688,7 @@ export class DataSource {
       }
 
       // Process result
+      // @ts-expect-error extra is not always an object, _processStoreLoadResult makes it one
       const loadResult: LoadResult = extend(normalizeLoadResult(data, extra), loadOptions);
 
       this._eventsStrategy.fireEvent('customizeLoadResult', [loadResult]);
@@ -788,21 +789,3 @@ export class DataSource {
     return this;
   }
 }
-
-/*
- * `Class.inherit()` defined prototype members as enumerable, and consumers still rely on
- * that: the grid's DataSourceAdapter copies a data source's members with a `for…in` loop
- * (see its "remove copying dataSource's members" TODO). ES6 class methods are not
- * enumerable, so restore the descriptors a data source used to expose.
- */
-Object.getOwnPropertyNames(DataSource.prototype).forEach((memberName) => {
-  if (memberName === 'constructor') {
-    return;
-  }
-
-  const descriptor = Object.getOwnPropertyDescriptor(DataSource.prototype, memberName);
-
-  if (descriptor) {
-    Object.defineProperty(DataSource.prototype, memberName, { ...descriptor, enumerable: true });
-  }
-});

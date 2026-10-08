@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -14,10 +12,7 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type * as CommonTypes from 'devextreme/common';
 import type { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
 import type { HorizontalAlignment } from 'devextreme/common';
@@ -33,6 +28,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_validationRules,
 } from 'devextreme-angular/core/tokens';
@@ -183,7 +179,6 @@ export class DxiCardViewSimpleItemComponent extends CollectionNestedOption imple
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -206,11 +201,9 @@ export class DxiCardViewSimpleItemComponent extends CollectionNestedOption imple
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

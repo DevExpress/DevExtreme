@@ -14,13 +14,6 @@ import type { UserDefinedElement } from 'devextreme/core/element';
     template: ''
 })
 export abstract class DxoColumnChooser extends NestedOption {
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
     get container(): UserDefinedElement | string | undefined {
         return this._getOption('container');
     }
@@ -68,13 +61,6 @@ export abstract class DxoColumnChooser extends NestedOption {
     }
     set search(value: ColumnChooserSearchConfig) {
         this._setOption('search', value);
-    }
-
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
     }
 
     get selection(): ColumnChooserSelectionConfig {

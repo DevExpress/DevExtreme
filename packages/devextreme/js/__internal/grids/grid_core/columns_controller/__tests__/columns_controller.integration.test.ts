@@ -1,8 +1,15 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
+import ko from 'knockout';
 
+import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
   afterTest,
   beforeTest,
@@ -48,11 +55,244 @@ describe('getFilteringColumns', () => {
   });
 });
 
+describe('column fixing enablement', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it.each([
+    { enabled: undefined, fixed: false, expected: undefined },
+    { enabled: undefined, fixed: true, expected: true },
+    { enabled: false, fixed: false, expected: false },
+    { enabled: false, fixed: true, expected: true },
+    { enabled: true, fixed: false, expected: true },
+    { enabled: true, fixed: true, expected: true },
+  ])('preserves enabled=$enabled when fixed=$fixed', async ({ enabled, fixed, expected }) => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1 }],
+      columns: [{ dataField: 'id', fixed }],
+    });
+    instance.option('columnFixing.enabled', enabled);
+
+    const result = instance.getController('columns')._isColumnFixing();
+
+    expect(result).toBe(expected);
+  });
+});
+
+describe('column generation', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should generate columns when an empty data source receives data', async () => {
+    const { instance } = await createDataGrid({ dataSource: [] });
+
+    expect(instance.columnCount()).toBe(0);
+
+    instance.option('dataSource', [{ id: 1, name: 'a' }]);
+    jest.runAllTimers();
+
+    expect(instance.getVisibleColumns().map((column) => column.dataField)).toEqual(['id', 'name']);
+  });
+});
+
+describe('observable column customization', () => {
+  beforeEach(() => {
+    beforeTest();
+    variableWrapper.inject({
+      isWrapped: ko.isObservable,
+      unwrap(value: unknown): unknown {
+        return ko.unwrap(value);
+      },
+    });
+  });
+  afterEach(() => {
+    afterTest();
+    variableWrapper.resetInjection();
+  });
+
+  it('should invoke an observable callback without replacing its value', async () => {
+    const customizeColumns = (columns: Column[]): void => {
+      columns[0].caption = 'Customized';
+    };
+    const observable = ko.observable(customizeColumns);
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1 }],
+      columns: ['id'],
+    });
+
+    instance.option('customizeColumns', observable);
+    jest.runAllTimers();
+
+    expect(instance.columnOption('id', 'caption')).toBe('Customized');
+    expect(observable()).toBe(customizeColumns);
+  });
+});
+
+describe('fixed column layout', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should preserve band colspan across fixed header rows without changing source columns', async () => {
+    const { instance } = await createDataGrid({ dataSource: [], columns: [] });
+    const controller = instance.getController('columns');
+    const left: Column = {
+      name: 'left', fixed: true, fixedPosition: 'left', headerId: 'left',
+    };
+    const right: Column = {
+      name: 'right', fixed: true, fixedPosition: 'right', headerId: 'right',
+    };
+    const rows: Column[][] = [
+      [left, { name: 'band', isBand: true, colspan: 2 }, right],
+      [left, { name: 'first' }, { name: 'second' }, right],
+    ];
+    jest.spyOn(controller, '_isColumnFixing').mockReturnValue(true);
+    jest.spyOn(controller, 'getRowCount').mockReturnValue(1);
+    jest.spyOn(controller, 'getVisibleColumns').mockImplementation((rowIndex) => rows[rowIndex ?? 1]);
+    controller.resetColumnsCache();
+
+    const fixedRows = [controller.getFixedColumns(0), controller.getFixedColumns(1)];
+
+    fixedRows.forEach((row) => {
+      expect(row).toEqual([
+        { ...left, headerId: 'left-fixed' },
+        { command: 'transparent', colspan: 2 },
+        { ...right, headerId: 'right-fixed' },
+      ]);
+    });
+    expect(left.headerId).toBe('left');
+    expect(right.headerId).toBe('right');
+    expect(rows.map((row) => row.length)).toEqual([3, 4]);
+  });
+});
+
+describe('getVisibleColumns', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should keep null row indexes equivalent to omitted indexes', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      columns: [{ caption: 'Band', columns: ['id', 'name'] }],
+    });
+
+    const visibleColumns = instance.getController('columns').getVisibleColumns(null);
+
+    expect(visibleColumns).toEqual(instance.getVisibleColumns());
+    expect(visibleColumns.map((column) => column.dataField)).toEqual(['id', 'name']);
+    expect(instance.getVisibleColumns(0).map((column) => column.caption)).toEqual(['Band']);
+  });
+});
+
+describe('sort and group selectors', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should skip empty sort and group selectors', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      columns: [
+        { dataField: 'id', sortOrder: 'asc', calculateSortValue: '' },
+        { dataField: 'name', groupIndex: 0, calculateGroupValue: '' },
+      ],
+    });
+
+    const controller = instance.getController('columns');
+
+    expect(controller.getSortDataSourceParameters()?.[0].selector).toBe('id');
+    expect(controller.getGroupDataSourceParameters()?.[0].selector).toBe('name');
+  });
+});
+
+describe('column filter expressions', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should forward filter target and preserve column callback context', async () => {
+    const calls: unknown[] = [];
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1 }, { id: 2 }],
+      columns: [{
+        dataField: 'id',
+        calculateFilterExpression(
+          this: Column,
+          value: unknown,
+          operation: string | null,
+          target: string,
+        ): unknown[] {
+          calls.push({
+            field: this.dataField, value, operation, target,
+          });
+          return [this.dataField, operation, value];
+        },
+      }],
+      filterRow: { visible: true },
+    });
+
+    instance.columnOption('id', 'selectedFilterOperation', '=');
+    instance.columnOption('id', 'filterValue', 2);
+    jest.runAllTimers();
+
+    expect(calls).toContainEqual({
+      field: 'id', value: 2, operation: '=', target: 'filterRow',
+    });
+    expect(instance.getVisibleRows()).toMatchObject([{ data: { id: 2 } }]);
+  });
+});
+
+describe('column data type inference', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should finish type inference before reading raw values for serialization', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [],
+      columns: ['value'],
+    });
+    const controller = instance.getController('columns');
+    const column = controller.getColumns()[0];
+    const calls: unknown[] = [];
+    const items = [{ value: 1 }, { value: '2' }];
+    jest.spyOn(controller, '_getFirstItems').mockReturnValue(items);
+    column.calculateCellValue = function calculateCellValue(
+      this: Column,
+      item: RawItemData,
+      ...args: unknown[]
+    ): unknown {
+      calls.push({
+        context: this,
+        value: item.value,
+        dataType: this.dataType,
+        skipDeserialization: args[0],
+      });
+      return item.value;
+    };
+
+    const updated = controller.updateColumnDataTypes();
+
+    expect(updated).toBe(true);
+    expect(column.dataType).toBe('string');
+    expect(calls).toEqual([
+      {
+        context: column, value: 1, dataType: undefined, skipDeserialization: undefined,
+      },
+      {
+        context: column, value: '2', dataType: undefined, skipDeserialization: undefined,
+      },
+      {
+        context: column, value: 1, dataType: 'string', skipDeserialization: true,
+      },
+      {
+        context: column, value: '2', dataType: 'string', skipDeserialization: true,
+      },
+    ]);
+  });
+});
+
 describe('Bugs', () => {
   beforeEach(() => {
     beforeTest();
     jest.spyOn(errors, 'log').mockImplementation(jest.fn());
-    jest.spyOn(errors, 'Error').mockImplementation(() => ({}));
+    jest.spyOn(errors, 'Error').mockImplementation(() => ({}) as ReturnType<typeof errors.Error>);
   });
   afterEach(afterTest);
 
@@ -136,6 +376,271 @@ describe('Bugs', () => {
 
       expect(headerCellsArray.length).toBe(1);
       expect(dataCellsArray.length).toBe(1);
+    });
+  });
+
+  describe('T1329677 - DataGrid - Column width changes are not applied immediately', () => {
+    const spyOnResize = (instance: DataGridInstance): jest.Mock => jest
+      .spyOn(instance.getController('resizing'), 'resize') as unknown as jest.Mock;
+
+    it('should recalculate dimensions when a column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, 'width', 150);
+
+      expect(resize).toHaveBeenCalledTimes(1);
+      expect(instance.columnOption(1, 'width')).toBe(150);
+    });
+
+    it('should recalculate dimensions when a width changes through the object form', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, { caption: 'Updated', width: 150 });
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should recalculate dimensions when a command column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columnAutoWidth: true,
+        selection: { mode: 'multiple' },
+        columns: ['field1'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption('command:select', 'width', 80);
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should recalculate dimensions when a command column width changes inside a component update cycle', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columnAutoWidth: true,
+        selection: { mode: 'multiple' },
+        columns: ['field1'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.beginUpdate();
+      instance.columnOption('command:select', 'width', 80);
+      instance.endUpdate();
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not recalculate dimensions when an internal layout batch applies widths', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
+
+      columnsController.beginUpdate();
+      columnsController.columnOption(0, 'width', 120);
+      columnsController.columnOption(1, 'width', 150);
+      columnsController.endUpdate();
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
+    it('should drop the virtual scrolling resize throttle on a width change', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        scrolling: { mode: 'virtual' },
+        columns: ['field1', 'field2'],
+      });
+      const resizingController = instance.getController('resizing');
+      const resetLastResizeTime = jest.spyOn(resizingController, 'resetLastResizeTime');
+
+      instance.columnOption(1, 'width', 150);
+
+      expect(resetLastResizeTime).toHaveBeenCalled();
+    });
+
+    it('should not recalculate dimensions when the width is set to its current value', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: [{ dataField: 'field1' }, { dataField: 'field2', width: 150 }],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, 'width', 150);
+      instance.columnOption(1, { width: 150 });
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
+    it('should leave no postponed resize when onInitialized changes a width', async () => {
+      const onInitialized = (e: { component: DataGridInstance }): void => {
+        e.component.columnOption('command:expand', 'width', 15);
+        e.component.columnOption('field2', 'width', 150);
+      };
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        masterDetail: { enabled: true },
+        columns: ['field1', 'field2'],
+        onInitialized,
+      } as DataGridProperties);
+
+      // A flag set during onInitialized would never be consumed, and
+      // ResizingController.resize bails out while it is set.
+      expect((instance as unknown as InternalGrid)._requireResize).toBeFalsy();
+
+      const resize = spyOnResize(instance);
+      instance.columnOption('field2', 'width', 200);
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not recalculate dimensions when a non-width option changes', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, 'caption', 'Updated');
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
+    it('should not recalculate dimensions when the width change does not fire events', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columns: ['field1', 'field2'],
+      });
+      const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
+
+      columnsController.columnOption(1, 'width', 150, true);
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
+    it('should recalculate dimensions once when a width changes inside a component update cycle', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.beginUpdate();
+      instance.columnOption(0, 'width', 120);
+      instance.columnOption(1, 'width', 150);
+      instance.endUpdate();
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should recalculate dimensions once when the columns option sets a width', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.option('columns[1].width', 150);
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should leave no postponed resize after a width change', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+
+      instance.columnOption(1, 'width', 150);
+
+      expect((instance as unknown as InternalGrid)._requireResize).toBeFalsy();
+    });
+
+    it('should not recurse when onColumnsChanging changes a width', async () => {
+      const onColumnsChanging = (e: {
+        optionNames: Record<string, unknown>;
+        component: DataGridInstance;
+      }): void => {
+        if (e.optionNames.width && e.component.columnOption(1, 'width') === 100) {
+          e.component.columnOption(1, 'width', 150);
+        }
+      };
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columns: ['field1', 'field2'],
+        onColumnsChanging,
+      } as DataGridProperties);
+
+      instance.columnOption(1, 'width', 100);
+
+      expect(instance.columnOption(1, 'width')).toBe(150);
+    });
+  });
+
+  describe('T1336036 - DataGrid - State Storing: A column added at runtime and later declared in the columns array is duplicated on every state restore', () => {
+    const STATE_WITH_ADDED_COLUMN = {
+      columns: [
+        { dataField: 'id', visibleIndex: 0 },
+        { dataField: 'name', visibleIndex: 1, added: 'name' },
+      ],
+    };
+
+    const createGrid = (columns: string[]): ReturnType<typeof createDataGrid> => createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      columns,
+      stateStoring: {
+        enabled: true,
+        type: 'custom',
+        customLoad: () => Promise.resolve({}),
+      },
+    });
+
+    const getVisibleDataFields = (
+      instance: DataGridInstance,
+    ): (string | undefined)[] => instance.getVisibleColumns().map((column) => column.dataField);
+
+    it('should not duplicate a declared column when the restored state marks it as added', async () => {
+      const { instance } = await createGrid(['id', 'name']);
+
+      instance.state(STATE_WITH_ADDED_COLUMN);
+
+      expect(getVisibleDataFields(instance)).toEqual(['id', 'name']);
+    });
+
+    it('should not duplicate a declared column when the saved state is restored again', async () => {
+      const { instance } = await createGrid(['id', 'name']);
+
+      instance.state(STATE_WITH_ADDED_COLUMN);
+      instance.state(instance.state());
+
+      expect(getVisibleDataFields(instance)).toEqual(['id', 'name']);
+    });
+
+    it('should restore an added column that is not declared', async () => {
+      const { instance } = await createGrid(['id']);
+
+      instance.state(STATE_WITH_ADDED_COLUMN);
+
+      expect(getVisibleDataFields(instance)).toEqual(['id', 'name']);
     });
   });
 });

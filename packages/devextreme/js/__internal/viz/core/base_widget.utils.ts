@@ -13,12 +13,12 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import resizeObserverSingleton from '@js/core/resize_observer';
-import { each } from '@js/core/utils/iterator';
-import _windowResizeCallbacks from '@js/core/utils/resize_callbacks';
-import { format as _stringFormat } from '@js/core/utils/string';
 import { version } from '@js/core/version';
-import warnings from '@js/viz/core/errors_warnings';
+import { resizeObserverSingleton } from '@ts/core/resize_observer';
+import { each } from '@ts/core/utils/m_iterator';
+import { resizeCallbacks as _windowResizeCallbacks } from '@ts/core/utils/m_resize_callbacks';
+import { format as _stringFormat } from '@ts/core/utils/m_string';
+import warnings from '@ts/viz/core/errors_warnings';
 import { normalizeEnum } from '@ts/viz/core/utils';
 
 const { ERROR_MESSAGES } = warnings;

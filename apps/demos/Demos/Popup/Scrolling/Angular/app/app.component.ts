@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxPopupModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';
@@ -7,17 +9,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxPopupModule,
     DxButtonModule,
@@ -26,6 +21,8 @@ if (window && window.config?.packageConfigPaths) {
 })
 
 export class AppComponent {
+  constructor(private changeDetectorRef: ChangeDetectorRef) { }
+
   popupVisible = false;
 
   popupWithScrollViewVisible = false;
@@ -38,6 +35,7 @@ export class AppComponent {
     onClick: () => {
       this.popupVisible = false;
       this.popupWithScrollViewVisible = false;
+      this.changeDetectorRef.markForCheck();
     },
   };
 

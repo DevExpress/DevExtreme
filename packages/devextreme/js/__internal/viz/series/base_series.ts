@@ -2,7 +2,6 @@
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 /* eslint-disable no-bitwise */
-/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
@@ -12,19 +11,18 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
-import { each as _each } from '@js/core/utils/iterator';
-import { isDefined as _isDefined, isEmptyObject as _isEmptyObject, isFunction } from '@js/core/utils/type';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { each as _each } from '@ts/core/utils/m_iterator';
+import { isDefined as _isDefined, isEmptyObject as _isEmptyObject, isFunction } from '@ts/core/utils/m_type';
 import consts from '@ts/viz/components/consts';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 
 import * as areaSeries from './area_series';
@@ -39,7 +37,51 @@ import { chart as rangeSeriesChart } from './range_series';
 import * as scatterSeries from './scatter_series';
 import * as stackedSeries from './stacked_series';
 
-const seriesNS = {};
+type SeriesPoint = InstanceType<typeof Point>;
+
+type LegendCallback = (item?: ThemeValue) => void;
+
+type ValueChecker = (value?: ThemeValue) => boolean;
+
+interface SeriesSettings {
+  renderer: ThemeValue;
+  seriesGroup?: ThemeValue;
+  labelsGroup?: ThemeValue;
+  eventTrigger?: ThemeValue;
+  eventPipe?: ThemeValue;
+  incidentOccurred: ThemeValue;
+  commonSeriesModes?: ThemeValue;
+  valueAxis?: ThemeValue;
+  argumentAxis?: ThemeValue;
+}
+
+interface SeriesLegendStyles {
+  normal: ThemeValue;
+  hover: ThemeValue;
+  selection: ThemeValue;
+}
+
+interface SeriesStyles {
+  labelColor: string;
+  normal: ThemeValue;
+  hover: ThemeValue;
+  selection: ThemeValue;
+  legendStyles: SeriesLegendStyles;
+}
+
+interface BusinessRange {
+  arg: ThemeValue;
+  val: ThemeValue;
+}
+
+interface DrawPointOptions {
+  point: SeriesPoint;
+  groups: ThemeValue;
+  hasAnimation: boolean;
+  firstDrawing: boolean;
+}
+
+const seriesNS: Record<string, ThemeValue> = {};
 const states = consts.states;
 
 const DISCRETE = 'discrete';
@@ -65,27 +107,22 @@ const CLEAR_POINT_HOVER = 'clearPointHover';
 const SERIES_SELECT = 'seriesSelect';
 const POINT_SELECT = 'pointSelect';
 const POINT_DESELECT = 'pointDeselect';
-const getEmptyBusinessRange = function () {
+const getEmptyBusinessRange = function (): BusinessRange {
   return { arg: {}, val: {} };
 };
 
-function triggerEvent(element, event, point) {
+function triggerEvent(element: ThemeValue, event: string, point?: SeriesPoint): void {
   element && element.trigger(event, point);
 }
-// @ts-expect-error
 seriesNS.mixins = {
   chart: {},
   pie: {},
   polar: {},
 };
-// @ts-expect-error
 seriesNS.mixins.chart.scatter = scatterSeries.chart;
-// @ts-expect-error
 seriesNS.mixins.polar.scatter = scatterSeries.polar;
-// @ts-expect-error
 _extend(seriesNS.mixins.pie, pieSeries);
 _extend(
-  // @ts-expect-error
   seriesNS.mixins.chart,
   lineSeries.chart,
   areaSeries.chart,
@@ -95,16 +132,15 @@ _extend(
   financialSeries,
   stackedSeries.chart,
 );
-// @ts-expect-error
 _extend(seriesNS.mixins.polar, lineSeries.polar, areaSeries.polar, barSeries.polar, stackedSeries.polar);
 
-function includePointsMode(mode) {
+function includePointsMode(mode: ThemeValue): boolean {
   mode = _normalizeEnum(mode);
 
   return mode === INCLUDE_POINTS || mode === ALL_SERIES_POINTS;
 }
 
-function getLabelOptions(labelOptions, defaultColor) {
+function getLabelOptions(labelOptions: ThemeValue, defaultColor: string): ThemeValue {
   const opt = labelOptions || {};
   const labelFont = _extend({}, opt.font) || {};
   const labelBorder = opt.border || {};
@@ -144,34 +180,34 @@ function getLabelOptions(labelOptions, defaultColor) {
   };
 }
 
-function setPointHoverState(point, legendCallback) {
+function setPointHoverState(point: SeriesPoint, legendCallback: LegendCallback): void {
   point.fullState |= HOVER_STATE;
   point.applyView(legendCallback);
 }
 
-function releasePointHoverState(point, legendCallback) {
+function releasePointHoverState(point: SeriesPoint, legendCallback: LegendCallback): void {
   point.fullState &= ~HOVER_STATE;
   point.applyView(legendCallback);
   point.releaseHoverState();
 }
 
-function setPointSelectedState(point, legendCallback) {
+function setPointSelectedState(point: SeriesPoint, legendCallback: LegendCallback): void {
   point.fullState |= SELECTED_STATE;
   point.applyView(legendCallback);
 }
 
-function releasePointSelectedState(point, legendCallback) {
+function releasePointSelectedState(point: SeriesPoint, legendCallback: LegendCallback): void {
   point.fullState &= ~SELECTED_STATE;
   point.applyView(legendCallback);
 }
 
-function mergePointOptionsCore(base, extra) {
+function mergePointOptionsCore(base: ThemeValue, extra: ThemeValue): ThemeValue {
   const options = _extend({}, base, extra);
   options.border = _extend({}, base && base.border, extra && extra.border);
   return options;
 }
 
-function mergePointOptions(base, extra) {
+function mergePointOptions(base: ThemeValue, extra: ThemeValue): ThemeValue {
   const options = mergePointOptionsCore(base, extra);
   options.image = _extend(true, {}, base.image, extra.image);
   options.selectionStyle = mergePointOptionsCore(base.selectionStyle, extra.selectionStyle);
@@ -179,25 +215,11 @@ function mergePointOptions(base, extra) {
   return options;
 }
 
-export function Series(settings, options) {
-  const that = this;
-  that.fullState = 0;
-  that._extGroups = settings;
-  that._renderer = settings.renderer;
-  that._group = settings.renderer.g().attr({ class: 'dxc-series' });
-  that._eventTrigger = settings.eventTrigger;
-  that._eventPipe = settings.eventPipe;
-  that._incidentOccurred = settings.incidentOccurred;
-
-  that._legendCallback = _noop;
-  that.updateOptions(options, settings);
-}
-
-function getData(pointData) {
+function getData(pointData: ThemeValue): ThemeValue {
   return pointData.data;
 }
 
-function getValueChecker(axisType, axis) {
+function getValueChecker(axisType: string, axis: ThemeValue): ValueChecker {
   if (!axis || axisType !== 'logarithmic' || axis.getOptions().allowNegatives !== false) {
     return () => true;
   } else {
@@ -205,83 +227,275 @@ function getValueChecker(axisType, axis) {
   }
 }
 
-Series.prototype = {
-  constructor: Series,
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Series = class Series {
+  declare fullState: number;
 
-  _createLegendState: _noop,
+  declare _extGroups: SeriesSettings;
 
-  getLegendStyles() {
+  declare _renderer: ThemeValue;
+
+  declare _group: ThemeValue;
+
+  declare _eventTrigger: (name: string, args: ThemeValue) => void;
+
+  declare _eventPipe: (data: ThemeValue) => void;
+
+  declare _incidentOccurred: (id: string, args?: ThemeValue[]) => void;
+
+  declare _legendCallback: LegendCallback;
+
+  declare type: string;
+
+  declare isUpdated: boolean;
+
+  declare _firstDrawing: boolean;
+
+  declare _options: ThemeValue;
+
+  declare _pointOptions: ThemeValue;
+
+  declare name: string;
+
+  declare pane: string;
+
+  declare tag: ThemeValue;
+
+  declare _seriesModes: ThemeValue;
+
+  declare _valueAxis: ThemeValue;
+
+  declare axis: string | undefined;
+
+  declare _argumentAxis: ThemeValue;
+
+  declare _stackName: string | null;
+
+  declare _visible: boolean;
+
+  declare stack: ThemeValue;
+
+  declare barOverlapGroup: ThemeValue;
+
+  declare _processEmptyValue: (value: ThemeValue) => ThemeValue;
+
+  declare argumentType: string;
+
+  declare valueType: string;
+
+  declare argumentAxisType: string;
+
+  declare valueAxisType: string;
+
+  declare showZero: boolean;
+
+  declare _canRenderCompleteHandle?: boolean;
+
+  declare _data: ThemeValue[];
+
+  declare _useAllAggregatedPoints: boolean;
+
+  declare pointsByArgument: Record<string, SeriesPoint[]>;
+
+  declare _points: SeriesPoint[];
+
+  declare _drawnPoints: SeriesPoint[];
+
+  declare _segments: SeriesPoint[][];
+
+  declare _graphics: ThemeValue;
+
+  declare _trackers: ThemeValue;
+
+  declare _markersGroup: ThemeValue;
+
+  declare _errorBarGroup: ThemeValue;
+
+  declare _labelsGroup: ThemeValue;
+
+  declare _elementsGroup: ThemeValue;
+
+  declare _bordersGroup: ThemeValue;
+
+  declare _trackersGroup: ThemeValue;
+
+  declare _isAllPointsTranslated: boolean;
+
+  declare _resetApplyingAnimation: boolean;
+
+  declare lastSelectionMode: string;
+
+  declare lastHoverMode: string;
+
+  declare _nearestPoint: SeriesPoint | null;
+
+  declare _paneClipRectID: ThemeValue;
+
+  declare _widePaneClipRectID: ThemeValue;
+
+  declare _forceClipping: boolean;
+
+  declare _clipLabels: boolean;
+
+  declare _styles: SeriesStyles;
+
+  declare _rangeData: ThemeValue;
+
+  declare _prevSeries: ThemeValue;
+
+  declare autoHidePointMarkers?: boolean;
+
+  declare _aggregators: Record<string, (aggregationInfo: ThemeValue, series: ThemeValue) => ThemeValue>;
+
+  declare _defaultAggregator: string;
+
+  declare _parseStyle: (options: ThemeValue, defaultColor: string, defaultBorderColor?: string) => ThemeValue;
+
+  declare _getCreatingPointOptions: (data: ThemeValue, dataIndex?: number) => ThemeValue;
+
+  declare _updateOptions: (options: ThemeValue) => void;
+
+  declare _createGroups: () => void;
+
+  declare _getPointDataSelector: () => (data: ThemeValue, options?: ThemeValue) => ThemeValue;
+
+  declare _endUpdateData: () => void;
+
+  declare _calculateErrorBars: (data: ThemeValue[]) => void;
+
+  declare _checkData: (data: ThemeValue, skippedFields?: ThemeValue, fieldsToCheck?: ThemeValue) => boolean;
+
+  declare _removeElement: (element: ThemeValue) => void;
+
+  declare _drawPoint: (options: DrawPointOptions) => void;
+
+  declare _drawSegment: (points: SeriesPoint[], animationEnabled: boolean, segmentCount: number, lastSegment: boolean) => void;
+
+  declare _animate: (firstDrawing?: boolean) => void;
+
+  declare _appendInGroup: () => void;
+
+  declare _setGroupsSettings: (animationEnabled: boolean, firstDrawing: boolean) => void;
+
+  declare _applyStyle: (style: ThemeValue) => void;
+
+  declare _applyVisibleArea: () => void;
+
+  declare _applyElementsClipRect: (settings: Record<string, ThemeValue>) => void;
+
+  declare _applyClearingSettings: (settings: Record<string, ThemeValue>) => void;
+
+  declare _getRangeData: () => ThemeValue;
+
+  declare _getOptionsForPoint: () => ThemeValue;
+
+  declare _createPointStyles: (pointOptions: ThemeValue, data?: ThemeValue, point?: SeriesPoint) => ThemeValue;
+
+  declare _patchMarginOptions: (options: ThemeValue) => ThemeValue;
+
+  declare getVisibleArea: () => ThemeValue;
+
+  declare _createLegendState: (styleOptions: ThemeValue, defaultColor: string) => ThemeValue;
+
+  declare getValueFields: () => string[];
+
+  declare getSizeField: () => string;
+
+  declare getArgumentField: () => string;
+
+  declare autoHidePointMarkersEnabled: () => boolean;
+
+  declare usePointsToDefineAutoHiding: () => boolean;
+
+  declare _updatePointsVisibility: () => void;
+
+  declare correctPosition: (correction: ThemeValue, canvas: ThemeValue) => void;
+
+  declare drawTrackers: () => void;
+
+  declare getNeighborPoint: (x: number, y: number) => SeriesPoint | null | undefined;
+
+  declare areErrorBarsVisible: () => boolean;
+
+  declare _getColorId: (options: ThemeValue) => ThemeValue;
+
+  constructor(settings: SeriesSettings, options: ThemeValue) {
+    this.fullState = 0;
+    this._extGroups = settings;
+    this._renderer = settings.renderer;
+    this._group = settings.renderer.g().attr({ class: 'dxc-series' });
+    this._eventTrigger = settings.eventTrigger;
+    this._eventPipe = settings.eventPipe;
+    this._incidentOccurred = settings.incidentOccurred;
+
+    this._legendCallback = _noop;
+    this.updateOptions(options, settings);
+  }
+
+  getLegendStyles(): SeriesLegendStyles {
     return this._styles.legendStyles;
-  },
+  }
 
-  _createStyles(options) {
-    const that = this;
+  _createStyles(options: ThemeValue): void {
     const mainSeriesColor = options.mainSeriesColor;
     const colorId = this._getColorId(options);
     const hoverStyle = options.hoverStyle || {};
     const selectionStyle = options.selectionStyle || {};
 
     if (colorId) {
-      that._turnOffHatching(hoverStyle, selectionStyle);
+      this._turnOffHatching(hoverStyle, selectionStyle);
     }
 
-    that._styles = {
+    this._styles = {
       labelColor: mainSeriesColor,
-      normal: that._parseStyle(options, mainSeriesColor, mainSeriesColor),
-      hover: that._parseStyle(hoverStyle, colorId || mainSeriesColor, mainSeriesColor),
-      selection: that._parseStyle(selectionStyle, colorId || mainSeriesColor, mainSeriesColor),
+      normal: this._parseStyle(options, mainSeriesColor, mainSeriesColor),
+      hover: this._parseStyle(hoverStyle, colorId || mainSeriesColor, mainSeriesColor),
+      selection: this._parseStyle(selectionStyle, colorId || mainSeriesColor, mainSeriesColor),
       legendStyles: {
-        normal: that._createLegendState(options, colorId || mainSeriesColor),
-        hover: that._createLegendState(hoverStyle, colorId || mainSeriesColor),
-        selection: that._createLegendState(selectionStyle, colorId || mainSeriesColor),
+        normal: this._createLegendState(options, colorId || mainSeriesColor),
+        hover: this._createLegendState(hoverStyle, colorId || mainSeriesColor),
+        selection: this._createLegendState(selectionStyle, colorId || mainSeriesColor),
       },
     };
-  },
+  }
 
-  setClippingParams(baseId, wideId, forceClipping, clipLabels = true) {
+  setClippingParams(baseId: ThemeValue, wideId: ThemeValue, forceClipping: boolean, clipLabels = true): void {
     this._paneClipRectID = baseId;
     this._widePaneClipRectID = wideId;
     this._forceClipping = forceClipping;
     this._clipLabels = clipLabels;
-  },
+  }
 
-  applyClip() {
+  applyClip(): void {
     this._group.attr({ 'clip-path': this._paneClipRectID });
-  },
+  }
 
-  resetClip() {
+  resetClip(): void {
     this._group.attr({ 'clip-path': null });
-  },
+  }
 
-  getTagField() { return this._options.tagField || 'tag'; },
+  getTagField(): string { return this._options.tagField || 'tag'; }
 
-  getValueFields: _noop,
-
-  getSizeField: _noop,
-
-  getArgumentField: _noop,
-
-  getPoints() {
+  getPoints(): SeriesPoint[] {
     return this._points;
-  },
+  }
 
-  getPointsInViewPort() {
+  getPointsInViewPort(): ThemeValue {
     return rangeCalculator.getPointsInViewPort(this);
-  },
+  }
 
-  _createPoint(data, index, oldPoint) {
+  _createPoint(data: ThemeValue, index: number, oldPoint?: SeriesPoint): SeriesPoint {
     data.index = index;
-    const that = this;
-    const pointsByArgument = that.pointsByArgument;
-    const options = that._getCreatingPointOptions(data);
+    const pointsByArgument = this.pointsByArgument;
+    const options = this._getCreatingPointOptions(data);
     const arg = data.argument.valueOf();
     let point = oldPoint;
 
     if (point) {
       point.update(data, options);
     } else {
-      point = new Point(that, data, options);
-      if (that.isSelected() && includePointsMode(that.lastSelectionMode)) {
+      point = new Point(this, data, options);
+      if (this.isSelected() && includePointsMode(this.lastSelectionMode)) {
         point.setView(SELECTION);
       }
     }
@@ -294,121 +508,119 @@ Series.prototype = {
     }
 
     if (point.hasValue()) {
-      that.customizePoint(point, data);
+      this.customizePoint(point, data);
     }
     return point;
-  },
+  }
 
-  getRangeData() {
+  getRangeData(): ThemeValue {
     return this._visible ? this._getRangeData() : getEmptyBusinessRange();
-  },
+  }
 
-  getArgumentRange() {
+  getArgumentRange(): ThemeValue {
     return this._visible ? rangeCalculator.getArgumentRange(this) : getEmptyBusinessRange();
-  },
+  }
 
-  getViewport() {
+  getViewport(): ThemeValue {
     return rangeCalculator.getViewport(this);
-  },
+  }
 
-  _deleteGroup(groupName) {
+  _deleteGroup(groupName: string): void {
     const group = this[groupName];
     if (group) {
       group.dispose();
       this[groupName] = null;
     }
-  },
+  }
 
-  updateOptions(newOptions, settings) {
-    const that = this;
+  updateOptions(newOptions: ThemeValue, settings?: SeriesSettings): void {
     const widgetType = newOptions.widgetType;
-    const oldType = that.type;
+    const oldType = this.type;
     const newType = newOptions.type;
 
-    that.type = newType && _normalizeEnum(newType.toString());
+    this.type = newType && _normalizeEnum(newType.toString());
 
-    if (!that._checkType(widgetType) || that._checkPolarBarType(widgetType, newOptions)) {
-      that.dispose();
-      that.isUpdated = false;
+    if (!this._checkType(widgetType) || this._checkPolarBarType(widgetType, newOptions)) {
+      this.dispose();
+      this.isUpdated = false;
       return;
     }
 
-    if (oldType !== that.type) {
-      that._firstDrawing = true;
-      that._resetType(oldType, widgetType);
-      that._setType(that.type, widgetType);
+    if (oldType !== this.type) {
+      this._firstDrawing = true;
+      this._resetType(oldType, widgetType);
+      this._setType(this.type, widgetType);
     } else {
-      that._defineDrawingState();
+      this._defineDrawingState();
     }
 
-    that._options = newOptions;
-    that._pointOptions = null;
+    this._options = newOptions;
+    this._pointOptions = null;
 
-    that.name = newOptions.name;
-    that.pane = newOptions.pane;
+    this.name = newOptions.name;
+    this.pane = newOptions.pane;
 
-    that.tag = newOptions.tag;
+    this.tag = newOptions.tag;
 
     if (settings) {
-      that._seriesModes = settings.commonSeriesModes || that._seriesModes;
-      that._valueAxis = settings.valueAxis || that._valueAxis;
-      that.axis = that._valueAxis && that._valueAxis.name;
-      that._argumentAxis = settings.argumentAxis || that._argumentAxis;
+      this._seriesModes = settings.commonSeriesModes || this._seriesModes;
+      this._valueAxis = settings.valueAxis || this._valueAxis;
+      this.axis = this._valueAxis && this._valueAxis.name;
+      this._argumentAxis = settings.argumentAxis || this._argumentAxis;
     }
 
-    that._createStyles(newOptions);
+    this._createStyles(newOptions);
 
-    that._stackName = null;
+    this._stackName = null;
 
-    that._updateOptions(newOptions);
+    this._updateOptions(newOptions);
 
-    that._visible = newOptions.visible;
-    that.isUpdated = true;
+    this._visible = newOptions.visible;
+    this.isUpdated = true;
 
-    that.stack = newOptions.stack;
-    that.barOverlapGroup = newOptions.barOverlapGroup;
+    this.stack = newOptions.stack;
+    this.barOverlapGroup = newOptions.barOverlapGroup;
 
-    that._createGroups();
+    this._createGroups();
 
-    that._processEmptyValue = newOptions.ignoreEmptyPoints ? (x) => (x === null ? undefined : x) : (x) => x;
-  },
+    this._processEmptyValue = newOptions.ignoreEmptyPoints ? (x): ThemeValue => (x === null ? undefined : x) : (x): ThemeValue => x;
+  }
 
-  _defineDrawingState() {
+  _defineDrawingState(): void {
     this._firstDrawing = true;
-  },
+  }
 
-  _disposePoints(points) {
+  _disposePoints(points: SeriesPoint[] | null | undefined): void {
     _each(points || [], (_, p) => {
       p.dispose();
     });
-  },
+  }
 
-  updateDataType(settings) {
-    const that = this;
-    that.argumentType = settings.argumentType;
-    that.valueType = settings.valueType;
-    that.argumentAxisType = settings.argumentAxisType;
-    that.valueAxisType = settings.valueAxisType;
-    that.showZero = settings.showZero;
-    this._argumentChecker = getValueChecker(settings.argumentAxisType, that.getArgumentAxis());
-    this._valueChecker = getValueChecker(settings.valueAxisType, that.getValueAxis());
+  updateDataType(settings: ThemeValue): this {
+    this.argumentType = settings.argumentType;
+    this.valueType = settings.valueType;
+    this.argumentAxisType = settings.argumentAxisType;
+    this.valueAxisType = settings.valueAxisType;
+    this.showZero = settings.showZero;
+    this._argumentChecker = getValueChecker(settings.argumentAxisType, this.getArgumentAxis());
+    this._valueChecker = getValueChecker(settings.valueAxisType, this.getValueAxis());
 
-    return that;
-  },
+    return this;
+  }
 
-  _argumentChecker() {
+  _argumentChecker(): boolean {
     return true;
-  },
+  }
 
-  _valueChecker() {
+  _valueChecker(): boolean {
     return true;
-  },
+  }
 
-  getOptions() {
+  getOptions(): ThemeValue {
     return this._options;
-  },
+  }
 
-  _getOldPoint(data, oldPointsByArgument, index) {
+  _getOldPoint(data: ThemeValue, oldPointsByArgument: Record<string, SeriesPoint[]>, index: number): SeriesPoint | undefined {
     const arg = data.argument && data.argument.valueOf();
     const point = (oldPointsByArgument[arg] || [])[0];
 
@@ -417,23 +629,22 @@ Series.prototype = {
     }
 
     return point;
-  },
+  }
 
-  updateData(data) {
-    const that = this;
-    const options = that._options;
+  updateData(data: ThemeValue): void {
+    const options = this._options;
     const nameField = options.nameField;
 
     data = data || [];
 
     if (data.length) {
-      that._canRenderCompleteHandle = true;
+      this._canRenderCompleteHandle = true;
     }
 
     const dataSelector = this._getPointDataSelector();
     let itemsWithoutArgument = 0;
 
-    that._data = data.reduce((data, dataItem, index) => {
+    this._data = data.reduce((data, dataItem, index) => {
       const pointDataItem = dataSelector(dataItem);
       if (_isDefined(pointDataItem.argument)) {
         if (!nameField || dataItem[nameField] === options.nameFieldValue) {
@@ -447,12 +658,12 @@ Series.prototype = {
     }, []);
 
     if (itemsWithoutArgument && itemsWithoutArgument === data.length) {
-      that._incidentOccurred('W2002', [that.name, that.getArgumentField()]);
+      this._incidentOccurred('W2002', [this.name, this.getArgumentField()]);
     }
-    that._endUpdateData();
-  },
+    this._endUpdateData();
+  }
 
-  _getData() {
+  _getData(): ThemeValue {
     let data = this._data || [];
 
     if (this.useAggregation()) {
@@ -465,42 +676,37 @@ Series.prototype = {
     }
 
     return data;
-  },
+  }
 
-  useAggregation() {
+  useAggregation(): boolean {
     const aggregation = this.getOptions().aggregation;
 
     return aggregation && aggregation.enabled;
-  },
+  }
 
-  autoHidePointMarkersEnabled: _noop,
-
-  usePointsToDefineAutoHiding: _noop,
-
-  createPoints(useAllAggregatedPoints) {
+  createPoints(useAllAggregatedPoints?: boolean): void {
     this._normalizeUsingAllAggregatedPoints(useAllAggregatedPoints);
     this._createPoints();
-  },
+  }
 
-  _normalizeUsingAllAggregatedPoints(useAllAggregatedPoints) {
+  _normalizeUsingAllAggregatedPoints(useAllAggregatedPoints?: boolean): void {
     this._useAllAggregatedPoints = this.useAggregation() && (this.argumentAxisType === DISCRETE || ((this._data || []).length > 1 && !!useAllAggregatedPoints));
-  },
+  }
 
-  _createPoints() {
-    const that = this;
-    const oldPointsByArgument = that.pointsByArgument || {};
-    const data = that._getData();
+  _createPoints(): void {
+    const oldPointsByArgument = this.pointsByArgument || {};
+    const data = this._getData();
 
-    that.pointsByArgument = {};
+    this.pointsByArgument = {};
 
-    that._calculateErrorBars(data);
+    this._calculateErrorBars(data);
 
     const skippedFields = {};
     const points = data.reduce((points, pointDataItem) => {
-      if (that._checkData(pointDataItem, skippedFields)) {
+      if (this._checkData(pointDataItem, skippedFields)) {
         const pointIndex = points.length;
-        const oldPoint = that._getOldPoint(pointDataItem, oldPointsByArgument, pointIndex);
-        const point = that._createPoint(pointDataItem, pointIndex, oldPoint);
+        const oldPoint = this._getOldPoint(pointDataItem, oldPointsByArgument, pointIndex);
+        const point = this._createPoint(pointDataItem, pointIndex, oldPoint);
 
         points.push(point);
       }
@@ -509,32 +715,31 @@ Series.prototype = {
 
     for (const field in skippedFields) {
       if (skippedFields[field] === data.length) {
-        that._incidentOccurred('W2002', [that.name, field]);
+        this._incidentOccurred('W2002', [this.name, field]);
       }
     }
-    Object.keys(oldPointsByArgument).forEach((key) => that._disposePoints(oldPointsByArgument[key]));
+    Object.keys(oldPointsByArgument).forEach((key) => this._disposePoints(oldPointsByArgument[key]));
 
-    that._points = points;
-  },
+    this._points = points;
+  }
 
-  _removeOldSegments() {
-    const that = this;
-    const startIndex = that._segments.length;
+  _removeOldSegments(): void {
+    const startIndex = this._segments.length;
 
-    _each(that._graphics.splice(startIndex, that._graphics.length) || [], (_, elem) => {
-      that._removeElement(elem);
+    _each(this._graphics.splice(startIndex, this._graphics.length) || [], (_, elem) => {
+      this._removeElement(elem);
     });
-    if (that._trackers) {
-      _each(that._trackers.splice(startIndex, that._trackers.length) || [], (_, elem) => {
+    if (this._trackers) {
+      _each(this._trackers.splice(startIndex, this._trackers.length) || [], (_, elem) => {
         elem.remove();
       });
     }
-  },
+  }
 
-  _prepareSegmentsPosition() {
+  _prepareSegmentsPosition(): void {
     const points = this._points || [];
     const isCloseSegment = points[0] && points[0].hasValue() && this._options.closed;
-    const segments = points.reduce((segments, p) => {
+    const segments = points.reduce((segments: ThemeValue, p) => {
       const segment = segments.at(-1);
 
       if (!p.translated) {
@@ -551,26 +756,25 @@ Series.prototype = {
     }, [[]]);
 
     this._drawSegments(segments, isCloseSegment, false);
-  },
+  }
 
-  _drawElements(animationEnabled, firstDrawing) {
-    const that = this;
-    const points = that._points || [];
-    const isCloseSegment = points[0] && points[0].hasValue() && that._options.closed;
+  _drawElements(animationEnabled: boolean, firstDrawing: boolean): void {
+    const points = this._points || [];
+    const isCloseSegment = points[0] && points[0].hasValue() && this._options.closed;
     const groupForPoint = {
-      markers: that._markersGroup,
-      errorBars: that._errorBarGroup,
+      markers: this._markersGroup,
+      errorBars: this._errorBarGroup,
     };
 
-    that._drawnPoints = [];
-    that._graphics = that._graphics || [];
-    that._segments = [];
+    this._drawnPoints = [];
+    this._graphics = this._graphics || [];
+    this._segments = [];
 
-    const segments = points.reduce((segments, p) => {
+    const segments = points.reduce((segments: ThemeValue, p) => {
       const segment = segments.at(-1);
 
       if (p.hasValue() && p.hasCoords()) {
-        that._drawPoint({
+        this._drawPoint({
           point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing,
         });
         segment.push(p);
@@ -583,13 +787,13 @@ Series.prototype = {
       return segments;
     }, [[]]);
 
-    that._drawSegments(segments, isCloseSegment, animationEnabled);
-    that._firstDrawing = !points.length;
-    that._removeOldSegments();
-    animationEnabled && that._animate(firstDrawing);
-  },
+    this._drawSegments(segments, isCloseSegment, animationEnabled);
+    this._firstDrawing = !points.length;
+    this._removeOldSegments();
+    animationEnabled && this._animate(firstDrawing);
+  }
 
-  _drawSegments(segments, closeSegment, animationEnabled) {
+  _drawSegments(segments: SeriesPoint[][], closeSegment: boolean, animationEnabled: boolean): void {
     segments.forEach((segment, index) => {
       if (segment.length) {
         const lastSegment = closeSegment && index === segments.length - 1;
@@ -597,222 +801,212 @@ Series.prototype = {
         this._drawSegment(segment, animationEnabled, index, lastSegment);
       }
     });
-  },
+  }
 
-  draw(animationEnabled, hideLayoutLabels, legendCallback) {
-    const that = this;
-    const firstDrawing = that._firstDrawing;
+  draw(animationEnabled: boolean, hideLayoutLabels?: boolean, legendCallback?: LegendCallback): void {
+    const firstDrawing = this._firstDrawing;
 
-    that._legendCallback = legendCallback || that._legendCallback;
+    this._legendCallback = legendCallback || this._legendCallback;
 
-    if (!that._visible) {
-      that._group.remove();
+    if (!this._visible) {
+      this._group.remove();
       return;
     }
 
-    that._appendInGroup();
+    this._appendInGroup();
 
-    if (!that._isAllPointsTranslated) {
-      that.prepareCoordinatesForPoints();
+    if (!this._isAllPointsTranslated) {
+      this.prepareCoordinatesForPoints();
     }
 
-    that._setGroupsSettings(animationEnabled, firstDrawing);
-    !firstDrawing && !that._resetApplyingAnimation && that._prepareSegmentsPosition();
-    that._drawElements(animationEnabled, firstDrawing);
-    hideLayoutLabels && that.hideLabels();
+    this._setGroupsSettings(animationEnabled, firstDrawing);
+    !firstDrawing && !this._resetApplyingAnimation && this._prepareSegmentsPosition();
+    this._drawElements(animationEnabled, firstDrawing);
+    hideLayoutLabels && this.hideLabels();
 
-    if (that.isSelected()) {
-      that._changeStyle(that.lastSelectionMode, undefined, true);
-    } else if (that.isHovered()) {
-      that._changeStyle(that.lastHoverMode, undefined, true);
+    if (this.isSelected()) {
+      this._changeStyle(this.lastSelectionMode, undefined, true);
+    } else if (this.isHovered()) {
+      this._changeStyle(this.lastHoverMode, undefined, true);
     } else {
-      that._applyStyle(that._styles.normal);
+      this._applyStyle(this._styles.normal);
     }
-    that._isAllPointsTranslated = false;
-    that._resetApplyingAnimation = false;
-  },
+    this._isAllPointsTranslated = false;
+    this._resetApplyingAnimation = false;
+  }
 
-  _translatePoints() {
+  _translatePoints(): void {
     const points = this._points ?? [];
 
     points.forEach((p) => {
       p.translate();
     });
-  },
+  }
 
-  prepareCoordinatesForPoints() {
+  prepareCoordinatesForPoints(): void {
     this._applyVisibleArea();
     this._translatePoints();
     this._isAllPointsTranslated = true;
-  },
+  }
 
-  _setLabelGroupSettings(animationEnabled) {
-    const settings = { class: 'dxc-labels', 'pointer-events': 'none' };
+  _setLabelGroupSettings(animationEnabled: boolean): void {
+    const settings: Record<string, ThemeValue> = { class: 'dxc-labels', 'pointer-events': 'none' };
     this._clipLabels && this._applyElementsClipRect(settings);
     this._applyClearingSettings(settings);
-    // @ts-expect-error
     animationEnabled && (settings.opacity = 0.001);
     this._labelsGroup.attr(settings).append(this._extGroups.labelsGroup);
-  },
+  }
 
-  _checkType(widgetType) {
-    // @ts-expect-error
+  _checkType(widgetType: string): boolean {
     return !!seriesNS.mixins[widgetType][this.type];
-  },
+  }
 
-  _checkPolarBarType(widgetType, options) {
+  _checkPolarBarType(widgetType: string, options: ThemeValue): boolean {
+    // eslint-disable-next-line @typescript-eslint/prefer-includes
     return widgetType === 'polar' && options.spiderWidget && this.type.indexOf('bar') !== -1;
-  },
+  }
 
-  _resetType(seriesType, widgetType) {
+  _resetType(seriesType: string | undefined, widgetType: string): void {
     let methodName;
     let methods;
 
     if (seriesType) {
-      // @ts-expect-error
       methods = seriesNS.mixins[widgetType][seriesType];
       for (methodName in methods) {
         delete this[methodName];
       }
     }
-  },
+  }
 
-  _setType(seriesType, widgetType) {
+  _setType(seriesType: string, widgetType: string): void {
     let methodName;
-    // @ts-expect-error
     const methods = seriesNS.mixins[widgetType][seriesType];
 
     for (methodName in methods) {
       this[methodName] = methods[methodName];
     }
-  },
+  }
 
-  _setPointsView(view, target) {
+  _setPointsView(view: string, target?: SeriesPoint): void {
     this.getPoints().forEach((point) => {
       if (target !== point) {
         point.setView(view);
       }
     });
-  },
+  }
 
-  _resetPointsView(view, target) {
+  _resetPointsView(view: string, target?: SeriesPoint): void {
     this.getPoints().forEach((point) => {
       if (target !== point) {
         point.resetView(view);
       }
     });
-  },
+  }
 
-  _resetNearestPoint() {
-    const that = this;
-    that._nearestPoint && that._nearestPoint.series !== null && that._nearestPoint.resetView(HOVER);
-    that._nearestPoint = null;
-  },
+  _resetNearestPoint(): void {
+    this._nearestPoint && this._nearestPoint.series !== null && this._nearestPoint.resetView(HOVER);
+    this._nearestPoint = null;
+  }
 
-  _setSelectedState(mode) {
-    const that = this;
+  _setSelectedState(mode?: string): void {
+    this.lastSelectionMode = _normalizeEnum(mode || this._options.selectionMode);
 
-    that.lastSelectionMode = _normalizeEnum(mode || that._options.selectionMode);
+    this.fullState |= SELECTED_STATE;
 
-    that.fullState |= SELECTED_STATE;
+    this._resetNearestPoint();
+    this._changeStyle(this.lastSelectionMode);
 
-    that._resetNearestPoint();
-    that._changeStyle(that.lastSelectionMode);
-
-    if (that.lastSelectionMode !== NONE_MODE && that.isHovered() && includePointsMode(that.lastHoverMode)) {
-      that._resetPointsView(HOVER);
+    if (this.lastSelectionMode !== NONE_MODE && this.isHovered() && includePointsMode(this.lastHoverMode)) {
+      this._resetPointsView(HOVER);
     }
-  },
+  }
 
-  _releaseSelectedState() {
-    const that = this;
+  _releaseSelectedState(): void {
+    this.fullState &= ~SELECTED_STATE;
 
-    that.fullState &= ~SELECTED_STATE;
+    this._changeStyle(this.lastSelectionMode, SELECTION);
 
-    that._changeStyle(that.lastSelectionMode, SELECTION);
-
-    if (that.lastSelectionMode !== NONE_MODE && that.isHovered() && includePointsMode(that.lastHoverMode)) {
-      that._setPointsView(HOVER);
+    if (this.lastSelectionMode !== NONE_MODE && this.isHovered() && includePointsMode(this.lastHoverMode)) {
+      this._setPointsView(HOVER);
     }
-  },
+  }
 
-  isFullStackedSeries() {
+  isFullStackedSeries(): boolean {
+    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
     return this.type.indexOf('fullstacked') === 0;
-  },
+  }
 
-  isStackedSeries() {
+  isStackedSeries(): boolean {
+    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
     return this.type.indexOf('stacked') === 0;
-  },
+  }
 
-  resetApplyingAnimation(isFirstDrawing) {
+  resetApplyingAnimation(isFirstDrawing?: boolean): void {
     this._resetApplyingAnimation = true;
     if (isFirstDrawing) {
       this._firstDrawing = true;
     }
-  },
+  }
 
-  isFinancialSeries() {
+  isFinancialSeries(): boolean {
     return this.type === 'stock' || this.type === 'candlestick';
-  },
+  }
 
-  _canChangeView() {
+  _canChangeView(): boolean {
     return !this.isSelected() && _normalizeEnum(this._options.hoverMode) !== NONE_MODE;
-  },
+  }
 
-  _changeStyle(mode, resetView, skipPoints) {
-    const that = this;
-    let state = that.fullState;
+  _changeStyle(mode: string, resetView?: string, skipPoints?: boolean): void {
+    let state = this.fullState;
     const styles = [NORMAL, HOVER, SELECTION, SELECTION];
 
-    if (that.lastHoverMode === 'none') {
+    if (this.lastHoverMode === 'none') {
       state &= ~HOVER_STATE;
     }
 
-    if (that.lastSelectionMode === 'none') {
+    if (this.lastSelectionMode === 'none') {
       state &= ~SELECTED_STATE;
     }
 
     if (includePointsMode(mode) && !skipPoints) {
       if (!resetView) {
-        that._setPointsView(styles[state]);
+        this._setPointsView(styles[state]);
       } else {
-        that._resetPointsView(resetView);
+        this._resetPointsView(resetView);
       }
     }
 
-    that._legendCallback([RESET_ITEM, APPLY_HOVER, APPLY_SELECTED, APPLY_SELECTED][state]);
-    that._applyStyle(that._styles[styles[state]]);
-  },
+    this._legendCallback([RESET_ITEM, APPLY_HOVER, APPLY_SELECTED, APPLY_SELECTED][state]);
+    this._applyStyle(this._styles[styles[state]]);
+  }
 
-  updateHover(x, y) {
-    const that = this;
-    const currentNearestPoint = that._nearestPoint;
-    const point = that.isHovered() && that.lastHoverMode === NEAREST_POINT && that.getNeighborPoint(x, y);
+  updateHover(x: number, y: number): void {
+    const currentNearestPoint = this._nearestPoint;
+    const point = this.isHovered() && this.lastHoverMode === NEAREST_POINT && this.getNeighborPoint(x, y);
 
-    if (point !== currentNearestPoint && !(that.isSelected() && that.lastSelectionMode !== NONE_MODE)) {
-      that._resetNearestPoint();
+    if (point !== currentNearestPoint && !(this.isSelected() && this.lastSelectionMode !== NONE_MODE)) {
+      this._resetNearestPoint();
       if (point) {
         point.setView(HOVER);
-        that._nearestPoint = point;
+        this._nearestPoint = point;
       }
     }
-  },
+  }
 
-  _getMainAxisName() {
+  _getMainAxisName(): string {
     return this._options.rotated ? 'X' : 'Y';
-  },
+  }
 
-  areLabelsVisible() {
+  areLabelsVisible(): boolean {
     return !_isDefined(this._options.maxLabelCount) || (this._points.length <= this._options.maxLabelCount);
-  },
+  }
 
-  getLabelVisibility() {
+  getLabelVisibility(): boolean {
     return this.areLabelsVisible() && this._options.label && this._options.label.visible;
-  },
+  }
 
-  customizePoint(point, pointData) {
-    const that = this;
-    const options = that._options;
+  customizePoint(point: SeriesPoint, pointData: ThemeValue): void {
+    const options = this._options;
     const customizePoint = options.customizePoint;
     let customizeObject;
     let pointOptions;
@@ -823,72 +1017,66 @@ Series.prototype = {
     let usePointCustomOptions;
 
     if (customizeLabel && customizeLabel.call) {
-      customizeObject = _extend({ seriesName: that.name }, pointData);
-      customizeObject.series = that;
+      customizeObject = _extend({ seriesName: this.name }, pointData);
+      customizeObject.series = this;
       customLabelOptions = customizeLabel.call(customizeObject, customizeObject);
       useLabelCustomOptions = customLabelOptions && !_isEmptyObject(customLabelOptions);
       customLabelOptions = useLabelCustomOptions ? _extend(true, {}, options.label, customLabelOptions) : null;
     }
 
     if (customizePoint && customizePoint.call) {
-      customizeObject = customizeObject || _extend({ seriesName: that.name }, pointData);
-      customizeObject.series = that;
+      customizeObject = customizeObject || _extend({ seriesName: this.name }, pointData);
+      customizeObject.series = this;
       customOptions = customizePoint.call(customizeObject, customizeObject);
       usePointCustomOptions = customOptions && !_isEmptyObject(customOptions);
     }
 
     if (useLabelCustomOptions || usePointCustomOptions) {
-      pointOptions = that._parsePointOptions(that._preparePointOptions(customOptions), customLabelOptions || options.label, pointData, point);
+      pointOptions = this._parsePointOptions(this._preparePointOptions(customOptions), customLabelOptions || options.label, pointData, point);
       pointOptions.styles.useLabelCustomOptions = useLabelCustomOptions;
       pointOptions.styles.usePointCustomOptions = usePointCustomOptions;
 
       point.updateOptions(pointOptions);
     }
-  },
+  }
 
-  show() {
+  show(): void {
     if (!this._visible) {
       this._changeVisibility(true);
     }
-  },
+  }
 
-  hide() {
+  hide(): void {
     if (this._visible) {
       this._changeVisibility(false);
     }
-  },
+  }
 
-  _changeVisibility(visibility) {
-    const that = this;
-    that._visible = that._options.visible = visibility;
-    that._updatePointsVisibility();
-    that.hidePointTooltip();
-    that._options.visibilityChanged(that);
-  },
+  _changeVisibility(visibility: boolean): void {
+    this._visible = this._options.visible = visibility;
+    this._updatePointsVisibility();
+    this.hidePointTooltip();
+    this._options.visibilityChanged(this);
+  }
 
-  // TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed
-  // see T243839, T231939
-  _updatePointsVisibility: _noop,
-
-  hideLabels() {
+  hideLabels(): void {
     _each(this._points, (_, point) => {
       point._label.draw(false);
     });
-  },
+  }
 
-  _turnOffHatching(hoverStyle, selectionStyle) {
+  _turnOffHatching(hoverStyle: ThemeValue, selectionStyle: ThemeValue): void {
     if (hoverStyle.hatching) {
       hoverStyle.hatching.direction = 'none';
     }
     if (selectionStyle.hatching) {
       selectionStyle.hatching.direction = 'none';
     }
-  },
+  }
 
-  _parsePointOptions(pointOptions, labelOptions, data, point) {
-    const that = this;
-    const options = that._options;
-    const styles = that._createPointStyles(pointOptions, data, point);
+  _parsePointOptions(pointOptions: ThemeValue, labelOptions: ThemeValue, data?: ThemeValue, point?: SeriesPoint): ThemeValue {
+    const options = this._options;
+    const styles = this._createPointStyles(pointOptions, data, point);
     const parsedOptions = _extend({}, pointOptions, {
       type: options.type,
       rotated: options.rotated,
@@ -899,23 +1087,23 @@ Series.prototype = {
 
     parsedOptions.label = getLabelOptions(labelOptions, styles.labelColor);
 
-    if (that.areErrorBarsVisible()) {
+    if (this.areErrorBarsVisible()) {
       parsedOptions.errorBars = options.valueErrorBar;
     }
 
     return parsedOptions;
-  },
+  }
 
-  _preparePointOptions(customOptions) {
+  _preparePointOptions(customOptions?: ThemeValue): ThemeValue {
     const pointOptions = this._getOptionsForPoint();
     return customOptions ? mergePointOptions(pointOptions, customOptions) : pointOptions;
-  },
+  }
 
-  _getMarkerGroupOptions() {
+  _getMarkerGroupOptions(): ThemeValue {
     return _extend(false, {}, this._getOptionsForPoint(), { hoverStyle: {}, selectionStyle: {} });
-  },
+  }
 
-  _getAggregationMethod(isValueAxisDiscrete) {
+  _getAggregationMethod(isValueAxisDiscrete: boolean): (aggregationInfo: ThemeValue, series: ThemeValue) => ThemeValue {
     const options = this.getOptions().aggregation;
     const method = _normalizeEnum(options.method);
     const customAggregator = method === 'custom' && options.calculate;
@@ -929,20 +1117,19 @@ Series.prototype = {
     }
 
     return this._aggregators[method] || this._aggregators[this._defaultAggregator];
-  },
+  }
 
-  _resample({ interval, ticks }, data) {
-    const that = this;
-    const options = that.getOptions();
+  _resample({ interval, ticks }: ThemeValue, data: ThemeValue): ThemeValue[] {
+    const options = this.getOptions();
 
     const dataSelector = this._getPointDataSelector();
-    const addAggregatedData = (target, data, aggregationInfo?) => {
+    const addAggregatedData = (target, data, aggregationInfo?): void => {
       if (!data) {
         return;
       }
-      const processData = (d) => {
+      const processData = (d): void => {
         const pointData = d && dataSelector(d, options);
-        if (pointData && that._checkData(pointData)) {
+        if (pointData && this._checkData(pointData)) {
           pointData.aggregationInfo = aggregationInfo;
           target.push(pointData);
         }
@@ -955,8 +1142,8 @@ Series.prototype = {
       }
     };
 
-    const isValueAxisDiscrete = that.valueAxisType === DISCRETE;
-    const aggregateByCategory = that.argumentAxisType === DISCRETE;
+    const isValueAxisDiscrete = this.valueAxisType === DISCRETE;
+    const aggregateByCategory = this.argumentAxisType === DISCRETE;
     const aggregationMethod = this._getAggregationMethod(isValueAxisDiscrete);
 
     if (aggregateByCategory) {
@@ -976,7 +1163,7 @@ Series.prototype = {
           intervalStart: c,
           intervalEnd: c,
           data: groups[c.valueOf()].map(getData),
-        }, that));
+        }, this));
         return result;
       }, []);
     }
@@ -990,7 +1177,7 @@ Series.prototype = {
             aggregationInterval: interval,
             data: dataInInterval.map(getData),
           };
-          addAggregatedData(result[0], aggregationMethod(aggregationInfo, that));
+          addAggregatedData(result[0], aggregationMethod(aggregationInfo, this));
           result[1] = [];
         }
         return result;
@@ -1006,17 +1193,16 @@ Series.prototype = {
         aggregationInterval: null,
         data: data.map(getData),
       };
-      addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, that), aggregationInfo);
+      addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, this), aggregationInfo);
     } else {
       let dataIndex = 0;
 
       for (let i = 1; i < ticks.length; i++) {
         const intervalEnd = ticks[i];
         const intervalStart = ticks[i - 1];
-        const dataInInterval = [];
+        const dataInInterval: ThemeValue[] = [];
         while (data[dataIndex] && data[dataIndex].argument < intervalEnd) {
           if (data[dataIndex].argument >= intervalStart) {
-            // @ts-expect-error
             dataInInterval.push(data[dataIndex]);
           }
           dataIndex++;
@@ -1027,217 +1213,205 @@ Series.prototype = {
           aggregationInterval: interval,
           data: dataInInterval.map(getData),
         };
-        addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, that), aggregationInfo);
+        addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, this), aggregationInfo);
       }
     }
 
-    that._endUpdateData();
+    this._endUpdateData();
     return aggregatedData;
-  },
+  }
 
-  canRenderCompleteHandle() {
+  canRenderCompleteHandle(): boolean {
     const result = this._canRenderCompleteHandle;
     delete this._canRenderCompleteHandle;
     return !!result;
-  },
+  }
 
-  isHovered() {
+  isHovered(): boolean {
     return !!(this.fullState & 1);
-  },
+  }
 
-  isSelected() {
+  isSelected(): boolean {
     return !!(this.fullState & 2);
-  },
+  }
 
-  isVisible() {
+  isVisible(): boolean {
     return this._visible;
-  },
+  }
 
-  getAllPoints() {
+  getAllPoints(): SeriesPoint[] {
     this._createAllAggregatedPoints();
     return (this._points || []).slice();
-  },
+  }
 
-  getPointByPos(pos) {
+  getPointByPos(pos: number): SeriesPoint {
     this._createAllAggregatedPoints();
     return (this._points || [])[pos];
-  },
+  }
 
-  getVisiblePoints() {
+  getVisiblePoints(): SeriesPoint[] {
     return (this._drawnPoints || []).slice();
-  },
+  }
 
-  selectPoint(point) {
+  selectPoint(point: SeriesPoint): void {
     if (!point.isSelected()) {
       setPointSelectedState(point, this._legendCallback);
       this._eventPipe({ action: POINT_SELECT, target: point });
       this._eventTrigger(POINT_SELECTION_CHANGED, { target: point });
     }
-  },
+  }
 
-  deselectPoint(point) {
+  deselectPoint(point: SeriesPoint): void {
     if (point.isSelected()) {
       releasePointSelectedState(point, this._legendCallback);
       this._eventPipe({ action: POINT_DESELECT, target: point });
       this._eventTrigger(POINT_SELECTION_CHANGED, { target: point });
     }
-  },
+  }
 
-  hover(mode) {
-    const that = this;
-    const eventTrigger = that._eventTrigger;
+  hover(mode?: string): void {
+    const eventTrigger = this._eventTrigger;
 
-    if (that.isHovered()) {
+    if (this.isHovered()) {
       return;
     }
 
-    that.lastHoverMode = _normalizeEnum(mode || that._options.hoverMode);
+    this.lastHoverMode = _normalizeEnum(mode || this._options.hoverMode);
 
-    that.fullState |= HOVER_STATE;
+    this.fullState |= HOVER_STATE;
 
-    that._changeStyle(that.lastHoverMode, undefined, that.isSelected() && that.lastSelectionMode !== NONE_MODE);
+    this._changeStyle(this.lastHoverMode, undefined, this.isSelected() && this.lastSelectionMode !== NONE_MODE);
 
-    eventTrigger(SERIES_HOVER_CHANGED, { target: that });
-  },
+    eventTrigger(SERIES_HOVER_CHANGED, { target: this });
+  }
 
-  clearHover() {
-    const that = this;
-    const eventTrigger = that._eventTrigger;
+  clearHover(): void {
+    const eventTrigger = this._eventTrigger;
 
-    if (!that.isHovered()) {
+    if (!this.isHovered()) {
       return;
     }
 
-    that._resetNearestPoint();
-    that.fullState &= ~HOVER_STATE;
+    this._resetNearestPoint();
+    this.fullState &= ~HOVER_STATE;
 
-    that._changeStyle(that.lastHoverMode, HOVER, that.isSelected() && that.lastSelectionMode !== NONE_MODE);
+    this._changeStyle(this.lastHoverMode, HOVER, this.isSelected() && this.lastSelectionMode !== NONE_MODE);
 
-    eventTrigger(SERIES_HOVER_CHANGED, { target: that });
-  },
+    eventTrigger(SERIES_HOVER_CHANGED, { target: this });
+  }
 
-  hoverPoint(point) {
-    const that = this;
-
+  hoverPoint(point: SeriesPoint): void {
     if (!point.isHovered()) {
       point.clearHover();
-      setPointHoverState(point, that._legendCallback);
-      that._canChangeView() && that._applyStyle(that._styles.hover);
-      that._eventPipe({ action: POINT_HOVER, target: point });
-      that._eventTrigger(POINT_HOVER_CHANGED, { target: point });
+      setPointHoverState(point, this._legendCallback);
+      this._canChangeView() && this._applyStyle(this._styles.hover);
+      this._eventPipe({ action: POINT_HOVER, target: point });
+      this._eventTrigger(POINT_HOVER_CHANGED, { target: point });
     }
-  },
+  }
 
-  clearPointHover() {
-    const that = this;
-
-    that.getPoints().some((currentPoint) => {
+  clearPointHover(): void {
+    this.getPoints().some((currentPoint) => {
       if (currentPoint.isHovered()) {
-        releasePointHoverState(currentPoint, that._legendCallback);
-        that._canChangeView() && that._applyStyle(that._styles.normal);
-        that._eventPipe({ action: CLEAR_POINT_HOVER, target: currentPoint });
-        that._eventTrigger(POINT_HOVER_CHANGED, { target: currentPoint });
+        releasePointHoverState(currentPoint, this._legendCallback);
+        this._canChangeView() && this._applyStyle(this._styles.normal);
+        this._eventPipe({ action: CLEAR_POINT_HOVER, target: currentPoint });
+        this._eventTrigger(POINT_HOVER_CHANGED, { target: currentPoint });
         return true;
       }
       return false;
     });
-  },
+  }
 
-  showPointTooltip(point) {
+  showPointTooltip(point: SeriesPoint): void {
     triggerEvent(this._extGroups.seriesGroup, 'showpointtooltip', point);
-  },
+  }
 
-  hidePointTooltip(point) {
+  hidePointTooltip(point?: SeriesPoint): void {
     triggerEvent(this._extGroups.seriesGroup, 'hidepointtooltip', point);
-  },
+  }
 
-  select() {
-    const that = this;
-
-    if (!that.isSelected()) {
-      that._setSelectedState(that._options.selectionMode);
-      that._eventPipe({ action: SERIES_SELECT, target: that });
-      that._group.toForeground();
-      that._eventTrigger(SERIES_SELECTION_CHANGED, { target: that });
+  select(): void {
+    if (!this.isSelected()) {
+      this._setSelectedState(this._options.selectionMode);
+      this._eventPipe({ action: SERIES_SELECT, target: this });
+      this._group.toForeground();
+      this._eventTrigger(SERIES_SELECTION_CHANGED, { target: this });
     }
-  },
+  }
 
-  clearSelection: function clearSelection() {
-    const that = this;
-
-    if (that.isSelected()) {
-      that._releaseSelectedState();
-      that._eventTrigger(SERIES_SELECTION_CHANGED, { target: that });
+  clearSelection(): void {
+    if (this.isSelected()) {
+      this._releaseSelectedState();
+      this._eventTrigger(SERIES_SELECTION_CHANGED, { target: this });
     }
-  },
+  }
 
-  getPointsByArg(arg, skipPointsCreation) {
-    const that = this;
+  getPointsByArg(arg: ThemeValue, skipPointsCreation?: boolean): SeriesPoint[] {
     const argValue = arg.valueOf();
-    let points = that.pointsByArgument[argValue];
+    let points = this.pointsByArgument[argValue];
 
-    if (!points && !skipPointsCreation && that._createAllAggregatedPoints()) {
-      points = that.pointsByArgument[argValue];
+    if (!points && !skipPointsCreation && this._createAllAggregatedPoints()) {
+      points = this.pointsByArgument[argValue];
     }
     return points || [];
-  },
+  }
 
-  _createAllAggregatedPoints() {
+  _createAllAggregatedPoints(): boolean {
     if (this.useAggregation() && !this._useAllAggregatedPoints) {
       this.createPoints(true);
       return true;
     }
     return false;
-  },
+  }
 
-  getPointsByKeys(arg) {
+  getPointsByKeys(arg: ThemeValue, argumentIndex?: number): SeriesPoint[];
+
+  getPointsByKeys(arg: ThemeValue): SeriesPoint[] {
     return this.getPointsByArg(arg);
-  },
+  }
 
-  notify(data) {
-    const that = this;
+  notify(data: ThemeValue): void {
     const action = data.action;
-    const seriesModes = that._seriesModes;
+    const seriesModes = this._seriesModes;
     const target = data.target;
     const targetOptions = target.getOptions();
     const pointHoverMode = _normalizeEnum(targetOptions.hoverMode);
     const selectionModeOfPoint = _normalizeEnum(targetOptions.selectionMode);
 
     if (action === POINT_HOVER) {
-      that._hoverPointHandler(target, pointHoverMode, data.notifyLegend);
+      this._hoverPointHandler(target, pointHoverMode, data.notifyLegend);
     } else if (action === CLEAR_POINT_HOVER) {
-      that._clearPointHoverHandler(target, pointHoverMode, data.notifyLegend);
+      this._clearPointHoverHandler(target, pointHoverMode, data.notifyLegend);
     } else if (action === SERIES_SELECT) {
-      (target !== that) && (seriesModes.seriesSelectionMode === 'single') && that.clearSelection();
+      (target !== this) && (seriesModes.seriesSelectionMode === 'single') && this.clearSelection();
     } else if (action === POINT_SELECT) {
       if (seriesModes.pointSelectionMode === 'single') {
-        that.getPoints().some((currentPoint) => {
+        this.getPoints().some((currentPoint) => {
           if (currentPoint !== target && currentPoint.isSelected()) {
-            that.deselectPoint(currentPoint);
+            this.deselectPoint(currentPoint);
             return true;
           }
           return false;
         });
       }
-      that._selectPointHandler(target, selectionModeOfPoint);
+      this._selectPointHandler(target, selectionModeOfPoint);
     } else if (action === POINT_DESELECT) {
-      that._deselectPointHandler(target, selectionModeOfPoint);
+      this._deselectPointHandler(target, selectionModeOfPoint);
     }
-  },
+  }
 
-  _selectPointHandler(target, mode) {
-    const that = this;
-
+  _selectPointHandler(target: ThemeValue, mode: string): void {
     if (mode === ALL_SERIES_POINTS) {
-      (target.series === that) && that._setPointsView(SELECTION, target);
+      (target.series === this) && this._setPointsView(SELECTION, target);
     } else if (mode === ALL_ARGUMENT_POINTS) {
-      that.getPointsByKeys(target.argument, target.argumentIndex).forEach((currentPoint) => {
+      this.getPointsByKeys(target.argument, target.argumentIndex).forEach((currentPoint) => {
         (currentPoint !== target) && currentPoint.setView(SELECTION);
       });
     }
-  },
+  }
 
-  _deselectPointHandler(target, mode) {
+  _deselectPointHandler(target: ThemeValue, mode: string): void {
     if (mode === ALL_SERIES_POINTS) {
       (target.series === this) && this._resetPointsView(SELECTION, target);
     } else if (mode === ALL_ARGUMENT_POINTS) {
@@ -1245,60 +1419,142 @@ Series.prototype = {
         (currentPoint !== target) && currentPoint.resetView(SELECTION);
       });
     }
-  },
+  }
 
-  _hoverPointHandler(target, mode, notifyLegend) {
-    const that = this;
-
-    if (target.series !== that && mode === ALL_ARGUMENT_POINTS) {
-      that.getPointsByKeys(target.argument, target.argumentIndex).forEach((currentPoint) => {
+  _hoverPointHandler(target: ThemeValue, mode: string, notifyLegend?: boolean): void {
+    if (target.series !== this && mode === ALL_ARGUMENT_POINTS) {
+      this.getPointsByKeys(target.argument, target.argumentIndex).forEach((currentPoint) => {
         currentPoint.setView(HOVER);
       });
-      notifyLegend && that._legendCallback(target);
-    } else if (mode === ALL_SERIES_POINTS && target.series === that) {
-      that._setPointsView(HOVER, target);
+      notifyLegend && this._legendCallback(target);
+    } else if (mode === ALL_SERIES_POINTS && target.series === this) {
+      this._setPointsView(HOVER, target);
     }
-  },
+  }
 
-  _clearPointHoverHandler(target, mode, notifyLegend) {
-    const that = this;
-
+  _clearPointHoverHandler(target: ThemeValue, mode: string, notifyLegend?: boolean): void {
     if (mode === ALL_ARGUMENT_POINTS) {
-      (target.series !== that) && that.getPointsByKeys(target.argument, target.argumentIndex).forEach((currentPoint) => {
+      (target.series !== this) && this.getPointsByKeys(target.argument, target.argumentIndex).forEach((currentPoint) => {
         currentPoint.resetView(HOVER);
       });
-      notifyLegend && that._legendCallback(target);
-    } else if (mode === ALL_SERIES_POINTS && target.series === that) {
-      that._resetPointsView(HOVER, target);
+      notifyLegend && this._legendCallback(target);
+    } else if (mode === ALL_SERIES_POINTS && target.series === this) {
+      this._resetPointsView(HOVER, target);
     }
-  },
+  }
 
-  _deletePoints() {
-    const that = this;
-    that._disposePoints(that._points);
-    that._points = that._drawnPoints = null;
-  },
+  _deletePoints(): void {
+    this._disposePoints(this._points);
+    // @ts-expect-error dispose() drops the references
+    this._points = this._drawnPoints = null;
+  }
 
-  _deleteTrackers() {
-    const that = this;
-    _each(that._trackers || [], (_, tracker) => {
+  _deleteTrackers(): void {
+    _each(this._trackers || [], (_, tracker) => {
       tracker.remove();
     });
-    that._trackersGroup && that._trackersGroup.dispose();
-    that._trackers = that._trackersGroup = null;
-  },
+    this._trackersGroup && this._trackersGroup.dispose();
+    this._trackers = this._trackersGroup = null;
+  }
 
-  dispose() {
-    const that = this;
-    that._deletePoints();
-    that._group.dispose();
-    that._labelsGroup && that._labelsGroup.dispose();
-    that._errorBarGroup && that._errorBarGroup.dispose();
+  dispose(): void {
+    this._deletePoints();
+    this._group.dispose();
+    this._labelsGroup && this._labelsGroup.dispose();
+    this._errorBarGroup && this._errorBarGroup.dispose();
 
-    that._deleteTrackers();
+    this._deleteTrackers();
 
-    that._group = that._extGroups = that._markersGroup = that._elementsGroup = that._bordersGroup = that._labelsGroup = that._errorBarGroup = that._graphics = that._rangeData = that._renderer = that._styles = that._options = that._pointOptions = that._drawnPoints = that.pointsByArgument = that._segments = that._prevSeries = null;
-  },
+    // @ts-expect-error dispose() drops the references
+    this._group = this._extGroups = this._markersGroup = this._elementsGroup = this._bordersGroup = this._labelsGroup = this._errorBarGroup = this._graphics = this._rangeData = this._renderer = this._styles = this._options = this._pointOptions = this._drawnPoints = this.pointsByArgument = this._segments = this._prevSeries = null;
+  }
+
+  getMarginOptions(): ThemeValue {
+    return this._patchMarginOptions({
+      percentStick: this.isFullStackedSeries(),
+    });
+  }
+
+  getColor(): string {
+    return this.getLegendStyles().normal.fill;
+  }
+
+  getOpacity(): number {
+    return this._options.opacity;
+  }
+
+  getStackName(): string | null {
+    return this._stackName;
+  }
+
+  getBarOverlapGroup(): ThemeValue {
+    return this._options.barOverlapGroup;
+  }
+
+  getPointByCoord(x: number, y: number): SeriesPoint | null {
+    const point = this.getNeighborPoint(x, y);
+    return point?.coordsIn(x, y) ? point : null;
+  }
+
+  getValueAxis(): ThemeValue {
+    return this._valueAxis;
+  }
+
+  getArgumentAxis(): ThemeValue {
+    return this._argumentAxis;
+  }
+
+  getMarkersGroup(): ThemeValue {
+    return this._markersGroup;
+  }
+
+  getRenderer(): ThemeValue {
+    return this._renderer;
+  }
+
+  removePointElements(): void {
+    if (this._markersGroup) {
+      _each(this._points, (_, p) => p.deleteMarker());
+      this._markersGroup.dispose();
+      this._markersGroup = null;
+    }
+  }
+
+  removeGraphicElements(): void {
+    if (this._elementsGroup) {
+      this._elementsGroup.dispose();
+      this._elementsGroup = null;
+    }
+    _each(this._graphics || [], (_, elem) => {
+      this._removeElement(elem);
+    });
+    this._graphics = null;
+  }
+
+  removeBordersGroup(): void {
+    if (this._bordersGroup) {
+      this._bordersGroup.dispose();
+      this._bordersGroup = null;
+    }
+  }
+};
+
+Object.assign(Series.prototype, {
+  _createLegendState: _noop,
+
+  getValueFields: _noop,
+
+  getSizeField: _noop,
+
+  getArgumentField: _noop,
+
+  autoHidePointMarkersEnabled: _noop,
+
+  usePointsToDefineAutoHiding: _noop,
+
+  // TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed
+  // see T243839, T231939
+  _updatePointsVisibility: _noop,
 
   correctPosition: _noop,
 
@@ -1309,76 +1565,14 @@ Series.prototype = {
   areErrorBarsVisible: _noop,
 
   _getColorId: _noop,
+});
 
-  getMarginOptions() {
-    return this._patchMarginOptions({
-      percentStick: this.isFullStackedSeries(),
-    });
-  },
-
-  getColor() {
-    return this.getLegendStyles().normal.fill;
-  },
-
-  getOpacity() {
-    return this._options.opacity;
-  },
-
-  getStackName() {
-    return this._stackName;
-  },
-
-  getBarOverlapGroup() {
-    return this._options.barOverlapGroup;
-  },
-
-  getPointByCoord(x, y) {
-    const point = this.getNeighborPoint(x, y);
-    return point?.coordsIn(x, y) ? point : null;
-  },
-
-  getValueAxis() {
-    return this._valueAxis;
-  },
-
-  getArgumentAxis() {
-    return this._argumentAxis;
-  },
-
-  getMarkersGroup() {
-    return this._markersGroup;
-  },
-
-  getRenderer() {
-    return this._renderer;
-  },
-
-  removePointElements() {
-    if (this._markersGroup) {
-      _each(this._points, (_, p) => p.deleteMarker());
-      this._markersGroup.dispose();
-      this._markersGroup = null;
-    }
-  },
-
-  removeGraphicElements() {
-    const that = this;
-    if (that._elementsGroup) {
-      that._elementsGroup.dispose();
-      that._elementsGroup = null;
-    }
-    _each(that._graphics || [], (_, elem) => {
-      that._removeElement(elem);
-    });
-    that._graphics = null;
-  },
-
-  removeBordersGroup() {
-    if (this._bordersGroup) {
-      this._bordersGroup.dispose();
-      this._bordersGroup = null;
-    }
-  },
-};
-// @ts-expect-error
 export const mixins = seriesNS.mixins;
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_Series(value: typeof Series): void {
+  Series = value;
+}
+/// #ENDDEBUG

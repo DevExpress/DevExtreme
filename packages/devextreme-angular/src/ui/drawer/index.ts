@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -21,7 +18,6 @@ import type { event } from 'devextreme/events/events.types';
 import type { DisposingEvent, InitializedEvent, OptionChangedEvent, OpenedStateMode, PanelLocation, RevealMode } from 'devextreme/ui/drawer';
 
 import DxDrawer from 'devextreme/ui/drawer';
-
 
 import {
     DxComponent,
@@ -37,7 +33,6 @@ import {
 
 /**
  * [descr:dxDrawer]
-
  */
 @Component({
     selector: 'dx-drawer',
@@ -56,7 +51,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -66,10 +60,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.animationDuration]
-    
      */
     @Input()
     get animationDuration(): number {
@@ -79,10 +71,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('animationDuration', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.animationEnabled]
-    
      */
     @Input()
     get animationEnabled(): boolean {
@@ -92,10 +82,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('animationEnabled', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.closeOnOutsideClick]
-    
      */
     @Input()
     get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
@@ -105,10 +93,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('closeOnOutsideClick', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -118,10 +104,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -131,10 +115,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -144,10 +126,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -157,10 +137,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -170,10 +148,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.maxSize]
-    
      */
     @Input()
     get maxSize(): null | number {
@@ -183,10 +159,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('maxSize', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.minSize]
-    
      */
     @Input()
     get minSize(): null | number {
@@ -196,10 +170,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('minSize', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -209,10 +181,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('opened', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.openedStateMode]
-    
      */
     @Input()
     get openedStateMode(): OpenedStateMode {
@@ -222,10 +192,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('openedStateMode', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.position]
-    
      */
     @Input()
     get position(): PanelLocation {
@@ -235,10 +203,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('position', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.revealMode]
-    
      */
     @Input()
     get revealMode(): RevealMode {
@@ -248,10 +214,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('revealMode', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -261,10 +225,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.shading]
-    
      */
     @Input()
     get shading(): boolean {
@@ -274,10 +236,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('shading', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.template]
-    
      */
     @Input()
     get template(): any {
@@ -287,10 +247,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('template', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -300,10 +258,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -314,171 +270,119 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxDrawerOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxDrawerOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxDrawerOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationDurationChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxSizeChange: EventEmitter<null | number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minSizeChange: EventEmitter<null | number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() openedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() openedStateModeChange: EventEmitter<OpenedStateMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() positionChange: EventEmitter<PanelLocation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() revealModeChange: EventEmitter<RevealMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() templateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

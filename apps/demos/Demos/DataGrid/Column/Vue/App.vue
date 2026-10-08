@@ -42,7 +42,7 @@ import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import { employees } from './data.ts';
 
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

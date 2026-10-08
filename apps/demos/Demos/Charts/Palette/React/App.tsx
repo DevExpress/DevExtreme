@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PieChart, {
   Series,
   Legend,
@@ -13,6 +13,12 @@ import {
   paletteLabel,
   paletteExtensionLabel,
 } from './data.ts';
+
+function PaletteItem({ color }: { color: string }) {
+  const style = useMemo(() => ({ backgroundColor: color }), [color]);
+
+  return <div className="palette-item" style={style} />;
+}
 
 function App() {
   const [palette, setPalette] = useState(paletteCollection[0]);
@@ -41,11 +47,7 @@ function App() {
 
         <div className="palette-container flex-block">
           {getPalette(palette).simpleSet.map((color: string) => (
-            <div
-              className="palette-item"
-              style={{ backgroundColor: color }}
-              key={color}
-            />
+            <PaletteItem color={color} key={color} />
           ))}
         </div>
       </div>

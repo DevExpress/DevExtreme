@@ -5,7 +5,7 @@ import config from 'core/config';
 import dateLocalization from 'common/core/localization/date';
 import dateSerialization from 'core/utils/date_serialization';
 import dateUtils from 'core/utils/date';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import messageLocalization from 'common/core/localization/message';

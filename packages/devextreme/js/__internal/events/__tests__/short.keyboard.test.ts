@@ -2,7 +2,7 @@ import {
   afterEach, describe, expect, it, jest,
 } from '@jest/globals';
 
-import { keyboard } from '../m_short';
+import { keyboard } from '../short';
 
 describe('keyboard processor registry disposal (T1332943)', () => {
   const registered: string[] = [];

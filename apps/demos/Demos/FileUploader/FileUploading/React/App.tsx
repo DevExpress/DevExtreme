@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import FileUploader from 'devextreme-react/file-uploader';
 import type { FileUploaderTypes } from 'devextreme-react/file-uploader';
 import SelectBox from 'devextreme-react/select-box';
@@ -20,6 +20,7 @@ export default function App() {
   const [uploadMode, setUploadMode] = useState<FileUploaderTypes.FileUploadMode>('instantly');
   const [accept, setAccept] = useState<string>('*');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const contentStyle = useMemo(() => ({ display: selectedFiles.length > 0 ? 'block' : 'none' }), [selectedFiles.length]);
 
   const onSelectedFilesChanged = useCallback(({ value }: FileUploaderTypes.ValueChangedEvent): void => {
     if (!value) {
@@ -50,7 +51,7 @@ export default function App() {
           uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"
           onValueChanged={onSelectedFilesChanged}
         />
-        <div className="content" style={{ display: selectedFiles.length > 0 ? 'block' : 'none' }}>
+        <div className="content" style={contentStyle}>
           <div>
             <h4>Selected Files</h4>
             {selectedFiles.map((file: File, index: number) => (

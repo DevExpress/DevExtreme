@@ -77,7 +77,7 @@ const dataSource = new PivotGridDataSource({
   }),
 });
 </script>
-<style scoped>
+<style>
 #sales {
   max-height: 570px;
 }

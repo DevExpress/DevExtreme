@@ -16,8 +16,8 @@ import {
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
 } from '@ts/grids/grid_core/header_filter/m_header_filter_core';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import sortingMixin from '@ts/grids/grid_core/sorting/m_sorting_mixin';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import type { RovingTabIndexComponent } from '../keyboard_navigation/roving_tab_index';
 import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
@@ -162,11 +162,9 @@ export class FieldChooserBase extends mixinWidget {
 
   _init() {
     super._init();
-    this._headerFilterView = new HeaderFilterView(this);
+    this._headerFilterView = new HeaderFilterView(this as unknown as InternalGrid);
     this._refreshDataSource();
     this.subscribeToEvents();
-
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
   }
 
   _refreshDataSource() {

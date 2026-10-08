@@ -26,6 +26,12 @@ import {
   textStyleInputAttr,
 } from './data.ts';
 
+function FontSizeItem({ itemData }: { itemData: { size: number; text: string } }) {
+  const style = React.useMemo(() => ({ fontSize: `${itemData.size}px` }), [itemData.size]);
+
+  return <div style={style}>{itemData.text}</div>;
+}
+
 const stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 const lineHeightDefault = lineHeights[1].lineHeight;
 const textAlignDefault = [textAlignItems[0].alignment];
@@ -133,9 +139,7 @@ function App() {
   );
 
   const renderFontSize = useCallback(
-    (itemData) => (
-      <div style={{ fontSize: `${itemData.size}px` }}>{itemData.text}</div>
-    ),
+    (itemData) => <FontSizeItem itemData={itemData} />,
     [],
   );
 

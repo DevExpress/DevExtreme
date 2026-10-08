@@ -5,19 +5,24 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
 const COMPONENT_NAMES_DATA_KEY = 'dxComponents';
+
+interface ComponentsData extends Record<string, unknown> {
+  dxComponents?: string[];
+}
 const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 
-const componentNames = new WeakMap();
+const componentNames = new WeakMap<object, string>();
 let nextAnonymousComponent = 0;
 
-const getName = function (componentClass, newName?) {
+const getName = function getName(componentClass: object, newName?: string): string | undefined {
   if (isDefined(newName)) {
     componentNames.set(componentClass, newName);
-    return;
+    return undefined;
   }
 
   if (!componentNames.has(componentClass)) {
-    const generatedName = ANONYMOUS_COMPONENT_DATA_KEY + nextAnonymousComponent++;
+    const generatedName = ANONYMOUS_COMPONENT_DATA_KEY + nextAnonymousComponent;
+    nextAnonymousComponent += 1;
     componentNames.set(componentClass, generatedName);
     return generatedName;
   }
@@ -25,29 +30,35 @@ const getName = function (componentClass, newName?) {
   return componentNames.get(componentClass);
 };
 
-export function attachInstanceToElement($element, componentInstance, disposeFn) {
-  const data = elementData($element.get(0));
-  const name = getName(componentInstance.constructor);
+export function attachInstanceToElement(
+  $element: dxElementWrapper,
+  componentInstance: object,
+  disposeFn?: () => void,
+): void {
+  const data = elementData<ComponentsData>($element.get(0));
+  const name = getName(componentInstance.constructor) as string;
 
   data[name] = componentInstance;
 
   if (disposeFn) {
-    eventsEngine.one($element, removeEvent, function () {
+    eventsEngine.one($element, removeEvent, () => {
       disposeFn.call(componentInstance);
     });
   }
 
-  if (!data[COMPONENT_NAMES_DATA_KEY]) {
-    data[COMPONENT_NAMES_DATA_KEY] = [];
-  }
+  data[COMPONENT_NAMES_DATA_KEY] ??= [];
 
   data[COMPONENT_NAMES_DATA_KEY].push(name);
 }
 
-export function getInstanceByElement<T = any>($element, componentClass): T {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers omit the type argument
+export function getInstanceByElement<T = any>(
+  $element: dxElementWrapper,
+  componentClass: object,
+): T {
   const name = getName(componentClass);
 
-  return elementData($element.get(0), name);
+  return elementData<T>($element.get(0), name);
 }
 
 export function getComponentInstance<T = unknown>($element: dxElementWrapper): T | undefined {
@@ -57,10 +68,10 @@ export function getComponentInstance<T = unknown>($element: dxElementWrapper): T
     return undefined;
   }
 
-  const names = elementData(element, COMPONENT_NAMES_DATA_KEY) as string[] | undefined;
+  const names = elementData<string[] | undefined>(element, COMPONENT_NAMES_DATA_KEY);
   const componentName = names?.[0];
 
-  return componentName ? (elementData(element, componentName) as T) : undefined;
+  return componentName ? elementData<T>(element, componentName) : undefined;
 }
 
 export { getName as name };

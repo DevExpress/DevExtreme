@@ -5,9 +5,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { noop } from '@js/core/utils/common';
-import DataHelperMixin from '@js/data_helper';
-// @ts-expect-error
+import { noop } from '@ts/core/utils/m_common';
+import { DataHelperMixin } from '@ts/data/m_data_helper';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+
+export interface DataSourcePluginMembers {
+  _dataIsLoaded: () => boolean;
+  _dataSourceItems: () => ThemeValue;
+  _updateDataSource: () => void;
+}
 const { postCtor } = DataHelperMixin;
 let name;
 const members = {

@@ -17,7 +17,7 @@ import {
     clickByOutside
 } from './helpers.js';
 
-import '__internal/filter_builder/m_filter_builder';
+import '__internal/filter_builder/filter_builder';
 
 QUnit.module('Events', function() {
     QUnit.test('onEditorPreparing', function(assert) {

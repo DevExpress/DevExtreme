@@ -117,7 +117,7 @@ function treeViewItemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEve
   treeBoxValue.value = e.component.getSelectedNodeKeys();
 }
 </script>
-<style scoped>
+<style>
 .dx-fieldset {
   height: 500px;
 }

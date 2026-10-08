@@ -55,7 +55,7 @@ import { employees } from './data.ts';
 const expandedRowKeys = [1];
 const filterValue = ['City', '=', 'Bentonville'];
 </script>
-<style scoped>
+<style>
 .demo-container {
   height: 570px;
 }

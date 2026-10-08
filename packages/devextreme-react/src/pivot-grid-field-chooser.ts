@@ -67,11 +67,9 @@ const PivotGridFieldChooser = memo(
 // owners:
 // PivotGridFieldChooser
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;
-  searchTimeout?: number;
   showRelevantValues?: boolean;
   texts?: Record<string, any> | {
     cancel?: string;

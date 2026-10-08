@@ -1,2 +1,2 @@
 // deprecated
-export { TemplateManager } from '../__internal/core/m_template_manager';
+export { TemplateManager } from '../__internal/core/template_manager';

@@ -3,22 +3,18 @@ import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import 'anti-forgery';
+import { DetailGridComponent } from './detail-grid/detail-grid.component';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
+  templateUrl: './app.component.html',
   imports: [
     DxDataGridModule,
+    DetailGridComponent,
   ],
 })
 export class AppComponent {

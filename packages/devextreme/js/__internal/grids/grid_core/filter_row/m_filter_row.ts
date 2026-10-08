@@ -6,25 +6,31 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
+import { map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type {
+  DataFilter, FilterSourceContext,
+} from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
-import modules from '@ts/grids/grid_core/m_modules';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import modules from '@ts/grids/grid_core/modules/modules';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
+
+import { CLASSES } from './const';
+import { createFilterRowExpressions } from './utils';
 
 const OPERATION_ICONS = {
   '=': 'filter-operation-equals',
@@ -59,7 +65,6 @@ const OPERATION_DESCRIPTORS = {
 
 const FILTERING_TIMEOUT = 700;
 const CORRECT_FILTER_RANGE_OVERLAY_WIDTH = 1;
-const FILTER_ROW_CLASS = 'filter-row';
 const FILTER_RANGE_OVERLAY_CLASS = 'filter-range-overlay';
 const FILTER_RANGE_START_CLASS = 'filter-range-start';
 const FILTER_RANGE_END_CLASS = 'filter-range-end';
@@ -204,7 +209,11 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
   private _applyFilterViewController!: ApplyFilterViewController;
 
+  private dataSourceController!: DataSourceController;
+
   public init() {
+    this.dataSourceController = this.getController('dataSource');
+
     super.init();
     this._applyFilterViewController = this.getController('applyFilter');
   }
@@ -248,7 +257,8 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     if (gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'filterValues', 'filterType']) && e.columnIndex !== undefined) {
       const visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
       const column = that._columnsController.columnOption(e.columnIndex);
-      $cell = that._getCellElement(that.element().find(`.${that.addWidgetPrefix(FILTER_ROW_CLASS)}`).index(), visibleIndex) ?? $();
+      // @ts-expect-error the view is rendered here
+      $cell = that._getCellElement(that.element().find(`.${that.addWidgetPrefix(CLASSES.filterRow)}`).index(), visibleIndex) ?? $();
       $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
 
       if (optionNames.filterValue || optionNames.bufferedFilterValue) {
@@ -427,7 +437,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const $row = super._createRow(row);
 
     if (row.rowType === 'filter') {
-      $row.addClass(this.addWidgetPrefix(FILTER_ROW_CLASS));
+      $row.addClass(this.addWidgetPrefix(CLASSES.filterRow));
 
       if (!this.option('useLegacyKeyboardNavigation')) {
         eventsEngine.on($row, 'keydown', (event) => selectView('filterRow', this, event));
@@ -437,7 +447,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return $row;
   }
 
-  protected _getRows() {
+  public _getRows() {
     const result = super._getRows();
 
     if (this.isFilterRowVisible()) {
@@ -545,12 +555,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   private _renderEditor($editorContainer, options) {
     $editorContainer.empty();
     const $element = $('<div>').appendTo($editorContainer);
-    const dataSource = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     if (options.lookup && this.option('syncLookupFilterValues')) {
       const filter = this._dataController.getCombinedFilterWithExcludedColumn(options);
 
-      const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
+      const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSourceAdapter, filter);
       const lookupOptions = {
         ...options,
         lookup: {
@@ -739,8 +749,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 
   protected _handleDataChanged(e) {
-    const dataSource = this._dataController?.dataSource?.();
-    const lastLoadOptions = dataSource?.lastLoadOptions?.();
+    const lastLoadOptions = this.dataSourceController.lastLoadOptions();
 
     // @ts-expect-error
     super._handleDataChanged.apply(this, arguments);
@@ -760,8 +769,9 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
 
     const columns = this._columnsController.getVisibleColumns();
-    const dataSource = this._dataController.dataSource();
-    const rowIndex = this.element().find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).index();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    // @ts-expect-error the view is rendered here
+    const rowIndex = this.element().find(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).index();
 
     if (rowIndex === -1) {
       return;
@@ -789,7 +799,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
             editor.option('items', [...items, selectedItem]);
           }
 
-          const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+          const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSourceAdapter, filter);
           editor.option('dataSource', lookupDataSource);
         }
       }
@@ -807,34 +817,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 
   public isFilterRowCell($cell): boolean {
-    return !!$cell.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
-  }
-};
-
-const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {
-  private skipCalculateColumnFilters() {
-    return false;
-  }
-
-  protected calculateAdditionalFilter() {
-    if (this.skipCalculateColumnFilters()) {
-      return super.calculateAdditionalFilter();
-    }
-
-    const filters = [super.calculateAdditionalFilter()];
-    const columns = this._columnsController.getVisibleColumns(null, true);
-
-    const excludedColumn = this.getFilterExcludedColumn();
-
-    each(columns, function () {
-      const shouldSkip = excludedColumn?.index === this.index;
-      if (this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue) && !shouldSkip) {
-        const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
-        filters.push(filter);
-      }
-    });
-
-    return gridCoreUtils.combineFilters(filters);
+    return !!$cell.closest(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).length;
   }
 };
 
@@ -845,6 +828,19 @@ export class ApplyFilterViewController extends modules.ViewController {
 
   public init() {
     this._columnsController = this.getController('columns');
+  }
+
+  public isFilterSourceActive({ columnSourcesActive }: FilterSourceContext): boolean {
+    return columnSourcesActive;
+  }
+
+  public getFilterExpressions({
+    excludedColumn,
+    columnsController,
+  }: FilterSourceContext): DataFilter[] {
+    const columns: Column[] = columnsController.getVisibleColumns(null, true);
+
+    return createFilterRowExpressions(columns, excludedColumn);
   }
 
   private _getHeaderPanel() {
@@ -885,9 +881,10 @@ export class ApplyFilterViewController extends modules.ViewController {
   private removeHighLights() {
     if (isOnClickApplyFilterMode(this)) {
       // TODO getView
-      const columnHeadersViewElement = this.getView('columnHeadersView').element();
-      columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${HIGHLIGHT_OUTLINE_CLASS}`).removeClass(HIGHLIGHT_OUTLINE_CLASS);
-      columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
+      // @ts-expect-error the view is rendered here
+      const columnHeadersViewElement: dxElementWrapper = this.getView('columnHeadersView').element();
+      columnHeadersViewElement.find(`.${this.addWidgetPrefix(CLASSES.filterRow)} .${HIGHLIGHT_OUTLINE_CLASS}`).removeClass(HIGHLIGHT_OUTLINE_CLASS);
+      columnHeadersViewElement.find(`.${this.addWidgetPrefix(CLASSES.filterRow)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
       this._getHeaderPanel().enableApplyButton(false);
     }
   }
@@ -1046,7 +1043,6 @@ export const filterRowModule = {
   },
   extenders: {
     controllers: {
-      data,
       columnsResizer,
       editing,
     },

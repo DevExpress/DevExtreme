@@ -379,7 +379,6 @@ class Lookup extends DropDownList<LookupProperties> {
     } else {
       const { placeholder } = this.option();
       const $placeholder = $('<div>')
-        // @ts-expect-error fix on renderer level
         .attr({ 'data-dx_placeholder': placeholder });
 
       this._$field.append($placeholder);

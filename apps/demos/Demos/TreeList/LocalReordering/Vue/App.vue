@@ -59,7 +59,9 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxTreeList, DxColumn, DxRowDragging } from 'devextreme-vue/tree-list';
+import {
+  DxTreeList, DxColumn, DxRowDragging, type DxTreeListTypes,
+} from 'devextreme-vue/tree-list';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { employees as employeesData } from './data.ts';
 
@@ -70,10 +72,10 @@ const expandedRowKeys = [1];
 
 const employees = ref(employeesData);
 
-function onDragChange(e: Record<string, any>) {
+function onDragChange(e: DxTreeListTypes.RowDraggingChangeEvent) {
   const visibleRows = e.component.getVisibleRows();
   const sourceNode = e.component.getNodeByKey(e.itemData.ID);
-  let targetNode = visibleRows[e.toIndex].node;
+  let targetNode: DxTreeListTypes.Node | undefined = visibleRows[e.toIndex].node;
 
   while (targetNode && targetNode.data) {
     if (targetNode.data.ID === sourceNode.data.ID) {
@@ -83,7 +85,7 @@ function onDragChange(e: Record<string, any>) {
     targetNode = targetNode.parent;
   }
 }
-function onReorder(e: Record<string, any>) {
+function onReorder(e: DxTreeListTypes.RowDraggingReorderEvent) {
   const visibleRows = e.component.getVisibleRows();
 
   if (e.dropInsideItem) {

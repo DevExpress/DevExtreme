@@ -1,8 +1,8 @@
-const RenovatedScrollable = require('renovation/ui/scroll_view/scrollable.j.js');
+import RenovatedScrollable from 'renovation/ui/scroll_view/scrollable.j.js';
 // eslint-disable-next-line spellcheck/spell-checker
-const reRender = require('inferno').rerender;
+import { rerender as reRender } from 'inferno';
 
-exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
+export class WrappedWidget extends RenovatedScrollable {
 
     _initMarkup() {
         super._initMarkup.apply(this, arguments);
@@ -59,4 +59,4 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
         super.scrollToElement.apply(this, arguments);
         reRender();
     }
-};
+}

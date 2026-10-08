@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -13,16 +11,11 @@ import {
     EventEmitter
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSearchPanel } from './base/search-panel';
-
 
 @Component({
     selector: 'dxo-search-panel',
@@ -52,7 +45,6 @@ export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy
         return 'searchPanel';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -72,7 +64,6 @@ export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

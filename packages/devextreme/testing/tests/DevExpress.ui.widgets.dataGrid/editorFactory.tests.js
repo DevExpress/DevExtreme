@@ -41,7 +41,7 @@ import TextArea from 'ui/text_area';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import dateLocalization from 'common/core/localization/date';
 import browser from 'core/utils/browser';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import SelectBox from 'ui/select_box';
 import { MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import config from 'core/config';

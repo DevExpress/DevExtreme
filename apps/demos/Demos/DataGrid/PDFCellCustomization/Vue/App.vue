@@ -126,7 +126,7 @@ const phoneNumberFormat = (value: string) => {
 };
 </script>
 
-<style scoped>
+<style>
 #gridContainer {
   height: 436px;
 }

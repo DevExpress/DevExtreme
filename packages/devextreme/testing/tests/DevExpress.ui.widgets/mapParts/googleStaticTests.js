@@ -1,13 +1,9 @@
 import $ from 'jquery';
-import testing from './utils.js';
+import { LOCATIONS, MARKERS, ROUTES } from './utils.js';
 import Map from 'ui/map';
 import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import Color from 'color';
 import ajaxMock from '../../../helpers/ajaxMock.js';
-
-const LOCATIONS = testing.LOCATIONS;
-const MARKERS = testing.MARKERS;
-const ROUTES = testing.ROUTES;
 
 const MAP_CONTAINER_CLASS = 'dx-map-container';
 
@@ -166,6 +162,38 @@ QUnit.test('center', function(assert) {
             });
 
             map.option('center', LOCATIONS[3]);
+        });
+    });
+});
+
+QUnit.test('disabled option change should not break the following async actions', function(assert) {
+    return new Promise(function(resolve) {
+        const map = new Map($('#map'), {
+            provider: 'googleStatic',
+            center: LOCATIONS[0],
+            onReady: function(e) {
+                resolve(e.component);
+            }
+        });
+    }).then(function(map) {
+        return new Promise(function(resolve) {
+            const started = Date.now();
+            const check = function() {
+                const centerUpdated = mapUrl(map).indexOf('center=40.537102,-73.990318') !== -1;
+
+                if(centerUpdated || Date.now() - started > 2000) {
+                    assert.ok(centerUpdated, 'center changed after the disabled change');
+
+                    resolve();
+                } else {
+                    setTimeout(check, 20);
+                }
+            };
+
+            map.option('disabled', true);
+            map.option('center', LOCATIONS[1]);
+
+            check();
         });
     });
 });

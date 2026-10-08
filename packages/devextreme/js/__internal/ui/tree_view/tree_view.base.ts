@@ -104,10 +104,19 @@ type TreeViewItem = Item & {
 
 type TreeViewNode = InternalNode & TreeViewItem;
 
-export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
-  CollectionWidgetEditProperties<TreeViewBase, Item>,
-  keyof Properties<TreeViewNode>
-> {
+type NullDefaultKeys = 'createChildren'
+  | 'onSelectAllValueChanged'
+  | 'onItemSelectionChanged'
+  | 'onItemExpanded'
+  | 'onItemCollapsed';
+
+type NullDefaults = {
+  [TKey in NullDefaultKeys]?: Properties<TreeViewNode>[TKey] | null;
+};
+
+export interface TreeViewBaseProperties extends Omit<Properties<TreeViewNode>, NullDefaultKeys>,
+  NullDefaults,
+  Omit<CollectionWidgetEditProperties<TreeViewBase, Item>, keyof Properties<TreeViewNode>> {
   deferRendering?: boolean;
 
   _supportItemUrl?: boolean;
@@ -267,7 +276,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _getDefaultOptions(): TreeViewBaseProperties {
-    const defaultOptions = {
+    const defaultOptions: TreeViewBaseProperties = {
       ...super._getDefaultOptions(),
       animationEnabled: true,
       dataStructure: 'tree',
@@ -297,7 +306,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       disabledNodeSelectionMode: 'recursiveAndAll',
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(true, defaultOptions, {
       integrationOptions: {
         useDeferUpdateForTemplates: false,
@@ -1800,7 +1808,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _itemEventHandlerImpl(
     initiator: dxElementWrapper | Element,
-    action: (event?: Record<string, unknown>) => void,
+    action: (event?: object) => void,
     actionArgs: ActionArgs<Item>,
   ): void {
     const $itemElement = $(initiator).closest(`.${NODE_CLASS}`).children(`.${ITEM_CLASS}`);

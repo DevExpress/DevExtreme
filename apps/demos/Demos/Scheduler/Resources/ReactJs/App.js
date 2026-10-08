@@ -12,6 +12,7 @@ import {
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek'];
+const colCountByScreen = { xs: 3 };
 const App = () => {
   const [currentResource, setCurrentResource] = useState(resourcesList[0]);
   const onRadioGroupValueChanged = useCallback((e) => {
@@ -62,7 +63,7 @@ const App = () => {
                 <Item
                   name="roomIdGroup"
                   colCount={3}
-                  colCountByScreen={{ xs: 3 }}
+                  colCountByScreen={colCountByScreen}
                 >
                   <Item name="roomIdIcon" />
                   <Item name="roomIdEditor" />

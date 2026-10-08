@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const ko = require('knockout');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import ko from 'knockout';
 
-require('ui/button');
-require('ui/tree_view');
-require('integration/knockout');
+import 'ui/button';
+import 'ui/tree_view';
+import 'integration/knockout';
 
 if(QUnit.urlParams['nocsp']) {
     QUnit.module('treeView');

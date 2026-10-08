@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ButtonGroup, type ButtonGroupTypes } from 'devextreme-react/button-group';
 import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
 import { type Orientation } from 'devextreme-react/common';
@@ -26,6 +26,9 @@ export default function Options({
   onSelectOnFocusChanged,
   onRtlModeChanged,
 }: OptionsProps) {
+  const selectedOrientation = useMemo(() => [orientation], [orientation]);
+  const selectedNavigationMode = useMemo(() => [navigationMode], [navigationMode]);
+
   return (
     <>
       <div className="caption">Options</div>
@@ -36,7 +39,7 @@ export default function Options({
           id="orientation"
           keyExpr="value"
           items={orientations}
-          selectedItemKeys={[orientation]}
+          selectedItemKeys={selectedOrientation}
           onItemClick={onOrientationClick}
         />
       </div>
@@ -46,7 +49,7 @@ export default function Options({
           id="navigationMode"
           keyExpr="value"
           items={navigationModes}
-          selectedItemKeys={[navigationMode]}
+          selectedItemKeys={selectedNavigationMode}
           onItemClick={onNavigationModeClick}
         />
       </div>

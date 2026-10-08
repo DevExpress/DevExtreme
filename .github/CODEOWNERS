@@ -77,7 +77,7 @@
 /packages/devextreme/js/ui/sortable.d.ts       @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/sortable.js           @DevExpress/devextreme-grids
-/packages/devextreme/js/__internal/m_sortable.ts @DevExpress/devextreme-grids
+/packages/devextreme/js/__internal/sortable.ts @DevExpress/devextreme-grids
 
 /packages/devextreme-scss/scss/widgets/base/_sortable.scss  @DevExpress/devextreme-grids
 /packages/devextreme-scss/scss/widgets/fluent/sortable/**   @DevExpress/devextreme-grids
@@ -92,7 +92,7 @@
 /packages/devextreme/js/ui/draggable.d.ts       @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/draggable.js           @DevExpress/devextreme-grids
-/packages/devextreme/js/__internal/m_draggable.ts @DevExpress/devextreme-grids
+/packages/devextreme/js/__internal/draggable.ts @DevExpress/devextreme-grids
 
 /packages/devextreme-scss/scss/widgets/base/_draggable.scss @DevExpress/devextreme-grids
 
@@ -145,6 +145,8 @@
 /packages/devextreme/testing/tests/DevExpress.ui.widgets.pivotGrid/** @DevExpress/devextreme-scheduler
 /packages/testcafe-models/pivotGrid/**                                @DevExpress/devextreme-scheduler
 /e2e/testcafe-devextreme/tests/pivotGrid/**                           @DevExpress/devextreme-scheduler
+/e2e/playwright/models/pivotGrid/**                                   @DevExpress/devextreme-scheduler
+/e2e/playwright/tests/common/pivotGrid/**                             @DevExpress/devextreme-scheduler
 
 /packages/devextreme-scss/scss/widgets/base/pivotGrid/**     @DevExpress/devextreme-scheduler
 /packages/devextreme-scss/scss/widgets/fluent/pivotGrid/**   @DevExpress/devextreme-scheduler

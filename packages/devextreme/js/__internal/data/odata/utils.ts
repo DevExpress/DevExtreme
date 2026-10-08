@@ -97,7 +97,7 @@ interface AjaxRequestOptions {
   url: string;
   data: Record<string, unknown> | string;
   dataType: string;
-  jsonp: string | boolean | undefined;
+  jsonp: string | false | undefined;
   method: string;
   async: boolean;
   timeout: number;
@@ -123,7 +123,11 @@ type ExpandTreeStepper = (
 const isRecord = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === 'object';
 
 // NOTE: `[String(value)]` is the former `value.split()`: a missing separator yields one item.
-const makeArray = (value: SelectExpr): SelectExpr => (type(value) === 'string' ? [String(value)] : value);
+const isStringExpr = (value: SelectExpr): value is string => type(value) === 'string';
+
+const makeArray = (value: SelectExpr): string[] | Function => (
+  isStringExpr(value) ? [String(value)] : value
+);
 
 const hasDot = (x: string): boolean => x.includes('.');
 
@@ -388,11 +392,11 @@ const errorFromResponse = (
 };
 
 const transformTypes = (obj: unknown, options: TransformTypesOptions = {}): void => {
-  each(obj, (key: string, value: unknown): void => {
-    if (!isRecord(obj)) {
-      return;
-    }
+  if (!isRecord(obj)) {
+    return;
+  }
 
+  each(obj, (key: string, value: unknown): void => {
     if (value !== null && typeof value === 'object') {
       if ('results' in value) {
         obj[key] = value.results;
@@ -645,12 +649,12 @@ export const generateSelect = (oDataVersion: number, select?: SelectExpr): strin
   return dottedNames.join();
 };
 
-const formatCore = (hash: unknown): string => {
+const formatCore = (hash: ExpandTreeNode | string[]): string => {
   let result = '';
-  const selectValue: unknown[] = [];
+  const selectValue: string[] = [];
   const expandValue: string[] = [];
 
-  each(hash, (key: string, value: unknown): void => {
+  each(hash, (key, value): void => {
     if (Array.isArray(value)) {
       selectValue.push(...value);
     }
@@ -684,7 +688,7 @@ const formatCore = (hash: unknown): string => {
 
 const format = (hash: ExpandTreeNode): string => {
   const result: string[] = [];
-  each(hash, (key: string, value: unknown): void => {
+  each(hash, (key, value): void => {
     result.push(`${key}${formatCore(value)}`);
   });
 
@@ -701,7 +705,7 @@ const parseCore = (exprParts: string[], root: ExpandTreeNode, stepper: ExpandTre
   parseCore(exprParts, result, stepper);
 };
 
-const parseTree = (exprs: unknown, root: ExpandTreeNode, stepper: ExpandTreeStepper): void => {
+const parseTree = (exprs: string[], root: ExpandTreeNode, stepper: ExpandTreeStepper): void => {
   each(exprs, (_: number, x: string): void => {
     parseCore(x.split('.'), root, stepper);
   });
@@ -710,14 +714,16 @@ const parseTree = (exprs: unknown, root: ExpandTreeNode, stepper: ExpandTreeStep
 const generatorV2 = (expand?: SelectExpr, select?: SelectExpr): string => {
   const hash: Record<string, number> = {};
 
-  if (expand) {
-    each(makeArray(expand), function (): void {
+  const expandItems = expand && makeArray(expand);
+  if (Array.isArray(expandItems)) {
+    each(expandItems, function (): void {
       hash[serializePropName(this)] = 1;
     });
   }
 
-  if (select) {
-    each(makeArray(select), function (): void {
+  const selectItems = select && makeArray(select);
+  if (Array.isArray(selectItems)) {
+    each(selectItems, function (): void {
       const path = this.split('.');
       if (path.length < 2) {
         return;
@@ -737,8 +743,9 @@ const generatorV4 = (expand?: SelectExpr, select?: SelectExpr): string | undefin
   const hash: ExpandTreeNode = {};
 
   if (expand || select) {
-    if (expand) {
-      parseTree(makeArray(expand), hash, (node, key, path) => {
+    const expandItems = expand && makeArray(expand);
+    if (Array.isArray(expandItems)) {
+      parseTree(expandItems, hash, (node, key, path) => {
         node[key] = node[key] || {};
 
         return !path.length ? false : node[key];

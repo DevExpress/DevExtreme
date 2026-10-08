@@ -32,7 +32,7 @@ interface EditorWithClearButton {
 export default class ClearButton<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TComponent extends Editor<any> & EditorWithClearButton = TextEditorBase,
-> extends TextEditorButton<TComponent> {
+> extends TextEditorButton<TComponent, dxElementWrapper> {
   _create(): {
     instance: dxElementWrapper;
     $element: dxElementWrapper;
@@ -101,7 +101,6 @@ export default class ClearButton<
     const isVisible = this._isVisible();
 
     if (instance) {
-      // @ts-expect-error instance is dxElementWrapper
       instance.toggleClass(STATE_INVISIBLE_CLASS, !isVisible);
     }
 

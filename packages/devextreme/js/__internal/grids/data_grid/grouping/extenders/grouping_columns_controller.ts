@@ -1,6 +1,6 @@
-import gridCore from '@ts/grids/data_grid/m_core';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import gridCore from '@ts/grids/data_grid/core';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 export const groupingColumnsControllerExtender = (
   Base: ModuleType<ColumnsController>,
@@ -9,7 +9,6 @@ export const groupingColumnsControllerExtender = (
   public _getExpandColumnOptions() {
     const options = super._getExpandColumnOptions();
 
-    // @ts-expect-error
     options.cellTemplate = gridCore.getExpandCellTemplate();
 
     return options;

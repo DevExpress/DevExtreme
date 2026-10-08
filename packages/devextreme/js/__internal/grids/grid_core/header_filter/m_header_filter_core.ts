@@ -12,12 +12,14 @@ import type dxCheckBox from '@js/ui/check_box';
 import type { ValueChangedInfo } from '@js/ui/editor/editor';
 import type dxList from '@js/ui/list';
 import Popup from '@js/ui/popup/ui.popup';
-import Modules from '@ts/grids/grid_core/m_modules';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import Modules from '@ts/grids/grid_core/modules/modules';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import List from '@ts/ui/list/list.edit.search';
+import type { TreeViewBaseProperties } from '@ts/ui/tree_view/tree_view.base';
 import TreeView from '@ts/ui/tree_view/tree_view.search';
 
 import gridCoreUtils from '../m_utils';
+import { allowHeaderFiltering } from './utils';
 
 type CheckBoxValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;
 type CheckBoxValueChangedHandler = (event: CheckBoxValueChangedEvent) => void;
@@ -334,6 +336,7 @@ export class HeaderFilterView extends Modules.View {
     };
 
     if (!isDefined(that._popupContainer)) {
+      // @ts-expect-error the view is rendered here
       that._popupContainer = that._createComponent($element, Popup, dxPopupOptions);
     } else {
       that._popupContainer.option(dxPopupOptions);
@@ -403,14 +406,20 @@ export class HeaderFilterView extends Modules.View {
     };
 
     if (options.type === 'tree') {
+      const treeViewOptions: Pick<
+        TreeViewBaseProperties,
+        'showCheckBoxesMode' | 'onOptionChanged' | 'keyExpr'
+      > = {
+        showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
+        // @ts-expect-error the handler takes the internal TreeView, the option declares the public one
+        onOptionChanged: onTreeViewOptionChanged,
+        keyExpr: 'id',
+      };
+
       that._listComponent = that._createComponent(
         $('<div>').appendTo($content),
         TreeView,
-        extend(widgetOptions, {
-          showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
-          onOptionChanged: onTreeViewOptionChanged,
-          keyExpr: 'id',
-        }),
+        extend(widgetOptions, treeViewOptions),
       );
     } else {
       that._listComponent = that._createComponent(
@@ -418,9 +427,9 @@ export class HeaderFilterView extends Modules.View {
         List,
         extend(widgetOptions, {
           searchExpr: that._getSearchExpr(options, headerFilterOptions),
-          pageLoadMode: 'scrollBottom',
+          pageLoadMode: 'scrollBottom' as const,
           showSelectionControls: true,
-          selectionMode: needShowSelectAllCheckbox ? 'all' : 'multiple',
+          selectionMode: needShowSelectAllCheckbox ? 'all' as const : 'multiple' as const,
           onOptionChanged: onListOptionChanged,
           onSelectionChanged(event) {
             const { component: listComponent } = event;
@@ -489,32 +498,18 @@ export class HeaderFilterView extends Modules.View {
     const generalHeaderFilter = this.option('headerFilter') || {};
     const specificHeaderFilter = options.headerFilter || {};
 
-    const generalDeprecated = {
-      search: {
-        enabled: generalHeaderFilter.allowSearch,
-        timeout: generalHeaderFilter.searchTimeout,
-      },
-    };
+    const headerFilterOptions = extend(true, {}, generalHeaderFilter, specificHeaderFilter);
 
-    const specificDeprecated = {
-      search: {
-        enabled: specificHeaderFilter.allowSearch,
-        mode: specificHeaderFilter.searchMode,
-        timeout: specificHeaderFilter.searchTimeout,
-      },
-    };
+    headerFilterOptions.search ??= {};
 
-    return extend(true, {}, generalHeaderFilter, generalDeprecated, specificHeaderFilter, specificDeprecated);
+    return headerFilterOptions;
   }
 
   protected _renderCore() {
+    // @ts-expect-error the view is rendered here
     this.element().addClass(HEADER_FILTER_MENU_CLASS);
   }
 }
-
-export const allowHeaderFiltering = function (column) {
-  return isDefined(column.allowHeaderFiltering) ? column.allowHeaderFiltering : column.allowFiltering;
-};
 
 // TODO Fix types of this mixin
 export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class HeaderFilterMixin extends Base {

@@ -1,5 +1,5 @@
 // STYLE dataGrid
-import DataGrid from '../__internal/grids/data_grid/m_widget';
+import DataGrid from '../__internal/grids/data_grid/widget';
 // NOTE: This redundant import allows to build
 // dependencies between components correctly by theme-builder
 // eslint-disable-next-line no-unused-vars

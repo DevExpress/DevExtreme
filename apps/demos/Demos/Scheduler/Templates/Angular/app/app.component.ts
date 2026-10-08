@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ViewChild,
   enableProdMode,
@@ -10,6 +11,7 @@ import {
 import { bootstrapApplication } from '@angular/platform-browser';
 import { formatDate } from 'devextreme-angular/common/core/localization';
 import { query } from 'devextreme-angular/common/data';
+import themes from 'devextreme/ui/themes';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
@@ -30,16 +32,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [
     DxSchedulerModule,
@@ -52,6 +48,8 @@ export class AppComponent {
   private formatDate = formatDate;
 
   private service = inject(Service);
+
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   data: Data[] = this.service.getData();
 
@@ -95,10 +93,9 @@ export class AppComponent {
     ? query(this.moviesData).filter(['id', '=', id]).toArray()[0] ?? null
     : null;
 
-  getEditorStylingMode = (): 'filled' | 'outlined' => {
-    const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
-    return isMaterialOrFluent ? 'filled' : 'outlined';
-  };
+  getEditorStylingMode = (): 'filled' | 'outlined' => (
+    themes.current().startsWith('generic') ? 'outlined' : 'filled'
+  );
 
   priceDisplayExpr = (value: number): string => `$${value}`;
 
@@ -158,6 +155,8 @@ export class AppComponent {
       form.updateData('director', movie.director);
       this.updateEndDate(movie);
     }
+
+    this.changeDetectorRef.detectChanges();
   };
 
   onCustomEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {

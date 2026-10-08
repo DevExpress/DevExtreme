@@ -1,5 +1,4 @@
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
-import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';
 import { normalizeIndexes } from '@js/core/utils/array';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -341,7 +340,6 @@ class PivotGridDataSource {
   createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
     const StoreConstructor = dataSourceOptions.remoteOperations
       || dataSourceOptions.paginate ? RemoteStore : LocalStore;
-    // @ts-expect-error
     return new StoreConstructor(extend(normalizeDataSourceOptions(dataSourceOptions), {
       onChanged: null,
       onLoadingChanged: null,
@@ -369,7 +367,7 @@ class PivotGridDataSource {
         || (storeOptions instanceof Store)
         || Array.isArray(storeOptions)) {
         store = this.createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
-      } else if (storeOptions instanceof Class || storeOptions instanceof xmlaStore.XmlaStore) {
+      } else if (isFunction(storeOptions.load) && isFunction(storeOptions.getFields)) {
         store = storeOptions;
       }
     }

@@ -7,7 +7,7 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import type { DisabledNodeSelectionMode } from '@js/ui/tree_view';
 import errors from '@js/ui/widget/ui.errors';
-import { getIntersection } from '@ts/core/utils/m_array';
+import { getIntersection } from '@ts/core/utils/array';
 import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/search_box_controller';
 import TextBox from '@ts/ui/text_box/text_box';
 
@@ -82,9 +82,9 @@ class DataAdapter {
 
   _expandedNodesKeys: ItemKey[] = [];
 
-  _dataStructure: (InternalNode | null)[] = [];
+  _dataStructure: InternalNode[] = [];
 
-  _initialDataStructure: (InternalNode | null)[] = [];
+  _initialDataStructure: InternalNode[] = [];
 
   constructor(options: DataAdapterOptions) {
     extend(this.options, options);
@@ -170,7 +170,7 @@ class DataAdapter {
     return array;
   }
 
-  _getDataBySelectionMode(): (InternalNode | null)[] {
+  _getDataBySelectionMode(): InternalNode[] {
     return this.options.multipleSelection ? this.getData() : this.getFullData();
   }
 
@@ -182,7 +182,7 @@ class DataAdapter {
     return node?.internalFields.disabled ?? false;
   }
 
-  _getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {
+  _getByKey(data: InternalNode[], key: ItemKey): InternalNode | null {
     return data === this._dataStructure
       ? this.options.dataConverter._getByKey(key)
       : this.options.dataConverter.getByKey(data.filter(Boolean), key);
@@ -368,10 +368,12 @@ class DataAdapter {
   }
 
   _markChildren(keys: ItemKey[]): void {
+    const markedDataStructure: (InternalNode | null)[] = this._dataStructure;
+
     each(keys, (_index: number, key: ItemKey) => {
       const index = this.getIndexByKey(key);
       const node = this.getNodeByKey(key);
-      this._dataStructure[index] = null;
+      markedDataStructure[index] = null;
 
       if (node?.internalFields.childrenKeys.length) {
         this._markChildren(node.internalFields.childrenKeys);
@@ -381,15 +383,16 @@ class DataAdapter {
 
   _removeNode(key: ItemKey): void {
     const node = this.getNodeByKey(key);
+    const markedDataStructure: (InternalNode | null)[] = this._dataStructure;
 
-    this._dataStructure[this.getIndexByKey(key)] = null;
+    markedDataStructure[this.getIndexByKey(key)] = null;
 
     if (node?.internalFields.childrenKeys.length) {
       this._markChildren(node.internalFields.childrenKeys);
     }
 
     let counter = 0;
-    const items = extend([], this._dataStructure);
+    const items = extend([], markedDataStructure);
     each(items, (index: number, item: InternalNode | null) => {
       if (!item) {
         this._dataStructure.splice(index - counter, 1);
@@ -430,11 +433,11 @@ class DataAdapter {
     return this._expandedNodesKeys;
   }
 
-  getData(): (InternalNode | null)[] {
+  getData(): InternalNode[] {
     return this._dataStructure;
   }
 
-  getFullData(): (InternalNode | null)[] {
+  getFullData(): InternalNode[] {
     return this._initialDataStructure;
   }
 
@@ -467,7 +470,7 @@ class DataAdapter {
 
   getNodeByKey(
     key: ItemKey,
-    data?: (InternalNode | null)[],
+    data?: InternalNode[],
   ): InternalNode | null {
     return this._getByKey(data ?? this._getDataBySelectionMode(), key);
   }
@@ -630,7 +633,7 @@ class DataAdapter {
     if (!Array.isArray(selector)) {
       return [selector, operation, value];
     }
-    each(selector, (_index: number, item: string) => {
+    each(selector, (_index, item) => {
       searchFilter.push([item, operation, value], 'or');
     });
 
@@ -650,7 +653,7 @@ class DataAdapter {
     return query(data, { langParams: this.options.langParams }).filter(criteria).toArray();
   }
 
-  search(searchValue: string): (InternalNode | null)[] {
+  search(searchValue: string): InternalNode[] {
     let matches = this._filterDataStructure(searchValue);
     const { dataConverter } = this.options;
 
@@ -691,8 +694,8 @@ class DataAdapter {
     lookForParents(matches, 0);
 
     if (this.options.sort) {
+      // @ts-expect-error queryByOptions().toArray() is typed as unknown[]
       matches = storeHelper
-        // @ts-expect-error ts-error
         .queryByOptions(query(matches), {
           sort: this.options.sort,
           langParams: this.options.langParams,

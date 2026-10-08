@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
+import errors from '@ts/core/errors';
 import { resolvePresetOverride } from '@ts/core/global_format_config';
 import firstDayOfWeekData from '@ts/core/localization/cldr-data/first_day_of_week_data';
 import localizationCore from '@ts/core/localization/core';
@@ -9,7 +10,6 @@ import { getFormat as getLDMLDateFormat } from '@ts/core/localization/ldml/date.
 import { getFormatter as getLDMLDateFormatter } from '@ts/core/localization/ldml/date.formatter';
 import { getParser as getLDMLDateParser } from '@ts/core/localization/ldml/date.parser';
 import numberLocalization from '@ts/core/localization/number';
-import errors from '@ts/core/m_errors';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
 import { each } from '@ts/core/utils/m_iterator';
 import { isString } from '@ts/core/utils/m_type';
@@ -82,8 +82,8 @@ const dateLocalization = dependencyInjector({
     }
     if (isString(presetOverride)) {
       const pattern = FORMATS_TO_PATTERN_MAP[
-        (presetOverride as string).toLowerCase()
-      ] || presetOverride as string;
+        presetOverride.toLowerCase()
+      ] || presetOverride;
 
       return numberLocalization.convertDigits(
         getLDMLDateFormatter(pattern, this)(date),
@@ -168,7 +168,7 @@ const dateLocalization = dependencyInjector({
       // eslint-disable-next-line no-param-reassign
       format = (format as FormatObject).type ?? format;
       if (isString(format)) {
-        const resolvedFormat = this._resolveStringFormat(format as string, date);
+        const resolvedFormat = this._resolveStringFormat(format, date);
 
         if (resolvedFormat !== undefined) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -176,7 +176,7 @@ const dateLocalization = dependencyInjector({
         }
 
         // eslint-disable-next-line no-param-reassign
-        format = (FORMATS_TO_PATTERN_MAP[(format as string).toLowerCase()] || format) as string;
+        format = (FORMATS_TO_PATTERN_MAP[format.toLowerCase()] || format) as string;
 
         return numberLocalization.convertDigits(getLDMLDateFormatter(format, this)(date));
       }

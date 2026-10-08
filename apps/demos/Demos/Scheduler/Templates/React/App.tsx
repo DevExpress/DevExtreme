@@ -7,6 +7,7 @@ import Scheduler, {
   Label,
 } from 'devextreme-react/scheduler';
 import { query } from 'devextreme-react/common/data';
+import themes from 'devextreme/ui/themes';
 import type { SchedulerTypes } from 'devextreme-react/scheduler';
 import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import type { FormTypes } from 'devextreme-react/form';
@@ -30,10 +31,9 @@ const getMovieById = (id: number | undefined): MovieResource | null => id
   ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null
   : null;
 
-const getEditorStylingMode = (): 'filled' | 'outlined' => {
-  const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
-  return isMaterialOrFluent ? 'filled' : 'outlined';
-};
+const getEditorStylingMode = (): 'filled' | 'outlined' => (
+  themes.current().startsWith('generic') ? 'outlined' : 'filled'
+);
 
 const priceDisplayExpr = (value: number): string => `$${value}`;
 

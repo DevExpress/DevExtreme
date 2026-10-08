@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import type { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
 import type { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
@@ -121,7 +115,6 @@ export class DxoRangeContainerComponent extends NestedOption implements OnDestro
         return 'rangeContainer';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -137,7 +130,6 @@ export class DxoRangeContainerComponent extends NestedOption implements OnDestro
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

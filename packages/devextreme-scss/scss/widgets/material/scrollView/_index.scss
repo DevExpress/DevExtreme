@@ -6,7 +6,7 @@
 @use "../scrollable";
 @use "../../base/scrollView";
 
-$scrollview-loading-indicator-size: 42px;
+$scrollview-loading-indicator-size: 42px !default;
 
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {

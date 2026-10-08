@@ -33,6 +33,7 @@ export const DISABLED_STATE_CLASS = 'dx-state-disabled';
 export const ACTIVE_STATE_CLASS = 'dx-state-active';
 export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 export const HOVER_STATE_CLASS = 'dx-state-hover';
+export const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 export const EMPTY_ACTIVE_STATE_UNIT = '';
@@ -121,25 +122,22 @@ class Widget<
   }
 
   _getDefaultOptions(): TProperties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._getDefaultOptions(), {
+    return {
+      ...super._getDefaultOptions(),
       hoveredElement: null,
       isActive: false,
       disabled: false,
       visible: true,
-      hint: undefined,
       activeStateEnabled: false,
-      onContentReady: undefined,
       hoverStateEnabled: false,
       focusStateEnabled: false,
       tabIndex: 0,
-      accessKey: undefined,
       onFocusIn: null,
       onFocusOut: null,
       onKeyboardHandled: null,
       ignoreParentReadOnly: false,
       useResizeObserver: true,
-    });
+    };
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
@@ -150,7 +148,7 @@ class Widget<
           const device = devices.real();
           const { platform } = device;
           const { version } = device;
-          return platform === 'ios' && compareVersions(version, '13.3') <= 0;
+          return platform === 'ios' && compareVersions(version ?? [], '13.3') <= 0;
         },
         options: {
           useResizeObserver: false,
@@ -183,7 +181,6 @@ class Widget<
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _bindInnerWidgetOptions(innerWidget, optionsContainer): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const syncOptions = (): void => this._options.silent(
       optionsContainer,
       extend({}, innerWidget.option()),
@@ -561,10 +558,24 @@ class Widget<
     }
   }
 
+  _needsDisabledStateOnRoot(): boolean {
+    return true;
+  }
+
   _toggleDisabledState(value: boolean | undefined): void {
-    this.$element().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+    const $element = this.$element();
+
+    $element.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+
+    const $ariaTarget = this._getAriaTarget();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this.setAria('disabled', value || undefined);
+    const state = value || undefined;
+
+    this.setAria('disabled', state, $ariaTarget);
+
+    if (this._needsDisabledStateOnRoot() && $ariaTarget.get(0) !== $element.get(0)) {
+      this.setAria('disabled', state, $element);
+    }
   }
 
   _toggleIndependentState(): void {

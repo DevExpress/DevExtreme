@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -30,7 +27,6 @@ import type { Orientation, ScrollbarMode } from 'devextreme/common';
 
 import DxTileView from 'devextreme/ui/tile_view';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -46,13 +42,12 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTileViewItemModule } from 'devextreme-angular/ui/tile-view/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxTileView]
-
  */
 @Component({
     selector: 'dx-tile-view',
@@ -77,7 +72,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -87,10 +81,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -100,10 +92,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.baseItemHeight]
-    
      */
     @Input()
     get baseItemHeight(): number {
@@ -113,10 +103,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('baseItemHeight', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.baseItemWidth]
-    
      */
     @Input()
     get baseItemWidth(): number {
@@ -126,10 +114,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('baseItemWidth', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxTileViewItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -139,10 +125,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.direction]
-    
      */
     @Input()
     get direction(): Orientation {
@@ -152,10 +136,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('direction', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -165,10 +147,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -178,10 +158,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -191,10 +169,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -204,10 +180,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -217,10 +191,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -230,10 +202,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -243,10 +213,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.itemMargin]
-    
      */
     @Input()
     get itemMargin(): number {
@@ -256,10 +224,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemMargin', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxTileViewItem | string> {
@@ -269,10 +235,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -282,10 +246,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -295,10 +257,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -308,10 +268,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.showScrollbar]
-    
      */
     @Input()
     get showScrollbar(): ScrollbarMode {
@@ -321,10 +279,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('showScrollbar', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -334,10 +290,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -347,10 +301,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -361,225 +313,154 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     }
 
     /**
-    
      * [descr:dxTileViewOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxTileViewOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxTileViewOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxTileViewOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxTileViewOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxTileViewOptions.onItemHold]
-    
-    
      */
     @Output() onItemHold: EventEmitter<ItemHoldEvent>;
 
     /**
-    
      * [descr:dxTileViewOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxTileViewOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() baseItemHeightChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() baseItemWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any | dxTileViewItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() directionChange: EventEmitter<Orientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemMarginChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxTileViewItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showScrollbarChange: EventEmitter<ScrollbarMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

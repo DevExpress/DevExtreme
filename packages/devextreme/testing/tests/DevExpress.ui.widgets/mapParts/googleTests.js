@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 import { LOCATIONS, MARKERS, ROUTES } from './utils.js';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import errorsLogger from 'core/errors';
 import errors from 'ui/widget/ui.errors';
 import GoogleProvider from '__internal/ui/map/provider.dynamic.google';
@@ -423,6 +423,30 @@ QUnit.test('center changing from map', function(assert) {
         });
 
         map.repaint();
+    });
+});
+
+QUnit.test('disabled option change should not break the following async actions', function(assert) {
+    const done = assert.async();
+    const d1 = $.Deferred();
+
+    const map = $('#map').dxMap({
+        provider: 'google',
+        center: LOCATIONS[0],
+        onReady: function() {
+            d1.resolve();
+        }
+    }).dxMap('instance');
+
+    d1.done(function() {
+        map.option('disabled', true);
+        map.option('center', LOCATIONS[1]);
+
+        setTimeout(function() {
+            assert.deepEqual(window.google.assignedCenter, new google.maps.LatLng(LOCATIONS[1].lat, LOCATIONS[1].lng), 'center changed after the disabled change');
+
+            done();
+        }, 100);
     });
 });
 

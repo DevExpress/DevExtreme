@@ -1,4 +1,4 @@
-import { wrapToArray } from '@ts/core/utils/m_array';
+import { wrapToArray } from '@ts/core/utils/array';
 import { equalByValue } from '@ts/core/utils/m_common';
 import type { SafeAppointment } from '@ts/scheduler/types';
 

@@ -103,7 +103,7 @@ function convertRangeToDays([startDate, endDate]: Date[]) {
   return daysCount;
 }
 </script>
-<style scoped>
+<style>
 .demo-container {
   height: 690px;
 }

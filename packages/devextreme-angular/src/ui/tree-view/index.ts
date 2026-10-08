@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -30,7 +27,6 @@ import type { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } fro
 import type { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
 import DxTreeView from 'devextreme/ui/tree_view';
-
 
 import {
     DxComponent,
@@ -53,14 +49,13 @@ import { DxiTreeViewItemModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxTreeView]
-
  */
 @Component({
     selector: 'dx-tree-view',
@@ -90,7 +85,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -100,10 +94,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -113,10 +105,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.animationEnabled]
-    
      */
     @Input()
     get animationEnabled(): boolean {
@@ -126,10 +116,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('animationEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.collapseIcon]
-    
      */
     @Input()
     get collapseIcon(): null | string {
@@ -139,10 +127,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('collapseIcon', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.createChildren]
-    
      */
     @Input()
     get createChildren(): ((parentNode: dxTreeViewNode) => any | Array<Record<string, any>>) {
@@ -152,10 +138,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('createChildren', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<dxTreeViewItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -165,10 +149,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.dataStructure]
-    
      */
     @Input()
     get dataStructure(): DataStructure {
@@ -178,10 +160,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('dataStructure', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -191,10 +171,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
-    
      */
     @Input()
     get disabledExpr(): ((item: any) => boolean | undefined) | string {
@@ -204,10 +182,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('disabledExpr', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.disabledNodeSelectionMode]
-    
      */
     @Input()
     get disabledNodeSelectionMode(): DisabledNodeSelectionMode {
@@ -217,10 +193,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('disabledNodeSelectionMode', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string {
@@ -230,10 +204,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('displayExpr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -243,10 +215,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.expandAllEnabled]
-    
      */
     @Input()
     get expandAllEnabled(): boolean {
@@ -256,10 +226,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('expandAllEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.expandedExpr]
-    
      */
     @Input()
     get expandedExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
@@ -269,10 +237,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('expandedExpr', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.expandEvent]
-    
      */
     @Input()
     get expandEvent(): TreeViewExpandEvent {
@@ -282,10 +248,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('expandEvent', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.expandIcon]
-    
      */
     @Input()
     get expandIcon(): null | string {
@@ -295,10 +259,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('expandIcon', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.expandNodesRecursive]
-    
      */
     @Input()
     get expandNodesRecursive(): boolean {
@@ -308,10 +270,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('expandNodesRecursive', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -321,10 +281,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.hasItemsExpr]
-    
      */
     @Input()
     get hasItemsExpr(): ((item: any) => boolean | undefined) | string {
@@ -334,10 +292,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hasItemsExpr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -347,10 +303,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -360,10 +314,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -373,10 +325,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -386,10 +336,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxTreeViewItem> {
@@ -399,10 +347,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
-    
      */
     @Input()
     get itemsExpr(): ((item: any) => Array<any> | undefined) | string {
@@ -412,10 +358,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemsExpr', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -425,10 +369,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any) => any) | string {
@@ -438,10 +380,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -451,10 +391,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.parentIdExpr]
-    
      */
     @Input()
     get parentIdExpr(): ((item: any) => any | undefined) | string {
@@ -464,10 +402,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('parentIdExpr', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.rootValue]
-    
      */
     @Input()
     get rootValue(): any {
@@ -477,10 +413,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('rootValue', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -490,10 +424,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.scrollDirection]
-    
      */
     @Input()
     get scrollDirection(): ScrollDirection {
@@ -503,10 +435,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('scrollDirection', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchEditorOptions]
-    
      */
     @Input()
     get searchEditorOptions(): dxTextBoxOptions<any> {
@@ -516,10 +446,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('searchEditorOptions', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchEnabled]
-    
      */
     @Input()
     get searchEnabled(): boolean {
@@ -529,10 +457,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('searchEnabled', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchExpr]
-    
      */
     @Input()
     get searchExpr(): Array<Function | string> | Function | string {
@@ -542,10 +468,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('searchExpr', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchMode]
-    
      */
     @Input()
     get searchMode(): SearchMode {
@@ -555,10 +479,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('searchMode', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number | undefined {
@@ -568,10 +490,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('searchTimeout', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchValue]
-    
      */
     @Input()
     get searchValue(): string {
@@ -581,10 +501,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('searchValue', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.selectAllText]
-    
      */
     @Input()
     get selectAllText(): string {
@@ -594,10 +512,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('selectAllText', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.selectByClick]
-    
      */
     @Input()
     get selectByClick(): boolean {
@@ -607,10 +523,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('selectByClick', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
-    
      */
     @Input()
     get selectedExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
@@ -620,10 +534,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('selectedExpr', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleOrMultiple {
@@ -633,10 +545,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.selectNodesRecursive]
-    
      */
     @Input()
     get selectNodesRecursive(): boolean {
@@ -646,10 +556,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('selectNodesRecursive', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.showCheckBoxesMode]
-    
      */
     @Input()
     get showCheckBoxesMode(): TreeViewCheckBoxMode {
@@ -659,10 +567,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('showCheckBoxesMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -672,10 +578,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.useNativeScrolling]
-    
      */
     @Input()
     get useNativeScrolling(): boolean {
@@ -685,10 +589,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('useNativeScrolling', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.virtualModeEnabled]
-    
      */
     @Input()
     get virtualModeEnabled(): boolean {
@@ -698,10 +600,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('virtualModeEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -711,10 +611,8 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -725,454 +623,314 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     }
 
     /**
-    
      * [descr:dxTreeViewOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onItemCollapsed]
-    
-    
      */
     @Output() onItemCollapsed: EventEmitter<ItemCollapsedEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onItemExpanded]
-    
-    
      */
     @Output() onItemExpanded: EventEmitter<ItemExpandedEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onItemHold]
-    
-    
      */
     @Output() onItemHold: EventEmitter<ItemHoldEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onItemSelectionChanged]
-    
-    
      */
     @Output() onItemSelectionChanged: EventEmitter<ItemSelectionChangedEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onSelectAllValueChanged]
-    
-    
      */
     @Output() onSelectAllValueChanged: EventEmitter<SelectAllValueChangedEvent>;
 
     /**
-    
      * [descr:dxTreeViewOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() collapseIconChange: EventEmitter<null | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() createChildrenChange: EventEmitter<((parentNode: dxTreeViewNode) => any | Array<Record<string, any>>)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<dxTreeViewItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataStructureChange: EventEmitter<DataStructure>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledExprChange: EventEmitter<((item: any) => boolean | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledNodeSelectionModeChange: EventEmitter<DisabledNodeSelectionMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() displayExprChange: EventEmitter<((item: any) => string) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() expandAllEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() expandedExprChange: EventEmitter<((item: any, value: boolean | undefined) => boolean | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() expandEventChange: EventEmitter<TreeViewExpandEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() expandIconChange: EventEmitter<null | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() expandNodesRecursiveChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hasItemsExprChange: EventEmitter<((item: any) => boolean | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxTreeViewItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsExprChange: EventEmitter<((item: any) => Array<any> | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyExprChange: EventEmitter<((item: any) => any) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() parentIdExprChange: EventEmitter<((item: any) => any | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rootValueChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollDirectionChange: EventEmitter<ScrollDirection>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchEditorOptionsChange: EventEmitter<dxTextBoxOptions<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchExprChange: EventEmitter<Array<Function | string> | Function | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchModeChange: EventEmitter<SearchMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchTimeoutChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchValueChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectAllTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectByClickChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedExprChange: EventEmitter<((item: any, value: boolean | undefined) => boolean | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectNodesRecursiveChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showCheckBoxesModeChange: EventEmitter<TreeViewCheckBoxMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() useNativeScrollingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() virtualModeEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

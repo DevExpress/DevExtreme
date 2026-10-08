@@ -9,8 +9,8 @@ import Box from '@ts/ui/box';
 import dateUtils from '@ts/ui/date_box/date_utils';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
-import NumberBox from '@ts/ui/number_box/m_number_box';
-import type { NumberBoxMaskProperties } from '@ts/ui/number_box/m_number_box.mask';
+import NumberBox from '@ts/ui/number_box/number_box';
+import type { NumberBoxMaskProperties } from '@ts/ui/number_box/number_box.mask';
 import SelectBox from '@ts/ui/select_box';
 
 const TIMEVIEW_CLASS = 'dx-timeview';

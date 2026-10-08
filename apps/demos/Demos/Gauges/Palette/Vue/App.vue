@@ -31,7 +31,7 @@ import {
 
 const values = [-2.13, 1.48, -3.09, 4.52, 4.9, 3.9];
 </script>
-<style scoped>
+<style>
 #gauge {
   height: 440px;
   width: 100%;

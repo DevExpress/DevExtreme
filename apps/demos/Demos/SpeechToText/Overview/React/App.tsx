@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { SpeechToText } from 'devextreme-react/speech-to-text';
 import { TextArea } from 'devextreme-react/text-area';
 import { Button } from 'devextreme-react/button';
@@ -36,11 +36,11 @@ export default function App() {
   const [interimResults, setInterimResults] = useState<boolean>(true);
   const [continuous, setContinuous] = useState<boolean>(false);
   const [animation, setAnimation] = useState<boolean>(true);
-  const speechRecognitionConfig = {
+  const speechRecognitionConfig = useMemo(() => ({
     lang: langMap[language],
     interimResults,
     continuous,
-  };
+  }), [language, interimResults, continuous]);
 
   const onStartClick = useCallback(() => {
     if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {

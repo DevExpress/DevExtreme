@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Pipe,
   PipeTransform,
@@ -15,12 +15,6 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Pipe({ name: 'stringifyItems', standalone: true })
 export class StringifyItemsPipe implements PipeTransform {
   transform(items: DxDiagramTypes.Item[], textExpression: string): string {
@@ -31,10 +25,9 @@ export class StringifyItemsPipe implements PipeTransform {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [
@@ -49,7 +42,7 @@ export class AppComponent {
 
   textExpression = 'Full_Name';
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.dataSource = new ArrayStore({
       key: 'ID',
       data: service.getEmployees(),
@@ -69,6 +62,7 @@ export class AppComponent {
 
   selectionChangedHandler(e: DxDiagramTypes.SelectionChangedEvent) {
     this.selectedItems = e.items.filter((item) => item.itemType === 'shape');
+    this.changeDetectorRef.detectChanges();
   }
 }
 

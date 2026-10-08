@@ -16,26 +16,26 @@ import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/m_support';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
+import type { ModuleType } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
 
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
+import type { DataSourceController } from '../data_source/data_source_controller';
 import { isEditRow } from '../keyboard_navigation/utils';
-import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import {
   CHECKBOXES_HIDDEN_CLASS,
   COMMAND_SELECT_CLASS,
-  DATA_ROW_CLASS,
   EDITOR_CELL_CLASS,
-  ROW_CLASS,
   ROW_SELECTION_CLASS,
   SELECT_CHECKBOX_CLASS,
   SELECTION_DISABLED_CLASS,
@@ -48,7 +48,7 @@ const processLongTap = function (that, dxEvent) {
   const rowsView = that.getView('rowsView');
   // TODO getController
   const selectionController = that.getController('selection');
-  const $row = $(dxEvent.target).closest(`.${DATA_ROW_CLASS}`);
+  const $row = $(dxEvent.target).closest(`.${VIEW_CLASSES.dataRow}`);
   const rowIndex = rowsView.getRowIndex($row);
 
   if (rowIndex < 0) return;
@@ -71,8 +71,7 @@ const processLongTap = function (that, dxEvent) {
 
 const isSeveralRowsSelected = function (that, selectionFilter) {
   let keyIndex = 0;
-  const store = that._dataController.store();
-  const key = store?.key();
+  const key = that.dataSourceController.store()?.key();
   const isComplexKey = Array.isArray(key);
 
   if (!selectionFilter.length) {
@@ -120,6 +119,8 @@ const selectionHeaderTemplate = (container, options) => {
 export class SelectionController extends modules.Controller {
   protected _dataController!: DataController;
 
+  protected dataSourceController!: DataSourceController;
+
   private _columnsController!: ColumnsController;
 
   protected _stateStoringController!: StateStoringController;
@@ -144,6 +145,7 @@ export class SelectionController extends modules.Controller {
     }
 
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
     this._stateStoringController = this.getController('stateStoring');
     // mode has a default value
@@ -156,7 +158,7 @@ export class SelectionController extends modules.Controller {
 
     if (!this._dataPushedHandler) {
       this._dataPushedHandler = this._handleDataPushed.bind(this);
-      this._dataController.pushed.add(this._dataPushedHandler);
+      this.dataSourceController.pushed.add(this._dataPushedHandler);
     }
   }
 
@@ -206,6 +208,7 @@ export class SelectionController extends modules.Controller {
    */
   protected _getSelectionConfig(): SelectionOptions {
     const dataController = this._dataController;
+    const { dataSourceController } = this;
     const columnsController = this._columnsController;
     const selectionOptions: any = this.option('selection') ?? {};
     const { deferred } = selectionOptions;
@@ -230,17 +233,17 @@ export class SelectionController extends modules.Controller {
         return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
       },
       key() {
-        return dataController?.key();
+        return dataSourceController.key();
       },
       keyOf(item) {
-        return dataController?.keyOf(item);
+        return dataSourceController.keyOf(item);
       },
       dataFields() {
-        return dataController.dataSource()?.select();
+        return dataSourceController.select();
       },
       load(options) {
         // @ts-expect-error
-        return dataController.dataSource()?.load(options) || new Deferred().resolve([]);
+        return dataSourceController.getAdapter()?.customLoader.load(options) || new Deferred().resolve([]);
       },
       // eslint-disable-next-line
       plainItems(cached?) {
@@ -259,9 +262,9 @@ export class SelectionController extends modules.Controller {
       filter() {
         return dataController.getCombinedFilter(deferred);
       },
-      totalCount: () => dataController.totalCount(),
+      totalCount: () => dataSourceController.totalCount(),
       getLoadOptions(loadItemIndex, focusedItemIndex, shiftItemIndex) {
-        const { sort, filter } = dataController.dataSource()?.lastLoadOptions() ?? {};
+        const { sort, filter } = dataSourceController.lastLoadOptions();
         let minIndex = Math.min(loadItemIndex, focusedItemIndex);
         let maxIndex = Math.max(loadItemIndex, focusedItemIndex);
 
@@ -662,10 +665,12 @@ export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeader
     const $element = that.element();
     const $editor = $element?.find(`.${SELECT_CHECKBOX_CLASS}`);
 
+    // @ts-expect-error $editor is set whenever $element is
     if ($element && $editor.length && this.option('selection.mode') === 'multiple') {
       const selectAllValue = this._selectionController.isSelectAll();
       const isVisible = this._isSelectAllCheckBoxVisible();
 
+      // @ts-expect-error dxCheckBox is added to the renderer at runtime
       $editor.dxCheckBox('instance').option({
         visible: isVisible,
         value: selectAllValue,
@@ -791,7 +796,7 @@ export const selectionRowsViewExtender = (
   private _attachCheckBoxClickEvent($element) {
     eventsEngine.on($element, clickEventName, this.createAction(function (e) {
       const { event } = e;
-      const rowIndex = this.getRowIndex($(event.currentTarget).closest(`.${ROW_CLASS}`));
+      const rowIndex = this.getRowIndex($(event.currentTarget).closest(`.${VIEW_CLASSES.row}`));
 
       if (rowIndex >= 0) {
         this._selectionController.startSelectionWithCheckboxes();
@@ -833,6 +838,7 @@ export const selectionRowsViewExtender = (
 
           $row
             .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
+            // @ts-expect-error dxCheckBox is added to the renderer at runtime
             .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
           that.setAria('selected', String(isSelected), $row);
         });
@@ -852,7 +858,7 @@ export const selectionRowsViewExtender = (
     if (selectionMode !== 'none') {
       if (that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !supportUtils.touch) {
         // TODO Not working timeout by hold when it is larger than other timeouts by hold
-        eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${DATA_ROW_CLASS}`, that.createAction((e) => {
+        eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${VIEW_CLASSES.dataRow}`, that.createAction((e) => {
           processLongTap(that.component, e.event);
 
           e.event.stopPropagation();
@@ -917,7 +923,7 @@ export const selectionRowsViewExtender = (
     return !!isCommandSelect;
   }
 
-  protected _renderCore(change) {
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
     const deferred = super._renderCore(change);
     this._updateCheckboxesClass();
     return deferred;

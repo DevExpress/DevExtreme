@@ -411,7 +411,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 2);
+        assert.equal(this.dataSourceController.pageCount(), 2);
         assert.ok(isVisible);
         assert.equal(pagerView.element().dxPagination('instance').option('pagesNavigatorVisible'), 'auto', 'pagesNavigatorVisible');
     });
@@ -426,7 +426,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.ok(!isVisible);
     });
 
@@ -443,8 +443,8 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.ok(!this.dataController.hasKnownLastPage());
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.ok(!this.dataSourceController.hasKnownLastPage());
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.ok(isVisible);
     });
 
@@ -459,7 +459,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.ok(isVisible);
         assert.equal(pagerView.element().dxPagination('instance').option('pagesNavigatorVisible'), true, 'pagesNavigatorVisible');
     });
@@ -476,7 +476,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 2);
+        assert.equal(this.dataSourceController.pageCount(), 2);
         assert.ok(!isVisible);
         assert.equal(dataUtils.data(pagerView.element().get(0), 'dxPager'), undefined, 'pager instance');
     });
@@ -494,7 +494,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.ok(!isVisible);
     });
 
@@ -511,7 +511,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.deepEqual(this.dataController.getPageSizes(), []);
         assert.ok(!isVisible);
     });

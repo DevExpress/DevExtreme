@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { Format } from 'devextreme/common/core/localization';
 import type { DashStyle, Font } from 'devextreme/common/charts';
 import type { dxPolarChartPointInfo } from 'devextreme/viz/polar_chart';
@@ -23,7 +17,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-tooltip',
@@ -182,7 +175,6 @@ export class DxoPolarChartTooltipComponent extends NestedOption implements OnDes
         return 'tooltip';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -198,7 +190,6 @@ export class DxoPolarChartTooltipComponent extends NestedOption implements OnDes
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

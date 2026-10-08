@@ -1,12 +1,4 @@
 @use "../sizes" as *;
 
 $fluent-numberbox-spin-container-width: 24px !default;
-$fluent-numberbox-touch-friendly-spin-container-width: null !default;
-
-@if $size == "default" {
-  $fluent-numberbox-touch-friendly-spin-container-width: 48px !default;
-}
-
-@else if $size == "compact" {
-  $fluent-numberbox-touch-friendly-spin-container-width: 48px !default;
-}
+$fluent-numberbox-touch-friendly-spin-container-width: 48px !default;

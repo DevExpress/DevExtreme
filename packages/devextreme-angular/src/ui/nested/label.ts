@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { HorizontalAlignment, HorizontalEdge, Position, VerticalAlignment, VerticalEdge } from 'devextreme/common';
 import type { ChartsAxisLabelOverlap, DashStyle, Font, LabelOverlap, LabelPosition, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
@@ -34,7 +29,6 @@ import {
     DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-label',
@@ -370,7 +364,6 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
         return 'label';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -390,7 +383,6 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
         extractTemplate(this, this.element, this.renderer, this.document);
     }
 
-
     ngOnInit() {
         this._addRecreatedComponent();
     }
@@ -398,7 +390,6 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

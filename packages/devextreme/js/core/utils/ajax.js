@@ -1,3 +1,3 @@
 // deprecated
-import { Ajax } from '../../__internal/core/utils/m_ajax';
+import { Ajax } from '../../__internal/core/utils/ajax';
 export default Ajax;

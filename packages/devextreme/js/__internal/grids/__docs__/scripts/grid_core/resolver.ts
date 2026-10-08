@@ -168,8 +168,8 @@ export function normalizeModuleRef(baseClass: string): string {
 }
 
 /**
- * Normalize bare imports of Controller/View/ViewController from m_modules.
- * When a file does `import { Controller } from '../m_modules'`, the heritage
+ * Normalize bare imports of Controller/View/ViewController from modules.ts.
+ * When a file does `import { Controller } from '../modules/modules'`, the heritage
  * string is just "Controller" instead of "modules.Controller".
  */
 export function normalizeBareModuleImports(
@@ -180,14 +180,14 @@ export function normalizeBareModuleImports(
     return baseClass;
   }
 
-  // Check all import aliases to see if this was imported from m_modules
+  // Check all import aliases to see if this was imported from modules.ts
   for (const [localName, aliasInfo] of parsedFile.importAliases) {
     if (localName === baseClass && aliasInfo.fromPath.includes(M_MODULES_PATH)) {
       return `${MODULES_PREFIX}${aliasInfo.originalName}`;
     }
   }
 
-  // If there's no local class with this name, it's almost certainly from m_modules
+  // If there's no local class with this name, it's almost certainly from modules.ts
   if (!parsedFile.classes.has(baseClass)) {
     return `${MODULES_PREFIX}${baseClass}`;
   }

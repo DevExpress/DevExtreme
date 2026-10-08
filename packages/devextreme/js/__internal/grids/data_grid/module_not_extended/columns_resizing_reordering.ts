@@ -1,13 +1,15 @@
 import { columnsResizingReorderingModule } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 
-export const DraggingHeaderView = columnsResizingReorderingModule.views.draggingHeaderView;
-export const DraggingHeaderViewController = columnsResizingReorderingModule.controllers.draggingHeader;
-export const ColumnsSeparatorView = columnsResizingReorderingModule.views.columnsSeparatorView;
-export const TablePositionViewController = columnsResizingReorderingModule.controllers.tablePosition;
-export const ColumnsResizerViewController = columnsResizingReorderingModule.controllers.columnsResizer;
-export const TrackerView = columnsResizingReorderingModule.views.trackerView;
+const { views, controllers } = columnsResizingReorderingModule;
+
+export const DraggingHeaderView = views.draggingHeaderView;
+export const DraggingHeaderViewController = controllers.draggingHeader;
+export const ColumnsSeparatorView = views.columnsSeparatorView;
+export const TablePositionViewController = controllers.tablePosition;
+export const ColumnsResizerViewController = controllers.columnsResizer;
+export const TrackerView = views.trackerView;
 
 gridCore.registerModule('columnsResizingReordering', columnsResizingReorderingModule);
 

@@ -16,9 +16,10 @@ import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
-import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import type { ModuleType } from '../types';
 import {
   BUTTON_CLASS,
   DATA_EDIT_DATA_INSERT_TYPE,
@@ -539,7 +540,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
 
     // @ts-expect-error
     each($cells, (index, cellElement) => {
-      const item: any = $(cellElement).find('.dx-field-item-content').data('dx-form-item');
+      const item: any = $(cellElement).find(`.${FIELD_ITEM_CONTENT_CLASS}`).data('dx-form-item');
       if (item?.column && column && item.column.index === column.index) {
         visibleIndex = index;
         return false;

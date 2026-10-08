@@ -124,8 +124,6 @@ $base-invalid-color: null !default;
 */
 $base-invalid-faded-border-color: null !default;
 $base-header-color: null !default;
-
-$scrollview-pulldown-path: null !default;
 $base-default: null !default;
 $base-info: null !default;
 $screen-text-color: null !default;
@@ -166,8 +164,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
   $base-header-color: #627789 !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/carmine/pulldown.png") !default;
 }
 
 @if $color == "contrast" {
@@ -194,8 +190,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-faded-border-color: $base-invalid-color !default;
   $base-label-color: $base-text-color !default;
   $base-dropdown-shadow-color: $base-shadow-color !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/contrast/pulldown.png") !default;
 }
 
 @if $color == "dark" {
@@ -226,8 +220,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/dark/pulldown.png") !default;
 }
 
 @if $color == "darkmoon" {
@@ -262,8 +254,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
   $screen-text-color: extcolor.screen($base-bg, #686868) !default;
   $base-grid-selected-border-color: #45c7de !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/darkmoon/pulldown.png") !default;
 }
 
 @if $color == "darkviolet" {
@@ -298,8 +288,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/darkviolet/pulldown.png") !default;
 }
 
 @if $color == "greenmist" {
@@ -330,8 +318,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/greenmist/pulldown.png") !default;
 }
 
 @if $color == "light" {
@@ -362,8 +348,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/light/pulldown.png") !default;
 }
 
 @if $color == "softblue" {
@@ -399,8 +383,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/softblue/pulldown.png") !default;
 }
 
 $typography-bg: $base-bg !default;

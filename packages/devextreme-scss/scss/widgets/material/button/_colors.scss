@@ -13,7 +13,7 @@ $button-shadow-color: null !default;
 * $type color
 */
 $button-normal-color: $base-text-color !default;
-$button-normal-border-color: color.change($button-normal-color, $alpha: 0.24);
+$button-normal-border-color: color.change($button-normal-color, $alpha: 0.24) !default;
 
 /**
 * $name 20. Selected state text color

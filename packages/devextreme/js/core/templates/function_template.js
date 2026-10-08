@@ -1,2 +1,2 @@
 // deprecated
-export { FunctionTemplate } from '../../__internal/core/templates/m_function_template';
+export { FunctionTemplate } from '../../__internal/core/templates/function_template';

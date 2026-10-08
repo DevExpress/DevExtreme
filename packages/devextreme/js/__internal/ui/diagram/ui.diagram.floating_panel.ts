@@ -9,21 +9,36 @@ import {
   getWidth,
 } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import type { EventInfo } from '@js/events';
 import type { dxPopupAnimation } from '@js/ui/popup';
-import DiagramPanel from '@ts/ui/diagram/ui.diagram.panel';
+import type { OptionAction } from '@ts/core/widget/component';
+import DiagramPanel, { type DiagramPanelProperties } from '@ts/ui/diagram/ui.diagram.panel';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import Popup from '@ts/ui/popup/popup';
 
 const DIAGRAM_MOBILE_POPUP_CLASS = 'dx-diagram-mobile-popup';
 
-class DiagramFloatingPanel extends DiagramPanel {
+// eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
+type VisibilityEvent = EventInfo<DiagramFloatingPanel> & { visible: boolean };
+
+export interface DiagramFloatingPanelProperties extends DiagramPanelProperties {
+  isVisible?: boolean;
+  isMobileView?: boolean;
+  offsetParent?: dxElementWrapper;
+  offsetX?: number;
+  offsetY?: number;
+  onVisibilityChanging?: (e: VisibilityEvent) => void;
+  onVisibilityChanged?: (e: VisibilityEvent) => void;
+}
+
+class DiagramFloatingPanel<
+  TProperties extends DiagramFloatingPanelProperties = DiagramFloatingPanelProperties,
+> extends DiagramPanel<TProperties> {
   _popup?: Popup;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onVisibilityChangingAction?: any;
+  private _onVisibilityChangingAction!: OptionAction<DiagramFloatingPanelProperties['onVisibilityChanging']>;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onVisibilityChangedAction?: any;
+  private _onVisibilityChangedAction!: OptionAction<DiagramFloatingPanelProperties['onVisibilityChanged']>;
 
   _init(): void {
     super._init();
@@ -33,17 +48,13 @@ class DiagramFloatingPanel extends DiagramPanel {
   }
 
   isVisible(): boolean {
-    // @ts-expect-error ts-error
     const { isVisible } = this.option();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return isVisible;
+    return Boolean(isVisible);
   }
 
   isMobileView(): boolean {
-    // @ts-expect-error ts-error
     const { isMobileView } = this.option();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return isMobileView;
+    return Boolean(isMobileView);
   }
 
   _initMarkup(): void {
@@ -205,18 +216,18 @@ class DiagramFloatingPanel extends DiagramPanel {
         that._renderPopupContent(that._popup?.content());
       },
       onShowing: (): void => {
-        this._onVisibilityChangingAction({ visible: true, component: this });
+        this._onVisibilityChangingAction({ visible: true });
       },
       onShown: (): void => {
         this.option('isVisible', true);
-        this._onVisibilityChangedAction({ visible: true, component: this });
+        this._onVisibilityChangedAction({ visible: true });
       },
       onHiding: (): void => {
-        this._onVisibilityChangingAction({ visible: false, component: this });
+        this._onVisibilityChangingAction({ visible: false });
       },
       onHidden: (): void => {
         this.option('isVisible', false);
-        this._onVisibilityChangedAction({ visible: false, component: this });
+        this._onVisibilityChangedAction({ visible: false });
       },
     };
   }
@@ -280,15 +291,14 @@ class DiagramFloatingPanel extends DiagramPanel {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  _getDefaultOptions() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       isVisible: true,
       isMobileView: false,
       offsetX: 0,
       offsetY: 0,
-    });
+    };
   }
 }
 export default DiagramFloatingPanel;

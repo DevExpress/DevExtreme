@@ -16,6 +16,19 @@ const App = () => {
     setEvents([]);
   }, []);
 
+  const logEditingStart = useCallback(() => logEvent('EditingStart'), [logEvent]);
+  const logInitNewRow = useCallback(() => logEvent('InitNewRow'), [logEvent]);
+  const logRowInserting = useCallback(() => logEvent('RowInserting'), [logEvent]);
+  const logRowInserted = useCallback(() => logEvent('RowInserted'), [logEvent]);
+  const logRowUpdating = useCallback(() => logEvent('RowUpdating'), [logEvent]);
+  const logRowUpdated = useCallback(() => logEvent('RowUpdated'), [logEvent]);
+  const logRowRemoving = useCallback(() => logEvent('RowRemoving'), [logEvent]);
+  const logRowRemoved = useCallback(() => logEvent('RowRemoved'), [logEvent]);
+  const logSaving = useCallback(() => logEvent('Saving'), [logEvent]);
+  const logSaved = useCallback(() => logEvent('Saved'), [logEvent]);
+  const logEditCanceling = useCallback(() => logEvent('EditCanceling'), [logEvent]);
+  const logEditCanceled = useCallback(() => logEvent('EditCanceled'), [logEvent]);
+
   return (
     <>
       <DataGrid
@@ -24,18 +37,18 @@ const App = () => {
         keyExpr="ID"
         allowColumnReordering={true}
         showBorders={true}
-        onEditingStart={() => logEvent('EditingStart')}
-        onInitNewRow={() => logEvent('InitNewRow')}
-        onRowInserting={() => logEvent('RowInserting')}
-        onRowInserted={() => logEvent('RowInserted')}
-        onRowUpdating={() => logEvent('RowUpdating')}
-        onRowUpdated={() => logEvent('RowUpdated')}
-        onRowRemoving={() => logEvent('RowRemoving')}
-        onRowRemoved={() => logEvent('RowRemoved')}
-        onSaving={() => logEvent('Saving')}
-        onSaved={() => logEvent('Saved')}
-        onEditCanceling={() => logEvent('EditCanceling')}
-        onEditCanceled={() => logEvent('EditCanceled')}>
+        onEditingStart={logEditingStart}
+        onInitNewRow={logInitNewRow}
+        onRowInserting={logRowInserting}
+        onRowInserted={logRowInserted}
+        onRowUpdating={logRowUpdating}
+        onRowUpdated={logRowUpdated}
+        onRowRemoving={logRowRemoving}
+        onRowRemoved={logRowRemoved}
+        onSaving={logSaving}
+        onSaved={logSaved}
+        onEditCanceling={logEditCanceling}
+        onEditCanceled={logEditCanceled}>
 
         <Paging enabled={true} />
         <Editing

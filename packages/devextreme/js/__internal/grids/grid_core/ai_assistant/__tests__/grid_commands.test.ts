@@ -5,7 +5,7 @@ import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
 import { logger } from '@ts/core/utils/m_console';
 import { z } from 'zod';
 
-import type { InternalGrid } from '../../m_types';
+import type { InternalGrid } from '../../types';
 import { GridCommands } from '../grid_commands';
 import type {
   CommandCallbacks,
@@ -73,6 +73,7 @@ describe('GridCommands', () => {
 
       await gridCommands.executeCommands([{ name: 'test', args: {} }]);
 
+      // @ts-expect-error
       expect(executeSpy).toHaveBeenCalledWith(
         component,
         expect.objectContaining({

@@ -54,7 +54,7 @@ jobs:
         if ! diff $target.current $target -U 5 > $target.diff; then
             echo "FAIL: $target is outdated:"
             cat $target.diff | sed "1,2d"
-            echo "Execute 'pnpm run regenerate-all' to update dx.all.d.ts"
+            echo "Execute 'pnpm run regenerate' in packages/devextreme to update dx.all.d.ts"
             exit 1
         else
             echo "TS is up-to-date"

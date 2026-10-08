@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import eventsEngine from 'common/core/events/core/events_engine';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -13,7 +13,7 @@ import { isRenderer } from 'core/utils/type';
 import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dxButton from 'ui/button';
-import domAdapter from '__internal/core/m_dom_adapter';
+import domAdapter from '__internal/core/dom_adapter';
 import {
     DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON,
     DROP_DOWN_EDITOR_AFTER_FIELD_ADDON

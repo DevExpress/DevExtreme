@@ -1,6 +1,7 @@
 import { computed, type ReadonlySignal } from '@ts/core/state_manager/index';
 import { FilterBuilderView as OldFilterBuilderView } from '@ts/grids/grid_core/filter_builder/m_filter_builder';
 import { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter_panel/m_filter_panel';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { View } from '../../core/view';
 import { WidgetMock } from '../../widget_mock';
@@ -11,9 +12,13 @@ import { FilterPanelComponent } from './filter_panel';
 export class FilterPanelView extends View<FilterPanelProps> {
   protected component = FilterPanelComponent;
 
-  private readonly oldFilterPanelView = new OldFilterPanelView(this.widget);
+  private readonly oldFilterPanelView = new OldFilterPanelView(
+    this.widget as unknown as InternalGrid,
+  );
 
-  private readonly oldFilterBuilderView = new OldFilterBuilderView(this.widget);
+  private readonly oldFilterBuilderView = new OldFilterBuilderView(
+    this.widget as unknown as InternalGrid,
+  );
 
   public static dependencies = [
     FilterController,

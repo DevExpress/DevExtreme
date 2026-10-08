@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import type { SchedulerPredefinedToolbarItem, DateNavigatorItemProperties } from 'devextreme/ui/scheduler';
@@ -157,7 +152,6 @@ export class DxiSchedulerToolbarItemComponent extends CollectionNestedOption imp
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -178,11 +172,9 @@ export class DxiSchedulerToolbarItemComponent extends CollectionNestedOption imp
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

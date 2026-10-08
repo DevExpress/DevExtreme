@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import 'ui/text_box/ui.text_editor';
 import { Deferred } from 'core/utils/deferred';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const INPUT_CLASS = 'dx-texteditor-input';

@@ -1,17 +1,11 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     NgModule,
     Host,
     SkipSelf
 } from '@angular/core';
-
-
-
-
 
 import {
     DxIntegrationModule,
@@ -50,7 +44,6 @@ export class DxiCustomOperationComponent extends DxiFilterBuilderCustomOperation
         return 'customOperations';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -63,7 +56,6 @@ export class DxiCustomOperationComponent extends DxiFilterBuilderCustomOperation
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

@@ -25,3 +25,19 @@ export function isSameContinuationState(item1: ProcessedItem, item2: ProcessedIt
   return item1.data?.isContinuation === item2.data?.isContinuation
     && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
 }
+
+export function getGroupColumnIndices(
+  oldItem: ProcessedItem,
+  newItem: ProcessedItem,
+): number[] | undefined {
+  const isSameState = isSameExpandedState(oldItem, newItem)
+    && isSameContinuationState(oldItem, newItem);
+
+  if (!oldItem.cells || !isSameState) {
+    return undefined;
+  }
+
+  return oldItem.cells
+    .map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1))
+    .filter((index) => index >= 0);
+}

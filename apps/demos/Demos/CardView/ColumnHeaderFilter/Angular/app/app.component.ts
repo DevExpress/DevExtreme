@@ -7,19 +7,13 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 function getOrderDay(rowData: Order) {
   return new Date(rowData.OrderDate).getDay();
 }
 
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
+  templateUrl: './app.component.html',
   providers: [Service],
   imports: [
     DxCardViewModule,

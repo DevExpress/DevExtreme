@@ -12,6 +12,7 @@ import { isDefined } from 'devextreme/core/utils/type';
 import { getWindow } from 'devextreme/core/utils/window';
 import {
   isCrossDomain,
+  isFormData,
   evalCrossDomainScript,
   getRequestOptions,
   getJsonpCallbackName,
@@ -101,7 +102,7 @@ function getRequestHeaders(options: Options) {
     headers.Accept = getAcceptHeader(options);
   }
 
-  if (!upload && !isGetMethod(options) && !headers[CONTENT_TYPE]) {
+  if (!upload && !isFormData(options.data) && !isGetMethod(options) && !headers[CONTENT_TYPE]) {
     headers[CONTENT_TYPE] = options.contentType || `${URLENCODED};charset=utf-8`;
   }
 
@@ -174,7 +175,6 @@ function getRequestCallbacks(options: Options, deferred: DeferredResult, xhrSurr
 }
 
 function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurrogate: XHRSurrogate) {
-  let total = 0;
   let isUploadStarted = false;
 
   return {
@@ -186,8 +186,7 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
       }
 
       if (event.type === HttpEventType.UploadProgress) {
-        total += event.loaded;
-        options.upload.onprogress?.({ ...event, total });
+        options.upload.onprogress?.(event);
       } else if (event.type === HttpEventType.Response) {
         xhrSurrogate.status = event.status;
         xhrSurrogate.statusText = event.statusText;
@@ -266,11 +265,11 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
     return result;
   }
 
-  if (options.cache === false && isGet && data) {
+  if (options.cache === false && isGet && data && !isFormData(data)) {
     data._ = Date.now() + 1;
   }
 
-  const makeBody = () => (!upload && typeof data === 'object' && headers[CONTENT_TYPE].indexOf(URLENCODED) === 0
+  const makeBody = () => (!upload && !isFormData(data) && typeof data === 'object' && headers[CONTENT_TYPE].indexOf(URLENCODED) === 0
     ? Object.keys(data).reduce(
       (httpParams, key) => httpParams.set(key, data[key]),
       new HttpParams(),

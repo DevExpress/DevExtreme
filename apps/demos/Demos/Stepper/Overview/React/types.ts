@@ -16,4 +16,5 @@ export type StepperConfig = {
   labelId: string;
   title: string;
   fields: (keyof StepperTypes.Item)[];
+  elementAttr: { 'aria-labelledby': string };
 };

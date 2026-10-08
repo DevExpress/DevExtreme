@@ -378,6 +378,12 @@ exports[`HeaderFilter View integration should render popup with list by default 
             style="width: 222px; height: 90px;"
           />
         </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 5
+        </div>
       </div>
     </div>
     <div
@@ -856,6 +862,12 @@ exports[`HeaderFilter View integration should render popup with tree list if dat
             class="dx-overlay-content"
             style="width: 222px; height: 90px;"
           />
+        </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 5
         </div>
       </div>
     </div>

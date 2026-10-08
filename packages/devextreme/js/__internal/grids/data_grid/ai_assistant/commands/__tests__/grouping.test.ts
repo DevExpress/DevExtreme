@@ -13,7 +13,7 @@ import {
   createDataGrid,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { clearGroupingCommand, groupingCommand } from '../grouping';
 
