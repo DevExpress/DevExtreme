@@ -22,7 +22,8 @@ const RELEASE_YEAR = 2000 + Number(MAJOR);
 const FORMATS = ['ttf', 'woff', 'woff2'] as const;
 const CONTAINERS: Record<typeof FORMATS[number], FontContainer> = { ttf: 'sfnt', woff: 'woff', woff2: 'woff2' };
 const WEB_FORMATS = ['woff', 'woff2'] as const;
-const WEB_HEADER_OFFSETS: Record<typeof WEB_FORMATS[number], { metadataLength: number; privateDataLength: number }> = {
+type WebHeaderOffsets = { metadataLength: number; privateDataLength: number };
+const WEB_HEADER_OFFSETS: Record<typeof WEB_FORMATS[number], WebHeaderOffsets> = {
   woff: { metadataLength: 28, privateDataLength: 40 },
   woff2: { metadataLength: 32, privateDataLength: 44 },
 };
@@ -77,7 +78,8 @@ describe('Icon fonts metadata', () => {
 
     test.each(FORMATS)('%s carries exactly the DevExtreme name records', (format) => {
       const names = readNames(readFont(fileName, format));
-      const records = Object.fromEntries(Object.entries(NAME_RECORDS).map(([field, nameId]) => [field, names.get(nameId)]));
+      const records = Object.fromEntries(Object.entries(NAME_RECORDS)
+        .map(([field, nameId]) => [field, names.get(nameId)]));
 
       expect(records).toEqual({
         copyright: EXPECTED.copyright,
@@ -93,14 +95,16 @@ describe('Icon fonts metadata', () => {
         license: EXPECTED.license,
         licenseUrl: EXPECTED.licenseUrl,
       });
-      expect([...names.keys()].sort((a, b) => a - b)).toEqual(Object.values(NAME_RECORDS).sort((a, b) => a - b));
+      expect([...names.keys()].sort((a, b) => a - b))
+        .toEqual(Object.values(NAME_RECORDS).sort((a, b) => a - b));
     });
 
     test.each(FORMATS)('%s repeats every name record on each platform', (format) => {
       const font = readFont(fileName, format);
       const names = readNames(font);
 
-      expect(readNameRecords(font).filter(({ nameId, text }) => text !== names.get(nameId))).toEqual([]);
+      expect(readNameRecords(font).filter(({ nameId, text }) => text !== names.get(nameId)))
+        .toEqual([]);
     });
 
     test.each(FORMATS)('%s credits no third-party font generator', (format) => {
