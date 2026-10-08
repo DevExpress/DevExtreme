@@ -1,11 +1,17 @@
+import type { InitializedEventInfo } from '@js/common/core/events';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup';
+import type Widget from '@js/ui/widget/ui.widget';
 
 import { isSmallScreen } from '../utils/small_screen';
+
+type PopupOptionArgs = [optionName: string]
+| [optionName: string, optionValue: unknown]
+| [options: Partial<PopupProperties>];
 
 const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 abstract class BaseDialog<T = unknown> {
@@ -29,7 +35,8 @@ abstract class BaseDialog<T = unknown> {
     this._popup?.hide();
   }
 
-  protected _addEscapeHandler(e): void {
+  protected _addEscapeHandler(e: InitializedEventInfo<Widget<unknown>>): void {
+    // @ts-expect-error component is always set when onInitialized fires; the d.ts marks it optional
     e.component.registerKeyHandler('escape', () => this._escKeyHandler());
   }
 
@@ -53,7 +60,6 @@ abstract class BaseDialog<T = unknown> {
       onInitialized: (e) => {
         this._popup = e.component as Popup;
         this._popup.on('hiding', () => this.onHiding());
-        this._addEscapeHandler.bind(this);
       },
     }) as PopupProperties;
   }
@@ -85,9 +91,14 @@ abstract class BaseDialog<T = unknown> {
     this._popup.hide();
   }
 
-  public popupOption(...args): void {
-    // @ts-expect-error args is any
-    return this._popup.option.apply(this._popup, args);
+  public popupOption<TName extends string>(
+    optionName: TName,
+  ): TName extends keyof PopupProperties ? PopupProperties[TName] : unknown;
+  public popupOption(options: Partial<PopupProperties>): void;
+  public popupOption(optionName: string, optionValue: unknown): void;
+  public popupOption(...args: PopupOptionArgs): unknown {
+    // @ts-expect-error option() is overloaded; a union of tuples cannot be spread into it
+    return this._popup.option(...args);
   }
 }
 
