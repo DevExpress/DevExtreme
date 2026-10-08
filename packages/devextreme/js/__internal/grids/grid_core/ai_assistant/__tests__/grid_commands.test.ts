@@ -393,7 +393,7 @@ describe('GridCommands', () => {
         op: filterOps,
         value: z.union([z.string(), z.number(), z.null()]),
       }).strict();
-      const exprSchema: z.ZodType<unknown> = z.lazy(() => z.union([
+      const exprSchema: z.ZodType = z.lazy(() => z.union([
         basicExpr,
         z.object({
           type: z.literal('combined'),

@@ -29,6 +29,7 @@ const z = {
     transform() { return z; },
     describe() { return z; },
     safeParse() { return { success: true, data: {} }; },
+    toJSONSchema() { return { type: 'object' }; },
 };
 
 export { z };

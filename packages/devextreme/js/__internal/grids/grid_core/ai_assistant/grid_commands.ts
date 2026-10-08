@@ -8,7 +8,7 @@ import {
   DEFAULT_SUCCESS_MESSAGE,
   EXECUTION_ABORT_MESSAGE,
 } from '@ts/grids/grid_core/ai_assistant/const';
-import { zodToJsonSchema } from 'zod-to-json-schema';
+import { z } from 'zod';
 
 import type { InternalGrid } from '../types';
 import type {
@@ -19,7 +19,7 @@ import type {
   JsonSchema,
   ResponseSchemaBranch,
 } from './types';
-import { expandTypeArraysToAnyOf, hoistSchemaRefs } from './utils';
+import { expandTypeArraysToAnyOf, hoistSchemaRefs, makeOpenAICompatible } from './utils';
 
 export class GridCommands {
   private readonly component: InternalGrid;
@@ -85,7 +85,10 @@ export class GridCommands {
     const commands = [...this.commands.values()];
 
     return commands.map((command) => {
-      const argsSchema = zodToJsonSchema(command.schema, { target: 'openAi' }) as JsonSchema;
+      const argsSchema = z.toJSONSchema(command.schema, {
+        io: 'input',
+        override: makeOpenAICompatible,
+      }) as JsonSchema;
 
       // Remove $schema from nested schemas since it's only necessary at root
       delete argsSchema.$schema;
