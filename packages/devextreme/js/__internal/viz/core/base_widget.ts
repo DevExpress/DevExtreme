@@ -68,7 +68,8 @@ function getFalse(): boolean {
 
 function defaultOnIncidentOccurred(e): void {
   if (!e.component._eventsStrategy.hasEvent('incidentOccurred')) {
-    log(e.target.id, ...[e.target.args || []].flat());
+    const details = e.target.args || [];
+    log(e.target.id, ...(Array.isArray(details) ? details : [details]));
   }
 }
 
