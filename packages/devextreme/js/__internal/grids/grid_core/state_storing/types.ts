@@ -2,7 +2,7 @@ import type { PagerPageSize } from '@js/common/grids';
 
 import type { ColumnUserState } from '../columns_controller/types';
 import type { UserState } from '../data_controller/types';
-import type { InternalGridOptions } from '../m_types';
+import type { InternalGridOptions } from '../types';
 
 export type PersistentState = Record<string, unknown>;
 

@@ -22,30 +22,29 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject, isString } from '@js/core/utils/type';
 import swatchContainer from '@ts/core/utils/swatch_container';
+import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { getDraggingPanelBoundingRects } from '@ts/grids/grid_core/columns_resizing_reordering/utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import type { ColumnPoint, Coordinates, ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ColumnPoint, ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
-import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import type { PagerView } from '../pager/m_pager';
 import { CLASSES } from './const';
-import type { DraggingPanel } from './types';
+import type { Coordinates, DraggingPanel } from './types';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
 const DRAGGING_HEADER_CLASS = 'drag-header';
-const CELL_CONTENT_CLASS = 'text-content';
 const HEADERS_DRAG_ACTION_CLASS = 'drag-action';
 const TRACKER_CLASS = 'tracker';
 const HEADERS_DROP_HIGHLIGHT_CLASS = 'drop-highlight';
 const BLOCK_SEPARATOR_CLASS = 'dx-block-separator';
-const HEADER_ROW_CLASS = 'dx-header-row';
 const WIDGET_CLASS = 'dx-widget';
 
 const MODULE_NAMESPACE = 'dxDataGridResizingReordering';
@@ -95,6 +94,7 @@ export class TrackerView extends modules.View {
 
   protected _renderCore() {
     const deferred = super._renderCore();
+    // @ts-expect-error the view is rendered here
     this.element().addClass(this.addWidgetPrefix(TRACKER_CLASS));
     this.hide();
     return deferred;
@@ -124,6 +124,7 @@ export class TrackerView extends modules.View {
   }
 
   private show() {
+    // @ts-expect-error the view is rendered here
     this.element().show();
   }
 
@@ -187,11 +188,9 @@ export class ColumnsSeparatorView extends SeparatorView {
 
   private _isTransparent?: boolean;
 
-  /// #DEBUG
   private _testPosX?: number;
 
   private _testCursorName?: string;
-  /// #ENDDEBUG
 
   public init() {
     super.init();
@@ -225,6 +224,7 @@ export class ColumnsSeparatorView extends SeparatorView {
     super._renderSeparator();
 
     const $element = this.element();
+    // @ts-expect-error the view is rendered here
     $element.addClass(this.addWidgetPrefix(COLUMNS_SEPARATOR_CLASS));
   }
 
@@ -293,6 +293,7 @@ export class ColumnsSeparatorView extends SeparatorView {
   private moveByX(outerX) {
     const $element = this.element();
     if ($element) {
+      // @ts-expect-error render() sets _$parent together with _$element
       $element.css('left', outerX === null ? 0 : outerX - this._parentElement().offset().left);
       /// #DEBUG
       this._testPosX = outerX;
@@ -326,6 +327,7 @@ export class BlockSeparatorView extends SeparatorView {
 
   protected _renderSeparator() {
     super._renderSeparator();
+    // @ts-expect-error the view is rendered here
     this.element().addClass(BLOCK_SEPARATOR_CLASS).html('&nbsp;');
   }
 
@@ -339,6 +341,7 @@ export class BlockSeparatorView extends SeparatorView {
     }
 
     if ($parent && !$parent.children(`.${BLOCK_SEPARATOR_CLASS}`).length) {
+      // @ts-expect-error the view is rendered here
       $parent.prepend(that.element());
     }
 
@@ -356,7 +359,9 @@ export class BlockSeparatorView extends SeparatorView {
     const that = this;
     const $element = this.element();
     const startAnimate = function (toOptions) {
+      // @ts-expect-error fx is typed for Element
       fx.stop($element, true);
+      // @ts-expect-error fx is typed for Element
       fx.animate($element, {
         type: 'slide',
         from: {
@@ -372,6 +377,7 @@ export class BlockSeparatorView extends SeparatorView {
     if ($element && !that._isShown) {
       switch (targetLocation) {
         case 'group':
+          // @ts-expect-error the view is rendered here
           this.element().css('display', 'block');
           break;
         case 'columnChooser':
@@ -401,9 +407,7 @@ export class DraggingHeaderView extends modules.View {
 
   private _onSelectStart: any;
 
-  /// #DEBUG
   private _testPointsByColumns: any;
-  /// #ENDDEBUG
 
   private getSourceDraggingPanel(): DraggingPanel {
     const {
@@ -423,7 +427,8 @@ export class DraggingHeaderView extends modules.View {
   private updateDragElement(): void {
     const { columnElement, sourceColumn } = this._dragOptions;
     const sourceDraggingPanel = this.getSourceDraggingPanel();
-    const dragElement = this.element();
+    // @ts-expect-error the view is rendered here
+    const dragElement: dxElementWrapper = this.element();
 
     dragElement
       .empty()
@@ -482,8 +487,9 @@ export class DraggingHeaderView extends modules.View {
   }
 
   protected _renderCore() {
+    // @ts-expect-error the view is rendered here
     this.element()
-      .addClass(`${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)} ${this.addWidgetPrefix(CELL_CONTENT_CLASS)} ${WIDGET_CLASS}`)
+      .addClass(`${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)} ${this.addWidgetPrefix(COLUMN_HEADERS_CLASSES.cellContent)} ${WIDGET_CLASS}`)
       .hide();
   }
 
@@ -549,6 +555,7 @@ export class DraggingHeaderView extends modules.View {
     this._controller.drag(this._dropOptions);
     this.updateDragElement();
 
+    // @ts-expect-error the view is rendered here
     this.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
   }
 
@@ -738,6 +745,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
       const element = this._columnHeadersView.element();
 
       if (element) {
+        // @ts-expect-error offset() is typed as possibly undefined
         const offsetTop = element.offset().top;
         const headersRowHeight = this._columnHeadersView.getHeadersRowHeight();
         return posY >= offsetTop && posY <= offsetTop + headersRowHeight;
@@ -805,7 +813,8 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return null;
   }
 
-  protected getSeparatorOffsetX($cell: dxElementWrapper): number {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected getSeparatorOffsetX($cell: dxElementWrapper, $nextCell: dxElementWrapper): number {
     const isNextColumnMode = isNextColumnResizingMode(this);
     const rtlEnabled = this.option('rtlEnabled');
     const isRtlParentStyle = this._isRtlParentStyle();
@@ -830,10 +839,12 @@ export class ColumnsResizerViewController extends modules.ViewController {
     if (that._isResizing && that._resizingInfo) {
       if ((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + getWidth(that._$parentContainer))) {
         if (that._updateColumnsWidthIfNeeded(eventData.x)) {
-          const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
+          const $cells = that._columnHeadersView.getColumnElements();
+          const $cell = $cells.eq(that._resizingInfo.currentColumnIndex);
+          const $nextCell = $cells.eq(that._resizingInfo.nextColumnIndex);
 
           if ($cell.length) {
-            const offsetX = this.getSeparatorOffsetX($cell);
+            const offsetX = this.getSeparatorOffsetX($cell, $nextCell);
 
             that._columnsSeparatorView.moveByX(offsetX);
             that._tablePositionController.update(that._targetPoint.y);
@@ -1632,6 +1643,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const showSeparator = function () {
       if (that._animationColumnIndex !== targetColumnIndex) {
         that.hideSeparators();
+        // @ts-expect-error the view is rendered here
         separator.element()[parameters.isLast ? 'insertAfter' : 'insertBefore'](parameters.targetColumnElement);
 
         that._animationColumnIndex = targetColumnIndex;
@@ -1639,7 +1651,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
       }
     };
 
-    that._columnHeadersView.element().find(`.${HEADER_ROW_CLASS}`).toggleClass(that.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS), sourceLocation !== 'headers' && targetLocation === 'headers' && !hasTargetVisibleIndex);
+    // @ts-expect-error the view is rendered here
+    that._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).toggleClass(that.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS), sourceLocation !== 'headers' && targetLocation === 'headers' && !hasTargetVisibleIndex);
 
     if (separator) {
       if (that.allowDrop(parameters) && hasTargetVisibleIndex) {
@@ -1665,7 +1678,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
       sourceColumnElement.removeClass(this.addWidgetPrefix(CLASSES.draggableColumn));
       this._columnHeadersView.toggleDraggableColumnClass(parameters.sourceIndex, false);
       this._rowsView.toggleDraggableColumnClass(parameters.sourceIndex, false);
-      this._columnHeadersView.element().find(`.${HEADER_ROW_CLASS}`).removeClass(this.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS));
+      // @ts-expect-error the view is rendered here
+      this._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).removeClass(this.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS));
     }
 
     if (this.allowDrop(parameters)) {

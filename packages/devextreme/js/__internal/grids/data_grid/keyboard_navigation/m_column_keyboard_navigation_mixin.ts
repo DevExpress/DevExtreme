@@ -4,7 +4,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
 import type { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboardNavigationController>>(Base: T) => class ColumnKeyboardNavigationMixin extends Base {
   private ungroupColumnByPressingKey(e): void {

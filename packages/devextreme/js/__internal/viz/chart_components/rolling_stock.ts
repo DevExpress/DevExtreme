@@ -1,12 +1,7 @@
-interface BoundingRect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+import type { BBox } from '@ts/viz/core/types';
 
 interface RollingStockLabel {
-  getBoundingRect: () => BoundingRect;
+  getBoundingRect: () => BBox;
   hideInsideLabel: (coords: { x: number; y: number }) => boolean;
   getData: () => { value: number | string | Date };
   shift: (x: number, y: number) => void;
@@ -24,7 +19,7 @@ export class RollingStock {
   labels: RollingStockLabel[];
 
   private readonly shiftFunction: (
-    bBox: BoundingRect,
+    bBox: BBox,
     shiftLength: number,
   ) => { x: number; y: number };
 
@@ -35,7 +30,7 @@ export class RollingStock {
   constructor(
     label: RollingStockLabel,
     isRotated: boolean,
-    shiftFunction: (bBox: BoundingRect, shiftLength: number) => { x: number; y: number },
+    shiftFunction: (bBox: BBox, shiftLength: number) => { x: number; y: number },
   ) {
     const bBox = label.getBoundingRect();
     const { x } = bBox;

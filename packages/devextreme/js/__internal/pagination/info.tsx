@@ -44,7 +44,7 @@ export class InfoText extends BaseInfernoComponent<InfoTextPropsType> {
       (pageIndex + 1).toString(),
       pageCount?.toString(),
       itemCount?.toString(),
-    ) as string;
+    );
   }
 
   render(): JSX.Element {

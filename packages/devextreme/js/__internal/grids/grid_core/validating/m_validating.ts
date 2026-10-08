@@ -26,17 +26,18 @@ import ValidationEngine from '@js/ui/validation_engine';
 import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/m_selectors';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
 import type { NormalizedEditCellOptions } from '../editing/types';
-import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
+import type { ModuleType } from '../types';
 import {
   INVALIDATE_CLASS,
   VALIDATION_CANCELLED,
@@ -54,7 +55,6 @@ const REVERT_BUTTON_ID = 'dxRevertButton';
 const VALIDATOR_CLASS = 'validator';
 const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
 const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
-const CONTENT_CLASS = 'content';
 
 const INSERT_INDEX = '__DX_INSERT_INDEX__';
 const PADDING_BETWEEN_TOOLTIPS = 2;
@@ -63,7 +63,6 @@ const EDIT_MODE_FORM = 'form';
 const EDIT_MODE_BATCH = 'batch';
 const EDIT_MODE_CELL = 'cell';
 const EDIT_MODE_POPUP = 'popup';
-const GROUP_CELL_CLASS = 'dx-group-cell';
 
 const FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM];
 
@@ -836,9 +835,9 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     const that = this;
     const columns = this._columnsController.getColumns();
     const invisibleColumns = this._columnsController.getInvisibleColumns().filter((column) => !column.isBand);
-    const groupColumns = this._columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1);
+    const groupColumns = this._columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && !invisibleColumns.includes(column));
     const invisibleColumnValidators: any[] = [];
-    const isCellVisible = (column, rowKey) => this._dataController.getRowIndexByKey(rowKey) >= 0 && invisibleColumns.indexOf(column) < 0;
+    const isCellVisible = (column, rowKey) => this._dataController.getRowIndexByKey(rowKey) >= 0 && !invisibleColumns.includes(column);
 
     invisibleColumns.push(...groupColumns);
 
@@ -930,7 +929,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     if (this.getEditMode() === EDIT_MODE_CELL) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
       const validator = $cell && $cell.data('dxValidator');
-      const rowOptions = $cell && $cell.closest('.dx-row').data('options');
+      const rowOptions = $cell && $cell.closest(`.${VIEW_CLASSES.row}`).data('options');
       // @ts-expect-error
       const value = validator && validator.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
@@ -1027,7 +1026,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     if (isCellEditMode) {
       const columns = this._columnsController.getColumns();
       const columnsWithValidatingEditors = columns.filter(
-        (col) => col.showEditorAlways && col.validationRules?.length > 0,
+        (col) => col.showEditorAlways && (col.validationRules?.length ?? 0) > 0,
       );
 
       return columnsWithValidatingEditors.length === 0;
@@ -1211,11 +1210,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     const isFormOrPopupEditMode = this._editingController.isFormOrPopupEditMode();
 
     if (isFixedColumns && !isFormOrPopupEditMode) {
-      const nextRowOptions = $cell.closest('.dx-row').next().data('options');
+      const nextRowOptions = $cell.closest(`.${VIEW_CLASSES.row}`).next().data('options');
 
       if (nextRowOptions && nextRowOptions.rowType === 'group') {
         $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();
-        $groupCellElement = $nextFixedRowElement.find(`.${GROUP_CELL_CLASS}`);
+        $groupCellElement = $nextFixedRowElement.find(`.${VIEW_CLASSES.groupCell}`);
 
         if ($groupCellElement.length && $groupCellElement.get(0).style.visibility !== 'hidden') {
           $groupCellElement.css('visibility', 'hidden');
@@ -1243,6 +1242,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
 
+    // @ts-expect-error the view is rendered here
     this._rowsView.element().find(`.${invalidMessageClass}`).remove();
 
     const $overlayElement = $('<div>')
@@ -1292,6 +1292,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 
   private getValidationMessages(): dxElementWrapper {
+    // @ts-expect-error the view is rendered here
     return this._rowsView.element()?.find(this._getValidationMessagesSelector());
   }
 
@@ -1397,7 +1398,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   private updateCellState($element, validationResult, isHideBorder) {
     const $focus = $element?.closest(this._getFocusCellSelector());
     const $cell = $focus?.is('td') ? $focus : null;
-    const rowOptions = $focus?.closest('.dx-row').data('options');
+    const rowOptions = $focus?.closest(`.${VIEW_CLASSES.row}`).data('options');
     // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     const column = $cell && this._columnsController.getVisibleColumns()[$cell.index()];
@@ -1463,13 +1464,13 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     this._hideValidationMessage();
 
-    if ($element?.hasClass('dx-row') || $element?.hasClass('dx-master-detail-cell')) {
+    if ($element?.hasClass(VIEW_CLASSES.row) || $element?.hasClass('dx-master-detail-cell')) {
       return super.focus($element, isHideBorder);
     }
 
     const $focus = $element?.closest(this._getFocusCellSelector());
     const validator = $focus && ($focus.data('dxValidator') || $element.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
-    const rowOptions = $focus && $focus.closest('.dx-row').data('options');
+    const rowOptions = $focus && $focus.closest(`.${VIEW_CLASSES.row}`).data('options');
     // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     let validationResult;
@@ -1512,11 +1513,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 
   protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
-    return $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+    return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`);
   }
 
   protected getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
-    return $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`).parent();
+    return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`).parent();
   }
 
   public hasOverlayElements(): boolean {

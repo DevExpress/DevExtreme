@@ -4,11 +4,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
+
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 import { normalizeEnum as _normalizeEnum } from './utils';
 
@@ -37,26 +36,61 @@ const sideMap = {
   vertical: 1,
 };
 
-const slicersMap = {};
+const slicersMap: Record<number, (a: number, b: number, size: number) => number[]> = {};
 
 const BBOX_CEIL_CORRECTION = 2;
 
-slicersMap[ALIGN_START] = function (a, b, size) {
+export interface LayoutTargetOptions {
+  side?: string;
+  horizontalAlignment?: string;
+  verticalAlignment?: string;
+  weak?: boolean;
+  priority?: number;
+  header?: ThemeValue;
+  position?: string;
+}
+
+interface LayoutItemElement {
+  measure: (size: number[]) => number[];
+  move: (rect: number[], fitRect: number[]) => void;
+  freeSpace: () => void;
+}
+
+interface LayoutTarget extends LayoutItemElement {
+  layoutOptions: () => LayoutTargetOptions | false | null | undefined;
+}
+
+interface NormalizedLayoutOptions {
+  side: number;
+  primary: number;
+  secondary: number;
+  weak?: boolean;
+  priority: number;
+  header?: ThemeValue;
+  position?: string;
+}
+
+interface LayoutItem extends NormalizedLayoutOptions {
+  element: LayoutItemElement;
+  size: number[];
+}
+
+slicersMap[ALIGN_START] = function (a, b, size): number[] {
   return [a, _min(b, a + size)];
 };
-slicersMap[ALIGN_MIDDLE] = function (a, b, size) {
+slicersMap[ALIGN_MIDDLE] = function (a, b, size): number[] {
   return [_max(a, (a + b - size) / 2), _min(b, (a + b + size) / 2)];
 };
-slicersMap[ALIGN_END] = function (a, b, size) {
+slicersMap[ALIGN_END] = function (a, b, size): number[] {
   return [_max(a, b - size), b];
 };
 
-function pickValue(value, map, defaultValue) {
+function pickValue(value: ThemeValue, map: Record<string, number>, defaultValue: number): number {
   const val = _normalizeEnum(value);
   return val in map ? map[val] : defaultValue;
 }
 
-function normalizeLayoutOptions(options) {
+function normalizeLayoutOptions(options: LayoutTargetOptions): NormalizedLayoutOptions {
   const side = pickValue(options.side, sideMap, 1);
   const alignment = [
     pickValue(options.horizontalAlignment, horizontalAlignmentMap, ALIGN_MIDDLE),
@@ -74,26 +108,26 @@ function normalizeLayoutOptions(options) {
   };
 }
 
-function bringToEdge(primary) {
+function bringToEdge(primary: number): number {
   return primary < 2 ? 0 : 2;
 }
 
-function getConjugateSide(side) {
+function getConjugateSide(side: number): number {
   return 1 - side;
 }
 
-function getSlice(alignment, a, b, size) {
+function getSlice(alignment: number, a: number, b: number, size: number): number[] {
   return slicersMap[alignment](a, b, size);
 }
 
-function getShrink(alignment, size) {
+function getShrink(alignment: number, size: number): number {
   return (alignment > 0 ? -1 : +1) * size;
 }
 
-function processForward(item, rect, minSize) {
+function processForward(item: LayoutItem, rect: number[], minSize: number[]): boolean {
   const side = item.side;
   const size = item.element.measure([rect[2] - rect[0], rect[3] - rect[1]]);
-  const minSide = item.position === 'indside' ? 0 : minSize[side];
+  const minSide = minSize[side];
   const isValid = size[side] < rect[2 + side] - rect[side] - minSide;
 
   if (isValid) {
@@ -105,28 +139,24 @@ function processForward(item, rect, minSize) {
   return isValid;
 }
 
-function processRectBackward(item, rect, alignmentRect) {
+function processRectBackward(item: LayoutItem, rect: number[], alignmentRect: number[]): number[] {
   const primarySide = item.side;
   const secondarySide = getConjugateSide(primarySide);
-  const itemRect = [];
+  const itemRect: number[] = [];
   const secondary = getSlice(item.secondary, alignmentRect[secondarySide], alignmentRect[2 + secondarySide], item.size[secondarySide]);
-  // @ts-expect-error
   itemRect[primarySide] = _round(itemRect[2 + primarySide] = rect[item.primary + primarySide] + (item.position === 'inside' ? getShrink(item.primary, item.size[primarySide]) : 0));
-  // @ts-expect-error
   itemRect[item.primary + primarySide] = _round(rect[item.primary + primarySide] - getShrink(item.primary, item.size[primarySide]));
 
   if (item.position !== 'inside') {
     rect[item.primary + primarySide] = itemRect[item.primary + primarySide];
   }
-  // @ts-expect-error
   itemRect[secondarySide] = _round(secondary[0]);
-  // @ts-expect-error
   itemRect[2 + secondarySide] = _round(secondary[1]);
 
   return itemRect;
 }
 
-function processBackward(item, rect, alignmentRect, fitRect, size, targetRect) {
+function processBackward(item: LayoutItem, rect: number[], alignmentRect: number[], fitRect: number[], size: number[], targetRect: number[]): void {
   const itemRect = processRectBackward(item, rect, alignmentRect);
   const itemFitRect = processRectBackward(item, fitRect, fitRect);
 
@@ -139,45 +169,47 @@ function processBackward(item, rect, alignmentRect, fitRect, size, targetRect) {
   }
 }
 
-function Layout() {
-  this._targets = [];
-}
+class Layout {
+  declare _targets: LayoutTarget[];
 
-Layout.prototype = {
-  constructor: Layout,
+  declare _cache: LayoutItem[];
 
-  dispose() {
+  constructor() {
+    this._targets = [];
+  }
+
+  dispose(): void {
+    // @ts-expect-error dispose() drops the reference
     this._targets = null;
-  },
+  }
 
-  add(target) {
+  add(target: LayoutTarget): void {
     this._targets.push(target);
-  },
+  }
 
   // Note on possible improvement.
   // "createTargets" part depends on options of a target while the following cycle depends on container size - those areas do not intersect.
   // When any of options are changed targets have to be recreated and cycle has to be executed. But when container size is changed there is no
   // need to recreate targets - only cycle has to be executed.
-  forward(targetRect, minSize) {
+  forward(targetRect: number[], minSize: number[]): number[] {
     const rect = targetRect.slice();
     const targets = createTargets(this._targets);
     let i;
     const ii = targets.length;
-    const cache = [];
+    const cache: LayoutItem[] = [];
 
     for (i = 0; i < ii; ++i) {
       if (processForward(targets[i], rect, minSize)) {
         cache.push(targets[i]);
       } else {
-        // @ts-expect-error
         targets[i].element.freeSpace();
       }
     }
     this._cache = cache.reverse();
     return rect;
-  },
+  }
 
-  backward(targetRect, alignmentRect, size = [0, 0]) {
+  backward(targetRect: number[], alignmentRect: number[], size: number[] = [0, 0]): number[] {
     let backwardRect = targetRect.slice();
     const fitRect = targetRect.slice();
     const targets = this._cache;
@@ -197,13 +229,13 @@ Layout.prototype = {
     }
 
     return size;
-  },
-};
+  }
+}
 
-function createTargets(targets) {
+function createTargets(targets: LayoutTarget[]): LayoutItem[] {
   let i;
   const ii = targets.length;
-  let collection = [];
+  let collection: LayoutItem[] = [];
   let layout;
 
   for (i = 0; i < ii; ++i) {
@@ -211,11 +243,9 @@ function createTargets(targets) {
     if (layout) {
       layout = normalizeLayoutOptions(layout);
       layout.element = targets[i];
-      // @ts-expect-error
       collection.push(layout);
     }
   }
-  // @ts-expect-error
   collection.sort((a, b) => b.side - a.side || a.priority - b.priority);
 
   collection = processWeakItems(collection);
@@ -223,7 +253,7 @@ function createTargets(targets) {
   return collection;
 }
 
-function processWeakItems(collection) {
+function processWeakItems(collection: LayoutItem[]): LayoutItem[] {
   const weakItem = collection.filter((item) => item.weak === true)[0];
   let headerItem;
 
@@ -238,18 +268,16 @@ function processWeakItems(collection) {
   return collection;
 }
 
-function processBackwardHeaderRect(element, rect) {
+function processBackwardHeaderRect(element: LayoutItem, rect: number[]): number[] {
   const rectCopy = rect.slice();
   const itemRect = processRectBackward(element, rectCopy, rectCopy);
-  // @ts-expect-error
   itemRect[element.side] = rect[element.side];
-  // @ts-expect-error
   itemRect[2 + element.side] = rect[2 + element.side];
 
   return itemRect;
 }
 
-function makeHeader(header, weakElement) {
+function makeHeader(header: LayoutItem, weakElement: LayoutItem): LayoutItem {
   const side = header.side;
   const primary = header.primary;
   const secondary = header.secondary;
@@ -293,6 +321,7 @@ function makeHeader(header, weakElement) {
           headerRect = processBackwardHeaderRect(header, rect);
         }
 
+        // @ts-expect-error the weak element (the export menu) ignores fitRect
         weakElement.element.move(weakRect);
         header.element.move(headerRect, headerFitReact);
       },
@@ -302,7 +331,7 @@ function makeHeader(header, weakElement) {
         weakElement.element.freeSpace();
       },
     },
-  };
+  } as LayoutItem;
 }
 
 export default Layout;

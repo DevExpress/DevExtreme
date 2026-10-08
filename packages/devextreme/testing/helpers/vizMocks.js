@@ -194,7 +194,14 @@ function ObjectPool(ctor) {
     };
 
     this._resetStub = function(stub) {
-        $.each(stub, function(key, value) {
+        const keys = Object.getOwnPropertyNames(stub);
+        $.each(stub, function(key) {
+            if(keys.indexOf(key) === -1) {
+                keys.push(key);
+            }
+        });
+        keys.forEach(function(key) {
+            const value = stub[key];
             if(typeUtils.isFunction(value && value.reset)) {
                 value.reset();
                 typeUtils.isFunction(value.resetBehavior) && value.resetBehavior();

@@ -1,4 +1,4 @@
-import '__internal/grids/tree_list/m_widget';
+import '__internal/grids/tree_list/widget';
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';

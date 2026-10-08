@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 // PLUGINS_SECTION
-import componentRegistrator from '@js/core/component_registrator';
-import { noop } from '@js/core/utils/common';
+import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
+import { noop } from '@ts/core/utils/m_common';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
 import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
@@ -25,22 +25,6 @@ interface FunnelDataItem {
   dataItem: ThemeValue;
 }
 
-interface FunnelItem {
-  id: number;
-  figure: number[];
-  coords: number[];
-  element: ThemeValue;
-  argument: ThemeValue;
-  value: number;
-  percent: number;
-  states: ThemeValue;
-  getState: () => string;
-  isHovered: () => boolean;
-  hover: (state: boolean) => void;
-  isSelected: () => boolean;
-  select: (state: boolean) => void;
-}
-
 interface LegendItemState {
   fill: ThemeValue;
   hatching: ThemeValue;
@@ -59,12 +43,14 @@ function getLegendItemState(itemState: ThemeValue): LegendItemState {
   };
 }
 
-interface Funnel extends DataSourcePluginMembers {}
+interface Funnel extends DataSourcePluginMembers {
+  _showTooltip: (id: number, coords?: number[]) => void;
+}
 
 class Funnel extends BaseWidget {
   _group;
 
-  _items!: FunnelItem[];
+  _items!: Item[];
 
   _rect!: number[];
 
@@ -234,9 +220,8 @@ class Funnel extends BaseWidget {
       count: figures.length,
     });
 
-    this._items = figures.map((figure: number[], index: number): ThemeValue => {
+    this._items = figures.map((figure: number[], index: number): Item => {
       const curData = data[index];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return new Item(this, {
         figure,
         data: curData,
@@ -257,7 +242,7 @@ class Funnel extends BaseWidget {
     this._change(['TILING', 'DRAWN']);
   }
 
-  getAllItems(): FunnelItem[] {
+  getAllItems(): Item[] {
     return this._items.slice();
   }
 

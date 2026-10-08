@@ -3,8 +3,17 @@
 
 import { isFunction } from '@js/core/utils/type';
 
-const noop = function () {};
-const getConsoleMethod = function (method) {
+type ConsoleMethod = 'log' | 'info' | 'warn' | 'error';
+
+interface Debug {
+  assert: (condition: unknown, message?: string) => void;
+  assertParam: (parameter: unknown, message?: string) => void;
+}
+
+const noop = function noop(): void {};
+const getConsoleMethod = function getConsoleMethod(
+  method: ConsoleMethod,
+): (...args: unknown[]) => void {
   if (typeof console === 'undefined' || !isFunction(console[method])) {
     return noop;
   }
@@ -18,13 +27,13 @@ export const logger = {
   error: getConsoleMethod('error'),
 };
 
-export const debug = (function () {
-  function assert(condition, message) {
+export const debug = (function createDebug(): Debug {
+  function assert(condition: unknown, message?: string): void {
     if (!condition) {
       throw new Error(message);
     }
   }
-  function assertParam(parameter, message) {
+  function assertParam(parameter: unknown, message?: string): void {
     assert(parameter !== null && parameter !== undefined, message);
   }
   return {

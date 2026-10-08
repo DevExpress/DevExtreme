@@ -7,25 +7,35 @@ import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import {
   columnOptionCore,
   createColumn,
   createColumnsFromDataSourceAdapter,
   createColumnsFromOptions,
   customizeTextForBooleanDataType,
+  digitsCount,
   findColumn,
   fireColumnsChanged,
   getAlignmentByDataType,
+  getChildrenByBandColumn,
+  getColumnByIndexes,
+  getCommandColumnIndex,
   getCustomizeTextByDataType,
+  getDataColumns,
   getSerializationFormat,
   getValueDataType,
+  isColumnFixed,
+  mergeColumns,
+  numberToString,
+  processBandColumns,
+  reserveGroupIndex,
   resolveChangeType,
   setFilterOperationsAsDefaultValues,
   strictParseNumber,
   updateSerializers,
-} from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
-import type { Column, ColumnsControllerOptions } from '@ts/grids/grid_core/columns_controller/types';
+} from '@ts/grids/grid_core/columns_controller/columns_controller_utils';
+import type { BandColumnsCache, Column, ColumnsControllerOptions } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
@@ -662,6 +672,49 @@ describe('createColumnsFromDataSourceAdapter', () => {
   });
 });
 
+describe('isColumnFixed', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  describe('when the column is not a command column', () => {
+    it('should return true for a fixed column', async () => {
+      const columnsController = await getColumnsController();
+
+      expect(isColumnFixed(columnsController, { fixed: true })).toBe(true);
+    });
+
+    it('should return false for a sticky column', async () => {
+      const columnsController = await getColumnsController();
+      const column: Column = { fixed: true, fixedPosition: 'sticky' };
+
+      expect(isColumnFixed(columnsController, column)).toBe(false);
+    });
+
+    it.each([
+      ['a data column', {}],
+      ['an AI column', { type: 'ai' }],
+    ])('should ignore the column fixing of the grid for %s', async (_, column: Column) => {
+      const columnsController = await getColumnsController();
+      jest.spyOn(columnsController, '_isColumnFixing').mockReturnValue(true);
+
+      expect(isColumnFixed(columnsController, column)).toBe(false);
+    });
+  });
+
+  describe('when the column is a command column', () => {
+    it.each([
+      [true, true],
+      [false, false],
+      [false, undefined],
+    ])('should return %s when the column fixing of the grid is %s', async (expected, isColumnFixing) => {
+      const columnsController = await getColumnsController();
+      jest.spyOn(columnsController, '_isColumnFixing').mockReturnValue(isColumnFixing);
+
+      expect(isColumnFixed(columnsController, { type: 'buttons' })).toBe(expected);
+    });
+  });
+});
+
 describe('findColumn', () => {
   it('should return undefined when the identifier is undefined', () => {
     expect(findColumn([{ index: 0 }], undefined)).toBeUndefined();
@@ -965,6 +1018,7 @@ describe('columnOptionCore', () => {
         selection: { mode: 'multiple', showCheckBoxesMode: 'always' },
       });
       const column = columnsController._commandColumns.find(({ type }) => type === 'selection');
+      if (!column) throw new Error('selection command column not found');
 
       columnOptionCore(columnsController, column, 'caption', 'New');
 
@@ -1105,6 +1159,800 @@ describe('columnOptionCore', () => {
       columnOptionCore(columnsController, column, 'caption', 'New');
 
       expect(aiColumnOptionChanged).not.toHaveBeenCalled();
+    });
+  });
+});
+
+describe('getCommandColumnIndex', () => {
+  const selectColumn: Column = { type: 'selection', command: 'select' };
+  const editColumn: Column = { type: 'buttons', command: 'edit' };
+
+  it.each<[string, Column]>([
+    ['type', { type: 'buttons' }],
+    ['command', { command: 'edit' }],
+  ])('should find the command column with the same %s', (_, column) => {
+    expect(getCommandColumnIndex(column, [selectColumn, editColumn])).toBe(1);
+  });
+
+  it('should return -1 when no command column matches', () => {
+    expect(getCommandColumnIndex({ type: 'custom' }, [selectColumn, editColumn])).toBe(-1);
+  });
+
+  it('should return -1 when there are no command columns', () => {
+    expect(getCommandColumnIndex({ type: 'buttons' }, [])).toBe(-1);
+  });
+
+  it('should return -1 for a column without a type and a command', () => {
+    expect(getCommandColumnIndex({ dataField: 'a' }, [{ command: 'custom' }])).toBe(-1);
+  });
+
+  it('should return the last command column that matches', () => {
+    const column: Column = { type: 'buttons', command: 'select' };
+
+    expect(getCommandColumnIndex(column, [editColumn, selectColumn])).toBe(1);
+  });
+
+  describe('when looking up the column as the expand column', () => {
+    const expandColumn: Column = { type: 'expand', command: 'expand' };
+
+    it('should find the expand command column', () => {
+      expect(getCommandColumnIndex({ type: 'custom' }, [selectColumn, expandColumn], true)).toBe(1);
+    });
+
+    it('should not match the own type of the column', () => {
+      const commandColumns: Column[] = [expandColumn, { type: 'custom', command: 'custom' }];
+
+      expect(getCommandColumnIndex({ type: 'custom' }, commandColumns, true)).toBe(0);
+    });
+  });
+
+  it('should not find the expand command column by default', () => {
+    const expandColumn: Column = { type: 'expand', command: 'expand' };
+
+    expect(getCommandColumnIndex({ type: 'custom' }, [selectColumn, expandColumn])).toBe(-1);
+  });
+});
+
+describe('mergeColumns', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  describe('when merging the command columns into the columns', () => {
+    const selectColumn: Column = { type: 'selection', command: 'select' };
+    const editColumn: Column = { type: 'buttons', command: 'edit', width: 'auto' };
+
+    it('should return copies of the columns', async () => {
+      const columnsController = await getColumnsController();
+      const columns: Column[] = [{ dataField: 'a' }, { dataField: 'b' }];
+
+      const result = mergeColumns(columnsController, columns, [], true);
+
+      expect(result).toEqual(columns);
+      expect(result[0]).not.toBe(columns[0]);
+      expect(result[1]).not.toBe(columns[1]);
+    });
+
+    it('should append the command columns after the columns', async () => {
+      const columnsController = await getColumnsController();
+
+      const result = mergeColumns(columnsController, [{ dataField: 'a' }], [selectColumn], true);
+
+      expect(result).toEqual([
+        { dataField: 'a' },
+        { type: 'selection', command: 'select', fixed: false },
+      ]);
+    });
+
+    it('should not append the command columns when there are no columns', async () => {
+      const columnsController = await getColumnsController();
+
+      expect(mergeColumns(columnsController, [], [selectColumn], true)).toEqual([]);
+    });
+
+    it.each<[string, DataGridProperties & ColumnsControllerOptions]>([
+      ['column fixing is enabled', { columnFixing: { enabled: true } }],
+      ['a column is fixed', { columns: [{ dataField: 'a', fixed: true }] }],
+    ])('should fix the appended command columns when %s', async (_, options) => {
+      const columnsController = await getColumnsController(options);
+
+      const [, commandColumn] = mergeColumns(columnsController, [{ dataField: 'a' }], [selectColumn], true);
+
+      expect(commandColumn.fixed).toBe(true);
+    });
+
+    it('should keep the fixed option of a command column', async () => {
+      const columnsController = await getColumnsController({ columnFixing: { enabled: true } });
+      const aiColumn: Column = { type: 'ai', command: 'ai', fixed: false };
+
+      const [, commandColumn] = mergeColumns(columnsController, [{ dataField: 'a' }], [aiColumn], true);
+
+      expect(commandColumn.fixed).toBe(false);
+    });
+
+    it('should not change the passed columns', async () => {
+      const columnsController = await getColumnsController();
+      const columns: Column[] = [{ dataField: 'a' }, { type: 'buttons', cssClass: 'custom' }];
+      const commandColumns: Column[] = [selectColumn, { ...editColumn, cssClass: 'edit' }];
+      const columnsCopy = columns.map((column) => ({ ...column }));
+      const commandColumnsCopy = commandColumns.map((column) => ({ ...column }));
+
+      mergeColumns(columnsController, columns, commandColumns, true);
+
+      expect(columns).toEqual(columnsCopy);
+      expect(commandColumns).toEqual(commandColumnsCopy);
+    });
+
+    it.each<[string, Column]>([
+      ['type', { type: 'buttons' }],
+      ['command', { command: 'edit' }],
+    ])('should merge a column into the command column with the same %s', async (_, column) => {
+      const columnsController = await getColumnsController();
+
+      const result = mergeColumns(
+        columnsController,
+        [{ dataField: 'a' }, { ...column, caption: 'Actions' }],
+        [editColumn],
+        true,
+      );
+
+      expect(result).toEqual([
+        { dataField: 'a' },
+        {
+          type: 'buttons', command: 'edit', width: 'auto', caption: 'Actions', cssClass: '', fixed: false,
+        },
+      ]);
+    });
+
+    it('should let the column options override the command column options', async () => {
+      const columnsController = await getColumnsController();
+
+      const [column] = mergeColumns(
+        columnsController,
+        [{ type: 'buttons', width: 100, fixed: true }],
+        [editColumn],
+        true,
+      );
+
+      expect(column.width).toBe(100);
+      expect(column.fixed).toBe(true);
+    });
+
+    it('should keep calculateCellValue of the command column', async () => {
+      const columnsController = await getColumnsController();
+      const calculateCellValue = (): string => 'command';
+
+      const [column] = mergeColumns(
+        columnsController,
+        [{ type: 'ai', calculateCellValue: (): string => 'column' }],
+        [{ type: 'ai', command: 'ai', calculateCellValue }],
+        true,
+      );
+
+      expect(column.calculateCellValue).toBe(calculateCellValue);
+    });
+
+    it('should keep calculateCellValue of the column when the command column has none', async () => {
+      const columnsController = await getColumnsController();
+      const calculateCellValue = (): string => 'column';
+
+      const [column] = mergeColumns(
+        columnsController,
+        [{ type: 'buttons', calculateCellValue }],
+        [editColumn],
+        true,
+      );
+
+      expect(column.calculateCellValue).toBe(calculateCellValue);
+    });
+
+    it.each([
+      ['both columns', 'edit', 'custom', 'edit custom'],
+      ['only the command column', 'edit', undefined, 'edit'],
+      ['only the column', undefined, 'custom', 'custom'],
+      ['neither column', undefined, undefined, ''],
+    ])('should join the css classes when %s have one', async (_, commandCssClass, cssClass, expected) => {
+      const columnsController = await getColumnsController();
+
+      const [column] = mergeColumns(
+        columnsController,
+        [{ type: 'buttons', cssClass }],
+        [{ ...editColumn, cssClass: commandCssClass }],
+        true,
+      );
+
+      expect(column.cssClass).toBe(expected);
+    });
+
+    it('should append only the command columns that no column customizes', async () => {
+      const columnsController = await getColumnsController();
+
+      const result = mergeColumns(
+        columnsController,
+        [{ dataField: 'a' }, { type: 'buttons' }],
+        [selectColumn, editColumn],
+        true,
+      );
+
+      expect(result.map(({ dataField, command }) => dataField ?? command)).toEqual(['a', 'edit', 'select']);
+    });
+
+    it('should use the last command column that matches', async () => {
+      const columnsController = await getColumnsController();
+
+      const result = mergeColumns(
+        columnsController,
+        [{ type: 'buttons', command: 'select' }],
+        [{ ...editColumn, caption: 'Edit' }, { ...selectColumn, caption: 'Select' }],
+        true,
+      );
+
+      expect(result.map(({ caption }) => caption)).toEqual(['Select', 'Edit']);
+    });
+
+    it('should not merge a column without a type and a command into a command column', async () => {
+      const columnsController = await getColumnsController();
+
+      const result = mergeColumns(columnsController, [{ dataField: 'a' }], [{ command: 'custom' }], true);
+
+      expect(result).toEqual([
+        { dataField: 'a' },
+        { command: 'custom', fixed: false },
+      ]);
+    });
+
+    describe('when a column customizes the group expand column', () => {
+      const expandColumn: Column = { type: 'expand', command: 'expand', cssClass: 'expand' };
+
+      it('should merge it into the expand command column', async () => {
+        const columnsController = await getColumnsController();
+
+        const [column] = mergeColumns(
+          columnsController,
+          [{ type: 'groupExpand', caption: 'Group' }],
+          [expandColumn],
+          true,
+        );
+
+        expect(column).toEqual({
+          type: 'groupExpand', command: 'expand', caption: 'Group', cssClass: 'expand', fixed: false,
+        });
+      });
+
+      it('should still append the expand command column', async () => {
+        const columnsController = await getColumnsController();
+
+        const result = mergeColumns(columnsController, [{ type: 'groupExpand' }], [expandColumn], true);
+
+        expect(result).toHaveLength(2);
+        expect(result[1]).toEqual({ ...expandColumn, fixed: false });
+      });
+    });
+  });
+
+  describe('when merging the columns into the expand columns', () => {
+    const groupExpandColumn: Column = {
+      type: 'groupExpand',
+      command: 'expand',
+      index: 1,
+      visibleIndex: 2,
+      headerId: 'dx-col-1',
+      groupIndex: 0,
+      cssClass: 'expand',
+      width: 'auto',
+    };
+
+    it('should return copies of the expand columns and append nothing', async () => {
+      const columnsController = await getColumnsController();
+      const expandColumns: Column[] = [groupExpandColumn];
+
+      const result = mergeColumns(columnsController, expandColumns, [{ dataField: 'a' }]);
+
+      expect(result).toEqual(expandColumns);
+      expect(result[0]).not.toBe(expandColumns[0]);
+    });
+
+    it('should apply the options of a groupExpand column but keep the position of the expand column', async () => {
+      const columnsController = await getColumnsController();
+      const column: Column = {
+        type: 'groupExpand',
+        index: 5,
+        visibleIndex: 6,
+        headerId: 'dx-col-5',
+        groupIndex: 3,
+        cssClass: 'custom',
+        width: 50,
+        caption: 'Group',
+      };
+
+      const result = mergeColumns(columnsController, [groupExpandColumn], [{ dataField: 'a' }, column]);
+
+      expect(result).toEqual([{
+        type: 'groupExpand',
+        command: 'expand',
+        index: 1,
+        visibleIndex: 2,
+        headerId: 'dx-col-1',
+        groupIndex: 0,
+        cssClass: 'custom',
+        width: 50,
+        caption: 'Group',
+        allowFixing: true,
+        allowReordering: true,
+      }]);
+    });
+
+    it.each([1, undefined])('should forbid fixing and reordering when groupIndex is %s', async (groupIndex) => {
+      const columnsController = await getColumnsController();
+
+      const [column] = mergeColumns(
+        columnsController,
+        [{ ...groupExpandColumn, groupIndex }],
+        [{ type: 'groupExpand' }],
+      );
+
+      expect(column.allowFixing).toBe(false);
+      expect(column.allowReordering).toBe(false);
+    });
+
+    it('should let a column of another type override every option', async () => {
+      const columnsController = await getColumnsController();
+
+      const [column] = mergeColumns(
+        columnsController,
+        [{
+          type: 'detailExpand', command: 'expand', index: 1, visibleIndex: 2,
+        }],
+        [{
+          type: 'detailExpand', index: 5, visibleIndex: 6, width: 40,
+        }],
+      );
+
+      expect(column).toEqual({
+        type: 'detailExpand', command: 'expand', index: 5, visibleIndex: 6, width: 40,
+      });
+    });
+
+    it('should not treat a groupExpand column as the expand command column', async () => {
+      const columnsController = await getColumnsController();
+
+      const [column] = mergeColumns(
+        columnsController,
+        [{ type: 'groupExpand', command: 'expand', index: 1 }],
+        [{ type: 'expand', caption: 'Expand' }],
+      );
+
+      expect(column).toEqual({ type: 'groupExpand', command: 'expand', index: 1 });
+    });
+  });
+});
+
+describe('processBandColumns', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const copyColumns = (columnsController: ColumnsController): Column[] => {
+    const columns: Column[] = columnsController.getColumns();
+
+    return columns.map((column) => ({ ...column }));
+  };
+
+  const getSpans = (columns: Column[]): Record<string, Pick<Column, 'colspan' | 'rowspan'>> => Object.fromEntries(
+    columns.map(({
+      dataField, caption, type, colspan, rowspan,
+    }) => [String(dataField ?? caption ?? type), { colspan, rowspan }]),
+  );
+
+  it('should not set spans when there are no bands', async () => {
+    const columnsController = await getColumnsController({ columns: ['a', 'b'] });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({ a: {}, b: {} });
+  });
+
+  it('should span a band over its children and a plain column over all header rows', async () => {
+    const columnsController = await getColumnsController({
+      columns: ['a', { caption: 'Band', columns: ['b', 'c'] }],
+    });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({
+      a: { rowspan: 2 },
+      Band: { colspan: 2 },
+      b: {},
+      c: {},
+    });
+  });
+
+  it('should skip the hidden columns', async () => {
+    const columnsController = await getColumnsController({
+      columns: [
+        'a',
+        { dataField: 'd', visible: false },
+        { caption: 'Band', columns: ['b', { dataField: 'c', visible: false }] },
+      ],
+    });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({
+      a: { rowspan: 2 },
+      d: {},
+      Band: { colspan: 1 },
+      b: {},
+      c: {},
+    });
+  });
+
+  it('should subtract the parent bands from the rowspan of a nested column', async () => {
+    const columnsController = await getColumnsController({
+      columns: ['a', {
+        caption: 'Band',
+        columns: ['b', { caption: 'Nested band', columns: ['c', 'd'] }],
+      }],
+    });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({
+      a: { rowspan: 3 },
+      Band: { colspan: 3 },
+      b: { rowspan: 2 },
+      'Nested band': { colspan: 2 },
+      c: {},
+      d: {},
+    });
+  });
+
+  it('should keep the colspan a band already has', async () => {
+    const columnsController = await getColumnsController({
+      columns: ['a', { caption: 'Band', columns: ['b', 'c'] }],
+    });
+    const columns = copyColumns(columnsController)
+      .map((column) => (column.isBand ? { ...column, colspan: 5 } : column));
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns).Band).toEqual({ colspan: 5 });
+  });
+
+  it('should recalculate a zero colspan of a band', async () => {
+    const columnsController = await getColumnsController({
+      columns: ['a', { caption: 'Band', columns: ['b', 'c'] }],
+    });
+    const columns = copyColumns(columnsController)
+      .map((column) => (column.isBand ? { ...column, colspan: 0 } : column));
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns).Band).toEqual({ colspan: 2 });
+  });
+
+  it('should span a band without visible children over all header rows', async () => {
+    const columnsController = await getColumnsController({
+      columns: [
+        { caption: 'Empty band', columns: [{ dataField: 'a', visible: false }] },
+        { caption: 'Band', columns: ['b'] },
+      ],
+    });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({
+      'Empty band': { colspan: 0, rowspan: 2 },
+      a: {},
+      Band: { colspan: 1 },
+      b: {},
+    });
+  });
+
+  describe('when a column of a band is grouped', () => {
+    it('should span the grouped column over all header rows', async () => {
+      const columnsController = await getColumnsController({
+        columns: ['a', { caption: 'Band', columns: [{ dataField: 'b', groupIndex: 0 }, 'c'] }],
+      });
+      const columns = copyColumns(columnsController);
+
+      processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+      expect(getSpans(columns)).toEqual({
+        a: { rowspan: 2 },
+        Band: { colspan: 1 },
+        b: { rowspan: 2 },
+        c: {},
+      });
+    });
+
+    it('should keep the grouped column in the band when showWhenGrouped is set', async () => {
+      const columnsController = await getColumnsController({
+        columns: ['a', {
+          caption: 'Band',
+          columns: [{ dataField: 'b', groupIndex: 0, showWhenGrouped: true }, 'c'],
+        }],
+      });
+      const columns = copyColumns(columnsController);
+
+      processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+      expect(getSpans(columns)).toEqual({
+        a: { rowspan: 2 },
+        Band: { colspan: 2 },
+        b: {},
+        c: {},
+      });
+    });
+  });
+
+  describe('when processing the command columns', () => {
+    it('should span a command column over all header rows even without the visible option', async () => {
+      const columnsController = await getColumnsController({
+        columns: ['a', { caption: 'Band', columns: ['b'] }],
+      });
+      const columns = [...copyColumns(columnsController), { type: 'expand', command: 'expand' }];
+
+      processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+      expect(getSpans(columns).expand).toEqual({ rowspan: 2 });
+    });
+
+    it('should not subtract the parent bands from the rowspan of a command column in a band', async () => {
+      const columnsController = await getColumnsController({
+        editing: { mode: 'row', allowUpdating: true },
+        columns: ['a', { caption: 'Band', columns: ['b', { type: 'buttons' }] }],
+      });
+      const columns = mergeColumns(
+        columnsController,
+        columnsController.getColumns(),
+        columnsController._commandColumns,
+        true,
+      );
+
+      processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+      expect(getSpans(columns).buttons).toEqual({ rowspan: 2 });
+    });
+  });
+});
+
+describe('getChildrenByBandColumn', () => {
+  const band: Column = { index: 0, isBand: true };
+  const b: Column = { index: 1, dataField: 'b' };
+  const nestedBand: Column = { index: 2, isBand: true };
+  const c: Column = { index: 3, dataField: 'c' };
+  const d: Column = { index: 4, dataField: 'd' };
+  const e: Column = { index: 5, dataField: 'e' };
+  const columnChildrenByIndex: BandColumnsCache['columnChildrenByIndex'] = {
+    [-1]: [band],
+    0: [b, nestedBand, e],
+    2: [c, d],
+  };
+
+  it.each([false, true])('should return no children for a column that is not a band (recursive: %s)', (recursive) => {
+    expect(getChildrenByBandColumn(1, columnChildrenByIndex, recursive)).toEqual([]);
+  });
+
+  it('should return only the direct children of a band', () => {
+    expect(getChildrenByBandColumn(0, columnChildrenByIndex, false)).toEqual([b, nestedBand, e]);
+  });
+
+  it('should return the children of a nested band right after that band when recursive', () => {
+    expect(getChildrenByBandColumn(0, columnChildrenByIndex, true))
+      .toEqual([b, nestedBand, c, d, e]);
+  });
+
+  describe('when a child is grouped', () => {
+    it('should skip the grouped child', () => {
+      const groupedColumn: Column = { ...b, groupIndex: 0 };
+
+      expect(getChildrenByBandColumn(0, { 0: [groupedColumn, e] }, false)).toEqual([e]);
+    });
+
+    it('should keep the grouped child when showWhenGrouped is set', () => {
+      const groupedColumn: Column = { ...b, groupIndex: 0, showWhenGrouped: true };
+
+      expect(getChildrenByBandColumn(0, { 0: [groupedColumn, e] }, false))
+        .toEqual([groupedColumn, e]);
+    });
+  });
+});
+
+describe('getDataColumns', () => {
+  const a: Column = { dataField: 'a' };
+  const band: Column = { index: 1, isBand: true, colspan: 2 };
+  const b: Column = { dataField: 'b', ownerBand: 1 };
+  const c: Column = { dataField: 'c', ownerBand: 1 };
+  const e: Column = { dataField: 'e' };
+
+  it('should return no columns when there are no rows', () => {
+    expect(getDataColumns([])).toEqual([]);
+  });
+
+  it('should return the columns of the only row when there are no bands', () => {
+    expect(getDataColumns([[a, e]])).toEqual([a, e]);
+  });
+
+  it('should put the children of a band in place of the band', () => {
+    expect(getDataColumns([[a, band, e], [b, c]])).toEqual([a, b, c, e]);
+  });
+
+  it('should take only the own children of each band from the next row', () => {
+    const otherBand: Column = { index: 4, isBand: true, colspan: 1 };
+    const d: Column = { dataField: 'd', ownerBand: 4 };
+
+    expect(getDataColumns([[band, otherBand], [b, c, d]])).toEqual([b, c, d]);
+  });
+
+  it('should go down through the nested bands', () => {
+    const nestedBand: Column = {
+      index: 3, isBand: true, colspan: 1, ownerBand: 1,
+    };
+    const d: Column = { dataField: 'd', ownerBand: 3 };
+
+    expect(getDataColumns([[a, band], [b, nestedBand], [d]])).toEqual([a, b, d]);
+  });
+
+  it('should keep a band without visible children as a data column', () => {
+    const emptyBand: Column = { index: 1, isBand: true, colspan: 0 };
+
+    expect(getDataColumns([[a, emptyBand]])).toEqual([a, emptyBand]);
+  });
+
+  describe('when there are command columns', () => {
+    it('should keep the command columns of the first row', () => {
+      const selectColumn: Column = { type: 'selection', command: 'select' };
+
+      expect(getDataColumns([[selectColumn, a]])).toEqual([selectColumn, a]);
+    });
+
+    it('should skip the command columns of a band', () => {
+      const editColumn: Column = { type: 'buttons', command: 'edit', ownerBand: 1 };
+
+      expect(getDataColumns([[a, band], [b, editColumn]])).toEqual([a, b]);
+    });
+
+    it('should keep a groupExpand column of the first row even when it has an owner band', () => {
+      const groupExpandColumn: Column = { type: 'groupExpand', command: 'expand', ownerBand: 1 };
+
+      expect(getDataColumns([[groupExpandColumn, band], [b, c]]))
+        .toEqual([groupExpandColumn, b, c]);
+    });
+  });
+});
+
+describe('digitsCount', () => {
+  it.each([
+    [10, 1],
+    [11, 2],
+  ])('should return the digits count of the largest index below %s', (count, expected) => {
+    expect(digitsCount(count)).toBe(expected);
+  });
+});
+
+describe('numberToString', () => {
+  it('should pad a number with leading zeros', () => {
+    expect(numberToString(5, 3)).toBe('005');
+  });
+
+  it('should not cut a number that is longer than the length', () => {
+    expect(numberToString(123, 2)).toBe('123');
+  });
+});
+
+describe('reserveGroupIndex', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const getGroupedColumnsController = (): Promise<ColumnsController> => getColumnsController({
+    columns: [{ dataField: 'a', groupIndex: 0 }, { dataField: 'b', groupIndex: 1 }, 'c'],
+  });
+
+  const getGroupIndexes = (columnsController: ColumnsController): (number | undefined)[] => {
+    const columns: Column[] = columnsController.getColumns();
+
+    return columns.map(({ groupIndex }) => groupIndex);
+  };
+
+  describe('when the group index is set', () => {
+    it.each([
+      [0, [1, 2, undefined]],
+      [1, [0, 2, undefined]],
+      [2, [0, 1, undefined]],
+    ])('should shift the group columns from the group index %s', async (groupIndex, expected) => {
+      const columnsController = await getGroupedColumnsController();
+
+      reserveGroupIndex(columnsController, groupIndex);
+
+      expect(getGroupIndexes(columnsController)).toEqual(expected);
+    });
+
+    it('should return the group index', async () => {
+      const columnsController = await getGroupedColumnsController();
+
+      expect(reserveGroupIndex(columnsController, 1)).toBe(1);
+    });
+  });
+
+  describe.each([undefined, -1])('when the group index is %s', (groupIndex) => {
+    it('should return the index after the last group column', async () => {
+      const columnsController = await getGroupedColumnsController();
+
+      expect(reserveGroupIndex(columnsController, groupIndex)).toBe(2);
+    });
+
+    it('should not change the group columns', async () => {
+      const columnsController = await getGroupedColumnsController();
+
+      reserveGroupIndex(columnsController, groupIndex);
+
+      expect(getGroupIndexes(columnsController)).toEqual([0, 1, undefined]);
+    });
+
+    it('should return 0 when the grid has no group columns', async () => {
+      const columnsController = await getColumnsController({ columns: ['a'] });
+
+      expect(reserveGroupIndex(columnsController, groupIndex)).toBe(0);
+    });
+  });
+});
+
+describe('getColumnByIndexes', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const getDataField = async (
+    columns: DataGridProperties['columns'],
+    columnIndexes: number[],
+  ): Promise<string | undefined> => {
+    const columnsController = await getColumnsController({ columns });
+
+    return getColumnByIndexes(columnsController, columnIndexes)?.dataField;
+  };
+
+  describe('when there are no band columns', () => {
+    it('should return the column at the index', async () => {
+      expect(await getDataField(['a', 'b', 'c'], [1])).toBe('b');
+    });
+
+    it('should take the position in the columns, not the visible index', async () => {
+      const columns = [{ dataField: 'a', visibleIndex: 1 }, { dataField: 'b', visibleIndex: 0 }];
+
+      expect(await getDataField(columns, [0])).toBe('a');
+    });
+
+    it('should return undefined for an index out of range', async () => {
+      expect(await getDataField(['a', 'b'], [5])).toBeUndefined();
+    });
+  });
+
+  describe('when there are band columns', () => {
+    const columns = ['a', { caption: 'Band', columns: ['b', 'c'] }, 'd'];
+
+    it('should count only the top-level columns for the first index', async () => {
+      expect(await getDataField(columns, [2])).toBe('d');
+    });
+
+    it('should return a band child by the band index and the child index', async () => {
+      expect(await getDataField(columns, [1, 1])).toBe('c');
+    });
+
+    it('should return a child of a nested band', async () => {
+      const nestedColumns = ['a', { caption: 'Outer', columns: ['b', { caption: 'Inner', columns: ['c', 'd'] }] }];
+
+      expect(await getDataField(nestedColumns, [1, 1, 1])).toBe('d');
+    });
+
+    it('should return undefined for a child index out of range', async () => {
+      expect(await getDataField(columns, [1, 5])).toBeUndefined();
+    });
+
+    it('should return undefined when there are no indexes', async () => {
+      expect(await getDataField(columns, [])).toBeUndefined();
     });
   });
 });

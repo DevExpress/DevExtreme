@@ -16,23 +16,25 @@ import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
+import type { Coordinates } from '../columns_resizing_reordering/types';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import type { ColumnPoint, Coordinates, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import type { ColumnPoint, ModuleType } from '../types';
 import type { ColumnsView } from '../views/m_columns_view';
 import { normalizeWidth } from '../views/m_columns_view';
 import type { ResizingController } from '../views/m_grid_view';
 import type { RowsView } from '../views/m_rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
+import { CLASSES } from './const';
 
-const CONTENT_CLASS = 'content';
-const CONTENT_FIXED_CLASS = 'content-fixed';
 const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
 const FIRST_CELL_CLASS = 'dx-first-cell';
 const LAST_CELL_CLASS = 'dx-last-cell';
@@ -41,8 +43,6 @@ const FIXED_COL_CLASS = 'dx-col-fixed';
 const FIXED_COLUMNS_CLASS = 'dx-fixed-columns';
 const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
 const COMMAND_TRANSPARENT = 'transparent';
-const GROUP_ROW_CLASS = 'dx-group-row';
-const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FIXED_COLUMN_ICON_CLASS = 'fix-column';
 const FIXED_COLUMN_LEFT_ICON_CLASS = 'fix-column-left';
 const FIXED_COLUMN_RIGHT_ICON_CLASS = 'fix-column-right';
@@ -170,13 +170,13 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     let colIndex = columnIndexOffset + 1;
     let { colspan } = transparentColumn;
 
-    if ($row.hasClass(DETAIL_ROW_CLASS)) {
+    if ($row.hasClass(MASTER_DETAIL_CLASSES.detailRow)) {
       cellElements[0].setAttribute('colspan', this._columnsController.getVisibleColumns()?.length);
 
       return;
     }
 
-    if ($row.hasClass(GROUP_ROW_CLASS)) {
+    if ($row.hasClass(VIEW_CLASSES.groupRow)) {
       // @ts-expect-error RowsView's method
       groupCellOptions = this._getGroupCellOptions({
         row,
@@ -319,7 +319,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     const $scrollContainer = super._wrapTableInScrollContainer.apply(this, arguments as any);
 
     if (this._isFixedTableRendering || isFixedTableRendering) {
-      $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_FIXED_CLASS));
+      $scrollContainer.addClass(this.addWidgetPrefix(CLASSES.contentFixed));
     }
 
     return $scrollContainer;
@@ -383,7 +383,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
   public _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     const cellElements = super._getCellElementsCore.apply(this, arguments as any);
 
-    const isGroupRow = cellElements?.parent().hasClass(GROUP_ROW_CLASS);
+    const isGroupRow = cellElements?.parent().hasClass(VIEW_CLASSES.groupRow);
     const headerRowIndex = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
 
     if (this._fixedTableElement && cellElements) {
@@ -608,7 +608,8 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     const rtlEnabled = this.option('rtlEnabled');
 
     super.setScrollerSpacing(width);
-    this.element().children(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`).css({
+    // @ts-expect-error the view is rendered here
+    this.element().children(`.${this.addWidgetPrefix(CLASSES.contentFixed)}`).css({
       paddingLeft: rtlEnabled ? width : '',
       paddingRight: !rtlEnabled ? width : '',
     });
@@ -701,15 +702,15 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     const element = this.element();
 
     if (this._fixedTableElement && this._tableElement) {
-      eventsEngine.off(element, 'mouseover mouseout', '.dx-data-row');
+      eventsEngine.off(element, 'mouseover mouseout', `.${VIEW_CLASSES.dataRow}`);
     }
   }
 
   private _attachHoverEvents() {
     if (this._fixedTableElement && this._tableElement) {
-      eventsEngine.on(this.element(), 'mouseover mouseout', '.dx-data-row', this.createAction((args) => {
+      eventsEngine.on(this.element(), 'mouseover mouseout', `.${VIEW_CLASSES.dataRow}`, this.createAction((args) => {
         const { event } = args;
-        const rowIndex = this.getRowIndex($(event.target).closest('.dx-row'));
+        const rowIndex = this.getRowIndex($(event.target).closest(`.${VIEW_CLASSES.row}`));
         const isHover = event.type === 'mouseover';
 
         if (rowIndex >= 0) {
@@ -734,7 +735,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
   public _findContentElement(isFixedTableRendering) {
     let $content;
     let scrollTop;
-    const contentClass = this.addWidgetPrefix(CONTENT_CLASS);
+    const contentClass = this.addWidgetPrefix(VIEW_CLASSES.content);
     const element = this.element();
 
     isFixedTableRendering = this._isFixedTableRendering || isFixedTableRendering;
@@ -813,7 +814,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     if (this._isFixedTableRendering || isFixedTableRendering) {
       return contentElement
         .empty()
-        .addClass(`${this.addWidgetPrefix(CONTENT_CLASS)} ${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`)
+        .addClass(`${this.addWidgetPrefix(VIEW_CLASSES.content)} ${this.addWidgetPrefix(CLASSES.contentFixed)}`)
         .append(tableElement);
     }
 
@@ -902,6 +903,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
 
     const isFixedColumns = this._isFixedColumns;
 
+    // @ts-expect-error the view is rendered here
     this.element().toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
 
     if (this.option('hoverStateEnabled') && isFixedColumns) {
@@ -913,11 +915,13 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
 
   protected setAriaOwns(headerTableId, footerTableId, isFixed) {
     if (isFixed) {
-      const contentFixedClass = this.addWidgetPrefix(CONTENT_FIXED_CLASS);
+      const contentFixedClass = this.addWidgetPrefix(CLASSES.contentFixed);
       const $contentFixedElement = this.element()?.children(`.${contentFixedClass}`);
       const $fixedTableElement = this.getFixedTableElement();
 
+      // @ts-expect-error the view is rendered here
       if ($contentFixedElement.length && $fixedTableElement?.length) {
+        // @ts-expect-error the view is rendered here
         this.setAria('owns', `${headerTableId ?? ''} ${$fixedTableElement.attr('id') ?? ''} ${footerTableId ?? ''}`.trim(), $contentFixedElement);
       }
     } else {
@@ -977,7 +981,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
   public setScrollerSpacing(vWidth, hWidth) {
     const that = this;
     const styles = { marginBottom: 0 };
-    const $fixedContent = that.element().children(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
+    // @ts-expect-error the view is rendered here
+    const $fixedContent = that.element().children(`.${this.addWidgetPrefix(CLASSES.contentFixed)}`);
 
     if ($fixedContent.length && that._fixedTableElement) {
       $fixedContent.css(styles);

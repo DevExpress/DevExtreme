@@ -1,6 +1,6 @@
 import { isDefined, isString } from '@js/core/utils/type';
 
-import { applyColumnStateFields, isUserStateColumn } from './m_columns_controller_utils';
+import { applyColumnStateFields, isUserStateColumn } from './columns_controller_utils';
 import type {
   Column,
   ColumnUserState,
@@ -13,10 +13,9 @@ export class UserStateApplier {
   constructor(private readonly options: UserStateApplierOptions) {}
 
   public apply(): UserStateApplyResult {
-    const matchCountById: MatchCountById = new Map();
-    const stateIndexes = this.matchColumnsWithState(matchCountById);
+    const stateIndexes = this.matchColumnsWithState();
     const columns = this.applyStateToColumns(stateIndexes);
-    const hasAddedBands = this.appendAddedColumns(columns, matchCountById);
+    const hasAddedBands = this.appendAddedColumns(columns, stateIndexes);
 
     return { columns, hasAddedBands };
   }
@@ -44,8 +43,9 @@ export class UserStateApplier {
     return -1;
   }
 
-  private matchColumnsWithState(matchCountById: MatchCountById): number[] {
+  private matchColumnsWithState(): number[] {
     const { columns, columnsUserState } = this.options;
+    const matchCountById: MatchCountById = new Map();
 
     return columns.map((column) => this.findMatchIndex(columnsUserState, column, matchCountById));
   }
@@ -76,16 +76,16 @@ export class UserStateApplier {
     return resultColumns;
   }
 
-  private appendAddedColumns(resultColumns: Column[], matchCountById: MatchCountById): boolean {
+  private appendAddedColumns(resultColumns: Column[], stateIndexes: number[]): boolean {
     const {
-      columns, columnsUserState, ignoreColumnOptionNames, createColumn,
+      columnsUserState, ignoreColumnOptionNames, createColumn,
     } = this.options;
     let hasAddedBands = false;
 
-    columnsUserState.forEach((columnState) => {
+    columnsUserState.forEach((columnState, stateIndex) => {
       const { added } = columnState;
 
-      if (added && this.findMatchIndex(columns, columnState, matchCountById) < 0) {
+      if (added && !stateIndexes.includes(stateIndex)) {
         const column = createColumn(added);
 
         applyColumnStateFields(column, columnState, ignoreColumnOptionNames);

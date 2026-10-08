@@ -10,7 +10,7 @@ import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m
 import type { DefaultToolbarItem, ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
-import type { ModuleType } from '../m_types';
+import type { ModuleType } from '../types';
 import { ColumnsView } from '../views/m_columns_view';
 import type { ResizingController } from '../views/m_grid_view';
 
@@ -165,8 +165,10 @@ export class HeaderPanel extends ColumnsView {
   protected _renderCore() {
     if (!this._toolbar) {
       const $headerPanel = this.element();
+      // @ts-expect-error the view is rendered here
       $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
       const label = messageLocalization.format(this.component.NAME + TOOLBAR_ARIA_LABEL);
+      // @ts-expect-error the view is rendered here
       const $toolbar = $('<div>').appendTo($headerPanel);
 
       this.setAria('label', label, $toolbar);

@@ -8,9 +8,9 @@ import FilterBuilder from '@js/ui/filter_builder';
 import Popup from '@js/ui/popup/ui.popup';
 import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
-import { getFilterExpression, removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import modules from '@ts/grids/grid_core/m_modules';
+import { getFilterExpression, removeFieldConditionsFromFilter } from '@ts/filter_builder/utils';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import modules from '@ts/grids/grid_core/modules/modules';
 
 import type { DataFilter, FilterSourceContext } from '../filter/types';
 import { anyOf, noneOf } from '../filter_sync/m_filter_custom_operations';
@@ -70,6 +70,7 @@ export class FilterBuilderView extends modules.View {
     const that = this;
 
     that._disposePopup();
+    // @ts-expect-error the view is rendered here
     that._filterBuilderPopup = that._createComponent(that.element(), Popup, extend({
       title: messageLocalization.format('dxDataGrid-filterBuilderPopupTitle'),
       contentTemplate($contentElement) {
@@ -158,6 +159,7 @@ export class FilterBuilderController extends modules.Controller {
       : currentFilterValue;
     const columns = columnsController.getFilteringColumns();
     const customOperations = this.getCustomFilterOperations();
+    // @ts-expect-error FilterExpression and the grid FilterField do not match DataFilter and FilterBuilderField
     const filterExpression: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
 
     return filterExpression ? [filterExpression] : [];

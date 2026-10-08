@@ -632,9 +632,9 @@ class Calendar<
 
   _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
-      // @ts-expect-error ts-error
       cell: new FunctionTemplate((options) => {
         const data = options.model;
+        // @ts-expect-error model and container are unknown in the default FunctionTemplate options
         $(options.container).append($('<span>').text(data?.text || String(data)));
       }),
     });

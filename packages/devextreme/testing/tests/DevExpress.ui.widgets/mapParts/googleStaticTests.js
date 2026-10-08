@@ -188,6 +188,38 @@ QUnit.test('center', function(assert) {
     });
 });
 
+QUnit.test('disabled option change should not break the following async actions', function(assert) {
+    return new Promise(function(resolve) {
+        const map = new Map($('#map'), {
+            provider: 'googleStatic',
+            center: LOCATIONS[0],
+            onReady: function(e) {
+                resolve(e.component);
+            }
+        });
+    }).then(function(map) {
+        return new Promise(function(resolve) {
+            const started = Date.now();
+            const check = function() {
+                const centerUpdated = mapUrl(map).indexOf('center=40.537102,-73.990318') !== -1;
+
+                if(centerUpdated || Date.now() - started > 2000) {
+                    assert.ok(centerUpdated, 'center changed after the disabled change');
+
+                    resolve();
+                } else {
+                    setTimeout(check, 20);
+                }
+            };
+
+            map.option('disabled', true);
+            map.option('center', LOCATIONS[1]);
+
+            check();
+        });
+    });
+});
+
 QUnit.test('location parsing should be correct in case of string with one comma', function(assert) {
     return new Promise(function(resolve) {
         const map = new Map($('#map'), {

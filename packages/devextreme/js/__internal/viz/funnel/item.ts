@@ -1,16 +1,40 @@
 /* eslint-disable no-bitwise */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { isDefined } from '@js/core/utils/type';
+import { isDefined } from '@ts/core/utils/m_type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const states = ['normal', 'hover', 'selection', 'selection'];
 
-function parseStyles(color, style, baseStyle) {
+interface ItemStyle {
+  fill: string;
+  hatching: ThemeValue;
+  stroke: string;
+  'stroke-width': number;
+}
+
+interface ItemWidget {
+  _getOption: (name: string, isScalar?: boolean) => ThemeValue;
+  _suspend: () => void;
+  _resume: () => void;
+  _eventTrigger: (name: string, args: ThemeValue) => void;
+  _applyTilesAppearance: () => void;
+  _showTooltip: (id: number, coords?: number[]) => void;
+  clearHover: () => void;
+  clearSelection: () => void;
+}
+
+interface ItemOptions {
+  figure: number[];
+  data: ThemeValue;
+  percent: number;
+  id: number;
+  color: string;
+  itemOptions: ThemeValue;
+}
+
+function parseStyles(color: string, style: ThemeValue, baseStyle: ThemeValue): ItemStyle {
   const border = style.border;
   const baseBorder = baseStyle.border;
   const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
@@ -24,43 +48,70 @@ function parseStyles(color, style, baseStyle) {
   };
 }
 
-function Item(widget, options) {
-  const that = this;
-  const data = options.data;
+class Item {
+  declare code: number;
 
-  that.code = 0;
-  that.widget = widget;
+  declare widget: ItemWidget;
 
-  that.figure = options.figure;
-  that.argument = data.argument;
-  that.value = data.value;
-  that.data = data.dataItem;
-  that.percent = options.percent;
+  declare figure: number[];
 
-  that.id = options.id;
-  that.color = options.color;
+  declare argument: ThemeValue;
 
-  that.states = {
-    normal: parseStyles(options.color, options.itemOptions, options.itemOptions),
-    hover: parseStyles(options.color, options.itemOptions.hoverStyle, options.itemOptions),
-    selection: parseStyles(options.color, options.itemOptions.selectionStyle, options.itemOptions),
-  };
-}
+  declare value: ThemeValue;
 
-Item.prototype = {
-  getState() {
+  declare data: ThemeValue;
+
+  declare percent: number;
+
+  declare id: number;
+
+  declare color: string;
+
+  declare states: Record<'normal' | 'hover' | 'selection', ItemStyle>;
+
+  declare coords: number[];
+
+  declare element: ThemeValue;
+
+  constructor(widget: ItemWidget, options: ItemOptions) {
+    const data = options.data;
+
+    this.code = 0;
+    this.widget = widget;
+
+    this.figure = options.figure;
+    this.argument = data.argument;
+    this.value = data.value;
+    this.data = data.dataItem;
+    this.percent = options.percent;
+
+    this.id = options.id;
+    this.color = options.color;
+
+    this.states = {
+      normal: parseStyles(options.color, options.itemOptions, options.itemOptions),
+      hover: parseStyles(options.color, options.itemOptions.hoverStyle, options.itemOptions),
+      selection: parseStyles(
+        options.color,
+        options.itemOptions.selectionStyle,
+        options.itemOptions,
+      ),
+    };
+  }
+
+  getState(): string {
     return states[this.code];
-  },
+  }
 
-  getNormalStyle() {
+  getNormalStyle(): ItemStyle {
     return this.states.normal;
-  },
+  }
 
-  setHover() {
+  setHover(): void {
     this.hover(true);
-  },
+  }
 
-  hover(state) {
+  hover(state: boolean): void {
     if (!this.widget._getOption('hoverEnabled', true) || state === this.isHovered()) {
       return;
     }
@@ -70,18 +121,18 @@ Item.prototype = {
     this.setState(1, state);
     this.widget._eventTrigger('hoverChanged', { item: this });
     this.widget._resume();
-  },
+  }
 
-  setState(code, state) {
+  setState(code: number, state: boolean): void {
     if (state) {
       this.code |= code;
     } else {
       this.code &= ~code;
     }
     this.widget._applyTilesAppearance();
-  },
+  }
 
-  select(state) {
+  select(state: boolean): void {
     const mode = this.widget._getOption('selectionMode', true);
     if (mode === 'none' || state === this.isSelected()) {
       return;
@@ -93,23 +144,23 @@ Item.prototype = {
     this.setState(2, state);
     this.widget._eventTrigger('selectionChanged', { item: this });
     this.widget._resume();
-  },
+  }
 
-  showTooltip(coords) {
+  showTooltip(coords?: number[]): void {
     this.widget._showTooltip(this.id, coords);
-  },
+  }
 
-  getColor() {
+  getColor(): string {
     return this.color;
-  },
+  }
 
-  isHovered() {
+  isHovered(): boolean {
     return !!(this.code & 1);
-  },
+  }
 
-  isSelected() {
+  isSelected(): boolean {
     return !!(this.code & 2);
-  },
-};
+  }
+}
 
 export default Item;

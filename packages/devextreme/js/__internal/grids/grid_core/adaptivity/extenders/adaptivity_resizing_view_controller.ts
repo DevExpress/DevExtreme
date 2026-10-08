@@ -1,11 +1,10 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable prefer-rest-params */
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { COLUMN_VIEWS } from '../const';
@@ -76,9 +75,9 @@ export const adaptivityResizingViewControllerExtender = (
     super._toggleBestFitMode(isBestFit);
   }
 
-  protected _needStretch() {
+  protected _needStretch(): boolean {
     return super._needStretch.apply(this, arguments as any)
-      || this.adaptiveColumnsController.getHidingColumnsQueue().length
+      || this.adaptiveColumnsController.getHidingColumnsQueue().length > 0
       || this.adaptiveColumnsController.hasHiddenColumns();
   }
 };

@@ -1,4 +1,3 @@
-import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { DxEvent } from '@js/events';
@@ -54,7 +53,9 @@ export interface RouteObject {
   southWest?: [number, number];
 }
 
-class DynamicProvider<TLocation = GoogleLocation | BingLocation | AzureLocation> extends Provider {
+abstract class DynamicProvider<
+  TLocation = GoogleLocation | BingLocation | AzureLocation,
+> extends Provider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _bounds?: any;
 
@@ -142,14 +143,13 @@ class DynamicProvider<TLocation = GoogleLocation | BingLocation | AzureLocation>
     return Promise.resolve();
   }
 
-  _attachHandlers(): void {
-    Class.abstract();
-  }
+  abstract _attachHandlers(): void;
 
   addMarkers(markers: MarkerOptions[]): Promise<[boolean, unknown[]]> {
     return Promise
       .all(markers.map((options) => this._addMarker(options)))
       .then((markerObjects: MarkerObject[]) => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._fitBounds();
 
         return [false, markerObjects.map((markerObject) => markerObject.marker)];
@@ -216,10 +216,7 @@ class DynamicProvider<TLocation = GoogleLocation | BingLocation | AzureLocation>
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _destroyMarker(marker: unknown): void {
-    Class.abstract();
-  }
+  abstract _destroyMarker(marker: unknown): void;
 
   _clearMarkers(): void {
     while (this._markers.length > 0) {
@@ -229,6 +226,7 @@ class DynamicProvider<TLocation = GoogleLocation | BingLocation | AzureLocation>
 
   addRoutes(routes: RouteOptions[]): Promise<[boolean, unknown[]]> {
     return Promise.all(routes.map((options) => this._addRoute(options))).then((routeObjects) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._fitBounds();
 
       return [false, routeObjects.map((routeObject) => routeObject.instance)];
@@ -286,10 +284,7 @@ class DynamicProvider<TLocation = GoogleLocation | BingLocation | AzureLocation>
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _destroyRoute(routeObject: RouteObject): void {
-    Class.abstract();
-  }
+  abstract _destroyRoute(routeObject: RouteObject): void;
 
   _geocodeLocationImpl(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -304,7 +299,7 @@ class DynamicProvider<TLocation = GoogleLocation | BingLocation | AzureLocation>
     }
   }
 
-  adjustViewport(): void {
+  adjustViewport(): Promise<void> {
     return this._fitBounds();
   }
 
@@ -313,9 +308,7 @@ class DynamicProvider<TLocation = GoogleLocation | BingLocation | AzureLocation>
     return true;
   }
 
-  _fitBounds(): void {
-    Class.abstract();
-  }
+  abstract _fitBounds(): Promise<void>;
 
   _updateBounds(): void {
     this._clearBounds();
@@ -342,10 +335,7 @@ class DynamicProvider<TLocation = GoogleLocation | BingLocation | AzureLocation>
     this._bounds = null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _extendBounds(location: unknown): void {
-    Class.abstract();
-  }
+  abstract _extendBounds(location: unknown): void;
 }
 
 export default DynamicProvider;

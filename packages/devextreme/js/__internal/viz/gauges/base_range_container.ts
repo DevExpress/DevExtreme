@@ -1,5 +1,5 @@
-import { each } from '@js/core/utils/iterator';
-import { isString } from '@js/core/utils/type';
+import { each } from '@ts/core/utils/m_iterator';
+import { isString } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { extractColor } from '@ts/viz/core/utils';
 import { BaseElement } from '@ts/viz/gauges/base_indicators';

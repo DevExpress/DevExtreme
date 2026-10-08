@@ -9,13 +9,14 @@ import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
 import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
-import gridCore from '../m_core';
-import dataSourceAdapterProvider from '../m_data_source_adapter';
+import gridCore from '../core';
+import dataSourceAdapterProvider from '../data_source_adapter';
 import {
   CLASSES,
   CONTEXT_MENU_GROUP_BY_COLUMN_ICON_NAME,
@@ -26,7 +27,6 @@ import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapse
 import { GroupingHelper as ExpandedGroupingHelper } from './m_grouping_expanded';
 
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
-const DATAGRID_GROUP_ROW_CLASS = 'dx-group-row';
 const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
 
 export interface GroupingDataControllerExtension {
@@ -395,7 +395,9 @@ export const GroupingHeaderPanelExtender = (
       const offset = $element.offset();
 
       return {
+        // @ts-expect-error offset() is typed as possibly undefined
         top: offset.top,
+        // @ts-expect-error offset() is typed as possibly undefined
         bottom: offset.top + getHeight($element),
       };
     }
@@ -494,7 +496,7 @@ export const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class Gr
     const that = this;
     const expandMode = that.option('grouping.expandMode');
     const scrollingMode = that.option('scrolling.mode');
-    const isGroupRowStateChanged = scrollingMode !== 'infinite' && expandMode === 'rowClick' && $(e.event.target).closest(`.${DATAGRID_GROUP_ROW_CLASS}`).length;
+    const isGroupRowStateChanged = scrollingMode !== 'infinite' && expandMode === 'rowClick' && $(e.event.target).closest(`.${VIEW_CLASSES.groupRow}`).length;
     const isExpandButtonClicked = $(e.event.target).closest(`.${DATAGRID_EXPAND_CLASS}`).length;
 
     if (isGroupRowStateChanged || isExpandButtonClicked) {

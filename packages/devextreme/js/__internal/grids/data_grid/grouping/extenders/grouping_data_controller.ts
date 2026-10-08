@@ -11,7 +11,7 @@ import type {
   OptionChanged,
   OptionChangedFor,
   RowKey,
-} from '@ts/grids/grid_core/m_types';
+} from '@ts/grids/grid_core/types';
 
 import type { GroupingDataSourceAdapter } from '../m_grouping';
 import type {

@@ -1,11 +1,11 @@
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
 import {
   isDefined,
   isNumeric,
   isPlainObject,
   isString,
-} from '@js/core/utils/type';
+} from '@ts/core/utils/m_type';
 import type { BaseThemeManagerOptions, Palette, ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { BaseThemeManager } from '@ts/viz/core/base_theme_manager';
 import { extractColor, normalizeEnum } from '@ts/viz/core/utils';

@@ -1,4 +1,4 @@
-import type { ModuleType } from '../m_types';
+import type { ModuleType } from '../types';
 import type DataSourceAdapter from './m_data_source_adapter';
 import type { DataSourceAdapterProvider } from './types';
 

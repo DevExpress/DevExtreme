@@ -2,8 +2,8 @@
 import { validatingModule } from '@ts/grids/grid_core/validating/validating_module';
 
 import type { EditingController } from '../grid_core/editing/m_editing';
-import type { ModuleType } from '../grid_core/m_types';
-import treeListCore from './m_core';
+import type { ModuleType } from '../grid_core/types';
+import treeListCore from './core';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class TreeListEditingControllerExtender extends validatingModule.extenders.controllers.editing(Base) {
   public processDataItem(item) {

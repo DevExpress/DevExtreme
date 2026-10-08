@@ -3,8 +3,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
-
-const GRID_CORE_ROW_SELECTOR = '.dx-row';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
   private readonly _controllers: any;
@@ -13,7 +12,7 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
 
   // eslint-disable-next-line class-methods-use-this
   protected _activeStateUnit(): string {
-    return GRID_CORE_ROW_SELECTOR;
+    return `.${VIEW_CLASSES.row}`;
   }
 
   private _getDefaultOptions() {

@@ -1,5 +1,5 @@
 import { filterModule } from '@ts/grids/grid_core/filter/filter_module';
 
-import treeListCore from '../m_core';
+import treeListCore from '../core';
 
 treeListCore.registerModule('filter', filterModule);

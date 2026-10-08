@@ -14,7 +14,7 @@ import {
   createDataGrid,
   flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { DataSourceController } from '../data_source_controller';
 

@@ -6,9 +6,11 @@ import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
+import type { ColumnDataSourceParameter } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import type { EditingController } from '../editing/m_editing';
@@ -16,18 +18,17 @@ import { isNewRowTempKey } from '../editing/m_editing_utils';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import { combineFilters } from '../filter/utils';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import core from '../m_modules';
-import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import core from '../modules/modules';
+import type { ModuleType } from '../types';
 import type { RowsView } from '../views/m_rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
 import type { FocusDataSourceControllerExtension } from './extenders/focus_data_source_controller';
-import { UiGridCoreFocusUtils } from './m_focus_utils';
+import { UiGridCoreFocusUtils } from './focus_utils';
 import type { FocusDataControllerExtension } from './types';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
-const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
-const TABLE_POSTFIX_CLASS = 'table';
+const FOCUSED_ROW_SELECTOR = `.${VIEW_CLASSES.row}.${ROW_FOCUSED_CLASS}`;
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
 type FocusDataController = DataController
@@ -523,7 +524,7 @@ export class FocusController extends core.ViewController {
 
   private _clearPreviousFocusedRow($tableElement, focusedRowIndex) {
     const isNotMasterDetailFocusedRow = (_, focusedRow) => {
-      const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(TABLE_POSTFIX_CLASS)}`);
+      const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(VIEW_CLASSES.table)}`);
       return $tableElement.is($focusedRowTable);
     };
 
@@ -662,7 +663,10 @@ export const columns = (Base: ModuleType<ColumnsController>) => class FocusColum
     super.init(isApplyingUserState);
   }
 
-  public getSortDataSourceParameters(_, sortByKey?) {
+  public getSortDataSourceParameters(
+    _?: boolean,
+    sortByKey?: boolean,
+  ): ColumnDataSourceParameter[] | null {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
     let key = this.dataSourceController.store()?.key();
@@ -675,10 +679,11 @@ export const columns = (Base: ModuleType<ColumnsController>) => class FocusColum
 
       if (notSortedKeys.length) {
         result = result || [];
+        const sortParameters = result;
         if (isLocalOperations) {
           result.push({ selector: this.dataSourceController.getDataIndexGetter(), desc: false });
         } else {
-          notSortedKeys.forEach((notSortedKey) => result.push({ selector: notSortedKey, desc: false }));
+          notSortedKeys.forEach((notSortedKey) => sortParameters.push({ selector: notSortedKey, desc: false }));
         }
       }
     }
@@ -824,11 +829,10 @@ export const focusDataControllerExtender = (
   private _generateOperationFilterByKey(key, rowData, useGroup) {
     const dateSerializationFormat = this.option('dateSerializationFormat');
     const remoteOperations = this.dataSourceController.remoteOperations();
-    const isRemoteFiltering = remoteOperations.filtering;
+    const isRemoteFiltering = Boolean(remoteOperations.filtering);
     const isRemoteSorting = remoteOperations.sorting;
 
     let filter = this._generateFilterByKey(key, '<');
-    // @ts-expect-error
     let sort = this._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
 
     if (useGroup) {
@@ -842,6 +846,7 @@ export const focusDataControllerExtender = (
       sort.slice().reverse().forEach((sortInfo) => {
         const { selector, desc, compare } = sortInfo;
         const { getter, rawValue, safeValue } = UiGridCoreFocusUtils.getSortFilterValue(
+          // @ts-expect-error column selectors can be undefined; focus requires a selector
           sortInfo,
           rowData,
           {
