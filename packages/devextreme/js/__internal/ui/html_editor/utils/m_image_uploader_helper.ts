@@ -24,7 +24,10 @@ import type {
 } from '@js/ui/form';
 import type { dxHtmlEditorImageUpload, HtmlEditorImageUploadTab } from '@js/ui/html_editor';
 import type { SelectionChangedEvent as TabPanelSelectionChangedEvent } from '@js/ui/tab_panel';
-import type { ValueChangedEvent as TextBoxValueChangedEvent } from '@js/ui/text_box';
+import type {
+  EnterKeyEvent as TextBoxEnterKeyEvent,
+  ValueChangedEvent as TextBoxValueChangedEvent,
+} from '@js/ui/text_box';
 import TextBox from '@js/ui/text_box';
 import { isFluent } from '@js/ui/themes';
 
@@ -204,8 +207,10 @@ class AddUrlStrategy extends BaseStrategy {
       extend(true, data.editorOptions, {
         // @ts-expect-error dataField is optional in SimpleItemTemplateData; these items set it
         value: data.component.option('formData')[data.dataField],
-        // @ts-expect-error the handler is bound with the template data as its event (see Findings)
-        onEnterKey: data.component.option('onEditorEnterKey').bind(this.editorInstance._formDialog, data),
+        onEnterKey: (e: TextBoxEnterKeyEvent): void => {
+          // @ts-expect-error the form's handler reads only e.event, which this event carries too
+          data.component.option('onEditorEnterKey')?.(e);
+        },
         onValueChanged: (e: TextBoxValueChangedEvent): void => {
           this.keepAspectRatio(data, { dependentEditor: this[`${dependentEditorDataField}Editor`], e });
         },
