@@ -119,7 +119,7 @@ export type ColumnCommonSettings = Omit<Partial<Column>, 'allowGrouping'> & {
   allowGrouping?: boolean | 'auto';
 };
 
-export type CellValueCalculator = (rowData: unknown, skipDeserialization?: boolean) => unknown;
+export type CellValueCalculator = (rowData: RawItemData, skipDeserialization?: boolean) => unknown;
 
 export type WithCellValueCalculator<T> = T & { calculateCellValue: CellValueCalculator };
 
