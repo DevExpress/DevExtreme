@@ -4,10 +4,10 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
-import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
 import type { NodeCallback, OperationTypes, TreeNode } from '@ts/grids/tree_list/data_source_adapter/types';
 
+import type { TreeListColumnsController } from '../columns_controller';
 import treeListCore from '../core';
 import type { TreeListDataSourceController } from '../data_source/data_source_controller';
 import type {
@@ -22,6 +22,8 @@ import type {
 export class TreeListDataController extends DataController {
   protected declare dataSourceController: TreeListDataSourceController;
 
+  public declare _columnsController: TreeListColumnsController;
+
   private _getNodeLevel(node: TreeNode): number {
     let level = -1;
     let current = node;
@@ -35,11 +37,9 @@ export class TreeListDataController extends DataController {
   }
 
   protected _generateDataItem(
-    data: RawItemData,
+    node: TreeNode,
     options?: TreeListItemProcessingOptions,
   ): TreeListGeneratedItem {
-    // @ts-expect-error TreeList items are TreeNodes built by the adapter
-    const node: TreeNode = data;
     return {
       rowType: 'data',
       node,
@@ -79,7 +79,6 @@ export class TreeListDataController extends DataController {
     columnIndex: number,
     isLiveUpdate?: boolean,
   ): boolean {
-    // @ts-expect-error getFirstDataColumnIndex() is added by the TreeList columns controller
     const firstDataColumnIndex = this._columnsController.getFirstDataColumnIndex();
 
     if (columnIndex === firstDataColumnIndex && oldRow.isSelected !== newRow.isSelected) {
