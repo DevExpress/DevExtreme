@@ -1,4 +1,5 @@
 /* eslint-disable devextreme-custom/no-deferred */
+import type { DateLike } from '@js/common';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
@@ -194,7 +195,11 @@ const StoreEventNames = {
 
 type StoreEventName = typeof StoreEventNames[keyof typeof StoreEventNames];
 
-type WorkspaceConfig = Omit<WorkspaceOptionsInternal, 'onInitialized' | 'onDisposing' | 'rowHeight'>;
+// the startDate of a view reaches the workspace as is
+type WorkspaceConfig = Omit<
+  Partial<WorkspaceOptionsInternal>,
+  'onInitialized' | 'onDisposing' | 'rowHeight' | 'startDate'
+> & { startDate?: DateLike };
 
 interface SchedulerActionMap {
   onAppointmentAdding: AppointmentAddingOptions;
@@ -1673,6 +1678,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace = this._createComponent(
       $workSpace,
       workSpaceComponent,
+      // @ts-expect-error the startDate of a view reaches the workspace as is
       workSpaceConfig,
     ) as SchedulerWorkSpaceLike;
     this._workSpace.getWorkArea().append(this._appointments.$element());
@@ -1740,7 +1746,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       schedulerHeight: this.option('height'),
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
-      onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
       renderAppointments: (): void => { this.renderAppointments(); },
       onShowAllDayPanel: (value: boolean) => this.option('showAllDayPanel', value),
       getHeaderHeight: (): number => (this.header?.getHeight() ?? 0),
@@ -1753,9 +1758,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       currentDate: this.getViewOption('currentDate'),
     }, currentViewOptions);
 
-    // @ts-expect-error the startDate and the scrolling of a view are passed to the workspace as is
     const workSpaceOptions: WorkspaceConfig = {
       ...mergedOptions,
+      // @ts-expect-error the workspace types the selected cells as object, the popup reads dates
+      onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
       hoursInterval: mergedOptions.cellDuration / 60,
       notifyScheduler: this.notifyScheduler,
       groups: this.resourceManager.groupResources(),
