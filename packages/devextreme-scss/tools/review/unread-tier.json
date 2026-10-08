@@ -12,7 +12,7 @@
     "tests/fluent-next-naming.test.ts scans those three trees, over the legacy tier. Two questions,",
     "two gates - do not read either as the whole answer.",
     "",
-    "The names read in neither place are the ones worth a decision, and they come in three kinds. Counts move with every change - run the tool rather than trusting a number written here (28.09.2026: 66 names listed, after a curation pass; removed names are recorded in tools/naming/public-renames.json, the rest were kept and reasoned in the finalizing PR's history).",
+    "The names read in neither place are the ones worth a decision, and they come in three kinds. Counts move with every change - run the tool rather than trusting a number written here (28.09.2026: 66 names listed, after a curation pass; the names removed then never shipped, so they are in the finalizing PR's history rather than in tools/naming/public-renames.json, and so are the reasons for the ones kept).",
     "",
     "Defects: the theme publishes a knob and no rule turns it. --dx-switch-box-shadow was one such",
     "example, removed 25.09.2026. --dx-datagrid-row-alternation-bg looked like another, but turned out",

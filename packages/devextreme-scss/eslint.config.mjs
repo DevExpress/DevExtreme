@@ -80,7 +80,7 @@ export default [
     rules: {
       'import/extensions': ['error', 'ignorePackages', { mjs: 'always' }],
       'import/no-unresolved': ['error', {
-        ignore: ['^style-dictionary(/|$)', '^safe-ts-transforms-fork$', '^@typescript-eslint/'],
+        ignore: ['^style-dictionary(/|$)', '^@tokens-studio/sd-transforms$', '^@typescript-eslint/'],
       }],
       'no-restricted-syntax': [
         'error',

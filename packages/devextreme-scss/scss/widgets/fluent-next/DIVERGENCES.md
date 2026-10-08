@@ -19,9 +19,9 @@ The marker records which token the literal stands for:
 $file-manager-icon: #161616 !default; // dx-data-uri-static: ds.$color-content
 ```
 
-`tests/fluent-next-naming.test.ts` reads it: a variable that feeds a data-uri is exempt from the
-rule that every colour variable is published into the component tier, because publishing a knob
-that turns nothing would be worse than not publishing it.
+`tools/naming/tier.ts` reads it: a variable that feeds a data-uri is exempt from the rule that
+every colour variable is published into the component tier, because publishing a knob that turns
+nothing would be worse than not publishing it.
 
 **A single-colour icon does not need this.** The same artwork used as a `mask-image` carries only
 its alpha, so `background-color` paints it from the cascade or from a role and the colour stays a

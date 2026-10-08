@@ -2,10 +2,18 @@
  * The roles report: which semantic role every colour slot of the theme reads, and what the token
  * package's component tier says the same slot should read.
  *
- *   node tools/review/roles.mjs                        # → scss/widgets/fluent-next/ROLES.md
- *   node tools/review/roles.mjs --md                   # markdown to stdout
- *   node tools/review/roles.mjs --json                 # machine-readable, for the gate
- *   node tools/review/roles.mjs --theme=<dir> --json   # another theme folder; needs --json or --md
+ *   node tools/review/roles.mjs [--md]                 # the readable report, to stdout
+ *   node tools/review/roles.mjs --json                 # machine-readable
+ *   node tools/review/roles.mjs --theme=<dir> --json   # another theme folder (--md works too);
+ *                                                      # pass its CSS as --bundle=<css>, or the
+ *                                                      # bundle-based checks are off
+ *   node tools/review/roles.mjs --report=tools/review/roles.decisions.json
+ *                                                      # what moved against the banked decisions
+ *   node tools/review/roles.mjs --write=tools/review/roles.decisions.json
+ *                                                      # re-stamp them, keeping every decision
+ *
+ * What the theme declares and paints is collected by tools/review/roles-theme.mjs, which loads no
+ * package; this file adds the package's side on top.
  *
  * Nothing else checks the CHOICE of role. The naming enforcer checks the name, the resolve diff
  * checks that a value did not move, the reachability audit checks delivery, the screenshots check
@@ -46,15 +54,18 @@
 import {
   readFileSync, writeFileSync, readdirSync, statSync, existsSync,
 } from 'fs';
-import { join, dirname, relative } from 'path';
-import { fileURLToPath } from 'url';
+import { join, dirname } from 'path';
 import { createRequire } from 'module';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const packageRoot = join(here, '..', '..');
+import {
+  collectTheme, defaultBundlePath, defaultThemeDir, familyOf, FAMILY, PARTS, registries, trailing,
+} from './roles-theme.mjs';
+
 const themeArg = process.argv.find((a) => a.startsWith('--theme='));
-const themeDir = themeArg ? themeArg.slice('--theme='.length) : join(packageRoot, 'scss', 'widgets', 'fluent-next');
-const registries = JSON.parse(readFileSync(join(packageRoot, 'tools', 'naming', 'registries.json'), 'utf8'));
+const themeDir = themeArg ? themeArg.slice('--theme='.length) : defaultThemeDir;
+const bundleArg = process.argv.find((a) => a.startsWith('--bundle='));
+const bundlePath = bundleArg?.slice('--bundle='.length) ?? (themeArg ? null : defaultBundlePath);
+const hasBundle = Boolean(bundlePath) && existsSync(bundlePath);
 
 const require = createRequire(import.meta.url);
 const tokensRoot = dirname(require.resolve('@devexpress/design-tokens-internal/package.json'));
@@ -139,39 +150,6 @@ const COMPONENT_AS_SLOT = { 'focus-rect': 'outline', skeleton: 'bg', 'empty-item
 
 const SHARED = ['separator', 'focus-rect', 'backdrop', 'skeleton', 'empty-item', 'text-content', 'link'];
 
-const FAMILY = {
-  backdrop: 'bg',
-  bg: 'bg',
-  highlight: 'bg',
-  scrim: 'bg',
-  veil: 'bg',
-  caption: 'content',
-  chevron: 'content',
-  content: 'content',
-  'end-icon': 'content',
-  icon: 'content',
-  placeholder: 'content',
-  shortcut: 'content',
-  'start-icon': 'content',
-  subtitle: 'content',
-  text: 'content',
-  title: 'content',
-  border: 'border',
-  line: 'border',
-  outline: 'border',
-  separator: 'border',
-  shadow: 'shadow',
-  'shadow-ambient': 'shadow',
-  'shadow-key': 'shadow',
-  grip: null,
-  indicator: null,
-  opacity: null,
-  selector: null,
-  thumb: null,
-  track: null,
-  trigger: null,
-};
-
 const KIN = {
   bg: 'bg',
   backdrop: 'bg',
@@ -208,20 +186,7 @@ const kinOf = (slot) => KIN[slot] ?? 'ambiguous';
 const kindred = (a, b) => a === b || kinOf(a) === 'ambiguous' || kinOf(b) === 'ambiguous'
   || kinOf(a) === kinOf(b);
 
-const PARTS = [...registries.parts].sort((a, b) => b.length - a.length);
-const STATES = [...registries.states].sort((a, b) => b.length - a.length);
 const PACKAGE_STATES = new Set([...registries.states, 'rest', 'disable']);
-
-const familyOf = (role) => {
-  if (/^(box-shadow|color-shadow)-/.test(role)) return 'shadow';
-  if (role === 'color-none' || role === 'none') return 'none';
-  return /^color-(bg|content|border)\b/.exec(role)?.[1] ?? 'other';
-};
-
-const trailing = (name, vocabulary) => {
-  for (const word of vocabulary) if (name === word || name.endsWith(`-${word}`)) return word;
-  return null;
-};
 
 const valueIndex = {};
 for (const mode of MODES) {
@@ -259,115 +224,8 @@ const sameValue = (a, b) => MODES.every((mode) => {
   return va !== null && vb !== null && va === vb;
 });
 
-const styleFiles = (dir) => readdirSync(dir).flatMap((entry) => {
-  const absolute = join(dir, entry);
-  if (statSync(absolute).isDirectory()) return styleFiles(absolute);
-  return entry.endsWith('.scss') ? [absolute] : [];
-});
-
-const rawDeclarations = [];
-for (const file of styleFiles(themeDir)) {
-  const folder = relative(themeDir, file).split('/')[0];
-  const colourFile = file.endsWith('_colors.scss');
-  const source = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ''));
-  source.split('\n').forEach((line, index) => {
-    if (/^\s*\/\//.test(line)) return;
-    const sass = /^\s*\$([a-z0-9-]+)\s*:\s*(.+?)(?:\s*!default)?\s*;/.exec(line);
-    if (sass) {
-      rawDeclarations.push({
-        file, folder, colourFile, index, name: sass[1], value: sass[2], sass: true,
-      });
-      return;
-    }
-    /*
-     * A tier name written straight as a custom property is a declaration too, and fourteen of them
-     * sit on the theme root - `--dx-color-warning: #{ds.$color-content-warning}` and its
-     * neighbours, the public aliases. Reading a role directly is the whole test: `--dx-toast-bg:
-     * #{$toast-bg}` in a generated `_public.scss` only republishes a declaration already audited
-     * under its Sass name, and counting it again would double the set.
-     */
-    const custom = /^\s*--(dx-[a-z0-9-]+)\s*:\s*(.+?)\s*;/.exec(line);
-    if (!custom || !/ds\.\$/.test(custom[2])) return;
-    rawDeclarations.push({
-      file, folder, colourFile, index, name: custom[1].replace(/^dx-/, ''), value: custom[2],
-    });
-  });
-}
-
-const valueOf = new Map(rawDeclarations.filter((d) => d.sass).map((d) => [d.name, d.value]));
-const rolesOf = (value, seen = new Set(), depth = 0) => {
-  if (depth > 8) return [];
-  const direct = [...value.matchAll(/ds\.\$([a-z0-9-]+)/g)].map((r) => r[1]);
-  const refs = [...value.matchAll(/(?:[A-Za-z][\w-]*\.)?\$([a-z0-9-]+)/g)]
-    .map((r) => r[1])
-    .filter((n) => valueOf.has(n) && !seen.has(n));
-  const borrowed = refs.flatMap((n) => {
-    seen.add(n);
-    return rolesOf(valueOf.get(n), seen, depth + 1);
-  });
-  return [...direct, ...borrowed];
-};
-const borrowsOf = (value) => [...new Set([...value.matchAll(/(?:[A-Za-z][\w-]*\.)?\$([a-z0-9-]+)/g)]
-  .map((r) => r[1]).filter((n) => valueOf.has(n)))];
-
-const declarations = [];
-rawDeclarations.forEach(({
-  file, folder, colourFile, index, name, value,
-}) => {
-  const roles = [...new Set(rolesOf(value))];
-  const borrows = borrowsOf(value);
-  if (!roles.length) return;
-  if (!colourFile && !roles.some((role) => /^(color|box-shadow)-/.test(role))) return;
-  const state = trailing(name, STATES);
-  const bare = state ? name.slice(0, -state.length - 1) : name;
-  const slot = trailing(bare, PARTS);
-  const middle = slot ? bare.slice(0, -slot.length).replace(/-$/, '') : bare;
-  const subElementSlots = PARTS.filter((part) => middle === part || middle.endsWith(`-${part}`)
-    || middle.startsWith(`${part}-`) || middle.includes(`-${part}-`));
-  declarations.push({
-    folder,
-    where: `${relative(packageRoot, file)}:${index + 1}`,
-    name,
-    slot,
-    subElementSlots,
-    state: state ?? 'rest',
-    roles,
-    bridged: /rgb\(\s*from/.test(value),
-    value: value.trim(),
-    ...(borrows.length ? { borrows } : {}),
-  });
-});
-
-/*
- * Does the collector see every line that reads a role?
- *
- * Three times now a pass has narrowed its own input and then reported completeness over what was
- * left: declarations that borrow their value, declarations outside `_colors.scss`, tier names
- * written as custom properties. Each was found by hand, and each was invisible to `every colour
- * declaration reaches a verdict`, because that test counts the set the collector already built.
- *
- * So this counts from the file instead. Every line that mentions a colour or shadow role has to end
- * up as a declaration - or carry `dx-data-uri-static`, which means the role is named in a comment
- * beside a literal because the value is baked into an SVG and never reaches CSS. Anything else is a
- * blind spot, and the gate names the line.
- */
-const coverage = {
-  lines: 0, collected: 0, dataUriStatic: 0, unexplained: [],
-};
-{
-  const collected = new Set(declarations.map((d) => d.where));
-  for (const file of styleFiles(themeDir)) {
-    const source = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ''));
-    source.split('\n').forEach((line, index) => {
-      if (/^\s*\/\//.test(line) || !/ds\.\$(color|box-shadow)-/.test(line)) return;
-      coverage.lines += 1;
-      const where = `${relative(packageRoot, file)}:${index + 1}`;
-      if (collected.has(where)) coverage.collected += 1;
-      else if (/dx-data-uri-static/.test(line)) coverage.dataUriStatic += 1;
-      else coverage.unexplained.push(where);
-    });
-  }
-}
+const theme = collectTheme({ themeDir, bundlePath });
+const { declarations, coverage } = theme;
 
 const dissect = (path) => {
   const segments = path.split('.');
@@ -456,74 +314,28 @@ for (const family of TYPOGRAPHY) {
   typographyGrid[family] = roles.sort((a, b) => a.step - b.step);
 }
 
-const MARKERS = /dx-(no-semantic-role|icon-glyph-size|offscale|relative|px-nudge|literal-required|fixed-size|line-width|shadow-geometry)/;
-
-const typography = [];
-const sizeFiles = (dir) => readdirSync(dir).flatMap((entry) => {
-  const absolute = join(dir, entry);
-  if (statSync(absolute).isDirectory()) return sizeFiles(absolute);
-  return entry === '_sizes.scss' ? [absolute] : [];
+const typography = theme.typography.map((read) => {
+  const grid = typographyGrid[read.family] ?? [];
+  const onGrid = grid.filter((r) => r.step === read.step);
+  const nearest = [...grid]
+    .sort((a, b) => Math.abs(a.step - read.step) - Math.abs(b.step - read.step))
+    .slice(0, 3);
+  return {
+    ...read,
+    roles: onGrid.map((r) => r.role),
+    nearest: onGrid.length ? [] : nearest.map((r) => ({ role: r.role, step: r.step })),
+  };
 });
-for (const file of sizeFiles(themeDir)) {
-  const folder = relative(themeDir, file).split('/')[0];
-  readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, '')).split('\n').forEach((line, index) => {
-    if (/^\s*\/\//.test(line)) return;
-    const read = /ds\.\$(font-size|font-weight|line-height)-(\d+)/.exec(line);
-    if (!read) return;
-    const [, family, step] = read;
-    const grid = typographyGrid[family] ?? [];
-    const onGrid = grid.filter((r) => r.step === Number(step));
-    const nearest = [...grid]
-      .sort((a, b) => Math.abs(a.step - Number(step)) - Math.abs(b.step - Number(step)))
-      .slice(0, 3);
-    typography.push({
-      folder,
-      where: `${relative(packageRoot, file)}:${index + 1}`,
-      variable: /\$([a-z0-9-]+)\s*:/.exec(line)?.[1] ?? '(inline)',
-      family,
-      step: Number(step),
-      marker: MARKERS.exec(line)?.[1] ?? null,
-      roles: onGrid.map((r) => r.role),
-      nearest: onGrid.length ? [] : nearest.map((r) => ({ role: r.role, step: r.step })),
-    });
-  });
-}
-
-const PROPERTY_FAMILY = [
-  [/^(background|background-color|background-image)$/, 'bg'],
-  [/^(color|fill|caret-color|-webkit-text-fill-color)$/, 'content'],
-  [/(^|-)border(-|$)|^outline(-|$)|^stroke$|^border-color$/, 'border'],
-  [/shadow$/, 'shadow'],
-];
-const bundlePath = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
-const paints = new Map();
-const declaredInBundle = new Set();
-if (existsSync(bundlePath)) {
-  const css = readFileSync(bundlePath, 'utf8');
-  for (const [, name] of css.matchAll(/(--dx-[a-z0-9-]+)\s*:/g)) declaredInBundle.add(name);
-  for (const [, property, value] of css.matchAll(/([a-z-]+)\s*:\s*([^;{}]*var\(--dx-[^;{}]*)/g)) {
-    for (const [, name] of value.matchAll(/var\(\s*(--dx-[a-z0-9-]+)/g)) {
-      if (!paints.has(name)) paints.set(name, new Set());
-      paints.get(name).add(property);
-    }
-  }
-}
-const familyOfProperty = (property) => PROPERTY_FAMILY
-  .find(([re]) => re.test(property))?.[1] ?? null;
 
 const findings = [];
-for (const declaration of declarations) {
+for (const {
+  family: familyMismatch, paints, slotLies, ...declaration
+} of theme.findings) {
   const {
     slot, subElementSlots, roles, folder, state,
   } = declaration;
   const ourSlots = [slot, ...subElementSlots].filter(Boolean);
-  const record = { ...declaration, family: null, package: null };
-
-  if (slot && FAMILY[slot]) {
-    const want = FAMILY[slot];
-    const got = [...new Set(roles.map(familyOf))].filter((f) => f !== 'none');
-    if (got.length && !got.includes(want)) record.family = { want, got, slot };
-  }
+  const record = { ...declaration, family: familyMismatch, package: null };
 
   const candidates = COMPONENT[folder] ?? [];
   if (!candidates.length) record.package = { verdict: 'no-counterpart' };
@@ -616,14 +428,8 @@ for (const declaration of declarations) {
       }
     }
   }
-  const painted = [...(paints.get(`--dx-${declaration.name}`) ?? [])].sort();
-  if (painted.length) {
-    const families = [...new Set(painted.map(familyOfProperty).filter(Boolean))];
-    record.paints = { properties: painted, families };
-    if (FAMILY[slot] && families.length && !families.includes(FAMILY[slot])) {
-      record.slotLies = { slotSays: FAMILY[slot], propertySays: families };
-    }
-  }
+  if (paints) record.paints = paints;
+  if (slotLies) record.slotLies = slotLies;
 
   const packageUses = record.package?.packageUsesHere ?? [];
   if (packageUses.length && roles.length === 1) {
@@ -647,51 +453,16 @@ for (const declaration of declarations) {
   findings.push(record);
 }
 
-const ACCEPTED_COLLAPSE = [['focused', 'hovered'], ['focused', 'active'], ['selected-focused', 'selected-hovered']];
-const acceptedPair = (a, b) => ACCEPTED_COLLAPSE
-  .some(([x, y]) => (a === x && b === y) || (a === y && b === x));
-
-const ladders = [];
-{
-  const groups = new Map();
-  declarations.filter((declaration) => declaration.slot).forEach((declaration) => {
-    const stem = declaration.state === 'rest'
-      ? declaration.name
-      : declaration.name.slice(0, -declaration.state.length - 1);
-    if (!groups.has(stem)) groups.set(stem, []);
-    groups.get(stem).push(declaration);
-  });
-  groups.forEach((members, stem) => {
-    if (members.length < 2) return;
-    const byRole = new Map();
-    members.forEach((member) => {
-      const key = member.roles.join('+');
-      if (!byRole.has(key)) byRole.set(key, []);
-      byRole.get(key).push(member.state);
-    });
-    byRole.forEach((states, role) => {
-      if (states.length < 2) return;
-      const pairs = states.flatMap((a, i) => states.slice(i + 1).map((b) => [a, b]));
-      if (pairs.every(([a, b]) => acceptedPair(a, b))) return;
-      const unusedRungs = states
-        .filter((state) => state !== 'rest')
-        .flatMap((state) => role.split('+').map((r) => {
-          const rung = `${r.replace(/-(hovered|active|selected|focused|disabled|read-only)$/, '')}-${state}`;
-          return resolveRole(rung, 'light') !== null && rung !== r ? { state, rung } : null;
-        }))
-        .filter(Boolean);
-      ladders.push({
-        stem,
-        folder: members[0].folder,
-        where: members.find((m) => states.includes(m.state)).where,
-        role: role.split('+'),
-        states: states.sort(),
-        unusedRungs,
-      });
-    });
-  });
-  ladders.sort((a, b) => a.stem.localeCompare(b.stem));
-}
+const ladders = theme.ladders.map(({ statesInOrder, ...ladder }) => ({
+  ...ladder,
+  unusedRungs: statesInOrder
+    .filter((state) => state !== 'rest')
+    .flatMap((state) => ladder.role.map((r) => {
+      const rung = `${r.replace(/-(hovered|active|selected|focused|disabled|read-only)$/, '')}-${state}`;
+      return resolveRole(rung, 'light') !== null && rung !== r ? { state, rung } : null;
+    }))
+    .filter(Boolean),
+}));
 
 const hexOf = (value) => {
   const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(value).trim());
@@ -715,7 +486,7 @@ const roleOfTierName = new Map(declarations
   .filter((d) => !d.bridged && d.roles.length === 1)
   .map((d) => [`--dx-${d.name}`, d.roles[0]]));
 const pairs = [];
-if (existsSync(bundlePath)) {
+if (hasBundle) {
   const css = readFileSync(bundlePath, 'utf8');
   [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, selector, body]) => {
     if (selector.trim().startsWith('@')) return;
@@ -756,7 +527,7 @@ const elementKey = (selector) => selector
 
 const foregroundOf = new Map();
 const statePairs = [];
-if (existsSync(bundlePath)) {
+if (hasBundle) {
   const css = readFileSync(bundlePath, 'utf8');
   const rules = [];
   [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, selectorList, body]) => {
@@ -819,55 +590,23 @@ const lowStatePairs = statePairs
     .findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
   .sort((a, b) => Math.min(...Object.values(a.contrast)) - Math.min(...Object.values(b.contrast)));
 
-const MODIFIER_WORDS = new Set(Object.values(registries.modifiers).flat());
-const concepts = [];
-{
-  const groups = new Map();
-  declarations
-    .filter((declaration) => declaration.slot && declaration.roles.length === 1)
-    .forEach((declaration) => {
-      const bare = declaration.state === 'rest'
-        ? declaration.name
-        : declaration.name.slice(0, -declaration.state.length - 1);
-      const middle = bare.slice(0, -declaration.slot.length).replace(/-$/, '').split('-');
-      const modifiers = [...new Set(middle.filter((word) => MODIFIER_WORDS.has(word)))].sort();
-      if (!modifiers.length) return;
-      const key = `${modifiers.join('+')} ${declaration.slot} ${declaration.state}`;
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(declaration);
-    });
-  groups.forEach((members, concept) => {
-    const folders = [...new Set(members.map((m) => m.folder))];
-    const roles = [...new Set(members.map((m) => m.roles[0]))];
-    if (folders.length < 2 || roles.length < 2) return;
-    const families = [...new Set(roles.map(familyOf).filter((f) => f !== 'none'))];
-    const valueOfRole = (role) => MODES.map((mode) => resolveRole(role, mode)).join(' / ');
-    const values = new Set(roles.map(valueOfRole));
-    const oneColour = values.size === 1;
-    const clusters = [...values].map((value) => ({
+const concepts = theme.concepts.map(({
+  concept, families, roles, members,
+}) => {
+  const valueOfRole = (role) => MODES.map((mode) => resolveRole(role, mode)).join(' / ');
+  const values = new Set(roles.map(valueOfRole));
+  return {
+    concept,
+    families,
+    roles,
+    oneColour: values.size === 1,
+    clusters: [...values].map((value) => ({
       value,
       roles: roles.filter((role) => valueOfRole(role) === value),
-    })).filter((cluster) => cluster.roles.length > 1);
-    const seen = new Set();
-    concepts.push({
-      concept,
-      families,
-      roles,
-      oneColour,
-      clusters,
-      members: members.filter((m) => {
-        const key = `${m.folder}|${m.roles[0]}`;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      }).map((m) => ({
-        folder: m.folder, name: m.name, role: m.roles[0], where: m.where,
-      })),
-    });
-  });
-  concepts.sort((a, b) => b.families.length - a.families.length
-    || b.roles.length - a.roles.length || a.concept.localeCompare(b.concept));
-}
+    })).filter((cluster) => cluster.roles.length > 1),
+    members,
+  };
+});
 
 const declaredRoles = new Set();
 for (const [name] of valueIndex.light) declaredRoles.add(name.replace(/^(color|global\.color)\./, 'color-'));
@@ -913,7 +652,7 @@ const summary = {
   contrastBelowAA: lowContrast.length,
   contrastDarkOnly: lowContrast
     .filter((p) => p.contrast.light >= AA && p.contrast.dark < AA).length,
-  declarationsMissingFromBundle: findings.filter((f) => !declaredInBundle.has(`--dx-${f.name}`)).length,
+  declarationsMissingFromBundle: theme.declarationsMissingFromBundle,
   statePairsMeasured: statePairs.length,
   statePairsBelowGraphic: lowStatePairs.length,
   familyMismatch: count((f) => f.family),
@@ -1147,7 +886,138 @@ for (const role of [...roleNames].sort()) {
   if (Object.keys(entry).length) palette[role] = entry;
 }
 
-if (process.argv.includes('--json')) {
+/*
+ * The package's sections, as tools/review/roles.decisions.json banks them. A token bump moves
+ * these, so they are not a jest gate: --report shows what moved against the banked decisions,
+ * --write re-stamps the file keeping every decision by key.
+ */
+const PACKAGE_SECTIONS = {
+  open: {
+    key: (row) => row.name,
+    rows: () => findings
+      .filter((f) => ['cross-family', 'family-conflict'].includes(f.package?.verdict))
+      .map((f) => ({
+        name: f.name, verdict: f.package.verdict, roles: f.roles, slot: f.slot,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  },
+  rungs: {
+    key: (row) => row.name,
+    rows: () => findings
+      .filter((f) => f.rung)
+      .map((f) => ({
+        name: f.name, state: f.rung.state, roles: f.roles, oursAt: f.rung.oursAt, want: f.rung.want,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+  },
+  contrast: {
+    key: (row) => row.selector,
+    fromBundle: true,
+    rows: () => lowContrast
+      .map(({
+        selector, fgRole, bgRole, contrast: measured,
+      }) => ({
+        selector, fgRole, bgRole, contrast: measured,
+      }))
+      .sort((a, b) => a.selector.localeCompare(b.selector)),
+  },
+  statePairs: {
+    key: (row) => `${row.bg} ${row.selector}`,
+    fromBundle: true,
+    nested: true,
+    rows: () => lowStatePairs
+      .map(({
+        bg, fg, fgRole, bgRole, contrast: measured, selector,
+      }) => ({
+        bg, fg, fgRole, bgRole, contrast: measured, selector,
+      }))
+      .sort((a, b) => (a.bg + a.selector).localeCompare(b.bg + b.selector)),
+  },
+};
+const DECISION_FIELDS = ['decision', 'why', 'group'];
+const withoutDecision = (row) => Object.fromEntries(Object.entries(row)
+  .filter(([field]) => !DECISION_FIELDS.includes(field)));
+const decisionOf = (row) => Object.fromEntries(Object.entries(row ?? {})
+  .filter(([field]) => DECISION_FIELDS.includes(field)));
+
+// the bundle names the package it was built against (scss-build banner)
+const bundleTokens = hasBundle
+  ? /Design tokens: @devexpress\/design-tokens-internal (\S+)/.exec(readFileSync(bundlePath, 'utf8').slice(0, 2000))?.[1] ?? null
+  : null;
+const bundleIsCurrent = bundleTokens === tokensVersion;
+
+const unusedRoleNames = {
+  capability: unusedRoles.capability.map((r) => r.role),
+  stale: unusedRoles.stale.map((r) => r.role),
+};
+
+const reportAgainst = (decisions) => {
+  const out = [`# Roles against the banked decisions - package ${tokensVersion}\n`];
+  if (!bundleIsCurrent) {
+    out.push(`> The bundle was built against ${bundleTokens ?? 'nothing (it is not built)'}, the package is `
+      + `${tokensVersion}: contrast and statePairs are skipped. Run \`pnpm nx build:themes devextreme-scss\` `
+      + 'and report again.\n');
+  }
+  let moved = 0;
+  Object.entries(PACKAGE_SECTIONS).forEach(([section, {
+    key, rows, fromBundle, nested,
+  }]) => {
+    if (fromBundle && !bundleIsCurrent) return;
+    const banked = nested ? decisions[section].rows : decisions[section];
+    const bankedBy = new Map(banked.map((row) => [key(row), row]));
+    const current = rows();
+    const currentKeys = new Set(current.map(key));
+    const lines = [
+      ...current.filter((row) => !bankedBy.has(key(row))).map((row) => `- new: \`${key(row)}\``),
+      ...banked.filter((row) => !currentKeys.has(key(row))).map((row) => `- gone: \`${key(row)}\``),
+      ...current.filter((row) => bankedBy.has(key(row))
+        && JSON.stringify(withoutDecision(bankedBy.get(key(row)))) !== JSON.stringify(row))
+        .map((row) => `- changed: \`${key(row)}\` - now ${JSON.stringify(row)}`),
+      ...banked.filter((row) => !row.decision).map((row) => `- undecided: \`${key(row)}\``),
+    ];
+    moved += lines.length;
+    if (lines.length) out.push(`## ${section} - ${lines.length}\n`, ...lines, '');
+  });
+  ['capability', 'stale'].forEach((kind) => {
+    const banked = new Set(decisions.unusedRoles[kind]);
+    const current = new Set(unusedRoleNames[kind]);
+    const lines = [
+      ...[...current].filter((role) => !banked.has(role)).map((role) => `- new: \`${role}\``),
+      ...[...banked].filter((role) => !current.has(role)).map((role) => `- gone: \`${role}\``),
+    ];
+    moved += lines.length;
+    if (lines.length) out.push(`## unusedRoles.${kind} - ${lines.length}\n`, ...lines, '');
+  });
+  if (!moved) out.push('Nothing moved: every banked row still holds.\n');
+  else out.push('Re-bank with `node tools/review/roles.mjs --write=<file>`, then fill in the decision of every new row.\n');
+  return out.join('\n');
+};
+
+const restamp = (decisions) => {
+  const next = { ...decisions };
+  Object.entries(PACKAGE_SECTIONS).forEach(([section, {
+    key, rows, fromBundle, nested,
+  }]) => {
+    if (fromBundle && !bundleIsCurrent) return;
+    const banked = nested ? decisions[section].rows : decisions[section];
+    const bankedBy = new Map(banked.map((row) => [key(row), row]));
+    const stamped = rows().map((row) => ({ ...row, ...decisionOf(bankedBy.get(key(row))) }));
+    next[section] = nested ? { ...decisions[section], rows: stamped } : stamped;
+  });
+  next.unusedRoles = { ...decisions.unusedRoles, ...unusedRoleNames };
+  return next;
+};
+
+const reportArg = process.argv.find((a) => a.startsWith('--report='));
+const writeArg = process.argv.find((a) => a.startsWith('--write='));
+
+if (reportArg) {
+  console.log(reportAgainst(JSON.parse(readFileSync(reportArg.slice('--report='.length), 'utf8'))));
+} else if (writeArg) {
+  const file = writeArg.slice('--write='.length);
+  writeFileSync(file, `${JSON.stringify(restamp(JSON.parse(readFileSync(file, 'utf8'))), null, 2)}\n`);
+  console.log(`${file} re-stamped${bundleIsCurrent ? '' : ' (contrast and statePairs kept: the bundle is stale)'}`);
+} else if (process.argv.includes('--json')) {
   console.log(JSON.stringify({
     summary,
     findings,
@@ -1160,14 +1030,6 @@ if (process.argv.includes('--json')) {
     palette,
     coverage,
   }, null, 2));
-} else if (process.argv.includes('--md')) {
-  console.log(md());
-} else if (themeArg) {
-  console.error('--theme= is for the gate; pass --json with it');
-  process.exit(2);
 } else {
-  writeFileSync(join(themeDir, 'ROLES.md'), `${md()}\n`);
-  console.log(`declarations ${summary.declarations} | family mismatch ${summary.familyMismatch}`);
-  for (const verdict of verdicts) console.log(`  ${verdict.padEnd(16)} ${summary.byVerdict[verdict]}`);
-  console.log(`\n→ ${relative(process.cwd(), join(themeDir, 'ROLES.md'))}`);
+  console.log(md());
 }

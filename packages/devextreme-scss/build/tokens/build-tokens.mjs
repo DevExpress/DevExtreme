@@ -1,5 +1,6 @@
 import path from 'node:path';
 import url from 'node:url';
+import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import {
   readdir, readFile, rm, writeFile,
@@ -15,21 +16,6 @@ import {
   collectCustomPropertyReferences,
   collectTokenReferences,
 } from './consumed-tokens.ts';
-
-// Suppress ONE known noisy sd-transforms warning about unresolvable
-// {font-weight…} references inside math expressions. Scoped to console.warn
-// so legitimate errors/logs containing the substring are never swallowed.
-// Remove when https://github.com/tokens-studio/sd-transforms/issues/218 is
-// fixed in the (forked) sd-transforms we consume.
-{
-  const originalWarn = console.warn.bind(console);
-  console.warn = (message, ...args) => {
-    if (typeof message === 'string' && message.includes('Warning: could not resolve reference {font-weight')) {
-      return;
-    }
-    originalWarn(message, ...args);
-  };
-}
 
 registerTransforms(StyleDictionary);
 
@@ -553,7 +539,19 @@ async function validateConsumedTokens() {
   return referenced.size;
 }
 
+// style-dictionary treats a source as a glob, so a file the package moved or renamed is skipped
+// without a word and its tokens silently drop out of the build
+function assertSourcesExist() {
+  const missing = [...new Set(configs.flatMap((config) => config.source))]
+    .filter((file) => !existsSync(file))
+    .map((file) => `  ${path.relative(tokensDir, file)}`);
+  if (missing.length) {
+    throw new Error(`Token source files absent from @devexpress/design-tokens-internal (see build/tokens/sources.mjs):\n${missing.join('\n')}`);
+  }
+}
+
 async function build() {
+  assertSourcesExist();
   await rm(buildPath, { recursive: true, force: true });
 
   for (const config of configs) {

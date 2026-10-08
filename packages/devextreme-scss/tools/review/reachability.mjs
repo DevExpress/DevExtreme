@@ -17,10 +17,9 @@
  *      element IS nested in the root (`.dx-editor-cell` inside the grid) and the selector text just
  *      does not say so. The dangerous ones are portals: elements JS creates outside the root (the
  *      dragged column preview, the sortable clone, a popup wrapper). The two cannot be told apart
- *      statically — that is knowledge about the DOM — so the verdict comes from the runtime audit
- *      playground/tier-reachability-audit.html, and this list is the material for its gallery:
- *      every new name here must be either proven nested or added as a root to
- *      registries.rootSelectors.
+ *      statically — that is knowledge about the DOM — so the verdict is the reviewer's: every new
+ *      scope here is either confirmed nested in the live widget and listed in nested-scopes.json,
+ *      or added as a root to registries.rootSelectors.
  *
  *   3) GATE (fails): a name declared and never read. Questions 1 and 2 both ask "the read happens,
  *      does it land" — neither notices a name nothing reads at all. Such a name is still API: it
@@ -221,7 +220,7 @@ unreviewed.forEach(([key, example]) => {
   process.stdout.write(`✘ scope outside the roots of ${component}: .${scope}\n`);
   process.stdout.write(`     example: ${example}\n`);
   process.stdout.write('     cure: either add the root to OVERRIDES.rootSelectors (derive-registries.mjs),\n');
-  process.stdout.write(`     or, having proven nesting with the runtime audit, add "${scope}" to nested-scopes.json["${component}"]\n`);
+  process.stdout.write(`     or, having confirmed in the live widget that the element is nested in the root, add "${scope}" to nested-scopes.json["${component}"]\n`);
 });
 
 const declaredValues = new Map();

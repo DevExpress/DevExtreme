@@ -1,13 +1,14 @@
 /*
  * One command for a design-token package bump, and the report that goes with it.
  *
- *   pnpm run tokens:update 262.24.0   # bump, reinstall, rebuild, regenerate, report
+ *   pnpm run tokens:update 262.24.0   # bump, reinstall, rebuild, check, report
  *   pnpm run tokens:update            # report the installed package, change nothing
  *   pnpm run tokens:update --report   # the same, stated explicitly
  *
- * The four manual steps — edit the dependency, reinstall, rebuild the tokens, regenerate the
- * registries — are the cheap part. It stops there: the themes are not rebuilt, so the CSS bundles
- * on disk still come from the previous package until `nx build:themes` runs. The expensive part is
+ * The manual steps — edit the dependency and its minimumReleaseAgeExclude entry, reinstall, rebuild
+ * the tokens — are the cheap part. It stops there: the themes are not rebuilt, so the CSS bundles
+ * on disk still come from the previous package until `nx build:themes` runs, and the registries are
+ * only checked, because their rootSelectors gate reads those bundles. The expensive part is
  * knowing what the new package did, and that is what the report is for: names the theme reads and
  * the package no longer has (the build refuses those), and every generated value that moved. The
  * second list is the one that costs etalon screenshots, so it is printed per file with old and new
@@ -15,6 +16,9 @@
  *
  * What stays manual on purpose: approving the Renovate pull request, and re-recording the etalons.
  * A bot can do neither — our etalons are pixels, and a value change has to be looked at.
+ *
+ * A failed bump puts back what it touched — package.json, pnpm-workspace.yaml, pnpm-lock.yaml and
+ * the generated token layer — so the tree is where it was, short of node_modules.
  *
  * The install runs with --no-frozen-lockfile, which is the only way to move a pinned dependency,
  * and pnpm takes the opportunity to normalise the rest of the lockfile. Read that diff before
@@ -25,7 +29,10 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  cpSync, existsSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync,
+} from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -51,6 +58,8 @@ const repoRoot = path.resolve(packageRoot, '..', '..');
 const generatedRoot = path.join(packageRoot, 'scss', '_design-system');
 const themeRoot = path.join(packageRoot, 'scss', 'widgets', THEME_FOLDER);
 const manifestPath = path.join(packageRoot, 'package.json');
+const workspacePath = path.join(repoRoot, 'pnpm-workspace.yaml');
+const lockPath = path.join(repoRoot, 'pnpm-lock.yaml');
 const PACKAGE = '@devexpress/design-tokens-internal';
 
 const tokensPackage = path.join(packageRoot, 'node_modules', PACKAGE);
@@ -67,10 +76,20 @@ const readFlatTokens = () => {
   return { version, names: Object.keys(tokens) };
 };
 
-const readGenerated = () => new Map(walk(generatedRoot, '.scss').map((file) => [
-  path.relative(generatedRoot, file),
-  parseDeclarations(readFileSync(file, 'utf8')),
-]));
+let notedUnbuilt = false;
+const readGenerated = () => {
+  if (!existsSync(generatedRoot)) {
+    if (notedUnbuilt) return new Map();
+    notedUnbuilt = true;
+    process.stderr.write(`note: ${path.relative(repoRoot, generatedRoot)} is not built yet, so the `
+      + 'value diff is empty — run pnpm nx build:tokens devextreme-scss first to get one\n');
+    return new Map();
+  }
+  return new Map(walk(generatedRoot, '.scss').map((file) => [
+    path.relative(generatedRoot, file),
+    parseDeclarations(readFileSync(file, 'utf8')),
+  ]));
+};
 
 const readConsumed = () => {
   const consumed = new Set();
@@ -98,11 +117,29 @@ const show = (report) => {
     : `\n${renderReport(report)}`);
 };
 
+/*
+ * Neither binary is looked up on PATH: `node` is this very process, and `pnpm run` hands its own
+ * entry point in npm_execpath. On Windows `pnpm` on PATH is pnpm.cmd, which execFile cannot start
+ * without a shell.
+ */
+const executable = (command) => {
+  if (command === 'node') return [process.execPath, []];
+  const pnpm = process.env.npm_execpath;
+  if (!pnpm) return [command, []];
+  const entry = realpathSync(pnpm);
+  return /\.[cm]?js$/.test(entry) ? [process.execPath, [entry]] : [entry, []];
+};
+
 const run = (command, args, cwd) => {
   process.stderr.write(`\n$ ${command} ${args.join(' ')}\n`);
 
   try {
-    execFileSync(command, args, { cwd, stdio: ['inherit', 2, 'inherit'] });
+    const [file, prefix] = executable(command);
+    execFileSync(file, [...prefix, ...args], {
+      cwd,
+      stdio: ['inherit', 2, 'inherit'],
+      shell: file === command && process.platform === 'win32',
+    });
 
     return true;
   } catch {
@@ -112,11 +149,39 @@ const run = (command, args, cwd) => {
   }
 };
 
+// pnpm refuses a release younger than minimumReleaseAge, so the bump carries its own exclusion
+const withReleaseAgeExclusion = (yaml, version) => {
+  const entry = `"${PACKAGE}@${version}"`;
+  const existing = new RegExp(`(['"])${PACKAGE.replace(/[/.]/g, '\\$&')}@[^'"]+\\1`);
+  if (existing.test(yaml)) return yaml.replace(existing, entry);
+  if (!/^minimumReleaseAgeExclude:\n/m.test(yaml)) {
+    throw new Error('pnpm-workspace.yaml has no minimumReleaseAgeExclude list to add the package to');
+  }
+  return yaml.replace(/^minimumReleaseAgeExclude:\n/m, (key) => `${key}  - ${entry}\n`);
+};
+
 const setDependency = (version) => {
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 
   manifest.devDependencies[PACKAGE] = version;
   writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  writeFileSync(workspacePath, withReleaseAgeExclusion(readFileSync(workspacePath, 'utf8'), version));
+};
+
+const snapshot = () => {
+  const files = new Map([manifestPath, workspacePath, lockPath]
+    .map((file) => [file, readFileSync(file, 'utf8')]));
+  const generated = existsSync(generatedRoot)
+    ? path.join(mkdtempSync(path.join(os.tmpdir(), 'tokens-update-')), 'generated')
+    : null;
+  if (generated) cpSync(generatedRoot, generated, { recursive: true });
+  return { files, generated };
+};
+
+const restore = ({ files, generated }) => {
+  files.forEach((content, file) => writeFileSync(file, content));
+  rmSync(generatedRoot, { recursive: true, force: true });
+  if (generated) cpSync(generated, generatedRoot, { recursive: true });
 };
 
 const [target] = process.argv.slice(2);
@@ -129,54 +194,75 @@ if (!reportOnly && !/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(target)) {
   process.exit(1);
 }
 const before = { ...readFlatTokens(), generated: readGenerated() };
+const saved = reportOnly ? null : snapshot();
 
-const giveUp = (version) => {
-  process.stderr.write(`\npackage.json asks for ${version} now.\n`
-    + `To go back: pnpm run tokens:update ${before.version}\n`);
+const giveUp = () => {
+  restore(saved);
+  process.stderr.write('\nThe bump failed and was rolled back: package.json, pnpm-workspace.yaml, '
+    + `pnpm-lock.yaml and the token layer are as they were (${before.version}).\n`
+    + 'node_modules may still hold the new package: pnpm install --frozen-lockfile\n');
   process.exit(1);
 };
 
-if (!reportOnly) {
-  setDependency(target);
+// once the snapshot is taken every failure rolls back, not only a child process that exits non-zero
+const bumpAndReport = () => {
+  if (!reportOnly) {
+    setDependency(target);
 
-  if (!run('pnpm', ['install', '--no-frozen-lockfile'], repoRoot)) {
-    giveUp(target);
+    if (!run('pnpm', ['install', '--no-frozen-lockfile'], repoRoot)) {
+      giveUp();
+    }
   }
-}
 
-const after = readFlatTokens();
-const summary = {
-  package: PACKAGE,
-  versionBefore: before.version,
-  versionAfter: after.version,
-  countBefore: before.names.length,
-  countAfter: after.names.length,
-  names: diffNames(before.names, after.names),
-  lostConsumed: findLostConsumed(
-    readConsumed(),
-    buildAvailableNames(after.names, new Set(getBridgeFiles())),
-  ),
+  const after = readFlatTokens();
+  const summary = {
+    package: PACKAGE,
+    versionBefore: before.version,
+    versionAfter: after.version,
+    countBefore: before.names.length,
+    countAfter: after.names.length,
+    names: diffNames(before.names, after.names),
+    lostConsumed: findLostConsumed(
+      readConsumed(),
+      buildAvailableNames(after.names, new Set(getBridgeFiles())),
+    ),
+  };
+
+  if (!reportOnly) {
+    process.stderr.write(`\n${renderPreamble(summary, { color: progressColor })}\n`);
+
+    if (!run('node', ['build/tokens/build-tokens.mjs'], packageRoot)) {
+      giveUp();
+    }
+  }
+
+  // read-only: the write mode would gate rootSelectors against bundles built from the old package
+  const registriesCurrent = reportOnly
+    || run('node', ['tools/naming/derive-registries.mjs', '--check'], packageRoot);
+
+  const report = { ...summary, output: diffGenerated(before.generated, readGenerated()) };
+
+  show(report);
+
+  // what the package now says about the theme's roles, against the banked decisions
+  run('node', ['tools/review/roles.mjs', '--report=tools/review/roles.decisions.json'], packageRoot);
+
+  if (!reportOnly) {
+    const registries = registriesCurrent ? ''
+      : 'The registries are stale: after build:themes run pnpm run naming:registries and review '
+        + 'tools/naming/registries.json.\n';
+    process.stderr.write('\nThis rebuilt the token layer, not the themes — '
+      + 'packages/devextreme/artifacts/css still holds the previous bundles.\n'
+      + 'Next: pnpm nx build:themes devextreme-scss, then the etalons if any value moved.\n'
+      + `${registries}\nCheck \`git diff pnpm-lock.yaml\`: anything in it beyond ${PACKAGE} is pnpm `
+      + 'normalising the lockfile, not this bump.\n');
+  }
 };
 
-if (!reportOnly) {
-  process.stderr.write(`\n${renderPreamble(summary, { color: progressColor })}\n`);
-
-  const rebuilt = run('node', ['build/tokens/build-tokens.mjs'], packageRoot)
-    && run('node', ['tools/naming/derive-registries.mjs'], packageRoot);
-
-  if (!rebuilt) {
-    giveUp(after.version);
-  }
-}
-
-const report = { ...summary, output: diffGenerated(before.generated, readGenerated()) };
-
-show(report);
-
-if (!reportOnly) {
-  process.stderr.write('\nThis rebuilt the token layer, not the themes — '
-    + 'packages/devextreme/artifacts/css still holds the previous bundles.\n'
-    + 'Next: pnpm nx build:themes devextreme-scss, then the etalons if any value moved.\n'
-    + `\nCheck \`git diff pnpm-lock.yaml\`: anything in it beyond ${PACKAGE} is pnpm normalising `
-    + 'the lockfile, not this bump.\n');
+try {
+  bumpAndReport();
+} catch (error) {
+  if (reportOnly) throw error;
+  process.stderr.write(`\n${error?.stack ?? error}\n`);
+  giveUp();
 }

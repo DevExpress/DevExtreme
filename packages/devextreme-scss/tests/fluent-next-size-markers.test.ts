@@ -7,6 +7,7 @@ import { basename, join } from 'path';
 
 const packageRoot = join(__dirname, '..');
 const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
+const baseRoot = join(packageRoot, 'scss', 'widgets', 'base');
 const tool = join(packageRoot, 'tools', 'review', 'px-audit.mjs');
 
 const walk = (dir: string): string[] => readdirSync(dir, { withFileTypes: true })
@@ -22,22 +23,26 @@ const markers: string[] = vocabulary.categories
   .map((category: { marker: string | null }) => category.marker)
   .filter(Boolean);
 
-interface Place { file: string; line: number; literals: string[]; text: string }
+interface Place {
+  file: string; line: number; literals: string[]; text: string; variable?: string;
+}
 
-const audit = (root?: string): { marked: number; unmarked: Place[] } => {
-  const args = [tool, '--json', ...(root ? [`--root=${root}`] : [])];
-  const parse = (json: string): { marked: number; unmarked: Place[] } => JSON.parse(json) as {
-    marked: number; unmarked: Place[];
-  };
+const run = <T>(args: string[]): T => {
   try {
-    return parse(execFileSync(process.execPath, args, { encoding: 'utf8' }));
+    return JSON.parse(execFileSync(process.execPath, [tool, '--json', ...args], { encoding: 'utf8' })) as T;
   } catch (error) {
     const { stdout, status } = error as { stdout?: string; status?: number };
     if (!stdout) throw error;
     expect(status).toBe(1);
-    return parse(stdout);
+    return JSON.parse(stdout) as T;
   }
 };
+
+const audit = (root?: string): { marked: number; unmarked: Place[] } => run(root ? [`--root=${root}`] : []);
+const auditBase = (root?: string): { unmarkedOwned: Place[]; openKnobs: Place[] } => run([
+  '--layer=base', ...(root ? [`--root=${root}`] : []),
+]);
+const where = (place: Place): string => `${place.file}:${place.line} ${place.text}`;
 
 test('every fixed px size in fluent-next carries a classification marker', () => {
   const { unmarked } = audit();
@@ -71,8 +76,45 @@ test('the gate rejects a new unmarked literal', () => {
   });
 });
 
-test('no marker name is a substring of a custom property name used in the theme', () => {
-  const names = new Set(walk(themeRoot).flatMap((file) => [
+test('every fixed px size in the shared layer is a knob or carries a marker', () => {
+  expect(auditBase().unmarkedOwned.map(where)).toEqual([]);
+});
+
+test('fluent-next sets every px knob of the shared layer', () => {
+  expect(auditBase().openKnobs.map((place) => `$${place.variable} at ${where(place)}`)).toEqual([]);
+});
+
+test('the shared-layer gate reads a declaration up to its semicolon', () => {
+  const fixture = mkdtempSync(join(tmpdir(), 'fluent-next-px-audit-base-'));
+  writeFileSync(join(fixture, '_knobs.scss'), [
+    '$fixture-unset-shadow:',
+    '  0 1px 2px red,',
+    '  0 4px 8px blue !default;',
+    '$fixture-local: 3px;',
+    '@mixin fixture($size: 5px) {',
+    '  margin: $size;',
+    '}',
+    '@mixin fixture-inline($gap: 1px) { margin: 2px; }',
+    '@mixin fixture-wide(',
+    '  $gap: 6px,',
+    ') {',
+    '  gap: $gap;',
+    '}',
+    '',
+  ].join('\n'));
+
+  const { unmarkedOwned, openKnobs } = auditBase(fixture);
+  expect({
+    unmarkedOwned: unmarkedOwned.map((place) => place.line),
+    openKnobs: openKnobs.map((place) => `${place.line} ${place.variable}`),
+  }).toEqual({
+    unmarkedOwned: [4, 8],
+    openKnobs: ['2 fixture-unset-shadow', '3 fixture-unset-shadow'],
+  });
+});
+
+test('no marker name is a substring of a custom property name used in the theme or the shared layer', () => {
+  const names = new Set([...walk(themeRoot), ...walk(baseRoot)].flatMap((file) => [
     ...readFileSync(file, 'utf8').matchAll(/--(dx[a-z0-9-]*)/g),
   ].map(([, name]) => name)));
   const collisions = markers.flatMap((marker) => [...names]

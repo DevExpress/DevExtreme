@@ -93,8 +93,5 @@ if (process.argv.includes('--check')) {
     writeFileSync(absolute, plan.files.get(path));
     process.stdout.write(`wrote ${path}\n`);
   });
-  plan.created.forEach((path) => {
-    process.stdout.write(`${path} is new — add the component to packages/devextreme/playground/tier-reachability-audit.html\n`);
-  });
   if (!stale.length) process.stdout.write('component tier is up to date\n');
 }
