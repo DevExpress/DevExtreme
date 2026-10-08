@@ -6,6 +6,7 @@ import CheckBox from '@js/ui/check_box';
 import Form from '@js/ui/form';
 import TextBox from '@js/ui/text_box';
 import Button from '@ts/ui/button';
+import TabPanel from '@ts/ui/tab_panel/tab_panel';
 
 const forms: Form[] = [];
 
@@ -17,6 +18,11 @@ const createForm = (): Form => {
       { dataField: 'name' },
       { dataField: 'isActive', editorType: 'dxCheckBox' },
       { itemType: 'button', name: 'submit', buttonOptions: { text: 'Submit' } },
+      {
+        itemType: 'tabbed',
+        name: 'details',
+        tabs: [{ title: 'Notes', items: [{ dataField: 'comment' }] }],
+      },
     ],
   });
   forms.push(form);
@@ -51,6 +57,18 @@ describe('Form', () => {
       const form = createForm();
 
       expect(form.getEditor('unknown')).toBeUndefined();
+    });
+
+    it('should return the button of a button item found by its name', () => {
+      const form = createForm();
+
+      expect(form.getEditor('submit')).toBeInstanceOf(Button);
+    });
+
+    it('should return the tab panel of a tabbed item found by its name', () => {
+      const form = createForm();
+
+      expect(form.getEditor('details')).toBeInstanceOf(TabPanel);
     });
   });
 

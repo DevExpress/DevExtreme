@@ -30,8 +30,8 @@ import type {
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
+import type Editor from '@ts/ui/editor/editor';
 import type { EditorProperties } from '@ts/ui/editor/editor';
-import Editor from '@ts/ui/editor/editor';
 import { renderButtonItem } from '@ts/ui/form/components/button_item';
 import { renderEmptyItem } from '@ts/ui/form/components/empty_item';
 import { renderFieldItem } from '@ts/ui/form/components/field_item';
@@ -46,7 +46,7 @@ import {
 } from '@ts/ui/form/constants';
 import type { FormProperties } from '@ts/ui/form/form';
 import type Form from '@ts/ui/form/form';
-import type { FormItemRuntimeInfo, PreparedItem } from '@ts/ui/form/form.items_runtime_info';
+import type { FormItemRuntimeInfo, FormWidgetInstance, PreparedItem } from '@ts/ui/form/form.items_runtime_info';
 import FormItemsRunTimeInfo from '@ts/ui/form/form.items_runtime_info';
 import type { LabelMarkOptions } from '@ts/ui/form/form.layout_manager.utils';
 import { convertToRenderFieldItemOptions } from '@ts/ui/form/form.layout_manager.utils';
@@ -1267,11 +1267,9 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     }
   }
 
-  getEditor(field: string): Editor | undefined {
-    const instance = this._itemsRunTimeInfo.findWidgetInstanceByDataField(field)
+  getEditor(field: string): FormWidgetInstance | undefined {
+    return this._itemsRunTimeInfo.findWidgetInstanceByDataField(field)
       ?? this._itemsRunTimeInfo.findWidgetInstanceByName(field);
-
-    return Editor.isEditor(instance) ? instance : undefined;
   }
 
   isSingleColumnMode(component?: ResponsiveBox): boolean {
