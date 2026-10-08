@@ -52,7 +52,7 @@ describe('OpenLayers utils', () => {
 
   describe('coordinate conversion', () => {
     it('converts a Map location to the active OpenLayers projection', () => {
-      const transform = jest.fn(() => [100, 200] as [number, number]);
+      const transform = jest.fn<OpenLayersApi['proj']['transform']>().mockReturnValue([100, 200]);
       const api = {
         proj: {
           getUserProjection: () => 'user-projection',
@@ -70,7 +70,7 @@ describe('OpenLayers utils', () => {
     });
 
     it('converts an OpenLayers coordinate to a Map location', () => {
-      const toLonLat = jest.fn(() => [-74, 40.7] as [number, number]);
+      const toLonLat = jest.fn<OpenLayersApi['proj']['toLonLat']>().mockReturnValue([-74, 40.7]);
       const api = {
         proj: {
           getUserProjection: () => null,
