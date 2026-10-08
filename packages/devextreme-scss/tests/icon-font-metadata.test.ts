@@ -22,7 +22,7 @@ const RELEASE_YEAR = 2000 + Number(MAJOR);
 const FORMATS = ['ttf', 'woff', 'woff2'] as const;
 const CONTAINERS: Record<typeof FORMATS[number], FontContainer> = { ttf: 'sfnt', woff: 'woff', woff2: 'woff2' };
 const WEB_FORMATS = ['woff', 'woff2'] as const;
-type WebHeaderOffsets = { metadataLength: number; privateDataLength: number };
+interface WebHeaderOffsets { metadataLength: number; privateDataLength: number }
 const WEB_HEADER_OFFSETS: Record<typeof WEB_FORMATS[number], WebHeaderOffsets> = {
   woff: { metadataLength: 28, privateDataLength: 40 },
   woff2: { metadataLength: 32, privateDataLength: 44 },
