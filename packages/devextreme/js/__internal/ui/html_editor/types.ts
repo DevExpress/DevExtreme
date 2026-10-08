@@ -85,17 +85,17 @@ export interface ImageAttributes {
   height?: string | number | null;
 }
 
-/** The `mention` value; `keyInTemplateStorage` is set only by the mentions module */
+/** The `mention` value; `keyInTemplateStorage` is the editor number the mentions module sets */
 export interface MentionData {
   marker?: string;
   id?: string;
   value?: string;
-  keyInTemplateStorage?: string;
+  keyInTemplateStorage?: number;
 }
 
-/** Key of a mention template; `editorKey` is undefined when Quill renders the blot */
+/** Key of a mention template: the editor's number, undefined when Quill itself renders the blot */
 export interface MentionTemplateKey {
-  editorKey: string | undefined;
+  editorKey: number | undefined;
   marker: string | undefined;
 }
 
