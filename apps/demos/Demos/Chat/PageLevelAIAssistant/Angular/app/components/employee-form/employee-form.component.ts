@@ -6,17 +6,11 @@ import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { employee, formFieldsConfig, type Employee } from '../../data';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'app-employee-form',
   imports: [CommonModule, DxFormModule, DxToastModule],
-  templateUrl: `.${modulePrefix}/components/employee-form/employee-form.component.html`,
-  styleUrls: [`.${modulePrefix}/components/employee-form/employee-form.component.css`],
+  templateUrl: './employee-form.component.html',
+  styleUrls: ['./employee-form.component.css'],
 })
 export class EmployeeFormComponent {
   @Input({ required: true }) aiIntegration!: AIIntegration;
