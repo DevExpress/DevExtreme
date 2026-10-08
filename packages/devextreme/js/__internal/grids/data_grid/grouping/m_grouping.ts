@@ -387,7 +387,7 @@ export const GroupingHeaderPanelExtender = (
     return this._columnsController.getGroupColumns();
   }
 
-  public getBoundingRect() {
+  protected getBoundingRect() {
     const that = this;
     const $element = that.element();
 

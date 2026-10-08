@@ -29,6 +29,7 @@ import {
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
+import type { ActionEvent } from '@ts/core/action';
 import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
@@ -218,15 +219,6 @@ export const normalizeWidth = (width: string | number | undefined): string | und
   return width;
 };
 
-interface ScrollableOptions {
-  direction: string;
-  bounceEnabled: boolean;
-  useKeyboard: boolean;
-  useNative?: boolean | 'auto';
-  useSimulatedScrollbar?: boolean;
-  onScroll?: (e) => void;
-}
-
 export class ColumnsView extends ColumnStateMixin(modules.View) {
   protected _tableElement?: dxElementWrapper | null;
 
@@ -326,6 +318,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const scrollingOptions = this.option('scrolling');
     let useNativeScrolling = this.option('scrolling.useNative');
 
+    // @ts-expect-error useNative: 'auto' of the grid scrolling is copied and normalized below
     const options: ScrollableOptions = extend({}, scrollingOptions, {
       direction: 'both',
       bounceEnabled: false,
@@ -895,6 +888,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const changeTypes = options.change?.changeTypes ?? [];
 
     for (let i = 0; i < rows.length; i += 1) {
+      // @ts-expect-error _renderTable sets the columns of the options before the rows are rendered
       this._renderRow($table, extend({
         row: rows[i], columnIndices: columnIndices[i], changeType: changeTypes[i],
       }, options));
@@ -1216,7 +1210,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._tableElement = tableElement;
   }
 
-  protected _afterRowPrepared(e?: Record<string, unknown>): void {}
+  protected _afterRowPrepared(e?: ActionEvent): void {}
 
   /**
    * @extended: header_panel
