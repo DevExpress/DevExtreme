@@ -132,7 +132,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return this._columnHeadersView.getCellIndex($cell);
   }
 
-  protected _getCell(cellPosition): dxElementWrapper {
+  protected _getCell(cellPosition): dxElementWrapper | undefined {
     return this._columnHeadersView?.getCell(cellPosition);
   }
 

@@ -11,6 +11,7 @@ import { getWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
@@ -586,10 +587,10 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     super.renderDelayedTemplates.apply(this, arguments as any);
   }
 
-  protected _renderCore(e) {
+  protected _renderCore(e?: DataChange): DeferredObj<unknown> {
     const startRenderTime = Date.now();
 
-    const deferred = super._renderCore.apply(this, arguments as any);
+    const deferred = super._renderCore(e);
 
     const dataSourceAdapter = this.dataSourceController.getAdapter();
 
@@ -599,8 +600,12 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
         // @ts-expect-error
         .viewportSize() || 20;
 
-      if (gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0 && this.option(LEGACY_SCROLLING_MODE) !== false) {
-        dataSourceAdapter._renderTime = (Date.now() - startRenderTime) * viewportSize / itemCount;
+      if (
+        gridCoreUtils.isVirtualRowRendering(this)
+        && itemCount > 0
+        && this.option(LEGACY_SCROLLING_MODE) !== false
+      ) {
+        dataSourceAdapter._renderTime = ((Date.now() - startRenderTime) * viewportSize) / itemCount;
       } else {
         dataSourceAdapter._renderTime = Date.now() - startRenderTime;
       }
@@ -780,6 +785,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
       removeEmptyRows($virtualRows, VIRTUAL_ROW_CLASS);
 
+      // @ts-expect-error each() is typed for callbacks that return a boolean
       $tables.each((index, element) => {
         const isFixed = index > 0;
         const prevFixed = this._isFixedTableRendering;

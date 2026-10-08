@@ -2,6 +2,8 @@
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
@@ -162,7 +164,7 @@ export class HeaderPanel extends ColumnsView {
     return options.toolbarOptions;
   }
 
-  protected _renderCore() {
+  protected _renderCore(): DeferredObj<unknown> {
     if (!this._toolbar) {
       const $headerPanel = this.element();
       // @ts-expect-error the view is rendered here
@@ -176,6 +178,8 @@ export class HeaderPanel extends ColumnsView {
     } else {
       this._toolbar.option(this._toolbarOptions!);
     }
+
+    return Deferred<unknown>().resolve();
   }
 
   protected _columnOptionChanged() {
