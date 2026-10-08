@@ -30,14 +30,14 @@ import type { DataSourceController } from '../data_source/data_source_controller
 import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { SelectionRange } from '../types';
+import { CLASSES } from './const';
 import type { RowsView } from './m_rows_view';
 import type { ColumnWidth } from './types';
 
 const BORDERS_CLASS = 'borders';
-const TABLE_FIXED_CLASS = 'table-fixed';
 const IMPORTANT_MARGIN_CLASS = 'important-margin';
 const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
-const GROUP_ROW_SELECTOR = 'tr.dx-group-row';
+const GROUP_ROW_SELECTOR = `tr.${CLASSES.groupRow}`;
 
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
 
@@ -268,7 +268,7 @@ export class ResizingController extends modules.ViewController {
 
     if (!widths?.length) {
       const headersTableElement = columnHeadersView.getTableElement();
-      columnHeadersView.setTableElement(rowsView.getTableElement()?.children('.dx-header'));
+      columnHeadersView.setTableElement(rowsView.getTableElement()?.children(`.${CLASSES.headerBody}`));
       widths = columnHeadersView.getColumnWidths();
       columnHeadersView.setTableElement(headersTableElement);
     }
@@ -326,10 +326,10 @@ export class ResizingController extends modules.ViewController {
       $(item).css('display', isBestFit ? 'none' : '');
     });
 
-    $rowsFixedTable.toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
+    $rowsFixedTable.toggleClass(this.addWidgetPrefix(CLASSES.tableFixed), !isBestFit);
 
-    this._toggleBestFitModeForView(this._columnHeadersView, 'dx-header', isBestFit);
-    this._toggleBestFitModeForView(this._footerView, 'dx-footer', isBestFit);
+    this._toggleBestFitModeForView(this._columnHeadersView, CLASSES.headerBody, isBestFit);
+    this._toggleBestFitModeForView(this._footerView, CLASSES.footerBody, isBestFit);
 
     if (this._needStretch()) {
       // @ts-expect-error

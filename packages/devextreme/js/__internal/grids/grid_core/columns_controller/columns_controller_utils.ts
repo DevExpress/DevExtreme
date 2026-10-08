@@ -15,6 +15,7 @@ import {
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type DataSourceAdapter from '../data_source_adapter/m_data_source_adapter';
@@ -1258,4 +1259,4 @@ export const columnHasValue = (column: Column): boolean => (
   !column.command || column.type === AI_COLUMN_NAME
 );
 
-export const getColumnHeaderCellSelector = (visibleIndex: number): string => `.dx-header-row td[aria-colindex="${visibleIndex + 1}"]`;
+export const getColumnHeaderCellSelector = (visibleIndex: number): string => `.${COLUMN_HEADERS_CLASSES.headerRow} td[aria-colindex="${visibleIndex + 1}"]`;

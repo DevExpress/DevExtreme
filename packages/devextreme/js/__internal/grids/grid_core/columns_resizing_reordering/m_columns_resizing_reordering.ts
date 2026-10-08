@@ -22,6 +22,7 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject, isString } from '@js/core/utils/type';
 import swatchContainer from '@ts/core/utils/swatch_container';
+import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { getDraggingPanelBoundingRects } from '@ts/grids/grid_core/columns_resizing_reordering/utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ColumnPoint, ModuleType } from '@ts/grids/grid_core/types';
@@ -40,12 +41,10 @@ import type { Coordinates, DraggingPanel } from './types';
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
 const DRAGGING_HEADER_CLASS = 'drag-header';
-const CELL_CONTENT_CLASS = 'text-content';
 const HEADERS_DRAG_ACTION_CLASS = 'drag-action';
 const TRACKER_CLASS = 'tracker';
 const HEADERS_DROP_HIGHLIGHT_CLASS = 'drop-highlight';
 const BLOCK_SEPARATOR_CLASS = 'dx-block-separator';
-const HEADER_ROW_CLASS = 'dx-header-row';
 const WIDGET_CLASS = 'dx-widget';
 
 const MODULE_NAMESPACE = 'dxDataGridResizingReordering';
@@ -490,7 +489,7 @@ export class DraggingHeaderView extends modules.View {
   protected _renderCore() {
     // @ts-expect-error the view is rendered here
     this.element()
-      .addClass(`${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)} ${this.addWidgetPrefix(CELL_CONTENT_CLASS)} ${WIDGET_CLASS}`)
+      .addClass(`${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)} ${this.addWidgetPrefix(COLUMN_HEADERS_CLASSES.cellContent)} ${WIDGET_CLASS}`)
       .hide();
   }
 
@@ -1653,7 +1652,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     };
 
     // @ts-expect-error the view is rendered here
-    that._columnHeadersView.element().find(`.${HEADER_ROW_CLASS}`).toggleClass(that.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS), sourceLocation !== 'headers' && targetLocation === 'headers' && !hasTargetVisibleIndex);
+    that._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).toggleClass(that.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS), sourceLocation !== 'headers' && targetLocation === 'headers' && !hasTargetVisibleIndex);
 
     if (separator) {
       if (that.allowDrop(parameters) && hasTargetVisibleIndex) {
@@ -1680,7 +1679,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
       this._columnHeadersView.toggleDraggableColumnClass(parameters.sourceIndex, false);
       this._rowsView.toggleDraggableColumnClass(parameters.sourceIndex, false);
       // @ts-expect-error the view is rendered here
-      this._columnHeadersView.element().find(`.${HEADER_ROW_CLASS}`).removeClass(this.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS));
+      this._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).removeClass(this.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS));
     }
 
     if (this.allowDrop(parameters)) {
