@@ -114,6 +114,11 @@ export interface InternalColumnOptions extends ValueSerializers {
 
 export type Column = ColumnBase & InternalColumnOptions;
 
+// groupPanel.visible: 'auto' reaches the common settings as is, as a truthy allowGrouping
+export type ColumnCommonSettings = Omit<Partial<Column>, 'allowGrouping'> & {
+  allowGrouping?: boolean | 'auto';
+};
+
 export type CellValueCalculator = (rowData: unknown, skipDeserialization?: boolean) => unknown;
 
 export type WithCellValueCalculator<T> = T & { calculateCellValue: CellValueCalculator };

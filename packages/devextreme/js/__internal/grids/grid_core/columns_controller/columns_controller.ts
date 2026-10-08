@@ -26,6 +26,7 @@ import type { SortingInfo } from '@ts/data/utils';
 import type {
   BandColumnsCache,
   Column,
+  ColumnCommonSettings,
   ColumnDataSourceParameter,
   ColumnFilterExpression,
   ColumnIdentifier,
@@ -496,7 +497,7 @@ export class ColumnsController extends modules.Controller {
     return this.dataSourceAdapterApplied;
   }
 
-  public getCommonSettings(column?: Column): Partial<Column> {
+  public getCommonSettings(column?: Column): ColumnCommonSettings {
     const commonColumnSettings = this.getCommonColumnSettings(column);
     const groupingOptions: Grouping = this.option('grouping') ?? {};
     const groupPanelOptions: GroupPanel = this.option('groupPanel') ?? {};
@@ -510,7 +511,7 @@ export class ColumnsController extends modules.Controller {
       width: this.option('columnWidth'),
       autoExpandGroup: groupingOptions.autoExpandAll,
       allowCollapsing: groupingOptions.allowCollapsing,
-      allowGrouping: Boolean(groupPanelOptions.allowColumnDragging && groupPanelOptions.visible)
+      allowGrouping: (groupPanelOptions.allowColumnDragging && groupPanelOptions.visible)
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- false fallback
         || groupingOptions.contextMenuEnabled,
     }, commonColumnSettings);
@@ -732,28 +733,32 @@ export class ColumnsController extends modules.Controller {
 
     const fixedPosition: FixedPosition = rtlEnabled ? 'right' : 'left';
 
-    // @ts-expect-error minWidth and the templates are null to reset the values of the column
-    expandColumns = map(expandColumns, (column: Column): Column => extend(
-      {},
-      {
-        ...column,
-        ownerBand: undefined,
-      },
-      {
+    expandColumns = map(expandColumns, (column: Column): Column => {
+      const columnReset: Partial<Column> = {
         visibleWidth: null,
+        // @ts-expect-error null resets the minWidth of the column
         minWidth: null,
         cellTemplate: !isDefined(column.groupIndex) ? column.cellTemplate : null,
         headerCellTemplate: null,
         fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
         fixedPosition,
-      },
-      expandColumn,
-      {
-        index: column.index,
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- skip empty type
-        type: column.type || GROUP_COMMAND_COLUMN_NAME,
-      },
-    ));
+      };
+
+      return extend(
+        {},
+        {
+          ...column,
+          ownerBand: undefined,
+        },
+        columnReset,
+        expandColumn,
+        {
+          index: column.index,
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- empty type
+          type: column.type || GROUP_COMMAND_COLUMN_NAME,
+        },
+      );
+    });
 
     return expandColumns;
   }
@@ -1404,12 +1409,10 @@ export class ColumnsController extends modules.Controller {
             column.serializationFormat = getSerializationFormat(column.dataType, value);
           }
 
-          if (lookup
-            && lookup.serializationFormat === undefined
-            && hasCellValueCalculator(lookup)
-          ) {
+          if (lookup && lookup.serializationFormat === undefined) {
             lookup.serializationFormat = getSerializationFormat(
               lookup.dataType,
+              // @ts-expect-error createColumn initializes the calculateCellValue of a lookup
               lookup.calculateCellValue(value, true),
             );
           }
