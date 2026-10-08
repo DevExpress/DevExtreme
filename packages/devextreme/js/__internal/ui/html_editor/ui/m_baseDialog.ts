@@ -7,6 +7,7 @@ import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup';
 import type Widget from '@js/ui/widget/ui.widget';
 
+import type { DialogPromise } from '../types';
 import { isSmallScreen } from '../utils/small_screen';
 
 type PopupOptionArgs = [optionName: string]
@@ -14,7 +15,7 @@ type PopupOptionArgs = [optionName: string]
 | [options: Partial<PopupProperties>];
 
 const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
-abstract class BaseDialog<T = unknown> {
+abstract class BaseDialog<T = unknown, TExtra = undefined> {
   _$container: dxElementWrapper;
 
   _popupConfig?: PopupProperties;
@@ -72,7 +73,7 @@ abstract class BaseDialog<T = unknown> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public show(options?: unknown): Promise<T> | undefined {
+  public show(options?: unknown): DialogPromise<T, TExtra> | undefined {
     if (this._popup.option('visible')) {
       return undefined;
     }
@@ -82,6 +83,7 @@ abstract class BaseDialog<T = unknown> {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popup.show();
 
+    // @ts-expect-error deferred.d.ts types promise() as a native Promise; it has done/fail/always
     return this.deferred.promise();
   }
 
