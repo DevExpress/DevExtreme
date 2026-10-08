@@ -150,6 +150,11 @@ export class EditPopupView extends View<Props> {
   }
 
   private readonly customizeItems = (item: dxForm.Item): void => {
+    this.customizeItemCore(item);
+    this.options.oneWay('editing.form.customizeItem').peek()?.(item);
+  };
+
+  private customizeItemCore(item: dxForm.Item): void {
     const editingCard = this.editingController.editingCard.peek();
     const columns = this.columnsController.columns.peek();
     const customEditorItems = this.customEditorItems.peek();
@@ -222,5 +227,5 @@ export class EditPopupView extends View<Props> {
     if (simpleFormItem.editorType === 'dxDateBox') {
       simpleFormItem.editorOptions.type = column.dataType;
     }
-  };
+  }
 }

@@ -7,7 +7,7 @@ import type {
   StoreLoadOptions,
 } from '@ts/data/data_source/types';
 
-import type { InternalGrid, ModuleType } from '../m_types';
+import type { InternalGrid, ModuleType } from '../types';
 import type DataSourceAdapter from './m_data_source_adapter';
 
 export type RawItemData = Record<string, unknown>;
@@ -30,6 +30,11 @@ export interface OperationTypes {
   paging?: boolean;
 }
 
+export type LastLoadOptions = StoreLoadOptions & {
+  pageIndex: number;
+  pageSize: number;
+};
+
 export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
   operationId?: number;
   data?: RawItemData[] | DeferredObj<RawItemData[]>;
@@ -39,19 +44,32 @@ export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
   };
   loadOptions?: StoreLoadOptions;
   originalStoreLoadOptions?: StoreLoadOptions;
-  remoteOperations?: RemoteOperations;
+  remoteOperations?: RemoteOperationsOptions;
   isCustomLoading?: boolean;
   pageIndex?: number;
-  lastLoadOptions?: StoreLoadOptions & {
-    pageIndex: number;
-    pageSize: number;
-  };
+  lastLoadOptions?: LastLoadOptions;
   operationTypes?: OperationTypes;
-  group?: unknown[] | null;
+  group?: StoreLoadOptions['group'];
   extra?: {
     totalCount?: number;
     summary?: unknown[];
+    groupCount?: number;
   };
+  cachedData?: {
+    items: Record<string, unknown>;
+    extra?: {
+      totalCount?: number;
+      summary?: unknown[];
+    };
+  };
+  cachedPagingData?: RawItemData[];
+  cachedDataPartBegin?: RawItemData[];
+  cachedDataPartEnd?: RawItemData[];
+  skip?: number;
+  take?: number;
+  skips?: (number | undefined)[];
+  takes?: (number | undefined)[];
+  mergeStoreLoadData?: boolean;
 }
 
 export interface ChangedEvent extends BaseChangedEvent {
@@ -67,7 +85,9 @@ export type DataSourceAdapterExtender = (
   Base: ModuleType<DataSourceAdapter>,
 ) => ModuleType<DataSourceAdapter>;
 
-export interface DataSourceAdapterProvider {
+export interface DataSourceAdapterProvider<
+  TAdapter extends DataSourceAdapter = DataSourceAdapter,
+> {
   extend: (extender: DataSourceAdapterExtender) => void;
-  create: (component: InternalGrid) => DataSourceAdapter;
+  create: (component: InternalGrid) => TAdapter;
 }

@@ -1,17 +1,14 @@
 import $ from '@js/core/renderer';
-import { map } from '@js/core/utils/iterator';
 import type { Item } from '@js/ui/menu';
 import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 
 class MenuBaseEditStrategy extends PlainEditStrategy<Item> {
   _getPlainItems(): Item[] {
-    const items = this._getItems();
+    const getPlainItems = (items: Item[]): Item[] => items.flatMap(
+      (item) => (item.items ? [item, ...getPlainItems(item.items)] : [item]),
+    );
 
-    const result = map(items, function getMenuItems(item: Item): Item | Item[] {
-      return item.items ? [item].concat(map(item.items, getMenuItems)) : item;
-    });
-
-    return result.flat() as Item[];
+    return getPlainItems(this._getItems());
   }
 
   static _stringifyItem(item: Item): string {

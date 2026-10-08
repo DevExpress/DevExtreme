@@ -156,6 +156,7 @@ class Store {
       loadOptions._langParams = { ...this._langParams, ...loadOptions._langParams };
     }
 
+    // @ts-expect-error public Query.enumerate() is a Promise, the query resolves a Deferred
     const result: DeferredObj<unknown[]> = queryByOptions(
       this.createQuery(loadOptions),
       loadOptions,
@@ -193,6 +194,7 @@ class Store {
   }
 
   _totalCountImpl(options?: StoreLoadOptions): DeferredObj<number> {
+    // @ts-expect-error public Query.count() is a Promise, the query resolves a Deferred
     const result: DeferredObj<number> = queryByOptions(
       this.createQuery(options),
       options,

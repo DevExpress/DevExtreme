@@ -6,7 +6,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/fileUploader";
 
-$material-fileuploader-file-wrapper-border-size: 3px;
+$material-fileuploader-file-wrapper-border-size: 3px !default;
 
 .dx-fileuploader-wrapper {
   padding: $material-fileuploader-vertical-padding;

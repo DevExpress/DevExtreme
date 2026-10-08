@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -8,34 +7,75 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { each } from '@js/core/utils/iterator';
+import { each } from '@ts/core/utils/m_iterator';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Bounds } from '@ts/viz/core/types';
 
 const _round = Math.round;
 const _min = Math.min;
 const _max = Math.max;
 const _each = each;
 
-const horizontalAlignmentMap = {
+const horizontalAlignmentMap: Record<string, number> = {
   left: 0,
   center: 1,
   right: 2,
 };
 
-const verticalAlignmentMap = {
+const verticalAlignmentMap: Record<string, number> = {
   top: 0,
   bottom: 1,
 };
 
-function getCellIndex(options) {
+interface LayoutCanvas {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
+interface LayoutOptions {
+  horizontalAlignment: string;
+  verticalAlignment: string;
+  width: number;
+  height: number;
+}
+
+interface LayoutItem {
+  resize: (size: LayoutCanvas | null) => void;
+  getLayoutOptions: () => LayoutOptions | null;
+  locate: (x: number, y: number) => void;
+  updateLayout?: (() => void) | null;
+  getTemplatesGroups?: () => ThemeValue;
+  getTemplatesDef?: () => ThemeValue;
+}
+
+interface LayoutWidget {
+  resolveItemsDeferred: (items: LayoutItem[]) => void;
+}
+
+interface CellItem {
+  item: LayoutItem;
+  width: number;
+  height: number;
+}
+
+interface LayoutCell {
+  rect: number[];
+  center?: boolean | null;
+  horInversion?: boolean;
+  verInversion?: boolean;
+  right?: boolean;
+  items?: CellItem[] | null;
+}
+
+function getCellIndex(options: LayoutOptions): number {
   return verticalAlignmentMap[options.verticalAlignment] * 3 + horizontalAlignmentMap[options.horizontalAlignment];
 }
 
-function createCells(canvas, items) {
+function createCells(canvas: Bounds, items: LayoutItem[]): LayoutCell[] {
   const hStep = (canvas.right - canvas.left) / 3;
   const vStep = (canvas.bottom - canvas.top) / 2;
   const h1 = canvas.left;
@@ -45,7 +85,7 @@ function createCells(canvas, items) {
   const v1 = canvas.top;
   const v2 = _round(v1 + vStep);
   const v3 = canvas.bottom;
-  const cells = [
+  const cells: LayoutCell[] = [
     { rect: [h1, v1, h2, v2] },
     { rect: [h2, v1, h3, v2], center: true },
     { rect: [h3, v1, h4, v2], horInversion: true },
@@ -53,12 +93,11 @@ function createCells(canvas, items) {
     { rect: [h2, v2, h3, v3], center: true, verInversion: true },
     { rect: [h3, v2, h4, v3], horInversion: true, verInversion: true },
   ];
-  const itemsList = [[], [], [], [], [], []];
+  const itemsList: CellItem[][] = [[], [], [], [], [], []];
 
   _each(items, (_, item) => {
     const options = item.getLayoutOptions();
     if (options) {
-      // @ts-expect-error
       itemsList[getCellIndex(options)].push({ item, width: options.width, height: options.height });
     }
   });
@@ -77,7 +116,7 @@ function createCells(canvas, items) {
   return cells;
 }
 
-function adjustCellSizes(cells) {
+function adjustCellSizes(cells: LayoutCell[]): void {
   _each([0, 1, 2, 3, 4, 5], (_, index) => {
     const cell = cells[index];
     const otherCell = cells[(index + 3) % 6];
@@ -125,7 +164,7 @@ function adjustCellSizes(cells) {
   });
 }
 
-function adjustCellsAndApplyLayout(cells, forceMode?) {
+function adjustCellsAndApplyLayout(cells: LayoutCell[], forceMode?: boolean): boolean {
   let hasHiddenItems = false;
   adjustCellSizes(cells);
   _each(cells, (_, cell) => {
@@ -136,7 +175,7 @@ function adjustCellsAndApplyLayout(cells, forceMode?) {
   return hasHiddenItems;
 }
 
-function applyCellLayout(cell, forceMode) {
+function applyCellLayout(cell: LayoutCell, forceMode: boolean | undefined): boolean {
   const cellRect = cell.rect;
   const cellWidth = cellRect[2] - cellRect[0];
   const cellHeight = cellRect[3] - cellRect[1];
@@ -147,12 +186,12 @@ function applyCellLayout(cell, forceMode) {
   let totalT = cellRect[3];
   let totalR = cellRect[0];
   let totalB = cellRect[1];
-  const moves = [];
+  const moves: (number[] | null)[] = [];
   let hasHiddenItems = false;
 
-  _each(cell.items, (_, item) => {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- the each() callback returns false to break the loop
+  _each(cell.items, (_, item): boolean | void => {
     if (item.width > cellWidth || item.height > cellHeight) {
-      // @ts-expect-error
       moves.push(null);
       hasHiddenItems = true;
       return forceMode || false;
@@ -162,7 +201,6 @@ function applyCellLayout(cell, forceMode) {
       xOffset = currentHeight = 0;
     }
     if (yOffset + item.height > cellHeight) {
-      // @ts-expect-error
       moves.push(null);
       hasHiddenItems = true;
       return forceMode || false;
@@ -175,7 +213,6 @@ function applyCellLayout(cell, forceMode) {
     totalT = _min(totalT, dy);
     totalR = _max(totalR, dx + item.width);
     totalB = _max(totalB, dy + item.height);
-    // @ts-expect-error
     moves.push([dx, dy]);
   });
 
@@ -200,58 +237,68 @@ function applyCellLayout(cell, forceMode) {
   return hasHiddenItems;
 }
 
-function applyLayout(canvas, items) {
+function applyLayout(canvas: Bounds, items: LayoutItem[]): void {
   const cells = createCells(canvas, items);
   if (adjustCellsAndApplyLayout(cells)) {
     adjustCellsAndApplyLayout(cells, true);
   }
 }
 
-export function LayoutControl(widget) {
-  const that = this;
-  that._items = [];
-  that._suspended = 0;
-  that._widget = widget;
-  that._updateLayout = function () {
-    that._update();
-  };
-}
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let LayoutControl = class LayoutControl {
+  declare _items: LayoutItem[];
 
-LayoutControl.prototype = {
-  constructor: LayoutControl,
+  declare _suspended: number;
 
-  dispose() {
+  declare _widget: LayoutWidget;
+
+  declare _updateLayout: () => void;
+
+  declare _canvas: LayoutCanvas;
+
+  constructor(widget: LayoutWidget) {
+    const that = this;
+    that._items = [];
+    that._suspended = 0;
+    that._widget = widget;
+    that._updateLayout = function (): void {
+      that._update();
+    };
+  }
+
+  dispose(): void {
+    // @ts-expect-error dispose releases the items and the update callback
     this._items = this._updateLayout = null;
-  },
+  }
 
-  setSize(canvas) {
+  setSize(canvas: LayoutCanvas): void {
     this._canvas = canvas;
     this._update();
-  },
+  }
 
-  suspend() {
+  suspend(): void {
     ++this._suspended;
-  },
+  }
 
-  resume() {
+  resume(): void {
     if (--this._suspended === 0) {
       this._update();
     }
-  },
+  }
 
   // It should return callback (update trigger) instead of injecting the argument
-  addItem(item) {
+  addItem(item: LayoutItem): void {
     this._items.push(item);
     item.updateLayout = this._updateLayout;
-  },
+  }
 
-  removeItem(item) {
+  removeItem(item: LayoutItem): void {
     const index = this._items.indexOf(item);
     this._items.splice(index, 1);
     item.updateLayout = null;
-  },
+  }
 
-  _update() {
+  _update(): void {
     let canvas;
     if (this._suspended === 0) {
       canvas = this._canvas;
@@ -264,5 +311,11 @@ LayoutControl.prototype = {
         left: canvas.left, top: canvas.top, right: canvas.width + canvas.left, bottom: canvas.height + canvas.top,
       }, this._items);
     }
-  },
+  }
 };
+
+/// #DEBUG
+export function DEBUG_set_LayoutControl(value: typeof LayoutControl): void {
+  LayoutControl = value;
+}
+/// #ENDDEBUG

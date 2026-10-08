@@ -1,5 +1,5 @@
 import {
-  Component, Pipe, PipeTransform, enableProdMode, ViewChild, provideZoneChangeDetection, ChangeDetectionStrategy,
+  AfterViewInit, Component, Pipe, PipeTransform, enableProdMode, ViewChild, provideZoneChangeDetection, ChangeDetectorRef,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule, DxCheckBoxModule } from 'devextreme-angular';
@@ -18,18 +18,11 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
-  changeDetection: ChangeDetectionStrategy.Eager,
   preserveWhitespaces: true,
   imports: [
     DxTreeViewModule,
@@ -39,7 +32,7 @@ if (window && window.config?.packageConfigPaths) {
     TitlePipe,
   ],
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent<Employee>;
 
   employees: Employee[];
@@ -66,8 +59,13 @@ export class AppComponent {
 
   isSelectionModeDisabled = false;
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.employees = service.getEmployees();
+  }
+
+  ngAfterViewInit() {
+    this.syncSelection(this.treeView.instance);
+    this.changeDetectorRef.detectChanges();
   }
 
   treeViewSelectionChanged(e: DxTreeViewTypes.SelectionChangedEvent<Employee>) {

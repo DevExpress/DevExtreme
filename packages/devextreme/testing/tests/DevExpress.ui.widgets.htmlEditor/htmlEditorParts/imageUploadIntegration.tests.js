@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import '../../../helpers/xmlHttpRequestMock.js';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import 'ui/html_editor';
 

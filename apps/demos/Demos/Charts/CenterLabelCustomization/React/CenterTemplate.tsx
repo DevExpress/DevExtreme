@@ -4,6 +4,8 @@ import type { PieChartRef } from 'devextreme-react/pie-chart';
 const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
+const textStyle = { fontSize: 18, fill: '#494949' };
+const totalStyle = { fontWeight: 600 };
 
 function calculateTotal(pieChart: ReturnType<PieChartRef['instance']>): string {
   return formatNumber(pieChart
@@ -22,11 +24,11 @@ export default function TooltipTemplate(pieChart: ReturnType<PieChartRef['instan
     <svg>
       <circle cx="100" cy="100" r={pieChart.getInnerRadius() - 6} fill="#eee"></circle>
       <image href={getImagePath(country)} x="70" y="58" width="60" height="40" />
-      <text textAnchor="middle" x="100" y="120" style={{ fontSize: 18, fill: '#494949' }}>
+      <text textAnchor="middle" x="100" y="120" style={textStyle}>
         <tspan x="100">{country}</tspan>
-        <tspan x="100" dy="20px" style={{ fontWeight: 600 }}>{
-          calculateTotal(pieChart)
-        }</tspan>
+        <tspan x="100" dy="20px" style={totalStyle}>
+          {calculateTotal(pieChart)}
+        </tspan>
       </text>
     </svg>
   );

@@ -1,4 +1,4 @@
-import type { InternalGridOptions, Module } from '../m_types';
+import type { InternalGridOptions, Module } from '../types';
 import { adaptivityColumnsControllerExtender } from './extenders/adaptivity_columns_controller';
 import { adaptivityColumnsResizerViewControllerExtender } from './extenders/adaptivity_columns_resizer_view_controller';
 import { adaptivityDataControllerExtender } from './extenders/adaptivity_data_controller';
@@ -29,6 +29,7 @@ export const adaptivityModule: Module = {
       draggingHeader: adaptivityDraggingHeaderViewControllerExtender,
       editing: adaptivityEditingViewControllerExtender,
       resizing: adaptivityResizingViewControllerExtender,
+      // @ts-expect-error the extender assumes the master detail extension of DataController
       data: adaptivityDataControllerExtender,
       editorFactory: adaptivityEditorFactoryViewControllerExtender,
       columns: adaptivityColumnsControllerExtender,

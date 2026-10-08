@@ -144,7 +144,7 @@ const chatOptions = {
 };
 </script>
 
-<style scoped>
+<style>
 #gridContainer {
   max-height: 800px;
 }

@@ -31,7 +31,7 @@ export async function getAIResponse(messages: AIMessage[], delay?: number): Prom
     temperature: 0.7,
   };
 
-  const response = await chatService.chat.completions.create(params);
+  const response = await chatService.chat.completions.create(params, { maxRetries: 0 });
   const data = { choices: response.choices };
 
   if (delay) {

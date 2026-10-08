@@ -50,7 +50,7 @@ function calculateFilterExpression(filterValue: any, field: DxFilterBuilderTypes
     && Array.prototype.concat.apply([], filterValue.map((value: any) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
 }
 </script>
-<style scoped>
+<style>
 .results {
   margin-top: 50px;
   display: flex;

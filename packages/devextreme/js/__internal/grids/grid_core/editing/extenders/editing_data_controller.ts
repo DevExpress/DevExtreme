@@ -10,11 +10,12 @@ import type {
   UpdateChange,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
 import type { EditingController } from '../m_editing';
+import { isCellModified } from '../m_editing_utils';
 
 export interface EditingDataControllerExtension {
   _editingController: EditingController;
@@ -147,6 +148,10 @@ export const editingDataControllerExtender = (
       return true;
     }
 
+    if (isCellModified(oldRow, columnIndex) !== isCellModified(newRow, columnIndex)) {
+      return true;
+    }
+
     return super._isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate);
   }
 
@@ -173,7 +178,7 @@ export const editingDataControllerExtender = (
       return;
     }
 
-    const dataSourceKeys = dataSource.map((item) => this.keyOf(item));
+    const dataSourceKeys = dataSource.map((item) => this.dataSourceController.keyOf(item));
     const survivingChanges = changes.filter(
       (change) => change.type === 'insert' || dataSourceKeys.some((key) => equalByValue(change.key, key)),
     );

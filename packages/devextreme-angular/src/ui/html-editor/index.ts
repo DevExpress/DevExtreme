@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -74,12 +71,11 @@ import { DxoHtmlEditorToolbarModule } from 'devextreme-angular/ui/html-editor/ne
 import { DxiHtmlEditorToolbarItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
 import { 
-           PROPERTY_TOKEN_commands,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_mentions,
-           PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/core/tokens';
-
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_mentions,
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -89,7 +85,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 };
 /**
  * [descr:dxHtmlEditor]
-
  */
 @Component({
     selector: 'dx-html-editor',
@@ -130,7 +125,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -140,10 +134,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -153,10 +145,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.aiIntegration]
-    
      */
     @Input()
     get aiIntegration(): AIIntegration | undefined {
@@ -166,10 +156,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('aiIntegration', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.allowSoftLineBreak]
-    
      */
     @Input()
     get allowSoftLineBreak(): boolean {
@@ -179,10 +167,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('allowSoftLineBreak', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.converter]
-    
      */
     @Input()
     get converter(): Converter | undefined {
@@ -192,10 +178,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('converter', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.customizeModules]
-    
      */
     @Input()
     get customizeModules(): ((config: any) => void) {
@@ -205,10 +189,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('customizeModules', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -218,10 +200,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -231,10 +211,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -244,10 +222,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -257,10 +233,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -270,10 +244,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -283,10 +255,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.imageUpload]
-    
      */
     @Input()
     get imageUpload(): dxHtmlEditorImageUpload {
@@ -296,10 +266,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('imageUpload', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -309,10 +277,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -322,10 +288,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.mediaResizing]
-    
      */
     @Input()
     get mediaResizing(): dxHtmlEditorMediaResizing | null {
@@ -335,10 +299,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('mediaResizing', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.mentions]
-    
      */
     @Input()
     get mentions(): Array<dxHtmlEditorMention> | null {
@@ -348,10 +310,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('mentions', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -361,10 +321,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -374,10 +332,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -387,10 +343,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -400,10 +354,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -413,10 +365,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -426,10 +376,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.tableContextMenu]
-    
      */
     @Input()
     get tableContextMenu(): dxHtmlEditorTableContextMenu | null {
@@ -439,10 +387,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('tableContextMenu', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.tableResizing]
-    
      */
     @Input()
     get tableResizing(): dxHtmlEditorTableResizing | null {
@@ -452,10 +398,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('tableResizing', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxHtmlEditorToolbar | null {
@@ -465,10 +409,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('toolbar', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -478,10 +420,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -491,10 +431,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -504,10 +442,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -517,10 +453,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -530,10 +464,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:EditorOptions.value]
-    
      */
     @Input()
     get value(): any | null {
@@ -543,10 +475,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.variables]
-    
      */
     @Input()
     get variables(): dxHtmlEditorVariables | null {
@@ -556,10 +486,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('variables', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -569,10 +497,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -583,318 +509,221 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     }
 
     /**
-    
      * [descr:dxHtmlEditorOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxHtmlEditorOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxHtmlEditorOptions.onFocusIn]
-    
-    
      */
     @Output() onFocusIn: EventEmitter<FocusInEvent>;
 
     /**
-    
      * [descr:dxHtmlEditorOptions.onFocusOut]
-    
-    
      */
     @Output() onFocusOut: EventEmitter<FocusOutEvent>;
 
     /**
-    
      * [descr:dxHtmlEditorOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxHtmlEditorOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxHtmlEditorOptions.onValueChanged]
-    
-    
      */
     @Output() onValueChanged: EventEmitter<ValueChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() aiIntegrationChange: EventEmitter<AIIntegration | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowSoftLineBreakChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() converterChange: EventEmitter<Converter | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customizeModulesChange: EventEmitter<((config: any) => void)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() imageUploadChange: EventEmitter<dxHtmlEditorImageUpload>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isDirtyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isValidChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() mediaResizingChange: EventEmitter<dxHtmlEditorMediaResizing | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() mentionsChange: EventEmitter<Array<dxHtmlEditorMention> | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() placeholderChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stylingModeChange: EventEmitter<EditorStyle>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tableContextMenuChange: EventEmitter<dxHtmlEditorTableContextMenu | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tableResizingChange: EventEmitter<dxHtmlEditorTableResizing | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxHtmlEditorToolbar | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() variablesChange: EventEmitter<dxHtmlEditorVariables | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -1,16 +1,10 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Employee, Service } from '../app.service';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'employee',
-  templateUrl: `.${modulePrefix}/employee/employee.component.html`,
-  styleUrls: [`.${modulePrefix}/employee/employee.component.css`],
+  templateUrl: './employee.component.html',
+  styleUrls: ['./employee.component.css'],
 })
 export class EmployeeComponent implements OnChanges {
   employees: Employee[];

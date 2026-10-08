@@ -6,6 +6,17 @@ import { Form, SimpleItem } from 'devextreme-react/form';
 import type { FormProps } from './types.ts';
 import { mealPlans, roomTypes } from './data.ts';
 
+const roomTypeLabel = { text: 'Room Type', location: 'top' };
+const mealPlanLabel = { text: 'Meal Plan', location: 'top' };
+const roomTypeEditorOptions = {
+  items: roomTypes,
+  elementAttr: { id: 'roomType' },
+};
+const mealPlanEditorOptions = {
+  items: mealPlans,
+  elementAttr: { id: 'mealPlan' },
+};
+
 const RoomMealPlanForm: FC<FormProps> = memo(({ formData, validationGroup }: FormProps) => (
   <>
     <p>
@@ -17,21 +28,15 @@ const RoomMealPlanForm: FC<FormProps> = memo(({ formData, validationGroup }: For
         dataField='roomType'
         isRequired
         editorType='dxSelectBox'
-        label={{ text: 'Room Type', location: 'top' }}
-        editorOptions={{
-          items: roomTypes,
-          elementAttr: { id: 'roomType' },
-        }}
+        label={roomTypeLabel}
+        editorOptions={roomTypeEditorOptions}
       />
       <SimpleItem
         dataField='mealPlan'
         isRequired
         editorType='dxSelectBox'
-        label={{ text: 'Meal Plan', location: 'top' }}
-        editorOptions={{
-          items: mealPlans,
-          elementAttr: { id: 'mealPlan' },
-        }}
+        label={mealPlanLabel}
+        editorOptions={mealPlanEditorOptions}
       />
     </Form>
   </>

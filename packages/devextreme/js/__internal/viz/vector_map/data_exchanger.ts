@@ -1,45 +1,60 @@
 /* eslint-disable no-return-assign */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import Callbacks from '@js/core/utils/callbacks';
+import { Callbacks } from '@ts/core/utils/m_callbacks';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
-export function DataExchanger() {
-  this._store = {};
+type DataCallback = (data: ThemeValue) => void;
+
+interface DataItem {
+  callbacks: ReturnType<typeof Callbacks>;
+  data?: ThemeValue;
 }
 
-DataExchanger.prototype = {
-  constructor: DataExchanger,
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let DataExchanger = class DataExchanger {
+  declare _store: Record<string, Record<string, DataItem>>;
 
-  dispose() {
+  constructor() {
+    this._store = {};
+  }
+
+  dispose(): this {
+    // @ts-expect-error dispose releases the store, the instance is not used afterwards
     this._store = null;
     return this;
-  },
+  }
 
-  _get(category, name) {
+  _get(category: string, name: string): DataItem {
     const store = this._store[category] || (this._store[category] = {});
     return store[name] || (store[name] = { callbacks: Callbacks() });
-  },
+  }
 
-  set(category, name, data) {
+  set(category: string, name: string, data: ThemeValue): this {
     const item = this._get(category, name);
     item.data = data;
     item.callbacks.fire(data);
     return this;
-  },
+  }
 
-  bind(category, name, callback) {
+  bind(category: string, name: string, callback: DataCallback): this {
     const item = this._get(category, name);
     item.callbacks.add(callback);
     item.data && callback(item.data);
     return this;
-  },
+  }
 
-  unbind(category, name, callback) {
+  unbind(category: string, name: string, callback: DataCallback): this {
     const item = this._get(category, name);
     item.callbacks.remove(callback);
     return this;
-  },
+  }
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_DataExchanger(value: typeof DataExchanger): void {
+  DataExchanger = value;
+}
+/// #ENDDEBUG

@@ -16,13 +16,6 @@
             "singleAttributePerLine": true,
             "trailingComma": "all"
         }
-    },
-    {
-        "files": "**/ReactJs/**/*.html",
-        "options": {
-            "printWidth": 100,
-            "singleAttributePerLine": true
-        }
     }
 ]
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 type ItemTemplateProps = {
   data: {
@@ -7,11 +7,15 @@ type ItemTemplateProps = {
   }
 };
 
-const ItemTemplate = (props: ItemTemplateProps) => (
-  <div>
-    {props.data.color && <div className="item-badge" style={{ backgroundColor: props.data.color }} />}
-    {props.data.text}
-  </div>
-);
+const ItemTemplate = (props: ItemTemplateProps) => {
+  const badgeStyle = useMemo(() => ({ backgroundColor: props.data.color }), [props.data.color]);
+
+  return (
+    <div>
+      {props.data.color && <div className="item-badge" style={badgeStyle} />}
+      {props.data.text}
+    </div>
+  );
+};
 
 export default ItemTemplate;

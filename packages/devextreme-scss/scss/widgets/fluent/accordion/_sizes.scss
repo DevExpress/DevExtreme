@@ -13,7 +13,7 @@ $accordion-item-border-radius: $fluent-base-border-radius !default;
 * $name 10. Item expanded margin
 * $type text
 */
-$fluent-accordion-item-opened-margin: null !default;
+$fluent-accordion-item-opened-margin: 0 !default;
 
 @if $size == "default" {
   $fluent-accordion-title-horizontal-padding: 12px !default;
@@ -21,7 +21,6 @@ $fluent-accordion-item-opened-margin: null !default;
   $fluent-accordion-title-height: 44px !default;
   $accordion-title-icon-margin: 8px !default;
   $accordion-title-icon-size: 20px !default;
-  $fluent-accordion-item-opened-margin: 0 !default;
 }
 
 @else if $size == "compact" {
@@ -30,5 +29,4 @@ $fluent-accordion-item-opened-margin: null !default;
   $fluent-accordion-title-height: 32px !default;
   $accordion-title-icon-margin: 6px !default;
   $accordion-title-icon-size: 16px !default;
-  $fluent-accordion-item-opened-margin: 0 !default;
 }

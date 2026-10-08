@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   enableProdMode,
   provideZoneChangeDetection,
@@ -15,17 +15,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [
@@ -38,8 +31,22 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   companies: Company[];
 
-  constructor(service: Service) {
+  selectedItems: Company[];
+
+  multiple = false;
+
+  collapsible = false;
+
+  animationDuration = 300;
+
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.companies = service.getCompanies();
+    this.selectedItems = [this.companies[0]];
+  }
+
+  onSelectedItemsChange(items: Company[]) {
+    this.selectedItems = items;
+    this.changeDetectorRef.detectChanges();
   }
 }
 

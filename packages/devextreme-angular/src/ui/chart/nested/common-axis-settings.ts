@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import type { ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import type { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
@@ -23,7 +17,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chart-common-axis-settings',
@@ -214,7 +207,6 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
         return 'commonAxisSettings';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -230,7 +222,6 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { PanelVisibility, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
@@ -87,7 +81,6 @@ export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnIn
         return 'toolbox';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -103,7 +96,6 @@ export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnIn
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

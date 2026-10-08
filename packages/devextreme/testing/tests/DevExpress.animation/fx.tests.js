@@ -4,6 +4,7 @@ import eventsEngine from 'common/core/events/core/events_engine';
 import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import positionUtils from 'common/core/animation/position';
 import support from '__internal/core/utils/m_support';
 
@@ -75,7 +76,7 @@ QUnit.module('frame transitions', {
 
         this.clock = sinon.useFakeTimers();
 
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+        this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake((callback) => {
             return setTimeout(callback, 1);
         });
     },

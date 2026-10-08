@@ -106,15 +106,15 @@ packages/
     js/data/            # Public entry points for data layer
     js/__internal/      # All implementation code lives here
       grids/            # Grid components (DataGrid, TreeList, etc.)
-  devextreme-angular/   # Angular wrapper (GENERATED — do not edit src/)
-  devextreme-react/     # React wrapper (GENERATED — do not edit src/)
-  devextreme-vue/       # Vue wrapper (GENERATED — do not edit src/)
+  devextreme-angular/   # Angular wrapper (hand/AI-maintained — do not edit src/core/)
+  devextreme-react/     # React wrapper (hand/AI-maintained — do not edit src/core/)
+  devextreme-vue/       # Vue wrapper (hand/AI-maintained — do not edit src/core/)
   devextreme-scss/      # SCSS themes
   devextreme-metadata/  # Metadata that drives wrapper generation
   testcafe-models/      # TestCafe page object models
 
 apps/
-  demos/                # Technical demos (Angular, React, Vue, jQuery)
+  demos/                # Technical demos (Angular, React, Vue, jQuery) — esbuild on demand
 
 e2e/
   testcafe-devextreme/  # E2E tests
@@ -124,23 +124,47 @@ The folders under `js/` (except `__internal/`) contain only the public API surfa
 
 ### Framework Wrappers
 
-Framework wrappers (`devextreme-angular/src/`, `devextreme-react/src/`, `devextreme-vue/src/`) are **entirely generated** — do not edit `src/` directly.
+Framework wrappers (`devextreme-angular/src/`, `devextreme-react/src/`, `devextreme-vue/src/`) are **maintained by hand** (with the help of local AI agents) — they are no longer regenerated from `devextreme-metadata` / `devextreme-internal-tools`.
 
-When updating public API in `js/ui/*.d.ts`, regenerate afterward:
+When updating public API in `js/{ui,viz}/**/*.d.ts`, apply the same change to all three wrappers in the same PR, then validate:
 ```bash
-pnpm run regenerate-all          # from repo root — requires .NET SDK 8.0.x
 cd packages/devextreme
-pnpm run update-ts-reexports
-pnpm run update-ts-bundle
+pnpm run regenerate
 pnpm run lint-dts
 ```
+Follow the per-framework anatomy and rules in `.github/instructions/wrapper-{angular,react,vue}.instructions.md`, and the propagation/breaking-change checklist in `.github/instructions/public-api-wrappers.instructions.md`. The reusable workflow lives in `.github/prompts/update-wrappers.prompt.md`.
 
 Do not edit directly:
-- `packages/devextreme-angular/src/**/*` (except templates)
-- `packages/devextreme-react/src/**/*` (except templates)
-- `packages/devextreme-vue/src/**/*` (except templates)
+- `packages/devextreme-angular/src/core/**` (exception: add a `PROPERTY_TOKEN_<name>` to `src/core/tokens/index.ts` for a new collection option; see `wrapper-angular.instructions.md`)
+- `packages/devextreme-react/src/core/**`
+- `packages/devextreme-vue/src/core/**`
 - `packages/devextreme/js/__internal/core/localization/default_messages.ts`
 - `packages/devextreme/js/__internal/core/localization/cldr-data/**/*`
+
+## Demos
+
+Technical demos live in `apps/demos`.
+
+From the repo root:
+
+```bash
+pnpm run demos:prepare   # build DevExtreme, pack wrappers, vendor bundles
+pnpm run demos:start     # http://localhost:8080/
+```
+
+`demos:start` is long-running. Do not start a second copy if the developer already has it running.
+
+Angular, React, and Vue demos bundle on demand with esbuild when a page is opened (`bundle.js` / `bundle.css` next to the demo source — gitignored, do not commit). jQuery demos load `dx.all.js` from `devextreme-dist`.
+
+### Editing demos
+
+From `apps/demos`:
+
+```bash
+pnpm run add-demo                  # scaffold a new demo
+pnpm run convert-to-js split       # after React TypeScript changes
+pnpm run fix-lint
+```
 
 ## Code Style Conventions
 
@@ -162,11 +186,11 @@ Files under `**/localization/messages/**/*.json` are managed by a dedicated team
 | `default_workflow.yml` | `nx run-many -t lint,test` on most packages                           |
 | `lint.yml`             | TS, JS, .d.ts, text linting; checks generated reexports are up-to-date |
 | `build_all.yml`        | Full production build (requires .NET 8.0.x) — CI only                |
-| `wrapper_tests.yml`    | Angular/React/Vue wrapper tests + regeneration check                  |
+| `wrapper_tests.yml`    | Angular/React/Vue wrapper tests                                      |
 | `qunit_tests.yml`      | Legacy QUnit tests                                                    |
 | `testcafe_tests.yml`   | E2E accessibility and component tests                                 |
 
 **Common CI failure fixes:**
-- *"Generated code is outdated"* → run `pnpm run regenerate-all` from repo root
+- *"dx.all.d.ts is outdated"* → run `pnpm run regenerate` from `packages/devextreme`
 - *"Reexports outdated"* → run `pnpm run update-ts-reexports` from `packages/devextreme`
 - *Lint errors* → run `pnpm run lint-js -- --fix` or `pnpm run lint-ts -- --fix`

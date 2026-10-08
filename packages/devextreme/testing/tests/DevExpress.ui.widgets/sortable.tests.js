@@ -4,6 +4,7 @@ import 'ui/sortable';
 import 'ui/scroll_view';
 import fx from 'common/core/animation/fx';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import browser from 'core/utils/browser';
 import translator from 'common/core/animation/translator';
 import viewPort from 'core/utils/view_port';
@@ -2642,7 +2643,7 @@ function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
 
-            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake((callback) => {
                 return window.setTimeout(callback, 10);
             });
 

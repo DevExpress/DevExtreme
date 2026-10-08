@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { AIIntegration } from 'devextreme/common/ai-integration';
 import type { Mode } from 'devextreme/common';
 import type { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
@@ -410,7 +404,6 @@ export class DxoSchedulerFormComponent extends NestedOption implements OnDestroy
         return 'form';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -430,7 +423,6 @@ export class DxoSchedulerFormComponent extends NestedOption implements OnDestroy
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

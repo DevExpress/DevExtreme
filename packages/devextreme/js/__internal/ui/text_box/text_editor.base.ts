@@ -34,6 +34,15 @@ import { TextEditorLabel } from './text_editor.label';
 import type { TextEditorButtonInfo } from './texteditor_button_collection/index';
 import TextEditorButtonCollection from './texteditor_button_collection/index';
 
+export interface TextEditorInputAttributes {
+  autocomplete: string;
+
+  placeholder: string | null;
+
+  // eslint-disable-next-line spellcheck/spell-checker
+  inputmode?: string;
+}
+
 export interface TextEditorInternalProperties extends EditorInternalProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   displayValueFormatter?: ((value: string | any[]) => string);
@@ -446,12 +455,7 @@ class TextEditorBase<
     return value;
   }
 
-  _getDefaultAttributes(): {
-    autocomplete: string;
-    placeholder: string | null;
-    // eslint-disable-next-line spellcheck/spell-checker
-    inputmode?: string;
-  } {
+  _getDefaultAttributes(): TextEditorInputAttributes {
     const defaultAttributes = {
       autocomplete: 'off',
       placeholder: this._getPlaceholderAttr(),
@@ -465,7 +469,14 @@ class TextEditorBase<
   }
 
   _updateButtonsStyling(editorStylingMode?: EditorStyle): void {
-    each(this.option('buttons'), (_, { options, name: buttonName }) => {
+    const { buttons } = this.option();
+
+    each(buttons, (_, button) => {
+      if (typeof button === 'string') {
+        return;
+      }
+
+      const { options, name: buttonName } = button;
       if (options && !options.stylingMode && this.option('visible')) {
         const buttonInstance = this.getButton(buttonName);
         if (buttonInstance?.option) {
@@ -773,7 +784,7 @@ class TextEditorBase<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _keyPressHandler(e?: { originalEvent: InputEvent & KeyboardEvent }): void {
+  _keyPressHandler(e?: DxEvent): void {
     this.option('text', this._input().val());
   }
 
@@ -990,7 +1001,6 @@ class TextEditorBase<
       case 'placeholder':
         this._renderPlaceholder();
         this._setFieldAria(true);
-        // @ts-expect-error ts-error
         this._input().attr({ placeholder: this._getPlaceholderAttr() });
         break;
       case 'label':
@@ -1091,7 +1101,7 @@ class TextEditorBase<
     }
   }
 
-  getButton(name: string): dxButton | null | undefined {
+  getButton(name: string | undefined): dxButton | null | undefined {
     // @ts-expect-error TextEditorButtonCollection should use generic
     return this._buttonCollection.getButton(name);
   }

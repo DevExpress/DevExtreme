@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import pointerEvents from 'common/core/events/pointer';
 import themes from 'ui/themes';

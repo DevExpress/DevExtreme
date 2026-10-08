@@ -30,14 +30,11 @@
   $scheduler-panel-text-color: $scheduler-panel-text-color,
   $scheduler-left-column-width: $scheduler-left-column-width,
   $scheduler-timeline-cell-height: $scheduler-timeline-cell-height,
-  $scheduler-workspace-active-cell-color: $scheduler-workspace-active-cell-color,
-  $scheduler-workspace-hovered-cell-color: $scheduler-workspace-hovered-cell-color,
   $scheduler-workspace-focused-cell-color: $scheduler-workspace-focused-cell-color,
   $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-background-color,
   $scheduler-appointment-text-color: $scheduler-appointment-text-color,
   $scheduler-fill-focused-appointment: $scheduler-fill-focused-appointment,
   $scheduler-is-shadow-color-for-focused-state: $scheduler-is-shadow-color-for-focused-state,
-  $scheduler-dd-appointment-hover-text-color: $scheduler-dd-appointment-hover-text-color,
 
   $agenda-appointment-recurrence-icon-color: $agenda-appointment-recurrence-icon-color,
   $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
@@ -55,13 +52,13 @@
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
-$fluent-scheduler-all-day-table-cell-height: $fluent-scheduler-workspace-date-table-cell-height * 1.5;
+$fluent-scheduler-all-day-table-cell-height: $fluent-scheduler-workspace-date-table-cell-height * 1.5 !default;
 
-$fluent-scheduler-month-date-text-size: 14px;
+$fluent-scheduler-month-date-text-size: 14px !default;
 
-$scheduler-first-of-month-border: 1px solid;
+$scheduler-first-of-month-border: 1px solid !default;
 
-$fluent-scheduler-agenda-time-panel-cell-padding: 8px;
+$fluent-scheduler-agenda-time-panel-cell-padding: 8px !default;
 
 @include baseScheduler.scheduler-mixin();
 
@@ -464,14 +461,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-rtl & {
       text-align: right;
-    }
-  }
-
-  .dx-scheduler-header-panel-current-time-cell {
-    .dx-scheduler-header-panel-cell-date343 {
-      border-radius: initial;
-      background-color: initial;
-      color: $scheduler-current-time-cell-color;
     }
   }
 
@@ -1043,4 +1032,8 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-header-panel-empty-cell {
   margin-top: 0;
+}
+
+.dx-scheduler-work-space.dx-scheduler-work-space-month .dx-scheduler-date-table-other-month.dx-state-hover {
+  color: $scheduler-workspace-hovered-cell-color;
 }

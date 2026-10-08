@@ -14,9 +14,9 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
-import { isDefined as _isDefined } from '@js/core/utils/type';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { isDefined as _isDefined } from '@ts/core/utils/m_type';
 import { extractColor, normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 
 import { chart as barChart } from './bar_series';
@@ -295,7 +295,8 @@ export const candlestick = _extend({}, stock, {
 
   _parsePointStyle(style, defaultColor, innerColor) {
     const color = extractColor(style.color, true) || innerColor;
-    const base = stock._parsePointStyle.call(this, style, defaultColor, color);
+    const base: ReturnType<typeof stock._parsePointStyle> & { hatching?: unknown } = stock
+      ._parsePointStyle.call(this, style, defaultColor, color);
     base.fill = color;
     base.hatching = style.hatching;
     return base;

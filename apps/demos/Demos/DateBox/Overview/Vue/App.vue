@@ -129,7 +129,7 @@ const diffInDay = computed(() => (
   )} days`
 ));
 </script>
-<style scoped>
+<style>
 #age {
   display: inline-block;
 }

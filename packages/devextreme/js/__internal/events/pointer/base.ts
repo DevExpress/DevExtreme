@@ -4,14 +4,9 @@ import { addNamespace, eventSource, fireEvent } from '@js/common/core/events/uti
 import domAdapter from '@js/core/dom_adapter';
 import browser from '@js/core/utils/browser';
 import type { EmitterEvent } from '@ts/events/core/emitter';
+import type { HandleObject } from '@ts/events/core/events_engine';
 
 const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
-
-export interface PointerEventHandleObj {
-  selector?: string | null;
-  type?: string;
-  data?: Record<string, unknown>;
-}
 
 export interface PointerStrategyEventArgs {
   type: string;
@@ -82,7 +77,7 @@ class BaseStrategy {
     return event;
   }
 
-  _setSelector(handleObj?: PointerEventHandleObj): void {
+  _setSelector(handleObj?: HandleObject): void {
     this._selector = this.noBubble && handleObj ? handleObj.selector : null;
   }
 
@@ -94,7 +89,7 @@ class BaseStrategy {
     return true;
   }
 
-  add(element: Element, handleObj: PointerEventHandleObj): void {
+  add(element: Element, handleObj: HandleObject): void {
     if (this._handlerCount <= 0 || this.noBubble) {
       const target = this.noBubble ? element : domAdapter.getDocument();
       this._setSelector(handleObj);

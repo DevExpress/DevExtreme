@@ -2,4 +2,4 @@ export {
     getPublicElement,
     getPublicElementNonJquery,
     setPublicElementWrapper,
-} from '../__internal/core/m_element';
+} from '../__internal/core/element';

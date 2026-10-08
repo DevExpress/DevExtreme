@@ -1,5 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
+  ChangeDetectorRef,
   Component,
   ViewChild,
   AfterViewInit,
@@ -16,16 +17,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [
@@ -65,7 +60,7 @@ export class AppComponent implements AfterViewInit {
 
   pullDown = false;
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.content = service.getContent();
   }
 
@@ -82,6 +77,7 @@ export class AppComponent implements AfterViewInit {
     if (this.updateContentTimer) { clearTimeout(this.updateContentTimer as number); }
     this.updateContentTimer = setTimeout(() => {
       this.content = (eventName === 'PullDown' ? updateContentText + this.content : this.content + updateContentText);
+      this.changeDetectorRef.detectChanges();
       args.component.release(false);
     }, 500);
   };

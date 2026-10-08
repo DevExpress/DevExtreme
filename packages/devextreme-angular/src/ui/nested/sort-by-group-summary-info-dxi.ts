@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { SortOrder } from 'devextreme/common';
 
 import {
@@ -65,7 +59,6 @@ export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
         return 'sortByGroupSummaryInfo';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -78,7 +71,6 @@ export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

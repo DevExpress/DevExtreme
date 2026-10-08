@@ -7,7 +7,10 @@ import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
+import type {
+  VirtualDataLoaderController,
+  VirtualItemsCount,
+} from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import gridCoreUtils from '../m_utils';
 import { VirtualDataLoader } from '../virtual_data_loader/m_virtual_data_loader';
@@ -152,7 +155,10 @@ class VirtualScrollController {
     this._sizeRatio = 1;
     this._isVirtual = isVirtual;
     this.positionChanged = Callbacks();
-    this._dataLoader = new VirtualDataLoader(this, this._dataOptions);
+    this._dataLoader = new VirtualDataLoader(
+      this as unknown as VirtualDataLoaderController,
+      this._dataOptions,
+    );
   }
 
   private getItemSizes() {
@@ -232,7 +238,7 @@ class VirtualScrollController {
     return this._position;
   }
 
-  private getItemIndexByPosition(position?, viewportItemIndex?, height?) {
+  public getItemIndexByPosition(position?, viewportItemIndex?, height?) {
     position = position ?? this._position;
     const defaultItemSize = this.getItemSize();
     let offset = 0;
@@ -452,6 +458,7 @@ class VirtualScrollController {
   }
 
   public pageIndex(...args) {
+    // @ts-expect-error a spread argument can't match the overloads of pageIndex()
     return this._dataLoader.pageIndex(...args);
   }
 

@@ -1,5 +1,4 @@
 import registerEvent from '@js/common/core/events/core/event_registrator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as wheelEventName } from '@js/common/core/events/core/wheel';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, isMouseEvent } from '@js/common/core/events/utils/index';
@@ -11,6 +10,8 @@ import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { getParentNode } from '@ts/core/utils/m_dom';
 import type Emitter from '@ts/events/core/emitter';
 import type { EmitterEvent } from '@ts/events/core/emitter';
+import type { HandleObject } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 import type GestureEmitter from '@ts/events/gesture/emitter.gesture';
 
 const MANAGER_EVENT = 'dxEventManager';
@@ -43,25 +44,21 @@ class EventManager {
   _attachHandlers(): void {
     readyCallbacks.add(() => {
       const document = domAdapter.getDocument();
-      // @ts-expect-error subscribeGlobal is not declared in the public events engine type
       eventsEngine.subscribeGlobal(
         document,
         addNamespace(pointerEvents.down, MANAGER_EVENT),
         this._pointerDownHandler.bind(this),
       );
-      // @ts-expect-error subscribeGlobal is not declared in the public events engine type
       eventsEngine.subscribeGlobal(
         document,
         addNamespace(pointerEvents.move, MANAGER_EVENT),
         this._pointerMoveHandler.bind(this),
       );
-      // @ts-expect-error subscribeGlobal is not declared in the public events engine type
       eventsEngine.subscribeGlobal(
         document,
         addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT),
         this._pointerUpHandler.bind(this),
       );
-      // @ts-expect-error subscribeGlobal is not declared in the public events engine type
       eventsEngine.subscribeGlobal(
         document,
         addNamespace(wheelEventName, MANAGER_EVENT),
@@ -275,12 +272,6 @@ export interface EmitterRegistrationConfig {
   bubble?: boolean;
 }
 
-interface EmitterHandleObj {
-  selector?: string;
-  type?: string;
-  data?: Record<string, unknown>;
-}
-
 const registerEmitter = function (emitterConfig: EmitterRegistrationConfig): void {
   const EmitterClass = emitterConfig.emitter;
   const emitterName = emitterConfig.events[0];
@@ -307,7 +298,7 @@ const registerEmitter = function (emitterConfig: EmitterRegistrationConfig): voi
         elementData(element, EMITTER_SUBSCRIPTION_DATA, subscriptions);
       },
 
-      add(element: Element, handleObj: EmitterHandleObj) {
+      add(element: Element, handleObj: HandleObject) {
         const emitters: Record<string, Emitter> = elementData(element, EMITTER_DATA);
         const emitter = emitters[emitterName];
 

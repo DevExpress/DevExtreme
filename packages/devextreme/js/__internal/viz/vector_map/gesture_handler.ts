@@ -2,29 +2,84 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const _ln = Math.log;
 const _LN2 = Math.LN2;
 
-export function GestureHandler(params) {
-  const that = this;
-  that._projection = params.projection;
-  that._renderer = params.renderer;
-  that._x = that._y = 0;
-  that._subscribeToTracker(params.tracker);
+interface PointerArg {
+  x: number;
+  y: number;
+  data: { name?: string };
 }
 
-GestureHandler.prototype = {
-  constructor: GestureHandler,
+interface ZoomArg {
+  x: number;
+  y: number;
+  delta?: number;
+  ratio?: number;
+}
 
-  dispose() {
+interface GestureTracker {
+  on: (handlers: {
+    start: (arg: PointerArg) => void;
+    move: (arg: PointerArg) => void;
+    end: () => void;
+    zoom: (arg: ZoomArg) => void;
+  }) => () => void;
+}
+
+interface GestureProjection {
+  beginMoveCenter: () => void;
+  moveCenter: (shift: number[]) => void;
+  endMoveCenter: () => void;
+  fromScreenPoint: (coordinates: number[]) => number[];
+  changeScaledZoom: (deltaZoom: number) => void;
+  setCenterByPoint: (coordinates: number[], screenPosition: number[]) => void;
+}
+
+interface GestureHandlerParams {
+  projection: GestureProjection;
+  renderer: ThemeValue;
+  tracker: GestureTracker;
+}
+
+interface GestureInteraction {
+  centeringEnabled: boolean;
+  zoomingEnabled: boolean;
+}
+
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let GestureHandler = class GestureHandler {
+  declare _projection: GestureProjection;
+
+  declare _renderer: ThemeValue;
+
+  declare _x: number;
+
+  declare _y: number;
+
+  declare _offTracker: () => void;
+
+  declare _centeringEnabled: boolean;
+
+  declare _zoomingEnabled: boolean;
+
+  constructor(params: GestureHandlerParams) {
+    this._projection = params.projection;
+    this._renderer = params.renderer;
+    this._x = this._y = 0;
+    this._subscribeToTracker(params.tracker);
+  }
+
+  dispose(): void {
     this._offTracker();
+    // @ts-expect-error dispose releases the tracker subscription
     this._offTracker = null;
-  },
+  }
 
-  _subscribeToTracker(tracker) {
+  _subscribeToTracker(tracker: GestureTracker): void {
     const that = this;
     let isActive = false;
     that._offTracker = tracker.on({
@@ -50,59 +105,63 @@ GestureHandler.prototype = {
       },
 
     });
-  },
+  }
 
-  setInteraction(options) {
+  setInteraction(options: GestureInteraction): void {
     this._processEnd();
     this._centeringEnabled = options.centeringEnabled;
     this._zoomingEnabled = options.zoomingEnabled;
-  },
+  }
 
-  _processStart(arg) {
+  _processStart(arg: PointerArg): void {
     if (this._centeringEnabled) {
       this._x = arg.x;
       this._y = arg.y;
       this._projection.beginMoveCenter();
     }
-  },
+  }
 
-  _processMove(arg) {
-    const that = this;
-    if (that._centeringEnabled) {
-      that._renderer.root.attr({ cursor: 'move' });
-      that._projection.moveCenter([that._x - arg.x, that._y - arg.y]);
-      that._x = arg.x;
-      that._y = arg.y;
+  _processMove(arg: PointerArg): void {
+    if (this._centeringEnabled) {
+      this._renderer.root.attr({ cursor: 'move' });
+      this._projection.moveCenter([this._x - arg.x, this._y - arg.y]);
+      this._x = arg.x;
+      this._y = arg.y;
     }
-  },
+  }
 
-  _processEnd() {
+  _processEnd(): void {
     if (this._centeringEnabled) {
       this._renderer.root.attr({ cursor: 'default' });
       this._projection.endMoveCenter();
     }
-  },
+  }
 
-  _processZoom(arg) {
-    const that = this;
+  _processZoom(arg: ZoomArg): void {
     let delta;
     let screenPosition;
     let coords;
-    if (that._zoomingEnabled) {
+    if (this._zoomingEnabled) {
       if (arg.delta) {
         delta = arg.delta;
       } else if (arg.ratio) {
         delta = _ln(arg.ratio) / _LN2;
       }
-      if (that._centeringEnabled) {
-        screenPosition = that._renderer.getRootOffset();
+      if (this._centeringEnabled) {
+        screenPosition = this._renderer.getRootOffset();
         screenPosition = [arg.x - screenPosition.left, arg.y - screenPosition.top];
-        coords = that._projection.fromScreenPoint(screenPosition);
+        coords = this._projection.fromScreenPoint(screenPosition);
       }
-      that._projection.changeScaledZoom(delta);
-      if (that._centeringEnabled) {
-        that._projection.setCenterByPoint(coords, screenPosition);
+      this._projection.changeScaledZoom(delta);
+      if (this._centeringEnabled) {
+        this._projection.setCenterByPoint(coords, screenPosition);
       }
     }
-  },
+  }
 };
+
+/// #DEBUG
+export function DEBUG_set_GestureHandler(value: typeof GestureHandler): void {
+  GestureHandler = value;
+}
+/// #ENDDEBUG

@@ -1,5 +1,5 @@
 import { getHeight, getWidth } from 'core/utils/size';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import commonUtils from 'core/utils/common';
 import ArrayStore from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -2299,51 +2299,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     });
 
     // T821418, T878862
-    QUnit.test('rowTemplate with tbody should works with virtual scrolling', function(assert) {
-        // arrange, act
-        const data = [...Array(20)].map((_, i) => ({ id: i + 1 }));
-        const rowHeight = 50;
-        const dataGrid = createDataGrid({
-            height: rowHeight,
-            loadingTimeout: null,
-            dataSource: data,
-            columns: ['id'],
-            scrolling: {
-                mode: 'virtual',
-                useNative: false
-            },
-            paging: {
-                pageSize: 2
-            },
-            rowTemplate: function(container, options) {
-                const tr = $(`<tr><td>${options.data.id}</td></tr>`).css('height', `${rowHeight}px`);
-                const tbody = $('<tbody class="dx-row"></tbody>').append(tr);
-                $(container).append(tbody);
-            }
-        });
-
-        // act
-        dataGrid.getScrollable().scrollTo({ top: 1 });
-        dataGrid.getScrollable().scrollTo({ top: 4 * rowHeight });
-
-        // assert
-        assert.strictEqual(dataGrid.getVisibleRows()[0].data.id, 5, 'first visible row');
-        assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), '5', 'first visible cell text');
-        assert.strictEqual($(dataGrid.element()).find('tbody.dx-virtual-row').length, 2, 'virtual row count');
-        const $colgroup = $(dataGrid.element()).find('.dx-datagrid-rowsview colgroup');
-        assert.strictEqual($colgroup.length, 1, 'colgroup element exists');
-        // T878862
-        assert.strictEqual($colgroup.index(), 0, 'colgroup is first element in table');
-
-        // act
-        dataGrid.getScrollable().scrollTo({ top: 0 });
-
-        // assert
-        assert.strictEqual(dataGrid.getVisibleRows()[0].data.id, 1, 'first visible row');
-        assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), '1', 'first visible cell text');
-        assert.strictEqual($(dataGrid.element()).find('tbody.dx-virtual-row').length, 1, 'virtual row count');
-    });
-
     QUnit.test('dataRowTemplate should works with virtual scrolling', function(assert) {
         // arrange, act
         const data = [...Array(20)].map((_, i) => ({ id: i + 1 }));
@@ -2404,11 +2359,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 rowRenderingMode: 'virtual',
                 useNative: false
             },
-            dataRowTemplate: 'rowTemplate',
+            dataRowTemplate: 'dataRowTemplate',
             templatesRenderAsynchronously: true,
             integrationOptions: {
                 templates: {
-                    rowTemplate: {
+                    dataRowTemplate: {
                         render({ container, model, onRendered }) {
                             const data = model.data;
 
@@ -3242,7 +3197,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.deepEqual(dataGrid.getController('data').pageCount(), 2, 'pages count');
+        assert.deepEqual(dataGrid.getController('dataSource').pageCount(), 2, 'pages count');
         assert.deepEqual(dataGrid.getController('data').items().length, 5, 'items count');
         assert.ok(!dataGrid.getView('pagerView').isVisible(), 'pager visibility');
     });
@@ -6916,7 +6871,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         this.clock.tick(10);
         // assert
         assert.ok(dataGrid.getController('data').viewportSize() > 0);
-        assert.ok(!dataGrid.getController('data').dataSource().requireTotalCount());
+        assert.ok(!dataGrid.getController('dataSource').getAdapter().requireTotalCount());
     });
 
     QUnit.test('New mode. Load panel should not be displayed at the bottom when all items are loaded', function(assert) {

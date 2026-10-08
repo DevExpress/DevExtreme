@@ -47,27 +47,23 @@ class ArrayStore extends Store {
     const index = indexByKey(this, this._array, key);
 
     if (index === -1) {
-      // @ts-expect-error data/utils is untyped: `rejectedPromise` reads its arguments object
       const rejected: DeferredObj<unknown> = rejectedPromise(errors.Error('E4009'));
 
       return rejected;
     }
 
-    // @ts-expect-error data/utils is untyped: `trivialPromise` reads its arguments object
     const resolved: DeferredObj<unknown> = trivialPromise(this._array[index]);
 
     return resolved;
   }
 
   _insertImpl(values: unknown): DeferredObj<unknown> {
-    // @ts-expect-error array_utils is untyped: `insert` declares every argument as required
     const result: DeferredObj<unknown> = insert(this, this._array, values);
 
     return result;
   }
 
   _pushImpl(changes: StoreChange[]): void {
-    // @ts-expect-error array_utils is untyped: `applyBatch` destructures every option as required
     applyBatch({
       keyInfo: this,
       data: this._array,
@@ -76,14 +72,12 @@ class ArrayStore extends Store {
   }
 
   _updateImpl(key: unknown, values: unknown): DeferredObj<unknown> {
-    // @ts-expect-error array_utils is untyped: `update` declares every argument as required
     const result: DeferredObj<unknown> = update(this, this._array, key, values);
 
     return result;
   }
 
   _removeImpl(key: unknown): DeferredObj<unknown> {
-    // @ts-expect-error array_utils is untyped: `remove` declares every argument as required
     const result: DeferredObj<unknown> = remove(this, this._array, key);
 
     return result;

@@ -1,47 +1,30 @@
 /* eslint-disable max-classes-per-file */
 
 import messageLocalization from '@js/common/core/localization/message';
-import type { LangParams } from '@js/common/data';
-import dataQuery from '@js/common/data/query';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { compileGetter, toComparable } from '@js/core/utils/data';
+import { toComparable } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type TextBox from '@js/ui/text_box';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import type { DataController } from '../data_controller/data_controller';
-import type { DataFilter } from '../data_controller/types';
+import type { DataChange, UserState } from '../data_controller/types';
+import type { DataFilter, FilterSourceContext } from '../filter/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
-import modules from '../m_modules';
-import type { ModuleType, OptionChanged } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
+import type { ModuleType, OptionChanged } from '../types';
 import type { RowsView } from '../views/m_rows_view';
+import { allowSearch, createSearchExpression, parseValue } from './utils';
 
 const SEARCH_PANEL_CLASS = 'search-panel';
 const SEARCH_TEXT_CLASS = 'search-text';
 const HEADER_PANEL_CLASS = 'header-panel';
 const FILTERING_TIMEOUT = 700;
 const SEARCH_PANEL_ITEM_NAME = 'searchPanel';
-
-function allowSearch(column: Column): boolean {
-  return !!(column.allowSearch ?? column.allowFiltering);
-}
-
-function parseValue(column: Column, text: string): unknown {
-  const { lookup } = column;
-
-  if (!column.parseValue) {
-    return text;
-  }
-
-  if (lookup) {
-    return column.parseValue.call(lookup, text);
-  }
-
-  return column.parseValue(text);
-}
 
 const dataController = (
   base: ModuleType<DataController>,
@@ -62,78 +45,15 @@ const dataController = (
     return super.publicMethods().concat(['searchByText']);
   }
 
-  protected calculateAdditionalFilter(): DataFilter {
-    const dataSource = this.getDataSource();
-    const langParams = dataSource?.loadOptions?.()?.langParams;
-
-    const filter = super.calculateAdditionalFilter();
-    const searchFilter = this.calculateSearchFilter(this.option('searchPanel.text'), langParams);
-
-    return gridCoreUtils.combineFilters([filter, searchFilter]);
+  public getUserState(): UserState {
+    return {
+      ...super.getUserState(),
+      searchText: this.option('searchPanel.text'),
+    };
   }
 
   public searchByText(text: string | undefined): void {
     this.option('searchPanel.text', text);
-  }
-
-  private calculateSearchFilter(text: string | undefined, langParams?: LangParams): DataFilter {
-    let column;
-    const columns = this._columnsController.getColumns();
-    const searchVisibleColumnsOnly = this.option('searchPanel.searchVisibleColumnsOnly');
-    let lookup;
-    const filters: any[] = [];
-
-    if (!text) return null;
-
-    function onQueryDone(items): void {
-      const valueGetter = compileGetter(lookup.valueExpr);
-
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
-      for (let i = 0; i < items.length; i++) {
-        // @ts-expect-error
-        const value = valueGetter(items[i]);
-        filters.push(column.createFilterExpression(value, null, 'search'));
-      }
-    }
-
-    for (let i = 0; i < columns.length; i++) {
-      column = columns[i];
-
-      if (searchVisibleColumnsOnly && !column.visible) continue;
-
-      if (allowSearch(column) && column.calculateFilterExpression) {
-        lookup = column.lookup;
-        const filterValue = parseValue(column, text);
-
-        if (lookup?.items) {
-          // @ts-expect-error
-          dataQuery(lookup.items, { langParams })
-            // @ts-expect-error
-            .filter(
-              column.createFilterExpression.call(
-                {
-                  dataField: lookup.displayExpr,
-                  dataType: lookup.dataType,
-                  calculateFilterExpression: column.calculateFilterExpression,
-                },
-                filterValue,
-                null,
-                'search',
-              ),
-            )
-            .enumerate()
-            .done(onQueryDone);
-        } else if (filterValue !== undefined) {
-          filters.push(column.createFilterExpression(filterValue, null, 'search'));
-        }
-      }
-    }
-
-    if (filters.length === 0) {
-      return ['!'];
-    }
-
-    return gridCoreUtils.combineFilters(filters, 'or');
   }
 };
 
@@ -155,6 +75,27 @@ export class SearchPanelViewController extends modules.ViewController {
 
       this.headerPanel?.registerToolbarItem(SEARCH_PANEL_ITEM_NAME, searchPanelToolbarItem);
     }
+  }
+
+  public isFilterSourceActive(): boolean {
+    return true;
+  }
+
+  public getFilterExpressions({ langParams, columnsController }: FilterSourceContext): DataFilter[] {
+    const columns = this.getColumnsToSearch(columnsController);
+    const searchFilter = createSearchExpression(columns, this.option('searchPanel.text'), langParams);
+
+    return searchFilter ? [searchFilter] : [];
+  }
+
+  private getColumnsToSearch(
+    columnsController: FilterSourceContext['columnsController'],
+  ): Column[] {
+    const searchVisibleColumnsOnly = this.option('searchPanel.searchVisibleColumnsOnly');
+
+    return columnsController
+      ?.getColumns()
+      ?.filter((column: Column) => !searchVisibleColumnsOnly || !!column.visible) ?? [];
   }
 
   public optionChanged(args: OptionChanged): void {
@@ -232,9 +173,11 @@ export class SearchPanelViewController extends modules.ViewController {
     const headerPanelClass = this.headerPanel.addWidgetPrefix(HEADER_PANEL_CLASS);
     const $searchPanel = $element
       .find(`.${this.headerPanel.addWidgetPrefix(SEARCH_PANEL_CLASS)}`)
+      // @ts-expect-error filter() is typed for selectors only
       .filter((_, el: HTMLElement) => $(el).closest(`.${headerPanelClass}`).is($element));
 
     if ($searchPanel.length) {
+      // @ts-expect-error dxTextBox is added to the renderer at runtime
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return $searchPanel.dxTextBox('instance');
     }
@@ -269,7 +212,7 @@ const rowsView = (
 
   private _getStringNormalizer() {
     const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
-    const dataSource = this._dataController?.getDataSource?.();
+    const dataSource = this.dataSourceController.getDataSource();
     const langParams = dataSource?.loadOptions?.()?.langParams;
 
     return (str: string): string => toComparable(str, isCaseSensitive, langParams);
@@ -355,11 +298,11 @@ const rowsView = (
     }
   }
 
-  protected _renderCore() {
-    const deferred = super._renderCore.apply(this, arguments as any);
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
+    const deferred = super._renderCore(change);
 
     // T103538
-    if (this.option().rowTemplate || this.option('dataRowTemplate')) {
+    if (this.option('dataRowTemplate')) {
       if (this.option('templatesRenderAsynchronously')) {
         clearTimeout(this._highlightTimer);
 

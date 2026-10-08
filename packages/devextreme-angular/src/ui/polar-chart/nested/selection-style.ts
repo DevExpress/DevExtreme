@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DashStyle, ChartsColor, HatchDirection } from 'devextreme/common/charts';
 
 import {
@@ -21,7 +15,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-selection-style',
@@ -92,7 +85,6 @@ export class DxoPolarChartSelectionStyleComponent extends NestedOption implement
         return 'selectionStyle';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -108,7 +100,6 @@ export class DxoPolarChartSelectionStyleComponent extends NestedOption implement
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

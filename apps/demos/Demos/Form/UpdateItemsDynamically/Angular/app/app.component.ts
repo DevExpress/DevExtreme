@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxFormModule } from 'devextreme-angular';
 import { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
@@ -10,17 +12,11 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
   providers: [Service],
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxFormModule,
   ],
@@ -38,6 +34,7 @@ export class AppComponent {
     value: true,
     onValueChanged: (e: DxCheckBoxTypes.ValueChangedEvent) => {
       this.isHomeAddressVisible = e.component.option('value');
+      this.changeDetectorRef.detectChanges();
     },
   };
 
@@ -47,10 +44,11 @@ export class AppComponent {
     onClick: () => {
       this.employee.Phones.push('');
       this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
+      this.changeDetectorRef.detectChanges();
     },
   };
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.employee = service.getEmployee();
 
     this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
@@ -71,6 +69,7 @@ export class AppComponent {
           onClick: () => {
             this.employee.Phones.splice(index, 1);
             this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
+            this.changeDetectorRef.detectChanges();
           },
         },
       }],

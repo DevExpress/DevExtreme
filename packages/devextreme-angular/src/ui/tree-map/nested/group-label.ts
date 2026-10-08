@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
@@ -21,7 +15,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-map-group-label',
@@ -60,7 +53,6 @@ export class DxoTreeMapGroupLabelComponent extends NestedOption implements OnDes
         return 'label';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -76,7 +68,6 @@ export class DxoTreeMapGroupLabelComponent extends NestedOption implements OnDes
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

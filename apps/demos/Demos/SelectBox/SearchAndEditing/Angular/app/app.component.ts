@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxNumberBoxModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -9,17 +9,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [
     DxSelectBoxModule,
@@ -35,6 +28,8 @@ export class AppComponent {
   productsDataSource: DataSource;
 
   product: number;
+
+  selectedProduct: SimpleProduct;
 
   searchModeOption = 'contains';
 
@@ -58,6 +53,7 @@ export class AppComponent {
     this.products = service.getProducts();
     this.simpleProducts = service.getSimpleProducts();
     this.product = this.simpleProducts[0].ID;
+    this.selectedProduct = this.simpleProducts[0];
     this.productsDataSource = new DataSource({
       store: {
         data: this.simpleProducts,

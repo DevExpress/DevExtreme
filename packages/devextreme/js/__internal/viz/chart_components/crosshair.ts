@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 
-import { extend } from '@js/core/utils/extend';
+import { extend } from '@ts/core/utils/m_extend';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type {
+  BBox, Bounds, Canvas, Coords,
+} from '@ts/viz/core/types';
 import { patchFontOptions } from '@ts/viz/core/utils';
 
 const math = Math;
@@ -28,14 +28,55 @@ const LEFT = 'left';
 const TOP = 'top';
 const BOTTOM = 'bottom';
 
-export function getMargins() {
+type Direction = 'horizontal' | 'vertical';
+type LabelSide = 'left' | 'right' | 'top' | 'bottom';
+type CoordName = 'x' | 'y';
+type SizeName = 'width' | 'height';
+
+interface CrosshairPane {
+  coords: Bounds;
+  clipRect: { id: string | null };
+}
+
+interface CrosshairParams {
+  canvas: Canvas;
+  axes: ThemeValue[][];
+  panes: CrosshairPane[];
+}
+
+interface CrosshairLineStyle {
+  stroke: string;
+  'stroke-width': number;
+  dashStyle: string;
+  opacity: number;
+  'stroke-linecap': string;
+}
+
+interface CrosshairLineSettings {
+  visible: boolean;
+  line: CrosshairLineStyle;
+  label: ThemeValue;
+}
+
+interface CrosshairLabel {
+  text: ThemeValue;
+  background: ThemeValue;
+  axis: ThemeValue;
+  options: ThemeValue;
+  pos: { coord: number; side: LabelSide };
+  startXY: Coords;
+}
+
+type LabelPositionChecker = (bBox: BBox, position: LabelSide, coord: Coords) => Coords;
+
+export function getMargins(): Coords {
   return {
     x: LABEL_BACKGROUND_PADDING_X,
     y: LABEL_BACKGROUND_PADDING_Y,
   };
 }
 
-function getRectangleBBox(bBox) {
+function getRectangleBBox(bBox: BBox): BBox {
   return {
     x: bBox.x - LABEL_BACKGROUND_PADDING_X,
     y: bBox.y - LABEL_BACKGROUND_PADDING_Y,
@@ -44,8 +85,8 @@ function getRectangleBBox(bBox) {
   };
 }
 
-function getLabelCheckerPosition(x, y, isHorizontal, canvas) {
-  const params = isHorizontal ? ['x', 'width', 'y', 'height', y, 0] : ['y', 'height', 'x', 'width', x, 1];
+function getLabelCheckerPosition(x: number, y: number, isHorizontal: boolean, canvas: Canvas): LabelPositionChecker {
+  const params: [CoordName, SizeName, CoordName, SizeName, number, number] = isHorizontal ? ['x', 'width', 'y', 'height', y, 0] : ['y', 'height', 'x', 'width', x, 1];
 
   return function (bBox, position, coord) {
     const labelCoord = { x: coord.x, y: coord.y };
@@ -69,21 +110,42 @@ function getLabelCheckerPosition(x, y, isHorizontal, canvas) {
   };
 }
 
-export function Crosshair(renderer, options, params, group) {
-  const that = this;
-  that._renderer = renderer;
-  that._crosshairGroup = group;
-  that._options = {};
-  that.update(options, params);
-}
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Crosshair = class Crosshair {
+  declare _renderer: ThemeValue;
 
-Crosshair.prototype = {
-  constructor: Crosshair,
+  declare _crosshairGroup: ThemeValue;
 
-  update(options, params) {
-    const that = this;
+  declare _options: Record<string, CrosshairLineSettings>;
+
+  declare _canvas: Canvas;
+
+  declare _axes: ThemeValue[][];
+
+  declare _panes: CrosshairPane[];
+
+  declare _horizontal: ThemeValue;
+
+  declare _vertical: ThemeValue;
+
+  declare _horizontalGroup: ThemeValue;
+
+  declare _verticalGroup: ThemeValue;
+
+  declare _circle: ThemeValue;
+
+  declare _linesCanvas: Bounds;
+
+  constructor(renderer: ThemeValue, options: ThemeValue, params: CrosshairParams, group: ThemeValue) {
+    this._renderer = renderer;
+    this._crosshairGroup = group;
+    this._options = {};
+    this.update(options, params);
+  }
+
+  update(options: ThemeValue, params: CrosshairParams): void {
     const canvas = params.canvas;
-    that._canvas = {
+    this._canvas = {
       top: canvas.top,
       bottom: canvas.height - canvas.bottom,
       left: canvas.left,
@@ -91,19 +153,18 @@ Crosshair.prototype = {
       width: canvas.width,
       height: canvas.height,
     };
-    that._axes = params.axes;
-    that._panes = params.panes;
-    that._prepareOptions(options, HORIZONTAL);
-    that._prepareOptions(options, VERTICAL);
-  },
+    this._axes = params.axes;
+    this._panes = params.panes;
+    this._prepareOptions(options, HORIZONTAL);
+    this._prepareOptions(options, VERTICAL);
+  }
 
-  dispose() {
-    const that = this;
+  dispose(): void {
+    // @ts-expect-error dispose drops the references kept in non-nullable fields
+    this._renderer = this._crosshairGroup = this._options = this._axes = this._canvas = this._horizontalGroup = this._verticalGroup = this._horizontal = this._vertical = this._circle = this._panes = null;
+  }
 
-    that._renderer = that._crosshairGroup = that._options = that._axes = that._canvas = that._horizontalGroup = that._verticalGroup = that._horizontal = that._vertical = that._circle = that._panes = null;
-  },
-
-  _prepareOptions(options, direction) {
+  _prepareOptions(options: ThemeValue, direction: Direction): void {
     const lineOptions = options[`${direction}Line`];
     this._options[direction] = {
       visible: lineOptions.visible,
@@ -116,58 +177,55 @@ Crosshair.prototype = {
       },
       label: extend(true, {}, options.label, lineOptions.label),
     };
-  },
+  }
 
-  _createLines(options, sharpParam, group) {
-    const lines = [];
+  _createLines(options: CrosshairLineStyle, sharpParam: string, group: ThemeValue): ThemeValue[] {
+    const lines: ThemeValue[] = [];
     const canvas = this._canvas;
     const points = [canvas.left, canvas.top, canvas.left, canvas.top];
     for (let i = 0; i < 2; i++) {
-      // @ts-expect-error
       lines.push(this._renderer.path(points, 'line').attr(options).sharp(sharpParam).append(group));
     }
     return lines;
-  },
+  }
 
-  render() {
-    const that = this;
-    const renderer = that._renderer;
-    const options = that._options;
+  render(): void {
+    const renderer = this._renderer;
+    const options = this._options;
     const verticalOptions = options.vertical;
     const horizontalOptions = options.horizontal;
     const extraOptions = horizontalOptions.visible ? horizontalOptions.line : verticalOptions.line;
     const circleOptions = {
       stroke: extraOptions.stroke, 'stroke-width': extraOptions['stroke-width'], dashStyle: extraOptions.dashStyle, opacity: extraOptions.opacity,
     };
-    const canvas = that._canvas;
+    const canvas = this._canvas;
 
-    that._horizontal = {};
-    that._vertical = {};
+    this._horizontal = {};
+    this._vertical = {};
 
-    that._circle = renderer.circle(canvas.left, canvas.top, 0).attr(circleOptions).append(that._crosshairGroup);
-    that._horizontalGroup = renderer.g().append(that._crosshairGroup);
-    that._verticalGroup = renderer.g().append(that._crosshairGroup);
+    this._circle = renderer.circle(canvas.left, canvas.top, 0).attr(circleOptions).append(this._crosshairGroup);
+    this._horizontalGroup = renderer.g().append(this._crosshairGroup);
+    this._verticalGroup = renderer.g().append(this._crosshairGroup);
 
     if (verticalOptions.visible) {
-      that._vertical.lines = that._createLines(verticalOptions.line, 'h', that._verticalGroup);
-      that._vertical.labels = that._createLabels(that._axes[0], verticalOptions, false, that._verticalGroup);
+      this._vertical.lines = this._createLines(verticalOptions.line, 'h', this._verticalGroup);
+      this._vertical.labels = this._createLabels(this._axes[0], verticalOptions, false, this._verticalGroup);
     }
     if (horizontalOptions.visible) {
-      that._horizontal.lines = that._createLines(horizontalOptions.line, 'v', that._horizontalGroup);
-      that._horizontal.labels = that._createLabels(that._axes[1], horizontalOptions, true, that._horizontalGroup);
+      this._horizontal.lines = this._createLines(horizontalOptions.line, 'v', this._horizontalGroup);
+      this._horizontal.labels = this._createLabels(this._axes[1], horizontalOptions, true, this._horizontalGroup);
     }
 
-    that.hide();
-  },
+    this.hide();
+  }
 
-  _createLabels(axes, options, isHorizontal, group) {
-    const that = this;
-    const canvas = that._canvas;
-    const renderer = that._renderer;
+  _createLabels(axes: ThemeValue[], options: CrosshairLineSettings, isHorizontal: boolean, group: ThemeValue): CrosshairLabel[] {
+    const canvas = this._canvas;
+    const renderer = this._renderer;
     let x;
     let y;
     let text;
-    const labels = [];
+    const labels: CrosshairLabel[] = [];
     let background;
     let currentLabelPos;
     const labelOptions = options.label;
@@ -193,7 +251,6 @@ Crosshair.prototype = {
           align,
           class: labelOptions.cssClass,
         }).append(group);
-        // @ts-expect-error
         labels.push({
           text, background, axis, options: labelOptions, pos: { coord: currentLabelPos, side: position }, startXY: { x, y },
         });
@@ -201,11 +258,9 @@ Crosshair.prototype = {
     }
 
     return labels;
-  },
+  }
 
-  _updateText(value, axisName, labels, point, func) {
-    const that = this;
-
+  _updateText(value: ThemeValue, axisName: ThemeValue, labels: CrosshairLabel[], point: ThemeValue, func: LabelPositionChecker): void {
     labels.forEach((label) => {
       const axis = label.axis;
       const coord = label.startXY;
@@ -221,7 +276,7 @@ Crosshair.prototype = {
         textElement.attr({ text, x: coord.x, y: coord.y });
         textElement.attr(func(textElement.getBBox(), label.pos.side, coord));
 
-        that._updateLinesCanvas(label);
+        this._updateLinesCanvas(label);
         backgroundElement.attr(getRectangleBBox(textElement.getBBox()));
       } else {
         textElement.attr({ text: '' });
@@ -233,22 +288,22 @@ Crosshair.prototype = {
         });
       }
     });
-  },
+  }
 
-  hide() {
+  hide(): void {
     this._crosshairGroup.attr({ visibility: 'hidden' });
-  },
+  }
 
-  _updateLinesCanvas(label) {
+  _updateLinesCanvas(label: CrosshairLabel): void {
     const position = label.pos.side;
     const labelCoord = label.pos.coord;
     const coords = this._linesCanvas;
     const canvas = this._canvas;
 
     coords[position] = coords[position] !== canvas[position] && mathAbs(coords[position] - canvas[position]) < mathAbs(labelCoord - canvas[position]) ? coords[position] : labelCoord;
-  },
+  }
 
-  _updateLines(lines, x, y, r, isHorizontal) {
+  _updateLines(lines: ThemeValue[], x: number, y: number, r: number, isHorizontal: boolean): void {
     const coords = this._linesCanvas;
     const canvas = this._canvas;
     const points = isHorizontal
@@ -263,9 +318,9 @@ Crosshair.prototype = {
     for (let i = 0; i < 2; i++) {
       lines[i].attr({ points: points[i] }).sharp(isHorizontal ? 'v' : 'h', isHorizontal ? y === canvas.bottom ? -1 : 1 : x === canvas.right ? -1 : 1);
     }
-  },
+  }
 
-  _resetLinesCanvas() {
+  _resetLinesCanvas(): void {
     const canvas = this._canvas;
     this._linesCanvas = {
       left: canvas.left,
@@ -273,9 +328,9 @@ Crosshair.prototype = {
       top: canvas.top,
       bottom: canvas.bottom,
     };
-  },
+  }
 
-  _getClipRectForPane(x, y) {
+  _getClipRectForPane(x: number, y: number): { id: string | null } {
     const panes = this._panes;
     let i;
     let coords;
@@ -286,40 +341,47 @@ Crosshair.prototype = {
       }
     }
     return { id: null };
-  },
+  }
 
-  show(data) {
-    const that = this;
+  show(data: { point: ThemeValue; x: number; y: number }): void {
     const point = data.point;
     const pointData = point.getCrosshairData(data.x, data.y);
     const r = point.getPointRadius();
-    const horizontal = that._horizontal;
-    const vertical = that._vertical;
+    const horizontal = this._horizontal;
+    const vertical = this._vertical;
     const rad = !r ? 0 : r + 3;
-    const canvas = that._canvas;
+    const canvas = this._canvas;
     const x = mathFloor(pointData.x);
     const y = mathFloor(pointData.y);
 
     if (x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom) {
-      that._crosshairGroup.attr({ visibility: 'visible' });
-      that._resetLinesCanvas();
-      that._circle.attr({
-        cx: x, cy: y, r: rad, 'clip-path': that._getClipRectForPane(x, y).id,
+      this._crosshairGroup.attr({ visibility: 'visible' });
+      this._resetLinesCanvas();
+      this._circle.attr({
+        cx: x, cy: y, r: rad, 'clip-path': this._getClipRectForPane(x, y).id,
       });
 
       if (horizontal.lines) {
-        that._updateText(pointData.yValue, pointData.axis, horizontal.labels, point, getLabelCheckerPosition(x, y, true, canvas));
-        that._updateLines(horizontal.lines, x, y, rad, true);
-        that._horizontalGroup.attr({ translateY: y - canvas.top });
+        this._updateText(pointData.yValue, pointData.axis, horizontal.labels, point, getLabelCheckerPosition(x, y, true, canvas));
+        this._updateLines(horizontal.lines, x, y, rad, true);
+        this._horizontalGroup.attr({ translateY: y - canvas.top });
       }
 
       if (vertical.lines) {
-        that._updateText(pointData.xValue, pointData.axis, vertical.labels, point, getLabelCheckerPosition(x, y, false, canvas));
-        that._updateLines(vertical.lines, x, y, rad, false);
-        that._verticalGroup.attr({ translateX: x - canvas.left });
+        this._updateText(pointData.xValue, pointData.axis, vertical.labels, point, getLabelCheckerPosition(x, y, false, canvas));
+        this._updateLines(vertical.lines, x, y, rad, false);
+        this._verticalGroup.attr({ translateX: x - canvas.left });
       }
     } else {
-      that.hide();
+      this.hide();
     }
-  },
+  }
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_Crosshair(value: typeof Crosshair): void {
+  Crosshair = value;
+}
+/// #ENDDEBUG

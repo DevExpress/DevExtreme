@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../../testing/visualtestrc-schema.json",
+  "comment": "Angular antialiases the group header text a sub-pixel off: 5 differing pixels in one glyph column.",
+  "comparison-options": {
+    "looksSameComparisonOptions": {
+      "tolerance": 20,
+      "antialiasingTolerance": 20
+    }
+  }
+}

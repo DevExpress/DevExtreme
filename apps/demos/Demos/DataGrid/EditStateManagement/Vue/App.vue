@@ -39,7 +39,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <span>Edit Row Key:</span>
-        <div id="editRowKey">{{ editRowKey === null ? "null" : editRowKey.toString() }}</div>
+        <div id="editRowKey">{{ editRowKey == null ? "null" : editRowKey.toString() }}</div>
       </div>
       <div class="option">
         <span>Changes:</span>
@@ -91,7 +91,7 @@ const onSaving = (e: DxDataGridTypes.SavingEvent) => {
 
 loadOrders();
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

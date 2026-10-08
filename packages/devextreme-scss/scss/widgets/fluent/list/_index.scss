@@ -13,10 +13,10 @@
 @use "../radioGroup/colors" as *;
 @use "../badge";
 
-$fluent-list-item-border-width: 1px;
-$fluent-list-border-width: 1px;
-$fluent-list-border: $fluent-list-border-width solid;
-$fluent-list-item-border: $fluent-list-item-border-width solid;
+$fluent-list-item-border-width: 1px !default;
+$fluent-list-border-width: 1px !default;
+$fluent-list-border: $fluent-list-border-width solid !default;
+$fluent-list-item-border: $fluent-list-item-border-width solid !default;
 
 .dx-state-disabled {
   &.dx-list {

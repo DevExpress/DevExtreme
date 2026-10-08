@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -9,16 +9,10 @@ if (!/localhost/.test(document.location.host)) {
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridRowReordering';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxDataGridModule,
   ],
@@ -41,11 +35,11 @@ export class AppComponent {
     },
   });
 
-  onReorder = (e: Parameters<DxDataGridTypes.RowDragging['onReorder']>[0]) => {
+  onReorder = (e: DxDataGridTypes.RowDraggingReorderEvent) => {
     e.promise = this.processReorder(e);
   };
 
-  async processReorder(e: Parameters<DxDataGridTypes.RowDragging['onReorder']>[0]) {
+  async processReorder(e: DxDataGridTypes.RowDraggingReorderEvent) {
     const visibleRows = e.component.getVisibleRows();
     const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 

@@ -3,12 +3,14 @@
 import type { RefObject } from '@ts/core/r1/runtime/inferno/index';
 import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 
+import type { EffectReturn } from '../../core/r1/utils/effect_return';
 import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
 import { SelectBox } from '../drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { getLocalizationMessage } from '../utils/compatibility_utils';
 import { getElementMinWidth } from '../utils/get_element_width';
+import { onThemeReady } from '../utils/on_theme_ready';
 
 export interface PaginationSmallProps {
   parentRef?: RefObject<HTMLElement>;
@@ -38,6 +40,7 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
   constructor(props) {
     super(props);
     this.updateWidth = this.updateWidth.bind(this);
+    this.subscribeToThemeReady = this.subscribeToThemeReady.bind(this);
   }
 
   componentWillUpdate(nextProps: PageSizeSmallPropsType, nextState, context): void {
@@ -52,7 +55,10 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       this.props.pageSizeChangedInternal,
       this.props.allowedPageSizes,
     ];
-    return [new InfernoEffect(this.updateWidth, dependency)];
+    return [
+      new InfernoEffect(this.updateWidth, dependency),
+      new InfernoEffect(this.subscribeToThemeReady, []),
+    ];
   }
 
   updateEffects(): void {
@@ -64,6 +70,10 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       this.props.allowedPageSizes,
     ];
     this._effects[0]?.update(dependency);
+  }
+
+  subscribeToThemeReady(): EffectReturn {
+    return onThemeReady(this.updateWidth);
   }
 
   updateWidth(): void {

@@ -49,7 +49,7 @@ function supportChatTypingEnd() {
 }
 </script>
 
-<style scoped>
+<style>
 #app {
   display: flex;
   gap: 20px;

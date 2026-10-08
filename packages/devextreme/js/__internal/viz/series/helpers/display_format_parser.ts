@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { formatDate, formatNumber } from '@js/localization';
+import { formatDate, formatNumber } from '@ts/core/localization';
 
 const startPlaceHolderChar = '{';
 const endPlaceHolderChar = '}';

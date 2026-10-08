@@ -5,16 +5,10 @@ import { DxFormModule, DxDataGridModule, DxSelectBoxModule, DxTabPanelModule } f
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'detail-view',
-  templateUrl: `.${modulePrefix}/detail-view/detail-view.component.html`,
-  styleUrls: [`.${modulePrefix}/detail-view/detail-view.component.css`],
+  templateUrl: './detail-view.component.html',
+  styleUrls: ['./detail-view.component.css'],
   imports: [
     DxDataGridModule,
     DxFormModule,

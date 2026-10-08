@@ -8,9 +8,9 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { ModuleType, RowKey } from '@ts/grids/grid_core/m_types';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -44,7 +44,14 @@ const initMasterDetail = function (that) {
   that._isExpandAll = that.option('masterDetail.autoExpandAll');
 };
 
-export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) => class DataMasterDetailExtender extends Base {
+export interface MasterDetailDataControllerExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  getRowIndicesForExpand(key: RowKey): number[];
+}
+
+export const dataMasterDetailExtenderMixin = (
+  Base: ModuleType<DataController>,
+): ModuleType<DataController & MasterDetailDataControllerExtension> => class DataMasterDetailExtender extends Base {
   private _isExpandAll: any;
 
   private _expandedItems: any;
@@ -98,7 +105,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return !!(that._isExpandAll ^ (expandIndex >= 0 && that._expandedItems[expandIndex].visible));
   }
 
-  protected getRowIndicesForExpand(key: RowKey): number[] {
+  public getRowIndicesForExpand(key: RowKey): number[] {
     const rowIndex = this.getRowIndexByKey(key);
 
     return [rowIndex, rowIndex + 1];

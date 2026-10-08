@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -13,16 +11,11 @@ import {
     EventEmitter
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-search-panel',
@@ -99,7 +92,6 @@ export class DxoTreeListSearchPanelComponent extends NestedOption implements OnD
         return 'searchPanel';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -119,7 +111,6 @@ export class DxoTreeListSearchPanelComponent extends NestedOption implements OnD
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

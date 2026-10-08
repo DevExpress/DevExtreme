@@ -18,7 +18,7 @@ $float-channel-color: null !default;
 }
 
 
-$never-used: collector(
+$_never-used: collector(
 (
 "$base-font-family": $base-font-family,
 "$base-accent": $base-accent,

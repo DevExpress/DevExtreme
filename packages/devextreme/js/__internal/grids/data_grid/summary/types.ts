@@ -4,6 +4,7 @@ import type {
 } from '@js/ui/data_grid';
 import type { Column } from '@ts/grids/data_grid/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 
 import type { GroupItem } from '../grouping/types';
 
@@ -44,7 +45,7 @@ export interface SortInfo {
 export type SortByGroups = (SortInfo[] | undefined)[];
 
 export interface CustomAggregator {
-  seed: (groupIndex: number) => unknown;
+  seed: (groupIndex?: number) => unknown;
   step: (totalValue: unknown, value: unknown) => unknown;
   finalize: (totalValue: unknown) => unknown;
 }
@@ -60,4 +61,8 @@ export interface SummaryOptions {
   groupAggregates: Aggregate[];
   totalAggregates: Aggregate[];
   sortByGroups: () => SortByGroups | undefined;
+}
+
+export interface EditingControllerRequired {
+  editingController: EditingController;
 }

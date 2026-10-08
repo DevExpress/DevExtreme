@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const fx = require('common/core/animation/fx');
-const ko = require('knockout');
+import $ from 'jquery';
+import fx from 'common/core/animation/fx';
+import ko from 'knockout';
 
-require('ui/overlay/ui.overlay');
-require('ui/slider');
-require('integration/knockout');
+import 'ui/overlay/ui.overlay';
+import 'ui/slider';
+import 'integration/knockout';
 
-require('fluent_blue_light.css!');
+import 'fluent_blue_light.css!';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

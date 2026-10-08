@@ -52,7 +52,7 @@ import { customers } from './data.ts';
 
 const autoExpandAll = ref(true);
 </script>
-<style scoped>
+<style>
 .options {
   padding: 20px;
   margin-top: 20px;

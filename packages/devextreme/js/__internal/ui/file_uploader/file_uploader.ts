@@ -718,7 +718,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         : null,
     };
 
-    // @ts-expect-error attr type should be extended
     this._$filesContainer?.attr(aria);
   }
 
@@ -1173,7 +1172,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _applyInputAttributes(customAttributes: Record<string, string>): void {
-    // @ts-expect-error dxElementWrapper should be extdened
     this._$fileInput.attr(customAttributes);
   }
 

@@ -345,7 +345,7 @@ function sendRequest(value: string) {
   });
 }
 </script>
-<style scoped>
+<style>
 #summary {
   padding-left: 10px;
   margin-top: 20px;

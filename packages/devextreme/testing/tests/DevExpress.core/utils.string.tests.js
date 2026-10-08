@@ -1,4 +1,4 @@
-const stringUtils = require('core/utils/string');
+import * as stringUtils from 'core/utils/string';
 
 QUnit.module('String utils');
 

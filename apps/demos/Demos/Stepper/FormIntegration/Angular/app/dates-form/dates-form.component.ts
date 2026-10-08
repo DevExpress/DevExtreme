@@ -5,15 +5,9 @@ import { type DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
 import 'devextreme/ui/date_range_box';
 import type { BookingFormData } from '../app.types';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'dates-form',
-  templateUrl: `.${modulePrefix}/dates-form/dates-form.component.html`,
+  templateUrl: './dates-form.component.html',
   imports: [
     DxFormModule,
   ],

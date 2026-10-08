@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
 import type { dxPieChartAnnotationConfig, PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
@@ -30,7 +25,6 @@ import {
     DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pie-chart-common-annotation-settings',
@@ -286,7 +280,6 @@ export class DxoPieChartCommonAnnotationSettingsComponent extends NestedOption i
         return 'commonAnnotationSettings';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -306,7 +299,6 @@ export class DxoPieChartCommonAnnotationSettingsComponent extends NestedOption i
         extractTemplate(this, this.element, this.renderer, this.document);
     }
 
-
     ngOnInit() {
         this._addRecreatedComponent();
     }
@@ -314,7 +306,6 @@ export class DxoPieChartCommonAnnotationSettingsComponent extends NestedOption i
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

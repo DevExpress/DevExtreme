@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -20,7 +19,7 @@ import DataOption from '@ts/ui/gantt/ui.gantt.data.option';
 import { GanttDataChangesProcessingHelper } from '@ts/ui/gantt/ui.gantt.data_changes_processing_helper';
 import { GanttDialog } from '@ts/ui/gantt/ui.gantt.dialogs';
 import { GanttExportHelper } from '@ts/ui/gantt/ui.gantt.export_helper';
-import { GanttHelper } from '@ts/ui/gantt/ui.gantt.helper';
+import { GanttHelper, type GanttProperties } from '@ts/ui/gantt/ui.gantt.helper';
 import { GanttMappingHelper } from '@ts/ui/gantt/ui.gantt.mapping_helper';
 import { ModelChangesListener } from '@ts/ui/gantt/ui.gantt.model_changes_listener';
 import { GanttSizeHelper } from '@ts/ui/gantt/ui.gantt.size_helper';
@@ -52,7 +51,7 @@ interface SortFilterState {
   sieveColumn?: any;
 }
 
-class Gantt extends Widget<Properties> {
+class Gantt extends Widget<GanttProperties> {
   _isGanttRendered?: boolean;
 
   _$toolbarWrapper!: dxElementWrapper;
@@ -137,8 +136,6 @@ class Gantt extends Widget<Properties> {
 
   _init(): void {
     super._init();
-
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
 
     this._initGantt();
     this._isGanttRendered = false;
@@ -1152,12 +1149,12 @@ class Gantt extends Widget<Properties> {
     this._ganttView?._ganttViewCore.zoomOut();
   }
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): GanttProperties {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), GanttHelper.getDefaultOptions());
   }
 
-  _optionChanged(args: OptionChanged<Properties>): void {
+  _optionChanged(args: OptionChanged<GanttProperties>): void {
     const { name, fullName, value } = args;
 
     switch (name) {

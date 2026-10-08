@@ -79,7 +79,7 @@ const onValueChanged = ({ value }: DxSelectBoxTypes.ValueChangedEvent) => {
   }
 };
 </script>
-<style scoped>
+<style>
 .right-side {
   position: absolute;
   right: 1px;

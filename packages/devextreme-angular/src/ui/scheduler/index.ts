@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -31,7 +28,6 @@ import type { Store } from 'devextreme/data/store';
 import type { DayOfWeek, Orientation } from 'devextreme/common';
 
 import DxScheduler from 'devextreme/ui/scheduler';
-
 
 import {
     DxComponent,
@@ -84,17 +80,16 @@ import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/n
 import { DxiSchedulerValidationRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_resources,
-           PROPERTY_TOKEN_tabs,
-           PROPERTY_TOKEN_views,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_resources,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_views,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxScheduler]
-
  */
 @Component({
     selector: 'dx-scheduler',
@@ -139,7 +134,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -149,10 +143,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.adaptivityEnabled]
-    
      */
     @Input()
     get adaptivityEnabled(): boolean {
@@ -162,10 +154,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('adaptivityEnabled', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.allDayExpr]
-    
      */
     @Input()
     get allDayExpr(): string {
@@ -175,10 +165,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('allDayExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.allDayPanelMode]
-    
      */
     @Input()
     get allDayPanelMode(): AllDayPanelMode {
@@ -188,10 +176,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('allDayPanelMode', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.appointmentCollectorTemplate]
-    
      */
     @Input()
     get appointmentCollectorTemplate(): any {
@@ -201,10 +187,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('appointmentCollectorTemplate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.appointmentDragging]
-    
      */
     @Input()
     get appointmentDragging(): { autoScroll?: boolean, data?: any | undefined, group?: string | undefined, onAdd?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragEnd?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void), onDragMove?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragStart?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void), scrollSensitivity?: number, scrollSpeed?: number } {
@@ -214,10 +198,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('appointmentDragging', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.appointmentTemplate]
-    
      */
     @Input()
     get appointmentTemplate(): any {
@@ -227,10 +209,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('appointmentTemplate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.appointmentTooltipTemplate]
-    
      */
     @Input()
     get appointmentTooltipTemplate(): any {
@@ -240,10 +220,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('appointmentTooltipTemplate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.cellDuration]
-    
      */
     @Input()
     get cellDuration(): number {
@@ -253,10 +231,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('cellDuration', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.crossScrollingEnabled]
-    
      */
     @Input()
     get crossScrollingEnabled(): boolean {
@@ -266,10 +242,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('crossScrollingEnabled', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.currentDate]
-    
      */
     @Input()
     get currentDate(): Date | number | string {
@@ -279,10 +253,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('currentDate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.currentView]
-    
      */
     @Input()
     get currentView(): string | ViewType {
@@ -292,10 +264,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('currentView', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.customizeDateNavigatorText]
-    
      */
     @Input()
     get customizeDateNavigatorText(): ((info: { endDate: Date, startDate: Date, text: string }) => string) | undefined {
@@ -305,10 +275,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('customizeDateNavigatorText', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.dataCellTemplate]
-    
      */
     @Input()
     get dataCellTemplate(): any {
@@ -318,10 +286,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('dataCellTemplate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string {
@@ -331,10 +297,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.dateCellTemplate]
-    
      */
     @Input()
     get dateCellTemplate(): any {
@@ -344,10 +308,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('dateCellTemplate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.dateSerializationFormat]
-    
      */
     @Input()
     get dateSerializationFormat(): string | undefined {
@@ -357,10 +319,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('dateSerializationFormat', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.descriptionExpr]
-    
      */
     @Input()
     get descriptionExpr(): string {
@@ -370,10 +330,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('descriptionExpr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -383,10 +341,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.editing]
-    
      */
     @Input()
     get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: AppointmentFormProperties, popup?: Record<string, any> } {
@@ -396,10 +352,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('editing', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -409,10 +363,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
-    
      */
     @Input()
     get endDateExpr(): string {
@@ -422,10 +374,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('endDateExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.endDateTimeZoneExpr]
-    
      */
     @Input()
     get endDateTimeZoneExpr(): string {
@@ -435,10 +385,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('endDateTimeZoneExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.endDayHour]
-    
      */
     @Input()
     get endDayHour(): number {
@@ -448,10 +396,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('endDayHour', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.firstDayOfWeek]
-    
      */
     @Input()
     get firstDayOfWeek(): DayOfWeek | undefined {
@@ -461,10 +407,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('firstDayOfWeek', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -474,10 +418,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.groupByDate]
-    
      */
     @Input()
     get groupByDate(): boolean {
@@ -487,10 +429,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('groupByDate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.groups]
-    
      */
     @Input()
     get groups(): Array<string> {
@@ -500,10 +440,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('groups', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -512,7 +450,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     
     @Input()
@@ -523,10 +460,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('hiddenWeekDays', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -536,10 +471,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.indicatorUpdateInterval]
-    
      */
     @Input()
     get indicatorUpdateInterval(): number {
@@ -549,10 +482,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('indicatorUpdateInterval', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.max]
-    
      */
     @Input()
     get max(): Date | number | string | undefined {
@@ -562,10 +493,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('max', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.maxAppointmentsPerCell]
-    
      */
     @Input()
     get maxAppointmentsPerCell(): CellAppointmentsLimit | number {
@@ -575,10 +504,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('maxAppointmentsPerCell', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.min]
-    
      */
     @Input()
     get min(): Date | number | string | undefined {
@@ -588,10 +515,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('min', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -601,10 +526,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.offset]
-    
      */
     @Input()
     get offset(): number {
@@ -614,10 +537,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('offset', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.recurrenceEditMode]
-    
      */
     @Input()
     get recurrenceEditMode(): RecurrenceEditMode {
@@ -627,10 +548,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('recurrenceEditMode', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.recurrenceExceptionExpr]
-    
      */
     @Input()
     get recurrenceExceptionExpr(): string {
@@ -640,10 +559,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('recurrenceExceptionExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.recurrenceRuleExpr]
-    
      */
     @Input()
     get recurrenceRuleExpr(): string {
@@ -653,10 +570,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('recurrenceRuleExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.remoteFiltering]
-    
      */
     @Input()
     get remoteFiltering(): boolean {
@@ -666,10 +581,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('remoteFiltering', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.resourceCellTemplate]
-    
      */
     @Input()
     get resourceCellTemplate(): any {
@@ -679,10 +592,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('resourceCellTemplate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.resources]
-    
      */
     @Input()
     get resources(): { allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, icon?: string, label?: string, parentIdExpr?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }[] {
@@ -692,10 +603,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('resources', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -705,10 +614,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.scrolling]
-    
      */
     @Input()
     get scrolling(): dxSchedulerScrolling {
@@ -718,10 +625,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('scrolling', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.selectedCellData]
-    
      */
     @Input()
     get selectedCellData(): Array<any> {
@@ -731,10 +636,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('selectedCellData', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.shadeUntilCurrentTime]
-    
      */
     @Input()
     get shadeUntilCurrentTime(): boolean {
@@ -744,10 +647,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('shadeUntilCurrentTime', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.showAllDayPanel]
-    
      */
     @Input()
     get showAllDayPanel(): boolean {
@@ -757,10 +658,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showAllDayPanel', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.showCurrentTimeIndicator]
-    
      */
     @Input()
     get showCurrentTimeIndicator(): boolean {
@@ -769,7 +668,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set showCurrentTimeIndicator(value: boolean) {
         this._setOption('showCurrentTimeIndicator', value);
     }
-
 
     
     @Input()
@@ -780,10 +678,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('snapToCellsMode', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.startDateExpr]
-    
      */
     @Input()
     get startDateExpr(): string {
@@ -793,10 +689,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('startDateExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.startDateTimeZoneExpr]
-    
      */
     @Input()
     get startDateTimeZoneExpr(): string {
@@ -806,10 +700,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('startDateTimeZoneExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.startDayHour]
-    
      */
     @Input()
     get startDayHour(): number {
@@ -819,10 +711,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('startDayHour', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -832,10 +722,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.textExpr]
-    
      */
     @Input()
     get textExpr(): string {
@@ -845,10 +733,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('textExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.timeCellTemplate]
-    
      */
     @Input()
     get timeCellTemplate(): any {
@@ -858,10 +744,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('timeCellTemplate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.timeZone]
-    
      */
     @Input()
     get timeZone(): string {
@@ -871,10 +755,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('timeZone', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxSchedulerToolbar | undefined {
@@ -884,10 +766,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('toolbar', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.useDropDownViewSwitcher]
-    
      */
     @Input()
     get useDropDownViewSwitcher(): boolean {
@@ -897,10 +777,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('useDropDownViewSwitcher', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.views]
-    
      */
     @Input()
     get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: DayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<DayOfWeek> | undefined, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
@@ -910,10 +788,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('views', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -923,10 +799,8 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -937,593 +811,409 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     }
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentAdded]
-    
-    
      */
     @Output() onAppointmentAdded: EventEmitter<AppointmentAddedEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentAdding]
-    
-    
      */
     @Output() onAppointmentAdding: EventEmitter<AppointmentAddingEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentClick]
-    
-    
      */
     @Output() onAppointmentClick: EventEmitter<AppointmentClickEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentContextMenu]
-    
-    
      */
     @Output() onAppointmentContextMenu: EventEmitter<AppointmentContextMenuEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentDblClick]
-    
-    
      */
     @Output() onAppointmentDblClick: EventEmitter<AppointmentDblClickEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentDeleted]
-    
-    
      */
     @Output() onAppointmentDeleted: EventEmitter<AppointmentDeletedEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentDeleting]
-    
-    
      */
     @Output() onAppointmentDeleting: EventEmitter<AppointmentDeletingEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentFormOpening]
-    
-    
      */
     @Output() onAppointmentFormOpening: EventEmitter<AppointmentFormOpeningEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentRendered]
-    
-    
      */
     @Output() onAppointmentRendered: EventEmitter<AppointmentRenderedEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentTooltipShowing]
-    
-    
      */
     @Output() onAppointmentTooltipShowing: EventEmitter<AppointmentTooltipShowingEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentUpdated]
-    
-    
      */
     @Output() onAppointmentUpdated: EventEmitter<AppointmentUpdatedEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onAppointmentUpdating]
-    
-    
      */
     @Output() onAppointmentUpdating: EventEmitter<AppointmentUpdatingEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onCellClick]
-    
-    
      */
     @Output() onCellClick: EventEmitter<CellClickEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onCellContextMenu]
-    
-    
      */
     @Output() onCellContextMenu: EventEmitter<CellContextMenuEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxSchedulerOptions.onSelectionEnd]
-    
-    
      */
     @Output() onSelectionEnd: EventEmitter<SelectionEndEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() adaptivityEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allDayExprChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allDayPanelModeChange: EventEmitter<AllDayPanelMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() appointmentCollectorTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() appointmentDraggingChange: EventEmitter<{ autoScroll?: boolean, data?: any | undefined, group?: string | undefined, onAdd?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragEnd?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void), onDragMove?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragStart?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void), scrollSensitivity?: number, scrollSpeed?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() appointmentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() appointmentTooltipTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cellDurationChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() crossScrollingEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() currentDateChange: EventEmitter<Date | number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() currentViewChange: EventEmitter<string | ViewType>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customizeDateNavigatorTextChange: EventEmitter<((info: { endDate: Date, startDate: Date, text: string }) => string) | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataCellTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dateCellTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dateSerializationFormatChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() descriptionExprChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: AppointmentFormProperties, popup?: Record<string, any> }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() endDateExprChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() endDateTimeZoneExprChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() endDayHourChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() firstDayOfWeekChange: EventEmitter<DayOfWeek | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupByDateChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupsChange: EventEmitter<Array<string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hiddenWeekDaysChange: EventEmitter<Array<DayOfWeek> | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() indicatorUpdateIntervalChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxChange: EventEmitter<Date | number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxAppointmentsPerCellChange: EventEmitter<CellAppointmentsLimit | number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minChange: EventEmitter<Date | number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() offsetChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() recurrenceEditModeChange: EventEmitter<RecurrenceEditMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() recurrenceExceptionExprChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() recurrenceRuleExprChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() remoteFilteringChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() resourceCellTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() resourcesChange: EventEmitter<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, icon?: string, label?: string, parentIdExpr?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollingChange: EventEmitter<dxSchedulerScrolling>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedCellDataChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadeUntilCurrentTimeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showAllDayPanelChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showCurrentTimeIndicatorChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() snapToCellsModeChange: EventEmitter<SnapToCellsMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() startDateExprChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() startDateTimeZoneExprChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() startDayHourChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() textExprChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() timeCellTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() timeZoneChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxSchedulerToolbar | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() useDropDownViewSwitcherChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: DayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<DayOfWeek> | undefined, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

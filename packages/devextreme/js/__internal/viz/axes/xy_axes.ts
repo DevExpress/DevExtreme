@@ -24,11 +24,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop } from '@js/core/utils/common';
-import dateUtils from '@js/core/utils/date';
-import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
-import formatHelper from '@js/format_helper';
+import formatHelper from '@ts/core/format_helper';
+import { noop } from '@ts/core/utils/m_common';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined } from '@ts/core/utils/m_type';
 import constants from '@ts/viz/axes/axes_constants';
 import { generateDateBreaks } from '@ts/viz/axes/datetime_breaks';
 import { getCosAndSin, getLog, patchFontOptions } from '@ts/viz/core/utils';
@@ -137,7 +137,6 @@ function getMarkerFormat(curDate, prevDate, tickInterval, markerInterval) {
   const datesDifferences = prevDate && dateUtils.getDatesDifferences(prevDate, curDate);
   if (prevDate && tickInterval !== 'year') {
     prepareDatesDifferences(datesDifferences, tickInterval);
-    // @ts-expect-error
     format = formatHelper.getDateFormatByDifferences(datesDifferences);
   }
   return format;

@@ -18,15 +18,15 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-plusplus */
 
-import Color from '@js/color';
-import { noop } from '@js/core/utils/common';
-import dateUtils from '@js/core/utils/date';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { adjust, sign } from '@js/core/utils/math';
+import Color from '@ts/color';
+import { noop } from '@ts/core/utils/m_common';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { adjust, sign } from '@ts/core/utils/m_math';
 import {
   isDefined, isExponential, isFunction, isNumeric, isString,
-} from '@js/core/utils/type';
+} from '@ts/core/utils/m_type';
 
 const {
   PI,
@@ -91,7 +91,8 @@ export const degreesToRadians = function (value) {
 
 //  Calculates sin and cos for <angle> in degrees
 //  Expects number, no validation
-export const getCosAndSin = function (angle) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let getCosAndSin = function (angle) {
   const angleInRadians = degreesToRadians(angle);
   return { cos: _cos(angleInRadians), sin: _sin(angleInRadians) };
 };
@@ -150,7 +151,6 @@ export const roundValue = function (value, precision) {
     if (isExponential(value)) {
       return _Number(value.toExponential(precision));
     }
-    // @ts-expect-error
     return _Number(value.toFixed(precision));
   }
 };
@@ -159,16 +159,27 @@ export const getPower = function (value) {
   return value.toExponential().split('e')[1];
 };
 
-export function map(array, callback) {
+type IsAny<T> = 0 extends 1 & T ? true : false;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- an untyped array gives untyped items
+type Item<TArray> = IsAny<TArray> extends true ? any
+  : TArray extends ArrayLike<infer TItem> ? TItem : never;
+
+export function map<TArray extends ArrayLike<unknown>, TResult>(
+  array: TArray,
+  callback: (item: Item<TArray>, index: number) => TResult | null,
+): TResult[];
+export function map<TResult>(
+  array: ArrayLike<unknown>,
+  callback: (item: unknown, index: number) => TResult | null,
+): TResult[] {
   let i = 0;
   const len = array.length;
-  const result = [];
-  let value;
+  const result: TResult[] = [];
 
   while (i < len) {
-    value = callback(array[i], i);
+    const value = callback(array[i], i);
     if (value !== null) {
-      // @ts-expect-error
       result.push(value);
     }
     i++;
@@ -276,7 +287,8 @@ export const enumParser = function (values) {
   };
 };
 
-export const patchFontOptions = function (options) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let patchFontOptions = function (options) {
   const fontOptions = {};
   each(options || {}, (key, value) => {
     if (/^(cursor)$/i.test(key)) {
@@ -318,7 +330,7 @@ export const processSeriesTemplate = function (seriesTemplate, items) {
   const customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop;
   const { nameField } = seriesTemplate;
   const generatedSeries = {};
-  const seriesOrder = [];
+  const seriesOrder: PropertyKey[] = [];
   let series;
   let i = 0;
   let length;
@@ -331,7 +343,6 @@ export const processSeriesTemplate = function (seriesTemplate, items) {
       series = generatedSeries[data[nameField]];
       if (!series) {
         series = generatedSeries[data[nameField]] = { name: data[nameField], nameFieldValue: data[nameField] };
-        // @ts-expect-error
         seriesOrder.push(series.name);
       }
     }
@@ -350,9 +361,7 @@ export const getCategoriesInfo = function (categories, startValue, endValue) {
   endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
 
   const categoriesValue = map(categories, (category) => category?.valueOf());
-  // @ts-expect-error
   let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
-  // @ts-expect-error
   let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
   let swapBuf;
   let inverted = false;
@@ -422,7 +431,8 @@ export function normalizePanesHeight(panes) {
   }
 }
 
-export function updatePanesCanvases(panes, canvas, rotated) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let updatePanesCanvases = function (panes, canvas, rotated) {
   let distributedSpace = 0;
   const padding = PANE_PADDING;
   const paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom;
@@ -441,7 +451,7 @@ export function updatePanesCanvases(panes, canvas, rotated) {
     distributedSpace = distributedSpace + calcLength + padding;
     setCanvasValues(pane.canvas);
   });
-}
+};
 
 export const unique = function (array) {
   const values = {};
@@ -671,7 +681,8 @@ export function pointInCanvas(canvas, x, y) {
   return x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom;
 }
 
-export const getNextDefsSvgId = () => `DevExpress_${numDefsSvgElements++}`;
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let getNextDefsSvgId = () => `DevExpress_${numDefsSvgElements++}`;
 
 export function extractColor(color, isBase?) {
   if (isString(color) || !color) {
@@ -681,3 +692,21 @@ export function extractColor(color, isBase?) {
   }
   return color.fillId || color.base;
 }
+
+/// #DEBUG
+export function DEBUG_set_getCosAndSin(value: typeof getCosAndSin): void {
+  getCosAndSin = value;
+}
+
+export function DEBUG_set_patchFontOptions(value: typeof patchFontOptions): void {
+  patchFontOptions = value;
+}
+
+export function DEBUG_set_updatePanesCanvases(value: typeof updatePanesCanvases): void {
+  updatePanesCanvases = value;
+}
+
+export function DEBUG_set_getNextDefsSvgId(value: typeof getNextDefsSvgId): void {
+  getNextDefsSvgId = value;
+}
+/// #ENDDEBUG

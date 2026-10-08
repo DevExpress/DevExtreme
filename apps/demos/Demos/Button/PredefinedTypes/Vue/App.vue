@@ -146,7 +146,7 @@ function onClick(e: DxButtonTypes.ClickEvent) {
   notify(`The ${capitalize(buttonText)} button was clicked`);
 }
 </script>
-<style scoped>
+<style>
 #app {
   align-self: center;
 }

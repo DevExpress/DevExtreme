@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -24,9 +21,9 @@ import type { PivotGridDataFieldArea, CellClickEvent, CellPreparedEvent, Content
 import type { default as PivotGridDataSource, PivotGridDataSourceOptions } from 'devextreme/ui/pivot_grid/data_source';
 import type { ApplyChangesMode, HeaderFilterSearchConfig, StateStoreType } from 'devextreme/common/grids';
 import type { FieldChooserLayout, ScrollMode, Mode } from 'devextreme/common';
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import DxPivotGrid from 'devextreme/ui/pivot_grid';
-
 
 import {
     DxComponent,
@@ -48,13 +45,14 @@ import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
 import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
 import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 
+import { DxoPivotGridEmbeddedFieldChooserTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridExportModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridFieldPanelModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridFieldPanelTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridHeaderFilterModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridHeaderFilterTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridIndicatorOptionsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridLoadPanelModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridScrollingModule } from 'devextreme-angular/ui/pivot-grid/nested';
@@ -65,7 +63,6 @@ import { DxoPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested
 
 /**
  * [descr:dxPivotGrid]
-
  */
 @Component({
     selector: 'dx-pivot-grid',
@@ -85,7 +82,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.allowExpandAll]
-    
      */
     @Input()
     get allowExpandAll(): boolean {
@@ -95,10 +91,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('allowExpandAll', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.allowFiltering]
-    
      */
     @Input()
     get allowFiltering(): boolean {
@@ -108,10 +102,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('allowFiltering', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.allowSorting]
-    
      */
     @Input()
     get allowSorting(): boolean {
@@ -121,10 +113,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('allowSorting', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.allowSortingBySummary]
-    
      */
     @Input()
     get allowSortingBySummary(): boolean {
@@ -134,10 +124,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('allowSortingBySummary', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.dataFieldArea]
-    
      */
     @Input()
     get dataFieldArea(): PivotGridDataFieldArea {
@@ -147,10 +135,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('dataFieldArea', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | null | PivotGridDataSource | PivotGridDataSourceOptions {
@@ -160,10 +146,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -173,10 +157,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -186,10 +168,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -199,10 +179,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.export]
-    
      */
     @Input()
     get export(): { enabled?: boolean } {
@@ -212,10 +190,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.fieldChooser]
-    
      */
     @Input()
     get fieldChooser(): { allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number | string, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number | string } {
@@ -225,10 +201,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('fieldChooser', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.fieldPanel]
-    
      */
     @Input()
     get fieldPanel(): { allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean } {
@@ -238,23 +212,19 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('fieldPanel', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.headerFilter]
-    
      */
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number } {
+    get headerFilter(): { allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number }) {
+    set headerFilter(value: { allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number }) {
         this._setOption('headerFilter', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -264,10 +234,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.hideEmptySummaryCells]
-    
      */
     @Input()
     get hideEmptySummaryCells(): boolean {
@@ -277,10 +245,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('hideEmptySummaryCells', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -290,23 +256,19 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.loadPanel]
-    
      */
     @Input()
-    get loadPanel(): { enabled?: boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number } {
+    get loadPanel(): { enabled?: boolean, height?: number, indicatorOptions?: LoadPanelIndicatorProperties, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }) {
+    set loadPanel(value: { enabled?: boolean, height?: number, indicatorOptions?: LoadPanelIndicatorProperties, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }) {
         this._setOption('loadPanel', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.rowHeaderLayout]
-    
      */
     @Input()
     get rowHeaderLayout(): PivotGridRowHeaderLayout {
@@ -316,10 +278,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('rowHeaderLayout', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -329,10 +289,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.scrolling]
-    
      */
     @Input()
     get scrolling(): { mode?: ScrollMode, useNative?: boolean | Mode } {
@@ -342,10 +300,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('scrolling', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.showBorders]
-    
      */
     @Input()
     get showBorders(): boolean {
@@ -355,10 +311,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showBorders', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.showColumnGrandTotals]
-    
      */
     @Input()
     get showColumnGrandTotals(): boolean {
@@ -368,10 +322,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showColumnGrandTotals', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.showColumnTotals]
-    
      */
     @Input()
     get showColumnTotals(): boolean {
@@ -381,10 +333,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showColumnTotals', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.showRowGrandTotals]
-    
      */
     @Input()
     get showRowGrandTotals(): boolean {
@@ -394,10 +344,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showRowGrandTotals', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.showRowTotals]
-    
      */
     @Input()
     get showRowTotals(): boolean {
@@ -407,10 +355,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showRowTotals', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.showTotalsPrior]
-    
      */
     @Input()
     get showTotalsPrior(): PivotGridTotalDisplayMode {
@@ -420,10 +366,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showTotalsPrior', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.stateStoring]
-    
      */
     @Input()
     get stateStoring(): { customLoad?: Function, customSave?: ((state: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType } {
@@ -433,10 +377,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('stateStoring', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -446,10 +388,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.texts]
-    
      */
     @Input()
     get texts(): { collapseAll?: string, dataNotAvailable?: string, expandAll?: string, exportToExcel?: string, grandTotal?: string, noData?: string, removeAllSorting?: string, showFieldChooser?: string, sortColumnBySummary?: string, sortRowBySummary?: string, total?: string } {
@@ -459,10 +399,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('texts', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -472,10 +410,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -485,10 +421,8 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('width', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.wordWrapEnabled]
-    
      */
     @Input()
     get wordWrapEnabled(): boolean {
@@ -499,295 +433,204 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     }
 
     /**
-    
      * [descr:dxPivotGridOptions.onCellClick]
-    
-    
      */
     @Output() onCellClick: EventEmitter<CellClickEvent>;
 
     /**
-    
      * [descr:dxPivotGridOptions.onCellPrepared]
-    
-    
      */
     @Output() onCellPrepared: EventEmitter<CellPreparedEvent>;
 
     /**
-    
      * [descr:dxPivotGridOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxPivotGridOptions.onContextMenuPreparing]
-    
-    
      */
     @Output() onContextMenuPreparing: EventEmitter<ContextMenuPreparingEvent>;
 
     /**
-    
      * [descr:dxPivotGridOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxPivotGridOptions.onExporting]
-    
-    
      */
     @Output() onExporting: EventEmitter<ExportingEvent>;
 
     /**
-    
      * [descr:dxPivotGridOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxPivotGridOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowExpandAllChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowFilteringChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowSortingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowSortingBySummaryChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataFieldAreaChange: EventEmitter<PivotGridDataFieldArea>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any> | null | PivotGridDataSource | PivotGridDataSourceOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() encodeHtmlChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() exportChange: EventEmitter<{ enabled?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fieldChooserChange: EventEmitter<{ allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number | string, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fieldPanelChange: EventEmitter<{ allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
-    @Output() headerFilterChange: EventEmitter<{ allowSearch?: boolean, allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number }>;
+    @Output() headerFilterChange: EventEmitter<{ allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideEmptySummaryCellsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }>;
+    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean, height?: number, indicatorOptions?: LoadPanelIndicatorProperties, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rowHeaderLayoutChange: EventEmitter<PivotGridRowHeaderLayout>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollingChange: EventEmitter<{ mode?: ScrollMode, useNative?: boolean | Mode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showBordersChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showColumnGrandTotalsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showColumnTotalsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showRowGrandTotalsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showRowTotalsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showTotalsPriorChange: EventEmitter<PivotGridTotalDisplayMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: ((state: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() textsChange: EventEmitter<{ collapseAll?: string, dataNotAvailable?: string, expandAll?: string, exportToExcel?: string, grandTotal?: string, noData?: string, removeAllSorting?: string, showFieldChooser?: string, sortColumnBySummary?: string, sortRowBySummary?: string, total?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
@@ -895,13 +738,14 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoLoadPanelModule,
     DxoScrollingModule,
     DxoStateStoringModule,
+    DxoPivotGridEmbeddedFieldChooserTextsModule,
     DxoPivotGridExportModule,
     DxoPivotGridFieldChooserModule,
-    DxoPivotGridFieldChooserTextsModule,
     DxoPivotGridFieldPanelModule,
     DxoPivotGridFieldPanelTextsModule,
     DxoPivotGridHeaderFilterModule,
     DxoPivotGridHeaderFilterTextsModule,
+    DxoPivotGridIndicatorOptionsModule,
     DxoPivotGridLoadPanelModule,
     DxoPivotGridPivotGridTextsModule,
     DxoPivotGridScrollingModule,
@@ -922,13 +766,14 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoLoadPanelModule,
     DxoScrollingModule,
     DxoStateStoringModule,
+    DxoPivotGridEmbeddedFieldChooserTextsModule,
     DxoPivotGridExportModule,
     DxoPivotGridFieldChooserModule,
-    DxoPivotGridFieldChooserTextsModule,
     DxoPivotGridFieldPanelModule,
     DxoPivotGridFieldPanelTextsModule,
     DxoPivotGridHeaderFilterModule,
     DxoPivotGridHeaderFilterTextsModule,
+    DxoPivotGridIndicatorOptionsModule,
     DxoPivotGridLoadPanelModule,
     DxoPivotGridPivotGridTextsModule,
     DxoPivotGridScrollingModule,

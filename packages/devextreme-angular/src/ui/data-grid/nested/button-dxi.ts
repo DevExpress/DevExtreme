@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { default as dxDataGrid, dxDataGridColumn, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
 import type { TextEditorButtonLocation } from 'devextreme/common';
 import type { dxButtonOptions } from 'devextreme/ui/button';
@@ -141,7 +136,6 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
         return 'buttons';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -162,11 +156,9 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

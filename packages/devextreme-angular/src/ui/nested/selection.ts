@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection-config';
-
 
 @Component({
     selector: 'dxo-selection',
@@ -45,7 +38,6 @@ export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig imple
         return 'selection';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -61,7 +53,6 @@ export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig imple
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

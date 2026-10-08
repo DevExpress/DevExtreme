@@ -1,7 +1,5 @@
 import {
-  ChangeDetectionStrategy,
   Component,
-  AfterViewInit,
   enableProdMode,
   provideZoneChangeDetection,
   inject,
@@ -18,44 +16,33 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxChartModule,
     DxSelectBoxModule,
   ],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   temperature: number[] = [2, 4, 6, 8, 9, 10, 11];
 
   palette: string[] = ['#c3a2cc', '#b7b5e0', '#e48cba'];
 
   paletteIndex = 0;
 
-  monthWeather = {} as DataSource;
-
   http = inject(HttpClient);
 
-  ngAfterViewInit() {
-    this.monthWeather = new DataSource({
-      store: new CustomStore({
-        load: () => lastValueFrom(this.http.get('../../../../data/monthWeather.json'))
-          .catch(() => { throw new Error('Data Loading Error'); }),
-        loadMode: 'raw',
-      }),
-      filter: ['t', '>', '2'],
-      paginate: false,
-    });
-  }
+  monthWeather = new DataSource({
+    store: new CustomStore({
+      load: () => lastValueFrom(this.http.get('../../../../data/monthWeather.json'))
+        .catch(() => { throw new Error('Data Loading Error'); }),
+      loadMode: 'raw',
+    }),
+    filter: ['t', '>', '2'],
+    paginate: false,
+  });
 
   customizePoint = () => {
     const color = this.palette[this.paletteIndex];

@@ -5,7 +5,7 @@
 @use "../../base/dateView";
 @use "../scrollable";
 
-$generic-dateview-roller-padding: math.div($generic-dateview-roller-height - $generic-dateview-roller-item-height, 2);
+$generic-dateview-roller-padding: math.div($generic-dateview-roller-height - $generic-dateview-roller-item-height, 2) !default;
 
 .dx-dateview-rollers {
   width: auto;

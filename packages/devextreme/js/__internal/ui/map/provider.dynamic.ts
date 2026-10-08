@@ -1,4 +1,3 @@
-import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -56,7 +55,7 @@ export interface RouteObject {
   southWest?: [number, number];
 }
 
-class DynamicProvider extends Provider {
+abstract class DynamicProvider extends Provider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _bounds?: any;
 
@@ -130,14 +129,13 @@ class DynamicProvider extends Provider {
     return Promise.resolve();
   }
 
-  _attachHandlers(): void {
-    Class.abstract();
-  }
+  abstract _attachHandlers(): void;
 
   addMarkers(markers: MarkerOptions[]): Promise<[boolean, unknown[]]> {
     return Promise
       .all(markers.map((options) => this._addMarker(options)))
       .then((markerObjects: MarkerObject[]) => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._fitBounds();
 
         return [false, markerObjects.map((markerObject) => markerObject.marker)];
@@ -204,10 +202,7 @@ class DynamicProvider extends Provider {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _destroyMarker(marker: unknown): void {
-    Class.abstract();
-  }
+  abstract _destroyMarker(marker: unknown): void;
 
   _clearMarkers(): void {
     while (this._markers.length > 0) {
@@ -217,6 +212,7 @@ class DynamicProvider extends Provider {
 
   addRoutes(routes: RouteOptions[]): Promise<[boolean, unknown[]]> {
     return Promise.all(routes.map((options) => this._addRoute(options))).then((routeObjects) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._fitBounds();
 
       return [false, routeObjects.map((routeObject) => routeObject.instance)];
@@ -274,10 +270,7 @@ class DynamicProvider extends Provider {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _destroyRoute(routeObject: RouteObject): void {
-    Class.abstract();
-  }
+  abstract _destroyRoute(routeObject: RouteObject): void;
 
   _geocodeLocationImpl(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -292,7 +285,7 @@ class DynamicProvider extends Provider {
     }
   }
 
-  adjustViewport(): void {
+  adjustViewport(): Promise<void> {
     return this._fitBounds();
   }
 
@@ -301,9 +294,7 @@ class DynamicProvider extends Provider {
     return true;
   }
 
-  _fitBounds(): void {
-    Class.abstract();
-  }
+  abstract _fitBounds(): Promise<void>;
 
   _updateBounds(): void {
     this._clearBounds();
@@ -330,10 +321,7 @@ class DynamicProvider extends Provider {
     this._bounds = null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _extendBounds(location: unknown): void {
-    Class.abstract();
-  }
+  abstract _extendBounds(location: unknown): void;
 }
 
 export default DynamicProvider;

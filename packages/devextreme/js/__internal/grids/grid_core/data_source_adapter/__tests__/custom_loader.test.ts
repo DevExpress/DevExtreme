@@ -3,10 +3,10 @@ import {
 } from '@jest/globals';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import CustomStore from '@js/data/custom_store';
-import PublicDataSource from '@js/data/data_source';
 import { logger } from '@ts/core/utils/m_console';
-import type { DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
+import CustomStore from '@ts/data/custom_store';
+import { DataSource } from '@ts/data/data_source/data_source';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
 import { CustomLoader } from '../custom_loader';
 import type { LoadOperation } from '../types';
@@ -33,7 +33,6 @@ const setup = ({
 }: SetupOptions = {}) => {
   const load = jest.fn(storeLoad);
   const totalCount = jest.fn(storeTotalCount);
-  // @ts-expect-error
   const store = new CustomStore({ load, totalCount });
 
   if (customLoadOptions.length) {
@@ -43,10 +42,10 @@ const setup = ({
       ._customLoadOptions = (): string[] => customLoadOptions;
   }
 
-  const dataSource = new PublicDataSource({
+  const dataSource = new DataSource({
     store,
     ...dataSourceOptions,
-  }) as unknown as DataSource;
+  });
 
   const getLoadingTimeout = jest.fn(() => loadingTimeout);
   const customizeStoreLoadOptionsSpy = jest.fn(customizeStoreLoadOptions);
@@ -92,6 +91,17 @@ describe('load', () => {
     expect(operation.isCustomLoading).toBe(true);
   });
 
+  it('drops load options the caller left undefined', () => {
+    // Selection builds `filter`/`select` unconditionally, so the store must not
+    // see them when there is nothing to send.
+    const { customLoader, store } = setup();
+
+    customLoader.load({ filter: ['id', '=', 1], select: undefined });
+
+    expect(store.load).toHaveBeenCalledTimes(1);
+    expect(store.load.mock.calls[0][0]).not.toHaveProperty('select');
+  });
+
   it('fills the store custom load options from the dataSource, without overwriting', () => {
     const { customLoader, customizeStoreLoadOptions } = setup({
       customLoadOptions: ['fromDataSource', 'fromOptions'],
@@ -127,7 +137,7 @@ describe('load', () => {
 
     customLoader.load({}).done(done);
 
-    expect(done).toHaveBeenCalledWith(data, { totalCount: 42 });
+    expect(done).toHaveBeenCalledWith({ data, extra: { totalCount: 42 } });
   });
 
   it('skips the store when a customizeStoreLoadOptions handler supplies the data', () => {
@@ -140,7 +150,7 @@ describe('load', () => {
     customLoader.load({}).done(done);
 
     expect(store.load).not.toHaveBeenCalled();
-    expect(done).toHaveBeenCalledWith(data, expect.anything());
+    expect(done).toHaveBeenCalledWith({ data, extra: expect.anything() });
   });
 
   it('resolves with the data a customizeLoadResult handler put on the operation', () => {
@@ -153,7 +163,7 @@ describe('load', () => {
 
     customLoader.load({}).done(done);
 
-    expect(done).toHaveBeenCalledWith(transformed, expect.anything());
+    expect(done).toHaveBeenCalledWith({ data: transformed, extra: expect.anything() });
   });
 
   it('rejects as canceled when the dataSource is disposed before the load runs', () => {
@@ -180,7 +190,7 @@ describe('load', () => {
     customLoader.load({ requireTotalCount: true }).done(done);
 
     expect(store.totalCount).toHaveBeenCalledTimes(1);
-    expect(done).toHaveBeenCalledWith([{ id: 1 }], { totalCount: 17 });
+    expect(done).toHaveBeenCalledWith({ data: [{ id: 1 }], extra: { totalCount: 17 } });
   });
 
   it('keeps the total count the store already reported', () => {
@@ -192,7 +202,7 @@ describe('load', () => {
     customLoader.load({ requireTotalCount: true }).done(done);
 
     expect(store.totalCount).not.toHaveBeenCalled();
-    expect(done).toHaveBeenCalledWith([{ id: 1 }], { totalCount: 3 });
+    expect(done).toHaveBeenCalledWith({ data: [{ id: 1 }], extra: { totalCount: 3 } });
   });
 
   it('resolves a deferred total count before resolving the load', () => {
@@ -209,7 +219,7 @@ describe('load', () => {
     totalCount.resolve(9);
 
     expect(d.state()).toBe('resolved');
-    expect(done).toHaveBeenCalledWith([{ id: 1 }], { totalCount: 9 });
+    expect(done).toHaveBeenCalledWith({ data: [{ id: 1 }], extra: { totalCount: 9 } });
   });
 
   it('reports a store failure through the dataSource loadError event', () => {
@@ -357,7 +367,7 @@ describe('processLoadedData', () => {
     expect(operation.isCustomLoading).toBe(true);
     expect(operation.storeLoadOptions).toEqual({ isLoadingAll: true });
     expect(operation.loadOptions).toEqual({ sort: 'id' });
-    expect(done).toHaveBeenCalledWith(data, undefined);
+    expect(done).toHaveBeenCalledWith({ data, extra: undefined });
   });
 
   it('resolves with the data and extra the result stage produced', () => {
@@ -373,7 +383,7 @@ describe('processLoadedData', () => {
 
     customLoader.processLoadedData([{ id: 1 }], {}).done(done);
 
-    expect(done).toHaveBeenCalledWith(transformed, { summary });
+    expect(done).toHaveBeenCalledWith({ data: transformed, extra: { summary } });
   });
 
   it('waits for data the result stage left deferred', () => {
@@ -389,7 +399,7 @@ describe('processLoadedData', () => {
     expect(done).not.toHaveBeenCalled();
 
     deferredData.resolve([{ id: 2 }]);
-    expect(done).toHaveBeenCalledWith([{ id: 2 }], undefined);
+    expect(done).toHaveBeenCalledWith({ data: [{ id: 2 }], extra: undefined });
   });
 
   it('rejects when the result stage rejects the data', () => {
@@ -426,17 +436,17 @@ describe('loadFromStore', () => {
 
     customLoader.loadFromStore({}).done(done);
 
-    expect(done).toHaveBeenCalledWith(data, extra);
+    expect(done).toHaveBeenCalledWith({ data, extra });
   });
 
-  it('unwraps a single `{ data, totalCount }` object into a data/extra pair', () => {
+  it('unwraps a single `{ data, totalCount }` object into the data/extra result', () => {
     const result = { data: [{ id: 1 }], totalCount: 42 };
     const { customLoader } = setup({ storeLoad: () => Deferred().resolve(result) });
     const done = jest.fn();
 
     customLoader.loadFromStore({}).done(done);
 
-    expect(done).toHaveBeenCalledWith(result.data, result);
+    expect(done).toHaveBeenCalledWith({ data: result.data, extra: result });
   });
 
   it('leaves an array result alone even when it has a `data` property', () => {
@@ -446,7 +456,7 @@ describe('loadFromStore', () => {
 
     customLoader.loadFromStore({}).done(done);
 
-    expect(done).toHaveBeenCalledWith(data, undefined);
+    expect(done).toHaveBeenCalledWith({ data, extra: undefined });
   });
 
   it('leaves an object whose `data` is not an array alone', () => {
@@ -456,7 +466,7 @@ describe('loadFromStore', () => {
 
     customLoader.loadFromStore({}).done(done);
 
-    expect(done).toHaveBeenCalledWith(result, undefined);
+    expect(done).toHaveBeenCalledWith({ data: result, extra: undefined });
   });
 
   it('resolves with no data when the store reports none', () => {
@@ -465,7 +475,7 @@ describe('loadFromStore', () => {
 
     customLoader.loadFromStore({}).done(done);
 
-    expect(done).toHaveBeenCalledWith(undefined, undefined);
+    expect(done).toHaveBeenCalledWith({ data: undefined, extra: undefined });
   });
 
   it('rejects with the error the store failed with', () => {

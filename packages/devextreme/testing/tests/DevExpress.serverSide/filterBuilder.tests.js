@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="container"></div>');
@@ -6,4 +6,4 @@ QUnit.testStart(function() {
 
 QUnit.module('Filter Builder markup');
 
-require('../DevExpress.ui.widgets/filterBuilderParts/markupTests.js');
+import '../DevExpress.ui.widgets/filterBuilderParts/markupTests.js';

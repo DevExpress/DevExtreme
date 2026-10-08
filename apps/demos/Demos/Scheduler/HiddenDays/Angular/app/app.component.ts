@@ -9,12 +9,6 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 interface DayLabel {
   index: DxSchedulerTypes.DayOfWeek;
   label: string;
@@ -23,8 +17,8 @@ interface DayLabel {
 
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [DataService],
   imports: [
     DxSchedulerModule,

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     Input
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-argument-axis-tick',
@@ -83,7 +76,6 @@ export class DxoPolarChartArgumentAxisTickComponent extends NestedOption impleme
         return 'tick';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -99,7 +91,6 @@ export class DxoPolarChartArgumentAxisTickComponent extends NestedOption impleme
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

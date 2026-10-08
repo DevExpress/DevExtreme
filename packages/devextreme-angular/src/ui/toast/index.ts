@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -22,7 +19,6 @@ import type { event } from 'devextreme/events/events.types';
 import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, ToastType } from 'devextreme/ui/toast';
 
 import DxToast from 'devextreme/ui/toast';
-
 
 import {
     DxComponent,
@@ -60,7 +56,6 @@ import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
 
 /**
  * [descr:dxToast]
-
  */
 @Component({
     selector: 'dx-toast',
@@ -79,7 +74,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -89,10 +83,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxToastOptions.animation]
-    
      */
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
@@ -102,10 +94,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxToastOptions.closeOnClick]
-    
      */
     @Input()
     get closeOnClick(): boolean {
@@ -115,10 +105,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('closeOnClick', value);
     }
 
-
     /**
      * [descr:dxToastOptions.closeOnSwipe]
-    
      */
     @Input()
     get closeOnSwipe(): boolean {
@@ -128,10 +116,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('closeOnSwipe', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.contentTemplate]
-    
      */
     @Input()
     get contentTemplate(): any {
@@ -141,10 +127,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('contentTemplate', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -154,10 +138,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:dxToastOptions.displayTime]
-    
      */
     @Input()
     get displayTime(): number {
@@ -167,10 +149,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('displayTime', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -180,10 +160,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxToastOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -193,10 +171,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxToastOptions.hideOnOutsideClick]
-    
      */
     @Input()
     get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
@@ -206,10 +182,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('hideOnOutsideClick', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
-    
      */
     @Input()
     get hideOnParentScroll(): boolean {
@@ -219,10 +193,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('hideOnParentScroll', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -232,10 +204,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -245,10 +215,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.maxHeight]
-    
      */
     @Input()
     get maxHeight(): number | string {
@@ -258,10 +226,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('maxHeight', value);
     }
 
-
     /**
      * [descr:dxToastOptions.maxWidth]
-    
      */
     @Input()
     get maxWidth(): number | string {
@@ -271,10 +237,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('maxWidth', value);
     }
 
-
     /**
      * [descr:dxToastOptions.message]
-    
      */
     @Input()
     get message(): string {
@@ -284,10 +248,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('message', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.minHeight]
-    
      */
     @Input()
     get minHeight(): number | string {
@@ -297,10 +259,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('minHeight', value);
     }
 
-
     /**
      * [descr:dxToastOptions.minWidth]
-    
      */
     @Input()
     get minWidth(): number | string {
@@ -310,10 +270,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('minWidth', value);
     }
 
-
     /**
      * [descr:dxToastOptions.position]
-    
      */
     @Input()
     get position(): PositionConfig | string {
@@ -323,10 +281,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('position', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -336,10 +292,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxToastOptions.shading]
-    
      */
     @Input()
     get shading(): boolean {
@@ -349,10 +303,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('shading', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.shadingColor]
-    
      */
     @Input()
     get shadingColor(): string {
@@ -362,10 +314,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('shadingColor', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -375,10 +325,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxToastOptions.type]
-    
      */
     @Input()
     get type(): ToastType {
@@ -388,10 +336,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('type', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -401,10 +347,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxToastOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -414,10 +358,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('width', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
-    
      */
     @Input()
     get wrapperAttr(): any {
@@ -428,260 +370,179 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxToastOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxToastOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxToastOptions.onHidden]
-    
-    
      */
     @Output() onHidden: EventEmitter<HiddenEvent>;
 
     /**
-    
      * [descr:dxToastOptions.onHiding]
-    
-    
      */
     @Output() onHiding: EventEmitter<HidingEvent>;
 
     /**
-    
      * [descr:dxToastOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxToastOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxToastOptions.onShowing]
-    
-    
      */
     @Output() onShowing: EventEmitter<ShowingEvent>;
 
     /**
-    
      * [descr:dxToastOptions.onShown]
-    
-    
      */
     @Output() onShown: EventEmitter<ShownEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() closeOnClickChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() closeOnSwipeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() displayTimeChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideOnParentScrollChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxHeightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxWidthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() messageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minHeightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minWidthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() positionChange: EventEmitter<PositionConfig | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadingColorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() typeChange: EventEmitter<ToastType>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

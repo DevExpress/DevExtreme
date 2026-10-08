@@ -8,20 +8,20 @@
 @use "../../base/icon_fonts" as *;
 @use "../../base/dropDownEditor";
 
-$generic-dropdowneditor-container-button-size: $generic-base-inline-borderedwidget-inner-size;
-$generic-dropdowneditor-button-offset: $generic-base-border-width;
+$generic-dropdowneditor-container-button-size: $generic-base-inline-borderedwidget-inner-size !default;
+$generic-dropdowneditor-button-offset: $generic-base-border-width !default;
 
 $generic-dropdowneditor-button-size:
   $generic-dropdowneditor-container-button-size -
-  $generic-dropdowneditor-button-offset * 2;
+  $generic-dropdowneditor-button-offset * 2 !default;
 
 $generic-dropdowneditor-invalid-badge-offset:
   $generic-dropdowneditor-container-button-size +
-  $generic-invalid-badge-halfhorizontal-padding;
+  $generic-invalid-badge-halfhorizontal-padding !default;
 
-$generic-dropdowneditor-invalid-badge-with-clear-offset: $generic-dropdowneditor-container-button-size * 2;
+$generic-dropdowneditor-invalid-badge-with-clear-offset: $generic-dropdowneditor-container-button-size * 2 !default;
 
-$generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $generic-invalid-badge-horizontal-padding;
+$generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $generic-invalid-badge-horizontal-padding !default;
 
 @mixin dx-dropdowneditor-button-icon() {
   width: $generic-dropdowneditor-button-size;

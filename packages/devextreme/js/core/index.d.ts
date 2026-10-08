@@ -67,6 +67,10 @@ export type AllPermutations<T extends string> = UnionLength<T> extends PermutedU
 
 export type EventProps<T> = Extract<keyof T, `on${any}`>;
 
+type NestedEventProps<T> = {
+  [K in keyof T]?: EventProps<NonNullable<T[K]>>
+};
+
 export type CheckedEvents<
   TProps,
   TEvents extends {
@@ -77,6 +81,7 @@ export type CheckedEvents<
     [K in TExcludedEvents]?: never
   },
   TExcludedEvents extends keyof TProps = never,
+  TExcludedNestedEvents extends NestedEventProps<TProps> = {},
 > = TEvents;
 
 /// #ENDDEBUG

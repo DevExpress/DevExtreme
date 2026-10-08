@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
@@ -49,7 +43,6 @@ export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
         return 'tabs';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -62,7 +55,6 @@ export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

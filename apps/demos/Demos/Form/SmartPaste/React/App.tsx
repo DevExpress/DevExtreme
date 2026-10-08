@@ -21,6 +21,8 @@ import type { INumberBoxOptions } from 'devextreme-react/number-box';
 
 import { AzureOpenAIConfig, defaultText } from './data.ts';
 
+const textAreaInputAttr = { 'aria-labelledby': 'textarea-label' };
+
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
   content: string;
 };
@@ -167,7 +169,7 @@ const App = () => {
         />
         <TextArea
           id="textarea"
-          inputAttr={{ 'aria-labelledby': 'textarea-label' }}
+          inputAttr={textAreaInputAttr}
           value={text}
           stylingMode="filled"
           height="100%"

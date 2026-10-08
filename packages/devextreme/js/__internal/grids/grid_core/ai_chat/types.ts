@@ -3,7 +3,7 @@ import type { Properties as ChatProperties } from '@js/ui/chat';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 
 import type { AIMessage, CommandResult } from '../ai_assistant/types';
-import type { CreateComponent } from '../m_types';
+import type { CreateComponent } from '../types';
 
 export type { CommandResult };
 

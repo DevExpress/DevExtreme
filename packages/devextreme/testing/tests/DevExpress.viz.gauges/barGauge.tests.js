@@ -24,7 +24,7 @@ const { BarWrapper, stubBarWrapper, restoreBarWrapper } = barGaugeModule;
 $('<div id="test-container">').appendTo('#qunit-fixture');
 let renderer;
 QUnit.begin(function() {
-    rendererModule.Renderer = sinon.spy(function() {
+    rendererModule.DEBUG_set_Renderer(sinon.spy(function() {
         const test = currentTest();
         test.renderer = renderer || new Renderer();
         test.renderer.g = sinon.spy(function() {
@@ -61,12 +61,21 @@ QUnit.begin(function() {
                         step(1);
                         that.animationStep && that.animationStep(1);
                         complete();
-                        that.animationComplete && that.animationComplete();
+                        // Drop the hook before calling it — overlapping animate()
+                        // chains (or a second completion after done()) must not
+                        // re-enter assert.async() under native ESM scheduling.
+                        const onGroupComplete = that.animationComplete;
+                        that.animationComplete = null;
+                        onGroupComplete && onGroupComplete();
                         test.renderer.animationCompleted && test.renderer.animationCompleted();
                     }
                 }
 
                 if(arguments[1] && typeof arguments[1].step === 'function') {
+                    // Real renderer replaces the in-flight animation; without this,
+                    // a second animate() leaves an orphan setTimeout chain and
+                    // animationComplete / assert.async() fire twice.
+                    this.stopAnimation();
                     that = this;
                     step = arguments[1].step;
                     complete = arguments[1].complete || noop;
@@ -77,13 +86,14 @@ QUnit.begin(function() {
             };
             group.stopAnimation = function() {
                 clearTimeout(this.__animation);
+                this.__animation = null;
                 return this;
             };
             return group;
         });
 
         return test.renderer;
-    });
+    }));
     titleModule.DEBUG_set_title(sinon.spy(function() {
         const title = new Title();
         title.getLayoutOptions = () => ({

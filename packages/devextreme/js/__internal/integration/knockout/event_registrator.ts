@@ -1,7 +1,7 @@
 import eventRegistratorCallbacks from '@js/common/core/events/core/event_registrator_callbacks';
 import $ from '@js/core/renderer';
 import { isPlainObject } from '@ts/core/utils/m_type';
-import eventsEngine from '@ts/events/core/m_events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 import { addNamespace } from '@ts/events/utils/index';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';

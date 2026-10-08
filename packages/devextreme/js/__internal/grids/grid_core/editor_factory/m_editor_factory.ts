@@ -19,14 +19,15 @@ import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { EditingController } from '../editing/m_editing';
 import { isDataRow } from '../keyboard_navigation/utils';
-import type { ViewController } from '../m_modules';
-import modules from '../m_modules';
-import type { Module, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import type { ViewController } from '../modules/modules';
+import modules from '../modules/modules';
+import type { Module, ModuleType } from '../types';
 import type { RowsView } from '../views/m_rows_view';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
@@ -36,9 +37,7 @@ const CELL_INVALID_CLASS = 'invalid';
 const FOCUSED_CELL_MODIFIED_CLASS = 'dx-focused-cell-modified';
 const FOCUSED_CELL_INVALID_CLASS = 'dx-focused-cell-invalid';
 const FOCUS_OVERLAY_CLASS = 'focus-overlay';
-const CONTENT_CLASS = 'content';
 const FOCUSED_ELEMENT_CLASS = 'dx-focused';
-const ROW_CLASS = 'dx-row';
 const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
 const UPDATE_FOCUS_EVENTS = addNamespace([clickEventName, 'focusin'].join(' '), MODULE_NAMESPACE);
 const DX_HIDDEN = 'dx-hidden';
@@ -107,7 +106,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   }
 
   private _getFocusedElement($dataGridElement) {
-    const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
+    const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : `tr[tabindex]:not(.${VIEW_CLASSES.dataRow}):focus`;
     const focusedElementSelector = [
       'td[tabindex]:focus',
       `${rowSelector}`,
@@ -131,7 +130,7 @@ export class EditorFactory extends ViewControllerWithMixin {
    * @extended: adaptivity
    */
   protected _getFocusCellSelector() {
-    return '.dx-row > td';
+    return `.${VIEW_CLASSES.row} > td`;
   }
 
   private _updateFocusCore() {
@@ -144,7 +143,7 @@ export class EditorFactory extends ViewControllerWithMixin {
       if ($focus && $focus.length) {
         let isHideBorder;
 
-        if (!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
+        if (!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(VIEW_CLASSES.row)) {
           const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${CELL_FOCUS_DISABLED_CLASS}`);
 
           if ($focusCell.get(0) !== $focus.get(0)) {
@@ -212,7 +211,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   }
 
   protected getFocusOverlayContainer($focusedElement: dxElementWrapper): dxElementWrapper {
-    return $focusedElement.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+    return $focusedElement.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`);
   }
 
   protected getFocusOverlaySize($element: dxElementWrapper): { width: number; height: number } {

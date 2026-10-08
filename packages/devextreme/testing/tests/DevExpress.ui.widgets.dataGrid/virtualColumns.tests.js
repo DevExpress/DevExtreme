@@ -3,7 +3,7 @@ import dataGridMocks from '../../helpers/dataGridMocks.js';
 import 'ui/data_grid';
 import 'fluent_blue_light.css!';
 import { DataSource } from 'common/data/data_source/data_source';
-import dataSourceAdapter from '__internal/grids/data_grid/m_data_source_adapter';
+import dataSourceAdapter from '__internal/grids/data_grid/data_source_adapter';
 import { getOuterWidth } from 'core/utils/size';
 
 const setupModule = function() {
@@ -45,7 +45,7 @@ const teardownModule = function() {
     this.dispose();
 };
 
-const createDataSource = function(context, config, remoteOperations) {
+const createDataSourceAdapter = function(context, config, remoteOperations) {
     const dataSource = new DataSource(config);
     const dataAdapter = dataSourceAdapter.create(context);
     dataAdapter.init(dataSource, remoteOperations);
@@ -86,9 +86,9 @@ QUnit.module('initialization', { beforeEach: setupModule, afterEach: teardownMod
             dataItem[this.columns[i].dataField] = 'test';
         }
 
-        const dataSource = createDataSource(this, [ dataItem ]);
+        const dataSource = createDataSourceAdapter(this, [ dataItem ]);
         dataSource.load().done(() => {
-            this.columnsController.applyDataSource(dataSource);
+            this.columnsController.applyDataSourceAdapter(dataSource);
 
             assert.strictEqual(this.getColumns().length, 50, 'column count');
             assert.strictEqual(this.getVisibleColumns().length, 11, 'visible column count');

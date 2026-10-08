@@ -4,7 +4,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import { logger } from 'core/utils/console';
 import fx from 'common/core/animation/fx';
 import { isFunction } from 'core/utils/type';
-import dataSourceAdapter from '__internal/grids/data_grid/m_data_source_adapter';
+import dataSourceAdapter from '__internal/grids/data_grid/data_source_adapter';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
 import 'ui/data_grid';
@@ -71,7 +71,7 @@ const processColumnsForCompare = function(columns, parameterNames) {
     return processedColumns;
 };
 
-const createDataSource = function(context, config, remoteOperations) {
+const createDataSourceAdapter = function(context, config, remoteOperations) {
     const dataSource = new DataSource(config);
     const dataAdapter = dataSourceAdapter.create(context);
     dataAdapter.init(dataSource, remoteOperations);
@@ -136,13 +136,13 @@ moduleWithoutCsp('initialization from dataSource', {
 }, function() {
     // T111157
     QUnit.test('Initialize from array store with observable fields', function(assert) {
-        const dataSource = createDataSource(this, [
+        const dataSource = createDataSourceAdapter(this, [
             { name: ko.observable('Alex'), age: ko.observable(15), birthDate: ko.observable(new Date(1995, 5, 23)) },
             { name: ko.observable('Dan'), age: ko.observable(19), birthDate: ko.observable(new Date(1991, 6, 15)) }
         ]);
         dataSource.load();
 
-        this.columnsController.applyDataSource(dataSource);
+        this.columnsController.applyDataSourceAdapter(dataSource);
 
         const visibleColumns = this.columnsController.getVisibleColumns();
 
@@ -166,7 +166,7 @@ moduleWithoutCsp('initialization from dataSource', {
             { name: ko.observable('Tom'), age: ko.observable(18), birthDate: ko.observable(new Date(1992, 8, 14)) }
         ];
         const dataSource = new DataSource(this.array);
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.applyOptions({
@@ -318,12 +318,12 @@ moduleWithoutCsp('Work with knockout', {
         assert.equal($rows.eq(1).children().eq(0).text(), '3');
     });
 
-    QUnit.test('$root model in rowTemplate', function(assert) {
+    QUnit.test('$root model in dataRowTemplate', function(assert) {
         // arrange, act
 
         this.viewModel.rowClick = sinon.spy();
         this.viewModel.gridOptions = {
-            rowTemplate: 'testRowTemplate',
+            dataRowTemplate: 'testRowTemplate',
             dataSource: [{ id: 1 }, { id: 2 }]
         };
 

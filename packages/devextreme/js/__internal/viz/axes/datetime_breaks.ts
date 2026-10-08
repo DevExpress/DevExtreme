@@ -8,7 +8,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import dateUtils from '@js/core/utils/date';
+import { dateUtils } from '@ts/core/utils/m_date';
 
 const days = [0, 1, 2, 3, 4, 5, 6];
 

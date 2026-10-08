@@ -57,7 +57,7 @@ function calculateCellValue(data: Employee) {
   return [data.Title, data.FirstName, data.LastName].join(' ');
 }
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

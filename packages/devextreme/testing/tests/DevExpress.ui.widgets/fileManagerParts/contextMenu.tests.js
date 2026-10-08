@@ -4,7 +4,7 @@ import 'ui/file_manager';
 import fx from 'common/core/animation/fx';
 import pointerEvents from 'common/core/events/pointer';
 import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 const moduleConfig = {
 

@@ -259,7 +259,7 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(3);
-        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+        this.filterPanelView.getFilterText(filter, this.filterBuilderController.getCustomFilterOperations()).done(function(result) {
             assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
             assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
             const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
@@ -297,7 +297,7 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(3);
-        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+        this.filterPanelView.getFilterText(filter, this.filterBuilderController.getCustomFilterOperations()).done(function(result) {
             assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
             assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
             const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
@@ -339,7 +339,7 @@ QUnit.module('Filter Panel', {
 
             // act
             assert.expect(2);
-            this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            this.filterPanelView.getFilterText(filter, this.filterBuilderController.getCustomFilterOperations()).done(function(result) {
                 assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
                 assert.equal(errors.log.callCount, 0, 'no warnings');
             }).always(() => {
@@ -381,7 +381,7 @@ QUnit.module('Filter Panel', {
 
             // act
             assert.expect(key ? 2 : 4);
-            this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            this.filterPanelView.getFilterText(filter, this.filterBuilderController.getCustomFilterOperations()).done(function(result) {
                 assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
                 if(!key) {
                     assert.equal(errors.log.callCount, 2, 'four warnings');
@@ -422,7 +422,7 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(2);
-        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+        this.filterPanelView.getFilterText(filter, this.filterBuilderController.getCustomFilterOperations()).done(function(result) {
             assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
             assert.deepEqual(lookupDataSource[0], { key: 1, text: 'Text 1' }, 'lookup dataSource item is not changed');
         });
@@ -460,7 +460,7 @@ QUnit.module('Filter Panel', {
 
         // act
         assert.expect(2);
-        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+        this.filterPanelView.getFilterText(filter, this.filterBuilderController.getCustomFilterOperations()).done(function(result) {
             assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
             assert.equal(spy.callCount, 1);
         });
@@ -718,7 +718,7 @@ QUnit.module('Filter Panel', {
         assert.notOk(this.filterPanelView.element().hasClass(FILTER_PANEL_CLASS));
 
         // act
-        this.dataController.setDataSource(new DataSource([]));
+        this.dataController.initDataSourceAdapter(new DataSource([]));
         this.dataController.dataSourceChanged.fire();
 
         // assert

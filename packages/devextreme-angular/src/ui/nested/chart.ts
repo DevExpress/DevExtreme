@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { ChartsDataType, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
 import type { ChartSeries } from 'devextreme/viz/common';
 import type { ChartAxisScale } from 'devextreme/viz/range_selector';
@@ -161,7 +155,6 @@ export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit
         return 'chart';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -177,7 +170,6 @@ export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

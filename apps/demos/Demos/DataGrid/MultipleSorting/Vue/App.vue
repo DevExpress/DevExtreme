@@ -62,7 +62,7 @@ const onValueChanged = () => {
   dataGridRef.value!.instance!.columnOption(5, 'sortOrder', undefined);
 };
 </script>
-<style scoped>
+<style>
 .options {
   padding: 20px;
   margin-top: 20px;

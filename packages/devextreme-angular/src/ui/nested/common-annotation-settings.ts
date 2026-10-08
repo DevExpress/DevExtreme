@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-config';
-
 
 @Component({
     selector: 'dxo-common-annotation-settings',
@@ -72,7 +65,6 @@ export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotati
         return 'commonAnnotationSettings';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -88,7 +80,6 @@ export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotati
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

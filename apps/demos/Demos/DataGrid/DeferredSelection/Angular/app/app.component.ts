@@ -4,7 +4,7 @@ import {
   AfterViewInit,
   enableProdMode,
   provideZoneChangeDetection,
-  ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
 import { query } from 'devextreme-angular/common/data';
@@ -15,17 +15,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   preserveWhitespaces: true,
   imports: [
     DxDataGridModule,
@@ -47,7 +40,7 @@ export class AppComponent implements AfterViewInit {
 
   avgDuration = 0;
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
     this.tasksDataSource = AspNetData.createStore({
@@ -88,6 +81,7 @@ export class AppComponent implements AfterViewInit {
       .groupBy('Task_Assigned_Employee_ID')
       .toArray().length;
     this.avgDuration = Math.round(averageDurationInDays) || 0;
+    this.changeDetectorRef.markForCheck();
   }
 }
 

@@ -1,3 +1,4 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import config from '@js/core/config';
@@ -113,6 +114,8 @@ class DateBox<
   _strategy!: StrategyInstance;
 
   _pickerType?: DatePickerType;
+
+  _committedText?: string;
 
   _storedPadding?: number;
 
@@ -545,6 +548,7 @@ class DateBox<
   _renderValue(): DeferredObj<unknown> {
     const value = this.getDateOption('value');
 
+    this._committedText = undefined;
     this.option('text', this._getDisplayedText(value));
     this._strategy.renderValue();
 
@@ -559,7 +563,7 @@ class DateBox<
       ? dateSerialization.serializeDate(value, dateSerializationFormat)
       : uiDateUtils.toStandardDateFormat(value, submitFormat);
 
-    this._getSubmitElement().val(submitValue);
+    this._getSubmitElement().val(submitValue ?? '');
   }
 
   _getDisplayedText(value?: DateLike): string {
@@ -583,11 +587,36 @@ class DateBox<
       : uiDateUtils.FORMATS_MAP[mode] as string | null;
   }
 
+  _focusOutHandler(e: DxEvent): void {
+    if (this._shouldCommitTextOnFocusOut()) {
+      eventsEngine.triggerHandler(this._input(), { type: 'change' });
+    }
+
+    super._focusOutHandler(e);
+  }
+
+  _shouldCommitTextOnFocusOut(): boolean {
+    const { text, valueChangeEvent } = this.option();
+    const includesChangeEvent = valueChangeEvent?.split(' ').includes('change');
+    const currentText = text ?? '';
+
+    if (!includesChangeEvent || currentText === this._committedText) {
+      return false;
+    }
+
+    const currentValue = this.getDateOption('value');
+    const displayedText = this._getDisplayedText(currentValue) ?? '';
+
+    return currentText !== displayedText;
+  }
+
   _valueChangeEventHandler(
     e: InteractionEvent,
   ): void {
     const { text, type = 'date', validationError } = this.option();
     const currentValue = this.getDateOption('value');
+
+    this._committedText = text;
 
     if (text === this._getDisplayedText(currentValue)) {
       this._recallInternalValidation(currentValue, validationError);
@@ -884,6 +913,7 @@ class DateBox<
   getDateOption(optionName: 'value' | 'min' | 'max'): Date | null {
     const { [optionName]: optionValue } = this.option();
 
+    // @ts-expect-error a string that cannot be parsed and undefined are returned as is
     const deserializedDate: Date | null = dateSerialization.deserializeDate(optionValue);
 
     return deserializedDate;
@@ -895,13 +925,10 @@ class DateBox<
     this.option(optionName, serializedDate);
   }
 
-  _serializeDate(date?: DateLike): Date | string | null {
+  _serializeDate(date?: DateLike): DateLike | undefined {
     const serializationFormat = this._getSerializationFormat();
 
-    const serializedDate: Date | string | null = dateSerialization.serializeDate(
-      date,
-      serializationFormat,
-    );
+    const serializedDate = dateSerialization.serializeDate(date, serializationFormat);
 
     return serializedDate;
   }

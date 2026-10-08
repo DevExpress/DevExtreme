@@ -11,14 +11,16 @@ import inflector from '@ts/core/utils/m_inflector';
 import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
-} from '@ts/filter_builder/m_utils';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+} from '@ts/filter_builder/utils';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
-import modules from '@ts/grids/grid_core/m_modules';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridUtils from '@ts/grids/grid_core/m_utils';
+import modules from '@ts/grids/grid_core/modules/modules';
+import type { ModuleType } from '@ts/grids/grid_core/types';
+
+import type { FilterBuilderController } from '../filter_builder/m_filter_builder';
 
 const FILTER_PANEL_CLASS = 'filter-panel';
 const FILTER_PANEL_TEXT_CLASS = `${FILTER_PANEL_CLASS}-text`;
@@ -33,24 +35,28 @@ export class FilterPanelView extends modules.View {
 
   private _dataController!: DataController;
 
-  private _filterSyncController!: FilterSyncController;
+  private dataSourceController!: DataSourceController;
+
+  private filterBuilderController?: FilterBuilderController;
 
   private readonly _filterValueBuffer: any;
 
   public init() {
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
-    this._filterSyncController = this.getController('filterSync');
+    this.filterBuilderController = this.getController('filterBuilder');
 
     this._dataController.dataSourceChanged.add(() => this.render());
   }
 
   public isVisible() {
-    return this.option('filterPanel.visible') && this._dataController.dataSource();
+    return !!this.option('filterPanel.visible') && this.dataSourceController.hasAdapter();
   }
 
   protected _renderCore() {
-    const $element = this.element();
+    // @ts-expect-error the view is rendered here
+    const $element: dxElementWrapper = this.element();
 
     $element.empty();
 
@@ -129,7 +135,10 @@ export class FilterPanelView extends modules.View {
     let filterText;
     const filterValue = that.option('filterValue');
     if (filterValue) {
-      when(that.getFilterText(filterValue, this._filterSyncController.getCustomFilterOperations())).done((filterText) => {
+      when(that.getFilterText(
+        filterValue,
+        this.filterBuilderController?.getCustomFilterOperations(),
+      )).done((filterText) => {
         const customizeText = that.option('filterPanel.customizeText');
         if (customizeText) {
           const customText = customizeText({

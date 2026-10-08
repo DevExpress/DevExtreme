@@ -52,7 +52,7 @@ const dataSource = new PivotGridDataSource({
   }),
 });
 </script>
-<style scoped>
+<style>
 .long-title h2 {
   font-family:
     "Segoe UI Light",
