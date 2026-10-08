@@ -94,4 +94,27 @@ describe('locale-only displayFormat follows the editor type', () => {
     expect(inputs[0].value).toBe('6/15/2024');
     expect(inputs[1].value).toBe('6/15/2024');
   });
+
+  it('edits a longDate mask that uses another locale', () => {
+    const element = document.body.appendChild(document.createElement('div'));
+    const instance = new DateBox(element, {
+      type: 'date',
+      pickerType: 'calendar',
+      useMaskBehavior: true,
+      value,
+      displayFormat: { type: 'longDate', locale: 'de' },
+    });
+
+    widgets.push(instance);
+
+    const input = element.querySelector('.dx-texteditor-input') as HTMLInputElement;
+    const textBeforeEdit = input.value;
+
+    expect(textBeforeEdit).toContain('Juni');
+
+    const editor = instance as DateBox & { _upDownArrowHandler: (step: number) => void };
+
+    expect(() => editor._upDownArrowHandler(1)).not.toThrow();
+    expect(input.value).not.toBe(textBeforeEdit);
+  });
 });
