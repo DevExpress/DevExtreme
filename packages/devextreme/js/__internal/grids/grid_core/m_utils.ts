@@ -34,6 +34,7 @@ import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_control
 import type {
   ColumnPoint,
   ColumnPointProps,
+  EmptyDateValue,
   ExpandCellTemplate,
   ExpandCellTemplateOptions,
   FormatOptions,
@@ -42,6 +43,7 @@ import type {
   LoadPanelPosition,
   LookupDataSource,
   OptionsReader,
+  RowKey,
   SelectionRange,
   SummaryTextItem,
   TextSelectionElement,
@@ -70,25 +72,25 @@ const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 const SCROLLING_MODE_OPTION = 'scrolling.mode';
 const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
 const DATE_INTERVAL_SELECTORS = {
-  year(value: Date): number {
+  year(value: Date | EmptyDateValue): number | EmptyDateValue {
     return value && value.getFullYear();
   },
-  month(value: Date): number {
+  month(value: Date | EmptyDateValue): number | EmptyDateValue {
     return value && (value.getMonth() + 1);
   },
-  day(value: Date): number {
+  day(value: Date | EmptyDateValue): number | EmptyDateValue {
     return value && value.getDate();
   },
-  quarter(value: Date): number {
+  quarter(value: Date | EmptyDateValue): number | EmptyDateValue {
     return value && (Math.floor(value.getMonth() / 3) + 1);
   },
-  hour(value: Date): number {
+  hour(value: Date | EmptyDateValue): number | EmptyDateValue {
     return value && value.getHours();
   },
-  minute(value: Date): number {
+  minute(value: Date | EmptyDateValue): number | EmptyDateValue {
     return value && value.getMinutes();
   },
-  second(value: Date): number {
+  second(value: Date | EmptyDateValue): number | EmptyDateValue {
     return value && value.getSeconds();
   },
 };
@@ -103,16 +105,15 @@ const getIntervalSelector = function getIntervalSelector(
   this: Column & Required<Pick<Column, 'calculateCellValue'>>,
   interval: HeaderFilterGroupInterval | number,
   data: unknown,
-): number | null | undefined {
+): number | EmptyDateValue | null | undefined {
   const value = this.calculateCellValue(data);
 
   if (!isDefined(value)) {
     return null;
-  } if (isDateType(this.dataType)) {
-    const nameIntervalSelector = interval as HeaderFilterGroupInterval;
-    return DATE_INTERVAL_SELECTORS[nameIntervalSelector](value);
+  } if (isDateType(this.dataType) && isString(interval)) {
+    return DATE_INTERVAL_SELECTORS[interval](value);
   } if (this.dataType === 'number') {
-    const groupInterval = interval as number;
+    const groupInterval = Number(interval);
     return Math.floor(Number(value) / groupInterval) * groupInterval;
   }
 
@@ -345,7 +346,7 @@ export default {
     return { of: $element };
   },
 
-  getIndexByKey(key: unknown, items: unknown, keyName?: string | string[] | null): number {
+  getIndexByKey(key: RowKey, items: unknown, keyName?: string | string[] | null): number {
     let index = -1;
 
     if (key !== undefined && Array.isArray(items)) {
