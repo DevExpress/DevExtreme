@@ -15,6 +15,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import Modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import List from '@ts/ui/list/list.edit.search';
+import type { TreeViewBaseProperties } from '@ts/ui/tree_view/tree_view.base';
 import TreeView from '@ts/ui/tree_view/tree_view.search';
 
 import gridCoreUtils from '../m_utils';
@@ -405,15 +406,20 @@ export class HeaderFilterView extends Modules.View {
     };
 
     if (options.type === 'tree') {
+      const treeViewOptions: Pick<
+        TreeViewBaseProperties,
+        'showCheckBoxesMode' | 'onOptionChanged' | 'keyExpr'
+      > = {
+        showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
+        // @ts-expect-error the handler takes the internal TreeView, the option declares the public one
+        onOptionChanged: onTreeViewOptionChanged,
+        keyExpr: 'id',
+      };
+
       that._listComponent = that._createComponent(
         $('<div>').appendTo($content),
         TreeView,
-        // @ts-expect-error the onOptionChanged handler takes the internal TreeView
-        extend(widgetOptions, {
-          showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' as const : 'normal' as const,
-          onOptionChanged: onTreeViewOptionChanged,
-          keyExpr: 'id',
-        }),
+        extend(widgetOptions, treeViewOptions),
       );
     } else {
       that._listComponent = that._createComponent(
