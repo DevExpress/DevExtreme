@@ -129,7 +129,7 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 | 'sortByGroupSummaryInfo'
 >;
 
-type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
+type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions<unknown, RowKey>,
 'onNodesInitialized'
 | 'expandedRowKeys'
 >;

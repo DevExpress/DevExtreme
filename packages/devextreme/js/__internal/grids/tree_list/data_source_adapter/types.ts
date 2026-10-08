@@ -1,3 +1,4 @@
+import type { StoreKey } from '@ts/data/abstract_store';
 import type {
   LoadOperation as BaseLoadOperation,
   OperationTypes as BaseOperationTypes,
@@ -25,8 +26,10 @@ export type DataGetter = (data: unknown) => unknown;
 
 export type DataSetter = (data: unknown, value: unknown) => void;
 
+export type KeyExpr = StoreKey | ((item: unknown, value?: unknown) => unknown);
+
 export interface TreeNode {
-  key: unknown;
+  key: RowKey;
   children: TreeNode[];
   data?: RawItemData;
   parent?: TreeNode;
