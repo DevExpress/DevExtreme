@@ -1758,10 +1758,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       currentDate: this.getViewOption('currentDate'),
     }, currentViewOptions);
 
+    // @ts-expect-error the workspace types the selected cells as object, the popup reads dates
+    const onSelectedCellsClick: WorkspaceConfig['onSelectedCellsClick'] = this.showAddAppointmentPopup
+      .bind(this);
+
     const workSpaceOptions: WorkspaceConfig = {
       ...mergedOptions,
-      // @ts-expect-error the workspace types the selected cells as object, the popup reads dates
-      onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
+      scrolling,
+      onSelectedCellsClick,
       hoursInterval: mergedOptions.cellDuration / 60,
       notifyScheduler: this.notifyScheduler,
       groups: this.resourceManager.groupResources(),
