@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import gridCoreModule from '__internal/grids/data_grid/m_core';
+import gridCoreModule from '__internal/grids/data_grid/core';
 import columnResizingReorderingModule from '__internal/grids/data_grid/module_not_extended/columns_resizing_reordering';
 import domUtilsModule from '__internal/core/utils/m_dom';
 import commonUtilsModule from '__internal/core/utils/m_common';

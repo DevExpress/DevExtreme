@@ -12,11 +12,11 @@ import type {
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 
+import gridCore from '../../core';
 import type { ProcessGroupItemsOptions } from '../../grouping/types';
 import { isSameContinuationState } from '../../grouping/utils';
-import gridCore from '../../m_core';
 import { isDataColumn } from '../../m_utils';
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE, DATAGRID_TOTAL_FOOTER_ROW_TYPE } from '../const';
 import type { SummaryDataSourceAdapter } from '../m_summary';
@@ -66,6 +66,7 @@ export const summaryDataControllerExtender = (
       const columnName = groupItem.showInColumn ?? groupItem.column;
       const column = this._columnsController.columnOption(columnName);
 
+      // @ts-expect-error GridCore and DataGrid column types are not aligned
       if (groupItem.showInGroupFooter && isDataColumn(column)) {
         return true;
       }

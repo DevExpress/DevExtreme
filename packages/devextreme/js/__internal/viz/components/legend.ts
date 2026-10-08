@@ -15,27 +15,29 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop } from '@js/core/utils/common';
-/// #DEBUG
-import { debug } from '@js/core/utils/console';
-/// #ENDDEBUG
-import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import { clone } from '@js/core/utils/object';
-import { isDefined, isFunction } from '@js/core/utils/type';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { paintedColor } from '@ts/core/utils/css_variables';
+import { noop } from '@ts/core/utils/m_common';
+/// #DEBUG
+import { debug } from '@ts/core/utils/m_console';
+/// #ENDDEBUG
+import { Deferred } from '@ts/core/utils/m_deferred';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined, isFunction } from '@ts/core/utils/m_type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { LayoutTargetOptions } from '@ts/viz/core/layout';
+import type { AlignedLayoutRect, LayoutAlignment } from '@ts/viz/core/layout_element';
 import { LayoutElement, WrapperLayoutElement } from '@ts/viz/core/layout_element';
 import { getFuncIri, processHatchingAttrs } from '@ts/viz/core/renderers/renderer';
 import { Title } from '@ts/viz/core/title';
+import type { BBox, Bounds } from '@ts/viz/core/types';
 import { enumParser, normalizeEnum, patchFontOptions } from '@ts/viz/core/utils';
 
 const _Number = Number;
@@ -76,7 +78,119 @@ const parseItemTextPosition = _enumParser([LEFT, RIGHT, TOP, BOTTOM]);
 const parsePosition = _enumParser([OUTSIDE, INSIDE]);
 const parseItemsAlignment = _enumParser([LEFT, CENTER, RIGHT]);
 
-function getState(state, color, stateName) {
+type MarkerCreator = (renderer: ThemeValue, size: number) => ThemeValue;
+
+interface LegendItemStates {
+  normal: ThemeValue;
+  hover?: ThemeValue;
+  selection?: ThemeValue;
+}
+
+export interface LegendDataItem {
+  id?: number;
+  text?: string;
+  item?: ThemeValue;
+  visible?: boolean;
+  states: LegendItemStates;
+  size: number;
+  marker: ThemeValue;
+  textOpacity?: number;
+  argument?: ThemeValue;
+  argumentIndex?: number;
+}
+
+interface LegendTrackerData {
+  id?: number;
+  argument?: ThemeValue;
+  argumentIndex?: number;
+}
+
+interface LegendItemTracker extends LegendTrackerData, Bounds {}
+
+interface CreatedLegendItem {
+  label: ThemeValue;
+  marker: ThemeValue;
+  renderer: ThemeValue;
+  group: ThemeValue;
+  tracker: LegendTrackerData;
+  states: LegendItemStates;
+  itemTextPosition: string;
+  markerOffset: number;
+  bBoxes: WrapperLayoutElement[];
+  renderMarker: (state: ThemeValue) => void;
+}
+
+interface LegendItem extends CreatedLegendItem {
+  tracker: LegendItemTracker;
+  markerBBox: BBox;
+  markerSize: number;
+  labelBBox: BBox;
+  bBox: { width: number; height: number };
+}
+
+interface LegendLineItem {
+  width: number;
+  height: number;
+  element: ThemeValue;
+  bBox: BBox;
+  pos: LayoutAlignment;
+  itemIndex: number;
+  offset?: number;
+  altOffset?: number;
+}
+
+type LegendLine = LegendLineItem[];
+
+interface TableLine {
+  firstLine: LegendLine;
+  secondLine: LegendLine;
+}
+
+interface ItemsLayoutOptions {
+  itemsAlignment: string | null;
+  orientation: string;
+  length: number;
+  spacing: number;
+  direction: 'x' | 'y';
+  measure: 'width' | 'height';
+  altMeasure: 'width' | 'height';
+  altDirection: 'x' | 'y';
+  altSpacing: number;
+  countItem: number;
+  altCountItem: number;
+  marginTextLabel: number;
+  labelOffset: number;
+  markerOffset?: boolean;
+  inverseLabelPosition?: boolean;
+  itemTextPosition: string;
+}
+
+interface LegendBoundingRect extends AlignedLayoutRect {
+  widthWithoutMargins?: number;
+}
+
+interface LegendTemplate {
+  render: (args: { model: LegendDataItem; container: ThemeValue; onRendered: () => unknown }) => void;
+}
+
+interface LegendWidget {
+  _getTemplate: (template: ThemeValue) => LegendTemplate;
+  _incidentOccurred: (id: string) => void;
+}
+
+interface LegendSettings {
+  renderer: ThemeValue;
+  group: ThemeValue;
+  widget: LegendWidget;
+  textField: string;
+  getFormatObject: (data: LegendDataItem) => ThemeValue;
+  backgroundClass?: string | null;
+  itemGroupClass?: string;
+  titleGroupClass?: string;
+  allowInsidePosition?: boolean;
+}
+
+function getState(state: ThemeValue, color: ThemeValue, stateName: string): ThemeValue {
   if (!state) {
     return;
   }
@@ -94,25 +208,25 @@ function getState(state, color, stateName) {
   });
 }
 
-function statesOf(item) {
+function statesOf(item: ThemeValue): ThemeValue[] {
   const { normal, hover, selection } = item.states;
 
   return [normal, hover, selection].filter(isDefined);
 }
 
-function painter(element) {
-  const painted = new Map();
+function painter(element: Element | null | undefined): (fill: string) => string {
+  const painted = new Map<string, string>();
 
-  return (fill) => {
+  return (fill: string): string => {
     if (!painted.has(fill)) {
       painted.set(fill, paintedColor(fill, element));
     }
 
-    return painted.get(fill);
+    return painted.get(fill) as string;
   };
 }
 
-function paintFills(items, paint) {
+function paintFills(items: ThemeValue[], paint: (fill: string) => string): () => void {
   const handed = items
     .flatMap((item) => statesOf(item).map((state) => ({ state, name: state.fill, painted: paint(state.fill) })))
     .filter(({ name, painted }) => painted !== name);
@@ -121,7 +235,7 @@ function paintFills(items, paint) {
     state.fill = painted;
   });
 
-  return () => {
+  return (): void => {
     handed.forEach(({ state, name, painted }) => {
       if (state.fill === painted) {
         state.fill = name;
@@ -130,14 +244,14 @@ function paintFills(items, paint) {
   };
 }
 
-function paintedItem(item, paint) {
-  const withPaintedFill = (holder) => (holder ? { ...holder, fill: paint(holder.fill) } : holder);
+function paintedItem(item: ThemeValue, paint: (fill: string) => string): ThemeValue {
+  const withPaintedFill = (holder: ThemeValue): ThemeValue => (holder ? { ...holder, fill: paint(holder.fill) } : holder);
   const states = Object.fromEntries(Object.entries(item.states).map(([name, state]) => [name, withPaintedFill(state)]));
 
   return { ...item, marker: withPaintedFill(item.marker), states };
 }
 
-function getAttributes(item, state, size) {
+function getAttributes(item: ThemeValue, state: ThemeValue, size?: number): ThemeValue {
   const attrs = processHatchingAttrs(item, state);
 
   if (attrs.fill && attrs.fill.indexOf('DevExpress') === 0) {
@@ -149,7 +263,7 @@ function getAttributes(item, state, size) {
   return extend({}, attrs, { size });
 }
 
-function parseMargins(options) {
+function parseMargins(options: ThemeValue): void {
   let margin = options.margin;
   if (margin >= 0) {
     margin = _Number(options.margin);
@@ -167,7 +281,7 @@ function parseMargins(options) {
   options.margin = margin;
 }
 
-function getSizeItem(options, markerBBox, labelBBox) {
+function getSizeItem(options: ThemeValue, markerBBox: BBox, labelBBox: BBox): { width: number; height: number } {
   const defaultXMargin = 7;
   const defaultTopMargin = 4;
   let width;
@@ -189,28 +303,24 @@ function getSizeItem(options, markerBBox, labelBBox) {
   return { width, height };
 }
 
-function calculateBBoxLabelAndMarker(markerBBox, labelBBox) {
-  const bBox = {};
-  // @ts-expect-error
+function calculateBBoxLabelAndMarker(markerBBox: BBox, labelBBox: BBox): Bounds {
+  const bBox = {} as Bounds;
   bBox.left = _min(markerBBox.x, labelBBox.x);
-  // @ts-expect-error
   bBox.top = _min(markerBBox.y, labelBBox.y);
-  // @ts-expect-error
   bBox.right = _max(markerBBox.x + markerBBox.width, labelBBox.x + labelBBox.width);
-  // @ts-expect-error
   bBox.bottom = _max(markerBBox.y + markerBBox.height, labelBBox.y + labelBBox.height);
 
   return bBox;
 }
 
-function applyMarkerState(id, idToIndexMap, items, stateName) {
+function applyMarkerState(id: number, idToIndexMap: Record<number, number>, items: LegendItem[], stateName: keyof LegendItemStates): void {
   const item = idToIndexMap && items[idToIndexMap[id]];
   if (item) {
     item.renderMarker(item.states[stateName]);
   }
 }
 
-function parseOptions(options, textField, allowInsidePosition) {
+function parseOptions(options: ThemeValue, textField: string, allowInsidePosition?: boolean): ThemeValue {
   if (!options) return null;
 
   /// #DEBUG
@@ -233,29 +343,29 @@ function parseOptions(options, textField, allowInsidePosition) {
   options.position = allowInsidePosition ? parsePosition(options.position, OUTSIDE) : OUTSIDE;
   options.itemsAlignment = parseItemsAlignment(options.itemsAlignment, null);
   options.hoverMode = _normalizeEnum(options.hoverMode);
-  options.customizeText = _isFunction(options.customizeText) ? options.customizeText : function () { return this[textField]; };
+  options.customizeText = _isFunction(options.customizeText) ? options.customizeText : function (): ThemeValue { return this[textField]; };
   options.customizeHint = _isFunction(options.customizeHint) ? options.customizeHint : noop;
   options._incidentOccurred = options._incidentOccurred || noop;
   return options;
 }
 
-function createSquareMarker(renderer, size) {
+function createSquareMarker(renderer: ThemeValue, size: number): ThemeValue {
   return renderer.rect(0, 0, size, size);
 }
 
-function createCircleMarker(renderer, size) {
+function createCircleMarker(renderer: ThemeValue, size: number): ThemeValue {
   return renderer.circle(size / 2, size / 2, size / 2);
 }
 
-function isCircle(type) {
+function isCircle(type: ThemeValue): boolean {
   return _normalizeEnum(type) === 'circle';
 }
 
-function inRect(rect, x, y) {
+function inRect(rect: Bounds, x: number, y: number): boolean {
   return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 }
-// @ts-expect-error
-function checkLinesSize(lines, layoutOptions, countItems, margins) {
+// @ts-expect-error returns true only when the lines do not fit, undefined otherwise
+function checkLinesSize(lines: LegendLine[], layoutOptions: ItemsLayoutOptions, countItems: number, margins: Bounds): boolean | undefined {
   const position = { x: 0, y: 0 };
   let maxMeasureLength = 0;
   let maxAltMeasureLength = 0;
@@ -279,6 +389,7 @@ function checkLinesSize(lines, layoutOptions, countItems, margins) {
 
     position[layoutOptions.direction] = 0;
     position[layoutOptions.altDirection] += firstItem[layoutOptions.altMeasure]
+        // @ts-expect-error without altOffset the sum is NaN and falls back to altSpacing (maxAltMeasureLength is not used)
         + firstItem.altOffset || layoutOptions.altSpacing;
     maxAltMeasureLength = _max(maxAltMeasureLength, position[layoutOptions.altDirection]);
   });
@@ -289,25 +400,25 @@ function checkLinesSize(lines, layoutOptions, countItems, margins) {
   }
 }
 
-function decreaseItemCount(layoutOptions, countItems) {
+function decreaseItemCount(layoutOptions: ItemsLayoutOptions, countItems: number): number {
   layoutOptions.altCountItem++;
   return _ceil(countItems / layoutOptions.altCountItem);
 }
 
-function getLineLength(line, layoutOptions) {
+function getLineLength(line: LegendLine, layoutOptions: ItemsLayoutOptions): number {
   return line.reduce((lineLength, item) => {
     const offset = item.offset || layoutOptions.spacing;
     return lineLength + item[layoutOptions.measure] + offset;
   }, 0);
 }
 
-function getMaxLineLength(lines, layoutOptions) {
+function getMaxLineLength(lines: LegendLine[], layoutOptions: ItemsLayoutOptions): number {
   return lines.reduce((maxLineLength, line) => _max(maxLineLength, getLineLength(line, layoutOptions)), 0);
 }
 
-function getInitPositionForDirection(line, layoutOptions, maxLineLength) {
+function getInitPositionForDirection(line: LegendLine, layoutOptions: ItemsLayoutOptions, maxLineLength: number): number {
   const lineLength = getLineLength(line, layoutOptions);
-  let initPosition;
+  let initPosition: number;
 
   switch (layoutOptions.itemsAlignment) {
     case RIGHT:
@@ -322,8 +433,8 @@ function getInitPositionForDirection(line, layoutOptions, maxLineLength) {
 
   return initPosition;
 }
-// @ts-expect-error
-function getPos(layoutOptions) {
+// @ts-expect-error the switch covers every itemTextPosition
+function getPos(layoutOptions: ItemsLayoutOptions): LayoutAlignment {
   switch (layoutOptions.itemTextPosition) {
     case BOTTOM:
       return {
@@ -348,8 +459,8 @@ function getPos(layoutOptions) {
   }
 }
 
-function getLines(lines, layoutOptions, itemIndex) {
-  const tableLine = {};
+function getLines(lines: LegendLine[], layoutOptions: ItemsLayoutOptions, itemIndex: number): TableLine {
+  const tableLine = {} as TableLine;
 
   if (itemIndex % layoutOptions.countItem === 0) {
     if (layoutOptions.markerOffset) {
@@ -360,19 +471,16 @@ function getLines(lines, layoutOptions, itemIndex) {
   }
 
   if (layoutOptions.markerOffset) {
-    // @ts-expect-error
     tableLine.firstLine = lines[lines.length - 1];
-    // @ts-expect-error
     tableLine.secondLine = lines[lines.length - 2];
   } else {
-    // @ts-expect-error
     tableLine.firstLine = tableLine.secondLine = lines[lines.length - 1];
   }
 
   return tableLine;
 }
 
-function setMaxInLine(line, measure) {
+function setMaxInLine(line: (LegendLineItem | undefined)[], measure: 'width' | 'height'): void {
   const maxLineSize = line.reduce((maxLineSize, item) => {
     const itemMeasure = item ? item[measure] : maxLineSize;
     return _max(maxLineSize, itemMeasure);
@@ -385,26 +493,24 @@ function setMaxInLine(line, measure) {
   });
 }
 
-function transpose(array) {
+function transpose<T>(array: T[][]): (T | undefined)[][] {
   const width = array.length;
   const height = array[0].length;
   let i;
   let j;
-  const transposeArray = [];
+  const transposeArray: (T | undefined)[][] = [];
 
   for (i = 0; i < height; i++) {
-    // @ts-expect-error
     transposeArray[i] = [];
     for (j = 0; j < width; j++) {
-      // @ts-expect-error
       transposeArray[i][j] = array[j][i];
     }
   }
 
   return transposeArray;
 }
-// @ts-expect-error
-function getAlign(position) {
+// @ts-expect-error the switch covers every position
+function getAlign(position: string): string {
   switch (position) {
     case TOP:
     case BOTTOM:
@@ -416,11 +522,11 @@ function getAlign(position) {
   }
 }
 
-let getMarkerCreator = function (type) {
+let getMarkerCreator = function (type: ThemeValue): MarkerCreator {
   return isCircle(type) ? createCircleMarker : createSquareMarker;
 };
 
-function getTitleHorizontalAlignment(options) {
+function getTitleHorizontalAlignment(options: ThemeValue): string {
   if (options.horizontalAlignment === CENTER) {
     return CENTER;
   } else if (options.itemTextPosition === RIGHT) {
@@ -432,72 +538,104 @@ function getTitleHorizontalAlignment(options) {
   }
 }
 
-export let Legend = function (settings) {
-  const that = this;
-  that._renderer = settings.renderer;
-  that._legendGroup = settings.group;
-  that._backgroundClass = settings.backgroundClass;
-  that._itemGroupClass = settings.itemGroupClass;
-  that._textField = settings.textField;
-  that._getCustomizeObject = settings.getFormatObject;
-  that._titleGroupClass = settings.titleGroupClass;
-  that._allowInsidePosition = settings.allowInsidePosition;
-  that._widget = settings.widget;
+export let Legend = class Legend extends LayoutElement {
+  declare _renderer: ThemeValue;
 
-  that._updated = false;
-};
+  declare _legendGroup: ThemeValue;
 
-const _Legend = Legend;
+  declare _backgroundClass?: string | null;
 
-const legendPrototype = _Legend.prototype = clone(LayoutElement.prototype);
+  declare _itemGroupClass?: string;
 
-extend(legendPrototype, {
-  constructor: _Legend,
+  declare _textField: string;
 
-  getOptions() {
+  declare _getCustomizeObject: (data: LegendDataItem) => ThemeValue;
+
+  declare _titleGroupClass?: string;
+
+  declare _allowInsidePosition?: boolean;
+
+  declare _widget: LegendWidget;
+
+  declare _updated: boolean;
+
+  declare _data: LegendDataItem[];
+
+  declare _boundingRect: LegendBoundingRect;
+
+  declare _title: InstanceType<typeof Title>;
+
+  declare _insideLegendGroup: ThemeValue;
+
+  declare _markersGroup: ThemeValue;
+
+  declare _background: ThemeValue;
+
+  declare _markersId: Record<number, number>;
+
+  declare _deferredItems: DeferredObj<unknown>[];
+
+  declare _templatesGroups: ThemeValue[];
+
+  declare _items: LegendItem[];
+
+  declare _size: { width: number; height: number };
+
+  declare _x1: number;
+
+  declare _y1: number;
+
+  declare _x2: number;
+
+  declare _y2: number;
+
+  constructor(settings: LegendSettings) {
+    super();
+    this._renderer = settings.renderer;
+    this._legendGroup = settings.group;
+    this._backgroundClass = settings.backgroundClass;
+    this._itemGroupClass = settings.itemGroupClass;
+    this._textField = settings.textField;
+    this._getCustomizeObject = settings.getFormatObject;
+    this._titleGroupClass = settings.titleGroupClass;
+    this._allowInsidePosition = settings.allowInsidePosition;
+    this._widget = settings.widget;
+
+    this._updated = false;
+  }
+
+  getOptions(): ThemeValue {
     return this._options;
-  },
+  }
 
-  update(data = [], options, themeManagerTitleOptions = {}) {
-    const that = this;
-    options = that._options = parseOptions(options, that._textField, that._allowInsidePosition) || {};
+  update(data: LegendDataItem[] = [], options: ThemeValue, themeManagerTitleOptions: ThemeValue = {}): this {
+    options = this._options = parseOptions(options, this._textField, this._allowInsidePosition) || {};
     const initMarkerSize = options.markerSize;
     this._updated = true;
     this._data = data.map((dataItem) => {
-      // @ts-expect-error
       dataItem.size = _Number(dataItem.size > 0 ? dataItem.size : initMarkerSize);
-      // @ts-expect-error
       dataItem.marker = getAttributes(dataItem, dataItem.states.normal);
-      // @ts-expect-error
       Object.defineProperty(dataItem.marker, 'size', {
         get() {
-          // @ts-expect-error
           return dataItem.size;
         },
         set(value) {
-          // @ts-expect-error
           dataItem.size = value;
         },
       });
-      // @ts-expect-error
       Object.defineProperty(dataItem.marker, 'opacity', {
         get() {
-          // @ts-expect-error
           return dataItem.states.normal.opacity;
         },
         set(value) {
-          // @ts-expect-error
           dataItem.states.normal.opacity = dataItem.states.hover.opacity = dataItem.states.selection.opacity = value;
         },
       });
-      // @ts-expect-error
       Object.defineProperty(dataItem.marker, 'fill', {
         get() {
-          // @ts-expect-error
           return dataItem.states.normal.fill;
         },
         set(value) {
-          // @ts-expect-error
           dataItem.states.normal.fill = value;
         },
       });
@@ -506,72 +644,75 @@ extend(legendPrototype, {
     });
 
     if (options.customizeItems) {
-      const restoreNames = paintFills(data, painter(that._renderer.root.element));
+      const restoreNames = paintFills(data, painter(this._renderer.root.element));
 
-      that._data = options.customizeItems(data.slice()) || data;
+      this._data = options.customizeItems(data.slice()) || data;
       restoreNames();
     }
 
-    that._boundingRect = {
+    this._boundingRect = {
       width: 0,
       height: 0,
       x: 0,
       y: 0,
     };
 
-    if (that.isVisible()) {
-      that._title?.dispose();
+    if (this.isVisible()) {
+      this._title?.dispose();
 
-      that._title = new Title({ renderer: that._renderer, cssClass: that._titleGroupClass, root: that._legendGroup });
+      this._title = new Title({
+        renderer: this._renderer,
+        cssClass: this._titleGroupClass,
+        root: this._legendGroup,
+        incidentOccurred: this._widget._incidentOccurred,
+      });
     }
 
-    if (that._title) {
+    if (this._title) {
       const titleOptions = options.title;
-      // @ts-expect-error
       themeManagerTitleOptions.horizontalAlignment = getTitleHorizontalAlignment(options);
-      that._title.update(themeManagerTitleOptions, titleOptions);
+      this._title.update(themeManagerTitleOptions, titleOptions);
     }
 
     this.erase();
 
-    return that;
-  },
+    return this;
+  }
 
-  isVisible() {
+  isVisible(): boolean {
     return this._options && this._options.visible;
-  },
+  }
 
-  draw(width, height) {
+  draw(width: number, height: number): this {
     // TODO check multiple groups creation
-    const that = this;
-    const items = that._getItemData();
+    const items = this._getItemData();
 
-    that.erase();
+    this.erase();
 
-    if (!(that.isVisible() && items && items.length)) {
-      return that;
+    if (!(this.isVisible() && items && items.length)) {
+      return this;
     }
 
-    that._insideLegendGroup = that._renderer.g().enableLinks().append(that._legendGroup);
-    that._title.changeLink(that._insideLegendGroup);
+    this._insideLegendGroup = this._renderer.g().enableLinks().append(this._legendGroup);
+    this._title.changeLink(this._insideLegendGroup);
 
-    that._createBackground();
+    this._createBackground();
 
-    if (that._title.hasText()) {
-      const horizontalPadding = that._background ? 2 * that._options.paddingLeftRight : 0;
-      that._title.draw(width - horizontalPadding, height);
+    if (this._title.hasText()) {
+      const horizontalPadding = this._background ? 2 * this._options.paddingLeftRight : 0;
+      this._title.draw(width - horizontalPadding, height);
     }
 
     // TODO review pass or process states in legend
-    that._markersGroup = that._renderer.g().attr({ class: that._itemGroupClass }).append(that._insideLegendGroup);
-    that._createItems(items);
+    this._markersGroup = this._renderer.g().attr({ class: this._itemGroupClass }).append(this._insideLegendGroup);
+    this._createItems(items);
 
-    that._updateElementsPosition(width, height);
+    this._updateElementsPosition(width, height);
 
-    return that;
-  },
+    return this;
+  }
 
-  _measureElements() {
+  _measureElements(): void {
     const options = this._options;
     let maxBBoxHeight = 0;
     this._items.forEach((item) => {
@@ -587,23 +728,22 @@ extend(legendPrototype, {
     if (options.equalRowHeight) {
       this._items.forEach((item) => item.bBox.height = maxBBoxHeight);
     }
-  },
+  }
 
-  _updateElementsPosition(width, height) {
-    const that = this;
-    const options = that._options;
+  _updateElementsPosition(width: number, height: number): void {
+    const options = this._options;
     this._size = { width, height };
-    that._measureElements();
-    that._locateElements(options);
-    that._finalUpdate(options);
+    this._measureElements();
+    this._locateElements(options);
+    this._finalUpdate(options);
 
-    const size = that.getLayoutOptions();
+    const size = this.getLayoutOptions() as LegendBoundingRect;
     if (size.width > width || size.height > height) {
-      that.freeSpace();
+      this.freeSpace();
     }
-  },
+  }
 
-  _createItems(items) {
+  _createItems(items: LegendDataItem[]): void {
     const that = this;
     const options = that._options;
     const renderer = that._renderer;
@@ -611,7 +751,7 @@ extend(legendPrototype, {
 
     that._markersId = {};
 
-    const templateFunction = !options.markerTemplate ? (dataItem, group) => {
+    const templateFunction = !options.markerTemplate ? (dataItem: LegendDataItem, group: ThemeValue): void => {
       const attrs = dataItem.marker;
       createMarker(renderer, attrs.size)
         .attr({
@@ -624,8 +764,8 @@ extend(legendPrototype, {
 
     const template = that._widget._getTemplate(templateFunction);
     const modelOf = options.markerTemplate
-      ? (dataItem) => paintedItem(dataItem, painter(renderer.root.element))
-      : (dataItem) => dataItem;
+      ? (dataItem: LegendDataItem): ThemeValue => paintedItem(dataItem, painter(renderer.root.element))
+      : (dataItem: LegendDataItem): ThemeValue => dataItem;
 
     const markersGroup = that._markersGroup;
 
@@ -654,7 +794,7 @@ extend(legendPrototype, {
       that._deferredItems[i] = Deferred();
       that._templatesGroups.push(markerGroup);
 
-      const item = {
+      const item: CreatedLegendItem = {
         label: that._createLabel(dataItem, itemGroup),
         marker: markerGroup,
         renderer,
@@ -684,18 +824,18 @@ extend(legendPrototype, {
       }
 
       return item;
-    });
-  },
+    }) as LegendItem[];
+  }
 
-  getTemplatesGroups() {
+  getTemplatesGroups(): ThemeValue[] {
     return this._templatesGroups || [];
-  },
+  }
 
-  getTemplatesDef() {
+  getTemplatesDef(): DeferredObj<unknown>[] {
     return this._deferredItems || [];
-  },
+  }
 
-  _getItemData() {
+  _getItemData(): LegendDataItem[] {
     let items = this._data || [];
     const options = this._options || {};
     // For maps in dashboards
@@ -704,54 +844,53 @@ extend(legendPrototype, {
     }
 
     return items.filter((i) => i.visible);
-  },
+  }
 
-  _finalUpdate(options) {
+  _finalUpdate(options: ThemeValue): void {
     this._adjustBackgroundSettings(options);
     this._setBoundingRect(options.margin);
-  },
+  }
 
   // The name is chosen to be opposite for `draw`
-  erase() {
-    const that = this;
-    const insideLegendGroup = that._insideLegendGroup;
+  erase(): this {
+    const insideLegendGroup = this._insideLegendGroup;
 
     insideLegendGroup && insideLegendGroup.dispose();
-    that._insideLegendGroup = that._markersGroup = that._x1 = that._x2 = that._y2 = that._y2 = null;
-    return that;
-  },
+    // @ts-expect-error erase() drops the drawn state
+    this._insideLegendGroup = this._markersGroup = this._x1 = this._x2 = this._y2 = this._y2 = null;
+    return this;
+  }
 
-  _locateElements(locationOptions) {
+  _locateElements(locationOptions: ThemeValue): void {
     this._moveInInitialValues();
     this._locateRowsColumns(locationOptions);
-  },
+  }
 
-  _moveInInitialValues() {
-    const that = this;
-
-    that._title.hasText() && that._title.move([0, 0]);
-    that._legendGroup && that._legendGroup.move(0, 0);
-    that._background && that._background.attr({
+  _moveInInitialValues(): void {
+    // @ts-expect-error a [0, 0] rect never reaches the fitRect branch of Title.move()
+    this._title.hasText() && this._title.move([0, 0]);
+    this._legendGroup && this._legendGroup.move(0, 0);
+    this._background && this._background.attr({
       x: 0, y: 0, width: 0, height: 0,
     });
-  },
+  }
 
-  applySelected(id) {
+  applySelected(id: number): this {
     applyMarkerState(id, this._markersId, this._items, 'selection');
     return this;
-  },
+  }
 
-  applyHover(id) {
+  applyHover(id: number): this {
     applyMarkerState(id, this._markersId, this._items, 'hover');
     return this;
-  },
+  }
 
-  resetItem(id) {
+  resetItem(id: number): this {
     applyMarkerState(id, this._markersId, this._items, 'normal');
     return this;
-  },
+  }
 
-  _createLabel(data, group) {
+  _createLabel(data: LegendDataItem, group: ThemeValue): ThemeValue {
     const labelFormatObject = this._getCustomizeObject(data);
     const options = this._options;
     const align = getAlign(options.itemTextPosition);
@@ -762,50 +901,48 @@ extend(legendPrototype, {
       .css(patchFontOptions(fontStyle))
       .attr({ align, class: options.cssClass })
       .append(group);
-  },
+  }
 
-  _createHint(data, group) {
+  _createHint(data: LegendDataItem, group: ThemeValue): void {
     const labelFormatObject = this._getCustomizeObject(data);
     const text = this._options.customizeHint.call(labelFormatObject, labelFormatObject);
     if (_isDefined(text) && text !== '') {
       group.setTitle(text);
     }
-  },
+  }
 
-  _createBackground() {
-    const that = this;
-    const isInside = that._options.position === INSIDE;
-    const color = that._options.backgroundColor;
-    const fill = color || (isInside ? that._options.containerBackgroundColor : NONE);
+  _createBackground(): void {
+    const isInside = this._options.position === INSIDE;
+    const color = this._options.backgroundColor;
+    const fill = color || (isInside ? this._options.containerBackgroundColor : NONE);
 
-    if (that._options.border.visible || ((isInside || color) && color !== NONE)) {
-      that._background = that._renderer.rect(0, 0, 0, 0)
-        .attr({ fill, class: that._backgroundClass })
-        .append(that._insideLegendGroup);
+    if (this._options.border.visible || ((isInside || color) && color !== NONE)) {
+      this._background = this._renderer.rect(0, 0, 0, 0)
+        .attr({ fill, class: this._backgroundClass })
+        .append(this._insideLegendGroup);
     }
-  },
+  }
 
-  _locateRowsColumns(options) {
-    const that = this;
+  _locateRowsColumns(options: ThemeValue): void {
     let iteration = 0;
-    const layoutOptions = that._getItemsLayoutOptions();
-    const countItems = that._items.length;
+    const layoutOptions = this._getItemsLayoutOptions();
+    const countItems = this._items.length;
     let lines;
 
     do {
       lines = [];
-      that._createLines(lines, layoutOptions);
-      that._alignLines(lines, layoutOptions);
+      this._createLines(lines, layoutOptions);
+      this._alignLines(lines, layoutOptions);
       iteration++;
     } while (checkLinesSize(lines, layoutOptions, countItems, options.margin) && iteration < countItems);
 
-    that._applyItemPosition(lines, layoutOptions);
-  },
+    this._applyItemPosition(lines, layoutOptions);
+  }
 
-  _createLines(lines, layoutOptions) {
+  _createLines(lines: LegendLine[], layoutOptions: ItemsLayoutOptions): void {
     this._items.forEach((item, i) => {
       const tableLine = getLines(lines, layoutOptions, i);
-      const labelBox = {
+      const labelBox: LegendLineItem = {
         width: item.labelBBox.width,
         height: item.labelBBox.height,
         element: item.label,
@@ -813,7 +950,7 @@ extend(legendPrototype, {
         pos: getPos(layoutOptions),
         itemIndex: i,
       };
-      const markerBox = {
+      const markerBox: LegendLineItem = {
         width: item.markerBBox.width,
         height: item.markerBBox.height,
         element: item.marker,
@@ -826,8 +963,8 @@ extend(legendPrototype, {
         },
         itemIndex: i,
       };
-      let firstItem;
-      let secondItem;
+      let firstItem: LegendLineItem;
+      let secondItem: LegendLineItem;
       const offsetDirection = layoutOptions.markerOffset ? 'altOffset' : 'offset';
 
       if (layoutOptions.inverseLabelPosition) {
@@ -839,14 +976,12 @@ extend(legendPrototype, {
       }
 
       firstItem[offsetDirection] = layoutOptions.labelOffset;
-      // @ts-expect-error
       tableLine.secondLine.push(firstItem);
-      // @ts-expect-error
       tableLine.firstLine.push(secondItem);
     });
-  },
+  }
 
-  _alignLines(lines, layoutOptions) {
+  _alignLines(lines: LegendLine[], layoutOptions: ItemsLayoutOptions): void {
     let i;
     let measure = layoutOptions.altMeasure;
     lines.forEach((line) => setMaxInLine(line, measure));
@@ -861,13 +996,12 @@ extend(legendPrototype, {
       transpose(lines).forEach(processLine);
     }
 
-    function processLine(line) {
+    function processLine(line: (LegendLineItem | undefined)[]): void {
       setMaxInLine(line, measure);
     }
-  },
+  }
 
-  _applyItemPosition(lines, layoutOptions) {
-    const that = this;
+  _applyItemPosition(lines: LegendLine[], layoutOptions: ItemsLayoutOptions): void {
     const position = { x: 0, y: 0 };
     const maxLineLength = getMaxLineLength(lines, layoutOptions);
 
@@ -886,7 +1020,7 @@ extend(legendPrototype, {
           height: item.height,
         };
         const itemBBox = new WrapperLayoutElement(null, itemBBoxOptions);
-        const itemLegend = that._items[item.itemIndex];
+        const itemLegend = this._items[item.itemIndex];
 
         wrap.position({
           of: itemBBox,
@@ -901,118 +1035,80 @@ extend(legendPrototype, {
 
     this._items.forEach((item) => {
       const itemBBox = calculateBBoxLabelAndMarker(item.bBoxes[0].getLayoutOptions(), item.bBoxes[1].getLayoutOptions());
-      const horizontal = that._options.columnItemSpacing / 2;
-      const vertical = that._options.rowItemSpacing / 2;
-      // @ts-expect-error
+      const horizontal = this._options.columnItemSpacing / 2;
+      const vertical = this._options.rowItemSpacing / 2;
       item.tracker.left = itemBBox.left - horizontal;
-      // @ts-expect-error
       item.tracker.right = itemBBox.right + horizontal;
-      // @ts-expect-error
       item.tracker.top = itemBBox.top - vertical;
-      // @ts-expect-error
       item.tracker.bottom = itemBBox.bottom + vertical;
     });
-  },
+  }
 
-  _getItemsLayoutOptions() {
-    const that = this;
-    const options = that._options;
+  _getItemsLayoutOptions(): ItemsLayoutOptions {
+    const options = this._options;
     const orientation = options.orientation;
     const layoutOptions = {
       itemsAlignment: options.itemsAlignment,
       orientation: options.orientation,
-    };
-    const width = that._size.width - (that._background ? 2 * options.paddingLeftRight : 0);
-    const height = that._size.height - (that._background ? 2 * options.paddingTopBottom : 0);
+    } as ItemsLayoutOptions;
+    const width = this._size.width - (this._background ? 2 * options.paddingLeftRight : 0);
+    const height = this._size.height - (this._background ? 2 * options.paddingTopBottom : 0);
 
     if (orientation === HORIZONTAL) {
-      // @ts-expect-error
       layoutOptions.length = width;
-      // @ts-expect-error
       layoutOptions.spacing = options.columnItemSpacing;
-      // @ts-expect-error
       layoutOptions.direction = 'x';
-      // @ts-expect-error
       layoutOptions.measure = WIDTH;
-      // @ts-expect-error
       layoutOptions.altMeasure = HEIGHT;
-      // @ts-expect-error
       layoutOptions.altDirection = 'y';
-      // @ts-expect-error
       layoutOptions.altSpacing = options.rowItemSpacing;
-      // @ts-expect-error
       layoutOptions.countItem = options.columnCount;
-      // @ts-expect-error
       layoutOptions.altCountItem = options.rowCount;
-      // @ts-expect-error
       layoutOptions.marginTextLabel = 4;
-      // @ts-expect-error
       layoutOptions.labelOffset = 7;
       if (options.itemTextPosition === BOTTOM || options.itemTextPosition === TOP) {
-        // @ts-expect-error
         layoutOptions.labelOffset = 4;
-        // @ts-expect-error
         layoutOptions.markerOffset = true;
       }
     } else {
-      // @ts-expect-error
       layoutOptions.length = height;
-      // @ts-expect-error
       layoutOptions.spacing = options.rowItemSpacing;
-      // @ts-expect-error
       layoutOptions.direction = 'y';
-      // @ts-expect-error
       layoutOptions.measure = HEIGHT;
-      // @ts-expect-error
       layoutOptions.altMeasure = WIDTH;
-      // @ts-expect-error
       layoutOptions.altDirection = 'x';
-      // @ts-expect-error
       layoutOptions.altSpacing = options.columnItemSpacing;
-      // @ts-expect-error
       layoutOptions.countItem = options.rowCount;
-      // @ts-expect-error
       layoutOptions.altCountItem = options.columnCount;
-      // @ts-expect-error
       layoutOptions.marginTextLabel = 7;
-      // @ts-expect-error
       layoutOptions.labelOffset = 4;
       if (options.itemTextPosition === RIGHT || options.itemTextPosition === LEFT) {
-        // @ts-expect-error
         layoutOptions.labelOffset = 7;
-        // @ts-expect-error
         layoutOptions.markerOffset = true;
       }
     }
-    // @ts-expect-error
     if (!layoutOptions.countItem) {
-      // @ts-expect-error
       if (layoutOptions.altCountItem) {
-        // @ts-expect-error
-        layoutOptions.countItem = _ceil(that._items.length / layoutOptions.altCountItem);
+        layoutOptions.countItem = _ceil(this._items.length / layoutOptions.altCountItem);
       } else {
-        // @ts-expect-error
-        layoutOptions.countItem = that._items.length;
+        layoutOptions.countItem = this._items.length;
       }
     }
 
     if (options.itemTextPosition === TOP || options.itemTextPosition === LEFT) {
-      // @ts-expect-error
       layoutOptions.inverseLabelPosition = true;
     }
-    // @ts-expect-error
     layoutOptions.itemTextPosition = options.itemTextPosition;
-    // @ts-expect-error
-    layoutOptions.altCountItem = layoutOptions.altCountItem || _ceil(that._items.length / layoutOptions.countItem);
+    layoutOptions.altCountItem = layoutOptions.altCountItem || _ceil(this._items.length / layoutOptions.countItem);
 
     return layoutOptions;
-  },
+  }
 
-  _adjustBackgroundSettings(locationOptions) {
+  _adjustBackgroundSettings(locationOptions: ThemeValue): void {
     if (!this._background) return;
     const border = locationOptions.border;
     const legendBox = this._calculateTotalBox();
-    const backgroundSettings = {
+    const backgroundSettings: Record<string, ThemeValue> = {
       x: _round(legendBox.x - locationOptions.paddingLeftRight),
       y: _round(legendBox.y - locationOptions.paddingTopBottom),
       width: _round(legendBox.width) + 2 * locationOptions.paddingLeftRight,
@@ -1022,21 +1118,17 @@ extend(legendPrototype, {
 
     if (border.visible && border.width && border.color && border.color !== NONE) {
       backgroundSettings['stroke-width'] = border.width;
-      // @ts-expect-error
       backgroundSettings.stroke = border.color;
       backgroundSettings['stroke-opacity'] = border.opacity;
-      // @ts-expect-error
       backgroundSettings.dashStyle = border.dashStyle;
-      // @ts-expect-error
       backgroundSettings.rx = border.cornerRadius || 0;
-      // @ts-expect-error
       backgroundSettings.ry = border.cornerRadius || 0;
     }
 
     this._background.attr(backgroundSettings);
-  },
+  }
 
-  _setBoundingRect(margin) {
+  _setBoundingRect(margin: Bounds): void {
     if (!this._insideLegendGroup) {
       return;
     }
@@ -1050,9 +1142,9 @@ extend(legendPrototype, {
     box.y -= margin.top;
 
     this._boundingRect = box;
-  },
+  }
 
-  _calculateTotalBox() {
+  _calculateTotalBox(): LegendBoundingRect {
     const markerBox = this._markersGroup.getBBox();
     const titleBox = this._title.getCorrectedLayoutOptions();
     const box = this._insideLegendGroup.getBBox();
@@ -1063,9 +1155,9 @@ extend(legendPrototype, {
     titleBox.width > box.width && (box.width = titleBox.width);
 
     return box;
-  },
+  }
 
-  getActionCallback(point) {
+  getActionCallback(point: { index: number }): (act: string) => void {
     const that = this;
     if (that._options.visible) {
       return function (act) {
@@ -1074,11 +1166,11 @@ extend(legendPrototype, {
     } else {
       return noop;
     }
-  },
+  }
 
-  getLayoutOptions() {
+  getLayoutOptions(): LegendBoundingRect | null {
     const options = this._options;
-    const boundingRect = this._insideLegendGroup ? this._boundingRect : {
+    const boundingRect: LegendBoundingRect = this._insideLegendGroup ? this._boundingRect : {
       width: 0,
       height: 0,
       x: 0,
@@ -1105,46 +1197,40 @@ extend(legendPrototype, {
       return boundingRect;
     }
     return null;
-  },
+  }
 
-  shift(x, y) {
-    const that = this;
-    let box = {};
+  shift(x: number, y: number): this {
+    let box = {} as BBox;
 
-    if (that._insideLegendGroup) {
-      that._insideLegendGroup.attr({ translateX: x - that._boundingRect.x, translateY: y - that._boundingRect.y });
+    if (this._insideLegendGroup) {
+      this._insideLegendGroup.attr({ translateX: x - this._boundingRect.x, translateY: y - this._boundingRect.y });
     }
 
-    that._title && that._shiftTitle(that._boundingRect.widthWithoutMargins);
-    that._markersGroup && that._shiftMarkers();
+    this._title && this._shiftTitle(this._boundingRect.widthWithoutMargins);
+    this._markersGroup && this._shiftMarkers();
 
-    if (that._insideLegendGroup) box = that._legendGroup.getBBox();
-    // @ts-expect-error
-    that._x1 = box.x;
-    // @ts-expect-error
-    that._y1 = box.y;
-    // @ts-expect-error
-    that._x2 = box.x + box.width;
-    // @ts-expect-error
-    that._y2 = box.y + box.height;
-    return that;
-  },
+    if (this._insideLegendGroup) box = this._legendGroup.getBBox();
+    this._x1 = box.x;
+    this._y1 = box.y;
+    this._x2 = box.x + box.width;
+    this._y2 = box.y + box.height;
+    return this;
+  }
 
-  _shiftTitle(boxWidth) {
-    const that = this;
-    const title = that._title;
+  _shiftTitle(boxWidth: number | undefined): void {
+    const title = this._title;
     const titleBox = title.getCorrectedLayoutOptions();
     if (!titleBox || !title.hasText()) {
       return;
     }
 
-    const width = boxWidth - (that._background ? 2 * that._options.paddingLeftRight : 0);
+    const width = boxWidth === undefined ? titleBox.width : boxWidth - (this._background ? 2 * this._options.paddingLeftRight : 0);
     const titleOptions = title.getOptions();
     let titleY = titleBox.y + titleOptions.margin.top;
     let titleX = 0;
 
-    if (titleOptions.verticalAlignment === BOTTOM && that._markersGroup) {
-      titleY += that._markersGroup.getBBox().height;
+    if (titleOptions.verticalAlignment === BOTTOM && this._markersGroup) {
+      titleY += this._markersGroup.getBBox().height;
     }
 
     if (titleOptions.horizontalAlignment === RIGHT) {
@@ -1153,9 +1239,9 @@ extend(legendPrototype, {
       titleX = (width - titleBox.width) / 2;
     }
     title.shift(titleX, titleY);
-  },
+  }
 
-  _shiftMarkers() {
+  _shiftMarkers(): void {
     const titleBox = this._title.getLayoutOptions();
     const markerBox = this._markersGroup.getBBox();
     const titleOptions = this._title.getOptions() || {};
@@ -1180,17 +1266,17 @@ extend(legendPrototype, {
         item.tracker.bottom += y;
       });
     }
-  },
+  }
 
-  getPosition() {
+  getPosition(): string {
     return this._options.position;
-  },
+  }
 
-  coordsIn(x, y) {
+  coordsIn(x: number, y: number): boolean {
     return x >= this._x1 && x <= this._x2 && y >= this._y1 && y <= this._y2;
-  },
+  }
 
-  getItemByCoord(x, y) {
+  getItemByCoord(x: number, y: number): LegendItemTracker | null {
     const items = this._items;
     const legendGroup = this._insideLegendGroup;
     x -= legendGroup.attr('translateX');
@@ -1202,22 +1288,22 @@ extend(legendPrototype, {
       }
     }
     return null;
-  },
+  }
 
-  dispose() {
-    const that = this;
-    that._title && that._title.dispose();
-    that._legendGroup = that._insideLegendGroup = that._title = that._renderer = that._options = that._data = that._items = null;
+  dispose(): this {
+    this._title && this._title.dispose();
+    // @ts-expect-error dispose() drops the references
+    this._legendGroup = this._insideLegendGroup = this._title = this._renderer = this._options = this._data = this._items = null;
 
-    return that;
-  },
+    return this;
+  }
 
   // BaseWidget_layout_implementation
-  layoutOptions() {
+  layoutOptions(): LayoutTargetOptions | null {
     if (!this.isVisible()) {
       return null;
     }
-    const pos = this.getLayoutOptions();
+    const pos = this.getLayoutOptions() as LegendBoundingRect;
     return {
       horizontalAlignment: this._options.horizontalAlignment,
       verticalAlignment: this._options.verticalAlignment,
@@ -1225,9 +1311,9 @@ extend(legendPrototype, {
       priority: 1,
       position: this.getPosition(),
     };
-  },
+  }
 
-  measure(size) {
+  measure(size: number[]): number[] {
     if (this._updated || !this._insideLegendGroup) {
       this.draw(size[0], size[1]);
       this._updated = false;
@@ -1237,24 +1323,24 @@ extend(legendPrototype, {
       });
       this._updateElementsPosition(size[0], size[1]);
     }
-    const rect = this.getLayoutOptions();
+    const rect = this.getLayoutOptions() as LegendBoundingRect;
     return [rect.width, rect.height];
-  },
+  }
 
-  move(rect) {
+  move(rect: number[]): void {
     this.shift(rect[0], rect[1]);
-  },
+  }
 
-  freeSpace() {
+  freeSpace(): void {
     this._options._incidentOccurred('W2104');
     this.erase();
-  },
+  }
   // BaseWidget_layout_implementation
-});
+};
 
 export const plugin = {
   name: 'legend',
-  init() {
+  init(): void {
     const that = this;
     const group = this._renderer.g()
       .attr({
@@ -1270,7 +1356,7 @@ export const plugin = {
       itemGroupClass: `${this._rootClassPrefix}-item`,
       titleGroupClass: `${this._rootClassPrefix}-title`,
       textField: 'text',
-      getFormatObject(data) {
+      getFormatObject(data): { item: ThemeValue; text?: string } {
         return {
           item: data.item,
           text: data.text,
@@ -1281,18 +1367,18 @@ export const plugin = {
     that._layout.add(that._legend);
   },
   extenders: {
-    _applyTilesAppearance() {
+    _applyTilesAppearance(): void {
       const that = this;
       this._items.forEach((item) => {
         that._applyLegendItemStyle(item.id, item.getState());
       });
     },
-    _buildNodes() {
+    _buildNodes(): void {
       this._createLegendItems();
     },
   },
   members: {
-    _applyLegendItemStyle(id, state) {
+    _applyLegendItemStyle(id: number, state: string): void {
       const legend = this._legend;
       switch (state) {
         case 'hover':
@@ -1307,17 +1393,17 @@ export const plugin = {
       }
     },
 
-    _createLegendItems() {
+    _createLegendItems(): void {
       if (this._legend.update(this._getLegendData(), this._getOption('legend'), this._themeManager.theme('legend').title)) {
         this._requestChange(['LAYOUT']);
       }
     },
   },
-  dispose() {
+  dispose(): void {
     this._legend.dispose();
   },
-  customize(constructor) {
-    // @ts-expect-error
+  customize(constructor: ThemeValue): void {
+    // @ts-expect-error returns the legend item under the point, undefined elsewhere
     constructor.prototype._proxyData.push(function (x, y) {
       if (this._legend.coordsIn(x, y)) {
         const item = this._legend.getItemByCoord(x, y);
@@ -1332,7 +1418,7 @@ export const plugin = {
 
     constructor.addChange({
       code: 'LEGEND',
-      handler() {
+      handler(): void {
         this._createLegendItems();
       },
       isThemeDependent: true,
@@ -1343,17 +1429,17 @@ export const plugin = {
 };
 
 /// #DEBUG
-exports._setLegend = function (value) {
+exports._setLegend = function (value): void {
   Legend = value;
 };
 
 const __getMarkerCreator = getMarkerCreator;
-exports._DEBUG_stubMarkerCreator = function (callback) {
-  getMarkerCreator = function () {
+exports._DEBUG_stubMarkerCreator = function (callback): void {
+  getMarkerCreator = function (): MarkerCreator {
     return callback;
   };
 };
-exports._DEBUG_restoreMarkerCreator = function () {
+exports._DEBUG_restoreMarkerCreator = function (): void {
   getMarkerCreator = __getMarkerCreator;
 };
 /// #ENDDEBUG

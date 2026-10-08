@@ -1,5 +1,5 @@
-import callOnce from '@js/core/utils/call_once';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import { callOnce } from '@ts/core/utils/call_once';
 
 type ExtendedWindow = Window & {
   webkitRequestAnimationFrame?: typeof window.requestAnimationFrame;

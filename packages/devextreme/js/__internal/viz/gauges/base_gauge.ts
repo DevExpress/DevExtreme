@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import formatHelper from '@js/format_helper';
+import formatHelper from '@ts/core/format_helper';
 import { paintedColor } from '@ts/core/utils/css_variables';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
@@ -11,6 +11,7 @@ import { plugin as loadingIndicatorPlugin } from '@ts/viz/core/loading_indicator
 import { plugin as titlePlugin } from '@ts/viz/core/title';
 import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
+import type { Bounds } from '@ts/viz/core/types';
 import { getAppropriateFormat } from '@ts/viz/core/utils';
 import themeManagerModule from '@ts/viz/gauges/theme_manager';
 import type { TrackerParameters } from '@ts/viz/gauges/tracker';
@@ -24,13 +25,6 @@ export interface GaugeAnimationSettings {
   easing: ThemeValue;
   step?: (pos: number) => void;
   complete?: () => void;
-}
-
-export interface Rect {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
 }
 
 export interface GaugeFormatOptions {
@@ -58,7 +52,7 @@ export abstract class BaseGauge extends BaseWidget {
 
   _tracker;
 
-  _innerRect!: Rect;
+  _innerRect!: Bounds;
 
   _area;
 
@@ -329,7 +323,7 @@ export function formatValue(
 ): string {
   const normalizedValue = Object.is(value, -0) ? 0 : value;
   const formatOptions: GaugeFormatOptions = options ?? {};
-  const text = format(normalizedValue, formatOptions.format);
+  const text: string = format(normalizedValue, formatOptions.format);
   if (typeof formatOptions.customizeText === 'function') {
     const formatObject = extend({ value: normalizedValue, valueText: text }, extra);
     return String(formatOptions.customizeText.call(formatObject, formatObject));

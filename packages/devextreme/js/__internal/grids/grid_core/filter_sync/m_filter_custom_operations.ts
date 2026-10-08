@@ -7,7 +7,7 @@ import type { CustomOperation } from '@js/ui/filter_builder';
 import errors from '@js/ui/widget/ui.errors';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
-} from '@ts/filter_builder/m_utils';
+} from '@ts/filter_builder/utils';
 
 function baseOperation(grid) {
   const calculateFilterExpression = function (filterValue, field, fields) {
@@ -16,9 +16,11 @@ function baseOperation(grid) {
     filterValue && filterValue.forEach((value, index) => {
       if (isCondition(value) || isGroup(value)) {
         const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
+        // @ts-expect-error getFilterExpression returns an expression, not a string
         result.push(filterExpression);
       } else {
         const filterExpression = getFilterExpression([field.dataField, '=', value], fields, [], 'headerFilter');
+        // @ts-expect-error getFilterExpression returns an expression, not a string
         result.push(filterExpression);
       }
       index !== lastIndex && result.push('or');

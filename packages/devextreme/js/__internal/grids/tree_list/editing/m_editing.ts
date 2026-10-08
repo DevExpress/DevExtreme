@@ -10,13 +10,13 @@ import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { editingDataControllerExtender } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
 import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { RowsView } from '../../grid_core/views/m_rows_view';
+import treeListCore from '../core';
 import type { TreeListDataController } from '../data_controller/m_data_controller';
 import type { TreeListDataSourceController } from '../data_source/data_source_controller';
-import treeListCore from '../m_core';
 
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';

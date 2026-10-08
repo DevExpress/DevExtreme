@@ -1,8 +1,8 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
-import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
+import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/filter_sync';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 
 export const filterSyncDataControllerExtender = (
   Base: ModuleType<DataController>,

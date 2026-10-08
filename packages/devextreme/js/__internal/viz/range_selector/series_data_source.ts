@@ -1,25 +1,47 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isDate, isDefined, isNumeric } from '@js/core/utils/type';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { isDate, isDefined, isNumeric } from '@ts/core/utils/m_type';
 import { ThemeManager as ChartThemeManager } from '@ts/viz/components/chart_theme_manager';
 import { validateData } from '@ts/viz/components/data_validator';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { SeriesFamily } from '@ts/viz/core/series_family';
 import { mergeMarginOptions, processSeriesTemplate } from '@ts/viz/core/utils';
 import { Series } from '@ts/viz/series/base_series';
 import { Range } from '@ts/viz/translators/range';
 
-const createThemeManager = function (chartOptions) {
+type ChartThemeManagerInstance = InstanceType<typeof ChartThemeManager>;
+
+interface SeriesDataSourceOptions {
+  renderer: ThemeValue;
+  chart: ThemeValue;
+  dataSource?: ThemeValue[];
+  dataSourceField?: string;
+  valueType?: string;
+  axisType?: string;
+  categories?: ThemeValue[];
+  incidentOccurred: ThemeValue;
+  argumentAxis: ThemeValue;
+  valueAxis: ThemeValue;
+}
+
+interface BarOptions {
+  barGroupPadding: number;
+  barGroupWidth: number;
+}
+
+interface BoundRange {
+  arg: ThemeValue;
+  val: ThemeValue;
+}
+
+const createThemeManager = function (chartOptions: ThemeValue): ChartThemeManagerInstance {
   return new ChartThemeManager({
     options: chartOptions,
     themeSection: 'rangeSelector.chart',
@@ -27,14 +49,12 @@ const createThemeManager = function (chartOptions) {
   });
 };
 
-const processSeriesFamilies = function (series, minBubbleSize, maxBubbleSize, barOptions, negativesAsZeroes) {
-  const families = [];
-  const types = [];
+const processSeriesFamilies = function (series: ThemeValue[], minBubbleSize: number, maxBubbleSize: number, barOptions: BarOptions, negativesAsZeroes: boolean): ThemeValue[] {
+  const families: ThemeValue[] = [];
+  const types: string[] = [];
 
   each(series, (i, item) => {
-    // @ts-expect-error
     if (!types.includes(item.type)) {
-      // @ts-expect-error
       types.push(item.type);
     }
   });
@@ -50,7 +70,6 @@ const processSeriesFamilies = function (series, minBubbleSize, maxBubbleSize, ba
     });
     family.add(series);
     family.adjustSeriesValues();
-    // @ts-expect-error
     families.push(family);
   });
 
@@ -58,40 +77,50 @@ const processSeriesFamilies = function (series, minBubbleSize, maxBubbleSize, ba
 };
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let SeriesDataSource = function (options) {
-  const that = this;
-  const themeManager = that._themeManager = createThemeManager(options.chart);
+export let SeriesDataSource = class SeriesDataSource {
+  declare _themeManager: ChartThemeManagerInstance;
 
-  themeManager.setTheme(options.chart.theme);
-  const topIndent = themeManager.getOptions('topIndent');
-  const bottomIndent = themeManager.getOptions('bottomIndent');
+  declare _indent: { top: number; bottom: number };
 
-  that._indent = {
-    top: topIndent >= 0 && topIndent < 1 ? topIndent : 0,
-    bottom: bottomIndent >= 0 && bottomIndent < 1 ? bottomIndent : 0,
-  };
-  that._valueAxis = themeManager.getOptions('valueAxisRangeSelector') || {};
-  that._hideChart = false;
+  declare _valueAxis: ThemeValue;
 
-  that._series = that._calculateSeries(options);
-  that._seriesFamilies = [];
-};
+  declare _hideChart: boolean;
 
-SeriesDataSource.prototype = {
-  constructor: SeriesDataSource,
+  declare _series: ThemeValue[];
 
-  _calculateSeries(options) {
-    const that = this;
-    const series = [];
+  declare _seriesFamilies: ThemeValue[];
+
+  declare argCategories?: ThemeValue[];
+
+  constructor(options: SeriesDataSourceOptions) {
+    const themeManager = this._themeManager = createThemeManager(options.chart);
+
+    themeManager.setTheme(options.chart.theme);
+    const topIndent = themeManager.getOptions('topIndent');
+    const bottomIndent = themeManager.getOptions('bottomIndent');
+
+    this._indent = {
+      top: topIndent >= 0 && topIndent < 1 ? topIndent : 0,
+      bottom: bottomIndent >= 0 && bottomIndent < 1 ? bottomIndent : 0,
+    };
+    this._valueAxis = themeManager.getOptions('valueAxisRangeSelector') || {};
+    this._hideChart = false;
+
+    this._series = this._calculateSeries(options);
+    this._seriesFamilies = [];
+  }
+
+  _calculateSeries(options: SeriesDataSourceOptions): ThemeValue[] {
+    const series: ThemeValue[] = [];
     let particularSeriesOptions;
     let seriesTheme;
     const data = options.dataSource || [];
     let parsedData;
-    const chartThemeManager = that._themeManager;
+    const chartThemeManager = this._themeManager;
     const seriesTemplate = chartThemeManager.getOptions('seriesTemplate');
     let allSeriesOptions = seriesTemplate ? processSeriesTemplate(seriesTemplate, data) : options.chart.series;
     let dataSourceField;
-    const valueAxis = that._valueAxis;
+    const valueAxis = this._valueAxis;
     let i;
     let newSeries;
     let groupsData;
@@ -102,7 +131,7 @@ SeriesDataSource.prototype = {
         argumentField: dataSourceField,
         valueField: dataSourceField,
       };
-      that._hideChart = true;
+      this._hideChart = true;
     }
 
     allSeriesOptions = Array.isArray(allSeriesOptions) ? allSeriesOptions : allSeriesOptions ? [allSeriesOptions] : [];
@@ -125,7 +154,6 @@ SeriesDataSource.prototype = {
           valueAxis: options.valueAxis,
           incidentOccurred: options.incidentOccurred,
         }, seriesTheme);
-        // @ts-expect-error
         series.push(newSeries);
       }
     }
@@ -147,16 +175,15 @@ SeriesDataSource.prototype = {
         },
       };
       parsedData = validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions('dataPrepareSettings'));
-      that.argCategories = groupsData.categories;
+      this.argCategories = groupsData.categories;
       for (i = 0; i < series.length; i++) {
-        // @ts-expect-error
         series[i].updateData(parsedData[series[i].getArgumentField()]);
       }
     }
     return series;
-  },
+  }
 
-  createPoints() {
+  createPoints(): void {
     if (this._series.length === 0) {
       return;
     }
@@ -186,18 +213,17 @@ SeriesDataSource.prototype = {
       },
       isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros,
     );
-  },
+  }
 
-  adjustSeriesDimensions() {
+  adjustSeriesDimensions(): void {
     each(this._seriesFamilies, (_, family) => {
       family.adjustSeriesDimensions();
     });
-  },
+  }
 
-  getBoundRange() {
-    const that = this;
+  getBoundRange(): BoundRange {
     let rangeData;
-    const valueAxis = that._valueAxis;
+    const valueAxis = this._valueAxis;
     const valRange = new Range({
       min: valueAxis.min,
       minVisible: valueAxis.min,
@@ -212,15 +238,15 @@ SeriesDataSource.prototype = {
     let minIndent;
     let maxIndent;
 
-    each(that._series, (_, series) => {
+    each(this._series, (_, series) => {
       rangeData = series.getRangeData();
       valRange.addRange(rangeData.val);
       argRange.addRange(rangeData.arg);
     });
 
     if (!valRange.isEmpty() && !argRange.isEmpty()) {
-      minIndent = valueAxis.inverted ? that._indent.top : that._indent.bottom;
-      maxIndent = valueAxis.inverted ? that._indent.bottom : that._indent.top;
+      minIndent = valueAxis.inverted ? this._indent.top : this._indent.bottom;
+      maxIndent = valueAxis.inverted ? this._indent.bottom : this._indent.top;
       rangeYSize = valRange.max - valRange.min;
       rangeVisibleSizeY = (isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
       // B253717
@@ -243,9 +269,9 @@ SeriesDataSource.prototype = {
     }
 
     return { arg: argRange, val: valRange };
-  },
+  }
 
-  getMarginOptions(canvas) {
+  getMarginOptions(canvas: { width: number; height: number }): ThemeValue {
     const bubbleSize = Math.min(canvas.width, canvas.height) * this._themeManager.getOptions('maxBubbleSize');
 
     return this._series.reduce((marginOptions, series) => {
@@ -256,28 +282,28 @@ SeriesDataSource.prototype = {
       }
       return mergeMarginOptions(marginOptions, seriesOptions);
     }, {});
-  },
+  }
 
-  getSeries() {
+  getSeries(): ThemeValue[] {
     return this._series;
-  },
+  }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return this.getSeries().length === 0;
-  },
+  }
 
-  isShowChart() {
+  isShowChart(): boolean {
     return !this._hideChart;
-  },
+  }
 
-  getCalculatedValueType() {
+  getCalculatedValueType(): ThemeValue {
     const series = this._series[0];
     return series?.argumentType;
-  },
+  }
 
-  getThemeManager() {
+  getThemeManager(): ChartThemeManagerInstance {
     return this._themeManager;
-  },
+  }
 };
 
 /// #DEBUG

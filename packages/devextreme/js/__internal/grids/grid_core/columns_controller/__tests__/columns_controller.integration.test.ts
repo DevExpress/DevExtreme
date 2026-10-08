@@ -3,7 +3,11 @@ import {
 } from '@jest/globals';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
+import ko from 'knockout';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
@@ -48,6 +52,239 @@ describe('getFilteringColumns', () => {
 
     expect(filteringColumns.map((column) => column.dataField)).toEqual(['id', 'name']);
     expect(filteringColumns.some((column) => column.type)).toBe(false);
+  });
+});
+
+describe('column fixing enablement', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it.each([
+    { enabled: undefined, fixed: false, expected: undefined },
+    { enabled: undefined, fixed: true, expected: true },
+    { enabled: false, fixed: false, expected: false },
+    { enabled: false, fixed: true, expected: true },
+    { enabled: true, fixed: false, expected: true },
+    { enabled: true, fixed: true, expected: true },
+  ])('preserves enabled=$enabled when fixed=$fixed', async ({ enabled, fixed, expected }) => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1 }],
+      columns: [{ dataField: 'id', fixed }],
+    });
+    instance.option('columnFixing.enabled', enabled);
+
+    const result = instance.getController('columns')._isColumnFixing();
+
+    expect(result).toBe(expected);
+  });
+});
+
+describe('column generation', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should generate columns when an empty data source receives data', async () => {
+    const { instance } = await createDataGrid({ dataSource: [] });
+
+    expect(instance.columnCount()).toBe(0);
+
+    instance.option('dataSource', [{ id: 1, name: 'a' }]);
+    jest.runAllTimers();
+
+    expect(instance.getVisibleColumns().map((column) => column.dataField)).toEqual(['id', 'name']);
+  });
+});
+
+describe('observable column customization', () => {
+  beforeEach(() => {
+    beforeTest();
+    variableWrapper.inject({
+      isWrapped: ko.isObservable,
+      unwrap(value: unknown): unknown {
+        return ko.unwrap(value);
+      },
+    });
+  });
+  afterEach(() => {
+    afterTest();
+    variableWrapper.resetInjection();
+  });
+
+  it('should invoke an observable callback without replacing its value', async () => {
+    const customizeColumns = (columns: Column[]): void => {
+      columns[0].caption = 'Customized';
+    };
+    const observable = ko.observable(customizeColumns);
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1 }],
+      columns: ['id'],
+    });
+
+    instance.option('customizeColumns', observable);
+    jest.runAllTimers();
+
+    expect(instance.columnOption('id', 'caption')).toBe('Customized');
+    expect(observable()).toBe(customizeColumns);
+  });
+});
+
+describe('fixed column layout', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should preserve band colspan across fixed header rows without changing source columns', async () => {
+    const { instance } = await createDataGrid({ dataSource: [], columns: [] });
+    const controller = instance.getController('columns');
+    const left: Column = {
+      name: 'left', fixed: true, fixedPosition: 'left', headerId: 'left',
+    };
+    const right: Column = {
+      name: 'right', fixed: true, fixedPosition: 'right', headerId: 'right',
+    };
+    const rows: Column[][] = [
+      [left, { name: 'band', isBand: true, colspan: 2 }, right],
+      [left, { name: 'first' }, { name: 'second' }, right],
+    ];
+    jest.spyOn(controller, '_isColumnFixing').mockReturnValue(true);
+    jest.spyOn(controller, 'getRowCount').mockReturnValue(1);
+    jest.spyOn(controller, 'getVisibleColumns').mockImplementation((rowIndex) => rows[rowIndex ?? 1]);
+    controller.resetColumnsCache();
+
+    const fixedRows = [controller.getFixedColumns(0), controller.getFixedColumns(1)];
+
+    fixedRows.forEach((row) => {
+      expect(row).toEqual([
+        { ...left, headerId: 'left-fixed' },
+        { command: 'transparent', colspan: 2 },
+        { ...right, headerId: 'right-fixed' },
+      ]);
+    });
+    expect(left.headerId).toBe('left');
+    expect(right.headerId).toBe('right');
+    expect(rows.map((row) => row.length)).toEqual([3, 4]);
+  });
+});
+
+describe('getVisibleColumns', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should keep null row indexes equivalent to omitted indexes', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      columns: [{ caption: 'Band', columns: ['id', 'name'] }],
+    });
+
+    const visibleColumns = instance.getController('columns').getVisibleColumns(null);
+
+    expect(visibleColumns).toEqual(instance.getVisibleColumns());
+    expect(visibleColumns.map((column) => column.dataField)).toEqual(['id', 'name']);
+    expect(instance.getVisibleColumns(0).map((column) => column.caption)).toEqual(['Band']);
+  });
+});
+
+describe('sort and group selectors', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should skip empty sort and group selectors', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, name: 'a' }],
+      columns: [
+        { dataField: 'id', sortOrder: 'asc', calculateSortValue: '' },
+        { dataField: 'name', groupIndex: 0, calculateGroupValue: '' },
+      ],
+    });
+
+    const controller = instance.getController('columns');
+
+    expect(controller.getSortDataSourceParameters()?.[0].selector).toBe('id');
+    expect(controller.getGroupDataSourceParameters()?.[0].selector).toBe('name');
+  });
+});
+
+describe('column filter expressions', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should forward filter target and preserve column callback context', async () => {
+    const calls: unknown[] = [];
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1 }, { id: 2 }],
+      columns: [{
+        dataField: 'id',
+        calculateFilterExpression(
+          this: Column,
+          value: unknown,
+          operation: string | null,
+          target: string,
+        ): unknown[] {
+          calls.push({
+            field: this.dataField, value, operation, target,
+          });
+          return [this.dataField, operation, value];
+        },
+      }],
+      filterRow: { visible: true },
+    });
+
+    instance.columnOption('id', 'selectedFilterOperation', '=');
+    instance.columnOption('id', 'filterValue', 2);
+    jest.runAllTimers();
+
+    expect(calls).toContainEqual({
+      field: 'id', value: 2, operation: '=', target: 'filterRow',
+    });
+    expect(instance.getVisibleRows()).toMatchObject([{ data: { id: 2 } }]);
+  });
+});
+
+describe('column data type inference', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should finish type inference before reading raw values for serialization', async () => {
+    const { instance } = await createDataGrid({
+      dataSource: [],
+      columns: ['value'],
+    });
+    const controller = instance.getController('columns');
+    const column = controller.getColumns()[0];
+    const calls: unknown[] = [];
+    const items = [{ value: 1 }, { value: '2' }];
+    jest.spyOn(controller, '_getFirstItems').mockReturnValue(items);
+    column.calculateCellValue = function calculateCellValue(
+      this: Column,
+      item: RawItemData,
+      ...args: unknown[]
+    ): unknown {
+      calls.push({
+        context: this,
+        value: item.value,
+        dataType: this.dataType,
+        skipDeserialization: args[0],
+      });
+      return item.value;
+    };
+
+    const updated = controller.updateColumnDataTypes();
+
+    expect(updated).toBe(true);
+    expect(column.dataType).toBe('string');
+    expect(calls).toEqual([
+      {
+        context: column, value: 1, dataType: undefined, skipDeserialization: undefined,
+      },
+      {
+        context: column, value: '2', dataType: undefined, skipDeserialization: undefined,
+      },
+      {
+        context: column, value: 1, dataType: 'string', skipDeserialization: true,
+      },
+      {
+        context: column, value: '2', dataType: 'string', skipDeserialization: true,
+      },
+    ]);
   });
 });
 

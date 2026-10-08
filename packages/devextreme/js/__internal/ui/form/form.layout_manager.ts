@@ -302,7 +302,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       if (isObject(item) && isDefined(item.visible) && isFunction(watch)) {
         this._itemWatchers.push(
           watch(
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             () => variableWrapper.unwrap(item.visible),
             (): void => {
               const { layoutData } = this.option();
@@ -931,7 +930,8 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         skipImmediate: true,
       },
       /// #DEBUG
-      { createWatcherDataField: dataField },
+      // eslint-disable-next-line @stylistic/comma-dangle
+      { createWatcherDataField: dataField }
       /// #ENDDEBUG
     );
 

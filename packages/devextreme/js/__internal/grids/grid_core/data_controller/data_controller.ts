@@ -16,11 +16,11 @@ import type {
   ChangedEvent, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import modules from '@ts/grids/grid_core/m_modules';
-import type {
-  Controllers, Module, OptionChanged, RowKey,
-} from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import modules from '@ts/grids/grid_core/modules/modules';
+import type {
+  Controllers, Module, ModuleItemCallbackFlags, OptionChanged, RowKey,
+} from '@ts/grids/grid_core/types';
 
 import type { CustomLoadResult } from '../data_source_adapter/custom_loader';
 import type {
@@ -29,7 +29,6 @@ import type {
 } from '../filter/types';
 import { combineFilters, equalFilterParameters } from '../filter/utils';
 import type {
-  CallbackFlags,
   DataChange,
   GeneratedItem,
   GetUpdatedColumnIndices,
@@ -167,7 +166,7 @@ export class DataController extends modules.Controller {
     return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'rowIndicesChanged'];
   }
 
-  protected callbackFlags(name?: string): CallbackFlags | undefined {
+  protected callbackFlags(name?: string): ModuleItemCallbackFlags | undefined {
     if (name === 'dataErrorOccurred') {
       return { stopOnFalse: true };
     }
@@ -406,14 +405,18 @@ export class DataController extends modules.Controller {
       this._columnsUpdating = false;
     }
 
+    // @ts-expect-error the data layer accepts null to clear sorting
     storeLoadOptions.sort = columnsController.getSortDataSourceParameters();
+    // @ts-expect-error the data layer accepts null to clear grouping
     storeLoadOptions.group = columnsController.getGroupDataSourceParameters();
     dataSourceAdapter.sort(storeLoadOptions.sort);
     dataSourceAdapter.group(storeLoadOptions.group);
 
+    // @ts-expect-error the data layer accepts null to clear sorting
     storeLoadOptions.sort = columnsController
       .getSortDataSourceParameters(!dataSourceAdapter.remoteOperations().sorting);
 
+    // @ts-expect-error the data layer accepts null to clear grouping
     e.group = columnsController
       .getGroupDataSourceParameters(!dataSourceAdapter.remoteOperations().grouping);
   };
@@ -505,7 +508,9 @@ export class DataController extends modules.Controller {
       const dataSourceAdapter = this.dataSourceController.getAdapter();
 
       if (dataSourceAdapter && !this._columnsUpdating) {
+        // @ts-expect-error the data layer accepts null to clear grouping
         dataSourceAdapter.group(this._columnsController.getGroupDataSourceParameters());
+        // @ts-expect-error the data layer accepts null to clear sorting
         dataSourceAdapter.sort(this._columnsController.getSortDataSourceParameters());
         this.reload();
       }

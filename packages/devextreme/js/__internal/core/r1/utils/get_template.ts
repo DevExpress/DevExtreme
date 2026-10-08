@@ -7,7 +7,7 @@ import { createComponentVNode, normalizeProps } from 'inferno';
 // NOTE: React vs Inferno type conflict here
 export const getTemplate = <P extends object>(
   TemplateProp: any,
-): ((props: P) => VNode) => TemplateProp
+): ((props: P) => VNode) | undefined => TemplateProp
   && (TemplateProp.defaultProps
     ? (props: P): VNode => normalizeProps(createComponentVNode(2, TemplateProp, { ...props }))
     : TemplateProp);

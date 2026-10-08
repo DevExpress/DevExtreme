@@ -11,7 +11,7 @@ QUnit.testStart(function() {
 });
 
 import 'fluent_blue_light.css!';
-import '__internal/grids/tree_list/m_widget';
+import '__internal/grids/tree_list/widget';
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import { setupTreeListModules, MockColumnsController, MockDataController } from '../../helpers/treeListMocks.js';

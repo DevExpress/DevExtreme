@@ -5,22 +5,17 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import modules from '@ts/grids/grid_core/m_modules';
-import type { OptionChanged } from '@ts/grids/grid_core/m_types';
-import type { ToastViewController } from '@ts/grids/grid_core/toast/m_toast_controller';
+import modules from '@ts/grids/grid_core/modules/modules';
+import type { ToastViewController } from '@ts/grids/grid_core/toast/toast_controller';
+import type { OptionChanged } from '@ts/grids/grid_core/types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import {
-  ACTION_CLASS,
-  ERROR_CLOSEBUTTON_CLASS,
-  ERROR_MESSAGE_CLASS,
-  ERROR_ROW_CLASS,
-} from './const';
+import { CLASSES } from './const';
 import type { GridError } from './types';
 import { getErrorMessage, isDxError } from './utils';
 
@@ -80,14 +75,14 @@ export class ErrorHandlingViewController extends modules.ViewController {
     if ($tableElements) {
       const $errorRow = $('<tr>')
         .attr('role', 'row')
-        .addClass(ERROR_ROW_CLASS);
+        .addClass(CLASSES.errorRow);
       const $closeButton = $('<div>')
-        .addClass(ERROR_CLOSEBUTTON_CLASS)
-        .addClass(this.addWidgetPrefix(ACTION_CLASS));
+        .addClass(CLASSES.closeButton)
+        .addClass(this.addWidgetPrefix(CLASSES.action));
 
       eventsEngine.on($closeButton, clickEventName, this.createAction((args) => {
         const e = args.event;
-        const errorRowIndex = $(e.currentTarget).closest(`.${ERROR_ROW_CLASS}`).index();
+        const errorRowIndex = $(e.currentTarget).closest(`.${CLASSES.errorRow}`).index();
 
         e.stopPropagation();
         each($tableElements, (_, tableElement) => {
@@ -116,7 +111,7 @@ export class ErrorHandlingViewController extends modules.ViewController {
 
   private _renderErrorMessage(error: GridError): dxElementWrapper {
     const $message = $('<div>')
-      .addClass(ERROR_MESSAGE_CLASS)
+      .addClass(CLASSES.errorMessage)
       .text(getErrorMessage(error));
 
     this.setAria('role', 'alert', $message);
@@ -135,7 +130,7 @@ export class ErrorHandlingViewController extends modules.ViewController {
     $popupContent: dxElementWrapper | undefined,
   ): dxElementWrapper | undefined {
     if ($popupContent) {
-      $popupContent.find(`.${ERROR_MESSAGE_CLASS}`).remove();
+      $popupContent.find(`.${CLASSES.errorMessage}`).remove();
       const $errorMessageElement = this._createErrorRow(error);
       $popupContent.prepend($errorMessageElement);
 
@@ -179,7 +174,7 @@ export class ErrorHandlingViewController extends modules.ViewController {
 
   private findErrorRows(): dxElementWrapper | undefined {
     const $columnHeaders: dxElementWrapper | undefined = this._columnHeadersView?.element();
-    const $headerErrorRows = $columnHeaders?.find(`.${ERROR_ROW_CLASS}`);
+    const $headerErrorRows = $columnHeaders?.find(`.${CLASSES.errorRow}`);
 
     if ($headerErrorRows?.length) {
       return $headerErrorRows;
@@ -187,13 +182,13 @@ export class ErrorHandlingViewController extends modules.ViewController {
 
     const $rowsViewElement: dxElementWrapper | undefined = this._rowsView?.element();
 
-    return $rowsViewElement?.find(`.${ERROR_ROW_CLASS}`);
+    return $rowsViewElement?.find(`.${CLASSES.errorRow}`);
   }
 
   public removeErrorRow($row?: dxElementWrapper): void {
     const $errorRow = $row ?? this.findErrorRows();
 
-    if ($errorRow?.hasClass(ERROR_ROW_CLASS)) {
+    if ($errorRow?.hasClass(CLASSES.errorRow)) {
       $errorRow.remove();
     }
   }

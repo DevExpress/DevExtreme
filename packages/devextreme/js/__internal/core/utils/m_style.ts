@@ -1,66 +1,67 @@
 import domAdapter from '@js/core/dom_adapter';
-import callOnce from '@js/core/utils/call_once';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
 import { isNumeric, isString } from '@js/core/utils/type';
+import { callOnce } from '@ts/core/utils/call_once';
 
 const jsPrefixes = ['', 'Webkit', 'Moz', 'O', 'Ms'];
-const cssPrefixes = {
+const cssPrefixes: Record<string, string> = {
   '': '',
   Webkit: '-webkit-',
   Moz: '-moz-',
   O: '-o-',
   ms: '-ms-',
 };
-const getStyles = callOnce(function () {
-  return domAdapter.createElement('dx').style;
-});
+const getStyles = callOnce(() => domAdapter.createElement('dx').style);
 
-const forEachPrefixes = function (prop, callBack) {
-  prop = camelize(prop, true);
+const forEachPrefixes = function forEachPrefixes(
+  prop: string,
+  callBack: (prefixedProp: string, jsPrefix: string) => string | undefined,
+): string {
+  const normalizedProp = camelize(prop, true);
 
-  let result;
+  // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
+  let result: string | undefined;
 
-  for (let i = 0, cssPrefixesCount = jsPrefixes.length; i < cssPrefixesCount; i++) {
+  for (let i = 0, cssPrefixesCount = jsPrefixes.length; i < cssPrefixesCount; i += 1) {
     const jsPrefix = jsPrefixes[i];
-    const prefixedProp = jsPrefix + prop;
+    const prefixedProp = jsPrefix + normalizedProp;
     const lowerPrefixedProp = camelize(prefixedProp);
 
     result = callBack(lowerPrefixedProp, jsPrefix);
-
-    if (result === undefined) {
-      result = callBack(prefixedProp, jsPrefix);
-    }
+    result ??= callBack(prefixedProp, jsPrefix);
 
     if (result !== undefined) {
       break;
     }
   }
 
-  return result || '';
+  return result ?? '';
 };
 
-const styleProp = function (name) {
+const styleProp = function styleProp(name: string): string {
   if (name in getStyles()) {
     return name;
   }
 
-  const originalName = name;
-  name = name.charAt(0).toUpperCase() + name.substr(1);
-  for (let i = 1; i < jsPrefixes.length; i++) {
-    const prefixedProp = jsPrefixes[i].toLowerCase() + name;
+  const capitalizedName = name.charAt(0).toUpperCase() + name.substr(1);
+  for (let i = 1; i < jsPrefixes.length; i += 1) {
+    const prefixedProp = jsPrefixes[i].toLowerCase() + capitalizedName;
     if (prefixedProp in getStyles()) {
       return prefixedProp;
     }
   }
 
-  return originalName;
+  return name;
 };
 
-const stylePropPrefix = function (prop) {
-  return forEachPrefixes(prop, function (specific, jsPrefix) {
+const stylePropPrefix = function stylePropPrefix(prop: string): string {
+  return forEachPrefixes(prop, (specific, jsPrefix): string | undefined => {
     if (specific in getStyles()) {
       return cssPrefixes[jsPrefix];
     }
+
+    return undefined;
   });
 };
 
@@ -76,7 +77,7 @@ const pxExceptions = [
   'zoom',
 ];
 
-const parsePixelValue = function (value) {
+const parsePixelValue = function parsePixelValue(value: unknown): number | string {
   if (isNumeric(value)) {
     return value;
   } if (isString(value)) {
@@ -85,45 +86,51 @@ const parsePixelValue = function (value) {
   return NaN;
 };
 
-const normalizeStyleProp = function (prop, value) {
+const normalizeStyleProp = function normalizeStyleProp<T>(prop: string, value: T): T | string {
   if (isNumeric(value) && !pxExceptions.includes(prop)) {
-    // @ts-expect-error number + string
-    value += 'px';
+    // eslint-disable-next-line prefer-template -- + converts with valueOf, a template with toString
+    return value + 'px';
   }
 
   return value;
 };
 
-const setDimensionProperty = function (elements, propertyName, value) {
+type Elements = ArrayLike<HTMLElement> | dxElementWrapper | null | undefined;
+
+const setDimensionProperty = function setDimensionProperty(
+  elements: Elements,
+  propertyName: string,
+  value: unknown,
+): void {
   if (elements) {
-    // @ts-expect-error number + string
-    value = isNumeric(value) ? value += 'px' : value;
-    for (let i = 0; i < elements.length; ++i) {
-      elements[i].style[propertyName] = value;
+    // eslint-disable-next-line prefer-template -- + converts with valueOf, a template with toString
+    const dimension = isNumeric(value) ? value + 'px' : value;
+    for (let i = 0; i < elements.length; i += 1) {
+      (elements as ArrayLike<HTMLElement>)[i].style[propertyName] = dimension;
     }
   }
 };
 
-const setWidth = function (elements, value) {
+const setWidth = function setWidth(elements: Elements, value: unknown): void {
   setDimensionProperty(elements, 'width', value);
 };
 
-const setHeight = function (elements, value) {
+const setHeight = function setHeight(elements: Elements, value: unknown): void {
   setDimensionProperty(elements, 'height', value);
 };
 
-const setStyle = function (element, styleString, resetStyle = true) {
+const setStyle = function setStyle(element: Element, styleString: string, resetStyle = true): void {
   if (resetStyle) {
-    const styleList = [].slice.call(element.style);
+    const styleList = [].slice.call((element as HTMLElement).style);
     styleList.forEach((propertyName) => {
-      element.style.removeProperty(propertyName);
+      (element as HTMLElement).style.removeProperty(propertyName);
     });
   }
   styleString.split(';').forEach((style) => {
     const parts = style.split(':').map((stylePart) => stylePart.trim());
     if (parts.length === 2) {
       const [property, value] = parts;
-      element.style[property] = value;
+      (element as HTMLElement).style[property] = value;
     }
   });
 };

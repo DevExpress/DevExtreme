@@ -10,8 +10,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend as _extend } from '@js/core/utils/extend';
-import { isFunction } from '@js/core/utils/type';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { isFunction } from '@ts/core/utils/m_type';
 
 const defaultCustomizeLinkTooltip = (formatter) => function (info) {
   return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${formatter(info.weight)}` };

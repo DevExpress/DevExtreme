@@ -18,14 +18,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-plusplus */
 
-import { noop } from '@js/core/utils/common';
-import dateUtils from '@js/core/utils/date';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { adjust, sign } from '@js/core/utils/math';
+import { noop } from '@ts/core/utils/m_common';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { adjust, sign } from '@ts/core/utils/m_math';
 import {
   isDefined, isExponential, isFunction, isNumeric, isString,
-} from '@js/core/utils/type';
+} from '@ts/core/utils/m_type';
 
 const {
   PI,
@@ -150,7 +150,6 @@ export const roundValue = function (value, precision) {
     if (isExponential(value)) {
       return _Number(value.toExponential(precision));
     }
-    // @ts-expect-error
     return _Number(value.toFixed(precision));
   }
 };

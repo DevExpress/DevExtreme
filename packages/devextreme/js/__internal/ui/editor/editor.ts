@@ -45,11 +45,12 @@ export type ValueChangedEvent<TNativeEvent = Event> = NativeEventInfo<Editor, TN
   & ValueChangedInfo;
 
 export interface EditorInternalProperties {
-  integrationOptions?: Record<string, unknown>;
+  integrationOptions?: WidgetProperties['integrationOptions'];
   onKeyboardHandled?: WidgetProperties['onKeyboardHandled'];
   validationMessageOffset?: { h: number; v: number };
   validationBoundary?: dxElementWrapper;
   validationTooltipOptions?: Record<string, unknown>;
+  _cached_validationTooltipOptions?: Record<string, unknown>;
   _showValidationMessage?: boolean;
   _onMarkupRendered?: () => void;
 }

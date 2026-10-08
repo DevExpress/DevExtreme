@@ -12,7 +12,6 @@ if (ko) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return ko.utils.unwrapObservable(value);
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return this.callBase(value);
     },
     assign(variable, value) {

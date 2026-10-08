@@ -1,0 +1,395 @@
+import type { Callback } from '@js/core/utils/callbacks';
+import type { StoreChange } from '@js/data/store';
+import { isDefined } from '@ts/core/utils/m_type';
+import type Store from '@ts/data/abstract_store';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+
+import type { ColumnsController } from '../../columns_controller/columns_controller';
+import type { DataController } from '../../data_controller/data_controller';
+import type { DataSourceController } from '../../data_source/data_source_controller';
+import type DataSourceAdapter from '../../data_source_adapter/m_data_source_adapter';
+import type { ChangedEvent, RawItemData } from '../../data_source_adapter/types';
+import gridCoreUtils from '../../m_utils';
+import { Controller } from '../../modules/modules';
+import type { RowKey } from '../../types';
+import type { InternalRequestCallbacks } from '../types';
+import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from '../utils';
+import { AIColumnIntegrationController } from './ai_column_integration_controller';
+
+const getDefaultCellValue = (
+  column: Column,
+  cellValue: string | undefined,
+): string | null => {
+  if (cellValue === undefined) {
+    return column.ai?.emptyText ?? null;
+  }
+
+  return column.ai?.noDataText ?? null;
+};
+
+export class AIColumnController extends Controller {
+  private dataController!: DataController;
+
+  private dataSourceController!: DataSourceController;
+
+  private columnsController!: ColumnsController;
+
+  private aiColumnIntegrationController!: AIColumnIntegrationController;
+
+  private adapterDataChangedHandler!: (e?: ChangedEvent) => void;
+
+  private adapterChangedHandler!: () => void;
+
+  private dataSourceChangedHandler!: () => void;
+
+  private subscribedDataSourceAdapter: DataSourceAdapter | null = null;
+
+  private subscribedStore: Store | null = null;
+
+  private storeUpdatedHandler!: (key: RowKey) => void;
+
+  private storeRemovedHandler!: (key: RowKey) => void;
+
+  private storeBeforePushHandler!: ({ changes }: { changes: StoreChange[] }) => void;
+
+  private dataControllerChangedHandler!: () => void;
+
+  private aiColumnOptionChangedHandler!: (
+    column: Column,
+    optionName: string,
+    value: unknown,
+  ) => void;
+
+  public aiRequestCompleted!: Callback;
+
+  public aiRequestRejected!: Callback;
+
+  private _endCustomLoadingIfNoPendingRequests(): void {
+    if (!this.aiColumnIntegrationController.isAnyRequestAwaitingCompletion()) {
+      this.dataController.endCustomLoading();
+    }
+  }
+
+  private addAICommandColumn(): void {
+    const {
+      dataSourceController,
+      aiColumnIntegrationController,
+    } = this;
+
+    this.columnsController.addCommandColumn({
+      ...getAICommandColumnDefaultOptions(),
+      calculateCellValue(data: RawItemData) {
+        const key = dataSourceController.keyOf(data);
+        // @ts-expect-error the column name is initialized before calculateCellValue is called
+        const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
+        const defaultValue = getDefaultCellValue(this, cellValue);
+
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        return cellValue || defaultValue;
+      },
+    });
+  }
+
+  private subscribeToAdapterDataChanged(): void {
+    this.adapterDataChangedHandler = this.adapterDataChangedHandler
+      ?? this.handleAdapterDataChanged.bind(this);
+
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+
+    dataSourceAdapter?.changed.add(this.adapterDataChangedHandler);
+    this.subscribedDataSourceAdapter = dataSourceAdapter;
+  }
+
+  private unsubscribeFromAdapterDataChanged(): void {
+    if (!this.adapterDataChangedHandler) {
+      return;
+    }
+
+    this.subscribedDataSourceAdapter?.changed.remove(this.adapterDataChangedHandler);
+    this.subscribedDataSourceAdapter = null;
+  }
+
+  private handleAdapterChanged(): void {
+    this.unsubscribeFromAdapterDataChanged();
+
+    this.unsubscribeFromStoreEvents();
+    this.subscribeToStoreEvents();
+  }
+
+  private handleDataSourceChanged(): void {
+    if (this.dataSourceController.getAdapter() === this.subscribedDataSourceAdapter) {
+      return;
+    }
+
+    this.unsubscribeFromAdapterDataChanged();
+    this.subscribeToAdapterDataChanged();
+  }
+
+  private unsubscribeFromDataControllerChanged(): void {
+    if (!this.dataControllerChangedHandler) {
+      return;
+    }
+
+    this.dataController.changed.remove(this.dataControllerChangedHandler);
+  }
+
+  private subscribeToDataControllerChanged(): void {
+    if (!this.getAIColumns().length || !gridCoreUtils.isVirtualRowRendering(this)) {
+      return;
+    }
+
+    this.dataControllerChangedHandler = this.dataControllerChangedHandler
+      ?? this.handleDataControllerChanged.bind(this);
+
+    this.dataController.changed.add(this.dataControllerChangedHandler);
+  }
+
+  private handleDataControllerChanged(): void {
+    if (this.dataController.isViewportChanging()) {
+      this.sendRequests();
+    }
+  }
+
+  private unsubscribeFromStoreEvents(): void {
+    const store = this.subscribedStore;
+
+    if (this.storeUpdatedHandler) {
+      store?.off('updated', this.storeUpdatedHandler);
+    }
+    if (this.storeRemovedHandler) {
+      store?.off('removed', this.storeRemovedHandler);
+    }
+    if (this.storeBeforePushHandler) {
+      store?.off('beforePush', this.storeBeforePushHandler);
+    }
+
+    this.subscribedStore = null;
+  }
+
+  private subscribeToStoreEvents(): void {
+    const store = this.dataSourceController.store();
+
+    if (!store) {
+      return;
+    }
+
+    this.storeUpdatedHandler = this.storeUpdatedHandler ?? this.handleStoreUpdated.bind(this);
+    this.storeRemovedHandler = this.storeRemovedHandler ?? this.handleStoreRemoved.bind(this);
+    this.storeBeforePushHandler = this.storeBeforePushHandler
+      ?? this.handleStoreBeforePush.bind(this);
+
+    store.on('updated', this.storeUpdatedHandler);
+    store.on('removed', this.storeRemovedHandler);
+    store.on('beforePush', this.storeBeforePushHandler);
+
+    this.subscribedStore = store;
+  }
+
+  private handleStoreUpdated(key: RowKey): void {
+    this.clearAIColumnsByKey(key);
+  }
+
+  private handleStoreRemoved(key: RowKey): void {
+    this.clearAIColumnsByKey(key);
+  }
+
+  private handleStoreBeforePush({ changes }: { changes: StoreChange[] }): void {
+    changes.forEach(({ key }) => {
+      if (isDefined(key)) {
+        this.clearAIColumnsByKey(key);
+      }
+    });
+  }
+
+  private updateAICells(): void {
+    this.dataController.updateItems({
+      changeType: 'refresh',
+      repaintChangesOnly: this.option('repaintChangesOnly'),
+    });
+  }
+
+  private checkStoreKey(): boolean {
+    const store = this.dataSourceController.store();
+
+    if (store && !store.key()) {
+      this.dataController.fireError('E1042', 'AI Column');
+
+      return false;
+    }
+
+    return true;
+  }
+
+  private clearAIColumnsByKey(key: RowKey): void {
+    const aiColumns = this.getAIColumns();
+
+    aiColumns.forEach((col) => {
+      this.aiColumnIntegrationController.clearAIColumnByKey(col.name as string, key);
+    });
+  }
+
+  private sendRequests(): void {
+    const aiColumns = this.getAIColumns();
+
+    if (!aiColumns.length || !this.checkStoreKey()) {
+      return;
+    }
+
+    for (const col of aiColumns) {
+      if (isAIColumnAutoMode(col)) {
+        this.sendRequest(col.name as string, true);
+      }
+    }
+  }
+
+  private handleAdapterDataChanged(e?: ChangedEvent): void {
+    if (e?.changeType === 'loadError') {
+      return;
+    }
+
+    this.sendRequests();
+  }
+
+  protected callbackNames(): string[] {
+    return ['aiRequestCompleted', 'aiRequestRejected'];
+  }
+
+  public init(): void {
+    this.columnsController = this.getController('columns');
+    this.dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
+
+    this.aiColumnIntegrationController = new AIColumnIntegrationController(this.component);
+    this.aiColumnIntegrationController.init();
+
+    this.aiColumnOptionChangedHandler = this.aiColumnOptionChanged.bind(this);
+    this.columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
+
+    this.adapterChangedHandler = this.handleAdapterChanged.bind(this);
+    this.dataSourceController.adapterChanged.add(this.adapterChangedHandler);
+
+    this.dataSourceChangedHandler = this.handleDataSourceChanged.bind(this);
+    this.dataController.dataSourceChanged.add(this.dataSourceChangedHandler);
+
+    this.subscribeToAdapterDataChanged();
+
+    this.unsubscribeFromStoreEvents();
+    this.subscribeToStoreEvents();
+
+    this.unsubscribeFromDataControllerChanged();
+    this.subscribeToDataControllerChanged();
+
+    this.addAICommandColumn();
+  }
+
+  public getAIColumns(): Column[] {
+    return this.columnsController.getColumns().filter((col) => col.type === 'ai');
+  }
+
+  // API methods
+
+  public publicMethods(): string[] {
+    return [
+      'abortAIColumnRequest',
+      'sendAIColumnRequest',
+      'refreshAIColumn',
+      'clearAIColumn',
+      'getAIColumnText',
+    ];
+  }
+
+  public abortAIColumnRequest(columnName: string): void {
+    this.aiColumnIntegrationController.abortRequest(columnName);
+
+    this._endCustomLoadingIfNoPendingRequests();
+  }
+
+  public sendRequest(
+    columnName: string,
+    useCache: boolean,
+    needToShowLoadPanel = true,
+  ): void {
+    if (!this.checkStoreKey()) {
+      return;
+    }
+
+    const callbacks = this.getRequestCallbacks();
+
+    this.aiColumnIntegrationController.sendRequestCore({
+      columnName,
+      useCache,
+      needToShowLoadPanel,
+      callbacks,
+    });
+  }
+
+  public sendAIColumnRequest(
+    columnName: string,
+  ): void {
+    this.sendRequest(columnName, false);
+  }
+
+  public refreshAIColumn(
+    columnName: string,
+  ): void {
+    this.sendRequest(columnName, false);
+  }
+
+  private getRequestCallbacks(): InternalRequestCallbacks {
+    return {
+      onRequestSending: (needToShowLoadPanel: boolean): void => {
+        if (needToShowLoadPanel) {
+          this.dataController.beginCustomLoading();
+        }
+      },
+      onComplete: (data): void => {
+        this._endCustomLoadingIfNoPendingRequests();
+        this.aiRequestCompleted.fire(data);
+        this.updateAICells();
+      },
+      onError: (error: Error): void => {
+        this._endCustomLoadingIfNoPendingRequests();
+        this.aiRequestRejected.fire(error);
+      },
+      onRequestCanceled: (): void => {
+        this._endCustomLoadingIfNoPendingRequests();
+      },
+    };
+  }
+
+  public clearAIColumn(columnName: string): void {
+    this.abortAIColumnRequest(columnName);
+    this.aiColumnIntegrationController.clearAIColumn(columnName);
+    this.columnsController.columnOption(columnName, 'ai.prompt', '');
+    this.updateAICells();
+  }
+
+  public getAIColumnText(columnName: string, key: RowKey): string | undefined {
+    return this.aiColumnIntegrationController.getAIColumnText(columnName, key);
+  }
+
+  public aiColumnOptionChanged(
+    column: Column,
+    optionName: string,
+    value: unknown,
+  ): void {
+    const isPromptOptionName = isPromptOption(optionName, value);
+
+    if (isPromptOptionName && column.name) {
+      this.aiColumnIntegrationController.clearAIColumn(column.name);
+
+      if (!column.ai?.prompt) {
+        this.updateAICells();
+      }
+    }
+  }
+
+  public dispose(): void {
+    super.dispose();
+    this.dataSourceController.adapterChanged.remove(this.adapterChangedHandler);
+    this.dataController.dataSourceChanged.remove(this.dataSourceChangedHandler);
+    this.unsubscribeFromAdapterDataChanged();
+    this.unsubscribeFromStoreEvents();
+    this.unsubscribeFromDataControllerChanged();
+  }
+}
