@@ -16,10 +16,10 @@
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@ts/core/utils/m_extend';
-import { isString } from '@ts/core/utils/m_type';
 import { Color } from '@ts/color';
 import { fallbackOf } from '@ts/core/utils/css_variables';
+import { extend } from '@ts/core/utils/m_extend';
+import { isString } from '@ts/core/utils/m_type';
 import { mixColors, shiftChannels, shiftLightness } from '@ts/viz/color_math';
 import { normalizeEnum } from '@ts/viz/core/utils';
 
