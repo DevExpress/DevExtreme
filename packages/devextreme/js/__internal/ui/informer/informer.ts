@@ -2,7 +2,7 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-import { getImageContainer } from '@ts/core/utils/m_icon';
+import { getImageContainer } from '@ts/core/utils/icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
