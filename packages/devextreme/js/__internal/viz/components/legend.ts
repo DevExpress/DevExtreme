@@ -23,6 +23,7 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import type { DeferredObj } from '@js/core/utils/deferred';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { noop } from '@ts/core/utils/m_common';
 /// #DEBUG
 import { debug } from '@ts/core/utils/m_console';
@@ -205,6 +206,49 @@ function getState(state: ThemeValue, color: ThemeValue, stateName: string): Them
       width: DEFAULT_MARKER_HATCHING_WIDTH,
     }),
   });
+}
+
+function statesOf(item: ThemeValue): ThemeValue[] {
+  const { normal, hover, selection } = item.states;
+
+  return [normal, hover, selection].filter(isDefined);
+}
+
+function painter(element: Element | null | undefined): (fill: string) => string {
+  const painted = new Map<string, string>();
+
+  return (fill: string): string => {
+    if (!painted.has(fill)) {
+      painted.set(fill, paintedColor(fill, element));
+    }
+
+    return painted.get(fill) as string;
+  };
+}
+
+function paintFills(items: ThemeValue[], paint: (fill: string) => string): () => void {
+  const handed = items
+    .flatMap((item) => statesOf(item).map((state) => ({ state, name: state.fill, painted: paint(state.fill) })))
+    .filter(({ name, painted }) => painted !== name);
+
+  handed.forEach(({ state, painted }) => {
+    state.fill = painted;
+  });
+
+  return (): void => {
+    handed.forEach(({ state, name, painted }) => {
+      if (state.fill === painted) {
+        state.fill = name;
+      }
+    });
+  };
+}
+
+function paintedItem(item: ThemeValue, paint: (fill: string) => string): ThemeValue {
+  const withPaintedFill = (holder: ThemeValue): ThemeValue => (holder ? { ...holder, fill: paint(holder.fill) } : holder);
+  const states = Object.fromEntries(Object.entries(item.states).map(([name, state]) => [name, withPaintedFill(state)]));
+
+  return { ...item, marker: withPaintedFill(item.marker), states };
 }
 
 function getAttributes(item: ThemeValue, state: ThemeValue, size?: number): ThemeValue {
@@ -587,12 +631,23 @@ export let Legend = class Legend extends LayoutElement {
           dataItem.states.normal.opacity = dataItem.states.hover.opacity = dataItem.states.selection.opacity = value;
         },
       });
+      Object.defineProperty(dataItem.marker, 'fill', {
+        get() {
+          return dataItem.states.normal.fill;
+        },
+        set(value) {
+          dataItem.states.normal.fill = value;
+        },
+      });
 
       return dataItem;
     });
 
     if (options.customizeItems) {
+      const restoreNames = paintFills(data, painter(this._renderer.root.element));
+
       this._data = options.customizeItems(data.slice()) || data;
+      restoreNames();
     }
 
     this._boundingRect = {
@@ -708,6 +763,9 @@ export let Legend = class Legend extends LayoutElement {
     } : options.markerTemplate;
 
     const template = that._widget._getTemplate(templateFunction);
+    const modelOf = options.markerTemplate
+      ? (dataItem: LegendDataItem): ThemeValue => paintedItem(dataItem, painter(renderer.root.element))
+      : (dataItem: LegendDataItem): ThemeValue => dataItem;
 
     const markersGroup = that._markersGroup;
 
@@ -750,7 +808,7 @@ export let Legend = class Legend extends LayoutElement {
           dataItem.marker = getAttributes(item, state, dataItem.size);
           markerGroup.clear();
           template.render({
-            model: dataItem,
+            model: modelOf(dataItem),
             container: markerGroup.element,
             onRendered: that._deferredItems[i].resolve,
           });

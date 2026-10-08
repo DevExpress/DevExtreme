@@ -1085,6 +1085,28 @@ QUnit.test('getColor method', function(assert) {
     assert.equal(items[1].getColor(), '#234234');
 });
 
+QUnit.test('color and getColor hand out the painted colour, the item is filled with the name', function(assert) {
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One', color: 'var(--probe-fill, #123456)' }],
+    });
+    const item = funnel.getAllItems()[0];
+
+    assert.equal(item.color, '#123456');
+    assert.equal(item.getColor(), '#123456');
+    assert.equal(this.items()[0].smartAttr.lastCall.args[0].fill, 'var(--probe-fill, #123456)');
+});
+
+QUnit.test('color written by the application is read back', function(assert) {
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One', color: 'var(--probe-fill, #123456)' }],
+    });
+    const item = funnel.getAllItems()[0];
+
+    item.color = '#abcdef';
+
+    assert.equal(item.color, '#abcdef');
+});
+
 QUnit.test('isHovered method', function(assert) {
     const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],

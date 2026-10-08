@@ -6,6 +6,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { patchFontOptions } from '@ts/viz/core/utils';
@@ -36,7 +37,7 @@ interface NodeLayoutLink {
 }
 
 interface NodeWidget {
-  _renderer: { getRootOffset: () => { left: number; top: number } };
+  _renderer: { getRootOffset: () => { left: number; top: number }; root?: { element?: Element } };
   _tooltip?: { show: (target: ThemeValue, coords: { x: number; y: number }) => void; hide: () => void };
   _links: Link[];
   _getOption: (name: string, isScalar?: boolean) => ThemeValue;
@@ -79,7 +80,7 @@ function compileLabelAttrs(labelOptions: ThemeValue, filter: ThemeValue, node: N
   const _patchFontOptions = patchFontOptions;
 
   if (labelOptions.useNodeColors) {
-    labelOptions.font.color = node.color;
+    labelOptions.font.color = node.fill;
   }
 
   const borderVisible = isDefined(labelOptions.border.visible) ? labelOptions.border.visible : false;
@@ -107,7 +108,7 @@ class Node {
 
   declare widget: NodeWidget;
 
-  declare color: string;
+  declare fill: string;
 
   declare options: ThemeValue;
 
@@ -131,7 +132,7 @@ class Node {
     this.code = 0;
     this.widget = widget;
 
-    this.color = params.color;
+    this.fill = params.color;
     this.options = params.options;
     this.rect = params.rect;
     this.label = params.rect._name;
@@ -144,9 +145,17 @@ class Node {
     this.linksOut = params.linksOut;
 
     this.states = {
-      normal: compileAttrs(this.color, this.options, this.options),
-      hover: compileAttrs(this.color, this.options.hoverStyle, this.options),
+      normal: compileAttrs(this.fill, this.options, this.options),
+      hover: compileAttrs(this.fill, this.options.hoverStyle, this.options),
     };
+  }
+
+  get color(): string {
+    return paintedColor(this.fill, this.widget._renderer?.root?.element);
+  }
+
+  set color(value: string) {
+    this.fill = value;
   }
 
   getState(): string {

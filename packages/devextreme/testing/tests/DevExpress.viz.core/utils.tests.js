@@ -158,9 +158,18 @@ QUnit.test('Check exceptions', function(assert) {
 
     assert.deepEqual(fontOptions, {
         'font-size': 14,
-        fill: 'rgba(118,118,118,0.3)',
-        cursor: 'default',
-        opacity: null
+        fill: '#767676',
+        'fill-opacity': 0.3,
+        cursor: 'default'
+    });
+});
+
+QUnit.test('A color that is a published name is left for the cascade, opacity stays apart', function(assert) {
+    const fontOptions = patchFontOptions({ color: 'var(--dx-viz-content-subtle, #444444)', opacity: 0.5 });
+
+    assert.deepEqual(fontOptions, {
+        fill: 'var(--dx-viz-content-subtle, #444444)',
+        'fill-opacity': 0.5
     });
 });
 

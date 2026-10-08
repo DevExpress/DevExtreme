@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import formatHelper from '@ts/core/format_helper';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { noop } from '@ts/core/utils/m_common';
 import { extend } from '@ts/core/utils/m_extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -108,7 +109,7 @@ export abstract class BaseGauge extends BaseWidget {
         const formatObject = extend({
           value: tooltipParameters.value,
           valueText: tooltip.formatValue(tooltipParameters.value),
-          color: tooltipParameters.color,
+          color: paintedColor(tooltipParameters.color, renderer.root.element),
         }, info);
 
         return tooltip.show(formatObject, {
