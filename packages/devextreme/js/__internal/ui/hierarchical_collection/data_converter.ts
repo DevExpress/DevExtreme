@@ -66,7 +66,7 @@ export interface DataAccessors {
 }
 
 class DataConverter {
-  _dataStructure: (InternalNode | null)[] = [];
+  _dataStructure: InternalNode[] = [];
 
   private _itemsCount = 0;
 
@@ -158,8 +158,8 @@ class DataConverter {
   }
 
   setChildrenKeys(): void {
-    each(this._dataStructure, (_index: number, node: InternalNode | null) => {
-      if (!node || node.internalFields.parentKey === this._rootValue) return;
+    each(this._dataStructure, (_index: number, node: InternalNode) => {
+      if (node.internalFields.parentKey === this._rootValue) return;
 
       const parent = this.getParentNode(node);
       if (parent) {
@@ -246,21 +246,18 @@ class DataConverter {
     return this._getByKey(node.internalFields.parentKey);
   }
 
-  getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {
+  getByKey(data: InternalNode[], key: ItemKey): InternalNode | null {
     if (!isDefined(key)) {
       return null;
     }
 
     const findByKey = function findByKey(
-      searchData: (InternalNode | null)[],
+      searchData: InternalNode[],
       searchKey: ItemKey,
     ): InternalNode | null {
       let result: InternalNode | null = null;
 
-      each(searchData, (_index: number, element: InternalNode | null): boolean => {
-        if (!element) {
-          return true;
-        }
+      each(searchData, (_index: number, element: InternalNode): boolean => {
         const currentElementKey = element.internalFields?.key ?? element.key;
         if (currentElementKey?.toString() === searchKey.toString()) {
           result = element;
@@ -289,8 +286,7 @@ class DataConverter {
 
   updateIndexByKey(): void {
     this._indexByKey = {};
-    each(this._dataStructure, (index: number, node: InternalNode | null): void => {
-      if (!node) return;
+    each(this._dataStructure, (index: number, node: InternalNode): void => {
       this._checkForDuplicateId(node.internalFields.key);
       this._indexByKey[node.internalFields.key] = index;
     });
@@ -305,8 +301,7 @@ class DataConverter {
 
   removeChildrenKeys(): void {
     this._indexByKey = {};
-    each(this._dataStructure, (_index: number, node: InternalNode | null): void => {
-      if (!node) return;
+    each(this._dataStructure, (_index: number, node: InternalNode): void => {
       node.internalFields.childrenKeys = [];
     });
   }
@@ -319,7 +314,7 @@ class DataConverter {
     items: ItemData[],
     rootValue: ItemKey,
     dataType: DataStructure | undefined,
-  ): (InternalNode | null)[] {
+  ): InternalNode[] {
     this._itemsCount = 0;
     this._visibleItemsCount = 0;
     this._disabledItemsCount = 0;
