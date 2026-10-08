@@ -21,25 +21,26 @@ export type RowsViewScrollEvent = Partial<ScrollEventInfo<dxScrollable>> & {
 
 export type ColumnWidth = number | string | undefined;
 
-export interface ColumnViewTemplateOptions {
+export interface ColumnViewTemplateOptions<TModel extends TemplateModel = TemplateModel> {
   container: dxElementWrapper;
-  model: TemplateModel;
+  model: TModel;
   deferred?: DeferredObj<unknown>;
   onRendered?: () => void;
   change?: DataChange;
 }
 
-export interface ColumnViewTemplate {
+export interface ColumnViewTemplate<TModel extends TemplateModel = TemplateModel> {
   allowRenderToDetachedContainer?: boolean;
-  render: (options: ColumnViewTemplateOptions) => void;
+  render: (options: ColumnViewTemplateOptions<TModel>) => void;
 }
 
-export interface ColumnRenderTemplate {
+export interface ColumnRenderTemplate<TModel extends TemplateModel = TemplateModel> {
   allowRenderToDetachedContainer?: boolean;
-  render: (container: dxElementWrapper, model: TemplateModel, change?: DataChange) => void;
+  render: (container: dxElementWrapper, model: TModel, change?: DataChange) => void;
 }
 
-export type ColumnTemplateSource = template | ColumnRenderTemplate;
+export type ColumnTemplateSource<TModel extends TemplateModel = TemplateModel> = template
+  | ColumnRenderTemplate<TModel>;
 
 export interface DelayedTemplate {
   template: ColumnViewTemplate;

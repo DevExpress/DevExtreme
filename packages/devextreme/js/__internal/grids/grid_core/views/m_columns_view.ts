@@ -198,11 +198,11 @@ const removeHandler = function removeHandler(templateDeferred: DeferredObj<unkno
   templateDeferred.resolve();
 };
 
-const isRenderTemplate = function isRenderTemplate(
-  template: ColumnTemplateSource,
-): template is ColumnRenderTemplate {
+const isRenderTemplate = function isRenderTemplate<TModel extends TemplateModel>(
+  template: ColumnTemplateSource<TModel>,
+): template is ColumnRenderTemplate<TModel> {
   return !!template
-    && !!(template as Partial<ColumnRenderTemplate>).render
+    && !!(template as Partial<ColumnRenderTemplate<TModel>>).render
     && !isRenderer(template);
 };
 
@@ -685,24 +685,24 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  protected _processTemplate(
-    template: ColumnTemplateSource,
-    options?: TemplateModel,
-  ): ColumnViewTemplate {
+  protected _processTemplate<TModel extends TemplateModel>(
+    template: ColumnTemplateSource<TModel>,
+    options?: TModel,
+  ): ColumnViewTemplate<TModel> {
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-chain
-    let renderingTemplate: ColumnViewTemplate;
+    let renderingTemplate: ColumnViewTemplate<TModel>;
 
     if (isRenderTemplate(template)) {
       renderingTemplate = {
         allowRenderToDetachedContainer: template.allowRenderToDetachedContainer,
-        render(templateOptions: ColumnViewTemplateOptions): void {
+        render(templateOptions: ColumnViewTemplateOptions<TModel>): void {
           template.render(templateOptions.container, templateOptions.model, templateOptions.change);
           templateOptions.deferred?.resolve();
         },
       };
     } else if (isFunction(template)) {
       renderingTemplate = {
-        render(templateOptions: ColumnViewTemplateOptions): void {
+        render(templateOptions: ColumnViewTemplateOptions<TModel>): void {
           const renderedTemplate = template(
             getPublicElement(templateOptions.container),
             templateOptions.model,
@@ -731,10 +731,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return renderingTemplate;
   }
 
-  public renderTemplate(
+  public renderTemplate<TModel extends TemplateModel>(
     container: dxElementWrapper,
-    template: ColumnTemplateSource,
-    options: TemplateModel,
+    template: ColumnTemplateSource<TModel>,
+    options: TModel,
     allowRenderToDetachedContainer?: boolean,
     change?: ViewDataChange,
   ): DeferredObj<unknown> {
@@ -742,7 +742,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const { column } = options;
     const isDataRow = options.rowType === 'data';
     const templateDeferred = Deferred<unknown>();
-    const templateOptions: ColumnViewTemplateOptions = {
+    const templateOptions: ColumnViewTemplateOptions<TModel> = {
       container,
       model: options,
       deferred: templateDeferred,
@@ -780,7 +780,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         renderingTemplate.render(templateOptions);
       } else {
         this._delayedTemplates.push({
-          template: renderingTemplate,
+          // an entry's template is only rendered with that entry's options
+          template: renderingTemplate as ColumnViewTemplate,
           options: templateOptions,
           async,
         });
@@ -1047,7 +1048,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  protected _getCellTemplate(options?: ViewCellOptions): ColumnTemplateSource | undefined {
+  protected _getCellTemplate(
+    options?: ViewCellOptions,
+  ): ColumnTemplateSource<ViewCellOptions> | undefined {
     return undefined;
   }
 
@@ -1409,7 +1412,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     styleProps: Partial<CSSStyleDeclaration>,
     $row: dxElementWrapper,
     visibleCellIndex: number,
-  ) {
+  ): void {
     const $cell = $row.hasClass(CLASSES.groupRow)
       ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${CLASSES.groupCell})`)
       : $row.find('td').eq(visibleCellIndex);
