@@ -492,7 +492,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       }
     }
 
-    const formatArg = this._getFormatArgumentForNumberLocalization(format);
+    const formatArg = this._withExplicitFormatLocale(format);
 
     return number.parse(
       text.substr(integerPartStartIndex),
