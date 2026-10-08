@@ -241,7 +241,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _createScrollableOptions(): ScrollableOptions {
     const scrollingOptions = this.option('scrolling');
-    let useNativeScrolling = this.option('scrolling.useNative');
+    const useNativeScrolling = this.option('scrolling.useNative');
 
     // @ts-expect-error useNative: 'auto' of the grid scrolling is copied and normalized below
     const options: ScrollableOptions = extend({}, scrollingOptions, {
@@ -250,11 +250,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       useKeyboard: false,
     });
 
-    // TODO jsdmitry: This condition is for unit tests and testing scrollable
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- null is not native
-    if (useNativeScrolling === undefined) {
-      useNativeScrolling = true;
-    }
     if (useNativeScrolling === 'auto') {
       delete options.useNative;
       delete options.useSimulatedScrollbar;
@@ -501,12 +496,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       }, timeout);
     }
 
-    eventsEngine.on($table, 'touchstart touchend', `.${CLASSES.row}`, (e: DxEvent<TouchEvent> & { event?: DxEvent }) => {
-      // NOTE: checking for target only for mocks in qunits
-      if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
-        return;
-      }
-
+    eventsEngine.on($table, 'touchstart touchend', `.${CLASSES.row}`, (e: DxEvent<TouchEvent>) => {
       clearTimeout(timeoutId);
       if (e.type === 'touchstart') {
         touchTargets = { target: e.target, currentTarget: e.currentTarget };
@@ -519,8 +509,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), `.${CLASSES.row}`, this.createAction((e: ViewRowEvent) => {
       const { event } = e;
 
-      // NOTE: checking for target only for mocks in qunits
-      if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(this, $(event.target))) {
+      if (!gridCoreUtils.isElementInCurrentGrid(this, $(event.target))) {
         return;
       }
 
