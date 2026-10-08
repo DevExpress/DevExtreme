@@ -28,6 +28,7 @@ import { normalizeStyleProp } from '@js/core/utils/style';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 
 import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';
@@ -390,9 +391,9 @@ Tooltip.prototype = {
     }
   },
 
-  formatValue(value, _specialFormat) {
+  formatValue(value, _specialFormat, dataType) {
     const options = _specialFormat ? getSpecialFormatOptions(this._options, _specialFormat) : this._options;
-    return format(value, options.format);
+    return format(value, applyDataTypePreset(options.format, dataType));
   },
 
   getOptions() {

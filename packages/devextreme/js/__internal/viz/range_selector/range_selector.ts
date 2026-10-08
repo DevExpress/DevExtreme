@@ -11,6 +11,7 @@ import {
   isDate, isDefined, isFunction, isNumeric, isPlainObject, type as getType,
 } from '@js/core/utils/type';
 import formatHelper from '@ts/core/format_helper';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import constants from '@ts/viz/axes/axes_constants';
 import { Axis } from '@ts/viz/axes/base_axis';
 import { tickGenerator } from '@ts/viz/axes/tick_generator';
@@ -1466,6 +1467,14 @@ class RangeSelector extends BaseWidget {
     const isValueTypeDatetime = scaleOptions.valueType === DATETIME;
 
     sliderMarkerOptions.borderColor = this._getOption(CONTAINER_BACKGROUND_COLOR, true);
+
+    if (isValueTypeDatetime) {
+      const formatWithTime = applyDataTypePreset(sliderMarkerOptions.format, 'datetime');
+
+      if (formatWithTime !== sliderMarkerOptions.format) {
+        sliderMarkerOptions.format = formatWithTime;
+      }
+    }
 
     if (!sliderMarkerOptions.format && !argRange.isEmpty()) {
       if (doNotSnap && isNumeric(scaleOptions.startValue)) {

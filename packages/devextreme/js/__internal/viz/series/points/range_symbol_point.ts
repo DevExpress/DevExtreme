@@ -496,12 +496,12 @@ export default _extend({}, symbolPoint, {
     const initialMinValue = that.initialMinValue;
     const initialValue = that.initialValue;
     const initialArgument = that.initialArgument;
-    const minValue = tooltip.formatValue(initialMinValue);
-    const value = tooltip.formatValue(initialValue);
+    const minValue = tooltip.formatValue(initialMinValue, undefined, that.series.valueType);
+    const value = tooltip.formatValue(initialValue, undefined, that.series.valueType);
 
     return {
       argument: initialArgument,
-      argumentText: tooltip.formatValue(initialArgument, 'argument'),
+      argumentText: tooltip.formatValue(initialArgument, 'argument', that.series.argumentType),
       valueText: `${minValue} - ${value}`,
       rangeValue1Text: minValue,
       rangeValue2Text: value,

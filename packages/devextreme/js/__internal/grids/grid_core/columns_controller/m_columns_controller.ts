@@ -19,6 +19,7 @@ import variableWrapper from '@js/core/utils/variable_wrapper';
 import Store from '@js/data/abstract_store';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import inflector from '@ts/core/utils/m_inflector';
 import type {
   BandColumnsCache,
@@ -1233,7 +1234,10 @@ export class ColumnsController extends modules.Controller {
     const dataType = lookup ? lookup.dataType : column.dataType;
     if (dataType) {
       column.alignment = column.alignment || getAlignmentByDataType(dataType, this.option('rtlEnabled'));
-      column.format = column.format || gridCoreUtils.getFormatByDataType(dataType);
+      column.format = applyDataTypePreset(
+        column.format || gridCoreUtils.getFormatByDataType(dataType),
+        dataType,
+      );
       column.customizeText = column.customizeText || getCustomizeTextByDataType(dataType);
       column.defaultFilterOperations = column.defaultFilterOperations || !lookup && DATATYPE_OPERATIONS[dataType] || [];
       if (!isDefined(column.filterOperations)) {

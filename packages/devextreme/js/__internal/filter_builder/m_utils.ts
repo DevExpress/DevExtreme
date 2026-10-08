@@ -15,7 +15,7 @@ import formatHelper from '@js/format_helper';
 import type { CustomOperation, DataType, Field } from '@js/ui/filter_builder';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
 import { getConfig } from './m_between';
 import filterOperationsDictionary from './m_filter_operations_dictionary';
@@ -68,7 +68,10 @@ function getDateFormat(dataType: DataType | undefined): Format | undefined {
 }
 
 function getFormattedValueText(field: Field, value: FieldValue): string {
-  const fieldFormat = field.format ?? getDateFormat(field.dataType);
+  const fieldFormat = applyDataTypePreset(
+    field.format ?? getDateFormat(field.dataType),
+    field.dataType,
+  );
 
   if (isBoolean(value)) {
     const trueText = field.trueText ?? messageLocalization.format('dxDataGrid-trueText');

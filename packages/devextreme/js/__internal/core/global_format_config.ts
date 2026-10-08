@@ -1,6 +1,8 @@
 import coreLocalization from '@js/common/core/localization/core';
 import config from '@js/core/config';
-import { isFunction, isPlainObject, isString } from '@js/core/utils/type';
+import {
+  isDefined, isFunction, isPlainObject, isString,
+} from '@js/core/utils/type';
 import type { Format, FormatObject } from '@js/localization';
 import parentLocales from '@ts/core/localization/cldr-data/parent_locales';
 import getParentLocale from '@ts/core/localization/parentLocale';
@@ -19,6 +21,39 @@ const DEFAULT_IMPLICIT_PRESET_BY_DATA_TYPE = {
   date: 'shortdate',
   datetime: 'shortdateshorttime',
   time: 'shorttime',
+};
+
+const DATA_TYPE_FORMAT_PRESET: Record<string, string> = {
+  datetime: 'shortDateShortTime',
+  time: 'shortTime',
+};
+
+const isLocaleOnlyFormat = (format: Format | undefined): format is FormatObject => {
+  if (!isPlainObject(format)) {
+    return false;
+  }
+
+  const formatObject = format as FormatObject;
+
+  return Object.keys(formatObject).length === 1 && isDefined(formatObject.locale);
+};
+
+// A locale-only object has no date or time fields. Intl then formats it as a date,
+// so datetime and time values lose their time. Attach the preset for that data type.
+export const applyDataTypePreset = (
+  format: Format | undefined,
+  dataType?: string,
+): Format | undefined => {
+  const preset = dataType ? DATA_TYPE_FORMAT_PRESET[dataType] : undefined;
+
+  if (!preset || !isLocaleOnlyFormat(format)) {
+    return format;
+  }
+
+  return {
+    ...format,
+    type: preset,
+  };
 };
 
 export type FormatLocale = string | (() => string);
@@ -76,9 +111,9 @@ export const getGlobalFormatByDataType = (dataType: string): Format | undefined 
     case 'date':
       return resolveGlobalFormat('dateFormat');
     case 'datetime':
-      return resolveGlobalFormat('dateTimeFormat');
+      return applyDataTypePreset(resolveGlobalFormat('dateTimeFormat'), 'datetime');
     case 'time':
-      return resolveGlobalFormat('timeFormat');
+      return applyDataTypePreset(resolveGlobalFormat('timeFormat'), 'time');
     case 'number':
       return resolveGlobalFormat('numberFormat');
     default:

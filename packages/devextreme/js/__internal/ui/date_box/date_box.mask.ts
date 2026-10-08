@@ -373,7 +373,7 @@ class DateBoxMask<
     }
 
     const { displayFormat } = this.option();
-    const format = this._strategy.getDisplayFormat(displayFormat);
+    const format = this._resolveDisplayFormat(displayFormat);
     const isLDMLPattern = isString(format) && !dateLocalization._getPatternByFormat(format);
 
     if (isLDMLPattern) {

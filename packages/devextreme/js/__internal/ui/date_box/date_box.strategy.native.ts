@@ -4,7 +4,7 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { inputType } from '@js/core/utils/support';
 import type { Format } from '@js/localization';
 import type { TextBoxType } from '@js/ui/text_box';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import DateBoxStrategy from '@ts/ui/date_box/date_box.strategy';
 import dateUtils from '@ts/ui/date_box/date_utils';
@@ -71,7 +71,10 @@ class NativeStrategy extends DateBoxStrategy {
       : undefined;
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || globalFormat || dateUtils.FORMATS_MAP[type] as string;
+    const format = displayFormat || globalFormat || dateUtils.FORMATS_MAP[type] as string;
+    const dataType = type === 'datetime-local' ? 'datetime' : type;
+
+    return applyDataTypePreset(format, dataType) ?? format;
   }
 
   renderInputMinMax($input?: dxElementWrapper): void {

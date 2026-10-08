@@ -7,7 +7,7 @@ import {
   isDefined,
   isString, type,
 } from '@js/core/utils/type';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { getTreeNodeByPath, setTreeNodeByPath } from '@ts/grids/new/grid_core/utils/tree/index';
 import type { ComponentType } from 'inferno';
 
@@ -64,10 +64,13 @@ export function normalizeColumn(
   const columnDataTypeDefaultOptions = defaultColumnPropertiesByDataType[dataType];
   const shouldUseInferredFormat = column.dataType === undefined
     || columnFromDataOptions?.dataType === dataType;
-  const columnFormat = column.format
-    ?? (shouldUseInferredFormat ? columnFromDataOptions?.format : undefined)
-    ?? getGlobalColumnFormat(dataType)
-    ?? columnDataTypeDefaultOptions?.format;
+  const columnFormat = applyDataTypePreset(
+    column.format
+      ?? (shouldUseInferredFormat ? columnFromDataOptions?.format : undefined)
+      ?? getGlobalColumnFormat(dataType)
+      ?? columnDataTypeDefaultOptions?.format,
+    dataType,
+  );
   const caption = captionize(column.name);
 
   const colWithDefaults = {

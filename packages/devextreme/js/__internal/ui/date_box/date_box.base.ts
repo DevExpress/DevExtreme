@@ -14,6 +14,7 @@ import { inputType } from '@js/core/utils/support';
 import { isDate as isDateType, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent, InteractionEvent } from '@js/events';
+import type { Format } from '@js/localization';
 import type dxDateBox from '@js/ui/date_box';
 import type {
   DateBoxBaseOptions,
@@ -23,6 +24,7 @@ import type {
   Properties as dxDateBoxOptions,
 } from '@js/ui/date_box';
 import type { ToolbarItem } from '@js/ui/popup';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import type { OptionChanged, OwnLeafOptions } from '@ts/core/widget/types';
 import Calendar from '@ts/ui/date_box/date_box.strategy.calendar';
 import CalendarWithTime from '@ts/ui/date_box/date_box.strategy.calendar_with_time';
@@ -408,7 +410,7 @@ class DateBox<
     rightPadding: number;
   } {
     const { displayFormat } = this.option();
-    const format = this._strategy.getDisplayFormat(displayFormat);
+    const format = this._resolveDisplayFormat(displayFormat);
     const longestValue = dateLocalization.format(
       uiDateUtils.getLongestDate(
         format,
@@ -566,11 +568,18 @@ class DateBox<
     this._getSubmitElement().val(submitValue);
   }
 
+  _resolveDisplayFormat(displayFormat?: Format | null): Format {
+    const { type = 'date' } = this.option();
+    const format = this._strategy.getDisplayFormat(displayFormat);
+
+    return applyDataTypePreset(format, type) ?? format;
+  }
+
   _getDisplayedText(value?: DateLike): string {
     const { mode = 'text', displayFormat: displayFormatOption } = this.option();
 
     if (mode === 'text') {
-      const displayFormat = this._strategy.getDisplayFormat(displayFormatOption);
+      const displayFormat = this._resolveDisplayFormat(displayFormatOption);
       return dateLocalization.format(value, displayFormat) as string;
     }
     const format = this._getFormatByMode(mode);
@@ -659,7 +668,7 @@ class DateBox<
 
   _getParsedDate(text?: string): Date | undefined {
     const { displayFormat } = this.option();
-    const strategyDisplayFormat = this._strategy.getDisplayFormat(displayFormat);
+    const strategyDisplayFormat = this._resolveDisplayFormat(displayFormat);
     const parsedText = this._strategy.getParsedText(text, strategyDisplayFormat as string);
 
     return parsedText ?? undefined;

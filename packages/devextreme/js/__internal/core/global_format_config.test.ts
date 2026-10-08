@@ -5,6 +5,7 @@ import coreLocalization from '@js/common/core/localization/core';
 import config from '@js/core/config';
 
 import {
+  applyDataTypePreset,
   getDateFormatLocale,
   getEffectiveFormatLocale,
   getFormatterOptions,
@@ -402,6 +403,46 @@ describe('global_format_config', () => {
       getFormatterOptions(formatObject);
 
       expect(formatObject).toEqual({ locale: 'en-US', precision: 2 });
+    });
+  });
+
+  describe('applyDataTypePreset', () => {
+    it('should add a datetime preset to a locale-only format', () => {
+      expect(applyDataTypePreset({ locale: 'en-US' }, 'datetime')).toEqual({
+        locale: 'en-US',
+        type: 'shortDateShortTime',
+      });
+    });
+
+    it('should add a time preset to a locale-only format', () => {
+      expect(applyDataTypePreset({ locale: 'de-DE' }, 'time')).toEqual({
+        locale: 'de-DE',
+        type: 'shortTime',
+      });
+    });
+
+    it('should leave a locale-only date format unchanged', () => {
+      expect(applyDataTypePreset({ locale: 'de' }, 'date')).toEqual({ locale: 'de' });
+    });
+
+    it('should leave a format that already has a type unchanged', () => {
+      const format = { locale: 'en-US', type: 'longDate' };
+
+      expect(applyDataTypePreset(format, 'datetime')).toBe(format);
+    });
+
+    it('should resolve a locale-only dateTimeFormat with the datetime preset', () => {
+      config({
+        ...config(),
+        dateTimeFormat: {
+          default: { locale: 'en' },
+        },
+      });
+
+      expect(getGlobalFormatByDataType('datetime')).toEqual({
+        locale: 'en',
+        type: 'shortDateShortTime',
+      });
     });
   });
 });

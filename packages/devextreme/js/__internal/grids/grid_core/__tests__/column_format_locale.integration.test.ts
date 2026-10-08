@@ -59,7 +59,7 @@ describe('column format locale override', () => {
       (instance.getCellElement(0, columnIndex) as HTMLElement).textContent ?? ''
     );
 
-    expect(cellText(0)).toBe('12,345.68');
+    expect(cellText(0)).toBe('12,345.678');
     expect(cellText(1)).toBe('12.345,68');
     expect(cellText(2)).toBe('6/15/2024, 2:30 PM');
     expect(cellText(3)).toBe('15.6.2024, 14:30');

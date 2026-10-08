@@ -106,4 +106,32 @@ describe('Formatting', () => {
 
     expect(getCurrentValueText(field, value, null)).toBe('9/5/2017, 12:30 PM');
   });
+
+  it('locale-only format keeps time for datetime', () => {
+    const field: Field = {
+      dataType: 'datetime',
+      format: { locale: 'en-US' },
+    };
+    const value = new Date(2024, 5, 15, 14, 30);
+
+    expect(getCurrentValueText(field, value, null)).toBe('6/15/2024, 2:30 PM');
+  });
+
+  it('locale-only format stays date-only for date', () => {
+    const field: Field = {
+      dataType: 'date',
+      format: { locale: 'en-US' },
+    };
+    const value = new Date(2024, 5, 15, 14, 30);
+
+    expect(getCurrentValueText(field, value, null)).toBe('6/15/2024');
+  });
+
+  it('locale-only number format stays a number', () => {
+    const value = 1234.5;
+    const format = { locale: 'en-US' };
+
+    expect(getCurrentValueText({ dataType: 'number', format }, value, null))
+      .toBe(getCurrentValueText({ format }, value, null));
+  });
 });

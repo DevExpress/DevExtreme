@@ -709,8 +709,8 @@ export default {
       {},
       labelFormatObject,
       {
-        argumentText: tooltip.formatValue(that.initialArgument, 'argument'),
-        valueText: tooltip.formatValue(that.initialValue),
+        argumentText: tooltip.formatValue(that.initialArgument, 'argument', that.series.argumentType),
+        valueText: tooltip.formatValue(that.initialValue, undefined, that.series.valueType),
       },
       _isDefined(labelFormatObject.percent) ? { percentText: tooltip.formatValue(labelFormatObject.percent, 'percent') } : {},
       _isDefined(labelFormatObject.total) ? { totalText: tooltip.formatValue(labelFormatObject.total) } : {},

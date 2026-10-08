@@ -5,6 +5,7 @@ import coreLocalization from '@js/common/core/localization/core';
 import dateLocalization from '@js/common/core/localization/date';
 import numberLocalization from '@js/common/core/localization/number';
 import config from '@js/core/config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
 const GLOBAL_FORMAT_KEYS = ['dateFormat', 'timeFormat', 'dateTimeFormat', 'numberFormat', 'dateTimeFormatPresets'] as const;
 type GlobalFormatKey = typeof GLOBAL_FORMAT_KEYS[number];
@@ -254,6 +255,21 @@ describe('format locale integration', () => {
       });
 
       expect(dateLocalization.format(new Date(2020, 0, 2), 'shortDate')).toBe('2.1.2020');
+    });
+
+    it('should keep time when a locale-only dateTimeFormat is applied', () => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        dateTimeFormat: {
+          default: { locale: 'de-DE' },
+        },
+      });
+
+      expect(dateLocalization.format(
+        new Date(2024, 5, 15, 14, 30),
+        getGlobalFormatByDataType('datetime'),
+      )).toBe('15.6.2024, 14:30');
     });
 
     it('should format using explicit date format locale', () => {
