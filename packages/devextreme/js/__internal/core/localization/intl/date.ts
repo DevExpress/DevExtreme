@@ -342,8 +342,12 @@ export default {
         return intlPresetResult;
       }
 
+      const dateParts = formatLocale === localizationCoreUtils.locale()
+        ? this
+        : bindDatePartsToLocale(this, formatLocale);
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return this.callBase.apply(this, [date, resolvedFormat]);
+      return this.callBase(date, resolvedFormat, dateParts);
     }
 
     if (typeof resolvedFormat === 'object') {

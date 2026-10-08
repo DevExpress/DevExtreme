@@ -57,6 +57,16 @@ describe('locale-only displayFormat follows the editor type', () => {
     expect(input.value).toBe('2:30 PM');
   });
 
+  it('uses the format locale for month names in an LDML pattern', () => {
+    const input = createDateBox({
+      type: 'date',
+      value: new Date(2024, 5, 15),
+      displayFormat: { type: 'dd MMMM yyyy', locale: 'de' },
+    });
+
+    expect(input.value).toBe('15 Juni 2024');
+  });
+
   it('stays date-only for a date editor', () => {
     const input = createDateBox({
       type: 'date',

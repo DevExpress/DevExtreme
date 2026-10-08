@@ -283,6 +283,15 @@ describe('format locale integration', () => {
       })).toBe('02.01.2020');
     });
 
+    it('should format LDML month and day names using the format locale', () => {
+      coreLocalization.locale('en');
+
+      expect(dateLocalization.format(new Date(2020, 5, 15), {
+        type: 'EEEE, dd MMMM yyyy',
+        locale: 'de',
+      })).toBe('Montag, 15 Juni 2020');
+    });
+
     it('should not pass locale metadata to Intl.DateTimeFormat options', () => {
       const dateTimeFormatSpy = jest.spyOn(Intl, 'DateTimeFormat');
 
@@ -335,6 +344,15 @@ describe('format locale integration', () => {
       const parsed = dateLocalization.parse('Thursday, January 2, 2020', 'longDate') as Date;
 
       expect(parsed).toEqual(date);
+    });
+
+    it('should parse an LDML pattern using the format locale month names', () => {
+      coreLocalization.locale('en');
+      const format = { type: 'dd MMMM yyyy', locale: 'de' };
+
+      const parsed = dateLocalization.parse('15 Juni 2020', format) as Date;
+
+      expect(parsed).toEqual(new Date(2020, 5, 15));
     });
 
     it('should keep parsing month names in message locale without format locale', () => {
