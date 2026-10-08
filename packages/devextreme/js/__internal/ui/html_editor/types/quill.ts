@@ -10,8 +10,10 @@ export interface DeltaOperation {
   attributes?: Record<string, unknown>;
 }
 
+export type DeltaConstructor = new (ops?: DeltaOperation[] | { ops: DeltaOperation[] }) => Delta;
+
 export interface Delta {
-  ops?: DeltaOperation[];
+  ops: DeltaOperation[];
   length: () => number;
   slice: (start?: number, end?: number) => Delta;
   concat: (other: Delta) => Delta;
@@ -61,7 +63,7 @@ export interface BlotInstance {
 }
 
 export interface FormatBlotInstance extends BlotInstance {
-  format: (property: string, value: string) => void;
+  format: (property: string, value: unknown) => void;
   statics: {
     blotName: string;
   };
@@ -185,7 +187,11 @@ export interface BaseQuillModuleInstance {
 
 export interface QuillStatic {
   // Static methods
-  import: (path: string) => unknown;
+  import: {
+    (path: 'delta'): DeltaConstructor;
+    (path: string): unknown;
+  };
+  MS_LIST_DATA_KEY: string;
   register: (
     modules: Record<string, unknown> | string | BlotConstructor | AttributorConstructor,
     overwrite?: boolean,

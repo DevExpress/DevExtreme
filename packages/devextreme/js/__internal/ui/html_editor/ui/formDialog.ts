@@ -76,7 +76,6 @@ export default class FormDialog extends BaseDialog {
         this._popup = e.component as Popup;
         this._popup.on('hiding', () => this.onHiding());
         this._popup.on('shown', () => { this._form.focus(); });
-        this._addEscapeHandler.bind(this);
       },
       toolbarItems: [
         {
