@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { coreCommands } from '@ts/grids/grid_core/ai_assistant/commands/index';
 import { GridCommands } from '@ts/grids/grid_core/ai_assistant/grid_commands';
-import type { JsonSchema, ResponseSchemaBranch } from '@ts/grids/grid_core/ai_assistant/types';
+import type { GridCommand, JsonSchema, ResponseSchemaBranch } from '@ts/grids/grid_core/ai_assistant/types';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { dataGridCommands } from '../commands/index';
@@ -528,10 +528,11 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
   },
 };
 
-const buildResponseSchema = (commands: typeof coreCommands): JsonSchema => new GridCommands(
-  {} as InternalGrid,
-  commands,
-).buildResponseSchema();
+const buildResponseSchema = (commands: GridCommand[]): JsonSchema => {
+  const gridCommands = new GridCommands({} as InternalGrid, commands);
+
+  return gridCommands.buildResponseSchema();
+};
 
 const getArgsByCommand = (schema: JsonSchema): Record<string, JsonSchema | undefined> => {
   const { actions } = schema.properties as {
@@ -543,35 +544,36 @@ const getArgsByCommand = (schema: JsonSchema): Record<string, JsonSchema | undef
   ));
 };
 
+const dataGridCommandNames = Object.keys(expectedArgsByCommand);
+const treeListCommandNames = coreCommands.map(({ name }) => name);
+
 describe('Response schema', () => {
   describe('DataGrid commands', () => {
-    it.each(Object.keys(expectedArgsByCommand))('should build args schema for the "%s" command', (commandName) => {
-      const schema = buildResponseSchema([...coreCommands, ...dataGridCommands]);
+    const schema = buildResponseSchema([...coreCommands, ...dataGridCommands]);
+    const argsByCommand = getArgsByCommand(schema);
 
-      const argsByCommand = getArgsByCommand(schema);
-
+    it.each(dataGridCommandNames)('should build args schema for the "%s" command', (commandName) => {
       expect(argsByCommand[commandName]).toEqual(expectedArgsByCommand[commandName]);
     });
 
     it('should build args for all commands', () => {
-      const schema = buildResponseSchema([...coreCommands, ...dataGridCommands]);
-
-      const argsByCommand = getArgsByCommand(schema);
-
-      expect(Object.keys(argsByCommand)).toEqual(Object.keys(expectedArgsByCommand));
+      expect(Object.keys(argsByCommand)).toEqual(dataGridCommandNames);
     });
 
     it('should not build root $defs', () => {
-      const schema = buildResponseSchema([...coreCommands, ...dataGridCommands]);
-
       expect(schema.$defs).toBeUndefined();
     });
   });
 
   describe('TreeList commands', () => {
-    it('should not build root $defs', () => {
-      const schema = buildResponseSchema(coreCommands);
+    const schema = buildResponseSchema(coreCommands);
+    const argsByCommand = getArgsByCommand(schema);
 
+    it.each(treeListCommandNames)('should build args schema for the "%s" command', (commandName) => {
+      expect(argsByCommand[commandName]).toEqual(expectedArgsByCommand[commandName]);
+    });
+
+    it('should not build root $defs', () => {
       expect(schema.$defs).toBeUndefined();
     });
   });

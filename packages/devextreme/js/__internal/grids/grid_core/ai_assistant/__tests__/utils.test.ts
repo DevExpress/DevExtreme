@@ -8,6 +8,7 @@ import {
 import type { Message } from '@js/ui/chat';
 import { custom } from '@js/ui/dialog';
 import * as themes from '@js/ui/themes';
+import type { z } from 'zod';
 
 import {
   AI_ASSISTANT_AUTHOR_ID,
@@ -28,6 +29,7 @@ import {
   isPopupOptions,
   isTitleOption,
   isUserMessage,
+  makeOpenAICompatible,
 } from '../utils';
 
 jest.mock('@js/ui/dialog', () => ({
@@ -453,6 +455,92 @@ describe('expandTypeArraysToAnyOf', () => {
     const original = JSON.parse(JSON.stringify(schema));
     expandTypeArraysToAnyOf(schema);
     expect(schema).toEqual(original);
+  });
+});
+
+describe('makeOpenAICompatible', () => {
+  it('lists every object property in required', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'object',
+      properties: { a: { type: 'string' }, b: { type: 'number' } },
+      required: ['a'],
+      additionalProperties: false,
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema.required).toEqual(['a', 'b']);
+  });
+
+  it('does not add required to an object without properties', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'object',
+      properties: {},
+      additionalProperties: false,
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema).toEqual({
+      type: 'object',
+      properties: {},
+      additionalProperties: false,
+    });
+  });
+
+  it('adds additionalProperties false when it is missing', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'object',
+      properties: { a: { type: 'string' } },
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema.additionalProperties).toBe(false);
+  });
+
+  it('keeps existing additionalProperties', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'object',
+      properties: { a: { type: 'string' } },
+      additionalProperties: { type: 'string' },
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema.additionalProperties).toEqual({ type: 'string' });
+  });
+
+  it('removes safe integer bounds', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'integer',
+      minimum: Number.MIN_SAFE_INTEGER,
+      maximum: Number.MAX_SAFE_INTEGER,
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema).toEqual({ type: 'integer' });
+  });
+
+  it('keeps custom integer bounds', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'integer',
+      minimum: 0,
+      maximum: Number.MAX_SAFE_INTEGER,
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema).toEqual({ type: 'integer', minimum: 0 });
+  });
+
+  it('leaves other schemas unchanged', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = { type: 'string' };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema).toEqual({ type: 'string' });
   });
 });
 
