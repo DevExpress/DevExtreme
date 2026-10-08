@@ -1,4 +1,6 @@
-import type { dxHtmlEditorVariables } from '@js/ui/html_editor';
+import type { dxElementWrapper } from '@js/core/renderer';
+import type { DxEvent } from '@js/events';
+import type { AICustomCommand, dxHtmlEditorVariables } from '@js/ui/html_editor';
 
 import type {
   FormatBlotInstance,
@@ -6,6 +8,7 @@ import type {
   QuillOptions,
   ScrollInstance,
 } from './types/quill';
+import type { CommandsMap } from './utils/ai';
 
 /** A Quill-dependent export: the empty object stands in when devextreme-quill is not loaded */
 export type QuillDependent<T> = T | Record<string, undefined>;
@@ -93,10 +96,16 @@ export interface MentionData {
   keyInTemplateStorage?: number;
 }
 
-/** Key of a mention template: the editor's number, undefined when Quill itself renders the blot */
+/** A mention template's key: the editor number (getMentionKeyInTemplateStorage) and the marker */
 export interface MentionTemplateKey {
-  editorKey: number | undefined;
-  marker: string | undefined;
+  editorKey: number;
+  marker: string;
+}
+
+/** What a mention blot looks a template up with; both parts are missing when Quill renders it */
+export interface MentionTemplateLookupKey {
+  editorKey?: number;
+  marker?: string;
 }
 
 /** Value of the `variable` embed */
@@ -129,4 +138,60 @@ export interface ThemeConstructor {
   DEFAULTS: { modules: Record<string, unknown> };
   themes: Record<string, ThemeConstructor>;
   new (quill: QuillInstance, options: ThemeOptions): ThemeInstance;
+}
+
+/** What a dialog's show() returns: the Deferred's promise object (done/fail/always) */
+export interface DialogPromise<TResult = unknown, TExtra = undefined> {
+  done: (callback: (result: TResult, extra: TExtra) => void) => DialogPromise<TResult, TExtra>;
+  fail: (callback: () => void) => DialogPromise<TResult, TExtra>;
+  always: (callback: () => void) => DialogPromise<TResult, TExtra>;
+}
+
+/** What a toolbar button or a context menu item passes to a format handler. */
+export interface FormatHandlerArgs {
+  event?: DxEvent;
+}
+
+export type FormatHandler = (args: FormatHandlerArgs) => void;
+
+/** A click on an AI toolbar menu item (modules/m_toolbar.ts). */
+export interface AITextTransformOptions {
+  command: string;
+  commandsMap: CommandsMap;
+  parentCommand?: string;
+  prompt?: AICustomCommand['prompt'];
+}
+
+export interface FormatHandlers {
+  clear: FormatHandler;
+  link: () => void;
+  image: () => void;
+  color: () => void;
+  background: () => void;
+  orderedList: FormatHandler;
+  bulletList: FormatHandler;
+  alignLeft: FormatHandler;
+  alignCenter: FormatHandler;
+  alignRight: FormatHandler;
+  alignJustify: FormatHandler;
+  codeBlock: FormatHandler;
+  undo: FormatHandler;
+  redo: FormatHandler;
+  increaseIndent: FormatHandler;
+  decreaseIndent: FormatHandler;
+  superscript: FormatHandler;
+  subscript: FormatHandler;
+  insertTable: () => void;
+  insertHeaderRow: () => unknown;
+  insertRowAbove: () => unknown;
+  insertRowBelow: () => unknown;
+  insertColumnLeft: () => unknown;
+  insertColumnRight: () => unknown;
+  deleteColumn: () => unknown;
+  deleteRow: () => unknown;
+  deleteTable: () => unknown;
+  // the toolbar button passes its click event here, the context menu a cell or table element
+  cellProperties: ($element?: dxElementWrapper | FormatHandlerArgs) => void;
+  tableProperties: ($element?: dxElementWrapper | FormatHandlerArgs) => void;
+  ai: (options: AITextTransformOptions) => void;
 }
