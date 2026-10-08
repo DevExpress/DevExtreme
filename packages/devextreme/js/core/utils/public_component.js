@@ -3,4 +3,4 @@ export {
     attachInstanceToElement,
     getInstanceByElement,
     name,
-} from '../../__internal/core/utils/m_public_component';
+} from '../../__internal/core/utils/public_component';

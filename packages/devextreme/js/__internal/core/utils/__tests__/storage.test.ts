@@ -1,7 +1,7 @@
 import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
-import { sessionStorage } from '@ts/core/utils/m_storage';
+import { sessionStorage } from '@ts/core/utils/storage';
 
 describe('Storage utils', () => {
   describe('sessionStorage', () => {
