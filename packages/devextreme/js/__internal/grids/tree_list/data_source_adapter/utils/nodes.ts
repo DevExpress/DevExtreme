@@ -2,14 +2,16 @@ import { isDefined } from '@js/core/utils/type';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import treeListCore from '../../core';
-import type { LoadOperation, NodeByKey, TreeNode } from '../types';
+import type {
+  DataGetter, LoadOperation, NodeByKey, TreeNode,
+} from '../types';
 
 export interface NodesContext {
   rootValue: unknown;
   isFullBranchFilterMode: boolean;
-  keyGetter: (data: unknown) => unknown;
-  parentIdGetter: (data: unknown) => unknown;
-  hasItemsGetter?: (data: unknown) => unknown;
+  keyGetter: DataGetter;
+  parentIdGetter: DataGetter;
+  hasItemsGetter?: DataGetter;
   isChildrenLoaded: Record<string, boolean>;
 }
 
