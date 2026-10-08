@@ -615,7 +615,7 @@ export class DataController extends modules.Controller {
     this.dataErrorOccurred.fire(e);
   }
 
-  public fireError(...args: unknown[]): void {
+  public fireError(...args: [id: string, ...details: unknown[]]): void {
     this.dataErrorOccurred.fire(errors.Error(...args));
   }
 

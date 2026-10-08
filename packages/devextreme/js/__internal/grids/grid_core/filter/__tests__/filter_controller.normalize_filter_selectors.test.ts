@@ -6,7 +6,6 @@ import {
   it,
 } from '@jest/globals';
 import type { dxElementWrapper } from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import type { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import {
@@ -101,7 +100,7 @@ describe('FilterController.normalizeFilterSelectors', () => {
   describe('when the filter array carries its own properties', () => {
     it('should carry them over to the result', async () => {
       const { instance } = await createGrid();
-      const filter = extend([], [['name', '=', 'Alex'], 'and', ['age', '=', 15]]);
+      const filter: unknown[] & TaggedSelector = [['name', '=', 'Alex'], 'and', ['age', '=', 15]];
 
       filter.columnIndex = 7;
       filter.filterValue = 'ZZ';
@@ -117,7 +116,7 @@ describe('FilterController.normalizeFilterSelectors', () => {
     it('should pass columnIndex and filterValue down but not selectedFilterOperation', async () => {
       const { instance } = await createGrid();
       const customSelector: ColumnSelector = (): number => 1;
-      const filter = extend([], [[customSelector, '=', 'Alex']]);
+      const filter: unknown[] & TaggedSelector = [[customSelector, '=', 'Alex']];
 
       filter.columnIndex = 3;
       filter.filterValue = 'inherited';

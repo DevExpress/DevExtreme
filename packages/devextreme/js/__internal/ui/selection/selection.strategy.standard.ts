@@ -132,7 +132,7 @@ export default class StandardStrategy<
       return deferred;
     }
 
-    const selectionFilterCreator = new SelectionFilterCreator(keys, isSelectAll);
+    const selectionFilterCreator = new SelectionFilterCreator<TItem, TKey>(keys, isSelectAll);
     const combinedFilter = selectionFilterCreator.getCombinedFilter(
       key,
       filter,
@@ -594,7 +594,7 @@ export default class StandardStrategy<
       return Deferred<TItem[]>().resolve([]);
     }
 
-    const selectionFilterCreator = new SelectionFilterCreator(keys);
+    const selectionFilterCreator = new SelectionFilterCreator<TItem, TKey>(keys);
     const combinedFilter = selectionFilterCreator.getCombinedFilter(keyExpr, filter, true);
 
     return this._loadFilteredData(combinedFilter);

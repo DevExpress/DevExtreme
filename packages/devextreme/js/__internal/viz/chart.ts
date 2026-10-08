@@ -591,7 +591,6 @@ class Chart extends AdvancedChart {
   _checkPaneName(seriesTheme: ThemeValue): ThemeValue {
     const paneList = _map(this.panes, (pane) => pane.name);
     seriesTheme.pane = seriesTheme.pane || this.defaultPane;
-    // @ts-expect-error
     return paneList.includes(seriesTheme.pane);
   }
 

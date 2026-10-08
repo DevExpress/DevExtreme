@@ -32,6 +32,7 @@ import eventsEngine from '@ts/events/core/events_engine';
 import pointerEvents from '@ts/events/pointer';
 import { addNamespace } from '@ts/events/utils/index';
 import consts from '@ts/viz/components/consts';
+import type { Point } from '@ts/viz/series/points/base_point';
 
 import { getDistance, normalizeEnum as _normalizeEnum, pointInCanvas as inCanvas } from '../core/utils';
 
@@ -623,14 +624,13 @@ export class ChartTracker extends BaseTracker {
 
   _getSeriesForShared(x, y) {
     const that = this;
-    const points = [];
-    let point = null;
+    const points: InstanceType<typeof Point>[] = [];
+    let point: InstanceType<typeof Point> | null = null;
     let distance = Infinity;
 
     if (that._tooltip.isShared() && !that.hoveredSeries) {
       _each(that._storedSeries, (_, series) => {
         const point = series.getNeighborPoint(x, y);
-        // @ts-expect-error
         point && points.push(point);
       });
       _each(points, (_, p) => {

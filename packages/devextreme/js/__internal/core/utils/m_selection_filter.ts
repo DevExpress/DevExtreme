@@ -2,126 +2,150 @@ import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { isFunction, isObject, isString } from '@js/core/utils/type';
 
-export const SelectionFilterCreator = function (selectedItemKeys, isSelectAll?: boolean) {
-  this.getLocalFilter = function (keyGetter, equalKeys, equalByReference, keyExpr) {
-    equalKeys = equalKeys === undefined ? equalByValue : equalKeys;
-    return functionFilter.bind(this, equalKeys, keyGetter, equalByReference, keyExpr);
-  };
+type KeyGetter<TItem, TKey> = (item: TItem) => TKey;
+type EqualKeys<TKey> = (key1: TKey, key2: TKey) => boolean;
+type PlainKeyExpression<TItem> = string | KeyGetter<TItem, unknown>;
+type KeyExpression<TItem> = PlainKeyExpression<TItem> | string[];
 
-  this.getExpr = function (keyExpr) {
+export class SelectionFilterCreator<TItem = unknown, TKey = unknown> {
+  private readonly selectedItemKeys: readonly TKey[];
+
+  private readonly isSelectAll?: boolean;
+
+  private selectedItemKeyHashesMap?: Record<string, boolean>;
+
+  constructor(selectedItemKeys: readonly TKey[], isSelectAll?: boolean) {
+    this.selectedItemKeys = selectedItemKeys;
+    this.isSelectAll = isSelectAll;
+  }
+
+  getLocalFilter(
+    keyGetter: KeyGetter<TItem, TKey>,
+    equalKeys?: EqualKeys<TKey>,
+    equalByReference?: boolean,
+    keyExpr?: KeyExpression<TItem>,
+  ): (item: TItem) => boolean {
+    const equalKeysFunction = equalKeys === undefined ? equalByValue : equalKeys;
+    return this.functionFilter.bind(this, equalKeysFunction, keyGetter, equalByReference, keyExpr);
+  }
+
+  getExpr(keyExpr?: KeyExpression<TItem>): unknown[] | undefined {
     if (!keyExpr) {
-      return;
+      return undefined;
     }
 
-    let filterExpr;
+    const filterExprParts = this.selectedItemKeys.map((key) => (
+      isString(keyExpr) || isFunction(keyExpr)
+        ? this.getFilterForPlainKey(keyExpr, key)
+        : this.getFilterForCompositeKey(keyExpr, key)
+    ));
 
-    selectedItemKeys.forEach(function (key, index) {
-      filterExpr = filterExpr || [];
-
-      let filterExprPart;
-
-      if (index > 0) {
-        filterExpr.push(isSelectAll ? 'and' : 'or');
-      }
-
-      if (isString(keyExpr) || isFunction(keyExpr)) {
-        filterExprPart = getFilterForPlainKey(keyExpr, key);
-      } else {
-        filterExprPart = getFilterForCompositeKey(keyExpr, key);
-      }
-
-      filterExpr.push(filterExprPart);
-    });
-
-    if (filterExpr && filterExpr.length === 1) {
-      // eslint-disable-next-line prefer-destructuring
-      filterExpr = filterExpr[0];
+    if (filterExprParts.length <= 1) {
+      return filterExprParts[0];
     }
 
-    return filterExpr;
-  };
+    const groupOperation = this.isSelectAll ? 'and' : 'or';
 
-  this.getCombinedFilter = function (keyExpr, dataSourceFilter, forceCombinedFilter = false) {
+    return filterExprParts.flatMap((part, index) => (index > 0 ? [groupOperation, part] : [part]));
+  }
+
+  getCombinedFilter<TFilter>(
+    keyExpr?: KeyExpression<TItem>,
+    dataSourceFilter?: TFilter,
+    forceCombinedFilter = false,
+  ): unknown[] | NonNullable<TFilter> | undefined {
     const filterExpr = this.getExpr(keyExpr);
-    let combinedFilter = filterExpr;
+    let combinedFilter: unknown[] | NonNullable<TFilter> | undefined = filterExpr;
 
-    if ((forceCombinedFilter || isSelectAll) && dataSourceFilter) {
+    if ((forceCombinedFilter || this.isSelectAll) && dataSourceFilter) {
       if (filterExpr) {
-        combinedFilter = [];
-        combinedFilter.push(filterExpr);
-        combinedFilter.push(dataSourceFilter);
+        combinedFilter = [filterExpr, dataSourceFilter];
       } else {
         combinedFilter = dataSourceFilter;
       }
     }
 
     return combinedFilter;
-  };
+  }
 
-  let selectedItemKeyHashesMap;
-
-  const getSelectedItemKeyHashesMap = function (keyOf, keyExpr) {
-    if (!selectedItemKeyHashesMap) {
-      selectedItemKeyHashesMap = {};
-      const normalizedKeys = normalizeKeys(selectedItemKeys, keyOf, keyExpr);
-      for (let i = 0; i < normalizedKeys.length; i++) {
-        selectedItemKeyHashesMap[getKeyHash(normalizedKeys[i])] = true;
-      }
-    }
-    return selectedItemKeyHashesMap;
-  };
-
-  const normalizeKeys = function (keys, keyOf, keyExpr) {
+  private normalizeKeys(
+    keys: readonly TKey[],
+    keyOf: KeyGetter<TItem, TKey>,
+    keyExpr?: KeyExpression<TItem>,
+  ): readonly TKey[] {
+    // @ts-expect-error a composite key has the fields of the item, so the key getter reads it
     return Array.isArray(keyExpr) ? keys.map((key) => keyOf(key)) : keys;
-  };
+  }
 
-  function functionFilter(equalKeys, keyOf, equalByReference, keyExpr, item) {
+  private getSelectedItemKeyHashesMap(
+    keyOf: KeyGetter<TItem, TKey>,
+    keyExpr?: KeyExpression<TItem>,
+  ): Record<string, boolean> {
+    if (!this.selectedItemKeyHashesMap) {
+      const selectedItemKeyHashesMap: Record<string, boolean> = {};
+      const normalizedKeys = this.normalizeKeys(this.selectedItemKeys, keyOf, keyExpr);
+      for (const normalizedKey of normalizedKeys) {
+        selectedItemKeyHashesMap[getKeyHash(normalizedKey)] = true;
+      }
+      this.selectedItemKeyHashesMap = selectedItemKeyHashesMap;
+    }
+    return this.selectedItemKeyHashesMap;
+  }
+
+  private functionFilter(
+    equalKeys: EqualKeys<TKey>,
+    keyOf: KeyGetter<TItem, TKey>,
+    equalByReference: boolean | undefined,
+    keyExpr: KeyExpression<TItem> | undefined,
+    item: TItem,
+  ): boolean {
     const key = keyOf(item);
-    let keyHash;
-    let i;
 
     if (!equalByReference) {
-      keyHash = getKeyHash(key);
+      const keyHash = getKeyHash(key);
       if (!isObject(keyHash)) {
-        const selectedKeyHashesMap = getSelectedItemKeyHashesMap(keyOf, keyExpr);
+        const selectedKeyHashesMap = this.getSelectedItemKeyHashesMap(keyOf, keyExpr);
         if (selectedKeyHashesMap[keyHash]) {
-          return !isSelectAll;
+          return !this.isSelectAll;
         }
-        return !!isSelectAll;
+        return !!this.isSelectAll;
       }
     }
 
-    for (i = 0; i < selectedItemKeys.length; i++) {
-      if (equalKeys(selectedItemKeys[i], key)) {
-        return !isSelectAll;
+    for (const selectedItemKey of this.selectedItemKeys) {
+      if (equalKeys(selectedItemKey, key)) {
+        return !this.isSelectAll;
       }
     }
-    return !!isSelectAll;
+    return !!this.isSelectAll;
   }
 
-  function getFilterForPlainKey(keyExpr, keyValue) {
+  private getFilterForPlainKey(
+    keyExpr: PlainKeyExpression<TItem>,
+    keyValue: unknown,
+  ): unknown[] | undefined {
     if (keyValue === undefined) {
-      return;
+      return undefined;
     }
-    return [keyExpr, isSelectAll ? '<>' : '=', keyValue];
+    return [keyExpr, this.isSelectAll ? '<>' : '=', keyValue];
   }
 
-  function getFilterForCompositeKey(keyExpr, itemKeyValue) {
-    const filterExpr: any[] = [];
+  private getFilterForCompositeKey(keyExpr: string[], itemKeyValue: unknown): unknown[] {
+    const filterExpr: unknown[] = [];
 
-    for (let i = 0, { length } = keyExpr; i < length; i++) {
+    for (let i = 0, { length } = keyExpr; i < length; i += 1) {
       const currentKeyExpr = keyExpr[i];
       const keyValueGetter = compileGetter(currentKeyExpr);
       // @ts-expect-error keyValueGetter is unknown
       const currentKeyValue = itemKeyValue && keyValueGetter(itemKeyValue);
-      const filterExprPart = getFilterForPlainKey(currentKeyExpr, currentKeyValue);
+      const filterExprPart = this.getFilterForPlainKey(currentKeyExpr, currentKeyValue);
 
       if (!filterExprPart) {
         break;
       }
 
       if (i > 0) {
-        filterExpr.push(isSelectAll ? 'or' : 'and');
+        filterExpr.push(this.isSelectAll ? 'or' : 'and');
       }
 
       filterExpr.push(filterExprPart);
@@ -129,4 +153,4 @@ export const SelectionFilterCreator = function (selectedItemKeys, isSelectAll?: 
 
     return filterExpr;
   }
-};
+}

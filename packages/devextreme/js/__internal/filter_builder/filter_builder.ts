@@ -8,10 +8,12 @@ import $, { type dxElementWrapper } from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import type { GroupOperation } from '@js/ui/filter_builder';
 import type { ShownEvent } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
+import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import type { EngineEvent, EngineTarget } from '@ts/events/core/events_engine';
@@ -84,7 +86,7 @@ const TAB_KEY = 'tab';
 const ENTER_KEY = 'enter';
 const ESCAPE_KEY = 'escape';
 
-const ACTIONS = [{
+const ACTIONS: { name: string; config: ActionConfig }[] = [{
   name: 'onEditorPreparing',
   config: { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' },
 }, {
@@ -131,7 +133,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
       fields: [],
 
-      groupOperations: ['and', 'or', 'notAnd', 'notOr'],
+      groupOperations: ['and', 'or', 'notAnd', 'notOr'] satisfies GroupOperation[],
 
       maxGroupLevel: undefined,
 
@@ -322,7 +324,6 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
       attributes['aria-level'] = `${ariaLevel}`;
     }
 
-    // @ts-expect-error attr is declared without the object form
     $element.attr(attributes);
   }
 
