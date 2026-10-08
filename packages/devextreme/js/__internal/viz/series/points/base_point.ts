@@ -11,6 +11,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { noop as _noop } from '@ts/core/utils/m_common';
 import { extend } from '@ts/core/utils/m_extend';
 import { isDefined as _isDefined } from '@ts/core/utils/m_type';
@@ -298,7 +299,9 @@ export let Point = class Point {
     if (!this.hasValue() && !this._styles.usePointCustomOptions) {
       this.series.customizePoint(this, this._dataItem);
     }
-    return this._styles.normal.fill || this.series.getColor();
+    const fill = paintedColor(this._styles.normal.fill, this.series.getRenderer?.()?.root?.element);
+
+    return fill || this.series.getColor();
   }
 
   _getStyle(): ThemeValue {

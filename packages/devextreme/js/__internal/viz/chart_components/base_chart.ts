@@ -20,6 +20,7 @@
 /* eslint-disable prefer-spread */
 
 import trackerModule from '@js/viz/chart_components/tracker';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { grep, noop } from '@ts/core/utils/m_common';
 import { extend } from '@ts/core/utils/m_extend';
 import { reverseEach as _reverseEach } from '@ts/core/utils/m_iterator';
@@ -276,13 +277,13 @@ function getLegendFields(name) {
   };
 }
 
-function getLegendSettings(legendDataField) {
+function getLegendSettings(legendDataField, element) {
   const formatObjectFields = getLegendFields(legendDataField);
   return {
     getFormatObject(data) {
       const res = {};
       res[formatObjectFields.indexField] = data.id;
-      res[formatObjectFields.colorField] = data.states.normal.fill;
+      res[formatObjectFields.colorField] = paintedColor(data.states.normal.fill, element);
       res[formatObjectFields.nameField] = data.text;
       return res;
     },
@@ -915,7 +916,7 @@ export class BaseChart extends BaseWidget {
   }
 
   _createLegend() {
-    const legendSettings = getLegendSettings(this._legendDataField);
+    const legendSettings = getLegendSettings(this._legendDataField, this._renderer.root.element);
 
     this._legend = new Legend({
       renderer: this._renderer,

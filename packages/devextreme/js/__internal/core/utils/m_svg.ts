@@ -3,12 +3,15 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isRenderer, isString } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import { copyResolvedStyles } from '@ts/core/utils/css_variables';
 
 const window = getWindow();
 
 function getMarkup(element: Node, backgroundColor?: string): string {
   const clone = element.cloneNode(true);
   const serializer = new XMLSerializer();
+
+  copyResolvedStyles(element as Element, clone as Element);
 
   if (backgroundColor) {
     $(clone).css('backgroundColor', backgroundColor);

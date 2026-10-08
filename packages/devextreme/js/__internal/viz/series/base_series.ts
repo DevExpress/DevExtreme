@@ -17,6 +17,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { noop as _noop } from '@ts/core/utils/m_common';
 import { extend as _extend } from '@ts/core/utils/m_extend';
 import { each as _each } from '@ts/core/utils/m_iterator';
@@ -1476,7 +1477,7 @@ export let Series = class Series {
   }
 
   getColor(): string {
-    return this.getLegendStyles().normal.fill;
+    return paintedColor(this.getLegendStyles().normal.fill, this._renderer?.root?.element);
   }
 
   getOpacity(): number {
