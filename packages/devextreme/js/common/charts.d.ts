@@ -47,9 +47,10 @@ export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
 export type ChartsDataType = 'datetime' | 'numeric' | 'string';
 
 /**
+ * @docid
  * @public
+ * @type object
  * @namespace DevExpress.common.charts
- * @type 'dash'|'dot'|'longDash'|'solid'
  */
 export type DashStyle = RepeatUnion<'dash' | 'dot' | 'longDash' | 'solid', 5>;
 
