@@ -69,6 +69,8 @@ export interface ColumnPointProps extends ColumnPoint {
   isRightBoundary?: boolean;
 }
 
+export type EmptyDateValue = '' | false;
+
 export type HeaderFilterGroupSelector = (data: unknown) => unknown;
 
 export interface HeaderFilterGroupDescriptor {
