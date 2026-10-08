@@ -19,22 +19,22 @@ import type {
   TreeListProcessedItem,
 } from './types';
 
+const getNodeLevel = (node: TreeNode): number => {
+  let level = -1;
+  let current = node;
+  while (current.parent) {
+    if (current.visible) {
+      level += 1;
+    }
+    current = current.parent;
+  }
+  return level;
+};
+
 export class TreeListDataController extends DataController {
   protected declare dataSourceController: TreeListDataSourceController;
 
   public declare _columnsController: TreeListColumnsController;
-
-  private _getNodeLevel(node: TreeNode): number {
-    let level = -1;
-    let current = node;
-    while (current.parent) {
-      if (current.visible) {
-        level += 1;
-      }
-      current = current.parent;
-    }
-    return level;
-  }
 
   protected _generateDataItem(
     node: TreeNode,
@@ -47,13 +47,12 @@ export class TreeListDataController extends DataController {
       // @ts-expect-error a data node always has data, only the root node has none
       data: node.data,
       isExpanded: this.isRowExpanded(node.key, options),
-      level: this._getNodeLevel(node),
+      level: getNodeLevel(node),
     };
   }
 
-  private _loadOnOptionChange(): void {
-    // @ts-expect-error called only after optionChanged checked the adapter
-    this.dataSourceController.getAdapter().load();
+  protected _loadOnOptionChange(): void {
+    this.dataSourceController.getAdapter()?.load();
   }
 
   protected isSameRowState(item1: TreeListProcessedItem, item2: TreeListProcessedItem): boolean {
