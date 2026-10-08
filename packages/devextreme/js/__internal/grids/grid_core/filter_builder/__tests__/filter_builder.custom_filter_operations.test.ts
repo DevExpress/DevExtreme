@@ -35,7 +35,7 @@ const createGrid = (
   filterBuilder: customOperations ? { customOperations } : {},
 });
 
-const getOperationNames = (operations: CustomOperation[]): (string | undefined)[] => operations
+const getOperationNames = (operations: { name?: string }[]): (string | undefined)[] => operations
   .map((operation) => operation.name);
 
 describe('FilterBuilderController.getCustomFilterOperations', () => {

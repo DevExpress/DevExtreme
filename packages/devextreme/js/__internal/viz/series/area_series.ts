@@ -151,9 +151,7 @@ const areaSeries = chart.area = _extend({}, chartLineSeries, baseAreaMethods, {
         areaPoints.forEach((p, i) => {
           if (p) {
             const index = points.length === 1 ? 0 : i < points.length ? i : areaPoints.length - 1 - i;
-            // @ts-expect-error
             rotated && p.x === points[index].defaultX && p.x === argAxisPosition - argAxis.getAxisShift() && (p.x += edgeOffset);
-            // @ts-expect-error
             !rotated && p.y === points[index].defaultY && p.y === argAxisPosition - argAxis.getAxisShift() && (p.y += edgeOffset);
           }
         });

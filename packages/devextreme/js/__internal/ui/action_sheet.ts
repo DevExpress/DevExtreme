@@ -156,7 +156,7 @@ class ActionSheet extends CollectionWidget<Properties> {
     super._clean();
   }
 
-  _overlayConfig(): PopoverProperties | PopupProperties {
+  _overlayConfig(): PopoverProperties & PopupProperties {
     const { title } = this.option();
     return {
       disabled: false,
@@ -231,7 +231,7 @@ class ActionSheet extends CollectionWidget<Properties> {
           },
         },
       },
-    }));
+    } satisfies PopupProperties));
 
     this._popup.$wrapper()?.addClass(ACTION_SHEET_POPUP_WRAPPER_CLASS);
   }

@@ -20,7 +20,7 @@ import DataOption from '@ts/ui/gantt/ui.gantt.data.option';
 import { GanttDataChangesProcessingHelper } from '@ts/ui/gantt/ui.gantt.data_changes_processing_helper';
 import { GanttDialog } from '@ts/ui/gantt/ui.gantt.dialogs';
 import { GanttExportHelper } from '@ts/ui/gantt/ui.gantt.export_helper';
-import { GanttHelper } from '@ts/ui/gantt/ui.gantt.helper';
+import { GanttHelper, type GanttProperties } from '@ts/ui/gantt/ui.gantt.helper';
 import { GanttMappingHelper } from '@ts/ui/gantt/ui.gantt.mapping_helper';
 import { ModelChangesListener } from '@ts/ui/gantt/ui.gantt.model_changes_listener';
 import { GanttSizeHelper } from '@ts/ui/gantt/ui.gantt.size_helper';
@@ -52,7 +52,7 @@ interface SortFilterState {
   sieveColumn?: any;
 }
 
-class Gantt extends Widget<Properties> {
+class Gantt extends Widget<GanttProperties> {
   _isGanttRendered?: boolean;
 
   _$toolbarWrapper!: dxElementWrapper;
@@ -1152,12 +1152,12 @@ class Gantt extends Widget<Properties> {
     this._ganttView?._ganttViewCore.zoomOut();
   }
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): GanttProperties {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), GanttHelper.getDefaultOptions());
   }
 
-  _optionChanged(args: OptionChanged<Properties>): void {
+  _optionChanged(args: OptionChanged<GanttProperties>): void {
     const { name, fullName, value } = args;
 
     switch (name) {

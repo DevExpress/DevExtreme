@@ -384,7 +384,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row
    */
-  protected _getRows() {
+  public _getRows() {
     const result: any[] = [];
     const rowCount = this.getRowCount();
 

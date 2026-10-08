@@ -71,15 +71,16 @@ export interface FilterBuilderItem extends FilterBuilderField {
   id: string;
 }
 
-export interface FilterCustomOperation extends Omit<CustomOperation, 'name' | 'calculateFilterExpression'> {
+export interface FilterCustomOperation extends Omit<CustomOperation, 'name' | 'calculateFilterExpression' | 'customizeText'> {
   name: string;
+  customizeText?: (fieldInfo: FieldInfo, options?: { values: FieldValue[] }) => string;
   notForLookup?: boolean;
   valueSeparator?: string;
   calculateFilterExpression?: (
     filterValue: unknown,
     field: Field,
     fields?: Field[],
-  ) => FilterExpression;
+  ) => FilterExpression | null;
 }
 
 export interface ValueTextCustomOperation extends CustomOperation {

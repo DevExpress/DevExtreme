@@ -122,25 +122,22 @@ class Widget<
   }
 
   _getDefaultOptions(): TProperties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._getDefaultOptions(), {
+    return {
+      ...super._getDefaultOptions(),
       hoveredElement: null,
       isActive: false,
       disabled: false,
       visible: true,
-      hint: undefined,
       activeStateEnabled: false,
-      onContentReady: undefined,
       hoverStateEnabled: false,
       focusStateEnabled: false,
       tabIndex: 0,
-      accessKey: undefined,
       onFocusIn: null,
       onFocusOut: null,
       onKeyboardHandled: null,
       ignoreParentReadOnly: false,
       useResizeObserver: true,
-    });
+    };
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {

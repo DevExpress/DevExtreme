@@ -13,6 +13,7 @@ export const getDraggingPanelBoundingRects = (
   const boundingRects: DraggingPanelBoundingRect[] = [];
 
   each(draggingPanels, (_, draggingPanel) => {
+    // @ts-expect-error the dragging panels have getBoundingRect
     const boundingRect = draggingPanel?.getBoundingRect();
 
     if (boundingRect) {

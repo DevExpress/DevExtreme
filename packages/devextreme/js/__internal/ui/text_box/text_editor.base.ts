@@ -469,7 +469,14 @@ class TextEditorBase<
   }
 
   _updateButtonsStyling(editorStylingMode?: EditorStyle): void {
-    each(this.option('buttons'), (_, { options, name: buttonName }) => {
+    const { buttons } = this.option();
+
+    each(buttons, (_, button) => {
+      if (typeof button === 'string') {
+        return;
+      }
+
+      const { options, name: buttonName } = button;
       if (options && !options.stylingMode && this.option('visible')) {
         const buttonInstance = this.getButton(buttonName);
         if (buttonInstance?.option) {
@@ -994,7 +1001,6 @@ class TextEditorBase<
       case 'placeholder':
         this._renderPlaceholder();
         this._setFieldAria(true);
-        // @ts-expect-error ts-error
         this._input().attr({ placeholder: this._getPlaceholderAttr() });
         break;
       case 'label':
@@ -1095,7 +1101,7 @@ class TextEditorBase<
     }
   }
 
-  getButton(name: string): dxButton | null | undefined {
+  getButton(name: string | undefined): dxButton | null | undefined {
     // @ts-expect-error TextEditorButtonCollection should use generic
     return this._buttonCollection.getButton(name);
   }

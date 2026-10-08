@@ -58,7 +58,6 @@ class Tooltip<
   _toggleAriaAttributes(): void {
     this._contentId = `dx-${new Guid()}`;
 
-    // @ts-expect-error dxElementWrapper typings
     this.$overlayContent().attr({
       id: this._contentId,
     });

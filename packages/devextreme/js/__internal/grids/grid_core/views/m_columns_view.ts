@@ -29,6 +29,7 @@ import {
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
+import type { ActionEvent } from '@ts/core/action';
 import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
@@ -317,6 +318,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const scrollingOptions = this.option('scrolling');
     let useNativeScrolling = this.option('scrolling.useNative');
 
+    // @ts-expect-error useNative: 'auto' of the grid scrolling is copied and normalized below
     const options: ScrollableOptions = extend({}, scrollingOptions, {
       direction: 'both',
       bounceEnabled: false,
@@ -889,6 +891,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const changeTypes = options.change?.changeTypes ?? [];
 
     for (let i = 0; i < rows.length; i += 1) {
+      // @ts-expect-error _renderTable sets the columns of the options before the rows are rendered
       this._renderRow($table, extend({
         row: rows[i], columnIndices: columnIndices[i], changeType: changeTypes[i],
       }, options));
@@ -1057,7 +1060,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  protected _getRows(change?: ViewDataChange): ViewRow[] {
+  public _getRows(change?: ViewDataChange): ViewRow[] {
     return [];
   }
 
@@ -1210,7 +1213,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._tableElement = tableElement;
   }
 
-  protected _afterRowPrepared(e?: Record<string, unknown>): void {}
+  protected _afterRowPrepared(e?: ActionEvent): void {}
 
   /**
    * @extended: header_panel
@@ -1664,6 +1667,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   protected getBoundingRect(): BoundingRect | null | undefined {
     return undefined;
   }
+
+  public getContextMenuItems?(options): unknown;
 
   public getName(): string | undefined {
     return undefined;

@@ -708,7 +708,7 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
     return validationMessagePosition;
   }
 
-  _getSerializedDates([startDate, endDate]: (DateLike | undefined)[]): DateLike[] {
+  _getSerializedDates([startDate, endDate]: (DateLike | undefined)[]): (DateLike | undefined)[] {
     return [
       this.getStartDateBox()._serializeDate(getDeserializedDate(startDate)),
       this.getStartDateBox()._serializeDate(getDeserializedDate(endDate)),

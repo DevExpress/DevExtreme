@@ -309,6 +309,12 @@ const emptyStrategy = {
   getDefaultColor: _noop,
 };
 
+type LayerStrategy = typeof emptyStrategy & {
+  type?: string;
+  fullType?: string;
+  elementType?: string;
+};
+
 const strategiesByType = {};
 const strategiesByGeometry = {};
 const strategiesByElementType = {};
@@ -319,7 +325,7 @@ let selectStrategy = function (options, data) {
   let type = _normalizeEnum(options.type);
   let elementType = _normalizeEnum(options.elementType);
   let sample;
-  const strategy = _extend({}, emptyStrategy);
+  const strategy: LayerStrategy = _extend({}, emptyStrategy);
   if (data.count() > 0) {
     sample = data.geometry(data.item(0));
     type = strategiesByType[type] ? type : guessTypeByData(sample);

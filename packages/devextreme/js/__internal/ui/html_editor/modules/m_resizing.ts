@@ -181,7 +181,6 @@ export default class ResizingModule extends BaseModule {
         if (!this._$target) {
           return;
         }
-        // @ts-expect-error
         $(this._$target).attr({
           height: e.height,
           width: e.width,

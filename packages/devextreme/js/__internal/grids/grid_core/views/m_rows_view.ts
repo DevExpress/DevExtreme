@@ -915,7 +915,7 @@ export class RowsView extends ColumnsView {
     return deferred;
   }
 
-  protected _getRows(change) {
+  public _getRows(change?) {
     return change && change.items || this._dataController.items();
   }
 

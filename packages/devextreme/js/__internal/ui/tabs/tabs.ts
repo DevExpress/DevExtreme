@@ -581,7 +581,6 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
     const buttons = [this._leftButton, this._rightButton];
 
     buttons.forEach((button) => {
-      // @ts-expect-error ts-error
       button?.$element().attr({ 'aria-disabled': null });
     });
   }

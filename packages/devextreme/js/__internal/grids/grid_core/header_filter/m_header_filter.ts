@@ -347,6 +347,7 @@ export class HeaderFilterController extends Modules.ViewController {
       const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView');
       // @ts-expect-error getColumnElements() is typed as possibly undefined
       const $columnElement = view.getColumnElements()
+        // @ts-expect-error a column shown in the group panel has a groupIndex
         .eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
       this.showHeaderFilterMenuBase({

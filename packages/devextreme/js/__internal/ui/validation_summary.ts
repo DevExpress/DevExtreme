@@ -4,6 +4,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
+import type { KoDxValidator } from '@ts/integration/knockout/validation';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
@@ -23,7 +24,7 @@ const ITEM_DATA_KEY = `${VALIDATION_SUMMARY_CLASS}-item-data`;
 
 export interface ValidationSummaryItem {
   text?: string;
-  validator?: Validator;
+  validator?: Validator | KoDxValidator;
   index?: number;
 }
 
@@ -261,7 +262,10 @@ class ValidationSummary extends CollectionWidget<
 
   _postprocessRenderItem(params: PostprocessRenderItemInfo<ValidationSummaryItem>): void {
     eventsEngine.on(params.itemElement, 'click', (): void => {
-      params.itemData.validator?.focus?.();
+      const { validator } = params.itemData;
+      if (validator && 'focus' in validator) {
+        validator.focus?.();
+      }
     });
   }
 
