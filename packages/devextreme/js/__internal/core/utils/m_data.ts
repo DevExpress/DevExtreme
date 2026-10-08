@@ -36,7 +36,6 @@ const readPropValue = function (obj, propName, options) {
 
 const assignPropValue = function (obj, propName, value, options) {
   if (propName === 'this') {
-    // @ts-expect-error only void function can be called with new
     throw new errors.Error('E4016');
   }
 

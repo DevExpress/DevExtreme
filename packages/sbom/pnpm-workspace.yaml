@@ -11,3 +11,5 @@ overrides:
   fast-uri@>=3.0.0 <3.1.8: ^3.1.8
   qs@>=2.2.5 <6.16.0: ^6.16.0
   undici@>=7.0.0 <7.29.1: ^7.29.1
+  compression@<1.8.2: ^1.8.2
+  http-cache-semantics@<=4.2.0: ^4.3.0

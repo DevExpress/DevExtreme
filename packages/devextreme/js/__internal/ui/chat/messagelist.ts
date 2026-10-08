@@ -750,7 +750,8 @@ class MessageList extends Widget<Properties> {
     const lastMessageTimestampInMs = dateSerialization.deserializeDate(lastMessageTimestamp);
     const newMessageTimestampInMs = dateSerialization.deserializeDate(newMessageTimestamp);
 
-    const result = newMessageTimestampInMs - lastMessageTimestampInMs > MESSAGEGROUP_TIMEOUT;
+    const result = Number(newMessageTimestampInMs) - Number(lastMessageTimestampInMs)
+      > MESSAGEGROUP_TIMEOUT;
 
     return result;
   }

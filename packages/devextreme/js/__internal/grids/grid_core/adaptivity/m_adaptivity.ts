@@ -380,7 +380,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
     let colWidth = 0;
 
     each(columns, (index, column) => {
-      if (column.index < 0 || column.command) {
+      if ((isDefined(column.index) && column.index < 0) || column.command) {
         colWidth += that._columnsController.columnOption(getColumnId(that, column), 'bestFitWidth') || 0;
       }
     });

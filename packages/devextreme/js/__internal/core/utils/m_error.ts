@@ -12,48 +12,42 @@ export interface DxError extends Error {
   url: string;
 }
 
-function error(baseErrors, errors?) {
-  const exports = {
+type ErrorMessages = Record<string, string>;
 
-    ERROR_MESSAGES: extend(errors, baseErrors),
+type ErrorArgs = [id: string, ...details: unknown[]];
 
-    Error: function (...args) {
-      return makeError(args);
-    },
+interface ErrorFactory {
+  (id: string, ...details: unknown[]): DxError;
+  new (id: string, ...details: unknown[]): DxError;
+}
 
-    log(...args) {
-      const id = args[0];
-      let method = 'log';
+interface ErrorUtils {
+  ERROR_MESSAGES: ErrorMessages;
+  Error: ErrorFactory;
+  log: (id: string, ...details: unknown[]) => void;
+}
 
-      if (/^E\d+$/.test(id)) {
-        method = 'error';
-      } else if (/^W\d+$/.test(id)) {
-        method = 'warn';
-      }
-
-      consoleUtils.logger[method](method === 'log' ? id : combineMessage(args));
-    },
-  };
-
-  function combineMessage(args) {
-    const id = args[0];
-    args = args.slice(1);
-    return formatMessage(id, formatDetails(id, args));
+function error(baseErrors: ErrorMessages, errors?: ErrorMessages): ErrorUtils {
+  function getErrorUrl(id: string): string {
+    return ERROR_URL + id;
   }
 
-  function formatDetails(id, args) {
-    args = [exports.ERROR_MESSAGES[id]].concat(args);
-    return format.apply(this, args).replace(/\.*\s*?$/, '');
+  function formatDetails(id: string, args: unknown[]): string {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- exports comes below
+    const formatArgs: [unknown, ...unknown[]] = [exports.ERROR_MESSAGES[id], ...args];
+    return format.apply(this, formatArgs).replace(/\.*\s*?$/, '');
   }
 
-  function formatMessage(id, details) {
+  function formatMessage(id: string, details: string): string {
     const kind = id?.startsWith('W') ? 'warning' : 'error';
     return format.apply(this, ['{0} - {1}.\n\nFor additional information on this {2} message, see: {3}', id, details, kind, getErrorUrl(id)]);
   }
 
-  function makeError(args) {
-    const id = args[0];
-    args = args.slice(1);
+  function combineMessage([id, ...details]: ErrorArgs): string {
+    return formatMessage(id, formatDetails(id, details));
+  }
+
+  function makeError([id, ...args]: ErrorArgs): DxError {
     const details = formatDetails(id, args);
     const url = getErrorUrl(id);
     const message = formatMessage(id, details);
@@ -65,9 +59,27 @@ function error(baseErrors, errors?) {
     });
   }
 
-  function getErrorUrl(id) {
-    return ERROR_URL + id;
-  }
+  const exports: ErrorUtils = {
+
+    ERROR_MESSAGES: extend(errors, baseErrors),
+
+    Error: function Error(...args: ErrorArgs): DxError {
+      return makeError(args);
+    } as ErrorFactory,
+
+    log(...args: ErrorArgs): void {
+      const [id] = args;
+      let method: 'log' | 'error' | 'warn' = 'log';
+
+      if (/^E\d+$/.test(id)) {
+        method = 'error';
+      } else if (/^W\d+$/.test(id)) {
+        method = 'warn';
+      }
+
+      consoleUtils.logger[method](method === 'log' ? id : combineMessage(args));
+    },
+  };
 
   return exports;
 }
