@@ -37,18 +37,21 @@ export const normalizeKey = (
 };
 
 /* eslint-disable spellcheck/spell-checker */
-type OptionalNullishSchema<T extends z.ZodTypeAny> = z.ZodEffects<
-  z.ZodOptional<z.ZodNullable<T>>,
-  z.output<T> | undefined,
-  z.input<T> | null | undefined
+type OptionalNullishSchema<T extends z.ZodType> = z.ZodOptional<
+  z.ZodPipe<
+    z.ZodOptional<z.ZodNullable<T>>,
+    z.ZodTransform<
+      z.output<T> | undefined,
+      z.output<T> | null | undefined
+    >
+  >
 >;
 
 // Treats `null` as "absent" for optional schema fields
-export function optionalNullish<T extends z.ZodTypeAny>(
+export function optionalNullish<T extends z.ZodType>(
   schema: T,
 ): OptionalNullishSchema<T> {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return schema.nullish().transform((value) => value ?? undefined);
+  return schema.nullish().transform((value) => value ?? undefined).optional();
 }
 /* eslint-enable spellcheck/spell-checker */
 

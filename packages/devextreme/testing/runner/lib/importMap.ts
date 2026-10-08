@@ -352,7 +352,6 @@ export function buildQunitImportMap({
 
     // Stubs
     zod: `${SHIMS}/zod.js`,
-    'zod-to-json-schema': `${SHIMS}/zod-to-json-schema.js`,
 
     // Suite-specific missing-dependency overrides
     ...collectSuiteImportOverrides(suiteFilePath),

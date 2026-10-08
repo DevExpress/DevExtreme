@@ -6,6 +6,57 @@ import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { dataGridCommands } from '../commands/index';
 
+const expectedFilterScalarValue: JsonSchema = {
+  anyOf: [
+    {
+      type: 'string',
+      description: 'A plain string value. Date values should be in "YYYY-MM-DDTHH:mm:ss" format (e.g. "2024-05-10T00:00:00", "2024-05-10T14:30:00"). The time part is always required. The "Z" suffix or timezone offset should not be appended unless the user explicitly requests it.',
+    },
+    {
+      type: 'number',
+      description: 'A numeric filter value.',
+    },
+    {
+      type: 'boolean',
+      description: 'A boolean filter value.',
+    },
+    {
+      type: 'null',
+      description: 'A null filter value.',
+    },
+  ],
+};
+
+const expectedSummaryItemBaseProperties: JsonSchema = {
+  column: {
+    type: 'string',
+  },
+  summaryType: {
+    type: 'string',
+    enum: ['sum', 'min', 'max', 'avg', 'count'],
+  },
+  showInColumn: {
+    anyOf: [
+      {
+        type: 'string',
+      },
+      {
+        type: 'null',
+      },
+    ],
+  },
+  displayFormat: {
+    anyOf: [
+      {
+        type: 'string',
+      },
+      {
+        type: 'null',
+      },
+    ],
+  },
+};
+
 const expectedArgsByCommand: Record<string, JsonSchema> = {
   columnsPinning: {
     type: 'object',
@@ -118,22 +169,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
                               type: 'string',
                               enum: ['=', '<>', '<', '<=', '>', '>=', 'contains', 'notcontains', 'startswith', 'endswith'],
                             },
-                            value: {
-                              anyOf: [
-                                {
-                                  type: 'string',
-                                },
-                                {
-                                  type: 'number',
-                                },
-                                {
-                                  type: 'boolean',
-                                },
-                                {
-                                  type: 'null',
-                                },
-                              ],
-                            },
+                            value: expectedFilterScalarValue,
                           },
                           required: ['type', 'field', 'operator', 'value'],
                           additionalProperties: false,
@@ -154,9 +190,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
                             },
                             value: {
                               type: 'array',
-                              items: {
-                                $ref: '#/$defs/filterValue_properties_expression_anyOf_0_properties_nodes_items_properties_expr_anyOf_0_properties_value',
-                              },
+                              items: expectedFilterScalarValue,
                             },
                           },
                           required: ['type', 'field', 'operator', 'value'],
@@ -447,35 +481,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
         type: 'array',
         items: {
           type: 'object',
-          properties: {
-            column: {
-              type: 'string',
-            },
-            summaryType: {
-              type: 'string',
-              enum: ['sum', 'min', 'max', 'avg', 'count'],
-            },
-            showInColumn: {
-              anyOf: [
-                {
-                  type: 'string',
-                },
-                {
-                  type: 'null',
-                },
-              ],
-            },
-            displayFormat: {
-              anyOf: [
-                {
-                  type: 'string',
-                },
-                {
-                  type: 'null',
-                },
-              ],
-            },
-          },
+          properties: expectedSummaryItemBaseProperties,
           required: ['column', 'summaryType', 'showInColumn', 'displayFormat'],
           additionalProperties: false,
         },
@@ -485,18 +491,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
         items: {
           type: 'object',
           properties: {
-            column: {
-              $ref: '#/$defs/summary_properties_totalItems_items_properties_column',
-            },
-            summaryType: {
-              $ref: '#/$defs/summary_properties_totalItems_items_properties_summaryType',
-            },
-            showInColumn: {
-              $ref: '#/$defs/summary_properties_totalItems_items_properties_showInColumn',
-            },
-            displayFormat: {
-              $ref: '#/$defs/summary_properties_totalItems_items_properties_displayFormat',
-            },
+            ...expectedSummaryItemBaseProperties,
             showInGroupFooter: {
               anyOf: [
                 {
@@ -533,54 +528,6 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
   },
 };
 
-const filterValueDefName = 'filterValue_properties_expression_anyOf_0_properties_nodes_items_properties_expr_anyOf_0_properties_value';
-
-const expectedDataGridDefs: JsonSchema = {
-  [filterValueDefName]: {
-    anyOf: [
-      {
-        type: 'string',
-      },
-      {
-        type: 'number',
-      },
-      {
-        type: 'boolean',
-      },
-      {
-        type: 'null',
-      },
-    ],
-  },
-  summary_properties_totalItems_items_properties_column: {
-    type: 'string',
-  },
-  summary_properties_totalItems_items_properties_summaryType: {
-    type: 'string',
-    enum: ['sum', 'min', 'max', 'avg', 'count'],
-  },
-  summary_properties_totalItems_items_properties_showInColumn: {
-    anyOf: [
-      {
-        type: 'string',
-      },
-      {
-        type: 'null',
-      },
-    ],
-  },
-  summary_properties_totalItems_items_properties_displayFormat: {
-    anyOf: [
-      {
-        type: 'string',
-      },
-      {
-        type: 'null',
-      },
-    ],
-  },
-};
-
 const buildResponseSchema = (commands: typeof coreCommands): JsonSchema => new GridCommands(
   {} as InternalGrid,
   commands,
@@ -614,20 +561,18 @@ describe('Response schema', () => {
       expect(Object.keys(argsByCommand)).toEqual(Object.keys(expectedArgsByCommand));
     });
 
-    it('should build root $defs', () => {
+    it('should not build root $defs', () => {
       const schema = buildResponseSchema([...coreCommands, ...dataGridCommands]);
 
-      expect(schema.$defs).toEqual(expectedDataGridDefs);
+      expect(schema.$defs).toBeUndefined();
     });
   });
 
   describe('TreeList commands', () => {
-    it('should build root $defs', () => {
+    it('should not build root $defs', () => {
       const schema = buildResponseSchema(coreCommands);
 
-      expect(schema.$defs).toEqual({
-        [filterValueDefName]: expectedDataGridDefs[filterValueDefName],
-      });
+      expect(schema.$defs).toBeUndefined();
     });
   });
 });

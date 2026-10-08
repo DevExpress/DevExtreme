@@ -6,6 +6,7 @@ import type { Message } from '@js/ui/chat';
 import { custom } from '@js/ui/dialog';
 import { current, isCompact, isFluent } from '@js/ui/themes';
 import type { BaseDialog, DialogParams } from '@ts/ui/dialog';
+import type { z } from 'zod';
 
 import {
   AI_ASSISTANT_AUTHOR_ID,
@@ -49,6 +50,30 @@ export const getMessageStatus = (commands: CommandResult[]): ResponseStatus => {
   }
 
   return 'success';
+};
+
+export const makeOpenAICompatible = (
+  { jsonSchema }: { jsonSchema: z.core.JSONSchema.BaseSchema },
+): void => {
+  if (jsonSchema.type === 'object' && jsonSchema.properties) {
+    const propertyNames = Object.keys(jsonSchema.properties);
+
+    if (propertyNames.length > 0) {
+      jsonSchema.required = propertyNames;
+    }
+
+    jsonSchema.additionalProperties ??= false;
+  }
+
+  if (jsonSchema.type === 'integer') {
+    if (jsonSchema.minimum === Number.MIN_SAFE_INTEGER) {
+      delete jsonSchema.minimum;
+    }
+
+    if (jsonSchema.maximum === Number.MAX_SAFE_INTEGER) {
+      delete jsonSchema.maximum;
+    }
+  }
 };
 
 /**
@@ -207,8 +232,7 @@ const defNameFromRef = (ref: string): string => {
  * `#/$defs/<prefix>_<name>`.
  *
  * Handles both `$defs`-based (`$ref: "#/$defs/Foo"`) and inline-path
- * (`$ref: "#/properties/expression/anyOf/0"`) references that
- * `zodToJsonSchema` may produce.
+ * (`$ref: "#/properties/expression/anyOf/0"`) references.
  *
  * OpenAI Structured Outputs requires every `$ref` to resolve against
  * `$defs` at the **root** of the schema. This utility rewrites local
