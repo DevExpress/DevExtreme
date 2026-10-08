@@ -10,6 +10,8 @@
 /* eslint-disable spellcheck/spell-checker */
 import '@js/common/core/localization/currency';
 
+import type { DataType } from '@js/common';
+import type { Format, FormatObject } from '@js/common/core/localization';
 import dateLocalization from '@js/common/core/localization/date';
 import { getLanguageId } from '@js/common/core/localization/language_codes';
 import { getFormat } from '@js/common/core/localization/ldml/date.format';
@@ -167,16 +169,17 @@ function _includesCSVExpression(value) {
 }
 
 interface ConvertedFormat {
-  format: unknown;
-  precision: unknown;
-  dataType: unknown;
-  currency?: unknown;
+  format: Format;
+  precision: FormatObject['precision'];
+  dataType: DataType | undefined;
+  currency?: FormatObject['currency'];
 }
 
 export const ExportFormat = {
-  formatObjectConverter(format, dataType): ConvertedFormat {
+  formatObjectConverter(format: Format, dataType: DataType | undefined): ConvertedFormat {
     const result = {
       format,
+      // @ts-expect-error a string or a function format has no precision, it reads as undefined
       precision: format?.precision,
       dataType,
     };
