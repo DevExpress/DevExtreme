@@ -42,7 +42,7 @@ overrides:
   axios@>=1.0.0 <1.20.0: ^1.20.0
   compression@<1.8.2: ^1.8.2
   dompurify@>=3.4.13 <=3.4.15: ^3.4.16
-  http-cache-semantics@<=4.2.0: ^4.2.1
+  http-cache-semantics@<4.3.0: ^4.3.0
   pbkdf2@<=3.1.6: ^3.1.7
   piscina@>=5.0.0 <5.3.2: ^5.3.2
   postcss-selector-parser@<7.1.6: ^7.1.6
