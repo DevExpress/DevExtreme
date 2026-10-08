@@ -11,7 +11,7 @@ function getMarkup(element: Node, backgroundColor?: string): string {
   const clone = element.cloneNode(true);
   const serializer = new XMLSerializer();
 
-  copyResolvedStyles(element, clone);
+  copyResolvedStyles(element as Element, clone as Element);
 
   if (backgroundColor) {
     $(clone).css('backgroundColor', backgroundColor);

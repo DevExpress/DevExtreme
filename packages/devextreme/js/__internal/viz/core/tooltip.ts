@@ -211,7 +211,7 @@ export let Tooltip = class Tooltip {
 
     const scope = swatchContainer.getSwatchContainer(this._widgetRoot);
 
-    return (scope?.length ? scope : $('body')).get(0);
+    return scope?.length ? scope.get(0) : $('body').get(0);
   }
 
   setTemplate(contentTemplate: ThemeValue): void {

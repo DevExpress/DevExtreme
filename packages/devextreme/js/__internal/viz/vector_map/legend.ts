@@ -94,7 +94,7 @@ let Legend = class Legend extends _BaseLegend {
       group: root,
       backgroundClass: null,
       textField: 'text',
-      getFormatObject(data) {
+      getFormatObject(data: ThemeValue): ThemeValue {
         return data.color === undefined
           ? data
           : { ...data, color: paintedColor(data.color, parameters.renderer.root.element) };
