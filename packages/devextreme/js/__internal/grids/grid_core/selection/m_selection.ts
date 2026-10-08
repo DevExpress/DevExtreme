@@ -838,6 +838,7 @@ export const selectionRowsViewExtender = (
 
           $row
             .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
+            // @ts-expect-error dxCheckBox is added to the renderer at runtime
             .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
           that.setAria('selected', String(isSelected), $row);
         });
@@ -922,7 +923,7 @@ export const selectionRowsViewExtender = (
     return !!isCommandSelect;
   }
 
-  protected _renderCore(change) {
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
     const deferred = super._renderCore(change);
     this._updateCheckboxesClass();
     return deferred;

@@ -9,6 +9,7 @@ import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect, getDefaultAlignment } from '@js/core/utils/position';
@@ -24,7 +25,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
-import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import { isSameItem } from '@ts/grids/grid_core/data_controller/utils/row_changes';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
@@ -115,6 +116,8 @@ export class RowsView extends ColumnsView {
   public _hasHeight: boolean | undefined;
 
   public _scrollTop: any;
+
+  protected declare _scrollLeft: number;
 
   private _scrollRight: any;
 
@@ -436,7 +439,7 @@ export class RowsView extends ColumnsView {
 
   private isRenderedLayoutCurrent(): boolean {
     const items = this._dataController.items();
-    const rowElements: HTMLElement[] = this._getRowElements().toArray();
+    const rowElements = this._getRowElements().toArray() as HTMLElement[];
     const renderedRows: (ProcessedItem & { columns: Column[] })[] = rowElements.map(
       (rowElement) => elementData(rowElement, 'options'),
     );
@@ -458,7 +461,6 @@ export class RowsView extends ColumnsView {
   protected _updateContent(newTableElement, change, isFixedTableRendering?) {
     this._contentChanges.push({ newTableElement, change, isFixedTableRendering });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.waitAsyncTemplates().done(() => {
       const contentChanges = this._contentChanges;
 
@@ -893,7 +895,7 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing, editing, keyboard_navigation, row_dragging, search, selection, virtual_column, virtual_scrolling
    */
-  protected _renderCore(change) {
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
     // @ts-expect-error the view is rendered here
     const $element: dxElementWrapper = this.element();
 
