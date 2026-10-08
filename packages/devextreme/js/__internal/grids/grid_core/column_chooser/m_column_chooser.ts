@@ -470,7 +470,7 @@ export class ColumnChooserView extends ColumnsView {
     return this.isColumnChooserVisible() && isParentColumnVisible && isColumnHidden;
   }
 
-  public getBoundingRect() {
+  protected getBoundingRect() {
     const that = this;
     const container = that._popupContainer?.$overlayContent();
 

@@ -394,7 +394,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
 
       each(fixedCellElements, (columnIndex, cell) => {
         if (isGroupRow) {
-          if (cellElements[columnIndex] && cell.style.visibility !== 'hidden') {
+          if (cellElements[columnIndex] && (cell as HTMLElement).style.visibility !== 'hidden') {
             cellElements[columnIndex] = cell;
           }
         } else {
