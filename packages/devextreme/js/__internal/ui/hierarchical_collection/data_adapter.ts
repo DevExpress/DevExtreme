@@ -82,9 +82,9 @@ class DataAdapter {
 
   _expandedNodesKeys: ItemKey[] = [];
 
-  _dataStructure: (InternalNode | null)[] = [];
+  _dataStructure: InternalNode[] = [];
 
-  _initialDataStructure: (InternalNode | null)[] = [];
+  _initialDataStructure: InternalNode[] = [];
 
   constructor(options: DataAdapterOptions) {
     extend(this.options, options);
@@ -150,8 +150,8 @@ class DataAdapter {
   _updateNodesKeysArray(property: typeof SELECTED | typeof EXPANDED | typeof DISABLED): ItemKey[] {
     let array: ItemKey[] = [];
 
-    each(this._getDataBySelectionMode(), (_index: number, node: InternalNode | null): void => {
-      if (!node || !this._isNodeVisible(node)) {
+    each(this._getDataBySelectionMode(), (_index: number, node: InternalNode): void => {
+      if (!this._isNodeVisible(node)) {
         return;
       }
 
@@ -170,7 +170,7 @@ class DataAdapter {
     return array;
   }
 
-  _getDataBySelectionMode(): (InternalNode | null)[] {
+  _getDataBySelectionMode(): InternalNode[] {
     return this.options.multipleSelection ? this.getData() : this.getFullData();
   }
 
@@ -182,14 +182,14 @@ class DataAdapter {
     return node?.internalFields.disabled ?? false;
   }
 
-  _getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {
+  _getByKey(data: InternalNode[], key: ItemKey): InternalNode | null {
     return data === this._dataStructure
       ? this.options.dataConverter._getByKey(key)
       : this.options.dataConverter.getByKey(data.filter(Boolean), key);
   }
 
   _setChildrenSelection(): void {
-    each(this._dataStructure, (_index: number, node: InternalNode | null): void => {
+    each(this._dataStructure, (_index: number, node: InternalNode): void => {
       if (!node?.internalFields.childrenKeys.length) {
         return;
       }
@@ -202,7 +202,7 @@ class DataAdapter {
   }
 
   _setParentSelection(): void {
-    each(this._dataStructure, (_index: number, node: InternalNode | null): void => {
+    each(this._dataStructure, (_index: number, node: InternalNode): void => {
       if (!node) return;
 
       const parent = this.options.dataConverter.getParentNode(node);
@@ -220,7 +220,7 @@ class DataAdapter {
   }
 
   _setParentExpansion(): void {
-    each(this._dataStructure, (_index: number, node: InternalNode | null): void => {
+    each(this._dataStructure, (_index: number, node: InternalNode): void => {
       if (!node?.internalFields.expanded) {
         return;
       }
@@ -368,10 +368,12 @@ class DataAdapter {
   }
 
   _markChildren(keys: ItemKey[]): void {
+    const markedDataStructure: (InternalNode | null)[] = this._dataStructure;
+
     each(keys, (_index: number, key: ItemKey) => {
       const index = this.getIndexByKey(key);
       const node = this.getNodeByKey(key);
-      this._dataStructure[index] = null;
+      markedDataStructure[index] = null;
 
       if (node?.internalFields.childrenKeys.length) {
         this._markChildren(node.internalFields.childrenKeys);
@@ -381,15 +383,16 @@ class DataAdapter {
 
   _removeNode(key: ItemKey): void {
     const node = this.getNodeByKey(key);
+    const markedDataStructure: (InternalNode | null)[] = this._dataStructure;
 
-    this._dataStructure[this.getIndexByKey(key)] = null;
+    markedDataStructure[this.getIndexByKey(key)] = null;
 
     if (node?.internalFields.childrenKeys.length) {
       this._markChildren(node.internalFields.childrenKeys);
     }
 
     let counter = 0;
-    const items = extend([], this._dataStructure);
+    const items = extend([], markedDataStructure);
     each(items, (index: number, item: InternalNode | null) => {
       if (!item) {
         this._dataStructure.splice(index - counter, 1);
@@ -430,18 +433,18 @@ class DataAdapter {
     return this._expandedNodesKeys;
   }
 
-  getData(): (InternalNode | null)[] {
+  getData(): InternalNode[] {
     return this._dataStructure;
   }
 
-  getFullData(): (InternalNode | null)[] {
+  getFullData(): InternalNode[] {
     return this._initialDataStructure;
   }
 
   getNodeByItem(item: ItemData): InternalNode | null {
     let result: InternalNode | null = null;
 
-    each(this._dataStructure, (_index: number, node: InternalNode | null): boolean => {
+    each(this._dataStructure, (_index: number, node: InternalNode): boolean => {
       if (node?.internalFields.item === item) {
         result = node;
         return false;
@@ -467,7 +470,7 @@ class DataAdapter {
 
   getNodeByKey(
     key: ItemKey,
-    data?: (InternalNode | null)[],
+    data?: InternalNode[],
   ): InternalNode | null {
     return this._getByKey(data ?? this._getDataBySelectionMode(), key);
   }
@@ -566,8 +569,8 @@ class DataAdapter {
       ? this._initialDataStructure
       : this._dataStructure;
 
-    each(dataStructure, (_index: number, node: InternalNode | null) => {
-      if (!node || !this._isNodeVisible(node)) {
+    each(dataStructure, (_index: number, node: InternalNode) => {
+      if (!this._isNodeVisible(node)) {
         return;
       }
 
@@ -650,7 +653,7 @@ class DataAdapter {
     return query(data, { langParams: this.options.langParams }).filter(criteria).toArray();
   }
 
-  search(searchValue: string): (InternalNode | null)[] {
+  search(searchValue: string): InternalNode[] {
     let matches = this._filterDataStructure(searchValue);
     const { dataConverter } = this.options;
 
