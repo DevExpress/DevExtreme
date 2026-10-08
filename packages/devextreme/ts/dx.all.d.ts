@@ -25284,8 +25284,13 @@ declare module DevExpress.ui {
       height?: number;
       /**
        * [descr:dxPivotGridOptions.loadPanel.indicatorSrc]
+       * @deprecated [depNote:dxPivotGridOptions.loadPanel.indicatorSrc]
        */
       indicatorSrc?: string;
+      /**
+       * [descr:dxPivotGridOptions.loadPanel.indicatorOptions]
+       */
+      indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
       /**
        * [descr:dxPivotGridOptions.loadPanel.shading]
        */

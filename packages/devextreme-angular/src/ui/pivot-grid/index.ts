@@ -24,6 +24,7 @@ import type { PivotGridDataFieldArea, CellClickEvent, CellPreparedEvent, Content
 import type { default as PivotGridDataSource, PivotGridDataSourceOptions } from 'devextreme/ui/pivot_grid/data_source';
 import type { ApplyChangesMode, HeaderFilterSearchConfig, StateStoreType } from 'devextreme/common/grids';
 import type { FieldChooserLayout, ScrollMode, Mode } from 'devextreme/common';
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import DxPivotGrid from 'devextreme/ui/pivot_grid';
 
@@ -55,6 +56,7 @@ import { DxoPivotGridFieldPanelModule } from 'devextreme-angular/ui/pivot-grid/n
 import { DxoPivotGridFieldPanelTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridHeaderFilterModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridHeaderFilterTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridIndicatorOptionsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridLoadPanelModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 import { DxoPivotGridScrollingModule } from 'devextreme-angular/ui/pivot-grid/nested';
@@ -296,10 +298,10 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get loadPanel(): { enabled?: boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number } {
+    get loadPanel(): { enabled?: boolean, height?: number, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }) {
+    set loadPanel(value: { enabled?: boolean, height?: number, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }) {
         this._setOption('loadPanel', value);
     }
 
@@ -679,7 +681,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }>;
+    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean, height?: number, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number }>;
 
     /**
     
@@ -902,6 +904,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoPivotGridFieldPanelTextsModule,
     DxoPivotGridHeaderFilterModule,
     DxoPivotGridHeaderFilterTextsModule,
+    DxoPivotGridIndicatorOptionsModule,
     DxoPivotGridLoadPanelModule,
     DxoPivotGridPivotGridTextsModule,
     DxoPivotGridScrollingModule,
@@ -929,6 +932,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoPivotGridFieldPanelTextsModule,
     DxoPivotGridHeaderFilterModule,
     DxoPivotGridHeaderFilterTextsModule,
+    DxoPivotGridIndicatorOptionsModule,
     DxoPivotGridLoadPanelModule,
     DxoPivotGridPivotGridTextsModule,
     DxoPivotGridScrollingModule,
