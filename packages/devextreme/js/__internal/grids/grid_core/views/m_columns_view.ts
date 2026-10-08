@@ -35,9 +35,9 @@ import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
-import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_handling/const';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
@@ -76,7 +76,6 @@ import type {
   ViewRowEvent,
   WatchableOptions,
 } from './types';
-
 import { isRowElementVisible } from './utils';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
