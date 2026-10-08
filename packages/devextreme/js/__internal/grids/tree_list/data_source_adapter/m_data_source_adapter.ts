@@ -9,7 +9,6 @@ import { isDefined, isFunction } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import type Store from '@ts/data/abstract_store';
-import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
@@ -24,6 +23,7 @@ import type {
   ConvertibleData,
   DataGetter,
   DataSetter,
+  KeyExpr,
   LoadOperation,
   NodeByKey,
   NodeCallback,
@@ -99,7 +99,6 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     const keyExpr = this.getKeyExpr();
 
     if (isFunction(keyExpr)) {
-      // @ts-expect-error keyExpr may be a function (public API), StoreKey omits it
       return keyExpr;
     }
 
@@ -293,7 +292,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
    * @extended: TreeLists's data_source_adapter
    */
   protected customizeStoreLoadOptionsHandler(options: LoadOperation): void {
-    const rootValue: unknown = this.option('rootValue');
+    const rootValue: RowKey = this.option('rootValue');
     const parentIdExpr = this.option('parentIdExpr');
     let { parentIds } = options.storeLoadOptions;
 
@@ -307,7 +306,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     if (options.remoteOperations.filtering && !options.isCustomLoading) {
       if ((isFullBranchFilterMode(this) && options.cachedStoreData)
         || !options.storeLoadOptions.filter) {
-        const expandedRowKeys = (options.collapseVisibleNodes ? [] : this.option('expandedRowKeys')) as RowKey[];
+        const expandedRowKeys = options.collapseVisibleNodes ? [] : this.option('expandedRowKeys');
         parentIds = [rootValue].concat(expandedRowKeys).concat(parentIds ?? []);
         const parentIdsToLoad = options.data ? this._getParentIdsToLoad(parentIds) : parentIds;
 
@@ -461,7 +460,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     super.customizeLoadResultHandler(options);
 
     if (!options.isCustomLoading) {
-      this._lastExpandedRowKeys = (this.option('expandedRowKeys') as RowKey[] | undefined)?.slice();
+      this._lastExpandedRowKeys = this.option('expandedRowKeys')?.slice();
     }
 
     if (data.isConverted && this._cachedStoreData) {
@@ -592,7 +591,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     this.createAction('onNodesInitialized');
   }
 
-  public getKeyExpr(): StoreKey {
+  public getKeyExpr(): KeyExpr {
     const store = this.store();
     const key = store?.key();
     const keyExpr = this.option('keyExpr');
@@ -607,11 +606,11 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     return key || keyExpr || DEFAULT_KEY_EXPRESSION;
   }
 
-  public keyOf(data: unknown): unknown {
+  public keyOf(data: unknown): RowKey {
     return this._keyGetter?.(data);
   }
 
-  public parentKeyOf(data: unknown): unknown {
+  public parentKeyOf(data: unknown): RowKey {
     return this._parentIdGetter?.(data);
   }
 
@@ -630,7 +629,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     if (cache) {
       let { isExpandedByKey } = cache;
       if (!isExpandedByKey) {
-        const expandedRowKeys = (this.option('expandedRowKeys') ?? []) as RowKey[];
+        const expandedRowKeys = this.option('expandedRowKeys') ?? [];
         const map: Record<string, boolean> = {};
 
         expandedRowKeys.forEach((expandedKey) => {
@@ -649,7 +648,8 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
   }
 
   protected _changeRowExpandCore(key: RowKey): void {
-    const expandedRowKeys = (this.option('expandedRowKeys') as RowKey[]).slice();
+    // @ts-expect-error expandedRowKeys defaults to []
+    const expandedRowKeys: RowKey[] = this.option('expandedRowKeys').slice();
     const indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, expandedRowKeys, null);
 
     if (indexExpandedNodeKey < 0) {
