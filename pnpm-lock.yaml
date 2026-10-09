@@ -149,11 +149,8 @@ catalogs:
       specifier: 10.4.1
       version: 10.4.1
     zod:
-      specifier: 3.24.4
-      version: 3.24.4
-    zod-to-json-schema:
-      specifier: 3.24.6
-      version: 3.24.6
+      specifier: ^4.6.5
+      version: 4.6.5
   tools:
     '@types/node':
       specifier: 20.19.37
@@ -496,7 +493,7 @@ importers:
         version: 4.2.0
       openai:
         specifier: 7.5.0
-        version: 7.5.0(ws@8.21.1)(zod@3.24.4)
+        version: 7.5.0(ws@8.21.1)(zod@4.6.5)
       preact:
         specifier: 10.12.1
         version: 10.12.1
@@ -565,10 +562,7 @@ importers:
         version: 17.7.2
       zod:
         specifier: 'catalog:'
-        version: 3.24.4
-      zod-to-json-schema:
-        specifier: 'catalog:'
-        version: 3.24.6(zod@3.24.4)
+        version: 4.6.5
       zone.js:
         specifier: 0.16.2
         version: 0.16.2
@@ -1241,10 +1235,7 @@ importers:
         version: 4.6.4(vue@3.5.40(typescript@5.8.3))
       zod:
         specifier: 'catalog:'
-        version: 3.24.4
-      zod-to-json-schema:
-        specifier: 'catalog:'
-        version: 3.24.6(zod@3.24.4)
+        version: 4.6.5
       zone.js:
         specifier: ~0.15.0
         version: 0.15.1
@@ -1350,10 +1341,7 @@ importers:
         version: 2.8.1
       zod:
         specifier: 'catalog:'
-        version: 3.24.4
-      zod-to-json-schema:
-        specifier: 'catalog:'
-        version: 3.24.6(zod@3.24.4)
+        version: 4.6.5
     devDependencies:
       '@babel/core':
         specifier: 7.29.7
@@ -16332,11 +16320,6 @@ packages:
     resolution: {integrity: sha512-dSvYKdvLsAHCDqPOhIwk/q5CvuWtTB3Dgpoe0uVEFjTzIOAmsQpprX25InCvrvJsirEbu1OHyy67n/kAj1Sw/w==}
     engines: {node: '>=18'}
 
-  zod-to-json-schema@3.24.6:
-    resolution: {integrity: sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==}
-    peerDependencies:
-      zod: ^3.24.1
-
   zod-to-json-schema@3.25.2:
     resolution: {integrity: sha512-O/PgfnpT1xKSDeQYSCfRI5Gy3hPf91mKVDuYLUHZJMiDFptvP41MSnWofm8dnCm0256ZNfZIM7DSzuSMAFnjHA==}
     peerDependencies:
@@ -16348,9 +16331,6 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
-  zod@3.24.4:
-    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
-
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
@@ -16359,6 +16339,9 @@ packages:
 
   zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
+  zod@4.6.5:
+    resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
 
   zone.js@0.15.1:
     resolution: {integrity: sha512-XE96n56IQpJM7NAoXswY3XRLcWFW83xe0BiAOeMD7K5k5xecOeul3Qcpx6GqEeeHNkW5DWL5zOyTbEfB4eti8w==}
@@ -17233,7 +17216,7 @@ snapshots:
       '@standard-schema/spec': 1.1.0
       rxjs: 7.8.2
       tslib: 2.8.1
-      zod: 4.4.3
+      zod: 4.6.5
 
   '@angular/platform-browser-dynamic@20.3.33(@angular/common@20.3.33(@angular/core@20.3.33(@angular/compiler@20.3.33)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@20.3.33)(@angular/core@20.3.33(@angular/compiler@20.3.33)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.33(@angular/common@20.3.33(@angular/core@20.3.33(@angular/compiler@20.3.33)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.33(@angular/compiler@20.3.33)(rxjs@7.8.2)(zone.js@0.15.1)))':
     dependencies:
@@ -26843,8 +26826,8 @@ snapshots:
       '@babel/parser': 7.29.8
       eslint: 9.39.4(jiti@2.7.0)
       hermes-parser: 0.25.1
-      zod: 4.4.3
-      zod-validation-error: 4.0.2(zod@4.4.3)
+      zod: 4.6.5
+      zod-validation-error: 4.0.2(zod@4.6.5)
     transitivePeerDependencies:
       - supports-color
 
@@ -31449,10 +31432,10 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  openai@7.5.0(ws@8.21.1)(zod@3.24.4):
+  openai@7.5.0(ws@8.21.1)(zod@4.6.5):
     optionalDependencies:
       ws: 8.21.1
-      zod: 3.24.4
+      zod: 4.6.5
 
   opencollective-postinstall@2.0.3: {}
 
@@ -35864,10 +35847,6 @@ snapshots:
       normalize-path: 3.0.0
       readable-stream: 4.7.0
 
-  zod-to-json-schema@3.24.6(zod@3.24.4):
-    dependencies:
-      zod: 3.24.4
-
   zod-to-json-schema@3.25.2(zod@4.1.13):
     dependencies:
       zod: 4.1.13
@@ -35876,17 +35855,17 @@ snapshots:
     dependencies:
       zod: 4.4.3
 
-  zod-validation-error@4.0.2(zod@4.4.3):
+  zod-validation-error@4.0.2(zod@4.6.5):
     dependencies:
-      zod: 4.4.3
-
-  zod@3.24.4: {}
+      zod: 4.6.5
 
   zod@3.25.76: {}
 
   zod@4.1.13: {}
 
   zod@4.4.3: {}
+
+  zod@4.6.5: {}
 
   zone.js@0.15.1: {}
 

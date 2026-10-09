@@ -63,8 +63,7 @@
     "inferno-create-element": "catalog:",
     "jszip": "^3.10.1",
     "rrule": "^2.7.1",
-    "zod": "catalog:",
-    "zod-to-json-schema": "catalog:"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "7.29.7",
