@@ -1,18 +1,26 @@
 import { isString } from '@js/core/utils/type';
 
-function getListType(marker) {
-  return marker.match(/\S+\./) ? 'ordered' : 'bullet';
+import type {
+  Delta as QuillDelta,
+  DeltaConstructor,
+  DeltaOperation,
+  QuillStatic,
+} from '../types/quill';
+
+type ListType = 'ordered' | 'bullet';
+type ClipboardMatcher = (node: Element, delta: QuillDelta) => QuillDelta;
+
+function getListType(marker: string): ListType {
+  return /\S+\./.exec(marker) ? 'ordered' : 'bullet';
 }
 
-function getIndent(node, msStyleAttributeName) {
+function getIndent(node: Element, msStyleAttributeName: string): number | false {
   const style = node.getAttribute(msStyleAttributeName);
 
   if (style) {
-    const level = style
-      .replace(/\n+/g, '')
-      .match(/level(\d+)/);
+    const level = /level(\d+)/.exec(style.replace(/\n+/g, ''));
 
-    return level ? level[1] - 1 : 0;
+    return level ? Number(level[1]) - 1 : 0;
   }
   return false;
 }
@@ -28,16 +36,17 @@ function getListMarker(node: Element, msStyleAttributeName: string): string {
   return markerNode ? (markerNode.textContent ?? '').replace(/\s+/g, '') : '';
 }
 
-function removeNewLineChar(operations) {
+function removeNewLineChar(operations: DeltaOperation[]): void {
   const newLineOperation = operations[operations.length - 1];
+  // @ts-expect-error the trailing op is assumed to be the paragraph's text insert; insert is wider
   newLineOperation.insert = newLineOperation.insert.trim();
 }
 
-const getMatcher = (quill) => {
-  const Delta = quill.import('delta');
+const getMatcher = (quill: QuillStatic): ClipboardMatcher => {
+  const Delta: DeltaConstructor = quill.import('delta');
   const msStyleAttributeName = quill.MS_LIST_DATA_KEY;
 
-  return (node, delta) => {
+  return (node: Element, delta: QuillDelta): QuillDelta => {
     const ops = delta.ops.slice();
 
     const insertOperation = ops[0];
@@ -58,14 +67,14 @@ const getMatcher = (quill) => {
     if (marker) {
       const content = insertOperation.insert.replace(/^\s+/, '');
 
-      if (content.indexOf(marker) !== 0) {
+      if (!content.startsWith(marker)) {
         return delta;
       }
 
       insertOperation.insert = content.substring(marker.length).replace(/^\s+/, '');
     } else {
       insertOperation.insert = insertOperation.insert.replace(/^\s+/, '');
-      const listDecoratorMatches = insertOperation.insert.match(/^(\S+)\s+/);
+      const listDecoratorMatches = /^(\S+)\s+/.exec(insertOperation.insert);
 
       if (!listDecoratorMatches) {
         return delta;

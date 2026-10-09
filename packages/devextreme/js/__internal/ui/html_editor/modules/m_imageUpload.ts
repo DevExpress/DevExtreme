@@ -16,7 +16,6 @@ const HIDDEN_FILE_UPLOADER_CLASS = 'dx-htmleditor-hidden-content';
 let ImageUploadModule = BaseModule;
 
 if (Quill) {
-  // @ts-expect-error
   ImageUploadModule = class ImageUploadModule extends BaseModule {
     quill: any;
 
@@ -31,12 +30,10 @@ if (Quill) {
     _fileUploader!: FileUploader;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       this.options = options;
       this._quillContainer = this.editorInstance._getQuillContainer();
-      // @ts-expect-error
       this.addCleanCallback(this.prepareCleanCallback());
       this._handleServerUpload();
     }
@@ -107,7 +104,6 @@ if (Quill) {
     }
 
     _handleInsertImages(e, filesField) {
-      // @ts-expect-error
       this.saveValueChangeEvent(e);
       const files = Array.from(e.originalEvent[filesField].files || []);
 
@@ -136,7 +132,6 @@ if (Quill) {
       // eslint-disable-next-line default-case
       switch (option) {
         case 'imageUpload':
-          // @ts-expect-error
           this.handleOptionChangeValue(value);
           break;
         case 'fileUploadMode':

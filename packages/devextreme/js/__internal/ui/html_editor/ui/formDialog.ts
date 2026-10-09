@@ -9,6 +9,7 @@ import type { InitializedEvent, Properties as PopupProperties } from '@js/ui/pop
 import type Popup from '@js/ui/popup';
 import { current, isFluent, isMaterialBased } from '@js/ui/themes';
 import type { FormProperties } from '@ts/ui/form/form';
+import type { DialogPromise } from '@ts/ui/html_editor/types';
 
 import BaseDialog from './m_baseDialog';
 
@@ -44,8 +45,8 @@ const getCancelButtonConfig = (): ButtonConfig => {
   return {};
 };
 
-export default class FormDialog extends BaseDialog {
-  private _form!: Form;
+export default class FormDialog extends BaseDialog<unknown, Event | undefined> {
+  _form!: Form;
 
   public beforeAddButtonAction?: () => boolean;
 
@@ -72,7 +73,6 @@ export default class FormDialog extends BaseDialog {
         this._popup = e.component as Popup;
         this._popup.on('hiding', () => this.onHiding());
         this._popup.on('shown', () => { this._form.focus(); });
-        this._addEscapeHandler.bind(this);
       },
       toolbarItems: [
         {
@@ -170,11 +170,14 @@ export default class FormDialog extends BaseDialog {
     this.hide(formData, event);
   }
 
-  public show(formUserConfig: FormProperties): Promise<unknown> | undefined {
+  public show<TResult = unknown>(
+    formUserConfig?: FormProperties,
+  ): DialogPromise<TResult, Event | undefined> | undefined {
     const formConfig = extend(this._getDefaultFormOptions(), formUserConfig);
 
     this._form.option(formConfig);
 
+    // @ts-expect-error the form data type is the caller's choice; the base resolves with unknown
     return super.show();
   }
 
