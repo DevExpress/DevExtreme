@@ -124,6 +124,8 @@ function buildGridResultsPromise(
   const columnNames = getGridColumnNames(gridInstance);
   const prompt = `${buildGridSystemPrompt(columnNames)}\n\nUser request: '${text}'`;
 
+  gridInstance?.instance.beginCustomLoading('');
+
   return executeAiCommand(prompt, aiIntegration)
     .then((parsed) => {
       const actions = Array.isArray((parsed as { actions?: ExecuteGridAssistantAction[] })?.actions)
@@ -213,14 +215,12 @@ async function runCommand(
   }
 
   if (target === 'form') {
-    const { results: formResults, error: formError } = await buildFormResultsPromise(form, formAction, text);
+    const { results: formResults, error: formError } = await buildFormResultsPromise(form, formAction ?? { type: 'smart_paste' }, text);
 
     return joinSucceededOrThrow(formResults, formError);
   }
 
   if (target === 'grid') {
-    gridInstance?.instance.beginCustomLoading('');
-
     const { results: gridResults, error: gridError } = await buildGridResultsPromise(gridInstance, aiIntegration, text);
 
     return joinSucceededOrThrow(gridResults, gridError);
