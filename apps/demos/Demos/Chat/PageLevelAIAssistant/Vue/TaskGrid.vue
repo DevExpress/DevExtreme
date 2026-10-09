@@ -1,48 +1,49 @@
 <template>
-  <DxDataGrid
-    ref="dataGridRef"
-    id="grid-container"
-    :data-source="tasks"
-    key-expr="ID"
-    :show-borders="true"
-    :filter-sync-enabled="true"
-  >
-    <DxFilterRow :visible="true"/>
-    <DxHeaderFilter :visible="true"/>
+  <div id="grid-container">
+    <DxDataGrid
+      ref="dataGridRef"
+      :data-source="tasks"
+      key-expr="ID"
+      :show-borders="true"
+      :filter-sync-enabled="true"
+    >
+      <DxFilterRow :visible="true"/>
+      <DxHeaderFilter :visible="true"/>
 
-    <DxColumn
-      data-field="Subject"
-      :width="250"
-    />
-    <DxColumn
-      data-field="StartDate"
-      data-type="date"
-    />
-    <DxColumn
-      data-field="DueDate"
-      data-type="date"
-    />
-    <DxColumn
-      data-field="Priority"
-      caption="Priority"
-      cell-template="priority-cell"
-    />
-    <template #priority-cell="{ data }">
-      <div
-        class="priority-badge"
-        :style="{ background: colors[data.value as TaskPriority] }"
-      >{{ data.value }}</div>
-    </template>
-    <DxColumn
-      data-field="Completion"
-      caption="Completed"
-      alignment="center"
-      data-type="boolean"
-      :editor-options="completionEditorOptions"
-      :calculate-cell-value="calculateCompletionCellValue"
-      :calculate-filter-expression="calculateCompletionFilterExpression"
-    />
-  </DxDataGrid>
+      <DxColumn
+        data-field="Subject"
+        :width="250"
+      />
+      <DxColumn
+        data-field="StartDate"
+        data-type="date"
+      />
+      <DxColumn
+        data-field="DueDate"
+        data-type="date"
+      />
+      <DxColumn
+        data-field="Priority"
+        caption="Priority"
+        cell-template="priority-cell"
+      />
+      <template #priority-cell="{ data }">
+        <div
+          class="priority-badge"
+          :style="{ background: colors[data.value as TaskPriority] }"
+        >{{ data.value }}</div>
+      </template>
+      <DxColumn
+        data-field="Completion"
+        caption="Completed"
+        alignment="center"
+        data-type="boolean"
+        :editor-options="completionEditorOptions"
+        :calculate-cell-value="calculateCompletionCellValue"
+        :calculate-filter-expression="calculateCompletionFilterExpression"
+      />
+    </DxDataGrid>
+  </div>
 </template>
 
 <script setup lang="ts">

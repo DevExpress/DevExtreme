@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div class="demo-container">
     <EmployeeForm
       ref="employeeFormRef"
       :ai-integration="aiIntegration"
     />
-    <TaskGrid ref="taskGridRef"/>
     <AiAssistant
       ref="aiAssistantRef"
       :disabled="chatDisabled"
       @message-submitted="onMessageSubmitted"
     />
+    <TaskGrid ref="taskGridRef"/>
   </div>
 </template>
 
