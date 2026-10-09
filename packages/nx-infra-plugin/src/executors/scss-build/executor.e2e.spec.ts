@@ -5,6 +5,24 @@ import { ScssBuildExecutorSchema } from './schema';
 import { createMockContext, createTempDir, cleanupTempDir } from '../../utils/test-utils';
 import { writeFileText, writeJson, readFileText } from '../../utils';
 
+type WatchHandler = (event: string, filePath: string) => void;
+
+interface ChokidarMockState {
+  __scssWatchTargets?: string | string[];
+  __scssWatchHandler?: WatchHandler;
+}
+
+const chokidarMockState = globalThis as unknown as ChokidarMockState;
+
+async function waitFor(predicate: () => boolean, timeoutMs = 3000): Promise<void> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    if (predicate()) return;
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+  throw new Error('waitFor timed out');
+}
+
 function writeMockPackage(nodeModulesDir: string, packageName: string, mainFile: string): void {
   const packageDir = path.join(nodeModulesDir, packageName);
   fs.mkdirSync(packageDir, { recursive: true });
@@ -77,9 +95,10 @@ function createMockModules(projectRoot: string): void {
     path.join(projectNodeModules, 'chokidar', 'index.js'),
     [
       'module.exports = {',
-      '  watch: function watch() {',
+      '  watch: function watch(paths) {',
+      '    globalThis.__scssWatchTargets = paths;',
       '    return {',
-      '      on: function on() { return this; },',
+      '      on: function on(event, handler) { globalThis.__scssWatchHandler = handler; return this; },',
       '      close: function close() { return Promise.resolve(); },',
       '    };',
       '  },',
@@ -235,5 +254,71 @@ describe('ScssBuildExecutor E2E', () => {
     const result = await executor(options, context);
 
     expect(result.success).toBe(false);
+  });
+
+  it('watch mode watches the scss directory and rebuilds on source changes only', async () => {
+    const projectRoot = await setupProjectStructure(tempDir);
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+    const options: ScssBuildExecutorSchema = {
+      mode: 'all',
+      devBundles: ['light'],
+      cssOutputDir: './artifacts/css',
+      watch: true,
+    };
+    const lightCssPath = path.join(projectRoot, 'artifacts', 'css', 'dx.light.css');
+
+    const originalOnce = process.once;
+    let stopWatch: (() => void) | undefined;
+    let run: Promise<{ success: boolean }> | undefined;
+
+    (process as unknown as { once: typeof process.once }).once = ((
+      event: string,
+      handler: () => void,
+    ) => {
+      if (event === 'SIGINT' || event === 'SIGTERM') {
+        stopWatch = handler;
+        return process;
+      }
+      return originalOnce.call(process, event, handler as never);
+    }) as typeof process.once;
+
+    try {
+      run = executor(options, context);
+
+      await waitFor(() => typeof chokidarMockState.__scssWatchHandler === 'function');
+      expect(chokidarMockState.__scssWatchTargets).toBe(path.join(projectRoot, 'scss'));
+      fs.rmSync(lightCssPath);
+
+      chokidarMockState.__scssWatchHandler?.(
+        'change',
+        path.join(projectRoot, 'scss', 'bundles', 'dx.light.scss'),
+      );
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      expect(fs.existsSync(lightCssPath)).toBe(false);
+
+      chokidarMockState.__scssWatchHandler?.(
+        'change',
+        path.join(projectRoot, 'scss', 'widgets', '_button.scss'),
+      );
+      await waitFor(() => fs.existsSync(lightCssPath));
+
+      stopWatch?.();
+      stopWatch = undefined;
+
+      expect((await run).success).toBe(true);
+      run = undefined;
+    } finally {
+      stopWatch?.();
+      if (run) {
+        await run;
+      }
+      (process as unknown as { once: typeof process.once }).once = originalOnce;
+      delete chokidarMockState.__scssWatchTargets;
+      delete chokidarMockState.__scssWatchHandler;
+    }
   });
 });
