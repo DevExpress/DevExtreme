@@ -11,6 +11,9 @@ export const enums = {
       'swing',
     ],
   },
+  DashStyle: {
+    Items: ['dash', 'dot', 'longDash', 'solid'],
+  },
   EdmType: {
     Items: ['Guid', 'Int32', 'Int64', 'String', 'Boolean', 'Single', 'Decimal'],
   },
