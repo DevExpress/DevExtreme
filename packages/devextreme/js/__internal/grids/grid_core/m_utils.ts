@@ -6,7 +6,6 @@ import type { GroupDescriptor } from '@js/common/data';
 import DataSource from '@js/common/data/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/common/data/utils';
-import type { HeaderFilterGroupInterval } from '@js/common/grids';
 import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -15,7 +14,6 @@ import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getInnerWidth, getOuterWidth } from '@js/core/utils/size';
 import { format } from '@js/core/utils/string';
@@ -25,7 +23,6 @@ import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
 import type { Format } from '@js/localization';
 import LoadPanel from '@js/ui/load_panel';
-import sharedFiltering from '@js/ui/shared/filtering';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
@@ -34,12 +31,9 @@ import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_control
 import type {
   ColumnPoint,
   ColumnPointProps,
-  EmptyDateValue,
   ExpandCellTemplate,
   ExpandCellTemplateOptions,
   FormatOptions,
-  HeaderFilterGroup,
-  HeaderFilterGroupItem,
   LoadPanelPosition,
   LookupDataSource,
   OptionsReader,
@@ -71,58 +65,12 @@ const SCROLLING_MODE_VIRTUAL = 'virtual';
 const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 const SCROLLING_MODE_OPTION = 'scrolling.mode';
 const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
-const DATE_INTERVAL_SELECTORS = {
-  year(value: Date | EmptyDateValue): number | EmptyDateValue {
-    return value && value.getFullYear();
-  },
-  month(value: Date | EmptyDateValue): number | EmptyDateValue {
-    return value && (value.getMonth() + 1);
-  },
-  day(value: Date | EmptyDateValue): number | EmptyDateValue {
-    return value && value.getDate();
-  },
-  quarter(value: Date | EmptyDateValue): number | EmptyDateValue {
-    return value && (Math.floor(value.getMonth() / 3) + 1);
-  },
-  hour(value: Date | EmptyDateValue): number | EmptyDateValue {
-    return value && value.getHours();
-  },
-  minute(value: Date | EmptyDateValue): number | EmptyDateValue {
-    return value && value.getMinutes();
-  },
-  second(value: Date | EmptyDateValue): number | EmptyDateValue {
-    return value && value.getSeconds();
-  },
-};
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
 export function isDateType(dataType: string | undefined): boolean {
   return dataType === 'date' || dataType === 'datetime';
 }
-
-const getIntervalSelector = function getIntervalSelector(
-  this: Column & Required<Pick<Column, 'calculateCellValue'>>,
-  interval: HeaderFilterGroupInterval | number,
-  data: unknown,
-): number | EmptyDateValue | null | undefined {
-  const value = this.calculateCellValue(data);
-
-  if (!isDefined(value)) {
-    return null;
-  }
-
-  if (isDateType(this.dataType) && isString(interval)) {
-    return DATE_INTERVAL_SELECTORS[interval](value);
-  }
-
-  if (this.dataType === 'number') {
-    const groupInterval = Number(interval);
-    return Math.floor(Number(value) / groupInterval) * groupInterval;
-  }
-
-  return undefined;
-};
 
 const getGlobalFormat = (dataType: string): Format | undefined => {
   const globalFormat = getGlobalFormatByDataType(dataType);
@@ -449,48 +397,6 @@ export default {
       default:
         return undefined;
     }
-  },
-
-  getHeaderFilterGroupParameters(
-    column: Column & Required<Pick<Column, 'calculateCellValue'>>,
-    remoteGrouping?: boolean,
-  ): HeaderFilterGroup {
-    const dataField = column.dataField || column.name;
-    const groupInterval = sharedFiltering.getGroupInterval(column);
-
-    if (groupInterval) {
-      const result: HeaderFilterGroupItem[] = [];
-
-      each(groupInterval, (index, interval) => {
-        result.push(remoteGrouping ? {
-          selector: dataField,
-          groupInterval: interval,
-          isExpanded: index < groupInterval.length - 1,
-          // @ts-ignore
-        } : getIntervalSelector.bind(column, interval));
-      });
-
-      return result;
-    }
-
-    if (remoteGrouping) {
-      return [{ selector: dataField, isExpanded: false }];
-    }
-
-    const selector = (data: unknown): unknown => {
-      let value = column.calculateCellValue(data);
-
-      if (value === undefined || value === '') {
-        value = null;
-      }
-      return value;
-    };
-
-    if (column.sortingMethod) {
-      return [{ selector, compare: column.sortingMethod.bind(column) }];
-    }
-
-    return selector;
   },
 
   equalSortParameters(

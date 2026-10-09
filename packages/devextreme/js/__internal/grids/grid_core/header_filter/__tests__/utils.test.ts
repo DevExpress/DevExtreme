@@ -5,10 +5,10 @@ import {
   jest,
 } from '@jest/globals';
 import filterUtils from '@js/ui/shared/filtering';
-import type { HeaderFilterGroupSelector } from '@ts/grids/grid_core/types';
 
-import gridCoreUtils from '../../m_utils';
 import { getFormatOptions } from '../m_header_filter';
+import type { HeaderFilterGroupSelector } from '../types';
+import { getHeaderFilterGroupParameters } from '../utils';
 
 describe('getGroupInterval', () => {
   describe('headerFilter.groupInterval normalization', () => {
@@ -72,7 +72,7 @@ describe('getGroupInterval', () => {
   });
 });
 
-type HeaderFilterColumn = Parameters<typeof gridCoreUtils.getHeaderFilterGroupParameters>[0];
+type HeaderFilterColumn = Parameters<typeof getHeaderFilterGroupParameters>[0];
 
 const asHeaderFilterColumn = (column: object): HeaderFilterColumn => column as HeaderFilterColumn;
 
@@ -82,7 +82,7 @@ describe('getHeaderFilterGroupParameters', () => {
       dataField: 'Price', dataType: 'number', headerFilter: { groupInterval: [100, 10] },
     });
 
-    expect(gridCoreUtils.getHeaderFilterGroupParameters(column, true)).toEqual([
+    expect(getHeaderFilterGroupParameters(column, true)).toEqual([
       { selector: 'Price', groupInterval: 100, isExpanded: true },
       { selector: 'Price', groupInterval: 10, isExpanded: false },
     ]);
@@ -95,7 +95,7 @@ describe('getHeaderFilterGroupParameters', () => {
       headerFilter: { groupInterval: [100000, 10000, 1000] },
     });
 
-    expect(gridCoreUtils.getHeaderFilterGroupParameters(column, true)).toEqual([
+    expect(getHeaderFilterGroupParameters(column, true)).toEqual([
       { selector: 'Population', groupInterval: 100000, isExpanded: true },
       { selector: 'Population', groupInterval: 10000, isExpanded: true },
       { selector: 'Population', groupInterval: 1000, isExpanded: false },
@@ -110,7 +110,7 @@ describe('getHeaderFilterGroupParameters', () => {
       calculateCellValue: (data: { Price: number }) => data.Price,
     });
 
-    const params = gridCoreUtils.getHeaderFilterGroupParameters(
+    const params = getHeaderFilterGroupParameters(
       column,
     ) as HeaderFilterGroupSelector[];
 
@@ -124,7 +124,7 @@ describe('getHeaderFilterGroupParameters', () => {
     it('should group remotely by the data field', () => {
       const column = asHeaderFilterColumn({ dataField: 'Name', dataType: 'string' });
 
-      expect(gridCoreUtils.getHeaderFilterGroupParameters(column, true)).toEqual([
+      expect(getHeaderFilterGroupParameters(column, true)).toEqual([
         { selector: 'Name', isExpanded: false },
       ]);
     });
@@ -132,7 +132,7 @@ describe('getHeaderFilterGroupParameters', () => {
     it('should group remotely by the column name when there is no data field', () => {
       const column = asHeaderFilterColumn({ name: 'nameColumn', dataType: 'string' });
 
-      expect(gridCoreUtils.getHeaderFilterGroupParameters(column, true)).toEqual([
+      expect(getHeaderFilterGroupParameters(column, true)).toEqual([
         { selector: 'nameColumn', isExpanded: false },
       ]);
     });
@@ -144,7 +144,7 @@ describe('getHeaderFilterGroupParameters', () => {
         calculateCellValue: (data: { Name?: unknown }) => data.Name,
       });
 
-      const selector = gridCoreUtils.getHeaderFilterGroupParameters(
+      const selector = getHeaderFilterGroupParameters(
         column,
       ) as HeaderFilterGroupSelector;
 
@@ -163,7 +163,7 @@ describe('getHeaderFilterGroupParameters', () => {
         sortingMethod,
       });
 
-      const [descriptor] = gridCoreUtils.getHeaderFilterGroupParameters(column) as {
+      const [descriptor] = getHeaderFilterGroupParameters(column) as {
         selector: HeaderFilterGroupSelector;
         compare: (value1: unknown, value2: unknown) => number;
       }[];
