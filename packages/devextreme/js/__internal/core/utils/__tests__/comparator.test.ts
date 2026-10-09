@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import $ from '@js/core/renderer';
-import { equals } from '@ts/core/utils/m_comparator';
+import { equals } from '@ts/core/utils/comparator';
 
 describe('Comparator utils', () => {
   describe('equals', () => {

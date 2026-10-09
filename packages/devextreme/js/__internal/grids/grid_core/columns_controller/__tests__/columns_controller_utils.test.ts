@@ -6,7 +6,7 @@ import config from '@js/core/config';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
-import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
+import { variableWrapper } from '@ts/core/utils/variable_wrapper';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import {
   columnOptionCore,

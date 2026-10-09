@@ -1,4 +1,4 @@
-import type { DxError } from '@ts/core/utils/m_error';
+import type { DxError } from '@ts/core/utils/error';
 
 export interface ExternalError {
   message?: string;

@@ -1,4 +1,30 @@
 // stylelint-disable selector-class-pattern
+@use "sass:color";
+@use "sass:meta";
+
+@function with-alpha($color, $alpha) {
+  @if meta.type-of($color) == color {
+    @return color.change($color, $alpha: $alpha);
+  }
+
+  @return rgb(from #{$color} r g b / #{$alpha});
+}
+
+@function calc-sum($first, $second) {
+  @if meta.type-of($first) == number and meta.type-of($second) == number {
+    @return $first + $second;
+  }
+
+  @return calc($first + $second);
+}
+
+@function calc-difference($first, $second) {
+  @if meta.type-of($first) == number and meta.type-of($second) == number {
+    @return $first - $second;
+  }
+
+  @return calc($first - $second);
+}
 
 @mixin dx-clearfix-mixin() {
   &::before,

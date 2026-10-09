@@ -4,7 +4,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Attachment, AttachmentDownloadClickEvent, Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-import { ICON_CLASS } from '@ts/core/utils/m_icon';
+import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import FileView from '@ts/ui/chat/file_view/file_view';

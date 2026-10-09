@@ -55,4 +55,9 @@ $accent: colors.$color !default;
 }
 
 @include inverted-scope();
-@include named-scopes(colors.$mode, if(colors.$mode == "light", "dark", "light"));
+
+@if colors.$mode == "light" {
+  @include named-scopes(colors.$mode, "dark");
+} @else {
+  @include named-scopes(colors.$mode, "light");
+}

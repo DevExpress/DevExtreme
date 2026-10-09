@@ -1,7 +1,7 @@
-@use "sass:meta";
 @use "sass:string";
 @use "../string" as *;
 @use "../mask" as *;
+@use "../mixins" as *;
 
 @mixin diagram-icon-colored($data-uri, $current-color, $width, $height) {
   $uri: replace("#{$data-uri}", "currentColor", escape("#{$current-color}"));
@@ -57,7 +57,7 @@
 }
 
 @mixin diagram-action-icons-mixin($toolbar-color, $menu-color, $icon-size, $toolbar-colorbutton-border-width, $masked: false) {
-  $diagram-wide-icon-size: if(meta.type-of($icon-size) == number, 1.56 * $icon-size, calc(1.56 * #{$icon-size}));
+  $diagram-wide-icon-size: calc(1.56 * $icon-size);
 
   @if $masked {
     .dx-diagram-i {
@@ -131,7 +131,7 @@
     @include diagram-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/line-dashed.svg"), $toolbar-color, $diagram-wide-icon-size, $icon-size, $masked);
   }
 
-  $fill-height: if(meta.type-of($icon-size) == number and meta.type-of($toolbar-colorbutton-border-width) == number, $icon-size + $toolbar-colorbutton-border-width, calc(#{$icon-size} + #{$toolbar-colorbutton-border-width}));
+  $fill-height: calc-sum($icon-size, $toolbar-colorbutton-border-width);
   $fill-uri: data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/button-fill.svg");
 
   @if $masked {

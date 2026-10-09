@@ -30,6 +30,7 @@ import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
 
 import { CLASSES } from './const';
+import type { FilterRowEditorOptions } from './types';
 import { createFilterRowExpressions } from './utils';
 
 const OPERATION_ICONS = {
@@ -285,7 +286,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
             if (getColumnSelectedFilterOperation(that, column) === 'between') {
               that._renderFilterRangeContent($cell, column);
             } else if ($editorContainer.find(`.${FILTER_RANGE_CONTENT_CLASS}`).length) {
-              that._renderEditor($editorContainer, that._getEditorOptions($editorContainer, column));
+              that._renderEditor($editorContainer, that.getEditorOptions($editorContainer, column));
               that._hideFilterRange();
             }
           }
@@ -345,7 +346,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         let $editor = $('<div>').addClass(`${EDITOR_CONTAINER_CLASS} ${that.addWidgetPrefix(FILTER_RANGE_START_CLASS)}`).appendTo(contentElement);
 
         column = that._columnsController.columnOption(column.index);
-        editorOptions = that._getEditorOptions($editor, column);
+        editorOptions = that.getEditorOptions($editor, column);
         editorOptions.sharedData = sharedData;
         that._renderEditor($editor, editorOptions);
         eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e) => {
@@ -364,7 +365,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         });
 
         $editor = $('<div>').addClass(`${EDITOR_CONTAINER_CLASS} ${that.addWidgetPrefix(FILTER_RANGE_END_CLASS)}`).appendTo(contentElement);
-        editorOptions = that._getEditorOptions($editor, column);
+        editorOptions = that.getEditorOptions($editor, column);
 
         editorOptions.sharedData = sharedData;
         that._renderEditor($editor, editorOptions);
@@ -474,7 +475,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     if (getColumnSelectedFilterOperation(that, column) === 'between') {
       that._renderFilterRangeContent($cell, column);
     } else {
-      const editorOptions = that._getEditorOptions($editorContainer, column);
+      const editorOptions = that.getEditorOptions($editorContainer, column);
       that._renderEditor($editorContainer, editorOptions);
     }
 
@@ -507,21 +508,25 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     super._renderCellContent.apply(this, arguments);
   }
 
-  private _getEditorOptions($editorContainer, column) {
-    const that = this;
-    const accessibilityOptions = {
+  private getEditorOptions(
+    $editorContainer: dxElementWrapper,
+    column: Column,
+  ): FilterRowEditorOptions {
+    const editorOptions: FilterRowEditorOptions = extend({}, column, {
       editorOptions: {
-        inputAttr: that._getFilterInputAccessibilityAttributes(column),
+        ...column.editorOptions,
+        inputAttr: {
+          ...this._getFilterInputAccessibilityAttributes(column),
+          ...column.editorOptions?.inputAttr,
+        },
       },
-    };
-    const result = extend(accessibilityOptions, column, {
-      value: getFilterValue(that, column.index, $editorContainer),
-      parentType: 'filterRow',
-      showAllText: that.option('filterRow.showAllText'),
-      updateValueTimeout: that.option('filterRow.applyFilter') === 'onClick' ? 0 : FILTERING_TIMEOUT,
+      value: getFilterValue(this, column.index, $editorContainer),
+      parentType: 'filterRow' as const,
+      showAllText: this.option('filterRow.showAllText'),
+      updateValueTimeout: this.option('filterRow.applyFilter') === 'onClick' ? 0 : FILTERING_TIMEOUT,
       width: null,
-      setValue(value, notFireEvent) {
-        updateFilterValue(that, {
+      setValue: (value: unknown, notFireEvent?: boolean): void => {
+        updateFilterValue(this, {
           column,
           value,
           container: $editorContainer,
@@ -530,15 +535,15 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       },
     });
 
-    if (getColumnSelectedFilterOperation(that, column) === 'between') {
-      if ($editorContainer.hasClass(that.addWidgetPrefix(FILTER_RANGE_START_CLASS))) {
-        result.placeholder = that.option('filterRow.betweenStartText');
+    if (getColumnSelectedFilterOperation(this, column) === 'between') {
+      if ($editorContainer.hasClass(this.addWidgetPrefix(FILTER_RANGE_START_CLASS))) {
+        editorOptions.placeholder = this.option('filterRow.betweenStartText');
       } else {
-        result.placeholder = that.option('filterRow.betweenEndText');
+        editorOptions.placeholder = this.option('filterRow.betweenEndText');
       }
     }
 
-    return result;
+    return editorOptions;
   }
 
   private _getFilterInputAccessibilityAttributes(column) {

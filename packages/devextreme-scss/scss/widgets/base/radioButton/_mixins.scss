@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "sass:meta";
+@use "../mixins" as *;
 
 @mixin dx-radiobutton-icon-mixin(
   $icon-size,
@@ -10,7 +10,7 @@
   $ripple-transition: all 0s ease 0s,
 ) {
   $border-radius: 50%;
-  $dot-icon-border-width: if(meta.type-of($icon-size) == number and meta.type-of($border-width) == number and meta.type-of($dot-size) == number, math.div($icon-size - $border-width * 2 - $dot-size, 2), calc((#{$icon-size} - #{$border-width} * 2 - #{$dot-size}) / 2));
+  $dot-icon-border-width: calc(calc-difference(calc-difference($icon-size, calc($border-width * 2)), $dot-size) / 2);
 
   .dx-radiobutton-icon {
     position: relative;
@@ -84,8 +84,8 @@
   $checked-border-color: null,
   $invalid-border-color: null,
 ) {
-  $checked-border: if($checked-border-color, $checked-border-color, $checked-color);
-  $invalid-border: if($invalid-border-color, $invalid-border-color, $invalid-color);
+  $checked-border: $checked-border-color or $checked-color;
+  $invalid-border: $invalid-border-color or $invalid-color;
 
   .dx-radiobutton-icon {
     border-color: $border-color;

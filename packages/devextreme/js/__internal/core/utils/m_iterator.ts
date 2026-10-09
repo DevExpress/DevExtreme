@@ -9,10 +9,10 @@ type Item<TValues> = IsAny<TValues> extends true ? any
   : TValues extends dxElementWrapper ? Element
     : TValues extends ArrayLike<infer TItem> ? TItem : never;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the keys of any values are not known
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- any values have unknown keys
 type Index<TValues> = IsAny<TValues> extends true ? any : number;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- as Object.values, an object without keys gives any values
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- no known keys give any values
 type Value<TValues> = [keyof TValues] extends [never] ? any
   : { [TKey in keyof TValues]-?: TValues[TKey] }[keyof TValues];
 
@@ -42,7 +42,9 @@ function map(values: Collection | null | undefined, callback: Callback): unknown
 
   const result: unknown[] = [];
 
-  // eslint-disable-next-line no-restricted-syntax, guard-for-in, @typescript-eslint/no-for-in-array -- inherited keys are mapped too
+  /* eslint-disable-next-line
+    no-restricted-syntax, guard-for-in, @typescript-eslint/no-for-in-array
+    -- inherited keys are mapped too */
   for (const key in values) {
     result.push(callback(values[key], key));
   }
@@ -56,7 +58,7 @@ function each<TValues extends ArrayLike<unknown> | dxElementWrapper | null | und
 ): Each<TValues>;
 function each<TValues extends object | null | undefined>(
   values: TValues,
-  // eslint-disable-next-line @typescript-eslint/unified-signatures -- a union of callbacks has no contextual parameter types
+  // eslint-disable-next-line @typescript-eslint/unified-signatures -- union: no contextual types
   callback: EachCallback<Value<NonNullable<TValues>>, Key<NonNullable<TValues>>>,
 ): Each<TValues>;
 function each(values: Collection | null | undefined, callback: Callback): unknown {

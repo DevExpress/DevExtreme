@@ -2,7 +2,7 @@ import { domAdapter } from '@ts/core/dom_adapter';
 /// #DEBUG
 import { debug } from '@ts/core/utils/m_console';
 /// #ENDDEBUG
-import { readyCallbacksModule as ReadyCallbacks } from '@ts/core/utils/m_ready_callbacks';
+import { readyCallbacksModule as ReadyCallbacks } from '@ts/core/utils/ready_callbacks';
 import eventsEngine from '@ts/events/core/events_engine';
 import { name as wheelEventName } from '@ts/events/core/wheel';
 import pointerEvents from '@ts/events/pointer';

@@ -13,8 +13,6 @@ $header-filter-color: null !default;
 $header-filter-color-empty: null !default;
 $base-focus-color: null !default;
 
-@use "sass:color";
-@use "sass:meta";
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 $treelist-draggable-column-opacity: 0.5 !default;
@@ -316,11 +314,11 @@ $treelist-button-margin-right: 10px !default;
 
 @keyframes dx-treelist-highlight-change {
   from {
-    background-color: if(meta.type-of($treelist-base-color) == color, color.change($treelist-base-color, $alpha: 0.08), rgb(from #{$treelist-base-color} r g b / 0.08));
+    background-color: with-alpha($treelist-base-color, 0.08);
   }
 
   50% {
-    background-color: if(meta.type-of($treelist-base-color) == color, color.change($treelist-base-color, $alpha: 0.08), rgb(from #{$treelist-base-color} r g b / 0.08));
+    background-color: with-alpha($treelist-base-color, 0.08);
   }
 }
 

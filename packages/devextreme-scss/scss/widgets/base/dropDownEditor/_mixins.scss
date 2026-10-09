@@ -14,7 +14,11 @@
 }
 
 @function lookup-field-padding($input-horizontal-padding, $icon-size, $icon-count, $spin-padding) {
-  $icons: if($icon-count == 1, "#{$icon-size}", "#{$icon-size} * #{$icon-count}");
+  $icons: "#{$icon-size}";
+
+  @if $icon-count != 1 {
+    $icons: "#{$icon-size} * #{$icon-count}";
+  }
 
   @if meta.type-of($input-horizontal-padding) == number and $input-horizontal-padding == 0 {
     @return calc(#{$icons} + #{$spin-padding});

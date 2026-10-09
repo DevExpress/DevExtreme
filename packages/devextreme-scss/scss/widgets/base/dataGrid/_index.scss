@@ -16,8 +16,6 @@ $datagrid-group-row-border: 1px solid !default;
 $datagrid-sticky-column-border: 2px solid !default;
 $datagrid-cell-focus-outline: 2px solid !default;
 
-@use "sass:color";
-@use "sass:meta";
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 $datagrid-common-group-min-width: 30px !default;
@@ -348,11 +346,11 @@ $datagrid-button-margin-right: 10px !default;
 
 @keyframes dx-datagrid-highlight-change {
   from {
-    background-color: if(meta.type-of($datagrid-base-color) == color, color.change($datagrid-base-color, $alpha: 0.08), rgb(from #{$datagrid-base-color} r g b / 0.08));
+    background-color: with-alpha($datagrid-base-color, 0.08);
   }
 
   50% {
-    background-color: if(meta.type-of($datagrid-base-color) == color, color.change($datagrid-base-color, $alpha: 0.08), rgb(from #{$datagrid-base-color} r g b / 0.08));
+    background-color: with-alpha($datagrid-base-color, 0.08);
   }
 }
 

@@ -39,6 +39,7 @@ overrides:
   "brace-expansion@>=3.0.0 <5.0.12": "^5.0.12"
   engine.io@>=6.6.0 <6.6.10: ^6.6.10
   fast-uri@>=3.0.0 <3.1.8: ^3.1.8
+  handlebars@<4.7.10: ^4.7.10
   moment@>=2.29.2 <2.31.0: ^2.31.0
   webpack-dev-middleware@<7.4.6: ^7.4.6
   webpack-dev-middleware@>=8.0.0 <8.3.0: ^8.3.0
