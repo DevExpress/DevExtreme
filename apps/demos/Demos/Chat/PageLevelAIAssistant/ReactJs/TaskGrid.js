@@ -23,7 +23,6 @@ export default function TaskGrid({ gridRef }) {
         ref={gridRef}
         dataSource={tasks}
         keyExpr="ID"
-        height={360}
         showBorders={true}
         filterSyncEnabled={true}
       >
