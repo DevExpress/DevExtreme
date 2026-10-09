@@ -128,7 +128,7 @@ watch(() => width.value, (val) => {
 </script>
 <style>
 .settings {
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   display: flex;
   justify-content: space-between;
   padding: 15px;

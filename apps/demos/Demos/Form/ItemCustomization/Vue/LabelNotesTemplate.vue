@@ -30,7 +30,7 @@ withDefaults(defineProps<{
 </script>
 <style scoped>
 #helpedInfo {
-  color: #42a5f5;
+  color: var(--dxds-color-content-primary, #42a5f5);
 }
 
 #tooltip-content {

@@ -8,3 +8,8 @@
 ::ng-deep .dx-scheduler-date-table .dx-scheduler-cell-sizes-horizontal {
   width: 100px;
 }
+
+::ng-deep .dx-scheduler-appointment-title,
+::ng-deep .dx-scheduler-appointment-content-date {
+  color: var(--dxds-color-content-static-light, #242424);
+}

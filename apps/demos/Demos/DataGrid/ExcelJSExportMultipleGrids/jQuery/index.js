@@ -54,9 +54,6 @@ $(() => {
         });
       },
     }],
-    itemTitleTemplate(itemData, itemIndex, itemElement) {
-      itemElement.append(`<span class='dx-tab-text'>${itemData.title}</span>`);
-    },
     deferRendering: false,
   });
 

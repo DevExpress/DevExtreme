@@ -1,0 +1,9 @@
+@mixin publish {
+  --dx-text-editor-filled-bg-focused: var(--dx-text-editor-filled-bg);
+  --dx-text-editor-filled-bg-hovered: var(--dx-text-editor-filled-bg);
+  --dx-text-editor-label-content: var(--dx-text-editor-placeholder);
+  --dx-text-editor-outlined-bg-focused: var(--dx-text-editor-outlined-bg);
+  --dx-text-editor-outlined-bg-hovered: var(--dx-text-editor-outlined-bg);
+  --dx-text-editor-underlined-bg-focused: var(--dx-text-editor-underlined-bg);
+  --dx-text-editor-underlined-bg-hovered: var(--dx-text-editor-underlined-bg);
+}

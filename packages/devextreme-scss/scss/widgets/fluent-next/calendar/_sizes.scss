@@ -1,0 +1,38 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$calendar-cell-contoured-border-radius: 50% !default;
+$calendar-week-number-border-radius: 0 !default;
+
+$calendar-legacy-width: null !default;
+$calendar-legacy-height: null !default;
+
+$calendar-footer-button-height: null !default;
+$calendar-cell-font-size: null !default;
+
+$calendar-element-gap: ds.$spacing-80 !default;
+
+@if $size == "default" {
+  $calendar-legacy-width: 272px !default; // dx-offscale: 272px
+  $calendar-legacy-height: 264px !default; // dx-offscale: 264px
+
+  $calendar-cell-font-size: ds.$font-size-base-md !default;
+
+  $calendar-footer-button-height: ds.$spacing-360 !default;
+}
+
+@else if $size == "compact" {
+  $calendar-legacy-width: 252px !default; // dx-offscale: 252px
+  $calendar-legacy-height: 260px !default; // dx-offscale: 260px
+
+  $calendar-cell-font-size: ds.$font-size-base-sm !default;
+  $calendar-footer-button-height: ds.$spacing-280 !default;
+}
+
+$calendar-week-day-header-font-size: ds.$font-size-caption-sm !default;
+$calendar-week-day-header-font-weight: ds.$font-weight-caption-strong !default;
+
+$calendar-border-width: ds.$border-width-10 !default;
+$calendar-view-multiview-padding-inline: ds.$spacing-100 !default;
+$calendar-cell-today-border-width: ds.$border-width-20 !default;
+$calendar-cell-contoured-outline-width: ds.$border-width-20 !default;

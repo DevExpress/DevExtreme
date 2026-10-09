@@ -1,3 +1,5 @@
+$treeview-disabled-opacity: null !default;
+
 @use "../mixins" as *;
 @use "../../base/icon_fonts" as *;
 
@@ -74,7 +76,7 @@
     order: 2;
 
     .dx-icon {
-      margin-inline-end: 8px;
+      margin-inline-end: 8px; // dx-fixed-size: demos hand-write this class outside the widget, where a tier var would not reach
     }
 
     .dx-button-has-icon {
@@ -92,7 +94,9 @@
   }
 
   &.dx-state-disabled {
-    opacity: 0.5;
+    @if $treeview-disabled-opacity {
+      opacity: $treeview-disabled-opacity;
+    }
   }
 }
 

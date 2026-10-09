@@ -17,7 +17,7 @@ export class Service {
   }
 
   getPaletteCollection(): Palette[] {
-    return ['Material', 'Soft Pastel', 'Harmony Light', 'Pastel', 'Bright', 'Soft', 'Ocean', 'Office', 'Vintage', 'Violet', 'Carmine', 'Dark Moon', 'Soft Blue', 'Dark Violet', 'Green Mist'];
+    return ['Material', 'Fluent Next', 'Soft Pastel', 'Harmony Light', 'Pastel', 'Bright', 'Soft', 'Ocean', 'Office', 'Vintage', 'Violet', 'Carmine', 'Dark Moon', 'Soft Blue', 'Dark Violet', 'Green Mist'];
   }
 
   getPaletteExtensionModes(): PaletteExtensionMode[] {

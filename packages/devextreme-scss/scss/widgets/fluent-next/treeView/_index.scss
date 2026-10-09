@@ -1,0 +1,80 @@
+@use "../mixins" as *;
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/treeView" as baseTreeView with (
+  $treeview-select-all-item-border-bottom: var(--dx-tree-view-select-all-item-border-block-end),
+  $treeview-border-visible-border: var(--dx-tree-view-border-visible-border),
+  $treeview-disabled-opacity: false,
+);
+@use "../../base/icon_fonts" as *;
+
+.dx-treeview-custom-expand-icon,
+.dx-treeview-custom-collapse-icon {
+  @include dx-icon-sizing($global-icon-size);
+}
+
+.dx-treeview-item-with-checkbox.dx-state-focused > .dx-treeview-item {
+  background-color: var(--dx-tree-view-bg-focused);
+  color: var(--dx-tree-view-content-focused);
+  border-radius: var(--dx-tree-view-item-border-radius);
+}
+
+.dx-treeview-item-content.dx-state-disabled {
+  color: var(--dx-tree-view-item-content-disabled);
+}
+
+@include baseTreeView.default-expander-icon(
+  "chevrondown",
+  "chevronright",
+  $global-icon-size,
+  var(--dx-tree-view-toggle-item-width),
+  var(--dx-tree-view-spin-icon),
+);
+@include baseTreeView.treeview-item(
+  var(--dx-tree-view-item-element-gap),
+  var(--dx-tree-view-item-padding),
+  $global-icon-size,
+  var(--dx-tree-view-bg-hovered),
+  var(--dx-tree-view-item-content-hovered),
+  var(--dx-tree-view-item-content-selected),
+  calc(var(--dx-tree-view-toggle-item-width) + var(--dx-tree-view-item-element-gap)),
+  var(--dx-tree-view-item-margin),
+  var(--dx-tree-view-item-border-radius),
+);
+@include baseTreeView.treeview-checkbox(
+  var(--dx-tree-view-checkbox-container-size),
+  var(--dx-tree-view-content),
+  $checkbox-border-color-focused: null,
+  $treeview-item-selected-color: var(--dx-tree-view-item-content-selected),
+  $treeview-item-selected-bg: var(--dx-tree-view-item-bg-selected),
+  $treeview-focused-bg: var(--dx-tree-view-bg-focused),
+  $treeview-focus-color: var(--dx-tree-view-content-focused),
+  $border-radius: var(--dx-tree-view-item-border-radius)
+);
+@include baseTreeView.treeview-aux-items(
+  var(--dx-tree-view-search-box-margin-block-end),
+  var(--dx-tree-view-search-editor-height),
+  var(--dx-tree-view-border),
+  var(--dx-tree-view-select-all-item-padding),
+  var(--dx-tree-view-item-element-gap),
+  var(--dx-tree-view-select-all-item-border-visible-padding),
+  $tree-view-container-padding,
+  var(--dx-tree-view-load-indicator-size),
+);
+
+@include when-disabled(".dx-treeview") {
+  .dx-treeview-item {
+    color: var(--dx-tree-view-item-content-disabled);
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    color: var(--dx-tree-view-spin-icon-disabled);
+  }
+
+  .dx-treeview-node.dx-state-selected > .dx-treeview-item,
+  .dx-treeview-item.dx-state-selected {
+    background-color: var(--dx-tree-view-item-bg-selected-disabled);
+  }
+}

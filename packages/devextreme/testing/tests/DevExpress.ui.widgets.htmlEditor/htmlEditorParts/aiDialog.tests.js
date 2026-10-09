@@ -1497,6 +1497,43 @@ QUnit.module('AIDialog', () => {
         });
     });
 
+    QUnit.module('sizes declared by the theme', {
+        beforeEach() {
+            this.$style = $('<style nonce="qunit-test">')
+                .text('#htmlEditor { --dx-html-editor-ai-dialog-button-width: 123px; }')
+                .appendTo('head');
+
+            integrationModuleConfig.beforeEach.apply(this);
+        },
+        afterEach() {
+            integrationModuleConfig.afterEach.apply(this);
+
+            this.$style.remove();
+        },
+    }, () => {
+        QUnit.test('generate button takes the width the theme declares', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'askAI' },
+            });
+
+            const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
+            const generateToolbarItem = getItemByName(bottomToolbarItems, 'generate');
+
+            assert.strictEqual(generateToolbarItem.options.width, 123, 'width comes from the theme');
+        });
+
+        QUnit.test('cancel button takes the width the theme declares', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'translate' },
+            });
+
+            const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
+            const cancelToolbarItem = getItemByName(bottomToolbarItems, 'cancel');
+
+            assert.strictEqual(cancelToolbarItem.options.width, 123, 'width comes from the theme');
+        });
+    });
+
     QUnit.module('Accessibility', moduleConfig, () => {
         QUnit.test('result textarea should have correct aria-label', function(assert) {
             showAIDialog(this);

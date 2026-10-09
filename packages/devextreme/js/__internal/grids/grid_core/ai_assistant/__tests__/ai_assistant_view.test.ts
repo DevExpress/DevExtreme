@@ -360,7 +360,7 @@ describe('AIAssistantView', () => {
         }),
       };
       (createConfirmDialog as jest.Mock).mockReturnValue(mockDialog);
-      createAIAssistantView();
+      const { aiAssistantView } = createAIAssistantView();
 
       const aiChatConfig = (AIChat as jest.Mock).mock.calls[0][0] as AIChatOptions;
       const event = { cancel: false, component: { hide: jest.fn() } };
@@ -377,6 +377,8 @@ describe('AIAssistantView', () => {
             }),
           }),
         }),
+        // the element the theme declares the dialog's sizes on
+        aiAssistantView.element(),
       );
       expect(mockDialog.show).toHaveBeenCalledTimes(1);
     });

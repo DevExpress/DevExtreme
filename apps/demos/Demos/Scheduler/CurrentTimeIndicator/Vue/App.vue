@@ -97,9 +97,9 @@ function onAppointmentDblClick(e: DxSchedulerTypes.AppointmentDblClickEvent) {
 }
 
 .dx-scheduler-appointment {
-  color: #000;
+  color: var(--dxds-color-content, #000);
   font-weight: 500;
-  background-color: #e4e4e4;
+  background-color: var(--dxds-color-bg-low, #e4e4e4);
 }
 
 .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
@@ -107,7 +107,7 @@ function onAppointmentDblClick(e: DxSchedulerTypes.AppointmentDblClickEvent) {
 }
 
 .options {
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   margin-top: 20px;
   display: flex;
   align-items: flex-start;

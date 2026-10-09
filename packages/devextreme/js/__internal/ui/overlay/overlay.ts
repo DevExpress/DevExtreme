@@ -46,6 +46,7 @@ import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import { themeModeChangedCallback } from '@ts/ui/m_themes_callback';
 import type {
   BaseControllerProperties,
   ControllerOverlayElements,
@@ -273,6 +274,8 @@ class Overlay<
 
   _viewPortChangeHandle?: () => void;
 
+  _themeModeChangeHandle?: () => void;
+
   _proxiedDocumentDownHandler?: EventHandler;
 
   _supportedKeys(): SupportedKeys {
@@ -414,6 +417,7 @@ class Overlay<
 
     this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
     this._toggleViewPortSubscription(true);
+    this._toggleThemeModeSubscription(true);
 
     const { hideTopOverlayHandler } = this.option();
 
@@ -629,6 +633,42 @@ class Overlay<
 
     this._positionController.updateContainer(container);
     this._refresh();
+  }
+
+  _toggleThemeModeSubscription(toggle: boolean): void {
+    if (this._themeModeChangeHandle) {
+      themeModeChangedCallback.remove(this._themeModeChangeHandle);
+    }
+
+    if (toggle) {
+      this._themeModeChangeHandle = (): void => {
+        this._themeModeChangeHandler();
+      };
+
+      themeModeChangedCallback.add(this._themeModeChangeHandle);
+    }
+  }
+
+  _themeModeChangeHandler(): void {
+    if (!this._isVisible()) {
+      return;
+    }
+
+    const { $container } = this._positionController;
+    const wrapper = this._$wrapper?.get(0) as HTMLElement | undefined;
+
+    if (!$container || $container.get(0) === wrapper?.parentElement) {
+      return;
+    }
+
+    const focused = domAdapter.getActiveElement(wrapper) as HTMLElement | null;
+    const shouldRestoreFocus = !!wrapper && !!focused && domUtils.contains(wrapper, focused);
+
+    this._moveToContainer();
+
+    if (shouldRestoreFocus) {
+      focused?.focus();
+    }
   }
 
   _renderWrapperAttributes(): void {
@@ -1583,6 +1623,7 @@ class Overlay<
     }
 
     this._toggleViewPortSubscription(false);
+    this._toggleThemeModeSubscription(false);
     this._toggleSubscriptions(false);
     this._updateZIndexStackPosition(false);
 

@@ -5,24 +5,24 @@
 }
 
 ::ng-deep #page .header {
-  background-color: #C6B1DE;
+  background-color: var(--dxds-color-bg-purple-subtle, #C6B1DE);
   text-align: center;
 }
 
 ::ng-deep #page .content {
-  background-color: #EDBBE7;
+  background-color: var(--dxds-color-bg-pink-subtle, #EDBBE7);
 }
 
 ::ng-deep #page .left-side-bar {
-  background-color: #F9E2AE;
+  background-color: var(--dxds-color-bg-yellow-subtle, #F9E2AE);
 }
 
 ::ng-deep #page .right-side-bar {
-  background-color: #9FD89F;
+  background-color: var(--dxds-color-bg-green-subtle, #9FD89F);
 }
 
 ::ng-deep #page .footer {
-  background-color: #B4D6FA;
+  background-color: var(--dxds-color-bg-blue-subtle, #B4D6FA);
 }
 
 ::ng-deep .item {
@@ -33,5 +33,5 @@
   font-size: 20px;
   padding-top: 10px;
   text-align: center;
-  color: #000;
+  color: var(--dxds-color-content, #000);
 }

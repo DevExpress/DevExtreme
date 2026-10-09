@@ -46,7 +46,7 @@ $(() => {
       const text = createText({
         x: 100,
         y: 120,
-        fill: '#494949',
+        fill: 'var(--dxds-color-content-subtle, #494949)',
         'text-anchor': 'middle',
         'font-size': 18,
       }, [country, formatNumber(total)]);

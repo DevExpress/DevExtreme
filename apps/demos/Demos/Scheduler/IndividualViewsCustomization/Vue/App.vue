@@ -102,4 +102,9 @@ const currentDate = new Date(2021, 3, 27);
     font-size: 15px;
     line-height: 15px;
   }
+
+  .dx-scheduler-appointment-title,
+  .dx-scheduler-appointment-content-date {
+    color: var(--dxds-color-content-static-light, #242424);
+  }
 </style>

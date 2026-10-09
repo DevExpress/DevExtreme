@@ -1,6 +1,7 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
+import $ from '@js/core/renderer';
 import type Scheduler from '@ts/scheduler/scheduler';
 import type { DOMMetaData } from '@ts/scheduler/types';
 
@@ -56,6 +57,8 @@ const createSchedulerStore = (workspace: unknown): Scheduler => ({
   option: (name: string) => schedulerOptions.get(name),
   isVirtualScrolling: () => false,
   getWorkSpace: () => workspace,
+  // the root the theme declares the appointment sizes on
+  $element: () => $('<div>'),
 }) as unknown as Scheduler;
 
 describe('OptionManager', () => {

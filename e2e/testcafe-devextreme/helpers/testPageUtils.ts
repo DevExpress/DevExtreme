@@ -64,6 +64,16 @@ export async function loadAxeCore(t: TestController): Promise<void> {
   })).with({ boundTestRun: t })();
 }
 
+export async function applyViewportEnvironment(t: TestController): Promise<void> {
+  await ClientFunction(() => {
+    const { body } = document;
+    body.classList.remove('dx-surface');
+    body.classList.add('dx-viewport');
+
+    (window as any).DevExpress.viewPort('.dx-viewport');
+  }).with({ boundTestRun: t })();
+}
+
 export async function loadShadowDomExtension(t: TestController): Promise<void> {
   await ClientFunction(() => new Promise<void>((resolve, reject) => {
     if (document.getElementById('shadow-dom-extension-script')) {

@@ -152,7 +152,7 @@ function cancelClick() {
 
 .options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   position: absolute;
   top: 29px;
   bottom: 5px;

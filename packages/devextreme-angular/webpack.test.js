@@ -3,6 +3,7 @@ module.exports = {
   mode: 'development',
   plugins: [],
   resolve: {
+    alias: { stream: require.resolve('stream-browserify') },
     fallback: { stream: require.resolve('stream-browserify') },
   },
   module: {
@@ -24,5 +25,4 @@ module.exports = {
       ],
     }],
   },
-
 };
