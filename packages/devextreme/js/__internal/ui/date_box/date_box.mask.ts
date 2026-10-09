@@ -1,5 +1,6 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
+import coreLocalization from '@js/common/core/localization/core';
 import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
 import numberLocalization from '@js/common/core/localization/number';
@@ -13,7 +14,12 @@ import {
 import type { DxEvent, InteractionEvent } from '@js/events';
 import type dxDateBox from '@js/ui/date_box';
 import type { DateLike } from '@js/ui/date_box';
+import { getDateFormatLocale } from '@ts/core/global_format_config';
 import dateLocalization from '@ts/core/localization/date';
+import {
+  bindDatePartsToLocale,
+  type LocaleAwareDateLocalization,
+} from '@ts/core/localization/ldml/date.parser';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
@@ -373,7 +379,7 @@ class DateBoxMask<
     }
 
     const { displayFormat } = this.option();
-    const format = this._strategy.getDisplayFormat(displayFormat);
+    const format = this._resolveDisplayFormat(displayFormat);
     const isLDMLPattern = isString(format) && !dateLocalization._getPatternByFormat(format);
 
     if (isLDMLPattern) {
@@ -478,7 +484,14 @@ class DateBoxMask<
   }
 
   _prepareRegExpInfo(): void {
-    this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+    const { displayFormat } = this.option();
+    const format = this._resolveDisplayFormat(displayFormat);
+    const formatLocale = getDateFormatLocale(format);
+    const dateParts = formatLocale === coreLocalization.locale()
+      ? dateLocalization
+      : bindDatePartsToLocale(dateLocalization as LocaleAwareDateLocalization, formatLocale);
+
+    this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateParts);
     const { regexp } = this._regExpInfo;
     const { source } = regexp;
     const { flags } = regexp;

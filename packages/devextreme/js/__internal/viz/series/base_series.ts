@@ -24,6 +24,7 @@ import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
 import { each as _each } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, isEmptyObject as _isEmptyObject, isFunction } from '@js/core/utils/type';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import consts from '@ts/viz/components/consts';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 
@@ -899,6 +900,11 @@ Series.prototype = {
     });
 
     parsedOptions.label = getLabelOptions(labelOptions, styles.labelColor);
+    parsedOptions.label.format = applyDataTypePreset(parsedOptions.label.format, that.valueType);
+    parsedOptions.label.argumentFormat = applyDataTypePreset(
+      parsedOptions.label.argumentFormat,
+      that.argumentType,
+    );
 
     if (that.areErrorBarsVisible()) {
       parsedOptions.errorBars = options.valueErrorBar;

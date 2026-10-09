@@ -8,7 +8,7 @@ import type { ClickEvent } from '@js/ui/button';
 import type { ValueChangedEvent } from '@js/ui/calendar';
 import type { ToolbarItem } from '@js/ui/popup';
 import { current, isMaterial } from '@js/ui/themes';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { splitPair } from '@ts/core/utils/m_common';
 import Calendar from '@ts/ui/calendar/calendar';
 import type { CellEvent } from '@ts/ui/calendar/calendar.base_view';
@@ -94,9 +94,12 @@ class CalendarStrategy<
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
+    const { type = 'date' } = this.dateBox.option();
     const globalDateFormat: Format = getGlobalFormatByDataType('date');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || globalDateFormat || 'shortdate';
+    const format = displayFormat || globalDateFormat || 'shortdate';
+
+    return applyDataTypePreset(format, type) ?? format;
   }
 
   _closeDropDownByEnter(): boolean {

@@ -8,6 +8,7 @@ import defaultDateNames from '@ts/core/localization/default_date_names';
 import intlDateLocalization from '@ts/core/localization/intl/date';
 import { getFormat as getLDMLDateFormat } from '@ts/core/localization/ldml/date.format';
 import { getFormatter as getLDMLDateFormatter } from '@ts/core/localization/ldml/date.formatter';
+import type { LdlmDateLocalization } from '@ts/core/localization/ldml/date.parser';
 import { getParser as getLDMLDateParser } from '@ts/core/localization/ldml/date.parser';
 import numberLocalization from '@ts/core/localization/number';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
@@ -71,6 +72,7 @@ const dateLocalization = dependencyInjector({
   _resolveStringFormat(
     format: string,
     date: Date,
+    dateParts: LdlmDateLocalization = this,
   ): string | undefined {
     const presetOverride = resolvePresetOverride(format);
 
@@ -86,7 +88,7 @@ const dateLocalization = dependencyInjector({
       ] || presetOverride as string;
 
       return numberLocalization.convertDigits(
-        getLDMLDateFormatter(pattern, this)(date),
+        getLDMLDateFormatter(pattern, dateParts)(date),
       );
     }
 
@@ -148,7 +150,11 @@ const dateLocalization = dependencyInjector({
     return undefined;
   },
 
-  format(date: Date, format: LocalizationFormat): Date | string | undefined {
+  format(
+    date: Date,
+    format: LocalizationFormat,
+    dateParts: LdlmDateLocalization = this,
+  ): Date | string | undefined {
     if (!date) {
       return undefined;
     }
@@ -168,7 +174,7 @@ const dateLocalization = dependencyInjector({
       // eslint-disable-next-line no-param-reassign
       format = (format as FormatObject).type ?? format;
       if (isString(format)) {
-        const resolvedFormat = this._resolveStringFormat(format as string, date);
+        const resolvedFormat = this._resolveStringFormat(format as string, date, dateParts);
 
         if (resolvedFormat !== undefined) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -178,7 +184,7 @@ const dateLocalization = dependencyInjector({
         // eslint-disable-next-line no-param-reassign
         format = (FORMATS_TO_PATTERN_MAP[(format as string).toLowerCase()] || format) as string;
 
-        return numberLocalization.convertDigits(getLDMLDateFormatter(format, this)(date));
+        return numberLocalization.convertDigits(getLDMLDateFormatter(format, dateParts)(date));
       }
     }
 
@@ -190,7 +196,11 @@ const dateLocalization = dependencyInjector({
     return formatter(date);
   },
 
-  parse(text: string, format?: FormatObject | string): Date | null | undefined {
+  parse(
+    text: string,
+    format?: FormatObject | string,
+    dateParts: LdlmDateLocalization = this,
+  ): Date | null | undefined {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -229,7 +239,7 @@ const dateLocalization = dependencyInjector({
     if (ldmlFormat) {
       // eslint-disable-next-line no-param-reassign
       text = numberLocalization.convertDigits(text, true);
-      return getLDMLDateParser(ldmlFormat, this)(text);
+      return getLDMLDateParser(ldmlFormat, dateParts)(text);
     }
 
     errors.log('W0012');

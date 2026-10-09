@@ -3452,6 +3452,28 @@ QUnit.module('Global formatting config (spec)', {
         assert.strictEqual($input.val(), '02/01/2020, 14:05');
     });
 
+    QUnit.test('locale-only displayFormat on datetime keeps time', function(assert) {
+        config({
+            ...config(),
+            dateTimeFormat: {
+                default: {
+                    locale: 'de-DE',
+                    type: 'shortDateShortTime',
+                },
+            },
+        });
+
+        const $element = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            value: new Date(2024, 5, 15, 14, 30),
+            displayFormat: { locale: 'en-US' },
+            pickerType: 'calendar',
+        });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.val(), '6/15/2024, 2:30 PM');
+    });
+
     QUnit.test('implicit time displayFormat uses global timeFormat', function(assert) {
         config({
             ...config(),
@@ -3579,5 +3601,34 @@ QUnit.module('Global formatting config (spec)', {
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.val(), '02/01/2020');
+    });
+
+    QUnit.test('explicit displayFormat keeps priority over global dateFormat locale', function(assert) {
+        const savedLocale = localization.locale();
+
+        try {
+            localization.locale('en');
+            config({
+                ...config(),
+                dateFormat: {
+                    default: {
+                        locale: 'de-DE',
+                        type: 'shortDate',
+                    },
+                },
+            });
+
+            const $element = $('#dateBox').dxDateBox({
+                type: 'date',
+                value: new Date(2020, 0, 2),
+                displayFormat: 'yyyy-MM-dd',
+                pickerType: 'calendar',
+            });
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.val(), '2020-01-02', 'explicit displayFormat wins over global dateFormat locale');
+        } finally {
+            localization.locale(savedLocale);
+        }
     });
 });
