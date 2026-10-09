@@ -2,7 +2,7 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import type { dxElementWrapper } from '@js/core/renderer';
-import { computeStyleSheetsHash, getShadowElementsFromPoint } from '@ts/core/utils/m_shadow_dom';
+import { computeStyleSheetsHash, getShadowElementsFromPoint } from '@ts/core/utils/shadow_dom';
 
 const createSheet = (rules: string[] | 'cross-origin'): CSSStyleSheet => ({
   get cssRules() {
@@ -269,12 +269,12 @@ describe('Shadow DOM utils', () => {
 
     const createRoot = (sheets: CSSStyleSheet[]): FakeRoot => ({ host: {}, styleSheets: sheets });
 
-    type ShadowDomModule = typeof import('@ts/core/utils/m_shadow_dom');
+    type ShadowDomModule = typeof import('@ts/core/utils/shadow_dom');
 
     const load = (): ShadowDomModule => {
       jest.resetModules();
 
-      return jest.requireActual<ShadowDomModule>('@ts/core/utils/m_shadow_dom');
+      return jest.requireActual<ShadowDomModule>('@ts/core/utils/shadow_dom');
     };
 
     const getTexts = (sheet: FakeStyleSheet): string[] => (

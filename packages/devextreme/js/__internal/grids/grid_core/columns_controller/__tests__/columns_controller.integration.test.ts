@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
-import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
+import { variableWrapper } from '@ts/core/utils/variable_wrapper';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { InternalGrid } from '@ts/grids/grid_core/types';

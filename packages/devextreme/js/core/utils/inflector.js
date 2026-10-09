@@ -6,4 +6,4 @@ export {
     humanize,
     titleize,
     captionize,
-} from '../../__internal/core/utils/m_inflector';
+} from '../../__internal/core/utils/inflector';
