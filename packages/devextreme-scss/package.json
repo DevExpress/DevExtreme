@@ -8,7 +8,7 @@
     "autoprefixer": "10.5.0",
     "clean-css": "5.3.3",
     "postcss": "^8.5.23",
-    "sass-embedded": "1.93.3",
+    "sass-embedded": "1.105.1",
     "stylelint": "catalog:",
     "stylelint-config-standard-scss": "14.0.0",
     "stylelint-scss": "6.10.0",
