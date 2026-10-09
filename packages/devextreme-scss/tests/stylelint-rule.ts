@@ -19,7 +19,7 @@ export const createRunner = (pluginFile: string, ruleName: string): Runner => {
   const fixture = mkdtempSync(join(tmpdir(), `${basename(pluginFile, '.mjs')}-`));
   const configPath = join(fixture, 'config.json');
   writeFileSync(configPath, JSON.stringify({
-    customSyntax: require.resolve('postcss-scss', { paths: [require.resolve('stylelint-scss')] }),
+    customSyntax: require.resolve('postcss-scss'),
     plugins: [join(packageRoot, 'tools', 'stylelint', pluginFile)],
     rules: { [ruleName]: true },
   }));
