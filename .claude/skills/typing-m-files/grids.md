@@ -10,6 +10,7 @@ These apply on top of `SKILL.md` to files under `js/__internal/grids/`: `grid_co
 
 ## Where types go
 
+- Files directly in `grid_core/` (`m_modules.ts`, `m_utils.ts`, `m_widget_base.ts`, …) have no `types.ts` of their own. Their types file is `grid_core/m_types.ts`.
 - Reuse before creating:
   - `Controllers['x']`/`Views['x']`, `ModuleType`, `OptionChanged`/`OptionChangedFor` from `grid_core/m_types.ts`;
   - public types from `@js/common/grids` and `@js/ui/data_grid` (`ColumnBase`, `FixedPosition`, `Properties as DataGridProperties`, …).
@@ -32,7 +33,18 @@ const summaryDataController = (Base: ModuleType<DataController>): ModuleType<Dat
 ```
 A generic mixin `<T extends ModuleType<Controller>>(Base: T) => class extends Base` can't name its return type. It keeps `// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type`.
 
+`ModuleType<T>` itself keeps `new (...args: any[]) => T`, with the directive reason `mixin constructors need any[]` (see fixes.md).
+
 **Controller fields.** `public _columnsController!: Controllers['columns'];`
+
+**Views**
+- `_$element` and `_$parent` are optional (`?:`), because `render()` sets them. `element()` returns `dxElementWrapper | undefined`, and so does `_parentElement()`.
+- Code that assumes the view is rendered gets `// @ts-expect-error the view is rendered here`. Use exactly this reason, so `grep -rn "the view is rendered here"` finds every such place when its file is typed. A guard would turn today's `TypeError` into a silent no-op, so it isn't behaviour-neutral.
+- `_renderCore()` returns `DeferredObj<unknown> | void`, with a `no-invalid-void-type` disable: a view that renders synchronously returns nothing. `| undefined` breaks every override that returns nothing (7 of them).
+
+**Fake components.** CardView passes its `WidgetMock`, PivotGrid's field chooser passes itself, and Jest tests pass partial mocks to classic module items. They get `as unknown as InternalGrid` where they're passed. The `ModuleItem` constructor stays `component: InternalGrid`.
+
+**The widget instance as a param** (`callModuleItemsMethod(that, …)`): type it `Partial<Pick<InternalGrid, '_controllers' | '_views'>>`. The widget class declares `_controllers` and `_views` as private, so the typed DataGrid caller needs `// @ts-expect-error the widget's _controllers and _views are private`, like the `processModules` call next to it.
 
 **Options**
 - `this.option('a.b')` is already typed from the public options through `InternalGridOptions`, so delete the casts: `this.option('summary.groupItems') ?? []`.
