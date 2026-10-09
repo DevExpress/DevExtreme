@@ -16,7 +16,7 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import { registerKeyboardAction } from '../m_accessibility';
-import { ColumnsView } from '../views/m_columns_view';
+import { ColumnsView } from '../views/columns_view';
 import type { ColumnViewTemplate } from '../views/types';
 import { CLASSES } from './const';
 
