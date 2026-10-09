@@ -110,7 +110,7 @@ export type WrappedLookupDataSource = NormalizedDataSourceOptions & {
   __dataGridSourceFilter: unknown;
   load: (loadOptions: StoreLoadOptions) => DeferredObj<unknown>;
   key: string | undefined;
-  byKey: (key: unknown) => Promise<unknown>;
+  byKey: (key: RowKey) => Promise<unknown>;
 };
 
 export type LookupDataSource = never[] | NormalizedDataSourceOptions | WrappedLookupDataSource;
