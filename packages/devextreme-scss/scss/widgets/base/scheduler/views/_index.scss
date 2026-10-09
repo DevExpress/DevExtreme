@@ -1,4 +1,3 @@
-@use "sass:meta";
 @use "../../mixins" as *;
 @use "sass:math";
 
@@ -47,7 +46,7 @@ $scheduler-current-time-cell-border-size: 2px; // dx-fixed-size: multiplied else
 
 $scheduler-workspace-date-table-cell-height: 50px; // dx-fixed-size: derived heights multiply it, so a var() cannot pass
 $scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height !default;
-$scheduler-header-panel-table-cell-height: if(meta.type-of($scheduler-workspace-date-table-cell-height) == number, $scheduler-workspace-date-table-cell-height - 10px, calc(#{$scheduler-workspace-date-table-cell-height} - 10px)); // dx-px-nudge: -10px under the workspace cell height
+$scheduler-header-panel-table-cell-height: calc-difference($scheduler-workspace-date-table-cell-height, 10px); // dx-px-nudge: -10px under the workspace cell height
 $scheduler-group-header-table-cell-height: 30px !default;
 
 $scheduler-group-header-table-cell-width: 80px; // dx-fixed-size: multiplied elsewhere, so a var() cannot pass
@@ -111,7 +110,7 @@ $scheduler-renovation-virtual-row-height: 50px !default;
 
   &::before {
     position: absolute;
-    top: if(meta.type-of($scheduler-header-panel-table-cell-height) == number and meta.type-of($scheduler-current-time-cell-border-size) == number, $scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1, calc(#{$scheduler-header-panel-table-cell-height} - #{$scheduler-current-time-cell-border-size} - 1px)); // dx-px-nudge: -1px under the derived top offset, so the indicator overlaps the border
+    top: calc-difference(calc-difference($scheduler-header-panel-table-cell-height, $scheduler-current-time-cell-border-size), 1px); // dx-px-nudge: -1px under the derived top offset, so the indicator overlaps the border
     right: 0;
     width: 100%;
     height: $scheduler-current-time-cell-border-size;

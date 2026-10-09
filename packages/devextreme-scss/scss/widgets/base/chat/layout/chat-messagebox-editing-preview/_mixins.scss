@@ -1,4 +1,4 @@
-@use "sass:meta";
+@use "../../../mixins" as *;
 
 @mixin message-editing-preview(
   $preview-padding,
@@ -16,7 +16,7 @@
 
   .dx-chat-editing-preview-content {
     gap: $message-row-gap;
-    padding-inline-start: if(meta.type-of($preview-padding) == number and meta.type-of($border-width) == number, $preview-padding + $border-width, calc(#{$preview-padding} + #{$border-width}));
+    padding-inline-start: calc-sum($preview-padding, $border-width);
     padding-inline-end: $preview-padding;
   }
 

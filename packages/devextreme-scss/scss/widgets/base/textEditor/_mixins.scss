@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:meta";
+@use "../mixins" as *;
 
 @mixin dx-editor-content-wrapper() {
   display: flex;
@@ -18,7 +19,7 @@
     border-top-width: 0;
 
     span {
-      transform: translate(0, if(meta.type-of($label-offset-y) == number, -$label-offset-y, calc(-1 * #{$label-offset-y})));
+      transform: translate(0, calc(-1 * $label-offset-y));
       font-size: $label-font-size;
       margin-top: 0;
       top: 0;
@@ -161,11 +162,7 @@
   $label-border-radius: 1px,
   $label-backdrop-height: 3px,
 ) {
-  $label-margin-inline: if(
-    meta.type-of($label-padding-inline) == number,
-    -$label-padding-inline,
-    calc(-1 * #{$label-padding-inline})
-  );
+  $label-margin-inline: calc(-1 * $label-padding-inline);
 
   .dx-editor-outlined {
     .dx-texteditor-label {
@@ -192,18 +189,14 @@
        *
        * dx-line-width: the notch is carved at the label border, a hairline that must not thicken.
        */
-      clip-path: inset(#{if(
-        meta.type-of($texteditor-label-font-size) == number,
-        -$texteditor-label-font-size,
-        calc(-1 * #{$texteditor-label-font-size})
-      )} 1px -1px 1px);
+      clip-path: inset(#{calc(-1 * $texteditor-label-font-size)} 1px -1px 1px);
 
       span {
         position: relative;
         font-size: $texteditor-label-font-size;
         top: 0;
         margin-top: 0;
-        transform: translate(0, if(meta.type-of($label-offset-y) == number, -$label-offset-y, calc(-1 * #{$label-offset-y})));
+        transform: translate(0, calc(-1 * $label-offset-y));
         height: $label-active-height;
         line-height: normal;
       }
@@ -259,7 +252,7 @@
             width: 100%;
             position: absolute;
             height: $label-backdrop-height;
-            top: if(meta.type-of($label-backdrop-offset-y) == number, -$label-backdrop-offset-y, calc(-1 * #{$label-backdrop-offset-y}));
+            top: calc(-1 * $label-backdrop-offset-y);
             margin-inline-start: $label-margin-inline;
             background-color: $label-backdrop-bg;
           }
@@ -328,15 +321,21 @@
         padding: 0;
 
         span {
+          $outside-height: $texteditor-label-outside-height;
+
+          @if meta.type-of($texteditor-label-outside-height) == number and meta.type-of($texteditor-label-outside-font-size) == number {
+            $outside-height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
+          }
+
           position: absolute;
           width: 100%;
           cursor: default;
           pointer-events: auto;
           font-size: $texteditor-label-outside-font-size;
           margin-top: 0;
-          top: if(meta.type-of($label-offset-y-outside) == number, -$label-offset-y-outside, calc(-1 * #{$label-offset-y-outside}));
-          height: if(meta.type-of($texteditor-label-outside-height) == number and meta.type-of($texteditor-label-outside-font-size) == number, #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em, $texteditor-label-outside-height);
-          line-height: if(meta.type-of($texteditor-label-outside-height) == number and meta.type-of($texteditor-label-outside-font-size) == number, #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em, $texteditor-label-outside-height);
+          top: calc(-1 * $label-offset-y-outside);
+          height: $outside-height;
+          line-height: $outside-height;
         }
       }
     }
@@ -353,7 +352,7 @@
         }
       }
 
-      $label-empty-margin-top: if(meta.type-of($label-empty-height) == number and meta.type-of($label-margin-top-diff) == number, math.div(-$label-empty-height, 2) + $label-margin-top-diff, calc(#{$label-empty-height} / -2 + #{$label-margin-top-diff}));
+      $label-empty-margin-top: calc-sum(calc($label-empty-height / -2), $label-margin-top-diff);
 
       &.dx-texteditor-empty {
         @include dx-state-empty(
@@ -456,7 +455,7 @@
         height: $texteditor-label-outside-height;
         line-height: $texteditor-label-outside-height;
         margin-top: 0;
-        top: if(meta.type-of($texteditor-label-outside-top-offset) == number, -$texteditor-label-outside-top-offset, calc(-1 * #{$texteditor-label-outside-top-offset}));
+        top: calc(-1 * $texteditor-label-outside-top-offset);
       }
 
       .dx-label {
@@ -484,7 +483,7 @@
           height: $texteditor-empty-label-height;
           line-height: $texteditor-empty-label-line-height;
           top: 50%;
-          margin-top: if(meta.type-of($texteditor-empty-label-height) == number, math.div(-$texteditor-empty-label-height, 2), calc(#{$texteditor-empty-label-height} / -2));
+          margin-top: calc($texteditor-empty-label-height / -2);
         }
 
         &.dx-textarea {
@@ -571,7 +570,7 @@
         font-size: $texteditor-label-outside-font-size;
         height: $texteditor-label-outside-height;
         line-height: $texteditor-label-outside-height;
-        top: if(meta.type-of($texteditor-label-outside-top-offset) == number, -$texteditor-label-outside-top-offset, calc(-1 * #{$texteditor-label-outside-top-offset}));
+        top: calc(-1 * $texteditor-label-outside-top-offset);
         margin-top: 0;
       }
 
@@ -601,7 +600,7 @@
           height: $texteditor-empty-label-height;
           line-height: $texteditor-empty-label-line-height;
           top: 50%;
-          margin-top: if(meta.type-of($texteditor-empty-label-height) == number, math.div(-$texteditor-empty-label-height, 2), calc(#{$texteditor-empty-label-height} / -2));
+          margin-top: calc($texteditor-empty-label-height / -2);
         }
 
         &.dx-textarea {
@@ -781,7 +780,7 @@
             .dx-button-content {
               display: flex;
               justify-content: center;
-              padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px)); // dx-px-nudge: -1px under the button's own padding
+              padding-top: calc-difference($material-button-vertical-padding, 1px); // dx-px-nudge: -1px under the button's own padding
 
               .dx-icon {
                 align-self: center;
@@ -835,7 +834,7 @@
           .dx-button-content {
             display: flex;
             justify-content: center;
-            padding-top: if(meta.type-of($material-button-vertical-padding) == number, $material-button-vertical-padding - 1px, calc(#{$material-button-vertical-padding} - 1px)); // dx-px-nudge: -1px under the button's own padding
+            padding-top: calc-difference($material-button-vertical-padding, 1px); // dx-px-nudge: -1px under the button's own padding
 
             .dx-icon {
               align-self: center;
