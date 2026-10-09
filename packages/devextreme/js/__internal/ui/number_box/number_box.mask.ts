@@ -874,8 +874,6 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     if (this._usesIntlFormatOption(formatOption)) {
       const formatObject = asFormatObject(formatOption) ?? {};
       const locale = getEffectiveFormatLocale(formatOption, 'number');
-      // Fraction-digit options are frequently left unset (e.g. a locale-only format),
-      // so read the limits Intl actually resolves to instead of assuming 0.
       const {
         minimumFractionDigits: min = 0,
         maximumFractionDigits: max = min,
