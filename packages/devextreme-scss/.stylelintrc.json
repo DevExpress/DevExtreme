@@ -1,5 +1,6 @@
 {
     "plugins": [
+        "stylelint-scss",
         "@stylistic/stylelint-plugin",
         "./tools/stylelint/no-identical-branch-declarations.mjs",
         "./tools/stylelint/module-variable-default.mjs"
