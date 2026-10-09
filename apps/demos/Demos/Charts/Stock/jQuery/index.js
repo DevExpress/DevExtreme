@@ -13,10 +13,7 @@ $(() => {
   const dataMax = data[data.length - 1].date.getTime();
 
   const chart = $('#chart').dxChart({
-    title: {
-      text: 'Stock Price',
-      horizontalAlignment: 'center',
-    },
+    title: 'Stock Price',
     dataSource: data,
     commonSeriesSettings: { argumentField: 'date', type: 'stock' },
     series: [{
