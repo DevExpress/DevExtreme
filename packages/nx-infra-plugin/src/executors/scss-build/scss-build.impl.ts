@@ -5,6 +5,7 @@ import { createRequire } from 'module';
 import { glob } from 'glob';
 import { createExecutor } from '../../utils/create-executor';
 import { normalizeGlobPathForWindows } from '../../utils/path-resolver';
+import { watchWithChokidar } from '../../utils/watch';
 import { ensureDir, exists, readFileText, writeFileText } from '../../utils/file-operations';
 import { encodeDataUriContent } from '../../utils/scss-data-uri';
 import { DEFAULT_EULA_URL } from '../add-license-headers/defaults';
@@ -279,19 +280,6 @@ async function runSingleBuild(
   }
 }
 
-function loadChokidar(projectRoot: string): {
-  watch: (
-    paths: string | string[],
-    options?: Record<string, unknown>,
-  ) => {
-    on: (event: string, handler: (...args: any[]) => void) => unknown;
-    close: () => Promise<void> | void;
-  };
-} {
-  const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
-  return projectRequire('chokidar');
-}
-
 async function runWatchBuild(
   projectRoot: string,
   options: ScssBuildExecutorSchema,
@@ -300,6 +288,9 @@ async function runWatchBuild(
   const bundlesDir = options.bundlesDir || DEFAULT_BUNDLES_DIR;
   const cssOutputDir = path.resolve(projectRoot, options.cssOutputDir || DEFAULT_CSS_OUTPUT_DIR);
   const watchDir = path.resolve(projectRoot, 'scss');
+  const generatedBundlesDir = path.resolve(projectRoot, bundlesDir) + path.sep;
+  const isSourceChange = (filePath: string): boolean =>
+    filePath.endsWith('.scss') && !filePath.startsWith(generatedBundlesDir);
   const watchBundleNames = getWatchBundleNames(options);
   const minifyProfile: MinifyProfile = options.mode === 'ci' ? 'ci' : 'all';
 
@@ -320,61 +311,13 @@ async function runWatchBuild(
   };
 
   await rebuild();
-  logger.info('scss-build watch mode is watching for changes...');
 
-  await new Promise<void>((resolve) => {
-    let timer: NodeJS.Timeout | undefined;
-    let busy = false;
-    let pending = false;
-
-    const runRebuild = async (): Promise<void> => {
-      if (busy) {
-        pending = true;
-        return;
-      }
-
-      busy = true;
-      try {
-        await rebuild();
-        logger.info('scss-build watch: rebuild complete');
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        logger.error(`scss-build watch rebuild failed: ${message}`);
-      } finally {
-        busy = false;
-        if (pending) {
-          pending = false;
-          void runRebuild();
-        }
-      }
-    };
-
-    const scheduleRebuild = () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      timer = setTimeout(() => {
-        void runRebuild();
-      }, 200);
-    };
-
-    const chokidar = loadChokidar(projectRoot);
-    const watcher = chokidar.watch(path.join(watchDir, '**/*.scss'), {
-      ignoreInitial: true,
-    });
-    watcher.on('all', scheduleRebuild);
-
-    const stopWatcher = () => {
-      void watcher.close();
-      if (timer) {
-        clearTimeout(timer);
-      }
-      resolve();
-    };
-
-    process.once('SIGINT', stopWatcher);
-    process.once('SIGTERM', stopWatcher);
+  await watchWithChokidar({
+    projectRoot,
+    watchTargets: watchDir,
+    label: 'scss-build watch',
+    eventFilter: (_event, filePath) => isSourceChange(filePath),
+    onRebuild: rebuild,
   });
 }
 
