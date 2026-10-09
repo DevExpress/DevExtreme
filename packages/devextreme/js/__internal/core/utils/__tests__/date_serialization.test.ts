@@ -2,7 +2,7 @@ import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
 import config from '@js/core/config';
-import { dateSerialization } from '@ts/core/utils/m_date_serialization';
+import { dateSerialization } from '@ts/core/utils/date_serialization';
 
 const {
   createLocalDateFromUTCTimestamp,
