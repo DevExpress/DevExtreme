@@ -49,7 +49,6 @@ const WIDGET_CLASS = 'dx-widget';
 
 const MODULE_NAMESPACE = 'dxDataGridResizingReordering';
 
-const COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH = 10;
 const DRAGGING_DELTA = 5;
 
 const allowResizing = function (that) {
@@ -192,6 +191,8 @@ export class ColumnsSeparatorView extends SeparatorView {
 
   private _testCursorName?: string;
 
+  private _testPointerEventsName?: string;
+
   public init() {
     super.init();
 
@@ -308,6 +309,17 @@ export class ColumnsSeparatorView extends SeparatorView {
       $element.css('cursor', cursorName);
       /// #DEBUG
       this._testCursorName = cursorName;
+      /// #ENDDEBUG
+    }
+  }
+
+  private changePointerEvents(pointerEventsName) {
+    pointerEventsName = isDefined(pointerEventsName) ? pointerEventsName : '';
+    const $element = this.element();
+    if ($element) {
+      $element.css('pointerEvents', pointerEventsName);
+      /// #DEBUG
+      this._testPointerEventsName = pointerEventsName;
       /// #ENDDEBUG
     }
   }
@@ -793,6 +805,9 @@ export class ColumnsResizerViewController extends modules.ViewController {
     currentPoint: Coordinates,
     deltaX: number,
   ): ColumnPoint | null {
+    let targetPoint: ColumnPoint | null = null;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+
     if (pointsByColumns) {
       for (let i = 0; i < pointsByColumns.length; i += 1) {
         if (pointsByColumns[i].x === pointsByColumns[0].x
@@ -806,11 +821,15 @@ export class ColumnsResizerViewController extends modules.ViewController {
           && pointsByColumns[i].x - deltaX <= currentPoint.x
           && currentPoint.x <= pointsByColumns[i].x + deltaX
         ) {
-          return pointsByColumns[i];
+          const distance = Math.abs(currentPoint.x - pointsByColumns[i].x);
+          if (distance < nearestDistance) {
+            targetPoint = pointsByColumns[i];
+            nearestDistance = distance;
+          }
         }
       }
     }
-    return null;
+    return targetPoint;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -863,24 +882,27 @@ export class ColumnsResizerViewController extends modules.ViewController {
         that._targetPoint = that._getTargetPoint(
           that.pointsByColumns(),
           eventData,
-          columnsSeparatorWidth,
+          deltaX,
         );
         that._previousParentOffset = parentOffset;
         that._isReadyResizing = false;
 
         if (that._targetPoint) {
+          that._columnsSeparatorView.changePointerEvents('auto');
           that._columnsSeparatorView.changeCursor('col-resize');
           that._columnsSeparatorView.moveByX(that._targetPoint.x - deltaX);
           that._tablePositionController.update(that._targetPoint.y);
           that._isReadyResizing = true;
           e.preventDefault();
         } else {
+          that._columnsSeparatorView.changePointerEvents();
           that._columnsSeparatorView.changeCursor();
           that._columnsSeparatorView.moveByX(null);
         }
       } else {
         that.pointsByColumns(null);
         that._isReadyResizing = false;
+        that._columnsSeparatorView.changePointerEvents();
         that._columnsSeparatorView.changeCursor();
         that._columnsSeparatorView.moveByX(null);
       }
@@ -900,6 +922,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
       that._resizingInfo = null;
 
       that._columnsSeparatorView.hide();
+      that._columnsSeparatorView.changePointerEvents();
       that._columnsSeparatorView.changeCursor();
       that._trackerView.hide();
 
@@ -943,13 +966,16 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
     if (isTouchEvent(e)) {
       if (that._isHeadersRowArea(eventData.y)) {
+        const columnsSeparatorWidth = that._columnsSeparatorView.width();
+        const deltaX = columnsSeparatorWidth / 2;
+
         that._targetPoint = that._getTargetPoint(
           that.pointsByColumns(),
           eventData,
-          COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH,
+          deltaX,
         );
         if (that._targetPoint) {
-          that._columnsSeparatorView.moveByX(that._targetPoint.x - that._columnsSeparatorView.width() / 2);
+          that._columnsSeparatorView.moveByX(that._targetPoint.x - deltaX);
           that._isReadyResizing = true;
         }
       } else {
@@ -971,6 +997,10 @@ export class ColumnsResizerViewController extends modules.ViewController {
       that._tablePositionController.update(that._targetPoint.y);
       that._columnsSeparatorView.show();
       that._trackerView.show();
+
+      const columnsSeparatorWidth = that._columnsSeparatorView.width();
+      that._columnsSeparatorView.moveByX(that._targetPoint.x - columnsSeparatorWidth / 2);
+
       const scrollable = that.component.getScrollable();
 
       if (scrollable && that._isRtlParentStyle()) {

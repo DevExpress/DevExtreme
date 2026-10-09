@@ -952,6 +952,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 this.cursorName = typeUtils.isDefined(cursorName) ? cursorName : '';
             },
 
+            changePointerEvents: function(pointerEvents) {
+                this.pointerEvents = typeUtils.isDefined(pointerEvents) ? pointerEvents : '';
+            },
+
             render: function($container) {
                 this.renderCompleted.fire();
             }
