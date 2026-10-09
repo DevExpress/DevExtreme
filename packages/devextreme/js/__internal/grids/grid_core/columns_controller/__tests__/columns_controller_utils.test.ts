@@ -6,8 +6,8 @@ import config from '@js/core/config';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
-import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import { variableWrapper } from '@ts/core/utils/variable_wrapper';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import {
   columnOptionCore,
   createColumn,
@@ -34,7 +34,7 @@ import {
   setFilterOperationsAsDefaultValues,
   strictParseNumber,
   updateSerializers,
-} from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
+} from '@ts/grids/grid_core/columns_controller/columns_controller_utils';
 import type { BandColumnsCache, Column, ColumnsControllerOptions } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';

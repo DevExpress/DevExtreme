@@ -15,9 +15,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@js/core/utils/extend';
-import { isEmptyObject } from '@js/core/utils/type';
-import { current as getCurrentTheme } from '@js/ui/themes';
+import { extend } from '@ts/core/utils/m_extend';
+import { isEmptyObject } from '@ts/core/utils/m_type';
+import { current as getCurrentTheme } from '@ts/ui/themes';
 import fluentThemes from '@ts/viz/core/themes/fluent/index';
 import carmineThemes from '@ts/viz/core/themes/generic/carmine';
 import contrastThemes from '@ts/viz/core/themes/generic/contrast';
@@ -39,7 +39,7 @@ let defaultTheme;
 let nextCacheUid = 0;
 const widgetsCache = {};
 
-export function getTheme(themeName) {
+export function getTheme(themeName?) {
   const name = normalizeEnum(themeName);
   // @ts-expect-error
   return themes[name] || themes[themesMapping[name] || currentTheme()];

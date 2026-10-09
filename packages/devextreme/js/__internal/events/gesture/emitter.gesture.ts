@@ -3,13 +3,13 @@ import {
   isMouseEvent, isTouchEvent, needSkipEvent,
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
-import callOnce from '@js/core/utils/call_once';
 import { noop } from '@js/core/utils/common';
 import { sign } from '@js/core/utils/math';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { styleProp } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import devices from '@ts/core/devices';
+import { callOnce } from '@ts/core/utils/call_once';
 import domUtils from '@ts/core/utils/m_dom';
 import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';

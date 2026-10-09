@@ -980,7 +980,7 @@ QUnit.test('Half circle right - leave margin on left', function(assert) {
 });
 
 QUnit.module('Colors', $.extend({}, environment, {
-    checkColors: function(assert, backgroundColor, colors, lineColor, textColor) {
+    checkColors: function(assert, backgroundColor, colors, lineColor, textColor, textOpacity) {
         const elements = this.getBarsGroup().children;
         let i = 0;
         const ii = elements.length / 4;
@@ -991,6 +991,9 @@ QUnit.module('Colors', $.extend({}, environment, {
             assert.strictEqual(elements[i * 4 + 1]._stored_settings.fill, colors[i], 'bar' + message);
             assert.strictEqual(elements[i * 4 + 2]._stored_settings.stroke, lineColor || colors[i], 'line' + message);
             assert.strictEqual(elements[i * 4 + 3]._stored_styles.fill, textColor || colors[i], 'text' + message);
+            if(textOpacity !== undefined) {
+                assert.strictEqual(elements[i * 4 + 3]._stored_styles['fill-opacity'], textOpacity, 'text opacity' + message);
+            }
         }
     }
 }));
@@ -1126,7 +1129,7 @@ QUnit.test('Font color', function(assert) {
                 }
             }
         });
-        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, `rgba(0,0,255,${opacity})`);
+        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, 'blue', opacity);
     });
 
     QUnit.test('Font opacity should be set correctly at runtime change (T1238556)', function(assert) {
@@ -1142,7 +1145,7 @@ QUnit.test('Font color', function(assert) {
 
         this.$container.dxBarGauge('instance').option('label.font.opacity', opacity);
 
-        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, `rgba(0,0,255,${opacity})`);
+        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, 'blue', opacity);
     });
 });
 

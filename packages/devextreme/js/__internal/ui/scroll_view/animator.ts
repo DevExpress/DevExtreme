@@ -1,5 +1,4 @@
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/common/core/animation/frame';
-import Class from '@js/core/class';
 import { isDefined } from '@js/core/utils/type';
 
 type AnimationFrameId = ReturnType<typeof requestAnimationFrame>;
@@ -47,9 +46,7 @@ abstract class Animator {
     this._stepAnimationFrame = requestAnimationFrame(this._proxiedStepCore);
   }
 
-  _step(): void {
-    Class.abstract();
-  }
+  abstract _step(): void;
 
   _isFinished(): boolean {
     return this._finished;

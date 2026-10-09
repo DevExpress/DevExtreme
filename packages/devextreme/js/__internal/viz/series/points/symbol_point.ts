@@ -16,11 +16,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isDefined as _isDefined } from '@js/core/utils/type';
-import { getWindow, hasProperty } from '@js/core/utils/window';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { isDefined as _isDefined } from '@ts/core/utils/m_type';
+import { getWindow, hasProperty } from '@ts/core/utils/m_window';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 import { Label } from '@ts/viz/series/points/label';
 
@@ -484,7 +484,7 @@ export default {
     const that = this;
     const options = that._options;
     const errorBarOptions = options.errorBars;
-    const points = [];
+    const points: number[][] = [];
     let settings;
     const pos = that._errorBarPos;
     let high = that._highErrorCoord;
@@ -507,11 +507,8 @@ export default {
     lowErrorOnly && (high = that._baseErrorBarPos);
 
     if (displayMode !== 'none' && _isDefined(high) && _isDefined(low) && _isDefined(pos)) {
-      // @ts-expect-error
       !lowErrorOnly && points.push([pos - edgeLength, high, pos + edgeLength, high]);
-      // @ts-expect-error
       points.push([pos, high, pos, low]);
-      // @ts-expect-error
       !highErrorOnly && points.push([pos + edgeLength, low, pos - edgeLength, low]);
 
       options.rotated && each(points, (_, p) => {
@@ -571,7 +568,6 @@ export default {
     navigator = that.__debug_navigator || navigator;
     that.__debug_browserNavigator = navigator;
     /// #ENDDEBUG
-    // @ts-expect-error
     const minTrackerSize = hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
     that._options.trackerR = r < minTrackerSize ? minTrackerSize : r;
     return that._options.trackerR;

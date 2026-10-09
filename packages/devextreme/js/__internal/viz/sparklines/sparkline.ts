@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 // PLUGINS_SECTION
-import componentRegistrator from '@js/core/component_registrator';
-import { isDefined } from '@js/core/utils/type';
+import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
+import { isDefined } from '@ts/core/utils/m_type';
 import { validateData } from '@ts/viz/components/data_validator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';

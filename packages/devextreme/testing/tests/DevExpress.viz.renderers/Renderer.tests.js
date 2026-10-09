@@ -25,7 +25,6 @@ QUnit.testDone(function() {
     renderers.SvgElement.resetHistory && renderers.SvgElement.resetHistory();
 });
 
-// const elementsName = ['DEBUG_set_SvgElement', 'DEBUG_set_RectSvgElement', 'DEBUG_set_PathSvgElement', 'DEBUG_set_ArcSvgElement', 'DEBUG_set_TextSvgElement'];
 const methodsName = ['SvgElement', 'RectSvgElement', 'PathSvgElement', 'ArcSvgElement', 'TextSvgElement'];
 const origMethods = {};
 

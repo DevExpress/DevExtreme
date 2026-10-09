@@ -586,18 +586,17 @@ QUnit.test('getLayerByName', function(assert) {
 });
 
 QUnit.test('clearSelection', function(assert) {
-    const arg = { tag: 'arg' };
     const spy1 = sinon.spy();
     const spy2 = sinon.spy();
     const spy3 = sinon.spy();
     this.createMap();
     this.layerCollection.stub('items').returns([{ clearSelection: spy1 }, { clearSelection: spy2 }, { clearSelection: spy3 }]);
 
-    this.map.clearSelection(arg);
+    this.map.clearSelection();
 
-    assert.deepEqual(spy1.lastCall.args, [arg]);
-    assert.deepEqual(spy2.lastCall.args, [arg]);
-    assert.deepEqual(spy3.lastCall.args, [arg]);
+    assert.deepEqual(spy1.lastCall.args, []);
+    assert.deepEqual(spy2.lastCall.args, []);
+    assert.deepEqual(spy3.lastCall.args, []);
 });
 
 QUnit.test('center - getter', function(assert) {

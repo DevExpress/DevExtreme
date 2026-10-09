@@ -20,10 +20,10 @@ import type {
   DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
-import Modules from '@ts/grids/grid_core/m_modules';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import Modules from '@ts/grids/grid_core/modules/modules';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import gridCoreUtils from '../m_utils';
 import {
   headerFilterMixin,
@@ -345,7 +345,9 @@ export class HeaderFilterController extends Modules.ViewController {
       const visibleIndex = columnsController.getVisibleIndex(columnIndex);
       // TODO getView
       const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView');
+      // @ts-expect-error getColumnElements() is typed as possibly undefined
       const $columnElement = view.getColumnElements()
+        // @ts-expect-error a column shown in the group panel has a groupIndex
         .eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
       this.showHeaderFilterMenuBase({
@@ -443,6 +445,8 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const $indicator = super._updateIndicator($cell, column, indicatorName);
 
     $indicator && this._subscribeToIndicatorEvent($indicator, column, indicatorName);
+
+    return undefined;
   }
 
   private _updateHeaderFilterIndicators() {

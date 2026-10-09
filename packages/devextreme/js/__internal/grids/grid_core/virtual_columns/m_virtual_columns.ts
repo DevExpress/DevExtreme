@@ -1,13 +1,16 @@
 /* eslint-disable max-classes-per-file */
+import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { getHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { ModuleType } from '../m_types';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import gridCoreUtils from '../m_utils';
+import type { ModuleType } from '../types';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
@@ -47,9 +50,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
     this._columnsController.setScrollPosition(left, e.event);
   }
 
-  protected _renderCore(e) {
-    if (e?.virtualColumnsScrolling) {
-      const $contentElement = this._findContentElement();
+  protected _renderCore(e?: DataChange): DeferredObj<unknown> {
+    if (e && 'virtualColumnsScrolling' in e && e.virtualColumnsScrolling) {
+      // @ts-expect-error _findContentElement() is typed as possibly undefined
+      const $contentElement: dxElementWrapper = this._findContentElement();
       const fixedColumns = this._columnsController?.getFixedColumns();
       const useNativeScrolling = this._scrollable?.option('useNative');
       const legacyMode = this.option('columnFixing.legacyMode');
@@ -62,7 +66,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
           $contentElement.css({ minHeight: getHeight($contentElement) });
         }
 
-        const resizeCompletedHandler = () => {
+        const resizeCompletedHandler = (): void => {
           this.resizeCompleted.remove(resizeCompletedHandler);
           $contentElement.css({ minHeight: '' });
         };
@@ -71,8 +75,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
       }
     }
 
-    // @ts-expect-error
-    return super._renderCore.apply(this, arguments);
+    return super._renderCore(e);
   }
 };
 

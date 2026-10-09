@@ -2,6 +2,8 @@
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
@@ -11,14 +13,15 @@ import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import type { Item } from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
-import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
+import modules from '../modules/modules';
+import type { ModuleType } from '../types';
 import { ColumnsView } from '../views/m_columns_view';
 import { defaultOptions } from './const';
 
@@ -154,6 +157,7 @@ export class ColumnChooserView extends ColumnsView {
   private _initializePopupContainer() {
     const that = this;
     const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
+    // @ts-expect-error the view is rendered here
     const $element = that.element().addClass(columnChooserClass);
     const columnChooserOptions = that.option('columnChooser')!;
     const popupPosition = this._columnChooserController.getPosition();
@@ -212,7 +216,7 @@ export class ColumnChooserView extends ColumnsView {
     }
   }
 
-  protected _renderCore(change) {
+  protected _renderCore(change?: DataChange | 'full'): DeferredObj<unknown> {
     if (this._popupContainer) {
       const isDragMode = !this.isSelectMode();
 
@@ -222,6 +226,8 @@ export class ColumnChooserView extends ColumnsView {
         this._updateItems();
       }
     }
+
+    return Deferred<unknown>().resolve();
   }
 
   private _renderTreeView() {

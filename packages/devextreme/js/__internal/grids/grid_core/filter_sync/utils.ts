@@ -5,7 +5,7 @@ import {
   getDefaultOperation,
   removeFieldConditionsFromFilter,
   syncFilters,
-} from '@ts/filter_builder/m_utils';
+} from '@ts/filter_builder/utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/filter/types';
 
@@ -57,7 +57,6 @@ const canSyncHeaderFilterWithFilterRow = (column: FilterSyncColumn): boolean => 
 export const checkForErrors = (columns: FilterSyncColumn[]): void => {
   columns.forEach((column) => {
     if (!isDefined(getColumnIdentifier(column)) && column.allowFiltering) {
-      // @ts-expect-error `errors.Error` is not declared as a constructor
       throw new errors.Error('E1049', column.caption);
     }
   });

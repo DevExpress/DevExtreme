@@ -1,0 +1,226 @@
+//# ─────────────────────────────────────────────────────────────────────────────
+//# DevExtreme Angular wrapper — nested option component template
+//# Output: packages/devextreme-angular/src/ui/<path>/nested/<file>.ts
+//#         (one file per nested component; README §5)
+//#
+//# Same directive syntax as component.ts.tmpl. Delete every "//#" line.
+//# Lists have any length; __X_LIST__ is one placeholder for a whole comma-joined list.
+//# Never leave two blank lines in a row: if skipping a block does that, keep one.
+//#
+//# Flags:  ITEM      collection item (array option): Dxi… class, CollectionNestedOption
+//#         TMPL      the nested type has a field named `template`
+//#         EVENTS    ≥1 subscribable (@fires) field → <field>Change outputs
+//#         CO        this nested type itself has collection-item children
+//#
+//# Placeholders:
+//#   __Class__      DxoPopupPosition / DxiTabsItem   (README §5.2)
+//#   __selector__   dxo-popup-position / dxi-tabs-item
+//#   __optionName__ option name in the parent: position / items
+//# ─────────────────────────────────────────────────────────────────────────────
+/* tslint:disable:max-line-length */
+
+import {
+    Component,
+//#if !ITEM
+    OnInit,
+    OnDestroy,
+//#endif
+    NgModule,
+    Host,
+//#if TMPL
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
+//#endif
+    SkipSelf,
+//#if EVENTS || CO
+    Input,
+//#else
+    Input
+//#endif
+//#if EVENTS
+//#if CO
+    Output,
+    EventEmitter,
+//#else
+    Output,
+    EventEmitter
+//#endif
+//#endif
+//#if CO
+    ContentChildren,
+    QueryList
+//#endif
+} from '@angular/core';
+//#if TMPL
+import { DOCUMENT } from '@angular/common';
+//#endif
+
+//#each TYPE_IMPORT   (README §6: one line per module, first-use order)
+//#   __TYPES_LIST__  all type names from that module, joined with ", " — any number, e.g.
+//#                   PositionAlignment, HorizontalAlignment, VerticalAlignment
+//#                   The type `Component` is written "Component as CoreComponent".
+import type { __TYPES_LIST__ } from '__typeModule__';
+//#endeach
+
+import {
+    DxIntegrationModule,
+    NestedOptionHost,
+//#if TMPL
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost,
+//#endif
+//#if CO && !ITEM
+    CollectionNestedOption,
+//#endif
+} from 'devextreme-angular/core';
+//#if ITEM
+import { CollectionNestedOption } from 'devextreme-angular/core';
+import { PROPERTY_TOKEN___optionName__ } from 'devextreme-angular/core/tokens';
+//#else
+import { NestedOption } from 'devextreme-angular/core';
+//#endif
+//#if CO
+import {
+//#each CO_PROPERTY   (distinct option names of this component's collection-item children)
+    PROPERTY_TOKEN___coProp__,
+//#endeach
+} from 'devextreme-angular/core/tokens';
+//#endif
+
+@Component({
+    selector: '__selector__',
+//#if TMPL
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+//#else
+    template: '',
+    styles: [''],
+//#endif
+    imports: [ DxIntegrationModule ],
+//#if ITEM
+    providers: [
+        NestedOptionHost,
+//#if TMPL
+        DxTemplateHost,
+//#endif
+        {
+            provide: PROPERTY_TOKEN___optionName__,
+            useExisting: __Class__Component,
+        }
+    ]
+//#else
+//#if TMPL
+    providers: [NestedOptionHost, DxTemplateHost]
+//#else
+    providers: [NestedOptionHost]
+//#endif
+//#endif
+})
+//#if ITEM && TMPL
+export class __Class__Component extends CollectionNestedOption implements AfterViewInit, IDxTemplateHost {
+//#endif
+//#if ITEM && !TMPL
+export class __Class__Component extends CollectionNestedOption {
+//#endif
+//#if !ITEM && TMPL
+export class __Class__Component extends NestedOption implements AfterViewInit, OnDestroy, OnInit, IDxTemplateHost {
+//#endif
+//#if !ITEM && !TMPL
+export class __Class__Component extends NestedOption implements OnDestroy, OnInit {
+//#endif
+//#each CO_PROPERTY
+    @ContentChildren(PROPERTY_TOKEN___coProp__)
+    set ___coProp__ContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('__coProp__', value);
+    }
+
+//#endeach
+//#each FIELD   (README §5.3: every public field, A→Z; README §2 types)
+    @Input()
+    get __field__(): __FieldType__ {
+        return this._getOption('__field__');
+    }
+    set __field__(value: __FieldType__) {
+        this._setOption('__field__', value);
+    }
+
+//#endeach
+//#each NESTED_SUBSCRIBABLE_FIELD   (EVENTS)
+    /**
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+     */
+    @Output() __field__Change: EventEmitter<__FieldType__>;
+
+//#endeach
+    protected get _optionPath() {
+        return '__optionName__';
+    }
+
+    constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
+//#if TMPL
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
+//#else
+            @Host() optionHost: NestedOptionHost) {
+//#endif
+        super();
+//#if EVENTS
+        this._createEventEmitters([
+//#each NESTED_SUBSCRIBABLE_FIELD   (drop the comma on the LAST entry)
+            { emit: '__field__Change' },
+//#endeach
+        ]);
+
+//#endif
+        parentOptionHost.setNestedOption(this);
+        optionHost.setHost(this, this._fullOptionPath.bind(this));
+//#if TMPL
+        templateHost.setHost(this);
+//#endif
+//#each PREDEFINED_PROP   (README §5.4; string values in single quotes)
+        this.__discriminator__ = '__value__';
+//#endeach
+    }
+//#if TMPL
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
+    }
+//#endif
+//#if ITEM
+
+    ngOnDestroy() {
+        this._deleteRemovedOptions(this._fullOptionPath());
+    }
+//#else
+
+    ngOnInit() {
+        this._addRecreatedComponent();
+    }
+
+    ngOnDestroy() {
+        this._addRemovedOption(this._getOptionPath());
+    }
+//#endif
+}
+
+@NgModule({
+  imports: [
+    __Class__Component
+  ],
+  exports: [
+    __Class__Component
+  ],
+})
+export class __Class__Module { }

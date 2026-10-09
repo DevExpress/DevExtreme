@@ -3,8 +3,8 @@ import '@ts/viz/tree_map/tiling.squarified';
 // By design discrete colorizing is used by default.
 import '@ts/viz/tree_map/colorizing.discrete';
 
-import componentRegistrator from '@js/core/component_registrator';
-import { noop } from '@js/core/utils/common';
+import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
+import { noop } from '@ts/core/utils/m_common';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 import BaseWidget from '@ts/viz/core/base_widget';

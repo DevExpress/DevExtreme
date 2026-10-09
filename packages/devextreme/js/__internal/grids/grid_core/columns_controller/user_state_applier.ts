@@ -1,6 +1,6 @@
 import { isDefined, isString } from '@js/core/utils/type';
 
-import { applyColumnStateFields, isUserStateColumn } from './m_columns_controller_utils';
+import { applyColumnStateFields, isUserStateColumn } from './columns_controller_utils';
 import type {
   Column,
   ColumnUserState,

@@ -1,0 +1,1095 @@
+/* eslint-disable max-classes-per-file */
+import { normalizeKeyName } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/common/core/localization/message';
+import registerComponent from '@js/core/component_registrator';
+import domAdapter from '@js/core/dom_adapter';
+import Guid from '@js/core/guid';
+import $, { type dxElementWrapper } from '@js/core/renderer';
+import { when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { isDefined } from '@js/core/utils/type';
+import type { GroupOperation } from '@js/ui/filter_builder';
+import type { ShownEvent } from '@js/ui/popup';
+import Popup from '@js/ui/popup/ui.popup';
+import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
+import TreeView from '@js/ui/tree_view';
+import type { ActionConfig } from '@ts/core/widget/component';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
+import type { EngineEvent, EngineTarget } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
+
+import type {
+  AddMenuItem,
+  ButtonWithMenuOptions,
+  Condition,
+  ConditionValue,
+  Criteria,
+  EditorFactoryOwner,
+  FilterBuilderField,
+  FilterBuilderItem,
+  FilterBuilderProperties,
+  FilterCustomOperation,
+  FilterExpression,
+  GroupMenuItem,
+  KeyEvent,
+  MenuOptions,
+  OperationMenuItem,
+  PopupMenuOptions,
+  PopupOptions,
+  ResolvedMenuOptions,
+  ValueEditorOptions,
+} from './types';
+import {
+  addItem, convertToInnerStructure,
+  createCondition, createEmptyGroup,
+  getAvailableOperations, getCaptionWithParents, getCurrentLookupValueText, getCurrentValueText,
+  getCustomOperation, getDefaultOperation, getField, getFilterExpression, getGroupCriteria,
+  getGroupMenuItem, getGroupValue,
+  getItems,
+  getMergedOperations, getNormalizedFields, getNormalizedFilter,
+  getOperationFromAvailable,
+  getOperationValue, hasLookup, isCondition, isGroup, removeItem, renderValueText, setGroupValue,
+  updateConditionByOperation,
+} from './utils';
+
+const FILTER_BUILDER_CLASS = 'dx-filterbuilder';
+const FILTER_BUILDER_GROUP_CLASS = `${FILTER_BUILDER_CLASS}-group`;
+const FILTER_BUILDER_GROUP_ITEM_CLASS = `${FILTER_BUILDER_GROUP_CLASS}-item`;
+const FILTER_BUILDER_GROUP_CONTENT_CLASS = `${FILTER_BUILDER_GROUP_CLASS}-content`;
+const FILTER_BUILDER_GROUP_OPERATIONS_CLASS = `${FILTER_BUILDER_GROUP_CLASS}-operations`;
+const FILTER_BUILDER_GROUP_OPERATION_CLASS = `${FILTER_BUILDER_GROUP_CLASS}-operation`;
+const FILTER_BUILDER_ACTION_CLASS = `${FILTER_BUILDER_CLASS}-action`;
+const FILTER_BUILDER_IMAGE_CLASS = `${FILTER_BUILDER_ACTION_CLASS}-icon`;
+const FILTER_BUILDER_IMAGE_ADD_CLASS = 'dx-icon-plus';
+const FILTER_BUILDER_IMAGE_REMOVE_CLASS = 'dx-icon-remove';
+const FILTER_BUILDER_ITEM_TEXT_CLASS = `${FILTER_BUILDER_CLASS}-text`;
+const FILTER_BUILDER_ITEM_FIELD_CLASS = `${FILTER_BUILDER_CLASS}-item-field`;
+const FILTER_BUILDER_ITEM_OPERATION_CLASS = `${FILTER_BUILDER_CLASS}-item-operation`;
+const FILTER_BUILDER_ITEM_VALUE_CLASS = `${FILTER_BUILDER_CLASS}-item-value`;
+const FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = `${FILTER_BUILDER_CLASS}-item-value-text`;
+const FILTER_BUILDER_OVERLAY_CLASS = `${FILTER_BUILDER_CLASS}-overlay`;
+const FILTER_BUILDER_FILTER_OPERATIONS_CLASS = `${FILTER_BUILDER_CLASS}-operations`;
+const FILTER_BUILDER_FIELDS_CLASS = `${FILTER_BUILDER_CLASS}-fields`;
+const FILTER_BUILDER_ADD_CONDITION_CLASS = `${FILTER_BUILDER_CLASS}-add-condition`;
+const ACTIVE_CLASS = 'dx-state-active';
+const FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = `${FILTER_BUILDER_CLASS}-menu-custom-operation`;
+const SOURCE = 'filterBuilder';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
+const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
+const TREEVIEW_NODE_CONTAINER = 'dx-treeview-node-container';
+
+const TAB_KEY = 'tab';
+const ENTER_KEY = 'enter';
+const ESCAPE_KEY = 'escape';
+
+const ACTIONS: { name: string; config: ActionConfig }[] = [{
+  name: 'onEditorPreparing',
+  config: { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' },
+}, {
+  name: 'onEditorPrepared',
+  config: { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' },
+}, {
+  name: 'onValueChanged',
+  config: { excludeValidators: ['disabled', 'readOnly'] },
+}];
+const OPERATORS: Record<string, string> = {
+  and: 'and',
+  or: 'or',
+  notAnd: '!and',
+  notOr: '!or',
+};
+
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+const EditorFactory = EditorFactoryMixin(class {});
+
+class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFactoryOwner {
+  _disableInvalidateForValue!: boolean;
+
+  _model!: Criteria;
+
+  _customOperations!: FilterCustomOperation[];
+
+  _editorFactory!: EditorFactoryOwner['_editorFactory'];
+
+  _actions!: Record<string, (options?: Record<string, unknown>) => unknown>;
+
+  _documentKeyUpHandler?: (e: KeyEvent) => void;
+
+  _documentClickHandler?: (e: EngineEvent) => void;
+
+  _popupWithTreeView?: InstanceType<typeof Popup>;
+
+  _getDefaultOptions(): FilterBuilderProperties {
+    const defaultOptions: FilterBuilderProperties = extend(super._getDefaultOptions(), {
+      onEditorPreparing: undefined,
+
+      onEditorPrepared: undefined,
+
+      onValueChanged: undefined,
+
+      fields: [],
+
+      groupOperations: ['and', 'or', 'notAnd', 'notOr'] satisfies GroupOperation[],
+
+      maxGroupLevel: undefined,
+
+      value: null,
+
+      allowHierarchicalFields: false,
+
+      groupOperationDescriptions: {
+        and: messageLocalization.format('dxFilterBuilder-and'),
+        or: messageLocalization.format('dxFilterBuilder-or'),
+        notAnd: messageLocalization.format('dxFilterBuilder-notAnd'),
+        notOr: messageLocalization.format('dxFilterBuilder-notOr'),
+      },
+
+      customOperations: [],
+
+      closePopupOnTargetScroll: true,
+
+      filterOperationDescriptions: {
+        between: messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
+        equal: messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
+        notEqual: messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
+        lessThan: messageLocalization.format('dxFilterBuilder-filterOperationLess'),
+        lessThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
+        greaterThan: messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
+        greaterThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
+        startsWith: messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
+        contains: messageLocalization.format('dxFilterBuilder-filterOperationContains'),
+        notContains: messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
+        endsWith: messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
+        isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
+        isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
+      },
+    });
+
+    return defaultOptions;
+  }
+
+  _optionChanged(args: OptionChanged<FilterBuilderProperties>): void {
+    switch (args.name) {
+      case 'closePopupOnTargetScroll':
+        break;
+      case 'onEditorPreparing':
+      case 'onEditorPrepared':
+      case 'onValueChanged':
+        this._initActions();
+        break;
+      case 'customOperations':
+        this._initCustomOperations();
+        this._invalidate();
+        break;
+      case 'fields':
+      case 'maxGroupLevel':
+      case 'groupOperations':
+      case 'allowHierarchicalFields':
+      case 'groupOperationDescriptions':
+      case 'filterOperationDescriptions':
+        this._invalidate();
+        break;
+      case 'value':
+        if (args.value !== args.previousValue) {
+          const disableInvalidateForValue = this._disableInvalidateForValue;
+          if (!disableInvalidateForValue) {
+            this._initModel();
+            this._invalidate();
+          }
+          this._disableInvalidateForValue = false;
+          this.executeAction('onValueChanged', {
+            value: args.value,
+            previousValue: args.previousValue,
+          });
+          this._disableInvalidateForValue = disableInvalidateForValue;
+        }
+        break;
+      default:
+        super._optionChanged(args);
+    }
+  }
+
+  getFilterExpression(): FilterExpression | null {
+    const fields = this._getNormalizedFields();
+    const value: Criteria = extend(true, [], this._model);
+    return getFilterExpression(getNormalizedFilter(value), fields, this._customOperations, SOURCE);
+  }
+
+  _getNormalizedFields(): FilterBuilderField[] {
+    return getNormalizedFields(this.option('fields'));
+  }
+
+  _updateFilter(): void {
+    this._disableInvalidateForValue = true;
+    const value: Criteria = extend(true, [], this._model);
+    const normalizedValue = getNormalizedFilter(value);
+    const oldValue = getNormalizedFilter(this._getModel(this.option('value')));
+    if (JSON.stringify(oldValue) !== JSON.stringify(normalizedValue)) {
+      this.option('value', normalizedValue);
+    }
+    this._disableInvalidateForValue = false;
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._fireContentReadyAction();
+  }
+
+  _init(): void {
+    this._initCustomOperations();
+    this._initModel();
+    this._initEditorFactory();
+    this._initActions();
+    super._init();
+  }
+
+  _initEditorFactory(): void {
+    this._editorFactory = new EditorFactory();
+  }
+
+  _initCustomOperations(): void {
+    this._customOperations = getMergedOperations(
+      this.option('customOperations'),
+      this.option('filterOperationDescriptions')?.between,
+      this,
+    );
+  }
+
+  _getDefaultGroupOperation(): string {
+    return this.option('groupOperations')?.[0] ?? OPERATORS.and;
+  }
+
+  _getModel(value: unknown): Criteria {
+    return convertToInnerStructure(value, this._customOperations, this._getDefaultGroupOperation());
+  }
+
+  _initModel(): void {
+    this._model = this._getModel(this.option('value'));
+  }
+
+  _initActions(): void {
+    this._actions = {};
+
+    ACTIONS.forEach((action) => {
+      const actionConfig = extend({}, action.config);
+      this._actions[action.name] = this._createActionByOption(action.name, actionConfig);
+    });
+  }
+
+  executeAction(actionName: string, options: Record<string, unknown>): unknown {
+    const action = this._actions[actionName];
+
+    return action && action(options);
+  }
+
+  _initMarkup(): void {
+    this.$element().addClass(FILTER_BUILDER_CLASS);
+    super._initMarkup();
+
+    this._addAriaAttributes(this.$element(), messageLocalization.format('dxFilterBuilder-filterAriaRootElement'), 'group');
+    this._createGroupElementByCriteria(this._model)
+      .appendTo(this.$element());
+  }
+
+  _addAriaAttributes(
+    $element: dxElementWrapper,
+    ariaLabel: string,
+    role: string,
+    hasPopup?: boolean | null,
+    hasExpanded?: boolean | null,
+    ariaLevel?: number | string | null,
+  ): void {
+    if (!$element || !$element.length) return;
+
+    const attributes: Record<string, string> = { role };
+
+    if (ariaLabel) {
+      if ($element.text().length > 0) {
+        attributes.title = ariaLabel;
+      } else {
+        attributes['aria-label'] = ariaLabel;
+      }
+    }
+
+    if (isDefined(hasPopup)) {
+      attributes['aria-haspopup'] = `${hasPopup}`;
+    }
+
+    if (isDefined(hasExpanded)) {
+      attributes['aria-expanded'] = `${hasExpanded}`;
+    }
+
+    if (isDefined(ariaLevel)) {
+      attributes['aria-level'] = `${ariaLevel}`;
+    }
+
+    $element.attr(attributes);
+  }
+
+  _createConditionElement(
+    condition: Condition,
+    parent: Criteria,
+    groupLevel?: number | string,
+  ): dxElementWrapper {
+    return $('<div>')
+      .addClass(FILTER_BUILDER_GROUP_CLASS)
+      .append(this._createConditionItem(condition, parent, groupLevel))
+      .attr('role', 'group');
+  }
+
+  _createGroupElementByCriteria(
+    criteria: Criteria,
+    parent?: Criteria,
+    groupLevel = 0,
+  ): dxElementWrapper {
+    const $group = this._createGroupElement(criteria, parent, groupLevel);
+    const $groupContent = $group.find(`.${FILTER_BUILDER_GROUP_CONTENT_CLASS}`);
+    const groupCriteria = getGroupCriteria(criteria);
+
+    for (const innerCriteria of groupCriteria) {
+      if (isGroup(innerCriteria)) {
+        this._createGroupElementByCriteria(innerCriteria, criteria, groupLevel + 1)
+          .appendTo($groupContent);
+      } else if (isCondition(innerCriteria)) {
+        this._createConditionElement(innerCriteria, criteria, `${groupLevel + 1}`)
+          .appendTo($groupContent);
+      }
+    }
+    return $group;
+  }
+
+  _createGroupElement(
+    criteria: Criteria,
+    parent: Criteria | undefined,
+    groupLevel: number,
+  ): dxElementWrapper {
+    const $guid = new Guid();
+    const $groupItem = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
+    const $groupContent = $('<div>').addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS).attr('id', `${$guid}`);
+    const $group = $('<div>').addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
+
+    if (parent != null) {
+      this._createRemoveButton(() => {
+        removeItem(parent, criteria);
+        $group.remove();
+        this._updateFilter();
+      }, 'group').appendTo($groupItem);
+    }
+
+    let groupItemLevel = groupLevel;
+
+    if (groupLevel === 0) {
+      this._addAriaAttributes($group, '', 'tree');
+      groupItemLevel += 1;
+    }
+
+    this._addAriaAttributes(
+      $groupItem,
+      messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'),
+      'treeitem',
+      null,
+      null,
+      groupItemLevel,
+    );
+    $groupItem.attr('aria-owns', `${$guid}`);
+
+    this._createGroupOperationButton(criteria).appendTo($groupItem);
+
+    this._createAddButton(() => {
+      const newGroup = createEmptyGroup(this._getDefaultGroupOperation());
+      addItem(newGroup, criteria);
+      this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
+      this._updateFilter();
+    }, () => {
+      const field = this.option('fields')[0];
+      const newCondition = createCondition(field, this._customOperations);
+      addItem(newCondition, criteria);
+      this._createConditionElement(newCondition, criteria, groupLevel + 1).appendTo($groupContent);
+      this._updateFilter();
+    }, groupLevel).appendTo($groupItem);
+
+    return $group;
+  }
+
+  _createButton(caption?: string): dxElementWrapper {
+    const $button = $('<div>');
+
+    return caption === undefined ? $button : $button.text(caption);
+  }
+
+  _createGroupOperationButton(criteria: Criteria): dxElementWrapper {
+    const groupOperations = this._getGroupOperations(criteria);
+    let groupMenuItem = getGroupMenuItem(criteria, groupOperations);
+    const caption = groupMenuItem.text;
+    const $operationButton: dxElementWrapper = groupOperations && groupOperations.length < 2
+      ? this._createButton(caption).addClass(DISABLED_STATE_CLASS)
+      : this._createButtonWithMenu({
+        caption,
+        menu: {
+          items: groupOperations,
+          displayExpr: 'text',
+          keyExpr: 'value',
+          onItemClick: (e) => {
+            if (groupMenuItem !== e.itemData) {
+              setGroupValue(criteria, e.itemData.value);
+              $operationButton.text(e.itemData.text);
+              groupMenuItem = e.itemData;
+              this._updateFilter();
+            }
+          },
+          onContentReady(e) {
+            e.component.selectItem(groupMenuItem);
+          },
+          cssClass: FILTER_BUILDER_GROUP_OPERATIONS_CLASS,
+        },
+      });
+
+    this._addAriaAttributes(
+      $operationButton,
+      messageLocalization.format('dxFilterBuilder-filterAriaOperationButton'),
+      'combobox',
+      true,
+      false,
+    );
+
+    return $operationButton.addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+      .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
+      .attr('tabindex', 0);
+  }
+
+  _createButtonWithMenu<TItem>(options: ButtonWithMenuOptions<TItem>): dxElementWrapper {
+    const removeMenu = (): void => {
+      this.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
+      this.$element().find('.dx-overlay .dx-treeview').remove();
+      this.$element().find('.dx-overlay').remove();
+    };
+    const rtlEnabled = this.option('rtlEnabled');
+    const menuOnItemClickWrapper = function (
+      handler: MenuOptions<TItem>['onItemClick'],
+    ): MenuOptions<TItem>['onItemClick'] {
+      return function (e): void {
+        handler(e);
+        if (e.event?.type === 'dxclick') {
+          removeMenu();
+        }
+      };
+    };
+    const position = rtlEnabled ? 'right' : 'left';
+    const $button = this._createButton(options.caption);
+    const $guid = new Guid();
+    $button.attr('aria-controls', `${$guid}`);
+
+    const menu: ResolvedMenuOptions<TItem> = {
+      ...options.menu,
+      id: $guid,
+      focusStateEnabled: true,
+      selectionMode: 'single',
+      onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
+      onHiding() {
+        $button.removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
+      },
+      position: {
+        my: `${position} top`, at: `${position} bottom`, offset: '0 1', of: $button, collision: 'flip',
+      },
+      animation: null,
+      onHidden() {
+        removeMenu();
+      },
+      cssClass: `${FILTER_BUILDER_OVERLAY_CLASS} ${options.menu.cssClass}`,
+      rtlEnabled,
+    };
+
+    const popup: PopupOptions = {
+      onShown: (info: ShownEvent): void => {
+        const treeViewContentElement = $(info.component.content());
+        const treeViewElement = treeViewContentElement.find('.dx-treeview');
+
+        if (treeViewElement.length) {
+          this._applyAccessibilityAttributes(treeViewElement);
+        }
+
+        eventsEngine.on(treeViewElement, 'keyup keydown', (e: KeyEvent) => {
+          const keyName = normalizeKeyName(e);
+
+          if ((e.type === 'keydown' && keyName === TAB_KEY)
+                            || (e.type === 'keyup' && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            info.component.hide();
+            eventsEngine.trigger(menu.position.of, 'focus');
+          }
+        });
+
+        // @ts-expect-error dxElementWrapper doesn't contain widget creation methods types
+        const treeView = treeViewElement.dxTreeView('instance');
+
+        treeView.focus();
+        treeView.option('focusedElement', null);
+      },
+    };
+
+    this._subscribeOnClickAndEnterKey($button, () => {
+      removeMenu();
+      this._createPopupWithTreeView({ menu, popup }, this.$element());
+      $button.addClass(ACTIVE_CLASS).attr('aria-expanded', 'true');
+    });
+    return $button;
+  }
+
+  _hasValueButton(condition: Condition): boolean {
+    const customOperation = getCustomOperation(this._customOperations, condition[1]);
+    return customOperation
+      ? customOperation.hasValue !== false
+      : condition[2] !== null;
+  }
+
+  _createOperationButtonWithMenu(
+    condition: Condition,
+    field: FilterBuilderField,
+  ): dxElementWrapper {
+    const availableOperations = getAvailableOperations(
+      field,
+      this.option('filterOperationDescriptions'),
+      this._customOperations,
+    );
+    let currentOperation = getOperationFromAvailable(
+      getOperationValue(condition),
+      availableOperations,
+    );
+    const $operationButton: dxElementWrapper = this._createButtonWithMenu<OperationMenuItem>({
+      caption: currentOperation.text,
+      menu: {
+        items: availableOperations,
+        displayExpr: 'text',
+        onItemRendered(e) {
+          if (e.itemData.isCustom) {
+            $(e.itemElement).addClass(FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
+          }
+        },
+        onContentReady(e) {
+          e.component.selectItem(currentOperation);
+        },
+        onItemClick: (e) => {
+          if (currentOperation !== e.itemData) {
+            currentOperation = e.itemData;
+            updateConditionByOperation(condition, currentOperation.value, this._customOperations);
+            const $valueButton = $operationButton.siblings().filter(`.${FILTER_BUILDER_ITEM_VALUE_CLASS}`);
+            if (this._hasValueButton(condition)) {
+              if ($valueButton.length !== 0) {
+                $valueButton.remove();
+              }
+              this._createValueButton(condition, field).appendTo($operationButton.parent());
+            } else {
+              $valueButton.remove();
+            }
+            $operationButton.text(currentOperation.text);
+            this._updateFilter();
+          }
+        },
+        cssClass: FILTER_BUILDER_FILTER_OPERATIONS_CLASS,
+      },
+    }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+      .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
+      .attr('tabindex', 0);
+    this._addAriaAttributes(
+      $operationButton,
+      messageLocalization.format('dxFilterBuilder-filterAriaItemOperation'),
+      'combobox',
+      true,
+      false,
+    );
+
+    return $operationButton;
+  }
+
+  _createOperationAndValueButtons(
+    condition: Condition,
+    field: FilterBuilderField,
+    $item: dxElementWrapper,
+  ): void {
+    this._createOperationButtonWithMenu(condition, field)
+      .appendTo($item);
+
+    if (this._hasValueButton(condition)) {
+      this._createValueButton(condition, field)
+        .appendTo($item);
+    }
+  }
+
+  _createFieldButtonWithMenu(
+    fields: FilterBuilderField[],
+    condition: Condition,
+    field: FilterBuilderField,
+  ): dxElementWrapper {
+    const allowHierarchicalFields = this.option('allowHierarchicalFields');
+    const items = getItems(fields, allowHierarchicalFields);
+    let item = getField(field.name || field.dataField, items);
+    const getFullCaption = function (
+      fieldItem: FilterBuilderItem,
+      fieldItems: FilterBuilderItem[],
+    ): string {
+      return allowHierarchicalFields
+        ? getCaptionWithParents(fieldItem, fieldItems)
+        : fieldItem.caption;
+    };
+    condition[0] = item.name || item.dataField;
+
+    const $fieldButton: dxElementWrapper = this._createButtonWithMenu<FilterBuilderItem>({
+      caption: getFullCaption(item, items),
+      menu: {
+        items,
+        dataStructure: 'plain',
+        keyExpr: 'id',
+        displayExpr: 'caption',
+        onItemClick: (e) => {
+          if (item !== e.itemData) {
+            item = e.itemData;
+            condition[0] = item.name || item.dataField;
+            condition[2] = item.dataType === 'object' ? null : '';
+            updateConditionByOperation(
+              condition,
+              getDefaultOperation(item),
+              this._customOperations,
+            );
+            $fieldButton.siblings().filter(`.${FILTER_BUILDER_ITEM_TEXT_CLASS}`).remove();
+            this._createOperationAndValueButtons(condition, item, $fieldButton.parent());
+
+            $fieldButton.text(getFullCaption(item, items));
+            this._updateFilter();
+          }
+        },
+        onContentReady(e) {
+          e.component.selectItem(item);
+        },
+        cssClass: FILTER_BUILDER_FIELDS_CLASS,
+      },
+    }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+      .addClass(FILTER_BUILDER_ITEM_FIELD_CLASS)
+      .attr('tabindex', 0);
+
+    this._addAriaAttributes(
+      $fieldButton,
+      messageLocalization.format('dxFilterBuilder-filterAriaItemField'),
+      'combobox',
+      true,
+      false,
+    );
+
+    return $fieldButton;
+  }
+
+  _createConditionItem(
+    condition: Condition,
+    parent: Criteria,
+    groupLevel?: number | string,
+  ): dxElementWrapper {
+    const $item = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
+    const fields = this._getNormalizedFields();
+    const field = getField(condition[0], fields);
+
+    this._addAriaAttributes($item, '', 'treeitem', null, null, groupLevel);
+
+    this._createRemoveButton(() => {
+      removeItem(parent, condition);
+      const isSingleChild = $item.parent().children().length === 1;
+      if (isSingleChild) {
+        $item.parent().remove();
+      } else {
+        $item.remove();
+      }
+      this._updateFilter();
+    }, 'condition').appendTo($item);
+    this._createFieldButtonWithMenu(fields, condition, field).appendTo($item);
+    this._createOperationAndValueButtons(condition, field, $item);
+    return $item;
+  }
+
+  _getGroupOperations(criteria: Criteria): GroupMenuItem[] {
+    let groupOperations: string[] | undefined = this.option('groupOperations');
+    const descriptions = this.option('groupOperationDescriptions');
+    const groupOperationDescriptions: Record<string, string> = {
+      and: descriptions?.and ?? messageLocalization.format('dxFilterBuilder-and'),
+      or: descriptions?.or ?? messageLocalization.format('dxFilterBuilder-or'),
+      notAnd: descriptions?.notAnd ?? messageLocalization.format('dxFilterBuilder-notAnd'),
+      notOr: descriptions?.notOr ?? messageLocalization.format('dxFilterBuilder-notOr'),
+    };
+
+    if (!groupOperations || !groupOperations.length) {
+      groupOperations = [getGroupValue(criteria).replace('!', 'not')];
+    }
+
+    return groupOperations.map((operation) => ({
+      text: groupOperationDescriptions[operation],
+      value: OPERATORS[operation],
+    }));
+  }
+
+  _createRemoveButton(handler: () => void, type?: string): dxElementWrapper {
+    const $removeButton = $('<div>')
+      .addClass(FILTER_BUILDER_IMAGE_CLASS)
+      .addClass(FILTER_BUILDER_IMAGE_REMOVE_CLASS)
+      .addClass(FILTER_BUILDER_ACTION_CLASS)
+      .attr('tabindex', 0);
+    if (type) {
+      // @ts-expect-error format is declared with one argument
+      const removeMessage = messageLocalization.format('dxFilterBuilder-filterAriaRemoveButton', type);
+      this._addAriaAttributes($removeButton, removeMessage, 'button');
+    }
+    this._subscribeOnClickAndEnterKey($removeButton, handler);
+    return $removeButton;
+  }
+
+  _createAddButton(
+    addGroupHandler: () => void,
+    addConditionHandler: () => void,
+    groupLevel: number,
+  ): dxElementWrapper {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let $button: dxElementWrapper;
+    const maxGroupLevel = this.option('maxGroupLevel');
+    if (isDefined(maxGroupLevel) && groupLevel >= maxGroupLevel) {
+      $button = this._createButton();
+      this._subscribeOnClickAndEnterKey($button, addConditionHandler);
+    } else {
+      $button = this._createButtonWithMenu<AddMenuItem>({
+        menu: {
+          items: [{
+            caption: messageLocalization.format('dxFilterBuilder-addCondition'),
+            click: addConditionHandler,
+          }, {
+            caption: messageLocalization.format('dxFilterBuilder-addGroup'),
+            click: addGroupHandler,
+          }],
+          displayExpr: 'caption',
+          onItemClick(e) {
+            e.itemData.click();
+          },
+          cssClass: FILTER_BUILDER_ADD_CONDITION_CLASS,
+        },
+      });
+    }
+
+    this._addAriaAttributes(
+      $button,
+      messageLocalization.format('dxFilterBuilder-filterAriaAddButton'),
+      'combobox',
+      true,
+      false,
+    );
+
+    return $button.addClass(FILTER_BUILDER_IMAGE_CLASS)
+      .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)
+      .addClass(FILTER_BUILDER_ACTION_CLASS)
+      .attr('tabindex', 0);
+  }
+
+  _createValueText(
+    item: Condition,
+    field: FilterBuilderField,
+    $container: dxElementWrapper,
+  ): dxElementWrapper {
+    const $text = $('<div>')
+      .html('&nbsp;')
+      .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
+      .attr('tabindex', 0)
+      .appendTo($container);
+    this._addAriaAttributes(
+      $text,
+      messageLocalization.format('dxFilterBuilder-filterAriaItemValue'),
+      'button',
+      true,
+    );
+    const value = item[2];
+
+    const customOperation = getCustomOperation(this._customOperations, item[1]);
+    if (!customOperation && hasLookup(field)) {
+      getCurrentLookupValueText(field, value, (result) => {
+        renderValueText($text, result);
+      });
+    } else {
+      when(getCurrentValueText(field, value, customOperation)).done((result) => {
+        renderValueText($text, result, customOperation);
+      });
+    }
+
+    this._subscribeOnClickAndEnterKey($text, (e) => {
+      if (e.type === 'keyup') {
+        e.stopPropagation();
+      }
+      this._createValueEditorWithEvents(item, field, $container);
+    });
+
+    return $text;
+  }
+
+  _updateConditionValue(item: Condition, value: ConditionValue, callback: () => void): void {
+    const areValuesDifferent = item[2] !== value;
+    if (areValuesDifferent) {
+      item[2] = value;
+    }
+    callback();
+    this._updateFilter();
+  }
+
+  _addDocumentKeyUp($editor: dxElementWrapper, handler: (e: KeyEvent) => void): void {
+    let isComposing = false; // IME Composing going on
+    let hasCompositionJustEnded = false; // Used to swallow keyup event related to compositionend
+    const document = domAdapter.getDocument();
+    const documentKeyUpHandler = (e: KeyEvent): void => {
+      if (isComposing || hasCompositionJustEnded) {
+        // IME composing fires
+        hasCompositionJustEnded = false;
+        return;
+      }
+      handler(e);
+    };
+    eventsEngine.on(document, 'keyup', documentKeyUpHandler);
+
+    const input = $editor.find('input');
+    eventsEngine.on(input, 'compositionstart', () => {
+      isComposing = true;
+    });
+
+    eventsEngine.on(input, 'compositionend', () => {
+      isComposing = false;
+      // some browsers (IE, Firefox, Safari) send a keyup event after
+      // compositionend, some (Chrome, Edge) don't. This is to swallow
+      // the next keyup event, unless a keydown event happens first
+      hasCompositionJustEnded = true;
+    });
+
+    // Safari on OS X may send a keydown of 229 after compositionend
+    eventsEngine.on(input, 'keydown', (event: KeyEvent) => {
+      if (event.which !== 229) {
+        hasCompositionJustEnded = false;
+      }
+    });
+
+    this._documentKeyUpHandler = documentKeyUpHandler;
+  }
+
+  _addDocumentClick($editor: dxElementWrapper, closeEditorFunc: () => void): void {
+    const document = domAdapter.getDocument();
+    const documentClickHandler = (e: EngineEvent): void => {
+      if (!this._isFocusOnEditorParts($editor, e.target)) {
+        eventsEngine.trigger($editor.find('input'), 'change');
+        closeEditorFunc();
+      }
+    };
+    eventsEngine.on(document, 'dxpointerdown', documentClickHandler);
+
+    this._documentClickHandler = documentClickHandler;
+  }
+
+  _isFocusOnEditorParts($editor: dxElementWrapper, target?: EngineTarget): boolean {
+    const activeElement = target || domAdapter.getActiveElement();
+    const isFocusOnEditor = $(activeElement).closest($editor).length > 0;
+    if (isFocusOnEditor) {
+      return true;
+    }
+
+    const overlay = $(activeElement).closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
+    const isFocusOnOverlay = overlay.length > 0;
+    if (isFocusOnOverlay) {
+      const overlayID = overlay.find(`.${POPUP_CONTENT_CLASS}`).attr('id');
+      const editorOwns = $editor.attr('aria-owns') ?? $editor.find('[aria-owns]').attr('aria-owns');
+      const overlayOwnedByEditor = isDefined(editorOwns) && editorOwns === overlayID;
+      return overlayOwnedByEditor;
+    }
+
+    return false;
+  }
+
+  _removeEvents(): void {
+    const document = domAdapter.getDocument();
+    if (isDefined(this._documentKeyUpHandler)) {
+      eventsEngine.off(document, 'keyup', this._documentKeyUpHandler);
+    }
+    if (isDefined(this._documentClickHandler)) {
+      eventsEngine.off(document, 'dxpointerdown', this._documentClickHandler);
+    }
+  }
+
+  _dispose(): void {
+    this._removeEvents();
+    super._dispose();
+  }
+
+  _createValueEditorWithEvents(
+    item: Condition,
+    field: FilterBuilderField,
+    $container: dxElementWrapper,
+  ): void {
+    let value = item[2];
+    const createValueText = (): dxElementWrapper => {
+      $container.empty();
+      this._removeEvents();
+      return this._createValueText(item, field, $container);
+    };
+    const closeEditor = (): void => {
+      this._updateConditionValue(item, value, () => {
+        createValueText();
+      });
+    };
+
+    const options: ValueEditorOptions = {
+      value: value === '' ? null : value,
+      filterOperation: getOperationValue(item),
+      setValue(data: ConditionValue): void {
+        value = data === null ? '' : data;
+      },
+      closeEditor,
+      text: $container.text(),
+    };
+
+    $container.empty();
+
+    const $editor = this._createValueEditor($container, field, options);
+    eventsEngine.trigger($editor.find('input').not(':hidden').eq(0), 'focus');
+
+    this._removeEvents();
+
+    this._addDocumentClick($editor, closeEditor);
+    this._addDocumentKeyUp($editor, (e: KeyEvent) => {
+      const keyName = normalizeKeyName(e);
+
+      if (keyName === TAB_KEY) {
+        if (this._isFocusOnEditorParts($editor)) {
+          return;
+        }
+        this._updateConditionValue(item, value, () => {
+          createValueText();
+          if (e.shiftKey) {
+            eventsEngine.trigger($container.prev(), 'focus');
+          }
+        });
+      }
+      if (keyName === ESCAPE_KEY) {
+        eventsEngine.trigger(createValueText(), 'focus');
+      }
+      if (keyName === ENTER_KEY) {
+        this._updateConditionValue(item, value, () => {
+          eventsEngine.trigger(createValueText(), 'focus');
+        });
+      }
+    });
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._fireContentReadyAction();
+  }
+
+  _createValueButton(item: Condition, field: FilterBuilderField): dxElementWrapper {
+    const $valueButton = $('<div>')
+      .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+      .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS);
+    this._createValueText(item, field, $valueButton);
+    return $valueButton;
+  }
+
+  _createValueEditor(
+    $container: dxElementWrapper,
+    field: FilterBuilderField,
+    options: ValueEditorOptions,
+  ): dxElementWrapper {
+    const $editor = $('<div>').attr('tabindex', 0).appendTo($container);
+    const customOperation = getCustomOperation(this._customOperations, options.filterOperation);
+    const editorTemplate = customOperation && customOperation.editorTemplate
+      ? customOperation.editorTemplate
+      : field.editorTemplate;
+
+    if (editorTemplate) {
+      const template = this._getTemplate(editorTemplate);
+
+      template.render({
+        model: extend({ field }, options),
+        container: $editor,
+      });
+    } else {
+      this._editorFactory.createEditor.call(this, $editor, extend({}, field, options, {
+        parentType: SOURCE,
+      }));
+    }
+    return $editor;
+  }
+
+  _dimensionChanged(): void {
+    const position = this._popupWithTreeView?.option('position');
+    const positionOf = typeof position === 'object' ? position.of : undefined;
+
+    if (positionOf) {
+      this._popupWithTreeView?.option('maxHeight', getElementMaxHeightByWindow($(positionOf)));
+    }
+  }
+
+  _createPopupWithTreeView<TItem>(
+    options: PopupMenuOptions<TItem>,
+    $container: dxElementWrapper,
+  ): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that = this;
+    const { onHidden } = options.menu;
+    const $popup = $('<div>')
+      .addClass(options.menu.cssClass)
+      .appendTo($container);
+
+    this._popupWithTreeView = this._createComponent($popup, Popup, {
+      onHiding: options.menu.onHiding,
+      onHidden: (...args) => {
+        onHidden?.(...args);
+        this._popupWithTreeView = undefined;
+      },
+      rtlEnabled: options.menu.rtlEnabled,
+      position: options.menu.position,
+      animation: options.menu.animation,
+      contentTemplate(contentElement) {
+        const $menuContainer = $('<div>').appendTo(contentElement);
+        that._createComponent($menuContainer, TreeView, options.menu);
+
+        $menuContainer.attr('id', `${options.menu.id}`);
+        // T852701
+        this.repaint();
+      },
+      maxHeight: getElementMaxHeightByWindow(options.menu.position.of),
+      visible: true,
+      focusStateEnabled: false,
+      preventScrollEvents: false,
+      hideOnParentScroll: this.option('closePopupOnTargetScroll'),
+      _hideOnParentScrollTarget: $popup,
+      hideOnOutsideClick: true,
+      onShown: options.popup.onShown,
+      shading: false,
+      width: 'auto',
+      height: 'auto',
+      showTitle: false,
+      _wrapperClassExternal: options.menu.cssClass,
+      _ignorePreventScrollEventsDeprecation: true,
+    });
+  }
+
+  _subscribeOnClickAndEnterKey(
+    $button: dxElementWrapper,
+    handler: (e: EngineEvent) => void,
+  ): void {
+    eventsEngine.on($button, 'dxclick', handler);
+    eventsEngine.on($button, 'keyup', (e: KeyEvent) => {
+      if (normalizeKeyName(e) === ENTER_KEY) {
+        handler(e);
+      }
+    });
+  }
+
+  _applyAccessibilityAttributes($element: dxElementWrapper): void {
+    const treeViewPopup = $element.closest(`.${OVERLAY_CONTENT_CLASS}`);
+    treeViewPopup?.removeAttr('role');
+
+    const treeViewNode = treeViewPopup?.find?.(`.${TREEVIEW_NODE_CONTAINER}`);
+    treeViewNode?.attr('role', 'presentation');
+  }
+
+  addWidgetPrefix(className: string): string {
+    return `${FILTER_BUILDER_CLASS}-${className}`;
+  }
+}
+
+registerComponent('dxFilterBuilder', FilterBuilder);
+
+export default FilterBuilder;

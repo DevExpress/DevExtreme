@@ -5,14 +5,14 @@
 /* eslint-disable prefer-rest-params */
 import { Deferred, when } from '@js/core/utils/deferred';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { ModuleType } from '@ts/grids/grid_core/types';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import {
   ADAPTIVE_ROW_TYPE,
   EDIT_MODE_BATCH,
   EDIT_MODE_ROW,
-  FORM_ITEM_CONTENT_CLASS,
 } from '../const';
 import type { AdaptivityDataController } from '../types';
 
@@ -37,7 +37,7 @@ export const adaptivityEditingViewControllerExtender = (
   }
 
   protected _closeEditItem($targetElement) {
-    const $itemContents = $targetElement.closest(`.${FORM_ITEM_CONTENT_CLASS}`);
+    const $itemContents = $targetElement.closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
     const rowIndex = this._dataController.getRowIndexByKey(this._dataController.getAdaptiveExpandedKey()) + 1;
     const formItem = $itemContents.length ? $itemContents.first().data('dx-form-item') : null;
     const columnIndex = formItem?.column && this._columnsController.getVisibleIndex(formItem.column.index);

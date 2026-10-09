@@ -1,9 +1,6 @@
 /* eslint-disable import/no-import-module-exports */
-/* eslint-disable @typescript-eslint/no-base-to-string */
-/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable consistent-return */
@@ -18,21 +15,25 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import domAdapter from '@js/core/dom_adapter';
-import $ from '@js/core/renderer';
-import { replaceWith } from '@js/core/utils/dom';
-import { extend } from '@js/core/utils/extend';
-import { camelize } from '@js/core/utils/inflector';
-import { getHeight, getWidth } from '@js/core/utils/size';
-import { normalizeStyleProp } from '@js/core/utils/style';
-import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
-import { getWindow } from '@js/core/utils/window';
-import formatHelper from '@js/format_helper';
+import { Color } from '@ts/color';
+import { domAdapter } from '@ts/core/dom_adapter';
+import formatHelper from '@ts/core/format_helper';
 import { applyDataTypePreset } from '@ts/core/global_format_config';
+import { renderer as $ } from '@ts/core/renderer';
+import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
+import { isCssVariableReference } from '@ts/core/utils/css_variables';
+import { camelize } from '@ts/core/utils/inflector';
+import { replaceWith } from '@ts/core/utils/m_dom';
+import { extend } from '@ts/core/utils/m_extend';
+import { getHeight, getWidth } from '@ts/core/utils/m_size';
+import { isDefined, isFunction, isPlainObject } from '@ts/core/utils/m_type';
+import { getWindow } from '@ts/core/utils/m_window';
+import { normalizeStyleProp } from '@ts/core/utils/style';
 
 import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';
 import { Renderer } from './renderers/renderer';
+import type { BBox, Canvas } from './types';
 import { normalizeEnum, patchFontOptions } from './utils';
 
 const format = formatHelper.format;
@@ -40,14 +41,74 @@ const format = formatHelper.format;
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
 const mathMin = Math.min;
-const window = getWindow();
+const window: Window = getWindow();
 const DEFAULT_HTML_GROUP_WIDTH = 3000;
+const PERCENT = 100;
 
-function hideElement($element) {
+function foldOpacityIntoFill(styles: Record<string, ThemeValue>): void {
+  const { fill, 'fill-opacity': opacity } = styles;
+
+  if (!isDefined(fill) || !isDefined(opacity)) {
+    return;
+  }
+
+  delete styles['fill-opacity'];
+
+  if (isCssVariableReference(fill)) {
+    styles.fill = `color-mix(in srgb, ${fill} ${Number((opacity * PERCENT).toFixed(2))}%, transparent)`;
+  } else {
+    const { r, g, b } = new Color(fill);
+
+    styles.fill = `rgba(${r},${g},${b},${opacity})`;
+  }
+}
+
+type TooltipEventTrigger = (name: string, data?: ThemeValue) => void;
+
+interface TooltipWidget {
+  _getTemplate: (template: ThemeValue) => ThemeValue;
+}
+
+interface TooltipParams {
+  eventTrigger: TooltipEventTrigger;
+  cssClass: string;
+  widgetRoot: ThemeValue;
+  widget: TooltipWidget;
+  pathModified?: boolean;
+}
+
+interface TooltipCustomization {
+  text?: ThemeValue;
+  html?: ThemeValue;
+  color?: string;
+  borderColor?: string;
+  fontColor?: string;
+}
+
+interface TooltipState {
+  formatObject: ThemeValue;
+  eventData: ThemeValue;
+  templateCallback?: (isRendered: boolean) => void;
+  text?: string;
+  html?: string;
+  color?: string;
+  borderColor?: string;
+  textColor?: string;
+}
+
+interface TooltipDrawParams {
+  group: ThemeValue;
+  onRender: () => void;
+  eventData: ThemeValue;
+  isMoving?: boolean;
+  templateCallback?: (isRendered: boolean) => void;
+}
+
+function hideElement($element: ThemeValue): void {
   $element.css({ left: '-9999px' }).detach();
 }
 
-function getSpecialFormatOptions(options, specialFormat) {
+function getSpecialFormatOptions(options: ThemeValue, specialFormat: string): ThemeValue {
   let result = options;
   switch (specialFormat) {
     case 'argument':
@@ -60,78 +121,104 @@ function getSpecialFormatOptions(options, specialFormat) {
   return result;
 }
 
-function createTextHtml() {
+function createTextHtml(): CoreRenderer {
   return $('<div>').css({
     position: 'relative', display: 'inline-block', padding: 0, margin: 0, border: '0px solid transparent',
   });
 }
 
-function removeElements(elements) {
+function removeElements(elements: ThemeValue[]): void {
   elements.forEach((el) => el.remove());
 }
 
-export let Tooltip = function (params) {
-  const that = this;
+export let Tooltip = class Tooltip {
+  declare _eventTrigger: TooltipEventTrigger;
 
-  that._eventTrigger = params.eventTrigger;
-  that._widgetRoot = params.widgetRoot;
-  that._widget = params.widget;
-  that._textHtmlContainers = [];// T1015148
+  declare _widgetRoot: ThemeValue;
 
-  that._wrapper = $('<div>')
-    .css({ position: 'absolute', overflow: 'hidden', pointerEvents: 'none' }) // T265557, T447623
-    .addClass(params.cssClass);
+  declare _widget: TooltipWidget;
 
-  const renderer = that._renderer = new Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
-  const root = renderer.root;
-  root.attr({ 'pointer-events': 'none' });
+  declare _textHtmlContainers: ThemeValue[];
 
-  // svg text
-  that._text = renderer.text(undefined, 0, 0);
+  declare _wrapper: ThemeValue;
 
-  // html text
-  that._textGroupHtml = $('<div>').css({
-    position: 'absolute', padding: 0, margin: 0, border: '0px solid transparent',
-  }).appendTo(that._wrapper);
-  that._textHtml = createTextHtml().appendTo(that._textGroupHtml);
-};
+  declare _renderer: ThemeValue;
 
-Tooltip.prototype = {
-  constructor: Tooltip,
+  declare _text: ThemeValue;
 
-  dispose() {
+  declare _textGroupHtml: ThemeValue;
+
+  declare _textHtml: ThemeValue;
+
+  declare _options: ThemeValue;
+
+  declare _template: ThemeValue;
+
+  declare _textFontStyles: Record<string, ThemeValue>;
+
+  declare _customizeTooltip: ThemeValue;
+
+  declare _state: TooltipState;
+
+  declare _eventData: ThemeValue;
+
+  declare plaque: ThemeValue;
+
+  constructor(params: TooltipParams) {
+    this._eventTrigger = params.eventTrigger;
+    this._widgetRoot = params.widgetRoot;
+    this._widget = params.widget;
+    this._textHtmlContainers = [];// T1015148
+
+    this._wrapper = $('<div>')
+      .css({ position: 'absolute', overflow: 'hidden', pointerEvents: 'none' }) // T265557, T447623
+      .addClass(params.cssClass);
+
+    const renderer = this._renderer = new Renderer({ pathModified: params.pathModified, container: this._wrapper[0] });
+    const root = renderer.root;
+    root.attr({ 'pointer-events': 'none' });
+
+    // svg text
+    this._text = renderer.text(undefined, 0, 0);
+
+    // html text
+    this._textGroupHtml = $('<div>').css({
+      position: 'absolute', padding: 0, margin: 0, border: '0px solid transparent',
+    }).appendTo(this._wrapper);
+    this._textHtml = createTextHtml().appendTo(this._textGroupHtml);
+  }
+
+  dispose(): void {
     this._wrapper.remove();
     this._renderer.dispose();
     this._options = this._widgetRoot = null;
-  },
+  }
 
-  _getContainer() {
+  _getContainer(): Element {
     const options = this._options;
     let container = $(this._widgetRoot).closest(options.container);
     if (container.length === 0) {
       container = $(options.container);
     }
     return (container.length ? container : $('body')).get(0);
-  },
+  }
 
-  setTemplate(contentTemplate) {
-    const that = this;
-    that._template = contentTemplate ? that._widget._getTemplate(contentTemplate) : null;
-  },
+  setTemplate(contentTemplate: ThemeValue): void {
+    this._template = contentTemplate ? this._widget._getTemplate(contentTemplate) : null;
+  }
 
-  setOptions(options) {
+  setOptions(options: ThemeValue): this {
     options = options || {};
 
-    const that = this;
+    this._options = options;
+    this._textFontStyles = patchFontOptions(options.font);
+    foldOpacityIntoFill(this._textFontStyles);
+    this._textFontStyles.color = this._textFontStyles.fill;
+    this._wrapper.css({ zIndex: options.zIndex });
 
-    that._options = options;
-    that._textFontStyles = patchFontOptions(options.font);
-    that._textFontStyles.color = that._textFontStyles.fill;
-    that._wrapper.css({ zIndex: options.zIndex });
+    this._customizeTooltip = options.customizeTooltip;
 
-    that._customizeTooltip = options.customizeTooltip;
-
-    const textGroupHtml = that._textGroupHtml;
+    const textGroupHtml = this._textGroupHtml;
 
     if (this.plaque) {
       this.plaque.clear();
@@ -146,16 +233,16 @@ Tooltip.prototype = {
 
     const drawTooltip = ({
       group, onRender, eventData, isMoving, templateCallback = () => {},
-    }) => {
-      const state = that._state;
+    }: TooltipDrawParams) => {
+      const state = this._state;
       if (!isMoving) {
-        const template = that._template;
+        const template = this._template;
         const useTemplate = template && !state.formatObject.skipTemplate;
         if (state.html || useTemplate) {
           textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH, pointerEvents });
           if (useTemplate) {
-            const htmlContainers = that._textHtmlContainers;
-            const containerToTemplateRender = createTextHtml().appendTo(that._textGroupHtml);
+            const htmlContainers = this._textHtmlContainers;
+            const containerToTemplateRender = createTextHtml().appendTo(this._textGroupHtml);
             htmlContainers.push(containerToTemplateRender);
 
             template.render({
@@ -164,60 +251,57 @@ Tooltip.prototype = {
               onRendered: () => {
                 removeElements(htmlContainers.splice(0, htmlContainers.length - 1));
 
-                that._textHtml = replaceWith(that._textHtml, containerToTemplateRender);
+                this._textHtml = replaceWith(this._textHtml, containerToTemplateRender);
 
-                state.html = that._textHtml.html();
-                if (getWidth(that._textHtml) === 0 && getHeight(that._textHtml) === 0) {
+                state.html = this._textHtml.html();
+                if (getWidth(this._textHtml) === 0 && getHeight(this._textHtml) === 0) {
                   this.plaque.clear();
-                  // @ts-expect-error
                   templateCallback(false);
                   return;
                 }
 
                 onRender();
-                that._riseEvents(eventData);
-                that._moveWrapper();
-                that.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
-                // @ts-expect-error
+                this._riseEvents(eventData);
+                this._moveWrapper();
+                this.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
                 templateCallback(true);
-                that._textHtmlContainers = [];
+                this._textHtmlContainers = [];
               },
             });
             return;
           } else {
-            that._text.attr({ text: '' });
-            that._textHtml.html(state.html);
+            this._text.attr({ text: '' });
+            this._textHtml.html(state.html);
           }
         } else {
-          that._text
+          this._text
             .css({ fill: state.textColor })
             .attr({ text: state.text, class: options.cssClass, 'pointer-events': pointerEvents })
             .append(group.attr({ align: options.textAlignment }));
         }
-        that._riseEvents(eventData);
-        that.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
+        this._riseEvents(eventData);
+        this.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
       }
       onRender();
-      that._moveWrapper();
+      this._moveWrapper();
       return true;
     };
 
     this.plaque = new Plaque({
-      opacity: that._options.opacity,
-      color: that._options.color,
-      border: that._options.border,
-      paddingLeftRight: that._options.paddingLeftRight,
-      paddingTopBottom: that._options.paddingTopBottom,
-      arrowLength: that._options.arrowLength,
+      opacity: this._options.opacity,
+      color: this._options.color,
+      border: this._options.border,
+      paddingLeftRight: this._options.paddingLeftRight,
+      paddingTopBottom: this._options.paddingTopBottom,
+      arrowLength: this._options.arrowLength,
       arrowWidth: 20,
-      shadow: that._options.shadow,
-      cornerRadius: that._options.cornerRadius,
-    }, that, that._renderer.root, drawTooltip, true, (tooltip, g) => {
+      shadow: this._options.shadow,
+      cornerRadius: this._options.cornerRadius,
+    }, this, this._renderer.root, drawTooltip, true, (tooltip, g) => {
       const state = tooltip._state;
       if (state.html) {
-        let bBox = window.getComputedStyle(that._textHtml.get(0));
+        let bBox: CSSStyleDeclaration | BBox = window.getComputedStyle(this._textHtml.get(0));
         bBox = {
-          // @ts-expect-error
           x: 0, y: 0, width: mathCeil(parseFloat(bBox.width)), height: mathCeil(parseFloat(bBox.height)),
         };
         return bBox;
@@ -226,59 +310,58 @@ Tooltip.prototype = {
     }, (tooltip, g, x, y) => {
       const state = tooltip._state;
       if (state.html) {
-        that._textGroupHtml.css({ left: x, top: y });
+        this._textGroupHtml.css({ left: x, top: y });
       } else {
         g.move(x, y);
       }
     });
 
-    return that;
-  },
+    return this;
+  }
 
-  _riseEvents(eventData) {
+  _riseEvents(eventData: ThemeValue): void {
     // trigger event
     // The *onTooltipHidden* is triggered outside the *hide* method because of the cases when *show* is called to determine if tooltip will be visible or not (when target is changed) -
     // *hide* can neither be called before that *show* - because if tooltip is determined to hide it requires some timeout before actually hiding
     // nor after that *show* - because it is either too early to hide (because of timeout) or wrong (because tooltip has already been shown for new target)
     // It is only inside the *show* where it is known weather *onTooltipHidden* is required or not
     // This functionality can be simplified when we get rid of timeouts for tooltip
-    const that = this;
-    that._eventData && that._eventTrigger('tooltipHidden', that._eventData);
-    that._eventData = eventData;
-    that._eventTrigger('tooltipShown', that._eventData);
-  },
+    this._eventData && this._eventTrigger('tooltipHidden', this._eventData);
+    this._eventData = eventData;
+    this._eventTrigger('tooltipShown', this._eventData);
+  }
 
-  setRendererOptions(options) {
+  setRendererOptions(options: ThemeValue): this {
     this._renderer.setOptions(options);
     this._textGroupHtml.css({ direction: options.rtl ? 'rtl' : 'ltr' });
     return this;
-  },
+  }
 
-  update(options) {
-    const that = this;
-
-    that.setOptions(options);
+  update(options: ThemeValue): this {
+    this.setOptions(options);
 
     // The following is because after update (on widget refresh) tooltip must be hidden
-    hideElement(that._wrapper);
+    hideElement(this._wrapper);
 
     // text area
     const normalizedCSS = {};
-    for (const name in that._textFontStyles) {
-      const normalizedName = camelize(name);
-      normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, that._textFontStyles[name]);
+    for (const name in this._textFontStyles) {
+      if (name !== 'fill-opacity') {
+        const normalizedName = camelize(name);
+        normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, this._textFontStyles[name]);
+      }
     }
-    that._textGroupHtml.css(normalizedCSS);
-    that._text.css(that._textFontStyles);
+    this._textGroupHtml.css(normalizedCSS);
+    this._text.css(this._textFontStyles);
 
-    that._eventData = null;
-    return that;
-  },
+    this._eventData = null;
+    return this;
+  }
 
-  _prepare(formatObject, state, customizeTooltip = this._customizeTooltip) {
+  _prepare(formatObject: ThemeValue, state: TooltipState, customizeTooltip: ThemeValue = this._customizeTooltip): boolean {
     const options = this._options;
 
-    let customize = {};
+    let customize: TooltipCustomization = {};
 
     if (isFunction(customizeTooltip)) {
       customize = customizeTooltip.call(formatObject, formatObject);
@@ -293,22 +376,17 @@ Tooltip.prototype = {
     if (!('text' in state) && !('html' in state)) {
       state.text = formatObject.valueText || formatObject.description || '';
     }
-    // @ts-expect-error
     state.color = customize.color || options.color;
-    // @ts-expect-error
     state.borderColor = customize.borderColor || (options.border || {}).color;
-    // @ts-expect-error
     state.textColor = customize.fontColor || (this._textFontStyles || {}).color;
     return !!state.text || !!state.html || !!this._template;
-  },
+  }
 
-  show(formatObject, params, eventData, customizeTooltip, templateCallback) {
-    const that = this;
-
-    if (that._options.forceEvents) { // for Blazor charts
+  show(formatObject: ThemeValue, params: ThemeValue, eventData: ThemeValue, customizeTooltip?: ThemeValue, templateCallback?: (isRendered: boolean) => void): boolean {
+    if (this._options.forceEvents) { // for Blazor charts
       eventData.x = params.x;
       eventData.y = params.y - params.offset;
-      that._riseEvents(eventData);
+      this._riseEvents(eventData);
       return true;
     }
     const state = {
@@ -317,103 +395,100 @@ Tooltip.prototype = {
       templateCallback,
     };
 
-    if (!that._prepare(formatObject, state, customizeTooltip)) {
+    if (!this._prepare(formatObject, state, customizeTooltip)) {
       return false;
     }
 
-    that._state = state;
+    this._state = state;
 
-    that._wrapper.appendTo(that._getContainer());
+    this._wrapper.appendTo(this._getContainer());
 
-    that._clear();
+    this._clear();
 
-    const parameters = extend({}, that._options, {
-      canvas: that._getCanvas(),
+    const parameters = extend({}, this._options, {
+      canvas: this._getCanvas(),
     }, state, {
       x: params.x,
       y: params.y,
       offset: params.offset,
     });
     return this.plaque.clear().draw(parameters);
-  },
+  }
 
-  isCursorOnTooltip(x, y) {
+  isCursorOnTooltip(x: number, y: number): boolean {
     if (this._options.interactive) {
       const box = this.plaque.getBBox();
       return x > box.x && x < box.x + box.width && y > box.y && y < box.y + box.height;
     }
     return false;
-  },
+  }
 
-  hide(isPointerOut) {
-    const that = this;
-    hideElement(that._wrapper);
+  hide(isPointerOut?: boolean): void {
+    hideElement(this._wrapper);
     // trigger event
-    if (that._eventData) {
-      that._eventTrigger('tooltipHidden', that._options.forceEvents ? extend({ isPointerOut }, that._eventData) : that._eventData);
-      that._clear();
-      that._eventData = null;
+    if (this._eventData) {
+      this._eventTrigger('tooltipHidden', this._options.forceEvents ? extend({ isPointerOut }, this._eventData) : this._eventData);
+      this._clear();
+      this._eventData = null;
     }
-  },
+  }
 
-  _clear() {
+  _clear(): void {
     this._textHtml.empty();
-  },
+  }
 
-  move(x, y, offset) {
+  move(x: number, y: number, offset?: number): void {
     this.plaque.draw({
       x, y, offset, canvas: this._getCanvas(), isMoving: true,
     });
-  },
+  }
 
-  _moveWrapper() {
-    const that = this;
-
+  _moveWrapper(): void {
     const plaqueBBox = this.plaque.getBBox();
-    that._renderer.resize(plaqueBBox.width, plaqueBBox.height);
+    this._renderer.resize(plaqueBBox.width, plaqueBBox.height);
 
     // move wrapper
-    const offset = that._wrapper.css({ left: 0, top: 0 }).offset();
+    const offset = this._wrapper.css({ left: 0, top: 0 }).offset();
     const left = plaqueBBox.x;
     const top = plaqueBBox.y;
 
-    that._wrapper.css({
+    this._wrapper.css({
       left: left - offset.left,
       top: top - offset.top,
     });
 
     this.plaque.moveRoot(-left, -top);
     if (this._state.html) {
-      that._textHtml.css({
+      this._textHtml.css({
         left: -left, top: -top,
       });
-      that._textGroupHtml.css({ width: mathCeil(getWidth(that._textHtml)) });
+      this._textGroupHtml.css({ width: mathCeil(getWidth(this._textHtml)) });
     }
-  },
+  }
 
-  formatValue(value, _specialFormat, dataType) {
+  formatValue(value: ThemeValue, _specialFormat?: string, dataType?: string): string {
     const options = _specialFormat ? getSpecialFormatOptions(this._options, _specialFormat) : this._options;
     return format(value, applyDataTypePreset(options.format, dataType));
-  },
+  }
 
-  getOptions() {
+  getOptions(): ThemeValue {
     return this._options;
-  },
+  }
 
-  getLocation() {
+  getLocation(): string {
     return normalizeEnum(this._options.location);
-  },
+  }
 
-  isEnabled() {
+  isEnabled(): boolean {
     return !!this._options.enabled
          || !!this._options.forceEvents; // for Blazor charts
-  },
+  }
 
-  isShared() {
+  isShared(): boolean {
     return !!this._options.shared;
-  },
+  }
 
-  _getCanvas() {
+  _getCanvas(): Canvas {
     const container = this._getContainer();
     const containerBox = container.getBoundingClientRect();
     const html = domAdapter.getDocumentElement();
@@ -450,7 +525,7 @@ Tooltip.prototype = {
     }
 
     return box;
-  },
+  }
 };
 
 export interface TooltipPluginMembers {

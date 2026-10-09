@@ -12,10 +12,10 @@ import { extend } from '@ts/core/utils/m_extend';
 import { getHeight, getOuterHeight, getWidth } from '@ts/core/utils/m_size';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler, SupportedKeys } from '@ts/core/widget/widget';
+import Draggable from '@ts/draggable';
 import { name as clickEventName } from '@ts/events/click';
 import eventsEngine from '@ts/events/core/events_engine';
 import { isCommandKeyPressed } from '@ts/events/utils/index';
-import Draggable from '@ts/m_draggable';
 import type { EditorProperties, ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 import NumberBox from '@ts/ui/number_box/number_box';
@@ -736,7 +736,7 @@ class ColorView extends Editor<ColorViewProperties> {
     const { editorType: EditorConstructor } = options;
     const { stylingMode } = this.option();
 
-    const editorOptions = extend({
+    const editorOptions: Record<string, unknown> = extend({
       value: options.value,
       onValueChanged: options.onValueChanged,
       onKeyboardHandled: (opts) => this._keyboardHandler(opts),

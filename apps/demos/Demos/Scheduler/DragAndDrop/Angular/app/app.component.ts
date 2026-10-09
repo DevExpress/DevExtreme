@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
@@ -10,7 +12,6 @@ if (!/localhost/.test(document.location.host)) {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -30,7 +31,7 @@ export class AppComponent {
 
   currentDate: Date = new Date(2021, 3, 26);
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.tasks = service.getTasks();
     this.appointments = service.getAppointments();
   }
@@ -41,6 +42,7 @@ export class AppComponent {
     if (index >= 0) {
       this.appointments.splice(index, 1);
       this.tasks.push(e.itemData);
+      this.changeDetectorRef.markForCheck();
     }
   };
 

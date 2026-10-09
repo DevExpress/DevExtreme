@@ -1,5 +1,5 @@
 import domAdapter from '@js/core/dom_adapter';
-import { Callbacks } from '@ts/core/utils/m_callbacks';
+import { Callbacks } from '@ts/core/utils/callbacks';
 import windowUtils from '@ts/core/utils/m_window';
 
 interface Size {

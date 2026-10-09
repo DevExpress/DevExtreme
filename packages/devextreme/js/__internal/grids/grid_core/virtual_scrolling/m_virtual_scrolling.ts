@@ -11,14 +11,16 @@ import { getWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import type { ChangedEvent } from '../data_source_adapter/types';
+import type { ChangedEvent, RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
 import type { RowsViewScrollEvent } from '../views/types';
@@ -26,7 +28,6 @@ import {
   BOTTOM_LOAD_PANEL_CLASS,
   COLUMN_LINES_CLASS,
   FREESPACE_CLASS,
-  GROUP_SPACE_CLASS,
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
   PAGING_METHOD_NAMES,
@@ -87,6 +88,8 @@ const removeEmptyRows = function ($emptyRows, className) {
 };
 
 export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class VirtualScrollingCoreDataSourceAdapterExtender extends Base {
+  protected declare _items: RawItemData[];
+
   private _totalCount: any;
 
   private _isLoaded: any;
@@ -197,6 +200,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
 
   protected dataChangedHandler(e?: ChangedEvent): void {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      // @ts-expect-error DataSource items are typed as unknown
       this._items = this._dataSource.items().slice();
       this._totalCount = this._dataSourceTotalCount(true);
       super.dataChangedHandler(e);
@@ -583,10 +587,10 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     super.renderDelayedTemplates.apply(this, arguments as any);
   }
 
-  protected _renderCore(e) {
+  protected _renderCore(e?: DataChange): DeferredObj<unknown> {
     const startRenderTime = Date.now();
 
-    const deferred = super._renderCore.apply(this, arguments as any);
+    const deferred = super._renderCore(e);
 
     const dataSourceAdapter = this.dataSourceController.getAdapter();
 
@@ -596,8 +600,12 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
         // @ts-expect-error
         .viewportSize() || 20;
 
-      if (gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0 && this.option(LEGACY_SCROLLING_MODE) !== false) {
-        dataSourceAdapter._renderTime = (Date.now() - startRenderTime) * viewportSize / itemCount;
+      if (
+        gridCoreUtils.isVirtualRowRendering(this)
+        && itemCount > 0
+        && this.option(LEGACY_SCROLLING_MODE) !== false
+      ) {
+        dataSourceAdapter._renderTime = ((Date.now() - startRenderTime) * viewportSize) / itemCount;
       } else {
         dataSourceAdapter._renderTime = Date.now() - startRenderTime;
       }
@@ -777,6 +785,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
       removeEmptyRows($virtualRows, VIRTUAL_ROW_CLASS);
 
+      // @ts-expect-error each() is typed for callbacks that return a boolean
       $tables.each((index, element) => {
         const isFixed = index > 0;
         const prevFixed = this._isFixedTableRendering;
@@ -816,7 +825,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     const isExpandColumn = column.command === 'expand';
 
     cssClass && classes.push(cssClass);
-    isExpandColumn && classes.push(this.addWidgetPrefix(GROUP_SPACE_CLASS));
+    isExpandColumn && classes.push(this.addWidgetPrefix(VIEW_CLASSES.groupSpace));
 
     return classes;
   }

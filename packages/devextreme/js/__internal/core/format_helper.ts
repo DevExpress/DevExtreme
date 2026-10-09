@@ -17,7 +17,7 @@ import { injector as dependencyInjector } from '@ts/core/utils/dependency_inject
 import { getGlobalFormatByDataType } from './global_format_config';
 
 export default dependencyInjector({
-  format(value, format) {
+  format(value, format?) {
     const formatIsValid = (isString(format) && format !== '')
       || isPlainObject(format) || isFunction(format);
     const valueIsValid = isNumeric(value) || (isDate(value) && !isNaN(value.getTime()));
@@ -30,7 +30,6 @@ export default dependencyInjector({
     if (!formatIsValid && isNumeric(value)) {
       const globalNumberFormat = getGlobalFormatByDataType('number');
       if (globalNumberFormat) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return numberLocalization.format(value, globalNumberFormat);
       }
     }
@@ -47,7 +46,6 @@ export default dependencyInjector({
     const resolvedFormat = isString(format) ? { type: format } : format;
 
     if (isNumeric(value)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return numberLocalization.format(value, resolvedFormat);
     }
 
@@ -77,7 +75,7 @@ export default dependencyInjector({
     };
   },
 
-  getDateFormatByDifferences(dateDifferences, intervalFormat) {
+  getDateFormatByDifferences(dateDifferences, intervalFormat?) {
     const resultFormat: Format[] = [];
     const needSpecialSecondFormatter = intervalFormat && dateDifferences.millisecond
       && !(dateDifferences.year || dateDifferences.month || dateDifferences.day);

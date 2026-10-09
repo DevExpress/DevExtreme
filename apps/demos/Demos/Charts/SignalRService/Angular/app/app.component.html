@@ -1,4 +1,5 @@
-<div ng-if="connectionStarted">
+@if (connectionStarted) {
+<div>
   <dx-chart
     id="chart"
     [dataSource]="dataSource"
@@ -74,3 +75,4 @@
     </div>
   </dx-chart>
 </div>
+}

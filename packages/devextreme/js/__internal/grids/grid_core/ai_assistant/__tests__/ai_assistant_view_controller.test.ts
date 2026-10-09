@@ -7,6 +7,7 @@ import {
   jest,
 } from '@jest/globals';
 
+import type { InternalGrid } from '../../types';
 import { AIAssistantViewController } from '../ai_assistant_view_controller';
 
 interface MockVisibilityChangedCallback {
@@ -74,7 +75,7 @@ const createAIAssistantViewController = (
     },
   };
 
-  const controller = new AIAssistantViewController(mockComponent);
+  const controller = new AIAssistantViewController(mockComponent as unknown as InternalGrid);
   controller.init();
 
   return { controller, mockView, mockHeaderPanel };

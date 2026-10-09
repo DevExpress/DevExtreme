@@ -10,8 +10,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@js/core/utils/extend';
-import { clone } from '@js/core/utils/object';
+import { extend } from '@ts/core/utils/m_extend';
+import { clone } from '@ts/core/utils/m_object';
 import { extractColor, map as _map } from '@ts/viz/core/utils';
 
 import { chart as lineSeriesChart, polar as lineSeriesPolar } from './line_series';
@@ -151,9 +151,7 @@ const areaSeries = chart.area = _extend({}, chartLineSeries, baseAreaMethods, {
         areaPoints.forEach((p, i) => {
           if (p) {
             const index = points.length === 1 ? 0 : i < points.length ? i : areaPoints.length - 1 - i;
-            // @ts-expect-error
             rotated && p.x === points[index].defaultX && p.x === argAxisPosition - argAxis.getAxisShift() && (p.x += edgeOffset);
-            // @ts-expect-error
             !rotated && p.y === points[index].defaultY && p.y === argAxisPosition - argAxis.getAxisShift() && (p.y += edgeOffset);
           }
         });
