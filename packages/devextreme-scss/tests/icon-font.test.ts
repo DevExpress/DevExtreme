@@ -8,7 +8,6 @@ const SVG_ICONS_ROOT = `${BASE_PATH}/images/icons`;
 
 describe('Equals svg to font', () => {
   const getCountElementInFont = (pathToFont: string): number => {
-    // glyphs 0-3 are .notdef, U+0000, U+0001 and space
     const countEmptySvg = 4;
 
     return readGlyphCount(readFileSync(pathToFont)) - countEmptySvg;

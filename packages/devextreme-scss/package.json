@@ -12,7 +12,6 @@
     "clean-css": "5.3.3",
     "jest": "30.4.2",
     "postcss": "^8.5.23",
-    "postcss-scss": "4.0.9",
     "sass-embedded": "1.93.3",
     "stylelint": "catalog:",
     "stylelint-config-standard-scss": "14.0.0",
