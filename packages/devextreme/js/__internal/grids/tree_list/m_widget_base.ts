@@ -1,5 +1,5 @@
 import './module_not_extended/column_headers';
-import './m_columns_controller';
+import './columns_controller';
 import './data_source/data_source_module';
 import './module_not_extended/filter';
 import './data_controller/m_data_controller';
@@ -7,7 +7,7 @@ import './module_not_extended/sorting';
 import './rows/m_rows';
 import './module_not_extended/context_menu';
 import './module_not_extended/error_handling';
-import './m_grid_view';
+import './grid_view';
 import './module_not_extended/header_panel';
 
 import registerComponent from '@js/core/component_registrator';
@@ -15,7 +15,7 @@ import { isMaterialBased } from '@js/ui/themes';
 import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 
-import treeListCore from './m_core';
+import treeListCore from './core';
 
 const TREELIST_CLASS = 'dx-treelist';
 
@@ -98,8 +98,10 @@ class TreeList extends GridCoreWidget<dxTreeListOptions> {
 
     super._init();
 
+    // @ts-expect-error the widget has no index signature of the component instance
     treeListCore.processModules(that, treeListCore);
 
+    // @ts-expect-error the widget's _controllers and _views are private
     treeListCore.callModuleItemsMethod(this, 'init');
   }
 

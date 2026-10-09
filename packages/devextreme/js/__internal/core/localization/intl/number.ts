@@ -21,7 +21,7 @@ type NormalizedConfig = Intl.NumberFormatOptions & {
 };
 type IntlFormatter = Intl.NumberFormat['format'];
 
-const CURRENCY_STYLES = ['standard', 'accounting'];
+const CURRENCY_STYLES = ['standard', 'accounting'] as const;
 const MAX_FRACTION_DIGITS = 20;
 const NUMBER_DATA_TYPE = 'number';
 
@@ -141,8 +141,8 @@ export default {
     // eslint-disable-next-line no-param-reassign
     format = this._normalizeFormat(format) as FormatConfig;
 
-    if (format.currency === 'default') {
-      format.currency = dxConfig().defaultCurrency;
+    if ((format as FormatConfig).currency === 'default') {
+      (format as FormatConfig).currency = dxConfig().defaultCurrency;
     }
 
     // eslint-disable-next-line @stylistic/no-mixed-operators

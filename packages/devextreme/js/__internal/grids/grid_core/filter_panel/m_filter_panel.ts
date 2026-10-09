@@ -7,18 +7,18 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import CheckBox from '@js/ui/check_box';
-import inflector from '@ts/core/utils/m_inflector';
+import inflector from '@ts/core/utils/inflector';
 import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
-} from '@ts/filter_builder/m_utils';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+} from '@ts/filter_builder/utils';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
-import modules from '@ts/grids/grid_core/m_modules';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridUtils from '@ts/grids/grid_core/m_utils';
+import modules from '@ts/grids/grid_core/modules/modules';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { FilterBuilderController } from '../filter_builder/m_filter_builder';
 
@@ -55,7 +55,8 @@ export class FilterPanelView extends modules.View {
   }
 
   protected _renderCore() {
-    const $element = this.element();
+    // @ts-expect-error the view is rendered here
+    const $element: dxElementWrapper = this.element();
 
     $element.empty();
 

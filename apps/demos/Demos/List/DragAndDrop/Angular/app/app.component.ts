@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule } from 'devextreme-angular';
 import type { DxSortableTypes } from 'devextreme-angular/ui/sortable';
@@ -15,7 +17,6 @@ type DxoItemDraggingProperties = DxSortableTypes.Properties;
   providers: [Service],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
   preserveWhitespaces: true,
   imports: [DxListModule],
 })
@@ -24,7 +25,7 @@ export class AppComponent {
 
   plannedTasks: Task[];
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.doingTasks = service.getDoingTasks();
     this.plannedTasks = service.getPlannedTasks();
   }
@@ -35,10 +36,12 @@ export class AppComponent {
 
   onAdd: DxoItemDraggingProperties['onAdd'] = (e) => {
     e.toData.splice(e.toIndex, 0, e.itemData);
+    this.changeDetectorRef.markForCheck();
   };
 
   onRemove: DxoItemDraggingProperties['onRemove'] = (e) => {
     e.fromData.splice(e.fromIndex, 1);
+    this.changeDetectorRef.markForCheck();
   };
 
   onReorder: DxoItemDraggingProperties['onReorder'] = (e) => {

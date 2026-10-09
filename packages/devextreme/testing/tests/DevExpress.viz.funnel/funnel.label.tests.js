@@ -98,6 +98,24 @@ QUnit.test('Create labels with styles', function(assert) {
     assert.deepEqual(options.textAlignment, 'center', 'textAlign');
 });
 
+QUnit.test('Label background and connector take the item fill by name', function(assert) {
+    stubAlgorithm.getFigures.returns([[0]]);
+    stubAlgorithm.normalizeValues.returns([1]);
+    createFunnel({
+        algorithm: 'stub',
+        dataSource: [{ value: 2, color: 'var(--probe-fill, #123456)' }],
+        valueField: 'value',
+        label: {
+            visible: true
+        }
+    });
+
+    const options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
+
+    assert.equal(options.background.fill, 'var(--probe-fill, #123456)');
+    assert.equal(options.connector.stroke, 'var(--probe-fill, #123456)');
+});
+
 QUnit.test('Default label alignment for inside labels is center', function(assert) {
     stubAlgorithm.getFigures.returns([[0]]);
     createFunnel({

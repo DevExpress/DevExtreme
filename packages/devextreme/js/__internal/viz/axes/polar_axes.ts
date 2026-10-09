@@ -18,9 +18,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined } from '@ts/core/utils/m_type';
 import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import { tick } from '@ts/viz/axes/tick';

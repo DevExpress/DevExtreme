@@ -17,11 +17,7 @@ interface ButtonConfig {
   type?: string;
 }
 
-interface FormOptions {
-  colCount: number;
-  width: string;
-  labelLocation: string;
-}
+type FormOptions = Pick<FormProperties, 'colCount' | 'width' | 'labelLocation'>;
 
 const FORM_CLASS = 'dx-formdialog-form';
 const FORM_DIALOG_CLASS = 'dx-formdialog';
@@ -108,7 +104,7 @@ export default class FormDialog extends BaseDialog {
         },
       ],
       ...this._popupConfig,
-    }) as PopupProperties;
+    });
   }
 
   protected _renderContent($contentElem: dxElementWrapper): void {

@@ -5,6 +5,7 @@ import { each } from '@js/core/utils/iterator';
 import { attachInstanceToElement, getInstanceByElement } from '@js/core/utils/public_component';
 import { isObject } from '@js/core/utils/type';
 import type { CollectionWidgetItem, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type { WatchMethod } from '@ts/core/template_manager';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
@@ -16,10 +17,7 @@ interface Watcher {
 }
 
 const forcibleWatcher = <T>(
-  watchMethod: (
-    fn: () => void,
-    callback: (value: T) => void,
-  ) => () => void,
+  watchMethod: WatchMethod<T>,
   fn: () => T,
   callback: (value: T, oldValue: T) => void,
 ): Watcher => {
@@ -47,10 +45,7 @@ export interface ItemExtraOption<TProperties> {
   fieldGetter: <TT>(
     field: keyof TProperties,
   ) => (rawData: TProperties | undefined) => TT;
-  watchMethod: <TT>() => (
-    fn: () => void,
-    callback: (value: TT) => void,
-  ) => () => void;
+  watchMethod: <TT>() => WatchMethod<TT>;
 }
 
 export type ItemClickEvent<

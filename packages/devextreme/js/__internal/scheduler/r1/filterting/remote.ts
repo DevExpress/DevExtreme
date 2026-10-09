@@ -87,7 +87,7 @@ class RemoteFilterCombiner {
       startDateExpr,
       endDateExpr,
     } = this.dataAccessors.expr;
-    const filter = extend([], combinedFilter) as unknown[];
+    const filter = extend([], combinedFilter);
 
     if (isString(filter[0])) {
       if (this.forceIsoDateParsing && filter.length > 1) {

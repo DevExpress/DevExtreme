@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import type { BookingFormData } from '../app.types';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'confirmation',
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.css'],

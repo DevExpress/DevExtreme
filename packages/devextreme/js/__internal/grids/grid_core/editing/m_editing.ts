@@ -31,6 +31,7 @@ import type Store from '@ts/data/abstract_store';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type {
@@ -40,11 +41,11 @@ import type {
   ProcessedItem,
 } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
-import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import type {
   Controllers, ModuleType, RowKey, Views,
-} from '../m_types';
-import gridCoreUtils from '../m_utils';
+} from '../types';
 import {
   ACTION_OPTION_NAMES,
   BUTTON_NAMES,
@@ -83,7 +84,6 @@ import {
   READONLY_CLASS,
   REQUIRED_EDITOR_LABELLEDBY_MODES,
   ROW_BASED_MODES,
-  ROW_CLASS,
   ROW_INSERTED,
   ROW_MODIFIED,
   ROW_SELECTED,
@@ -2611,7 +2611,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
   }
 
   private _getColumnIndexByElementCore($element) {
-    const $targetElement = $element.closest(`.${ROW_CLASS}> td:not(.dx-master-detail-cell)`);
+    const $targetElement = $element.closest(`.${VIEW_CLASSES.row}> td:not(.dx-master-detail-cell)`);
 
     return this.getCellIndex($targetElement);
   }
@@ -2778,8 +2778,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     clearTimeout(this._pointerDownTimeout);
   }
 
-  protected _renderCore() {
-    super._renderCore.apply(this, arguments as any);
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
+    super._renderCore(change);
 
     return this.waitAsyncTemplates(true).done(() => {
       this._editingController._focusEditorIfNeed();

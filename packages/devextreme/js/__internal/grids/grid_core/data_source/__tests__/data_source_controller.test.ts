@@ -15,7 +15,7 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_da
 import type {
   DataSourceAdapterProvider, RawItemData, RemoteOperationsOptions,
 } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { DataSourceController } from '../data_source_controller';
 

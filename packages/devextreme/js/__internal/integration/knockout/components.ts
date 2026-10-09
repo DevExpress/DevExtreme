@@ -1,4 +1,4 @@
-import { getImageContainer } from '@ts/core/utils/m_icon';
+import { getImageContainer } from '@ts/core/utils/icon';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
 

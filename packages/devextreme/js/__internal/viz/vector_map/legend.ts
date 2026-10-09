@@ -1,5 +1,4 @@
 /* eslint-disable import/no-import-module-exports */
-/* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
@@ -8,29 +7,57 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable max-classes-per-file */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { clone } from '@js/core/utils/object';
+import { paintedColor } from '@ts/core/utils/css_variables';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import type { LegendDataItem } from '@ts/viz/components/legend';
 import { Legend as _BaseLegend } from '@ts/viz/components/legend';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const _extend = extend;
 const _each = each;
 
 const unknownSource = { category: 'UNKNOWN', name: 'UNKNOWN' };
 
-function buildData(partition, values, field) {
+interface LegendLayoutControl {
+  addItem: (item: ThemeValue) => void;
+  removeItem: (item: ThemeValue) => void;
+  suspend: () => void;
+  resume: () => void;
+}
+
+interface LegendDataExchanger {
+  bind: (category: string, name: string, callback: (data: ThemeValue) => void) => void;
+  unbind: (category: string, name: string, callback: (data: ThemeValue) => void) => void;
+}
+
+interface LegendParameters {
+  renderer: ThemeValue;
+  container: ThemeValue;
+  widget: ThemeValue;
+  layoutControl: LegendLayoutControl;
+  themeManager: { theme: (name: string) => ThemeValue };
+  dataExchanger: LegendDataExchanger;
+  notifyDirty: () => void;
+  notifyReady: () => void;
+}
+
+interface LegendDataSource {
+  category: string;
+  name: string;
+}
+
+function buildData(partition: number[], values: ThemeValue[], field: string): LegendDataItem[] {
   let i;
   const ii = values.length;
   const list = [];
   let item;
   for (i = 0; i < ii; ++i) {
-    // @ts-expect-error
+    // @ts-expect-error the item gets its value, states and visibility right below
     list[i] = item = {
       start: partition[i],
       end: partition[i + 1],
@@ -43,43 +70,56 @@ function buildData(partition, values, field) {
   return list;
 }
 
-// 'var' because JSHint throws W021 error
-let Legend = function (parameters) {
-  const that = this;
-  that._params = parameters;
-  that._root = parameters.renderer.g().attr({ class: 'dxm-legend' }).linkOn(parameters.container, { name: 'legend', after: 'legend-base' }).enableLinks()
-    .linkAppend();
-  parameters.layoutControl.addItem(that);
-  _BaseLegend.call(that, {
-    renderer: parameters.renderer,
-    widget: parameters.widget,
-    group: that._root,
-    backgroundClass: null,
-    itemsGroupClass: null,
-    textField: 'text',
-    getFormatObject(data) {
-      return data;
-    },
-  });
-  that._onDataChanged = function (data) {
-    that._updateData(data);
-  };
-};
+let Legend = class Legend extends _BaseLegend {
+  declare _params: LegendParameters;
 
-Legend.prototype = _extend(clone(_BaseLegend.prototype), {
-  constructor: Legend,
+  declare _root: ThemeValue;
 
-  dispose() {
+  declare _onDataChanged: (data: ThemeValue) => void;
+
+  declare _dataCategory: string;
+
+  declare _dataName: string;
+
+  declare updateLayout: () => void;
+
+  declare locate: (x: number, y: number) => this;
+
+  constructor(parameters: LegendParameters) {
+    const root = parameters.renderer.g().attr({ class: 'dxm-legend' }).linkOn(parameters.container, { name: 'legend', after: 'legend-base' }).enableLinks()
+      .linkAppend();
+    super({
+      renderer: parameters.renderer,
+      widget: parameters.widget,
+      group: root,
+      backgroundClass: null,
+      textField: 'text',
+      getFormatObject(data: ThemeValue): ThemeValue {
+        return data.color === undefined
+          ? data
+          : { ...data, color: paintedColor(data.color, parameters.renderer.root.element) };
+      },
+    });
     const that = this;
-    that._params.layoutControl.removeItem(that);
-    that._unbindData();
-    that._root.linkRemove().linkOff();
-    that._params = that._root = that._onDataChanged = null;
-    return _BaseLegend.prototype.dispose.apply(that, arguments);
-  },
+    that._params = parameters;
+    that._root = root;
+    parameters.layoutControl.addItem(that);
+    that._onDataChanged = function (data): void {
+      that._updateData(data);
+    };
+  }
+
+  dispose(): this {
+    this._params.layoutControl.removeItem(this);
+    this._unbindData();
+    this._root.linkRemove().linkOff();
+    // @ts-expect-error dispose() drops the references
+    this._params = this._root = this._onDataChanged = null;
+    return super.dispose();
+  }
 
   // This method is called only by the layout
-  resize(size) {
+  resize(size: { width: number; height: number } | null): void {
     this._params.notifyDirty();
     if (size === null) {
       this.erase();
@@ -87,55 +127,59 @@ Legend.prototype = _extend(clone(_BaseLegend.prototype), {
       this.draw(size.width, size.height);
     }
     this._params.notifyReady();
-  },
+  }
 
-  locate: _BaseLegend.prototype.shift,
-
-  _updateData(data) {
+  _updateData(data: ThemeValue): void {
     this._options.defaultColor = data && data.defaultColor;
     this.update(data ? buildData(data.partition, data.values, this._dataName) : [], this._options, this._params.themeManager.theme('legend').title);
     this.updateLayout();
-  },
+  }
 
-  _unbindData() {
+  _unbindData(): void {
     if (this._dataCategory) {
       this._params.dataExchanger.unbind(this._dataCategory, this._dataName, this._onDataChanged);
     }
-  },
+  }
 
-  _bindData(arg) {
+  _bindData(arg: LegendDataSource): void {
     this._params.dataExchanger.bind(this._dataCategory = arg.category, this._dataName = arg.name, this._onDataChanged);
-  },
+  }
 
   // The `_root` should be appended or removed here but there is no way to check if core.Legend is actually enabled or not
-  setOptions(options) {
-    const that = this;
-    that.update(that._data, options, this._params.themeManager.theme('legend').title);
-    that._unbindData();
+  setOptions(options: ThemeValue): this {
+    this.update(this._data, options, this._params.themeManager.theme('legend').title);
+    this._unbindData();
     const source = options.source;
-    that._bindData(source ? { category: source.layer, name: source.grouping } : unknownSource);
-    that.updateLayout();
-    return that;
-  },
-});
-
-export let LegendsControl = function (parameters) {
-  this._params = parameters;
-  this._items = [];
-  parameters.container.virtualLink('legend-base');
+    this._bindData(source ? { category: source.layer, name: source.grouping } : unknownSource);
+    this.updateLayout();
+    return this;
+  }
 };
 
-LegendsControl.prototype = {
-  constructor: LegendsControl,
+_extend(Legend.prototype, {
+  locate: _BaseLegend.prototype.shift,
+});
 
-  dispose() {
+export let LegendsControl = class LegendsControl {
+  declare _params: LegendParameters;
+
+  declare _items: InstanceType<typeof Legend>[];
+
+  constructor(parameters: LegendParameters) {
+    this._params = parameters;
+    this._items = [];
+    parameters.container.virtualLink('legend-base');
+  }
+
+  dispose(): void {
     _each(this._items, (_, item) => {
       item.dispose();
     });
+    // @ts-expect-error dispose() drops the references
     this._params = this._items = null;
-  },
+  }
 
-  setOptions(options) {
+  setOptions(options: ThemeValue[]): void {
     const optionList = options && options.length ? options : [];
     const items = this._items;
     let i;
@@ -155,18 +199,18 @@ LegendsControl.prototype = {
       items[i].setOptions(_extend(true, {}, theme, optionList[i]));
     }
     params.layoutControl.resume();
-  },
+  }
 };
 
 /// #DEBUG
 const originalLegend = Legend;
 export { Legend as _TESTS_Legend };
 
-exports._TESTS_stubLegendType = function (stub) {
+exports._TESTS_stubLegendType = function (stub): void {
   Legend = stub;
 };
 
-exports._TESTS_restoreLegendType = function () {
+exports._TESTS_restoreLegendType = function (): void {
   Legend = originalLegend;
 };
 /// #ENDDEBUG

@@ -1,4 +1,4 @@
-import { columnHasValue } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
+import { columnHasValue } from '@ts/grids/grid_core/columns_controller/columns_controller_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { RawItemData } from '../../data_source_adapter/types';

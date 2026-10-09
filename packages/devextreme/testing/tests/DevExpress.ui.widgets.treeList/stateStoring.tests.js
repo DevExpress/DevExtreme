@@ -10,7 +10,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import '__internal/grids/tree_list/m_widget';
+import '__internal/grids/tree_list/widget';
 import $ from 'jquery';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 

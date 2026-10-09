@@ -1,9 +1,10 @@
 /* eslint-disable max-classes-per-file */
 
 import type { Font } from '@js/common/charts';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Coords, Size } from '@ts/viz/core/types';
 import { extractColor, patchFontOptions } from '@ts/viz/core/utils';
 import { formatValue, getSampleText } from '@ts/viz/gauges/base_gauge';
 
@@ -55,16 +56,6 @@ interface IndicatorAnimation {
   delta?: number;
 }
 
-export interface Point {
-  x: number;
-  y: number;
-}
-
-export interface Size {
-  width: number;
-  height: number;
-}
-
 export abstract class BaseElement {
   _renderer;
 
@@ -85,8 +76,9 @@ export abstract class BaseElement {
 
   dispose(): this {
     this._dispose();
-    each(this, (name) => {
-      this[name] = null;
+    const fields = this as Record<string, unknown>;
+    each(fields, (name) => {
+      fields[name] = null;
     });
     return this;
   }
@@ -421,7 +413,7 @@ export abstract class BaseTextCloudMarker extends BaseIndicator {
     };
   }
 
-  abstract _correctCloudType(type: string, position: Point, size: Size): string;
+  abstract _correctCloudType(type: string, position: Coords, size: Size): string;
 
   abstract _getTextCloudOptions(): TextCloudOptions;
 }
@@ -634,7 +626,7 @@ export abstract class BaseRangeBar extends BaseIndicator {
 
   abstract _updateLinePosition(): void;
 
-  abstract _getTooltipPosition(): Point;
+  abstract _getTooltipPosition(): Coords;
 }
 
 /// #DEBUG

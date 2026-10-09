@@ -1,4 +1,5 @@
-<div ng-if="connectionStarted">
+@if (connectionStarted) {
+<div>
   <dx-data-grid
     id="gridContainer"
     [dataSource]="dataSource"
@@ -58,3 +59,4 @@
     </div>
   </dx-data-grid>
 </div>
+}

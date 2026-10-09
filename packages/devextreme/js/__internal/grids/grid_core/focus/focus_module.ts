@@ -1,4 +1,4 @@
-import type { InternalGridOptions } from '@ts/grids/grid_core/m_types';
+import type { InternalGridOptions } from '@ts/grids/grid_core/types';
 
 import {
   focusDataSourceControllerExtender,
