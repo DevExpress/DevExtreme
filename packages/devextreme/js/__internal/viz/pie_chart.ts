@@ -1,21 +1,10 @@
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable no-bitwise */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-plusplus */
-/* eslint-disable prefer-rest-params */
-/* eslint-disable prefer-spread */
 /* eslint-disable */
 
-import registerComponent from '@js/core/component_registrator';
-import { noop as _noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
-import { each as _each } from '@js/core/utils/iterator';
-import { isNumeric } from '@js/core/utils/type';
+import { registerComponent } from '@ts/core/component_registrator';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { each as _each } from '@ts/core/utils/m_iterator';
+import { isNumeric } from '@ts/core/utils/m_type';
 import consts from '@ts/viz/components/consts';
 import { plugins as annotationsPlugins } from '@ts/viz/core/annotations';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

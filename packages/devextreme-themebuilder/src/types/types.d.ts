@@ -59,7 +59,7 @@ interface CompilerResult {
   changedVariables: { [key: string]: string };
 }
 
-interface BundleResolver<T = 'async' | 'sync'> {
+interface BundleResolver<T extends 'async' | 'sync' = 'async' | 'sync'> {
   options: import('sass-embedded').Options<T>;
   file: string;
 }

@@ -20,6 +20,7 @@ import {
   createDataGrid,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import type { GridContext, JsonSchema } from '@ts/grids/grid_core/ai_assistant/types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { DataGridAIAssistantIntegrationController } from '../ai_assistant_integration_controller';
 
@@ -79,7 +80,9 @@ const createController = async (
     ...options,
   } as Properties);
 
-  const controller = new DataGridAIAssistantIntegrationController(instance);
+  const controller = new DataGridAIAssistantIntegrationController(
+    instance as unknown as InternalGrid,
+  );
   controller.init();
 
   return controller;

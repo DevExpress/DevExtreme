@@ -7308,6 +7308,10 @@ declare module DevExpress.core {
 
     attr(attributeName: string, value: string | number | boolean | null): this;
 
+    attr(
+      attributes: Record<string, string | number | boolean | null | undefined>
+    ): this;
+
     attr(attributeName: string): string | undefined;
 
     before(element: Element | dxElementWrapper): this;
@@ -7464,11 +7468,11 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class FunctionTemplate {
-    render(template: {
-      container: unknown;
-      model?: object;
-      transclude?: boolean;
-    }): DxElement;
+    constructor(
+      render?: (options: Omit<TemplateRenderOptions, 'onRendered'>) => unknown
+    );
+
+    render(options?: TemplateRenderOptions): DxElement;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7520,6 +7524,7 @@ declare module DevExpress.core {
    */
   export class Template {
     constructor(options?: dxTemplateOptions);
+    constructor(element: string | UserDefinedElement | dxElementWrapper);
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7527,6 +7532,17 @@ declare module DevExpress.core {
   export class TemplateManager {
     anonymousTemplateName: string;
     addDefaultTemplates(templates: Record<string, unknown>): void;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface TemplateRenderOptions {
+    container?: unknown;
+    model?: unknown;
+    index?: number;
+    transclude?: boolean;
+    renovated?: boolean;
+    onRendered?: () => void;
   }
   /**
    * [descr:UserDefinedElement]

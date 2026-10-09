@@ -1,5 +1,5 @@
 import './module_not_extended/column_headers';
-import './m_columns_controller';
+import './columns_controller';
 import './data_source/data_source_module';
 import './module_not_extended/filter';
 import './module_not_extended/data_controller';
@@ -19,7 +19,7 @@ import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 
-import gridCore from './m_core';
+import gridCore from './core';
 
 const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
 
@@ -133,6 +133,7 @@ class DataGrid extends GridCoreWidget<Properties> {
     // @ts-expect-error
     gridCore.processModules(that, gridCore as any);
 
+    // @ts-expect-error the widget's _controllers and _views are private
     gridCore.callModuleItemsMethod(that, 'init');
   }
 

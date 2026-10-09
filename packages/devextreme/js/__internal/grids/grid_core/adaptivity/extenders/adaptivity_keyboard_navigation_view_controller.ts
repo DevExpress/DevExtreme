@@ -4,7 +4,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import {
   ADAPTIVE_ITEM_TEXT_CLASS,

@@ -21,6 +21,8 @@ export interface DialogOptions {
 }
 
 interface FileManagerDialogBaseOptions extends WidgetProperties {
+  title?: string;
+  buttonText?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClosed?: ((args: any) => void);
 }

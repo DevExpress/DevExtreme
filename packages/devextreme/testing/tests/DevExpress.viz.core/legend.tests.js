@@ -403,7 +403,10 @@ QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
         .draw(200, 200);
 
     assert.deepEqual(this.renderer.text.lastCall.returnValue.css.lastCall.args[0], {}, 'Label should not have font style');
-    assert.equal(this.renderer.g.getCall(1).returnValue.children[0].css.lastCall.args[0].fill, 'rgba(127,127,127,0.5)', 'Label\'s group should have fill with opacity');
+    const groupStyles = this.renderer.g.getCall(1).returnValue.children[0].css.lastCall.args[0];
+
+    assert.equal(groupStyles.fill, '#7F7F7F', 'Label\'s group should have the font colour');
+    assert.equal(groupStyles['fill-opacity'], 0.5, 'and the font opacity beside it');
 });
 
 QUnit.test('Create legend, textOpacity less than font opacity', function(assert) {
@@ -423,7 +426,10 @@ QUnit.test('Create legend, textOpacity less than font opacity', function(assert)
     ];
     this.createAndDrawLegend();
 
-    assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].fill, 'rgba(127,127,127,0.3)', 'Label should be changed');
+    const labelStyles = this.renderer.text.lastCall.returnValue.css.lastCall.args[0];
+
+    assert.equal(labelStyles.fill, '#7F7F7F', 'Label keeps the font colour');
+    assert.equal(labelStyles['fill-opacity'], 0.3, 'and takes the smaller opacity of the item');
 });
 
 QUnit.test('Create legend, selected fill is "none"', function(assert) {
@@ -2134,6 +2140,56 @@ QUnit.test('Process items return nothing - get original items', function(assert)
     });
 });
 
+QUnit.test('customizeItems receives the painted fill, the marker keeps the name', function(assert) {
+    const handed = [];
+    this.data[0].states.normal.fill = 'var(--probe-fill, #123456)';
+    this.options.customizeItems = function(items) {
+        handed.push(items[0].marker.fill, items[0].states.normal.fill);
+    };
+
+    this.createAndDrawLegend();
+
+    assert.deepEqual(handed, ['#123456', '#123456']);
+    assert.deepEqual(this.createMarker.getCall(0).returnValue.attr.getCall(0).args, [{ fill: 'var(--probe-fill, #123456)', opacity: 1, filter: undefined }]);
+});
+
+QUnit.test('customizeItems keeps the marker fill the application sets', function(assert) {
+    this.data[0].states.normal.fill = 'var(--probe-fill, #123456)';
+    this.options.customizeItems = function(items) {
+        items[0].marker.fill = '#abcdef';
+    };
+
+    this.createAndDrawLegend();
+
+    assert.deepEqual(this.createMarker.getCall(0).returnValue.attr.getCall(0).args, [{ fill: '#abcdef', opacity: 1, filter: undefined }]);
+});
+
+QUnit.test('customizeItems receives the painted hover fill, the hovered marker keeps the name', function(assert) {
+    const handed = [];
+    this.data[0].states.hover = { fill: 'var(--probe-fill, #123456)', hatching: { direction: 'none' } };
+    this.options.customizeItems = function(items) {
+        handed.push(items[0].states.hover.fill);
+    };
+
+    this.createAndDrawLegend();
+    this.legend.applyHover(0);
+
+    assert.deepEqual(handed, ['#123456']);
+    assert.deepEqual(this.createMarker.lastCall.returnValue.attr.getCall(0).args, [{ fill: 'var(--probe-fill, #123456)', opacity: 1, filter: undefined }]);
+});
+
+QUnit.test('customizeItems keeps the hover fill the application sets', function(assert) {
+    this.data[0].states.hover = { fill: 'var(--probe-fill, #123456)', hatching: { direction: 'none' } };
+    this.options.customizeItems = function(items) {
+        items[0].states.hover.fill = '#abcdef';
+    };
+
+    this.createAndDrawLegend();
+    this.legend.applyHover(0);
+
+    assert.deepEqual(this.createMarker.lastCall.returnValue.attr.getCall(0).args, [{ fill: '#abcdef', opacity: 1, filter: undefined }]);
+});
+
 QUnit.test('Do not render hidden items', function(assert) {
     this.data[1].visible = false;
     this.createAndDrawLegend();
@@ -2684,6 +2740,22 @@ QUnit.test('Call second time when state changed', function(assert) {
     assert.equal(this.options.markerTemplate.callCount, 1);
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.state, 'hovered');
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.2);
+});
+
+QUnit.test('Template receives the painted fills, the item keeps the names', function(assert) {
+    this.data[0].states.normal.fill = 'var(--probe-fill, #123456)';
+    this.data[0].states.hover.fill = 'var(--probe-hover, #abcdef)';
+
+    this.createAndDrawLegend();
+
+    const model = this.options.markerTemplate.lastCall.args[0];
+
+    assert.equal(model.marker.fill, '#123456');
+    assert.equal(model.states.normal.fill, '#123456');
+    assert.equal(model.states.hover.fill, '#abcdef');
+    assert.equal(this.data[0].marker.fill, 'var(--probe-fill, #123456)');
+    assert.equal(this.data[0].states.normal.fill, 'var(--probe-fill, #123456)');
+    assert.equal(this.data[0].states.hover.fill, 'var(--probe-hover, #abcdef)');
 });
 
 QUnit.test('can customize legendItem.marker.size', function(assert) {

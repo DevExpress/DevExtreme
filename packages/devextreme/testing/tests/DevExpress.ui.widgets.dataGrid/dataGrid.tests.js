@@ -6,7 +6,7 @@ import typeUtils from 'core/utils/type';
 import { deferUpdate } from 'core/utils/common';
 import { version } from 'core/version';
 import errors from 'core/errors';
-import gridCore from '__internal/grids/data_grid/m_core';
+import gridCore from '__internal/grids/data_grid/core';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
 import messageLocalization from 'common/core/localization/message';

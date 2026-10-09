@@ -11,8 +11,8 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
-import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined } from '@ts/core/utils/m_type';
 
 const math = Math;
 const round = math.round;

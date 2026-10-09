@@ -3,7 +3,7 @@ import { AIAssistantController } from '@ts/grids/grid_core/ai_assistant/ai_assis
 import { AIAssistantView } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view';
 import { AIAssistantViewController } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view_controller';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 
 gridCore.registerModule('aiAssistant', {
   defaultOptions() {

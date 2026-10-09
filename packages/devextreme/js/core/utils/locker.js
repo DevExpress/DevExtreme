@@ -1,3 +1,3 @@
 // deprecated
-import { Locker } from '../../__internal/core/utils/m_locker';
+import { Locker } from '../../__internal/core/utils/locker';
 export default Locker;

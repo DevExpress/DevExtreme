@@ -63,6 +63,8 @@ const ANIMATION_TIMEOUT = 15;
 
 type ItemLike = string | Item;
 
+type ToolbarGroup = Item & { items?: Item[] };
+
 export interface ToolbarBaseProperties<
   TItem extends ItemLike = Item,
   TKey extends CollectionItemKey = CollectionItemKey,
@@ -609,7 +611,7 @@ class ToolbarBase<
 
   _renderGroupedItems(): void {
     const { items: groups = [] } = this.option();
-    each(groups, (groupIndex, group) => {
+    each(groups, (groupIndex, group: ToolbarGroup) => {
       const groupItems = group.items;
       const $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS);
       const location = group.location ?? 'center';

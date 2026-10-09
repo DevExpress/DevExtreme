@@ -1,7 +1,7 @@
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 const SORT_CLASS = 'dx-sort';
 const SORT_NONE_CLASS = 'dx-sort-none';

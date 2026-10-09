@@ -786,7 +786,7 @@ class Menu extends MenuBase<MenuProperties> {
       onHidden: this._submenuOnHiddenHandler.bind(this, $menuAnchorItem, submenu),
     });
 
-    each(submenus, (_index: number, subMenu: Submenu) => {
+    each(submenus, (_index, subMenu) => {
       eventsEngine.off(subMenu, submenuMouseLeaveName);
       eventsEngine.on(
         subMenu,

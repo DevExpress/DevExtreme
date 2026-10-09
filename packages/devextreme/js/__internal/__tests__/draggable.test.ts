@@ -4,6 +4,7 @@ import {
   describe,
   expect,
   it,
+  jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 
@@ -81,5 +82,57 @@ describe('Draggable preventDefault on a drag move', () => {
 
     expect(event._cancelPreventDefault).not.toBe(true);
     expect(event.isDefaultPrevented()).toBe(true);
+  });
+});
+
+describe('Draggable onCancelByEsc', () => {
+  const startDrag = (element: Element): void => {
+    fire(element, 'dxpointerdown');
+    fire(element, 'dxpointermove', { y: 20 });
+    fire(element, 'dxpointermove', { y: 40 });
+  };
+
+  it('should cancel the drag by Escape when the option is on at creation', () => {
+    const onDragCancel = jest.fn();
+    const draggable = createDraggable({ onCancelByEsc: true, onDragCancel });
+    const element = draggable.$element().get(0);
+
+    startDrag(element);
+    fire(element, 'keydown', { key: 'Escape' });
+
+    expect(onDragCancel).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not throw when the option is changed during a drag', () => {
+    const draggable = createDraggable({ onCancelByEsc: false });
+
+    startDrag(draggable.$element().get(0));
+
+    expect(draggable.getDragInProgress()).toBe(true);
+    expect(() => draggable.option('onCancelByEsc', true)).not.toThrow();
+  });
+
+  it('should cancel the drag by Escape after the option is turned on', () => {
+    const onDragCancel = jest.fn();
+    const draggable = createDraggable({ onCancelByEsc: false, onDragCancel });
+    const element = draggable.$element().get(0);
+
+    draggable.option('onCancelByEsc', true);
+    startDrag(element);
+    fire(element, 'keydown', { key: 'Escape' });
+
+    expect(onDragCancel).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not cancel the drag by Escape after the option is turned off', () => {
+    const onDragCancel = jest.fn();
+    const draggable = createDraggable({ onCancelByEsc: true, onDragCancel });
+    const element = draggable.$element().get(0);
+
+    draggable.option('onCancelByEsc', false);
+    startDrag(element);
+    fire(element, 'keydown', { key: 'Escape' });
+
+    expect(onDragCancel).not.toHaveBeenCalled();
   });
 });

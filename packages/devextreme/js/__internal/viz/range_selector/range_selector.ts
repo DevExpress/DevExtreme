@@ -2,16 +2,16 @@
 /* eslint-disable max-classes-per-file */
 
 import type { VisualRange } from '@js/common/charts';
-import registerComponent from '@js/core/component_registrator';
-import dateUtils from '@js/core/utils/date';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { adjust } from '@js/core/utils/math';
-import {
-  isDate, isDefined, isFunction, isNumeric, isPlainObject, type as getType,
-} from '@js/core/utils/type';
+import { registerComponent } from '@ts/core/component_registrator';
 import formatHelper from '@ts/core/format_helper';
 import { applyDataTypePreset } from '@ts/core/global_format_config';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { adjust } from '@ts/core/utils/m_math';
+import {
+  isDate, isDefined, isFunction, isNumeric, isPlainObject, type as getType,
+} from '@ts/core/utils/m_type';
 import constants from '@ts/viz/axes/axes_constants';
 import { Axis } from '@ts/viz/axes/base_axis';
 import { tickGenerator } from '@ts/viz/axes/tick_generator';
@@ -25,6 +25,7 @@ import { plugin as exportPlugin } from '@ts/viz/core/export';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
+import type { Bounds } from '@ts/viz/core/types';
 import {
   convertVisualRangeObject,
   getCategoriesInfo,
@@ -61,13 +62,6 @@ const SEMIDISCRETE_GRID_SPACING_FACTOR = 50;
 const DEFAULT_AXIS_DIVISION_FACTOR = 30;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
 const DEFAULT_LOGARITHM_BASE = 10;
-
-interface Indents {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-}
 
 interface TickIntervalsInfo {
   tickInterval: ThemeValue;
@@ -145,7 +139,7 @@ function calculateIndents(
   sliderMarkerOptions: ThemeValue,
   indentOptions: ThemeValue,
   tickIntervalsInfo: TickIntervalsInfo,
-): Indents {
+): Bounds {
   let leftScaleLabelWidth = 0;
   let rightScaleLabelWidth = 0;
   const ticks = scale.type === 'semidiscrete' ? scale.customTicks : tickIntervalsInfo.ticks;
@@ -962,12 +956,11 @@ class AxisWrapper {
   }
 
   getOptions(): ThemeValue {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._axis.getOptions() || {};
   }
 }
 
-each(Axis.prototype, (field: string) => {
+Object.getOwnPropertyNames(Axis.prototype).forEach((field: string) => {
   if (field !== 'constructor' && !field.startsWith('_') && isFunction(Axis.prototype[field])
     && !(field in AxisWrapper.prototype)) {
     AxisWrapper.prototype[field] = function callAxisMethod(
@@ -988,11 +981,11 @@ class RangeSelector extends BaseWidget {
 
   _axis!: ThemeValue;
 
-  _rangeView;
+  declare _rangeView: InstanceType<typeof RangeView>;
 
-  _slidersController;
+  declare _slidersController: InstanceType<typeof SlidersController>;
 
-  _tracker;
+  declare _tracker: InstanceType<typeof Tracker>;
 
   _clientRect!: number[];
 
@@ -1009,7 +1002,6 @@ class RangeSelector extends BaseWidget {
   _toggleParentsScrollSubscription(): void {}
 
   _dataIsReady(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._dataIsLoaded();
   }
 
@@ -1058,7 +1050,6 @@ class RangeSelector extends BaseWidget {
     this._rangeView = new RangeView({
       renderer,
       root: rangeViewGroup,
-      translator: this._axis.getTranslator(),
     });
 
     this._slidersController = new SlidersController({
@@ -1413,7 +1404,9 @@ class RangeSelector extends BaseWidget {
     this._tracker.update(!this._axis.getTranslator().getBusinessRange().isEmpty(), behavior);
   }
 
-  _createSeriesDataSource(chartOptions: ThemeValue): ThemeValue {
+  _createSeriesDataSource(
+    chartOptions: ThemeValue,
+  ): InstanceType<typeof SeriesDataSource> | undefined {
     // TODO: This code can be executed when data source is not loaded (it is an error)!
     const dataSource = this._dataSourceItems();
     const scaleOptions = this._getOption('scale');

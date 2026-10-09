@@ -6,11 +6,14 @@ import { createRef as infernoCreateRef } from 'inferno';
 
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { isDefined } from '../../core/utils/type';
-import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
+import type { DisposeEffectReturn, EffectReturn } from '../core/r1/utils/effect_return';
 import { PaginationDefaultProps, type PaginationProps } from './common/pagination_props';
 import type { RefObject } from './common/types';
 import type { PaginationContentProps } from './content';
-import { getElementContentWidth, getElementStyle, getElementWidth } from './utils/get_element_width';
+import {
+  getElementContentWidth, getElementStyle, getElementWidth, isElementBlockLevel,
+} from './utils/get_element_width';
+import { onThemeReady } from './utils/on_theme_ready';
 
 interface ChildElements<T> { allowedPageSizes: T; pages: T; info: T }
 interface MainElements<T> { parent: T; allowedPageSizes: T; pages: T }
@@ -30,6 +33,13 @@ export function calculateInfoTextVisible({
 }: AllElements<number>): boolean {
   const minimalWidth = pageSizesWidth + pagesWidth + infoWidth;
   return parentWidth - minimalWidth > 0;
+}
+
+export function isLayoutApplied({
+  allowedPageSizes, pages, info,
+}: ChildElements<HTMLElement | null | undefined>): boolean {
+  return [allowedPageSizes, pages, info]
+    .every((element) => !element || !isElementBlockLevel(element));
 }
 
 function getElementsWidth({
@@ -82,6 +92,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
   constructor(props) {
     super(props);
     this.subscribeToResize = this.subscribeToResize.bind(this);
+    this.subscribeToThemeReady = this.subscribeToThemeReady.bind(this);
     this.effectUpdateChildProps = this.effectUpdateChildProps.bind(this);
     this.updateAdaptivityProps = this.updateAdaptivityProps.bind(this);
   }
@@ -102,7 +113,9 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
         this.state.isLargeDisplayMode,
         this.props.paginationProps,
         this.props.contentTemplate,
-      ])];
+      ]),
+      new InfernoEffect(this.subscribeToThemeReady, []),
+    ];
   }
 
   updateEffects(): void {
@@ -124,6 +137,14 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
     };
     resizeCallbacks.add(callback);
     return (): void => { resizeCallbacks.remove(callback); };
+  }
+
+  subscribeToThemeReady(): EffectReturn {
+    return onThemeReady((): void => {
+      if (this.getParentWidth() > 0) {
+        this.updateAdaptivityProps();
+      }
+    });
   }
 
   effectUpdateChildProps(): void {
@@ -228,6 +249,13 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
     });
     if (this.actualInfoTextVisible !== this.state.infoTextVisible
       || this.actualIsLargeDisplayMode !== this.state.isLargeDisplayMode) {
+      return;
+    }
+    if (!isLayoutApplied({
+      allowedPageSizes: this.allowedPageSizesRef?.current,
+      pages: this.pagesRef?.current,
+      info: this.infoTextRef?.current,
+    })) {
       return;
     }
     const isEmpty = !isDefined(this.elementsWidth);

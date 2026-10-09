@@ -1,4 +1,5 @@
 /* eslint-disable devextreme-custom/no-deferred */
+import type { DateLike } from '@js/common';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
@@ -58,7 +59,7 @@ import type {
 import errors from '@js/ui/widget/ui.errors';
 import type { Options } from '@ts/core/options/index';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { tabbable } from '@ts/core/utils/m_selectors';
+import { tabbable } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { focus } from '@ts/events/short';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -193,6 +194,12 @@ const StoreEventNames = {
 } as const;
 
 type StoreEventName = typeof StoreEventNames[keyof typeof StoreEventNames];
+
+// the startDate of a view reaches the workspace as is
+type WorkspaceConfig = Omit<
+  Partial<WorkspaceOptionsInternal>,
+  'onInitialized' | 'onDisposing' | 'rowHeight' | 'startDate'
+> & { startDate?: DateLike };
 
 interface SchedulerActionMap {
   onAppointmentAdding: AppointmentAddingOptions;
@@ -1671,6 +1678,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace = this._createComponent(
       $workSpace,
       workSpaceComponent,
+      // @ts-expect-error the startDate of a view reaches the workspace as is
       workSpaceConfig,
     ) as SchedulerWorkSpaceLike;
     this._workSpace.getWorkArea().append(this._appointments.$element());
@@ -1685,7 +1693,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     });
   }
 
-  private workSpaceConfig(currentViewOptions: NormalizedView): WorkspaceOptionsInternal {
+  private workSpaceConfig(currentViewOptions: NormalizedView): WorkspaceConfig {
     const scrolling = this.getViewOption('scrolling');
     const isVirtualScrolling = scrolling.mode === 'virtual';
     const horizontalVirtualScrollingAllowed = isVirtualScrolling
@@ -1697,7 +1705,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       || horizontalVirtualScrollingAllowed
       || isTimelineView(currentViewOptions.type);
 
-    const workSpaceOptions = extend({
+    const mergedOptions = extend({
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
       getFilteredItems: () => this._layoutManager.filteredItems, // NOTE: used only in agenda
@@ -1738,7 +1746,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       schedulerHeight: this.option('height'),
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
-      onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
       renderAppointments: (): void => { this.renderAppointments(); },
       onShowAllDayPanel: (value: boolean) => this.option('showAllDayPanel', value),
       getHeaderHeight: (): number => (this.header?.getHeight() ?? 0),
@@ -1749,27 +1756,35 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       cellDuration: this.option('cellDuration'),
       allDayExpanded: false,
       currentDate: this.getViewOption('currentDate'),
-    }, currentViewOptions) as WorkspaceOptionsInternal;
+    }, currentViewOptions);
 
-    workSpaceOptions.hoursInterval = workSpaceOptions.cellDuration / 60;
+    // @ts-expect-error the workspace types the selected cells as object, the popup reads dates
+    const onSelectedCellsClick: WorkspaceConfig['onSelectedCellsClick'] = this.showAddAppointmentPopup
+      .bind(this);
 
-    workSpaceOptions.notifyScheduler = this.notifyScheduler;
-    workSpaceOptions.groups = this.resourceManager.groupResources();
-    workSpaceOptions.onCellClick = this.createSchedulerAction('onCellClick');
-    workSpaceOptions.onCellContextMenu = this.createSchedulerAction('onCellContextMenu');
-    workSpaceOptions.skippedDays = this.getViewOption('hiddenWeekDays') as number[];
-    workSpaceOptions.dataCellTemplate = workSpaceOptions.dataCellTemplate
-      ? this._getTemplate(workSpaceOptions.dataCellTemplate) as TemplateBase
-      : null;
-    workSpaceOptions.timeCellTemplate = workSpaceOptions.timeCellTemplate
-      ? this._getTemplate(workSpaceOptions.timeCellTemplate) as TemplateBase
-      : null;
-    workSpaceOptions.resourceCellTemplate = workSpaceOptions.resourceCellTemplate
-      ? this._getTemplate(workSpaceOptions.resourceCellTemplate) as TemplateBase
-      : null;
-    workSpaceOptions.dateCellTemplate = workSpaceOptions.dateCellTemplate
-      ? this._getTemplate(workSpaceOptions.dateCellTemplate) as TemplateBase
-      : null;
+    const workSpaceOptions: WorkspaceConfig = {
+      ...mergedOptions,
+      scrolling,
+      onSelectedCellsClick,
+      hoursInterval: mergedOptions.cellDuration / 60,
+      notifyScheduler: this.notifyScheduler,
+      groups: this.resourceManager.groupResources(),
+      onCellClick: this.createSchedulerAction('onCellClick'),
+      onCellContextMenu: this.createSchedulerAction('onCellContextMenu'),
+      skippedDays: this.getViewOption('hiddenWeekDays') as number[],
+      dataCellTemplate: mergedOptions.dataCellTemplate
+        ? this._getTemplate(mergedOptions.dataCellTemplate) as unknown as TemplateBase
+        : null,
+      timeCellTemplate: mergedOptions.timeCellTemplate
+        ? this._getTemplate(mergedOptions.timeCellTemplate) as unknown as TemplateBase
+        : null,
+      resourceCellTemplate: mergedOptions.resourceCellTemplate
+        ? this._getTemplate(mergedOptions.resourceCellTemplate) as unknown as TemplateBase
+        : null,
+      dateCellTemplate: mergedOptions.dateCellTemplate
+        ? this._getTemplate(mergedOptions.dateCellTemplate) as unknown as TemplateBase
+        : null,
+    };
 
     return workSpaceOptions;
   }
@@ -2371,7 +2386,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       {},
       rawAppointment,
       newRawTargetedAppointment,
-    ) as SafeAppointment;
+    );
 
     const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
 

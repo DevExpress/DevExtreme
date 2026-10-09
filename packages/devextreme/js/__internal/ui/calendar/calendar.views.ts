@@ -89,7 +89,6 @@ export class MonthView extends BaseView<MonthViewProperties> {
       abbreviated: abbrCaption,
     } = this._getDayCaption(firstDayOfWeek + cellIndex);
     const $cell = $('<th>')
-      // @ts-expect-error ts-error
       .attr({
         scope: 'col',
         abbr: fullCaption,
@@ -101,7 +100,6 @@ export class MonthView extends BaseView<MonthViewProperties> {
 
   _renderWeekHeaderCell($headerRow: dxElementWrapper): void {
     const $weekNumberHeaderCell = $('<th>')
-      // @ts-expect-error ts-error
       .attr({
         scope: 'col',
         abbr: WEEK_NUMBER_TEXT,
