@@ -30,7 +30,11 @@ import {
   HeaderFilterView,
   updateHeaderFilterItemSelectionState,
 } from './m_header_filter_core';
-import { allowHeaderFiltering, createHeaderFilterExpressions } from './utils';
+import {
+  allowHeaderFiltering,
+  createHeaderFilterExpressions,
+  getHeaderFilterGroupParameters,
+} from './utils';
 
 const DATE_INTERVAL_FORMATS = {
   year(value) {
@@ -83,7 +87,7 @@ function ungroupUTCDates(items, dateParts?, dates?) {
 export function convertDataFromUTCToLocal(data, column) {
   const dates = ungroupUTCDates(data);
   const query = dataQuery(dates);
-  const group = gridCoreUtils.getHeaderFilterGroupParameters({
+  const group = getHeaderFilterGroupParameters({
     ...column,
     calculateCellValue: (date) => date,
   });
@@ -251,7 +255,7 @@ export class HeaderFilterController extends Modules.ViewController {
   private getDataSource(column) {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const remoteGrouping = this.dataSourceController.remoteOperations().grouping;
-    const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
+    const group = getHeaderFilterGroupParameters(column, remoteGrouping);
     const headerFilterDataSource = column.headerFilter?.dataSource;
     const headerFilterOptions = this.option('headerFilter');
     let isLookup = false;

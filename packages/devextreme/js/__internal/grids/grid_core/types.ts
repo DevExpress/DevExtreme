@@ -1,15 +1,21 @@
 /* eslint-disable spellcheck/spell-checker */
 import type {
-  GridBase, GridBaseOptions, SelectionBase,
+  ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase,
 } from '@js/common/grids';
 import type { PropertyType } from '@js/core';
 import type { Component } from '@js/core/component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } from '@js/ui/data_grid';
+import type { Format } from '@js/localization';
+import type {
+  Properties as DataGridOptions,
+  Scrolling as DataGridScrolling,
+  SummaryTotalItem,
+} from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 import type { ActionConfig } from '@ts/core/widget/component';
+import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { FilterValue } from '@ts/grids/grid_core/filter/types';
 import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
 
@@ -31,6 +37,68 @@ export interface SelectionRange {
   selectionStart: number;
   selectionEnd: number;
 }
+
+export interface FormatOptions {
+  format?: Format;
+  getDisplayFormat?: (valueText: string) => string;
+  customizeText?: (cellInfo: ColumnCustomizeTextArg & { valueText: string }) => string;
+  target?: string;
+  groupInterval?: string | number;
+  trueText?: string;
+  falseText?: string;
+}
+
+/** @architectureLeak data_grid/summary: core renders summary texts in group rows */
+export interface SummaryTextItem extends Pick<SummaryTotalItem, 'displayFormat' | 'valueFormat' | 'customizeText'> {
+  summaryType: string;
+  value?: unknown;
+  columnCaption?: string;
+}
+
+export interface LoadPanelPosition {
+  of: dxElementWrapper | undefined;
+  boundary?: dxElementWrapper;
+  collision?: 'fit';
+}
+
+export type WidgetElementData = Record<string, unknown> & { dxComponents?: string[] };
+
+export interface ColumnPointProps extends ColumnPoint {
+  item: Element | undefined;
+  isLeftBoundary?: boolean;
+  isRightBoundary?: boolean;
+}
+
+export interface ExpandCellTemplateOptions {
+  value?: unknown;
+  data?: { isContinuation?: boolean };
+  row: { isNewRow?: boolean };
+  component: InternalGrid;
+}
+
+export interface ExpandCellTemplate {
+  allowRenderToDetachedContainer: boolean;
+  render: (container: dxElementWrapper, options: ExpandCellTemplateOptions) => void;
+}
+
+export type TextSelectionElement = Element & {
+  selectionStart?: number | null;
+  selectionEnd?: number | null;
+  setSelectionRange?: (start: number, end: number) => void;
+};
+
+export interface OptionsReader {
+  option: (name: string) => unknown;
+}
+
+export type WrappedLookupDataSource = NormalizedDataSourceOptions & {
+  __dataGridSourceFilter: unknown;
+  load: (loadOptions: StoreLoadOptions) => DeferredObj<unknown>;
+  key: string | undefined;
+  byKey: (key: RowKey) => Promise<unknown>;
+};
+
+export type LookupDataSource = never[] | NormalizedDataSourceOptions | WrappedLookupDataSource;
 
 type OptionsMethod<TOptions> = (() => TOptions)
   & ((options: TOptions) => void)
