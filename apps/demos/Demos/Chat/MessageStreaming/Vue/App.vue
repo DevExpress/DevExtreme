@@ -92,8 +92,14 @@ function insertAssistantPlaceholder(): number {
   return id;
 }
 
-function alertLimitReached(): void {
-  alerts.value = [{ message: 'Request limit reached, try again in a minute.' }];
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+}
+
+function alertError(message: string): void {
+  alerts.value = [{ message }];
   setTimeout(() => { alerts.value = []; }, ALERT_TIMEOUT);
 }
 
@@ -162,9 +168,11 @@ async function fetchAIResponse(message: DxChatTypes.Message): Promise<void> {
     typingUsers.value = [];
   } catch (e: unknown) {
     typingUsers.value = [];
-    if ((e as Error)?.name !== 'AbortError' && assistantId !== undefined) {
-      updateMessageText(assistantId, '');
-      alertLimitReached();
+    if (!abortController?.signal.aborted) {
+      if (assistantId !== undefined) {
+        updateMessageText(assistantId, '');
+      }
+      alertError(getErrorMessage(e));
     }
   } finally {
     abortController = null;
