@@ -1,5 +1,5 @@
 <template>
-  <div class="demo-container">
+  <div>
     <EmployeeForm
       ref="employeeFormRef"
       :ai-integration="aiIntegration"
