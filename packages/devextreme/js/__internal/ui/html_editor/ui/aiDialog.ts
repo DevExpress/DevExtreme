@@ -18,6 +18,7 @@ import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
 import { current, isCompact, isMaterial } from '@js/ui/themes';
 import { themeLength } from '@ts/core/utils/theme_length';
+import type { DialogPromise } from '@ts/ui/html_editor/types';
 import BaseDialog from '@ts/ui/html_editor/ui/m_baseDialog';
 import type {
   AICommandExecutor,
@@ -82,7 +83,7 @@ enum ReplaceButtonActions {
 type NamedToolbarItem = ToolbarItem & { name: string };
 
 export interface AIDialogShowPayload {
-  currentCommand: AICommandNameExtended;
+  currentCommand: string;
   currentCommandOption?: string;
   text?: string;
   commandsMap: CommandsMap;
@@ -111,7 +112,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _commandsMap: CommandsMap = {};
 
-  private _currentCommand?: AICommandNameExtended;
+  private _currentCommand?: string;
 
   private _currentOption?: string;
 
@@ -531,7 +532,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _getAICommandParams(
-    uiCommand: AICommandNameExtended,
+    uiCommand: string,
   ): AICommandParamsMap[AICommandNameExtended] {
     const {
       _askAIPrompt: askAIPrompt,
@@ -596,7 +597,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._setDialogState(DialogState.Generating);
 
     const abort = (this._aiIntegration[aiCommandName] as unknown as AICommandExecutor<
-      typeof uiCommand
+      AICommandNameExtended
     >)(params, callbacks);
 
     this._abort = abort;
@@ -805,7 +806,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._executeAICommand();
   }
 
-  show(payload: AIDialogShowPayload): Promise<AIDialogResult> | undefined {
+  show(payload: AIDialogShowPayload): DialogPromise<AIDialogResult> | undefined {
     const {
       currentCommand, currentCommandOption, commandsMap, text, prompt,
     } = payload;

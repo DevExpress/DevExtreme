@@ -33,7 +33,7 @@ import type { Properties } from '@js/ui/draggable';
 import { domAdapter } from '@ts/core/dom_adapter';
 import { splitPair } from '@ts/core/utils/m_common';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import type { Quad } from '@ts/core/utils/m_string';
+import type { Quad } from '@ts/core/utils/string';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';

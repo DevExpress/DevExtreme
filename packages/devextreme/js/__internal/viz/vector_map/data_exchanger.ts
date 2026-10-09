@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { Callbacks } from '@ts/core/utils/m_callbacks';
+import { Callbacks } from '@ts/core/utils/callbacks';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 type DataCallback = (data: ThemeValue) => void;

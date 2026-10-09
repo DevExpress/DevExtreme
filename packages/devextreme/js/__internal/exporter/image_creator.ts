@@ -35,7 +35,7 @@ import {
 } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import { isCssVariableReference } from '@ts/core/utils/css_variables';
-import svgUtils from '@ts/core/utils/m_svg';
+import svgUtils from '@ts/core/utils/svg';
 
 const window = getWindow();
 

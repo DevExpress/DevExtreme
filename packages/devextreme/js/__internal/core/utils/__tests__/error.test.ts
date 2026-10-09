@@ -1,8 +1,8 @@
 import {
   beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import errorFactory from '@ts/core/utils/error';
 import consoleUtils from '@ts/core/utils/m_console';
-import errorFactory from '@ts/core/utils/m_error';
 
 jest.mock('@ts/core/utils/m_console', () => {
   const logger = {

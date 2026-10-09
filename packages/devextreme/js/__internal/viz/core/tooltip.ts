@@ -21,13 +21,13 @@ import formatHelper from '@ts/core/format_helper';
 import { renderer as $ } from '@ts/core/renderer';
 import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
 import { isCssVariableReference } from '@ts/core/utils/css_variables';
+import { camelize } from '@ts/core/utils/inflector';
 import { replaceWith } from '@ts/core/utils/m_dom';
 import { extend } from '@ts/core/utils/m_extend';
-import { camelize } from '@ts/core/utils/m_inflector';
 import { getHeight, getWidth } from '@ts/core/utils/m_size';
-import { normalizeStyleProp } from '@ts/core/utils/m_style';
 import { isDefined, isFunction, isPlainObject } from '@ts/core/utils/m_type';
 import { getWindow } from '@ts/core/utils/m_window';
+import { normalizeStyleProp } from '@ts/core/utils/style';
 import swatchContainer from '@ts/core/utils/swatch_container';
 
 import type { ThemeValue } from './base_theme_manager';

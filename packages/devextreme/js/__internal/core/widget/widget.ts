@@ -22,7 +22,7 @@ import type {
   PointerInteractionEvent,
 } from '@js/events';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-import { focusable as focusableSelector } from '@ts/core/utils/m_selectors';
+import { focusable as focusableSelector } from '@ts/core/utils/selectors';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
