@@ -224,7 +224,6 @@ class CollectionWidget<
       currentTarget: $target.get(0),
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return params;
   }
 
@@ -1510,7 +1509,7 @@ class CollectionWidget<
 
   _itemEventHandlerImpl(
     initiator: dxElementWrapper | Element,
-    action: (event?: Record<string, unknown>) => void,
+    action: (event?: object) => void,
     actionArgs: ActionArgs<TItem>,
   ): void {
     const $itemElement = this._closestItemElement($(initiator));
@@ -1545,7 +1544,7 @@ class CollectionWidget<
     let result = 0;
 
     if (items) {
-      each(items, (_index: number, item: dxElementWrapper) => {
+      each(items, (_index, item) => {
         if (dimension === 'width') {
           result += getOuterWidth(item, includeMargin ?? false);
         } else if (dimension === 'height') {

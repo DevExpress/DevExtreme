@@ -345,7 +345,9 @@ export class HeaderFilterController extends Modules.ViewController {
       const visibleIndex = columnsController.getVisibleIndex(columnIndex);
       // TODO getView
       const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView');
+      // @ts-expect-error getColumnElements() is typed as possibly undefined
       const $columnElement = view.getColumnElements()
+        // @ts-expect-error a column shown in the group panel has a groupIndex
         .eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
       this.showHeaderFilterMenuBase({
@@ -443,6 +445,8 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const $indicator = super._updateIndicator($cell, column, indicatorName);
 
     $indicator && this._subscribeToIndicatorEvent($indicator, column, indicatorName);
+
+    return undefined;
   }
 
   private _updateHeaderFilterIndicators() {

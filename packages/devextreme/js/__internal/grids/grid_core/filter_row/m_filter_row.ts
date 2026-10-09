@@ -447,7 +447,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return $row;
   }
 
-  protected _getRows() {
+  public _getRows() {
     const result = super._getRows();
 
     if (this.isFilterRowVisible()) {

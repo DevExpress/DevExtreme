@@ -29,7 +29,7 @@ interface ValidatedObservable extends Observable {
   dxValidator?: KoDxValidator;
 }
 
-class KoDxValidator {
+export class KoDxValidator {
   target: ValidatedObservable;
 
   name: string | undefined;
@@ -57,7 +57,6 @@ class KoDxValidator {
     this.validationStatus = ko.observable<ValidationStatus | undefined>(VALIDATION_STATUS_VALID);
     this._eventsStrategy = new EventsStrategy(this);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend() is untyped
     this.validationRules = map(validationRules, (rule, index) => extend({}, rule, {
       validator: this,
       index,
@@ -91,7 +90,6 @@ class KoDxValidator {
     if (currentResult?.status === VALIDATION_STATUS_PENDING
       && currentResult.value === value
     ) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend() is untyped
       return extend({}, currentResult);
     }
     const result = ValidationEngine.validate(value, this.validationRules, this.name);
@@ -103,7 +101,6 @@ class KoDxValidator {
         this._applyValidationResult(res);
       }
     });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend() is untyped
     return extend({}, this._validationInfo.result);
   }
 

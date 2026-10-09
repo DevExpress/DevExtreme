@@ -14,13 +14,13 @@ import { map } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/drop_down_box';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
-import type { Properties as PopupProperties } from '@js/ui/popup';
 import { grep } from '@ts/core/utils/m_common';
 import { tabbable } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
-import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
+import DropDownEditor, { type DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
+import type { PopupProperties as InternalPopupProperties } from '@ts/ui/popup/popup';
 
 const { getActiveElement } = domAdapter;
 
@@ -38,7 +38,7 @@ export interface DropDownBoxProperties extends Omit<Properties,
 | 'onValueChanged' | 'dropDownOptions'
 | 'validationMessagePosition'
 | 'onContentReady' | 'onDisposing'
-| 'onOptionChanged' | 'onInitialized'> {
+| 'onOptionChanged' | 'onInitialized'>, Pick<DropDownEditorInternalProperties, 'popupPosition'> {
 }
 
 class DropDownBox<
@@ -294,8 +294,8 @@ class DropDownBox<
     };
   }
 
-  _popupConfig(): PopupProperties {
-    const { focusStateEnabled } = this.option();
+  _popupConfig(): InternalPopupProperties {
+    const { focusStateEnabled, popupPosition } = this.option();
 
     return {
       ...super._popupConfig(),
@@ -305,7 +305,7 @@ class DropDownBox<
       contentTemplate: ANONYMOUS_TEMPLATE_NAME,
       // @ts-expect-error hideOnParentScroll public overlay.d.ts needs fix
       hideOnParentScroll: this._shouldHideOnParentScroll.bind(this),
-      position: extend(this.option('popupPosition'), {
+      position: extend(popupPosition, {
         of: this.$element(),
       }),
       _ignoreFunctionValueDeprecation: true,

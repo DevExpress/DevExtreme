@@ -864,6 +864,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
             const validator = this._validatingController.createValidator({
               column,
               key: change.key,
+              // @ts-expect-error createColumn initializes calculateCellValue
               value: column.calculateCellValue(data),
             });
             if (validator) {
@@ -1588,6 +1589,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
   }
 
   protected _restoreErrorRow(contentTable?) {
+    // @ts-expect-error each() is typed for callbacks that return a boolean
     this._editingController && this._editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
       const rowOptions = $(item).data('options');
       if (rowOptions) {

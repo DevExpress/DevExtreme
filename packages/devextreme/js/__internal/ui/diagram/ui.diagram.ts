@@ -503,6 +503,7 @@ class Diagram extends Widget<Properties> {
     const isServerSide = !hasWindow();
     const $toolBox = $('<div>').appendTo($parent);
     const bounds = this._getToolboxBounds($parent, isServerSide);
+    const { toolbox } = this.option();
     this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
       isMobileView: this.isMobileScreenSize(),
       isVisible: this._isToolboxVisible(),
@@ -511,9 +512,9 @@ class Diagram extends Widget<Properties> {
       offsetParent: $parent,
       offsetX: bounds.offsetX,
       offsetY: bounds.offsetY,
-      showSearch: this.option('toolbox.showSearch'),
+      showSearch: toolbox?.showSearch,
       toolboxGroups: this._getToolboxGroups(),
-      toolboxWidth: this.option('toolbox.width'),
+      toolboxWidth: toolbox?.width,
 
       onShapeCategoryRendered: (e): void => {
         if (isServerSide) return;
@@ -1883,7 +1884,6 @@ class Diagram extends Widget<Properties> {
 
   _updateFormatUnitsMethod(): void {
     const { DiagramLocalizationService } = getDiagram();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     DiagramLocalizationService.formatUnit = (value): string => numberLocalization.format(value);
   }
 
@@ -2196,7 +2196,6 @@ class Diagram extends Widget<Properties> {
   }
 
   _getDefaultOptions(): Properties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       readOnly: false,
       zoomLevel: DIAGRAM_DEFAULT_ZOOMLEVEL,
@@ -2307,7 +2306,7 @@ class Diagram extends Widget<Properties> {
       onRequestEditOperation: undefined,
 
       onRequestLayoutUpdate: undefined,
-    });
+    } satisfies Properties);
   }
 
   _raiseDataChangeAction(): void {

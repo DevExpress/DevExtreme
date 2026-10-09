@@ -158,16 +158,27 @@ export const getPower = function (value) {
   return value.toExponential().split('e')[1];
 };
 
-export function map(array, callback) {
+type IsAny<T> = 0 extends 1 & T ? true : false;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- an untyped array gives untyped items
+type Item<TArray> = IsAny<TArray> extends true ? any
+  : TArray extends ArrayLike<infer TItem> ? TItem : never;
+
+export function map<TArray extends ArrayLike<unknown>, TResult>(
+  array: TArray,
+  callback: (item: Item<TArray>, index: number) => TResult | null,
+): TResult[];
+export function map<TResult>(
+  array: ArrayLike<unknown>,
+  callback: (item: unknown, index: number) => TResult | null,
+): TResult[] {
   let i = 0;
   const len = array.length;
-  const result = [];
-  let value;
+  const result: TResult[] = [];
 
   while (i < len) {
-    value = callback(array[i], i);
+    const value = callback(array[i], i);
     if (value !== null) {
-      // @ts-expect-error
       result.push(value);
     }
     i++;
@@ -314,7 +325,7 @@ export const processSeriesTemplate = function (seriesTemplate, items) {
   const customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop;
   const { nameField } = seriesTemplate;
   const generatedSeries = {};
-  const seriesOrder = [];
+  const seriesOrder: PropertyKey[] = [];
   let series;
   let i = 0;
   let length;
@@ -327,7 +338,6 @@ export const processSeriesTemplate = function (seriesTemplate, items) {
       series = generatedSeries[data[nameField]];
       if (!series) {
         series = generatedSeries[data[nameField]] = { name: data[nameField], nameFieldValue: data[nameField] };
-        // @ts-expect-error
         seriesOrder.push(series.name);
       }
     }
@@ -346,9 +356,7 @@ export const getCategoriesInfo = function (categories, startValue, endValue) {
   endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
 
   const categoriesValue = map(categories, (category) => category?.valueOf());
-  // @ts-expect-error
   let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
-  // @ts-expect-error
   let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
   let swapBuf;
   let inverted = false;

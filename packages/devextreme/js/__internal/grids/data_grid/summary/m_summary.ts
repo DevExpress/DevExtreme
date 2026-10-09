@@ -153,7 +153,7 @@ const sortGroupsBySummary = function (data, group, summary) {
 };
 
 export class FooterView extends ColumnsView {
-  protected _getRows() {
+  public _getRows() {
     // @ts-expect-error
     return this._dataController.footerItems();
   }

@@ -596,9 +596,9 @@ class Sortable extends Draggable<SortableProperties> {
     });
     const placeholderPreparedArgs: PlaceholderPreparedArgs = extend(this._getEventArgs(e), {
       // @ts-expect-error the placeholder element can be null
-      placeholderElement: getPublicElement(this._$placeholderElement),
+      placeholderElement: getPublicElement<HTMLElement>(this._$placeholderElement),
       // @ts-expect-error the drag element can be null
-      dragElement: getPublicElement(sourceDraggable._$dragElement),
+      dragElement: getPublicElement<HTMLElement>(sourceDraggable._$dragElement),
     });
     this._getAction('onPlaceholderPrepared')(placeholderPreparedArgs);
     this._updateItemPoints();

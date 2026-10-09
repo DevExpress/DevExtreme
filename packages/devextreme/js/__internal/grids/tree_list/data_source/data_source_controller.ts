@@ -12,6 +12,7 @@ export class TreeListDataSourceController
   }
 
   public key(): StoreKey | undefined {
+    // @ts-expect-error keyExpr may be a function, grid_core key() allows only StoreKey
     return this.adapter?.getKeyExpr();
   }
 

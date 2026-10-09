@@ -206,9 +206,9 @@ const isRecord = (value: unknown): value is Record<string, unknown> => isObject(
 
 export const keysEqual = function (keyExpr: unknown, key1: unknown, key2: unknown): boolean {
   if (Array.isArray(keyExpr)) {
-    const names: string[] = map(key1, (value: unknown, name: string): string => name);
     const values1: Record<string, unknown> = isRecord(key1) ? key1 : {};
     const values2: Record<string, unknown> = isRecord(key2) ? key2 : {};
+    const names: string[] = map(values1, (value: unknown, name: string): string => name);
 
     for (const name of names) {
       if (!equalByValue(values1[name], values2[name], { strict: false })) {

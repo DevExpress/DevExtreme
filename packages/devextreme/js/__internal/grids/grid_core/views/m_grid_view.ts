@@ -54,13 +54,12 @@ const VIEW_NAMES = [
   'pagerView',
   'draggingHeaderView',
   'contextMenuView',
-  'errorView',
   'headerFilterView',
   'filterBuilderView',
   'toastView',
   'aiPromptEditorView',
   'aiAssistantView',
-];
+] as const;
 
 const E2E_ATTRIBUTES = {
   a11yStatusContainer: 'e2e-a11y-general-status-container',
@@ -418,7 +417,9 @@ export class ResizingController extends modules.ViewController {
         const { width } = column;
         if (width !== 'auto') {
           if (isDefined(width)) {
-            resultWidths[index] = isNumeric(width) || isPixelWidth(width) ? parseFloat(width) : width;
+            resultWidths[index] = isNumeric(width) || isPixelWidth(width)
+              ? parseFloat(String(width))
+              : width;
           } else if (!columnAutoWidth) {
             resultWidths[index] = undefined;
           }

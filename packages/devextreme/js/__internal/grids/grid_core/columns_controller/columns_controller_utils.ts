@@ -40,7 +40,7 @@ import {
 import type {
   BandColumnsCache, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionChangeArgs,
   ColumnOptionGetter, ColumnOptionSetter, ColumnsChanges, ColumnsControllerOptions, ColumnUserState,
-  DropLocationNames, GroupColumn, ValueSerializers,
+  DropLocationNames, GroupColumn, ValueSerializers, WithCellValueCalculator,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (
@@ -63,6 +63,10 @@ const warnFixedInChildColumnsOnce = (
     }
   }
 };
+
+export const hasCellValueCalculator = <T extends { calculateCellValue?: unknown }>(
+  item: T,
+): item is WithCellValueCalculator<T> => Boolean(item.calculateCellValue);
 
 export const setFilterOperationsAsDefaultValues = (column: Column): void => {
   column.filterOperations = column.defaultFilterOperations;
@@ -146,7 +150,7 @@ export function isUserStateColumn(
 
 export const createColumnsFromOptions = (
   that: ColumnsController,
-  columnsOptions: (Column | string)[] | undefined,
+  columnsOptions: (Column | string | undefined)[] | undefined,
   bandColumn?: Column,
   createdColumnCount = 0,
 ): Column[] => {
@@ -1045,7 +1049,7 @@ export const mergeColumns = (
     );
 
     if (commandColumnIndex < 0) {
-      return extend({}, column) as Column;
+      return extend({}, column);
     }
 
     const commandColumn = commandColumns[commandColumnIndex];

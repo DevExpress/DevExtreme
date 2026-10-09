@@ -1,16 +1,17 @@
+import type { DataType } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import type { CustomOperation } from '@js/ui/filter_builder';
 import errors from '@js/ui/widget/ui.errors';
+import type { FilterCustomOperation } from '@ts/filter_builder/types';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
 } from '@ts/filter_builder/utils';
 
 function baseOperation(grid) {
-  const calculateFilterExpression = function (filterValue, field, fields) {
+  const calculateFilterExpression = function (filterValue, field, fields?) {
     const result: string[] = [];
     const lastIndex = filterValue.length - 1;
     filterValue && filterValue.forEach((value, index) => {
@@ -49,7 +50,7 @@ function baseOperation(grid) {
 
   const headerFilterController = grid && grid.getController('headerFilter');
   // Override in the private API WA [T1232532]
-  const customizeText = function (fieldInfo, options) {
+  const customizeText = function (fieldInfo, options?) {
     options = options || {};
     const { value } = fieldInfo;
     let column = grid.columnOption(fieldInfo.field.dataField);
@@ -101,7 +102,7 @@ function baseOperation(grid) {
     return text;
   };
   return {
-    dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'],
+    dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'] satisfies DataType[],
     calculateFilterExpression,
     editorTemplate(conditionInfo, container) {
       const div = $('<div>')
@@ -137,7 +138,7 @@ function baseOperation(grid) {
   };
 }
 
-export function anyOf(grid): CustomOperation {
+export function anyOf(grid): FilterCustomOperation {
   return extend(baseOperation(grid), {
     name: 'anyof',
     icon: 'selectall',
@@ -145,10 +146,10 @@ export function anyOf(grid): CustomOperation {
   });
 }
 
-export function noneOf(grid): CustomOperation {
+export function noneOf(grid): FilterCustomOperation {
   const baseOp = baseOperation(grid);
   return extend({}, baseOp, {
-    calculateFilterExpression(filterValue, field, fields) {
+    calculateFilterExpression(filterValue, field, fields?) {
       const baseFilter = baseOp.calculateFilterExpression(filterValue, field, fields);
       if (!baseFilter || baseFilter.length === 0) return null;
 
