@@ -47,7 +47,11 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
 
 ## Workflow
 
-1. **List the work.** Run the script on the file or range. Its errors and warnings are what the task fixes.
+1. **List the work.** Run the script on the file or range. Its errors and warnings are what the task fixes. For a file that many others import (a hub such as `grid_core/types.ts`), also list the open PRs that touch it, and leave to them what they already change:
+   ```bash
+   gh pr list --repo DevExpress/DevExtreme --state open --limit 200 --json number,title,files \
+     --jq '.[] | select(any(.files[]; .path == "packages/devextreme/js/__internal/grids/grid_core/types.ts")) | "#\(.number) \(.title)"'
+   ```
 2. **Type, in this order.**
    1. Class fields. Only in a whole file, or in the part that holds the class fields (usually the first): every later method depends on them.
    2. Signatures: param types and return types.
@@ -62,6 +66,7 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
    - every body edit, one line each, with why it behaves the same;
    - what was added to the module's `types.ts`;
    - the warnings left, grouped by rule, with the reason each was left.
+6. **Review loop.** The developer then usually goes through the remaining directives and casts one by one. A question like "can we remove them?" is about what the last step added. Don't reopen items that were already settled; if a technique you found would also fit one of them, say so in one line.
 
 ## Rules
 
@@ -69,6 +74,9 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
 - The task's files are the given files plus the module's own `types.ts`, where new types go (create it if the module has none). With a range, touch only those lines of the given file, plus its import block.
 - Anything else needs the developer's OK before you touch it: the test file for an agreed refactor, another module's `types.ts`, or callers in other files.
 - If a new type (usually a return type) breaks callers in other files, stop and ask the developer. The options are a compile-only fix at those callers, a wider type, or agreeing it with whoever is typing those files.
+  - Measure before asking. Put the honest type in on a backup copy, run `tsc`, and group the errors by cause. For example, `element(): dxElementWrapper | undefined` broke 90 places in 26 files: about 78 were the `| undefined`, about 10 were gaps in `renderer.d.ts` (see fixes.md). Bring that table to the developer, then restore the file from the backup (`cmp` it).
+  - Until the developer decides, keep the wider type with a directive that gives the reason.
+  - When agreed, a behaviour-neutral change that reaches many files (one accessor typed across 26 files) goes in its own commit, separate from the file's typing.
 - Don't change public API: no edits to `js/**/*.d.ts`.
 
 **Typing only**
@@ -95,6 +103,8 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
   - TypeScript rejects the value, because it is `unknown` or has a wider or wrong type: use `// @ts-expect-error <what isn't typed yet>`. Keep that line short, because the directive hides every error on it.
 - Remove a directive once it is reported as unused: TS2578 from tsc, or "Unused eslint-disable directive" from ESLint. ESLint shows that as a warning, and `strict-lint.mjs` shows it as a note.
 - Any other new disable is a last resort: line-level, with a reason (`-- <why>`). Never a file-level disable.
+- An existing file-level disable of a warning rule (for example `/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */`) is removed when the developer asks. Then resolve each report as fixes.md ("Warnings") says, and give a line disable with a reason where the fix isn't provably the same. `max-classes-per-file` stays.
+- A directive hides every error on its line, so its reason must cover all of them. Directives with the same cause get the same reason text, so `grep -rn "<reason>"` finds them all later.
 
 **Style**
 - Braces around every `if` body, including one-line guards.
@@ -112,16 +122,22 @@ Run from `packages/devextreme`:
 
 ```bash
 node ../../.claude/skills/typing-m-files/scripts/strict-lint.mjs --check '<input lines>'     # 0 errors; the warnings left go in the report
-pnpm exec eslint <files>                                                                   # no errors
-pnpm exec tsc --noEmit -p js/__internal/tsconfig.json; echo "exit $?"                      # exit 0
+node_modules/.bin/eslint <files>                                                             # no errors
+node_modules/.bin/tsc --noEmit -p js/__internal/tsconfig.json; echo "exit $?"                # exit 0
 ```
+
+- Call the binaries in `node_modules/.bin` directly, not through `pnpm exec`. When `node_modules` lags the lockfile (after a dependency bump on `main`), `pnpm exec` and `pnpm run` first run a full install, the `nx-infra-plugin` postinstall and `nx reset`. `nx reset` stops the Nx daemon and can take down the developer's watch build. If a step needs `pnpm run` (for example `update-ts-reexports` in [rename.md](rename.md)), tell the developer before running it.
 
 - `tsc`: use `js/__internal/tsconfig.json`. The root `tsconfig.json` compiles only `.d.ts` files, so it passes no matter what. In a fresh worktree, run `pnpm nx build:localization:generate devextreme` first, or you get phantom TS2307 errors for `cldr-data`.
 - With a range, only the range must be at 0. The rest of the file keeps its errors until its own part.
 - Tests: only those that cover the changed code. Pick them by tracing what uses it, not by folder. Whole-tree runs happen on CI.
   - Jest (Jest 30, the flag is plural):
     ```bash
-    pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPatterns "<pattern>"
+    node_modules/.bin/jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPatterns "<pattern>"
     ```
   - QUnit (`testing/tests/<suite>/…`) runs on the developer's dev server. Ask them to start it and tell you when the build is ready. Then open `http://localhost:20060/run/<path under testing/tests>?notimers=true&nojquery=true&nocsp=true`.
-  - Before trusting a QUnit result, check the built file of *every* file you changed, under `packages/devextreme/artifacts/transpiled/`. The watch build sometimes skips one without saying so. The built file must be newer than the source and must contain your body edits. Type-only edits leave no trace in the built JS. If a built file is stale, ask the developer to rebuild (`rm -rf .nx/cache`, then restart the dev build).
+  - Before trusting a QUnit result, check the built file of *every* file you changed, under `packages/devextreme/artifacts/transpiled-esm-npm/esm/` (what the runner serves). The watch build sometimes skips a file without saying so, and sometimes stops rebuilding altogether: then every file in that tree has the same old timestamp. The built file must be newer than the source and must contain your body edits. Grep for them as Babel writes them: a rest param `...args` comes back as a copy loop over `arguments` (`for (var _len = arguments.length, args = new Array(_len) …`), while `??` stays. Type-only edits leave no trace in the built JS. If a built file is stale, ask the developer to rebuild (`rm -rf .nx/cache`, then restart the dev build).
+  - If the Playwright browser is held by another session, the chrome-devtools tools work too: open the page in an `isolatedContext`, and read `#qunit-testresult` once the run is done instead of polling it.
+  - In a browser that draws 15px scrollbars, a few pixel tests fail with `Expected: 0, Result: 15`, for example two "Scroller shown …" tests in `DevExpress.ui.widgets.dataGrid/gridView.tests.js`. They fail before your change too; don't chase them.
+  - In headless Chrome, `DevExpress.ui.widgets.dataGrid/adaptiveColumns.tests.js` › "Columns should hide consistently if percentage width (T640539)" fails too (expected 2 adaptive buttons, got 4), on unmodified code. Don't chase it either.
+- Check a type question with a probe, not by reading the diff. Write a small file with one line that must compile and one that must fail. Run it with `node_modules/.bin/tsc` from `packages/devextreme` (TypeScript 5.9.3), through a tsconfig that extends `js/__internal/tsconfig.json` with `"files": ["<probe>"]` and `"include": []`. That config also prints unrelated JSX and lib errors, so keep only the probe file's lines. Delete the probe afterwards.
