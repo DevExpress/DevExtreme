@@ -49,7 +49,12 @@ export type ChartsDataType = 'datetime' | 'numeric' | 'string';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+export type DashStyle = 'solid'
+| 'dash' | 'dot' | 'longDash'
+| `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`
+| `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`
+| `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`
+| `${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}${'dash' | 'dot' | 'longDash'}`;
 
 /**
  * @public
