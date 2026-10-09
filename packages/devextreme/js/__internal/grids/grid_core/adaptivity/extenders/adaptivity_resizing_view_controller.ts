@@ -12,11 +12,6 @@ import { COLUMN_VIEWS } from '../const';
 export const adaptivityResizingViewControllerExtender = (
   Base: ModuleType<ResizingController>,
 ): ModuleType<ResizingController> => class AdaptivityResizingViewControllerExtender extends Base {
-  public dispose() {
-    super.dispose.apply(this, arguments as any);
-    clearTimeout(this._updateScrollableTimeoutID);
-  }
-
   private isHiddenColumnsChanged(
     oldHiddenColumns: Column[],
     hiddenColumns: Column[],

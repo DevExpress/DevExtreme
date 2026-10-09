@@ -8,7 +8,6 @@ import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { setHeight } from '@js/core/utils/style';
@@ -29,10 +28,13 @@ import type { DataChange } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
 import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
-import type { SelectionRange } from '../types';
+import type {
+  InternalGridOptions, OptionChanged, SelectionRange, Views,
+} from '../types';
 import { CLASSES } from './const';
+import type { ColumnsView } from './m_columns_view';
 import type { RowsView } from './m_rows_view';
-import type { ColumnWidth } from './types';
+import type { ColumnWidth, ScrollPosition, ViewDataChange } from './types';
 
 const BORDERS_CLASS = 'borders';
 const IMPORTANT_MARGIN_CLASS = 'important-margin';
@@ -65,24 +67,17 @@ const E2E_ATTRIBUTES = {
   a11yStatusContainer: 'e2e-a11y-general-status-container',
 };
 
-const isPercentWidth = function (width) {
-  return isString(width) && width.endsWith('%');
-};
+const isPercentWidth = (width: ColumnWidth): boolean => isString(width) && width.endsWith('%');
 
-const isPixelWidth = function (width) {
-  return isString(width) && width.endsWith('px');
-};
+const isPixelWidth = (width: ColumnWidth): boolean => isString(width) && width.endsWith('px');
 
-const calculateFreeWidth = function (that, widths) {
-  const contentWidth = that._rowsView.contentWidth();
-  const totalWidth = that._getTotalWidth(widths, contentWidth);
-
-  return contentWidth - totalWidth;
-};
-
-const calculateFreeWidthWithCurrentMinWidth = function (that, columnIndex, currentMinWidth, widths) {
-  return calculateFreeWidth(that, widths.map((width, index) => (index === columnIndex ? currentMinWidth : width)));
-};
+const withWidthAt = (
+  widths: ColumnWidth[],
+  index: number,
+  width: ColumnWidth,
+): ColumnWidth[] => widths.map(
+  (columnWidth, columnIndex) => (columnIndex === index ? width : columnWidth),
+);
 
 const restoreFocus = (focusedElement: Element, selectionRange: SelectionRange): void => {
   accessibility.hiddenFocus(focusedElement, true);
@@ -90,7 +85,7 @@ const restoreFocus = (focusedElement: Element, selectionRange: SelectionRange): 
 };
 
 export class ResizingController extends modules.ViewController {
-  private _refreshSizesHandler: any;
+  private _refreshSizesHandler?: (change: DataChange) => void;
 
   public _dataController!: DataController;
 
@@ -106,35 +101,33 @@ export class ResizingController extends modules.ViewController {
 
   private _gridView!: GridView;
 
-  private _prevContentMinHeight: any;
+  private _prevContentMinHeight!: string | null;
 
-  private _hasWidth: any;
+  private _hasWidth?: boolean;
 
-  private _hasHeight: any;
+  private _hasHeight?: boolean;
 
-  private _resizeDeferred: any;
+  private _resizeDeferred?: DeferredObj<unknown>;
 
-  public _lastWidth: any;
+  public _lastWidth?: number;
 
-  private _devicePixelRatio: any;
+  private _devicePixelRatio?: number;
 
-  private _lastHeight: any;
+  private _lastHeight?: number;
 
   protected adaptiveColumnsController!: AdaptiveColumnsController;
 
   private _editorFactoryController!: EditorFactory;
 
-  protected _updateScrollableTimeoutID: any;
-
   public resizeCompleted!: Callback;
 
   private isMaxWidthSet = false;
 
-  protected callbackNames() {
+  protected callbackNames(): string[] {
     return ['resizeCompleted'];
   }
 
-  public init() {
+  public init(): void {
     this._prevContentMinHeight = null;
     this._dataController = this.getController('data');
     this.dataSourceController = this.getController('dataSource');
@@ -147,11 +140,10 @@ export class ResizingController extends modules.ViewController {
     this._gridView = this.getView('gridView');
   }
 
-  private _initPostRenderHandlers() {
+  private _initPostRenderHandlers(): void {
     if (!this._refreshSizesHandler) {
-      this._refreshSizesHandler = (change: DataChange) => {
-        // @ts-expect-error
-        let resizeDeferred = new Deferred<null>().resolve(null);
+      const refreshSizesHandler = (change: DataChange): void => {
+        let resizeDeferred: DeferredObj<unknown> = Deferred<null>().resolve(null);
         const changeType = change?.changeType;
         // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
         const isDelayed = change?.isDelayed;
@@ -161,7 +153,7 @@ export class ResizingController extends modules.ViewController {
           && changeType !== 'pageIndex'
           && !isDelayed;
 
-        this._dataController.changed.remove(this._refreshSizesHandler);
+        this._dataController.changed.remove(refreshSizesHandler);
 
         if (this._checkSize()) {
           resizeDeferred = this._refreshSizes(change);
@@ -174,18 +166,20 @@ export class ResizingController extends modules.ViewController {
           });
         }
       };
+      this._refreshSizesHandler = refreshSizesHandler;
       // TODO remove resubscribing
       this._dataController.changed.add(() => {
-        this._dataController.changed.add(this._refreshSizesHandler);
+        this._dataController.changed.add(refreshSizesHandler);
       });
     }
   }
 
-  private _refreshSizes(e) {
+  private _refreshSizes(e: ViewDataChange): DeferredObj<unknown> {
     const changeType = e?.changeType;
+    // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
     const isDelayed = e?.isDelayed;
 
-    if (!e || ['refresh', 'prepend', 'append'].includes(changeType)) {
+    if (!e || (changeType !== undefined && ['refresh', 'prepend', 'append'].includes(changeType))) {
       if (!isDelayed) {
         return this.resize();
       }
@@ -193,8 +187,7 @@ export class ResizingController extends modules.ViewController {
 
     if (changeType === 'update') {
       if (!e.changeTypes?.length) {
-        // @ts-expect-error
-        return new Deferred<null>().resolve(null);
+        return Deferred<null>().resolve(null);
       }
 
       const items = this._dataController.items();
@@ -202,15 +195,16 @@ export class ResizingController extends modules.ViewController {
       const isShowingNoDataPanel = items.length === 0 && e.changeTypes[0] === 'remove';
 
       if (!isHidingNoDataPanel && !isShowingNoDataPanel && !e.needUpdateDimensions) {
-        // @ts-expect-error
-        const deferred = new Deferred();
+        const deferred = Deferred<unknown>();
 
         this._waitAsyncTemplates().done(() => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
           deferUpdate(() => deferRender(() => deferUpdate(() => {
             this._setScrollerSpacing();
             this._rowsView.resize();
             deferred.resolve();
           })));
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
         }).fail(deferred.reject);
 
         return deferred;
@@ -219,48 +213,45 @@ export class ResizingController extends modules.ViewController {
       return this.resize();
     }
 
-    // @ts-expect-error
-    return new Deferred<null>().resolve(null);
+    return Deferred<null>().resolve(null);
   }
 
   /**
    * @extended: master_detail
    */
-  public fireContentReadyAction() {
+  public fireContentReadyAction(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
     this.component._fireContentReadyAction();
   }
 
-  protected _getWidgetAriaLabel() {
+  protected _getWidgetAriaLabel(): string {
     return 'dxDataGrid-ariaDataGrid';
   }
 
-  private _setAriaLabel(e?: any): void {
-    let widgetStatusText = '';
-    let labelParts: string[] = [];
-
-    const columnCount = this._columnsController?._columns?.filter(({ visible }) => !!visible).length ?? 0;
+  private _setAriaLabel(e?: DataChange): void {
+    const visibleColumns = this._columnsController?._columns?.filter(({ visible }) => !!visible);
+    const columnCount = visibleColumns?.length ?? 0;
     const totalItemsCount = Math.max(0, this.dataSourceController.totalItemsCount());
     const widgetAriaLabel = this._getWidgetAriaLabel();
-    widgetStatusText = messageLocalization
+    const widgetStatusText = messageLocalization
       // @ts-expect-error Badly typed format method
       .format(widgetAriaLabel, totalItemsCount, columnCount);
 
     // @ts-expect-error Treelist Variable
     const expandableWidgetAriaLabel = messageLocalization.format(this._expandableWidgetAriaId);
-    labelParts = [widgetStatusText];
-    if (expandableWidgetAriaLabel) {
-      labelParts.push(expandableWidgetAriaLabel);
-    }
+    const labelText = expandableWidgetAriaLabel
+      ? `${widgetStatusText}. ${expandableWidgetAriaLabel}`
+      : widgetStatusText;
 
     const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
 
-    this.component.setAria('label', labelParts.join('. '), $ariaLabelElement);
+    this.component.setAria('label', labelText, $ariaLabelElement);
     if (!e?.isFirstRender) {
       this._gridView.setWidgetA11yStatusText(widgetStatusText);
     }
   }
 
-  private _getBestFitWidths() {
+  private _getBestFitWidths(): number[] {
     const rowsView = this._rowsView;
     const columnHeadersView = this._columnHeadersView;
     let widths = rowsView.getColumnWidths();
@@ -275,33 +266,37 @@ export class ResizingController extends modules.ViewController {
     return widths;
   }
 
-  private _setVisibleWidths(visibleColumns, widths) {
+  private _setVisibleWidths(visibleColumns: Column[], widths: ColumnWidth[]): void {
     const columnsController = this._columnsController;
     columnsController.beginUpdate();
-    each(visibleColumns, (index, column) => {
+    visibleColumns.forEach((column, index) => {
       const columnId = columnsController.getColumnId(column);
       columnsController.columnOption(columnId, 'visibleWidth', widths[index]);
     });
     columnsController.endUpdate();
   }
 
-  private _toggleBestFitModeForView(view, className, isBestFit) {
-    if (!view || !view.isVisible()) return;
+  private _toggleBestFitModeForView(
+    view: ColumnsView | undefined,
+    className: string,
+    isBestFit: boolean,
+  ): void {
+    if (!view?.isVisible()) {
+      return;
+    }
 
     const $rowsTables = this._rowsView.getTableElements();
     const $viewTables = view.getTableElements();
 
-    each($rowsTables, (index, tableElement) => {
-      let $tableBody;
+    $rowsTables.toArray().forEach((tableElement, index) => {
       const $rowsTable = $(tableElement);
       const $viewTable = $viewTables.eq(index);
 
-      if ($viewTable && $viewTable.length) {
-        if (isBestFit) {
-          $tableBody = $viewTable.children('tbody').appendTo($rowsTable);
-        } else {
-          $tableBody = $rowsTable.children(`.${className}`).appendTo($viewTable);
-        }
+      if ($viewTable?.length) {
+        const $tableBody = isBestFit
+          ? $viewTable.children('tbody').appendTo($rowsTable)
+          : $rowsTable.children(`.${className}`).appendTo($viewTable);
+
         $tableBody.toggleClass(className, isBestFit);
         $tableBody.toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
       }
@@ -311,17 +306,19 @@ export class ResizingController extends modules.ViewController {
   /**
    * @extended: adaptivity, master_detail
    */
-  protected _toggleBestFitMode(isBestFit) {
+  protected _toggleBestFitMode(isBestFit: boolean): void {
     const $rowsTable = this._rowsView.getTableElement();
     const $rowsFixedTable = this._rowsView.getTableElements().eq(1);
 
-    if (!$rowsTable) return;
+    if (!$rowsTable) {
+      return;
+    }
 
     $rowsTable.css('tableLayout', isBestFit ? 'auto' : 'fixed');
     $rowsTable.children('colgroup').css('display', isBestFit ? 'none' : '');
 
     // NOTE T1156153: Hide group row column to get correct fixed column widths.
-    each($rowsFixedTable.find(GROUP_ROW_SELECTOR), (idx, item) => {
+    $rowsFixedTable.find(GROUP_ROW_SELECTOR).toArray().forEach((item) => {
       $(item).css('display', isBestFit ? 'none' : '');
     });
 
@@ -331,12 +328,11 @@ export class ResizingController extends modules.ViewController {
     this._toggleBestFitModeForView(this._footerView, CLASSES.footerBody, isBestFit);
 
     if (this._needStretch()) {
-      // @ts-expect-error
-      $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
+      ($rowsTable.get(0) as HTMLElement).style.width = isBestFit ? 'auto' : '';
     }
   }
 
-  private _toggleContentMinHeight(value) {
+  private _toggleContentMinHeight(value: boolean | undefined): void {
     const $contentElement = this._rowsView._findContentElement();
 
     if (value === true) {
@@ -344,7 +340,11 @@ export class ResizingController extends modules.ViewController {
     }
 
     if (isDefined(this._prevContentMinHeight)) {
-      $contentElement.css({ minHeight: value ? gridCoreUtils.getContentHeightLimit(browser) : this._prevContentMinHeight });
+      $contentElement.css({
+        minHeight: value
+          ? gridCoreUtils.getContentHeightLimit(browser)
+          : this._prevContentMinHeight,
+      });
     }
   }
 
@@ -390,9 +390,9 @@ export class ResizingController extends modules.ViewController {
   private synchronizeColumns(): void {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
-    const columnAutoWidth = this.option('columnAutoWidth') as boolean;
+    const columnAutoWidth = this.option('columnAutoWidth');
     const hasUndefinedColumnWidth = visibleColumns.some((column) => !isDefined(column.width));
-    const needBestFit = this._needBestFit() || visibleColumns.some((column) => column.width === 'auto');
+    const needBestFit = !!this._needBestFit() || visibleColumns.some((column) => column.width === 'auto');
     const hasMinWidth = visibleColumns.some((column) => !!column.minWidth);
 
     this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
@@ -408,7 +408,7 @@ export class ResizingController extends modules.ViewController {
         resultWidths = this._getBestFitWidths();
       }
 
-      each(visibleColumns, (index, column) => {
+      visibleColumns.forEach((column, index) => {
         if (needBestFit) {
           const columnId = columnsController.getColumnId(column);
           columnsController.columnOption(columnId, 'bestFitWidth', resultWidths[index], true);
@@ -453,19 +453,26 @@ export class ResizingController extends modules.ViewController {
   /**
    * @extended: adaptivity
    */
-  protected _needBestFit() {
+  protected _needBestFit(): boolean | undefined {
     return this.option('columnAutoWidth');
   }
 
   /**
    * @extended: adaptivity
    */
-  protected _needStretch() {
+  protected _needStretch(): boolean {
     return this._columnsController.getVisibleColumns().some((c) => c.width === 'auto' && !c.command);
   }
 
-  private _getAverageColumnsWidth(resultWidths) {
-    const freeWidth = calculateFreeWidth(this, resultWidths);
+  private calculateFreeWidth(widths: ColumnWidth[]): number {
+    const contentWidth = this._rowsView.contentWidth();
+    const totalWidth = this._getTotalWidth(widths, contentWidth);
+
+    return contentWidth - totalWidth;
+  }
+
+  private _getAverageColumnsWidth(resultWidths: ColumnWidth[]): number {
+    const freeWidth = this.calculateFreeWidth(resultWidths);
     const columnCountWithoutWidth = resultWidths.filter((width) => width === undefined).length;
 
     return freeWidth / columnCountWithoutWidth;
@@ -477,16 +484,10 @@ export class ResizingController extends modules.ViewController {
   ): void {
     const isExpandColumn = (column: Column): boolean => column.type === GROUP_COMMAND_COLUMN_NAME;
 
-    const lastExpandColumnIndex = visibleColumns.reduce(
-      (result, column, index) => (isExpandColumn(column) ? index : result),
-      -1,
-    );
-
-    if (lastExpandColumnIndex < 0) {
-      return;
-    }
-
-    const expandColumnWidth = resultWidths[lastExpandColumnIndex];
+    const lastExpandColumnIndex = visibleColumns.map(isExpandColumn).lastIndexOf(true);
+    const expandColumnWidth = lastExpandColumnIndex >= 0
+      ? resultWidths[lastExpandColumnIndex]
+      : undefined;
 
     if (!expandColumnWidth) {
       return;
@@ -502,40 +503,37 @@ export class ResizingController extends modules.ViewController {
   /**
    * @extended: adaptivity
    */
-  protected _correctColumnWidths(resultWidths, visibleColumns) {
-    const that = this;
-    let i;
+  protected _correctColumnWidths(resultWidths: ColumnWidth[], visibleColumns: Column[]): boolean {
     let hasPercentWidth = false;
     let hasAutoWidth = false;
     let isColumnWidthsCorrected = false;
-    const hasWidth = that._hasWidth;
+    const hasWidth = this._hasWidth;
 
-    for (i = 0; i < visibleColumns.length; i++) {
-      const index = i;
+    for (let index = 0; index < visibleColumns.length; index += 1) {
       const column = visibleColumns[index];
       const isHiddenColumn = resultWidths[index] === HIDDEN_COLUMNS_WIDTH;
       let width = resultWidths[index];
       const { minWidth } = column;
 
-      if (minWidth) {
-        if (width === undefined) {
-          const averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
-          width = averageColumnsWidth;
-        } else if (isPercentWidth(width)) {
-          const freeWidth = calculateFreeWidthWithCurrentMinWidth(that, index, minWidth, resultWidths);
+      if (minWidth && width === undefined) {
+        width = this._getAverageColumnsWidth(resultWidths);
+      } else if (minWidth && isPercentWidth(width)) {
+        const freeWidth = this.calculateFreeWidth(withWidthAt(resultWidths, index, minWidth));
 
-          if (freeWidth < 0) {
-            width = -1;
-          }
+        if (freeWidth < 0) {
+          width = -1;
         }
       }
 
-      const realColumnWidth = that._getRealColumnWidth(index, resultWidths.map((columnWidth, columnIndex) => (index === columnIndex ? width : columnWidth)));
+      const realColumnWidth = this._getRealColumnWidth(
+        index,
+        withWidthAt(resultWidths, index, width),
+      );
 
       if (minWidth && !isHiddenColumn && realColumnWidth < minWidth) {
         resultWidths[index] = minWidth;
         isColumnWidthsCorrected = true;
-        i = -1;
+        index = -1;
       }
       if (!isDefined(column.width)) {
         hasAutoWidth = true;
@@ -546,13 +544,16 @@ export class ResizingController extends modules.ViewController {
     }
 
     if (!hasAutoWidth && resultWidths.length) {
-      const $rowsViewElement = that._rowsView.element();
-      const contentWidth = that._rowsView.contentWidth();
-      const scrollbarWidth = that._rowsView.getScrollbarWidth();
-      const totalWidth = that._getTotalWidth(resultWidths, contentWidth);
+      const $rowsViewElement = this._rowsView.element();
+      const contentWidth = this._rowsView.contentWidth();
+      const scrollbarWidth = this._rowsView.getScrollbarWidth();
+      const totalWidth = this._getTotalWidth(resultWidths, contentWidth);
 
       if (totalWidth < contentWidth) {
-        const lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns, resultWidths);
+        const lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(
+          visibleColumns,
+          resultWidths,
+        );
 
         if (lastColumnIndex >= 0) {
           resultWidths[lastColumnIndex] = 'auto';
@@ -560,7 +561,7 @@ export class ResizingController extends modules.ViewController {
           if (hasWidth === false && !hasPercentWidth) {
             const borderWidth = gridCoreUtils.getComponentBorderWidth(this, $rowsViewElement);
 
-            that.setMaxWidth(totalWidth + scrollbarWidth + borderWidth);
+            this.setMaxWidth(totalWidth + scrollbarWidth + borderWidth);
           }
         }
       }
@@ -568,17 +569,19 @@ export class ResizingController extends modules.ViewController {
     return isColumnWidthsCorrected;
   }
 
-  private _processStretch(resultSizes, visibleColumns) {
+  private _processStretch(resultSizes: ColumnWidth[], visibleColumns: Column[]): void {
     const groupSize = this._rowsView.contentWidth();
     const tableSize = this._getTotalWidth(resultSizes, groupSize);
     const unusedIndexes = { length: 0 };
 
-    if (!resultSizes.length) return;
+    if (!resultSizes.length) {
+      return;
+    }
 
-    each(visibleColumns, function (index) {
-      if (this.width || resultSizes[index] === HIDDEN_COLUMNS_WIDTH) {
+    visibleColumns.forEach((column, index) => {
+      if (column.width || resultSizes[index] === HIDDEN_COLUMNS_WIDTH) {
         unusedIndexes[index] = true;
-        unusedIndexes.length++;
+        unusedIndexes.length += 1;
       }
     });
 
@@ -586,64 +589,70 @@ export class ResizingController extends modules.ViewController {
     const diffElement = Math.floor(diff / (resultSizes.length - unusedIndexes.length));
     let onePixelElementsCount = diff - diffElement * (resultSizes.length - unusedIndexes.length);
     if (diff >= 0) {
-      for (let i = 0; i < resultSizes.length; i++) {
+      for (let i = 0; i < resultSizes.length; i += 1) {
         if (unusedIndexes[i]) {
+          // eslint-disable-next-line no-continue -- an inverted if would exceed max-depth
           continue;
         }
+        // @ts-expect-error columns without a width have best-fit widths here
         resultSizes[i] += diffElement;
-        if (onePixelElementsCount > 0) {
-          if (onePixelElementsCount < 1) {
-            resultSizes[i] += onePixelElementsCount;
-            onePixelElementsCount = 0;
-          } else {
-            resultSizes[i]++;
-            onePixelElementsCount--;
-          }
+        if (onePixelElementsCount > 0 && onePixelElementsCount < 1) {
+          // @ts-expect-error columns without a width have best-fit widths here
+          resultSizes[i] += onePixelElementsCount;
+          onePixelElementsCount = 0;
+        } else if (onePixelElementsCount > 0) {
+          resultSizes[i] = Number(resultSizes[i]) + 1;
+          onePixelElementsCount -= 1;
         }
       }
     }
   }
 
-  private _getRealColumnWidth(columnIndex, columnWidths, groupWidth?) {
+  private _getRealColumnWidth(
+    columnIndex: number,
+    columnWidths: ColumnWidth[],
+    groupWidth?: number,
+  ): number {
     let ratio = 1;
     const width = columnWidths[columnIndex];
 
     if (!isPercentWidth(width)) {
-      return parseFloat(width);
+      return parseFloat(String(width));
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const percentTotalWidth = columnWidths.reduce((sum, width, index) => {
-      if (!isPercentWidth(width)) {
+    const percentTotalWidth = columnWidths.reduce<number>((sum, columnWidth, index) => {
+      if (!isPercentWidth(columnWidth)) {
         return sum;
       }
 
-      return sum + parseFloat(width);
+      return sum + parseFloat(String(columnWidth));
     }, 0);
-    const pixelTotalWidth = columnWidths.reduce((sum, width) => {
-      if (!width || width === HIDDEN_COLUMNS_WIDTH || isPercentWidth(width)) {
+    const pixelTotalWidth = columnWidths.reduce<number>((sum, columnWidth) => {
+      if (!columnWidth || columnWidth === HIDDEN_COLUMNS_WIDTH || isPercentWidth(columnWidth)) {
         return sum;
       }
 
-      return sum + parseFloat(width);
+      return sum + parseFloat(String(columnWidth));
     }, 0);
 
-    groupWidth = groupWidth || this._rowsView.contentWidth();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
+    const currentGroupWidth = groupWidth || this._rowsView.contentWidth();
 
-    const freeSpace = groupWidth - pixelTotalWidth;
-    const percentTotalWidthInPixel = percentTotalWidth * groupWidth / 100;
+    const freeSpace = currentGroupWidth - pixelTotalWidth;
+    const percentTotalWidthInPixel = (percentTotalWidth * currentGroupWidth) / 100;
 
-    if (pixelTotalWidth > 0 && (percentTotalWidthInPixel + pixelTotalWidth) >= groupWidth) {
+    if (pixelTotalWidth > 0 && (percentTotalWidthInPixel + pixelTotalWidth) >= currentGroupWidth) {
       ratio = percentTotalWidthInPixel > freeSpace ? freeSpace / percentTotalWidthInPixel : 1;
     }
 
-    return parseFloat(width) * groupWidth * ratio / 100;
+    return (parseFloat(String(width)) * currentGroupWidth * ratio) / 100;
   }
 
-  private _getTotalWidth(widths, groupWidth) {
+  private _getTotalWidth(widths: ColumnWidth[], groupWidth: number): number {
     let result = 0;
 
-    for (let i = 0; i < widths.length; i++) {
+    for (let i = 0; i < widths.length; i += 1) {
       const width = widths[i];
       if (width && width !== HIDDEN_COLUMNS_WIDTH) {
         result += this._getRealColumnWidth(i, widths, groupWidth);
@@ -653,27 +662,26 @@ export class ResizingController extends modules.ViewController {
     return Math.ceil(result);
   }
 
-  private _getGroupElement() {
-    return this.component.$element().children().get(0);
+  private _getGroupElement(): HTMLElement | undefined {
+    return this.component.$element().children().get(0) as HTMLElement | undefined;
   }
 
-  public updateSize(rootElement) {
-    const that = this;
+  public updateSize(rootElement: dxElementWrapper): void {
     const $rootElement = $(rootElement);
-    const importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
+    const importantMarginClass = this.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
-    if (that._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
-      const $groupElement = $rootElement.children(`.${that.getWidgetContainerClass()}`);
+    if (this._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
+      const $groupElement = $rootElement.children(`.${this.getWidgetContainerClass()}`);
 
       if ($groupElement.length) {
         $groupElement.detach();
       }
 
-      that._hasHeight = !!getHeight($rootElement);
+      this._hasHeight = !!getHeight($rootElement);
 
       const width = getWidth($rootElement);
       $rootElement.addClass(importantMarginClass);
-      that._hasWidth = getWidth($rootElement) === width;
+      this._hasWidth = getWidth($rootElement) === width;
       $rootElement.removeClass(importantMarginClass);
 
       if ($groupElement.length) {
@@ -682,11 +690,11 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  public publicMethods() {
+  public publicMethods(): string[] {
     return ['resize', 'updateDimensions'];
   }
 
-  private _waitAsyncTemplates() {
+  private _waitAsyncTemplates(): DeferredObj<unknown> {
     return when(
       this._columnHeadersView?.waitAsyncTemplates(true),
       this._rowsView?.waitAsyncTemplates(true),
@@ -699,71 +707,75 @@ export class ResizingController extends modules.ViewController {
    */
   public resize(): DeferredObj<unknown> {
     if (this.component._requireResize) {
-      // @ts-expect-error
-      return new Deferred().resolve();
+      return Deferred<unknown>().resolve();
     }
 
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred<unknown>();
 
     this._waitAsyncTemplates().done(() => {
       when(this.updateDimensions())
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
         .done(d.resolve)
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
         .fail(d.reject);
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(d.reject);
 
-    return d.promise().done(() => {
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
+    const promise: DeferredObj<unknown> = d.promise();
+
+    return promise.done(() => {
       this.resizeCompleted.fire();
     });
   }
 
-  public updateDimensions(checkSize?) {
-    const that = this;
-
-    that._initPostRenderHandlers();
+  public updateDimensions(checkSize?: boolean): DeferredObj<unknown> | undefined {
+    this._initPostRenderHandlers();
 
     // T335767
-    if (!that._checkSize(checkSize)) {
-      return;
+    if (!this._checkSize(checkSize)) {
+      return undefined;
     }
 
-    const prevResult = that._resizeDeferred;
-    // @ts-expect-error
-    const result = that._resizeDeferred = new Deferred();
+    const prevResult = this._resizeDeferred;
+    const result = Deferred<unknown>();
+    this._resizeDeferred = result;
 
     when(prevResult).always(() => {
       deferRender(() => {
-        if (that._dataController.isLoaded()) {
-          that.synchronizeColumns();
+        if (this._dataController.isLoaded()) {
+          this.synchronizeColumns();
         }
         // IE11
-        that._resetGroupElementHeight();
+        this._resetGroupElementHeight();
 
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
         deferUpdate(() => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
           deferRender(() => {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
             deferUpdate(() => {
-              that._updateDimensionsCore();
+              this._updateDimensionsCore();
             });
           });
         });
-        // @ts-expect-error
+        // @ts-expect-error deferRender() returns a Deferred when the callback returns nothing
       }).done(result.resolve).fail(result.reject);
     });
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return result.promise();
   }
 
-  private _resetGroupElementHeight() {
+  private _resetGroupElementHeight(): void {
     const groupElement = this._getGroupElement();
     const scrollable = this._rowsView.getScrollable();
-    // @ts-expect-error
-    if (groupElement && groupElement.style.height && (!scrollable || !scrollable.scrollTop())) {
-      // @ts-expect-error
+    if (groupElement?.style.height && !scrollable?.scrollTop()) {
       groupElement.style.height = '';
     }
   }
 
-  private _checkSize(checkSize?) {
+  private _checkSize(checkSize?: boolean): boolean {
     const $rootElement = this.component.$element();
     const isWidgetVisible = $rootElement.is(':visible');
     const isGridSizeChanged = this._lastWidth !== getWidth($rootElement)
@@ -773,71 +785,71 @@ export class ResizingController extends modules.ViewController {
     return isWidgetVisible && (!checkSize || isGridSizeChanged);
   }
 
-  private _setScrollerSpacingCore() {
-    const that = this;
-    const vScrollbarWidth = that._rowsView.getScrollbarWidth();
-    const hScrollbarWidth = that._rowsView.getScrollbarWidth(true);
+  private _setScrollerSpacingCore(): void {
+    const vScrollbarWidth = this._rowsView.getScrollbarWidth();
+    const hScrollbarWidth = this._rowsView.getScrollbarWidth(true);
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
     deferRender(() => {
-      that._columnHeadersView && that._columnHeadersView.setScrollerSpacing(vScrollbarWidth);
-      that._footerView && that._footerView.setScrollerSpacing(vScrollbarWidth);
-      that._rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
+      this._columnHeadersView?.setScrollerSpacing(vScrollbarWidth);
+      this._footerView?.setScrollerSpacing(vScrollbarWidth);
+      this._rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
     });
   }
 
-  private _setScrollerSpacing() {
+  private _setScrollerSpacing(): void {
     const scrollable = this._rowsView.getScrollable();
     // T722415, T758955
     const isNativeScrolling = this.option('scrolling.useNative') === true;
 
     if (!scrollable || isNativeScrolling) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
       deferRender(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
         deferUpdate(() => {
           this._setScrollerSpacingCore();
         });
       });
-    } else { this._setScrollerSpacingCore(); }
+    } else {
+      this._setScrollerSpacingCore();
+    }
   }
 
   /**
    * @extended: column_fixing
    */
-  protected _setAriaOwns() {
+  protected _setAriaOwns(): void {
     const headerTable = this._columnHeadersView?.getTableElement();
     const footerTable = this._footerView?.getTableElement();
 
-    // @ts-expect-error
     this._rowsView?.setAriaOwns(headerTable?.attr('id'), footerTable?.attr('id'));
   }
 
   /**
    * @extended: header_panel
    */
-  protected _updateDimensionsCore() {
-    const that = this;
+  protected _updateDimensionsCore(): void {
+    const dataController = this._dataController;
+    const rowsView = this._rowsView;
 
-    const dataController = that._dataController;
-    const rowsView = that._rowsView;
-
-    const $rootElement = that.component.$element();
+    const $rootElement = this.component.$element();
     const groupElement = this._getGroupElement();
 
     const rootElementHeight = getHeight($rootElement);
-    // @ts-expect-error
-    const height = that.option('height') ?? $rootElement.get(0).style.height;
+    const height = this.option('height') ?? ($rootElement.get(0) as HTMLElement).style.height;
     const isHeightSpecified = !!height && height !== 'auto';
 
-    // @ts-expect-error
-    // eslint-disable-next-line radix
-    const maxHeight = parseInt($rootElement.css('maxHeight'));
+    // @ts-expect-error css value can be undefined
+    const maxHeight = parseInt($rootElement.css('maxHeight'), 10);
     const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
-    // @ts-expect-error
-    const isMaxHeightApplied = groupElement && groupElement.scrollHeight === groupElement.offsetHeight;
+    const isMaxHeightApplied = groupElement
+      && groupElement.scrollHeight === groupElement.offsetHeight;
 
-    that.updateSize($rootElement);
+    this.updateSize($rootElement);
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
     deferRender(() => {
-      const hasHeight = that._hasHeight || !!maxHeight || isHeightSpecified;
+      const hasHeight = !!this._hasHeight || !!maxHeight || isHeightSpecified;
       rowsView.hasHeight(hasHeight);
 
       this._setAriaOwns();
@@ -851,30 +863,31 @@ export class ResizingController extends modules.ViewController {
         rowsView.setLoading(dataController.isLoading());
         return;
       }
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
       deferUpdate(() => {
-        that._updateLastSizes($rootElement);
-        that._setScrollerSpacing();
+        this._updateLastSizes($rootElement);
+        this._setScrollerSpacing();
 
-        each(VIEW_NAMES, (index, viewName) => {
+        VIEW_NAMES.forEach((viewName) => {
           // TODO getView
-          const view = that.getView(viewName);
+          const view = this.getView(viewName);
           if (view) {
             view.resize();
           }
         });
 
-        this._editorFactoryController && this._editorFactoryController.resize();
+        this._editorFactoryController?.resize();
       });
     });
   }
 
-  private _updateLastSizes($rootElement) {
+  private _updateLastSizes($rootElement: dxElementWrapper): void {
     this._lastWidth = getWidth($rootElement);
     this._lastHeight = getHeight($rootElement);
     this._devicePixelRatio = getWindow().devicePixelRatio;
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     switch (args.name) {
       case 'width':
       case 'height':
@@ -896,19 +909,22 @@ export class ResizingController extends modules.ViewController {
 }
 
 export class SynchronizeScrollingController extends modules.ViewController {
-  private _scrollChangedHandler(views, pos, viewName) {
-    for (let j = 0; j < views.length; j++) {
-      if (views[j] && views[j].name !== viewName) {
-        views[j].scrollTo({ left: pos.left, top: pos.top });
+  private _scrollChangedHandler(
+    views: ColumnsView[],
+    pos: ScrollPosition,
+    viewName: string,
+  ): void {
+    for (const view of views) {
+      if (view && view.name !== viewName) {
+        view.scrollTo({ left: pos.left, top: pos.top });
       }
     }
   }
 
-  public init() {
+  public init(): void {
     const views = [this.getView('columnHeadersView'), this.getView('footerView'), this.getView('rowsView')];
 
-    for (let i = 0; i < views.length; i++) {
-      const view = views[i];
+    for (const view of views) {
       if (view) {
         view.scrollChanged.add(this._scrollChangedHandler.bind(this, views));
       }
@@ -921,9 +937,9 @@ export class GridView extends modules.View {
 
   private _dataController!: DataController;
 
-  private _groupElement: any;
+  private _groupElement?: dxElementWrapper;
 
-  private _rootElement: any;
+  private _rootElement?: dxElementWrapper;
 
   private _a11yGeneralStatusElement!: dxElementWrapper;
 
@@ -932,51 +948,47 @@ export class GridView extends modules.View {
     this._dataController = this.getController('data');
   }
 
-  protected _endUpdateCore() {
+  protected _endUpdateCore(): void {
     if (this.component._requireResize) {
       this.component._requireResize = false;
       this._resizingController.resize();
     }
   }
 
-  public getView(name) {
+  public getView<T extends keyof Views>(name: T): Views[T] {
     return this.component._views[name];
   }
 
-  public element() {
+  public element(): dxElementWrapper | undefined {
     return this._groupElement;
   }
 
-  public optionChanged(args) {
-    const that = this;
-
-    if (isDefined(that._groupElement) && args.name === 'showBorders') {
-      that._groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!args.value);
+  public optionChanged(args: OptionChanged): void {
+    if (isDefined(this._groupElement) && args.name === 'showBorders') {
+      this._groupElement.toggleClass(this.addWidgetPrefix(BORDERS_CLASS), !!args.value);
       args.handled = true;
     } else {
       super.optionChanged(args);
     }
   }
 
-  private _renderViews($groupElement) {
-    const that = this;
-
-    each(VIEW_NAMES, (index, viewName) => {
+  private _renderViews($groupElement: dxElementWrapper): void {
+    VIEW_NAMES.forEach((viewName) => {
       // TODO getView
-      const view = that.getView(viewName);
+      const view = this.getView(viewName);
       if (view) {
         view.render($groupElement);
       }
     });
   }
 
-  private _getTableRoleName() {
+  private _getTableRoleName(): string {
     return 'group';
   }
 
-  public render($rootElement) {
+  public render($rootElement: dxElementWrapper): void {
     const isFirstRender = !this._groupElement;
-    const $groupElement = this._groupElement || $('<div>').addClass(this.getWidgetContainerClass());
+    const $groupElement = this._groupElement ?? $('<div>').addClass(this.getWidgetContainerClass());
 
     $groupElement.addClass(GRIDBASE_CONTAINER_CLASS);
     $groupElement.toggleClass(this.addWidgetPrefix(BORDERS_CLASS), !!this.option('showBorders'));
@@ -989,7 +1001,9 @@ export class GridView extends modules.View {
 
     if (isFirstRender) {
       this._groupElement = $groupElement;
-      hasWindow() && this._resizingController.updateSize($rootElement);
+      if (hasWindow()) {
+        this._resizingController.updateSize($rootElement);
+      }
       $groupElement.appendTo($rootElement);
     }
 
@@ -1002,15 +1016,14 @@ export class GridView extends modules.View {
     this._renderViews($groupElement);
   }
 
-  public update() {
-    const that = this;
-    const $rootElement = that._rootElement;
-    const $groupElement = that._groupElement;
+  public update(): void {
+    const $rootElement = this._rootElement;
+    const $groupElement = this._groupElement;
 
     if ($rootElement && $groupElement) {
       this._resizingController.resize();
-      if (that._dataController.isLoaded()) {
-        that._resizingController.fireContentReadyAction();
+      if (this._dataController.isLoaded()) {
+        this._resizingController.fireContentReadyAction();
       }
     }
   }
@@ -1021,7 +1034,7 @@ export class GridView extends modules.View {
 }
 
 export const gridViewModule = {
-  defaultOptions() {
+  defaultOptions(): Pick<InternalGridOptions, 'showBorders' | 'renderAsync'> {
     return {
       showBorders: false,
       renderAsync: false,

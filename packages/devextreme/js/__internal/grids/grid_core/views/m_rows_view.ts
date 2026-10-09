@@ -1431,7 +1431,11 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing
    */
-  protected setAriaOwns(headerTableId: string, footerTableId: string, isFixed?: boolean): void {
+  public setAriaOwns(
+    headerTableId: string | undefined,
+    footerTableId: string | undefined,
+    isFixed?: boolean,
+  ): void {
     const $contentElement = this._findContentElement();
     const $tableElement = this.getTableElement();
 
