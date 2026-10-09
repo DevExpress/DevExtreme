@@ -4,6 +4,7 @@ import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilt
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 import { sales } from './data';
 
 fixture.disablePageReloads`pivotGrid_headerFilter`
@@ -92,5 +93,74 @@ test('[T1284200] Should handle dxList "selectAll" when has unselected items on t
   allowFiltering: true,
   fieldPanel: {
     visible: true,
+  },
+}));
+
+test.meta({ runInTheme: Themes.genericLight })('[T1336516] Filter icon aligns with the field caption', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+  const headerFilterIcon = pivotGrid.getColumnHeaderArea().getHeaderFilterIcon();
+
+  await t.expect(headerFilterIcon.element.exists).ok();
+
+  await testScreenshot(t, takeScreenshot, 'headerFilter - icon alignment.png', {
+    element: pivotGrid.getColumnHeaderArea().element,
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxPivotGrid', {
+  width: 1000,
+  allowFiltering: true,
+  allowSorting: false,
+  showBorders: true,
+  fieldChooser: {
+    enabled: false,
+  },
+  fieldPanel: {
+    showColumnFields: true,
+    showDataFields: true,
+    showFilterFields: false,
+    showRowFields: true,
+    allowFieldDragging: false,
+    visible: true,
+  },
+  dataSource: {
+    fields: [{
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }, {
+      groupName: 'date',
+      groupInterval: 'year',
+      expanded: true,
+    }, {
+      groupName: 'date',
+      groupInterval: 'quarter',
+      expanded: true,
+    }, {
+      groupName: 'date',
+      groupInterval: 'month',
+    }, {
+      caption: 'Region',
+      dataField: 'region',
+      area: 'row',
+    }, {
+      caption: 'Sales',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      area: 'data',
+    }],
+    store: [{
+      region: 'Africa',
+      amount: 500,
+      date: '2015-05-26',
+    }, {
+      region: 'South America',
+      amount: 780,
+      date: '2015-05-07',
+    }],
   },
 }));
