@@ -138,7 +138,7 @@ Call `super` with named params, when the method declares exactly those params an
 
 | Rule | Fix |
 |---|---|
-| `no-plusplus` | `i += 1`, when the operand is a number. `` `dx-col-${id++}` `` becomes `` `dx-col-${id}` `` followed by `id += 1;`. If the operand can be a string, `++` converts it to a number but `+= 1` concatenates: write `x = Number(x) + 1` (see traps.md) |
+| `no-plusplus` | `i += 1`, when the operand is a number and `i++` stands alone. Postfix `++` evaluates to the old value, so a used result moves out first: `` `dx-col-${id++}` `` becomes `` `dx-col-${id}` `` followed by `id += 1;`. If the operand can be a string, `++` converts it to a number but `+= 1` concatenates: write `x = Number(x) + 1` for an increment that stands alone (see traps.md) |
 | `no-param-reassign` | a default param (`rowIndex = 0` instead of `rowIndex = rowIndex \|\| 0`, only when the old code treats only `undefined` as missing; see traps), or a new `const`. Mutating an object's properties is allowed |
 | `no-unused-expressions` | `cond && doIt()` becomes `if (cond) { doIt(); }`, which always behaves the same. `a.update && a.update(x)` becomes `a.update?.(x)` only when `a.update` can only be a function, `null` or `undefined`. If it can be `false`, `0` or `''`, the old code skips the call but `?.()` throws, so use `if (a.update) { a.update(x); }` |
 | `@stylistic/no-mixed-operators` | parentheses that spell out the current grouping: `a && b \|\| c` becomes `(a && b) \|\| c`, since `&&` binds tighter. A named boolean also works: `const isDefaultCommandColumn = column.command && !isCustom(column); if (isDefaultCommandColumn \|\| !column.fixedPosition)` |

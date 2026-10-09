@@ -47,10 +47,10 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
 
 ## Workflow
 
-1. **List the work.** Run the script on the file or range. Its errors and warnings are what the task fixes. For a file that many others import (a hub such as `grid_core/m_types.ts`), also list the open PRs that touch it, and leave to them what they already change:
+1. **List the work.** Run the script on the file or range. Its errors and warnings are what the task fixes. For a file that many others import (a hub such as `grid_core/types.ts`), also list the open PRs that touch it, and leave to them what they already change:
    ```bash
    gh pr list --repo DevExpress/DevExtreme --state open --limit 200 --json number,title,files \
-     --jq '.[] | select(any(.files[]; .path | endswith("grid_core/m_types.ts"))) | "#\(.number) \(.title)"'
+     --jq '.[] | select(any(.files[]; .path == "packages/devextreme/js/__internal/grids/grid_core/types.ts")) | "#\(.number) \(.title)"'
    ```
 2. **Type, in this order.**
    1. Class fields. Only in a whole file, or in the part that holds the class fields (usually the first): every later method depends on them.
@@ -136,7 +136,7 @@ node_modules/.bin/tsc --noEmit -p js/__internal/tsconfig.json; echo "exit $?"   
     node_modules/.bin/jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPatterns "<pattern>"
     ```
   - QUnit (`testing/tests/<suite>/…`) runs on the developer's dev server. Ask them to start it and tell you when the build is ready. Then open `http://localhost:20060/run/<path under testing/tests>?notimers=true&nojquery=true&nocsp=true`.
-  - Before trusting a QUnit result, check the built file of *every* file you changed, under `packages/devextreme/artifacts/transpiled-esm-npm/esm/` (what the runner serves). The watch build sometimes skips a file without saying so, and sometimes stops rebuilding altogether: then every file in that tree has the same old timestamp. The built file must be newer than the source and must contain your body edits. Grep for them as Babel writes them: a rest param `...args` comes back as `arguments`, while `??` stays. Type-only edits leave no trace in the built JS. If a built file is stale, ask the developer to rebuild (`rm -rf .nx/cache`, then restart the dev build).
+  - Before trusting a QUnit result, check the built file of *every* file you changed, under `packages/devextreme/artifacts/transpiled-esm-npm/esm/` (what the runner serves). The watch build sometimes skips a file without saying so, and sometimes stops rebuilding altogether: then every file in that tree has the same old timestamp. The built file must be newer than the source and must contain your body edits. Grep for them as Babel writes them: a rest param `...args` comes back as a copy loop over `arguments` (`for (var _len = arguments.length, args = new Array(_len) …`), while `??` stays. Type-only edits leave no trace in the built JS. If a built file is stale, ask the developer to rebuild (`rm -rf .nx/cache`, then restart the dev build).
   - If the Playwright browser is held by another session, the chrome-devtools tools work too: open the page in an `isolatedContext`, and read `#qunit-testresult` once the run is done instead of polling it.
   - In a browser that draws 15px scrollbars, a few pixel tests fail with `Expected: 0, Result: 15`, for example two "Scroller shown …" tests in `DevExpress.ui.widgets.dataGrid/gridView.tests.js`. They fail before your change too; don't chase them.
   - In headless Chrome, `DevExpress.ui.widgets.dataGrid/adaptiveColumns.tests.js` › "Columns should hide consistently if percentage width (T640539)" fails too (expected 2 adaptive buttons, got 4), on unmodified code. Don't chase it either.

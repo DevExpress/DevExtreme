@@ -6,20 +6,20 @@ These apply on top of `SKILL.md` to files under `js/__internal/grids/`: `grid_co
 
 - `data_grid`, `tree_list`, `pivot_grid` and CardView are built on `grid_core`. **`grid_core` never imports from them.**
 - Inside `grid_core`, a module never adds an import from a module that depends on it.
-- Reach another module's controllers and views the way the code already does: through `getController('x')`/`getView('x')`. The `Controllers`/`Views` registry in `grid_core/m_types.ts` types them, and no new import is needed.
+- Reach another module's controllers and views the way the code already does: through `getController('x')`/`getView('x')`. The `Controllers`/`Views` registry in `grid_core/types.ts` types them, and no new import is needed.
 
 ## Where types go
 
-- Files directly in `grid_core/` (`m_modules.ts`, `m_utils.ts`, `m_widget_base.ts`, …) have no `types.ts` of their own. Their types file is `grid_core/m_types.ts`.
+- Files directly in `grid_core/` (`m_utils.ts`, `m_widget_base.ts`, …) put their types in `grid_core/types.ts`, the shared hub. `grid_core/modules/modules.ts` has its own `modules/types.ts`.
 - Reuse before creating:
-  - `Controllers['x']`/`Views['x']`, `ModuleType`, `OptionChanged`/`OptionChangedFor` from `grid_core/m_types.ts`;
+  - `Controllers['x']`/`Views['x']`, `ModuleType`, `OptionChanged`/`OptionChangedFor` from `grid_core/types.ts`;
   - public types from `@js/common/grids` and `@js/ui/data_grid` (`ColumnBase`, `FixedPosition`, `Properties as DataGridProperties`, …).
 - **Leaks.** Sometimes feature logic has leaked into core: core code reads a row field that editing or grouping sets, or handles a view only `data_grid` registers. Declare the type core needs in the core module's `types.ts`, not by importing it from the feature, and mark it:
   ```ts
   /** @architectureLeak <owner module>: <why core needs it> */
   ```
   `grep -rn "@architectureLeak" js/__internal/grids` lists them all. Moving one to its owner is a separate architecture task.
-- `Controllers['x']` or a direct `import type` of the class: both work, and the direct import is the more common style. `grid_core/m_types.ts` itself uses inline `import('…')` types so that it has no import cycles. Don't add a regular import to it.
+- `Controllers['x']` or a direct `import type` of the class: both work, and the direct import is the more common style. `grid_core/types.ts` itself uses inline `import('…')` types so that it has no import cycles. Don't add a regular import to it.
 
 ## Style enforced here
 
@@ -75,13 +75,11 @@ A generic mixin `<T extends ModuleType<Controller>>(Base: T) => class extends Ba
 
 On top of [rename.md](rename.md):
 - **Hub files** are imported from more than 20 places outside their module. Rename them only at a moment the team has agreed and announced, so everyone merges or rebases first. Ask the developer before renaming one of these:
-  - `grid_core/m_types.ts`, `grid_core/m_utils.ts`, `grid_core/m_modules.ts`
+  - `grid_core/m_utils.ts`
   - `grid_core/views/m_rows_view.ts`, `grid_core/column_headers/m_column_headers.ts`
   - `pivot_grid/m_widget_utils.ts`
-- `grid_core/m_types.ts` imports most controllers and views with inline `import('./…/m_x')` types. Update that line too.
-- Diagram scripts:
-  - `grids/__docs__/scripts/data_grid/constants.ts` maps `m_*` file names to feature areas. Rename the entry.
-  - For `m_modules.ts` only, also `grids/__docs__/scripts/grid_core/constants.ts`: `M_MODULES_PATH` and `EXCLUDED_FILE_NAMES`.
+- `grid_core/types.ts` imports most controllers and views with inline `import('./…/m_x')` types. Update that line too.
+- Diagram scripts: `grids/__docs__/scripts/data_grid/constants.ts` maps `m_*` file names to feature areas. Rename the entry.
 - **`module_not_extended/` folders** have no `m_` prefix, so there is nothing to rename. They get the relaxed rules only through the `'js/__internal/**/module*/**.ts'` glob of the "Rules for migrated from JS files" block in `packages/devextreme/eslint.config.mjs`. That glob also matches `ui/html_editor/modules/` and `ui/list/modules/`, so don't delete it. Once a folder has 0 strict errors, add it to that block's `ignores`:
   ```js
   // Rules for migrated from JS files
