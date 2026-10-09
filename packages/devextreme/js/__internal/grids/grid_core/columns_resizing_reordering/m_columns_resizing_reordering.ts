@@ -805,6 +805,9 @@ export class ColumnsResizerViewController extends modules.ViewController {
     currentPoint: Coordinates,
     deltaX: number,
   ): ColumnPoint | null {
+    let targetPoint: ColumnPoint | null = null;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+
     if (pointsByColumns) {
       for (let i = 0; i < pointsByColumns.length; i += 1) {
         if (pointsByColumns[i].x === pointsByColumns[0].x
@@ -818,11 +821,15 @@ export class ColumnsResizerViewController extends modules.ViewController {
           && pointsByColumns[i].x - deltaX <= currentPoint.x
           && currentPoint.x <= pointsByColumns[i].x + deltaX
         ) {
-          return pointsByColumns[i];
+          const distance = Math.abs(currentPoint.x - pointsByColumns[i].x);
+          if (distance < nearestDistance) {
+            targetPoint = pointsByColumns[i];
+            nearestDistance = distance;
+          }
         }
       }
     }
-    return null;
+    return targetPoint;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

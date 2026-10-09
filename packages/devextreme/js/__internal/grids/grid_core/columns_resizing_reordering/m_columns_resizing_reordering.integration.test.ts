@@ -94,6 +94,28 @@ describe('Performance optimization', () => {
 
       expect(columnHeadersViewSpy).toHaveBeenCalledTimes(2);
     });
+
+    it('should select the nearest boundary when hit regions overlap', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ id: 1, name: 'John' }],
+        columns: ['id', 'name'],
+        allowColumnResizing: true,
+      });
+      const points = [
+        {
+          x: 100, y: 10, columnIndex: 0, index: 1,
+        },
+        {
+          x: 110, y: 10, columnIndex: 1, index: 2,
+        },
+      ];
+      const columnsResizerController = (instance as any).getController('columnsResizer');
+
+      expect(columnsResizerController._getTargetPoint(points, { x: 109, y: 10 }, 12))
+        .toBe(points[1]);
+      expect(columnsResizerController._getTargetPoint(points, { x: 105, y: 10 }, 12))
+        .toBe(points[0]);
+    });
   });
 
   describe('DraggingHeaderViewController', () => {
