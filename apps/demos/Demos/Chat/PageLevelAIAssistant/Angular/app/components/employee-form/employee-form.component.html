@@ -1,0 +1,40 @@
+<div id="form-container" class="form-container">
+  <dx-form
+    [formData]="formData"
+    [colCount]="3"
+    labelLocation="top"
+    [aiIntegration]="aiIntegration"
+    (onOptionChanged)="onOptionChanged($event)"
+  >
+    <dxi-form-simple-item
+      *ngFor="let field of formFields"
+      [dataField]="field.dataField"
+      [label]="field.label"
+      [editorType]="field.editorType"
+      [editorOptions]="field.editorOptions"
+      [aiOptions]="field.aiOptions"
+    ></dxi-form-simple-item>
+    <dxi-form-button-item
+      name="Save"
+      [colSpan]="3"
+      cssClass="save-button"
+      [buttonOptions]="saveButtonOptions"
+    ></dxi-form-button-item>
+  </dx-form>
+</div>
+
+<dx-toast
+  [displayTime]="600"
+  [maxWidth]="568"
+  [closeOnClick]="true"
+  message="Form data is saved."
+  type="success"
+>
+  <dxo-toast-position
+    of="#form-container"
+    at="bottom center"
+    my="bottom center"
+    offset="0 -20"
+  >
+  </dxo-toast-position>
+</dx-toast>
