@@ -1,18 +1,16 @@
-import { loadSync } from 'opentype.js';
 import { readdirSync, readFileSync } from 'fs';
 import { join, extname } from 'path';
+
+import { readGlyphCount } from './font-tables';
 
 const BASE_PATH = join(__dirname, '..');
 const SVG_ICONS_ROOT = `${BASE_PATH}/images/icons`;
 
 describe('Equals svg to font', () => {
   const getCountElementInFont = (pathToFont: string): number => {
-    // NOTE: Different SVG parsers produce different headers.
-    // For opentype.js: first five glyphs are empty
     const countEmptySvg = 4;
 
-    // eslint-disable-next-line spellcheck/spell-checker, @typescript-eslint/no-unsafe-member-access
-    return loadSync(pathToFont).glyphs.length - countEmptySvg;
+    return readGlyphCount(readFileSync(pathToFont)) - countEmptySvg;
   };
 
   const getCountElementInSvg = (pathToSvg: string): number => {
