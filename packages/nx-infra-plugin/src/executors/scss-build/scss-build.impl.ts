@@ -311,7 +311,6 @@ async function runWatchBuild(
   };
 
   await rebuild();
-  logger.info('scss-build watch mode is watching for changes...');
 
   await watchWithChokidar({
     projectRoot,
