@@ -1,0 +1,7 @@
+<div class="demo-container">
+  <app-employee-form [aiIntegration]="aiIntegration"></app-employee-form>
+  <app-task-grid></app-task-grid>
+  <app-ai-assistant
+    (messageSubmitted)="onMessageSubmitted($event)"
+  ></app-ai-assistant>
+</div>
