@@ -350,7 +350,7 @@ describe('format locale integration', () => {
       coreLocalization.locale('en');
       const format = { type: 'dd MMMM yyyy', locale: 'de' };
 
-      const parsed = dateLocalization.parse('15 Juni 2020', format) as Date;
+      const parsed = dateLocalization.parse('15 Juni 2020', format as never) as Date;
 
       expect(parsed).toEqual(new Date(2020, 5, 15));
     });
