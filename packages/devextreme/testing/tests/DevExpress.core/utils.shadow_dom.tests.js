@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { computeStyleSheetsHash, addShadowDomStyles } from '__internal/core/utils/m_shadow_dom';
+import { computeStyleSheetsHash, addShadowDomStyles } from '__internal/core/utils/shadow_dom';
 
 QUnit.module('computeStyleSheetsHash', () => {
     QUnit.test('Returns consistent hash for same content', function(assert) {

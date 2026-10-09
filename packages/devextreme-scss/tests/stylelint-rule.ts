@@ -13,6 +13,14 @@ export interface Runner {
 const packageRoot = join(__dirname, '..');
 const stylelintBin = join(packageRoot, 'node_modules', '.bin', 'stylelint');
 
+const resolveFrom = (parent: string, request: string): string => (
+  require.resolve(request, { paths: [parent] })
+);
+const scssSyntax = resolveFrom(
+  resolveFrom(require.resolve('stylelint-config-standard-scss'), 'stylelint-config-recommended-scss'),
+  'postcss-scss',
+);
+
 export const scss = (...rows: string[]): string => `${rows.join('\n')}\n`;
 
 export const createRunner = (
@@ -23,7 +31,7 @@ export const createRunner = (
   const fixture = mkdtempSync(join(tmpdir(), `${basename(pluginFile, '.mjs')}-`));
   const configPath = join(fixture, 'config.json');
   writeFileSync(configPath, JSON.stringify({
-    customSyntax: require.resolve('postcss-scss', { paths: [require.resolve('stylelint-scss')] }),
+    customSyntax: scssSyntax,
     plugins: [join(packageRoot, 'tools', 'stylelint', pluginFile)],
     rules: { [ruleName]: ruleOptions },
   }));

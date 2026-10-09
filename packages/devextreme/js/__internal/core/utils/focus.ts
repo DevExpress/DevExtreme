@@ -1,5 +1,5 @@
 import domAdapter from '@js/core/dom_adapter';
-import { ALL_FOCUSABLE_ELEMENTS_SELECTOR, isElementVisible } from '@ts/core/utils/m_selectors';
+import { ALL_FOCUSABLE_ELEMENTS_SELECTOR, isElementVisible } from '@ts/core/utils/selectors';
 
 const DOCUMENT_POSITION_PRECEDING = 2;
 const DOCUMENT_POSITION_FOLLOWING = 4;

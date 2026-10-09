@@ -1,6 +1,6 @@
 import { isObject } from '@js/core/utils/type';
+import { dateSerialization } from '@ts/core/utils/date_serialization';
 import { dateUtils } from '@ts/core/utils/m_date';
-import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 import { extend } from '@ts/core/utils/m_extend';
 
 import { DEFAULT_VIEW_OPTIONS, VIEW_TYPES } from './constants_view';
