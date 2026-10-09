@@ -10,7 +10,9 @@ import type { ValueChangedEvent as CheckBoxValueChangedEvent } from '@js/ui/chec
 import CheckBox from '@js/ui/check_box';
 import type { CustomOperation } from '@js/ui/filter_builder';
 import inflector from '@ts/core/utils/inflector';
-import type { Condition, Criteria, FilterBuilderField } from '@ts/filter_builder/types';
+import type {
+  Condition, ConditionValue, Criteria, FilterBuilderField, FilterCustomOperation,
+} from '@ts/filter_builder/types';
 import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
@@ -228,8 +230,8 @@ export class FilterPanelView extends modules.View {
 
   private _getValueText(
     field: FilterBuilderField,
-    customOperation: CustomOperation | null,
-    value: unknown,
+    customOperation: FilterCustomOperation | null,
+    value: ConditionValue,
   ): DeferredObj<string> {
     const deferred = Deferred<string>();
     const hasCustomOperation = customOperation?.customizeText;
@@ -287,7 +289,6 @@ export class FilterPanelView extends modules.View {
     const value = filterValue[2];
     const filterOperationDescriptions = this.getFilterOperationDescriptions();
 
-    // eslint-disable-next-line @typescript-eslint/init-declarations
     let operationText: string;
 
     if (customOperation) {
@@ -339,7 +340,7 @@ export class FilterPanelView extends modules.View {
 
   public getFilterText(
     filterValue: FilterValueExpression,
-    customOperations: CustomOperation[],
+    customOperations: (CustomOperation | FilterCustomOperation)[],
   ): DeferredObj<string> {
     const options: FilterTextOptions = {
       customOperations,
