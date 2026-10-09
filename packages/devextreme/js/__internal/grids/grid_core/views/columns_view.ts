@@ -33,7 +33,7 @@ import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
-import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
@@ -61,6 +61,7 @@ import type {
   ColumnViewTemplate,
   ColumnViewTemplateOptions,
   ColumnWidthsOptions,
+  ContextMenuItemsOptions,
   DelayedTemplate,
   HintColumn,
   RowPreparedOptions,
@@ -1648,7 +1649,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  public getContextMenuItems?(options): unknown;
+  public getContextMenuItems?(options: ContextMenuItemsOptions): unknown;
 
   public getName(): string | undefined {
     return undefined;
