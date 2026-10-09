@@ -27,7 +27,7 @@ import {
   createEmptyCachedData,
   getPageDataFromCache,
   setPageDataToCache,
-} from './m_data_source_adapter_utils';
+} from './data_source_adapter_utils';
 import type {
   ChangedEvent,
   LastLoadOptions,
