@@ -96,7 +96,8 @@ const getDateSerializationFormat = function getDateSerializationFormat(
 function parseDate(text: unknown): unknown {
   const parsedValue = !isDate(text) && Date.parse(String(text));
 
-  if (!parsedValue && isString(text) && getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT) {
+  if (!parsedValue && isString(text)
+    && getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT) {
     const parts = DATE_SERIALIZATION_PATTERN.exec(text);
 
     if (parts) {
