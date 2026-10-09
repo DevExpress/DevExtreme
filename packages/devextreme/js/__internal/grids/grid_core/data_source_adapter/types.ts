@@ -8,7 +8,7 @@ import type {
 } from '@ts/data/data_source/types';
 
 import type { InternalGrid, ModuleType } from '../types';
-import type DataSourceAdapter from './m_data_source_adapter';
+import type DataSourceAdapter from './data_source_adapter';
 
 export type RawItemData = Record<string, unknown>;
 

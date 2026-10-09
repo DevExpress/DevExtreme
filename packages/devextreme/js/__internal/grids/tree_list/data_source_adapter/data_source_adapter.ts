@@ -12,7 +12,7 @@ import type Store from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
-import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/provider';
 import type { OperationTypes as BaseOperationTypes, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';

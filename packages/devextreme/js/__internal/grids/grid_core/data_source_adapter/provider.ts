@@ -1,5 +1,5 @@
 import type { ModuleType } from '../types';
-import type DataSourceAdapter from './m_data_source_adapter';
+import type DataSourceAdapter from './data_source_adapter';
 import type { DataSourceAdapterProvider } from './types';
 
 export function createDataSourceAdapterProvider<TAdapter extends DataSourceAdapter>(
