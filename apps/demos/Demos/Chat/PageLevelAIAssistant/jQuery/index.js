@@ -902,7 +902,11 @@ async function runCommand(text, { form, gridInstance, aiIntegration }) {
 
   if (target === 'form') {
     const { results: formResults, error: formError } =
-      await buildFormResultsPromise(form, formAction, text);
+      await buildFormResultsPromise(
+        form,
+        formAction ?? { type: 'smart_paste' },
+        text,
+      );
 
     return joinSucceededOrThrow(formResults, formError);
   }

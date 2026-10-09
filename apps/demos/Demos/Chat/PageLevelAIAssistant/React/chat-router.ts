@@ -212,7 +212,7 @@ async function runCommand(text: string, { form, gridInstance, aiIntegration }: R
   }
 
   if (target === 'form') {
-    const { results, error } = await buildFormResultsPromise(form, formAction, text);
+    const { results, error } = await buildFormResultsPromise(form, formAction ?? { type: 'smart_paste' }, text);
     return joinSucceededOrThrow(results, error);
   }
 

@@ -215,7 +215,7 @@ async function runCommand(
   }
 
   if (target === 'form') {
-    const { results: formResults, error: formError } = await buildFormResultsPromise(form, formAction, text);
+    const { results: formResults, error: formError } = await buildFormResultsPromise(form, formAction ?? { type: 'smart_paste' }, text);
 
     return joinSucceededOrThrow(formResults, formError);
   }
