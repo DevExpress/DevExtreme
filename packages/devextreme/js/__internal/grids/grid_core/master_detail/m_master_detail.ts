@@ -317,6 +317,8 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
         const isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailElementWidth !== getWidth($detailElement);
 
         if (isDetailHorizontalScrollCanBeShown && isDetailGridWidthChanged) {
+          // @ts-expect-error updateDimensions() returns undefined only for an invisible grid
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
           this.updateDimensions().done(() => d.resolve(true));
         } else {
           d.resolve(true);
