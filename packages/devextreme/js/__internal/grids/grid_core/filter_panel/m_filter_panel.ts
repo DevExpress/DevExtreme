@@ -7,7 +7,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import CheckBox from '@js/ui/check_box';
-import inflector from '@ts/core/utils/m_inflector';
+import inflector from '@ts/core/utils/inflector';
 import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,

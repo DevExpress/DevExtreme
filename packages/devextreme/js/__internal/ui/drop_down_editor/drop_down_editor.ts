@@ -35,7 +35,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { FunctionTemplate } from '@ts/core/templates/function_template';
-import { focused } from '@ts/core/utils/m_selectors';
+import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import type { PopoverProperties as InternalPopoverProperties } from '@ts/ui/popover/popover';

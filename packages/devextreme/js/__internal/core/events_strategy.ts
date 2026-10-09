@@ -1,6 +1,6 @@
 import { each } from '@js/core/utils/iterator';
 import { isFunction, isPlainObject } from '@js/core/utils/type';
-import { Callbacks } from '@ts/core/utils/m_callbacks';
+import { Callbacks } from '@ts/core/utils/callbacks';
 
 export type EventHandler = Function;
 

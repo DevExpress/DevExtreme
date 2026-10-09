@@ -1,2 +1,2 @@
 // deprecated
-export { equals } from '../../__internal/core/utils/m_comparator';
+export { equals } from '../../__internal/core/utils/comparator';
