@@ -811,6 +811,8 @@ function buildGridResultsPromise(gridInstance, aiIntegration, text) {
   const columnNames = getGridColumnNames(gridInstance);
   const prompt = `${buildGridSystemPrompt(columnNames)}\n\nUser request: '${text}'`;
 
+  gridInstance?.beginCustomLoading('');
+
   return executeAiCommand(prompt, aiIntegration)
     .then((parsed) => {
       const actions = Array.isArray(parsed.actions) ? parsed.actions : [];
@@ -906,8 +908,6 @@ async function runCommand(text, { form, gridInstance, aiIntegration }) {
   }
 
   if (target === 'grid') {
-    gridInstance?.beginCustomLoading('');
-
     const { results: gridResults, error: gridError } =
       await buildGridResultsPromise(gridInstance, aiIntegration, text);
 
