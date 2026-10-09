@@ -19,7 +19,7 @@ describe('NumberBox currency format with locale', () => {
     const element = document.body.appendChild(document.createElement('div'));
     const instance = new NumberBox(element, {
       value: 1234.5,
-      format: { style: 'currency', locale: 'fr', currency: 'US' },
+      format: { style: 'currency', locale: 'fr', currency: 'EUR' },
     });
 
     widgets.push(instance);
