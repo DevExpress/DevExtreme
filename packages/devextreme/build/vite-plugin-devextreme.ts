@@ -89,12 +89,15 @@ export function moveFieldInitializersToConstructor(): unknown {
 
         const ctorBody = ctor.body!.body as Stmt[];
 
-        let insertAt = 0;
-        for (let i = 0; i < ctorBody.length; i += 1) {
-          const stmt = ctorBody[i];
-          const isSuperCall = stmt.type === 'ExpressionStatement'
+        const superCallIdx = ctorBody.findIndex(
+          (stmt) => stmt.type === 'ExpressionStatement'
             && stmt.expression?.type === 'CallExpression'
-            && stmt.expression.callee?.type === 'Super';
+            && stmt.expression.callee?.type === 'Super',
+        );
+
+        let insertAt = superCallIdx !== -1 ? superCallIdx + 1 : 0;
+        while (insertAt < ctorBody.length) {
+          const stmt = ctorBody[insertAt];
           const isParamPropertyAssignment = stmt.type === 'ExpressionStatement'
             && stmt.expression?.type === 'AssignmentExpression'
             && stmt.expression.operator === '='
@@ -104,7 +107,8 @@ export function moveFieldInitializersToConstructor(): unknown {
             && stmt.expression.left.property?.name === stmt.expression.right.name
             && paramNames.has(stmt.expression.right.name!);
 
-          if (isSuperCall || isParamPropertyAssignment) insertAt = i + 1;
+          if (!isParamPropertyAssignment) break;
+          insertAt += 1;
         }
 
         ctorBody.splice(insertAt, 0, ...(assignments as Stmt[]));
