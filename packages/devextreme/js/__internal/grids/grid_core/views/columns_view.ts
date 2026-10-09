@@ -33,7 +33,7 @@ import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
-import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
@@ -61,6 +61,7 @@ import type {
   ColumnViewTemplate,
   ColumnViewTemplateOptions,
   ColumnWidthsOptions,
+  ContextMenuItemsOptions,
   DelayedTemplate,
   HintColumn,
   RowPreparedOptions,
@@ -382,7 +383,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const rowOptions: RowPreparedOptions | undefined = $row.data('options');
         const columnIndex = $cell.index();
 
-        const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
+        const cellOptions = rowOptions?.cells?.[columnIndex];
         const column: HintColumn | undefined = cellOptions
           ? cellOptions.column
           : visibleColumns[columnIndex];
@@ -424,7 +425,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       const $row = $cell.parent();
       // @ts-expect-error data(key) is typed as returning the wrapper
       const rowOptions: RowPreparedOptions | undefined = $row.data('options');
-      const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
+      const options = rowOptions?.cells?.[$cell.index()];
 
       if (!$cell.closest('table').is(event.delegateTarget)) {
         return undefined;
@@ -789,8 +790,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return hasRowTemplate && !!this._getBodies($tableElement)?.filter(`.${CLASSES.row}`).length;
   }
 
-  protected _wrapRowIfNeed($table: dxElementWrapper, $row: dxElementWrapper, isRefreshing?: boolean): dxElementWrapper {
-    const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
+  protected _wrapRowIfNeed(
+    $table: dxElementWrapper,
+    $row: dxElementWrapper,
+    isRefreshing?: boolean,
+  ): dxElementWrapper {
+    const $tableElement = isRefreshing
+      ? $table || this._tableElement
+      : this._tableElement || $table;
     const needWrapRow = this._needWrapRow($tableElement);
 
     if (needWrapRow) {
@@ -1651,7 +1658,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  public getContextMenuItems?(options): unknown;
+  public getContextMenuItems?(options: ContextMenuItemsOptions): unknown;
 
   public getName(): string | undefined {
     return undefined;

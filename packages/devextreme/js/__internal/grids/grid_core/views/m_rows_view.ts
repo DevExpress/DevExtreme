@@ -39,8 +39,8 @@ import { isLocalStore } from '../data_source_adapter/utils/store';
 import type { EditingController } from '../editing/m_editing';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
+import { ColumnsView } from './columns_view';
 import { CLASSES as VIEW_CLASSES } from './const';
-import { ColumnsView } from './m_columns_view';
 import type { RowsViewScrollEvent } from './types';
 import {
   getCellText, getMaxHorizontalScrollOffset, isRowElementVisible, isSameColumnLayout,
