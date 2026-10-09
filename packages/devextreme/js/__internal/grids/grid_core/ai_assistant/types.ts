@@ -44,7 +44,7 @@ export type CommandExecutor<TArgs = undefined> = (
 
 // Empty schemas (no keys) collapse args to `undefined` so the executor
 // signature becomes `() => Promise<CommandResult>` for no-arg commands.
-type CommandArgs<TSchema extends ZodObject<ZodRawShape>> = keyof z.infer<TSchema> extends never
+type CommandArgs<TSchema extends ZodObject<ZodRawShape>> = keyof TSchema['shape'] extends never
   ? undefined
   : z.infer<TSchema>;
 

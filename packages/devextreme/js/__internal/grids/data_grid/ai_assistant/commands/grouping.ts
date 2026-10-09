@@ -1,6 +1,6 @@
 import { defineGridCommand } from '@ts/grids/grid_core/ai_assistant/commands/defineGridCommand';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import { z } from 'zod';
+import { z } from '@ts/grids/grid_core/ai_assistant/zod';
 
 import type { Column } from './types';
 
