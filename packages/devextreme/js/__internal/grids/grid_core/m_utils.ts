@@ -110,9 +110,13 @@ const getIntervalSelector = function getIntervalSelector(
 
   if (!isDefined(value)) {
     return null;
-  } if (isDateType(this.dataType) && isString(interval)) {
+  }
+
+  if (isDateType(this.dataType) && isString(interval)) {
     return DATE_INTERVAL_SELECTORS[interval](value);
-  } if (this.dataType === 'number') {
+  }
+
+  if (this.dataType === 'number') {
     const groupInterval = Number(interval);
     return Math.floor(Number(value) / groupInterval) * groupInterval;
   }
@@ -346,13 +350,17 @@ export default {
     return { of: $element };
   },
 
-  getIndexByKey(key: RowKey, items: unknown, keyName?: string | string[] | null): number {
+  getIndexByKey(
+    key: RowKey,
+    items: unknown[] | null | undefined,
+    keyName?: string | string[] | null,
+  ): number {
     let index = -1;
 
     if (key !== undefined && Array.isArray(items)) {
       const keyField = arguments.length <= 2 ? 'key' : keyName;
       for (let i = 0; i < items.length; i += 1) {
-        const item = isDefined(keyField) ? items[i][String(keyField)] : items[i];
+        const item = isDefined(keyField) ? (items[i] as RawItemData)[String(keyField)] : items[i];
 
         if (equalByValue(key, item)) {
           index = i;
@@ -393,7 +401,7 @@ export default {
   },
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use it as their own type
-  getDisplayValue(column: Column, value: unknown, data: unknown, rowType?: string): any {
+  getDisplayValue(column: Column, value: unknown, data: RawItemData | null, rowType?: string): any {
     if (column.displayValueMap?.[String(value)] !== undefined) {
       return column.displayValueMap[String(value)];
     }
@@ -833,7 +841,7 @@ export default {
         return d;
       },
       key: lookup.valueExpr,
-      byKey(key: unknown): Promise<unknown> {
+      byKey(key: RowKey): Promise<unknown> {
         const d = Deferred<unknown>();
         this.load({
           filter: [lookup.valueExpr, '=', key],

@@ -8,7 +8,7 @@ import {
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
-import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
+import { variableWrapper } from '@ts/core/utils/variable_wrapper';
 import type { NormalizedDataSourceOptions } from '@ts/data/data_source/types';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
