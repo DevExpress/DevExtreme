@@ -29,7 +29,7 @@
     "@nx/devkit": "23.2.1",
     "@nx/jest": "23.2.1",
     "@nx/js": "23.2.1",
-    "@types/jest": "29.5.14",
+    "@types/jest": "30.0.0",
     "@types/node": "catalog:tools",
     "@types/shelljs": "0.8.15",
     "axe-core": "catalog:",
