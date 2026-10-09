@@ -119,8 +119,6 @@ export class ResizingController extends modules.ViewController {
 
   private _editorFactoryController!: EditorFactory;
 
-  protected _updateScrollableTimeoutID?: ReturnType<typeof setTimeout>;
-
   public resizeCompleted!: Callback;
 
   private isMaxWidthSet = false;
@@ -824,7 +822,6 @@ export class ResizingController extends modules.ViewController {
     const headerTable = this._columnHeadersView?.getTableElement();
     const footerTable = this._footerView?.getTableElement();
 
-    // @ts-expect-error setAriaOwns() is protected and its id params exclude undefined
     this._rowsView?.setAriaOwns(headerTable?.attr('id'), footerTable?.attr('id'));
   }
 
