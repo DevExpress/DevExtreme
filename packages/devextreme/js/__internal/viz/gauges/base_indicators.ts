@@ -76,8 +76,9 @@ export abstract class BaseElement {
 
   dispose(): this {
     this._dispose();
-    each(this, (name) => {
-      this[name] = null;
+    const fields = this as Record<string, unknown>;
+    each(fields, (name) => {
+      fields[name] = null;
     });
     return this;
   }

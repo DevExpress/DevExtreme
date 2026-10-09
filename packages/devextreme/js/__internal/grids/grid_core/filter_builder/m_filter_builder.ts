@@ -10,6 +10,7 @@ import type { OptionChangedEvent as PopupOptionChangedEvent, ToolbarItem } from 
 import Popup from '@js/ui/popup/ui.popup';
 import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
+import type { FilterCustomOperation } from '@ts/filter_builder/types';
 import { getFilterExpression, removeFieldConditionsFromFilter } from '@ts/filter_builder/utils';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import modules from '@ts/grids/grid_core/modules/modules';
@@ -173,7 +174,7 @@ export class FilterBuilderController extends modules.Controller {
   }
 
   // Override in the private API WA [T1232532]
-  public getCustomFilterOperations(): CustomOperation[] {
+  public getCustomFilterOperations(): (CustomOperation | FilterCustomOperation)[] {
     const filterBuilderCustomOperations = this.option('filterBuilder.customOperations') ?? [];
 
     return [

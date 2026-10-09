@@ -15,6 +15,7 @@ import {
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type DataSourceAdapter from '../data_source_adapter/m_data_source_adapter';
@@ -39,7 +40,7 @@ import {
 import type {
   BandColumnsCache, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionChangeArgs,
   ColumnOptionGetter, ColumnOptionSetter, ColumnsChanges, ColumnsControllerOptions, ColumnUserState,
-  DropLocationNames, GroupColumn, ValueSerializers,
+  DropLocationNames, GroupColumn, ValueSerializers, WithCellValueCalculator,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (
@@ -62,6 +63,10 @@ const warnFixedInChildColumnsOnce = (
     }
   }
 };
+
+export const hasCellValueCalculator = <T extends { calculateCellValue?: unknown }>(
+  item: T,
+): item is WithCellValueCalculator<T> => Boolean(item.calculateCellValue);
 
 export const setFilterOperationsAsDefaultValues = (column: Column): void => {
   column.filterOperations = column.defaultFilterOperations;
@@ -145,7 +150,7 @@ export function isUserStateColumn(
 
 export const createColumnsFromOptions = (
   that: ColumnsController,
-  columnsOptions: (Column | string)[] | undefined,
+  columnsOptions: (Column | string | undefined)[] | undefined,
   bandColumn?: Column,
   createdColumnCount = 0,
 ): Column[] => {
@@ -1044,7 +1049,7 @@ export const mergeColumns = (
     );
 
     if (commandColumnIndex < 0) {
-      return extend({}, column) as Column;
+      return extend({}, column);
     }
 
     const commandColumn = commandColumns[commandColumnIndex];
@@ -1258,4 +1263,4 @@ export const columnHasValue = (column: Column): boolean => (
   !column.command || column.type === AI_COLUMN_NAME
 );
 
-export const getColumnHeaderCellSelector = (visibleIndex: number): string => `.dx-header-row td[aria-colindex="${visibleIndex + 1}"]`;
+export const getColumnHeaderCellSelector = (visibleIndex: number): string => `.${COLUMN_HEADERS_CLASSES.headerRow} td[aria-colindex="${visibleIndex + 1}"]`;

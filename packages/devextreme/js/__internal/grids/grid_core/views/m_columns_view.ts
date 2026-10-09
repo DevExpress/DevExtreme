@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblclickEvent } from '@js/common/core/events/double_click';
@@ -11,10 +10,11 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
+import type { Callback } from '@js/core/utils/callbacks';
 import { noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import * as iteratorUtils from '@js/core/utils/iterator';
 import { getBoundingRect, getDefaultAlignment } from '@js/core/utils/position';
 import {
   getHeight,
@@ -27,139 +27,108 @@ import {
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
+import type { ActionEvent } from '@ts/core/action';
 import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
+import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
+import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
+import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_handling/const';
+import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
+import modules from '@ts/grids/grid_core/modules/modules';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { OptionChanged } from '@ts/grids/grid_core/types';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
-import type { ColumnsController } from '../columns_controller/columns_controller';
-import type { DataController } from '../data_controller/data_controller';
-import gridCoreUtils from '../m_utils';
-import modules from '../modules/modules';
 import { CLASSES } from './const';
-import type { ColumnViewTemplate } from './types';
-
-const SCROLL_CONTAINER_CLASS = 'scroll-container';
-const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
-const GROUP_SPACE_CLASS = 'group-space';
-const CONTENT_CLASS = 'content';
-const HEADER_TEXT_CONTENT_CLASS = 'text-content';
-const TABLE_CLASS = 'table';
-const TABLE_FIXED_CLASS = 'table-fixed';
-const CONTENT_FIXED_CLASS = 'content-fixed';
-const ROW_CLASS = 'dx-row';
-const GROUP_ROW_CLASS = 'dx-group-row';
-const GROUP_CELL_CLASS = 'dx-group-cell';
-const DETAIL_ROW_CLASS = 'dx-master-detail-row';
-const FILTER_ROW_CLASS = 'filter-row';
-const ERROR_ROW_CLASS = 'dx-error-row';
-const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
+import type {
+  AppendRowTemplate,
+  BoundingRect,
+  CellEventOptions,
+  CellPosition,
+  CellRenderOptions,
+  ColumnRenderTemplate,
+  ColumnTemplateSource,
+  ColumnViewTemplate,
+  ColumnViewTemplateOptions,
+  ColumnWidthsOptions,
+  DelayedTemplate,
+  HintColumn,
+  RowPreparedOptions,
+  RowRenderOptions,
+  ScrollableOptions,
+  ScrollPosition,
+  TableRenderOptions,
+  TemplateModel,
+  ViewCellOptions,
+  ViewDataChange,
+  ViewRow,
+  ViewRowEvent,
+  WatchableOptions,
+} from './types';
+import { isRowElementVisible } from './utils';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
 
 const CELL_HINT_VISIBLE = 'dxCellHintVisible';
 
-const FORM_FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
-
-const appendElementTemplate = {
-  render(options) {
+const appendElementTemplate: AppendRowTemplate = {
+  render(options): void {
     options.container.append(options.content);
   },
 };
 
-const subscribeToRowEvents = function (that, $table) {
-  let touchTarget;
-  let touchCurrentTarget;
-  let timeoutId;
-
-  function clearTouchTargets(timeout?) {
-    return setTimeout(() => {
-      touchTarget = touchCurrentTarget = null;
-    }, timeout);
+const getWidthStyle = (width: number | string): string => {
+  if (width === 'auto') {
+    return '';
   }
 
-  eventsEngine.on($table, 'touchstart touchend', '.dx-row', (e) => {
-    // NOTE: checking for target only for mocks in qunits
-    if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(that, $(e.event.target))) {
-      return;
-    }
-
-    clearTimeout(timeoutId);
-    if (e.type === 'touchstart') {
-      touchTarget = e.target;
-      touchCurrentTarget = e.currentTarget;
-      timeoutId = clearTouchTargets(1000);
-    } else {
-      timeoutId = clearTouchTargets();
-    }
-  });
-
-  eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), '.dx-row', that.createAction((e) => {
-    const { event } = e;
-
-    // NOTE: checking for target only for mocks in qunits
-    if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(that, $(event.target))) {
-      return;
-    }
-
-    if (touchTarget) {
-      event.target = touchTarget;
-      event.currentTarget = touchCurrentTarget;
-    }
-
-    if (!$(event.target).closest('a').length) {
-      e.rowIndex = that.getRowIndex(event.currentTarget);
-
-      if (e.rowIndex >= 0) {
-        e.rowElement = getPublicElement($(event.currentTarget));
-        e.columns = that.getColumns();
-
-        if (event.type === pointerEvents.down) {
-          that._rowPointerDown(e);
-        } else if (event.type === clickEventName) {
-          that._rowClick(e);
-        } else {
-          that._rowDblClick(e);
-        }
-      }
-    }
-  }));
-};
-
-const getWidthStyle = function (width) {
-  if (width === 'auto') return '';
   return isNumeric(width) ? `${width}px` : width;
 };
 
-const setCellWidth = function (cell, column, width) {
-  cell.style.width = cell.style.maxWidth = column.width === 'auto' ? '' : width;
+const setCellWidth = (cell: HTMLElement, column: Column, width: string): void => {
+  const cellWidth = column.width === 'auto' ? '' : width;
+
+  cell.style.maxWidth = cellWidth;
+  cell.style.width = cellWidth;
 };
 
-const copyAttributes = function (element, newElement) {
+const copyAttributes = (
+  element: Element | undefined,
+  newElement: Element | undefined,
+): void => {
   if (!element || !newElement) return;
 
   const oldAttributes = element.attributes;
   const newAttributes = newElement.attributes;
-  let i;
 
-  for (i = 0; i < oldAttributes.length; i++) {
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of -- the loop shrinks the live list
+  for (let i = 0; i < oldAttributes.length; i += 1) {
     const name = oldAttributes[i].nodeName;
     if (!newElement.hasAttribute(name)) {
       element.removeAttribute(name);
     }
   }
 
-  for (i = 0; i < newAttributes.length; i++) {
-    element.setAttribute(newAttributes[i].nodeName, newAttributes[i].nodeValue);
+  for (const attribute of newAttributes) {
+    element.setAttribute(attribute.nodeName, attribute.value);
   }
 };
 
-const removeHandler = function (templateDeferred) {
-  templateDeferred.resolve();
-};
+const isRenderTemplate = <TModel extends TemplateModel>(
+  template: ColumnTemplateSource<TModel>,
+): template is ColumnRenderTemplate<TModel> => !!template
+  && !!(template as Partial<ColumnRenderTemplate<TModel>>).render
+  && !isRenderer(template);
 
 export const normalizeWidth = (width: string | number | undefined): string | undefined => {
   if (typeof width === 'number') {
@@ -174,21 +143,21 @@ export const normalizeWidth = (width: string | number | undefined): string | und
 };
 
 export class ColumnsView extends ColumnStateMixin(modules.View) {
-  protected _tableElement: any;
+  protected _tableElement?: dxElementWrapper | null;
 
-  protected _scrollLeft: any;
+  protected _scrollLeft?: number;
 
-  private _delayedTemplates: any;
+  private _delayedTemplates!: DelayedTemplate[];
 
-  private _templateDeferreds: any;
+  private _templateDeferreds!: Set<DeferredObj<unknown>>;
 
-  private _templateTimeouts: any;
+  private _templateTimeouts!: Set<number>;
 
-  private _templatesCache: any;
+  private _templatesCache!: Record<string, ColumnViewTemplate>;
 
-  protected _requireReady: any;
+  protected _requireReady?: boolean;
 
-  public scrollChanged: any;
+  public scrollChanged!: Callback<[ScrollPosition, string]>;
 
   protected _columnsController!: ColumnsController;
 
@@ -204,7 +173,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _columnChooserView!: ColumnChooserView;
 
-  public init() {
+  public init(): void {
     this._scrollLeft = undefined;
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
@@ -217,6 +186,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._templateDeferreds = new Set();
     this._templatesCache = {};
     this._templateTimeouts = new Set();
+
     this.createAction('onCellClick');
     this.createAction('onRowClick');
     this.createAction('onCellDblClick');
@@ -232,10 +202,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
 
     this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
-    this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
+
+    if (this._dataController) {
+      this._dataController.changed.add(this._handleDataChanged.bind(this));
+    }
   }
 
-  public dispose() {
+  public dispose(): void {
     if (hasWindow()) {
       const window = getWindow();
 
@@ -244,10 +217,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     super.optionChanged(args);
 
-    // eslint-disable-next-line default-case
     switch (args.name) {
       case 'cellHintEnabled':
       case 'onCellPrepared':
@@ -262,24 +234,22 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         }
         args.handled = true;
         break;
+      default:
+        break;
     }
   }
 
-  protected _createScrollableOptions() {
-    const that = this;
-    const scrollingOptions = that.option('scrolling');
-    let useNativeScrolling = that.option('scrolling.useNative');
+  protected _createScrollableOptions(): ScrollableOptions {
+    const scrollingOptions = this.option('scrolling');
+    const useNativeScrolling = this.option('scrolling.useNative');
 
-    const options = extend({}, scrollingOptions, {
+    // @ts-expect-error useNative: 'auto' of the grid scrolling is copied and normalized below
+    const options: ScrollableOptions = extend({}, scrollingOptions, {
       direction: 'both',
       bounceEnabled: false,
       useKeyboard: false,
     });
 
-    // TODO jsdmitry: This condition is for unit tests and testing scrollable
-    if (useNativeScrolling === undefined) {
-      useNativeScrolling = true;
-    }
     if (useNativeScrolling === 'auto') {
       delete options.useNative;
       delete options.useSimulatedScrollbar;
@@ -290,22 +260,22 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return options;
   }
 
-  public _updateCell($cell, parameters) {
+  public _updateCell($cell: dxElementWrapper, parameters: ViewCellOptions): void {
     if (parameters.rowType) {
       this._cellPrepared($cell, parameters);
     }
   }
 
-  protected _needToSetCellWidths() {
+  protected _needToSetCellWidths(): boolean | undefined {
     return this.option('columnAutoWidth');
   }
 
   /**
    * @extended: column_fixing, editing
    */
-  protected _createCell(options) {
+  protected _createCell(options: ViewCellOptions): dxElementWrapper {
     const { column } = options;
-    const alignment = column.alignment || getDefaultAlignment(this.option('rtlEnabled'));
+    const alignment = column.alignment ?? getDefaultAlignment(this.option('rtlEnabled'));
     const needToSetCellWidths = this._needToSetCellWidths();
 
     const cell = domAdapter.createElement('td');
@@ -324,15 +294,20 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
 
     if (column.command === 'expand') {
-      $cell.addClass(column.cssClass);
-      $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
+      if (isDefined(column.cssClass)) {
+        $cell.addClass(column.cssClass);
+      }
+      $cell.addClass(this.addWidgetPrefix(CLASSES.groupSpace));
     }
 
-    if (column.colspan > 1) {
+    if (isDefined(column.colspan) && column.colspan > 1) {
       $cell.attr('colSpan', column.colspan);
     } else if (!column.isBand && column.visibleWidth !== 'auto' && needToSetCellWidths) {
-      if (column.width || column.minWidth) {
-        cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
+      const minWidth = column.minWidth || column.width;
+
+      if (minWidth) {
+        cell.style.minWidth = getWidthStyle(minWidth);
       }
       if (column.width) {
         setCellWidth(cell, column, getWidthStyle(column.width));
@@ -345,9 +320,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: selection
    */
-  protected _createRow(rowObject, tagName?) {
-    tagName = tagName || 'tr';
-    const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
+  protected _createRow(rowObject?: ViewRow, tagName = 'tr'): dxElementWrapper {
+    const $element = $(`<${tagName}>`).addClass(CLASSES.row);
 
     if (tagName === 'tr') {
       this.setAria('role', 'row', $element);
@@ -355,17 +329,17 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $element;
   }
 
-  protected _isAltRow(row) {
-    return row && row.dataIndex % 2 === 1;
+  protected _isAltRow(row: ViewRow | undefined): boolean | undefined {
+    return row && isDefined(row.dataIndex) && row.dataIndex % 2 === 1;
   }
 
   /**
    * @extended: selection
    */
-  protected _createTable(columns, isAppend?) {
+  protected _createTable(columns?: Column[], isAppend?: boolean): dxElementWrapper {
     const $table = $('<table>')
-      .addClass(this.addWidgetPrefix(TABLE_CLASS))
-      .addClass(this.addWidgetPrefix(TABLE_FIXED_CLASS));
+      .addClass(this.addWidgetPrefix(CLASSES.table))
+      .addClass(this.addWidgetPrefix(CLASSES.tableFixed));
 
     if (columns && !isAppend) {
       $table
@@ -390,7 +364,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     // T138469
     if (browser.mozilla) {
-      eventsEngine.on($table, 'mousedown', 'td', (e) => {
+      eventsEngine.on($table, 'mousedown', 'td', (e: DxEvent<MouseEvent>) => {
         if (e.ctrlKey) {
           e.preventDefault();
         }
@@ -398,35 +372,45 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
 
     if (this.option('cellHintEnabled')) {
-      eventsEngine.on($table, 'mousemove', '.dx-row > td', this.createAction((args) => {
+      eventsEngine.on($table, 'mousemove', `.${CLASSES.row} > td`, this.createAction((args: { event: DxEvent }) => {
         const e = args.event;
         const $element = $(e.target);
         const $cell = $(e.currentTarget);
         const $row = $cell.parent();
         const visibleColumns = this._columnsController.getVisibleColumns();
-        const rowOptions: any = $row.data('options');
+        // @ts-expect-error data(key) is typed as returning the wrapper
+        const rowOptions: RowPreparedOptions | undefined = $row.data('options');
         const columnIndex = $cell.index();
 
         const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
-        const column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
+        const column: HintColumn | undefined = cellOptions
+          ? cellOptions.column
+          : visibleColumns[columnIndex];
 
-        const isHeaderRow = $row.hasClass('dx-header-row');
-        const isDataRow = $row.hasClass('dx-data-row');
-        const isMasterDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
-        const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
-        const isFilterRow = $row.hasClass(this.addWidgetPrefix(FILTER_ROW_CLASS));
+        const isHeaderRow = $row.hasClass(COLUMN_HEADERS_CLASSES.headerRow);
+        const isDataRow = $row.hasClass(CLASSES.dataRow);
+        const isMasterDetailRow = $row.hasClass(MASTER_DETAIL_CLASSES.detailRow);
+        const isGroupRow = $row.hasClass(CLASSES.groupRow);
+        const isFilterRow = $row.hasClass(this.addWidgetPrefix(FILTER_ROW_CLASSES.filterRow));
 
-        const isDataRowWithTemplate = isDataRow && (!column || column.cellTemplate);
-        const isEditorShown = isDataRow && cellOptions && (rowOptions.isEditing || cellOptions.isEditing || column?.showEditorAlways);
-        const isHeaderRowWithTemplate = isHeaderRow && (!column || column.headerCellTemplate);
-        const isGroupCellWithTemplate = isGroupRow && (!column || (column.groupIndex && column.groupCellTemplate));
+        const hasCellTemplate = !column || column.cellTemplate;
+        const hasHeaderCellTemplate = !column || column.headerCellTemplate;
+        const hasGroupCellTemplate = !column || (column.groupIndex && column.groupCellTemplate);
+
+        const isEditing = !!rowOptions?.isEditing || !!cellOptions?.isEditing;
+        const hasEditor = isEditing || column?.showEditorAlways;
+
+        const isDataRowWithTemplate = isDataRow && hasCellTemplate;
+        const isEditorShown = isDataRow && cellOptions && hasEditor;
+        const isHeaderRowWithTemplate = isHeaderRow && hasHeaderCellTemplate;
+        const isGroupCellWithTemplate = isGroupRow && hasGroupCellTemplate;
 
         const shouldShowHint = !isMasterDetailRow
-                                    && !isFilterRow
-                                    && !isEditorShown
-                                    && !isDataRowWithTemplate
-                                    && !isHeaderRowWithTemplate
-                                    && !isGroupCellWithTemplate;
+          && !isFilterRow
+          && !isEditorShown
+          && !isDataRowWithTemplate
+          && !isHeaderRowWithTemplate
+          && !isGroupCellWithTemplate;
 
         if (shouldShowHint) {
           this._setCellTitleAttribute($element, isHeaderRow);
@@ -434,16 +418,19 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       }));
     }
 
-    const getOptions = (event) => {
+    const getOptions = (event: DxEvent): CellEventOptions | undefined => {
       const $cell = $(event.currentTarget);
-      const $fieldItemContent = $(event.target).closest(`.${FORM_FIELD_ITEM_CONTENT_CLASS}`);
+      const $fieldItemContent = $(event.target).closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
       const $row = $cell.parent();
-      const rowOptions: any = $row.data('options');
+      // @ts-expect-error data(key) is typed as returning the wrapper
+      const rowOptions: RowPreparedOptions | undefined = $row.data('options');
       const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
 
-      if (!$cell.closest('table').is(event.delegateTarget)) return;
+      if (!$cell.closest('table').is(event.delegateTarget)) {
+        return undefined;
+      }
 
-      const resultOptions = extend({}, options, {
+      const resultOptions: CellEventOptions = extend({}, options, {
         cellElement: getPublicElement($cell),
         event,
         eventType: event.type,
@@ -452,39 +439,102 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       resultOptions.rowIndex = this.getRowIndex($row);
 
       if ($fieldItemContent.length) {
-        const formItemOptions: any = $fieldItemContent.data('dx-form-item');
+        // @ts-expect-error data(key) is typed as returning the wrapper
+        const formItemOptions: { column?: Column } = $fieldItemContent.data('dx-form-item');
         if (formItemOptions.column) {
           resultOptions.column = formItemOptions.column;
-          resultOptions.columnIndex = this._columnsController.getVisibleIndex(resultOptions.column.index);
+          resultOptions.columnIndex = this._columnsController
+            .getVisibleIndex(resultOptions.column.index);
         }
       }
 
       return resultOptions;
     };
 
-    eventsEngine.on($table, 'mouseover', '.dx-row > td', (e) => {
+    eventsEngine.on($table, 'mouseover', `.${CLASSES.row} > td`, (e: DxEvent) => {
       const options = getOptions(e);
-      options && this.executeAction('onCellHoverChanged', options);
+      if (options) {
+        this.executeAction('onCellHoverChanged', options);
+      }
     });
 
-    eventsEngine.on($table, 'mouseout', '.dx-row > td', (e) => {
+    eventsEngine.on($table, 'mouseout', `.${CLASSES.row} > td`, (e: DxEvent) => {
       const options = getOptions(e);
-      options && this.executeAction('onCellHoverChanged', options);
+      if (options) {
+        this.executeAction('onCellHoverChanged', options);
+      }
     });
 
-    eventsEngine.on($table, clickEventName, '.dx-row > td', (e) => {
+    eventsEngine.on($table, clickEventName, `.${CLASSES.row} > td`, (e: DxEvent) => {
       const options = getOptions(e);
-      options && this.executeAction('onCellClick', options);
+      if (options) {
+        this.executeAction('onCellClick', options);
+      }
     });
 
-    eventsEngine.on($table, dblclickEvent, '.dx-row > td', (e) => {
+    eventsEngine.on($table, dblclickEvent, `.${CLASSES.row} > td`, (e: DxEvent) => {
       const options = getOptions(e);
-      options && this.executeAction('onCellDblClick', options);
+      if (options) {
+        this.executeAction('onCellDblClick', options);
+      }
     });
 
-    subscribeToRowEvents(this, $table);
+    this.subscribeToRowEvents($table);
 
     return $table;
+  }
+
+  private subscribeToRowEvents($table: dxElementWrapper): void {
+    let touchTargets: { target: Element; currentTarget: Element } | null = null;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set by the touch handler
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    function clearTouchTargets(timeout?: number): ReturnType<typeof setTimeout> {
+      // eslint-disable-next-line no-restricted-globals
+      return setTimeout(() => {
+        touchTargets = null;
+      }, timeout);
+    }
+
+    eventsEngine.on($table, 'touchstart touchend', `.${CLASSES.row}`, (e: DxEvent<TouchEvent>) => {
+      clearTimeout(timeoutId);
+      if (e.type === 'touchstart') {
+        touchTargets = { target: e.target, currentTarget: e.currentTarget };
+        timeoutId = clearTouchTargets(1000);
+      } else {
+        timeoutId = clearTouchTargets();
+      }
+    });
+
+    eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), `.${CLASSES.row}`, this.createAction((e: ViewRowEvent) => {
+      const { event } = e;
+
+      if (!gridCoreUtils.isElementInCurrentGrid(this, $(event.target))) {
+        return;
+      }
+
+      if (touchTargets) {
+        event.target = touchTargets.target;
+        event.currentTarget = touchTargets.currentTarget;
+      }
+
+      if (!$(event.target).closest('a').length) {
+        e.rowIndex = this.getRowIndex(event.currentTarget);
+
+        if (e.rowIndex >= 0) {
+          e.rowElement = getPublicElement($(event.currentTarget));
+          e.columns = this.getColumns();
+
+          if (event.type === pointerEvents.down) {
+            this._rowPointerDown(e);
+          } else if (event.type === clickEventName) {
+            this._rowClick(e);
+          } else {
+            this._rowDblClick(e);
+          }
+        }
+      }
+    }));
   }
 
   private _setCellTitleAttribute($cell: dxElementWrapper, isHeaderRow: boolean): void {
@@ -494,7 +544,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
 
     let $cellContent = $cell;
-    const headerContentClass = this.addWidgetPrefix(HEADER_TEXT_CONTENT_CLASS);
+    const headerContentClass = this.addWidgetPrefix(COLUMN_HEADERS_CLASSES.cellContent);
 
     if (isHeaderRow && !$cell.hasClass(headerContentClass)) {
       const $headerContent = $cell.find(`.${headerContentClass}`);
@@ -516,29 +566,35 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: editing
    */
-  protected _rowPointerDown(e?: any) {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _rowPointerDown(e?: ViewRowEvent): void {}
 
-  protected _rowClick() {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _rowClick(e?: ViewRowEvent): void {}
 
-  protected _rowDblClick() {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _rowDblClick(e?: ViewRowEvent): void {}
 
-  protected _createColGroup(columns) {
+  protected _createColGroup(columns: Column[]): dxElementWrapper {
     const colgroupElement = $('<colgroup>');
 
-    for (let i = 0; i < columns.length; i++) {
-      const colspan = columns[i].colspan || 1;
+    for (const column of columns) {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
+      const colspan = column.colspan || 1;
 
-      for (let j = 0; j < colspan; j++) {
-        colgroupElement.append(this._createCol(columns[i]));
+      for (let j = 0; j < colspan; j += 1) {
+        colgroupElement.append(this._createCol(column));
       }
     }
+
     return colgroupElement;
   }
 
   /**
    * @extended: column_fixing
    */
-  protected _createCol(column) {
+  protected _createCol(column: Column): dxElementWrapper {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
     let width = column.visibleWidth || column.width;
 
     if (width === 'adaptiveHidden') {
@@ -554,7 +610,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: keyboard_navigation, virtual_scrolling
    */
-  public renderDelayedTemplates(change?) {
+  public renderDelayedTemplates(change?: DataChange): void {
     const delayedTemplates = this._delayedTemplates;
     const syncTemplates = delayedTemplates.filter((template) => !template.async);
     const asyncTemplates = delayedTemplates.filter((template) => template.async);
@@ -565,7 +621,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._renderDelayedTemplatesCoreAsync(asyncTemplates);
   }
 
-  private _renderDelayedTemplatesCoreAsync(templates) {
+  private _renderDelayedTemplatesCoreAsync(templates: DelayedTemplate[]): void {
     if (templates.length) {
       const templateTimeout = getWindow().setTimeout(() => {
         this._templateTimeouts.delete(templateTimeout);
@@ -576,15 +632,22 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  private _renderDelayedTemplatesCore(templates, isAsync, change?) {
+  private _renderDelayedTemplatesCore(
+    templates: DelayedTemplate[],
+    isAsync: boolean,
+    change?: DataChange,
+  ): void {
     const date = new Date();
 
     while (templates.length) {
       const templateParameters = templates.shift();
 
+      if (!templateParameters) {
+        break;
+      }
+
       const { options } = templateParameters;
-      // @ts-expect-error
-      const doc = domAdapter.getRootNode($(options.container).get(0));
+      const doc = domAdapter.getRootNode($(options.container).get(0) as HTMLElement);
       const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
 
       if (!isAsync || $(options.container).closest(doc).length || needWaitAsyncTemplates) {
@@ -593,7 +656,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         }
         templateParameters.template.render(options);
       }
-      // @ts-expect-error
+      // @ts-expect-error Date objects subtract as timestamps
       if (isAsync && (new Date() - date) > 30) {
         this._renderDelayedTemplatesCoreAsync(templates);
         break;
@@ -605,52 +668,61 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  protected _processTemplate(template, options?): ColumnViewTemplate {
-    const that = this;
-    let renderingTemplate;
-
-    if (template && template.render && !isRenderer(template)) {
-      renderingTemplate = {
+  protected _processTemplate<TModel extends TemplateModel>(
+    template: ColumnTemplateSource<TModel>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    options?: TModel,
+  ): ColumnViewTemplate<TModel> {
+    if (isRenderTemplate(template)) {
+      return {
         allowRenderToDetachedContainer: template.allowRenderToDetachedContainer,
-        render(options) {
-          template.render(options.container, options.model, options.change);
-          options.deferred && options.deferred.resolve();
+        render(templateOptions: ColumnViewTemplateOptions<TModel>): void {
+          template.render(templateOptions.container, templateOptions.model, templateOptions.change);
+          templateOptions.deferred?.resolve();
         },
       };
-    } else if (isFunction(template)) {
-      renderingTemplate = {
-        render(options) {
-          const renderedTemplate = template(getPublicElement(options.container), options.model, options.change);
-          if (renderedTemplate && (renderedTemplate.nodeType || isRenderer(renderedTemplate))) {
-            options.container.append(renderedTemplate);
-          }
-          options.deferred && options.deferred.resolve();
-        },
-      };
-    } else {
-      const templateID: any = isString(template) ? template : $(template).attr('id');
-
-      if (!templateID) {
-        renderingTemplate = that.getTemplate(template);
-      } else {
-        if (!that._templatesCache[templateID]) {
-          that._templatesCache[templateID] = that.getTemplate(template);
-        }
-
-        renderingTemplate = that._templatesCache[templateID];
-      }
     }
 
-    return renderingTemplate;
+    if (isFunction(template)) {
+      return {
+        render(templateOptions: ColumnViewTemplateOptions<TModel>): void {
+          const renderedTemplate = template(
+            getPublicElement(templateOptions.container),
+            templateOptions.model,
+            templateOptions.change,
+          );
+          if (renderedTemplate && (renderedTemplate.nodeType || isRenderer(renderedTemplate))) {
+            templateOptions.container.append(renderedTemplate);
+          }
+          templateOptions.deferred?.resolve();
+        },
+      };
+    }
+
+    const templateID = isString(template) ? template : $(template).attr('id');
+
+    if (!templateID) {
+      return this.getTemplate(template);
+    }
+
+    if (!this._templatesCache[templateID]) {
+      this._templatesCache[templateID] = this.getTemplate(template);
+    }
+
+    return this._templatesCache[templateID];
   }
 
-  public renderTemplate(container, template, options, allowRenderToDetachedContainer?, change?) {
+  public renderTemplate<TModel extends TemplateModel>(
+    container: dxElementWrapper,
+    template: ColumnTemplateSource<TModel>,
+    options: TModel,
+    allowRenderToDetachedContainer?: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    change?: ViewDataChange,
+  ): DeferredObj<unknown> {
     const renderingTemplate = this._processTemplate(template, options);
-    const { column } = options;
-    const isDataRow = options.rowType === 'data';
-    // @ts-expect-error
-    const templateDeferred = new Deferred();
-    const templateOptions = {
+    const templateDeferred = Deferred<unknown>();
+    const templateOptions: ColumnViewTemplateOptions<TModel> = {
       container,
       model: options,
       deferred: templateDeferred,
@@ -666,47 +738,63 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     if (renderingTemplate) {
       options.component = this.component;
 
-      const columnAsync = column && (
-        (column.renderAsync && isDataRow)
-                || this.option('renderAsync')
-                    && (column.renderAsync !== false && (column.command || column.showEditorAlways) && isDataRow || options.rowType === 'filter')
-      );
+      const { column, rowType } = options;
+      const isDataRow = rowType === 'data';
+      const isFilterRow = rowType === 'filter';
+      const isCommandOrEditorCell = !!column?.command || !!column?.showEditorAlways;
+
+      const isAsyncColumn = isDataRow && !!column?.renderAsync;
+      const isAsyncByDefault = isDataRow && column?.renderAsync !== false && isCommandOrEditorCell;
+      const isAsyncByGrid = !!this.option('renderAsync') && (isAsyncByDefault || isFilterRow);
+
+      const columnAsync = !!column && (isAsyncColumn || isAsyncByGrid);
 
       const async = options.renderAsync ?? columnAsync;
+      const canRenderToDetachedContainer = !!renderingTemplate.allowRenderToDetachedContainer
+        || !!allowRenderToDetachedContainer;
 
-      if ((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
+      if (canRenderToDetachedContainer && !async) {
         renderingTemplate.render(templateOptions);
       } else {
-        this._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async });
+        this._delayedTemplates.push({
+          // an entry's template is only rendered with that entry's options
+          template: renderingTemplate as ColumnViewTemplate,
+          options: templateOptions,
+          async,
+        });
       }
 
       this._templateDeferreds.add(templateDeferred);
-      eventsEngine.on(container, removeEvent, removeHandler.bind(null, templateDeferred));
+      eventsEngine.on(container, removeEvent, () => {
+        templateDeferred.resolve();
+      });
     } else {
       templateDeferred.reject();
     }
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- promise() is typed as Promise
     return templateDeferred.promise().always(() => {
       this._templateDeferreds.delete(templateDeferred);
     });
   }
 
-  protected _getBodies(tableElement) {
-    return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
+  protected _getBodies(tableElement: dxElementWrapper): dxElementWrapper {
+    return $(tableElement).children('tbody').not(`.${CLASSES.headerBody}`).not(`.${CLASSES.footerBody}`);
   }
 
-  protected _needWrapRow($tableElement) {
+  protected _needWrapRow($tableElement: dxElementWrapper): boolean {
     const hasRowTemplate = !!this.option().rowTemplate;
 
-    return hasRowTemplate && !!this._getBodies($tableElement)?.filter(`.${ROW_CLASS}`).length;
+    return hasRowTemplate && !!this._getBodies($tableElement)?.filter(`.${CLASSES.row}`).length;
   }
 
-  protected _wrapRowIfNeed($table, $row, isRefreshing?) {
+  protected _wrapRowIfNeed($table: dxElementWrapper, $row: dxElementWrapper, isRefreshing?: boolean): dxElementWrapper {
     const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
     const needWrapRow = this._needWrapRow($tableElement);
 
     if (needWrapRow) {
-      const $tbody = $('<tbody>').addClass($row.attr('class'));
+      const $tbody = $('<tbody>').addClass($row.attr('class') ?? '');
 
       this.setAria('role', 'presentation', $tbody);
 
@@ -716,8 +804,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $row;
   }
 
-  private _appendRow($table, $row, appendTemplate?) {
-    appendTemplate = appendTemplate || appendElementTemplate;
+  private _appendRow(
+    $table: dxElementWrapper,
+    $row: dxElementWrapper,
+    appendTemplate: AppendRowTemplate = appendElementTemplate,
+  ): void {
     appendTemplate.render({ content: $row, container: $table });
   }
 
@@ -737,14 +828,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing, filter_row, row_dragging, virtual_columns
    */
-  protected _resizeCore() {
+  protected _resizeCore(): void {
     this.updateScrollLeftPosition();
   }
 
   /**
    * @extended: column_fixing, header_panel, virtual_column
    */
-  protected _renderCore(e?) {
+  protected _renderCore(e?: DataChange): DeferredObj<unknown> {
     // @ts-expect-error the view is rendered here
     const $root = this.element().parent();
 
@@ -752,40 +843,42 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       this.renderDelayedTemplates(e);
     }
 
-    // @ts-expect-error
-    return new Deferred().resolve();
+    return Deferred<unknown>().resolve();
   }
 
   /**
    * @extended: column_fixing
    */
-  protected _renderTable(options) {
-    options = options || {};
-
+  protected _renderTable(options: TableRenderOptions = {}): dxElementWrapper {
     options.columns = this._columnsController.getVisibleColumns();
     const changeType = options.change && options.change.changeType;
-    const $table = this._createTable(options.columns, changeType === 'append' || changeType === 'prepend' || changeType === 'update');
+    const $table = this._createTable(
+      options.columns,
+      changeType === 'append' || changeType === 'prepend' || changeType === 'update',
+    );
 
     this._renderRows($table, options);
 
     return $table;
   }
 
-  protected _renderRows($table, options) {
-    const that = this;
-    const rows = that._getRows(options.change);
-    const columnIndices = options.change && options.change.columnIndices || [];
-    const changeTypes = options.change && options.change.changeTypes || [];
+  protected _renderRows($table: dxElementWrapper, options: TableRenderOptions): void {
+    const rows = this._getRows(options.change);
+    const columnIndices = options.change?.columnIndices ?? [];
+    const changeTypes = options.change?.changeTypes ?? [];
 
-    for (let i = 0; i < rows.length; i++) {
-      that._renderRow($table, extend({ row: rows[i], columnIndices: columnIndices[i], changeType: changeTypes[i] }, options));
+    for (let i = 0; i < rows.length; i += 1) {
+      // @ts-expect-error _renderTable sets the columns of the options before the rows are rendered
+      this._renderRow($table, extend({
+        row: rows[i], columnIndices: columnIndices[i], changeType: changeTypes[i],
+      }, options));
     }
   }
 
   /**
    * @extended: column_fixing
    */
-  protected _renderRow($table, options) {
+  protected _renderRow($table: dxElementWrapper, options: RowRenderOptions): void {
     if (!options.columnIndices) {
       options.row.cells = [];
     }
@@ -796,48 +889,56 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       this._renderCells($row, options);
     }
     this._appendRow($table, $wrappedRow);
-    const rowOptions = extend({ columns: options.columns }, options.row);
+    const rowOptions: RowPreparedOptions = extend({ columns: options.columns }, options.row);
 
     this._addWatchMethod(rowOptions, options.row);
 
     this._rowPrepared($wrappedRow, rowOptions, options.row);
   }
 
-  protected _needRenderCell(columnIndex, columnIndices) {
-    return !columnIndices || columnIndices.indexOf(columnIndex) >= 0;
+  protected _needRenderCell(columnIndex: number, columnIndices?: number[]): boolean {
+    return !columnIndices || columnIndices.includes(columnIndex);
   }
 
-  protected _renderCells($row, options) {
-    const that = this;
+  protected _renderCells($row: dxElementWrapper, options: RowRenderOptions): void {
     let columnIndex = 0;
     const { row } = options;
     const { columns } = options;
 
-    for (let i = 0; i < columns.length; i++) {
+    for (let i = 0; i < columns.length; i += 1) {
       if (this._needRenderCell(i, options.columnIndices)) {
-        that._renderCell($row, extend({
-          column: columns[i], columnIndex, value: row.values && row.values[columnIndex], oldValue: row.oldValues && row.oldValues[columnIndex],
+        this._renderCell($row, extend({
+          column: columns[i],
+          columnIndex,
+          value: row.values?.[columnIndex],
+          oldValue: row.oldValues?.[columnIndex],
         }, options));
       }
 
-      if (columns[i].colspan > 1) {
-        columnIndex += columns[i].colspan;
+      const { colspan } = columns[i];
+
+      if (isDefined(colspan) && colspan > 1) {
+        columnIndex += colspan;
       } else {
-        columnIndex++;
+        columnIndex += 1;
       }
     }
   }
 
-  protected _updateCells($rowElement, $newRowElement, columnIndices, options?) {
-    const that = this;
+  protected _updateCells(
+    $rowElement: dxElementWrapper,
+    $newRowElement: dxElementWrapper,
+    columnIndices: number[],
+    options?: ViewRow,
+  ): void {
     const $cells = $rowElement.children();
     const $newCells = $newRowElement.children();
     const highlightChanges = this.option('highlightChanges');
-    const cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS);
+    const cellUpdatedClass = this.addWidgetPrefix(CLASSES.cellUpdatedAnimation);
 
     if (options?.node?.hasChildren) {
-      $cells.each(function () {
-        that.setAria('expanded', options.isExpanded, $(this));
+      $cells.toArray().forEach((cell) => {
+        this.setAria('expanded', options.isExpanded, $(cell));
       });
     }
 
@@ -847,7 +948,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
       $cell.replaceWith($newCell);
 
-      if (highlightChanges && !$newCell.hasClass('dx-command-expand')) {
+      if (highlightChanges && !$newCell.hasClass(COLUMNS_CONTROLLER_CLASSES.commandExpand)) {
         $newCell.addClass(cellUpdatedClass);
       }
     });
@@ -860,8 +961,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    */
   protected _setCellAriaAttributes(
     $cell: dxElementWrapper,
-    cellOptions: { rowType: 'freeSpace' | 'group'; columnIndex: number },
-    options?: any,
+    cellOptions: Pick<ViewCellOptions, 'rowType' | 'columnIndex'>,
+    options: CellRenderOptions,
   ): void {
     const { row } = options;
     const isFreeSpaceRow = cellOptions.rowType === 'freeSpace';
@@ -887,15 +988,17 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this.setAria('colindex', ariaColIndex, $cell);
   }
 
-  protected _renderCell($row, options) {
+  protected _renderCell($row: dxElementWrapper, options: CellRenderOptions): dxElementWrapper {
     const cellOptions = this._getCellOptions(options);
 
     if (options.columnIndices) {
       if (options.row.cells) {
-        const cellIndex = options.row.cells.findIndex((cell) => cell.columnIndex === cellOptions.columnIndex);
+        const cellIndex = options.row.cells
+          .findIndex((cell) => cell.columnIndex === cellOptions.columnIndex);
         options.row.cells[cellIndex] = cellOptions;
       }
     } else {
+      // @ts-expect-error _renderRow creates the cells when columnIndices aren't set
       options.row.cells.push(cellOptions);
     }
 
@@ -913,24 +1016,34 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing, editing_form_based, filter_row, header_filter
    */
-  protected _renderCellContent($cell, options, renderOptions) {
+  protected _renderCellContent(
+    $cell: dxElementWrapper,
+    options: ViewCellOptions,
+    renderOptions: CellRenderOptions,
+  ): void {
     const template = this._getCellTemplate(options);
 
-    when(!template || this.renderTemplate($cell, template, options, undefined, renderOptions.change)).done(() => {
+    when(
+      !template || this.renderTemplate($cell, template, options, undefined, renderOptions.change),
+    ).done(() => {
       this._updateCell($cell, options);
     });
   }
 
-  protected _getCellTemplate(options?): any {
-
+  protected _getCellTemplate(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    options?: ViewCellOptions,
+  ): ColumnTemplateSource<ViewCellOptions> | undefined {
+    return undefined;
   }
 
-  protected _getRows(change?) {
-    return [] as any[];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public _getRows(change?: ViewDataChange): ViewRow[] {
+    return [];
   }
 
-  protected _getCellOptions(options): any {
-    const cellOptions = {
+  protected _getCellOptions(options: CellRenderOptions): ViewCellOptions {
+    const cellOptions: ViewCellOptions = {
       column: options.column,
       columnIndex: options.columnIndex,
       rowType: options.row.rowType,
@@ -943,17 +1056,20 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return cellOptions;
   }
 
-  public _addWatchMethod(options, source?) {
-    if (!this.option('repaintChangesOnly')) return;
+  public _addWatchMethod(
+    options: WatchableOptions,
+    source: WatchableOptions = options,
+  ): WatchableOptions | undefined {
+    if (!this.option('repaintChangesOnly')) {
+      return undefined;
+    }
 
-    const watchers: any[] = [];
+    const watchers: ((row?: ProcessedItem) => void)[] = [];
 
-    source = source || options;
-
-    source.watch = source.watch || function (getter, updateValueFunc, updateRowFunc) {
+    source.watch ??= (getter, updateValueFunc, updateRowFunc): (() => void) => {
       let oldValue = getter(source.data);
 
-      const watcher = function (row) {
+      const watcher = (row?: ProcessedItem): void => {
         if (row && updateRowFunc) {
           updateRowFunc(row);
         }
@@ -970,22 +1086,24 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
       watchers.push(watcher);
 
-      const stopWatch = function () {
+      return (): void => {
         const index = watchers.indexOf(watcher);
         if (index >= 0) {
           watchers.splice(index, 1);
         }
       };
-
-      return stopWatch;
     };
 
-    source.update = source.update || function (row, keepRow) {
+    source.update ??= function update(this: WatchableOptions, row, keepRow): void {
       if (row) {
-        this.data = options.data = row.data;
-        this.rowIndex = options.rowIndex = row.rowIndex;
-        this.dataIndex = options.dataIndex = row.dataIndex;
-        this.isExpanded = options.isExpanded = row.isExpanded;
+        options.data = row.data;
+        this.data = options.data;
+        options.rowIndex = row.rowIndex;
+        this.rowIndex = options.rowIndex;
+        options.dataIndex = row.dataIndex;
+        this.dataIndex = options.dataIndex;
+        options.isExpanded = row.isExpanded;
+        this.isExpanded = options.isExpanded;
 
         if (options.row && !keepRow) {
           options.row = row;
@@ -1007,23 +1125,23 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: adaptivity, editing, validating
    */
-  public _cellPrepared(cell, options) {
+  public _cellPrepared(cell: dxElementWrapper, options: ViewCellOptions): void {
     options.cellElement = getPublicElement($(cell));
     this.executeAction('onCellPrepared', options);
   }
 
-  protected _rowPrepared($row, options, row?) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _rowPrepared($row: dxElementWrapper, options: RowPreparedOptions, row?: ViewRow): void {
     elementData($row.get(0), 'options', options);
 
     options.rowElement = getPublicElement($row);
     this.executeAction('onRowPrepared', options);
   }
 
-  protected _columnOptionChanged(e) {
-    const { optionNames } = e;
-
+  protected _columnOptionChanged({ optionNames }: ColumnsChanges): void {
     if (gridCoreUtils.checkChanges(optionNames, ['width', 'visibleWidth'])) {
       const visibleColumns = this._columnsController.getVisibleColumns();
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
       const widths = visibleColumns.map((column) => column.visibleWidth || column.width);
 
       this.setColumnWidths({ widths, optionNames });
@@ -1038,8 +1156,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing, editing
    */
-  public getCellIndex($cell, rowIndex?) {
-    const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getCellIndex($cell: dxElementWrapper, rowIndex?: number): number {
+    const cellIndex: number = $cell.length ? $cell[0].cellIndex : -1;
 
     return cellIndex;
   }
@@ -1047,33 +1166,40 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing
    */
-  public getTableElements() {
-    return this._tableElement || $();
+  public getTableElements(): dxElementWrapper {
+    return this._tableElement ?? $();
   }
 
   /**
    * @extended: column_fixing
    */
-  public getTableElement(isFixedTableRendering?): dxElementWrapper | undefined {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getTableElement(isFixedTableRendering?: boolean): dxElementWrapper | null | undefined {
     return this._tableElement;
   }
 
   /**
    * @extended: column_fixing
    */
-  public setTableElement(tableElement, isFixedTableRendering?) {
+  public setTableElement(
+    tableElement: dxElementWrapper | null | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isFixedTableRendering?: boolean,
+  ): void {
     this._tableElement = tableElement;
   }
 
-  protected _afterRowPrepared(e?) {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _afterRowPrepared(e?: ActionEvent): void {}
 
   /**
    * @extended: header_panel
    */
-  protected _handleDataChanged(e) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _handleDataChanged(e: DataChange): void {
   }
 
-  public callbackNames() {
+  public callbackNames(): string[] {
     return ['scrollChanged'];
   }
 
@@ -1086,24 +1212,28 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  public scrollTo(pos) {
+  public scrollTo(pos: ScrollPosition): void {
     const $element = this.element();
-    const $scrollContainer = $element && $element.children(`.${this.addWidgetPrefix(SCROLL_CONTAINER_CLASS)}`).not(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
+    const $scrollContainer = $element
+      ?.children(`.${this.addWidgetPrefix(CLASSES.scrollContainer)}`)
+      .not(`.${this.addWidgetPrefix(COLUMN_FIXING_CLASSES.contentFixed)}`);
 
     if (isDefined(pos) && isDefined(pos.left) && this._scrollLeft !== pos.left) {
       this._scrollLeft = pos.left;
-      $scrollContainer && $scrollContainer.scrollLeft(pos.left);
+      // @ts-expect-error scrollLeft() is typed for string values
+      $scrollContainer?.scrollLeft(pos.left);
     }
   }
 
   /**
    * @extended: column_fixing
    */
-  public getContent(isFixedTableRendering?) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getContent(isFixedTableRendering?: boolean): dxElementWrapper | undefined {
     return this._tableElement?.parent();
   }
 
-  private _removeContent(isFixedTableRendering) {
+  private _removeContent(isFixedTableRendering: boolean | undefined): void {
     const $scrollContainer = this.getContent(isFixedTableRendering);
 
     if ($scrollContainer?.length) {
@@ -1112,7 +1242,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected handleScroll(e: DxEvent): void {
-    const scrollLeft = $(e.target).scrollLeft();
+    // @ts-expect-error scrollLeft() is typed as a setter only
+    const scrollLeft: number = $(e.target).scrollLeft();
 
     if (scrollLeft !== this._scrollLeft) {
       this.scrollChanged.fire({ left: scrollLeft }, this.name);
@@ -1122,17 +1253,21 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing
    */
-  protected _wrapTableInScrollContainer($table, isFixedTableRendering?) {
+  protected _wrapTableInScrollContainer(
+    $table: dxElementWrapper,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isFixedTableRendering?: boolean,
+  ): dxElementWrapper {
     const $scrollContainer = $('<div>');
     const useNative = this.option('scrolling.useNative');
 
     if (useNative === false || (useNative === 'auto' && !supportUtils.nativeScrolling)) {
-      $scrollContainer.addClass(this.addWidgetPrefix(SCROLLABLE_SIMULATED_CLASS));
+      $scrollContainer.addClass(this.addWidgetPrefix(CLASSES.scrollableSimulated));
     }
     eventsEngine.on($scrollContainer, 'scroll', this.handleScroll.bind(this));
 
-    $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_CLASS))
-      .addClass(this.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
+    $scrollContainer.addClass(this.addWidgetPrefix(CLASSES.content))
+      .addClass(this.addWidgetPrefix(CLASSES.scrollContainer))
       .append($table)
       // @ts-expect-error the view is rendered here
       .appendTo(this.element());
@@ -1142,7 +1277,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $scrollContainer;
   }
 
-  private needWaitAsyncTemplates() {
+  private needWaitAsyncTemplates(): boolean | undefined {
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
@@ -1150,16 +1285,16 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return !!this.needWaitAsyncTemplates() && this._templateDeferreds?.size > 0;
   }
 
-  public waitAsyncTemplates(forceWaiting = false) {
-    // @ts-expect-error
-    const result = new Deferred();
+  public waitAsyncTemplates(forceWaiting = false): DeferredObj<unknown> {
+    const result = Deferred<unknown>();
     const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
 
     if (!needWaitAsyncTemplates || !isDefined(this._templateDeferreds)) {
       return result.resolve();
     }
 
-    const waitTemplatesRecursion = () => when.apply(this, Array.from(this._templateDeferreds))
+    const waitTemplatesRecursion = (): DeferredObj<unknown> => when
+      .apply(this, Array.from(this._templateDeferreds))
       .done(() => {
         if (this.isDisposed()) {
           result.reject();
@@ -1168,17 +1303,23 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         } else {
           result.resolve();
         }
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- fail ignores the result
       }).fail(result.reject);
 
     waitTemplatesRecursion();
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return result.promise();
   }
 
   /**
    * @extended: sticky_columns, rows_view
    */
-  protected _updateContent($newTableElement, change, isFixedTableRendering?) {
+  protected _updateContent(
+    $newTableElement: dxElementWrapper,
+    change?: ViewDataChange,
+    isFixedTableRendering?: boolean,
+  ): DeferredObj<unknown> {
     return this.waitAsyncTemplates().done(() => {
       this._removeContent(isFixedTableRendering);
       this.setTableElement($newTableElement, isFixedTableRendering);
@@ -1186,7 +1327,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  public _findContentElement(isFixedTableRendering?: any): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public _findContentElement(isFixedTableRendering?: boolean): dxElementWrapper | undefined {
+    return undefined;
+  }
 
   public _getWidths($cellElements?: dxElementWrapper): number[] {
     if (!$cellElements) {
@@ -1199,7 +1343,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     (cellElements as HTMLElement[]).forEach((cell) => {
       let width = cell.offsetWidth;
 
-      if ((cell as any).getBoundingClientRect) {
+      if ((cell as Partial<HTMLElement>).getBoundingClientRect) {
         const rect = getBoundingRect(cell);
 
         if (rect.width > cell.offsetWidth - 1) {
@@ -1216,30 +1360,29 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getColumnWidths($tableElement?: dxElementWrapper, rowIndex?: number): number[] {
-    (this.option('forceApplyBindings') || noop)();
+    (this.option('forceApplyBindings') ?? noop)();
 
-    $tableElement = $tableElement ?? this.getTableElement();
+    const $table = $tableElement ?? this.getTableElement();
 
-    if ($tableElement) {
-      const $rows = $tableElement.children('tbody:not(.dx-header)').children();
+    if ($table) {
+      const $rows = $table.children(`tbody:not(.${CLASSES.headerBody})`).children();
 
-      for (let i = 0; i < $rows.length; i++) {
+      for (let i = 0; i < $rows.length; i += 1) {
         const $row = $rows.eq(i);
 
-        const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
-        const isDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
-        const isErrorRow = $row.hasClass(ERROR_ROW_CLASS);
+        const isGroupRow = $row.hasClass(CLASSES.groupRow);
+        const isDetailRow = $row.hasClass(MASTER_DETAIL_CLASSES.detailRow);
+        const isErrorRow = $row.hasClass(ERROR_HANDLING_CLASSES.errorRow);
 
-        const isRowVisible = ($row.get(0) as HTMLElement).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
+        const isRowVisible = isRowElementVisible($row.get(0) as HTMLElement);
         const isRelevantRow = !isGroupRow && !isDetailRow && !isErrorRow;
 
         if (isRowVisible && isRelevantRow) {
           const $cells = $row.children('td');
 
-          const result = this._getWidths($cells);
-
-          return result;
+          return this._getWidths($cells);
         }
       }
     }
@@ -1247,17 +1390,18 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return [];
   }
 
-  protected getVisibleColumnIndex(columnIndex, rowIndex) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected getVisibleColumnIndex(columnIndex: number, rowIndex?: number): number {
     return columnIndex;
   }
 
   private setCellPropertiesCore(
-    styleProps: CSSStyleDeclaration,
+    styleProps: Partial<CSSStyleDeclaration>,
     $row: dxElementWrapper,
     visibleCellIndex: number,
-  ) {
-    const $cell = $row.hasClass(GROUP_ROW_CLASS)
-      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
+  ): void {
+    const $cell = $row.hasClass(CLASSES.groupRow)
+      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${CLASSES.groupCell})`)
       : $row.find('td').eq(visibleCellIndex);
 
     for (let i = 0; i < $cell.length; i += 1) {
@@ -1268,32 +1412,33 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected setCellProperties(
-    styleProps: CSSStyleDeclaration,
+    styleProps: Partial<CSSStyleDeclaration>,
     columnIndex: number,
     rowIndex?: number,
-  ) {
+  ): void {
     const $tableElement = this.getTableElement();
 
     if (!$tableElement?.length) {
       return;
     }
 
-    const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
+    const $rows = $tableElement.children().children(`.${CLASSES.row}`).not(`.${MASTER_DETAIL_CLASSES.detailRow}`);
 
     if (isDefined(rowIndex)) {
       this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), columnIndex);
     } else {
-      for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
-        const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
+      for (let currentRowIndex = 0; currentRowIndex < $rows.length; currentRowIndex += 1) {
+        const visibleIndex = this.getVisibleColumnIndex(columnIndex, currentRowIndex);
 
         if (visibleIndex >= 0) {
-          this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), visibleIndex);
+          this.setCellPropertiesCore(styleProps, $rows.eq(currentRowIndex), visibleIndex);
         }
       }
     }
   }
 
-  protected setColumnWidths({ widths, optionNames }: any): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected setColumnWidths({ widths, optionNames }: ColumnWidthsOptions): void {
     const $tableElement = this.getTableElement();
 
     if (!$tableElement?.length || !widths) {
@@ -1315,8 +1460,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       Also check _createCell method because min-width, width and max-width are also set there.
       */
       if (needToSetCellWidths && column.width && !column.command) {
-        const styleProps: any = {};
+        const styleProps: Partial<CSSStyleDeclaration> = {};
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
         const width = getWidthStyle(column.visibleWidth || column.width);
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
         const minWidth = getWidthStyle(column.minWidth || width);
 
         styleProps.width = column.width === 'auto' ? '' : width;
@@ -1337,11 +1484,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: editing_form_based
    */
-  public getCellElements(rowIndex): dxElementWrapper | undefined {
+  public getCellElements(rowIndex: number): dxElementWrapper | undefined {
     return this._getCellElementsCore(rowIndex);
   }
 
-  protected _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
+  protected _getCellElementsCore(rowIndex: number): dxElementWrapper | undefined {
     if (rowIndex < 0) {
       return undefined;
     }
@@ -1354,7 +1501,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: adaptivity
    */
-  public _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
+  public _getCellElement(
+    rowIndex: number,
+    columnIdentifier: string | number,
+  ): dxElementWrapper | undefined {
     const $cells = this.getCellElements(rowIndex) ?? $();
     const columnVisibleIndex = this._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
@@ -1367,13 +1517,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $cell.length > 0 ? $cell : undefined;
   }
 
-  private _getRowElement(rowIndex) {
-    const that = this;
+  private _getRowElement(rowIndex: number): dxElementWrapper | undefined {
     let $rowElement = $();
-    const $tableElements = that.getTableElements();
+    const $tableElements = this.getTableElements();
 
-    iteratorUtils.each($tableElements, (_, tableElement) => {
-      $rowElement = $rowElement.add(that._getRowElements($(tableElement)).eq(rowIndex));
+    $tableElements.toArray().forEach((tableElement) => {
+      $rowElement = $rowElement.add(this._getRowElements($(tableElement)).eq(rowIndex));
     });
 
     if ($rowElement.length) {
@@ -1382,7 +1531,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  private getCellElement(rowIndex, columnIdentifier): Element | undefined {
+  private getCellElement(rowIndex: number, columnIdentifier: string | number): Element | undefined {
     const $cell = this._getCellElement(rowIndex, columnIdentifier);
 
     if ($cell) {
@@ -1392,14 +1541,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  public getRowElement(rowIndex) {
+  public getRowElement(rowIndex: number): Element[] | dxElementWrapper | undefined {
     const $rows = this._getRowElement(rowIndex);
-    let elements: any = [];
+    let elements: Element[] | dxElementWrapper | undefined = [];
 
-    // @ts-expect-error
+    // @ts-expect-error getPublicElement returns a jQuery object when jQuery is used
     if ($rows && !getPublicElement($rows).get) {
-      for (let i = 0; i < $rows.length; i++) {
-        elements.push($rows[i]);
+      for (const row of $rows.toArray()) {
+        elements.push(row);
       }
     } else {
       elements = $rows;
@@ -1423,67 +1572,90 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIdentifier;
   }
 
-  public getColumnElements(): any {}
+  public getColumnElements(): dxElementWrapper | undefined {
+    return undefined;
+  }
 
-  public getColumns(rowIndex?, $tableElement?) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getColumns(rowIndex?: number | null, $tableElement?: dxElementWrapper): Column[] {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
   /**
    * @extended: adaptivity
    */
-  public getCell(cellPosition, rows?, cells?) {
-    const $rows = rows || this._getRowElements();
-    let $cells;
+  public getCell(
+    cellPosition: CellPosition,
+    rows?: dxElementWrapper,
+    cells?: dxElementWrapper,
+  ): dxElementWrapper | undefined {
+    const $rows = rows ?? this._getRowElements();
 
     if ($rows.length > 0 && cellPosition.rowIndex >= 0) {
-      if (this.option('scrolling.mode') !== 'virtual' && this.option('scrolling.rowRenderingMode') !== 'virtual') {
-        cellPosition.rowIndex = cellPosition.rowIndex < $rows.length ? cellPosition.rowIndex : $rows.length - 1;
+      if (
+        this.option('scrolling.mode') !== 'virtual'
+        && this.option('scrolling.rowRenderingMode') !== 'virtual'
+      ) {
+        cellPosition.rowIndex = cellPosition.rowIndex < $rows.length
+          ? cellPosition.rowIndex
+          : $rows.length - 1;
       }
-      $cells = cells || this.getCellElements(cellPosition.rowIndex);
-      if ($cells?.length > 0) {
-        return $cells.eq($cells.length > cellPosition.columnIndex ? cellPosition.columnIndex : $cells.length - 1);
+      const $cells = cells ?? this.getCellElements(cellPosition.rowIndex);
+      if ($cells && $cells.length > 0) {
+        return $cells.eq(
+          $cells.length > cellPosition.columnIndex ? cellPosition.columnIndex : $cells.length - 1,
+        );
       }
     }
+
+    return undefined;
   }
 
-  private getRowsCount() {
+  private getRowsCount(): number {
     const tableElement = this.getTableElement();
 
-    if (tableElement && tableElement.length === 1) {
-      return tableElement[0].rows.length;
+    if (tableElement?.length === 1) {
+      const table: HTMLTableElement = tableElement[0];
+
+      return table.rows.length;
     }
     return 0;
   }
 
-  protected _getRowElementsCore(tableElement?) {
-    tableElement = tableElement || this.getTableElement();
+  protected _getRowElementsCore(tableElement?: dxElementWrapper): dxElementWrapper {
+    const $table = tableElement ?? this.getTableElement();
 
-    if (tableElement) {
+    if ($table) {
       const hasRowTemplate = this.option().rowTemplate || this.option('dataRowTemplate');
-      const tBodies = hasRowTemplate && tableElement.find(`> tbody.${ROW_CLASS}`);
+      const tBodies = hasRowTemplate && $table.find(`> tbody.${CLASSES.row}`);
 
       // eslint-disable-next-line no-useless-concat
-      return tBodies && tBodies.length ? tBodies : tableElement.find('> tbody > ' + `.${ROW_CLASS}, > .${ROW_CLASS}`);
+      return tBodies && tBodies.length ? tBodies : $table.find('> tbody > ' + `.${CLASSES.row}, > .${CLASSES.row}`);
     }
 
     return $();
   }
 
-  public _getRowElements(tableElement?) {
+  public _getRowElements(tableElement?: dxElementWrapper): dxElementWrapper {
     return this._getRowElementsCore(tableElement);
   }
 
   /**
    * @extended: column_fixing
    */
-  public getRowIndex($row) {
+  public getRowIndex($row: Element | dxElementWrapper): number {
     return this._getRowElements().index($row);
   }
 
-  protected getBoundingRect() { }
+  protected getBoundingRect(): BoundingRect | null | undefined {
+    return undefined;
+  }
 
-  public getName() { }
+  public getContextMenuItems?(options): unknown;
+
+  public getName(): string | undefined {
+    return undefined;
+  }
 
   /**
    * @extended: column_fixing
@@ -1496,18 +1668,20 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       .css('paddingInlineEnd', width ? `${width}px` : '');
   }
 
-  protected isScrollbarVisible(isHorizontal) {
+  protected isScrollbarVisible(isHorizontal: boolean): boolean {
     const $element = this.element();
     const $tableElement = this._tableElement;
 
     if ($element && $tableElement) {
-      return isHorizontal ? getOuterWidth($tableElement) - getWidth($element) > 0 : getOuterHeight($tableElement) - getHeight($element) > 0;
+      return isHorizontal
+        ? getOuterWidth($tableElement) - getWidth($element) > 0
+        : getOuterHeight($tableElement) - getHeight($element) > 0;
     }
 
     return false;
   }
 
-  public isDisposed() {
+  public isDisposed(): boolean | undefined {
     return this.component?._disposed;
   }
 

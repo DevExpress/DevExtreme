@@ -251,6 +251,7 @@ const FrameAnimationStrategy = {
       return deferred.reject().promise();
     }
 
+    // @ts-expect-error the frame strategy gets the states as objects of properties
     each(config.to, (prop) => {
       // @ts-expect-error
       if (config.from[prop] === undefined) {
@@ -337,8 +338,8 @@ const FrameAnimationStrategy = {
 
     each(transformString.match(/\w+\d*\w*\([^)]*\)\s*/g), (i, part) => {
       const translateData = parseTranslate(part);
-      const scaleData = part.match(/scale\((.+?)\)/);
-      const rotateData = part.match(/(rotate.)\((.+)deg\)/);
+      const scaleData = /scale\((.+?)\)/.exec(part);
+      const rotateData = /(rotate.)\((.+)deg\)/.exec(part);
 
       if (translateData) {
         result.translate = translateData;

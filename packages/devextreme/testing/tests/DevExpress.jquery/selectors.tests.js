@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import selectors from '__internal/core/utils/m_selectors';
+import selectors from '__internal/core/utils/selectors';
 
 if(!QUnit.urlParams['nojquery']) {
     QUnit.testStart(function() {

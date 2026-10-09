@@ -1,28 +1,71 @@
-const map = (values, callback): any[] => {
+import type { dxElementWrapper } from '@js/core/renderer';
+
+type EachCallback<TValue, TKey> = (this: TValue, key: TKey, value: TValue) => unknown;
+
+type IsAny<T> = 0 extends 1 & T ? true : false;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- any values give any items
+type Item<TValues> = IsAny<TValues> extends true ? any
+  : TValues extends dxElementWrapper ? Element
+    : TValues extends ArrayLike<infer TItem> ? TItem : never;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- any values have unknown keys
+type Index<TValues> = IsAny<TValues> extends true ? any : number;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- no known keys give any values
+type Value<TValues> = [keyof TValues] extends [never] ? any
+  : { [TKey in keyof TValues]-?: TValues[TKey] }[keyof TValues];
+
+type Key<TValues> = [keyof TValues] extends [never] ? string : string & keyof TValues;
+
+type Each<TValues> = TValues extends null | undefined ? undefined : TValues;
+
+type Collection = Readonly<Record<string, unknown>> | ArrayLike<unknown>;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the overloads type the callback
+type Callback = (this: any, key: any, value: any, array?: any) => unknown;
+
+const hasLength = (values: object): values is ArrayLike<unknown> => 'length' in values;
+
+function map<TItem, TResult>(
+  values: readonly TItem[] | null | undefined,
+  callback: (value: TItem, index: number, array: readonly TItem[]) => TResult,
+): TResult[];
+function map<TValues extends object, TResult>(
+  values: TValues | null | undefined,
+  callback: (value: Value<TValues>, key: Key<TValues>) => TResult,
+): TResult[];
+function map(values: Collection | null | undefined, callback: Callback): unknown[] {
   if (Array.isArray(values)) {
     return values.map(callback);
   }
 
   const result: unknown[] = [];
 
+  /* eslint-disable-next-line
+    no-restricted-syntax, guard-for-in, @typescript-eslint/no-for-in-array
+    -- inherited keys are mapped too */
   for (const key in values) {
     result.push(callback(values[key], key));
   }
 
   return result;
-};
+}
 
-/**
- * @type {{
- *   <T>(values: readonly T[], callback: (this: T,          index: number,  value: T)          => void | boolean): T[],
- *   <T>(values: T,            callback: (this: T[keyof T], index: keyof T, value: T[keyof T]) => void | boolean): T,
- * }}
- */
-const each = (values, callback) => {
-  if (!values) return;
+function each<TValues extends ArrayLike<unknown> | dxElementWrapper | null | undefined>(
+  values: TValues,
+  callback: EachCallback<Item<NonNullable<TValues>>, Index<TValues>>,
+): Each<TValues>;
+function each<TValues extends object | null | undefined>(
+  values: TValues,
+  // eslint-disable-next-line @typescript-eslint/unified-signatures -- union: no contextual types
+  callback: EachCallback<Value<NonNullable<TValues>>, Key<NonNullable<TValues>>>,
+): Each<TValues>;
+function each(values: Collection | null | undefined, callback: Callback): unknown {
+  if (!values) return undefined;
 
-  if ('length' in values) {
-    for (let i = 0; i < values.length; i++) {
+  if (hasLength(values)) {
+    for (let i = 0; i < values.length; i += 1) {
       if (callback.call(values[i], i, values[i]) === false) {
         break;
       }
@@ -37,17 +80,21 @@ const each = (values, callback) => {
   }
 
   return values;
-};
+}
 
-const reverseEach = (array, callback) => {
+function reverseEach<TItem>(
+  array: ArrayLike<TItem> | null | undefined,
+  callback: EachCallback<TItem, number>,
+): void;
+function reverseEach(array: ArrayLike<unknown> | null | undefined, callback: Callback): void {
   if (!array || !('length' in array) || array.length === 0) return;
 
-  for (let i = array.length - 1; i >= 0; i--) {
+  for (let i = array.length - 1; i >= 0; i -= 1) {
     if (callback.call(array[i], i, array[i]) === false) {
       break;
     }
   }
-};
+}
 
 export {
   each,

@@ -34,7 +34,7 @@ export type OverlayPositionAlignment = | 'top center'
 export interface OverlayPosition extends Partial<Coordinates> {
   my?: OverlayPositionAlignment;
   at?: OverlayPositionAlignment;
-  of?: string | dxElementWrapper | Element;
+  of?: string | dxElementWrapper | Element | null;
   offset?: string | { x?: number; y?: number };
   boundaryOffset?: typeof DEFAULT_BOUNDARY_OFFSET;
 }

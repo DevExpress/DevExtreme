@@ -155,7 +155,7 @@ export class GridCoreNewBase<
     return {
       // @ts-expect-error
       ...super._getDefaultOptions() as {},
-      ...extend(true, {}, defaultOptions) as typeof defaultOptions,
+      ...extend(true, {}, defaultOptions),
     };
   }
 

@@ -21,6 +21,7 @@ import {
   isDefined, isFunction, isPlainObject, isString,
 } from '@js/core/utils/type';
 import type { DxEvent, EventInfo, InitializedEventInfo } from '@js/events';
+import type { ActionEvent } from '@ts/core/action';
 import type { DeprecatedOptionInfo } from '@ts/core/options/index';
 import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -34,8 +35,8 @@ const isInnerOption = (
 ): boolean => optionName.indexOf('_', 0) === 0;
 
 export interface ActionConfig {
-  beforeExecute?: (e: Record<string, unknown>) => void;
-  afterExecute?: (e: Record<string, unknown>) => void;
+  beforeExecute?: (e: ActionEvent) => void;
+  afterExecute?: (e: ActionEvent) => void;
   excludeValidators?: ('disabled' | 'readOnly')[];
   element?: Element;
   validatingTargetName?: string;
@@ -53,6 +54,16 @@ export interface DefaultActionArgs<TComponent> {
   event?: DxEvent;
   model?: unknown;
 }
+
+type OptionActionArgs<THandler> = THandler extends (event: infer TEvent) => unknown
+  ? Omit<TEvent, keyof EventInfo<unknown>>
+  : never;
+
+type OptionActionEventArgs<THandler> = OptionActionArgs<NonNullable<THandler>>;
+
+export type OptionAction<THandler> = Record<never, never> extends OptionActionEventArgs<THandler>
+  ? (event?: OptionActionEventArgs<THandler>) => void
+  : (event: OptionActionEventArgs<THandler>) => void;
 
 export interface ComponentProperties<TComponent> extends ComponentOptions<
   EventInfo<TComponent>,

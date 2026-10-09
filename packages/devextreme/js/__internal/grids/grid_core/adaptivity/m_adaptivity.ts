@@ -14,6 +14,8 @@ import { isDefined, isString } from '@js/core/utils/type';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
@@ -36,10 +38,7 @@ import {
   EDIT_MODE_FORM,
   EDIT_MODE_POPUP,
   EDIT_MODE_ROW,
-  FORM_ITEM_CONTENT_CLASS,
   FORM_ITEM_MODIFIED,
-  GROUP_CELL_CLASS,
-  GROUP_ROW_CLASS,
   HIDDEN_COLUMN_CLASS,
   HIDDEN_COLUMNS_WIDTH,
   MASTER_DETAIL_CELL_CLASS,
@@ -381,7 +380,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
     let colWidth = 0;
 
     each(columns, (index, column) => {
-      if (column.index < 0 || column.command) {
+      if ((isDefined(column.index) && column.index < 0) || column.command) {
         colWidth += that._columnsController.columnOption(getColumnId(that, column), 'bestFitWidth') || 0;
       }
     });
@@ -503,7 +502,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
   }
 
   private _isCellValid($cell) {
-    return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS) && !$cell.hasClass(GROUP_CELL_CLASS);
+    return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS) && !$cell.hasClass(VIEW_CLASSES.groupCell);
   }
 
   private _hideVisibleColumn({ isCommandColumn, visibleIndex }: any) {
@@ -546,8 +545,8 @@ export class AdaptiveColumnsController extends modules.ViewController {
     const $rowCells = $rowElement.children();
     let visibleIndex = visibleColumnIndex;
     let cellIsInsideGroup = false;
-    if ($rowElement.hasClass(GROUP_ROW_CLASS)) {
-      const $groupCell = $rowElement.find(`.${GROUP_CELL_CLASS}`);
+    if ($rowElement.hasClass(VIEW_CLASSES.groupRow)) {
+      const $groupCell = $rowElement.find(`.${VIEW_CLASSES.groupCell}`);
       const colSpan = $groupCell.attr('colspan');
       if ($groupCell.length && isDefined(colSpan)) {
         // eslint-disable-next-line radix
@@ -712,7 +711,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
       },
       onContentReady(e) {
         userFormOptions.onContentReady && userFormOptions.onContentReady.call(this, e);
-        that._$itemContents = $container.find(`.${FORM_ITEM_CONTENT_CLASS}`);
+        that._$itemContents = $container.find(`.${FIELD_ITEM_CONTENT_CLASS}`);
       },
     }));
   }

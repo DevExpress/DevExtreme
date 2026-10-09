@@ -38,11 +38,11 @@ export class ScrollViewScroller extends Scroller {
 
   _$pullDown!: dxElementWrapper;
 
-  _$pullingDownText?: dxElementWrapper;
+  _$pullingDownText!: dxElementWrapper;
 
-  _$pulledDownText?: dxElementWrapper;
+  _$pulledDownText!: dxElementWrapper;
 
-  _$refreshingText?: dxElementWrapper;
+  _$refreshingText!: dxElementWrapper;
 
   _$bottomPocket!: dxElementWrapper;
 

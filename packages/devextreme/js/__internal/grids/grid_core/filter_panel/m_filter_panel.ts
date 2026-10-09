@@ -9,8 +9,8 @@ import { isDefined } from '@js/core/utils/type';
 import type { ValueChangedEvent as CheckBoxValueChangedEvent } from '@js/ui/check_box';
 import CheckBox from '@js/ui/check_box';
 import type { CustomOperation } from '@js/ui/filter_builder';
-import inflector from '@ts/core/utils/m_inflector';
-import type { Condition, Criteria, FilterBuilderField } from '@ts/filter_builder/utils';
+import inflector from '@ts/core/utils/inflector';
+import type { Condition, Criteria, FilterBuilderField } from '@ts/filter_builder/types';
 import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,

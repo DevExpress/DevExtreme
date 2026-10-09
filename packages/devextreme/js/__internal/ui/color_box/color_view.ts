@@ -736,7 +736,7 @@ class ColorView extends Editor<ColorViewProperties> {
     const { editorType: EditorConstructor } = options;
     const { stylingMode } = this.option();
 
-    const editorOptions = extend({
+    const editorOptions: Record<string, unknown> = extend({
       value: options.value,
       onValueChanged: options.onValueChanged,
       onKeyboardHandled: (opts) => this._keyboardHandler(opts),

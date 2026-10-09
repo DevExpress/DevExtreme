@@ -9,13 +9,13 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import {
   ADAPTIVE_COLUMN_NAME_CLASS,
   ADAPTIVE_DETAIL_ROW_CLASS,
   ADAPTIVE_ROW_TYPE,
   EXPAND_ARIA_NAME,
-  FORM_ITEM_CONTENT_CLASS,
   HIDDEN_COLUMN_CLASS,
   HIDDEN_COLUMNS_WIDTH,
   LAST_DATA_CELL_CLASS,
@@ -68,7 +68,7 @@ export const adaptivityRowsViewExtender = (
   }
 
   private _getColumnIndexByElementCore($element) {
-    const $itemContent = $element.closest(`.${FORM_ITEM_CONTENT_CLASS}`);
+    const $itemContent = $element.closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
     if ($itemContent.length && $itemContent.closest(this.component.$element()).length) {
       const formItem = $itemContent.length ? $itemContent.first().data('dx-form-item') : null;
       return formItem?.column && this._columnsController.getVisibleIndex(formItem.column.index);
@@ -105,7 +105,7 @@ export const adaptivityRowsViewExtender = (
     return super._getCellElement.apply(this, arguments as any);
   }
 
-  private getContextMenuItems(options) {
+  public getContextMenuItems(options) {
     if (options.row?.rowType === 'detailAdaptive') {
       const view = this._columnHeadersView;
       const formItem = $(options.targetElement).closest('.dx-field-item-label').next().data('dx-form-item');
@@ -113,7 +113,6 @@ export const adaptivityRowsViewExtender = (
       options.column = formItem ? formItem.column : options.column;
       return view.getContextMenuItems?.(options);
     }
-    // @ts-expect-error
     return super.getContextMenuItems?.(options);
   }
 

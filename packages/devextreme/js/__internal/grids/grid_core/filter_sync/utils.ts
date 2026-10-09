@@ -57,7 +57,6 @@ const canSyncHeaderFilterWithFilterRow = (column: FilterSyncColumn): boolean => 
 export const checkForErrors = (columns: FilterSyncColumn[]): void => {
   columns.forEach((column) => {
     if (!isDefined(getColumnIdentifier(column)) && column.allowFiltering) {
-      // @ts-expect-error `errors.Error` is not declared as a constructor
       throw new errors.Error('E1049', column.caption);
     }
   });
@@ -189,7 +188,6 @@ export const getFilterValueWithFilterRow = (
   const condition = getConditionFromFilterRow(column);
 
   if (isDefined(condition)) {
-    // @ts-expect-error filterValue can be undefined
     return syncFilters(filterValue, condition) as FilterValue;
   }
 
@@ -203,7 +201,6 @@ export const getFilterValueWithHeaderFilter = (
   const condition = getConditionFromHeaderFilter(column);
 
   if (condition) {
-    // @ts-expect-error filterValue can be undefined
     return syncFilters(filterValue, condition) as FilterValue;
   }
 

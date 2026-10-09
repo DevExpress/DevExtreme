@@ -42,7 +42,8 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
       return;
     }
 
-    const $firstCell = this._rowsView.getCell({ rowIndex: 0, columnIndex: 0 });
+    // @ts-expect-error getCell() is typed as possibly undefined
+    const $firstCell: dxElementWrapper = this._rowsView.getCell({ rowIndex: 0, columnIndex: 0 });
     const firstCellHasTabIndex = !!$firstCell.attr('tabindex');
 
     // @ts-expect-error dxElementWrapper doesn't have overload for 'is' method

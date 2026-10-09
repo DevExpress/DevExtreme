@@ -318,12 +318,11 @@ class Calendar<
       return undefined;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateSerialization.getDateSerializationFormat(value);
   }
 
   _convertToDate(value: DateLike | undefined): Date | null {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    // @ts-expect-error a string that cannot be parsed and undefined are returned as is
     return dateSerialization.deserializeDate(value);
   }
 
@@ -348,7 +347,6 @@ class Calendar<
   ): void {
     const serializationFormat = this._getSerializationFormat(optionName);
     const serializedValue = this._isArrayValue(optionName, optionValue)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       ? optionValue.map((value) => dateSerialization.serializeDate(value, serializationFormat))
       : dateSerialization.serializeDate(optionValue, serializationFormat);
 
@@ -1349,7 +1347,7 @@ class Calendar<
 
     const dateValue = this._convertToDate(value);
     this._getSubmitElement()
-      .val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
+      .val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN) ?? '');
   }
 
   _getSubmitElement(): dxElementWrapper {

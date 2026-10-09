@@ -1,8 +1,7 @@
 /* eslint-disable max-classes-per-file */
+import type { Orientation } from '@js/common';
 import positionUtils from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
-import type { Cancelable } from '@js/common/core/events';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   end as dragEventEnd,
   enter as dragEventEnter,
@@ -13,9 +12,8 @@ import {
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, needSkipEvent } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
-import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -31,98 +29,23 @@ import { quadToObject } from '@js/core/utils/string';
 import { isFunction, isNumeric, isObject } from '@js/core/utils/type';
 import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
-import type { DraggableBaseOptions, Properties } from '@js/ui/draggable';
+import type { Properties } from '@js/ui/draggable';
 import { domAdapter } from '@ts/core/dom_adapter';
 import { splitPair } from '@ts/core/utils/m_common';
 import { fromPromise } from '@ts/core/utils/m_deferred';
+import type { Quad } from '@ts/core/utils/string';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
+import type {
+  ActionFn, CursorOffset, CursorOffsetCallback, DragEvent, DragEventArgs,
+  DraggableBaseProperties, DraggableProperties, DragStartArgs, DragTemplateArgs,
+  ElementOffsetOptions, MousePosition, ScrollHelperOwner,
+} from './draggable.types';
 import Animator from './ui/scroll_view/animator';
-
-type BoundOffset = number | string | { h?: number; v?: number };
-
-type DragHandler = ((e: never) => void) | undefined;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface DraggableBaseProperties<TComponent = any> extends Omit<DraggableBaseOptions<TComponent>, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
-  scrollSensitivity: number;
-
-  scrollSpeed: number;
-
-  allowMoveByClick?: boolean;
-
-  boundOffset?: BoundOffset | (() => BoundOffset);
-
-  boundary?: DraggableBaseOptions<TComponent>['boundary'] | dxElementWrapper;
-
-  component?: unknown;
-
-  contentTemplate?: string | null;
-
-  clone?: boolean;
-
-  dragTemplate?: Properties['dragTemplate'];
-
-  filter?: string;
-
-  immediate?: boolean;
-
-  itemData?: unknown;
-
-  onCancelByEsc?: boolean;
-
-  onDragCancel?: DragHandler;
-
-  onDragEnd?: DragHandler;
-
-  onDragEnter?: DragHandler;
-
-  onDragLeave?: DragHandler;
-
-  onDragMove?: DragHandler;
-
-  onDragStart?: DragHandler;
-
-  onDraggableElementShown?: DragHandler;
-
-  onDrop?: DragHandler;
-}
-
-export interface DraggableProperties extends Omit<Properties, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
-  scrollSensitivity: number;
-
-  scrollSpeed: number;
-
-  allowMoveByClick?: boolean;
-
-  boundOffset?: BoundOffset | (() => BoundOffset);
-
-  boundary?: Properties['boundary'] | dxElementWrapper;
-
-  component?: unknown;
-
-  contentTemplate?: string | null;
-
-  filter?: string;
-
-  immediate?: boolean;
-
-  itemData?: unknown;
-
-  onCancelByEsc?: boolean;
-
-  onDragCancel?: (e: DragEventArgs) => void;
-
-  onDragEnter?: (e: DragEventArgs) => void;
-
-  onDragLeave?: (e: DragEventArgs) => void;
-
-  onDraggableElementShown?: (e: DragElementShownArgs) => void;
-
-  onDrop?: (e: DragEventArgs) => void;
-}
 
 const window = getWindow();
 const KEYDOWN_EVENT = 'keydown';
@@ -146,12 +69,7 @@ let activeSourceDraggable: AnyDraggable | null = null;
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
-interface MousePosition {
-  x: number;
-  y: number;
-}
-
-const getMousePosition = (event: { pageX: number; pageY: number }): MousePosition => ({
+const getMousePosition = (event: Pick<DragEvent, 'pageX' | 'pageY'>): MousePosition => ({
   // @ts-expect-error scrollLeft is declared to return the wrapper
   x: event.pageX - $(window).scrollLeft(),
   // @ts-expect-error scrollTop is declared to return the wrapper
@@ -161,90 +79,6 @@ const getMousePosition = (event: { pageX: number; pageY: number }): MousePositio
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
-
-interface Offset {
-  left: number;
-  top: number;
-}
-
-interface DragEventOffset {
-  x: number;
-  y: number;
-}
-
-export type DragEvent = Cancelable & {
-  type: string;
-  target: Element;
-  pageX: number;
-  pageY: number;
-  key?: string;
-  originalEvent?: { target?: Element };
-  offset?: DragEventOffset;
-  maxLeftOffset?: number;
-  maxRightOffset?: number;
-  maxTopOffset?: number;
-  maxBottomOffset?: number;
-  _cancelPreventDefault?: boolean;
-};
-
-export type DragEventArgs = Cancelable & {
-  event: DragEvent;
-  itemData: unknown;
-  itemElement: unknown;
-  fromComponent: unknown;
-  toComponent: unknown;
-  fromData: unknown;
-  toData: unknown;
-};
-
-export type DragStartArgs = Cancelable & {
-  event: DragEvent;
-  itemData: unknown;
-  itemElement: dxElementWrapper;
-  fromData: unknown;
-};
-
-export type DragElementShownArgs = DragStartArgs & { dragElement: dxElementWrapper };
-
-type CursorOffset = DraggableBaseOptions<unknown>['cursorOffset'];
-
-type ElementOffsetOptions = DragStartArgs & {
-  dragElement: Element | undefined;
-  initialOffset?: Offset | false;
-};
-
-type CursorOffsetCallback = (options: ElementOffsetOptions) => CursorOffset;
-
-interface BoundOffsetQuad {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-}
-
-export interface DragTemplateArgs {
-  container: DxElement;
-  model: {
-    itemData: unknown;
-    itemElement: DxElement;
-    fromIndex?: number;
-  };
-}
-
-type ActionFn = (args?: object) => void;
-
-type ScrollOrientation = 'vertical' | 'horizontal';
-
-interface ScrollableInstance {
-  scrollOffset: () => Record<string, number>;
-  scrollTo: (position: Record<string, number>) => void;
-}
-
-interface ScrollHelperOwner {
-  option: () => { scrollSensitivity: number; scrollSpeed: number };
-  _dragMoveEvent?: DragEvent;
-  dragMoveHandler: (e: DragEvent) => void;
-}
 
 class ScrollHelper {
   private _preventScroll: boolean;
@@ -267,7 +101,7 @@ class ScrollHelper {
 
   private _scrollSpeed: number | undefined;
 
-  constructor(orientation: ScrollOrientation, component: ScrollHelperOwner) {
+  constructor(orientation: Orientation, component: ScrollHelperOwner) {
     this._preventScroll = true;
     this._component = component;
 
@@ -335,12 +169,12 @@ class ScrollHelper {
       const distanceToBorders = this._calculateDistanceToBorders($element, mousePosition);
       const { start, end } = this._limitProps;
 
-      if (sensitivity > distanceToBorders[start]) {
+      if (distanceToBorders && sensitivity > distanceToBorders[start]) {
         if (!this._preventScroll) {
           this._scrollSpeed = -this._calculateScrollSpeed(distanceToBorders[start]);
           this._$scrollableAtPointer = $element;
         }
-      } else if (sensitivity > distanceToBorders[end]) {
+      } else if (distanceToBorders && sensitivity > distanceToBorders[end]) {
         if (!this._preventScroll) {
           this._scrollSpeed = this._calculateScrollSpeed(distanceToBorders[end]);
           this._$scrollableAtPointer = $element;
@@ -357,7 +191,7 @@ class ScrollHelper {
   _calculateDistanceToBorders(
     $area: dxElementWrapper,
     mousePosition: MousePosition,
-  ): Record<string, number> {
+  ): Quad | undefined {
     const area = $area.get(0);
 
     if (area) {
@@ -370,7 +204,7 @@ class ScrollHelper {
         bottom: areaBoundingRect.bottom - mousePosition.y,
       };
     }
-    return {};
+    return undefined;
   }
 
   _calculateScrollSpeed(distance: number): number {
@@ -384,7 +218,7 @@ class ScrollHelper {
       if (this._$scrollableAtPointer.hasClass('dx-scrollable-container')) {
         const $scrollable = this._$scrollableAtPointer.closest('.dx-scrollable');
         // @ts-expect-error data is declared without the getter form
-        const scrollableInstance: ScrollableInstance | undefined = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
+        const scrollableInstance: Pick<Scrollable, 'scrollOffset' | 'scrollTo'> | undefined = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
 
         if (scrollableInstance) {
           const nextScrollPosition = scrollableInstance
@@ -473,9 +307,9 @@ class Draggable<
 
   _scrollAnimator!: ScrollAnimator;
 
-  _initialLocate?: { left: number; top: number };
+  _initialLocate?: Coordinates;
 
-  _startPosition?: { left: number; top: number };
+  _startPosition?: Coordinates;
 
   reset(): void {}
 
@@ -491,8 +325,7 @@ class Draggable<
   dragEnd(sourceEvent: DragEventArgs): DeferredObj<unknown> | PromiseLike<void> {
     const sourceDraggable = this._getSourceDraggable();
 
-    // @ts-expect-error dragEnd passes the event args where the event is expected
-    sourceDraggable._fireRemoveEvent(sourceEvent);
+    sourceDraggable._fireRemoveEvent(sourceEvent.event);
 
     return Deferred().resolve();
   }
@@ -549,7 +382,7 @@ class Draggable<
     this._initScrollLeft = 0;
   }
 
-  _normalizeCursorOffset(offset: CursorOffset): Offset {
+  _normalizeCursorOffset(offset: CursorOffset): Coordinates {
     let normalizedOffset: CursorOffset | { h?: number; v?: number } = offset;
 
     if (isObject(offset)) {
@@ -569,7 +402,7 @@ class Draggable<
   _getNormalizedCursorOffset(
     offset: CursorOffset | CursorOffsetCallback,
     options: ElementOffsetOptions,
-  ): Offset {
+  ): Coordinates {
     let cursorOffset = offset;
 
     if (isFunction(cursorOffset)) {
@@ -579,9 +412,9 @@ class Draggable<
     return this._normalizeCursorOffset(cursorOffset);
   }
 
-  _calculateElementOffset(options: ElementOffsetOptions): Offset | undefined {
+  _calculateElementOffset(options: ElementOffsetOptions): Coordinates | undefined {
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let elementOffset: Offset | undefined;
+    let elementOffset: Coordinates | undefined;
     const { event } = options;
     const $element = $(options.itemElement);
     const $dragElement = $(options.dragElement);
@@ -665,7 +498,7 @@ class Draggable<
       return;
     }
 
-    let $element = this._$content();
+    const $element = this._getEventsTarget();
     let itemsSelector = this._getItemsSelector();
     const allowMoveByClick = this.option('allowMoveByClick');
     const data = {
@@ -691,7 +524,6 @@ class Draggable<
     };
 
     if (allowMoveByClick) {
-      $element = this._getArea();
       eventsEngine.on($element, POINTERDOWN_EVENT_NAME, data, this._pointerDownHandler.bind(this));
     }
 
@@ -703,13 +535,22 @@ class Draggable<
       DRAGSTART_EVENT_NAME,
       itemsSelector,
       data,
-      // @ts-expect-error eventsEngine is badly typed
       this._dragStartHandler.bind(this),
     );
     eventsEngine.on($element, DRAG_EVENT_NAME, data, this.dragMoveHandler.bind(this));
     eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
     eventsEngine.on($element, DRAG_ENTER_EVENT_NAME, data, this._dragEnterHandler.bind(this));
     eventsEngine.on($element, DRAGEND_LEAVE_EVENT_NAME, data, this._dragLeaveHandler.bind(this));
+
+    this._subscribeKeydownHandler($element);
+  }
+
+  _getEventsTarget(): dxElementWrapper {
+    return this.option('allowMoveByClick') ? this._getArea() : this._$content();
+  }
+
+  _subscribeKeydownHandler($element: dxElementWrapper): void {
+    eventsEngine.off($element, KEYDOWN_EVENT_NAME);
 
     if (this.option('onCancelByEsc')) {
       eventsEngine.on($element, KEYDOWN_EVENT_NAME, this._keydownHandler.bind(this));
@@ -732,9 +573,8 @@ class Draggable<
 
   _createDragElement($element: dxElementWrapper): dxElementWrapper {
     let result = $element;
-    const clone = this.option('clone');
     const $container = this._getContainer();
-    const dragTemplate = this.option('dragTemplate');
+    const { clone, dragTemplate } = this.option();
 
     if (dragTemplate) {
       const template = this._getTemplate(dragTemplate);
@@ -772,7 +612,7 @@ class Draggable<
     eventsEngine.off(this._getArea(), `.${DRAGGABLE}`);
   }
 
-  _move(position: Partial<Offset>, $element?: dxElementWrapper | null): void {
+  _move(position: Partial<Coordinates>, $element?: dxElementWrapper | null): void {
     // @ts-expect-error the drag element can be null
     move($element || this._$dragElement, position);
   }
@@ -812,7 +652,7 @@ class Draggable<
       return;
     }
 
-    const position: Partial<Offset> = {};
+    const position: Partial<Coordinates> = {};
     const $element = this.$element();
     const { dragDirection } = this.option();
 
@@ -923,7 +763,7 @@ class Draggable<
     }
   }
 
-  _getAreaOffset($area: dxElementWrapper): Offset {
+  _getAreaOffset($area: dxElementWrapper): Coordinates {
     const offset = $area && positionUtils.offset($area);
     return offset || { left: 0, top: 0 };
   }
@@ -942,7 +782,7 @@ class Draggable<
     $(`.${GESTURE_COVER_CLASS}`).css('cursor', $element.css('cursor'));
   }
 
-  _getBoundOffset(): BoundOffsetQuad {
+  _getBoundOffset(): Quad {
     let { boundOffset } = this.option();
 
     if (isFunction(boundOffset)) {
@@ -971,7 +811,7 @@ class Draggable<
     return $(container);
   }
 
-  _getDraggableElementOffset(initialOffsetX: number, initialOffsetY: number): Offset {
+  _getDraggableElementOffset(initialOffsetX: number, initialOffsetY: number): Coordinates {
     const initScrollTop = this._initScrollTop;
     const initScrollLeft = this._initScrollLeft;
 
@@ -981,7 +821,7 @@ class Draggable<
     const elementPosition = $(this.element()).css('position');
     const isFixedPosition = elementPosition === 'fixed';
 
-    const result: Offset = {
+    const result: Coordinates = {
       left: (this._startPosition?.left ?? 0) + initialOffsetX,
       top: (this._startPosition?.top ?? 0) + initialOffsetY,
     };
@@ -1091,11 +931,10 @@ class Draggable<
 
   _defaultActionArgs(): DefaultActionArgs<unknown> {
     const args = super._defaultActionArgs();
-    const component = this.option('component');
+    const { component } = this.option();
 
     if (component) {
       args.component = component;
-      // @ts-expect-error component is unknown
       args.element = component.element();
     }
 
@@ -1110,7 +949,7 @@ class Draggable<
       event: e,
       itemData: sourceDraggable.option('itemData'),
       // @ts-expect-error the source element can be null
-      itemElement: getPublicElement(sourceDraggable._$sourceElement),
+      itemElement: getPublicElement<HTMLElement>(sourceDraggable._$sourceElement),
       fromComponent: sourceDraggable.option('component') || sourceDraggable,
       toComponent: targetDraggable.option('component') || targetDraggable,
       fromData: sourceDraggable.option('data'),
@@ -1329,8 +1168,9 @@ class Draggable<
         this._attachEventHandlers();
         break;
       case 'onCancelByEsc':
-        // @ts-expect-error the event is not passed
-        this._keydownHandler();
+        if (!this.option('disabled')) {
+          this._subscribeKeydownHandler(this._getEventsTarget());
+        }
         break;
       case 'autoScroll':
         this._verticalScrollHelper.reset();

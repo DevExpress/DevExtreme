@@ -4,7 +4,9 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getWidth, setWidth } from '@js/core/utils/size';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
@@ -125,7 +127,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     });
   }
 
-  protected _renderCore(options?) {
+  protected _renderCore(options?: DataChange): DeferredObj<unknown> {
     const deferred = super._renderCore(options);
     const $element = this.element();
     const hasStickyColumns = this.hasStickyColumns();
@@ -431,8 +433,8 @@ const rowsView = (
       const styleProps = normalizeOffset(offset);
 
       const $cells = $tableElement
-        .children().children('.dx-group-row')
-        .find(`.dx-group-cell[aria-colindex='${columnIndex + 1}']`);
+        .children().children(`.${VIEW_CLASSES.groupRow}`)
+        .find(`.${VIEW_CLASSES.groupCell}[aria-colindex='${columnIndex + 1}']`);
 
       for (let i = 0; i < $cells.length; i += 1) {
         const cell = $cells.get(i) as HTMLElement;

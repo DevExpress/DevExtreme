@@ -77,15 +77,14 @@ class DOMComponent<
   }
 
   _getDefaultOptions(): TProperties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._getDefaultOptions(), {
-      width: undefined,
-      height: undefined,
+    return {
+      ...super._getDefaultOptions(),
       rtlEnabled: config().rtlEnabled,
       elementAttr: {},
       disabled: false,
       integrationOptions: {},
-    }, this._useTemplates() ? TemplateManagerModule.TemplateManager.createDefaultOptions() : {});
+      ...this._useTemplates() ? TemplateManagerModule.TemplateManager.createDefaultOptions() : {},
+    };
   }
 
   ctor(element: Element, options: TProperties): void {
@@ -208,10 +207,8 @@ class DOMComponent<
     const classNames = attributes.class;
 
     delete attributes.class;
-    // @ts-expect-error
     this.$element()
       .attr(attributes)
-      // @ts-expect-error
       .removeClass(this._customClass)
       .addClass(classNames);
 
@@ -350,14 +347,14 @@ class DOMComponent<
     const configuration = componentConfiguration ?? {};
 
     const synchronizableOptions = this._getSynchronizableOptionsForCreateComponent()
-      .filter((value) => !(value in configuration)) as (keyof TProperties)[];
+      .filter((value) => !(value in configuration)) as (keyof TProperties & string)[];
 
     const { integrationOptions } = this.option();
     let { nestedComponentOptions } = this.option();
 
     nestedComponentOptions = nestedComponentOptions ?? noop;
 
-    const nestedComponentConfig = extend(
+    const nestedComponentConfig: Record<string, unknown> = extend(
       { integrationOptions },
       nestedComponentOptions(this as unknown as TComponent),
     );

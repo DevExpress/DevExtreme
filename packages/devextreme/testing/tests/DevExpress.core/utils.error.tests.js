@@ -1,4 +1,4 @@
-import errorUtils from '__internal/core/utils/m_error';
+import errorUtils from '__internal/core/utils/error';
 import consoleUtils from '__internal/core/utils/m_console';
 
 const errors = errorUtils({

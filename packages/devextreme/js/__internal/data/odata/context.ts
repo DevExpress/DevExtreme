@@ -42,7 +42,7 @@ class ODataContext {
     this._errorHandler = options.errorHandler;
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    each(options.entities || [], (entityAlias: string, entityOptions: { name?: string }): void => {
+    each(options.entities || {}, (entityAlias: string, entityOptions: { name?: string }): void => {
       this[entityAlias] = new ODataStore(extend(
         {},
         options,

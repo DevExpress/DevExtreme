@@ -10,14 +10,11 @@ const clickEvent = addNamespace('dxclick', MODULE_NAMESPACE);
 let ImageCursorModule = BaseModule;
 
 if (Quill) {
-  // @ts-expect-error
   ImageCursorModule = class ImageCursorModule extends BaseModule {
     quill: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
-      // @ts-expect-error
       this.addCleanCallback(this.clean.bind(this));
       this._attachEvents();
     }

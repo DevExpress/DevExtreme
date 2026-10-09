@@ -29,6 +29,7 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
 
+import { CLASSES } from './const';
 import { createFilterRowExpressions } from './utils';
 
 const OPERATION_ICONS = {
@@ -64,7 +65,6 @@ const OPERATION_DESCRIPTORS = {
 
 const FILTERING_TIMEOUT = 700;
 const CORRECT_FILTER_RANGE_OVERLAY_WIDTH = 1;
-const FILTER_ROW_CLASS = 'filter-row';
 const FILTER_RANGE_OVERLAY_CLASS = 'filter-range-overlay';
 const FILTER_RANGE_START_CLASS = 'filter-range-start';
 const FILTER_RANGE_END_CLASS = 'filter-range-end';
@@ -258,7 +258,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       const visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
       const column = that._columnsController.columnOption(e.columnIndex);
       // @ts-expect-error the view is rendered here
-      $cell = that._getCellElement(that.element().find(`.${that.addWidgetPrefix(FILTER_ROW_CLASS)}`).index(), visibleIndex) ?? $();
+      $cell = that._getCellElement(that.element().find(`.${that.addWidgetPrefix(CLASSES.filterRow)}`).index(), visibleIndex) ?? $();
       $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
 
       if (optionNames.filterValue || optionNames.bufferedFilterValue) {
@@ -437,7 +437,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const $row = super._createRow(row);
 
     if (row.rowType === 'filter') {
-      $row.addClass(this.addWidgetPrefix(FILTER_ROW_CLASS));
+      $row.addClass(this.addWidgetPrefix(CLASSES.filterRow));
 
       if (!this.option('useLegacyKeyboardNavigation')) {
         eventsEngine.on($row, 'keydown', (event) => selectView('filterRow', this, event));
@@ -447,7 +447,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return $row;
   }
 
-  protected _getRows() {
+  public _getRows() {
     const result = super._getRows();
 
     if (this.isFilterRowVisible()) {
@@ -771,7 +771,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const columns = this._columnsController.getVisibleColumns();
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     // @ts-expect-error the view is rendered here
-    const rowIndex = this.element().find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).index();
+    const rowIndex = this.element().find(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).index();
 
     if (rowIndex === -1) {
       return;
@@ -817,7 +817,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 
   public isFilterRowCell($cell): boolean {
-    return !!$cell.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
+    return !!$cell.closest(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).length;
   }
 };
 
@@ -883,8 +883,8 @@ export class ApplyFilterViewController extends modules.ViewController {
       // TODO getView
       // @ts-expect-error the view is rendered here
       const columnHeadersViewElement: dxElementWrapper = this.getView('columnHeadersView').element();
-      columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${HIGHLIGHT_OUTLINE_CLASS}`).removeClass(HIGHLIGHT_OUTLINE_CLASS);
-      columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
+      columnHeadersViewElement.find(`.${this.addWidgetPrefix(CLASSES.filterRow)} .${HIGHLIGHT_OUTLINE_CLASS}`).removeClass(HIGHLIGHT_OUTLINE_CLASS);
+      columnHeadersViewElement.find(`.${this.addWidgetPrefix(CLASSES.filterRow)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
       this._getHeaderPanel().enableApplyButton(false);
     }
   }

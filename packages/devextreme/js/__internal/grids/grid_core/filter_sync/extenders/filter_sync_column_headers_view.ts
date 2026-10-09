@@ -27,7 +27,6 @@ export const filterSyncColumnHeadersViewExtender = (
 
   private _isHeaderFilterEmpty(column): boolean {
     if (this.filterController.isFilterSyncActive()) {
-      // @ts-expect-error filterValue can be undefined
       return !filterHasField(this.option('filterValue'), getColumnIdentifier(column));
     }
 

@@ -20,7 +20,7 @@ import uiErrors from 'ui/widget/ui.errors';
 import Overlay from 'ui/overlay/ui.overlay';
 import * as zIndex from '__internal/ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
-import selectors from '__internal/core/utils/m_selectors';
+import selectors from '__internal/core/utils/selectors';
 import swatch from '__internal/core/utils/swatch_container';
 import documentSizeCallbacks from '__internal/core/utils/document_size_callbacks';
 import keyboardMock from '../../helpers/keyboardMock.js';

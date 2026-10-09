@@ -18,82 +18,29 @@ import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 
-import type { EditorFactoryOwner } from './between';
 import { getConfig } from './between';
 import filterOperationsDictionary from './filter_operations_dictionary';
-
-type FieldValue = string | number | boolean | Date | null | undefined;
-export type ConditionValue = FieldValue | FieldValue[];
-
-type FilterCombiner = 'and' | 'or';
-
-export type Condition = [string, string, ...ConditionValue[]];
-
-type ValueOperand = FieldValue | ValueOperand[];
-type ValueCondition = [string, ValueOperand] | [string, string, ...ValueOperand[]];
-type ValueGroup = [] | [FilterCombiner] | ['!', ValueExpression]
-| [ValueExpression, ...(FilterCombiner | ValueExpression)[]];
-type ValueExpression = ValueCondition | ValueGroup;
-export type FilterBuilderValue = ValueExpression | null | undefined;
-
-export type Criteria = unknown[];
-type NegationGroup = ['!', Criteria];
-
-export type FilterExpression = ReturnType<NonNullable<CustomOperation['calculateFilterExpression']>>;
-
-type FilterExpressionCallback = (
-  filterValue: unknown,
-  selectedFilterOperation: string,
-  target?: string,
-) => FilterExpression;
-
-export interface FilterBuilderField extends Field {
-  dataField: string;
-  calculateFilterExpression?: FilterExpressionCallback;
-  createFilterExpression?: FilterExpressionCallback;
-  defaultCalculateFilterExpression: FilterExpressionCallback;
-  defaultFilterOperation?: string;
-  id?: string;
-  parentId?: string;
-  lookup?: NonNullable<Field['lookup']> & {
-    items?: unknown;
-    calculateCellValue?: (value: ConditionValue) => string;
-  };
-}
-
-export interface FilterCustomOperation extends Omit<CustomOperation, 'name' | 'calculateFilterExpression'> {
-  name: string;
-  notForLookup?: boolean;
-  valueSeparator?: string;
-  calculateFilterExpression?: (
-    filterValue: unknown,
-    field: Field,
-    fields?: Field[],
-  ) => FilterExpression;
-}
-
-type LookupField = FilterBuilderField & {
-  lookup: NonNullable<FilterBuilderField['lookup']>;
-};
-
-export interface OperationMenuItem {
-  icon: string;
-  text: string;
-  value: string;
-  isCustom?: boolean;
-}
-
-export interface GroupMenuItem {
-  text: string;
-  value: string;
-}
-
-interface OperationsField {
-  dataType?: string;
-  defaultFilterOperation?: string;
-  filterOperations?: readonly string[] | null;
-  lookup?: object | null;
-}
+import type {
+  Condition,
+  ConditionValue,
+  Criteria,
+  EditorFactoryOwner,
+  FieldValue,
+  FilterBuilderField,
+  FilterBuilderItem,
+  FilterBuilderValue,
+  FilterCustomOperation,
+  FilterExpression,
+  GroupMenuItem,
+  LookupField,
+  NegationGroup,
+  OperationMenuItem,
+  OperationsField,
+  ValueCondition,
+  ValueExpression,
+  ValueGroup,
+  ValueTextCustomOperation,
+} from './types';
 
 const DEFAULT_DATA_TYPE = 'string';
 const EMPTY_MENU_ICON = 'icon-none';
@@ -159,12 +106,16 @@ function getFormattedValueText(field: Field, value: FieldValue): string {
   return formatHelper.format(value, fieldFormat);
 }
 
-export function isCondition(criteria: unknown): criteria is Condition {
+export function isValueCondition(criteria: unknown): criteria is ValueCondition {
   if (!Array.isArray(criteria)) {
     return false;
   }
 
   return criteria.length > 1 && !Array.isArray(criteria[0]) && !Array.isArray(criteria[1]);
+}
+
+export function isCondition(criteria: unknown): criteria is Condition {
+  return isValueCondition(criteria);
 }
 
 function isNegationGroup(group: Criteria): group is NegationGroup {
@@ -198,7 +149,7 @@ function convertGroupToNewStructure(group: Criteria, value: string): void {
   const convertNegationGroupToGroup = function (target: Criteria): void {
     const criteria = getGroupCriteria(target);
     target.length = 0;
-    ([] as Criteria).push.apply(target, criteria);
+    target.push(...criteria);
   };
 
   if (isNegationValue(value)) {
@@ -306,8 +257,7 @@ export function getOperationFromAvailable(
       return availableOperation;
     }
   }
-  // @ts-expect-error wrong usage of new
-  throw new errors.Error('E1048', operation);
+  throw errors.Error('E1048', operation);
 }
 
 export function getCustomOperation(
@@ -495,8 +445,8 @@ function itemExists(plainItems: FilterBuilderField[], parentId: string): boolean
 
 function pushItemAndCheckParent(
   originalItems: FilterBuilderField[],
-  plainItems: FilterBuilderField[],
-  item: FilterBuilderField,
+  plainItems: FilterBuilderItem[],
+  item: FilterBuilderItem,
 ): void {
   const { dataField } = item;
   if (hasParent(dataField)) {
@@ -518,16 +468,19 @@ function pushItemAndCheckParent(
 export function getItems(
   fields: FilterBuilderField[],
   allowHierarchicalFields: boolean | undefined,
-): FilterBuilderField[] {
-  const items: FilterBuilderField[] = [];
+): FilterBuilderItem[] {
+  const items: FilterBuilderItem[] = [];
 
   for (const field of fields) {
-    const item: FilterBuilderField = extend(
+    const mergedField = extend(
       true,
       { caption: generateCaptionByDataField(field.dataField, allowHierarchicalFields) },
       field,
     );
-    item.id = item.name || item.dataField;
+    const item: FilterBuilderItem = {
+      ...mergedField,
+      id: mergedField.name || mergedField.dataField,
+    };
 
     if (allowHierarchicalFields) {
       pushItemAndCheckParent(fields, items, item);
@@ -539,7 +492,10 @@ export function getItems(
   return items;
 }
 
-export function getField(dataField: string, fields: FilterBuilderField[]): FilterBuilderField {
+export function getField<TField extends FilterBuilderField>(
+  dataField: string,
+  fields: TField[],
+): TField | FilterBuilderItem {
   for (const field of fields) {
     if (field.name === dataField) {
       return field;
@@ -553,8 +509,7 @@ export function getField(dataField: string, fields: FilterBuilderField[]): Filte
   if (extendedFields.length > 0) {
     return extendedFields[0];
   }
-  // @ts-expect-error wrong usage of new
-  throw new errors.Error('E1047', dataField);
+  throw errors.Error('E1047', dataField);
 }
 
 export function isGroup(criteria: unknown): criteria is ValueGroup {
@@ -575,26 +530,32 @@ function appendGroupOperationToCriteria(criteria: Criteria, groupOperation: stri
 }
 
 function conditionHasCustomOperation(
-  condition: Condition,
+  condition: ValueCondition,
   customOperations: FilterCustomOperation[],
 ): boolean {
-  const customOperation = getCustomOperation(customOperations, condition[1]);
-  return !!customOperation && customOperation.name === condition[1];
+  const [, operation] = condition;
+
+  return isString(operation) && !!getCustomOperation(customOperations, operation);
+}
+
+function isInnerCondition(
+  condition: ValueCondition,
+  customOperations: FilterCustomOperation[],
+): condition is Condition {
+  return condition.length > 2 || conditionHasCustomOperation(condition, customOperations);
 }
 
 function convertToInnerCondition(
-  condition: Condition,
+  condition: ValueCondition,
   customOperations: FilterCustomOperation[],
 ): Condition {
-  if (conditionHasCustomOperation(condition, customOperations)) {
+  if (isInnerCondition(condition, customOperations)) {
     return condition;
   }
 
-  if (condition.length < 3) {
-    // eslint-disable-next-line prefer-destructuring
-    condition[2] = condition[1];
-    condition[1] = EQUAL_OPERATION;
-  }
+  condition.splice(1, 0, EQUAL_OPERATION);
+
+  // @ts-expect-error the shorthand [field, value] was extended to [field, '=', value] in place
   return condition;
 }
 
@@ -628,7 +589,7 @@ function convertToInnerGroup(
     if (isGroup(item)) {
       innerGroup.push(convertItem(item, customOperations, defaultOperation));
       innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
-    } else if (isCondition(item)) {
+    } else if (isValueCondition(item)) {
       innerGroup.push(convertToInnerCondition(item, customOperations));
       innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
     }
@@ -653,7 +614,7 @@ export function convertToInnerStructure(
 
   const clone: Criteria = extend(true, [], value);
 
-  if (isCondition(clone)) {
+  if (isValueCondition(clone)) {
     return appendGroupOperationToCriteria(
       convertToInnerCondition(clone, customOperations),
       defaultOperation,
@@ -661,7 +622,7 @@ export function convertToInnerStructure(
   }
   if (isNegationGroup(clone)) {
     const [, innerCriteria] = clone;
-    if (isCondition(innerCriteria)) {
+    if (isValueCondition(innerCriteria)) {
       return ['!', appendGroupOperationToCriteria(
         convertToInnerCondition(innerCriteria, customOperations),
         defaultOperation,
@@ -680,7 +641,7 @@ export function convertToInnerStructure(
 
 export function getNormalizedFields(fields: Field[]): FilterBuilderField[] {
   return fields.reduce<FilterBuilderField[]>((result, field) => {
-    if (isDefined(field.dataField)) {
+    if (isDefined(field.dataField) && field.dataField !== '') {
       const normalizedField: Partial<FilterBuilderField> = {};
       // eslint-disable-next-line no-restricted-syntax
       for (const key in field) {
@@ -706,11 +667,11 @@ export function getNormalizedFields(fields: Field[]): FilterBuilderField[] {
 }
 
 function getConditionFilterExpression(
-  condition: Condition,
+  condition: ValueCondition,
   fields: FilterBuilderField[],
   customOperations: FilterCustomOperation[],
   target: string,
-): FilterExpression {
+): FilterExpression | null {
   const field = getField(condition[0], fields);
   const filterExpression = convertToInnerCondition(condition, customOperations);
   const customOperation = customOperations.length
@@ -753,10 +714,10 @@ export function getFilterExpression(
     return ['!', filterExpression];
   }
   const criteria = getGroupCriteria(value);
-  if (isCondition(criteria)) {
+  if (isValueCondition(criteria)) {
     return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
   }
-  let result: FilterExpression[] = [];
+  const result: FilterExpression[] = [];
   let filterExpression: FilterExpression | null = null;
   const groupValue = getGroupValue(criteria);
 
@@ -770,7 +731,7 @@ export function getFilterExpression(
       if (filterExpression) {
         result.push(filterExpression);
       }
-    } else if (isCondition(item)) {
+    } else if (isValueCondition(item)) {
       filterExpression = getConditionFilterExpression(item, fields, customOperations, target);
       if (filterExpression && result.length) {
         result.push(groupValue);
@@ -781,13 +742,9 @@ export function getFilterExpression(
     }
   }
 
-  if (result.length === 1) {
-    // @ts-expect-error a single expression replaces the list
-    // eslint-disable-next-line prefer-destructuring
-    result = result[0];
-  }
+  const expression = result.length === 1 ? result[0] : result;
 
-  return result.length ? result : null;
+  return isFunction(expression) || expression.length ? expression : null;
 }
 
 export function isValidCondition(condition: Condition): boolean {
@@ -841,6 +798,10 @@ export function getNormalizedFilter(group: Criteria): ValueExpression | null {
   return normalizedGroup;
 }
 
+export function hasLookup(field: FilterBuilderField): field is LookupField {
+  return !!field.lookup;
+}
+
 export function getCurrentLookupValueText(
   field: LookupField,
   value: ConditionValue,
@@ -852,7 +813,6 @@ export function getCurrentLookupValueText(
   }
   const { lookup } = field;
   if (lookup.items) {
-    // @ts-expect-error calculateCellValue is declared only on the grid lookup
     handler(lookup.calculateCellValue(value) || '');
   } else {
     const lookupDataSource = isFunction(lookup.dataSource)
@@ -886,7 +846,7 @@ export function getCurrentLookupValueText(
 function getPrimitiveValueText(
   field: Field,
   value: FieldValue,
-  customOperation: CustomOperation | null,
+  customOperation: ValueTextCustomOperation | FilterCustomOperation | null,
   target: string,
   options?: { values: FieldValue[] },
 ): string {
@@ -903,11 +863,11 @@ function getPrimitiveValueText(
 
   if (customOperation && customOperation.customizeText) {
     valueText = customOperation.customizeText.call(customOperation, {
+      // @ts-expect-error FieldInfo.value does not admit boolean or null
       value,
       valueText,
       field,
       target,
-      // @ts-expect-error customizeText is declared with one argument
     }, options);
   }
 
@@ -917,7 +877,7 @@ function getPrimitiveValueText(
 function getArrayValueText(
   field: Field,
   value: FieldValue[],
-  customOperation: CustomOperation | null,
+  customOperation: ValueTextCustomOperation | FilterCustomOperation | null,
   target: string,
 ): string[] {
   const options = { values: value };
@@ -932,7 +892,7 @@ export function getCurrentValueText(
   this: unknown,
   field: Field,
   value: FieldValue | FieldValue[],
-  customOperation: CustomOperation | null,
+  customOperation: ValueTextCustomOperation | FilterCustomOperation | null,
   target = 'filterBuilder',
 ): string | DeferredObj<string | string[]> {
   if (checkDefaultValue(value)) {
@@ -940,8 +900,7 @@ export function getCurrentValueText(
   }
 
   if (Array.isArray(value)) {
-    // @ts-expect-error Deferred has badly typed ctor function
-    const result: DeferredObj<string | string[]> = new Deferred();
+    const result = Deferred<string | string[]>();
     when.apply(this, getArrayValueText(field, value, customOperation, target)).done((...args) => {
       const text: string | string[] = (args as string[]).some((item) => !checkDefaultValue(item))
         ? (args as string[]).map((item) => (!checkDefaultValue(item) ? item : '?'))
@@ -954,9 +913,9 @@ export function getCurrentValueText(
 }
 
 export function getCaptionWithParents(
-  item: FilterBuilderField,
-  plainItems: FilterBuilderField[],
-): string | undefined {
+  item: FilterBuilderItem,
+  plainItems: FilterBuilderItem[],
+): string {
   if (hasParent(item.dataField)) {
     const parentId = getParentIdFromItemDataField(item.dataField);
     for (const plainItem of plainItems) {
@@ -988,7 +947,7 @@ export function getMergedOperations(
   betweenCaption: string | undefined,
   context: EditorFactoryOwner,
 ): FilterCustomOperation[] {
-  const result: FilterCustomOperation[] = extend(true, [], customOperations);
+  const result = extend(true, [], customOperations as FilterCustomOperation[] | undefined);
   let betweenIndex = -1;
   result.some((customOperation, index) => {
     if (customOperation.name === 'between') {
@@ -1020,7 +979,7 @@ function syncConditionIntoGroup(
   let shouldPush = canPush;
 
   filter.forEach((item) => {
-    if (isCondition(item)) {
+    if (isValueCondition(item)) {
       if (isMatchedCondition(item, addedFilter[0])) {
         if (shouldPush) {
           result.push(addedFilter);
@@ -1060,7 +1019,7 @@ export function removeFieldConditionsFromFilter(
     return null;
   }
 
-  if (isCondition(filter)) {
+  if (isValueCondition(filter)) {
     const hasMatchedCondition = isMatchedCondition(filter, dataField);
     return !hasMatchedCondition ? filter : null;
   }
@@ -1068,14 +1027,14 @@ export function removeFieldConditionsFromFilter(
 }
 
 export function syncFilters(
-  filter: Criteria | null,
+  filter: Criteria | null | undefined,
   addedFilter: Criteria,
 ): Criteria | null {
-  if (filter === null || filter.length === 0) {
+  if (!filter || filter.length === 0) {
     return addedFilter;
   }
 
-  if (isCondition(filter)) {
+  if (isValueCondition(filter)) {
     if (isMatchedCondition(filter, addedFilter[0])) {
       return addedFilter;
     }
@@ -1091,12 +1050,12 @@ export function syncFilters(
 }
 
 export function getMatchedConditions(
-  filter: Criteria | null,
+  filter: Criteria | null | undefined,
   dataField: string | undefined,
 ): Criteria[] {
-  if (filter === null || filter.length === 0) return [];
+  if (!filter || filter.length === 0) return [];
 
-  if (isCondition(filter)) {
+  if (isValueCondition(filter)) {
     if (isMatchedCondition(filter, dataField)) {
       return [filter];
     }
@@ -1109,24 +1068,24 @@ export function getMatchedConditions(
   }
 
   const result = filter.filter(
-    (item): item is Condition => isCondition(item) && isMatchedCondition(item, dataField),
+    (item): item is Condition => isValueCondition(item) && isMatchedCondition(item, dataField),
   );
 
   return result;
 }
 
 export function filterHasField(
-  filter: Criteria | null,
+  filter: Criteria | null | undefined,
   dataField: string | undefined,
 ): boolean {
-  if (filter === null || filter.length === 0) return false;
+  if (!filter || filter.length === 0) return false;
 
-  if (isCondition(filter)) {
+  if (isValueCondition(filter)) {
     return filter[0] === dataField;
   }
 
   return filter.some(
-    (item) => (isCondition(item) || isGroup(item)) && filterHasField(item, dataField),
+    (item) => (isValueCondition(item) || isGroup(item)) && filterHasField(item, dataField),
   );
 }
 
