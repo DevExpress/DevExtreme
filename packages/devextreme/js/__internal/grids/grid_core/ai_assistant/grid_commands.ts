@@ -8,7 +8,7 @@ import {
   DEFAULT_SUCCESS_MESSAGE,
   EXECUTION_ABORT_MESSAGE,
 } from '@ts/grids/grid_core/ai_assistant/const';
-import { z } from 'zod';
+import { z } from '@ts/grids/grid_core/ai_assistant/zod';
 
 import type { InternalGrid } from '../types';
 import type {

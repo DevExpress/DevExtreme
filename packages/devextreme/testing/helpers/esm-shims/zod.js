@@ -30,6 +30,7 @@ const z = {
     describe() { return z; },
     safeParse() { return { success: true, data: {} }; },
     toJSONSchema() { return { type: 'object' }; },
+    config() { return {}; },
 };
 
 export { z };

@@ -3,7 +3,7 @@ import { defineGridCommand } from '@ts/grids/grid_core/ai_assistant/commands/def
 // eslint-disable-next-line spellcheck/spell-checker
 import { optionalNullish } from '@ts/grids/grid_core/ai_assistant/commands/utils';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import { z } from 'zod';
+import { z } from '@ts/grids/grid_core/ai_assistant/zod';
 
 import type { Column } from './types';
 
