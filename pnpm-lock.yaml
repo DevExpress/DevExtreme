@@ -1867,24 +1867,12 @@ importers:
       '@stylistic/stylelint-plugin':
         specifier: 3.1.3
         version: 3.1.3(stylelint@16.22.0(typescript@5.9.3))
-      '@types/jest':
-        specifier: 30.0.0
-        version: 30.0.0
-      '@types/node':
-        specifier: catalog:tools
-        version: 20.19.37
       autoprefixer:
         specifier: 10.5.0
         version: 10.5.0(postcss@8.5.23)
-      chokidar:
-        specifier: 5.0.0
-        version: 5.0.0
       clean-css:
         specifier: 5.3.3
         version: 5.3.3
-      jest:
-        specifier: 30.4.2
-        version: 30.4.2(@types/node@20.19.37)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.19.37)(typescript@5.9.3))
       postcss:
         specifier: ^8.5.23
         version: 8.5.23
