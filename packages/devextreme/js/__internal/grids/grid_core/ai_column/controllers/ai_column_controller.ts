@@ -7,7 +7,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsController } from '../../columns_controller/columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
 import type { DataSourceController } from '../../data_source/data_source_controller';
-import type DataSourceAdapter from '../../data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '../../data_source_adapter/data_source_adapter';
 import type { ChangedEvent, RawItemData } from '../../data_source_adapter/types';
 import gridCoreUtils from '../../m_utils';
 import { Controller } from '../../modules/modules';
