@@ -11,7 +11,7 @@ import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
-import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
 import {
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
