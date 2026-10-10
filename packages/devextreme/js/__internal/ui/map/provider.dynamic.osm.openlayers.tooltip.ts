@@ -3,7 +3,7 @@ import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/popover';
 import Popover from '@js/ui/popover';
-import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/m_selectors';
+import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/selectors';
 import type InternalPopover from '@ts/ui/popover/popover';
 
 import { DEFAULT_MARKER_CLASS } from './provider.dynamic.osm.openlayers.marker';

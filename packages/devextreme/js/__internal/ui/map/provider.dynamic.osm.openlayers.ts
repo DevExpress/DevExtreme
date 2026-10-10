@@ -2,7 +2,7 @@ import Color from '@js/color';
 import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import resizeObserverSingleton from '@js/core/resize_observer';
-import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/m_selectors';
+import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/selectors';
 
 import type {
   MapEngine,
