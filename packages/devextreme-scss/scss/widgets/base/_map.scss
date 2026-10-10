@@ -18,6 +18,22 @@
   user-select: none;
 }
 
+.dx-map-marker-default {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+}
+
+.dx-map-marker-default-icon {
+  display: block;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 0.5px rgba(255, 255, 255, 0.85))
+    drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35));
+}
+
 .dx-map-marker-tooltip {
   margin: 10px;
 }

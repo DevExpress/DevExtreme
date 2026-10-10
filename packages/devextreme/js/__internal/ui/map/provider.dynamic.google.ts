@@ -90,7 +90,7 @@ const googleMapsLoaded = (): boolean => Boolean(window.google?.maps);
 // eslint-disable-next-line @typescript-eslint/init-declarations
 let googleMapsLoader;
 
-class GoogleProvider extends DynamicProvider {
+class GoogleProvider extends DynamicProvider<GoogleLocation> {
   _clickListener?: (e: { latLng: GoogleLocation; domEvent: Event }) => void;
 
   _preventZoomChangeEvent?: boolean;
@@ -132,7 +132,7 @@ class GoogleProvider extends DynamicProvider {
       } else {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
-          resolve(geocodedLocation as GoogleLocation);
+          resolve(geocodedLocation);
         });
       }
     });

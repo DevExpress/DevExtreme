@@ -9,6 +9,8 @@ import type Map from './map';
 import type { MapProperties } from './map';
 import type { LocationOption, MarkerOptions, RouteOptions } from './provider.dynamic';
 
+type KeyedMapProvider = Exclude<MapProvider, 'osm'>;
+
 abstract class Provider {
   _mapWidget!: Map;
 
@@ -56,6 +58,10 @@ abstract class Provider {
     return Promise.resolve();
   }
 
+  updateFocus(): Promise<void> {
+    return Promise.resolve();
+  }
+
   abstract updateBounds(): Promise<unknown>;
 
   abstract updateCenter(): Promise<unknown>;
@@ -71,17 +77,9 @@ abstract class Provider {
     markerOptionsToRemove: MarkerOptions[],
     markerOptionsToAdd: MarkerOptions[],
   ): Promise<unknown> {
-    return new Promise((resolve) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
-        .then((removeValue) => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd)
-            .then((addValue) => {
-              resolve(addValue || removeValue);
-            });
-        });
-    });
+    return this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
+      .then((removeValue) => this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd)
+        .then((addValue) => addValue || removeValue));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -100,17 +98,9 @@ abstract class Provider {
     routeOptionsToRemove: RouteOptions[],
     routeOptionsToAdd: RouteOptions[],
   ): Promise<unknown> {
-    return new Promise((resolve) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove)
-        .then((removeValue) => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd)
-            .then((addValue) => {
-              resolve(addValue || removeValue);
-            });
-        });
-    });
+    return this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove)
+      .then((removeValue) => this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd)
+        .then((addValue) => addValue || removeValue));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -152,7 +142,7 @@ abstract class Provider {
     return undefined;
   }
 
-  _keyOption(providerName: MapProvider): string {
+  _keyOption(providerName: KeyedMapProvider): string {
     const key = this._option('apiKey') ?? '';
     if (typeof key === 'string') {
       return key;

@@ -44,7 +44,7 @@ export const enums = {
     Options: ['GaugeIndicator.type'],
   },
   GeoMapProvider: {
-    Items: ['bing', 'google', 'googleStatic', 'azure'],
+    Items: ['bing', 'google', 'googleStatic', 'azure', 'osm'],
   },
   SchedulerViewType: {
     Items: [

@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "開始日期必須晚於 {0}",
         "dxGantt-dialogEndDateValidation": "結束日期必須晚於 {0}",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "圖庫項目",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

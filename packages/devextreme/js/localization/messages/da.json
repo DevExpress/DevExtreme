@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "Startdatoen skal være efter {0}",
         "dxGantt-dialogEndDateValidation": "Slutdatoen skal være efter {0}",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Gallerielement",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

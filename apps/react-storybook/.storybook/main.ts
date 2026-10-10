@@ -28,7 +28,11 @@ const config: StorybookConfig = {
 
   docs: {},
 
-  staticDirs: ['../stories/assets', '../node_modules/devextreme/dist'],
+  staticDirs: [
+    '../stories/assets',
+    '../node_modules/devextreme/dist',
+    { from: '../../demos/images/Maps', to: '/images/maps' },
+  ],
 
   typescript: {
     reactDocgen: "react-docgen-typescript"
