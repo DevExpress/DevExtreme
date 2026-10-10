@@ -11,6 +11,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { extend } from '@ts/core/utils/m_extend';
 import { isDefined as _isDefined } from '@ts/core/utils/m_type';
 import consts from '@ts/viz/components/consts';
@@ -388,7 +389,7 @@ export default _extend({}, symbolPoint, {
   },
 
   getColor() {
-    return this._styles.normal.fill;
+    return paintedColor(this._styles.normal.fill, this.series.getRenderer?.()?.root?.element);
   },
 
   coordsIn(x, y) {

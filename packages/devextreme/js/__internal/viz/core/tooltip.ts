@@ -1,7 +1,6 @@
 /* eslint-disable import/no-import-module-exports */
 /* eslint-disable default-case */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable consistent-return */
@@ -16,17 +15,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import { Color } from '@ts/color';
 import { domAdapter } from '@ts/core/dom_adapter';
 import formatHelper from '@ts/core/format_helper';
 import { renderer as $ } from '@ts/core/renderer';
 import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
+import { isCssVariableReference } from '@ts/core/utils/css_variables';
+import { camelize } from '@ts/core/utils/inflector';
 import { replaceWith } from '@ts/core/utils/m_dom';
 import { extend } from '@ts/core/utils/m_extend';
-import { camelize } from '@ts/core/utils/m_inflector';
 import { getHeight, getWidth } from '@ts/core/utils/m_size';
-import { normalizeStyleProp } from '@ts/core/utils/m_style';
 import { isDefined, isFunction, isPlainObject } from '@ts/core/utils/m_type';
 import { getWindow } from '@ts/core/utils/m_window';
+import { normalizeStyleProp } from '@ts/core/utils/style';
 
 import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';
@@ -41,6 +42,25 @@ const mathMax = Math.max;
 const mathMin = Math.min;
 const window: Window = getWindow();
 const DEFAULT_HTML_GROUP_WIDTH = 3000;
+const PERCENT = 100;
+
+function foldOpacityIntoFill(styles: Record<string, ThemeValue>): void {
+  const { fill, 'fill-opacity': opacity } = styles;
+
+  if (!isDefined(fill) || !isDefined(opacity)) {
+    return;
+  }
+
+  delete styles['fill-opacity'];
+
+  if (isCssVariableReference(fill)) {
+    styles.fill = `color-mix(in srgb, ${fill} ${Number((opacity * PERCENT).toFixed(2))}%, transparent)`;
+  } else {
+    const { r, g, b } = new Color(fill);
+
+    styles.fill = `rgba(${r},${g},${b},${opacity})`;
+  }
+}
 
 type TooltipEventTrigger = (name: string, data?: ThemeValue) => void;
 
@@ -191,6 +211,7 @@ export let Tooltip = class Tooltip {
 
     this._options = options;
     this._textFontStyles = patchFontOptions(options.font);
+    foldOpacityIntoFill(this._textFontStyles);
     this._textFontStyles.color = this._textFontStyles.fill;
     this._wrapper.css({ zIndex: options.zIndex });
 
@@ -324,8 +345,10 @@ export let Tooltip = class Tooltip {
     // text area
     const normalizedCSS = {};
     for (const name in this._textFontStyles) {
-      const normalizedName = camelize(name);
-      normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, this._textFontStyles[name]);
+      if (name !== 'fill-opacity') {
+        const normalizedName = camelize(name);
+        normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, this._textFontStyles[name]);
+      }
     }
     this._textGroupHtml.css(normalizedCSS);
     this._text.css(this._textFontStyles);

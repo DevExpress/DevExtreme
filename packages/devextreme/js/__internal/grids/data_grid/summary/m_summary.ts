@@ -12,8 +12,8 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/c
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData, RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
 import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
@@ -153,7 +153,7 @@ const sortGroupsBySummary = function (data, group, summary) {
 };
 
 export class FooterView extends ColumnsView {
-  protected _getRows() {
+  public _getRows() {
     // @ts-expect-error
     return this._dataController.footerItems();
   }

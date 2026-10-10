@@ -22,7 +22,7 @@ import type {
   PointerInteractionEvent,
 } from '@js/events';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-import { focusable as focusableSelector } from '@ts/core/utils/m_selectors';
+import { focusable as focusableSelector } from '@ts/core/utils/selectors';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -122,25 +122,22 @@ class Widget<
   }
 
   _getDefaultOptions(): TProperties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._getDefaultOptions(), {
+    return {
+      ...super._getDefaultOptions(),
       hoveredElement: null,
       isActive: false,
       disabled: false,
       visible: true,
-      hint: undefined,
       activeStateEnabled: false,
-      onContentReady: undefined,
       hoverStateEnabled: false,
       focusStateEnabled: false,
       tabIndex: 0,
-      accessKey: undefined,
       onFocusIn: null,
       onFocusOut: null,
       onKeyboardHandled: null,
       ignoreParentReadOnly: false,
       useResizeObserver: true,
-    });
+    };
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {

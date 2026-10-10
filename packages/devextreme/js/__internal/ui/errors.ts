@@ -1,5 +1,5 @@
 import errors from '@ts/core/errors';
-import errorUtils from '@ts/core/utils/m_error';
+import errorUtils from '@ts/core/utils/error';
 
 export default errorUtils(errors.ERROR_MESSAGES, {
   E1001: 'Module \'{0}\'. Controller \'{1}\' is already registered',

@@ -18,14 +18,16 @@
 import {
   export as _export, image as imageExporter, pdf as pdfExporter, svg as svgExporter,
 } from '@js/exporter';
+import { domAdapter } from '@ts/core/dom_adapter';
 import messageLocalization from '@ts/core/localization/message';
 import { renderer as $ } from '@ts/core/renderer';
+import { copyResolvedStyles, resolvedInScope } from '@ts/core/utils/css_variables';
 import { logger } from '@ts/core/utils/m_console';
 import { extend } from '@ts/core/utils/m_extend';
 import { getWidth } from '@ts/core/utils/m_size';
-import { HIDDEN_FOR_EXPORT } from '@ts/core/utils/m_svg';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined, isString } from '@ts/core/utils/m_type';
 import { getWindow } from '@ts/core/utils/m_window';
+import { HIDDEN_FOR_EXPORT } from '@ts/core/utils/svg';
 import { end as hoverEventEnd, start as hoverEventStart } from '@ts/events/hover';
 import pointerEvents from '@ts/events/pointer';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -351,9 +353,11 @@ function createMenuItems(renderer: ThemeValue, options: ThemeValue): MenuItem[] 
 }
 
 function getBackgroundColorFromMarkup(markup) {
-  const parsedMarkup = GET_COLOR_REGEX.exec(markup);
+  if (!isString(markup)) {
+    return $(markup).attr('data-backgroundcolor');
+  }
 
-  return parsedMarkup?.[1];
+  return GET_COLOR_REGEX.exec(markup)?.[1];
 }
 
 export const exportFromMarkup = function (markup, options) {
@@ -364,7 +368,7 @@ export const exportFromMarkup = function (markup, options) {
   options.exportedAction = options.onExported;
   options.fileSavingAction = options.onFileSaving;
   options.margin = isDefined(options.margin) ? options.margin : MARGIN;
-  options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor;
+  options.backgroundColor = resolvedInScope(isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor, domAdapter.getDocumentElement());
   _export(markup, options, getCreatorFunc(options.format));
 };
 
@@ -392,11 +396,15 @@ export let combineMarkups = function (widgets, options: CombineMarkupsOptions = 
   const exportItems = widgets.reduce((r, row, rowIndex) => {
     const rowInfo = row.reduce((r, item, colIndex) => {
       const size = item.getSize();
-      const backgroundColor = item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor;
-      const node = $(item.element())
-        .find('svg')
-        .get(0)
-        .cloneNode(true);
+      const container = $(item.element());
+      const backgroundColor = resolvedInScope(
+        item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor,
+        container.get(0),
+      );
+      const source = container.find('svg').get(0);
+      const node = source.cloneNode(true) as Element;
+
+      copyResolvedStyles(source, node);
 
       backgroundColor && r.backgroundColors.indexOf(backgroundColor) === -1 && r.backgroundColors.push(backgroundColor);
 
@@ -788,7 +796,7 @@ function getExportOptions(widget: ThemeValue, exportOptions: ThemeValue, fileNam
   return {
     format: format || DEFAULT_EXPORT_FORMAT,
     fileName: fileName || exportOptions.fileName || 'file',
-    backgroundColor: exportOptions.backgroundColor,
+    backgroundColor: resolvedInScope(exportOptions.backgroundColor, $(widget.element()).get(0)),
     width,
     height,
     margin: exportOptions.margin,

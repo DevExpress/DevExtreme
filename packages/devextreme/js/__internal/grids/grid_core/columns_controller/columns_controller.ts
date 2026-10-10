@@ -2,6 +2,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import type { FixedPosition } from '@js/common/grids';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
@@ -20,11 +21,12 @@ import Store from '@js/data/abstract_store';
 import type { Grouping, GroupPanel } from '@js/ui/data_grid';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
-import inflector from '@ts/core/utils/m_inflector';
+import inflector from '@ts/core/utils/inflector';
 import type { SortingInfo } from '@ts/data/utils';
 import type {
   BandColumnsCache,
   Column,
+  ColumnCommonSettings,
   ColumnDataSourceParameter,
   ColumnFilterExpression,
   ColumnIdentifier,
@@ -43,6 +45,7 @@ import type {
   GroupColumn,
   IndexedColumns,
   SavedColumnState,
+  WithCellValueCalculator,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
@@ -76,6 +79,7 @@ import {
   getRowCount,
   getSerializationFormat,
   getValueDataType,
+  hasCellValueCalculator,
   isColumnFixed,
   isColumnNameRequired,
   isFirstOrLastColumn,
@@ -493,12 +497,11 @@ export class ColumnsController extends modules.Controller {
     return this.dataSourceAdapterApplied;
   }
 
-  public getCommonSettings(column?: Column): Partial<Column> {
+  public getCommonSettings(column?: Column): ColumnCommonSettings {
     const commonColumnSettings = this.getCommonColumnSettings(column);
     const groupingOptions: Grouping = this.option('grouping') ?? {};
     const groupPanelOptions: GroupPanel = this.option('groupPanel') ?? {};
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend has an untyped result
     return extend({
       allowFixing: this.option('columnFixing.enabled'),
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- false -> undefined
@@ -728,28 +731,34 @@ export class ColumnsController extends modules.Controller {
     const rtlEnabled = this.option('rtlEnabled');
     const expandColumn = expandColumns.length ? this.columnOption('command:expand') : undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend has an untyped result
-    expandColumns = map(expandColumns, (column: Column): Column => extend(
-      {},
-      {
-        ...column,
-        ownerBand: undefined,
-      },
-      {
+    const fixedPosition: FixedPosition = rtlEnabled ? 'right' : 'left';
+
+    expandColumns = map(expandColumns, (column: Column): Column => {
+      const columnReset: Partial<Column> = {
         visibleWidth: null,
+        // @ts-expect-error null resets the minWidth of the column
         minWidth: null,
         cellTemplate: !isDefined(column.groupIndex) ? column.cellTemplate : null,
         headerCellTemplate: null,
         fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
-        fixedPosition: rtlEnabled ? 'right' : 'left',
-      },
-      expandColumn,
-      {
-        index: column.index,
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- skip empty type
-        type: column.type || GROUP_COMMAND_COLUMN_NAME,
-      },
-    ));
+        fixedPosition,
+      };
+
+      return extend(
+        {},
+        {
+          ...column,
+          ownerBand: undefined,
+        },
+        columnReset,
+        expandColumn,
+        {
+          index: column.index,
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- empty type
+          type: column.type || GROUP_COMMAND_COLUMN_NAME,
+        },
+      );
+    });
 
     return expandColumns;
   }
@@ -1356,9 +1365,9 @@ export class ColumnsController extends modules.Controller {
         lookup.serializationFormat = dateSerializationFormat;
       }
 
-      const inferDataTypes = (): void => {
+      const inferDataTypes = (processedColumn: WithCellValueCalculator<Column>): void => {
         for (const item of firstItems) {
-          const value = column.calculateCellValue(item);
+          const value = processedColumn.calculateCellValue(item);
 
           if (!column.dataType) {
             const valueDataType = getValueDataType(value);
@@ -1390,9 +1399,11 @@ export class ColumnsController extends modules.Controller {
         }
       };
 
-      const inferSerializationFormats = (): void => {
+      const inferSerializationFormats = (
+        processedColumn: WithCellValueCalculator<Column>,
+      ): void => {
         for (const item of firstItems) {
-          const value = column.calculateCellValue(item, true);
+          const value = processedColumn.calculateCellValue(item, true);
 
           if (column.serializationFormat === undefined) {
             column.serializationFormat = getSerializationFormat(column.dataType, value);
@@ -1401,20 +1412,21 @@ export class ColumnsController extends modules.Controller {
           if (lookup && lookup.serializationFormat === undefined) {
             lookup.serializationFormat = getSerializationFormat(
               lookup.dataType,
+              // @ts-expect-error createColumn initializes the calculateCellValue of a lookup
               lookup.calculateCellValue(value, true),
             );
           }
         }
       };
 
-      if (column.calculateCellValue && firstItems.length) {
+      if (hasCellValueCalculator(column) && firstItems.length) {
         if (!column.dataType || (lookup && !lookup.dataType)) {
-          inferDataTypes();
+          inferDataTypes(column);
         }
         const needsSerializationFormat = column.serializationFormat === undefined
           || (lookup && lookup.serializationFormat === undefined);
         if (needsSerializationFormat) {
-          inferSerializationFormats();
+          inferSerializationFormats(column);
         }
       }
 
@@ -1594,15 +1606,16 @@ export class ColumnsController extends modules.Controller {
         && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
 
     if (!this._columns.length) {
+      const columnsOptions: (Column | string | undefined)[] = this._columns;
       each(groupParameters, (_: number, group) => {
-        this._columns.push(group.selector);
+        columnsOptions.push(group.selector);
       });
       each(sortParameters, (_: number, sort) => {
         if (!isFunction(sort.selector)) {
-          this._columns.push(sort.selector);
+          columnsOptions.push(sort.selector);
         }
       });
-      assignColumns(this, createColumnsFromOptions(this, this._columns));
+      assignColumns(this, createColumnsFromOptions(this, columnsOptions));
     }
 
     const shouldApplyGrouping = (Boolean(needToApplyGroupingFromDataSource)

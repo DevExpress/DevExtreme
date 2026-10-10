@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { BBox } from '@ts/viz/core/types';
@@ -29,7 +30,7 @@ interface LinkConnection {
 }
 
 interface LinkWidget {
-  _renderer: { getRootOffset: () => { left: number; top: number } };
+  _renderer: { getRootOffset: () => { left: number; top: number }; root?: { element?: Element } };
   _tooltip?: { show: (target: ThemeValue, coords: { x: number; y: number }) => void; hide: () => void };
   _getOption: (name: string, isScalar?: boolean) => ThemeValue;
   _suspend: () => void;
@@ -78,7 +79,7 @@ class Link {
 
   declare widget: LinkWidget;
 
-  declare color: string;
+  declare fill: string;
 
   declare connection: LinkConnection;
 
@@ -100,7 +101,7 @@ class Link {
     this.code = 0;
     this.widget = widget;
 
-    this.color = params.color;
+    this.fill = params.color;
     this.connection = params.connection;
     this.d = params.d;
     this.options = params.options;
@@ -111,16 +112,24 @@ class Link {
     };
 
     this.states = {
-      normal: compileAttrs(this.color, this.options, this.options, params.gradient),
-      adjacentNodeHover: compileAttrs(this.color, { opacity: 0, border: {} }, this.options, params.gradient),
-      hover: compileAttrs(this.color, { opacity: 0, border: {} }, this.options, params.gradient),
+      normal: compileAttrs(this.fill, this.options, this.options, params.gradient),
+      adjacentNodeHover: compileAttrs(this.fill, { opacity: 0, border: {} }, this.options, params.gradient),
+      hover: compileAttrs(this.fill, { opacity: 0, border: {} }, this.options, params.gradient),
     };
 
     this.overlayStates = {
-      normal: compileAttrs(this.color, { opacity: 0, border: {} }, this.options),
-      adjacentNodeHover: compileAttrs(this.color, this.options.hoverStyle, this.options),
-      hover: compileAttrs(this.color, this.options.hoverStyle, this.options),
+      normal: compileAttrs(this.fill, { opacity: 0, border: {} }, this.options),
+      adjacentNodeHover: compileAttrs(this.fill, this.options.hoverStyle, this.options),
+      hover: compileAttrs(this.fill, this.options.hoverStyle, this.options),
     };
+  }
+
+  get color(): string {
+    return paintedColor(this.fill, this.widget._renderer?.root?.element);
+  }
+
+  set color(value: string) {
+    this.fill = value;
   }
 
   getState(): string {

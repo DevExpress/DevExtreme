@@ -96,6 +96,7 @@ import type {
   ViewCellData,
 } from '../types';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import type { ResourceConfig } from '../utils/loader/types';
 import {
   getAppointmentGroupIndex,
   getSafeGroupValues,
@@ -279,7 +280,7 @@ export type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
 export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
 
 export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWorkSpace> {
-  resources: ResourceLoader[];
+  resources?: ResourceConfig[];
   getResourceManager: () => ResourceManager;
   getFilteredItems: () => ListEntity[];
   noDataText: string;
@@ -650,7 +651,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       },
     };
 
-    return extend(super._supportedKeys(), supportedKeys) as SupportedKeys;
+    return extend(super._supportedKeys(), supportedKeys);
   }
 
   private isRTL(): boolean {
@@ -1715,7 +1716,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       allDay: cellData.allDay,
     };
 
-    return extend(true, {}, normalizedCellData) as NormalizedCellData;
+    return extend(true, {}, normalizedCellData);
   }
 
   private getSelectedCellsData(): NormalizedCellData[] {

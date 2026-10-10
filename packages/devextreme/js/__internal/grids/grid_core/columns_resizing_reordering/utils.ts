@@ -1,14 +1,10 @@
 import { each } from '@ts/core/utils/m_iterator';
 import type { View } from '@ts/grids/grid_core/modules/modules';
+import type { BoundingRect } from '@ts/grids/grid_core/views/types';
 
 interface DraggingPanelBoundingRect {
   draggingPanel: View;
-  boundingRect: {
-    top?: number;
-    left?: number;
-    right?: number;
-    bottom?: number;
-  };
+  boundingRect: BoundingRect;
 }
 
 export const getDraggingPanelBoundingRects = (
@@ -17,6 +13,7 @@ export const getDraggingPanelBoundingRects = (
   const boundingRects: DraggingPanelBoundingRect[] = [];
 
   each(draggingPanels, (_, draggingPanel) => {
+    // @ts-expect-error the dragging panels have getBoundingRect
     const boundingRect = draggingPanel?.getBoundingRect();
 
     if (boundingRect) {

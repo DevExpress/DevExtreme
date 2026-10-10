@@ -5,7 +5,7 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 
 import treeListCore from './core';
 
-class TreeListColumnsController extends ColumnsController {
+export class TreeListColumnsController extends ColumnsController {
   public _getFirstItems(dataSourceAdapter?: DataSourceAdapter): RawItemData[] {
     // @ts-expect-error TreeList nodes have data that the base adapter does not type
     return super._getFirstItems(dataSourceAdapter).map((node) => node.data);

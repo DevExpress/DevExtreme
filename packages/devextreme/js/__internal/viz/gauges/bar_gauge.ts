@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { registerComponent } from '@ts/core/component_registrator';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { extend } from '@ts/core/utils/m_extend';
 import { roundFloatPart } from '@ts/core/utils/m_math';
 import { clone } from '@ts/core/utils/m_object';
@@ -952,7 +953,7 @@ class BarGauge extends BaseGauge {
       id: bar.index,
       item: {
         value: bar.getValue(),
-        color: bar.getColor(),
+        color: paintedColor(bar.getColor(), this._renderer.root.element),
         index: bar.index,
       },
       text: formatValue(bar.getValue(), formatOptions),

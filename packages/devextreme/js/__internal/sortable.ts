@@ -12,7 +12,7 @@ import {
 } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import fx from '@ts/common/core/animation/fx';
-import type { Quad } from '@ts/core/utils/m_string';
+import type { Quad } from '@ts/core/utils/string';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Draggable from '@ts/draggable';
 import type { EngineEvent } from '@ts/events/core/events_engine';
@@ -596,9 +596,9 @@ class Sortable extends Draggable<SortableProperties> {
     });
     const placeholderPreparedArgs: PlaceholderPreparedArgs = extend(this._getEventArgs(e), {
       // @ts-expect-error the placeholder element can be null
-      placeholderElement: getPublicElement(this._$placeholderElement),
+      placeholderElement: getPublicElement<HTMLElement>(this._$placeholderElement),
       // @ts-expect-error the drag element can be null
-      dragElement: getPublicElement(sourceDraggable._$dragElement),
+      dragElement: getPublicElement<HTMLElement>(sourceDraggable._$dragElement),
     });
     this._getAction('onPlaceholderPrepared')(placeholderPreparedArgs);
     this._updateItemPoints();

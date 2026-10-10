@@ -50,7 +50,6 @@ import { logger } from '@ts/core/utils/m_console';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
 import Widget, { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';
-import type { Button } from '@ts/ui/button/button';
 import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/drop_down_editor';
 import Editor from '@ts/ui/editor/editor';
 import { setLabelWidthByMaxLabelWidth } from '@ts/ui/form/components/label';
@@ -80,6 +79,7 @@ import type { ItemOptionActionType } from '@ts/ui/form/form.item_options_actions
 import tryCreateItemOptionAction from '@ts/ui/form/form.item_options_actions';
 import type {
   FormItemRuntimeInfo,
+  FormWidgetInstance,
   PreparedGroupedItem,
   PreparedItem,
   PreparedTabItem,
@@ -1354,7 +1354,7 @@ class Form extends Widget<FormProperties> {
     return false;
   }
 
-  _tryChangeLayoutManagerItemOptions(itemPath: string, options: unknown): boolean {
+  _tryChangeLayoutManagerItemOptions(itemPath: string, options: object): boolean {
     let result = false;
     this.beginUpdate();
 
@@ -1798,13 +1798,13 @@ class Form extends Widget<FormProperties> {
     this._updateData(data, value);
   }
 
-  getEditor(dataField: string): Editor | undefined {
+  getEditor(dataField: string): FormWidgetInstance | undefined {
     return this._itemsRunTimeInfo.findWidgetInstanceByDataField(dataField)
-      ?? this._itemsRunTimeInfo.findWidgetInstanceByName<Editor>(dataField);
+      ?? this._itemsRunTimeInfo.findWidgetInstanceByName(dataField);
   }
 
-  getButton(name: string): Button | undefined {
-    return this._itemsRunTimeInfo.findWidgetInstanceByName<Button>(name);
+  getButton(name: string): FormWidgetInstance | undefined {
+    return this._itemsRunTimeInfo.findWidgetInstanceByName(name);
   }
 
   getScrollable(): Scrollable | undefined {

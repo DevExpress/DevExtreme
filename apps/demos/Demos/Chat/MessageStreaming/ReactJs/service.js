@@ -19,7 +19,7 @@ export async function getAIResponseStream(messages, {
     stream: true,
   };
   try {
-    const stream = await chatService.chat.completions.create(params, { signal });
+    const stream = await chatService.chat.completions.create(params, { signal, maxRetries: 0 });
     // eslint-disable-next-line no-restricted-syntax
     for await (const event of stream) {
       const delta = event.choices?.[0]?.delta?.content;

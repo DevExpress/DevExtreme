@@ -255,7 +255,7 @@ class Devices {
       return undefined;
     }
     /// #ENDDEBUG
-    return extend({}, this._realDevice) as ResolvedDevice;
+    return extend({}, this._realDevice);
   }
 
   orientation(): Orientation | undefined {
@@ -389,7 +389,7 @@ class Devices {
   }
 
   _fromConfig(config: Device): ResolvedDevice {
-    const result = extend({}, DEFAULT_DEVICE, this._currentDevice, config) as ResolvedDevice;
+    const result = extend({}, DEFAULT_DEVICE, this._currentDevice, config);
     const shortcuts = {
       phone: result.deviceType === 'phone',
       tablet: result.deviceType === 'tablet',

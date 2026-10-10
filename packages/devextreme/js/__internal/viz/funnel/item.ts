@@ -2,6 +2,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
@@ -15,6 +16,7 @@ interface ItemStyle {
 }
 
 interface ItemWidget {
+  _renderer?: { root?: { element?: Element } };
   _getOption: (name: string, isScalar?: boolean) => ThemeValue;
   _suspend: () => void;
   _resume: () => void;
@@ -65,7 +67,7 @@ class Item {
 
   declare id: number;
 
-  declare color: string;
+  declare fill: string;
 
   declare states: Record<'normal' | 'hover' | 'selection', ItemStyle>;
 
@@ -86,7 +88,7 @@ class Item {
     this.percent = options.percent;
 
     this.id = options.id;
-    this.color = options.color;
+    this.fill = options.color;
 
     this.states = {
       normal: parseStyles(options.color, options.itemOptions, options.itemOptions),
@@ -97,6 +99,14 @@ class Item {
         options.itemOptions,
       ),
     };
+  }
+
+  get color(): string {
+    return this.getColor();
+  }
+
+  set color(value: string) {
+    this.fill = value;
   }
 
   getState(): string {
@@ -151,7 +161,7 @@ class Item {
   }
 
   getColor(): string {
-    return this.color;
+    return paintedColor(this.fill, this.widget._renderer?.root?.element);
   }
 
   isHovered(): boolean {

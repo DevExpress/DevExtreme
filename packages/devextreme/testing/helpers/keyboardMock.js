@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import * as inferno from 'inferno';
-import { focused } from '__internal/core/utils/m_selectors';
+import { focused } from '__internal/core/utils/selectors';
 
 const keyboardMock = (function($, inferno) {
     let $element;

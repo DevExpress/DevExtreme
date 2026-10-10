@@ -11,6 +11,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
 import type { LegendDataItem } from '@ts/viz/components/legend';
@@ -93,8 +94,10 @@ let Legend = class Legend extends _BaseLegend {
       group: root,
       backgroundClass: null,
       textField: 'text',
-      getFormatObject(data) {
-        return data;
+      getFormatObject(data: ThemeValue): ThemeValue {
+        return data.color === undefined
+          ? data
+          : { ...data, color: paintedColor(data.color, parameters.renderer.root.element) };
       },
     });
     const that = this;

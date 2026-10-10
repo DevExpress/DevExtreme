@@ -6,10 +6,13 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import type { EventInfo } from '@js/events';
 import Accordion from '@js/ui/accordion';
 import type { dxPopupAnimation } from '@js/ui/popup';
+import type { OptionAction } from '@ts/core/widget/component';
 import { getDiagram } from '@ts/ui/diagram/diagram.importer';
-import DiagramFloatingPanel from '@ts/ui/diagram/ui.diagram.floating_panel';
+import type { ToolboxGroups } from '@ts/ui/diagram/diagram.toolbox_manager';
+import DiagramFloatingPanel, { type DiagramFloatingPanelProperties } from '@ts/ui/diagram/ui.diagram.floating_panel';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
 import TextBox from '@ts/ui/text_box/text_box';
@@ -23,7 +26,25 @@ const DIAGRAM_TOOLBOX_INPUT_CLASS = 'dx-diagram-toolbox-input';
 const DIAGRAM_TOOLTIP_DATATOGGLE = 'shape-toolbox-tooltip';
 const DIAGRAM_TOOLBOX_START_DRAG_CLASS = '.dxdi-tb-start-drag-flag';
 
-class DiagramToolbox extends DiagramFloatingPanel {
+interface DiagramToolboxProperties extends DiagramFloatingPanelProperties {
+  showSearch?: boolean;
+  toolboxGroups?: ToolboxGroups;
+  toolboxWidth?: number;
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
+  onShapeCategoryRendered?: (e: EventInfo<DiagramToolbox> & {
+    category: string;
+    displayMode?: string;
+    dataToggle: string;
+    shapes?: string[];
+    $element: dxElementWrapper;
+  }) => void;
+  onFilterChanged?: (e: EventInfo<DiagramToolbox> & {
+    text: string;
+    filteringToolboxes: number | number[] | undefined;
+  }) => void;
+}
+
+class DiagramToolbox extends DiagramFloatingPanel<DiagramToolboxProperties> {
   private _toolboxes?: dxElementWrapper[];
 
   private _filterText!: string;
@@ -35,11 +56,9 @@ class DiagramToolbox extends DiagramFloatingPanel {
 
   private _accordion?: Accordion;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onShapeCategoryRenderedAction?: any;
+  private _onShapeCategoryRenderedAction!: OptionAction<DiagramToolboxProperties['onShapeCategoryRendered']>;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onFilterChangedAction?: any;
+  private _onFilterChangedAction!: OptionAction<DiagramToolboxProperties['onFilterChanged']>;
 
   _init(): void {
     super._init();
@@ -68,7 +87,6 @@ class DiagramToolbox extends DiagramFloatingPanel {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getPopupPosition() {
-    // @ts-expect-error ts-error
     const { offsetParent, offsetX, offsetY } = this.option();
     const position = {
       my: 'left top',
@@ -147,7 +165,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
             },
           },
         ],
-      });
+      } satisfies PopupProperties);
     }
     return options;
   }
@@ -174,9 +192,8 @@ class DiagramToolbox extends DiagramFloatingPanel {
   }
 
   _updateElementWidth($element: dxElementWrapper): void {
-    if (this.option('toolboxWidth') !== undefined) {
-      // @ts-expect-error ts-error
-      const { toolboxWidth } = this.option();
+    const { toolboxWidth } = this.option();
+    if (toolboxWidth !== undefined) {
       $element.css('width', toolboxWidth);
     }
   }
@@ -261,13 +278,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getAccordionDataSource() {
     const result = [];
-    const toolboxGroups = this.option('toolboxGroups') as {
-      category: string;
-      title?: string;
-      expanded?: boolean;
-      displayMode?: string;
-      shapes?: string[];
-    }[];
+    const { toolboxGroups = [] } = this.option();
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < toolboxGroups.length; i += 1) {
       const { category } = toolboxGroups[i];
