@@ -2073,7 +2073,7 @@ declare module DevExpress.common.charts {
   /**
    * [descr:DashStyle]
    */
-  export type DashStyle = DevExpress.core.RepeatUnion<
+  export type DashStyle = DevExpress.core.PermutationsWithRepetition<
     'dash' | 'dot' | 'longDash' | 'solid',
     5
   >;
@@ -7198,15 +7198,6 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type BuildTuple<
-    Length extends number,
-    Result extends unknown[] = []
-  > = Result['length'] extends Length
-    ? Result
-    : BuildTuple<Length, [...Result, unknown]>;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
   export type ComponentFactory<TComponent> = {
     new (
       element: UserDefinedElement,
@@ -7477,6 +7468,34 @@ declare module DevExpress.core {
     render(options?: TemplateRenderOptions): DxElement;
   }
   /**
+   * IncrementalCounter[1]=2, IncrementalCounter[2]=3, IncrementalCounter[3]=4, ...
+   */
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type IncrementalCounter = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ];
+  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type InternalElement<T extends Element> = {} extends Condition
@@ -7497,27 +7516,34 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
+  export type PermutationsWithRepetition<
+    T extends string,
+    TMaxLength extends number
+  > = PermutationsWithRepetitionInner<T, TMaxLength, 1>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type PermutationsWithRepetitionInner<
+    T extends string,
+    TMaxLength extends number,
+    K extends number
+  > = K extends TMaxLength
+    ? T
+    :
+        | T
+        | `${T}${PermutationsWithRepetitionInner<
+            T,
+            TMaxLength,
+            IncrementalCounter[K]
+          >}`;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
   export interface PromiseType<T> {}
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type RepeatUnion<
-    T extends string,
-    Depth extends number
-  > = RepeatUnionInternal<T, BuildTuple<Depth>>;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  type RepeatUnionInternal<
-    T extends string,
-    DepthTuple extends unknown[]
-  > = DepthTuple['length'] extends 0
-    ? never
-    : T | `${T}${RepeatUnionInternal<T, Tail<DepthTuple>>}`;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -7536,12 +7562,6 @@ declare module DevExpress.core {
     | Array<unknown>
     | null
     | undefined;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  type Tail<T extends unknown[]> = T extends [unknown, ...infer Rest]
-    ? Rest
-    : [];
 
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
