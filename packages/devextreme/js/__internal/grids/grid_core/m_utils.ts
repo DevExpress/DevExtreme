@@ -26,7 +26,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnPoint, SelectionRange } from '@ts/grids/grid_core/types';
 
 import { AI_COLUMN_NAME } from './ai_column/const';
-import type DataSourceAdapter from './data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from './data_source_adapter/data_source_adapter';
 import { combineFilters } from './filter/utils';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
