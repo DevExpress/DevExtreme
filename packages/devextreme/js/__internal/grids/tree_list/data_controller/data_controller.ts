@@ -221,7 +221,6 @@ export class TreeListDataController extends DataController {
 
 treeListCore.registerModule('data', {
   defaultOptions() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend() returns any
     return extend({}, dataControllerModule.defaultOptions?.(), {
       itemsExpr: 'items',
       parentIdExpr: 'parentId',

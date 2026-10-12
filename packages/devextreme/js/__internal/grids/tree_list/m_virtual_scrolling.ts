@@ -2,7 +2,7 @@
 import { extend } from '@js/core/utils/extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -15,7 +15,7 @@ import {
 } from '@ts/grids/grid_core/virtual_scrolling/index';
 
 import gridCore from './core';
-import dataSourceAdapterProvider from './data_source_adapter/m_data_source_adapter';
+import dataSourceAdapterProvider from './data_source_adapter/data_source_adapter';
 
 const oldDefaultOptions = virtualScrollingModule.defaultOptions;
 

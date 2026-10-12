@@ -47,7 +47,7 @@ import type {
   SavedColumnState,
   WithCellValueCalculator,
 } from '@ts/grids/grid_core/columns_controller/types';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import type { Module } from '@ts/grids/grid_core/types';

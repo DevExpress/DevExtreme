@@ -21,9 +21,6 @@ import type {
 const saleAmountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
 };
 const filterLabel = { 'aria-label': 'Filter' };
 
