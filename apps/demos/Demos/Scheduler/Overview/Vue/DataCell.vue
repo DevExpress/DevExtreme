@@ -54,19 +54,19 @@ function getCurrentTraining(date: number, employeeID: number) {
 }
 
 .employee-1 {
-  background-color: color-mix(in srgb, var(--person-color-1, #377e3a) calc(0.1 * 100%), transparent);
+  background-color: rgb(from var(--person-color-1, #377e3a) r g b / 0.1);
 }
 
 .employee-2 {
-  background-color: color-mix(in srgb, var(--person-color-2, #c25100) calc(0.1 * 100%), transparent);
+  background-color: rgb(from var(--person-color-2, #c25100) r g b / 0.1);
 }
 
 .employee-weekend-1 {
-  background-color: color-mix(in srgb, var(--person-color-1, #377e3a) calc(0.15 * 100%), transparent);
+  background-color: rgb(from var(--person-color-1, #377e3a) r g b / 0.15);
 }
 
 .employee-weekend-2 {
-  background-color: color-mix(in srgb, var(--person-color-2, #c25100) calc(0.15 * 100%), transparent);
+  background-color: rgb(from var(--person-color-2, #c25100) r g b / 0.15);
 }
 
 .training-background-0 {
