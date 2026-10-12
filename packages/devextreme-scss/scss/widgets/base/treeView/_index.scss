@@ -1,7 +1,5 @@
 $treeview-disabled-opacity: null !default;
 
-@use "sass:math";
-@use "sass:meta";
 @use "./common" with (
   $treeview-disabled-opacity: $treeview-disabled-opacity,
 );
@@ -92,10 +90,6 @@ $treeview-border-visible-border: 1px solid !default;
 
   .dx-treeview-with-search > .dx-scrollable {
     $search-offset: calc($search-editor-height + $searchbox-margin-bottom);
-
-    @if meta.type-of($search-offset) == number {
-      $search-offset: math.round($search-offset);
-    }
 
     height: calc(100% - #{$search-offset});
   }

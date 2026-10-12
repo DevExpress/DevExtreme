@@ -1,6 +1,3 @@
-@use "sass:math";
-@use "sass:meta";
-
 $grid-cell-padding: 7px !default;
 $grid-texteditor-input-padding: 32px !default;
 
@@ -37,21 +34,11 @@ $grid-filter-panel-checkbox-padding-inline-end: 10px !default;
 $grid-filter-panel-icon-margin-inline-end: 7px !default;
 
 @function grid-header-text-max-width($indicators, $margins, $sort-indexes: 0) {
-  @if meta.type-of($grid-column-header-indicator-width) == number
-    and meta.type-of($grid-text-content-margin) == number
-    and meta.type-of($grid-sort-index-width) == number {
-    $sum: $grid-column-header-indicator-width * $indicators +
-      $grid-text-content-margin * $margins +
-      $grid-sort-index-width * $sort-indexes;
-
-    @return calc(100% - #{math.round($sum)});
-  }
-
-  $sum: "#{$indicators} * #{$grid-column-header-indicator-width} + #{$margins} * #{$grid-text-content-margin}";
+  $sum: calc($indicators * $grid-column-header-indicator-width + $margins * $grid-text-content-margin);
 
   @if $sort-indexes > 0 {
-    $sum: "#{$sum} + #{$sort-indexes} * #{$grid-sort-index-width}";
+    $sum: calc($sum + $sort-indexes * $grid-sort-index-width);
   }
 
-  @return calc(100% - (#{$sum}));
+  @return calc(100% - $sum);
 }
