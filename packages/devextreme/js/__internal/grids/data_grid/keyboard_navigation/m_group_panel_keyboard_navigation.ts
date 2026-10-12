@@ -189,3 +189,9 @@ gridCore.registerModule('groupPanelKeyboardNavigation', {
     groupPanelKeyboardNavigation: GroupPanelKeyboardNavigationController,
   },
 });
+
+declare module '@ts/grids/grid_core/types' {
+  interface Controllers {
+    groupPanelKeyboardNavigation: GroupPanelKeyboardNavigationController;
+  }
+}
