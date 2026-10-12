@@ -120,7 +120,8 @@ files.forEach((file) => {
     });
   });
 
-  const inWith = (index: number): boolean => withRanges.some(([from, to]) => index >= from && index < to);
+  const inWith = (index: number): boolean => withRanges
+    .some(([from, to]) => index >= from && index < to);
   const scopes: boolean[] = [];
   let statement = 0;
   let parens = 0;
@@ -164,10 +165,11 @@ const wildcardOwner = (file: string, name: string): string | null => {
   const queue = [...(wildcards.get(file) ?? [])];
   while (queue.length) {
     const candidate = queue.shift();
-    if (!candidate || seen.has(candidate)) continue;
-    seen.add(candidate);
-    if (declarations.get(candidate)?.has(name)) return candidate;
-    queue.push(...(wildcards.get(candidate) ?? []));
+    if (candidate && !seen.has(candidate)) {
+      seen.add(candidate);
+      if (declarations.get(candidate)?.has(name)) return candidate;
+      queue.push(...(wildcards.get(candidate) ?? []));
+    }
   }
   return null;
 };
@@ -216,7 +218,8 @@ configures.forEach((entry) => {
 while (frontier.length) {
   const site = frontier.pop();
   (byTarget.get(key(site?.file ?? '', site?.name ?? '')) ?? []).forEach((entry) => {
-    entry.values.forEach((value) => declaringModules(value).forEach((file) => wake(file, value.name)));
+    entry.values.forEach((value) => declaringModules(value)
+      .forEach((file) => wake(file, value.name)));
   });
 }
 

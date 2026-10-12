@@ -3,17 +3,19 @@ import { mkdtempSync, readFileSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { basename, join } from 'path';
 
-export type Warning = { line: number; rule: string; text: string };
-export type Result = { warnings: Warning[]; output: string };
-export type Runner = {
+export interface Warning { line: number; rule: string; text: string }
+export interface Result { warnings: Warning[]; output: string }
+export interface Runner {
   lint: (name: string, source: string) => Result;
   fix: (name: string, source: string) => Result;
-};
+}
 
 const packageRoot = process.cwd();
 const stylelintBin = join(packageRoot, 'node_modules', '.bin', 'stylelint');
 
-const resolveFrom = (parent: string, request: string): string => require.resolve(request, { paths: [parent] });
+const resolveFrom = (parent: string, request: string): string => (
+  require.resolve(request, { paths: [parent] })
+);
 const scssSyntax = resolveFrom(
   resolveFrom(require.resolve('stylelint-config-standard-scss'), 'stylelint-config-recommended-scss'),
   'postcss-scss',

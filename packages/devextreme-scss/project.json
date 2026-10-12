@@ -162,6 +162,32 @@
       "inputs": [
         "{projectRoot}/**/*"
       ]
+    },
+    "test": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test"
+      },
+      "dependsOn": [
+        "typecheck"
+      ],
+      "inputs": [
+        "{projectRoot}/**/*",
+        "{workspaceRoot}/packages/devextreme/package.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ]
+    },
+    "typecheck": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "typecheck"
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*.d.cts",
+        "{projectRoot}/tests/**/*.ts",
+        "{projectRoot}/tsconfig.json"
+      ],
+      "cache": true
     }
   },
   "tags": []
