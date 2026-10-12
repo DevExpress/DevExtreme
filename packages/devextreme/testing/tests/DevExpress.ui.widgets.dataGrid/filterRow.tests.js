@@ -772,7 +772,8 @@ QUnit.module('Filter Row', {
         assert.ok(!filterRow.find('.dx-editor-cell').length);
         assert.equal(filterRow.find('td').length, 4, 'count td');
         assert.equal(filterRow.find('td').last().html(), '&nbsp;', 'text column with command is empty');
-        assert.roughEqual(filterRow.outerHeight(), 18, 1, 'height filter row');
+        // jQuery measures table rows via the rounded offsetHeight since Chrome 155
+        assert.roughEqual(filterRow.get(0).getBoundingClientRect().height, 18, 1, 'height filter row');
     });
 
     // T100624
