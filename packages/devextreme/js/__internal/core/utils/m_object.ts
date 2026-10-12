@@ -1,36 +1,55 @@
 import { isNumeric, isObject, isPlainObject } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
 
-const clone = (function () {
-  function Clone() { }
+type Dictionary = Record<PropertyKey, unknown>;
 
-  return function (obj) {
+type CollectionLike = Set<unknown>
+  | Map<unknown, unknown>
+  | WeakSet<object>
+  | WeakMap<object, unknown>;
+
+type AssignFunction = (
+  target: Dictionary,
+  property: string,
+  value: unknown,
+  extendComplexObject?: boolean,
+  assignByReference?: boolean,
+  shouldCopyUndefined?: boolean,
+) => void;
+
+const clone = (function createClone() {
+  function Clone(): void { }
+
+  return function cloneObject<T extends object>(obj: T): T {
     Clone.prototype = obj;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- obj is its prototype
     return new Clone();
   };
-})();
+}());
 
-const isBlobLike = function (value: unknown): boolean {
+const isBlobLike = function isBlobLike(value: unknown): value is Blob {
   return typeof Blob !== 'undefined' && value instanceof Blob;
 };
 
-const isCollectionLike = function (value: unknown): boolean {
+const isCollectionLike = function isCollectionLike(value: unknown): value is CollectionLike {
   return value instanceof Set || value instanceof Map
     || value instanceof WeakSet || value instanceof WeakMap;
 };
 
-const orderEach = function (map, func) {
+const orderEach = function orderEach<TValue>(
+  map: Record<string, TValue>,
+  func: (key: string, value: TValue) => void,
+): void {
   const keys: string[] = [];
-  let key;
-  let i;
 
-  for (key in map) {
+  // eslint-disable-next-line no-restricted-syntax -- the own keys are checked in the loop
+  for (const key in map) {
     if (Object.prototype.hasOwnProperty.call(map, key)) {
       keys.push(key);
     }
   }
 
-  keys.sort(function (x, y) {
+  keys.sort((x, y) => {
     const isNumberX = isNumeric(x);
     const isNumberY = isNumeric(y);
 
@@ -42,13 +61,12 @@ const orderEach = function (map, func) {
     return 0;
   });
 
-  for (i = 0; i < keys.length; i++) {
-    key = keys[i];
+  for (const key of keys) {
     func(key, map[key]);
   }
 };
 
-const getDeepCopyTarget = (item) => {
+const getDeepCopyTarget = (item: unknown): unknown => {
   if (isObject(item)) {
     if (Array.isArray(item)) {
       return [];
@@ -64,8 +82,15 @@ const getDeepCopyTarget = (item) => {
   return item;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const legacyAssign = function (target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
+const legacyAssign = function legacyAssign(
+  target: Dictionary,
+  property: string,
+  value: unknown,
+  extendComplexObject?: boolean,
+  assignByReference?: boolean,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- the signature of newAssign
+  shouldCopyUndefined?: boolean,
+): void {
   if (!assignByReference && variableWrapper.isWrapped(target[property])) {
     variableWrapper.assign(target[property], value);
   } else {
@@ -73,12 +98,97 @@ const legacyAssign = function (target, property, value, extendComplexObject, ass
   }
 };
 
-const newAssign = function (target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
+function deepExtendArraySafe<TChanges extends Blob | CollectionLike>(
+  target: unknown,
+  changes: TChanges,
+  extendComplexObject?: boolean,
+  assignByReference?: boolean,
+  shouldCopyUndefined?: boolean,
+  useNewAssign?: boolean | AssignFunction,
+): TChanges;
+function deepExtendArraySafe<TTarget>(
+  target: TTarget,
+  changes: unknown,
+  extendComplexObject?: boolean,
+  assignByReference?: boolean,
+  shouldCopyUndefined?: boolean,
+  useNewAssign?: boolean | AssignFunction,
+): TTarget;
+// B239679, http://bugs.jquery.com/ticket/9477
+function deepExtendArraySafe(
+  target: unknown,
+  changes: unknown,
+  extendComplexObject?: boolean,
+  assignByReference?: boolean,
+  shouldCopyUndefined?: boolean,
+  useNewAssign?: boolean | AssignFunction,
+): unknown {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- newAssign calls it back
+  const assignFunc = useNewAssign ? newAssign : legacyAssign;
+
+  if (isBlobLike(changes) || isCollectionLike(changes)) {
+    return changes;
+  }
+
+  const targetObject = target as Dictionary;
+  const changesObject = changes as Dictionary;
+
+  // eslint-disable-next-line no-restricted-syntax, guard-for-in -- inherited keys are copied too
+  for (const name in changesObject) {
+    const prevValue = targetObject[name];
+    let newValue = changesObject[name];
+
+    if (name === '__proto__' || name === 'constructor' || target === newValue) {
+      // eslint-disable-next-line no-continue -- the keys that are not copied are skipped
+      continue;
+    }
+
+    if (isPlainObject(newValue)) {
+      const goDeeper = extendComplexObject ? isObject(prevValue) : isPlainObject(prevValue);
+      newValue = deepExtendArraySafe(
+        goDeeper ? prevValue : {},
+        newValue,
+        extendComplexObject,
+        assignByReference,
+        shouldCopyUndefined,
+      );
+    }
+
+    const isDeepCopyArray = Array.isArray(newValue)
+      && !assignByReference
+      && prevValue !== newValue;
+    const hasDifferentNewValue = (
+      (!!shouldCopyUndefined || newValue !== undefined) && prevValue !== newValue
+    ) || (shouldCopyUndefined && prevValue === undefined);
+
+    if (isDeepCopyArray || hasDifferentNewValue) {
+      assignFunc(
+        targetObject,
+        name,
+        newValue,
+        extendComplexObject,
+        assignByReference,
+        shouldCopyUndefined,
+      );
+    }
+  }
+
+  return target;
+}
+
+const newAssign = function newAssign(
+  target: Dictionary,
+  property: string,
+  value: unknown,
+  extendComplexObject?: boolean,
+  assignByReference?: boolean,
+  shouldCopyUndefined?: boolean,
+): void {
   const goDeeper = extendComplexObject ? isObject(target) : isPlainObject(target);
   if (!assignByReference && variableWrapper.isWrapped(target[property])) {
     variableWrapper.assign(target[property], value);
   } else if (!assignByReference && Array.isArray(value)) {
-    target[property] = value.map((item) => deepExtendArraySafe(
+    target[property] = value.map((item: unknown) => deepExtendArraySafe(
       getDeepCopyTarget(item),
       item,
       extendComplexObject,
@@ -97,41 +207,6 @@ const newAssign = function (target, property, value, extendComplexObject, assign
   } else {
     target[property] = value;
   }
-};
-
-// B239679, http://bugs.jquery.com/ticket/9477
-const deepExtendArraySafe = function (target, changes, extendComplexObject?, assignByReference?, shouldCopyUndefined?, useNewAssign?) {
-  let prevValue;
-  let newValue;
-  const assignFunc = useNewAssign ? newAssign : legacyAssign;
-
-  if (isBlobLike(changes) || isCollectionLike(changes)) {
-    return changes;
-  }
-
-  for (const name in changes) {
-    prevValue = target[name];
-    newValue = changes[name];
-
-    if (name === '__proto__' || name === 'constructor' || target === newValue) {
-      continue;
-    }
-
-    if (isPlainObject(newValue)) {
-      const goDeeper = extendComplexObject ? isObject(prevValue) : isPlainObject(prevValue);
-      newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
-    }
-
-    const isDeepCopyArray = Array.isArray(newValue) && !assignByReference && prevValue !== newValue;
-    const hasDifferentNewValue = (shouldCopyUndefined || newValue !== undefined) && prevValue !== newValue
-          || shouldCopyUndefined && prevValue === undefined;
-
-    if (isDeepCopyArray || hasDifferentNewValue) {
-      assignFunc(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
-    }
-  }
-
-  return target;
 };
 
 export {
