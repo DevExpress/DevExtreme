@@ -153,13 +153,6 @@
     },
     {
       "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
-      "selector": ".dx-colorview-controls-container",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
       "file": "scss/widgets/base/gridBase/_index.scss",
       "property": "padding-bottom",
       "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",

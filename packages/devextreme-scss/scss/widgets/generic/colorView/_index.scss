@@ -18,6 +18,7 @@ $generic-colorview-alpha-width: $generic-colorview-palette-width + 4 !default;
   $color-view-hue-scale-wrapper-height: $generic-colorview-hue-scale-height + 2,
   $color-view-color-preview-height: $generic-colorview-color-preview-height,
   $color-view-alpha-cell-width: $generic-colorview-alpha-width,
+  $color-view-controls-width: $generic-colorview-controls-container-width,
 );
 @include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
 
@@ -41,7 +42,6 @@ $generic-colorview-alpha-width: $generic-colorview-palette-width + 4 !default;
 }
 
 .dx-colorview-controls-container {
-  width: $generic-colorview-controls-container-width;
   margin-inline-start: $generic-colorview-controls-container-margin;
 }
 

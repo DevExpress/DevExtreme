@@ -6,12 +6,6 @@
     "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
   },
   {
-    "file": "scss/widgets/base/colorView/_index.scss",
-    "property": "width",
-    "selector": ".dx-colorview-controls-container",
-    "reason": "fluent-next on the design-tokens branch renders this base value; drop the declaration once that branch lands in main"
-  },
-  {
     "file": "scss/widgets/base/dataGrid/_index.scss",
     "property": "outline",
     "selector": ".dx-command-ai-header-button .dx-button.dx-state-focused",
