@@ -103,8 +103,8 @@
 
       .dx-sort-index-icon {
         padding-right: $grid-sort-index-offset;
-        margin-left: grid-negate($grid-sort-index-offset);
-        width: grid-sum($grid-sort-index-width, $grid-sort-index-offset);
+        margin-left: calc(-1 * $grid-sort-index-offset);
+        width: calc-sum($grid-sort-index-width, $grid-sort-index-offset);
       }
 
       .dx-sort,
@@ -121,7 +121,7 @@
           bottom: 0;
           left: 0;
           right: 0;
-          margin: grid-negate($grid-cell-padding);
+          margin: calc(-1 * $grid-cell-padding);
         }
       }
     }
@@ -313,7 +313,7 @@
         }
 
         &.dx-sort-index {
-          width: grid-sum($grid-column-header-indicator-width, $grid-sort-index-width);
+          width: calc-sum($grid-column-header-indicator-width, $grid-sort-index-width);
         }
       }
     }

@@ -64,6 +64,6 @@ $sortable-placeholder-inside-border-width: 2px !default;
 }
 
 .dx-sortable-dragging > * {
-  border-color: with-alpha($base-accent, 0.5);
+  border-color: rgb(from $base-accent r g b / 0.5);
   box-shadow: $sortable-clone-shadow;
 }

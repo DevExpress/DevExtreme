@@ -226,9 +226,9 @@
     @if $container-size == $icon-size and $borders-size == 0 {
       $icon-padding: 0;
     } @else if $borders-size == 0 {
-      $icon-padding: calc((#{$container-size} - #{$icon-size}) / 2);
+      $icon-padding: calc(($container-size - $icon-size) / 2);
     } @else {
-      $icon-padding: calc((#{$container-size} - #{$icon-size} - #{$borders-size}) / 2);
+      $icon-padding: calc(($container-size - $icon-size - $borders-size) / 2);
     }
 
     $icon-line-height: $icon-size;
@@ -252,14 +252,7 @@
 }
 
 @mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
-  $icon-center-offset: null;
-
-  @if meta.type-of($icon-size) == number {
-    $icon-center-offset: math.div(-$icon-size, 2);
-  } @else {
-
-    $icon-center-offset: calc(#{$icon-size} / -2);
-  }
+  $icon-center-offset: calc($icon-size / -2);
 
   font-size: $icon-size;
   text-align: center;
@@ -282,7 +275,7 @@
         left: 0;
         margin-left: 0;
         right: 50%;
-        margin-right: math.div(-$icon-size, 2);
+        margin-right: $icon-center-offset;
       }
     }
   }

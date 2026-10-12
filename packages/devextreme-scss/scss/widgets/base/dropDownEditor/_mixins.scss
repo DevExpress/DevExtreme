@@ -1,16 +1,12 @@
-@use "sass:meta";
 @use "../icon_fonts" as *;
+@use "../mixins" as *;
 
 @function badge-input-padding($invalid-badge-size, $input-horizontal-padding) {
-  @if meta.type-of($invalid-badge-size) == number and meta.type-of($input-horizontal-padding) == number {
-    @return $invalid-badge-size + $input-horizontal-padding;
-  }
-
   @if $input-horizontal-padding == 0 {
     @return $invalid-badge-size;
   }
 
-  @return calc(#{$invalid-badge-size} + #{$input-horizontal-padding});
+  @return calc-sum($invalid-badge-size, $input-horizontal-padding);
 }
 
 @function lookup-field-padding($input-horizontal-padding, $icon-size, $icon-count, $spin-padding) {
@@ -20,7 +16,7 @@
     $icons: "#{$icon-size} * #{$icon-count}";
   }
 
-  @if meta.type-of($input-horizontal-padding) == number and $input-horizontal-padding == 0 {
+  @if $input-horizontal-padding == 0 {
     @return calc(#{$icons} + #{$spin-padding});
   }
 
