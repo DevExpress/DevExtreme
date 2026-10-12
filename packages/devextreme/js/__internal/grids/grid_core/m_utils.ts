@@ -27,7 +27,11 @@ import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo } from '@ts/data/utils';
-import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type {
+  Column,
+  ColumnsChanges,
+  DisplayValueColumn,
+} from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnPoint,
   ColumnPointProps,
@@ -52,6 +56,7 @@ import type { DataFilter } from './filter/types';
 import { combineFilters } from './filter/utils';
 import type { ModuleItem } from './modules/modules';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
+import type { ColumnWidth } from './views/types';
 
 const BASE_LOAD_PANEL_Z_INDEX = 1000;
 
@@ -348,8 +353,13 @@ export default {
     };
   },
 
+  getDisplayValue(
+    column: DisplayValueColumn,
+    value: unknown,
+    data: RawItemData | null,
+    rowType?: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use it as their own type
-  getDisplayValue(column: Column, value: unknown, data: RawItemData | null, rowType?: string): any {
+  ): any {
     if (column.displayValueMap?.[String(value)] !== undefined) {
       return column.displayValueMap[String(value)];
     }
@@ -585,7 +595,7 @@ export default {
 
   getWidgetInstance,
 
-  getLastResizableColumnIndex(columns: Column[], resultWidths?: (number | string)[]): number {
+  getLastResizableColumnIndex(columns: Column[], resultWidths?: ColumnWidth[]): number {
     const hasResizableColumns = columns.some(
       (column) => column && !column.command && !column.fixed && column.allowResizing !== false,
     );

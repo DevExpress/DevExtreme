@@ -162,6 +162,11 @@ export interface ColumnsDataSourceParameters {
 
 export type GroupColumn = Column & { groupIndex: number };
 
+export type DisplayValueColumn = Pick<
+  Column,
+  'displayValueMap' | 'calculateDisplayValue' | 'type' | 'calculateGroupValue'
+> & { lookup?: Pick<NonNullable<Column['lookup']>, 'calculateCellValue'> };
+
 export interface ColumnsChanges {
   changeTypes: {
     sorting?: boolean;

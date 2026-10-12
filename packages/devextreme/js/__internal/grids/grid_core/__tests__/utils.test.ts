@@ -11,7 +11,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { variableWrapper } from '@ts/core/utils/variable_wrapper';
 import type { NormalizedDataSourceOptions } from '@ts/data/data_source/types';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import type { WrappedLookupDataSource } from '@ts/grids/grid_core/types';
 
