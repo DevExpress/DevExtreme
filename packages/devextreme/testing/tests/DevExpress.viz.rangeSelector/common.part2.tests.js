@@ -1153,7 +1153,13 @@ QUnit.test('Auto format for sliderMarker with global locale-only dateTimeFormat 
 
         assert.strictEqual(this.slidersController.update.lastCall.args[4].format(new Date(2017, 1, 1, 1, 1, 1, 123)), '01:01:01 123', 'Slider markers auto format');
     } finally {
-        config({ dateTimeFormat: savedDateTimeFormat });
+        const currentConfig = config();
+
+        if(savedDateTimeFormat === undefined) {
+            delete currentConfig.dateTimeFormat;
+        } else {
+            currentConfig.dateTimeFormat = savedDateTimeFormat;
+        }
     }
 });
 
@@ -1196,7 +1202,13 @@ QUnit.test('Explicit sliderMarker format is kept when global dateTimeFormat is l
 
         assert.strictEqual(this.slidersController.update.lastCall.args[4].format, 'shortdate');
     } finally {
-        config({ dateTimeFormat: savedDateTimeFormat });
+        const currentConfig = config();
+
+        if(savedDateTimeFormat === undefined) {
+            delete currentConfig.dateTimeFormat;
+        } else {
+            currentConfig.dateTimeFormat = savedDateTimeFormat;
+        }
     }
 });
 
