@@ -91,6 +91,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
       visibleIndex: {
         type: 'integer',
         minimum: 0,
+        maximum: Number.MAX_SAFE_INTEGER,
       },
     },
     required: ['dataField', 'visibleIndex'],
@@ -258,6 +259,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
       index: {
         type: 'integer',
         minimum: 0,
+        maximum: Number.MAX_SAFE_INTEGER,
       },
     },
     required: ['index'],
@@ -309,6 +311,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
       pageIndex: {
         type: 'integer',
         minimum: 0,
+        maximum: Number.MAX_SAFE_INTEGER,
       },
     },
     required: ['pageIndex'],
@@ -320,6 +323,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
       pageSize: {
         type: 'integer',
         minimum: 0,
+        maximum: Number.MAX_SAFE_INTEGER,
       },
     },
     required: ['pageSize'],
@@ -368,6 +372,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
         items: {
           type: 'integer',
           minimum: 1,
+          maximum: Number.MAX_SAFE_INTEGER,
         },
         minItems: 1,
       },
@@ -459,6 +464,7 @@ const expectedArgsByCommand: Record<string, JsonSchema> = {
           {
             type: 'integer',
             minimum: 0,
+            maximum: Number.MAX_SAFE_INTEGER,
           },
           {
             type: 'null',

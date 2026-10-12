@@ -511,30 +511,6 @@ describe('makeOpenAICompatible', () => {
     expect(jsonSchema.additionalProperties).toEqual({ type: 'string' });
   });
 
-  it('removes safe integer bounds', () => {
-    const jsonSchema: z.core.JSONSchema.BaseSchema = {
-      type: 'integer',
-      minimum: Number.MIN_SAFE_INTEGER,
-      maximum: Number.MAX_SAFE_INTEGER,
-    };
-
-    makeOpenAICompatible({ jsonSchema });
-
-    expect(jsonSchema).toEqual({ type: 'integer' });
-  });
-
-  it('keeps custom integer bounds', () => {
-    const jsonSchema: z.core.JSONSchema.BaseSchema = {
-      type: 'integer',
-      minimum: 0,
-      maximum: Number.MAX_SAFE_INTEGER,
-    };
-
-    makeOpenAICompatible({ jsonSchema });
-
-    expect(jsonSchema).toEqual({ type: 'integer', minimum: 0 });
-  });
-
   it('leaves other schemas unchanged', () => {
     const jsonSchema: z.core.JSONSchema.BaseSchema = { type: 'string' };
 
@@ -689,102 +665,6 @@ describe('hoistSchemaRefs', () => {
       });
       expect(props.b).toEqual({
         $ref: '#/$defs/sort_TypeB',
-      });
-    });
-  });
-
-  describe('inline-path refs', () => {
-    it('hoists an inline $ref to root-level $defs', () => {
-      const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-          expr: {
-            anyOf: [
-              { type: 'string' },
-              {
-                type: 'object',
-                properties: {
-                  child: { $ref: '#/properties/expr' },
-                },
-              },
-            ],
-          },
-        },
-      };
-
-      const result = hoistSchemaRefs([
-        { prefix: 'test', schema },
-      ]);
-
-      expect(result.test_properties_expr).toBeDefined();
-
-      const props = schema.properties as JsonSchema;
-      const exprNode = props.expr as JsonSchema;
-      const branches = exprNode.anyOf as JsonSchema[];
-      expect(branches[1].properties).toEqual({
-        child: { $ref: '#/$defs/test_properties_expr' },
-      });
-    });
-
-    it('handles recursive inline $ref', () => {
-      const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-          expression: {
-            anyOf: [
-              {
-                anyOf: [
-                  {
-                    type: 'object',
-                    properties: {
-                      type: { type: 'string', const: 'basic' },
-                      field: { type: 'string' },
-                    },
-                    additionalProperties: false,
-                  },
-                  {
-                    type: 'object',
-                    properties: {
-                      type: { type: 'string', const: 'combined' },
-                      left: { $ref: '#/properties/expression/anyOf/0' },
-                      right: { $ref: '#/properties/expression/anyOf/0' },
-                    },
-                    additionalProperties: false,
-                  },
-                ],
-              },
-              { type: 'null' },
-            ],
-          },
-        },
-      };
-
-      const result = hoistSchemaRefs([
-        { prefix: 'filter', schema },
-      ]);
-
-      const defName = 'filter_properties_expression_anyOf_0';
-      expect(result[defName]).toBeDefined();
-
-      const props = schema.properties as JsonSchema;
-      const exprNode = props.expression as JsonSchema;
-      const exprAnyOf = exprNode.anyOf as JsonSchema[];
-      const innerAnyOf = exprAnyOf[0].anyOf as JsonSchema[];
-      expect(innerAnyOf[1].properties).toEqual(
-        expect.objectContaining({
-          left: { $ref: `#/$defs/${defName}` },
-          right: { $ref: `#/$defs/${defName}` },
-        }),
-      );
-
-      const hoistedDef = result[defName] as JsonSchema;
-      const hoistedInner = hoistedDef.anyOf as JsonSchema[];
-      const hoistedProps = hoistedInner[1].properties as JsonSchema;
-      expect(hoistedProps.left).toEqual({
-        $ref: `#/$defs/${defName}`,
-      });
-      expect(hoistedProps.right).toEqual({
-        $ref: `#/$defs/${defName}`,
       });
     });
   });
