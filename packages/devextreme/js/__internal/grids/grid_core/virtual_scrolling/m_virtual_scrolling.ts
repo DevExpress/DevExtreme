@@ -642,6 +642,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     const changeType = change?.changeType;
     const d: any = Deferred();
 
+    // @ts-expect-error the view is rendered here
     const contentTable = contentElement.children().first();
     if (changeType === 'append' || changeType === 'prepend') {
       this.waitAsyncTemplates().done(() => {
@@ -855,6 +856,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
               'aria-label': null,
             },
           }).$element())
+          // @ts-expect-error the view is rendered here
           .appendTo($contentElement);
       }
     } else if (bottomLoadPanelElement) {
