@@ -213,8 +213,9 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         const $contentTable = $('.dx-datagrid-rowsview .dx-datagrid-content').children().first();
         let dataRowsHeight = 0;
 
+        // jQuery measures table rows via the rounded offsetHeight since Chrome 155
         $contentTable.find('.dx-data-row:visible').each(function(index) {
-            dataRowsHeight += $(this).outerHeight();
+            dataRowsHeight += this.getBoundingClientRect().height;
         });
 
         const heightCorrection = gridInstance.getView('rowsView')._getHeightCorrection();
@@ -222,7 +223,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // assert
         assert.equal($dataGrid.find('.dx-freespace-row:visible').length, 1, 'freespace row count');
-        assert.roughEqual($dataGrid.find('.dx-freespace-row:visible').eq(0).height(), expectedFreeSpaceRowHeight, 1.5, 'Height of the freeSpace row');
+        assert.roughEqual($dataGrid.find('.dx-freespace-row:visible').get(0).getBoundingClientRect().height, expectedFreeSpaceRowHeight, 1.5, 'Height of the freeSpace row');
     });
 
     // T242473

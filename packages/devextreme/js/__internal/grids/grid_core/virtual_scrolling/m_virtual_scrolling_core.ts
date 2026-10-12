@@ -13,7 +13,7 @@ import type {
 } from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import gridCoreUtils from '../m_utils';
-import { VirtualDataLoader } from '../virtual_data_loader/m_virtual_data_loader';
+import { VirtualDataLoader } from '../virtual_data_loader/virtual_data_loader';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';

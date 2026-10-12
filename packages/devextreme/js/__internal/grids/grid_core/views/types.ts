@@ -1,4 +1,5 @@
 import type { template } from '@js/common';
+import type { GridsContextMenuTarget } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -189,4 +190,14 @@ export interface ViewRowEvent {
 export interface ColumnWidthsOptions {
   widths?: ColumnWidth[];
   optionNames?: ColumnsChanges['optionNames'];
+}
+
+export interface ContextMenuItemsOptions {
+  event: DxEvent;
+  targetElement: DxElement;
+  target: GridsContextMenuTarget;
+  rowIndex: number;
+  row?: ViewRow;
+  columnIndex?: number;
+  column?: Column;
 }

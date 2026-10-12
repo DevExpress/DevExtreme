@@ -11,7 +11,7 @@ import type { StoreChange } from '@js/data/store';
 import type Store from '@ts/data/abstract_store';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type {
   DataSourceAdapterProvider, RawItemData, RemoteOperationsOptions,
 } from '@ts/grids/grid_core/data_source_adapter/types';

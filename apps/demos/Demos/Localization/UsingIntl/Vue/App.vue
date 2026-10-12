@@ -77,9 +77,6 @@ const editPopupOptions = { width: 700, height: 345 };
 const amountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
 };
 const selectBoxInputAttr = { id: 'selectInput' };
 const formatMessage = ref((msg: string) => msg);
