@@ -1691,9 +1691,9 @@ export class DraggingHeaderViewController extends modules.ViewController {
         } else {
           that.hideSeparators('block');
           that._tablePositionController.update(parameters.posY);
+          separator.show();
           // @ts-expect-error
           separator.moveByX(parameters.posX - separator.width());
-          separator.show();
         }
       } else {
         that.hideSeparators();
