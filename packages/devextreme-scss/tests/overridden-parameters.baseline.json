@@ -13,20 +13,6 @@
   "entries": [
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/_validation.scss",
-      "property": "font-size",
-      "selector": ".dx-invalid-message > .dx-overlay-content",
-      "paintedOverBy": "scss/widgets/base/_validation.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_validation.scss",
-      "property": "padding",
-      "selector": ".dx-invalid-message > .dx-overlay-content",
-      "paintedOverBy": "scss/widgets/base/_validation.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/gridBase/_index.scss",
       "property": "margin-left",
       "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
@@ -206,20 +192,6 @@
       "property": "width",
       "selector": ".dx-scheduler-agenda .dx-scheduler-group-header-content",
       "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_validation.scss",
-      "property": "font-size",
-      "selector": ".dx-invalid-message > .dx-overlay-content",
-      "paintedOverBy": "scss/widgets/base/_validation.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_validation.scss",
-      "property": "padding",
-      "selector": ".dx-invalid-message > .dx-overlay-content",
-      "paintedOverBy": "scss/widgets/base/_validation.scss"
     },
     {
       "theme": "material",
