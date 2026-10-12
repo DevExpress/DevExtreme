@@ -1,6 +1,5 @@
 @use "sass:math";
 @use "sass:meta";
-@use "../mixins" as *;
 
 @mixin dx-editor-content-wrapper() {
   display: flex;
@@ -352,7 +351,7 @@
         }
       }
 
-      $label-empty-margin-top: calc-sum(calc($label-empty-height / -2), $label-margin-top-diff);
+      $label-empty-margin-top: calc($label-empty-height / -2 + $label-margin-top-diff);
 
       &.dx-texteditor-empty {
         @include dx-state-empty(
@@ -780,7 +779,7 @@
             .dx-button-content {
               display: flex;
               justify-content: center;
-              padding-top: calc-difference($material-button-vertical-padding, 1px); // dx-px-nudge: -1px under the button's own padding
+              padding-top: calc($material-button-vertical-padding - 1px); // dx-px-nudge: -1px under the button's own padding
 
               .dx-icon {
                 align-self: center;
@@ -834,7 +833,7 @@
           .dx-button-content {
             display: flex;
             justify-content: center;
-            padding-top: calc-difference($material-button-vertical-padding, 1px); // dx-px-nudge: -1px under the button's own padding
+            padding-top: calc($material-button-vertical-padding - 1px); // dx-px-nudge: -1px under the button's own padding
 
             .dx-icon {
               align-self: center;

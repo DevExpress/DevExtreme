@@ -1,7 +1,6 @@
 @use "sass:string";
 @use "../string" as *;
 @use "../mask" as *;
-@use "../mixins" as *;
 
 @mixin diagram-icon-colored($data-uri, $current-color, $width, $height) {
   $uri: replace("#{$data-uri}", "currentColor", escape("#{$current-color}"));
@@ -131,7 +130,7 @@
     @include diagram-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/line-dashed.svg"), $toolbar-color, $diagram-wide-icon-size, $icon-size, $masked);
   }
 
-  $fill-height: calc-sum($icon-size, $toolbar-colorbutton-border-width);
+  $fill-height: calc($icon-size + $toolbar-colorbutton-border-width);
   $fill-uri: data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/button-fill.svg");
 
   @if $masked {

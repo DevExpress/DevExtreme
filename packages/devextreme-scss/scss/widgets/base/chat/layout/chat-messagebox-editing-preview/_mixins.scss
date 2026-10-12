@@ -1,5 +1,3 @@
-@use "../../../mixins" as *;
-
 @mixin message-editing-preview(
   $preview-padding,
   $message-row-gap,
@@ -16,7 +14,7 @@
 
   .dx-chat-editing-preview-content {
     gap: $message-row-gap;
-    padding-inline-start: calc-sum($preview-padding, $border-width);
+    padding-inline-start: calc($preview-padding + $border-width);
     padding-inline-end: $preview-padding;
   }
 

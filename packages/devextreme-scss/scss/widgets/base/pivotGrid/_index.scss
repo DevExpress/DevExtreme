@@ -63,7 +63,7 @@ $pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-sh
 $pivotgrid-border: $pivotgrid-border-width solid !default;
 $pivotgrid-icon-size: 14px !default;
 $pivotgrid-common-field-padding: 2px !default;
-$pivotgrid-filter-area-border-spacing: calc-difference($pivotgrid-common-left-right-padding, $pivotgrid-common-field-padding) calc-difference($pivotgrid-header-top-bottom-padding, $pivotgrid-common-field-padding) !default;
+$pivotgrid-filter-area-border-spacing: calc($pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding) calc($pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding) !default;
 $pivotgrid-expand-icon-offset: -5px; // dx-fixed-size: negated at its use site
 $pivotgrid-expand-icon-text-offset: 0 !default;
 
