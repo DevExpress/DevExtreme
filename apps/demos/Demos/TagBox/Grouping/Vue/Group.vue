@@ -13,7 +13,7 @@ withDefaults(defineProps<{
 </script>
 <style scoped>
   .custom-icon .icon {
-    color: var(--dxds-color-content-orange, #f05b41);
+    color: #f05b41;
   }
 
   .custom-icon {

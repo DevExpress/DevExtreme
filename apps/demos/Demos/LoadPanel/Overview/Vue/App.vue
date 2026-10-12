@@ -107,8 +107,8 @@ function onHidden() {
   margin: 20px 0;
   -webkit-touch-callout: none;
   user-select: none;
-  border-top: 1px solid var(--dxds-color-border, lightgray);
-  border-bottom: 1px solid var(--dxds-color-border, lightgray);
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
 }
 
 #employee > p {

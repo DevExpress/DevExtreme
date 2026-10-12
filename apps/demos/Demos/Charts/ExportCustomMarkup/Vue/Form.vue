@@ -66,7 +66,7 @@ defineExpose({
 </script>
 <style>
 .custom-markup-text {
-  fill: var(--dxds-color-content-on-color, #fff);
+  fill: #fff;
   font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;
 }
 

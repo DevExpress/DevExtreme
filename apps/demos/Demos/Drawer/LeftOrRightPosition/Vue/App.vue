@@ -96,7 +96,7 @@ const toolbarContent = [{
 
     #toolbar {
       background-color: var(--dx-component-color-bg);
-      box-shadow: var(--dxds-box-shadow-md, 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08));
+      box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
       padding: 5px 10px;
       z-index: 10000;
     }

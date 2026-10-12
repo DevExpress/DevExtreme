@@ -211,9 +211,9 @@ function getTimeLeft(task: Task) {
   }
 
   .custom-task-edit-tooltip {
-    background-color: var(--dxds-color-bg, #fff);
-    color: var(--dxds-color-content, #000);
-    box-shadow: var(--dxds-box-shadow-md, 0 4px 8px 0 rgba(0, 0, 0, 0.2));
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 10px 12px 12px;
     border-radius: 3px;
   }

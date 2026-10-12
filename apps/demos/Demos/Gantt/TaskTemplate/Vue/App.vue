@@ -83,31 +83,31 @@ function getImagePath(taskId: number) {
 }
 
 .custom-task-color-0 {
-  background-color: var(--dxds-color-content-purple, #512DA8);
+  background-color: #512DA8;
 }
 
 .custom-task-color-1 {
-  background-color: var(--dxds-color-content-green, #2E7D32);
+  background-color: #2E7D32;
 }
 
 .custom-task-color-2 {
-  background-color: var(--dxds-color-content-blue, #1564C0);
+  background-color: #1564C0;
 }
 
 .custom-task-color-3 {
-  background-color: var(--dxds-color-content-pink, #C2185B);
+  background-color: #C2185B;
 }
 
 .custom-task-color-4 {
-  background-color: var(--dxds-color-content-red, #C62828);
+  background-color: #C62828;
 }
 
 .custom-task-color-5 {
-  background-color: var(--dxds-color-content-orange, #DD2C00);
+  background-color: #DD2C00;
 }
 
 .custom-task-color-6 {
-  background-color: var(--dxds-color-content-indigo, #7B1FA2);
+  background-color: #7B1FA2;
 }
 
 .custom-task {
@@ -119,7 +119,7 @@ function getImagePath(taskId: number) {
 
 .custom-task-wrapper {
   padding: 8px;
-  color: var(--dxds-color-content-inverted, #fff);
+  color: #fff;
 }
 
 .custom-task-wrapper > * {
@@ -134,7 +134,7 @@ function getImagePath(taskId: number) {
   height: 32px;
   border-radius: 50%;
   margin: 8px;
-  background-color: var(--dxds-color-content-on-color, #fff);
+  background-color: #fff;
   overflow: hidden;
 }
 
@@ -157,7 +157,7 @@ function getImagePath(taskId: number) {
   bottom: 0;
   width: 0%;
   height: 4px;
-  background: rgb(from var(--dxds-color-bg-static-dark, #000) r g b / var(--dxds-opacity-30, 0.3));
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .dx-gantt .dx-row {

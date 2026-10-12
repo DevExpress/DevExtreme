@@ -112,7 +112,7 @@ body {
   position: relative;
   overflow: hidden;
   border-bottom: var(--dx-border-width) solid var(--dx-color-border);
-  background-color: var(--dxds-color-bg, #fff);
+  background-color: #fff;
 }
 
 .employees__img {
