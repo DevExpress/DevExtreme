@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
@@ -94,7 +95,7 @@ jobs:
 
     - name: Build localization
       working-directory: ./packages/devextreme
-      run: pnpm exec gulp localization
+      run: pnpm exec nx build:localization devextreme
 
     - name: Check test types
       run: pnpm exec nx check-types devextreme
@@ -110,7 +111,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: DevExpress/github-actions/send-teams-notification@v1
+      - uses: DevExpress/github-actions/send-teams-notification@send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}

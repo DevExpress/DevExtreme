@@ -7,7 +7,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { Properties as DateBoxProperties } from '@js/ui/date_box';
 import type { SimpleItem } from '@js/ui/form';
 
-import { getImageContainer } from '../../core/utils/m_icon';
+import { getImageContainer } from '../../core/utils/icon';
 import { getRecurrenceString, parseRecurrenceRule } from '../recurrence/base';
 import { daysFromByDayRule } from '../recurrence/days_from_by_day_rule';
 import type { Rule } from '../recurrence/types';

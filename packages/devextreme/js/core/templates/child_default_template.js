@@ -1,2 +1,2 @@
 // deprecated
-export { ChildDefaultTemplate } from '../../__internal/core/templates/m_child_default_template';
+export { ChildDefaultTemplate } from '../../__internal/core/templates/child_default_template';

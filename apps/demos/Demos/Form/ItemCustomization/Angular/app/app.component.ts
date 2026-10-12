@@ -7,12 +7,12 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import {
-  DxSelectBoxModule,
-  DxTextAreaModule,
   DxFormModule,
   DxFormComponent,
   DxTooltipModule,
 } from 'devextreme-angular';
+import 'devextreme/ui/select_box';
+import 'devextreme/ui/text_area';
 
 import { Employee, Service } from './app.service';
 
@@ -20,20 +20,12 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
   providers: [Service],
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
-    DxSelectBoxModule,
-    DxTextAreaModule,
     DxFormModule,
     DxTooltipModule,
   ],

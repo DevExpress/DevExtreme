@@ -1,4 +1,5 @@
 import { HorizontalAlignment } from '../common';
+import { PermutationsWithRepetition } from '../core';
 import { Format } from '../localization';
 import { BaseLegendItem } from '../viz/common';
 import { baseSeriesObject } from '../viz/chart';
@@ -46,10 +47,12 @@ export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
 export type ChartsDataType = 'datetime' | 'numeric' | 'string';
 
 /**
+ * @docid
  * @public
+ * @type object
  * @namespace DevExpress.common.charts
  */
-export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+export type DashStyle = PermutationsWithRepetition<'dash' | 'dot' | 'longDash' | 'solid', 5>;
 
 /**
  * @public
@@ -255,7 +258,7 @@ export type VisualRange = {
     * @default undefined
     * @public
     */
-    length?: TimeIntervalConfig;
+    length?: TimeIntervalConfig | undefined;
     /**
     * @docid
     * @default undefined

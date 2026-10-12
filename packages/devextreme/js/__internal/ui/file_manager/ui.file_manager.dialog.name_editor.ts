@@ -2,7 +2,7 @@
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import TextBox from '@js/ui/text_box';
-import FileManagerDialogBase from '@ts/ui/file_manager/ui.file_manager.dialog';
+import FileManagerDialogBase, { type DialogOptions } from '@ts/ui/file_manager/ui.file_manager.dialog';
 
 const FILE_MANAGER_DIALOG_NAME_EDITOR = 'dx-filemanager-dialog-name-editor';
 const FILE_MANAGER_DIALOG_NAME_EDITOR_POPUP = 'dx-filemanager-dialog-name-editor-popup';
@@ -40,12 +40,12 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
     this._nameTextBox.focus();
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  _getDialogOptions() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  _getDialogOptions(): DialogOptions {
+    const { title, buttonText } = this.option();
+
     return extend(super._getDialogOptions(), {
-      title: this.option('title'),
-      buttonText: this.option('buttonText'),
+      title,
+      buttonText,
       contentCssClass: FILE_MANAGER_DIALOG_NAME_EDITOR,
       popupCssClass: FILE_MANAGER_DIALOG_NAME_EDITOR_POPUP,
     });

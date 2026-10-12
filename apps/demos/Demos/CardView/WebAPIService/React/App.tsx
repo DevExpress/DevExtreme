@@ -1,7 +1,7 @@
 import React from 'react';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import CardView, { Column, Editing, RequiredRule, SearchPanel, HeaderFilter, Form, Item } from 'devextreme-react/card-view';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/select_box';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
@@ -15,6 +15,10 @@ const dataSource = AspNetData.createStore({
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
+
+const popupConfig = { width: 700, height: 400 };
+
+const priorityOptions = { dataSource: ['Low', 'Normal', 'High', 'Urgent'] };
 
 const App = () => (
   <CardView
@@ -34,7 +38,7 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
-      popup={{ width: 700, height: 400 }}
+      popup={popupConfig}
     >
       <Form>
         <Item
@@ -49,7 +53,7 @@ const App = () => (
         <Item
           dataField="Task_Priority"
           editorType="dxSelectBox"
-          editorOptions={{ dataSource: ['Low', 'Normal', 'High', 'Urgent'] }}
+          editorOptions={priorityOptions}
         ></Item>
         <Item
           dataField="Task_Status"

@@ -184,7 +184,7 @@ const getDetailGridDataSource = (product: Product) => ({
 
 const getAmount = (order: Order) => order.UnitPrice * order.Quantity;
 </script>
-<style scoped>
+<style>
 .options {
   padding: 20px;
   margin-top: 20px;

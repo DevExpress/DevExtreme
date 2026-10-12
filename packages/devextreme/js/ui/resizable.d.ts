@@ -128,28 +128,28 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     minWidth?: number;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/resizable:ResizeEvent}
      * @action
      * @public
      */
-    onResize?: ((e: ResizeEvent) => void);
+    onResize?: ((e: ResizeEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/resizable:ResizeEndEvent}
      * @action
      * @public
      */
-    onResizeEnd?: ((e: ResizeEndEvent) => void);
+    onResizeEnd?: ((e: ResizeEndEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/resizable:ResizeStartEvent}
      * @action
      * @public
      */
-    onResizeStart?: ((e: ResizeStartEvent) => void);
+    onResizeStart?: ((e: ResizeStartEvent) => void) | undefined;
     /**
      * @docid
      * @fires dxResizableOptions.onResize

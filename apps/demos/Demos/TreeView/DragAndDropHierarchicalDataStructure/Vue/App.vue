@@ -215,7 +215,7 @@ function getTopVisibleNode(component: DxSortableInstance) {
   return null;
 }
 </script>
-<style scoped>
+<style>
 .form {
   display: flex;
 }

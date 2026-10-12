@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable func-names */
@@ -11,20 +12,55 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-plusplus */
 
-import { cancelAnimationFrame, requestAnimationFrame } from '@js/common/core/animation/frame';
+import { cancelAnimationFrame, requestAnimationFrame } from '@ts/common/core/animation/frame';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
-export const noop = function () { };
-export const easingFunctions = {
+type EasingFunction = (pos: number, start: number, end: number) => number;
+
+type AnimationParams = Record<string, ThemeValue>;
+
+interface AnimatedElement {
+  attr: (attrs: AnimationParams) => unknown;
+  animation?: Animation;
+}
+
+type AnimationStep = (
+  element: AnimatedElement,
+  params: ThemeValue,
+  progress: number,
+  easing: EasingFunction,
+  currentParams: AnimationParams,
+  attributeName: string,
+) => void;
+
+interface AnimationSteps {
+  [attributeName: string]: AnimationStep | undefined;
+  base: AnimationStep;
+  complete?: (element: AnimatedElement, currentParams: AnimationParams) => void;
+}
+
+export interface AnimationOptions {
+  duration: number;
+  partitionDuration?: number;
+  delay?: number;
+  easing?: string;
+  animateStep?: AnimationSteps;
+  unstoppable?: boolean;
+  step?: (easedProgress: number, progress: number) => void;
+  complete?: () => void;
+}
+
+type AnimationTick = (this: Animation, now: number) => unknown;
+
+export const noop = function (): void { };
+export const easingFunctions: Record<string, EasingFunction> = {
   easeOutCubic(pos, start, end) { return pos === 1 ? end : (1 - (1 - pos) ** 3) * (end - start) + +start; },
   linear(pos, start, end) { return pos === 1 ? end : pos * (end - start) + +start; },
 };
 
-export const animationSvgStep = {
+export const animationSvgStep: AnimationSteps = {
   segments(elem, params, progress, easing, currentParams) {
     const { from } = params;
     const { to } = params;
@@ -32,7 +68,7 @@ export const animationSvgStep = {
     let seg;
     let i;
     let j;
-    const segments = [];
+    const segments: ThemeValue[][] = [];
 
     for (i = 0; i < from.length; i++) {
       curSeg = from[i];
@@ -42,7 +78,6 @@ export const animationSvgStep = {
           seg.push(easing(progress, curSeg[j], to[i][j]));
         }
       }
-      // @ts-expect-error
       segments.push(seg);
     }
     currentParams.segments = params.end && progress === 1 ? params.end : segments;
@@ -82,7 +117,7 @@ export const animationSvgStep = {
   },
 };
 
-function step(now) {
+function step(this: Animation, now: number): unknown {
   const that = this;
   const animateStep = that._animateStep;
   let attrName;
@@ -100,66 +135,100 @@ function step(now) {
   return true;
 }
 
-function delayTick(now) {
+function delayTick(this: Animation, now: number): boolean {
   if (now - this._startTime >= this.delay) {
     this.tick = step;
   }
   return true;
 }
 
-function start(now) {
+function start(this: Animation, now: number): boolean {
   this._startTime = now;
   this.tick = this.delay ? delayTick : step;
   return true;
 }
 
-export function Animation(element, params, options) {
-  const that = this;
-  that._progress = 0;
-  that.element = element;
-  that.params = params;
-  that.options = options;
-  that.duration = options.partitionDuration ? options.duration * options.partitionDuration : options.duration;
-  that.delay = options.delay && options.duration * options.delay || 0;
-  that._animateStep = options.animateStep || animationSvgStep;
-  that._easing = easingFunctions[options.easing] || easingFunctions.easeOutCubic;
-  that._currentParams = {};
-  that.tick = start;
-}
+export class Animation {
+  declare _progress: number;
 
-Animation.prototype = {
-  _calcProgress(now) {
+  declare element: AnimatedElement;
+
+  declare params: AnimationParams;
+
+  declare options: AnimationOptions;
+
+  declare duration: number;
+
+  declare delay: number;
+
+  declare _animateStep: AnimationSteps;
+
+  declare _easing: EasingFunction;
+
+  declare _currentParams: AnimationParams;
+
+  declare _startTime: number;
+
+  declare tick: AnimationTick;
+
+  constructor(element: AnimatedElement, params: AnimationParams, options: AnimationOptions) {
+    this._progress = 0;
+    this.element = element;
+    this.params = params;
+    this.options = options;
+    this.duration = options.partitionDuration ? options.duration * options.partitionDuration : options.duration;
+    this.delay = options.delay && options.duration * options.delay || 0;
+    this._animateStep = options.animateStep || animationSvgStep;
+    // @ts-expect-error an unknown or missing easing name falls back to easeOutCubic
+    this._easing = easingFunctions[options.easing] || easingFunctions.easeOutCubic;
+    this._currentParams = {};
+    this.tick = start;
+  }
+
+  _calcProgress(now: number): number {
     return Math.min(1, (now - this.delay - this._startTime) / this.duration);
-  },
+  }
 
-  stop(disableComplete) {
-    const that = this;
-    const { options } = that;
-    const animateStep = that._animateStep;
+  stop(disableComplete?: boolean): void {
+    const { options } = this;
+    const animateStep = this._animateStep;
 
-    that.stop = that.tick = noop;
+    this.stop = this.tick = noop;
 
-    animateStep.complete && animateStep.complete(that.element, that._currentParams);
+    animateStep.complete && animateStep.complete(this.element, this._currentParams);
     options.complete && !disableComplete && options.complete();
-  },
-};
-
-export function AnimationController(element) {
-  const that = this;
-  that._animationCount = 0;
-  that._timerId = null;
-  that._animations = {};
-  that.element = element;
+  }
 }
 
-AnimationController.prototype = {
-  _loop() {
-    const that = this;
-    const animations = that._animations;
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let AnimationController = class AnimationController {
+  declare _animationCount: number;
+
+  declare _timerId: number | null;
+
+  declare _animations: Record<number, Animation>;
+
+  declare element: Element | null;
+
+  declare _startDelay?: ReturnType<typeof setTimeout>;
+
+  declare _endAnimation?: (() => void) | null;
+
+  declare _endAnimationTimer?: ReturnType<typeof setTimeout> | null;
+
+  constructor(element: Element) {
+    this._animationCount = 0;
+    this._timerId = null;
+    this._animations = {};
+    this.element = element;
+  }
+
+  _loop(): void {
+    const animations = this._animations;
     let activeAnimation = 0;
     const now = new Date().getTime();
     let an;
-    const endAnimation = that._endAnimation;
+    const endAnimation = this._endAnimation;
 
     for (an in animations) {
       if (!animations[an].tick(now)) {
@@ -168,61 +237,61 @@ AnimationController.prototype = {
       activeAnimation++;
     }
     if (activeAnimation === 0) {
-      that.stop();
-      that._endAnimationTimer = endAnimation && setTimeout(() => {
-        if (that._animationCount === 0) {
+      this.stop();
+      this._endAnimationTimer = endAnimation && setTimeout(() => {
+        if (this._animationCount === 0) {
           endAnimation();
-          that._endAnimation = null;
+          this._endAnimation = null;
         }
       });
       return;
     }
-    that._timerId = requestAnimationFrame.call(null, () => {
-      that._loop();
-    }, that.element);
-  },
+    this._timerId = requestAnimationFrame.call(null, () => {
+      this._loop();
+    }, this.element);
+  }
 
-  addAnimation(animation) {
-    const that = this;
-    that._animations[that._animationCount++] = animation;
-    clearTimeout(that._endAnimationTimer);
-    if (!that._timerId) {
-      clearTimeout(that._startDelay);
-      that._startDelay = setTimeout(() => {
-        that._timerId = 1;
-        that._loop();
+  addAnimation(animation: Animation): void {
+    this._animations[this._animationCount++] = animation;
+    // @ts-expect-error the handle is null when _loop() had no end callback, clearTimeout(null) is a no-op
+    clearTimeout(this._endAnimationTimer);
+    if (!this._timerId) {
+      clearTimeout(this._startDelay);
+      this._startDelay = setTimeout(() => {
+        this._timerId = 1;
+        this._loop();
       }, 0);
     }
-  },
+  }
 
-  animateElement(elem, params, options) {
+  animateElement(elem: AnimatedElement, params: AnimationParams, options: AnimationOptions): void {
     if (elem && params && options) {
       elem.animation && elem.animation.stop();
       this.addAnimation(elem.animation = new Animation(elem, params, options));
     }
-  },
+  }
 
-  onEndAnimation(endAnimation) {
+  onEndAnimation(endAnimation: () => void): void {
     this._animationCount ? this._endAnimation = endAnimation : endAnimation();
-  },
+  }
 
-  dispose() {
+  dispose(): void {
     this.stop();
     this.element = null;
-  },
+  }
 
-  stop() {
-    const that = this;
+  stop(): void {
+    this._animations = {};
+    this._animationCount = 0;
+    // @ts-expect-error the timer handle is null when no frame is requested, cancelAnimationFrame(null) is a no-op
+    cancelAnimationFrame(this._timerId);
+    clearTimeout(this._startDelay);
+    // @ts-expect-error the handle is null when _loop() had no end callback, clearTimeout(null) is a no-op
+    clearTimeout(this._endAnimationTimer);
+    this._timerId = null;
+  }
 
-    that._animations = {};
-    that._animationCount = 0;
-    cancelAnimationFrame(that._timerId);
-    clearTimeout(that._startDelay);
-    clearTimeout(that._endAnimationTimer);
-    that._timerId = null;
-  },
-
-  lock() {
+  lock(): void {
     let an;
     const animations = this._animations;
     let unstoppable; // T261694
@@ -237,5 +306,13 @@ AnimationController.prototype = {
       }
     }
     !hasUnstoppableInAnimations && this.stop();
-  },
+  }
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_AnimationController(value: typeof AnimationController): void {
+  AnimationController = value;
+}
+/// #ENDDEBUG

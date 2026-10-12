@@ -34,7 +34,6 @@
         { "env": "CHANGEDFILEINFOSPATH" },
         { "env": "BROWSERS" },
         { "env": "DEBUG" },
-        { "env": "TCQUARANTINE" },
         { "env": "CONSTEL" },
         { "env": "THEME" },
         { "env": "DISABLE_DEMO_TEST_SETTINGS" },
@@ -46,23 +45,6 @@
         "{projectRoot}/accessibility_report.txt",
         "{projectRoot}/accessibility_testcafe_report",
         "{projectRoot}/testing/artifacts"
-      ]
-    },
-    "prepare-bundles": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "prepare-bundles"
-      },
-      "dependsOn": [
-        // "^build" uncomment me after migrating to PNPM
-      ],
-      "inputs": [
-        "default",
-        "{projectRoot}/gulpfile.js/**/*",
-        "{projectRoot}/rollup.devextreme-angular.umd.config.mjs"
-      ],
-      "outputs": [
-        "{projectRoot}/bundles"
       ]
     },
     "lint-js": {
@@ -128,24 +110,20 @@
         "commands": [
           "pnpm nx build devextreme",
           "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel",
-          "pnpm run prepare-js"
+          "pnpm run build-vendor-bundles"
         ],
         "parallel": false,
         "cwd": "{projectRoot}"
       },
       "inputs": [
         "default",
-        "{projectRoot}/gulpfile.js/**/*",
-        "{projectRoot}/rollup.devextreme-angular.umd.config.mjs"
-      ],
-      "outputs": [
-        "{projectRoot}/Demos/**/config.js"
+        "{projectRoot}/utils/server/build-vendor-bundles.js",
+        "{projectRoot}/utils/server/vendor-bundle.js"
       ]
     }
   },
   "namedInputs": {
     "default": [
-      "{projectRoot}/configs/**/*",
       "{projectRoot}/data/**/*",
       "{projectRoot}/Demos/**/*",
       "{projectRoot}/images/**/*",

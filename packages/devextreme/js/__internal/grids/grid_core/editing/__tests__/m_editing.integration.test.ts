@@ -1,7 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
-import CustomStore from '@ts/data/m_custom_store';
+import CustomStore from '@js/data/custom_store';
 
 import {
   afterTest,
@@ -259,6 +259,88 @@ describe('DataGrid editing', () => {
       await flushAsync();
 
       expect(editingController.getInternalStateSize()).toBe(1);
+    });
+  });
+
+  describe('allowUpdating for a new row (T1332312)', () => {
+    it('should allow updating a new row regardless of the allowUpdating option', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'batch',
+          allowUpdating: false,
+          allowAdding: true,
+        },
+      });
+
+      await instance.addRow();
+      await flushAsync();
+
+      const editingController = instance.getController('editing');
+      const dataController = instance.getController('data');
+      const newRow = dataController.items().find((row) => row.isNewRow);
+      const existingRow = dataController.items().find((row) => !row.isNewRow);
+
+      expect(editingController.allowUpdating({ row: newRow })).toBe(true);
+      expect(editingController.allowUpdating({ row: existingRow })).toBe(false);
+    });
+
+    it('should respect the allowUpdating option for a new row when allowEditingForNewRows is false', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'batch',
+          allowUpdating: false,
+          allowAdding: true,
+        },
+      });
+
+      await instance.addRow();
+      await flushAsync();
+
+      const editingController = instance.getController('editing');
+      const dataController = instance.getController('data');
+      const newRow = dataController.items().find((row) => row.isNewRow);
+
+      expect(editingController.allowUpdating({ row: newRow }, 'click', false)).toBe(false);
+    });
+  });
+
+  describe('Nested arrays in row data (T1334039)', () => {
+    const createDataSourceWithTasks = (): Record<string, unknown>[] => [
+      { ID: 1, FirstName: 'John', Tasks: [{ ID: 11, Subject: 'Task 1' }] },
+      { ID: 2, FirstName: 'Olivia', Tasks: [{ ID: 21, Subject: 'Task 2' }] },
+    ];
+
+    it.each([
+      { refreshMode: 'reshape' as const },
+      { refreshMode: 'repaint' as const },
+      { refreshMode: 'full' as const },
+    ])('should keep the nested array reference after saving a cell when refreshMode is "$refreshMode"', async ({ refreshMode }) => {
+      const dataSourceWithTasks = createDataSourceWithTasks();
+      const tasks = dataSourceWithTasks[0].Tasks;
+
+      const { component } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource: dataSourceWithTasks,
+        columns: ['FirstName'],
+        editing: {
+          mode: 'cell',
+          refreshMode,
+          allowUpdating: true,
+        },
+      });
+
+      component.apiCellValue(0, 'FirstName', 'Updated');
+      const saving = component.apiSaveEditData();
+      await flushAsync();
+      await saving;
+
+      expect(component.getDataCell(0, 0).getText()).toBe('Updated');
+      expect(component.apiGetVisibleRows()[0].data.Tasks).toBe(tasks);
+      expect(dataSourceWithTasks[0].Tasks).toBe(tasks);
     });
   });
 });

@@ -1,10 +1,7 @@
-@use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 10. Text color
@@ -27,4 +24,3 @@ $tooltip-border-radius: $base-border-radius !default;
 @if $mode == "dark" {
   $tooltip-bg: $base-hover-bg !default;
 }
-

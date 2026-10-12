@@ -6,7 +6,7 @@ import '@ts/ui/list/modules/deleting';
 
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import Form from '@ts/ui/form/form';
 import Popup from '@ts/ui/popup/popup';
 
@@ -130,10 +130,8 @@ class DialogInfoBase {
     return this._parameters;
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  getFormData() {
-    const formData = this._form?.option('formData');
-    return formData;
+  getFormData(): unknown {
+    return this._form?.option('formData');
   }
 
   isValidated(): boolean {

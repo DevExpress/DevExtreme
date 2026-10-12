@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import registerComponent from 'core/component_registrator';
 import Widget from 'ui/widget/ui.widget';
 import ResponsiveBox from 'ui/responsive_box';
@@ -7,7 +7,7 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import dxButton from 'ui/button';
 import 'ui/box';
 import eventsEngine from 'common/core/events/core/events_engine';
-import domAdapter from '__internal/core/m_dom_adapter';
+import domAdapter from '__internal/core/dom_adapter';
 
 QUnit.testStart(function() {
     const markup =

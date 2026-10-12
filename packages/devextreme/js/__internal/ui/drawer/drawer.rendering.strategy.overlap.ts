@@ -34,7 +34,6 @@ class OverlapStrategy extends DrawerStrategy {
     drawer._overlay = drawer._createComponent($(drawer.content()), Overlay, {
       shading: false,
       container: drawer.content(),
-      // @ts-expect-error ts-error
       visualContainer: drawer.getOverlayTarget(),
       position: this._getOverlayPosition(),
       width: opened ? 'auto' : minSize ?? 0,

@@ -254,7 +254,7 @@ describe('CopyFilesExecutor E2E', () => {
 
   it('should forward applyLicenseHeaders option to license header pipeline', async () => {
     const projectDir = path.join(tempDir, 'packages', 'test-lib');
-    const buildDir = path.join(projectDir, 'build', 'gulp');
+    const buildDir = path.join(projectDir, 'build');
     fs.mkdirSync(buildDir, { recursive: true });
     await writeFileText(
       path.join(buildDir, 'license-header.txt'),
@@ -268,7 +268,7 @@ describe('CopyFilesExecutor E2E', () => {
     const options: CopyFilesExecutorSchema = {
       files: [{ from: './aspnet-source.js', to: './artifacts/js/dx.aspnet.mvc.js' }],
       applyLicenseHeaders: {
-        licenseTemplateFile: './build/gulp/license-header.txt',
+        licenseTemplateFile: './build/license-header.txt',
         targetSubdir: './artifacts/js',
         separator: '',
         includePatterns: ['dx.aspnet.mvc.js'],

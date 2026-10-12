@@ -2215,7 +2215,7 @@ const titleEnvironment = $.extend({}, environment, {
         const titleConstructor = module.Title;
 
         that.titleLayout = { height: 17, width: 20, x: 4, y: 5 };
-        module.Title = function(params) {
+        module.DEBUG_set_title(function(params) {
             that.title = new titleConstructor(params);
 
             that.title.getLayoutOptions = sinon.stub();
@@ -2231,7 +2231,7 @@ const titleEnvironment = $.extend({}, environment, {
             that.title.shift = sinon.spy();
 
             return that.title;
-        };
+        });
 
         that.themeManagerTitleOptions = {
             backgroundColor: '#ffffff',

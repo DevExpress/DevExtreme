@@ -11,10 +11,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isDefined as _isDefined } from '@js/core/utils/type';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { isDefined as _isDefined } from '@ts/core/utils/m_type';
 import { Label } from '@ts/viz/series/points/label';
 import symbolPoint from '@ts/viz/series/points/symbol_point';
 
@@ -236,7 +236,7 @@ export default _extend({}, symbolPoint, {
 
   _drawLabel() {
     const that = this;
-    const labels = [];
+    const labels: InstanceType<typeof Label>[] = [];
     const notInverted = that._options.rotated ? that.x >= that.minX : that.y < that.minY;
     const customVisibility = that._getCustomLabelVisibility();
     const topLabel = that._topLabel;
@@ -246,9 +246,7 @@ export default _extend({}, symbolPoint, {
     bottomLabel.pointPosition = notInverted ? 'bottom' : 'top';
 
     if ((that.series.getLabelVisibility() || customVisibility) && that.hasValue() && customVisibility !== false) {
-      // @ts-expect-error
       that.visibleTopMarker !== false && labels.push(topLabel);
-      // @ts-expect-error
       that.visibleBottomMarker !== false && labels.push(bottomLabel);
 
       each(labels, (_, label) => {

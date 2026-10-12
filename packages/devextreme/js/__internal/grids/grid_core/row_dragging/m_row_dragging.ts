@@ -1,10 +1,14 @@
-import $ from '@js/core/../core/renderer';
-import { extend } from '@js/core/../core/utils/extend';
+import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Sortable from '@js/ui/sortable';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import gridCoreUtils from '../m_utils';
@@ -70,7 +74,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
     };
 
-    const rowSelector = '.dx-row:not(.dx-freespace-row):not(.dx-virtual-row):not(.dx-header-row):not(.dx-footer-row)';
+    const rowSelector = `.${VIEW_CLASSES.row}:not(.dx-freespace-row):not(.dx-virtual-row):not(.${COLUMN_HEADERS_CLASSES.headerRow}):not(.dx-footer-row)`;
     const filter = this.option('dataRowTemplate')
       ? `> table > tbody${rowSelector}`
       : `> table > tbody > ${rowSelector}`;
@@ -149,16 +153,19 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     return $content;
   }
 
-  protected _renderCore(e) {
-    super._renderCore.apply(this, arguments as any);
+  protected _renderCore(e?: DataChange): DeferredObj<unknown> {
+    const deferred = super._renderCore(e);
 
-    if (e && e.changeType === 'update'
+    if (e?.changeType === 'update'
         && e.repaintChangesOnly
         && gridCoreUtils.isVirtualRowRendering(this)) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget update
       deferUpdate(() => {
         this._updateSortable();
       });
     }
+
+    return deferred;
   }
 
   private _updateSortable() {

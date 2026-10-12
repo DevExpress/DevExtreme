@@ -257,78 +257,78 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
     items?: Array<TItem>;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tree_view:ItemClickEvent}
 
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
+    onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tree_view:ItemCollapsedEvent}
      * @action
      * @public
      */
-    onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void);
+    onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tree_view:ItemContextMenuEvent}
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
+    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tree_view:ItemExpandedEvent}
      * @action
      * @public
      */
-    onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void);
+    onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tree_view:ItemHoldEvent}
      * @action
      * @public
      */
-    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
+    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tree_view:ItemRenderedEvent}
      * @action
      * @public
      */
-    onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
+    onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tree_view:ItemSelectionChangedEvent}
      * @action
      * @public
      */
-    onItemSelectionChanged?: ((e: ItemSelectionChangedEvent<TItem, TKey>) => void);
+    onItemSelectionChanged?: ((e: ItemSelectionChangedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tree_view:SelectAllValueChangedEvent}
      * @action
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/tree_view:SelectionChangedEvent}
      * @action
      * @public
      * @override
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent<TItem, TKey>) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent<TItem, TKey>) => void) | undefined;
     /**
      * @docid
      * @default 'parentId'

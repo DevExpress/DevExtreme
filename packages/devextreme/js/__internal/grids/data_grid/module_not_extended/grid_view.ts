@@ -1,5 +1,5 @@
 import { gridViewModule } from '@ts/grids/grid_core/views/m_grid_view';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 
 gridCore.registerModule('gridView', gridViewModule);

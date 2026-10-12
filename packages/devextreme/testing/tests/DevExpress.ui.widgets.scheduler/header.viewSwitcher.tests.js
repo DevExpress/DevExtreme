@@ -2,7 +2,7 @@ import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.j
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 testStart(() => initTestMarkup());
 if(devices.current().deviceType === 'desktop') {

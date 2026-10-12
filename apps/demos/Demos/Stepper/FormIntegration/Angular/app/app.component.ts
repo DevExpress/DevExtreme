@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectionStrategy,
   Component,
   enableProdMode,
   provideZoneChangeDetection,
@@ -23,17 +22,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxButtonModule,
     DxMultiViewModule,
@@ -50,6 +42,8 @@ export class AppComponent {
 
   formData: BookingFormData;
 
+  confirmationData: BookingFormData;
+
   selectedIndex: number;
 
   isConfirmed: boolean;
@@ -61,6 +55,7 @@ export class AppComponent {
   constructor(private readonly appService: AppService) {
     this.steps = this.appService.getInitialSteps();
     this.formData = this.appService.getInitialFormData();
+    this.confirmationData = this.formData;
     this.selectedIndex = 0;
     this.isConfirmed = false;
     this.isStepperReadonly = false;
@@ -95,6 +90,10 @@ export class AppComponent {
         e.cancel = true;
       }
     }
+
+    if (!e.cancel && addedIndex === items.length - 1) {
+      this.confirmationData = { ...this.formData };
+    }
   }
 
   getNextButtonText() {
@@ -124,6 +123,7 @@ export class AppComponent {
     this.selectedIndex = 0;
     this.steps = this.appService.getInitialSteps();
     this.formData = this.appService.getInitialFormData();
+    this.confirmationData = this.formData;
     this.isStepperReadonly = false;
   }
 

@@ -1,12 +1,8 @@
-@use "sass:color";
 @use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/tabPanel";
-
-// adduse
 
 .dx-tabpanel {
   .dx-tabpanel-tab {

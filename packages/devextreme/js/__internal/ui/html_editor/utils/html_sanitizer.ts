@@ -5,7 +5,6 @@ import type { QuillInstance } from '@ts/ui/html_editor/html_editor';
 
 export const createNoScriptFrame = (): dxElementWrapper => $('<iframe>')
   .css('display', 'none')
-  // @ts-expect-error
   .attr({
     // eslint-disable-next-line spellcheck/spell-checker
     srcdoc: '', // NOTE: srcdoc is used to prevent an excess "Blocked script execution" error in Opera. See T1150911.

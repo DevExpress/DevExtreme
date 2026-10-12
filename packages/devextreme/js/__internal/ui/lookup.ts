@@ -29,14 +29,17 @@ import type {
 } from '@js/ui/list';
 import type { Properties } from '@js/ui/lookup';
 import Popover from '@js/ui/popover/ui.popover';
-import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
+import type { ToolbarItem } from '@js/ui/popup';
+import type { TextBoxType } from '@js/ui/text_box';
 import { current, isMaterial } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
+import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
 import { getElementWidth } from '@ts/ui/drop_down_editor/utils';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 import TextBox from '@ts/ui/text_box/text_box';
 
 import type { FieldTemplate } from './drop_down_editor/drop_down_editor';
@@ -66,7 +69,8 @@ const MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 5;
 const MATERIAL_LOOKUP_LIST_PADDING = 8;
 const WINDOW_RATIO = 0.8;
 
-export interface LookupProperties extends Omit<Properties, 'onItemClick' | 'onSelectionChanged'> {
+export interface LookupProperties extends Omit<Properties, 'onItemClick' | 'onSelectionChanged' | 'dropDownOptions' | 'fieldTemplate'>,
+  DropDownEditorInternalProperties {
   _scrollToSelectedItemEnabled?: boolean;
 }
 
@@ -135,12 +139,9 @@ class Lookup extends DropDownList<LookupProperties> {
       pulledDownText: messageLocalization.format('dxList-pulledDownText'),
       refreshingText: messageLocalization.format('dxList-refreshingText'),
       pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
-      // @ts-expect-error public API
-      onScroll: null,
-      // @ts-expect-error public API
-      onPullRefresh: null,
-      // @ts-expect-error public API
-      onPageLoading: null,
+      onScroll: undefined,
+      onPullRefresh: undefined,
+      onPageLoading: undefined,
       pageLoadMode: 'scrollBottom',
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
       grouped: false,
@@ -161,8 +162,7 @@ class Lookup extends DropDownList<LookupProperties> {
         animation: {},
         title: '',
         titleTemplate: 'title',
-        // @ts-expect-error ts-error
-        onTitleRendered: null,
+        onTitleRendered: undefined,
         fullScreen: false,
         maxHeight: '100vh',
       },
@@ -379,7 +379,6 @@ class Lookup extends DropDownList<LookupProperties> {
     } else {
       const { placeholder } = this.option();
       const $placeholder = $('<div>')
-        // @ts-expect-error fix on renderer level
         .attr({ 'data-dx_placeholder': placeholder });
 
       this._$field.append($placeholder);
@@ -923,7 +922,7 @@ class Lookup extends DropDownList<LookupProperties> {
       const $searchBox = this._$searchBox;
 
       const currentDevice = devices.current();
-      const searchMode = currentDevice.android ? 'text' : 'search';
+      const searchMode: TextBoxType = currentDevice.android ? 'text' : 'search';
 
       let isKeyboardListeningEnabled = false;
 
@@ -944,7 +943,7 @@ class Lookup extends DropDownList<LookupProperties> {
         onValueChanged: (): void => { this._searchHandler(); },
       };
 
-      this._searchBox = this._createComponent($searchBox, TextBox, textBoxOptions);
+      this._searchBox = this._createComponent<TextBox>($searchBox, TextBox, textBoxOptions);
 
       this._registerSearchKeyHandlers();
       // @ts-expect-error _$list is a List component; insertBefore expects a dxElementWrapper
@@ -1252,9 +1251,10 @@ class Lookup extends DropDownList<LookupProperties> {
         switch (fullName) {
           case 'dropDownOptions.width':
           case 'dropDownOptions.height': {
+            const initialValue = this.initialOption('dropDownOptions')?.[getFieldName(fullName)];
             const optionArgs = {
               ...args,
-              value: value === 'auto' ? this.initialOption('dropDownOptions')[getFieldName(fullName)] : value,
+              value: value === 'auto' ? initialValue : value,
             };
             this._popupOptionChanged(optionArgs);
             this._innerWidgetOptionChanged(this._popup, optionArgs);

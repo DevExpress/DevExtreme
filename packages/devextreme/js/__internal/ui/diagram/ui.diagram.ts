@@ -39,6 +39,7 @@ import EdgesOption from '@ts/ui/diagram/diagram.edges_option';
 import { getDiagram } from '@ts/ui/diagram/diagram.importer';
 import NodesOption from '@ts/ui/diagram/diagram.nodes_option';
 import DiagramOptionsUpdateBar from '@ts/ui/diagram/diagram.options_update';
+import type { ToolboxGroups } from '@ts/ui/diagram/diagram.toolbox_manager';
 import DiagramToolboxManager from '@ts/ui/diagram/diagram.toolbox_manager';
 import diagramContextMenuModule from '@ts/ui/diagram/ui.diagram.context_menu';
 import DiagramContextToolbox from '@ts/ui/diagram/ui.diagram.context_toolbox';
@@ -448,7 +449,9 @@ class Diagram extends Widget<Properties> {
   }
 
   _isHistoryToolbarVisible(): boolean {
-    return this.option('historyToolbar.visible') && !this.isReadOnlyMode();
+    const { historyToolbar } = this.option();
+
+    return Boolean(historyToolbar?.visible) && !this.isReadOnlyMode();
   }
 
   _renderHistoryToolbar($parent: dxElementWrapper): void {
@@ -500,6 +503,7 @@ class Diagram extends Widget<Properties> {
     const isServerSide = !hasWindow();
     const $toolBox = $('<div>').appendTo($parent);
     const bounds = this._getToolboxBounds($parent, isServerSide);
+    const { toolbox } = this.option();
     this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
       isMobileView: this.isMobileScreenSize(),
       isVisible: this._isToolboxVisible(),
@@ -508,9 +512,9 @@ class Diagram extends Widget<Properties> {
       offsetParent: $parent,
       offsetX: bounds.offsetX,
       offsetY: bounds.offsetY,
-      showSearch: this.option('toolbox.showSearch'),
+      showSearch: toolbox?.showSearch,
       toolboxGroups: this._getToolboxGroups(),
-      toolboxWidth: this.option('toolbox.width'),
+      toolboxWidth: toolbox?.width,
 
       onShapeCategoryRendered: (e): void => {
         if (isServerSide) return;
@@ -599,7 +603,6 @@ class Diagram extends Widget<Properties> {
       const toolboxBounds = this._getToolboxBounds($parent, isServerSide);
       this._toolbox?.option('height', toolboxBounds.height);
       const prevIsMobileView = this._toolbox?.option('isMobileView');
-      // @ts-expect-error ts-error
       if (prevIsMobileView !== this.isMobileScreenSize()) {
         this._toolbox?.option({
           isMobileView: this.isMobileScreenSize(),
@@ -797,7 +800,6 @@ class Diagram extends Widget<Properties> {
     );
     this._propertiesPanelResizeCallback = (): void => {
       const prevIsMobileView = this._propertiesPanel?.option('isMobileView');
-      // @ts-expect-error ts-error
       if (prevIsMobileView !== this.isMobileScreenSize()) {
         this._propertiesPanel?.option({
           isMobileView: this.isMobileScreenSize(),
@@ -835,7 +837,6 @@ class Diagram extends Widget<Properties> {
         // @ts-expect-error ts-error
         onItemClick: (itemData): boolean => this._onBeforeCommandExecuted(itemData.command),
         export: this.option('export'),
-        // @ts-expect-error ts-error
         excludeCommands: this._getExcludeCommands(),
         onInternalCommand: this._onInternalCommand.bind(this),
         onCustomCommand: this._onCustomCommand.bind(this),
@@ -863,7 +864,6 @@ class Diagram extends Widget<Properties> {
           const $toolboxContainer = $(e.$element);
           let isTextGroup = displayMode === 'texts';
           if (!shapes && !category && !isTextGroup) {
-            // @ts-expect-error ts-error
             const group = this._getToolboxGroups()?.filter((g) => g.category === e.category)[0];
             if (group) {
               isTextGroup = group.displayMode === 'texts';
@@ -985,7 +985,6 @@ class Diagram extends Widget<Properties> {
     this._updateUnitItems();
     this._updateFormatUnitsMethod();
 
-    // @ts-expect-error ts-error
     if (this.option('units') !== DIAGRAM_DEFAULT_UNIT) {
       this._updateUnitsState();
     }
@@ -1000,15 +999,12 @@ class Diagram extends Widget<Properties> {
         this._updatePageSizeState();
       }
     }
-    // @ts-expect-error ts-error
     if (this.option('pageOrientation') !== DIAGRAM_DEFAULT_PAGE_ORIENTATION) {
       this._updatePageOrientationState();
     }
-    // @ts-expect-error ts-error
     if (this.option('pageColor') !== DIAGRAM_DEFAULT_PAGE_COLOR) {
       this._updatePageColorState();
     }
-    // @ts-expect-error ts-error
     if (this.option('viewUnits') !== DIAGRAM_DEFAULT_UNIT) {
       this._updateViewUnitsState();
     }
@@ -1021,14 +1017,12 @@ class Diagram extends Widget<Properties> {
     if (this.option('gridSize')) {
       this._updateGridSizeState();
     }
-    // @ts-expect-error ts-error
     if (this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
       this._updateZoomLevelState();
     }
     if (this.option('simpleView')) {
       this._updateSimpleViewState();
     }
-    // @ts-expect-error ts-error
     if (this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
       this._updateAutoZoomState();
     }
@@ -1087,13 +1081,11 @@ class Diagram extends Widget<Properties> {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getNodeDataSource(): any {
-    // @ts-expect-error ts-error
     return this._nodesOption?.getDataSource();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getEdgeDataSource(): any {
-    // @ts-expect-error ts-error
     return this._edgesOption?.getDataSource();
   }
 
@@ -1106,30 +1098,24 @@ class Diagram extends Widget<Properties> {
 
   _refreshNodesDataSource(): void {
     if (this._nodesOption) {
-      // @ts-expect-error ts-error
       this._nodesOption._disposeDataSource();
       delete this._nodesOption;
     }
     if (this.option('nodes.dataSource')) {
       this._nodesOption = new NodesOption(this);
-      // @ts-expect-error ts-error
       this._nodesOption.option('dataSource', this.option('nodes.dataSource'));
-      // @ts-expect-error ts-error
       this._nodesOption._refreshDataSource();
     }
   }
 
   _refreshEdgesDataSource(): void {
     if (this._edgesOption) {
-      // @ts-expect-error ts-error
       this._edgesOption._disposeDataSource();
       delete this._edgesOption;
     }
     if (this.option('edges.dataSource')) {
       this._edgesOption = new EdgesOption(this);
-      // @ts-expect-error ts-error
       this._edgesOption.option('dataSource', this.option('edges.dataSource'));
-      // @ts-expect-error ts-error
       this._edgesOption._refreshDataSource();
     }
   }
@@ -1180,7 +1166,9 @@ class Diagram extends Widget<Properties> {
       .filter((key) => isDefined(key));
   }
 
-  _createOptionGetter(optionName: string): unknown {
+  _createOptionGetter<TValue = unknown>(
+    optionName: string,
+  ): ((item: Item) => TValue) | undefined {
     const expr = this.option(optionName);
     // @ts-expect-error ts-error
     return expr && compileGetter(expr);
@@ -1553,10 +1541,10 @@ class Diagram extends Widget<Properties> {
     return (customShapes ?? []) as Properties['customShapes'];
   }
 
-  _getToolboxGroups(): NonNullable<Properties['toolbox']>['groups'] {
+  _getToolboxGroups(): ToolboxGroups {
     const { toolbox } = this.option();
     // @ts-expect-error ts-error
-    return DiagramToolboxManager.getGroups(toolbox?.groups) as NonNullable<Properties['toolbox']>['groups'];
+    return DiagramToolboxManager.getGroups(toolbox?.groups);
   }
 
   _updateAllCustomShapes(): void {
@@ -1896,7 +1884,6 @@ class Diagram extends Widget<Properties> {
 
   _updateFormatUnitsMethod(): void {
     const { DiagramLocalizationService } = getDiagram();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     DiagramLocalizationService.formatUnit = (value): string => numberLocalization.format(value);
   }
 
@@ -2209,7 +2196,6 @@ class Diagram extends Widget<Properties> {
   }
 
   _getDefaultOptions(): Properties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       readOnly: false,
       zoomLevel: DIAGRAM_DEFAULT_ZOOMLEVEL,
@@ -2311,16 +2297,16 @@ class Diagram extends Widget<Properties> {
         fileName: 'Diagram',
       },
 
-      onItemClick: null,
+      onItemClick: undefined,
 
-      onItemDblClick: null,
+      onItemDblClick: undefined,
 
-      onSelectionChanged: null,
+      onSelectionChanged: undefined,
 
-      onRequestEditOperation: null,
+      onRequestEditOperation: undefined,
 
-      onRequestLayoutUpdate: null,
-    });
+      onRequestLayoutUpdate: undefined,
+    } satisfies Properties);
   }
 
   _raiseDataChangeAction(): void {

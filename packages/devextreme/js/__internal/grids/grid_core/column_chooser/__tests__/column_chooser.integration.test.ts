@@ -13,7 +13,7 @@ describe('Bugs', () => {
   beforeEach(() => {
     beforeTest();
     jest.spyOn(errors, 'log').mockImplementation(jest.fn());
-    jest.spyOn(errors, 'Error').mockImplementation(() => ({}));
+    jest.spyOn(errors, 'Error').mockImplementation(() => ({}) as ReturnType<typeof errors.Error>);
   });
   afterEach(afterTest);
 

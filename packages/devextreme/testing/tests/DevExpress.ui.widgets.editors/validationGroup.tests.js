@@ -1,32 +1,31 @@
-import Class from 'core/class';
 import { Deferred } from 'core/utils/deferred';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
-import DefaultAdapter from '__internal/ui/validation/m_default_adapter';
+import DefaultAdapter from '__internal/ui/validation/default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 import 'ui/validation_group';
 
 
-const Fixture = Class.inherit({
+class Fixture {
 
-    ctor: function() {
+    constructor() {
         ValidationEngine.initGroups();
         this.originalValidationGroupFunction = ValidationEngine.validateGroup;
-    },
+    }
 
-    createValidationGroupContainer: function(container) {
+    createValidationGroupContainer(container) {
         if(container) {
             this.$groupContainer = $(container);
         }
-    },
+    }
 
-    createGroup: function(container) {
+    createGroup(container) {
         this.createValidationGroupContainer(container);
         const group = this.$groupContainer.dxValidationGroup().dxValidationGroup('instance');
 
         return group;
     }
-});
+}
 
 
 QUnit.testStart(function() {

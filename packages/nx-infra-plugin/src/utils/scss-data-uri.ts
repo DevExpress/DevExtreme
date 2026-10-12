@@ -30,4 +30,4 @@ export function encodeDataUriForCssUrl(
 }
 
 export const DATA_URI_SCSS_REGEX =
-  /data-uri\((?:'(image\/svg\+xml;charset=UTF-8)',\s)?['"]?([^)'"]+)['"]?\)/g;
+  /data-uri\((?:['"](image\/svg\+xml;charset=UTF-8)['"],\s)?['"]?([^)'"]+)['"]?\)/g;

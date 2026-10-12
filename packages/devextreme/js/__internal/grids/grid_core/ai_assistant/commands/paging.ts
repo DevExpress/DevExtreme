@@ -64,10 +64,10 @@ export const pageIndexCommand = defineGridCommand({
   schema: pageIndexCommandSchema,
   execute: (component, { success, failure }) => async (args): Promise<CommandResult> => {
     const paging = component.option('paging');
-    const dataController = component.getController('data');
+    const dataSourceController = component.getController('dataSource');
     const defaultMessage = `Switch the view to page number ${args.pageIndex + 1}.`;
 
-    const isIndexValid = args.pageIndex < dataController.pageCount();
+    const isIndexValid = args.pageIndex < dataSourceController.pageCount();
 
     if (paging?.enabled === false || !isIndexValid) {
       return failure(defaultMessage);

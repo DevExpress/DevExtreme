@@ -1,6 +1,6 @@
 import type { DataSourceLike } from '@js/data/data_source';
 import DataSource from '@js/data/data_source';
-import { normalizeDataSourceOptions } from '@ts/data/data_source/m_utils';
+import { normalizeDataSourceOptions } from '@ts/data/data_source/utils';
 
 export const normalizeDataSource = <T>(
   dataSourceOptions: DataSourceLike<T> | null | undefined,
@@ -19,6 +19,7 @@ export const normalizeDataSource = <T>(
     ...options,
   };
 
+  // @ts-expect-error the public DataSource constructor takes the public option types
   return new DataSource(result);
 };
 

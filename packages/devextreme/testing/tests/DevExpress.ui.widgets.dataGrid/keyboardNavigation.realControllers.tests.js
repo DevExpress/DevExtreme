@@ -11,7 +11,7 @@ import {
     triggerKeyDown,
     focusCell,
     dataGridWrapper } from '../../helpers/grid/keyboardNavigationHelper.js';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 const device = devices.real();
 

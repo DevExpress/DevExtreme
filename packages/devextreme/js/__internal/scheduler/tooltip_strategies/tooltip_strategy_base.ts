@@ -1,20 +1,21 @@
 import { type DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { FunctionTemplate } from '@js/core/templates/function_template';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { isRenderer } from '@js/core/utils/type';
 import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
   ContentReadyEvent,
-  InitializedEvent,
   ItemClickEvent,
   ItemContextMenuEvent,
   Properties as ListProperties,
 } from '@js/ui/list';
 import type dxOverlay from '@js/ui/overlay';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
-import type { Appointment, AppointmentClickEvent, Properties as SchedulerProperties } from '@js/ui/scheduler';
+import type { Appointment, Properties as SchedulerProperties } from '@js/ui/scheduler';
+import { FunctionTemplate as InternalFunctionTemplate } from '@ts/core/templates/function_template';
+import type { TemplateBase } from '@ts/core/templates/template_base';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
 import type Tooltip from '@ts/ui/tooltip';
@@ -45,7 +46,7 @@ export interface AppointmentTooltipOptions {
   ) => unknown;
   container: dxElementWrapper;
   getScrollableContainer: () => dxElementWrapper;
-  addDefaultTemplates: (templates: Record<string, FunctionTemplate>) => void;
+  addDefaultTemplates: (templates: Record<string, TemplateBase>) => void;
   getAppointmentTemplate: (optionName: string) => FunctionTemplate;
   showAppointmentPopup: (
     appointment: Appointment,
@@ -69,10 +70,6 @@ export interface AppointmentTooltipOptions {
   onItemContextMenu: (eventArgs: unknown) => void;
   createEventArgs: (e: ItemContextMenuEvent<AppointmentTooltipItem>) =>
   AppointmentTooltipContextMenuEventArgs;
-  newAppointments?: boolean; // TODO<Appointments>
-  onAppointmentClick: (e: AppointmentClickEvent) => void;
-  onListInitialized: (e: InitializedEvent) => void;
-  onListDisposing: () => void;
 }
 
 export interface AppointmentTooltipExtraOptions {
@@ -241,8 +238,6 @@ export abstract class TooltipStrategyBase {
     return {
       dataSource: dataList,
       onContentReady: this.onListRender.bind(this),
-      onInitialized: this.onListInitialized.bind(this),
-      onDisposing: this._options.onListDisposing,
       onItemClick: (
         e: ItemClickEvent<AppointmentTooltipItem>,
       ): void => this.onListItemClick(e),
@@ -250,7 +245,7 @@ export abstract class TooltipStrategyBase {
       itemTemplate: (
         item: AppointmentTooltipItem,
         index: number,
-      ): FunctionTemplate => this.renderTemplate(
+      ): TemplateBase => this.renderTemplate(
         item.appointment,
         item.targetedAppointment,
         index,
@@ -259,9 +254,6 @@ export abstract class TooltipStrategyBase {
       pageLoadMode: 'scrollBottom',
     };
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected onListInitialized(e: InitializedEvent): void { }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected onListRender(e: ContentReadyEvent<AppointmentTooltipItem>): void { }
@@ -286,12 +278,11 @@ export abstract class TooltipStrategyBase {
     targetedAppointment: Appointment | TargetedAppointment | undefined,
     index: number,
     color: Promise<string | undefined>,
-  ): FunctionTemplate {
+  ): TemplateBase {
     const itemListContent = this.createItemListContent(appointment, targetedAppointment, color);
     this._options.addDefaultTemplates({
-      appointmentTooltip: new FunctionTemplate(
-        // @ts-expect-error
-        (options: { container: DxElement }): dxElementWrapper => {
+      appointmentTooltip: new InternalFunctionTemplate(
+        (options): dxElementWrapper => {
           const $container = $(options.container);
           $container.append(itemListContent);
           return $container;
@@ -308,11 +299,10 @@ export abstract class TooltipStrategyBase {
     appointmentData: Appointment,
     targetedAppointmentData: Appointment | TargetedAppointment | undefined,
     index: number,
-  ): FunctionTemplate {
+  ): TemplateBase {
     const isButtonClicked = Boolean(this.extraOptions?.isButtonClick);
 
-    // @ts-expect-error
-    return new FunctionTemplate((options: { container: DxElement }): DxElement => {
+    return new InternalFunctionTemplate((options): DxElement => {
       // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
       const { promise, resolve } = createPromise<void>();
       this.asyncTemplatePromises.add(promise);
@@ -323,7 +313,6 @@ export abstract class TooltipStrategyBase {
           isButtonClicked,
         },
         container: options.container,
-        // @ts-expect-error
         index,
         onRendered: () => {
           this.asyncTemplatePromises.delete(promise);
@@ -340,19 +329,7 @@ export abstract class TooltipStrategyBase {
 
     this.hide();
 
-    if (this._options.newAppointments) {
-      if (this.extraOptions?.isButtonClick) {
-        // @ts-expect-error 'component' and 'element' are set by action
-        this._options.onAppointmentClick({
-          appointmentElement: e.itemElement,
-          appointmentData: e.itemData.appointment,
-          targetedAppointmentData: e.itemData.targetedAppointment,
-          event: e.event,
-        });
-      }
-    } else {
-      this.extraOptions?.clickEvent?.(e);
-    }
+    this.extraOptions?.clickEvent?.(e);
 
     this._options.showAppointmentPopup(
       e.itemData.appointment,

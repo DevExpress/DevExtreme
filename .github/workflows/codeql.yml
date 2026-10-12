@@ -100,7 +100,7 @@ jobs:
           restore-keys: ${{ runner.os }}
 
       - name: Teams Notification
-        uses: DevExpress/github-actions/send-teams-notification@v1
+        uses: DevExpress/github-actions/send-teams-notification@send-teams-notification
         with:
           hook_url: ${{ secrets.TEAMS_HOOK_TMP }}
           alerts: ${{ env.ALERTS }}

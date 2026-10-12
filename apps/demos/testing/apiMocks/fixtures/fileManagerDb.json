@@ -1,0 +1,746 @@
+{
+  "": [
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2018-01-02T07:00:00",
+      "key": "5",
+      "name": "Documents",
+      "dateModified": "2018-01-02T07:00:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "modifiedBy": "Penny Buck",
+      "created": "2019-01-10T10:20:00",
+      "key": "23",
+      "name": "Email Attachments",
+      "dateModified": "2019-01-10T10:20:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2018-10-12T15:20:00",
+      "key": "24",
+      "name": "Videos",
+      "dateModified": "2018-10-12T15:20:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "modifiedBy": "Kerstin Parn",
+      "created": "2018-05-08T10:08:00",
+      "key": "30",
+      "name": "README.md",
+      "dateModified": "2018-05-08T14:37:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Documents": [
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2019-07-07T15:00:00",
+      "key": "10",
+      "name": "Dashboards",
+      "dateModified": "2019-07-07T15:00:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2019-03-05T07:00:00",
+      "key": "8",
+      "name": "Reports",
+      "dateModified": "2019-03-05T07:00:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2019-03-05T07:00:00",
+      "key": "9",
+      "name": "Resumes",
+      "dateModified": "2019-03-05T07:00:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Documents/Dashboards": [
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2018-05-08T14:37:00",
+      "key": "95",
+      "name": "Customer Support.xlsx",
+      "dateModified": "2019-03-08T14:37:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2018-10-10T09:12:00",
+      "key": "94",
+      "name": "Revenue by Industry.xlsx",
+      "dateModified": "2018-10-12T10:27:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Anthony Frosse",
+      "created": "2017-07-25T14:44:00",
+      "key": "92",
+      "name": "Sales Details.xlsx",
+      "dateModified": "2018-11-05T10:27:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2019-05-08T15:33:00",
+      "key": "96",
+      "name": "Sales Overview.xlsx",
+      "dateModified": "2019-06-19T15:33:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Amy Trefl",
+      "created": "2019-10-18T15:45:00",
+      "key": "91",
+      "name": "Sales Performance.xlsx",
+      "dateModified": "2019-10-18T15:45:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Alica Fatnowna",
+      "created": "2019-04-02T10:20:00",
+      "key": "93",
+      "name": "Website Statistics.xlsx",
+      "dateModified": "2019-04-02T10:20:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Documents/Reports": [
+    {
+      "modifiedBy": "Helen Abven",
+      "created": "2019-06-01T08:00:00",
+      "key": "22",
+      "name": "Detailed Expense Estimates.xlsx",
+      "dateModified": "2019-06-07T08:20:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Jai Shand",
+      "created": "2018-12-10T20:45:00",
+      "key": "20",
+      "name": "Expense Report.xlsx",
+      "dateModified": "2018-12-10T20:45:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Amy Trefl",
+      "created": "2019-05-03T07:00:00",
+      "key": "18",
+      "name": "Invoice.xlsx",
+      "dateModified": "2019-05-05T07:00:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Penny Buck",
+      "created": "2018-10-15T07:00:00",
+      "key": "19",
+      "name": "Loan Amortization Schedule.xlsx",
+      "dateModified": "2019-01-02T07:00:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Amy Trefl",
+      "created": "2019-07-07T15:00:00",
+      "key": "17",
+      "name": "Profit and Loss.xlsx",
+      "dateModified": "2019-07-07T15:00:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Paulus Lippmaa",
+      "created": "2019-01-19T10:07:00",
+      "key": "21",
+      "name": "Shift Schedule.xlsx",
+      "dateModified": "2019-01-20T15:32:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Documents/Resumes": [
+    {
+      "modifiedBy": "Paulus Lippmaa",
+      "created": "2018-11-05T10:27:00",
+      "key": "40",
+      "name": "Airi Vassiljev.docx",
+      "dateModified": "2019-06-18T10:04:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Anthony Frosse",
+      "created": "2018-03-15T10:45:00",
+      "key": "53",
+      "name": "Alba Ponce.docx",
+      "dateModified": "2018-08-27T15:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Paulus Lippmaa",
+      "created": "2018-08-18T18:42:00",
+      "key": "50",
+      "name": "Amarendra Ankitham.docx",
+      "dateModified": "2018-11-20T15:33:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Jai Shand",
+      "created": "2019-02-14T15:02:00",
+      "key": "54",
+      "name": "Antra Dzene.docx",
+      "dateModified": "2019-02-14T15:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2018-06-25T17:45:00",
+      "key": "46",
+      "name": "Bela Nemeth.docx",
+      "dateModified": "2018-11-19T12:12:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2018-12-20T15:35:00",
+      "key": "56",
+      "name": "Bhanu Thota.docx",
+      "dateModified": "2019-01-08T11:22:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kerstin Parn",
+      "created": "2018-07-02T09:45:00",
+      "key": "39",
+      "name": "Bianh Phan.docx",
+      "dateModified": "2018-11-05T10:27:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Alica Fatnowna",
+      "created": "2019-06-17T15:02:00",
+      "key": "49",
+      "name": "Chung-Ho Han.docx",
+      "dateModified": "2019-07-21T15:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Alica Fatnowna",
+      "created": "2019-04-23T18:35:00",
+      "key": "42",
+      "name": "Duleep Walia.docx",
+      "dateModified": "2019-05-12T00:27:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2019-04-07T12:42:00",
+      "key": "43",
+      "name": "Ethan Hopkins.docx",
+      "dateModified": "2019-04-19T15:45:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Amy Trefl",
+      "created": "2018-08-12T19:21:00",
+      "key": "52",
+      "name": "GokCe Karaca.docx",
+      "dateModified": "2018-10-27T15:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Alica Fatnowna",
+      "created": "2019-02-07T10:27:00",
+      "key": "36",
+      "name": "Grieta Kalnina.docx",
+      "dateModified": "2019-03-05T10:27:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Jai Shand",
+      "created": "2018-09-25T10:27:00",
+      "key": "41",
+      "name": "Hoang La.docx",
+      "dateModified": "2018-11-05T10:27:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Amy Trefl",
+      "created": "2018-12-20T10:23:00",
+      "key": "48",
+      "name": "Isabell Duperre.docx",
+      "dateModified": "2019-03-23T15:22:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2018-03-22T10:32:00",
+      "key": "51",
+      "name": "Isak Berggren.docx",
+      "dateModified": "2018-08-17T15:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2019-03-20T12:08:00",
+      "key": "47",
+      "name": "Margherita Bucco.docx",
+      "dateModified": "2019-06-19T15:33:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Paulus Lippmaa",
+      "created": "2018-02-05T10:27:00",
+      "key": "38",
+      "name": "Paola Loggia.docx",
+      "dateModified": "2018-02-05T10:27:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Anthony Frosse",
+      "created": "2019-02-02T14:37:00",
+      "key": "35",
+      "name": "Rohana Kaskar.docx",
+      "dateModified": "2019-02-02T14:37:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Amy Trefl",
+      "created": "2017-04-19T15:45:00",
+      "key": "45",
+      "name": "Sang Tran.docx",
+      "dateModified": "2019-02-18T15:45:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Paulus Lippmaa",
+      "created": "2018-02-21T16:16:00",
+      "key": "57",
+      "name": "Steven Frasier.docx",
+      "dateModified": "2018-07-01T10:23:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2018-01-08T12:37:00",
+      "key": "55",
+      "name": "Victoria Ene.docx",
+      "dateModified": "2018-05-08T14:37:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2019-02-04T09:37:00",
+      "key": "33",
+      "name": "Yu-jin Jee.docx",
+      "dateModified": "2019-02-14T14:37:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Email Attachments": [
+    {
+      "modifiedBy": "Paulus Lippmaa",
+      "created": "2019-04-08T15:45:00",
+      "key": "100",
+      "name": "Managers.docx",
+      "dateModified": "2019-04-08T15:45:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2018-04-15T14:37:00",
+      "key": "99",
+      "name": "PasswordList.txt",
+      "dateModified": "2018-04-15T14:37:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Videos": [
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2018-10-12T15:20:00",
+      "key": "25",
+      "name": "ASP",
+      "dateModified": "2018-10-12T15:20:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kayla Woodcock",
+      "created": "2019-04-02T10:20:00",
+      "key": "26",
+      "name": "ASP.NET Core",
+      "dateModified": "2019-04-02T10:20:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2019-04-01T10:20:00",
+      "key": "27",
+      "name": "JavaScript Frameworks",
+      "dateModified": "2019-04-01T10:20:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Alica Fatnowna",
+      "created": "2019-01-20T10:20:00",
+      "key": "28",
+      "name": "Win",
+      "dateModified": "2019-01-20T10:20:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Jai Shand",
+      "created": "2019-05-06T10:20:00",
+      "key": "29",
+      "name": "Wpf",
+      "dateModified": "2019-05-06T10:20:00",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Videos/ASP": [
+    {
+      "modifiedBy": "Kerstin Parn",
+      "created": "2019-03-20T14:35:00",
+      "key": "66",
+      "name": "ASP.NET File Manager with Dropbox Storage.mp4",
+      "dateModified": "2019-03-20T14:35:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2019-01-24T12:28:00",
+      "key": "59",
+      "name": "ASP.NET Security - Best Practices.mp4",
+      "dateModified": "2019-08-12T14:37:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2018-08-15T10:27:00",
+      "key": "62",
+      "name": "ASP.NET Security - Locking Down Sections.mp4",
+      "dateModified": "2018-10-02T11:27:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Helen Abven",
+      "created": "2018-08-12T15:33:00",
+      "key": "60",
+      "name": "Build Responsive ASP.NET Websites.mp4",
+      "dateModified": "2018-11-20T15:33:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Helen Abven",
+      "created": "2019-01-10T10:20:00",
+      "key": "58",
+      "name": "In-Depth: ASP.NET MVC Tips and Tricks.mp4",
+      "dateModified": "2019-01-10T10:20:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Videos/ASP.NET Core": [
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2019-02-02T10:23:00",
+      "key": "70",
+      "name": "Adding DevExpress Controls for .NET Core.mp4",
+      "dateModified": "2019-02-02T10:23:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Anthony Frosse",
+      "created": "2018-07-01T10:23:00",
+      "key": "69",
+      "name": "DevExtreme ASP.NET Core Controls.mp4",
+      "dateModified": "2018-07-01T10:23:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Helen Abven",
+      "created": "2018-01-02T20:10:00",
+      "key": "71",
+      "name": "DevExtreme ASP.NET Core Localization.mp4",
+      "dateModified": "2019-04-05T10:23:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2018-08-10T19:05:00",
+      "key": "73",
+      "name": "Optimizing ASP.NET Core Performance.mp4",
+      "dateModified": "2018-08-15T18:23:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Videos/JavaScript Frameworks": [
+    {
+      "modifiedBy": "Helen Abven",
+      "created": "2018-10-15T10:23:00",
+      "key": "75",
+      "name": "Angular and DevExtreme - Getting Started.mp4",
+      "dateModified": "2019-02-03T10:23:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Paulus Lippmaa",
+      "created": "2018-08-15T18:23:00",
+      "key": "74",
+      "name": "HTML5 DataGrid.mp4",
+      "dateModified": "2018-10-15T18:23:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Helen Abven",
+      "created": "2019-08-10T14:15:00",
+      "key": "77",
+      "name": "Using DevExtreme, Angular and Ionic.mp4",
+      "dateModified": "2019-09-15T18:15:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Videos/Win": [
+    {
+      "modifiedBy": "Paulus Lippmaa",
+      "created": "2018-08-15T12:02:00",
+      "key": "79",
+      "name": "Revamp Your Existing WinForms Apps.mp4",
+      "dateModified": "2019-08-27T15:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Piper Koch",
+      "created": "2018-08-27T15:02:00",
+      "key": "78",
+      "name": "Rock Your WinForms Apps with DevExpress MVVM\r\n.mp4",
+      "dateModified": "2018-12-20T10:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Alica Fatnowna",
+      "created": "2017-02-12T10:43:00",
+      "key": "82",
+      "name": "WinForms Grid: Hit Information.mp4",
+      "dateModified": "2019-05-12T00:27:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Helen Abven",
+      "created": "2019-05-06T10:20:00",
+      "key": "83",
+      "name": "WinForms Pivot Grid: Integration with Chart Control.mp4",
+      "dateModified": "2019-05-06T10:20:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Alica Fatnowna",
+      "created": "2016-11-19T12:12:00",
+      "key": "81",
+      "name": "WinForms Scheduler: Connecting Data and Customizing Forms.mp4",
+      "dateModified": "2018-11-19T12:12:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Anthony Frosse",
+      "created": "2018-05-21T15:33:00",
+      "key": "80",
+      "name": "Working with the WinForms Tile Control.mp4",
+      "dateModified": "2018-11-20T10:23:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Videos/Wpf": [
+    {
+      "modifiedBy": "Helen Abven",
+      "created": "2018-11-20T12:07:00",
+      "key": "84",
+      "name": "Using DevExpress MVVM Magic with WPF.mp4",
+      "dateModified": "2019-03-23T15:22:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Kerstin Parn",
+      "created": "2018-10-11T18:23:00",
+      "key": "88",
+      "name": "WPF Diagram: Organization Charts.mp4",
+      "dateModified": "2019-03-20T12:08:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Amy Trefl",
+      "created": "2019-02-14T15:02:00",
+      "key": "89",
+      "name": "WPF Grid - Custom Sorting.mp4",
+      "dateModified": "2019-02-14T15:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Helen Abven",
+      "created": "2017-05-21T18:12:00",
+      "key": "90",
+      "name": "WPF Grid - Master-Detail Printing",
+      "dateModified": "2019-04-11T14:37:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Anthony Frosse",
+      "created": "2017-07-22T12:32:00",
+      "key": "86",
+      "name": "WPF Grid: In-Place Editors.mp4",
+      "dateModified": "2018-10-27T15:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "modifiedBy": "Alica Fatnowna",
+      "created": "2019-02-14T15:02:00",
+      "key": "87",
+      "name": "WPF Theme Designer: Creating a Custom Theme.mp4",
+      "dateModified": "2019-03-19T17:02:00",
+      "isDirectory": false,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ]
+}

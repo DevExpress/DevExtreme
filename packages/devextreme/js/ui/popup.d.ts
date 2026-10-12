@@ -146,43 +146,43 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     height?: number | string;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field event:event
      * @action
      * @public
      */
-    onResize?: ((e: ResizeEvent) => void);
+    onResize?: ((e: ResizeEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field event:event
      * @action
      * @public
      */
-    onResizeEnd?: ((e: ResizeEndEvent) => void);
+    onResizeEnd?: ((e: ResizeEndEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field event:event
      * @action
      * @public
      */
-    onResizeStart?: ((e: ResizeStartEvent) => void);
+    onResizeStart?: ((e: ResizeStartEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @action
      * @public
      */
-    onTitleRendered?: ((e: EventInfo<TComponent> & TitleRenderedInfo) => void);
+    onTitleRendered?: ((e: EventInfo<TComponent> & TitleRenderedInfo) => void) | undefined;
     /**
      * @docid
      * @public

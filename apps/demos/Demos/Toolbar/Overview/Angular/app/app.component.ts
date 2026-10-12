@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DxListModule, DxToolbarModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxListModule, DxToolbarModule } from 'devextreme-angular';
+import 'devextreme/ui/select_box';
 import { DataSource } from 'devextreme-angular/common/data';
 import notify from 'devextreme/ui/notify';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
@@ -11,21 +12,14 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [
     DxListModule,
     DxToolbarModule,
-    DxSelectBoxModule,
   ],
 })
 export class AppComponent {

@@ -118,10 +118,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get buttons(): Array<string | TextBoxPredefinedButton | TextEditorButton> {
+    get buttons(): Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<string | TextBoxPredefinedButton | TextEditorButton>) {
+    set buttons(value: Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined) {
         this._setOption('buttons', value);
     }
 
@@ -326,10 +326,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get maxLength(): number | string {
+    get maxLength(): null | number | string {
         return this._getOption('maxLength');
     }
-    set maxLength(value: number | string) {
+    set maxLength(value: null | number | string) {
         this._setOption('maxLength', value);
     }
 
@@ -495,10 +495,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
@@ -508,10 +508,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationErrors(): Array<any> {
+    get validationErrors(): Array<any> | null {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
 
@@ -745,7 +745,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<string | TextBoxPredefinedButton | TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined>;
 
     /**
     
@@ -857,7 +857,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxLengthChange: EventEmitter<number | string>;
+    @Output() maxLengthChange: EventEmitter<null | number | string>;
 
     /**
     
@@ -948,14 +948,14 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationErrorChange: EventEmitter<any>;
+    @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationErrorsChange: EventEmitter<Array<any>>;
+    @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
     

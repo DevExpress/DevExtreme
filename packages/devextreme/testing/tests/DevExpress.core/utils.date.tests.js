@@ -1,4 +1,4 @@
-const dateUtils = require('core/utils/date');
+import dateUtils from 'core/utils/date';
 
 const WEEK_DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 

@@ -1,21 +1,17 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxButtonModule, DxLoadIndicatorModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxButtonModule,
     DxLoadIndicatorModule,
@@ -26,6 +22,8 @@ export class AppComponent {
 
   buttonText = 'Send';
 
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
+
   onClick() {
     this.buttonText = 'Sending';
     this.loadIndicatorVisible = true;
@@ -33,6 +31,7 @@ export class AppComponent {
     setTimeout(() => {
       this.buttonText = 'Send';
       this.loadIndicatorVisible = false;
+      this.changeDetectorRef.detectChanges();
     }, 2000);
   }
 }

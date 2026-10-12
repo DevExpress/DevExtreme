@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $gantt-header-item-height: null !default;
 $gantt-task-title-padding-left: null !default;
 $gantt-task-height: null !default;
@@ -25,4 +23,3 @@ $gantt-task-wrapper-padding-top: 0 !default;
   $gantt-dependency-successor-size: 10px !default;
   $gantt-milestone-size: 14px !default;
 }
-

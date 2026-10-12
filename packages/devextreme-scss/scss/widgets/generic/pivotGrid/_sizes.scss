@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $pivotgrid-empty-column-width: null !default;
 $pivotgrid-common-left-right-padding: null !default;
 $pivotgrid-common-top-bottom-padding: null !default;
@@ -18,7 +16,7 @@ $pivotgrid-empty-area-text-padding: null !default;
   $pivotgrid-common-top-bottom-padding: 7px !default;
   $pivotgrid-field-indicators-offset: 6px !default;
   $pivotgrid-indicators-line-height: 19px !default;
-  $pivotgrid-button-top-padding: 12px;
+  $pivotgrid-button-top-padding: 12px !default;
   $pivotgrid-empty-area-text-padding: 7px !default;
 }
 
@@ -29,7 +27,6 @@ $pivotgrid-empty-area-text-padding: null !default;
   $pivotgrid-common-top-bottom-padding: 5px !default;
   $pivotgrid-field-indicators-offset: 4px !default;
   $pivotgrid-indicators-line-height: 16px !default;
-  $pivotgrid-button-top-padding: 8px;
+  $pivotgrid-button-top-padding: 8px !default;
   $pivotgrid-empty-area-text-padding: 5px !default;
 }
-

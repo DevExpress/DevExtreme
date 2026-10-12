@@ -59,7 +59,6 @@ QUnit.module('Pager', {
     }
 }, () => {
 
-    const isRenovation = !!Pager.IS_RENOVATED_WIDGET;
     QUnit.test('Not initialize pager when pager is not visible', function(assert) {
     // arrange
         const testElement = $('#container');
@@ -204,12 +203,8 @@ QUnit.module('Pager', {
         this.dataController.updatePagesCount(1);
 
         // assert
-        if(isRenovation) {
-            assert.strictEqual(testElement.find('.dx-next-button').length, 1, 'pager has next page button');
-            assert.strictEqual(testElement.find('.dx-prev-button').length, 0, 'pager doesnt have prev page button');
-        } else {
-            assert.ok(pagerView.getPager()._testShowMoreButton, 'showMoreButton in pager');
-        }
+        assert.strictEqual(testElement.find('.dx-next-button').length, 1, 'pager has next page button');
+        assert.strictEqual(testElement.find('.dx-prev-button').length, 0, 'pager doesnt have prev page button');
     });
 
     QUnit.test('Visible is changed from dataController', function(assert) {
@@ -416,7 +411,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 2);
+        assert.equal(this.dataSourceController.pageCount(), 2);
         assert.ok(isVisible);
         assert.equal(pagerView.element().dxPagination('instance').option('pagesNavigatorVisible'), 'auto', 'pagesNavigatorVisible');
     });
@@ -431,7 +426,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.ok(!isVisible);
     });
 
@@ -448,8 +443,8 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.ok(!this.dataController.hasKnownLastPage());
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.ok(!this.dataSourceController.hasKnownLastPage());
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.ok(isVisible);
     });
 
@@ -464,7 +459,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.ok(isVisible);
         assert.equal(pagerView.element().dxPagination('instance').option('pagesNavigatorVisible'), true, 'pagesNavigatorVisible');
     });
@@ -481,7 +476,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 2);
+        assert.equal(this.dataSourceController.pageCount(), 2);
         assert.ok(!isVisible);
         assert.equal(dataUtils.data(pagerView.element().get(0), 'dxPager'), undefined, 'pager instance');
     });
@@ -499,7 +494,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.ok(!isVisible);
     });
 
@@ -516,7 +511,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.equal(this.dataController.pageCount(), 1);
+        assert.equal(this.dataSourceController.pageCount(), 1);
         assert.deepEqual(this.dataController.getPageSizes(), []);
         assert.ok(!isVisible);
     });

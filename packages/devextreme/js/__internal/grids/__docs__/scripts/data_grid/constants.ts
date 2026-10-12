@@ -23,17 +23,17 @@ export const GRID_CORE_IMPORT_REGEXP = /grid_core\//;
  * Matched as exact path segments (not substrings).
  */
 export const CROSS_DEP_IGNORED_SEGMENTS = new Set([
-  'm_core',
-  'm_data_source_adapter',
+  'core',
+  'data_source_adapter',
 ]);
 
 export type ModificationCategory = 'passthrough' | 'extended' | 'replaced' | 'new';
 
 const DATA_GRID_FEATURE_MAP: Record<string, string> = {
   m_data_controller: 'Data',
-  m_data_source_adapter: 'Data',
-  m_core: 'Core',
-  m_widget: 'Core',
+  data_source_adapter: 'Data',
+  core: 'Core',
+  widget: 'Core',
   m_widget_base: 'Core',
   m_utils: 'Core',
   m_editing: 'Editing',
@@ -42,7 +42,7 @@ const DATA_GRID_FEATURE_MAP: Record<string, string> = {
   export: 'Export',
   keyboard_navigation: 'Navigation',
   focus: 'Navigation',
-  m_columns_controller: 'Columns',
+  columns_controller: 'Columns',
   m_aggregate_calculator: 'Data',
   module_not_extended: 'Passthrough',
 };

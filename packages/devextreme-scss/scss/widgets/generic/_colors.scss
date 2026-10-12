@@ -10,7 +10,7 @@ $generic-color-postfix: null !default;
 * $name 10. Font family
 * $type text
 */
-$base-font-family: -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'segoe ui', 'helvetica neue', 'adwaita sans', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif !default;
+$base-font-family: -apple-system, BlinkMacSystemFont, "avenir next", avenir, "segoe ui", "helvetica neue", "adwaita sans", cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif !default;
 
 /**
 * $name 10. Accent color
@@ -167,7 +167,7 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
   $base-header-color: #627789 !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/carmine/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/carmine/pulldown.png") !default;
 }
 
 @if $color == "contrast" {
@@ -195,7 +195,7 @@ $base-grid-selectedrow-border-color: null !default;
   $base-label-color: $base-text-color !default;
   $base-dropdown-shadow-color: $base-shadow-color !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/contrast/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/contrast/pulldown.png") !default;
 }
 
 @if $color == "dark" {
@@ -227,7 +227,7 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/dark/pulldown.png") !default;
 }
 
 @if $color == "darkmoon" {
@@ -263,7 +263,7 @@ $base-grid-selectedrow-border-color: null !default;
   $screen-text-color: extcolor.screen($base-bg, #686868) !default;
   $base-grid-selected-border-color: #45c7de !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/darkmoon/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/darkmoon/pulldown.png") !default;
 }
 
 @if $color == "darkviolet" {
@@ -299,7 +299,7 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/darkviolet/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/darkviolet/pulldown.png") !default;
 }
 
 @if $color == "greenmist" {
@@ -331,7 +331,7 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/greenmist/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/greenmist/pulldown.png") !default;
 }
 
 @if $color == "light" {
@@ -363,7 +363,7 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/light/pulldown.png") !default;
 }
 
 @if $color == "softblue" {
@@ -400,13 +400,12 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
-  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/softblue/pulldown.png') !default;
+  $scrollview-pulldown-path: data-uri("images/widgets/generic/color-schemes/softblue/pulldown.png") !default;
 }
 
 $typography-bg: $base-bg !default;
 $typography-color: $base-text-color !default;
 $typography-link-color: $base-link-color !default;
-
 
 :root {
   --dx-component-color-bg: #{$base-bg};

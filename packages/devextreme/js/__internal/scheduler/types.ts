@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { ItemContextMenuEvent } from '@js/ui/list';
 import type { Appointment, Properties } from '@js/ui/scheduler';
-import type { Component } from '@ts/core/widget/component';
+import type { IntegrationOptions } from '@ts/core/template_manager';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
 import type { GroupLeaf, GroupValues, RawGroupValues } from './utils/resource_manager/types';
@@ -25,9 +25,10 @@ export interface TargetedAppointment extends Appointment {
 export type CreateComponentFn = <TTComponent, IProperties = Record<string, unknown>>(
   element: string | HTMLElement | dxElementWrapper | Element,
   component: string | (new (...args) => TTComponent),
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-  componentConfiguration: TTComponent extends Component<any, infer TTProperties>
-    ? TTProperties
+  componentConfiguration: TTComponent extends { _getDefaultOptions: () => infer TTProperties }
+    ? string extends keyof TTProperties
+      ? object
+      : Partial<TTProperties> & { integrationOptions?: IntegrationOptions }
     : IProperties,
 ) => TTComponent;
 

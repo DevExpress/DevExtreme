@@ -1,6 +1,4 @@
 @use "sass:math";
-@use "../colors" as *;
-@use "../sizes" as *;
 @use "../button/colors" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/tabs";
@@ -14,7 +12,5 @@
 @use "layout/tabs/vertical" as *;
 @use "layout/navigation-button/base" as *;
 @use "layout/navigation-button/vertical" as *;
-
-// adduse
 @use "../scrollable";
 @use "../badge";

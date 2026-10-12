@@ -2,8 +2,6 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 
-// adduse
-
 $button-border-radius: $base-border-radius !default;
 $button-disabled-background: null !default;
 $button-disabled-text-color: null !default;
@@ -15,7 +13,7 @@ $button-shadow-color: null !default;
 * $type color
 */
 $button-normal-color: $base-text-color !default;
-$button-normal-border-color: color.change($button-normal-color, $alpha: 0.24);
+$button-normal-border-color: color.change($button-normal-color, $alpha: 0.24) !default;
 
 /**
 * $name 20. Selected state text color

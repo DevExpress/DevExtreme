@@ -4,7 +4,9 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import messageLocalization from '@js/localization/message';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
-import { computed, effect, signal } from '@ts/core/state_manager/index';
+import {
+  computed, effect, signal, track,
+} from '@ts/core/state_manager/index';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
@@ -167,10 +169,10 @@ export class SelectionController {
     });
 
     effect(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      this.dataController.items.value;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      this.dataController.isLoaded.value;
+      track(
+        this.dataController.items.value,
+        this.dataController.isLoaded.value,
+      );
       this.updateSelectionToolbarButtons(this.normalizedSelectedCardKeys.value);
     });
   }

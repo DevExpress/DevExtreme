@@ -118,11 +118,11 @@ class CollectionWidget<
       selectedIndex: NOT_EXISTING_INDEX,
       focusOnSelectedItem: true,
       selectedItem: null,
-      onSelectionChanging: null,
-      onSelectionChanged: null,
-      onItemReordered: null,
-      onItemDeleting: null,
-      onItemDeleted: null,
+      onSelectionChanging: undefined,
+      onSelectionChanged: undefined,
+      onItemReordered: undefined,
+      onItemDeleting: undefined,
+      onItemDeleted: undefined,
     };
   }
 
@@ -277,7 +277,6 @@ class CollectionWidget<
             if (that._disposed) {
               return;
             }
-            // @ts-expect-error arguments
             const items = normalizeLoadResult(loadResult).data;
 
             dataController.applyMapFunction(items);

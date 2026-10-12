@@ -1,0 +1,93 @@
+import type { Mode } from '@js/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import type { Properties } from '@js/ui/data_grid';
+import type {
+  ChangedEvent as BaseChangedEvent,
+  LoadOperation as BaseLoadOperation,
+  StoreLoadOptions,
+} from '@ts/data/data_source/types';
+
+import type { InternalGrid, ModuleType } from '../types';
+import type DataSourceAdapter from './data_source_adapter';
+
+export type RawItemData = Record<string, unknown>;
+
+export type RemoteOperations = Properties['remoteOperations'];
+
+export type RemoteOperationsOptions = Exclude<RemoteOperations, boolean | Mode | undefined>;
+
+export interface OperationTypes {
+  reload?: boolean;
+  fullReload?: boolean;
+  sorting?: boolean;
+  grouping?: boolean;
+  groupExpanding?: boolean;
+  filtering?: boolean;
+  pageIndex?: boolean;
+  skip?: boolean;
+  take?: boolean;
+  pageSize?: boolean;
+  paging?: boolean;
+}
+
+export type LastLoadOptions = StoreLoadOptions & {
+  pageIndex: number;
+  pageSize: number;
+};
+
+export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
+  operationId?: number;
+  data?: RawItemData[] | DeferredObj<RawItemData[]>;
+  cachedStoreData?: RawItemData[];
+  storeLoadOptions: StoreLoadOptions & {
+    isLoadingAll?: boolean;
+  };
+  loadOptions?: StoreLoadOptions;
+  originalStoreLoadOptions?: StoreLoadOptions;
+  remoteOperations?: RemoteOperationsOptions;
+  isCustomLoading?: boolean;
+  pageIndex?: number;
+  lastLoadOptions?: LastLoadOptions;
+  operationTypes?: OperationTypes;
+  group?: StoreLoadOptions['group'];
+  extra?: {
+    totalCount?: number;
+    summary?: unknown[];
+    groupCount?: number;
+  };
+  cachedData?: {
+    items: Record<string, unknown>;
+    extra?: {
+      totalCount?: number;
+      summary?: unknown[];
+    };
+  };
+  cachedPagingData?: RawItemData[];
+  cachedDataPartBegin?: RawItemData[];
+  cachedDataPartEnd?: RawItemData[];
+  skip?: number;
+  take?: number;
+  skips?: (number | undefined)[];
+  takes?: (number | undefined)[];
+  mergeStoreLoadData?: boolean;
+}
+
+export interface ChangedEvent extends BaseChangedEvent {
+  // When  virtual scrolling with scrolling.legacyMode, changeType
+  // also can be 'append', 'prepend', 'pageIndex' in case of
+  changeType?: 'loadError';
+  error?: unknown;
+}
+
+/** provider */
+
+export type DataSourceAdapterExtender = (
+  Base: ModuleType<DataSourceAdapter>,
+) => ModuleType<DataSourceAdapter>;
+
+export interface DataSourceAdapterProvider<
+  TAdapter extends DataSourceAdapter = DataSourceAdapter,
+> {
+  extend: (extender: DataSourceAdapterExtender) => void;
+  create: (component: InternalGrid) => TAdapter;
+}

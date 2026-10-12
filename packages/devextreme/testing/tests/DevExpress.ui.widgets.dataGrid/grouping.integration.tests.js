@@ -1,4 +1,4 @@
-import gridCore from '__internal/grids/data_grid/m_core';
+import gridCore from '__internal/grids/data_grid/core';
 import ArrayStore from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import commonUtils from 'core/utils/common';
@@ -8,7 +8,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
@@ -213,7 +213,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         this.clock.tick(300);
 
-        assert.deepEqual(dataGrid.getController('data')._dataSource.group(), [{ selector: 'field2', desc: false, isExpanded: true }], 'datasource grouping is up to date');
+        assert.deepEqual(dataGrid.getController('dataSource').getAdapter().group(), [{ selector: 'field2', desc: false, isExpanded: true }], 'datasource grouping is up to date');
         assert.equal(dataGrid.columnOption('field2', 'groupIndex'), 0, 'Group by field2');
 
         $(dataGrid.$element())
@@ -677,7 +677,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 contextMenuEnabled: true
             },
             columnHidingEnabled: true,
-            width: 200,
+            width: 250,
             dataSource: [
                 { field1: '1', field2: '2', field3: '3', field4: '4' },
                 { field1: '1', field2: '4', field3: '3', field4: '5' }
@@ -698,7 +698,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         items.eq(3).trigger('dxclick');
 
-        assert.deepEqual(dataGrid.getController('data')._dataSource.group(), [{ selector: 'field3', desc: false, isExpanded: true }], 'datasource grouping is up to date');
+        assert.deepEqual(dataGrid.getController('dataSource').getAdapter().group(), [{ selector: 'field3', desc: false, isExpanded: true }], 'datasource grouping is up to date');
         assert.equal(dataGrid.columnOption('field3', 'groupIndex'), 0, 'Group by field3');
     });
 
@@ -1260,7 +1260,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.expandRow(['group1']);
 
         // assert
-        assert.equal(dataGrid.getVisibleColumns()[0].visibleWidth, 30, 'visibleWidth for first groupExpand column');
+        assert.roughEqual(dataGrid.getVisibleColumns()[0].visibleWidth, 30, 0.01, 'visibleWidth for first groupExpand column');
     });
 
     QUnit.test('Group Row - expandRow should resolve its promise only after re-rendering (T880769)', function(assert) {
@@ -1409,7 +1409,7 @@ QUnit.module('columnWidth auto option', {
             loadingTimeout: null,
             dataSource: [{ value0: 0, value1: 1, value2: 2 }],
             columnAutoWidth: true,
-            width: 400,
+            width: 380,
             selection: {
                 mode: 'multiple',
                 showCheckBoxesMode: 'always',

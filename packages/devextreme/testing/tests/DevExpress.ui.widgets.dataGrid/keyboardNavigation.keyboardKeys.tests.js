@@ -1,11 +1,11 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import $ from 'jquery';
 
 import 'ui/data_grid';
 
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
@@ -18,7 +18,6 @@ import {
     fireKeyDown,
     triggerKeyDown,
     focusCell,
-    callViewsRenderCompleted,
     dataGridWrapper
 } from '../../helpers/grid/keyboardNavigationHelper.js';
 
@@ -664,7 +663,7 @@ QUnit.module('Keyboard keys', {
     QUnit.testInActiveWindow('Page down should scroll page down when paging disabled and vertial scroll exists', function(assert) {
         // arrange
         const that = this;
-        const rowsViewHeight = 180;
+        const rowsViewHeight = 230;
 
         this.options = {
             height: 200
@@ -1811,14 +1810,12 @@ QUnit.module('Keyboard keys', {
                 return $container;
             };
 
-            this.dataController.store = function() {
-                return {
-                    key: function() { },
-                    update: function(key, values) {
-                        isStoreUpdated = true;
-                        return $.Deferred().resolve(key, values);
-                    }
-                };
+            this.dataControllerOptions.store = {
+                key: function() { },
+                update: function(key, values) {
+                    isStoreUpdated = true;
+                    return $.Deferred().resolve(key, values);
+                }
             };
 
             // act
@@ -3892,7 +3889,7 @@ QUnit.module('Keyboard keys', {
         this.options.scrolling = { mode: 'virtual' };
 
         this.gridView.render($('#container'));
-        this.rowsView.height(70);
+        this.rowsView.height(100);
         this.rowsView.resize();
         const scrollable = this.rowsView.getScrollable();
         const $scrollContainer = $(scrollable.container());
@@ -4019,7 +4016,7 @@ QUnit.module('Keyboard keys', {
         setupModules(this, { initViews: true });
 
         this.gridView.render($('#container'));
-        this.rowsView.height(70);
+        this.rowsView.height(100);
         this.rowsView.resize();
         const scrollable = this.rowsView.getScrollable();
         const $scrollContainer = $(scrollable.container());

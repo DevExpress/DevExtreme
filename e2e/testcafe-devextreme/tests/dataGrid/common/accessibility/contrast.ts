@@ -9,9 +9,6 @@ fixture.disablePageReloads`DataGrid - contrast`
   .page(url(__dirname, '../../../container.html'));
 
 // T1257970
-// visual: generic.light
-// visual: fluent.blue.light
-// visual: material.blue.light
 test('DataGrid - Contrast between icons in the Filter Row menu and their background doesn\'t comply with WCAG accessibility standards', async (t) => {
   const dataGrid = new DataGrid('#container');
   const filterCell = dataGrid.getFilterCell(0);
@@ -43,9 +40,6 @@ test('DataGrid - Contrast between icons in the Filter Row menu and their backgro
 );
 
 // T1286345
-// visual: generic.light
-// visual: fluent.blue.light
-// visual: material.blue.light
 test('DataGrid - Filter icon should remain visible when it\'s focused', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

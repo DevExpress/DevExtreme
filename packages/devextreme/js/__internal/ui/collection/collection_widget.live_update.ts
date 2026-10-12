@@ -7,12 +7,15 @@ import { findChanges } from '@js/core/utils/array_compare';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
+import { isObject } from '@js/core/utils/type';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
 import type { CollectionItemKey, DataChange } from './collection_widget.base';
+
+const hasKey = (value: unknown): value is { key: unknown } => isObject(value) && 'key' in value;
 
 export const PRIVATE_KEY_FIELD = '__dx_key__';
 
@@ -129,7 +132,8 @@ class CollectionWidgetLiveUpdate<
         if (change.type === 'insert') {
           result = true;
           each(items, (_, item) => {
-            if (change.data.key !== undefined && change.data.key === item.key) {
+            const groupKey = hasKey(change.data) ? change.data.key : undefined;
+            if (groupKey !== undefined && hasKey(item) && groupKey === item.key) {
               result = false;
               return false;
             }
@@ -160,7 +164,9 @@ class CollectionWidgetLiveUpdate<
         isItemEquals: this._isItemStrictEquals.bind(this),
         detectReorders: true,
       });
+      // @ts-expect-error DataChange requires key on inserts and data on removes
       if (result && this._itemsCache.length && !this._shouldAddNewGroup(result, this._itemsCache)) {
+        // @ts-expect-error DataChange requires key on inserts and data on removes
         this._modifyByChanges(result, true);
         this._renderEmptyMessage();
         return true;
@@ -204,7 +210,6 @@ class CollectionWidgetLiveUpdate<
     } else {
       const changedItem = items[indexByKey(keyInfo, items, change.key)];
       if (changedItem) {
-        // @ts-expect-error ts-error
         update(keyInfo, items, change.key, change.data).done(() => {
           this._renderItem(
             items.indexOf(changedItem),
@@ -224,7 +229,6 @@ class CollectionWidgetLiveUpdate<
     isPartialRefresh?: boolean,
   ): void {
     when(
-      // @ts-expect-error ts-error
       isPartialRefresh ?? insert(keyInfo, items, change.data, change.index),
     ).done(() => {
       this._beforeItemElementInserted(change);

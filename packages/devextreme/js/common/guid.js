@@ -7,5 +7,5 @@
     * @publicName ctor(value)
     * @param1 value:string
     */
-import { Guid } from '../__internal/core/m_guid';
+import { Guid } from '../__internal/core/guid';
 export default Guid;

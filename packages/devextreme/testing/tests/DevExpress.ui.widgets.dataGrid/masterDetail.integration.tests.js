@@ -5,7 +5,7 @@ import commonUtils from 'core/utils/common';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
 
@@ -1125,27 +1125,27 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         // assert
         assert.ok($(nestedGrid.getRowElement(1)).hasClass('dx-master-detail-row'), 'detail row of the nested grid');
-        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 1593, 5.5, 'scroll height1');
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 2209, 5.5, 'scroll height1');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 1290 });
+        dataGrid.getScrollable().scrollTo({ top: 1950 });
 
         // assert
-        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1228, 5, 'scroll top2');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1858, 5, 'scroll top2');
 
         // act
         dataGrid.expandRow(10);
         this.clock.tick(10);
 
         // assert
-        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 2011, 7.5, 'scroll height2');
+        assert.roughEqual(dataGrid.getScrollable().scrollHeight(), 2782, 7.5, 'scroll height2');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 1728 });
+        dataGrid.getScrollable().scrollTo({ top: 2550 });
         this.clock.tick(10);
 
         // assert
-        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 1644, 5, 'scroll top3');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 2431, 5, 'scroll top3');
     });
 
     QUnit.test('Detail row heights should be synced with fixed columns with async templates (react) (T1103945)', function(assert) {
@@ -1198,6 +1198,6 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         const notFixedDetailRowHeight = $('#dataGrid').find('.dx-master-detail-row').eq(1).css('height');
 
         assert.strictEqual(fixedDetailRowHeight, notFixedDetailRowHeight, 'detail rows are equal');
-        assert.strictEqual(fixedDetailRowHeight, '81px');
+        assert.strictEqual(fixedDetailRowHeight, '73px');
     });
 });

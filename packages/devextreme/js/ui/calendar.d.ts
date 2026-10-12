@@ -125,7 +125,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @type_function_param1 data:DisabledDate
      * @public
      */
-    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean) | null;
     /**
      * @docid
      * @default undefined

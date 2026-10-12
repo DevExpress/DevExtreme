@@ -1,0 +1,3163 @@
+{
+  "": [
+    {
+      "key": "cldr-data",
+      "name": "cldr-data",
+      "dateModified": "2026-07-03T11:20:35.2919435Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "css",
+      "name": "css",
+      "dateModified": "2026-07-23T07:11:57.2163258Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "data",
+      "name": "data",
+      "dateModified": "2026-07-23T07:12:06.7872503Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "DemoShell",
+      "name": "DemoShell",
+      "dateModified": "2026-07-03T11:20:35.3515032Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "Descr",
+      "name": "Descr",
+      "dateModified": "2026-07-03T11:20:35.4151368Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "images",
+      "name": "images",
+      "dateModified": "2026-07-23T07:12:25.6429056Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "js",
+      "name": "js",
+      "dateModified": "2026-07-23T07:13:08.8725227Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "SampleData",
+      "name": "SampleData",
+      "dateModified": "2026-07-23T07:13:13.2463736Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "signalr",
+      "name": "signalr",
+      "dateModified": "2026-07-23T07:13:16.4311397Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "bundle.min.css",
+      "name": "bundle.min.css",
+      "dateModified": "2026-07-23T06:08:25.7119709Z",
+      "isDirectory": false,
+      "size": 21914,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "bundle.min.js",
+      "name": "bundle.min.js",
+      "dateModified": "2026-07-23T06:08:25.822672Z",
+      "isDirectory": false,
+      "size": 8044279,
+      "hasSubDirectories": false
+    }
+  ],
+  "cldr-data": [
+    {
+      "key": "cldr-data\\main",
+      "name": "main",
+      "dateModified": "2026-07-03T11:20:35.2919435Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "cldr-data\\supplemental",
+      "name": "supplemental",
+      "dateModified": "2026-07-23T07:11:32.7699286Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "cldr-data/main": [
+    {
+      "key": "cldr-data\\main\\de",
+      "name": "de",
+      "dateModified": "2026-07-23T07:11:32.7148158Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "cldr-data\\main\\ru",
+      "name": "ru",
+      "dateModified": "2026-07-23T07:11:32.7349512Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "cldr-data/supplemental": [
+    {
+      "key": "cldr-data\\supplemental\\currencyData.json",
+      "name": "currencyData.json",
+      "dateModified": "2026-07-23T06:08:26.1120626Z",
+      "isDirectory": false,
+      "size": 67526,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "cldr-data\\supplemental\\likelySubtags.json",
+      "name": "likelySubtags.json",
+      "dateModified": "2026-07-23T06:08:26.1517082Z",
+      "isDirectory": false,
+      "size": 34890,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "cldr-data\\supplemental\\numberingSystems.json",
+      "name": "numberingSystems.json",
+      "dateModified": "2026-07-23T06:08:26.1874148Z",
+      "isDirectory": false,
+      "size": 8065,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "cldr-data\\supplemental\\timeData.json",
+      "name": "timeData.json",
+      "dateModified": "2026-07-23T06:08:26.221834Z",
+      "isDirectory": false,
+      "size": 19779,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "cldr-data\\supplemental\\weekData.json",
+      "name": "weekData.json",
+      "dateModified": "2026-07-23T06:08:26.2552544Z",
+      "isDirectory": false,
+      "size": 5298,
+      "hasSubDirectories": false
+    }
+  ],
+  "css": [
+    {
+      "key": "css\\DemosStyles",
+      "name": "DemosStyles",
+      "dateModified": "2026-07-03T11:20:35.345461Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "css\\fonts",
+      "name": "fonts",
+      "dateModified": "2026-07-23T07:12:04.9302174Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\icons",
+      "name": "icons",
+      "dateModified": "2026-07-23T07:12:06.5519782Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\custom.css",
+      "name": "custom.css",
+      "dateModified": "2026-07-23T06:08:26.2632915Z",
+      "isDirectory": false,
+      "size": 738,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\demo-template.css",
+      "name": "demo-template.css",
+      "dateModified": "2026-07-23T06:08:26.2673176Z",
+      "isDirectory": false,
+      "size": 2673,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx-diagram.css",
+      "name": "dx-diagram.css",
+      "dateModified": "2026-07-23T06:08:30.275466Z",
+      "isDirectory": false,
+      "size": 13271,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx-diagram.min.css",
+      "name": "dx-diagram.min.css",
+      "dateModified": "2026-07-23T06:08:30.3033627Z",
+      "isDirectory": false,
+      "size": 13149,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx-gantt.css",
+      "name": "dx-gantt.css",
+      "dateModified": "2026-07-23T06:08:30.3329933Z",
+      "isDirectory": false,
+      "size": 7590,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx-gantt.min.css",
+      "name": "dx-gantt.min.css",
+      "dateModified": "2026-07-23T06:08:30.3646524Z",
+      "isDirectory": false,
+      "size": 7451,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.carmine.compact.css",
+      "name": "dx.carmine.compact.css",
+      "dateModified": "2026-07-23T06:08:30.4000783Z",
+      "isDirectory": false,
+      "size": 720211,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.carmine.css",
+      "name": "dx.carmine.css",
+      "dateModified": "2026-07-23T06:08:30.4279695Z",
+      "isDirectory": false,
+      "size": 719966,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.common.css",
+      "name": "dx.common.css",
+      "dateModified": "2026-07-23T06:08:30.4475496Z",
+      "isDirectory": false,
+      "size": 312,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.contrast.compact.css",
+      "name": "dx.contrast.compact.css",
+      "dateModified": "2026-07-23T06:08:30.463398Z",
+      "isDirectory": false,
+      "size": 691025,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.contrast.css",
+      "name": "dx.contrast.css",
+      "dateModified": "2026-07-23T06:08:30.4951523Z",
+      "isDirectory": false,
+      "size": 690779,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.dark.compact.css",
+      "name": "dx.dark.compact.css",
+      "dateModified": "2026-07-23T06:08:30.5270014Z",
+      "isDirectory": false,
+      "size": 708977,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.dark.css",
+      "name": "dx.dark.css",
+      "dateModified": "2026-07-23T06:08:30.5429186Z",
+      "isDirectory": false,
+      "size": 708732,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.darkmoon.compact.css",
+      "name": "dx.darkmoon.compact.css",
+      "dateModified": "2026-07-23T06:08:30.5920584Z",
+      "isDirectory": false,
+      "size": 725886,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.darkmoon.css",
+      "name": "dx.darkmoon.css",
+      "dateModified": "2026-07-23T06:08:30.6318766Z",
+      "isDirectory": false,
+      "size": 725641,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.darkviolet.compact.css",
+      "name": "dx.darkviolet.compact.css",
+      "dateModified": "2026-07-23T06:08:30.6675393Z",
+      "isDirectory": false,
+      "size": 722403,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.darkviolet.css",
+      "name": "dx.darkviolet.css",
+      "dateModified": "2026-07-23T06:08:30.7069557Z",
+      "isDirectory": false,
+      "size": 722158,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.fluent.blue.dark.compact.css",
+      "name": "dx.fluent.blue.dark.compact.css",
+      "dateModified": "2026-07-23T06:08:30.7426592Z",
+      "isDirectory": false,
+      "size": 804241,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.fluent.blue.dark.css",
+      "name": "dx.fluent.blue.dark.css",
+      "dateModified": "2026-07-23T06:08:30.7881552Z",
+      "isDirectory": false,
+      "size": 803519,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.fluent.blue.light.compact.css",
+      "name": "dx.fluent.blue.light.compact.css",
+      "dateModified": "2026-07-23T06:08:30.8275838Z",
+      "isDirectory": false,
+      "size": 803107,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.fluent.blue.light.css",
+      "name": "dx.fluent.blue.light.css",
+      "dateModified": "2026-07-23T06:08:30.8672513Z",
+      "isDirectory": false,
+      "size": 802385,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.fluent.saas.dark.compact.css",
+      "name": "dx.fluent.saas.dark.compact.css",
+      "dateModified": "2026-07-23T06:08:30.9049154Z",
+      "isDirectory": false,
+      "size": 804432,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.fluent.saas.dark.css",
+      "name": "dx.fluent.saas.dark.css",
+      "dateModified": "2026-07-23T06:08:30.9403133Z",
+      "isDirectory": false,
+      "size": 803710,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.fluent.saas.light.compact.css",
+      "name": "dx.fluent.saas.light.compact.css",
+      "dateModified": "2026-07-23T06:08:30.9759733Z",
+      "isDirectory": false,
+      "size": 803299,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.fluent.saas.light.css",
+      "name": "dx.fluent.saas.light.css",
+      "dateModified": "2026-07-23T06:08:31.015671Z",
+      "isDirectory": false,
+      "size": 802577,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.greenmist.compact.css",
+      "name": "dx.greenmist.compact.css",
+      "dateModified": "2026-07-23T06:08:31.0510766Z",
+      "isDirectory": false,
+      "size": 734494,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.greenmist.css",
+      "name": "dx.greenmist.css",
+      "dateModified": "2026-07-23T06:08:31.1223426Z",
+      "isDirectory": false,
+      "size": 734249,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.light.compact.css",
+      "name": "dx.light.compact.css",
+      "dateModified": "2026-07-23T06:08:31.1875946Z",
+      "isDirectory": false,
+      "size": 706608,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.light.css",
+      "name": "dx.light.css",
+      "dateModified": "2026-07-23T06:08:31.2250233Z",
+      "isDirectory": false,
+      "size": 706363,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.blue.dark.compact.css",
+      "name": "dx.material.blue.dark.compact.css",
+      "dateModified": "2026-07-23T06:08:31.256691Z",
+      "isDirectory": false,
+      "size": 779254,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.blue.dark.css",
+      "name": "dx.material.blue.dark.css",
+      "dateModified": "2026-07-23T06:08:31.3199727Z",
+      "isDirectory": false,
+      "size": 779439,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.blue.light.compact.css",
+      "name": "dx.material.blue.light.compact.css",
+      "dateModified": "2026-07-23T06:08:31.407061Z",
+      "isDirectory": false,
+      "size": 778866,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.blue.light.css",
+      "name": "dx.material.blue.light.css",
+      "dateModified": "2026-07-23T06:08:31.4524978Z",
+      "isDirectory": false,
+      "size": 779051,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.lime.dark.compact.css",
+      "name": "dx.material.lime.dark.compact.css",
+      "dateModified": "2026-07-23T06:08:31.4919359Z",
+      "isDirectory": false,
+      "size": 778954,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.lime.dark.css",
+      "name": "dx.material.lime.dark.css",
+      "dateModified": "2026-07-23T06:08:31.5356614Z",
+      "isDirectory": false,
+      "size": 779139,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.lime.light.compact.css",
+      "name": "dx.material.lime.light.compact.css",
+      "dateModified": "2026-07-23T06:08:31.5730806Z",
+      "isDirectory": false,
+      "size": 778899,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.lime.light.css",
+      "name": "dx.material.lime.light.css",
+      "dateModified": "2026-07-23T06:08:31.6127799Z",
+      "isDirectory": false,
+      "size": 779084,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.orange.dark.compact.css",
+      "name": "dx.material.orange.dark.compact.css",
+      "dateModified": "2026-07-23T06:08:31.6542144Z",
+      "isDirectory": false,
+      "size": 778165,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.orange.dark.css",
+      "name": "dx.material.orange.dark.css",
+      "dateModified": "2026-07-23T06:08:31.6898842Z",
+      "isDirectory": false,
+      "size": 778350,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.orange.light.compact.css",
+      "name": "dx.material.orange.light.compact.css",
+      "dateModified": "2026-07-23T06:08:31.727582Z",
+      "isDirectory": false,
+      "size": 778339,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.orange.light.css",
+      "name": "dx.material.orange.light.css",
+      "dateModified": "2026-07-23T06:08:31.762995Z",
+      "isDirectory": false,
+      "size": 778524,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.purple.dark.compact.css",
+      "name": "dx.material.purple.dark.compact.css",
+      "dateModified": "2026-07-23T06:08:31.7947183Z",
+      "isDirectory": false,
+      "size": 778749,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.purple.dark.css",
+      "name": "dx.material.purple.dark.css",
+      "dateModified": "2026-07-23T06:08:31.8244441Z",
+      "isDirectory": false,
+      "size": 778934,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.purple.light.compact.css",
+      "name": "dx.material.purple.light.compact.css",
+      "dateModified": "2026-07-23T06:08:31.8641314Z",
+      "isDirectory": false,
+      "size": 779038,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.purple.light.css",
+      "name": "dx.material.purple.light.css",
+      "dateModified": "2026-07-23T06:08:31.9055598Z",
+      "isDirectory": false,
+      "size": 779223,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.teal.dark.compact.css",
+      "name": "dx.material.teal.dark.compact.css",
+      "dateModified": "2026-07-23T06:08:31.945258Z",
+      "isDirectory": false,
+      "size": 777883,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.teal.dark.css",
+      "name": "dx.material.teal.dark.css",
+      "dateModified": "2026-07-23T06:08:31.9769022Z",
+      "isDirectory": false,
+      "size": 778068,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.teal.light.compact.css",
+      "name": "dx.material.teal.light.compact.css",
+      "dateModified": "2026-07-23T06:08:32.0045366Z",
+      "isDirectory": false,
+      "size": 778134,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.material.teal.light.css",
+      "name": "dx.material.teal.light.css",
+      "dateModified": "2026-07-23T06:08:32.034166Z",
+      "isDirectory": false,
+      "size": 778319,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.softblue.compact.css",
+      "name": "dx.softblue.compact.css",
+      "dateModified": "2026-07-23T06:08:32.0623024Z",
+      "isDirectory": false,
+      "size": 718337,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\dx.softblue.css",
+      "name": "dx.softblue.css",
+      "dateModified": "2026-07-23T06:08:32.0779808Z",
+      "isDirectory": false,
+      "size": 718092,
+      "hasSubDirectories": false
+    }
+  ],
+  "css/DemosStyles": [
+    {
+      "key": "css\\DemosStyles\\Accordion",
+      "name": "Accordion",
+      "dateModified": "2026-07-23T07:11:57.2240872Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Autocomplete",
+      "name": "Autocomplete",
+      "dateModified": "2026-07-23T07:11:57.2303044Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Button",
+      "name": "Button",
+      "dateModified": "2026-07-23T07:11:57.2486081Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\ButtonGroup",
+      "name": "ButtonGroup",
+      "dateModified": "2026-07-23T07:11:57.2540881Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Calendar",
+      "name": "Calendar",
+      "dateModified": "2026-07-23T07:11:57.2717202Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\CardView",
+      "name": "CardView",
+      "dateModified": "2026-07-23T07:11:57.3136862Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Charts",
+      "name": "Charts",
+      "dateModified": "2026-07-23T07:11:57.9831736Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Chat",
+      "name": "Chat",
+      "dateModified": "2026-07-23T07:11:58.0301288Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\ColorBox",
+      "name": "ColorBox",
+      "dateModified": "2026-07-23T07:11:58.0388289Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Common",
+      "name": "Common",
+      "dateModified": "2026-07-23T07:11:58.0992312Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\ContextMenu",
+      "name": "ContextMenu",
+      "dateModified": "2026-07-23T07:11:58.118853Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\DataGrid",
+      "name": "DataGrid",
+      "dateModified": "2026-07-23T07:11:58.6278177Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\DateBox",
+      "name": "DateBox",
+      "dateModified": "2026-07-23T07:11:58.6439358Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\DateRangeBox",
+      "name": "DateRangeBox",
+      "dateModified": "2026-07-23T07:11:58.6756628Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Diagram",
+      "name": "Diagram",
+      "dateModified": "2026-07-23T07:11:58.8023102Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Drawer",
+      "name": "Drawer",
+      "dateModified": "2026-07-23T07:11:58.8169044Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\DropDownBox",
+      "name": "DropDownBox",
+      "dateModified": "2026-07-23T07:11:58.8309322Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\DropDownButton",
+      "name": "DropDownButton",
+      "dateModified": "2026-07-23T07:11:58.8371271Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\FieldSet",
+      "name": "FieldSet",
+      "dateModified": "2026-07-23T07:11:58.8461213Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\FileManager",
+      "name": "FileManager",
+      "dateModified": "2026-07-23T07:11:58.8584369Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\FileUploader",
+      "name": "FileUploader",
+      "dateModified": "2026-07-23T07:11:58.900803Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\FilterBuilder",
+      "name": "FilterBuilder",
+      "dateModified": "2026-07-23T07:11:58.9248707Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\FloatingActionButton",
+      "name": "FloatingActionButton",
+      "dateModified": "2026-07-23T07:11:58.9312231Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Form",
+      "name": "Form",
+      "dateModified": "2026-07-23T07:11:58.9905141Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Gallery",
+      "name": "Gallery",
+      "dateModified": "2026-07-23T07:11:59.0049793Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Gantt",
+      "name": "Gantt",
+      "dateModified": "2026-07-23T07:12:02.4643494Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Gauges",
+      "name": "Gauges",
+      "dateModified": "2026-07-23T07:12:02.6439124Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\HtmlEditor",
+      "name": "HtmlEditor",
+      "dateModified": "2026-07-23T07:12:02.6885914Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\List",
+      "name": "List",
+      "dateModified": "2026-07-23T07:12:02.7589557Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\LoadIndicator",
+      "name": "LoadIndicator",
+      "dateModified": "2026-07-23T07:12:02.7703515Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\LoadPanel",
+      "name": "LoadPanel",
+      "dateModified": "2026-07-23T07:12:02.7786666Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Localization",
+      "name": "Localization",
+      "dateModified": "2026-07-23T07:12:02.7988733Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Lookup",
+      "name": "Lookup",
+      "dateModified": "2026-07-23T07:12:02.8205512Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Map",
+      "name": "Map",
+      "dateModified": "2026-07-23T07:12:02.8412844Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Menu",
+      "name": "Menu",
+      "dateModified": "2026-07-23T07:12:02.854898Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\MultiView",
+      "name": "MultiView",
+      "dateModified": "2026-07-23T07:12:02.8614753Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\NumberBox",
+      "name": "NumberBox",
+      "dateModified": "2026-07-23T07:12:02.8682165Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Pagination",
+      "name": "Pagination",
+      "dateModified": "2026-07-23T07:12:02.8754446Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\PivotGrid",
+      "name": "PivotGrid",
+      "dateModified": "2026-07-23T07:12:02.9814084Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Popover",
+      "name": "Popover",
+      "dateModified": "2026-07-23T07:12:02.9887973Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Popup",
+      "name": "Popup",
+      "dateModified": "2026-07-23T07:12:03.0015935Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\ProgressBar",
+      "name": "ProgressBar",
+      "dateModified": "2026-07-23T07:12:03.0096139Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\RadioGroup",
+      "name": "RadioGroup",
+      "dateModified": "2026-07-23T07:12:03.019138Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\RangeSelector",
+      "name": "RangeSelector",
+      "dateModified": "2026-07-23T07:12:03.1319506Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\RangeSlider",
+      "name": "RangeSlider",
+      "dateModified": "2026-07-23T07:12:03.1381401Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Resizable",
+      "name": "Resizable",
+      "dateModified": "2026-07-23T07:12:03.1456591Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Scheduler",
+      "name": "Scheduler",
+      "dateModified": "2026-07-23T07:12:03.4607844Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\ScrollView",
+      "name": "ScrollView",
+      "dateModified": "2026-07-23T07:12:03.4669572Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\SelectBox",
+      "name": "SelectBox",
+      "dateModified": "2026-07-23T07:12:03.4925367Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Slider",
+      "name": "Slider",
+      "dateModified": "2026-07-23T07:12:03.5007942Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Sortable",
+      "name": "Sortable",
+      "dateModified": "2026-07-23T07:12:03.5146706Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\SpeechToText",
+      "name": "SpeechToText",
+      "dateModified": "2026-07-23T07:12:03.5218626Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Splitter",
+      "name": "Splitter",
+      "dateModified": "2026-07-23T07:12:03.5288303Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Stepper",
+      "name": "Stepper",
+      "dateModified": "2026-07-23T07:12:03.5485794Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\TabPanel",
+      "name": "TabPanel",
+      "dateModified": "2026-07-23T07:12:03.5682881Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Tabs",
+      "name": "Tabs",
+      "dateModified": "2026-07-23T07:12:03.5802724Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\TagBox",
+      "name": "TagBox",
+      "dateModified": "2026-07-23T07:12:03.6002337Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\TextArea",
+      "name": "TextArea",
+      "dateModified": "2026-07-23T07:12:03.6070302Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\TileView",
+      "name": "TileView",
+      "dateModified": "2026-07-23T07:12:03.6258933Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Toast",
+      "name": "Toast",
+      "dateModified": "2026-07-23T07:12:03.6393082Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Toolbar",
+      "name": "Toolbar",
+      "dateModified": "2026-07-23T07:12:03.6523185Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Tooltip",
+      "name": "Tooltip",
+      "dateModified": "2026-07-23T07:12:03.6591323Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\TreeList",
+      "name": "TreeList",
+      "dateModified": "2026-07-23T07:12:03.8430274Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\TreeView",
+      "name": "TreeView",
+      "dateModified": "2026-07-23T07:12:03.8884619Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\Validation",
+      "name": "Validation",
+      "dateModified": "2026-07-23T07:12:03.8987701Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "css\\DemosStyles\\VectorMap",
+      "name": "VectorMap",
+      "dateModified": "2026-07-23T07:12:03.9945098Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "css/fonts": [],
+  "css/icons": [],
+  "data": [
+    {
+      "key": "data\\appointments.js",
+      "name": "appointments.js",
+      "dateModified": "2026-07-23T06:08:32.7776351Z",
+      "isDirectory": false,
+      "size": 2460,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\areaPopulations.js",
+      "name": "areaPopulations.js",
+      "dateModified": "2026-07-23T06:08:32.7954654Z",
+      "isDirectory": false,
+      "size": 839,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\companies.js",
+      "name": "companies.js",
+      "dateModified": "2026-07-23T06:08:32.7994842Z",
+      "isDirectory": false,
+      "size": 2875,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\countries.js",
+      "name": "countries.js",
+      "dateModified": "2026-07-23T06:08:32.8052495Z",
+      "isDirectory": false,
+      "size": 569,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\countriesGDP.js",
+      "name": "countriesGDP.js",
+      "dateModified": "2026-07-23T06:08:32.8092691Z",
+      "isDirectory": false,
+      "size": 21855,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\customers.js",
+      "name": "customers.js",
+      "dateModified": "2026-07-23T06:08:32.874541Z",
+      "isDirectory": false,
+      "size": 3259,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\customMapData.js",
+      "name": "customMapData.js",
+      "dateModified": "2026-07-23T06:08:32.999044Z",
+      "isDirectory": false,
+      "size": 252,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\customProjection.js",
+      "name": "customProjection.js",
+      "dateModified": "2026-07-23T06:08:33.0565492Z",
+      "isDirectory": false,
+      "size": 869,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\demos.js",
+      "name": "demos.js",
+      "dateModified": "2026-07-23T06:08:33.1097588Z",
+      "isDirectory": false,
+      "size": 74063,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\diagramEmployees.js",
+      "name": "diagramEmployees.js",
+      "dateModified": "2026-07-23T06:08:33.1591871Z",
+      "isDirectory": false,
+      "size": 8858,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\employee.js",
+      "name": "employee.js",
+      "dateModified": "2026-07-23T06:08:33.2204359Z",
+      "isDirectory": false,
+      "size": 338,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\employeeData.js",
+      "name": "employeeData.js",
+      "dateModified": "2026-07-23T06:08:33.2264601Z",
+      "isDirectory": false,
+      "size": 8435,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\employees.js",
+      "name": "employees.js",
+      "dateModified": "2026-07-23T06:08:33.2856785Z",
+      "isDirectory": false,
+      "size": 10246,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\employeesEI.js",
+      "name": "employeesEI.js",
+      "dateModified": "2026-07-23T06:08:33.3489356Z",
+      "isDirectory": false,
+      "size": 410820,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\employeesHS.js",
+      "name": "employeesHS.js",
+      "dateModified": "2026-07-23T06:08:33.5366392Z",
+      "isDirectory": false,
+      "size": 12623,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\employeesPS.js",
+      "name": "employeesPS.js",
+      "dateModified": "2026-07-23T06:08:33.5783097Z",
+      "isDirectory": false,
+      "size": 10248,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\fileSystem.js",
+      "name": "fileSystem.js",
+      "dateModified": "2026-07-23T06:08:33.6375404Z",
+      "isDirectory": false,
+      "size": 2108,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\floorPlanProjection.js",
+      "name": "floorPlanProjection.js",
+      "dateModified": "2026-07-23T06:08:33.7028439Z",
+      "isDirectory": false,
+      "size": 257,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\localReordering.js",
+      "name": "localReordering.js",
+      "dateModified": "2026-07-23T06:08:33.7580855Z",
+      "isDirectory": false,
+      "size": 19336,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\names.js",
+      "name": "names.js",
+      "dateModified": "2026-07-23T06:08:33.8035257Z",
+      "isDirectory": false,
+      "size": 77,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\orders.js",
+      "name": "orders.js",
+      "dateModified": "2026-07-23T06:08:33.8095501Z",
+      "isDirectory": false,
+      "size": 891,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\orgItems.js",
+      "name": "orgItems.js",
+      "dateModified": "2026-07-23T06:08:33.8193431Z",
+      "isDirectory": false,
+      "size": 2402,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\orgItemsAdvanced.js",
+      "name": "orgItemsAdvanced.js",
+      "dateModified": "2026-07-23T06:08:33.8351619Z",
+      "isDirectory": false,
+      "size": 2062,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\orgItemsHierarchy.js",
+      "name": "orgItemsHierarchy.js",
+      "dateModified": "2026-07-23T06:08:33.8509769Z",
+      "isDirectory": false,
+      "size": 11255,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\orgItemsPlain.js",
+      "name": "orgItemsPlain.js",
+      "dateModified": "2026-07-23T06:08:33.9242814Z",
+      "isDirectory": false,
+      "size": 8840,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\orgItemsWithImages.js",
+      "name": "orgItemsWithImages.js",
+      "dateModified": "2026-07-23T06:08:33.9895645Z",
+      "isDirectory": false,
+      "size": 2976,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\palette.js",
+      "name": "palette.js",
+      "dateModified": "2026-07-23T06:08:34.0545952Z",
+      "isDirectory": false,
+      "size": 73,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\populationData.js",
+      "name": "populationData.js",
+      "dateModified": "2026-07-23T06:08:34.0686539Z",
+      "isDirectory": false,
+      "size": 305,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\populations.js",
+      "name": "populations.js",
+      "dateModified": "2026-07-23T06:08:34.1238866Z",
+      "isDirectory": false,
+      "size": 874,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\priorities.js",
+      "name": "priorities.js",
+      "dateModified": "2026-07-23T06:08:34.1773675Z",
+      "isDirectory": false,
+      "size": 138,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\realTimeData.js",
+      "name": "realTimeData.js",
+      "dateModified": "2026-07-23T06:08:34.2127587Z",
+      "isDirectory": false,
+      "size": 1372,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\sales.js",
+      "name": "sales.js",
+      "dateModified": "2026-07-23T06:08:34.27425Z",
+      "isDirectory": false,
+      "size": 91227,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "data\\statuses.js",
+      "name": "statuses.js",
+      "dateModified": "2026-07-23T06:08:34.3473025Z",
+      "isDirectory": false,
+      "size": 226,
+      "hasSubDirectories": false
+    }
+  ],
+  "DemoShell": [
+    {
+      "key": "DemoShell\\css",
+      "name": "css",
+      "dateModified": "2026-07-23T07:12:06.7940815Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "DemoShell\\fonts",
+      "name": "fonts",
+      "dateModified": "2026-07-23T07:12:06.8210541Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "DemoShell\\hljs",
+      "name": "hljs",
+      "dateModified": "2026-07-23T07:12:18.1844797Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "DemoShell\\images",
+      "name": "images",
+      "dateModified": "2026-07-03T11:20:35.3532564Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    }
+  ],
+  "DemoShell/css": [
+    {
+      "key": "DemoShell\\css\\site.css",
+      "name": "site.css",
+      "dateModified": "2026-07-23T06:08:34.3570928Z",
+      "isDirectory": false,
+      "size": 7812,
+      "hasSubDirectories": false
+    }
+  ],
+  "DemoShell/fonts": [],
+  "DemoShell/hljs": [
+    {
+      "key": "DemoShell\\hljs\\cshtml-razor.min.js",
+      "name": "cshtml-razor.min.js",
+      "dateModified": "2026-07-23T06:08:34.4956691Z",
+      "isDirectory": false,
+      "size": 4670,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "DemoShell\\hljs\\github.min.css",
+      "name": "github.min.css",
+      "dateModified": "2026-07-23T06:08:34.5411071Z",
+      "isDirectory": false,
+      "size": 1309,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "DemoShell\\hljs\\highlight.min.js",
+      "name": "highlight.min.js",
+      "dateModified": "2026-07-23T06:08:34.5687368Z",
+      "isDirectory": false,
+      "size": 127496,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "DemoShell\\hljs\\highlight.pack.js",
+      "name": "highlight.pack.js",
+      "dateModified": "2026-07-23T06:08:34.6636047Z",
+      "isDirectory": false,
+      "size": 14741,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "DemoShell\\hljs\\highlightjs.gh.css",
+      "name": "highlightjs.gh.css",
+      "dateModified": "2026-07-23T06:08:34.7564749Z",
+      "isDirectory": false,
+      "size": 1023,
+      "hasSubDirectories": false
+    }
+  ],
+  "DemoShell/images": [
+    {
+      "key": "DemoShell\\images\\Layout",
+      "name": "Layout",
+      "dateModified": "2026-07-23T07:12:18.2189341Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "DemoShell\\images\\Menu",
+      "name": "Menu",
+      "dateModified": "2026-07-23T07:12:18.2344663Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Descr": [
+    {
+      "key": "Descr\\Charts",
+      "name": "Charts",
+      "dateModified": "2026-07-23T07:12:18.2427479Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Common",
+      "name": "Common",
+      "dateModified": "2026-07-23T07:12:18.2784738Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\DataGrid",
+      "name": "DataGrid",
+      "dateModified": "2026-07-23T07:12:18.297954Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Diagram",
+      "name": "Diagram",
+      "dateModified": "2026-07-23T07:12:18.4028221Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\DropDownBox",
+      "name": "DropDownBox",
+      "dateModified": "2026-07-23T07:12:18.4107467Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\FileManager",
+      "name": "FileManager",
+      "dateModified": "2026-07-23T07:12:18.4507078Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\FileUploader",
+      "name": "FileUploader",
+      "dateModified": "2026-07-23T07:12:18.4644354Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Gauges",
+      "name": "Gauges",
+      "dateModified": "2026-07-23T07:12:18.4713559Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Localization",
+      "name": "Localization",
+      "dateModified": "2026-07-23T07:12:18.4841922Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\PivotGrid",
+      "name": "PivotGrid",
+      "dateModified": "2026-07-23T07:12:18.4898025Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Scheduler",
+      "name": "Scheduler",
+      "dateModified": "2026-07-23T07:12:18.4959797Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Sortable",
+      "name": "Sortable",
+      "dateModified": "2026-07-23T07:12:18.503791Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp",
+      "name": "Temp",
+      "dateModified": "2026-07-03T11:20:35.4135973Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "Descr\\TreeList",
+      "name": "TreeList",
+      "dateModified": "2026-07-23T07:12:25.6131182Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\VectorMap",
+      "name": "VectorMap",
+      "dateModified": "2026-07-23T07:12:25.6204134Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Descr/Charts": [],
+  "Descr/Common": [],
+  "Descr/DataGrid": [],
+  "Descr/Diagram": [],
+  "Descr/DropDownBox": [],
+  "Descr/FileManager": [],
+  "Descr/FileUploader": [],
+  "Descr/Gauges": [],
+  "Descr/Localization": [],
+  "Descr/PivotGrid": [],
+  "Descr/Scheduler": [],
+  "Descr/Sortable": [],
+  "Descr/Temp": [
+    {
+      "key": "Descr\\Temp\\Accordion",
+      "name": "Accordion",
+      "dateModified": "2026-07-23T07:12:18.5122042Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\ActionSheet",
+      "name": "ActionSheet",
+      "dateModified": "2026-07-23T07:12:18.5257413Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Autocomplete",
+      "name": "Autocomplete",
+      "dateModified": "2026-07-23T07:12:18.5335627Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Box",
+      "name": "Box",
+      "dateModified": "2026-07-23T07:12:18.5397461Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Button",
+      "name": "Button",
+      "dateModified": "2026-07-23T07:12:18.5558568Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\ButtonGroup",
+      "name": "ButtonGroup",
+      "dateModified": "2026-07-23T07:12:18.5620443Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Calendar",
+      "name": "Calendar",
+      "dateModified": "2026-07-23T07:12:18.5757492Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\CardView",
+      "name": "CardView",
+      "dateModified": "2026-07-23T07:12:18.6906422Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Charts",
+      "name": "Charts",
+      "dateModified": "2026-07-23T07:12:19.4233512Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Chat",
+      "name": "Chat",
+      "dateModified": "2026-07-23T07:12:19.4765853Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\CheckBox",
+      "name": "CheckBox",
+      "dateModified": "2026-07-23T07:12:19.4843662Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\ColorBox",
+      "name": "ColorBox",
+      "dateModified": "2026-07-23T07:12:19.4926123Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Common",
+      "name": "Common",
+      "dateModified": "2026-07-23T07:12:19.5283789Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\ContextMenu",
+      "name": "ContextMenu",
+      "dateModified": "2026-07-23T07:12:19.5470612Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\DataGrid",
+      "name": "DataGrid",
+      "dateModified": "2026-07-23T07:12:20.1077826Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\DateBox",
+      "name": "DateBox",
+      "dateModified": "2026-07-23T07:12:20.1217811Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\DateRangeBox",
+      "name": "DateRangeBox",
+      "dateModified": "2026-07-23T07:12:20.1358573Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Diagram",
+      "name": "Diagram",
+      "dateModified": "2026-07-23T07:12:20.2551116Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Drawer",
+      "name": "Drawer",
+      "dateModified": "2026-07-23T07:12:20.2687322Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\DropDownBox",
+      "name": "DropDownBox",
+      "dateModified": "2026-07-23T07:12:20.2844144Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\DropDownButton",
+      "name": "DropDownButton",
+      "dateModified": "2026-07-23T07:12:20.2909124Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\FieldSet",
+      "name": "FieldSet",
+      "dateModified": "2026-07-23T07:12:20.2987422Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\FileManager",
+      "name": "FileManager",
+      "dateModified": "2026-07-23T07:12:20.3421648Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\FileUploader",
+      "name": "FileUploader",
+      "dateModified": "2026-07-23T07:12:20.3805506Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\FilterBuilder",
+      "name": "FilterBuilder",
+      "dateModified": "2026-07-23T07:12:20.4022502Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\FloatingActionButton",
+      "name": "FloatingActionButton",
+      "dateModified": "2026-07-23T07:12:20.4101892Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Form",
+      "name": "Form",
+      "dateModified": "2026-07-23T07:12:20.4640356Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Gallery",
+      "name": "Gallery",
+      "dateModified": "2026-07-23T07:12:20.4903269Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Gantt",
+      "name": "Gantt",
+      "dateModified": "2026-07-23T07:12:20.5738853Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Gauges",
+      "name": "Gauges",
+      "dateModified": "2026-07-23T07:12:20.7685686Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\HtmlEditor",
+      "name": "HtmlEditor",
+      "dateModified": "2026-07-23T07:12:20.8080013Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\List",
+      "name": "List",
+      "dateModified": "2026-07-23T07:12:20.8654052Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\LoadIndicator",
+      "name": "LoadIndicator",
+      "dateModified": "2026-07-23T07:12:20.8716283Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\LoadPanel",
+      "name": "LoadPanel",
+      "dateModified": "2026-07-23T07:12:20.8798809Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Localization",
+      "name": "Localization",
+      "dateModified": "2026-07-23T07:12:20.8937526Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Lookup",
+      "name": "Lookup",
+      "dateModified": "2026-07-23T07:12:20.9156753Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Map",
+      "name": "Map",
+      "dateModified": "2026-07-23T07:12:20.9381166Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Menu",
+      "name": "Menu",
+      "dateModified": "2026-07-23T07:12:20.9559485Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\MultiView",
+      "name": "MultiView",
+      "dateModified": "2026-07-23T07:12:20.9651372Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\NumberBox",
+      "name": "NumberBox",
+      "dateModified": "2026-07-23T07:12:20.9786887Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Pagination",
+      "name": "Pagination",
+      "dateModified": "2026-07-23T07:12:20.9869654Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\PivotGrid",
+      "name": "PivotGrid",
+      "dateModified": "2026-07-23T07:12:21.1189611Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Popover",
+      "name": "Popover",
+      "dateModified": "2026-07-23T07:12:21.1272736Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Popup",
+      "name": "Popup",
+      "dateModified": "2026-07-23T07:12:21.1422985Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\ProgressBar",
+      "name": "ProgressBar",
+      "dateModified": "2026-07-23T07:12:21.1500129Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\RadioGroup",
+      "name": "RadioGroup",
+      "dateModified": "2026-07-23T07:12:21.1565334Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\RangeSelector",
+      "name": "RangeSelector",
+      "dateModified": "2026-07-23T07:12:24.7196507Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\RangeSlider",
+      "name": "RangeSlider",
+      "dateModified": "2026-07-23T07:12:24.7279235Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Resizable",
+      "name": "Resizable",
+      "dateModified": "2026-07-23T07:12:24.735728Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\ResponsiveBox",
+      "name": "ResponsiveBox",
+      "dateModified": "2026-07-23T07:12:24.7424797Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Scheduler",
+      "name": "Scheduler",
+      "dateModified": "2026-07-23T07:12:24.9441168Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\ScrollView",
+      "name": "ScrollView",
+      "dateModified": "2026-07-23T07:12:24.953467Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\SelectBox",
+      "name": "SelectBox",
+      "dateModified": "2026-07-23T07:12:24.9872381Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Slider",
+      "name": "Slider",
+      "dateModified": "2026-07-23T07:12:24.9962182Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Sortable",
+      "name": "Sortable",
+      "dateModified": "2026-07-23T07:12:25.0110172Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\SpeechToText",
+      "name": "SpeechToText",
+      "dateModified": "2026-07-23T07:12:25.0188471Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Splitter",
+      "name": "Splitter",
+      "dateModified": "2026-07-23T07:12:25.0266993Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Stepper",
+      "name": "Stepper",
+      "dateModified": "2026-07-23T07:12:25.0484047Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Switch",
+      "name": "Switch",
+      "dateModified": "2026-07-23T07:12:25.0566454Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\TabPanel",
+      "name": "TabPanel",
+      "dateModified": "2026-07-23T07:12:25.0788633Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Tabs",
+      "name": "Tabs",
+      "dateModified": "2026-07-23T07:12:25.0938151Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\TagBox",
+      "name": "TagBox",
+      "dateModified": "2026-07-23T07:12:25.1145574Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\TextArea",
+      "name": "TextArea",
+      "dateModified": "2026-07-23T07:12:25.1223787Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\TextBox",
+      "name": "TextBox",
+      "dateModified": "2026-07-23T07:12:25.1302068Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\TileView",
+      "name": "TileView",
+      "dateModified": "2026-07-23T07:12:25.1619399Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Toast",
+      "name": "Toast",
+      "dateModified": "2026-07-23T07:12:25.1780253Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Toolbar",
+      "name": "Toolbar",
+      "dateModified": "2026-07-23T07:12:25.1941168Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Tooltip",
+      "name": "Tooltip",
+      "dateModified": "2026-07-23T07:12:25.2039753Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\TreeList",
+      "name": "TreeList",
+      "dateModified": "2026-07-23T07:12:25.4294211Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\TreeView",
+      "name": "TreeView",
+      "dateModified": "2026-07-23T07:12:25.5011799Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\Validation",
+      "name": "Validation",
+      "dateModified": "2026-07-23T07:12:25.5084452Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "Descr\\Temp\\VectorMap",
+      "name": "VectorMap",
+      "dateModified": "2026-07-23T07:12:25.6048712Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "Descr/TreeList": [],
+  "Descr/VectorMap": [],
+  "images": [
+    {
+      "key": "images\\button",
+      "name": "button",
+      "dateModified": "2026-07-23T07:12:25.6507696Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\Charts",
+      "name": "Charts",
+      "dateModified": "2026-07-03T11:20:35.4189119Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "images\\Chat",
+      "name": "Chat",
+      "dateModified": "2026-07-23T07:12:25.7292935Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\colorbox",
+      "name": "colorbox",
+      "dateModified": "2026-07-23T07:12:25.7454909Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\DataGrid",
+      "name": "DataGrid",
+      "dateModified": "2026-07-23T07:12:25.7752649Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\employees",
+      "name": "employees",
+      "dateModified": "2026-07-23T07:12:28.522474Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "images\\flags",
+      "name": "flags",
+      "dateModified": "2026-07-23T07:12:35.3466084Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "images\\Gallery",
+      "name": "Gallery",
+      "dateModified": "2026-07-23T07:12:37.1237114Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\Gauges",
+      "name": "Gauges",
+      "dateModified": "2026-07-23T07:12:37.1298871Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\hotels",
+      "name": "hotels",
+      "dateModified": "2026-07-23T07:12:46.0915571Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\houses",
+      "name": "houses",
+      "dateModified": "2026-07-23T07:12:46.2954648Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\icons",
+      "name": "icons",
+      "dateModified": "2026-07-23T07:12:46.3522881Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\LoadIndicator",
+      "name": "LoadIndicator",
+      "dateModified": "2026-07-23T07:12:46.3585742Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\mentions",
+      "name": "mentions",
+      "dateModified": "2026-07-23T07:12:46.8858939Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\movies",
+      "name": "movies",
+      "dateModified": "2026-07-23T07:12:47.6189762Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\products",
+      "name": "products",
+      "dateModified": "2026-07-23T07:12:47.7399074Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\ProductsLarge",
+      "name": "ProductsLarge",
+      "dateModified": "2026-07-23T07:12:50.5301698Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\RangeSelector",
+      "name": "RangeSelector",
+      "dateModified": "2026-07-23T07:12:50.539841Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\Scheduler",
+      "name": "Scheduler",
+      "dateModified": "2026-07-03T11:20:35.432427Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "images\\shapes",
+      "name": "shapes",
+      "dateModified": "2026-07-23T07:12:50.6476785Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\thumbnails",
+      "name": "thumbnails",
+      "dateModified": "2026-07-23T07:12:50.6784321Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\VectorMap",
+      "name": "VectorMap",
+      "dateModified": "2026-07-23T07:12:50.7169551Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\Vehicles",
+      "name": "Vehicles",
+      "dateModified": "2026-07-23T07:12:53.4845913Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\widgets",
+      "name": "widgets",
+      "dateModified": "2026-07-23T07:12:53.5397601Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "images/button": [],
+  "images/Charts": [
+    {
+      "key": "images\\Charts\\Annotation",
+      "name": "Annotation",
+      "dateModified": "2026-07-23T07:12:25.6727346Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\Charts\\PieWithCustomStyles",
+      "name": "PieWithCustomStyles",
+      "dateModified": "2026-07-23T07:12:25.6789228Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "images\\Charts\\PointImage",
+      "name": "PointImage",
+      "dateModified": "2026-07-23T07:12:25.702849Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "images/Chat": [],
+  "images/colorbox": [],
+  "images/DataGrid": [],
+  "images/employees": [
+    {
+      "key": "images\\employees\\new",
+      "name": "new",
+      "dateModified": "2026-07-23T07:12:30.5703504Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "images/flags": [
+    {
+      "key": "images\\flags\\3x2",
+      "name": "3x2",
+      "dateModified": "2026-07-23T07:12:35.4025683Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "images/Gallery": [],
+  "images/Gauges": [],
+  "images/hotels": [],
+  "images/houses": [],
+  "images/icons": [],
+  "images/LoadIndicator": [],
+  "images/mentions": [],
+  "images/movies": [],
+  "images/products": [],
+  "images/ProductsLarge": [],
+  "images/RangeSelector": [],
+  "images/Scheduler": [
+    {
+      "key": "images\\Scheduler\\Overview",
+      "name": "Overview",
+      "dateModified": "2026-07-23T07:12:50.5627129Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "images/shapes": [],
+  "images/thumbnails": [],
+  "images/VectorMap": [],
+  "images/Vehicles": [],
+  "images/widgets": [],
+  "js": [
+    {
+      "key": "js\\lib",
+      "name": "lib",
+      "dateModified": "2026-07-23T07:13:08.8942459Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization",
+      "name": "localization",
+      "dateModified": "2026-07-23T07:13:10.6770538Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\vectormap-data",
+      "name": "vectormap-data",
+      "dateModified": "2026-07-23T07:13:11.9759512Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\vectormap-utils",
+      "name": "vectormap-utils",
+      "dateModified": "2026-07-23T07:13:13.1612779Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx-diagram.js",
+      "name": "dx-diagram.js",
+      "dateModified": "2026-07-23T06:08:59.5365649Z",
+      "isDirectory": false,
+      "size": 2019634,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx-diagram.min.js",
+      "name": "dx-diagram.min.js",
+      "dateModified": "2026-07-23T06:08:59.6314383Z",
+      "isDirectory": false,
+      "size": 1028617,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx-gantt.js",
+      "name": "dx-gantt.js",
+      "dateModified": "2026-07-23T06:08:59.7660146Z",
+      "isDirectory": false,
+      "size": 945370,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx-gantt.min.js",
+      "name": "dx-gantt.min.js",
+      "dateModified": "2026-07-23T06:08:59.8471379Z",
+      "isDirectory": false,
+      "size": 499576,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx.ai-integration.debug.js",
+      "name": "dx.ai-integration.debug.js",
+      "dateModified": "2026-07-23T06:08:59.979547Z",
+      "isDirectory": false,
+      "size": 101178,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx.ai-integration.js",
+      "name": "dx.ai-integration.js",
+      "dateModified": "2026-07-23T06:09:00.0627095Z",
+      "isDirectory": false,
+      "size": 45071,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx.all.debug.js",
+      "name": "dx.all.debug.js",
+      "dateModified": "2026-07-23T06:09:00.4383118Z",
+      "isDirectory": false,
+      "size": 15824834,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx.all.js",
+      "name": "dx.all.js",
+      "dateModified": "2026-07-23T06:09:01.2942437Z",
+      "isDirectory": false,
+      "size": 5453029,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx.aspnet.data.js",
+      "name": "dx.aspnet.data.js",
+      "dateModified": "2026-07-23T06:09:01.646178Z",
+      "isDirectory": false,
+      "size": 13686,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\dx.aspnet.mvc.js",
+      "name": "dx.aspnet.mvc.js",
+      "dateModified": "2026-07-23T06:09:01.7074268Z",
+      "isDirectory": false,
+      "size": 9081,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\FileSaver.js",
+      "name": "FileSaver.js",
+      "dateModified": "2026-07-23T06:09:01.7568839Z",
+      "isDirectory": false,
+      "size": 6153,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\FileSaver.min.js",
+      "name": "FileSaver.min.js",
+      "dateModified": "2026-07-23T06:09:01.8497507Z",
+      "isDirectory": false,
+      "size": 2749,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\jquery.js",
+      "name": "jquery.js",
+      "dateModified": "2026-07-23T06:09:01.9328259Z",
+      "isDirectory": false,
+      "size": 285314,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\jquery.min.js",
+      "name": "jquery.min.js",
+      "dateModified": "2026-07-23T06:09:02.0058955Z",
+      "isDirectory": false,
+      "size": 87533,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\jszip.js",
+      "name": "jszip.js",
+      "dateModified": "2026-07-23T06:09:02.0790705Z",
+      "isDirectory": false,
+      "size": 374191,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\jszip.min.js",
+      "name": "jszip.min.js",
+      "dateModified": "2026-07-23T06:09:02.6953135Z",
+      "isDirectory": false,
+      "size": 97630,
+      "hasSubDirectories": false
+    }
+  ],
+  "js/lib": [
+    {
+      "key": "js\\lib\\webpack.common.js",
+      "name": "webpack.common.js",
+      "dateModified": "2026-07-23T06:09:02.8338637Z",
+      "isDirectory": false,
+      "size": 1535,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\lib\\webpack.config.js",
+      "name": "webpack.config.js",
+      "dateModified": "2026-07-23T06:09:02.8614928Z",
+      "isDirectory": false,
+      "size": 2767,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\lib\\webpack.prod.js",
+      "name": "webpack.prod.js",
+      "dateModified": "2026-07-23T06:09:02.8933782Z",
+      "isDirectory": false,
+      "size": 694,
+      "hasSubDirectories": false
+    }
+  ],
+  "js/localization": [
+    {
+      "key": "js\\localization\\dx.messages.ar.js",
+      "name": "dx.messages.ar.js",
+      "dateModified": "2026-07-23T06:09:02.9250082Z",
+      "isDirectory": false,
+      "size": 63759,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.bg.js",
+      "name": "dx.messages.bg.js",
+      "dateModified": "2026-07-23T06:09:02.9506234Z",
+      "isDirectory": false,
+      "size": 70996,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.ca.js",
+      "name": "dx.messages.ca.js",
+      "dateModified": "2026-07-23T06:09:02.9802533Z",
+      "isDirectory": false,
+      "size": 58715,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.cs.js",
+      "name": "dx.messages.cs.js",
+      "dateModified": "2026-07-23T06:09:03.0119016Z",
+      "isDirectory": false,
+      "size": 57893,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.da.js",
+      "name": "dx.messages.da.js",
+      "dateModified": "2026-07-23T06:09:03.0417148Z",
+      "isDirectory": false,
+      "size": 56911,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.de.js",
+      "name": "dx.messages.de.js",
+      "dateModified": "2026-07-23T06:09:03.073359Z",
+      "isDirectory": false,
+      "size": 58893,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.el.js",
+      "name": "dx.messages.el.js",
+      "dateModified": "2026-07-23T06:09:03.1147755Z",
+      "isDirectory": false,
+      "size": 72683,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.en.js",
+      "name": "dx.messages.en.js",
+      "dateModified": "2026-07-23T06:09:03.168247Z",
+      "isDirectory": false,
+      "size": 55637,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.es.js",
+      "name": "dx.messages.es.js",
+      "dateModified": "2026-07-23T06:09:03.2194703Z",
+      "isDirectory": false,
+      "size": 58282,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.fa.js",
+      "name": "dx.messages.fa.js",
+      "dateModified": "2026-07-23T06:09:03.2491369Z",
+      "isDirectory": false,
+      "size": 65452,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.fi.js",
+      "name": "dx.messages.fi.js",
+      "dateModified": "2026-07-23T06:09:03.2808111Z",
+      "isDirectory": false,
+      "size": 57989,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.fr.js",
+      "name": "dx.messages.fr.js",
+      "dateModified": "2026-07-23T06:09:03.3225274Z",
+      "isDirectory": false,
+      "size": 59290,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.hu.js",
+      "name": "dx.messages.hu.js",
+      "dateModified": "2026-07-23T06:09:03.3599275Z",
+      "isDirectory": false,
+      "size": 59076,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.it.js",
+      "name": "dx.messages.it.js",
+      "dateModified": "2026-07-23T06:09:03.3956257Z",
+      "isDirectory": false,
+      "size": 58349,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.ja.js",
+      "name": "dx.messages.ja.js",
+      "dateModified": "2026-07-23T06:09:03.425244Z",
+      "isDirectory": false,
+      "size": 62418,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.ko.js",
+      "name": "dx.messages.ko.js",
+      "dateModified": "2026-07-23T06:09:03.4531529Z",
+      "isDirectory": false,
+      "size": 59640,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.lt.js",
+      "name": "dx.messages.lt.js",
+      "dateModified": "2026-07-23T06:09:03.4828082Z",
+      "isDirectory": false,
+      "size": 59150,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.lv.js",
+      "name": "dx.messages.lv.js",
+      "dateModified": "2026-07-23T06:09:03.5024341Z",
+      "isDirectory": false,
+      "size": 58170,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.nb.js",
+      "name": "dx.messages.nb.js",
+      "dateModified": "2026-07-23T06:09:03.5520153Z",
+      "isDirectory": false,
+      "size": 56589,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.nl.js",
+      "name": "dx.messages.nl.js",
+      "dateModified": "2026-07-23T06:09:03.5974533Z",
+      "isDirectory": false,
+      "size": 57642,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.pl.js",
+      "name": "dx.messages.pl.js",
+      "dateModified": "2026-07-23T06:09:03.6371141Z",
+      "isDirectory": false,
+      "size": 58117,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.pt.js",
+      "name": "dx.messages.pt.js",
+      "dateModified": "2026-07-23T06:09:03.6845874Z",
+      "isDirectory": false,
+      "size": 58427,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.ro.js",
+      "name": "dx.messages.ro.js",
+      "dateModified": "2026-07-23T06:09:03.7240124Z",
+      "isDirectory": false,
+      "size": 59083,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.ru.js",
+      "name": "dx.messages.ru.js",
+      "dateModified": "2026-07-23T06:09:03.7518927Z",
+      "isDirectory": false,
+      "size": 70859,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.sl.js",
+      "name": "dx.messages.sl.js",
+      "dateModified": "2026-07-23T06:09:03.7794853Z",
+      "isDirectory": false,
+      "size": 57269,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.sv.js",
+      "name": "dx.messages.sv.js",
+      "dateModified": "2026-07-23T06:09:03.8050683Z",
+      "isDirectory": false,
+      "size": 56751,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.tr.js",
+      "name": "dx.messages.tr.js",
+      "dateModified": "2026-07-23T06:09:03.8309538Z",
+      "isDirectory": false,
+      "size": 57825,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.uk.js",
+      "name": "dx.messages.uk.js",
+      "dateModified": "2026-07-23T06:09:03.861094Z",
+      "isDirectory": false,
+      "size": 69994,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.vi.js",
+      "name": "dx.messages.vi.js",
+      "dateModified": "2026-07-23T06:09:03.9063171Z",
+      "isDirectory": false,
+      "size": 61312,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.zh-tw.js",
+      "name": "dx.messages.zh-tw.js",
+      "dateModified": "2026-07-23T06:09:03.9477488Z",
+      "isDirectory": false,
+      "size": 54867,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\localization\\dx.messages.zh.js",
+      "name": "dx.messages.zh.js",
+      "dateModified": "2026-07-23T06:09:03.9854506Z",
+      "isDirectory": false,
+      "size": 54805,
+      "hasSubDirectories": false
+    }
+  ],
+  "js/vectormap-data": [
+    {
+      "key": "js\\vectormap-data\\africa.js",
+      "name": "africa.js",
+      "dateModified": "2026-07-23T06:09:04.038926Z",
+      "isDirectory": false,
+      "size": 302239,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\vectormap-data\\canada.js",
+      "name": "canada.js",
+      "dateModified": "2026-07-23T06:09:04.0763405Z",
+      "isDirectory": false,
+      "size": 294361,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\vectormap-data\\eurasia.js",
+      "name": "eurasia.js",
+      "dateModified": "2026-07-23T06:09:04.1569633Z",
+      "isDirectory": false,
+      "size": 946770,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\vectormap-data\\europe.js",
+      "name": "europe.js",
+      "dateModified": "2026-07-23T06:09:04.2202225Z",
+      "isDirectory": false,
+      "size": 353168,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\vectormap-data\\usa.js",
+      "name": "usa.js",
+      "dateModified": "2026-07-23T06:09:04.2834943Z",
+      "isDirectory": false,
+      "size": 271342,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\vectormap-data\\world.js",
+      "name": "world.js",
+      "dateModified": "2026-07-23T06:09:04.3723675Z",
+      "isDirectory": false,
+      "size": 406526,
+      "hasSubDirectories": false
+    }
+  ],
+  "js/vectormap-utils": [
+    {
+      "key": "js\\vectormap-utils\\dx.vectormaputils.debug.js",
+      "name": "dx.vectormaputils.debug.js",
+      "dateModified": "2026-07-23T06:09:04.4120637Z",
+      "isDirectory": false,
+      "size": 22867,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "js\\vectormap-utils\\dx.vectormaputils.js",
+      "name": "dx.vectormaputils.js",
+      "dateModified": "2026-07-23T06:09:04.4534634Z",
+      "isDirectory": false,
+      "size": 7683,
+      "hasSubDirectories": false
+    }
+  ],
+  "SampleData": [
+    {
+      "key": "SampleData\\SampleImages",
+      "name": "SampleImages",
+      "dateModified": "2026-07-03T11:20:35.4542884Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "SampleData\\Birthlife.json",
+      "name": "Birthlife.json",
+      "dateModified": "2026-07-23T06:09:04.5089641Z",
+      "isDirectory": false,
+      "size": 41507,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\Copper.json",
+      "name": "Copper.json",
+      "dateModified": "2026-07-23T06:09:04.540616Z",
+      "isDirectory": false,
+      "size": 554,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\Customers.json",
+      "name": "Customers.json",
+      "dateModified": "2026-07-23T06:09:04.5822252Z",
+      "isDirectory": false,
+      "size": 3264,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\Demos.json",
+      "name": "Demos.json",
+      "dateModified": "2026-07-23T06:09:04.586241Z",
+      "isDirectory": false,
+      "size": 75472,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\diagram-employees.json",
+      "name": "diagram-employees.json",
+      "dateModified": "2026-07-23T06:09:04.6299495Z",
+      "isDirectory": false,
+      "size": 1966,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\diagram-flow.json",
+      "name": "diagram-flow.json",
+      "dateModified": "2026-07-23T06:09:04.6399979Z",
+      "isDirectory": false,
+      "size": 5664,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\diagram-hardware.json",
+      "name": "diagram-hardware.json",
+      "dateModified": "2026-07-23T06:09:04.6655899Z",
+      "isDirectory": false,
+      "size": 14641,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\diagram-structure.json",
+      "name": "diagram-structure.json",
+      "dateModified": "2026-07-23T06:09:04.6874647Z",
+      "isDirectory": false,
+      "size": 3590,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\Stock.json",
+      "name": "Stock.json",
+      "dateModified": "2026-07-23T06:09:06.9180845Z",
+      "isDirectory": false,
+      "size": 2827,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\TreeMap.json",
+      "name": "TreeMap.json",
+      "dateModified": "2026-07-23T06:09:06.9535191Z",
+      "isDirectory": false,
+      "size": 5657,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\VectorMap.json",
+      "name": "VectorMap.json",
+      "dateModified": "2026-07-23T06:09:06.957541Z",
+      "isDirectory": false,
+      "size": 2823,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\Wind.json",
+      "name": "Wind.json",
+      "dateModified": "2026-07-23T06:09:06.9615625Z",
+      "isDirectory": false,
+      "size": 1861,
+      "hasSubDirectories": false
+    }
+  ],
+  "SampleData/SampleImages": [
+    {
+      "key": "SampleData\\SampleImages\\Cities",
+      "name": "Cities",
+      "dateModified": "2026-07-03T11:20:35.4522759Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": true
+    },
+    {
+      "key": "SampleData\\SampleImages\\Contacts",
+      "name": "Contacts",
+      "dateModified": "2026-07-23T07:13:15.5195929Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\SampleImages\\Landscapes",
+      "name": "Landscapes",
+      "dateModified": "2026-07-23T07:13:15.6308132Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\SampleImages\\Portraits",
+      "name": "Portraits",
+      "dateModified": "2026-07-23T07:13:16.3865833Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "SampleData\\SampleImages\\Widescreen",
+      "name": "Widescreen",
+      "dateModified": "2026-07-23T07:13:16.417134Z",
+      "isDirectory": true,
+      "size": 0,
+      "hasSubDirectories": false
+    }
+  ],
+  "signalr": [
+    {
+      "key": "signalr\\signalr-client.js",
+      "name": "signalr-client.js",
+      "dateModified": "2026-07-23T06:09:07.0010014Z",
+      "isDirectory": false,
+      "size": 163796,
+      "hasSubDirectories": false
+    },
+    {
+      "key": "signalr\\signalr-session-id.js",
+      "name": "signalr-session-id.js",
+      "dateModified": "2026-07-23T06:09:07.0564923Z",
+      "isDirectory": false,
+      "size": 1097,
+      "hasSubDirectories": false
+    }
+  ]
+}

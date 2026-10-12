@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import dateUtils from '@js/core/utils/date';
+import { dateUtils } from '@ts/core/utils/m_date';
 
 function parse(value) {
   return value !== null ? new Date(value) : value;

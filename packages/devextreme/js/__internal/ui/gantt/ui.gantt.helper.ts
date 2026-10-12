@@ -2,6 +2,17 @@
 import messageLocalization from '@js/common/core/localization/message';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
 import { isFunction } from '@js/core/utils/type';
+import type { Properties } from '@js/ui/gantt';
+
+type NullDefaultKeys = 'toolbar'
+  | 'taskTooltipContentTemplate'
+  | 'taskProgressTooltipContentTemplate'
+  | 'taskTimeTooltipContentTemplate'
+  | 'taskContentTemplate';
+
+export type GanttProperties = Omit<Properties, NullDefaultKeys> & {
+  [TKey in NullDefaultKeys]?: Properties[TKey] | null;
+};
 
 export const GanttHelper = {
   prepareMapHandler(getters) {
@@ -118,8 +129,7 @@ export const GanttHelper = {
     }
   },
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  getDefaultOptions() {
+  getDefaultOptions(): GanttProperties {
     return {
       tasks: {
         dataSource: null,
@@ -157,33 +167,33 @@ export const GanttHelper = {
       taskTitlePosition: 'inside',
       firstDayOfWeek: undefined,
       selectedRowKey: undefined,
-      onSelectionChanged: null,
-      onTaskClick: null,
-      onTaskDblClick: null,
-      onTaskInserting: null,
-      onTaskInserted: null,
-      onTaskDeleting: null,
-      onTaskDeleted: null,
-      onTaskUpdating: null,
-      onTaskUpdated: null,
-      onTaskMoving: null,
-      onTaskEditDialogShowing: null,
-      onDependencyInserting: null,
-      onDependencyInserted: null,
-      onDependencyDeleting: null,
-      onDependencyDeleted: null,
-      onResourceInserting: null,
-      onResourceInserted: null,
-      onResourceDeleting: null,
-      onResourceDeleted: null,
-      onResourceAssigning: null,
-      onResourceAssigned: null,
+      onSelectionChanged: undefined,
+      onTaskClick: undefined,
+      onTaskDblClick: undefined,
+      onTaskInserting: undefined,
+      onTaskInserted: undefined,
+      onTaskDeleting: undefined,
+      onTaskDeleted: undefined,
+      onTaskUpdating: undefined,
+      onTaskUpdated: undefined,
+      onTaskMoving: undefined,
+      onTaskEditDialogShowing: undefined,
+      onDependencyInserting: undefined,
+      onDependencyInserted: undefined,
+      onDependencyDeleting: undefined,
+      onDependencyDeleted: undefined,
+      onResourceInserting: undefined,
+      onResourceInserted: undefined,
+      onResourceDeleting: undefined,
+      onResourceDeleted: undefined,
+      onResourceAssigning: undefined,
+      onResourceAssigned: undefined,
 
-      onResourceUnassigning: null,
+      onResourceUnassigning: undefined,
 
-      onResourceUnassigned: null,
-      onCustomCommand: null,
-      onContextMenuPreparing: null,
+      onResourceUnassigned: undefined,
+      onCustomCommand: undefined,
+      onContextMenuPreparing: undefined,
       allowSelection: true,
       showRowLines: true,
       stripLines: undefined,

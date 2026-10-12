@@ -34,6 +34,8 @@ import {
     StateStoreType,
 } from '../common/grids';
 
+import { LoadPanelIndicatorProperties } from './load_panel';
+
 export {
     ApplyChangesMode,
     FieldChooserLayout,
@@ -480,8 +482,13 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       /**
        * @docid
        * @default ""
+       * @deprecated dxPivotGridOptions.loadPanel.indicatorOptions
        */
       indicatorSrc?: string;
+      /**
+       * @docid
+       */
+      indicatorOptions?: LoadPanelIndicatorProperties;
       /**
        * @docid
        * @default false
@@ -516,35 +523,35 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid
      * @type_function_param1 e:{ui/pivot_grid:CellClickEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onCellClick?: ((e: CellClickEvent) => void);
+    onCellClick?: ((e: CellClickEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/pivot_grid:CellPreparedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onCellPrepared?: ((e: CellPreparedEvent) => void);
+    onCellPrepared?: ((e: CellPreparedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/pivot_grid:ContextMenuPreparingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/pivot_grid:ExportingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onExporting?: ((e: ExportingEvent) => void);
+    onExporting?: ((e: ExportingEvent) => void) | undefined;
     /**
      * @docid
      * @default "standard"
@@ -631,9 +638,9 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       savingTimeout?: number;
       /**
        * @docid
-       * @default null
+       * @default undefined
        */
-      storageKey?: string;
+      storageKey?: string | undefined;
       /**
        * @docid
        * @default "localStorage"

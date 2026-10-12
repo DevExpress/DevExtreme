@@ -1,4 +1,14 @@
-const $ = require('jquery');
+import $ from 'jquery';
+
+import 'fluent_blue_light.css!';
+import 'ui/drop_down_button';
+
+import { noop } from 'core/utils/common';
+import { DataSource } from 'common/data/data_source/data_source';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+
+import '__internal/scheduler/scheduler';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -6,16 +16,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require('fluent_blue_light.css!');
-require('ui/drop_down_button');
-
-const noop = require('core/utils/common').noop;
-const DataSource = require('common/data/data_source/data_source').DataSource;
-const { createWrapper } = require('../../helpers/scheduler/helpers.js');
-const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
-
-require('__internal/scheduler/scheduler');
 
 QUnit.module('Integration: View switcher', () => {
     QUnit.test('dataSource should be filtered if \'currentView\' option is changed', async function(assert) {

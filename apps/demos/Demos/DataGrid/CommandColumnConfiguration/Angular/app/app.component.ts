@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, Employee, State } from './app.service';
 
@@ -9,15 +11,9 @@ if (!/localhost/.test(document.location.host)) {
 
 type FirstArgument<T> = T extends (...args: any) => any ? Parameters<T>[0] : never;
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
+  templateUrl: './app.component.html',
   providers: [Service],
   imports: [
     DxDataGridModule,
@@ -28,7 +24,7 @@ export class AppComponent {
 
   states: State[];
 
-  constructor(private service: Service) {
+  constructor(private service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.employees = service.getEmployees();
     this.states = service.getStates();
   }
@@ -69,6 +65,8 @@ export class AppComponent {
 
     this.employees.splice(e.row.rowIndex, 0, clonedItem);
     e.event.preventDefault();
+
+    this.changeDetectorRef.detectChanges();
   };
 }
 

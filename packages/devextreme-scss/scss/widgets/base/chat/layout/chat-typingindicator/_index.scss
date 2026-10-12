@@ -1,7 +1,7 @@
 @use "../../../mixins" as *;
 @use "./mixins" as *;
-@include chat-typingindicator-scale('dx-typingindicator-circle-scale-outer', 1.5);
-@include chat-typingindicator-scale('dx-typingindicator-circle-scale-inner', 0.666667);
+@include chat-typingindicator-scale("dx-typingindicator-circle-scale-outer", 1.5);
+@include chat-typingindicator-scale("dx-typingindicator-circle-scale-inner", 0.666667);
 
 .dx-chat-typingindicator-content {
   display: grid;

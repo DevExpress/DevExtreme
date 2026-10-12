@@ -18,7 +18,7 @@ import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import ProgressBar from '@js/ui/progress_bar';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
-import { ICON_CLASS } from '@ts/core/utils/m_icon';
+import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Editor from '@ts/ui/editor/editor';
 import { CustomChunksFileUploadStrategy } from '@ts/ui/file_uploader/file_upload_strategy.chunks.custom';
@@ -206,16 +206,16 @@ class FileUploader extends Editor<FileUploaderProperties> {
         uploadMethod: 'POST',
         uploadHeaders: {},
         uploadCustomData: {},
-        onBeforeSend: null,
-        onUploadStarted: null,
-        onUploaded: null,
-        onFilesUploaded: null,
+        onBeforeSend: undefined,
+        onUploadStarted: undefined,
+        onUploaded: undefined,
+        onFilesUploaded: undefined,
         onFileValidationError: null,
-        onProgress: null,
-        onUploadError: null,
-        onUploadAborted: null,
-        onDropZoneEnter: null,
-        onDropZoneLeave: null,
+        onProgress: undefined,
+        onUploadError: undefined,
+        onUploadAborted: undefined,
+        onDropZoneEnter: undefined,
+        onDropZoneLeave: undefined,
         onCancelButtonClick: null,
         onFileLimitReached: undefined,
         allowedFileExtensions: [],
@@ -718,7 +718,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         : null,
     };
 
-    // @ts-expect-error attr type should be extended
     this._$filesContainer?.attr(aria);
   }
 
@@ -1173,7 +1172,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _applyInputAttributes(customAttributes: Record<string, string>): void {
-    // @ts-expect-error dxElementWrapper should be extdened
     this._$fileInput.attr(customAttributes);
   }
 

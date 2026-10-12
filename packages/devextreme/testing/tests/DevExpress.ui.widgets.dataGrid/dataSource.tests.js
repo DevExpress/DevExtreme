@@ -6,7 +6,7 @@ import { CustomStore } from 'common/data/custom_store';
 import ODataStore from 'common/data/odata/store';
 import dataQuery from 'common/data/query';
 import { queryByOptions } from 'common/data/store_helper';
-import gridCore from '__internal/grids/data_grid/m_core';
+import gridCore from '__internal/grids/data_grid/core';
 import { createOffsetFilter } from '__internal/grids/data_grid/grouping/m_grouping_core';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import { loadTotalCount, GroupingHelper as ExpandedGroupingHelper } from '__internal/grids/data_grid/grouping/m_grouping_expanded';
@@ -31,7 +31,7 @@ const createDataSource = function(options) {
 
     setupDataGridModules(dataGridStub, ['data', 'columns']);
 
-    const dataSourceAdapter = dataGridStub.dataController._createDataSourceAdapter(dataSource);
+    const dataSourceAdapter = dataGridStub.dataSourceController.createAdapter(dataSource);
 
     const origItems = dataSourceAdapter.items;
     const processItems = function(items) {
@@ -58,9 +58,12 @@ const createDataSource = function(options) {
         return items;
     };
 
+    dataSourceAdapter.setSummary = (summary) => {
+        dataSourceAdapter.getSummary = () => summary;
+    };
+
     return dataSourceAdapter;
 };
-
 
 QUnit.module('Grid DataSource', {
     beforeEach: function() {
@@ -3019,7 +3022,7 @@ QUnit.module('Remote group paging', {
         });
         const loadingChanged = sinon.stub();
 
-        dataSource.summary({
+        dataSource.setSummary({
             groupAggregates: [{
                 summaryType: 'count'
             }],
@@ -6019,12 +6022,13 @@ QUnit.module('Summary', {
     QUnit.test('Total summary without grouping', function(assert) {
         const dataSource = this.createDataSource({});
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
                 aggregator: 'sum'
-            }]
+            }],
+            groupAggregates: [],
         });
 
         // act
@@ -6040,7 +6044,7 @@ QUnit.module('Summary', {
             group: 'this'
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
@@ -6068,7 +6072,7 @@ QUnit.module('Summary', {
             }
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
@@ -6105,12 +6109,13 @@ QUnit.module('Summary', {
             }
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
                 aggregator: 'sum'
-            }]
+            }],
+            groupAggregates: [],
         });
 
         // act
@@ -6137,12 +6142,13 @@ QUnit.module('Summary', {
             remoteOperations: false
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
                 aggregator: 'sum'
-            }]
+            }],
+            groupAggregates: [],
         });
 
         // act
@@ -6166,7 +6172,7 @@ QUnit.module('Summary', {
             })
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: 'count'
             }, {
@@ -6303,7 +6309,7 @@ QUnit.module('Cache', {
             remoteOperations: true
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 selector: 'this',
                 aggregator: 'sum'
@@ -6470,14 +6476,15 @@ QUnit.module('Cache', {
             }
         });
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 selector: 'this',
                 aggregator: 'count'
             }, {
                 selector: 'this',
                 aggregator: 'sum'
-            }]
+            }],
+            groupAggregates: [],
         });
 
         dataSource.load();
@@ -6592,7 +6599,7 @@ QUnit.module('Cache', {
 
         let stepCount = 0;
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: {
                     seed: 0,
@@ -6601,7 +6608,8 @@ QUnit.module('Cache', {
                         return a + b;
                     }
                 }
-            }]
+            }],
+            groupAggregates: []
         });
         dataSource.load();
         this.clock.tick(10);
@@ -6629,7 +6637,7 @@ QUnit.module('Cache', {
 
         let stepCount = 0;
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: {
                     seed: 0,
@@ -6669,7 +6677,7 @@ QUnit.module('Cache', {
 
         let stepCount = 0;
 
-        dataSource.summary({
+        dataSource.setSummary({
             totalAggregates: [{
                 aggregator: {
                     seed: 0,
@@ -6678,7 +6686,8 @@ QUnit.module('Cache', {
                         return a + b;
                     }
                 }
-            }]
+            }],
+            groupAggregates: []
         });
         dataSource.load();
         this.clock.tick(10);
@@ -6969,9 +6978,9 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>', 8]
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7010,12 +7019,12 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>', '1'],
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7052,12 +7061,12 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>', '5'],
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7094,9 +7103,9 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             group: function(data) { return data % 2; }
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7132,12 +7141,12 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
         this.loadingCount = 0;
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>', '5'],
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7175,11 +7184,11 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
         this.loadingCount = 0;
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             group: 'this',
             skip: 0,
             take: 3
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7217,11 +7226,11 @@ QUnit.module('Custom Load', {
         this.loadingCount = 0;
         // act
 
-        dataSource.load({
+        dataSource.customLoader.load({
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7259,11 +7268,11 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
         this.loadingCount = 0;
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             group: [{ selector: 'this', groupInterval: 2 }],
             skip: 0,
             take: 3
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7287,11 +7296,11 @@ QUnit.module('Custom Load', {
 
         let customLoadData = false;
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>=', '5'],
             group: 'this',
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7378,11 +7387,11 @@ QUnit.module('Custom Load', {
         this.loadingCount = 0;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             isLoadingAll: true,
             filter: ['this', '>', '5'],
             group: 'this'
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7430,11 +7439,11 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7476,17 +7485,17 @@ QUnit.module('New virtual scrolling mode', {
         const dataSource = this.createDataSource({
             pageSize: 3
         });
-        const dataLoadingHandler = dataSource._customizeStoreLoadOptionsHandler;
+        const originalDataLoadingHandler = dataSource.customizeStoreLoadOptionsHandlerProxy;
         const takeValues = [];
         const skipValues = [];
 
-        dataSource._customizeStoreLoadOptionsHandler = function(options) {
-            dataLoadingHandler.apply(dataSource, arguments);
+        dataSource.customizeStoreLoadOptionsHandlerProxy = function(options) {
+            originalDataLoadingHandler.apply(dataSource, arguments);
             skipValues.push(options.storeLoadOptions.skip);
             takeValues.push(options.storeLoadOptions.take);
         };
-        dataSource._dataSource.off('customizeStoreLoadOptions', dataLoadingHandler);
-        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource._customizeStoreLoadOptionsHandler);
+        dataSource._dataSource.off('customizeStoreLoadOptions', originalDataLoadingHandler);
+        dataSource._dataSource.on('customizeStoreLoadOptions', dataSource.customizeStoreLoadOptionsHandlerProxy);
 
         try {
             // act
@@ -7507,8 +7516,8 @@ QUnit.module('New virtual scrolling mode', {
             assert.strictEqual(takeValues[1], 3, 'second take value');
             assert.deepEqual(dataSource.items(), TEN_NUMBERS.slice(0, 9), 'second load items');
         } finally {
-            dataSource._dataSource.off('customizeStoreLoadOptions', dataSource._dataLoadingHandler);
-            dataSource._dataSource.on('customizeStoreLoadOptions', dataLoadingHandler);
+            dataSource._dataSource.off('customizeStoreLoadOptions', dataSource.customizeStoreLoadOptionsHandlerProxy);
+            dataSource._dataSource.on('customizeStoreLoadOptions', originalDataLoadingHandler);
         }
     });
 
@@ -7518,15 +7527,15 @@ QUnit.module('New virtual scrolling mode', {
         const dataSource = this.createDataSource({
             pageSize: 3
         });
-        const loadingChangeHandler = dataSource._loadingChangedHandler;
+        const originalLoadingChangeHandler = dataSource.loadingChangedHandlerProxy;
         const startLoadTimeValues = [];
 
-        dataSource._loadingChangedHandler = function() {
-            loadingChangeHandler.apply(dataSource, arguments);
+        dataSource.loadingChangedHandlerProxy = function() {
+            originalLoadingChangeHandler.apply(dataSource, arguments);
             startLoadTimeValues.push(dataSource._startLoadTime);
         };
-        dataSource._dataSource.off('loadingChanged', loadingChangeHandler);
-        dataSource._dataSource.on('loadingChanged', dataSource._loadingChangedHandler);
+        dataSource._dataSource.off('loadingChanged', originalLoadingChangeHandler);
+        dataSource._dataSource.on('loadingChanged', dataSource.loadingChangedHandlerProxy);
 
         try {
             // act
@@ -7537,8 +7546,8 @@ QUnit.module('New virtual scrolling mode', {
             assert.notOk(startLoadTimeValues[0], 'not initizlized on the first call');
             assert.notOk(startLoadTimeValues[1], 'not initizlized on the second call');
         } finally {
-            dataSource._dataSource.off('loadingChanged', dataSource._loadingChangedHandler);
-            dataSource._dataSource.on('loadingChanged', loadingChangeHandler);
+            dataSource._dataSource.off('loadingChanged', dataSource.loadingChangedHandlerProxy);
+            dataSource._dataSource.on('loadingChanged', originalLoadingChangeHandler);
         }
     });
 

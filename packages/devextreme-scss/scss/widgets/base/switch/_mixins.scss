@@ -18,8 +18,8 @@
 
     .dx-switch-wrapper {
       position: relative;
-      padding-top:  $switch-padding,;
-      padding-bottom:  $switch-padding,;
+      padding-top: $switch-padding;
+      padding-bottom: $switch-padding;
       padding-inline-start: $switch-padding - $switch-container-horizontal-padding;
       padding-inline-end: $switch-padding + $switch-container-horizontal-padding;
       inset-inline-start: -$switch-padding;
@@ -38,7 +38,7 @@
 
     &::before {
       position: absolute;
-      content: '';
+      content: "";
       width: 100%;
       height: $switch-container-height;
       border-radius: 500px;
@@ -86,7 +86,7 @@
 
     &::before {
       display: block;
-      content: ' ';
+      content: " ";
       width: 100%;
       height: 100%;
       border-radius: $switch-handle-border-radius;
@@ -210,7 +210,7 @@
 
   .dx-switch {
     .dx-switch-handle::before {
-      background-color:  $switch-off-border-color;
+      background-color: $switch-off-border-color;
     }
 
     &.dx-state-hover {
@@ -234,7 +234,7 @@
     &.dx-state-active,
     &.dx-state-focused {
       .dx-switch-container::before {
-        border-color:  $switch-off-border-color-active;
+        border-color: $switch-off-border-color-active;
       }
 
       &.dx-state-readonly {
@@ -274,14 +274,14 @@
   .dx-switch:not(.dx-switch-on-value):not(.dx-state-readonly) {
     &.dx-state-hover {
       .dx-switch-handle::before {
-        background-color:  $switch-off-border-color-hover;
+        background-color: $switch-off-border-color-hover;
       }
     }
 
     &.dx-state-active,
     &.dx-state-focused {
       .dx-switch-handle::before {
-        background-color:  $switch-off-border-color-active;
+        background-color: $switch-off-border-color-active;
       }
     }
   }

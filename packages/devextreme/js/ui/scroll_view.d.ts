@@ -77,20 +77,20 @@ export type UpdatedEvent = ScrollEventInfo<dxScrollView>;
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scroll_view:PullDownEvent}
      * @action
      * @public
      */
-    onPullDown?: ((e: PullDownEvent) => void);
+    onPullDown?: ((e: PullDownEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/scroll_view:ReachBottomEvent}
      * @action
      * @public
      */
-    onReachBottom?: ((e: ReachBottomEvent) => void);
+    onReachBottom?: ((e: ReachBottomEvent) => void) | undefined;
     /**
      * @docid
      * @default "Release to refresh..."

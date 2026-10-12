@@ -1,6 +1,6 @@
 import type { DataSource } from '@js/common/data';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import type { InternalGrid, RowKey } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid, RowKey } from '@ts/grids/grid_core/types';
 import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
@@ -187,8 +187,7 @@ const resolveKeysFromAllPages = (
   component: InternalGrid,
   indexes: number[],
 ): Promise<RowKey[] | null> => {
-  const dataController = component.getController('data');
-  const isRemotePaging = !!dataController.dataSource()?.remoteOperations()?.paging;
+  const isRemotePaging = !!component.getController('dataSource').remoteOperations().paging;
 
   return isRemotePaging
     ? resolveKeysFromAllPagesRemote(component, indexes)

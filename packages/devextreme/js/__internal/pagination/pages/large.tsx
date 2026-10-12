@@ -161,6 +161,8 @@ export class PagesLarge extends BaseInfernoComponent<PagesLargePropsType> {
     } else {
       startIndex = pageIndex - 1;
     }
+    // Keep the sliding window inside [1, pageCount - 1] (T1322291)
+    startIndex = Math.max(1, Math.min(startIndex, pageCount - PAGES_LIMITER - 1));
     const slidingWindowSize = PAGES_LIMITER;
     const delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
     const indexes = createPageIndexes(startIndex, slidingWindowSize, pageCount, delimiter);

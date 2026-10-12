@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const animationFrame = require('common/core/animation/frame');
-const coreUtilsType = require('core/utils/type');
+import $ from 'jquery';
+import * as animationFrame from 'common/core/animation/frame';
+import * as coreUtilsType from 'core/utils/type';
 
 QUnit.module('animation frame');
 

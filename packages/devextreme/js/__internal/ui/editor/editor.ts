@@ -1,4 +1,4 @@
-import type { Position } from '@js/common';
+import type { Mode, Position } from '@js/common';
 import type { NativeEventInfo } from '@js/common/core/events';
 import EventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
@@ -17,10 +17,10 @@ import type {
 } from '@js/ui/editor/editor';
 import ValidationEngine from '@js/ui/validation_engine';
 import ValidationMessage from '@js/ui/validation_message';
+import domUtils from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
-
-import domUtils from '../../core/utils/m_dom';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
@@ -44,21 +44,34 @@ export type UnresolvedEvents = 'onContentReady' | 'onDisposing' | 'onInitialized
 export type ValueChangedEvent<TNativeEvent = Event> = NativeEventInfo<Editor, TNativeEvent>
   & ValueChangedInfo;
 
-export interface EditorProperties<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TComponent extends PublicEditor<any> = PublicEditor,
-> extends EditorOptions<TComponent> {
+export interface EditorInternalProperties {
+  integrationOptions?: WidgetProperties['integrationOptions'];
+  onKeyboardHandled?: WidgetProperties['onKeyboardHandled'];
   validationMessageOffset?: { h: number; v: number };
   validationBoundary?: dxElementWrapper;
   validationTooltipOptions?: Record<string, unknown>;
+  _cached_validationTooltipOptions?: Record<string, unknown>;
   _showValidationMessage?: boolean;
-  name?: string;
   _onMarkupRendered?: () => void;
 }
 
+export interface EditorProperties<
+  TComponent = PublicEditor,
+> extends EditorOptions<TComponent>, EditorInternalProperties {
+  name?: string;
+}
+
+// NOTE: EditorOptions declares validationMessagePosition as Position, while the public
+// options of dropDownEditor and its descendants widen it to Position | Mode. The class
+// constraints have to tolerate that union, unlike the properties interfaces themselves.
+export type WithValidationMessageMode<TProperties> = Omit<TProperties, 'validationMessagePosition'>
+  & { validationMessagePosition?: Position | Mode };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type EditorPropertiesConstraint = WithValidationMessageMode<EditorProperties<any>>;
+
 class Editor<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TProperties extends EditorProperties<any> = EditorProperties,
+  TProperties extends EditorPropertiesConstraint = EditorProperties,
 > extends Widget<TProperties> {
   _initialValue: unknown;
 
@@ -80,15 +93,10 @@ class Editor<
     return instance instanceof Editor;
   }
 
-  ctor(element: Element, options: TProperties): void {
-    this.showValidationMessageTimeout = undefined;
-    this.validationRequest = Callbacks();
-
-    super.ctor(element, options);
-  }
-
   _createElement(element: Element): void {
     super._createElement(element);
+    this.showValidationMessageTimeout = undefined;
+    this.validationRequest = Callbacks();
     const $element = this.$element();
     if ($element) {
       data($element[0], VALIDATION_TARGET, this);
@@ -117,7 +125,7 @@ class Editor<
       ...super._getDefaultOptions(),
       value: null,
       name: '',
-      onValueChanged: null,
+      onValueChanged: undefined,
       readOnly: false,
       isValid: true,
       validationError: null,
@@ -262,7 +270,7 @@ class Editor<
     this.$element().addClass(stylingModeClass);
   }
 
-  _getValidationErrors(): unknown[] | undefined {
+  _getValidationErrors(): unknown[] | null | undefined {
     let { validationErrors } = this.option();
     const { validationError } = this.option();
 
@@ -341,7 +349,7 @@ class Editor<
     }
   }
 
-  _getValidationMessagePosition(): Position | undefined {
+  _getValidationMessagePosition(): Position | Mode | undefined {
     const { validationMessagePosition } = this.option();
     return validationMessagePosition;
   }

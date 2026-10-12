@@ -33,7 +33,7 @@ export const sortingCommand = defineGridCommand({
     const column: Column | undefined = columnsController.columnOption(args.dataField);
     const defaultMessage = getSortingDefaultMessage(args, column);
 
-    if (!column || !columnsController.allowColumnSorting(column)) {
+    if (!column || !columnsController.allowColumnSorting(column) || column.index === undefined) {
       return Promise.resolve(failure(defaultMessage));
     }
 

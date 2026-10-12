@@ -101,7 +101,7 @@ function updateValues() {
   ]);
 }
 </script>
-<style scoped>
+<style>
 .widget-container {
   margin-right: 320px;
 }

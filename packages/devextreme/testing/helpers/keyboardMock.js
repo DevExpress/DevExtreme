@@ -1,16 +1,8 @@
-let focused;
+import $ from 'jquery';
+import * as inferno from 'inferno';
+import { focused } from '__internal/core/utils/selectors';
 
-(function(root, factory) {
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            focused = require('__internal/core/utils/m_selectors').focused;
-            root.keyboardMock = module.exports = factory(require('jquery'), require('inferno'));
-        });
-    } else {
-        focused = DevExpress.require('__internal/core/utils/m_selectors').focused;
-        root.keyboardMock = factory(root.jQuery);
-    }
-}(window, function($, inferno) {
+const keyboardMock = (function($, inferno) {
     let $element;
 
     let caret;
@@ -149,7 +141,7 @@ let focused;
 
     const isEditableElement = function() {
         const editableInputTypesRE = /^(date|datetime|datetime-local|email|month|number|password|search|tel|text|time|url|week)$/;
-        return $element.is('input') && editableInputTypesRE.test($element.prop('type')) || $element.is('textarea') || ($element.prop('tabindex') >= 0);
+        return $element.is('input') && editableInputTypesRE.test($element.prop('type')) || $element.is('textarea') || ($element.prop('tabindex') >= 0) || $element.attr('tabindex') !== undefined;
     };
 
     const deleteSelection = function() {
@@ -427,4 +419,6 @@ let focused;
             }
         };
     };
-}));
+})($, inferno);
+
+export default keyboardMock;

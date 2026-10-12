@@ -53,7 +53,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @action
      * @public
      */
-    onValueChanged?: ((e: NativeEventInfo<TComponent, Event> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<TComponent, Event> & ValueChangedInfo) => void) | null;
     /**
      * @docid
      * @default false
@@ -66,13 +66,13 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @default null
      * @public
      */
-    validationError?: any;
+    validationError?: any | null;
     /**
      * @docid
      * @default null
      * @public
      */
-    validationErrors?: Array<any>;
+    validationErrors?: Array<any> | null;
     /**
      * @docid
      * @default "auto"
@@ -97,7 +97,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @fires EditorOptions.onValueChanged
      * @public
      */
-    value?: any;
+    value?: any | null;
     /**
      * @docid
      * @default 'outlined'

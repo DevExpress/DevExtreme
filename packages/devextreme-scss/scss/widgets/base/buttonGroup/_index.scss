@@ -1,7 +1,5 @@
 @use "../mixins" as *;
 
-// adduse
-
 .dx-buttongroup {
   display: inline-block;
 }
@@ -33,4 +31,3 @@
 .dx-buttongroup-item-has-width {
   flex: 1 1 auto;
 }
-

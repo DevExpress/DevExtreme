@@ -71,7 +71,7 @@ function onAttachmentDownloadClick({ attachment }: DxChatTypes.AttachmentDownloa
 }
 </script>
 
-<style scoped>
+<style>
 .demo-container {
   min-width: 720px;
 }

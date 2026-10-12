@@ -110,7 +110,7 @@ export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemChange: EventEmitter<any>;
+    @Output() selectedItemChange: EventEmitter<any | null>;
     protected get _optionPath() {
         return 'tabPanelOptions';
     }

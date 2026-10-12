@@ -11,6 +11,7 @@ import CardView, {
   AsyncRule,
   CustomRule,
 } from 'devextreme-react/card-view';
+import 'devextreme/ui/text_area';
 import { employees } from './data.js';
 
 function altExpr({ fullName }) {
@@ -36,6 +37,17 @@ async function emailValidationCallback(options) {
 function hireDateValidationCallback(options) {
   return new Date(options.value) > new Date(options.data.birthDate);
 }
+const popupOptions = {
+  title: 'Employee Info',
+  showTitle: true,
+  width: 700,
+  height: 525,
+};
+const notesEditorOptions = { height: 100 };
+const mobilePhoneEditorOptions = {
+  mask: '+1 (000) 000-0000',
+  useMaskedValue: true,
+};
 const App = () => (
   <CardView
     dataSource={employees}
@@ -53,12 +65,7 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
-      popup={{
-        title: 'Employee Info',
-        showTitle: true,
-        width: 700,
-        height: 525,
-      }}
+      popup={popupOptions}
     >
       <Form>
         <Item
@@ -85,7 +92,7 @@ const App = () => (
             dataField="notes"
             editorType="dxTextArea"
             colSpan={2}
-            editorOptions={{ height: 100 }}
+            editorOptions={notesEditorOptions}
           ></Item>
           <Item dataField="picture"></Item>
         </Item>
@@ -103,10 +110,7 @@ const App = () => (
           <Item dataField="zipcode"></Item>
           <Item
             dataField="mobilePhone"
-            editorOptions={{
-              mask: '+1 (000) 000-0000',
-              useMaskedValue: true,
-            }}
+            editorOptions={mobilePhoneEditorOptions}
           ></Item>
           <Item dataField="email"></Item>
         </Item>

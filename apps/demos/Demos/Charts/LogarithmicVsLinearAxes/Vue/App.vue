@@ -63,7 +63,7 @@ const crosshairFormat = {
   precision: 2,
 };
 </script>
-<style scoped>
+<style>
 #chart {
   height: 450px;
 }

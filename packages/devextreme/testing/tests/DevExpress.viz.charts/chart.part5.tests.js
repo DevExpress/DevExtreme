@@ -422,7 +422,7 @@ QUnit.test('chart with visible scrollBar', function(assert) {
     assert.ok(scrollBar, 'scroll bar');
 
     assert.ok(scrollBar.init.calledOnce);
-    assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
+    assert.deepEqual(scrollBar.init.lastCall.args, [range, true, []]);
 
     assert.ok(scrollBar.setPane.calledOnce);
     assert.equal(scrollBar.setPane.lastCall.args[0], chart._getLayoutTargets());
@@ -454,7 +454,7 @@ QUnit.test('chart with visible scrollBar. Rotated', function(assert) {
     assert.ok(scrollBar);
 
     assert.ok(scrollBar.init.calledOnce);
-    assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
+    assert.deepEqual(scrollBar.init.lastCall.args, [range, true, []]);
 
     assert.ok(scrollBar.setPane.calledOnce);
     assert.equal(scrollBar.setPane.lastCall.args[0], chart._getLayoutTargets());
@@ -557,7 +557,7 @@ QUnit.test('scrollbarModule.ScrollBar option changed', function(assert) {
     }]);
 
     assert.equal(scrollBar.init.callCount, 1, 'scroll bar init calls');
-    assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
+    assert.deepEqual(scrollBar.init.lastCall.args, [range, true, []]);
 
     assert.equal(scrollBar.setPosition.callCount, 1);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [range.minVisible, range.maxVisible]);
@@ -625,7 +625,7 @@ QUnit.test('Options changed - show scrollBar', function(assert) {
     const range = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
     assert.equal(scrollBar.init.callCount, 1, 'scroll bar init calls');
-    assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
+    assert.deepEqual(scrollBar.init.lastCall.args, [range, true, []]);
 
     assert.equal(scrollBar.setPosition.callCount, 1);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [range.minVisible, range.maxVisible]);

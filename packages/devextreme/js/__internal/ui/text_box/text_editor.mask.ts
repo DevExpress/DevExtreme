@@ -11,12 +11,12 @@ import { extend } from '@js/core/utils/extend';
 import { isEmpty } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import { focused } from '@ts/core/utils/m_selectors';
+import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
-import type { TextEditorBaseProperties } from '@ts/ui/text_box/text_editor.base';
+import type { TextEditorBaseProperties, TextEditorPropertiesConstraint } from '@ts/ui/text_box/text_editor.base';
 import TextEditorBase from '@ts/ui/text_box/text_editor.base';
 import type { HandlingArgs } from '@ts/ui/text_box/text_editor.mask.rule';
 import { EmptyMaskRule, MaskRule, StubMaskRule } from '@ts/ui/text_box/text_editor.mask.rule';
@@ -68,7 +68,7 @@ const buildInMaskRules: MaskRules = {
 };
 
 class TextEditorMask<
-  TProperties extends TextEditorBaseProperties= TextEditorBaseProperties,
+  TProperties extends TextEditorPropertiesConstraint = TextEditorBaseProperties,
 > extends TextEditorBase<TProperties> {
   _changedValue?: string;
 
@@ -340,7 +340,7 @@ class TextEditorMask<
   _replaceSelectedText(
     text: string,
     selection: CaretRange,
-    char: string,
+    char: string | undefined,
   ): string {
     if (char === undefined) {
       return text;

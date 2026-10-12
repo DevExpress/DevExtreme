@@ -1,5 +1,4 @@
 import type { ValidationRule } from '@js/common';
-import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Item, SimpleItem } from '@js/ui/form';
 import type Button from '@ts/ui/button';
@@ -20,7 +19,9 @@ export interface ValidationRulesItemOptionActionOption extends ItemOptionActionO
   validationRules?: ValidationRule[];
 }
 
-export default class ItemOptionAction<T extends ItemOptionActionOptions = ItemOptionActionOptions> {
+export default abstract class ItemOptionAction<
+  T extends ItemOptionActionOptions = ItemOptionActionOptions,
+> {
   _options: T;
 
   _itemsRunTimeInfo: FormItemsRunTimeInfo;
@@ -42,7 +43,5 @@ export default class ItemOptionAction<T extends ItemOptionActionOptions = ItemOp
     return this._itemsRunTimeInfo.findPreparedItemByItem(this._options.item);
   }
 
-  tryExecute(): void {
-    Class.abstract();
-  }
+  abstract tryExecute(): void;
 }

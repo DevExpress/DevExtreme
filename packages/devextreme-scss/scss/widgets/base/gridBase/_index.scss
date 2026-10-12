@@ -1,11 +1,8 @@
-@use 'sass:math';
+@use "sass:math";
 @use "../mixins" as *;
-@use 'variables' as *;
-@use 'layout/cell' as *;
+@use "variables" as *;
+@use "layout/cell" as *;
 @use "layout/aiChat" as *;
-
-// adduse
-
 
 .dx-gridbase-container {
   display: flex;
@@ -18,15 +15,6 @@
 
 .dx-gridbase-container > * {
   flex: 0 0 auto;
-}
-
-// NOTE: a11y aria-live container must be visible to allow screen readers read it
-.dx-gridbase-a11y-status-container {
-  position: fixed;
-  left: 0;
-  top: 0;
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: polygon(0 0);
 }
 
 @mixin grid-base($widget-name) {
@@ -127,7 +115,7 @@
         }
 
         &.dx-header-filter::after {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           bottom: 0;
@@ -422,7 +410,7 @@
   .dx-cell-modified,
   .dx-#{$widget-name}-invalid {
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       border: 2px solid transparent;
       top: 0;
@@ -453,7 +441,7 @@
     &.dx-editor-inline-block:not(.dx-command-select) {
       &::before {
         display: inline-block;
-        content: '\200b';
+        content: "\200b";
         vertical-align: middle;
         padding-top: $grid-cell-padding;
         padding-bottom: $grid-cell-padding;
@@ -635,7 +623,7 @@
         left: 0;
         bottom: 0;
         right: 0;
-        content: '';
+        content: "";
       }
     }
 
@@ -751,7 +739,6 @@
         height: auto;
       }
     }
-
 
     &:focus {
       outline: 0;
@@ -935,7 +922,6 @@
         }
       }
     }
-
 
     .dx-#{$widget-name}-filter-row {
       .dx-editor-cell .dx-editor-with-menu {

@@ -1,4 +1,3 @@
-// TODO<Appointments>: remove this file after old impl is deleted
 import type { SafeAppointment, TargetedAppointment } from '../types';
 import type {
   AppointmentAgendaViewModel,

@@ -38,6 +38,6 @@ export const PublicTemplate = <TTemplateProps extends BasePropsType,>({
   };
 
   return (
-    templateFn?.(templatePropsWithComparer)
+    templateFn?.(templatePropsWithComparer) as JSX.Element
   );
 };

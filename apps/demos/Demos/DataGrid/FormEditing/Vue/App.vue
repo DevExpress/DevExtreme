@@ -64,7 +64,7 @@ import {
   DxEditing,
   DxLookup,
 } from 'devextreme-vue/data-grid';
-import 'devextreme-vue/text-area';
+import 'devextreme/ui/text_area';
 import { employees, states } from './data.ts';
 
 </script>

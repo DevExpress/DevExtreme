@@ -1,27 +1,21 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { DxCardViewModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxCardViewModule } from 'devextreme-angular';
+import 'devextreme/ui/select_box';
 import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
+  templateUrl: './app.component.html',
   imports: [
     DxCardViewModule,
-    DxSelectBoxModule,
   ],
 })
 export class AppComponent {

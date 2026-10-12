@@ -392,10 +392,10 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get selectedItem(): any {
+    get selectedItem(): any | null {
         return this._getOption('selectedItem');
     }
-    set selectedItem(value: any) {
+    set selectedItem(value: any | null) {
         this._setOption('selectedItem', value);
     }
 
@@ -767,7 +767,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedItemChange: EventEmitter<any>;
+    @Output() selectedItemChange: EventEmitter<any | null>;
 
     /**
     

@@ -263,9 +263,9 @@
   $calendar-cell-hover-border-color,
   $calendar-cell-range-border-radius,
   $calendar-range-cell-border-width,
-  $cell: '.dx-calendar-cell-in-range',
-  $startCell: '.dx-calendar-range-start-date',
-  $endCell: '.dx-calendar-range-end-date',
+  $cell: ".dx-calendar-cell-in-range",
+  $startCell: ".dx-calendar-range-start-date",
+  $endCell: ".dx-calendar-range-end-date",
 ) {
   #{$cell} {
     &#{$pseudo} {

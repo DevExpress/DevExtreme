@@ -4,4 +4,4 @@ QUnit.testStart(function() {
     document.getElementById('qunit-fixture').innerHTML = markup;
 });
 
-require('../DevExpress.ui.widgets.editors/textEditorParts/markup.tests.js');
+import '../DevExpress.ui.widgets.editors/textEditorParts/markup.tests.js';

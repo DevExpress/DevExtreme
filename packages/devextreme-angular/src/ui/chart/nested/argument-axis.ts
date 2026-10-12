@@ -109,10 +109,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get breaks(): Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[] {
+    get breaks(): Array<ScaleBreak> | undefined | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[] {
         return this._getOption('breaks');
     }
-    set breaks(value: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[]) {
+    set breaks(value: Array<ScaleBreak> | undefined | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[]) {
         this._setOption('breaks', value);
     }
 
@@ -197,10 +197,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get holidays(): Array<Date | string> | Array<number> {
+    get holidays(): Array<Date | string> | Array<number> | undefined {
         return this._getOption('holidays');
     }
-    set holidays(value: Array<Date | string> | Array<number>) {
+    set holidays(value: Array<Date | string> | Array<number> | undefined) {
         this._setOption('holidays', value);
     }
 
@@ -317,10 +317,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get placeholderSize(): number {
+    get placeholderSize(): null | number {
         return this._getOption('placeholderSize');
     }
-    set placeholderSize(value: number) {
+    set placeholderSize(value: null | number) {
         this._setOption('placeholderSize', value);
     }
 
@@ -333,10 +333,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get singleWorkdays(): Array<Date | string> | Array<number> {
+    get singleWorkdays(): Array<Date | string> | Array<number> | undefined {
         return this._getOption('singleWorkdays');
     }
-    set singleWorkdays(value: Array<Date | string> | Array<number>) {
+    set singleWorkdays(value: Array<Date | string> | Array<number> | undefined) {
         this._setOption('singleWorkdays', value);
     }
 

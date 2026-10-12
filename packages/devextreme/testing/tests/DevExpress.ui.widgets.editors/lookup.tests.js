@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import dataUtils from 'core/element_data';
 import config from 'core/config';
 import browser from 'core/utils/browser';
@@ -2511,12 +2511,22 @@ QUnit.module('popup options', {
         const lookup = $('#lookup').dxLookup({ }).dxLookup('instance');
         const dropDownOptionsAfterInit = { ... lookup.option('dropDownOptions') };
 
+        const normalizeOptions = (options) => {
+            const filteredEntries = Object.entries(options).filter(([key, value]) => {
+                return value !== undefined;
+            });
+            return Object.fromEntries(filteredEntries);
+        };
+
         lookup.open();
         lookup.option('dropDownOptions.width', 123);
 
         const { _cached_dropDownOptions } = lookup.option();
 
-        assert.deepEqual(_cached_dropDownOptions, { ...dropDownOptionsAfterInit, width: 123 }, 'updated part of dropDownOptions is cached in _cached_dropDownOptions');
+        assert.deepEqual(
+            normalizeOptions(_cached_dropDownOptions),
+            normalizeOptions({ ...dropDownOptionsAfterInit, width: 123 }),
+            'updated part of dropDownOptions is cached in _cached_dropDownOptions');
     });
 
     [
@@ -3940,6 +3950,62 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 }
+
+QUnit.module('screen reader announcements (T1334729)', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        this.instance = $('#lookup').dxLookup({
+            dataSource: [1, 2, 3],
+            searchTimeout: 0,
+            'dropDownOptions.animation': null,
+            opened: true
+        }).dxLookup('instance');
+
+        this.search = (value) => {
+            this.instance._searchBox.option('value', value);
+            this.clock.tick(0);
+        };
+
+        this.getA11yStatus = () => $(`.${LIST_CLASS}`).children('[role="status"]');
+        this.getItemsAnnouncement = (itemsCount) => `${messageLocalization.format('dxList-listAriaLabel')}: ${itemsCount}`;
+    },
+    afterEach: function() {
+        this.clock.restore();
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('list should have a single live region', function(assert) {
+        assert.strictEqual(this.getA11yStatus().length, 1);
+    });
+
+    QUnit.test('item count should be announced when the drop-down is opened', function(assert) {
+        assert.strictEqual(this.getA11yStatus().text(), this.getItemsAnnouncement(3));
+    });
+
+    QUnit.test('noDataText should be announced if search returns no items', function(assert) {
+        this.search('4');
+
+        assert.strictEqual(this.getA11yStatus().text(), messageLocalization.format('dxCollectionWidget-noDataText'));
+    });
+
+    QUnit.test('item count should be announced if search returns items', function(assert) {
+        this.search('1');
+
+        assert.strictEqual(this.getA11yStatus().text(), this.getItemsAnnouncement(1));
+    });
+
+    QUnit.test('live region should not be re-created on search', function(assert) {
+        const a11yStatusElement = this.getA11yStatus().get(0);
+
+        this.search('4');
+
+        assert.strictEqual(this.getA11yStatus().get(0), a11yStatusElement, 'the live region is the same element');
+        assert.strictEqual(a11yStatusElement.textContent, messageLocalization.format('dxCollectionWidget-noDataText'),
+            'the announcement is written into that element, otherwise screen readers do not announce it');
+    });
+});
 
 QUnit.module('default options', {
     beforeEach: function() {

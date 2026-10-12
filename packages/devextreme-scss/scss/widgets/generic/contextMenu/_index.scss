@@ -1,19 +1,14 @@
-@use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../menuBase/sizes" as *;
 @use "../menu/colors" as *;
 @use "../../base/contextMenu";
-
-// adduse
 @use "../overlay";
 @use "../menuBase" as *; // need as private
 
-
-$generic-menu-popup-border: 1px solid;
+$generic-menu-popup-border: 1px solid !default;
 
 .dx-context-menu {
   color: $menu-color;

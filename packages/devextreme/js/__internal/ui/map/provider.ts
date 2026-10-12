@@ -1,5 +1,4 @@
 import { addNamespace } from '@js/common/core/events/utils/index';
-import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isNumeric, isPlainObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
@@ -10,7 +9,7 @@ import type Map from './map';
 import type { MapProperties } from './map';
 import type { LocationOption, MarkerOptions, RouteOptions } from './provider.dynamic';
 
-class Provider {
+abstract class Provider {
   _mapWidget!: Map;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,29 +48,19 @@ class Provider {
     return Promise.resolve();
   }
 
-  updateDimensions(): void {
-    Class.abstract();
+  abstract updateDimensions(): Promise<unknown>;
+
+  abstract updateMapType(): Promise<unknown>;
+
+  updateDisabled(): Promise<unknown> {
+    return Promise.resolve();
   }
 
-  updateMapType(): void {
-    Class.abstract();
-  }
+  abstract updateBounds(): Promise<unknown>;
 
-  updateDisabled(): void {
-    Class.abstract();
-  }
+  abstract updateCenter(): Promise<unknown>;
 
-  updateBounds(): void {
-    Class.abstract();
-  }
-
-  updateCenter(): void {
-    Class.abstract();
-  }
-
-  updateZoom(): void {
-    Class.abstract();
-  }
+  abstract updateZoom(): Promise<unknown>;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateControls(markers: MarkerOptions[], routes: RouteOptions[]): Promise<unknown> {
@@ -105,9 +94,7 @@ class Provider {
     return Promise.resolve();
   }
 
-  adjustViewport(): void {
-    Class.abstract();
-  }
+  abstract adjustViewport(): Promise<unknown>;
 
   updateRoutes(
     routeOptionsToRemove: RouteOptions[],
@@ -136,9 +123,7 @@ class Provider {
     return Promise.resolve();
   }
 
-  clean(): void {
-    Class.abstract();
-  }
+  abstract clean(): Promise<unknown>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   map(): any {

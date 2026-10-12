@@ -1,7 +1,8 @@
 import { isDefined } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Item, UserData } from '../data_controller/m_data_controller';
+import type { ProcessedItem } from '../data_controller/types';
+import type { RawItemData } from '../data_source_adapter/types';
 import { AI_COLUMN_NAME, CLASSES } from './const';
 
 export const getAICommandColumnDefaultOptions = (): object => ({
@@ -13,24 +14,39 @@ export const getAICommandColumnDefaultOptions = (): object => ({
   minWidth: 120,
 });
 
-export const getDataFromRowItems = (items: Item[]): UserData[] => items
+export const getDataFromRowItems = (items: ProcessedItem[]): RawItemData[] => items
   .filter((row) => row.rowType === 'data')
   .map((row) => row.data);
 
 export const reduceDataCachedKeys = (
-  data: UserData[],
+  data: RawItemData[],
   cachedData: Record<PropertyKey, string>,
-  keyField: string,
+  getKey: (item: RawItemData) => PropertyKey,
 ): Record<PropertyKey, unknown> => {
   const newData: Record<PropertyKey, unknown> = { };
   for (const item of data) {
-    const key = item[keyField] as PropertyKey;
+    const key = getKey(item);
     if (!(key in cachedData)) {
       newData[key] = item;
     }
   }
 
   return newData;
+};
+
+export const isKeyMissingInData = (
+  data: RawItemData[],
+  keyField: string | string[] | ((data: RawItemData) => unknown),
+): boolean => {
+  if (typeof keyField === 'function') {
+    return data.some((item) => !isDefined(keyField(item)));
+  }
+
+  const keyFields = Array.isArray(keyField) ? keyField : [keyField];
+
+  return data.some(
+    (item) => keyFields.some((field) => !(field in item)),
+  );
 };
 
 export const isAIColumnAutoMode = (column: Column): boolean => column.type === 'ai' && (!column.ai?.mode || column.ai.mode === 'auto');

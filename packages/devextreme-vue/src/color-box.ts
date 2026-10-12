@@ -204,7 +204,7 @@ const componentConfig = {
     tabIndex: Number,
     text: String,
     validationError: {},
-    validationErrors: Array as PropType<Array<any>>,
+    validationErrors: Array as PropType<Array<any> | null>,
     validationMessageMode: String as PropType<ValidationMessageMode>,
     validationMessagePosition: String as PropType<Mode | Position>,
     validationStatus: String as PropType<ValidationStatus>,

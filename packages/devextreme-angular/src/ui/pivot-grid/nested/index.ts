@@ -5,6 +5,7 @@ export * from './field-panel-texts';
 export * from './field-panel';
 export * from './header-filter-texts';
 export * from './header-filter';
+export * from './indicator-options';
 export * from './load-panel';
 export * from './pivot-grid-texts';
 export * from './scrolling';

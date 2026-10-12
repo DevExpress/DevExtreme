@@ -159,10 +159,10 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get onItemClick(): ((e: ItemClickEvent) => void) {
+    get onItemClick(): ((e: ItemClickEvent) => void) | undefined {
         return this._getOption('onItemClick');
     }
-    set onItemClick(value: ((e: ItemClickEvent) => void)) {
+    set onItemClick(value: ((e: ItemClickEvent) => void) | undefined) {
         this._setOption('onItemClick', value);
     }
 
@@ -175,10 +175,10 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get onSelectionChanged(): ((e: SelectionChangedEvent) => void) {
+    get onSelectionChanged(): ((e: SelectionChangedEvent) => void) | undefined {
         return this._getOption('onSelectionChanged');
     }
-    set onSelectionChanged(value: ((e: SelectionChangedEvent) => void)) {
+    set onSelectionChanged(value: ((e: SelectionChangedEvent) => void) | undefined) {
         this._setOption('onSelectionChanged', value);
     }
 

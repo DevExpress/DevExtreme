@@ -105,10 +105,8 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
       pulledDownText: messageLocalization.format('dxScrollView-pulledDownText'),
       refreshingText: messageLocalization.format('dxScrollView-refreshingText'),
       reachBottomText: messageLocalization.format('dxScrollView-reachBottomText'),
-      // @ts-expect-error ts-error
-      onPullDown: null,
-      // @ts-expect-error ts-error
-      onReachBottom: null,
+      onPullDown: undefined,
+      onReachBottom: undefined,
       refreshStrategy: 'pullDown',
     };
   }
@@ -204,7 +202,6 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
       delay: 400,
       message: refreshingText,
       position: {
-        // @ts-expect-error ts-error
         of: this.$element(),
       },
     });

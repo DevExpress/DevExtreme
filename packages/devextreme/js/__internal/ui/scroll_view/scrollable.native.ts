@@ -47,7 +47,7 @@ class NativeStrategy<
   _hideScrollbarTimeout?: ReturnType<typeof setTimeout> | number;
 
   _createActionByOption!: (
-    optionName: keyof TProperties,
+    optionName: string,
     config?: ActionConfig,
   ) => (event?: ScrollEventArgs) => void;
 
@@ -176,7 +176,7 @@ class NativeStrategy<
   handleStop(): void {}
 
   _eachScrollbar(callback: (scrollbar: Scrollbar, direction: Orientation) => void): void {
-    each(this._scrollbars || {}, (direction, scrollbar) => {
+    each(this._scrollbars, (direction, scrollbar) => {
       callback(scrollbar, direction);
     });
   }

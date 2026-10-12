@@ -4,7 +4,7 @@ import '@ts/core/localization/currency';
 import 'globalize/currency';
 
 import config from '@js/core/config';
-import type { FormatConfig, NormalizedConfig } from '@ts/core/localization/number';
+import type { FormatConfig, LocalizationFormat, NormalizedConfig } from '@ts/core/localization/number';
 import numberLocalization from '@ts/core/localization/number';
 import openXmlCurrencyFormat from '@ts/core/localization/open_xml_currency_format';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -79,30 +79,29 @@ if (Globalize?.formatCurrency) {
     },
     format(
       value: string | number,
-      format: number | string | FormatConfig | Function | undefined,
+      format?: LocalizationFormat,
     ): string | number {
       if (typeof value !== 'number') {
         return value;
       }
 
-      // eslint-disable-next-line no-param-reassign
-      format = this._normalizeFormat(format) as FormatConfig;
+      const normalizedFormat = this._normalizeFormat(format) as FormatConfig;
 
-      if (format) {
-        if (format.currency === 'default') {
-          format.currency = config().defaultCurrency;
+      if (normalizedFormat) {
+        if (normalizedFormat.currency === 'default') {
+          normalizedFormat.currency = config().defaultCurrency;
         }
 
-        if (format.type === 'currency') {
+        if (normalizedFormat.type === 'currency') {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return this._formatNumber(value, this._parseNumberFormatString('currency'), format);
-        } if (!format.type && format.currency) {
-          return getFormatter(format.currency, format)(value);
+          return this._formatNumber(value, this._parseNumberFormatString('currency'), normalizedFormat);
+        } if (!normalizedFormat.type && normalizedFormat.currency) {
+          return getFormatter(normalizedFormat.currency, normalizedFormat)(value);
         }
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return this.callBase.apply(this, [value, format]);
+      return this.callBase.apply(this, [value, normalizedFormat]);
     },
     getCurrencySymbol(currency?: string): { symbol: string } {
       if (!currency) {
@@ -113,7 +112,7 @@ if (Globalize?.formatCurrency) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return Globalize.cldr.main(`numbers/currencies/${currency}`);
     },
-    getOpenXmlCurrencyFormat(currency: string): string | undefined {
+    getOpenXmlCurrencyFormat(currency?: string): string | undefined {
       const currencySymbol = this.getCurrencySymbol(currency).symbol;
       const accountingFormat = Globalize.cldr.main('numbers/currencyFormats-numberSystem-latn').accounting;
 

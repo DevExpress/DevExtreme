@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $filterbuilder-bg: $base-bg !default;
 
@@ -66,7 +63,6 @@ $filterbuilder-item-value-color: color.change($base-icon-color, $alpha: 0.24) !d
 $filterbuilder-item-value-hover-color: color.change($base-icon-color, $alpha: 0.32) !default;
 $filterbuilder-item-value-focus-color: $base-icon-color !default;
 $filterbuilder-menu-icon-color: $base-text-color !default;
-
 
 @if $mode == "light" {
   $filterbuilder-text-focus-color: #fff !default;

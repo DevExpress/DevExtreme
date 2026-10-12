@@ -13,7 +13,7 @@ interface OrderHistoryProps {
 }
 
 const OrderHistory = ({ productId }: OrderHistoryProps) => {
-  const [orderHistoryStore, setOrderHistoryStore] = useState<CustomStore | null>(null);
+  const [orderHistoryStore, setOrderHistoryStore] = useState<CustomStore | undefined>(undefined);
 
   useEffect(() => {
     if (productId) {

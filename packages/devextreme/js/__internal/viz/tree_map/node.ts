@@ -1,63 +1,97 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { extend as _extend } from '@js/core/utils/extend';
-
-function Node() { }
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const updateTile = [updateLeaf, updateGroup];
 
-_extend(Node.prototype, {
-  value: 0,
+class Node {
+  declare _id: number;
 
-  isNode() {
+  declare value: number;
+
+  declare parent: ThemeValue;
+
+  declare index: number;
+
+  declare data: ThemeValue;
+
+  declare label: ThemeValue;
+
+  declare proxy: ThemeValue;
+
+  declare code: number;
+
+  declare statesMap: Record<number, number>;
+
+  declare additionalStates: number[];
+
+  declare setState: (code: number, state: boolean) => void;
+
+  declare ctx: ThemeValue;
+
+  declare nodes?: Node[];
+
+  declare level: number;
+
+  declare color?: string;
+
+  declare tile: ThemeValue;
+
+  declare state: ThemeValue;
+
+  declare labelState: ThemeValue;
+
+  declare labelParams: ThemeValue;
+
+  isNode(): boolean {
     return !!(this.nodes && this.level < this.ctx.maxLevel);
-  },
+  }
 
-  isActive() {
+  isActive(): boolean {
     const { ctx } = this;
 
     return this.level >= ctx.minLevel && this.level <= ctx.maxLevel;
-  },
+  }
 
-  updateStyles() {
-    const that = this;
-    const isNode = Number(that.isNode());
+  updateStyles(): void {
+    const isNode = Number(this.isNode());
 
-    that.state = that._buildState(that.ctx.settings[isNode].state, !isNode && that.color && { fill: that.color });
-  },
+    this.state = this._buildState(this.ctx.settings[isNode].state, !isNode && this.color && { fill: this.color });
+  }
 
-  _buildState(state, extra) {
+  _buildState(state: ThemeValue, extra: ThemeValue): ThemeValue {
     const base = _extend({}, state);
 
     return extra ? _extend(base, extra) : base;
-  },
+  }
 
-  updateLabelStyle() {
+  updateLabelStyle(): void {
     const settings = this.ctx.settings[Number(this.isNode())];
 
     this.labelState = settings.labelState;
     this.labelParams = settings.labelParams;
-  },
+  }
 
-  _getState() {
+  _getState(): ThemeValue {
     return this.state;
-  },
+  }
 
-  applyState() {
+  applyState(): void {
     updateTile[Number(this.isNode())](this.tile, this._getState());
-  },
+  }
+}
+
+_extend(Node.prototype, {
+  value: 0,
 });
 
-function updateLeaf(content, attrs) {
+function updateLeaf(content: ThemeValue, attrs: ThemeValue): void {
   content.smartAttr(attrs);
 }
 
-function updateGroup(content, attrs) {
+function updateGroup(content: ThemeValue, attrs: ThemeValue): void {
   content.outer.attr({ stroke: attrs.stroke, 'stroke-width': attrs['stroke-width'], 'stroke-opacity': attrs['stroke-opacity'] });
   content.inner.smartAttr({ fill: attrs.fill, opacity: attrs.opacity, hatching: attrs.hatching });
 }

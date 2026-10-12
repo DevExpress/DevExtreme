@@ -1,4 +1,3 @@
-import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -34,7 +33,7 @@ interface KeysCache<TKey = CollectionItemKey> {
   [key: string]: unknown;
   keys?: TKey[];
 }
-class EditStrategy<
+abstract class EditStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,29 +52,15 @@ class EditStrategy<
     return items;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getIndexByItemData(value: TItem): CollectionItemIndex {
-    return Class.abstract();
-  }
+  abstract getIndexByItemData(value: TItem): CollectionItemIndex;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getItemDataByIndex(index: number): TItem {
-    return Class.abstract();
-  }
+  abstract getItemDataByIndex(index: number): TItem;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getKeysByItems(items: TItem[]): TKey[] {
-    return Class.abstract();
-  }
+  abstract getKeysByItems(items: TItem[]): TKey[];
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getItemsByKeys(keys: TKey[], items: TItem[] | undefined): TItem[] {
-    return Class.abstract();
-  }
+  abstract getItemsByKeys(keys: TKey[], items: TItem[] | undefined): TItem[];
 
-  itemsGetter(): TItem[] {
-    return Class.abstract();
-  }
+  abstract itemsGetter(): TItem[];
 
   getKeyByIndex(index: CollectionItemIndex): TKey {
     const resultIndex = this._denormalizeItemIndex(index);
@@ -98,10 +83,7 @@ class EditStrategy<
     this._cache = null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getIndexByKey(key: TKey): number {
-    return Class.abstract();
-  }
+  abstract getIndexByKey(key: TKey): number;
 
   getNormalizedIndex(
     value: CollectionItemIndex | Element | dxElementWrapper | TItem,
@@ -162,19 +144,13 @@ class EditStrategy<
     return domAdapter.isNode(el && isRenderer(el) ? (el as dxElementWrapper).get(0) : el);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  deleteItemAtIndex(index: number): void {
-    return Class.abstract();
-  }
+  abstract deleteItemAtIndex(index: number): void;
 
   itemPlacementFunc(movingIndex: number, destinationIndex: number): 'after' | 'before' {
     return this._itemsFromSameParent(movingIndex, destinationIndex) && movingIndex < destinationIndex ? 'after' : 'before';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  moveItemAtIndexToIndex(movingIndex: number, destinationIndex: number): void {
-    return Class.abstract();
-  }
+  abstract moveItemAtIndexToIndex(movingIndex: number, destinationIndex: number): void;
 
   _isNormalizedItemIndex(
     index: CollectionItemIndex | TItem,
@@ -182,38 +158,17 @@ class EditStrategy<
     return (typeof index === 'number') && Math.round(index) === index;
   }
 
-  _isItemIndex(
-    index: CollectionItemIndex | TItem,
-  ): index is CollectionItemIndex {
-    return Class.abstract();
-  }
+  abstract _isItemIndex(index: CollectionItemIndex | TItem): index is CollectionItemIndex;
 
-  _getNormalizedItemIndex(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    value: Element | dxElementWrapper,
-  ): number {
-    return Class.abstract();
-  }
+  abstract _getNormalizedItemIndex(value: Element | dxElementWrapper): number;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _normalizeItemIndex(index: CollectionItemIndex): number {
-    return Class.abstract();
-  }
+  abstract _normalizeItemIndex(index: CollectionItemIndex): number;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _denormalizeItemIndex(index: CollectionItemIndex): CollectionItemIndex {
-    return Class.abstract();
-  }
+  abstract _denormalizeItemIndex(index: CollectionItemIndex): CollectionItemIndex;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getItemByNormalizedIndex(index: CollectionItemIndex): dxElementWrapper {
-    return Class.abstract();
-  }
+  abstract _getItemByNormalizedIndex(index: CollectionItemIndex): dxElementWrapper;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _itemsFromSameParent(movingIndex: number, destinationIndex: number): boolean {
-    return Class.abstract();
-  }
+  abstract _itemsFromSameParent(movingIndex: number, destinationIndex: number): boolean;
 }
 
 export default EditStrategy;

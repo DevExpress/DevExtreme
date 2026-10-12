@@ -55,8 +55,10 @@ runManualTest('Chat', 'MessageEditing', (test) => {
 
     await testScreenshot(t, takeScreenshot, screenshotNames.previewShown);
 
+    await t.expect(textEditorInput.value).notEql('');
+
     await t
-      .typeText(textEditorInput, 'testing')
+      .typeText(textEditorInput, 'testing', { caretPos: 0 })
       .pressKey('enter');
 
     await testScreenshot(t, takeScreenshot, screenshotNames.messageEdited);

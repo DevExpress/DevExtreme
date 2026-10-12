@@ -52,7 +52,53 @@
       "type": "string",
       "description": "Separator between concatenated files (default: '\\n')",
       "default": "\n"
+    },
+    "additionalPasses": {
+      "type": "array",
+      "description": "Extra concatenation passes run after the primary output, in order (e.g. a derived output built from the primary). Each pass is resolved at run time.",
+      "items": { "$ref": "#/definitions/pass" }
+    },
+    "watch": {
+      "type": "boolean",
+      "description": "Watch the source files and rebuild all passes on changes.",
+      "default": false
+    },
+    "watchPaths": {
+      "type": "array",
+      "description": "Glob patterns to watch in watch mode (defaults to sourceFiles when omitted).",
+      "items": { "type": "string" }
     }
   },
-  "required": ["sourceFiles", "outputFile"]
+  "required": ["sourceFiles", "outputFile"],
+  "definitions": {
+    "pass": {
+      "type": "object",
+      "properties": {
+        "sourceFiles": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "outputFile": { "type": "string" },
+        "extractPattern": { "type": "string" },
+        "extractPatternFlags": { "type": "string" },
+        "header": { "type": "string" },
+        "footer": { "type": "string" },
+        "transforms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "find": { "type": "string" },
+              "replace": { "type": "string" },
+              "flags": { "type": "string" }
+            },
+            "required": ["find", "replace"]
+          }
+        },
+        "normalizeLineEndings": { "type": "boolean" },
+        "separator": { "type": "string" }
+      },
+      "required": ["sourceFiles", "outputFile"]
+    }
+  }
 }

@@ -5,10 +5,11 @@ import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
-import type { Controllers } from '@ts/grids/grid_core/m_types';
+import type { Controllers, Views } from '@ts/grids/grid_core/types';
 
 export interface DataGridInstance extends DataGrid {
   getController: <T extends keyof Controllers>(name: T) => Controllers[T];
+  getView: <T extends keyof Views>(name: T) => Views[T];
 }
 
 export const SELECTORS = {
@@ -69,3 +70,7 @@ export const flushAsync = async (): Promise<void> => {
   jest.runAllTimers();
   await Promise.resolve();
 };
+
+export const toPlainFilter = (value: unknown): unknown => (Array.isArray(value)
+  ? Array.from(value, toPlainFilter)
+  : value);

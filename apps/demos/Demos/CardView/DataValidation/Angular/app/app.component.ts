@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DxCardViewModule, DxTextAreaModule } from 'devextreme-angular';
+import { DxCardViewModule } from 'devextreme-angular';
+import 'devextreme/ui/text_area';
 import { lastValueFrom } from 'rxjs';
 import { Employee, Service } from './app.service';
 import 'anti-forgery';
@@ -10,19 +11,12 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
+  templateUrl: './app.component.html',
   providers: [Service],
   imports: [
     DxCardViewModule,
-    DxTextAreaModule,
   ],
 })
 export class AppComponent {

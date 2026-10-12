@@ -1,3 +1,3 @@
-import PolarChart from '../__internal/viz/m_polar_chart';
+import PolarChart from '../__internal/viz/polar_chart';
 
 export default PolarChart;

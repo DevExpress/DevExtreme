@@ -1,10 +1,7 @@
 @use "./mixins" as *;
 
-// adduse
-
-
-$pulldown-height: 50px;
-$pulldown-padding: 15px;
+$pulldown-height: 50px !default;
+$pulldown-padding: 15px !default;
 
 .dx-scrollable-native {
   &.dx-scrollable-native-generic {
@@ -194,7 +191,7 @@ $pulldown-padding: 15px;
   transform: translate(0, 0);
 
   &::before {
-    content: '';
+    content: "";
     display: inline-block;
     height: 100%;
     vertical-align: middle;

@@ -1,16 +1,12 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/radioButton/mixins" as *;
 @use "../radioGroup/colors" as *;
 @use "../../base/radioButton";
 
-// adduse
-
-$material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+$material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1) !default;
 
 @include dx-radiobutton-icon-mixin(
   $material-radiobutton-size,

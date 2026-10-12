@@ -6,3 +6,4 @@ export * from './common';
 export * from './test-utils';
 export * from './create-executor';
 export * from './glob-discovery';
+export * from './watch';

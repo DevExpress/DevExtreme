@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $menu-popup-bg: $base-bg !default;
 $menu-item-hover-bg: $base-hover-bg !default;
@@ -13,7 +10,6 @@ $menu-item-hover-bg: $base-hover-bg !default;
 */
 $menu-color: $base-text-color !default;
 $menu-item-expanded-color: $menu-color !default;
-
 
 /**
 * $name 20. Selected item background color
@@ -38,4 +34,3 @@ $menu-container-shadow-color: null !default;
   $menu-item-focused-selected-bg: color.change(#fff, $alpha: 0.14) !default;
   $menu-container-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 }
-

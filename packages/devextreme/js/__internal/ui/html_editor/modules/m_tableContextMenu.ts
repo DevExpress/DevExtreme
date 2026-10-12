@@ -23,7 +23,6 @@ let TableContextMenuModule = BaseModule;
 const localize = (name) => localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
 
 if (Quill) {
-  // @ts-expect-error
   TableContextMenuModule = class TableContextMenuModule extends BaseModule {
     quill: any;
 
@@ -42,11 +41,9 @@ if (Quill) {
     _targetElement: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
       this.enabled = !!options.enabled;
       this._quillContainer = this.editorInstance._getQuillContainer();
-      // @ts-expect-error
       this.addCleanCallback(this.prepareCleanCallback());
       this._formatHandlers = getFormatHandlers(this);
       this._tableFormats = getTableFormats(quill);
@@ -207,7 +204,6 @@ if (Quill) {
 
     option(option, value) {
       if (option === 'tableContextMenu') {
-        // @ts-expect-error
         this.handleOptionChangeValue(value);
         return;
       }

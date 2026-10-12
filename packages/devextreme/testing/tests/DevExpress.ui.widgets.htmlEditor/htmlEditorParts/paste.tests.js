@@ -37,6 +37,26 @@ const TEXT_WITH_DECORATION = '<span style=\'text-decoration: underline;\'>test1<
 
 const MS_INVALID_LIST_PARAGRAPH = '<p class=\'MsoListParagraphCxSpFirst\'><span>test<o:p></o:p></span></p>';
 
+const MS_BULLET_LIST_MARKER_GLUED_TO_TEXT = `<p class=MsoListParagraphCxSpFirst style='text-indent:-18.0pt;mso-list:l0 level1 lfo1'><![if !supportLists]><span
+lang=DE-CH style='font-family:Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=DE-CH>Test 1<o:p></o:p></span></p><p class=MsoListParagraphCxSpMiddle style='text-indent:-18.0pt;mso-list:l0 level1 lfo1'><![if !supportLists]><span
+lang=DE-CH style='font-family:Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=DE-CH>Test 2<o:p></o:p></span></p><p class=MsoListParagraphCxSpLast style='text-indent:-18.0pt;mso-list:l0 level1 lfo1'><![if !supportLists]><span
+lang=DE-CH style='font-family:Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=DE-CH>Test 3<o:p></o:p></span></p>`;
+
+const MS_ORDERED_LIST_MARKER_GLUED_TO_TEXT = `<p class=MsoListParagraphCxSpFirst style='text-indent:-18.0pt;mso-list:l1 level1 lfo2'><![if !supportLists]><span
+lang=DE-CH style='mso-bidi-font-family:Calibri'><span style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=DE-CH>Test<o:p></o:p></span></p><p class=MsoListParagraphCxSpMiddle style='text-indent:-18.0pt;mso-list:l1 level1 lfo2'><![if !supportLists]><span
+lang=DE-CH style='mso-bidi-font-family:Calibri'><span style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=DE-CH>Test<o:p></o:p></span></p><p class=MsoListParagraphCxSpMiddle style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l1 level2 lfo2'><![if !supportLists]><span
+lang=DE-CH style='mso-bidi-font-family:Calibri'><span style='mso-list:Ignore'>a.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=DE-CH>Test<o:p></o:p></span></p><p class=MsoListParagraphCxSpMiddle style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l1 level2 lfo2'><![if !supportLists]><span
+lang=DE-CH style='mso-bidi-font-family:Calibri'><span style='mso-list:Ignore'>b.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=DE-CH>Test<o:p></o:p></span></p><p class=MsoListParagraphCxSpLast style='margin-left:72.0pt;text-indent:-18.0pt;mso-list:l1 level2 lfo2'><![if !supportLists]><span
+lang=DE-CH style='mso-bidi-font-family:Calibri'><span style='mso-list:Ignore'>c.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=DE-CH>Test<o:p></o:p></span></p>`;
+
 const { module: testModule, test } = QUnit;
 
 export default function() {
@@ -90,6 +110,36 @@ export default function() {
                 .dxHtmlEditor('instance');
 
             const newDelta = instance._quillInstance.clipboard.convert({ html: MS_INVALID_LIST_PARAGRAPH });
+            instance._quillInstance.setContents(newDelta);
+        });
+
+        test('paste bullet list keeps item text when marker is glued to text (T1332302)', function(assert) {
+            const done = assert.async();
+            const instance = $('#htmlEditor')
+                .dxHtmlEditor({
+                    onValueChanged: ({ value }) => {
+                        assert.equal(value, '<ul><li>Test 1</li><li>Test 2</li><li>Test 3</li></ul>');
+                        done();
+                    }
+                })
+                .dxHtmlEditor('instance');
+
+            const newDelta = instance._quillInstance.clipboard.convert({ html: MS_BULLET_LIST_MARKER_GLUED_TO_TEXT });
+            instance._quillInstance.setContents(newDelta);
+        });
+
+        test('paste nested ordered list keeps item text when marker is glued to text (T1332302)', function(assert) {
+            const done = assert.async();
+            const instance = $('#htmlEditor')
+                .dxHtmlEditor({
+                    onValueChanged: ({ value }) => {
+                        assert.equal(value, '<ol><li>Test</li><li>Test<ol><li>Test</li><li>Test</li><li>Test</li></ol></li></ol>');
+                        done();
+                    }
+                })
+                .dxHtmlEditor('instance');
+
+            const newDelta = instance._quillInstance.clipboard.convert({ html: MS_ORDERED_LIST_MARKER_GLUED_TO_TEXT });
             instance._quillInstance.setContents(newDelta);
         });
     });

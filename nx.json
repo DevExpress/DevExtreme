@@ -2,6 +2,7 @@
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "neverConnectToCloud": true,
+  "cacheDirectory": ".nx/cache",
   "plugins": ["./packages/nx-infra-plugin/dist"],
   "namedInputs": {
     "metadataToolsCommonInputs": [
@@ -15,8 +16,7 @@
     ],
     "devextreme-build-config": [
       "{projectRoot}/build/**/*",
-      "{projectRoot}/webpack.config.js",
-      "{projectRoot}/gulpfile.js"
+      "{projectRoot}/webpack.config.js"
     ]
   },
   "targetDefaults": {

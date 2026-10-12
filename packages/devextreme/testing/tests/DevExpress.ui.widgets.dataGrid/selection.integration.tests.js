@@ -3,7 +3,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import pointerMock from '../../helpers/pointerMock.js';
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
@@ -55,7 +55,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         assert.notOk($secondRow.hasClass(DX_STATE_HOVER_CLASS), 'no hover class');
         assert.ok($secondCheckBox.length, 'checkbox');
-        assert.equal($secondCommandColumn.css('overflow'), 'hidden', 'command column\'s overflow');
+        assert.equal($secondCommandColumn.css('overflow'), 'visible', 'command column\'s overflow');
+        assert.strictEqual($secondCheckBox.css('display'), 'none', 'checkbox is hidden on a not hovered row');
     });
 
     // T808614
@@ -794,7 +795,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 100,
+            height: 130,
             dataSource: array,
             keyExpr: 'id',
             selection: {
@@ -846,7 +847,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 300 });
+        dataGrid.getScrollable().scrollTo({ y: 440 });
 
         $(dataGrid.getRowElement(1)).trigger('dxclick');
 
@@ -930,7 +931,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'first row selected');
 
         // act
-        dataGrid.getScrollable().scrollTo({ top: 2400 });
+        dataGrid.getScrollable().scrollTo({ top: 3450 });
         this.clock.tick(300);
         pointerMock($(dataGrid.getRowElement(0)).find('.dx-command-select .dx-checkbox-icon')).start({ shiftKey: true }).click(true);
         this.clock.tick(300);
@@ -1126,7 +1127,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = createDataGrid({
             dataSource: [{ field1: 1, field2: 2 }],
-            selection: { mode: 'multiple' }
+            selection: { mode: 'multiple', showCheckBoxesMode: 'onClick' }
         });
 
         this.clock.tick(10);

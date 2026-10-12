@@ -22,17 +22,18 @@ import type {
   PointerInteractionEvent,
 } from '@js/events';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-import { focusable as focusableSelector } from '@ts/core/utils/m_selectors';
+import { focusable as focusableSelector } from '@ts/core/utils/selectors';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 
 export const WIDGET_CLASS = 'dx-widget';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 export const ACTIVE_STATE_CLASS = 'dx-state-active';
 export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 export const HOVER_STATE_CLASS = 'dx-state-hover';
+export const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 export const EMPTY_ACTIVE_STATE_UNIT = '';
@@ -62,10 +63,14 @@ function setAttribute(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface WidgetProperties<TComponent = any> extends WidgetOptions<TComponent>, Omit<
+export interface WidgetProperties<TComponent = any> extends Omit<WidgetOptions<TComponent>, 'width' | 'height'>, Omit<
   DOMComponentProperties<TComponent>,
   keyof WidgetOptions<TComponent>
 > {
+  width?: DOMComponentProperties<TComponent>['width'];
+
+  height?: DOMComponentProperties<TComponent>['height'];
+
   useResizeObserver?: boolean;
   onKeyboardHandled?: (event: KeyboardKeyDownEvent) => void;
   isActive?: boolean;
@@ -117,25 +122,22 @@ class Widget<
   }
 
   _getDefaultOptions(): TProperties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._getDefaultOptions(), {
+    return {
+      ...super._getDefaultOptions(),
       hoveredElement: null,
       isActive: false,
       disabled: false,
       visible: true,
-      hint: undefined,
       activeStateEnabled: false,
-      onContentReady: null,
       hoverStateEnabled: false,
       focusStateEnabled: false,
       tabIndex: 0,
-      accessKey: undefined,
       onFocusIn: null,
       onFocusOut: null,
       onKeyboardHandled: null,
       ignoreParentReadOnly: false,
       useResizeObserver: true,
-    });
+    };
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
@@ -146,7 +148,7 @@ class Widget<
           const device = devices.real();
           const { platform } = device;
           const { version } = device;
-          return platform === 'ios' && compareVersions(version, '13.3') <= 0;
+          return platform === 'ios' && compareVersions(version ?? [], '13.3') <= 0;
         },
         options: {
           useResizeObserver: false,
@@ -179,7 +181,6 @@ class Widget<
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _bindInnerWidgetOptions(innerWidget, optionsContainer): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const syncOptions = (): void => this._options.silent(
       optionsContainer,
       extend({}, innerWidget.option()),

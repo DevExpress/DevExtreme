@@ -26,10 +26,10 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('activeStateEnabled', value);
     }
 
-    get buttons(): Array<TextBoxPredefinedButton | TextEditorButton | string> {
+    get buttons(): undefined | Array<TextBoxPredefinedButton | TextEditorButton | string> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<TextBoxPredefinedButton | TextEditorButton | string>) {
+    set buttons(value: undefined | Array<TextBoxPredefinedButton | TextEditorButton | string>) {
         this._setOption('buttons', value);
     }
 
@@ -138,10 +138,10 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('maskRules', value);
     }
 
-    get maxLength(): number | string {
+    get maxLength(): number | null | string {
         return this._getOption('maxLength');
     }
-    set maxLength(value: number | string) {
+    set maxLength(value: number | null | string) {
         this._setOption('maxLength', value);
     }
 
@@ -334,17 +334,17 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('useMaskedValue', value);
     }
 
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
-    get validationErrors(): Array<any> {
+    get validationErrors(): null | Array<any> {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: null | Array<any>) {
         this._setOption('validationErrors', value);
     }
 

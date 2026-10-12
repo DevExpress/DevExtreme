@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const MouseStrategy = require('common/core/events/pointer/mouse');
-const registerEvent = require('common/core/events/core/event_registrator');
-const nativePointerMock = require('../../../helpers/nativePointerMock.js');
-const special = require('../../../helpers/eventHelper.js').special;
+import $ from 'jquery';
+import MouseStrategy from 'common/core/events/pointer/mouse';
+import registerEvent from 'common/core/events/core/event_registrator';
+import nativePointerMock from '../../../helpers/nativePointerMock.js';
+import { special } from '../../../helpers/eventHelper.js';
 
 QUnit.module('mouse events', {
     beforeEach: function() {

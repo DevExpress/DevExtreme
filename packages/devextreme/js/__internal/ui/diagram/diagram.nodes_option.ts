@@ -1,19 +1,18 @@
+import type { Item } from '@js/ui/diagram';
+import type { ItemKey, ItemKeyGetter, ItemsGetter } from '@ts/ui/diagram/diagram.items_option';
 import ItemsOption from '@ts/ui/diagram/diagram.items_option';
 
 class NodesOption extends ItemsOption {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getKeyExpr(): any {
-    return this._diagramWidget._createOptionGetter('nodes.keyExpr');
+  _getKeyExpr(): ItemKeyGetter | undefined {
+    return this._diagramWidget._createOptionGetter<ItemKey>('nodes.keyExpr');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getItemsExpr(): any {
-    return this._diagramWidget._createOptionGetter('nodes.itemsExpr');
+  _getItemsExpr(): ItemsGetter | undefined {
+    return this._diagramWidget._createOptionGetter<Item[] | undefined>('nodes.itemsExpr');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getContainerChildrenExpr(): any {
-    return this._diagramWidget._createOptionGetter(
+  _getContainerChildrenExpr(): ItemsGetter | undefined {
+    return this._diagramWidget._createOptionGetter<Item[] | undefined>(
       'nodes.containerChildrenExpr',
     );
   }

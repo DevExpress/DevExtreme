@@ -286,6 +286,18 @@ describe('Multi-version license scenarios', () => {
     expect(findLatestDevExtremeVersion(lic)).toBe(versionId - 1);
   });
 
+  it('prefers closest licensed DevExtreme version when latest entry is trial-like/non-DevExtreme', () => {
+    const lic = {
+      products: [
+        createProductInfo(versionId + 10, ProductKind.Default), // trial-like
+        createProductInfo(versionId + 5, ProductKind.DXperienceWin), // non-trial, no DevExtreme
+        createProductInfo(versionId, ProductKind.DevExtremeHtmlJs), // closest licensed DevExtreme
+      ],
+    };
+
+    expect(findLatestDevExtremeVersion(lic)).toBe(versionId);
+  });
+
   it('returns undefined when no entry has DevExtremeHtmlJs', () => {
     const lic = {
       products: [

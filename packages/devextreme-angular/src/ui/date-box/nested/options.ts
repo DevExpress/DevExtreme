@@ -114,10 +114,10 @@ export class DxoDateBoxOptionsComponent extends NestedOption implements AfterVie
     }
 
     @Input()
-    get onClick(): ((e: ClickEvent) => void) {
+    get onClick(): ((e: ClickEvent) => void) | undefined {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: ClickEvent) => void)) {
+    set onClick(value: ((e: ClickEvent) => void) | undefined) {
         this._setOption('onClick', value);
     }
 

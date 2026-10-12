@@ -97,6 +97,7 @@ import type {
   ViewCellData,
 } from '../types';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import type { ResourceConfig } from '../utils/loader/types';
 import {
   getAppointmentGroupIndex,
   getSafeGroupValues,
@@ -280,8 +281,7 @@ export type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
 export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
 
 export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWorkSpace> {
-  newAppointments: boolean;
-  resources: ResourceLoader[];
+  resources?: ResourceConfig[];
   getResourceManager: () => ResourceManager;
   getFilteredItems: () => ListEntity[];
   noDataText: string;
@@ -652,7 +652,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       },
     };
 
-    return extend(super._supportedKeys(), supportedKeys) as SupportedKeys;
+    return extend(super._supportedKeys(), supportedKeys);
   }
 
   private isRTL(): boolean {
@@ -799,6 +799,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _focusTarget(): dxElementWrapper {
     return this.$element();
+  }
+
+  _renderFocusTarget(): void {
+    this._focusTarget().attr('tabIndex', -1);
   }
 
   protected isVerticalGroupedWorkSpace(): boolean { // TODO move to the Model
@@ -1375,10 +1379,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private attachDragEvents(element: dxElementWrapper): void {
-    if (this.option().newAppointments) {
-      return;
-    }
-
     this.detachDragEvents(element);
 
     const onDragEnter = (e: { target: Element }): void => {
@@ -1731,7 +1731,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       allDay: cellData.allDay,
     };
 
-    return extend(true, {}, normalizedCellData) as NormalizedCellData;
+    return extend(true, {}, normalizedCellData);
   }
 
   private getSelectedCellsData(): NormalizedCellData[] {
@@ -2507,8 +2507,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     const point = this.getPointFromDragTarget($dragTarget);
+    return this.getCellFromPoint(point.x, point.y);
+  }
+
+  public getCellFromPoint(x: number, y: number): dxElementWrapper | null {
     // @ts-expect-error
-    const elements = domAdapter.elementsFromPoint(point.x, point.y) as Element[];
+    const elements = domAdapter.elementsFromPoint(x, y) as Element[];
 
     const cell = elements.find((element) => element.classList.contains('dx-scheduler-date-table-cell')
       || element.classList.contains('dx-scheduler-all-day-table-cell'));
@@ -2550,7 +2554,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   // DnD should be removed from work-space
   // ------------
 
-  // TODO<Appointments>: dragBehavior when old impl is removed
   initDragBehavior(scheduler: { element: () => Element }): void {
     if (!this.dragBehavior && scheduler) {
       this.dragBehavior = new AppointmentDragBehavior(scheduler);
@@ -3444,7 +3447,6 @@ interface DragBehaviorOptions {
   filter?: string;
 }
 
-// TODO<Appointments>: remove dragBehavior when old impl is removed
 const createDragBehaviorConfig = (
   container: dxElementWrapper,
   rootElement: dxElementWrapper,

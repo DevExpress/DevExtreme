@@ -1,13 +1,9 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/accordion";
-
-// adduse
 
 .dx-accordion {
   background-color: $accordion-background-color;

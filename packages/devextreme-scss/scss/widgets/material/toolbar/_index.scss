@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -12,8 +11,6 @@
 @use "../checkBox/sizes" as *;
 @use "mixins" as *;
 @use "../../base/toolbar";
-
-// adduse
 @use "../dropDownMenu";
 
 .dx-toolbar {
@@ -206,4 +203,3 @@
 .dx-toolbar .dx-tab {
   padding: 4px;
 }
-

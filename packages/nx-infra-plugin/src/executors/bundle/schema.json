@@ -37,6 +37,11 @@
       "description": "Enable eval-source-map devtool in debug mode",
       "default": true
     },
+    "watch": {
+      "type": "boolean",
+      "description": "Keep webpack running in watch mode until SIGINT/SIGTERM",
+      "default": false
+    },
     "applyLicenseHeaders": {
       "type": "object",
       "description": "Optional post-step that prepends license headers to bundle output files",

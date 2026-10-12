@@ -46,10 +46,10 @@ export class GanttExportHelper {
     };
   }
 
-  getTreeListColCount() {
+  getTreeListColCount(): number {
     const headerView = this._getHeaderView();
-    const widths = headerView.getColumnWidths().filter((w) => w > 0);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    const widths: number[] = headerView.getColumnWidths().filter((w) => w > 0);
+
     return widths.length;
   }
 

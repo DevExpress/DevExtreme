@@ -22,7 +22,7 @@ $('#test-container').css({ width: '600px', height: '400px' });
 /** Create a mocked renderer for TreeMap tests */
 export function createRenderer() {
     const renderer = new Renderer();
-    rendererModule.Renderer = function() { return renderer; };
+    rendererModule.DEBUG_set_Renderer(function() { return renderer; });
     return renderer;
 };
 

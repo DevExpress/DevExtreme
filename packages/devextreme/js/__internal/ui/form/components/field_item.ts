@@ -18,7 +18,7 @@ import {
 import type Form from '@ts/ui/form/form';
 import type LayoutManager from '@ts/ui/form/form.layout_manager';
 import type { FieldItemOptions } from '@ts/ui/form/form.layout_manager.utils';
-import Validator from '@ts/ui/m_validator';
+import Validator from '@ts/ui/validator';
 
 export const FLEX_LAYOUT_CLASS = 'dx-flex-layout';
 export const FIELD_ITEM_OPTIONAL_CLASS = 'dx-field-item-optional';
@@ -213,7 +213,6 @@ export function renderFieldItem({
     template.render({
       container: getPublicElement($fieldEditorContainer),
       model: getTemplateData(item, editorOptions, formOrLayoutManager),
-      // @ts-expect-error ts-error
       onRendered(): void {
         const $validationTarget = getValidationTarget($fieldEditorContainer);
         const validationTargetInstance = tryGetValidationTargetInstance($validationTarget);

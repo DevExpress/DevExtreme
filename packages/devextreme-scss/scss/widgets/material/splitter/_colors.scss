@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 10. Icon color
@@ -28,20 +25,19 @@ $splitter-resize-handle-bg-hover: null !default;
 */
 $splitter-resize-handle-bg-focused: $base-accent !default;
 
-@if $mode == 'light' {
+@if $mode == "light" {
   $splitter-resize-handle-color: $base-text-color !default;
 
   $splitter-resize-handle-bg: $base-hover-bg !default;
   $splitter-resize-handle-bg-hover: color.change($base-inverted-bg, $alpha: 0.12) !default;
 }
 
-@if $mode == 'dark' {
+@if $mode == "dark" {
   $splitter-resize-handle-color: color.change($base-text-color, $alpha: 0.87) !default;
 
   $splitter-resize-handle-bg: color.change($base-text-color, $alpha: 0.04) !default;
   $splitter-resize-handle-bg-hover: color.change($base-text-color, $alpha: 0.12) !default;
 }
-
 
 /**
 * $name 20. Hover state icon color

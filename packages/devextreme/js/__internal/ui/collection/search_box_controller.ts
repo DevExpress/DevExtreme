@@ -93,7 +93,6 @@ class SearchBoxController {
       value: searchValue,
       valueChangeEvent: 'input',
       inputAttr: { 'aria-label': placeholder },
-      // @ts-expect-error ts-error
       onValueChanged: (e: ValueChangedEvent): void => {
         this._onValueChanged(e, searchTimeout);
       },

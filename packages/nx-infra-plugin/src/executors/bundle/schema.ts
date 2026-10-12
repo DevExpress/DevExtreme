@@ -18,5 +18,6 @@ export interface BundleExecutorSchema {
   mode: 'debug' | 'production';
   webpackConfigPath?: string;
   sourceMap?: boolean;
+  watch?: boolean;
   applyLicenseHeaders?: BundleLicenseHeadersOption;
 }

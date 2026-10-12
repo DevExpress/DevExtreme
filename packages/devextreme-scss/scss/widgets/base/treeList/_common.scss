@@ -1,8 +1,5 @@
 @use "../mixins" as *;
 @use "../gridBase" as *;
-
-// adduse
-
 @include grid-base(treelist);
 
 .dx-treelist-container {

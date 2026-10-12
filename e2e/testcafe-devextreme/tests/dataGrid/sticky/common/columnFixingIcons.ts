@@ -9,9 +9,6 @@ fixture.disablePageReloads`Column Fixing`.page(
   url(__dirname, '../../../container.html'),
 );
 
-// visual: generic.light
-// visual: material.blue
-// visual: fluent.blue
 test('Fixed columns: Check context menu items', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

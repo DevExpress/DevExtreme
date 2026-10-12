@@ -1,8 +1,6 @@
 @use "./mixins" as *;
 @use "sass:selector";
 
-// adduse
-
 .dx-tagbox {
   .dx-texteditor-input {
     width: auto;
@@ -40,7 +38,6 @@
     }
   }
 }
-
 
 .dx-tag {
   max-width: calc(100% - 1px);

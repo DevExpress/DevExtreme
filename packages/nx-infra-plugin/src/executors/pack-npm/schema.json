@@ -1,6 +1,21 @@
 {
   "$schema": "https://json-schema.org/schema",
   "title": "Pack Npm Executor Schema",
-  "description": "Run pnpm pack for npm distribution",
-  "type": "object"
+  "description": "Run pnpm pack for npm distribution, optionally set version and copy tarballs",
+  "type": "object",
+  "properties": {
+    "packageDir": {
+      "type": "string",
+      "description": "Directory to pack (relative to the project root). Defaults to the project root."
+    },
+    "destination": {
+      "type": "string",
+      "description": "Optional destination directory for *.tgz files (relative to the project root)."
+    },
+    "setVersionFrom": {
+      "type": "string",
+      "description": "Optional path to a package.json (relative to the project root) whose version is applied before packing."
+    }
+  },
+  "additionalProperties": false
 }

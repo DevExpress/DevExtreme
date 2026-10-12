@@ -232,13 +232,11 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
 export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     /**
      * @docid dxLoadPanelOptions.animation.hide
-     * @default null
      * @public
      */
     hide?: AnimationConfig;
     /**
      * @docid dxLoadPanelOptions.animation.show
-     * @default null
      * @public
      */
     show?: AnimationConfig;

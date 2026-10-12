@@ -8,6 +8,8 @@ import { WidgetName } from '../types';
 import SelectBox from '../selectBox';
 
 const CLASS = {
+  page: 'dx-page',
+
   paginationPageSize: 'dx-page-size',
   paginationPageSizes: 'dx-page-sizes',
   paginationPrevNavButton: 'dx-prev-button',
@@ -21,6 +23,7 @@ const CLASS = {
 
   overlayContent: 'dx-overlay-content',
   focusedState: 'dx-state-focused',
+  selection: 'dx-selection',
 };
 
 export default class Pagination extends Widget {
@@ -62,5 +65,17 @@ export default class Pagination extends Widget {
 
   hasFocusedState(): Promise<boolean> {
     return this.element.hasClass(CLASS.focusedState);
+  }
+
+  getSelectedPages(): Selector {
+    return this.element.find(`.${CLASS.page}.${CLASS.selection}`);
+  }
+
+  getPageByIndex(index: number): Selector {
+    return this.element.find(`.${CLASS.page}`).nth(index);
+  }
+
+  getPagesByText(text: string): Selector {
+    return this.element.find(`.${CLASS.page}`).withExactText(text);
   }
 }

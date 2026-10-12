@@ -109,7 +109,7 @@ function onMessageEntered(event: DxChatTypes.MessageEnteredEvent): void {
 
 </script>
 
-<style scoped>
+<style>
 #app {
   min-width: 720px;
   display: flex;

@@ -1,6 +1,6 @@
 export interface DomAdapter {
   querySelectorAll: (element, selector) => any;
-  elementMatches: (element, selector) => any;
+  elementMatches: (element, selector) => boolean;
   getActiveElement: (element?: HTMLElement | null) => HTMLElement;
   getDocument: () => Document;
   getDocumentElement: () => HTMLDocument & {
@@ -14,7 +14,7 @@ export interface DomAdapter {
   getHead: () => any;
   listen: (element, event, callback, options?) => any;
   getReadyState: () => DocumentReadyState;
-  isNode: (node: unknown) => boolean;
+  isNode: (node: unknown) => node is Node;
   isDocument: (element: any) => boolean;
   isDocumentFragment: (element: any) => boolean;
   getBody: () => HTMLBodyElement;

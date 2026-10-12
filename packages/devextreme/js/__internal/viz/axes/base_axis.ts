@@ -16,24 +16,22 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import dateUtils from '@js/core/utils/date';
-import { Deferred, when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import { adjust } from '@js/core/utils/math';
+import formatHelper from '@ts/core/format_helper';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { Deferred, when } from '@ts/core/utils/m_deferred';
+import { extend } from '@ts/core/utils/m_extend';
+import { adjust, multiplyInExponentialForm } from '@ts/core/utils/m_math';
 import {
-  isDefined, isFunction, isPlainObject, type,
-} from '@js/core/utils/type';
-import formatHelper from '@js/format_helper';
+  isDate, isDefined, isFunction, isPlainObject, type,
+} from '@ts/core/utils/m_type';
 import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import createConstantLine from '@ts/viz/axes/constant_line';
@@ -44,6 +42,8 @@ import { tick } from '@ts/viz/axes/tick';
 import { tickGenerator } from '@ts/viz/axes/tick_generator';
 import xyMethods from '@ts/viz/axes/xy_axes';
 import { getParser } from '@ts/viz/components/parse_utils';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Bounds } from '@ts/viz/core/types';
 
 import {
   adjustVisualRange,
@@ -57,8 +57,102 @@ import {
   rotateBBox,
   valueOf,
 } from '../core/utils';
+import type { RangeData, RangeInstance } from '../translators/range';
 import { Range } from '../translators/range';
+import type { Translator2DInstance, Translator2DOptions } from '../translators/translator2d';
 import { Translator2D } from '../translators/translator2d';
+
+type IncidentOccurred = (errorId: string, args?: ThemeValue[]) => void;
+
+type VisualRangeSetter = (axis: ThemeValue, range: ThemeValue) => void;
+
+type TicksGenerator = (
+  tickInterval: ThemeValue,
+  skipTickGeneration: boolean,
+  min: ThemeValue,
+  max: ThemeValue,
+  breaks?: ThemeValue[],
+) => ThemeValue;
+
+interface AxisRenderSettings {
+  renderer: ThemeValue;
+  incidentOccurred?: IncidentOccurred;
+  eventTrigger?: (name: string, args: ThemeValue) => void;
+  stripsGroup?: ThemeValue;
+  stripLabelAxesGroup?: ThemeValue;
+  labelsAxesGroup?: ThemeValue;
+  constantLinesGroup?: ThemeValue;
+  scaleBreaksGroup?: ThemeValue;
+  axesContainerGroup?: ThemeValue;
+  gridGroup?: ThemeValue;
+  widgetClass?: string;
+  axisClass?: string;
+  axisType: string;
+  drawingType: string;
+  isArgumentAxis?: boolean;
+  getTemplate?: (template: ThemeValue) => ThemeValue;
+}
+
+interface StripPosition {
+  from: number;
+  to: number;
+  outOfCanvas?: boolean;
+}
+
+interface LabelTranslation {
+  translateX: number;
+  translateY: number;
+}
+
+interface ConstantLineGroups {
+  inside: ThemeValue;
+  outside1: ThemeValue;
+  left: ThemeValue;
+  top: ThemeValue;
+  outside2: ThemeValue;
+  right: ThemeValue;
+  bottom: ThemeValue;
+  remove: () => void;
+  clear: () => void;
+}
+
+interface LabelFormatObject {
+  value: ThemeValue;
+  valueText: string;
+  min: ThemeValue;
+  max: ThemeValue;
+  point?: ThemeValue;
+}
+
+interface OrthogonalPositions {
+  start: number;
+  end: number;
+  center?: number;
+}
+
+interface ValueMargins {
+  startPadding: number;
+  endPadding: number;
+  minValue?: ThemeValue;
+  maxValue?: ThemeValue;
+  interval?: ThemeValue;
+  isSpacedMargin?: boolean;
+}
+
+interface CorrectedValuesToZero {
+  start: number | null;
+  end: number | null;
+  correctedMin?: number;
+  correctedMax?: number;
+}
+
+interface ZoomResults {
+  isPrevented: boolean;
+  skipEventRising?: boolean;
+  range: ThemeValue;
+}
+
+type AxisInstance = InstanceType<typeof Axis>;
 
 const convertTicksToValues = constants.convertTicksToValues;
 const _math = Math;
@@ -69,6 +163,12 @@ const _isArray = Array.isArray;
 
 const DEFAULT_AXIS_LABEL_SPACING = 5;
 const MAX_GRID_BORDER_ADHENSION = 4;
+
+const PANNING_CORRECTION_ITERATION_COUNT = 5;
+const PANNING_CORRECTION_PRECISION = 1e-4;
+
+const ZOOM_FACTOR_PRECISION = 2;
+const ZOOM_FACTOR_MULTIPLIER = 10 ** ZOOM_FACTOR_PRECISION;
 
 const TOP = constants.top;
 const BOTTOM = constants.bottom;
@@ -94,7 +194,14 @@ const dateIntervals = {
   week: 604800000,
 };
 
-function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIsEmpty, adjustDivisionFactor, { allowNegatives, linearThreshold }) {
+function getTickGenerator(
+  options: ThemeValue,
+  incidentOccurred: IncidentOccurred,
+  skipTickGeneration: boolean | undefined,
+  rangeIsEmpty: boolean,
+  adjustDivisionFactor: (value: number) => number,
+  { allowNegatives, linearThreshold }: { allowNegatives?: boolean; linearThreshold?: number },
+): ThemeValue {
   return tickGenerator({
     axisType: options.type,
     dataType: options.dataType,
@@ -123,7 +230,7 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIs
   });
 }
 
-function createMajorTick(axis, renderer, skippedCategory) {
+function createMajorTick(axis: AxisInstance, renderer: ThemeValue, skippedCategory: ThemeValue): ThemeValue {
   const options = axis.getOptions();
 
   return tick(
@@ -136,7 +243,7 @@ function createMajorTick(axis, renderer, skippedCategory) {
   );
 }
 
-function createMinorTick(axis, renderer) {
+function createMinorTick(axis: AxisInstance, renderer: ThemeValue): ThemeValue {
   const options = axis.getOptions();
 
   return tick(
@@ -147,7 +254,7 @@ function createMinorTick(axis, renderer) {
   );
 }
 
-function createBoundaryTick(axis, renderer, isFirst) {
+function createBoundaryTick(axis: AxisInstance, renderer: ThemeValue, isFirst: boolean): ThemeValue {
   const options = axis.getOptions();
 
   return tick(
@@ -161,31 +268,31 @@ function createBoundaryTick(axis, renderer, isFirst) {
   );
 }
 
-function callAction(elements, action, actionArgument1?, actionArgument2?) {
+function callAction(elements: ThemeValue[] | null | undefined, action: string, actionArgument1?: ThemeValue, actionArgument2?: ThemeValue): void {
   (elements || []).forEach((e) => e[action](actionArgument1, actionArgument2));
 }
 
-function initTickCoords(ticks) {
+function initTickCoords(ticks: ThemeValue[]): void {
   callAction(ticks, 'initCoords');
 }
 
-function drawTickMarks(ticks, options) {
+function drawTickMarks(ticks: ThemeValue[], options: ThemeValue): void {
   callAction(ticks, 'drawMark', options);
 }
 
-function drawGrids(ticks, drawLine) {
+function drawGrids(ticks: ThemeValue[], drawLine: ThemeValue): void {
   callAction(ticks, 'drawGrid', drawLine);
 }
 
-function updateTicksPosition(ticks, options, animate?) {
+function updateTicksPosition(ticks: ThemeValue[], options: ThemeValue, animate?: boolean): void {
   callAction(ticks, 'updateTickPosition', options, animate);
 }
 
-function updateGridsPosition(ticks, animate) {
+function updateGridsPosition(ticks: ThemeValue[], animate?: boolean): void {
   callAction(ticks, 'updateGridPosition', animate);
 }
 
-function cleanUpInvalidTicks(ticks) {
+function cleanUpInvalidTicks(ticks: ThemeValue[]): void {
   let i = ticks.length - 1;
   for (i; i >= 0; i--) {
     if (!removeInvalidTick(ticks, i)) {
@@ -201,7 +308,7 @@ function cleanUpInvalidTicks(ticks) {
   }
 }
 
-function removeInvalidTick(ticks, i) {
+function removeInvalidTick(ticks: ThemeValue[], i: number): boolean {
   if (ticks[i].coords.x === null || ticks[i].coords.y === null) {
     ticks.splice(i, 1);
     return true;
@@ -209,7 +316,7 @@ function removeInvalidTick(ticks, i) {
   return false;
 }
 
-function validateAxisOptions(options) {
+function validateAxisOptions(options: ThemeValue): void {
   const labelOptions = options.label;
   let position = options.position;
   const defaultPosition = options.isHorizontal ? BOTTOM : LEFT;
@@ -254,12 +361,12 @@ function validateAxisOptions(options) {
   options.valueType && (options.valueType = options.valueType.toLowerCase());
 }
 
-function getOptimalAngle(boxes, labelOpt) {
+function getOptimalAngle(boxes: ThemeValue[], labelOpt: ThemeValue): number {
   const angle = _math.asin((boxes[0].height + labelOpt.minSpacing) / (boxes[1].x - boxes[0].x)) * 180 / _math.PI;
   return angle < 45 ? -45 : -90;
 }
 
-function updateLabels(ticks, step, func?) {
+function updateLabels(ticks: ThemeValue[], step: number, func?: (tick: ThemeValue, index: number) => void): void {
   ticks.forEach((tick, index) => {
     if (tick.getContentContainer()) {
       if (index % step !== 0) {
@@ -271,7 +378,7 @@ function updateLabels(ticks, step, func?) {
   });
 }
 
-function getZoomBoundValue(optionValue, dataValue) {
+function getZoomBoundValue(optionValue: ThemeValue, dataValue: ThemeValue): ThemeValue {
   if (optionValue === undefined) {
     return dataValue;
   } else if (optionValue === null) {
@@ -281,7 +388,13 @@ function getZoomBoundValue(optionValue, dataValue) {
   }
 }
 
-function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, minTickInterval) {
+function configureGenerator(
+  options: ThemeValue,
+  axisDivisionFactor: number | undefined,
+  viewPort: RangeInstance,
+  screenDelta: number,
+  minTickInterval: ThemeValue,
+): TicksGenerator {
   const tickGeneratorOptions = extend({}, options, {
     endOnTick: true,
     axisDivisionFactor,
@@ -309,43 +422,262 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
   };
 }
 
-function getConstantLineSharpDirection(coord, axisCanvas) {
+function getConstantLineSharpDirection(coord: number, axisCanvas: { start: number; end: number }): number {
   return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
 
-export const Axis = function (renderSettings) {
-  const that = this;
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Axis = class Axis {
+  declare _renderer: ThemeValue;
 
-  that._renderer = renderSettings.renderer;
-  that._incidentOccurred = renderSettings.incidentOccurred;
-  that._eventTrigger = renderSettings.eventTrigger;
+  declare _incidentOccurred: ThemeValue;
 
-  that._stripsGroup = renderSettings.stripsGroup;
-  that._stripLabelAxesGroup = renderSettings.stripLabelAxesGroup;
-  that._labelsAxesGroup = renderSettings.labelsAxesGroup;
-  that._constantLinesGroup = renderSettings.constantLinesGroup;
-  that._scaleBreaksGroup = renderSettings.scaleBreaksGroup;
-  that._axesContainerGroup = renderSettings.axesContainerGroup;
-  that._gridContainerGroup = renderSettings.gridGroup;
-  that._axisCssPrefix = `${renderSettings.widgetClass}-${renderSettings.axisClass ? `${renderSettings.axisClass}-` : ''}`;
+  declare _eventTrigger: ThemeValue;
 
-  that._setType(renderSettings.axisType, renderSettings.drawingType);
-  that._createAxisGroups();
-  that._translator = that._createTranslator();
-  that.isArgumentAxis = renderSettings.isArgumentAxis;
-  that._viewport = {};
-  that._prevDataInfo = {};
+  declare _stripsGroup: ThemeValue;
 
-  that._firstDrawing = true;
+  declare _stripLabelAxesGroup: ThemeValue;
 
-  that._initRange = {};
-  that._getTemplate = renderSettings.getTemplate;
-};
+  declare _labelsAxesGroup: ThemeValue;
 
-Axis.prototype = {
-  constructor: Axis,
+  declare _constantLinesGroup: ThemeValue;
 
-  _drawAxis() {
+  declare _scaleBreaksGroup: ThemeValue;
+
+  declare _axesContainerGroup: ThemeValue;
+
+  declare _gridContainerGroup: ThemeValue;
+
+  declare _axisCssPrefix: string;
+
+  declare _translator: Translator2DInstance;
+
+  declare isArgumentAxis?: boolean;
+
+  declare _viewport: ThemeValue;
+
+  declare _prevDataInfo: { isEmpty?: boolean; containsConstantLine?: boolean };
+
+  declare _firstDrawing: boolean;
+
+  declare _initRange: { startValue?: ThemeValue; endValue?: ThemeValue };
+
+  declare _getTemplate: ThemeValue;
+
+  declare _axisGroup: ThemeValue;
+
+  declare _axisStripGroup: ThemeValue;
+
+  declare _axisGridGroup: ThemeValue;
+
+  declare _axisElementsGroup: ThemeValue;
+
+  declare _axisLineGroup: ThemeValue;
+
+  declare _axisTitleGroup: ThemeValue;
+
+  declare _axisConstantLineGroups: ThemeValue;
+
+  declare _axisStripLabelGroup: ThemeValue;
+
+  declare _axisBreaksGroup: ThemeValue;
+
+  declare _axisElement: ThemeValue;
+
+  declare _options: ThemeValue;
+
+  declare _initTypes: { type?: string; argumentType?: string; valueType?: string };
+
+  declare _isHorizontal: boolean;
+
+  declare pane?: string;
+
+  declare name?: string;
+
+  declare priority?: number;
+
+  declare isVirtual?: boolean;
+
+  declare _hasLabelFormat: boolean;
+
+  declare _textOptions: ThemeValue;
+
+  declare _textFontStyles: ThemeValue;
+
+  declare _tickOffset: number;
+
+  declare _strips: ThemeValue;
+
+  declare _title: ThemeValue;
+
+  declare _outsideConstantLines: ThemeValue[];
+
+  declare _insideConstantLines: ThemeValue[];
+
+  declare _majorTicks: ThemeValue;
+
+  declare _minorTicks: ThemeValue;
+
+  declare _boundaryTicks: ThemeValue[];
+
+  declare _ticksToRemove: ThemeValue;
+
+  declare _dateMarkers: ThemeValue[];
+
+  declare _canvas: ThemeValue;
+
+  declare _orthogonalPositions: ThemeValue;
+
+  declare _axisPosition: number;
+
+  declare _axisShift?: number;
+
+  declare _constantLabelOffset: number;
+
+  declare _seriesData: RangeInstance;
+
+  declare _series: ThemeValue[];
+
+  declare _lastVisualRangeUpdateMode?: string;
+
+  declare _storedZoomEndParams: ThemeValue;
+
+  declare _tickInterval: ThemeValue;
+
+  declare _minorTickInterval: ThemeValue;
+
+  declare _estimatedTickInterval: ThemeValue;
+
+  declare _aggregationInterval: ThemeValue;
+
+  declare _initialBreaks: ThemeValue[];
+
+  declare _isSynchronized: boolean;
+
+  declare _marginOptions?: ThemeValue;
+
+  declare _resetApplyingAnimation: boolean;
+
+  declare _templatesRendered: ThemeValue;
+
+  declare _drawn: boolean;
+
+  declare borderOptions: ThemeValue;
+
+  declare parser: (value: ThemeValue) => ThemeValue;
+
+  declare _boundaryTicksVisibility: { min?: boolean; max?: boolean };
+
+  declare _getTranslatedCoord: (value: ThemeValue, offset?: number) => number | null;
+
+  declare _createAxisElement: () => ThemeValue;
+
+  declare _updateAxisElementPosition: () => void;
+
+  declare _checkAlignmentConstantLineLabels: (labelOptions: ThemeValue) => void;
+
+  declare _getConstantLineLabelsCoords: (value: number, labelOptions: ThemeValue) => { x: number; y: number };
+
+  declare _getAdjustedStripLabelCoords: (strip: ThemeValue) => LabelTranslation;
+
+  declare _getMaxLabelHeight: (boxes: ThemeValue[], spacing: number) => number;
+
+  declare _getStick: () => boolean;
+
+  declare customPositionIsBoundary: () => boolean;
+
+  declare getRadius?: () => number;
+
+  declare getOrthogonalAxis: () => ThemeValue;
+
+  declare getCustomPosition: (position?: ThemeValue) => number;
+
+  declare getCustomBoundaryPosition: (position?: ThemeValue) => ThemeValue;
+
+  declare resolveOverlappingForCustomPositioning: (oppositeAxes: ThemeValue[]) => void;
+
+  declare _disposeBreaksGroup: () => void;
+
+  declare _measureTitle: () => void;
+
+  declare _updateLabelsPosition: () => void;
+
+  declare getMarkerTrackers: () => ThemeValue;
+
+  declare _drawDateMarkers: () => ThemeValue[] | undefined;
+
+  declare _adjustDateMarkers: (offset: number) => number;
+
+  declare coordsIn: (x: number, y: number) => boolean;
+
+  declare areCoordsOutsideAxis: (coords: ThemeValue) => boolean;
+
+  declare _getSkippedCategory: (ticks: ThemeValue[]) => ThemeValue;
+
+  declare _initAxisPositions: () => void;
+
+  declare _drawTitle: () => void;
+
+  declare _updateTitleCoords: () => void;
+
+  declare _adjustConstantLineLabels: (constantLines: ThemeValue[]) => number;
+
+  declare _adjustTitle: (offset: number) => void;
+
+  declare _checkTitleOverflow: (titleElement?: ThemeValue) => void;
+
+  declare getSpiderTicks: () => ThemeValue[];
+
+  declare setSpiderTicks: (ticks: ThemeValue[]) => void;
+
+  declare _checkBoundedLabelsOverlapping: (majorTicks: ThemeValue[], boxes: ThemeValue[], mode: string) => void;
+
+  declare _checkShiftedLabels: (majorTicks: ThemeValue[], boxes: ThemeValue[], minSpacing: number, alignment: string) => void;
+
+  declare drawScaleBreaks: (customCanvas?: ThemeValue) => void;
+
+  declare _visualRange: VisualRangeSetter;
+
+  declare _rotateConstantLine: (line: ThemeValue, value: number) => void;
+
+  declare _getTickMarkPoints: (coords: ThemeValue, length: number, options?: ThemeValue) => number[];
+
+  declare _validateOverlappingMode: (mode: string, displayMode?: string) => string;
+
+  declare _getStep: (boxes: ThemeValue[], rotationAngle?: number) => number;
+
+  declare _validateDisplayMode: (mode: string) => string;
+
+  declare shift: (margins: ThemeValue) => void;
+
+  constructor(renderSettings: AxisRenderSettings) {
+    this._renderer = renderSettings.renderer;
+    this._incidentOccurred = renderSettings.incidentOccurred;
+    this._eventTrigger = renderSettings.eventTrigger;
+
+    this._stripsGroup = renderSettings.stripsGroup;
+    this._stripLabelAxesGroup = renderSettings.stripLabelAxesGroup;
+    this._labelsAxesGroup = renderSettings.labelsAxesGroup;
+    this._constantLinesGroup = renderSettings.constantLinesGroup;
+    this._scaleBreaksGroup = renderSettings.scaleBreaksGroup;
+    this._axesContainerGroup = renderSettings.axesContainerGroup;
+    this._gridContainerGroup = renderSettings.gridGroup;
+    this._axisCssPrefix = `${renderSettings.widgetClass}-${renderSettings.axisClass ? `${renderSettings.axisClass}-` : ''}`;
+
+    this._setType(renderSettings.axisType, renderSettings.drawingType);
+    this._createAxisGroups();
+    this._translator = this._createTranslator();
+    this.isArgumentAxis = renderSettings.isArgumentAxis;
+    this._viewport = {};
+    this._prevDataInfo = {};
+
+    this._firstDrawing = true;
+
+    this._initRange = {};
+    this._getTemplate = renderSettings.getTemplate;
+  }
+
+  _drawAxis(): void {
     const options = this._options;
 
     if (!options.visible) {
@@ -358,53 +690,45 @@ Axis.prototype = {
     this._axisElement.attr({ 'stroke-width': options.width, stroke: options.color, 'stroke-opacity': options.opacity })
       .sharp(this._getSharpParam(true), this.getAxisSharpDirection())
       .append(this._axisLineGroup);
-  },
+  }
 
-  _createPathElement(points, attr, sharpDirection) {
+  _createPathElement(points: number[], attr: ThemeValue, sharpDirection?: number): ThemeValue {
     return this.sharp(this._renderer.path(points, 'line').attr(attr), sharpDirection);
-  },
+  }
 
-  sharp(svgElement, sharpDirection = 1) {
+  sharp(svgElement: ThemeValue, sharpDirection = 1): ThemeValue {
     return svgElement.sharp(this._getSharpParam(), sharpDirection);
-  },
+  }
 
-  customPositionIsAvailable() {
+  customPositionIsAvailable(): boolean {
     return false;
-  },
+  }
 
-  getOrthogonalAxis: _noop,
-
-  getCustomPosition: _noop,
-
-  getCustomBoundaryPosition: _noop,
-
-  resolveOverlappingForCustomPositioning: _noop,
-
-  hasNonBoundaryPosition() {
+  hasNonBoundaryPosition(): boolean {
     return false;
-  },
+  }
 
-  customPositionIsBoundaryOrthogonalAxis() {
+  customPositionIsBoundaryOrthogonalAxis(): boolean {
     return false;
-  },
+  }
 
-  getResolvedBoundaryPosition() {
+  getResolvedBoundaryPosition(): string {
     return this.getOptions().position;
-  },
+  }
 
-  getAxisSharpDirection() {
+  getAxisSharpDirection(): number {
     const position = this.getResolvedBoundaryPosition();
     return this.hasNonBoundaryPosition() || position !== BOTTOM && position !== RIGHT ? 1 : -1;
-  },
+  }
 
-  getSharpDirectionByCoords(coords) {
+  getSharpDirectionByCoords(coords: ThemeValue): number {
     const canvas = this._getCanvasStartEnd();
     const maxCoord = Math.max(canvas.start, canvas.end);
 
     return this.getRadius ? 0 : maxCoord !== coords[this._isHorizontal ? 'x' : 'y'] ? 1 : -1;
-  },
+  }
 
-  _getGridLineDrawer() {
+  _getGridLineDrawer(): (tick: ThemeValue, gridStyle: ThemeValue) => ThemeValue {
     const that = this;
 
     return function (tick, gridStyle) {
@@ -415,21 +739,20 @@ Axis.prototype = {
       }
       return null;
     };
-  },
+  }
 
-  _getGridPoints(coords) {
-    const that = this;
+  _getGridPoints(coords: ThemeValue): { points: number[] | null } {
     const isHorizontal = this._isHorizontal;
     const tickPositionField = isHorizontal ? 'x' : 'y';
     const orthogonalPositions = this._orthogonalPositions;
     const positionFrom = orthogonalPositions.start;
     const positionTo = orthogonalPositions.end;
 
-    const borderOptions = that.borderOptions;
+    const borderOptions = this.borderOptions;
 
     const canvasStart = isHorizontal ? LEFT : TOP;
     const canvasEnd = isHorizontal ? RIGHT : BOTTOM;
-    const axisCanvas = that.getCanvas();
+    const axisCanvas = this.getCanvas();
     const canvas = {
       left: axisCanvas.left,
       right: axisCanvas.width - axisCanvas.right,
@@ -441,7 +764,7 @@ Axis.prototype = {
     const minDelta = MAX_GRID_BORDER_ADHENSION + firstBorderLinePosition;
     const maxDelta = lastBorderLinePosition - MAX_GRID_BORDER_ADHENSION;
 
-    if (that.areCoordsOutsideAxis(coords)
+    if (this.areCoordsOutsideAxis(coords)
             || coords[tickPositionField] === undefined
             || (coords[tickPositionField] < minDelta || coords[tickPositionField] > maxDelta)) {
       return { points: null };
@@ -452,9 +775,9 @@ Axis.prototype = {
         ? coords[tickPositionField] !== null ? [coords[tickPositionField], positionFrom, coords[tickPositionField], positionTo] : null
         : coords[tickPositionField] !== null ? [positionFrom, coords[tickPositionField], positionTo, coords[tickPositionField]] : null,
     };
-  },
+  }
 
-  _getConstantLinePos(parsedValue, canvasStart, canvasEnd) {
+  _getConstantLinePos(parsedValue: ThemeValue, canvasStart: number, canvasEnd: number): number | undefined {
     const value = this._getTranslatedCoord(parsedValue);
 
     if (!isDefined(value) || value < _min(canvasStart, canvasEnd) || value > _max(canvasStart, canvasEnd)) {
@@ -462,43 +785,42 @@ Axis.prototype = {
     }
 
     return value;
-  },
+  }
 
-  _getConstantLineGraphicAttributes(value) {
+  _getConstantLineGraphicAttributes(value: number): { points: number[] } {
     const positionFrom = this._orthogonalPositions.start;
     const positionTo = this._orthogonalPositions.end;
 
     return {
       points: this._isHorizontal ? [value, positionFrom, value, positionTo] : [positionFrom, value, positionTo, value],
     };
-  },
+  }
 
-  _createConstantLine(value, attr) {
+  _createConstantLine(value: number, attr: ThemeValue): ThemeValue {
     return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr, getConstantLineSharpDirection(value, this._getCanvasStartEnd()));
-  },
+  }
 
-  _drawConstantLineLabelText(text, x, y, { font, cssClass }, group) {
+  _drawConstantLineLabelText(text: string, x: number, y: number, { font, cssClass }: ThemeValue, group: ThemeValue): ThemeValue {
     return this._renderer.text(text, x, y)
       .css(patchFontOptions(extend({}, this._options.label.font, font)))
       .attr({ align: 'center', class: cssClass })
       .append(group);
-  },
+  }
 
-  _drawConstantLineLabels(parsedValue, lineLabelOptions, value, group) {
-    const that = this;
+  _drawConstantLineLabels(parsedValue: ThemeValue, lineLabelOptions: ThemeValue, value: number, group: ThemeValue): ThemeValue {
     let text = lineLabelOptions.text;
-    const options = that._options;
+    const options = this._options;
     const labelOptions = options.label;
 
-    that._checkAlignmentConstantLineLabels(lineLabelOptions);
+    this._checkAlignmentConstantLineLabels(lineLabelOptions);
 
-    text = text ?? that.formatLabel(parsedValue, labelOptions);
-    const coords = that._getConstantLineLabelsCoords(value, lineLabelOptions);
+    text = text ?? this.formatLabel(parsedValue, labelOptions);
+    const coords = this._getConstantLineLabelsCoords(value, lineLabelOptions);
 
-    return that._drawConstantLineLabelText(text, coords.x, coords.y, lineLabelOptions, group);
-  },
+    return this._drawConstantLineLabelText(text, coords.x, coords.y, lineLabelOptions, group);
+  }
 
-  _getStripPos(startValue, endValue, canvasStart, canvasEnd, range) {
+  _getStripPos(startValue: ThemeValue, endValue: ThemeValue, canvasStart: number, canvasEnd: number, range: ThemeValue): StripPosition {
     const isContinuous = !!(range.minVisible || range.maxVisible);
     const categories = (range.categories || []).reduce((result, cat) => {
       result.push(cat.valueOf());
@@ -541,17 +863,16 @@ Axis.prototype = {
       end = canvasEnd;
     }
 
-    const stripPosition = start < end ? { from: start, to: end } : { from: end, to: start };
+    const stripPosition: StripPosition = start < end ? { from: start, to: end } : { from: end, to: start };
     const visibleArea = this.getVisibleArea();
 
     if (stripPosition.from <= visibleArea[0] && stripPosition.to <= visibleArea[0] || stripPosition.from >= visibleArea[1] && stripPosition.to >= visibleArea[1]) {
-      // @ts-expect-error
       stripPosition.outOfCanvas = true;
     }
     return stripPosition;
-  },
+  }
 
-  _getStripGraphicAttributes(fromPoint, toPoint) {
+  _getStripGraphicAttributes(fromPoint: number, toPoint: number): { x: number; y: number; width: number; height: number } {
     let x;
     let y;
     let width;
@@ -578,26 +899,23 @@ Axis.prototype = {
       width,
       height,
     };
-  },
+  }
 
-  _createStrip(attrs) {
+  _createStrip(attrs: ThemeValue): ThemeValue {
     return this._renderer.rect(attrs.x, attrs.y, attrs.width, attrs.height);
-  },
+  }
 
-  _adjustStripLabels() {
-    const that = this;
-
+  _adjustStripLabels(): void {
     this._strips.forEach((strip) => {
       if (strip.label) {
-        strip.label.attr(that._getAdjustedStripLabelCoords(strip));
+        strip.label.attr(this._getAdjustedStripLabelCoords(strip));
       }
     });
-  },
+  }
 
-  _adjustLabelsCoord(offset, maxWidth, checkCanvas) {
-    const that = this;
-    const getContainerAttrs = (tick) => this._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas);
-    that._majorTicks.forEach((tick) => {
+  _adjustLabelsCoord(offset: number, maxWidth: number, checkCanvas?: boolean): void {
+    const getContainerAttrs = (tick: ThemeValue): LabelTranslation => this._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas);
+    this._majorTicks.forEach((tick) => {
       if (tick.label) {
         tick.updateMultilineTextAlignment();
         tick.label.attr(getContainerAttrs(tick));
@@ -605,13 +923,12 @@ Axis.prototype = {
         tick.templateContainer && tick.templateContainer.attr(getContainerAttrs(tick));
       }
     });
-  },
+  }
 
-  _adjustLabels(offset) {
-    const that = this;
-    const options = that.getOptions();
+  _adjustLabels(offset: number): number {
+    const options = this.getOptions();
     const positionsAreConsistent = options.position === options.label.position;
-    const maxSize = that._majorTicks.reduce((size, tick) => {
+    const maxSize = this._majorTicks.reduce((size, tick) => {
       if (!tick.getContentContainer()) return size;
       const bBox = tick.labelRotationAngle ? rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
       return {
@@ -620,31 +937,32 @@ Axis.prototype = {
         offset: _max(size.offset || 0, tick.labelOffset || 0),
       };
     }, {});
-    const additionalOffset = positionsAreConsistent ? that._isHorizontal ? maxSize.height : maxSize.width : 0;
+    const additionalOffset = positionsAreConsistent ? this._isHorizontal ? maxSize.height : maxSize.width : 0;
 
-    that._adjustLabelsCoord(offset, maxSize.width);
+    this._adjustLabelsCoord(offset, maxSize.width);
 
-    return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + (positionsAreConsistent ? maxSize.offset : 0);
-  },
+    return offset + additionalOffset + (additionalOffset && this._options.label.indentFromAxis) + (positionsAreConsistent ? maxSize.offset : 0);
+  }
 
-  _getLabelAdjustedCoord(tick, offset, maxWidth) {
+  _getLabelAdjustedCoord(tick: ThemeValue, offset: number, maxWidth: number, checkCanvas?: boolean): LabelTranslation;
+
+  _getLabelAdjustedCoord(tick: ThemeValue, offset: number, maxWidth: number): LabelTranslation {
     offset = offset || 0;
-    const that = this;
-    const options = that._options;
+    const options = this._options;
     const templateBox = tick.templateContainer && tick.templateContainer.getBBox();
     const box = templateBox || rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
     const textAlign = tick.labelAlignment || options.label.alignment;
-    const isDiscrete = that._options.type === 'discrete';
+    const isDiscrete = this._options.type === 'discrete';
     const isFlatLabel = tick.labelRotationAngle % 90 === 0;
     const indentFromAxis = options.label.indentFromAxis;
     const labelPosition = options.label.position;
-    const axisPosition = that._axisPosition;
+    const axisPosition = this._axisPosition;
     const labelCoords = tick.labelCoords;
     const labelX = labelCoords.x;
     let translateX;
     let translateY;
 
-    if (that._isHorizontal) {
+    if (this._isHorizontal) {
       if (labelPosition === BOTTOM) {
         translateY = axisPosition + indentFromAxis - box.y + offset;
       } else {
@@ -685,12 +1003,11 @@ Axis.prototype = {
       translateX,
       translateY,
     };
-  },
+  }
 
-  _createAxisConstantLineGroups() {
-    const that = this;
-    const renderer = that._renderer;
-    const classSelector = that._axisCssPrefix;
+  _createAxisConstantLineGroups(): ConstantLineGroups {
+    const renderer = this._renderer;
+    const classSelector = this._axisCssPrefix;
     const constantLinesClass = `${classSelector}constant-lines`;
 
     const insideGroup = renderer.g().attr({ class: constantLinesClass });
@@ -705,67 +1022,64 @@ Axis.prototype = {
       outside2: outsideGroup2,
       right: outsideGroup2,
       bottom: outsideGroup2,
-      remove() {
+      remove(): void {
         this.inside.remove();
         this.outside1.remove();
         this.outside2.remove();
       },
-      clear() {
+      clear(): void {
         this.inside.clear();
         this.outside1.clear();
         this.outside2.clear();
       },
     };
-  },
+  }
 
-  _createAxisGroups() {
-    const that = this;
-    const renderer = that._renderer;
-    const classSelector = that._axisCssPrefix;
+  _createAxisGroups(): void {
+    const renderer = this._renderer;
+    const classSelector = this._axisCssPrefix;
 
-    that._axisGroup = renderer.g().attr({ class: `${classSelector}axis` }).enableLinks();
-    that._axisStripGroup = renderer.g().attr({ class: `${classSelector}strips` });
-    that._axisGridGroup = renderer.g().attr({ class: `${classSelector}grid` });
-    that._axisElementsGroup = renderer.g().attr({ class: `${classSelector}elements` });
-    that._axisLineGroup = renderer.g().attr({ class: `${classSelector}line` }).linkOn(that._axisGroup, 'axisLine').linkAppend();
-    that._axisTitleGroup = renderer.g().attr({ class: `${classSelector}title` }).append(that._axisGroup);
+    this._axisGroup = renderer.g().attr({ class: `${classSelector}axis` }).enableLinks();
+    this._axisStripGroup = renderer.g().attr({ class: `${classSelector}strips` });
+    this._axisGridGroup = renderer.g().attr({ class: `${classSelector}grid` });
+    this._axisElementsGroup = renderer.g().attr({ class: `${classSelector}elements` });
+    this._axisLineGroup = renderer.g().attr({ class: `${classSelector}line` }).linkOn(this._axisGroup, 'axisLine').linkAppend();
+    this._axisTitleGroup = renderer.g().attr({ class: `${classSelector}title` }).append(this._axisGroup);
 
-    that._axisConstantLineGroups = {
-      above: that._createAxisConstantLineGroups(),
-      under: that._createAxisConstantLineGroups(),
+    this._axisConstantLineGroups = {
+      above: this._createAxisConstantLineGroups(),
+      under: this._createAxisConstantLineGroups(),
     };
 
-    that._axisStripLabelGroup = renderer.g().attr({ class: `${classSelector}axis-labels` });
-  },
+    this._axisStripLabelGroup = renderer.g().attr({ class: `${classSelector}axis-labels` });
+  }
 
-  _clearAxisGroups() {
-    const that = this;
+  _clearAxisGroups(): void {
+    this._axisGroup.remove();
+    this._axisStripGroup.remove();
+    this._axisStripLabelGroup.remove();
+    this._axisConstantLineGroups.above.remove();
+    this._axisConstantLineGroups.under.remove();
+    this._axisGridGroup.remove();
 
-    that._axisGroup.remove();
-    that._axisStripGroup.remove();
-    that._axisStripLabelGroup.remove();
-    that._axisConstantLineGroups.above.remove();
-    that._axisConstantLineGroups.under.remove();
-    that._axisGridGroup.remove();
-
-    that._axisTitleGroup.clear();
-    if (!that._options.label.template || !that.isRendered()) { // for react async templates
-      that._axisElementsGroup.remove();
-      that._axisElementsGroup.clear();
+    this._axisTitleGroup.clear();
+    if (!this._options.label.template || !this.isRendered()) { // for react async templates
+      this._axisElementsGroup.remove();
+      this._axisElementsGroup.clear();
     }
 
-    that._axisLineGroup && that._axisLineGroup.clear();
-    that._axisStripGroup && that._axisStripGroup.clear();
-    that._axisGridGroup && that._axisGridGroup.clear();
-    that._axisConstantLineGroups.above.clear();
-    that._axisConstantLineGroups.under.clear();
-    that._axisStripLabelGroup && that._axisStripLabelGroup.clear();
-  },
+    this._axisLineGroup && this._axisLineGroup.clear();
+    this._axisStripGroup && this._axisStripGroup.clear();
+    this._axisGridGroup && this._axisGridGroup.clear();
+    this._axisConstantLineGroups.above.clear();
+    this._axisConstantLineGroups.under.clear();
+    this._axisStripLabelGroup && this._axisStripLabelGroup.clear();
+  }
 
-  _getLabelFormatObject(value, labelOptions, range, point, tickInterval, ticks) {
+  _getLabelFormatObject(value: ThemeValue, labelOptions: ThemeValue, range?: ThemeValue, point?: ThemeValue, tickInterval?: ThemeValue, ticks?: ThemeValue[]): LabelFormatObject {
     range = range || this._getViewportRange();
 
-    const formatObject = {
+    const formatObject: LabelFormatObject = {
       value,
       valueText: _format(value, {
         labelOptions,
@@ -785,54 +1099,53 @@ Axis.prototype = {
 
     // for crosshair's customizeText
     if (point) {
-      // @ts-expect-error
       formatObject.point = point;
     }
 
     return formatObject;
-  },
+  }
 
-  formatLabel(value, labelOptions, range, point, tickInterval, ticks) {
+  formatLabel(value: ThemeValue, labelOptions: ThemeValue, range?: ThemeValue, point?: ThemeValue, tickInterval?: ThemeValue, ticks?: ThemeValue[]): string {
     const formatObject = this._getLabelFormatObject(value, labelOptions, range, point, tickInterval, ticks);
 
     return isFunction(labelOptions.customizeText) ? labelOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText;
-  },
+  }
 
-  formatHint(value, labelOptions, range) {
+  formatHint(value: ThemeValue, labelOptions: ThemeValue, range?: ThemeValue): string | undefined {
     const formatObject = this._getLabelFormatObject(value, labelOptions, range);
 
     return isFunction(labelOptions.customizeHint) ? labelOptions.customizeHint.call(formatObject, formatObject) : undefined;
-  },
+  }
 
-  formatRange(startValue, endValue, interval, argumentFormat) {
+  formatRange(startValue: ThemeValue, endValue: ThemeValue, interval: ThemeValue, argumentFormat: ThemeValue): string {
     return formatRange({
       startValue, endValue, tickInterval: interval, argumentFormat, axisOptions: this.getOptions(),
     });
-  },
+  }
 
-  _setTickOffset() {
+  _setTickOffset(): void {
     const options = this._options;
     const discreteAxisDivisionMode = options.discreteAxisDivisionMode;
     this._tickOffset = +(discreteAxisDivisionMode !== 'crossLabels' || !discreteAxisDivisionMode);
-  },
+  }
 
   // T1068023,T948359
-  aggregatedPointBetweenTicks() {
+  aggregatedPointBetweenTicks(): boolean {
     return this._options.aggregatedPointsPosition === 'crossTicks';
-  },
+  }
 
-  resetApplyingAnimation(isFirstDrawing) {
+  resetApplyingAnimation(isFirstDrawing?: boolean): void {
     this._resetApplyingAnimation = true;
     if (isFirstDrawing) {
       this._firstDrawing = true;
     }
-  },
+  }
 
-  isFirstDrawing() {
+  isFirstDrawing(): boolean {
     return this._firstDrawing;
-  },
+  }
 
-  getMargins() {
+  getMargins(): Bounds {
     const that = this;
     const {
       position, offset, customPosition, placeholderSize, grid, tick, crosshairMargin,
@@ -853,7 +1166,7 @@ Axis.prototype = {
       that._axisLineGroup,
     ]
       .map((group) => group && group.getBBox())
-      .concat((function (group) {
+      .concat((function (group: ThemeValue): ThemeValue {
         const box = group && group.getBBox();
 
         if (!box || box.isEmpty) {
@@ -897,19 +1210,17 @@ Axis.prototype = {
     }
 
     return margins;
-  },
+  }
 
-  validateUnit(unit, idError, parameters) {
-    const that = this;
-    unit = that.parser(unit);
+  validateUnit(unit: ThemeValue, idError?: string, parameters?: string): ThemeValue {
+    unit = this.parser(unit);
     if (unit === undefined && idError) {
-      that._incidentOccurred(idError, [parameters]);
+      this._incidentOccurred(idError, [parameters]);
     }
     return unit;
-  },
+  }
 
-  _setType(axisType, drawingType) {
-    const that = this;
+  _setType(axisType: string, drawingType: string): void {
     let axisTypeMethods;
 
     switch (axisType) {
@@ -921,66 +1232,64 @@ Axis.prototype = {
         break;
     }
 
-    extend(that, axisTypeMethods[drawingType]);
-  },
+    extend(this, axisTypeMethods[drawingType]);
+  }
 
-  _getSharpParam() {
+  _getSharpParam(opposite?: boolean): boolean;
+
+  _getSharpParam(): boolean {
     return true;
-  },
-
-  _disposeBreaksGroup: _noop,
+  }
 
   // public
-  dispose() {
-    const that = this;
+  dispose(): void {
+    [this._axisElementsGroup, this._axisStripGroup, this._axisGroup].forEach((g) => { g.dispose(); });
 
-    [that._axisElementsGroup, that._axisStripGroup, that._axisGroup].forEach((g) => { g.dispose(); });
+    this._strips = this._title = null;
 
-    that._strips = that._title = null;
+    this._axisStripGroup = this._axisConstantLineGroups = this._axisStripLabelGroup = this._axisBreaksGroup = null;
+    this._axisLineGroup = this._axisElementsGroup = this._axisGridGroup = null;
+    this._axisGroup = this._axisTitleGroup = null;
+    this._axesContainerGroup = this._stripsGroup = this._constantLinesGroup = this._labelsAxesGroup = null;
 
-    that._axisStripGroup = that._axisConstantLineGroups = that._axisStripLabelGroup = that._axisBreaksGroup = null;
-    that._axisLineGroup = that._axisElementsGroup = that._axisGridGroup = null;
-    that._axisGroup = that._axisTitleGroup = null;
-    that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = that._labelsAxesGroup = null;
+    this._renderer = this._options = this._textOptions = this._textFontStyles = null;
+    // @ts-expect-error the disposed axis drops its translator
+    this._translator = null;
+    this._majorTicks = this._minorTicks = null;
+    this._disposeBreaksGroup();
+    this._templatesRendered && this._templatesRendered.reject();
+  }
 
-    that._renderer = that._options = that._textOptions = that._textFontStyles = null;
-    that._translator = null;
-    that._majorTicks = that._minorTicks = null;
-    that._disposeBreaksGroup();
-    that._templatesRendered && that._templatesRendered.reject();
-  },
-
-  getOptions() {
+  getOptions(): ThemeValue {
     return this._options;
-  },
+  }
 
-  setPane(pane) {
+  setPane(pane: string): void {
     this.pane = pane;
     this._options.pane = pane;
-  },
+  }
 
-  setTypes(type, axisType, typeSelector) {
+  setTypes(type: string, axisType: string, typeSelector: string): void {
     this._options.type = type || this._options.type;
     this._options[typeSelector] = axisType || this._options[typeSelector];
 
     this._updateTranslator();
-  },
+  }
 
-  resetTypes(typeSelector) {
+  resetTypes(typeSelector: string): void {
     this._options.type = this._initTypes.type;
     this._options[typeSelector] = this._initTypes[typeSelector];
-  },
+  }
 
-  getTranslator() {
+  getTranslator(): Translator2DInstance {
     return this._translator;
-  },
+  }
 
-  updateOptions(options) {
-    const that = this;
+  updateOptions(options: ThemeValue): void {
     const labelOpt = options.label;
 
     validateAxisOptions(options);
-    that._options = options;
+    this._options = options;
 
     options.tick = options.tick || {};
     options.minorTick = options.minorTick || {};
@@ -989,41 +1298,41 @@ Axis.prototype = {
     options.title = options.title || {};
     options.marker = options.marker || {};
 
-    that._initTypes = {
+    this._initTypes = {
       type: options.type,
       argumentType: options.argumentType,
       valueType: options.valueType,
     };
-    that._setTickOffset();
+    this._setTickOffset();
 
-    that._isHorizontal = options.isHorizontal;
-    that.pane = options.pane ?? that.pane;
-    that.name = options.name;
-    that.priority = options.priority;
+    this._isHorizontal = options.isHorizontal;
+    this.pane = options.pane ?? this.pane;
+    this.name = options.name;
+    this.priority = options.priority;
 
-    that._hasLabelFormat = labelOpt.format !== '' && isDefined(labelOpt.format);
-    that._textOptions = {
+    this._hasLabelFormat = labelOpt.format !== '' && isDefined(labelOpt.format);
+    this._textOptions = {
       opacity: labelOpt.opacity,
       align: 'center',
       class: labelOpt.cssClass,
     };
-    that._textFontStyles = patchFontOptions(labelOpt.font);
+    this._textFontStyles = patchFontOptions(labelOpt.font);
 
     if (options.type === constants.logarithmic) {
       if (options.logarithmBaseError) {
-        that._incidentOccurred('E2104');
+        this._incidentOccurred('E2104');
         delete options.logarithmBaseError;
       }
     }
 
-    that._updateTranslator();
-    that._createConstantLines();
-    that._strips = (options.strips || []).map((o) => createStrip(that, o));
-    that._majorTicks = that._minorTicks = null;
-    that._firstDrawing = true;
-  },
+    this._updateTranslator();
+    this._createConstantLines();
+    this._strips = (options.strips || []).map((o) => createStrip(this, o));
+    this._majorTicks = this._minorTicks = null;
+    this._firstDrawing = true;
+  }
 
-  calculateInterval(value, prevValue) {
+  calculateInterval(value: ThemeValue, prevValue: ThemeValue): number {
     const options = this._options;
 
     if (!options || (options.type !== constants.logarithmic)) {
@@ -1031,27 +1340,26 @@ Axis.prototype = {
     }
     const { allowNegatives, linearThreshold } = new Range(this.getTranslator().getBusinessRange());
     return _abs(getLog(value, options.logarithmBase, allowNegatives, linearThreshold) - getLog(prevValue, options.logarithmBase, allowNegatives, linearThreshold));
-  },
+  }
 
-  getCanvasRange() {
+  getCanvasRange(): { startValue: ThemeValue; endValue: ThemeValue } {
     const translator = this._translator;
     return {
       startValue: translator.from(translator.translate('canvas_position_start')),
       endValue: translator.from(translator.translate('canvas_position_end')),
     };
-  },
+  }
 
-  _processCanvas(canvas) {
+  _processCanvas(canvas: ThemeValue): ThemeValue {
     return canvas;
-  },
+  }
 
-  updateCanvas(canvas, canvasRedesign) {
+  updateCanvas(canvas: ThemeValue, canvasRedesign?: boolean): void {
     if (!canvasRedesign) {
-      const positions = this._orthogonalPositions = {
+      const positions: OrthogonalPositions = this._orthogonalPositions = {
         start: !this._isHorizontal ? canvas.left : canvas.top,
         end: !this._isHorizontal ? canvas.width - canvas.right : canvas.height - canvas.bottom,
       };
-      // @ts-expect-error
       positions.center = positions.start + (positions.end - positions.start) / 2;
     } else {
       this._orthogonalPositions = null;
@@ -1061,41 +1369,38 @@ Axis.prototype = {
     this._translator.updateCanvas(this._processCanvas(canvas));
 
     this._initAxisPositions();
-  },
+  }
 
-  getCanvas() {
+  getCanvas(): ThemeValue {
     return this._canvas;
-  },
+  }
 
-  getAxisShift() {
+  getAxisShift(): number {
     return this._axisShift || 0;
-  },
+  }
 
-  hideTitle() {
-    const that = this;
-
-    if (that._options.title.text) {
-      that._incidentOccurred('W2105', [that._isHorizontal ? 'horizontal' : 'vertical']);
-      that._axisTitleGroup.clear();
+  hideTitle(): void {
+    if (this._options.title.text) {
+      this._incidentOccurred('W2105', [this._isHorizontal ? 'horizontal' : 'vertical']);
+      this._axisTitleGroup.clear();
     }
-  },
+  }
 
-  getTitle() {
+  getTitle(): ThemeValue {
     return this._title;
-  },
+  }
 
-  hideOuterElements() {
-    const that = this;
-    const options = that._options;
+  hideOuterElements(): void {
+    const options = this._options;
 
-    if ((options.label.visible || that._outsideConstantLines.length) && !that._translator.getBusinessRange().isEmpty()) {
-      that._incidentOccurred('W2106', [that._isHorizontal ? 'horizontal' : 'vertical']);
-      that._axisElementsGroup.clear();
-      callAction(that._outsideConstantLines, 'removeLabel');
+    if ((options.label.visible || this._outsideConstantLines.length) && !this._translator.getBusinessRange().isEmpty()) {
+      this._incidentOccurred('W2106', [this._isHorizontal ? 'horizontal' : 'vertical']);
+      this._axisElementsGroup.clear();
+      callAction(this._outsideConstantLines, 'removeLabel');
     }
-  },
+  }
 
-  _resolveLogarithmicOptionsForRange(range) {
+  _resolveLogarithmicOptionsForRange(range: RangeInstance): void {
     const options = this._options;
     if (options.type === constants.logarithmic) {
       range.addRange({
@@ -1105,18 +1410,17 @@ Axis.prototype = {
         range.linearThreshold = options.linearThreshold;
       }
     }
-  },
+  }
 
-  adjustViewport(businessRange) {
-    const that = this;
-    const options = that._options;
+  adjustViewport(businessRange: RangeData): RangeInstance {
+    const options = this._options;
     const isDiscrete = options.type === constants.discrete;
-    let categories = that._seriesData && that._seriesData.categories || [];
-    const wholeRange = that.adjustRange(getVizRangeObject(options.wholeRange));
-    const visualRange = that.getViewport() || {};
+    let categories = this._seriesData && this._seriesData.categories || [];
+    const wholeRange = this.adjustRange(getVizRangeObject(options.wholeRange));
+    const visualRange = this.getViewport() || {};
 
     const result = new Range(businessRange);
-    that._addConstantLinesToRange(result);
+    this._addConstantLinesToRange(result);
 
     let minDefined = isDefined(visualRange.startValue);
     let maxDefined = isDefined(visualRange.endValue);
@@ -1163,12 +1467,12 @@ Axis.prototype = {
     !isDefined(result.min) && (result.min = result.minVisible);
     !isDefined(result.max) && (result.max = result.maxVisible);
     result.addRange({}); // controlValuesByVisibleBounds
-    that._resolveLogarithmicOptionsForRange(result);
+    this._resolveLogarithmicOptionsForRange(result);
 
     return result;
-  },
+  }
 
-  adjustRange(range) {
+  adjustRange(range?: ThemeValue): ThemeValue {
     range = range || {};
     const isDiscrete = this._options.type === constants.discrete;
     const isLogarithmic = this._options.type === constants.logarithmic;
@@ -1185,9 +1489,9 @@ Axis.prototype = {
     }
 
     return range;
-  },
+  }
 
-  _getVisualRangeUpdateMode(viewport, newRange, oppositeValue) {
+  _getVisualRangeUpdateMode(viewport: ThemeValue, newRange: ThemeValue, oppositeValue?: string): string {
     let value = this._options.visualRangeUpdateMode;
     const translator = this._translator;
     const range = this._seriesData;
@@ -1257,28 +1561,27 @@ Axis.prototype = {
     }
 
     return value;
-  },
+  }
 
-  _handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized, newRange) {
-    const that = this;
+  _handleBusinessRangeChanged(oppositeVisualRangeUpdateMode: string | undefined, axisReinitialized: boolean | undefined, newRange: ThemeValue): void {
     const visualRange = this.visualRange();
 
-    if (axisReinitialized || that._translator.getBusinessRange().isEmpty()) {
+    if (axisReinitialized || this._translator.getBusinessRange().isEmpty()) {
       return;
     }
 
-    const visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
+    const visualRangeUpdateMode = this._lastVisualRangeUpdateMode = this._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
 
     if (visualRangeUpdateMode === KEEP) {
-      that._setVisualRange([visualRange.startValue, visualRange.endValue]);
+      this._setVisualRange([visualRange.startValue, visualRange.endValue]);
     } else if (visualRangeUpdateMode === RESET) {
-      that._setVisualRange([null, null]);
+      this._setVisualRange([null, null]);
     } else if (visualRangeUpdateMode === SHIFT) {
-      that._setVisualRange({ length: that.getVisualRangeLength() });
+      this._setVisualRange({ length: this.getVisualRangeLength() });
     }
-  },
+  }
 
-  getVisualRangeLength(range) {
+  getVisualRangeLength(range?: ThemeValue): number {
     const currentBusinessRange = range || this._translator.getBusinessRange();
     const { type } = this._options;
     let length;
@@ -1291,9 +1594,158 @@ Axis.prototype = {
       length = currentBusinessRange.maxVisible - currentBusinessRange.minVisible;
     }
     return length;
-  },
+  }
 
-  getVisualRangeCenter(range, useMerge) {
+  _getTickIntervalValue(): number {
+    const tickInterval = this.getTickInterval();
+
+    if (!isDefined(tickInterval)) {
+      return 0;
+    }
+
+    return this._options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval;
+  }
+
+  getWholeRangeBreaks(): ThemeValue[] {
+    const businessRange = this._translator.getBusinessRange();
+    const { type } = this._options;
+
+    if (type === constants.discrete
+      || !isDefined(businessRange.min) || !isDefined(businessRange.max)) {
+      return [];
+    }
+
+    const interval = this._getTickIntervalValue();
+
+    return this._getBreaksForRange(businessRange.min, businessRange.max)
+      .reduce((result, scaleBreak) => {
+        const hidden = this._getHiddenDuration(scaleBreak, interval);
+        const shift = (this.calculateInterval(scaleBreak.to, scaleBreak.from) - hidden) / 2;
+
+        return hidden ? result.concat(extend({}, scaleBreak, {
+          from: this._addToValue(scaleBreak.from, shift),
+          to: this._addToValue(scaleBreak.to, -shift),
+          cumulativeWidth: 0,
+        })) : result;
+      }, []);
+  }
+
+  _getBreaksForRange(minVisible: ThemeValue, maxVisible: ThemeValue): ThemeValue[] {
+    const viewport = minVisible > maxVisible
+      ? { minVisible: maxVisible, maxVisible: minVisible }
+      : { minVisible, maxVisible };
+    const breaks = this._getScaleBreaks(this._options, viewport, this._series, this.isArgumentAxis);
+
+    return this._filterBreaks(breaks, viewport, this._options.breakStyle);
+  }
+
+  _getHiddenDuration(scaleBreak: ThemeValue, tickInterval: number): number {
+    const duration = this.calculateInterval(scaleBreak.to, scaleBreak.from);
+
+    return scaleBreak.gapSize ? duration : Math.max(duration - tickInterval, 0);
+  }
+
+  getVisualRangeLengthWithoutBreaks(range?: ThemeValue): number {
+    const businessRange = range || this._translator.getBusinessRange();
+    const length = this.getVisualRangeLength(businessRange);
+    const options = this._options;
+
+    if (options.type === constants.discrete
+      || !isDefined(businessRange.minVisible) || !isDefined(businessRange.maxVisible)) {
+      return length;
+    }
+
+    const interval = this._getTickIntervalValue();
+
+    return this._getBreaksForRange(businessRange.minVisible, businessRange.maxVisible)
+      .reduce((result, scaleBreak) => result - this._getHiddenDuration(scaleBreak, interval), length);
+  }
+
+  _addToValue(value: ThemeValue, diff: number): ThemeValue {
+    if (this._options.type === constants.logarithmic) {
+      const translator = this.getTranslator();
+
+      return translator.toValue(translator.fromValue(value) + diff);
+    }
+
+    return isDate(value) ? new Date(value.getTime() + diff) : value + diff;
+  }
+
+  adjustPannedRange(range: ThemeValue, anchor?: 'start' | 'end'): ThemeValue {
+    const storedParams = this._storedZoomEndParams;
+    const { type } = this._options;
+
+    if (!storedParams || type === constants.discrete) {
+      return range;
+    }
+
+    const { startRange } = storedParams;
+
+    if (!this._getBreaksForRange(range.startValue, range.endValue).length
+      && !this._getBreaksForRange(startRange.startValue, startRange.endValue).length) {
+      return range;
+    }
+
+    const isReversed = range.startValue > range.endValue;
+
+    if (isReversed) {
+      const reordered = this.adjustPannedRange({ startValue: range.endValue, endValue: range.startValue }, anchor);
+
+      return { startValue: reordered.endValue, endValue: reordered.startValue };
+    }
+
+    const targetLength = this.getVisualRangeLengthWithoutBreaks({
+      minVisible: startRange.startValue,
+      maxVisible: startRange.endValue,
+    });
+
+    if (!targetLength) {
+      return range;
+    }
+
+    const tolerance = targetLength * PANNING_CORRECTION_PRECISION;
+    const bounds = this.getZoomBounds();
+    const keepsEndValue = anchor
+      ? anchor === 'end'
+      : range.startValue > startRange.startValue || range.endValue > startRange.endValue;
+    let result = range;
+    let current = range;
+    let bestDeviation = Infinity;
+
+    for (let i = 0; i < PANNING_CORRECTION_ITERATION_COUNT; i += 1) {
+      const delta = this.getVisualRangeLengthWithoutBreaks({
+        minVisible: current.startValue,
+        maxVisible: current.endValue,
+      }) - targetLength;
+      const deviation = Math.abs(delta);
+
+      if (deviation < bestDeviation) {
+        bestDeviation = deviation;
+        result = current;
+      }
+
+      if (deviation <= tolerance) {
+        break;
+      }
+
+      const shifted = keepsEndValue
+        ? { startValue: this._addToValue(current.startValue, delta), endValue: current.endValue }
+        : { startValue: current.startValue, endValue: this._addToValue(current.endValue, -delta) };
+
+      current = {
+        startValue: shifted.startValue < bounds.startValue ? bounds.startValue : shifted.startValue,
+        endValue: shifted.endValue > bounds.endValue ? bounds.endValue : shifted.endValue,
+      };
+
+      if (current.startValue >= current.endValue) {
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  getVisualRangeCenter(range?: ThemeValue, useMerge?: boolean): ThemeValue {
     const translator = this.getTranslator();
     const businessRange = translator.getBusinessRange();
     const currentBusinessRange = useMerge ? extend(true, {}, businessRange, range || {}) : range || businessRange;
@@ -1312,31 +1764,31 @@ Axis.prototype = {
     } else if (type === constants.discrete) {
       const categoriesInfo = getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
       const index = Math.ceil(categoriesInfo.categories.length / 2) - 1;
+      // @ts-expect-error a discrete range always has categories
       center = businessRange.categories.indexOf(categoriesInfo.categories[index]);
     } else {
       center = translator.toValue((currentBusinessRange.maxVisible.valueOf() + currentBusinessRange.minVisible.valueOf()) / 2);
     }
     return center;
-  },
+  }
 
-  setBusinessRange(range, axisReinitialized, oppositeVisualRangeUpdateMode, argCategories) {
-    const that = this;
-    const options = that._options;
+  setBusinessRange(range: RangeData, axisReinitialized?: boolean, oppositeVisualRangeUpdateMode?: string, argCategories?: ThemeValue): void {
+    const options = this._options;
     const isDiscrete = options.type === constants.discrete;
 
-    that._handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized, range);
-    that._seriesData = new Range(range);
-    const dataIsEmpty = that._seriesData.isEmpty();
+    this._handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized, range);
+    this._seriesData = new Range(range);
+    const dataIsEmpty = this._seriesData.isEmpty();
 
-    const rangeWithConstantLines = new Range(that._seriesData);
+    const rangeWithConstantLines = new Range(this._seriesData);
 
-    that._addConstantLinesToRange(rangeWithConstantLines);
-    that._prevDataInfo = {
+    this._addConstantLinesToRange(rangeWithConstantLines);
+    this._prevDataInfo = {
       isEmpty: dataIsEmpty,
       containsConstantLine: rangeWithConstantLines.containsConstantLine,
     };
 
-    that._seriesData.addRange({
+    this._seriesData.addRange({
       categories: options.categories,
       dataType: options.dataType,
       axisType: options.type,
@@ -1344,39 +1796,39 @@ Axis.prototype = {
       invert: options.inverted,
     });
 
-    that._resolveLogarithmicOptionsForRange(that._seriesData);
+    this._resolveLogarithmicOptionsForRange(this._seriesData);
 
     if (!isDiscrete) {
-      if (!isDefined(that._seriesData.min) && !isDefined(that._seriesData.max)) {
-        const visualRange = that.getViewport();
-        visualRange && that._seriesData.addRange({
+      if (!isDefined(this._seriesData.min) && !isDefined(this._seriesData.max)) {
+        const visualRange = this.getViewport();
+        visualRange && this._seriesData.addRange({
           min: visualRange.startValue,
           max: visualRange.endValue,
         });
       }
       const synchronizedValue = options.synchronizedValue;
       if (isDefined(synchronizedValue)) {
-        that._seriesData.addRange({
+        this._seriesData.addRange({
           min: synchronizedValue,
           max: synchronizedValue,
         });
       }
     }
 
-    that._seriesData.minVisible = that._seriesData.minVisible ?? that._seriesData.min;
-    that._seriesData.maxVisible = that._seriesData.maxVisible ?? that._seriesData.max;
+    this._seriesData.minVisible = this._seriesData.minVisible ?? this._seriesData.min;
+    this._seriesData.maxVisible = this._seriesData.maxVisible ?? this._seriesData.max;
 
-    if (!that.isArgumentAxis && options.showZero) {
-      that._seriesData.correctValueZeroLevel();
+    if (!this.isArgumentAxis && options.showZero) {
+      this._seriesData.correctValueZeroLevel();
     }
-    that._seriesData.sortCategories(that.getCategoriesSorter(argCategories));
+    this._seriesData.sortCategories(this.getCategoriesSorter(argCategories));
 
-    that._seriesData.userBreaks = that._seriesData.isEmpty() ? [] : that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
+    this._seriesData.userBreaks = this._seriesData.isEmpty() ? [] : this._getScaleBreaks(options, this._seriesData, this._series, this.isArgumentAxis);
 
-    that._translator.updateBusinessRange(that._getViewportRange());
-  },
+    this._translator.updateBusinessRange(this._getViewportRange());
+  }
 
-  _addConstantLinesToRange(dataRange) {
+  _addConstantLinesToRange(dataRange: RangeInstance): void {
     this._outsideConstantLines.concat(this._insideConstantLines || []).forEach((cl) => {
       if (cl.options.extendAxis) {
         const value = cl.getParsedValue();
@@ -1389,121 +1841,112 @@ Axis.prototype = {
         });
       }
     });
-  },
+  }
 
-  setGroupSeries(series) {
+  setGroupSeries(series: ThemeValue[]): void {
     this._series = series;
-  },
+  }
 
-  getLabelsPosition() {
-    const that = this;
-    const options = that._options;
+  getLabelsPosition(): number {
+    const options = this._options;
     const position = options.position;
-    const labelShift = options.label.indentFromAxis + (that._axisShift || 0) + that._constantLabelOffset;
-    const axisPosition = that._axisPosition;
+    const labelShift = options.label.indentFromAxis + (this._axisShift || 0) + this._constantLabelOffset;
+    const axisPosition = this._axisPosition;
 
     return position === TOP || position === LEFT ? axisPosition - labelShift : axisPosition + labelShift;
-  },
+  }
 
-  getFormattedValue(value, options, point) {
+  getFormattedValue(value: ThemeValue, options: ThemeValue, point?: ThemeValue): string | null {
     const labelOptions = this._options.label;
 
     return isDefined(value) ? this.formatLabel(value, extend(true, {}, labelOptions, options), undefined, point) : null;
-  },
+  }
 
-  _getBoundaryTicks(majors, viewPort) {
-    const that = this;
+  _getBoundaryTicks(majors: ThemeValue[], viewPort: ThemeValue): ThemeValue[] {
     const length = majors.length;
-    const options = that._options;
+    const options = this._options;
     const customBounds = options.customBoundTicks;
     const min = viewPort.minVisible;
     const max = viewPort.maxVisible;
-    const addMinMax = options.showCustomBoundaryTicks ? that._boundaryTicksVisibility : {};
-    let boundaryTicks = [];
+    const addMinMax = options.showCustomBoundaryTicks ? this._boundaryTicksVisibility : {};
+    let boundaryTicks: ThemeValue[] = [];
 
     if (options.type === constants.discrete) {
-      if (that._tickOffset && majors.length !== 0) {
-        // @ts-expect-error
+      if (this._tickOffset && majors.length !== 0) {
         boundaryTicks = [majors[0], majors[majors.length - 1]];
       }
     } else if (customBounds) {
       if (addMinMax.min && isDefined(customBounds[0])) {
-        // @ts-expect-error
         boundaryTicks.push(customBounds[0]);
       }
 
       if (addMinMax.max && isDefined(customBounds[1])) {
-        // @ts-expect-error
         boundaryTicks.push(customBounds[1]);
       }
     } else {
       if (addMinMax.min && (length === 0 || majors[0] > min)) {
-        // @ts-expect-error
         boundaryTicks.push(min);
       }
 
       if (addMinMax.max && (length === 0 || majors[length - 1] < max)) {
-        // @ts-expect-error
         boundaryTicks.push(max);
       }
     }
     return boundaryTicks;
-  },
+  }
 
-  setPercentLabelFormat() {
+  setPercentLabelFormat(): void {
     if (!this._hasLabelFormat) {
       this._options.label.format = 'percent';
     }
-  },
+  }
 
-  resetAutoLabelFormat() {
+  resetAutoLabelFormat(): void {
     if (!this._hasLabelFormat) {
       delete this._options.label.format;
     }
-  },
+  }
 
-  getMultipleAxesSpacing() {
+  getMultipleAxesSpacing(): number {
     return this._options.multipleAxesSpacing || 0;
-  },
+  }
 
-  getTicksValues() {
+  getTicksValues(): { majorTicksValues: ThemeValue[]; minorTicksValues: ThemeValue[] } {
     return {
       majorTicksValues: convertTicksToValues(this._majorTicks),
       minorTicksValues: convertTicksToValues(this._minorTicks),
     };
-  },
+  }
 
-  estimateTickInterval(canvas) {
-    const that = this;
-    that.updateCanvas(canvas);
-    return that._tickInterval !== that._getTicks(that._getViewportRange(), _noop, true).tickInterval;
-  },
+  estimateTickInterval(canvas: ThemeValue): boolean {
+    this.updateCanvas(canvas);
+    return this._tickInterval !== this._getTicks(this._getViewportRange(), _noop, true).tickInterval;
+  }
 
-  setTicks(ticks) {
+  setTicks(ticks: ThemeValue): void {
     const majors = ticks.majorTicks || [];
     this._majorTicks = majors.map(createMajorTick(this, this._renderer, this._getSkippedCategory(majors)));
     this._minorTicks = (ticks.minorTicks || []).map(createMinorTick(this, this._renderer));
     this._isSynchronized = true;
-  },
+  }
 
-  _adjustDivisionFactor(val) {
+  _adjustDivisionFactor(val: number): number {
     return val;
-  },
+  }
 
-  _getTicks(viewPort, incidentOccurred, skipTickGeneration) {
-    const that = this;
-    const options = that._options;
+  _getTicks(viewPort: ThemeValue, incidentOccurred?: IncidentOccurred, skipTickGeneration?: boolean): ThemeValue {
+    const options = this._options;
     const customTicks = options.customTicks;
     const customMinorTicks = options.customMinorTicks;
 
-    return getTickGenerator(options, incidentOccurred || that._incidentOccurred, skipTickGeneration, that._translator.getBusinessRange().isEmpty(), that._adjustDivisionFactor.bind(that), viewPort)(
+    return getTickGenerator(options, incidentOccurred || this._incidentOccurred, skipTickGeneration, this._translator.getBusinessRange().isEmpty(), this._adjustDivisionFactor.bind(this), viewPort)(
       {
         min: viewPort.minVisible,
         max: viewPort.maxVisible,
         categories: viewPort.categories,
         isSpacedMargin: viewPort.isSpacedMargin,
       },
-      that._getScreenDelta(),
+      this._getScreenDelta(),
       options.tickInterval,
       options.label.overlappingBehavior === 'ignore' || options.forceUserTickInterval,
       {
@@ -1512,50 +1955,48 @@ Axis.prototype = {
       },
       options.minorTickInterval,
       options.minorTickCount,
-      that._initialBreaks,
+      this._initialBreaks,
     );
-  },
+  }
 
-  _createTicksAndLabelFormat(range, incidentOccurred) {
+  _createTicksAndLabelFormat(range: RangeInstance, incidentOccurred?: IncidentOccurred): ThemeValue {
     const options = this._options;
     const ticks = this._getTicks(range, incidentOccurred, false);
 
     if (!range.isEmpty() && options.type === constants.discrete && options.dataType === 'datetime' && !this._hasLabelFormat && ticks.ticks.length) {
-      // @ts-expect-error
       options.label.format = formatHelper.getDateFormatByTicks(ticks.ticks);
     }
 
     return ticks;
-  },
+  }
 
-  getAggregationInfo(useAllAggregatedPoints, range) {
-    const that = this;
-    const options = that._options;
+  getAggregationInfo(useAllAggregatedPoints: boolean, range: ThemeValue): { interval: ThemeValue; ticks: ThemeValue[] } {
+    const options = this._options;
 
-    const businessRange = new Range(that.getTranslator().getBusinessRange()).addRange(range);
-    const visualRange = that.getViewport();
+    const businessRange = new Range(this.getTranslator().getBusinessRange()).addRange(range);
+    const visualRange = this.getViewport();
 
     const minVisible = visualRange?.startValue ?? businessRange.minVisible;
     const maxVisible = visualRange?.endValue ?? businessRange.maxVisible;
 
     const aggregationInterval = options.aggregationInterval;
-    const aggregationGroupWidth = that._getAggregationGroupWidth();
+    const aggregationGroupWidth = this._getAggregationGroupWidth();
 
     const minInterval = !options.aggregationGroupWidth && !aggregationInterval && range.interval;
-    const generateTicks = configureGenerator(options, aggregationGroupWidth, businessRange, that._getScreenDelta(), minInterval);
+    const generateTicks = configureGenerator(options, aggregationGroupWidth, businessRange, this._getScreenDelta(), minInterval);
 
-    const tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._seriesData?.breaks).tickInterval;
-    const ticks = that._generateTick(useAllAggregatedPoints, businessRange, minVisible, maxVisible, tickInterval, generateTicks);
+    const tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, this._seriesData?.breaks).tickInterval;
+    const ticks = this._generateTick(useAllAggregatedPoints, businessRange, minVisible, maxVisible, tickInterval, generateTicks);
 
-    that._aggregationInterval = tickInterval;
+    this._aggregationInterval = tickInterval;
 
     return {
       interval: tickInterval,
       ticks,
     };
-  },
+  }
 
-  _getAggregationGroupWidth() {
+  _getAggregationGroupWidth(): number | undefined {
     const { checkInterval, sizePointNormalState } = this._marginOptions || {};
     const { aggregationGroupWidth, axisDivisionFactor } = this._options;
 
@@ -1572,9 +2013,9 @@ Axis.prototype = {
     }
 
     return aggregationGroupWidth;
-  },
+  }
 
-  _generateTick(useAllAggregatedPoints, businessRange, minVisible, maxVisible, tickInterval, generateTicks) {
+  _generateTick(useAllAggregatedPoints: boolean, businessRange: RangeInstance, minVisible: ThemeValue, maxVisible: ThemeValue, tickInterval: ThemeValue, generateTicks: TicksGenerator): ThemeValue[] {
     const min = useAllAggregatedPoints ? businessRange.min : minVisible;
     const max = useAllAggregatedPoints ? businessRange.max : maxVisible;
 
@@ -1582,8 +2023,7 @@ Axis.prototype = {
       return [];
     }
 
-    const that = this;
-    const options = that._options;
+    const options = this._options;
 
     const add = getAddFunction({
       base: options.logarithmBase,
@@ -1595,7 +2035,7 @@ Axis.prototype = {
     let end = max;
 
     if (!useAllAggregatedPoints && isDefined(tickInterval)) {
-      const maxMinDistance = Math.max(that.calculateInterval(max, min), options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval);
+      const maxMinDistance = Math.max(this.calculateInterval(max, min), options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval);
       start = add(min, maxMinDistance, -1);
       end = add(max, maxMinDistance);
     }
@@ -1603,43 +2043,43 @@ Axis.prototype = {
     start = start < businessRange.min ? businessRange.min : start;
     end = end > businessRange.max ? businessRange.max : end;
 
-    const breaks = that._getScaleBreaks(options, {
+    const breaks = this._getScaleBreaks(options, {
       minVisible: start,
       maxVisible: end,
-    }, that._series, that.isArgumentAxis);
+    }, this._series, this.isArgumentAxis);
 
-    const filteredBreaks = that._filterBreaks(breaks, {
+    const filteredBreaks = this._filterBreaks(breaks, {
       minVisible: start,
       maxVisible: end,
     }, options.breakStyle);
 
     return generateTicks(tickInterval, false, start, end, filteredBreaks).ticks;
-  },
+  }
 
-  getTickInterval() {
+  getTickInterval(): ThemeValue {
     return this._tickInterval;
-  },
+  }
 
-  getAggregationInterval() {
+  getAggregationInterval(): ThemeValue {
     return this._aggregationInterval;
-  },
+  }
 
-  createTicks(canvas) {
-    const that = this;
-    const renderer = that._renderer;
-    const options = that._options;
+  createTicks(canvas: ThemeValue): void {
+    const renderer = this._renderer;
+    const options = this._options;
 
     if (!canvas) {
       return;
     }
 
-    that._isSynchronized = false;
-    that.updateCanvas(canvas);
+    this._isSynchronized = false;
+    this.updateCanvas(canvas);
 
-    const range = that._getViewportRange();
-    that._initialBreaks = range.breaks = this._seriesData.breaks = that._filterBreaks(this._seriesData.userBreaks, range, options.breakStyle);
+    const range = this._getViewportRange();
+    // @ts-expect-error setBusinessRange() sets userBreaks before the ticks are created
+    this._initialBreaks = range.breaks = this._seriesData.breaks = this._filterBreaks(this._seriesData.userBreaks, range, options.breakStyle);
 
-    that._estimatedTickInterval = that._getTicks(that.adjustViewport(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
+    this._estimatedTickInterval = this._getTicks(this.adjustViewport(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
 
     const margins = this._calculateValueMargins();
 
@@ -1649,31 +2089,31 @@ Axis.prototype = {
       isSpacedMargin: margins.isSpacedMargin,
     });
 
-    const ticks = that._createTicksAndLabelFormat(range);
+    const ticks = this._createTicksAndLabelFormat(range);
 
-    const boundaryTicks = that._getBoundaryTicks(ticks.ticks, that._getViewportRange());
+    const boundaryTicks = this._getBoundaryTicks(ticks.ticks, this._getViewportRange());
     if (options.showCustomBoundaryTicks && boundaryTicks.length) {
-      that._boundaryTicks = [boundaryTicks[0]].map(createBoundaryTick(that, renderer, true));
+      this._boundaryTicks = [boundaryTicks[0]].map(createBoundaryTick(this, renderer, true));
       if (boundaryTicks.length > 1) {
-        that._boundaryTicks = that._boundaryTicks.concat([boundaryTicks[1]].map(createBoundaryTick(that, renderer, false)));
+        this._boundaryTicks = this._boundaryTicks.concat([boundaryTicks[1]].map(createBoundaryTick(this, renderer, false)));
       }
     } else {
-      that._boundaryTicks = [];
+      this._boundaryTicks = [];
     }
 
     const minors = (ticks.minorTicks || []).filter((minor) => !boundaryTicks.some((boundary) => valueOf(boundary) === valueOf(minor)));
 
-    that._tickInterval = ticks.tickInterval;
-    that._minorTickInterval = ticks.minorTickInterval;
+    this._tickInterval = ticks.tickInterval;
+    this._minorTickInterval = ticks.minorTickInterval;
 
-    const oldMajorTicks = that._majorTicks || [];
+    const oldMajorTicks = this._majorTicks || [];
     const majorTicksByValues = oldMajorTicks.reduce((r, t) => {
       r[t.value.valueOf()] = t;
       return r;
     }, {});
 
     const sameType = type(ticks.ticks[0]) === type(oldMajorTicks[0] && oldMajorTicks[0].value);
-    const skippedCategory = that._getSkippedCategory(ticks.ticks);
+    const skippedCategory = this._getSkippedCategory(ticks.ticks);
     const majorTicks = ticks.ticks.map((v) => {
       const tick = majorTicksByValues[v.valueOf()];
       if (tick && sameType) {
@@ -1681,74 +2121,71 @@ Axis.prototype = {
         tick.setSkippedCategory(skippedCategory);
         return tick;
       } else {
-        return createMajorTick(that, renderer, skippedCategory)(v);
+        return createMajorTick(this, renderer, skippedCategory)(v);
       }
     });
 
-    that._majorTicks = majorTicks;
+    this._majorTicks = majorTicks;
 
-    const oldMinorTicks = that._minorTicks || [];
+    const oldMinorTicks = this._minorTicks || [];
 
-    that._minorTicks = minors.map((v, i) => {
+    this._minorTicks = minors.map((v, i) => {
       const minorTick = oldMinorTicks[i];
       if (minorTick) {
         minorTick.updateValue(v);
         return minorTick;
       }
-      return createMinorTick(that, renderer)(v);
+      return createMinorTick(this, renderer)(v);
     });
 
-    that._ticksToRemove = Object.keys(majorTicksByValues)
-      .map((k) => majorTicksByValues[k]).concat(oldMinorTicks.slice(that._minorTicks.length, oldMinorTicks.length));
-    that._ticksToRemove.forEach((t) => t.label?.removeTitle());
+    this._ticksToRemove = Object.keys(majorTicksByValues)
+      .map((k) => majorTicksByValues[k]).concat(oldMinorTicks.slice(this._minorTicks.length, oldMinorTicks.length));
+    this._ticksToRemove.forEach((t) => t.label?.removeTitle());
 
     if (ticks.breaks) {
-      that._seriesData.breaks = ticks.breaks;
+      this._seriesData.breaks = ticks.breaks;
     }
-    that._reinitTranslator(that._getViewportRange());
-  },
+    this._reinitTranslator(this._getViewportRange());
+  }
 
-  _reinitTranslator(range) {
-    const that = this;
-    const translator = that._translator;
+  _reinitTranslator(range: RangeData): void {
+    const translator = this._translator;
 
-    if (that._isSynchronized) {
+    if (this._isSynchronized) {
       return;
     }
 
     translator.updateBusinessRange(range);
-  },
+  }
 
-  _getViewportRange() {
+  _getViewportRange(): RangeInstance {
     return this.adjustViewport(this._seriesData);
-  },
+  }
 
-  setMarginOptions(options) {
+  setMarginOptions(options: ThemeValue): void {
     this._marginOptions = options;
-  },
+  }
 
-  getMarginOptions() {
+  getMarginOptions(): ThemeValue {
     return this._marginOptions ?? {};
-  },
+  }
 
-  _calculateRangeInterval(interval) {
+  _calculateRangeInterval(interval: ThemeValue): number {
     const isDateTime = this._options.dataType === 'datetime';
-    const minArgs = [];
-    const addToArgs = function (value) {
-      // @ts-expect-error
+    const minArgs: number[] = [];
+    const addToArgs = function (value: ThemeValue): void {
       isDefined(value) && minArgs.push(isDateTime ? dateUtils.dateToMilliseconds(value) : value);
     };
 
     addToArgs(this._tickInterval);
     addToArgs(this._estimatedTickInterval);
-    // @ts-expect-error
     isDefined(interval) && minArgs.push(interval);
     addToArgs(this._aggregationInterval);
 
     return this._calculateWorkWeekInterval(_min.apply(this, minArgs));
-  },
+  }
 
-  _calculateWorkWeekInterval(businessInterval) {
+  _calculateWorkWeekInterval(businessInterval: number): number {
     const options = this._options;
     if (options.dataType === 'datetime' && options.workdaysOnly && businessInterval) {
       const workWeek = options.workWeek.length * dateIntervals.day;
@@ -1761,26 +2198,25 @@ Axis.prototype = {
       }
     }
     return businessInterval;
-  },
+  }
 
-  _getConvertIntervalCoefficient(intervalInPx, screenDelta) {
+  _getConvertIntervalCoefficient(intervalInPx: number, screenDelta: number): number {
     const ratioOfCanvasRange = this._translator.ratioOfCanvasRange();
     return ratioOfCanvasRange / (ratioOfCanvasRange * screenDelta / (intervalInPx + screenDelta));
-  },
+  }
 
-  _calculateValueMargins(ticks) {
+  _calculateValueMargins(ticks?: ThemeValue[]): ValueMargins {
     this._resetMargins();
-    const that = this;
-    const margins = that.getMarginOptions();
+    const margins = this.getMarginOptions();
     const marginSize = (margins.size || 0) / 2;
-    const options = that._options;
-    const dataRange = that._getViewportRange();
-    const viewPort = that.getViewport();
-    const screenDelta = that._getScreenDelta();
+    const options = this._options;
+    const dataRange = this._getViewportRange();
+    const viewPort = this.getViewport();
+    const screenDelta = this._getScreenDelta();
     const isDiscrete = (options.type || '').indexOf(constants.discrete) !== -1;
-    const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !that.customPositionIsBoundaryOrthogonalAxis();
+    const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !this.customPositionIsBoundaryOrthogonalAxis();
 
-    const translator = that._translator;
+    const translator = this._translator;
 
     const minValueMargin = options.minValueMargin;
     const maxValueMargin = options.maxValueMargin;
@@ -1790,18 +2226,18 @@ Axis.prototype = {
     let interval = 0;
     let rangeInterval;
 
-    if (dataRange.stubData || !screenDelta) {
+    if (!screenDelta) {
       return {
         startPadding: 0,
         endPadding: 0,
       };
     }
 
-    if (that.isArgumentAxis && margins.checkInterval) {
-      rangeInterval = that._calculateRangeInterval(dataRange.interval);
+    if (this.isArgumentAxis && margins.checkInterval) {
+      rangeInterval = this._calculateRangeInterval(dataRange.interval);
       const pxInterval = translator.getInterval(rangeInterval);
       if (isFinite(pxInterval)) {
-        interval = Math.ceil(pxInterval / (2 * that._getConvertIntervalCoefficient(pxInterval, screenDelta)));
+        interval = Math.ceil(pxInterval / (2 * this._getConvertIntervalCoefficient(pxInterval, screenDelta)));
       } else {
         rangeInterval = 0;
       }
@@ -1815,7 +2251,7 @@ Axis.prototype = {
     if (valueMarginsEnabled) {
       if (isDefined(minValueMargin)) {
         minPercentPadding = isFinite(minValueMargin) ? minValueMargin : 0;
-      } else if (!that.isArgumentAxis && margins.checkInterval && valueOf(dataRange.minVisible) > 0 && valueOf(dataRange.minVisible) === valueOf(dataRange.min)) {
+      } else if (!this.isArgumentAxis && margins.checkInterval && valueOf(dataRange.minVisible) > 0 && valueOf(dataRange.minVisible) === valueOf(dataRange.min)) {
         minPadding = MIN_BAR_MARGIN;
       } else {
         minPadding = Math.max(marginSize, interval);
@@ -1824,7 +2260,7 @@ Axis.prototype = {
 
       if (isDefined(maxValueMargin)) {
         maxPercentPadding = isFinite(maxValueMargin) ? maxValueMargin : 0;
-      } else if (!that.isArgumentAxis && margins.checkInterval && valueOf(dataRange.maxVisible) < 0 && valueOf(dataRange.maxVisible) === valueOf(dataRange.max)) {
+      } else if (!this.isArgumentAxis && margins.checkInterval && valueOf(dataRange.maxVisible) < 0 && valueOf(dataRange.maxVisible) === valueOf(dataRange.max)) {
         maxPadding = MIN_BAR_MARGIN;
       } else {
         maxPadding = Math.max(marginSize, interval);
@@ -1844,7 +2280,7 @@ Axis.prototype = {
       }
     }
 
-    const canvasStartEnd = that._getCanvasStartEnd();
+    const canvasStartEnd = this._getCanvasStartEnd();
 
     const commonMargin = 1 + (minPercentPadding || 0) + (maxPercentPadding || 0);
     const screenDeltaWithMargins = ((screenDelta - minPadding - maxPadding) / commonMargin) || screenDelta;
@@ -1877,7 +2313,7 @@ Axis.prototype = {
 
       if (minTickPadding > minPadding || maxTickPadding > maxPadding) {
         const commonPadding = maxTickPadding + minTickPadding;
-        const coeff = that._getConvertIntervalCoefficient(commonPadding, screenDelta);
+        const coeff = this._getConvertIntervalCoefficient(commonPadding, screenDelta);
         if (minTickPadding >= minPadding) {
           minValue = ticks[0].value;
         }
@@ -1904,7 +2340,7 @@ Axis.prototype = {
 
     const {
       correctedMin, correctedMax, start, end,
-    } = that.getCorrectedValuesToZero(minValue, maxValue);
+    } = this.getCorrectedValuesToZero(minValue, maxValue);
     minPadding = start ?? minPadding;
     maxPadding = end ?? maxPadding;
 
@@ -1918,9 +2354,9 @@ Axis.prototype = {
       interval: rangeInterval,
       isSpacedMargin: minPadding === maxPadding && minPadding !== 0,
     };
-  },
+  }
 
-  _shouldCorrectValuesToZero(minValue, maxValue) {
+  _shouldCorrectValuesToZero(minValue: ThemeValue, maxValue: ThemeValue): boolean {
     if (this.isArgumentAxis || this._options.dataType === 'datetime') {
       return false;
     }
@@ -1936,30 +2372,30 @@ Axis.prototype = {
     }
 
     return true;
-  },
-  getCorrectedValuesToZero(minValue, maxValue) {
-    const that = this;
-    const translator = that._translator;
-    const canvasStartEnd = that._getCanvasStartEnd();
-    const dataRange = that._getViewportRange();
-    const screenDelta = that._getScreenDelta();
+  }
+
+  getCorrectedValuesToZero(minValue: ThemeValue, maxValue: ThemeValue): CorrectedValuesToZero {
+    const translator = this._translator;
+    const canvasStartEnd = this._getCanvasStartEnd();
+    const dataRange = this._getViewportRange();
+    const screenDelta = this._getScreenDelta();
 
     let start;
     let end;
     let correctedMin;
     let correctedMax;
 
-    const correctZeroLevel = (minPoint, maxPoint) => {
+    const correctZeroLevel = (minPoint: number, maxPoint: number): void => {
       const minExpectedPadding = _abs(canvasStartEnd.start - minPoint);
       const maxExpectedPadding = _abs(canvasStartEnd.end - maxPoint);
 
-      const coeff = that._getConvertIntervalCoefficient(minExpectedPadding + maxExpectedPadding, screenDelta);
+      const coeff = this._getConvertIntervalCoefficient(minExpectedPadding + maxExpectedPadding, screenDelta);
 
       start = minExpectedPadding / coeff;
       end = maxExpectedPadding / coeff;
     };
 
-    if (that._shouldCorrectValuesToZero(minValue, maxValue)) {
+    if (this._shouldCorrectValuesToZero(minValue, maxValue)) {
       if (minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
         correctZeroLevel(translator.translate(0), translator.translate(maxValue));
         correctedMin = 0;
@@ -1977,9 +2413,9 @@ Axis.prototype = {
       correctedMin,
       correctedMax,
     };
-  },
+  }
 
-  applyMargins() {
+  applyMargins(): void {
     if (this._isSynchronized) {
       return;
     }
@@ -1997,141 +2433,139 @@ Axis.prototype = {
       br.addRange({ interval: margins.interval });
       this._translator.updateBusinessRange(br);
     }
-  },
+  }
 
-  _resetMargins() {
+  _resetMargins(): void {
     this._reinitTranslator(this._getViewportRange());
     if (this._canvas) {
       this._translator.updateCanvas(this._processCanvas(this._canvas));
     }
-  },
+  }
 
-  _createConstantLines() {
+  _createConstantLines(): void {
     const constantLines = (this._options.constantLines || []).map((o) => createConstantLine(this, o));
 
     this._outsideConstantLines = constantLines.filter((l) => l.labelPosition === 'outside');
     this._insideConstantLines = constantLines.filter((l) => l.labelPosition === 'inside');
-  },
+  }
 
-  draw(canvas, borderOptions) {
-    const that = this;
+  draw(canvas: ThemeValue, borderOptions?: ThemeValue): void {
     const options = this._options;
-    that.borderOptions = borderOptions || { visible: false };
+    this.borderOptions = borderOptions || { visible: false };
 
-    that._resetMargins();
-    that.createTicks(canvas);
+    this._resetMargins();
+    this.createTicks(canvas);
 
-    that.applyMargins();
+    this.applyMargins();
 
-    that._clearAxisGroups();
+    this._clearAxisGroups();
 
-    initTickCoords(that._majorTicks);
-    initTickCoords(that._minorTicks);
-    initTickCoords(that._boundaryTicks);
+    initTickCoords(this._majorTicks);
+    initTickCoords(this._minorTicks);
+    initTickCoords(this._boundaryTicks);
 
-    that._axisGroup.append(that._axesContainerGroup);
+    this._axisGroup.append(this._axesContainerGroup);
 
-    that._drawAxis();
-    that._drawTitle();
-    drawTickMarks(that._majorTicks, options.tick);
-    drawTickMarks(that._minorTicks, options.minorTick);
-    drawTickMarks(that._boundaryTicks, options.tick);
+    this._drawAxis();
+    this._drawTitle();
+    drawTickMarks(this._majorTicks, options.tick);
+    drawTickMarks(this._minorTicks, options.minorTick);
+    drawTickMarks(this._boundaryTicks, options.tick);
 
-    const drawGridLine = that._getGridLineDrawer();
-    drawGrids(that._majorTicks, drawGridLine);
-    drawGrids(that._minorTicks, drawGridLine);
+    const drawGridLine = this._getGridLineDrawer();
+    drawGrids(this._majorTicks, drawGridLine);
+    drawGrids(this._minorTicks, drawGridLine);
 
-    callAction(that._majorTicks, 'drawLabel', that._getViewportRange(), that._getTemplate(options.label.template));
+    callAction(this._majorTicks, 'drawLabel', this._getViewportRange(), this._getTemplate(options.label.template));
 
-    that._templatesRendered && that._templatesRendered.reject();
-    that._templatesRendered = Deferred();
+    this._templatesRendered && this._templatesRendered.reject();
+    this._templatesRendered = Deferred();
 
-    that._majorTicks.forEach((tick) => {
+    this._majorTicks.forEach((tick) => {
       tick.labelRotationAngle = 0;
       tick.labelAlignment = undefined;
       tick.labelOffset = 0;
     });
 
-    callAction(that._outsideConstantLines.concat(that._insideConstantLines), 'draw');
+    callAction(this._outsideConstantLines.concat(this._insideConstantLines), 'draw');
 
-    callAction(that._strips, 'draw');
+    callAction(this._strips, 'draw');
 
-    that._dateMarkers = that._drawDateMarkers() || [];
+    this._dateMarkers = this._drawDateMarkers() || [];
 
-    that._stripLabelAxesGroup && that._axisStripLabelGroup.append(that._stripLabelAxesGroup);
-    that._gridContainerGroup && that._axisGridGroup.append(that._gridContainerGroup);
-    that._stripsGroup && that._axisStripGroup.append(that._stripsGroup);
-    that._labelsAxesGroup && that._axisElementsGroup.append(that._labelsAxesGroup);
+    this._stripLabelAxesGroup && this._axisStripLabelGroup.append(this._stripLabelAxesGroup);
+    this._gridContainerGroup && this._axisGridGroup.append(this._gridContainerGroup);
+    this._stripsGroup && this._axisStripGroup.append(this._stripsGroup);
+    this._labelsAxesGroup && this._axisElementsGroup.append(this._labelsAxesGroup);
 
-    if (that._constantLinesGroup) {
-      that._axisConstantLineGroups.above.inside.append(that._constantLinesGroup.above);
-      that._axisConstantLineGroups.above.outside1.append(that._constantLinesGroup.above);
-      that._axisConstantLineGroups.above.outside2.append(that._constantLinesGroup.above);
+    if (this._constantLinesGroup) {
+      this._axisConstantLineGroups.above.inside.append(this._constantLinesGroup.above);
+      this._axisConstantLineGroups.above.outside1.append(this._constantLinesGroup.above);
+      this._axisConstantLineGroups.above.outside2.append(this._constantLinesGroup.above);
 
-      that._axisConstantLineGroups.under.inside.append(that._constantLinesGroup.under);
-      that._axisConstantLineGroups.under.outside1.append(that._constantLinesGroup.under);
-      that._axisConstantLineGroups.under.outside2.append(that._constantLinesGroup.under);
+      this._axisConstantLineGroups.under.inside.append(this._constantLinesGroup.under);
+      this._axisConstantLineGroups.under.outside1.append(this._constantLinesGroup.under);
+      this._axisConstantLineGroups.under.outside2.append(this._constantLinesGroup.under);
     }
 
-    that._measureTitle();
-    measureLabels(that._majorTicks);
+    this._measureTitle();
+    measureLabels(this._majorTicks);
 
-    !options.label.template && that._applyWordWrap();
+    !options.label.template && this._applyWordWrap();
 
-    measureLabels(that._outsideConstantLines);
-    measureLabels(that._insideConstantLines);
-    measureLabels(that._strips);
-    measureLabels(that._dateMarkers);
+    measureLabels(this._outsideConstantLines);
+    measureLabels(this._insideConstantLines);
+    measureLabels(this._strips);
+    measureLabels(this._dateMarkers);
 
-    that._adjustConstantLineLabels(that._insideConstantLines);
-    that._adjustStripLabels();
+    this._adjustConstantLineLabels(this._insideConstantLines);
+    this._adjustStripLabels();
 
-    let offset = that._constantLabelOffset = that._adjustConstantLineLabels(that._outsideConstantLines);
+    let offset = this._constantLabelOffset = this._adjustConstantLineLabels(this._outsideConstantLines);
 
-    if (!that._translator.getBusinessRange().isEmpty()) {
-      that._setLabelsPlacement();
-      offset = that._adjustLabels(offset);
+    if (!this._translator.getBusinessRange().isEmpty()) {
+      this._setLabelsPlacement();
+      offset = this._adjustLabels(offset);
     }
 
-    when.apply(this, that._majorTicks.map((tick) => tick.getTemplateDeferred())).done(() => {
-      that._templatesRendered.resolve();
+    when.apply(this, this._majorTicks.map((tick) => tick.getTemplateDeferred())).done(() => {
+      this._templatesRendered.resolve();
     });
 
-    offset = that._adjustDateMarkers(offset);
-    that._adjustTitle(offset);
-  },
+    offset = this._adjustDateMarkers(offset);
+    this._adjustTitle(offset);
+  }
 
-  getTemplatesDef() {
+  getTemplatesDef(): ThemeValue {
     return this._templatesRendered;
-  },
+  }
 
-  setRenderedState(state) {
+  setRenderedState(state: boolean): void {
     this._drawn = state;
-  },
+  }
 
-  isRendered() {
+  isRendered(): boolean {
     return this._drawn;
-  },
+  }
 
-  _applyWordWrap() {
-    const that = this;
+  _applyWordWrap(): void {
     let convertedTickInterval;
     let textWidth;
     let textHeight;
     const options = this._options;
-    const tickInterval = that._tickInterval;
+    const tickInterval = this._tickInterval;
     if (isDefined(tickInterval)) {
-      convertedTickInterval = that.getTranslator().getInterval(options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval);
+      convertedTickInterval = this.getTranslator().getInterval(options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval);
     }
 
-    const displayMode = that._validateDisplayMode(options.label.displayMode);
-    const overlappingMode = that._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
+    const displayMode = this._validateDisplayMode(options.label.displayMode);
+    const overlappingMode = this._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
     const wordWrapMode = options.label.wordWrap || 'none';
     const overflowMode = options.label.textOverflow || 'none';
 
     if ((wordWrapMode !== 'none' || overflowMode !== 'none') && displayMode !== ROTATE && overlappingMode !== ROTATE && overlappingMode !== 'auto') {
       const usefulSpace = isDefined(options.placeholderSize) ? options.placeholderSize - options.label.indentFromAxis : undefined;
-      if (that._isHorizontal) {
+      if (this._isHorizontal) {
         textWidth = convertedTickInterval;
         textHeight = usefulSpace;
       } else {
@@ -2141,119 +2575,112 @@ Axis.prototype = {
       let correctByWidth = false;
       let correctByHeight = false;
       if (textWidth) {
-        if (that._majorTicks.some((tick) => tick.labelBBox.width > textWidth)) {
+        if (this._majorTicks.some((tick) => tick.labelBBox.width > textWidth)) {
           correctByWidth = true;
         }
       }
       if (textHeight) {
-        if (that._majorTicks.some((tick) => tick.labelBBox.height > textHeight)) {
+        if (this._majorTicks.some((tick) => tick.labelBBox.height > textHeight)) {
           correctByHeight = true;
         }
       }
       if (correctByWidth || correctByHeight) {
-        that._majorTicks.forEach((tick) => {
+        this._majorTicks.forEach((tick) => {
           tick.label && tick.label.setMaxSize(textWidth, textHeight, options.label);
         });
-        measureLabels(that._majorTicks);
+        measureLabels(this._majorTicks);
       }
     }
-  },
+  }
 
-  _measureTitle: _noop,
-
-  animate() {
+  animate(): void {
     callAction(this._majorTicks, 'animateLabels');
-  },
+  }
 
-  updateSize(canvas, animate, updateTitle = true) {
-    const that = this;
-    that.updateCanvas(canvas);
+  updateSize(canvas: ThemeValue, animate?: boolean, updateTitle = true): void {
+    this.updateCanvas(canvas);
 
     if (updateTitle) {
-      that._checkTitleOverflow();
-      that._measureTitle();
-      that._updateTitleCoords();
+      this._checkTitleOverflow();
+      this._measureTitle();
+      this._updateTitleCoords();
     }
 
-    that._reinitTranslator(that._getViewportRange());
-    that.applyMargins();
+    this._reinitTranslator(this._getViewportRange());
+    this.applyMargins();
 
-    const animationEnabled = !that._firstDrawing && animate;
-    const options = that._options;
+    const animationEnabled = !this._firstDrawing && animate;
+    const options = this._options;
 
-    initTickCoords(that._majorTicks);
-    initTickCoords(that._minorTicks);
-    initTickCoords(that._boundaryTicks);
+    initTickCoords(this._majorTicks);
+    initTickCoords(this._minorTicks);
+    initTickCoords(this._boundaryTicks);
 
-    if (that._resetApplyingAnimation && !that._firstDrawing) {
-      that._resetStartCoordinates();
+    if (this._resetApplyingAnimation && !this._firstDrawing) {
+      this._resetStartCoordinates();
     }
 
-    cleanUpInvalidTicks(that._majorTicks);
-    cleanUpInvalidTicks(that._minorTicks);
-    cleanUpInvalidTicks(that._boundaryTicks);
+    cleanUpInvalidTicks(this._majorTicks);
+    cleanUpInvalidTicks(this._minorTicks);
+    cleanUpInvalidTicks(this._boundaryTicks);
 
-    if (that._axisElement) {
-      that._updateAxisElementPosition();
+    if (this._axisElement) {
+      this._updateAxisElementPosition();
     }
 
-    updateTicksPosition(that._majorTicks, options.tick, animationEnabled);
-    updateTicksPosition(that._minorTicks, options.minorTick, animationEnabled);
-    updateTicksPosition(that._boundaryTicks, options.tick);
+    updateTicksPosition(this._majorTicks, options.tick, animationEnabled);
+    updateTicksPosition(this._minorTicks, options.minorTick, animationEnabled);
+    updateTicksPosition(this._boundaryTicks, options.tick);
 
-    callAction(that._majorTicks, 'updateLabelPosition', animationEnabled);
+    callAction(this._majorTicks, 'updateLabelPosition', animationEnabled);
 
-    that._outsideConstantLines.concat(that._insideConstantLines || []).forEach((l) => l.updatePosition(animationEnabled));
+    this._outsideConstantLines.concat(this._insideConstantLines || []).forEach((l) => l.updatePosition(animationEnabled));
 
-    callAction(that._strips, 'updatePosition', animationEnabled);
+    callAction(this._strips, 'updatePosition', animationEnabled);
 
-    updateGridsPosition(that._majorTicks, animationEnabled);
-    updateGridsPosition(that._minorTicks, animationEnabled);
+    updateGridsPosition(this._majorTicks, animationEnabled);
+    updateGridsPosition(this._minorTicks, animationEnabled);
 
     if (animationEnabled) {
-      callAction(that._ticksToRemove || [], 'fadeOutElements');
+      callAction(this._ticksToRemove || [], 'fadeOutElements');
     }
 
-    that.prepareAnimation();
+    this.prepareAnimation();
 
-    that._ticksToRemove = null;
+    this._ticksToRemove = null;
 
-    if (!that._translator.getBusinessRange().isEmpty()) {
-      that._firstDrawing = false;
+    if (!this._translator.getBusinessRange().isEmpty()) {
+      this._firstDrawing = false;
     }
-    that._resetApplyingAnimation = false;
-    that._updateLabelsPosition();
-  },
+    this._resetApplyingAnimation = false;
+    this._updateLabelsPosition();
+  }
 
-  _updateLabelsPosition: _noop,
-
-  prepareAnimation() {
-    const that = this;
+  prepareAnimation(): void {
     const action = 'saveCoords';
-    callAction(that._majorTicks, action);
-    callAction(that._minorTicks, action);
-    callAction(that._insideConstantLines, action);
-    callAction(that._outsideConstantLines, action);
-    callAction(that._strips, action);
-  },
+    callAction(this._majorTicks, action);
+    callAction(this._minorTicks, action);
+    callAction(this._insideConstantLines, action);
+    callAction(this._outsideConstantLines, action);
+    callAction(this._strips, action);
+  }
 
-  _resetStartCoordinates() {
-    const that = this;
+  _resetStartCoordinates(): void {
     const action = 'resetCoordinates';
-    callAction(that._majorTicks, action);
-    callAction(that._minorTicks, action);
-    callAction(that._insideConstantLines, action);
-    callAction(that._outsideConstantLines, action);
-    callAction(that._strips, action);
-  },
+    callAction(this._majorTicks, action);
+    callAction(this._minorTicks, action);
+    callAction(this._insideConstantLines, action);
+    callAction(this._outsideConstantLines, action);
+    callAction(this._strips, action);
+  }
 
-  applyClipRects(elementsClipID, canvasClipID) {
+  applyClipRects(elementsClipID: string, canvasClipID: string): void {
     this._axisGroup.attr({ 'clip-path': canvasClipID });
     this._axisStripGroup.attr({ 'clip-path': elementsClipID });
     this._axisElementsGroup.attr({ 'clip-path': canvasClipID });
-  },
+  }
 
-  _validateVisualRange(optionValue) {
+  _validateVisualRange(optionValue: ThemeValue): ThemeValue {
     const range = getVizRangeObject(optionValue);
     if (range.startValue !== undefined) {
       range.startValue = this.validateUnit(range.startValue);
@@ -2264,34 +2691,33 @@ Axis.prototype = {
     }
 
     return convertVisualRangeObject(range, !_isArray(optionValue));
-  },
+  }
 
-  _validateOptions(options) {
+  _validateOptions(options: ThemeValue): void {
     options.wholeRange = this._validateVisualRange(options.wholeRange);
     options.visualRange = options._customVisualRange = this._validateVisualRange(options._customVisualRange);
 
     this._setVisualRange(options._customVisualRange);
-  },
+  }
 
-  validate() {
-    const that = this;
-    const options = that._options;
-    const dataType = that.isArgumentAxis ? options.argumentType : options.valueType;
-    const parser = dataType ? getParser(dataType) : function (unit) { return unit; };
+  validate(): void {
+    const options = this._options;
+    const dataType = this.isArgumentAxis ? options.argumentType : options.valueType;
+    const parser = dataType ? getParser(dataType) : function (unit: ThemeValue): ThemeValue { return unit; };
 
-    that.parser = parser;
+    this.parser = parser;
     options.dataType = dataType;
 
-    that._validateOptions(options);
-  },
+    this._validateOptions(options);
+  }
 
-  resetVisualRange(isSilent) {
+  resetVisualRange(isSilent?: boolean): void {
     this._seriesData.minVisible = this._seriesData.min;
     this._seriesData.maxVisible = this._seriesData.max;
     this.handleZooming([null, null], { start: !!isSilent, end: !!isSilent });
-  },
+  }
 
-  _setVisualRange(visualRange, allowPartialUpdate) {
+  _setVisualRange(visualRange: ThemeValue, allowPartialUpdate?: boolean): void {
     const range = this.adjustRange(getVizRangeObject(visualRange));
     if (allowPartialUpdate) {
       isDefined(range.startValue) && (this._viewport.startValue = range.startValue);
@@ -2299,24 +2725,23 @@ Axis.prototype = {
     } else {
       this._viewport = range;
     }
-  },
+  }
 
-  _applyZooming(visualRange, allowPartialUpdate) {
-    const that = this;
-    that._resetVisualRangeOption();
-    that._setVisualRange(visualRange, allowPartialUpdate);
+  _applyZooming(visualRange: ThemeValue, allowPartialUpdate?: boolean): void {
+    this._resetVisualRangeOption();
+    this._setVisualRange(visualRange, allowPartialUpdate);
 
-    const viewPort = that.getViewport();
+    const viewPort = this.getViewport();
 
-    that._seriesData.userBreaks = that._getScaleBreaks(that._options, {
+    this._seriesData.userBreaks = this._getScaleBreaks(this._options, {
       minVisible: viewPort.startValue,
       maxVisible: viewPort.endValue,
-    }, that._series, that.isArgumentAxis);
+    }, this._series, this.isArgumentAxis);
 
-    that._translator.updateBusinessRange(that._getViewportRange());
-  },
+    this._translator.updateBusinessRange(this._getViewportRange());
+  }
 
-  getZoomStartEventArg(event, actionType) {
+  getZoomStartEventArg(event: ThemeValue, actionType: string | undefined): ThemeValue {
     return {
       axis: this,
       range: this.visualRange(),
@@ -2324,9 +2749,9 @@ Axis.prototype = {
       event,
       actionType,
     };
-  },
+  }
 
-  _getZoomEndEventArg(previousRange, event, actionType, zoomFactor, shift) {
+  _getZoomEndEventArg(previousRange: ThemeValue, event: ThemeValue, actionType: string | undefined, zoomFactor: number, shift: number): ThemeValue {
     const newRange = this.visualRange();
     return {
       axis: this,
@@ -2341,9 +2766,9 @@ Axis.prototype = {
       rangeStart: newRange.startValue,
       rangeEnd: newRange.endValue,
     };
-  },
+  }
 
-  getZoomBounds() {
+  getZoomBounds(): { startValue: ThemeValue; endValue: ThemeValue } {
     const wholeRange = getVizRangeObject(this._options.wholeRange);
     const range = this.getTranslator().getBusinessRange();
     const secondPriorityRange = {
@@ -2355,45 +2780,45 @@ Axis.prototype = {
       startValue: getZoomBoundValue(wholeRange.startValue, secondPriorityRange.startValue),
       endValue: getZoomBoundValue(wholeRange.endValue, secondPriorityRange.endValue),
     };
-  },
+  }
 
-  setInitRange() {
+  setInitRange(): void {
     this._initRange = {};
     if (Object.keys(this._options.wholeRange || {}).length === 0) {
       this._initRange = this.getZoomBounds();
     }
-  },
+  }
 
-  _resetVisualRangeOption() {
+  _resetVisualRangeOption(): void {
     this._options._customVisualRange = {};
-  },
+  }
 
-  getTemplatesGroups() {
+  getTemplatesGroups(): ThemeValue[] {
     const ticks = this._majorTicks;
     if (ticks) {
       return this._majorTicks.map((tick) => tick.templateContainer).filter((item) => isDefined(item));
     } else {
       return [];
     }
-  },
+  }
 
-  setCustomVisualRange(range) {
+  setCustomVisualRange(range: ThemeValue): void {
     this._options._customVisualRange = range;
-  },
+  }
 
   // API
-  // @ts-expect-error
-  visualRange() {
-    const that = this;
+  visualRange(): ThemeValue {
     const args = arguments;
     let visualRange;
 
     if (args.length === 0) {
-      const adjustedRange = that._getAdjustedBusinessRange();
+      const adjustedRange = this._getAdjustedBusinessRange();
       let startValue = adjustedRange.minVisible;
       let endValue = adjustedRange.maxVisible;
-      if (that._options.type === constants.discrete) {
+      if (this._options.type === constants.discrete) {
+        // @ts-expect-error a discrete range always has categories
         startValue = startValue ?? adjustedRange.categories[0];
+        // @ts-expect-error a discrete range always has categories
         endValue = endValue ?? adjustedRange.categories[adjustedRange.categories.length - 1];
         return {
           startValue,
@@ -2413,25 +2838,24 @@ Axis.prototype = {
       visualRange = [args[0], args[1]];
     }
 
-    const zoomResults = that.handleZooming(visualRange, args[1]);
+    const zoomResults = this.handleZooming(visualRange, args[1]);
     if (!zoomResults.isPrevented) {
-      that._visualRange(that, zoomResults);
+      this._visualRange(this, zoomResults);
     }
-  },
+  }
 
-  handleZooming(visualRange, preventEvents, domEvent, action) {
-    const that = this;
+  handleZooming(visualRange: ThemeValue, preventEvents?: ThemeValue, domEvent?: ThemeValue, action?: string): ZoomResults {
     preventEvents = preventEvents || {};
 
     if (isDefined(visualRange)) {
-      visualRange = that._validateVisualRange(visualRange);
+      visualRange = this._validateVisualRange(visualRange);
       visualRange.action = action;
     }
 
-    const zoomStartEvent = that.getZoomStartEventArg(domEvent, action);
+    const zoomStartEvent = this.getZoomStartEventArg(domEvent, action);
     const previousRange = zoomStartEvent.range;
 
-    !preventEvents.start && that._eventTrigger('zoomStart', zoomStartEvent);
+    !preventEvents.start && this._eventTrigger('zoomStart', zoomStartEvent);
     const zoomResults = {
       isPrevented: zoomStartEvent.cancel,
       skipEventRising: preventEvents.skipEventRising,
@@ -2439,60 +2863,65 @@ Axis.prototype = {
     };
 
     if (!zoomStartEvent.cancel) {
-      isDefined(visualRange) && that._applyZooming(visualRange, preventEvents.allowPartialUpdate);
-      if (!isDefined(that._storedZoomEndParams)) {
-        that._storedZoomEndParams = {
+      isDefined(visualRange) && this._applyZooming(visualRange, preventEvents.allowPartialUpdate);
+      if (!isDefined(this._storedZoomEndParams)) {
+        this._storedZoomEndParams = {
           startRange: previousRange,
           type: this.getOptions().type,
         };
       }
-      that._storedZoomEndParams.event = domEvent;
-      that._storedZoomEndParams.action = action;
-      that._storedZoomEndParams.prevent = !!preventEvents.end;
+      this._storedZoomEndParams.event = domEvent;
+      this._storedZoomEndParams.action = action;
+      this._storedZoomEndParams.prevent = !!preventEvents.end;
     }
 
     return zoomResults;
-  },
+  }
 
-  handleZoomEnd() {
-    const that = this;
-    if (isDefined(that._storedZoomEndParams) && !that._storedZoomEndParams.prevent) {
-      const previousRange = that._storedZoomEndParams.startRange;
-      const domEvent = that._storedZoomEndParams.event;
-      const action = that._storedZoomEndParams.action;
+  handleZoomEnd(): void {
+    if (isDefined(this._storedZoomEndParams) && !this._storedZoomEndParams.prevent) {
+      const previousRange = this._storedZoomEndParams.startRange;
+      const domEvent = this._storedZoomEndParams.event;
+      const action = this._storedZoomEndParams.action;
       const previousBusinessRange = {
         minVisible: previousRange.startValue,
         maxVisible: previousRange.endValue,
         categories: previousRange.categories,
       };
-      const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
-      const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange, false)) : NaN;
-      const zoomFactor = typeIsNotChanged
-      // @ts-expect-error
-        ? +`${Math.round(`${that.getVisualRangeLength(previousBusinessRange) / (that.getVisualRangeLength() || 1)}e+2`)}e-2` : NaN;
-      const zoomEndEvent = that._getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
+      const typeIsNotChanged = this.getOptions().type === this._storedZoomEndParams.type;
+      const shift = typeIsNotChanged ? adjust(this.getVisualRangeCenter() - this.getVisualRangeCenter(previousBusinessRange, false)) : NaN;
+      const calcZoomFactor = (): number => {
+        if (action === 'pan') {
+          return 1;
+        }
 
-      zoomEndEvent.cancel = that.checkZoomingLowerLimitOvercome(zoomFactor === 1 ? 'pan' : 'zoom', zoomFactor).stopInteraction;
-      that._eventTrigger('zoomEnd', zoomEndEvent);
+        const currentLength = this.getVisualRangeLength() || 1;
+        const ratio = this.getVisualRangeLength(previousBusinessRange) / currentLength;
+
+        return Math.round(multiplyInExponentialForm(ratio, ZOOM_FACTOR_PRECISION)) / ZOOM_FACTOR_MULTIPLIER;
+      };
+      const zoomFactor = typeIsNotChanged ? calcZoomFactor() : NaN;
+      const zoomEndEvent = this._getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
+
+      zoomEndEvent.cancel = this.checkZoomingLowerLimitOvercome(zoomFactor === 1 ? 'pan' : 'zoom', zoomFactor).stopInteraction;
+      this._eventTrigger('zoomEnd', zoomEndEvent);
 
       if (zoomEndEvent.cancel) {
-        that._restorePreviousVisualRange(previousRange);
+        this._restorePreviousVisualRange(previousRange);
       }
-      that._storedZoomEndParams = null;
+      this._storedZoomEndParams = null;
     }
-  },
+  }
 
-  _restorePreviousVisualRange(previousRange) {
-    const that = this;
-    that._storedZoomEndParams = null;
-    that._applyZooming(previousRange);
-    that._visualRange(that, previousRange);
-  },
+  _restorePreviousVisualRange(previousRange: ThemeValue): void {
+    this._storedZoomEndParams = null;
+    this._applyZooming(previousRange);
+    this._visualRange(this, previousRange);
+  }
 
-  checkZoomingLowerLimitOvercome(actionType, zoomFactor, range) {
-    const that = this;
-    const options = that._options;
-    const translator = that._translator;
+  checkZoomingLowerLimitOvercome(actionType: string, zoomFactor: number, range?: ThemeValue): { stopInteraction: boolean; correctedRange: ThemeValue } {
+    const options = this._options;
+    const translator = this._translator;
     let minZoom = options.minVisualRangeLength;
     let correctedRange = range;
     let visualRange;
@@ -2501,7 +2930,7 @@ Axis.prototype = {
     const businessRange = translator.getBusinessRange();
 
     if (range) {
-      visualRange = that.adjustRange(getVizRangeObject(range));
+      visualRange = this.adjustRange(getVizRangeObject(range));
       visualRange = {
         minVisible: visualRange.startValue,
         maxVisible: visualRange.endValue,
@@ -2509,8 +2938,8 @@ Axis.prototype = {
       };
     }
 
-    const beforeVisualRangeLength = that.getVisualRangeLength(businessRange);
-    const afterVisualRangeLength = that.getVisualRangeLength(visualRange);
+    const beforeVisualRangeLength = this.getVisualRangeLength(businessRange);
+    const afterVisualRangeLength = this.getVisualRangeLength(visualRange);
 
     if (isDefined(minZoom) || options.type === 'discrete') {
       minZoom = translator.convert(minZoom);
@@ -2518,24 +2947,24 @@ Axis.prototype = {
         correctedRange = getVizRangeObject(translator.getRangeByMinZoomValue(minZoom, visualRange));
         isOvercoming = false;
       } else {
-        // @ts-expect-error
+        // @ts-expect-error boolean bitwise AND
         isOvercoming &= minZoom > afterVisualRangeLength;
       }
     } else {
-      const canvasLength = that._translator.canvasLength;
+      const canvasLength = this._translator.canvasLength;
       const fullRange = {
         minVisible: businessRange.min,
         maxVisible: businessRange.max,
         categories: businessRange.categories,
       };
-      // @ts-expect-error
-      isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= afterVisualRangeLength;
+      // @ts-expect-error boolean bitwise AND
+      isOvercoming &= this.getVisualRangeLength(fullRange) / canvasLength >= afterVisualRangeLength;
     }
 
     return { stopInteraction: !!isOvercoming, correctedRange };
-  },
+  }
 
-  isExtremePosition(isMax) {
+  isExtremePosition(isMax: boolean): boolean {
     let extremeDataValue;
     let seriesData;
 
@@ -2553,13 +2982,13 @@ Axis.prototype = {
     const visualRangePoint = isMax ? translator.translate(visualRange.endValue) : translator.translate(visualRange.startValue);
 
     return _abs(visualRangePoint - extremePoint) < SCROLL_THRESHOLD;
-  },
+  }
 
-  getViewport() {
+  getViewport(): ThemeValue {
     return this._viewport;
-  },
+  }
 
-  getFullTicks() {
+  getFullTicks(): ThemeValue[] {
     const majors = this._majorTicks || [];
     if (this._options.type === constants.discrete) {
       return convertTicksToValues(majors);
@@ -2567,110 +2996,106 @@ Axis.prototype = {
       return convertTicksToValues(majors.concat(this._minorTicks, this._boundaryTicks))
         .sort((a, b) => valueOf(a) - valueOf(b));
     }
-  },
+  }
 
-  measureLabels(canvas, withIndents) {
-    const that = this;
-    const options = that._options;
+  measureLabels(canvas: ThemeValue, withIndents?: boolean): { x: number; y: number; width: number; height: number } {
+    const options = this._options;
     const widthAxis = options.visible ? options.width : 0;
     let ticks;
     const indent = withIndents ? options.label.indentFromAxis + (options.tick.length * 0.5) : 0;
     let tickInterval;
-    const viewportRange = that._getViewportRange();
+    const viewportRange = this._getViewportRange();
 
-    if (viewportRange.isEmpty() || !options.label.visible || !that._axisElementsGroup) {
+    if (viewportRange.isEmpty() || !options.label.visible || !this._axisElementsGroup) {
       return {
         height: widthAxis, width: widthAxis, x: 0, y: 0,
       };
     }
 
-    if (that._majorTicks) {
-      ticks = convertTicksToValues(that._majorTicks);
+    if (this._majorTicks) {
+      ticks = convertTicksToValues(this._majorTicks);
     } else {
-      that.updateCanvas(canvas);
-      ticks = that._createTicksAndLabelFormat(viewportRange, _noop);
+      this.updateCanvas(canvas);
+      ticks = this._createTicksAndLabelFormat(viewportRange, _noop);
       tickInterval = ticks.tickInterval;
       ticks = ticks.ticks;
     }
 
     const maxText = ticks.reduce((prevLabel, tick, index) => {
-      const label = that.formatLabel(tick, options.label, viewportRange, undefined, tickInterval, ticks);
+      const label = this.formatLabel(tick, options.label, viewportRange, undefined, tickInterval, ticks);
       if (prevLabel.length < label.length) {
         return label;
       } else {
         return prevLabel;
       }
-    }, that.formatLabel(ticks[0], options.label, viewportRange, undefined, tickInterval, ticks));
+    }, this.formatLabel(ticks[0], options.label, viewportRange, undefined, tickInterval, ticks));
 
-    const text = that._renderer.text(maxText, 0, 0).css(that._textFontStyles).attr(that._textOptions).append(that._renderer.root);
+    const text = this._renderer.text(maxText, 0, 0).css(this._textFontStyles).attr(this._textOptions).append(this._renderer.root);
     const box = text.getBBox();
 
     text.remove();
     return {
       x: box.x, y: box.y, width: box.width + indent, height: box.height + indent,
     };
-  },
+  }
 
-  _setLabelsPlacement() {
+  _setLabelsPlacement(): void {
     if (!this._options.label.visible) {
       return;
     }
-    const that = this;
-    const labelOpt = that._options.label;
-    const displayMode = that._validateDisplayMode(labelOpt.displayMode);
-    const overlappingMode = that._validateOverlappingMode(labelOpt.overlappingBehavior, displayMode);
+    const labelOpt = this._options.label;
+    const displayMode = this._validateDisplayMode(labelOpt.displayMode);
+    const overlappingMode = this._validateOverlappingMode(labelOpt.overlappingBehavior, displayMode);
     const ignoreOverlapping = overlappingMode === 'none' || overlappingMode === 'ignore';
     const behavior = {
       rotationAngle: labelOpt.rotationAngle,
       staggeringSpacing: labelOpt.staggeringSpacing,
     };
     let notRecastStep;
-    const boxes = that._majorTicks.map((tick) => tick.labelBBox);
-    let step = that._getStep(boxes);
+    const boxes = this._majorTicks.map((tick) => tick.labelBBox);
+    let step = this._getStep(boxes);
     switch (displayMode) {
       case ROTATE:
         if (ignoreOverlapping) {
           notRecastStep = true;
           step = 1;
         }
-        that._applyLabelMode(displayMode, step, boxes, labelOpt, notRecastStep);
+        this._applyLabelMode(displayMode, step, boxes, labelOpt, notRecastStep);
         break;
       case 'stagger':
         if (ignoreOverlapping) {
           step = 2;
         }
-        that._applyLabelMode(displayMode, _max(step, 2), boxes, labelOpt);
+        this._applyLabelMode(displayMode, _max(step, 2), boxes, labelOpt);
         break;
       default:
-        that._applyLabelOverlapping(boxes, overlappingMode, step, behavior);
+        this._applyLabelOverlapping(boxes, overlappingMode, step, behavior);
     }
-  },
+  }
 
-  _applyLabelOverlapping(boxes, mode, step, behavior) {
-    const that = this;
-    const labelOpt = that._options.label;
-    const majorTicks = that._majorTicks;
+  _applyLabelOverlapping(boxes: ThemeValue[], mode: string, step: number, behavior: ThemeValue): void {
+    const labelOpt = this._options.label;
+    const majorTicks = this._majorTicks;
 
     if (mode === 'none' || mode === 'ignore') {
       return;
     }
-    const checkLabels = function (box, index, array) {
+    const checkLabels = function (box: ThemeValue, index: number, array: ThemeValue[]): boolean {
       if (index === 0) {
         return false;
       }
       return constants.areLabelsOverlap(box, array[index - 1], labelOpt.minSpacing, labelOpt.alignment);
     };
     if (step > 1 && boxes.some(checkLabels)) {
-      that._applyLabelMode(mode, step, boxes, behavior);
+      this._applyLabelMode(mode, step, boxes, behavior);
     }
-    that._checkBoundedLabelsOverlapping(majorTicks, boxes, mode);
-    that._checkShiftedLabels(majorTicks, boxes, labelOpt.minSpacing, labelOpt.alignment);
-  },
+    this._checkBoundedLabelsOverlapping(majorTicks, boxes, mode);
+    this._checkShiftedLabels(majorTicks, boxes, labelOpt.minSpacing, labelOpt.alignment);
+  }
 
-  _applyLabelMode(mode, step, boxes, behavior, notRecastStep) {
-    const that = this;
-    const majorTicks = that._majorTicks;
-    const labelOpt = that._options.label;
+  _applyLabelMode(mode: string, step: number, boxes: ThemeValue[], behavior: ThemeValue, notRecastStep?: boolean): void {
+    const majorTicks = this._majorTicks;
+    const labelOpt = this._options.label;
     const angle = behavior.rotationAngle;
     let labelHeight;
     let alignment;
@@ -2683,8 +3108,8 @@ Axis.prototype = {
             alignment = CENTER;
           }
         }
-        step = notRecastStep ? step : that._getStep(boxes, angle);
-        func = function (tick) {
+        step = notRecastStep ? step : this._getStep(boxes, angle);
+        func = function (tick: ThemeValue): void {
           const contentContainer = tick.getContentContainer();
           if (!contentContainer) {
             return;
@@ -2696,9 +3121,9 @@ Axis.prototype = {
         updateLabels(majorTicks, step, func);
         break;
       case 'stagger':
-        labelHeight = that._getMaxLabelHeight(boxes, behavior.staggeringSpacing);
+        labelHeight = this._getMaxLabelHeight(boxes, behavior.staggeringSpacing);
 
-        func = function (tick, index) {
+        func = function (tick: ThemeValue, index: number): void {
           if ((index / (step - 1)) % 2 !== 0) {
             tick.labelOffset = labelHeight;
           }
@@ -2708,47 +3133,27 @@ Axis.prototype = {
       case 'auto':
       case '_auto':
         if (step === 2) {
-          that._applyLabelMode('stagger', step, boxes, behavior);
+          this._applyLabelMode('stagger', step, boxes, behavior);
         } else {
-          that._applyLabelMode(ROTATE, step, boxes, { rotationAngle: getOptimalAngle(boxes, labelOpt) });
+          this._applyLabelMode(ROTATE, step, boxes, { rotationAngle: getOptimalAngle(boxes, labelOpt) });
         }
         break;
       default:
         updateLabels(majorTicks, step);
         break;
     }
-  },
+  }
 
-  getMarkerTrackers: _noop,
-
-  _drawDateMarkers: _noop,
-
-  _adjustDateMarkers: _noop,
-
-  coordsIn: _noop,
-
-  areCoordsOutsideAxis: _noop,
-
-  _getSkippedCategory: _noop,
-
-  _initAxisPositions: _noop,
-
-  _drawTitle: _noop,
-
-  _updateTitleCoords: _noop,
-
-  _adjustConstantLineLabels: _noop,
-
-  _createTranslator() {
+  _createTranslator(): Translator2DInstance {
     return new Translator2D({}, {}, {});
-  },
+  }
 
-  _updateTranslator() {
+  _updateTranslator(): void {
     const translator = this._translator;
     translator.update(translator.getBusinessRange(), this._canvas || {}, this._getTranslatorOptions());
-  },
+  }
 
-  _getTranslatorOptions() {
+  _getTranslatorOptions(): Translator2DOptions {
     const options = this._options;
     return {
       isHorizontal: this._isHorizontal,
@@ -2758,14 +3163,14 @@ Axis.prototype = {
       stick: this._getStick(),
       breaksSize: options.breakStyle?.width ?? 0,
     };
-  },
+  }
 
-  getVisibleArea() {
+  getVisibleArea(): number[] {
     const canvas = this._getCanvasStartEnd();
     return [canvas.start, canvas.end].sort((a, b) => a - b);
-  },
+  }
 
-  _getCanvasStartEnd() {
+  _getCanvasStartEnd(): { start: number; end: number } {
     const isHorizontal = this._isHorizontal;
     const canvas = this._canvas || {};
     const invert = this._translator.getBusinessRange().invert;
@@ -2777,45 +3182,31 @@ Axis.prototype = {
       start: coords[0],
       end: coords[1],
     };
-  },
+  }
 
-  _getScreenDelta() {
-    const that = this;
-    const canvas = that._getCanvasStartEnd();
-    const breaks = that._seriesData ? that._seriesData.breaks || [] : [];
+  _getScreenDelta(): number {
+    const canvas = this._getCanvasStartEnd();
+    const breaks = this._seriesData ? this._seriesData.breaks || [] : [];
     const breaksLength = breaks.length;
     const screenDelta = _abs(canvas.start - canvas.end);
 
     return screenDelta - (breaksLength ? breaks[breaksLength - 1].cumulativeWidth : 0);
-  },
+  }
 
-  _getScaleBreaks() { return []; },
+  _getScaleBreaks(axisOptions: ThemeValue, viewport: ThemeValue, series: ThemeValue[], isArgumentAxis?: boolean): ThemeValue[];
 
-  _filterBreaks() { return []; },
+  _getScaleBreaks(): ThemeValue[] { return []; }
 
-  _adjustTitle: _noop,
+  _filterBreaks(breaks: ThemeValue[], viewport: ThemeValue, breakStyle: ThemeValue): ThemeValue[];
 
-  _checkTitleOverflow: _noop,
+  _filterBreaks(): ThemeValue[] { return []; }
 
-  getSpiderTicks: _noop,
-
-  setSpiderTicks: _noop,
-
-  _checkBoundedLabelsOverlapping: _noop,
-
-  _checkShiftedLabels: _noop,
-
-  drawScaleBreaks: _noop,
-
-  _visualRange: _noop,
-
-  _rotateConstantLine: _noop,
-
-  applyVisualRangeSetter(visualRangeSetter) {
+  applyVisualRangeSetter(visualRangeSetter: VisualRangeSetter): void {
     this._visualRange = visualRangeSetter;
-  },
+  }
+
   // T642779, T714928, T810801
-  getCategoriesSorter(argCategories) {
+  getCategoriesSorter(argCategories?: ThemeValue): ThemeValue {
     let sort;
     if (this.isArgumentAxis) {
       sort = argCategories;
@@ -2825,12 +3216,40 @@ Axis.prototype = {
     }
 
     return sort;
-  },
+  }
 
-  _getAdjustedBusinessRange() {
+  _getAdjustedBusinessRange(): RangeInstance {
     return this.adjustViewport(this._translator.getBusinessRange());
-  },
+  }
+};
 
+Object.assign(Axis.prototype, {
+  getOrthogonalAxis: _noop,
+  getCustomPosition: _noop,
+  getCustomBoundaryPosition: _noop,
+  resolveOverlappingForCustomPositioning: _noop,
+  _disposeBreaksGroup: _noop,
+  _measureTitle: _noop,
+  _updateLabelsPosition: _noop,
+  getMarkerTrackers: _noop,
+  _drawDateMarkers: _noop,
+  _adjustDateMarkers: _noop,
+  coordsIn: _noop,
+  areCoordsOutsideAxis: _noop,
+  _getSkippedCategory: _noop,
+  _initAxisPositions: _noop,
+  _drawTitle: _noop,
+  _updateTitleCoords: _noop,
+  _adjustConstantLineLabels: _noop,
+  _adjustTitle: _noop,
+  _checkTitleOverflow: _noop,
+  getSpiderTicks: _noop,
+  setSpiderTicks: _noop,
+  _checkBoundedLabelsOverlapping: _noop,
+  _checkShiftedLabels: _noop,
+  drawScaleBreaks: _noop,
+  _visualRange: _noop,
+  _rotateConstantLine: _noop,
   /// #DEBUG
   _getTickMarkPoints: _noop,
   _validateOverlappingMode: _noop,
@@ -2838,4 +3257,10 @@ Axis.prototype = {
   _validateDisplayMode: _noop,
   shift: _noop,
   /// #ENDDEBUG
-};
+});
+
+/// #DEBUG
+export function DEBUG_set_Axis(value: typeof Axis): void {
+  Axis = value;
+}
+/// #ENDDEBUG

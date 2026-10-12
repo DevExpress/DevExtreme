@@ -1,4 +1,5 @@
 import Callbacks from '@js/core/utils/callbacks';
+import type { DeferredObj as DeferredInstance } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDeferred, isDefined, isPromise } from '@js/core/utils/type';
 
@@ -169,10 +170,12 @@ export function setStrategy(value) {
   whenFunc = value.when;
 }
 
+export function Deferred<T>(): DeferredInstance<T>;
 export function Deferred() {
   return new DeferredObj();
 }
 
+export function when<T>(...values: (DeferredInstance<T> | T)[]): DeferredInstance<T>;
 export function when() {
   // @ts-expect-error
   return whenFunc.apply(this, arguments);

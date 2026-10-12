@@ -1,21 +1,17 @@
 @use "../mixins" as *;
 
-// adduse
+$color-view-container-width: 450px !default;
+$color-view-palette-width: 288px !default;
+$color-view-palette-height: 299px !default;
+$color-view-alpha-width: 292px !default;
+$color-view-hue-scale-width: 18px !default;
+$color-view-hue-scale-height: $color-view-palette-height !default;
 
+$colorview-palette-handle-size: 28px !default;
+$colorview-transparent-background-color: #ccc !default;
 
-$color-view-container-width: 450px;
-$color-view-palette-width: 288px;
-$color-view-palette-height: 299px;
-$color-view-alpha-width: 292px;
-$color-view-hue-scale-width: 18px;
-$color-view-hue-scale-height: $color-view-palette-height;
-
-$colorview-palette-handle-size: 28px;
-$colorview-transparent-background-color: #ccc;
-
-$colorview-handle-first-side-size: 36px;
-$colorview-handle-second-side-size: 17px;
-
+$colorview-handle-first-side-size: 36px !default;
+$colorview-handle-second-side-size: 17px !default;
 
 .dx-colorview-container {
   width: $color-view-container-width;
@@ -132,7 +128,6 @@ $colorview-handle-second-side-size: 17px;
 .dx-colorbox-input-container {
   height: 100%;
 }
-
 
 .dx-colorview-palette-gradient-white {
   $palette-white-bg: 270deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1);

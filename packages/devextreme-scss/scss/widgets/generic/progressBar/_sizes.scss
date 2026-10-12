@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $progressbar-status-padding-top: null !default;
 
 @if $size == "default" {

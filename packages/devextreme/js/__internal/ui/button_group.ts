@@ -86,9 +86,10 @@ class ButtonCollection extends CollectionWidgetEdit<ButtonCollectionProperties> 
     };
   }
 
-  _hasCustomTemplate(template): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return isFunction(template) || this.option('integrationOptions.templates')[template];
+  _hasCustomTemplate(template: unknown): boolean {
+    const templates = this.option('integrationOptions.templates') as Record<string, unknown>;
+
+    return isFunction(template) || Boolean(templates[String(template)]);
   }
 
   _selectedItemClass(): string {
@@ -177,10 +178,8 @@ class ButtonGroup extends Widget<Properties> {
       keyExpr: 'text',
       items: [],
       buttonTemplate: 'content',
-      // @ts-expect-error ts-error
-      onSelectionChanged: null,
-      // @ts-expect-error ts-error
-      onItemClick: null,
+      onSelectionChanged: undefined,
+      onItemClick: undefined,
     };
   }
 

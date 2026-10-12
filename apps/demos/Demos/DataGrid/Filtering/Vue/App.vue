@@ -197,7 +197,7 @@ const orderDateHeaderFilter = (options: { dataSource: DataSourceOptions }) => {
   };
 };
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

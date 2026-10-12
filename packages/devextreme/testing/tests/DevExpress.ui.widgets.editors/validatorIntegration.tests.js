@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -23,8 +22,8 @@ import 'ui/slider';
 import 'ui/range_slider';
 import 'ui/switch';
 
-const Fixture = Class.inherit({
-    createInstance: function(editor, editorOptions, validatorOptions, keyboard = true) {
+class Fixture {
+    createInstance(editor, editorOptions, validatorOptions, keyboard = true) {
         const $element = $('<div/>').appendTo('#qunit-fixture');
         this.$element = $element[editor](editorOptions).dxValidator(validatorOptions);
 
@@ -37,19 +36,19 @@ const Fixture = Class.inherit({
         this.validator = Validator.getInstance($element);
 
         return $element;
-    },
+    }
 
-    createTextBoxWithValidator: function(validatorOptions) {
+    createTextBoxWithValidator(validatorOptions) {
         this.$element = $('<div/>');
         const validator = this.$element.dxTextBox().dxValidator(validatorOptions).dxValidator('instance');
         return validator;
-    },
+    }
 
-    teardown: function() {
+    teardown() {
         this.$element.remove();
         ValidationEngine.initGroups();
     }
-});
+}
 
 QUnit.module('Regression', {
     beforeEach: function() {

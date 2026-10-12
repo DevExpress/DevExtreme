@@ -56,16 +56,16 @@ function testsFactory(testModel: {
   assertFirstColumnHidden: (t: TestController, cardView: CardView) => Promise<void>;
   config: any; // TODO: add typing
 }) {
-  test.meta({ unstable: true })(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
+  test(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
     const cardView = new CardView('#container');
 
     await cardView.apiShowColumnChooser();
+    await testModel.assertFirstColumnVisible(t, cardView);
 
     await testModel.hideFirstColumn(t, cardView);
     await testModel.assertFirstColumnHidden(t, cardView);
 
     await testModel.showFirstColumn(t, cardView);
-
     await testModel.assertFirstColumnVisible(t, cardView);
 
     await testModel.hideFirstColumn(t, cardView);
@@ -231,11 +231,13 @@ test('cards should update when column is hidden via column chooser (select mode)
   await t.expect(initialCaptions).eql(['A', 'B', 'C']);
 
   await cardView.apiShowColumnChooser();
+  await t.expect(cardView.getColumnChooser().isCheckboxChecked(0)).ok();
 
   await t.click(cardView.getColumnChooser().getCheckbox(0));
 
   const captionsAfterHide = await getCardFieldCaptions(t, cardView, 2);
   await t.expect(captionsAfterHide).eql(['B', 'C']);
+  await t.expect(cardView.getColumnChooser().isCheckboxChecked(0)).notOk();
 
   await t.click(cardView.getColumnChooser().getCheckbox(0));
 

@@ -57,7 +57,7 @@ async function writeBundleArtifact(projectDir: string, content: string): Promise
 }
 
 async function writeModulesMetadata(projectDir: string, modules: unknown[]): Promise<void> {
-  const metadataPath = path.join(projectDir, 'build', 'gulp', 'modules_metadata.json');
+  const metadataPath = path.join(projectDir, 'build', 'modules_metadata.json');
   fs.mkdirSync(path.dirname(metadataPath), { recursive: true });
   await writeFileText(metadataPath, JSON.stringify(modules));
 }
@@ -112,6 +112,24 @@ describe('CheckDeclarationsExecutor E2E', () => {
 
     const result = await executor(options, context);
     expect(result.success).toBe(true);
+  });
+
+  it('should fail when the requested typescript module cannot be resolved', async () => {
+    await writeFileText(
+      path.join(projectDir, 'js', 'sample.d.ts'),
+      'declare namespace DevExpress { export interface Sample { value: number; } }\n',
+    );
+
+    const options: CheckDeclarationsExecutorSchema = {
+      mode: 'modules',
+      modulesPattern: './js/**/*.d.ts',
+      typescriptModule: path.join(tempDir, 'missing-typescript'),
+      compilerOptions: { types: [] },
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(false);
+    expect(String(errorSpy.mock.calls[0][0])).toContain('could not be resolved');
   });
 
   it('should fail modules mode when declarations contain type errors', async () => {

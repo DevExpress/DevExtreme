@@ -1,6 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
 .dx-accordion-item-title {
   cursor: pointer;
   position: relative;
@@ -31,7 +30,6 @@
     visibility: hidden;
   }
 }
-
 
 .dx-accordion-item {
   overflow: hidden;

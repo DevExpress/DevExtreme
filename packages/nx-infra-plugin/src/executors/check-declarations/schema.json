@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/schema",
   "title": "Check Declarations Executor Schema",
-  "description": "Type-check DevExtreme declaration files (gulp validate-ts parity)",
+  "description": "Type-check DevExtreme declaration files",
   "type": "object",
   "properties": {
     "mode": {

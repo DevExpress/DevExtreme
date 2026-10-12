@@ -4,6 +4,7 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import errors from '@js/core/errors';
 import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
 import { getPathParts } from '@js/core/utils/data';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -146,6 +147,8 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     this._toggleVisibility();
   }
 
+  _renderFocusTarget(): void { return noop(); }
+
   private renderToolbar(): void {
     const config = this.createToolbarConfig();
 
@@ -233,9 +236,10 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       firstDayOfWeek,
       focusStateEnabled,
       tabIndex,
-      onValueChanged: async (e) => {
+      onValueChanged: (e): void => {
         this.updateCurrentDate(e.value);
-        await this.calendar?.hide();
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.calendar?.hide();
       },
     });
 

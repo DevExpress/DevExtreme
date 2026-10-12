@@ -1,3 +1,12 @@
+import 'fluent_blue_light.css!';
+
+import 'ui/data_grid';
+import 'ui/tree_list';
+
+import $ from 'jquery';
+import pointerMock from '../../helpers/pointerMock.js';
+import { setupTreeListModules } from '../../helpers/treeListMocks.js';
+
 QUnit.testStart(function() {
     const markup =
         `<style>
@@ -15,15 +24,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 });
-
-import 'generic_light.css!';
-
-import 'ui/data_grid';
-import 'ui/tree_list';
-
-import $ from 'jquery';
-import pointerMock from '../../helpers/pointerMock.js';
-import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 const generateData = function(rowCount) {
     let i;
@@ -100,7 +100,7 @@ QUnit.module('Drag and Drop nodes', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 100);
 
         // assert
         const $draggableElement = $('body').children('.dx-sortable-dragging');
@@ -130,7 +130,7 @@ QUnit.module('Drag and Drop nodes', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 50);
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 75);
 
         // assert
         const $placeholderElement = $('body').children('.dx-sortable-placeholder');

@@ -284,12 +284,10 @@ class TileView extends CollectionWidget<TileViewProperties> {
       };
       currentItem[itemMainRatio] = item[itemMainRatio] ?? 1;
       currentItem[itemCrossRatio] = item[itemCrossRatio] ?? 1;
-      // @ts-expect-error ts-error
       currentItem[itemMainRatio] = currentItem[itemMainRatio] <= 0
         ? 0
         // @ts-expect-error ts-error
         : Math.round(currentItem[config.itemMainRatio]);
-      // @ts-expect-error ts-error
       currentItem[itemCrossRatio] = currentItem[itemCrossRatio] <= 0
         ? 0
         // @ts-expect-error ts-error

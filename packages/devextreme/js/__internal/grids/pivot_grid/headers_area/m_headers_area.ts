@@ -6,10 +6,12 @@ import { setHeight, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 
 import { AreaItem } from '../area_item/m_area_item';
+import {
+  HORIZONTAL_HEADERS_AREA_CLASS as PIVOTGRID_AREA_COLUMN_CLASS,
+  VERTICAL_HEADERS_AREA_CLASS as PIVOTGRID_AREA_ROW_CLASS,
+} from '../keyboard_navigation/const';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
-const PIVOTGRID_AREA_COLUMN_CLASS = 'dx-pivotgrid-horizontal-headers';
-const PIVOTGRID_AREA_ROW_CLASS = 'dx-pivotgrid-vertical-headers';
 const PIVOTGRID_TOTAL_CLASS = 'dx-total';
 const PIVOTGRID_GRAND_TOTAL_CLASS = 'dx-grandtotal';
 const PIVOTGRID_ROW_TOTAL_CLASS = 'dx-row-total';
@@ -47,6 +49,10 @@ class HorizontalHeadersArea extends AreaItem {
 
   _getAreaClassName() {
     return PIVOTGRID_AREA_COLUMN_CLASS;
+  }
+
+  _isCellNavigationEnabled() {
+    return true;
   }
 
   _createGroupElement() {
@@ -89,6 +95,7 @@ class HorizontalHeadersArea extends AreaItem {
   _getMainElementMarkup() {
     const thead = domAdapter.createElement('thead');
     thead.setAttribute('class', this._getAreaClassName());
+    thead.setAttribute('role', 'presentation');
     return thead;
   }
 
@@ -290,6 +297,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
   _getMainElementMarkup() {
     const tbody = domAdapter.createElement('tbody');
     tbody.classList.add(this._getAreaClassName());
+    tbody.setAttribute('role', 'presentation');
     return tbody;
   }
 

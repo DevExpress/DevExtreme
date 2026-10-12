@@ -38,7 +38,7 @@ import { dataSource } from './data.ts';
 
 const customizeSeries = (seriesName: string) => (seriesName === 'USA' ? { color: 'red' } : {});
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 310px;
 }

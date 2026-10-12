@@ -96,10 +96,10 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get breaks(): Array<ScaleBreak> {
+    get breaks(): undefined | Array<ScaleBreak> {
         return this._getOption('breaks');
     }
-    set breaks(value: Array<ScaleBreak>) {
+    set breaks(value: undefined | Array<ScaleBreak>) {
         this._setOption('breaks', value);
     }
 
@@ -312,10 +312,10 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get placeholderSize(): number {
+    get placeholderSize(): number | null {
         return this._getOption('placeholderSize');
     }
-    set placeholderSize(value: number) {
+    set placeholderSize(value: number | null) {
         this._setOption('placeholderSize', value);
     }
 

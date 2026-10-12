@@ -18,7 +18,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 
 type IPivotGridFieldChooserOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
-  onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
+  onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void) | undefined;
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
 }

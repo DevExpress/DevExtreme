@@ -1,7 +1,7 @@
 {
   "presets": [["@babel/preset-env", { "modules": false }]],
   "plugins": [
-      ["transform-es2015-modules-commonjs", { "strict": false, "allowTopLevelThis": true }, "add-module-exports"],
+      ["@babel/plugin-transform-modules-commonjs", { "strict": false, "allowTopLevelThis": true }, "add-module-exports"],
       "@babel/plugin-transform-nullish-coalescing-operator", "@babel/plugin-transform-optional-chaining"
   ],
   "ignore": ["**/*.json"]

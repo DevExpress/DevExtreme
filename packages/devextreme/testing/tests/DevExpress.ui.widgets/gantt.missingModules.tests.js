@@ -1,1 +1,1 @@
-require('./ganttParts/importGantt.tests.js');
+import './ganttParts/importGantt.tests.js';

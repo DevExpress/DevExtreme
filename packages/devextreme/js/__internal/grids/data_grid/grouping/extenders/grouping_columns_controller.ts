@@ -1,0 +1,16 @@
+import gridCore from '@ts/grids/data_grid/core';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import type { ModuleType } from '@ts/grids/grid_core/types';
+
+export const groupingColumnsControllerExtender = (
+  Base: ModuleType<ColumnsController>,
+): ModuleType<ColumnsController> => class GroupingColumnsExtender extends Base {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public _getExpandColumnOptions() {
+    const options = super._getExpandColumnOptions();
+
+    options.cellTemplate = gridCore.getExpandCellTemplate();
+
+    return options;
+  }
+};

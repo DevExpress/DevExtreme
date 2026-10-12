@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 import 'ui/tag_box';
@@ -8,7 +8,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { value as viewPort } from 'core/utils/view_port';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import dateLocalization from 'common/core/localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
@@ -753,7 +753,7 @@ QUnit.module('Filter Row', {
 
     // B254521
     QUnit.test('Draw filterRow when all columns grouped', function(assert) {
-    // arrange
+        // arrange
         const testElement = $('#container');
 
         $.extend(this.columns, [{ headerCaption: 'Column 1', groupIndex: 0 },
@@ -772,7 +772,7 @@ QUnit.module('Filter Row', {
         assert.ok(!filterRow.find('.dx-editor-cell').length);
         assert.equal(filterRow.find('td').length, 4, 'count td');
         assert.equal(filterRow.find('td').last().html(), '&nbsp;', 'text column with command is empty');
-        assert.ok(filterRow.outerHeight() >= 30, 'height filter row');
+        assert.roughEqual(filterRow.outerHeight(), 18, 1, 'height filter row');
     });
 
     // T100624
@@ -855,7 +855,11 @@ QUnit.module('Filter Row', {
         this.columnHeadersView.render(testElement);
 
         // assert
-        assert.deepEqual(this.columnHeadersView.getColumnWidths(), [100, 100, 100]);
+        const widths = this.columnHeadersView.getColumnWidths();
+
+        assert.roughEqual(widths[0], 100, 0.001);
+        assert.roughEqual(widths[1], 100, 0.001);
+        assert.roughEqual(widths[2], 100, 0.001);
     });
 
     QUnit.test('Show apply filter button', function(assert) {
@@ -1397,7 +1401,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             countApplyFilter++;
         };
 
@@ -1966,7 +1970,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             countApplyFilter++;
         };
 
@@ -2000,7 +2004,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             countApplyFilter++;
         };
 

@@ -1,5 +1,5 @@
-@use './variables' as *;
-@use '../variables' as *;
+@use "./variables" as *;
+@use "../variables" as *;
 
 .dx-cardview-card-content {
   padding: $cardview-card__content-padding;

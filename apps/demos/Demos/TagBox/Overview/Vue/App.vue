@@ -136,7 +136,7 @@ const onCustomItemCreating = ref((args: DxTagBoxTypes.CustomItemCreatingEvent) =
   args.customItem = newValue;
 });
 </script>
-<style scoped>
+<style>
 body .custom-item {
   padding-left: 7px;
   padding-right: 7px;

@@ -39,20 +39,20 @@ export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TCom
     loadingIndicator?: BaseWidgetLoadingIndicator;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<TComponent>) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent>) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<TComponent>) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent>) => void) | undefined;
     /**
      * @docid
      * @hidden

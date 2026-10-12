@@ -7,7 +7,7 @@ import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
-import type { DataChange, GridsEditMode } from '@js/common/grids';
+import type { DataChange as EditingDataChange, GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
@@ -27,15 +27,25 @@ import {
 import { confirm } from '@js/ui/dialog';
 import { current, isFluent } from '@js/ui/themes';
 import domUtils from '@ts/core/utils/m_dom';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import type Store from '@ts/data/abstract_store';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import modules from '../m_modules';
+import type {
+  DataChange,
+  GeneratedItem,
+  ItemProcessingOptions,
+  ProcessedItem,
+} from '../data_controller/types';
+import type { RawItemData } from '../data_source_adapter/types';
+import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
 import type {
   Controllers, ModuleType, RowKey, Views,
-} from '../m_types';
-import gridCoreUtils from '../m_utils';
+} from '../types';
 import {
   ACTION_OPTION_NAMES,
   BUTTON_NAMES,
@@ -74,7 +84,6 @@ import {
   READONLY_CLASS,
   REQUIRED_EDITOR_LABELLEDBY_MODES,
   ROW_BASED_MODES,
-  ROW_CLASS,
   ROW_INSERTED,
   ROW_MODIFIED,
   ROW_SELECTED,
@@ -82,6 +91,7 @@ import {
   VIEWPORT_BOTTOM_NEW_ROW_POSITION,
   VIEWPORT_TOP_NEW_ROW_POSITION,
 } from './const';
+import { editingDataControllerExtender } from './extenders/editing_data_controller';
 import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
 import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
 import {
@@ -94,7 +104,12 @@ import {
   isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
 import type {
-  InsertInfo, InternalEditData, NormalizedEditCellOptions,
+  AllowEditActionValue,
+  EditActionOptions,
+  EditActions,
+  InsertInfo,
+  InternalEditData,
+  NormalizedEditCellOptions,
 } from './types';
 
 class EditingControllerImpl extends modules.ViewController {
@@ -102,7 +117,9 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _dataController!: Controllers['data'];
 
-  protected _adaptiveColumnsController!: Controllers['adaptiveColumns'];
+  protected dataSourceController!: Controllers['dataSource'];
+
+  protected adaptiveColumnsController!: Controllers['adaptiveColumns'];
 
   protected _validatingController!: Controllers['validating'];
 
@@ -113,8 +130,6 @@ class EditingControllerImpl extends modules.ViewController {
   protected _columnsResizerController!: Controllers['columnsResizer'];
 
   protected _keyboardNavigationController!: Controllers['keyboardNavigation'];
-
-  protected _errorHandlingController!: Controllers['errorHandling'];
 
   protected _rowsView!: Views['rowsView'];
 
@@ -157,13 +172,13 @@ class EditingControllerImpl extends modules.ViewController {
   public init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.dataSourceController = this.getController('dataSource');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._validatingController = this.getController('validating');
     this._editorFactoryController = this.getController('editorFactory');
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._columnsResizerController = this.getController('columnsResizer');
-    this._errorHandlingController = this.getController('errorHandling');
     this._rowsView = this.getView('rowsView');
     this._headerPanelView = this.getView('headerPanel');
     this._lastOperation = null;
@@ -277,7 +292,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _getInternalData(key: RowKey): InternalEditData | undefined {
+  protected _getInternalData(key: RowKey): InternalEditData | undefined {
     return this._internalState.get(getKeyHash(key));
   }
 
@@ -297,7 +312,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   public getUpdatedData(data) {
-    const key = this._dataController.keyOf(data);
+    const key = this.dataSourceController.keyOf(data);
     const changes = this.getChanges();
     const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
@@ -602,13 +617,15 @@ class EditingControllerImpl extends modules.ViewController {
       if (change.type === 'insert') {
         this._addInsertInfo(change);
       } else {
-        const items = dataController.getCachedStoreData() || dataController.items()?.map((item) => item.data);
-        const rowIndex = gridCoreUtils.getIndexByKey(change.key, items, dataController.key());
+        const items = this.dataSourceController.getCachedStoreData()
+          || dataController.items()?.map((item) => item.data);
+        const rowIndex = gridCoreUtils.getIndexByKey(change.key, items, this.dataSourceController.key());
         this._addInternalData({ key: change.key, oldData: items[rowIndex] });
       }
     });
 
     dataController.updateItems({
+      changeType: 'refresh',
       repaintChangesOnly: true,
       isLiveUpdate: false,
       isOptionChanged: true,
@@ -679,7 +696,7 @@ class EditingControllerImpl extends modules.ViewController {
   protected getPopupContent(): any {}
 
   /**
-   * @extended: TreeList's editing
+   * @extended: TreeList's editing, DataGrid's grouping
    */
   protected _isProcessedItem(item) {
     return false;
@@ -704,7 +721,7 @@ class EditingControllerImpl extends modules.ViewController {
             if (equalByValue(item.key, key)) {
               result = index;
             }
-          } else if (equalByValue(dataController.keyOf(item), key)) {
+          } else if (equalByValue(this.dataSourceController.keyOf(item as RawItemData), key)) {
             result = index;
           }
         }
@@ -768,8 +785,8 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validatiing
    */
-  public processItems(items, e) {
-    const { changeType } = e;
+  public processItems(items: RawItemData[], change: DataChange): RawItemData[] {
+    const { changeType } = change;
 
     this.update(changeType);
 
@@ -804,20 +821,20 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  public processDataItem(item, options, generateDataValues) {
+  public processDataItem(generatedItem: GeneratedItem, options: ItemProcessingOptions): void {
     const columns = options.visibleColumns;
-    const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
+    const key = generatedItem.data[INSERT_INDEX] ? generatedItem.data.key : generatedItem.key;
     const changes = this.getChanges();
 
     const editIndex = gridCoreUtils.getIndexByKey(key, changes);
-    item.isEditing = false;
+    generatedItem.isEditing = false;
 
     if (editIndex >= 0) {
-      this._processDataItemCore(item, changes[editIndex], key, columns, generateDataValues);
+      this._processDataItemCore(generatedItem, changes[editIndex], key, columns);
     }
   }
 
-  protected _processDataItemCore(item, change, key, columns, generateDataValues) {
+  protected _processDataItemCore(item: GeneratedItem, change, key, columns) {
     const { data, type } = change;
 
     // eslint-disable-next-line default-case
@@ -831,7 +848,7 @@ class EditingControllerImpl extends modules.ViewController {
         item.modified = true;
         item.oldData = item.data;
         item.data = createObjectWithChanges(item.data, data);
-        item.modifiedValues = generateDataValues(data, columns, true);
+        item.modifiedValues = generateRowValues(data, columns, true);
         break;
       case DATA_EDIT_DATA_REMOVE_TYPE:
         item.removed = true;
@@ -858,12 +875,15 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _createInsertInfo(): InsertInfo {
-    return { [INSERT_INDEX]: this._getInsertIndex() };
+  private _createInsertInfo(parentKey?: RowKey): InsertInfo {
+    return {
+      [INSERT_INDEX]: this._getInsertIndex(),
+      parentKey,
+    };
   }
 
   private _addInsertInfo(
-    change: Partial<DataChange>,
+    change: Partial<EditingDataChange>,
     parentKey?: RowKey,
   ): { insertInfo: InsertInfo; key: RowKey } {
     let insertInfo: InsertInfo | undefined;
@@ -877,7 +897,7 @@ class EditingControllerImpl extends modules.ViewController {
     if (!isDefined(insertInfo)) {
       const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
-      insertInfo = this._createInsertInfo();
+      insertInfo = this._createInsertInfo(parentKey);
 
       if (!isDefined(insertAfterOrBeforeKey)) {
         this._setInsertAfterOrBeforeKey(change, parentKey);
@@ -894,7 +914,7 @@ class EditingControllerImpl extends modules.ViewController {
       return change.key;
     }
 
-    const keyExpr = this._dataController.key();
+    const keyExpr = this.dataSourceController.key();
     let keyValue;
     if (change.data && keyExpr && !Array.isArray(keyExpr)) {
       keyValue = change.data[keyExpr];
@@ -971,7 +991,7 @@ class EditingControllerImpl extends modules.ViewController {
     const newRowPosition: any = this._getNewRowPosition();
     const dataController = this._dataController;
     const pageIndex = dataController.pageIndex();
-    const lastPageIndex = dataController.pageCount() - 1;
+    const lastPageIndex = this.dataSourceController.pageCount() - 1;
 
     if (newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0) {
       return 0;
@@ -987,7 +1007,7 @@ class EditingControllerImpl extends modules.ViewController {
    */
   protected addRow(parentKey) {
     const dataController = this._dataController;
-    const store = dataController.store();
+    const store = this.dataSourceController.store();
 
     if (!store) {
       dataController.fireError('E1052', this.component.NAME);
@@ -999,9 +1019,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected _addRow(parentKey) {
-    const dataController = this._dataController;
-    const store = dataController.store();
-    const key = store && store.key();
+    const key = this.dataSourceController.store()?.key();
     const param: any = { data: {} };
     const oldEditRowIndex = this._getVisibleEditRowIndex();
     // @ts-expect-error
@@ -1045,7 +1063,7 @@ class EditingControllerImpl extends modules.ViewController {
    * @exteded: TreeList's editing
    */
   protected _addRowCore(data, parentKey, initialOldEditRowIndex) {
-    const change: Partial<DataChange> = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
+    const change: Partial<EditingDataChange> = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
     const editRowIndex = this._getVisibleEditRowIndex();
     const insertInfo = this._addInsertInfo(change, parentKey);
     const { key } = insertInfo;
@@ -1596,7 +1614,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _processChanges(deferreds, results, dataChanges, changes) {
-    const store = this._dataController.store();
+    const store = this.dataSourceController.store() as Store;
 
     each(changes, (index, change) => {
       const oldData = this._getOldData(change.key);
@@ -1614,13 +1632,13 @@ class EditingControllerImpl extends modules.ViewController {
       switch (type) {
         case DATA_EDIT_DATA_REMOVE_TYPE:
           params = { data: oldData, key: change.key, cancel: false };
-          deferred = this._executeEditingAction('onRowRemoving', params, () => store.remove(change.key).done((key) => {
+          deferred = this._executeEditingAction('onRowRemoving', params, () => fromPromise(store.remove(change.key)).done((key) => {
             dataChanges.push({ type: 'remove', key });
           }));
           break;
         case DATA_EDIT_DATA_INSERT_TYPE:
           params = { data, cancel: false };
-          deferred = this._executeEditingAction('onRowInserting', params, () => store.insert(params.data).done((data, key) => {
+          deferred = this._executeEditingAction('onRowInserting', params, () => fromPromise(store.insert(params.data)).done((data, key) => {
             if (isDefined(key)) {
               const initialKey = changeCopy.key;
 
@@ -1637,7 +1655,7 @@ class EditingControllerImpl extends modules.ViewController {
           params = {
             newData: data, oldData, key: change.key, cancel: false,
           };
-          deferred = this._executeEditingAction('onRowUpdating', params, () => store.update(change.key, params.newData).done((data, key) => {
+          deferred = this._executeEditingAction('onRowUpdating', params, () => fromPromise(store.update(change.key, params.newData)).done((data, key) => {
             if (data && isObject(data) && data !== params.newData) {
               changeCopy.data = data;
             }
@@ -1764,7 +1782,6 @@ class EditingControllerImpl extends modules.ViewController {
       }
       when(this._beforeSaveEditData()).done((cancel) => {
         if (cancel) {
-          // @ts-expect-error
           this._resolveAfterSave(deferred, { cancel });
           return;
         }
@@ -1784,7 +1801,7 @@ class EditingControllerImpl extends modules.ViewController {
     return deferred.promise();
   }
 
-  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined } = {}) {
+  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined }: { cancel?: unknown; error?: unknown } = {}) {
     // @ts-expect-error
     when(this._afterSaveEditData(cancel)).done(() => {
       deferred.resolve(error);
@@ -1797,7 +1814,7 @@ class EditingControllerImpl extends modules.ViewController {
     const results = [];
     const deferreds = [];
     const dataChanges = [];
-    const dataSource = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     when(this._fireOnSaving())
       .done(({ cancel, changes }) => {
@@ -1809,17 +1826,17 @@ class EditingControllerImpl extends modules.ViewController {
 
         if (deferreds.length) {
           this._refocusEditCell = true;
-          dataSource?.beginLoading();
+          dataSourceAdapter?.beginLoading();
 
           when(...deferreds).done(() => {
             if (this._processSaveEditDataResult(results)) {
               this._endSaving(dataChanges, changes, result);
             } else {
-              dataSource?.endLoading();
+              dataSourceAdapter?.endLoading();
               result.resolve();
             }
           }).fail((error) => {
-            dataSource?.endLoading();
+            dataSourceAdapter?.endLoading();
             result.resolve(error);
           });
 
@@ -1840,11 +1857,11 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _endSaving(dataChanges, changes, deferred) {
-    const dataSource = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     this._beforeEndSaving(changes);
 
-    dataSource?.endLoading();
+    dataSourceAdapter?.endLoading();
 
     this._refreshDataAfterSave(dataChanges, changes, deferred);
   }
@@ -1860,7 +1877,7 @@ class EditingControllerImpl extends modules.ViewController {
     const isFullRefresh = refreshMode !== 'reshape' && refreshMode !== 'repaint';
 
     if (!isFullRefresh) {
-      dataController.push(dataChanges);
+      this.dataSourceController.push(dataChanges);
     }
 
     when(dataController.refresh({
@@ -1974,6 +1991,7 @@ class EditingControllerImpl extends modules.ViewController {
     const dataController = this._dataController;
 
     dataController.updateItems({
+      changeType: 'refresh',
       repaintChangesOnly: this.option('repaintChangesOnly'),
     });
   }
@@ -2267,9 +2285,8 @@ class EditingControllerImpl extends modules.ViewController {
       || (column.setCellValue && (isEditableByRowState || isCellEditing));
 
     if (needsEditorTemplate && isEditableRowType && !column.command) {
-      const allowUpdating = !!this.allowUpdating(options);
-      const canModifyCell = (allowUpdating || isRowEditing || !!row?.isNewRow)
-        && !!column.allowEditing;
+      const allowUpdating = this.allowUpdating(options);
+      const canModifyCell = (allowUpdating || isRowEditing) && !!column.allowEditing;
       const isEditable = (canModifyCell || isCellEditing) && (isRowEditing || !isRowMode);
 
       if (isEditable) {
@@ -2455,24 +2472,32 @@ class EditingControllerImpl extends modules.ViewController {
    */
   protected _beforeCancelEditData(): any {}
 
-  protected _allowEditAction(actionName, options) {
-    let allowEditAction: any = this.option(`editing.${actionName}`);
+  protected _allowEditAction(actionName: EditActions, options: EditActionOptions): boolean {
+    const allowEditAction: AllowEditActionValue | undefined = this.option('editing')?.[actionName];
 
-    if (isFunction(allowEditAction)) {
-      allowEditAction = allowEditAction({ component: this.component, row: options.row });
+    return isFunction(allowEditAction)
+      ? allowEditAction({ component: this.component, row: options.row })
+      : !!allowEditAction;
+  }
+
+  public allowUpdating(
+    options: EditActionOptions,
+    eventName?: string,
+    allowEditingForNewRows = true,
+  ): boolean {
+    if (allowEditingForNewRows && options.row?.isNewRow) {
+      return true;
     }
 
-    return allowEditAction;
-  }
-
-  public allowUpdating(options, eventName?) {
     const startEditAction = this.option('editing.startEditAction') ?? DEFAULT_START_EDIT_ACTION;
-    const needCallback = arguments.length > 1 ? startEditAction === eventName || eventName === 'down' : true;
+    const isStartEditEvent = !isDefined(eventName)
+      || eventName === startEditAction
+      || eventName === 'down';
 
-    return needCallback && this._allowEditAction('allowUpdating', options);
+    return isStartEditEvent && this._allowEditAction('allowUpdating', options);
   }
 
-  protected allowDeleting(options) {
+  protected allowDeleting(options: EditActionOptions): boolean {
     return this._allowEditAction('allowDeleting', options);
   }
 
@@ -2521,115 +2546,6 @@ class EditingControllerImpl extends modules.ViewController {
 export type EditingController = EditingControllerImpl
   & ICellBasedEditingControllerExtender
   & IFormBasedEditingControllerExtender;
-
-export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataController>) => class DataControllerEditingExtender extends Base {
-  public reload(full, repaintChangesOnly) {
-    !repaintChangesOnly && this._editingController.refresh();
-
-    return super.reload.apply(this, arguments as any);
-  }
-
-  public repaintRows() {
-    if (this._editingController.isSaving()) return;
-    return super.repaintRows.apply(this, arguments as any);
-  }
-
-  private _updateEditRow(items) {
-    const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
-    const editRowIndex = gridCoreUtils.getIndexByKey(editRowKey, items);
-    const editItem = items[editRowIndex];
-    if (editItem) {
-      editItem.isEditing = true;
-      // @ts-expect-error Badly typed based class
-      this._updateEditItem?.(editItem);
-    }
-  }
-
-  protected _updateItemsCore(change) {
-    super._updateItemsCore(change);
-    this._updateEditRow(this.items(true));
-  }
-
-  protected _applyChangeUpdate(change) {
-    this._updateEditRow(change.items);
-    super._applyChangeUpdate(change);
-  }
-
-  protected _applyChangesOnly(change) {
-    this._updateEditRow(change.items);
-    super._applyChangesOnly(change);
-  }
-
-  protected _processItems(items, change) {
-    items = this._editingController.processItems(items, change);
-    return super._processItems(items, change);
-  }
-
-  protected _processDataItem(dataItem, options) {
-    this._editingController.processDataItem(dataItem, options, this.generateDataValues);
-    return super._processDataItem(dataItem, options);
-  }
-
-  protected _processItem(item, options) {
-    item = super._processItem(item, options);
-
-    if (item.isNewRow) {
-      options.dataIndex--;
-      delete item.dataIndex;
-    }
-
-    return item;
-  }
-
-  protected _getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate) {
-    if (oldItem.isNewRow !== newItem.isNewRow || oldItem.removed !== newItem.removed) {
-      return;
-    }
-
-    return super._getChangedColumnIndices.apply(this, arguments as any);
-  }
-
-  protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-    const cell = oldRow.cells && oldRow.cells[columnIndex];
-    const isEditing = this._editingController && this._editingController.isEditCell(visibleRowIndex, columnIndex);
-
-    if (isLiveUpdate && isEditing) {
-      return false;
-    }
-
-    if (cell && cell.column && !cell.column.showEditorAlways && cell.isEditing !== isEditing) {
-      return true;
-    }
-
-    return super._isCellChanged.apply(this, arguments as any);
-  }
-
-  protected needToRefreshOnDataSourceChange(args) {
-    const isParasiteChange = Array.isArray(args.value) && args.value === args.previousValue && this._editingController.isSaving();
-    return !isParasiteChange;
-  }
-
-  protected _handleDataSourceChange(args) {
-    const result = super._handleDataSourceChange(args);
-    const changes: any = this.option('editing.changes');
-    const dataSource = args.value;
-    if (Array.isArray(dataSource) && changes.length) {
-      const dataSourceKeys = dataSource.map((item) => this.keyOf(item));
-      const newChanges = changes.filter((change) => change.type === 'insert' || dataSourceKeys.some((key) => equalByValue(change.key, key)));
-      if (newChanges.length !== changes.length) {
-        this.option('editing.changes', newChanges);
-      }
-      const editRowKey = this.option('editing.editRowKey');
-      const isEditNewItem = newChanges.some(
-        (change) => change.type === 'insert' && equalByValue(editRowKey, change.key),
-      );
-      if (!isEditNewItem && dataSourceKeys.every((key) => !equalByValue(editRowKey, key))) {
-        this.option('editing.editRowKey', undefined);
-      }
-    }
-    return result;
-  }
-};
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender extends Base {
   private _pointerDownTarget: any;
@@ -2694,7 +2610,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
   }
 
   private _getColumnIndexByElementCore($element) {
-    const $targetElement = $element.closest(`.${ROW_CLASS}> td:not(.dx-master-detail-cell)`);
+    const $targetElement = $element.closest(`.${VIEW_CLASSES.row}> td:not(.dx-master-detail-cell)`);
 
     return this.getCellIndex($targetElement);
   }
@@ -2704,7 +2620,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     const $targetElement = $(e.event.target);
     const columnIndex = this._getColumnIndexByElement($targetElement);
     const row: any = this._dataController.items()[e.rowIndex];
-    const allowUpdating = editingController.allowUpdating({ row }, eventName) || row && row.isNewRow;
+    const allowUpdating = editingController.allowUpdating({ row }, eventName);
     const column = this._columnsController.getVisibleColumns()[columnIndex];
     const isEditedCell = editingController.isEditCell(e.rowIndex, columnIndex);
     const allowEditing = allowUpdating && column && (column.allowEditing || isEditedCell);
@@ -2861,8 +2777,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     clearTimeout(this._pointerDownTimeout);
   }
 
-  protected _renderCore() {
-    super._renderCore.apply(this, arguments as any);
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
+    super._renderCore(change);
 
     return this.waitAsyncTemplates(true).done(() => {
       this._editingController._focusEditorIfNeed();
@@ -2953,7 +2869,7 @@ export const editingModule = {
   },
   extenders: {
     controllers: {
-      data: dataControllerEditingExtenderMixin,
+      data: editingDataControllerExtender,
     },
     views: {
       rowsView,

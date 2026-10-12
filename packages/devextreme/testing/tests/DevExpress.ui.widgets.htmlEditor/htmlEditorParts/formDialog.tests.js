@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import FormDialog from '__internal/ui/html_editor/ui/formDialog';
 import { isPromise } from 'core/utils/type';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { getCurrentScreenFactor, hasWindow } from 'core/utils/window';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 

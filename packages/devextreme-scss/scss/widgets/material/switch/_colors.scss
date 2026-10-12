@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 20. Track 'OFF' background color
@@ -43,4 +40,3 @@ $switch-invalid-container-bg: color.change($base-invalid-color, $alpha: 0.5) !de
   $switch-handle-off-bg: color.adjust($base-element-bg, $lightness: 18.5%, $space: hsl) !default;
   $switch-handle-disabled-bg: color.adjust($base-element-bg, $lightness: 26%, $space: hsl) !default;
 }
-

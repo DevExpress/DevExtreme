@@ -66,7 +66,7 @@ function customizeTooltip(scaleValue: Record<string, any>) {
   };
 }
 </script>
-<style scoped>
+<style>
 #gauge-demo {
   height: 440px;
   width: 100%;

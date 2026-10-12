@@ -1,3 +1,3 @@
 // deprecated
-import { resizeObserverSingleton } from '../__internal/core/m_resize_observer';
+import { resizeObserverSingleton } from '../__internal/core/resize_observer';
 export default resizeObserverSingleton;

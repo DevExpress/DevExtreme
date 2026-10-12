@@ -8,14 +8,14 @@ import { hiddenFocus } from '@js/ui/shared/accessibility';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
-import type { Views } from '@ts/grids/grid_core/m_types';
+import type { Views } from '@ts/grids/grid_core/types';
 
+import gridCore from '../core';
 import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
-import gridCore from '../m_core';
 import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
 
 export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNavigationMixin(ColumnKeyboardNavigationController) {
-  private isNeedToHiddenFocusAfterClick = false;
+  private isNeedToHiddenFocusAfterClick: boolean | undefined = false;
 
   private groupItemClickHandlerContext!: (event: any) => void;
 

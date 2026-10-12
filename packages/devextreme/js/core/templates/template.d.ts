@@ -1,3 +1,11 @@
+import {
+    UserDefinedElement,
+} from '../element';
+
+import {
+    dxElementWrapper,
+} from '../renderer';
+
 export type {
     template,
 } from '../../common';
@@ -26,4 +34,5 @@ export type dxTemplate = Template;
  // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Template {
     constructor(options?: dxTemplateOptions);
+    constructor(element: string | UserDefinedElement | dxElementWrapper);
 }

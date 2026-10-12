@@ -1,5 +1,5 @@
 import translator from 'common/core/animation/translator';
-import visibilityChange from 'common/core/events/visibility_change';
+import * as visibilityChange from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/resizable';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -1808,14 +1808,14 @@ QUnit.module('actions', () => {
         assert.expect(1);
 
         try {
-            visibilityChange.triggerResizeEvent = function() {
+            visibilityChange.DEBUG_set_triggerResizeEvent(function() {
                 assert.ok(true, 'event triggered');
-            };
+            });
 
             pointer.dragStart().drag(10, 0);
 
         } finally {
-            visibilityChange.triggerResizeEvent = triggerFunction;
+            visibilityChange.DEBUG_set_triggerResizeEvent(triggerFunction);
         }
     });
 

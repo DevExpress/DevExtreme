@@ -121,7 +121,8 @@ import {
 } from 'devextreme-vue/form';
 import { type ValidationRule } from 'devextreme-vue/common';
 import service from './data.ts';
-import 'devextreme-vue/text-area';
+import 'devextreme/ui/select_box';
+import 'devextreme/ui/text_area';
 
 import LabelTemplate from './LabelTemplate.vue';
 import LabelNotesTemplate from './LabelNotesTemplate.vue';

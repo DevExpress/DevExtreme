@@ -1,19 +1,17 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('integration/knockout');
-const Scheduler = require('ui/scheduler');
-const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
+import 'integration/knockout';
+import 'ui/scheduler';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-require('fluent_blue_light.css!');
+import 'fluent_blue_light.css!';
 
 if(QUnit.urlParams['nocsp']) {
     QUnit.module('scheduler');
 } else {
     QUnit.module.skip('scheduler');
 }
-
-const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 
 QUnit.test('Appointment should have right date format', async function(assert) {
     const $element = $('<div data-bind=\'dxScheduler: {dataSource: schedulerDataSource, currentDate: new Date(2016, 6, 10)}\'></div>').appendTo('#qunit-fixture');
@@ -37,7 +35,7 @@ QUnit.test('Appointment should have right date format', async function(assert) {
     assert.deepEqual(endDate, new Date(2016, 6, 10, 3));
 });
 
-QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment template should be render once(T947938)', async function(assert) {
+QUnit.test('Appointment template should be render once(T947938)', async function(assert) {
     const markupText = `<div class='dx-viewport demo-container'>
         <div id='scheduler-demo'>
             <div data-bind='dxScheduler: schedulerOptions'></div>
@@ -67,7 +65,7 @@ QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment template should be re
     assert.equal($('.dx-scheduler-appointment-content-details').length, 1, 'details should be render once');
 });
 
-QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment DnD with disabled property (T1046067)', async function(assert) {
+QUnit.test('Appointment DnD with disabled property (T1046067)', async function(assert) {
     const markupText = `<div class='dx-viewport demo-container'>
         <div id='scheduler-demo'>
             <div data-bind='dxScheduler: schedulerOptions'></div>

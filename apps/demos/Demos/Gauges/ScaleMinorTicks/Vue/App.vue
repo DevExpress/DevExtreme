@@ -39,7 +39,7 @@ import {
   DxCircularGauge, DxScale, DxTick, DxMinorTick, DxRangeContainer, DxTitle, DxFont, DxExport,
 } from 'devextreme-vue/circular-gauge';
 </script>
-<style scoped>
+<style>
 #gauge {
   height: 440px;
   width: 100%;

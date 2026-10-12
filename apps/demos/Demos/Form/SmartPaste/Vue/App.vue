@@ -262,7 +262,7 @@ onMounted(() => {
 });
 
 </script>
-<style scoped>
+<style>
 #app {
   display: grid;
   grid-template-columns: 1fr 2fr;

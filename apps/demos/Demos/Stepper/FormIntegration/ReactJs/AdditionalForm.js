@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
 import { Form, SimpleItem } from 'devextreme-react/form';
 
 const AdditionalForm = memo(({ formData }) => (

@@ -1,13 +1,13 @@
-const $ = require('jquery');
-const ko = require('knockout');
-const registerEvent = require('common/core/events/core/event_registrator');
-const dragEvents = require('common/core/events/drag');
-const clickEvent = require('common/core/events/click');
-const holdEvent = require('common/core/events/hold');
-const pointerEvents = require('common/core/events/pointer');
-const swipeEvents = require('common/core/events/swipe');
+import $ from 'jquery';
+import ko from 'knockout';
+import registerEvent from 'common/core/events/core/event_registrator';
+import * as dragEvents from 'common/core/events/drag';
+import * as clickEvent from 'common/core/events/click';
+import holdEvent from 'common/core/events/hold';
+import pointerEvents from 'common/core/events/pointer';
+import * as swipeEvents from 'common/core/events/swipe';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

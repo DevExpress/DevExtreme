@@ -100,7 +100,7 @@ const componentConfig = {
     tabIndex: Number,
     tooltip: Object as PropType<Record<string, any>>,
     validationError: {},
-    validationErrors: Array as PropType<Array<any>>,
+    validationErrors: Array as PropType<Array<any> | null>,
     validationMessageMode: String as PropType<ValidationMessageMode>,
     validationMessagePosition: String as PropType<Position>,
     validationStatus: String as PropType<ValidationStatus>,

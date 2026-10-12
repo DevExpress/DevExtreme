@@ -82,7 +82,6 @@ export default class TableResizingModule extends BaseModule {
   _startLineSeparatorPosition?: number;
 
   constructor(quill, options) {
-    // @ts-expect-error
     super(quill, options);
     this.enabled = !!options.enabled;
     this._tableResizeFrames = [];
@@ -102,7 +101,6 @@ export default class TableResizingModule extends BaseModule {
     } else {
       this.editorInstance.addContentInitializedCallback(this._applyResizingImpl.bind(this));
     }
-    // @ts-expect-error
     this.addCleanCallback(this.clean.bind(this));
     this._resizeHandlerWithContext = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
   }
@@ -718,7 +716,6 @@ export default class TableResizingModule extends BaseModule {
 
   option(option, value) {
     if (option === 'tableResizing') {
-      // @ts-expect-error
       this.handleOptionChangeValue(value);
       return;
     }

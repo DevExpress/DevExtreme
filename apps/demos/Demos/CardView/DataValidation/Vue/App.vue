@@ -174,7 +174,7 @@ import {
   DxAsyncRule, DxCustomRule,
 } from 'devextreme-vue/card-view';
 import { type ValidationCallbackData } from 'devextreme-vue/common';
-import 'devextreme-vue/text-area';
+import 'devextreme/ui/text_area';
 import { employees, type Employee } from './data.ts';
 
 function altExpr({ fullName }: Employee): string {

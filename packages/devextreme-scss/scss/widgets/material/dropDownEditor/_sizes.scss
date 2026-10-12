@@ -1,10 +1,7 @@
 @use "../sizes" as *;
 
-// adduse
-
 $material-dropdowneditor-list-font-size: null !default;
 $material-dropdowneditor-list-line-height: null !default;
-
 
 @if $size == "default" {
   $material-dropdowneditor-list-font-size: 14px !default;

@@ -20,7 +20,7 @@ import DataOption from '@ts/ui/gantt/ui.gantt.data.option';
 import { GanttDataChangesProcessingHelper } from '@ts/ui/gantt/ui.gantt.data_changes_processing_helper';
 import { GanttDialog } from '@ts/ui/gantt/ui.gantt.dialogs';
 import { GanttExportHelper } from '@ts/ui/gantt/ui.gantt.export_helper';
-import { GanttHelper } from '@ts/ui/gantt/ui.gantt.helper';
+import { GanttHelper, type GanttProperties } from '@ts/ui/gantt/ui.gantt.helper';
 import { GanttMappingHelper } from '@ts/ui/gantt/ui.gantt.mapping_helper';
 import { ModelChangesListener } from '@ts/ui/gantt/ui.gantt.model_changes_listener';
 import { GanttSizeHelper } from '@ts/ui/gantt/ui.gantt.size_helper';
@@ -52,7 +52,7 @@ interface SortFilterState {
   sieveColumn?: any;
 }
 
-class Gantt extends Widget<Properties> {
+class Gantt extends Widget<GanttProperties> {
   _isGanttRendered?: boolean;
 
   _$toolbarWrapper!: dxElementWrapper;
@@ -299,7 +299,6 @@ class Gantt extends Widget<Properties> {
     this._ganttView = this._createComponent(this._$ganttView, GanttView, {
       width: '100%',
       height: this._ganttTreeList?.getOffsetHeight(),
-      // @ts-expect-error ts-error
       rowHeight: this._ganttTreeList?.getRowHeight(),
       headerHeight: this._ganttTreeList?.getHeaderHeight(),
       tasks: this._tasks,
@@ -499,7 +498,6 @@ class Gantt extends Widget<Properties> {
       }
     }
     const validKeys = [rootValue];
-    // @ts-expect-error ts-error
     this._appendChildKeys(validationTree[rootValue], validKeys);
 
     // @ts-expect-error ts-error
@@ -770,7 +768,6 @@ class Gantt extends Widget<Properties> {
     if (!this._loadPanel) {
       this._loadPanel = this._createComponent(this._$loadPanel, LoadPanel, {
         position: {
-          // @ts-expect-error ts-error
           of: this.$element(),
         },
       });
@@ -1155,12 +1152,12 @@ class Gantt extends Widget<Properties> {
     this._ganttView?._ganttViewCore.zoomOut();
   }
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): GanttProperties {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), GanttHelper.getDefaultOptions());
   }
 
-  _optionChanged(args: OptionChanged<Properties>): void {
+  _optionChanged(args: OptionChanged<GanttProperties>): void {
     const { name, fullName, value } = args;
 
     switch (name) {

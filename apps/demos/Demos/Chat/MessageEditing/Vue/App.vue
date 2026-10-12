@@ -142,7 +142,7 @@ const onAllowDeletingChange = (event: DxSelectBoxTypes.ValueChangedEvent) => {
 };
 </script>
 
-<style scoped>
+<style>
 #app {
   min-width: 720px;
   display: flex;

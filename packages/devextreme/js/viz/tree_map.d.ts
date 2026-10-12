@@ -228,7 +228,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
        * @docid
        * @default undefined
        */
-      range?: Array<number>;
+      range?: Array<number> | undefined;
       /**
        * @docid
        * @default undefined
@@ -253,7 +253,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       border?: {
         /**
          * @docid
-         * @default "#d3d3d3"
+         * @default undefined
          */
         color?: string | undefined;
         /**
@@ -338,7 +338,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
         border?: {
           /**
            * @docid
-           * @default "#232323"
+           * @default undefined
            */
           color?: string | undefined;
           /**
@@ -406,59 +406,59 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     maxDepth?: number | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type function
      * @type_function_param1 e:{viz/tree_map:ClickEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onClick?: ((e: ClickEvent) => void) | string;
+    onClick?: ((e: ClickEvent) => void) | string | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/tree_map:DrillEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onDrill?: ((e: DrillEvent) => void);
+    onDrill?: ((e: DrillEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/tree_map:HoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onHoverChanged?: ((e: HoverChangedEvent) => void);
+    onHoverChanged?: ((e: HoverChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/tree_map:NodesInitializedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onNodesInitialized?: ((e: NodesInitializedEvent) => void);
+    onNodesInitialized?: ((e: NodesInitializedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/tree_map:NodesRenderingEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onNodesRendering?: ((e: NodesRenderingEvent) => void);
+    onNodesRendering?: ((e: NodesRenderingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{viz/tree_map:SelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -557,7 +557,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
         border?: {
           /**
            * @docid
-           * @default "#232323"
+           * @default undefined
            */
           color?: string | undefined;
           /**

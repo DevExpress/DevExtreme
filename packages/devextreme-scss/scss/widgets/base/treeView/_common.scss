@@ -1,9 +1,7 @@
 @use "../mixins" as *;
 @use "../../base/icon_fonts" as *;
 
-// adduse
-
-$treeview-searchbox-margin-bottom: 5px;
+$treeview-searchbox-margin-bottom: 5px !default;
 
 .dx-treeview-loadindicator-wrapper {
   text-align: center;

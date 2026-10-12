@@ -185,7 +185,6 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
 
     const $form = $('<form>')
       .css({ display: 'none' })
-      // @ts-expect-error ts-error
       .attr({
         method: REQUEST_METHOD.POST,
         action: args.url,
@@ -334,7 +333,6 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     for (const entryName in formDataEntries) {
       if (Object.prototype.hasOwnProperty.call(formDataEntries, entryName)
         && isDefined(formDataEntries[entryName])) {
-        // @ts-expect-error ts-error
         $('<input>').attr({
           type: 'hidden',
           name: entryName,

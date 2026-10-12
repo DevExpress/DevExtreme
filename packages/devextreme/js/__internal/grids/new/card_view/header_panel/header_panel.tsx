@@ -3,7 +3,7 @@
 */
 import messageLocalization from '@js/localization/message';
 import { combineClasses } from '@ts/core/utils/combine_classes';
-import { filterHasField } from '@ts/filter_builder/m_utils';
+import { filterHasField } from '@ts/filter_builder/utils';
 import type { Column, VisibleColumn } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
 import type { NavigationStrategyBase } from '@ts/grids/new/grid_core/keyboard_navigation/index';
@@ -197,7 +197,8 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
     const columnId = getColumnIdentifier(column);
 
     const hasHeaderFilterValue = !!filterValues?.length;
-    const hasFilterSyncValue = filterHasField(filterSyncValue, columnId) as boolean;
+    // @ts-expect-error filterSyncValue is unknown
+    const hasFilterSyncValue = filterHasField(filterSyncValue, columnId);
 
     return hasHeaderFilterValue || hasFilterSyncValue;
   }

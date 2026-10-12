@@ -35,8 +35,8 @@ import type {
   CollectionWidgetOptions,
   ItemLike,
 } from '@js/ui/collection/ui.collection_widget.base';
-import { getPublicElement } from '@ts/core/m_element';
-import { focusable } from '@ts/core/utils/m_selectors';
+import { getPublicElement } from '@ts/core/element';
+import { focusable } from '@ts/core/utils/selectors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
@@ -224,7 +224,6 @@ class CollectionWidget<
       currentTarget: $target.get(0),
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return params;
   }
 
@@ -255,12 +254,12 @@ class CollectionWidget<
       loopItemFocus: true,
       items: [],
       itemTemplate: 'item',
-      onItemRendered: null,
-      onItemClick: null,
-      onItemHold: null,
+      onItemRendered: undefined,
+      onItemClick: undefined,
+      onItemHold: undefined,
       itemHoldTimeout: 750,
-      onItemContextMenu: null,
-      onFocusedItemChanged: null,
+      onItemContextMenu: undefined,
+      onFocusedItemChanged: undefined,
       noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
       encodeNoDataText: false,
       dataSource: null,
@@ -728,12 +727,10 @@ class CollectionWidget<
     } = args;
 
     if (name === 'items') {
-      // @ts-expect-error ts-error
       const matches = fullName.match(ITEM_PATH_REGEX);
 
       if (matches?.length) {
         const property = matches[matches.length - 1];
-        // @ts-expect-error ts-error
         const itemPath = fullName.replace(`.${property}`, '');
         const item = this.option(itemPath);
 
@@ -1491,7 +1488,7 @@ class CollectionWidget<
     actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {
-    const action = this._createActionByOption(handlerOptionName, {
+    const action = this._createActionByOption(String(handlerOptionName), {
       validatingTargetName: 'itemElement',
       ...actionConfig,
     });
@@ -1512,7 +1509,7 @@ class CollectionWidget<
 
   _itemEventHandlerImpl(
     initiator: dxElementWrapper | Element,
-    action: (event?: Record<string, unknown>) => void,
+    action: (event?: object) => void,
     actionArgs: ActionArgs<TItem>,
   ): void {
     const $itemElement = this._closestItemElement($(initiator));
@@ -1547,7 +1544,7 @@ class CollectionWidget<
     let result = 0;
 
     if (items) {
-      each(items, (_index: number, item: dxElementWrapper) => {
+      each(items, (_index, item) => {
         if (dimension === 'width') {
           result += getOuterWidth(item, includeMargin ?? false);
         } else if (dimension === 'height') {

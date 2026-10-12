@@ -1,8 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $toast-default-bg: $base-bg !default;
 $warning-color: null !default;

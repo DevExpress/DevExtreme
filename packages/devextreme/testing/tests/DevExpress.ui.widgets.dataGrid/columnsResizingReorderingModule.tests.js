@@ -1,6 +1,6 @@
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 
@@ -19,17 +19,17 @@ const MockDataController = dataGridMocks.MockDataController;
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const MockEditingController = dataGridMocks.MockEditingController;
 
-import gridCore from '__internal/grids/data_grid/m_core';
+import gridCore from '__internal/grids/data_grid/core';
 import dragEvents from 'common/core/events/drag';
 import columnsResizingReordering from '__internal/grids/data_grid/module_not_extended/columns_resizing_reordering';
 import { ColumnChooserView } from '__internal/grids/data_grid/module_not_extended/column_chooser';
 import { ColumnHeadersView } from '__internal/grids/data_grid/module_not_extended/column_headers';
-import { columnsControllerModule } from '__internal/grids/grid_core/columns_controller/m_columns_controller';
+import { columnsControllerModule } from '__internal/grids/grid_core/columns_controller/columns_controller';
 const ColumnsController = columnsControllerModule.controllers.columns;
 import { RowsView } from '__internal/grids/data_grid/module_not_extended/rows';
 import { GroupingHeaderPanelExtender } from '__internal/grids/data_grid/grouping/m_grouping';
 import { HeaderPanel } from '__internal/grids/data_grid/module_not_extended/header_panel';
-import Action from '__internal/core/m_action';
+import Action from '__internal/core/action';
 import { getHeight } from 'core/utils/size';
 import publicComponentUtils from 'core/utils/public_component';
 
@@ -968,6 +968,13 @@ QUnit.module('Columns resizing', {
                     ]
                 }),
 
+                dataSource: {
+                    key: noop,
+                    store: noop,
+                    pageCount: () => 1,
+                    totalCount: () => 0
+                },
+
                 columnsResizer: {
                     isResizing: () => true
                 },
@@ -1148,10 +1155,13 @@ QUnit.module('Columns resizing', {
         assert.equal(resizeController._pointsByColumns.length, 3, 'count point');
         assert.deepEqual(resizeController._pointsByColumns[0], { x: -9875, y: -10000, columnIndex: 0, index: 1 });
         assert.equal(resizeController._pointsByColumns[1].x, -9750, 'x-coordinate of the second point');
-        assert.ok(resizeController._pointsByColumns[1].y > -9970 && resizeController._pointsByColumns[1].y < -9960, 'y-coordinate of the second point');
+        assert.ok(resizeController._pointsByColumns[1].y > -9970 && resizeController._pointsByColumns[1].y < -9950, 'y-coordinate of the second point');
         assert.equal(resizeController._pointsByColumns[1].columnIndex, 1, 'columnIndex of the second point');
         assert.equal(resizeController._pointsByColumns[1].index, 2, 'index of the second point');
-        assert.deepEqual(resizeController._pointsByColumns[2], { x: -9625, y: -10000, columnIndex: 2, index: 3 });
+        assert.equal(resizeController._pointsByColumns[2].x, -9625, 'x-coordinate of the third point');
+        assert.equal(resizeController._pointsByColumns[2].y, -10000, 'y-coordinate of the third point');
+        assert.equal(resizeController._pointsByColumns[2].columnIndex, 2, 'columnIndex of the third point');
+        assert.equal(resizeController._pointsByColumns[2].index, 3, 'index of the third point');
     });
 
     QUnit.test('Get points by columns when column contains column is not allowResizing', function(assert) {
@@ -1744,7 +1754,7 @@ QUnit.module('Columns resizing', {
             data: resizeController,
             type: 'mousemove',
             pageX: -9750,
-            pageY: -9960
+            pageY: -9945
         }));
 
         // assert
@@ -4839,7 +4849,7 @@ QUnit.module('Headers reordering', {
 
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
-        assert.strictEqual($dragHeader.outerWidth(), 102, 'width');
+        assert.strictEqual($dragHeader.outerWidth(), 116, 'width');
         assert.strictEqual($dragHeader.text(), '', 'text');
     });
 });

@@ -456,10 +456,9 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @default null
      * @public
      */
-    fileSystemProvider?: any;
+    fileSystemProvider?: any | null;
     /**
      * @docid
-     * @default null
      * @public
      */
     itemView?: {
@@ -507,44 +506,44 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     };
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_manager:ContextMenuItemClickEvent}
      * @action
      * @public
      */
-    onContextMenuItemClick?: ((e: ContextMenuItemClickEvent) => void);
+    onContextMenuItemClick?: ((e: ContextMenuItemClickEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/file_manager:ContextMenuShowingEvent}
      * @action
      * @public
      */
-    onContextMenuShowing?: ((e: ContextMenuShowingEvent) => void);
+    onContextMenuShowing?: ((e: ContextMenuShowingEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:CurrentDirectoryChangedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onCurrentDirectoryChanged?: ((e: CurrentDirectoryChangedEvent) => void);
+    onCurrentDirectoryChanged?: ((e: CurrentDirectoryChangedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:SelectedFileOpenedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onSelectedFileOpened?: ((e: SelectedFileOpenedEvent) => void);
+    onSelectedFileOpened?: ((e: SelectedFileOpenedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:SelectionChangedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ToolbarItemClickEvent}
@@ -555,123 +554,123 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:FocusedItemChangedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onFocusedItemChanged?: ((e: FocusedItemChangedEvent) => void);
+    onFocusedItemChanged?: ((e: FocusedItemChangedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ErrorOccurredEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onErrorOccurred?: ((e: ErrorOccurredEvent) => void);
+    onErrorOccurred?: ((e: ErrorOccurredEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:DirectoryCreatingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onDirectoryCreating?: ((e: DirectoryCreatingEvent) => void);
+    onDirectoryCreating?: ((e: DirectoryCreatingEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:DirectoryCreatedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onDirectoryCreated?: ((e: DirectoryCreatedEvent) => void);
+    onDirectoryCreated?: ((e: DirectoryCreatedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ItemRenamingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onItemRenaming?: ((e: ItemRenamingEvent) => void);
+    onItemRenaming?: ((e: ItemRenamingEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ItemRenamedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onItemRenamed?: ((e: ItemRenamedEvent) => void);
+    onItemRenamed?: ((e: ItemRenamedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ItemMovingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onItemMoving?: ((e: ItemMovingEvent) => void);
+    onItemMoving?: ((e: ItemMovingEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ItemMovedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onItemMoved?: ((e: ItemMovedEvent) => void);
+    onItemMoved?: ((e: ItemMovedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ItemCopyingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onItemCopying?: ((e: ItemCopyingEvent) => void);
+    onItemCopying?: ((e: ItemCopyingEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ItemCopiedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onItemCopied?: ((e: ItemCopiedEvent) => void);
+    onItemCopied?: ((e: ItemCopiedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ItemDeletingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onItemDeleting?: ((e: ItemDeletingEvent) => void);
+    onItemDeleting?: ((e: ItemDeletingEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ItemDeletedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onItemDeleted?: ((e: ItemDeletedEvent) => void);
+    onItemDeleted?: ((e: ItemDeletedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:FileUploadingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onFileUploading?: ((e: FileUploadingEvent) => void);
+    onFileUploading?: ((e: FileUploadingEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:FileUploadedEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onFileUploaded?: ((e: FileUploadedEvent) => void);
+    onFileUploaded?: ((e: FileUploadedEvent) => void) | undefined;
     /**
      * @docid
      * @type_function_param1 e:{ui/file_manager:ItemDownloadingEvent}
-     * @default null
+     * @default undefined
      * @action
      * @public
      */
-    onItemDownloading?: ((e: ItemDownloadingEvent) => void);
+    onItemDownloading?: ((e: ItemDownloadingEvent) => void) | undefined;
     /**
      * @docid
      * @public
@@ -733,10 +732,10 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     selectedItemKeys?: Array<string>;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @public
      */
-    focusedItemKey?: string;
+    focusedItemKey?: string | undefined;
     /**
      * @docid
      * @public

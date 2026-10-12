@@ -1,5 +1,6 @@
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -8,6 +9,8 @@ import { setStyle } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
+
+import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
@@ -105,7 +108,9 @@ abstract class AreaItem {
   }
 
   _createTableElement() {
-    return $('<table>');
+    return $('<table>')
+      .attr('id', `dx-${new Guid()}`)
+      .attr('role', 'presentation');
   }
 
   _getCellText(cell, encodeHtml) {
@@ -133,7 +138,13 @@ abstract class AreaItem {
   }
 
   _getMainElementMarkup() {
-    return domAdapter.createElement('tbody');
+    const tbody = domAdapter.createElement('tbody');
+    tbody.setAttribute('role', 'presentation');
+    return tbody;
+  }
+
+  _isCellNavigationEnabled() {
+    return false;
   }
 
   _getCloseMainElementMarkup() {
@@ -156,6 +167,16 @@ abstract class AreaItem {
     });
 
     return columnIndexMap;
+  }
+
+  _getCellAriaRole() {
+    const rolesByArea = {
+      column: 'columnheader',
+      row: 'rowheader',
+      data: 'gridcell',
+    };
+
+    return rolesByArea[this._getAreaName()];
   }
 
   _setCellAriaIndexAttributes(td, options) {
@@ -187,6 +208,7 @@ abstract class AreaItem {
     const rowsCount = data.length;
     const rtlEnabled = this.option('rtlEnabled');
     const encodeHtml = this.option('encodeHtml');
+    const isCellNavigationEnabled = this._isCellNavigationEnabled();
 
     tableElement.data('area', this._getAreaName());
     tableElement.data('data', data);
@@ -199,16 +221,22 @@ abstract class AreaItem {
     const columnIndexMap = areaName === 'column'
       ? this._createColumnIndexMap(data)
       : null;
+    const cellAriaRole = this._getCellAriaRole();
 
     for (let i = 0; i < rowsCount; i += 1) {
       const row = data[i];
       const rowClassNames = [];
 
       const tr = domAdapter.createElement('tr');
+      tr.setAttribute('role', 'row');
 
       for (let j = 0; j < row.length; j += 1) {
         const cell = row[j];
         const td = domAdapter.createElement('td');
+
+        if (cellAriaRole && !cell?.isWhiteSpace) {
+          td.setAttribute('role', cellAriaRole);
+        }
 
         this._getRowClassNames(i, cell, rowClassNames);
 
@@ -218,6 +246,10 @@ abstract class AreaItem {
         if (cell) {
           cell.rowspan && td.setAttribute('rowspan', cell.rowspan || 1);
           cell.colspan && td.setAttribute('colspan', cell.colspan || 1);
+
+          if (isCellNavigationEnabled && !cell.isWhiteSpace) {
+            td.setAttribute('tabindex', '-1');
+          }
 
           const styleOptions = {
             cellElement: undefined,
@@ -253,7 +285,13 @@ abstract class AreaItem {
             div.setAttribute('role', 'button');
             div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
             div.setAttribute('aria-expanded', String(cell.expanded));
-            div.setAttribute('tabindex', '0');
+            div.setAttribute('tabindex', isCellNavigationEnabled ? '-1' : '0');
+
+            // With cell navigation the cell itself is the focus target, so it
+            // must expose the expanded state to assistive technologies.
+            if (isCellNavigationEnabled) {
+              td.setAttribute('aria-expanded', String(cell.expanded));
+            }
           }
 
           cellText = this._getCellText(cell, encodeHtml);
@@ -433,8 +471,10 @@ abstract class AreaItem {
       columnWidth.push(values[i] || 0);
     }
 
-    for (let i = columnsCount; i < values.length && values; i += 1) {
-      columnWidth[columnsCount - 1] += values[i];
+    if (columnsCount) {
+      for (let i = columnsCount; i < values.length; i += 1) {
+        columnWidth[columnsCount - 1] += values[i];
+      }
     }
 
     this._colgroupElement.html('');
@@ -445,7 +485,8 @@ abstract class AreaItem {
       this._colgroupElement.append(col);
     }
 
-    this._tableWidth = columnWidth.reduce((sum, width) => sum + width, 0);
+    this._tableWidth = (columnsCount ? columnWidth : values)
+      .reduce((sum, width) => sum + width, 0);
     tableElement.style.width = `${this._tableWidth}px`;
     tableElement.style.tableLayout = 'fixed';
   }
@@ -609,8 +650,11 @@ abstract class AreaItem {
     if (!that._fakeTable) {
       that._fakeTable = that.tableElement()
         .clone()
-        .addClass('dx-pivot-grid-fake-table')
-        .appendTo(that._virtualContent);
+        .removeAttr('id')
+        .attr('aria-hidden', 'true')
+        .addClass(FAKE_TABLE_CLASS);
+      that._fakeTable.find('[tabindex]').removeAttr('tabindex');
+      that._fakeTable.appendTo(that._virtualContent);
     }
   }
 
@@ -699,6 +743,13 @@ abstract class AreaItem {
     if (this._virtualContent) {
       this._createFakeTable();
       this._moveFakeTable(pos);
+    }
+  }
+
+  scrollToElement(element) {
+    const scrollable = this._getScrollable();
+    if (scrollable) {
+      scrollable.scrollToElement(element);
     }
   }
 

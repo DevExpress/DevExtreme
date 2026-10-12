@@ -61,7 +61,8 @@ import {
   DxGroupItem,
   DxLabel,
 } from 'devextreme-vue/form';
-import { DxTextArea } from 'devextreme-vue/text-area'; // needs for editor-type="dxTextArea"
+import 'devextreme/ui/select_box';
+import 'devextreme/ui/text_area';
 import { employee, positions, states } from './data.ts';
 
 const formData = employee;

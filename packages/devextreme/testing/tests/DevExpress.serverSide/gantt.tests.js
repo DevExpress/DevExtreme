@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/gantt.markup.tests.js');
+import '../DevExpress.ui.widgets/gantt.markup.tests.js';

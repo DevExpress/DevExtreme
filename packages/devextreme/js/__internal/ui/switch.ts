@@ -18,7 +18,7 @@ import type { NativeEventInfo } from '@js/events';
 import type { Properties } from '@js/ui/switch';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
 import Editor from '@ts/ui/editor/editor';
 
 const SWITCH_CLASS = 'dx-switch';

@@ -519,7 +519,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     columns?: Array<Column | string> | undefined;
     /**
      * @docid
-     * @default null
      * @public
      */
     dependencies?: {
@@ -644,224 +643,223 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      headerFilter?: dxGanttHeaderFilter;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:SelectionChangedEvent}
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:CustomCommandEvent}
      * @action
      * @public
      */
-    onCustomCommand?: ((e: CustomCommandEvent) => void);
+    onCustomCommand?: ((e: CustomCommandEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ContextMenuPreparingEvent}
      * @action
      * @public
      */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskInsertingEvent}
      * @action
      * @public
      */
-    onTaskInserting?: ((e: TaskInsertingEvent) => void);
+    onTaskInserting?: ((e: TaskInsertingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskInsertedEvent}
      * @action
      * @public
      */
-    onTaskInserted?: ((e: TaskInsertedEvent) => void);
+    onTaskInserted?: ((e: TaskInsertedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskDeletingEvent}
      * @action
      * @public
      */
-    onTaskDeleting?: ((e: TaskDeletingEvent) => void);
+    onTaskDeleting?: ((e: TaskDeletingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskDeletedEvent}
      * @action
      * @public
      */
-    onTaskDeleted?: ((e: TaskDeletedEvent) => void);
+    onTaskDeleted?: ((e: TaskDeletedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskUpdatingEvent}
      * @action
      * @public
      */
-    onTaskUpdating?: ((e: TaskUpdatingEvent) => void);
+    onTaskUpdating?: ((e: TaskUpdatingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskUpdatedEvent}
      * @action
      * @public
      */
-    onTaskUpdated?: ((e: TaskUpdatedEvent) => void);
+    onTaskUpdated?: ((e: TaskUpdatedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskMovingEvent}
      * @action
      * @public
      */
-    onTaskMoving?: ((e: TaskMovingEvent) => void);
+    onTaskMoving?: ((e: TaskMovingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskEditDialogShowingEvent}
      * @action
      * @public
      */
-    onTaskEditDialogShowing?: ((e: TaskEditDialogShowingEvent) => void);
+    onTaskEditDialogShowing?: ((e: TaskEditDialogShowingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceManagerDialogShowingEvent}
      * @action
      * @public
      */
-    onResourceManagerDialogShowing?: ((e: ResourceManagerDialogShowingEvent) => void);
+    onResourceManagerDialogShowing?: ((e: ResourceManagerDialogShowingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:DependencyInsertingEvent}
      * @action
      * @public
      */
-    onDependencyInserting?: ((e: DependencyInsertingEvent) => void);
+    onDependencyInserting?: ((e: DependencyInsertingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:DependencyInsertedEvent}
      * @action
      * @public
      */
-    onDependencyInserted?: ((e: DependencyInsertedEvent) => void);
+    onDependencyInserted?: ((e: DependencyInsertedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:DependencyDeletingEvent}
      * @action
      * @public
      */
-    onDependencyDeleting?: ((e: DependencyDeletingEvent) => void);
+    onDependencyDeleting?: ((e: DependencyDeletingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:DependencyDeletedEvent}
      * @action
      * @public
      */
-    onDependencyDeleted?: ((e: DependencyDeletedEvent) => void);
+    onDependencyDeleted?: ((e: DependencyDeletedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceInsertingEvent}
      * @action
      * @public
      */
-    onResourceInserting?: ((e: ResourceInsertingEvent) => void);
+    onResourceInserting?: ((e: ResourceInsertingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceInsertedEvent}
      * @action
      * @public
      */
-    onResourceInserted?: ((e: ResourceInsertedEvent) => void);
+    onResourceInserted?: ((e: ResourceInsertedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceDeletingEvent}
      * @action
      * @public
      */
-    onResourceDeleting?: ((e: ResourceDeletingEvent) => void);
+    onResourceDeleting?: ((e: ResourceDeletingEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceDeletedEvent}
      * @action
      * @public
      */
-    onResourceDeleted?: ((e: ResourceDeletedEvent) => void);
+    onResourceDeleted?: ((e: ResourceDeletedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceAssigningEvent}
      * @action
      * @public
      */
-    onResourceAssigning?: ((e: ResourceAssigningEvent) => void);
+    onResourceAssigning?: ((e: ResourceAssigningEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceAssignedEvent}
      * @action
      * @public
      */
-    onResourceAssigned?: ((e: ResourceAssignedEvent) => void);
+    onResourceAssigned?: ((e: ResourceAssignedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceUnassigningEvent}
      * @action
      * @public
      */
-    onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void);
+    onResourceUnassigning?: ((e: ResourceUnassigningEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ResourceUnassignedEvent}
      * @action
      * @public
      */
-    onResourceUnassigned?: ((e: ResourceUnassignedEvent) => void);
+    onResourceUnassigned?: ((e: ResourceUnassignedEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskClickEvent}
      * @action
      * @public
      */
-    onTaskClick?: ((e: TaskClickEvent) => void);
+    onTaskClick?: ((e: TaskClickEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:TaskDblClickEvent}
      * @action
      * @public
      */
-    onTaskDblClick?: ((e: TaskDblClickEvent) => void);
+    onTaskDblClick?: ((e: TaskDblClickEvent) => void) | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @type_function_param1 e:{ui/gantt:ScaleCellPreparedEvent}
      * @action
      * @public
      */
-    onScaleCellPrepared?: ((e: ScaleCellPreparedEvent) => void);
+    onScaleCellPrepared?: ((e: ScaleCellPreparedEvent) => void) | undefined;
 
     /**
      * @docid
-     * @default null
      * @public
      */
     resourceAssignments?: {
@@ -889,7 +887,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @default null
      * @public
      */
     resources?: {
@@ -981,7 +978,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     firstDayOfWeek?: DayOfWeek | undefined;
     /**
      * @docid
-     * @default null
      * @public
      */
     tasks?: {
@@ -1029,7 +1025,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     };
     /**
      * @docid
-     * @default null
      * @public
      */
     toolbar?: dxGanttToolbar;
@@ -1040,7 +1035,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     contextMenu?: dxGanttContextMenu;
     /**
      * @docid
-     * @default undefined
      * @public
      */
     stripLines?: Array<dxGanttStripLine>;
@@ -1085,16 +1079,16 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     rootValue?: any;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @public
      */
-    startDateRange?: Date;
+    startDateRange?: Date | undefined;
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @public
      */
-    endDateRange?: Date;
+    endDateRange?: Date | undefined;
 }
 /**
  * @docid

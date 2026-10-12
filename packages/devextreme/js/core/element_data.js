@@ -9,4 +9,4 @@ export {
     cleanData,
     removeData,
     cleanDataRecursive,
-} from '../__internal/core/m_element_data';
+} from '../__internal/core/element_data';

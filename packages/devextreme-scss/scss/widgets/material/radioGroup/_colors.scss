@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $radiogroup-checked-bg: $base-accent !default;
 $radiogroup-border-color: $base-icon-color !default;

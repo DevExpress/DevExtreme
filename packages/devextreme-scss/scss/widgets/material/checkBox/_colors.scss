@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $checkbox-border-color: color.change($base-text-color, $alpha: 0.54) !default;
 $checkbox-checked-color: $base-element-bg !default;

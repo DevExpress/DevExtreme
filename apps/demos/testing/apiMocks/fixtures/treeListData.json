@@ -1,0 +1,3252 @@
+[
+  {
+    "id": "Configuration",
+    "parentId": "",
+    "name": "Configuration",
+    "modifiedDate": "2026-08-10T04:58:48.1293998-07:00",
+    "createdDate": "2026-07-09T06:00:17.1613577-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Controllers",
+    "parentId": "",
+    "name": "Controllers",
+    "modifiedDate": "2026-08-10T04:59:01.977562-07:00",
+    "createdDate": "2026-07-06T01:17:48.5360376-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "DataProviders",
+    "parentId": "",
+    "name": "DataProviders",
+    "modifiedDate": "2026-08-10T04:59:02.3012351-07:00",
+    "createdDate": "2026-07-09T06:00:35.6575148-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "DemoShell",
+    "parentId": "",
+    "name": "DemoShell",
+    "modifiedDate": "2026-08-10T04:59:02.3413356-07:00",
+    "createdDate": "2026-07-06T01:17:49.0311722-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Hubs",
+    "parentId": "",
+    "name": "Hubs",
+    "modifiedDate": "2026-08-10T04:59:02.4372592-07:00",
+    "createdDate": "2026-07-06T01:17:49.1036695-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models",
+    "parentId": "",
+    "name": "Models",
+    "modifiedDate": "2026-08-10T04:59:03.1526604-07:00",
+    "createdDate": "2026-07-06T01:17:49.1235516-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Services",
+    "parentId": "",
+    "name": "Services",
+    "modifiedDate": "2026-08-10T04:59:13.7860871-07:00",
+    "createdDate": "2026-07-09T06:00:49.9482495-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "ViewModels",
+    "parentId": "",
+    "name": "ViewModels",
+    "modifiedDate": "2026-08-10T04:59:13.9143813-07:00",
+    "createdDate": "2026-07-06T01:17:50.689437-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views",
+    "parentId": "",
+    "name": "Views",
+    "modifiedDate": "2026-08-10T04:59:13.9278986-07:00",
+    "createdDate": "2026-07-06T01:17:50.7835233-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "wwwroot",
+    "parentId": "",
+    "name": "wwwroot",
+    "modifiedDate": "2026-07-03T03:03:25.8903981-07:00",
+    "createdDate": "2026-07-06T01:17:53.4846619-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Extensions.cs.txt",
+    "parentId": "",
+    "name": "Extensions.cs",
+    "modifiedDate": "2026-08-10T04:25:34.0097229-07:00",
+    "createdDate": "2026-08-10T04:25:34.0097229-07:00",
+    "size": 562,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Program.cs.txt",
+    "parentId": "",
+    "name": "Program.cs",
+    "modifiedDate": "2026-08-10T04:25:45.3863716-07:00",
+    "createdDate": "2026-08-10T04:25:45.3863716-07:00",
+    "size": 6571,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Configuration\\AzureOpenAIOptions.cs.txt",
+    "parentId": "Configuration",
+    "name": "AzureOpenAIOptions.cs",
+    "modifiedDate": "2026-08-10T04:25:28.9574712-07:00",
+    "createdDate": "2026-08-10T04:25:28.9574712-07:00",
+    "size": 340,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ApiControllers",
+    "parentId": "Controllers",
+    "name": "ApiControllers",
+    "modifiedDate": "2026-08-10T04:59:02.2942688-07:00",
+    "createdDate": "2026-07-06T01:17:48.5416483-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Controllers\\AccordionController.cs.txt",
+    "parentId": "Controllers",
+    "name": "AccordionController.cs",
+    "modifiedDate": "2026-08-10T04:25:28.9894456-07:00",
+    "createdDate": "2026-08-10T04:25:28.9894456-07:00",
+    "size": 549,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\AutocompleteController.cs.txt",
+    "parentId": "Controllers",
+    "name": "AutocompleteController.cs",
+    "modifiedDate": "2026-08-10T04:25:30.9067677-07:00",
+    "createdDate": "2026-08-10T04:25:30.9067677-07:00",
+    "size": 1075,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ButtonController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ButtonController.cs",
+    "modifiedDate": "2026-08-10T04:25:30.9383724-07:00",
+    "createdDate": "2026-08-10T04:25:30.9383724-07:00",
+    "size": 369,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ButtonGroupController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ButtonGroupController.cs",
+    "modifiedDate": "2026-08-10T04:25:30.986088-07:00",
+    "createdDate": "2026-08-10T04:25:30.9704159-07:00",
+    "size": 323,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\CalendarController.cs.txt",
+    "parentId": "Controllers",
+    "name": "CalendarController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.0175686-07:00",
+    "createdDate": "2026-08-10T04:25:31.0175686-07:00",
+    "size": 309,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\CardViewController.cs.txt",
+    "parentId": "Controllers",
+    "name": "CardViewController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.0706669-07:00",
+    "createdDate": "2026-08-10T04:25:31.0686569-07:00",
+    "size": 2199,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ChartsController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ChartsController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.1043008-07:00",
+    "createdDate": "2026-08-10T04:25:31.1022936-07:00",
+    "size": 11303,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ChatController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ChatController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.1437691-07:00",
+    "createdDate": "2026-08-10T04:25:31.1379565-07:00",
+    "size": 3210,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\CheckBoxController.cs.txt",
+    "parentId": "Controllers",
+    "name": "CheckBoxController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.1598991-07:00",
+    "createdDate": "2026-08-10T04:25:31.1598991-07:00",
+    "size": 222,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ColorBoxController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ColorBoxController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.1916655-07:00",
+    "createdDate": "2026-08-10T04:25:31.1916655-07:00",
+    "size": 222,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\CommonController.cs.txt",
+    "parentId": "Controllers",
+    "name": "CommonController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.2233982-07:00",
+    "createdDate": "2026-08-10T04:25:31.2233982-07:00",
+    "size": 4712,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ContextMenuController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ContextMenuController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.254719-07:00",
+    "createdDate": "2026-08-10T04:25:31.254719-07:00",
+    "size": 739,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\DataGridController.cs.txt",
+    "parentId": "Controllers",
+    "name": "DataGridController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.2865394-07:00",
+    "createdDate": "2026-08-10T04:25:31.2865394-07:00",
+    "size": 8041,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\DateBoxController.cs.txt",
+    "parentId": "Controllers",
+    "name": "DateBoxController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.3340821-07:00",
+    "createdDate": "2026-08-10T04:25:31.3340821-07:00",
+    "size": 302,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\DateRangeBoxController.cs.txt",
+    "parentId": "Controllers",
+    "name": "DateRangeBoxController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.3655174-07:00",
+    "createdDate": "2026-08-10T04:25:31.3655174-07:00",
+    "size": 306,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\DefaultController.cs.txt",
+    "parentId": "Controllers",
+    "name": "DefaultController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.3977303-07:00",
+    "createdDate": "2026-08-10T04:25:31.3977303-07:00",
+    "size": 286,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\DiagramController.cs.txt",
+    "parentId": "Controllers",
+    "name": "DiagramController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.4295332-07:00",
+    "createdDate": "2026-08-10T04:25:31.4295332-07:00",
+    "size": 2247,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\DrawerController.cs.txt",
+    "parentId": "Controllers",
+    "name": "DrawerController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.4771711-07:00",
+    "createdDate": "2026-08-10T04:25:31.4610726-07:00",
+    "size": 431,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\DropDownBoxController.cs.txt",
+    "parentId": "Controllers",
+    "name": "DropDownBoxController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.5087549-07:00",
+    "createdDate": "2026-08-10T04:25:31.5087549-07:00",
+    "size": 462,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\DropDownButtonController.cs.txt",
+    "parentId": "Controllers",
+    "name": "DropDownButtonController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.5403265-07:00",
+    "createdDate": "2026-08-10T04:25:31.5244718-07:00",
+    "size": 774,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\FieldSetController.cs.txt",
+    "parentId": "Controllers",
+    "name": "FieldSetController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.586047-07:00",
+    "createdDate": "2026-08-10T04:25:31.5840328-07:00",
+    "size": 222,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\FileManagerController.cs.txt",
+    "parentId": "Controllers",
+    "name": "FileManagerController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.617657-07:00",
+    "createdDate": "2026-08-10T04:25:31.6156495-07:00",
+    "size": 726,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\FileUploaderBaseController.cs.txt",
+    "parentId": "Controllers",
+    "name": "FileUploaderBaseController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.6611054-07:00",
+    "createdDate": "2026-08-10T04:25:31.6590971-07:00",
+    "size": 453,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\FileUploaderController.cs.txt",
+    "parentId": "Controllers",
+    "name": "FileUploaderController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.7183178-07:00",
+    "createdDate": "2026-08-10T04:25:31.7142983-07:00",
+    "size": 4396,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\FilterBuilderController.cs.txt",
+    "parentId": "Controllers",
+    "name": "FilterBuilderController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.769778-07:00",
+    "createdDate": "2026-08-10T04:25:31.7677715-07:00",
+    "size": 495,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\FloatingActionButtonController.cs.txt",
+    "parentId": "Controllers",
+    "name": "FloatingActionButtonController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.801442-07:00",
+    "createdDate": "2026-08-10T04:25:31.801442-07:00",
+    "size": 391,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\FormController.cs.txt",
+    "parentId": "Controllers",
+    "name": "FormController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.840806-07:00",
+    "createdDate": "2026-08-10T04:25:31.8291606-07:00",
+    "size": 3798,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\GalleryController.cs.txt",
+    "parentId": "Controllers",
+    "name": "GalleryController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.8722937-07:00",
+    "createdDate": "2026-08-10T04:25:31.8722937-07:00",
+    "size": 813,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\GanttController.cs.txt",
+    "parentId": "Controllers",
+    "name": "GanttController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.9079554-07:00",
+    "createdDate": "2026-08-10T04:25:31.9079554-07:00",
+    "size": 1171,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\GaugesController.cs.txt",
+    "parentId": "Controllers",
+    "name": "GaugesController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.935643-07:00",
+    "createdDate": "2026-08-10T04:25:31.935643-07:00",
+    "size": 2677,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\HtmlEditorController.cs.txt",
+    "parentId": "Controllers",
+    "name": "HtmlEditorController.cs",
+    "modifiedDate": "2026-08-10T04:25:31.9876108-07:00",
+    "createdDate": "2026-08-10T04:25:31.9856009-07:00",
+    "size": 820,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ListController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ListController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.029287-07:00",
+    "createdDate": "2026-08-10T04:25:32.0272796-07:00",
+    "size": 922,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\LoadIndicatorController.cs.txt",
+    "parentId": "Controllers",
+    "name": "LoadIndicatorController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.0686856-07:00",
+    "createdDate": "2026-08-10T04:25:32.066679-07:00",
+    "size": 294,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\LoadPanelController.cs.txt",
+    "parentId": "Controllers",
+    "name": "LoadPanelController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.1023068-07:00",
+    "createdDate": "2026-08-10T04:25:32.1002985-07:00",
+    "size": 290,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\LocalizationController.cs.txt",
+    "parentId": "Controllers",
+    "name": "LocalizationController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.1339644-07:00",
+    "createdDate": "2026-08-10T04:25:32.1319543-07:00",
+    "size": 724,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\LookupController.cs.txt",
+    "parentId": "Controllers",
+    "name": "LookupController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.1576313-07:00",
+    "createdDate": "2026-08-10T04:25:32.1576313-07:00",
+    "size": 595,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\MapController.cs.txt",
+    "parentId": "Controllers",
+    "name": "MapController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.1892981-07:00",
+    "createdDate": "2026-08-10T04:25:32.1892981-07:00",
+    "size": 446,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\MenuController.cs.txt",
+    "parentId": "Controllers",
+    "name": "MenuController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.2208398-07:00",
+    "createdDate": "2026-08-10T04:25:32.2208398-07:00",
+    "size": 902,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\MultiViewController.cs.txt",
+    "parentId": "Controllers",
+    "name": "MultiViewController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.2626335-07:00",
+    "createdDate": "2026-08-10T04:25:32.2626335-07:00",
+    "size": 290,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\NumberBoxController.cs.txt",
+    "parentId": "Controllers",
+    "name": "NumberBoxController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.2998974-07:00",
+    "createdDate": "2026-08-10T04:25:32.2941458-07:00",
+    "size": 303,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\PaginationController.cs.txt",
+    "parentId": "Controllers",
+    "name": "PaginationController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.3316277-07:00",
+    "createdDate": "2026-08-10T04:25:32.3316277-07:00",
+    "size": 348,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\PivotGridController.cs.txt",
+    "parentId": "Controllers",
+    "name": "PivotGridController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.3642599-07:00",
+    "createdDate": "2026-08-10T04:25:32.3642599-07:00",
+    "size": 1912,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\PopoverController.cs.txt",
+    "parentId": "Controllers",
+    "name": "PopoverController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.3947908-07:00",
+    "createdDate": "2026-08-10T04:25:32.3947908-07:00",
+    "size": 288,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\PopupController.cs.txt",
+    "parentId": "Controllers",
+    "name": "PopupController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.4422844-07:00",
+    "createdDate": "2026-08-10T04:25:32.4422844-07:00",
+    "size": 477,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ProgressBarController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ProgressBarController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.4901029-07:00",
+    "createdDate": "2026-08-10T04:25:32.4740691-07:00",
+    "size": 292,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\RadioGroupController.cs.txt",
+    "parentId": "Controllers",
+    "name": "RadioGroupController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.5231812-07:00",
+    "createdDate": "2026-08-10T04:25:32.5211728-07:00",
+    "size": 224,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\RangeSelectorController.cs.txt",
+    "parentId": "Controllers",
+    "name": "RangeSelectorController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.5608452-07:00",
+    "createdDate": "2026-08-10T04:25:32.5588369-07:00",
+    "size": 1615,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\RangeSliderController.cs.txt",
+    "parentId": "Controllers",
+    "name": "RangeSliderController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.6062996-07:00",
+    "createdDate": "2026-08-10T04:25:32.6042917-07:00",
+    "size": 225,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\RemoteValidationController.cs.txt",
+    "parentId": "Controllers",
+    "name": "RemoteValidationController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.637913-07:00",
+    "createdDate": "2026-08-10T04:25:32.635906-07:00",
+    "size": 1177,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ResizableController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ResizableController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.6775828-07:00",
+    "createdDate": "2026-08-10T04:25:32.6755748-07:00",
+    "size": 345,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\SchedulerController.cs.txt",
+    "parentId": "Controllers",
+    "name": "SchedulerController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.703187-07:00",
+    "createdDate": "2026-08-10T04:25:32.7011801-07:00",
+    "size": 5448,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ScrollViewController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ScrollViewController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.7388312-07:00",
+    "createdDate": "2026-08-10T04:25:32.7368237-07:00",
+    "size": 291,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\SelectBoxController.cs.txt",
+    "parentId": "Controllers",
+    "name": "SelectBoxController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.7704454-07:00",
+    "createdDate": "2026-08-10T04:25:32.7684374-07:00",
+    "size": 1726,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\SliderController.cs.txt",
+    "parentId": "Controllers",
+    "name": "SliderController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.8058182-07:00",
+    "createdDate": "2026-08-10T04:25:32.8040689-07:00",
+    "size": 220,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\SortableController.cs.txt",
+    "parentId": "Controllers",
+    "name": "SortableController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.8414566-07:00",
+    "createdDate": "2026-08-10T04:25:32.8394469-07:00",
+    "size": 735,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\SpeechToTextController.cs.txt",
+    "parentId": "Controllers",
+    "name": "SpeechToTextController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.8770919-07:00",
+    "createdDate": "2026-08-10T04:25:32.8750848-07:00",
+    "size": 223,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\SplitterController.cs.txt",
+    "parentId": "Controllers",
+    "name": "SplitterController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.9027087-07:00",
+    "createdDate": "2026-08-10T04:25:32.9006983-07:00",
+    "size": 219,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\StepperController.cs.txt",
+    "parentId": "Controllers",
+    "name": "StepperController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.9225615-07:00",
+    "createdDate": "2026-08-10T04:25:32.9225615-07:00",
+    "size": 705,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\SwitchController.cs.txt",
+    "parentId": "Controllers",
+    "name": "SwitchController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.9482703-07:00",
+    "createdDate": "2026-08-10T04:25:32.9482703-07:00",
+    "size": 220,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\TabPanelController.cs.txt",
+    "parentId": "Controllers",
+    "name": "TabPanelController.cs",
+    "modifiedDate": "2026-08-10T04:25:32.9797911-07:00",
+    "createdDate": "2026-08-10T04:25:32.9797911-07:00",
+    "size": 1124,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\TabsController.cs.txt",
+    "parentId": "Controllers",
+    "name": "TabsController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.0273231-07:00",
+    "createdDate": "2026-08-10T04:25:33.0115916-07:00",
+    "size": 348,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\TagBoxController.cs.txt",
+    "parentId": "Controllers",
+    "name": "TagBoxController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.0653024-07:00",
+    "createdDate": "2026-08-10T04:25:33.0632935-07:00",
+    "size": 928,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\TextAreaController.cs.txt",
+    "parentId": "Controllers",
+    "name": "TextAreaController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.1187794-07:00",
+    "createdDate": "2026-08-10T04:25:33.1167731-07:00",
+    "size": 222,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\TextBoxController.cs.txt",
+    "parentId": "Controllers",
+    "name": "TextBoxController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.1504331-07:00",
+    "createdDate": "2026-08-10T04:25:33.1484248-07:00",
+    "size": 221,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\TileViewController.cs.txt",
+    "parentId": "Controllers",
+    "name": "TileViewController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.1702672-07:00",
+    "createdDate": "2026-08-10T04:25:33.1702672-07:00",
+    "size": 503,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ToastController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ToastController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.2016134-07:00",
+    "createdDate": "2026-08-10T04:25:33.2016134-07:00",
+    "size": 468,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ToolbarController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ToolbarController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.2330187-07:00",
+    "createdDate": "2026-08-10T04:25:33.2330187-07:00",
+    "size": 1059,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\TooltipController.cs.txt",
+    "parentId": "Controllers",
+    "name": "TooltipController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.2646332-07:00",
+    "createdDate": "2026-08-10T04:25:33.2646332-07:00",
+    "size": 288,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\TreeListController.cs.txt",
+    "parentId": "Controllers",
+    "name": "TreeListController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.3119526-07:00",
+    "createdDate": "2026-08-10T04:25:33.2962458-07:00",
+    "size": 3063,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\TreeViewController.cs.txt",
+    "parentId": "Controllers",
+    "name": "TreeViewController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.3453816-07:00",
+    "createdDate": "2026-08-10T04:25:33.3453816-07:00",
+    "size": 3225,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\ValidationController.cs.txt",
+    "parentId": "Controllers",
+    "name": "ValidationController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.3910126-07:00",
+    "createdDate": "2026-08-10T04:25:33.3910126-07:00",
+    "size": 751,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Controllers\\VectorMapController.cs.txt",
+    "parentId": "Controllers",
+    "name": "VectorMapController.cs",
+    "modifiedDate": "2026-08-10T04:25:33.4266766-07:00",
+    "createdDate": "2026-08-10T04:25:33.4266766-07:00",
+    "size": 3270,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "DataProviders\\SmartFilterProvider.cs.txt",
+    "parentId": "DataProviders",
+    "name": "SmartFilterProvider.cs",
+    "modifiedDate": "2026-08-10T04:25:33.4701357-07:00",
+    "createdDate": "2026-08-10T04:25:33.4701357-07:00",
+    "size": 1612,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "DemoShell\\Parsers",
+    "parentId": "DemoShell",
+    "name": "Parsers",
+    "modifiedDate": "2026-08-10T04:59:02.3524103-07:00",
+    "createdDate": "2026-07-06T01:17:49.0352971-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "DemoShell\\Views",
+    "parentId": "DemoShell",
+    "name": "Views",
+    "modifiedDate": "2026-08-10T04:59:02.4114728-07:00",
+    "createdDate": "2026-07-06T01:17:49.0456426-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "DemoShell\\Demo.cs.txt",
+    "parentId": "DemoShell",
+    "name": "Demo.cs",
+    "modifiedDate": "2026-08-10T04:25:33.5017786-07:00",
+    "createdDate": "2026-08-10T04:25:33.5017786-07:00",
+    "size": 1102,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "DemoShell\\DemoGroup.cs.txt",
+    "parentId": "DemoShell",
+    "name": "DemoGroup.cs",
+    "modifiedDate": "2026-08-10T04:25:33.533457-07:00",
+    "createdDate": "2026-08-10T04:25:33.533457-07:00",
+    "size": 327,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "DemoShell\\DemoMenuMeta.cs.txt",
+    "parentId": "DemoShell",
+    "name": "DemoMenuMeta.cs",
+    "modifiedDate": "2026-08-10T04:25:33.5674088-07:00",
+    "createdDate": "2026-08-10T04:25:33.5653986-07:00",
+    "size": 8091,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "DemoShell\\DemoSourceFile.cs.txt",
+    "parentId": "DemoShell",
+    "name": "DemoSourceFile.cs",
+    "modifiedDate": "2026-08-10T04:25:33.6148611-07:00",
+    "createdDate": "2026-08-10T04:25:33.6128531-07:00",
+    "size": 1156,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "DemoShell\\DemoTreeNode.cs.txt",
+    "parentId": "DemoShell",
+    "name": "DemoTreeNode.cs",
+    "modifiedDate": "2026-08-10T04:25:33.6367391-07:00",
+    "createdDate": "2026-08-10T04:25:33.6367391-07:00",
+    "size": 509,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "DemoShell\\DemoUtils.cs.txt",
+    "parentId": "DemoShell",
+    "name": "DemoUtils.cs",
+    "modifiedDate": "2026-08-10T04:25:33.660471-07:00",
+    "createdDate": "2026-08-10T04:25:33.660471-07:00",
+    "size": 2098,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Hubs\\DataGridCollaborativeEditingHub.cs.txt",
+    "parentId": "Hubs",
+    "name": "DataGridCollaborativeEditingHub.cs",
+    "modifiedDate": "2026-08-10T04:25:34.0568595-07:00",
+    "createdDate": "2026-08-10T04:25:34.0411057-07:00",
+    "size": 429,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Hubs\\LiveUpdateSignalRHub.cs.txt",
+    "parentId": "Hubs",
+    "name": "LiveUpdateSignalRHub.cs",
+    "modifiedDate": "2026-08-10T04:25:34.0965817-07:00",
+    "createdDate": "2026-08-10T04:25:34.0945721-07:00",
+    "size": 506,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Hubs\\SchedulerSignalRHub.cs.txt",
+    "parentId": "Hubs",
+    "name": "SchedulerSignalRHub.cs",
+    "modifiedDate": "2026-08-10T04:25:34.1440473-07:00",
+    "createdDate": "2026-08-10T04:25:34.1420403-07:00",
+    "size": 572,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Hubs\\StockTickDataHub.cs.txt",
+    "parentId": "Hubs",
+    "name": "StockTickDataHub.cs",
+    "modifiedDate": "2026-08-10T04:25:34.1756575-07:00",
+    "createdDate": "2026-08-10T04:25:34.1756575-07:00",
+    "size": 480,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CardView",
+    "parentId": "Models",
+    "name": "CardView",
+    "modifiedDate": "2026-08-10T04:59:03.2473685-07:00",
+    "createdDate": "2026-07-06T01:17:49.1297315-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\Chat",
+    "parentId": "Models",
+    "name": "Chat",
+    "modifiedDate": "2026-08-10T04:59:03.2649633-07:00",
+    "createdDate": "2026-07-06T01:17:49.1964962-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\DataGrid",
+    "parentId": "Models",
+    "name": "DataGrid",
+    "modifiedDate": "2026-08-10T04:59:03.3325233-07:00",
+    "createdDate": "2026-07-06T01:17:49.2120521-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\DataService",
+    "parentId": "Models",
+    "name": "DataService",
+    "modifiedDate": "2026-08-10T04:59:03.33871-07:00",
+    "createdDate": "2026-07-06T01:17:49.2566512-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\Diagram",
+    "parentId": "Models",
+    "name": "Diagram",
+    "modifiedDate": "2026-08-10T04:59:03.350292-07:00",
+    "createdDate": "2026-07-06T01:17:49.2665254-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\FileManagement",
+    "parentId": "Models",
+    "name": "FileManagement",
+    "modifiedDate": "2026-08-10T04:59:03.3795252-07:00",
+    "createdDate": "2026-07-06T01:17:49.2768504-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\FileUploader",
+    "parentId": "Models",
+    "name": "FileUploader",
+    "modifiedDate": "2026-08-10T04:59:03.38764-07:00",
+    "createdDate": "2026-07-06T01:17:49.3270806-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\Gantt",
+    "parentId": "Models",
+    "name": "Gantt",
+    "modifiedDate": "2026-08-10T04:59:03.4114105-07:00",
+    "createdDate": "2026-07-06T01:17:49.3351641-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\Northwind",
+    "parentId": "Models",
+    "name": "Northwind",
+    "modifiedDate": "2026-08-10T04:59:03.4751436-07:00",
+    "createdDate": "2026-07-06T01:17:49.3531003-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\Pagination",
+    "parentId": "Models",
+    "name": "Pagination",
+    "modifiedDate": "2026-08-10T04:59:03.4821548-07:00",
+    "createdDate": "2026-07-06T01:17:49.4001467-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\SampleData",
+    "parentId": "Models",
+    "name": "SampleData",
+    "modifiedDate": "2026-08-10T04:59:13.7003895-07:00",
+    "createdDate": "2026-07-06T01:17:49.4083929-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\Scheduler",
+    "parentId": "Models",
+    "name": "Scheduler",
+    "modifiedDate": "2026-08-10T04:59:13.7086308-07:00",
+    "createdDate": "2026-07-09T06:00:49.8553306-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\SignalR",
+    "parentId": "Models",
+    "name": "SignalR",
+    "modifiedDate": "2026-08-10T04:59:13.7228509-07:00",
+    "createdDate": "2026-07-06T01:17:50.1171229-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\SignalRTickData",
+    "parentId": "Models",
+    "name": "SignalRTickData",
+    "modifiedDate": "2026-08-10T04:59:13.7362148-07:00",
+    "createdDate": "2026-07-06T01:17:50.131102-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\TreeList",
+    "parentId": "Models",
+    "name": "TreeList",
+    "modifiedDate": "2026-08-10T04:59:13.7692246-07:00",
+    "createdDate": "2026-07-06T01:17:50.1430467-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\TreeView",
+    "parentId": "Models",
+    "name": "TreeView",
+    "modifiedDate": "2026-08-10T04:59:13.7801265-07:00",
+    "createdDate": "2026-07-06T01:17:50.1731561-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Models\\ActiveCompany.cs.txt",
+    "parentId": "Models",
+    "name": "ActiveCompany.cs",
+    "modifiedDate": "2026-08-10T04:25:34.2170828-07:00",
+    "createdDate": "2026-08-10T04:25:34.215074-07:00",
+    "size": 568,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\AdaptabilityAppointment.cs.txt",
+    "parentId": "Models",
+    "name": "AdaptabilityAppointment.cs",
+    "modifiedDate": "2026-08-10T04:25:34.2467884-07:00",
+    "createdDate": "2026-08-10T04:25:34.2467884-07:00",
+    "size": 222,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\AdaptabilityAppointmentsResource.cs.txt",
+    "parentId": "Models",
+    "name": "AdaptabilityAppointmentsResource.cs",
+    "modifiedDate": "2026-08-10T04:25:34.2628884-07:00",
+    "createdDate": "2026-08-10T04:25:34.2628884-07:00",
+    "size": 294,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\AdaptiveAppointment.cs.txt",
+    "parentId": "Models",
+    "name": "AdaptiveAppointment.cs",
+    "modifiedDate": "2026-08-10T04:25:34.2963148-07:00",
+    "createdDate": "2026-08-10T04:25:34.2963148-07:00",
+    "size": 163,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\AdaptiveAppointmentsResource.cs.txt",
+    "parentId": "Models",
+    "name": "AdaptiveAppointmentsResource.cs",
+    "modifiedDate": "2026-08-10T04:25:34.3260904-07:00",
+    "createdDate": "2026-08-10T04:25:34.3260904-07:00",
+    "size": 248,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\AgendaTask.cs.txt",
+    "parentId": "Models",
+    "name": "AgendaTask.cs",
+    "modifiedDate": "2026-08-10T04:25:34.3595912-07:00",
+    "createdDate": "2026-08-10T04:25:34.3595912-07:00",
+    "size": 291,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ApplyFilterType.cs.txt",
+    "parentId": "Models",
+    "name": "ApplyFilterType.cs",
+    "modifiedDate": "2026-08-10T04:25:34.3927949-07:00",
+    "createdDate": "2026-08-10T04:25:34.3927949-07:00",
+    "size": 205,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Appointment.cs.txt",
+    "parentId": "Models",
+    "name": "Appointment.cs",
+    "modifiedDate": "2026-08-10T04:25:34.4202939-07:00",
+    "createdDate": "2026-08-10T04:25:34.4202939-07:00",
+    "size": 1603,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\AppointmentWithResources.cs.txt",
+    "parentId": "Models",
+    "name": "AppointmentWithResources.cs",
+    "modifiedDate": "2026-08-10T04:25:34.4537762-07:00",
+    "createdDate": "2026-08-10T04:25:34.4537762-07:00",
+    "size": 269,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\AssigneeResource.cs.txt",
+    "parentId": "Models",
+    "name": "AssigneeResource.cs",
+    "modifiedDate": "2026-08-10T04:25:34.4835331-07:00",
+    "createdDate": "2026-08-10T04:25:34.4835331-07:00",
+    "size": 236,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CinemaDataItem.cs.txt",
+    "parentId": "Models",
+    "name": "CinemaDataItem.cs",
+    "modifiedDate": "2026-08-10T04:25:34.9955219-07:00",
+    "createdDate": "2026-08-10T04:25:34.9955219-07:00",
+    "size": 244,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\City.cs.txt",
+    "parentId": "Models",
+    "name": "City.cs",
+    "modifiedDate": "2026-08-10T04:25:35.0389815-07:00",
+    "createdDate": "2026-08-10T04:25:35.0372269-07:00",
+    "size": 236,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CityByState.cs.txt",
+    "parentId": "Models",
+    "name": "CityByState.cs",
+    "modifiedDate": "2026-08-10T04:25:35.0706065-07:00",
+    "createdDate": "2026-08-10T04:25:35.0688533-07:00",
+    "size": 238,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CityInfo.cs.txt",
+    "parentId": "Models",
+    "name": "CityInfo.cs",
+    "modifiedDate": "2026-08-10T04:25:35.1062666-07:00",
+    "createdDate": "2026-08-10T04:25:35.1042586-07:00",
+    "size": 215,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CityPopulation.cs.txt",
+    "parentId": "Models",
+    "name": "CityPopulation.cs",
+    "modifiedDate": "2026-08-10T04:25:35.1359141-07:00",
+    "createdDate": "2026-08-10T04:25:35.1339058-07:00",
+    "size": 237,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ClimateData.cs.txt",
+    "parentId": "Models",
+    "name": "ClimateData.cs",
+    "modifiedDate": "2026-08-10T04:25:35.1655152-07:00",
+    "createdDate": "2026-08-10T04:25:35.163766-07:00",
+    "size": 252,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Color.cs.txt",
+    "parentId": "Models",
+    "name": "Color.cs",
+    "modifiedDate": "2026-08-10T04:25:35.1954084-07:00",
+    "createdDate": "2026-08-10T04:25:35.1934025-07:00",
+    "size": 196,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ColumnChooserMode.cs.txt",
+    "parentId": "Models",
+    "name": "ColumnChooserMode.cs",
+    "modifiedDate": "2026-08-10T04:25:35.2129926-07:00",
+    "createdDate": "2026-08-10T04:25:35.2129926-07:00",
+    "size": 207,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Company.cs.txt",
+    "parentId": "Models",
+    "name": "Company.cs",
+    "modifiedDate": "2026-08-10T04:25:35.2465556-07:00",
+    "createdDate": "2026-08-10T04:25:35.2465556-07:00",
+    "size": 521,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ContextMenuItem.cs.txt",
+    "parentId": "Models",
+    "name": "ContextMenuItem.cs",
+    "modifiedDate": "2026-08-10T04:25:35.2764605-07:00",
+    "createdDate": "2026-08-10T04:25:35.2764605-07:00",
+    "size": 542,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ContextMenuScrollingItem.cs.txt",
+    "parentId": "Models",
+    "name": "ContextMenuScrollingItem.cs",
+    "modifiedDate": "2026-08-10T04:25:35.3079903-07:00",
+    "createdDate": "2026-08-10T04:25:35.3079903-07:00",
+    "size": 281,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ContinentInfo.cs.txt",
+    "parentId": "Models",
+    "name": "ContinentInfo.cs",
+    "modifiedDate": "2026-08-10T04:25:35.3401211-07:00",
+    "createdDate": "2026-08-10T04:25:35.3401211-07:00",
+    "size": 351,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ContinentPopulation.cs.txt",
+    "parentId": "Models",
+    "name": "ContinentPopulation.cs",
+    "modifiedDate": "2026-08-10T04:25:35.371865-07:00",
+    "createdDate": "2026-08-10T04:25:35.371865-07:00",
+    "size": 269,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CoordLines.cs.txt",
+    "parentId": "Models",
+    "name": "CoordLines.cs",
+    "modifiedDate": "2026-08-10T04:25:35.4036037-07:00",
+    "createdDate": "2026-08-10T04:25:35.395499-07:00",
+    "size": 252,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CostAndRevenue.cs.txt",
+    "parentId": "Models",
+    "name": "CostAndRevenue.cs",
+    "modifiedDate": "2026-08-10T04:25:35.4287078-07:00",
+    "createdDate": "2026-08-10T04:25:35.4287078-07:00",
+    "size": 285,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CountryInfo.cs.txt",
+    "parentId": "Models",
+    "name": "CountryInfo.cs",
+    "modifiedDate": "2026-08-10T04:25:35.4508659-07:00",
+    "createdDate": "2026-08-10T04:25:35.4508659-07:00",
+    "size": 362,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CountryPopulation.cs.txt",
+    "parentId": "Models",
+    "name": "CountryPopulation.cs",
+    "modifiedDate": "2026-08-10T04:25:35.4827791-07:00",
+    "createdDate": "2026-08-10T04:25:35.4827791-07:00",
+    "size": 264,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CountryPopulationAndGDP.cs.txt",
+    "parentId": "Models",
+    "name": "CountryPopulationAndGDP.cs",
+    "modifiedDate": "2026-08-10T04:25:35.521316-07:00",
+    "createdDate": "2026-08-10T04:25:35.5193057-07:00",
+    "size": 907,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CustomEditorsEmployee.cs.txt",
+    "parentId": "Models",
+    "name": "CustomEditorsEmployee.cs",
+    "modifiedDate": "2026-08-10T04:25:35.5680209-07:00",
+    "createdDate": "2026-08-10T04:25:35.5660115-07:00",
+    "size": 266,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CustomEditorsTask.cs.txt",
+    "parentId": "Models",
+    "name": "CustomEditorsTask.cs",
+    "modifiedDate": "2026-08-10T04:25:35.5996797-07:00",
+    "createdDate": "2026-08-10T04:25:35.5956638-07:00",
+    "size": 511,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Customer.cs.txt",
+    "parentId": "Models",
+    "name": "Customer.cs",
+    "modifiedDate": "2026-08-10T04:25:35.6254818-07:00",
+    "createdDate": "2026-08-10T04:25:35.6254818-07:00",
+    "size": 529,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\CustomerInfo.cs.txt",
+    "parentId": "Models",
+    "name": "CustomerInfo.cs",
+    "modifiedDate": "2026-08-10T04:25:35.6572697-07:00",
+    "createdDate": "2026-08-10T04:25:35.6572697-07:00",
+    "size": 295,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\DataGridProduct.cs.txt",
+    "parentId": "Models",
+    "name": "DataGridProduct.cs",
+    "modifiedDate": "2026-08-10T04:25:36.0839172-07:00",
+    "createdDate": "2026-08-10T04:25:36.0819096-07:00",
+    "size": 517,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\DataGridSale.cs.txt",
+    "parentId": "Models",
+    "name": "DataGridSale.cs",
+    "modifiedDate": "2026-08-10T04:25:36.1077681-07:00",
+    "createdDate": "2026-08-10T04:25:36.1057611-07:00",
+    "size": 472,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\DateTimeScaleTemperature.cs.txt",
+    "parentId": "Models",
+    "name": "DateTimeScaleTemperature.cs",
+    "modifiedDate": "2026-08-10T04:25:36.1664425-07:00",
+    "createdDate": "2026-08-10T04:25:36.1664425-07:00",
+    "size": 294,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Demo.cs.txt",
+    "parentId": "Models",
+    "name": "Demo.cs",
+    "modifiedDate": "2026-08-10T04:25:36.1960743-07:00",
+    "createdDate": "2026-08-10T04:25:36.1960743-07:00",
+    "size": 475,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Details.cs.txt",
+    "parentId": "Models",
+    "name": "Details.cs",
+    "modifiedDate": "2026-08-10T04:25:36.2295403-07:00",
+    "createdDate": "2026-08-10T04:25:36.2295403-07:00",
+    "size": 374,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\DiscreteScaleTemperature.cs.txt",
+    "parentId": "Models",
+    "name": "DiscreteScaleTemperature.cs",
+    "modifiedDate": "2026-08-10T04:25:36.3220408-07:00",
+    "createdDate": "2026-08-10T04:25:36.3220408-07:00",
+    "size": 239,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\DynamicAppointment.cs.txt",
+    "parentId": "Models",
+    "name": "DynamicAppointment.cs",
+    "modifiedDate": "2026-08-10T04:25:36.3537316-07:00",
+    "createdDate": "2026-08-10T04:25:36.3537316-07:00",
+    "size": 347,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\DynamicAppointmentsResource.cs.txt",
+    "parentId": "Models",
+    "name": "DynamicAppointmentsResource.cs",
+    "modifiedDate": "2026-08-10T04:25:36.3854589-07:00",
+    "createdDate": "2026-08-10T04:25:36.3854589-07:00",
+    "size": 248,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ElectronicsCategory.cs.txt",
+    "parentId": "Models",
+    "name": "ElectronicsCategory.cs",
+    "modifiedDate": "2026-08-10T04:25:36.4170929-07:00",
+    "createdDate": "2026-08-10T04:25:36.4170929-07:00",
+    "size": 295,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ElectronicsGroupedItem.cs.txt",
+    "parentId": "Models",
+    "name": "ElectronicsGroupedItem.cs",
+    "modifiedDate": "2026-08-10T04:25:36.448627-07:00",
+    "createdDate": "2026-08-10T04:25:36.448627-07:00",
+    "size": 528,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ElectronicsItem.cs.txt",
+    "parentId": "Models",
+    "name": "ElectronicsItem.cs",
+    "modifiedDate": "2026-08-10T04:25:36.4800055-07:00",
+    "createdDate": "2026-08-10T04:25:36.4800055-07:00",
+    "size": 548,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ElectronicsSimpleItem.cs.txt",
+    "parentId": "Models",
+    "name": "ElectronicsSimpleItem.cs",
+    "modifiedDate": "2026-08-10T04:25:36.512257-07:00",
+    "createdDate": "2026-08-10T04:25:36.512257-07:00",
+    "size": 241,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\EmployeeMention.cs.txt",
+    "parentId": "Models",
+    "name": "EmployeeMention.cs",
+    "modifiedDate": "2026-08-10T04:25:36.563139-07:00",
+    "createdDate": "2026-08-10T04:25:36.5611288-07:00",
+    "size": 317,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\EmployeeTask.cs.txt",
+    "parentId": "Models",
+    "name": "EmployeeTask.cs",
+    "modifiedDate": "2026-08-10T04:25:36.6007862-07:00",
+    "createdDate": "2026-08-10T04:25:36.5987782-07:00",
+    "size": 902,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\EuCountry.cs.txt",
+    "parentId": "Models",
+    "name": "EuCountry.cs",
+    "modifiedDate": "2026-08-10T04:25:36.6304375-07:00",
+    "createdDate": "2026-08-10T04:25:36.6284296-07:00",
+    "size": 206,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\EuropeanCountry.cs.txt",
+    "parentId": "Models",
+    "name": "EuropeanCountry.cs",
+    "modifiedDate": "2026-08-10T04:25:36.6542917-07:00",
+    "createdDate": "2026-08-10T04:25:36.6542917-07:00",
+    "size": 580,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Event.cs.txt",
+    "parentId": "Models",
+    "name": "Event.cs",
+    "modifiedDate": "2026-08-10T04:25:36.6862415-07:00",
+    "createdDate": "2026-08-10T04:25:36.6862415-07:00",
+    "size": 368,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ExtendedListItemData.cs.txt",
+    "parentId": "Models",
+    "name": "ExtendedListItemData.cs",
+    "modifiedDate": "2026-08-10T04:25:36.7175929-07:00",
+    "createdDate": "2026-08-10T04:25:36.7175929-07:00",
+    "size": 347,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Flow.cs.txt",
+    "parentId": "Models",
+    "name": "Flow.cs",
+    "modifiedDate": "2026-08-10T04:25:36.9428498-07:00",
+    "createdDate": "2026-08-10T04:25:36.9428498-07:00",
+    "size": 425,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\GalleryItem.cs.txt",
+    "parentId": "Models",
+    "name": "GalleryItem.cs",
+    "modifiedDate": "2026-08-10T04:25:36.9941908-07:00",
+    "createdDate": "2026-08-10T04:25:36.9921847-07:00",
+    "size": 915,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\GaugeProduct.cs.txt",
+    "parentId": "Models",
+    "name": "GaugeProduct.cs",
+    "modifiedDate": "2026-08-10T04:25:37.16024-07:00",
+    "createdDate": "2026-08-10T04:25:37.16024-07:00",
+    "size": 208,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\GeoInfo.cs.txt",
+    "parentId": "Models",
+    "name": "GeoInfo.cs",
+    "modifiedDate": "2026-08-10T04:25:37.1919728-07:00",
+    "createdDate": "2026-08-10T04:25:37.1919728-07:00",
+    "size": 299,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\InMemoryAppointmentsDataContext.cs.txt",
+    "parentId": "Models",
+    "name": "InMemoryAppointmentsDataContext.cs",
+    "modifiedDate": "2026-08-10T04:25:37.2237361-07:00",
+    "createdDate": "2026-08-10T04:25:37.2237361-07:00",
+    "size": 787,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\InMemoryDataContext.cs.txt",
+    "parentId": "Models",
+    "name": "InMemoryDataContext.cs",
+    "modifiedDate": "2026-08-10T04:25:37.2556722-07:00",
+    "createdDate": "2026-08-10T04:25:37.2396672-07:00",
+    "size": 1665,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\InMemoryListDataContext.cs.txt",
+    "parentId": "Models",
+    "name": "InMemoryListDataContext.cs",
+    "modifiedDate": "2026-08-10T04:25:37.2872088-07:00",
+    "createdDate": "2026-08-10T04:25:37.2872088-07:00",
+    "size": 732,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\InMemoryListDoingDataContext.cs.txt",
+    "parentId": "Models",
+    "name": "InMemoryListDoingDataContext.cs",
+    "modifiedDate": "2026-08-10T04:25:37.3189796-07:00",
+    "createdDate": "2026-08-10T04:25:37.3189796-07:00",
+    "size": 803,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\InMemoryListPlannedDataContext.cs.txt",
+    "parentId": "Models",
+    "name": "InMemoryListPlannedDataContext.cs",
+    "modifiedDate": "2026-08-10T04:25:37.3501262-07:00",
+    "createdDate": "2026-08-10T04:25:37.3501262-07:00",
+    "size": 809,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\InMemoryListTasksDataContext.cs.txt",
+    "parentId": "Models",
+    "name": "InMemoryListTasksDataContext.cs",
+    "modifiedDate": "2026-08-10T04:25:37.3822111-07:00",
+    "createdDate": "2026-08-10T04:25:37.3822111-07:00",
+    "size": 1742,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\InMemorySelectBoxDataContext.cs.txt",
+    "parentId": "Models",
+    "name": "InMemorySelectBoxDataContext.cs",
+    "modifiedDate": "2026-08-10T04:25:37.4135673-07:00",
+    "createdDate": "2026-08-10T04:25:37.4135673-07:00",
+    "size": 808,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Intraday.cs.txt",
+    "parentId": "Models",
+    "name": "Intraday.cs",
+    "modifiedDate": "2026-08-10T04:25:37.4449375-07:00",
+    "createdDate": "2026-08-10T04:25:37.4449375-07:00",
+    "size": 502,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Job.cs.txt",
+    "parentId": "Models",
+    "name": "Job.cs",
+    "modifiedDate": "2026-08-10T04:25:37.4767547-07:00",
+    "createdDate": "2026-08-10T04:25:37.4767547-07:00",
+    "size": 191,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Layout.cs.txt",
+    "parentId": "Models",
+    "name": "Layout.cs",
+    "modifiedDate": "2026-08-10T04:25:37.5085076-07:00",
+    "createdDate": "2026-08-10T04:25:37.5085076-07:00",
+    "size": 227,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ListItem.cs.txt",
+    "parentId": "Models",
+    "name": "ListItem.cs",
+    "modifiedDate": "2026-08-10T04:25:37.5406434-07:00",
+    "createdDate": "2026-08-10T04:25:37.5406434-07:00",
+    "size": 228,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ListProduct.cs.txt",
+    "parentId": "Models",
+    "name": "ListProduct.cs",
+    "modifiedDate": "2026-08-10T04:25:37.5783214-07:00",
+    "createdDate": "2026-08-10T04:25:37.576311-07:00",
+    "size": 504,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ListTaskItem.cs.txt",
+    "parentId": "Models",
+    "name": "ListTaskItem.cs",
+    "modifiedDate": "2026-08-10T04:25:37.6197566-07:00",
+    "createdDate": "2026-08-10T04:25:37.6180069-07:00",
+    "size": 270,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\MarkerAttribute.cs.txt",
+    "parentId": "Models",
+    "name": "MarkerAttribute.cs",
+    "modifiedDate": "2026-08-10T04:25:37.6554134-07:00",
+    "createdDate": "2026-08-10T04:25:37.6534061-07:00",
+    "size": 131,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\MedalAnnotationInfo.cs.txt",
+    "parentId": "Models",
+    "name": "MedalAnnotationInfo.cs",
+    "modifiedDate": "2026-08-10T04:25:37.6833112-07:00",
+    "createdDate": "2026-08-10T04:25:37.6833112-07:00",
+    "size": 687,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\MedalistData.cs.txt",
+    "parentId": "Models",
+    "name": "MedalistData.cs",
+    "modifiedDate": "2026-08-10T04:25:37.7152602-07:00",
+    "createdDate": "2026-08-10T04:25:37.7152602-07:00",
+    "size": 315,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\MenuItem.cs.txt",
+    "parentId": "Models",
+    "name": "MenuItem.cs",
+    "modifiedDate": "2026-08-10T04:25:37.7469703-07:00",
+    "createdDate": "2026-08-10T04:25:37.7469703-07:00",
+    "size": 372,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\MenuScrollingItem.cs.txt",
+    "parentId": "Models",
+    "name": "MenuScrollingItem.cs",
+    "modifiedDate": "2026-08-10T04:25:37.7787312-07:00",
+    "createdDate": "2026-08-10T04:25:37.7787312-07:00",
+    "size": 255,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\MonthlyPrice.cs.txt",
+    "parentId": "Models",
+    "name": "MonthlyPrice.cs",
+    "modifiedDate": "2026-08-10T04:25:37.7946779-07:00",
+    "createdDate": "2026-08-10T04:25:37.7946779-07:00",
+    "size": 365,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Movie.cs.txt",
+    "parentId": "Models",
+    "name": "Movie.cs",
+    "modifiedDate": "2026-08-10T04:25:37.8425791-07:00",
+    "createdDate": "2026-08-10T04:25:37.8305813-07:00",
+    "size": 366,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\NavigationItem.cs.txt",
+    "parentId": "Models",
+    "name": "NavigationItem.cs",
+    "modifiedDate": "2026-08-10T04:25:37.8746149-07:00",
+    "createdDate": "2026-08-10T04:25:37.8586563-07:00",
+    "size": 181,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\NavigationItemWithIcon.cs.txt",
+    "parentId": "Models",
+    "name": "NavigationItemWithIcon.cs",
+    "modifiedDate": "2026-08-10T04:25:37.8907264-07:00",
+    "createdDate": "2026-08-10T04:25:37.8907264-07:00",
+    "size": 230,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\NumericScaleProduct.cs.txt",
+    "parentId": "Models",
+    "name": "NumericScaleProduct.cs",
+    "modifiedDate": "2026-08-10T04:25:38.2876112-07:00",
+    "createdDate": "2026-08-10T04:25:38.2876112-07:00",
+    "size": 298,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\OilProduction.cs.txt",
+    "parentId": "Models",
+    "name": "OilProduction.cs",
+    "modifiedDate": "2026-08-10T04:25:38.3260857-07:00",
+    "createdDate": "2026-08-10T04:25:38.3260857-07:00",
+    "size": 278,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Order.cs.txt",
+    "parentId": "Models",
+    "name": "Order.cs",
+    "modifiedDate": "2026-08-10T04:25:38.3569713-07:00",
+    "createdDate": "2026-08-10T04:25:38.3569713-07:00",
+    "size": 667,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\OrderWithCustomerInfo.cs.txt",
+    "parentId": "Models",
+    "name": "OrderWithCustomerInfo.cs",
+    "modifiedDate": "2026-08-10T04:25:38.382429-07:00",
+    "createdDate": "2026-08-10T04:25:38.382429-07:00",
+    "size": 560,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\OrderWithDelivery.cs.txt",
+    "parentId": "Models",
+    "name": "OrderWithDelivery.cs",
+    "modifiedDate": "2026-08-10T04:25:38.4138469-07:00",
+    "createdDate": "2026-08-10T04:25:38.4138469-07:00",
+    "size": 640,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\OrgItems.cs.txt",
+    "parentId": "Models",
+    "name": "OrgItems.cs",
+    "modifiedDate": "2026-08-10T04:25:38.4456229-07:00",
+    "createdDate": "2026-08-10T04:25:38.4456229-07:00",
+    "size": 2186,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ParetoChartData.cs.txt",
+    "parentId": "Models",
+    "name": "ParetoChartData.cs",
+    "modifiedDate": "2026-08-10T04:25:38.5092168-07:00",
+    "createdDate": "2026-08-10T04:25:38.5092168-07:00",
+    "size": 243,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Payment.cs.txt",
+    "parentId": "Models",
+    "name": "Payment.cs",
+    "modifiedDate": "2026-08-10T04:25:38.5569287-07:00",
+    "createdDate": "2026-08-10T04:25:38.5569287-07:00",
+    "size": 379,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\PriorityResource.cs.txt",
+    "parentId": "Models",
+    "name": "PriorityResource.cs",
+    "modifiedDate": "2026-08-10T04:25:38.5927074-07:00",
+    "createdDate": "2026-08-10T04:25:38.5906974-07:00",
+    "size": 236,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Product.cs.txt",
+    "parentId": "Models",
+    "name": "Product.cs",
+    "modifiedDate": "2026-08-10T04:25:38.6343886-07:00",
+    "createdDate": "2026-08-10T04:25:38.6323814-07:00",
+    "size": 499,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\RecurringAppointment.cs.txt",
+    "parentId": "Models",
+    "name": "RecurringAppointment.cs",
+    "modifiedDate": "2026-08-10T04:25:38.6640383-07:00",
+    "createdDate": "2026-08-10T04:25:38.6620312-07:00",
+    "size": 164,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\RecurringAppointmentsResource.cs.txt",
+    "parentId": "Models",
+    "name": "RecurringAppointmentsResource.cs",
+    "modifiedDate": "2026-08-10T04:25:38.6993204-07:00",
+    "createdDate": "2026-08-10T04:25:38.6836351-07:00",
+    "size": 234,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\RoomResource.cs.txt",
+    "parentId": "Models",
+    "name": "RoomResource.cs",
+    "modifiedDate": "2026-08-10T04:25:38.7149697-07:00",
+    "createdDate": "2026-08-10T04:25:38.7149697-07:00",
+    "size": 232,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\RowReorderingTask.cs.txt",
+    "parentId": "Models",
+    "name": "RowReorderingTask.cs",
+    "modifiedDate": "2026-08-10T04:25:38.7544525-07:00",
+    "createdDate": "2026-08-10T04:25:38.7544525-07:00",
+    "size": 509,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Sale.cs.txt",
+    "parentId": "Models",
+    "name": "Sale.cs",
+    "modifiedDate": "2026-08-10T04:25:38.7782879-07:00",
+    "createdDate": "2026-08-10T04:25:38.7782879-07:00",
+    "size": 463,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\SchedulerResource.cs.txt",
+    "parentId": "Models",
+    "name": "SchedulerResource.cs",
+    "modifiedDate": "2026-08-10T04:25:44.2160519-07:00",
+    "createdDate": "2026-08-10T04:25:44.2160519-07:00",
+    "size": 349,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Season.cs.txt",
+    "parentId": "Models",
+    "name": "Season.cs",
+    "modifiedDate": "2026-08-10T04:25:44.2537274-07:00",
+    "createdDate": "2026-08-10T04:25:44.2537274-07:00",
+    "size": 268,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\SelectedEmployee.cs.txt",
+    "parentId": "Models",
+    "name": "SelectedEmployee.cs",
+    "modifiedDate": "2026-08-10T04:25:44.2914633-07:00",
+    "createdDate": "2026-08-10T04:25:44.2894555-07:00",
+    "size": 376,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\SimpleData.cs.txt",
+    "parentId": "Models",
+    "name": "SimpleData.cs",
+    "modifiedDate": "2026-08-10T04:25:44.4537123-07:00",
+    "createdDate": "2026-08-10T04:25:44.4537123-07:00",
+    "size": 254,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\State.cs.txt",
+    "parentId": "Models",
+    "name": "State.cs",
+    "modifiedDate": "2026-08-10T04:25:44.4831073-07:00",
+    "createdDate": "2026-08-10T04:25:44.4831073-07:00",
+    "size": 267,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\StateData.cs.txt",
+    "parentId": "Models",
+    "name": "StateData.cs",
+    "modifiedDate": "2026-08-10T04:25:44.5149872-07:00",
+    "createdDate": "2026-08-10T04:25:44.5149872-07:00",
+    "size": 277,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\StockPrice.cs.txt",
+    "parentId": "Models",
+    "name": "StockPrice.cs",
+    "modifiedDate": "2026-08-10T04:25:44.530635-07:00",
+    "createdDate": "2026-08-10T04:25:44.530635-07:00",
+    "size": 388,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Store.cs.txt",
+    "parentId": "Models",
+    "name": "Store.cs",
+    "modifiedDate": "2026-08-10T04:25:44.566546-07:00",
+    "createdDate": "2026-08-10T04:25:44.566546-07:00",
+    "size": 526,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\SubvalueIndicator.cs.txt",
+    "parentId": "Models",
+    "name": "SubvalueIndicator.cs",
+    "modifiedDate": "2026-08-10T04:25:44.614158-07:00",
+    "createdDate": "2026-08-10T04:25:44.614158-07:00",
+    "size": 285,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\TabPanelItem.cs.txt",
+    "parentId": "Models",
+    "name": "TabPanelItem.cs",
+    "modifiedDate": "2026-08-10T04:25:44.6614834-07:00",
+    "createdDate": "2026-08-10T04:25:44.6594734-07:00",
+    "size": 292,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\TaskItem.cs.txt",
+    "parentId": "Models",
+    "name": "TaskItem.cs",
+    "modifiedDate": "2026-08-10T04:25:44.6951264-07:00",
+    "createdDate": "2026-08-10T04:25:44.6890936-07:00",
+    "size": 365,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\TemperatureItem.cs.txt",
+    "parentId": "Models",
+    "name": "TemperatureItem.cs",
+    "modifiedDate": "2026-08-10T04:25:44.7207473-07:00",
+    "createdDate": "2026-08-10T04:25:44.7189946-07:00",
+    "size": 295,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Theatre.cs.txt",
+    "parentId": "Models",
+    "name": "Theatre.cs",
+    "modifiedDate": "2026-08-10T04:25:44.752381-07:00",
+    "createdDate": "2026-08-10T04:25:44.7506321-07:00",
+    "size": 159,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\TileViewItem.cs.txt",
+    "parentId": "Models",
+    "name": "TileViewItem.cs",
+    "modifiedDate": "2026-08-10T04:25:44.7840301-07:00",
+    "createdDate": "2026-08-10T04:25:44.7822824-07:00",
+    "size": 546,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\User.cs.txt",
+    "parentId": "Models",
+    "name": "User.cs",
+    "modifiedDate": "2026-08-10T04:25:45.021987-07:00",
+    "createdDate": "2026-08-10T04:25:45.021987-07:00",
+    "size": 365,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\VectorMapMarker.cs.txt",
+    "parentId": "Models",
+    "name": "VectorMapMarker.cs",
+    "modifiedDate": "2026-08-10T04:25:45.0535473-07:00",
+    "createdDate": "2026-08-10T04:25:45.0535473-07:00",
+    "size": 242,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Vehicle.cs.txt",
+    "parentId": "Models",
+    "name": "Vehicle.cs",
+    "modifiedDate": "2026-08-10T04:25:45.0957266-07:00",
+    "createdDate": "2026-08-10T04:25:45.0937177-07:00",
+    "size": 1411,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Vehicles.cs.txt",
+    "parentId": "Models",
+    "name": "Vehicles.cs",
+    "modifiedDate": "2026-08-10T04:25:45.1351347-07:00",
+    "createdDate": "2026-08-10T04:25:45.1293665-07:00",
+    "size": 100662,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\ViewportCoordinate.cs.txt",
+    "parentId": "Models",
+    "name": "ViewportCoordinate.cs",
+    "modifiedDate": "2026-08-10T04:25:45.1748083-07:00",
+    "createdDate": "2026-08-10T04:25:45.172801-07:00",
+    "size": 187,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Weather.cs.txt",
+    "parentId": "Models",
+    "name": "Weather.cs",
+    "modifiedDate": "2026-08-10T04:25:45.2084252-07:00",
+    "createdDate": "2026-08-10T04:25:45.206419-07:00",
+    "size": 235,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\WeatherIndicator.cs.txt",
+    "parentId": "Models",
+    "name": "WeatherIndicator.cs",
+    "modifiedDate": "2026-08-10T04:25:45.2400854-07:00",
+    "createdDate": "2026-08-10T04:25:45.2380768-07:00",
+    "size": 233,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\WindRoseItem.cs.txt",
+    "parentId": "Models",
+    "name": "WindRoseItem.cs",
+    "modifiedDate": "2026-08-10T04:25:45.2717479-07:00",
+    "createdDate": "2026-08-10T04:25:45.2697393-07:00",
+    "size": 254,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\Workout.cs.txt",
+    "parentId": "Models",
+    "name": "Workout.cs",
+    "modifiedDate": "2026-08-10T04:25:45.2912318-07:00",
+    "createdDate": "2026-08-10T04:25:45.2912318-07:00",
+    "size": 166,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\WorkShift.cs.txt",
+    "parentId": "Models",
+    "name": "WorkShift.cs",
+    "modifiedDate": "2026-08-10T04:25:45.322941-07:00",
+    "createdDate": "2026-08-10T04:25:45.322941-07:00",
+    "size": 180,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Models\\WorldPopulationDataItem.cs.txt",
+    "parentId": "Models",
+    "name": "WorldPopulationDataItem.cs",
+    "modifiedDate": "2026-08-10T04:25:45.3564434-07:00",
+    "createdDate": "2026-08-10T04:25:45.3564434-07:00",
+    "size": 255,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Services\\EmbeddingsInitializerService.cs.txt",
+    "parentId": "Services",
+    "name": "EmbeddingsInitializerService.cs",
+    "modifiedDate": "2026-08-10T04:25:45.4342195-07:00",
+    "createdDate": "2026-08-10T04:25:45.4342195-07:00",
+    "size": 860,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\AdaptabilityAppointmentViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "AdaptabilityAppointmentViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.466184-07:00",
+    "createdDate": "2026-08-10T04:25:45.466184-07:00",
+    "size": 384,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\ChatViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "ChatViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.4975935-07:00",
+    "createdDate": "2026-08-10T04:25:45.4975935-07:00",
+    "size": 405,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\DropDownButtonViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "DropDownButtonViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.5291969-07:00",
+    "createdDate": "2026-08-10T04:25:45.5291969-07:00",
+    "size": 572,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\DynamicAppointmentsViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "DynamicAppointmentsViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.5606893-07:00",
+    "createdDate": "2026-08-10T04:25:45.5606893-07:00",
+    "size": 386,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\EditorsViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "EditorsViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.5925107-07:00",
+    "createdDate": "2026-08-10T04:25:45.5925107-07:00",
+    "size": 2624,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\FormViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "FormViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.6257245-07:00",
+    "createdDate": "2026-08-10T04:25:45.6257245-07:00",
+    "size": 1612,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\GalleryViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "GalleryViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.6684092-07:00",
+    "createdDate": "2026-08-10T04:25:45.6663993-07:00",
+    "size": 348,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\KanbanListViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "KanbanListViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.7111273-07:00",
+    "createdDate": "2026-08-10T04:25:45.7091134-07:00",
+    "size": 350,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\KanbanViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "KanbanViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.7427527-07:00",
+    "createdDate": "2026-08-10T04:25:45.7407416-07:00",
+    "size": 361,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\LimitAppointmentCountPerCellModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "LimitAppointmentCountPerCellModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.7764087-07:00",
+    "createdDate": "2026-08-10T04:25:45.7744028-07:00",
+    "size": 393,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\RecurringAppointmentsViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "RecurringAppointmentsViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.8080629-07:00",
+    "createdDate": "2026-08-10T04:25:45.8060554-07:00",
+    "size": 392,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\RtlViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "RtlViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.8294117-07:00",
+    "createdDate": "2026-08-10T04:25:45.8294117-07:00",
+    "size": 323,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\SchedulerResourcesViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "SchedulerResourcesViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.86085-07:00",
+    "createdDate": "2026-08-10T04:25:45.86085-07:00",
+    "size": 574,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\SchedulerViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "SchedulerViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.8924516-07:00",
+    "createdDate": "2026-08-10T04:25:45.8924516-07:00",
+    "size": 356,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\SelectBoxViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "SelectBoxViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.9237965-07:00",
+    "createdDate": "2026-08-10T04:25:45.9237965-07:00",
+    "size": 220,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\StepperViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "StepperViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.9555432-07:00",
+    "createdDate": "2026-08-10T04:25:45.9555432-07:00",
+    "size": 408,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\TagBoxViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "TagBoxViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:45.9872558-07:00",
+    "createdDate": "2026-08-10T04:25:45.9872558-07:00",
+    "size": 217,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\ToolbarViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "ToolbarViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:46.0186716-07:00",
+    "createdDate": "2026-08-10T04:25:46.0186716-07:00",
+    "size": 422,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\VerifyAgeAttribute.cs.txt",
+    "parentId": "ViewModels",
+    "name": "VerifyAgeAttribute.cs",
+    "modifiedDate": "2026-08-10T04:25:46.0344712-07:00",
+    "createdDate": "2026-08-10T04:25:46.0344712-07:00",
+    "size": 1448,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\VerifyDateRange.cs.txt",
+    "parentId": "ViewModels",
+    "name": "VerifyDateRange.cs",
+    "modifiedDate": "2026-08-10T04:25:46.0822061-07:00",
+    "createdDate": "2026-08-10T04:25:46.0662725-07:00",
+    "size": 1980,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "ViewModels\\WorkShiftsViewModel.cs.txt",
+    "parentId": "ViewModels",
+    "name": "WorkShiftsViewModel.cs",
+    "modifiedDate": "2026-08-10T04:25:46.1159154-07:00",
+    "createdDate": "2026-08-10T04:25:46.1159154-07:00",
+    "size": 336,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Views\\Accordion",
+    "parentId": "Views",
+    "name": "Accordion",
+    "modifiedDate": "2026-08-10T04:59:13.935656-07:00",
+    "createdDate": "2026-07-06T01:17:50.7876357-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Autocomplete",
+    "parentId": "Views",
+    "name": "Autocomplete",
+    "modifiedDate": "2026-08-10T04:59:13.9417629-07:00",
+    "createdDate": "2026-07-06T01:17:50.7965885-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Button",
+    "parentId": "Views",
+    "name": "Button",
+    "modifiedDate": "2026-08-10T04:59:13.9608795-07:00",
+    "createdDate": "2026-07-06T01:17:50.8042713-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\ButtonGroup",
+    "parentId": "Views",
+    "name": "ButtonGroup",
+    "modifiedDate": "2026-08-10T04:59:13.9675265-07:00",
+    "createdDate": "2026-07-06T01:17:50.8174232-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Calendar",
+    "parentId": "Views",
+    "name": "Calendar",
+    "modifiedDate": "2026-08-10T04:59:28.9760992-07:00",
+    "createdDate": "2026-07-06T01:17:50.8249065-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\CardView",
+    "parentId": "Views",
+    "name": "CardView",
+    "modifiedDate": "2026-08-10T04:59:29.0627882-07:00",
+    "createdDate": "2026-07-06T01:17:50.8379607-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Charts",
+    "parentId": "Views",
+    "name": "Charts",
+    "modifiedDate": "2026-08-10T04:59:29.7847055-07:00",
+    "createdDate": "2026-07-06T01:17:50.8975661-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Chat",
+    "parentId": "Views",
+    "name": "Chat",
+    "modifiedDate": "2026-08-10T04:59:29.8315159-07:00",
+    "createdDate": "2026-07-06T01:17:51.3422338-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\CheckBox",
+    "parentId": "Views",
+    "name": "CheckBox",
+    "modifiedDate": "2026-08-10T04:59:29.8390531-07:00",
+    "createdDate": "2026-07-06T01:17:51.372115-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\ColorBox",
+    "parentId": "Views",
+    "name": "ColorBox",
+    "modifiedDate": "2026-08-10T04:59:29.8458875-07:00",
+    "createdDate": "2026-07-06T01:17:51.3798877-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Common",
+    "parentId": "Views",
+    "name": "Common",
+    "modifiedDate": "2026-08-10T04:59:29.9041537-07:00",
+    "createdDate": "2026-07-06T01:17:51.3886161-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\ContextMenu",
+    "parentId": "Views",
+    "name": "ContextMenu",
+    "modifiedDate": "2026-08-10T04:59:29.9246145-07:00",
+    "createdDate": "2026-07-06T01:17:51.4312207-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\DataGrid",
+    "parentId": "Views",
+    "name": "DataGrid",
+    "modifiedDate": "2026-08-10T04:59:30.4374042-07:00",
+    "createdDate": "2026-07-06T01:17:51.4498656-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\DateBox",
+    "parentId": "Views",
+    "name": "DateBox",
+    "modifiedDate": "2026-08-10T04:59:30.4502993-07:00",
+    "createdDate": "2026-07-06T01:17:51.8396207-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\DateRangeBox",
+    "parentId": "Views",
+    "name": "DateRangeBox",
+    "modifiedDate": "2026-08-10T04:59:30.4626274-07:00",
+    "createdDate": "2026-07-06T01:17:51.8541339-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Diagram",
+    "parentId": "Views",
+    "name": "Diagram",
+    "modifiedDate": "2026-08-10T04:59:30.5785252-07:00",
+    "createdDate": "2026-07-06T01:17:51.8681808-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Drawer",
+    "parentId": "Views",
+    "name": "Drawer",
+    "modifiedDate": "2026-08-10T04:59:30.5936037-07:00",
+    "createdDate": "2026-07-06T01:17:51.9852109-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\DropDownBox",
+    "parentId": "Views",
+    "name": "DropDownBox",
+    "modifiedDate": "2026-08-10T04:59:30.6071151-07:00",
+    "createdDate": "2026-07-06T01:17:51.9993743-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\DropDownButton",
+    "parentId": "Views",
+    "name": "DropDownButton",
+    "modifiedDate": "2026-08-10T04:59:30.6143305-07:00",
+    "createdDate": "2026-07-06T01:17:52.0128997-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\FieldSet",
+    "parentId": "Views",
+    "name": "FieldSet",
+    "modifiedDate": "2026-08-10T04:59:30.6204193-07:00",
+    "createdDate": "2026-07-06T01:17:52.0221534-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\FileManager",
+    "parentId": "Views",
+    "name": "FileManager",
+    "modifiedDate": "2026-08-10T04:59:30.6597226-07:00",
+    "createdDate": "2026-07-06T01:17:52.033187-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\FileUploader",
+    "parentId": "Views",
+    "name": "FileUploader",
+    "modifiedDate": "2026-08-10T04:59:30.6958863-07:00",
+    "createdDate": "2026-07-06T01:17:52.0647604-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\FilterBuilder",
+    "parentId": "Views",
+    "name": "FilterBuilder",
+    "modifiedDate": "2026-08-10T04:59:30.7199582-07:00",
+    "createdDate": "2026-07-06T01:17:52.0960759-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\FloatingActionButton",
+    "parentId": "Views",
+    "name": "FloatingActionButton",
+    "modifiedDate": "2026-08-10T04:59:30.725857-07:00",
+    "createdDate": "2026-07-06T01:17:52.1166481-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Form",
+    "parentId": "Views",
+    "name": "Form",
+    "modifiedDate": "2026-08-10T04:59:30.7774605-07:00",
+    "createdDate": "2026-07-06T01:17:52.1254128-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Gallery",
+    "parentId": "Views",
+    "name": "Gallery",
+    "modifiedDate": "2026-08-10T04:59:30.7910286-07:00",
+    "createdDate": "2026-07-06T01:17:52.1666205-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Gantt",
+    "parentId": "Views",
+    "name": "Gantt",
+    "modifiedDate": "2026-08-10T04:59:30.8707052-07:00",
+    "createdDate": "2026-07-06T01:17:52.1820607-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Gauges",
+    "parentId": "Views",
+    "name": "Gauges",
+    "modifiedDate": "2026-08-10T04:59:51.7851511-07:00",
+    "createdDate": "2026-07-06T01:17:52.2624287-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\HtmlEditor",
+    "parentId": "Views",
+    "name": "HtmlEditor",
+    "modifiedDate": "2026-08-10T04:59:51.8291054-07:00",
+    "createdDate": "2026-07-06T01:17:52.4063951-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\List",
+    "parentId": "Views",
+    "name": "List",
+    "modifiedDate": "2026-08-10T04:59:51.8848259-07:00",
+    "createdDate": "2026-07-06T01:17:52.4411142-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\LoadIndicator",
+    "parentId": "Views",
+    "name": "LoadIndicator",
+    "modifiedDate": "2026-08-10T04:59:51.8949731-07:00",
+    "createdDate": "2026-07-06T01:17:52.482091-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\LoadPanel",
+    "parentId": "Views",
+    "name": "LoadPanel",
+    "modifiedDate": "2026-08-10T04:59:51.9023426-07:00",
+    "createdDate": "2026-07-06T01:17:52.492549-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Localization",
+    "parentId": "Views",
+    "name": "Localization",
+    "modifiedDate": "2026-08-10T04:59:51.9158067-07:00",
+    "createdDate": "2026-07-06T01:17:52.5018985-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Lookup",
+    "parentId": "Views",
+    "name": "Lookup",
+    "modifiedDate": "2026-08-10T04:59:51.9369901-07:00",
+    "createdDate": "2026-07-06T01:17:52.5183148-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Map",
+    "parentId": "Views",
+    "name": "Map",
+    "modifiedDate": "2026-08-10T04:59:51.9564406-07:00",
+    "createdDate": "2026-07-06T01:17:52.5372888-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Menu",
+    "parentId": "Views",
+    "name": "Menu",
+    "modifiedDate": "2026-08-10T04:59:51.9688829-07:00",
+    "createdDate": "2026-07-06T01:17:52.5585213-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\MultiView",
+    "parentId": "Views",
+    "name": "MultiView",
+    "modifiedDate": "2026-08-10T04:59:51.9755478-07:00",
+    "createdDate": "2026-07-06T01:17:52.5738342-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\NumberBox",
+    "parentId": "Views",
+    "name": "NumberBox",
+    "modifiedDate": "2026-08-10T04:59:51.9901015-07:00",
+    "createdDate": "2026-07-06T01:17:52.5841863-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Pagination",
+    "parentId": "Views",
+    "name": "Pagination",
+    "modifiedDate": "2026-08-10T04:59:51.996286-07:00",
+    "createdDate": "2026-07-06T01:17:52.599758-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\PivotGrid",
+    "parentId": "Views",
+    "name": "PivotGrid",
+    "modifiedDate": "2026-08-10T04:59:52.216314-07:00",
+    "createdDate": "2026-07-06T01:17:52.6147398-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Popover",
+    "parentId": "Views",
+    "name": "Popover",
+    "modifiedDate": "2026-08-10T04:59:52.2231101-07:00",
+    "createdDate": "2026-07-06T01:17:52.7121989-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Popup",
+    "parentId": "Views",
+    "name": "Popup",
+    "modifiedDate": "2026-08-10T04:59:52.23728-07:00",
+    "createdDate": "2026-07-06T01:17:52.7232646-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\ProgressBar",
+    "parentId": "Views",
+    "name": "ProgressBar",
+    "modifiedDate": "2026-08-10T04:59:52.2425468-07:00",
+    "createdDate": "2026-07-06T01:17:52.7405702-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\RadioGroup",
+    "parentId": "Views",
+    "name": "RadioGroup",
+    "modifiedDate": "2026-08-10T04:59:52.2487431-07:00",
+    "createdDate": "2026-07-06T01:17:52.7512013-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\RangeSelector",
+    "parentId": "Views",
+    "name": "RangeSelector",
+    "modifiedDate": "2026-08-10T04:59:52.3300938-07:00",
+    "createdDate": "2026-07-06T01:17:52.7603307-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\RangeSlider",
+    "parentId": "Views",
+    "name": "RangeSlider",
+    "modifiedDate": "2026-08-10T04:59:52.3374509-07:00",
+    "createdDate": "2026-07-06T01:17:52.8243784-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Resizable",
+    "parentId": "Views",
+    "name": "Resizable",
+    "modifiedDate": "2026-08-10T04:59:52.3444788-07:00",
+    "createdDate": "2026-07-06T01:17:52.8348715-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Scheduler",
+    "parentId": "Views",
+    "name": "Scheduler",
+    "modifiedDate": "2026-08-10T04:59:52.5461809-07:00",
+    "createdDate": "2026-07-06T01:17:52.8450812-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\ScrollView",
+    "parentId": "Views",
+    "name": "ScrollView",
+    "modifiedDate": "2026-08-10T04:59:52.5544335-07:00",
+    "createdDate": "2026-07-06T01:17:52.9724523-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\SelectBox",
+    "parentId": "Views",
+    "name": "SelectBox",
+    "modifiedDate": "2026-08-10T04:59:52.5828277-07:00",
+    "createdDate": "2026-07-06T01:17:52.9828211-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Slider",
+    "parentId": "Views",
+    "name": "Slider",
+    "modifiedDate": "2026-08-10T04:59:52.5894215-07:00",
+    "createdDate": "2026-07-06T01:17:53.0056879-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Sortable",
+    "parentId": "Views",
+    "name": "Sortable",
+    "modifiedDate": "2026-08-10T04:59:52.6117391-07:00",
+    "createdDate": "2026-07-06T01:17:53.0136904-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\SpeechToText",
+    "parentId": "Views",
+    "name": "SpeechToText",
+    "modifiedDate": "2026-08-10T04:59:52.6179545-07:00",
+    "createdDate": "2026-07-06T01:17:53.0335952-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Splitter",
+    "parentId": "Views",
+    "name": "Splitter",
+    "modifiedDate": "2026-08-10T04:59:52.6252834-07:00",
+    "createdDate": "2026-07-06T01:17:53.0435701-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Stepper",
+    "parentId": "Views",
+    "name": "Stepper",
+    "modifiedDate": "2026-08-10T04:59:52.6495233-07:00",
+    "createdDate": "2026-07-06T01:17:53.0551803-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Switch",
+    "parentId": "Views",
+    "name": "Switch",
+    "modifiedDate": "2026-08-10T04:59:52.6568268-07:00",
+    "createdDate": "2026-07-06T01:17:53.0745474-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\TabPanel",
+    "parentId": "Views",
+    "name": "TabPanel",
+    "modifiedDate": "2026-08-10T04:59:52.6892156-07:00",
+    "createdDate": "2026-07-06T01:17:53.0830339-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Tabs",
+    "parentId": "Views",
+    "name": "Tabs",
+    "modifiedDate": "2026-08-10T04:59:52.7032279-07:00",
+    "createdDate": "2026-07-06T01:17:53.1121524-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\TagBox",
+    "parentId": "Views",
+    "name": "TagBox",
+    "modifiedDate": "2026-08-10T04:59:52.7229808-07:00",
+    "createdDate": "2026-07-06T01:17:53.1281225-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\TextArea",
+    "parentId": "Views",
+    "name": "TextArea",
+    "modifiedDate": "2026-08-10T04:59:52.729583-07:00",
+    "createdDate": "2026-07-06T01:17:53.1469427-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\TextBox",
+    "parentId": "Views",
+    "name": "TextBox",
+    "modifiedDate": "2026-08-10T04:59:52.7372805-07:00",
+    "createdDate": "2026-07-06T01:17:53.1546452-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\TileView",
+    "parentId": "Views",
+    "name": "TileView",
+    "modifiedDate": "2026-08-10T04:59:52.7574409-07:00",
+    "createdDate": "2026-07-06T01:17:53.1655756-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Toast",
+    "parentId": "Views",
+    "name": "Toast",
+    "modifiedDate": "2026-08-10T04:59:52.7730458-07:00",
+    "createdDate": "2026-07-06T01:17:53.181082-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Toolbar",
+    "parentId": "Views",
+    "name": "Toolbar",
+    "modifiedDate": "2026-08-10T04:59:52.7882539-07:00",
+    "createdDate": "2026-07-06T01:17:53.1945428-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Tooltip",
+    "parentId": "Views",
+    "name": "Tooltip",
+    "modifiedDate": "2026-08-10T04:59:52.7960792-07:00",
+    "createdDate": "2026-07-06T01:17:53.2090267-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\TreeList",
+    "parentId": "Views",
+    "name": "TreeList",
+    "modifiedDate": "2026-08-10T04:59:52.9968173-07:00",
+    "createdDate": "2026-07-06T01:17:53.2173762-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\TreeView",
+    "parentId": "Views",
+    "name": "TreeView",
+    "modifiedDate": "2026-08-10T04:59:53.0560724-07:00",
+    "createdDate": "2026-07-06T01:17:53.3528143-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\Validation",
+    "parentId": "Views",
+    "name": "Validation",
+    "modifiedDate": "2026-08-10T04:59:53.0676765-07:00",
+    "createdDate": "2026-07-06T01:17:53.3946593-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\VectorMap",
+    "parentId": "Views",
+    "name": "VectorMap",
+    "modifiedDate": "2026-08-10T04:59:53.1715527-07:00",
+    "createdDate": "2026-07-06T01:17:53.4082086-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  },
+  {
+    "id": "Views\\_ViewImports.cshtml.txt",
+    "parentId": "Views",
+    "name": "_ViewImports.cshtml",
+    "modifiedDate": "2026-08-10T04:26:05.5885932-07:00",
+    "createdDate": "2026-08-10T04:26:05.5865836-07:00",
+    "size": 151,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "Views\\_ViewStart.cshtml.txt",
+    "parentId": "Views",
+    "name": "_ViewStart.cshtml",
+    "modifiedDate": "2026-08-10T04:26:05.6061641-07:00",
+    "createdDate": "2026-08-10T04:26:05.6061641-07:00",
+    "size": 39,
+    "isDirectory": false,
+    "hasItems": false
+  },
+  {
+    "id": "wwwroot\\css",
+    "parentId": "wwwroot",
+    "name": "css",
+    "modifiedDate": "2026-08-10T04:59:53.1793692-07:00",
+    "createdDate": "2026-07-06T01:17:53.4900283-07:00",
+    "size": null,
+    "isDirectory": true,
+    "hasItems": true
+  }
+]

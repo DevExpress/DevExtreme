@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { render } from '__internal/core/utils/m_ink_ripple';
+import { render } from '__internal/core/utils/ink_ripple';
 import fx from 'common/core/animation/fx';
 
 const INKRIPPLE_CLASS = 'dx-inkripple';

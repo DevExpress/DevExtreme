@@ -25,10 +25,10 @@ type IDiagramOptionsNarrowedEvents = {
   onCustomCommand?: ((e: CustomCommandEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onItemClick?: ((e: ItemClickEvent) => void);
-  onItemDblClick?: ((e: ItemDblClickEvent) => void);
-  onRequestEditOperation?: ((e: RequestEditOperationEvent) => void);
-  onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void);
+  onItemClick?: ((e: ItemClickEvent) => void) | undefined;
+  onItemDblClick?: ((e: ItemDblClickEvent) => void) | undefined;
+  onRequestEditOperation?: ((e: RequestEditOperationEvent) => void) | undefined;
+  onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void) | undefined;
 }
 
 type IDiagramOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDiagramOptionsNarrowedEvents> & IHtmlOptions & {

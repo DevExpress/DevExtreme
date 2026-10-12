@@ -45,9 +45,9 @@ interface CldrDependencies {
 }
 
 const DEFAULT_MESSAGES_DIR = './js/localization/messages';
-const DEFAULT_MESSAGE_TEMPLATE = './build/gulp/localization-template.jst';
+const DEFAULT_MESSAGE_TEMPLATE = './build/localization-templates/localization-template.jst';
 const DEFAULT_MESSAGE_OUTPUT_DIR = './artifacts/js/localization';
-const DEFAULT_GENERATED_TEMPLATE = './build/gulp/generated_js.jst';
+const DEFAULT_GENERATED_TEMPLATE = './build/localization-templates/generated_js.jst';
 const DEFAULT_CLDR_DATA_OUTPUT_DIR = './js/__internal/core/localization/cldr-data';
 const DEFAULT_DEFAULT_MESSAGES_OUTPUT_DIR = './js/__internal/core/localization';
 

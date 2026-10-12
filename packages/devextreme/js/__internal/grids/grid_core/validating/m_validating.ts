@@ -25,20 +25,26 @@ import { current, isFluent } from '@js/ui/themes';
 import ValidationEngine from '@js/ui/validation_engine';
 import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
-import { focused } from '@ts/core/utils/m_selectors';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import { focused } from '@ts/core/utils/selectors';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
 import type { NormalizedEditCellOptions } from '../editing/types';
-import modules from '../m_modules';
-import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import modules from '../modules/modules';
+import type { ModuleType } from '../types';
+import {
+  INVALIDATE_CLASS,
+  VALIDATION_CANCELLED,
+  VALIDATION_STATUS,
+  validationResultIsValid,
+} from './const';
 
-const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
 const INVALID_MESSAGE_ID = 'dxInvalidMessage';
@@ -49,7 +55,6 @@ const REVERT_BUTTON_ID = 'dxRevertButton';
 const VALIDATOR_CLASS = 'validator';
 const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
 const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
-const CONTENT_CLASS = 'content';
 
 const INSERT_INDEX = '__DX_INSERT_INDEX__';
 const PADDING_BETWEEN_TOOLTIPS = 2;
@@ -58,25 +63,13 @@ const EDIT_MODE_FORM = 'form';
 const EDIT_MODE_BATCH = 'batch';
 const EDIT_MODE_CELL = 'cell';
 const EDIT_MODE_POPUP = 'popup';
-const GROUP_CELL_CLASS = 'dx-group-cell';
 
 const FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM];
 
 const COMMAND_TRANSPARENT = 'transparent';
 
-const VALIDATION_STATUS = {
-  valid: 'valid',
-  invalid: 'invalid',
-  pending: 'pending',
-};
-
 const EDIT_DATA_INSERT_TYPE = 'insert';
 const EDIT_DATA_REMOVE_TYPE = 'remove';
-const VALIDATION_CANCELLED = 'cancel';
-
-const validationResultIsValid = function (result) {
-  return isDefined(result) && result !== VALIDATION_CANCELLED;
-};
 
 const cellValueShouldBeValidated = function (value, rowOptions) {
   return value !== undefined || (value === undefined && rowOptions && !rowOptions.isNewRow);
@@ -147,6 +140,10 @@ export class ValidatingController extends modules.Controller {
     const validationData = this._getValidationData(change?.key);
 
     return !!validationData && !!validationData.validated;
+  }
+
+  public getValidationData(key) {
+    return this._getValidationData(key);
   }
 
   public _getValidationData(key, create?) {
@@ -675,6 +672,14 @@ export class ValidatingController extends modules.Controller {
 }
 
 export const validatingEditingExtender = (Base: ModuleType<EditingController>) => class ValidateEditingControllerExtender extends Base {
+  protected _errorHandlingController!: ErrorHandlingViewController;
+
+  public init(): void {
+    super.init();
+
+    this._errorHandlingController = this.getController('errorHandling');
+  }
+
   protected processDataItemTreeListHack(item) {
     // @ts-expect-error
     super.processDataItem.apply(this, arguments);
@@ -761,7 +766,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       const { key } = change;
 
       each(items, (i, item) => {
-        if (equalByValue(key, isInsert ? item.key : this._dataController.keyOf(item))) {
+        if (equalByValue(key, isInsert ? item.key : this.dataSourceController.keyOf(item))) {
           index = i;
           return false;
         }
@@ -830,9 +835,9 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     const that = this;
     const columns = this._columnsController.getColumns();
     const invisibleColumns = this._columnsController.getInvisibleColumns().filter((column) => !column.isBand);
-    const groupColumns = this._columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1);
+    const groupColumns = this._columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && !invisibleColumns.includes(column));
     const invisibleColumnValidators: any[] = [];
-    const isCellVisible = (column, rowKey) => this._dataController.getRowIndexByKey(rowKey) >= 0 && invisibleColumns.indexOf(column) < 0;
+    const isCellVisible = (column, rowKey) => this._dataController.getRowIndexByKey(rowKey) >= 0 && !invisibleColumns.includes(column);
 
     invisibleColumns.push(...groupColumns);
 
@@ -859,6 +864,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
             const validator = this._validatingController.createValidator({
               column,
               key: change.key,
+              // @ts-expect-error createColumn initializes calculateCellValue
               value: column.calculateCellValue(data),
             });
             if (validator) {
@@ -924,7 +930,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     if (this.getEditMode() === EDIT_MODE_CELL) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
       const validator = $cell && $cell.data('dxValidator');
-      const rowOptions = $cell && $cell.closest('.dx-row').data('options');
+      const rowOptions = $cell && $cell.closest(`.${VIEW_CLASSES.row}`).data('options');
       // @ts-expect-error
       const value = validator && validator.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
@@ -1021,7 +1027,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     if (isCellEditMode) {
       const columns = this._columnsController.getColumns();
       const columnsWithValidatingEditors = columns.filter(
-        (col) => col.showEditorAlways && col.validationRules?.length > 0,
+        (col) => col.showEditorAlways && (col.validationRules?.length ?? 0) > 0,
       );
 
       return columnsWithValidatingEditors.length === 0;
@@ -1040,6 +1046,8 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       $popupContent = this.getPopupContent();
       return this._errorHandlingController && this._errorHandlingController.renderErrorRow(validationData?.errorText, rowIndex, $popupContent);
     }
+
+    return undefined;
   }
 
   public updateFieldValue(e) {
@@ -1203,11 +1211,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     const isFormOrPopupEditMode = this._editingController.isFormOrPopupEditMode();
 
     if (isFixedColumns && !isFormOrPopupEditMode) {
-      const nextRowOptions = $cell.closest('.dx-row').next().data('options');
+      const nextRowOptions = $cell.closest(`.${VIEW_CLASSES.row}`).next().data('options');
 
       if (nextRowOptions && nextRowOptions.rowType === 'group') {
         $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();
-        $groupCellElement = $nextFixedRowElement.find(`.${GROUP_CELL_CLASS}`);
+        $groupCellElement = $nextFixedRowElement.find(`.${VIEW_CLASSES.groupCell}`);
 
         if ($groupCellElement.length && $groupCellElement.get(0).style.visibility !== 'hidden') {
           $groupCellElement.css('visibility', 'hidden');
@@ -1235,6 +1243,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
 
+    // @ts-expect-error the view is rendered here
     this._rowsView.element().find(`.${invalidMessageClass}`).remove();
 
     const $overlayElement = $('<div>')
@@ -1284,6 +1293,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 
   private getValidationMessages(): dxElementWrapper {
+    // @ts-expect-error the view is rendered here
     return this._rowsView.element()?.find(this._getValidationMessagesSelector());
   }
 
@@ -1389,7 +1399,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   private updateCellState($element, validationResult, isHideBorder) {
     const $focus = $element?.closest(this._getFocusCellSelector());
     const $cell = $focus?.is('td') ? $focus : null;
-    const rowOptions = $focus?.closest('.dx-row').data('options');
+    const rowOptions = $focus?.closest(`.${VIEW_CLASSES.row}`).data('options');
     // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     const column = $cell && this._columnsController.getVisibleColumns()[$cell.index()];
@@ -1455,13 +1465,13 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     this._hideValidationMessage();
 
-    if ($element?.hasClass('dx-row') || $element?.hasClass('dx-master-detail-cell')) {
+    if ($element?.hasClass(VIEW_CLASSES.row) || $element?.hasClass('dx-master-detail-cell')) {
       return super.focus($element, isHideBorder);
     }
 
     const $focus = $element?.closest(this._getFocusCellSelector());
     const validator = $focus && ($focus.data('dxValidator') || $element.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
-    const rowOptions = $focus && $focus.closest('.dx-row').data('options');
+    const rowOptions = $focus && $focus.closest(`.${VIEW_CLASSES.row}`).data('options');
     // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     let validationResult;
@@ -1504,11 +1514,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 
   protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
-    return $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+    return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`);
   }
 
   protected getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
-    return $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`).parent();
+    return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`).parent();
   }
 
   public hasOverlayElements(): boolean {
@@ -1516,37 +1526,6 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     const $revertButtonElement = this.getRevertButton();
 
     return super.hasOverlayElements() || !!$validationMessageElements?.length || !!$revertButtonElement?.length;
-  }
-};
-
-export const validatingDataControllerExtender = (Base: ModuleType<DataController>) => class ValidatingDataControllerExtender extends Base {
-  private _getValidationStatus(validationResult) {
-    const validationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
-
-    return validationStatus || VALIDATION_STATUS.valid;
-  }
-
-  protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-    const cell = oldRow.cells?.[columnIndex];
-    const oldValidationStatus = this._getValidationStatus({ status: cell?.validationStatus });
-    const validationResult = this._validatingController.getCellValidationResult({
-      rowKey: oldRow.key,
-      columnIndex,
-    });
-    const validationData = this._validatingController._getValidationData(oldRow.key);
-    const newValidationStatus = this._getValidationStatus(validationResult);
-    const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
-    const validationStatusChanged = oldValidationStatus !== newValidationStatus && rowIsModified;
-    const cellIsMarkedAsInvalid = $(cell?.cellElement).hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
-    const hasValidationRules = cell?.column.validationRules?.length;
-    const rowEditStateChanged = oldRow.isEditing !== newRow.isEditing && hasValidationRules;
-    const cellValidationStateChanged = validationStatusChanged || validationData.isValid && cellIsMarkedAsInvalid;
-
-    if (rowEditStateChanged || cellValidationStateChanged) {
-      return true;
-    }
-
-    return super._isCellChanged.apply(this, arguments as any);
   }
 };
 
@@ -1610,6 +1589,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
   }
 
   protected _restoreErrorRow(contentTable?) {
+    // @ts-expect-error each() is typed for callbacks that return a boolean
     this._editingController && this._editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
       const rowOptions = $(item).data('options');
       if (rowOptions) {
@@ -1620,29 +1600,4 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
       }
     });
   }
-};
-
-export const validatingModule = {
-  defaultOptions() {
-    return {
-      editing: {
-        texts: {
-          validationCancelChanges: messageLocalization.format('dxDataGrid-validationCancelChanges'),
-        },
-      },
-    };
-  },
-  controllers: {
-    validating: ValidatingController,
-  },
-  extenders: {
-    controllers: {
-      editing: validatingEditingExtender,
-      editorFactory: validatingEditorFactoryExtender,
-      data: validatingDataControllerExtender,
-    },
-    views: {
-      rowsView: validatingRowsViewExtender,
-    },
-  },
 };

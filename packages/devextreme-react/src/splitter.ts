@@ -22,13 +22,13 @@ type ISplitterOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
   onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
   onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
-  onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void);
+  onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void) | undefined;
   onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
-  onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void);
+  onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void) | undefined;
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
-  onResize?: ((e: ResizeEvent<TKey>) => void);
-  onResizeEnd?: ((e: ResizeEndEvent<TKey>) => void);
-  onResizeStart?: ((e: ResizeStartEvent<TKey>) => void);
+  onResize?: ((e: ResizeEvent<TKey>) => void) | undefined;
+  onResizeEnd?: ((e: ResizeEndEvent<TKey>) => void) | undefined;
+  onResizeStart?: ((e: ResizeStartEvent<TKey>) => void) | undefined;
 }
 
 type ISplitterOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, ISplitterOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {

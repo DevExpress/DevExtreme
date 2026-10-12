@@ -12,7 +12,7 @@
     "messageTemplate": {
       "type": "string",
       "description": "Path to the Lodash template file for UMD message generation",
-      "default": "./build/gulp/localization-template.jst"
+      "default": "./build/localization-templates/localization-template.jst"
     },
     "messageOutputDir": {
       "type": "string",
@@ -22,7 +22,7 @@
     "generatedTemplate": {
       "type": "string",
       "description": "Path to the Lodash template file for TypeScript exports",
-      "default": "./build/gulp/generated_js.jst"
+      "default": "./build/localization-templates/generated_js.jst"
     },
     "cldrDataOutputDir": {
       "type": "string",

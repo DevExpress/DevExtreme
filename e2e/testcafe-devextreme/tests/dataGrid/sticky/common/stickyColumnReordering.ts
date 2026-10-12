@@ -220,10 +220,7 @@ test.meta({ browserSize: [1000, 800] })('Move fixed band column with fixedPositi
   },
 }));
 
-// visual: generic.light
-// visual: material.blue.light
-// visual: fluent.blue.light
-test.meta({ browserSize: [1000, 800] })('Check the draggable source column while moving the fixed column on the right side (generic.light theme)', async (t) => {
+test.meta({ browserSize: [1000, 800] })('Check the draggable source column while moving the fixed column on the right side', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

@@ -55,7 +55,7 @@ const resizingModes: DxTreeListTypes.ColumnResizeMode[] = ['nextColumn', 'widget
 const columnResizingMode = ref<DxTreeListTypes.ColumnResizeMode>('nextColumn');
 const expandedRowKeys = [1, 3, 6];
 </script>
-<style scoped>
+<style>
 #employees {
   max-height: 307px;
 }

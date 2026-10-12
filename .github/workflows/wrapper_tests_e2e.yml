@@ -9,8 +9,7 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches: [24_2, 25_*]
-  merge_group:
+    branches: [24_2, 25_*, 26_*]
   workflow_dispatch:
 
 env:
@@ -143,7 +142,7 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '149.0.7827.114'
+          chrome-version: '153.0.8010.52'
 
       - name: Use Node.js
         uses: actions/setup-node@v6

@@ -152,7 +152,7 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
      * @default null
      * @public
      */
-    maxLength?: string | number;
+    maxLength?: string | number | null;
     /**
      * @docid
      * @default "text"

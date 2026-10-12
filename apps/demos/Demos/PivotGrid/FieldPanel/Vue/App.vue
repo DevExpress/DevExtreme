@@ -165,7 +165,7 @@ function onContextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
   }
 }
 </script>
-<style scoped>
+<style>
 #sales {
   max-height: 570px;
 }

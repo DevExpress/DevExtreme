@@ -7,7 +7,7 @@ import {
 import tooltipModule from 'viz/core/tooltip';
 import vizUtils from 'viz/core/utils_default';
 import rendererModule from 'viz/core/renderers/renderer_default';
-import domAdapter from '__internal/core/m_dom_adapter';
+import domAdapter from '__internal/core/dom_adapter';
 import { implementationsMap } from 'core/utils/size';
 import { initializeSizeMocks, destroySizeMocks } from '../../helpers/sizeMocks.js';
 
@@ -56,11 +56,11 @@ function getInitialOptions() {
     };
 }
 
-rendererModule.Renderer = function(parameters) {
+rendererModule.DEBUG_set_Renderer(function(parameters) {
     const renderer = new Renderer(parameters);
     currentTest().renderer = renderer;
     return renderer;
-};
+});
 
 QUnit.module('Main functionality', {
     beforeEach: function() {
@@ -68,10 +68,10 @@ QUnit.module('Main functionality', {
 
         this._oldPatchFontOptions = vizUtils.patchFontOptions;
         this.patchFontOptions = sinon.spy(function() { return this._oldPatchFontOptions.apply(null, arguments); }.bind(this));
-        vizUtils.patchFontOptions = this.patchFontOptions;
+        vizUtils.DEBUG_set_patchFontOptions(this.patchFontOptions);
     },
     afterEach: function() {
-        vizUtils.patchFontOptions = this._oldPatchFontOptions;
+        vizUtils.DEBUG_set_patchFontOptions(this._oldPatchFontOptions);
     }
 });
 

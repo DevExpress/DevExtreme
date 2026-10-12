@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_1]
   workflow_dispatch:
 
 env:
@@ -111,7 +112,7 @@ jobs:
       shell: bash
       env:
         DEVEXTREME_TEST_CI: "true"
-      run: pnpm exec nx build:systemjs
+      run: pnpm exec nx build:dev
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -163,6 +164,11 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v6
 
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '153.0.8010.52'
+
     - name: Run QUnit tests
       uses: ./.github/actions/run-qunit-tests
       with:
@@ -194,6 +200,11 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v6
 
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '153.0.8010.52'
+
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
@@ -216,7 +227,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: DevExpress/github-actions/send-teams-notification@v1
+      - uses: DevExpress/github-actions/send-teams-notification@send-teams-notification
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}

@@ -1,4 +1,5 @@
 import { within } from '@testing-library/dom';
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 import { ToolbarModel } from '@ts/scheduler/__tests__/__mock__/model/toolbar';
 
 import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/popup';
@@ -34,8 +35,28 @@ export class SchedulerModel {
     return new ToolbarModel(this.queries.getByRole('toolbar'));
   }
 
+  getHeader(): HTMLElement {
+    const result = this.container.querySelector('.dx-scheduler-header');
+
+    if (!result) {
+      throw new Error('Scheduler header element not found');
+    }
+
+    return result as HTMLElement;
+  }
+
+  getWorkSpace(): HTMLElement {
+    const result = this.container.querySelector('.dx-scheduler-work-space');
+
+    if (!result) {
+      throw new Error('Scheduler workspace element not found');
+    }
+
+    return result as HTMLElement;
+  }
+
   getStatusContent(): string {
-    const statusElement = this.container.querySelector('.dx-screen-reader-only');
+    const statusElement = this.container.querySelector(`.${SCREEN_READER_ONLY_CLASS}`);
     return statusElement?.textContent ?? '';
   }
 

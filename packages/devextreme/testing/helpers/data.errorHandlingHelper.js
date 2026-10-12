@@ -1,28 +1,19 @@
-(function(root, factory) {
-    root.DevExpress = root.DevExpress || {};
-    root.DevExpress.data = root.DevExpress.data || {};
-    root.DevExpress.data.testing = root.DevExpress.data.testing || {};
+import $ from 'jquery';
+import * as errorsModule from 'common/data/errors';
 
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            root.DevExpress.data.testing.ErrorHandlingHelper = module.exports = factory(require('jquery'), require('core/class'), require('common/data/errors'));
-        });
-    } else {
-        root.DevExpress.data.testing.ErrorHandlingHelper = factory(window.jQuery, DevExpress.Class, DevExpress.data);
-    }
-}(window, function($, Class, errorsModule) {
-    return Class.inherit({
+const __moduleExports = (function($, errorsModule) {
+    return class ErrorHandlingHelper {
 
-        ctor: function() {
+        constructor() {
             this.optionalHandler = $.proxy(
                 function(arg) {
                     this.optionalHandlerImpl(arg);
                 },
                 this
             );
-        },
+        }
 
-        run: function(action, done, assert) {
+        run(action, done, assert) {
             const globalFired = $.Deferred();
             const optionalFired = $.Deferred();
             const failFired = $.Deferred();
@@ -75,5 +66,12 @@
                 done();
             });
         }
-    });
-}));
+    };
+})($, errorsModule);
+
+window.DevExpress = window.DevExpress || {};
+window.DevExpress.data = window.DevExpress.data || {};
+window.DevExpress.data.testing = window.DevExpress.data.testing || {};
+window.DevExpress.data.testing.ErrorHandlingHelper = __moduleExports;
+
+export default __moduleExports;

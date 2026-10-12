@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $material-tooltip-padding: null !default;
 
 @if $size == "default" {

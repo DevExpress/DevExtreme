@@ -1,10 +1,7 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
 @use "../button/colors" as *;
-
-// adduse
 
 $speed-dial-action-color: $base-text-color !default;
 $speed-dial-action-shadow: 0 2px 6px 0 color.change($base-shadow-color, $alpha: 0.2) !default;

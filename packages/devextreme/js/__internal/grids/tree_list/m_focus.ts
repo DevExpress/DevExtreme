@@ -1,9 +1,11 @@
 import { Deferred } from '@js/core/utils/deferred';
-import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
+import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
 
-import type { DataController } from '../grid_core/data_controller/m_data_controller';
-import type { ModuleType } from '../grid_core/m_types';
-import core from './m_core';
+import type { DataController } from '../grid_core/data_controller/data_controller';
+import type { FocusDataSourceControllerExtension } from '../grid_core/focus/extenders/focus_data_source_controller';
+import type { ModuleType } from '../grid_core/types';
+import core from './core';
+import type { TreeListDataSourceController } from './data_source/data_source_controller';
 
 function findIndex(items, callback) {
   let result = -1;
@@ -20,6 +22,9 @@ function findIndex(items, callback) {
 const data = (
   Base: ModuleType<DataController>,
 ) => class TreeListDataControllerExtender extends focusModule.extenders.controllers.data(Base) {
+  protected declare dataSourceController: TreeListDataSourceController
+  & FocusDataSourceControllerExtension;
+
   private changeRowExpand(key) {
     // @ts-expect-error
     if (this.option('focusedRowEnabled') && this.isRowExpanded(key)) {
@@ -51,7 +56,7 @@ const data = (
 
   private getParentKey(key) {
     const that = this;
-    const dataSource = that._dataSource;
+    const dataSourceAdapter = that.dataSourceController.getAdapter()!;
     // @ts-expect-error
     const node = that.getNodeByKey(key);
     // @ts-expect-error
@@ -60,13 +65,13 @@ const data = (
     if (node) {
       d.resolve(node.parent ? node.parent.key : undefined);
     } else {
-      dataSource.load({
-        filter: [dataSource.getKeyExpr(), '=', key],
-      }).done((items) => {
-        const parentData = items[0];
+      dataSourceAdapter.customLoader.load({
+        filter: [dataSourceAdapter.getKeyExpr(), '=', key],
+      }).done((loadResult) => {
+        const parentData = loadResult.data[0];
 
         if (parentData) {
-          d.resolve(dataSource.parentKeyOf(parentData));
+          d.resolve(dataSourceAdapter.parentKeyOf(parentData));
         } else {
           d.resolve();
         }
@@ -78,16 +83,16 @@ const data = (
 
   private expandAscendants(key) {
     const that = this;
-    const dataSource = that._dataSource;
+    const dataSourceAdapter = that.dataSourceController.getAdapter();
     // @ts-expect-error
     const d = new Deferred();
 
     that.getParentKey(key).done((parentKey) => {
-      if (dataSource && parentKey !== undefined && parentKey !== that.option('rootValue')) {
-        dataSource._isNodesInitializing = true;
+      if (dataSourceAdapter && parentKey !== undefined && parentKey !== that.option('rootValue')) {
+        dataSourceAdapter._isNodesInitializing = true;
         // @ts-expect-error
         that.expandRow(parentKey);
-        dataSource._isNodesInitializing = false;
+        dataSourceAdapter._isNodesInitializing = false;
         that.expandAscendants(parentKey).done(d.resolve).fail(d.reject);
       } else {
         d.resolve();
@@ -98,21 +103,25 @@ const data = (
   }
 
   protected getPageIndexByKey(key) {
-    const that = this;
-    const dataSource = that._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter()!;
     // @ts-expect-error
     const d = new Deferred();
 
-    that.expandAscendants(key).done(() => {
-      dataSource.load({
+    this.expandAscendants(key).done(() => {
+      dataSourceAdapter.customLoader.load({
         parentIds: [],
-      }).done((nodes) => {
-        const offset = findIndex(nodes, (node) => that.keyOf(node.data) === key);
+      }).done(({ data: nodes }) => {
+        if (this.dataSourceController.getAdapter() !== dataSourceAdapter) {
+          d.resolve(-1);
+          return;
+        }
+
+        const offset = findIndex(nodes, (node) => this.dataSourceController.keyOf(node.data) === key);
 
         let pageIndex = -1;
 
         if (offset >= 0) {
-          pageIndex = Math.floor(offset / that.pageSize());
+          pageIndex = Math.floor(offset / this.pageSize());
         }
 
         d.resolve(pageIndex);

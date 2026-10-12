@@ -1,7 +1,5 @@
 @use "../sizes" as *;
 
-// adduse
-
 $gantt-task-title-padding-left: null !default;
 $gantt-task-height: null !default;
 $gantt-dependency-successor-size: null !default;
@@ -32,4 +30,3 @@ $gantt-task-wrapper-padding-top: 0 !default;
   $gantt-cv-dialog-row-padding-top: 10px !default;
   $gantt-treelist-text-min-height: 16px !default;
 }
-

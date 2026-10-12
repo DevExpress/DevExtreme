@@ -1,12 +1,10 @@
 @use "../sizes" as *;
 
-// adduse
-
 $fluent-xl-font-size: null !default;
 $fluent-l-font-size: null !default;
 $fluent-m-font-size: null !default;
 $fluent-s-font-size: null !default;
-$fluent-xs-font-size: null !default;
+$fluent-xs-font-size: 12px !default;
 $fluent-h1-font-size: null !default;
 $fluent-h2-font-size: null !default;
 $fluent-h3-font-size: null !default;
@@ -19,7 +17,6 @@ $fluent-h6-font-size: null !default;
   $fluent-l-font-size: 28px !default;
   $fluent-m-font-size: 20px !default;
   $fluent-s-font-size: 18px !default;
-  $fluent-xs-font-size: 12px !default;
 
   $fluent-h1-font-size: 40px !default;
   $fluent-h2-font-size: 36px !default;
@@ -34,7 +31,6 @@ $fluent-h6-font-size: null !default;
   $fluent-l-font-size: 20px !default;
   $fluent-m-font-size: 16px !default;
   $fluent-s-font-size: 14px !default;
-  $fluent-xs-font-size: 12px !default;
 
   $fluent-h1-font-size: 32px !default;
   $fluent-h2-font-size: 28px !default;
@@ -57,4 +53,3 @@ $fluent-h6-font-size: null !default;
   --dx-font-size-sm: #{$fluent-s-font-size};
   --dx-font-size-xs: #{$fluent-xs-font-size};
 }
-

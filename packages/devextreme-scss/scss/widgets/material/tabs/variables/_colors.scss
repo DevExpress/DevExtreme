@@ -2,8 +2,6 @@
 @use "../../colors" as *;
 @use "../../button/colors" as *;
 
-// adduse
-
 $material-tabs-nav-button-background: color.change($button-default-hover-bg, $alpha: 0.08) !default;
 
 /**
@@ -53,7 +51,6 @@ $tabs-tab-icon-color: $tabs-tab-color !default;
 * $type color
 */
 $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
-
 
 $tabs-tab-button-disabled-opacity: 0 !default;
 

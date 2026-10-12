@@ -6,18 +6,19 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
+import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {
-  columnHeadersSelectionExtenderMixin,
-  dataSelectionExtenderMixin,
-  rowsViewSelectionExtenderMixin,
-  selectionModule,
+  selectionColumnHeadersViewExtender,
+  selectionRowsViewExtender,
 } from '@ts/grids/grid_core/selection/m_selection';
+import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import treeListCore from '../m_core';
+import treeListCore from '../core';
 
 const TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS = 'dx-treelist-select-checkbox-container';
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
@@ -27,30 +28,40 @@ const nodeExists = function (array, currentKey) {
   return !!array.filter((key) => key === currentKey).length;
 };
 
-const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListExtender extends dataSelectionExtenderMixin(Base) {
-  protected _handleDataChanged(e) {
-    // @ts-expect-error
+interface TreeListSelectionControllerExtension {
+  isRecursiveSelection: () => boolean;
+  updateSelectionState: (options: {
+    selectedItemKeys?: unknown[];
+    removedItemKeys?: unknown[];
+  }) => void;
+}
+
+const data = (
+  Base: ModuleType<DataController>,
+): ModuleType<DataController> => class DataSelectionTreeListExtender
+  extends selectionDataControllerExtender(Base) {
+  // eslint-disable-next-line @typescript-eslint/prefer-readonly
+  private _selectionController!: SelectionController & TreeListSelectionControllerExtension;
+
+  protected dataChangedHandler(e?: ChangedEvent): void {
     const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
-    if (isRecursiveSelection && (!e || e.changeType !== 'updateSelectionState')) {
-      // @ts-expect-error
+    if (isRecursiveSelection) {
       this._selectionController.updateSelectionState({
         selectedItemKeys: this.option('selectedRowKeys'),
       });
     }
-    super._handleDataChanged.apply(this, arguments as any);
+    super.dataChangedHandler(e);
   }
 
   private loadDescendants() {
     const that = this;
     // @ts-expect-error
     const d = super.loadDescendants.apply(that, arguments);
-    // @ts-expect-error
     const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
     if (isRecursiveSelection) {
       d.done(() => {
-        // @ts-expect-error
         this._selectionController.updateSelectionState({
           selectedItemKeys: that.option('selectedRowKeys'),
         });
@@ -61,7 +72,11 @@ const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListEx
   }
 };
 
-const selection = (Base: ModuleType<SelectionController>) => class SelectionControllerTreeListExtender extends Base {
+const selection = (
+  Base: ModuleType<SelectionController>,
+): ModuleType<
+SelectionController & TreeListSelectionControllerExtension
+> => class SelectionControllerTreeListExtender extends Base {
   private _selectionStateByKey: any;
 
   private _isSelectionNormalizing: any;
@@ -80,20 +95,19 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     config.plainItems = (cached) => {
       let result;
       if (cached) {
-        result = this._dataController.getCachedStoreData();
+        result = this.dataSourceController.getCachedStoreData();
       }
 
       result ||= plainItems.apply(this, arguments as any).map((item) => item.data);
       return result || [];
     };
     config.isItemSelected = (item) => {
-      const key = this._dataController.keyOf(item);
+      const key = this.dataSourceController.keyOf(item);
 
       return this.isRowSelected(key);
     };
     config.isSelectableItem = (item) => !!item;
     config.getItemData = (item) => item;
-    // @ts-expect-error
     config.allowLoadByRange = undefined;
     return config;
   }
@@ -480,14 +494,14 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return result;
   }
 
-  private isRecursiveSelection() {
+  public isRecursiveSelection() {
     const selectionMode = this.option('selection.mode');
     const isRecursive = this.option('selection.recursive');
 
     return selectionMode === 'multiple' && isRecursive;
   }
 
-  private updateSelectionState(options) {
+  public updateSelectionState(options): void {
     const removedItemKeys = options.removedItemKeys || [];
     const selectedItemKeys = options.selectedItemKeys || [];
 
@@ -560,7 +574,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
   }
 };
 
-const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeaderViewSelectionTreeListExtender extends columnHeadersSelectionExtenderMixin(Base) {
+const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeaderViewSelectionTreeListExtender extends selectionColumnHeadersViewExtender(Base) {
   protected _processTemplate(template, options) {
     const that = this;
     let resultTemplate;
@@ -615,7 +629,9 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeListExtender extends rowsViewSelectionExtenderMixin(Base) {
+const rowsView = (
+  Base: ModuleType<RowsView>,
+): ModuleType<RowsView> => class TreeListSelectionRowsViewExtender extends selectionRowsViewExtender(Base) {
   protected _renderIcons(
     $container: dxElementWrapper,
     options,
@@ -639,6 +655,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeList
 
     // @ts-expect-error
     if (this.isExpandIcon($targetElement)) {
+      // @ts-expect-error
       super._rowClickForTreeList.apply(this, arguments as any);
     } else {
       super._rowClick.apply(this, arguments as any);

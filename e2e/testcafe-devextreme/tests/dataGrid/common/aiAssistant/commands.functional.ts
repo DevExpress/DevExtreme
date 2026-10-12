@@ -1,68 +1,12 @@
-/* eslint-disable no-underscore-dangle */
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { createWidget } from '../../../../helpers/createWidget';
 import {
   AI_INTEGRATION_PAGE,
   GRID_SELECTOR,
   createGridWithAIAssistant,
-  setupAIState,
+  createRemoteGridWithAIAssistant,
   threeRows,
   twoRows,
 } from './testHelpers';
-
-const remoteAIGridOptions = (): any => {
-  const { data, options } = (window as any).__aiBase;
-  const arrayStore = new (window as any).DevExpress.data.ArrayStore({ key: 'id', data });
-  const store = new (window as any).DevExpress.data.CustomStore({
-    key: 'id',
-    load(loadOptions: any) {
-      return Promise.all([
-        arrayStore.load(loadOptions),
-        arrayStore.totalCount(loadOptions),
-      ]).then((res: any[]) => ({ data: res[0], totalCount: res[1] }));
-    },
-  });
-
-  return {
-    ...options,
-    dataSource: store,
-    remoteOperations: true,
-    aiAssistant: {
-      enabled: true,
-      aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
-        sendRequest() {
-          const responses = (window as any).__aiResponses;
-          const count = (window as any).__aiCallCount;
-          const response = responses[count];
-
-          (window as any).__aiCallCount = count + 1;
-
-          if (response === undefined) {
-            return {
-              promise: Promise.reject(new Error(`Unexpected AI call #${count}`)),
-              abort: (): void => {},
-            };
-          }
-
-          return {
-            promise: Promise.resolve(response),
-            abort: (): void => {},
-          };
-        },
-      }),
-    },
-  };
-};
-
-const createRemoteGridWithAIAssistant = async (
-  data: unknown[],
-  options: Record<string, unknown>,
-  responses: unknown[],
-): Promise<void> => {
-  await setupAIState({ data, options }, responses);
-
-  return createWidget('dxDataGrid', remoteAIGridOptions);
-};
 
 fixture`AI Assistant - Commands`
   .page(AI_INTEGRATION_PAGE);
@@ -81,7 +25,7 @@ test('Single sorting command should execute successfully and update grid', async
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant({
@@ -107,7 +51,7 @@ test('No-args command (clearSorting) should execute successfully', async (t) => 
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   dataSource: threeRows,
@@ -136,8 +80,8 @@ test('Multi-command request should show all success entries', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getActionItems(0).count).eql(2);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(2);
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(2);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(2);
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
   await t.expect(dataGrid.apiOption('searchPanel.text')).eql('Alice');
@@ -170,8 +114,8 @@ test('Multi-command sequential ordering should be reflected in grid state', asyn
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getActionItems(0).count).eql(2);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(2);
+  await t.expect(aiChat.getAIMessage(0).getActionItems().count).eql(2);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(2);
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant({
@@ -202,7 +146,7 @@ test('Single command should succeed with local array data source', async (t) => 
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('value', 'sortOrder')).eql('desc');
 }).before(async () => createGridWithAIAssistant({
@@ -228,7 +172,7 @@ test('Remote data parity — command should succeed with server-side data source
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createRemoteGridWithAIAssistant(
   [
@@ -259,7 +203,7 @@ test('Group then ungroup across two prompts should both succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'groupIndex')).eql(0);
 
   await t
@@ -267,7 +211,7 @@ test('Group then ungroup across two prompts should both succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
-  await t.expect(aiChat.getSuccessActionItems(1).count).eql(1);
+  await t.expect(aiChat.getAIMessage(1).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'groupIndex')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   dataSource: [
@@ -297,7 +241,7 @@ test('Filter then clear filter across two prompts should both succeed', async (t
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiOption('filterValue')).eql(['value', '>', 20]);
 
   await t
@@ -305,7 +249,7 @@ test('Filter then clear filter across two prompts should both succeed', async (t
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
-  await t.expect(aiChat.getSuccessActionItems(1).count).eql(1);
+  await t.expect(aiChat.getAIMessage(1).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiOption('filterValue')).eql(null);
 }).before(async () => createGridWithAIAssistant({
   dataSource: threeRows,
@@ -346,7 +290,7 @@ test('Sort, group, page combined across three prompts should all succeed', async
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 
   await t
@@ -354,7 +298,7 @@ test('Sort, group, page combined across three prompts should all succeed', async
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(2);
-  await t.expect(aiChat.getSuccessActionItems(1).count).eql(1);
+  await t.expect(aiChat.getAIMessage(1).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'groupIndex')).eql(0);
 
   await t
@@ -362,7 +306,7 @@ test('Sort, group, page combined across three prompts should all succeed', async
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(3);
-  await t.expect(aiChat.getSuccessActionItems(2).count).eql(1);
+  await t.expect(aiChat.getAIMessage(2).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiOption('paging.pageIndex')).eql(1);
 }).before(async () => createGridWithAIAssistant({
   dataSource: Array.from({ length: 30 }, (_, i) => ({
@@ -394,7 +338,7 @@ test('Sort should succeed with no rows', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
   await t.expect(dataGrid.getDataRows().count).eql(0);
@@ -421,7 +365,7 @@ test('Filter on empty grid should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiOption('filterValue')).eql(['value', '>', 10]);
   await t.expect(dataGrid.getDataRows().count).eql(0);
@@ -463,7 +407,7 @@ test('SelectAll on empty grid should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect((await dataGrid.apiOption('selectedRowKeys'))?.length).eql(0);
 }).before(async () => createGridWithAIAssistant({
@@ -490,7 +434,7 @@ test('Sort on single-row grid should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
   await t.expect(dataGrid.getDataCell(0, 1).element.textContent).eql('Alice');
@@ -517,7 +461,7 @@ test('selectByIndexes [1] on single-row grid should select the row', async (t) =
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.getDataRow(0).isSelected).ok();
 }).before(async () => createGridWithAIAssistant({
@@ -544,7 +488,7 @@ test('selectByIndexes [5] out of range on single-row grid should not crash', asy
     .pressKey('enter');
 
   await t.expect(aiChat.getErrorMessages().count).eql(1);
-  await t.expect(aiChat.getErrorActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getErrorActionItems().count).eql(1);
 
   await t.expect(dataGrid.getDataRow(0).isSelected).notOk();
 }).before(async () => createGridWithAIAssistant({
@@ -571,7 +515,7 @@ test('Page navigation on large dataset should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiOption('paging.pageIndex')).eql(99);
 }).before(async () => createGridWithAIAssistant({
@@ -602,7 +546,7 @@ test('Grouping on large dataset should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'groupIndex')).eql(0);
 }).before(async () => createGridWithAIAssistant({
@@ -633,7 +577,7 @@ test('Page size change on large dataset should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiOption('paging.pageSize')).eql(200);
 }).before(async () => createGridWithAIAssistant({
@@ -664,7 +608,7 @@ test('Sort on single-column grid should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant({
@@ -693,7 +637,7 @@ test('Reorder on single-column grid should succeed without crash', async (t) => 
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'visibleIndex')).eql(0);
 }).before(async () => createGridWithAIAssistant({
@@ -722,7 +666,7 @@ test('Hide the only column should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'visible')).eql(false);
 }).before(async () => createGridWithAIAssistant({
@@ -757,7 +701,7 @@ test('Show column from all-hidden state should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'visible')).eql(true);
   await t.expect(dataGrid.getDataCell(0, 0).element.textContent).eql('Alice');
@@ -785,7 +729,7 @@ test('Sort while all columns hidden should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant({
@@ -811,7 +755,7 @@ test('Filter while all columns hidden should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiOption('filterValue')).eql(['value', '>', 10]);
 }).before(async () => createGridWithAIAssistant({
@@ -852,7 +796,7 @@ test('Sort by X when already sorted by X should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql('asc');
 }).before(async () => createGridWithAIAssistant({
@@ -882,7 +826,7 @@ test('clearSorting when no sort should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiColumnOption('name', 'sortOrder')).eql(undefined);
 }).before(async () => createGridWithAIAssistant({
   dataSource: twoRows,
@@ -907,7 +851,7 @@ test('clearFilter when no filter should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
   await t.expect(dataGrid.apiOption('filterValue')).eql(null);
   await t.expect(dataGrid.getDataRows().count).eql(2);
 }).before(async () => createGridWithAIAssistant({
@@ -933,7 +877,7 @@ test('clearSelection when no selection should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect((await dataGrid.apiOption('selectedRowKeys'))?.length).eql(0);
 }).before(async () => createGridWithAIAssistant({
@@ -960,7 +904,7 @@ test('deselectAll when nothing selected should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect((await dataGrid.apiOption('selectedRowKeys'))?.length).eql(0);
 }).before(async () => createGridWithAIAssistant({
@@ -987,7 +931,7 @@ test('Hide already-hidden column should succeed', async (t) => {
     .pressKey('enter');
 
   await t.expect(aiChat.getSuccessMessages().count).eql(1);
-  await t.expect(aiChat.getSuccessActionItems(0).count).eql(1);
+  await t.expect(aiChat.getAIMessage(0).getSuccessActionItems().count).eql(1);
 
   await t.expect(dataGrid.apiColumnOption('value', 'visible')).eql(false);
 }).before(async () => createGridWithAIAssistant({

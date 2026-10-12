@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/data_grid';
 import 'common/data/odata/store';
@@ -4571,8 +4571,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            this.getController('data').store = function() {
-            };
+            this.getController('dataSource').disposeAdapter();
 
             this.getController('data').dataErrorOccurred.add(function(e) {
                 dataErrors.push(e);
@@ -4686,7 +4685,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             // assert
             assert.equal(this.option('focusedRowIndex'), 6, 'FocusedRowIndex');
             assert.equal(this.option('focusedRowKey'), 'Den', 'FocusedRowKey');
-            assert.equal(this.pageIndex(), 2, 'PageIndex');
+            assert.equal(this.pageIndex(), 3, 'PageIndex');
             assert.equal($(rowsView.getCellElement(5, 1)).text(), 'Alice');
             assert.ok(rowsViewWrapper.isRowVisible(5, 1));
         });
@@ -5837,7 +5836,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             this.clock.tick(10);
 
             // act
-            this.getController('data')._dataSource.operationTypes = () => undefined;
+            this.getController('dataSource').getAdapter().operationTypes = () => undefined;
             try {
                 this.option('focusedRowKey', 'Dan');
             } catch(e) {

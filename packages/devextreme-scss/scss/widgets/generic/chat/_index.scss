@@ -1,14 +1,9 @@
 @use "../../base/chat";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/chat/mixins" as *;
 @use "../popup/sizes" as *;
 @use "../common/mixins" as *;
-
-// adduse
-
 @include chat(
   $chat-background-color,
   $chat-border-color,

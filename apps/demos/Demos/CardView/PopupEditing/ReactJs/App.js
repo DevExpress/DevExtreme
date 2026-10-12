@@ -7,7 +7,7 @@ import CardView, {
   Form,
   Item,
 } from 'devextreme-react/card-view';
-import 'devextreme-react/text-area';
+import 'devextreme/ui/text_area';
 import { employees } from './data.js';
 
 function altExpr({ fullName }) {
@@ -19,6 +19,15 @@ function imageExpr({ picture }) {
 function calculateFullName({ firstName, lastName }) {
   return `${firstName} ${lastName}`;
 }
+const popupOptions = {
+  title: 'Employee Info',
+  showTitle: true,
+  width: 700,
+  height: 525,
+};
+const textAreaOptions = {
+  height: 100,
+};
 const App = () => (
   <CardView
     dataSource={employees}
@@ -36,12 +45,7 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
-      popup={{
-        title: 'Employee Info',
-        showTitle: true,
-        width: 700,
-        height: 525,
-      }}
+      popup={popupOptions}
     >
       <Form>
         <Item
@@ -68,7 +72,7 @@ const App = () => (
             dataField="notes"
             editorType="dxTextArea"
             colSpan={2}
-            editorOptions={{ height: 100 }}
+            editorOptions={textAreaOptions}
           ></Item>
           <Item dataField="picture"></Item>
         </Item>

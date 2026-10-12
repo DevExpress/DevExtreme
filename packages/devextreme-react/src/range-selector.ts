@@ -29,7 +29,7 @@ type IRangeSelectorOptionsNarrowedEvents = {
   onFileSaving?: ((e: FileSavingEvent) => void);
   onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
-  onValueChanged?: ((e: ValueChangedEvent) => void);
+  onValueChanged?: ((e: ValueChangedEvent) => void) | undefined;
 }
 
 type IRangeSelectorOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IRangeSelectorOptionsNarrowedEvents> & IHtmlOptions & {
@@ -1482,7 +1482,7 @@ type IScaleProps = React.PropsWithChildren<{
     years?: number;
   };
   allowDecimals?: boolean | undefined;
-  breaks?: Array<ScaleBreak> | {
+  breaks?: Array<ScaleBreak> | undefined | {
     endValue?: Date | number | string | undefined;
     startValue?: Date | number | string | undefined;
   }[];
@@ -1495,7 +1495,7 @@ type IScaleProps = React.PropsWithChildren<{
   discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
   endOnTick?: boolean;
   endValue?: Date | number | string | undefined;
-  holidays?: Array<Date | string> | Array<number>;
+  holidays?: Array<Date | string> | Array<number> | undefined;
   label?: Record<string, any> | {
     customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string);
     font?: ChartsFont;
@@ -1559,7 +1559,7 @@ type IScaleProps = React.PropsWithChildren<{
   };
   placeholderHeight?: number | undefined;
   showCustomBoundaryTicks?: boolean;
-  singleWorkdays?: Array<Date | string> | Array<number>;
+  singleWorkdays?: Array<Date | string> | Array<number> | undefined;
   startValue?: Date | number | string | undefined;
   tick?: Record<string, any> | {
     color?: string;
@@ -2014,7 +2014,7 @@ const SliderMarker = Object.assign<typeof _componentSliderMarker, NestedComponen
 type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   wordWrap?: WordWrap;
 }>
@@ -2095,11 +2095,11 @@ type ITitleProps = React.PropsWithChildren<{
   subtitle?: Record<string, any> | string | {
     font?: ChartsFont;
     offset?: number;
-    text?: string;
+    text?: string | undefined;
     textOverflow?: TextOverflow;
     wordWrap?: WordWrap;
   };
-  text?: string;
+  text?: string | undefined;
   textOverflow?: TextOverflow;
   verticalAlignment?: VerticalEdge;
   wordWrap?: WordWrap;

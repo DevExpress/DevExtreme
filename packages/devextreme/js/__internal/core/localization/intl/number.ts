@@ -1,9 +1,9 @@
 import dxConfig from '@js/core/config';
+import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import accountingFormats from '@ts/core/localization/cldr-data/accounting_formats';
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { FormatConfig as BaseFormatConfig, LocalizationFormat } from '@ts/core/localization/number';
 import openXmlCurrencyFormat from '@ts/core/localization/open_xml_currency_format';
-import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 interface CurrencySymbolInfo {
   position: 'before' | 'after';
@@ -17,7 +17,7 @@ type NormalizedConfig = Intl.NumberFormatOptions & {
 };
 type IntlFormatter = Intl.NumberFormat['format'];
 
-const CURRENCY_STYLES = ['standard', 'accounting'];
+const CURRENCY_STYLES = ['standard', 'accounting'] as const;
 const MAX_FRACTION_DIGITS = 20;
 
 const detectCurrencySymbolRegex = /([^\s0]+)?(\s*)0*[.,]*0*(\s*)([^\s0]+)?/;
@@ -101,7 +101,7 @@ export default {
   },
   format(
     value: string | number,
-    format: LocalizationFormat,
+    format?: LocalizationFormat,
   ): string {
     if (typeof value !== 'number') {
       return value;
@@ -117,8 +117,8 @@ export default {
     // eslint-disable-next-line no-param-reassign
     format = this._normalizeFormat(format) as FormatConfig;
 
-    if (format.currency === 'default') {
-      format.currency = dxConfig().defaultCurrency;
+    if ((format as FormatConfig).currency === 'default') {
+      (format as FormatConfig).currency = dxConfig().defaultCurrency;
     }
 
     // eslint-disable-next-line @stylistic/no-mixed-operators
@@ -149,10 +149,9 @@ export default {
     };
   },
 
-  getCurrencySymbol(currency: string): { symbol: string } {
+  getCurrencySymbol(currency?: string): { symbol: string } {
     if (!currency) {
-      // @ts-expect-error
-      // eslint-disable-next-line
+      // eslint-disable-next-line no-param-reassign
       currency = dxConfig().defaultCurrency;
     }
 
@@ -161,7 +160,7 @@ export default {
       symbol: symbolInfo.symbol,
     };
   },
-  getOpenXmlCurrencyFormat(currency: string): string | undefined {
+  getOpenXmlCurrencyFormat(currency?: string): string | undefined {
     const targetCurrency = currency || dxConfig().defaultCurrency;
     const currencySymbol: string = this._getCurrencySymbolInfo(targetCurrency).symbol;
     const closestAccountingFormat: string | undefined = localizationCoreUtils

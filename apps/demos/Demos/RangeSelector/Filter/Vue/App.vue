@@ -47,7 +47,7 @@ const selectedEmployees = computed(() => employees
   .filter((employee) => (employee.BirthYear >= range.value[0]
       && employee.BirthYear <= range.value[1]) || !range.value.length));
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 140px;
 }

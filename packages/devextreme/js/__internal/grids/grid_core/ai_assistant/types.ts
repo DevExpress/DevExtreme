@@ -1,7 +1,7 @@
 import type { ExecuteGridAssistantCommandParams, RequestCallbacks } from '@js/common/ai-integration';
 import type { AIAssistant } from '@js/common/grids';
 import type { Message } from '@js/ui/chat';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 import type { z, ZodObject, ZodRawShape } from 'zod';
 
 import type { MessageStatus } from './const';

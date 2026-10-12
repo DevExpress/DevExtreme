@@ -121,10 +121,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get buttons(): Array<NumberBoxPredefinedButton | TextEditorButton> {
+    get buttons(): Array<NumberBoxPredefinedButton | TextEditorButton> | undefined {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<NumberBoxPredefinedButton | TextEditorButton>) {
+    set buttons(value: Array<NumberBoxPredefinedButton | TextEditorButton> | undefined) {
         this._setOption('buttons', value);
     }
 
@@ -485,10 +485,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get validationError(): any {
+    get validationError(): any | null {
         return this._getOption('validationError');
     }
-    set validationError(value: any) {
+    set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
 
@@ -498,10 +498,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get validationErrors(): Array<any> {
+    get validationErrors(): Array<any> | null {
         return this._getOption('validationErrors');
     }
-    set validationErrors(value: Array<any>) {
+    set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
 
@@ -735,7 +735,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<NumberBoxPredefinedButton | TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<NumberBoxPredefinedButton | TextEditorButton> | undefined>;
 
     /**
     
@@ -931,14 +931,14 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationErrorChange: EventEmitter<any>;
+    @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationErrorsChange: EventEmitter<Array<any>>;
+    @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
     

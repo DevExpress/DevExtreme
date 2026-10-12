@@ -1,3 +1,6 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
+import { addNamespace } from '@js/common/core/events/utils/index';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -8,12 +11,12 @@ import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
 import { isBoolean } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type {
   Properties as PopupProperties,
   ShowingEvent,
   ToolbarItem,
 } from '@js/ui/popup';
-import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { current, isFluent } from '@js/ui/themes';
@@ -29,6 +32,11 @@ import type { ResourceManager } from '../utils/resource_manager/resource_manager
 import type { AppointmentForm } from './form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
+
+const POINTER_DOWN_EVENT_NAME = addNamespace(
+  pointerEvents.down,
+  'dxSchedulerAppointmentPopupAnimation',
+);
 
 const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 485;
 
@@ -47,7 +55,7 @@ export interface AppointmentPopupState {
 
 interface AppointmentFormOpeningArgs {
   form: AppointmentForm['dxForm'];
-  popup: dxPopup;
+  popup: Popup;
   appointmentData: SafeAppointment | null;
   cancel: boolean;
 }
@@ -195,7 +203,12 @@ export class AppointmentPopup {
       },
       onShowing: (e: ShowingEvent): void => {
         this.onShowing(e);
+        this.blockPointerEventsDuringShowAnimation();
         customPopupOptions?.onShowing?.(e);
+      },
+      onShown: (e): void => {
+        this.unblockPointerEvents();
+        customPopupOptions?.onShown?.(e);
       },
       wrapperAttr: { class: APPOINTMENT_POPUP_CLASS },
     };
@@ -204,6 +217,7 @@ export class AppointmentPopup {
       onInitialized: defaultPopupConfig.onInitialized,
       onHiding: defaultPopupConfig.onHiding,
       onShowing: defaultPopupConfig.onShowing,
+      onShown: defaultPopupConfig.onShown,
     }) as PopupProperties;
   }
 
@@ -232,6 +246,38 @@ export class AppointmentPopup {
         this.updatePopupFullScreenMode();
       }
     });
+  }
+
+  // When a selected cell is double-clicked, the popup opens on the first click
+  // and the second click's pointerdown reaches the overlay's document handler,
+  // which stops the opening animation. Swallow such pointerdowns while the popup
+  // is animating in so the animation is not interrupted.
+  private blockPointerEventsDuringShowAnimation(): void {
+    const $wrapper = this.getPopupWrapper();
+
+    if (!$wrapper?.length) {
+      return;
+    }
+
+    eventsEngine.off($wrapper, POINTER_DOWN_EVENT_NAME);
+    eventsEngine.on($wrapper, POINTER_DOWN_EVENT_NAME, (e: DxEvent): void => {
+      e.stopPropagation();
+    });
+  }
+
+  private unblockPointerEvents(): void {
+    const $wrapper = this.getPopupWrapper();
+
+    if ($wrapper?.length) {
+      eventsEngine.off($wrapper, POINTER_DOWN_EVENT_NAME);
+    }
+  }
+
+  private getPopupWrapper(): dxElementWrapper | null | undefined {
+    // Resolve the wrapper directly from the overlay (not via content.closest),
+    // so it is found regardless of where the content is currently rendered
+    // (e.g. deferRendering: false renders content outside the wrapper at first).
+    return this.popupInstance?.$wrapper();
   }
 
   private createAppointmentAdapter(rawAppointment): AppointmentAdapter {

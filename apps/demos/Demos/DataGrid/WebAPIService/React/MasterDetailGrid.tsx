@@ -18,7 +18,7 @@ const getMasterDetailGridDataSource = (id: number) => ({
 });
 
 const MasterDetailGrid = (props: DataGridTypes.MasterDetailTemplateData) => {
-  const [dataSource, setDataSource] = useState<DataSourceOptions | null>(null);
+  const [dataSource, setDataSource] = useState<DataSourceOptions | undefined>(undefined);
 
   useEffect(() => {
     const masterDetailDataSource = getMasterDetailGridDataSource(props.data.key);

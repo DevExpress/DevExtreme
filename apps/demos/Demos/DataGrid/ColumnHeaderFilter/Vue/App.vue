@@ -63,7 +63,7 @@ import { employees } from './data.ts';
 const searchExpr = ['City', 'State'];
 const editorOptions: DxTextBoxTypes.Properties = { placeholder: 'Search city or state' };
 </script>
-<style scoped>
+<style>
 #employees {
   max-height: 440px;
 }

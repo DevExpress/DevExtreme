@@ -187,7 +187,6 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   }
 
   _initializeRenderQueue(): void {
-    // @ts-expect-error
     this._renderQueue = this.option('_renderQueue') ?? [];
   }
 

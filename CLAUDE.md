@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 DevExtreme is an enterprise UI component suite for Angular, React, Vue, and jQuery. This is a large-scale monorepo (pnpm workspaces + Nx 22) containing the core library, framework wrappers, demos, themes, and test suites.
 
-**Required tooling:** Node.js 24.15.0, pnpm 11.6.0.
+**Required tooling:** Node.js 24.16.0, pnpm 11.9.0.
 
 ## Setup
 
@@ -18,7 +18,7 @@ Always use `--frozen-lockfile`. CI enforces it.
 
 ## Build
 
-The `dev` script is run manually in WebStorm (not by agents). It runs a Gulp watch build with hot reload and starts the QUnit test server on port 20060:
+The `dev` script is run manually in WebStorm (not by agents). It runs an Nx watch build with hot reload and starts the QUnit test server on port 20060:
 
 ```bash
 # From packages/devextreme — run manually, not via agent
@@ -100,7 +100,7 @@ packages/
   testcafe-models/      # TestCafe page object models
 
 apps/
-  demos/                # Technical demos (Angular, React, Vue, jQuery)
+  demos/                # Technical demos (Angular, React, Vue, jQuery) — esbuild on demand
 
 e2e/
   testcafe-devextreme/  # E2E tests
@@ -127,6 +127,31 @@ Do not edit directly:
 - `packages/devextreme-vue/src/**/*` (except templates)
 - `packages/devextreme/js/__internal/core/localization/default_messages.ts`
 - `packages/devextreme/js/__internal/core/localization/cldr-data/**/*`
+
+## Demos
+
+Technical demos live in `apps/demos`.
+
+From the repo root:
+
+```bash
+pnpm run demos:prepare   # build DevExtreme, pack wrappers, vendor bundles
+pnpm run demos:start     # http://localhost:8080/
+```
+
+`demos:start` is long-running. Do not start a second copy if the developer already has it running.
+
+Angular, React, and Vue demos bundle on demand with esbuild when a page is opened (`bundle.js` / `bundle.css` next to the demo source — gitignored, do not commit). jQuery demos load `dx.all.js` from `devextreme-dist`.
+
+### Editing demos
+
+From `apps/demos`:
+
+```bash
+pnpm run add-demo                  # scaffold a new demo
+pnpm run convert-to-js split       # after React TypeScript changes
+pnpm run fix-lint
+```
 
 ## Code Style Conventions
 

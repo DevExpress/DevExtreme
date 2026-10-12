@@ -55,6 +55,15 @@ const saleAmountHeaderFilterDataSource: OrderFilter[] = [
   },
 ];
 
+const citySearchEditorOptions = {
+  placeholder: 'Search city or state',
+};
+const citySearchFields = ['StoreCity', 'StoreState'];
+const stateSearchEditorOptions = {
+  placeholder: 'Search state or city',
+};
+const stateSearchFields = ['StoreState', 'StoreCity'];
+
 interface HeaderFilterDataResult {
   text: string;
   value: string;
@@ -119,10 +128,8 @@ const App = () => (
       <ColumnHeaderFilter>
         <ColumnHeaderFilterSearch
           enabled={true}
-          editorOptions={{
-            placeholder: 'Search city or state',
-          }}
-          searchExpr={['StoreCity', 'StoreState']}
+          editorOptions={citySearchEditorOptions}
+          searchExpr={citySearchFields}
         />
       </ColumnHeaderFilter>
     </Column>
@@ -132,10 +139,8 @@ const App = () => (
       <ColumnHeaderFilter>
         <ColumnHeaderFilterSearch
           enabled={true}
-          editorOptions={{
-            placeholder: 'Search state or city',
-          }}
-          searchExpr={['StoreState', 'StoreCity']}
+          editorOptions={stateSearchEditorOptions}
+          searchExpr={stateSearchFields}
         />
       </ColumnHeaderFilter>
     </Column>

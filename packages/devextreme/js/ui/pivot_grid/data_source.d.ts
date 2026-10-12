@@ -173,7 +173,7 @@ export interface PivotGridDataSourceOptions {
      * @default undefined
      * @public
      */
-    fields?: Array<Field>;
+    fields?: Array<Field> | undefined;
     /**
      * @docid
      * @type Filter expression
@@ -293,7 +293,6 @@ export interface PivotGridDataSourceField {
     area?: PivotGridArea | undefined;
     /**
      * @docid PivotGridDataSourceOptions.fields.areaIndex
-     * @default undefined
      * @public
      */
     areaIndex?: number;
@@ -304,13 +303,11 @@ export interface PivotGridDataSourceField {
     calculateCustomSummary?: ((options: { summaryProcess?: string; value?: any; totalValue?: any }) => void);
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateSummaryValue
-     * @default undefined
      * @public
      */
     calculateSummaryValue?: ((e: dxPivotGridSummaryCell) => number | null);
     /**
      * @docid PivotGridDataSourceOptions.fields.caption
-     * @default undefined
      * @public
      */
     caption?: string;
@@ -321,19 +318,16 @@ export interface PivotGridDataSourceField {
     customizeText?: ((cellInfo: { value?: string | number | Date; valueText?: string }) => string);
     /**
      * @docid PivotGridDataSourceOptions.fields.dataField
-     * @default undefined
      * @public
      */
     dataField?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.dataType
-     * @default undefined
      * @public
      */
     dataType?: PivotGridDataType;
     /**
      * @docid PivotGridDataSourceOptions.fields.displayFolder
-     * @default undefined
      * @public
      */
     displayFolder?: string;
@@ -351,7 +345,6 @@ export interface PivotGridDataSourceField {
     filterType?: FilterType;
     /**
      * @docid PivotGridDataSourceOptions.fields.filterValues
-     * @default undefined
      * @public
      */
     filterValues?: Array<any>;
@@ -363,19 +356,16 @@ export interface PivotGridDataSourceField {
     format?: Format;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupIndex
-     * @default undefined
      * @public
      */
     groupIndex?: number;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupInterval
-     * @default undefined
      * @public
      */
     groupInterval?: PivotGridGroupInterval | number;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupName
-     * @default undefined
      * @public
      */
     groupName?: string;
@@ -399,26 +389,22 @@ export interface PivotGridDataSourceField {
     };
     /**
      * @docid PivotGridDataSourceOptions.fields.isMeasure
-     * @default undefined
      * @public
      */
     isMeasure?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.name
-     * @default undefined
      * @public
      */
     name?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.runningTotal
-     * @default undefined
      * @public
      */
     runningTotal?: PivotGridRunningTotalMode;
     /**
      * @docid PivotGridDataSourceOptions.fields.selector
      * @type function(data)
-     * @default undefined
      * @public
      */
     selector?: Function;
@@ -436,25 +422,21 @@ export interface PivotGridDataSourceField {
     showTotals?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.showValues
-     * @default undefined
      * @public
      */
     showValues?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.sortBy
-     * @default undefined
      * @public
      */
     sortBy?: PivotGridSortBy;
     /**
      * @docid PivotGridDataSourceOptions.fields.sortBySummaryField
-     * @default undefined
      * @public
      */
     sortBySummaryField?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.sortBySummaryPath
-     * @default undefined
      * @public
      */
     sortBySummaryPath?: Array<number | string>;
@@ -466,13 +448,11 @@ export interface PivotGridDataSourceField {
     sortOrder?: SortOrder;
     /**
      * @docid PivotGridDataSourceOptions.fields.sortingMethod
-     * @default undefined
      * @public
      */
     sortingMethod?: ((a: { value?: string | number; children?: Array<any> }, b: { value?: string | number; children?: Array<any> }) => number);
     /**
      * @docid PivotGridDataSourceOptions.fields.summaryDisplayMode
-     * @default undefined
      * @public
      */
     summaryDisplayMode?: PivotGridSummaryDisplayMode;
@@ -490,13 +470,11 @@ export interface PivotGridDataSourceField {
     visible?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.width
-     * @default undefined
      * @public
      */
     width?: number;
     /**
      * @docid PivotGridDataSourceOptions.fields.wordWrapEnabled
-     * @default undefined
      * @public
      */
     wordWrapEnabled?: boolean;

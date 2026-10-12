@@ -11,8 +11,8 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
 import { normalizeEnum } from '@ts/viz/core/utils';
 import { Label } from '@ts/viz/series/points/label';
 

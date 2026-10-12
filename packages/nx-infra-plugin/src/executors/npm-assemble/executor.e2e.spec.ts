@@ -23,7 +23,7 @@ const OPTIONS: NpmAssembleExecutorSchema = {
   webpackConfig: './webpack.config.js',
   artifactsDir: './artifacts',
   outputDir: './artifacts/npm/devextreme',
-  licenseTemplateFile: './build/gulp/license-header.txt',
+  licenseTemplateFile: './build/license-header.txt',
   eulaUrl: 'https://js.devexpress.com/Licensing/',
   srcExcludes: ['bundles/**/*'],
   distExcludes: ['js/jquery*'],
@@ -45,16 +45,13 @@ describe('NpmAssembleExecutor E2E', () => {
     fs.mkdirSync(path.join(projectDir, 'license'), { recursive: true });
     fs.mkdirSync(path.join(projectDir, 'build', 'npm-bin'), { recursive: true });
     fs.mkdirSync(path.join(projectDir, 'artifacts'), { recursive: true });
-    fs.mkdirSync(path.join(projectDir, 'build', 'gulp'), { recursive: true });
+    fs.mkdirSync(path.join(projectDir, 'build'), { recursive: true });
 
     await writeFileText(
       path.join(projectDir, 'package.json'),
       JSON.stringify({ name: 'devextreme', version: '26.1.0' }),
     );
-    await writeFileText(
-      path.join(projectDir, 'build', 'gulp', 'license-header.txt'),
-      LICENSE_TEMPLATE,
-    );
+    await writeFileText(path.join(projectDir, 'build', 'license-header.txt'), LICENSE_TEMPLATE);
     await writeFileText(path.join(projectDir, 'webpack.config.js'), 'module.exports = {};');
   });
 
@@ -98,7 +95,7 @@ describe('NpmAssembleExecutor E2E', () => {
     expect(fs.existsSync(path.join(outDir, 'bin', 'install.js'))).toBe(true);
   });
 
-  it('should normalize CRLF to LF in copied license/ and bin/ files (gulp-eol parity)', async () => {
+  it('should normalize CRLF to LF in copied license/ and bin/ files', async () => {
     await writeFileText(
       path.join(projectDir, 'license', 'LICENSE.txt'),
       'DevExtreme License\r\nLine 2\r\nLine 3\r\n',
@@ -121,7 +118,7 @@ describe('NpmAssembleExecutor E2E', () => {
     expect(binContent.endsWith('\n')).toBe(true);
   });
 
-  it('should copy dist files into outputDir/dist with the gulp-equivalent excludes', async () => {
+  it('should copy dist files into outputDir/dist', async () => {
     const artifactsDir = path.join(projectDir, 'artifacts');
     fs.mkdirSync(path.join(artifactsDir, 'js'), { recursive: true });
 

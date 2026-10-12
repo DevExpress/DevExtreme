@@ -5,14 +5,15 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
+import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
+import type { Views } from '../types';
+import { ColumnFocusDispatcher } from './column_focus_dispatcher';
 import { Direction } from './const';
-import { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
 
 export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {
@@ -131,7 +132,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return this._columnHeadersView.getCellIndex($cell);
   }
 
-  protected _getCell(cellPosition): dxElementWrapper {
+  protected _getCell(cellPosition): dxElementWrapper | undefined {
     return this._columnHeadersView?.getCell(cellPosition);
   }
 
@@ -144,7 +145,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   protected getFocusinSelector(): string {
-    return '.dx-header-row > td';
+    return `.${COLUMN_HEADERS_CLASSES.headerRow} > td`;
   }
 
   protected getFocusableColumns(rowIndex?: number, bandColumnId?: number): Column[] {

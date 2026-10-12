@@ -36,7 +36,7 @@ class PullDownNativeScrollViewStrategy<
 
   _$pullDown!: dxElementWrapper;
 
-  _$refreshingText?: dxElementWrapper;
+  _$refreshingText!: dxElementWrapper;
 
   _$scrollViewContent!: dxElementWrapper;
 

@@ -2,22 +2,27 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
+import type Widget from '@ts/core/widget/widget';
 import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
 
-type TextEditorButtonInstance = dxElementWrapper | Button;
+export type TextEditorButtonInstance = dxElementWrapper | Button;
 
 export const isButtonInstance = (
   instance: unknown,
 ): instance is Button => instance instanceof Button;
 
-export default class TextEditorButton {
+export default class TextEditorButton<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TComponent extends Widget<any> = TextEditorBase,
+  TInstance extends TextEditorButtonInstance = TextEditorButtonInstance,
+> {
   $container!: dxElementWrapper | null;
 
   $placeMarker?: dxElementWrapper | null;
 
-  instance?: TextEditorButtonInstance | null;
+  instance?: TInstance | null;
 
-  editor!: TextEditorBase | null;
+  editor!: TComponent | null;
 
   name!: string;
 
@@ -25,7 +30,7 @@ export default class TextEditorButton {
 
   constructor(
     name: string,
-    editor: TextEditorBase,
+    editor: TComponent,
     options: Properties,
   ) {
     this.instance = null;
@@ -51,12 +56,12 @@ export default class TextEditorButton {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _attachEvents(instance: unknown, $element?: dxElementWrapper): void {
+  _attachEvents(instance: TInstance | undefined, $element?: dxElementWrapper): void {
     throw new Error('Not implemented');
   }
 
   _create(): {
-    instance: Button | dxElementWrapper;
+    instance: TInstance;
     $element: dxElementWrapper;
   } | undefined {
     throw new Error('Not implemented');
