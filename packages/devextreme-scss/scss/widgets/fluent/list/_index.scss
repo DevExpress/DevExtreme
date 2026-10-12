@@ -355,7 +355,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid !default;
     }
 
     .dx-icon-toggle-delete {
-      background-size: 100%;
+      mask-size: 100%;
     }
 
     &.dx-list-item-ghost-reordering {
