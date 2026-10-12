@@ -34,8 +34,8 @@ import type { InitializedEvent as PopupInitializedEvent, ToolbarItem } from '@js
 import Popup from '@js/ui/popup/ui.popup';
 import errors from '@js/ui/widget/ui.errors';
 import { FunctionTemplate } from '@ts/core/templates/function_template';
-import { getComponentInstance } from '@ts/core/utils/m_public_component';
-import { focused } from '@ts/core/utils/m_selectors';
+import { getComponentInstance } from '@ts/core/utils/public_component';
+import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';

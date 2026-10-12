@@ -66,6 +66,7 @@ $(() => {
     try {
       const stream = await chatService.chat.completions.create(params, {
         signal,
+        maxRetries: 0,
       });
 
       // eslint-disable-next-line no-restricted-syntax
@@ -85,11 +86,17 @@ $(() => {
     }
   }
 
-  function alertLimitReached() {
+  function getErrorMessage(err) {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
+  }
+
+  function alertError(message) {
     instance.option({
       alerts: [
         {
-          message: 'Request limit reached, try again in a minute.',
+          message,
         },
       ],
     });
@@ -170,9 +177,11 @@ $(() => {
 
       messages.pop();
 
-      if (e?.name !== 'AbortError' && assistantId) {
-        updateMessageText(assistantId, '');
-        alertLimitReached();
+      if (!abortController?.signal.aborted) {
+        if (assistantId) {
+          updateMessageText(assistantId, '');
+        }
+        alertError(getErrorMessage(e));
       }
     } finally {
       abortController = null;

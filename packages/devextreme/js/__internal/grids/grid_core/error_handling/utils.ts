@@ -1,5 +1,5 @@
 import { isObject } from '@js/core/utils/type';
-import type { DxError } from '@ts/core/utils/m_error';
+import type { DxError } from '@ts/core/utils/error';
 
 import type { GridError } from './types';
 

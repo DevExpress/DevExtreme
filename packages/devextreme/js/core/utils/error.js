@@ -1,3 +1,3 @@
 // deprecated
-import { error } from '../../__internal/core/utils/m_error';
+import { error } from '../../__internal/core/utils/error';
 export default error;

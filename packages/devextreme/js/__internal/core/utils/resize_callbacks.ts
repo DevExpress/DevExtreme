@@ -1,11 +1,11 @@
 import domAdapter from '@js/core/dom_adapter';
 import { callOnce } from '@ts/core/utils/call_once';
 
-import type { CallbackInterface } from './m_callbacks';
+import type { CallbackInterface } from './callbacks';
 // eslint-disable-next-line import/no-named-as-default
-import Callbacks from './m_callbacks';
-import readyCallbacks from './m_ready_callbacks';
+import Callbacks from './callbacks';
 import windowModule from './m_window';
+import readyCallbacks from './ready_callbacks';
 
 interface Size {
   width: number;

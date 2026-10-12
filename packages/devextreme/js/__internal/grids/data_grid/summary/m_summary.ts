@@ -9,11 +9,11 @@ import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { GroupData } from '@js/ui/data_grid';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { RawItemData, RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
 import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { RowsView } from '../../grid_core/views/m_rows_view';

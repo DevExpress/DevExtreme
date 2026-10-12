@@ -9,8 +9,8 @@ import {
   isString,
 } from '@js/core/utils/type';
 import Store from '@js/data/abstract_store';
+import inflector from '@ts/core/utils/inflector';
 import commonUtils from '@ts/core/utils/m_common';
-import inflector from '@ts/core/utils/m_inflector';
 
 import { LocalStore } from '../local_store/m_local_store';
 import {

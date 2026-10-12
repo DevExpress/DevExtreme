@@ -3,6 +3,7 @@ import '@js/ui/tag_box';
 import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
+import messageLocalization from '@js/common/core/localization/message';
 import type { EditorPreparingEvent } from '@js/ui/data_grid';
 import { TagBoxModel } from '@ts/ui/__tests__/__mock__/model/tag_box';
 import { TextBoxModel } from '@ts/ui/__tests__/__mock__/model/textbox';
@@ -117,6 +118,40 @@ describe('FilterRow', () => {
       const editor = component.getFilterRow().getFilterCell(0).getEditor(TextBoxModel);
 
       expect(editor.getInput().value).toBe('');
+    });
+  });
+
+  describe('when the column has editorOptions', () => {
+    it('should keep the default aria attributes of the filter editor input', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [{ id: 1, city: 'Las Vegas' }],
+        filterRow: { visible: true },
+        columns: [{ dataField: 'city', editorOptions: { showClearButton: true } }],
+      });
+
+      await flushAsync();
+
+      const input = component.getFilterRow().getFilterCell(0).getEditor(TextBoxModel).getInput();
+      const headerId = component.getHeaderCell(0).getElement()?.id;
+
+      expect(input.getAttribute('aria-label')).toBe(messageLocalization.format('dxDataGrid-ariaFilterCell'));
+      expect(input.getAttribute('aria-describedby')).toBe(headerId);
+    });
+
+    it('should apply inputAttr from editorOptions over the default aria attributes', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [{ id: 1, city: 'Las Vegas' }],
+        filterRow: { visible: true },
+        columns: [{ dataField: 'city', editorOptions: { inputAttr: { 'aria-label': 'City filter' } } }],
+      });
+
+      await flushAsync();
+
+      const input = component.getFilterRow().getFilterCell(0).getEditor(TextBoxModel).getInput();
+      const headerId = component.getHeaderCell(0).getElement()?.id;
+
+      expect(input.getAttribute('aria-label')).toBe('City filter');
+      expect(input.getAttribute('aria-describedby')).toBe(headerId);
     });
   });
 });

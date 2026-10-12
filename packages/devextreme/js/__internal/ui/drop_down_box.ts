@@ -15,7 +15,7 @@ import { isDefined, isObject } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/drop_down_box';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import { grep } from '@ts/core/utils/m_common';
-import { tabbable } from '@ts/core/utils/m_selectors';
+import { tabbable } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor, { type DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';

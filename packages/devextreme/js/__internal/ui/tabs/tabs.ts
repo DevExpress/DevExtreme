@@ -25,8 +25,8 @@ import type {
   TabsStyle,
 } from '@js/ui/tabs';
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
+import { getImageAriaLabel, getImageContainer } from '@ts/core/utils/icon';
 import { render } from '@ts/core/utils/ink_ripple';
-import { getImageAriaLabel, getImageContainer } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type {
   CollectionItemInfo,

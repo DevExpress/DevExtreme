@@ -36,7 +36,7 @@ import type {
   ItemLike,
 } from '@js/ui/collection/ui.collection_widget.base';
 import { getPublicElement } from '@ts/core/element';
-import { focusable } from '@ts/core/utils/m_selectors';
+import { focusable } from '@ts/core/utils/selectors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';

@@ -248,7 +248,7 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private getDataSource(column) {
+  public getDataSource(column) {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const remoteGrouping = this.dataSourceController.remoteOperations().grouping;
     const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
@@ -364,7 +364,7 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private showHeaderFilterMenuBase(options) {
+  public showHeaderFilterMenuBase(options) {
     const that = this;
     const { column } = options;
 
@@ -406,7 +406,7 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private hideHeaderFilterMenu() {
+  public hideHeaderFilterMenu() {
     this._headerFilterView.hideHeaderFilterMenu();
   }
 }

@@ -1,4 +1,4 @@
-import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
+import { variableWrapper } from '@ts/core/utils/variable_wrapper';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
 

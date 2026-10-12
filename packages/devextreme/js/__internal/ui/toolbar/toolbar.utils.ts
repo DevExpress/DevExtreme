@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Item } from '@js/ui/toolbar';
-import { getComponentInstance } from '@ts/core/utils/m_public_component';
+import { getComponentInstance } from '@ts/core/utils/public_component';
 import type Widget from '@ts/core/widget/widget';
 import { BUTTON_GROUP_CLASS } from '@ts/ui/button_group';
 import {

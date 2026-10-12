@@ -24,7 +24,7 @@ import type dxTextBox from '@js/ui/text_box';
 import type { dxTextEditorOptions } from '@js/ui/text_box/ui.text_editor.base';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
-import { focused } from '@ts/core/utils/m_selectors';
+import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorInternalProperties, ValueChangedEvent, WithValidationMessageMode } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';

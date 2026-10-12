@@ -13,7 +13,7 @@ import type { DefaultToolbarItem, ToolbarItem } from '@ts/grids/new/grid_core/to
 import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
 import type { ModuleType } from '../types';
-import { ColumnsView } from '../views/m_columns_view';
+import { ColumnsView } from '../views/columns_view';
 import type { ResizingController } from '../views/m_grid_view';
 
 const HEADER_PANEL_CLASS = 'header-panel';

@@ -25,13 +25,17 @@ type EmptySource = null | undefined | void;
 
 type IsAny<T> = 0 extends 1 & T ? true : false;
 
-type Source<T> = IsAny<T> extends true ? T : unknown extends T ? Record<string, unknown> : [T] extends [EmptySource]
-  ? Record<never, never>
-  : [Extract<T, EmptySource>] extends [never]
-    ? T
-    : NonNullable<T> extends readonly unknown[]
-      ? NonNullable<T>
-      : Partial<NonNullable<T>>;
+type Source<T> = IsAny<T> extends true
+  ? T
+  : unknown extends T
+    ? Record<string, unknown>
+    : [T] extends [EmptySource]
+      ? Record<never, never>
+      : [Extract<T, EmptySource>] extends [never]
+        ? T
+        : NonNullable<T> extends readonly unknown[]
+          ? NonNullable<T>
+          : Partial<NonNullable<T>>;
 
 type Leaf = readonly unknown[] | ((...args: never[]) => unknown) | Date | RegExp;
 
@@ -63,10 +67,10 @@ type AssignObject<TTarget, TSource> = KeptValues<TTarget, TSource> & {
 };
 
 type Assign<TTarget, TSource> = IsAny<TTarget> extends true
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any target gives an any result
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any target, any result
   ? any
   : IsAny<TSource> extends true
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any source, any result
     ? any
     : TTarget extends unknown
       ? TSource extends unknown
@@ -81,7 +85,6 @@ type Assign<TTarget, TSource> = IsAny<TTarget> extends true
 type NestedValue<TTarget, TSource> = [MergedArray<TTarget, TSource>] extends [never]
   ? IsNestedObject<TTarget> extends true
     ? IsNestedObject<TSource> extends true
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define -- recursive type
       ? DeepAssign<TTarget, TSource>
       : TSource
     : TSource
@@ -101,10 +104,10 @@ type DeepAssignObject<TTarget, TSource> = KeptValues<TTarget, TSource> & {
 };
 
 type DeepAssign<TTarget, TSource> = IsAny<TTarget> extends true
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any target gives an any result
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any target, any result
   ? any
   : IsAny<TSource> extends true
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- an any source gives an any result
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any source, any result
     ? any
     : TTarget extends unknown
       ? TSource extends unknown

@@ -6,7 +6,7 @@ import browser from 'core/utils/browser';
 import devices from '__internal/core/devices';
 import themes from 'ui/themes';
 import support from '__internal/core/utils/m_support';
-import publicComponentUtils from '__internal/core/utils/m_public_component';
+import publicComponentUtils from '__internal/core/utils/public_component';
 import { isFunction } from 'core/utils/type';
 import { getNestedOptionValue } from 'core/options/utils';
 

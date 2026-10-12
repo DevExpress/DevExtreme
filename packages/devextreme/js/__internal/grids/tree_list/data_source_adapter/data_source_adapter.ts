@@ -12,7 +12,7 @@ import type Store from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
-import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/provider';
 import type { OperationTypes as BaseOperationTypes, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -403,7 +403,6 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
       if ((!parentNode.parent || this.isRowExpanded(parentNode.key))
         && change.index !== undefined) {
-        // @ts-expect-error items() is typed as loaded items, but holds tree nodes here
         let index = this.items().indexOf(parentNode) + 1;
 
         index += change.index >= 0
@@ -509,7 +508,6 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       (key) => this.isRowExpanded(key, options),
     );
 
-    // @ts-expect-error rows are nodes here, not the loaded items
     options.data = resultData;
     this._totalItemsCount = resultData.length;
   }

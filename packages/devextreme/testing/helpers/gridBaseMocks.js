@@ -1120,6 +1120,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     result = result[path[i]];
                 }
                 changed && that.optionCalled.fire(options, value);
+
+                // unit tests are written for native scrolling; the module default ('auto') is applied only with initDefaultOptions
+                if(options === 'scrolling.useNative' && result === undefined) {
+                    return true;
+                }
+
                 return result;
             }
 

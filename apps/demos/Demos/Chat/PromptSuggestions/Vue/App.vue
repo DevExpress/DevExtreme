@@ -119,17 +119,23 @@ async function processMessageSending(
       messages.push({ role: 'assistant', content: aiResponse });
       renderAssistantMessage(aiResponse);
     }, 200);
-  } catch {
+  } catch (err: unknown) {
     typingUsers.value = [];
     messages.pop();
-    alertLimitReached();
+    alertError(getErrorMessage(err));
   } finally {
     toggleDisabledState(false, event);
   }
 }
 
-function alertLimitReached(): void {
-  alerts.value = [{ message: 'Request limit reached, try again in a minute.' }];
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+}
+
+function alertError(message: string): void {
+  alerts.value = [{ message }];
 
   setTimeout(() => {
     alerts.value = [];

@@ -2,4 +2,4 @@
 export {
     getBoundingRect,
     getDefaultAlignment,
-} from '../../__internal/core/utils/m_position';
+} from '../../__internal/core/utils/position';

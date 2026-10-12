@@ -1,5 +1,5 @@
 import errors from '@ts/core/errors';
-import { error as errorUtils } from '@ts/core/utils/m_error';
+import { error as errorUtils } from '@ts/core/utils/error';
 
 export default errorUtils(errors.ERROR_MESSAGES, {
   E2001: 'Invalid data source',

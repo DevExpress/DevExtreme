@@ -12,7 +12,7 @@ import {
 } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import fx from '@ts/common/core/animation/fx';
-import type { Quad } from '@ts/core/utils/m_string';
+import type { Quad } from '@ts/core/utils/string';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Draggable from '@ts/draggable';
 import type { EngineEvent } from '@ts/events/core/events_engine';

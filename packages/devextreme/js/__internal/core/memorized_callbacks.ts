@@ -1,7 +1,7 @@
 import Callbacks from '@js/core/utils/callbacks';
 import { each } from '@js/core/utils/iterator';
 
-import type { CallbackInterface } from './utils/m_callbacks';
+import type { CallbackInterface } from './utils/callbacks';
 
 type MemorizedHandler = Parameters<CallbackInterface['add']>[0];
 

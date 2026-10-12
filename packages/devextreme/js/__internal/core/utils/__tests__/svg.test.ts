@@ -2,7 +2,7 @@ import {
   afterEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
-import { getSvgElement, getSvgMarkup, HIDDEN_FOR_EXPORT } from '@ts/core/utils/m_svg';
+import { getSvgElement, getSvgMarkup, HIDDEN_FOR_EXPORT } from '@ts/core/utils/svg';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const XLINK_NS = 'http://www.w3.org/1999/xlink';
