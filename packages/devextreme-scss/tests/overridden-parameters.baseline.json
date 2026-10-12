@@ -13,62 +13,6 @@
   "entries": [
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/_contextMenu.scss",
-      "property": "padding",
-      "selector": ".dx-context-menu .dx-menu-items-container",
-      "paintedOverBy": "scss/widgets/fluent/contextMenu/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_fileUploader.scss",
-      "property": "margin-top",
-      "selector": ".dx-fileuploader-invalid .dx-fileuploader-cancel-button",
-      "paintedOverBy": "scss/widgets/fluent/fileUploader/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_form.scss",
-      "property": "margin-top",
-      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
-      "paintedOverBy": "scss/widgets/fluent/form/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_form.scss",
-      "property": "padding-top",
-      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
-      "paintedOverBy": "scss/widgets/fluent/form/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_form.scss",
-      "property": "padding-top",
-      "selector": ".dx-layout-manager .dx-field-item:not(.dx-first-row)",
-      "paintedOverBy": "scss/widgets/fluent/form/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_form.scss",
-      "property": "padding",
-      "selector": ".dx-layout-manager .dx-tabpanel .dx-multiview-item-content",
-      "paintedOverBy": "scss/widgets/fluent/form/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_gallery.scss",
-      "property": "margin",
-      "selector": ".dx-gallery-indicator-item",
-      "paintedOverBy": "scss/widgets/fluent/gallery/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "property": "padding",
-      "selector": ".dx-htmleditor-content",
-      "paintedOverBy": "scss/widgets/fluent/htmlEditor/_index.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/_icon_fonts.scss",
       "property": "background-size",
       "selector": ".dx-datagrid-adaptive-more",
@@ -237,24 +181,10 @@
     },
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/_loadPanel.scss",
-      "property": "padding",
-      "selector": ".dx-loadpanel-content",
-      "paintedOverBy": "scss/widgets/fluent/loadPanel/_index.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/_mask.scss",
       "property": "background-color",
       "selector": ".dx-diagram-i-button-fill::before, .dx-diagram-i-menu-fill::before",
       "paintedOverBy": "scss/widgets/base/_mask.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_numberBox.scss",
-      "property": "opacity",
-      "selector": ".dx-state-disabled .dx-numberbox-spin-container",
-      "paintedOverBy": "scss/widgets/fluent/numberBox/_index.scss"
     },
     {
       "theme": "fluent",
@@ -265,20 +195,6 @@
     },
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/_recurrenceEditor.scss",
-      "property": "margin-top",
-      "selector": ".dx-recurrence-numberbox-interval-label",
-      "paintedOverBy": "scss/widgets/fluent/recurrenceEditor/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_recurrenceEditor.scss",
-      "property": "padding",
-      "selector": ".dx-recurrence-button-group .dx-button-content",
-      "paintedOverBy": "scss/widgets/fluent/recurrenceEditor/_index.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/_scrollView.scss",
       "property": "width",
       "selector": ".dx-scrollview-pull-down-indicator",
@@ -286,34 +202,6 @@
     },
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/_toast.scss",
-      "property": "gap",
-      "selector": ".dx-toast-stack",
-      "paintedOverBy": "scss/widgets/fluent/toast/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_tooltip.scss",
-      "property": "font-size",
-      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
-      "paintedOverBy": "scss/widgets/fluent/tooltip/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_tooltip.scss",
-      "property": "min-height",
-      "selector": ".dx-tooltip-wrapper .dx-overlay-content",
-      "paintedOverBy": "scss/widgets/fluent/tooltip/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_tooltip.scss",
-      "property": "padding",
-      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
-      "paintedOverBy": "scss/widgets/fluent/tooltip/_index.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/_validation.scss",
       "property": "font-size",
       "selector": ".dx-invalid-message > .dx-overlay-content",
@@ -325,55 +213,6 @@
       "property": "padding",
       "selector": ".dx-invalid-message > .dx-overlay-content",
       "paintedOverBy": "scss/widgets/base/_validation.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/checkBox/_index.scss",
-      "property": "padding-inline-start",
-      "selector": ".dx-checkbox-text",
-      "paintedOverBy": "scss/widgets/fluent/checkBox/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "margin-right",
-      "selector": ".dx-rtl .dx-colorview-container label.dx-colorview-alpha-channel-label",
-      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "margin-right",
-      "selector": ".dx-rtl .dx-colorview-controls-container",
-      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "margin",
-      "selector": ".dx-colorview-container label .dx-texteditor",
-      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "margin",
-      "selector": ".dx-colorview-container label.dx-colorview-label-hex",
-      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
-      "selector": ".dx-colorview-color-preview",
-      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/fileManager/_index.scss",
-      "property": "padding",
-      "selector": ".dx-filemanager-file-actions-button .dx-button .dx-button-content",
-      "paintedOverBy": "scss/widgets/fluent/fileManager/_index.scss"
     },
     {
       "theme": "fluent",
@@ -490,13 +329,6 @@
     {
       "theme": "fluent",
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "background-color",
-      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
-      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
       "property": "border-color",
       "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
       "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
@@ -525,13 +357,6 @@
     {
       "theme": "fluent",
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "margin-top",
-      "selector": ".dx-pivotgridfieldchooser .dx-area .dx-area-fields",
-      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
       "property": "padding",
       "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
       "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
@@ -549,27 +374,6 @@
       "property": "border-color",
       "selector": ".dx-state-readonly .dx-radiobutton-icon",
       "paintedOverBy": "scss/widgets/fluent/radioButton/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/radioGroup/_index.scss",
-      "property": "column-gap",
-      "selector": ".dx-radiogroup-horizontal .dx-collection",
-      "paintedOverBy": "scss/widgets/fluent/radioGroup/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/radioGroup/_index.scss",
-      "property": "padding-inline-end",
-      "selector": ".dx-radio-value-container",
-      "paintedOverBy": "scss/widgets/fluent/radioButton/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-appointment-content-details",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
     },
     {
       "theme": "fluent",
@@ -699,13 +503,6 @@
     },
     {
       "theme": "generic",
-      "file": "scss/widgets/base/_gallery.scss",
-      "property": "margin",
-      "selector": ".dx-gallery-indicator-item",
-      "paintedOverBy": "scss/widgets/generic/gallery/_index.scss"
-    },
-    {
-      "theme": "generic",
       "file": "scss/widgets/base/_icon_fonts.scss",
       "property": "background-size",
       "selector": ".dx-datagrid-adaptive-more",
@@ -818,118 +615,6 @@
     },
     {
       "theme": "generic",
-      "file": "scss/widgets/base/_pagination.scss",
-      "property": "padding-bottom",
-      "selector": ".dx-pager .dx-page-sizes .dx-page-size, .dx-pagination .dx-page-sizes .dx-page-size",
-      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/_pagination.scss",
-      "property": "padding-bottom",
-      "selector": ".dx-pager, .dx-pagination",
-      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/_pagination.scss",
-      "property": "padding-left",
-      "selector": ".dx-pager .dx-page-sizes .dx-page-size, .dx-pagination .dx-page-sizes .dx-page-size",
-      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/_pagination.scss",
-      "property": "padding-right",
-      "selector": ".dx-pager .dx-page-sizes .dx-page-size, .dx-pagination .dx-page-sizes .dx-page-size",
-      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/_pagination.scss",
-      "property": "padding-top",
-      "selector": ".dx-pager .dx-page-sizes .dx-page-size, .dx-pagination .dx-page-sizes .dx-page-size",
-      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/_pagination.scss",
-      "property": "padding-top",
-      "selector": ".dx-pager, .dx-pagination",
-      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/_recurrenceEditor.scss",
-      "property": "margin-top",
-      "selector": ".dx-recurrence-numberbox-interval-label",
-      "paintedOverBy": "scss/widgets/generic/recurrenceEditor/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/_toast.scss",
-      "property": "height",
-      "selector": ".dx-toast-icon",
-      "paintedOverBy": "scss/widgets/generic/toast/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/_toast.scss",
-      "property": "width",
-      "selector": ".dx-toast-icon",
-      "paintedOverBy": "scss/widgets/generic/toast/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "height",
-      "selector": ".dx-colorview-color-preview",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "height",
-      "selector": ".dx-colorview-hue-scale",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "height",
-      "selector": ".dx-colorview-hue-scale-wrapper",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "height",
-      "selector": ".dx-colorview-palette",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "margin-top",
-      "selector": ".dx-colorview-container-row.dx-colorview-alpha-channel-row",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "margin",
-      "selector": ".dx-colorview-container label .dx-texteditor",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "margin",
-      "selector": ".dx-colorview-container label.dx-colorview-label-hex",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
       "file": "scss/widgets/base/colorView/_index.scss",
       "property": "width",
       "selector": ".dx-colorview-alpha-channel-cell",
@@ -939,49 +624,7 @@
       "theme": "generic",
       "file": "scss/widgets/base/colorView/_index.scss",
       "property": "width",
-      "selector": ".dx-colorview-alpha-channel-scale",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
-      "selector": ".dx-colorview-color-preview",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
-      "selector": ".dx-colorview-container",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
-      "selector": ".dx-colorview-container label .dx-texteditor",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
-      "selector": ".dx-colorview-container label.dx-colorview-alpha-channel-label",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
       "selector": ".dx-colorview-controls-container",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
-      "selector": ".dx-colorview-palette",
       "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
     },
     {
@@ -1025,13 +668,6 @@
       "property": "padding",
       "selector": ".dx-cell-modified, .dx-treelist-invalid",
       "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/list/_index.scss",
-      "property": "margin-bottom",
-      "selector": ".dx-list-search",
-      "paintedOverBy": "scss/widgets/generic/list/_index.scss"
     },
     {
       "theme": "generic",
@@ -1084,41 +720,6 @@
     },
     {
       "theme": "material",
-      "file": "scss/widgets/base/_contextMenu.scss",
-      "property": "padding",
-      "selector": ".dx-context-menu .dx-menu-items-container",
-      "paintedOverBy": "scss/widgets/material/contextMenu/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_fileUploader.scss",
-      "property": "margin-top",
-      "selector": ".dx-fileuploader-invalid .dx-fileuploader-cancel-button",
-      "paintedOverBy": "scss/widgets/material/fileUploader/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_form.scss",
-      "property": "margin-top",
-      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
-      "paintedOverBy": "scss/widgets/material/form/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_form.scss",
-      "property": "padding-top",
-      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
-      "paintedOverBy": "scss/widgets/material/form/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_gallery.scss",
-      "property": "margin",
-      "selector": ".dx-gallery-indicator-item",
-      "paintedOverBy": "scss/widgets/material/gallery/_index.scss"
-    },
-    {
-      "theme": "material",
       "file": "scss/widgets/base/_icon_fonts.scss",
       "property": "background-size",
       "selector": ".dx-datagrid-adaptive-more",
@@ -1270,13 +871,6 @@
       "property": "width",
       "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
       "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_loadPanel.scss",
-      "property": "padding",
-      "selector": ".dx-loadpanel-content",
-      "paintedOverBy": "scss/widgets/material/loadPanel/_index.scss"
     },
     {
       "theme": "material",
@@ -1287,31 +881,10 @@
     },
     {
       "theme": "material",
-      "file": "scss/widgets/base/_numberBox.scss",
-      "property": "opacity",
-      "selector": ".dx-state-disabled .dx-numberbox-spin-container",
-      "paintedOverBy": "scss/widgets/material/numberBox/_index.scss"
-    },
-    {
-      "theme": "material",
       "file": "scss/widgets/base/_pagination.scss",
       "property": "margin-left",
       "selector": ".dx-pager .dx-page-sizes .dx-page-size:first-child, .dx-pager .dx-page-sizes .dx-page-size.dx-first-child, .dx-pagination .dx-page-sizes .dx-page-size:first-child, .dx-pagination .dx-page-sizes .dx-page-size.dx-first-child",
       "paintedOverBy": "scss/widgets/material/pagination/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_recurrenceEditor.scss",
-      "property": "margin-top",
-      "selector": ".dx-recurrence-numberbox-interval-label",
-      "paintedOverBy": "scss/widgets/material/recurrenceEditor/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_recurrenceEditor.scss",
-      "property": "padding",
-      "selector": ".dx-recurrence-button-group .dx-button-content",
-      "paintedOverBy": "scss/widgets/material/recurrenceEditor/_index.scss"
     },
     {
       "theme": "material",
@@ -1322,27 +895,6 @@
     },
     {
       "theme": "material",
-      "file": "scss/widgets/base/_tooltip.scss",
-      "property": "font-size",
-      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
-      "paintedOverBy": "scss/widgets/material/tooltip/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_tooltip.scss",
-      "property": "min-height",
-      "selector": ".dx-tooltip-wrapper .dx-overlay-content",
-      "paintedOverBy": "scss/widgets/material/tooltip/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_tooltip.scss",
-      "property": "padding",
-      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
-      "paintedOverBy": "scss/widgets/material/tooltip/_index.scss"
-    },
-    {
-      "theme": "material",
       "file": "scss/widgets/base/_validation.scss",
       "property": "font-size",
       "selector": ".dx-invalid-message > .dx-overlay-content",
@@ -1354,34 +906,6 @@
       "property": "padding",
       "selector": ".dx-invalid-message > .dx-overlay-content",
       "paintedOverBy": "scss/widgets/base/_validation.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "margin",
-      "selector": ".dx-colorview-container label .dx-texteditor",
-      "paintedOverBy": "scss/widgets/material/colorView/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "margin",
-      "selector": ".dx-colorview-container label.dx-colorview-label-hex",
-      "paintedOverBy": "scss/widgets/material/colorView/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
-      "selector": ".dx-colorview-color-preview",
-      "paintedOverBy": "scss/widgets/material/colorView/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/fileManager/_index.scss",
-      "property": "padding",
-      "selector": ".dx-filemanager-file-actions-button .dx-button .dx-button-content",
-      "paintedOverBy": "scss/widgets/material/fileManager/_index.scss"
     },
     {
       "theme": "material",
@@ -1462,20 +986,6 @@
     },
     {
       "theme": "material",
-      "file": "scss/widgets/base/list/_index.scss",
-      "property": "padding",
-      "selector": ".dx-list-next-button .dx-button",
-      "paintedOverBy": "scss/widgets/material/list/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "background-color",
-      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
-      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "material",
       "file": "scss/widgets/base/pivotGrid/_index.scss",
       "property": "border",
       "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
@@ -1498,23 +1008,9 @@
     {
       "theme": "material",
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "margin-top",
-      "selector": ".dx-pivotgridfieldchooser .dx-area .dx-area-fields",
-      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
       "property": "padding",
       "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
       "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-appointment-content-details",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
     },
     {
       "theme": "material",

@@ -18,7 +18,6 @@
   $pivotgrid-area-color: $pivotgrid-area-color,
   $header-filter-color: $header-filter-color,
   $header-filter-color-empty: $header-filter-color-empty,
-  $pivotgrid-area-background: $pivotgrid-area-background,
   $pivotgrid-common-top-bottom-padding: $area-field-top-bottom-padding,
   $pivotgrid-header-top-bottom-padding: $pivotgrid-header-top-bottom-padding,
   $pivotgrid-field-indicators-offset: $pivotgrid-field-indicators-offset,
@@ -31,6 +30,8 @@
   $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
   $pivotgrid-fields-container-drag-opacity: 0.8,
+  $pivotgrid-area-background: $pivotgrid-field-area-box-background-color,
+  $pivotgrid-area-fields-margin-top: 8px,
 );
 
 $fluent-pivotgrid-headers-font-size: 14px !default;
@@ -52,7 +53,6 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px !default;
 
   .dx-area-field.dx-area-box {
     color: $pivotgrid-field-area-box-text-color;
-    background-color: $pivotgrid-field-area-box-background-color;
     border-radius: $area-field-border-radius;
     border: 1px solid;
     border-color: $base-border-color-disabled;
@@ -179,10 +179,6 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px !default;
       font-weight: 500;
       color: $pivotgrid-area-color;
       vertical-align: middle;
-    }
-
-    .dx-area-fields {
-      margin-top: 8px;
     }
   }
 

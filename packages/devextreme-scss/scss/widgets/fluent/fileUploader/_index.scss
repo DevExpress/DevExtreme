@@ -7,6 +7,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/fileUploader" with (
   $fileuploader-file-container-padding: 4px 0 4px,
+  $fileuploader-cancel-button-margin-top: 0,
 );
 
 $fluent-fileuploader-file-wrapper-border-size: 3px !default;
@@ -192,9 +193,5 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
 
   .dx-fileuploader-button-container {
     vertical-align: middle;
-  }
-
-  .dx-fileuploader-cancel-button {
-    margin-top: 0;
   }
 }

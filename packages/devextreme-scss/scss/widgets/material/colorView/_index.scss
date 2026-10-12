@@ -1,7 +1,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/colorView/mixins" as *;
-@use "../../base/colorView";
+@use "../../base/colorView" with (
+  $color-view-label-hex-margin: $material-colorview-container-hex-margin,
+  $color-view-textbox-margin: $material-colorview-container-textbox-margin,
+  $color-view-color-preview-width: 100%,
+);
 @include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
 
 $material-colorview-alpha-width: $material-colorview-palette-width + 4 !default;
@@ -16,10 +20,6 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height !defaul
     align-items: center;
     margin-bottom: 10px;
 
-    &.dx-colorview-label-hex {
-      margin: $material-colorview-container-hex-margin;
-    }
-
     &.dx-colorview-alpha-channel-label {
       margin: 0;
       margin-inline-start: $material-colorview-container-alpha-label-margin;
@@ -28,7 +28,6 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height !defaul
 
     .dx-texteditor {
       width: $material-colorview-container-textbox-width;
-      margin: $material-colorview-container-textbox-margin;
     }
   }
 }
@@ -66,7 +65,6 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height !defaul
 }
 
 .dx-colorview-color-preview {
-  width: 100%;
   height: $material-colorview-color-preview-height;
 }
 

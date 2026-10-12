@@ -8,7 +8,9 @@
 @use "../button/sizes" as *;
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
-@use "../../base/list" as *;
+@use "../../base/list" as * with (
+  $list-empty-message-button-padding: 0,
+);
 @use "../../base/list/mixins" as *;
 @use "../radioGroup/colors" as *;
 @use "../badge";
@@ -322,7 +324,6 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
 
   .dx-list-next-button .dx-button {
     margin-top: 20px;
-    padding: 0;
 
     @include dx-button-withtext-sizing();
 

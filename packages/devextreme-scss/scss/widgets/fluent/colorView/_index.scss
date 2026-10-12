@@ -1,7 +1,13 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/colorView/mixins" as *;
-@use "../../base/colorView";
+@use "../../base/colorView" with (
+  $color-view-label-hex-margin: $fluent-colorview-container-hex-margin,
+  $color-view-textbox-margin: $fluent-colorview-container-textbox-margin,
+  $color-view-color-preview-width: 100%,
+  $color-view-alpha-label-margin-inline-start-rtl: $fluent-colorview-container-alpha-label-margin,
+  $color-view-controls-margin-inline-start-rtl: $fluent-colorview-controls-container-margin,
+);
 @include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
 
 $fluent-colorview-alpha-width: $fluent-colorview-palette-width + 4 !default;
@@ -16,10 +22,6 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
     align-items: center;
     margin-bottom: 10px;
 
-    &.dx-colorview-label-hex {
-      margin: $fluent-colorview-container-hex-margin;
-    }
-
     &.dx-colorview-alpha-channel-label {
       margin: 0 0 0 $fluent-colorview-container-alpha-label-margin;
       width: $fluent-colorview-container-alpha-label-width;
@@ -27,7 +29,6 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
 
     .dx-texteditor {
       width: $fluent-colorview-container-textbox-width;
-      margin: $fluent-colorview-container-textbox-margin;
     }
   }
 }
@@ -65,7 +66,6 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
 }
 
 .dx-colorview-color-preview {
-  width: 100%;
   height: $fluent-colorview-color-preview-height;
 }
 
@@ -96,7 +96,6 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
 .dx-rtl {
   .dx-colorview-controls-container {
     margin-left: 0;
-    margin-right: $fluent-colorview-controls-container-margin;
   }
 
   .dx-colorview-hue-scale-cell {
@@ -108,7 +107,6 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
     label {
       &.dx-colorview-alpha-channel-label {
         margin-left: 0;
-        margin-right: $fluent-colorview-container-alpha-label-margin;
       }
     }
   }
