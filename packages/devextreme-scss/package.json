@@ -30,7 +30,7 @@
     "lint-css": "stylelint scss/widgets build",
     "lint-js": "eslint",
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
-    "typecheck": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tests/tsconfig.json --noEmit",
     "watch": "pnpm --workspace-root nx run devextreme-scss --target=watch"
   },
   "version": "26.2.0"

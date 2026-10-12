@@ -187,7 +187,9 @@
       "inputs": [
         "{projectRoot}/build/**/*.d.cts",
         "{projectRoot}/tests/**/*.ts",
-        "{projectRoot}/tsconfig.json"
+        "{projectRoot}/tests/tsconfig.json",
+        "{workspaceRoot}/tsconfig.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
       ],
       "cache": true
     }
