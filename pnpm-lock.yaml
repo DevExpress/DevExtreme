@@ -1868,9 +1868,6 @@ importers:
       '@devexpress/design-tokens-internal':
         specifier: 262.26.0
         version: 262.26.0
-      '@eslint/eslintrc':
-        specifier: 'catalog:'
-        version: 3.3.7
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1))

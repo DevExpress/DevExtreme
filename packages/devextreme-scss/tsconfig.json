@@ -1,27 +1,18 @@
 {
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "noEmit": true,
-        "strict": true,
-        "target": "es2022",
-        "module": "preserve",
-        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
         "lib": [
             "es2022"
         ],
         "types": [
-            "node",
-            "jest"
-        ],
-        "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true
+            "node"
+        ]
     },
     "include": [
         "build/tokens/**/*.ts",
         "tools/naming/**/*.ts",
-        "tools/tokens/**/*.ts",
-        "tests/**/*.ts"
+        "tools/tokens/**/*.ts"
     ]
 }
