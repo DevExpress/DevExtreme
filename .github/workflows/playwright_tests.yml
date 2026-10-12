@@ -161,6 +161,7 @@ jobs:
           style_dependent_matrix=$(cat <<'JSON'
           [
             { "componentFolder": "accessibility", "name": "accessibility - fluent.dark", "theme": "fluent.blue.dark", "concurrency": 6 },
+            { "componentFolder": "accessibility", "name": "accessibility - fluent-next.dark", "theme": "fluent-next.blue.dark", "concurrency": 6 },
             { "componentFolder": "accessibility", "name": "accessibility - material.light", "theme": "material.blue.light", "concurrency": 6 },
             { "componentFolder": "accessibility", "name": "accessibility - material.dark", "theme": "material.blue.dark", "concurrency": 6 }
           ]
@@ -172,7 +173,15 @@ jobs:
             --argjson baseEnd "$base_matrix_end" \
             --argjson styleDependent "$style_dependent_matrix" \
             --arg stylesChanged "${{ needs.check-should-run.outputs.styles-changed }}" \
-            '{ include: ($baseStart + (if $stylesChanged == "true" then $styleDependent else [] end) + $baseEnd) }')
+            '{ include: (
+              $baseStart
+              + (if $stylesChanged == "true" then $styleDependent else [] end)
+              + $baseEnd
+              + (($baseStart + $baseEnd) | map(
+                select(.theme == null)
+                | . + { name: (.name + " - fluent-next"), theme: "fluent-next.blue.light" }
+              ))
+            ) }')
 
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
@@ -206,7 +215,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '150.0.7871.181'
+        chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
       uses: actions/setup-node@v6

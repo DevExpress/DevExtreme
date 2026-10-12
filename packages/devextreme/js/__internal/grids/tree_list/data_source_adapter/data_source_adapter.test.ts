@@ -8,7 +8,7 @@ import { DataSource } from '@ts/data/data_source/data_source';
 import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
-import { DataSourceAdapterTreeList } from './m_data_source_adapter';
+import { DataSourceAdapterTreeList } from './data_source_adapter';
 import type { TreeNode } from './types';
 import type { LoadBranchesContext } from './utils/load_branches';
 

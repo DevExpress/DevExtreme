@@ -313,7 +313,7 @@
   .dx-list-item {
     border-radius: $global-border-radius;
 
-    @include toggle-delete-icon($masked: true);
+    @include toggle-delete-icon();
 
     &.dx-state-hover,
     &.dx-state-active {

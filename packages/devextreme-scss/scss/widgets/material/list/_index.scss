@@ -281,7 +281,7 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
     }
 
     .dx-icon-toggle-delete {
-      background-size: 100%;
+      mask-size: 100%;
     }
 
     &.dx-list-item-ghost-reordering {

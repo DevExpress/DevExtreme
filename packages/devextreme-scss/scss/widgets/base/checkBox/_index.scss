@@ -1,7 +1,7 @@
 @use "../mixins" as *;
 @use "./mixins" as *;
 
-$checkbox-text-padding-inline-start: 5px !default;
+$checkbox-text-padding-inline-start: null !default;
 
 .dx-checkbox {
   display: inline-block;
@@ -40,10 +40,7 @@ $checkbox-text-padding-inline-start: 5px !default;
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: normal;
-
-  @if $checkbox-text-padding-inline-start {
-    padding-inline-start: $checkbox-text-padding-inline-start;
-  }
+  padding-inline-start: $checkbox-text-padding-inline-start;
 }
 
 .dx-state-disabled {

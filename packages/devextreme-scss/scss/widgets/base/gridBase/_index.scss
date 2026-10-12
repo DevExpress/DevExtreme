@@ -104,7 +104,7 @@
       .dx-sort-index-icon {
         padding-right: $grid-sort-index-offset;
         margin-left: calc(-1 * $grid-sort-index-offset);
-        width: calc-sum($grid-sort-index-width, $grid-sort-index-offset);
+        width: calc($grid-sort-index-width + $grid-sort-index-offset);
       }
 
       .dx-sort,
@@ -158,10 +158,7 @@
         padding: $grid-column-chooser-content-padding;
 
         .dx-column-chooser-item {
-          @if $column-chooser-item-opacity {
-            opacity: $column-chooser-item-opacity;
-          }
-
+          opacity: $column-chooser-item-opacity;
           margin-bottom: $grid-column-chooser-item-margin-block-end;
 
           &.dx-#{$widget-name}-drag-action {
@@ -171,9 +168,7 @@
           }
 
           &.dx-#{$widget-name}-draggable-column {
-            @if $draggable-column-opacity {
-              opacity: $draggable-column-opacity;
-            }
+            opacity: $draggable-column-opacity;
           }
         }
       }
@@ -251,9 +246,7 @@
   }
 
   .dx-#{$widget-name}-draggable-column {
-    @if $draggable-column-opacity {
-      opacity: $draggable-column-opacity;
-    }
+    opacity: $draggable-column-opacity;
   }
 
   .dx-data-row.dx-state-hover {
@@ -313,7 +306,7 @@
         }
 
         &.dx-sort-index {
-          width: calc-sum($grid-column-header-indicator-width, $grid-sort-index-width);
+          width: calc($grid-column-header-indicator-width + $grid-sort-index-width);
         }
       }
     }

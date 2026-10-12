@@ -161,7 +161,8 @@ $datagrid-column-separator-bg: $base-accent !default;
 $datagrid-filter-row-background-color: color.adjust($datagrid-base-background-color, $lightness: -2%, $space: hsl) !default;
 $datagrid-active-header-filter-icon-color: $base-accent !default;
 
-$datagrid-text-stub-background-image-path: data-uri("images/widgets/material/grid/text-stub.png") !default;
+$datagrid-text-stub-mask-image: data-uri("images/widgets/material/grid/text-stub.png") !default;
+$datagrid-text-stub-bg: rgba(0, 0, 0, 0.12) !default;
 $datagrid-filter-panel-color: $base-accent !default;
 $datagrid-draggable-column-text-color: color.change($base-text-color, $alpha: 0.38) !default;
 

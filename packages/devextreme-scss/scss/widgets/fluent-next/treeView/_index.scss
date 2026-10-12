@@ -6,7 +6,6 @@
 @use "../../base/treeView" as baseTreeView with (
   $treeview-select-all-item-border-bottom: var(--dx-tree-view-select-all-item-border-block-end),
   $treeview-border-visible-border: var(--dx-tree-view-border-visible-border),
-  $treeview-disabled-opacity: false,
 );
 @use "../../base/icon_fonts" as *;
 

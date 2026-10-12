@@ -5,7 +5,6 @@ $datagrid-base-color: null !default;
 $datagrid-base-background-color: null !default;
 $datagrid-border-color: null !default;
 $datagrid-focused-border-color: null !default;
-$datagrid-text-stub-background-image-path: null !default;
 $datagrid-text-stub-mask-image: null !default;
 $datagrid-text-stub-bg: null !default;
 $datagrid-row-error-color: null !default;
@@ -47,7 +46,6 @@ $treelist-base-color: $datagrid-base-color !default;
 $treelist-base-background-color: $datagrid-base-background-color !default;
 $treelist-border-color: $datagrid-border-color !default;
 $treelist-focused-border-color: $datagrid-focused-border-color !default;
-$treelist-text-stub-background-image-path: $datagrid-text-stub-background-image-path !default;
 $treelist-row-error-color: $datagrid-row-error-color !default;
 
 $treelist-header-filter-outline: 2px solid !default;
@@ -205,15 +203,9 @@ $treelist-button-margin-right: 10px !default;
         display: block;
         height: 100%;
         content: "";
-
-        @if $datagrid-text-stub-mask-image {
-          mask-image: $datagrid-text-stub-mask-image;
-          mask-repeat: no-repeat repeat;
-          background-color: $datagrid-text-stub-bg;
-        } @else {
-          background-image: $treelist-text-stub-background-image-path;
-          background-repeat: no-repeat repeat;
-        }
+        mask-image: $datagrid-text-stub-mask-image;
+        mask-repeat: no-repeat repeat;
+        background-color: $datagrid-text-stub-bg;
       }
 
       &[style*="text-align: right"]::before {

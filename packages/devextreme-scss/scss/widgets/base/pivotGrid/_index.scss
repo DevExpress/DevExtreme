@@ -1,5 +1,5 @@
 $pivotgrid-drag-source-opacity: 0.5 !default;
-$pivotgrid-fields-container-drag-opacity: 0.8 !default;
+$pivotgrid-fields-container-drag-opacity: null !default;
 
 $pivotgrid-position-indicator-vertical-height: 2px !default;
 $pivotgrid-position-indicator-horizontal-width: 2px !default;
@@ -63,7 +63,7 @@ $pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-sh
 $pivotgrid-border: $pivotgrid-border-width solid !default;
 $pivotgrid-icon-size: 14px !default;
 $pivotgrid-common-field-padding: 2px !default;
-$pivotgrid-filter-area-border-spacing: calc-difference($pivotgrid-common-left-right-padding, $pivotgrid-common-field-padding) calc-difference($pivotgrid-header-top-bottom-padding, $pivotgrid-common-field-padding) !default;
+$pivotgrid-filter-area-border-spacing: calc($pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding) calc($pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding) !default;
 $pivotgrid-expand-icon-offset: -5px; // dx-fixed-size: negated at its use site
 $pivotgrid-expand-icon-text-offset: 0 !default;
 
@@ -131,9 +131,7 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
   }
 
   &.dx-drag {
-    @if $pivotgrid-fields-container-drag-opacity {
-      opacity: $pivotgrid-fields-container-drag-opacity;
-    }
+    opacity: $pivotgrid-fields-container-drag-opacity;
 
     .dx-area-field.dx-area-box {
       box-shadow: $pivotgrid-drag-header-first-shadow, $pivotgrid-drag-header-second-shadow;
@@ -151,9 +149,7 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
   }
 
   .dx-drag-source {
-    @if $pivotgrid-drag-source-opacity {
-      opacity: $pivotgrid-drag-source-opacity;
-    }
+    opacity: $pivotgrid-drag-source-opacity;
   }
 
   .dx-column-indicators {

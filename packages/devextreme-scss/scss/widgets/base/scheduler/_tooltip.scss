@@ -1,4 +1,4 @@
-$scheduler-tooltip-date-opacity: 0.8 !default;
+$scheduler-tooltip-date-opacity: null !default;
 
 @use "./mixins" as *;
 
@@ -75,11 +75,7 @@ $scheduler-tooltip-date-font-size: null !default;
       .dx-tooltip-appointment-item-content-date {
         text-align: left;
         font-size: $scheduler-tooltip-date-font-size;
-
-        @if $scheduler-tooltip-date-opacity {
-          opacity: $scheduler-tooltip-date-opacity;
-        }
-
+        opacity: $scheduler-tooltip-date-opacity;
         margin-top: $scheduler-tooltip-remove-margin-top;
       }
     }

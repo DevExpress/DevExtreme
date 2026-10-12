@@ -2,9 +2,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/numberBox" with (
-  $numberbox-spin-idle-opacity: false,
-);
+@use "../../base/numberBox";
 @use "../textEditor" as *;
 
 .dx-numberbox {

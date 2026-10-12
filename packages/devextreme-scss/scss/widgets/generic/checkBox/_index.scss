@@ -1,7 +1,9 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/checkBox";
+@use "../../base/checkBox" with (
+  $checkbox-text-padding-inline-start: 5px,
+);
 @use "../../base/checkBox/mixins" as *;
 
 $generic-checkbox-disable-opacity: 0.4 !default;

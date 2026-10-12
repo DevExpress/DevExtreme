@@ -496,7 +496,7 @@
 
   // (0,3,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]::before {
-    background-position-y: 34px;
+    mask-position: 0 34px;
   }
 
   // #endregion

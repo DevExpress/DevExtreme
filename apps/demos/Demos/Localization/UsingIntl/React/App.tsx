@@ -16,9 +16,6 @@ const editPopupOptions = {
 const amountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
 };
 
 const selectBoxInputAttr = { id: 'selectInput' };
