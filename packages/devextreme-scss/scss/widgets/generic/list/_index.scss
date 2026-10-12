@@ -62,7 +62,7 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
       color: $list-item-hover-color;
     }
 
-    @include toggle-delete-icon($list-item-hover-color);
+    @include toggle-delete-icon($list-item-hover-color, $masked: true);
   }
 
   &.dx-list-item-selected {
@@ -78,7 +78,7 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
       color: $list-item-color;
     }
 
-    @include toggle-delete-icon($list-item-selected-color);
+    @include toggle-delete-icon($list-item-selected-color, $masked: true);
   }
 
   &.dx-state-focused {
@@ -93,7 +93,7 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
       border-color: $list-chevron-focus-color;
     }
 
-    @include toggle-delete-icon($list-item-focus-color);
+    @include toggle-delete-icon($list-item-focus-color, $masked: true);
   }
 
   &.dx-state-focused.dx-list-item-selected {
@@ -114,7 +114,7 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
       color: $list-item-active-color;
     }
 
-    @include toggle-delete-icon($list-item-active-color);
+    @include toggle-delete-icon($list-item-active-color, $masked: true);
   }
 
   .dx-list-static-delete-button .dx-icon {
@@ -220,10 +220,10 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
     }
 
     .dx-icon-toggle-delete {
-      background-size: 100%;
+      mask-size: 100%;
     }
 
-    @include toggle-delete-icon($list-icon-color);
+    @include toggle-delete-icon($list-icon-color, $masked: true);
 
     &.dx-list-item-ghost-reordering {
       &.dx-state-focused {

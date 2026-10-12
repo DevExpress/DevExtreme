@@ -328,7 +328,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid !default;
   .dx-list-item {
     border-radius: $base-border-radius;
 
-    @include toggle-delete-icon($list-icon-color);
+    @include toggle-delete-icon($list-icon-color, $masked: true);
 
     &.dx-state-hover,
     &.dx-state-active {
@@ -355,7 +355,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid !default;
     }
 
     .dx-icon-toggle-delete {
-      background-size: 100%;
+      mask-size: 100%;
     }
 
     &.dx-list-item-ghost-reordering {

@@ -255,4 +255,4 @@
   margin-left: $filemanager-contextmenu-text-item-left-margin;
 }
 
-@include filemanager-icons-mixin($base-text-color, $base-success, $base-inverted-text-color, $base-danger, $base-inverted-text-color, $filemanager-large-icon-size);
+@include filemanager-icons-mixin($base-text-color, $base-success, $base-inverted-text-color, $base-danger, $base-inverted-text-color, $filemanager-large-icon-size, $masked: true);

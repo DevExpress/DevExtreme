@@ -5,7 +5,7 @@
 @use "../textEditor/sizes" as *;
 @use "../../base/timeView/mixins" as *;
 @use "../../base/timeView";
-@include clock-action-icons-mixin($base-accent, $base-bg, $clock-digits-color);
+@include clock-action-icons-mixin($base-accent, $base-bg, $clock-digits-color, $dial-size: 170px, $dial-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), $masked: true);
 
 .dx-timeview {
   height: auto;
