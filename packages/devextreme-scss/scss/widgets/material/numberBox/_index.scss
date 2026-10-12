@@ -4,7 +4,9 @@
 @use "../../base/icon_fonts" as *;
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
-@use "../../base/numberBox";
+@use "../../base/numberBox" with (
+  $numberbox-spin-idle-opacity: 0.2,
+);
 @use "../textEditor" as *;
 
 .dx-numberbox-spin-container {

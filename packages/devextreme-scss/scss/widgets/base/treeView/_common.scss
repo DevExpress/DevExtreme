@@ -94,9 +94,7 @@ $treeview-disabled-opacity: null !default;
   }
 
   &.dx-state-disabled {
-    @if $treeview-disabled-opacity {
-      opacity: $treeview-disabled-opacity;
-    }
+    opacity: $treeview-disabled-opacity;
   }
 }
 
