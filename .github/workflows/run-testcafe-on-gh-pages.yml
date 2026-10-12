@@ -54,7 +54,7 @@ jobs:
             - name: Setup Chrome
               uses: ./devextreme/.github/actions/setup-chrome
               with:
-                chrome-version: '154.0.8037.92'
+                chrome-version: '155.0.8059.39'
 
             - uses: pnpm/action-setup@v6
               with:
