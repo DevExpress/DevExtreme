@@ -1,6 +1,3 @@
-import globals from 'globals';
-import stylistic from '@stylistic/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 import javascriptConfig from 'eslint-config-devextreme/javascript';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
@@ -27,11 +24,7 @@ const typescriptFor = (files, project) => [
   ...typescriptConfig.map((config) => toStylistic(config, files)),
   {
     files,
-    plugins: {
-      '@stylistic': stylistic,
-    },
     languageOptions: {
-      parser: tsParser,
       parserOptions: {
         project,
         tsconfigRootDir: configDir,
@@ -42,7 +35,7 @@ const typescriptFor = (files, project) => [
 
 export default [
   {
-    ignores: ['node_modules/**', 'scss/**', '**/*.cjs'],
+    ignores: ['node_modules/**', 'scss/**'],
   },
 
   ...javascriptConfig.map((config) => ({ ...config, files: ['**/*.mjs'] })),
@@ -51,7 +44,6 @@ export default [
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'module',
-      globals: globals.node,
     },
   },
 
@@ -72,7 +64,7 @@ export default [
     rules: {
       'import/extensions': ['error', 'ignorePackages', { mjs: 'always' }],
       'import/no-unresolved': ['error', {
-        ignore: ['^style-dictionary(/|$)', '^@tokens-studio/sd-transforms$', '^@typescript-eslint/'],
+        ignore: ['^style-dictionary(/|$)', '^@tokens-studio/sd-transforms$'],
       }],
       'no-restricted-syntax': restrictedSyntax,
     },

@@ -11,7 +11,7 @@
         ]
     },
     "include": [
-        "build/tokens/**/*.ts",
+        "build/**/*.ts",
         "tools/naming/**/*.ts",
         "tools/tokens/**/*.ts"
     ]
