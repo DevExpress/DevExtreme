@@ -1,45 +1,75 @@
 import config from '@js/core/config';
+import type { Device } from '@js/core/devices';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import Errors from '@js/core/errors';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { ChildDefaultTemplate } from '@js/core/templates/child_default_template';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
 import { Template } from '@js/core/templates/template';
 import { TemplateBase } from '@js/core/templates/template_base';
 import { groupBy } from '@js/core/utils/array';
-import { findBestMatches } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
+import type { TemplateElement, TemplateRenderOptions } from '@ts/core/templates/template_base';
+import { findBestMatches } from '@ts/core/utils/m_common';
 
 import domUtils from './m_dom';
 import typeUtils from './m_type';
 
-export const findTemplates = (element, name) => {
+interface TemplateWithRender {
+  render: (options: TemplateRenderOptions) => unknown;
+}
+
+type TemplateOptions = { [TKey in keyof Device]?: unknown } & { name?: string };
+
+interface RawTemplate<TElement, TOptions> {
+  element: TElement;
+  options: TOptions;
+}
+
+const isRenderer = (
+  value: unknown,
+): value is dxElementWrapper & ArrayLike<Element> => typeUtils.isRenderer(value);
+
+const hasRender = (
+  value: NonNullable<unknown>,
+): value is TemplateWithRender => typeUtils.isFunction(
+  (value as Partial<TemplateWithRender>).render,
+);
+
+const hasNodeType = (
+  value: NonNullable<unknown>,
+): value is Node => !!(value as Partial<Node>).nodeType;
+
+export const findTemplates = <TOptions = Record<string, unknown>>(
+  element: Element | dxElementWrapper,
+  name: string,
+): RawTemplate<Element, TOptions>[] => {
   const optionsAttributeName = 'data-options';
   const templates = $(element).contents().filter(`[${optionsAttributeName}*="${name}"]`);
 
-  return [].slice.call(templates).map((element) => {
+  return [].slice.call(templates).map((templateElement: Element) => {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const optionsString = $(element).attr(optionsAttributeName) || '';
+    const optionsString = $(templateElement).attr(optionsAttributeName) || '';
     return {
-      element,
+      element: templateElement,
       // @ts-expect-error optionsParser do not exist in public type
       options: config().optionsParser(optionsString)[name],
     };
   }).filter((template) => !!template.options);
 };
 
-export const suitableTemplatesByName = (rawTemplates) => {
-  const templatesMap = groupBy<{ element: unknown; options: { name: string | undefined } }>(
-    rawTemplates,
-    (template) => template.options.name,
-  );
+export const suitableTemplatesByName = <TElement>(
+  rawTemplates: RawTemplate<TElement, TemplateOptions>[],
+): Record<string, TElement> => {
+  const templatesMap = groupBy(rawTemplates, (template) => template.options.name);
 
   if (templatesMap.undefined) {
     throw Errors.Error('E0023');
   }
 
-  const result = {};
+  const result: Record<string, TElement> = {};
 
   Object.keys(templatesMap).forEach((name) => {
     const suitableTemplate = findBestMatches(
@@ -56,29 +86,33 @@ export const suitableTemplatesByName = (rawTemplates) => {
   return result;
 };
 
-export const addOneRenderedCall = (template) => {
+export const addOneRenderedCall = (template: TemplateWithRender): TemplateWithRender => {
   const render = template.render.bind(template);
   return extend({}, template, {
-    render(options) {
+    render(options: TemplateRenderOptions): unknown {
       const templateResult = render(options);
-      options && options.onRendered && options.onRendered();
+      if (options?.onRendered) {
+        options.onRendered();
+      }
       return templateResult;
     },
   });
 };
 
-export const addPublicElementNormalization = (template) => {
+export const addPublicElementNormalization = (
+  template: TemplateWithRender,
+): TemplateWithRender => {
   const render = template.render.bind(template);
   return extend({}, template, {
-    render(options) {
+    render(options: TemplateRenderOptions): unknown {
       const $container = $(options.container);
       return render({ ...options, container: getPublicElement($container) });
     },
   });
 };
 
-export const getNormalizedTemplateArgs = (options) => {
-  const args: any[] = [];
+export const getNormalizedTemplateArgs = (options: TemplateRenderOptions): unknown[] => {
+  const args: unknown[] = [];
 
   if ('model' in options) {
     args.push(options.model);
@@ -91,25 +125,35 @@ export const getNormalizedTemplateArgs = (options) => {
   return args;
 };
 
-export const validateTemplateSource = (templateSource) => (typeof templateSource === 'string'
-  ? domUtils.normalizeTemplateElement(templateSource)
-  : templateSource);
+export const validateTemplateSource = (templateSource: unknown): unknown => (
+  typeof templateSource === 'string'
+    ? domUtils.normalizeTemplateElement(templateSource)
+    : templateSource
+);
 
-export const templateKey = (templateSource) => (typeUtils.isRenderer(templateSource) && templateSource[0]) || templateSource;
+export const templateKey = (templateSource: unknown): unknown => (
+  isRenderer(templateSource) && templateSource[0]
+) || templateSource;
 
-export const defaultCreateElement = (element) => new Template(element);
+export const defaultCreateElement = (element: TemplateElement): Template => new Template(element);
 
-export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTemplate, skipTemplates) => {
-  let integrationTemplate: any = null;
+export const acquireIntegrationTemplate = (
+  templateSource: string,
+  templates: Record<string, unknown>,
+  isAsyncTemplate?: boolean,
+  skipTemplates?: string[],
+): unknown => {
+  let integrationTemplate: unknown = null;
 
-  if (!skipTemplates || skipTemplates.indexOf(templateSource) === -1) {
+  if (!skipTemplates || !skipTemplates.includes(templateSource)) {
     integrationTemplate = templates[templateSource];
     if (integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-      if (typeUtils.isFunction(integrationTemplate.render)) {
+      if (hasRender(integrationTemplate)) {
         integrationTemplate = addPublicElementNormalization(integrationTemplate);
       }
 
       if (!isAsyncTemplate) {
+        // @ts-expect-error an integration template has render
         integrationTemplate = addOneRenderedCall(integrationTemplate);
       }
     }
@@ -118,7 +162,14 @@ export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTem
   return integrationTemplate;
 };
 
-export const acquireTemplate = (templateSource, createTemplate, templates, isAsyncTemplate, skipTemplates, defaultTemplates) => {
+export const acquireTemplate = (
+  templateSource: unknown,
+  createTemplate: (source: unknown) => unknown,
+  templates: Record<string, unknown>,
+  isAsyncTemplate: boolean | undefined,
+  skipTemplates: string[] | undefined,
+  defaultTemplates: Record<string, unknown>,
+): unknown => {
   if (templateSource == null) {
     return new EmptyTemplate();
   }
@@ -131,18 +182,22 @@ export const acquireTemplate = (templateSource, createTemplate, templates, isAsy
     return templateSource;
   }
 
-  // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
-  if (typeUtils.isFunction(templateSource.render) && !typeUtils.isRenderer(templateSource)) {
+  // TODO: templateSource.render is needed for angular2 integration.
+  // Try to remove it after supporting TypeScript modules.
+  if (hasRender(templateSource) && !isRenderer(templateSource)) {
     return isAsyncTemplate ? templateSource : addOneRenderedCall(templateSource);
   }
 
-  if (templateSource.nodeType || typeUtils.isRenderer(templateSource)) {
+  if (hasNodeType(templateSource) || isRenderer(templateSource)) {
     return createTemplate($(templateSource));
   }
 
-  return acquireIntegrationTemplate(templateSource, templates, isAsyncTemplate, skipTemplates)
-      || defaultTemplates[templateSource]
-      || createTemplate(templateSource);
+  // @ts-expect-error the other sources are template names
+  const templateName: string = templateSource;
+
+  return acquireIntegrationTemplate(templateName, templates, isAsyncTemplate, skipTemplates)
+      || defaultTemplates[templateName]
+      || createTemplate(templateName);
 };
 
 export default {
