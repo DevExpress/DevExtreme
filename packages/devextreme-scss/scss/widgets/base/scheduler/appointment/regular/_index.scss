@@ -86,10 +86,7 @@ $appointment-reduced-icon-rtl-left: null !default;
 }
 
 .dx-scheduler-appointment-content-date {
-  @if $appointment-date-opacity {
-    opacity: $appointment-date-opacity;
-  }
-
+  opacity: $appointment-date-opacity;
   display: inline-block;
   white-space: pre-wrap;
 }
@@ -177,9 +174,7 @@ $appointment-reduced-icon-rtl-left: null !default;
   }
 
   &.dx-scheduler-appointment-drag-source {
-    @if $appointment-drag-source-opacity {
-      opacity: $appointment-drag-source-opacity;
-    }
+    opacity: $appointment-drag-source-opacity;
   }
 }
 

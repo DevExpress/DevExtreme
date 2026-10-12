@@ -2,7 +2,6 @@
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/pagination" with (
-  $pagination-padding-block-fallback: false,
   $pagination-info-paddings: var(--dx-pagination-info-margin-inline),
   $pagination-page-margin-left: var(--dx-pagination-page-margin-inline-start),
   $pagination-page-margin-right: var(--dx-pagination-page-margin-inline-end),
@@ -14,8 +13,6 @@
   $pagination-page-size-margin-left: var(--dx-pagination-page-size-margin-inline-start),
   $pagination-page-index-width: var(--dx-pagination-page-index-width),
   $pagination-pages-count-padding-left: var(--dx-pagination-pages-count-padding-inline-start),
-  $pagination-info-opacity: false,
-  $pagination-nav-disabled-opacity: false,
 );
 @use "../gridBase/sizes" as gridBaseSizes;
 

@@ -158,10 +158,7 @@
         padding: $grid-column-chooser-content-padding;
 
         .dx-column-chooser-item {
-          @if $column-chooser-item-opacity {
-            opacity: $column-chooser-item-opacity;
-          }
-
+          opacity: $column-chooser-item-opacity;
           margin-bottom: $grid-column-chooser-item-margin-block-end;
 
           &.dx-#{$widget-name}-drag-action {
@@ -171,9 +168,7 @@
           }
 
           &.dx-#{$widget-name}-draggable-column {
-            @if $draggable-column-opacity {
-              opacity: $draggable-column-opacity;
-            }
+            opacity: $draggable-column-opacity;
           }
         }
       }
@@ -251,9 +246,7 @@
   }
 
   .dx-#{$widget-name}-draggable-column {
-    @if $draggable-column-opacity {
-      opacity: $draggable-column-opacity;
-    }
+    opacity: $draggable-column-opacity;
   }
 
   .dx-data-row.dx-state-hover {
