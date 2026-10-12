@@ -59,7 +59,7 @@ sup {
 ::ng-deep .stats > div {
   display: table-cell;
   text-align: center;
-  border: 1px solid rgba(191, 191, 191, 0.25);
+  border: 1px solid var(--dxds-color-border-subtle, rgba(191, 191, 191, 0.25));
   padding: 20px 0 25px;
   width: 33%;
 }
@@ -103,7 +103,7 @@ sup {
 ::ng-deep #tabpanel .stats {
   width: 398px;
   margin-top: 20px;
-  border-top: 1px solid rgba(191, 191, 191, 0.25);
+  border-top: 1px solid var(--dxds-color-border-subtle, rgba(191, 191, 191, 0.25));
 }
 
 ::ng-deep #tabpanel .stats > div {
@@ -123,7 +123,7 @@ sup {
 ::ng-deep .flag {
   width: 172px;
   max-height: 122px;
-  border: 1px solid rgba(191, 191, 191, 0.25);
+  border: 1px solid var(--dxds-color-border-subtle, rgba(191, 191, 191, 0.25));
   float: left;
   margin: 0 30px 10px 0;
 }
