@@ -215,13 +215,9 @@
 
 @mixin dx-icon-sizing($icon-size, $container-size: $icon-size, $borders-size: 0) {
   $icon-padding: null;
-  $icon-line-height: null;
 
   @if meta.type-of($icon-size) == number and meta.type-of($container-size) == number and meta.type-of($borders-size) == number {
-    $icon-paddings-dirty: $container-size - $icon-size;
-    $icon-paddings: $icon-paddings-dirty - $borders-size;
-    $icon-padding: math.floor(math.div($icon-paddings, 2));
-    $icon-line-height: $container-size - $icon-paddings-dirty;
+    $icon-padding: math.floor(math.div($container-size - $icon-size - $borders-size, 2));
   } @else {
     @if $container-size == $icon-size and $borders-size == 0 {
       $icon-padding: 0;
@@ -230,8 +226,6 @@
     } @else {
       $icon-padding: calc(($container-size - $icon-size - $borders-size) / 2);
     }
-
-    $icon-line-height: $icon-size;
   }
 
   // Geometry
@@ -248,7 +242,7 @@
   // Icon as font
   font-size: $icon-size;
   text-align: center;
-  line-height: $icon-line-height;
+  line-height: $icon-size;
 }
 
 @mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {

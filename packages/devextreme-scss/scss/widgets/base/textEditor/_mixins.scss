@@ -1,6 +1,3 @@
-@use "sass:math";
-@use "sass:meta";
-
 @mixin dx-editor-content-wrapper() {
   display: flex;
   flex-grow: 1;
@@ -320,12 +317,6 @@
         padding: 0;
 
         span {
-          $outside-height: $texteditor-label-outside-height;
-
-          @if meta.type-of($texteditor-label-outside-height) == number and meta.type-of($texteditor-label-outside-font-size) == number {
-            $outside-height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
-          }
-
           position: absolute;
           width: 100%;
           cursor: default;
@@ -333,8 +324,8 @@
           font-size: $texteditor-label-outside-font-size;
           margin-top: 0;
           top: calc(-1 * $label-offset-y-outside);
-          height: $outside-height;
-          line-height: $outside-height;
+          height: $texteditor-label-outside-height;
+          line-height: $texteditor-label-outside-height;
         }
       }
     }
