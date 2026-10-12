@@ -2,12 +2,15 @@
 @use "../string" as *;
 @use "../mask" as *;
 
-@mixin clock-masked-image($data-uri, $background: "%23000") {
+@function clock-shape($data-uri, $background: "%23000") {
   $painted: replace("#{$data-uri}", escape("$accent-color"), "%23fff");
   $digits: replace($painted, escape("$digit-color"), "%23fff");
-  $uri: replace($digits, escape("$background-color"), $background);
 
-  mask-image: string.unquote($uri);
+  @return string.unquote(replace($digits, escape("$background-color"), $background));
+}
+
+@mixin clock-masked-image($name) {
+  mask-image: var(--dxicon-timeview-#{$name});
   mask-mode: luminance;
 }
 
@@ -23,6 +26,12 @@
   $pivot-size: 4px,
   $pivot-offset: 5px,
 ) {
+  @at-root :root {
+    --dxicon-timeview-clock-bg: #{clock-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"))};
+    --dxicon-timeview-hour-arrow: #{clock-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), "%23fff")};
+    --dxicon-timeview-min-arrow: #{clock-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), "%23fff")};
+  }
+
   .dx-timeview-clock {
     min-width: $clock-size;
     min-height: $clock-size;
@@ -46,7 +55,7 @@
     }
 
     &::after {
-      @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"));
+      @include clock-masked-image("clock-bg");
 
       width: $clock-size;
       height: $clock-size;
@@ -75,11 +84,11 @@
   }
 
   .dx-timeview-hourarrow {
-    @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), "%23fff");
+    @include clock-masked-image("hour-arrow");
   }
 
   .dx-timeview-minutearrow {
-    @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), "%23fff");
+    @include clock-masked-image("min-arrow");
 
     &::after {
       content: "";

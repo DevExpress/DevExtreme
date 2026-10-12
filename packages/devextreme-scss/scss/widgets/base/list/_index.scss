@@ -1,7 +1,12 @@
 @use "../mixins" as *;
 @use "../button/mixins" as *;
+@use "../mask" as *;
 
 $list-searchbox-margin-bottom: 5px !default;
+
+:root {
+  --dxicon-list-toggle-delete: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/list/toggle-delete.svg"))};
+}
 
 .dx-list {
   margin: 0;
