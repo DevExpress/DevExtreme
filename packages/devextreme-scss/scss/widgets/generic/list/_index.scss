@@ -220,7 +220,7 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
     }
 
     .dx-icon-toggle-delete {
-      background-size: 100%;
+      mask-size: 100%;
     }
 
     @include toggle-delete-icon($list-icon-color);

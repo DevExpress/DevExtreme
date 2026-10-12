@@ -513,7 +513,10 @@ QUnit.module('decorators markup', {}, () => {
         const $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
         const $deleteToggleIcon = $item.find(`.${TOGGLE_DELETE_SWITCH_ICON_CLASS}`).get(0);
 
-        assert.notStrictEqual(window.getComputedStyle($deleteToggleIcon).backgroundImage, 'none', 'background image is defined');
+        const iconStyle = window.getComputedStyle($deleteToggleIcon);
+
+        assert.ok(iconStyle.getPropertyValue('mask-image').includes('url('), 'mask image is defined');
+        assert.notStrictEqual(iconStyle.backgroundColor, 'rgba(0, 0, 0, 0)', 'mask is painted');
     });
 
     QUnit.module('list item aria-label should be equal to item text (T1248422, T1285078)', {
