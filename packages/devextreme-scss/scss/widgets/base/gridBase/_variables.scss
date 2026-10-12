@@ -36,22 +36,6 @@ $grid-filter-panel-padding: 10px !default;
 $grid-filter-panel-checkbox-padding-inline-end: 10px !default;
 $grid-filter-panel-icon-margin-inline-end: 7px !default;
 
-@function grid-negate($value) {
-  @if meta.type-of($value) == number {
-    @return -$value;
-  }
-
-  @return calc(-1 * #{$value});
-}
-
-@function grid-sum($first, $second) {
-  @if meta.type-of($first) == number and meta.type-of($second) == number {
-    @return $first + $second;
-  }
-
-  @return calc(#{$first} + #{$second});
-}
-
 @function grid-header-text-max-width($indicators, $margins, $sort-indexes: 0) {
   @if meta.type-of($grid-column-header-indicator-width) == number
     and meta.type-of($grid-text-content-margin) == number

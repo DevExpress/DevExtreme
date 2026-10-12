@@ -1,5 +1,3 @@
-@use "sass:math";
-@use "sass:meta";
 @use "sass:string";
 @use "../string" as *;
 @use "../mask" as *;
@@ -27,11 +25,7 @@
   $digit-color,
   $clock-size: 182px,
   $arrow-width: 10px,
-  $arrow-offset: if(
-    meta.type-of($arrow-width) == number,
-    math.div(-$arrow-width, 2),
-    calc(#{$arrow-width} / -2)
-  ),
+  $arrow-offset: calc($arrow-width / -2),
   $dial-size: null,
   $dial-shadow: null,
   $pivot-size: 4px,

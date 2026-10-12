@@ -1,4 +1,3 @@
-@use "sass:meta";
 @use "./mixins" as *;
 
 $scrollview-top-pocket-width: 40px !default;
@@ -16,11 +15,7 @@ $scrollview-pulldown-icon-font-size: 24px !default;
 $pulldown-height: 50px !default;
 $pulldown-padding: 15px !default;
 
-$pulldown-top-offset: if(
-  meta.type-of($pulldown-height) == number and meta.type-of($pulldown-padding) == number,
-  -($pulldown-height + $pulldown-padding * 2),
-  calc(-1 * (#{$pulldown-height} + #{$pulldown-padding} * 2))
-) !default;
+$pulldown-top-offset: calc(-1 * calc-sum($pulldown-height, calc($pulldown-padding * 2))) !default;
 
 .dx-scrollable-native {
   &.dx-scrollable-native-generic {

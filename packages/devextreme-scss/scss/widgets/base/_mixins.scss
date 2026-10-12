@@ -1,6 +1,23 @@
 @use "sass:math";
+@use "sass:meta";
 
 // stylelint-disable selector-class-pattern
+
+@function calc-sum($first, $second) {
+  @if meta.type-of($first) == number and meta.type-of($second) == number {
+    @return $first + $second;
+  }
+
+  @return calc($first + $second);
+}
+
+@function calc-difference($first, $second) {
+  @if meta.type-of($first) == number and meta.type-of($second) == number {
+    @return $first - $second;
+  }
+
+  @return calc($first - $second);
+}
 
 @mixin dx-clearfix-mixin() {
   &::before,

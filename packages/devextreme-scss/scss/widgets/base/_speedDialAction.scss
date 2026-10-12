@@ -1,6 +1,5 @@
-@use "sass:math";
-@use "sass:meta";
 @use "sass:color";
+@use "./mixins" as *;
 
 $speeddialaction-fa-button-label-border-radius: 4px !default;
 
@@ -28,10 +27,10 @@ $speeddialaction-fa-button-label-border-radius: 4px !default;
   $button-default-hover-bg: null,
   $button-default-active-bg: null
 ) {
-  $fa-main-radius: if(meta.type-of($main-action-button-size) == number, math.div($main-action-button-size, 2), calc(#{$main-action-button-size} / 2));
-  $fa-action-radius: if(meta.type-of($action-button-size) == number, math.div($action-button-size, 2), calc(#{$action-button-size} / 2));
-  $fa-main-icon-padding: if(meta.type-of($main-action-button-size) == number and meta.type-of($icon-size) == number, math.div($main-action-button-size - $icon-size, 2), calc((#{$main-action-button-size} - #{$icon-size}) / 2));
-  $fa-action-icon-padding: if(meta.type-of($action-button-size) == number and meta.type-of($icon-size) == number, math.div($action-button-size - $icon-size, 2), calc((#{$action-button-size} - #{$icon-size}) / 2));
+  $fa-main-radius: calc($main-action-button-size / 2);
+  $fa-action-radius: calc($action-button-size / 2);
+  $fa-main-icon-padding: calc(calc-difference($main-action-button-size, $icon-size) / 2);
+  $fa-action-icon-padding: calc(calc-difference($action-button-size, $icon-size) / 2);
 
   .dx-fa-button {
     &.dx-fa-button-main {
@@ -49,7 +48,7 @@ $speeddialaction-fa-button-label-border-radius: 4px !default;
         box-shadow: $speed-dial-action-shadow;
 
         &.dx-state-hover {
-          background-color: if($button-default-hover-bg != null, $button-default-hover-bg, color.adjust($button-default-bg, $lightness: -10%, $space: hsl));
+          background-color: $button-default-hover-bg or color.adjust($button-default-bg, $lightness: -10%, $space: hsl);
 
           .dx-fa-button-icon {
             background-color: transparent;
@@ -57,7 +56,7 @@ $speeddialaction-fa-button-label-border-radius: 4px !default;
         }
 
         &.dx-state-active {
-          background-color: if($button-default-active-bg != null, $button-default-active-bg, color.adjust($button-default-bg, $lightness: -15%, $space: hsl));
+          background-color: $button-default-active-bg or color.adjust($button-default-bg, $lightness: -15%, $space: hsl);
 
           .dx-fa-button-icon {
             background-color: transparent;

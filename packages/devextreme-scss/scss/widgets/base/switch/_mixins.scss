@@ -1,5 +1,5 @@
-@use "sass:meta";
 @use "../icon_fonts" as *;
+@use "../mixins" as *;
 
 @mixin dx-switch(
   $switch-width,
@@ -24,10 +24,10 @@
       position: relative;
       padding-top: $switch-padding;
       padding-bottom: $switch-padding;
-      padding-inline-start: if(meta.type-of($switch-padding) == number and meta.type-of($switch-container-horizontal-padding) == number, $switch-padding - $switch-container-horizontal-padding, calc(#{$switch-padding} - #{$switch-container-horizontal-padding}));
-      padding-inline-end: if(meta.type-of($switch-padding) == number and meta.type-of($switch-container-horizontal-padding) == number, $switch-padding + $switch-container-horizontal-padding, calc(#{$switch-padding} + #{$switch-container-horizontal-padding}));
-      inset-inline-start: if(meta.type-of($switch-padding) == number, -$switch-padding, calc(-1 * #{$switch-padding}));
-      top: if(meta.type-of($switch-padding) == number, -$switch-padding, calc(-1 * #{$switch-padding}));
+      padding-inline-start: calc-difference($switch-padding, $switch-container-horizontal-padding);
+      padding-inline-end: calc-sum($switch-padding, $switch-container-horizontal-padding);
+      inset-inline-start: calc(-1 * $switch-padding);
+      top: calc(-1 * $switch-padding);
       overflow: hidden;
       vertical-align: middle;
       box-sizing: content-box;
@@ -205,15 +205,15 @@
   $switch-invalid-bg: null,
   $switch-invalid-bg-hover: null,
   $switch-invalid-bg-active: null,) {
-  $trigger-off: if($trigger-off-bg, $trigger-off-bg, $switch-off-border-color);
-  $trigger-off-hovered: if($trigger-off-bg-hover, $trigger-off-bg-hover, $switch-off-border-color-hover);
-  $trigger-off-pressed: if($trigger-off-bg-active, $trigger-off-bg-active, $switch-off-border-color-active);
-  $on-bg-hovered: if($switch-on-bg-hover, $switch-on-bg-hover, $switch-accent-hover);
-  $on-bg-pressed: if($switch-on-bg-active, $switch-on-bg-active, $switch-accent-active);
-  $on-border-disabled: if($switch-on-disabled-border, $switch-on-disabled-border, $switch-on-disabled-bg);
-  $invalid-bg: if($switch-invalid-bg, $switch-invalid-bg, $switch-invalid-color);
-  $invalid-bg-hovered: if($switch-invalid-bg-hover, $switch-invalid-bg-hover, $switch-invalid-color-hover);
-  $invalid-bg-pressed: if($switch-invalid-bg-active, $switch-invalid-bg-active, $switch-invalid-color-focused);
+  $trigger-off: $trigger-off-bg or $switch-off-border-color;
+  $trigger-off-hovered: $trigger-off-bg-hover or $switch-off-border-color-hover;
+  $trigger-off-pressed: $trigger-off-bg-active or $switch-off-border-color-active;
+  $on-bg-hovered: $switch-on-bg-hover or $switch-accent-hover;
+  $on-bg-pressed: $switch-on-bg-active or $switch-accent-active;
+  $on-border-disabled: $switch-on-disabled-border or $switch-on-disabled-bg;
+  $invalid-bg: $switch-invalid-bg or $switch-invalid-color;
+  $invalid-bg-hovered: $switch-invalid-bg-hover or $switch-invalid-color-hover;
+  $invalid-bg-pressed: $switch-invalid-bg-active or $switch-invalid-color-focused;
 
   .dx-switch-container {
     &::before {
@@ -376,11 +376,11 @@
     .dx-switch-handle {
       float: right;
       margin-left: 0;
-      margin-right: if(meta.type-of($switch-height) == number, -$switch-height, calc(-1 * #{$switch-height}));
+      margin-right: calc(-1 * $switch-height);
     }
 
     .dx-switch-container {
-      margin: 0 0 0 if(meta.type-of($switch-container-adjustment) == number, (-$switch-container-adjustment), calc(-1 * #{$switch-container-adjustment}));
+      margin: 0 0 0 calc(-1 * $switch-container-adjustment);
     }
   }
 }
