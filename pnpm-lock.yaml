@@ -1898,9 +1898,6 @@ importers:
       eslint-plugin-jest:
         specifier: 29.15.2
         version: 29.15.2(@typescript-eslint/eslint-plugin@8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(jest@30.4.2(@types/node@20.19.37)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.19.37)(typescript@5.9.3)))(typescript@5.9.3)
-      globals:
-        specifier: 'catalog:'
-        version: 15.14.0
       postcss:
         specifier: ^8.5.23
         version: 8.5.23

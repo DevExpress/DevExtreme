@@ -15,7 +15,6 @@
     "eslint-migration-utils": "workspace:*",
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-jest": "29.15.2",
-    "globals": "catalog:",
     "postcss": "^8.5.23",
     "sass-embedded": "1.105.1",
     "stylelint": "catalog:",
