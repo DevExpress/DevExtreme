@@ -168,5 +168,11 @@
 /**
     * @name ErrorsCore.W0023
     */
+/**
+    * @name ErrorsCore.W0024
+    */
+/**
+    * @name ErrorsCore.W0025
+    */
 import errors from '../__internal/core/errors';
 export default errors;

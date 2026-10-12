@@ -1,7 +1,11 @@
 @use "./mixins" as *;
 
+$fieldset-root-margin-bottom: 20px !default;
+
+$fieldset-label-width: 40% !default; // dx-relative-%
+$fieldset-datebox-value-min-width: 60% !default; // dx-relative-%
 .dx-fieldset {
-  margin-bottom: 20px;
+  margin-bottom: $fieldset-root-margin-bottom;
 
   .dx-field-value {
     margin: 0;
@@ -25,7 +29,7 @@
 
 .dx-field-label {
   float: left;
-  width: 40%;
+  width: $fieldset-label-width;
 
   @include dx-overflow();
 }
@@ -40,7 +44,7 @@
 }
 
 .dx-field-value.dx-datebox {
-  min-width: 60%;
+  min-width: $fieldset-datebox-value-min-width;
 }
 
 .dx-field-value:not(.dx-widget) > .dx-datebox {

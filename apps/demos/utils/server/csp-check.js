@@ -6,6 +6,7 @@ const {
 } = require('fs');
 const http = require('http');
 const { readShardConfig, applyShard: applyShardGeneric } = require('./shard');
+const { canaryProblem } = require('./csp-canary-guard');
 
 const DEMO_ROOT = join(__dirname, '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
@@ -307,11 +308,15 @@ async function collectViolations(tab, url, renderDeadlineMs) {
   await waitForDomIdle(tab);
 
   const res = await tab.send('Runtime.evaluate', {
-    expression: 'JSON.stringify(window.__cspViolations || [])',
+    expression: 'JSON.stringify(window.__cspViolations ?? null)',
     returnByValue: true,
   });
   const raw = res && res.result && res.result.value;
-  const all = raw ? JSON.parse(raw) : [];
+  const all = raw ? JSON.parse(raw) : null;
+
+  if (!Array.isArray(all)) {
+    throw new Error(`CSP listener did not run for ${url}`);
+  }
 
   const seen = new Set();
   return all.filter((v) => {
@@ -338,6 +343,56 @@ async function visitPage(url, renderDeadlineMs = RENDER_DEADLINE_MS) {
     tab.close();
     await browserCdp.send('Target.closeTarget', { targetId });
   }
+}
+
+const CANARY_URL = `${SERVER_URL}/apps/demos/utils/server/csp-canary.html`;
+
+const CANARY_PROBES = [
+  {
+    what: 'inline <style> element',
+    match: (v) => v.effectiveDirective === 'style-src-elem' && v.blockedURI === 'inline',
+  },
+  {
+    what: 'stylesheet from a disallowed origin',
+    match: (v) => v.effectiveDirective === 'style-src-elem'
+      && v.blockedURI.startsWith('https://csp-canary.invalid/'),
+  },
+  {
+    what: 'style attribute',
+    match: (v) => v.effectiveDirective === 'style-src-attr' && v.blockedURI === 'inline',
+  },
+];
+
+function httpMeta(url) {
+  return new Promise((resolve, reject) => {
+    const req = http.request(url, { method: 'GET' }, (res) => {
+      res.resume();
+      res.on('end', () => resolve({ statusCode: res.statusCode, headers: res.headers }));
+    });
+    req.on('error', reject);
+    req.end();
+  });
+}
+
+async function verifyCanary() {
+  const { statusCode, headers } = await httpMeta(CANARY_URL);
+  const problem = canaryProblem(statusCode, headers);
+
+  if (problem) {
+    throw new Error(problem);
+  }
+
+  const violations = await visitPage(CANARY_URL);
+  const missed = CANARY_PROBES
+    .filter(({ match }) => !violations.some(match))
+    .map(({ what }) => what);
+
+  if (missed.length) {
+    throw new Error(`${missed.length} of ${CANARY_PROBES.length} probe(s) went unreported `
+      + `(${missed.join(', ')}); ${violations.length} violation(s) seen`);
+  }
+
+  console.log(`CSP canary: all ${CANARY_PROBES.length} probes reported\n`);
 }
 
 function httpRequest(url, method) {
@@ -418,6 +473,14 @@ async function main() {
   await startBrowser();
 
   try {
+    try {
+      await verifyCanary();
+    } catch (err) {
+      console.log(`\n❌ CSP canary failed — this run could not detect a violation: ${err.message}`);
+      process.exitCode = 1;
+      return;
+    }
+
     await runPool(demos, CONCURRENCY, async (demo, i) => {
       const idx = i + 1;
       try {

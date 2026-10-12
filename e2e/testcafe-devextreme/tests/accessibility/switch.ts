@@ -1,6 +1,7 @@
+import { ElementContext } from 'axe-core';
 import { Properties } from 'devextreme/ui/switch.d';
 import url from '../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { testAccessibility, Configuration, defaultSelector } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
@@ -15,10 +16,16 @@ const options: Options<Properties> = {
 
 const a11yCheckConfig = {};
 
+const selector: ElementContext = {
+  include: [defaultSelector],
+  exclude: ['.dx-switch-on', '.dx-switch-off'],
+};
+
 const configuration: Configuration = {
   component: 'dxSwitch',
   a11yCheckConfig,
   options,
+  selector,
 };
 
 testAccessibility(configuration);

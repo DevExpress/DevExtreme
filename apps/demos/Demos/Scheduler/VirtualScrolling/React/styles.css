@@ -5,3 +5,8 @@
 #scheduler .dx-scheduler-cell-sizes-horizontal {
   width: 100px;
 }
+
+#scheduler .dx-scheduler-appointment-title,
+#scheduler .dx-scheduler-appointment-content-date {
+  color: var(--dxds-color-content-static-light, #242424);
+}

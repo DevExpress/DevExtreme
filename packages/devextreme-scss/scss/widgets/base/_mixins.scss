@@ -1,6 +1,21 @@
-@use "sass:math";
-
 // stylelint-disable selector-class-pattern
+@use "sass:meta";
+
+@function calc-sum($first, $second) {
+  @if meta.type-of($first) == number and meta.type-of($second) == number {
+    @return $first + $second;
+  }
+
+  @return calc($first + $second);
+}
+
+@function calc-difference($first, $second) {
+  @if meta.type-of($first) == number and meta.type-of($second) == number {
+    @return $first - $second;
+  }
+
+  @return calc($first - $second);
+}
 
 @mixin dx-clearfix-mixin() {
   &::before,
@@ -127,7 +142,7 @@
   pointer-events: none;
   position: absolute;
   top: 50%;
-  margin-top: math.div(-$indicator-size, 2);
+  transform: translateY(-50%);
   width: $indicator-size;
   height: $indicator-size;
 }

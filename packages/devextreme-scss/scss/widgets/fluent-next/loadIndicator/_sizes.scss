@@ -1,0 +1,5 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$load-indicator-segment-border-width: 0.12em !default; // dx-relative: scales with the parent font-size
+
+$load-indicator-size: ds.$spacing-320 !default;

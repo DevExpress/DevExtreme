@@ -95,3 +95,14 @@ export const openAIHandler: MockHandler = {
     return completion(JSON.stringify(findCase(req)?.answers ?? {}));
   },
 };
+
+export const CHAT_QUESTION = 'What is DevExtreme?';
+
+export const CHAT_ANSWER = 'DevExtreme is a suite of UI components for web apps.';
+
+export const openAIChatHandler: MockHandler = {
+  matches: (req) => isOpenAIUrl(req.url)
+    && req.method.toLowerCase() === 'post'
+    && String(req.body).includes(CHAT_QUESTION),
+  respond: () => completion(CHAT_ANSWER),
+};

@@ -121,10 +121,6 @@ function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
   font-size: 24px;
 }
 
-.dark #product-details > div {
-  color: #f0f0f0;
-}
-
 .options {
   padding: 20px;
   position: absolute;
@@ -132,7 +128,7 @@ function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
   right: 0;
   width: 260px;
   top: 0;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .caption {

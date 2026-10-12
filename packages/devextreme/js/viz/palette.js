@@ -1,10 +1,12 @@
 export {
     currentPalette,
+    registerPalette,
+} from '../__internal/viz/palette';
+export {
     generateColors,
     getPalette,
-    registerPalette,
     getAccentColor,
     createPalette,
     getDiscretePalette,
     getGradientPalette,
-} from '../__internal/viz/palette';
+} from '../__internal/viz/handed_out';

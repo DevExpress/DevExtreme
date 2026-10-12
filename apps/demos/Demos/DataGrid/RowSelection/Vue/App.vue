@@ -75,8 +75,4 @@ const onSelectionChanged = (
   padding-top: 20px;
   text-align: justify;
 }
-
-.dark #employee-info .employee-notes {
-  color: rgb(181, 181, 181);
-}
 </style>

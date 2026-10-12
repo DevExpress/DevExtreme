@@ -1,6 +1,8 @@
 @use "sass:selector";
 @use "./mixins" as *;
 
+$scrollable-scroll-padding: 2px !default;
+
 .dx-scrollable-scrollbar-simulated {
   position: relative;
 }
@@ -164,7 +166,7 @@
   opacity: 1;
   transition: opacity 0s linear, background-color 0s linear;
   overflow: hidden;
-  padding: 2px;
+  padding: $scrollable-scroll-padding;
 
   &.dx-state-invisible {
     display: block !important; // stylelint-disable-line declaration-no-important

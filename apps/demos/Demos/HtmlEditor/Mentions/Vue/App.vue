@@ -102,7 +102,7 @@ const mentions = ref([{
 </script>
 <style>
 #chat-window {
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   height: 350px;
   padding: 10px;
 }
@@ -124,7 +124,7 @@ const mentions = ref([{
   border-radius: 5px;
   margin: 5px;
   padding: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--dxds-box-shadow-md, 0 2px 6px rgba(0, 0, 0, 0.1));
 }
 
 .name {

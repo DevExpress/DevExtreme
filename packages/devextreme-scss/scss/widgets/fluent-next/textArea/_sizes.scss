@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$text-area-content-line-height: null !default;
+$text-area-input-container-margin: ds.$spacing-20 !default;
+
+@if $size == "default" {
+  $text-area-content-line-height: ds.$line-height-base-md !default;
+}
+
+@else if $size == "compact" {
+  $text-area-content-line-height: ds.$line-height-base-sm !default;
+}

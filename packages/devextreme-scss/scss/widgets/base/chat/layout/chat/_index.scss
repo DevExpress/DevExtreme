@@ -1,3 +1,5 @@
+$disabled-opacity: 0.5 !default;
+
 .dx-chat {
   display: flex;
   flex-direction: column;
@@ -8,7 +10,9 @@
   overflow-y: auto;
 
   &.dx-state-disabled {
-    opacity: 0.5;
+    @if $disabled-opacity {
+      opacity: $disabled-opacity;
+    }
   }
 }
 

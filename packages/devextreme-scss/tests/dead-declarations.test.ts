@@ -3,17 +3,13 @@ import * as path from 'path';
 import { pathToFileURL } from 'url';
 import postcss, { Declaration, Rule } from 'postcss';
 import { compileStringAsync, SassString, Value } from 'sass-embedded';
+import { getThemes, Theme } from '../build/theme-options.cjs';
 
 jest.setTimeout(300000);
 
 const packageRoot = path.resolve(__dirname, '..');
 const scssRoot = path.join(packageRoot, 'scss');
 const baselinePath = path.join(__dirname, 'dead-declarations.baseline.json');
-
-type Theme = [theme: string, size: string, color: string, mode?: string];
-const { getThemes } = require(path.join(packageRoot, 'build', 'theme-options.cjs')) as {
-  getThemes: () => Theme[];
-};
 
 interface BaselineEntry {
   file: string;
@@ -50,27 +46,31 @@ const bundleSource = ([theme, size, color, mode]: Theme): string => (
 );
 
 const dataUri = (args: Value[]): Value => {
-  const list = args[0].asList;
-  const hasEncoding = list.size === 2;
-  const encoding = hasEncoding ? list.get(0)!.assertString().text : 'image/svg+xml;charset=UTF-8';
-  const file = list.get(hasEncoding ? 1 : 0)!.assertString().text;
+  const parts = args[0].asList.toArray();
+  const hasEncoding = parts.length === 2;
+  const encoding = hasEncoding ? parts[0].assertString().text : 'image/svg+xml;charset=UTF-8';
+  const file = parts[hasEncoding ? 1 : 0].assertString().text;
   return new SassString(`url("data:${encoding},${path.basename(file)}")`, { quotes: false });
 };
 
 const contextOf = (rule: Rule): string | null => {
   let context = '';
-  for (let parent = rule.parent; parent && parent.type === 'atrule'; parent = parent.parent) {
+  let { parent } = rule;
+  while (parent && parent.type === 'atrule') {
     const { name, params } = parent as postcss.AtRule;
-    if (/keyframes/.test(name)) return null;
+    if (name.includes('keyframes')) return null;
     context = `@${name} ${params} ${context}`;
+    parent = parent.parent;
   }
   return context;
 };
 
 const originOf = (decl: Declaration): { file: string; line: number } => {
-  const { input, start } = decl.source!;
-  const origin = input.origin(start!.line, start!.column);
-  if (!origin) return { file: input.file ?? '?', line: start!.line };
+  const { source } = decl;
+  if (!source?.start) return { file: '?', line: 0 };
+  const { input, start } = source;
+  const origin = input.origin(start.line, start.column);
+  if (!origin) return { file: input.file ?? '?', line: start.line };
   const file = decodeURIComponent((origin.file ?? origin.url).replace(/^file:\/\//, ''));
   return { file: path.relative(packageRoot, file), line: origin.line };
 };
@@ -85,6 +85,10 @@ const collectDeadPositions = async (): Promise<{ positions: Position[]; bundles:
 
   for (const theme of getThemes()) {
     const name = bundleName(theme);
+
+    // Sequential on purpose: compiling all 48 bundles at once would hold every bundle's CSS and
+    // its postcss tree in the worker at the same time.
+    // eslint-disable-next-line no-await-in-loop
     const compiled = await compileStringAsync(bundleSource(theme), {
       url: pathToFileURL(path.join(scssRoot, 'bundles', name)),
       style: 'expanded',
@@ -141,8 +145,11 @@ const collectDeadPositions = async (): Promise<{ positions: Position[]; bundles:
       position.total += 1;
       if (loses) {
         position.dead += 1;
-        const winner = originOf(winners.get(emission.keys[0])!.decl);
-        position.winners.add(`${winner.file}:${winner.line}`);
+        const winner = winners.get(emission.keys[0]);
+        if (winner) {
+          const at = originOf(winner.decl);
+          position.winners.add(`${at.file}:${at.line}`);
+        }
       }
       positions.set(id, position);
     });
@@ -168,13 +175,13 @@ describe('declarations the cascade never renders', () => {
   });
 
   test('every baseline entry carries a reason', () => {
-    const unexplained = baseline.filter((entry) => !entry.reason || !entry.reason.trim());
+    const unexplained = baseline.filter((entry) => !entry.reason?.trim());
 
     expect(unexplained.map(signature)).toEqual([]);
   });
 
   test('every dead declaration is removed or listed in the baseline with a reason', () => {
-    const known = new Set(baseline.filter((entry) => entry.reason && entry.reason.trim()).map(signature));
+    const known = new Set(baseline.filter((entry) => entry.reason?.trim()).map(signature));
     const unexpected = dead.filter((position) => !known.has(signature(position)));
 
     const report = unexpected.map((position) => [

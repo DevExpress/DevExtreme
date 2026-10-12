@@ -1,0 +1,6 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$data-grid-group-panel-item-bg: ds.$color-bg-low !default;
+
+$data-grid-block-separator-bg: ds.$color-bg-primary !default;
+$data-grid-group-panel-item-border: ds.$color-border-disabled !default;

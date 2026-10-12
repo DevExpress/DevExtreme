@@ -39,9 +39,9 @@ withDefaults(defineProps<{
   overflow: hidden;
   position: relative;
   height: 124px;
-  border: 1px solid rgba(0, 0, 0, 0.24);
+  border: 1px solid var(--dxds-color-border-static-light, rgba(0, 0, 0, 0.24));
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: var(--dxds-color-bg-static-light, #fff);
 }
 
 .avatar img {
@@ -86,10 +86,9 @@ withDefaults(defineProps<{
   line-height: 20px;
   font-weight: normal;
   padding: 25px 20px 25px 40px;
-  color: #707070;
 }
 
 .dx-color-scheme-contrast .info {
-  color: #fff;
+  color: var(--dxds-color-content-on-color, #fff);
 }
 </style>

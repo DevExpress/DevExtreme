@@ -15,7 +15,7 @@
   width: 220px;
   box-sizing: border-box;
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   gap: 12px;
 }
 
@@ -33,10 +33,10 @@
   display: none;
   margin-top: 8px;
   padding: 10px 12px;
-  background: #fdf3f4;
-  border-left: 3px solid #c50f1f;
+  background: var(--dxds-color-bg-danger-subtler, #fdf3f4);
+  border-left: 3px solid var(--dxds-color-bg-danger, #c50f1f);
   border-radius: 4px;
-  color: #c50f1f;
+  color: var(--dxds-color-content-danger, #c50f1f);
   font-size: 13px;
   line-height: 1.4;
 }
@@ -46,7 +46,11 @@
 }
 
 .hidden-days-demo.is-invalid .option .dx-checkbox-icon {
-  border-color: #c50f1f;
+  border-color: var(--dxds-color-border-danger-shared, #c50f1f);
+}
+
+.hidden-days-demo.is-invalid .option .dx-checkbox-icon:hover {
+  border-color: var(--dxds-color-border-danger-shared-hovered, #c50f1f);
 }
 
 .hidden-days-demo.is-invalid .dx-scheduler-work-space {

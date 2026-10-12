@@ -42,7 +42,7 @@ $scheduler-base-border-color: null !default;
 
   &:not(.dx-scheduler-work-space-grouped) {
     .dx-scheduler-header-panel {
-      margin-top: 1px;
+      margin-top: 1px; // dx-px-nudge: keeps the ungrouped header panel off the border above
     }
   }
 

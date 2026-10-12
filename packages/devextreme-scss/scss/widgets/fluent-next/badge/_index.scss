@@ -1,0 +1,17 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/badge";
+
+.dx-badge {
+  background-color: var(--dx-badge-bg);
+  color: var(--dx-badge-content);
+  font-size: var(--dx-badge-font-size);
+  padding: var(--dx-badge-padding);
+  border-radius: var(--dx-badge-border-radius);
+  line-height: var(--dx-badge-line-height);
+
+  .dx-state-disabled & {
+    color: var(--dx-badge-content-disabled);
+    background-color: var(--dx-badge-bg-disabled);
+  }
+}
