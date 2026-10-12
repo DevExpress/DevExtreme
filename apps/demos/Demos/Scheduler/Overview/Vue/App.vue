@@ -68,8 +68,8 @@ const dataSource = data;
   --text-color-1: rgba(0, 0, 0, .6);
   --text-color-2: rgba(255, 255, 255, 1);
   --disabled-color: rgba(0, 0, 0, 0.38);
-  --background-color-1: rgba(50, 134, 56, 1);
-  --background-color-2: rgba(194, 81, 0, 1);
+  --person-color-1: rgba(50, 134, 56, 1);
+  --person-color-2: rgba(194, 81, 0, 1);
 }
 
 .dx-color-scheme-dark,
@@ -84,9 +84,8 @@ const dataSource = data;
   --text-color-1: rgba(255, 255, 255, 1);
   --text-color-2: rgba(54, 54, 64, 1);
   --disabled-color: rgba(255, 255, 255, 0.38);
-  --background-color-1: rgba(159, 213, 161, 1);
-  --background-color-2: rgba(255, 181, 127, 1);
-
+  --person-color-1: rgba(159, 213, 161, 1);
+  --person-color-2: rgba(255, 181, 127, 1);
 }
 
 .dx-scheduler-header .dx-toolbar .dx-button,
