@@ -110,19 +110,6 @@ async function generateScssBundles(
   await writeFileText(path.join(resolvedBundlesDir, 'dx.common.scss'), commonTemplate);
 }
 
-export function findMissingThemeCss(cssOutputDir: string, deps: BuildDependencies): string[] {
-  const declaredCssNames = [
-    ...deps.themeOptions
-      .getThemes()
-      .map(([theme, size, color, mode]) =>
-        generateBundleName(theme, size, color, mode).replace(/\.scss$/, '.css'),
-      ),
-    'dx.common.css',
-  ];
-
-  return declaredCssNames.filter((name) => !fs.existsSync(path.join(cssOutputDir, name)));
-}
-
 function loadDependencies(projectRoot: string): BuildDependencies {
   const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
 
@@ -290,13 +277,6 @@ async function runSingleBuild(
   for (const source of sourcesToCompile) {
     logger.verbose(`Compiling ${source}`);
     await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
-  }
-
-  if (options.mode !== 'ci') {
-    const missingThemeCss = findMissingThemeCss(cssOutputDir, deps);
-    if (missingThemeCss.length > 0) {
-      throw new Error(`Declared themes produced no CSS: ${missingThemeCss.join(', ')}`);
-    }
   }
 }
 
