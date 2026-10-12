@@ -105,6 +105,6 @@ const currentDate = new Date(2021, 3, 27);
 
   .dx-scheduler-appointment-title,
   .dx-scheduler-appointment-content-date {
-    color: var(--dxds-color-content-static-light, #242424);
+    color: #242424;
   }
 </style>

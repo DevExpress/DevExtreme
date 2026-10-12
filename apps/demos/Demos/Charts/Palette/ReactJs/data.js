@@ -1,6 +1,5 @@
 export const paletteCollection = [
   'Material',
-  'Fluent Next',
   'Soft Pastel',
   'Harmony Light',
   'Pastel',

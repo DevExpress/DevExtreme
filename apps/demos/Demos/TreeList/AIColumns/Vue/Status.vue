@@ -18,15 +18,15 @@ defineProps<{
 }
 
 .status--salaried {
-  color: var(--dxds-color-content-green, var(--dx-color-success));
+  color: var(--dx-color-success);
 }
 
 .status--commission {
-  color: var(--dxds-color-content-yellow, var(--dx-color-warning));
+  color: var(--dx-color-warning);
 }
 
 .status--terminated {
-  color: var(--dxds-color-content-red, var(--dx-color-danger));
+  color: var(--dx-color-danger);
 }
 
 .status__indicator {

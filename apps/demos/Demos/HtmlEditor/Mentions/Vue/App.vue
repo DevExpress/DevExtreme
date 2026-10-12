@@ -124,7 +124,7 @@ const mentions = ref([{
   border-radius: 5px;
   margin: 5px;
   padding: 10px;
-  box-shadow: var(--dxds-box-shadow-md, 0 2px 6px rgba(0, 0, 0, 0.1));
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .name {

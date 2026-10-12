@@ -49,6 +49,6 @@ const dataSource = data;
 
 .dx-scheduler-appointment-title,
 .dx-scheduler-appointment-content-date {
-  color: var(--dxds-color-content-on-color, white);
+  color: white;
 }
 </style>
