@@ -34,8 +34,8 @@ Once a file has 0 strict errors, it loses its `m_` prefix in a PR of its own. Th
 ```bash
 cd packages/devextreme
 git diff -M --stat <latest main>...HEAD   # e.g. upstream/main; the file must show as a rename (=>), not as a delete plus an add
-pnpm exec eslint <renamed file> <changed importers>   # the file now gets the strict rules: 0 errors
-pnpm exec tsc --noEmit -p js/__internal/tsconfig.json; echo "exit $?"
+node_modules/.bin/eslint <renamed file> <changed importers>   # the file now gets the strict rules: 0 errors
+node_modules/.bin/tsc --noEmit -p js/__internal/tsconfig.json; echo "exit $?"
 ```
 
 - If `js/ui/**` re-exports the file (for example a `m_widget.ts`), also run `pnpm run update-ts-reexports` and check that nothing changed. CI fails on stale generated re-exports.
