@@ -18,7 +18,7 @@ import errors from '@js/ui/widget/ui.errors';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
-import type DataSourceAdapter from '../data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '../data_source_adapter/data_source_adapter';
 import type { RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
