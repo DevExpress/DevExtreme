@@ -9,6 +9,8 @@ const baselinePath = join(__dirname, 'public-surface.baseline.json');
 
 interface Surface { theme: string; name: string; names: string[] }
 
+interface Group { themes: string[]; names: string[] }
+
 const declarations = (css: string): string[] => [
   ...new Set([...css.matchAll(/(--dx-[a-z0-9-]+)\s*:/g)].map((match) => match[1])),
 ].sort();
@@ -22,6 +24,17 @@ const mostCommon = (lists: string[][]): string[] => {
   return [...counts.values()].sort((left, right) => right.count - left.count)[0]?.names ?? [];
 };
 
+const grouped = (surfaceOf: Record<string, string[]>): Group[] => {
+  const groups = new Map<string, Group>();
+  Object.entries(surfaceOf).forEach(([theme, names]) => {
+    const key = names.join('\n');
+    const group = groups.get(key) ?? { themes: [], names };
+    group.themes.push(theme);
+    groups.set(key, group);
+  });
+  return [...groups.values()];
+};
+
 const outside = (
   names: Record<string, string[]>,
   reference: Record<string, string[]>,
@@ -30,8 +43,9 @@ const outside = (
   .map((name) => `${theme}: ${name}`));
 
 describe('names the themes publish as custom properties', () => {
-  const baseline: Record<string, string[]> = JSON.parse(readFileSync(baselinePath, 'utf8'));
+  const baseline: Group[] = JSON.parse(readFileSync(baselinePath, 'utf8'));
   const current: Record<string, string[]> = {};
+  const expected: Record<string, string[]> = {};
   let surfaces: Surface[] = [];
 
   beforeAll(async () => {
@@ -45,6 +59,7 @@ describe('names the themes publish as custom properties', () => {
       current[theme] = mostCommon(surfaces
         .filter((surface) => surface.theme === theme)
         .map(({ names }) => names));
+      expected[theme] = baseline.find(({ themes }) => themes.includes(theme))?.names ?? [];
     });
   });
 
@@ -58,17 +73,22 @@ describe('names the themes publish as custom properties', () => {
 
   if (process.env.UPDATE_NAMING_BASELINE === '1') {
     test('baseline regenerated', () => {
-      writeFileSync(baselinePath, `${JSON.stringify(current, null, 2)}\n`);
+      writeFileSync(baselinePath, `${JSON.stringify(grouped(current), null, 2)}\n`);
 
       expect(Object.values(current).flat().length).toBeGreaterThan(0);
     });
   } else {
+    test('every theme is in the baseline', () => {
+      expect(Object.keys(current).filter((theme) => !baseline
+        .some(({ themes }) => themes.includes(theme)))).toEqual([]);
+    });
+
     test('no name is published without being in the baseline', () => {
-      expect(outside(current, baseline)).toEqual([]);
+      expect(outside(current, expected)).toEqual([]);
     });
 
     test('every name in the baseline still ships', () => {
-      expect(outside(baseline, current)).toEqual([]);
+      expect(outside(expected, current)).toEqual([]);
     });
   }
 });
