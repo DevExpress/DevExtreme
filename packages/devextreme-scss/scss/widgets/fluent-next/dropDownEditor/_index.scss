@@ -2,9 +2,7 @@
 @use "sizes" as *;
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../../base/icon_fonts" as *;
-@use "../../base/dropDownEditor" with (
-  $dropdowneditor-icon-idle-opacity: false,
-);
+@use "../../base/dropDownEditor";
 @use "../../base/dropDownEditor/mixins" as *;
 
 @mixin dx-dropdowneditor-button-icon() {

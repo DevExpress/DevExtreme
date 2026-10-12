@@ -60,10 +60,7 @@ $filterbuilder-scrollable-max-height: null !default;
         .dx-filterbuilder-text-separator,
         .dx-filterbuilder-range-separator {
           margin: $filterbuilder-range-separator-margin;
-
-          @if $filterbuilder-range-separator-opacity {
-            opacity: $filterbuilder-range-separator-opacity;
-          }
+          opacity: $filterbuilder-range-separator-opacity;
         }
 
         &.dx-filterbuilder-group-operation,

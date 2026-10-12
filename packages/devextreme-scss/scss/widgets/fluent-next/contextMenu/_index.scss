@@ -5,7 +5,6 @@
 @use "../menu/sizes" as menuSizes;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/contextMenu" with (
-  $contextmenu-menu-items-container-padding: false,
   $contextmenu-menu-separator-height: var(--dx-context-menu-separator-height),
   $contextmenu-menu-separator-margin: var(--dx-context-menu-separator-margin),
 );

@@ -3,7 +3,7 @@
 $fileuploader-button-margin-left: 12px !default;
 $fileuploader-upload-button-margin-top: 10px !default;
 $fileuploader-show-file-list-padding-top: 22px !default;
-$fileuploader-file-container-padding: 4px 0 4px !default;
+$fileuploader-file-container-padding: null !default;
 $fileuploader-button-width: 28px !default;
 $fileuploader-button-height: 28px !default;
 $fileuploader-button-margin-right: 10px !default;
@@ -122,10 +122,7 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
   display: flex;
   align-items: center;
   width: 100%;
-
-  @if $fileuploader-file-container-padding {
-    padding: $fileuploader-file-container-padding;
-  }
+  padding: $fileuploader-file-container-padding;
 
   .dx-button {
     width: $fileuploader-button-width;

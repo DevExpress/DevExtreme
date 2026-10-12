@@ -8,7 +8,9 @@
 @use "../menuBase/sizes" as *;
 @use "../menu/colors" as *;
 @use "../menu/sizes" as *;
-@use "../../base/contextMenu";
+@use "../../base/contextMenu" with (
+  $contextmenu-menu-items-container-padding: 1px,
+);
 @use "../overlay";
 @use "../menuBase" as *;
 
