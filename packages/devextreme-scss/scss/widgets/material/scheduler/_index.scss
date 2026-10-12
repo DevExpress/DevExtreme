@@ -42,7 +42,10 @@
 
   $scheduler-appointment-popup-icon-margin-top: $material-scheduler-appointment-popup-icon-margin-top,
   $scheduler-appointment-popup-repeat-end-item-height: $material-scheduler-appointment-popup-repeat-end-item-height,
-  $scheduler-appointment-popup-repeat-end-item-vertical-margin: $material-radio-button-vertical-margin
+  $scheduler-appointment-popup-repeat-end-item-vertical-margin: $material-radio-button-vertical-margin,
+  $scheduler-tooltip-date-opacity: 0.8,
+  $scheduler-appointment-date-opacity: 0.7,
+  $agenda-appointment-details-opacity: 0.7,
 );
 @use "../button/colors" as *;
 @use "../button/mixins" as *;

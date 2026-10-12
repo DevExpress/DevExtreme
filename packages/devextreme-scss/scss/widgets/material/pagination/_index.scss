@@ -1,7 +1,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/pagination";
+@use "../../base/pagination" with (
+  $pagination-padding-block-fallback: 8px,
+  $pagination-info-opacity: 0.7,
+  $pagination-nav-disabled-opacity: 0.3,
+);
 @use "../gridBase/sizes" as *;
 
 .dx-pager,

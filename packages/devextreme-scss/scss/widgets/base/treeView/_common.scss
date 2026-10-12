@@ -1,3 +1,5 @@
+$treeview-disabled-opacity: null !default;
+
 @use "../mixins" as *;
 @use "../../base/icon_fonts" as *;
 
@@ -92,7 +94,7 @@
   }
 
   &.dx-state-disabled {
-    opacity: 0.5;
+    opacity: $treeview-disabled-opacity;
   }
 }
 

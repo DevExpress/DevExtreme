@@ -5,7 +5,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/fileUploader";
+@use "../../base/fileUploader" with (
+  $fileuploader-file-container-padding: 4px 0 4px,
+);
 
 $fluent-fileuploader-file-wrapper-border-size: 3px !default;
 $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.1) !default;
