@@ -18,7 +18,7 @@ export class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
     const { uploadFile } = this.fileUploader.option();
     try {
       const result = uploadFile?.(file.value, progressCallback);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      // @ts-expect-error fromPromise returns a Deferred, its then is not typed as PromiseLike
       return fromPromise(result);
     } catch (error) {
       return Deferred().reject(error).promise();

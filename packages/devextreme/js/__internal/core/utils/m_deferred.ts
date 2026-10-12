@@ -1,9 +1,82 @@
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import type { DeferredObj as DeferredInstance } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDeferred, isDefined, isPromise } from '@js/core/utils/type';
 
-const deferredConfig = [{
+type DeferredState = 'pending' | 'resolved' | 'rejected';
+
+type DeferredMethod = 'resolve' | 'reject' | 'notify';
+
+type DeferredHandlerName = 'done' | 'fail' | 'progress';
+
+interface DeferredConfig {
+  method: DeferredMethod;
+  handler: DeferredHandlerName;
+  state?: DeferredState;
+}
+
+type Handler = (this: unknown, ...args: unknown[]) => unknown;
+
+type HandlerMethod = <TThis>(this: TThis, handler?: Handler | null) => TThis;
+
+interface DeferredLike {
+  done: HandlerMethod;
+  fail: HandlerMethod;
+}
+
+interface DeferredPromise extends DeferredLike {
+  progress: HandlerMethod;
+  always: <TThis extends DeferredLike>(this: TThis, handler?: Handler | null) => TThis;
+  catch: (this: DeferredPromise, handler?: Handler | null) => DeferredPromise;
+  then: (resolve?: Handler | null, reject?: Handler | null) => DeferredPromise;
+  state: () => DeferredState;
+  promise: (args?: object) => DeferredPromise;
+}
+
+type CallbackArgs = [context: unknown, args: unknown[] | undefined];
+
+type Trigger = (...args: unknown[]) => DeferredInternal;
+
+type TriggerWith = (
+  this: DeferredInternal,
+  context: unknown,
+  args?: unknown[],
+) => DeferredInternal;
+
+interface DeferredInternal extends DeferredPromise {
+  _state: DeferredState;
+  _promise: DeferredPromise;
+  resolve: Trigger;
+  reject: Trigger;
+  notify: Trigger;
+  resolveWith: TriggerWith;
+  rejectWith: TriggerWith;
+  notifyWith: TriggerWith;
+  resolveCallbacks: Callback<CallbackArgs>;
+  rejectCallbacks: Callback<CallbackArgs>;
+  notifyCallbacks: Callback<CallbackArgs>;
+  resolveArgs?: unknown[];
+  rejectArgs?: unknown[];
+  notifyArgs?: unknown[];
+  resolveContext?: unknown;
+  rejectContext?: unknown;
+  notifyContext?: unknown;
+}
+
+interface DeferredConstructor {
+  prototype: DeferredInternal;
+  new (): DeferredInternal;
+}
+
+type WhenFunction = (this: unknown, ...args: unknown[]) => unknown;
+
+interface DeferredStrategy {
+  Deferred: DeferredConstructor;
+  when: WhenFunction;
+}
+
+const deferredConfig: DeferredConfig[] = [{
   method: 'resolve',
   handler: 'done',
   state: 'resolved',
@@ -16,90 +89,114 @@ const deferredConfig = [{
   handler: 'progress',
 }];
 
-let DeferredObj = function () {
+const isDeferredLike = (value: unknown): value is DeferredLike => isDeferred(value);
+
+// eslint-disable-next-line func-names -- a name would hide the DeferredObj that setStrategy swaps
+let DeferredObj = function (this: DeferredInternal): void {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias -- the handlers return their receiver
   const that = this;
   this._state = 'pending';
-  this._promise = {};
+  this._promise = {} as DeferredPromise;
 
-  deferredConfig.forEach(function (config) {
+  deferredConfig.forEach((config) => {
     const methodName = config.method;
-    this[`${methodName}Callbacks`] = Callbacks();
+    this[`${methodName}Callbacks`] = Callbacks<CallbackArgs>();
 
-    this[methodName] = function () {
-      return this[`${methodName}With`](this._promise, arguments);
-    }.bind(this);
+    this[methodName] = (...args: unknown[]): DeferredInternal => this[`${methodName}With`](
+      this._promise,
+      args,
+    );
 
-    this._promise[config.handler] = function (handler) {
+    this._promise[config.handler] = function subscribe<TThis>(
+      this: TThis,
+      handler?: Handler | null,
+    ): TThis {
       if (!handler) return this;
 
       const callbacks = that[`${methodName}Callbacks`];
       if (callbacks.fired()) {
-        handler.apply(that[`${methodName}Context`], that[`${methodName}Args`]);
+        handler.apply(that[`${methodName}Context`], that[`${methodName}Args`] ?? []);
       } else {
-        callbacks.add(function (context, args) {
-          handler.apply(context, args);
+        callbacks.add((context, args) => {
+          handler.apply(context, args ?? []);
         });
       }
       return this;
     };
-  }.bind(this));
+  });
 
-  this._promise.always = function (handler) {
+  this._promise.always = function always<TThis extends DeferredLike>(
+    this: TThis,
+    handler?: Handler | null,
+  ): TThis {
     return this.done(handler).fail(handler);
   };
 
-  this._promise.catch = function (handler) {
+  this._promise.catch = function catchHandler(
+    this: DeferredPromise,
+    handler?: Handler | null,
+  ): DeferredPromise {
     return this.then(null, handler);
   };
 
-  this._promise.then = function (resolve, reject) {
+  this._promise.then = function then(
+    this: DeferredPromise,
+    resolve?: Handler | null,
+    reject?: Handler | null,
+  ): DeferredPromise {
     const result = new DeferredObj();
 
-    ['done', 'fail'].forEach(function (method) {
+    (['done', 'fail'] as const).forEach((method) => {
       const callback = method === 'done' ? resolve : reject;
 
-      this[method](function () {
+      this[method](function doneOrFail(this: unknown, ...args: unknown[]): void {
         if (!callback) {
-          result[method === 'done' ? 'resolve' : 'reject'].apply(this, arguments);
+          result[method === 'done' ? 'resolve' : 'reject'].apply(this, args);
           return;
         }
 
-        const callbackResult = callback && callback.apply(this, arguments);
-        if (isDeferred(callbackResult)) {
+        const callbackResult = callback.apply(this, args);
+        if (isDeferredLike(callbackResult)) {
           callbackResult.done(result.resolve).fail(result.reject);
         } else if (isPromise(callbackResult)) {
           callbackResult.then(result.resolve, result.reject);
         } else {
-          result.resolve.apply(this, isDefined(callbackResult) ? [callbackResult] : arguments);
+          result.resolve.apply(this, isDefined(callbackResult) ? [callbackResult] : args);
         }
       });
-    }.bind(this));
+    });
 
     return result.promise();
   };
 
-  this._promise.state = function () {
+  this._promise.state = function state(): DeferredState {
     return that._state;
   };
 
-  this._promise.promise = function (args) {
+  this._promise.promise = function promise(args?: object): DeferredPromise {
     return args ? extend(args, that._promise) : that._promise;
   };
 
   this._promise.promise(this);
-};
+} as unknown as DeferredConstructor;
 
-deferredConfig.forEach(function (config) {
+deferredConfig.forEach((config) => {
   const methodName = config.method;
   const { state } = config;
 
-  DeferredObj.prototype[`${methodName}With`] = function (context, args) {
+  DeferredObj.prototype[`${methodName}With`] = function triggerWith(
+    this: DeferredInternal,
+    context: unknown,
+    args?: unknown[],
+  ): DeferredInternal {
     const callbacks = this[`${methodName}Callbacks`];
 
     if (this.state() === 'pending') {
       this[`${methodName}Args`] = args;
       this[`${methodName}Context`] = context;
-      if (state) this._state = state;
+      if (state) {
+        this._state = state;
+      }
       callbacks.fire(context, args);
       if (state !== 'pending') {
         this.resolveCallbacks.empty();
@@ -111,15 +208,19 @@ deferredConfig.forEach(function (config) {
   };
 });
 
-export function fromPromise(promise, context?: any) {
+export function fromPromise<T>(
+  promise: PromiseLike<T> | DeferredInstance<T> | T,
+  context?: unknown,
+): DeferredInstance<T>;
+export function fromPromise(promise: unknown, context?: unknown): unknown {
   if (isDeferred(promise)) {
     return promise;
   } if (isPromise(promise)) {
     const d = new DeferredObj();
-    promise.then(function () {
-      d.resolveWith.apply(d, [context].concat([[].slice.call(arguments)]));
-    }, function () {
-      d.rejectWith.apply(d, [context].concat([[].slice.call(arguments)]));
+    promise.then((...args: unknown[]) => {
+      d.resolveWith(context, args);
+    }, (...args: unknown[]) => {
+      d.rejectWith(context, args);
     });
     return d;
   }
@@ -127,34 +228,36 @@ export function fromPromise(promise, context?: any) {
   return new DeferredObj().resolveWith(context, [promise]);
 }
 
-let whenFunc = function () {
-  if (arguments.length === 1) {
-    return fromPromise(arguments[0]);
+let whenFunc: WhenFunction = function whenDeferreds(...args: unknown[]): unknown {
+  if (args.length === 1) {
+    return fromPromise(args[0]);
   }
 
-  const values: any[] = [].slice.call(arguments);
-  const contexts: any[] = [];
+  const values: unknown[] = args;
+  const contexts: unknown[] = [];
   let resolvedCount = 0;
   const deferred = new DeferredObj();
 
-  const updateState = function (i) {
-    return function (value) {
+  const updateState = function updateState(i: number): Handler {
+    return function resolveValue(this: unknown, ...stateArgs: unknown[]): void {
       contexts[i] = this;
-      values[i] = arguments.length > 1 ? [].slice.call(arguments) : value;
-      resolvedCount++;
+      values[i] = stateArgs.length > 1 ? stateArgs : stateArgs[0];
+      resolvedCount += 1;
       if (resolvedCount === values.length) {
         deferred.resolveWith(contexts, values);
       }
     };
   };
 
-  for (let i = 0; i < values.length; i++) {
-    if (isDeferred(values[i])) {
-      values[i].promise()
+  for (let i = 0; i < values.length; i += 1) {
+    const value = values[i];
+    if (isDeferredLike(value)) {
+      // @ts-expect-error a value with done and fail is a deferred with promise()
+      value.promise()
         .done(updateState(i))
         .fail(deferred.reject);
     } else {
-      resolvedCount++;
+      resolvedCount += 1;
     }
   }
 
@@ -165,18 +268,17 @@ let whenFunc = function () {
   return deferred.promise();
 };
 
-export function setStrategy(value) {
+export function setStrategy(value: DeferredStrategy): void {
   DeferredObj = value.Deferred;
   whenFunc = value.when;
 }
 
 export function Deferred<T>(): DeferredInstance<T>;
-export function Deferred() {
+export function Deferred(): unknown {
   return new DeferredObj();
 }
 
 export function when<T>(...values: (DeferredInstance<T> | T)[]): DeferredInstance<T>;
-export function when() {
-  // @ts-expect-error
-  return whenFunc.apply(this, arguments);
+export function when(this: unknown, ...args: unknown[]): unknown {
+  return whenFunc.apply(this, args);
 }

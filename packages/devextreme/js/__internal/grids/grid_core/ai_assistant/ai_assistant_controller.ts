@@ -201,7 +201,7 @@ export class AIAssistantController extends Controller {
                 this.completeAIMessage(aiMessage.id, commands, commandNames);
                 resolve();
               })
-              .fail((errorMessage) => {
+              .fail((errorMessage: unknown) => {
                 const error = errorMessage instanceof Error
                   ? errorMessage
                   : new Error(String(errorMessage));
