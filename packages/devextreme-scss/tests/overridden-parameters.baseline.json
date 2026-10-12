@@ -160,13 +160,6 @@
     },
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/radioButton/_mixins.scss",
-      "property": "border-color",
-      "selector": ".dx-state-readonly .dx-radiobutton-icon",
-      "paintedOverBy": "scss/widgets/fluent/radioButton/_index.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/scheduler/_index.scss",
       "property": "height",
       "selector": ".dx-scheduler-work-space-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-work-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-day .dx-scheduler-date-time-indicator",
@@ -493,13 +486,6 @@
       "property": "padding-right",
       "selector": ".dx-scheduler-time-panel-cell",
       "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/material/button/_mixins.scss",
-      "property": "background-color",
-      "selector": ".dx-tabs-nav-button.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) .dx-inkripple-wave",
-      "paintedOverBy": "scss/widgets/material/tabs/layout/navigation-button/_base.scss"
     }
   ]
 }

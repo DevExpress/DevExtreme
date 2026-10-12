@@ -28,22 +28,42 @@ const sourceLines = (file: string): string[] => {
   return sources.get(file) ?? [];
 };
 
-const mixinVariables = (file: string, line: number): Set<string> | undefined => {
-  const lines = sourceLines(file);
+const mixinArguments = (source: string): string[] => {
+  const names: string[] = [];
+  const open = /^@mixin\s+[\w-]+\s*\(/.exec(source);
   let depth = 0;
-  for (let index = line - 2; index >= 0; index -= 1) {
-    depth += (lines[index].match(/}/g) ?? []).length - (lines[index].match(/{/g) ?? []).length;
-    const mixin = /^@mixin\s+[\w-]+\s*(?:\(([^)]*)\))?/.exec(lines[index]);
-    if (mixin && depth < 0) {
-      const names = new Set(mixin[1]?.match(/\$[\w-]+/g) ?? []);
-      lines.slice(index + 1, line - 1).forEach((body) => {
-        const local = /^\s+(\$[\w-]+)\s*:/.exec(body);
-        if (local) names.add(local[1]);
-      });
-      return names;
+  let argumentStart = true;
+  for (let index = open ? open[0].length - 1 : source.length; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === '(') depth += 1;
+    if (char === ')') depth -= 1;
+    if (depth === 0) break;
+    if (depth === 1 && char === ',') argumentStart = true;
+    if (argumentStart && char === '$') {
+      names.push(/^\$[\w-]+/.exec(source.slice(index))?.[0] ?? '');
+      argumentStart = false;
     }
   }
-  return undefined;
+  return names;
+};
+
+const mixinVariables = (file: string, line: number): Set<string> | undefined => {
+  const lines = sourceLines(file).slice(0, line - 1);
+  let depth = 0;
+  let statement = 0;
+  lines.forEach((text, index) => {
+    if (depth === 0 && /^[^\s)}]/.test(text)) statement = index;
+    depth += (text.match(/{/g) ?? []).length - (text.match(/}/g) ?? []).length;
+  });
+  if (depth === 0 || !lines[statement].startsWith('@mixin')) return undefined;
+
+  const body = lines.slice(statement);
+  const names = new Set(mixinArguments(body.join('\n')));
+  body.forEach((text) => {
+    const local = /^\s+(\$[\w-]+)\s*:/.exec(text);
+    if (local) names.add(local[1]);
+  });
+  return names;
 };
 
 /*
@@ -66,7 +86,9 @@ const findingsOf = async (theme: Theme): Promise<Finding[]> => {
     if (!winner || winner.decl.value.trim() === emission.decl.value.trim()) return;
 
     const origin = originOf(emission.decl);
-    const variables = sourceLines(origin.file)[origin.line - 1]?.match(/\$[\w-]+/g) ?? [];
+    const variables = sourceLines(origin.file)[origin.line - 1]
+      ?.replace(/\$[\w-]+\s*:/g, '')
+      .match(/\$[\w-]+/g) ?? [];
     if (!variables.length) return;
     const mixinScope = mixinVariables(origin.file, origin.line);
     if (mixinScope && variables.every((name) => mixinScope.has(name))) return;
