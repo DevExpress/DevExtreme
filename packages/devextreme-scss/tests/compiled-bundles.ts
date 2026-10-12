@@ -3,7 +3,7 @@ import * as path from 'path';
 import { pathToFileURL } from 'url';
 import postcss, { Declaration, Root, Rule } from 'postcss';
 import { compileStringAsync, SassString, Value } from 'sass-embedded';
-import { Theme } from '../build/theme-options.cjs';
+import { Theme } from '../build/theme-options';
 
 export const packageRoot = path.resolve(__dirname, '..');
 const bundlesRoot = path.join(packageRoot, 'scss', 'bundles');

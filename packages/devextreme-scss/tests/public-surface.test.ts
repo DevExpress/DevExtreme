@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { getThemes } from '../build/theme-options.cjs';
+import { getThemes } from '../build/theme-options';
 import { bundleName, compileBundle } from './compiled-bundles';
 
 jest.setTimeout(600000);

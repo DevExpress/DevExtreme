@@ -182,7 +182,7 @@
         "script": "typecheck"
       },
       "inputs": [
-        "{projectRoot}/build/**/*.d.cts",
+        "{projectRoot}/build/**/*.ts",
         "{projectRoot}/tests/**/*.ts",
         "{projectRoot}/tests/tsconfig.json",
         "{workspaceRoot}/tsconfig.json",

@@ -42,7 +42,7 @@ const typescriptFor = (files, project) => [
 
 export default [
   {
-    ignores: ['node_modules/**', 'scss/**', '**/*.cjs'],
+    ignores: ['node_modules/**', 'scss/**'],
   },
 
   ...javascriptConfig.map((config) => ({ ...config, files: ['**/*.mjs'] })),
@@ -55,7 +55,7 @@ export default [
     },
   },
 
-  ...typescriptFor(['tests/**/*.ts'], './tests/tsconfig.json'),
+  ...typescriptFor(['build/**/*.ts', 'tests/**/*.ts'], './tests/tsconfig.json'),
   ...jestConfig.map((config) => ({ ...config, files: ['tests/**/*.ts'] })),
 
   {
