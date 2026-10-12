@@ -2,6 +2,15 @@
 @use "../string" as *;
 @use "../mask" as *;
 
+@function filemanager-status-shape($data-uri) {
+  $text: replace("#{$data-uri}", "currentTextColor", "%23000");
+  $success-bg: replace($text, "currentSuccessBgColor", "%23000");
+  $success-text: replace($success-bg, "currentSuccessTextColor", "%23000");
+  $danger-bg: replace($success-text, "currentDangerBgColor", "%23000");
+
+  @return string.unquote(replace($danger-bg, "currentDangerTextColor", "%23000"));
+}
+
 @mixin filemanager-icon-masked($name, $width, $height, $color: null) {
   mask-image: var(--dxicon-filemanager-#{$name});
   mask-position: 50% 50%;
@@ -36,10 +45,10 @@
 
 @mixin filemanager-icons-mixin($text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size) {
   @at-root :root {
-    --dxicon-filemanager-refresh: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"), ("currentTextColor",))};
-    --dxicon-filemanager-cancel: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/cancel.svg"), ("currentTextColor",))};
-    --dxicon-filemanager-done: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/done.svg"), ("currentTextColor", "currentSuccessBgColor", "currentSuccessTextColor", "currentDangerBgColor", "currentDangerTextColor"))};
-    --dxicon-filemanager-danger: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/danger.svg"), ("currentTextColor", "currentSuccessBgColor", "currentSuccessTextColor", "currentDangerBgColor", "currentDangerTextColor"))};
+    --dxicon-filemanager-refresh: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"), "currentTextColor")};
+    --dxicon-filemanager-cancel: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/cancel.svg"), "currentTextColor")};
+    --dxicon-filemanager-done: #{filemanager-status-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/done.svg"))};
+    --dxicon-filemanager-danger: #{filemanager-status-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/danger.svg"))};
   }
 
   .dx-filemanager-i,

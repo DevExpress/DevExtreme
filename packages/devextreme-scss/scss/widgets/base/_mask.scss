@@ -1,13 +1,8 @@
-@use "sass:list";
 @use "sass:string";
 @use "./string" as *;
 
-@function mask-shape($data-uri, $placeholders: ("currentColor",), $index: 1) {
-  @if $index > list.length($placeholders) {
-    @return string.unquote("#{$data-uri}");
-  }
-
-  @return mask-shape(replace("#{$data-uri}", list.nth($placeholders, $index), "%23000"), $placeholders, $index + 1);
+@function mask-shape($data-uri, $placeholder: "currentColor") {
+  @return string.unquote(replace("#{$data-uri}", $placeholder, "%23000"));
 }
 
 @mixin masked-glyph-paint($color: currentColor) {
