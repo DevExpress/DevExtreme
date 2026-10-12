@@ -31,8 +31,8 @@ import modules from '../modules/modules';
 import type {
   InternalGridOptions, OptionChanged, SelectionRange, Views,
 } from '../types';
+import type { ColumnsView } from './columns_view';
 import { CLASSES } from './const';
-import type { ColumnsView } from './m_columns_view';
 import type { RowsView } from './m_rows_view';
 import type { ColumnWidth, ScrollPosition, ViewDataChange } from './types';
 
