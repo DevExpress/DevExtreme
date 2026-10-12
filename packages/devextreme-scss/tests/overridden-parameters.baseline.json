@@ -104,27 +104,6 @@
     },
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "padding",
-      "selector": ".dx-datagrid-filter-panel",
-      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "padding",
-      "selector": ".dx-treelist-filter-panel",
-      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/gridBase/layout/cell.scss",
-      "property": "min-width",
-      "selector": ".dx-command-adaptive",
-      "paintedOverBy": "scss/widgets/fluent/gridBase/layout/cell.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/gridBase/layout/cell.scss",
       "property": "padding",
       "selector": ".dx-cell-modified, .dx-datagrid-invalid",
@@ -135,13 +114,6 @@
       "file": "scss/widgets/base/gridBase/layout/cell.scss",
       "property": "padding",
       "selector": ".dx-cell-modified, .dx-treelist-invalid",
-      "paintedOverBy": "scss/widgets/fluent/gridBase/layout/cell.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/gridBase/layout/cell.scss",
-      "property": "width",
-      "selector": ".dx-command-adaptive",
       "paintedOverBy": "scss/widgets/fluent/gridBase/layout/cell.scss"
     },
     {
@@ -343,20 +315,6 @@
     {
       "theme": "generic",
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "margin-bottom",
-      "selector": ".dx-datagrid-column-chooser .dx-overlay-content .dx-popup-content .dx-column-chooser-item",
-      "paintedOverBy": "scss/widgets/generic/gridBase/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "margin-bottom",
-      "selector": ".dx-treelist-column-chooser .dx-overlay-content .dx-popup-content .dx-column-chooser-item",
-      "paintedOverBy": "scss/widgets/generic/gridBase/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/gridBase/_index.scss",
       "property": "padding-bottom",
       "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
       "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
@@ -507,34 +465,6 @@
       "property": "padding-right",
       "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
       "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "padding",
-      "selector": ".dx-datagrid-filter-panel",
-      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "padding",
-      "selector": ".dx-treelist-filter-panel",
-      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/gridBase/layout/cell.scss",
-      "property": "min-width",
-      "selector": ".dx-command-adaptive",
-      "paintedOverBy": "scss/widgets/material/gridBase/layout/cell.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/gridBase/layout/cell.scss",
-      "property": "width",
-      "selector": ".dx-command-adaptive",
-      "paintedOverBy": "scss/widgets/material/gridBase/layout/cell.scss"
     },
     {
       "theme": "material",

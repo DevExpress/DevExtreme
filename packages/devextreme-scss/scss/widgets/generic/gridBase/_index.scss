@@ -355,7 +355,6 @@ $generic-grid-base-cell-input-height: math.round($generic-base-line-height * $ge
 
       .dx-popup-content {
         .dx-column-chooser-item {
-          margin-bottom: $generic-grid-base-column-chooser-item-margin;
           background-color: $datagrid-columnchooser-item-bg;
           color: $datagrid-columnchooser-item-color;
           font-weight: $datagrid-columnchooser-font-weight;

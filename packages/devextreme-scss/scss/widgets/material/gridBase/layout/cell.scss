@@ -43,12 +43,6 @@
     min-width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
   }
 
-  // (0,2,0)
-  .dx-command-adaptive {
-    width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
-    min-width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
-  }
-
   // (0,6,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-select,
   .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-select,
