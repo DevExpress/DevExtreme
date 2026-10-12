@@ -47,6 +47,9 @@
   $scheduler-appointment-date-opacity: 0.7,
   $agenda-appointment-details-opacity: 0.7,
   $scheduler-appointment-content-details-font-size: 10px,
+  $scheduler-agenda-date-table-padding-top: 0,
+  $scheduler-workspace-info-font-size: $material-scheduler-workspace-info-text-size,
+  $scheduler-focused-cell-shadow: none,
 );
 @use "../button/colors" as *;
 @use "../button/mixins" as *;
@@ -634,9 +637,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px !default;
     color: $scheduler-workspace-hovered-cell-color;
   }
 
-  &.dx-scheduler-focused-cell {
-    box-shadow: none;
-  }
 }
 
 .dx-scheduler-appointment-popup {
@@ -729,11 +729,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px !default;
       }
     }
   }
-}
-
-.dx-scheduler-header-panel,
-.dx-scheduler-time-panel {
-  font-size: $material-scheduler-workspace-info-text-size;
 }
 
 .dx-scheduler-work-space-grouped:not(.dx-scheduler-agenda) .dx-scheduler-group-row th,
@@ -850,10 +845,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px !default;
     }
   }
 
-  .dx-scheduler-date-table-scrollable {
-    padding-top: 0;
-  }
-
   &.dx-scheduler-work-space-grouped {
     .dx-scheduler-group-header {
       border-bottom: none;
@@ -869,10 +860,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px !default;
       }
     }
   }
-}
-
-.dx-scheduler-agenda-nodata {
-  font-size: $material-scheduler-workspace-info-text-size;
 }
 
 .dx-popup-content .dx-scheduler-dropdown-appointment-buttons-block {

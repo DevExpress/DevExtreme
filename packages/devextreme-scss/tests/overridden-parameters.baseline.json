@@ -238,29 +238,8 @@
     {
       "theme": "fluent",
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "box-shadow",
-      "selector": ".dx-scheduler-all-day-table-cell.dx-scheduler-focused-cell, .dx-scheduler-date-table-cell.dx-scheduler-focused-cell",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
       "property": "color",
       "selector": ".dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-header-panel",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-time-panel",
       "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
     },
     {
@@ -282,20 +261,6 @@
       "file": "scss/widgets/base/scheduler/views/_index.scss",
       "property": "padding-right",
       "selector": ".dx-scheduler-time-panel-cell",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-agenda-nodata",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
-      "property": "padding-top",
-      "selector": ".dx-scheduler-agenda .dx-scheduler-date-table-scrollable",
       "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
     },
     {
@@ -380,13 +345,6 @@
       "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
       "property": "width",
       "selector": ".dx-scheduler-agenda .dx-scheduler-group-header-content",
-      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/scheduler/views/month/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-work-space-month .dx-scheduler-date-table-cell",
       "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
     },
     {
@@ -560,27 +518,6 @@
     {
       "theme": "material",
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "box-shadow",
-      "selector": ".dx-scheduler-all-day-table-cell.dx-scheduler-focused-cell, .dx-scheduler-date-table-cell.dx-scheduler-focused-cell",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-header-panel",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-time-panel",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
       "property": "height",
       "selector": ".dx-scheduler-header-panel-cell",
       "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
@@ -604,20 +541,6 @@
       "file": "scss/widgets/base/scheduler/views/_index.scss",
       "property": "padding-right",
       "selector": ".dx-scheduler-time-panel-cell",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-agenda-nodata",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
-      "property": "padding-top",
-      "selector": ".dx-scheduler-agenda .dx-scheduler-date-table-scrollable",
       "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
     },
     {

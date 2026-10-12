@@ -8,6 +8,9 @@
 @use "../../base/scheduler/layout/header" as *;
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
+@use "../typography/sizes" as *;
+$generic-scheduler-month-date-text-size: $generic-h5-font-size !default;
+
 @use "../../base/scheduler" as baseScheduler with (
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
@@ -45,10 +48,10 @@
   $scheduler-tooltip-date-opacity: 0.8,
   $scheduler-appointment-date-opacity: 0.7,
   $agenda-appointment-details-opacity: 0.7,
+  $scheduler-month-date-text-size: $generic-scheduler-month-date-text-size,
 );
 @use "../button/colors" as *;
 @use "../tooltip/colors" as *;
-@use "../typography/sizes" as *;
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
@@ -60,8 +63,6 @@ $generic-scheduler-collapsed-all-day-table-cell-height: $generic-scheduler-works
 $generic-scheduler-header-panel-table-cell-height: $generic-scheduler-workspace-date-table-cell-height !default;
 
 $generic-scheduler-current-time-cell-border-size: 2px !default;
-
-$generic-scheduler-month-date-text-size: $generic-h5-font-size !default;
 
 $scheduler-first-of-month-border: 1px solid !default;
 
@@ -316,10 +317,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       }
     }
   }
-}
-
-.dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
-  font-size: $generic-scheduler-month-date-text-size;
 }
 
 .dx-scheduler-header-panel,
