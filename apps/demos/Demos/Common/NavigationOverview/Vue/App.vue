@@ -111,7 +111,7 @@ function changeSelection({ itemData }: DxTreeViewTypes.ItemSelectionChangedEvent
   display: inline-block;
   width: 180px;
   padding: 0 10px 10px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   box-shadow: -5px 0 14px -8px rgba(0, 0, 0, 0.25) inset;
 }
 

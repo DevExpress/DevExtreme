@@ -444,7 +444,7 @@ function onFontFamilyClick() {
 .options-container {
   margin-top: 20px;
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   position: relative;
 }
 
