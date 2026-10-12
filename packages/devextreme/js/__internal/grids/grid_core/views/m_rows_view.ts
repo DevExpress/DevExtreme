@@ -1581,8 +1581,12 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected setAriaOwns(headerTableId: string, footerTableId: string, isFixed?: boolean): void {
+  public setAriaOwns(
+    headerTableId: string | undefined,
+    footerTableId: string | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isFixed?: boolean,
+  ): void {
     // @ts-expect-error the view is rendered here
     const $contentElement: dxElementWrapper = this._findContentElement();
     const $tableElement = this.getTableElement();
