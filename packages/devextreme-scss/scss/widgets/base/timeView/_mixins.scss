@@ -55,7 +55,6 @@
 
       @include masked-glyph-paint($digit-color);
     }
-
   }
 
   .dx-timeview-hourarrow,
@@ -77,7 +76,6 @@
 
   .dx-timeview-hourarrow {
     @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), "%23fff");
-
   }
 
   .dx-timeview-minutearrow {
@@ -94,6 +92,5 @@
       border-radius: 50%;
       background-color: $background-color;
     }
-
   }
 }

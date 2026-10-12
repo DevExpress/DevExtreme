@@ -45,7 +45,6 @@
   @if $current-color {
     @include masked-glyph-paint($current-color);
   }
-
 }
 
 @mixin diagram-action-icons-mixin($toolbar-color, $menu-color, $icon-size, $toolbar-colorbutton-border-width) {
@@ -67,7 +66,6 @@
     @if $toolbar-color {
       @include masked-glyph-paint($toolbar-color);
     }
-
   }
 
   .dx-diagram-i-connector-begin-arrow {
@@ -88,7 +86,6 @@
     @if $toolbar-color {
       @include masked-glyph-paint($toolbar-color);
     }
-
   }
 
   .dx-diagram-i-connector-end-arrow {
