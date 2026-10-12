@@ -3,9 +3,13 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DxEvent } from '@js/events';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
+import type { Column, GroupColumn } from '@ts/grids/grid_core/columns_controller/types';
+import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
 import type { Views } from '@ts/grids/grid_core/types';
@@ -14,21 +18,22 @@ import gridCore from '../core';
 import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
 import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
 
-export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNavigationMixin(ColumnKeyboardNavigationController) {
+export class GroupPanelKeyboardNavigationController
+  extends ColumnKeyboardNavigationMixin(ColumnKeyboardNavigationController) {
   private isNeedToHiddenFocusAfterClick: boolean | undefined = false;
 
-  private groupItemClickHandlerContext!: (event: any) => void;
+  private groupItemClickHandlerContext!: (event: DxEvent<MouseEvent>) => void;
 
   private headerPanel!: Views['headerPanel'];
 
-  private groupItemClickHandler(e) {
+  private groupItemClickHandler(e: DxEvent<MouseEvent>): void {
     const $groupedColumnElement = $(e.originalEvent.target);
     const groupColumn = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
 
     this.isNeedToHiddenFocusAfterClick = this._columnsController?.allowColumnSorting(groupColumn);
   }
 
-  private unsubscribeFromGroupItemClick() {
+  private unsubscribeFromGroupItemClick(): void {
     const $focusedView = this.getFocusedViewElement();
 
     if ($focusedView) {
@@ -36,20 +41,26 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     }
   }
 
-  private subscribeToGroupItemClick() {
+  private subscribeToGroupItemClick(): void {
     const $focusedView = this.getFocusedViewElement();
 
     if ($focusedView) {
-      eventsEngine.on($focusedView, clickEventName, `.${GROUPING_CLASSES.groupPanelItem}`, this.groupItemClickHandlerContext);
+      eventsEngine.on(
+        $focusedView,
+        clickEventName,
+        `.${GROUPING_CLASSES.groupPanelItem}`,
+        this.groupItemClickHandlerContext,
+      );
     }
   }
 
-  private leftRightKeysHandler(e): void {
+  private leftRightKeysHandler(e: KeyboardKeyDownEvent): void {
     const { originalEvent } = e;
 
     if (isCommandKeyPressed(originalEvent)) {
       const $groupedColumnElement = $(originalEvent.target);
-      const column = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
+      // @ts-expect-error a focused group panel item always has its group column
+      const column: Column = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
       const direction = this.getDirectionByKeyName(e.keyName);
 
       if (this.canReorderColumn(column, direction)) {
@@ -60,18 +71,18 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     }
   }
 
-  protected getVisibleIndex(column) {
-    return column.groupIndex as number;
+  protected getVisibleIndex(column: GroupColumn): number {
+    return column.groupIndex;
   }
 
-  protected getColumnFromEvent(e) {
+  protected getColumnFromEvent(e: KeyboardKeyDownEvent): Column | undefined {
     const $groupedColumnElement = $(e.originalEvent.target);
 
     return this._columnsController
       .columnOption(`groupIndex:${$groupedColumnElement.index()}`);
   }
 
-  protected getNewFocusedColumnBeforeUngrouping(column): Column | undefined {
+  protected getNewFocusedColumnBeforeUngrouping(column: GroupColumn): Column | undefined {
     const visibleColumnIndex: number = column.groupIndex;
     const groupColumns: Column[] = this._columnsController.getGroupColumns();
 
@@ -80,17 +91,17 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
       : groupColumns[visibleColumnIndex + 1];
   }
 
-  protected _getCell(cellPosition): any {
+  protected _getCell(cellPosition: FocusedCellPosition): dxElementWrapper | undefined {
     const $groupColumnElements = this.headerPanel?.getColumnElements();
 
     return $groupColumnElements?.eq(cellPosition.columnIndex);
   }
 
-  protected getFocusedView() {
+  protected getFocusedView(): Views['headerPanel'] {
     return this.getView('headerPanel');
   }
 
-  protected getFocusedViewElement() {
+  protected getFocusedViewElement(): dxElementWrapper | undefined {
     return this.headerPanel?.element()?.find(`.${GROUPING_CLASSES.groupPanel}`);
   }
 
@@ -98,11 +109,11 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     return `.${GROUPING_CLASSES.groupPanelItem}`;
   }
 
-  protected focusinHandler(e: any): void {
+  protected focusinHandler(e: DxEvent<FocusEvent>): void {
     this.setFocusedCellPosition(0, $(e.target).index());
   }
 
-  protected keyDownHandler(e): boolean {
+  protected keyDownHandler(e: KeyboardKeyDownEvent): boolean {
     let isHandled = super.keyDownHandler(e);
 
     if (isHandled) {
@@ -117,7 +128,7 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     return isHandled;
   }
 
-  protected renderCompleted(e: any) {
+  protected renderCompleted(e?: unknown): void {
     const { needToRestoreFocus } = this;
 
     super.renderCompleted(e);
@@ -135,7 +146,7 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     }
   }
 
-  public canUngroupColumnByPressingKey(e) {
+  public canUngroupColumnByPressingKey(e: KeyboardKeyDownEvent): boolean {
     return super.canUngroupColumnByPressingKey(e) || e.keyName === 'backspace' || e.keyName === 'del';
   }
 
@@ -153,7 +164,7 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
     super.init();
   }
 
-  public canReorderColumn(groupColumn, direction: Direction): boolean {
+  public canReorderColumn(groupColumn: Column, direction: Direction): boolean {
     const allowDragging = this.headerPanel.allowDragging(groupColumn);
 
     if (!allowDragging) {
