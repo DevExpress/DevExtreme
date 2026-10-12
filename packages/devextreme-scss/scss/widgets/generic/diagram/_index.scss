@@ -433,7 +433,7 @@ $diagram-toolbox-title-size: 12px !default;
   }
 }
 
-@include diagram-action-icons-mixin($base-icon-color, $menu-color, $generic-diagram-toolbar-icon-size,  $diagram-toolbar-colorbutton-border-width, $masked: true);
+@include diagram-action-icons-mixin($base-icon-color, $menu-color, $generic-diagram-toolbar-icon-size,  $diagram-toolbar-colorbutton-border-width);
 
 .dx-diagram-toolbox-popup .dx-button-has-icon .dx-icon.dx-icon-diagram-toolbox-drag {
   @include diagram-icon-masked(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-drag.svg"), $diagram-toolbox-title-size, $diagram-toolbox-title-size);

@@ -2,12 +2,6 @@
 @use "../string" as *;
 @use "../mask" as *;
 
-@mixin list-icon-colored($data-uri, $current-color) {
-  $uri: replace("#{$data-uri}", "currentColor", escape("#{$current-color}"));
-
-  background-image: string.unquote($uri);
-}
-
 @mixin list-icon-masked($data-uri, $color: null) {
   $uri: replace("#{$data-uri}", "currentColor", "%23000");
 
@@ -18,12 +12,9 @@
   @include masked-glyph-paint($color or currentColor);
 }
 
-@mixin toggle-delete-icon($color: null, $masked: false) {
+@mixin toggle-delete-icon($color: null) {
   .dx-icon-toggle-delete {
-    @if $masked {
-      @include list-icon-masked(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/list/toggle-delete.svg"), $color);
-    } @else {
-      @include list-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/list/toggle-delete.svg"), $color);
-    }
+    @include list-icon-masked(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/list/toggle-delete.svg"), $color);
+
   }
 }

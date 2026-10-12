@@ -285,4 +285,4 @@ $gantt-successor-background-color: white !default;
   }
 }
 
-@include gantt-icons-mixin($gantt-icon-color, $masked: true);
+@include gantt-icons-mixin($gantt-icon-color);
