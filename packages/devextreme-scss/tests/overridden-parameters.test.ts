@@ -20,12 +20,30 @@ interface BaselineEntry {
 interface Finding extends BaselineEntry { line: number }
 
 const sources = new Map<string, string[]>();
-const sourceLine = ({ file, line }: { file: string; line: number }): string => {
+const sourceLines = (file: string): string[] => {
   if (!sources.has(file)) {
     const full = path.join(packageRoot, file);
     sources.set(file, fs.existsSync(full) ? fs.readFileSync(full, 'utf8').split('\n') : []);
   }
-  return sources.get(file)?.[line - 1] ?? '';
+  return sources.get(file) ?? [];
+};
+
+const mixinVariables = (file: string, line: number): Set<string> | undefined => {
+  const lines = sourceLines(file);
+  let depth = 0;
+  for (let index = line - 2; index >= 0; index -= 1) {
+    depth += (lines[index].match(/}/g) ?? []).length - (lines[index].match(/{/g) ?? []).length;
+    const mixin = /^@mixin\s+[\w-]+\s*(?:\(([^)]*)\))?/.exec(lines[index]);
+    if (mixin && depth < 0) {
+      const names = new Set(mixin[1]?.match(/\$[\w-]+/g) ?? []);
+      lines.slice(index + 1, line - 1).forEach((body) => {
+        const local = /^\s+(\$[\w-]+)\s*:/.exec(body);
+        if (local) names.add(local[1]);
+      });
+      return names;
+    }
+  }
+  return undefined;
 };
 
 /*
@@ -34,6 +52,7 @@ const sourceLine = ({ file, line }: { file: string; line: number }): string => {
  * declaration wins. Only a parametrized loser counts - when the base layer spells a literal there,
  * painting over it is the only way a theme can change that value, and that is ordinary theming.
  * Two declarations carrying the same value are not reported either; they cost bytes, not behaviour.
+ * A value a mixin receives as an argument is not a parameter: its call site decides it.
  */
 const findingsOf = async (theme: Theme): Promise<Finding[]> => {
   const { emissions, winners } = cascadeOf(await parseBundle(theme));
@@ -47,7 +66,10 @@ const findingsOf = async (theme: Theme): Promise<Finding[]> => {
     if (!winner || winner.decl.value.trim() === emission.decl.value.trim()) return;
 
     const origin = originOf(emission.decl);
-    if (!/\$[\w-]+/.test(sourceLine(origin))) return;
+    const variables = sourceLines(origin.file)[origin.line - 1]?.match(/\$[\w-]+/g) ?? [];
+    if (!variables.length) return;
+    const mixinScope = mixinVariables(origin.file, origin.line);
+    if (mixinScope && variables.every((name) => mixinScope.has(name))) return;
 
     const paintedOver = originOf(winner.decl);
     const finding: Finding = {
