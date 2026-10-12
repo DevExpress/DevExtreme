@@ -244,11 +244,10 @@
         "script": "typecheck"
       },
       "inputs": [
-        "{projectRoot}/build/tokens/**/*.ts",
         "{projectRoot}/tools/naming/**/*.ts",
         "{projectRoot}/tools/tokens/**/*.ts",
         "{projectRoot}/tests/**/*.ts",
-        "{projectRoot}/build/**/*.d.cts",
+        "{projectRoot}/build/**/*.ts",
         "{projectRoot}/tsconfig.json",
         "{projectRoot}/tests/tsconfig.json",
         "{workspaceRoot}/tsconfig.json",

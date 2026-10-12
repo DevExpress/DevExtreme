@@ -141,7 +141,7 @@ function loadDependencies(projectRoot: string): BuildDependencies {
     postcss: projectRequire('postcss'),
     autoprefixer: projectRequire('autoprefixer'),
     CleanCss: projectRequire('clean-css'),
-    themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.cjs')) as {
+    themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.ts')) as {
       getThemes: () => Array<[string, string, string, string?]>;
     },
     cleanCssSanitizeOptions: projectRequire(

@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-const { getThemes } = require('../../../devextreme-scss/build/theme-options.cjs');
+const { getThemes } = require('../../../devextreme-scss/build/theme-options.ts');
 import themes from '../../src/modules/themes';
 
 describe('Themes', () => {
