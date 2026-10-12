@@ -49,34 +49,6 @@
     {
       "theme": "fluent-next",
       "file": "scss/widgets/base/_icon_fonts.scss",
-      "property": "background-position",
-      "selector": ".dx-datagrid-adaptive-more",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent-next",
-      "file": "scss/widgets/base/_icon_fonts.scss",
-      "property": "background-position",
-      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent-next",
-      "file": "scss/widgets/base/_icon_fonts.scss",
-      "property": "background-position",
-      "selector": ".dx-treelist-adaptive-more",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent-next",
-      "file": "scss/widgets/base/_icon_fonts.scss",
-      "property": "background-position",
-      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent-next",
-      "file": "scss/widgets/base/_icon_fonts.scss",
       "property": "background-size",
       "selector": ".dx-datagrid-adaptive-more",
       "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
@@ -204,34 +176,6 @@
       "theme": "fluent-next",
       "file": "scss/widgets/base/_icon_fonts.scss",
       "property": "line-height",
-      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent-next",
-      "file": "scss/widgets/base/_icon_fonts.scss",
-      "property": "padding",
-      "selector": ".dx-datagrid-adaptive-more",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent-next",
-      "file": "scss/widgets/base/_icon_fonts.scss",
-      "property": "padding",
-      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent-next",
-      "file": "scss/widgets/base/_icon_fonts.scss",
-      "property": "padding",
-      "selector": ".dx-treelist-adaptive-more",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent-next",
-      "file": "scss/widgets/base/_icon_fonts.scss",
-      "property": "padding",
       "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
       "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
     },
