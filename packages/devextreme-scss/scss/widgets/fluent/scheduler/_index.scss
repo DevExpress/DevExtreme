@@ -11,6 +11,8 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
+  $scheduler-time-indicator-height: 2px,
+  $scheduler-views-all-day-border: 1px solid,
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
   $scheduler-tooltip-list-focused-bg: $list-item-hover-bg,
@@ -28,6 +30,7 @@
   $scheduler-workspace-accent-color: $scheduler-workspace-accent-color,
   $scheduler-first-month-cell-background-color: $scheduler-first-month-cell-background-color,
   $scheduler-panel-text-color: $scheduler-panel-text-color,
+  $scheduler-header-panel-current-time-cell-color: $scheduler-panel-text-color,
   $scheduler-left-column-width: $scheduler-left-column-width,
   $scheduler-timeline-cell-height: $scheduler-timeline-cell-height,
   $scheduler-workspace-focused-cell-color: $scheduler-workspace-focused-cell-color,
@@ -129,8 +132,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px !default;
   justify-content: flex-end;
   height: $fluent-scheduler-all-day-table-cell-height;
   font-size: $fluent-scheduler-all-day-title-font-size;
-  border-bottom: baseScheduler.$scheduler-base-border;
-  border-bottom-color: $scheduler-base-border-color;
   text-align: right;
   padding-right: $fluent-scheduler-agenda-time-panel-cell-padding;
 
@@ -191,10 +192,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px !default;
     .dx-scheduler-appointment-content {
       padding: $fluent-scheduler-appointment-content-padding;
     }
-  }
-
-  .dx-scheduler-date-time-indicator {
-    height: 2px;
   }
 
   .dx-scheduler-date-table-row:nth-child(even) .dx-scheduler-date-table-cell {
@@ -337,8 +334,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px !default;
   }
 
   &.dx-scheduler-header-panel-current-time-cell {
-    color: $scheduler-panel-text-color;
-
     &::before {
       content: none;
     }
@@ -613,11 +608,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px !default;
 
 .dx-scheduler-all-day-panel {
   background-color: $scheduler-alldaypanel-bg;
-
-  .dx-scheduler-all-day-table-cell {
-    border-bottom: baseScheduler.$scheduler-base-border;
-    border-bottom-color: $scheduler-base-border-color;
-  }
 }
 
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors

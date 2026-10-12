@@ -13,20 +13,6 @@
   "entries": [
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/_pagination.scss",
-      "property": "margin-left",
-      "selector": ".dx-pager .dx-page-sizes .dx-page-size:first-child, .dx-pager .dx-page-sizes .dx-page-size.dx-first-child, .dx-pagination .dx-page-sizes .dx-page-size:first-child, .dx-pagination .dx-page-sizes .dx-page-size.dx-first-child",
-      "paintedOverBy": "scss/widgets/fluent/pagination/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/_scrollView.scss",
-      "property": "width",
-      "selector": ".dx-scrollview-pull-down-indicator",
-      "paintedOverBy": "scss/widgets/fluent/scrollView/_index.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/_validation.scss",
       "property": "font-size",
       "selector": ".dx-invalid-message > .dx-overlay-content",
@@ -38,20 +24,6 @@
       "property": "padding",
       "selector": ".dx-invalid-message > .dx-overlay-content",
       "paintedOverBy": "scss/widgets/base/_validation.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-datagrid-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
-      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-treelist-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
-      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
     },
     {
       "theme": "fluent",
@@ -111,34 +83,6 @@
     },
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/list/_index.scss",
-      "property": "min-height",
-      "selector": ".dx-list .dx-empty-message",
-      "paintedOverBy": "scss/widgets/fluent/list/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "border-color",
-      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
-      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "border-color",
-      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
-      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "box-shadow",
-      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
-      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/pivotGrid/_index.scss",
       "property": "font-size",
       "selector": ".dx-pivotgrid-fields-container .dx-header-filter",
@@ -157,13 +101,6 @@
       "property": "width",
       "selector": ".dx-pivotgrid-fields-container .dx-header-filter",
       "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "property": "height",
-      "selector": ".dx-scheduler-work-space-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-work-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-day .dx-scheduler-date-time-indicator",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
     },
     {
       "theme": "fluent",
@@ -210,27 +147,6 @@
     {
       "theme": "fluent",
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "border-bottom",
-      "selector": ".dx-scheduler-all-day-panel .dx-scheduler-all-day-table-cell",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "border-bottom",
-      "selector": ".dx-scheduler-all-day-title",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "color",
-      "selector": ".dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
       "property": "padding-left",
       "selector": ".dx-rtl .dx-scheduler-time-panel-cell",
       "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
@@ -248,13 +164,6 @@
       "property": "padding-right",
       "selector": ".dx-scheduler-time-panel-cell",
       "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/colorView/_index.scss",
-      "property": "width",
-      "selector": ".dx-colorview-alpha-channel-cell",
-      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
     },
     {
       "theme": "generic",
@@ -300,20 +209,6 @@
     },
     {
       "theme": "material",
-      "file": "scss/widgets/base/_pagination.scss",
-      "property": "margin-left",
-      "selector": ".dx-pager .dx-page-sizes .dx-page-size:first-child, .dx-pager .dx-page-sizes .dx-page-size.dx-first-child, .dx-pagination .dx-page-sizes .dx-page-size:first-child, .dx-pagination .dx-page-sizes .dx-page-size.dx-first-child",
-      "paintedOverBy": "scss/widgets/material/pagination/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/_scrollView.scss",
-      "property": "width",
-      "selector": ".dx-scrollview-pull-down-indicator",
-      "paintedOverBy": "scss/widgets/material/scrollView/_index.scss"
-    },
-    {
-      "theme": "material",
       "file": "scss/widgets/base/_validation.scss",
       "property": "font-size",
       "selector": ".dx-invalid-message > .dx-overlay-content",
@@ -329,20 +224,6 @@
     {
       "theme": "material",
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-datagrid-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
-      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-treelist-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
-      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/gridBase/_index.scss",
       "property": "margin-left",
       "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
       "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
@@ -367,27 +248,6 @@
       "property": "padding-right",
       "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
       "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "border",
-      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
-      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "border",
-      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
-      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "box-shadow",
-      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
-      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
     },
     {
       "theme": "material",
@@ -395,13 +255,6 @@
       "property": "padding",
       "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
       "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "property": "height",
-      "selector": ".dx-scheduler-work-space-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-work-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-day .dx-scheduler-date-time-indicator",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
     },
     {
       "theme": "material",
@@ -443,20 +296,6 @@
       "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
       "property": "box-shadow",
       "selector": ".dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "border-bottom",
-      "selector": ".dx-scheduler-all-day-panel .dx-scheduler-all-day-table-cell",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "border-bottom",
-      "selector": ".dx-scheduler-all-day-title",
       "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
     },
     {

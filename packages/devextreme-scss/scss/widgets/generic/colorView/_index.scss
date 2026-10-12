@@ -2,6 +2,7 @@
 @use "sizes" as *;
 @use "../../base/colorView/mixins" as *;
 $generic-colorview-hue-scale-height: $generic-colorview-palette-height !default;
+$generic-colorview-alpha-width: $generic-colorview-palette-width + 4 !default;
 
 @use "../../base/colorView" with (
   $color-view-color-preview-width: 100%,
@@ -16,10 +17,9 @@ $generic-colorview-hue-scale-height: $generic-colorview-palette-height !default;
   $color-view-palette-height: $generic-colorview-palette-height,
   $color-view-hue-scale-wrapper-height: $generic-colorview-hue-scale-height + 2,
   $color-view-color-preview-height: $generic-colorview-color-preview-height,
+  $color-view-alpha-cell-width: $generic-colorview-alpha-width,
 );
 @include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
-
-$generic-colorview-alpha-width: $generic-colorview-palette-width + 4 !default;
 
 .dx-colorview-container {
   label {
@@ -38,10 +38,6 @@ $generic-colorview-alpha-width: $generic-colorview-palette-width + 4 !default;
 
 .dx-colorview-hue-scale {
   width: $generic-colorview-hue-scale-width;
-}
-
-.dx-colorview-alpha-channel-cell {
-  width: $generic-colorview-alpha-width;
 }
 
 .dx-colorview-controls-container {

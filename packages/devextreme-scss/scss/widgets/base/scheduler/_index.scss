@@ -102,6 +102,8 @@ $scheduler-grouped-appointment-month-text-size: 12px !default;
 $scheduler-border-width: 1px !default;
 $scheduler-workspace-info-font-size: 20px !default;
 $scheduler-header-panel-table-cell-height: null !default;
+$scheduler-header-panel-current-time-cell-color: null !default;
+$scheduler-views-all-day-border: null !default;
 $scheduler-small-font-size: 14px !default;
 $scheduler-group-header-table-cell-height: 30px !default;
 $scheduler-month-date-text-size: 16px !default;
@@ -122,6 +124,7 @@ $scheduler-small-size-element-offset: $scheduler-left-column-width * $scheduler-
 
 $scheduler-time-indicator-font-size: 30px !default;
 $scheduler-time-indicator-size: 1px !default;
+$scheduler-time-indicator-height: $scheduler-time-indicator-size !default;
 $scheduler-time-indicator-top: 14px !default;
 $scheduler-time-indicator-left: 12px !default;
 
@@ -215,6 +218,8 @@ $scheduler-renovation-virtual-row-height: 50px !default;
 
 @use "./views" with (
   $scheduler-header-panel-table-cell-height: $scheduler-header-panel-table-cell-height,
+  $scheduler-header-panel-current-time-cell-color: $scheduler-header-panel-current-time-cell-color,
+  $scheduler-views-all-day-border: $scheduler-views-all-day-border,
   $scheduler-workspace-info-font-size: $scheduler-workspace-info-font-size,
   $scheduler-small-font-size: $scheduler-small-font-size,
   $scheduler-group-header-table-cell-height: $scheduler-group-header-table-cell-height,
@@ -346,7 +351,7 @@ $scheduler-appointment-content-padding-right: 5px !default;
 
     .dx-scheduler-date-time-indicator {
       margin-left: $scheduler-left-column-width;
-      height: $scheduler-time-indicator-size;
+      height: $scheduler-time-indicator-height;
 
       @include dx-icon(spinright);
 

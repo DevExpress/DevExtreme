@@ -9,10 +9,13 @@
 @use "../treeView/sizes" as *;
 @use "../button/mixins" as *;
 @use "../button/colors" as *;
+$material-pivotgrid-drag-header-shadow: 0 3px 4px color.change($base-shadow-color, $alpha: 0.15) !default;
+
 @use "../../base/pivotGrid" as basePivotGrid with (
+  $pivotgrid-drag-header-border: none,
+  $pivotgrid-area-box-border: none,
+  $pivotgrid-drag-header-shadow: $material-pivotgrid-drag-header-shadow,
   $pivotgrid-drag-header-border-color: $pivotgrid-drag-header-border-color,
-  $pivotgrid-drag-header-first-shadow-color: $pivotgrid-drag-header-first-shadow-color,
-  $pivotgrid-drag-header-second-shadow-color: $pivotgrid-drag-header-second-shadow-color,
   $pivotgrid-border-color: $pivotgrid-border-color,
   $pivotgrid-common-left-right-padding: $pivotgrid-common-left-right-padding,
   $pivotgrid-area-color: $pivotgrid-area-color,
@@ -38,22 +41,18 @@ $material-pivotgrid-headers-font-size: 12px !default;
 $material-pivotgrid-area-font-size: 13px !default;
 $material-pivotgrid-chevron-icon-size: 20px !default;
 
-$material-pivotgrid-drag-header-shadow: 0 3px 4px color.change($base-shadow-color, $alpha: 0.15) !default;
 $material-pivotgridfieldchooser-field-min-height: 36px !default;
 
 .dx-pivotgrid-fields-container {
   &.dx-drag {
     .dx-area-field.dx-area-box {
       background-color: color.change($pivotgrid-field-area-box-background-color, $alpha: 0.9);
-      border: none;
-      box-shadow: $material-pivotgrid-drag-header-shadow;
     }
   }
 
   .dx-area-field.dx-area-box {
     color: $pivotgrid-field-area-box-text-color;
     border-radius: 16px;
-    border: none;
     font-size: $material-pivotgrid-headers-font-size;
     font-weight: 500;
 

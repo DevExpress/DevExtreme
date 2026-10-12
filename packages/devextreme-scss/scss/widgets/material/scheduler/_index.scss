@@ -10,6 +10,8 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
+  $scheduler-time-indicator-height: 2px,
+  $scheduler-views-all-day-border: 1px solid,
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
   $scheduler-tooltip-list-focused-bg: $list-item-hover-bg,
@@ -117,8 +119,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px !default;
   justify-content: center;
   height: $material-scheduler-all-day-table-cell-height;
   font-size: $material-scheduler-all-day-title-font-size;
-  border-bottom: baseScheduler.$scheduler-base-border;
-  border-bottom-color: $scheduler-base-border-color;
 
   .dx-scheduler-small & {
     font-size: $material-scheduler-all-day-title-font-size * 0.8;
@@ -170,8 +170,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px !default;
     &::before {
       display: none;
     }
-
-    height: 2px;
   }
 
   .dx-scheduler-appointment {
@@ -565,11 +563,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px !default;
 
 .dx-scheduler-all-day-panel {
   background-color: $scheduler-alldaypanel-bg;
-
-  .dx-scheduler-all-day-table-cell {
-    border-bottom: baseScheduler.$scheduler-base-border;
-    border-bottom-color: $scheduler-base-border-color;
-  }
 }
 
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
