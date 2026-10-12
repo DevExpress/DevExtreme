@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "../mixins" as *;
 
 @mixin dx-radiobutton-icon-mixin(
   $icon-size,
@@ -10,7 +9,7 @@
   $ripple-transition: all 0s ease 0s,
 ) {
   $border-radius: 50%;
-  $dot-icon-border-width: calc(calc-difference(calc-difference($icon-size, calc($border-width * 2)), $dot-size) / 2);
+  $dot-icon-border-width: calc(($icon-size - $border-width * 2 - $dot-size) / 2);
 
   .dx-radiobutton-icon {
     position: relative;

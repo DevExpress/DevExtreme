@@ -1,5 +1,4 @@
 @use "sass:color";
-@use "./mixins" as *;
 
 $speeddialaction-fa-button-label-border-radius: 4px !default;
 
@@ -29,8 +28,8 @@ $speeddialaction-fa-button-label-border-radius: 4px !default;
 ) {
   $fa-main-radius: calc($main-action-button-size / 2);
   $fa-action-radius: calc($action-button-size / 2);
-  $fa-main-icon-padding: calc(calc-difference($main-action-button-size, $icon-size) / 2);
-  $fa-action-icon-padding: calc(calc-difference($action-button-size, $icon-size) / 2);
+  $fa-main-icon-padding: calc(($main-action-button-size - $icon-size) / 2);
+  $fa-action-icon-padding: calc(($action-button-size - $icon-size) / 2);
 
   .dx-fa-button {
     &.dx-fa-button-main {

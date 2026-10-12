@@ -46,7 +46,7 @@ $scheduler-current-time-cell-border-size: 2px !default;
 
 $scheduler-workspace-date-table-cell-height: 50px !default;
 $scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height !default;
-$scheduler-header-panel-table-cell-height: calc-difference($scheduler-workspace-date-table-cell-height, 10px) !default;
+$scheduler-header-panel-table-cell-height: calc($scheduler-workspace-date-table-cell-height - 10px) !default;
 $scheduler-group-header-table-cell-height: 30px !default;
 
 $scheduler-group-header-table-cell-width: 80px !default;
@@ -110,7 +110,7 @@ $scheduler-renovation-virtual-row-height: 50px !default;
 
   &::before {
     position: absolute;
-    top: calc-difference(calc-difference($scheduler-header-panel-table-cell-height, $scheduler-current-time-cell-border-size), 1px);
+    top: calc($scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1px);
     right: 0;
     width: 100%;
     height: $scheduler-current-time-cell-border-size;
