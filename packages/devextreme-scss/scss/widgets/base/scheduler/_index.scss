@@ -101,6 +101,7 @@ $scheduler-grouped-appointment-month-text-size: 12px !default;
 
 $scheduler-border-width: 1px !default;
 $scheduler-workspace-info-font-size: 20px !default;
+$scheduler-header-panel-table-cell-height: null !default;
 $scheduler-small-font-size: 14px !default;
 $scheduler-group-header-table-cell-height: 30px !default;
 $scheduler-month-date-text-size: 16px !default;
@@ -213,6 +214,7 @@ $scheduler-agenda-date-table-padding-top: 10px !default;
 $scheduler-renovation-virtual-row-height: 50px !default;
 
 @use "./views" with (
+  $scheduler-header-panel-table-cell-height: $scheduler-header-panel-table-cell-height,
   $scheduler-workspace-info-font-size: $scheduler-workspace-info-font-size,
   $scheduler-small-font-size: $scheduler-small-font-size,
   $scheduler-group-header-table-cell-height: $scheduler-group-header-table-cell-height,

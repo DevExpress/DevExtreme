@@ -307,41 +307,6 @@
     },
     {
       "theme": "generic",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-header-panel",
-      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-time-panel",
-      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "height",
-      "selector": ".dx-scheduler-header-panel-cell",
-      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "top",
-      "selector": ".dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell::before",
-      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
-    },
-    {
-      "theme": "generic",
-      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-scheduler-agenda-nodata",
-      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
-    },
-    {
-      "theme": "generic",
       "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
       "property": "width",
       "selector": ".dx-scheduler-agenda .dx-scheduler-group-header-content",
