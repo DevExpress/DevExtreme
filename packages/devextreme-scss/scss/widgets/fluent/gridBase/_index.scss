@@ -294,7 +294,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
-      background-position-y: 49px;
+      mask-position: 0 49px;
     }
 
     .dx-command-drag {

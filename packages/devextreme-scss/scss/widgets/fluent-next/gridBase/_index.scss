@@ -341,7 +341,7 @@
     }
 
     .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
-      background-position-y: 49px; // dx-fixed-size: 49px sprite offset
+      mask-position: 0 49px; // dx-fixed-size: 49px sprite offset
     }
 
     .dx-command-drag {
