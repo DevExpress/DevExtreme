@@ -63,7 +63,7 @@ const expandedRowKeys = [1, 3, 6];
 .options {
   padding: 20px;
   margin-top: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   position: absolute;
   bottom: 0;
   width: 100%;

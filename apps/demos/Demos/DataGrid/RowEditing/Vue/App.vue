@@ -96,7 +96,7 @@ const clearEvents = () => {
 </script>
 <style>
 #events {
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   padding: 20px;
   margin-top: 20px;
 }
