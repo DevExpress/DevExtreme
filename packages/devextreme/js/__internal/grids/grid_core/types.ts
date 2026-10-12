@@ -222,7 +222,6 @@ export interface Controllers {
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
   columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/m_headers_keyboard_navigation').HeadersKeyboardNavigationController;
-  groupPanelKeyboardNavigation: import('../data_grid/keyboard_navigation/m_group_panel_keyboard_navigation').GroupPanelKeyboardNavigationController;
   resizing: import('./views/grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
