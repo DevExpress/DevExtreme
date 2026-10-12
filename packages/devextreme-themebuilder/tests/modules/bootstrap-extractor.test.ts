@@ -1,15 +1,9 @@
-import { readFileSync } from 'fs';
 import BootstrapExtractor from '../../src/modules/bootstrap-extractor';
 
 describe('BootstrapExtractor', () => {
-  test('constructor set the right compiler and processor', () => {
-    const sassExtractorFor5 = new BootstrapExtractor('', 5);
-    const defaultExtractor = new BootstrapExtractor('', 10);
-
-    expect(sassExtractorFor5.compiler).toBe(BootstrapExtractor.sassRender);
-    expect(defaultExtractor.compiler).toBe(BootstrapExtractor.sassRender);
-
-    expect(defaultExtractor.sourceProcessor).toBe(defaultExtractor.sassProcessor);
+  test('reject unsupported Bootstrap versions', () => {
+    expect(() => new BootstrapExtractor('', 5)).toThrow('Unsupported Bootstrap version: 5');
+    expect(new BootstrapExtractor('', 0).version).toBe(6);
   });
 
   test('sassRender', async () => {
@@ -19,110 +13,67 @@ describe('BootstrapExtractor', () => {
     return expect(await BootstrapExtractor.sassRender(sass)).toBe(css);
   });
 
-  test('sassRender (error)', async () => expect(BootstrapExtractor.sassRender('0'))
+  test('sassRender (error)', () => expect(BootstrapExtractor.sassRender('0'))
     .rejects
     .toMatch(/^Error: expected "{"\./));
 
-  test('sassProcessor (bootstrap5)', async () => {
-    const testSassString = 'test string';
-    const setterServiceCode = 'setter';
-    const collectorServiceCode = 'collector';
-    const extractor = new BootstrapExtractor(testSassString, 5);
-    const functionsPath = require.resolve('bootstrap/scss/_functions.scss');
-    const variablesPath = require.resolve('bootstrap/scss/_variables.scss');
-    const variablesDarkPath = require.resolve('bootstrap/scss/_variables-dark.scss');
-    const functions = readFileSync(functionsPath);
-    const variables = readFileSync(variablesPath);
-    const variablesDark = readFileSync(variablesDarkPath);
-    extractor.getSetterServiceCode = (): string => setterServiceCode;
-    extractor.getCollectorServiceCode = (): string => collectorServiceCode;
-
-    const result = await extractor.sassProcessor();
-
-    expect(result.includes('@import "variables-dark";')).toBeFalsy();
-
-    const expectedResult = `${functions.toString()}
-${variables.toString()}
-${variablesDark.toString()}
-${testSassString}
-${setterServiceCode}
-${collectorServiceCode}`;
-
-    expect(result).toBe(extractor.removeImports(expectedResult));
+  test('extract Bootstrap 6 defaults without an explicit version', async () => {
+    const extractor = new BootstrapExtractor('', undefined);
+    expect(extractor.version).toBe(6);
+    const items = await extractor.extract();
+    expect(items).toHaveLength(43);
+    expect(items).toContainEqual({ key: '$base-bg', value: '#fff' });
+    expect(items).toContainEqual({ key: '$base-border-radius', value: '8px' });
+    expect(items.every(({ value }) => !/var\(|light-dark\(|color-mix\(|oklch\(/.test(value))).toBe(true);
   });
 
-  test('sassProcessor (bootstrap5 without _variables-dark.scss)', async () => {
-    const testSassString = 'test string';
-    const setterServiceCode = 'setter';
-    const collectorServiceCode = 'collector';
-    const extractor = new BootstrapExtractor(testSassString, 5);
-    const functionsPath = require.resolve('bootstrap/scss/_functions.scss');
-    const variablesPath = require.resolve('bootstrap/scss/_variables.scss');
-    const functions = readFileSync(functionsPath);
-    const variables = readFileSync(variablesPath);
-    const resolveFilePath = extractor.getFilePath.bind(extractor);
-
-    // Emulate a Bootstrap version that ships no _variables-dark.scss.
-    extractor.getFilePath = (fileName: string): string => (fileName === '_variables-dark.scss'
-      ? '/non-existent/_variables-dark.scss'
-      : resolveFilePath(fileName));
-    extractor.getSetterServiceCode = (): string => setterServiceCode;
-    extractor.getCollectorServiceCode = (): string => collectorServiceCode;
-
-    const result = await extractor.sassProcessor();
-
-    const expectedResult = `${functions.toString()}
-${variables.toString()}
-
-${testSassString}
-${setterServiceCode}
-${collectorServiceCode}`;
-
-    expect(result).toBe(extractor.removeImports(expectedResult));
+  test('extract customized Bootstrap 6 token maps', async () => {
+    const input = `@use "bootstrap" with (
+      $radius: .75rem,
+      $root-tokens: (--link-color: #123456),
+      $form-control-tokens: (--control-bg: #abcdef),
+      $pagination-tokens: (--pagination-active-bg: var(--missing, var(--link-color)))
+    );`;
+    const items = await new BootstrapExtractor(input, 6).extract();
+    expect(items).toContainEqual({ key: '$base-link-color', value: '#123456' });
+    expect(items).toContainEqual({ key: '$base-border-radius', value: '12px' });
+    expect(items).toContainEqual({ key: '$texteditor-bg', value: '#abcdef' });
+    expect(items).toContainEqual({ key: '$pager-page-selected-bg', value: '#123456' });
   });
 
-  test('getSetterServiceCode', () => {
-    const extractor = new BootstrapExtractor('', 4);
-    extractor.meta = {
-      'test-key-var1': '$var1',
-      'test-key-var2': '$var2',
-    };
-
-    const expectedStyleStringWithoutPostfix = '$var1: dx-empty ;\n$var2: dx-empty ;\n';
-    const expectedStyleStringWithPostfix = '$var1: dx-empty !default;\n$var2: dx-empty !default;\n';
-
-    expect(extractor.getSetterServiceCode()).toBe(expectedStyleStringWithoutPostfix);
-    expect(extractor.getSetterServiceCode('!default')).toBe(expectedStyleStringWithPostfix);
+  test('reject circular Bootstrap 6 tokens', async () => {
+    const input = '@use "bootstrap" with ($root-tokens: (--link-color: var(--link-color)));';
+    await expect(new BootstrapExtractor(input, 6).extract()).rejects.toThrow('Circular Bootstrap token');
   });
 
-  test('getCollectorServiceCode', () => {
-    const extractor = new BootstrapExtractor('', 4);
-    extractor.meta = {
-      'test-key-var1': '$var1',
-      'test-key-var2': '$var2',
-    };
-
-    const expectedStyleStringWithoutPostfix = 'dx-varibles-collector {test-key-var1: $var1;test-key-var2: $var2;}';
-
-    expect(extractor.getCollectorServiceCode()).toBe(expectedStyleStringWithoutPostfix);
+  test('reject a Bootstrap module with missing mapped tokens', async () => {
+    const extractor = new BootstrapExtractor('');
+    const resolver = jest.spyOn(BootstrapExtractor, 'getFilePath')
+      .mockReturnValue(require.resolve('../data/scss/widgets/generic/_variables.scss'));
+    try {
+      await expect(extractor.extract()).rejects.toThrow('Missing Bootstrap token: --body-font-family');
+    } finally {
+      resolver.mockRestore();
+    }
   });
 
-  test('extract (bootstrap 5)', async () => {
-    const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;$var4: var(--bs-blue);$var5: -.25rem;';
-    const extractor = new BootstrapExtractor(input, 5);
-    extractor.meta = {
-      'dx-var1': '$var1',
-      'dx-var2': '$var2',
-      'dx-var3': '$var3',
-      'dx-var4': '$var4',
-      'dx-var5': '$var5',
-    };
+  test('convert rem units, including negatives', () => {
+    expect(BootstrapExtractor.convertRemToPx('-.25rem 1rem;')).toBe('-4px 16px;');
+    expect(BootstrapExtractor.convertRemToPx('2rem')).toBe('32px');
+  });
 
-    expect(await extractor.extract()).toEqual([
-      { key: '$dx-var1', value: 'test1' },
-      { key: '$dx-var2', value: 'test2' },
-      { key: '$dx-var4', value: '#0d6efd' },
-      { key: '$dx-var5', value: '-4px' },
-    ]);
+  test('reject missing references', async () => {
+    const input = '@use "bootstrap"; :root { --link-color: var(--missing); }';
+    await expect(new BootstrapExtractor(input).extract()).rejects.toThrow('Missing Bootstrap token: --missing');
+  });
+
+  test.each([
+    ['color-mix(in oklch, #000, #fff)'],
+    ['color-mix(in oklch, #000, #fff 25%)'],
+    ['color-mix(in oklch, #000 25%, #fff 75%)'],
+  ])('resolve color mixing %s', async (value) => {
+    const input = `@use "bootstrap"; :root { --link-color: ${value}; }`;
+    const items = await new BootstrapExtractor(input).extract();
+    expect(items.find(({ key }) => key === '$base-link-color').value).toMatch(/rgb/);
   });
 });

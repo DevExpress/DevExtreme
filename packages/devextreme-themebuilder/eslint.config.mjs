@@ -1,15 +1,13 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
-import { changeRulesToStylistic } from 'eslint-migration-utils';
+// eslint-config-devextreme exports flat configs. FlatCompat treats the ESM
+// namespace as a legacy config and rejects its __esModule property.
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import jestConfig from 'eslint-config-devextreme/jest';
 import stylistic from '@stylistic/eslint-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-});
-
 export default [
     {
         ignores: [
@@ -19,20 +17,17 @@ export default [
             "jest.config.js",
         ],
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
-            files: ["src/**/*.ts"],
-        }
-
-        if (config.rules) {
-            newConfig.rules = changeRulesToStylistic(config.rules);
+            // Tests also need the TypeScript plugin used by their rule overrides.
+            files: ["src/**/*.ts", "tests/**/*.ts"],
         }
 
         return newConfig;
     }),
     {
-        files: ["src/**/*.ts"],
+        files: ["src/**/*.ts", "tests/**/*.ts"],
         languageOptions: {
             parserOptions: {
                 project: "./tsconfig.json",
@@ -57,7 +52,7 @@ export default [
             "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",
         },
     },
-    ...compat.extends("devextreme/jest").map((config) => ({
+    ...jestConfig.map((config) => ({
         ...config,
         files: ["tests/**/*.ts"],
     })),

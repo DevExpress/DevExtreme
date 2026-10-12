@@ -25,7 +25,7 @@
     "pack": "cd dist && pnpm pack"
   },
   "peerDependencies": {
-    "bootstrap": "^5.3.8"
+    "bootstrap": "6.0.0-alpha.1"
   },
   "dependencies": {
     "autoprefixer": "^10.4.21",
@@ -34,6 +34,7 @@
     "sass-embedded": "1.105.1"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "catalog:",
     "@types/clean-css": "4.2.11",
     "@types/dependency-tree": "7.2.0",
     "@types/filing-cabinet": "2.5.3",
