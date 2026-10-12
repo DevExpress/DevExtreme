@@ -273,13 +273,6 @@
     {
       "theme": "material",
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "height",
-      "selector": ".dx-scheduler-header-panel-cell",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
       "property": "padding-left",
       "selector": ".dx-rtl .dx-scheduler-time-panel-cell",
       "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
