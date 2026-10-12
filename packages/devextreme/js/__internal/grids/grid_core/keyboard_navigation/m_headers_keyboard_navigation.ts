@@ -5,6 +5,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
@@ -13,13 +15,14 @@ import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import type { Views } from '../types';
 import { ColumnFocusDispatcher } from './column_focus_dispatcher';
+import type { FocusedCellPosition } from './const';
 import { Direction } from './const';
 import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
 
 export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {
   protected _columnHeadersView!: Views['columnHeadersView'];
 
-  private leftRightKeysHandler(e): void {
+  private leftRightKeysHandler(e: KeyboardKeyDownEvent): void {
     const { originalEvent } = e;
 
     if (isCommandKeyPressed(originalEvent)) {
@@ -41,7 +44,8 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
 
   private correctFocusedColumnIndexAfterScroll(columnIndexOffset: number): void {
     if (isDefined(this._focusedCellPosition?.columnIndex)) {
-      const columnIndexOffsetDiff = this._columnsController.getColumnIndexOffset() - columnIndexOffset;
+      const columnIndexOffsetDiff = this._columnsController.getColumnIndexOffset()
+        - columnIndexOffset;
 
       this.setFocusedColumnIndex(
         this._focusedCellPosition.columnIndex - columnIndexOffsetDiff,
@@ -80,9 +84,9 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   protected getDraggableColumns(
-    column,
+    column: Column,
     rowIndex: number,
-  ): any[] {
+  ): Column[] {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns(rowIndex, true)
       ?.filter((col) => col.ownerBand === column?.ownerBand
@@ -98,10 +102,12 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       }
     }
 
-    return visibleColumns.filter((column) => !column.fixed || column.fixedPosition === StickyPosition.Sticky);
+    return visibleColumns.filter(
+      (col) => !col.fixed || col.fixedPosition === StickyPosition.Sticky,
+    );
   }
 
-  protected keyDownHandler(e): boolean {
+  protected keyDownHandler(e: KeyboardKeyDownEvent): boolean {
     let isHandled = super.keyDownHandler(e);
 
     if (isHandled) {
@@ -126,21 +132,21 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected tabKeyHandler(e): void {}
+  protected tabKeyHandler(e: KeyboardKeyDownEvent): void {}
 
-  protected getCellIndex($cell): number {
+  protected getCellIndex($cell: dxElementWrapper): number {
     return this._columnHeadersView.getCellIndex($cell);
   }
 
-  protected _getCell(cellPosition): dxElementWrapper | undefined {
+  protected _getCell(cellPosition: FocusedCellPosition): dxElementWrapper | undefined {
     return this._columnHeadersView?.getCell(cellPosition);
   }
 
-  protected getFocusedView(): any {
+  protected getFocusedView(): Views['columnHeadersView'] {
     return this.getView('columnHeadersView');
   }
 
-  protected focusinHandler(e): void {
+  protected focusinHandler(e: DxEvent<FocusEvent>): void {
     this._updateFocusedCellPosition($(e.target));
   }
 
@@ -180,7 +186,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     this._columnHeadersView = this.getView('columnHeadersView');
   }
 
-  public canReorderColumn(column, direction, rowIndex): boolean {
+  public canReorderColumn(column: Column, direction: Direction, rowIndex: number): boolean {
     const allowReordering = this._columnHeadersView.isColumnReorderingEnabled(column);
 
     if (!allowReordering) {

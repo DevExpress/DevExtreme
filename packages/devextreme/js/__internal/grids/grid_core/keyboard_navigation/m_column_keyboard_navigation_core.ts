@@ -1,14 +1,16 @@
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
+import type { Column, DropLocationNames } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnFocusDispatcher } from './column_focus_dispatcher';
+import type { FocusedCellPosition } from './const';
 import { Direction } from './const';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
   public columnFocusDispatcher!: ColumnFocusDispatcher;
 
-  protected keyDownHandler(e): boolean {
+  protected keyDownHandler(e: KeyboardKeyDownEvent): boolean {
     return this.processOnKeyDown(e);
   }
 
@@ -58,19 +60,20 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public canReorderColumn(column, direction, rowIndex): boolean {
+  public canReorderColumn(column: Column, direction: Direction, rowIndex: number): boolean {
     return false;
   }
 
-  public init() {
+  public init(): void {
     super.init();
 
     this.columnFocusDispatcher = this.getController('columnFocusDispatcher');
     this.columnFocusDispatcher?.registerKeyboardNavigationController(this);
   }
 
-  public moveColumn(column, direction = Direction.Next, rowIndex = 0) {
-    const viewName = this.getFocusedView().getName();
+  public moveColumn(column: Column, direction: Direction = Direction.Next, rowIndex = 0): void {
+    // @ts-expect-error column controllers always have a headers or group panel view
+    const viewName: DropLocationNames = this.getFocusedView().getName();
     const visibleIndex = this.getVisibleIndex(column, rowIndex);
     const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, rowIndex, direction);
     const newFocusedColumnIndex = this.getNewFocusedColumnIndex(newVisibleIndex, direction);
@@ -91,11 +94,11 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     return -1;
   }
 
-  public updateViewFocusPosition(cellPosition?: { rowIndex: number; columnIndex: number }) {
+  public updateViewFocusPosition(cellPosition?: FocusedCellPosition): void {
     this.columnFocusDispatcher?.updateFocusPosition(this, cellPosition);
   }
 
-  public updateFocusPosition(cellPosition?: { rowIndex: number; columnIndex: number }) {
+  public updateFocusPosition(cellPosition?: FocusedCellPosition): void {
     this.needToRestoreFocus = true;
 
     if (isDefined(cellPosition)) {
@@ -105,7 +108,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     }
   }
 
-  public restoreFocus() {
+  public restoreFocus(): void {
     this.needToRestoreFocus = false;
 
     if (isEmptyObject(this._focusedCellPosition)) {
