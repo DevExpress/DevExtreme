@@ -104,6 +104,7 @@ jobs:
           ignoredAdvisories: [
             'GHSA-2gmp-34j9-fqjm', // replicator
             'GHSA-848j-6mx2-7j84', // elliptic
+            'GHSA-vfj7-8cjw-p6xm', // braces, no patch available, 2026-10-09
           ]
         }
       # Markdown appended to this repo's monitor issue body. Empty when the collect job

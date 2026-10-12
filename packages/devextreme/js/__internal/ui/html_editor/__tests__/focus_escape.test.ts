@@ -6,8 +6,8 @@ import { HtmlEditorModel } from '@ts/ui/__tests__/__mock__/model/html_editor';
 
 import HtmlEditor from '../html_editor';
 
-jest.mock('@ts/core/utils/m_selectors', () => ({
-  ...jest.requireActual<typeof import('@ts/core/utils/m_selectors')>('@ts/core/utils/m_selectors'),
+jest.mock('@ts/core/utils/selectors', () => ({
+  ...jest.requireActual<typeof import('@ts/core/utils/selectors')>('@ts/core/utils/selectors'),
   isElementVisible: jest.fn(() => true),
 }));
 

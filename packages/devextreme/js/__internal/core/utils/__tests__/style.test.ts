@@ -8,9 +8,9 @@ import {
   setHeight,
   setStyle,
   setWidth,
-} from '@ts/core/utils/m_style';
+} from '@ts/core/utils/style';
 
-type StyleModule = typeof import('@ts/core/utils/m_style');
+type StyleModule = typeof import('@ts/core/utils/style');
 
 const createRealElement = document.createElement.bind(document) as (tagName: string) => HTMLElement;
 
@@ -23,7 +23,7 @@ const loadStyleModule = (supportedProps: Record<string, string>): StyleModule =>
     )) as typeof document.createElement,
   );
 
-  return jest.requireActual<StyleModule>('@ts/core/utils/m_style');
+  return jest.requireActual<StyleModule>('@ts/core/utils/style');
 };
 
 describe('Style utils', () => {

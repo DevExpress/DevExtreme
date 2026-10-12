@@ -1,2 +1,2 @@
 // deprecated
-export { create, enqueue } from '../../__internal/core/utils/m_queue';
+export { create, enqueue } from '../../__internal/core/utils/queue';

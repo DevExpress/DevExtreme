@@ -1,4 +1,4 @@
-import readyCallbacks from '@ts/core/utils/m_ready_callbacks';
+import readyCallbacks from '@ts/core/utils/ready_callbacks';
 import { themeReadyCallback } from '@ts/ui/m_themes_callback';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';

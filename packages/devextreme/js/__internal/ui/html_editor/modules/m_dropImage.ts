@@ -11,14 +11,12 @@ import BaseModule from './m_base';
 let DropImageModule = BaseModule;
 
 if (Quill) {
-  // @ts-expect-error
   DropImageModule = class DropImageModule extends BaseModule {
     editorInstance: any;
 
     quill: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       const widgetName = this.editorInstance.NAME;
@@ -30,7 +28,6 @@ if (Quill) {
     _dropHandler(e) {
       const { dataTransfer } = e.originalEvent;
       const hasFiles = dataTransfer?.files?.length;
-      // @ts-expect-error
       this.saveValueChangeEvent(e);
       e.preventDefault();
       if (hasFiles) {
@@ -40,7 +37,6 @@ if (Quill) {
 
     _pasteHandler(e) {
       const { clipboardData } = e.originalEvent;
-      // @ts-expect-error
       this.saveValueChangeEvent(e);
 
       if (!clipboardData) {

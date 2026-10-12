@@ -25,9 +25,9 @@ import { copyResolvedStyles, resolvedInScope } from '@ts/core/utils/css_variable
 import { logger } from '@ts/core/utils/m_console';
 import { extend } from '@ts/core/utils/m_extend';
 import { getWidth } from '@ts/core/utils/m_size';
-import { HIDDEN_FOR_EXPORT } from '@ts/core/utils/m_svg';
 import { isDefined, isString } from '@ts/core/utils/m_type';
 import { getWindow } from '@ts/core/utils/m_window';
+import { HIDDEN_FOR_EXPORT } from '@ts/core/utils/svg';
 import { end as hoverEventEnd, start as hoverEventStart } from '@ts/events/hover';
 import pointerEvents from '@ts/events/pointer';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { isTablePart, parseHTML } from '@ts/core/utils/m_html_parser';
+import { isTablePart, parseHTML } from '@ts/core/utils/html_parser';
 
 const tableParts: [string, string][] = [
   ['tr', '<tr><td>1</td></tr>'],

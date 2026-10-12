@@ -5,7 +5,7 @@ import {
   attachInstanceToElement,
   getInstanceByElement,
   name as getComponentName,
-} from '@ts/core/utils/m_public_component';
+} from '@ts/core/utils/public_component';
 
 const ANONYMOUS_NAME = /^dxPrivateComponent(\d+)$/;
 

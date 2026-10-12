@@ -11,7 +11,7 @@ import { extend } from '@js/core/utils/extend';
 import { isEmpty } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import { focused } from '@ts/core/utils/m_selectors';
+import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';

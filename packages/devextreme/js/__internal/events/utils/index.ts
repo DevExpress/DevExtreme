@@ -2,7 +2,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { focused } from '@ts/core/utils/m_selectors';
+import { focused } from '@ts/core/utils/selectors';
 
 import mappedAddNamespace from './add_namespace';
 /* eslint-disable spellcheck/spell-checker */

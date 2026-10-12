@@ -8,7 +8,7 @@ import type { DxEvent } from '@js/events';
 import type { Item, Properties } from '@js/ui/stepper';
 import { BindableTemplate } from '@ts/core/templates/bindable_template';
 import type { Template } from '@ts/core/templates/template';
-import { getImageContainer } from '@ts/core/utils/m_icon';
+import { getImageContainer } from '@ts/core/utils/icon';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';

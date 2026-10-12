@@ -4,7 +4,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import {
   dataSourceAdapterExtender as virtualScrollingDataSourceAdapterExtender,
@@ -42,13 +42,13 @@ virtualScrollingModule.extenders.controllers.data = (Base: ModuleType<DataContro
     const virtualScrollController = this.dataSourceController.getAdapter()?._virtualScrollController;
 
     virtualScrollController?.reset();
-    // @ts-expect-error
+    // @ts-expect-error _loadOnOptionChange() is added by the TreeList data controller
     super._loadOnOptionChange();
   }
 };
 
 const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class VirtualScrollingDataSourceAdapterExtender extends virtualScrollingDataSourceAdapterExtender(Base) {
-  public changeRowExpand(path?: unknown) {
+  public changeRowExpand(path: RowKey) {
     return super.changeRowExpand(path)?.done(() => {
       const viewportItemIndex = this.getViewportItemIndex();
 

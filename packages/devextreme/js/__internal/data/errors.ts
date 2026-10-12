@@ -1,7 +1,7 @@
 import coreErrors from '@js/core/errors';
 import errorUtils from '@js/core/utils/error';
 import { isObject } from '@js/core/utils/type';
-import type { DxError } from '@ts/core/utils/m_error';
+import type { DxError } from '@ts/core/utils/error';
 
 export const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
 

@@ -403,7 +403,6 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
       if ((!parentNode.parent || this.isRowExpanded(parentNode.key))
         && change.index !== undefined) {
-        // @ts-expect-error items() is typed as loaded items, but holds tree nodes here
         let index = this.items().indexOf(parentNode) + 1;
 
         index += change.index >= 0
@@ -509,7 +508,6 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       (key) => this.isRowExpanded(key, options),
     );
 
-    // @ts-expect-error rows are nodes here, not the loaded items
     options.data = resultData;
     this._totalItemsCount = resultData.length;
   }

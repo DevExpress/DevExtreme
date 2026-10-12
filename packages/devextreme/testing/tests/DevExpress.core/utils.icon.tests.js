@@ -1,5 +1,5 @@
 import { getImageSourceType, getImageContainer } from 'core/utils/icon';
-import { getImageAriaLabel } from '__internal/core/utils/m_icon';
+import { getImageAriaLabel } from '__internal/core/utils/icon';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 

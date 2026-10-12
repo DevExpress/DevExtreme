@@ -13,7 +13,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import svgUtils from '@ts/core/utils/m_svg';
+import svgUtils from '@ts/core/utils/svg';
 
 const window = getWindow();
 

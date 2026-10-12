@@ -1,42 +1,61 @@
 import { equalByValue } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
+import type { NodeCallback, OperationTypes, TreeNode } from '@ts/grids/tree_list/data_source_adapter/types';
 
+import type { TreeListColumnsController } from '../columns_controller';
 import treeListCore from '../core';
 import type { TreeListDataSourceController } from '../data_source/data_source_controller';
+import type {
+  ExpandedKeysCache,
+  RowExpandArgs,
+  TreeListDataControllerOptionChanged,
+  TreeListGeneratedItem,
+  TreeListItemProcessingOptions,
+  TreeListProcessedItem,
+} from './types';
+
+const getNodeLevel = (node: TreeNode): number => {
+  let level = -1;
+  let current = node;
+  while (current.parent) {
+    if (current.visible) {
+      level += 1;
+    }
+    current = current.parent;
+  }
+  return level;
+};
 
 export class TreeListDataController extends DataController {
   protected declare dataSourceController: TreeListDataSourceController;
 
-  private _getNodeLevel(node) {
-    let level = -1;
-    while (node.parent) {
-      if (node.visible) {
-        level++;
-      }
-      node = node.parent;
-    }
-    return level;
-  }
+  public declare _columnsController: TreeListColumnsController;
 
-  protected _generateDataItem(node?: any, options?: any): any {
+  protected _generateDataItem(
+    node: TreeNode,
+    options?: TreeListItemProcessingOptions,
+  ): TreeListGeneratedItem {
     return {
       rowType: 'data',
       node,
       key: node.key,
+      // @ts-expect-error a data node always has data, only the root node has none
       data: node.data,
       isExpanded: this.isRowExpanded(node.key, options),
-      level: this._getNodeLevel(node),
+      level: getNodeLevel(node),
     };
   }
 
-  private _loadOnOptionChange() {
-    this.dataSourceController.getAdapter()!.load();
+  protected _loadOnOptionChange(): void {
+    this.dataSourceController.getAdapter()?.load();
   }
 
-  protected isSameRowState(item1, item2): boolean {
+  protected isSameRowState(item1: TreeListProcessedItem, item2: TreeListProcessedItem): boolean {
     if (item1.isSelected !== item2.isSelected) {
       return false;
     }
@@ -52,42 +71,47 @@ export class TreeListDataController extends DataController {
     return super.isSameRowState(item1, item2);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-    // @ts-expect-error
+  protected _isCellChanged(
+    oldRow: ProcessedItem,
+    newRow: ProcessedItem,
+    visibleRowIndex: number,
+    columnIndex: number,
+    isLiveUpdate?: boolean,
+  ): boolean {
     const firstDataColumnIndex = this._columnsController.getFirstDataColumnIndex();
 
     if (columnIndex === firstDataColumnIndex && oldRow.isSelected !== newRow.isSelected) {
       return true;
     }
 
-    return super._isCellChanged.apply(this, arguments as any);
+    return super._isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate);
   }
 
-  public init() {
+  public init(): void {
     this.createAction('onRowExpanding');
     this.createAction('onRowExpanded');
     this.createAction('onRowCollapsing');
     this.createAction('onRowCollapsed');
 
-    super.init.apply(this, arguments as any);
+    super.init();
   }
 
-  public publicMethods() {
-    return super.publicMethods().concat(['expandRow', 'collapseRow', 'isRowExpanded', 'getRootNode', 'getNodeByKey', 'loadDescendants', 'forEachNode']);
+  public publicMethods(): string[] {
+    return super.publicMethods().concat([
+      'expandRow', 'collapseRow', 'isRowExpanded', 'getRootNode',
+      'getNodeByKey', 'loadDescendants', 'forEachNode',
+    ]);
   }
 
-  protected override needUpdateDimensions(operationTypes) {
-    return super.needUpdateDimensions(operationTypes) || (
-      operationTypes && operationTypes.nodeExpanding
-    );
+  protected override needUpdateDimensions(operationTypes?: OperationTypes): boolean {
+    return super.needUpdateDimensions(operationTypes) || Boolean(operationTypes?.nodeExpanding);
   }
 
-  private changeRowExpand(key) {
+  private changeRowExpand(key: RowKey): DeferredObj<unknown> {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     if (dataSourceAdapter) {
-      const args: any = {
+      const args: RowExpandArgs = {
         key,
       };
       const isExpanded = this.isRowExpanded(key);
@@ -101,35 +125,32 @@ export class TreeListDataController extends DataController {
       }
     }
 
-    // @ts-expect-error
-    return new Deferred().resolve();
+    return Deferred<unknown>().resolve();
   }
 
-  private isRowExpanded(key, cache?) {
+  private isRowExpanded(key: RowKey, cache?: ExpandedKeysCache): boolean | undefined {
     return this.dataSourceController.getAdapter()?.isRowExpanded(key, cache);
   }
 
-  private expandRow(key) {
+  private expandRow(key: RowKey): DeferredObj<unknown> {
     if (!this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
-    // @ts-expect-error
-    return new Deferred().resolve();
+    return Deferred<unknown>().resolve();
   }
 
-  private collapseRow(key) {
+  private collapseRow(key: RowKey): DeferredObj<unknown> {
     if (this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
-    // @ts-expect-error
-    return new Deferred().resolve();
+    return Deferred<unknown>().resolve();
   }
 
-  private getRootNode() {
+  private getRootNode(): TreeNode | undefined {
     return this.dataSourceController.getAdapter()?.getRootNode();
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: TreeListDataControllerOptionChanged): void {
     switch (args.name) {
       case 'rootValue':
       case 'parentIdExpr':
@@ -147,8 +168,11 @@ export class TreeListDataController extends DataController {
       case 'expandedRowKeys':
       case 'onNodesInitialized': {
         const dataSourceAdapter = this.dataSourceController.getAdapter();
+        const isReloadNeeded = dataSourceAdapter
+          && !dataSourceAdapter._isNodesInitializing
+          && !equalByValue(args.value, args.previousValue);
 
-        if (dataSourceAdapter && !dataSourceAdapter._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
+        if (isReloadNeeded) {
           this._loadOnOptionChange();
         }
         args.handled = true;
@@ -162,20 +186,24 @@ export class TreeListDataController extends DataController {
     }
   }
 
-  private getNodeByKey(key) {
+  private getNodeByKey(key: RowKey): TreeNode | undefined {
     return this.dataSourceController.getAdapter()?.getNodeByKey(key);
   }
 
-  private getChildNodeKeys(parentKey) {
+  private getChildNodeKeys(parentKey: RowKey): RowKey[] | undefined {
     return this.dataSourceController.getAdapter()?.getChildNodeKeys(parentKey);
   }
 
-  private loadDescendants(keys, childrenOnly) {
+  private loadDescendants(
+    keys?: RowKey | RowKey[],
+    childrenOnly?: boolean,
+  ): DeferredObj<unknown> | undefined {
     return this.dataSourceController.getAdapter()?.loadDescendants(keys, childrenOnly);
   }
 
-  private forEachNode() {
-    this.dataSourceController.getAdapter()!.forEachNode.apply(this, arguments as any);
+  private forEachNode(...args: [NodeCallback] | [TreeNode | TreeNode[], NodeCallback]): void {
+    // @ts-expect-error adapter is set; a spread argument can't match the overloads of forEachNode()
+    this.dataSourceController.getAdapter().forEachNode(...args);
   }
 
   // Collect keys by walking the loaded node tree (depth-first, parent before
@@ -193,7 +221,8 @@ export class TreeListDataController extends DataController {
 
 treeListCore.registerModule('data', {
   defaultOptions() {
-    return extend({}, (dataControllerModule as any).defaultOptions(), {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- extend() returns any
+    return extend({}, dataControllerModule.defaultOptions?.(), {
       itemsExpr: 'items',
       parentIdExpr: 'parentId',
       rootValue: 0,

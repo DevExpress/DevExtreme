@@ -15,7 +15,6 @@ if (Quill) {
   const SELECTED_STATE_CLASS = 'dx-state-selected';
 
   Quill.register({ 'formats/variable': Variable }, true);
-  // @ts-expect-error
   VariableModule = class VariableModule extends PopupModule {
     quill: any;
 
@@ -24,7 +23,6 @@ if (Quill) {
     options: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       const toolbar = quill.getModule('toolbar');

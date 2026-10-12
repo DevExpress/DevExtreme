@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { SelectionFilterCreator } from '@ts/core/utils/m_selection_filter';
+import { SelectionFilterCreator } from '@ts/core/utils/selection_filter';
 
 const createFilter = (
   keys: unknown[],

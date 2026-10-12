@@ -13,7 +13,7 @@ import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { Widget } from '@ts/core/r1/widget';
 import { combineClasses } from '@ts/core/utils/combine_classes';
-import { getImageAriaLabel } from '@ts/core/utils/m_icon';
+import { getImageAriaLabel } from '@ts/core/utils/icon';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { Icon } from './icon';
