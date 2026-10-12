@@ -30,8 +30,8 @@ import type { Coordinates } from '../columns_resizing_reordering/types';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import gridCoreUtils from '../m_utils';
 import type { ColumnPoint, ModuleType } from '../types';
-import type { ColumnsView } from '../views/m_columns_view';
-import { normalizeWidth } from '../views/m_columns_view';
+import type { ColumnsView } from '../views/columns_view';
+import { normalizeWidth } from '../views/columns_view';
 import type { ResizingController } from '../views/m_grid_view';
 import type { RowsView } from '../views/m_rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
@@ -915,7 +915,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return deferred;
   }
 
-  protected setAriaOwns(headerTableId, footerTableId, isFixed) {
+  public setAriaOwns(headerTableId, footerTableId, isFixed) {
     if (isFixed) {
       const contentFixedClass = this.addWidgetPrefix(CLASSES.contentFixed);
       const $contentFixedElement = this.element()?.children(`.${contentFixedClass}`);
@@ -1172,7 +1172,6 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingColumnF
     const headerFixedTable = this._columnHeadersView?.getFixedTableElement();
     // @ts-expect-error
     const footerFixedTable = this._footerView?.getFixedTableElement();
-    // @ts-expect-error
     this._rowsView?.setAriaOwns(headerFixedTable?.attr('id'), footerFixedTable?.attr('id'), true);
   }
 };

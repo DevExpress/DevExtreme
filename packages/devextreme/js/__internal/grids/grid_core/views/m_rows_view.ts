@@ -39,8 +39,8 @@ import { isLocalStore } from '../data_source_adapter/utils/store';
 import type { EditingController } from '../editing/m_editing';
 import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
+import { ColumnsView } from './columns_view';
 import { CLASSES as VIEW_CLASSES } from './const';
-import { ColumnsView } from './m_columns_view';
 import type { RowsViewScrollEvent } from './types';
 import {
   getCellText, getMaxHorizontalScrollOffset, isRowElementVisible, isSameColumnLayout,
@@ -1431,7 +1431,11 @@ export class RowsView extends ColumnsView {
   /**
    * @extended: column_fixing
    */
-  protected setAriaOwns(headerTableId: string, footerTableId: string, isFixed?: boolean): void {
+  public setAriaOwns(
+    headerTableId: string | undefined,
+    footerTableId: string | undefined,
+    isFixed?: boolean,
+  ): void {
     const $contentElement = this._findContentElement();
     const $tableElement = this.getTableElement();
 

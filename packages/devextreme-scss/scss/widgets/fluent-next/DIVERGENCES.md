@@ -25,9 +25,9 @@ nothing would be worse than not publishing it.
 
 **A single-colour icon does not need this.** The same artwork used as a `mask-image` carries only
 its alpha, so `background-color` paints it from the cascade or from a role and the colour stays a
-token. That is how gantt, list, the file manager, timeView and diagram were retired - see the
-`$masked` flag in each `base/<widget>/_mixins.scss`, which keeps the legacy themes on the baked path
-so their emitted css does not move.
+token. That is how gantt, list, the file manager, timeView and diagram were retired - see
+`base/<widget>/_mixins.scss`, which every theme paints these icons through; each artwork is declared
+once as a `--dxicon-*` custom property on `:root`.
 
 **What is left is only what is the same in both modes.** A literal that does not flip answers for
 every mode scope, so it is a frozen value, not a broken island. That every remaining data uri is
@@ -54,15 +54,6 @@ Two images are still emitted there, and neither is a marker. The `none` connecto
 the same path, so the slash is genuinely red and no substitution reaches it: the mask keeps the
 union of the slash and the box for `currentColor` to fill, and the red goes back on top as an image
 that is the same in both modes. The selectbox placeholder is an empty drawing.
-
-### Masks and forced colours
-
-A forced-colours palette replaces `background-color` with its Canvas, which is what an icon sits on,
-so a mask left to itself paints nothing at all where a baked image used to survive.
-`base/_mask.scss` is what every masked glyph paints through, and it names the palette's text colour
-for that case. One mask is deliberately not on it: the grid's virtual-row placeholder
-(`base/dataGrid/_index.scss`) is a skeleton, not a glyph, and a solid `CanvasText` bar in place of
-the rows it stands for would be worse than the nothing it shows now.
 
 ## Rasters
 

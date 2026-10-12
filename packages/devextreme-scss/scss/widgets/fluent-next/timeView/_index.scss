@@ -12,7 +12,6 @@
   $arrow-offset: var(--dx-time-view-clock-arrow-offset),
   $dial-size: calc(var(--dx-time-view-clock-size) * 85 / 91),
   $dial-shadow: var(--dx-time-view-clock-shadow),
-  $masked: true,
 );
 
 .dx-timeview {

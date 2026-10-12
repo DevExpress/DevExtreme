@@ -22,7 +22,7 @@ import type { DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
-import { ColumnsView } from '../views/m_columns_view';
+import { ColumnsView } from '../views/columns_view';
 import { defaultOptions } from './const';
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';

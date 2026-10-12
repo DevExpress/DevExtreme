@@ -285,7 +285,7 @@
   }
 }
 
-@include gantt-icons-mixin($masked: true);
+@include gantt-icons-mixin();
 
 .dx-gantt.dx-state-disabled,
 .dx-state-disabled .dx-gantt {

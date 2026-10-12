@@ -56,6 +56,11 @@ function createDelayedRenderer({ delay = 20, onRender }) {
   }
   return { pushChunk, stop };
 }
+const getErrorMessage = (err) => {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+};
 export const useApi = () => {
   const [alerts, setAlerts] = useState([]);
   const [typingUsers, setTypingUsers] = useState([]);
@@ -88,10 +93,10 @@ export const useApi = () => {
     ]);
     return id;
   }, []);
-  const alertLimitReached = useCallback(() => {
+  const alertError = useCallback((message) => {
     setAlerts([
       {
-        message: 'Request limit reached, try again in a minute.',
+        message,
       },
     ]);
     setTimeout(() => {
@@ -137,16 +142,18 @@ export const useApi = () => {
         setTypingUsers([]);
       } catch (e) {
         setTypingUsers([]);
-        if (e?.name !== 'AbortError' && assistantId !== undefined) {
-          updateMessageText(assistantId, '');
-          alertLimitReached();
+        if (!abortControllerRef.current?.signal.aborted) {
+          if (assistantId !== undefined) {
+            updateMessageText(assistantId, '');
+          }
+          alertError(getErrorMessage(e));
         }
       } finally {
         abortControllerRef.current = null;
         setIsStreaming(false);
       }
     },
-    [alertLimitReached, insertAssistantPlaceholder, updateMessageText],
+    [alertError, insertAssistantPlaceholder, updateMessageText],
   );
   return {
     alerts,

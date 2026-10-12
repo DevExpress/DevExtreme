@@ -1,5 +1,6 @@
 @use "../mixins" as *;
 @use "../button/mixins" as *;
+@use "../mask" as *;
 
 $list-response-wait-opacity: 0.5 !default;
 
@@ -11,6 +12,11 @@ $list-next-button-padding: 5px !default;
 
 $list-min-height: 3em !default; // dx-relative
 $list-empty-message-button-padding: 0 3em !default; // dx-relative
+
+:root {
+  --dxicon-list-toggle-delete: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/list/toggle-delete.svg"))};
+}
+
 .dx-list {
   margin: 0;
   min-height: $list-min-height;
