@@ -132,9 +132,6 @@ const dataGridRef = ref<DxDataGrid | null>(null);
 const saleAmountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
 };
 const saleAmountHeaderFilter = [
   {
