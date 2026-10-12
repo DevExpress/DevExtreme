@@ -41,13 +41,6 @@
     },
     {
       "theme": "fluent",
-      "file": "scss/widgets/base/filterBuilder/_common.scss",
-      "property": "padding",
-      "selector": ".dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-group-item .dx-filterbuilder-action.dx-filterbuilder-action-icon",
-      "paintedOverBy": "scss/widgets/fluent/filterBuilder/_index.scss"
-    },
-    {
-      "theme": "fluent",
       "file": "scss/widgets/base/gridBase/_index.scss",
       "property": "font-size",
       "selector": ".dx-datagrid-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
@@ -339,13 +332,6 @@
       "property": "padding",
       "selector": ".dx-invalid-message > .dx-overlay-content",
       "paintedOverBy": "scss/widgets/base/_validation.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/filterBuilder/_common.scss",
-      "property": "padding",
-      "selector": ".dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-group-item .dx-filterbuilder-action.dx-filterbuilder-action-icon",
-      "paintedOverBy": "scss/widgets/material/filterBuilder/_index.scss"
     },
     {
       "theme": "material",
