@@ -125,15 +125,32 @@ export const getGlobalFormatByDataType = (dataType: string): Format | undefined 
   applyDataTypePreset(getRawGlobalFormatByDataType(dataType), dataType)
 );
 
+export type LocaleAwareFormatter = ((value: Date) => string) & {
+  withLocale?: (locale?: FormatLocale) => LocaleAwareFormatter;
+};
+
+const getLocaleAwareFormatter = (formatter: unknown): LocaleAwareFormatter | undefined => (
+  isFunction((formatter as LocaleAwareFormatter | undefined)?.withLocale)
+    ? formatter as LocaleAwareFormatter
+    : undefined
+);
+
 export const withFormatLocale = (format: Format, locale?: FormatLocale): Format | undefined => {
-  if (!locale || !isDefined(format) || isFunction(format)) {
+  if (!locale || !isDefined(format)) {
     return format;
+  }
+
+  if (isFunction(format)) {
+    return getLocaleAwareFormatter(format)?.withLocale?.(locale) ?? format;
   }
 
   if (isString(format)) return { type: format, locale };
 
+  const formatter = getLocaleAwareFormatter((format as FormatObject).formatter);
+
   return {
     ...format,
+    ...formatter && { formatter: formatter.withLocale?.(locale) },
     locale,
   } as FormatObject;
 };

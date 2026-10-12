@@ -4,6 +4,7 @@ import {
 import coreLocalization from '@js/common/core/localization/core';
 import config from '@js/core/config';
 
+import type { LocaleAwareFormatter } from './global_format_config';
 import {
   applyDataTypePreset,
   getDateFormatLocale,
@@ -417,6 +418,34 @@ describe('global_format_config', () => {
   });
 
   describe('withFormatLocale', () => {
+    const createLocaleAwareFormatter = (locale?: unknown): LocaleAwareFormatter => {
+      const formatter: LocaleAwareFormatter = () => `text:${String(locale)}`;
+      formatter.withLocale = createLocaleAwareFormatter;
+      return formatter;
+    };
+
+    it('should rebuild locale-aware function format with locale', () => {
+      const format = withFormatLocale(createLocaleAwareFormatter(), 'de') as LocaleAwareFormatter;
+
+      expect(format(new Date())).toBe('text:de');
+    });
+
+    it('should rebuild locale-aware formatter inside format object', () => {
+      const format = withFormatLocale({ type: null, formatter: createLocaleAwareFormatter() } as never, 'de') as {
+        formatter: LocaleAwareFormatter; locale: string;
+      };
+
+      expect(format.formatter(new Date())).toBe('text:de');
+      expect(format.locale).toBe('de');
+    });
+
+    it('should keep formatter inside format object when it is not locale-aware', () => {
+      const formatter = (): string => 'text';
+      const format = withFormatLocale({ formatter } as never, 'de') as { formatter: unknown };
+
+      expect(format.formatter).toBe(formatter);
+    });
+
     it('should wrap string preset into format object with locale', () => {
       expect(withFormatLocale('month', 'de')).toEqual({ type: 'month', locale: 'de' });
     });

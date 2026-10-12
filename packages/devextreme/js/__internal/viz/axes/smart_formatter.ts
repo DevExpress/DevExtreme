@@ -147,7 +147,7 @@ function createFormat(type) {
   return { type, formatter };
 }
 
-function formatLogarithmicNumber(tick) {
+function formatLogarithmicNumber(tick, localeOnlyFormat?) {
   const log10Tick = log10(abs(tick));
   let type;
 
@@ -156,10 +156,10 @@ function formatLogarithmicNumber(tick) {
   } else if (log10Tick < -4) {
     type = EXPONENTIAL;
   } else {
-    return _format(adjust(tick));
+    return _format(adjust(tick), localeOnlyFormat);
   }
 
-  return _format(tick, { type, precision: 0 });
+  return _format(tick, withFormatLocale({ type, precision: 0 }, localeOnlyFormat?.locale));
 }
 
 function getDateTimeFormat(tick, { showTransition, ticks, tickInterval }) {
@@ -323,7 +323,7 @@ export function smartFormatter(tick, options) {
       }
 
       if (isLogarithmic) {
-        return formatLogarithmicNumber(tick);
+        return formatLogarithmicNumber(tick, localeOnlyFormat);
       }
       let separatedTickInterval = splitDecimalNumber(tickInterval);
       if (separatedTickInterval < 2) {

@@ -121,4 +121,49 @@ describe('smartFormatter with locale-only format', () => {
       expect(formatNumeric(1.5, [1, 1.25, 1.5], 0.25, { type: 'fixedPoint', precision: 3, locale: 'de' })).toBe('1,500');
     });
   });
+
+  describe('logarithmic axis', () => {
+    const formatLogarithmic = (tick: number, format?: unknown): string => smartFormatter(tick, {
+      labelOptions: { format },
+      ticks: [0.1, 1, 10],
+      tickInterval: 1,
+      type: 'logarithmic',
+      logarithmBase: 10,
+      dataType: 'numeric',
+    });
+
+    it('should apply own locale-only format to small ticks', () => {
+      expect(formatLogarithmic(0.5)).toBe('0.5');
+      expect(formatLogarithmic(0.5, { locale: 'de' })).toBe('0,5');
+    });
+
+    it('should keep auto modifier for large ticks with own locale-only format', () => {
+      expect(formatLogarithmic(1500000, { locale: 'de' })).toBe('2M');
+    });
+  });
+
+  describe('datetime axis with transitions', () => {
+    const lastDayTick = new Date(2024, 5, 15, 23, 0);
+    const nextDayTick = new Date(2024, 5, 16, 1, 0);
+
+    const formatTransition = (format?: unknown): string => smartFormatter(nextDayTick, {
+      labelOptions: { format },
+      ticks: [lastDayTick, nextDayTick],
+      tickInterval: 'hour',
+      showTransition: true,
+      dataType: 'datetime',
+      type: 'continuous',
+    });
+
+    it('should apply own locale-only format to each part of composite format', () => {
+      expect(formatTransition()).toBe('16 1:00 AM');
+      expect(formatTransition({ locale: 'de' })).toBe('16 01:00');
+    });
+
+    it('should apply global locale-only dateTimeFormat to each part of composite format', () => {
+      config({ ...config(), dateTimeFormat: { default: { locale: 'de' } } });
+
+      expect(formatTransition()).toBe('16 01:00');
+    });
+  });
 });
