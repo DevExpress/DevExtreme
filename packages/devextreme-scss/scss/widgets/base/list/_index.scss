@@ -2,7 +2,16 @@
 @use "../button/mixins" as *;
 @use "../mask" as *;
 
+$list-response-wait-opacity: 0.5 !default;
+
 $list-searchbox-margin-bottom: 5px !default;
+
+$list-item-badge-container-width: 20px !default;
+$list-slide-menu-button-padding: 0 10px !default;
+$list-next-button-padding: 5px !default;
+
+$list-min-height: 3em !default;
+$list-empty-message-button-padding: 0 3em !default;
 
 :root {
   --dxicon-list-toggle-delete: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/list/toggle-delete.svg"))};
@@ -10,7 +19,7 @@ $list-searchbox-margin-bottom: 5px !default;
 
 .dx-list {
   margin: 0;
-  min-height: 3em;
+  min-height: $list-min-height;
 
   .dx-scrollview-content:focus {
     outline: 0;
@@ -67,12 +76,12 @@ $list-searchbox-margin-bottom: 5px !default;
   @include dx-overflow();
 
   text-align: start;
-  min-height: 3em;
+  min-height: $list-min-height;
 }
 
 .dx-list-item-badge-container {
   display: table-cell;
-  width: 20px;
+  width: $list-item-badge-container-width;
   text-align: right;
   vertical-align: middle;
 }
@@ -96,7 +105,7 @@ $list-searchbox-margin-bottom: 5px !default;
 }
 
 .dx-list-item-response-wait {
-  opacity: 0.5;
+  opacity: $list-response-wait-opacity;
   transition: opacity 0.2s linear;
 }
 
@@ -230,7 +239,7 @@ $list-searchbox-margin-bottom: 5px !default;
 
 .dx-list-slide-menu-button {
   display: table-cell;
-  padding: 0 10px;
+  padding: $list-slide-menu-button-padding;
   vertical-align: middle;
 }
 
@@ -241,11 +250,11 @@ $list-searchbox-margin-bottom: 5px !default;
 }
 
 .dx-list-next-button {
-  padding: 5px;
+  padding: $list-next-button-padding;
   text-align: center;
 
   .dx-button {
-    padding: 0 3em;
+    padding: $list-empty-message-button-padding;
   }
 }
 

@@ -5,6 +5,8 @@ $treelist-border-color: null !default;
 $treelist-base-background-color: null !default;
 $treelist-row-error-color: null !default;
 $treelist-focused-border-color: null !default;
+$treelist-sticky-column-border: null !default;
+$treelist-cell-focus-outline: null !default;
 
 // #region position & z-index
 
@@ -38,9 +40,9 @@ $treelist-focused-border-color: null !default;
 .dx-treelist-container .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none,
 .dx-treelist-container .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none,
 .dx-treelist-container .dx-treelist-headers .dx-row td.dx-pointer-events-none {
-  border-left: 2px solid;
+  border-left: $treelist-sticky-column-border;
   border-left-color: $treelist-border-color;
-  border-right: 2px solid;
+  border-right: $treelist-sticky-column-border;
   border-right-color: $treelist-border-color;
 }
 
@@ -70,13 +72,13 @@ $treelist-focused-border-color: null !default;
 
 // (0,5,1)
 .dx-treelist .dx-treelist-sticky-columns .dx-treelist-table .dx-row td.dx-treelist-sticky-column-border-right {
-  border-right: 2px solid;
+  border-right: $treelist-sticky-column-border;
   border-right-color: $treelist-border-color;
 }
 
 // (0,5,1)
 .dx-treelist .dx-treelist-sticky-columns .dx-treelist-table .dx-row td.dx-treelist-sticky-column-border-left {
-  border-left: 2px solid;
+  border-left: $treelist-sticky-column-border;
   border-left-color: $treelist-border-color;
 }
 
@@ -92,7 +94,7 @@ $treelist-focused-border-color: null !default;
 
 // (0,7,1)
 .dx-treelist:not(.dx-rtl) > .dx-gridbase-container .dx-treelist-table .dx-row > td.dx-treelist-first-cell.dx-treelist-sticky-column-border-left {
-  border-left: 2px solid;
+  border-left: $treelist-sticky-column-border;
   border-left-color: $treelist-border-color;
 }
 
@@ -123,9 +125,9 @@ $treelist-focused-border-color: null !default;
 .dx-rtl .dx-treelist-container .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none,
 .dx-rtl .dx-treelist-container .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none,
 .dx-rtl .dx-treelist-container .dx-treelist-headers .dx-row td.dx-pointer-events-none {
-  border-left: 2px solid;
+  border-left: $treelist-sticky-column-border;
   border-left-color: $treelist-border-color;
-  border-right: 2px solid;
+  border-right: $treelist-sticky-column-border;
   border-right-color: $treelist-border-color;
 }
 
@@ -172,13 +174,13 @@ $treelist-focused-border-color: null !default;
 
 // (0,7,1)
 .dx-rtl > .dx-gridbase-container .dx-treelist-content .dx-treelist-table .dx-row > td.dx-treelist-first-cell.dx-treelist-sticky-column-border-left {
-  border-left: 2px solid;
+  border-left: $treelist-sticky-column-border;
   border-left-color: $treelist-border-color;
 }
 
 // (0,8,0)
 .dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row .dx-treelist-column-no-border.dx-treelist-sticky-column-border-left {
-  border-left: 2px solid;
+  border-left: $treelist-sticky-column-border;
   border-left-color: $treelist-border-color;
 }
 
@@ -222,7 +224,7 @@ $treelist-focused-border-color: null !default;
 
 // (0,5,1)
 .dx-treelist-container .dx-treelist-headers.dx-state-focused .dx-header-row td:focus {
-  outline: 2px solid;
+  outline: $treelist-cell-focus-outline;
   outline-color: $treelist-focused-border-color;
   outline-offset: -2px;
 }

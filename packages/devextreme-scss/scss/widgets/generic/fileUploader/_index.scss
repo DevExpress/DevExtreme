@@ -4,7 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/fileUploader";
+@use "../../base/fileUploader" with (
+  $fileuploader-file-container-padding: 4px 0 4px,
+);
 
 $generic-fileuploader-file-wrapper-border-size: 3px !default;
 

@@ -155,7 +155,8 @@ $datagrid-column-separator-bg: $base-accent !default;
 $datagrid-filter-row-background-color: null !default;
 $datagrid-active-header-filter-icon-color: $base-accent !default;
 
-$datagrid-text-stub-background-image-path: data-uri("images/widgets/fluent/grid/text-stub.png") !default;
+$datagrid-text-stub-mask-image: data-uri("images/widgets/fluent/grid/text-stub.png") !default;
+$datagrid-text-stub-bg: rgba(0, 0, 0, 0.12) !default;
 $datagrid-filter-panel-color: $base-accent !default;
 $datagrid-draggable-column-text-color: null !default;
 
