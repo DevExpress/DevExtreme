@@ -101,7 +101,6 @@ class TreeList extends GridCoreWidget<dxTreeListOptions> {
     // @ts-expect-error the widget has no index signature of the component instance
     treeListCore.processModules(that, treeListCore);
 
-    // @ts-expect-error the widget's _controllers and _views are private
     treeListCore.callModuleItemsMethod(this, 'init');
   }
 
