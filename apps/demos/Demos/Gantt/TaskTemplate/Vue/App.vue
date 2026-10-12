@@ -157,7 +157,7 @@ function getImagePath(taskId: number) {
   bottom: 0;
   width: 0%;
   height: 4px;
-  background: color-mix(in srgb, var(--dxds-color-bg-static-dark, #000) calc(var(--dxds-opacity-30, 0.3) * 100%), transparent);
+  background: rgb(from var(--dxds-color-bg-static-dark, #000) r g b / var(--dxds-opacity-30, 0.3));
 }
 
 .dx-gantt .dx-row {
