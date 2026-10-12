@@ -1,110 +1,157 @@
 import type { DataType } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
+import type { DxElement } from '@js/core/element';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import errors from '@js/ui/widget/ui.errors';
-import type { FilterCustomOperation } from '@ts/filter_builder/types';
+import type {
+  ConditionValue, FilterBuilderField, FilterCustomOperation, ValueOperand,
+} from '@ts/filter_builder/types';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
 } from '@ts/filter_builder/utils';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
-function baseOperation(grid) {
-  const calculateFilterExpression = function (filterValue, field, fields?) {
+import type {
+  HeaderFilterCustomizeTextOptions,
+  HeaderFilterFieldInfo,
+  HeaderFilterOperation,
+  HeaderFilterTextItem,
+} from './types';
+
+function baseOperation(grid: InternalGrid): HeaderFilterOperation {
+  const calculateFilterExpression = function calculateFilterExpression(
+    filterValue: ValueOperand[],
+    field: FilterBuilderField,
+    fields?: FilterBuilderField[],
+  ): string | string[] {
     const result: string[] = [];
     const lastIndex = filterValue.length - 1;
-    filterValue && filterValue.forEach((value, index) => {
-      if (isCondition(value) || isGroup(value)) {
-        const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
-        // @ts-expect-error getFilterExpression returns an expression, not a string
-        result.push(filterExpression);
-      } else {
-        const filterExpression = getFilterExpression([field.dataField, '=', value], fields, [], 'headerFilter');
-        // @ts-expect-error getFilterExpression returns an expression, not a string
-        result.push(filterExpression);
-      }
-      index !== lastIndex && result.push('or');
-    });
+    if (filterValue) {
+      filterValue.forEach((value, index) => {
+        if (isCondition(value) || isGroup(value)) {
+          // @ts-expect-error fields is optional in the public CustomOperation
+          const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
+          // @ts-expect-error getFilterExpression returns an expression, not a string
+          result.push(filterExpression);
+        } else {
+          const filterExpression = getFilterExpression(
+            [field.dataField, '=', value],
+            // @ts-expect-error fields is optional in the public CustomOperation
+            fields,
+            [],
+            'headerFilter',
+          );
+          // @ts-expect-error getFilterExpression returns an expression, not a string
+          result.push(filterExpression);
+        }
+        if (index !== lastIndex) {
+          result.push('or');
+        }
+      });
+    }
     if (result.length === 1) {
       return result[0];
     }
     return result;
   };
 
-  const getFullText = function (itemText, parentText) {
+  const getFullText = function getFullText(itemText: string, parentText: string | null): string {
     return parentText ? `${parentText}/${itemText}` : itemText;
   };
 
-  const getSelectedItemsTexts = function (items, parentText) {
+  const getSelectedItemsTexts = function getSelectedItemsTexts(
+    items: HeaderFilterTextItem[],
+    parentText: string | null,
+  ): string[] {
     let result: string[] = [];
     items.forEach((item) => {
       if (item.items) {
-        const selectedItemsTexts = getSelectedItemsTexts(item.items, getFullText(item.text, parentText));
+        const selectedItemsTexts = getSelectedItemsTexts(
+          item.items,
+          getFullText(item.text, parentText),
+        );
         result = result.concat(selectedItemsTexts);
       }
-      item.selected && result.push(getFullText(item.text, parentText));
+      if (item.selected) {
+        result.push(getFullText(item.text, parentText));
+      }
     });
     return result;
   };
 
-  const headerFilterController = grid && grid.getController('headerFilter');
+  const headerFilterController = grid?.getController('headerFilter');
   // Override in the private API WA [T1232532]
-  const customizeText = function (fieldInfo, options?) {
-    options = options || {};
+  const customizeText = function customizeText(
+    fieldInfo: HeaderFilterFieldInfo,
+    options?: HeaderFilterCustomizeTextOptions,
+  ): DeferredObj<string> | string {
+    const textOptions = options ?? {};
     const { value } = fieldInfo;
     let column = grid.columnOption(fieldInfo.field.dataField);
-    const headerFilter = column && column.headerFilter;
-    const lookup = column && column.lookup;
-    const values = options.values || [value];
+    const headerFilter = column?.headerFilter;
+    const lookup = column?.lookup;
+    const values = textOptions.values ?? [value];
 
-    if ((headerFilter && headerFilter.dataSource) || (lookup && lookup.dataSource)) {
-      // @ts-expect-error
-      const result = new Deferred();
-      // @ts-expect-error
-      const itemsDeferred = options.items || new Deferred();
-      if (!options.items) {
-        column = extend({}, column, { filterType: 'include', filterValues: values });
-        const dataSourceOptions = headerFilterController.getDataSource(column);
-        dataSourceOptions.paginate = false;
-        const dataSource = new DataSource(dataSourceOptions);
-        const key = dataSource.store().key();
-
-        if (key) {
-          const { values } = options;
-          if (values && values.length > 1) {
-            const filter = values.reduce((result, value) => {
-              if (result.length) {
-                result.push('or');
-              }
-              result.push([key, '=', value]);
-              return result;
-            }, []);
-            dataSource.filter(filter);
-          } else {
-            dataSource.filter([key, '=', fieldInfo.value]);
-          }
-        } else if (fieldInfo.field.calculateDisplayValue) {
-          errors.log('W1017');
-        }
-
-        options.items = itemsDeferred;
-
-        dataSource.load().done(itemsDeferred.resolve);
-      }
-      itemsDeferred.done((items) => {
-        const index = values.indexOf(fieldInfo.value);
-        result.resolve(getSelectedItemsTexts(items, null)[index]);
-      });
-      return result;
+    if (!(headerFilter?.dataSource || lookup?.dataSource)) {
+      const text = headerFilterController.getHeaderItemText(
+        value,
+        column,
+        0,
+        grid.option('headerFilter'),
+      );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- untyped getHeaderItemText
+      return text;
     }
-    const text = headerFilterController.getHeaderItemText(value, column, 0, grid.option('headerFilter'));
-    return text;
+
+    const result = Deferred<string>();
+    const itemsDeferred = textOptions.items ?? Deferred();
+
+    if (!textOptions.items) {
+      column = extend({}, column, { filterType: 'include', filterValues: values });
+      const dataSourceOptions = headerFilterController.getDataSource(column);
+      dataSourceOptions.paginate = false;
+      const dataSource = new DataSource(dataSourceOptions);
+      const key = dataSource.store().key();
+
+      if (key) {
+        const { values: optionValues } = textOptions;
+        if (optionValues && optionValues.length > 1) {
+          const filter = optionValues.reduce<unknown[]>((keyFilter, keyValue) => {
+            if (keyFilter.length) {
+              keyFilter.push('or');
+            }
+            keyFilter.push([key, '=', keyValue]);
+            return keyFilter;
+          }, []);
+          dataSource.filter(filter);
+        } else {
+          dataSource.filter([key, '=', fieldInfo.value]);
+        }
+      } else if (fieldInfo.field.calculateDisplayValue) {
+        errors.log('W1017');
+      }
+
+      textOptions.items = itemsDeferred;
+
+      dataSource.load().done((items) => {
+        itemsDeferred.resolve(items as HeaderFilterTextItem[]);
+      });
+    }
+    itemsDeferred.done((items) => {
+      const index = values.indexOf(fieldInfo.value);
+      result.resolve(getSelectedItemsTexts(items, null)[index]);
+    });
+
+    return result;
   };
   return {
     dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'] satisfies DataType[],
     calculateFilterExpression,
-    editorTemplate(conditionInfo, container) {
+    editorTemplate(conditionInfo, container): DxElement {
       const div = $('<div>')
         .addClass('dx-filterbuilder-item-value-text')
         .appendTo(container);
@@ -112,11 +159,12 @@ function baseOperation(grid) {
 
       renderValueText(div, conditionInfo.text && conditionInfo.text.split('|'));
 
-      const setValue = function (value) {
+      const setValue = function setValue(value: ConditionValue): void {
         conditionInfo.setValue(value);
       };
 
       column.filterType = 'include';
+      // @ts-expect-error the anyof value is always an array
       column.filterValues = conditionInfo.value ? conditionInfo.value.slice() : [];
 
       headerFilterController.showHeaderFilterMenuBase({
@@ -138,7 +186,8 @@ function baseOperation(grid) {
   };
 }
 
-export function anyOf(grid): FilterCustomOperation {
+export function anyOf(grid: InternalGrid): FilterCustomOperation {
+  // @ts-expect-error customizeText takes a grid column field, not FieldInfo.field
   return extend(baseOperation(grid), {
     name: 'anyof',
     icon: 'selectall',
@@ -146,8 +195,9 @@ export function anyOf(grid): FilterCustomOperation {
   });
 }
 
-export function noneOf(grid): FilterCustomOperation {
+export function noneOf(grid: InternalGrid): FilterCustomOperation {
   const baseOp = baseOperation(grid);
+  // @ts-expect-error customizeText takes a grid column field, not FieldInfo.field
   return extend({}, baseOp, {
     calculateFilterExpression(filterValue, field, fields?) {
       const baseFilter = baseOp.calculateFilterExpression(filterValue, field, fields);
