@@ -28,7 +28,7 @@ const DATA_TYPE_FORMAT_PRESET: Record<string, string> = {
   time: 'shortTime',
 };
 
-const isLocaleOnlyFormat = (format: Format | undefined): format is FormatObject => {
+export const isLocaleOnlyFormat = (format: Format | undefined): format is FormatObject => {
   if (!isPlainObject(format)) {
     return false;
   }
@@ -106,19 +106,36 @@ const resolveGlobalFormat = (optionName: GlobalFormatOptionName): Format | undef
   return resolveConfigValue(optionValue);
 };
 
-export const getGlobalFormatByDataType = (dataType: string): Format | undefined => {
+export const getRawGlobalFormatByDataType = (dataType: string): Format | undefined => {
   switch (dataType) {
     case 'date':
       return resolveGlobalFormat('dateFormat');
     case 'datetime':
-      return applyDataTypePreset(resolveGlobalFormat('dateTimeFormat'), 'datetime');
+      return resolveGlobalFormat('dateTimeFormat');
     case 'time':
-      return applyDataTypePreset(resolveGlobalFormat('timeFormat'), 'time');
+      return resolveGlobalFormat('timeFormat');
     case 'number':
       return resolveGlobalFormat('numberFormat');
     default:
       return undefined;
   }
+};
+
+export const getGlobalFormatByDataType = (dataType: string): Format | undefined => (
+  applyDataTypePreset(getRawGlobalFormatByDataType(dataType), dataType)
+);
+
+export const withFormatLocale = (format: Format, locale?: FormatLocale): Format | undefined => {
+  if (!locale || !isDefined(format) || isFunction(format)) {
+    return format;
+  }
+
+  if (isString(format)) return { type: format, locale };
+
+  return {
+    ...format,
+    locale,
+  } as FormatObject;
 };
 
 const getOwnFormatLocale = (format: Format | undefined): string | undefined => (

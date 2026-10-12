@@ -16,7 +16,12 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import formatHelper from '@ts/core/format_helper';
-import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import {
+  applyDataTypePreset,
+  getRawGlobalFormatByDataType,
+  isLocaleOnlyFormat,
+  withFormatLocale,
+} from '@ts/core/global_format_config';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { adjust, getExponent, getPrecision } from '@ts/core/utils/m_math';
 import {
@@ -288,13 +293,10 @@ export function smartFormatter(tick, options) {
   let { tickInterval } = options;
   const stringTick = abs(tick).toString();
   let { format } = options.labelOptions;
+  let localeOnlyFormat;
   const { ticks } = options;
   const isLogarithmic = options.type === 'logarithmic';
   const globalFormatDataType = options.dataType === 'datetime' ? 'datetime' : 'number';
-
-  if (options.dataType === 'datetime') {
-    format = applyDataTypePreset(format, 'datetime');
-  }
 
   if (ticks.length === 1 && ticks.indexOf(tick) === 0 && !isDefined(tickInterval)) {
     tickInterval = abs(tick) >= 1 ? 1 : adjust(1 - abs(tick), tick);
@@ -305,7 +307,12 @@ export function smartFormatter(tick, options) {
   }
 
   if (!isDefined(format)) {
-    format = getGlobalFormatByDataType(globalFormatDataType);
+    format = getRawGlobalFormatByDataType(globalFormatDataType);
+  }
+
+  if (isLocaleOnlyFormat(format)) {
+    localeOnlyFormat = format;
+    format = undefined;
   }
 
   if (!isDefined(format) && options.type !== 'discrete' && tick && (options.logarithmBase === 10 || !isLogarithmic)) {
@@ -339,6 +346,10 @@ export function smartFormatter(tick, options) {
       format = getDateTimeFormat(tick, options);
     }
   }
+
+  format = isDefined(format)
+    ? withFormatLocale(format, localeOnlyFormat?.locale)
+    : applyDataTypePreset(localeOnlyFormat, globalFormatDataType);
 
   return _format(tick, format);
 }
