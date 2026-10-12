@@ -34,5 +34,6 @@ if (useJQuery) {
       return jQuery.when.apply(jQuery, arguments);
     };
 
+  // @ts-expect-error jQuery.Deferred is a factory that works with new too, when is set above
   setStrategy(strategy);
 }
