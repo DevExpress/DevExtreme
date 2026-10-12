@@ -875,14 +875,21 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       const formatObject = asFormatObject(formatOption) ?? {};
       const locale = getEffectiveFormatLocale(formatOption, 'number');
       const {
-        minimumFractionDigits: min = 0,
-        maximumFractionDigits: max = min,
+        minimumFractionDigits,
+        maximumFractionDigits,
+        maximumSignificantDigits,
       } = new Intl.NumberFormat(
         locale,
         getFormatterOptions(formatObject) as Intl.NumberFormatOptions,
       ).resolvedOptions();
 
-      return { min, max };
+      if (!isDefined(maximumFractionDigits) && isDefined(maximumSignificantDigits)) {
+        return { min: 0, max: maximumSignificantDigits };
+      }
+
+      const min = minimumFractionDigits ?? 0;
+
+      return { min, max: maximumFractionDigits ?? min };
     }
 
     const realSeparatorIndex = getRealSeparatorIndex(pattern).index;
