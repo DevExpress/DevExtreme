@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { getThemes, Theme } from '../build/theme-options.cjs';
+import { getThemes, Theme } from '../build/theme-options';
 import {
   cascadeOf, originOf, packageRoot, parseBundle,
 } from './compiled-bundles';
