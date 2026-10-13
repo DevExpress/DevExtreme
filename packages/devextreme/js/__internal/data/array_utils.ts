@@ -198,7 +198,7 @@ function createObjectWithChanges(
   changes?: unknown,
 ): Record<string, unknown> {
   const result = cloneInstanceWithChangedPaths(target, changes);
-  // @ts-expect-error the clone is an object unless the target is a collection
+  // @ts-expect-error the result is the clone unless the target or the changes are a collection
   const extended: Record<string, unknown> = deepExtendArraySafe(result, changes, true, true, true);
 
   return extended;
