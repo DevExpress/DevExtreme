@@ -285,7 +285,6 @@
   }
 }
 
-// stylelint-disable property-no-unknown
 $icons: (
     "add": "\f00b",
     "airplane": "\f000",
@@ -617,8 +616,6 @@ $icons: (
     "listbartreeoffset": "\f241",
     "clearhistory": "\f242",
 ) !default;
-
-// stylelint-enable
 
 @mixin dx-icon($name) {
   @include dx-font-icon(map.get($icons, $name));
