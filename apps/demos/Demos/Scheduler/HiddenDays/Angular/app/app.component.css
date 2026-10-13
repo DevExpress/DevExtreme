@@ -49,6 +49,10 @@
   border-color: #c50f1f;
 }
 
+::ng-deep .hidden-days-demo.is-invalid .option .dx-checkbox-icon:hover {
+  border-color: #c50f1f;
+}
+
 ::ng-deep .hidden-days-demo.is-invalid .dx-scheduler-work-space {
   opacity: 0.4;
   pointer-events: none;
