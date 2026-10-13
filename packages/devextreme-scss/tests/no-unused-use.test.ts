@@ -1,7 +1,7 @@
 import { createRunner, scss } from './stylelint-rule';
 
 const ruleName = 'dx/no-unused-use';
-const { lint, fix } = createRunner('no-unused-use.mjs', ruleName);
+const { lint, fix } = createRunner('no-unused-use.ts', ruleName);
 
 const builtIn = (url: string): string => `Nothing reads "${url}"; remove the @use (${ruleName})`;
 const unread = (url: string): string => `Nothing reads "${url}"; remove the @use, or write @use "${url}"; when the module is loaded for its CSS or its load order (${ruleName})`;
