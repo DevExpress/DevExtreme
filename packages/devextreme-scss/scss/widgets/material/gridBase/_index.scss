@@ -1,4 +1,3 @@
-@use "sass:math";
 @use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
@@ -13,13 +12,11 @@
 @use "../popup/colors" as *;
 @use "../popup/sizes" as *;
 @use "../menu/colors" as *;
-@use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
 @use "../../base/button/mixins" as *;
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
 @use "../validation/colors" as *;
-@use "../typography/sizes" as *;
 @use "variables" as *;
 @forward "variables";
 @use "layout/cell" as *;
