@@ -23,7 +23,7 @@ const getImagesFromContent = (content: string): string[] => {
 };
 
 const getFilesFromDirectory = (directoryName: string, extensions: string[] = []): string[] => {
-  const fullDirName = join(process.cwd(), directoryName);
+  const fullDirName = join(__dirname, '..', directoryName);
   const result: string[] = [];
 
   const walkDirectory = (directory: string): void => {
