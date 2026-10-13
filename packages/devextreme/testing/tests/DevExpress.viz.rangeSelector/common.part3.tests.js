@@ -1323,6 +1323,23 @@ QUnit.test('Init selection format before calculate canvas for number type', func
     assert.deepEqual(this.slidersController.update.lastCall.args[4].format, { type: 'fixedPoint', precision: 1 }, 'format');
 });
 
+QUnit.test('Init selection format with own locale-only format for number type keeps auto precision', function(assert) {
+    this.createWidget({
+        sliderMarker: {
+            format: { locale: 'de' }
+        },
+        scale: {
+            startValue: 20,
+            endValue: 180
+        },
+        behavior: {
+            snapToTicks: false
+        }
+    });
+
+    assert.deepEqual(this.slidersController.update.lastCall.args[4].format, { type: 'fixedPoint', precision: 1, locale: 'de' }, 'format');
+});
+
 QUnit.test('format for sliders', function(assert) {
     this.createWidget({
         sliderMarker: {
@@ -1359,6 +1376,22 @@ QUnit.test('Init selection format before calculate canvas for dateTime type', fu
     };
 
     assert.ok(formatsAreEqual(options.format, expectedFormat), 'format selection for number type');
+});
+
+QUnit.test('Init selection format with own locale-only format for dateTime type applies locale to custom day formatter', function(assert) {
+    this.createWidget({
+        sliderMarker: {
+            format: { locale: 'de' }
+        },
+        scale: {
+            minorTickInterval: { days: 1 },
+            tickInterval: { weeks: 1 },
+            startValue: new Date(2010, 2, 13),
+            endValue: new Date(2010, 2, 20)
+        }
+    });
+
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format(new Date(2010, 2, 13)), 'Samstag, 13');
 });
 
 // B217786
