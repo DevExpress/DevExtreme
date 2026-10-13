@@ -333,10 +333,11 @@ export class ResizingController extends modules.ViewController {
   }
 
   private _toggleContentMinHeight(value: boolean | undefined): void {
-    const $contentElement = this._rowsView._findContentElement();
+    // @ts-expect-error the view is rendered here
+    const $contentElement: dxElementWrapper = this._rowsView._findContentElement();
 
     if (value === true) {
-      this._prevContentMinHeight = $contentElement.get(0).style.minHeight;
+      this._prevContentMinHeight = ($contentElement.get(0) as HTMLElement).style.minHeight;
     }
 
     if (isDefined(this._prevContentMinHeight)) {
