@@ -7,6 +7,7 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
+import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
@@ -440,7 +441,7 @@ class Editor<
         break;
       case 'value':
         if (value != previousValue) { // eslint-disable-line eqeqeq
-          this.option('isDirty', this._initialValue !== value);
+          this.option('isDirty', !this._isValueEqual(this._initialValue, value));
 
           this.validationRequest.fire({
             value,
@@ -489,6 +490,13 @@ class Editor<
       default:
         super._optionChanged(args);
     }
+  }
+
+  _isValueEqual(value: unknown, otherValue: unknown): boolean {
+    return equalByValue(value, otherValue, {
+      assumeEqualBeyondMaxDepth: false,
+      comparePlainObjectsOnly: true,
+    });
   }
 
   _resetToInitialValue(): void {

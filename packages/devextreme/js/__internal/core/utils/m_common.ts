@@ -4,7 +4,7 @@ import { toComparable } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import {
-  isDefined, isFunction, isObject, isString, type,
+  isDefined, isFunction, isObject, isPlainObject, isString, type,
 } from '@js/core/utils/type';
 
 // @ts-expect-error new deferred
@@ -313,9 +313,14 @@ const DEFAULT_EQUAL_BY_VALUE_OPTS = {
   strict: true,
 };
 const compareByValue = (value1, value2, depth, options) => {
-  const { strict, maxDepth } = options;
+  const {
+    strict, maxDepth, assumeEqualBeyondMaxDepth = true, comparePlainObjectsOnly = false,
+  } = options;
   const comparable1 = toComparable(value1, true);
   const comparable2 = toComparable(value2, true);
+  const isComparedObjectPair = comparePlainObjectsOnly
+    ? isPlainObject(comparable1) && isPlainObject(comparable2)
+    : isObject(comparable1) && isObject(comparable2);
 
   const comparisonResult = strict
     ? comparable1 === comparable2
@@ -324,9 +329,10 @@ const compareByValue = (value1, value2, depth, options) => {
 
   switch (true) {
     case comparisonResult:
-    case depth >= maxDepth:
       return true;
-    case isObject(comparable1) && isObject(comparable2):
+    case depth >= maxDepth:
+      return assumeEqualBeyondMaxDepth;
+    case isComparedObjectPair:
       return compareObjects(comparable1, comparable2, depth, options);
     case Array.isArray(comparable1) && Array.isArray(comparable2):
       return compareArrays(comparable1, comparable2, depth, options);

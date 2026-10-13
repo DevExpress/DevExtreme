@@ -15,6 +15,43 @@ interface ValidationRequestArgs {
   editor: unknown;
 }
 
+interface ReturnScenario {
+  scenario: string;
+  createValue: () => unknown;
+  changedValue: unknown;
+}
+
+const createSelfReferencingObject = (): Record<string, unknown> => {
+  const value: Record<string, unknown> = { id: 1 };
+
+  value.self = value;
+
+  return value;
+};
+
+const returnScenarios: ReturnScenario[] = [
+  {
+    scenario: 'an array',
+    createValue: () => [1, 2],
+    changedValue: [3],
+  },
+  {
+    scenario: 'an array of plain objects with nested arrays',
+    createValue: () => [{ name: 'a', tags: [1, 2] }],
+    changedValue: [{ name: 'b', tags: [] }],
+  },
+  {
+    scenario: 'a date',
+    createValue: () => new Date(2026, 9, 12),
+    changedValue: new Date(2026, 9, 13),
+  },
+  {
+    scenario: 'an array of dates',
+    createValue: () => [new Date(2026, 9, 12), new Date(2026, 9, 13)],
+    changedValue: [],
+  },
+];
+
 const disposables: { dispose: () => void }[] = [];
 
 const createEditor = (options: Partial<EditorProperties> = {}): Editor => {
@@ -72,5 +109,49 @@ describe('Editor initialization', () => {
     expect(calls).toHaveLength(1);
     expect(calls[0].value).toBe('changed');
     expect(calls[0].editor).toBe(instance);
+  });
+});
+
+describe('Editor isDirty when the value returns to its initial content (T1336605)', () => {
+  afterEach(() => {
+    disposables.forEach((instance) => instance.dispose());
+    disposables.length = 0;
+    document.body.innerHTML = '';
+  });
+
+  it.each(returnScenarios)('should be false after $scenario returns as a new copy', ({ createValue, changedValue }) => {
+    const instance = createEditor({ value: createValue() });
+
+    instance.option('value', changedValue);
+
+    expect(instance.option('isDirty')).toBe(true);
+
+    instance.option('value', createValue());
+
+    expect(instance.option('isDirty')).toBe(false);
+  });
+
+  it('should be true when array items change their order', () => {
+    const instance = createEditor({ value: [1, 2] });
+
+    instance.option('value', [2, 1]);
+
+    expect(instance.option('isDirty')).toBe(true);
+  });
+
+  it('should be true when an object in an array differs deeper than three levels', () => {
+    const instance = createEditor({ value: [{ a: { b: { c: 1 } } }] });
+
+    instance.option('value', [{ a: { b: { c: 2 } } }]);
+
+    expect(instance.option('isDirty')).toBe(true);
+  });
+
+  it('should be true when a distinct copy of a self-referencing value replaces the initial one', () => {
+    const instance = createEditor({ value: [createSelfReferencingObject()] });
+
+    instance.option('value', [createSelfReferencingObject()]);
+
+    expect(instance.option('isDirty')).toBe(true);
   });
 });
