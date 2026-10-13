@@ -7,6 +7,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { ChildDefaultTemplate } from '@js/core/templates/child_default_template';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
+import type { dxTemplateOptions } from '@js/core/templates/template';
 import { Template } from '@js/core/templates/template';
 import { TemplateBase } from '@js/core/templates/template_base';
 import { groupBy } from '@js/core/utils/array';
@@ -21,7 +22,7 @@ interface TemplateWithRender {
   render: (options: TemplateRenderOptions) => unknown;
 }
 
-type TemplateOptions = { [TKey in keyof Device]?: unknown } & { name?: string };
+type TemplateOptions = { [TKey in keyof Device]?: unknown } & dxTemplateOptions;
 
 interface RawTemplate<TElement, TOptions> {
   element: TElement;
@@ -30,7 +31,7 @@ interface RawTemplate<TElement, TOptions> {
 
 const isRenderer = (
   value: unknown,
-): value is dxElementWrapper & ArrayLike<Element> => typeUtils.isRenderer(value);
+): value is dxElementWrapper & ArrayLike<Node | Window> => typeUtils.isRenderer(value);
 
 const hasRender = (
   value: NonNullable<unknown>,
@@ -42,10 +43,21 @@ const hasNodeType = (
   value: NonNullable<unknown>,
 ): value is Node => !!(value as Partial<Node>).nodeType;
 
-export const findTemplates = <TOptions = Record<string, unknown>>(
+interface FindTemplates {
+  (
+    element: Element | dxElementWrapper,
+    name: 'dxTemplate',
+  ): RawTemplate<Element, TemplateOptions>[];
+  (
+    element: Element | dxElementWrapper,
+    name: string,
+  ): RawTemplate<Element, Record<string, unknown>>[];
+}
+
+export const findTemplates: FindTemplates = (
   element: Element | dxElementWrapper,
   name: string,
-): RawTemplate<Element, TOptions>[] => {
+) => {
   const optionsAttributeName = 'data-options';
   const templates = $(element).contents().filter(`[${optionsAttributeName}*="${name}"]`);
 
@@ -192,7 +204,7 @@ export const acquireTemplate = (
     return createTemplate($(templateSource));
   }
 
-  // @ts-expect-error the other sources are template names
+  // @ts-expect-error the remaining sources are used as template names
   const templateName: string = templateSource;
 
   return acquireIntegrationTemplate(templateName, templates, isAsyncTemplate, skipTemplates)
