@@ -1,3 +1,5 @@
+import type { DxEvent } from '@js/events';
+
 export type NavigationDirection = 'next' | 'previous' | 'nextInRow' | 'previousInRow';
 
 export type NavigationKeyCode = NavigationDirection | 'upArrow' | 'downArrow';
@@ -10,7 +12,7 @@ export interface HorizontalBounds {
 }
 
 export interface KeyDownEvent {
-  originalEvent: KeyboardEvent;
+  originalEvent: DxEvent<KeyboardEvent>;
   keyName: string;
   shift: boolean;
 }
