@@ -18,6 +18,7 @@
 import { Color } from '@ts/color';
 import { domAdapter } from '@ts/core/dom_adapter';
 import formatHelper from '@ts/core/format_helper';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import { renderer as $ } from '@ts/core/renderer';
 import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
 import { isCssVariableReference } from '@ts/core/utils/css_variables';
