@@ -65,6 +65,7 @@ $pivotgrid-border: $pivotgrid-border-width solid !default;
 $pivotgrid-area-box-border: $pivotgrid-border !default;
 $pivotgrid-area-box-border-color: $pivotgrid-border-color !default;
 $pivotgrid-icon-size: 14px !default;
+$pivotgrid-header-filter-icon-size: $pivotgrid-icon-size !default;
 $pivotgrid-common-field-padding: 2px !default;
 $pivotgrid-filter-area-border-spacing: calc($pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding) calc($pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding) !default;
 $pivotgrid-expand-icon-offset: -5px !default;
@@ -115,8 +116,8 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
 
     @include dx-icon(filter);
 
-    font-size: $pivotgrid-icon-size;
-    width: $pivotgrid-icon-size;
+    font-size: $pivotgrid-header-filter-icon-size;
+    width: $pivotgrid-header-filter-icon-size;
   }
 
   .dx-header-filter-empty {

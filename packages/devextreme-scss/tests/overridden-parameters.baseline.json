@@ -70,23 +70,9 @@
     {
       "theme": "fluent",
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "font-size",
-      "selector": ".dx-pivotgrid-fields-container .dx-header-filter",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
       "property": "padding",
       "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
       "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "property": "width",
-      "selector": ".dx-pivotgrid-fields-container .dx-header-filter",
-      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
     },
     {
       "theme": "fluent",
