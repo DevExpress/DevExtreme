@@ -63,9 +63,9 @@ treeListCore.registerModulesOrder([
 ]);
 
 class TreeList extends GridCoreWidget<dxTreeListOptions> {
-  private _initMarkup(...args: unknown[]): void {
+  private _initMarkup(): void {
     // @ts-expect-error
-    super._initMarkup(...args);
+    super._initMarkup();
     this.$element().addClass(TREELIST_CLASS);
     this.getView('gridView').render(this.$element());
   }

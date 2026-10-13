@@ -10,6 +10,7 @@ import './module_not_extended/error_handling';
 import './module_not_extended/grid_view';
 import './module_not_extended/header_panel';
 
+import type { template } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import type { Device } from '@js/core/devices';
 import type { UserDefinedElement } from '@js/core/element';
@@ -139,9 +140,9 @@ class DataGrid extends GridCoreWidget<Properties> {
     gridCore.callModuleItemsMethod(this, 'init');
   }
 
-  private _initMarkup(...args: unknown[]): void {
+  private _initMarkup(): void {
     // @ts-expect-error
-    super._initMarkup(...args);
+    super._initMarkup();
     this.getView('gridView').render(this.$element());
   }
 
@@ -153,15 +154,16 @@ class DataGrid extends GridCoreWidget<Properties> {
     return gridCore;
   }
 
-  public _getTemplate(templateName: unknown): FunctionTemplate {
-    let template = templateName;
+  public _getTemplate(templateName: template): FunctionTemplate {
+    if (isString(templateName) && templateName.startsWith('#')) {
+      const $template = $(templateName);
 
-    if (isString(template) && template.startsWith('#')) {
-      template = $(template);
       logger.warn(DATAGRID_DEPRECATED_TEMPLATE_WARNING);
+
+      return super._getTemplate($template);
     }
 
-    return super._getTemplate(template);
+    return super._getTemplate(templateName);
   }
 
   public focus(element?: UserDefinedElement): void {
