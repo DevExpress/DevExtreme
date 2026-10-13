@@ -5,7 +5,7 @@
 @use "../sizes" as *;
 @use "../menuBase/sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../menuBase" as *;
+@use "../menuBase";
 @use "../../base/menu";
 
 $material-menu-font-size: $material-base-font-size !default;

@@ -51,7 +51,7 @@ $generic-scheduler-header-panel-table-cell-height: $generic-scheduler-workspace-
   $agenda-appointment-details-opacity: 0.7,
   $scheduler-month-date-text-size: $generic-scheduler-month-date-text-size,
 );
-@use "../recurrenceEditor" as *;
+@use "../recurrenceEditor";
 @use "../scrollable";
 
 $generic-scheduler-appointment-reduced-content-padding: 40px !default;
