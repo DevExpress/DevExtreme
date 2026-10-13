@@ -2083,7 +2083,13 @@ declare module DevExpress.common.charts {
   };
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
-  export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+  /**
+   * [descr:DashStyle]
+   */
+  export type DashStyle = DevExpress.core.PermutationsWithRepetition<
+    'dash' | 'dot' | 'longDash' | 'solid',
+    5
+  >;
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
   /**
    * [descr:Font]
@@ -7475,6 +7481,34 @@ declare module DevExpress.core {
     render(options?: TemplateRenderOptions): DxElement;
   }
   /**
+   * IncrementalCounter[1]=2, IncrementalCounter[2]=3, IncrementalCounter[3]=4, ...
+   */
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type IncrementalCounter = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ];
+  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type InternalElement<T extends Element> = {} extends Condition
@@ -7492,6 +7526,29 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type OmitInternal<T> = Omit<T, `${'_' | '$'}${any}`>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type PermutationsWithRepetition<
+    T extends string,
+    TMaxLength extends number
+  > = PermutationsWithRepetitionInner<T, TMaxLength, 1>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type PermutationsWithRepetitionInner<
+    T extends string,
+    TMaxLength extends number,
+    K extends number
+  > = K extends TMaxLength
+    ? T
+    :
+        | T
+        | `${T}${PermutationsWithRepetitionInner<
+            T,
+            TMaxLength,
+            IncrementalCounter[K]
+          >}`;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */

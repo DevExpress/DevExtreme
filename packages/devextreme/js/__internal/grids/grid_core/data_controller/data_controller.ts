@@ -11,7 +11,7 @@ import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type {
   ChangedEvent, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';

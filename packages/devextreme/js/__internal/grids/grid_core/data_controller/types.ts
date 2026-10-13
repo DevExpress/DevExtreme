@@ -33,7 +33,7 @@ export interface ItemProcessingOptions<TColumn extends Column = Column> {
 export type RowUpdate = (row?: ProcessedItem, keepRow?: boolean) => void;
 
 export type RowWatch = (
-  getter: (data: RawItemData) => unknown,
+  getter: (data: RawItemData | undefined) => unknown,
   updateValue: (value: unknown) => void,
   updateRow?: (row: ProcessedItem) => void,
 ) => () => void;
@@ -66,7 +66,7 @@ export interface ProcessedItem extends GeneratedItem {
   loadIndex?: number;
   rowIndex?: number;
   cells?: Cell[];
-  summaryCells?: unknown[];
+  summaryCells?: unknown[][];
   update?: RowUpdate;
   watch?: RowWatch;
 }

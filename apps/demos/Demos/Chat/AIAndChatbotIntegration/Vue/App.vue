@@ -228,7 +228,6 @@ function onRegenerateButtonClick(): void {
 }
 
 .dx-button {
-  display: inline-block;
   color: var(--dx-color-icon);
 }
 

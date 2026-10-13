@@ -23,6 +23,7 @@ describe('MetadataCollector', () => {
 
   promises.mkdir = jest.fn();
   promises.writeFile = jest.fn();
+  promises.rm = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -77,6 +78,17 @@ describe('MetadataCollector', () => {
     expect(promises.mkdir).toHaveBeenCalledWith(expectedDestinationDir, { recursive: true });
     expect(promises.writeFile).toHaveBeenCalledTimes(1);
     expect(promises.writeFile).toHaveBeenCalledWith(expectedDestinationPath, fileContent);
+  });
+
+  test('saveScssFiles wipes the destination so sources deleted upstream stop shipping', async () => {
+    const destinationPath = './scss';
+
+    await MetadataCollector.saveScssFiles(Promise.resolve([]), destinationPath);
+
+    expect(promises.rm).toHaveBeenCalledWith(
+      resolve(destinationPath),
+      { recursive: true, force: true },
+    );
   });
 
   test('saveMetadata', async () => {

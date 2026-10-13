@@ -576,7 +576,7 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -788,7 +788,7 @@ const DxAxisConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     label: Object as PropType<Record<string, any>>,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -950,7 +950,7 @@ const DxBorderConfig = {
     bottom: Boolean,
     color: String,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     left: Boolean,
     opacity: Number,
     right: Boolean,
@@ -1264,7 +1264,7 @@ const DxCommonAxisSettingsConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     label: Object as PropType<Record<string, any>>,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -1481,7 +1481,7 @@ const DxCommonSeriesSettingsConfig = {
     closeValueField: String,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     fullstackedarea: {},
     fullstackedbar: {},
     fullstackedline: {},
@@ -1566,7 +1566,7 @@ const DxCommonSeriesSettingsHoverStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
@@ -1652,7 +1652,7 @@ const DxCommonSeriesSettingsSelectionStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
@@ -1708,7 +1708,7 @@ const DxConstantLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     displayBehindSeries: Boolean,
     extendAxis: Boolean,
     label: Object as PropType<Record<string, any>>,
@@ -1772,7 +1772,7 @@ const DxConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     label: Object as PropType<Record<string, any>>,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -1805,7 +1805,7 @@ const DxCrosshairConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     enabled: Boolean,
     horizontalLine: [Boolean, Object] as PropType<boolean | Record<string, any>>,
     label: Object as PropType<Record<string, any>>,
@@ -2028,7 +2028,7 @@ const DxHorizontalLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     label: Object as PropType<Record<string, any>>,
     opacity: Number,
     visible: Boolean,
@@ -2090,7 +2090,7 @@ const DxHoverStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
@@ -2588,7 +2588,7 @@ const DxPaneBorderConfig = {
   props: {
     bottom: Boolean,
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     left: Boolean,
     opacity: Number,
     right: Boolean,
@@ -2806,7 +2806,7 @@ const DxSelectionStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
@@ -2883,7 +2883,7 @@ const DxSeriesConfig = {
     closeValueField: String,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     highValueField: String,
     hoverMode: String as PropType<SeriesHoverMode>,
     hoverStyle: Object as PropType<Record<string, any>>,
@@ -2949,7 +2949,7 @@ const DxSeriesBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     visible: Boolean,
     width: Number
   }
@@ -3331,7 +3331,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -3543,7 +3543,7 @@ const DxVerticalLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     label: Object as PropType<Record<string, any>>,
     opacity: Number,
     visible: Boolean,

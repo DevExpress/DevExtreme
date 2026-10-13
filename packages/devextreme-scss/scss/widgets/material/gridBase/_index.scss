@@ -495,10 +495,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         background-color: transparent;
         border-bottom: 1px solid;
         border-bottom-color: $popup-title-border-color;
-
-        .dx-toolbar-label {
-          font-size: $material-m-font-size;
-        }
       }
 
       .dx-popup-content {
@@ -983,7 +979,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
   }
 
   .dx-#{$widget-name}-filter-panel {
-    padding: 18px $material-grid-base-cell-horizontal-padding;
 
     .dx-#{$widget-name}-filter-panel-text,
     .dx-#{$widget-name}-filter-panel-clear-filter {

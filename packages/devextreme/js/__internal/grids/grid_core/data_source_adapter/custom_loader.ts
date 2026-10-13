@@ -4,7 +4,7 @@ import { extend } from '@js/core/utils/extend';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
-import { executeTask } from './m_data_source_adapter_utils';
+import { executeTask } from './data_source_adapter_utils';
 import type { LoadOperation, RawItemData } from './types';
 
 export type CustomStoreLoadOptions = StoreLoadOptions & { isLoadingAll?: boolean };

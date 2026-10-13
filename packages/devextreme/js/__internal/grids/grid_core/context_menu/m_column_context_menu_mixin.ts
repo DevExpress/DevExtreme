@@ -3,7 +3,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import { Direction } from '../keyboard_navigation/const';
 import type { ColumnKeyboardNavigationController } from '../keyboard_navigation/m_column_keyboard_navigation_core';
 import type { ModuleType } from '../types';
-import type { ColumnsView } from '../views/m_columns_view';
+import type { ColumnsView } from '../views/columns_view';
 import { CONTEXT_MENU_MOVE_NEXT_ICON_NAME, CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME } from './const';
 
 interface ColumnContextMenuMixinRequirements extends ColumnsView {

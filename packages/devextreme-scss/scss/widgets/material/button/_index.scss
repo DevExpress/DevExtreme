@@ -17,36 +17,16 @@
 
 .dx-button {
   @include dx-button-onlyicon-sizing();
-}
 
-.dx-button-has-icon {
-  @include dx-button-onlyicon-sizing();
-}
+  height: $material-button-height;
+  position: relative;
 
-.dx-button-has-text {
-  min-width: $material-button-min-width;
-
-  @include dx-button-withtext-sizing();
-}
-
-.dx-button-has-icon.dx-button-has-text {
-  @include dx-button-text-and-icon-sizing();
-}
-
-.dx-button { // stylelint-disable-line no-duplicate-selectors
   &.dx-button-has-icon:not(.dx-button-has-text) {
     &:not(.dx-shape-standard) {
       border-radius: 50%;
       box-shadow: none;
     }
   }
-}
-
-// NOTE: Button styles
-
-.dx-button { // stylelint-disable-line no-duplicate-selectors
-  height: $material-button-height;
-  position: relative;
 
   .dx-button-content {
     position: relative;
@@ -107,6 +87,22 @@
     );
   }
 }
+
+.dx-button-has-icon {
+  @include dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-text {
+  min-width: $material-button-min-width;
+
+  @include dx-button-withtext-sizing();
+}
+
+.dx-button-has-icon.dx-button-has-text {
+  @include dx-button-text-and-icon-sizing();
+}
+
+// NOTE: Button styles
 
 .dx-button-mode-contained {
   &,

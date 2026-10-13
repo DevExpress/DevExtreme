@@ -1,36 +1,73 @@
 @use "sass:string";
 @use "../string" as *;
+@use "../mask" as *;
 
-@mixin filemanager-icon-colored($data-uri, $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $width, $height) {
-  $uri1: replace("#{$data-uri}", "currentTextColor", escape("#{$text-color}"));
-  $uri2: replace("#{$uri1}", "currentSuccessBgColor", escape("#{$success-bg-color}"));
-  $uri3: replace("#{$uri2}", "currentSuccessTextColor", escape("#{$success-text-color}"));
-  $uri4: replace("#{$uri3}", "currentDangerBgColor", escape("#{$danger-bg-color}"));
-  $uri-final: replace("#{$uri4}", "currentDangerTextColor", escape("#{$danger-text-color}"));
+@function filemanager-status-shape($data-uri) {
+  $text: replace("#{$data-uri}", "currentTextColor", "%23000");
+  $success-bg: replace($text, "currentSuccessBgColor", "%23000");
+  $success-text: replace($success-bg, "currentSuccessTextColor", "%23000");
+  $danger-bg: replace($success-text, "currentDangerBgColor", "%23000");
 
-  background: string.unquote($uri-final);
+  @return string.unquote(replace($danger-bg, "currentDangerTextColor", "%23000"));
+}
+
+@mixin filemanager-icon-masked($name, $width, $height, $color: null) {
+  mask-image: var(--dxicon-filemanager-#{$name});
+  mask-position: 50% 50%;
+  mask-repeat: no-repeat;
+  mask-size: contain;
   width: $width;
   height: $height;
+
+  @include masked-glyph-paint($color or currentColor);
+}
+
+@mixin filemanager-icon-status($name, $data-uri, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $width, $height, $text-color: null) {
+  $disc1: replace("#{$data-uri}", "currentTextColor", "transparent");
+  $disc2: replace($disc1, "currentSuccessBgColor", escape("#{$success-bg-color}"));
+  $disc3: replace($disc2, "currentSuccessTextColor", escape("#{$success-text-color}"));
+  $disc4: replace($disc3, "currentDangerBgColor", escape("#{$danger-bg-color}"));
+  $disc: replace($disc4, "currentDangerTextColor", escape("#{$danger-text-color}"));
+
+  mask-image: var(--dxicon-filemanager-#{$name});
+  mask-position: 50% 50%;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-image: string.unquote($disc);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: $width;
+  height: $height;
+
+  @include masked-glyph-paint($text-color or currentColor);
 }
 
 @mixin filemanager-icons-mixin($text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size) {
+  @at-root :root {
+    --dxicon-filemanager-refresh: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"), "currentTextColor")};
+    --dxicon-filemanager-cancel: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/cancel.svg"), "currentTextColor")};
+    --dxicon-filemanager-done: #{filemanager-status-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/done.svg"))};
+    --dxicon-filemanager-danger: #{filemanager-status-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/danger.svg"))};
+  }
+
   .dx-filemanager-i,
   .dx-filemanager-i.dx-icon {
     &.dx-filemanager-i-refresh,
     &.dx-filemanager-i-progress {
-      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-masked("refresh", $icon-size, $icon-size, $text-color);
     }
 
     &.dx-filemanager-i-done {
-      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/done.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-status("done", data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/done.svg"), $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size, $text-color);
     }
 
     &.dx-filemanager-i-danger {
-      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/danger.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-status("danger", data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/danger.svg"), $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size, $text-color);
     }
 
     &.dx-filemanager-i-cancel {
-      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/cancel.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-masked("cancel", $icon-size, $icon-size, $text-color);
     }
   }
 }

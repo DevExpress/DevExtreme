@@ -101,24 +101,12 @@ const formatDate = new Intl.DateTimeFormat('en-US').format;
   color: #999;
 }
 
-.dark #gridContainer tr.notes-row td {
-  color: #777;
-}
-
 #gridContainer tbody.dx-state-hover {
   background-color: #ebebeb;
 }
 
-.dark #gridContainer tbody.dx-state-hover {
-  background-color: #484848;
-}
-
 #gridContainer tbody.dx-state-hover tr.main-row td {
   color: #000;
-}
-
-.dark #gridContainer tbody.dx-state-hover tr.main-row td {
-  color: #ccc;
 }
 
 #gridContainer tbody.dx-state-hover tr.notes-row td {

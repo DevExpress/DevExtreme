@@ -8,6 +8,8 @@ export default class MetadataCollector {
   generator = new MetadataGenerator();
 
   static async saveScssFiles(files: Promise<FileInfo[]>, destination: string): Promise<void> {
+    await fs.rm(resolve(destination), { recursive: true, force: true });
+
     await Promise.all((await files).map(async (file) => {
       const absolutePath = resolve(join(destination, file.path));
       const directory = dirname(absolutePath);

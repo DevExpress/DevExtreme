@@ -1,5 +1,7 @@
 @use "./mixins" as *;
 
+$numberbox-spin-idle-opacity: null !default;
+
 .dx-numberbox {
   position: relative;
 
@@ -45,6 +47,6 @@
 
 .dx-state-disabled {
   .dx-numberbox-spin-container {
-    opacity: 0.2;
+    opacity: $numberbox-spin-idle-opacity;
   }
 }

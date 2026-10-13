@@ -852,8 +852,8 @@ function getPrimitiveValueText(
   customOperation: ValueTextCustomOperation | FilterCustomOperation | null,
   target: string,
   options?: { values: FieldValue[] },
-): string {
-  let valueText = getFormattedValueText(field, value);
+): string | DeferredObj<string> {
+  let valueText: string | DeferredObj<string> = getFormattedValueText(field, value);
 
   if (field.customizeText) {
     valueText = field.customizeText.call(field, {
@@ -882,7 +882,7 @@ function getArrayValueText(
   value: FieldValue[],
   customOperation: ValueTextCustomOperation | FilterCustomOperation | null,
   target: string,
-): string[] {
+): (string | DeferredObj<string>)[] {
   const options = { values: value };
   return value.map((v) => getPrimitiveValueText(field, v, customOperation, target, options));
 }

@@ -83,4 +83,21 @@ describe('ScssAssembleExecutor E2E', () => {
     expect(content).toContain(expectedSvg);
     expect(content).toContain(expectedPng);
   });
+
+  it('should drop files an earlier run left in the output directory', async () => {
+    await writeFileText(path.join(outputDir, 'widgets', 'renamed-away', '_index.scss'), '.old {}');
+    await writeFileText(
+      path.join(scssPackageDir, 'scss', 'widgets', 'kept', '_index.scss'),
+      '.new {}',
+    );
+
+    const context = createMockContext({ root: tempDir });
+    const result = await executor(OPTIONS, context);
+
+    expect(result.success).toBe(true);
+    expect(fs.existsSync(path.join(outputDir, 'widgets', 'renamed-away'))).toBe(false);
+    expect(await readFileText(path.join(outputDir, 'widgets', 'kept', '_index.scss'))).toBe(
+      '.new {}',
+    );
+  });
 });

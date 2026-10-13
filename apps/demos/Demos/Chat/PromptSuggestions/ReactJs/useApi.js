@@ -29,15 +29,20 @@ const dataItemToMessage = (item) => ({
   content: item.text,
 });
 const getMessageHistory = () => [...dataSource.items()].map(dataItemToMessage);
+const getErrorMessage = (err) => {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+};
 export const useApi = () => {
   const [alerts, setAlerts] = useState([]);
   const insertMessage = useCallback((data) => {
     dataSource.store().push([{ type: 'insert', data }]);
   }, []);
-  const alertLimitReached = useCallback(() => {
+  const alertError = useCallback((message) => {
     setAlerts([
       {
-        message: 'Request limit reached, try again in a minute.',
+        message,
       },
     ]);
     setTimeout(() => {
@@ -59,11 +64,11 @@ export const useApi = () => {
           author: assistant,
           text: aiResponse,
         });
-      } catch {
-        alertLimitReached();
+      } catch (err) {
+        alertError(getErrorMessage(err));
       }
     },
-    [alertLimitReached, insertMessage],
+    [alertError, insertMessage],
   );
   return {
     alerts,
