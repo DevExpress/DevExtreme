@@ -23,17 +23,13 @@ const scssSyntax = resolveFrom(
 
 export const scss = (...rows: string[]): string => `${rows.join('\n')}\n`;
 
-export const createRunner = (
-  pluginFile: string,
-  ruleName: string,
-  ruleOptions: unknown = true,
-): Runner => {
-  const fixture = mkdtempSync(join(tmpdir(), `${basename(pluginFile, '.mjs')}-`));
+export const createRunner = (pluginFile: string, ruleName: string): Runner => {
+  const fixture = mkdtempSync(join(tmpdir(), `${basename(pluginFile).replace(/\.[^.]+$/, '')}-`));
   const configPath = join(fixture, 'config.json');
   writeFileSync(configPath, JSON.stringify({
     customSyntax: scssSyntax,
     plugins: [join(packageRoot, 'tools', 'stylelint', pluginFile)],
-    rules: { [ruleName]: ruleOptions },
+    rules: { [ruleName]: true },
   }));
 
   const run = (name: string, source: string, fix: boolean): Result => {

@@ -1,6 +1,4 @@
-@use "colors" as *;
 @use "sizes" as *;
-@use "../../base/icon_fonts" as *;
 @use "../toolbar/mixins" as *;
 @use "../../base/popup" with (
   $popup-title-padding: var(--dx-popup-title-padding),

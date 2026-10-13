@@ -1,5 +1,3 @@
-@use "colors" as *;
-@use "sizes" as *;
 @use "../../base/splitterBar" with (
   $splitterbar-splitter-border-width: var(--dx-splitter-bar-border-width),
   $splitterbar-splitter-bar-width: var(--dx-splitter-bar-width),

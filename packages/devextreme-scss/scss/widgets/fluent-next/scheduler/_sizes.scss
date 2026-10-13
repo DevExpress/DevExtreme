@@ -192,7 +192,6 @@ $scheduler-navigator-button-font-size: ds.$font-size-base-sm !default;
 $scheduler-appointment-border-radius: ds.$border-radius-40 !default;
 $scheduler-time-panel-cell-margin-block-start: ds.$spacing-minus-60 !default;
 $scheduler-small-padding-inline-end: ds.$spacing-20 !default;
-$scheduler-small-padding-inline-start: ds.$spacing-20 !default;
 $scheduler-date-time-indicator-height: ds.$spacing-20 !default;
 $scheduler-header-panel-cell-padding-block-end: ds.$spacing-20 !default;
 $scheduler-header-panel-cell-date-margin-block-end: ds.$spacing-10 !default;
@@ -260,7 +259,6 @@ $scheduler-tooltip-title-margin-inline-start: ds.$spacing-50 !default;
 $scheduler-tooltip-date-margin: ds.$spacing-50 ds.$spacing-100 !default;
 $scheduler-tooltip-remove-margin-block-start: ds.$spacing-100 !default;
 
-$scheduler-appointment-content-details-font-size: ds.$font-size-110 !default;
 $scheduler-tooltip-subject-font-size: ds.$font-size-title-sm !default;
 $scheduler-tooltip-date-font-size: ds.$font-size-caption-md !default;
 
@@ -281,7 +279,6 @@ $scheduler-timeline-group-header-width: ds.$spacing-800 !default;
 $scheduler-timeline-group-three-empty-cell-width: 240px !default;
 $scheduler-timeline-cell-width: 200px !default;
 $scheduler-agenda-left-column-width: ds.$spacing-720 !default;
-$scheduler-agenda-date-table-padding-block-start: ds.$spacing-100 !default;
 $scheduler-virtual-row-height: ds.$spacing-480 !default;
 
 $scheduler-all-day-table-cell-height: calc(#{$scheduler-workspace-date-table-cell-height} * 1.5) !default;

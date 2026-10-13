@@ -1,6 +1,3 @@
-@use "sass:math";
-@use "colors" as *;
-@use "sizes" as *;
 @use "../../base/timeView/mixins" as *;
 @use "../../base/timeView";
 @include clock-action-icons-mixin(

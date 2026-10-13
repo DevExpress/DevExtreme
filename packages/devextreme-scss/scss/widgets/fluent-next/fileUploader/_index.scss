@@ -1,7 +1,4 @@
 @use "../mixins" as *;
-@use "sass:math";
-@use "colors" as *;
-@use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../base/fileUploader" with (
@@ -20,7 +17,7 @@
   $fileuploader-cancel-button-position-end-margin-right: var(--dx-file-uploader-cancel-button-position-end-margin-inline-end),
   $fileuploader-file-size-padding-right: var(--dx-file-uploader-file-size-padding-inline-end),
   $fileuploader-file-status-message-line-margin-bottom: var(--dx-file-uploader-file-status-message-line-margin-block-end),
-  $fileuploader-cancel-button-margin-top: var(--dx-file-uploader-cancel-button-margin-block-start),
+  $fileuploader-cancel-button-margin-top: 0,
   $fileuploader-status-message-font-size: var(--dx-file-uploader-status-message-font-size),
   $fileuploader-file-size-font-size: var(--dx-file-uploader-file-size-font-size),
 );
@@ -55,6 +52,9 @@
 
   .dx-fileuploader-input-label {
     text-align: center;
+    padding: calc(var(--dx-file-uploader-padding-block) * 2) calc(var(--dx-file-uploader-padding-block) + 2px);
+    border: var(--dx-file-uploader-file-wrapper-border-width) dashed;
+    border-color: var(--dx-file-uploader-border);
   }
 
   .dx-fileuploader-input-container {
@@ -70,12 +70,6 @@
     padding-bottom: calc(var(--dx-file-uploader-padding-block) * 2 + var(--dx-file-uploader-file-wrapper-border-width) + 1px);
     padding-left: var(--dx-file-uploader-file-wrapper-border-width);
     box-sizing: content-box;
-  }
-
-  .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: calc(var(--dx-file-uploader-padding-block) * 2) calc(var(--dx-file-uploader-padding-block) + 2px);
-    border: var(--dx-file-uploader-file-wrapper-border-width) dashed;
-    border-color: var(--dx-file-uploader-border);
   }
 }
 
@@ -203,10 +197,6 @@
 
   .dx-fileuploader-button-container {
     vertical-align: middle;
-  }
-
-  .dx-fileuploader-cancel-button {
-    margin-top: 0;
   }
 }
 

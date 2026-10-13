@@ -1,7 +1,4 @@
-@use "../../colors" as *;
 @use "../../../../base/gridBase/layout/aiChat/mixins" as *;
-@use "../../../colors" as *;
-@use "./sizes" as *;
 @use "../../../button/colors" as buttonColors;
 @include ai-chat-messagelist-empty(
   var(--dx-grid-ai-chat-empty-icon-content),

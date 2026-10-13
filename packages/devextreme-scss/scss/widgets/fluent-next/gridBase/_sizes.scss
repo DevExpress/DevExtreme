@@ -150,7 +150,6 @@ $grid-editor-input-border-block-end-width: ds.$border-width-10 !default;
 
 $grid-command-expand-column-width: ds.$spacing-300 !default;
 
-$grid-command-adaptive-column-width: calc(2 * #{$grid-cell-padding-inline} + #{$global-icon-size}) !default;
 $grid-ai-confirm-dialog-button-width: ds.$spacing-520 !default;
 
 $grid-context-menu-item-padding-block: ds.$spacing-70 !default;

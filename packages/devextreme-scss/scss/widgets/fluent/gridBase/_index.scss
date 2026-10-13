@@ -13,13 +13,11 @@
 @use "../popup/colors" as *;
 @use "../popup/sizes" as *;
 @use "../menu/colors" as *;
-@use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
 @use "../button/sizes" as *;
 @use "../../base/button/mixins" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
-@use "../typography/sizes" as *;
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";

@@ -3,11 +3,6 @@
 $sortable-clone-shadow-color-first: rgba(0, 0, 0, 0.1) !default;
 $sortable-clone-shadow-color-second: rgba(0, 0, 0, 0.2) !default;
 
-/*
- * The whole shadow, so a theme can hand over a design-system role instead of
- * two colours for a geometry frozen here. The default keeps the two-layer lift the older themes
- * were built on.
- */
 $sortable-clone-shadow:
   0 1px 3px $sortable-clone-shadow-color-first,
   0 6px 8px $sortable-clone-shadow-color-second !default;

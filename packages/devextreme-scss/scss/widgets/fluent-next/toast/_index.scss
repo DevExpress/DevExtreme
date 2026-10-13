@@ -1,4 +1,3 @@
-@use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/toast" with (
@@ -6,13 +5,9 @@
   $toast-icon-height: var(--dx-toast-icon-height),
   $toast-icon-margin-right: var(--dx-toast-icon-margin-inline-end),
   $toast-icon-margin-left: var(--dx-toast-icon-rtl-margin-inline-end),
-  $toast-stack-gap: var(--dx-toast-stack-gap),
+  $toast-stack-gap: var(--dx-toast-item-gap),
 );
 @use "../overlay";
-
-.dx-toast-stack {
-  gap: var(--dx-toast-item-gap);
-}
 
 .dx-toast-content {
   font-size: $global-font-size;

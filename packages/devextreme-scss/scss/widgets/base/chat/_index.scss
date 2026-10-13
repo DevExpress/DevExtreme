@@ -8,7 +8,6 @@ $chat-messagebubble-border-radius-image: 8px !default;
 $chat-messagebubble-max-width-image: 400px !default;
 $chat-messagebubble-max-height-image: 400px !default;
 
-@use "../mixins" as *;
 @use "layout/chat" as * with (
   $disabled-opacity: $chat-disabled-opacity,
 );

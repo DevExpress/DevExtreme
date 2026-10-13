@@ -1,5 +1,3 @@
-@use "sass:math";
-@use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
@@ -12,6 +10,7 @@
   $list-next-button-padding: var(--dx-list-next-button-padding),
   $list-response-wait-opacity: var(--dx-list-response-wait-opacity),
   $list-searchbox-margin-bottom: var(--dx-list-search-box-margin-block-end),
+  $list-empty-message-min-height: var(--dx-list-empty-message-min-height),
 );
 @use "../../base/list/mixins" as *;
 @use "../badge";
@@ -131,10 +130,6 @@
 
     &.dx-list-with-search .dx-scrollable-wrapper {
       height: calc(100% - (#{textEditorSizes.$text-editor-input-min-height} + var(--dx-list-search-box-margin-block-end)));
-    }
-
-    .dx-empty-message {
-      min-height: var(--dx-list-empty-message-min-height);
     }
 
     &.dx-list-select-decorator-enabled {
@@ -370,7 +365,7 @@
     padding: var(--dx-list-item-padding-block) $item-horizontal-padding var(--dx-list-item-padding-block);
   }
 
-  .dx-list .dx-empty-message { // stylelint-disable-line no-duplicate-selectors
+  .dx-list .dx-empty-message {
     padding: var(--dx-list-item-padding-block) var(--dx-list-item-padding-inline);
   }
 

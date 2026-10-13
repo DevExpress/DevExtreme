@@ -1,6 +1,3 @@
-@use "sass:math";
-@use "colors" as *;
-@use "sizes" as *;
 @use "../../base/colorBox" with (
   $colorbox-input-left-padding: var(--dx-color-box-input-min-width),
   $colorbox-texteditor-input-container-width: var(--dx-color-box-input-container-width),

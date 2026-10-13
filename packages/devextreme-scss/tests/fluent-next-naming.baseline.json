@@ -466,9 +466,7 @@
     "cardView/_colors.scss: ../../base/cardView/column_chooser/variables",
     "cardView/_colors.scss: ../../base/cardView/content_view/content/card/content/variables",
     "cardView/_colors.scss: ../../base/cardView/content_view/content/card/cover/variables",
-    "cardView/_colors.scss: ../../base/cardView/content_view/content/card/header/variables",
     "cardView/_colors.scss: ../../base/cardView/content_view/content/card/variables",
-    "cardView/_colors.scss: ../../base/cardView/content_view/content/variables",
     "cardView/_colors.scss: ../../base/cardView/content_view/no_data/variables",
     "cardView/_colors.scss: ../../base/cardView/filter_panel/variables",
     "cardView/_colors.scss: ../../base/cardView/header_panel/item/variables",
@@ -490,7 +488,6 @@
     "treeList/_sizes.scss: ../../base/treeList/variables"
   ],
   "crossWidgetStarImports": [],
-  "deadVariables": [],
   "publicSurfaceUnused": [
     "--dx-button-padding-inline",
     "--dx-color-shadow",

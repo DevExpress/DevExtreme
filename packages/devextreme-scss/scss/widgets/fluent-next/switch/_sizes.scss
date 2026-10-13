@@ -1,5 +1,4 @@
 @use "../sizes" as *;
-@use "colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
 $switch-transition: all 0.2s cubic-bezier(0.33, 0, 0.67, 1) !default;

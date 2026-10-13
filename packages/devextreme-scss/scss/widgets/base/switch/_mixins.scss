@@ -1,5 +1,3 @@
-@use "../icon_fonts" as *;
-
 @mixin dx-switch(
   $switch-width,
   $switch-height,
@@ -177,12 +175,10 @@
 @mixin dx-switch-states-fluent(
   $switch-on-disabled-bg,
   $switch-handle-disabled-bg,
-  $switch-shadow,
   $switch-bg,
   $switch-on-bg,
   $switch-accent-hover,
   $switch-accent-active,
-  $switch-handle-on-shadow,
   $switch-handle-off-bg,
   $switch-handle-on-bg,
   $switch-border,
@@ -363,7 +359,6 @@
 
 @mixin dx-switch-rtl(
   $switch-height,
-  $switch-padding,
   $switch-container-adjustment,
 ) {
   .dx-rtl .dx-switch,
