@@ -5,6 +5,15 @@ $scrollable-scroll-padding: 2px !default;
 
 .dx-scrollable-scrollbar-simulated {
   position: relative;
+
+  &,
+  .dx-scrollable-container {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    scrollbar-width: none;
+  }
 }
 
 .dx-scrollable {
@@ -89,17 +98,6 @@ $scrollable-scroll-padding: 2px !default;
   &.dx-scrollable-native-android .dx-scrollable-content {
     transform: none;
     z-index: 0;
-  }
-}
-
-.dx-scrollable-scrollbar-simulated { // stylelint-disable-line no-duplicate-selectors
-  &,
-  .dx-scrollable-container {
-    ::-webkit-scrollbar {
-      display: none;
-    }
-
-    scrollbar-width: none;
   }
 }
 

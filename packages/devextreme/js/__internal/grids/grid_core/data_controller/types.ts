@@ -66,7 +66,7 @@ export interface ProcessedItem extends GeneratedItem {
   loadIndex?: number;
   rowIndex?: number;
   cells?: Cell[];
-  summaryCells?: unknown[];
+  summaryCells?: unknown[][];
   update?: RowUpdate;
   watch?: RowWatch;
 }

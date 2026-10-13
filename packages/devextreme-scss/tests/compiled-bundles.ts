@@ -52,6 +52,14 @@ export const parseBundle = async (theme: Theme): Promise<Root> => {
   });
 };
 
+export const mapBundles = <T>(
+  themes: Theme[],
+  map: (root: Root, theme: Theme) => T,
+): Promise<T[]> => themes.reduce<Promise<T[]>>(
+  async (previous, theme) => [...await previous, map(await parseBundle(theme), theme)],
+  Promise.resolve([]),
+);
+
 const contextOf = (rule: Rule): string | null => {
   let context = '';
   let { parent } = rule;

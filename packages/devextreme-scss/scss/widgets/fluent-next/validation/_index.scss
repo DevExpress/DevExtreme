@@ -10,12 +10,9 @@
   var(--dx-validation-overlay-border-radius)
 );
 @include baseValidation.dx-modern-styles-validation(
-  var(--dx-validation-message-font-size),
   var(--dx-validation-message-line-height),
   textEditorSizes.$text-editor-input-filled-padding-inline,
   var(--dx-validation-summary-item-margin),
-  var(--dx-validation-message-padding-block),
-  var(--dx-validation-message-padding-inline),
 );
 
 .dx-state-disabled .dx-invalid-message .dx-overlay-content,
