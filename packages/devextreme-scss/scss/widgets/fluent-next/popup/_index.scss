@@ -69,7 +69,7 @@
 }
 
 .dx-popup-content.dx-dialog-content {
-  min-width: calc(220px - 2 * var(--dx-popup-content-padding)); // dx-fixed-size: 220px dialog min-width
+  min-width: calc(220px - 2 * var(--dx-popup-content-padding));
   padding: var(--dx-popup-content-padding-block) var(--dx-popup-content-padding);
 }
 

@@ -101,7 +101,6 @@ interface Typography {
   variable: string;
   family: string;
   step: number;
-  marker: string | null;
 }
 
 interface ThemeFinding {
@@ -193,13 +192,6 @@ test('a role the package names for the slot passes', () => {
 
   const planted = run(theme).findings.find((f) => f.name === 'switch-off-border');
   expect(planted?.package?.verdict).toBe('agrees');
-});
-
-test('every typography step read carries a marker', () => {
-  const unmarked = actual.typography
-    .filter((t) => !t.marker)
-    .map((t) => `${t.variable} reads ${t.family}-${t.step}`);
-  expect(unmarked).toEqual([]);
 });
 
 test('names whose slot contradicts the painted property are the reviewed ones', () => {

@@ -17,17 +17,17 @@ $invalid-badge-size: calc(#{$global-icon-size} - #{ds.$spacing-20}) !default;
 $invalid-badge-padding-inline: calc((#{$global-inline-widget-inner-height} - #{$invalid-badge-size}) / 2) !default;
 $invalid-badge-offset: calc(#{$invalid-badge-padding-inline} / 2) !default;
 
-$valid-badge-font-size: calc(#{$global-font-size} + 6px) !default; // dx-px-nudge: +6px over the global font size
+$valid-badge-font-size: calc(#{$global-font-size} + 6px) !default;
 
 $global-dropdown-box-shadow: null !default;
 
 @if $size == "default" {
-  $global-line-height: 1.428571 !default; // dx-relative: unitless ratio, no line-height-ratio scale in package
+  $global-line-height: 1.428571 !default;
   $global-dropdown-box-shadow: ds.$box-shadow-lg !default;
 }
 
 @else if $size == "compact" {
-  $global-line-height: 1.3333 !default; // dx-relative
+  $global-line-height: 1.3333 !default;
   $global-dropdown-box-shadow: ds.$box-shadow-md !default;
 }
 

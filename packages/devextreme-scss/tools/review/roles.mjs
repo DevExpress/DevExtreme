@@ -292,8 +292,7 @@ for (const set of SETS) {
  * The colour layer reads roles everywhere (0 direct palette reads). Typography does not: most of
  * its step reads go straight to a base scale, because the value came from legacy fluent and the
  * role grid has no step with that value - font-weight 500, font-size 110/180/220/260/360,
- * line-height 120/180. Most carry `dx-no-semantic-role`; the rest carry no marker at all, because
- * the px gate only looks at literals and a step read is not a literal.
+ * line-height 120/180.
  *
  * None of the four neighbors has this: their component sets reference the typography ROLES and a
  * bare step three times in total. So a place here is not "the package is missing a role" by
@@ -638,7 +637,6 @@ const summary = {
   declarations: findings.length,
   typographyStepReads: typography.length,
   typographyOffGrid: typography.filter((t) => !t.roles.length).length,
-  typographyUnmarked: typography.filter((t) => !t.marker).length,
   collapsedLadders: ladders.length,
   conceptsSplit: concepts.length,
   conceptsSplitAcrossFamilies: concepts.filter((c) => c.families.length > 1).length,
@@ -846,19 +844,19 @@ const md = () => {
   out.push('The role grid names no step with this value, so the theme reads the base scale directly.');
   out.push('Each line is a choice: move onto the nearest role (the value changes, etalons follow), ask');
   out.push('the package for a role at this step, or record the value as a deliberate divergence.\n');
-  out.push('| Where | Variable | Reads | Marker | Nearest roles |');
-  out.push('|---|---|---|---|---|');
+  out.push('| Where | Variable | Reads | Nearest roles |');
+  out.push('|---|---|---|---|');
   for (const t of offGrid) {
-    out.push(`| ${t.where} | \`${t.variable}\` | \`${t.family}-${t.step}\` | ${t.marker ? `\`${t.marker}\`` : '**none**'}`
+    out.push(`| ${t.where} | \`${t.variable}\` | \`${t.family}-${t.step}\``
       + ` | ${t.nearest.map((n) => `\`${n.role}\` (${n.step})`).join(', ')} |`);
   }
   out.push('');
   if (onGridUnrouted.length) {
     out.push(`### A role names this step and the theme reads the step anyway - ${onGridUnrouted.length}\n`);
-    out.push('| Where | Variable | Reads | Marker | Role with this step |');
-    out.push('|---|---|---|---|---|');
+    out.push('| Where | Variable | Reads | Role with this step |');
+    out.push('|---|---|---|---|');
     for (const t of onGridUnrouted) {
-      out.push(`| ${t.where} | \`${t.variable}\` | \`${t.family}-${t.step}\` | ${t.marker ? `\`${t.marker}\`` : '**none**'}`
+      out.push(`| ${t.where} | \`${t.variable}\` | \`${t.family}-${t.step}\``
         + ` | ${t.roles.map((r) => `\`${r}\``).join(', ')} |`);
     }
     out.push('');

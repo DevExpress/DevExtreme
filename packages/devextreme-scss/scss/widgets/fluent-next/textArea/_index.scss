@@ -15,8 +15,8 @@
 .dx-textarea {
   &.dx-editor-underlined {
     .dx-texteditor-input {
-      padding-top: calc(#{textEditorSizes.$text-editor-input-underlined-padding-block-start} + 1px); // dx-px-nudge: +1px over the underlined input padding
-      padding-bottom: calc(#{textEditorSizes.$text-editor-input-underlined-padding-block-end} + 1px); // dx-px-nudge: +1px over the underlined input padding
+      padding-top: calc(#{textEditorSizes.$text-editor-input-underlined-padding-block-start} + 1px);
+      padding-bottom: calc(#{textEditorSizes.$text-editor-input-underlined-padding-block-end} + 1px);
     }
 
     &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),

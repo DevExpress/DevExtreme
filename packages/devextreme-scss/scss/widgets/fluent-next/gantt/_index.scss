@@ -99,8 +99,8 @@
       }
 
       &.dx-gantt-parent {
-        height: calc(var(--dx-gantt-task-height) - 2px); // dx-px-nudge: -2px off the task height
-        line-height: calc(var(--dx-gantt-task-height) - 2px); // dx-px-nudge: -2px off the task height
+        height: calc(var(--dx-gantt-task-height) - 2px);
+        line-height: calc(var(--dx-gantt-task-height) - 2px);
         background-color: var(--dx-gantt-parent-task-bg);
         border-left-color: var(--dx-gantt-parent-task-bg);
         border-right-color: var(--dx-gantt-parent-task-bg);
@@ -153,7 +153,7 @@
         }
 
         .dx-gantt-task-edit-frame {
-          height: calc(var(--dx-gantt-task-height) - 2px); // dx-px-nudge: -2px off the task height
+          height: calc(var(--dx-gantt-task-height) - 2px);
         }
       }
     }
@@ -237,12 +237,12 @@
 
   .dx-gantt-task-edit-dependency-r,
   .dx-gantt-task-edit-successor-dependency-r {
-    left: calc(-1 * var(--dx-gantt-dependency-successor-size) - 1px); // dx-px-nudge: -1px off the dependency size
+    left: calc(-1 * var(--dx-gantt-dependency-successor-size) - 1px);
   }
 
   .dx-gantt-task-edit-dependency-l,
   .dx-gantt-task-edit-successor-dependency-l {
-    right: calc(-1 * var(--dx-gantt-dependency-successor-size) - 1px); // dx-px-nudge: -1px off the dependency size
+    right: calc(-1 * var(--dx-gantt-dependency-successor-size) - 1px);
   }
 
   .dx-gantt-task-edit-dependency-line {

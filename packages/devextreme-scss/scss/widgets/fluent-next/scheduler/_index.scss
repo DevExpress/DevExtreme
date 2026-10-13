@@ -146,7 +146,7 @@
     font-size: var(--dx-scheduler-time-panel-font-size);
 
     .dx-scheduler-small & {
-      font-size: calc(var(--dx-scheduler-time-panel-font-size) - 1px); // dx-px-nudge: -1px off the time panel font size
+      font-size: calc(var(--dx-scheduler-time-panel-font-size) - 1px);
     }
   }
 
@@ -801,7 +801,7 @@
 
       &.dx-button-mode-text.dx-state-focused {
         outline: auto;
-        outline-offset: -2px; // dx-px-nudge: -2px outline inset
+        outline-offset: -2px;
       }
     }
   }
@@ -892,7 +892,7 @@
     background-color: var(--dx-scheduler-appointment-strip-bg);
   }
 
-  @container (max-width: 8px) { // dx-literal-required: 8px in a @container condition, var() is invalid there
+  @container (max-width: 8px) {
     .dx-scheduler-appointment-strip {
       display: none;
     }
@@ -930,7 +930,7 @@
 
   .dx-scheduler-date-table-row,
   .dx-scheduler-time-panel-row {
-    box-shadow: inset 0 -1px 0 0 var(--dx-scheduler-border); // dx-line-width: 1px hairline drawn as an inset shadow
+    box-shadow: inset 0 -1px 0 0 var(--dx-scheduler-border);
   }
 
   .dx-scheduler-time-panel-cell {
@@ -964,7 +964,7 @@
       border-bottom: none;
 
       &:not(:last-child) {
-        box-shadow: inset 0 -1px 0 0 var(--dx-scheduler-group-separator-border); // dx-line-width: 1px hairline drawn as an inset shadow
+        box-shadow: inset 0 -1px 0 0 var(--dx-scheduler-group-separator-border);
       }
     }
   }

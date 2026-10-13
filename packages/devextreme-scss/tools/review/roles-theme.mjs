@@ -188,8 +188,6 @@ const coverageOf = (themeDir, declarations) => {
   return coverage;
 };
 
-const MARKERS = /dx-(no-semantic-role|icon-glyph-size|offscale|relative|px-nudge|literal-required|fixed-size|line-width|shadow-geometry)/;
-
 const sizeFiles = (dir) => readdirSync(dir).flatMap((entry) => {
   const absolute = join(dir, entry);
   if (statSync(absolute).isDirectory()) return sizeFiles(absolute);
@@ -211,7 +209,6 @@ const typographyReads = (themeDir) => {
         variable: /\$([a-z0-9-]+)\s*:/.exec(line)?.[1] ?? '(inline)',
         family,
         step: Number(step),
-        marker: MARKERS.exec(line)?.[1] ?? null,
       });
     });
   }

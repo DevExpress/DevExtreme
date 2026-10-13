@@ -58,7 +58,7 @@
   margin: var(--dx-color-view-color-preview-container-margin);
   margin-top: 0;
   background-color: var(--dx-color-view-bg-box-palette-cell-bg);
-  box-shadow: 0 0 0 1px var(--dx-color-view-border); // dx-line-width: 1px hairline ring drawn as a shadow
+  box-shadow: 0 0 0 1px var(--dx-color-view-border);
 }
 
 .dx-colorview-color-preview-container {
@@ -75,7 +75,7 @@
   .dx-colorview-alpha-channel-border,
   .dx-colorview-hue-scale-wrapper,
   .dx-colorview-color-preview-container {
-    box-shadow: 0 0 0 1px var(--dx-color-view-border-disabled); // dx-line-width: 1px hairline ring drawn as a shadow
+    box-shadow: 0 0 0 1px var(--dx-color-view-border-disabled);
   }
 
   .dx-colorview-palette-handle,

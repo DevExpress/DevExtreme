@@ -427,7 +427,7 @@
   }
 
   .dx-list-select-all-checkbox {
-    margin: 0 calc(#{$item-horizontal-padding} - 4px); // dx-px-nudge: -4px off the item horizontal padding
+    margin: 0 calc(#{$item-horizontal-padding} - 4px);
   }
 
   .dx-list-select-all-label {

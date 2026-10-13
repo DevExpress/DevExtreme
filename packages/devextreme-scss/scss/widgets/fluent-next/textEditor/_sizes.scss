@@ -42,7 +42,7 @@ $text-editor-input-filled-with-label-padding-block-end: null !default;
 $text-editor-icon-container-size: $global-icon-size !default;
 
 @if $size == "default" {
-  $text-editor-line-height: 1.428571 !default; // dx-relative: unitless ratio, no line-height-ratio scale in package
+  $text-editor-line-height: 1.428571 !default;
   $text-editor-font-size: ds.$font-size-base-md !default;
   $text-editor-input-min-height: ds.$spacing-320 !default;
   $text-editor-label-outside-height: ds.$spacing-200 !default;
@@ -60,7 +60,7 @@ $text-editor-icon-container-size: $global-icon-size !default;
 }
 
 @else if $size == "compact" {
-  $text-editor-line-height: 1.3333 !default; // dx-relative
+  $text-editor-line-height: 1.3333 !default;
   $text-editor-font-size: ds.$font-size-base-sm !default;
   $text-editor-input-min-height: ds.$spacing-240 !default;
   $text-editor-label-outside-height: ds.$spacing-160 !default;
@@ -86,11 +86,11 @@ $text-editor-button-filled-inset-inline-end: calc(#{$text-editor-input-filled-pa
 $text-editor-spin-button-margin-inline-end: calc(#{$text-editor-input-filled-padding-inline} / 2) !default;
 
 $text-editor-border-width: ds.$border-width-10 !default;
-$text-editor-line-inset-inline-start: -1px !default; // dx-offscale: -1px
-$text-editor-line-inset-block-end: -1px !default; // dx-offscale: -1px
-$text-editor-line-inset-inline-end: -1px !default; // dx-offscale: -1px
-$text-editor-label-inset: -1px !default; // dx-offscale: -1px
-$text-editor-label-margin-block-end: -1px !default; // dx-offscale: -1px
+$text-editor-line-inset-inline-start: -1px !default;
+$text-editor-line-inset-block-end: -1px !default;
+$text-editor-line-inset-inline-end: -1px !default;
+$text-editor-label-inset: -1px !default;
+$text-editor-label-margin-block-end: -1px !default;
 $text-editor-line-border-block-end-active: ds.$border-width-20 solid !default;
 $text-editor-custom-button-margin: ds.$spacing-60 !default;
 $text-editor-line-border-block-end-width-focused: ds.$border-width-10 !default;
