@@ -59,7 +59,7 @@ export async function testScreenshot(
   } = options ?? {};
 
   if (isString(theme)) {
-    await changeTheme(theme);
+    await changeTheme(t, theme);
     await themeChanged?.();
   }
 
@@ -69,7 +69,7 @@ export async function testScreenshot(
 
   if (shouldTestInCompact) {
     const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
-    await changeTheme(`${themeName}.compact`);
+    await changeTheme(t, `${themeName}.compact`);
 
     await compactCallBack?.();
 
@@ -79,6 +79,6 @@ export async function testScreenshot(
   }
 
   if (isString(theme) || shouldTestInCompact) {
-    await changeTheme(process.env.theme ?? defaultThemeName);
+    await changeTheme(t, process.env.theme ?? defaultThemeName);
   }
 }
