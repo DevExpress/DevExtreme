@@ -1,10 +1,5 @@
 [
   {
-    "file": "scss/widgets/base/colorView/_index.scss",
-    "property": "width",
-    "selector": ".dx-colorview-hue-scale"
-  },
-  {
     "file": "scss/widgets/base/dataGrid/_index.scss",
     "property": "outline",
     "selector": ".dx-command-ai-header-button .dx-button.dx-state-focused"
