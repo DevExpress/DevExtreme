@@ -207,7 +207,7 @@
   }
 }
 
-.dx-scheduler-appointment-content { // stylelint-disable-line no-duplicate-selectors
+.dx-scheduler-appointment-content {
   padding: var(--dx-scheduler-appointment-content-padding);
 }
 
@@ -675,7 +675,7 @@
   }
 }
 
-.dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
+.dx-scheduler-work-space {
   border-bottom-right-radius: var(--dx-scheduler-border-radius);
   border-bottom-left-radius: var(--dx-scheduler-border-radius);
 
@@ -860,7 +860,7 @@
   color: var(--dx-scheduler-dropdown-appointment-date-content);
 }
 
-.dx-scheduler-work-space-vertical-grouped { // stylelint-disable-line no-duplicate-selectors
+.dx-scheduler-work-space-vertical-grouped {
   &.dx-scheduler-work-space-month {
     .dx-scheduler-date-table-scrollable {
       border-top: baseScheduler.$scheduler-base-border;
