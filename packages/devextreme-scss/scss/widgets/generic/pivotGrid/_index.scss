@@ -27,6 +27,7 @@
   $pivotgrid-accent-color: $pivotgrid-accent-color,
   $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
+  $pivotgrid-fields-container-drag-opacity: 0.8,
 );
 
 .dx-pivotgrid {
@@ -102,5 +103,13 @@
 .dx-pivotgrid-fields-container {
   .dx-position-indicator {
     background-color: $pivotgrid-position-indicator-color;
+  }
+
+  .dx-column-indicators {
+    .dx-sort,
+    .dx-header-filter {
+      vertical-align: top;
+      line-height: inherit;
+    }
   }
 }

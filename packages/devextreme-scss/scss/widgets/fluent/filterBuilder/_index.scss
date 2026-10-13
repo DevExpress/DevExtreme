@@ -24,6 +24,8 @@
     $filterbuilder-remove-icon-hover-color: $filterbuilder-remove-icon-hover-color,
     $filterbuilder-remove-icon-focus-color: $filterbuilder-remove-icon-focus-color,
     $filterbuilder-menu-icon-color: $filterbuilder-menu-icon-color,
+  $filterbuilder-range-separator-opacity: 0.3,
+    $filterbuilder-action-icon-padding: $fluent-filterbuilder-icon-padding,
 );
 @use "../textEditor/colors" as *;
 
@@ -35,7 +37,6 @@
   .dx-filterbuilder-group {
     .dx-filterbuilder-group-item {
       .dx-filterbuilder-action.dx-filterbuilder-action-icon {
-        padding: $fluent-filterbuilder-icon-padding;
         vertical-align: middle;
       }
     }

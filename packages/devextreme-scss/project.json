@@ -162,6 +162,33 @@
       "inputs": [
         "{projectRoot}/**/*"
       ]
+    },
+    "test": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test"
+      },
+      "dependsOn": [
+        "typecheck"
+      ],
+      "inputs": [
+        "{projectRoot}/**/*",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ]
+    },
+    "typecheck": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "typecheck"
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*.ts",
+        "{projectRoot}/tests/**/*.ts",
+        "{projectRoot}/tests/tsconfig.json",
+        "{workspaceRoot}/tsconfig.json",
+        "{workspaceRoot}/pnpm-lock.yaml"
+      ],
+      "cache": true
     }
   },
   "tags": []

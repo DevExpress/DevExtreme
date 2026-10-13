@@ -95,8 +95,7 @@ function getPriorityClass(task: Task) {
 .list-title {
   color: var(--dx-color-text);
   font-size: 16px;
-  padding: 10px;
-  padding-left: 30px;
+  padding: 10px 10px 10px 30px;
   margin-bottom: -10px;
   font-weight: bold;
   cursor: pointer;

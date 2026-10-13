@@ -60,7 +60,7 @@ function calculateFilterExpression(filterValue: any, field: DxFilterBuilderTypes
 .results > div {
   flex-basis: 49%;
   max-width: 50%;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   position: relative;
 }
 

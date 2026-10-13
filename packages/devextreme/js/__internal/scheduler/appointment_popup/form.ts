@@ -24,7 +24,7 @@ import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import type { Properties as SwitchProperties } from '@js/ui/switch';
 import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 import { current, isFluent } from '@js/ui/themes';
-import { dateSerialization } from '@ts/core/utils/m_date_serialization';
+import { dateSerialization } from '@ts/core/utils/date_serialization';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type Popup from '@ts/ui/popup/popup';
 

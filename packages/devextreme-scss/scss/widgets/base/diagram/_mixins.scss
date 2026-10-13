@@ -1,188 +1,287 @@
 @use "sass:string";
 @use "../string" as *;
+@use "../mask" as *;
 
-@mixin diagram-icon-colored($data-uri, $current-color, $width, $height) {
-  $uri: replace("#{$data-uri}", "currentColor", escape("#{$current-color}"));
-
-  background-image: string.unquote($uri);
+@mixin diagram-icon-masked($name, $width, $height) {
+  mask-image: var(--dxicon-diagram-#{$name});
   width: $width;
   height: $height;
 }
 
+@mixin diagram-icon-two-tone($name, $data-uri, $width, $height) {
+  $overlay: replace("#{$data-uri}", "currentColor", "transparent");
+
+  mask-image: var(--dxicon-diagram-#{$name});
+  background-image: string.unquote($overlay);
+  width: $width;
+  height: $height;
+}
+
+@mixin diagram-icon-masked-inset($name, $width, $height) {
+  position: relative;
+  width: $width;
+  height: $height;
+  background-color: transparent;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    mask-image: var(--dxicon-diagram-#{$name});
+    mask-repeat: no-repeat;
+
+    @include masked-glyph-paint();
+  }
+}
+
+@mixin diagram-icon($name, $current-color, $width, $height) {
+  @include diagram-icon-masked($name, $width, $height);
+
+  @if $current-color {
+    @include masked-glyph-paint($current-color);
+  }
+}
+
 @mixin diagram-action-icons-mixin($toolbar-color, $menu-color, $icon-size, $toolbar-colorbutton-border-width) {
+  $diagram-wide-icon-size: calc(1.56 * $icon-size);
+
+  @at-root :root {
+    --dxicon-diagram-selectbox-null-icon: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/selectbox-null-icon.svg"))};
+    --dxicon-diagram-connector-begin-arrow: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-begin-arrow.svg"))};
+    --dxicon-diagram-connector-begin-outlined-triangle: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-begin-outlined-triangle.svg"))};
+    --dxicon-diagram-connector-begin-filled-triangle: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-begin-filled-triangle.svg"))};
+    --dxicon-diagram-connector-end-arrow: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-end-arrow.svg"))};
+    --dxicon-diagram-connector-end-outlined-triangle: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-end-outlined-triangle.svg"))};
+    --dxicon-diagram-connector-end-filled-triangle: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-end-filled-triangle.svg"))};
+    --dxicon-diagram-connector-orthogonal: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-orthogonal.svg"))};
+    --dxicon-diagram-connector-straight: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-straight.svg"))};
+    --dxicon-diagram-line-solid: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/line-solid.svg"))};
+    --dxicon-diagram-line-dotted: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/line-dotted.svg"))};
+    --dxicon-diagram-line-dashed: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/line-dashed.svg"))};
+    --dxicon-diagram-fullscreen: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/fullscreen.svg"))};
+    --dxicon-diagram-lock: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/lock.svg"))};
+    --dxicon-diagram-unlock: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/unlock.svg"))};
+    --dxicon-diagram-send-to-back: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/send-to-back.svg"))};
+    --dxicon-diagram-bring-to-front: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/bring-to-front.svg"))};
+    --dxicon-diagram-select-all: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/select-all.svg"))};
+    --dxicon-diagram-image-delete: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/image-delete.svg"))};
+    --dxicon-diagram-image-edit: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/image-edit.svg"))};
+    --dxicon-diagram-image-insert: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/image-insert.svg"))};
+    --dxicon-diagram-layout-layered-bt: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-layered-bt.svg"))};
+    --dxicon-diagram-layout-layered-lr: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-layered-lr.svg"))};
+    --dxicon-diagram-layout-layered-rl: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-layered-rl.svg"))};
+    --dxicon-diagram-layout-layered-tb: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-layered-tb.svg"))};
+    --dxicon-diagram-layout-tree-bt: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-tree-bt.svg"))};
+    --dxicon-diagram-layout-tree-lr: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-tree-lr.svg"))};
+    --dxicon-diagram-layout-tree-rl: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-tree-rl.svg"))};
+    --dxicon-diagram-toolbox-open: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-open.svg"))};
+    --dxicon-diagram-toolbox-close: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-close.svg"))};
+    --dxicon-diagram-layout-tree-tb: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-tree-tb.svg"))};
+    --dxicon-diagram-connector-begin-none: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-begin-none.svg"))};
+    --dxicon-diagram-connector-end-none: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-end-none.svg"))};
+    --dxicon-diagram-button-fill: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/button-fill.svg"))};
+    --dxicon-diagram-toolbox-drag: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-drag.svg"))};
+    --dxicon-diagram-properties-panel-open: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/properties-panel-open.svg"))};
+  }
+
+  .dx-diagram-i {
+    mask-repeat: no-repeat;
+
+    @include masked-glyph-paint();
+  }
+
   .dx-diagram-i-selectbox-null-icon {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/selectbox-null-icon.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("selectbox-null-icon", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-connector-begin-none {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-begin-none.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon-two-tone("connector-begin-none", data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-begin-none.svg"), $diagram-wide-icon-size, $icon-size);
+
+    @if $toolbar-color {
+      @include masked-glyph-paint($toolbar-color);
+    }
   }
 
   .dx-diagram-i-connector-begin-arrow {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-begin-arrow.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("connector-begin-arrow", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-connector-begin-outlined-triangle {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-begin-outlined-triangle.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("connector-begin-outlined-triangle", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-connector-begin-filled-triangle {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-begin-filled-triangle.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("connector-begin-filled-triangle", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-connector-end-none {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-end-none.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon-two-tone("connector-end-none", data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-end-none.svg"), $diagram-wide-icon-size, $icon-size);
+
+    @if $toolbar-color {
+      @include masked-glyph-paint($toolbar-color);
+    }
   }
 
   .dx-diagram-i-connector-end-arrow {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-end-arrow.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("connector-end-arrow", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-connector-end-outlined-triangle {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-end-outlined-triangle.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("connector-end-outlined-triangle", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-connector-end-filled-triangle {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-end-filled-triangle.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("connector-end-filled-triangle", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-connector-orthogonal {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-orthogonal.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("connector-orthogonal", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-connector-straight {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/connector-straight.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("connector-straight", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-line-solid {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/line-solid.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("line-solid", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-line-dotted {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/line-dotted.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("line-dotted", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
   .dx-diagram-i-line-dashed {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/line-dashed.svg"), $toolbar-color, 1.56 * $icon-size, $icon-size);
+    @include diagram-icon("line-dashed", $toolbar-color, $diagram-wide-icon-size, $icon-size);
   }
 
-  .dx-diagram-i-button-fill {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/button-fill.svg"), $toolbar-color, $icon-size, $icon-size + $toolbar-colorbutton-border-width);
-  }
+  $fill-height: calc($icon-size + $toolbar-colorbutton-border-width);
 
+  .dx-diagram-i-button-fill,
   .dx-diagram-i-menu-fill {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/button-fill.svg"), $menu-color, $icon-size, $icon-size + $toolbar-colorbutton-border-width);
+    @include diagram-icon-masked-inset("button-fill", $icon-size, $fill-height);
+  }
+
+  @if $toolbar-color {
+    .dx-diagram-i-button-fill::before {
+      @include masked-glyph-paint($toolbar-color);
+    }
+  }
+
+  @if $menu-color {
+    .dx-diagram-i-menu-fill::before {
+      @include masked-glyph-paint($menu-color);
+    }
   }
 
   .dx-diagram-i-button-fullscreen {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/fullscreen.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("fullscreen", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-menu-fullscreen {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/fullscreen.svg"), $menu-color, $icon-size, $icon-size);
+    @include diagram-icon("fullscreen", $menu-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-lock {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/lock.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("lock", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-menu-lock {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/lock.svg"), $menu-color, $icon-size, $icon-size);
+    @include diagram-icon("lock", $menu-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-unlock {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/unlock.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("unlock", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-menu-unlock {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/unlock.svg"), $menu-color, $icon-size, $icon-size);
+    @include diagram-icon("unlock", $menu-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-send-to-back {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/send-to-back.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("send-to-back", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-menu-send-to-back {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/send-to-back.svg"), $menu-color, $icon-size, $icon-size);
+    @include diagram-icon("send-to-back", $menu-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-bring-to-front {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/bring-to-front.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("bring-to-front", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-menu-bring-to-front {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/bring-to-front.svg"), $menu-color, $icon-size, $icon-size);
+    @include diagram-icon("bring-to-front", $menu-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-select-all {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/select-all.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("select-all", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-menu-select-all {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/select-all.svg"), $menu-color, $icon-size, $icon-size);
+    @include diagram-icon("select-all", $menu-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-image-delete {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/image-delete.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("image-delete", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-menu-image-delete {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/image-delete.svg"), $menu-color, $icon-size, $icon-size);
+    @include diagram-icon("image-delete", $menu-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-image-edit {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/image-edit.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("image-edit", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-menu-image-edit {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/image-edit.svg"), $menu-color, $icon-size, $icon-size);
+    @include diagram-icon("image-edit", $menu-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-image-insert {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/image-insert.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("image-insert", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-menu-image-insert {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/image-insert.svg"), $menu-color, $icon-size, $icon-size);
+    @include diagram-icon("image-insert", $menu-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-layout-layered-bt {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-layered-bt.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("layout-layered-bt", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-layout-layered-lr {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-layered-lr.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("layout-layered-lr", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-layout-layered-rl {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-layered-rl.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("layout-layered-rl", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-layout-layered-tb {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-layered-tb.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("layout-layered-tb", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-layout-tree-bt {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-tree-bt.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("layout-tree-bt", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-layout-tree-lr {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-tree-lr.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("layout-tree-lr", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-layout-tree-rl {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-tree-rl.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("layout-tree-rl", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-toolbox-open {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-open.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("toolbox-open", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-toolbox-close {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-close.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("toolbox-close", $toolbar-color, $icon-size, $icon-size);
   }
 
   .dx-diagram-i-button-layout-tree-tb {
-    @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/layout-tree-tb.svg"), $toolbar-color, $icon-size, $icon-size);
+    @include diagram-icon("layout-tree-tb", $toolbar-color, $icon-size, $icon-size);
   }
 }

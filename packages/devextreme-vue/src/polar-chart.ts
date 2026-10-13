@@ -462,7 +462,7 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -698,7 +698,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -993,7 +993,7 @@ const DxCommonSeriesSettingsConfig = {
     border: Object as PropType<Record<string, any>>,
     closed: Boolean,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hoverMode: String as PropType<SeriesHoverMode>,
     hoverStyle: Object as PropType<Record<string, any>>,
     ignoreEmptyPoints: Boolean,
@@ -1051,7 +1051,7 @@ const DxCommonSeriesSettingsHoverStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
@@ -1131,7 +1131,7 @@ const DxCommonSeriesSettingsSelectionStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
@@ -1185,7 +1185,7 @@ const DxConstantLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     displayBehindSeries: Boolean,
     extendAxis: Boolean,
     label: Object as PropType<Record<string, any>>,
@@ -1239,7 +1239,7 @@ const DxConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     label: Object as PropType<Record<string, any>>,
     width: Number
   }
@@ -1441,7 +1441,7 @@ const DxHoverStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
@@ -2063,7 +2063,7 @@ const DxSelectionStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
@@ -2123,7 +2123,7 @@ const DxSeriesConfig = {
     border: Object as PropType<Record<string, any>>,
     closed: Boolean,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hoverMode: String as PropType<SeriesHoverMode>,
     hoverStyle: Object as PropType<Record<string, any>>,
     ignoreEmptyPoints: Boolean,
@@ -2178,7 +2178,7 @@ const DxSeriesBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     visible: Boolean,
     width: Number
   }
@@ -2540,7 +2540,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number

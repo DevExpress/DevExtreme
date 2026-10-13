@@ -37,6 +37,7 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';
 import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/index';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import { memoize } from '@ts/utils/memoize';
 
 import {
@@ -2811,7 +2812,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _scrollBy(left, top, rowIndex?, $event?) {
     const that = this;
-    const scrollable = this._rowsView.getScrollable();
+    // @ts-expect-error the scrollable is created here
+    const scrollable: Scrollable = this._rowsView.getScrollable();
 
     if (that._focusedCellPosition) {
       const scrollHandler = function () {

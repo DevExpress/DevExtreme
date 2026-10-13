@@ -28,7 +28,8 @@ export type DataSetter = (data: unknown, value: unknown) => void;
 
 export type KeyExpr = StoreKey | ((item: unknown, value?: unknown) => unknown);
 
-export interface TreeNode {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- alias fits RawItemData
+export type TreeNode = {
   key: RowKey;
   children: TreeNode[];
   data?: RawItemData;
@@ -36,7 +37,7 @@ export interface TreeNode {
   level?: number;
   visible?: boolean;
   hasChildren?: boolean;
-}
+};
 
 export type NodeByKey = Record<string, TreeNode>;
 

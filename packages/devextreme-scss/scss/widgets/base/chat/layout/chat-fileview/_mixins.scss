@@ -31,7 +31,7 @@
   }
 
   .dx-chat-file-name {
-    margin-inline-end: $chat-file-base-section-gap * 2;
+    margin-inline-end: calc($chat-file-base-section-gap * 2);
     margin-inline-start: $chat-file-base-section-gap;
   }
 

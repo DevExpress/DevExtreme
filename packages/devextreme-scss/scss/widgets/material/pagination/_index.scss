@@ -1,7 +1,12 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/pagination";
+@use "../../base/pagination" with (
+  $pagination-padding-block-fallback: 8px,
+  $pagination-info-opacity: 0.7,
+  $pagination-nav-disabled-opacity: 0.3,
+  $pagination-page-size-first-child-margin-left: 0,
+);
 @use "../gridBase/sizes" as *;
 
 .dx-pager,
@@ -76,11 +81,6 @@
   }
 
   .dx-page-sizes .dx-page-size {
-    &:first-child,
-    &.dx-first-child {
-      margin-left: 0;
-    }
-
     padding: $material-pagination-page-padding;
     line-height: $material-pagination-page-line-height;
   }

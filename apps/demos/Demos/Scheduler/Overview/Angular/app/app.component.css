@@ -19,8 +19,8 @@
   --text-color-1: rgba(0, 0, 0, .6);
   --text-color-2: rgba(255, 255, 255, 1);
   --disabled-color: rgba(0, 0, 0, 0.38);
-  --background-color-1: rgba(50, 134, 56, 1);
-  --background-color-2: rgba(194, 81, 0, 1);
+  --person-color-1: rgba(50, 134, 56, 1);
+  --person-color-2: rgba(194, 81, 0, 1);
 }
 
 ::ng-deep .dx-color-scheme-dark,
@@ -35,9 +35,8 @@
   --text-color-1: rgba(255, 255, 255, 1);
   --text-color-2: rgba(54, 54, 64, 1);
   --disabled-color: rgba(255, 255, 255, 0.38);
-  --background-color-1: rgba(159, 213, 161, 1);
-  --background-color-2: rgba(255, 181, 127, 1);
-
+  --person-color-1: rgba(159, 213, 161, 1);
+  --person-color-2: rgba(255, 181, 127, 1);
 }
 
 ::ng-deep .dx-scheduler-header .dx-toolbar .dx-button,
@@ -124,7 +123,6 @@
   line-height: 20px;
   font-weight: normal;
   padding: 25px 20px 25px 40px;
-  color: #707070;
 }
 
 ::ng-deep .dx-color-scheme-contrast .info {
@@ -143,19 +141,19 @@
 }
 
 ::ng-deep .employee-1 {
-  background-color: rgba(55, 126, 58, 0.08);
+  background-color: rgb(from var(--person-color-1, #377e3a) r g b / 0.1);
 }
 
 ::ng-deep .employee-2 {
-  background-color: rgba(194, 81, 0, 0.08);
+  background-color: rgb(from var(--person-color-2, #c25100) r g b / 0.1);
 }
 
 ::ng-deep .employee-weekend-1 {
-  background-color: rgba(55, 126, 58, 0.12);
+  background-color: rgb(from var(--person-color-1, #377e3a) r g b / 0.15);
 }
 
 ::ng-deep .employee-weekend-2 {
-  background-color: rgba(194, 81, 0, 0.12);
+  background-color: rgb(from var(--person-color-2, #c25100) r g b / 0.15);
 }
 
 ::ng-deep .training-background-0 {
