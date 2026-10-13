@@ -34,6 +34,7 @@
     display: flex;
     align-items: center;
     margin-bottom: var(--dx-color-view-container-margin-block-end);
+    color: var(--dx-color-view-label-content);
 
     &.dx-colorview-alpha-channel-label {
       margin: 0 0 0 var(--dx-color-view-container-alpha-label-margin);
@@ -44,10 +45,6 @@
 .dx-colorview-container-row.dx-colorview-alpha-channel-row {
   display: flex;
   align-items: center;
-}
-
-.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
-  color: var(--dx-color-view-label-content);
 }
 
 .dx-colorview-palette-cell,

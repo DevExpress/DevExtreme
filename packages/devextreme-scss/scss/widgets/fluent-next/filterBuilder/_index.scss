@@ -8,7 +8,7 @@
   $filterbuilder-range-separator-margin: var(--dx-filter-builder-range-separator-margin),
   $filterbuilder-item-value-text-min-width: var(--dx-filter-builder-item-value-text-min-width),
   $filterbuilder-item-value-text-padding: var(--dx-filter-builder-item-value-text-padding),
-  $filterbuilder-action-icon-padding: var(--dx-filter-builder-action-icon-padding),
+  $filterbuilder-action-icon-padding: var(--dx-filter-builder-icon-padding),
   $filterbuilder-group-content-padding-left: var(--dx-filter-builder-group-content-padding-inline-start),
   $filterbuilder-treeview-item-padding-left: var(--dx-filter-builder-tree-view-item-padding-inline-start),
   $filterbuilder-treeview-item-padding-right: var(--dx-filter-builder-tree-view-item-padding-inline-end),
@@ -47,7 +47,6 @@
   .dx-filterbuilder-group {
     .dx-filterbuilder-group-item {
       .dx-filterbuilder-action.dx-filterbuilder-action-icon {
-        padding: var(--dx-filter-builder-icon-padding);
         vertical-align: middle;
       }
     }

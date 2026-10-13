@@ -13,6 +13,7 @@
   $pagination-page-size-margin-left: var(--dx-pagination-page-size-margin-inline-start),
   $pagination-page-index-width: var(--dx-pagination-page-index-width),
   $pagination-pages-count-padding-left: var(--dx-pagination-pages-count-padding-inline-start),
+  $pagination-page-size-first-child-margin-left: 0,
 );
 @use "../gridBase/sizes" as gridBaseSizes;
 
@@ -88,11 +89,6 @@
   }
 
   .dx-page-sizes .dx-page-size {
-    &:first-child,
-    &.dx-first-child {
-      margin-left: 0;
-    }
-
     padding: var(--dx-pagination-page-padding);
     line-height: var(--dx-pagination-page-line-height);
   }
