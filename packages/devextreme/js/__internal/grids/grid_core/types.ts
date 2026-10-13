@@ -9,6 +9,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
+import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { FilterValue } from '@ts/grids/grid_core/filter/types';
 import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
@@ -154,6 +155,8 @@ export interface InternalGridOptions extends
   scrolling?: DataGridScrolling | TreeListScrolling;
 
   filterValue?: FilterValue;
+
+  integrationOptions?: IntegrationOptions;
 }
 
 type DotPrefix<T extends string> = T extends '' ? '' : `.${T}`;
