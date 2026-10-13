@@ -31,6 +31,7 @@ import type {
   Column,
   ColumnsChanges,
   DisplayValueColumn,
+  SortParameters,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnPoint,
@@ -98,17 +99,25 @@ const setEmptyText = ($container: dxElementWrapper): void => {
   $container.get(0).textContent = '\u00A0';
 };
 
-const normalizeSortingInfo = (sort: unknown): SortingInfo[] => {
+const normalizeSortingInfo = (sort: SortParameters): SortingInfo[] => {
   const sortItems = sort || [];
   const result = normalizeSortingInfoUtility(sortItems);
 
-  if (Array.isArray(sortItems)) {
-    for (let i = 0; i < sortItems.length; i += 1) {
-      if (sortItems?.[i]?.isExpanded !== undefined) {
-        result[i].isExpanded = sortItems[i].isExpanded;
+  if (!Array.isArray(sortItems)) {
+    return result;
+  }
+
+  for (let i = 0; i < sortItems.length; i += 1) {
+    const item = sortItems[i];
+
+    if (item && typeof item === 'object') {
+      const { isExpanded, groupInterval }: Partial<SortingInfo> = item;
+
+      if (isExpanded !== undefined) {
+        result[i].isExpanded = isExpanded;
       }
-      if (sortItems?.[i]?.groupInterval !== undefined) {
-        result[i].groupInterval = sortItems[i].groupInterval;
+      if (groupInterval !== undefined) {
+        result[i].groupInterval = groupInterval;
       }
     }
   }
@@ -410,8 +419,8 @@ export default {
   },
 
   equalSortParameters(
-    sortParameters1: unknown,
-    sortParameters2: unknown,
+    sortParameters1: SortParameters,
+    sortParameters2: SortParameters,
     ignoreIsExpanded?: boolean,
   ): boolean {
     const sortInfo1 = normalizeSortingInfo(sortParameters1);

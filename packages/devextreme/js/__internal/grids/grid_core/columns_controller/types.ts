@@ -4,6 +4,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { SortingInfo } from '@ts/data/utils';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import type { DataFilter } from '../filter/types';
@@ -154,9 +156,15 @@ export interface ColumnDataSourceParameter {
   isExpanded?: boolean;
 }
 
+export type SortParameters = StoreLoadOptions['sort']
+  | StoreLoadOptions['group']
+  | ColumnDataSourceParameter[]
+  | SortingInfo[]
+  | null;
+
 export interface ColumnsDataSourceParameters {
-  sorting: unknown;
-  grouping: unknown;
+  sorting: SortParameters;
+  grouping: SortParameters;
   filtering?: DataFilter;
 }
 
