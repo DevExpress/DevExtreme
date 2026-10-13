@@ -7,6 +7,7 @@
 @use "../../base/contextMenu" with (
   $contextmenu-menu-separator-height: var(--dx-context-menu-separator-height),
   $contextmenu-menu-separator-margin: var(--dx-context-menu-separator-margin),
+  $contextmenu-menu-items-container-padding: var(--dx-context-menu-items-container-padding),
 );
 @use "../overlay";
 @use "../menuBase" as *;
@@ -18,7 +19,6 @@
   .dx-menu-items-container {
     display: flex;
     flex-direction: column;
-    padding: var(--dx-context-menu-items-container-padding);
     gap: var(--dx-context-menu-items-container-gap);
   }
 

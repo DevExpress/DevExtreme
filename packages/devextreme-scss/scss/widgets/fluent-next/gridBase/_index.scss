@@ -23,7 +23,7 @@
   $grid-command-edit-column-width: var(--dx-grid-command-edit-column-width),
   $grid-command-edit-column-with-icons-width: var(--dx-grid-command-edit-column-with-icons-width),
   $grid-command-expand-column-width: var(--dx-grid-command-expand-column-width),
-  $grid-command-adaptive-column-width: var(--dx-grid-command-adaptive-column-width),
+  $grid-command-adaptive-column-width: calc(2 * var(--dx-grid-cell-padding-inline) + #{$global-icon-size}),
   $grid-ai-assistant-confirm-dialog-button-width: var(--dx-grid-ai-confirm-dialog-button-width),
   $grid-context-menu-item-padding-block: var(--dx-grid-context-menu-item-padding-block),
   $grid-context-menu-item-padding-inline-start: var(--dx-grid-context-menu-item-padding-inline-start),
@@ -33,6 +33,7 @@
   $grid-menu-bar-item-padding: var(--dx-grid-menu-bar-item-padding),
   $grid-menu-caption-padding-inline-start: var(--dx-grid-menu-caption-padding-inline-start),
   $grid-column-chooser-title-font-size: var(--dx-grid-column-chooser-title-font-size),
+  $grid-column-chooser-title-label-font-size: typographySizes.$typography-m-font-size,
   $grid-column-chooser-content-padding: var(--dx-grid-column-chooser-content-padding),
   $grid-column-chooser-item-margin-block-end: var(--dx-grid-column-chooser-item-margin-block-end),
   $grid-column-chooser-tree-view-item-padding-inline-start: var(--dx-grid-column-chooser-tree-view-item-padding-inline-start),
@@ -564,10 +565,6 @@
         background-color: transparent;
         border-bottom: var(--dx-grid-popup-title-border-block-end);
         border-bottom-color: var(--dx-popup-title-border);
-
-        .dx-toolbar-label {
-          font-size: typographySizes.$typography-m-font-size;
-        }
       }
 
       .dx-popup-content {
@@ -1053,7 +1050,6 @@
 
   .dx-#{$widget-name}-filter-panel {
     background-color: var(--dx-grid-bg);
-    padding: var(--dx-grid-filter-panel-padding);
 
     .dx-#{$widget-name}-filter-panel-text,
     .dx-#{$widget-name}-filter-panel-clear-filter {

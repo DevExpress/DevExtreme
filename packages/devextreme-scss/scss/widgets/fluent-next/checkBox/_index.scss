@@ -2,7 +2,9 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/checkBox";
+@use "../../base/checkBox" with (
+  $checkbox-text-padding-inline-start: var(--dx-check-box-text-padding-inline-start),
+);
 @use "../../base/checkBox/mixins" as *;
 
 .dx-checkbox-icon {
@@ -21,7 +23,6 @@
 }
 
 .dx-checkbox-text {
-  padding-inline-start: var(--dx-check-box-text-padding-inline-start);
   padding-inline-end: var(--dx-check-box-text-padding-inline-end);
 }
 

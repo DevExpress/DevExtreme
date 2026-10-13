@@ -47,7 +47,7 @@
   $filemanager-thumbnails-item-margin: var(--dx-file-manager-thumbnails-item-margin),
   $filemanager-thumbnails-item-content-padding: var(--dx-file-manager-thumbnails-item-content-padding),
   $filemanager-thumbnails-item-spacer-height: var(--dx-file-manager-thumbnails-item-spacer-height),
-  $filemanager-button-content-padding: var(--dx-file-manager-view-mode-button-content-padding),
+  $filemanager-button-content-padding: var(--dx-file-manager-button-content-padding),
   $filemanager-dialog-min-width: var(--dx-file-manager-dialog-min-width),
   $filemanager-overlay-content-min-height: var(--dx-file-manager-overlay-content-min-height),
   $filemanager-overlay-content-max-height: var(--dx-file-manager-overlay-content-max-height),
@@ -300,10 +300,6 @@
   .dx-button {
     min-width: var(--dx-file-manager-file-actions-button-size);
     height: var(--dx-file-manager-file-actions-button-size);
-
-    .dx-button-content {
-      padding: var(--dx-file-manager-button-content-padding);
-    }
   }
 }
 
