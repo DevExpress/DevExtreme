@@ -1,6 +1,13 @@
 function generateStockData(startDate, days) {
+  let seed = 12345;
+
+  function random() {
+    seed = (seed * 16807) % 2147483647;
+    return (seed - 1) / 2147483646;
+  }
+
   function randomOffset(amplitude) {
-    return (Math.random() - 0.5) * amplitude;
+    return (random() - 0.5) * amplitude;
   }
 
   const data = [];
@@ -12,8 +19,8 @@ function generateStockData(startDate, days) {
     if (day !== 0 && day !== 6) {
       const open = price + randomOffset(1.5);
       const close = open + randomOffset(1.5);
-      const high = Math.max(open, close) + Math.random() * 0.8;
-      const low = Math.min(open, close) - Math.random() * 0.8;
+      const high = Math.max(open, close) + random() * 0.8;
+      const low = Math.min(open, close) - random() * 0.8;
 
       data.push({
         date: new Date(current),
