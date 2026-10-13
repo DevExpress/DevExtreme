@@ -36,7 +36,6 @@ $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color
 );
 @include dx-switch-rtl(
   $material-switch-height,
-  $material-switch-shadow-blur-radius,
   $material-switch-container-adjustment,
 );
 @include dx-switch-invalid(
