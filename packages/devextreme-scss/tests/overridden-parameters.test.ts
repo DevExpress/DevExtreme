@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { Root } from 'postcss';
 import { getThemes, Theme } from '../build/theme-options';
 import {
-  cascadeOf, originOf, packageRoot, parseBundle,
+  cascadeOf, mapBundles, originOf, packageRoot,
 } from './compiled-bundles';
 
 jest.setTimeout(600000);
@@ -66,16 +67,8 @@ const mixinVariables = (file: string, line: number): Set<string> | undefined => 
   return names;
 };
 
-/*
- * A theme sets a parameter and then paints the same property again, with its own value, on the same
- * selector. The parameter is still published and documented, and setting it moves nothing: the last
- * declaration wins. Only a parametrized loser counts - when the base layer spells a literal there,
- * painting over it is the only way a theme can change that value, and that is ordinary theming.
- * Two declarations carrying the same value are not reported either; they cost bytes, not behaviour.
- * A value a mixin receives as an argument is not a parameter: its call site decides it.
- */
-const findingsOf = async (theme: Theme): Promise<Finding[]> => {
-  const { emissions, winners } = cascadeOf(await parseBundle(theme));
+const findingsOf = (root: Root, theme: Theme): Finding[] => {
+  const { emissions, winners } = cascadeOf(root);
 
   const findings = new Map<string, Finding>();
   emissions.forEach((emission) => {
@@ -113,27 +106,18 @@ const signature = (entry: BaselineEntry): string => (
 );
 
 describe('parameters a theme sets and then paints over', () => {
-  const baseline = JSON.parse(fs.readFileSync(baselinePath, 'utf8')) as {
-    comment: string[];
-    entries: BaselineEntry[];
-  };
+  const baseline = JSON.parse(fs.readFileSync(baselinePath, 'utf8')) as BaselineEntry[];
   let findings: Finding[] = [];
 
   beforeAll(async () => {
-    const themes = getThemes();
-    const seen = new Map<string, Finding>();
-    for (const theme of themes) {
-      // Sequential on purpose: compiling every bundle at once would hold them all in the worker.
-      // eslint-disable-next-line no-await-in-loop
-      const found = await findingsOf(theme);
-      found.forEach((finding) => seen.set(signature(finding), finding));
-    }
+    const found = await mapBundles(getThemes(), findingsOf);
+    const seen = new Map(found.flat().map((finding) => [signature(finding), finding]));
     findings = [...seen.values()]
       .sort((left, right) => signature(left).localeCompare(signature(right)));
   });
 
   test('no parameter outside the baseline is painted over', () => {
-    const known = new Set(baseline.entries.map(signature));
+    const known = new Set(baseline.map(signature));
     const report = findings.filter((finding) => !known.has(signature(finding))).map((finding) => [
       `${finding.file}:${finding.line}  ${finding.property} on \`${finding.selector}\` (${finding.theme})`,
       `    painted over by ${finding.paintedOverBy}`,
@@ -145,7 +129,7 @@ describe('parameters a theme sets and then paints over', () => {
 
   test('every baseline entry is still painted over', () => {
     const current = new Set(findings.map(signature));
-    const stale = baseline.entries.filter((entry) => !current.has(signature(entry)));
+    const stale = baseline.filter((entry) => !current.has(signature(entry)));
 
     expect(stale.map((entry) => `${entry.theme} ${entry.file} ${entry.property} on \`${entry.selector}\` renders again - remove the entry`))
       .toEqual([]);
@@ -160,7 +144,7 @@ describe('parameters a theme sets and then paints over', () => {
         selector: finding.selector,
         paintedOverBy: finding.paintedOverBy,
       }));
-      fs.writeFileSync(baselinePath, `${JSON.stringify({ ...baseline, entries }, null, 2)}\n`);
+      fs.writeFileSync(baselinePath, `${JSON.stringify(entries, null, 2)}\n`);
 
       expect(entries.length).toBeGreaterThan(0);
     });
