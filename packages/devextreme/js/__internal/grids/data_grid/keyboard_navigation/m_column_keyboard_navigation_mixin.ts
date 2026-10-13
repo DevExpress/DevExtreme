@@ -2,14 +2,16 @@ import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import { isDefined } from '@js/core/utils/type';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
-import type { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/types';
 
-// eslint-disable-next-line @stylistic/max-len -- the directive below names three rules
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type, @stylistic/max-len -- TS can't name the class type of a generic mixin
-export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboardNavigationController>>(Base: T) => class extends Base {
+import type { MixinBase } from './types';
+
+/* eslint-disable-next-line
+  @typescript-eslint/explicit-module-boundary-types,
+  @typescript-eslint/explicit-function-return-type
+  -- TS can't name the class type of a generic mixin */
+export const ColumnKeyboardNavigationMixin = <T extends MixinBase>(Base: T) => class extends Base {
   private ungroupColumnByPressingKey(e: KeyboardKeyDownEvent): void {
     const column = this.getColumnFromEvent(e);
     const rowIndex = this.getRowIndexFromEvent(e);
@@ -26,8 +28,7 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
     }
 
     const newRowIndex = this._columnsController
-      // @ts-expect-error a column of the columns controller always has an index
-      .getRowIndex(column.index, true);
+      .getRowIndex(column.index ?? -1, true);
 
     return {
       rowIndex: newRowIndex,

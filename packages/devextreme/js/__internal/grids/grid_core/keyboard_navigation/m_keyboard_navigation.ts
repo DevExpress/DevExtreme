@@ -53,10 +53,6 @@ import gridCoreUtils from '../m_utils';
 import type {
   Controllers, ModuleType, RowKey, Views,
 } from '../types';
-import type {
-  FocusedCellPosition,
-  ScrollOffset,
-} from './const';
 import {
   ADAPTIVE_COLUMN_NAME_CLASS,
   CELL_FOCUS_DISABLED_CLASS,
@@ -88,7 +84,8 @@ import { GridCoreKeyboardNavigationDom } from './dom';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
 import type {
-  KeyDownEvent, NavigationDirection, NavigationElementType, NavigationKeyCode,
+  FocusedCellPosition, KeyDownEvent, NavigationDirection, NavigationElementType, NavigationKeyCode,
+  ScrollOffset,
 } from './types';
 import {
   getInteractiveElement,

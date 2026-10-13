@@ -16,9 +16,8 @@ import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { Controllers, OptionChanged, Views } from '../types';
 import type { ColumnsView } from '../views/columns_view';
-import type { FocusedCellPosition } from './const';
 import { Direction } from './const';
-import type { HorizontalBounds, NavigationDirection } from './types';
+import type { FocusedCellPosition, HorizontalBounds, NavigationDirection } from './types';
 import { isElementDefined, isFixedColumnIndexOffsetRequired } from './utils';
 
 export class KeyboardNavigationController extends modules.ViewController {
@@ -308,11 +307,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     const scrollable = this.getScrollable();
 
     if (!scrollable || scrollable.scrollLeft() === scrollLeft) {
-      // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
-      return Deferred().resolve().promise();
+      return Deferred<undefined>().resolve();
     }
 
-    const d = Deferred();
+    const d = Deferred<undefined>();
     const scrollHandler = (): void => {
       scrollable.off('scroll', scrollHandler);
 
@@ -333,8 +331,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     scrollable.on('scroll', scrollHandler);
     scrollable.scrollTo({ left: scrollLeft });
 
-    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
-    return d.promise();
+    return d;
   }
 
   protected scrollToNextCell(

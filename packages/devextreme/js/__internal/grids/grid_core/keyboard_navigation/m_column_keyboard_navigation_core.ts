@@ -3,9 +3,9 @@ import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { Column, DropLocationNames } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnFocusDispatcher } from './column_focus_dispatcher';
-import type { FocusedCellPosition } from './const';
 import { Direction } from './const';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
+import type { FocusedCellPosition } from './types';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
   public columnFocusDispatcher!: ColumnFocusDispatcher;
