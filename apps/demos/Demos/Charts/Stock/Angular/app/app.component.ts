@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { DxChartModule, DxChartComponent, DxToolbarModule } from 'devextreme-angular';
 import type { DxChartTypes } from 'devextreme-angular/ui/chart';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { StockPrice, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -42,31 +43,31 @@ export class AppComponent {
 
   dataMax: number;
 
-  panLeftButtonOptions = {
+  panLeftButtonOptions: DxButtonTypes.Properties = {
     icon: 'chevronleft',
     hint: 'Pan Left',
     onClick: () => this.pan(-1),
   };
 
-  panRightButtonOptions = {
+  panRightButtonOptions: DxButtonTypes.Properties = {
     icon: 'chevronright',
     hint: 'Pan Right',
     onClick: () => this.pan(1),
   };
 
-  zoomInButtonOptions = {
+  zoomInButtonOptions: DxButtonTypes.Properties = {
     icon: 'plus',
     hint: 'Zoom In',
     onClick: () => this.zoom(zoomFactor),
   };
 
-  zoomOutButtonOptions = {
+  zoomOutButtonOptions: DxButtonTypes.Properties = {
     icon: 'minus',
     hint: 'Zoom Out',
     onClick: () => this.zoom(1 / zoomFactor),
   };
 
-  resetZoomButtonOptions = {
+  resetZoomButtonOptions: DxButtonTypes.Properties = {
     icon: 'refresh',
     hint: 'Reset Zoom',
     onClick: () => this.resetZoom(),
