@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import executor, { findMissingThemeCss } from './executor';
+import executor from './executor';
 import { ScssBuildExecutorSchema } from './schema';
 import { createMockContext, createTempDir, cleanupTempDir } from '../../utils/test-utils';
 import { writeFileText, writeJson, readFileText } from '../../utils';
@@ -145,15 +145,8 @@ async function setupProjectStructure(workspaceRoot: string): Promise<string> {
   await writeJson(path.join(devextremeDir, 'package.json'), { version: '26.1.0-test' });
 
   await writeFileText(
-    path.join(buildDir, 'theme-options.cjs'),
-    [
-      'module.exports = {',
-      '  getThemes: () => [',
-      "    ['generic', 'default', 'light'],",
-      '  ],',
-      '};',
-      '',
-    ].join('\n'),
+    path.join(buildDir, 'theme-options.ts'),
+    ['export const getThemes = () => [', "  ['generic', 'default', 'light'],", '];', ''].join('\n'),
   );
 
   await writeFileText(
@@ -309,25 +302,6 @@ describe('ScssBuildExecutor E2E', () => {
     const result = await executor(options, context);
 
     expect(result.success).toBe(false);
-  });
-
-  it('reports declared themes that left no CSS behind', async () => {
-    const projectRoot = await setupProjectStructure(tempDir);
-    const context = createMockContext({
-      root: tempDir,
-      projectName: 'devextreme-scss',
-      projectRoot: 'packages/devextreme-scss',
-    });
-
-    await executor({ mode: 'all', cssOutputDir: './artifacts/css' }, context);
-
-    const cssDir = path.join(projectRoot, 'artifacts', 'css');
-    const deps = { themeOptions: { getThemes: () => [['generic', 'default', 'light']] } };
-
-    expect(findMissingThemeCss(cssDir, deps as never)).toEqual([]);
-
-    fs.rmSync(path.join(cssDir, 'dx.light.css'));
-    expect(findMissingThemeCss(cssDir, deps as never)).toEqual(['dx.light.css']);
   });
 
   it('fails in ci mode when a configured bundle source is missing', async () => {

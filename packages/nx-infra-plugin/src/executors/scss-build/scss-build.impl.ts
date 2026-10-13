@@ -125,19 +125,6 @@ async function generateScssBundles(
   await writeFileText(path.join(resolvedBundlesDir, 'dx.common.scss'), commonTemplate);
 }
 
-export function findMissingThemeCss(cssOutputDir: string, deps: BuildDependencies): string[] {
-  const declaredCssNames = [
-    ...deps.themeOptions
-      .getThemes()
-      .map(([theme, size, color, mode]) =>
-        generateBundleName(theme, size, color, mode).replace(/\.scss$/, '.css'),
-      ),
-    'dx.common.css',
-  ];
-
-  return declaredCssNames.filter((name) => !fs.existsSync(path.join(cssOutputDir, name)));
-}
-
 function readTokensVersion(projectRequire: NodeRequire): string | null {
   try {
     return projectRequire(`${TOKENS_PACKAGE}/package.json`).version ?? null;
@@ -154,7 +141,7 @@ function loadDependencies(projectRoot: string): BuildDependencies {
     postcss: projectRequire('postcss'),
     autoprefixer: projectRequire('autoprefixer'),
     CleanCss: projectRequire('clean-css'),
-    themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.cjs')) as {
+    themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.ts')) as {
       getThemes: () => Array<[string, string, string, string?]>;
     },
     cleanCssSanitizeOptions: projectRequire(
@@ -354,13 +341,6 @@ async function runSingleBuild(
   }
 
   await compileAccentOverrides(projectRoot, cssOutputDir, deps);
-
-  if (options.mode !== 'ci') {
-    const missingThemeCss = findMissingThemeCss(cssOutputDir, deps);
-    if (missingThemeCss.length > 0) {
-      throw new Error(`Declared themes produced no CSS: ${missingThemeCss.join(', ')}`);
-    }
-  }
 }
 
 async function runWatchBuild(

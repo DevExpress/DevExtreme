@@ -104,4 +104,12 @@
   .dx-position-indicator {
     background-color: $pivotgrid-position-indicator-color;
   }
+
+  .dx-column-indicators {
+    .dx-sort,
+    .dx-header-filter {
+      vertical-align: top;
+      line-height: inherit;
+    }
+  }
 }
