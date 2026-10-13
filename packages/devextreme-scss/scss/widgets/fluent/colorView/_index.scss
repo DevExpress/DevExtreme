@@ -1,24 +1,7 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/colorView/mixins" as *;
-$fluent-colorview-alpha-width: $fluent-colorview-palette-width + 4 !default;
-$fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
-
 @use "../../base/colorView" with (
-  $color-view-container-width: $fluent-colorview-container-width,
-  $color-view-alpha-label-width: $fluent-colorview-container-alpha-label-width,
-  $color-view-textbox-width: $fluent-colorview-container-textbox-width,
-  $color-view-alpha-row-margin-block-start: $fluent-colorview-alpha-margin,
-  $color-view-hue-scale-width: $fluent-colorview-hue-scale-width,
-  $color-view-hue-scale-height: $fluent-colorview-hue-scale-height,
-  $color-view-hue-scale-wrapper-height: $fluent-colorview-hue-scale-height + 2,
-  $color-view-palette-width: $fluent-colorview-palette-width,
-  $color-view-palette-height: $fluent-colorview-palette-height,
-  $color-view-alpha-cell-width: $fluent-colorview-alpha-width,
-  $color-view-controls-width: $fluent-colorview-controls-container-width,
-  $color-view-color-preview-height: $fluent-colorview-color-preview-height,
-  $color-view-hue-scale-cell-margin-inline-start: $fluent-colorview-hue-scale-margin,
-  $color-view-controls-margin-inline-start: $fluent-colorview-controls-container-margin,
   $color-view-label-hex-margin: $fluent-colorview-container-hex-margin,
   $color-view-textbox-margin: $fluent-colorview-container-textbox-margin,
   $color-view-color-preview-width: 100%,
@@ -27,7 +10,12 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
 );
 @include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
 
+$fluent-colorview-alpha-width: $fluent-colorview-palette-width + 4 !default;
+$fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
+
 .dx-colorview-container {
+  width: $fluent-colorview-container-width;
+
   label {
     line-height: $fluent-colorview-container-line-height;
     display: flex;
@@ -37,13 +25,54 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
 
     &.dx-colorview-alpha-channel-label {
       margin: 0 0 0 $fluent-colorview-container-alpha-label-margin;
+      width: $fluent-colorview-container-alpha-label-width;
+    }
+
+    .dx-texteditor {
+      width: $fluent-colorview-container-textbox-width;
     }
   }
 }
 
+.dx-colorview-hue-scale-cell {
+  margin-left: $fluent-colorview-hue-scale-margin;
+}
+
+.dx-colorview-palette {
+  width: $fluent-colorview-palette-width;
+  height: $fluent-colorview-palette-height;
+}
+
+.dx-colorview-alpha-channel-scale {
+  width: $fluent-colorview-palette-width;
+}
+
 .dx-colorview-container-row.dx-colorview-alpha-channel-row {
+  margin-top: $fluent-colorview-alpha-margin;
   display: flex;
   align-items: center;
+}
+
+.dx-colorview-hue-scale {
+  width: $fluent-colorview-hue-scale-width;
+  height: $fluent-colorview-hue-scale-height;
+}
+
+.dx-colorview-alpha-channel-cell {
+  width: $fluent-colorview-alpha-width;
+}
+
+.dx-colorview-hue-scale-wrapper {
+  height: $fluent-colorview-hue-scale-height + 2;
+}
+
+.dx-colorview-color-preview {
+  height: $fluent-colorview-color-preview-height;
+}
+
+.dx-colorview-controls-container {
+  width: $fluent-colorview-controls-container-width;
+  margin-left: $fluent-colorview-controls-container-margin;
 }
 
 .dx-colorview-palette-cell,
@@ -68,6 +97,7 @@ $fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
 
   .dx-colorview-hue-scale-cell {
     margin-left: 0;
+    margin-right: $fluent-colorview-hue-scale-margin;
   }
 
   .dx-colorview-container {
