@@ -36,23 +36,22 @@ interface DeferredPromise extends DeferredLike {
 
 type CallbackArgs = [context: unknown, args: unknown[] | undefined];
 
-type Trigger = (...args: unknown[]) => DeferredInternal;
+type Trigger = (...args: unknown[]) => DeferredMethods;
 
-type TriggerWith = (
-  this: DeferredInternal,
-  context: unknown,
-  args?: unknown[],
-) => DeferredInternal;
+type TriggerWith = (context: unknown, args?: unknown[]) => DeferredMethods;
 
-interface DeferredInternal extends DeferredPromise {
-  _state: DeferredState;
-  _promise: DeferredPromise;
+interface DeferredMethods extends DeferredPromise {
   resolve: Trigger;
   reject: Trigger;
   notify: Trigger;
   resolveWith: TriggerWith;
   rejectWith: TriggerWith;
   notifyWith: TriggerWith;
+}
+
+interface DeferredInternal extends DeferredMethods {
+  _state: DeferredState;
+  _promise: DeferredPromise;
   resolveCallbacks: Callback<CallbackArgs>;
   rejectCallbacks: Callback<CallbackArgs>;
   notifyCallbacks: Callback<CallbackArgs>;
@@ -64,7 +63,9 @@ interface DeferredInternal extends DeferredPromise {
   notifyContext?: unknown;
 }
 
-interface DeferredConstructor {
+type DeferredConstructor = new () => DeferredMethods;
+
+interface NativeDeferredConstructor {
   prototype: DeferredInternal;
   new (): DeferredInternal;
 }
@@ -91,8 +92,7 @@ const deferredConfig: DeferredConfig[] = [{
 
 const isDeferredLike = (value: unknown): value is DeferredLike => isDeferred(value);
 
-// eslint-disable-next-line func-names -- a name would hide the DeferredObj that setStrategy swaps
-let DeferredObj = function (this: DeferredInternal): void {
+const DeferredObj = function DeferredObj(this: DeferredInternal): void {
   // eslint-disable-next-line @typescript-eslint/no-this-alias -- the handlers return their receiver
   const that = this;
   this._state = 'pending';
@@ -102,7 +102,7 @@ let DeferredObj = function (this: DeferredInternal): void {
     const methodName = config.method;
     this[`${methodName}Callbacks`] = Callbacks<CallbackArgs>();
 
-    this[methodName] = (...args: unknown[]): DeferredInternal => this[`${methodName}With`](
+    this[methodName] = (...args: unknown[]): DeferredMethods => this[`${methodName}With`](
       this._promise,
       args,
     );
@@ -144,7 +144,8 @@ let DeferredObj = function (this: DeferredInternal): void {
     resolve?: Handler | null,
     reject?: Handler | null,
   ): DeferredPromise {
-    const result = new DeferredObj();
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- swapped by setStrategy
+    const result = new StrategyDeferred();
 
     (['done', 'fail'] as const).forEach((method) => {
       const callback = method === 'done' ? resolve : reject;
@@ -178,7 +179,7 @@ let DeferredObj = function (this: DeferredInternal): void {
   };
 
   this._promise.promise(this);
-} as unknown as DeferredConstructor;
+} as unknown as NativeDeferredConstructor;
 
 deferredConfig.forEach((config) => {
   const methodName = config.method;
@@ -208,6 +209,8 @@ deferredConfig.forEach((config) => {
   };
 });
 
+let StrategyDeferred: DeferredConstructor = DeferredObj;
+
 export function fromPromise<T>(
   promise: PromiseLike<T> | DeferredInstance<T> | T,
   context?: unknown,
@@ -216,7 +219,7 @@ export function fromPromise(promise: unknown, context?: unknown): unknown {
   if (isDeferred(promise)) {
     return promise;
   } if (isPromise(promise)) {
-    const d = new DeferredObj();
+    const d = new StrategyDeferred();
     promise.then((...args: unknown[]) => {
       d.resolveWith(context, args);
     }, (...args: unknown[]) => {
@@ -225,7 +228,7 @@ export function fromPromise(promise: unknown, context?: unknown): unknown {
     return d;
   }
 
-  return new DeferredObj().resolveWith(context, [promise]);
+  return new StrategyDeferred().resolveWith(context, [promise]);
 }
 
 let whenFunc: WhenFunction = function whenDeferreds(...args: unknown[]): unknown {
@@ -236,7 +239,7 @@ let whenFunc: WhenFunction = function whenDeferreds(...args: unknown[]): unknown
   const values: unknown[] = args;
   const contexts: unknown[] = [];
   let resolvedCount = 0;
-  const deferred = new DeferredObj();
+  const deferred = new StrategyDeferred();
 
   const updateState = function updateState(i: number): Handler {
     return function resolveValue(this: unknown, ...stateArgs: unknown[]): void {
@@ -269,13 +272,13 @@ let whenFunc: WhenFunction = function whenDeferreds(...args: unknown[]): unknown
 };
 
 export function setStrategy(value: DeferredStrategy): void {
-  DeferredObj = value.Deferred;
+  StrategyDeferred = value.Deferred;
   whenFunc = value.when;
 }
 
 export function Deferred<T>(): DeferredInstance<T>;
 export function Deferred(): unknown {
-  return new DeferredObj();
+  return new StrategyDeferred();
 }
 
 export function when<T>(...values: (DeferredInstance<T> | T)[]): DeferredInstance<T>;

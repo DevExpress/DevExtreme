@@ -34,6 +34,6 @@ if (useJQuery) {
       return jQuery.when.apply(jQuery, arguments);
     };
 
-  // @ts-expect-error jQuery.Deferred is a factory that works with new too, when is set above
+  // @ts-expect-error when is set after the literal; @types/jquery has no new for Deferred
   setStrategy(strategy);
 }
