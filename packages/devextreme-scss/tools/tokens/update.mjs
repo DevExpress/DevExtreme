@@ -244,9 +244,6 @@ const bumpAndReport = () => {
 
   show(report);
 
-  // what the package now says about the theme's roles, against the banked decisions
-  run('node', ['tools/review/roles.mjs', '--report=tools/review/roles.decisions.json'], packageRoot);
-
   if (!reportOnly) {
     const registries = registriesCurrent ? ''
       : 'The registries are stale: after build:themes run pnpm run naming:registries and review '
