@@ -213,6 +213,13 @@ $table-resizer-highlight-thickness: 3px !default;
 
   table {
     border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+
+    td,
+    th {
+      outline: none;
+    }
   }
 
   td,
@@ -282,16 +289,6 @@ $table-resizer-highlight-thickness: 3px !default;
 
   @include add-counter($max-indent);
   @include add-indent-styles($max-indent);
-
-  table { // stylelint-disable-line no-duplicate-selectors
-    table-layout: fixed;
-    width: 100%;
-
-    td,
-    th {
-      outline: none;
-    }
-  }
 
   // stylelint-disable selector-class-pattern
   .ql-code-block-container {

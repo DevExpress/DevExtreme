@@ -43,6 +43,9 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
 
   .dx-fileuploader-input-label {
     text-align: center;
+    padding: $fluent-fileuploader-vertical-padding * 2 $fluent-fileuploader-vertical-padding + 2px;
+    border: $fluent-fileuploader-file-wrapper-border-size dashed;
+    border-color: $fileuploader-border-color;
   }
 
   .dx-fileuploader-input-container {
@@ -60,12 +63,6 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
     padding-bottom: $fluent-fileuploader-vertical-padding * 2 + $fluent-fileuploader-file-wrapper-border-size + 1px;
     padding-left: $fluent-fileuploader-file-wrapper-border-size;
     box-sizing: content-box;
-  }
-
-  .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: $fluent-fileuploader-vertical-padding * 2 $fluent-fileuploader-vertical-padding + 2px;
-    border: $fluent-fileuploader-file-wrapper-border-size dashed;
-    border-color: $fileuploader-border-color;
   }
 }
 

@@ -64,6 +64,10 @@ $material-pivotgridfieldchooser-field-min-height: 36px !default;
       }
     }
   }
+
+  .dx-position-indicator {
+    background-color: $pivotgrid-position-indicator-color;
+  }
 }
 
 .dx-pivotgrid {
@@ -207,11 +211,5 @@ $material-pivotgridfieldchooser-field-min-height: 36px !default;
 
   .dx-treeview-toggle-item-visibility {
     height: $material-pivotgridfieldchooser-field-min-height;
-  }
-}
-
-.dx-pivotgrid-fields-container { // stylelint-disable-line no-duplicate-selectors
-  .dx-position-indicator {
-    background-color: $pivotgrid-position-indicator-color;
   }
 }

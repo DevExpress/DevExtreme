@@ -16,31 +16,15 @@
   letter-spacing: $fluent-button-text-letter-spacing;
 }
 
-.dx-button {
-  @include dx-button-onlyicon-sizing();
-}
-
-.dx-button-has-icon {
-  @include dx-button-onlyicon-sizing();
-}
-
-.dx-button-has-text {
-  @include dx-button-withtext-sizing();
-}
-
-.dx-button-has-icon.dx-button-has-text {
-  @include dx-button-text-and-icon-sizing();
-}
-
-// NOTE: Button styles
-
 .dx-button-mode-contained {
   &.dx-button-normal {
     box-shadow: $fluent-button-box-shadow-size $button-shadow-color;
   }
 }
 
-.dx-button { // stylelint-disable-line no-duplicate-selectors
+.dx-button {
+  @include dx-button-onlyicon-sizing();
+
   height: $fluent-button-height;
   position: relative;
 
@@ -98,6 +82,20 @@
     );
   }
 }
+
+.dx-button-has-icon {
+  @include dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-text {
+  @include dx-button-withtext-sizing();
+}
+
+.dx-button-has-icon.dx-button-has-text {
+  @include dx-button-text-and-icon-sizing();
+}
+
+// NOTE: Button styles
 
 .dx-button-mode-text {
   @include dx-button-flat-color-styling(

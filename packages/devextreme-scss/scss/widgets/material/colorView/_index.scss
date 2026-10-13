@@ -19,6 +19,7 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height !defaul
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    color: $colorview-label-color;
 
     &.dx-colorview-alpha-channel-label {
       margin: 0;
@@ -71,10 +72,6 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height !defaul
 .dx-colorview-controls-container {
   width: $material-colorview-controls-container-width;
   margin-inline-start: $material-colorview-controls-container-margin;
-}
-
-.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
-  color: $colorview-label-color;
 }
 
 .dx-colorview-palette-cell,

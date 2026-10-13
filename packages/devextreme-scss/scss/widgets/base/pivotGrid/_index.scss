@@ -271,6 +271,7 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
   .dx-expand-icon-container {
     margin-left: $pivotgrid-expand-icon-offset;
     margin-right: $pivotgrid-expand-icon-text-offset;
+    width: $pivotgrid-icon-size;
   }
 
   .dx-area-row-cell,
@@ -472,10 +473,6 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
     tr:first-child td {
       border-top: 0;
     }
-  }
-
-  .dx-expand-icon-container { // stylelint-disable-line no-duplicate-selectors
-    width: $pivotgrid-icon-size;
   }
 
   .dx-pivotgrid-horizontal-headers:last-child {

@@ -26,6 +26,7 @@ $generic-colorview-alpha-width: $generic-colorview-palette-width + 4 !default;
   label {
     line-height: $generic-colorview-container-line-height;
     display: block;
+    color: $colorview-label-color;
 
     &.dx-colorview-alpha-channel-label {
       margin-inline-start: $generic-colorview-container-alpha-label-margin;
@@ -43,10 +44,6 @@ $generic-colorview-alpha-width: $generic-colorview-palette-width + 4 !default;
 
 .dx-colorview-controls-container {
   margin-inline-start: $generic-colorview-controls-container-margin;
-}
-
-.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
-  color: $colorview-label-color;
 }
 
 .dx-colorview-palette-cell,

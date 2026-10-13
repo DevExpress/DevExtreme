@@ -77,6 +77,10 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px !default;
   .dx-header-filter {
     @include dx-icon-sizing($fluent-button-icon-size);
   }
+
+  .dx-position-indicator {
+    background-color: $pivotgrid-position-indicator-color;
+  }
 }
 
 .dx-pivotgrid {
@@ -214,11 +218,5 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px !default;
 
   .dx-treeview-toggle-item-visibility {
     height: $fluent-pivotgridfieldchooser-field-min-height;
-  }
-}
-
-.dx-pivotgrid-fields-container { // stylelint-disable-line no-duplicate-selectors
-  .dx-position-indicator {
-    background-color: $pivotgrid-position-indicator-color;
   }
 }

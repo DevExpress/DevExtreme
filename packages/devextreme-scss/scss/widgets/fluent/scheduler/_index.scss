@@ -281,6 +281,12 @@ $scheduler-first-of-month-border: 1px solid !default;
 
   .dx-scheduler-work-space.dx-scheduler-work-space-month & {
     height: $header-panel-time-cell-height;
+    padding-left: $fluent-scheduler-workspace-month-cell-left-offset;
+
+    .dx-scheduler-header-panel-cell-date {
+      margin-left: 0;
+      line-height: $fluent-scheduler-workspace-month-header-height;
+    }
   }
 
   .dx-scheduler-work-space.dx-scheduler-timeline.dx-scheduler-timeline-week &,
@@ -446,15 +452,6 @@ $scheduler-first-of-month-border: 1px solid !default;
 
     .dx-rtl & {
       text-align: right;
-    }
-  }
-
-  .dx-scheduler-header-panel-cell { // stylelint-disable-line no-duplicate-selectors
-    padding-left: $fluent-scheduler-workspace-month-cell-left-offset;
-
-    .dx-scheduler-header-panel-cell-date {
-      margin-left: 0;
-      line-height: $fluent-scheduler-workspace-month-header-height;
     }
   }
 
