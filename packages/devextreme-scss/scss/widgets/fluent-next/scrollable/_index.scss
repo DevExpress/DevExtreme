@@ -1,5 +1,3 @@
-@use "sass:math";
-@use "colors" as *;
 @use "sizes" as *;
 @use "../../base/scrollable" with (
   $scrollable-scroll-padding: var(--dx-scrollable-scroll-padding),

@@ -1,6 +1,4 @@
 @use "../mixins" as *;
-@use "colors" as *;
-@use "sizes" as *;
 @use "../../base/filterBuilder" with (
   $filterbuilder-action-icon-margin-left: var(--dx-filter-builder-action-icon-margin-inline-start),
   $filterbuilder-action-icon-margin-right: var(--dx-filter-builder-action-icon-margin-inline-end),

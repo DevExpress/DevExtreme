@@ -1,4 +1,4 @@
-@use "colors" as *;
+@use "colors";
 @use "sizes" as *;
 @use "../../base/chat" with (
   $chat-file-name-font-weight: var(--dx-chat-file-name-font-weight),

@@ -1,4 +1,3 @@
-@use "sizes" as *;
 @use "../../base/dropDownMenu/mixins" as *;
 @use "../../base/dropDownMenu" with (
   $dropdownmenu-list-min-width: var(--dx-drop-down-menu-list-min-width),

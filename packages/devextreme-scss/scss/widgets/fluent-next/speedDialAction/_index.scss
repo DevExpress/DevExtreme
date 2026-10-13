@@ -1,5 +1,3 @@
-@use "colors" as *;
-@use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/speedDialAction" as baseSpeedDialAction with (
   $speeddialaction-fa-button-label-border-radius: var(--dx-speed-dial-action-fa-button-label-border-radius),

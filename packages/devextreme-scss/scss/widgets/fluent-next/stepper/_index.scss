@@ -1,6 +1,4 @@
 @use "../../base/stepper";
-@use "colors" as *;
-@use "sizes" as *;
 @use "../../base/stepper/mixins" as *;
 @include stepper(
   var(--dx-stepper-padding),

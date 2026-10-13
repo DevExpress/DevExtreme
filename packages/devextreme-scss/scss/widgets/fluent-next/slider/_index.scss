@@ -1,6 +1,3 @@
-@use "sass:math";
-@use "colors" as *;
-@use "sizes" as *;
 @use "../../base/slider" with (
   $slider-tooltip-content-height: var(--dx-slider-tooltip-height),
   $slider-label-position-bottom-padding-bottom: var(--dx-slider-label-bottom-padding-block-end),
