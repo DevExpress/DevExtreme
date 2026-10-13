@@ -104,6 +104,8 @@ $scheduler-workspace-info-font-size: 20px !default;
 $scheduler-header-panel-table-cell-height: null !default;
 $scheduler-header-panel-current-time-cell-color: null !default;
 $scheduler-views-all-day-border: null !default;
+$scheduler-timepanel-cell-offset: null !default;
+$scheduler-timepanel-cell-small-offset: null !default;
 $scheduler-small-font-size: 14px !default;
 $scheduler-group-header-table-cell-height: 30px !default;
 $scheduler-month-date-text-size: 16px !default;
@@ -220,6 +222,8 @@ $scheduler-renovation-virtual-row-height: 50px !default;
   $scheduler-header-panel-table-cell-height: $scheduler-header-panel-table-cell-height,
   $scheduler-header-panel-current-time-cell-color: $scheduler-header-panel-current-time-cell-color,
   $scheduler-views-all-day-border: $scheduler-views-all-day-border,
+  $scheduler-timepanel-cell-offset: $scheduler-timepanel-cell-offset,
+  $scheduler-timepanel-cell-small-offset: $scheduler-timepanel-cell-small-offset,
   $scheduler-workspace-info-font-size: $scheduler-workspace-info-font-size,
   $scheduler-small-font-size: $scheduler-small-font-size,
   $scheduler-group-header-table-cell-height: $scheduler-group-header-table-cell-height,

@@ -131,27 +131,6 @@
       "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
     },
     {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "padding-left",
-      "selector": ".dx-rtl .dx-scheduler-time-panel-cell",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "padding-right",
-      "selector": ".dx-scheduler-small .dx-scheduler-time-panel-cell",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
-      "theme": "fluent",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "padding-right",
-      "selector": ".dx-scheduler-time-panel-cell",
-      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
-    },
-    {
       "theme": "generic",
       "file": "scss/widgets/base/gridBase/_index.scss",
       "property": "padding-bottom",
@@ -261,27 +240,6 @@
       "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
       "property": "box-shadow",
       "selector": ".dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "padding-left",
-      "selector": ".dx-rtl .dx-scheduler-time-panel-cell",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "padding-right",
-      "selector": ".dx-scheduler-small .dx-scheduler-time-panel-cell",
-      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
-    },
-    {
-      "theme": "material",
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "property": "padding-right",
-      "selector": ".dx-scheduler-time-panel-cell",
       "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
     }
   ]

@@ -41,6 +41,7 @@ $scheduler-views-group-header-content-height: null !default;
 $scheduler-views-vertical-group-min-height: null !default;
 
 $scheduler-timepanel-cell-offset: 20px !default;
+$scheduler-timepanel-cell-small-offset: $scheduler-timepanel-cell-offset * $scheduler-small-size-factor !default;
 $scheduler-workspace-info-font-size: 20px !default;
 $scheduler-small-font-size: 14px !default;
 
@@ -670,7 +671,7 @@ $scheduler-renovation-virtual-row-height: 50px !default;
 
   .dx-scheduler-small & {
     padding-left: 0;
-    padding-right: $scheduler-timepanel-cell-offset * $scheduler-small-size-factor;
+    padding-right: $scheduler-timepanel-cell-small-offset;
   }
 
   &::after {
@@ -885,7 +886,7 @@ $scheduler-renovation-virtual-row-height: 50px !default;
     padding-right: 0;
 
     .dx-scheduler-small & {
-      padding-left: $scheduler-timepanel-cell-offset * $scheduler-small-size-factor;
+      padding-left: $scheduler-timepanel-cell-small-offset;
     }
 
     &::after {
