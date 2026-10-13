@@ -5855,7 +5855,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         this.clock.tick(300);
 
-        for(let i = 0; i < 7; i++) {
+        for(let i = 0; i < 10; i++) {
             dataGrid.getScrollable().scrollTo({ top: 16000000 });
             this.clock.tick(1000);
         }

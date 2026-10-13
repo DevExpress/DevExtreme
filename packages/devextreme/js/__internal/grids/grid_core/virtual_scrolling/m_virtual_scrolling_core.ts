@@ -179,7 +179,7 @@ class VirtualScrollController {
       const dataOptions = this._dataOptions;
       const totalItemsCount = dataOptions.totalItemsCount();
       if (this.option(LEGACY_SCROLLING_MODE) === false && totalItemsCount !== -1) {
-        const viewportParams = this.getViewportParams();
+        const viewportParams = dataOptions.loadViewportParams?.() ?? this.getViewportParams();
         const loadedOffset = dataOptions.loadedOffset();
         const loadedItemCount = dataOptions.loadedItemCount();
 

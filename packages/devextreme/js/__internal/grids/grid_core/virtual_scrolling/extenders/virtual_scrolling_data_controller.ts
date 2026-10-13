@@ -67,6 +67,8 @@ export const virtualScrollingDataControllerExtender = (
 
   private _loadViewportParams: any;
 
+  private loadViewportPageOffset = 0;
+
   private _allItems: any;
 
   private _visibleItems: any;
@@ -197,6 +199,14 @@ export const virtualScrollingDataControllerExtender = (
       },
       loadedItemCount() {
         return that._itemCount;
+      },
+      loadViewportParams() {
+        const viewportParams = that._loadViewportParams;
+
+        return viewportParams && {
+          skip: viewportParams.skip - that.loadViewportPageOffset,
+          take: viewportParams.take,
+        };
       },
       totalItemsCount() {
         if (isVirtualPaging(that)) {
@@ -358,9 +368,10 @@ export const virtualScrollingDataControllerExtender = (
     const viewportParams = this._rowsScrollController!.getViewportParams();
     const pageSize = this.pageSize();
 
+    this.loadViewportPageOffset = 0;
     if (viewportParams && !isVirtualPaging(this) && pageSize > 0) {
-      const pageOffset = this.pageIndex() * pageSize;
-      viewportParams.skip += pageOffset;
+      this.loadViewportPageOffset = this.pageIndex() * pageSize;
+      viewportParams.skip += this.loadViewportPageOffset;
     }
     this._loadViewportParams = viewportParams;
   }
