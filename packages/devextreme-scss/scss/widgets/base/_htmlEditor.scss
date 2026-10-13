@@ -12,12 +12,8 @@ $list-style-margin: 0.3em !default;
 $list-style-outer-width: $list-style-margin + $list-style-width !default;
 $max-indent: 9 !default;
 
-/*
- * dx-fixed-size: the drag handle's size; its half is negated at twenty positions, so feeding a
- * var() here would trade one knob nobody retunes for twenty calc() in the bundle.
- */
-$resize-handle-size: 11px;
-$touch-resize-handle-size: 15px; // dx-fixed-size: the touch variant of the same handle
+$resize-handle-size: 11px !default;
+$touch-resize-handle-size: 15px !default;
 $half-resize-handle-size: math.div($resize-handle-size, 2) !default;
 $half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2) !default;
 
@@ -149,15 +145,15 @@ $table-resizer-highlight-thickness: 3px !default;
   display: flex;
   flex: 1;
   flex-basis: auto;
-  min-height: 1px; // dx-structural: lets the flex item shrink below its content, not a designed height
+  min-height: 1px;
   margin: 0;
   position: relative;
   overflow: hidden;
 }
 
 .ql-clipboard { // stylelint-disable-line selector-class-pattern
-  left: -100000px; // dx-structural: parks Quill's clipboard element off-screen
-  height: 1px; // dx-structural: collapses the off-screen clipboard element, not a designed height
+  left: -100000px;
+  height: 1px;
   overflow-y: hidden;
   position: absolute;
   top: 50%;
@@ -221,7 +217,7 @@ $table-resizer-highlight-thickness: 3px !default;
 
   td,
   th {
-    border: 1px solid #000; // dx-line-width: a table hairline; the colour beside it is hard-coded too
+    border: 1px solid #000;
     padding: $table-cell-padding;
   }
 
@@ -350,7 +346,7 @@ $table-resizer-highlight-thickness: 3px !default;
     }
 
     &[data-placeholder] > p {
-      height: 0.1px; // dx-structural: a non-zero height the placeholder needs, not a designed size
+      height: 0.1px;
     }
   }
 
@@ -371,7 +367,7 @@ $table-resizer-highlight-thickness: 3px !default;
 }
 
 .dx-suggestion-list {
-  min-width: 50px; // dx-fixed-size: the narrowest the mention suggestion list may get
+  min-width: 50px;
 
   .dx-list-item {
     display: block;
@@ -384,7 +380,7 @@ $table-resizer-highlight-thickness: 3px !default;
 }
 
 .dx-formdialog-form {
-  min-width: 360px; // dx-fixed-size: the link/image dialog form width
+  min-width: 360px;
 }
 
 .dx-aidialog {
@@ -409,14 +405,14 @@ $table-resizer-highlight-thickness: 3px !default;
 .dx-aidialog-title {
   display: flex;
   align-items: center;
-  gap: 6px; // dx-fixed-size: gap between the AI dialog title icon and its text
+  gap: 6px;
   font-weight: $htmleditor-aidialog-title-font-weight;
 }
 
 .dx-overlay-content {
   &.dx-popup-fullscreen {
     .dx-formdialog-form {
-      min-width: 240px; // dx-fixed-size: the same dialog form once the popup goes fullscreen
+      min-width: 240px;
     }
   }
 }
@@ -429,7 +425,7 @@ $table-resizer-highlight-thickness: 3px !default;
 .dx-background-format {
   .dx-icon-color,
   .dx-icon-background {
-    border-bottom: 3px solid transparent; // dx-line-width: the strip under the colour-format icon that shows the picked colour
+    border-bottom: 3px solid transparent;
   }
 }
 
@@ -449,7 +445,7 @@ $table-resizer-highlight-thickness: 3px !default;
 .dx-resize-frame {
   position: absolute;
   box-sizing: content-box;
-  border: 1px dashed lightslategrey; // dx-line-width: hairline of the image resize frame
+  border: 1px dashed lightslategrey;
   pointer-events: none;
 
   .dx-resizable-handle {
@@ -460,7 +456,7 @@ $table-resizer-highlight-thickness: 3px !default;
   .dx-resizable-handle-corner-top-left,
   .dx-resizable-handle-corner-bottom-right,
   .dx-resizable-handle-corner-bottom-left {
-    border: 1px solid white; // dx-line-width: hairline around a resize handle
+    border: 1px solid white;
     width: $resize-handle-size;
     height: $resize-handle-size;
     border-radius: 0;
@@ -516,7 +512,7 @@ $table-resizer-highlight-thickness: 3px !default;
       position: absolute;
       width: $resize-handle-size;
       height: $resize-handle-size;
-      border: 1px solid white; // dx-line-width: hairline around a resize handle
+      border: 1px solid white;
 
       @at-root #{selector.append(".dx-touch-device", &)} {
         width: $touch-resize-handle-size;

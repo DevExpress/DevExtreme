@@ -236,7 +236,7 @@
       .dx-sort-index-icon {
         padding-right: var(--dx-grid-sort-index-icon-padding-inline-end);
         margin-left: var(--dx-grid-sort-index-icon-margin-inline-start);
-        font-size: calc(var(--dx-grid-header-cell-font-size) - 1px); // dx-px-nudge: -1px off the header cell font size
+        font-size: calc(var(--dx-grid-header-cell-font-size) - 1px);
         position: relative;
         bottom: var(--dx-grid-sort-index-icon-inset-block-end);
       }
@@ -295,10 +295,10 @@
     .dx-error-row {
       .dx-closebutton {
         float: right;
-        margin: calc(var(--dx-grid-cell-padding-block) + 2px); // dx-px-nudge: +2px over the cell padding
+        margin: calc(var(--dx-grid-cell-padding-block) + 2px);
 
         @include dx-icon(close);
-        @include dx-icon-sizing(14px); // dx-icon-glyph-size: 14px, the error row close glyph
+        @include dx-icon-sizing(14px);
       }
 
       .dx-error-message {
@@ -341,7 +341,7 @@
     }
 
     .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
-      mask-position: 0 49px; // dx-fixed-size: 49px sprite offset
+      mask-position: 0 49px;
     }
 
     .dx-command-drag {
@@ -674,7 +674,7 @@
 
   .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
     > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
-      box-shadow: 1px 0 0 var(--dx-grid-border); // dx-line-width: 1px hairline drawn as a shadow
+      box-shadow: 1px 0 0 var(--dx-grid-border);
     }
   }
 
@@ -728,7 +728,7 @@
 
         .dx-texteditor-input {
           font-size: var(--dx-grid-cell-font-size);
-          height: calc(var(--dx-grid-cell-height) + 1px); // dx-px-nudge: +1px over the cell height
+          height: calc(var(--dx-grid-cell-height) + 1px);
           padding-right: var(--dx-grid-filter-row-editor-padding-inline);
           padding-left: var(--dx-grid-filter-row-editor-padding-inline);
         }
@@ -934,8 +934,8 @@
 
     &.dx-#{$widget-name}-sticky-columns {
       .dx-row.dx-edit-row > td:not(.dx-master-detail-cell) .dx-texteditor-input {
-        height: calc(var(--dx-grid-cell-height) - 2px); // dx-px-nudge: -2px off the cell height
-        line-height: calc(var(--dx-grid-cell-height) - 2px); // dx-px-nudge: -2px off the cell height
+        height: calc(var(--dx-grid-cell-height) - 2px);
+        line-height: calc(var(--dx-grid-cell-height) - 2px);
       }
 
       .dx-master-detail-row > .dx-master-detail-cell {
@@ -1034,7 +1034,7 @@
 
     .dx-#{$widget-name}-headers.dx-#{$widget-name}-scroller-spacing {
       > .dx-#{$widget-name}-scroll-container:not(.dx-#{$widget-name}-content-fixed) {
-        box-shadow: -1px 0 0 var(--dx-grid-border); // dx-line-width: 1px hairline drawn as a shadow
+        box-shadow: -1px 0 0 var(--dx-grid-border);
       }
     }
 

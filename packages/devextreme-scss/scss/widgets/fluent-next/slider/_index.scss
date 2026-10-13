@@ -11,7 +11,7 @@
 .dx-slider-wrapper {
   height: var(--dx-slider-wrapper-height);
 
-  @include dx-popover-arrow-size(14px, 2px); // dx-literal-required: the mixin divides the width by sqrt(2), and var() cannot take part in Sass arithmetic
+  @include dx-popover-arrow-size(14px, 2px);
 }
 
 .dx-slider-bar {
@@ -95,11 +95,11 @@
 }
 
 .dx-slider-tooltip-position-top {
-  padding-top: calc(var(--dx-slider-tooltip-width) + 6px); // dx-px-nudge: +6px over the tooltip width
+  padding-top: calc(var(--dx-slider-tooltip-width) + 6px);
 }
 
 .dx-slider-tooltip-position-bottom {
-  padding-bottom: calc(var(--dx-slider-tooltip-width) + 6px); // dx-px-nudge: +6px over the tooltip width
+  padding-bottom: calc(var(--dx-slider-tooltip-width) + 6px);
 }
 
 .dx-slider-label-position-bottom {

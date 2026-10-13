@@ -6,7 +6,8 @@ $calendar-multiview-table-padding: 0 10px !default;
 $calendar-week-day-header-font-size: 10px !default;
 $calendar-week-day-header-font-weight: 500 !default;
 
-$calendar-week-number-cell-width: 2em !default; // dx-relative
+$calendar-week-number-cell-width: 2em !default;
+
 .dx-calendar {
   @include user-select(none);
 

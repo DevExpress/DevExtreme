@@ -57,8 +57,8 @@ $filemanager-progress-title-font-size: 18px !default;
 $filemanager-progress-title-font-weight: 600 !default;
 $filemanager-progress-bold-font-weight: 600 !default;
 
-$filemanager-error-message-font-size: 0.85em !default; // dx-relative
-$filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
+$filemanager-error-message-font-size: 0.85em !default;
+$filemanager-drawer-panel-content-width: 30% !default;
 
 $filemanager-splitter-wrapper-right: 3px !default;
 
@@ -82,7 +82,7 @@ $filemanager-splitter-wrapper-right: 3px !default;
       min-width: $filemanager-overlay-content-min-width;
       max-width: 93vw;
 
-      @media (min-width: 431px) { // dx-literal-required: a media condition, var() is invalid here
+      @media (min-width: 431px) {
         max-width: $filemanager-overlay-content-max-width;
       }
     }
@@ -296,14 +296,14 @@ $filemanager-splitter-wrapper-right: 3px !default;
 
   .dx-filemanager-notification-container {
     position: absolute;
-    top: -5000px; // dx-structural: parks the container off-screen until it is positioned
-    left: -5000px; // dx-structural: parks the container off-screen until it is positioned
+    top: -5000px;
+    left: -5000px;
   }
 
   .dx-filemanager-editing-container {
     position: absolute;
-    top: -5000px; // dx-structural: parks the container off-screen until it is positioned
-    left: -5000px; // dx-structural: parks the container off-screen until it is positioned
+    top: -5000px;
+    left: -5000px;
   }
 
   .dx-row {

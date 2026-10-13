@@ -1,7 +1,7 @@
 $validation-summary-margin-top: 20px !default;
 $validation-message-content-padding: 10px !default;
 
-$validation-message-font-size: 0.85em !default; // dx-relative
+$validation-message-font-size: 0.85em !default;
 $validation-summary-item-border-bottom-width: 1px !default;
 
 @mixin dx-base-validation($summary-color, $message-color, $message-bg-color, $border-radius) {

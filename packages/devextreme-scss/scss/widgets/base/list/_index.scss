@@ -10,8 +10,8 @@ $list-item-badge-container-width: 20px !default;
 $list-slide-menu-button-padding: 0 10px !default;
 $list-next-button-padding: 5px !default;
 
-$list-min-height: 3em !default; // dx-relative
-$list-empty-message-button-padding: 0 3em !default; // dx-relative
+$list-min-height: 3em !default;
+$list-empty-message-button-padding: 0 3em !default;
 
 :root {
   --dxicon-list-toggle-delete: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/list/toggle-delete.svg"))};

@@ -58,29 +58,29 @@ $pivotgrid-border-width: 1px !default;
 $pivotgrid-focus-outline-width: 2px !default;
 $pivotgrid-focus-outline-offset: -2px !default;
 $pivotgrid-drag-header-border: $pivotgrid-border-width solid !default;
-$pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color; // dx-shadow-geometry
-$pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-shadow-color; // dx-shadow-geometry
+$pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color !default;
+$pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-shadow-color !default;
 $pivotgrid-border: $pivotgrid-border-width solid !default;
 $pivotgrid-icon-size: 14px !default;
 $pivotgrid-common-field-padding: 2px !default;
 $pivotgrid-filter-area-border-spacing: calc($pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding) calc($pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding) !default;
-$pivotgrid-expand-icon-offset: -5px; // dx-fixed-size: negated at its use site
+$pivotgrid-expand-icon-offset: -5px !default;
 $pivotgrid-expand-icon-text-offset: 0 !default;
 
 .dx-pivotgrid-fields-container {
   .dx-position-indicator {
     &.dx-position-indicator-vertical {
-      margin-top: -4px; // dx-fixed-size: pulls the element onto the grid line
-      margin-left: -1px; // dx-fixed-size: pulls the element onto the grid line
+      margin-top: -4px;
+      margin-left: -1px;
       height: $pivotgrid-position-indicator-vertical-height;
 
       &.dx-position-indicator-last {
-        margin-top: -3px; // dx-fixed-size: pulls the element onto the grid line
+        margin-top: -3px;
       }
     }
 
     &.dx-position-indicator-horizontal {
-      margin-left: -3px; // dx-fixed-size: pulls the element onto the grid line
+      margin-left: -3px;
       width: $pivotgrid-position-indicator-horizontal-width;
 
       &.dx-position-indicator-last {
@@ -329,7 +329,7 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
     width: $pivotgrid-position-indicator-horizontal-width;
     top: 50%;
     height: $pivotgrid-position-indicator-vertical-height;
-    margin-top: -1px; // dx-fixed-size: pulls the element onto the grid line
+    margin-top: -1px;
     background-color: $pivotgrid-border-color;
 
     &.dx-group-connector-prev {
@@ -600,7 +600,7 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
   .dx-pivotgrid-fields-container {
     .dx-position-indicator {
       &.dx-position-indicator-horizontal {
-        margin-left: -3px; // dx-fixed-size: pulls the element onto the grid line
+        margin-left: -3px;
 
         &.dx-position-indicator-last {
           margin-left: $pivotgrid-position-indicator-last-margin-left-rtl;

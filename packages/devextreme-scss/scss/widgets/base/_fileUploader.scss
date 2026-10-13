@@ -21,7 +21,8 @@ $fileuploader-cancel-button-margin-top: 5px !default;
 $fileuploader-status-message-font-size: 12px !default;
 $fileuploader-file-size-font-size: 10px !default;
 
-$fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
+$fileuploader-input-wrapper-vertical-padding: 1em !default;
+
 .dx-fileuploader {
   &.dx-state-disabled .dx-fileuploader-input {
     display: none;
@@ -205,7 +206,7 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
   float: left;
   width: 100%;
   height: $fileuploader-progressbar-height;
-  margin-top: -6px; // dx-fixed-size: pulls the status text onto the progress line
+  margin-top: -6px;
 }
 
 .dx-fileuploader-file-name {

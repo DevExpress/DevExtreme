@@ -8,7 +8,7 @@
 @use "../button/colors" as buttonColors;
 @include dx-buttongroup-sizing(
   buttonSizes.$button-border-radius,
-  1px, // dx-line-width: 1px, the button border passed to dx-buttongroup-sizing
+  1px,
 );
 
 .dx-buttongroup-mode-contained {

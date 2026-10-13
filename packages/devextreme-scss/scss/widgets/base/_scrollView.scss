@@ -40,7 +40,7 @@ $pulldown-top-offset: calc(-1 * ($pulldown-height + $pulldown-padding * 2)) !def
       height: 100%;
       width: 100%;
       left: -50%;
-      margin-left: -20px; // dx-fixed-size: centres the android pull-down on the pocket
+      margin-left: -20px;
       padding: 0;
       border-radius: 50%;
 
@@ -139,7 +139,7 @@ $pulldown-top-offset: calc(-1 * ($pulldown-height + $pulldown-padding * 2)) !def
   left: 0;
   top: 50%;
   display: inline-block;
-  margin: -15px 20px 0 15px; // dx-fixed-size: centres the indicator on its own half-height
+  margin: -15px 20px 0 15px;
   width: $scrollview-pull-down-indicator-width;
   -webkit-user-drag: none;
 }
@@ -220,7 +220,7 @@ $pulldown-top-offset: calc(-1 * ($pulldown-height + $pulldown-padding * 2)) !def
 
 .dx-scrollview-scrollbottom-text {
   display: inline-block;
-  margin-top: -20px; // dx-fixed-size: pulls the text onto the indicator's line
+  margin-top: -20px;
   vertical-align: middle;
   -webkit-user-drag: none;
 }
