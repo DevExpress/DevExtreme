@@ -61,10 +61,6 @@ function App() {
     endValue: initialEnd,
   });
 
-  const onVisualRangeChange = useCallback((value: VisualRange | unknown[]) => {
-    setVisualRange(value as VisualRange);
-  }, []);
-
   const setRange = useCallback((start: number, end: number) => {
     const span = clamp(end - start, minVisibleSpanMs, dataMax - dataMin);
     const center = (start + end) / 2;
@@ -156,7 +152,6 @@ function App() {
         <Legend verticalAlignment="bottom" horizontalAlignment="center" />
         <ArgumentAxis
           visualRange={visualRange}
-          onVisualRangeChange={onVisualRangeChange}
         >
           <Label
             format="MMM dd"

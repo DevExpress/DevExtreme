@@ -50,9 +50,6 @@ function App() {
     startValue: initialStart,
     endValue: initialEnd,
   });
-  const onVisualRangeChange = useCallback((value) => {
-    setVisualRange(value);
-  }, []);
   const setRange = useCallback((start, end) => {
     const span = clamp(end - start, minVisibleSpanMs, dataMax - dataMin);
     const center = (start + end) / 2;
@@ -182,10 +179,7 @@ function App() {
           verticalAlignment="bottom"
           horizontalAlignment="center"
         />
-        <ArgumentAxis
-          visualRange={visualRange}
-          onVisualRangeChange={onVisualRangeChange}
-        >
+        <ArgumentAxis visualRange={visualRange}>
           <Label
             format="MMM dd"
             overlappingBehavior="rotate"
