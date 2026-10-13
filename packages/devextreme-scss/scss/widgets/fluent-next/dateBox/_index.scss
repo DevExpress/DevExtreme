@@ -1,12 +1,6 @@
-@use "sass:math";
 @use "colors" as *;
-@use "sizes" as *;
-@use "../../base/icon_fonts" as *;
-@use "../dropDownEditor" as *;
 @use "../../base/dropDownEditor/mixins" as *;
-@use "../textEditor" as *;
 @use "../textEditor/sizes" as textEditorSizes;
-@use "../dropDownEditor/sizes" as dropDownEditorSizes;
 @use "../../base/dateBox" with (
   $datebox-texteditor-height: var(--dx-date-box-input-height),
   $datebox-popup-content-padding-top: var(--dx-date-box-popup-content-padding-block-start),

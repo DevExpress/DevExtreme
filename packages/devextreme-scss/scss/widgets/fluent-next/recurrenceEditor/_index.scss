@@ -1,5 +1,4 @@
 @use "colors" as *;
-@use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/recurrenceEditor" with (
   $recurrence-interval-number-box-margin-top: var(--dx-recurrence-editor-interval-number-box-margin-block-start),

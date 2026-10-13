@@ -1,10 +1,5 @@
-@use "sass:math";
-@use "colors" as *;
-@use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/icon_fonts" as *;
 @use "../textEditor/sizes" as textEditorSizes;
-@use "../dropDownEditor" as *;
 @use "../../base/dropDownEditor/mixins" as *;
 @use "../common/mixins" as *;
 @use "../../base/lookup";

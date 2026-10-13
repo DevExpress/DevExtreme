@@ -3,7 +3,8 @@
         "stylelint-scss",
         "@stylistic/stylelint-plugin",
         "./tools/stylelint/no-identical-branch-declarations.mjs",
-        "./tools/stylelint/module-variable-default.mjs"
+        "./tools/stylelint/module-variable-default.mjs",
+        "./tools/stylelint/no-unused-use.ts"
     ],
     "extends": "stylelint-config-standard-scss",
     "ignoreFiles": "!**/*.{css,scss}",
@@ -25,6 +26,7 @@
             { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently." }
         ],
         "dx/module-variable-default": true,
+        "dx/no-unused-use": true,
         "dx/no-identical-branch-declarations": true,
         "font-family-name-quotes": "always-unless-keyword",
         "@stylistic/function-comma-space-after": "always-single-line",

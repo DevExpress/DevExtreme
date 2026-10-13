@@ -1,8 +1,4 @@
-@use "sass:math";
-@use "colors" as *;
-@use "sizes" as *;
-@use "../../base/mixins" as *;
-@use "../../base/icon_fonts" as *;
+@use "sizes";
 @use "../gridBase" as *;
 @use "../gridBase/sizes" as gridBaseSizes;
 @use "../../base/treeList" as baseTreeList with (

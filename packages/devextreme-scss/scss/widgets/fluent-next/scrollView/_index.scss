@@ -1,6 +1,3 @@
-@use "sass:math";
-@use "colors" as *;
-@use "sizes" as *;
 @use "../sizes" as *;
 @use "../scrollable";
 @use "../../base/scrollView" with (
@@ -63,6 +60,7 @@
   flex-direction: column;
   align-items: center;
   box-shadow: var(--dx-scroll-view-shadow);
+  opacity: 1;
 
   > .dx-loadindicator {
     height: var(--dx-scroll-view-scroll-bottom-image-height);

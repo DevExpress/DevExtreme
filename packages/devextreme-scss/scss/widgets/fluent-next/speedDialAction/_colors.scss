@@ -1,6 +1,5 @@
 @use "../button/colors" as buttonColors;
 @use "../../../_design-system/variables/ds" as ds;
-@use "../common/colors" as *;
 
 $speed-dial-action-content: ds.$color-content !default;
 $speed-dial-action-shadow: ds.$box-shadow-md !default;

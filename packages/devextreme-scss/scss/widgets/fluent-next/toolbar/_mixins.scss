@@ -1,5 +1,3 @@
-@use "sizes" as *;
-
 @mixin dx-toolbar-sizing($height, $padding, $label-font-size, $item-spacing) {
   padding: $padding;
   overflow: visible;

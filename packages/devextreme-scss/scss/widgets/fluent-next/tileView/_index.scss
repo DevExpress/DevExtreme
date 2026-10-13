@@ -1,6 +1,4 @@
 @use "../mixins" as *;
-@use "colors" as *;
-@use "sizes" as *;
 @use "../../base/tileView" with (
   $tileview-wrapper-height: var(--dx-tile-view-wrapper-height),
 );
