@@ -32,7 +32,7 @@ $colorbox-toolbar-item-padding-right: 10px !default;
       z-index: 1;
       width: $colorbox-texteditor-input-container-width;
       height: $colorbox-texteditor-input-container-height;
-      margin-top: -7.5px;
+      transform: translateY(-50%);
       inset-inline-start: $colorbox-texteditor-input-container-inset-inline-start;
     }
   }
