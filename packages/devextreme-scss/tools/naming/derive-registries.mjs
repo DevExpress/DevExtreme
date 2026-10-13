@@ -469,7 +469,7 @@ const OVERRIDES = {
   exemptFolders: {},
 
   // Segments the package puts in the part slot that are NOT parts: they are variant or state
-  // words leaking into it (upstream defects, see DIVERGENCES.md). Excluded from PARTS.
+  // words leaking into it (upstream defects). Excluded from PARTS.
   partExclude: [
     'default', 'selected', 'hidden', 'invalid', 'range', 'pre', 'group', 'none', 'alt',
     'inverted', 'edge', 'center', 'disable', 'static', 'dragged', 'transparent',
@@ -729,7 +729,7 @@ const OVERRIDES = {
      * `menu-items-container` sits next to `items-container` on purpose: base/_contextMenu.scss
      * draws `.dx-context-menu .dx-menu-items-container` with its own parameter, and
      * contextMenu/_index.scss draws the SAME element again with its own value, which wins on order.
-     * Two variables for one padding, with different values — see DIVERGENCES.md.
+     * Two variables for one padding, with different values.
      */
     'context-menu': ['item', 'items-container', 'menu-items-container', 'separator', 'content',
       'text'],
