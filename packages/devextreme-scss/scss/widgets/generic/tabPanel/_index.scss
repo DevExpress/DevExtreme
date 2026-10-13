@@ -1,12 +1,6 @@
 @use "variables/colors" as *;
-@use "variables/sizes" as *;
-@use "../tabs/variables/colors" as *;
-@use "../tabs/variables/borders" as *;
-@use "../tabs/variables/sizes" as *;
-@use "../tabs/mixins" as *;
 @use "../tabs" as *;
 @use "../../base/tabPanel";
-@use "variables/borders" as *;
 @use "layout/tab/base" as *;
 @use "layout/tab/position-top" as *;
 @use "layout/tab/position-right" as *;

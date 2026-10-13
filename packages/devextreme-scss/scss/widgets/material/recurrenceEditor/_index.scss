@@ -1,7 +1,6 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../scheduler/sizes" as *;
 $material-recurrence-button-group-padding: 6px !default;
 
 @use "../../base/recurrenceEditor" as * with (

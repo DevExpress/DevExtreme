@@ -1,4 +1,3 @@
-@use "sass:math";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -6,8 +5,6 @@
 @use "../list/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../../base/scheduler/layout/header" as *;
-@use "../../base/mixins" as *;
-@use "../../base/icon_fonts" as *;
 @use "../typography/sizes" as *;
 $generic-scheduler-month-date-text-size: $generic-h5-font-size !default;
 
@@ -54,8 +51,6 @@ $generic-scheduler-header-panel-table-cell-height: $generic-scheduler-workspace-
   $agenda-appointment-details-opacity: 0.7,
   $scheduler-month-date-text-size: $generic-scheduler-month-date-text-size,
 );
-@use "../button/colors" as *;
-@use "../tooltip/colors" as *;
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
