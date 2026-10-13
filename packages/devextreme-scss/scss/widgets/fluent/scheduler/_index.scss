@@ -144,7 +144,7 @@ $scheduler-first-of-month-border: 1px solid !default;
   }
 }
 
-.dx-scheduler-appointment-content { // stylelint-disable-line no-duplicate-selectors
+.dx-scheduler-appointment-content {
   padding: $fluent-scheduler-appointment-content-padding;
 }
 
@@ -597,7 +597,7 @@ $scheduler-first-of-month-border: 1px solid !default;
   background-color: $scheduler-alldaypanel-bg;
 }
 
-.dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
+.dx-scheduler-work-space {
   border-bottom-right-radius: $scheduler-border-radius;
   border-bottom-left-radius: $scheduler-border-radius;
 
@@ -779,7 +779,7 @@ $scheduler-first-of-month-border: 1px solid !default;
   color: $scheduler-dropdown-appointment-date-color;
 }
 
-.dx-scheduler-work-space-vertical-grouped { // stylelint-disable-line no-duplicate-selectors
+.dx-scheduler-work-space-vertical-grouped {
   &.dx-scheduler-work-space-month {
     .dx-scheduler-date-table-scrollable {
       border-top: baseScheduler.$scheduler-base-border;

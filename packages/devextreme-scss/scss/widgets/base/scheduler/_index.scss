@@ -541,7 +541,7 @@ $scheduler-appointment-content-padding-right: 5px !default;
     box-shadow: $scheduler-horizontal-appointment-resizing-shadow, $scheduler-appointment-dragging-shadow;
   }
 
-  .dx-scheduler-appointment { // stylelint-disable-line no-duplicate-selectors
+  .dx-scheduler-appointment {
     &.dx-scheduler-appointment-body,
     &.dx-scheduler-appointment-tail {
       box-shadow: none;
