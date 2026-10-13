@@ -54,6 +54,7 @@ export interface GetTemplateOptions {
 }
 
 interface WatchOptions {
+  deep?: boolean;
   skipImmediate?: boolean;
 }
 

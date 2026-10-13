@@ -129,11 +129,11 @@ export const virtualScrollingDataControllerExtender = (
           const rowElement = component.getRowElement(rowIndex);
           const $rowElement = rowElement?.[0] && $(rowElement[0]);
           let top = $rowElement?.position()?.top;
-          const isChromeLatest = browser.chrome && Number(browser.version ?? 0) >= 91;
-          const allowedTopOffset = browser.mozilla || isChromeLatest ? 1 : 0; // T884308
+          const isChrome = browser.chrome;
+          const allowedTopOffset = browser.mozilla || isChrome ? 1 : 0; // T884308
           if (top && top > allowedTopOffset) {
             top = Math.round(top + getOuterHeight($rowElement) * (itemIndex % 1));
-            scrollable.scrollTo({ y: top });
+            scrollable.scrollTo({ top });
           }
         }
       }
