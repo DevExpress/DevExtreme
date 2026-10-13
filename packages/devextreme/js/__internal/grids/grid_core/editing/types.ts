@@ -1,3 +1,4 @@
+import type { DataChange } from '@js/common/grids';
 import type { ColumnButton } from '@js/ui/data_grid';
 import type { FormItemComponent } from '@js/ui/form';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
@@ -61,6 +62,11 @@ export interface EditFormColumnItem {
   column: Column;
   editorType?: FormItemComponent;
   isCustomEditorType?: boolean;
+}
+
+export interface OnSavingResult {
+  cancel: boolean;
+  changes?: DataChange[];
 }
 
 export interface EditFormItemNode {
