@@ -38,12 +38,12 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   protected getRowIndexFromEvent(e: KeyboardKeyDownEvent): number {
     return 0;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   protected getColumnFromEvent(e: KeyboardKeyDownEvent): Column | undefined {
     return undefined;
   }

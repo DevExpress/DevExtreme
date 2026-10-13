@@ -153,7 +153,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return this.getFocusedView()?.element();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   protected keyDownHandler(e: KeyboardKeyDownEvent): void {}
 
   protected initKeyDownHandler(): void {
@@ -165,7 +165,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return '';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   protected focusinHandler(e: DxEvent<FocusEvent>): void {}
 
   protected initHandlers(): void {
@@ -186,7 +186,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return undefined;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   protected _getCell(cellPosition: FocusedCellPosition): dxElementWrapper | undefined {
     return undefined;
   }
@@ -195,7 +195,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return $row?.index();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   protected getCellIndex($cell: dxElementWrapper, rowIndex?: number): number {
     return $cell?.index();
   }
@@ -292,7 +292,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return position;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   protected renderCompleted(e?: unknown): void {
     this.initKeyDownHandler();
 

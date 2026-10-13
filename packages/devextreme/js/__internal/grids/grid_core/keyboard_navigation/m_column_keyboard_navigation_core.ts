@@ -59,7 +59,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     this._focusedCellPosition = {};
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   public canReorderColumn(column: Column, direction: Direction, rowIndex: number): boolean {
     return false;
   }

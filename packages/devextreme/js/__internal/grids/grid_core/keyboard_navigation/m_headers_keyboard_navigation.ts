@@ -54,11 +54,11 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   }
 
   protected getColumnVisibleIndexCorrection(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
     visibleColumnIndex: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
     rowIndex: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
     direction: Direction,
   ): number {
     return 0;
@@ -131,7 +131,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return isHandled;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   protected tabKeyHandler(e: KeyboardKeyDownEvent): void {}
 
   protected getCellIndex($cell: dxElementWrapper): number {
