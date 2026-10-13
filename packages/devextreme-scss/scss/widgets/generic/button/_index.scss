@@ -14,6 +14,7 @@
 
 .dx-button {
   @include dx-button-onlyicon-sizing();
+  @include dx-button-styling();
 }
 
 .dx-button-has-icon {
@@ -25,10 +26,6 @@
 }
 
 // NOTE: Button styles
-
-.dx-button { // stylelint-disable-line no-duplicate-selectors
-  @include dx-button-styling();
-}
 
 .dx-button-mode-contained {
   @include dx-button-mode-contained-styling();

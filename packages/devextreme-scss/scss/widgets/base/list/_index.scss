@@ -11,6 +11,7 @@ $list-slide-menu-button-padding: 0 10px !default;
 $list-next-button-padding: 5px !default;
 
 $list-min-height: 3em !default;
+$list-empty-message-min-height: $list-min-height !default;
 $list-empty-message-button-padding: 0 3em !default;
 
 :root {
@@ -76,7 +77,7 @@ $list-empty-message-button-padding: 0 3em !default;
   @include dx-overflow();
 
   text-align: start;
-  min-height: $list-min-height;
+  min-height: $list-empty-message-min-height;
 }
 
 .dx-list-item-badge-container {

@@ -60,8 +60,12 @@ $pivotgrid-focus-outline-offset: -2px !default;
 $pivotgrid-drag-header-border: $pivotgrid-border-width solid !default;
 $pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color !default;
 $pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-shadow-color !default;
+$pivotgrid-drag-header-shadow: $pivotgrid-drag-header-first-shadow, $pivotgrid-drag-header-second-shadow !default;
 $pivotgrid-border: $pivotgrid-border-width solid !default;
+$pivotgrid-area-box-border: $pivotgrid-border !default;
+$pivotgrid-area-box-border-color: $pivotgrid-border-color !default;
 $pivotgrid-icon-size: 14px !default;
+$pivotgrid-header-filter-icon-size: $pivotgrid-icon-size !default;
 $pivotgrid-common-field-padding: 2px !default;
 $pivotgrid-filter-area-border-spacing: calc($pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding) calc($pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding) !default;
 $pivotgrid-expand-icon-offset: -5px !default;
@@ -112,8 +116,8 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
 
     @include dx-icon(filter);
 
-    font-size: $pivotgrid-icon-size;
-    width: $pivotgrid-icon-size;
+    font-size: $pivotgrid-header-filter-icon-size;
+    width: $pivotgrid-header-filter-icon-size;
   }
 
   .dx-header-filter-empty {
@@ -134,7 +138,7 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
     opacity: $pivotgrid-fields-container-drag-opacity;
 
     .dx-area-field.dx-area-box {
-      box-shadow: $pivotgrid-drag-header-first-shadow, $pivotgrid-drag-header-second-shadow;
+      box-shadow: $pivotgrid-drag-header-shadow;
       border: $pivotgrid-drag-header-border;
       border-color: $pivotgrid-drag-header-border-color;
     }
@@ -143,8 +147,8 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
   .dx-area-field.dx-area-box {
     background-color: $pivotgrid-area-background;
     margin-bottom: $pivotgrid-area-box-margin-bottom;
-    border: $pivotgrid-border;
-    border-color: $pivotgrid-border-color;
+    border: $pivotgrid-area-box-border;
+    border-color: $pivotgrid-area-box-border-color;
     padding: $pivotgrid-common-top-bottom-padding $pivotgrid-common-left-right-padding;
   }
 
@@ -267,6 +271,7 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
   .dx-expand-icon-container {
     margin-left: $pivotgrid-expand-icon-offset;
     margin-right: $pivotgrid-expand-icon-text-offset;
+    width: $pivotgrid-icon-size;
   }
 
   .dx-area-row-cell,
@@ -468,10 +473,6 @@ $pivotgrid-expand-icon-text-offset: 0 !default;
     tr:first-child td {
       border-top: 0;
     }
-  }
-
-  .dx-expand-icon-container { // stylelint-disable-line no-duplicate-selectors
-    width: $pivotgrid-icon-size;
   }
 
   .dx-pivotgrid-horizontal-headers:last-child {
