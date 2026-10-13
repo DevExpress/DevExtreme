@@ -1,6 +1,6 @@
 @use "colors" as *;
 @use "../colors" as *;
-@use "sizes" as *;
+@use "sizes";
 @use "../gridBase" as *;
 @use "../gridBase/colors" as *;
 @use "../../base/treeList" as baseTreeList with (

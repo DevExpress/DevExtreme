@@ -61,7 +61,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px !default;
 @use "../button/colors" as *;
 @use "../button/mixins" as *;
 @use "../tooltip/colors" as *;
-@use "../recurrenceEditor" as *;
+@use "../recurrenceEditor";
 @use "../scrollable";
 
 $fluent-scheduler-all-day-table-cell-height: $fluent-scheduler-workspace-date-table-cell-height * 1.5 !default;
