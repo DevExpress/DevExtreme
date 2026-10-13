@@ -31,7 +31,7 @@ import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import type {
-  DataChange, ProcessedItem, RowWatch,
+  DataChange, ProcessedItem, RowWatch, UpdateChange, UpdateItemChange,
 } from '@ts/grids/grid_core/data_controller/types';
 import { isSameItem } from '@ts/grids/grid_core/data_controller/utils/row_changes';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
@@ -75,7 +75,11 @@ import type {
   ViewRowEvent,
 } from './types';
 import {
-  getCellText, getMaxHorizontalScrollOffset, isRowElementVisible, isSameColumnLayout,
+  getCellText,
+  getMaxHorizontalScrollOffset,
+  insertRowElement,
+  isRowElementVisible,
+  isSameColumnLayout,
 } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
@@ -554,92 +558,114 @@ export class RowsView extends ColumnsView {
 
     return this.waitAsyncTemplates().done(() => {
       const contentChanges = this._contentChanges;
-      const highlightChanges = this.option('highlightChanges');
-      const rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
 
       this._contentChanges = [];
 
       contentChanges.forEach(({
-        newTableElement: $newTableElement,
+        newTableElement: $newTable,
         change: contentChange,
         isFixedTableRendering: isFixedTable,
       }) => {
         const contentElement = this._findContentElement(isFixedTable);
 
-        switch (contentChange?.changeType) {
-          case 'update': {
-            const tableElement = this.getTableElement(isFixedTable);
-            const executors: (() => void)[] = [];
-
-            contentChange.rowIndices.forEach((rowIndex, index) => {
-              const $newRowElement = this._getRowElements($newTableElement).eq(index);
-              const dataChangeType = contentChange.changeTypes?.[index];
-              const item = contentChange.items?.[index];
-
-              executors.push(() => {
-                const $rowElements = this._getRowElements(tableElement);
-                const $rowElement = $rowElements.eq(rowIndex);
-
-                switch (dataChangeType) {
-                  case 'update':
-                    if (item) {
-                      const columnIndices = contentChange.columnIndices?.[index];
-
-                      if (isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
-                        $rowElement.toggle(item.visible);
-                      } else if (columnIndices) {
-                        this._updateCells($rowElement, $newRowElement, columnIndices, item);
-                      } else {
-                        $rowElement.replaceWith($newRowElement);
-                      }
-                    }
-                    break;
-                  case 'insert':
-                    if (!$rowElements.length) {
-                      if (tableElement) {
-                        const target = $newRowElement.is('tbody')
-                          ? tableElement
-                          : tableElement.children('tbody');
-                        $newRowElement.prependTo(target);
-                      }
-                    } else if ($rowElement.length) {
-                      $newRowElement.insertBefore($rowElement);
-                    } else {
-                      $newRowElement.insertAfter($rowElements.last());
-                    }
-                    if (highlightChanges && contentChange.isLiveUpdate) {
-                      $newRowElement.addClass(rowInsertedClass);
-                    }
-                    break;
-                  case 'remove':
-                    $rowElement.remove();
-                    break;
-                  default:
-                    break;
-                }
-              });
-            });
-            executors.forEach((executor) => {
-              executor();
-            });
-
-            $newTableElement.remove();
-            break;
-          }
-          default:
-            this.setTableElement($newTableElement, isFixedTable);
-
-            if (contentElement) {
-              contentElement.addClass(this.addWidgetPrefix(VIEW_CLASSES.content));
-              this._setGridRole(contentElement);
-              this._renderContent(contentElement, $newTableElement, isFixedTable);
-            }
-            break;
+        if (contentChange?.changeType === 'update') {
+          this.applyRowChanges(contentChange, $newTable, isFixedTable);
+        } else {
+          this.replaceTable(contentElement, $newTable, isFixedTable);
         }
       });
     }).fail(() => {
       this._contentChanges = [];
     });
+  }
+
+  private applyRowChanges(
+    change: UpdateChange,
+    $newTable: dxElementWrapper,
+    isFixedTable?: boolean,
+  ): void {
+    const tableElement = this.getTableElement(isFixedTable);
+    const $newRows = this._getRowElements($newTable);
+    const shouldHighlightInserts = this.option('highlightChanges') && change.isLiveUpdate;
+    const insertedRowClass = shouldHighlightInserts
+      ? this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS)
+      : undefined;
+
+    change.rowIndices.forEach((rowIndex, index) => {
+      const changeType = change.changeTypes?.[index];
+
+      if (changeType) {
+        this.applyRowChange(tableElement, $newRows.eq(index), {
+          changeType,
+          rowIndex,
+          item: change.items?.[index],
+          columnIndices: change.columnIndices?.[index],
+        }, insertedRowClass);
+      }
+    });
+
+    $newTable.remove();
+  }
+
+  private applyRowChange(
+    tableElement: dxElementWrapper | null | undefined,
+    $newRow: dxElementWrapper,
+    {
+      changeType, rowIndex, item, columnIndices,
+    }: UpdateItemChange,
+    insertedRowClass: string | undefined,
+  ): void {
+    const $rows = this._getRowElements(tableElement);
+    const $row = $rows.eq(rowIndex);
+
+    switch (changeType) {
+      case 'update':
+        if (item) {
+          this.updateRowElement($row, $newRow, item, columnIndices);
+        }
+        break;
+      case 'insert':
+        insertRowElement($newRow, $rows, rowIndex, tableElement);
+
+        if (insertedRowClass) {
+          $newRow.addClass(insertedRowClass);
+        }
+        break;
+      case 'remove':
+        $row.remove();
+        break;
+      default:
+        break;
+    }
+  }
+
+  private updateRowElement(
+    $row: dxElementWrapper,
+    $newRow: dxElementWrapper,
+    item: ProcessedItem,
+    columnIndices: number[] | undefined,
+  ): void {
+    if (isDefined(item.visible) && item.visible !== $row.is(':visible')) {
+      $row.toggle(item.visible);
+    } else if (columnIndices) {
+      this._updateCells($row, $newRow, columnIndices, item);
+    } else {
+      $row.replaceWith($newRow);
+    }
+  }
+
+  private replaceTable(
+    contentElement: dxElementWrapper | undefined,
+    $newTable: dxElementWrapper,
+    isFixedTable?: boolean,
+  ): void {
+    this.setTableElement($newTable, isFixedTable);
+
+    if (contentElement) {
+      contentElement.addClass(this.addWidgetPrefix(VIEW_CLASSES.content));
+      this._setGridRole(contentElement);
+      this._renderContent(contentElement, $newTable, isFixedTable);
+    }
   }
 
   protected _getGridRoleName(): string {
