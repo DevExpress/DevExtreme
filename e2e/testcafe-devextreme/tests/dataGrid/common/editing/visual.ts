@@ -6,6 +6,8 @@ import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import { testScreenshot } from '../../../../helpers/themeUtils';
+import { changeTheme } from '../../../../helpers/changeTheme';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Editing.Visual`
   .page(url(__dirname, '../../../container.html'));
@@ -553,5 +555,53 @@ test('DataGrid - ColorBox in DataGrid causes input value to appear behind color 
         e.editorOptions.readOnly = false;
       }
     },
+  });
+});
+
+[
+  Themes.materialBlue,
+  Themes.materialBlueDark,
+  Themes.materialOrange,
+  Themes.materialOrangeDark,
+].forEach((theme) => {
+  test(`Modified and invalid cells should be highlighted in the ${theme} theme (T1336679)`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    await dataGrid.apiSaveEditData();
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).isModified)
+      .ok()
+      .expect(dataGrid.getDataCell(1, 2).isInvalid)
+      .ok();
+
+    await testScreenshot(t, takeScreenshot, 'T1336679-modified-and-invalid-cells.png', { element: dataGrid.element, theme });
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async (t) => {
+    await changeTheme(t, theme);
+    await createWidget('dxDataGrid', {
+      dataSource: getData(3, 3),
+      keyExpr: 'field_0',
+      showBorders: true,
+      columns: ['field_0', 'field_1', {
+        dataField: 'field_2',
+        validationRules: [{ type: 'required' }],
+      }],
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+        changes: [
+          { type: 'update', key: 'val_0_0', data: { field_1: 'modified' } },
+          { type: 'update', key: 'val_1_0', data: { field_2: '' } },
+        ],
+      },
+    });
   });
 });
