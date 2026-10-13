@@ -8,6 +8,8 @@ type CollectionLike = Set<unknown>
   | WeakSet<object>
   | WeakMap<object, unknown>;
 
+type EmptyTarget = Record<string, never>;
+
 type AssignFunction = (
   target: Dictionary,
   property: string,
@@ -100,6 +102,14 @@ const legacyAssign = function legacyAssign(
 
 function deepExtendArraySafe<TChanges extends Blob | CollectionLike>(
   target: unknown,
+  changes: TChanges,
+  extendComplexObject?: boolean,
+  assignByReference?: boolean,
+  shouldCopyUndefined?: boolean,
+  useNewAssign?: boolean | AssignFunction,
+): TChanges;
+function deepExtendArraySafe<TChanges extends object>(
+  target: EmptyTarget,
   changes: TChanges,
   extendComplexObject?: boolean,
   assignByReference?: boolean,
