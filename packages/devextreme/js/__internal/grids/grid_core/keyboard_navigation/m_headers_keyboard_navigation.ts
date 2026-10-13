@@ -15,9 +15,9 @@ import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import type { Views } from '../types';
 import { ColumnFocusDispatcher } from './column_focus_dispatcher';
-import type { FocusedCellPosition } from './const';
 import { Direction } from './const';
 import { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
+import type { FocusedCellPosition } from './types';
 
 export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {
   protected _columnHeadersView!: Views['columnHeadersView'];
@@ -114,7 +114,6 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       return true;
     }
 
-    // eslint-disable-next-line default-case
     switch (e.keyName) {
       case 'tab': {
         this.tabKeyHandler(e);
@@ -125,6 +124,8 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       case 'rightArrow':
         this.leftRightKeysHandler(e);
         isHandled = true;
+        break;
+      default:
         break;
     }
 

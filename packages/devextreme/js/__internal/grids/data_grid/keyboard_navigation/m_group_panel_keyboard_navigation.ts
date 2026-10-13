@@ -9,9 +9,9 @@ import type { DxEvent } from '@js/events';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { Column, GroupColumn } from '@ts/grids/grid_core/columns_controller/types';
-import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
+import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/types';
 import type { Views } from '@ts/grids/grid_core/types';
 
 import gridCore from '../core';
@@ -59,11 +59,10 @@ export class GroupPanelKeyboardNavigationController
 
     if (isCommandKeyPressed(originalEvent)) {
       const $groupedColumnElement = $(originalEvent.target);
-      // @ts-expect-error a focused group panel item always has its group column
-      const column: Column = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
+      const column = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
       const direction = this.getDirectionByKeyName(e.keyName);
 
-      if (this.canReorderColumn(column, direction)) {
+      if (column && this.canReorderColumn(column, direction)) {
         this.moveColumn(column, direction);
       }
 
