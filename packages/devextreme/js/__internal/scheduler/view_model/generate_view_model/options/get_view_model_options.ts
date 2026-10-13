@@ -57,7 +57,6 @@ export interface ViewModelOptions {
   isAdaptivityEnabled: boolean;
   cellDurationMinutes: number;
   isVirtualScrolling: boolean;
-  // Declared by the theme on the scheduler root; undefined when the theme declares nothing
   appointmentMinHeight?: number;
 }
 

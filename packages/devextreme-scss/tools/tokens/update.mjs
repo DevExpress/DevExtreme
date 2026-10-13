@@ -1,33 +1,3 @@
-/*
- * One command for a design-token package bump, and the report that goes with it.
- *
- *   pnpm run tokens:update 262.24.0   # bump, reinstall, rebuild, check, report
- *   pnpm run tokens:update            # report the installed package, change nothing
- *   pnpm run tokens:update --report   # the same, stated explicitly
- *
- * The manual steps — edit the dependency and its minimumReleaseAgeExclude entry, reinstall, rebuild
- * the tokens — are the cheap part. It stops there: the themes are not rebuilt, so the CSS bundles
- * on disk still come from the previous package until `nx build:themes` runs, and the registries are
- * only checked, because their rootSelectors gate reads those bundles. The expensive part is
- * knowing what the new package did, and that is what the report is for: names the theme reads and
- * the package no longer has (the build refuses those), and every generated value that moved. The
- * second list is the one that costs etalon screenshots, so it is printed per file with old and new
- * side by side.
- *
- * What stays manual on purpose: approving the Renovate pull request, and re-recording the etalons.
- * A bot can do neither — our etalons are pixels, and a value change has to be looked at.
- *
- * A failed bump puts back what it touched — package.json, pnpm-workspace.yaml, pnpm-lock.yaml and
- * the generated token layer — so the tree is where it was, short of node_modules.
- *
- * The install runs with --no-frozen-lockfile, which is the only way to move a pinned dependency,
- * and pnpm takes the opportunity to normalise the rest of the lockfile. Read that diff before
- * committing it: everything beyond this package is pnpm's housekeeping, not part of the bump.
- *
- * Everything here is file system and process; the diffing and the markdown live in report.ts, where
- * tests/tokens-report.test.ts can reach them.
- */
-
 import { execFileSync } from 'node:child_process';
 import {
   cpSync, existsSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync,
@@ -117,11 +87,6 @@ const show = (report) => {
     : `\n${renderReport(report)}`);
 };
 
-/*
- * Neither binary is looked up on PATH: `node` is this very process, and `pnpm run` hands its own
- * entry point in npm_execpath. On Windows `pnpm` on PATH is pnpm.cmd, which execFile cannot start
- * without a shell.
- */
 const executable = (command) => {
   if (command === 'node') return [process.execPath, []];
   const pnpm = process.env.npm_execpath;
@@ -149,7 +114,6 @@ const run = (command, args, cwd) => {
   }
 };
 
-// pnpm refuses a release younger than minimumReleaseAge, so the bump carries its own exclusion
 const withReleaseAgeExclusion = (yaml, version) => {
   const entry = `"${PACKAGE}@${version}"`;
   const existing = new RegExp(`(['"])${PACKAGE.replace(/[/.]/g, '\\$&')}@[^'"]+\\1`);
@@ -204,7 +168,6 @@ const giveUp = () => {
   process.exit(1);
 };
 
-// once the snapshot is taken every failure rolls back, not only a child process that exits non-zero
 const bumpAndReport = () => {
   if (!reportOnly) {
     setDependency(target);
@@ -236,7 +199,6 @@ const bumpAndReport = () => {
     }
   }
 
-  // read-only: the write mode would gate rootSelectors against bundles built from the old package
   const registriesCurrent = reportOnly
     || run('node', ['tools/naming/derive-registries.mjs', '--check'], packageRoot);
 

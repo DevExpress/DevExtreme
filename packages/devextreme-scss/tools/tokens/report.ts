@@ -1,11 +1,3 @@
-/*
- * What a design-token package bump did, as data and as the markdown tools/tokens/update.mjs prints.
- *
- * Kept free of the file system and of `process` so both sides can use it: the update command loads
- * it through Node's type stripping, tests/tokens-report.test.ts imports it directly. The same split
- * build/tokens/consumed-tokens.ts uses.
- */
-
 export type Declarations = Map<string, string>;
 
 export type GeneratedOutput = Map<string, Declarations>;

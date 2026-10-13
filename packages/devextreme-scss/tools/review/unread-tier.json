@@ -1,7 +1,7 @@
 {
   "comment": [
     "--dx-* names the built fluent-next bundle declares and nothing in that bundle reads. The list is",
-    "the worklist for question 3 of reachability.mjs and is pinned by exact set equality: a name that",
+    "the worklist for the 'declared and never read' check of reachability.ts and is pinned by exact set equality: a name that",
     "starts being read is banked with --update-unread, a name that goes dead fails the gate.",
     "",
     "What this measures, precisely: reads INSIDE the bundle. That is not the same as dead. The tier is",
