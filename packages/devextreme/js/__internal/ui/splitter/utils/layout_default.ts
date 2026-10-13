@@ -9,6 +9,69 @@ import {
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
 import type { PaneRestrictions } from './types';
 
+function getRequestedSize(paneRestrictions: PaneRestrictions): number {
+  const {
+    size, visible, collapsed, collapsedSize = 0,
+  } = paneRestrictions;
+
+  if (visible === false) {
+    return 0;
+  }
+
+  if (collapsed === true) {
+    return collapsedSize;
+  }
+
+  return size ?? 0;
+}
+
+function isPaneInLayout(paneRestrictions: PaneRestrictions): boolean {
+  return paneRestrictions.visible !== false && paneRestrictions.collapsed !== true;
+}
+
+function isSizeAdjustable(paneRestrictions: PaneRestrictions): boolean {
+  return paneRestrictions.isSizeAuto === true
+    && isDefined(paneRestrictions.size)
+    && isPaneInLayout(paneRestrictions);
+}
+
+// Sizes the widget measured itself are relative to the container size of the previous layout
+// pass. Once the container has been resized, they no longer add up to the space available now,
+// and the difference would otherwise be taken from (or given to) panes whose size the user
+// did request, making the layout depend on the container size it was first calculated for.
+// Applies only to render-time recalculations: option-change recalculations work with sizes
+// measured for the current container, where the pinned behavior resolves conflicts by order.
+export function fitAutoSizesIntoLayout(layoutRestrictions: PaneRestrictions[]): PaneRestrictions[] {
+  let requestedSize = 0;
+  let adjustableSize = 0;
+  let hasPanesWithoutSize = false;
+
+  layoutRestrictions.forEach((paneRestrictions) => {
+    requestedSize += getRequestedSize(paneRestrictions);
+
+    if (isSizeAdjustable(paneRestrictions)) {
+      adjustableSize += paneRestrictions.size ?? 0;
+    } else if (isPaneInLayout(paneRestrictions) && !isDefined(paneRestrictions.size)) {
+      hasPanesWithoutSize = true;
+    }
+  });
+
+  const excessSize = requestedSize - 100;
+  const excessSign = compareNumbersWithPrecision(excessSize, 0);
+  // free space belongs to the panes that have no size of their own, if there are any
+  const shouldFit = excessSign > 0 || (excessSign < 0 && !hasPanesWithoutSize);
+
+  if (adjustableSize <= 0 || !shouldFit) {
+    return layoutRestrictions;
+  }
+
+  const ratio = Math.max(0, adjustableSize - excessSize) / adjustableSize;
+
+  return layoutRestrictions.map((paneRestrictions) => (isSizeAdjustable(paneRestrictions)
+    ? { ...paneRestrictions, size: (paneRestrictions.size ?? 0) * ratio }
+    : paneRestrictions));
+}
+
 export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number[] {
   let layout: number[] = new Array(layoutRestrictions.length).fill(null);
 
@@ -61,9 +124,9 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
     layoutRestrictions.forEach((paneRestrictions, index) => {
       if (layout[index] === null) {
         if (isDefined(paneRestrictions.maxSize) && panelsToDistribute === 1) {
-          layout[index] = remainingSize > paneRestrictions.maxSize
-            ? remainingSize
-            : paneRestrictions.maxSize;
+          // the only pane left without a size takes all the space the sized panes did not
+          // claim; a larger maxSize must not push the layout over 100% and squeeze them
+          layout[index] = remainingSize;
           remainingSize -= layout[index];
           numPanelsWithDefinedSize += 1;
         } else if (isDefined(paneRestrictions.maxSize)
@@ -94,25 +157,9 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
     return layout;
   }
 
-  let nextLayout = [...layout];
-
-  const nextLayoutTotalSize = nextLayout.reduce(
-    (accumulated, current) => accumulated + current,
-    0,
-  );
-
-  if (!(compareNumbersWithPrecision(nextLayoutTotalSize, 100) === 0)) {
-    for (let index = 0; index < layoutRestrictions.length; index += 1) {
-      const unsafeSize = nextLayout[index];
-
-      const safeSize = (100 / nextLayoutTotalSize) * unsafeSize;
-      nextLayout[index] = safeSize;
-    }
-  }
-
   remainingSize = 0;
 
-  nextLayout = layout.map((panelSize, index) => {
+  const nextLayout = layout.map((panelSize, index) => {
     const restriction = layoutRestrictions[index];
     const adjustedSize = normalizePanelSize(restriction, panelSize);
 
