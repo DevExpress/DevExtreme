@@ -1,27 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-/*
- * The colorview layout is hand-fitted and holds itself together, not the scale. The container
- * row is a three-cell table whose outer widths must add up to the container width, or the right
- * edge sticks out and the border gets clipped:
- *
- *   palette 288 + borders 2 + margins 2    = 292
- *   hue scale 20 + borders 2 + margin 19   =  41
- *   controls 90 + margin 27                = 117
- *                                           --- 450
- *
- * Two of the numbers below are therefore remainders, not sizes:
- *
- *   $color-view-container-alpha-label-margin  43 = 450 - 292 - 115
- *   $color-view-controls-container-margin     27 = 450 - 292 - 41 - 90
- *
- * Do not snap them to the nearest step: up pushes the block past the container by exactly that
- * much, down leaves a gap on the right. packages/devextreme/playground/sizes-colorview.html
- * carries an overflow check for exactly this.
- *
- * The spacing scale stops at 160px, so 450, 288, 299 and 115 are out of its reach anyway -
- * colorView is off the tokenization queue.
- */
 $color-view-container-width: 450px !default;
 $color-view-palette-width: 288px !default;
 $color-view-palette-height: 299px !default;

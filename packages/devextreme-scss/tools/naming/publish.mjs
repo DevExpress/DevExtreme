@@ -1,22 +1,3 @@
-/*
- * Regenerates the fluent-next component tier: every `<folder>/_public.scss` (projections of the
- * component's eligible variables, alphabetical) and the collector `_public-tier.scss` (mount points
- * from tools/naming/registries.json). Hand-written relations live next door in `_public-links.scss`
- * and are never touched — the generated file includes them.
- *
- *   node tools/naming/publish.mjs          # regenerates the tier files
- *   node tools/naming/publish.mjs --check  # exit 1 when a committed file is stale or a rule is
- *                                          # broken
- *
- * The rules are the ones tests/fluent-next-naming.test.ts enforces; both read them from
- * tools/naming/tier.ts. Needs no built bundle.
- *
- * The published name is derived from the SCSS variable, so renaming a variable retires a public
- * `--dx-*` name and this file's diff looks like plain regeneration. Record the retirement in
- * tools/naming/public-renames.json in the same pull request; tests/public-renames.test.ts keeps a
- * retired name from reappearing, as an alias or otherwise.
- */
-
 import {
   readFileSync,
   writeFileSync,

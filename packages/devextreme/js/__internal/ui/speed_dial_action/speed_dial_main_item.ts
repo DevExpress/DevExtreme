@@ -382,11 +382,6 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
     return direction !== 'down' ? -directionIndex : directionIndex;
   }
 
-  /*
-   * Where the action buttons go, relative to the main button: the theme declares these lengths on
-   * the FAB root and the runtime reads them back (fluent-next); a theme that declares nothing keeps
-   * the per-theme literals from the default options.
-   */
   _getActionsGeometry(): ActionsGeometry {
     const $element = this.$element();
     const length = (

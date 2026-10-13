@@ -1,19 +1,3 @@
-/*
- * Regenerates tools/naming/registries.json — the single source of truth for the fluent-next
- * SCSS naming standard.
- *
- *   node tools/naming/derive-registries.mjs        # writes registries.json
- *   node tools/naming/derive-registries.mjs --check # fails if the committed file is stale
- *
- * Vocabularies that describe the design system (parts, states, sub-element anatomy) are DERIVED
- * from the token package, so they cannot drift from it. Judgment calls (component exceptions,
- * chassis dependents) live in OVERRIDES below and are reviewed as code.
- *
- * The component names come from the package's flat index rather than from generated output, so the
- * vocabulary survives the component tier no longer being emitted (it is an alias layer the theme
- * stopped reading) and the script needs no build to run.
- */
-
 import {
   readFileSync, writeFileSync, readdirSync, statSync,
 } from 'fs';
@@ -982,10 +966,6 @@ const OVERRIDES = {
   },
 };
 
-// ---------------------------------------------------------------------------------------------
-// Derivation
-// ---------------------------------------------------------------------------------------------
-
 const kebab = (folder) => folder.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 
 const listFolders = (dir) => readdirSync(dir)
@@ -995,7 +975,6 @@ const listFolders = (dir) => readdirSync(dir)
 const sortedUnique = (values) => [...new Set(values)].sort();
 
 const stripState = (name, states) => {
-  // longest match first, so `selected-hovered` wins over `selected`
   const ordered = [...states].sort((a, b) => b.length - a.length);
   for (const state of ordered) {
     if (name.endsWith(`-${state}`)) return { base: name.slice(0, -state.length - 1), state };
@@ -1029,38 +1008,6 @@ const deriveFromTokens = (states) => {
   };
 };
 
-/*
- * The grammar is positional, so the vocabularies do NOT all have to be disjoint:
- *
- *   $<component>(-<sub-element>)*(-<modifier>)*-<slot>(-<state>)
- *
- * Parsing is right-to-left with longest-match: the trailing state, then the slot, then the middle.
- * That resolves the overlaps that do exist on purpose — `text` is both a part (text color) and an
- * appearance modifier (stylingMode: 'text'), and `separator`/`backdrop`/`shadow` are both parts and
- * system concerns:
- *
- *   $button-text-bg-rest   -> modifier `text`  + slot `bg`      (slot is the position before state)
- *   $button-text-rest      -> slot `text`                        (no modifier present)
- *   $separator-border-rest -> concern `separator` + slot `border` (concern is the first segment)
- *   $button-separator-rest -> component `button` + slot `separator`
- *
- * Only overlaps between vocabularies competing for the SAME position are fatal, and there are two:
- *
- *   1. STATES ∩ PARTS = ∅       — the trailing state is matched first, so a part that is also a
- *      state word would be eaten as the state and the slot would go missing
- *   2. SUB_ELEMENTS ∩ STATES = ∅ — same reason, from the other side
- *
- * A sub-element that is also a PART or a MODIFIER is fine, and `toast` proves it: the DOM element
- * is `.dx-toast-content`, so `content` is both the name of that box and the part meaning "text
- * colour".
- *
- *   $toast-content-padding-block  -> sub-element `content` + slot `padding-block`
- *   $toast-content-rest           -> slot `content` (mandatory, and it sits before the state)
- *
- * Both parse. Requiring sub-elements to avoid part names would have forced `body` on an element the
- * DOM calls `content`, which costs findability for no decidability gain. (This is the second time
- * the instinct "make all the vocabularies disjoint" turned out to be too strong.)
- */
 const assertParseable = (parts, states, modifiers, subElements) => {
   const clash = (a, b) => a.filter((value) => b.includes(value));
 
@@ -1077,11 +1024,6 @@ const assertParseable = (parts, states, modifiers, subElements) => {
   });
 };
 
-/*
- * The typo gate for rootSelectors: every class the emitter will declare on must exist in the built
- * bundle. Hard requirement when REGENERATING (regeneration is a curated act — build first); --check
- * still works without a build (byte comparison; the committed content already passed the gate).
- */
 const assertRootSelectorsExist = (rootSelectors) => {
   const bundle = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
   try {
@@ -1111,13 +1053,6 @@ const assertRootSelectorsExist = (rootSelectors) => {
 
 const build = () => {
   const folders = listFolders(themeDir);
-  /*
-   * The PACKAGE's own state vocabulary, used only to strip a trailing state off a token name
-   * while deriving parts. It is not our grammar: the package's component tier still spells the
-   * resting value `-rest` (300 of its 732 names), so `rest` has to be strippable here even when
-   * our own names leave it implicit — otherwise `rest` is read as the part and the real parts
-   * (backdrop, grip, scrim, thumb, veil) vanish.
-   */
   const derived = deriveFromTokens([...OVERRIDES.states, 'rest']);
 
   const parts = sortedUnique([
@@ -1131,7 +1066,6 @@ const build = () => {
     components[folder] = OVERRIDES.components[folder] ?? kebab(folder);
   });
 
-  // component -> owning folder; explicit overrides win, otherwise the only folder mapping to it
   const declarationHome = {};
   Object.entries(components).forEach(([folder, component]) => {
     declarationHome[component] = OVERRIDES.declarationHome[component] ?? folder;
@@ -1140,7 +1074,6 @@ const build = () => {
   const { subElements } = OVERRIDES;
   assertParseable(parts, OVERRIDES.states, OVERRIDES.modifiers, subElements);
 
-  // Emission scope per migrated component — explicit override or the derived widget class
   const rootSelectors = {};
   [...OVERRIDES.migrated, ...OVERRIDES.systemTier].forEach((component) => {
     rootSelectors[component] = OVERRIDES.rootSelectors[component]

@@ -1,9 +1,3 @@
-/*
- * Which files of @devexpress/design-tokens-internal the theme is built from. Shared by the token
- * build and by tools/tokens/update.mjs, which reports what a package bump does to exactly these —
- * two copies of this list would drift and the report would quietly describe the wrong package.
- */
-
 export const THEME_NAME = 'fluent';
 export const THEME_FOLDER = 'fluent-next';
 
@@ -37,9 +31,4 @@ export const getModeFiles = (mode) => [
   `semantic/colors/${THEME_NAME}/${mode}`,
 ];
 
-/*
- * Source files behind the SCSS bridge. The component tier is absent on purpose: its tokens only
- * alias the semantic roles the theme already reads, so emitting them added unreferenced custom
- * properties. Absent from the bridge, `ds.$button-color-bg-rest` is now a Sass error.
- */
 export const getBridgeFiles = () => getModeFiles('light');

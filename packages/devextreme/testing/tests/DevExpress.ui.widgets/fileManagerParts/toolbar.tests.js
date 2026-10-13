@@ -1127,7 +1127,6 @@ QUnit.module('Toolbar sizes declared by the theme', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
-        // .dx-filemanager is the scope the tier declares this on; the toolbar reads from inside it
         this.$style = $('<style nonce="qunit-test">')
             .text('.dx-filemanager { --dx-file-manager-toolbar-viewmode-popup-width: 77px; }')
             .appendTo('head');

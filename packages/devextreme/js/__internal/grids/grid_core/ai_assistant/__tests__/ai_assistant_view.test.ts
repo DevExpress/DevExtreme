@@ -377,7 +377,6 @@ describe('AIAssistantView', () => {
             }),
           }),
         }),
-        // the element the theme declares the dialog's sizes on
         aiAssistantView.element(),
       );
       expect(mockDialog.show).toHaveBeenCalledTimes(1);

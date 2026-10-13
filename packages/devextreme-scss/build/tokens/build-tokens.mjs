@@ -19,10 +19,6 @@ import {
 
 registerTransforms(StyleDictionary);
 
-// The Figma export occasionally emits size-suffixed cross-component references
-// (e.g. {text-content.typography.font-weight.small} in the *_small file) while
-// only the unsuffixed token exists in that file. Rewrite such dangling
-// references to the unsuffixed token, which carries the size-specific value.
 const SIZE_SUFFIX_RE = /\.(small|medium|large)$/;
 
 const getTokenAtPath = (tokens, refPath) => {
@@ -77,10 +73,6 @@ StyleDictionary.registerPreprocessor({
   },
 });
 
-// Composite shadow aliases are exported as $type "text" with a pure reference
-// value (e.g. popup.box-shadow.composite = "{box-shadow.lg}"). Without a
-// shadow type they get expanded into per-property sub-tokens; retyping keeps
-// them as a single var() reference to the composite shadow variable.
 const PURE_REFERENCE_RE = /^\{([\w.-]+)\}$/;
 
 StyleDictionary.registerPreprocessor({
@@ -164,7 +156,6 @@ const require = createRequire(import.meta.url);
 const tokensDir = path.dirname(require.resolve('@devexpress/design-tokens-internal/package.json'));
 const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 
-// Kept in step with the @includes in widgets/fluent-next/_design-system.scss.
 const MODE_ROLES_MIXIN = 'roles';
 const MODE_ALIASES_MIXIN = 'aliases';
 const MODE_ALIASES_FILE = 'mode-aliases';
@@ -539,8 +530,6 @@ async function validateConsumedTokens() {
   return referenced.size;
 }
 
-// style-dictionary treats a source as a glob, so a file the package moved or renamed is skipped
-// without a word and its tokens silently drop out of the build
 function assertSourcesExist() {
   const missing = [...new Set(configs.flatMap((config) => config.source))]
     .filter((file) => !existsSync(file))

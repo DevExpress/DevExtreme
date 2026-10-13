@@ -490,7 +490,6 @@
     "treeList/_sizes.scss: ../../base/treeList/variables"
   ],
   "crossWidgetStarImports": [],
-  "deadVariables": [],
   "publicSurfaceUnused": [
     "--dx-button-padding-inline",
     "--dx-color-shadow",

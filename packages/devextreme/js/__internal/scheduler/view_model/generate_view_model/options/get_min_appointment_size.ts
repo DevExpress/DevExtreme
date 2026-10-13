@@ -8,7 +8,6 @@ interface Options {
   isAdaptivityEnabled: boolean;
   isMonthView?: boolean;
   isAllDayAppointment?: boolean;
-  // From the theme when it declares one; otherwise the legacy literals below apply
   appointmentMinHeight?: number;
 }
 
