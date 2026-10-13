@@ -10,7 +10,7 @@ export interface Runner {
   fix: (name: string, source: string) => Result;
 }
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const stylelintBin = join(packageRoot, 'node_modules', '.bin', 'stylelint');
 
 const resolveFrom = (parent: string, request: string): string => (
