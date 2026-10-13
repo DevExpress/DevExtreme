@@ -1,19 +1,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { pathToFileURL } from 'url';
-import postcss, { Declaration, Rule } from 'postcss';
-import { compileStringAsync, SassString, Value } from 'sass-embedded';
+import { getThemes } from '../build/theme-options';
+import {
+  cascadeOf, originOf, packageRoot, parseBundle,
+} from './compiled-bundles';
 
 jest.setTimeout(300000);
 
-const packageRoot = path.resolve(__dirname, '..');
-const scssRoot = path.join(packageRoot, 'scss');
 const baselinePath = path.join(__dirname, 'dead-declarations.baseline.json');
-
-type Theme = [theme: string, size: string, color: string, mode?: string];
-const { getThemes } = require(path.join(packageRoot, 'build', 'theme-options.cjs')) as {
-  getThemes: () => Theme[];
-};
 
 interface BaselineEntry {
   file: string;
@@ -32,49 +26,6 @@ interface Position {
   winners: Set<string>;
 }
 
-interface Emission {
-  decl: Declaration;
-  rule: Rule;
-  keys: string[];
-}
-
-const bundleName = ([theme, size, color, mode]: Theme): string => (
-  `dx${theme === 'generic' ? '' : `.${theme}`}.${color}${mode ? `.${mode}` : ''}${size === 'default' ? '' : '.compact'}.scss`
-);
-
-const bundleSource = ([theme, size, color, mode]: Theme): string => (
-  fs.readFileSync(path.join(packageRoot, 'build', `bundle-template.${theme}.scss`), 'utf8')
-    .replace('$COLOR', color)
-    .replace('$SIZE', size)
-    .replace('$MODE', mode ?? '')
-);
-
-const dataUri = (args: Value[]): Value => {
-  const list = args[0].asList;
-  const hasEncoding = list.size === 2;
-  const encoding = hasEncoding ? list.get(0)!.assertString().text : 'image/svg+xml;charset=UTF-8';
-  const file = list.get(hasEncoding ? 1 : 0)!.assertString().text;
-  return new SassString(`url("data:${encoding},${path.basename(file)}")`, { quotes: false });
-};
-
-const contextOf = (rule: Rule): string | null => {
-  let context = '';
-  for (let parent = rule.parent; parent && parent.type === 'atrule'; parent = parent.parent) {
-    const { name, params } = parent as postcss.AtRule;
-    if (/keyframes/.test(name)) return null;
-    context = `@${name} ${params} ${context}`;
-  }
-  return context;
-};
-
-const originOf = (decl: Declaration): { file: string; line: number } => {
-  const { input, start } = decl.source!;
-  const origin = input.origin(start!.line, start!.column);
-  if (!origin) return { file: input.file ?? '?', line: start!.line };
-  const file = decodeURIComponent((origin.file ?? origin.url).replace(/^file:\/\//, ''));
-  return { file: path.relative(packageRoot, file), line: origin.line };
-};
-
 const signature = (entry: { file: string; property: string; selector: string }): string => (
   `${entry.file}|${entry.property}|${entry.selector}`
 );
@@ -84,47 +35,9 @@ const collectDeadPositions = async (): Promise<{ positions: Position[]; bundles:
   let bundles = 0;
 
   for (const theme of getThemes()) {
-    const name = bundleName(theme);
-    const compiled = await compileStringAsync(bundleSource(theme), {
-      url: pathToFileURL(path.join(scssRoot, 'bundles', name)),
-      style: 'expanded',
-      sourceMap: true,
-      functions: { 'data-uri($args...)': dataUri },
-    });
-    const root = postcss.parse(compiled.css, {
-      from: path.join(scssRoot, 'bundles', name.replace(/\.scss$/, '.css')),
-      map: { prev: compiled.sourceMap as unknown as string },
-    });
+    // eslint-disable-next-line no-await-in-loop
+    const { emissions, winners } = cascadeOf(await parseBundle(theme));
     bundles += 1;
-
-    const byKey = new Map<string, Emission[]>();
-    const emissions: Emission[] = [];
-    root.walkRules((rule) => {
-      const context = contextOf(rule);
-      if (context === null || !rule.selector) return;
-      const selectors = rule.selectors.map((selector) => selector.replace(/\s+/g, ' ').trim());
-      rule.each((node) => {
-        if (node.type !== 'decl') return;
-        const emission: Emission = {
-          decl: node,
-          rule,
-          keys: selectors.map((selector) => `${context}${selector}|${node.prop}`),
-        };
-        emissions.push(emission);
-        emission.keys.forEach((key) => {
-          const list = byKey.get(key) ?? [];
-          list.push(emission);
-          byKey.set(key, list);
-        });
-      });
-    });
-
-    const winners = new Map<string, Emission>();
-    byKey.forEach((list, key) => {
-      const important = list.filter((emission) => emission.decl.important);
-      const candidates = important.length ? important : list;
-      winners.set(key, candidates[candidates.length - 1]);
-    });
 
     emissions.forEach((emission) => {
       const loses = emission.keys.every((key) => winners.get(key) !== emission);
@@ -141,8 +54,11 @@ const collectDeadPositions = async (): Promise<{ positions: Position[]; bundles:
       position.total += 1;
       if (loses) {
         position.dead += 1;
-        const winner = originOf(winners.get(emission.keys[0])!.decl);
-        position.winners.add(`${winner.file}:${winner.line}`);
+        const winner = winners.get(emission.keys[0]);
+        if (winner) {
+          const at = originOf(winner.decl);
+          position.winners.add(`${at.file}:${at.line}`);
+        }
       }
       positions.set(id, position);
     });
@@ -168,13 +84,13 @@ describe('declarations the cascade never renders', () => {
   });
 
   test('every baseline entry carries a reason', () => {
-    const unexplained = baseline.filter((entry) => !entry.reason || !entry.reason.trim());
+    const unexplained = baseline.filter((entry) => !entry.reason?.trim());
 
     expect(unexplained.map(signature)).toEqual([]);
   });
 
   test('every dead declaration is removed or listed in the baseline with a reason', () => {
-    const known = new Set(baseline.filter((entry) => entry.reason && entry.reason.trim()).map(signature));
+    const known = new Set(baseline.filter((entry) => entry.reason?.trim()).map(signature));
     const unexpected = dead.filter((position) => !known.has(signature(position)));
 
     const report = unexpected.map((position) => [
