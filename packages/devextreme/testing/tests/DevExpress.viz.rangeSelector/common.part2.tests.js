@@ -7,6 +7,7 @@ import {
 import seriesDataSourceModule from 'viz/range_selector/series_data_source';
 import { DataSource } from 'common/data/data_source/data_source';
 import dateUtils from 'core/utils/date';
+import config from 'core/config';
 import {
     Title,
     stubClass
@@ -1111,6 +1112,104 @@ QUnit.test('Auto format for sliderMarker when minorTickInterval and tickInterval
     });
 
     assert.strictEqual(this.slidersController.update.lastCall.args[4].format(new Date(2017, 1, 1, 1, 1, 1, 123)), '1:01:01 AM 123', 'Slider markers auto format');
+});
+
+QUnit.test('Auto format for sliderMarker with own locale-only format - composite format uses locale', function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: new Date(2006, 10, 1, 1, 1, 1),
+            endValue: new Date(2006, 10, 1, 1, 1, 4),
+            tickInterval: { milliseconds: 500 },
+            minorTickInterval: { milliseconds: 100 }
+        },
+        marker: {
+            visible: false
+        },
+        sliderMarker: {
+            format: { locale: 'de' }
+        }
+    });
+
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format(new Date(2017, 1, 1, 1, 1, 1, 123)), '01:01:01 123', 'Slider markers auto format');
+});
+
+QUnit.test('Auto format for sliderMarker with global locale-only dateTimeFormat - composite format uses locale', function(assert) {
+    const savedDateTimeFormat = config().dateTimeFormat;
+
+    try {
+        config({ dateTimeFormat: { default: { locale: 'de' } } });
+
+        this.createWidget({
+            scale: {
+                startValue: new Date(2006, 10, 1, 1, 1, 1),
+                endValue: new Date(2006, 10, 1, 1, 1, 4),
+                tickInterval: { milliseconds: 500 },
+                minorTickInterval: { milliseconds: 100 }
+            },
+            marker: {
+                visible: false
+            }
+        });
+
+        assert.strictEqual(this.slidersController.update.lastCall.args[4].format(new Date(2017, 1, 1, 1, 1, 1, 123)), '01:01:01 123', 'Slider markers auto format');
+    } finally {
+        const currentConfig = config();
+
+        if(savedDateTimeFormat === undefined) {
+            delete currentConfig.dateTimeFormat;
+        } else {
+            currentConfig.dateTimeFormat = savedDateTimeFormat;
+        }
+    }
+});
+
+QUnit.test('Auto format for sliderMarker with own locale-only format - string auto format gets locale', function(assert) {
+    this.createWidget({
+        behavior: {
+            snapToTicks: true
+        },
+        scale: {
+            startValue: new Date(2006, 10, 1),
+            endValue: new Date(2010, 1, 1),
+            tickInterval: { months: 1 },
+            minorTickInterval: { days: 14 }
+        },
+        sliderMarker: {
+            format: { locale: 'de' }
+        }
+    });
+
+    assert.deepEqual(this.slidersController.update.lastCall.args[4].format, { type: 'shortdate', locale: 'de' });
+});
+
+QUnit.test('Explicit sliderMarker format is kept when global dateTimeFormat is locale-only', function(assert) {
+    const savedDateTimeFormat = config().dateTimeFormat;
+
+    try {
+        config({ dateTimeFormat: { default: { locale: 'de' } } });
+
+        this.createWidget({
+            scale: {
+                startValue: new Date(2006, 10, 1),
+                endValue: new Date(2010, 1, 1),
+                tickInterval: { months: 1 },
+                minorTickInterval: { days: 14 }
+            },
+            sliderMarker: {
+                format: 'shortdate'
+            }
+        });
+
+        assert.strictEqual(this.slidersController.update.lastCall.args[4].format, 'shortdate');
+    } finally {
+        const currentConfig = config();
+
+        if(savedDateTimeFormat === undefined) {
+            delete currentConfig.dateTimeFormat;
+        } else {
+            currentConfig.dateTimeFormat = savedDateTimeFormat;
+        }
+    }
 });
 
 QUnit.test('Auto format for sliderMarker when minorTickInterval and tickInterval have different units but snapToTicks true - take minorTickInterval', function(assert) {

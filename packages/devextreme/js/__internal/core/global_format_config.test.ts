@@ -4,13 +4,17 @@ import {
 import coreLocalization from '@js/common/core/localization/core';
 import config from '@js/core/config';
 
+import type { LocaleAwareFormatter } from './global_format_config';
 import {
   applyDataTypePreset,
   getDateFormatLocale,
   getEffectiveFormatLocale,
   getFormatterOptions,
   getGlobalFormatByDataType,
+  getRawGlobalFormatByDataType,
+  isLocaleOnlyFormat,
   resolvePresetOverride,
+  withFormatLocale,
 } from './global_format_config';
 
 const GLOBAL_FORMAT_KEYS = ['dateFormat', 'timeFormat', 'dateTimeFormat', 'numberFormat', 'dateTimeFormatPresets'] as const;
@@ -380,6 +384,102 @@ describe('global_format_config', () => {
 
     it('should fall back to message locale for unmapped preset', () => {
       expect(getDateFormatLocale('longDate')).toBe('en');
+    });
+  });
+
+  describe('getRawGlobalFormatByDataType', () => {
+    it('should return locale-only datetime format without preset', () => {
+      config({ ...config(), dateTimeFormat: { default: { locale: 'de' } } });
+
+      expect(getRawGlobalFormatByDataType('datetime')).toEqual({ locale: 'de' });
+      expect(getGlobalFormatByDataType('datetime')).toEqual({ locale: 'de', type: 'shortDateShortTime' });
+    });
+
+    it('should return locale-only time format without preset', () => {
+      config({ ...config(), timeFormat: { default: { locale: 'de' } } });
+
+      expect(getRawGlobalFormatByDataType('time')).toEqual({ locale: 'de' });
+      expect(getGlobalFormatByDataType('time')).toEqual({ locale: 'de', type: 'shortTime' });
+    });
+  });
+
+  describe('isLocaleOnlyFormat', () => {
+    it.each([
+      { format: { locale: 'de' }, expected: true },
+      { format: { locale: () => 'de' }, expected: true },
+      { format: { locale: 'de', type: 'shortDate' }, expected: false },
+      { format: { locale: 'de', maximumFractionDigits: 1 }, expected: false },
+      { format: { type: 'shortDate' }, expected: false },
+      { format: 'shortDate', expected: false },
+      { format: undefined, expected: false },
+    ])('should return $expected for $format', ({ format, expected }) => {
+      expect(isLocaleOnlyFormat(format as never)).toBe(expected);
+    });
+  });
+
+  describe('withFormatLocale', () => {
+    const createLocaleAwareFormatter = (locale?: unknown): LocaleAwareFormatter => {
+      const formatter: LocaleAwareFormatter = () => `text:${String(locale)}`;
+      formatter.withLocale = createLocaleAwareFormatter;
+      return formatter;
+    };
+
+    it('should rebuild locale-aware function format with locale', () => {
+      const format = withFormatLocale(createLocaleAwareFormatter(), 'de') as LocaleAwareFormatter;
+
+      expect(format(new Date())).toBe('text:de');
+    });
+
+    it('should rebuild locale-aware formatter inside format object', () => {
+      const format = withFormatLocale({ type: null, formatter: createLocaleAwareFormatter() } as never, 'de') as {
+        formatter: LocaleAwareFormatter; locale: string;
+      };
+
+      expect(format.formatter(new Date())).toBe('text:de');
+      expect(format.locale).toBe('de');
+    });
+
+    it('should keep formatter inside format object when it is not locale-aware', () => {
+      const formatter = (): string => 'text';
+      const format = withFormatLocale({ formatter } as never, 'de') as { formatter: unknown };
+
+      expect(format.formatter).toBe(formatter);
+    });
+
+    it('should wrap string preset into format object with locale', () => {
+      expect(withFormatLocale('month', 'de')).toEqual({ type: 'month', locale: 'de' });
+    });
+
+    it('should add locale to format object', () => {
+      expect(withFormatLocale({ type: 'fixedPoint', precision: 2 }, 'de'))
+        .toEqual({ type: 'fixedPoint', precision: 2, locale: 'de' });
+    });
+
+    it('should keep function locale as is', () => {
+      const locale = (): string => 'de';
+
+      expect(withFormatLocale('month', locale)).toEqual({ type: 'month', locale });
+    });
+
+    it('should return function format unchanged', () => {
+      const formatter = (): string => 'text';
+
+      expect(withFormatLocale(formatter, 'de')).toBe(formatter);
+    });
+
+    it('should return format unchanged without locale', () => {
+      const format = { type: 'fixedPoint' };
+
+      expect(withFormatLocale(format, undefined)).toBe(format);
+      expect(withFormatLocale('month', undefined)).toBe('month');
+    });
+
+    it('should not mutate the original format object', () => {
+      const format = { type: 'fixedPoint', precision: 2 };
+
+      withFormatLocale(format, 'de');
+
+      expect(format).toEqual({ type: 'fixedPoint', precision: 2 });
     });
   });
 

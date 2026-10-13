@@ -28,7 +28,7 @@ const DATA_TYPE_FORMAT_PRESET: Record<string, string> = {
   time: 'shortTime',
 };
 
-const isLocaleOnlyFormat = (format: Format | undefined): format is FormatObject => {
+export const isLocaleOnlyFormat = (format: Format | undefined): format is FormatObject => {
   if (!isPlainObject(format)) {
     return false;
   }
@@ -106,19 +106,53 @@ const resolveGlobalFormat = (optionName: GlobalFormatOptionName): Format | undef
   return resolveConfigValue(optionValue);
 };
 
-export const getGlobalFormatByDataType = (dataType: string): Format | undefined => {
+export const getRawGlobalFormatByDataType = (dataType: string): Format | undefined => {
   switch (dataType) {
     case 'date':
       return resolveGlobalFormat('dateFormat');
     case 'datetime':
-      return applyDataTypePreset(resolveGlobalFormat('dateTimeFormat'), 'datetime');
+      return resolveGlobalFormat('dateTimeFormat');
     case 'time':
-      return applyDataTypePreset(resolveGlobalFormat('timeFormat'), 'time');
+      return resolveGlobalFormat('timeFormat');
     case 'number':
       return resolveGlobalFormat('numberFormat');
     default:
       return undefined;
   }
+};
+
+export const getGlobalFormatByDataType = (dataType: string): Format | undefined => (
+  applyDataTypePreset(getRawGlobalFormatByDataType(dataType), dataType)
+);
+
+export type LocaleAwareFormatter = ((value: Date) => string) & {
+  withLocale?: (locale?: FormatLocale) => LocaleAwareFormatter;
+};
+
+const getLocaleAwareFormatter = (formatter: unknown): LocaleAwareFormatter | undefined => (
+  isFunction((formatter as LocaleAwareFormatter | undefined)?.withLocale)
+    ? formatter as LocaleAwareFormatter
+    : undefined
+);
+
+export const withFormatLocale = (format: Format, locale?: FormatLocale): Format | undefined => {
+  if (!locale || !isDefined(format)) {
+    return format;
+  }
+
+  if (isFunction(format)) {
+    return getLocaleAwareFormatter(format)?.withLocale?.(locale) ?? format;
+  }
+
+  if (isString(format)) return { type: format, locale };
+
+  const formatter = getLocaleAwareFormatter((format as FormatObject).formatter);
+
+  return {
+    ...format,
+    ...formatter && { formatter: formatter.withLocale?.(locale) },
+    locale,
+  } as FormatObject;
 };
 
 const getOwnFormatLocale = (format: Format | undefined): string | undefined => (
