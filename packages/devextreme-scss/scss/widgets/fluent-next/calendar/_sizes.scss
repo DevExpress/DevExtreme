@@ -13,8 +13,8 @@ $calendar-cell-font-size: null !default;
 $calendar-element-gap: ds.$spacing-80 !default;
 
 @if $size == "default" {
-  $calendar-legacy-width: 272px !default; // dx-offscale: 272px
-  $calendar-legacy-height: 264px !default; // dx-offscale: 264px
+  $calendar-legacy-width: 272px !default;
+  $calendar-legacy-height: 264px !default;
 
   $calendar-cell-font-size: ds.$font-size-base-md !default;
 
@@ -22,8 +22,8 @@ $calendar-element-gap: ds.$spacing-80 !default;
 }
 
 @else if $size == "compact" {
-  $calendar-legacy-width: 252px !default; // dx-offscale: 252px
-  $calendar-legacy-height: 260px !default; // dx-offscale: 260px
+  $calendar-legacy-width: 252px !default;
+  $calendar-legacy-height: 260px !default;
 
   $calendar-cell-font-size: ds.$font-size-base-sm !default;
   $calendar-footer-button-height: ds.$spacing-280 !default;

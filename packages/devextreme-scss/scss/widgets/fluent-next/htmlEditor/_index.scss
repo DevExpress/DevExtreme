@@ -185,7 +185,7 @@
   &.dx-color-format,
   &.dx-background-format {
     .dx-button-content {
-      padding-bottom: calc(#{buttonSizes.$button-padding-block} - 3px); // dx-px-nudge: -3px off the button padding
+      padding-bottom: calc(#{buttonSizes.$button-padding-block} - 3px);
     }
   }
 
@@ -278,7 +278,7 @@
   .dx-fileuploader-dragover {
     .dx-fileuploader-input {
       padding-top: fileUploaderSizes.$file-uploader-padding-block;
-      padding-bottom: calc(#{fileUploaderSizes.$file-uploader-padding-block} + 1px); // dx-px-nudge: +1px over the file uploader padding
+      padding-bottom: calc(#{fileUploaderSizes.$file-uploader-padding-block} + 1px);
     }
 
     .dx-fileuploader-content {

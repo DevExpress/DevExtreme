@@ -29,7 +29,7 @@
   null, // dx-switch-states-fluent never reads its $switch-handle-on-shadow parameter
   var(--dx-switch-handle-off-bg),
   var(--dx-switch-handle-on-bg),
-  1px solid, // dx-line-width: 1px, the off-state border
+  1px solid,
   var(--dx-switch-off-border),
   var(--dx-switch-off-border-hovered),
   var(--dx-switch-off-border-active),

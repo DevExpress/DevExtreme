@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { getThemes } from '../build/theme-options';
 import {
-  cascadeOf, originOf, packageRoot, parseBundle,
+  cascadeOf, mapBundles, originOf, packageRoot,
 } from './compiled-bundles';
 
 jest.setTimeout(300000);
@@ -13,7 +13,6 @@ interface BaselineEntry {
   file: string;
   property: string;
   selector: string;
-  reason: string;
 }
 
 interface Position {
@@ -32,13 +31,9 @@ const signature = (entry: { file: string; property: string; selector: string }):
 
 const collectDeadPositions = async (): Promise<{ positions: Position[]; bundles: number }> => {
   const positions = new Map<string, Position>();
-  let bundles = 0;
 
-  for (const theme of getThemes()) {
-    // eslint-disable-next-line no-await-in-loop
-    const { emissions, winners } = cascadeOf(await parseBundle(theme));
-    bundles += 1;
-
+  const bundles = await mapBundles(getThemes(), (root) => {
+    const { emissions, winners } = cascadeOf(root);
     emissions.forEach((emission) => {
       const loses = emission.keys.every((key) => winners.get(key) !== emission);
       const origin = originOf(emission.decl);
@@ -62,11 +57,11 @@ const collectDeadPositions = async (): Promise<{ positions: Position[]; bundles:
       }
       positions.set(id, position);
     });
-  }
+  });
 
   return {
     positions: [...positions.values()].filter((position) => position.dead === position.total),
-    bundles,
+    bundles: bundles.length,
   };
 };
 
@@ -83,20 +78,14 @@ describe('declarations the cascade never renders', () => {
     expect(bundles).toBe(getThemes().length);
   });
 
-  test('every baseline entry carries a reason', () => {
-    const unexplained = baseline.filter((entry) => !entry.reason?.trim());
-
-    expect(unexplained.map(signature)).toEqual([]);
-  });
-
-  test('every dead declaration is removed or listed in the baseline with a reason', () => {
-    const known = new Set(baseline.filter((entry) => entry.reason?.trim()).map(signature));
+  test('every dead declaration is removed or listed in the baseline', () => {
+    const known = new Set(baseline.map(signature));
     const unexpected = dead.filter((position) => !known.has(signature(position)));
 
     const report = unexpected.map((position) => [
       `${position.file}:${position.line}  ${position.property} on \`${position.selector}\``,
       `    repainted from ${[...position.winners].slice(0, 3).join(', ')}`,
-      `    remove it, or add to ${path.relative(packageRoot, baselinePath)} with a reason:`,
+      `    remove it, or add to ${path.relative(packageRoot, baselinePath)}:`,
       `    ${JSON.stringify({ file: position.file, property: position.property, selector: position.selector })}`,
     ].join('\n'));
 

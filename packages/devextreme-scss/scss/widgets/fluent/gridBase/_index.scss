@@ -517,10 +517,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         background-color: transparent;
         border-bottom: 1px solid;
         border-bottom-color: $popup-title-border-color;
-
-        .dx-toolbar-label {
-          font-size: $fluent-m-font-size;
-        }
       }
 
       .dx-popup-content {
@@ -1000,7 +996,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
   .dx-#{$widget-name}-filter-panel {
     background-color: $datagrid-base-background-color;
-    padding: 18px $fluent-grid-base-cell-horizontal-padding;
 
     .dx-#{$widget-name}-filter-panel-text,
     .dx-#{$widget-name}-filter-panel-clear-filter {

@@ -9,7 +9,7 @@ $html-editor-padding-inline: null !default;
 $html-editor-add-image-dialog-file-uploader-padding: null !default;
 $html-editor-toolbar-menu-separator-margin: ds.$spacing-40 !default;
 $html-editor-file-uploader-input-wrapper-border-radius: ds.$border-radius-80 !default;
-$html-editor-file-uploader-input-wrapper-border-width: 1.5px !default; // dx-offscale: 1.5px
+$html-editor-file-uploader-input-wrapper-border-width: 1.5px !default;
 $html-editor-add-image-dialog-tabs-padding: null !default;
 $html-editor-ai-dialog-selects-gap: null !default;
 $html-editor-ai-dialog-content-gap: null !default;
@@ -27,7 +27,7 @@ $html-editor-ai-dialog-button-width: null !default;
   $html-editor-ai-dialog-content-gap: ds.$spacing-160 !default;
   $html-editor-ai-dialog-content-padding: ds.$spacing-160 ds.$spacing-240 !default;
   $html-editor-ai-dialog-border-radius: ds.$border-radius-80 !default;
-  $html-editor-ai-dialog-button-width: 110px !default; // dx-offscale: 110px
+  $html-editor-ai-dialog-button-width: 110px !default;
 }
 
 @else if $size == "compact" {

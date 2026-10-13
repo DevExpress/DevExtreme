@@ -11,6 +11,7 @@ $scheduler-accent-border: null !default;
 $scheduler-accent-border-color: null !default;
 
 $scheduler-current-time-cell-color: null !default;
+$scheduler-header-panel-current-time-cell-color: $scheduler-current-time-cell-color !default;
 $scheduler-time-indicator-color: null !default;
 
 $scheduler-workspace-focused-cell-color: null !default;
@@ -26,6 +27,7 @@ $scheduler-first-month-cell-background-color: null !default;
 
 $scheduler-panel-text-color: null !default;
 $scheduler-views-header-border: null !default;
+$scheduler-views-all-day-border: $scheduler-views-header-border !default;
 $scheduler-views-empty-cell-border-bottom: null !default;
 $scheduler-views-empty-cell-border-right: null !default;
 $scheduler-views-empty-cell-border-left: null !default;
@@ -34,22 +36,23 @@ $scheduler-views-time-panel-border-bottom: null !default;
 $scheduler-views-group-header-padding: null !default;
 $scheduler-views-group-header-padding-alt: null !default;
 $scheduler-views-time-indicator-height: null !default;
-$scheduler-views-time-indicator-width: 10% !default; // dx-relative-%
+$scheduler-views-time-indicator-width: 10% !default;
 $scheduler-views-group-header-content-height: null !default;
 $scheduler-views-vertical-group-min-height: null !default;
 
-$scheduler-timepanel-cell-offset: 20px; // dx-fixed-size: multiplied elsewhere, so a var() cannot pass
+$scheduler-timepanel-cell-offset: 20px !default;
+$scheduler-timepanel-cell-small-offset: $scheduler-timepanel-cell-offset * $scheduler-small-size-factor !default;
 $scheduler-workspace-info-font-size: 20px !default;
 $scheduler-small-font-size: 14px !default;
 
-$scheduler-current-time-cell-border-size: 2px; // dx-fixed-size: multiplied elsewhere, so a var() cannot pass
+$scheduler-current-time-cell-border-size: 2px !default;
 
-$scheduler-workspace-date-table-cell-height: 50px; // dx-fixed-size: derived heights multiply it, so a var() cannot pass
+$scheduler-workspace-date-table-cell-height: 50px !default;
 $scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height !default;
-$scheduler-header-panel-table-cell-height: calc($scheduler-workspace-date-table-cell-height - 10px); // dx-px-nudge: -10px under the workspace cell height
+$scheduler-header-panel-table-cell-height: calc($scheduler-workspace-date-table-cell-height - 10px) !default;
 $scheduler-group-header-table-cell-height: 30px !default;
 
-$scheduler-group-header-table-cell-width: 80px; // dx-fixed-size: multiplied elsewhere, so a var() cannot pass
+$scheduler-group-header-table-cell-width: 80px !default;
 
 $scheduler-month-date-text-size: 16px !default;
 
@@ -106,11 +109,11 @@ $scheduler-renovation-virtual-row-height: 50px !default;
 );
 
 .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
-  color: $scheduler-current-time-cell-color;
+  color: $scheduler-header-panel-current-time-cell-color;
 
   &::before {
     position: absolute;
-    top: calc($scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1px); // dx-px-nudge: -1px under the derived top offset, so the indicator overlaps the border
+    top: calc($scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1px);
     right: 0;
     width: 100%;
     height: $scheduler-current-time-cell-border-size;
@@ -241,6 +244,10 @@ $scheduler-renovation-virtual-row-height: 50px !default;
       border-bottom: $scheduler-base-border;
       border-bottom-color: $scheduler-base-border-color;
     }
+  }
+
+  &.dx-scheduler-work-space-all-day .dx-scheduler-header-panel-empty-cell {
+    border-bottom: none;
   }
 }
 
@@ -388,7 +395,7 @@ $scheduler-renovation-virtual-row-height: 50px !default;
       @include flex-container(row, nowrap);
 
       flex: 0 0 auto;
-      padding: 0 5px; // dx-fixed-size: horizontal padding of the time panel cell
+      padding: 0 5px;
       height: 100%;
       width: $scheduler-left-column-width;
       justify-content: flex-start;
@@ -444,6 +451,25 @@ $scheduler-renovation-virtual-row-height: 50px !default;
 
   &:first-child {
     border-left: none;
+  }
+
+  &.dx-state-hover {
+    &.dx-state-focused {
+      background-color: $scheduler-workspace-focused-cell-color;
+    }
+  }
+
+  &.dx-state-focused {
+    background-color: $scheduler-workspace-focused-cell-color;
+    opacity: 1;
+  }
+
+  &.dx-scheduler-focused-cell {
+    box-shadow: $scheduler-focused-cell-shadow;
+  }
+
+  > div {
+    pointer-events: none;
   }
 }
 
@@ -547,12 +573,6 @@ $scheduler-renovation-virtual-row-height: 50px !default;
   font-size: $scheduler-workspace-info-font-size;
 }
 
-.dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
-  &.dx-scheduler-work-space-all-day .dx-scheduler-header-panel-empty-cell {
-    border-bottom: none;
-  }
-}
-
 .dx-scheduler-work-space-both-scrollbar {
   .dx-scheduler-header-panel {
     width: auto;
@@ -598,7 +618,7 @@ $scheduler-renovation-virtual-row-height: 50px !default;
   position: relative;
 
   .dx-scheduler-all-day-table-cell {
-    border-bottom: $scheduler-views-header-border;
+    border-bottom: $scheduler-views-all-day-border;
     border-bottom-color: $scheduler-base-border-color;
   }
 }
@@ -608,7 +628,7 @@ $scheduler-renovation-virtual-row-height: 50px !default;
   width: $scheduler-left-column-width;
   position: relative;
   text-align: center;
-  border-bottom: $scheduler-views-header-border;
+  border-bottom: $scheduler-views-all-day-border;
   border-bottom-color: $scheduler-base-border-color;
 
   @include user-select(none);
@@ -663,17 +683,17 @@ $scheduler-renovation-virtual-row-height: 50px !default;
   border-bottom: $scheduler-views-time-panel-border-bottom;
 
   > div {
-    margin-top: -13px; // dx-px-nudge: lifts the hour label to straddle the cell border
+    margin-top: -13px;
   }
 
   .dx-scheduler-small & {
     padding-left: 0;
-    padding-right: $scheduler-timepanel-cell-offset * $scheduler-small-size-factor;
+    padding-right: $scheduler-timepanel-cell-small-offset;
   }
 
   &::after {
     position: absolute;
-    bottom: -1px; // dx-px-nudge: sits the time indicator on the cell border
+    bottom: -1px;
     width: $scheduler-views-time-indicator-width;
     height: $scheduler-views-time-indicator-height;
     right: 0;
@@ -708,29 +728,6 @@ $scheduler-renovation-virtual-row-height: 50px !default;
   width: 100%;
   border-spacing: 0;
   table-layout: fixed;
-}
-
-// stylelint-disable-next-line no-duplicate-selectors
-.dx-scheduler-all-day-table-cell,
-.dx-scheduler-date-table-cell {
-  &.dx-state-hover {
-    &.dx-state-focused {
-      background-color: $scheduler-workspace-focused-cell-color;
-    }
-  }
-
-  &.dx-state-focused {
-    background-color: $scheduler-workspace-focused-cell-color;
-    opacity: 1;
-  }
-
-  &.dx-scheduler-focused-cell {
-    box-shadow: $scheduler-focused-cell-shadow;
-  }
-
-  > div {
-    pointer-events: none;
-  }
 }
 
 .dx-scheduler-date-table-droppable-cell {
@@ -826,7 +823,7 @@ $scheduler-renovation-virtual-row-height: 50px !default;
 
     &.dx-scheduler-last-group-cell {
       border-bottom: none;
-      box-shadow: inset 0 -1px 0 $scheduler-base-border-color; // dx-line-width: hairline standing in for the removed border-bottom
+      box-shadow: inset 0 -1px 0 $scheduler-base-border-color;
     }
   }
 
@@ -883,7 +880,7 @@ $scheduler-renovation-virtual-row-height: 50px !default;
     padding-right: 0;
 
     .dx-scheduler-small & {
-      padding-left: $scheduler-timepanel-cell-offset * $scheduler-small-size-factor;
+      padding-left: $scheduler-timepanel-cell-small-offset;
     }
 
     &::after {

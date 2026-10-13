@@ -30,7 +30,7 @@
     border-bottom-left-radius: var(--dx-text-editor-input-border-radius);
     border-bottom-right-radius: var(--dx-text-editor-input-border-radius);
     border-bottom-color: var(--dx-text-editor-indicator);
-    clip-path: inset(calc(100% - 2px) 0 0); // dx-line-width: 2px focus line revealed by the clip
+    clip-path: inset(calc(100% - 2px) 0 0);
     transform: scaleX(0);
     transition-property: transform;
     transition-duration: 50ms;
@@ -120,7 +120,7 @@
     border-bottom-left-radius: var(--dx-text-editor-input-border-radius);
     border-bottom-right-radius: var(--dx-text-editor-input-border-radius);
     border-bottom-color: var(--dx-text-editor-indicator);
-    clip-path: inset(calc(100% - 2px) 0 0); // dx-line-width: 2px focus line revealed by the clip
+    clip-path: inset(calc(100% - 2px) 0 0);
   }
 
   &.dx-state-hover {
@@ -366,7 +366,7 @@
   }
 
   .dx-texteditor-input {
-    min-height: calc(var(--dx-text-editor-input-min-height) - 2px); // dx-px-nudge: -2px off the input min-height
+    min-height: calc(var(--dx-text-editor-input-min-height) - 2px);
   }
 
   @include validation-icon-position();
@@ -511,13 +511,13 @@
   solid,
   var(--dx-text-editor-label-height),
   var(--dx-text-editor-label-height),
-  calc((1px + var(--dx-text-editor-font-size)) / 2), // dx-px-nudge: +1px inside the label offset
+  calc((1px + var(--dx-text-editor-font-size)) / 2),
   var(--dx-text-editor-label-outside-offset),
-  0.5px, // dx-px-nudge: 0.5px label backdrop offset
+  0.5px,
   var(--dx-text-editor-input-filled-padding-inline),
   var(--dx-text-editor-input-filled-padding-inline),
   var(--dx-text-editor-outlined-bg),
-  1px solid transparent, // dx-line-width: 1px, the outlined editor border
+  1px solid transparent,
   var(--dx-text-editor-border),
   var(--dx-text-editor-line),
   var(--dx-text-editor-border-disabled),
@@ -531,7 +531,7 @@
   $text-editor-label-transition,
   var(--dx-text-editor-font-size),
   var(--dx-text-editor-input-filled-padding-block-start),
-  1px, // dx-px-nudge: 1px label margin-top difference
+  1px,
   var(--dx-text-editor-font-size),
   var(--dx-text-editor-label-outside-height),
   $label-padding-inline: var(--dx-text-editor-label-padding-inline),

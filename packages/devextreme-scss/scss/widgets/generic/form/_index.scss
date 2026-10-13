@@ -26,7 +26,7 @@
   font-size: $generic-form-group-caption-font-size;
 }
 
-.dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
+.dx-form-group-with-caption {
   & > .dx-form-group-content {
     border-top: 1px solid;
     border-top-color: $form-group-border-color;

@@ -1,3 +1,4 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -62,7 +63,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
   protected _renderContent() {
     const rowDragging: any = this.option('rowDragging');
     const allowReordering = this._allowReordering();
-    const $content = super._renderContent.apply(this, arguments as any);
+    // @ts-expect-error the view is rendered here
+    const $content: dxElementWrapper = super._renderContent.apply(this, arguments as any);
     // @ts-expect-error
     const isFixedTableRendering = this._isFixedTableRendering;
     const sortableName = '_sortable';

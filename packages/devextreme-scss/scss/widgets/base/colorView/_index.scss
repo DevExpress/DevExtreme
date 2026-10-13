@@ -8,11 +8,11 @@ $color-view-hue-scale-width: 18px !default;
 $color-view-hue-scale-height: $color-view-palette-height !default;
 $color-view-hue-scale-wrapper-height: $color-view-hue-scale-height + 2 !default;
 
-$colorview-palette-handle-size: 28px; // dx-fixed-size: diameter of the round palette handle, drawn as rings at 6/7/12/13px
+$colorview-palette-handle-size: 28px !default;
 $colorview-transparent-background-color: #ccc !default;
 
-$colorview-handle-first-side-size: 36px; // dx-fixed-size: long side of the scale handles, drawn by the inset shadows
-$colorview-handle-second-side-size: 17px; // dx-fixed-size: short side of the scale handles, drawn by the inset shadows
+$colorview-handle-first-side-size: 36px !default;
+$colorview-handle-second-side-size: 17px !default;
 
 $color-view-label-hex-margin: 10px 0 0 0 !default;
 $color-view-alpha-label-margin-inline-start: 43px !default;
@@ -75,7 +75,7 @@ $color-view-apply-button-margin-inline-end: 10px !default;
 
 .dx-colorview-container-row {
   overflow: hidden;
-  padding: 1px 0; // dx-line-width: room for the 1px hairline ring the cells inside carry, which overflow: hidden would clip
+  padding: 1px 0;
 
   &:first-child {
     margin-top: 0;
@@ -111,13 +111,13 @@ $color-view-apply-button-margin-inline-end: 10px !default;
   width: $colorview-handle-first-side-size;
   height: $colorview-handle-second-side-size;
   top: 0;
-  left: -7px; // dx-px-nudge: centres the handle across the hue scale, counting its own border
+  left: -7px;
 }
 
 .dx-colorview-alpha-channel-handle {
   width: $colorview-handle-second-side-size;
   height: $colorview-handle-first-side-size;
-  top: -6px; // dx-px-nudge: centres the handle across the alpha scale, counting its own border
+  top: -6px;
   left: 0;
 }
 
@@ -135,12 +135,12 @@ $color-view-apply-button-margin-inline-end: 10px !default;
 .dx-colorview-alpha-channel-wrapper,
 .dx-colorbox-input-container::after {
   background-image: linear-gradient(45deg, $colorview-transparent-background-color 25%, transparent 25%, transparent 74%, $colorview-transparent-background-color 75%, $colorview-transparent-background-color), linear-gradient(45deg, $colorview-transparent-background-color 25%, transparent 25%, transparent 74%, $colorview-transparent-background-color 75%, $colorview-transparent-background-color);
-  background-size: 16px 16px; // dx-fixed-size: tile of the transparency checkerboard, drawn by two offset gradients
-  background-position: 0 0, 8px 8px; // dx-fixed-size: half the tile, which is what makes the two gradients read as a checkerboard
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
 }
 
 .dx-colorview-alpha-channel-wrapper {
-  background-position: 0 6px, 8px 14px; // dx-fixed-size: the same checkerboard, shifted to sit inside the alpha scale
+  background-position: 0 6px, 8px 14px;
 }
 
 .dx-colorbox-input-container {

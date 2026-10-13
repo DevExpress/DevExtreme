@@ -5,7 +5,7 @@
 $grid-column-chooser-font-weight: ds.$font-weight-base-strong !default;
 $grid-group-panel-message-line-height: buttonSizes.$button-text-line-height !default;
 
-$grid-border-width: 1px !default; // dx-line-width: 1px
+$grid-border-width: 1px !default;
 $grid-border-radius: 0 !default;
 
 $grid-cell-height: null !default;
@@ -28,7 +28,7 @@ $grid-no-data-font-size: null !default;
 $grid-filter-row-editor-padding-inline: null !default;
 $grid-tree-view-select-all-item-padding-inline-start: null !default;
 
-$grid-header-line-height: ds.$line-height-180 !default; // dx-no-semantic-role: 180 is off the line-height-role scale
+$grid-header-line-height: ds.$line-height-180 !default;
 $grid-header-icon-size: null !default;
 $grid-header-icon-container-size: ds.$spacing-200 !default;
 $grid-column-chooser-item-margin: ds.$spacing-80 !default;
@@ -65,7 +65,7 @@ $grid-ai-confirm-dialog-width: null !default;
   $grid-command-edit-column-width: ds.$spacing-1200 !default;
   $grid-command-edit-column-with-icons-width: ds.$spacing-940 !default;
   $grid-adaptive-column-height: ds.$spacing-400 !default;
-  $grid-no-data-font-size: ds.$spacing-170 !default; // dx-foreign-scale: 17px, the font-size scale has no such step
+  $grid-no-data-font-size: ds.$spacing-170 !default;
 
   $grid-filter-row-editor-padding-inline: ds.$spacing-120 !default;
 
@@ -77,7 +77,7 @@ $grid-ai-confirm-dialog-width: null !default;
   $grid-command-ai-icon-size: ds.$spacing-200 !default;
   $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + #{ds.$spacing-80}) !default;
   $grid-command-ai-button-max-width: ds.$spacing-80 !default;
-  $grid-ai-confirm-dialog-width: 425px !default; // dx-offscale: 425px
+  $grid-ai-confirm-dialog-width: 425px !default;
 }
 
 @else if $size == "compact" {
@@ -110,7 +110,7 @@ $grid-ai-confirm-dialog-width: null !default;
   $grid-command-ai-icon-size: ds.$spacing-160 !default;
   $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + #{ds.$spacing-60}) !default;
   $grid-command-ai-button-max-width: ds.$spacing-60 !default;
-  $grid-ai-confirm-dialog-width: 360px !default; // dx-offscale: 360px
+  $grid-ai-confirm-dialog-width: 360px !default;
 }
 
 $grid-icon-button-border-radius: ds.$border-radius-20 !default;
@@ -118,7 +118,7 @@ $grid-margin-inline-start: ds.$spacing-50 !default;
 $grid-icon-margin: 0 ds.$spacing-30 !default;
 $grid-filter-operation-icon-margin-block-start: ds.$spacing-20 !default;
 $grid-sort-index-icon-padding-inline-end: ds.$spacing-40 !default;
-$grid-sort-index-icon-margin-inline-start: -1px !default; // dx-offscale: -1px
+$grid-sort-index-icon-margin-inline-start: -1px !default;
 $grid-sort-index-icon-inset-block-end: ds.$spacing-10 !default;
 $grid-header-cell-sort-index-margin-inline-start: ds.$spacing-40 !default;
 $grid-error-message-padding-inline-end: ds.$spacing-360 !default;

@@ -4,7 +4,7 @@ $sortable-clone-shadow-color-first: rgba(0, 0, 0, 0.1) !default;
 $sortable-clone-shadow-color-second: rgba(0, 0, 0, 0.2) !default;
 
 /*
- * dx-shadow-geometry: the whole shadow, so a theme can hand over a design-system role instead of
+ * The whole shadow, so a theme can hand over a design-system role instead of
  * two colours for a geometry frozen here. The default keeps the two-layer lift the older themes
  * were built on.
  */

@@ -756,6 +756,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
           clearTimeout(this._fixedScrollTimeout);
           this._fixedScrollTimeout = setTimeout(() => {
             scrollTop = $(target).scrollTop();
+            // @ts-expect-error scrollTo() is typed without x and y
             scrollable.scrollTo({ y: scrollTop });
           }, scrollDelay);
         });
@@ -776,6 +777,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
 
           if (shouldScroll) {
             scrollTop = scrollable.scrollTop();
+            // @ts-expect-error scrollTo() is typed without x and y
             scrollable.scrollTo({ y: scrollTop - e.delta });
 
             const scrollableTop = scrollable.scrollTop() + scrollable.clientHeight();

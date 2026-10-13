@@ -4,7 +4,8 @@
 @use "../validation/sizes" as validationSizes;
 @use "../../base/validation" as baseValidation with (
   $validation-summary-margin-top: validationSizes.$validation-summary-margin-block-start,
-  $validation-message-content-padding: validationSizes.$validation-message-content-padding,
+  $validation-message-content-padding: var(--dx-validation-message-padding-block) var(--dx-validation-message-padding-inline),
+  $validation-message-font-size: var(--dx-validation-message-font-size),
   $validation-summary-item-border-bottom-width: var(--dx-validation-summary-item-border-block-end-width),
 );
 @use "../list/sizes" as listSizes;
@@ -28,7 +29,7 @@
   margin-top: calc(var(--dx-invalid-badge-size) / -2);
   width: var(--dx-invalid-badge-size);
   height: var(--dx-invalid-badge-size);
-  line-height: calc(var(--dx-invalid-badge-size) + 1px); // dx-px-nudge: +1px over the badge size
+  line-height: calc(var(--dx-invalid-badge-size) + 1px);
 }
 
 @mixin dx-invalid-fluent-badge() {
@@ -84,7 +85,7 @@
 
   .dx-list-select-all {
     margin-inline: listSizes.$list-item-margin-inline;
-    padding: calc(#{listSizes.$list-item-padding-block} + 2px) 0 calc(#{listSizes.$list-item-padding-block} - 2px); // dx-px-nudge: +2px / -2px around the list item padding
+    padding: calc(#{listSizes.$list-item-padding-block} + 2px) 0 calc(#{listSizes.$list-item-padding-block} - 2px);
   }
 
   .dx-list-items {

@@ -19,7 +19,8 @@ $diagram-popup-title-toolbar-bg: rgba(0, 0, 0, 0.05) !default;
 $diagram-border-width: 1px !default;
 $transparent-border: $diagram-border-width solid transparent !default;
 
-$diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
+$diagram-toolbox-input-font-size: 0.9em !default;
+
 .dx-diagram {
   border: $transparent-border;
   display: flex;
@@ -173,7 +174,7 @@ $diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
   }
 
   &.dx-diagram-mobile-popup {
-    width: calc(100% - 2px) !important; // stylelint-disable-line declaration-no-important -- dx-px-nudge: 2px shaved off a full-width popup
+    width: calc(100% - 2px) !important; // stylelint-disable-line declaration-no-important
 
     .dx-popup-title {
       border: 0;

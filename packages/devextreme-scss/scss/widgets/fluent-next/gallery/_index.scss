@@ -27,7 +27,7 @@
       background-color: var(--dx-gallery-nav-button-bg-active);
     }
 
-    @include dx-icon-font-centered-sizing(32px); // dx-icon-glyph-size: 32px, the nav button glyph
+    @include dx-icon-font-centered-sizing(32px);
 
     &::after {
       content: "";
@@ -57,7 +57,7 @@
     }
 
     &::before {
-      left: calc(var(--dx-gallery-nav-button-inset-inline) - 1px); // dx-px-nudge: -1px off the nav button inset
+      left: calc(var(--dx-gallery-nav-button-inset-inline) - 1px);
       right: auto;
       margin-left: 0;
     }
@@ -71,7 +71,7 @@
     }
 
     &::before {
-      right: calc(var(--dx-gallery-nav-button-inset-inline) - 1px); // dx-px-nudge: -1px off the nav button inset
+      right: calc(var(--dx-gallery-nav-button-inset-inline) - 1px);
       left: auto;
     }
   }

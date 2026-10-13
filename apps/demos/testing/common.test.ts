@@ -65,7 +65,6 @@ const getIgnoredRules = (testName) => {
   if ((isMaterial() || isFluent())
     && [
       'TreeList-StatePersistence',
-      'DataGrid-SignalRService',
       // False positive: contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',
       // False positive: contrast rules do not apply to read-only editors on the custom option panel background

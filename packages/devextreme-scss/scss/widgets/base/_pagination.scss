@@ -3,6 +3,7 @@
 $pagination-page-margin-left: 5px !default;
 $pagination-page-margin-right: 1px !default;
 $pagination-first-child-margin-left: 1px !default;
+$pagination-page-size-first-child-margin-left: $pagination-first-child-margin-left !default;
 $pagination-first-child-padding-left: 10px !default;
 $pagination-first-child-padding-right: 9px !default;
 $pagination-first-child-padding-top: 7px !default;
@@ -77,7 +78,7 @@ $pagination-padding-block-fallback: null !default;
     .dx-page-size {
       &:first-child,
       &.dx-first-child {
-        margin-left: $pagination-first-child-margin-left;
+        margin-left: $pagination-page-size-first-child-margin-left;
       }
 
       display: inline-block;
