@@ -5,6 +5,7 @@ import {
 import { DxChartModule, DxChartComponent, DxToolbarModule } from 'devextreme-angular';
 import type { DxChartTypes } from 'devextreme-angular/ui/chart';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { VisualRange } from 'devextreme-angular/common/charts';
 import { StockPrice, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -38,6 +39,11 @@ export class AppComponent {
   initialStart = new Date(1994, 3, 15);
 
   initialEnd = new Date(1994, 3, 29);
+
+  visualRange: VisualRange = {
+    startValue: this.initialStart,
+    endValue: this.initialEnd,
+  };
 
   dataMin: number;
 
