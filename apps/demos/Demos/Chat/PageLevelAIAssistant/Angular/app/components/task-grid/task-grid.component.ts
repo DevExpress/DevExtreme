@@ -4,17 +4,11 @@ import {
   colors, tasks, type ColumnFilterExpression, type Task,
 } from '../../data';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'app-task-grid',
   imports: [DxDataGridModule],
-  templateUrl: `.${modulePrefix}/components/task-grid/task-grid.component.html`,
-  styleUrls: [`.${modulePrefix}/components/task-grid/task-grid.component.css`],
+  templateUrl: './task-grid.component.html',
+  styleUrls: ['./task-grid.component.css'],
 })
 export class TaskGridComponent {
   @ViewChild(DxDataGridComponent) private dxDataGrid!: DxDataGridComponent;

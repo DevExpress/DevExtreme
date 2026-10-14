@@ -12,12 +12,6 @@ import {
   CLASSES, chatSuggestions, EMPTY_VIEW_MESSAGE, EMPTY_VIEW_PROMPT,
 } from '../../data';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'app-ai-assistant',
   imports: [
@@ -25,8 +19,8 @@ if (window && window.config?.packageConfigPaths) {
     DxChatModule,
     DxSpeedDialActionModule,
   ],
-  templateUrl: `.${modulePrefix}/components/ai-assistant/ai-assistant.component.html`,
-  styleUrls: [`.${modulePrefix}/components/ai-assistant/ai-assistant.component.css`],
+  templateUrl: './ai-assistant.component.html',
+  styleUrls: ['./ai-assistant.component.css'],
 })
 export class AiAssistantComponent {
   @Input() disabled = false;
