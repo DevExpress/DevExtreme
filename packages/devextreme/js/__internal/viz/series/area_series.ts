@@ -11,7 +11,7 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { extend } from '@ts/core/utils/m_extend';
-import { clone } from '@ts/core/utils/m_object';
+import { clone } from '@ts/core/utils/object';
 import { extractColor, map as _map } from '@ts/viz/core/utils';
 
 import { chart as lineSeriesChart, polar as lineSeriesPolar } from './line_series';

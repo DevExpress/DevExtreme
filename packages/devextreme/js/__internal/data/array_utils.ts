@@ -10,7 +10,7 @@ import {
   isDefined, isEmptyObject, isObject, isPlainObject, isString,
 } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
-import { isCollectionLike } from '@ts/core/utils/m_object';
+import { isCollectionLike } from '@ts/core/utils/object';
 import type { StoreKey } from '@ts/data/abstract_store';
 
 export type KeyExpr = StoreKey | Function;
