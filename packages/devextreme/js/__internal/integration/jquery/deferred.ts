@@ -34,5 +34,6 @@ if (useJQuery) {
       return jQuery.when.apply(jQuery, arguments);
     };
 
+  // @ts-expect-error when is set after the literal; @types/jquery has no new for Deferred
   setStrategy(strategy);
 }
