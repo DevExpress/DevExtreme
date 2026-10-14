@@ -13,7 +13,7 @@ $(() => {
 
   DevExpress.localization.loadMessages({
     en: {
-      'dxChat-textareaPlaceholder': 'Enter a prompt...',
+      'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
     },
   });
 

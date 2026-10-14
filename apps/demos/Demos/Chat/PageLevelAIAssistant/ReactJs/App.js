@@ -6,7 +6,7 @@ import TaskGrid from './TaskGrid.js';
 import AiAssistant from './AiAssistant.js';
 import { aiIntegration } from './service.js';
 
-loadMessages({ en: { 'dxChat-textareaPlaceholder': 'Enter a prompt...' } });
+loadMessages({ en: { 'dxChat-textareaPlaceholder': 'Ask AI Assistant...' } });
 config({
   editorStylingMode: 'filled',
   floatingActionButtonConfig: {

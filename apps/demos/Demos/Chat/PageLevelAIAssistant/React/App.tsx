@@ -8,7 +8,7 @@ import TaskGrid from './TaskGrid.tsx';
 import AiAssistant from './AiAssistant.tsx';
 import { aiIntegration } from './service.ts';
 
-loadMessages({ en: { 'dxChat-textareaPlaceholder': 'Enter a prompt...' } });
+loadMessages({ en: { 'dxChat-textareaPlaceholder': 'Ask AI Assistant...' } });
 config({
   editorStylingMode: 'filled',
   floatingActionButtonConfig: {

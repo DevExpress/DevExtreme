@@ -36,7 +36,7 @@ config({
 
 loadMessages({
   en: {
-    'dxChat-textareaPlaceholder': 'Enter a prompt...',
+    'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
   },
 });
 
