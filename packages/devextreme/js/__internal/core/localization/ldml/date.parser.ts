@@ -11,6 +11,30 @@ export interface LdlmDateLocalization {
   getDayNames: (format: Format, type?: string) => string[];
 }
 
+type LocaleDateNamesGetter = (format: Format, type?: string, locale?: string) => string[];
+
+export interface LocaleAwareDateLocalization extends LdlmDateLocalization {
+  getMonthNames: LocaleDateNamesGetter;
+  getPeriodNames: LocaleDateNamesGetter;
+  getDayNames: LocaleDateNamesGetter;
+}
+
+export const bindDatePartsToLocale = (
+  dateParts: LocaleAwareDateLocalization,
+  locale: string,
+): LdlmDateLocalization => {
+  const result = Object.create(dateParts) as LdlmDateLocalization;
+
+  result.getMonthNames = (format, type): string[] => dateParts
+    .getMonthNames(format, type, locale);
+  result.getPeriodNames = (format, type): string[] => dateParts
+    .getPeriodNames(format, type, locale);
+  result.getDayNames = (format, type): string[] => dateParts
+    .getDayNames(format, type, locale);
+
+  return result;
+};
+
 const FORMAT_TYPES: Record<number, Format> = {
   3: 'abbreviated',
   4: 'wide',

@@ -4,6 +4,7 @@
 import type { VisualRange } from '@js/common/charts';
 import { registerComponent } from '@ts/core/component_registrator';
 import formatHelper from '@ts/core/format_helper';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
@@ -1459,6 +1460,14 @@ class RangeSelector extends BaseWidget {
     const isValueTypeDatetime = scaleOptions.valueType === DATETIME;
 
     sliderMarkerOptions.borderColor = this._getOption(CONTAINER_BACKGROUND_COLOR, true);
+
+    if (isValueTypeDatetime) {
+      const formatWithTime = applyDataTypePreset(sliderMarkerOptions.format, 'datetime');
+
+      if (formatWithTime !== sliderMarkerOptions.format) {
+        sliderMarkerOptions.format = formatWithTime;
+      }
+    }
 
     if (!sliderMarkerOptions.format && !argRange.isEmpty()) {
       if (doNotSnap && isNumeric(scaleOptions.startValue)) {

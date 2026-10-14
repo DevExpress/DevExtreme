@@ -16,7 +16,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import formatHelper from '@ts/core/format_helper';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { adjust, getExponent, getPrecision } from '@ts/core/utils/m_math';
 import {
@@ -291,6 +291,10 @@ export function smartFormatter(tick, options) {
   const { ticks } = options;
   const isLogarithmic = options.type === 'logarithmic';
   const globalFormatDataType = options.dataType === 'datetime' ? 'datetime' : 'number';
+
+  if (options.dataType === 'datetime') {
+    format = applyDataTypePreset(format, 'datetime');
+  }
 
   if (ticks.length === 1 && ticks.indexOf(tick) === 0 && !isDefined(tickInterval)) {
     tickInterval = abs(tick) >= 1 ? 1 : adjust(1 - abs(tick), tick);

@@ -8,6 +8,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
+import type { FormatLocale } from 'devextreme/common/core/localization';
 import type { Format } from 'devextreme/common';
 
 import {
@@ -38,6 +39,14 @@ export class DxoGanttFormatComponent extends NestedOption implements OnDestroy, 
     }
     set formatter(value: ((value: number | Date) => string)) {
         this._setOption('formatter', value);
+    }
+
+    @Input()
+    get locale(): FormatLocale {
+        return this._getOption('locale');
+    }
+    set locale(value: FormatLocale) {
+        this._setOption('locale', value);
     }
 
     @Input()
