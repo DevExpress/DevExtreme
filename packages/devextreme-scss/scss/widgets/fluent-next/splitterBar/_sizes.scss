@@ -1,0 +1,4 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$splitter-bar-border-width: ds.$spacing-70 !default;
+$splitter-bar-width: ds.$spacing-10 !default;

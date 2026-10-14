@@ -1,0 +1,4 @@
+@use "sizes" as mapSizes;
+@use "../../base/map" with (
+  $map-marker-tooltip-margin: mapSizes.$map-marker-tooltip-margin,
+);

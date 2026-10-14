@@ -23,6 +23,21 @@ import { isString } from '@ts/core/utils/m_type';
 import { mixColors, shiftChannels, shiftLightness } from '@ts/viz/color_math';
 import { normalizeEnum } from '@ts/viz/core/utils';
 
+const FLUENT_NEXT_VIZ = {
+  primary: 'var(--dx-viz-primary, #0f6cbd)',
+
+  blue: 'var(--dx-viz-blue, #0078d4)',
+  red: 'var(--dx-viz-red, #c83d3d)',
+  green: 'var(--dx-viz-green, #008f04)',
+  yellow: 'var(--dx-viz-yellow, #eaa300)',
+  pink: 'var(--dx-viz-pink, #e43ba6)',
+  purple: 'var(--dx-viz-purple, #865cbf)',
+
+  success: 'var(--dx-viz-success, #107c10)',
+  warning: 'var(--dx-viz-warning, #f7630c)',
+  danger: 'var(--dx-viz-danger, #c50f1f)',
+};
+
 const HIGHLIGHTING_STEP = 50;
 const DEFAULT_PALETTE = 'material';
 
@@ -42,6 +57,20 @@ const palettes = {
   },
 
   office: officePalette,
+
+  'fluent next': {
+    simpleSet: [
+      FLUENT_NEXT_VIZ.blue,
+      FLUENT_NEXT_VIZ.red,
+      FLUENT_NEXT_VIZ.green,
+      FLUENT_NEXT_VIZ.yellow,
+      FLUENT_NEXT_VIZ.pink,
+      FLUENT_NEXT_VIZ.purple,
+    ],
+    indicatingSet: [FLUENT_NEXT_VIZ.success, FLUENT_NEXT_VIZ.warning, FLUENT_NEXT_VIZ.danger],
+    gradientSet: [FLUENT_NEXT_VIZ.blue, FLUENT_NEXT_VIZ.green],
+    accentColor: FLUENT_NEXT_VIZ.primary,
+  },
 
   'harmony light': {
     simpleSet: ['#fcb65e', '#679ec5', '#ad79ce', '#7abd5c', '#e18e92', '#b6d623', '#b7abea', '#85dbd5'],

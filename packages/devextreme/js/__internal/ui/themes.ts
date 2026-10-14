@@ -11,7 +11,8 @@ import { changeCallback, originalViewPort, value as viewPortValue } from '@js/co
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
 import { uiLayerInitialized } from '@ts/core/utils/m_common';
-import { themeReadyCallback } from '@ts/ui/m_themes_callback';
+import { resolvedThemeMode } from '@ts/core/utils/theme_mode';
+import { themeModeChangedCallback, themeReadyCallback } from '@ts/ui/m_themes_callback';
 
 const window = getWindow();
 const ready = readyCallbacks.add;
@@ -39,6 +40,22 @@ let pendingThemeName;
 let defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
+
+const ACCENT_COLOR_PROPERTY = '--dx-accent-color';
+
+const VALUES_THAT_POINT_AT_ANOTHER_COLOR = [
+  'currentcolor', 'inherit', 'initial', 'unset', 'revert', 'revert-layer',
+];
+
+function isValidColor(value: string): boolean {
+  const probe = domAdapter.createElement('div');
+
+  probe.style.color = value;
+
+  const parsed = probe.style.color.trim().toLowerCase();
+
+  return parsed !== '' && !VALUES_THAT_POINT_AT_ANOTHER_COLOR.includes(parsed);
+}
 
 function readThemeMarker(): string | null {
   if (!hasWindow()) {
@@ -349,13 +366,10 @@ export function init(options): void {
   current(options);
 }
 
-function isTheme(themeRegExp: string, themeName: string): boolean {
-  if (!themeName) {
-    // eslint-disable-next-line no-param-reassign
-    themeName = currentThemeName || readThemeMarker();
-  }
+function isTheme(themeRegExp: string, themeName?: string): boolean {
+  const name: string | null = themeName || currentThemeName || readThemeMarker();
 
-  return new RegExp(themeRegExp).test(themeName);
+  return !!name && new RegExp(themeRegExp).test(name);
 }
 
 export function isMaterial(themeName: string): boolean {
@@ -366,6 +380,10 @@ export function isFluent(themeName: string): boolean {
   return isTheme('fluent', themeName);
 }
 
+export function isFluentNext(themeName: string): boolean {
+  return isTheme('fluent-next', themeName);
+}
+
 export function isMaterialBased(themeName: string): boolean {
   return isMaterial(themeName) || isFluent(themeName);
 }
@@ -374,12 +392,56 @@ export function isGeneric(themeName: string): boolean {
   return isTheme('generic', themeName);
 }
 
-export function isDark(themeName: string): boolean {
+export function isDark(themeName?: string): boolean {
   return isTheme('dark', themeName);
 }
 
 export function isCompact(themeName: string): boolean {
   return isTheme('compact', themeName);
+}
+
+export function mode(element: Element | dxElementWrapper): 'light' | 'dark' {
+  return resolvedThemeMode(element) ?? (isDark() ? 'dark' : 'light');
+}
+
+export function refreshMode(): void {
+  themeModeChangedCallback.fire();
+}
+
+export function customAccentColor(): string;
+export function customAccentColor(color: string | null): void;
+export function customAccentColor(color?: string | null): string | undefined {
+  if (!hasWindow()) {
+    return color === undefined ? '' : undefined;
+  }
+
+  const root = context.documentElement;
+
+  if (color === undefined) {
+    return window.getComputedStyle(root).getPropertyValue(ACCENT_COLOR_PROPERTY).trim();
+  }
+
+  if (color === null || color === '') {
+    root.style.removeProperty(ACCENT_COLOR_PROPERTY);
+
+    return undefined;
+  }
+
+  if (!isValidColor(color)) {
+    errors.log('W0024', color);
+
+    return undefined;
+  }
+
+  const themeName = current();
+
+  if (themeName && !isFluentNext(themeName)) {
+    errors.log('W0025', themeName);
+  }
+
+  root.style.setProperty(ACCENT_COLOR_PROPERTY, color);
+
+  return undefined;
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -510,6 +572,9 @@ export default {
   isMaterial,
   isFluent,
   isMaterialBased,
+  mode,
+  refreshMode,
+  customAccentColor,
   detachCssClasses,
   attachCssClasses,
   current,

@@ -32,7 +32,7 @@ const years = ['2021', '2022', '2023'];
 
 .demo-table {
   width: 100%;
-  border: 1px solid #c2c2c2;
+  border: 1px solid var(--dxds-color-border, #c2c2c2);
   border-collapse: collapse;
 }
 
@@ -40,7 +40,7 @@ const years = ['2021', '2022', '2023'];
   font-weight: 400;
   width: 200px;
   padding: 25px 15px 20px;
-  border: 1px solid #c2c2c2;
+  border: 1px solid var(--dxds-color-border, #c2c2c2);
 }
 
 .long-title h3 {

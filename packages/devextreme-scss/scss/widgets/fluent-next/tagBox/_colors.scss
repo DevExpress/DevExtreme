@@ -1,0 +1,16 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$tag-box-tag-content: ds.$color-content !default;
+
+$tag-box-tag-bg: ds.$color-bg-low !default;
+$tag-box-tag-bg-hovered: ds.$color-bg-hovered !default;
+
+$tag-box-tag-content-active: ds.$color-content !default;
+
+$tag-box-tag-remove-button-content: ds.$color-content-subtle !default;
+$tag-box-tag-border-focused: ds.$color-border-primary !default;
+$tag-box-select-all-line: ds.$color-border !default;
+$tag-box-tag-content-disabled: ds.$color-content-disabled !default;
+$tag-box-tag-bg-disabled: ds.$color-bg-disabled !default;
+
+$tag-box-tag-border: ds.$color-border-disabled !default;

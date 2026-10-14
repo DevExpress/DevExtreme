@@ -1,6 +1,7 @@
 export const THEME = {
   generic: 'generic.light',
   fluent: 'fluent.blue.light',
+  'fluent-next': 'fluent-next.blue.light',
   material: 'material.blue.light',
 };
 

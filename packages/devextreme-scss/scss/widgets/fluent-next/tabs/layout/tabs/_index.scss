@@ -1,0 +1,12 @@
+@use "../../../../base/tabs";
+@use "../../../scrollable";
+@use "../../../badge";
+
+.dx-tabs {
+  padding: 0;
+  background-color: var(--dx-tabs-tab-bg);
+
+  .dx-scrollable {
+    flex-basis: 100%;
+  }
+}

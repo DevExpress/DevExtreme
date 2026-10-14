@@ -3,7 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { dataSource } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
-import { testScreenshot } from '../../../../helpers/themeUtils';
+import { testScreenshot, getThemeName } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Drag-and-drop appointments in the Scheduler basic views`
   .page(url(__dirname, '../../../container.html'));
@@ -29,7 +29,8 @@ test('Drag-n-drop in the "month" view', async (t) => {
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 4))
-    .expect(draggableAppointment.size.height).eql('23.8281px')
+    .expect(draggableAppointment.size.height)
+    .eql(getThemeName() === 'fluent-next' ? '23.75px' : '23.8281px')
     .expect(draggableAppointment.date.time)
     .eql('9:00 AM - 9:30 AM');
 }).before(async () => createScheduler({

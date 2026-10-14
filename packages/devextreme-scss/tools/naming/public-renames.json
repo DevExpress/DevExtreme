@@ -1,0 +1,131 @@
+{
+  "$comment": "Journal of retired component-tier names \u2014 the `--dx-*` custom properties the theme publishes. A published name is the one thing a user can rely on without rebuilding the SCSS, so removing or renaming one is a public change, and this file is where that change is recorded. Add the entry in the SAME change that retires the name \u2014 which change that was is a question for `git log -- tools/naming/public-renames.json`, so the journal does not repeat it; tests/public-renames.test.ts then enforces that the name never appears in a built fluent-next bundle again, which is what forbids a quiet compatibility alias in _public-links.scss.",
+  "fields": {
+    "name": "The retired name, exactly as it shipped.",
+    "replacement": "The name that takes over the role, or null when the role itself disappeared.",
+    "release": "The release the removal ships in.",
+    "note": "One sentence for the release notes: who this reaches and what they see. Written from the user's side, not ours."
+  },
+  "retired": [
+    {
+      "name": "--dx-file-manager-view-mode-button-content-padding",
+      "replacement": "--dx-file-manager-button-content-padding",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-file-manager-button-content-padding to pad the file actions button."
+    },
+    {
+      "name": "--dx-file-uploader-cancel-button-margin-block-start",
+      "replacement": null,
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; the cancel button of an invalid file keeps no top margin."
+    },
+    {
+      "name": "--dx-filter-builder-action-icon-padding",
+      "replacement": "--dx-filter-builder-icon-padding",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-filter-builder-icon-padding to pad the action icons."
+    },
+    {
+      "name": "--dx-form-first-row-padding-block-start",
+      "replacement": "--dx-form-layout-manager-padding-block",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-form-layout-manager-padding-block to space the form rows."
+    },
+    {
+      "name": "--dx-form-group-content-margin-block-start",
+      "replacement": "--dx-form-group-caption-bottom-margin",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-form-group-caption-bottom-margin to space a group from its caption."
+    },
+    {
+      "name": "--dx-form-group-content-padding-block-start",
+      "replacement": "--dx-form-group-caption-top-padding",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-form-group-caption-top-padding to pad a captioned group."
+    },
+    {
+      "name": "--dx-form-multiview-item-content-padding",
+      "replacement": "--dx-form-layout-manager-tabpanel-content-padding",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-form-layout-manager-tabpanel-content-padding to pad tabbed form content."
+    },
+    {
+      "name": "--dx-grid-command-adaptive-column-width",
+      "replacement": null,
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; the adaptive column width follows --dx-grid-cell-padding-inline."
+    },
+    {
+      "name": "--dx-load-panel-content-padding",
+      "replacement": "--dx-load-panel-padding",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-load-panel-padding to pad the load panel."
+    },
+    {
+      "name": "--dx-pivot-grid-area-fields-margin-block-start",
+      "replacement": "--dx-pivot-grid-field-chooser-area-fields-margin-block-start",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-pivot-grid-field-chooser-area-fields-margin-block-start to space the field chooser areas."
+    },
+    {
+      "name": "--dx-pivot-grid-drag-header-first-shadow",
+      "replacement": "--dx-pivot-grid-drag-header-shadow",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-pivot-grid-drag-header-shadow to change the shadow of a dragged field."
+    },
+    {
+      "name": "--dx-pivot-grid-drag-header-shadow-key",
+      "replacement": "--dx-pivot-grid-drag-header-shadow",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-pivot-grid-drag-header-shadow to change the shadow of a dragged field."
+    },
+    {
+      "name": "--dx-radio-group-collection-horizontal-column-gap",
+      "replacement": "--dx-radio-group-collection-column-gap",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-radio-group-collection-column-gap to space horizontal radio buttons."
+    },
+    {
+      "name": "--dx-scheduler-agenda-date-table-padding-block-start",
+      "replacement": null,
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; the agenda date table keeps no top padding."
+    },
+    {
+      "name": "--dx-scheduler-appointment-content-details-font-size",
+      "replacement": "--dx-scheduler-appointment-details-font-size",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-scheduler-appointment-details-font-size to size appointment details."
+    },
+    {
+      "name": "--dx-scheduler-small-padding-inline-start",
+      "replacement": "--dx-scheduler-small-padding-inline-end",
+      "release": "26.2",
+      "note": "It duplicated --dx-scheduler-small-padding-inline-end, which now pads the time panel of a small scheduler in both directions."
+    },
+    {
+      "name": "--dx-scroll-view-pull-down-indicator-width",
+      "replacement": "--dx-scroll-view-load-indicator-size",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-scroll-view-load-indicator-size to size the pull-down indicator."
+    },
+    {
+      "name": "--dx-toast-stack-gap",
+      "replacement": "--dx-toast-item-gap",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-toast-item-gap to space stacked toasts."
+    },
+    {
+      "name": "--dx-tooltip-overlay-content-min-height",
+      "replacement": null,
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; a tooltip keeps no minimum height."
+    },
+    {
+      "name": "--dx-tooltip-popup-content-padding",
+      "replacement": "--dx-tooltip-padding",
+      "release": "26.2",
+      "note": "Setting it had no effect because fluent-next painted over it; set --dx-tooltip-padding to pad the tooltip content."
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import {
 import type { Message } from '@js/ui/chat';
 import { custom } from '@js/ui/dialog';
 import * as themes from '@js/ui/themes';
+import { themeLength } from '@ts/core/utils/theme_length';
 
 import {
   AI_ASSISTANT_AUTHOR_ID,
@@ -41,6 +42,10 @@ jest.mock('@js/ui/themes', () => ({
   current: jest.fn().mockReturnValue('generic.light'),
   isFluent: jest.fn().mockReturnValue(false),
   isCompact: jest.fn().mockReturnValue(false),
+}));
+
+jest.mock('@ts/core/utils/theme_length', () => ({
+  themeLength: jest.fn(),
 }));
 
 describe('isAIMessage', () => {
@@ -803,6 +808,35 @@ describe('createConfirmDialog', () => {
     expect(custom).toHaveBeenCalledWith(
       expect.objectContaining({
         width: AI_ASSISTANT_CONFIRM_DIALOG_WIDTH,
+      }),
+    );
+  });
+
+  it('should take the width the theme declares on the grid element', () => {
+    (themes.isCompact as jest.Mock).mockReturnValue(true);
+    (themeLength as jest.Mock).mockReturnValue(333);
+    const gridElement = document.createElement('div');
+
+    createConfirmDialog(undefined, gridElement);
+
+    expect((themeLength as jest.Mock).mock.calls[0])
+      .toEqual([gridElement, '--dx-grid-ai-confirm-dialog-width']);
+    expect(custom).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: 333,
+      }),
+    );
+  });
+
+  it('should keep the legacy width when the theme declares nothing on the grid element', () => {
+    (themes.isCompact as jest.Mock).mockReturnValue(true);
+    (themeLength as jest.Mock).mockReturnValue(undefined);
+
+    createConfirmDialog(undefined, document.createElement('div'));
+
+    expect(custom).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH,
       }),
     );
   });
