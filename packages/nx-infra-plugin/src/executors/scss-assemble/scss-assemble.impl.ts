@@ -87,6 +87,8 @@ export default createExecutor<ScssAssembleExecutorSchema, ResolvedScssAssemble>(
     return { scssPackagePath, outputDir };
   },
   run: async ({ scssPackagePath, outputDir }) => {
+    await fs.rm(outputDir, { recursive: true, force: true });
+
     await Promise.all([
       copyScssWithInlineDataUri(scssPackagePath, outputDir),
       copyFonts(scssPackagePath, outputDir),

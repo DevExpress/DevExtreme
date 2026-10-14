@@ -1,4 +1,3 @@
-/* stylelint-disable no-duplicate-selectors */
 @use "sass:math";
 @use "../colors" as *;
 @use "../sizes" as *;
@@ -39,12 +38,6 @@
 
   // (0,2,0)
   .dx-#{$widget-name} .dx-command-drag {
-    width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
-    min-width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
-  }
-
-  // (0,2,0)
-  .dx-command-adaptive {
     width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
     min-width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
   }
@@ -547,7 +540,7 @@
 
   // (0,3,1)
   .dx-#{$widget-name} .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]::before {
-    background-position-y: 49px;
+    mask-position: 0 49px;
   }
 
   // #endregion

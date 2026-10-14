@@ -161,7 +161,7 @@ const onAllowDeletingChange = (event: DxSelectBoxTypes.ValueChangedEvent) => {
   display: flex;
   flex-direction: column;
   min-width: 280px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   gap: 16px;
 }
 

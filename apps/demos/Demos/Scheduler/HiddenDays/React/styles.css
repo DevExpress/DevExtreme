@@ -15,7 +15,7 @@
   width: 220px;
   box-sizing: border-box;
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   gap: 12px;
 }
 
@@ -46,6 +46,10 @@
 }
 
 .hidden-days-demo.is-invalid .option .dx-checkbox-icon {
+  border-color: #c50f1f;
+}
+
+.hidden-days-demo.is-invalid .option .dx-checkbox-icon:hover {
   border-color: #c50f1f;
 }
 

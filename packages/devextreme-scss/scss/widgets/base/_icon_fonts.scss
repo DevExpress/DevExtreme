@@ -1,4 +1,3 @@
-@use "sass:math";
 @use "sass:map";
 @use "sass:selector";
 
@@ -212,10 +211,12 @@
   pointer-events: none;
 }
 
-@mixin dx-icon-sizing($icon-size, $container-size: $icon-size, $borders-size: 0) {
-  $icon-paddings-dirty: $container-size - $icon-size;
-  $icon-paddings: $icon-paddings-dirty - $borders-size;
-  $icon-padding: math.floor(math.div($icon-paddings, 2));
+@mixin dx-icon-sizing($icon-size, $container-size: $icon-size) {
+  $icon-padding: 0;
+
+  @if $container-size != $icon-size {
+    $icon-padding: calc(($container-size - $icon-size) / 2);
+  }
 
   // Geometry
   width: $container-size;
@@ -231,10 +232,12 @@
   // Icon as font
   font-size: $icon-size;
   text-align: center;
-  line-height: $container-size - $icon-paddings-dirty;
+  line-height: $icon-size;
 }
 
 @mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
+  $icon-center-offset: calc($icon-size / -2);
+
   font-size: $icon-size;
   text-align: center;
   line-height: $icon-size;
@@ -244,9 +247,9 @@
     display: block;
     width: $icon-size;
     top: 50%;
-    margin-top: math.div(-$icon-size, 2);
+    margin-top: $icon-center-offset;
     left: 50%;
-    margin-left: math.div(-$icon-size, 2);
+    margin-left: $icon-center-offset;
   }
 
   @if $position == relative {
@@ -256,7 +259,7 @@
         left: 0;
         margin-left: 0;
         right: 50%;
-        margin-right: math.div(-$icon-size, 2);
+        margin-right: $icon-center-offset;
       }
     }
   }
@@ -282,7 +285,6 @@
   }
 }
 
-// stylelint-disable property-no-unknown
 $icons: (
     "add": "\f00b",
     "airplane": "\f000",
@@ -614,8 +616,6 @@ $icons: (
     "listbartreeoffset": "\f241",
     "clearhistory": "\f242",
 ) !default;
-
-// stylelint-enable
 
 @mixin dx-icon($name) {
   @include dx-font-icon(map.get($icons, $name));

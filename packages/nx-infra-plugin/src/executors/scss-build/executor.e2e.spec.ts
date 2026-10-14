@@ -143,15 +143,8 @@ async function setupProjectStructure(workspaceRoot: string): Promise<string> {
   await writeJson(path.join(devextremeDir, 'package.json'), { version: '26.1.0-test' });
 
   await writeFileText(
-    path.join(buildDir, 'theme-options.cjs'),
-    [
-      'module.exports = {',
-      '  getThemes: () => [',
-      "    ['generic', 'default', 'light'],",
-      '  ],',
-      '};',
-      '',
-    ].join('\n'),
+    path.join(buildDir, 'theme-options.ts'),
+    ['export const getThemes = () => [', "  ['generic', 'default', 'light'],", '];', ''].join('\n'),
   );
 
   await writeFileText(

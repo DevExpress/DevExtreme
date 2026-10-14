@@ -1,7 +1,5 @@
 @use "sass:math";
 
-// stylelint-disable selector-class-pattern
-
 @mixin dx-clearfix-mixin() {
   &::before,
   &::after {

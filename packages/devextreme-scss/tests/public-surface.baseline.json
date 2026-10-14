@@ -1,0 +1,50 @@
+[
+  {
+    "themes": [
+      "material",
+      "fluent",
+      "generic"
+    ],
+    "names": [
+      "--dx-border-radius",
+      "--dx-border-width",
+      "--dx-button-padding-inline",
+      "--dx-cardview-card-cover-max-height",
+      "--dx-color-border",
+      "--dx-color-danger",
+      "--dx-color-icon",
+      "--dx-color-link",
+      "--dx-color-main-bg",
+      "--dx-color-options-panel-bg",
+      "--dx-color-primary",
+      "--dx-color-separator",
+      "--dx-color-shadow",
+      "--dx-color-spin-icon",
+      "--dx-color-success",
+      "--dx-color-text",
+      "--dx-color-warning",
+      "--dx-component-color-bg",
+      "--dx-component-height",
+      "--dx-datagrid-row-alternation-bg",
+      "--dx-font-size",
+      "--dx-font-size-heading-1",
+      "--dx-font-size-heading-2",
+      "--dx-font-size-heading-3",
+      "--dx-font-size-heading-4",
+      "--dx-font-size-heading-5",
+      "--dx-font-size-heading-6",
+      "--dx-font-size-icon",
+      "--dx-font-size-lg",
+      "--dx-font-size-md",
+      "--dx-font-size-sm",
+      "--dx-font-size-xl",
+      "--dx-font-size-xs",
+      "--dx-list-item-padding-block",
+      "--dx-list-item-padding-inline",
+      "--dx-popup-toolbar-item-padding-inline",
+      "--dx-texteditor-color-label",
+      "--dx-texteditor-color-text",
+      "--dx-toolbar-height"
+    ]
+  }
+]

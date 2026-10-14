@@ -270,13 +270,14 @@ const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
 </script>
 
 <style>
-.dx-scheduler-appointment {
+.dx-scheduler-appointment-title,
+.dx-scheduler-appointment-content-date {
   color: #242424;
 }
 
 .options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   margin-top: 20px;
 }
 

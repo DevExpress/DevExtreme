@@ -756,6 +756,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
           clearTimeout(this._fixedScrollTimeout);
           this._fixedScrollTimeout = setTimeout(() => {
             scrollTop = $(target).scrollTop();
+            // @ts-expect-error scrollTo() is typed without x and y
             scrollable.scrollTo({ y: scrollTop });
           }, scrollDelay);
         });
@@ -776,6 +777,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
 
           if (shouldScroll) {
             scrollTop = scrollable.scrollTop();
+            // @ts-expect-error scrollTo() is typed without x and y
             scrollable.scrollTo({ y: scrollTop - e.delta });
 
             const scrollableTop = scrollable.scrollTop() + scrollable.clientHeight();
@@ -915,7 +917,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return deferred;
   }
 
-  protected setAriaOwns(headerTableId, footerTableId, isFixed) {
+  public setAriaOwns(headerTableId, footerTableId, isFixed) {
     if (isFixed) {
       const contentFixedClass = this.addWidgetPrefix(CLASSES.contentFixed);
       const $contentFixedElement = this.element()?.children(`.${contentFixedClass}`);
@@ -1172,7 +1174,6 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingColumnF
     const headerFixedTable = this._columnHeadersView?.getFixedTableElement();
     // @ts-expect-error
     const footerFixedTable = this._footerView?.getFixedTableElement();
-    // @ts-expect-error
     this._rowsView?.setAriaOwns(headerFixedTable?.attr('id'), footerFixedTable?.attr('id'), true);
   }
 };

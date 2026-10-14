@@ -2771,6 +2771,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
       }
       this._editingController.updateFieldValue(cellOptions, value, text, true);
     }
+
+    return undefined;
   }
 
   public dispose() {

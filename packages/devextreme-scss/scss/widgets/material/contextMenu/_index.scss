@@ -7,7 +7,9 @@
 @use "../menuBase/sizes" as *;
 @use "../menu/colors" as *;
 @use "../menu/sizes" as *;
-@use "../../base/contextMenu";
+@use "../../base/contextMenu" with (
+  $contextmenu-menu-items-container-padding: $material-context-menu-container-vertical-padding 0,
+);
 @use "../overlay";
 @use "../menuBase" as *;
 
@@ -48,10 +50,6 @@
         }
       }
     }
-  }
-
-  .dx-menu-items-container {
-    padding: $material-context-menu-container-vertical-padding 0;
   }
 
   &.dx-overlay-content.dx-state-focused {
