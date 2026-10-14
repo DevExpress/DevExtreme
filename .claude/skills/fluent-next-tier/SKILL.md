@@ -1,6 +1,6 @@
 ---
 name: fluent-next-tier
-description: How the fluent-next public `--dx-*` component tier is generated and guarded in packages/devextreme-scss — derive-registries, publish, reachability and tokens:update. Use whenever work touches `registries.json`, `OVERRIDES`/`rootSelectors`, a generated `_public.scss` / `_public-tier.scss`, `_public-links.scss`, `nested-scopes.json`, `unread-tier.json`, a renamed or new fluent-next SCSS variable, a design-token package bump (`@devexpress/design-tokens-internal`, Renovate), or when CI fails in "Check naming registries" / `naming:check` with "stale", "has no rootSelectors", "scope outside the roots", "portal", "declared and never read", "cross-scope duplicate" or "read and never declared" — even if the user names only the symptom.
+description: How the fluent-next public `--dx-*` component tier is generated and guarded in packages/devextreme-scss — derive-registries, publish, reachability and tokens:update. Use whenever work touches `registries.json`, `OVERRIDES`/`rootSelectors`, a generated `_public.scss` / `_public-tier.scss`, `_public-links.scss`, `nested-scopes.json`, `unread-tier.json`, a renamed or new fluent-next SCSS variable, a retired `--dx-*` name or `public-renames.json`, a design-token package bump (`@devexpress/design-tokens-internal`, Renovate), or when CI fails in "Check naming registries" / `naming:check` with "stale", "has no rootSelectors", "scope outside the roots", "portal", "declared and never read", "cross-scope duplicate" or "read and never declared" — even if the user names only the symptom.
 ---
 
 # fluent-next component tier
@@ -69,7 +69,8 @@ does every --dx-* actually reach the elements that read it?
   everything else in `registries.json` is derived.
 - Renaming a fluent-next SCSS variable retires its public `--dx-*` name. Record the old name in
   `tools/naming/public-renames.json` in the same PR; `tests/public-renames.test.ts` stops it from
-  coming back.
+  coming back. Only names that shipped in a release are journaled — see the journal section of
+  [tokens-update.md](tokens-update.md) for when an entry is due and how to write it.
 - `tests/fluent-next-naming.test.ts` reads the same rules as `publish.ts` (both import `tier.ts`):
   the tier composition, links, the collector and the name grammar for new variables. Its baseline
   sections fail on any change; after a deliberate one run `pnpm run naming:baseline` and review the

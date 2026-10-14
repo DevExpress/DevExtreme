@@ -12,9 +12,9 @@ node tools/naming/derive-registries.ts --check  # fails if the committed file is
 
 - **The token package** (`@devexpress/design-tokens-internal/tokens.flat.json`, the
   `components/core/theme/fluent` tokens). From it come the colour `parts` (the last word of every
-  colour token: `bg`, `border`, `content`, `icon`…), `packageElementPaths` and
-  `derivedFrom.componentTokenCount`. The vocabulary is read from the package's flat index, not from
-  generated output, so the script needs no build for this part and cannot drift from the package.
+  colour token: `bg`, `border`, `content`, `icon`…). The vocabulary is read from the package's flat
+  index, not from generated output, so the script needs no build for this part and cannot drift
+  from the package.
 - **The theme folders** in `scss/widgets/fluent-next/`: each folder becomes a component, its name in
   kebab case (`dateBox` → `date-box`) unless `OVERRIDES.components` says otherwise.
 - **`OVERRIDES`** at the top of the script — every judgment call, reviewed as code, with the reason
@@ -50,13 +50,12 @@ and the script refuses them:
 | `rootSelectors` | `tools/review/reachability.ts` |
 | `systemFolders` | `tests/disabled-paint.test.ts` |
 | the grammar vocabularies, `chassis`, `embeds`, `systemConcerns`, `themeIdentity` | `tests/fluent-next-naming.test.ts` |
-| `packageElementPaths` | nobody |
 
 ## Failures
 
 - **`registries.json is stale — run node tools/naming/derive-registries.ts`** — the committed file
   differs from what the script builds now: `OVERRIDES` changed, a theme folder was added or removed,
-  or the token package was bumped. Regenerate with `pnpm run naming:registries` (build the themes
+  or a token package bump changed the colour `parts`. Regenerate with `pnpm run naming:registries` (build the themes
   first, see below) and review the JSON diff.
 - **`STATES and PARTS overlap, the grammar would be undecidable`** / **`sub-elements of X collide with
   a state name`** — an `OVERRIDES` edit (or a new part from the package) made a word ambiguous. Pick

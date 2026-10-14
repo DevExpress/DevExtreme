@@ -33,7 +33,8 @@ It needs no built bundle. The rules live in `tools/naming/tier.ts`, which
 The published name is derived from the SCSS variable, so renaming a variable retires a public
 `--dx-*` name, and the diff looks like plain regeneration. Record the retirement in
 `tools/naming/public-renames.json` in the same pull request; `tests/public-renames.test.ts` keeps a
-retired name from reappearing, as an alias or otherwise.
+retired name from reappearing, as an alias or otherwise. Whether an entry is due (only names that
+shipped) and how to write it: the journal section of [tokens-update.md](tokens-update.md).
 
 ## Failures
 
