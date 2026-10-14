@@ -57,7 +57,11 @@
       vertical-alignment="bottom"
       horizontal-alignment="center"
     />
-    <DxArgumentAxis v-model:visual-range="visualRange">
+    <DxArgumentAxis>
+      <DxVisualRange
+        v-model:start-value="startValue"
+        v-model:end-value="endValue"
+      />
       <DxLabel
         :rotation-angle="30"
         format="MMM dd"
@@ -91,6 +95,7 @@ import DxChart, {
   DxSeries,
   DxReduction,
   DxArgumentAxis,
+  DxVisualRange,
   DxLabel,
   DxFormat,
   DxValueAxis,
@@ -102,7 +107,6 @@ import DxChart, {
   DxTooltip,
   type DxChartTypes,
 } from 'devextreme-vue/chart';
-import type { VisualRange } from 'devextreme-vue/common/charts';
 import type { DxButtonTypes } from 'devextreme-vue/button';
 import DxToolbar, { DxItem } from 'devextreme-vue/toolbar';
 import { dataSource } from './data.ts';
@@ -118,16 +122,14 @@ const initialEnd = new Date(1994, 3, 29);
 const dataMin = dataSource[0].date.getTime();
 const dataMax = dataSource[dataSource.length - 1].date.getTime();
 
-const visualRange = ref<VisualRange>({
-  startValue: initialStart,
-  endValue: initialEnd,
-});
+const startValue = ref(initialStart);
+const endValue = ref(initialEnd);
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 const getRange = () => ({
-  start: (visualRange.value.startValue as Date).getTime(),
-  end: (visualRange.value.endValue as Date).getTime(),
+  start: startValue.value.getTime(),
+  end: endValue.value.getTime(),
 });
 
 const setRange = (start: number, end: number) => {
@@ -135,10 +137,8 @@ const setRange = (start: number, end: number) => {
   const center = (start + end) / 2;
   const newStart = clamp(center - span / 2, dataMin, dataMax - span);
 
-  visualRange.value = {
-    startValue: new Date(newStart),
-    endValue: new Date(newStart + span),
-  };
+  startValue.value = new Date(newStart);
+  endValue.value = new Date(newStart + span);
 };
 
 const pan = (direction: number) => {
