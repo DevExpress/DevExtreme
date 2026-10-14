@@ -162,6 +162,39 @@ describe('Virtual scrolling data controller — viewport reads', () => {
       expect(renderedRowCount).toBeLessThan(12);
       expect(dataController.virtualItemsCount()).toEqual({ begin: 0, end: 12 - renderedRowCount });
     });
+
+    it('describes the rendered rows after a row is selected while the viewport is shrunk', async () => {
+      const { instance } = await createVirtualGrid('virtual', {
+        ...allRowsOnOnePage,
+        selection: { mode: 'single' },
+      });
+      const dataController = getDataController(instance);
+
+      dataController.viewportSize(4);
+      const selecting = instance.selectRows([1], false);
+      await flushAsync();
+      await selecting;
+
+      expect(instance.isRowSelected(1)).toBe(true);
+      expect(instance.getVisibleRows()).toHaveLength(12);
+      expect(dataController.virtualItemsCount()).toEqual({ begin: 0, end: 0 });
+    });
+
+    it('describes the rendered rows after the focused row changes while the viewport is shrunk', async () => {
+      const { instance } = await createVirtualGrid('virtual', {
+        ...allRowsOnOnePage,
+        focusedRowEnabled: true,
+      });
+      const dataController = getDataController(instance);
+
+      dataController.viewportSize(4);
+      instance.option('focusedRowKey', 1);
+      await flushAsync();
+
+      expect(instance.option('focusedRowIndex')).toBe(0);
+      expect(instance.getVisibleRows()).toHaveLength(12);
+      expect(dataController.virtualItemsCount()).toEqual({ begin: 0, end: 0 });
+    });
   });
 
   describe('standard mode is unaffected', () => {

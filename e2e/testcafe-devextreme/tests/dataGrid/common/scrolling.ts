@@ -1620,6 +1620,75 @@ test('New virtual mode. Virtual rows should not be rendered after the container 
   });
 });
 
+test('New virtual mode. Virtual rows should not be rendered after a row is selected while the height is decreased (T1336247)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const getViewportSize = ClientFunction(
+    () => (window as any).widget.getController('data').viewportSize() as number,
+  );
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const initialViewportSize = await getViewportSize();
+
+  await dataGrid.option('height', 150);
+  await t.expect(getViewportSize()).lt(initialViewportSize);
+
+  await t
+    .click(dataGrid.getDataRow(0).element)
+    .expect(dataGrid.getDataRow(0).isSelected)
+    .ok();
+
+  await dataGrid.option('height', 600);
+  await t.expect(getViewportSize()).eql(initialViewportSize);
+
+  await t
+    .expect(dataGrid.getRowsView().find(`.${ClassNames.virtualRow}`).count)
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 2),
+  height: 600,
+  selection: {
+    mode: 'single',
+  },
+  scrolling: {
+    mode: 'virtual',
+  },
+}));
+
+test('New virtual mode. Virtual rows should not be rendered after a row is focused while the height is decreased (T1336247)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const getViewportSize = ClientFunction(
+    () => (window as any).widget.getController('data').viewportSize() as number,
+  );
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const initialViewportSize = await getViewportSize();
+
+  await dataGrid.option('height', 150);
+  await t.expect(getViewportSize()).lt(initialViewportSize);
+
+  await t
+    .click(dataGrid.getDataRow(0).element)
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .ok();
+
+  await dataGrid.option('height', 600);
+  await t.expect(getViewportSize()).eql(initialViewportSize);
+
+  await t
+    .expect(dataGrid.getRowsView().find(`.${ClassNames.virtualRow}`).count)
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 2).map((item, index) => ({ ...item, id: index })),
+  keyExpr: 'id',
+  height: 600,
+  focusedRowEnabled: true,
+  scrolling: {
+    mode: 'virtual',
+  },
+}));
+
 fixture.disablePageReloads`Remote Scrolling`
   .page(url(__dirname, '../../container.html'));
 

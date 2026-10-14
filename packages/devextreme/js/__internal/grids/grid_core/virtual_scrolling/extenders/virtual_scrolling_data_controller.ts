@@ -67,8 +67,6 @@ export const virtualScrollingDataControllerExtender = (
 
   private _loadViewportParams: any;
 
-  private loadViewportPageOffset = 0;
-
   private _allItems: any;
 
   private _visibleItems: any;
@@ -200,13 +198,8 @@ export const virtualScrollingDataControllerExtender = (
       loadedItemCount() {
         return that._itemCount;
       },
-      loadViewportParams() {
-        const viewportParams = that._loadViewportParams;
-
-        return viewportParams && {
-          skip: viewportParams.skip - that.loadViewportPageOffset,
-          take: viewportParams.take,
-        };
+      renderedItemsRange() {
+        return that.getRenderedItemsRange();
       },
       totalItemsCount() {
         if (isVirtualPaging(that)) {
@@ -368,12 +361,31 @@ export const virtualScrollingDataControllerExtender = (
     const viewportParams = this._rowsScrollController!.getViewportParams();
     const pageSize = this.pageSize();
 
-    this.loadViewportPageOffset = 0;
     if (viewportParams && !isVirtualPaging(this) && pageSize > 0) {
-      this.loadViewportPageOffset = this.pageIndex() * pageSize;
-      viewportParams.skip += this.loadViewportPageOffset;
+      const pageOffset = this.pageIndex() * pageSize;
+      viewportParams.skip += pageOffset;
     }
     this._loadViewportParams = viewportParams;
+  }
+
+  private getRenderedItemsRange(): { skip: number; take: number } | undefined {
+    const renderedItems = this._items;
+    const loadedItems: ProcessedItem[] | null = this._allItems;
+
+    if (!renderedItems.length || !loadedItems?.length) {
+      return undefined;
+    }
+
+    const loadedItemIndex = loadedItems[0].loadIndex ?? 0;
+    const renderedItemIndex = renderedItems[0].loadIndex ?? 0;
+    const pageStartItemIndex = isVirtualPaging(this) ? 0 : loadedItemIndex;
+    const firstItemIndex = renderedItemIndex - pageStartItemIndex;
+    const lastItemIndex = (renderedItems[renderedItems.length - 1].loadIndex ?? 0) - pageStartItemIndex;
+
+    return {
+      skip: firstItemIndex,
+      take: lastItemIndex - firstItemIndex + 1,
+    };
   }
 
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
