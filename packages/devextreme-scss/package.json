@@ -38,7 +38,7 @@
     "naming:registries": "node tools/naming/derive-registries.mjs",
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
     "tokens:update": "node tools/tokens/update.mjs",
-    "typecheck": "tsc -p tsconfig.json && tsc -p tests/tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tests/tsconfig.json",
     "watch": "pnpm --workspace-root nx run devextreme-scss --target=watch"
   },
   "version": "26.2.0"
