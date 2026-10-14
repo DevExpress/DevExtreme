@@ -35,6 +35,15 @@ module('Resizing integration', {
         this.clock.restore();
     }
 }, () => {
+    test('resetting the mediaResizing option while resizing is disabled does not throw', function(assert) {
+        this.options.mediaResizing = { enabled: false };
+        this.createWidget();
+
+        this.instance.option('mediaResizing', undefined);
+
+        assert.ok(true, 'the module is cleaned without an exception');
+    });
+
     test('Click on an image with default resize module config', function(assert) {
         this.createWidget();
 

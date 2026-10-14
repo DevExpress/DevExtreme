@@ -370,14 +370,17 @@ if (Quill) {
 
     _updateButtonState(formatName: string): void {
       const formatWidget = this._toolbarWidgets.getByName(formatName);
+
+      if (!formatWidget) {
+        return;
+      }
+
       const currentFormat = this.quill.getFormat();
       const formatValue = currentFormat[formatName];
 
       if (formatValue) {
-        // @ts-expect-error getByName() gives null when the toolbar has no such button (Findings)
         this._markActiveFormatWidget(formatName, formatWidget, currentFormat);
       } else {
-        // @ts-expect-error getByName() gives null when the toolbar has no such button (Findings)
         this._resetFormatWidget(formatName, formatWidget);
       }
     }
