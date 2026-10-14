@@ -121,7 +121,7 @@ export default class TableResizingModule extends BaseModule {
 
   _quillTextChangeHandler?: QuillTextChangeHandler;
 
-  _resizeHandlerWithContext?: ReturnType<typeof _windowResizeCallbacks.add>;
+  _resizeHandlerWithContext?: () => void;
 
   _startLineSize!: number;
 
@@ -160,7 +160,8 @@ export default class TableResizingModule extends BaseModule {
       this.editorInstance.addContentInitializedCallback(this._applyResizingImpl.bind(this));
     }
     this.addCleanCallback(this.clean.bind(this));
-    this._resizeHandlerWithContext = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
+    this._resizeHandlerWithContext = this._resizeHandler.bind(this);
+    _windowResizeCallbacks.add(this._resizeHandlerWithContext);
   }
 
   _minSizeLimit(propertyName: SizeOptionName, newValue: number | undefined): number {
@@ -186,13 +187,16 @@ export default class TableResizingModule extends BaseModule {
       this._updateFramesPositions.bind(this),
     );
 
-    this.quill.on('text-change', this._getQuillTextChangeHandler());
+    this._quillTextChangeHandler = this._getQuillTextChangeHandler();
+    this.quill.on('text-change', this._quillTextChangeHandler);
   }
 
   _detachEvents(): void {
     eventsEngine.off(this.editorInstance._getContent(), MODULE_NAMESPACE);
-    // @ts-expect-error _quillTextChangeHandler is never assigned: off() gets undefined (Findings)
-    this.quill.off('text-change', this._quillTextChangeHandler);
+    if (this._quillTextChangeHandler) {
+      this.quill.off('text-change', this._quillTextChangeHandler);
+      this._quillTextChangeHandler = undefined;
+    }
   }
 
   _getQuillTextChangeHandler(
@@ -867,8 +871,9 @@ export default class TableResizingModule extends BaseModule {
     this._removeResizeFrames(true);
     this._detachEvents();
 
-    // @ts-expect-error add() returns the Callbacks object, which remove() never matches (Findings)
-    _windowResizeCallbacks.remove(this._resizeHandlerWithContext);
+    if (this._resizeHandlerWithContext) {
+      _windowResizeCallbacks.remove(this._resizeHandlerWithContext);
+    }
     clearTimeout(this._windowResizeTimeout);
     this._resizeHandlerWithContext = undefined;
     this._isDragging = undefined;

@@ -159,9 +159,10 @@ if (Quill) {
           this._handleServerUpload();
           break;
         case 'fileUploaderOptions':
-          // eslint-disable-next-line @stylistic/max-len
-          // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged); the file uploader exists while server upload is on
-          this._fileUploader.option(value);
+          // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
+          this.options.fileUploaderOptions = value;
+          // @ts-expect-error see above
+          this._fileUploader?.option(value);
       }
     }
   };
