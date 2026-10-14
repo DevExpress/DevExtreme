@@ -33,11 +33,6 @@ interface TempTemplate {
   source: unknown;
 }
 
-interface RawTemplate {
-  element: Element;
-  options: { name: string };
-}
-
 export interface NamedTemplate {
   name: string;
   template: TemplateLike;
@@ -172,10 +167,11 @@ export class TemplateManager {
   }
 
   _extractTemplates($el: dxElementWrapper): NamedTemplate[] {
-    const templates: RawTemplate[] = findTemplates($el, TEMPLATE_OPTIONS_NAME);
+    const templates = findTemplates($el, TEMPLATE_OPTIONS_NAME);
     const suitableTemplates: Record<string, Element> = suitableTemplatesByName(templates);
 
     templates.forEach(({ element, options: { name } }) => {
+      // @ts-expect-error suitableTemplatesByName throws E0023 for a template without a name
       if (element === suitableTemplates[name]) {
         $(element).addClass(TEMPLATE_WRAPPER_CLASS).detach();
       } else {

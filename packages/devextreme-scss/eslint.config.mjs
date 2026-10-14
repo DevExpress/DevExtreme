@@ -47,7 +47,7 @@ export default [
     },
   },
 
-  ...typescriptFor(['build/**/*.ts', 'tests/**/*.ts'], './tests/tsconfig.json'),
+  ...typescriptFor(['build/**/*.ts', 'tests/**/*.ts', 'tools/**/*.ts'], './tests/tsconfig.json'),
   ...jestConfig.map((config) => ({ ...config, files: ['tests/**/*.ts'] })),
 
   {
