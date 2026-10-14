@@ -48,7 +48,7 @@ export class FileUploadStrategyBase {
         deferred = Deferred().reject(error).promise();
       }
 
-      if (deferred && 'done' in deferred) {
+      if (deferred !== null && 'done' in deferred) {
         deferred
           ?.done(() => file.onAbort.fire())
           .fail((error) => this._handleFileError(file, error));

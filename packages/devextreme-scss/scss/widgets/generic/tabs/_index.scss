@@ -1,11 +1,4 @@
-@use "sass:math";
-@use "../button/colors" as *;
-@use "../../base/icon_fonts" as *;
 @use "../../base/tabs";
-@use "variables/borders" as *;
-@use "variables/colors" as *;
-@use "variables/sizes" as *;
-@use "mixins" as *;
 @use "layout/tab/base" as *;
 @use "layout/tab/vertical" as *;
 @use "layout/tabs/base" as *;
