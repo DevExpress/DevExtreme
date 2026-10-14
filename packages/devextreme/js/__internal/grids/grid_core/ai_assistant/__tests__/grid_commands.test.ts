@@ -323,7 +323,6 @@ describe('GridCommands', () => {
       const schema = gridCommands.buildResponseSchema() as unknown as SchemaShape;
       const args = schema.properties.actions.items.anyOf[0].properties.args as JsonSchema;
 
-      // openai target makes all fields required (optional becomes nullable)
       expect(args.required).toEqual(['field1', 'field2']);
     });
 
@@ -393,7 +392,7 @@ describe('GridCommands', () => {
         op: filterOps,
         value: z.union([z.string(), z.number(), z.null()]),
       }).strict();
-      const exprSchema: z.ZodType<unknown> = z.lazy(() => z.union([
+      const exprSchema: z.ZodType = z.lazy(() => z.union([
         basicExpr,
         z.object({
           type: z.literal('combined'),
