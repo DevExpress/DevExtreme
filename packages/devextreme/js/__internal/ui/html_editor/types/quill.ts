@@ -14,6 +14,12 @@ export type DeltaConstructor = new (ops?: DeltaOperation[] | { ops: DeltaOperati
 
 export interface Delta {
   ops: DeltaOperation[];
+  retain: (length: number, attributes?: Record<string, unknown>) => Delta;
+  delete: (length: number) => Delta;
+  insert: (
+    content: string | Record<string, unknown>,
+    attributes?: Record<string, unknown>,
+  ) => Delta;
   length: () => number;
   slice: (start?: number, end?: number) => Delta;
   concat: (other: Delta) => Delta;
@@ -76,6 +82,7 @@ export interface TableModule {
 /** devextreme-quill `modules/uploader` */
 export interface UploaderModule {
   upload: (range: RangeStatic, files: File[] | FileList, force?: boolean) => void;
+  preventImageUploading: (value: boolean) => void;
 }
 
 /** A leaf blot (text or embed) */
@@ -130,6 +137,19 @@ export interface QuillOptions {
   theme?: string;
 }
 
+/** `on`/`once`/`off`: the Quill events the editor subscribes to and their handler signatures */
+export interface QuillEventSubscriber {
+  (
+    eventName: 'text-change',
+    handler: (delta: Delta, oldDelta: Delta, source: string) => void,
+  ): QuillInstance;
+  (
+    eventName: 'selection-change',
+    handler: (range: RangeStatic | null, oldRange: RangeStatic | null, source: string) => void,
+  ): QuillInstance;
+  (eventName: string, handler: (...args: unknown[]) => void): QuillInstance;
+}
+
 export interface QuillInstance {
   deleteText: (index: number, length: number, source?: string) => Delta;
   getContents: (index?: number, length?: number) => Delta;
@@ -175,9 +195,9 @@ export interface QuillInstance {
   getSelection: (focus?: boolean) => RangeStatic | null;
   setSelection: (index: number | RangeStatic, length?: number, source?: string) => void;
 
-  on: (eventName: string, handler: (...args: unknown[]) => void) => QuillInstance;
-  once: (eventName: string, handler: (...args: unknown[]) => void) => QuillInstance;
-  off: (eventName: string, handler: (...args: unknown[]) => void) => QuillInstance;
+  on: QuillEventSubscriber;
+  once: QuillEventSubscriber;
+  off: QuillEventSubscriber;
 
   getLeaf: (index: number) => [LeafBlotInstance | null, number];
   getModule: {
@@ -190,9 +210,10 @@ export interface QuillInstance {
     clear: () => void;
     redo: () => void;
     undo: () => void;
+    stack: { undo: unknown[]; redo: unknown[] };
   };
 
-  keyboard: unknown;
+  keyboard: KeyboardModule;
   root: HTMLElement;
   container: HTMLElement;
   scrollingContainer: HTMLElement;
@@ -225,6 +246,7 @@ export interface QuillStatic {
     <T = unknown>(path: string): T;
   };
   MS_LIST_DATA_KEY: string;
+  replaceStyleAttribute: (html: string) => string;
   register: (
     modules: Record<string, unknown> | string | BlotConstructor | AttributorConstructor,
     overwrite?: boolean,
@@ -251,3 +273,40 @@ export interface QuillStatic {
 export type Quill = QuillStatic;
 
 export default Quill;
+
+/** A Quill keyboard binding (`modules/keyboard`): the key(s), the modifier state and the handler */
+export interface KeyboardBinding {
+  key?: string | string[];
+  which?: number;
+  altKey?: boolean | null;
+  ctrlKey?: boolean | null;
+  metaKey?: boolean | null;
+  shiftKey?: boolean | null;
+  shortKey?: boolean | null;
+  handler?: KeyboardBindingHandler;
+}
+
+/** What Quill's keyboard module passes to a binding handler after the selection range */
+export interface KeyboardBindingContext {
+  collapsed: boolean;
+  empty: boolean;
+  format: Record<string, unknown>;
+  line: BlotInstance;
+  offset: number;
+  prefix: string;
+  suffix: string;
+  event: KeyboardEvent;
+}
+
+/** A binding handler; Quill lets the browser handle the key only when it returns `true` */
+export type KeyboardBindingHandler = (
+  range: RangeStatic,
+  context: KeyboardBindingContext,
+  binding: KeyboardBinding,
+) => unknown;
+
+/** devextreme-quill `modules/keyboard` (`quill.keyboard`), as far as the modules use it */
+export interface KeyboardModule {
+  bindings: Record<string, KeyboardBinding[]>;
+  addBinding: (binding: KeyboardBinding, handler: KeyboardBindingHandler) => void;
+}
