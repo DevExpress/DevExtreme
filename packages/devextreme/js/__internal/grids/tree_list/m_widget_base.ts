@@ -11,9 +11,12 @@ import './grid_view';
 import './module_not_extended/header_panel';
 
 import registerComponent from '@js/core/component_registrator';
+import type { UserDefinedElement } from '@js/core/element';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { isMaterialBased } from '@js/ui/themes';
 import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
+import type { GridCoreHelper, Module } from '@ts/grids/grid_core/types';
 
 import treeListCore from './core';
 
@@ -60,22 +63,23 @@ treeListCore.registerModulesOrder([
 ]);
 
 class TreeList extends GridCoreWidget<dxTreeListOptions> {
-  private _initMarkup() {
+  private _initMarkup(): void {
     // @ts-expect-error
-    super._initMarkup.apply(this, arguments);
-    (this.$element() as any).addClass(TREELIST_CLASS);
+    super._initMarkup();
+    this.$element().addClass(TREELIST_CLASS);
     this.getView('gridView').render(this.$element());
   }
 
-  private static registerModule() {
-    treeListCore.registerModule.apply(treeListCore, arguments as any);
+  private static registerModule(name: string, module: Module): void {
+    treeListCore.registerModule(name, module);
   }
 
-  protected _defaultOptionsRules() {
+  protected _defaultOptionsRules(): DefaultOptionsRule<dxTreeListOptions>[] {
     // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- untyped in Widget d.ts
     return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           // @ts-expect-error
           return isMaterialBased();
         },
@@ -93,23 +97,20 @@ class TreeList extends GridCoreWidget<dxTreeListOptions> {
     ]);
   }
 
-  protected _init() {
-    const that = this;
-
+  protected _init(): void {
     super._init();
 
     // @ts-expect-error the widget has no index signature of the component instance
-    treeListCore.processModules(that, treeListCore);
+    treeListCore.processModules(this, treeListCore);
 
-    // @ts-expect-error the widget's _controllers and _views are private
     treeListCore.callModuleItemsMethod(this, 'init');
   }
 
-  protected getGridCoreHelper() {
+  protected getGridCoreHelper(): GridCoreHelper {
     return treeListCore;
   }
 
-  public focus(element?) {
+  public focus(element?: UserDefinedElement): void {
     this.getController('keyboardNavigation').focus(element);
   }
 }
