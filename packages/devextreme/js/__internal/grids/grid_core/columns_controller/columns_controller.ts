@@ -22,7 +22,7 @@ import type { Grouping, GroupPanel } from '@js/ui/data_grid';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import { applyDataTypePreset } from '@ts/core/global_format_config';
-import inflector from '@ts/core/utils/m_inflector';
+import inflector from '@ts/core/utils/inflector';
 import type { SortingInfo } from '@ts/data/utils';
 import type {
   BandColumnsCache,

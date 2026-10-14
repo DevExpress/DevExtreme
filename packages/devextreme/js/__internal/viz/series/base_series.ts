@@ -1088,10 +1088,10 @@ export let Series = class Series {
     });
 
     parsedOptions.label = getLabelOptions(labelOptions, styles.labelColor);
-    parsedOptions.label.format = applyDataTypePreset(parsedOptions.label.format, that.valueType);
+    parsedOptions.label.format = applyDataTypePreset(parsedOptions.label.format, this.valueType);
     parsedOptions.label.argumentFormat = applyDataTypePreset(
       parsedOptions.label.argumentFormat,
-      that.argumentType,
+      this.argumentType,
     );
 
     if (this.areErrorBarsVisible()) {
