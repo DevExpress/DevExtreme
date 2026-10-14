@@ -238,8 +238,7 @@ export default class ResizingModule extends BaseModule {
 
   clean(): void {
     this._detachEvents();
-    // @ts-expect-error the resize frame exists while enabled
-    this._$resizeFrame.remove();
+    this._$resizeFrame?.remove();
     this._$resizeFrame = undefined;
   }
 }
