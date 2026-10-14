@@ -364,7 +364,6 @@ class CollectionWidget<
     }
 
     const items = rawItems.map(({ element, options }) => {
-      // @ts-expect-error ts-error
       const isTemplateRequired = /\S/.test(element.innerHTML) && !options.template;
 
       if (isTemplateRequired) {
@@ -373,7 +372,6 @@ class CollectionWidget<
         $(element).remove();
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return options;
     });
 
