@@ -7,6 +7,7 @@ import {
   DEFAULT_FAILURE_MESSAGE,
   DEFAULT_SUCCESS_MESSAGE,
   EXECUTION_ABORT_MESSAGE,
+  MAX_COMMAND_ARGS_LENGTH,
 } from '@ts/grids/grid_core/ai_assistant/const';
 import { z } from '@ts/grids/grid_core/ai_assistant/zod';
 
@@ -54,6 +55,14 @@ export class GridCommands {
       status: 'failure',
       message: message ?? messageLocalization.format(DEFAULT_FAILURE_MESSAGE),
     };
+  }
+
+  private static isArgsLengthAllowed(args: unknown): boolean {
+    try {
+      return JSON.stringify(args).length <= MAX_COMMAND_ARGS_LENGTH;
+    } catch {
+      return false;
+    }
   }
 
   private static applyCustomizedResponseText(
@@ -165,6 +174,10 @@ export class GridCommands {
       const command = this.commands.get(action.name);
 
       if (!command || !isDefined(action.args) || !isObject(action.args)) {
+        return null;
+      }
+
+      if (!GridCommands.isArgsLengthAllowed(action.args)) {
         return null;
       }
 

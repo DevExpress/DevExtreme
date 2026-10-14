@@ -76,7 +76,7 @@ catalog:
   jquery: 4.0.0
   stylelint: 16.22.0
   testcafe: 3.7.5
-  zod: 4.6.5
+  zod: 4.6.7
   "@babel/eslint-parser": 7.29.7
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.3.5
