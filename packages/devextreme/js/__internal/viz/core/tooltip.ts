@@ -466,7 +466,7 @@ export let Tooltip = class Tooltip {
     }
   }
 
-  formatValue(value: ThemeValue, _specialFormat: string, dataType: string | undefined) {
+  formatValue(value: ThemeValue, _specialFormat?: string, dataType?: string): string {
     const options = _specialFormat ? getSpecialFormatOptions(this._options, _specialFormat) : this._options;
     return format(value, applyDataTypePreset(options.format, dataType));
   }
