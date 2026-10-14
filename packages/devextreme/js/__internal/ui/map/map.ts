@@ -475,7 +475,7 @@ class Map extends Widget<MapProperties> {
     removingValues: MapProperties['markers'] | MapProperties['routes'],
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<void> | Promise<any> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    // @ts-expect-error fromPromise returns a Deferred, not a Promise
     return fromPromise(new Promise((resolve) => {
       this._optionChangeBag = {
         resolve,

@@ -10,7 +10,7 @@ export interface Runner {
   fix: (name: string, source: string) => Result;
 }
 
-const packageRoot = process.cwd();
+const packageRoot = join(__dirname, '..');
 const stylelintBin = join(packageRoot, 'node_modules', '.bin', 'stylelint');
 
 const resolveFrom = (parent: string, request: string): string => (
@@ -24,7 +24,7 @@ const scssSyntax = resolveFrom(
 export const scss = (...rows: string[]): string => `${rows.join('\n')}\n`;
 
 export const createRunner = (pluginFile: string, ruleName: string): Runner => {
-  const fixture = mkdtempSync(join(tmpdir(), `${basename(pluginFile, '.mjs')}-`));
+  const fixture = mkdtempSync(join(tmpdir(), `${basename(pluginFile).replace(/\.[^.]+$/, '')}-`));
   const configPath = join(fixture, 'config.json');
   writeFileSync(configPath, JSON.stringify({
     customSyntax: scssSyntax,

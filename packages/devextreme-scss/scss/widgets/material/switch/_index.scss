@@ -2,7 +2,6 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
-@use "../../base/mixins" as *;
 @use "../../base/switch";
 @use "../../base/switch/mixins" as *;
 
@@ -36,7 +35,6 @@ $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color
 );
 @include dx-switch-rtl(
   $material-switch-height,
-  $material-switch-shadow-blur-radius,
   $material-switch-container-adjustment,
 );
 @include dx-switch-invalid(

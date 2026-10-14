@@ -86,6 +86,7 @@ $pivotgrid-common-field-chooser-drag-height: null !default;
 
   .dx-area-field-content {
     display: inline-block;
+    white-space: nowrap;
   }
 
   .dx-column-indicators {
@@ -118,10 +119,6 @@ $pivotgrid-common-field-chooser-drag-height: null !default;
   }
 
   .dx-area-field {
-    white-space: nowrap;
-  }
-
-  .dx-area-field-content { // stylelint-disable-line no-duplicate-selectors
     white-space: nowrap;
   }
 
@@ -184,6 +181,14 @@ $pivotgrid-common-field-chooser-drag-height: null !default;
     &.dx-layout-0 {
       flex-direction: column;
     }
+
+    .dx-row:nth-child(1) {
+      flex-grow: 2;
+    }
+
+    .dx-row:nth-child(2) {
+      flex-grow: 1;
+    }
   }
 
   .dx-pivotgridfieldchooser-container.dx-layout-2 {
@@ -211,17 +216,6 @@ $pivotgrid-common-field-chooser-drag-height: null !default;
     display: flex;
     flex-direction: row;
     height: 0;
-  }
-
-  // stylelint-disable no-duplicate-selectors
-  .dx-pivotgridfieldchooser-container {
-    .dx-row:nth-child(1) {
-      flex-grow: 2;
-    }
-
-    .dx-row:nth-child(2) {
-      flex-grow: 1;
-    }
   }
 }
 

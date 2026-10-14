@@ -1,4 +1,3 @@
-@use "sass:math";
 @use "../mixins" as *;
 @use "variables" as *;
 @use "layout/cell" as *;
@@ -150,7 +149,7 @@
         font-size: $grid-column-chooser-title-font-size;
 
         .dx-toolbar-label {
-          font-size: $grid-column-chooser-title-font-size;
+          font-size: $grid-column-chooser-title-label-font-size;
         }
       }
 

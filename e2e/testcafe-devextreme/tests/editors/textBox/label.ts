@@ -97,11 +97,8 @@ test('Textbox render', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
-    // eslint-disable-next-line no-restricted-syntax
     for (const labelMode of visibleLabelModes) {
-      // eslint-disable-next-line no-restricted-syntax
       for (const placeholder of ['Placeholder', '']) {
         await createTextBox({
           text: undefined,
@@ -114,7 +111,7 @@ test('Textbox render', async (t) => {
       await createTextBox({ text: 'Text value' });
       await createTextBox({ rtlEnabled: true });
     }
-    // eslint-disable-next-line no-restricted-syntax
+
     for (const placeholder of ['Placeholder', '']) {
       await createTextBox({
         text: undefined,
@@ -146,9 +143,8 @@ test('Textbox states', async (t) => {
     INVALID_STATE_CLASS,
     `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
   ];
-  // eslint-disable-next-line no-restricted-syntax
+
   for (const state of states) {
-    // eslint-disable-next-line no-restricted-syntax
     for (const placeholder of ['Placeholder', '']) {
       await createTextBox({
         text: undefined,
@@ -176,9 +172,7 @@ test('Textbox with buttons container', async (t) => {
     await insertStylesheetRulesToPage('#container .dx-widget { font-family: sans-serif }');
   }
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
-    // eslint-disable-next-line no-restricted-syntax
     for (const buttons of buttonsList) {
       await createTextBox({ stylingMode, buttons, showClearButton: true });
       await createTextBox({

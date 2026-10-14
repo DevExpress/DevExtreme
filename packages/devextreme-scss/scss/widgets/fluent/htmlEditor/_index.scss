@@ -5,8 +5,6 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as *;
-@use "../button/colors" as *;
-@use "../buttonGroup/colors" as *;
 @use "../textEditor/colors" as *;
 @use "../textEditor/index" as *;
 @use "../toolbar/sizes" as *;
@@ -15,7 +13,9 @@
 @use "../fileUploader/sizes" as *;
 @use "../popup/sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/htmlEditor";
+@use "../../base/htmlEditor" with (
+  $htmleditor-content-padding: $fluent-html-editor-vertical-padding $fluent-html-editor-horizontal-padding,
+);
 
 .dx-htmleditor {
   border-color: transparent;
@@ -123,7 +123,6 @@
 
 .dx-htmleditor-content {
   line-height: $fluent-line-height;
-  padding: $fluent-html-editor-vertical-padding $fluent-html-editor-horizontal-padding;
 
   &.ql-blank::before { // stylelint-disable-line selector-class-pattern
     color: $texteditor-placeholder-color;

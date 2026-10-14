@@ -1,5 +1,5 @@
 @use "../sizes" as *;
-@use "../list/colors" as *;
+@use "../list/colors";
 
 $material-list-vertical-padding: null !default;
 $material-list-item-height: null !default;

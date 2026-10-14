@@ -110,6 +110,7 @@ import type {
   InsertInfo,
   InternalEditData,
   NormalizedEditCellOptions,
+  OnSavingResult,
 } from './types';
 
 class EditingControllerImpl extends modules.ViewController {
@@ -1575,13 +1576,11 @@ class EditingControllerImpl extends modules.ViewController {
       changes: [...this.getChanges()],
     };
     this.executeAction('onSaving', onSavingParams);
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred<OnSavingResult>();
     when(fromPromise(onSavingParams.promise))
       .done(() => {
         d.resolve(onSavingParams);
       }).fail((arg) => {
-        createFailureHandler(d);
         this._fireDataErrorOccurred(arg);
         d.resolve({ cancel: true });
       });

@@ -1,5 +1,3 @@
-@use "sass:math";
-@use "sass:meta";
 @use "../mixins" as *;
 
 $diagram-root-height: 600px !default;
@@ -323,8 +321,9 @@ $diagram-toolbox-input-font-size: 0.9em !default;
 
 .dx-diagram-loading-indicator {
   position: absolute;
-  top: calc(50% - 32px);
-  left: calc(50% - 32px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: $diagram-loading-indicator-width;
   height: $diagram-loading-indicator-height;
 }

@@ -1,4 +1,3 @@
-@use "sass:math";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -30,10 +29,6 @@
   &::after {
     content: none;
   }
-}
-
-.dx-radio-value-container {
-  padding-inline-end: $fluent-radio-value-container-padding;
 }
 
 .dx-state-readonly {

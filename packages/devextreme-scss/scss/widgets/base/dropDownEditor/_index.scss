@@ -1,6 +1,4 @@
 @use "sass:selector";
-@use "../mixins" as *;
-@use "./mixins" as *;
 @use "../textEditor/mixins" as *;
 
 $dropdowneditor-icon-idle-opacity: null !default;

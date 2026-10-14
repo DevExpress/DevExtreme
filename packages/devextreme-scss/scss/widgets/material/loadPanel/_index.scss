@@ -1,13 +1,14 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../../base/loadPanel";
+@use "../../base/loadPanel" with (
+  $loadpanel-content-padding: 13px,
+);
 @use "../overlay";
 
 .dx-loadpanel-content {
   border: 1px solid;
   border-color: $loadpanel-border-color;
   background: $loadpanel-content-bg;
-  padding: 13px;
   border-radius: 50%;
   box-shadow: 0 6px 12px $loadpanel-content-shadow-color;
 }

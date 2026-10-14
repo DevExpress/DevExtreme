@@ -3,10 +3,8 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../textEditor/sizes" as *;
-@use "../textEditor/colors" as *;
 @use "../../base/numberBox" with (
-  $numberbox-spin-idle-opacity: 0.2,
+  $numberbox-spin-idle-opacity: 1,
 );
 @use "../textEditor" as *;
 
@@ -26,10 +24,6 @@
 .dx-numberbox-spin-container {
   overflow: hidden;
   width: $fluent-numberbox-spin-container-width;
-
-  .dx-state-disabled & {
-    opacity: 1;
-  }
 }
 
 .dx-numberbox-spin-up-icon {
