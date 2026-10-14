@@ -36,7 +36,6 @@ $scheduler-appointment-popup-repeat-end-item-vertical-margin: null !default;
 $agenda-appointment-recurrence-icon-color: null !default;
 
 @use "./layout/header" as *;
-@use "./mixins" as *;
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 $scheduler-common-collector-margin: 0 3px !default;
