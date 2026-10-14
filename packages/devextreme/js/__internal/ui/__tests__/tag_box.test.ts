@@ -71,8 +71,9 @@ describe('TagBox', () => {
   });
 
   describe('isDirty when the value order differs from the data order (T1336605)', () => {
-    it('should stay false after the delayed data load selects the value items in the list', () => {
+    it('should stay false without replacing the value after the delayed data load selects the value items in the list', () => {
       const tagBox = createTagBox({ value: [3, 2] });
+      const initialValue = tagBox.getValue();
 
       jest.runAllTimers();
 
@@ -80,6 +81,7 @@ describe('TagBox', () => {
 
       expect(tagTexts).toEqual(['Arthur Miller', 'Samantha Bright']);
       expect(tagBox.getSelectedListItems()).toHaveLength(2);
+      expect(tagBox.getValue()).toBe(initialValue);
       expect(tagBox.getInstance().option('isDirty')).toBe(false);
     });
 
@@ -102,8 +104,8 @@ describe('TagBox', () => {
 
       const tagTexts = Array.from(tagBox.getTags()).map((tag) => tag.textContent);
 
-      expect(tagTexts).toEqual(['Samantha Bright']);
       expect(tagBox.getValue()).toEqual([2, 99]);
+      expect(tagTexts).toEqual(['Samantha Bright']);
     });
   });
 });

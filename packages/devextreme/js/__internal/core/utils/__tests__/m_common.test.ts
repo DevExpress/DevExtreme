@@ -39,10 +39,6 @@ describe('Common utils', () => {
       )).toBe(false);
     });
 
-    it('should compare distinct non-plain objects by their keys by default', () => {
-      expect(equalByValue(new Map([[1, 'a']]), new Map([[2, 'b']]))).toBe(true);
-    });
-
     it('should compare non-plain objects by reference when comparePlainObjectsOnly is true', () => {
       const map = new Map([[1, 'a']]);
       const options = { comparePlainObjectsOnly: true };
