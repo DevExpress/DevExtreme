@@ -1,7 +1,7 @@
 export const THEME_NAME = 'fluent';
 export const THEME_FOLDER = 'fluent-next';
 
-export const getThemeCommonFiles = () => [
+export const getThemeCommonFiles = (): string[] => [
   'base/borders',
   'base/opacity',
   'base/spacing',
@@ -24,11 +24,11 @@ export const getThemeCommonFiles = () => [
   `figma-utils/icon/set/${THEME_NAME}`,
 ];
 
-export const getModeFiles = (mode) => [
+export const getModeFiles = (mode: string): string[] => [
   ...getThemeCommonFiles(),
   `base/colors/icons/${THEME_NAME}/${mode}`,
   `base/colors/palettes/${THEME_NAME}/blue`,
   `semantic/colors/${THEME_NAME}/${mode}`,
 ];
 
-export const getBridgeFiles = () => getModeFiles('light');
+export const getBridgeFiles = (): string[] => getModeFiles('light');

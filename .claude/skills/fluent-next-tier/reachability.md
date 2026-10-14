@@ -38,7 +38,7 @@ trusting a local green. Inputs besides the bundle: `registries.rootSelectors`, i
    dialog in `body` — the variable is missing there. The text cannot tell the two apart, so this is a
    prompt to check: open the widget in that state and confirm in the DOM that the element sits inside
    the root. Then either add the scope to `nested-scopes.json["X"]`, or, if it is a portal, add its
-   class to `OVERRIDES.rootSelectors` in `derive-registries.mjs` (the tier is then declared on it too)
+   class to `OVERRIDES.rootSelectors` in `derive-registries.ts` (the tier is then declared on it too)
    or read a Sass twin / `:root` value in that branch. `--update-scopes` writes every current scope in
    one go — use it only after the checks, never as a way to turn CI green.
 4. **`portal: .<scope> is another widget's overlay`** — a scope named after another widget's overlay

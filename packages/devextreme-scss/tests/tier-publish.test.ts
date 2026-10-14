@@ -411,7 +411,7 @@ describe('planPublication', () => {
     test('a publishing component without root selectors', () => {
       const result = plan(badge(), {}, { rootSelectors: { common: [':root'], typography: [':root'] } });
       expect(result.problems).toEqual([
-        'badge publishes from badge/ but has no rootSelectors — add it to derive-registries.mjs OVERRIDES',
+        'badge publishes from badge/ but has no rootSelectors — add it to derive-registries.ts OVERRIDES',
       ]);
     });
 
@@ -486,8 +486,8 @@ describe('parseLinksFile', () => {
   });
 });
 
-test('publish.mjs --check passes on the committed tree', () => {
-  const output = execFileSync(process.execPath, ['tools/naming/publish.mjs', '--check'], {
+test('publish.ts --check passes on the committed tree', () => {
+  const output = execFileSync(process.execPath, ['tools/naming/publish.ts', '--check'], {
     cwd: join(__dirname, '..'),
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],

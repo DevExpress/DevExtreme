@@ -1,6 +1,6 @@
 # tokens:update
 
-`tools/tokens/update.mjs` is one command for a design-token package bump
+`tools/tokens/update.ts` is one command for a design-token package bump
 (`@devexpress/design-tokens-internal`) and the report that goes with it.
 
 ```
@@ -13,8 +13,8 @@ pnpm run tokens:update --report   # the same, stated explicitly
 
 - Edits the dependency and its `minimumReleaseAgeExclude` entry (pnpm refuses a release younger than
   `minimumReleaseAge`, so the bump carries its own exclusion), reinstalls and rebuilds the token layer
-  (`build/tokens/build-tokens.mjs` → `scss/_design-system/`).
-- Runs `derive-registries.mjs --check` read-only and prints the report. The diffing and the markdown
+  (`build/tokens/build-tokens.ts` → `scss/_design-system/`).
+- Runs `derive-registries.ts --check` read-only and prints the report. The diffing and the markdown
   live in `tools/tokens/report.ts`, covered by `tests/tokens-report.test.ts`.
 
 The report answers the expensive question — what the new package did:

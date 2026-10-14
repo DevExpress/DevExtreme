@@ -1,11 +1,11 @@
-# derive-registries.mjs
+# derive-registries.ts
 
-`tools/naming/derive-registries.mjs` writes `tools/naming/registries.json`, the single source of truth
+`tools/naming/derive-registries.ts` writes `tools/naming/registries.json`, the single source of truth
 for the fluent-next naming standard.
 
 ```
-node tools/naming/derive-registries.mjs          # writes registries.json   (pnpm run naming:registries)
-node tools/naming/derive-registries.mjs --check  # fails if the committed file is stale
+node tools/naming/derive-registries.ts          # writes registries.json   (pnpm run naming:registries)
+node tools/naming/derive-registries.ts --check  # fails if the committed file is stale
 ```
 
 ## Where the data comes from
@@ -46,7 +46,7 @@ and the script refuses them:
 
 | Fields | Read by |
 |---|---|
-| `components`, `declarationHome`, `systemTier`, `rootSelectors`, `exemptFolders`, `migrated`, `sassOnly` | `tools/naming/tier.ts` → `publish.mjs` (the generator) |
+| `components`, `declarationHome`, `systemTier`, `rootSelectors`, `exemptFolders`, `migrated`, `sassOnly` | `tools/naming/tier.ts` → `publish.ts` (the generator) |
 | `rootSelectors` | `tools/review/reachability.ts` |
 | `systemFolders` | `tests/disabled-paint.test.ts` |
 | the grammar vocabularies, `chassis`, `embeds`, `systemConcerns`, `themeIdentity` | `tests/fluent-next-naming.test.ts` |
@@ -54,7 +54,7 @@ and the script refuses them:
 
 ## Failures
 
-- **`registries.json is stale — run node tools/naming/derive-registries.mjs`** — the committed file
+- **`registries.json is stale — run node tools/naming/derive-registries.ts`** — the committed file
   differs from what the script builds now: `OVERRIDES` changed, a theme folder was added or removed,
   or the token package was bumped. Regenerate with `pnpm run naming:registries` (build the themes
   first, see below) and review the JSON diff.

@@ -48,6 +48,13 @@ export default [
   },
 
   ...typescriptFor(['build/**/*.ts', 'tools/**/*.ts'], './tsconfig.json'),
+  {
+    files: ['build/**/*.ts', 'tools/**/*.ts'],
+    rules: {
+      'import/extensions': ['error', 'ignorePackages', { ts: 'always' }],
+      'no-console': 'off',
+    },
+  },
 
   ...typescriptFor(['tests/**/*.ts'], './tests/tsconfig.json'),
   ...jestConfig.map((config) => ({ ...config, files: ['tests/**/*.ts'] })),
@@ -68,14 +75,7 @@ export default [
   },
 
   {
-    files: ['tools/**/*.mjs', 'build/**/*.mjs'],
-    rules: {
-      'no-console': 'off',
-    },
-  },
-
-  {
-    files: ['tools/stylelint/*.mjs'],
+    files: ['tools/stylelint/*.ts'],
     rules: {
       'no-param-reassign': ['error', {
         props: true,
@@ -85,16 +85,7 @@ export default [
   },
 
   {
-    files: ['**/*.mjs'],
-    rules: {
-      'import/no-unresolved': ['error', {
-        ignore: ['^style-dictionary(/|$)', '^@tokens-studio/sd-transforms$'],
-      }],
-    },
-  },
-
-  {
-    files: ['build/tokens/transforms.mjs', 'build/tokens/build-tokens.mjs'],
+    files: ['build/tokens/transforms.ts', 'build/tokens/build-tokens.ts'],
     rules: {
       'no-param-reassign': ['error', {
         props: true,

@@ -36,7 +36,7 @@
     "build:tokens": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node build/tokens/build-tokens.mjs",
+        "command": "node build/tokens/build-tokens.ts",
         "cwd": "packages/devextreme-scss"
       },
       "inputs": [

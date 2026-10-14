@@ -2,6 +2,10 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "noEmit": true,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "skipLibCheck": true,
+        "rewriteRelativeImportExtensions": true,
         "resolveJsonModule": true,
         "lib": [
             "es2022"

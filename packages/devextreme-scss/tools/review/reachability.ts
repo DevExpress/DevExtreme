@@ -185,7 +185,7 @@ unreviewed.forEach(([key, example]) => {
   const [component, scope] = key.split(' :: ');
   process.stdout.write(`✘ scope outside the roots of ${component}: .${scope}\n`);
   process.stdout.write(`     example: ${example}\n`);
-  process.stdout.write('     cure: either add the root to OVERRIDES.rootSelectors (derive-registries.mjs),\n');
+  process.stdout.write('     cure: either add the root to OVERRIDES.rootSelectors (derive-registries.ts),\n');
   process.stdout.write(`     or, having confirmed in the live widget that the element is nested in the root, add "${scope}" to nested-scopes.json["${component}"]\n`);
 });
 
