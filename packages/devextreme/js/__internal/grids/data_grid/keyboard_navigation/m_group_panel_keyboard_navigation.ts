@@ -13,6 +13,7 @@ import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
 import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/types';
 import type { Views } from '@ts/grids/grid_core/types';
+import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 
 import gridCore from '../core';
 import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
@@ -127,14 +128,12 @@ export class GroupPanelKeyboardNavigationController
     return isHandled;
   }
 
-  protected renderCompleted(e?: unknown): void {
-    const { needToRestoreFocus } = this;
-
+  protected renderCompleted(e?: ViewDataChange): void {
     super.renderCompleted(e);
     this.unsubscribeFromGroupItemClick();
     this.subscribeToGroupItemClick();
 
-    if (!needToRestoreFocus && this.isNeedToHiddenFocusAfterClick) {
+    if (!this.needToRestoreFocus && this.isNeedToHiddenFocusAfterClick) {
       const $focusElement = this._getFocusedCell();
 
       if ($focusElement?.length) {

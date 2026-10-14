@@ -16,6 +16,7 @@ import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { Controllers, OptionChanged, Views } from '../types';
 import type { ColumnsView } from '../views/columns_view';
+import type { ViewDataChange } from '../views/types';
 import { Direction } from './const';
 import type { FocusedCellPosition, HorizontalBounds, NavigationDirection } from './types';
 import { isElementDefined, isFixedColumnIndexOffsetRequired } from './utils';
@@ -292,7 +293,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
-  protected renderCompleted(e?: unknown): void {
+  protected renderCompleted(e?: ViewDataChange): void {
     this.initKeyDownHandler();
 
     this.unsubscribeFromFocusinEvent();
