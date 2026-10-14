@@ -1,18 +1,54 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { camelize, titleize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
 import { isObject, isString } from '@js/core/utils/type';
-import type { Item } from '@js/ui/context_menu';
+import type { DxEvent } from '@js/events';
+import type { InitializedEvent } from '@js/ui/context_menu';
 import ContextMenu from '@js/ui/context_menu';
+import type {
+  ContextMenuItem,
+  dxHtmlEditorTableContextMenu,
+  HtmlEditorPredefinedContextMenuItem,
+} from '@js/ui/html_editor';
 import Quill from 'devextreme-quill';
 
+import type { FormatHandlers } from '../types';
+import type { QuillInstance } from '../types/quill';
 import { getTableFormats } from '../utils/m_table_helper';
 import { getDefaultClickHandler, getFormatHandlers, ICON_MAP } from '../utils/m_toolbar_helper';
+import type { BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
+
+/** What HtmlEditor passes to the module: the `tableContextMenu` option over the base config */
+interface TableContextMenuModuleOptions extends BaseModuleOptions, dxHtmlEditorTableContextMenu {}
+
+type ContextMenuItems = dxHtmlEditorTableContextMenu['items'];
+
+/** The format handler a predefined item name maps to */
+type PredefinedItemHandler = FormatHandlers[
+  HtmlEditorPredefinedContextMenuItem & keyof FormatHandlers
+];
+
+/** A predefined item name turned into a menu item */
+interface MenuItemConfig {
+  text: string;
+  icon: string;
+  onClick: PredefinedItemHandler;
+}
+
+/** The ContextMenu configuration (`Properties` types `items` as plain context menu items) */
+interface TableContextMenuConfig {
+  target: dxElementWrapper;
+  showEvent: null;
+  hideOnParentScroll: boolean;
+  onInitialized: (e: InitializedEvent) => void;
+  items: ContextMenuItem[];
+}
 
 const MODULE_NAMESPACE = 'dxHtmlEditorTableContextMenu';
 
@@ -20,27 +56,25 @@ const CONTEXT_MENU_EVENT = addNamespace('dxcontextmenu', MODULE_NAMESPACE);
 // eslint-disable-next-line import/no-mutable-exports
 let TableContextMenuModule = BaseModule;
 
-const localize = (name) => localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
+const localize = (name: string): string => localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
 
 if (Quill) {
-  TableContextMenuModule = class TableContextMenuModule extends BaseModule {
-    quill: any;
-
-    editorInstance: any;
+  TableContextMenuModule = class extends BaseModule {
+    declare options: TableContextMenuModuleOptions;
 
     enabled: boolean;
 
-    _quillContainer: any;
+    _quillContainer: dxElementWrapper;
 
-    _formatHandlers: any;
+    _formatHandlers: FormatHandlers;
 
-    _tableFormats: any;
+    _tableFormats: string[];
 
     _contextMenu!: ContextMenu;
 
-    _targetElement: any;
+    _targetElement?: Element | null;
 
-    constructor(quill, options) {
+    constructor(quill: QuillInstance, options: TableContextMenuModuleOptions) {
       super(quill, options);
       this.enabled = !!options.enabled;
       this._quillContainer = this.editorInstance._getQuillContainer();
@@ -53,46 +87,57 @@ if (Quill) {
       }
     }
 
-    _enableContextMenu(items?: Item[]) {
+    _enableContextMenu(items?: ContextMenuItems): void {
       this._contextMenu?.dispose();
       this._contextMenu = this._createContextMenu(items);
 
       this._attachEvents();
     }
 
-    _attachEvents() {
-      eventsEngine.on(this.editorInstance._getContent(), CONTEXT_MENU_EVENT, this._prepareContextMenuHandler());
+    _attachEvents(): void {
+      eventsEngine.on(
+        this.editorInstance._getContent(),
+        CONTEXT_MENU_EVENT,
+        this._prepareContextMenuHandler(),
+      );
     }
 
-    _detachEvents() {
+    _detachEvents(): void {
       eventsEngine.off(this.editorInstance._getContent(), CONTEXT_MENU_EVENT);
     }
 
-    _onContextMenuInitialized(e) {
+    _onContextMenuInitialized(e: InitializedEvent): void {
+      // @ts-expect-error component is optional in InitializedEventInfo; it is always set
       e.component.registerKeyHandler('escape', () => {
         this.editorInstance.focus();
       });
     }
 
-    _createContextMenu(items) {
+    _createContextMenu(items?: ContextMenuItems): ContextMenu {
       const $container = $('<div>').appendTo(this.editorInstance.$element());
       const menuConfig = this._getMenuConfig(items);
 
-      return this.editorInstance._createComponent($container, ContextMenu, menuConfig);
+      return this.editorInstance._createComponent<ContextMenu, TableContextMenuConfig>(
+        $container,
+        ContextMenu,
+        menuConfig,
+      );
     }
 
-    showPropertiesForm(type = 'cell') {
+    showPropertiesForm(type: 'cell' | 'table' = 'cell'): void {
       const $element = $(this._targetElement).closest(type === 'cell' ? 'th, td' : 'table');
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
       this._contextMenu.hide();
       this._formatHandlers[`${type}Properties`]($element);
       this._targetElement = null;
     }
 
-    _isAcceptableItem(widget, acceptableWidgetName) {
+    _isAcceptableItem(widget: string | undefined, acceptableWidgetName: string): boolean {
       return !widget || widget === acceptableWidgetName;
     }
 
-    _handleObjectItem(item) {
+    _handleObjectItem(item: ContextMenuItem): ContextMenuItem {
+      // @ts-expect-error widget is not a ContextMenuItem property (see Findings)
       if (item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
         const defaultButtonItemConfig = this._prepareMenuItemConfig(item.name);
         const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
@@ -105,21 +150,23 @@ if (Quill) {
       return item;
     }
 
-    _prepareMenuItemConfig(name) {
-      const iconName = ICON_MAP[name] ?? name;
+    _prepareMenuItemConfig(name: HtmlEditorPredefinedContextMenuItem): MenuItemConfig {
+      const iconName: string = ICON_MAP[name] ?? name;
       const buttonText = titleize(name);
+      const formatHandler: PredefinedItemHandler | undefined = this._formatHandlers[name];
 
       return {
         text: localize(buttonText),
         icon: iconName.toLowerCase(),
-        onClick: this._formatHandlers[name] ?? getDefaultClickHandler(this, name),
+        onClick: formatHandler ?? getDefaultClickHandler(this, name),
       };
     }
 
-    _prepareMenuItems(items) {
-      const resultItems: Item[] = [];
+    _prepareMenuItems(items: NonNullable<ContextMenuItems>): ContextMenuItem[] {
+      const resultItems: ContextMenuItem[] = [];
       each(items, (_, item) => {
-        let newItem;
+        // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-chain
+        let newItem: ContextMenuItem | undefined;
         if (isObject(item)) {
           newItem = this._handleObjectItem(item);
         } else if (isString(item)) {
@@ -133,8 +180,8 @@ if (Quill) {
       return resultItems;
     }
 
-    _getMenuConfig(items) {
-      const defaultItems = [
+    _getMenuConfig(items?: ContextMenuItems): TableContextMenuConfig {
+      const defaultItems: NonNullable<ContextMenuItems> = [
         {
           text: localize('insert'),
           items: [
@@ -163,27 +210,28 @@ if (Quill) {
         target: this._quillContainer,
         showEvent: null,
         hideOnParentScroll: false,
-        onInitialized: (e) => {
+        onInitialized: (e: InitializedEvent): void => {
           this._onContextMenuInitialized(e);
         },
         items: customItems,
       };
     }
 
-    _prepareContextMenuHandler() {
-      return (event) => {
+    _prepareContextMenuHandler(): (event: DxEvent<MouseEvent>) => void {
+      return (event: DxEvent<MouseEvent>): void => {
         if (this._isTableTarget(event.target)) {
           this._targetElement = event.target;
           this._setContextMenuPosition(event);
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
           this._contextMenu.show();
           event.preventDefault();
         }
       };
     }
 
-    _setContextMenuPosition(event) {
+    _setContextMenuPosition(event: DxEvent<MouseEvent>): void {
       const startPosition = this._quillContainer.get(0).getBoundingClientRect();
-      // @ts-expect-error
+      // @ts-expect-error 'fit fit' is not in CollisionResolutionCombination (see Findings)
       this._contextMenu.option({
         position: {
           my: 'left top',
@@ -194,30 +242,38 @@ if (Quill) {
       });
     }
 
-    _isTableTarget(targetElement) {
+    _isTableTarget(targetElement: Element): boolean {
       return !!$(targetElement).closest('.dx-htmleditor-content td, .dx-htmleditor-content th').length;
     }
 
-    clean() {
+    clean(): void {
       this._detachEvents();
     }
 
-    option(option, value) {
+    option(option: 'tableContextMenu', value: unknown): void;
+    option(option: 'enabled', value: boolean): void;
+    option(option: 'items', value: ContextMenuItems): void;
+    option(option: string, value: unknown): void;
+    option(option: string, value: unknown): void {
       if (option === 'tableContextMenu') {
         this.handleOptionChangeValue(value);
         return;
       }
 
       if (option === 'enabled') {
-        this.enabled = value;
-        value ? this._enableContextMenu() : this.clean();
+        this.enabled = value as boolean;
+        if (value) {
+          this._enableContextMenu();
+        } else {
+          this.clean();
+        }
       } else if (option === 'items') {
         this._contextMenu?.dispose();
-        this._contextMenu = this._createContextMenu(value);
+        this._contextMenu = this._createContextMenu(value as ContextMenuItems);
       }
     }
 
-    prepareCleanCallback() {
+    prepareCleanCallback(): () => void {
       return () => {
         this.clean();
       };

@@ -1,18 +1,83 @@
+import type { PositionConfig } from '@js/common/core/animation';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { compileGetter } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { isString } from '@js/core/utils/type';
-import type List from '@js/ui/list';
-import type Popup from '@js/ui/popup';
+import type { DxEvent } from '@js/events';
+import type { dxHtmlEditorMention } from '@js/ui/html_editor';
+import type { Properties as ListProperties } from '@js/ui/list';
+import type { Properties as PopupProperties } from '@js/ui/popup';
+import type List from '@ts/ui/list/list.edit.search';
 import Quill from 'devextreme-quill';
 
 import Mention from '../formats/m_mention';
+import type {
+  Delta,
+  DeltaConstructor,
+  DeltaOperation,
+  KeyboardModule,
+  QuillInstance,
+} from '../types/quill';
+import type { BaseHtmlEditorModule, BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
 import PopupModule from './m_popup';
+
+/** `_getDefaultOptions()`: the popup module's defaults plus the mention ones */
+interface MentionModuleDefaults {
+  dataSource: null;
+  itemTemplate: string;
+  valueExpr: string;
+  displayExpr: string;
+  template: null;
+  searchExpr: null;
+  searchTimeout: number;
+  minSearchLength: number;
+}
+
+/** What HtmlEditor passes to the module: `mentions` is an array (see _getModuleConfigByOption) */
+interface MentionModuleOptionsInput extends BaseModuleOptions {
+  mentions: dxHtmlEditorMention[];
+}
+
+/** `this.options`: the module options merged over `_getDefaultOptions()` by the popup module */
+interface MentionModuleOptions extends MentionModuleOptionsInput, MentionModuleDefaults {}
+
+type MentionModuleClass = new (
+  quill: QuillInstance,
+  options: MentionModuleOptionsInput,
+) => BaseHtmlEditorModule;
+
+/** One `mentions` item merged over `_getDefaultOptions()`, stored by its marker */
+interface MentionConfig extends Omit<dxHtmlEditorMention, 'template' | 'searchExpr'> {
+  marker: string;
+  itemTemplate: NonNullable<dxHtmlEditorMention['itemTemplate']>;
+  valueExpr: NonNullable<dxHtmlEditorMention['valueExpr']>;
+  displayExpr: NonNullable<dxHtmlEditorMention['displayExpr']>;
+  template: NonNullable<dxHtmlEditorMention['template']> | null;
+  searchExpr: NonNullable<dxHtmlEditorMention['searchExpr']> | null;
+  searchTimeout: number;
+  minSearchLength: number;
+}
+
+/** A compiled `displayExpr`/`valueExpr` getter */
+type ItemGetter = (item: unknown) => unknown;
+
+type MoveDirection = 'prev' | 'next';
+
+/** The popup position over the marker; PositionConfig has no `v` offset and no "top left" order */
+interface MentionPopupPosition {
+  of: DxEvent;
+  offset: { v: number };
+  my: 'top left';
+  at: 'top left';
+  collision: PositionConfig['collision'];
+}
+
 // eslint-disable-next-line import/no-mutable-exports
-let MentionModule = BaseModule;
+let MentionModule: MentionModuleClass = BaseModule;
 
 if (Quill) {
   const USER_ACTION = 'user';
@@ -46,50 +111,51 @@ if (Quill) {
   const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
   Quill.register({ 'formats/mention': Mention }, true);
-  MentionModule = class MentionModule extends PopupModule {
-    quill: any;
+  MentionModule = class extends PopupModule {
+    declare options: MentionModuleOptions;
 
-    editorInstance: any;
+    declare _list: List;
 
-    _searchTimer: any;
+    _searchTimer?: ReturnType<typeof setTimeout>;
 
-    options: any;
-
-    _mentions: any;
-
-    _list!: List;
-
-    _popup!: Popup;
+    _mentions: Record<string, MentionConfig>;
 
     _isMentionActive?: boolean;
 
-    _valueGetter: any;
+    _valueGetter!: ItemGetter;
 
-    _idGetter: any;
+    _idGetter!: ItemGetter;
 
-    _searchValue: any;
+    _searchValue!: string;
 
-    _activeMentionConfig: any;
+    _activeMentionConfig!: MentionConfig;
 
     _hasSearch?: boolean;
 
-    constructor(quill, options) {
+    constructor(quill: QuillInstance, options: MentionModuleOptionsInput) {
       super(quill, options);
       this._mentions = {};
 
       options.mentions.forEach((item) => {
         let { marker } = item;
         if (!marker) {
-          item.marker = marker = DEFAULT_MARKER;
+          marker = DEFAULT_MARKER;
+          item.marker = marker;
         }
 
         const { template } = item;
         if (template) {
           const preparedTemplate = this.editorInstance._getTemplate(template);
-          // @ts-expect-error
-          preparedTemplate && Mention.addTemplate({ marker, editorKey: this.editorInstance.getMentionKeyInTemplateStorage() }, preparedTemplate);
+          if (preparedTemplate) {
+            // @ts-expect-error Mention is a QuillDependent: the no-Quill stand-in has no templates
+            Mention.addTemplate({
+              marker,
+              editorKey: this.editorInstance.getMentionKeyInTemplateStorage(),
+            }, preparedTemplate);
+          }
         }
 
+        // @ts-expect-error marker is set above when the item has none; extend() keeps it optional
         this._mentions[marker] = extend({}, this._getDefaultOptions(), item);
       });
 
@@ -98,10 +164,10 @@ if (Quill) {
       this.quill.on('text-change', this.onTextChange.bind(this));
     }
 
-    _getDefaultOptions() {
-      // @ts-expect-error
+    _getDefaultOptions(): MentionModuleDefaults {
       const baseConfig = super._getDefaultOptions();
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- baseConfig is untyped
       return extend(baseConfig, {
         itemTemplate: 'item',
         valueExpr: 'this',
@@ -113,41 +179,44 @@ if (Quill) {
       });
     }
 
-    _attachKeyboardHandlers() {
-      this.quill.keyboard.addBinding({
+    _attachKeyboardHandlers(): void {
+      const keyboardModule: KeyboardModule = this.quill.keyboard;
+
+      keyboardModule.addBinding({
         key: KEYS.ARROW_UP,
       }, this._moveToItem.bind(this, 'prev'));
 
-      this.quill.keyboard.addBinding({
+      keyboardModule.addBinding({
         key: KEYS.ARROW_DOWN,
       }, this._moveToItem.bind(this, 'next'));
 
-      this.quill.keyboard.addBinding({
+      keyboardModule.addBinding({
         key: [KEYS.ENTER, KEYS.SPACE],
       }, this._selectItemHandler.bind(this));
 
-      const enterBindings = this.quill.keyboard.bindings[KEYS.ENTER];
+      const enterBindings = keyboardModule.bindings[KEYS.ENTER];
+      // @ts-expect-error pop() is typed as possibly undefined; the binding added above is there
       enterBindings.unshift(enterBindings.pop());
 
-      this.quill.keyboard.addBinding({
+      keyboardModule.addBinding({
         key: KEYS.ESCAPE,
       }, this._escapeKeyHandler.bind(this));
 
-      this.quill.keyboard.addBinding({
+      keyboardModule.addBinding({
         key: [KEYS.ARROW_LEFT, KEYS.ARROW_RIGHT],
         shiftKey: true,
       }, this._ignoreKeyHandler.bind(this));
 
-      this.quill.keyboard.addBinding({
+      keyboardModule.addBinding({
         key: NAVIGATION_KEYS,
       }, this._ignoreKeyHandler.bind(this));
     }
 
-    _moveToItem(direction) {
+    _moveToItem(direction: MoveDirection): boolean {
+      // @ts-expect-error getDataSource is mixed in by DataHelperMixin at runtime; not on the type
       const dataSource = this._list.getDataSource();
 
       if (this._isMentionActive && !dataSource.isLoading()) {
-        // @ts-expect-error
         const $focusedItem = $(this._list.option('focusedElement'));
         const defaultItemPosition = direction === 'next' ? 'first' : 'last';
         let $nextItem = $focusedItem[direction]();
@@ -160,11 +229,11 @@ if (Quill) {
       return !this._isMentionActive;
     }
 
-    _ignoreKeyHandler() {
+    _ignoreKeyHandler(): boolean {
       return !this._isMentionActive;
     }
 
-    _fitIntoRange(value, start, end) {
+    _fitIntoRange(value: number, start: number, end: number): number {
       if (value > end) {
         return start;
       }
@@ -176,39 +245,45 @@ if (Quill) {
       return value;
     }
 
-    _selectItemHandler() {
+    _selectItemHandler(): boolean {
       if (this._isMentionActive) {
-        // @ts-expect-error
-        this._list.option('items').length
-          ? this._list.selectItem(this._list.option('focusedElement'))
-          : this._popup.hide();
+        // @ts-expect-error items is optional in the d.ts; the list always holds an array
+        if (this._list.option('items').length) {
+          // @ts-expect-error selectItem() is typed without null; focusedElement is possibly null
+          this._list.selectItem(this._list.option('focusedElement'));
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
+          this._popup.hide();
+        }
       }
       return !this._isMentionActive;
     }
 
-    _escapeKeyHandler() {
+    _escapeKeyHandler(): boolean {
       if (this._isMentionActive) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
         this._popup.hide();
       }
 
       return !this._isMentionActive;
     }
 
-    renderList($container, options) {
+    renderList($container: dxElementWrapper, options: ListProperties): void {
       this.compileGetters(this.options);
-      // @ts-expect-error
       super.renderList($container, options);
     }
 
-    compileGetters({ displayExpr, valueExpr }) {
+    compileGetters({ displayExpr, valueExpr }: Pick<MentionConfig, 'displayExpr' | 'valueExpr'>): void {
+      // @ts-expect-error compileGetter is typed as (expr: string) => unknown
       this._valueGetter = compileGetter(displayExpr);
+      // @ts-expect-error compileGetter is typed as (expr: string) => unknown
       this._idGetter = compileGetter(valueExpr);
     }
 
-    _getListConfig(options) {
-      // @ts-expect-error
+    _getListConfig(options: MentionModuleOptions): ListProperties {
       const baseConfig = super._getListConfig(options);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- baseConfig is untyped
       return extend(baseConfig, {
         itemTemplate: this.options.itemTemplate,
         onContentReady: () => {
@@ -221,10 +296,9 @@ if (Quill) {
       });
     }
 
-    insertEmbedContent() {
+    insertEmbedContent(): void {
       const markerLength = this._activeMentionConfig.marker.length;
       const textLength = markerLength + this._searchValue.length;
-      // @ts-expect-error
       const caretPosition = this.getPosition();
       const selectedItem = this._list.option('selectedItem');
       const value = {
@@ -233,7 +307,8 @@ if (Quill) {
         marker: this._activeMentionConfig.marker,
         keyInTemplateStorage: this.editorInstance.getMentionKeyInTemplateStorage(),
       };
-      const Delta = Quill.import('delta');
+      const Delta: DeltaConstructor = Quill.import('delta');
+      // @ts-expect-error savePosition() runs before the popup is shown
       const startIndex = Math.max(0, caretPosition - markerLength);
       const currentFormat = this.quill.getFormat(startIndex);
 
@@ -247,7 +322,7 @@ if (Quill) {
       this.quill.setSelection(startIndex + 2);
     }
 
-    _getLastInsertOperation(ops) {
+    _getLastInsertOperation(ops: DeltaOperation[]): DeltaOperation | null {
       const lastOperation = ops[ops.length - 1];
       const isLastOperationInsert = 'insert' in lastOperation;
 
@@ -270,12 +345,14 @@ if (Quill) {
       return null;
     }
 
-    onTextChange(newDelta, oldDelta, source) {
+    onTextChange(newDelta: Delta, oldDelta: Delta, source: string): void {
       if (source === USER_ACTION) {
         const lastOperation = newDelta.ops[newDelta.ops.length - 1];
 
         if (this._isMentionActive && this._isPopupVisible) {
-          this._processSearchValue(lastOperation) && this._filterList(this._searchValue);
+          if (this._processSearchValue(lastOperation)) {
+            this._filterList(this._searchValue);
+          }
         } else {
           const { ops } = newDelta;
           const lastInsertOperation = this._getLastInsertOperation(ops);
@@ -287,16 +364,20 @@ if (Quill) {
       }
     }
 
-    get _isPopupVisible() {
+    get _isPopupVisible(): boolean | undefined {
       return this._popup?.option('visible');
     }
 
-    _processSearchValue(operation) {
+    _processSearchValue(operation: DeltaOperation): boolean {
       const isInsertOperation = 'insert' in operation;
       if (isInsertOperation) {
+        // eslint-disable-next-line @stylistic/max-len
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string -- a typed char; an embed insert would append [object Object] (see Findings)
         this._searchValue += operation.insert;
       } else {
+        // @ts-expect-error delete is undefined for a retain op; undefined > 1 is false
         if (!this._searchValue.length || operation.delete > 1) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
           this._popup.hide();
           return false;
         }
@@ -306,7 +387,7 @@ if (Quill) {
       return true;
     }
 
-    checkMentionRequest({ insert }, ops) {
+    checkMentionRequest({ insert }: DeltaOperation, ops: DeltaOperation[]): void {
       const caret = this.quill.getSelection();
 
       if (!insert || !isString(insert) || !caret || this._isMarkerPartOfText(ops[0].retain)) {
@@ -320,16 +401,17 @@ if (Quill) {
         // NOTE: Fix of off-by-one error in selection index after insert on a new line.
         // See https://github.com/quilljs/quill/issues/1763.
         const isOnNewLine = caret.index && this._getCharByIndex(caret.index - 1) === '\n';
-        // @ts-expect-error
+        // @ts-expect-error PopupModule members are untyped; isOnNewLine (boolean) is added as 0/1
         this.savePosition(caret.index + isOnNewLine);
-        // @ts-expect-error
         this._popup.option('position', this._popupPosition);
         this._searchValue = '';
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
         this._popup.show();
       }
     }
 
-    _isMarkerPartOfText(retain) {
+    _isMarkerPartOfText(retain: number | undefined): boolean {
+      // @ts-expect-error includes() is typed for strings; an object insert never matches
       if (!retain || ALLOWED_PREFIX_CHARS.includes(this._getCharByIndex(retain - 1))) {
         return false;
       }
@@ -337,13 +419,13 @@ if (Quill) {
       return true;
     }
 
-    _getCharByIndex(index) {
+    _getCharByIndex(index: number): DeltaOperation['insert'] {
       return this.quill.getContents(index, 1).ops[0].insert;
     }
 
     _updateList({
       dataSource, displayExpr, valueExpr, itemTemplate, searchExpr,
-    }) {
+    }: MentionConfig): void {
       this.compileGetters({ displayExpr, valueExpr });
       this._list.unselectAll();
       this._list.option({
@@ -354,7 +436,7 @@ if (Quill) {
       });
     }
 
-    _filterList(searchValue) {
+    _filterList(searchValue: string): void {
       if (!this._isMinSearchLengthExceeded(searchValue)) {
         this._resetFilter();
         return;
@@ -372,21 +454,21 @@ if (Quill) {
       }
     }
 
-    _isMinSearchLengthExceeded(searchValue) {
+    _isMinSearchLengthExceeded(searchValue: string): boolean {
       return searchValue.length >= this._activeMentionConfig.minSearchLength;
     }
 
-    _resetFilter() {
+    _resetFilter(): void {
       clearTimeout(this._searchTimer);
       this._search(null);
     }
 
-    _search(searchValue) {
+    _search(searchValue: string | null): void {
       this._hasSearch = true;
       this._list.option('searchValue', searchValue);
     }
 
-    _focusFirstElement() {
+    _focusFirstElement(): void {
       if (!this._list) {
         return;
       }
@@ -396,9 +478,8 @@ if (Quill) {
       this._list.scrollToItem($firstItem);
     }
 
-    _toggleActiveDescendant(shown) {
+    _toggleActiveDescendant(shown: boolean): void {
       if (shown) {
-        // @ts-expect-error
         const ariaId = this._list.getFocusedItemId();
         this.quill.root.setAttribute('aria-activedescendant', ariaId);
       } else {
@@ -406,13 +487,17 @@ if (Quill) {
       }
     }
 
-    get _popupPosition() {
-      // @ts-expect-error
+    get _popupPosition(): MentionPopupPosition {
       const position = this.getPosition();
-      const { left: mentionLeft, top: mentionTop, height: mentionHeight } = this.quill.getBounds(position ? position - 1 : position);
-      // @ts-expect-error
+      const {
+        left: mentionLeft,
+        top: mentionTop,
+        height: mentionHeight,
+      // @ts-expect-error savePosition() runs before the popup is shown
+      } = this.quill.getBounds(position ? position - 1 : position);
+      // @ts-expect-error offset() is typed as possibly undefined
       const { left: leftOffset, top: topOffset } = $(this.quill.root).offset();
-      // @ts-expect-error
+      // @ts-expect-error Event is not in the events_engine d.ts
       const positionEvent = eventsEngine.Event('positionEvent', {
         pageX: leftOffset + mentionLeft,
         pageY: topOffset + mentionTop,
@@ -431,8 +516,8 @@ if (Quill) {
       };
     }
 
-    _getPopupConfig() {
-      // @ts-expect-error
+    _getPopupConfig(): PopupProperties {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- the base config is untyped
       return extend(super._getPopupConfig(), {
         hideOnParentScroll: false,
         onShown: () => {
@@ -452,15 +537,14 @@ if (Quill) {
       });
     }
 
-    get _activeListItems() {
-      // @ts-expect-error
+    get _activeListItems(): dxElementWrapper {
       return this._list.itemElements().filter(`:not(.${DISABLED_STATE_CLASS})`);
     }
 
-    clean() {
+    clean(): void {
       Object.keys(this._mentions).forEach((marker) => {
         if (this._mentions[marker].template) {
-          // @ts-expect-error
+          // @ts-expect-error Mention is a QuillDependent: the no-Quill stand-in has no templates
           Mention.removeTemplate({
             marker,
             editorKey: this.editorInstance.getMentionKeyInTemplateStorage(),

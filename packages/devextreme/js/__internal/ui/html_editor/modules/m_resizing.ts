@@ -9,9 +9,13 @@ import { getBoundingRect } from '@js/core/utils/position';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
+import type { DxEvent } from '@js/events';
+import type { dxHtmlEditorMediaResizing } from '@js/ui/html_editor';
 import Resizable from '@js/ui/resizable';
 import Quill from 'devextreme-quill';
 
+import type { QuillInstance } from '../types/quill';
+import type { BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
@@ -24,26 +28,26 @@ const MOUSEDOWN_EVENT = addNamespace('mousedown', MODULE_NAMESPACE);
 
 const FRAME_PADDING = 1;
 
+/** The mediaResizing option plus the editor: what HtmlEditor._getModuleConfigByOption builds */
+type ResizingModuleOptions = BaseModuleOptions & dxHtmlEditorMediaResizing;
+
 export default class ResizingModule extends BaseModule {
-  quill: any;
-
-  editorInstance: any;
-
-  allowedTargets: any;
+  allowedTargets: string[];
 
   enabled: boolean;
 
-  _hideFrameWithContext: any;
+  _hideFrameWithContext: () => void;
 
-  _framePositionChangedHandler: any;
+  _framePositionChangedHandler: () => void;
 
-  _$target!: dxElementWrapper;
+  /** The clicked element itself, not a wrapper; null once the frame is hidden */
+  _$target?: Element | null;
 
-  resizable!: Resizable;
+  resizable?: Resizable;
 
-  _$resizeFrame!: dxElementWrapper;
+  _$resizeFrame?: dxElementWrapper;
 
-  constructor(quill, options) {
+  constructor(quill: QuillInstance, options: ResizingModuleOptions) {
     super(quill, options);
     this.allowedTargets = options.allowedTargets || ['image'];
     this.enabled = !!options.enabled;
@@ -56,20 +60,24 @@ export default class ResizingModule extends BaseModule {
     }
   }
 
-  _attachEvents() {
-    eventsEngine.on(this.quill.root, addNamespace(ClickEvent, MODULE_NAMESPACE), this._clickHandler.bind(this));
+  _attachEvents(): void {
+    eventsEngine.on(
+      this.quill.root,
+      addNamespace(ClickEvent, MODULE_NAMESPACE),
+      this._clickHandler.bind(this),
+    );
     eventsEngine.on(this.quill.root, SCROLL_EVENT, this._framePositionChangedHandler);
     this.editorInstance.on('focusOut', this._hideFrameWithContext);
     this.quill.on('text-change', this._framePositionChangedHandler);
   }
 
-  _detachEvents() {
+  _detachEvents(): void {
     eventsEngine.off(this.quill.root, `.${MODULE_NAMESPACE}`);
     this.editorInstance.off('focusOut', this._hideFrameWithContext);
     this.quill.off('text-change', this._framePositionChangedHandler);
   }
 
-  _clickHandler(e) {
+  _clickHandler(e: DxEvent): void {
     if (this._isAllowedTarget(e.target)) {
       if (this._$target === e.target) {
         return;
@@ -77,11 +85,18 @@ export default class ResizingModule extends BaseModule {
 
       this._$target = e.target;
       const $target = $(this._$target);
-      // @ts-expect-error
-      const minWidth = Math.max(getOuterWidth($target) - getWidth($target), this.resizable.option('minWidth'));
-      // @ts-expect-error
-      const minHeight = Math.max(getOuterHeight($target) - getHeight($target), this.resizable.option('minHeight'));
+      const minWidth = Math.max(
+        getOuterWidth($target) - getWidth($target),
+        // @ts-expect-error resizable exists while enabled; minWidth is typed as optional
+        this.resizable.option('minWidth'),
+      );
+      const minHeight = Math.max(
+        getOuterHeight($target) - getHeight($target),
+        // @ts-expect-error resizable exists while enabled; minHeight is typed as optional
+        this.resizable.option('minHeight'),
+      );
 
+      // @ts-expect-error resizable exists while enabled
       this.resizable.option({ minWidth, minHeight });
 
       this.updateFramePosition();
@@ -92,7 +107,7 @@ export default class ResizingModule extends BaseModule {
     }
   }
 
-  _prepareFramePositionChangedHandler() {
+  _prepareFramePositionChangedHandler(): () => void {
     return () => {
       if (this._$target) {
         this.updateFramePosition();
@@ -100,26 +115,27 @@ export default class ResizingModule extends BaseModule {
     };
   }
 
-  _adjustSelection() {
+  _adjustSelection(): void {
     if (!this.quill.getSelection()) {
       this.quill.setSelection(0, 0);
     }
   }
 
-  _isAllowedTarget(targetElement) {
+  _isAllowedTarget(targetElement: Element): boolean {
     return this._isImage(targetElement);
   }
 
-  _isImage(targetElement) {
-    return this.allowedTargets.indexOf('image') !== -1 && targetElement.tagName.toUpperCase() === 'IMG';
+  _isImage(targetElement: Element): boolean {
+    return this.allowedTargets.includes('image') && targetElement.tagName.toUpperCase() === 'IMG';
   }
 
-  showFrame() {
+  showFrame(): void {
+    // @ts-expect-error the resize frame exists while enabled
     this._$resizeFrame.show();
     eventsEngine.on(this.quill.root, KEYDOWN_EVENT, this._handleFrameKeyDown.bind(this));
   }
 
-  _handleFrameKeyDown(e) {
+  _handleFrameKeyDown(e: DxEvent<KeyboardEvent>): void {
     const keyName = normalizeKeyName(e);
     if (keyName === 'del' || keyName === 'backspace') {
       this._deleteImage();
@@ -127,20 +143,21 @@ export default class ResizingModule extends BaseModule {
     this.hideFrame();
   }
 
-  hideFrame() {
-    // @ts-expect-error
+  hideFrame(): void {
     this._$target = null;
+    // @ts-expect-error the resize frame exists while enabled
     this._$resizeFrame.hide();
     eventsEngine.off(this.quill.root, KEYDOWN_EVENT);
   }
 
-  updateFramePosition() {
+  updateFramePosition(): void {
     const {
       height, width, top: targetTop, left: targetLeft,
     } = getBoundingRect(this._$target);
     const { top: containerTop, left: containerLeft } = getBoundingRect(this.quill.root);
     const borderWidth = this._getBorderWidth();
 
+    // @ts-expect-error the resize frame exists while enabled
     this._$resizeFrame
       .css({
         height,
@@ -152,13 +169,13 @@ export default class ResizingModule extends BaseModule {
     move(this._$resizeFrame, { left: 0, top: 0 });
   }
 
-  _getBorderWidth() {
-    // @ts-expect-error
+  _getBorderWidth(): number {
+    // @ts-expect-error the resize frame exists while enabled
     // eslint-disable-next-line radix
-    return parseInt(this._$resizeFrame.css('borderTopWidth'));
+    return parseInt(this._$resizeFrame.css('borderTopWidth') ?? '');
   }
 
-  _createResizeFrame() {
+  _createResizeFrame(): void {
     if (this._$resizeFrame) {
       return;
     }
@@ -171,7 +188,7 @@ export default class ResizingModule extends BaseModule {
       .appendTo(this.editorInstance._getQuillContainer())
       .hide();
 
-    eventsEngine.on(this._$resizeFrame, MOUSEDOWN_EVENT, (e) => {
+    eventsEngine.on(this._$resizeFrame, MOUSEDOWN_EVENT, (e: DxEvent) => {
       e.preventDefault();
     });
 
@@ -189,13 +206,14 @@ export default class ResizingModule extends BaseModule {
     });
   }
 
-  _deleteImage() {
+  _deleteImage(): void {
+    // @ts-expect-error _$target is set while the frame is shown
     if (this._isAllowedTarget(this._$target)) {
       Quill.find(this._$target)?.deleteAt(0);
     }
   }
 
-  option(option, value) {
+  option(option: string, value: unknown): void {
     if (option === 'mediaResizing') {
       this.handleOptionChangeValue(value);
       return;
@@ -205,6 +223,7 @@ export default class ResizingModule extends BaseModule {
       if (this.enabled === value) {
         return;
       }
+      // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
       this.enabled = value;
       if (value) {
         this._attachEvents();
@@ -217,10 +236,10 @@ export default class ResizingModule extends BaseModule {
     }
   }
 
-  clean() {
+  clean(): void {
     this._detachEvents();
+    // @ts-expect-error the resize frame exists while enabled
     this._$resizeFrame.remove();
-    // @ts-expect-error
     this._$resizeFrame = undefined;
   }
 }
