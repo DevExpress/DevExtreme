@@ -176,7 +176,11 @@ async function runCommand(text, { form, gridInstance, aiIntegration }) {
     );
   }
   if (target === 'form') {
-    const { results, error } = await buildFormResultsPromise(form, formAction ?? { type: 'smart_paste' }, text);
+    const { results, error } = await buildFormResultsPromise(
+      form,
+      formAction ?? { type: 'smart_paste' },
+      text,
+    );
     return joinSucceededOrThrow(results, error);
   }
   if (target === 'grid') {
