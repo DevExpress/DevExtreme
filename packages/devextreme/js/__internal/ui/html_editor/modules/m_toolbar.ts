@@ -3,9 +3,11 @@ import '@ts/ui/color_box/color_view';
 import '@js/ui/number_box';
 import '@js/ui/menu';
 
+import type { ToolbarItemComponent } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
+import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -14,8 +16,17 @@ import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isEmptyObject, isObject, isString,
 } from '@js/core/utils/type';
-import type { AICommandName, AICustomCommand, AIToolbarItem } from '@js/ui/html_editor';
+import type { DxEvent } from '@js/events';
+import type {
+  AICommandName,
+  AICustomCommand,
+  AIToolbarItem,
+  dxHtmlEditorToolbar,
+  dxHtmlEditorToolbarItem,
+  OptionChangedEvent,
+} from '@js/ui/html_editor';
 import type { ContentReadyEvent, ItemClickEvent } from '@js/ui/menu';
+import type { ValueChangedEvent as SelectBoxValueChangedEvent } from '@js/ui/select_box';
 import type { Item } from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
 import { getPublicElement } from '@ts/core/element';
@@ -23,11 +34,19 @@ import { capitalize } from '@ts/core/utils/capitalize';
 import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/menu';
 import { DROP_DOWN_MENU_BUTTON_CLASS } from '@ts/ui/toolbar/constants';
 import { applyItemTabIndex } from '@ts/ui/toolbar/internal/roving.utils';
+import type DropDownMenu from '@ts/ui/toolbar/internal/toolbar.menu';
+import type { Properties as ToolbarProperties } from '@ts/ui/toolbar/toolbar';
 import Toolbar from '@ts/ui/toolbar/toolbar';
 import { TOOLBAR_ITEM_CLASS } from '@ts/ui/toolbar/toolbar.base';
 import { getItemFocusTarget } from '@ts/ui/toolbar/toolbar.utils';
 import Quill from 'devextreme-quill';
 
+import type { AITextTransformOptions, FormatHandler, FormatHandlers } from '../types';
+import type {
+  KeyboardBinding,
+  QuillInstance,
+  RangeStatic,
+} from '../types/quill';
 import type { CommandsMap } from '../utils/ai';
 import {
   buildCommandsMap,
@@ -40,8 +59,49 @@ import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
   applyFormat, getDefaultClickHandler, getFormatHandlers, ICON_MAP,
 } from '../utils/m_toolbar_helper';
+import type { BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
 import WidgetCollector from './m_widget_collector';
+
+interface ToolbarModuleOptions extends BaseModuleOptions, dxHtmlEditorToolbar {}
+
+/** A toolbar item's widget (dxButton, dxSelectBox, dxMenu, ...) as the toolbar module drives it */
+interface ToolbarItemWidget {
+  NAME?: string;
+  $element: () => dxElementWrapper;
+  option: {
+    (): object;
+    (name: string, value: unknown): void;
+  };
+}
+
+/** The `onInitialized` argument of a toolbar item's widget; `component` is always set */
+interface ToolbarItemInitializedEvent {
+  component: ToolbarItemWidget;
+}
+
+/** A node of the AI menu: the root, a command, or a command option */
+interface AIMenuItem {
+  id: string;
+  icon?: string;
+  name?: string;
+  text?: string;
+  items?: AIMenuItem[];
+  parentCommand?: string;
+  options?: string[];
+  prompt?: AICustomCommand['prompt'];
+  disabled?: boolean;
+}
+
+type ToolbarItemTemplate = (data: unknown, index: number, element: DxElement) => void;
+
+/** What `_getDefaultItemsConfig()` holds for a predefined item name */
+interface DefaultItemConfig {
+  options?: { disabled: boolean };
+  template?: ToolbarItemTemplate;
+  menuItemTemplate?: ToolbarItemTemplate;
+}
+
 // eslint-disable-next-line import/no-mutable-exports
 let ToolbarModule = BaseModule;
 
@@ -75,41 +135,43 @@ if (Quill) {
 
   const TOOLBAR_AI_ITEM_NAME = 'ai';
 
-  const localize = (name): string => localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
+  const localize = (name: string): string => (
+    localizationMessage.format(`dxHtmlEditor-${camelize(name)}`)
+  );
 
-  const localizeValue = (value, name) => {
+  const localizeValue = (
+    value: string | number | boolean,
+    name: string,
+  ): string | number | boolean => {
     if (name === 'header') {
       const isHeaderValue = isDefined(value) && value !== false;
       return isHeaderValue ? `${localize('heading')} ${value}` : localize('normalText');
     }
 
+    // @ts-expect-error localize() takes a string; a numeric accepted value reaches it (Findings)
     return localize(value) || value;
   };
-  ToolbarModule = class ToolbarModule extends BaseModule {
-    quill: any;
+  ToolbarModule = class extends BaseModule {
+    declare options: ToolbarModuleOptions;
 
-    options: any;
+    _toolbarWidgets: WidgetCollector<ToolbarItemWidget>;
 
-    editorInstance: any;
-
-    _toolbarWidgets: WidgetCollector;
-
-    toolbarInstance!: Toolbar;
+    toolbarInstance?: Toolbar;
 
     _$toolbar?: dxElementWrapper;
 
     _$toolbarContainer?: dxElementWrapper;
 
-    _formatHandlers: any;
+    _formatHandlers: FormatHandlers;
 
-    _tableFormats: any;
+    _tableFormats: string[];
 
     _isReset?: boolean;
 
-    constructor(quill, options) {
+    constructor(quill: QuillInstance, options: ToolbarModuleOptions) {
       super(quill, options);
 
-      this._toolbarWidgets = new WidgetCollector();
+      this._toolbarWidgets = new WidgetCollector<ToolbarItemWidget>();
       this._formatHandlers = getFormatHandlers(this);
       this._tableFormats = getTableFormats(quill);
 
@@ -117,22 +179,27 @@ if (Quill) {
         this._addCallbacks();
         this._renderToolbar();
 
-        // NOTE: Fixes the synchronization of the states of items placed in a menu that is rendered postponed.
-        // See bug t1117604: menu items' state could be updated after selection change before the menu is rendered.
+        // NOTE: Fixes the synchronization of the states of items placed in a menu
+        // that is rendered postponed.
+        // See bug t1117604: menu items' state could be updated after selection change
+        // before the menu is rendered.
         // We cannot just modify items' state using a toolbar api because of:
         // - runtime adding in-line styles for color formats' icon;
-        // - "dx-format-active" class toggling (using elementAttr will trigger toolbar item rerendering);
+        // - "dx-format-active" class toggling
+        //   (using elementAttr will trigger toolbar item rerendering);
         // - changing the value of non-button items.
         // Possible better solutions:
         // - rework or extend a toolbar menu api or life cycle;
-        // - support a separate cache for toolbar items' state and apply it on each item's initialization.
-        // @ts-expect-error
-        const toolbarMenu = this.toolbarInstance._layoutStrategy._menu;
+        // - support a separate cache for toolbar items' state
+        //   and apply it on each item's initialization.
+        // @ts-expect-error _menu exists on the single-line strategy only; the toolbar is rendered
+        const toolbarMenu: DropDownMenu | undefined = this.toolbarInstance._layoutStrategy._menu;
         if (toolbarMenu) {
           // eslint-disable-next-line @typescript-eslint/naming-convention
           const { _renderPopup } = toolbarMenu;
-          toolbarMenu._renderPopup = (...args) => {
+          toolbarMenu._renderPopup = (...args): void => {
             _renderPopup.apply(toolbarMenu, ...args);
+            // @ts-expect-error _renderPopup has just created _popup
             toolbarMenu._popup.on('showing', () => { this._updateToolbar(true); });
           };
         }
@@ -157,13 +224,13 @@ if (Quill) {
       this.editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
     }
 
-    _updateToolbar(isSelectionChanged): void {
+    _updateToolbar(isSelectionChanged: boolean): void {
       this.updateFormatWidgets(isSelectionChanged);
       this.updateHistoryWidgets();
       this.updateTableWidgets();
     }
 
-    _updateFormatWidget(name, isApplied, formats): void {
+    _updateFormatWidget(name: string, isApplied: boolean, formats: Record<string, unknown>): void {
       const widget = this._toolbarWidgets.getByName(name);
 
       if (!widget) {
@@ -174,7 +241,7 @@ if (Quill) {
         this._markActiveFormatWidget(name, widget, formats);
       } else {
         this._resetFormatWidget(name, widget);
-        // @ts-expect-error
+        // @ts-expect-error hasOwnProperty.call() gets one argument: always false (see Findings)
         if (Object.prototype.hasOwnProperty.call(name)) {
           // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete formats[name];
@@ -189,44 +256,59 @@ if (Quill) {
 
       this._$toolbar = $('<div>')
         .addClass(TOOLBAR_CLASS)
+        // @ts-expect-error appendTo() is typed without selector strings; container may be one
         .appendTo(container);
       this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
-      eventsEngine.on(this._$toolbarContainer, addNamespace('mousedown', this.editorInstance.NAME), (e) => {
-        e.target.focus();
-        e.preventDefault();
+      eventsEngine.on(
+        this._$toolbarContainer,
+        // @ts-expect-error NAME is typed optional (component.ts); the constructor always sets it
+        addNamespace('mousedown', this.editorInstance.NAME),
+        (e: DxEvent<MouseEvent>): void => {
+          // @ts-expect-error the mousedown target is the clicked element, not any EventTarget
+          e.target.focus();
+          e.preventDefault();
 
-        const $item = $(e.target).closest(`.${TOOLBAR_ITEM_CLASS}, .${DROP_DOWN_MENU_BUTTON_CLASS}`);
-        if ($item.length && getItemFocusTarget($item)?.length) {
-          this.toolbarInstance.option('focusedElement', getPublicElement($item));
-        }
-      });
+          const $item = $(e.target)
+            .closest(`.${TOOLBAR_ITEM_CLASS}, .${DROP_DOWN_MENU_BUTTON_CLASS}`);
+          if ($item.length && getItemFocusTarget($item)?.length) {
+            // @ts-expect-error toolbarInstance is set by _renderToolbar, which precedes this call
+            this.toolbarInstance.option('focusedElement', getPublicElement($item));
+          }
+        },
+      );
 
       this._subscribeFormatHotKeys();
 
-      this.toolbarInstance = this.editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
+      this.toolbarInstance = this.editorInstance._createComponent(
+        this._$toolbar,
+        Toolbar,
+        this.toolbarConfig,
+      );
 
-      this.editorInstance.on('optionChanged', ({ name }) => {
+      this.editorInstance.on('optionChanged', ({ name }: OptionChangedEvent): void => {
         if (name === 'readOnly' || name === 'disabled') {
+          // @ts-expect-error toolbarInstance is set by _renderToolbar, which precedes this call
           this.toolbarInstance.option('disabled', this.isInteractionDisabled);
         }
       });
     }
 
-    get toolbarConfig() {
+    get toolbarConfig(): Partial<ToolbarProperties> {
       return {
         dataSource: this._prepareToolbarItems(),
         disabled: this.isInteractionDisabled,
+        // @ts-expect-error menuContainer is typed string | Element (toolbar.ts); a wrapper works
         menuContainer: this._$toolbarContainer,
         multiline: this.isMultilineMode(),
       };
     }
 
-    get isInteractionDisabled() {
+    get isInteractionDisabled(): boolean | undefined {
       return this.editorInstance.option('readOnly') || this.editorInstance.option('disabled');
     }
 
-    isMultilineMode() {
+    isMultilineMode(): boolean {
       return this.options.multiline ?? true;
     }
 
@@ -241,14 +323,16 @@ if (Quill) {
     }
 
     repaint(): void {
-      this.toolbarInstance && this.toolbarInstance.repaint();
+      if (this.toolbarInstance) {
+        this.toolbarInstance.repaint();
+      }
     }
 
     focusFirstItem(): boolean {
       return this.toolbarInstance?.focusFirstItem() ?? false;
     }
 
-    _getContainer() {
+    _getContainer(): dxElementWrapper {
       const $container = $('<div>');
 
       this.editorInstance.$element().prepend($container);
@@ -273,29 +357,37 @@ if (Quill) {
       }, this._handleFormatHotKey.bind(this));
     }
 
-    _handleFormatHotKey(range, context, { which }): void {
+    _handleFormatHotKey(
+      range: RangeStatic,
+      context: unknown,
+      { which }: KeyboardBinding,
+    ): void {
+      // @ts-expect-error the three bindings above register only the keys of FORMAT_HOTKEYS
       const formatName = FORMAT_HOTKEYS[which];
 
       this._updateButtonState(formatName);
     }
 
-    _updateButtonState(formatName): void {
+    _updateButtonState(formatName: string): void {
       const formatWidget = this._toolbarWidgets.getByName(formatName);
       const currentFormat = this.quill.getFormat();
       const formatValue = currentFormat[formatName];
 
       if (formatValue) {
+        // @ts-expect-error getByName() gives null when the toolbar has no such button (Findings)
         this._markActiveFormatWidget(formatName, formatWidget, currentFormat);
       } else {
+        // @ts-expect-error getByName() gives null when the toolbar has no such button (Findings)
         this._resetFormatWidget(formatName, formatWidget);
       }
     }
 
-    _prepareToolbarItems() {
+    _prepareToolbarItems(): Item[] {
       const resultItems: Item[] = [];
 
       each(this.options.items, (index, item) => {
-        let newItem;
+        // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-chain
+        let newItem: Item | undefined;
         if (isObject(item)) {
           newItem = this._handleObjectItem(item);
         } else if (item === TOOLBAR_AI_ITEM_NAME) {
@@ -312,12 +404,14 @@ if (Quill) {
       return resultItems;
     }
 
-    _handleObjectItem(item) {
+    _handleObjectItem(item: dxHtmlEditorToolbarItem): Item {
       if (item.name === TOOLBAR_AI_ITEM_NAME) {
+        // @ts-expect-error an item named 'ai' is the AI item; the name check does not narrow it
         return this._getToolbarItem(this._prepareAIMenuItemConfig(item));
       }
 
       if (item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
+        // @ts-expect-error the name check above does not narrow item to one with a name
         const selectItemConfig = this._prepareSelectItemConfig(item);
 
         return this._getToolbarItem(selectItemConfig);
@@ -333,12 +427,15 @@ if (Quill) {
       return this._getToolbarItem(item);
     }
 
-    _isAcceptableItem(widget, acceptableWidgetName): boolean {
+    _isAcceptableItem(
+      widget: ToolbarItemComponent | undefined,
+      acceptableWidgetName: ToolbarItemComponent,
+    ): boolean {
       return !widget || widget === acceptableWidgetName;
     }
 
-    _prepareButtonItemConfig(name) {
-      const iconName = ICON_MAP[name] ?? name;
+    _prepareButtonItemConfig(name: string): dxHtmlEditorToolbarItem {
+      const iconName: string = ICON_MAP[name] ?? name;
       const buttonText = titleize(name);
 
       return {
@@ -355,7 +452,7 @@ if (Quill) {
       };
     }
 
-    _prepareSelectItemConfig(item) {
+    _prepareSelectItemConfig(item: dxHtmlEditorToolbarItem & { name: string }): Item {
       const { name, acceptedValues } = item;
 
       return extend(true, {
@@ -364,9 +461,11 @@ if (Quill) {
         options: {
           stylingMode: 'filled',
           dataSource: acceptedValues,
-          displayExpr: (value) => localizeValue(value, name),
+          displayExpr: (value: string | number | boolean): string | number | boolean => (
+            localizeValue(value, name)
+          ),
           placeholder: localize(name),
-          onValueChanged: (e) => {
+          onValueChanged: (e: SelectBoxValueChangedEvent): void => {
             if (!this._isReset) {
               this._hideAdaptiveMenu();
               applyFormat(this, [name, e.value, USER_ACTION], e.event);
@@ -381,11 +480,11 @@ if (Quill) {
       command: AICommandName,
       text?: string,
       commandOptions?: string[],
-    ) {
+    ): AIMenuItem {
       const options = commandOptions?.map(capitalize)
         ?? getDefaultOptionsByCommand(command);
 
-      const item = {
+      const item: AIMenuItem = {
         id: command,
         name: command,
         text: text ?? getDefaultCommandName(command),
@@ -400,24 +499,24 @@ if (Quill) {
       return item;
     }
 
-    private _buildMenuItems(commands: AIToolbarItem['commands']) {
+    private _buildMenuItems(commands: AIToolbarItem['commands']): AIMenuItem[] | undefined {
       let customCommandIndex = 0;
 
-      const items = commands?.map((command) => {
+      const items = commands?.map((command): AIMenuItem => {
         if (typeof command === 'object') {
           if (command.name === 'custom') {
             const id = `custom${customCommandIndex}`;
             const { prompt, options } = command as AICustomCommand;
             const capitalized = options?.map(capitalize);
 
-            const item = {
+            const item: AIMenuItem = {
               id,
               name: 'custom',
               text: command.text,
-              items: command.options?.map((rawOptionName: string) => {
+              items: command.options?.map((rawOptionName: string): AIMenuItem => {
                 const option = capitalize(rawOptionName);
 
-                const result = {
+                const result: AIMenuItem = {
                   parentCommand: id,
                   id: option,
                   text: option,
@@ -457,9 +556,11 @@ if (Quill) {
       }
     }
 
-    _prepareAIMenuItemConfig(item: AIToolbarItem) {
+    _prepareAIMenuItemConfig(item: AIToolbarItem | typeof TOOLBAR_AI_ITEM_NAME): Item {
       const {
+        // @ts-expect-error the 'ai' string has no name: the default applies
         name = TOOLBAR_AI_ITEM_NAME,
+        // @ts-expect-error the 'ai' string has no commands: the default applies
         commands = Object.keys(commandMessageKeys) as AICommandName[],
       } = item;
 
@@ -468,7 +569,7 @@ if (Quill) {
 
       this._validateAIToolbarItemConfig(commandsMap);
 
-      const dataSource = [{
+      const dataSource: AIMenuItem[] = [{
         id: 'root',
         icon: 'sparkle',
         items: menuItems,
@@ -480,18 +581,18 @@ if (Quill) {
       const options = {
         dataSource,
         disabled: isMenuDisabled,
-        onContentReady: (e: ContentReadyEvent): void => {
+        onContentReady: (e: ContentReadyEvent<AIMenuItem>): void => {
           const $item = $(e.element).find(`.${DX_MENU_ITEM_CLASS}`).first();
           $item.attr('aria-label', localizationMessage.format('dxHtmlEditor-aiToolbarItemAriaLabel'));
         },
-        onItemClick: (e: ItemClickEvent): void => {
+        onItemClick: (e: ItemClickEvent<AIMenuItem>): void => {
           const { itemData } = e;
 
           if (!itemData || itemData.items?.length) {
             return;
           }
 
-          const aiDialogOptions = {
+          const aiDialogOptions: AITextTransformOptions = {
             command: itemData.id,
             parentCommand: itemData.parentCommand,
             commandsMap,
@@ -510,31 +611,41 @@ if (Quill) {
     }
 
     _hideAdaptiveMenu(): void {
+      // @ts-expect-error toolbarInstance is set by _renderToolbar, which precedes this call
       if (this.toolbarInstance.option('overflowMenuVisible')) {
+        // @ts-expect-error toolbarInstance is set by _renderToolbar, which precedes this call
         this.toolbarInstance.option('overflowMenuVisible', false);
       }
     }
 
-    _getToolbarItem(item) {
+    _getToolbarItem(item: dxHtmlEditorToolbarItem): Item {
       const baseItem = {
         options: {
-          onInitialized: (e) => {
+          onInitialized: (e: ToolbarItemInitializedEvent): void => {
             if (item.name) {
               e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
-              e.component.$element().toggleClass(`dx-${item.name.toLowerCase()}-format`, !!item.name);
+              e.component.$element()
+                .toggleClass(`dx-${item.name.toLowerCase()}-format`, !!item.name);
               this._toolbarWidgets.add(item.name, e.component);
             }
           },
-          onDisposing: () => {
+          onDisposing: (): void => {
             this._toolbarWidgets.remove(item.name);
           },
         },
       };
 
-      return extend(true, { location: 'before', locateInMenu: 'auto' }, this._getDefaultConfig(item.name), item, baseItem);
+      return extend(
+        true,
+        { location: 'before', locateInMenu: 'auto' },
+        // @ts-expect-error an item without a name reads the key 'undefined': nothing is there
+        this._getDefaultConfig(item.name),
+        item,
+        baseItem,
+      );
     }
 
-    _getDefaultItemsConfig() {
+    _getDefaultItemsConfig(): Partial<Record<string, DefaultItemConfig>> {
       return {
         clear: {
           options: {
@@ -603,17 +714,17 @@ if (Quill) {
           },
         },
         separator: {
-          template: (data, index, element) => {
+          template: (data, index, element): void => {
             $(element).addClass(TOOLBAR_SEPARATOR_CLASS);
           },
-          menuItemTemplate: (data, index, element) => {
+          menuItemTemplate: (data, index, element): void => {
             $(element).addClass(TOOLBAR_MENU_SEPARATOR_CLASS);
           },
         },
       };
     }
 
-    _getDefaultConfig(name) {
+    _getDefaultConfig(name: string): DefaultItemConfig | undefined {
       return this._getDefaultItemsConfig()[name];
     }
 
@@ -629,8 +740,14 @@ if (Quill) {
         redo: redoOps,
       } = historyModule.stack;
 
-      this._updateManipulationWidget(this._toolbarWidgets.getByName('undo'), Boolean(undoOps.length));
-      this._updateManipulationWidget(this._toolbarWidgets.getByName('redo'), Boolean(redoOps.length));
+      this._updateManipulationWidget(
+        this._toolbarWidgets.getByName('undo'),
+        Boolean(undoOps.length),
+      );
+      this._updateManipulationWidget(
+        this._toolbarWidgets.getByName('redo'),
+        Boolean(redoOps.length),
+      );
     }
 
     updateTableWidgets(): void {
@@ -640,17 +757,21 @@ if (Quill) {
       }
 
       const selection = this.quill.getSelection();
-      const formats = selection && this.quill.getFormat(selection) || {};
-      const isTableOperationsEnabled = this._tableFormats.some((format) => Boolean(formats[format]));
+      const formats = (selection && this.quill.getFormat(selection)) || {};
+      const isTableOperationsEnabled = this._tableFormats
+        .some((format) => Boolean(formats[format]));
       TABLE_OPERATIONS.forEach((operationName) => {
         const isInsertTable = operationName === 'insertTable';
         const widget = this._toolbarWidgets.getByName(operationName);
 
-        this._updateManipulationWidget(widget, isInsertTable ? !isTableOperationsEnabled : isTableOperationsEnabled);
+        this._updateManipulationWidget(
+          widget,
+          isInsertTable ? !isTableOperationsEnabled : isTableOperationsEnabled,
+        );
       });
     }
 
-    _updateManipulationWidget(widget, isOperationEnabled): void {
+    _updateManipulationWidget(widget: ToolbarItemWidget | null, isOperationEnabled: boolean): void {
       if (!widget) {
         return;
       }
@@ -661,19 +782,20 @@ if (Quill) {
       }
     }
 
-    _syncItemTabIndex(widget): void {
+    _syncItemTabIndex(widget: ToolbarItemWidget): void {
       const $item = widget?.$element().closest(`.${TOOLBAR_ITEM_CLASS}`);
       if (!$item?.length) {
         return;
       }
 
+      // @ts-expect-error toolbarInstance is set by _renderToolbar, which precedes this call
       const { focusedElement } = this.toolbarInstance.option();
       const isFocused = $item.get(0) === $(focusedElement).get(0);
 
       applyItemTabIndex($item, isFocused ? 0 : -1);
     }
 
-    updateFormatWidgets(isResetRequired): void {
+    updateFormatWidgets(isResetRequired?: boolean): void {
       const selection = this.quill.getSelection();
       if (!selection) {
         return;
@@ -689,9 +811,11 @@ if (Quill) {
       // eslint-disable-next-line no-restricted-syntax, guard-for-in
       for (const formatName in formats) {
         const widgetName = this._getFormatWidgetName(formatName, formats);
-        const formatWidget = this._toolbarWidgets.getByName(widgetName) ?? this._toolbarWidgets.getByName(formatName);
+        const formatWidget = this._toolbarWidgets.getByName(widgetName)
+          ?? this._toolbarWidgets.getByName(formatName);
 
         if (!formatWidget) {
+          // eslint-disable-next-line no-continue -- a format without a widget is skipped
           continue;
         }
 
@@ -705,6 +829,7 @@ if (Quill) {
       const selection = this.quill.getSelection();
       const formatName = 'header';
       const formatWidget = this._toolbarWidgets.getByName(formatName);
+      // @ts-expect-error getFormat() is typed without null; devextreme-quill returns {} for it
       const formats = this.quill.getFormat(selection);
       if (!selection || !formatWidget) {
         return;
@@ -713,7 +838,11 @@ if (Quill) {
       this._markActiveFormatWidget(formatName, formatWidget, formats);
     }
 
-    _markActiveFormatWidget(name, widget, formats): void {
+    _markActiveFormatWidget(
+      name: string,
+      widget: ToolbarItemWidget,
+      formats: Record<string, unknown>,
+    ): void {
       if (this._isColorFormat(name)) {
         this._updateColorWidget(name, formats[name]);
       }
@@ -727,10 +856,9 @@ if (Quill) {
       }
     }
 
-    _toggleClearFormatting(hasFormats): void {
+    _toggleClearFormatting(hasFormats: boolean): void {
       const clearWidget = this._toolbarWidgets.getByName('clear');
       if (clearWidget) {
-        // @ts-expect-error
         clearWidget.option('disabled', !hasFormats);
         if (hasFormats) {
           this._syncItemTabIndex(clearWidget);
@@ -738,36 +866,40 @@ if (Quill) {
       }
     }
 
-    _isColorFormat(name): boolean {
+    _isColorFormat(name: string): boolean {
       return name === 'color' || name === 'background';
     }
 
-    _updateColorWidget(name?: any, color?: any): void {
+    _updateColorWidget(name: string, color?: unknown): void {
       const formatWidget = this._toolbarWidgets.getByName(name);
       if (!formatWidget) {
         return;
       }
 
       formatWidget
-        // @ts-expect-error
         .$element()
         .find(`.${ICON_CLASS}`)
+        // @ts-expect-error getFormat() values are unknown; css() is typed for strings
         .css('borderBottomColor', color || 'transparent');
     }
 
-    _getFormatWidgetName(name, formats) {
-      let widgetName;
+    _getFormatWidgetName(name: string, formats: Record<string, unknown>): string {
+      // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the switch
+      let widgetName: string;
       switch (name) {
         case 'align':
+          // @ts-expect-error getFormat() values are unknown; the align value is a string
           widgetName = name + titleize(formats[name]);
           break;
         case 'list':
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands -- a string value
           widgetName = formats[name] + titleize(name);
           break;
         case 'code-block':
           widgetName = 'codeBlock';
           break;
         case 'script':
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands -- a string value
           widgetName = formats[name] + name;
           break;
         case 'imageSrc':
@@ -780,7 +912,7 @@ if (Quill) {
       return widgetName;
     }
 
-    _setValueSilent(widget, value): void {
+    _setValueSilent(widget: Pick<ToolbarItemWidget, 'option'>, value: unknown): void {
       this._isReset = true;
       widget.option('value', value);
       this._isReset = false;
@@ -792,7 +924,7 @@ if (Quill) {
       });
     }
 
-    _resetFormatWidget(name, widget): void {
+    _resetFormatWidget(name: string, widget: ToolbarItemWidget): void {
       widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
       widget.$element().removeClass(SELECTED_STATE_CLASS);
       widget.$element().removeAttr('aria-pressed');
@@ -808,12 +940,10 @@ if (Quill) {
       }
     }
 
-    addClickHandler(name, handler): void {
+    addClickHandler(name: string, handler: FormatHandler): void {
       this._formatHandlers[name] = handler;
       const formatWidget = this._toolbarWidgets.getByName(name);
-      // @ts-expect-error
       if (formatWidget && formatWidget.NAME === 'dxButton') {
-        // @ts-expect-error
         formatWidget.option('onClick', handler);
       }
     }

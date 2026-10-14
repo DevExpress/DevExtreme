@@ -195,3 +195,6 @@ export interface FormatHandlers {
   tableProperties: ($element?: dxElementWrapper | FormatHandlerArgs) => void;
   ai: (options: AITextTransformOptions) => void;
 }
+
+/** The lines of a table: its columns (`horizontal`) or its rows (`vertical`) */
+export type LineDirection = 'horizontal' | 'vertical';

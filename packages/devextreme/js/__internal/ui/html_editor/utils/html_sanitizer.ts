@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/html_editor';
-import type { QuillInstance } from '@ts/ui/html_editor/html_editor';
+import type { QuillStatic } from '@ts/ui/html_editor/types/quill';
 
 export const createNoScriptFrame = (): dxElementWrapper => $('<iframe>')
   .css('display', 'none')
@@ -12,17 +12,17 @@ export const createNoScriptFrame = (): dxElementWrapper => $('<iframe>')
     sandbox: 'allow-same-origin',
   });
 
-export const sanitizeHtml = (quill: QuillInstance, value: Properties['value']): string => {
+export const sanitizeHtml = (quill: QuillStatic, value: Properties['value']): string => {
   // NOTE: Script tags and inline handlers are removed to prevent XSS attacks.
   // "Blocked script execution in 'about:blank' because the document's frame is sandboxed
   // and the 'allow-scripts' permission is not set."
   // error can be logged to the console if the html value is XSS vulnerable.
   const $frame = createNoScriptFrame()
-    // @ts-expect-error ts-error
+    // @ts-expect-error appendTo() is typed for elements; 'body' is a selector
     .appendTo('body');
 
   const frame = $frame.get(0);
-  // @ts-expect-error ts-error
+  // @ts-expect-error get(0) is typed as Element; the frame is an iframe
   const frameWindow = frame.contentWindow;
   const frameDocument = frameWindow.document;
   const frameDocumentBody = frameDocument.body;
