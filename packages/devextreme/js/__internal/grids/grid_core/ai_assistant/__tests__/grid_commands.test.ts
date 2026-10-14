@@ -6,6 +6,7 @@ import { logger } from '@ts/core/utils/m_console';
 import { z } from 'zod';
 
 import type { InternalGrid } from '../../types';
+import { MAX_COMMAND_ARGS_LENGTH } from '../const';
 import { GridCommands } from '../grid_commands';
 import type {
   CommandCallbacks,
@@ -574,6 +575,44 @@ describe('GridCommands', () => {
           { name: 'invalid', args: {} },
         ],
       );
+
+      expect(result).toBeNull();
+    });
+
+    it('should return null without parsing args longer than MAX_COMMAND_ARGS_LENGTH as JSON (CVE-2023-54404)', () => {
+      const command = createMockCommand('test', {
+        schema: z.object({ value: z.string() }),
+      });
+      const safeParseSpy = jest.spyOn(command.schema, 'safeParse');
+      const gridCommands = new GridCommands(createMockComponent(), [command]);
+
+      const result = gridCommands.parse(
+        [{ name: 'test', args: { value: 'x'.repeat(MAX_COMMAND_ARGS_LENGTH) } }],
+      );
+
+      expect(result).toBeNull();
+      expect(safeParseSpy).not.toHaveBeenCalled();
+    });
+
+    it('should parse args exactly MAX_COMMAND_ARGS_LENGTH long as JSON', () => {
+      const command = createMockCommand('test', {
+        schema: z.object({ value: z.string() }),
+      });
+      const gridCommands = new GridCommands(createMockComponent(), [command]);
+      const value = 'x'.repeat(MAX_COMMAND_ARGS_LENGTH - JSON.stringify({ value: '' }).length);
+
+      const result = gridCommands.parse([{ name: 'test', args: { value } }]);
+
+      expect(result).toEqual([{ name: 'test', args: { value } }]);
+    });
+
+    it('should return null if any action args cannot be serialized to JSON', () => {
+      const command = createMockCommand('test');
+      const gridCommands = new GridCommands(createMockComponent(), [command]);
+      const args: Record<string, unknown> = {};
+      args.self = args;
+
+      const result = gridCommands.parse([{ name: 'test', args }]);
 
       expect(result).toBeNull();
     });
