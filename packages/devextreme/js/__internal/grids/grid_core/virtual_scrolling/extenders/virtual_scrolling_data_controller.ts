@@ -129,8 +129,7 @@ export const virtualScrollingDataControllerExtender = (
           const rowElement = component.getRowElement(rowIndex);
           const $rowElement = rowElement?.[0] && $(rowElement[0]);
           let top = $rowElement?.position()?.top;
-          const isChrome = browser.chrome;
-          const allowedTopOffset = browser.mozilla || isChrome ? 1 : 0; // T884308
+          const allowedTopOffset = browser.mozilla || browser.chrome ? 1 : 0; // T884308
           if (top && top > allowedTopOffset) {
             top = Math.round(top + getOuterHeight($rowElement) * (itemIndex % 1));
             scrollable.scrollTo({ top });

@@ -1102,11 +1102,11 @@ export class RowsView extends ColumnsView {
       return {};
     }
 
+    const texts = grouping?.texts;
+
     return {
-      groupContinuesMessage: data && data.isContinuationOnNextPage
-        && grouping?.texts && grouping.texts.groupContinuesMessage,
-      groupContinuedMessage: data && data.isContinuation
-        && grouping?.texts && grouping.texts.groupContinuedMessage,
+      groupContinuesMessage: data?.isContinuationOnNextPage && texts?.groupContinuesMessage,
+      groupContinuedMessage: data?.isContinuation && texts?.groupContinuedMessage,
     };
   }
 
@@ -1269,10 +1269,9 @@ export class RowsView extends ColumnsView {
 
   private _getHeightCorrection(): number {
     const isZoomedWebkit = browser.webkit && this._getDevicePixelRatio() >= 2; // T606935
-    const isChrome = browser.chrome;
     const hasExtraBorderTop = browser.mozilla && !this.option('showRowLines');
 
-    return isZoomedWebkit || hasExtraBorderTop || isChrome ? 1 : 0;
+    return isZoomedWebkit || hasExtraBorderTop || browser.chrome ? 1 : 0;
   }
 
   protected _columnOptionChanged(e: ColumnsChanges): void {
