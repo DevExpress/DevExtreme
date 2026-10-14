@@ -3,7 +3,6 @@ import { DeferredObj } from './deferred';
 export interface EqualByValueOptions {
   strict?: boolean;
   maxDepth?: number;
-  assumeEqualBeyondMaxDepth?: boolean;
   comparePlainObjectsOnly?: boolean;
 }
 

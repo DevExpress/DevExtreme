@@ -4,7 +4,9 @@ import {
 import $ from '@js/core/renderer';
 import { componentRegistratorCallbacks } from '@ts/core/component_registrator_callbacks';
 import { readdirSync } from 'fs';
-import { join, relative, resolve } from 'path';
+import {
+  join, relative, resolve, sep,
+} from 'path';
 
 interface EditorInstance {
   option: (name: string, value?: unknown) => unknown;
@@ -102,7 +104,7 @@ const loadPublicUiModules = (): void => {
     try {
       jest.requireActual(file);
     } catch {
-      modulesFailedToLoad.push(relative(PUBLIC_UI_DIRECTORY, file));
+      modulesFailedToLoad.push(relative(PUBLIC_UI_DIRECTORY, file).split(sep).join('/'));
     }
   });
 

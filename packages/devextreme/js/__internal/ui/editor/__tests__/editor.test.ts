@@ -21,8 +21,8 @@ interface ReturnScenario {
   changedValue: unknown;
 }
 
-const createSelfReferencingObject = (): Record<string, unknown> => {
-  const value: Record<string, unknown> = { id: 1 };
+const createSelfReferencingObject = (id: number): Record<string, unknown> => {
+  const value: Record<string, unknown> = { id };
 
   value.self = value;
 
@@ -37,7 +37,7 @@ const returnScenarios: ReturnScenario[] = [
   },
   {
     scenario: 'an array of plain objects with nested arrays',
-    createValue: () => [{ name: 'a', tags: [1, 2] }],
+    createValue: () => [{ name: 'a', tags: [1, { id: 2 }] }],
     changedValue: [{ name: 'b', tags: [] }],
   },
   {
@@ -48,6 +48,16 @@ const returnScenarios: ReturnScenario[] = [
   {
     scenario: 'an array of dates',
     createValue: () => [new Date(2026, 9, 12), new Date(2026, 9, 13)],
+    changedValue: [],
+  },
+  {
+    scenario: 'an array with an object nested deeper than three levels',
+    createValue: () => [{ a: { b: { c: { d: 1 } } } }],
+    changedValue: [],
+  },
+  {
+    scenario: 'an array with an object that references itself',
+    createValue: () => [createSelfReferencingObject(1)],
     changedValue: [],
   },
 ];
@@ -147,10 +157,10 @@ describe('Editor isDirty when the value returns to its initial content (T1336605
     expect(instance.option('isDirty')).toBe(true);
   });
 
-  it('should be true when a distinct copy of a self-referencing value replaces the initial one', () => {
-    const instance = createEditor({ value: [createSelfReferencingObject()] });
+  it('should be true when a self-referencing object in an array changes', () => {
+    const instance = createEditor({ value: [createSelfReferencingObject(1)] });
 
-    instance.option('value', [createSelfReferencingObject()]);
+    instance.option('value', [createSelfReferencingObject(2)]);
 
     expect(instance.option('isDirty')).toBe(true);
   });

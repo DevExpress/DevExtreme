@@ -494,7 +494,7 @@ class Editor<
 
   _isValueEqual(value: unknown, otherValue: unknown): boolean {
     return equalByValue(value, otherValue, {
-      assumeEqualBeyondMaxDepth: false,
+      maxDepth: Infinity,
       comparePlainObjectsOnly: true,
     });
   }

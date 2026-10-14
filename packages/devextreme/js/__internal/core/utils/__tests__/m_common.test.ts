@@ -3,8 +3,8 @@ import { equalByValue } from '@js/core/utils/common';
 
 const createNestedValue = (leaf: unknown): Record<string, unknown> => ({ a: { b: { c: leaf } } });
 
-const createSelfReferencingObject = (): Record<string, unknown> => {
-  const value: Record<string, unknown> = { id: 1 };
+const createSelfReferencingObject = (id: number): Record<string, unknown> => {
+  const value: Record<string, unknown> = { id };
 
   value.self = value;
 
@@ -17,21 +17,26 @@ describe('Common utils', () => {
       expect(equalByValue(createNestedValue(1), createNestedValue(2))).toBe(true);
     });
 
-    it('should tell values deeper than maxDepth apart when assumeEqualBeyondMaxDepth is false', () => {
-      const options = { assumeEqualBeyondMaxDepth: false };
+    it('should compare values at any depth when maxDepth is Infinity', () => {
+      const options = { maxDepth: Infinity };
 
       expect(equalByValue(createNestedValue(1), createNestedValue(2), options)).toBe(false);
+      expect(equalByValue(createNestedValue(1), createNestedValue(1), options)).toBe(true);
     });
 
-    it('should treat the same object at maxDepth as equal when assumeEqualBeyondMaxDepth is false', () => {
-      const sharedObject = { d: 1 };
-      const options = { assumeEqualBeyondMaxDepth: false };
+    it('should compare self-referencing objects by content when maxDepth is Infinity', () => {
+      const options = { maxDepth: Infinity };
 
       expect(equalByValue(
-        createNestedValue(sharedObject),
-        createNestedValue(sharedObject),
+        createSelfReferencingObject(1),
+        createSelfReferencingObject(1),
         options,
       )).toBe(true);
+      expect(equalByValue(
+        createSelfReferencingObject(1),
+        createSelfReferencingObject(2),
+        options,
+      )).toBe(false);
     });
 
     it('should compare distinct non-plain objects by their keys by default', () => {
@@ -50,16 +55,6 @@ describe('Common utils', () => {
       const options = { comparePlainObjectsOnly: true };
 
       expect(equalByValue({ id: 1, tags: [1, 2] }, { id: 1, tags: [1, 2] }, options)).toBe(true);
-    });
-
-    it('should stop at maxDepth for distinct self-referencing objects when assumeEqualBeyondMaxDepth is false', () => {
-      const options = { assumeEqualBeyondMaxDepth: false };
-
-      expect(equalByValue(
-        createSelfReferencingObject(),
-        createSelfReferencingObject(),
-        options,
-      )).toBe(false);
     });
   });
 });
