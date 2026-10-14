@@ -12,9 +12,6 @@
     },
     "include": [
         "build/**/*.ts",
-        "tools/naming/**/*.ts",
-        "tools/review/**/*.ts",
-        "tools/stylelint/**/*.ts",
-        "tools/tokens/**/*.ts"
+        "tools/**/*.ts"
     ]
 }
