@@ -62,7 +62,15 @@ export default [
   {
     files: ['**/*.mjs'],
     rules: {
+      'import/extensions': ['error', 'ignorePackages', { mjs: 'always' }],
       'no-restricted-syntax': restrictedSyntax,
+    },
+  },
+
+  {
+    files: ['tools/**/*.mjs', 'build/**/*.mjs'],
+    rules: {
+      'no-console': 'off',
     },
   },
 
