@@ -1,20 +1,70 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight } from '@js/core/utils/size';
-import type ListType from '@js/ui/list';
-import Popup from '@js/ui/popup';
+import type { DxEvent } from '@js/events';
+import type { dxHtmlEditorVariables } from '@js/ui/html_editor';
+import type {
+  Properties as ListProperties,
+  SelectionChangedEvent as ListSelectionChangedEvent,
+} from '@js/ui/list';
+import type { Properties as PopupProperties } from '@js/ui/popup';
 import windowUtils from '@ts/core/utils/m_window';
 import List from '@ts/ui/list/list.edit.search';
+import Popup from '@ts/ui/popup/popup.full';
 import Quill from 'devextreme-quill';
 
+import type { QuillInstance } from '../types/quill';
+import type { BaseHtmlEditorModule, BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorPopupModule';
 
+/** The variables module passes its dataSource; the mentions module sets the list's one itself */
+export interface ListPopupModuleOptions extends BaseModuleOptions {
+  dataSource?: dxHtmlEditorVariables['dataSource'];
+}
+
+/** What `_getDefaultOptions()` returns before a subclass adds its own defaults */
+export interface ListPopupModuleDefaults {
+  dataSource: null;
+}
+
+export interface ListPopupModuleInstance extends BaseHtmlEditorModule {
+  _list: List;
+  _popup: Popup;
+  caretPosition?: number;
+  options: ListPopupModuleOptions;
+  readonly maxHeight: number;
+  renderPopup: () => Popup;
+  selectionChangedHandler: (e: ListSelectionChangedEvent) => void;
+  _renderPreventFocusOut: () => void;
+  savePosition: (position: number) => void;
+  getPosition: () => number | undefined;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  _getDefaultOptions(): ListPopupModuleDefaults;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  renderList($container: dxElementWrapper, options: ListProperties): void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  _getPopupConfig(): PopupProperties;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  _getListConfig(options: ListPopupModuleOptions): ListProperties;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  insertEmbedContent(selectionChangedEvent: ListSelectionChangedEvent): void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  showPopup(): void;
+}
+
+export type ListPopupModuleClass = new (
+  quill: QuillInstance,
+  options: ListPopupModuleOptions,
+) => ListPopupModuleInstance;
+
+// @ts-expect-error the no-Quill stand-in has no module members; subclasses only need a constructor
 // eslint-disable-next-line import/no-mutable-exports
-let ListPopupModule = BaseModule;
+let ListPopupModule: ListPopupModuleClass = BaseModule;
 
 if (Quill) {
   const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
@@ -22,32 +72,32 @@ if (Quill) {
   const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 
   const MIN_HEIGHT = 100;
-  ListPopupModule = class ListPopupModule extends BaseModule {
-    _list!: ListType;
+  ListPopupModule = class extends BaseModule {
+    _list!: List;
 
     _popup: Popup;
 
     caretPosition?: number;
 
-    options: any;
+    declare options: ListPopupModuleOptions;
 
-    constructor(quill, options) {
+    constructor(quill: QuillInstance, options: ListPopupModuleOptions) {
       super(quill, options);
 
       this.options = extend({}, this._getDefaultOptions(), options);
       this._popup = this.renderPopup();
-      // @ts-expect-error
+      // @ts-expect-error $wrapper() is an Overlay method that popup.d.ts does not declare
       this._popup.$wrapper().addClass(`${SUGGESTION_LIST_WRAPPER_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
       this._renderPreventFocusOut();
     }
 
-    _getDefaultOptions() {
+    _getDefaultOptions(): ListPopupModuleDefaults {
       return {
         dataSource: null,
       };
     }
 
-    renderList($container, options) {
+    renderList($container: dxElementWrapper, options: ListProperties): void {
       const $list = $('<div>')
         .addClass(SUGGESTION_LIST_CLASS)
         .appendTo($container);
@@ -59,20 +109,24 @@ if (Quill) {
       const $container = $('<div>').appendTo(editorInstance.$element());
       const popupConfig = this._getPopupConfig();
 
-      return editorInstance._createComponent($container, Popup, popupConfig);
+      return editorInstance._createComponent<Popup, PopupProperties>(
+        $container,
+        Popup,
+        popupConfig,
+      );
     }
 
-    _getPopupConfig() {
+    _getPopupConfig(): PopupProperties {
       return {
-        contentTemplate: (contentElem) => {
+        contentTemplate: (contentElem): void => {
           const listConfig = this._getListConfig(this.options);
           this.renderList($(contentElem), listConfig);
         },
         deferRendering: false,
-        onShown: () => {
+        onShown: (): void => {
           this._list.focus();
         },
-        onHidden: () => {
+        onHidden: (): void => {
           this._list.unselectAll();
           this._list.option('focusedElement', null);
         },
@@ -95,7 +149,7 @@ if (Quill) {
       };
     }
 
-    _getListConfig(options) {
+    _getListConfig(options: ListPopupModuleOptions): ListProperties {
       return {
         dataSource: options.dataSource,
         onSelectionChanged: this.selectionChangedHandler.bind(this),
@@ -104,40 +158,43 @@ if (Quill) {
       };
     }
 
-    get maxHeight() {
+    get maxHeight(): number {
       const window = windowUtils.getWindow();
-      const windowHeight = window && getHeight(window) || 0;
+      const windowHeight = (window && getHeight(window)) || 0;
       return Math.max(MIN_HEIGHT, windowHeight * 0.5);
     }
 
-    selectionChangedHandler(e) {
+    selectionChangedHandler(e: ListSelectionChangedEvent): void {
       if (this._popup.option('visible') && e.addedItems.length) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
         this._popup.hide();
 
         this.insertEmbedContent(e);
       }
     }
 
-    _renderPreventFocusOut() {
+    _renderPreventFocusOut(): void {
       const eventName = addNamespace('mousedown', MODULE_NAMESPACE);
-      // @ts-expect-error
-      eventsEngine.on(this._popup.$wrapper(), eventName, (e) => {
+      eventsEngine.on(this._popup.$wrapper(), eventName, (e: DxEvent) => {
         e.preventDefault();
       });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    insertEmbedContent(selectionChangedEvent) { }
+    insertEmbedContent(selectionChangedEvent: ListSelectionChangedEvent): void { }
 
-    showPopup() {
-      this._popup && this._popup.show();
+    showPopup(): void {
+      if (this._popup) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
+        this._popup.show();
+      }
     }
 
-    savePosition(position) {
+    savePosition(position: number): void {
       this.caretPosition = position;
     }
 
-    getPosition() {
+    getPosition(): number | undefined {
       return this.caretPosition;
     }
   };
