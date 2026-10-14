@@ -35,6 +35,8 @@ type GlobalizeDateFormatOptions = FormatObject & {
   datetime?: string;
 };
 
+const GLOBALIZE_DEFAULT_DATE_FORMAT: GlobalizeDateFormatOptions = { skeleton: 'yMd' };
+
 const resolveGlobalizeLocale = (formatLocale: string): string => {
   const currentLocale = Globalize.locale().locale as string;
 
@@ -71,6 +73,10 @@ const getCldrMain = <TValue>(
   path: string,
   formatLocale?: string,
 ): TValue => getGlobalizeByLocale(formatLocale).cldr.main(path) as TValue;
+
+const hasDefinedOption = (format: FormatObject): boolean => Object
+  .values(format)
+  .some((value) => value !== undefined);
 
 const getGlobalizeDateFormatter = (
   formatLocale: string,
@@ -311,9 +317,18 @@ if (Globalize?.formatDate) {
             formattersCache[formatCacheKey] = formatter;
           }
         } else {
-          const formatterOptions = getFormatterOptions(typedFormat) as FormatObject;
+          const strippedOptions = getFormatterOptions(typedFormat) as FormatObject;
+          let formatterOptions: GlobalizeDateFormatOptions | undefined = strippedOptions;
 
-          if (!this._isAcceptableFormat(formatterOptions)) {
+          if (!this._isAcceptableFormat(strippedOptions)) {
+            // Locale-only formats stay without a preset for dates. Globalize rejects
+            // an empty options object; its own default is numeric year, month, and day.
+            formatterOptions = hasDefinedOption(strippedOptions)
+              ? undefined
+              : GLOBALIZE_DEFAULT_DATE_FORMAT;
+          }
+
+          if (!formatterOptions) {
             return undefined;
           }
 

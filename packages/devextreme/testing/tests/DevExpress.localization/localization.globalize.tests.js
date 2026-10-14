@@ -1044,6 +1044,33 @@ QUnit.module('Format helper', () => {
                 restoreGlobalFormats(saved);
             }
         });
+
+        QUnit.test('locale-only date format uses the Globalize default date', function(assert) {
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+            const date = new Date(2020, 0, 2);
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+
+                const localizedDate = Globalize('de').dateFormatter()(date);
+
+                assert.strictEqual(dateLocalization.format(date, { locale: 'de' }), localizedDate);
+                assert.strictEqual(
+                    dateLocalization.format(date, { locale: 'de', type: undefined }),
+                    localizedDate,
+                );
+                assert.notEqual(localizedDate, Globalize('en').dateFormatter()(date));
+                assert.strictEqual(
+                    dateLocalization.format(date, { locale: 'de', day: 'numeric' }),
+                    undefined,
+                );
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+            }
+        });
     });
 });
 
