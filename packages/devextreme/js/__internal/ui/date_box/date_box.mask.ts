@@ -18,6 +18,7 @@ import { getDateFormatLocale } from '@ts/core/global_format_config';
 import dateLocalization from '@ts/core/localization/date';
 import {
   bindDatePartsToLocale,
+  getParser as getLDMLDateParser,
   type LocaleAwareDateLocalization,
 } from '@ts/core/localization/ldml/date.parser';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -57,6 +58,8 @@ class DateBoxMask<
   _formatPattern?: string | null;
 
   _formatLocaleCache?: string;
+
+  _formatDateParts?: ReturnType<typeof bindDatePartsToLocale>;
 
   _pendingIMEDigit?: string | null;
 
@@ -514,6 +517,7 @@ class DateBoxMask<
       ? dateLocalization
       : bindDatePartsToLocale(dateLocalization as LocaleAwareDateLocalization, formatLocale);
 
+    this._formatDateParts = dateParts;
     this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateParts);
     const { regexp } = this._regExpInfo;
     const { source } = regexp;
@@ -813,7 +817,11 @@ class DateBoxMask<
     const { text } = this.option();
     // @ts-expect-error text
     const newText = this._replaceSelectedText(text, this._caret(), clipboardText(e));
-    const date = dateLocalization.parse(newText, this._getFormatPattern());
+    const textToParse = numberLocalization.convertDigits(newText, true);
+    const date = getLDMLDateParser(
+      this._getFormatPattern(),
+      this._formatDateParts ?? dateLocalization,
+    )(textToParse);
 
     if (date && this._isDateValid(date)) {
       this._maskValue = date;
