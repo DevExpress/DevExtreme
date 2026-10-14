@@ -798,12 +798,14 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
     if (!isHideBorder) {
       const isFixedCell = GridCoreStickyColumnsDom
         .isFixedCell($element, this.addWidgetPrefix.bind(this));
+      // @ts-expect-error renderFocusOverlay creates the focus overlay first
       this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, isFixedCell);
       const isGroupElement = isGroupRowElement($element);
       const isGroupFooterRowElement = isGroupFooterRow($element);
       const isAdaptiveElement = isAdaptiveItem($element);
 
       if (isFixedCell || isGroupElement || isGroupFooterRowElement || isAdaptiveElement) {
+        // @ts-expect-error renderFocusOverlay creates the focus overlay first
         this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, true);
       }
     }
