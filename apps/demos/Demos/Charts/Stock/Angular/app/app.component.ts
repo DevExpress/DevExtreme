@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
 } from '@angular/core';
-import { DxChartModule, DxChartComponent, DxToolbarModule } from 'devextreme-angular';
+import { DxChartModule, DxToolbarModule } from 'devextreme-angular';
 import type { DxChartTypes } from 'devextreme-angular/ui/chart';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import type { VisualRange } from 'devextreme-angular/common/charts';
@@ -32,8 +32,6 @@ function clamp(value: number, min: number, max: number): number {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
-
   stockPrices: StockPrice[];
 
   initialStart = new Date(1994, 3, 15);
@@ -79,17 +77,16 @@ export class AppComponent {
     onClick: () => this.resetZoom(),
   };
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.stockPrices = service.getStockPrices();
     this.dataMin = this.stockPrices[0].date.getTime();
     this.dataMax = this.stockPrices[this.stockPrices.length - 1].date.getTime();
   }
 
   getRange() {
-    const { startValue, endValue } = this.chart.instance.getArgumentAxis().visualRange();
     return {
-      start: (startValue as Date).getTime(),
-      end: (endValue as Date).getTime(),
+      start: (this.visualRange.startValue as Date).getTime(),
+      end: (this.visualRange.endValue as Date).getTime(),
     };
   }
 
@@ -98,10 +95,11 @@ export class AppComponent {
     const center = (start + end) / 2;
     const newStart = clamp(center - span / 2, this.dataMin, this.dataMax - span);
 
-    this.chart.instance.getArgumentAxis().visualRange({
+    this.visualRange = {
       startValue: new Date(newStart),
       endValue: new Date(newStart + span),
-    });
+    };
+    this.changeDetectorRef.detectChanges();
   }
 
   pan(direction: number) {
