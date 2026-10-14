@@ -1,90 +1,88 @@
 <template>
-  <div>
-    <DxToolbar>
-      <DxItem
-        :options="panLeftButtonOptions"
-        location="after"
-        widget="dxButton"
-      />
-      <DxItem
-        :options="panRightButtonOptions"
-        location="after"
-        widget="dxButton"
-      />
-      <DxItem
-        :options="zoomInButtonOptions"
-        location="after"
-        widget="dxButton"
-      />
-      <DxItem
-        :options="zoomOutButtonOptions"
-        location="after"
-        widget="dxButton"
-      />
-      <DxItem
-        :options="resetZoomButtonOptions"
-        location="after"
-        widget="dxButton"
-      />
-    </DxToolbar>
-    <DxChart
-      id="chart"
-      :data-source="dataSource"
-      title="Stock Price"
+  <DxToolbar>
+    <DxItem
+      :options="panLeftButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+    <DxItem
+      :options="panRightButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+    <DxItem
+      :options="zoomInButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+    <DxItem
+      :options="zoomOutButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+    <DxItem
+      :options="resetZoomButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+  </DxToolbar>
+  <DxChart
+    id="chart"
+    :data-source="dataSource"
+    title="Stock Price"
+  >
+    <DxCommonSeriesSettings
+      argument-field="date"
+      type="stock"
+    />
+    <DxSeries
+      name="E-Mart"
+      open-value-field="o"
+      high-value-field="h"
+      low-value-field="l"
+      close-value-field="c"
     >
-      <DxCommonSeriesSettings
-        argument-field="date"
-        type="stock"
+      <DxReduction color="red"/>
+    </DxSeries>
+    <DxZoomAndPan
+      :drag-to-zoom="true"
+      :allow-mouse-wheel="true"
+      argument-axis="both"
+    />
+    <DxScrollBar
+      :visible="true"
+      position="bottom"
+    />
+    <DxLegend
+      vertical-alignment="bottom"
+      horizontal-alignment="center"
+    />
+    <DxArgumentAxis v-model:visual-range="visualRange">
+      <DxLabel
+        :rotation-angle="30"
+        format="MMM dd"
+        overlapping-behavior="rotate"
       />
-      <DxSeries
-        name="E-Mart"
-        open-value-field="o"
-        high-value-field="h"
-        low-value-field="l"
-        close-value-field="c"
-      >
-        <DxReduction color="red"/>
-      </DxSeries>
-      <DxZoomAndPan
-        :drag-to-zoom="true"
-        :allow-mouse-wheel="true"
-        argument-axis="both"
-      />
-      <DxScrollBar
-        :visible="true"
-        position="bottom"
-      />
-      <DxLegend
-        vertical-alignment="bottom"
-        horizontal-alignment="center"
-      />
-      <DxArgumentAxis v-model:visual-range="visualRange">
-        <DxLabel
-          :rotation-angle="30"
-          format="MMM dd"
-          overlapping-behavior="rotate"
+    </DxArgumentAxis>
+    <DxValueAxis
+      :tick-interval="1"
+      position="right"
+    >
+      <DxTitle text="US dollars"/>
+      <DxLabel>
+        <DxFormat
+          :precision="0"
+          type="currency"
         />
-      </DxArgumentAxis>
-      <DxValueAxis
-        :tick-interval="1"
-        position="right"
-      >
-        <DxTitle text="US dollars"/>
-        <DxLabel>
-          <DxFormat
-            :precision="0"
-            type="currency"
-          />
-        </DxLabel>
-      </DxValueAxis>
-      <DxExport :enabled="true"/>
-      <DxTooltip
-        :enabled="true"
-        :customize-tooltip="customizeTooltip"
-        location="edge"
-      />
-    </DxChart>
-  </div>
+      </DxLabel>
+    </DxValueAxis>
+    <DxExport :enabled="true"/>
+    <DxTooltip
+      :enabled="true"
+      :customize-tooltip="customizeTooltip"
+      location="edge"
+    />
+  </DxChart>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
