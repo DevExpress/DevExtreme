@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { equalByValue } from '@js/core/utils/common';
 import { getOuterWidth } from '@js/core/utils/size';
 import type { Properties } from '@js/ui/drop_down_box';
 import DropDownBox from '@js/ui/drop_down_box';
@@ -10,6 +11,7 @@ import DropDownBox from '@js/ui/drop_down_box';
 import { DropDownEditorModel } from './__mock__/model/drop_down_editor';
 
 const FIELD_WIDTH = 200;
+const MAX_PROBED_CHAIN_DEPTH = 1_000_000;
 
 interface NonPlainValueScenario {
   name: string;
@@ -35,6 +37,36 @@ const nonPlainValueScenarios: NonPlainValueScenario[] = [
   { name: 'File', createValue: (key) => new File([String(key)], 'file.txt') },
   { name: 'class instance with a private field', createValue: (key) => new KeyHolder(key) },
 ];
+
+const createChain = (depth: number, leaf: number): Record<string, unknown> => {
+  let node: Record<string, unknown> = { leaf };
+
+  for (let level = 0; level < depth; level += 1) {
+    node = { next: node };
+  }
+
+  return node;
+};
+
+const isChainTooDeepToCompare = (depth: number): boolean => {
+  try {
+    equalByValue(createChain(depth, 1), createChain(depth, 1), { maxDepth: Infinity });
+
+    return false;
+  } catch {
+    return true;
+  }
+};
+
+const findChainDepthTooDeepToCompare = (): number => {
+  let depth = 1024;
+
+  while (depth < MAX_PROBED_CHAIN_DEPTH && !isChainTooDeepToCompare(depth)) {
+    depth *= 2;
+  }
+
+  return depth;
+};
 
 const dropDownBoxes: DropDownBox[] = [];
 
@@ -114,6 +146,19 @@ describe('DropDownBox', () => {
       const [instance] = dropDownBoxes;
 
       instance.option('value', createValue(2));
+
+      expect(instance.option('isDirty')).toBe(true);
+    });
+
+    it('should fall back to reference comparison for a value too deep to compare by content', () => {
+      const depth = findChainDepthTooDeepToCompare();
+
+      expect(isChainTooDeepToCompare(depth)).toBe(true);
+
+      createDropDownBox({ valueExpr: 'this', value: createChain(depth, 1) });
+      const [instance] = dropDownBoxes;
+
+      instance.option('value', createChain(depth, 1));
 
       expect(instance.option('isDirty')).toBe(true);
     });

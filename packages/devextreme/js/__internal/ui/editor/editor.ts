@@ -493,10 +493,14 @@ class Editor<
   }
 
   _isValueEqual(value: unknown, otherValue: unknown): boolean {
-    return equalByValue(value, otherValue, {
-      maxDepth: Infinity,
-      comparePlainObjectsOnly: true,
-    });
+    try {
+      return equalByValue(value, otherValue, {
+        maxDepth: Infinity,
+        comparePlainObjectsOnly: true,
+      });
+    } catch {
+      return value === otherValue;
+    }
   }
 
   _resetToInitialValue(): void {
