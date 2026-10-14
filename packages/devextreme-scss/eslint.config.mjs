@@ -63,9 +63,6 @@ export default [
     files: ['**/*.mjs'],
     rules: {
       'import/extensions': ['error', 'ignorePackages', { mjs: 'always' }],
-      'import/no-unresolved': ['error', {
-        ignore: ['^style-dictionary(/|$)', '^@tokens-studio/sd-transforms$'],
-      }],
       'no-restricted-syntax': restrictedSyntax,
     },
   },
@@ -78,15 +75,30 @@ export default [
   },
 
   {
-    files: [
-      'tools/stylelint/*.mjs',
-      'build/tokens/transforms.mjs',
-      'build/tokens/build-tokens.mjs',
-    ],
+    files: ['tools/stylelint/*.mjs'],
     rules: {
       'no-param-reassign': ['error', {
         props: true,
-        ignorePropertyModificationsFor: ['decl', 'branch', 'token', 'node'],
+        ignorePropertyModificationsFor: ['decl', 'branch'],
+      }],
+    },
+  },
+
+  {
+    files: ['**/*.mjs'],
+    rules: {
+      'import/no-unresolved': ['error', {
+        ignore: ['^style-dictionary(/|$)', '^@tokens-studio/sd-transforms$'],
+      }],
+    },
+  },
+
+  {
+    files: ['build/tokens/transforms.mjs', 'build/tokens/build-tokens.mjs'],
+    rules: {
+      'no-param-reassign': ['error', {
+        props: true,
+        ignorePropertyModificationsFor: ['token', 'node'],
       }],
     },
   },
