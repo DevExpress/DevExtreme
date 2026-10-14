@@ -34,8 +34,12 @@ export const isLocaleOnlyFormat = (format: Format | undefined): format is Format
   }
 
   const formatObject = format as FormatObject;
+  const definedKeys = Object.entries(formatObject)
+    .filter(([, value]) => value !== undefined);
 
-  return Object.keys(formatObject).length === 1 && isDefined(formatObject.locale);
+  return definedKeys.length === 1
+    && definedKeys[0][0] === 'locale'
+    && isDefined(formatObject.locale);
 };
 
 // A locale-only object has no date or time fields. Intl then formats it as a date,

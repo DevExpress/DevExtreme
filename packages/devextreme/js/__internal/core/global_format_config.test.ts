@@ -407,7 +407,11 @@ describe('global_format_config', () => {
     it.each([
       { format: { locale: 'de' }, expected: true },
       { format: { locale: () => 'de' }, expected: true },
+      { format: { locale: 'de', type: undefined }, expected: true },
+      { format: { locale: 'de', type: undefined, precision: undefined }, expected: true },
       { format: { locale: 'de', type: 'shortDate' }, expected: false },
+      { format: { locale: 'de', type: null }, expected: false },
+      { format: { locale: undefined, type: undefined }, expected: false },
       { format: { locale: 'de', maximumFractionDigits: 1 }, expected: false },
       { format: { type: 'shortDate' }, expected: false },
       { format: 'shortDate', expected: false },
@@ -518,6 +522,13 @@ describe('global_format_config', () => {
       expect(applyDataTypePreset({ locale: 'de-DE' }, 'time')).toEqual({
         locale: 'de-DE',
         type: 'shortTime',
+      });
+    });
+
+    it('should add a datetime preset when optional members are undefined', () => {
+      expect(applyDataTypePreset({ locale: 'de', type: undefined }, 'datetime')).toEqual({
+        locale: 'de',
+        type: 'shortDateShortTime',
       });
     });
 
