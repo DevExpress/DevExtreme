@@ -8,7 +8,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-import type { MarkerClickEvent } from 'devextreme/ui/map';
 
 import {
     DxIntegrationModule,
@@ -58,10 +57,10 @@ export class DxiMarkerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get onClick(): ((e: MarkerClickEvent) => void) {
+    get onClick(): Function {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: MarkerClickEvent) => void)) {
+    set onClick(value: Function) {
         this._setOption('onClick', value);
     }
 
