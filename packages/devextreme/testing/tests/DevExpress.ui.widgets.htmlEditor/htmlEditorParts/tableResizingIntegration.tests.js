@@ -176,6 +176,31 @@ module('Table resizing integration', {
         this.clock.restore();
     }
 }, () => {
+    module('module cleanup', {}, () => {
+        test('disabling tableResizing keeps the other text-change subscribers of Quill', function(assert) {
+            this.createWidget();
+            const textChangeSpy = sinon.spy();
+            this.quillInstance.on('text-change', textChangeSpy);
+
+            this.instance.option('tableResizing.enabled', false);
+            this.quillInstance.insertText(0, 'a', 'user');
+
+            assert.strictEqual(textChangeSpy.callCount, 1, 'the foreign text-change handler is still subscribed');
+        });
+
+        test('disabling tableResizing removes its window resize handler', function(assert) {
+            this.createWidget();
+            const tableResizingModule = this.quillInstance.getModule('tableResizing');
+            const resizeHandler = tableResizingModule._resizeHandlerWithContext;
+
+            assert.ok(resizeCallbacks.has(resizeHandler), 'the handler is subscribed while resizing is enabled');
+
+            this.instance.option('tableResizing.enabled', false);
+
+            assert.notOk(resizeCallbacks.has(resizeHandler), 'the handler is removed');
+        });
+    });
+
     module('resizing frames initialization', {}, () => {
         test('Frame is created for table by default if the tableResizing option is enabled', function(assert) {
             this.createWidget();
