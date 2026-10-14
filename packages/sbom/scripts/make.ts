@@ -8,6 +8,7 @@ const PACKAGE_DIR = path.resolve(import.meta.dirname, '..');
 const REPO_ROOT = path.resolve(PACKAGE_DIR, '../..');
 const DIST = path.join(PACKAGE_DIR, 'dist');
 const EXTRA_SBOM = path.join(DIST, 'devextreme-extra-deps.cdx.json');
+const REGISTRY_CACHE = path.join(DIST, '.npm-registry.cache.json');
 
 const PACKAGES_WITH_DEVEXTREME = [
   'devextreme',
@@ -24,7 +25,12 @@ const packages = process.argv[2].split(',').map((entry) => {
   return tarball ? { fullName, tarball: path.resolve(tarball) } : { fullName };
 });
 
+const registryCache = fs.existsSync(REGISTRY_CACHE) ? fs.readFileSync(REGISTRY_CACHE) : null;
 fs.rmSync(DIST, { recursive: true, force: true });
+if (registryCache) {
+  fs.mkdirSync(DIST, { recursive: true });
+  fs.writeFileSync(REGISTRY_CACHE, registryCache);
+}
 
 await makeSbom({
   targetDir: path.join(PACKAGE_DIR, 'devextreme-extra-deps'),
