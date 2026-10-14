@@ -257,22 +257,6 @@ export const getEffectiveFormatLocale = (
   return coreLocalization.locale();
 };
 
-export const getDateFormatLocale = (
-  sourceFormat: Format,
-  resolvedFormat: Format = sourceFormat,
-): string => {
-  const localeSource = getOwnFormatLocale(sourceFormat) ? sourceFormat : resolvedFormat;
-  const sourcePresetName = isString(sourceFormat)
-    ? sourceFormat
-    : getFormatType(sourceFormat) ?? (isString(resolvedFormat) ? resolvedFormat : undefined);
-
-  return getEffectiveFormatLocale(
-    isPlainObject(localeSource) ? localeSource : undefined,
-    undefined,
-    sourcePresetName,
-  );
-};
-
 export const resolvePresetOverride = (presetName: string): Format | undefined => {
   const { dateTimeFormatPresets: presets } = config();
 
@@ -288,6 +272,32 @@ export const resolvePresetOverride = (presetName: string): Format | undefined =>
   }
 
   return resolveConfigValue(presets[matchedKey]);
+};
+
+const resolveFormatWhenOmitted = (sourceFormat: Format): Format => {
+  const presetName = isString(sourceFormat) ? sourceFormat : getFormatType(sourceFormat);
+  const presetOverride = presetName ? resolvePresetOverride(presetName) : undefined;
+
+  return presetOverride !== undefined && !isFunction(presetOverride)
+    ? presetOverride
+    : sourceFormat;
+};
+
+export const getDateFormatLocale = (
+  sourceFormat: Format,
+  resolvedFormat?: Format,
+): string => {
+  const effectiveResolved = resolvedFormat ?? resolveFormatWhenOmitted(sourceFormat);
+  const localeSource = getOwnFormatLocale(sourceFormat) ? sourceFormat : effectiveResolved;
+  const sourcePresetName = isString(sourceFormat)
+    ? sourceFormat
+    : getFormatType(sourceFormat) ?? (isString(effectiveResolved) ? effectiveResolved : undefined);
+
+  return getEffectiveFormatLocale(
+    isPlainObject(localeSource) ? localeSource : undefined,
+    undefined,
+    sourcePresetName,
+  );
 };
 
 export default {

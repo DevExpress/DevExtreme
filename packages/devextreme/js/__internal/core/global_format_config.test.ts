@@ -385,6 +385,31 @@ describe('global_format_config', () => {
     it('should fall back to message locale for unmapped preset', () => {
       expect(getDateFormatLocale('longDate')).toBe('en');
     });
+
+    it('should use the preset override locale when the resolved format is omitted', () => {
+      config({
+        ...config(),
+        dateTimeFormatPresets: {
+          longDate: { default: { type: 'longDate', locale: 'de' } },
+        },
+      });
+
+      expect(getDateFormatLocale('longDate')).toBe('de');
+      expect(getDateFormatLocale({ type: 'longDate' })).toBe('de');
+      expect(getDateFormatLocale({ type: 'longDate', locale: 'ja' })).toBe('ja');
+    });
+
+    it('should keep an explicit resolved format ahead of a preset override', () => {
+      config({
+        ...config(),
+        dateTimeFormatPresets: {
+          longDate: { default: { type: 'longDate', locale: 'de' } },
+        },
+      });
+
+      expect(getDateFormatLocale('longDate', { type: 'longDate', locale: 'fr' })).toBe('fr');
+      expect(getDateFormatLocale('shortDate', 'longDate')).toBe('de-DE');
+    });
   });
 
   describe('getRawGlobalFormatByDataType', () => {

@@ -871,7 +871,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   _getPrecisionLimits(pattern: string): { min: number; max: number } {
     const formatOption = this._getEffectiveFormatOption();
 
-    if (this._usesIntlFormatOption(formatOption)) {
+    if (this._usesIntlFormatOption(formatOption) && typeof Intl !== 'undefined') {
       const formatObject = asFormatObject(formatOption) ?? {};
       const locale = getEffectiveFormatLocale(formatOption, 'number');
       const {

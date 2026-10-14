@@ -1,7 +1,9 @@
 import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
+import coreLocalization from '@js/common/core/localization/core';
 import dateLocalization from '@js/common/core/localization/date';
+import config from '@js/core/config';
 import type { Properties } from '@js/ui/date_box';
 import DateBox from '@js/ui/date_box';
 import DateRangeBox from '@js/ui/date_range_box';
@@ -204,5 +206,51 @@ describe('locale-only displayFormat follows the editor type', () => {
     expect(editor._maskValue?.getMonth()).toBe(6);
     expect(editor._maskValue?.getDate()).toBe(20);
     expect(input.value).toContain('Juli');
+  });
+
+  it('edits a longDate mask whose locale comes from a preset override', () => {
+    const savedLocale = coreLocalization.locale();
+    const savedPresets = config().dateTimeFormatPresets;
+
+    coreLocalization.locale('en');
+    config({
+      ...config(),
+      dateTimeFormatPresets: {
+        longDate: { default: { type: 'longDate', locale: 'de' } },
+      },
+    });
+
+    try {
+      const element = document.body.appendChild(document.createElement('div'));
+      const instance = new DateBox(element, {
+        type: 'date',
+        pickerType: 'calendar',
+        useMaskBehavior: true,
+        value,
+        displayFormat: 'longDate',
+      });
+
+      widgets.push(instance);
+
+      const input = element.querySelector('.dx-texteditor-input') as HTMLInputElement;
+      const textBeforeEdit = input.value;
+
+      expect(textBeforeEdit).toContain('Juni');
+
+      const editor = instance as DateBox & { _upDownArrowHandler: (step: number) => void };
+
+      expect(() => editor._upDownArrowHandler(1)).not.toThrow();
+      expect(input.value).not.toBe(textBeforeEdit);
+    } finally {
+      const currentConfig = config();
+
+      if (savedPresets === undefined) {
+        delete currentConfig.dateTimeFormatPresets;
+      } else {
+        currentConfig.dateTimeFormatPresets = savedPresets;
+      }
+
+      coreLocalization.locale(savedLocale);
+    }
   });
 });

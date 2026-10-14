@@ -8,6 +8,7 @@ import type { CaretRange } from '@ts/ui/text_box/utils.caret';
 interface NumberBoxMaskInternals {
   _tryParse: (text: string, selection: CaretRange, char?: string) => number | undefined;
   _getDecimalSeparator: () => string;
+  _getPrecisionLimits: (pattern: string) => { min: number; max: number };
 }
 
 const widgets: NumberBox[] = [];
@@ -77,5 +78,22 @@ describe('NumberBox precision limits with a locale-only Intl format', () => {
     const editor = createEditor({ locale: 'fr', maximumFractionDigits: 0 });
 
     expect(typeDecimalSeparator(editor)).toBeUndefined();
+  });
+
+  it('uses the pattern precision when Intl is unavailable', () => {
+    const editor = createEditor({ locale: 'fr' });
+    const intl = globalThis.Intl;
+
+    Reflect.deleteProperty(globalThis, 'Intl');
+
+    try {
+      expect(editor._getPrecisionLimits('#,##0.00##')).toEqual({ min: 2, max: 4 });
+    } finally {
+      Object.defineProperty(globalThis, 'Intl', {
+        value: intl,
+        configurable: true,
+        writable: true,
+      });
+    }
   });
 });
