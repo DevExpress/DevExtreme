@@ -365,7 +365,7 @@ export default {
   getDisplayValue(
     column: DisplayValueColumn,
     value: unknown,
-    data: RawItemData | null,
+    data: RawItemData | null | undefined,
     rowType?: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use it as their own type
   ): any {
