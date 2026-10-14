@@ -9,8 +9,8 @@ import Guid from '@js/core/guid';
 import { captionize } from '@js/core/utils/inflector';
 import { isFunction, isString } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
+import { fromPromise } from '@ts/core/utils/deferred';
 import { logger } from '@ts/core/utils/m_console';
-import { fromPromise } from '@ts/core/utils/m_deferred';
 
 import { Controller } from '../modules/modules';
 import { AIAssistantIntegrationController } from './ai_assistant_integration_controller';
