@@ -1618,7 +1618,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  private getRowsCount(): number {
+  public getRowsCount(): number {
     const tableElement = this.getTableElement();
 
     if (tableElement?.length === 1) {
