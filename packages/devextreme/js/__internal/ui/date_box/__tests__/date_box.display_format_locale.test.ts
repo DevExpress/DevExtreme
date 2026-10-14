@@ -127,4 +127,34 @@ describe('locale-only displayFormat follows the editor type', () => {
     expect(() => editor._upDownArrowHandler(1)).not.toThrow();
     expect(input.value).not.toBe(textBeforeEdit);
   });
+
+  it('rebuilds the mask when a locale function changes before the value', () => {
+    let currentLocale = 'de';
+    const element = document.body.appendChild(document.createElement('div'));
+    const instance = new DateBox(element, {
+      type: 'date',
+      pickerType: 'calendar',
+      useMaskBehavior: true,
+      value,
+      displayFormat: { type: 'longDate', locale: () => currentLocale },
+    });
+
+    widgets.push(instance);
+
+    const input = element.querySelector('.dx-texteditor-input') as HTMLInputElement;
+
+    expect(input.value).toContain('Juni');
+
+    currentLocale = 'en';
+    instance.option('value', new Date(2024, 6, 20));
+
+    expect(input.value).toContain('July');
+
+    const editor = instance as DateBox & { _upDownArrowHandler: (step: number) => void };
+    const textBeforeEdit = input.value;
+
+    expect(() => editor._upDownArrowHandler(1)).not.toThrow();
+    expect(input.value).not.toBe(textBeforeEdit);
+    expect(input.value).toContain('July');
+  });
 });

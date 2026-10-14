@@ -56,6 +56,8 @@ class DateBoxMask<
 
   _formatPattern?: string | null;
 
+  _formatLocaleCache?: string;
+
   _pendingIMEDigit?: string | null;
 
   _isIMEDigitProcessed?: boolean;
@@ -373,7 +375,28 @@ class DateBoxMask<
     return caretEnd - caretStart === text.length;
   }
 
+  _invalidateMaskIfFormatLocaleChanged(): void {
+    const { displayFormat } = this.option();
+    const format = this._resolveDisplayFormat(displayFormat);
+    const formatLocale = getDateFormatLocale(format);
+
+    if (formatLocale === this._formatLocaleCache) {
+      return;
+    }
+
+    this._formatLocaleCache = formatLocale;
+
+    if (!this._formatPattern) {
+      return;
+    }
+
+    this._formatPattern = null;
+    this._prepareRegExpInfo();
+  }
+
   _getFormatPattern(): string {
+    this._invalidateMaskIfFormatLocaleChanged();
+
     if (this._formatPattern) {
       return this._formatPattern;
     }
@@ -529,6 +552,8 @@ class DateBoxMask<
     if (!this._useMaskBehavior()) {
       return;
     }
+
+    this._invalidateMaskIfFormatLocaleChanged();
 
     const { text } = this.option();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
