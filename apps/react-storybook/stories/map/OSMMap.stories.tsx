@@ -5,8 +5,6 @@ import { fn } from 'storybook/test';
 import Attribution from 'ol/control/Attribution.js';
 import type OpenLayersMap from 'ol/Map.js';
 import 'ol/ol.css';
-import { fromLonLat, transformExtent } from 'ol/proj.js';
-import View from 'ol/View.js';
 import React from 'react';
 import Button from 'devextreme-react/button';
 import Map, { type MapRef } from 'devextreme-react/map';
@@ -22,11 +20,14 @@ import 'devextreme/ui/map/openlayers';
 import { ROUTE_PATHS } from './routes';
 
 const CENTRAL_PARK_CENTER = { lat: 40.7829, lng: -73.9654 };
-const EXTENT: [number, number, number, number] = [-74.08, 40.67, -73.85, 40.88];
+// Demo only: tiles are served under Developer Express Inc's Stadia Maps subscription via domain-based authentication.
+// This configuration will not work on your domain. Configure your own tile provider here.
 const TILE_SERVER = {
-    url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19,
+    url: 'https://tiles-eu.stadiamaps.com/tiles/alidade_bright/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://stadiamaps.com/attribution/">Stadia Maps</a> '
+        + '&copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> '
+        + '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+    maxZoom: 20,
 };
 const MARKER_LOCATIONS: Record<string, MapLocation> = {
     'Columbus Circle': { lat: 40.768161, lng: -73.981906 },
@@ -132,25 +133,13 @@ interface OsmMapStoryProps extends OsmStoryArgs {
     updateArgs: (args: Partial<OsmStoryArgs>) => void;
 }
 
-const configureOpenLayersMap = (
-    { originalMap }: ReadyEvent,
-    center: MapLocation,
-    zoom: number,
-): void => {
+const configureAttribution = ({ originalMap }: ReadyEvent): void => {
     const map = originalMap as OpenLayersMap;
     const attribution = map.getControls().getArray()
         .find((control) => control instanceof Attribution) as Attribution | undefined;
 
     attribution?.setCollapsed(false);
     attribution?.setCollapsible(false);
-    map.setView(new View({
-        center: fromLonLat([center.lng, center.lat]),
-        extent: transformExtent(EXTENT, 'EPSG:4326', 'EPSG:3857'),
-        maxZoom: 16,
-        minZoom: 14,
-        smoothExtentConstraint: false,
-        zoom,
-    }));
 };
 
 const OsmMapStory = ({
@@ -263,7 +252,7 @@ const OsmMapStory = ({
                 zoom={zoom}
                 height={520}
                 width="100%"
-                onReady={(event) => configureOpenLayersMap(event, center, zoom)}
+                onReady={configureAttribution}
                 onZoomChange={(value) => updateArgs({ zoom: value })}
             />
         </div>
@@ -329,14 +318,12 @@ const meta: Meta<OsmStoryArgs> = {
         type: {
             control: 'select',
             options: ['roadmap', 'satellite', 'hybrid'],
-            description: 'The public OSM tile server provides one style, so this control exercises '
+            description: 'The Stadia Maps Alidade Bright tile source provides one style, so this control exercises '
                 + 'type changes without changing the map appearance.',
         },
         zoom: {
             control: {
                 type: 'number',
-                min: 14,
-                max: 16,
                 step: 0.25,
             },
         },
