@@ -57,11 +57,11 @@ export class GridCommands {
     };
   }
 
-  private static isArgsLengthAllowed(args: unknown): boolean {
+  private static getArgsJsonLength(args: unknown): number | undefined {
     try {
-      return JSON.stringify(args).length <= MAX_COMMAND_ARGS_LENGTH;
+      return JSON.stringify(args).length;
     } catch {
-      return false;
+      return undefined;
     }
   }
 
@@ -177,7 +177,14 @@ export class GridCommands {
         return null;
       }
 
-      if (!GridCommands.isArgsLengthAllowed(action.args)) {
+      const argsLength = GridCommands.getArgsJsonLength(action.args);
+
+      if (!isDefined(argsLength)) {
+        return null;
+      }
+
+      if (argsLength > MAX_COMMAND_ARGS_LENGTH) {
+        logger.warn(`Arguments of the "${action.name}" command are ${argsLength} characters long as JSON and exceed the ${MAX_COMMAND_ARGS_LENGTH}-character limit`);
         return null;
       }
 

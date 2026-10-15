@@ -577,14 +577,18 @@ describe('GridCommands', () => {
         schema: z.object({ value: z.string() }),
       });
       const safeParseSpy = jest.spyOn(command.schema, 'safeParse');
+      const loggerSpy = jest.spyOn(logger, 'warn').mockImplementation(() => {});
       const gridCommands = new GridCommands(createMockComponent(), [command]);
+      const args = { value: 'x'.repeat(MAX_COMMAND_ARGS_LENGTH) };
 
-      const result = gridCommands.parse(
-        [{ name: 'test', args: { value: 'x'.repeat(MAX_COMMAND_ARGS_LENGTH) } }],
-      );
+      const result = gridCommands.parse([{ name: 'test', args }]);
 
       expect(result).toBeNull();
       expect(safeParseSpy).not.toHaveBeenCalled();
+      expect(loggerSpy).toHaveBeenCalledWith(
+        `Arguments of the "test" command are ${JSON.stringify(args).length} characters long as JSON and exceed the ${MAX_COMMAND_ARGS_LENGTH}-character limit`,
+      );
+      loggerSpy.mockRestore();
     });
 
     it('should parse args exactly MAX_COMMAND_ARGS_LENGTH long as JSON', () => {
@@ -599,8 +603,9 @@ describe('GridCommands', () => {
       expect(result).toEqual([{ name: 'test', args: { value } }]);
     });
 
-    it('should return null if any action args cannot be serialized to JSON', () => {
+    it('should return null without a length warning if any action args cannot be serialized to JSON', () => {
       const command = createMockCommand('test');
+      const loggerSpy = jest.spyOn(logger, 'warn').mockImplementation(() => {});
       const gridCommands = new GridCommands(createMockComponent(), [command]);
       const args: Record<string, unknown> = {};
       args.self = args;
@@ -608,6 +613,8 @@ describe('GridCommands', () => {
       const result = gridCommands.parse([{ name: 'test', args }]);
 
       expect(result).toBeNull();
+      expect(loggerSpy).not.toHaveBeenCalled();
+      loggerSpy.mockRestore();
     });
 
     it('should apply zod transforms in the returned actions (null on optional → undefined)', () => {
