@@ -532,7 +532,7 @@ export class FieldChooser extends FieldChooserBase {
       treeView.option({ dataSource: that._createFieldsDataSource(dataSource) });
       scrollable = getScrollable(container);
       if (scrollable) {
-        scrollable.scrollTo({ y: scrollTop });
+        scrollable.scrollTo({ top: scrollTop });
         scrollable.update();
       }
     };

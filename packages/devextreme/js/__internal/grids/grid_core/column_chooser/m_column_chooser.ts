@@ -275,7 +275,7 @@ export class ColumnChooserView extends ColumnsView {
       this._columnChooserList.on('contentReady', (e) => {
         deferUpdate(() => {
           const scrollable = e.component.getScrollable();
-          scrollable.scrollTo({ y: scrollTop });
+          scrollable.scrollTo({ top: scrollTop });
 
           that.renderCompleted.fire();
         });
