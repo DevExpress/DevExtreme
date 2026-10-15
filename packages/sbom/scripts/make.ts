@@ -4,6 +4,8 @@ import path from 'node:path';
 import { addDependencies, makeSbom } from '@devexpress/sbom-toolkit';
 import type { MakeSbomConfig } from '@devexpress/sbom-toolkit';
 
+import { addWorkspaceHashes } from './add-workspace-hashes.ts';
+
 const PACKAGE_DIR = path.resolve(import.meta.dirname, '..');
 const REPO_ROOT = path.resolve(PACKAGE_DIR, '../..');
 const DIST = path.join(PACKAGE_DIR, 'dist');
@@ -47,6 +49,8 @@ for (const name of PACKAGES_WITH_DEVEXTREME) {
   }
 }
 fs.rmSync(EXTRA_SBOM);
+
+addWorkspaceHashes({ distDir: DIST, repoRoot: REPO_ROOT, packages });
 
 const devextremeSbom = path.join(DIST, 'devextreme.cdx.json');
 if (fs.existsSync(devextremeSbom)) {
