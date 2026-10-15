@@ -157,14 +157,18 @@ export interface ColumnDataSourceParameter {
 }
 
 export type SortParameters = StoreLoadOptions['sort']
-  | StoreLoadOptions['group']
+  | ColumnDataSourceParameter[]
+  | SortingInfo[]
+  | null;
+
+export type GroupParameters = StoreLoadOptions['group']
   | ColumnDataSourceParameter[]
   | SortingInfo[]
   | null;
 
 export interface ColumnsDataSourceParameters {
   sorting: SortParameters;
-  grouping: SortParameters;
+  grouping: GroupParameters;
   filtering?: DataFilter;
 }
 

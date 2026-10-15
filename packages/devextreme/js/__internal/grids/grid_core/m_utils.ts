@@ -31,6 +31,7 @@ import type {
   Column,
   ColumnsChanges,
   DisplayValueColumn,
+  GroupParameters,
   SortParameters,
   TemplateModel,
 } from '@ts/grids/grid_core/columns_controller/types';
@@ -100,7 +101,7 @@ const setEmptyText = ($container: dxElementWrapper): void => {
   $container.get(0).textContent = '\u00A0';
 };
 
-const normalizeSortingInfo = (sort: SortParameters): SortingInfo[] => {
+const normalizeSortingInfo = (sort: SortParameters | GroupParameters): SortingInfo[] => {
   const sortItems = sort || [];
   const result = normalizeSortingInfoUtility(sortItems);
 
@@ -420,8 +421,8 @@ export default {
   },
 
   equalSortParameters(
-    sortParameters1: SortParameters,
-    sortParameters2: SortParameters,
+    sortParameters1: SortParameters | GroupParameters,
+    sortParameters2: SortParameters | GroupParameters,
     ignoreIsExpanded?: boolean,
   ): boolean {
     const sortInfo1 = normalizeSortingInfo(sortParameters1);
@@ -432,12 +433,18 @@ export default {
         return false;
       }
       for (let i = 0; i < sortInfo1.length; i += 1) {
+        const sortItem1 = sortInfo1[i];
+        const sortItem2 = sortInfo2[i];
+        const isSameSelector = isEqualSelectors(sortItem1.selector, sortItem2.selector);
+        const isSameSortOrder = sortItem1.desc === sortItem2.desc;
+        const isSameGroupInterval = sortItem1.groupInterval === sortItem2.groupInterval;
+        const isSameExpandState = Boolean(sortItem1.isExpanded) === Boolean(sortItem2.isExpanded);
+
         if (
-          !isEqualSelectors(sortInfo1[i].selector, sortInfo2[i].selector)
-          || sortInfo1[i].desc !== sortInfo2[i].desc
-          || sortInfo1[i].groupInterval !== sortInfo2[i].groupInterval
-          || (!ignoreIsExpanded
-            && Boolean(sortInfo1[i].isExpanded) !== Boolean(sortInfo2[i].isExpanded))
+          !isSameSelector
+          || !isSameSortOrder
+          || !isSameGroupInterval
+          || (!ignoreIsExpanded && !isSameExpandState)
         ) {
           return false;
         }

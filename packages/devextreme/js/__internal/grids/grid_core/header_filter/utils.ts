@@ -131,7 +131,7 @@ export function getHeaderFilterGroupParameters(
         selector: dataField,
         groupInterval: interval,
         isExpanded: index < groupInterval.length - 1,
-        // @ts-ignore
+        // @ts-expect-error getGroupInterval() types interval names and numbers as string[]
       } : getIntervalSelector.bind(column, interval));
     });
 
@@ -143,12 +143,12 @@ export function getHeaderFilterGroupParameters(
   }
 
   const selector = (data: unknown): unknown => {
-    let value = column.calculateCellValue(data);
+    const cellValue = column.calculateCellValue(data);
 
-    if (value === undefined || value === '') {
-      value = null;
+    if (cellValue === undefined || cellValue === '') {
+      return null;
     }
-    return value;
+    return cellValue;
   };
 
   if (column.sortingMethod) {
