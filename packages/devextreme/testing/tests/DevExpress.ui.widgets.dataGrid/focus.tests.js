@@ -2938,7 +2938,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         that.clock.tick(10);
 
         // act
-        scrollable.scrollBy({ y: 400 });
+        scrollable.scrollBy({ top: 400 });
         that.clock.tick(10);
         const visibleRow = that.getVisibleRows()[0];
         $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
@@ -2992,7 +2992,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         that.clock.tick(10);
 
         // act
-        scrollable.scrollBy({ y: 400 });
+        scrollable.scrollBy({ top: 400 });
         that.clock.tick(10);
         const visibleRow = that.getVisibleRows()[0];
         $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);

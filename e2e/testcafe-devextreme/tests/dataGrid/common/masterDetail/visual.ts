@@ -119,7 +119,7 @@ test.meta({ browserSize: [800, 800] })('The master detail row should display cor
   // assert
   await testScreenshot(t, takeScreenshot, 'T1159578-master-detail-with-renderAsync-1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { y: 400 });
+  await dataGrid.scrollTo(t, { top: 400 });
   await t.wait(300);
 
   await t.click(dataGrid.getDataRow(16).getCommandCell(0).element);
@@ -161,7 +161,7 @@ test.meta({ browserSize: [800, 800] })('The master detail row should display cor
       while (scrollTop > 0) {
         scrollTop -= 25;
 
-        await dataGrid.scrollTo(t, { y: scrollTop });
+        await dataGrid.scrollTo(t, { top: scrollTop });
         await triggerScrollEvent(dataGrid);
       }
     };
@@ -172,7 +172,7 @@ test.meta({ browserSize: [800, 800] })('The master detail row should display cor
     await testScreenshot(t, takeScreenshot, `T1167889-master-detail-with-scrolling.useNative=${useNative}-1.png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { y: 1000 });
+    await dataGrid.scrollTo(t, { top: 1000 });
     await t.wait(100);
 
     // assert

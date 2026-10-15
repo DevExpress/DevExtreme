@@ -20,7 +20,7 @@ test.meta({ browserSize: [800, 800] })('Filter row with sticky columns', async (
 
   await testScreenshot(t, takeScreenshot, 'filter_row_with_sticky_columns_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'filter_row_with_sticky_columns_2.png', { element: dataGrid.element });
 
@@ -46,7 +46,7 @@ test.meta({ browserSize: [800, 800] })('Filter row with sticky columns when ther
 
   await testScreenshot(t, takeScreenshot, 'filter_row_with_sticky_and_band_columns_1_(showColumnHeaders_=_false).png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'filter_row_with_sticky_and_band_columns_2_(showColumnHeaders_=_false).png', { element: dataGrid.element });
 

@@ -22,7 +22,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await testScreenshot(t, takeScreenshot, `adaptability_sticky_columns_with_adaptive_detail_row_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `adaptability_sticky_columns_with_adaptive_detail_row_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -53,7 +53,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await testScreenshot(t, takeScreenshot, `adaptability_sticky_columns_with_sticky_positions_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { x: 10000 });
+    await dataGrid.scrollTo(t, { left: 10000 });
 
     await testScreenshot(t, takeScreenshot, `adaptability_sticky_columns_with_sticky_positions_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -123,7 +123,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await testScreenshot(t, takeScreenshot, `hidden_column_between_sticky_column_and_left_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `hidden_column_between_sticky_column_and_left_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -151,7 +151,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await testScreenshot(t, takeScreenshot, `banded_hidden_column_between_sticky_column_and_left_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `banded_hidden_column_between_sticky_column_and_left_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -182,7 +182,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await testScreenshot(t, takeScreenshot, `hidden_column_between_sticky_column_and_right_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `hidden_column_between_sticky_column_and_right_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -210,7 +210,7 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await testScreenshot(t, takeScreenshot, `banded_hidden_column_between_sticky_column_and_right_fixed_column_1_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `banded_hidden_column_between_sticky_column_and_right_fixed_column_2_(rtlEnabled_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -241,7 +241,7 @@ test.meta({ browserSize: [900, 800] })('Sticky columns with sticky positions whe
 
   await testScreenshot(t, takeScreenshot, 'adaptability_sticky_columns_with_sticky_positions_and_hiding_priority_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'adaptability_sticky_columns_with_sticky_positions_and_hiding_priority_2.png', { element: dataGrid.element });
 

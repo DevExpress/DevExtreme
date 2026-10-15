@@ -4,7 +4,7 @@ export const scrollTo = ClientFunction((x, y) => {
   const instance = ($('#container') as any).dxScheduler('instance');
   const scrollable = instance.getWorkSpaceScrollable();
 
-  scrollable.scrollTo({ y, x });
+  scrollable.scrollTo({ top: y, left: x });
 });
 
 export const scrollToDate = ClientFunction((date: Date, groups?: Record<string, unknown>) => {
