@@ -26,7 +26,7 @@ import modules from '@ts/grids/grid_core/modules/modules';
 import type { InternalGridOptions, ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 
 import type { FilterValueExpression } from '../filter/types';
-import type { FilterBuilderController } from '../filter_builder/m_filter_builder';
+import type { FilterBuilderController } from '../filter_builder/filter_builder';
 import type { FilterOperationDescriptions, FilterTextOptions } from './types';
 
 const FILTER_PANEL_CLASS = 'filter-panel';
@@ -289,7 +289,7 @@ export class FilterPanelView extends modules.View {
     const value = filterValue[2];
     const filterOperationDescriptions = this.getFilterOperationDescriptions();
 
-    let operationText: string;
+    let operationText = '';
 
     if (customOperation) {
       operationText = customOperation.caption || inflector.captionize(customOperation.name);

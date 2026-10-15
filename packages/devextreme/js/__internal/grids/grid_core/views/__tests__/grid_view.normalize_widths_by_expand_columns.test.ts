@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import type { Column } from '../../columns_controller/types';
-import { ResizingController } from '../m_grid_view';
+import { ResizingController } from '../grid_view';
 
 type ColumnWidth = number | string | undefined;
 
