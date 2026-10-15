@@ -20,7 +20,7 @@ describe('Data utils', () => {
     });
 
     it('should return any other object as is, including one with its own valueOf', () => {
-      const withValueOf = { valueOf: () => 42 };
+      const withValueOf = { valueOf: (): number => 42 };
       const plain = { id: 1 };
 
       expect(toComparable(withValueOf)).toBe(withValueOf);
