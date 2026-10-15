@@ -36,8 +36,9 @@
   ></dxi-data-grid-column>
 
   <div *dxTemplate="let data of 'priorityTemplate'">
-    <div [class]="'priority-badge priority-badge--' + data.value.toLowerCase()">{{
-      data.value
-    }}</div>
+    <div
+      [class]="'priority-badge priority-badge--' + data.value.toLowerCase()"
+      >{{ data.value }}</div
+    >
   </div>
 </dx-data-grid>
