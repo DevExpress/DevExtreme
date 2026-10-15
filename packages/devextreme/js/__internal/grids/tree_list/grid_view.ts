@@ -1,4 +1,4 @@
-import { gridViewModule, ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import { gridViewModule, ResizingController } from '@ts/grids/grid_core/views/grid_view';
 
 import treeListCore from './core';
 

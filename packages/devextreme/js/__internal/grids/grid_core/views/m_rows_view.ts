@@ -43,7 +43,7 @@ import type {
 } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import type { ResizingController } from '@ts/grids/grid_core/views/grid_view';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
