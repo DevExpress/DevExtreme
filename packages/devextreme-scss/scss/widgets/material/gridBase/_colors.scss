@@ -170,7 +170,7 @@ $datagrid-text-link-disabled-opacity: $base-disabled-opacity !default;
 $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
 
 @if $mode == "light" {
-  $datagrid-cell-modified-border-color: color.adjust($base-success, $lightness: 51%, $space: hsl) !default;
+  $datagrid-cell-modified-border-color: color.change($base-success, $lightness: 84.53%, $space: hsl) !default;
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
   $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: -12%, $space: hsl) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
@@ -178,11 +178,11 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-row-alternation-bg: color.adjust($datagrid-base-background-color, $lightness: -4%, $space: hsl) !default;
   $datagrid-hover-bg: color.adjust($datagrid-base-background-color, $lightness: -4%, $space: hsl) !default;
-  $datagrid-row-invalid-faded-border-color: color.adjust($base-danger, $lightness: 44%, $space: hsl) !default;
+  $datagrid-row-invalid-faded-border-color: color.change($base-danger, $lightness: 90.67%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
-  $datagrid-cell-modified-border-color: color.adjust($base-success, $lightness: -41%, $space: hsl) !default;
+  $datagrid-cell-modified-border-color: color.change($base-success, $lightness: 33.31%, $space: hsl) !default;
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.72) !default;
   $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: 12%, $space: hsl) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
@@ -190,7 +190,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
   $datagrid-columnchooser-item-bg: color.adjust($datagrid-columnchooser-bg, $lightness: 3%, $space: hsl) !default;
   $datagrid-row-alternation-bg: color.adjust($datagrid-base-background-color, $lightness: 4%, $space: hsl) !default;
   $datagrid-hover-bg: color.adjust($datagrid-base-background-color, $lightness: 4%, $space: hsl) !default;
-  $datagrid-row-invalid-faded-border-color: color.adjust($base-danger, $lightness: -31%, $space: hsl) !default;
+  $datagrid-row-invalid-faded-border-color: color.change($base-danger, $lightness: 46.06%, $space: hsl) !default;
 }
 
 $header-filter-color: $datagrid-columnchooser-item-color !default;

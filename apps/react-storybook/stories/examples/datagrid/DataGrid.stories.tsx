@@ -5,10 +5,12 @@ import { countries, generateData } from './data';
 import DataGrid, {
     Column,
     DataGridTypes,
+    Editing,
     Grouping,
     GroupPanel,
     Pager,
     Paging,
+    RequiredRule,
     SearchPanel
 } from "devextreme-react/data-grid";
 import DiscountCell from "./DiscountCell";
@@ -537,6 +539,51 @@ export const RowDraggingWithFixedColumns: Story = {
                 }}
                 columns={['Country', 'Area', 'Population_Total', 'GDP_Total']}
             />
+        );
+    },
+};
+
+const modifiedAndInvalidCellsChanges: DataGridTypes.DataChange[] = [
+    { type: 'update', key: 1, data: { Area: 8515000 } },
+    { type: 'update', key: 2, data: { GDP_Total: 10380000 } },
+    { type: 'update', key: 3, data: { Country: '' } },
+];
+
+export const ModifiedAndInvalidCells: Story = {
+    args: {
+        showBorders: true,
+        rowAlternationEnabled: false,
+    },
+    render: ({ showBorders, rowAlternationEnabled }) => {
+        const isValidated = useRef(false);
+
+        const onContentReady = useCallback((e: DataGridTypes.ContentReadyEvent) => {
+            if (!isValidated.current) {
+                isValidated.current = true;
+                e.component.saveEditData();
+            }
+        }, []);
+
+        return (
+            <DataGrid
+                dataSource={countries}
+                keyExpr="ID"
+                showBorders={showBorders}
+                rowAlternationEnabled={rowAlternationEnabled}
+                onContentReady={onContentReady}
+            >
+                <Editing
+                    mode="batch"
+                    allowUpdating={true}
+                    defaultChanges={modifiedAndInvalidCellsChanges}
+                />
+                <Column dataField="Country">
+                    <RequiredRule />
+                </Column>
+                <Column dataField="Area" />
+                <Column dataField="Population_Total" />
+                <Column dataField="GDP_Total" />
+            </DataGrid>
         );
     },
 };
