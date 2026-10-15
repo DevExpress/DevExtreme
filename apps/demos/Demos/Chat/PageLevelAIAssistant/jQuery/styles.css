@@ -16,6 +16,18 @@
   text-align: center;
 }
 
+.priority-badge--high {
+  background: #f1bbbc;
+}
+
+.priority-badge--normal {
+  background: #f9e2ae;
+}
+
+.priority-badge--low {
+  background: #9fd89f;
+}
+
 #form-container {
   border: 1px solid var(--dx-color-border);
   padding: 16px;
@@ -25,13 +37,6 @@
 .demo-container {
   margin: 20px;
   height: 556px;
-}
-
-.ai-chat-empty-icon {
-  font-size: 32px;
-  color: #337ab7;
-  text-align: center;
-  margin-bottom: 12px;
 }
 
 .ai-chat-empty-message {

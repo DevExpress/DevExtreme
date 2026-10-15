@@ -29,8 +29,7 @@
       />
       <template #priority-cell="{ data }">
         <div
-          class="priority-badge"
-          :style="{ background: colors[data.value as TaskPriority] }"
+          :class="['priority-badge', `priority-badge--${data.value.toLowerCase()}`]"
         >{{ data.value }}</div>
       </template>
       <DxColumn
@@ -49,8 +48,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { DxDataGrid, DxColumn, DxFilterRow, DxHeaderFilter } from 'devextreme-vue/data-grid';
-import { colors, tasks } from './data.ts';
-import type { ColumnFilterExpression, Task, TaskPriority } from './data.ts';
+import { tasks } from './data.ts';
+import type { ColumnFilterExpression, Task } from './data.ts';
 
 const dataGridRef = ref<InstanceType<typeof DxDataGrid>>();
 
@@ -90,5 +89,17 @@ defineExpose({
   padding: 2px 8px;
   display: inline-block;
   text-align: center;
+}
+
+.priority-badge--high {
+  background: #f1bbbc;
+}
+
+.priority-badge--normal {
+  background: #f9e2ae;
+}
+
+.priority-badge--low {
+  background: #9fd89f;
 }
 </style>

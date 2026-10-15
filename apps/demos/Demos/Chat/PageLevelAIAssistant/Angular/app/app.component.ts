@@ -16,12 +16,6 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 config({
   floatingActionButtonConfig: {
     position: {
@@ -36,14 +30,14 @@ config({
 
 loadMessages({
   en: {
-    'dxChat-textareaPlaceholder': 'Enter a prompt...',
+    'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
   },
 });
 
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [AiService],
   imports: [
     AiAssistantComponent,

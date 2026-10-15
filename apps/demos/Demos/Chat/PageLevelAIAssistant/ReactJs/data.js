@@ -17,7 +17,7 @@ export class ChatCommandError extends Error {
     Object.setPrototypeOf(this, ChatCommandError.prototype);
   }
 }
-export const emptyViewMessage = 'How can I help with this page?';
+export const emptyViewMessage = 'AI Assistant is ready to help you';
 export const employee = {
   ID: 1,
   Prefix: 'Mr.',

@@ -140,7 +140,7 @@ export const AI_SERVICE_CONFIG = {
 export const MAX_PROMPT_SIZE = 20000;
 export const RATE_LIMIT_RETRY_DELAY_MS = 30000;
 
-export const EMPTY_VIEW_MESSAGE = 'How can I help with this page?';
+export const EMPTY_VIEW_MESSAGE = 'AI Assistant is ready to help you';
 
 export const EMPTY_VIEW_PROMPT = 'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
 
@@ -153,12 +153,6 @@ export const ROUTER_TARGETS = new Set<RouterTarget>(['form', 'grid', 'mixed', 'n
 export const FORM_ACTION_TYPES = new Set<FormActionType>(['clear_field', 'clear_all', 'smart_paste']);
 
 export const titles = ['Mr.', 'Mrs.', 'Ms.'];
-
-export const colors: Record<TaskPriority, string> = {
-  High: '#F1BBBC',
-  Normal: '#F9E2AE',
-  Low: '#9FD89F',
-};
 
 export const states = ['California', 'New York', 'Texas'];
 

@@ -8,8 +8,6 @@ import { ArrayStore, DataSource } from 'devextreme-react/common/data';
 import { routeMessage } from './chat-router.js';
 import { emptyViewMessage } from './data.js';
 
-const chatStore = new ArrayStore({ key: 'id' });
-const chatDataSource = new DataSource({ store: chatStore, paginate: false });
 const chatSuggestionItems = [
   { text: 'Show Completed Tasks', prompt: 'Show Completed Tasks' },
   { text: 'Change State to Texas', prompt: 'Change State to Texas' },
@@ -37,17 +35,22 @@ export default function AiAssistant({ formRef, gridRef, aiIntegration }) {
   const clearButtonInstance = useRef(null);
   const [visible, setVisible] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [chatStore] = useState(() => new ArrayStore({ key: 'id' }));
+  const [chatDataSource] = useState(() => new DataSource({ store: chatStore, paginate: false }));
   const updateClearButtonState = useCallback(() => {
     clearButtonInstance.current?.option('disabled', chatDataSource.items().length === 0);
-  }, []);
-  const pushMessage = useCallback((message) => {
-    chatStore.push([
-      {
-        type: 'insert',
-        data: { id: Date.now() + Math.random(), timestamp: new Date(), ...message },
-      },
-    ]);
-  }, []);
+  }, [chatDataSource]);
+  const pushMessage = useCallback(
+    (message) => {
+      chatStore.push([
+        {
+          type: 'insert',
+          data: { id: Date.now() + Math.random(), timestamp: new Date(), ...message },
+        },
+      ]);
+    },
+    [chatStore],
+  );
   const handleUserMessage = useCallback(
     (message) => {
       const form = formRef.current?.instance();
@@ -93,7 +96,7 @@ export default function AiAssistant({ formRef, gridRef, aiIntegration }) {
     chatStore.clear();
     chatDataSource.reload();
     updateClearButtonState();
-  }, [updateClearButtonState]);
+  }, [chatStore, chatDataSource, updateClearButtonState]);
   const onPopupShowing = useCallback(() => setVisible(true), []);
   const onPopupHiding = useCallback(() => setVisible(false), []);
   const onClearButtonInitialized = useCallback(

@@ -46,10 +46,7 @@
         [onItemClick]="onSuggestionClick"
       ></dxo-chat-suggestions>
 
-      <div
-        class="dx-chat-messagelist-empty-view"
-        *dxTemplate="let data of 'emptyViewTemplate'"
-      >
+      <ng-container *dxTemplate="let data of 'emptyViewTemplate'">
         <div
           class="dx-chat-messagelist-empty-image dx-ai-chat__empty-image"
         ></div>
@@ -58,7 +55,7 @@
           class="ai-chat-empty-prompt"
           [innerHTML]="emptyViewPromptHtml"
         ></div>
-      </div>
+      </ng-container>
     </dx-chat>
   </div>
 </dx-popup>

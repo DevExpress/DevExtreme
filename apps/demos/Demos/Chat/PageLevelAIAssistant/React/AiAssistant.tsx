@@ -9,8 +9,6 @@ import { routeMessage } from './chat-router.ts';
 import { emptyViewMessage } from './data.ts';
 import type { AiAssistantProps, PushMessage } from './data.ts';
 
-const chatStore = new ArrayStore<ChatTypes.Message, number>({ key: 'id' });
-const chatDataSource = new DataSource({ store: chatStore, paginate: false });
 const chatSuggestionItems = [
   { text: 'Show Completed Tasks', prompt: 'Show Completed Tasks' },
   { text: 'Change State to Texas', prompt: 'Change State to Texas' },
@@ -35,14 +33,16 @@ export default function AiAssistant({ formRef, gridRef, aiIntegration }: AiAssis
   const clearButtonInstance = useRef<ReturnType<ButtonRef['instance']> | null>(null);
   const [visible, setVisible] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [chatStore] = useState(() => new ArrayStore<ChatTypes.Message, number>({ key: 'id' }));
+  const [chatDataSource] = useState(() => new DataSource({ store: chatStore, paginate: false }));
 
   const updateClearButtonState = useCallback((): void => {
     clearButtonInstance.current?.option('disabled', chatDataSource.items().length === 0);
-  }, []);
+  }, [chatDataSource]);
 
   const pushMessage: PushMessage = useCallback((message) => {
     chatStore.push([{ type: 'insert', data: { id: Date.now() + Math.random(), timestamp: new Date(), ...message } }]);
-  }, []);
+  }, [chatStore]);
 
   const handleUserMessage = useCallback((message: ChatTypes.Message): void => {
     const form = formRef.current?.instance();
@@ -80,7 +80,7 @@ export default function AiAssistant({ formRef, gridRef, aiIntegration }: AiAssis
     chatStore.clear();
     chatDataSource.reload();
     updateClearButtonState();
-  }, [updateClearButtonState]);
+  }, [chatStore, chatDataSource, updateClearButtonState]);
 
   const onPopupShowing = useCallback((): void => setVisible(true), []);
   const onPopupHiding = useCallback((): void => setVisible(false), []);

@@ -13,7 +13,7 @@ $(() => {
 
   DevExpress.localization.loadMessages({
     en: {
-      'dxChat-textareaPlaceholder': 'Enter a prompt...',
+      'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
     },
   });
 
@@ -309,8 +309,7 @@ $(() => {
           caption: 'Priority',
           cellTemplate: (container, options) => {
             $('<div>')
-              .addClass('priority-badge')
-              .css('background', colors[options.value])
+              .addClass(`priority-badge priority-badge--${options.value.toLowerCase()}`)
               .text(options.value)
               .appendTo(container);
           },

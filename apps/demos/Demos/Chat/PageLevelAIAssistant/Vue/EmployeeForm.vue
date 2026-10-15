@@ -1,7 +1,6 @@
 <template>
   <div
     id="form-container"
-    class="form-container"
   >
     <DxForm
       ref="formRef"
