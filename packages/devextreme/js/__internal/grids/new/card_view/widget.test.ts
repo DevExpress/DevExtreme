@@ -4,6 +4,8 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
+import { on } from '@js/events/index';
+import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import { rerender } from 'inferno';
 
 import type { Options as CardViewOptions } from './options';
@@ -66,6 +68,55 @@ describe('regressions', () => {
       dataSource: [{ a: 'a' }],
     });
     expect(cardView.option('pager.showPageSizeSelector')).toBe(false);
+  });
+});
+
+describe('card template container', () => {
+  it('should render card template into a new container and remove the previous one on data update (T1336765)', () => {
+    const containers: Element[] = [];
+    const onContainerRemoved = jest.fn();
+    const cardTemplate = (_: unknown, templateContainer: Element): void => {
+      const element = $(templateContainer).get(0);
+      containers.push(element);
+      on(element, 'dxremove', onContainerRemoved);
+    };
+
+    const container = document.createElement('div');
+    const cardView = new CardView(container, {
+      keyExpr: 'id',
+      dataSource: [{ id: 1, name: 'Audi' }],
+      cardTemplate,
+    } as CardViewOptions);
+
+    cardView.option('dataSource', [{ id: 1, name: 'BMW' }]);
+
+    expect(containers).toHaveLength(2);
+    expect(containers[1]).not.toBe(containers[0]);
+    expect(containers[0].parentNode).toBeNull();
+    expect(onContainerRemoved).toHaveBeenCalledTimes(1);
+  });
+
+  it('should remove card template container when the card is removed (T1336765)', () => {
+    const removedCardKeys: unknown[] = [];
+    const cardTemplate = (model: unknown, templateContainer: Element): void => {
+      const { card } = model as { card: CardInfo };
+
+      on($(templateContainer).get(0), 'dxremove', () => {
+        removedCardKeys.push(card.key);
+      });
+    };
+
+    const container = document.createElement('div');
+    const dataSource = [{ id: 1, name: 'Audi' }, { id: 2, name: 'BMW' }];
+    const cardView = new CardView(container, {
+      keyExpr: 'id',
+      dataSource,
+      cardTemplate,
+    } as CardViewOptions);
+
+    cardView.option('dataSource', [dataSource[0]]);
+
+    expect(removedCardKeys).toContain(2);
   });
 });
 
