@@ -216,19 +216,18 @@ export interface Controllers {
   export: import('../data_grid/export/m_export').ExportController;
   filter: import('./filter/filter_controller').FilterController;
   filterSync: import('./filter_sync/filter_sync').FilterSyncController;
-  filterBuilder: import('./filter_builder/m_filter_builder').FilterBuilderController;
+  filterBuilder: import('./filter_builder/filter_builder').FilterBuilderController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
   columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/m_headers_keyboard_navigation').HeadersKeyboardNavigationController;
-  groupPanelKeyboardNavigation: import('../data_grid/keyboard_navigation/m_group_panel_keyboard_navigation').GroupPanelKeyboardNavigationController;
-  resizing: import('./views/m_grid_view').ResizingController;
+  resizing: import('./views/grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
   searchPanel: import('./search/m_search').SearchPanelViewController;
   stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
-  synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
+  synchronizeScrolling: import('./views/grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/toast_controller').ToastViewController;
   aiColumn: import('./ai_column/controllers/ai_column_controller').AIColumnController;
@@ -254,9 +253,9 @@ export interface Views {
   trackerView: import('./columns_resizing_reordering/m_columns_resizing_reordering').TrackerView;
   contextMenuView: import('./context_menu/m_context_menu').ContextMenuView;
   footerView: import('../data_grid/summary/m_summary').FooterView;
-  gridView: import('./views/m_grid_view').GridView;
-  filterBuilderView: import('./filter_builder/m_filter_builder').FilterBuilderView;
-  filterPanelView: import('./filter_panel/m_filter_panel').FilterPanelView;
+  gridView: import('./views/grid_view').GridView;
+  filterBuilderView: import('./filter_builder/filter_builder').FilterBuilderView;
+  filterPanelView: import('./filter_panel/filter_panel').FilterPanelView;
   toastView: import('./toast/toast_view').ToastView;
   aiPromptEditorView: import('./ai_column/views/ai_prompt_editor_view').AIPromptEditorView;
   aiAssistantView: import('./ai_assistant/ai_assistant_view').AIAssistantView;
@@ -293,4 +292,9 @@ export interface Module {
     views?: Partial<ViewsExtender>;
   };
   defaultOptions?: () => InternalGridOptions;
+}
+
+export interface GridCoreHelper {
+  modules: Module[];
+  callModuleItemsMethod: typeof import('./modules/modules').default.callModuleItemsMethod;
 }

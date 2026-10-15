@@ -1,3 +1,4 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import { columnHasValue } from '@ts/grids/grid_core/columns_controller/columns_controller_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
@@ -32,3 +33,20 @@ export const isSameColumnLayout = (
 export const isRowElementVisible = (rowElement: HTMLElement): boolean => (
   rowElement.style.display !== 'none' && !rowElement.classList.contains(INVISIBLE_CLASS)
 );
+
+export const insertRowElement = (
+  $newRow: dxElementWrapper,
+  $rows: dxElementWrapper,
+  rowIndex: number,
+  $table: dxElementWrapper | null | undefined,
+): void => {
+  const $row = $rows.eq(rowIndex);
+
+  if ($row.length) {
+    $newRow.insertBefore($row);
+  } else if ($rows.length) {
+    $newRow.insertAfter($rows.last());
+  } else if ($table) {
+    $newRow.prependTo($newRow.is('tbody') ? $table : $table.children('tbody'));
+  }
+};
