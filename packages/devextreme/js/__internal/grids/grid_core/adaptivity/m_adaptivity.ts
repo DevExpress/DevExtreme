@@ -13,8 +13,8 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
-import { isDefined, isString } from '@js/core/utils/type';
-import type { Properties as FormProperties } from '@js/ui/form';
+import { isDefined } from '@js/core/utils/type';
+import type { Properties as FormProperties, SimpleItemTemplateData } from '@js/ui/form';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
@@ -31,6 +31,7 @@ import modules from '../modules/modules';
 import type { OptionChanged, RowKey } from '../types';
 import type { RowsView } from '../views/m_rows_view';
 import type { ColumnWidth, ViewCellOptions } from '../views/types';
+import { isPercentWidth } from '../views/utils';
 import {
   ADAPTIVE_COLUMN_BUTTON_CLASS,
   ADAPTIVE_COLUMN_NAME,
@@ -62,13 +63,6 @@ import type {
 } from './types';
 import { getHideableColumns } from './utils';
 
-function getColumnId(
-  columnsController: ColumnsController,
-  column: Column,
-): string | number | undefined {
-  return columnsController.getColumnId(column);
-}
-
 function adaptiveCellTemplate(container: DxElement, options: ViewCellOptions): void {
   const $container = $(container);
   // TODO getController
@@ -92,7 +86,7 @@ function adaptiveCellTemplate(container: DxElement, options: ViewCellOptions): v
   }
 }
 
-export class AdaptiveColumnsController extends modules.ViewController {
+export class AdaptiveColumnsViewController extends modules.ViewController {
   private _columnsController!: ColumnsController;
 
   private _dataController!: AdaptivityDataController;
@@ -186,7 +180,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
     const { column } = item;
     const focusAction = this.createAction(() => {
       if (this._editingController.isEditing()) {
-        // @ts-expect-error
+        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($container, clickEventName);
       }
     });
@@ -253,13 +247,11 @@ export class AdaptiveColumnsController extends modules.ViewController {
   private _getTemplate(
     item: AdaptiveFormItem,
     cellOptions: AdaptiveDetailCellOptions,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    updateForm?: (hiddenColumns?: Column[]) => void,
-  ): (options: unknown, container: DxElement) => void {
+  ): (options: SimpleItemTemplateData, container: DxElement) => void {
     const { column } = item;
     const editingController = this._editingController;
 
-    return (options: unknown, container: DxElement): void => {
+    return (options: SimpleItemTemplateData, container: DxElement): void => {
       const $container = $(container);
       const columnIndex = this._columnsController.getVisibleIndex(column.index);
       const templateOptions: AdaptiveDetailCellOptions = extend({}, cellOptions);
@@ -300,22 +292,13 @@ export class AdaptiveColumnsController extends modules.ViewController {
   }
 
   private _isVisibleColumnsValid(visibleColumns: Column[]): boolean {
-    const getCommandColumnsCount = (): number => {
-      let result = 0;
-
-      for (const visibleColumn of visibleColumns) {
-        if (visibleColumn.command) {
-          result += 1;
-        }
-      }
-      return result;
-    };
+    const commandColumnsCount = visibleColumns.filter((column) => column.command).length;
 
     if (visibleColumns.length < 2) {
       return false;
     }
 
-    if (visibleColumns.length - getCommandColumnsCount() <= 1) {
+    if (visibleColumns.length - commandColumnsCount <= 1) {
       return false;
     }
 
@@ -334,10 +317,6 @@ export class AdaptiveColumnsController extends modules.ViewController {
     return percentWidths;
   }
 
-  private _isPercentWidth(width: unknown): width is `${string}%` {
-    return isString(width) && width.endsWith('%');
-  }
-
   private _getAverageColumnsWidth(
     containerWidth: number,
     columns: Column[],
@@ -350,7 +329,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
       if (!this.isColumnHidden(column)) {
         const { width } = column;
         if (isDefined(width) && !isNaN(parseFloat(String(width)))) {
-          fixedColumnsWidth += this._isPercentWidth(width) ? this._calculatePercentWidth({
+          fixedColumnsWidth += isPercentWidth(width) ? this._calculatePercentWidth({
             visibleIndex: column.visibleIndex,
             columnsCount: columns.length,
             columnsCanFit,
@@ -372,34 +351,30 @@ export class AdaptiveColumnsController extends modules.ViewController {
     contentColumns: Column[],
     columnsCanFit: boolean,
   ): number | undefined {
-    const columnId = getColumnId(this._columnsController, column);
+    const columnId = this._columnsController.getColumnId(column);
     const widthOption = this._columnsController.columnOption(columnId, 'width');
     const bestFitWidth = this._columnsController.columnOption(columnId, 'bestFitWidth');
-    const columnsCount = contentColumns.length;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned conditionally below
-    let colWidth: number | undefined;
 
     if (widthOption && widthOption !== 'auto') {
-      if (this._isPercentWidth(widthOption)) {
-        colWidth = this._calculatePercentWidth({
+      if (isPercentWidth(widthOption)) {
+        return this._calculatePercentWidth({
           visibleIndex: column.visibleIndex,
-          columnsCount,
+          columnsCount: contentColumns.length,
           columnsCanFit,
           bestFitWidth,
           columnWidth: widthOption,
           containerWidth,
         });
-      } else {
-        return parseFloat(String(widthOption));
       }
-    } else {
-      const columnAutoWidth = this.option('columnAutoWidth');
-      colWidth = columnAutoWidth || !!column.command
-        ? bestFitWidth
-        : this._getAverageColumnsWidth(containerWidth, contentColumns, columnsCanFit);
+
+      return parseFloat(String(widthOption));
     }
 
-    return colWidth;
+    const columnAutoWidth = this.option('columnAutoWidth');
+
+    return columnAutoWidth || !!column.command
+      ? bestFitWidth
+      : this._getAverageColumnsWidth(containerWidth, contentColumns, columnsCanFit);
   }
 
   private _calculatePercentWidth(options: PercentWidthOptions): number {
@@ -423,11 +398,11 @@ export class AdaptiveColumnsController extends modules.ViewController {
     contentColumns: Column[],
     columnsCanFit: boolean,
   ): number | null | undefined {
-    const columnId = getColumnId(this._columnsController, column);
+    const columnId = this._columnsController.getColumnId(column);
     const widthOption = this._columnsController.columnOption(columnId, 'width');
     const bestFitWidth = this._columnsController.columnOption(columnId, 'bestFitWidth');
 
-    if (widthOption && widthOption !== 'auto' && !this._isPercentWidth(widthOption)) {
+    if (widthOption && widthOption !== 'auto' && !isPercentWidth(widthOption)) {
       return parseFloat(String(widthOption));
     }
 
@@ -445,7 +420,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
   private _getColumnPercentWidth(column: Column): number {
     let result = 0;
 
-    if (column.width && this._isPercentWidth(column.width)) {
+    if (column.width && isPercentWidth(column.width)) {
       result = parseFloat(column.width);
     }
 
@@ -459,7 +434,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
     each(columns, (index, column) => {
       if ((isDefined(column.index) && column.index < 0) || column.command) {
         colWidth += this._columnsController.columnOption(
-          getColumnId(this._columnsController, column),
+          this._columnsController.getColumnId(column),
           'bestFitWidth',
         ) || 0;
       }
@@ -616,24 +591,19 @@ export class AdaptiveColumnsController extends modules.ViewController {
       const cancelClassAdding = rowIndex === editFormRowIndex
         && viewName === ROWS_VIEW
         && this.option('editing.mode') !== 'popup';
+      const currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW && !cancelClassAdding
+        ? this._columnsController.getVisibleIndex(column.index, rowIndex)
+        : visibleIndex;
+      const $cellElement = !cancelClassAdding && currentVisibleIndex >= 0
+        ? this._findCellElementInRow($rowElements.eq(rowIndex), currentVisibleIndex)
+        : undefined;
 
-      if (!cancelClassAdding) {
-        const currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW
-          ? this._columnsController.getVisibleIndex(column.index, rowIndex)
-          : visibleIndex;
-        if (currentVisibleIndex >= 0) {
-          const $rowElement = $rowElements.eq(rowIndex);
-          const $cellElement = this._findCellElementInRow($rowElement, currentVisibleIndex);
-
-          // eslint-disable-next-line max-depth -- removing it needs a loop rewrite
-          if ($cellElement && this._isCellValid($cellElement)) {
-            this._hideVisibleCellInView({
-              viewName,
-              isCommandColumn,
-              $cell: $cellElement,
-            });
-          }
-        }
+      if ($cellElement && this._isCellValid($cellElement)) {
+        this._hideVisibleCellInView({
+          viewName,
+          isCommandColumn,
+          $cell: $cellElement,
+        });
       }
     }
   }
@@ -649,8 +619,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
       const $groupCell = $rowElement.find(`.${VIEW_CLASSES.groupCell}`);
       const colSpan = $groupCell.attr('colspan');
       if ($groupCell.length && isDefined(colSpan)) {
-        // eslint-disable-next-line radix
-        const groupCellLength = parseInt(colSpan);
+        const groupCellLength = parseInt(colSpan, 10);
         const endGroupIndex = $groupCell.index() + groupCellLength - 1;
         if (visibleColumnIndex > endGroupIndex) {
           visibleIndex = visibleColumnIndex - groupCellLength + 1;
@@ -727,7 +696,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
           visibleContentColumns,
           columnsCanFit,
         );
-        const columnId = getColumnId(this._columnsController, visibleColumn);
+        const columnId = this._columnsController.getColumnId(visibleColumn);
         const widthOption = this._columnsController.columnOption(columnId, 'width');
         const minWidth = this._columnsController.columnOption(columnId, 'minWidth');
         const columnBestFitWidth = this._columnsController.columnOption(columnId, 'bestFitWidth');
@@ -812,20 +781,20 @@ export class AdaptiveColumnsController extends modules.ViewController {
     container: dxElementWrapper,
     options: AdaptiveDetailCellOptions,
   ): void {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias -- Form callbacks use their this
-    const that = this;
     const $container = $(container);
     const userFormOptions: FormProperties & { formID: string } = {
       items: this._getFormItemsByHiddenColumns(this._hiddenColumns),
       formID: `dx-${new Guid()}`,
     };
-    // @ts-expect-error
+    // @ts-expect-error isMaterial() without a theme checks the current one
     const defaultFormOptions = isMaterial() ? { colCount: 2 } : {};
 
     this.executeAction('onAdaptiveDetailRowPreparing', { formOptions: userFormOptions });
 
     this._$itemContents = null;
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- Form callbacks use their this
+    const that = this;
     this._form = this._createComponent(
       $('<div>').appendTo($container),
       Form,
@@ -837,7 +806,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
             item.label = item.label || {};
             item.label.text = item.label.text || column.caption;
             item.column = column;
-            item.template = that._getTemplate(item, options, that.updateForm.bind(that));
+            item.template = that._getTemplate(item, options);
           }
           if (userFormOptions.customizeItem) {
             userFormOptions.customizeItem.call(this, item);

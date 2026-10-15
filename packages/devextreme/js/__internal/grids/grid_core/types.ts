@@ -201,7 +201,7 @@ export type OptionChangedFor<TOptions> = {
 export type OptionChanged = OptionChangedFor<InternalGridOptions>;
 
 export interface Controllers {
-  adaptiveColumns: import('./adaptivity/m_adaptivity').AdaptiveColumnsController;
+  adaptiveColumns: import('./adaptivity/m_adaptivity').AdaptiveColumnsViewController;
   applyFilter: import('./filter_row/m_filter_row').ApplyFilterViewController;
   columnChooser: import('./column_chooser/m_column_chooser').ColumnChooserController;
   columns: import('./columns_controller/columns_controller').ColumnsController;

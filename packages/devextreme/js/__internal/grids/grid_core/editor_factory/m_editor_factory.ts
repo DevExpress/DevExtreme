@@ -139,7 +139,6 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _updateFocusCore(): void {
     const $dataGridElement = this.component?.$element();
-    // this selector is specific to IE
     let $focus = $dataGridElement && this._getFocusedElement($dataGridElement);
 
     if ($focus && $focus.length) {
@@ -232,7 +231,6 @@ export class EditorFactory extends ViewControllerWithMixin {
     if (isHideBorder || isDataRow($element)) {
       $focusOverlay.addClass(DX_HIDDEN);
     } else if ($element.length) {
-      // align "right bottom" for Mozilla
       const align = browser.mozilla ? 'right bottom' : 'left top';
       const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
       const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
@@ -325,7 +323,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   /**
    * @extended: validating
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   public loseFocus(skipValidator?: boolean): void {
     this._$focusedElement?.removeClass(FOCUSED_ELEMENT_CLASS);
     this._$focusedElement = null;
@@ -334,14 +332,11 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _getContainerRoot(): Node {
     const $container = this.component?.$element();
-    // @ts-expect-error
+    // @ts-expect-error the grid element exists once the component is initialized
     const root = domAdapter.getRootNode($container?.get(0));
 
-    // @ts-expect-error
-    // NOTE: this condition is for the 'Row - Redundant validation messages should not be rendered
-    // in a detail grid when focused row is enabled (T950174)' testcafe test.
-    // The detail grid is created inside document_fragment_node but it is not shadow dom
-    if (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !root.host) {
+    // a grid created inside a plain document fragment (not a shadow root) listens on the document
+    if (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !('host' in root)) {
       return domAdapter.getDocument();
     }
 

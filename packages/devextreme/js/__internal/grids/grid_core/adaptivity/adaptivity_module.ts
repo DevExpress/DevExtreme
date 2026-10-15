@@ -9,7 +9,7 @@ import { adaptivityHeadersKeyboardNavigationViewControllerExtender } from './ext
 import { adaptivityKeyboardNavigationViewControllerExtender } from './extenders/adaptivity_keyboard_navigation_view_controller';
 import { adaptivityResizingViewControllerExtender } from './extenders/adaptivity_resizing_view_controller';
 import { adaptivityRowsViewExtender } from './extenders/adaptivity_rows_view';
-import { AdaptiveColumnsController } from './m_adaptivity';
+import { AdaptiveColumnsViewController } from './m_adaptivity';
 
 export const adaptivityModule: Module = {
   defaultOptions(): Pick<InternalGridOptions, 'columnHidingEnabled'> {
@@ -18,7 +18,7 @@ export const adaptivityModule: Module = {
     };
   },
   controllers: {
-    adaptiveColumns: AdaptiveColumnsController,
+    adaptiveColumns: AdaptiveColumnsViewController,
   },
   extenders: {
     views: {

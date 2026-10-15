@@ -18,7 +18,7 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_
 import { A11yStatusContainerComponent } from '@ts/grids/grid_core/views/a11y_status_container_component';
 
 import type { FooterView } from '../../data_grid/summary/m_summary';
-import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
+import type { AdaptiveColumnsViewController } from '../adaptivity/m_adaptivity';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import { GROUP_COMMAND_COLUMN_NAME } from '../columns_controller/const';
@@ -35,6 +35,7 @@ import type { ColumnsView } from './columns_view';
 import { CLASSES } from './const';
 import type { RowsView } from './m_rows_view';
 import type { ColumnWidth, ScrollPosition, ViewDataChange } from './types';
+import { isPercentWidth } from './utils';
 
 const BORDERS_CLASS = 'borders';
 const IMPORTANT_MARGIN_CLASS = 'important-margin';
@@ -66,8 +67,6 @@ const VIEW_NAMES = [
 const E2E_ATTRIBUTES = {
   a11yStatusContainer: 'e2e-a11y-general-status-container',
 };
-
-const isPercentWidth = (width: ColumnWidth): boolean => isString(width) && width.endsWith('%');
 
 const isPixelWidth = (width: ColumnWidth): boolean => isString(width) && width.endsWith('px');
 
@@ -115,7 +114,7 @@ export class ResizingController extends modules.ViewController {
 
   private _lastHeight?: number;
 
-  protected adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsViewController;
 
   private _editorFactoryController!: EditorFactory;
 
