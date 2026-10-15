@@ -577,7 +577,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       scrollPosition = 0;
     }
 
-    this.scrollTo({ y: scrollPosition, x: this._scrollLeft });
+    this.scrollTo({ top: scrollPosition, left: this._scrollLeft });
   }
 
   public renderDelayedTemplates() {
