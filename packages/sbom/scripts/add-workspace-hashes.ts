@@ -10,7 +10,7 @@ const INTERNAL_PACKAGES: Record<string, string> = {
   'eslint-migration-utils': 'packages/eslint-migration-utils/src',
 };
 
-const contentHashes = new Map<string, Hash>();
+let contentHashes: Record<string, Hash> | undefined;
 
 interface AddWorkspaceHashesConfig {
   sbomPath: string;
@@ -19,12 +19,9 @@ interface AddWorkspaceHashesConfig {
 }
 
 export function addWorkspaceHashes({ sbomPath, repoRoot, tarballs }: AddWorkspaceHashesConfig): void {
-  const getContentHash = (name: string): Hash | undefined => {
-    if (!contentHashes.has(name) && name in INTERNAL_PACKAGES) {
-      contentHashes.set(name, contentHash(path.join(repoRoot, INTERNAL_PACKAGES[name])));
-    }
-    return contentHashes.get(name);
-  };
+  const hashes = contentHashes ??= Object.fromEntries(
+    Object.entries(INTERNAL_PACKAGES).map(([name, dir]) => [name, contentHash(path.join(repoRoot, dir))]),
+  );
 
   const { components = [] }: CycloneDXBom = JSON.parse(fs.readFileSync(sbomPath, 'utf-8'));
   const entries = components.flatMap((component): AddHashesEntry[] => {
@@ -37,7 +34,7 @@ export function addWorkspaceHashes({ sbomPath, repoRoot, tarballs }: AddWorkspac
     if (tarball) {
       return [{ ...target, tarball }];
     }
-    const hash = getContentHash(name);
+    const hash = Object.hasOwn(hashes, name) ? hashes[name] : undefined;
     return hash ? [{ ...target, hashes: [hash] }] : [];
   });
 
