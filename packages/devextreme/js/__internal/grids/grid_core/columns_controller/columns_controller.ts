@@ -21,6 +21,7 @@ import Store from '@js/data/abstract_store';
 import type { Grouping, GroupPanel } from '@js/ui/data_grid';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import inflector from '@ts/core/utils/inflector';
 import type { SortingInfo } from '@ts/data/utils';
 import type {
@@ -1327,7 +1328,10 @@ export class ColumnsController extends modules.Controller {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- skip empty text
         || getAlignmentByDataType(dataType, this.option('rtlEnabled'));
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- skip falsy format
-      column.format = column.format || gridCoreUtils.getFormatByDataType(dataType);
+      column.format = applyDataTypePreset(
+        column.format || gridCoreUtils.getFormatByDataType(dataType),
+        dataType,
+      );
       column.customizeText = column.customizeText ?? getCustomizeTextByDataType(dataType);
       column.defaultFilterOperations = column.defaultFilterOperations
         ?? (lookup ? [] : (DATATYPE_OPERATIONS[dataType] ?? []));

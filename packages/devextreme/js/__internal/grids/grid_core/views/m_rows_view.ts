@@ -41,7 +41,7 @@ import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type {
   KeyboardNavigationController,
 } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
-import type { OptionChanged } from '@ts/grids/grid_core/types';
+import type { OptionChanged, SummaryTextItem } from '@ts/grids/grid_core/types';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 import type { ResizingController } from '@ts/grids/grid_core/views/grid_view';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -80,6 +80,7 @@ import {
   insertRowElement,
   isRowElementVisible,
   isSameColumnLayout,
+  keepContentHeight,
 } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
@@ -239,7 +240,7 @@ export class RowsView extends ColumnsView {
       const container = $container.get(0);
 
       if (options.summaryItems?.length) {
-        text += ` ${gridCoreUtils.getGroupRowSummaryText(options.summaryItems, summaryTexts)}`;
+        text += ` ${gridCoreUtils.getGroupRowSummaryText(options.summaryItems as SummaryTextItem[], summaryTexts)}`;
       }
 
       if (data) {
@@ -558,21 +559,26 @@ export class RowsView extends ColumnsView {
 
     return this.waitAsyncTemplates().done(() => {
       const contentChanges = this._contentChanges;
+      const hasRowChanges = contentChanges.some(
+        ({ change: contentChange }) => contentChange?.changeType === 'update',
+      );
 
       this._contentChanges = [];
 
-      contentChanges.forEach(({
-        newTableElement: $newTable,
-        change: contentChange,
-        isFixedTableRendering: isFixedTable,
-      }) => {
-        const contentElement = this._findContentElement(isFixedTable);
+      keepContentHeight(hasRowChanges ? this._findContentElement() : undefined, () => {
+        contentChanges.forEach(({
+          newTableElement: $newTable,
+          change: contentChange,
+          isFixedTableRendering: isFixedTable,
+        }) => {
+          const contentElement = this._findContentElement(isFixedTable);
 
-        if (contentChange?.changeType === 'update') {
-          this.applyRowChanges(contentChange, $newTable, isFixedTable);
-        } else {
-          this.replaceTable(contentElement, $newTable, isFixedTable);
-        }
+          if (contentChange?.changeType === 'update') {
+            this.applyRowChanges(contentChange, $newTable, isFixedTable);
+          } else {
+            this.replaceTable(contentElement, $newTable, isFixedTable);
+          }
+        });
       });
     }).fail(() => {
       this._contentChanges = [];

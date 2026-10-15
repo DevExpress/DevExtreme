@@ -10,8 +10,8 @@ import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ValueChangedEvent, BackgroundImageLocation, ChartAxisScale, AxisScale } from "devextreme/viz/range_selector";
 import type { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, dxChartCommonSeriesSettings, FinancialChartReductionLevel } from "devextreme/viz/chart";
+import type { FormatLocale, Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { Format as CommonFormat, SliderValueChangeMode, HorizontalAlignment, ExportFormat, VerticalEdge } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DashStyle, ScaleBreakLineStyle, Palette, PaletteExtensionMode, ChartsDataType, ChartsColor, SeriesHoverMode, HatchDirection, Font as ChartsFont, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, LabelOverlap, TimeInterval, ScaleBreak, DiscreteAxisDivisionMode, TextOverflow, WordWrap } from "devextreme/common/charts";
 import type { ChartSeries } from "devextreme/viz/common";
 
@@ -149,6 +149,7 @@ const AggregationInterval = Object.assign<typeof _componentAggregationInterval, 
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;
@@ -824,6 +825,7 @@ const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componen
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;
