@@ -250,6 +250,7 @@ export let Tooltip = class Tooltip {
               onRendered: () => {
                 removeElements(htmlContainers.splice(0, htmlContainers.length - 1));
 
+                // @ts-expect-error the core renderer wraps elements as dxElementWrapper does
                 this._textHtml = replaceWith(this._textHtml, containerToTemplateRender);
 
                 state.html = this._textHtml.html();
