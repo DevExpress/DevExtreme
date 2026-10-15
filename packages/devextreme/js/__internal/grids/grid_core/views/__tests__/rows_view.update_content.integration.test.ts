@@ -78,7 +78,7 @@ const emulateVisibilityByInvisibleClass = (): void => {
     .mockImplementation(function getClientRects(this: Element): DOMRectList {
       const isShown = this.isConnected && !this.closest(`.${INVISIBLE_CLASS}`);
 
-      return (isShown ? [new DOMRect()] : []) as unknown as DOMRectList;
+      return (isShown ? [{}] : []) as unknown as DOMRectList;
     });
 };
 
