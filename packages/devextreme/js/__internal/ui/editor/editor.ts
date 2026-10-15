@@ -442,7 +442,7 @@ class Editor<
         break;
       case 'value':
         if (value != previousValue) { // eslint-disable-line eqeqeq
-          this.option('isDirty', !this._isValueEqual(this._initialValue, value));
+          this.option('isDirty', !this._isSameAsInitialValue(value));
 
           this.validationRequest.fire({
             value,
@@ -493,18 +493,20 @@ class Editor<
     }
   }
 
-  _isValueEqual(value: unknown, otherValue: unknown): boolean {
-    if (isPlainObject(value) || isPlainObject(otherValue)) {
-      return value === otherValue;
+  _isSameAsInitialValue(value: unknown): boolean {
+    const initialValue = this._initialValue;
+
+    if (isPlainObject(initialValue) || isPlainObject(value)) {
+      return initialValue === value;
     }
 
     try {
-      return equalByValue(value, otherValue, {
+      return equalByValue(initialValue, value, {
         maxDepth: Infinity,
         comparePlainObjectsOnly: true,
       });
     } catch {
-      return value === otherValue;
+      return initialValue === value;
     }
   }
 
