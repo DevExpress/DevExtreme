@@ -80,6 +80,7 @@ import {
   insertRowElement,
   isRowElementVisible,
   isSameColumnLayout,
+  keepContentHeight,
 } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
@@ -558,21 +559,26 @@ export class RowsView extends ColumnsView {
 
     return this.waitAsyncTemplates().done(() => {
       const contentChanges = this._contentChanges;
+      const hasRowChanges = contentChanges.some(
+        ({ change: contentChange }) => contentChange?.changeType === 'update',
+      );
 
       this._contentChanges = [];
 
-      contentChanges.forEach(({
-        newTableElement: $newTable,
-        change: contentChange,
-        isFixedTableRendering: isFixedTable,
-      }) => {
-        const contentElement = this._findContentElement(isFixedTable);
+      keepContentHeight(hasRowChanges ? this._findContentElement() : undefined, () => {
+        contentChanges.forEach(({
+          newTableElement: $newTable,
+          change: contentChange,
+          isFixedTableRendering: isFixedTable,
+        }) => {
+          const contentElement = this._findContentElement(isFixedTable);
 
-        if (contentChange?.changeType === 'update') {
-          this.applyRowChanges(contentChange, $newTable, isFixedTable);
-        } else {
-          this.replaceTable(contentElement, $newTable, isFixedTable);
-        }
+          if (contentChange?.changeType === 'update') {
+            this.applyRowChanges(contentChange, $newTable, isFixedTable);
+          } else {
+            this.replaceTable(contentElement, $newTable, isFixedTable);
+          }
+        });
       });
     }).fail(() => {
       this._contentChanges = [];
