@@ -6,7 +6,7 @@ import { isDate, isDefined, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type TreeList from '@ts/grids/tree_list/m_widget_base';
+import type TreeList from '@ts/grids/tree_list/widget_base';
 import type Gantt from '@ts/ui/gantt/ui.gantt';
 
 const window = getWindow();

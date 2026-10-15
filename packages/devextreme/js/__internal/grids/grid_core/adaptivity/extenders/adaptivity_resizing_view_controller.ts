@@ -5,7 +5,7 @@
 /* eslint-disable prefer-rest-params */
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import type { ResizingController } from '@ts/grids/grid_core/views/grid_view';
 
 import { COLUMN_VIEWS } from '../const';
 

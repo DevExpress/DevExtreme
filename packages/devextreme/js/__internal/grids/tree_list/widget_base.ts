@@ -15,8 +15,8 @@ import type { UserDefinedElement } from '@js/core/element';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { isMaterialBased } from '@js/ui/themes';
 import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
-import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 import type { GridCoreHelper, Module } from '@ts/grids/grid_core/types';
+import GridCoreWidget from '@ts/grids/grid_core/widget_base';
 
 import treeListCore from './core';
 

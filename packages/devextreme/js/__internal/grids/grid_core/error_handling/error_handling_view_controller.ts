@@ -12,7 +12,7 @@ import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ToastViewController } from '@ts/grids/grid_core/toast/toast_controller';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import type { ResizingController } from '@ts/grids/grid_core/views/grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { CLASSES } from './const';
