@@ -23,11 +23,11 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred } from '@ts/core/utils/deferred';
 import { noop } from '@ts/core/utils/m_common';
 /// #DEBUG
 import { debug } from '@ts/core/utils/m_console';
 /// #ENDDEBUG
-import { Deferred } from '@ts/core/utils/m_deferred';
 import { extend } from '@ts/core/utils/m_extend';
 import { isDefined, isFunction } from '@ts/core/utils/m_type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
