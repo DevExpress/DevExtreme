@@ -80,6 +80,7 @@ import {
   insertRowElement,
   isRowElementVisible,
   isSameColumnLayout,
+  keepContentHeight,
 } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
@@ -569,7 +570,9 @@ export class RowsView extends ColumnsView {
         const contentElement = this._findContentElement(isFixedTable);
 
         if (contentChange?.changeType === 'update') {
-          this.applyRowChanges(contentChange, $newTable, isFixedTable);
+          keepContentHeight(contentElement, () => {
+            this.applyRowChanges(contentChange, $newTable, isFixedTable);
+          });
         } else {
           this.replaceTable(contentElement, $newTable, isFixedTable);
         }
