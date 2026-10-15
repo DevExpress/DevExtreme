@@ -32,6 +32,7 @@ import type {
   ColumnsChanges,
   DisplayValueColumn,
   SortParameters,
+  TemplateModel,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnPoint,
@@ -514,7 +515,8 @@ export default {
   getExpandCellTemplate(): ExpandCellTemplate {
     return {
       allowRenderToDetachedContainer: true,
-      render(container: dxElementWrapper, options: ExpandCellTemplateOptions): void {
+      render(container: dxElementWrapper, model: TemplateModel): void {
+        const options = model as ExpandCellTemplateOptions;
         const $container = $(container);
 
         if (

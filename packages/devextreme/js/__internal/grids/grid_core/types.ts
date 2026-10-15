@@ -17,6 +17,7 @@ import type Widget from '@js/ui/widget/ui.widget';
 import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
+import type { TemplateModel } from '@ts/grids/grid_core/columns_controller/types';
 import type { FilterValue } from '@ts/grids/grid_core/filter/types';
 import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
 
@@ -79,7 +80,7 @@ export interface ExpandCellTemplateOptions {
 
 export interface ExpandCellTemplate {
   allowRenderToDetachedContainer: boolean;
-  render: (container: dxElementWrapper, options: ExpandCellTemplateOptions) => void;
+  render: (container: dxElementWrapper, model: TemplateModel) => void;
 }
 
 export type TextSelectionElement = Element & {
