@@ -61,8 +61,8 @@ class DataArea extends AreaItem {
   }
 
   _moveFakeTable(scrollPos) {
-    this._moveFakeTableHorizontally(scrollPos.x);
-    this._moveFakeTableTop(scrollPos.y);
+    this._moveFakeTableHorizontally(scrollPos.left);
+    this._moveFakeTableTop(scrollPos.top);
     super._moveFakeTable();
   }
 
