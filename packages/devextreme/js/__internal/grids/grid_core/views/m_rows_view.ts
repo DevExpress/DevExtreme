@@ -40,6 +40,7 @@ import { ColumnsView } from './m_columns_view';
 import type { RowsViewScrollEvent } from './types';
 import {
   getCellText, getMaxHorizontalScrollOffset, isRowElementVisible, isSameColumnLayout,
+  keepContentHeight,
 } from './utils';
 
 const ROWS_VIEW_CLASS = 'rowsview';
@@ -459,77 +460,82 @@ export class RowsView extends ColumnsView {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.waitAsyncTemplates().done(() => {
       const contentChanges = this._contentChanges;
+      const hasRowChanges = contentChanges.some(
+        ({ change: contentChange }) => contentChange?.changeType === 'update',
+      );
 
       this._contentChanges = [];
 
-      contentChanges.forEach(({ newTableElement, change, isFixedTableRendering }) => {
-        const tableElement = this.getTableElement(isFixedTableRendering);
-        const contentElement = this._findContentElement(isFixedTableRendering);
-        const changeType = change?.changeType;
-        const executors: any[] = [];
-        const highlightChanges = this.option('highlightChanges');
-        const rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
+      keepContentHeight(hasRowChanges ? this._findContentElement() : undefined, () => {
+        contentChanges.forEach(({ newTableElement, change, isFixedTableRendering }) => {
+          const tableElement = this.getTableElement(isFixedTableRendering);
+          const contentElement = this._findContentElement(isFixedTableRendering);
+          const changeType = change?.changeType;
+          const executors: any[] = [];
+          const highlightChanges = this.option('highlightChanges');
+          const rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
 
-        switch (changeType) {
-          case 'update':
-            each(change.rowIndices, (index, rowIndex) => {
-              const $newRowElement = this._getRowElements(newTableElement).eq(index);
-              const dataChangeType = change.changeTypes?.[index];
-              const item = change.items && change.items[index];
+          switch (changeType) {
+            case 'update':
+              each(change.rowIndices, (index, rowIndex) => {
+                const $newRowElement = this._getRowElements(newTableElement).eq(index);
+                const dataChangeType = change.changeTypes?.[index];
+                const item = change.items && change.items[index];
 
-              executors.push(() => {
-                const $rowElements = this._getRowElements(tableElement);
-                const $rowElement = $rowElements.eq(rowIndex);
+                executors.push(() => {
+                  const $rowElements = this._getRowElements(tableElement);
+                  const $rowElement = $rowElements.eq(rowIndex);
 
-                // eslint-disable-next-line default-case
-                switch (dataChangeType) {
-                  case 'update':
-                    if (item) {
-                      const columnIndices = change.columnIndices?.[index];
+                  // eslint-disable-next-line default-case
+                  switch (dataChangeType) {
+                    case 'update':
+                      if (item) {
+                        const columnIndices = change.columnIndices?.[index];
 
-                      if (isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
-                        $rowElement.toggle(item.visible);
-                      } else if (columnIndices) {
-                        this._updateCells($rowElement, $newRowElement, columnIndices, item);
+                        if (isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
+                          $rowElement.toggle(item.visible);
+                        } else if (columnIndices) {
+                          this._updateCells($rowElement, $newRowElement, columnIndices, item);
+                        } else {
+                          $rowElement.replaceWith($newRowElement);
+                        }
+                      }
+                      break;
+                    case 'insert':
+                      if (!$rowElements.length) {
+                        if (tableElement) {
+                          const target = $newRowElement.is('tbody') ? tableElement : tableElement.children('tbody');
+                          $newRowElement.prependTo(target);
+                        }
+                      } else if ($rowElement.length) {
+                        $newRowElement.insertBefore($rowElement);
                       } else {
-                        $rowElement.replaceWith($newRowElement);
+                        $newRowElement.insertAfter($rowElements.last());
                       }
-                    }
-                    break;
-                  case 'insert':
-                    if (!$rowElements.length) {
-                      if (tableElement) {
-                        const target = $newRowElement.is('tbody') ? tableElement : tableElement.children('tbody');
-                        $newRowElement.prependTo(target);
+                      if (highlightChanges && change.isLiveUpdate) {
+                        $newRowElement.addClass(rowInsertedClass);
                       }
-                    } else if ($rowElement.length) {
-                      $newRowElement.insertBefore($rowElement);
-                    } else {
-                      $newRowElement.insertAfter($rowElements.last());
-                    }
-                    if (highlightChanges && change.isLiveUpdate) {
-                      $newRowElement.addClass(rowInsertedClass);
-                    }
-                    break;
-                  case 'remove':
-                    $rowElement.remove();
-                    break;
-                }
+                      break;
+                    case 'remove':
+                      $rowElement.remove();
+                      break;
+                  }
+                });
               });
-            });
-            each(executors, function () {
-              this();
-            });
+              each(executors, function () {
+                this();
+              });
 
-            newTableElement.remove();
-            break;
-          default:
-            this.setTableElement(newTableElement, isFixedTableRendering);
-            contentElement.addClass(this.addWidgetPrefix(CONTENT_CLASS));
-            this._setGridRole(contentElement);
-            this._renderContent(contentElement, newTableElement, isFixedTableRendering);
-            break;
-        }
+              newTableElement.remove();
+              break;
+            default:
+              this.setTableElement(newTableElement, isFixedTableRendering);
+              contentElement.addClass(this.addWidgetPrefix(CONTENT_CLASS));
+              this._setGridRole(contentElement);
+              this._renderContent(contentElement, newTableElement, isFixedTableRendering);
+              break;
+          }
+        });
       });
     }).fail(() => {
       this._contentChanges = [];
