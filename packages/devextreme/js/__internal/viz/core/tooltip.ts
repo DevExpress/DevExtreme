@@ -363,6 +363,7 @@ export let Tooltip = class Tooltip {
     let customize: TooltipCustomization = {};
 
     if (isFunction(customizeTooltip)) {
+      // @ts-expect-error the next line keeps only a plain object
       customize = customizeTooltip.call(formatObject, formatObject);
       customize = isPlainObject(customize) ? customize : {};
       if ('text' in customize) {
