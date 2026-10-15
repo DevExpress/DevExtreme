@@ -24,8 +24,8 @@ import { isString } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 import type { GridCoreHelper, Module } from '@ts/grids/grid_core/types';
+import GridCoreWidget from '@ts/grids/grid_core/widget_base';
 
 import gridCore from './core';
 
