@@ -1,7 +1,12 @@
+import '@js/ui/calendar';
+import '@js/ui/date_box';
+import '@js/ui/date_range_box';
 import '@js/ui/drop_down_box';
 import '@js/ui/lookup';
 import '@js/ui/radio_group';
+import '@js/ui/range_slider';
 import '@js/ui/select_box';
+import '@js/ui/tag_box';
 
 import {
   afterEach, describe, expect, it,
@@ -21,6 +26,13 @@ interface ObjectUpdateScenario {
   update: (form: Form, value: Item) => void;
 }
 
+interface ReturnScenario {
+  editorType: FormItemComponent;
+  editorOptions?: Record<string, unknown>;
+  createValue: () => unknown;
+  changedValue: unknown;
+}
+
 const FIELD = 'field';
 
 const OBJECT_VALUE_EDITORS: FormItemComponent[] = ['dxSelectBox', 'dxLookup', 'dxDropDownBox', 'dxRadioGroup'];
@@ -32,6 +44,41 @@ const updateWays: Pick<ObjectUpdateScenario, 'way' | 'update'>[] = [
 
 const objectUpdateScenarios: ObjectUpdateScenario[] = OBJECT_VALUE_EDITORS
   .flatMap((editorType) => updateWays.map((way) => ({ editorType, ...way })));
+
+const returnScenarios: ReturnScenario[] = [
+  {
+    editorType: 'dxCalendar',
+    createValue: () => new Date(2026, 9, 12),
+    changedValue: new Date(2026, 9, 13),
+  },
+  {
+    editorType: 'dxDateBox',
+    createValue: () => new Date(2026, 9, 12),
+    changedValue: new Date(2026, 9, 13),
+  },
+  {
+    editorType: 'dxTagBox',
+    editorOptions: { items: ['one', 'two'] },
+    createValue: () => ['one'],
+    changedValue: ['two'],
+  },
+  {
+    editorType: 'dxDropDownBox',
+    editorOptions: { dataSource: [{ id: 1 }, { id: 2 }], valueExpr: 'id' },
+    createValue: () => [1],
+    changedValue: [2],
+  },
+  {
+    editorType: 'dxRangeSlider',
+    createValue: () => [10, 50],
+    changedValue: [20, 60],
+  },
+  {
+    editorType: 'dxDateRangeBox',
+    createValue: () => [new Date(2026, 9, 12), new Date(2026, 9, 13)],
+    changedValue: [new Date(2026, 9, 14), new Date(2026, 9, 15)],
+  },
+];
 
 const createItems = (): Item[] => [{ id: 1, text: 'one' }, { id: 2, text: 'two' }];
 
@@ -73,6 +120,23 @@ describe('Form', () => {
       expect(editor?.option('value')).toBe(items[1]);
       expect(editor?.option('isDirty')).toBe(true);
       expect(form.option('isDirty')).toBe(true);
+    });
+
+    it.each(returnScenarios)('should be pristine after $editorType gets a value equal to the initial one as a new reference', ({
+      editorType, editorOptions, createValue, changedValue,
+    }) => {
+      const form = createForm({
+        formData: { [FIELD]: createValue() },
+        items: [{ dataField: FIELD, editorType, editorOptions }],
+      });
+
+      form.updateData(FIELD, changedValue);
+
+      expect(form.option('isDirty')).toBe(true);
+
+      form.updateData(FIELD, createValue());
+
+      expect(form.option('isDirty')).toBe(false);
     });
   });
 });
