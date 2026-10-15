@@ -141,6 +141,19 @@ describe('Editor isDirty when the value returns to its initial content (T1336605
     expect(instance.option('isDirty')).toBe(false);
   });
 
+  it('should be false when the same invalid date object returns', () => {
+    const invalidDate = new Date(NaN);
+    const instance = createEditor({ value: invalidDate });
+
+    instance.option('value', new Date(2026, 9, 15));
+
+    expect(instance.option('isDirty')).toBe(true);
+
+    instance.option('value', invalidDate);
+
+    expect(instance.option('isDirty')).toBe(false);
+  });
+
   it('should be true when array items change their order', () => {
     const instance = createEditor({ value: [1, 2] });
 

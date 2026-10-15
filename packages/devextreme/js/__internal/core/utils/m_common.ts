@@ -290,10 +290,12 @@ const compareArrays = (array1, array2, depth, options, comparedPairs) => {
     return false;
   }
 
+  const strictComparedPairs = options.strict ? comparedPairs : comparedPairs && new Map();
+
   return !array1.some((item, idx) => !compareByValue(item, array2[idx], depth + 1, {
     ...options,
     strict: true,
-  }, comparedPairs));
+  }, strictComparedPairs));
 };
 
 const compareObjects = (object1, object2, depth, options, comparedPairs) => {
@@ -329,9 +331,6 @@ const compareByValue = (value1, value2, depth, options, comparedPairs) => {
   const { strict, maxDepth, comparePlainObjectsOnly = false } = options;
   const comparable1 = toComparable(value1, true);
   const comparable2 = toComparable(value2, true);
-  const isComparedObjectPair = comparePlainObjectsOnly
-    ? isPlainObject(comparable1) && isPlainObject(comparable2)
-    : isObject(comparable1) && isObject(comparable2);
 
   const comparisonResult = strict
     ? comparable1 === comparable2
@@ -343,7 +342,9 @@ const compareByValue = (value1, value2, depth, options, comparedPairs) => {
     case depth >= maxDepth:
     case isPairCompared(comparedPairs, comparable1, comparable2):
       return true;
-    case isComparedObjectPair:
+    case comparePlainObjectsOnly
+      ? isPlainObject(comparable1) && isPlainObject(comparable2)
+      : isObject(comparable1) && isObject(comparable2):
       addComparedPair(comparedPairs, comparable1, comparable2);
       return compareObjects(comparable1, comparable2, depth, options, comparedPairs);
     case Array.isArray(comparable1) && Array.isArray(comparable2):

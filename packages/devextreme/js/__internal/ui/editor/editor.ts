@@ -496,8 +496,12 @@ class Editor<
   _isSameAsInitialValue(value: unknown): boolean {
     const initialValue = this._initialValue;
 
+    if (initialValue === value) {
+      return true;
+    }
+
     if (isPlainObject(initialValue) || isPlainObject(value)) {
-      return initialValue === value;
+      return false;
     }
 
     try {

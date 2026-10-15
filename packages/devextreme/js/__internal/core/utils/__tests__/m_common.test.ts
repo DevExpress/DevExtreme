@@ -39,6 +39,23 @@ describe('Common utils', () => {
       )).toBe(false);
     });
 
+    it('should not depend on the property order when loose comparison reaches strict array items with maxDepth Infinity', () => {
+      const options = { maxDepth: Infinity, strict: false };
+      const numberItem = { id: 1 };
+      const stringItem = { id: '1' };
+
+      expect(equalByValue(
+        { loose: numberItem, items: [numberItem] },
+        { loose: stringItem, items: [stringItem] },
+        options,
+      )).toBe(false);
+      expect(equalByValue(
+        { items: [numberItem], loose: numberItem },
+        { items: [stringItem], loose: stringItem },
+        options,
+      )).toBe(false);
+    });
+
     it('should compare non-plain objects by reference when comparePlainObjectsOnly is true', () => {
       const map = new Map([[1, 'a']]);
       const options = { comparePlainObjectsOnly: true };
