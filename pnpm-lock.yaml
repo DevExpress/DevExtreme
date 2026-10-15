@@ -152,8 +152,8 @@ catalogs:
       specifier: 10.4.1
       version: 10.4.1
     zod:
-      specifier: 4.6.5
-      version: 4.6.5
+      specifier: 4.6.7
+      version: 4.6.7
   tools:
     '@types/node':
       specifier: 20.19.37
@@ -493,7 +493,7 @@ importers:
         version: 4.2.0
       openai:
         specifier: 7.5.0
-        version: 7.5.0(ws@8.21.1)(zod@4.6.5)
+        version: 7.5.0(ws@8.21.1)(zod@4.6.7)
       preact:
         specifier: 10.12.1
         version: 10.12.1
@@ -562,7 +562,7 @@ importers:
         version: 17.7.2
       zod:
         specifier: 'catalog:'
-        version: 4.6.5
+        version: 4.6.7
       zone.js:
         specifier: 0.16.2
         version: 0.16.2
@@ -1280,7 +1280,7 @@ importers:
         version: 4.6.4(vue@3.5.32(typescript@5.9.3))
       zod:
         specifier: 'catalog:'
-        version: 4.6.5
+        version: 4.6.7
       zone.js:
         specifier: ~0.15.0
         version: 0.15.1
@@ -1386,7 +1386,7 @@ importers:
         version: 2.8.1
       zod:
         specifier: 'catalog:'
-        version: 4.6.5
+        version: 4.6.7
     devDependencies:
       '@babel/core':
         specifier: 7.29.7
@@ -16876,8 +16876,8 @@ packages:
   zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
 
-  zod@4.6.5:
-    resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
+  zod@4.6.7:
+    resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
 
   zone.js@0.15.1:
     resolution: {integrity: sha512-XE96n56IQpJM7NAoXswY3XRLcWFW83xe0BiAOeMD7K5k5xecOeul3Qcpx6GqEeeHNkW5DWL5zOyTbEfB4eti8w==}
@@ -17738,7 +17738,7 @@ snapshots:
       '@standard-schema/spec': 1.1.0
       rxjs: 7.8.2
       tslib: 2.8.1
-      zod: 4.6.5
+      zod: 4.6.7
 
   '@angular/platform-browser-dynamic@21.2.25(@angular/common@21.2.25(@angular/core@21.2.25(@angular/compiler@21.2.25)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@21.2.25)(@angular/core@21.2.25(@angular/compiler@21.2.25)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.25(@angular/common@21.2.25(@angular/core@21.2.25(@angular/compiler@21.2.25)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.25(@angular/compiler@21.2.25)(rxjs@7.8.2)(zone.js@0.15.1)))':
     dependencies:
@@ -27828,8 +27828,8 @@ snapshots:
       '@babel/parser': 7.29.2
       eslint: 9.39.4(jiti@2.6.1)
       hermes-parser: 0.25.1
-      zod: 4.6.5
-      zod-validation-error: 4.0.2(zod@4.6.5)
+      zod: 4.6.7
+      zod-validation-error: 4.0.2(zod@4.6.7)
     transitivePeerDependencies:
       - supports-color
 
@@ -32155,10 +32155,10 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  openai@7.5.0(ws@8.21.1)(zod@4.6.5):
+  openai@7.5.0(ws@8.21.1)(zod@4.6.7):
     optionalDependencies:
       ws: 8.21.1
-      zod: 4.6.5
+      zod: 4.6.7
 
   opencollective-postinstall@2.0.3: {}
 
@@ -36602,9 +36602,9 @@ snapshots:
     dependencies:
       zod: 4.4.3
 
-  zod-validation-error@4.0.2(zod@4.6.5):
+  zod-validation-error@4.0.2(zod@4.6.7):
     dependencies:
-      zod: 4.6.5
+      zod: 4.6.7
 
   zod@3.24.4: {}
 
@@ -36612,7 +36612,7 @@ snapshots:
 
   zod@4.4.3: {}
 
-  zod@4.6.5: {}
+  zod@4.6.7: {}
 
   zone.js@0.15.1: {}
 
