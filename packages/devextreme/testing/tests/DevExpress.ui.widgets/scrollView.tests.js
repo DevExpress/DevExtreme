@@ -2009,7 +2009,7 @@ QUnit.module('native swipeDown strategy', {
         const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
         pointerMock($container).start().down().move(0, -500).up();
-        $scrollView.dxScrollView('scrollTo', { y: 500 });
+        $scrollView.dxScrollView('scrollTo', { top: 500 });
         $($container).trigger('scroll');
         this.clock.tick(400);
 

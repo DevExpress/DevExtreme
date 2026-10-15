@@ -4095,7 +4095,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
 
         // act
-        scrollTo(this, { y: 1000 });
+        scrollTo(this, { top: 1000 });
         this.clock.tick(10);
 
         // assert

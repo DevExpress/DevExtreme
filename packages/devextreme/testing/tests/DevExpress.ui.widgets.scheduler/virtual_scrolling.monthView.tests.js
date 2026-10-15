@@ -22,8 +22,8 @@ const test = (description, callback) => {
     return testFunc(description, callback);
 };
 const printOffset = offset => [
-    offset.x >= 0 ? `offset.x: ${offset.x}` : '',
-    offset.y >= 0 ? `offset.y: ${offset.y}` : ''
+    offset.left >= 0 ? `offset.left: ${offset.left}` : '',
+    offset.top >= 0 ? `offset.top: ${offset.top}` : ''
 ].join(',');
 
 testStart(() => initTestMarkup());
@@ -68,7 +68,7 @@ module('Virtual scrolling Month View', () => {
             return asyncWrapper(assert, promise => {
                 [
                     {
-                        offset: { x: 0 },
+                        offset: { left: 0 },
                         expectedRects: [{
                             left: -9999,
                             top: -9859,
@@ -76,7 +76,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { x: 1050 },
+                        offset: { left: 1050 },
                         expectedRects: [{
                             left: -9999,
                             top: -9859,
@@ -84,7 +84,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { x: 2100 },
+                        offset: { left: 2100 },
                         expectedRects: [{
                             left: -10371,
                             top: -9859,
@@ -161,7 +161,7 @@ module('Virtual scrolling Month View', () => {
             return asyncWrapper(assert, promise => {
                 [
                     {
-                        offset: { y: 0 },
+                        offset: { top: 0 },
                         expectedRects: [{
                             left: -9934,
                             top: -9889,
@@ -169,7 +169,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { y: 900 },
+                        offset: { top: 900 },
                         expectedRects: [{
                             left: -9934,
                             top: -9589,
@@ -177,7 +177,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { y: 1800 },
+                        offset: { top: 1800 },
                         expectedRects: []
                     }
                 ].forEach(({ offset, expectedRects }) => {
@@ -251,7 +251,7 @@ module('Virtual scrolling Month View', () => {
             return asyncWrapper(assert, promise => {
                 [
                     {
-                        offset: { x: 0 },
+                        offset: { left: 0 },
                         expectedRects: [{
                             left: -9924,
                             top: -9859,
@@ -271,7 +271,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { x: 700 },
+                        offset: { left: 700 },
                         expectedRects: [{
                             left: -10324,
                             top: -9859,
@@ -307,7 +307,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { x: 1050 },
+                        offset: { left: 1050 },
                         expectedRects: [{
                             left: -9924,
                             top: -9859,
@@ -327,7 +327,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { x: 1400 },
+                        offset: { left: 1400 },
                         expectedRects: [{
                             left: -10274,
                             top: -9859,
@@ -417,7 +417,7 @@ module('Virtual scrolling Month View', () => {
             return asyncWrapper(assert, promise => {
                 [
                     {
-                        offset: { y: 0 },
+                        offset: { top: 0 },
                         expectedRects: [{
                             left: -9693,
                             top: -9689,
@@ -437,7 +437,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { y: 350 },
+                        offset: { top: 350 },
                         expectedRects: [{
                             left: -9693,
                             top: -10039,
@@ -457,7 +457,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { y: 1000 },
+                        offset: { top: 1000 },
                         expectedRects: [{
                             left: -9693,
                             top: -9489,
@@ -636,7 +636,7 @@ module('Virtual scrolling Month View', () => {
             return asyncWrapper(assert, promise => {
                 [
                     {
-                        offset: { x: 0 },
+                        offset: { left: 0 },
                         expectedRects: [{
                             left: -9924,
                             top: -9859,
@@ -652,7 +652,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { x: 1050 },
+                        offset: { left: 1050 },
                         expectedRects: [{
                             left: -9924,
                             top: -9859,
@@ -668,7 +668,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { x: 2100 },
+                        offset: { left: 2100 },
                         expectedRects: []
                     }
                 ].forEach(({ offset, expectedRects }) => {
@@ -743,7 +743,7 @@ module('Virtual scrolling Month View', () => {
             return asyncWrapper(assert, promise => {
                 [
                     {
-                        offset: { y: 0 },
+                        offset: { top: 0 },
                         expectedRects: [{
                             left: -9859,
                             top: -9889,
@@ -759,7 +759,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { y: 900 },
+                        offset: { top: 900 },
                         expectedRects: [{
                             left: -9859,
                             top: -9589,
@@ -845,7 +845,7 @@ module('Virtual scrolling Month View', () => {
             return asyncWrapper(assert, promise => {
                 [
                     {
-                        offset: { x: 0 },
+                        offset: { left: 0 },
                         expectedRects: [{
                             left: -9924,
                             top: -9859,
@@ -865,7 +865,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { x: 1050 },
+                        offset: { left: 1050 },
                         expectedRects: [{
                             left: -9924,
                             top: -9859,
@@ -885,7 +885,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { x: 1300 },
+                        offset: { left: 1300 },
                         expectedRects: [{
                             left: -10174,
                             top: -9859,
@@ -976,7 +976,7 @@ module('Virtual scrolling Month View', () => {
             return asyncWrapper(assert, promise => {
                 [
                     {
-                        offset: { y: 0 },
+                        offset: { top: 0 },
                         expectedRects: [{
                             left: -9853,
                             top: -9889,
@@ -996,7 +996,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { y: 900 },
+                        offset: { top: 900 },
                         expectedRects: [{
                             left: -9853,
                             top: -9589,
@@ -1016,7 +1016,7 @@ module('Virtual scrolling Month View', () => {
                         }]
                     },
                     {
-                        offset: { y: 1100 },
+                        offset: { top: 1100 },
                         expectedRects: [{
                             left: -9853,
                             top: -9789,
