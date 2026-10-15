@@ -30,7 +30,7 @@ interface AsyncTask {
 
 const hasDone = (
   value: unknown,
-): value is DeferredObj<unknown> => !!(value as { done?: unknown }).done;
+): value is { done: unknown } => !!(value as { done?: unknown }).done;
 
 export const executeAsync = function executeAsync(
   this: unknown,
@@ -105,7 +105,7 @@ const deferExecute = function deferExecute(
   executingName = oldExecutingName;
 
   if (deferred && result && hasDone(result)) {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises -- results are ignored
+    // @ts-expect-error a task result with done is a deferred
     result.done(deferred.resolve).fail(deferred.reject);
   }
 
@@ -315,11 +315,8 @@ export const escapeRegExp = function escapeRegExp(string: string): string {
   return string.replace(/[[\]{}\-()*+?.\\^$|\s]/g, '\\$&');
 };
 
-export function applyServerDecimalSeparator(
-  value: string | number | boolean | bigint | object,
-): string;
+export function applyServerDecimalSeparator(value: string | number): string;
 export function applyServerDecimalSeparator<T extends null | undefined>(value: T): T;
-export function applyServerDecimalSeparator(value: unknown): unknown;
 export function applyServerDecimalSeparator(value: unknown): unknown {
   const separator = config().serverDecimalSeparator;
   if (isDefined(value)) {
