@@ -4,6 +4,12 @@
 import type { VisualRange } from '@js/common/charts';
 import { registerComponent } from '@ts/core/component_registrator';
 import formatHelper from '@ts/core/format_helper';
+import {
+  applyDataTypePreset,
+  getRawGlobalFormatByDataType,
+  isLocaleOnlyFormat,
+  withFormatLocale,
+} from '@ts/core/global_format_config';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
@@ -1460,6 +1466,15 @@ class RangeSelector extends BaseWidget {
 
     sliderMarkerOptions.borderColor = this._getOption(CONTAINER_BACKGROUND_COLOR, true);
 
+    const valueDataType = isValueTypeDatetime ? DATETIME : 'number';
+    const ownOrGlobalFormat = sliderMarkerOptions.format
+      ?? getRawGlobalFormatByDataType(valueDataType);
+    const localeOnlyFormat = isLocaleOnlyFormat(ownOrGlobalFormat) ? ownOrGlobalFormat : undefined;
+
+    if (localeOnlyFormat) {
+      sliderMarkerOptions.format = undefined;
+    }
+
     if (!sliderMarkerOptions.format && !argRange.isEmpty()) {
       if (doNotSnap && isNumeric(scaleOptions.startValue)) {
         sliderMarkerOptions.format = {
@@ -1487,6 +1502,13 @@ class RangeSelector extends BaseWidget {
         sliderMarkerOptions.format = formatHelper.getDateFormatByTicks(tickIntervalsInfo.ticks);
       }
     }
+
+    if (localeOnlyFormat) {
+      sliderMarkerOptions.format = isDefined(sliderMarkerOptions.format)
+        ? withFormatLocale(sliderMarkerOptions.format, localeOnlyFormat.locale)
+        : applyDataTypePreset(localeOnlyFormat, valueDataType);
+    }
+
     return sliderMarkerOptions;
   }
 
