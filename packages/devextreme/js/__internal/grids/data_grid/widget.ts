@@ -1,6 +1,6 @@
 // NOTE: Order of imports important here and shouldn't be changed.
 /* eslint-disable simple-import-sort/imports */
-import DataGrid from './m_widget_base';
+import DataGrid from './widget_base';
 
 import './module_not_extended/state_storing';
 import './module_not_extended/ai_column';

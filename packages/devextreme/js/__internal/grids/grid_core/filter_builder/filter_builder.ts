@@ -17,7 +17,7 @@ import modules from '@ts/grids/grid_core/modules/modules';
 import type { InternalGridOptions, OptionChanged } from '@ts/grids/grid_core/types';
 
 import type { DataFilter, FilterSourceContext } from '../filter/types';
-import { anyOf, noneOf } from '../filter_sync/m_filter_custom_operations';
+import { anyOf, noneOf } from '../filter_sync/filter_custom_operations';
 import { getColumnIdentifier } from '../filter_sync/utils';
 
 export class FilterBuilderView extends modules.View {
