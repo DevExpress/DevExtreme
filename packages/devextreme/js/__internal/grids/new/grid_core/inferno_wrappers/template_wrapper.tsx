@@ -13,11 +13,14 @@ export function TemplateWrapper<TProps = {}>(template: TemplateType<TProps>) {
   return class Template extends BaseInfernoComponent<TProps> {
     private readonly ref = createRef<HTMLDivElement>();
 
+    private $container?: dxElementWrapper;
+
     private renderTemplate(): void {
-      $(this.ref.current).empty();
+      this.$container?.remove();
+      this.$container = $('<div>').appendTo($(this.ref.current));
 
       template.render({
-        container: $(this.ref.current),
+        container: this.$container,
         model: this.props,
       });
     }
@@ -32,6 +35,10 @@ export function TemplateWrapper<TProps = {}>(template: TemplateType<TProps>) {
 
     public componentDidMount(): void {
       this.renderTemplate();
+    }
+
+    public componentWillUnmount(): void {
+      this.$container?.remove();
     }
   };
 }

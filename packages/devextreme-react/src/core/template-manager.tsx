@@ -105,6 +105,8 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
       onContainerRemoved,
     });
 
+    subscribeOnRemoval(containerElement, onContainerRemoved);
+
     setInstantiationModels({ collection });
 
     return containerElement;
