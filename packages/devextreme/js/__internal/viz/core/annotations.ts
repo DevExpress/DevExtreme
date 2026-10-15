@@ -142,6 +142,7 @@ export let createAnnotations = function (widget, items, commonAnnotationSettings
     const currentImageOptions = getImageObject(item.image);
     const customizedItem = isFunction(customizeAnnotation) ? customizeAnnotation(item) : {};
     if (customizedItem) {
+      // @ts-expect-error customizeAnnotation returns the options of an annotation
       customizedItem.image = getImageObject(customizedItem.image);// T881143
     }
 
