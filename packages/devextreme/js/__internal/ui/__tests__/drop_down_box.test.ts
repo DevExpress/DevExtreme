@@ -155,10 +155,10 @@ describe('DropDownBox', () => {
 
       expect(isChainTooDeepToCompare(depth)).toBe(true);
 
-      createDropDownBox({ valueExpr: 'this', value: createChain(depth, 1) });
+      createDropDownBox({ valueExpr: 'this', value: [createChain(depth, 1)] });
       const [instance] = dropDownBoxes;
 
-      instance.option('value', createChain(depth, 1));
+      instance.option('value', [createChain(depth, 1)]);
 
       expect(instance.option('isDirty')).toBe(true);
     });

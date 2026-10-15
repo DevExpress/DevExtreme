@@ -41,7 +41,7 @@ const dateScenario: DirtyScenario = {
 };
 const objectItemScenario: DirtyScenario = {
   options: LIST_OPTIONS,
-  createValue: () => copyItem(0),
+  createValue: () => ITEMS[0],
   changedValue: ITEMS[1],
 };
 
@@ -58,10 +58,10 @@ const scenarios: Record<string, DirtyScenario> = {
   },
   dxDropDownBox: {
     options: { dataSource: ITEMS, displayExpr: 'text' },
-    createValue: () => copyItem(0),
+    createValue: () => ITEMS[0],
     changedValue: ITEMS[1],
   },
-  dxDropDownEditor: { createValue: () => copyItem(0), changedValue: ITEMS[1] },
+  dxDropDownEditor: { createValue: () => ITEMS[0], changedValue: ITEMS[1] },
   dxDropDownList: objectItemScenario,
   dxFileUploader: { createValue: () => [ATTACHED_FILE], changedValue: [] },
   dxHtmlEditor: { createValue: () => '<p>one</p>', changedValue: '<p>two</p>' },
@@ -163,7 +163,7 @@ describe('Editors isDirty when the value returns to its initial content (T133660
     expect(instance.option('isDirty')).toBe(false);
   });
 
-  it.each(Object.keys(scenarios))('%s should be dirty after a change and pristine after the initial value returns as a copy', (name) => {
+  it.each(Object.keys(scenarios))('%s should be dirty after a change and pristine after an equal value returns', (name) => {
     const { options, createValue, changedValue } = scenarios[name];
     const instance = createEditor(name, { ...options, value: createValue() });
 

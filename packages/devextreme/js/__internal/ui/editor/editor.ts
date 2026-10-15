@@ -9,6 +9,7 @@ import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
+import { isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type PublicEditor from '@js/ui/editor/editor';
@@ -493,6 +494,10 @@ class Editor<
   }
 
   _isValueEqual(value: unknown, otherValue: unknown): boolean {
+    if (isPlainObject(value) || isPlainObject(otherValue)) {
+      return value === otherValue;
+    }
+
     try {
       return equalByValue(value, otherValue, {
         maxDepth: Infinity,
