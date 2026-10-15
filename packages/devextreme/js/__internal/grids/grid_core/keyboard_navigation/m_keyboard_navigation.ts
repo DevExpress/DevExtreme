@@ -25,7 +25,7 @@ import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/m_dom';
 import { focused } from '@ts/core/utils/selectors';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
-import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -3248,7 +3248,7 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
   }
 };
 
-const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class AdaptiveColumnsKeyboardExtender extends Base {
+const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsViewController>) => class AdaptiveColumnsKeyboardExtender extends Base {
   protected _showHiddenCellsInView({ viewName, $cells, isCommandColumn }) {
     super._showHiddenCellsInView.apply(this, arguments as any);
 

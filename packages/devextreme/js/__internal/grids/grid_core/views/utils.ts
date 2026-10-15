@@ -1,9 +1,12 @@
+import { isString } from '@js/core/utils/type';
 import { columnHasValue } from '@ts/grids/grid_core/columns_controller/columns_controller_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import gridCoreUtils from '../m_utils';
 
 const INVISIBLE_CLASS = 'dx-state-invisible';
+
+export const isPercentWidth = (width: unknown): width is `${string}%` => isString(width) && width.endsWith('%');
 
 export const getCellText = (
   column: Column,
