@@ -36,7 +36,9 @@ import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_he
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
-import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type {
+  Column, ColumnRenderTemplate, ColumnsChanges, ColumnTemplateSource, TemplateModel,
+} from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
@@ -56,8 +58,6 @@ import type {
   CellEventOptions,
   CellPosition,
   CellRenderOptions,
-  ColumnRenderTemplate,
-  ColumnTemplateSource,
   ColumnViewTemplate,
   ColumnViewTemplateOptions,
   ColumnWidthsOptions,
@@ -69,7 +69,6 @@ import type {
   ScrollableOptions,
   ScrollPosition,
   TableRenderOptions,
-  TemplateModel,
   ViewCellOptions,
   ViewDataChange,
   ViewRow,
@@ -1629,7 +1628,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return 0;
   }
 
-  protected _getRowElementsCore(tableElement?: dxElementWrapper): dxElementWrapper {
+  protected _getRowElementsCore(tableElement?: dxElementWrapper | null): dxElementWrapper {
     const $table = tableElement ?? this.getTableElement();
 
     if ($table) {
@@ -1643,7 +1642,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $();
   }
 
-  public _getRowElements(tableElement?: dxElementWrapper): dxElementWrapper {
+  public _getRowElements(tableElement?: dxElementWrapper | null): dxElementWrapper {
     return this._getRowElementsCore(tableElement);
   }
 
