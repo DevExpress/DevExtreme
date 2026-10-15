@@ -42,15 +42,15 @@ await makeSbom({
 });
 await makeSbom({ targetDir: REPO_ROOT, outputDir: DIST, packages, options });
 
-for (const name of PACKAGES_WITH_DEVEXTREME) {
-  const sbomPath = path.join(DIST, `${name}.cdx.json`);
-  if (fs.existsSync(sbomPath)) {
+const tarballs = new Map(packages.flatMap(({ fullName, tarball }) => (tarball ? [[fullName, tarball]] : [])));
+for (const { fullName } of packages) {
+  const sbomPath = path.join(DIST, `${fullName}.cdx.json`);
+  if (PACKAGES_WITH_DEVEXTREME.includes(fullName)) {
     addDependencies({ sbomPath, extraSbomPath: EXTRA_SBOM, component: 'devextreme' });
   }
+  addWorkspaceHashes({ sbomPath, repoRoot: REPO_ROOT, tarballs });
 }
 fs.rmSync(EXTRA_SBOM);
-
-addWorkspaceHashes({ distDir: DIST, repoRoot: REPO_ROOT, packages });
 
 const devextremeSbom = path.join(DIST, 'devextreme.cdx.json');
 if (fs.existsSync(devextremeSbom)) {
