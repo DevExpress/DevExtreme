@@ -18,6 +18,7 @@
 import { Color } from '@ts/color';
 import { domAdapter } from '@ts/core/dom_adapter';
 import formatHelper from '@ts/core/format_helper';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import { renderer as $ } from '@ts/core/renderer';
 import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
 import { isCssVariableReference } from '@ts/core/utils/css_variables';
@@ -465,9 +466,9 @@ export let Tooltip = class Tooltip {
     }
   }
 
-  formatValue(value: ThemeValue, _specialFormat?: string): string {
+  formatValue(value: ThemeValue, _specialFormat?: string, dataType?: string): string {
     const options = _specialFormat ? getSpecialFormatOptions(this._options, _specialFormat) : this._options;
-    return format(value, options.format);
+    return format(value, applyDataTypePreset(options.format, dataType));
   }
 
   getOptions(): ThemeValue {

@@ -1,5 +1,6 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
+import coreLocalization from '@js/common/core/localization/core';
 import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
 import numberLocalization from '@js/common/core/localization/number';
@@ -13,7 +14,13 @@ import {
 import type { DxEvent, InteractionEvent } from '@js/events';
 import type dxDateBox from '@js/ui/date_box';
 import type { DateLike } from '@js/ui/date_box';
+import { getDateFormatLocale } from '@ts/core/global_format_config';
 import dateLocalization from '@ts/core/localization/date';
+import {
+  bindDatePartsToLocale,
+  getParser as getLDMLDateParser,
+  type LocaleAwareDateLocalization,
+} from '@ts/core/localization/ldml/date.parser';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
@@ -49,6 +56,10 @@ class DateBoxMask<
   _regExpInfo!: { regexp: RegExp; patterns: string[] };
 
   _formatPattern?: string | null;
+
+  _formatLocaleCache?: string;
+
+  _formatDateParts?: ReturnType<typeof bindDatePartsToLocale>;
 
   _pendingIMEDigit?: string | null;
 
@@ -367,13 +378,34 @@ class DateBoxMask<
     return caretEnd - caretStart === text.length;
   }
 
+  _invalidateMaskIfFormatLocaleChanged(): void {
+    const { displayFormat } = this.option();
+    const format = this._resolveDisplayFormat(displayFormat);
+    const formatLocale = getDateFormatLocale(format);
+
+    if (formatLocale === this._formatLocaleCache) {
+      return;
+    }
+
+    this._formatLocaleCache = formatLocale;
+
+    if (!this._formatPattern) {
+      return;
+    }
+
+    this._formatPattern = null;
+    this._prepareRegExpInfo();
+  }
+
   _getFormatPattern(): string {
+    this._invalidateMaskIfFormatLocaleChanged();
+
     if (this._formatPattern) {
       return this._formatPattern;
     }
 
     const { displayFormat } = this.option();
-    const format = this._strategy.getDisplayFormat(displayFormat);
+    const format = this._resolveDisplayFormat(displayFormat);
     const isLDMLPattern = isString(format) && !dateLocalization._getPatternByFormat(format);
 
     if (isLDMLPattern) {
@@ -478,7 +510,15 @@ class DateBoxMask<
   }
 
   _prepareRegExpInfo(): void {
-    this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+    const { displayFormat } = this.option();
+    const format = this._resolveDisplayFormat(displayFormat);
+    const formatLocale = getDateFormatLocale(format);
+    const dateParts = formatLocale === coreLocalization.locale()
+      ? dateLocalization
+      : bindDatePartsToLocale(dateLocalization as LocaleAwareDateLocalization, formatLocale);
+
+    this._formatDateParts = dateParts;
+    this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateParts);
     const { regexp } = this._regExpInfo;
     const { source } = regexp;
     const { flags } = regexp;
@@ -516,6 +556,8 @@ class DateBoxMask<
     if (!this._useMaskBehavior()) {
       return;
     }
+
+    this._invalidateMaskIfFormatLocaleChanged();
 
     const { text } = this.option();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -775,7 +817,11 @@ class DateBoxMask<
     const { text } = this.option();
     // @ts-expect-error text
     const newText = this._replaceSelectedText(text, this._caret(), clipboardText(e));
-    const date = dateLocalization.parse(newText, this._getFormatPattern());
+    const textToParse = numberLocalization.convertDigits(newText, true);
+    const date = getLDMLDateParser(
+      this._getFormatPattern(),
+      this._formatDateParts ?? dateLocalization,
+    )(textToParse);
 
     if (date && this._isDateValid(date)) {
       this._maskValue = date;
