@@ -97,14 +97,14 @@ const identicalDeclarations = (branches: AtRule[]): Map<string, Declaration[]> =
   const [first, ...rest] = branches.map(directDeclarations);
   const identical = new Map<string, Declaration[]>();
 
-  first.forEach((decl, name) => {
+  for (const [name, decl] of first) {
     const declarations = [decl, ...rest.map((byName) => byName.get(name))];
     const value = normalise(decl.value);
     if (declarations.every((other): other is Declaration => other !== undefined
       && normalise(other.value) === value)) {
       identical.set(name, declarations);
     }
-  });
+  }
   return identical;
 };
 
@@ -135,34 +135,30 @@ const planMoves = (
 
   const settle = (): void => {
     placement.clear();
-    identical.forEach(([first], name) => {
-      if (!movable.has(name)) return;
-      const behind = localReferences(first.value).some((ref) => (
-        movable.has(ref) ? placement.get(ref) === 'after' : assignedInside(branches, ref)
-      ));
-      placement.set(name, behind ? 'after' : 'before');
-    });
+    for (const [name, [first]] of identical) {
+      if (movable.has(name)) {
+        const behind = localReferences(first.value).some((ref) => (
+          movable.has(ref) ? placement.get(ref) === 'after' : assignedInside(branches, ref)
+        ));
+        placement.set(name, behind ? 'after' : 'before');
+      }
+    }
   };
   const readByStaying = (name: string): boolean => walkFinds(branches, (decl, branch) => (
     !(movable.has(decl.prop) && decl.parent === branch)
       && localReferences(decl.value).includes(name)
   ));
 
-  const prune = (): boolean => {
+  for (let changed = true; changed;) {
     settle();
-    let changed = false;
-    movable.forEach((name) => {
+    changed = false;
+    for (const name of movable) {
       if (placement.get(name) === 'after' && readByStaying(name)) {
         movable.delete(name);
         changed = true;
       }
-    });
-    return changed;
-  };
-  const pruneToFixpoint = (): void => {
-    if (prune()) pruneToFixpoint();
-  };
-  pruneToFixpoint();
+    }
+  }
   return { movable, placement };
 };
 
@@ -221,13 +217,13 @@ const ruleFunction: Rule = (primary) => (root, result) => {
 
   const lastHoisted = new WeakMap<AtRule, Declaration>();
 
-  collectChains(root).forEach(({ branches, independent }) => {
+  for (const { branches, independent } of collectChains(root)) {
     const ifRule = branches[0];
     const parent = parentOf(ifRule);
     const identical = identicalDeclarations(branches);
     const { movable, placement } = planMoves(branches, identical);
 
-    identical.forEach((declarations, name) => {
+    for (const [name, declarations] of identical) {
       const [first] = declarations;
       const earlier = earlierDeclaration(parent, ifRule, name);
       const overridden = earlier !== undefined && !isNull(earlier.value);
@@ -309,10 +305,10 @@ const ruleFunction: Rule = (primary) => (root, result) => {
         node: first,
         result,
         ruleName,
-        ...(fixable ? { fix: { apply: fix, node: parent } } : {}),
+        ...(fixable && { fix: { apply: fix, node: parent } }),
       });
-    });
-  });
+    }
+  }
 };
 
 ruleFunction.ruleName = ruleName;

@@ -114,9 +114,13 @@ const componentOf = (name: string): string | null => {
     .filter((component) => bare === component || bare.startsWith(`${component}-`))
     .sort((a, b) => b.length - a.length)[0] ?? null;
 };
-const scopeKeyOf = (selector: string): string | null => selector.split(/[\s>+~]+/)
-  .map((compound) => [...classesOf(compound)].find((one) => !GENERIC.test(one)))
-  .find((cls) => cls) ?? null;
+const scopeKeyOf = (selector: string): string | null => {
+  for (const compound of selector.split(/[\s>+~]+/)) {
+    const cls = [...classesOf(compound)].find((one) => !GENERIC.test(one));
+    if (cls) return cls;
+  }
+  return null;
+};
 
 const seenScopes = new Map<string, string>();
 [...orphans.keys()].forEach((line) => {

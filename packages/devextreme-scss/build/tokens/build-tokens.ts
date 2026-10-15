@@ -30,10 +30,14 @@ const SIZE_SUFFIX_RE = /\.(small|medium|large)$/;
 const isTree = (node: unknown): node is Tree => typeof node === 'object' && node !== null;
 
 const getTokenAtPath = (tokens: unknown, refPath: string): Tree | undefined => {
-  const node = refPath.split('.').reduce<unknown>(
-    (current, part) => (isTree(current) && part in current ? current[part] : undefined),
-    tokens,
-  );
+  let node = tokens;
+
+  for (const part of refPath.split('.')) {
+    if (!isTree(node) || !(part in node)) {
+      return undefined;
+    }
+    node = node[part];
+  }
 
   return isTree(node) && '$value' in node ? node : undefined;
 };
@@ -389,19 +393,19 @@ async function validateReferences(): Promise<number> {
 
   const contents = await Promise.all(files.map((file) => readFile(file, 'utf-8')));
 
-  files.forEach((file, index) => {
+  for (const [index, file] of files.entries()) {
     const content = contents[index];
 
-    [...content.matchAll(/--(dxds-[\w-]+)\s*:/g)].forEach(([, name]) => {
+    for (const [, name] of content.matchAll(/--(dxds-[\w-]+)\s*:/g)) {
       defined.add(name);
-    });
+    }
 
-    [...content.matchAll(/var\(--(dxds-[\w-]+)/g)].forEach(([, name]) => {
+    for (const [, name] of content.matchAll(/var\(--(dxds-[\w-]+)/g)) {
       if (!used.has(name)) {
         used.set(name, file);
       }
-    });
-  });
+    }
+  }
 
   const missing = [...used].filter(([name]) => !defined.has(name));
 
@@ -442,24 +446,18 @@ const modeDependentNames = (
   const tainted = new Set([...light.keys(), ...dark.keys()]
     .filter((name) => light.get(name) !== dark.get(name)));
 
-  const spread = (): boolean => {
-    let grew = false;
+  for (let grew = true; grew;) {
+    grew = false;
 
-    [light, aliases].forEach((source) => {
-      source.forEach((value, name) => {
+    for (const source of [light, aliases]) {
+      for (const [name, value] of source) {
         if (!tainted.has(name) && readsOf(value).some((read) => tainted.has(read))) {
           tainted.add(name);
           grew = true;
         }
-      });
-    });
-
-    return grew;
-  };
-  const spreadToFixpoint = (): void => {
-    if (spread()) spreadToFixpoint();
-  };
-  spreadToFixpoint();
+      }
+    }
+  }
 
   return tainted;
 };
@@ -520,7 +518,7 @@ async function validateConsumedTokens(): Promise<number> {
   const styleSheets = await collectThemeStyleSheets();
   const styleSheetContents = await Promise.all(styleSheets.map((file) => readFile(file, 'utf-8')));
 
-  styleSheets.forEach((file, index) => {
+  for (const [index, file] of styleSheets.entries()) {
     const content = styleSheetContents[index];
     const source = path.relative(themePath, file);
     const found: [string, string][] = [
@@ -528,12 +526,12 @@ async function validateConsumedTokens(): Promise<number> {
       ...collectCustomPropertyReferences(content, source).map((name): [string, string] => [name, `var(--dxds-${name})`]),
     ];
 
-    found.forEach(([name, reference]) => {
+    for (const [name, reference] of found) {
       if (!referenced.has(name)) {
         referenced.set(name, { file, reference });
       }
-    });
-  });
+    }
+  }
 
   const missing = [...referenced].filter(([name]) => !availableNames.has(name));
 
@@ -563,15 +561,16 @@ async function build(): Promise<void> {
   assertSourcesExist();
   await rm(buildPath, { recursive: true, force: true });
 
-  await configs.reduce(async (previous, config) => {
-    await previous;
+  for (const config of configs) {
     console.log(`Generating design tokens "${THEME_NAME}-${config.name}"`);
 
     const sd = new StyleDictionary(config);
 
+    // eslint-disable-next-line no-await-in-loop
     await sd.hasInitialized;
+    // eslint-disable-next-line no-await-in-loop
     await sd.buildAllPlatforms();
-  }, Promise.resolve());
+  }
 
   const split = await splitModeScopedLayers();
   const fileCount = await validateReferences();
@@ -582,6 +581,4 @@ async function build(): Promise<void> {
   console.log(`Design tokens consumed by ${THEME_FOLDER}: ${consumedCount} verified against the package`);
 }
 
-build().catch((error: unknown) => {
-  throw error;
-});
+await build();

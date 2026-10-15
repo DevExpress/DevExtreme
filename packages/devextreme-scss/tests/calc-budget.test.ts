@@ -24,7 +24,7 @@ if (!bundleNames.length) {
 }
 
 const measure = (css: string): { calcOccurrences: number; declarationsWithDeepCalc: number } => {
-  const declarations = css.match(/[a-z-][a-z0-9-]*\s*:[^;{}]*calc\([^;{}]*/g) ?? [];
+  const declarations: string[] = css.match(/[a-z-][a-z0-9-]*\s*:[^;{}]*calc\([^;{}]*/g) ?? [];
   return {
     calcOccurrences: (css.match(/calc\(/g) ?? []).length,
     declarationsWithDeepCalc: declarations

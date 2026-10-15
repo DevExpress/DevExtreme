@@ -996,8 +996,9 @@ const sortedUnique = (values: string[]): string[] => [...new Set(values)].sort()
 
 const stripState = (name: string, states: string[]): { base: string; state: string | null } => {
   const ordered = [...states].sort((a, b) => b.length - a.length);
-  const state = ordered.find((candidate) => name.endsWith(`-${candidate}`));
-  if (state !== undefined) return { base: name.slice(0, -state.length - 1), state };
+  for (const state of ordered) {
+    if (name.endsWith(`-${state}`)) return { base: name.slice(0, -state.length - 1), state };
+  }
   return { base: name, state: null };
 };
 
