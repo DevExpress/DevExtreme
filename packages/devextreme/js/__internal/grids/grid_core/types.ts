@@ -295,3 +295,8 @@ export interface Module {
   };
   defaultOptions?: () => InternalGridOptions;
 }
+
+export interface GridCoreHelper {
+  modules: Module[];
+  callModuleItemsMethod: typeof import('./modules/modules').default.callModuleItemsMethod;
+}
