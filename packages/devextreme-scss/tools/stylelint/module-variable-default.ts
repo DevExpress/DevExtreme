@@ -1,4 +1,9 @@
 import stylelint from 'stylelint';
+import type { Rule } from 'stylelint';
+
+import {
+  type AtRule, type Declaration, type Node, parentOf,
+} from './node-types.ts';
 
 const {
   createPlugin,
@@ -8,30 +13,34 @@ const {
 const ruleName = 'dx/module-variable-default';
 
 const messages = ruleMessages(ruleName, {
-  expected: (name) => `Expected the !default flag on "${name}": without it a value passed through @use … with() is ignored`,
+  expected: (name: string) => `Expected the !default flag on "${name}": without it a value passed through @use … with() is ignored`,
 });
 
-const meta = { fixable: true };
+const meta = {
+  url: 'https://github.com/DevExpress/DevExtreme/blob/main/packages/devextreme-scss/tools/stylelint/module-variable-default.ts',
+  fixable: true,
+};
 
-const isConditional = (node) => node.type === 'atrule' && ['if', 'else'].includes(node.name);
-const isModuleLevel = (decl) => {
-  let node = decl.parent;
-  while (isConditional(node)) node = node.parent;
+const isAtRule = (node: Node): node is AtRule => node.type === 'atrule';
+const isConditional = (node: Node): boolean => isAtRule(node) && ['if', 'else'].includes(node.name);
+const isModuleLevel = (decl: Declaration): boolean => {
+  let node = parentOf(decl);
+  while (isConditional(node)) node = parentOf(node);
   return node.type === 'root';
 };
-const hasFlag = (decl, flag) => new RegExp(`!${flag}\\b`, 'i').test(decl.value);
-const isNull = (decl) => /^null(\s+!default)?$/.test(decl.value.trim());
+const hasFlag = (decl: Declaration, flag: string): boolean => new RegExp(`!${flag}\\b`, 'i').test(decl.value);
+const isNull = (decl: Declaration): boolean => /^null(\s+!default)?$/.test(decl.value.trim());
 
-const ruleFunction = (primary) => (root, result) => {
+const ruleFunction: Rule = (primary) => (root, result) => {
   if (!validateOptions(result, ruleName, { actual: primary, possible: [true] })) return;
 
-  const assigned = new Set();
+  const assigned = new Set<string>();
 
   root.walkDecls((decl) => {
     if (!decl.prop.startsWith('$') || !isModuleLevel(decl)) return;
 
     const reassignment = assigned.has(decl.prop);
-    if (decl.parent.type === 'root' && !isNull(decl)) assigned.add(decl.prop);
+    if (parentOf(decl).type === 'root' && !isNull(decl)) assigned.add(decl.prop);
     if (reassignment || hasFlag(decl, 'default') || hasFlag(decl, 'global')) return;
 
     report({

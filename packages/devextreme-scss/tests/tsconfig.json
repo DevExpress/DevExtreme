@@ -1,7 +1,9 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "baseUrl": ".",
+        "module": "commonjs",
+        "moduleResolution": "node10",
+        "verbatimModuleSyntax": false,
         "types": [
             "node",
             "jest"
