@@ -40,12 +40,6 @@ root.walkDecls((decl) => {
   declaredAt.set(decl.prop, known);
 });
 
-const rootsOf = (name: string): Set<string> => {
-  const roots = declaredAt.get(name);
-  if (!roots) throw new Error(`${name} is not declared`);
-  return roots;
-};
-
 const SET_ELSEWHERE = new Set([
   '--dx-cardview-card-max-width',
   '--dx-cardview-card-min-width',
@@ -80,7 +74,7 @@ root.walkRules((rule) => {
     if (!reads.length) return;
     rule.selectors.forEach((sel) => {
       const key = `${sel.trim()}§${decl.prop}`;
-      const scope = [...new Set(reads.flatMap((name) => [...rootsOf(name)]))].sort().join(',');
+      const scope = [...new Set(reads.flatMap((name) => [...(declaredAt.get(name) ?? [])]))].sort().join(',');
       copies.set(key, [...(copies.get(key) ?? []), { reads, scope }]);
     });
   });
@@ -250,7 +244,7 @@ const revived = pinned.names.filter((name) => !unread.includes(name));
 
 appeared.forEach((name) => {
   process.stdout.write(`✘ declared and never read: ${name}\n`);
-  process.stdout.write(`     declared on ${[...rootsOf(name)].sort().join(', ')}\n`);
+  process.stdout.write(`     declared on ${[...(declaredAt.get(name) ?? [])].sort().join(', ')}\n`);
   process.stdout.write('     cure: read it where it belongs, or stop publishing it — a name that moves nothing\n');
   process.stdout.write('     is still API once the theme ships, and then it cannot be withdrawn\n');
 });

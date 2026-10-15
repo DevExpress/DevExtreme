@@ -13,7 +13,7 @@ import { stripScssComments } from '../../build/tokens/consumed-tokens.ts';
 import {
   type Registries,
   type SourceFile,
-  planPublication, stalePaths, THEME, PUBLIC_FILE, LINKS_FILE, COLLECTOR_PATH,
+  byCodepoint, planPublication, stalePaths, THEME, PUBLIC_FILE, LINKS_FILE, COLLECTOR_PATH,
 } from './tier.ts';
 
 const here = dirname(process.argv[1]);
@@ -67,15 +67,17 @@ if (process.argv.includes('--check')) {
   }
   process.stdout.write(`component tier is up to date (${plan.files.size} files)\n`);
 } else {
-  stale.forEach((path) => {
-    const absolute = join(widgetsRoot, path);
-    if (!existsSync(dirname(absolute))) {
-      throw new Error(`${path}: the folder does not exist`);
-    }
-    const content = plan.files.get(path);
-    if (content === undefined) throw new TypeError(`${path} is stale but was not planned`);
-    writeFileSync(absolute, content);
-    process.stdout.write(`wrote ${path}\n`);
-  });
+  const stalePathSet = new Set(stale);
+  [...plan.files]
+    .filter(([path]) => stalePathSet.has(path))
+    .sort(([a], [b]) => byCodepoint(a, b))
+    .forEach(([path, content]) => {
+      const absolute = join(widgetsRoot, path);
+      if (!existsSync(dirname(absolute))) {
+        throw new Error(`${path}: the folder does not exist`);
+      }
+      writeFileSync(absolute, content);
+      process.stdout.write(`wrote ${path}\n`);
+    });
   if (!stale.length) process.stdout.write('component tier is up to date\n');
 }

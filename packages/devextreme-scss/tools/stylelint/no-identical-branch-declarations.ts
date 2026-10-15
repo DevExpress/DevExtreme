@@ -40,16 +40,7 @@ const childrenOf = (container: Container): ChildNode[] => {
   if (!container.nodes) throw new TypeError(`a ${container.type} without children`);
   return container.nodes;
 };
-const entryOf = <K, V>(map: Map<K, V>, key: K): V => {
-  const value = map.get(key);
-  if (value === undefined) throw new TypeError(`no entry for ${String(key)}`);
-  return value;
-};
-const indentOf = (node: Node): string => {
-  const match = /[ \t]*$/.exec(node.raws.before ?? '');
-  if (!match) throw new TypeError('no indent');
-  return match[0];
-};
+const indentOf = (node: Node): string => /[ \t]*$/.exec(node.raws.before ?? '')?.[0] ?? '';
 
 const localReferences = (value: string): string[] => [...value.matchAll(/(^|[^\w.-])(\$[\w-]+)/g)].map((match) => match[2]);
 
@@ -144,8 +135,9 @@ const planMoves = (
 
   const settle = (): void => {
     placement.clear();
-    movable.forEach((name) => {
-      const behind = localReferences(entryOf(identical, name)[0].value).some((ref) => (
+    identical.forEach(([first], name) => {
+      if (!movable.has(name)) return;
+      const behind = localReferences(first.value).some((ref) => (
         movable.has(ref) ? placement.get(ref) === 'after' : assignedInside(branches, ref)
       ));
       placement.set(name, behind ? 'after' : 'before');
@@ -219,9 +211,8 @@ const dropEmptyBranches = (branches: AtRule[], independent: boolean): void => {
     return;
   }
   while (branches.length && isEmpty(branches[branches.length - 1])) {
-    const last = branches.pop();
-    if (!last) throw new TypeError('no branch to drop');
-    last.remove();
+    branches[branches.length - 1].remove();
+    branches.pop();
   }
 };
 

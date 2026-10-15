@@ -229,8 +229,7 @@ const PRIMARY_STEP_TOKEN = /^dxds-primary-\d+$/;
 StyleDictionary.registerFormat({
   name: 'dx/accent-palette',
   format: async (args) => {
-    const palette: unknown = await StyleDictionary.hooks.formats['css/variables'](args);
-    if (typeof palette !== 'string') throw new TypeError('css/variables did not return a string');
+    const palette = String(await StyleDictionary.hooks.formats['css/variables'](args));
     const stepsInDictionary = args.dictionary.allTokens
       .filter(({ name }) => PRIMARY_STEP_TOKEN.test(name)).length;
     let wrapped = 0;
