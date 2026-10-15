@@ -16,7 +16,7 @@ import {
   byCodepoint, planPublication, stalePaths, THEME, PUBLIC_FILE, LINKS_FILE, COLLECTOR_PATH,
 } from './tier.ts';
 
-const here = dirname(process.argv[1]);
+const here = import.meta.dirname;
 const packageRoot = join(here, '..', '..');
 const widgetsRoot = join(packageRoot, 'scss', 'widgets');
 const registries: Registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'));

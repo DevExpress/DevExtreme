@@ -1,7 +1,7 @@
 import {
   readFileSync, writeFileSync, readdirSync, statSync,
 } from 'fs';
-import { join, dirname } from 'path';
+import { join } from 'path';
 import { createRequire } from 'module';
 
 interface Overrides {
@@ -26,8 +26,8 @@ interface Overrides {
   subElements: Record<string, string[]>;
 }
 
-const here = dirname(process.argv[1]);
-const resolveFromHere = createRequire(process.argv[1]);
+const here = import.meta.dirname;
+const resolveFromHere = createRequire(import.meta.url);
 const packageRoot = join(here, '..', '..');
 const themeDir = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const flatTokens = resolveFromHere.resolve('@devexpress/design-tokens-internal/tokens.flat.json');

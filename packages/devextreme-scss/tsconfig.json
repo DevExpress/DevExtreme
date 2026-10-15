@@ -6,6 +6,8 @@
         "moduleResolution": "bundler",
         "skipLibCheck": true,
         "rewriteRelativeImportExtensions": true,
+        "verbatimModuleSyntax": true,
+        "erasableSyntaxOnly": true,
         "resolveJsonModule": true,
         "lib": [
             "es2022"

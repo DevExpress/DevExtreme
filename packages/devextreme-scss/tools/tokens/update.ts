@@ -27,7 +27,7 @@ interface FlatTokens { version: string; names: string[] }
 interface Manifest { devDependencies: Record<string, string> }
 interface Snapshot { files: Map<string, string>; generated: string | null }
 
-const here = path.dirname(process.argv[1]);
+const here = import.meta.dirname;
 const packageRoot = path.resolve(here, '..', '..');
 const repoRoot = path.resolve(packageRoot, '..', '..');
 const generatedRoot = path.join(packageRoot, 'scss', '_design-system');

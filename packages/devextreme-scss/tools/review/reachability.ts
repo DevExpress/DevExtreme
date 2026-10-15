@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, statSync } from 'fs';
-import { join, dirname } from 'path';
+import { join } from 'path';
 import postcss from 'postcss';
 import type { Node, Rule } from 'postcss';
 
@@ -8,7 +8,7 @@ interface Contract { variables: { name: string }[] }
 interface Pinned { names: string[] }
 interface Copy { reads: string[]; scope: string }
 
-const here = dirname(process.argv[1]);
+const here = import.meta.dirname;
 
 const packageRoot = join(here, '..', '..');
 const bundlePath = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');

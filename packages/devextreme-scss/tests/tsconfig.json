@@ -5,6 +5,7 @@
         "module": "commonjs",
         "moduleResolution": "node10",
         "skipLibCheck": false,
+        "verbatimModuleSyntax": false,
         "types": [
             "node",
             "jest"

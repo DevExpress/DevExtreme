@@ -157,8 +157,8 @@ StyleDictionary.registerPreprocessor({
   },
 });
 
-const dirname = path.dirname(process.argv[1]);
-const resolveFromHere = createRequire(process.argv[1]);
+const { dirname } = import.meta;
+const resolveFromHere = createRequire(import.meta.url);
 const tokensDir = path.dirname(resolveFromHere.resolve('@devexpress/design-tokens-internal/package.json'));
 const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 
