@@ -1,8 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent } from 'devextreme-angular/ui/data-grid';
-import {
-  colors, tasks, type ColumnFilterExpression, type Task,
-} from '../../data';
+import { tasks, type ColumnFilterExpression, type Task } from '../../data';
 
 @Component({
   selector: 'app-task-grid',
@@ -14,8 +12,6 @@ export class TaskGridComponent {
   @ViewChild(DxDataGridComponent) private dxDataGrid!: DxDataGridComponent;
 
   readonly tasks = tasks;
-
-  readonly colors = colors;
 
   readonly completionEditorOptions = {
     elementAttr: { 'aria-label': 'Completed' },

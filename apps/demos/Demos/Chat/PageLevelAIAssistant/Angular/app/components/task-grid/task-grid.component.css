@@ -3,9 +3,21 @@
   min-height: 360px;
 }
 
-::ng-deep .priority-badge {
+.priority-badge {
   border-radius: 24px;
   padding: 2px 8px;
   display: inline-block;
   text-align: center;
+}
+
+.priority-badge--high {
+  background: #f1bbbc;
+}
+
+.priority-badge--normal {
+  background: #f9e2ae;
+}
+
+.priority-badge--low {
+  background: #9fd89f;
 }

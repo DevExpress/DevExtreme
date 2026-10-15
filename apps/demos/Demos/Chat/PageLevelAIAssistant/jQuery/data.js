@@ -19,7 +19,6 @@ const ROUTER_TARGETS = new Set(['form', 'grid', 'mixed', 'none']);
 const FORM_ACTION_TYPES = new Set(['clear_field', 'clear_all', 'smart_paste']);
 
 const titles = ['Mr.', 'Mrs.', 'Ms.'];
-const colors = { High: '#F1BBBC', Normal: '#F9E2AE', Low: '#9FD89F' };
 const states = ['California', 'New York', 'Texas'];
 const positions = [
   'CEO',

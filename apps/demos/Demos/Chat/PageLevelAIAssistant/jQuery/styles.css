@@ -16,6 +16,18 @@
   text-align: center;
 }
 
+.priority-badge--high {
+  background: #f1bbbc;
+}
+
+.priority-badge--normal {
+  background: #f9e2ae;
+}
+
+.priority-badge--low {
+  background: #9fd89f;
+}
+
 #form-container {
   border: 1px solid var(--dx-color-border);
   padding: 16px;

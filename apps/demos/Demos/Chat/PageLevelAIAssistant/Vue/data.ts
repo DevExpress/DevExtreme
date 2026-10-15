@@ -154,12 +154,6 @@ export const FORM_ACTION_TYPES = new Set<FormActionType>(['clear_field', 'clear_
 
 export const titles = ['Mr.', 'Mrs.', 'Ms.'];
 
-export const colors: Record<TaskPriority, string> = {
-  High: '#F1BBBC',
-  Normal: '#F9E2AE',
-  Low: '#9FD89F',
-};
-
 export const states = ['California', 'New York', 'Texas'];
 
 export const positions = [
