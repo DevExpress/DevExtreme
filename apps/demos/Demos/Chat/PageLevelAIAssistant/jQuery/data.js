@@ -7,7 +7,7 @@ const apiVersion = '2024-02-01';
 const endpoint = 'https://public-api.devexpress.com/demo-openai';
 const apiKey = 'DEMO';
 
-const emptyViewMessage = 'How can I help with this page?';
+const emptyViewMessage = 'AI Assistant is ready to help you';
 const emptyViewPrompt =
   'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
 

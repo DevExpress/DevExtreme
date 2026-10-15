@@ -140,7 +140,7 @@ export const AI_SERVICE_CONFIG = {
 export const MAX_PROMPT_SIZE = 20000;
 export const RATE_LIMIT_RETRY_DELAY_MS = 30000;
 
-export const EMPTY_VIEW_MESSAGE = 'How can I help with this page?';
+export const EMPTY_VIEW_MESSAGE = 'AI Assistant is ready to help you';
 
 export const EMPTY_VIEW_PROMPT = 'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
 

@@ -131,7 +131,7 @@ export const AI_SERVICE_CONFIG = {
   apiKey: 'DEMO',
 };
 
-export const EMPTY_VIEW_MESSAGE = 'How can I help with this page?';
+export const EMPTY_VIEW_MESSAGE = 'AI Assistant is ready to help you';
 
 export const EMPTY_VIEW_PROMPT = 'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
 
