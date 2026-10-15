@@ -183,8 +183,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   _invalidateFormatPatternIfIntlLocaleChanged(): void {
     const formatOption = this._getEffectiveFormatOption();
     const formatObject = asFormatObject(formatOption);
-    const tracksLocale = this._usesIntlFormatOption(formatOption)
-      || (!!formatObject?.locale && !isFunction(formatObject.formatter));
+    const tracksLocale = !isFunction(formatOption)
+      && !isFunction(formatObject?.formatter);
 
     if (!tracksLocale) {
       return;
