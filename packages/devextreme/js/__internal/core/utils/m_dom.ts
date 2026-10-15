@@ -1,4 +1,5 @@
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import {
@@ -6,14 +7,22 @@ import {
 } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 
+interface ClipboardEventLike {
+  originalEvent?: { clipboardData?: DataTransfer | null };
+}
+
+interface TextCopyOptions {
+  includePaddings?: boolean;
+}
+
 const window = getWindow();
 
-const getRootNodeHost = (element) => {
+const getRootNodeHost = (element: Node): Element | undefined => {
   if (!element.getRootNode) {
     return undefined;
   }
 
-  const { host } = element.getRootNode();
+  const { host } = element.getRootNode() as { host?: Element | string };
 
   // NOTE: getRootNode().host can return a string if element is detached "a" element
   if (isString(host)) {
@@ -25,9 +34,11 @@ const getRootNodeHost = (element) => {
 
 // Returns the parent node, stepping from a shadow root to its host so callers can
 // walk out of a shadow tree (T1329805).
-export const getParentNode = (node) => node.parentNode ?? getRootNodeHost(node) ?? null;
+export const getParentNode = (
+  node: Node,
+): Node | null => node.parentNode ?? getRootNodeHost(node) ?? null;
 
-export const resetActiveElement = () => {
+export const resetActiveElement = (): void => {
   const activeElement = domAdapter.getActiveElement();
 
   if (activeElement && activeElement !== domAdapter.getBody()) {
@@ -35,7 +46,7 @@ export const resetActiveElement = () => {
   }
 };
 
-export const clearSelection = () => {
+export const clearSelection = (): void => {
   const selection = window.getSelection();
   if (!selection) return;
   if (selection.type === 'Caret') return;
@@ -50,53 +61,69 @@ export const clearSelection = () => {
   }
 };
 
-export const closestCommonParent = (startTarget, endTarget) => {
+export const closestCommonParent = (
+  startTarget: Element | dxElementWrapper | null | undefined,
+  endTarget: Element | dxElementWrapper | null | undefined,
+): Element | undefined => {
   const $startTarget = $(startTarget);
   const $endTarget = $(endTarget);
+  const startElement: Element = $startTarget[0];
+  const endElement: Element = $endTarget[0];
 
-  if ($startTarget[0] === $endTarget[0]) {
-    return $startTarget[0];
+  if (startElement === endElement) {
+    return startElement;
   }
 
   const $startParents = $startTarget.parents();
   const $endParents = $endTarget.parents();
   const startingParent = Math.min($startParents.length, $endParents.length);
 
-  for (let i = -startingParent; i < 0; i++) {
+  for (let i = -startingParent; i < 0; i += 1) {
     if ($startParents.get(i) === $endParents.get(i)) {
       return $startParents.get(i);
     }
   }
+
+  return undefined;
 };
 
-export const extractTemplateMarkup = (element) => {
-  element = $(element);
+export const extractTemplateMarkup = (element: Element | dxElementWrapper): string => {
+  const $element = $(element);
 
-  const templateTag = element.length && element.filter(function isNotExecutableScript() {
-    const $node = $(this);
-    // @ts-expect-error
-    return $node.is('script[type]') && !$node.attr('type').includes('script');
-  });
+  const templateTag = $element.length
+    // @ts-expect-error filter() is typed for selectors only
+    && $element.filter(function isNotExecutableScript(this: Element) {
+      const $node = $(this);
+      // @ts-expect-error
+      return $node.is('script[type]') && !$node.attr('type').includes('script');
+    });
 
-  if (templateTag.length) {
-    return templateTag.eq(0).html();
+  if (templateTag && templateTag.length) {
+    // @ts-expect-error html() without a value returns the markup
+    const templateMarkup: string = templateTag.eq(0).html();
+    return templateMarkup;
   }
-  element = $('<div>').append(element);
-  return element.html();
+  // @ts-expect-error html() without a value returns the markup
+  const markup: string = $('<div>').append($element).html();
+  return markup;
 };
 
-export const normalizeTemplateElement = (element) => {
+export const normalizeTemplateElement = (element: unknown): dxElementWrapper => {
   let $element = $();
 
-  if (isDefined(element) && (element.nodeType || isRenderer(element))) {
+  if (isDefined(element) && ((element as Partial<Node>).nodeType || isRenderer(element))) {
+    // @ts-expect-error a node or a renderer
     $element = $(element);
   } else if (typeof element !== 'object') {
+    // @ts-expect-error a primitive is rendered as markup
     $element = $('<div>').html(element).contents();
   }
 
   if ($element.length === 1) {
     if ($element.is('script')) {
-      $element = normalizeTemplateElement($element.html().trim());
+      // @ts-expect-error html() without a value returns the markup
+      const markup: string = $element.html();
+      $element = normalizeTemplateElement(markup.trim());
     } else if ($element.is('table')) {
       $element = $element.children('tbody').contents();
     }
@@ -105,17 +132,27 @@ export const normalizeTemplateElement = (element) => {
   return $element;
 };
 
-export const clipboardText = (event, text?) => {
-  // @ts-expect-error clipboardData doesn't exist in window type
-  const clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
+export const clipboardText = (
+  event: ClipboardEventLike,
+  text?: string,
+): string | null | undefined => {
+  const clipboard: DataTransfer | null | undefined = event.originalEvent?.clipboardData
+    // @ts-expect-error clipboardData doesn't exist in window type
+    ?? window.clipboardData;
   if (!text) {
     return clipboard && clipboard.getData('Text');
   }
 
-  clipboard && clipboard.setData('Text', text);
+  if (clipboard) {
+    clipboard.setData('Text', text);
+  }
+  return undefined;
 };
 
-export const contains = (container, element) => {
+export const contains = (
+  container: Node | (Window & typeof globalThis),
+  element: Node | null | undefined,
+): boolean => {
   if (!element) {
     return false;
   }
@@ -125,9 +162,13 @@ export const contains = (container, element) => {
   return container.contains(element) || contains(container, getRootNodeHost(element));
 };
 
-export const createTextElementHiddenCopy = (element, text, options?) => {
+export const createTextElementHiddenCopy = (
+  element: Element | dxElementWrapper,
+  text: string,
+  options?: TextCopyOptions,
+): dxElementWrapper => {
   const elementStyles = window.getComputedStyle($(element).get(0));
-  const includePaddings = options && options.includePaddings;
+  const includePaddings = options?.includePaddings;
 
   return $('<div>').text(text).css({
     fontStyle: elementStyles.fontStyle,
@@ -148,15 +189,19 @@ export const createTextElementHiddenCopy = (element, text, options?) => {
   });
 };
 
-export const insertBefore = (element, newElement) => {
+export const insertBefore = (element: Element, newElement?: Node | null): Element => {
   if (newElement) {
+    // @ts-expect-error insertElement moves any nodes
     domAdapter.insertElement(element.parentNode, newElement, element);
   }
   return element;
 };
 
-export const replaceWith = (element, newElement) => {
-  if (!(newElement && newElement[0])) return;
+export const replaceWith = (
+  element: dxElementWrapper,
+  newElement: dxElementWrapper | null | undefined,
+): dxElementWrapper | undefined => {
+  if (!newElement?.[0]) return undefined;
   if (newElement.is(element)) return element;
 
   each(newElement, (_, currentElement) => {
@@ -167,9 +212,9 @@ export const replaceWith = (element, newElement) => {
   return newElement;
 };
 
-export const isElementInDom = ($element) => {
+export const isElementInDom = ($element?: dxElementWrapper): boolean => {
   const element = $element?.get(0);
-  const shadowHost = element?.getRootNode().host;
+  const shadowHost = (element?.getRootNode() as { host?: Element | string } | undefined)?.host;
 
   return !!$(shadowHost || element).closest(getWindow().document).length;
 };
