@@ -201,6 +201,23 @@ describe('absence of multiple re-render', () => {
 
       expect(cardTemplate).toHaveBeenCalledTimes(calledTimes);
     });
+
+    it('should not render card template when integration templates are re-set (T1336765)', () => {
+      const cardTemplate = jest.fn();
+
+      const container = document.createElement('div');
+      const cardView = new CardView(container, {
+        keyExpr: 'id',
+        dataSource,
+        columns,
+        cardTemplate,
+      } as CardViewOptions);
+
+      cardTemplate.mockClear();
+      cardView.option('integrationOptions.templates', {});
+
+      expect(cardTemplate).not.toHaveBeenCalled();
+    });
   });
 
   describe('card footer template', () => {
