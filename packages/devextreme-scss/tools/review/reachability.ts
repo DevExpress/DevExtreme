@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, statSync } from 'fs';
-import { join, dirname } from 'path';
+import { join } from 'path';
 import postcss from 'postcss';
 import type { Node, Rule } from 'postcss';
 
@@ -8,7 +8,7 @@ interface Contract { variables: { name: string }[] }
 interface Pinned { names: string[] }
 interface Copy { reads: string[]; scope: string }
 
-const here = dirname(process.argv[1]);
+const here = import.meta.dirname;
 
 const packageRoot = join(here, '..', '..');
 const bundlePath = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
@@ -39,12 +39,6 @@ root.walkDecls((decl) => {
   (isRule(decl.parent) ? decl.parent.selectors : []).forEach((sel) => known.add(sel.trim()));
   declaredAt.set(decl.prop, known);
 });
-
-const rootsOf = (name: string): Set<string> => {
-  const roots = declaredAt.get(name);
-  if (!roots) throw new Error(`${name} is not declared`);
-  return roots;
-};
 
 const SET_ELSEWHERE = new Set([
   '--dx-cardview-card-max-width',
@@ -80,7 +74,7 @@ root.walkRules((rule) => {
     if (!reads.length) return;
     rule.selectors.forEach((sel) => {
       const key = `${sel.trim()}§${decl.prop}`;
-      const scope = [...new Set(reads.flatMap((name) => [...rootsOf(name)]))].sort().join(',');
+      const scope = [...new Set(reads.flatMap((name) => [...(declaredAt.get(name) ?? [])]))].sort().join(',');
       copies.set(key, [...(copies.get(key) ?? []), { reads, scope }]);
     });
   });
@@ -120,9 +114,13 @@ const componentOf = (name: string): string | null => {
     .filter((component) => bare === component || bare.startsWith(`${component}-`))
     .sort((a, b) => b.length - a.length)[0] ?? null;
 };
-const scopeKeyOf = (selector: string): string | null => selector.split(/[\s>+~]+/)
-  .map((compound) => [...classesOf(compound)].find((one) => !GENERIC.test(one)))
-  .find((cls) => cls) ?? null;
+const scopeKeyOf = (selector: string): string | null => {
+  for (const compound of selector.split(/[\s>+~]+/)) {
+    const cls = [...classesOf(compound)].find((one) => !GENERIC.test(one));
+    if (cls) return cls;
+  }
+  return null;
+};
 
 const seenScopes = new Map<string, string>();
 [...orphans.keys()].forEach((line) => {
@@ -185,7 +183,7 @@ unreviewed.forEach(([key, example]) => {
   const [component, scope] = key.split(' :: ');
   process.stdout.write(`✘ scope outside the roots of ${component}: .${scope}\n`);
   process.stdout.write(`     example: ${example}\n`);
-  process.stdout.write('     cure: either add the root to OVERRIDES.rootSelectors (derive-registries.mjs),\n');
+  process.stdout.write('     cure: either add the root to OVERRIDES.rootSelectors (derive-registries.ts),\n');
   process.stdout.write(`     or, having confirmed in the live widget that the element is nested in the root, add "${scope}" to nested-scopes.json["${component}"]\n`);
 });
 
@@ -250,7 +248,7 @@ const revived = pinned.names.filter((name) => !unread.includes(name));
 
 appeared.forEach((name) => {
   process.stdout.write(`✘ declared and never read: ${name}\n`);
-  process.stdout.write(`     declared on ${[...rootsOf(name)].sort().join(', ')}\n`);
+  process.stdout.write(`     declared on ${[...(declaredAt.get(name) ?? [])].sort().join(', ')}\n`);
   process.stdout.write('     cure: read it where it belongs, or stop publishing it — a name that moves nothing\n');
   process.stdout.write('     is still API once the theme ships, and then it cannot be withdrawn\n');
 });

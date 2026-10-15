@@ -1,51 +1,61 @@
 import path from 'node:path';
-import url from 'node:url';
 import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import {
   readdir, readFile, rm, writeFile,
 } from 'node:fs/promises';
 import StyleDictionary from 'style-dictionary';
+import type {
+  Config, File, FormatFnArguments, TransformedToken,
+} from 'style-dictionary/types';
 import { fileHeader, formattedVariables } from 'style-dictionary/utils';
-import { registerTransforms } from './transforms.mjs';
+import { registerTransforms } from './transforms.ts';
 import {
   THEME_NAME, THEME_FOLDER, getBridgeFiles, getModeFiles,
-} from './sources.mjs';
+} from './sources.ts';
 import {
   buildAvailableNames,
   collectCustomPropertyReferences,
   collectTokenReferences,
 } from './consumed-tokens.ts';
 
+type Tree = Record<string, unknown>;
+interface BuildConfig extends Config { theme: string; name: string; source: string[] }
+type Formatting = FormatFnArguments['options']['formatting'];
+
 registerTransforms(StyleDictionary);
 
 const SIZE_SUFFIX_RE = /\.(small|medium|large)$/;
 
-const getTokenAtPath = (tokens, refPath) => {
+const isTree = (node: unknown): node is Tree => typeof node === 'object' && node !== null;
+
+const getTokenAtPath = (tokens: unknown, refPath: string): Tree | undefined => {
   let node = tokens;
 
   for (const part of refPath.split('.')) {
-    if (typeof node !== 'object' || node === null || !(part in node)) {
+    if (!isTree(node) || !(part in node)) {
       return undefined;
     }
     node = node[part];
   }
 
-  return typeof node === 'object' && node !== null && '$value' in node ? node : undefined;
+  return isTree(node) && '$value' in node ? node : undefined;
 };
 
-const hasTokenAtPath = (tokens, refPath) => getTokenAtPath(tokens, refPath) !== undefined;
+const hasTokenAtPath = (tokens: unknown, refPath: string): boolean => (
+  getTokenAtPath(tokens, refPath) !== undefined
+);
 
 StyleDictionary.registerPreprocessor({
   name: 'dx/fix-dangling-size-references',
   preprocessor: (tokens) => {
-    const visit = (node) => {
-      if (typeof node !== 'object' || node === null) {
+    const visit = (node: unknown): void => {
+      if (!isTree(node)) {
         return;
       }
 
       if (typeof node.$value === 'string') {
-        node.$value = node.$value.replace(/\{([\w.-]+)\}/g, (match, refPath) => {
+        node.$value = node.$value.replace(/\{([\w.-]+)\}/g, (match: string, refPath: string): string => {
           if (!SIZE_SUFFIX_RE.test(refPath) || hasTokenAtPath(tokens, refPath)) {
             return match;
           }
@@ -78,13 +88,13 @@ const PURE_REFERENCE_RE = /^\{([\w.-]+)\}$/;
 StyleDictionary.registerPreprocessor({
   name: 'dx/fix-composite-shadow-references',
   preprocessor: (tokens) => {
-    const visit = (node) => {
-      if (typeof node !== 'object' || node === null) {
+    const visit = (node: unknown): void => {
+      if (!isTree(node)) {
         return;
       }
 
       if (typeof node.$value === 'string') {
-        const refPath = node.$value.match(PURE_REFERENCE_RE)?.[1];
+        const refPath = PURE_REFERENCE_RE.exec(node.$value)?.[1];
 
         if (node.$type === 'text' && refPath) {
           const target = getTokenAtPath(tokens, refPath);
@@ -124,8 +134,8 @@ const REMOVED_REFERENCES = new Map([
 StyleDictionary.registerPreprocessor({
   name: 'dx/substitute-removed-references',
   preprocessor: (tokens) => {
-    const visit = (node) => {
-      if (typeof node !== 'object' || node === null) {
+    const visit = (node: unknown): void => {
+      if (!isTree(node)) {
         return;
       }
 
@@ -151,9 +161,9 @@ StyleDictionary.registerPreprocessor({
   },
 });
 
-const dirname = import.meta.dirname || path.dirname(url.fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
-const tokensDir = path.dirname(require.resolve('@devexpress/design-tokens-internal/package.json'));
+const { dirname } = import.meta;
+const resolveFromHere = createRequire(import.meta.url);
+const tokensDir = path.dirname(resolveFromHere.resolve('@devexpress/design-tokens-internal/package.json'));
 const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 
 const MODE_ROLES_MIXIN = 'roles';
@@ -182,14 +192,18 @@ const FLUENT_MODES = [
   'light',
 ];
 
-const headerFormatting = ({ prefix, ...formatting } = {}) => formatting;
+const headerFormatting = (formatting: Formatting & { prefix?: string } = {}): Formatting => {
+  const { prefix, ...rest } = formatting;
+  return rest;
+};
 
 StyleDictionary.registerFormat({
   name: 'dx/mode-scoped-mixin',
   format: async ({ dictionary, file, options }) => {
     const {
-      outputReferences, outputReferenceFallbacks, usesDtcg, formatting, sort, mixin,
+      outputReferences, outputReferenceFallbacks, usesDtcg, formatting, sort,
     } = options;
+    const { mixin } = options;
     const header = await fileHeader({ file, formatting: headerFormatting(formatting), options });
     const variables = formattedVariables({
       format: 'css',
@@ -201,7 +215,7 @@ StyleDictionary.registerFormat({
       sort,
     });
 
-    return `${header}@mixin ${mixin}() {\n${variables}\n}\n`;
+    return `${header}@mixin ${String(mixin)}() {\n${variables}\n}\n`;
   },
 });
 
@@ -219,13 +233,13 @@ const PRIMARY_STEP_TOKEN = /^dxds-primary-\d+$/;
 StyleDictionary.registerFormat({
   name: 'dx/accent-palette',
   format: async (args) => {
-    const palette = await StyleDictionary.hooks.formats['css/variables'](args);
+    const palette = String(await StyleDictionary.hooks.formats['css/variables'](args));
     const stepsInDictionary = args.dictionary.allTokens
       .filter(({ name }) => PRIMARY_STEP_TOKEN.test(name)).length;
     let wrapped = 0;
     const withAccentFallback = palette.replace(
       PRIMARY_STEP_DECLARATION,
-      (line, indent, step, value) => {
+      (_line: string, indent: string, step: string, value: string): string => {
         wrapped += 1;
 
         return `${indent}--dxds-primary-${step}: var(${ACCENT_PROPERTY}-${step}, ${value});`;
@@ -244,16 +258,16 @@ StyleDictionary.registerFormat({
 const FILE_OPTIONS = {
   outputReferences: true,
   themeable: true,
-  formatting: { commentStyle: 'none' },
+  formatting: { commentStyle: 'none' as const },
 };
 
 const customExpand = {
   exclude: ['shadow', 'text'],
 };
 
-const normalizeFilePath = (token) => token.filePath.split(path.sep).join('/');
+const normalizeFilePath = (token: TransformedToken): string => token.filePath.split(path.sep).join('/');
 
-const getPlatformSettings = (files) => ({
+const getPlatformSettings = (files: File[]): Config['platforms'] => ({
   'scss/category': {
     transformGroup: 'css',
     buildPath,
@@ -272,7 +286,7 @@ const getPlatformSettings = (files) => ({
   },
 });
 
-const createConfig = (name, files, platformFiles) => ({
+const createConfig = (name: string, files: string[], platformFiles: File[]): BuildConfig => ({
   theme: THEME_NAME,
   name,
   source: files.map((src) => path.resolve(tokensDir, `tokens/${src}.json`)),
@@ -286,20 +300,20 @@ const createConfig = (name, files, platformFiles) => ({
   platforms: getPlatformSettings(platformFiles),
 });
 
-const createPaletteConfig = (palette) => createConfig(palette, [`base/colors/palettes/${THEME_NAME}/${palette}`], [
+const createPaletteConfig = (palette: string): BuildConfig => createConfig(palette, [`base/colors/palettes/${THEME_NAME}/${palette}`], [
   {
     destination: `${THEME_NAME}/accents/${palette}.scss`,
     format: 'dx/accent-palette',
-    filter: (token) => normalizeFilePath(token).includes(`${THEME_NAME}/${palette}.json`),
+    filter: (token): boolean => normalizeFilePath(token).includes(`${THEME_NAME}/${palette}.json`),
     options: FILE_OPTIONS,
   },
 ]);
 
-const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
+const createModeConfig = (mode: string): BuildConfig => createConfig(mode, getModeFiles(mode), [
   {
     destination: 'base.scss',
     format: 'css/variables',
-    filter: (token) => {
+    filter: (token): boolean => {
       const filePath = normalizeFilePath(token);
 
       return filePath.includes('base/borders.json')
@@ -312,7 +326,7 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
   {
     destination: `${THEME_NAME}/base.scss`,
     format: 'css/variables',
-    filter: (token) => {
+    filter: (token): boolean => {
       const filePath = normalizeFilePath(token);
 
       return filePath.includes(`base/colors/utility/${THEME_NAME}.json`)
@@ -323,13 +337,13 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
   {
     destination: `${THEME_NAME}/semantic/typography.scss`,
     format: 'css/variables',
-    filter: (token) => normalizeFilePath(token).includes(`semantic/typography/${THEME_NAME}`),
+    filter: (token): boolean => normalizeFilePath(token).includes(`semantic/typography/${THEME_NAME}`),
     options: FILE_OPTIONS,
   },
   {
     destination: `${THEME_NAME}/semantic/colors/${mode}.scss`,
     format: 'dx/mode-scoped-mixin',
-    filter: (token) => {
+    filter: (token): boolean => {
       const filePath = normalizeFilePath(token);
 
       return filePath.includes(`semantic/colors/${THEME_NAME}/${mode}.json`)
@@ -340,7 +354,7 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
   {
     destination: `${THEME_NAME}/${MODE_ALIASES_FILE}.scss`,
     format: 'dx/mode-scoped-mixin',
-    filter: (token) => {
+    filter: (token): boolean => {
       const filePath = normalizeFilePath(token);
 
       return filePath.includes(`semantic/box-shadow/${THEME_NAME}.json`)
@@ -351,7 +365,7 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
   },
 ]);
 
-const createDsConfig = () => createConfig('ds', getBridgeFiles(), [
+const createDsConfig = (): BuildConfig => createConfig('ds', getBridgeFiles(), [
   {
     destination: 'variables/_ds.scss',
     format: 'scssToCss',
@@ -364,7 +378,7 @@ const configs = [
   createDsConfig(),
 ];
 
-async function collectGeneratedFiles(dir) {
+async function collectGeneratedFiles(dir: string): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true, recursive: true });
 
   return entries
@@ -372,10 +386,10 @@ async function collectGeneratedFiles(dir) {
     .map((entry) => path.join(entry.parentPath, entry.name));
 }
 
-async function validateReferences() {
+async function validateReferences(): Promise<number> {
   const files = await collectGeneratedFiles(buildPath);
-  const defined = new Set();
-  const used = new Map();
+  const defined = new Set<string>();
+  const used = new Map<string, string>();
 
   const contents = await Promise.all(files.map((file) => readFile(file, 'utf-8')));
 
@@ -406,7 +420,7 @@ async function validateReferences() {
   return files.length;
 }
 
-async function collectThemeStyleSheets() {
+async function collectThemeStyleSheets(): Promise<string[]> {
   const entries = await readdir(themePath, { withFileTypes: true, recursive: true });
 
   return entries
@@ -416,15 +430,19 @@ async function collectThemeStyleSheets() {
 
 const DECLARATION = /^(\s*)(--[\w-]+)\s*:\s*([^;]+);\s*$/;
 
-const parseDeclarations = (content) => content.split('\n').reduce((declarations, line) => {
+const parseDeclarations = (content: string): Map<string, string> => content.split('\n').reduce((declarations, line) => {
   const match = DECLARATION.exec(line);
 
   return match ? declarations.set(match[2], match[3].trim()) : declarations;
-}, new Map());
+}, new Map<string, string>());
 
-const readsOf = (value) => [...value.matchAll(/var\(\s*(--[\w-]+)/g)].map(([, name]) => name);
+const readsOf = (value: string): string[] => [...value.matchAll(/var\(\s*(--[\w-]+)/g)].map(([, name]) => name);
 
-const modeDependentNames = (light, dark, aliases) => {
+const modeDependentNames = (
+  light: Map<string, string>,
+  dark: Map<string, string>,
+  aliases: Map<string, string>,
+): Set<string> => {
   const tainted = new Set([...light.keys(), ...dark.keys()]
     .filter((name) => light.get(name) !== dark.get(name)));
 
@@ -444,9 +462,9 @@ const modeDependentNames = (light, dark, aliases) => {
   return tainted;
 };
 
-const withBody = (content, keep) => content.replace(
+const withBody = (content: string, keep: (name: string) => boolean): string => content.replace(
   /(\{\n)([\s\S]*)(\n\})/,
-  (whole, open, body, close) => {
+  (_whole: string, open: string, body: string, close: string): string => {
     const lines = body.split('\n').filter((line) => {
       const match = DECLARATION.exec(line);
 
@@ -457,14 +475,14 @@ const withBody = (content, keep) => content.replace(
   },
 );
 
-async function splitModeScopedLayers() {
-  const modeFile = (mode) => path.join(buildPath, THEME_NAME, 'semantic', 'colors', `${mode}.scss`);
+async function splitModeScopedLayers(): Promise<{ dependent: number; shared: number }> {
+  const modeFile = (mode: string): string => path.join(buildPath, THEME_NAME, 'semantic', 'colors', `${mode}.scss`);
   const aliasesFile = path.join(buildPath, THEME_NAME, `${MODE_ALIASES_FILE}.scss`);
   const sharedFile = path.join(buildPath, THEME_NAME, `${MODE_SHARED_FILE}.scss`);
 
   const sources = Object.fromEntries(await Promise.all(
     [['light', modeFile('light')], ['dark', modeFile('dark')], ['aliases', aliasesFile]]
-      .map(async ([key, file]) => [key, { file, content: await readFile(file, 'utf-8') }]),
+      .map(async ([key, file]) => [key, { file, content: await readFile(file, 'utf-8') }] as const),
   ));
   const parsed = Object.fromEntries(
     Object.entries(sources).map(([key, { content }]) => [key, parseDeclarations(content)]),
@@ -486,8 +504,8 @@ async function splitModeScopedLayers() {
   return { dependent: dependent.size, shared: shared.length };
 }
 
-async function validateConsumedTokens() {
-  const { version, tokens } = JSON.parse(
+async function validateConsumedTokens(): Promise<number> {
+  const { version, tokens }: { version: string; tokens: Tree } = JSON.parse(
     await readFile(path.join(tokensDir, 'tokens.flat.json'), 'utf-8'),
   );
   const availableNames = buildAvailableNames(
@@ -495,7 +513,7 @@ async function validateConsumedTokens() {
     new Set(getBridgeFiles()),
   );
 
-  const referenced = new Map();
+  const referenced = new Map<string, { file: string; reference: string }>();
 
   const styleSheets = await collectThemeStyleSheets();
   const styleSheetContents = await Promise.all(styleSheets.map((file) => readFile(file, 'utf-8')));
@@ -503,9 +521,9 @@ async function validateConsumedTokens() {
   for (const [index, file] of styleSheets.entries()) {
     const content = styleSheetContents[index];
     const source = path.relative(themePath, file);
-    const found = [
-      ...collectTokenReferences(content, source).map((name) => [name, `ds.$${name}`]),
-      ...collectCustomPropertyReferences(content, source).map((name) => [name, `var(--dxds-${name})`]),
+    const found: [string, string][] = [
+      ...collectTokenReferences(content, source).map((name): [string, string] => [name, `ds.$${name}`]),
+      ...collectCustomPropertyReferences(content, source).map((name): [string, string] => [name, `var(--dxds-${name})`]),
     ];
 
     for (const [name, reference] of found) {
@@ -530,16 +548,16 @@ async function validateConsumedTokens() {
   return referenced.size;
 }
 
-function assertSourcesExist() {
+function assertSourcesExist(): void {
   const missing = [...new Set(configs.flatMap((config) => config.source))]
     .filter((file) => !existsSync(file))
     .map((file) => `  ${path.relative(tokensDir, file)}`);
   if (missing.length) {
-    throw new Error(`Token source files absent from @devexpress/design-tokens-internal (see build/tokens/sources.mjs):\n${missing.join('\n')}`);
+    throw new Error(`Token source files absent from @devexpress/design-tokens-internal (see build/tokens/sources.ts):\n${missing.join('\n')}`);
   }
 }
 
-async function build() {
+async function build(): Promise<void> {
   assertSourcesExist();
   await rm(buildPath, { recursive: true, force: true });
 

@@ -1,15 +1,36 @@
 import {
   readFileSync, writeFileSync, readdirSync, statSync,
 } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'path';
 import { createRequire } from 'module';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
+interface Overrides {
+  components: Record<string, string>;
+  systemFolders: string[];
+  systemTier: string[];
+  declarationHome: Record<string, string>;
+  chassis: Record<string, { component: string; dependents: string[] }>;
+  embeds: Record<string, string[]>;
+  rootSelectors: Record<string, string[]>;
+  systemConcerns: string[];
+  themeIdentity: string[];
+  exemptFolders: Record<string, string>;
+  partExclude: string[];
+  partsAdd: string[];
+  partsRemove: string[];
+  states: string[];
+  modifiers: Record<string, string[]>;
+  sizeSlots: string[];
+  migrated: string[];
+  sassOnly: Record<string, string>;
+  subElements: Record<string, string[]>;
+}
+
+const here = import.meta.dirname;
+const resolveFromHere = createRequire(import.meta.url);
 const packageRoot = join(here, '..', '..');
 const themeDir = join(packageRoot, 'scss', 'widgets', 'fluent-next');
-const flatTokens = require.resolve('@devexpress/design-tokens-internal/tokens.flat.json');
+const flatTokens = resolveFromHere.resolve('@devexpress/design-tokens-internal/tokens.flat.json');
 const COMPONENT_TOKEN_SOURCE = 'components/core/theme/fluent';
 const output = join(here, 'registries.json');
 
@@ -20,7 +41,7 @@ const output = join(here, 'registries.json');
 // Public contract of widgets/fluent-next/_design-system.scss: an element naming a theme mode.
 const THEME_MODE_SELECTORS = ['.dx-theme-mode-light', '.dx-theme-mode-dark', '.dx-theme-mode-inverted'];
 
-const OVERRIDES = {
+const OVERRIDES: Overrides = {
   // folder -> component, only where kebab(folder) is not the component name
   components: {
     gridBase: 'grid', // shared grid chassis; matches the package's grid-cell / grid-row / grid-view family
@@ -965,16 +986,15 @@ const OVERRIDES = {
     ],
   },
 };
+const kebab = (folder: string): string => folder.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 
-const kebab = (folder) => folder.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-
-const listFolders = (dir) => readdirSync(dir)
+const listFolders = (dir: string): string[] => readdirSync(dir)
   .filter((entry) => statSync(join(dir, entry)).isDirectory())
   .sort();
 
-const sortedUnique = (values) => [...new Set(values)].sort();
+const sortedUnique = (values: string[]): string[] => [...new Set(values)].sort();
 
-const stripState = (name, states) => {
+const stripState = (name: string, states: string[]): { base: string; state: string | null } => {
   const ordered = [...states].sort((a, b) => b.length - a.length);
   for (const state of ordered) {
     if (name.endsWith(`-${state}`)) return { base: name.slice(0, -state.length - 1), state };
@@ -982,49 +1002,53 @@ const stripState = (name, states) => {
   return { base: name, state: null };
 };
 
-const deriveFromTokens = (states) => {
-  const { tokens } = JSON.parse(readFileSync(flatTokens, 'utf8'));
+interface Derived { parts: string[] }
+
+const deriveFromTokens = (states: string[]): Derived => {
+  const { tokens }: { tokens: Record<string, unknown> } = JSON.parse(readFileSync(flatTokens, 'utf8'));
   const names = Object.keys(tokens)
     .filter((key) => key.startsWith(`${COMPONENT_TOKEN_SOURCE}:`))
     .map((key) => key.slice(key.indexOf(':') + 1).replace(/\//g, '-'));
 
-  const parts = new Set();
-  const packageElementPaths = new Set();
+  const parts = new Set<string>();
 
   names.forEach((name) => {
     const { base } = stripState(name, states);
     const marker = base.indexOf('-color-');
     if (marker === -1) return;
-    const elementPath = base.slice(0, marker);
     const tail = base.slice(marker + '-color-'.length);
-    packageElementPaths.add(elementPath);
-    if (tail) parts.add(tail.split('-').pop());
+    if (tail) {
+      const segments = tail.split('-');
+      parts.add(segments[segments.length - 1]);
+    }
   });
 
   return {
-    tokenCount: names.length,
     parts: [...parts],
-    packageElementPaths: [...packageElementPaths].sort(),
   };
 };
 
-const assertParseable = (parts, states, modifiers, subElements) => {
-  const clash = (a, b) => a.filter((value) => b.includes(value));
+const assertParseable = (
+  parts: string[],
+  states: string[],
+  subElements: Record<string, string[]>,
+): void => {
+  const clash = (a: string[], b: string[]): string[] => a.filter((value) => b.includes(value));
 
   const stateParts = clash(states, parts);
   if (stateParts.length) {
-    throw new Error(`STATES and PARTS overlap, the grammar would be undecidable: ${stateParts}`);
+    throw new Error(`STATES and PARTS overlap, the grammar would be undecidable: ${stateParts.join(',')}`);
   }
 
   Object.entries(subElements).forEach(([component, names]) => {
     const bad = clash(names, states);
     if (bad.length) {
-      throw new Error(`sub-elements of ${component} collide with a state name: ${bad}`);
+      throw new Error(`sub-elements of ${component} collide with a state name: ${bad.join(',')}`);
     }
   });
 };
 
-const assertRootSelectorsExist = (rootSelectors) => {
+const assertRootSelectorsExist = (rootSelectors: Record<string, string[]>): void => {
   const bundle = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
   try {
     statSync(bundle);
@@ -1051,7 +1075,7 @@ const assertRootSelectorsExist = (rootSelectors) => {
   });
 };
 
-const build = () => {
+const build = (): Record<string, unknown> => {
   const folders = listFolders(themeDir);
   const derived = deriveFromTokens([...OVERRIDES.states, 'rest']);
 
@@ -1060,21 +1084,21 @@ const build = () => {
     ...OVERRIDES.partsAdd,
   ]).filter((part) => !OVERRIDES.partsRemove.includes(part));
 
-  const components = {};
+  const components: Record<string, string> = {};
   folders.forEach((folder) => {
     if (OVERRIDES.systemFolders.includes(folder)) return;
     components[folder] = OVERRIDES.components[folder] ?? kebab(folder);
   });
 
-  const declarationHome = {};
+  const declarationHome: Record<string, string> = {};
   Object.entries(components).forEach(([folder, component]) => {
     declarationHome[component] = OVERRIDES.declarationHome[component] ?? folder;
   });
 
   const { subElements } = OVERRIDES;
-  assertParseable(parts, OVERRIDES.states, OVERRIDES.modifiers, subElements);
+  assertParseable(parts, OVERRIDES.states, subElements);
 
-  const rootSelectors = {};
+  const rootSelectors: Record<string, string[]> = {};
   [...OVERRIDES.migrated, ...OVERRIDES.systemTier].forEach((component) => {
     rootSelectors[component] = OVERRIDES.rootSelectors[component]
       ?? [`.dx-${component.replace(/-/g, '')}`];
@@ -1088,18 +1112,9 @@ const build = () => {
   assertRootSelectorsExist(rootSelectors);
 
   return {
-    $comment: 'GENERATED by tools/naming/derive-registries.mjs — do not edit by hand. '
+    $comment: 'GENERATED by tools/naming/derive-registries.ts — do not edit by hand. '
       + 'Judgment calls live in OVERRIDES in that script; vocabularies are derived from the '
       + '@devexpress/design-tokens-internal package and from the theme folder layout.',
-    parseRule: '$<component>(-<sub-element>)*(-<modifier>)*-<slot>(-<state>) — parsed right-to-left '
-      + 'with longest match. Overlaps between vocabularies competing for DIFFERENT positions are '
-      + 'intentional and resolved positionally; see assertParseable() in the generator for the two '
-      + 'overlaps that are forbidden.',
-    derivedFrom: {
-      componentTokens: `@devexpress/design-tokens-internal → ${COMPONENT_TOKEN_SOURCE}`,
-      componentTokenCount: derived.tokenCount,
-      themeFolders: folders.length,
-    },
     components,
     declarationHome,
     systemFolders: OVERRIDES.systemFolders,
@@ -1115,7 +1130,6 @@ const build = () => {
     sizeSlots: OVERRIDES.sizeSlots,
     embeds: OVERRIDES.embeds,
     subElements,
-    packageElementPaths: derived.packageElementPaths,
     migrated: OVERRIDES.migrated,
     sassOnly: OVERRIDES.sassOnly,
   };
@@ -1126,7 +1140,7 @@ const serialized = `${JSON.stringify(build(), null, 2)}\n`;
 if (process.argv.includes('--check')) {
   const committed = readFileSync(output, 'utf8');
   if (committed !== serialized) {
-    process.stderr.write('registries.json is stale — run node tools/naming/derive-registries.mjs\n');
+    process.stderr.write('registries.json is stale — run node tools/naming/derive-registries.ts\n');
     process.exit(1);
   }
   process.stdout.write('registries.json is up to date\n');

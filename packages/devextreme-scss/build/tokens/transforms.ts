@@ -1,19 +1,21 @@
 import { register } from '@tokens-studio/sd-transforms';
+import type StyleDictionary from 'style-dictionary';
 
-function hexToPercent(hex) {
+function hexToPercent(hex: string): number {
   if (typeof hex !== 'string') throw new TypeError('hex must be a string');
   if (hex.length !== 2) throw new Error('hex must be two characters long');
 
   const value = parseInt(hex, 16);
-  const percent = Math.round((value / 255) * 100);
 
-  return percent;
+  return Math.round((value / 255) * 100);
 }
 
-export function registerTransforms(StyleDictionary) {
-  register(StyleDictionary, {});
+export function registerTransforms(styleDictionary: typeof StyleDictionary): void {
+  register(styleDictionary, {}).catch((error: unknown) => {
+    throw error;
+  });
 
-  StyleDictionary.registerTransform({
+  styleDictionary.registerTransform({
     name: 'dx/ds-name',
     type: 'name',
     filter: () => true,
@@ -22,14 +24,15 @@ export function registerTransforms(StyleDictionary) {
 
   const REFERENCE_WITH_ALPHA_RE = /^(\{[\w.-]+\})([0-9a-fA-F]{2})$/;
 
-  StyleDictionary.registerTransform({
+  styleDictionary.registerTransform({
     name: 'dx/fix-transparent-color',
     type: 'value',
     transitive: true,
     filter: (token) => typeof token.original.$value === 'string'
       && REFERENCE_WITH_ALPHA_RE.test(token.original.$value),
     transform: (token) => {
-      const [, reference, alpha] = token.original.$value.match(REFERENCE_WITH_ALPHA_RE);
+      const original: string = token.original.$value;
+      const [, reference, alpha] = REFERENCE_WITH_ALPHA_RE.exec(original) ?? [];
       const newValue = `rgb(from ${reference} r g b / ${hexToPercent(alpha)}%)`;
 
       token.original.$value = newValue;
@@ -38,13 +41,16 @@ export function registerTransforms(StyleDictionary) {
     },
   });
 
-  StyleDictionary.registerTransform({
+  styleDictionary.registerTransform({
     name: 'dx/fix-drop-shadow',
     type: 'value',
     transitive: true,
     filter: (token) => token.$type === 'shadow',
-    transform: (token) => token.$value
-      .replace(/dropShadow\s/g, '')
-      .replace(/innerShadow\s/g, 'inset '),
+    transform: (token) => {
+      const value: string = token.$value;
+      return value
+        .replace(/dropShadow\s/g, '')
+        .replace(/innerShadow\s/g, 'inset ');
+    },
   });
 }

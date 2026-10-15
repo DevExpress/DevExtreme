@@ -192,7 +192,7 @@ const groupCapped = <T extends DeclarationRef>(
   ];
 };
 
-export const renderPreamble = (report: Report, options: TerminalOptions = {}): string => {
+export const renderPreamble = (report: Omit<Report, 'output'>, options: TerminalOptions = {}): string => {
   const color = options.color ?? false;
   const limit = options.limit ?? DEFAULT_LIMIT;
   const { names } = report;

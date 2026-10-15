@@ -33,12 +33,28 @@ if (!bundleNames.length) {
     + 'built theme; run `pnpm nx run devextreme-scss:build:themes`');
 }
 
-const declarationsOf = (css: string, name: string): { selectors: string[]; value: string }[] => [
-  ...css.matchAll(new RegExp(`([^{}]*)\\{[^{}]*${name}:([^;}]*)[;}]`, 'g')),
-].map((found) => ({
-  selectors: found[1].split(',').map((part) => part.trim()),
-  value: found[2].trim(),
-}));
+interface Declaration { selectors: string[]; value: string }
+
+const indexes = new Map<string, Map<string, Declaration[]>>();
+
+const indexOf = (css: string): Map<string, Declaration[]> => {
+  const cached = indexes.get(css);
+  if (cached) return cached;
+
+  const index = new Map<string, Declaration[]>();
+  [...css.matchAll(/([^{}]*)\{([^{}]*)\}/g)].forEach(([, prefix, body]) => {
+    const lastInBlock = new Map<string, string>();
+    [...body.matchAll(/(--[\w-]+):([^;}]*)/g)].forEach(([, name, value]) => lastInBlock.set(name, value));
+    const selectors = prefix.split(',').map((part) => part.trim());
+    lastInBlock.forEach((value, name) => {
+      index.set(name, [...(index.get(name) ?? []), { selectors, value: value.trim() }]);
+    });
+  });
+  indexes.set(css, index);
+  return index;
+};
+
+const declarationsOf = (css: string, name: string): Declaration[] => indexOf(css).get(name) ?? [];
 
 const onRoot = (css: string, name: string): string | undefined => declarationsOf(css, name)
   .find(({ selectors }) => selectors.includes(':root'))?.value;

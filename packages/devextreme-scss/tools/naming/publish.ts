@@ -8,27 +8,28 @@ import {
 import {
   join, dirname, relative, sep,
 } from 'path';
-import { fileURLToPath } from 'url';
 
 import { stripScssComments } from '../../build/tokens/consumed-tokens.ts';
 import {
-  planPublication, stalePaths, THEME, PUBLIC_FILE, LINKS_FILE, COLLECTOR_PATH,
+  type Registries,
+  type SourceFile,
+  byCodepoint, planPublication, stalePaths, THEME, PUBLIC_FILE, LINKS_FILE, COLLECTOR_PATH,
 } from './tier.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
+const here = import.meta.dirname;
 const packageRoot = join(here, '..', '..');
 const widgetsRoot = join(packageRoot, 'scss', 'widgets');
-const registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'));
+const registries: Registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'));
 
-const walk = (dir) => readdirSync(dir).flatMap((entry) => {
+const walk = (dir: string): string[] => readdirSync(dir).flatMap((entry) => {
   const absolute = join(dir, entry);
   if (statSync(absolute).isDirectory()) return walk(absolute);
   return entry.endsWith('.scss') ? [absolute] : [];
 });
 
-const toPosix = (absolute) => relative(widgetsRoot, absolute).split(sep).join('/');
+const toPosix = (absolute: string): string => relative(widgetsRoot, absolute).split(sep).join('/');
 
-const sourceFile = (absolute) => {
+const sourceFile = (absolute: string): SourceFile => {
   const path = toPosix(absolute);
   const segments = path.split('/');
   const raw = readFileSync(absolute, 'utf8');
@@ -43,7 +44,7 @@ const sourceFile = (absolute) => {
 const themeFiles = walk(join(widgetsRoot, THEME)).map(sourceFile);
 const baseFiles = walk(join(widgetsRoot, 'base')).map(sourceFile);
 
-const existing = new Map();
+const existing = new Map<string, string>();
 themeFiles.forEach(({ path, raw }) => {
   if (path.endsWith(`/${PUBLIC_FILE}`) || path.endsWith(`/${LINKS_FILE}`) || path === COLLECTOR_PATH) {
     existing.set(path, raw);
@@ -66,13 +67,17 @@ if (process.argv.includes('--check')) {
   }
   process.stdout.write(`component tier is up to date (${plan.files.size} files)\n`);
 } else {
-  stale.forEach((path) => {
-    const absolute = join(widgetsRoot, path);
-    if (!existsSync(dirname(absolute))) {
-      throw new Error(`${path}: the folder does not exist`);
-    }
-    writeFileSync(absolute, plan.files.get(path));
-    process.stdout.write(`wrote ${path}\n`);
-  });
+  const stalePathSet = new Set(stale);
+  [...plan.files]
+    .filter(([path]) => stalePathSet.has(path))
+    .sort(([a], [b]) => byCodepoint(a, b))
+    .forEach(([path, content]) => {
+      const absolute = join(widgetsRoot, path);
+      if (!existsSync(dirname(absolute))) {
+        throw new Error(`${path}: the folder does not exist`);
+      }
+      writeFileSync(absolute, content);
+      process.stdout.write(`wrote ${path}\n`);
+    });
   if (!stale.length) process.stdout.write('component tier is up to date\n');
 }
