@@ -19,13 +19,7 @@ import type { InternalGridOptions, ModuleType, OptionChanged } from '../types';
 import { ColumnsView } from '../views/columns_view';
 import type { ResizingController } from '../views/grid_view';
 import type { ContextMenuItemsOptions } from '../views/types';
-
-const HEADER_PANEL_CLASS = 'header-panel';
-const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
-
-const TOOLBAR_ARIA_LABEL = '-ariaToolbar';
-
-const DEFAULT_TOOLBAR_ITEM_NAMES = ['addRowButton', 'applyFilterButton', 'columnChooserButton', 'exportButton', 'groupPanel', 'revertButton', 'saveButton', 'searchPanel'];
+import { CLASSES, DEFAULT_TOOLBAR_ITEM_NAMES, TOOLBAR_ARIA_LABEL } from './const';
 
 export class HeaderPanel extends ColumnsView {
   private _toolbar?: Toolbar;
@@ -123,13 +117,13 @@ export class HeaderPanel extends ColumnsView {
   }
 
   private _getButtonContainer(): dxElementWrapper {
-    return $('<div>').addClass(this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS));
+    return $('<div>').addClass(this.addWidgetPrefix(CLASSES.toolbarButton));
   }
 
   public getToolbarButtonClass(specificClass?: string): string {
     const secondClass = specificClass ? ` ${specificClass}` : '';
 
-    return this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS) + secondClass;
+    return this.addWidgetPrefix(CLASSES.toolbarButton) + secondClass;
   }
 
   private _getToolbarOptions(): ToolbarProperties<DefaultToolbarItem | ToolbarItem> {
@@ -172,7 +166,7 @@ export class HeaderPanel extends ColumnsView {
     if (!this._toolbar) {
       const $headerPanel = this.element();
       // @ts-expect-error the view is rendered here
-      $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
+      $headerPanel.addClass(this.addWidgetPrefix(CLASSES.headerPanel));
       const label = messageLocalization.format(this.component.NAME + TOOLBAR_ARIA_LABEL);
       // @ts-expect-error the view is rendered here
       const $toolbar = $('<div>').appendTo($headerPanel);

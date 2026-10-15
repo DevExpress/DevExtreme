@@ -3,11 +3,9 @@ export const ATTRIBUTES = {
   dragCell: 'dx-drag-cell',
 };
 
-export const ROWS_VIEW_CLASS = 'rowsview';
 export const EDIT_FORM_CLASS = 'edit-form';
 export const GROUP_FOOTER_CLASS = 'group-footer';
 export const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
-export const FREESPACE_ROW_CLASS = 'dx-freespace-row';
 export const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
 export const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
 export const EDITOR_CELL_CLASS = 'dx-editor-cell';
