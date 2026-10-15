@@ -1,5 +1,5 @@
 import { Deferred } from '@js/core/utils/deferred';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
 import { ChunksFileUploadStrategyBase } from '@ts/ui/file_uploader/file_upload_strategy.chunks.base';
 import type {
   FileUploaderChunksData,

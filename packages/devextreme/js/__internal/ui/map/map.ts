@@ -13,7 +13,7 @@ import { isNumeric } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
