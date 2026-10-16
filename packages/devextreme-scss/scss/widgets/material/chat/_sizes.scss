@@ -2,6 +2,7 @@
 @use "../sizes" as *;
 @use "../typography/sizes" as *;
 @use "../button/colors" as *;
+@use "../accordion/sizes" as accordionSizes;
 
 $chat-border-radius: $base-border-radius * 2 !default; // 8px
 $chat-bubble-border-radius: $base-border-radius * 2 !default;
@@ -82,6 +83,10 @@ $chat-file-icon-font-size: null !default;
 $chat-file-view-items-gap: 8px !default;
 $chat-bubble-gap: 8px !default;
 
+$chat-tool-call-badge-padding-inline: null !default;
+$chat-tool-call-content-gap: null !default;
+$chat-tool-call-content-padding-block: null !default;
+
 @if $size == "default" {
   $chat-bubble-border-radius: 8px !default;
   $chat-bubble-padding: 8px 16px !default;
@@ -120,6 +125,10 @@ $chat-bubble-gap: 8px !default;
   $chat-confirmation-popup-toolbar-gap: 8px !default;
 
   $chat-file-icon-font-size: 18px !default;
+
+  $chat-tool-call-badge-padding-inline: 8px !default;
+  $chat-tool-call-content-gap: 16px !default;
+  $chat-tool-call-content-padding-block: 8px !default;
 }
 
 @else if $size == "compact" {
@@ -160,6 +169,21 @@ $chat-bubble-gap: 8px !default;
   $chat-confirmation-popup-toolbar-gap: 4px !default;
 
   $chat-file-icon-font-size: 16px !default;
+
+  $chat-tool-call-badge-padding-inline: 6px !default;
+  $chat-tool-call-content-gap: 12px !default;
+  $chat-tool-call-content-padding-block: 6px !default;
 }
 
 $chat-typingindicator-padding: $chat-messagegroup-padding !default;
+
+$chat-tool-call-min-width: 360px !default;
+$chat-tool-call-icon-size: accordionSizes.$accordion-title-icon-size !default;
+$chat-tool-call-title-gap: accordionSizes.$accordion-title-icon-margin !default;
+$chat-tool-call-badge-padding-block: 2px !default;
+$chat-tool-call-badge-border-radius: $base-border-radius !default;
+$chat-tool-call-content-border-width: 1px !default;
+$chat-tool-call-content-margin-inline-start: accordionSizes.$material-accordion-title-horizontal-padding + math.div($chat-tool-call-icon-size, 2) !default;
+$chat-tool-call-content-padding-inline-start: math.div($chat-tool-call-icon-size, 2) + $chat-tool-call-title-gap - $chat-tool-call-content-border-width !default;
+$chat-tool-call-field-gap: 4px !default;
+$chat-tool-call-field-font-family: Consolas, "Cascadia Mono", Menlo, monospace !default;
