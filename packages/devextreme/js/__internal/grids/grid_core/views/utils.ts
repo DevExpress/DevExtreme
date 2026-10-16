@@ -1,4 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
+import { getOuterHeight } from '@js/core/utils/size';
 import { isString } from '@js/core/utils/type';
 import { columnHasValue } from '@ts/grids/grid_core/columns_controller/columns_controller_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
@@ -52,4 +53,21 @@ export const insertRowElement = (
   } else if ($table) {
     $newRow.prependTo($newRow.is('tbody') ? $table : $table.children('tbody'));
   }
+};
+
+export const keepContentHeight = (
+  $content: dxElementWrapper | undefined,
+  callback: () => void,
+): void => {
+  if (!$content) {
+    callback();
+
+    return;
+  }
+
+  const { minHeight } = ($content.get(0) as HTMLElement).style;
+
+  $content.css('minHeight', getOuterHeight($content));
+  callback();
+  $content.css('minHeight', minHeight);
 };

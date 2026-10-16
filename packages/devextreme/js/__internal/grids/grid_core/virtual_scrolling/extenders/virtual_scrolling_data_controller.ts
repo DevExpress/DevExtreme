@@ -198,6 +198,9 @@ export const virtualScrollingDataControllerExtender = (
       loadedItemCount() {
         return that._itemCount;
       },
+      renderedItemsRange() {
+        return that.getRenderedItemsRange();
+      },
       totalItemsCount() {
         if (isVirtualPaging(that)) {
           return that.dataSourceController.totalItemsCount();
@@ -363,6 +366,26 @@ export const virtualScrollingDataControllerExtender = (
       viewportParams.skip += pageOffset;
     }
     this._loadViewportParams = viewportParams;
+  }
+
+  private getRenderedItemsRange(): { skip: number; take: number } | undefined {
+    const renderedItems = this._items;
+    const loadedItems: ProcessedItem[] | null = this._allItems;
+
+    if (!renderedItems.length || !loadedItems?.length) {
+      return undefined;
+    }
+
+    const loadedItemIndex = loadedItems[0].loadIndex ?? 0;
+    const renderedItemIndex = renderedItems[0].loadIndex ?? 0;
+    const pageStartItemIndex = isVirtualPaging(this) ? 0 : loadedItemIndex;
+    const firstItemIndex = renderedItemIndex - pageStartItemIndex;
+    const lastItemIndex = (renderedItems[renderedItems.length - 1].loadIndex ?? 0) - pageStartItemIndex;
+
+    return {
+      skip: firstItemIndex,
+      take: lastItemIndex - firstItemIndex + 1,
+    };
   }
 
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
