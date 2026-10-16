@@ -2,12 +2,15 @@ import messageLocalization from '@js/common/core/localization/message';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Attachment, AttachmentDownloadClickEvent, Message } from '@js/ui/chat';
+import type {
+  Attachment, AttachmentDownloadClickEvent, Message, ToolCall, ToolCallOptions,
+} from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import FileView from '@ts/ui/chat/file_view/file_view';
+import ToolCallView from '@ts/ui/chat/tool_call_view/tool_call_view';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
@@ -26,6 +29,8 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   src?: string;
   alt?: string;
   attachments?: Attachment[];
+  toolCalls?: ToolCall[];
+  toolCallOptions?: ToolCallOptions;
   onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
   template?: ((message: Message, container: Element) => void) | null;
 }
@@ -34,6 +39,8 @@ class MessageBubble extends Widget<Properties> {
   _$content!: dxElementWrapper;
 
   _$attachments?: dxElementWrapper;
+
+  _$toolCalls?: dxElementWrapper;
 
   _getDefaultOptions(): Properties {
     return {
@@ -53,9 +60,11 @@ class MessageBubble extends Widget<Properties> {
     super._initMarkup();
 
     this._renderContentContainer();
+    this._renderToolCallsElement();
     this._renderAttachmentsElement();
 
     this._updateContent();
+    this._renderToolCalls();
     this._renderAttachments();
   }
 
@@ -63,6 +72,20 @@ class MessageBubble extends Widget<Properties> {
     this._$content = $('<div>')
       .addClass(CHAT_MESSAGEBUBBLE_CONTENT_CLASS)
       .appendTo(this.$element());
+  }
+
+  _renderToolCallsElement(): void {
+    const {
+      toolCalls, toolCallOptions, isDeleted, template,
+    } = this.option();
+    const isReplacedByTemplate = Boolean(template) && !toolCallOptions?.showInMessageTemplate;
+
+    this._$toolCalls?.remove();
+    this._$toolCalls = undefined;
+
+    if (toolCalls?.length && !isDeleted && !isReplacedByTemplate) {
+      this._$toolCalls = $('<div>').prependTo(this.$element());
+    }
   }
 
   _renderAttachmentsElement(): void {
@@ -132,6 +155,19 @@ class MessageBubble extends Widget<Properties> {
     }
   }
 
+  _renderToolCalls(): void {
+    const { toolCalls, toolCallOptions } = this.option();
+
+    if (!this._$toolCalls) {
+      return;
+    }
+
+    this._createComponent(this._$toolCalls, ToolCallView, {
+      toolCalls,
+      expandAll: toolCallOptions?.expandAll,
+    });
+  }
+
   _renderAttachments(): void {
     const {
       attachments,
@@ -163,10 +199,17 @@ class MessageBubble extends Widget<Properties> {
     const { name, value } = args;
 
     switch (name) {
+      case 'isDeleted':
+        this._updateMessageData(name, value);
+        this._updateContent();
+        this._renderToolCallsElement();
+        this._renderToolCalls();
+        this._renderAttachmentsElement();
+        this._renderAttachments();
+        break;
       case 'text':
       case 'src':
       case 'alt':
-      case 'isDeleted':
         this._updateMessageData(name, value);
         this._updateContent();
         this._renderAttachmentsElement();
@@ -179,9 +222,16 @@ class MessageBubble extends Widget<Properties> {
         break;
       case 'template':
         this._updateContent();
+        this._renderToolCallsElement();
+        this._renderToolCalls();
         break;
       case 'isEdited':
         this._updateMessageData(name, value);
+        break;
+      case 'toolCalls':
+      case 'toolCallOptions':
+        this._renderToolCallsElement();
+        this._renderToolCalls();
         break;
       case 'onAttachmentDownloadClick':
       case 'attachments':
