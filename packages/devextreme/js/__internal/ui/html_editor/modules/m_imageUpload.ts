@@ -1,35 +1,44 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
+import type { UploadedEvent } from '@js/ui/file_uploader';
 import FileUploader from '@js/ui/file_uploader';
+import type { dxHtmlEditorImageUpload } from '@js/ui/html_editor';
 import Quill from 'devextreme-quill';
 
+import type { QuillInstance, UploaderModule } from '../types/quill';
 import { getFileUploaderBaseOptions, serverUpload } from '../utils/m_image_uploader_helper';
+import type { BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
 
 const HIDDEN_FILE_UPLOADER_CLASS = 'dx-htmleditor-hidden-content';
+
+/** The imageUpload option plus the editor: what HtmlEditor._getModuleConfigByOption builds */
+type ImageUploadModuleOptions = BaseModuleOptions & dxHtmlEditorImageUpload;
+
+/** The native event member that holds the dropped or pasted files */
+type FilesField = 'dataTransfer' | 'clipboardData';
+
 // eslint-disable-next-line import/no-mutable-exports
 let ImageUploadModule = BaseModule;
 
 if (Quill) {
-  ImageUploadModule = class ImageUploadModule extends BaseModule {
-    quill: any;
+  ImageUploadModule = class extends BaseModule {
+    declare options: ImageUploadModuleOptions;
 
-    options: any;
+    _quillContainer: dxElementWrapper;
 
-    _quillContainer: any;
+    _uploaderModule?: UploaderModule;
 
-    editorInstance: any;
+    _fileUploader?: FileUploader;
 
-    _uploaderModule: any;
-
-    _fileUploader!: FileUploader;
-
-    constructor(quill, options) {
+    constructor(quill: QuillInstance, options: ImageUploadModuleOptions) {
       super(quill, options);
 
       this.options = options;
@@ -38,35 +47,36 @@ if (Quill) {
       this._handleServerUpload();
     }
 
-    _handleServerUpload() {
-      const useServerUpload = isDefined(this.options.fileUploadMode) && this.options.fileUploadMode !== 'base64';
+    _handleServerUpload(): void {
+      const useServerUpload = isDefined(this.options.fileUploadMode)
+        && this.options.fileUploadMode !== 'base64';
 
-      useServerUpload
-        ? this._enableDragAndDropUploading()
-        : this._disableDragAndDropUploading();
+      if (useServerUpload) {
+        this._enableDragAndDropUploading();
+      } else {
+        this._disableDragAndDropUploading();
+      }
     }
 
-    _getUploaderModule() {
-      if (!this._uploaderModule) {
-        this._uploaderModule = this.quill.getModule('uploader');
-      }
+    _getUploaderModule(): UploaderModule {
+      this._uploaderModule ??= this.quill.getModule('uploader');
 
       return this._uploaderModule;
     }
 
-    _disableDragAndDropUploading() {
+    _disableDragAndDropUploading(): void {
       this._getUploaderModule().preventImageUploading(false);
       this._detachEvents();
       this._fileUploader?.dispose();
     }
 
-    _enableDragAndDropUploading() {
+    _enableDragAndDropUploading(): void {
       this._initFileUploader();
       this._getUploaderModule().preventImageUploading(true);
       this._attachEvents();
     }
 
-    _initFileUploader() {
+    _initFileUploader(): dxElementWrapper {
       const $container = $('<div>')
         .addClass(HIDDEN_FILE_UPLOADER_CLASS)
         .appendTo(this._quillContainer);
@@ -76,35 +86,43 @@ if (Quill) {
         onUploaded: this._onUploaded.bind(this),
       }, this.options.fileUploaderOptions);
 
-      this._fileUploader = this.editorInstance._createComponent($container, FileUploader, fileUploaderOptions);
+      this._fileUploader = this.editorInstance._createComponent(
+        $container,
+        FileUploader,
+        fileUploaderOptions,
+      );
 
       return $container;
     }
 
-    _onUploaded(data) {
+    _onUploaded(data: UploadedEvent): void {
       const { index: pasteIndex } = this.quill.getSelection() ?? { index: this.quill.getLength() };
       serverUpload(this.options.uploadDirectory, data.file.name, this.quill, pasteIndex);
     }
 
-    _attachEvents() {
+    _attachEvents(): void {
       eventsEngine.on(this.quill.root, addNamespace('drop', MODULE_NAMESPACE), this._dropHandler.bind(this));
       eventsEngine.on(this.quill.root, addNamespace('paste', MODULE_NAMESPACE), this._pasteHandler.bind(this));
     }
 
-    _detachEvents() {
+    _detachEvents(): void {
       eventsEngine.off(this.quill.root, MODULE_NAMESPACE);
     }
 
-    _dropHandler(e) {
+    _dropHandler(e: DxEvent<DragEvent>): void {
       this._handleInsertImages(e, 'dataTransfer');
     }
 
-    _pasteHandler(e) {
+    _pasteHandler(e: DxEvent<ClipboardEvent>): void {
       this._handleInsertImages(e, 'clipboardData');
     }
 
-    _handleInsertImages(e, filesField) {
+    _handleInsertImages<TField extends FilesField>(
+      e: DxEvent<Record<TField, DataTransfer | null>>,
+      filesField: TField,
+    ): void {
       this.saveValueChangeEvent(e);
+      // @ts-expect-error dataTransfer and clipboardData are typed as nullable
       const files = Array.from(e.originalEvent[filesField].files || []);
 
       const uploads = files;
@@ -112,34 +130,39 @@ if (Quill) {
       if (uploads.length) {
         e.preventDefault();
         e.stopPropagation();
-        // @ts-expect-error
+        // @ts-expect-error the file uploader exists while server upload is on
         this._fileUploader.option('value', uploads);
+        // @ts-expect-error the file uploader exists while server upload is on
         this._fileUploader.upload();
       }
     }
 
-    clean() {
+    clean(): void {
       this._disableDragAndDropUploading();
     }
 
-    prepareCleanCallback() {
+    prepareCleanCallback(): () => void {
       return () => {
         this.clean();
       };
     }
 
-    option(option, value) {
+    option(option: string, value: unknown): void {
       // eslint-disable-next-line default-case
       switch (option) {
         case 'imageUpload':
           this.handleOptionChangeValue(value);
           break;
         case 'fileUploadMode':
+          // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
           this.options.fileUploadMode = value;
           this._handleServerUpload();
           break;
         case 'fileUploaderOptions':
-          this._fileUploader.option(value);
+          // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
+          this.options.fileUploaderOptions = value;
+          // @ts-expect-error see above
+          this._fileUploader?.option(value);
       }
     }
   };

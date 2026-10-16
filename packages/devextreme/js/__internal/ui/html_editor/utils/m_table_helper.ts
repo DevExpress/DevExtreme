@@ -3,6 +3,7 @@ import $ from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
 
+import type { LineDirection } from '../types';
 import type {
   BaseQuillModuleInstance,
   FormatBlotInstance,
@@ -12,8 +13,6 @@ import type {
 
 type TableOperationName = 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow'
   | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
-
-type LineDirection = 'horizontal' | 'vertical';
 
 interface LineElementsFormat {
   elements: dxElementWrapper;

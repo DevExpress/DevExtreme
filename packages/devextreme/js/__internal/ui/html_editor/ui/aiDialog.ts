@@ -400,7 +400,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         text,
         onClick: (): void => {
           const { value } = this._resultTextArea.option();
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
           navigator?.clipboard?.writeText(value ?? '');
         },
         onInitialized: this._addEscapeHandler.bind(this),
