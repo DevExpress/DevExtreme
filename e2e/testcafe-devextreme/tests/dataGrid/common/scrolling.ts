@@ -1560,6 +1560,135 @@ test.meta({ browserSize: [800, 800] })('The page should not be changed when hidi
   delete (window as any).testLoadCount;
 })());
 
+test('New virtual mode. Virtual rows should not be rendered after the height is decreased and restored (T1336247)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const getViewportSize = ClientFunction(
+    () => (window as any).widget.getController('data').viewportSize() as number,
+  );
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const initialViewportSize = await getViewportSize();
+
+  await dataGrid.option('height', 150);
+  await t.expect(getViewportSize()).lt(initialViewportSize);
+
+  await dataGrid.option('height', 600);
+  await t.expect(getViewportSize()).eql(initialViewportSize);
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+
+  await t
+    .expect(visibleRows.length)
+    .eql(10)
+    .expect(dataGrid.getRowsView().find(`.${ClassNames.virtualRow}`).count)
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 2),
+  height: 600,
+  scrolling: {
+    mode: 'virtual',
+  },
+}));
+
+test('New virtual mode. Virtual rows should not be rendered after the container height is decreased and restored (T1336247)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const setContainerHeight = ClientFunction((height: number) => {
+    $('#container').css('height', height);
+  });
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await setContainerHeight(150);
+  await dataGrid.apiUpdateDimensions();
+  await setContainerHeight(600);
+  await dataGrid.apiUpdateDimensions();
+
+  await t
+    .expect(dataGrid.getRowsView().find(`.${ClassNames.virtualRow}`).count)
+    .eql(0);
+}).before(async () => {
+  await ClientFunction(() => {
+    $('#container').css('height', 600);
+  })();
+
+  return createWidget('dxDataGrid', {
+    dataSource: getData(10, 2),
+    scrolling: {
+      mode: 'virtual',
+    },
+  });
+});
+
+test('New virtual mode. Virtual rows should not be rendered after a row is selected while the height is decreased (T1336247)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const getViewportSize = ClientFunction(
+    () => (window as any).widget.getController('data').viewportSize() as number,
+  );
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const initialViewportSize = await getViewportSize();
+
+  await dataGrid.option('height', 150);
+  await t.expect(getViewportSize()).lt(initialViewportSize);
+
+  await t
+    .click(dataGrid.getDataRow(0).element)
+    .expect(dataGrid.getDataRow(0).isSelected)
+    .ok();
+
+  await dataGrid.option('height', 600);
+  await t.expect(getViewportSize()).eql(initialViewportSize);
+
+  await t
+    .expect(dataGrid.getRowsView().find(`.${ClassNames.virtualRow}`).count)
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 2),
+  height: 600,
+  selection: {
+    mode: 'single',
+  },
+  scrolling: {
+    mode: 'virtual',
+  },
+}));
+
+test('New virtual mode. Virtual rows should not be rendered after a row is focused while the height is decreased (T1336247)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const getViewportSize = ClientFunction(
+    () => (window as any).widget.getController('data').viewportSize() as number,
+  );
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const initialViewportSize = await getViewportSize();
+
+  await dataGrid.option('height', 150);
+  await t.expect(getViewportSize()).lt(initialViewportSize);
+
+  await t
+    .click(dataGrid.getDataRow(0).element)
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .ok();
+
+  await dataGrid.option('height', 600);
+  await t.expect(getViewportSize()).eql(initialViewportSize);
+
+  await t
+    .expect(dataGrid.getRowsView().find(`.${ClassNames.virtualRow}`).count)
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 2).map((item, index) => ({ ...item, id: index })),
+  keyExpr: 'id',
+  height: 600,
+  focusedRowEnabled: true,
+  scrolling: {
+    mode: 'virtual',
+  },
+}));
+
 fixture.disablePageReloads`Remote Scrolling`
   .page(url(__dirname, '../../container.html'));
 
