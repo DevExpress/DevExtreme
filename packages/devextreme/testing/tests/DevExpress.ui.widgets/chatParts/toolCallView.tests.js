@@ -3,6 +3,7 @@ import fx from 'common/core/animation/fx';
 import localization from 'localization';
 
 import ToolCallView, {
+    CHAT_TOOL_CALL_CONTENT_CLASS,
     CHAT_TOOL_CALL_ERROR_BADGE_CLASS,
     CHAT_TOOL_CALL_FIELD_CLASS,
     CHAT_TOOL_CALL_FIELD_ERROR_CLASS,
@@ -13,7 +14,9 @@ import ToolCallView, {
 } from '__internal/ui/chat/tool_call_view/tool_call_view';
 import TextArea from '__internal/ui/text_area';
 
+const ACCORDION_CLASS = 'dx-accordion';
 const ACCORDION_ITEM_CLASS = 'dx-accordion-item';
+const ACCORDION_ITEM_BODY_CLASS = 'dx-accordion-item-body';
 const ACCORDION_ITEM_TITLE_CLASS = 'dx-accordion-item-title';
 const ACCORDION_ITEM_OPENED_CLASS = 'dx-accordion-item-opened';
 const TEXTAREA_CLASS = 'dx-textarea';
@@ -124,6 +127,35 @@ QUnit.module('ToolCallView', moduleConfig, () => {
             this.reinit({ toolCalls: [] });
 
             assert.strictEqual(this.getItems().length, 0);
+        });
+    });
+
+    QUnit.module('Structure', () => {
+        QUnit.test('expanded item body should contain the content element with fields', function(assert) {
+            this.expand();
+
+            const $content = this.$element.find(`.${ACCORDION_ITEM_BODY_CLASS} > .${CHAT_TOOL_CALL_CONTENT_CLASS}`);
+            const $fields = $content.children(`.${CHAT_TOOL_CALL_FIELD_CLASS}`);
+
+            assert.strictEqual($content.length, 1, 'content element exists');
+            assert.strictEqual($fields.length, 2, 'two fields are rendered');
+
+            $fields.each((_, field) => {
+                const $fieldChildren = $(field).children();
+
+                assert.strictEqual($fieldChildren.eq(0).hasClass(CHAT_TOOL_CALL_FIELD_LABEL_CLASS), true, 'first child is the label');
+                assert.strictEqual($fieldChildren.eq(1).hasClass(TEXTAREA_CLASS), true, 'second child is the text area');
+            });
+        });
+
+        QUnit.test('expanded group body should contain the content element with the nested accordion', function(assert) {
+            this.reinit({ toolCalls: [currentTimeCall, stockPriceCall] });
+            this.expand();
+
+            const $content = this.$element.find(`.${ACCORDION_ITEM_BODY_CLASS} > .${CHAT_TOOL_CALL_CONTENT_CLASS}`);
+
+            assert.strictEqual($content.length, 1, 'content element exists');
+            assert.strictEqual($content.children(`.${ACCORDION_CLASS}`).length, 1, 'nested accordion is a direct child of the content');
         });
     });
 
