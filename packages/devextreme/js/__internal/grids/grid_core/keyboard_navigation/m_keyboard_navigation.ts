@@ -25,7 +25,7 @@ import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/m_dom';
 import { focused } from '@ts/core/utils/selectors';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
-import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -79,7 +79,7 @@ import {
   WIDGET_CLASS,
 } from './const';
 import { GridCoreKeyboardNavigationDom } from './dom';
-import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
+import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './keyboard_navigation_core';
 import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
 import type {
   FocusedCellPosition, KeyDownEvent, NavigationDirection, NavigationElementType, NavigationKeyCode,

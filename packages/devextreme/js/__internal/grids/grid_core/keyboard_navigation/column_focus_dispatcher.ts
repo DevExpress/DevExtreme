@@ -1,7 +1,7 @@
 import { isDefined } from '@js/core/utils/type';
 
 import { Controller } from '../modules/modules';
-import type { ColumnKeyboardNavigationController } from './m_column_keyboard_navigation_core';
+import type { ColumnKeyboardNavigationController } from './column_keyboard_navigation_core';
 
 export class ColumnFocusDispatcher extends Controller {
   private readonly keyboardNavigationControllers: ColumnKeyboardNavigationController[] = [];

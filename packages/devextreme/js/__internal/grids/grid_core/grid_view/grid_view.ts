@@ -15,7 +15,7 @@ import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
@@ -23,7 +23,7 @@ import type { ColumnWidth, ScrollPosition, ViewDataChange } from '@ts/grids/grid
 import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 
 import type { FooterView } from '../../data_grid/summary/m_summary';
-import type { AdaptiveColumnsViewController } from '../adaptivity/m_adaptivity';
+import type { AdaptiveColumnsViewController } from '../adaptivity/adaptivity';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import { GROUP_COMMAND_COLUMN_NAME } from '../columns_controller/const';

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 

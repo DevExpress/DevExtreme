@@ -17,7 +17,7 @@ import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 

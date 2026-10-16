@@ -4,8 +4,8 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/c
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
+import type { AdaptiveColumnsViewController } from '../adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '../const';
-import type { AdaptiveColumnsViewController } from '../m_adaptivity';
 
 export const adaptivityColumnsControllerExtender = (
   Base: ModuleType<ColumnsController>,

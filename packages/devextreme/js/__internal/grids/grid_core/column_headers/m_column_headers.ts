@@ -14,7 +14,7 @@ import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel'
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
-import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
+import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/headers_keyboard_navigation';
 import { registerKeyboardAction } from '../m_accessibility';
 import { ColumnsView } from '../views/columns_view';
 import type { ColumnViewTemplate } from '../views/types';

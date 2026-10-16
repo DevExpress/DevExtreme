@@ -34,9 +34,9 @@ import {
   FOCUSABLE_ELEMENT_SELECTOR,
   FORM_BUTTONS_CONTAINER_CLASS,
 } from './const';
+import { forEachFormItems, getEditorType } from './editing_utils';
 import { editingFormBasedDataControllerExtender } from './extenders/editing_form_based_data_controller';
 import type { EditingController } from './m_editing';
-import { forEachFormItems, getEditorType } from './m_editing_utils';
 
 export interface IFormBasedEditingControllerExtender {
   // eslint-disable-next-line @typescript-eslint/method-signature-style
