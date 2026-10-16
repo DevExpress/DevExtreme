@@ -447,6 +447,12 @@
         "dxChat-fileViewLabel": "Fájllista",
         "dxChat-downloadButtonLabel": "{0} fájl letöltése",
         "dxChat-fileLimitReachedWarning": "Túl sok fájlt választott. Válasszon legfeljebb {0} fájlt, és próbálja újra.",
+        "dxChat-toolCallsGroupTitle": "{0} tools",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallErrorText": "Error",
+        "dxChat-copyButtonLabel": "Copy",
+        "dxChat-copiedButtonLabel": "Copied",
 
         "dxColorView-ariaRed": "Piros",
         "dxColorView-ariaGreen": "Zöld",

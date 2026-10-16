@@ -447,6 +447,12 @@
         "dxChat-fileViewLabel": "檔案清單",
         "dxChat-downloadButtonLabel": "下載檔案 {0}",
         "dxChat-fileLimitReachedWarning": "您選擇的檔案過多。請選擇不超過 {0} 個檔案後重試。",
+        "dxChat-toolCallsGroupTitle": "{0} tools",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallErrorText": "Error",
+        "dxChat-copyButtonLabel": "Copy",
+        "dxChat-copiedButtonLabel": "Copied",
 
         "dxColorView-ariaRed": "紅色",
         "dxColorView-ariaGreen": "綠色",

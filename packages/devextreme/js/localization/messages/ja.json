@@ -447,6 +447,12 @@
         "dxChat-fileViewLabel": "ファイル リスト",
         "dxChat-downloadButtonLabel": "ファイル {0} をダウンロード",
         "dxChat-fileLimitReachedWarning": "ファイルが多すぎます。{0} 件以下のファイルを選択してやり直してください。",
+        "dxChat-toolCallsGroupTitle": "{0} tools",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallErrorText": "Error",
+        "dxChat-copyButtonLabel": "Copy",
+        "dxChat-copiedButtonLabel": "Copied",
 
         "dxColorView-ariaRed": "赤",
         "dxColorView-ariaGreen": "緑",
