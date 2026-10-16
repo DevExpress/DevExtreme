@@ -447,6 +447,12 @@
         "dxChat-fileViewLabel": "文件列表",
         "dxChat-downloadButtonLabel": "下载文件 {0}",
         "dxChat-fileLimitReachedWarning": "您选择的文件太多。请选择不超过 {0} 个文件后重试。",
+        "dxChat-toolCallsGroupTitle": "{0} tools",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallErrorText": "Error",
+        "dxChat-copyButtonLabel": "Copy",
+        "dxChat-copiedButtonLabel": "Copied",
 
         "dxColorView-ariaRed": "红色",
         "dxColorView-ariaGreen": "绿色",

@@ -447,6 +447,12 @@
         "dxChat-fileViewLabel": "Списък с файлове",
         "dxChat-downloadButtonLabel": "Изтегляне на файл {0}",
         "dxChat-fileLimitReachedWarning": "Избрахте прекалено много файлове. Изберете не повече от {0} файла и опитайте отново.",
+        "dxChat-toolCallsGroupTitle": "{0} tools",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallErrorText": "Error",
+        "dxChat-copyButtonLabel": "Copy",
+        "dxChat-copiedButtonLabel": "Copied",
 
         "dxColorView-ariaRed": "Червен",
         "dxColorView-ariaGreen": "Зелен",

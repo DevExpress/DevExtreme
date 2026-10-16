@@ -447,6 +447,12 @@
         "dxChat-fileViewLabel": "Lista de archivos",
         "dxChat-downloadButtonLabel": "Descargar archivo {0}",
         "dxChat-fileLimitReachedWarning": "Ha seleccionado demasiados archivos. Seleccione no más de {0} archivos y reintente.",
+        "dxChat-toolCallsGroupTitle": "{0} tools",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallErrorText": "Error",
+        "dxChat-copyButtonLabel": "Copy",
+        "dxChat-copiedButtonLabel": "Copied",
 
         "dxColorView-ariaRed": "Rojo",
         "dxColorView-ariaGreen": "Verde",

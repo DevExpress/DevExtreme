@@ -447,6 +447,12 @@
         "dxChat-fileViewLabel": "Seznam souborů",
         "dxChat-downloadButtonLabel": "Stáhnout soubor {0}",
         "dxChat-fileLimitReachedWarning": "Vybrali jste příliš mnoho souborů. Vyberte nejvýše {0} souborů a opakujte akci.",
+        "dxChat-toolCallsGroupTitle": "{0} tools",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallErrorText": "Error",
+        "dxChat-copyButtonLabel": "Copy",
+        "dxChat-copiedButtonLabel": "Copied",
 
         "dxColorView-ariaRed": "Červená",
         "dxColorView-ariaGreen": "Zelená",
