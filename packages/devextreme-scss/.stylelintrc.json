@@ -21,6 +21,10 @@
         "@stylistic/declaration-colon-space-after": "always-single-line",
         "@stylistic/declaration-colon-space-before": "never",
         "declaration-no-important": true,
+        "declaration-property-value-disallowed-list": [
+            { "/.*/": ["/var\\(\\s*--dxds-/"] },
+            { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently." }
+        ],
         "dx/module-variable-default": true,
         "dx/no-unused-use": true,
         "dx/no-identical-branch-declarations": true,
@@ -63,5 +67,58 @@
         "scss/map-keys-quotes": "always",
         "scss/no-duplicate-dollar-variables": [true, { "ignoreInsideAtRules": ["if", "else"] }],
         "scss/operator-no-newline-after": null
-    }
+    },
+    "overrides": [
+        {
+            "comment": "fluent-next variable names are strict kebab-case: each one maps onto a public --dx-* custom property.",
+            "files": ["scss/widgets/fluent-next/**/*.scss"],
+            "rules": {
+                "scss/dollar-variable-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+            }
+        },
+        {
+            "comment": "Rule files read design tokens through the widget's own variables. At-rule parameters are invisible to stylelint; fluent-next-naming.test.ts covers them.",
+            "files": ["scss/widgets/fluent-next/**/*.scss"],
+            "rules": {
+                "declaration-property-value-disallowed-list": [
+                    { "/.*/": ["/var\\(\\s*--dxds-/", "/\\bds\\.\\$/"] },
+                    { "message": "Use the widget's own variable here: resolve the design token in _colors.scss or _sizes.scss. A custom property compiles even when its name is wrong." }
+                ]
+            }
+        },
+        {
+            "comment": "Declaration files read design tokens through the ds bridge, not as custom properties.",
+            "files": [
+                "scss/widgets/fluent-next/**/_colors.scss",
+                "scss/widgets/fluent-next/**/_sizes.scss",
+                "scss/widgets/fluent-next/**/_variables.scss"
+            ],
+            "rules": {
+                "declaration-property-value-disallowed-list": [
+                    { "/.*/": ["/var\\(\\s*--dxds-/", "/var\\(\\s*--dx-/"] },
+                    { "message": "Read a design token through the ds bridge (ds.$name), not as a custom property: the bridge fails the build on an unknown name, a custom property compiles and degrades silently." }
+                ]
+            }
+        },
+        {
+            "comment": "cardView keeps its cross-theme BEM variable names.",
+            "files": ["scss/widgets/fluent-next/cardView/**/*.scss"],
+            "rules": {
+                "scss/dollar-variable-pattern": "^[a-z][0-9a-z_-]*$"
+            }
+        },
+        {
+            "comment": "cardView declaration files link component tier names through var(--dx-card-view-…).",
+            "files": [
+                "scss/widgets/fluent-next/cardView/_colors.scss",
+                "scss/widgets/fluent-next/cardView/_sizes.scss"
+            ],
+            "rules": {
+                "declaration-property-value-disallowed-list": [
+                    { "/.*/": ["/var\\(\\s*--dxds-/"] },
+                    { "message": "Read a design token through the ds bridge (ds.$name), not as a custom property: the bridge fails the build on an unknown name, a custom property compiles and degrades silently." }
+                ]
+            }
+        }
+    ]
 }

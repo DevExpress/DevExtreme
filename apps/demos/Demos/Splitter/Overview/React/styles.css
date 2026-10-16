@@ -27,7 +27,7 @@
 }
 
 .pane-option {
-  color: var(--dx-texteditor-color-label);
+  color: var(--dxds-color-content-subtle, var(--dx-texteditor-color-label));
   font-size: 10px;
 }
 

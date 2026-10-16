@@ -1,0 +1,4 @@
+@mixin publish {
+  --dx-switch-container-height: var(--dx-switch-height);
+  --dx-switch-container-padding-inline: var(--dx-switch-handle-margin);
+}

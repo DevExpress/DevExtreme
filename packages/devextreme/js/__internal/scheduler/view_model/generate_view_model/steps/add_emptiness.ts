@@ -6,6 +6,7 @@ interface AddEmptinessOptions {
   isTimelineView: boolean;
   isAdaptivityEnabled: boolean;
   isMonthView: boolean;
+  appointmentMinHeight?: number;
 }
 
 export const addEmptiness = <T extends Geometry & AllDayPanelOccupation & { allDay: boolean }>(

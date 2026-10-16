@@ -1,0 +1,32 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$color-view-container-width: 450px !default;
+$color-view-palette-width: 288px !default;
+$color-view-palette-height: 299px !default;
+$color-view-alpha-row-margin-block-start: ds.$spacing-100 !default;
+$color-view-hue-scale-width: ds.$spacing-180 !default;
+$color-view-hue-scale-margin: ds.$spacing-190 !default;
+$color-view-color-preview-height: ds.$spacing-400 !default;
+$color-view-preview-container-margin: ds.$spacing-340 !default;
+
+$color-view-container-line-height: normal !default;
+$color-view-container-hex-margin: ds.$spacing-200 0 0 0 !default;
+$color-view-container-alpha-label-width: 115px !default;
+$color-view-container-alpha-label-margin: 43px !default;
+$color-view-container-textbox-width: 69px !default;
+$color-view-container-textbox-margin: 0 0 0 ds.$spacing-100 !default;
+
+$color-view-controls-container-width: 90px !default;
+$color-view-controls-container-margin: 27px !default;
+
+$color-view-container-margin-block-end: ds.$spacing-100 !default;
+$color-view-color-preview-container-padding: ds.$spacing-10 !default;
+$color-view-color-preview-container-margin: ds.$spacing-10 !default;
+
+$color-view-alpha-cell-width: $color-view-palette-width + 4 !default;
+
+$color-view-hue-scale-wrapper-height: $color-view-palette-height + 2 !default;
+
+$color-view-alpha-scale-height: ds.$spacing-200 !default;
+$color-view-alpha-cell-margin-block: ds.$spacing-60 !default;
+$color-view-apply-button-margin-inline-end: ds.$spacing-100 !default;

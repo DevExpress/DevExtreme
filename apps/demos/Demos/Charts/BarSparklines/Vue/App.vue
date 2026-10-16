@@ -68,7 +68,7 @@ function onValueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
 
 .demo-table {
   width: 100%;
-  border: 1px solid #c2c2c2;
+  border: 1px solid var(--dxds-color-border, #c2c2c2);
   border-collapse: collapse;
 }
 
@@ -77,20 +77,20 @@ function onValueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   font-weight: 400;
   width: 200px;
   padding: 25px 10px 5px;
-  border: 1px solid #c2c2c2;
+  border: 1px solid var(--dxds-color-border, #c2c2c2);
 }
 
 .demo-table th {
   padding: 25px 15px 20px;
-  border: 1px solid #c2c2c2;
+  border: 1px solid var(--dxds-color-border, #c2c2c2);
 }
 
 .demo-table tr:nth-child(2) td {
-  border-top: 1px solid #c2c2c2;
+  border-top: 1px solid var(--dxds-color-border, #c2c2c2);
 }
 
 .demo-table td:first-of-type {
-  border-left: 1px solid #c2c2c2;
+  border-left: 1px solid var(--dxds-color-border, #c2c2c2);
 }
 
 .demo-table .sparkline {

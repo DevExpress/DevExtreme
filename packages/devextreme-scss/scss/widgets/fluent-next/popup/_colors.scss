@@ -1,0 +1,8 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$popup-title-bg: transparent !default;
+$popup-title-content: ds.$color-content !default;
+$popup-title-border: ds.$color-border !default;
+$popup-bottom-content: ds.$color-content !default;
+
+$popup-dialog-backdrop: ds.$color-bg-backdrop !default;

@@ -163,6 +163,6 @@ const getCellContextMenuItems = (
 <style>
 .dx-scheduler-appointment-title,
 .dx-scheduler-appointment-recurrence-icon {
-  color: white;
+  color: var(--dxds-color-content-on-color, white);
 }
 </style>
