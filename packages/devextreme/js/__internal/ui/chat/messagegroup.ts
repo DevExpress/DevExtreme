@@ -125,12 +125,15 @@ class MessageGroup extends Widget<Properties> {
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
     const { messageTemplate, onAttachmentDownloadClick } = this.option();
 
-    const { isDeleted, type, attachments } = message;
+    const {
+      isDeleted, type, attachments, toolCalls,
+    } = message;
 
     const options: MessageBubbleProperties = {
       isDeleted,
       type,
       attachments,
+      toolCalls,
       onAttachmentDownloadClick,
     };
 
