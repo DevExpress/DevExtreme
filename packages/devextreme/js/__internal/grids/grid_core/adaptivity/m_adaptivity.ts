@@ -214,7 +214,6 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
       rowsView.renderTemplate(
         $container,
-        // @ts-expect-error cellTemplate isn't typed yet
         column.cellTemplate,
         templateOptions,
         isElementInDom($container),
