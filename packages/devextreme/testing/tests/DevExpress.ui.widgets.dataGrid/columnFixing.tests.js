@@ -7,7 +7,7 @@ import browser from 'core/utils/browser';
 import devices from '__internal/core/devices';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import dataUtils from 'core/element_data';
 import translator from 'common/core/animation/translator';
 import { getOuterHeight } from 'core/utils/size';

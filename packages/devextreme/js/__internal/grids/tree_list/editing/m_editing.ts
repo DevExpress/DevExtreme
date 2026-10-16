@@ -10,8 +10,8 @@ import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { editingDataControllerExtender } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
 import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import type { RowsView } from '../../grid_core/views/rows_view';
 import treeListCore from '../core';

@@ -10,8 +10,8 @@ import type {
   UpdateChange,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
 import { isCellModified } from '../editing_utils';

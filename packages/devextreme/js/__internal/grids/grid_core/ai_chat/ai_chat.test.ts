@@ -27,7 +27,7 @@ const mockWidgetInstance = {
   option: jest.fn(),
 };
 
-jest.mock('../m_utils', () => ({
+jest.mock('../utils', () => ({
   __esModule: true,
   default: {
     getWidgetInstance: jest.fn(() => mockWidgetInstance),

@@ -21,8 +21,8 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { ChangedEvent, RawItemData } from '../data_source_adapter/types';
-import gridCoreUtils from '../m_utils';
 import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
+import gridCoreUtils from '../utils';
 import type { RowsViewScrollEvent } from '../views/types';
 import {
   BOTTOM_LOAD_PANEL_CLASS,

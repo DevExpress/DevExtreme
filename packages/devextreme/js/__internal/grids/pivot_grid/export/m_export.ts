@@ -6,7 +6,7 @@ import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
-import { prepareItems } from '@ts/grids/grid_core/m_export';
+import { prepareItems } from '@ts/grids/grid_core/export';
 
 const DEFAULT_DATA_TYPE = 'string';
 const DEFAUL_COLUMN_WIDTH = 100;

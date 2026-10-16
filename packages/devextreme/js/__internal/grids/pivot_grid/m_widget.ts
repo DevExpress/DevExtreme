@@ -26,7 +26,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import { current, isGeneric } from '@js/ui/themes';
 import Widget from '@ts/core/widget/widget';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
 import DataAreaImport from './data_area/m_data_area';

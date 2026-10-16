@@ -17,13 +17,13 @@ import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
 } from '@ts/filter_builder/utils';
+import { registerKeyboardAction } from '@ts/grids/grid_core/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
-import gridUtils from '@ts/grids/grid_core/m_utils';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { InternalGridOptions, ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
+import gridUtils from '@ts/grids/grid_core/utils';
 
 import type { FilterValueExpression } from '../filter/types';
 import type { FilterBuilderController } from '../filter_builder/filter_builder';

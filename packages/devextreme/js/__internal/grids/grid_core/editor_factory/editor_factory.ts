@@ -27,10 +27,10 @@ import { CELL_FOCUS_DISABLED_CLASS, CELL_MODIFIED_CLASS, FOCUS_OVERLAY_CLASS } f
 import type { EditingController } from '../editing/m_editing';
 import { CLASSES as KEYBOARD_NAVIGATION_CLASSES } from '../keyboard_navigation/const';
 import { isDataRow } from '../keyboard_navigation/utils';
-import gridCoreUtils from '../m_utils';
 import type { ViewController } from '../modules/modules';
 import modules from '../modules/modules';
 import type { Module, ModuleType } from '../types';
+import gridCoreUtils from '../utils';
 import { INVALIDATE_CLASS } from '../validating/const';
 import type { RowsView } from '../views/rows_view';
 import { CLASSES, MODULE_NAMESPACE, UPDATE_FOCUS_EVENTS } from './const';

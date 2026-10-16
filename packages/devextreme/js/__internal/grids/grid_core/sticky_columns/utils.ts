@@ -1,5 +1,5 @@
 import { isDefined } from '@js/core/utils/type';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
