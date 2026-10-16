@@ -14,11 +14,11 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange, UserState } from '../data_controller/types';
 import type { DataFilter, FilterSourceContext } from '../filter/types';
-import type { HeaderPanel } from '../header_panel/m_header_panel';
+import type { HeaderPanel } from '../header_panel/header_panel';
 import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { ModuleType, OptionChanged } from '../types';
-import type { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/rows_view';
 import { allowSearch, createSearchExpression, parseValue } from './utils';
 
 const SEARCH_PANEL_CLASS = 'search-panel';

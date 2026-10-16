@@ -29,7 +29,7 @@ import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyb
 import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { OptionChanged, RowKey } from '../types';
-import type { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/rows_view';
 import type { ColumnWidth, ViewCellOptions } from '../views/types';
 import { isPercentWidth } from '../views/utils';
 import {

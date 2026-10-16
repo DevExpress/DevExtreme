@@ -3,12 +3,12 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
+import type { ColumnWidth } from '@ts/grids/grid_core/views/types';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
   afterTest, beforeTest, createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
-import type { ColumnWidth } from '../types';
 
 const CONTENT_WIDTH = 1000;
 
