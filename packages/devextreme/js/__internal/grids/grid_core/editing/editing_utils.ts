@@ -7,6 +7,7 @@ import type { EditingTexts } from '@js/ui/tree_list';
 
 import type { ProcessedItem } from '../data_controller/types';
 import type { InternalGrid, RowKey } from '../types';
+import { GUID_LENGTH, NEW_ROW_TEMP_KEY_PREFIX } from './const';
 import type {
   EditFormColumnItem,
   EditFormItemNode,
@@ -14,9 +15,6 @@ import type {
   EditingButtonTexts,
   EditingCellOptions,
 } from './types';
-
-const NEW_ROW_TEMP_KEY_PREFIX = '_DX_KEY_';
-const GUID_LENGTH = 36;
 
 export const createFailureHandler = (
   deferred: DeferredObj<unknown>,

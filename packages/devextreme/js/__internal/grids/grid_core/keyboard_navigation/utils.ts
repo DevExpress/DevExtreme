@@ -5,15 +5,12 @@ import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_he
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
+import { CLASSES as ADAPTIVITY_CLASSES } from '../adaptivity/const';
 import type { Column } from '../columns_controller/types';
-import { EDIT_ROW, EDITOR_CELL_CLASS } from '../editing/const';
-import {
-  ADAPTIVE_ITEM_TEXT_CLASS,
-  COMMAND_SELECT_CLASS,
-  EDIT_FORM_CLASS,
-  INTERACTIVE_ELEMENTS_SELECTOR,
-  VIRTUAL_ROW_CLASS,
-} from './const';
+import { EDIT_FORM_CLASS, EDIT_ROW, EDITOR_CELL_CLASS } from '../editing/const';
+import { COMMAND_SELECT_CLASS } from '../selection/const';
+import { VIRTUAL_ROW_CLASS } from '../virtual_scrolling/const';
+import { INTERACTIVE_ELEMENTS_SELECTOR } from './const';
 import type { KeyboardNavigationController as KeyboardNavigationControllerCore } from './keyboard_navigation_core';
 import type { KeyboardNavigationController } from './m_keyboard_navigation';
 import type { NavigationDirection } from './types';
@@ -35,7 +32,7 @@ export const isDetailRow = (
 
 export const isAdaptiveItem = (
   $element: dxElementWrapper,
-): boolean => $element?.hasClass(ADAPTIVE_ITEM_TEXT_CLASS);
+): boolean => $element?.hasClass(ADAPTIVITY_CLASSES.adaptiveItemText);
 
 export const isEditRow = ($row: dxElementWrapper): boolean => $row?.hasClass(EDIT_ROW);
 

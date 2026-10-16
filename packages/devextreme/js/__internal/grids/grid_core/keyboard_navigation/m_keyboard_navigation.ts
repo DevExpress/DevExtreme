@@ -40,8 +40,13 @@ import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_cor
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import { memoize } from '@ts/utils/memoize';
 
+import { CLASSES as ADAPTIVITY_CLASSES } from '../adaptivity/const';
 import {
+  CELL_FOCUS_DISABLED_CLASS,
+  COMMAND_EDIT_CLASS,
+  DROPDOWN_EDITOR_OVERLAY_CLASS,
   EDIT_FORM_CLASS,
+  EDIT_FORM_ITEM_CLASS,
   EDIT_MODE_BATCH,
   EDIT_MODE_CELL,
   EDIT_MODE_FORM,
@@ -50,33 +55,25 @@ import {
   FOCUSABLE_ELEMENT_SELECTOR,
 } from '../editing/const';
 import gridCoreUtils from '../m_utils';
+import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
+import { COMMAND_SELECT_CLASS } from '../selection/const';
 import type {
   Controllers, ModuleType, RowKey, Views,
 } from '../types';
 import {
-  ADAPTIVE_COLUMN_NAME_CLASS,
-  CELL_FOCUS_DISABLED_CLASS,
+  CLASSES,
   COLUMN_HEADERS_VIEW,
   COMMAND_CELL_SELECTOR,
-  COMMAND_EDIT_CLASS,
-  COMMAND_SELECT_CLASS,
   DATEBOX_WIDGET_NAME,
   DRAG_COLUMN_NAME,
-  DROPDOWN_EDITOR_OVERLAY_CLASS,
-  EDIT_FORM_ITEM_CLASS,
   FAST_EDITING_DELETE_KEY,
-  FOCUS_STATE_CLASS,
   FOCUS_TYPE_CELL,
   FOCUS_TYPE_ROW,
   FOCUSED_CELL_KEYS,
-  FOCUSED_CLASS,
   FUNCTIONAL_KEYS,
   INTERACTIVE_ELEMENTS_SELECTOR,
-  MASTER_DETAIL_CELL_CLASS,
   NON_FOCUSABLE_ELEMENTS_SELECTOR,
-  REVERT_BUTTON_CLASS,
   ROWS_VIEW,
-  WIDGET_CLASS,
 } from './const';
 import { GridCoreKeyboardNavigationDom } from './dom';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './keyboard_navigation_core';
@@ -707,7 +704,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private isInsideMasterDetail($target): boolean {
-    const $masterDetail = $target.closest(`.${MASTER_DETAIL_CELL_CLASS}`);
+    const $masterDetail = $target.closest(`.${MASTER_DETAIL_CLASSES.detailCell}`);
     return !!$masterDetail.get(0)
       && this.elementIsInsideGrid($masterDetail)
       && !$target.is($masterDetail);
@@ -858,7 +855,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return;
     }
 
-    $(this._focusedView?.element()).addClass(FOCUS_STATE_CLASS);
+    $(this._focusedView?.element()).addClass(CLASSES.focusState);
 
     const { isLastValidCell, isOriginalHandlerRequired } = this.getTabBoundaryInfo(event);
 
@@ -1273,7 +1270,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     const needExpandGroupRow = this.option('grouping.allowCollapsing') && isGroupRow($row);
     const needExpandMasterDetailRow = this.option('masterDetail.enabled') && $cell?.hasClass(COLUMNS_CONTROLLER_CLASSES.commandExpand);
-    const needExpandAdaptiveRow = $cell?.hasClass(ADAPTIVE_COLUMN_NAME_CLASS);
+    const needExpandAdaptiveRow = $cell?.hasClass(ADAPTIVITY_CLASSES.commandAdaptive);
 
     if (needExpandGroupRow || needExpandMasterDetailRow) {
       const item = this._dataController.items()[rowIndex];
@@ -1609,7 +1606,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isInteractiveElement = $(event.target).is(
       INTERACTIVE_ELEMENTS_SELECTOR,
     );
-    const isRevertButton = !!$(event.target).closest(`.${REVERT_BUTTON_CLASS}`)
+    const isRevertButton = !!$(event.target).closest(`.${CLASSES.revertButton}`)
       .length;
     const isExpandCommandCell = $target.hasClass(COLUMNS_CONTROLLER_CLASSES.commandExpand);
 
@@ -1624,7 +1621,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       $target = this._isInsideEditForm($target) ? $(event.target) : $target;
 
       this._focusView();
-      $(focusedViewElement).removeClass(FOCUS_STATE_CLASS);
+      $(focusedViewElement).removeClass(CLASSES.focusState);
 
       if ($parent.hasClass(VIEW_CLASSES.freeSpaceRow)) {
         this._updateFocusedCellPosition($target);
@@ -1832,7 +1829,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           .filter((i, node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
           .not($focusElement)
           .removeClass(CELL_FOCUS_DISABLED_CLASS)
-          .removeClass(FOCUSED_CLASS)
+          .removeClass(CLASSES.focused)
           .removeAttr('tabindex');
       }
 
@@ -1840,7 +1837,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         if (e.relatedTarget) {
           $focusElement
             .removeClass(CELL_FOCUS_DISABLED_CLASS)
-            .removeClass(FOCUSED_CLASS);
+            .removeClass(CLASSES.focused);
         }
       });
       if (!skipFocusEvent) {
@@ -1960,7 +1957,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private _focusEditFormCell($cell) {
-    if ($cell.hasClass(MASTER_DETAIL_CELL_CLASS)) {
+    if ($cell.hasClass(MASTER_DETAIL_CLASSES.detailCell)) {
       this._editorFactory.focus($cell, true);
     }
   }
@@ -2475,7 +2472,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           const inputValue = this._getKeyPressInputValue($input, editorValue);
           $input.val(inputValue);
 
-          const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
+          const $widgetContainer = $input.closest(`.${CLASSES.widget}`);
           eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
           eventsEngine.one($widgetContainer, 'focusout', () => {
             // @ts-expect-error
@@ -2833,7 +2830,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   public getMasterDetailCell(element): dxElementWrapper | null {
     const $masterDetailCell = $(element).closest(
-      `.${MASTER_DETAIL_CELL_CLASS}`,
+      `.${MASTER_DETAIL_CLASSES.detailCell}`,
     );
 
     if ($masterDetailCell.length && this.elementIsInsideGrid($masterDetailCell)) {
