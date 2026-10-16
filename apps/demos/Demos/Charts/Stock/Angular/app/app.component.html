@@ -1,3 +1,35 @@
+<dx-toolbar>
+  <dxi-toolbar-item
+    location="after"
+    widget="dxButton"
+    [options]="panLeftButtonOptions"
+  >
+  </dxi-toolbar-item>
+  <dxi-toolbar-item
+    location="after"
+    widget="dxButton"
+    [options]="panRightButtonOptions"
+  >
+  </dxi-toolbar-item>
+  <dxi-toolbar-item
+    location="after"
+    widget="dxButton"
+    [options]="zoomInButtonOptions"
+  >
+  </dxi-toolbar-item>
+  <dxi-toolbar-item
+    location="after"
+    widget="dxButton"
+    [options]="zoomOutButtonOptions"
+  >
+  </dxi-toolbar-item>
+  <dxi-toolbar-item
+    location="after"
+    widget="dxButton"
+    [options]="resetZoomButtonOptions"
+  >
+  </dxi-toolbar-item>
+</dx-toolbar>
 <dx-chart id="chart" title="Stock Price" [dataSource]="stockPrices">
   <dxi-chart-series
     name="E-Mart"
@@ -10,14 +42,32 @@
   </dxi-chart-series>
   <dxo-chart-common-series-settings argumentField="date" type="stock">
   </dxo-chart-common-series-settings>
-  <dxi-chart-value-axis [tickInterval]="1">
+  <dxo-chart-zoom-and-pan
+    argumentAxis="both"
+    [dragToZoom]="true"
+    [allowMouseWheel]="true"
+  >
+  </dxo-chart-zoom-and-pan>
+  <dxo-chart-scroll-bar
+    [visible]="true"
+    position="bottom"
+  ></dxo-chart-scroll-bar>
+  <dxo-chart-legend
+    verticalAlignment="bottom"
+    horizontalAlignment="center"
+  ></dxo-chart-legend>
+  <dxi-chart-value-axis [tickInterval]="1" position="right">
     <dxo-chart-title text="US dollars"></dxo-chart-title>
     <dxo-chart-label>
       <dxo-chart-format type="currency" [precision]="0"> </dxo-chart-format>
     </dxo-chart-label>
   </dxi-chart-value-axis>
-  <dxo-chart-argument-axis [workdaysOnly]="true">
-    <dxo-chart-label format="shortDate"></dxo-chart-label>
+  <dxo-chart-argument-axis [(visualRange)]="visualRange">
+    <dxo-chart-label
+      format="MMM dd"
+      overlappingBehavior="rotate"
+      [rotationAngle]="30"
+    ></dxo-chart-label>
   </dxo-chart-argument-axis>
   <dxo-chart-export [enabled]="true"></dxo-chart-export>
   <dxo-chart-tooltip

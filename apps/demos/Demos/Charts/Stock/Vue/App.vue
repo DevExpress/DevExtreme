@@ -1,4 +1,31 @@
 <template>
+  <DxToolbar>
+    <DxItem
+      :options="panLeftButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+    <DxItem
+      :options="panRightButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+    <DxItem
+      :options="zoomInButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+    <DxItem
+      :options="zoomOutButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+    <DxItem
+      :options="resetZoomButtonOptions"
+      location="after"
+      widget="dxButton"
+    />
+  </DxToolbar>
   <DxChart
     id="chart"
     :data-source="dataSource"
@@ -17,10 +44,34 @@
     >
       <DxReduction color="red"/>
     </DxSeries>
-    <DxArgumentAxis :workdays-only="true">
-      <DxLabel format="shortDate"/>
+    <DxZoomAndPan
+      :drag-to-zoom="true"
+      :allow-mouse-wheel="true"
+      argument-axis="both"
+    />
+    <DxScrollBar
+      :visible="true"
+      position="bottom"
+    />
+    <DxLegend
+      vertical-alignment="bottom"
+      horizontal-alignment="center"
+    />
+    <DxArgumentAxis>
+      <DxVisualRange
+        v-model:start-value="startValue"
+        v-model:end-value="endValue"
+      />
+      <DxLabel
+        :rotation-angle="30"
+        format="MMM dd"
+        overlapping-behavior="rotate"
+      />
     </DxArgumentAxis>
-    <DxValueAxis :tick-interval="1">
+    <DxValueAxis
+      :tick-interval="1"
+      position="right"
+    >
       <DxTitle text="US dollars"/>
       <DxLabel>
         <DxFormat
@@ -38,26 +89,115 @@
   </DxChart>
 </template>
 <script setup lang="ts">
+import { ref } from 'vue';
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
   DxReduction,
   DxArgumentAxis,
+  DxVisualRange,
   DxLabel,
   DxFormat,
   DxValueAxis,
   DxTitle,
+  DxZoomAndPan,
+  DxScrollBar,
+  DxLegend,
   DxExport,
   DxTooltip,
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
+import type { DxButtonTypes } from 'devextreme-vue/button';
+import DxToolbar, { DxItem } from 'devextreme-vue/toolbar';
 import { dataSource } from './data.ts';
 
-const customizeTooltip = (pointInfo: any) => ({
-  text: `Open: $${pointInfo.openValue}<br/>
-         Close: $${pointInfo.closeValue}<br/>
-         High: $${pointInfo.highValue}<br/>
-         Low: $${pointInfo.lowValue}<br/>`,
+const dayMs = 24 * 60 * 60 * 1000;
+const panStepFraction = 0.25;
+const zoomFactor = 0.75;
+const minVisibleSpanMs = 3 * dayMs;
+
+const initialStart = new Date(1994, 3, 15);
+const initialEnd = new Date(1994, 3, 29);
+
+const dataMin = dataSource[0].date.getTime();
+const dataMax = dataSource[dataSource.length - 1].date.getTime();
+
+const startValue = ref(initialStart);
+const endValue = ref(initialEnd);
+
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
+const getRange = () => ({
+  start: startValue.value.getTime(),
+  end: endValue.value.getTime(),
 });
+
+const setRange = (start: number, end: number) => {
+  const span = clamp(end - start, minVisibleSpanMs, dataMax - dataMin);
+  const center = (start + end) / 2;
+  const newStart = clamp(center - span / 2, dataMin, dataMax - span);
+
+  startValue.value = new Date(newStart);
+  endValue.value = new Date(newStart + span);
+};
+
+const pan = (direction: number) => {
+  const { start, end } = getRange();
+  const shift = (end - start) * panStepFraction * direction;
+  setRange(start + shift, end + shift);
+};
+
+const zoom = (factor: number) => {
+  const { start, end } = getRange();
+  const center = (start + end) / 2;
+  const half = ((end - start) * factor) / 2;
+  setRange(center - half, center + half);
+};
+
+const resetZoom = () => {
+  setRange(initialStart.getTime(), initialEnd.getTime());
+};
+
+const panLeftButtonOptions: DxButtonTypes.Properties = {
+  icon: 'chevronleft',
+  hint: 'Pan Left',
+  onClick: () => pan(-1),
+};
+
+const panRightButtonOptions: DxButtonTypes.Properties = {
+  icon: 'chevronright',
+  hint: 'Pan Right',
+  onClick: () => pan(1),
+};
+
+const zoomInButtonOptions: DxButtonTypes.Properties = {
+  icon: 'plus',
+  hint: 'Zoom In',
+  onClick: () => zoom(zoomFactor),
+};
+
+const zoomOutButtonOptions: DxButtonTypes.Properties = {
+  icon: 'minus',
+  hint: 'Zoom Out',
+  onClick: () => zoom(1 / zoomFactor),
+};
+
+const resetZoomButtonOptions: DxButtonTypes.Properties = {
+  icon: 'refresh',
+  hint: 'Reset Zoom',
+  onClick: resetZoom,
+};
+
+const customizeTooltip = (pointInfo: DxChartTypes.PointInfo) => {
+  const info = pointInfo as DxChartTypes.PointInfo & Record<string, unknown>;
+
+  return {
+    text: `Open: $${info.openValue}<br/>
+         Close: $${info.closeValue}<br/>
+         High: $${info.highValue}<br/>
+         Low: $${info.lowValue}<br/>`,
+  };
+};
 </script>
 <style>
 #chart {
