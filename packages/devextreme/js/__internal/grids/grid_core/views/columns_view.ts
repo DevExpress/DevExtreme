@@ -29,7 +29,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
 import supportUtils from '@ts/core/utils/m_support';
-import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
@@ -163,7 +163,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _dataController!: DataController;
 
-  protected adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsViewController;
 
   protected _columnChooserController!: ColumnChooserController;
 
@@ -1617,7 +1617,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  private getRowsCount(): number {
+  public getRowsCount(): number {
     const tableElement = this.getTableElement();
 
     if (tableElement?.length === 1) {

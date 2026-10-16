@@ -7,12 +7,14 @@ import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
+import type { Callback } from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import {
   getOuterHeight,
   getOuterWidth, setOuterHeight, setOuterWidth,
 } from '@js/core/utils/size';
+import type { DxEvent } from '@js/events';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {
@@ -43,28 +45,30 @@ const UPDATE_FOCUS_EVENTS = addNamespace([clickEventName, 'focusin'].join(' '), 
 const DX_HIDDEN = 'dx-hidden';
 
 interface EditorFactoryMixinType {
-  createEditor(...args: any[]): any;
+  createEditor($container: dxElementWrapper, options: object): void;
 
   _getRevertTooltipsSelector(): string;
 
 }
 
-const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = EditorFactoryMixin(modules.ViewController);
+const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = (
+  EditorFactoryMixin(modules.ViewController)
+);
 
 export class EditorFactory extends ViewControllerWithMixin {
-  private _isFocusOverlay: any;
+  private _isFocusOverlay?: boolean;
 
-  private _updateFocusTimeoutID: any;
+  private _updateFocusTimeoutID?: ReturnType<typeof setTimeout>;
 
-  private _$focusedElement: any;
+  private _$focusedElement?: dxElementWrapper | null;
 
-  private _focusTimeoutID: any;
+  private _focusTimeoutID?: ReturnType<typeof setTimeout>;
 
-  public focused: any;
+  public focused!: Callback<[dxElementWrapper]>;
 
-  protected _$focusOverlay: any;
+  protected _$focusOverlay?: dxElementWrapper;
 
-  private _updateFocusHandler: any;
+  private _updateFocusHandler!: (e: DxEvent) => void;
 
   protected _editingController!: EditingController;
 
@@ -80,7 +84,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _subscribedContainerRoot!: Node;
 
-  public init() {
+  public init(): void {
     this.createAction('onEditorPreparing', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
     this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
 
@@ -91,7 +95,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     this._columnHeadersView = this.getView('columnHeadersView');
     this._rowsView = this.getView('rowsView');
 
-    this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
+    this._updateFocusHandler ??= this.createAction(this._updateFocus.bind(this));
 
     this._subscribedContainerRoot = this._getContainerRoot();
     eventsEngine.on(this._subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
@@ -99,13 +103,13 @@ export class EditorFactory extends ViewControllerWithMixin {
     this._attachContainerEventHandlers();
   }
 
-  public dispose() {
+  public dispose(): void {
     clearTimeout(this._focusTimeoutID);
     clearTimeout(this._updateFocusTimeoutID);
     eventsEngine.off(this._subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
   }
 
-  private _getFocusedElement($dataGridElement) {
+  private _getFocusedElement($dataGridElement: dxElementWrapper): dxElementWrapper | false {
     const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : `tr[tabindex]:not(.${VIEW_CLASSES.dataRow}):focus`;
     const focusedElementSelector = [
       'td[tabindex]:focus',
@@ -129,33 +133,30 @@ export class EditorFactory extends ViewControllerWithMixin {
   /**
    * @extended: adaptivity
    */
-  protected _getFocusCellSelector() {
+  protected _getFocusCellSelector(): string {
     return `.${VIEW_CLASSES.row} > td`;
   }
 
-  private _updateFocusCore() {
-    const $dataGridElement = this.component && this.component.$element();
+  private _updateFocusCore(): void {
+    const $dataGridElement = this.component?.$element();
+    let $focus = $dataGridElement && this._getFocusedElement($dataGridElement);
 
-    if ($dataGridElement) {
-      // this selector is specific to IE
-      let $focus = this._getFocusedElement($dataGridElement);
+    if ($focus && $focus.length) {
+      // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the nested if
+      let isHideBorder: boolean | undefined;
 
-      if ($focus && $focus.length) {
-        let isHideBorder;
+      if (!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(VIEW_CLASSES.row)) {
+        const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${CELL_FOCUS_DISABLED_CLASS}`);
 
-        if (!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(VIEW_CLASSES.row)) {
-          const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${CELL_FOCUS_DISABLED_CLASS}`);
-
-          if ($focusCell.get(0) !== $focus.get(0)) {
-            isHideBorder = this._needHideBorder($focusCell);
-            $focus = $focusCell;
-          }
+        if ($focusCell.get(0) !== $focus.get(0)) {
+          isHideBorder = this._needHideBorder($focusCell);
+          $focus = $focusCell;
         }
+      }
 
-        if ($focus.length && !$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
-          this.focus($focus, isHideBorder);
-          return;
-        }
+      if ($focus.length && !$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
+        this.focus($focus, isHideBorder);
+        return;
       }
     }
 
@@ -165,32 +166,32 @@ export class EditorFactory extends ViewControllerWithMixin {
   /**
    * @extended: adaptivity
    */
-  protected _needHideBorder($element) {
+  protected _needHideBorder($element: dxElementWrapper): boolean {
     const rowsViewElement = this._rowsView.element();
-    const isRowsView = $element.closest(rowsViewElement).length > 0;
+    const isRowsView = !!rowsViewElement && $element.closest(rowsViewElement).length > 0;
     const isEditing = this._editingController.isEditing();
 
     return $element.hasClass(EDITOR_INLINE_BLOCK) || (isRowsView && !isEditing);
   }
 
-  private _updateFocus(e) {
-    const that = this;
-    const isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+  private _updateFocus(e: { event?: DxEvent }): void {
+    const isFocusOverlay = e?.event
+      && $(e.event.target).hasClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
-    that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
+    this._isFocusOverlay = !!this._isFocusOverlay || isFocusOverlay;
 
-    clearTimeout(that._updateFocusTimeoutID);
+    clearTimeout(this._updateFocusTimeoutID);
 
-    that._updateFocusTimeoutID = setTimeout(() => {
-      delete that._updateFocusTimeoutID;
-      if (!that._isFocusOverlay) {
-        that._updateFocusCore();
+    this._updateFocusTimeoutID = setTimeout(() => {
+      delete this._updateFocusTimeoutID;
+      if (!this._isFocusOverlay) {
+        this._updateFocusCore();
       }
-      that._isFocusOverlay = false;
+      this._isFocusOverlay = false;
     });
   }
 
-  protected updateFocusOverlaySize($element, position): void {
+  protected updateFocusOverlaySize($element: dxElementWrapper, position: object): void {
     $element.hide();
 
     const location = positionUtils.calculate($element, extend({ collision: 'fit' }, position));
@@ -206,7 +207,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     $element.show();
   }
 
-  protected callbackNames() {
+  protected callbackNames(): string[] {
     return ['focused'];
   }
 
@@ -224,24 +225,26 @@ export class EditorFactory extends ViewControllerWithMixin {
   }
 
   protected updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
+    // @ts-expect-error renderFocusOverlay creates the focus overlay first
+    const $focusOverlay: dxElementWrapper = this._$focusOverlay;
+
     if (isHideBorder || isDataRow($element)) {
-      this._$focusOverlay.addClass(DX_HIDDEN);
+      $focusOverlay.addClass(DX_HIDDEN);
     } else if ($element.length) {
-      // align "right bottom" for Mozilla
       const align = browser.mozilla ? 'right bottom' : 'left top';
       const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
       const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
       const $content = this.getFocusOverlayContainer($element);
       const focusOverlaySize = this.getFocusOverlaySize($element);
 
-      this._$focusOverlay
+      $focusOverlay
         .removeClass(DX_HIDDEN)
         .toggleClass(FOCUSED_CELL_INVALID_CLASS, isFocusedCellInvalid)
         .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, isFocusedCellModified)
         .appendTo($content);
 
-      setOuterHeight(this._$focusOverlay, focusOverlaySize.height);
-      setOuterWidth(this._$focusOverlay, focusOverlaySize.width);
+      setOuterHeight($focusOverlay, focusOverlaySize.height);
+      setOuterWidth($focusOverlay, focusOverlaySize.width);
 
       const focusOverlayPosition = {
         precise: true,
@@ -251,24 +254,22 @@ export class EditorFactory extends ViewControllerWithMixin {
         boundary: $content.length && $content,
       };
 
-      this.updateFocusOverlaySize(this._$focusOverlay, focusOverlayPosition);
-      positionUtils.setup(this._$focusOverlay, focusOverlayPosition);
+      this.updateFocusOverlaySize($focusOverlay, focusOverlayPosition);
+      positionUtils.setup($focusOverlay, focusOverlayPosition);
 
-      this._$focusOverlay.css('visibility', 'visible'); // for ios
+      $focusOverlay.css('visibility', 'visible'); // for ios
     }
   }
 
   /**
    * @extended: focus
    */
-  protected renderFocusOverlay($element, isHideBorder) {
+  protected renderFocusOverlay($element: dxElementWrapper, isHideBorder?: boolean): void {
     if (!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
       return;
     }
 
-    if (!this._$focusOverlay) {
-      this._$focusOverlay = $('<div>').addClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
-    }
+    this._$focusOverlay ??= $('<div>').addClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
     this.updateFocusOverlay($element, isHideBorder);
   }
@@ -276,37 +277,42 @@ export class EditorFactory extends ViewControllerWithMixin {
   /**
    * @extended: validating
    */
-  public focus($element?, isHideBorder?) {
-    const that = this;
-
+  public focus(
+    $element?: dxElementWrapper | null,
+    isHideBorder?: boolean,
+  ): dxElementWrapper | null | undefined {
     if ($element === undefined) {
-      return that._$focusedElement;
+      return this._$focusedElement;
     } if ($element) {
       // To prevent overlay flicking
-      if (!$element.is(that._$focusedElement)) {
-        // TODO: this code should be before timeout else focus is not will move to adaptive form by shift + tab key
-        that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
+      // @ts-expect-error is() is typed without null and undefined
+      if (!$element.is(this._$focusedElement)) {
+        // TODO: this code should be before timeout
+        // else focus is not will move to adaptive form by shift + tab key
+        this._$focusedElement?.removeClass(FOCUSED_ELEMENT_CLASS);
       }
-      that._$focusedElement = $element;
+      this._$focusedElement = $element;
 
-      clearTimeout(that._focusTimeoutID);
-      that._focusTimeoutID = setTimeout(() => {
-        delete that._focusTimeoutID;
+      clearTimeout(this._focusTimeoutID);
+      this._focusTimeoutID = setTimeout(() => {
+        delete this._focusTimeoutID;
 
-        that.renderFocusOverlay($element, isHideBorder);
+        this.renderFocusOverlay($element, isHideBorder);
 
         $element.addClass(FOCUSED_ELEMENT_CLASS);
-        that.focused.fire($element);
+        this.focused.fire($element);
       });
     }
+
+    return undefined;
   }
 
-  public refocus() {
+  public refocus(): void {
     const $focus = this.focus();
     this.focus($focus);
   }
 
-  public resize() {
+  public resize(): void {
     const $focusedElement = this._$focusedElement;
 
     if ($focusedElement) {
@@ -317,44 +323,40 @@ export class EditorFactory extends ViewControllerWithMixin {
   /**
    * @extended: validating
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public loseFocus(skipValidator?) {
-    this._$focusedElement && this._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
+  public loseFocus(skipValidator?: boolean): void {
+    this._$focusedElement?.removeClass(FOCUSED_ELEMENT_CLASS);
     this._$focusedElement = null;
-    this._$focusOverlay && this._$focusOverlay.addClass(DX_HIDDEN);
+    this._$focusOverlay?.addClass(DX_HIDDEN);
   }
 
   private _getContainerRoot(): Node {
     const $container = this.component?.$element();
-    // @ts-expect-error
+    // @ts-expect-error the grid element exists once the component is initialized
     const root = domAdapter.getRootNode($container?.get(0));
 
-    // @ts-expect-error
-    // NOTE: this condition is for the 'Row - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)'
-    // testcafe test. The detail grid is created inside document_fragment_node but it is not shadow dom
-    // eslint-disable-next-line no-undef
-    if (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !root.host) {
+    // a grid created inside a plain document fragment (not a shadow root) listens on the document
+    if (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !('host' in root)) {
       return domAdapter.getDocument();
     }
 
     return root;
   }
 
-  private _attachContainerEventHandlers() {
-    const that = this;
-    const $container = that.component && that.component.$element();
+  private _attachContainerEventHandlers(): void {
+    const $container = this.component?.$element();
 
     if ($container) {
       // T179518
       eventsEngine.on($container, addNamespace('keydown', MODULE_NAMESPACE), (e) => {
         if (normalizeKeyName(e) === 'tab') {
-          that._updateFocusHandler(e);
+          this._updateFocusHandler(e);
         }
       });
     }
   }
 
-  public getFocusOverlay() {
+  public getFocusOverlay(): dxElementWrapper | undefined {
     return this._$focusOverlay;
   }
 
