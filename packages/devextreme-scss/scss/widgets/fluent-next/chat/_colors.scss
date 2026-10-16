@@ -59,3 +59,8 @@ $chat-suggestions-box-shadow: ds.$box-shadow-md !default;
 $chat-message-list-context-menu-delete-button-content: ds.$color-content-danger !default;
 $chat-message-list-context-menu-delete-button-content-focused: ds.$color-content-danger !default;
 $chat-message-list-context-menu-delete-button-bg-focused: ds.$color-bg-hovered !default;
+
+$chat-tool-call-title-content: ds.$color-content-subtle !default;
+$chat-tool-call-content-border: ds.$color-border !default;
+$chat-tool-call-error-content: ds.$color-content-danger !default;
+$chat-tool-call-error-bg: ds.$color-bg-danger-subtler !default;

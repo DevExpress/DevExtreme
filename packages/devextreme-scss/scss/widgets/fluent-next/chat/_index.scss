@@ -72,6 +72,25 @@
   var(--dx-chat-bubble-delete-icon-size),
   var(--dx-chat-bubble-gap),
 );
+@include chat-toolcallview(
+  var(--dx-chat-tool-call-min-width),
+  var(--dx-chat-tool-call-title-gap),
+  var(--dx-chat-tool-call-title-content),
+  var(--dx-chat-tool-call-icon-size),
+  var(--dx-chat-tool-call-badge-padding-block),
+  var(--dx-chat-tool-call-badge-padding-inline),
+  var(--dx-chat-tool-call-badge-border-radius),
+  var(--dx-chat-tool-call-content-gap),
+  var(--dx-chat-tool-call-content-padding-block),
+  var(--dx-chat-tool-call-content-margin-inline-start),
+  var(--dx-chat-tool-call-content-padding-inline-start),
+  var(--dx-chat-tool-call-content-border-width),
+  var(--dx-chat-tool-call-content-border),
+  var(--dx-chat-tool-call-field-gap),
+  var(--dx-chat-tool-call-field-font-family),
+  var(--dx-chat-tool-call-error-content),
+  var(--dx-chat-tool-call-error-bg),
+);
 @include chat-messagegroup(
   var(--dx-chat-message-group-gap),
   var(--dx-chat-message-group-start-grid-template-columns),
@@ -179,7 +198,11 @@
   .dx-chat-message-edited,
   .dx-chat-messagelist-empty-message,
   .dx-chat-messagelist-empty-prompt,
-  .dx-chat-messagelist-empty-image {
+  .dx-chat-messagelist-empty-image,
+  .dx-chat-tool-call-title,
+  .dx-chat-tool-call-error-badge,
+  .dx-chat-tool-call-field-error .dx-texteditor-input,
+  .dx-chat-tool-call-view .dx-accordion-item-title::before {
     color: var(--dx-chat-information-content-disabled);
   }
 }
