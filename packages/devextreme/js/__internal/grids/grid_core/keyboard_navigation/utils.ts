@@ -11,7 +11,6 @@ import {
   ADAPTIVE_ITEM_TEXT_CLASS,
   COMMAND_SELECT_CLASS,
   EDIT_FORM_CLASS,
-  FREESPACE_ROW_CLASS,
   INTERACTIVE_ELEMENTS_SELECTOR,
   VIRTUAL_ROW_CLASS,
 } from './const';
@@ -51,7 +50,7 @@ export const isDataRow = (
 
 export const isNotFocusedRow = (
   $row: dxElementWrapper,
-): boolean => !$row || $row.hasClass(FREESPACE_ROW_CLASS) || $row.hasClass(VIRTUAL_ROW_CLASS);
+): boolean => !$row || $row.hasClass(VIEW_CLASSES.freeSpaceRow) || $row.hasClass(VIRTUAL_ROW_CLASS);
 
 export const isEditorCell = (
   that: KeyboardNavigationController,

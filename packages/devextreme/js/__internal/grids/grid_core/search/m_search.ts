@@ -8,6 +8,7 @@ import { toComparable } from '@js/core/utils/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type TextBox from '@js/ui/text_box';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import { CLASSES as HEADER_PANEL_CLASSES } from '@ts/grids/grid_core/header_panel/const';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import type { DataController } from '../data_controller/data_controller';
@@ -22,7 +23,6 @@ import { allowSearch, createSearchExpression, parseValue } from './utils';
 
 const SEARCH_PANEL_CLASS = 'search-panel';
 const SEARCH_TEXT_CLASS = 'search-text';
-const HEADER_PANEL_CLASS = 'header-panel';
 const FILTERING_TIMEOUT = 700;
 const SEARCH_PANEL_ITEM_NAME = 'searchPanel';
 
@@ -170,7 +170,7 @@ export class SearchPanelViewController extends modules.ViewController {
       return null;
     }
 
-    const headerPanelClass = this.headerPanel.addWidgetPrefix(HEADER_PANEL_CLASS);
+    const headerPanelClass = this.headerPanel.addWidgetPrefix(HEADER_PANEL_CLASSES.headerPanel);
     const $searchPanel = $element
       .find(`.${this.headerPanel.addWidgetPrefix(SEARCH_PANEL_CLASS)}`)
       // @ts-expect-error filter() is typed for selectors only
