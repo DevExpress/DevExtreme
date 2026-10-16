@@ -69,7 +69,7 @@ const configs = {
             position: 'top',
             ratio: 'heightRatio'
         },
-        scrollByProp: 'x'
+        scrollByProp: 'left'
     },
     'vertical': {
         main: {
@@ -80,7 +80,7 @@ const configs = {
             position: 'left',
             ratio: 'widthRatio'
         },
-        scrollByProp: 'y'
+        scrollByProp: 'top'
     }
 };
 

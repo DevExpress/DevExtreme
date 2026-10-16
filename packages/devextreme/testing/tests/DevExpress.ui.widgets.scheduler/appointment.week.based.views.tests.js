@@ -297,7 +297,7 @@ module('Integration: Appointment Day, Week views', {
                     }]
                 });
 
-                scheduler.instance.getWorkSpace().getScrollable().scrollTo({ y: 1000 });
+                scheduler.instance.getWorkSpace().getScrollable().scrollTo({ top: 1000 });
 
                 return asyncAssert(assert, () => {
                     const cellHeight = getOuterHeight(scheduler.instance.$element().find(`.${DATE_TABLE_CELL_CLASS}`).eq(0));
@@ -849,7 +849,7 @@ module('Integration: Appointment Day, Week views', {
                 const $element = $(scheduler.instance.element());
 
                 const workspace = scheduler.instance.getWorkSpace();
-                workspace.getScrollable().scrollTo({ y: 3000 });
+                workspace.getScrollable().scrollTo({ top: 3000 });
 
                 const cellWidth = getOuterHeight($element.find(`.${DATE_TABLE_CELL_CLASS}`).eq(0));
                 const pointer = pointerMock($element.find('.dx-resizable-handle-bottom').eq(0)).start();

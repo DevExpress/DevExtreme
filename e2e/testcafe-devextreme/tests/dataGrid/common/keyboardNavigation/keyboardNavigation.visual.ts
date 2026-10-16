@@ -107,7 +107,7 @@ test('Navigate to first cell in the row that contains focus when pressing the Ho
     .expect(dataGrid.isReady())
     .ok();
 
-  await dataGrid.scrollTo(t, { x: 700 });
+  await dataGrid.scrollTo(t, { left: 700 });
 
   // assert
   await t
@@ -175,7 +175,7 @@ test('Navigate to first cell in the row that contains focus when row dragging is
     .expect(dataGrid.isReady())
     .ok();
 
-  await dataGrid.scrollTo(t, { x: 700 });
+  await dataGrid.scrollTo(t, { left: 700 });
 
   // assert
   await t
@@ -282,7 +282,7 @@ test('Navigate to first cell in the row that contains focus when virtual columns
     .expect(dataGrid.isReady())
     .ok();
 
-  await dataGrid.scrollTo(t, { x: 4200 });
+  await dataGrid.scrollTo(t, { left: 4200 });
 
   // assert
   await t
@@ -355,7 +355,7 @@ test('Navigate to first cell in the row that contains focus when adaptivity is e
     .expect(dataGrid.isReady())
     .ok();
 
-  await dataGrid.scrollTo(t, { x: 4200 });
+  await dataGrid.scrollTo(t, { left: 4200 });
 
   // assert
   await t
@@ -482,7 +482,7 @@ test('Navigate to first cell in the first row when pressing the Ctrl + Home key'
     .expect(dataGrid.isReady())
     .ok();
 
-  await dataGrid.scrollTo(t, { x: 700, y: 1000 });
+  await dataGrid.scrollTo(t, { left: 700, top: 1000 });
 
   // assert
   await t
@@ -563,7 +563,7 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
     .ok();
 
   await dataGrid
-    .scrollTo(t, { x: 700, y: 10000 });
+    .scrollTo(t, { left: 700, top: 10000 });
 
   // assert
   await t
@@ -652,7 +652,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     .expect(dataGrid.isReady())
     .ok();
 
-  await dataGrid.scrollTo(t, { x: 3000, y: 10000 });
+  await dataGrid.scrollTo(t, { left: 3000, top: 10000 });
 
   // assert
   await t

@@ -241,7 +241,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
             // act
             const scrollable = dataGrid.getScrollable();
-            scrollable.scrollTo({ x: 900 });
+            scrollable.scrollTo({ left: 900 });
             $(scrollable.container()).trigger('scroll');
             this.clock.tick(10);
 
@@ -384,7 +384,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // act
         dataController.toggleExpandAdaptiveDetailRow(1);
 
-        dataGrid.getScrollable().scrollTo({ y: 1450 });
+        dataGrid.getScrollable().scrollTo({ top: 1450 });
 
         dataController.toggleExpandAdaptiveDetailRow(28);
 
@@ -463,7 +463,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 1000 });
+        dataGrid.getScrollable().scrollTo({ top: 1000 });
         this.clock.tick(10);
 
         // assert
@@ -526,7 +526,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             assert.strictEqual($cell.text(), `0-${colIndex}`, `Data cell text == 0-${colIndex}`);
         }
 
-        dataGrid.getScrollable().scrollTo({ x: 1000 });
+        dataGrid.getScrollable().scrollTo({ left: 1000 });
         this.clock.tick(10);
 
         // assert
@@ -580,7 +580,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const columnOffset = 9;
         const fixedColumnCount = 2;
 
-        dataGrid.getScrollable().scrollTo({ x: 1000 });
+        dataGrid.getScrollable().scrollTo({ left: 1000 });
         this.clock.tick(10);
 
         // assert
@@ -631,7 +631,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         const $fixedCell = $(dataGrid.getCellElement(0, 0));
 
-        dataGrid.getScrollable().scrollTo({ x: 1000 });
+        dataGrid.getScrollable().scrollTo({ left: 1000 });
         this.clock.tick(10);
 
         // assert
@@ -666,7 +666,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(row.attr('aria-rowindex'), 1, 'aria-index is correct');
 
-        rowsView.scrollTo({ y: scrollOffsetForRows(88) });
+        rowsView.scrollTo({ top: scrollOffsetForRows(88) });
 
         this.clock.tick(10);
 
@@ -701,7 +701,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 300 });
+        dataGrid.getScrollable().scrollTo({ top: 300 });
 
         this.clock.tick(300);
 
@@ -768,7 +768,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 300 });
+        dataGrid.getScrollable().scrollTo({ top: 300 });
 
         this.clock.tick(300);
 
@@ -809,7 +809,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(500);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: scrollOffsetForRows(58) });
+        dataGrid.getScrollable().scrollTo({ top: scrollOffsetForRows(58) });
 
         // assert
         assert.equal(dataGrid.getScrollable().scrollTop(), scrollOffsetForRows(58), 'scrollTop is not reset');
@@ -1097,10 +1097,10 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const scrollable = dataGrid.getScrollable();
 
         // act
-        scrollable.scrollTo({ y: scrollOffsetForRows(5) });
+        scrollable.scrollTo({ top: scrollOffsetForRows(5) });
         $(scrollable.container()).trigger('scroll');
         this.clock.tick(200);
-        scrollable.scrollTo({ y: scrollOffsetForRows(8) });
+        scrollable.scrollTo({ top: scrollOffsetForRows(8) });
         $(scrollable.container()).trigger('scroll');
         this.clock.tick(200);
 
@@ -1158,11 +1158,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.deepEqual(pageIndexesForLoad, [0]);
         assert.strictEqual(dataGrid.getVisibleRows().length, 16);
 
-        dataGrid.getScrollable().scrollTo({ y: 1 });
+        dataGrid.getScrollable().scrollTo({ top: 1 });
         this.clock.tick(200);
-        dataGrid.getScrollable().scrollTo({ y: scrollOffsetForRows(20) });
+        dataGrid.getScrollable().scrollTo({ top: scrollOffsetForRows(20) });
         this.clock.tick(10);
-        dataGrid.getScrollable().scrollTo({ y: scrollOffsetForRows(41) });
+        dataGrid.getScrollable().scrollTo({ top: scrollOffsetForRows(41) });
         this.clock.tick(200);
 
         // assert
@@ -2492,7 +2492,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ x: 300 });
+        scrollable.scrollTo({ left: 300 });
         this.clock.tick(10);
 
         // assert
@@ -2544,7 +2544,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const rowsView = instance.getView('rowsView');
         const scrollable = instance.getScrollable();
 
-        scrollable.scrollTo({ y: 1440 });
+        scrollable.scrollTo({ top: 1440 });
         this.clock.tick(300);
 
         // assert
@@ -2739,7 +2739,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal($row.attr('aria-rowindex'), 1, 'aria-index is correct');
 
-        rowsView.scrollTo({ y: 3000 });
+        rowsView.scrollTo({ top: 3000 });
 
         this.clock.tick(10);
 
@@ -2912,7 +2912,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         for(let position = 700; position < 1600; position += 150) {
-            scrollable.scrollTo({ y: position });
+            scrollable.scrollTo({ top: position });
             this.clock.tick(50);
         }
 
@@ -2963,7 +2963,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         that.clock.tick(1000);
         const scrollable = dataGrid.getScrollable();
 
-        scrollable.scrollTo({ y: 1 });
+        scrollable.scrollTo({ top: 1 });
         that.clock.tick(100);
 
         // assert
@@ -2972,7 +2972,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         for(let i = 1; i <= 5; i++) {
-            scrollable.scrollTo({ y: scrollStep * i });
+            scrollable.scrollTo({ top: scrollStep * i });
             that.clock.tick(10);
         }
 
@@ -3050,7 +3050,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         for(let i = 1; i <= 10; i++) {
             // act
-            scrollable.scrollTo({ y: 200 * i });
+            scrollable.scrollTo({ top: 200 * i });
 
             const virtualRowHeight = getTopVirtualRowHeight();
 
@@ -6262,7 +6262,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const fixedColumnCount = 3;
 
         // act
-        dataGrid.getScrollable().scrollTo({ x: 10000 });
+        dataGrid.getScrollable().scrollTo({ left: 10000 });
         this.clock.tick(10);
 
         // assert
@@ -6326,7 +6326,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const fixedColumnCount = 3;
 
         // act
-        dataGrid.getScrollable().scrollTo({ x: 10000 });
+        dataGrid.getScrollable().scrollTo({ left: 10000 });
         this.clock.tick(10);
 
         // assert
@@ -6395,7 +6395,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const $fixedCell = $(dataGrid.getCellElement(0, 0));
 
         // act
-        dataGrid.getScrollable().scrollTo({ x: 10000 });
+        dataGrid.getScrollable().scrollTo({ left: 10000 });
         this.clock.tick(10);
 
         // assert
@@ -6456,7 +6456,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
             // act
             const scrollable = dataGrid.getScrollable();
-            scrollable.scrollTo({ x: 300 });
+            scrollable.scrollTo({ left: 300 });
             $(scrollable.container()).triggerHandler('scroll');
             this.clock.tick(500);
 
@@ -6526,7 +6526,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.up);
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
         this.clock.tick(10);
         // assert
         assert.ok(dataGrid.getScrollable().scrollTop() > 0, 'scrollTop is not reset');
@@ -6558,8 +6558,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             }
         });
 
-        dataGrid.getScrollable().scrollTo({ y: scrollOffsetForRows(44) });
-        dataGrid.getScrollable().scrollTo({ y: scrollOffsetForRows(88) });
+        dataGrid.getScrollable().scrollTo({ top: scrollOffsetForRows(44) });
+        dataGrid.getScrollable().scrollTo({ top: scrollOffsetForRows(88) });
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 40);
@@ -6601,7 +6601,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 20);
@@ -6638,7 +6638,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         });
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 40);
@@ -6677,7 +6677,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         });
 
         error = true;
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 20);
@@ -6686,7 +6686,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
 
         error = false;
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 10);

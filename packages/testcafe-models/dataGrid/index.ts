@@ -372,7 +372,7 @@ export default class DataGrid extends GridCore {
 
   async scrollTo(
     t: TestController,
-    options: { x?: number; y?: number; top?: number },
+    options: { top?: number; left?: number },
   ): Promise<void> {
     await t.expect(this.hasScrollable()).ok();
 
@@ -404,8 +404,8 @@ export default class DataGrid extends GridCore {
 
   async scrollBy(
     t: TestController,
-    options: { x?: number; y?: number; top?: number; left?: number
-  }): Promise<void> {
+    options: { top?: number; left?: number },
+  ): Promise<void> {
     await t.expect(this.hasScrollable()).ok();
 
     const { getInstance } = this;

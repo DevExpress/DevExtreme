@@ -14679,7 +14679,7 @@ QUnit.module('Editing with validation', {
             ]
         });
 
-        rowsView.scrollTo({ x: 100 });
+        rowsView.scrollTo({ left: 100 });
         that.clock.tick(10);
 
         // act
@@ -16608,7 +16608,7 @@ QUnit.module('Editing with scrolling', {
 
         // act
         this.addRow();
-        this.rowsView.scrollTo({ y: 100 });
+        this.rowsView.scrollTo({ top: 100 });
 
         // assert
         const items = this.dataController.items();
@@ -16641,8 +16641,8 @@ QUnit.module('Editing with scrolling', {
 
         // arrange
         this.addRow();
-        this.rowsView.scrollTo({ y: 150 }); // append
-        this.rowsView.scrollTo({ y: 300 }); // append
+        this.rowsView.scrollTo({ top: 150 }); // append
+        this.rowsView.scrollTo({ top: 300 }); // append
 
         // assert
         assert.equal(this.dataController.pageIndex(), 2, 'page index');
@@ -16652,7 +16652,7 @@ QUnit.module('Editing with scrolling', {
         });
 
         // act
-        this.rowsView.scrollTo({ y: 150 });
+        this.rowsView.scrollTo({ top: 150 });
 
         // assert
         const items = this.dataController.items();
@@ -16683,7 +16683,7 @@ QUnit.module('Editing with scrolling', {
 
         // act
         this.addRow();
-        this.rowsView.scrollTo({ y: 150 });
+        this.rowsView.scrollTo({ top: 150 });
 
         // assert
         const items = this.dataController.items();
@@ -16715,7 +16715,7 @@ QUnit.module('Editing with scrolling', {
 
         // arrange
         this.addRow();
-        this.rowsView.scrollTo({ y: 150 });
+        this.rowsView.scrollTo({ top: 150 });
 
         // assert
         const items = this.dataController.items();
@@ -16764,8 +16764,8 @@ QUnit.module('Editing with scrolling', {
         assert.equal(this.dataController.pageIndex(), 0, 'page index');
 
         // arrange
-        this.rowsView.scrollTo({ y: 1 });
-        this.rowsView.scrollTo({ y: 150 });
+        this.rowsView.scrollTo({ top: 1 });
+        this.rowsView.scrollTo({ top: 150 });
 
         // assert
         assert.equal(this.dataController.pageIndex(), 2, 'page index');
@@ -16826,14 +16826,14 @@ QUnit.module('Editing with scrolling', {
         assert.equal(testElement.find('.dx-error-row').length, 1);
 
         // arrange
-        this.rowsView.scrollTo({ y: 550 });
+        this.rowsView.scrollTo({ top: 550 });
 
         // assert
         assert.equal(this.dataController.pageIndex(), 4, 'page index');
         assert.equal(testElement.find('.dx-error-row').length, 0);
 
         // arrange
-        this.rowsView.scrollTo({ y: 1 });
+        this.rowsView.scrollTo({ top: 1 });
 
         // assert
         assert.equal(this.dataController.pageIndex(), 0, 'page index');
@@ -16868,7 +16868,7 @@ QUnit.module('Editing with scrolling', {
         this.rowsView.height(50);
         this.rowsView.resize();
 
-        this.rowsView.scrollTo({ y: 100 });
+        this.rowsView.scrollTo({ top: 100 });
         const scrollTop = this.rowsView.getScrollable().scrollTop();
 
         // act
@@ -16902,7 +16902,7 @@ QUnit.module('Editing with scrolling', {
 
         const y = $(this.rowsView.getRowElement(4)).offset().top - $(this.rowsView.getRowElement(0)).offset().top;
 
-        this.rowsView.scrollTo({ y: y });
+        this.rowsView.scrollTo({ top: y });
 
         // act
         this.addRow();
@@ -16936,7 +16936,7 @@ QUnit.module('Editing with scrolling', {
 
         this.rowsView.resize();
 
-        this.rowsView.scrollTo({ y: 10000 });
+        this.rowsView.scrollTo({ top: 10000 });
 
         // act
         this.addRow();
@@ -16991,7 +16991,7 @@ QUnit.module('Editing with scrolling', {
 
         this.rowsView.resize();
 
-        this.rowsView.scrollTo({ y: 10000 });
+        this.rowsView.scrollTo({ top: 10000 });
 
         // act
         this.addRow();
@@ -17078,7 +17078,7 @@ QUnit.module('Editing with scrolling', {
         assert.equal(that.dataController.items().length, 7, 'count items');
 
         // arrange
-        that.rowsView.scrollTo({ y: 500 });
+        that.rowsView.scrollTo({ top: 500 });
 
         // assert
         assert.equal(that.dataController.pageIndex(), 2, 'page index');
@@ -17092,7 +17092,7 @@ QUnit.module('Editing with scrolling', {
         assert.equal(that.dataController.items().length, 9, 'count items');
 
         // arrange
-        that.rowsView.scrollTo({ y: 0 });
+        that.rowsView.scrollTo({ top: 0 });
 
         // assert
         assert.equal(that.dataController.pageIndex(), 0, 'page index');
@@ -17129,7 +17129,7 @@ QUnit.module('Editing with scrolling', {
 
         // arrange
         this.addRow();
-        this.rowsView.scrollTo({ y: 150 });
+        this.rowsView.scrollTo({ top: 150 });
 
         // assert
         const items = this.dataController.items();
@@ -17169,7 +17169,7 @@ QUnit.module('Editing with scrolling', {
 
         const y = $(this.rowsView.getRowElement(2)).offset().top - $(this.rowsView.getRowElement(0)).offset().top;
 
-        this.rowsView.scrollTo({ y: y });
+        this.rowsView.scrollTo({ top: y });
 
         // act
         this.addRow();
@@ -21256,7 +21256,7 @@ QUnit.module('Editing - new row position', {
 
                 // act
                 const scrollable = this.rowsView.getScrollable();
-                scrollable.scrollTo({ y: 40 });
+                scrollable.scrollTo({ top: 40 });
                 $(scrollable.container()).trigger('scroll');
                 this.clock.tick(10);
 
