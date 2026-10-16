@@ -42,3 +42,4 @@ export const PROPERTY_TOKEN_views = new InjectionToken<string>('property-token-v
 export const PROPERTY_TOKEN_layers = new InjectionToken<string>('property-token-layers');
 export const PROPERTY_TOKEN_legends = new InjectionToken<string>('property-token-legends');
 export const PROPERTY_TOKEN_center = new InjectionToken<string>('property-token-center');
+export const PROPERTY_TOKEN_toolCalls = new InjectionToken<string>('property-token-toolCalls');

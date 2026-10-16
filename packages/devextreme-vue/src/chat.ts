@@ -25,9 +25,11 @@ import {
  SendButtonProperties,
  User,
  Attachment,
+ ToolCall,
  MessageType,
  SendButtonAction,
  SendButtonClickEvent,
+ ToolCallStatus,
 } from "devextreme/ui/chat";
 import {
  DataSourceOptions,
@@ -348,6 +350,7 @@ const DxChatItemConfig = {
     "update:src": null,
     "update:text": null,
     "update:timestamp": null,
+    "update:toolCalls": null,
     "update:type": null,
   },
   props: {
@@ -360,6 +363,7 @@ const DxChatItemConfig = {
     src: String,
     text: String,
     timestamp: [Date, Number, String],
+    toolCalls: Array as PropType<Array<ToolCall>>,
     type: String as PropType<MessageType>
   }
 };
@@ -372,7 +376,8 @@ const DxChatItem = defineComponent(DxChatItemConfig);
 (DxChatItem as any).$_isCollectionItem = true;
 (DxChatItem as any).$_expectedChildren = {
   attachment: { isCollectionItem: true, optionName: "attachments" },
-  author: { isCollectionItem: false, optionName: "author" }
+  author: { isCollectionItem: false, optionName: "author" },
+  toolCall: { isCollectionItem: true, optionName: "toolCalls" }
 };
 
 const DxCustomSpeechRecognizerConfig = {
@@ -601,6 +606,7 @@ const DxItemConfig = {
     "update:template": null,
     "update:text": null,
     "update:timestamp": null,
+    "update:toolCalls": null,
     "update:type": null,
     "update:visible": null,
   },
@@ -619,6 +625,7 @@ const DxItemConfig = {
     template: {},
     text: String,
     timestamp: [Date, Number, String],
+    toolCalls: Array as PropType<Array<ToolCall>>,
     type: String as PropType<MessageType | ButtonType | string>,
     visible: Boolean
   }
@@ -632,7 +639,8 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
   attachment: { isCollectionItem: true, optionName: "attachments" },
-  author: { isCollectionItem: false, optionName: "author" }
+  author: { isCollectionItem: false, optionName: "author" },
+  toolCall: { isCollectionItem: true, optionName: "toolCalls" }
 };
 
 const DxMessageTimestampFormatConfig = {
@@ -886,6 +894,30 @@ const DxSuggestionsItem = defineComponent(DxSuggestionsItemConfig);
 (DxSuggestionsItem as any).$_optionName = "items";
 (DxSuggestionsItem as any).$_isCollectionItem = true;
 
+const DxToolCallConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:arguments": null,
+    "update:name": null,
+    "update:result": null,
+    "update:status": null,
+  },
+  props: {
+    arguments: Object as PropType<Record<string, any>>,
+    name: String,
+    result: {},
+    status: String as PropType<ToolCallStatus>
+  }
+};
+
+prepareConfigurationComponentConfig(DxToolCallConfig);
+
+const DxToolCall = defineComponent(DxToolCallConfig);
+
+(DxToolCall as any).$_optionName = "toolCalls";
+(DxToolCall as any).$_isCollectionItem = true;
+
 const DxTypingUserConfig = {
   emits: {
     "update:isActive": null,
@@ -951,6 +983,7 @@ export {
   DxSpeechToTextOptions,
   DxSuggestions,
   DxSuggestionsItem,
+  DxToolCall,
   DxTypingUser,
   DxUser
 };

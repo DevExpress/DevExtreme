@@ -13,6 +13,7 @@ export * from './speech-recognition-config';
 export * from './speech-to-text-options';
 export * from './suggestions-item-dxi';
 export * from './suggestions';
+export * from './tool-call-dxi';
 export * from './typing-user-dxi';
 export * from './user';
 
