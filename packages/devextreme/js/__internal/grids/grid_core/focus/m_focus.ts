@@ -13,9 +13,9 @@ import type { ColumnsController } from '../columns_controller/columns_controller
 import type { ColumnDataSourceParameter } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
+import { isNewRowTempKey } from '../editing/editing_utils';
 import type { EditingController } from '../editing/m_editing';
-import { isNewRowTempKey } from '../editing/m_editing_utils';
-import type { EditorFactory } from '../editor_factory/m_editor_factory';
+import type { EditorFactory } from '../editor_factory/editor_factory';
 import { combineFilters } from '../filter/utils';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import gridCoreUtils from '../m_utils';

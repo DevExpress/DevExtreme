@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
-import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
+import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../const';

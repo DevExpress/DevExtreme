@@ -24,31 +24,24 @@ import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ProcessedItem } from '../data_controller/types';
+import { EDIT_MODE_FORM, EDIT_MODE_POPUP, EDIT_MODE_ROW } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import gridCoreUtils from '../m_utils';
+import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import modules from '../modules/modules';
 import type { OptionChanged, RowKey } from '../types';
 import type { RowsView } from '../views/rows_view';
 import type { ColumnWidth, ViewCellOptions } from '../views/types';
 import { isPercentWidth } from '../views/utils';
 import {
-  ADAPTIVE_COLUMN_BUTTON_CLASS,
   ADAPTIVE_COLUMN_NAME,
-  ADAPTIVE_COLUMN_NAME_CLASS,
-  ADAPTIVE_ITEM_TEXT_CLASS,
   ADAPTIVE_NAMESPACE,
   ADAPTIVE_ROW_TYPE,
+  CLASSES,
   COLUMN_HEADERS_VIEW,
   COLUMN_VIEWS,
-  COMMAND_ADAPTIVE_HIDDEN_CLASS,
-  EDIT_MODE_FORM,
-  EDIT_MODE_POPUP,
-  EDIT_MODE_ROW,
-  FORM_ITEM_MODIFIED,
-  HIDDEN_COLUMN_CLASS,
   HIDDEN_COLUMNS_WIDTH,
-  MASTER_DETAIL_CELL_CLASS,
   ROWS_VIEW,
 } from './const';
 import type {
@@ -71,7 +64,7 @@ function adaptiveCellTemplate(container: DxElement, options: ViewCellOptions): v
 
   if (options.rowType === 'data') {
     const $adaptiveColumnButton = $('<span>')
-      .addClass(adaptiveColumnsController.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
+      .addClass(adaptiveColumnsController.addWidgetPrefix(CLASSES.adaptiveColumnButton));
 
     eventsEngine.on(
       $adaptiveColumnButton,
@@ -117,7 +110,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
       command: ADAPTIVE_COLUMN_NAME,
       visible: true,
       adaptiveHidden: true,
-      cssClass: ADAPTIVE_COLUMN_NAME_CLASS,
+      cssClass: CLASSES.commandAdaptive,
       alignment: 'center',
       width: 'auto',
       cellTemplate: adaptiveCellTemplate,
@@ -228,14 +221,14 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
         container.innerHTML = text;
       }
 
-      $container.addClass(ADAPTIVE_ITEM_TEXT_CLASS);
+      $container.addClass(CLASSES.adaptiveItemText);
       if (!isDefined(text) || text === '') {
         $container.html('&nbsp;');
       }
 
       if (!this._isRowEditMode()) {
         if (this._isItemModified(item, cellOptions)) {
-          $container.addClass(FORM_ITEM_MODIFIED);
+          $container.addClass(CLASSES.itemModified);
         }
       }
 
@@ -281,7 +274,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
           value: this._getValueFromCellOptions(columnIndex, cellOptions),
         }), () => {
           $container.contents().remove();
-          $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
+          $container.removeClass(CLASSES.adaptiveItemText);
           renderFormTemplate();
         });
 
@@ -501,9 +494,9 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
    * @extended: keyboard_navigation
    */
   protected _showHiddenCellsInView({ $cells, isCommandColumn }: HiddenCellsInViewOptions): void {
-    let cssClassNameToRemove = this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
+    let cssClassNameToRemove = this.addWidgetPrefix(CLASSES.hiddenColumn);
     if (isCommandColumn) {
-      cssClassNameToRemove = COMMAND_ADAPTIVE_HIDDEN_CLASS;
+      cssClassNameToRemove = CLASSES.commandAdaptiveHidden;
       $cells.attr({
         tabIndex: 0,
         'aria-hidden': null,
@@ -519,14 +512,14 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
       if (view && view.isVisible() && view.element()) {
         const viewName = view.name;
         // @ts-expect-error the view is rendered here
-        const $hiddenCommandCells = view.element().find(`.${COMMAND_ADAPTIVE_HIDDEN_CLASS}`);
+        const $hiddenCommandCells = view.element().find(`.${CLASSES.commandAdaptiveHidden}`);
         this._showHiddenCellsInView({
           viewName,
           $cells: $hiddenCommandCells,
           isCommandColumn: true,
         });
         // @ts-expect-error the view is rendered here
-        const $hiddenCells = view.element().find(`.${this.addWidgetPrefix(HIDDEN_COLUMN_CLASS)}`);
+        const $hiddenCells = view.element().find(`.${this.addWidgetPrefix(CLASSES.hiddenColumn)}`);
         this._showHiddenCellsInView({
           viewName,
           $cells: $hiddenCells,
@@ -559,7 +552,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
   private _isCellValid($cell: dxElementWrapper | undefined): boolean | number | undefined {
     return $cell?.length
-      && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS)
+      && !$cell.hasClass(MASTER_DETAIL_CLASSES.detailCell)
       && !$cell.hasClass(VIEW_CLASSES.groupCell);
   }
 
@@ -636,8 +629,8 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
    */
   protected _hideVisibleCellInView({ $cell, isCommandColumn }: HiddenCellInViewOptions): void {
     const cssClassNameToAdd = isCommandColumn
-      ? COMMAND_ADAPTIVE_HIDDEN_CLASS
-      : this.addWidgetPrefix(HIDDEN_COLUMN_CLASS);
+      ? CLASSES.commandAdaptiveHidden
+      : this.addWidgetPrefix(CLASSES.hiddenColumn);
     $cell.attr({
       tabIndex: -1,
       'aria-hidden': true,

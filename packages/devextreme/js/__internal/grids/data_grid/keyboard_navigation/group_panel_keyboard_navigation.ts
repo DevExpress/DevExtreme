@@ -9,15 +9,15 @@ import type { DxEvent } from '@js/events';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { Column, GroupColumn } from '@ts/grids/grid_core/columns_controller/types';
+import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/column_keyboard_navigation_core';
 import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
-import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
 import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/types';
 import type { Views } from '@ts/grids/grid_core/types';
 import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 
 import gridCore from '../core';
 import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
-import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
+import { ColumnKeyboardNavigationMixin } from './column_keyboard_navigation_mixin';
 
 export class GroupPanelKeyboardNavigationController
   extends ColumnKeyboardNavigationMixin(ColumnKeyboardNavigationController) {
