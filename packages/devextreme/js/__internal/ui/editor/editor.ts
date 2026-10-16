@@ -7,7 +7,9 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
+import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
+import { isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type PublicEditor from '@js/ui/editor/editor';
@@ -440,7 +442,7 @@ class Editor<
         break;
       case 'value':
         if (value != previousValue) { // eslint-disable-line eqeqeq
-          this.option('isDirty', this._initialValue !== value);
+          this.option('isDirty', !this._isSameAsInitialValue(value));
 
           this.validationRequest.fire({
             value,
@@ -488,6 +490,27 @@ class Editor<
         break;
       default:
         super._optionChanged(args);
+    }
+  }
+
+  _isSameAsInitialValue(value: unknown): boolean {
+    const initialValue = this._initialValue;
+
+    if (initialValue === value) {
+      return true;
+    }
+
+    if (isPlainObject(initialValue) || isPlainObject(value)) {
+      return false;
+    }
+
+    try {
+      return equalByValue(initialValue, value, {
+        maxDepth: Infinity,
+        comparePlainObjectsOnly: true,
+      });
+    } catch {
+      return initialValue === value;
     }
   }
 
