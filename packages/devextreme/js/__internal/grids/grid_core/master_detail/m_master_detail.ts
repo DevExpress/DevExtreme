@@ -11,6 +11,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { ResizingController } from '@ts/grids/grid_core/views/grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -378,7 +379,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
 
       $row
         .addClass(CLASSES.detailRow)
-        .toggleClass(CLASSES.rowLines, showRowLines);
+        .toggleClass(VIEW_CLASSES.rowLines, showRowLines);
 
       if (isDefined(row.visible)) {
         $row.toggle(row.visible);

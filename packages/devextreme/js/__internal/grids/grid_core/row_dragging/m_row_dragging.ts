@@ -248,7 +248,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
       $dataGridContainer
         .find('.dx-gridbase-container')
-        .children(`:not(.${this.addWidgetPrefix(CLASSES.rowsView)})`)
+        .children(`:not(.${this.addWidgetPrefix(VIEW_CLASSES.rowsView)})`)
         .hide();
 
       $dataGridContainer.addClass(this.addWidgetPrefix(CLASSES.dragView));

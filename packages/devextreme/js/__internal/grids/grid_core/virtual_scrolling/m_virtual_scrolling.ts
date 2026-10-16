@@ -26,8 +26,6 @@ import type { StateStoringDataControllerExtension } from '../state_storing/exten
 import type { RowsViewScrollEvent } from '../views/types';
 import {
   BOTTOM_LOAD_PANEL_CLASS,
-  COLUMN_LINES_CLASS,
-  FREESPACE_CLASS,
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
   PAGING_METHOD_NAMES,
@@ -80,7 +78,9 @@ const removeEmptyRows = function ($emptyRows, className) {
     $emptyRows = $(tBodies);
   }
 
-  const rowCount = className === FREESPACE_CLASS ? $emptyRows.length - 1 : $emptyRows.length;
+  const rowCount = className === VIEW_CLASSES.freeSpaceRow
+    ? $emptyRows.length - 1
+    : $emptyRows.length;
 
   for (let i = 0; i < rowCount; i++) {
     $emptyRows.eq(i).remove();
@@ -655,7 +655,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
         tableElement.remove();
         $freeSpaceRowElements = this._getFreeSpaceRowElements(contentTable);
-        removeEmptyRows($freeSpaceRowElements, FREESPACE_CLASS);
+        removeEmptyRows($freeSpaceRowElements, VIEW_CLASSES.freeSpaceRow);
 
         if (change.removeCount) {
           this._removeRowsElements(contentTable, change.removeCount, changeType);
@@ -799,7 +799,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   private _isTableLinesDisplaysCorrect(table) {
-    const hasColumnLines = table.find(`.${COLUMN_LINES_CLASS}`).length > 0;
+    const hasColumnLines = table.find(`.${VIEW_CLASSES.columnLines}`).length > 0;
     return hasColumnLines === this.option('showColumnLines');
   }
 
