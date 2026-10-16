@@ -12,7 +12,7 @@ import {
   EXPAND_ARIA_NAME,
   LEGACY_SCROLLING_MODE,
 } from '../const';
-import type { AdaptiveColumnsController } from '../m_adaptivity';
+import type { AdaptiveColumnsViewController } from '../m_adaptivity';
 import type { AdaptivityDataController } from '../types';
 import { getAdaptiveDetailRowIndex, resolveAdaptiveDetailRowTarget } from '../utils';
 
@@ -23,7 +23,7 @@ export const adaptivityDataControllerExtender = (
 ): ModuleType<AdaptivityDataController> => class AdaptivityDataControllerExtender extends Base {
   private adaptiveExpandedKey?: RowKey;
 
-  protected adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsViewController;
 
   public init(): void {
     super.init();
