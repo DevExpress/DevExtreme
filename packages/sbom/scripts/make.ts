@@ -40,7 +40,34 @@ await makeSbom({
   packages: [{ fullName: 'devextreme-extra-deps' }],
   options,
 });
-await makeSbom({ targetDir: REPO_ROOT, outputDir: DIST, packages, options });
+await makeSbom({
+  targetDir: REPO_ROOT,
+  outputDir: DIST,
+  packages,
+  options: {
+    ...options,
+    publicPackages: [
+      '@devexpress/utils',
+      'devexpress-diagram',
+      'devexpress-gantt',
+      'devextreme-angular',
+      'devextreme-quill',
+      'devextreme-react',
+      'devextreme-themebuilder',
+      'devextreme-vue',
+      'devextreme',
+    ],
+    // Deliberately not included: 'devextreme-cldr-data', 'devextreme-internal-tools', 'eslint-config-devextreme'
+    internalPackages: [
+      'devextreme-metadata',
+      'eslint-migration-utils',
+    ],
+    cpeMappings: [
+      { name: 'devextreme-exceljs-fork', vendor: 'devexpress' },
+      { name: 'devextreme-schematics', vendor: 'devexpress' },
+    ],
+  },
+});
 
 for (const { fullName } of packages) {
   const sbomPath = path.join(DIST, `${fullName}.cdx.json`);
