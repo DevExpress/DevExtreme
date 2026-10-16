@@ -83,16 +83,6 @@ import {
   keepContentHeight,
 } from './utils';
 
-const ROWS_VIEW_CLASS = 'rowsview';
-const NOWRAP_CLASS = 'nowrap';
-const FREE_SPACE_CLASS = 'dx-freespace-row';
-const COLUMN_LINES_CLASS = 'dx-column-lines';
-const ROW_ALTERNATION_CLASS = 'dx-row-alt';
-const LAST_ROW_BORDER = 'dx-last-row-border';
-const EMPTY_CLASS = 'dx-empty';
-const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
-export const ROW_LINES_CLASS = 'dx-row-lines';
-
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
 export function isGroupRow(
@@ -318,11 +308,11 @@ export class RowsView extends ColumnsView {
         $row.addClass(VIEW_CLASSES.dataRow);
       }
       if (isDataRow && this.option('showRowLines')) {
-        $row.addClass(ROW_LINES_CLASS);
+        $row.addClass(VIEW_CLASSES.rowLines);
       }
 
       if (this.option('showColumnLines')) {
-        $row.addClass(COLUMN_LINES_CLASS);
+        $row.addClass(VIEW_CLASSES.columnLines);
       }
 
       if (row.visible === false) {
@@ -346,7 +336,7 @@ export class RowsView extends ColumnsView {
     if (rowOptions.rowType === 'data') {
       if (this.option('rowAlternationEnabled')) {
         if (this._isAltRow(row)) {
-          $row.addClass(ROW_ALTERNATION_CLASS);
+          $row.addClass(VIEW_CLASSES.rowAlternation);
         }
 
         setWatcher({
@@ -357,7 +347,7 @@ export class RowsView extends ColumnsView {
             this._dataController.getRowByKey(row.key),
           ),
           callBack: (value) => {
-            $row.toggleClass(ROW_ALTERNATION_CLASS, value);
+            $row.toggleClass(VIEW_CLASSES.rowAlternation, value);
           },
         });
       }
@@ -594,7 +584,7 @@ export class RowsView extends ColumnsView {
     const $newRows = this._getRowElements($newTable);
     const shouldHighlightInserts = this.option('highlightChanges') && change.isLiveUpdate;
     const insertedRowClass = shouldHighlightInserts
-      ? this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS)
+      ? this.addWidgetPrefix(VIEW_CLASSES.rowInsertedAnimation)
       : undefined;
 
     change.rowIndices.forEach((rowIndex, index) => {
@@ -692,7 +682,7 @@ export class RowsView extends ColumnsView {
 
     $row
       .addClass(className)
-      .toggleClass(COLUMN_LINES_CLASS, this.option('showColumnLines'));
+      .toggleClass(VIEW_CLASSES.columnLines, this.option('showColumnLines'));
 
     for (let i = 0; i < columns.length; i += 1) {
       const $cell = this._createCell({
@@ -735,7 +725,7 @@ export class RowsView extends ColumnsView {
   }
 
   private _renderFreeSpaceRow($tableElement: dxElementWrapper, change?: ViewDataChange): void {
-    let $freeSpaceRowElement = this._createEmptyRow(FREE_SPACE_CLASS);
+    let $freeSpaceRowElement = this._createEmptyRow(VIEW_CLASSES.freeSpaceRow);
 
     $freeSpaceRowElement = this._wrapRowIfNeed($tableElement, $freeSpaceRowElement, change?.changeType === 'refresh');
 
@@ -774,7 +764,7 @@ export class RowsView extends ColumnsView {
       .children('tbody')
       .children()
       .not('.dx-virtual-row')
-      .not(`.${FREE_SPACE_CLASS}`);
+      .not(`.${VIEW_CLASSES.freeSpaceRow}`);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- getBoundingRect returns any
     return $rowElements.toArray().reduce((sum, row) => sum + getBoundingRect(row).height, 0);
@@ -818,13 +808,13 @@ export class RowsView extends ColumnsView {
   public _getRowElements(tableElement?: dxElementWrapper | null): dxElementWrapper {
     const $rows = super._getRowElements(tableElement);
 
-    return $rows?.not(`.${FREE_SPACE_CLASS}`);
+    return $rows?.not(`.${VIEW_CLASSES.freeSpaceRow}`);
   }
 
   public _getFreeSpaceRowElements($table?: dxElementWrapper): dxElementWrapper {
     const tableElements = $table ?? this.getTableElements();
 
-    return tableElements && tableElements.children('tbody').children(`.${FREE_SPACE_CLASS}`);
+    return tableElements && tableElements.children('tbody').children(`.${VIEW_CLASSES.freeSpaceRow}`);
   }
 
   private _getNoDataText(): string | undefined {
@@ -1050,9 +1040,9 @@ export class RowsView extends ColumnsView {
     }
 
     $element
-      .addClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))
-      .toggleClass(this.addWidgetPrefix(NOWRAP_CLASS), !this.option('wordWrapEnabled'));
-    $element.toggleClass(EMPTY_CLASS, this._dataController.isEmpty());
+      .addClass(this.addWidgetPrefix(VIEW_CLASSES.rowsView))
+      .toggleClass(this.addWidgetPrefix(VIEW_CLASSES.noWrap), !this.option('wordWrapEnabled'));
+    $element.toggleClass(VIEW_CLASSES.empty, this._dataController.isEmpty());
 
     this.setAria('role', 'presentation', $element);
 
@@ -1374,9 +1364,9 @@ export class RowsView extends ColumnsView {
 
   private _updateLastRowBorder(isFreeSpaceRowVisible: boolean): void {
     if (this.option('showBorders') && !isFreeSpaceRowVisible) {
-      this.element()?.addClass(LAST_ROW_BORDER);
+      this.element()?.addClass(VIEW_CLASSES.lastRowBorder);
     } else {
-      this.element()?.removeClass(LAST_ROW_BORDER);
+      this.element()?.removeClass(VIEW_CLASSES.lastRowBorder);
     }
   }
 
@@ -1711,7 +1701,7 @@ export class RowsView extends ColumnsView {
       return false;
     }
 
-    const $rowsViewElement = $element.closest(`.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`);
+    const $rowsViewElement = $element.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.rowsView)}`);
 
     return $rowsViewElement.is($viewElement);
   }

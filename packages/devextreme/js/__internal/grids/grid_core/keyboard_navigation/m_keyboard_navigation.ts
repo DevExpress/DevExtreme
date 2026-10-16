@@ -70,14 +70,12 @@ import {
   FOCUS_TYPE_ROW,
   FOCUSED_CELL_KEYS,
   FOCUSED_CLASS,
-  FREESPACE_ROW_CLASS,
   FUNCTIONAL_KEYS,
   INTERACTIVE_ELEMENTS_SELECTOR,
   MASTER_DETAIL_CELL_CLASS,
   NON_FOCUSABLE_ELEMENTS_SELECTOR,
   REVERT_BUTTON_CLASS,
   ROWS_VIEW,
-  ROWS_VIEW_CLASS,
   WIDGET_CLASS,
 } from './const';
 import { GridCoreKeyboardNavigationDom } from './dom';
@@ -370,7 +368,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       const $target = $(e.event.target);
 
       const tableSelector = `.${this.addWidgetPrefix(VIEW_CLASSES.table)}`;
-      const rowsViewSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`;
+      const rowsViewSelector = `.${this.addWidgetPrefix(VIEW_CLASSES.rowsView)}`;
       const editorOverlaySelector = `.${DROPDOWN_EDITOR_OVERLAY_CLASS}`;
 
       // if click was on the datagrid table, but the target element is no more presented in the DOM
@@ -815,7 +813,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       if (
         isFocusedRowElement
         || $target.parent().hasClass(VIEW_CLASSES.dataRow)
-        || $target.hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))
+        || $target.hasClass(this.addWidgetPrefix(VIEW_CLASSES.rowsView))
       ) {
         this._selectionController.changeItemSelection(rowIndex, {
           shift: eventArgs.shift,
@@ -869,7 +867,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       && !!eventTarget && !isOriginalHandlerRequired;
 
     // Reset focused cell when the rows view container itself is focused (not a specific cell)
-    if (canHandleNavigation && $(eventTarget).hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))) {
+    if (
+      canHandleNavigation
+      && $(eventTarget).hasClass(this.addWidgetPrefix(VIEW_CLASSES.rowsView))
+    ) {
       this._resetFocusedCell();
     }
 
@@ -1625,7 +1626,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       this._focusView();
       $(focusedViewElement).removeClass(FOCUS_STATE_CLASS);
 
-      if ($parent.hasClass(FREESPACE_ROW_CLASS)) {
+      if ($parent.hasClass(VIEW_CLASSES.freeSpaceRow)) {
         this._updateFocusedCellPosition($target);
         this._applyTabIndexToElement(this._focusedView!.element());
         this._focusedView!.focus(true);
@@ -1707,8 +1708,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isHighlighted = this._isCellElement($(element));
 
     if (!element) {
-      const activeRowSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .${VIEW_CLASSES.row}[tabindex]`;
-      const activeCellSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .${VIEW_CLASSES.row} > td[tabindex]`;
+      const activeRowSelector = `.${this.addWidgetPrefix(VIEW_CLASSES.rowsView)} .${VIEW_CLASSES.row}[tabindex]`;
+      const activeCellSelector = `.${this.addWidgetPrefix(VIEW_CLASSES.rowsView)} .${VIEW_CLASSES.row} > td[tabindex]`;
       const selectors = [activeRowSelector, activeCellSelector].join(', ');
       element = this.component.$element().find(selectors).first();
     }

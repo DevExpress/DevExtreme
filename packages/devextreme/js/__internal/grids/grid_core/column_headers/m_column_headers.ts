@@ -21,8 +21,6 @@ import type { ColumnViewTemplate } from '../views/types';
 import { CLASSES } from './const';
 
 const HEADERS_CLASS = 'headers';
-const NOWRAP_CLASS = 'nowrap';
-const COLUMN_LINES_CLASS = 'dx-column-lines';
 const CONTEXT_MENU_SORT_ASC_ICON = 'context-menu-sort-asc';
 const CONTEXT_MENU_SORT_DESC_ICON = 'context-menu-sort-desc';
 const CONTEXT_MENU_SORT_NONE_ICON = 'context-menu-sort-none';
@@ -271,7 +269,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
 
-    $row.toggleClass(COLUMN_LINES_CLASS, this.option('showColumnLines'));
+    $row.toggleClass(VIEW_CLASSES.columnLines, this.option('showColumnLines'));
 
     if (row.rowType === 'header') {
       $row.addClass(CLASSES.headerRow);
@@ -322,7 +320,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
     $container
       .addClass(this.addWidgetPrefix(HEADERS_CLASS))
-      .toggleClass(this.addWidgetPrefix(NOWRAP_CLASS), !this.option('wordWrapEnabled'));
+      .toggleClass(this.addWidgetPrefix(VIEW_CLASSES.noWrap), !this.option('wordWrapEnabled'));
 
     this.setAria('role', 'presentation', $container);
 
