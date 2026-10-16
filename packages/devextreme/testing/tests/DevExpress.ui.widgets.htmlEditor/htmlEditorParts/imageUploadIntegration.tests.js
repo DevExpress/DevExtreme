@@ -519,6 +519,14 @@ module('Image uploading integration', {
         assert.strictEqual(event && event.type, 'keyup', 'the Enter key event is passed to valueChanged');
     });
 
+    test('changing imageUpload.fileUploaderOptions in the base64 mode does not throw', function(assert) {
+        this.createWidget({ imageUpload: { tabs: ['file'], fileUploadMode: 'base64' } });
+
+        this.instance.option('imageUpload.fileUploaderOptions', { multiple: true });
+
+        assert.ok(true, 'the option is accepted without a file uploader');
+    });
+
     test('check file uploading by url dimention editors default value', function(assert) {
         this.createWidget({
             value: markup,
