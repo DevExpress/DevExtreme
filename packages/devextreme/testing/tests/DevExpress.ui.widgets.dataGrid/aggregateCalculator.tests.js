@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import AggregateCalculator from '__internal/grids/data_grid/m_aggregate_calculator';
+import AggregateCalculator from '__internal/grids/data_grid/aggregate_calculator';
 
 const customAggregator = {
     seed: 6,

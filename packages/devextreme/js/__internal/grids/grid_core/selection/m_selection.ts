@@ -30,8 +30,8 @@ import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
 import { isEditRow } from '../keyboard_navigation/utils';
-import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
+import gridCoreUtils from '../utils';
 import {
   CHECKBOXES_HIDDEN_CLASS,
   COMMAND_SELECT_CLASS,

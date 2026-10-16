@@ -18,7 +18,7 @@ import List from '@ts/ui/list/list.edit.search';
 import type { TreeViewBaseProperties } from '@ts/ui/tree_view/tree_view.base';
 import TreeView from '@ts/ui/tree_view/tree_view.search';
 
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import { allowHeaderFiltering } from './utils';
 
 type CheckBoxValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;

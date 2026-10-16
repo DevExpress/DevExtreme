@@ -12,9 +12,9 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
-import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { Controllers, OptionChanged, Views } from '../types';
+import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import type { ViewDataChange } from '../views/types';
 import { Direction } from './const';

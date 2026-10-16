@@ -7,7 +7,7 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import LoadPanel from '@js/ui/load_panel';
-import gridUtils from '@ts/grids/grid_core/m_utils';
+import gridUtils from '@ts/grids/grid_core/utils';
 
 const EXPORT_LOAD_PANEL_CLASS = 'dx-export-loadpanel';
 class ExportLoadPanel {

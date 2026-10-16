@@ -10,7 +10,7 @@ import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import gridCore from '../core';
 import type { GroupingDataControllerExtension, GroupingDataSourceAdapter } from '../grouping/m_grouping';
-import { createGroupFilter } from '../m_utils';
+import { createGroupFilter } from '../utils';
 
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 
