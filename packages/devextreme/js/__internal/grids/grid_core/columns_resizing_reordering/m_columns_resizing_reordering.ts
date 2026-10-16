@@ -24,7 +24,7 @@ import { isDefined, isObject, isString } from '@js/core/utils/type';
 import swatchContainer from '@ts/core/utils/swatch_container';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { getDraggingPanelBoundingRects } from '@ts/grids/grid_core/columns_resizing_reordering/utils';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ColumnPoint, ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 

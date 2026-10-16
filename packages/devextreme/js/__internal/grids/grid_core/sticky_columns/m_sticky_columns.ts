@@ -5,7 +5,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
@@ -16,7 +16,7 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
+import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/headers_keyboard_navigation';
 import {
   isAdaptiveItem,
   isGroupFooterRow,

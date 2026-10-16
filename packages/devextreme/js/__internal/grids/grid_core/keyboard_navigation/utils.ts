@@ -14,8 +14,8 @@ import {
   INTERACTIVE_ELEMENTS_SELECTOR,
   VIRTUAL_ROW_CLASS,
 } from './const';
+import type { KeyboardNavigationController as KeyboardNavigationControllerCore } from './keyboard_navigation_core';
 import type { KeyboardNavigationController } from './m_keyboard_navigation';
-import type { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 import type { NavigationDirection } from './types';
 
 const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';

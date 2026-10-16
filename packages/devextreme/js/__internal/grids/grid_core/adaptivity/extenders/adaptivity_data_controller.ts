@@ -6,13 +6,13 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { MasterDetailDataControllerExtension } from '@ts/grids/grid_core/master_detail/m_master_detail';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 
+import type { AdaptiveColumnsViewController } from '../adaptivity';
 import {
   ADAPTIVE_ROW_TYPE,
   COLLAPSE_ARIA_NAME,
   EXPAND_ARIA_NAME,
   LEGACY_SCROLLING_MODE,
 } from '../const';
-import type { AdaptiveColumnsViewController } from '../m_adaptivity';
 import type { AdaptivityDataController } from '../types';
 import { getAdaptiveDetailRowIndex, resolveAdaptiveDetailRowTarget } from '../utils';
 
