@@ -52,6 +52,7 @@ import type {
   WrappedLookupDataSource,
 } from '@ts/grids/grid_core/types';
 
+import { HIDDEN_COLUMNS_WIDTH } from './adaptivity/const';
 import { AI_COLUMN_NAME } from './ai_column/const';
 import type DataSourceAdapter from './data_source_adapter/data_source_adapter';
 import type { RawItemData } from './data_source_adapter/types';
@@ -624,7 +625,7 @@ export default {
       const width = resultWidths && resultWidths[lastColumnIndex];
       const allowResizing = !hasResizableColumns || column.allowResizing !== false;
 
-      if (!column.command && !column.fixed && width !== 'adaptiveHidden' && allowResizing) {
+      if (!column.command && !column.fixed && width !== HIDDEN_COLUMNS_WIDTH && allowResizing) {
         break;
       }
     }

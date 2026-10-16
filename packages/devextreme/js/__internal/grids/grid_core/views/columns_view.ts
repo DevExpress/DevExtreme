@@ -29,6 +29,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
 import supportUtils from '@ts/core/utils/m_support';
+import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
@@ -77,7 +78,7 @@ import type {
 } from './types';
 import { isRowElementVisible } from './utils';
 
-const HIDDEN_COLUMNS_WIDTH = '0.0001px';
+const HIDDEN_COLUMN_CSS_WIDTH = '0.0001px';
 
 const CELL_HINT_VISIBLE = 'dxCellHintVisible';
 
@@ -135,8 +136,8 @@ export const normalizeWidth = (width: string | number | undefined): string | und
     return `${width.toFixed(3)}px`;
   }
 
-  if (width === 'adaptiveHidden') {
-    return HIDDEN_COLUMNS_WIDTH;
+  if (width === HIDDEN_COLUMNS_WIDTH) {
+    return HIDDEN_COLUMN_CSS_WIDTH;
   }
 
   return width;
@@ -597,8 +598,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
     let width = column.visibleWidth || column.width;
 
-    if (width === 'adaptiveHidden') {
-      width = HIDDEN_COLUMNS_WIDTH;
+    if (width === HIDDEN_COLUMNS_WIDTH) {
+      width = HIDDEN_COLUMN_CSS_WIDTH;
     }
 
     const col = $('<col>');

@@ -34,7 +34,7 @@ import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';
 import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/index';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';

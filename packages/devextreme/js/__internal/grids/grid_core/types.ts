@@ -292,12 +292,12 @@ export interface Controllers {
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
   columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/m_headers_keyboard_navigation').HeadersKeyboardNavigationController;
-  resizing: import('./views/grid_view').ResizingController;
+  resizing: import('./grid_view/grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
   searchPanel: import('./search/m_search').SearchPanelViewController;
   stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
-  synchronizeScrolling: import('./views/grid_view').SynchronizeScrollingController;
+  synchronizeScrolling: import('./grid_view/grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/toast_controller').ToastViewController;
   aiColumn: import('./ai_column/controllers/ai_column_controller').AIColumnController;
@@ -313,9 +313,9 @@ type ControllerTypes = {
 export interface Views {
   columnChooserView: import('./column_chooser/m_column_chooser').ColumnChooserView;
   columnHeadersView: import('./column_headers/m_column_headers').ColumnHeadersView;
-  headerPanel: import('./header_panel/m_header_panel').HeaderPanel;
+  headerPanel: import('./header_panel/header_panel').HeaderPanel;
   headerFilterView: import('./header_filter/m_header_filter_core').HeaderFilterView;
-  rowsView: import('./views/m_rows_view').RowsView;
+  rowsView: import('./views/rows_view').RowsView;
   pagerView: import('./pager/m_pager').PagerView;
   columnsSeparatorView: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsSeparatorView;
   blockSeparatorView: import('./columns_resizing_reordering/m_columns_resizing_reordering').BlockSeparatorView;
@@ -323,7 +323,7 @@ export interface Views {
   trackerView: import('./columns_resizing_reordering/m_columns_resizing_reordering').TrackerView;
   contextMenuView: import('./context_menu/m_context_menu').ContextMenuView;
   footerView: import('../data_grid/summary/m_summary').FooterView;
-  gridView: import('./views/grid_view').GridView;
+  gridView: import('./grid_view/grid_view').GridView;
   filterBuilderView: import('./filter_builder/filter_builder').FilterBuilderView;
   filterPanelView: import('./filter_panel/filter_panel').FilterPanelView;
   toastView: import('./toast/toast_view').ToastView;

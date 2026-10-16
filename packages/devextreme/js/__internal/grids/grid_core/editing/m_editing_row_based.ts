@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { equalByValue } from '@js/core/utils/common';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { ModuleType } from '../types';
 import {
