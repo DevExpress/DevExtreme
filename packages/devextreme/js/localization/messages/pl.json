@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "Data rozpoczęcia musi być późniejsza niż {0}",
         "dxGantt-dialogEndDateValidation": "Data zakończenia musi być późniejsza niż {0}",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Element galerii",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

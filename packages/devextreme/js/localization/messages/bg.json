@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "Началната дата трябва да е след {0}",
         "dxGantt-dialogEndDateValidation": "Крайната дата трябва да е след {0}",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Елемент от галерия",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

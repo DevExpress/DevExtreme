@@ -14,6 +14,10 @@ import {
  RouteRemovedEvent,
  MapProvider,
  MapType,
+ MarkerClickEvent,
+ CalculateOsmRouteInfo,
+ OsmTileServer,
+ OsmTileServerConfig,
  RouteMode,
 } from "devextreme/ui/map";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -224,7 +228,7 @@ const DxMarkerConfig = {
   props: {
     iconSrc: String,
     location: [Array, Object, String] as PropType<Array<number> | Record<string, any> | string>,
-    onClick: Function as PropType<(() => void)>,
+    onClick: Function as PropType<((e: MarkerClickEvent) => void)>,
     tooltip: [Object, String] as PropType<Record<string, any> | string>
   }
 };
@@ -244,11 +248,17 @@ const DxProviderConfigConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:calculateLocation": null,
+    "update:calculateRoute": null,
     "update:mapId": null,
+    "update:tileServer": null,
     "update:useAdvancedMarkers": null,
   },
   props: {
+    calculateLocation: Function as PropType<((query: string) => any)>,
+    calculateRoute: Function as PropType<((params: CalculateOsmRouteInfo) => any)>,
     mapId: String,
+    tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType) => string | OsmTileServerConfig | undefined)) | OsmTileServerConfig | string>,
     useAdvancedMarkers: Boolean
   }
 };

@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "Aloituspäivän on oltava {0} jälkeen",
         "dxGantt-dialogEndDateValidation": "Lopetuspäivän on oltava {0} jälkeen",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Galleriakohde",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

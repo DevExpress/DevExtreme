@@ -38,7 +38,7 @@ export interface BingLocation {
 
 // eslint-disable-next-line @typescript-eslint/init-declarations
 let msMapsLoader;
-class BingProvider extends DynamicProvider {
+class BingProvider extends DynamicProvider<BingLocation> {
   _providerClickHandler?: (e: { targetType: string; location: BingLocation }) => void;
 
   _providerViewChangeHandler?: () => void;
@@ -75,7 +75,7 @@ class BingProvider extends DynamicProvider {
       } else {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
-          resolve(geocodedLocation as BingLocation);
+          resolve(geocodedLocation);
         });
       }
     });

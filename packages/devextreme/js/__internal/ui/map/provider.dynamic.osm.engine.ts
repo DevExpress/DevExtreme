@@ -1,0 +1,99 @@
+import type { MapLocation } from '@js/ui/map';
+import type Popover from '@js/ui/popover';
+
+export const SUBDOMAIN_PLACEHOLDER = '{s}';
+
+export interface MapEngineTileLayerOptions {
+  attribution?: string;
+  maxZoom: number;
+  subdomains?: string | string[];
+  url: string;
+}
+
+export interface MapEngineSetViewOptions {
+  center?: MapLocation;
+  zoom?: number;
+}
+
+export interface MapEngineBounds {
+  northEast: MapLocation;
+  southWest: MapLocation;
+}
+
+export interface MapEngineFitBoundsOptions {
+  includeMarkerPadding?: boolean;
+}
+
+export interface MapEngineViewState extends MapEngineSetViewOptions {
+  bounds?: MapEngineBounds;
+}
+
+export interface MapEngineClickEvent {
+  event?: Event;
+  location: MapLocation;
+}
+
+export interface MapEngineMarkerOptions {
+  html?: string;
+  htmlOffset?: { top: number; left: number };
+  iconSrc?: string;
+  location: MapLocation;
+  onClick?: (tooltip?: Popover) => void;
+  rtlEnabled?: boolean;
+  tooltip?: { text: string; visible: boolean };
+}
+
+export interface MapEngineUpdateDimensionsResult {
+  needsViewportRefit: boolean;
+}
+
+export interface MapEngineMarker {
+  readonly originalMarker: unknown;
+  dispose: (restoreFocus?: boolean) => void;
+}
+
+export interface MapEngineRouteOptions {
+  locations: MapLocation[];
+  color: string;
+  opacity: number;
+  weight: number;
+}
+
+export interface MapEngineRoute {
+  readonly originalRoute: unknown;
+  dispose: () => void;
+}
+
+export interface MapEngineEventHandlers {
+  click: (event: MapEngineClickEvent) => void;
+  markerSizeChange: () => void;
+  viewChange: (view: MapEngineViewState) => void;
+}
+
+export interface MapEngineMap {
+  readonly originalMap: unknown;
+  addMarker: (options: MapEngineMarkerOptions) => MapEngineMarker;
+  addRoute: (options: MapEngineRouteOptions) => MapEngineRoute;
+  attachHandlers: (handlers: MapEngineEventHandlers) => void;
+  dispose: () => void;
+  fitBounds: (bounds: MapEngineBounds, options?: MapEngineFitBoundsOptions) => void;
+  getZoom: () => number | undefined;
+  replaceTileLayer: (options: MapEngineTileLayerOptions) => void;
+  setControls: (visible: boolean) => void;
+  setDisabled: (disabled: boolean) => void;
+  setFocus: (enabled: boolean, tabIndex: number) => void;
+  setView: (options: MapEngineSetViewOptions) => void;
+  updateDimensions: () => MapEngineUpdateDimensionsResult;
+}
+
+export interface MapEngine {
+  createMap: (container: Element, view?: MapEngineSetViewOptions) => MapEngineMap;
+}
+
+const registry: { mapEngine?: MapEngine } = {};
+
+export const getRegisteredMapEngine = (): MapEngine | undefined => registry.mapEngine;
+
+export const setRegisteredMapEngine = (engine: MapEngine | undefined): void => {
+  registry.mapEngine = engine;
+};

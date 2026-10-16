@@ -9,16 +9,73 @@ import {
   ChangedOptionInfo,
 } from '../events';
 
+import dxPopover from './popover';
+
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
-export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic';
+export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic' | 'osm';
 /** @public */
 export type RouteMode = 'driving' | 'walking';
 /** @public */
 export type MapType = 'hybrid' | 'roadmap' | 'satellite';
+
+/**
+ * @docid
+ * @public
+ */
+export type CalculateOsmRouteInfo = {
+  locations: Array<MapLocation>;
+  mode: RouteMode | string;
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type OsmGeoJsonLineString = {
+  type: 'LineString';
+  coordinates: Array<Array<number>>;
+};
+
+/**
+ * @docid
+ * @type Array<Array<number>>|OsmGeoJsonLineString
+ * @public
+ */
+export type OsmRouteResult = Array<[number, number]> | OsmGeoJsonLineString;
+
+/**
+ * @docid
+ * @public
+ */
+export type OsmTileServerConfig = {
+  /**
+   * @docid
+   */
+  url: string;
+  /**
+   * @docid
+   */
+  attribution?: string;
+  /**
+   * @docid
+   */
+  subdomains?: string | Array<string>;
+  /**
+   * @docid
+   */
+  maxZoom?: number;
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type OsmTileServer = string | OsmTileServerConfig
+| ((type: MapType) => string | OsmTileServerConfig | undefined);
 
 /**
  * @docid _ui_map_ClickEvent
@@ -64,6 +121,19 @@ export type MarkerAddedEvent = EventInfo<dxMap> & {
    * @type object
    */
   originalMarker: any;
+};
+
+/**
+ * @docid _ui_map_MarkerClickEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type MarkerClickEvent = EventInfo<dxMap> & {
+  /** @docid _ui_map_MarkerClickEvent.location */
+  location: MapLocation;
+  /** @docid _ui_map_MarkerClickEvent.tooltip */
+  tooltip?: dxPopover;
 };
 
 /**
@@ -245,8 +315,9 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
       location?: any | string | Array<number>;
       /**
        * @docid
+       * @type_function_param1 e:{ui/map:MarkerClickEvent}
        */
-      onClick?: Function;
+      onClick?: ((e: MarkerClickEvent) => void);
       /**
        * @docid
        */
@@ -336,6 +407,22 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
        * @deprecated
        */
       useAdvancedMarkers?: boolean;
+      /**
+       * @docid
+       * @public
+       * @default undefined
+       */
+      tileServer?: OsmTileServer | undefined;
+      /**
+       * @docid
+       * @public
+       */
+      calculateLocation?: (query: string) => PromiseLike<MapLocation | undefined>;
+      /**
+       * @docid
+       * @public
+       */
+      calculateRoute?: (params: CalculateOsmRouteInfo) => PromiseLike<OsmRouteResult>;
     };
     /**
      * @docid

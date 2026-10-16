@@ -1,0 +1,825 @@
+import Color from '@js/color';
+import messageLocalization from '@js/common/core/localization/message';
+import domAdapter from '@js/core/dom_adapter';
+import resizeObserverSingleton from '@js/core/resize_observer';
+import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/selectors';
+
+import type {
+  MapEngine,
+  MapEngineBounds,
+  MapEngineClickEvent,
+  MapEngineEventHandlers,
+  MapEngineFitBoundsOptions,
+  MapEngineMap,
+  MapEngineMarker,
+  MapEngineMarkerOptions,
+  MapEngineRoute,
+  MapEngineRouteOptions,
+  MapEngineSetViewOptions,
+  MapEngineTileLayerOptions,
+  MapEngineUpdateDimensionsResult,
+  MapEngineViewState,
+} from './provider.dynamic.osm.engine';
+import { SUBDOMAIN_PLACEHOLDER } from './provider.dynamic.osm.engine';
+import {
+  createMarkerElement,
+  DEFAULT_MARKER_SIZE,
+  MARKER_FALLBACK_HEIGHT,
+  MARKER_FALLBACK_WIDTH,
+  type MarkerElementInfo,
+  type MarkerKind,
+} from './provider.dynamic.osm.openlayers.marker';
+import { OpenLayersMarkerTooltip } from './provider.dynamic.osm.openlayers.tooltip';
+import type {
+  ControlLike,
+  Coordinate,
+  Extent,
+  InteractionLike,
+  MapLike,
+  OpenLayersApi,
+  Options,
+  OverlayLike,
+  TileLayerLike,
+  VectorSourceLike,
+  ViewLike,
+} from './provider.dynamic.osm.openlayers.utils';
+import {
+  areCoordinatesEqual,
+  createTileUrlList,
+  DEFAULT_VIEW_PROJECTION,
+  GEOGRAPHIC_PROJECTION,
+  getCoordinateProjection,
+  isOpenLayersApi,
+  toCoordinate,
+  toLocation,
+} from './provider.dynamic.osm.openlayers.utils';
+import { toRouteCoordinates } from './provider.dynamic.osm.route';
+
+interface MapBrowserEventLike {
+  coordinate?: Coordinate;
+  originalEvent?: Event;
+}
+
+const KEY_RELEASE_EVENT = 'keyup';
+
+interface MarkerFocusTarget {
+  element: HTMLElement;
+  tabIndex: string | null;
+}
+
+interface MarkerElementBinding {
+  focusTargets: MarkerFocusTarget[];
+  detach: () => void;
+}
+
+interface OpenLayersMarker extends MapEngineMarker {
+  element: HTMLElement;
+  focusTargets: MarkerFocusTarget[];
+  kind: MarkerKind;
+  location: MapEngineMarkerOptions['location'];
+  offset: number[];
+  overlay: OverlayLike;
+  positioning: string;
+  tooltip?: OpenLayersMarkerTooltip;
+}
+
+class OpenLayersMap implements MapEngineMap {
+  readonly originalMap: MapLike;
+
+  private readonly _container: Element;
+
+  private _focusEnabled = true;
+
+  private _tabIndex = 0;
+
+  private readonly _zoomControl: ControlLike;
+
+  private _controlsVisible = false;
+
+  private _disabled = false;
+
+  private _ownsDisabledInert = false;
+
+  private readonly _interactionStates = new Map<InteractionLike, boolean>();
+
+  private readonly _markers = new Set<OpenLayersMarker>();
+
+  private _eventHandlers?: {
+    click: (event: unknown) => void;
+    markerSizeChange: () => void;
+    moveEnd: (event: unknown) => void;
+    userKeyDown: (event: Event) => void;
+    userViewChange: () => void;
+  };
+
+  private _tileLayer?: TileLayerLike;
+
+  private _routeLayer?: object;
+
+  private _routeSource?: VectorSourceLike;
+
+  private _disposed = false;
+
+  private _markerFitNeedsLayout = false;
+
+  private _markerSizeRefitEnabled = true;
+
+  private _subscribedView: ViewLike;
+
+  constructor(
+    private readonly _api: OpenLayersApi,
+    container: Element,
+    view: MapEngineSetViewOptions = {},
+  ) {
+    this._container = container;
+    this._syncKeyboardTabIndex();
+
+    this.originalMap = new _api.Map({
+      controls: _api.control.defaults.defaults({ attribution: true, rotate: false, zoom: false }),
+      interactions: _api.interaction.defaults.defaults({
+        altShiftDragRotate: false,
+        onFocusOnly: false,
+        pinchRotate: false,
+      }),
+      keyboardEventTarget: container,
+      target: container,
+      view: new _api.View({
+        center: toCoordinate(
+          _api,
+          view.center ?? { lat: 0, lng: 0 },
+          DEFAULT_VIEW_PROJECTION,
+        ),
+        projection: DEFAULT_VIEW_PROJECTION,
+        zoom: view.zoom ?? 1,
+      }),
+    });
+    this.originalMap.getOverlayContainer().setAttribute('dir', 'ltr');
+    this.originalMap.getOverlayContainer().style.contain = 'layout paint';
+    this.originalMap.getOverlayContainerStopEvent().setAttribute('dir', 'ltr');
+    this._subscribedView = this.originalMap.getView();
+    this._subscribedView.on('change:center', this._viewCenterChangeHandler);
+    this.originalMap.on('change:view', this._viewChangeHandler);
+    this._zoomControl = new _api.control.Zoom();
+  }
+
+  private readonly _viewCenterChangeHandler = (): void => {
+    this._syncMarkerPositions();
+  };
+
+  private readonly _viewChangeHandler = (): void => {
+    const view = this.originalMap.getView();
+
+    if (view === this._subscribedView) {
+      return;
+    }
+
+    this._subscribedView.un('change:center', this._viewCenterChangeHandler);
+    const previousProjection = getCoordinateProjection(
+      this._api,
+      this._subscribedView.getProjection(),
+    );
+    const projection = getCoordinateProjection(this._api, view.getProjection());
+    if (previousProjection !== projection) {
+      this._routeSource?.getFeatures().forEach((feature) => {
+        feature.getGeometry()?.transform(previousProjection, projection);
+      });
+    }
+    this._subscribedView = view;
+    this._subscribedView.on('change:center', this._viewCenterChangeHandler);
+    this._syncMarkerPositions();
+    this._syncMarkerTabIndexes();
+  };
+
+  attachHandlers(handlers: MapEngineEventHandlers): void {
+    this._detachHandlers();
+    this._initHandlers(handlers);
+  }
+
+  private _attachMarkerElementHandlers(
+    element: HTMLElement,
+    onClick?: (event: MouseEvent) => void,
+    onSizeChange?: () => void,
+  ): MarkerElementBinding {
+    const keyboardInteractive = Boolean(onClick)
+      && !element.querySelector(ALL_FOCUSABLE_ELEMENTS_SELECTOR);
+    const focusTargets: MarkerFocusTarget[] = keyboardInteractive
+      ? [{ element, tabIndex: '0' }]
+      : Array.from(element.querySelectorAll<HTMLElement>(ALL_FOCUSABLE_ELEMENTS_SELECTOR))
+        .map((focusTarget) => ({
+          element: focusTarget,
+          tabIndex: focusTarget.getAttribute('tabindex'),
+        }));
+    const clickHandler: EventListener | undefined = onClick
+      ? (event): void => {
+        event.stopPropagation();
+        if (!this._disabled) {
+          onClick(event as MouseEvent);
+        }
+      }
+      : undefined;
+    let spacePressed = false;
+    const blurHandler = (): void => { spacePressed = false; };
+    const keydownHandler: EventListener | undefined = focusTargets.length
+      ? (event): void => {
+        if ((event as KeyboardEvent).key !== 'Escape' || event.defaultPrevented) {
+          event.stopPropagation();
+        }
+
+        if (!keyboardInteractive) {
+          return;
+        }
+
+        const keyboardEvent = event as KeyboardEvent;
+        if (keyboardEvent.key !== 'Enter' && keyboardEvent.key !== ' ') {
+          return;
+        }
+
+        event.preventDefault();
+        if (keyboardEvent.key === ' ') {
+          spacePressed = true;
+        }
+        if (keyboardEvent.key === 'Enter' && !keyboardEvent.repeat) {
+          element.click();
+        }
+      }
+      : undefined;
+    const keyReleaseHandler: EventListener | undefined = keyboardInteractive
+      ? (event): void => {
+        const keyboardEvent = event as KeyboardEvent;
+        if (keyboardEvent.key !== ' ') {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        if (spacePressed) {
+          spacePressed = false;
+          element.click();
+        }
+      }
+      : undefined;
+    let { height, width } = element.getBoundingClientRect();
+    const resizeHandler = (): void => {
+      const rect = element.getBoundingClientRect();
+      if (rect.height === height && rect.width === width) {
+        return;
+      }
+
+      height = rect.height;
+      width = rect.width;
+      onSizeChange?.();
+      if (this._markerSizeRefitEnabled) {
+        this._eventHandlers?.markerSizeChange();
+      }
+    };
+
+    if (clickHandler) {
+      element.addEventListener('click', clickHandler);
+    }
+    if (keyboardInteractive) {
+      element.setAttribute('role', 'button');
+      if (element.tagName !== 'IMG'
+        && !element.textContent?.trim()
+        && !element.getAttribute('alt')) {
+        element.setAttribute(
+          'aria-label',
+          messageLocalization.format('dxMap-markerAriaLabel'),
+        );
+      }
+    }
+    if (keydownHandler) {
+      element.addEventListener('keydown', keydownHandler);
+    }
+    if (keyReleaseHandler) {
+      element.addEventListener(KEY_RELEASE_EVENT, keyReleaseHandler);
+      element.addEventListener('blur', blurHandler);
+    }
+    resizeObserverSingleton.observe(element, resizeHandler);
+
+    return {
+      focusTargets,
+      detach: (): void => {
+        if (clickHandler) {
+          element.removeEventListener('click', clickHandler);
+        }
+        if (keydownHandler) {
+          element.removeEventListener('keydown', keydownHandler);
+        }
+        if (keyReleaseHandler) {
+          element.removeEventListener(KEY_RELEASE_EVENT, keyReleaseHandler);
+          element.removeEventListener('blur', blurHandler);
+        }
+        resizeObserverSingleton.unobserve(element);
+      },
+    };
+  }
+
+  addMarker(options: MapEngineMarkerOptions): MapEngineMarker {
+    const markerElement = createMarkerElement(this._container.ownerDocument, options);
+    const {
+      element, kind, offset, positioning,
+    } = markerElement;
+    element.setAttribute('dir', options.rtlEnabled ? 'rtl' : 'ltr');
+    const marker = new this._api.Overlay({
+      element,
+      insertFirst: false,
+      offset,
+      position: this._getMarkerPosition(options.location),
+      positioning,
+      stopEvent: false,
+    });
+    this.originalMap.addOverlay(marker);
+    const tooltip = options.tooltip
+      ? this._createMarkerTooltip(markerElement, options.tooltip.text, Boolean(options.rtlEnabled))
+      : undefined;
+    const onClick = options.onClick || tooltip
+      ? (): void => {
+        const showTooltip = !tooltip?.popover.option('visible');
+        options.onClick?.(tooltip?.popover);
+        tooltip?.setVisible(showTooltip);
+      }
+      : undefined;
+    const markerElementBinding = this._attachMarkerElementHandlers(
+      element,
+      onClick,
+      () => tooltip?.syncPosition(),
+    );
+    this._markerSizeRefitEnabled = true;
+
+    let disposed = false;
+    const handle: OpenLayersMarker = {
+      element,
+      focusTargets: markerElementBinding.focusTargets,
+      kind,
+      location: { ...options.location },
+      offset,
+      overlay: marker,
+      positioning,
+      tooltip,
+      originalMarker: marker,
+      dispose: (restoreFocus = true): void => {
+        if (disposed) {
+          return;
+        }
+
+        disposed = true;
+        if (restoreFocus && !this._disposed
+          && tooltip?.element.contains(domAdapter.getActiveElement(tooltip.element))) {
+          (this._container as HTMLElement).focus({ preventScroll: true });
+        }
+        tooltip?.dispose();
+        markerElementBinding.detach();
+        this.originalMap.removeOverlay(marker);
+        this._markers.delete(handle);
+      },
+    };
+
+    this._markers.add(handle);
+    this._syncMarkerTabIndex(handle);
+    if (options.tooltip?.visible) {
+      tooltip?.setVisible(true);
+    }
+
+    return handle;
+  }
+
+  private _createMarkerTooltip(
+    element: MarkerElementInfo,
+    text: string,
+    rtlEnabled: boolean,
+  ): OpenLayersMarkerTooltip {
+    return new OpenLayersMarkerTooltip(
+      this.originalMap,
+      this._container,
+      element.element,
+      text,
+      rtlEnabled,
+    );
+  }
+
+  addRoute(options: MapEngineRouteOptions): MapEngineRoute {
+    const { _api: api } = this;
+    const geometry = new api.geom.LineString(toRouteCoordinates(options.locations));
+    geometry.transform(
+      GEOGRAPHIC_PROJECTION,
+      getCoordinateProjection(api, this.originalMap.getView().getProjection()),
+    );
+    const feature = new api.Feature(geometry);
+    const { r, g, b } = new Color(options.color);
+    feature.setStyle(new api.style.Style({
+      stroke: Number.isFinite(options.weight) && options.weight > 0
+        ? new api.style.Stroke({ color: [r, g, b, options.opacity], width: options.weight })
+        : undefined,
+    }));
+
+    if (!this._routeSource) {
+      this._routeSource = new api.source.Vector();
+      this._routeLayer = new api.layer.Vector({ source: this._routeSource, zIndex: 1 });
+      this.originalMap.addLayer(this._routeLayer);
+    }
+    const source = this._routeSource;
+    source.addFeature(feature);
+
+    return {
+      originalRoute: feature,
+      dispose: (): void => source.removeFeature(feature),
+    };
+  }
+
+  private _getMarkerPosition(location: MapEngineMarkerOptions['location']): Coordinate {
+    const view = this.originalMap.getView();
+    const projection = view.getProjection();
+    const coordinate = toCoordinate(this._api, location, projection);
+    const center = view.getCenter();
+
+    if (!center) {
+      return coordinate;
+    }
+
+    const west = toCoordinate(this._api, { lat: 0, lng: -180 }, projection)[0];
+    const east = toCoordinate(this._api, { lat: 0, lng: 180 }, projection)[0];
+    const worldWidth = Math.abs(east - west);
+
+    if (Number.isFinite(worldWidth) && worldWidth > 0) {
+      coordinate[0] += Math.round((center[0] - coordinate[0]) / worldWidth) * worldWidth;
+    }
+
+    return coordinate;
+  }
+
+  private _syncMarkerPositions(): void {
+    this._markers.forEach((marker) => {
+      const position = this._getMarkerPosition(marker.location);
+      if (!areCoordinatesEqual(marker.overlay.getPosition(), position)) {
+        marker.overlay.setPosition(position);
+        marker.tooltip?.syncPosition();
+      }
+    });
+  }
+
+  private _syncMarkerTabIndex(marker: OpenLayersMarker, viewExtent?: Extent): void {
+    marker.tooltip?.setFocusEnabled(this._focusEnabled && !this._disabled);
+    const extent = viewExtent ?? this.originalMap.getView().calculateExtent();
+    const isVisible = this._isMarkerVisible(marker.overlay, extent);
+
+    marker.focusTargets.forEach(({ element, tabIndex }) => {
+      const isMarkerOutsideView = !isVisible && marker.element.contains(element);
+      if (!this._focusEnabled || this._disabled || isMarkerOutsideView) {
+        element.setAttribute('tabindex', '-1');
+      } else if (tabIndex === null) {
+        element.removeAttribute('tabindex');
+      } else {
+        element.setAttribute('tabindex', tabIndex);
+      }
+    });
+
+    if (this._focusEnabled && !this._disabled && !isVisible) {
+      this._moveMarkerFocusToMap(marker);
+    }
+  }
+
+  private _syncMarkerTabIndexes(): void {
+    const viewExtent = this.originalMap.getView().calculateExtent();
+
+    this._markers.forEach((marker) => this._syncMarkerTabIndex(marker, viewExtent));
+  }
+
+  private _isMarkerVisible(marker: OverlayLike, viewExtent: Extent): boolean {
+    const position = marker.getPosition();
+    if (!position) {
+      return false;
+    }
+
+    const [minX, minY, maxX, maxY] = viewExtent;
+    const [x, y] = position;
+
+    return x >= minX
+      && x <= maxX
+      && y >= minY
+      && y <= maxY;
+  }
+
+  private _moveMarkerFocusToMap(marker: OpenLayersMarker): void {
+    const markerRoot = marker.element.getRootNode() as Document | ShadowRoot;
+    const { activeElement } = markerRoot;
+    const markerHasFocus = marker.element.contains(activeElement);
+    const container = this._container as HTMLElement;
+
+    if (markerHasFocus && typeof container.focus === 'function') {
+      container.focus({ preventScroll: true });
+    }
+  }
+
+  private _getMarkerFitPadding(): { padding: number[]; needsLayout: boolean } {
+    const padding = [0, 0, 0, 0];
+    let needsLayout = false;
+
+    this._markers.forEach(({
+      element, kind, offset, positioning,
+    }) => {
+      const isDefault = kind === 'default';
+      const rect = isDefault ? undefined : element.getBoundingClientRect();
+      needsLayout ||= !isDefault && (!rect?.width || !rect.height);
+      const defaultSize = isDefault
+        ? DEFAULT_MARKER_SIZE
+        : undefined;
+      const width = Math.max(rect?.width ?? 0, defaultSize ?? MARKER_FALLBACK_WIDTH);
+      const height = Math.max(rect?.height ?? 0, defaultSize ?? MARKER_FALLBACK_HEIGHT);
+      let left = offset[0];
+      let top = offset[1];
+
+      if (positioning === 'bottom-center') {
+        left -= width / 2;
+        top -= height;
+      }
+
+      padding[0] = Math.max(padding[0], Math.ceil(Math.max(0, -top)));
+      padding[1] = Math.max(padding[1], Math.ceil(Math.max(0, left + width)));
+      padding[2] = Math.max(padding[2], Math.ceil(Math.max(0, top + height)));
+      padding[3] = Math.max(padding[3], Math.ceil(Math.max(0, -left)));
+    });
+
+    return { needsLayout, padding };
+  }
+
+  private _initHandlers(handlers: MapEngineEventHandlers): void {
+    const click = (event: unknown): void => {
+      const { coordinate, originalEvent } = event as MapBrowserEventLike;
+      if (!coordinate || this._isMarkerEvent(originalEvent)) {
+        return;
+      }
+
+      const clickEvent: MapEngineClickEvent = {
+        location: toLocation(
+          this._api,
+          coordinate,
+          this.originalMap.getView().getProjection(),
+        ),
+      };
+      if (originalEvent) {
+        clickEvent.event = originalEvent;
+      }
+      handlers.click(clickEvent);
+    };
+    const moveEnd = (): void => {
+      this._syncMarkerTabIndexes();
+      handlers.viewChange(this._getViewState());
+    };
+    const userViewChange = (): void => {
+      this._markerSizeRefitEnabled = false;
+    };
+    const userKeyDown = (event: Event): void => {
+      const { key } = event as KeyboardEvent;
+      if (['+', '-', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'Enter', ' '].includes(key)) {
+        userViewChange();
+      }
+    };
+
+    this._eventHandlers = {
+      click,
+      markerSizeChange: handlers.markerSizeChange,
+      moveEnd,
+      userKeyDown,
+      userViewChange,
+    };
+    this.originalMap.on('click', click);
+    this.originalMap.on('moveend', moveEnd);
+    this._container.addEventListener('pointerdown', userViewChange);
+    this._container.addEventListener('keydown', userKeyDown);
+    this._container.addEventListener('wheel', userViewChange);
+  }
+
+  private _isMarkerEvent(event?: Event): boolean {
+    const eventTarget = event?.target;
+    const NodeConstructor = this._container.ownerDocument.defaultView?.Node;
+
+    if (!eventTarget || !NodeConstructor || !(eventTarget instanceof NodeConstructor)) {
+      return false;
+    }
+
+    return [...this._markers].some(({ element, tooltip }) => (
+      element.contains(eventTarget) || tooltip?.element.contains(eventTarget)
+    ));
+  }
+
+  private _detachHandlers(): void {
+    if (!this._eventHandlers) {
+      return;
+    }
+
+    this.originalMap.un('click', this._eventHandlers.click);
+    this.originalMap.un('moveend', this._eventHandlers.moveEnd);
+    this._container.removeEventListener('pointerdown', this._eventHandlers.userViewChange);
+    this._container.removeEventListener('keydown', this._eventHandlers.userKeyDown);
+    this._container.removeEventListener('wheel', this._eventHandlers.userViewChange);
+    this._eventHandlers = undefined;
+  }
+
+  private _getViewState(): MapEngineViewState {
+    const view = this.originalMap.getView();
+    const center = view.getCenter();
+    const zoom = view.getZoom();
+    const extent = view.calculateExtent();
+
+    const result: MapEngineViewState = {
+      bounds: {
+        northEast: toLocation(this._api, [extent[2], extent[3]], view.getProjection()),
+        southWest: toLocation(this._api, [extent[0], extent[1]], view.getProjection()),
+      },
+    };
+
+    if (center) {
+      result.center = toLocation(this._api, center, view.getProjection());
+    }
+    if (zoom !== undefined) {
+      result.zoom = zoom;
+    }
+
+    return result;
+  }
+
+  dispose(): void {
+    if (this._disposed) {
+      return;
+    }
+
+    this._disposed = true;
+    this._detachHandlers();
+    this.originalMap.un('change:view', this._viewChangeHandler);
+    this._subscribedView.un('change:center', this._viewCenterChangeHandler);
+    this._removeOwnedInert();
+    [...this._markers].forEach((marker) => marker.dispose());
+    this._routeSource?.clear();
+    this._routeSource = undefined;
+    if (this._routeLayer) {
+      this.originalMap.removeLayer(this._routeLayer);
+      this._routeLayer = undefined;
+    }
+    this.setControls(false);
+    if (this._tileLayer) {
+      this.originalMap.removeLayer(this._tileLayer);
+      this._tileLayer = undefined;
+    }
+    this.originalMap.setTarget(undefined);
+    this._container.removeAttribute('tabindex');
+  }
+
+  fitBounds(bounds: MapEngineBounds, options?: MapEngineFitBoundsOptions): void {
+    this._markerSizeRefitEnabled = Boolean(options?.includeMarkerPadding);
+    const west = bounds.southWest.lng;
+    const east = bounds.northEast.lng < west
+      ? bounds.northEast.lng + 360
+      : bounds.northEast.lng;
+    const geographicExtent: Extent = [
+      west,
+      Math.min(bounds.northEast.lat, bounds.southWest.lat),
+      east,
+      Math.max(bounds.northEast.lat, bounds.southWest.lat),
+    ];
+    const view = this.originalMap.getView();
+    const extent = this._api.proj.transformExtent(
+      geographicExtent,
+      GEOGRAPHIC_PROJECTION,
+      getCoordinateProjection(this._api, view.getProjection()),
+    );
+    const markerFit = options?.includeMarkerPadding
+      ? this._getMarkerFitPadding()
+      : undefined;
+    this._markerFitNeedsLayout = Boolean(markerFit?.needsLayout);
+    view.fit(extent, markerFit ? { padding: markerFit.padding } : undefined);
+    this._syncMarkerTabIndexes();
+  }
+
+  getZoom(): number | undefined {
+    return this.originalMap.getView().getZoom();
+  }
+
+  replaceTileLayer(options: MapEngineTileLayerOptions): void {
+    const sourceOptions: Options = {
+      maxZoom: options.maxZoom,
+      url: options.url.includes(SUBDOMAIN_PLACEHOLDER)
+        ? createTileUrlList(options.url, options.subdomains)
+        : options.url,
+    };
+
+    if (options.attribution !== undefined) {
+      sourceOptions.attributions = options.attribution;
+    }
+
+    const source = new this._api.source.ImageTile(sourceOptions);
+
+    if (this._tileLayer) {
+      this._tileLayer.setSource(source);
+      return;
+    }
+
+    this._tileLayer = new this._api.layer.Tile({ source });
+    this.originalMap.addLayer(this._tileLayer);
+  }
+
+  setControls(visible: boolean): void {
+    if (visible === this._controlsVisible) {
+      return;
+    }
+
+    this._controlsVisible = visible;
+    if (visible) {
+      this.originalMap.addControl(this._zoomControl);
+    } else {
+      this.originalMap.removeControl(this._zoomControl);
+    }
+  }
+
+  setDisabled(disabled: boolean): void {
+    if (disabled === this._disabled) {
+      return;
+    }
+
+    this._disabled = disabled;
+    const interactions = this.originalMap.getInteractions();
+
+    if (disabled) {
+      this._disableKeyboardAccess();
+      this._interactionStates.clear();
+      interactions.forEach((interaction) => {
+        this._interactionStates.set(interaction, interaction.getActive());
+        interaction.setActive(false);
+      });
+    } else {
+      this._restoreKeyboardAccess();
+      interactions.forEach((interaction) => {
+        const active = this._interactionStates.get(interaction);
+        if (active !== undefined) {
+          interaction.setActive(active);
+        }
+      });
+      this._interactionStates.clear();
+    }
+  }
+
+  private _disableKeyboardAccess(): void {
+    if (!this._container.hasAttribute('inert')) {
+      this._container.setAttribute('inert', '');
+      this._ownsDisabledInert = true;
+    }
+    this._syncKeyboardTabIndex();
+  }
+
+  private _restoreKeyboardAccess(): void {
+    this._removeOwnedInert();
+    this._syncKeyboardTabIndex();
+  }
+
+  private _removeOwnedInert(): void {
+    if (this._ownsDisabledInert) {
+      this._container.removeAttribute('inert');
+      this._ownsDisabledInert = false;
+    }
+  }
+
+  setFocus(enabled: boolean, tabIndex: number): void {
+    this._focusEnabled = enabled;
+    this._tabIndex = tabIndex;
+    this._syncKeyboardTabIndex();
+  }
+
+  private _syncKeyboardTabIndex(): void {
+    if (this._focusEnabled && !this._disabled) {
+      this._container.setAttribute('tabindex', String(this._tabIndex));
+    } else {
+      this._container.removeAttribute('tabindex');
+    }
+    this._markers.forEach((marker) => this._syncMarkerTabIndex(marker));
+  }
+
+  setView(options: MapEngineSetViewOptions): void {
+    const view = this.originalMap.getView();
+
+    if (options.center) {
+      const center = toCoordinate(this._api, options.center, view.getProjection());
+      if (!areCoordinatesEqual(view.getCenter(), center)) {
+        view.setCenter(center);
+      }
+    }
+    if (options.zoom !== undefined && view.getZoom() !== options.zoom) {
+      view.setZoom(options.zoom);
+    }
+
+    this._syncMarkerTabIndexes();
+  }
+
+  updateDimensions(): MapEngineUpdateDimensionsResult {
+    this.originalMap.updateSize();
+    this._syncMarkerTabIndexes();
+    const needsViewportAdjustment = this._markerFitNeedsLayout;
+    this._markerFitNeedsLayout = false;
+
+    return { needsViewportRefit: needsViewportAdjustment };
+  }
+}
+
+export const createOpenLayersEngine = (api: unknown): MapEngine | undefined => (
+  isOpenLayersApi(api)
+    ? { createMap: (container, view) => new OpenLayersMap(api, container, view) }
+    : undefined
+);

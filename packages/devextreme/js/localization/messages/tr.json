@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "Başlangıç tarihi {0} tarihinden sonra olmalıdır",
         "dxGantt-dialogEndDateValidation": "Bitiş tarihi {0} tarihinden sonra olmalıdır",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Galeri öğesi",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

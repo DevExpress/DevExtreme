@@ -160,6 +160,8 @@ AspNet.makeMetadata({
       ['any[]'],
     ),
 
+    replaceTypes('ui/map:dxMapOptions.providerConfig.tileServer', ['*'], ['string']),
+
     ...replaceTypesMutations,
 
     [
