@@ -57,14 +57,16 @@ await makeSbom({
       'devextreme-vue',
       'devextreme',
     ],
-    // Deliberately not included: 'devextreme-cldr-data', 'devextreme-internal-tools', 'eslint-config-devextreme'
     internalPackages: [
       'devextreme-metadata',
       'eslint-migration-utils',
     ],
     cpeMappings: [
+      { name: 'devextreme-cldr-data', vendor: 'devexpress' },
       { name: 'devextreme-exceljs-fork', vendor: 'devexpress' },
+      { name: 'devextreme-internal-tools', vendor: 'devexpress' },
       { name: 'devextreme-schematics', vendor: 'devexpress' },
+      { name: 'eslint-config-devextreme', vendor: 'devexpress' },
     ],
   },
 });
