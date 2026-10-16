@@ -6,7 +6,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import sortingMixin from './m_sorting_mixin';

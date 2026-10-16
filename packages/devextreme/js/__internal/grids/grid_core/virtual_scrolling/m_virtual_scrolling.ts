@@ -18,7 +18,7 @@ import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_hand
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { ResizingController } from '@ts/grids/grid_core/views/grid_view';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { ChangedEvent, RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';

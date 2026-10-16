@@ -15,7 +15,7 @@ import Button from '@js/ui/button';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import gridCoreUtils from '../m_utils';

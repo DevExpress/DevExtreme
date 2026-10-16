@@ -13,7 +13,7 @@ import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
-import type { RowsView } from '../../grid_core/views/m_rows_view';
+import type { RowsView } from '../../grid_core/views/rows_view';
 import treeListCore from '../core';
 import type { TreeListDataController } from '../data_controller/data_controller';
 import type { TreeListDataSourceController } from '../data_source/data_source_controller';

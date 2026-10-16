@@ -30,9 +30,9 @@ import domUtils from '@ts/core/utils/m_dom';
 import type Store from '@ts/data/abstract_store';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type {
   DataChange,

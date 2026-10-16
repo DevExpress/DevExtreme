@@ -10,7 +10,7 @@ import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_he
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import gridCoreUtils from '../m_utils';
 import { ATTRIBUTES, CLASSES } from './const';

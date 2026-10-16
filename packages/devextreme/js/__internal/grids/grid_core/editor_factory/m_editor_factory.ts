@@ -30,7 +30,7 @@ import gridCoreUtils from '../m_utils';
 import type { ViewController } from '../modules/modules';
 import modules from '../modules/modules';
 import type { Module, ModuleType } from '../types';
-import type { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/rows_view';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';

@@ -33,7 +33,7 @@ import type { ColumnPoint, ModuleType } from '../types';
 import type { ColumnsView } from '../views/columns_view';
 import { normalizeWidth } from '../views/columns_view';
 import type { ResizingController } from '../views/grid_view';
-import type { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
 import { CLASSES } from './const';
 
