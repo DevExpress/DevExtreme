@@ -87,7 +87,6 @@ export interface TemplateInstantiationModel {
   index: any;
   onRendered: () => void;
   onRemoved: (componentKey: string) => void;
-  onContainerRemoved: () => void;
 }
 
 export type GetRenderFuncFn = (templateKey: string) => RenderFunc;

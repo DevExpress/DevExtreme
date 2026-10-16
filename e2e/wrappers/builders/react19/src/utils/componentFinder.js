@@ -28,6 +28,11 @@ const COMPONENTS = [
     path: 'gantt-template-state-update',
     name: 'GanttTemplateStateUpdate',
     component: () => import('@examples/gantt-template-state-update/react19/index.jsx')
+  },
+  {
+    path: 'card-view-template-rerender',
+    name: 'CardViewTemplateRerender',
+    component: () => import('@examples/card-view-template-rerender/react19/index.jsx')
   }
 ];
 
