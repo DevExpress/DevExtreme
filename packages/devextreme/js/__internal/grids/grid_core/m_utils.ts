@@ -791,7 +791,8 @@ export default {
     return lookupDataSource;
   },
 
-  logHeaderFilterDeprecatedWarningIfNeed(component) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- see Widget d.ts
+  logHeaderFilterDeprecatedWarningIfNeed(component): void {
     const since = '23.1';
     const logWarning = component._logDeprecatedOptionWarning.bind(component);
 
@@ -810,8 +811,8 @@ export default {
       return;
     }
 
-    const logSpecificDeprecatedWarningIfNeed = (columns) => {
-      columns.forEach((column) => {
+    const logSpecificDeprecatedWarningIfNeed = (columnList): void => {
+      columnList.forEach((column) => {
         const headerFilter = column.headerFilter || {};
 
         if (isDefined(headerFilter.allowSearch)) {
