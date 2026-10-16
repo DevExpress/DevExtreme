@@ -32,7 +32,7 @@ import gridCoreUtils from '../m_utils';
 import type { ColumnPoint, ModuleType } from '../types';
 import type { ColumnsView } from '../views/columns_view';
 import { normalizeWidth } from '../views/columns_view';
-import type { ResizingController } from '../views/m_grid_view';
+import type { ResizingController } from '../views/grid_view';
 import type { RowsView } from '../views/m_rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
 import { CLASSES } from './const';
@@ -756,8 +756,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
           clearTimeout(this._fixedScrollTimeout);
           this._fixedScrollTimeout = setTimeout(() => {
             scrollTop = $(target).scrollTop();
-            // @ts-expect-error scrollTo() is typed without x and y
-            scrollable.scrollTo({ y: scrollTop });
+            scrollable.scrollTo({ top: scrollTop });
           }, scrollDelay);
         });
         eventsEngine.on($content, wheelEventName, (e) => {
@@ -777,8 +776,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
 
           if (shouldScroll) {
             scrollTop = scrollable.scrollTop();
-            // @ts-expect-error scrollTo() is typed without x and y
-            scrollable.scrollTo({ y: scrollTop - e.delta });
+            scrollable.scrollTo({ top: scrollTop - e.delta });
 
             const scrollableTop = scrollable.scrollTop() + scrollable.clientHeight();
             const scrollableHeight = scrollable.scrollHeight() + this.getScrollbarWidth();

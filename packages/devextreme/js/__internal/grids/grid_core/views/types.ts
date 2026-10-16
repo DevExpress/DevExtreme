@@ -1,14 +1,15 @@
-import type { template } from '@js/common';
-import type { GridsContextMenuTarget } from '@js/common/grids';
+import type { GridsContextMenuTarget, LoadPanel } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { Callback } from '@js/core/utils/callbacks';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DxEvent } from '@js/events';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
+import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
-import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type {
+  Column, ColumnsChanges, ColumnTemplateSource, TemplateModel,
+} from '@ts/grids/grid_core/columns_controller/types';
 import type {
   Cell, DataChange, RowChangeType, RowUpdate, RowWatch, UpdateChange,
 } from '@ts/grids/grid_core/data_controller/types';
@@ -37,14 +38,6 @@ export interface ColumnViewTemplate<TModel extends TemplateModel = TemplateModel
   render: (options: ColumnViewTemplateOptions<TModel>) => void;
 }
 
-export interface ColumnRenderTemplate<TModel extends TemplateModel = TemplateModel> {
-  allowRenderToDetachedContainer?: boolean;
-  render: (container: dxElementWrapper, model: TModel, change?: DataChange) => void;
-}
-
-export type ColumnTemplateSource<TModel extends TemplateModel = TemplateModel> = template
-  | ColumnRenderTemplate<TModel>;
-
 export interface DelayedTemplate {
   template: ColumnViewTemplate;
   options: ColumnViewTemplateOptions;
@@ -53,13 +46,6 @@ export interface DelayedTemplate {
 
 export interface AppendRowTemplate {
   render: (options: { content: dxElementWrapper; container: dxElementWrapper }) => void;
-}
-
-export interface TemplateModel {
-  column?: Column;
-  rowType?: string;
-  renderAsync?: boolean;
-  component?: InternalGrid;
 }
 
 export type ScrollableOptions = Omit<dxScrollableOptions<dxScrollable>, 'onScroll'> & {
@@ -84,7 +70,8 @@ export interface CellPosition {
   columnIndex: number;
 }
 
-export type ViewDataChange = DataChange & Partial<Pick<UpdateChange, 'columnIndices' | 'changeTypes'>>;
+export type ViewDataChange = DataChange
+  & Partial<Pick<UpdateChange, 'columnIndices' | 'changeTypes'>>;
 
 /** @architectureLeak data_grid: group cells render this template, and the cell hint skips them */
 export type HintColumn = Column & { groupCellTemplate?: ColumnTemplateSource<ViewCellOptions> };
@@ -143,7 +130,7 @@ export interface ViewCellOptions {
   text?: string;
   values?: unknown[];
   summaryItems?: unknown[];
-  resized?: Callback<[number]>;
+  resized?: Column['resizedCallbacks'];
   groupContinuesMessage?: string | false;
   groupContinuedMessage?: string | false;
   /** @architectureLeak editing: the cell hint skips cells that are being edited */
@@ -227,6 +214,9 @@ export interface GroupContinuationData {
 
 /** @architectureLeak data_grid: group cells show the grouping continuation texts */
 export type RowsViewOptions = InternalGridOptions & Pick<DataGridProperties, 'grouping'>;
+
+// the grid passes loadPanel options to the LoadPanel widget, so its animation applies too
+export type RowsViewLoadPanelOptions = LoadPanel & Pick<LoadPanelProperties, 'animation'>;
 
 export type RowsModuleOptions = Pick<InternalGridOptions,
 | 'hoverStateEnabled'

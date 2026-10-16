@@ -17,7 +17,7 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import type { ResizingController } from '@ts/grids/grid_core/views/grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ChangedEvent, RawItemData } from '../data_source_adapter/types';
@@ -577,7 +577,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       scrollPosition = 0;
     }
 
-    this.scrollTo({ y: scrollPosition, x: this._scrollLeft });
+    this.scrollTo({ top: scrollPosition, left: this._scrollLeft });
   }
 
   public renderDelayedTemplates() {

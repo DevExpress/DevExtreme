@@ -232,7 +232,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
   private _synchronizeScrollLeftPosition(gridInstance) {
     const scrollable = gridInstance?.getScrollable();
 
-    scrollable?.scrollTo({ x: this._scrollLeft });
+    scrollable?.scrollTo({ left: this._scrollLeft });
   }
 
   private _getDraggableRowTemplate() {

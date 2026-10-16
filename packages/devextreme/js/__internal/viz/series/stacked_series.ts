@@ -15,7 +15,7 @@
 import { noop as _noop } from '@ts/core/utils/m_common';
 import { extend as _extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
-import { clone } from '@ts/core/utils/m_object';
+import { clone } from '@ts/core/utils/object';
 import { map } from '@ts/viz/core/utils';
 
 import { chart as areaSeries } from './area_series';

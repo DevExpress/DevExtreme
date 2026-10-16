@@ -10,4 +10,4 @@ export {
     defaultCreateElement,
     acquireIntegrationTemplate,
     acquireTemplate
-} from '../../__internal/core/utils/m_template_manager';
+} from '../../__internal/core/utils/template_manager';
