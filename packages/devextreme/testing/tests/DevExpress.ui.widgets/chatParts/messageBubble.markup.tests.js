@@ -10,6 +10,7 @@ import MessageBubble, {
 } from '__internal/ui/chat/messagebubble';
 
 import { CHAT_FILE_VIEW_CLASS } from '__internal/ui/chat/file_view/file_view';
+import { CHAT_TOOL_CALL_VIEW_CLASS } from '__internal/ui/chat/tool_call_view/tool_call_view';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -47,6 +48,14 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual($content.length, 1, 'attachments element exist');
             assert.strictEqual($content.parent().is(this.$element), true, 'attachments element is direct child of root element');
+        });
+
+        QUnit.test('root element should have a first child tool calls element with correct class if tool calls provided', function(assert) {
+            this.reinit({ text: 'answer', toolCalls: [{ name: 'getWeather' }] });
+            const $toolCalls = this.$element.find(`.${CHAT_TOOL_CALL_VIEW_CLASS}`);
+
+            assert.strictEqual($toolCalls.length, 1, 'tool calls element exist');
+            assert.strictEqual(this.$element.children().first().is($toolCalls), true, 'tool calls element is the first child of root element');
         });
 
         QUnit.test('root element should switch classes when deletion and undo happens', function(assert) {

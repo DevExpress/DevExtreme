@@ -794,7 +794,7 @@ const OVERRIDES: Overrides = {
       'alert-list', 'prompt', 'textarea', 'toolbar', 'information', 'author-name', 'timestamp',
       'typing-indicator', 'circle', 'bubble', 'group',
       // .dx-chat-messagebubble-image is a real <img> box inside a bubble
-      'image'],
+      'image', 'tool-call', 'title', 'badge', 'field'],
     /*
      * `alpha` alone was doing three jobs — the alpha row, the alpha cell and the alpha scale are
      * three different elements with three different sizes, so each gets its own segment and the

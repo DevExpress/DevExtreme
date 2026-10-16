@@ -447,6 +447,12 @@
         "dxChat-fileViewLabel": "Seznam datotek",
         "dxChat-downloadButtonLabel": "Prenesi datoteko {0}",
         "dxChat-fileLimitReachedWarning": "Izbrali ste preveč datotek. Izberite največ {0} datotek in poskusite znova.",
+        "dxChat-toolCallsGroupTitle": "{0} tools",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallErrorText": "Error",
+        "dxChat-copyButtonLabel": "Copy",
+        "dxChat-copiedButtonLabel": "Copied",
 
         "dxColorView-ariaRed": "Rdeča",
         "dxColorView-ariaGreen": "Zelena",

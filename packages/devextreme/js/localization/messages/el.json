@@ -447,6 +447,12 @@
         "dxChat-fileViewLabel": "Λίστα αρχείων",
         "dxChat-downloadButtonLabel": "Λήψη αρχείου {0}",
         "dxChat-fileLimitReachedWarning": "Επιλέξατε πολλά αρχεία. Επιλέξτε έως {0} αρχεία και δοκιμάστε ξανά.",
+        "dxChat-toolCallsGroupTitle": "{0} tools",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallErrorText": "Error",
+        "dxChat-copyButtonLabel": "Copy",
+        "dxChat-copiedButtonLabel": "Copied",
 
         "dxColorView-ariaRed": "Κόκκινο",
         "dxColorView-ariaGreen": "Πράσινο",

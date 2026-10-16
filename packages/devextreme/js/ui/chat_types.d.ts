@@ -17,6 +17,8 @@ export {
   User,
   Alert,
   Attachment,
+  ToolCallStatus,
+  ToolCall,
   MessageType,
   TextMessage,
   ImageMessage,
