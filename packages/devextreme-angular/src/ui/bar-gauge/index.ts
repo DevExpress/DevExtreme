@@ -192,6 +192,19 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
+     * [descr:BaseWidgetOptions.encodeHtml]
+    
+     */
+    @Input()
+    get encodeHtml(): boolean {
+        return this._getOption('encodeHtml');
+    }
+    set encodeHtml(value: boolean) {
+        this._setOption('encodeHtml', value);
+    }
+
+
+    /**
      * [descr:dxBarGaugeOptions.endValue]
     
      */
@@ -584,6 +597,13 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() encodeHtmlChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() endValueChange: EventEmitter<number>;
 
     /**
@@ -749,6 +769,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
             { emit: 'centerTemplateChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'encodeHtmlChange' },
             { emit: 'endValueChange' },
             { emit: 'exportChange' },
             { emit: 'geometryChange' },

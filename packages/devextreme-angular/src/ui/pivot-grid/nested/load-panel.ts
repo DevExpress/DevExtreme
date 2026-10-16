@@ -14,6 +14,7 @@ import {
 
 
 
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import {
     DxIntegrationModule,
@@ -44,6 +45,14 @@ export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDe
     }
     set height(value: number) {
         this._setOption('height', value);
+    }
+
+    @Input()
+    get indicatorOptions(): LoadPanelIndicatorProperties {
+        return this._getOption('indicatorOptions');
+    }
+    set indicatorOptions(value: LoadPanelIndicatorProperties) {
+        this._setOption('indicatorOptions', value);
     }
 
     @Input()

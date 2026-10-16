@@ -142,7 +142,7 @@ function onDragTemplateChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   dragTemplate.value = e.value ? 'drag' : '';
 }
 </script>
-<style scoped>
+<style>
 .widget-container {
   margin-right: 320px;
 }

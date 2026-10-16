@@ -56,9 +56,9 @@ export class EditPopup extends Component<Props> {
             componentRef={this.props.formRef}
             colCount={2} // TODO: move
             labelLocation={'top'}
-            customizeItem={this.props.customizeItem}
             items={this.props.items}
             {...this.props.formProps}
+            customizeItem={this.props.customizeItem}
           />
         </Popup>
       </div>

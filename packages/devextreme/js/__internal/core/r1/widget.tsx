@@ -42,7 +42,9 @@ export const WIDGET_CLASS = 'dx-widget';
 const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
 const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;
 
-const getAria = (args: Record<string, unknown>): Record<string, string> => Object
+const getAria = (
+  args: Record<string, string | boolean | undefined>,
+): Record<string, string> => Object
   .keys(args)
   .reduce((r, key) => {
     if (args[key]) {
@@ -442,7 +444,7 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
       const id = keyboard.on(
         this.widgetElementRef?.current,
         this.widgetElementRef?.current,
-        (e: Event): void => onKeyDown(e) as undefined,
+        (e): void => onKeyDown(e) as undefined,
       );
 
       return (): void => keyboard.off(id);

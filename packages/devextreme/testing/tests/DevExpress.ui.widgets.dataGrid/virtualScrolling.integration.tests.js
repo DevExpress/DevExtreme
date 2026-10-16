@@ -1,5 +1,5 @@
 import { getHeight, getWidth } from 'core/utils/size';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import commonUtils from 'core/utils/common';
 import ArrayStore from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -3242,7 +3242,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.deepEqual(dataGrid.getController('data').pageCount(), 2, 'pages count');
+        assert.deepEqual(dataGrid.getController('dataSource').pageCount(), 2, 'pages count');
         assert.deepEqual(dataGrid.getController('data').items().length, 5, 'items count');
         assert.ok(!dataGrid.getView('pagerView').isVisible(), 'pager visibility');
     });
@@ -6916,7 +6916,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         this.clock.tick(10);
         // assert
         assert.ok(dataGrid.getController('data').viewportSize() > 0);
-        assert.ok(!dataGrid.getController('data').dataSource().requireTotalCount());
+        assert.ok(!dataGrid.getController('dataSource').getAdapter().requireTotalCount());
     });
 
     QUnit.test('New mode. Load panel should not be displayed at the bottom when all items are loaded', function(assert) {

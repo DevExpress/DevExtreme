@@ -86,7 +86,7 @@ function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
   }
 }
 </script>
-<style scoped>
+<style>
 .form {
   margin-left: 3px;
 }

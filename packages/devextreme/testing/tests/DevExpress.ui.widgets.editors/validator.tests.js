@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import Class from 'core/class';
 import DefaultAdapter from '__internal/ui/validation/default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 import { Deferred } from 'core/utils/deferred';
@@ -9,8 +8,8 @@ import config from 'core/config';
 
 import 'ui/validator';
 
-const Fixture = Class.inherit({
-    createValidator: function(options, element) {
+class Fixture {
+    createValidator(options, element) {
         this.$element = element || this.$element || $('<div/>');
         this.stubAdapter = this.stubAdapter || sinon.createStubInstance(DefaultAdapter);
         const validator = this.$element.dxValidator($.extend({
@@ -18,17 +17,17 @@ const Fixture = Class.inherit({
         }, options)).dxValidator('instance');
 
         return validator;
-    },
+    }
 
-    createAdapter: function() {
+    createAdapter() {
         this.stubAdapter = sinon.createStubInstance(DefaultAdapter);
-    },
+    }
 
-    teardown: function() {
+    teardown() {
         this.$element.remove();
         ValidationEngine.initGroups();
     }
-});
+}
 
 QUnit.module('General', {
     beforeEach: function() {

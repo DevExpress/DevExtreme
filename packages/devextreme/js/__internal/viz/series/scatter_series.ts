@@ -25,10 +25,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
-import { each as _each } from '@js/core/utils/iterator';
-import { isDefined as _isDefined, isString as _isString } from '@js/core/utils/type';
+import { noop as _noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { each as _each } from '@ts/core/utils/m_iterator';
+import { isDefined as _isDefined, isString as _isString } from '@ts/core/utils/m_type';
 import {
   convertXYToPolar, extractColor, map as _map, normalizeEnum as _normalizeEnum,
 } from '@ts/viz/core/utils';

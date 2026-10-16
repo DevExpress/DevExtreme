@@ -4,15 +4,9 @@ import { DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
 import { type DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import type { BookingFormData } from '../app.types';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'guests-form',
-  templateUrl: `.${modulePrefix}/guests-form/guests-form.component.html`,
+  templateUrl: './guests-form.component.html',
   imports: [
     DxFormModule,
   ],

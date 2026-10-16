@@ -60,7 +60,7 @@ function customizeText({ value }: DxTreeListTypes.ColumnCustomizeTextArg) {
   return value ? `${Math.ceil(value / 1024)} KB` : '';
 }
 </script>
-<style scoped>
+<style>
 #treelist {
   max-height: 440px;
 }

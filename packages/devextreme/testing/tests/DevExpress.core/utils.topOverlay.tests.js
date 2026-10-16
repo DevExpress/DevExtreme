@@ -1,5 +1,5 @@
-const hideTopOverlay = require('common/core/environment/hide_top_overlay');
-const hideTopOverlayCallback = require('common/core/environment/hide_callback').hideCallback;
+import hideTopOverlay from 'common/core/environment/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from 'common/core/environment/hide_callback';
 
 QUnit.module('top overlay util');
 

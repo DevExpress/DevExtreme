@@ -35,8 +35,8 @@ import type {
   CollectionWidgetOptions,
   ItemLike,
 } from '@js/ui/collection/ui.collection_widget.base';
-import { getPublicElement } from '@ts/core/m_element';
-import { focusable } from '@ts/core/utils/m_selectors';
+import { getPublicElement } from '@ts/core/element';
+import { focusable } from '@ts/core/utils/selectors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
@@ -224,7 +224,6 @@ class CollectionWidget<
       currentTarget: $target.get(0),
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return params;
   }
 
@@ -365,7 +364,6 @@ class CollectionWidget<
     }
 
     const items = rawItems.map(({ element, options }) => {
-      // @ts-expect-error ts-error
       const isTemplateRequired = /\S/.test(element.innerHTML) && !options.template;
 
       if (isTemplateRequired) {
@@ -374,7 +372,6 @@ class CollectionWidget<
         $(element).remove();
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return options;
     });
 
@@ -1510,7 +1507,7 @@ class CollectionWidget<
 
   _itemEventHandlerImpl(
     initiator: dxElementWrapper | Element,
-    action: (event?: Record<string, unknown>) => void,
+    action: (event?: object) => void,
     actionArgs: ActionArgs<TItem>,
   ): void {
     const $itemElement = this._closestItemElement($(initiator));
@@ -1545,7 +1542,7 @@ class CollectionWidget<
     let result = 0;
 
     if (items) {
-      each(items, (_index: number, item: dxElementWrapper) => {
+      each(items, (_index, item) => {
         if (dimension === 'width') {
           result += getOuterWidth(item, includeMargin ?? false);
         } else if (dimension === 'height') {

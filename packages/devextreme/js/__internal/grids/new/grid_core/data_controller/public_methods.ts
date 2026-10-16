@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import type { FilterDescriptor } from '@js/data';
 import type DataSource from '@js/data/data_source';
-import { keysEqual } from '@ts/data/m_utils';
+import { keysEqual } from '@ts/data/utils';
 
 import type { Constructor } from '../types';
 import type { GridCoreNewBase } from '../widget';

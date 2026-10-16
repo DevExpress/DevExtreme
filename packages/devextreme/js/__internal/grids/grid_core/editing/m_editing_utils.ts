@@ -1,29 +1,52 @@
 import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { isObject } from '@js/core/utils/type';
+import type { FormItemComponent } from '@js/ui/form';
+import type { EditingTexts } from '@js/ui/tree_list';
+
+import type { ProcessedItem } from '../data_controller/types';
+import type { InternalGrid, RowKey } from '../types';
+import type {
+  EditFormColumnItem,
+  EditFormItemNode,
+  EditingButton,
+  EditingButtonTexts,
+  EditingCellOptions,
+} from './types';
 
 const NEW_ROW_TEMP_KEY_PREFIX = '_DX_KEY_';
 const GUID_LENGTH = 36;
 
-export const createFailureHandler = function (deferred) {
-  return function (arg) {
-    const error = arg instanceof Error ? arg : new Error(arg && String(arg) || 'Unknown error');
-    deferred.reject(error);
-  };
+export const createFailureHandler = (
+  deferred: DeferredObj<unknown>,
+): ((arg: unknown) => void) => (arg: unknown): void => {
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string -- any rejection reason
+  const error = arg instanceof Error ? arg : new Error((arg ? String(arg) : '') || 'Unknown error');
+  deferred.reject(error);
 };
 
-export const isEditingCell = function (isEditRow, cellOptions) {
-  return cellOptions.isEditing || isEditRow && cellOptions.column.allowEditing;
-};
+export const isEditingCell = (
+  isEditRow: boolean,
+  cellOptions: EditingCellOptions,
+): boolean => Boolean(cellOptions.isEditing)
+  || (isEditRow && Boolean(cellOptions.column.allowEditing));
 
-export const isEditingOrShowEditorAlwaysDataCell = function (isEditRow, cellOptions) {
-  const isCommandCell = !!cellOptions.column.command;
+export const isEditingOrShowEditorAlwaysDataCell = (
+  isEditRow: boolean,
+  cellOptions: EditingCellOptions,
+): boolean => {
+  const isCommandCell = Boolean(cellOptions.column.command);
   const isEditing = isEditingCell(isEditRow, cellOptions);
-  const isEditorCell = !isCommandCell && (isEditing || cellOptions.column.showEditorAlways);
+  const isEditorCell = !isCommandCell
+    && (isEditing || Boolean(cellOptions.column.showEditorAlways));
   return cellOptions.rowType === 'data' && isEditorCell;
 };
 
-export const getEditingTexts = (options) => {
-  const editingTexts = options.component.option('editing.texts') || {};
+export const getEditingTexts = (
+  options: { component: InternalGrid },
+): EditingButtonTexts => {
+  const editingTexts: EditingTexts = options.component.option('editing.texts') ?? {};
 
   return {
     save: editingTexts.saveRowChanges,
@@ -37,46 +60,51 @@ export const getEditingTexts = (options) => {
 
 export const generateNewRowTempKey = (): string => `${NEW_ROW_TEMP_KEY_PREFIX}${new Guid()}`;
 
-export const isNewRowTempKey = (key: string): boolean => typeof key === 'string'
+export const isNewRowTempKey = (key: RowKey): boolean => typeof key === 'string'
     && key.startsWith(NEW_ROW_TEMP_KEY_PREFIX)
     && key.length === NEW_ROW_TEMP_KEY_PREFIX.length + GUID_LENGTH;
 
-export const getButtonIndex = (buttons, name) => {
-  let result = -1;
-
-  // @ts-expect-error
-  // eslint-disable-next-line consistent-return, array-callback-return
-  buttons.some((button, index) => {
-    if (getButtonName(button) === name) {
-      result = index;
-      return true;
-    }
-  });
-
-  return result;
-};
-
-export function getButtonName(button) {
-  // @ts-expect-error
+export function getButtonName(button: string): string;
+export function getButtonName(button: EditingButton): string | undefined;
+export function getButtonName(button: EditingButton): string | undefined {
   return isObject(button) ? button.name : button;
 }
 
-export function isEditable($element) {
-  return $element && ($element.is('input') || $element.is('textarea'));
+export const getButtonIndex = (
+  buttons: EditingButton[],
+  name: string,
+): number => buttons.findIndex((button) => getButtonName(button) === name);
+
+export function isEditable($element: dxElementWrapper | undefined): boolean {
+  if (!$element) {
+    return false;
+  }
+
+  return $element.is('input') || $element.is('textarea');
 }
 
-export const getEditorType = (item) => {
+export const getEditorType = (item: EditFormColumnItem): FormItemComponent | undefined => {
   const { column } = item;
 
   return item.isCustomEditorType ? item.editorType : column.formItem?.editorType;
 };
 
-export const forEachFormItems = (items, callBack) => {
+export const forEachFormItems = (
+  items: EditFormItemNode[],
+  callBack: (item: EditFormItemNode) => void,
+): void => {
   items.forEach((item) => {
-    if (item.items || item.tabs) {
-      forEachFormItems(item.items || item.tabs, callBack);
+    const childItems = item.items ?? item.tabs;
+
+    if (childItems) {
+      forEachFormItems(childItems, callBack);
     } else {
       callBack(item);
     }
   });
 };
+
+export const isCellModified = (
+  row: ProcessedItem,
+  columnIndex: number,
+): boolean => row.modifiedValues?.[columnIndex] !== undefined;

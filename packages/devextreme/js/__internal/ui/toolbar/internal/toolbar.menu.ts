@@ -199,7 +199,6 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       icon: 'overflow',
       template: 'content',
       stylingMode: isFluent(current()) ? 'text' : 'contained',
-      // @ts-expect-error
       useInkRipple,
       hoverStateEnabled: false,
       focusStateEnabled: false,
@@ -242,12 +241,11 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     } = this.option();
 
     this._popup = this._createComponent(this._$popup, Popup, {
-      onInitialized(e) {
-        const { component } = e;
-        // @ts-expect-error
-        component.$wrapper()
-          .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
-          .addClass(DROP_DOWN_MENU_POPUP_CLASS);
+      wrapperAttr: {
+        class: [
+          DROP_DOWN_MENU_POPUP_WRAPPER_CLASS,
+          DROP_DOWN_MENU_POPUP_CLASS,
+        ].filter(Boolean).join(' '),
       },
       deferRendering: false,
       preventScrollEvents: false,
@@ -255,14 +253,10 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       contentTemplate: (contentElement) => this._renderList(contentElement),
       maxHeight: this._getMaxHeight(),
       position: {
-        // @ts-expect-error
         my: `top ${rtlEnabled ? 'left' : 'right'}`,
-        // @ts-expect-error
         at: `bottom ${rtlEnabled ? 'left' : 'right'}`,
         collision: 'fit flip',
-        // @ts-expect-error
         offset: { v: POPUP_VERTICAL_OFFSET },
-        // @ts-expect-error
         of: this.$element(),
       },
       animation,

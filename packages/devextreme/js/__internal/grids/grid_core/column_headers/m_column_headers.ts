@@ -11,17 +11,17 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import { registerKeyboardAction } from '../m_accessibility';
-import { ColumnsView } from '../views/m_columns_view';
+import { ColumnsView } from '../views/columns_view';
+import type { ColumnViewTemplate } from '../views/types';
 import { CLASSES } from './const';
 
 const HEADERS_CLASS = 'headers';
 const NOWRAP_CLASS = 'nowrap';
-const ROW_CLASS_SELECTOR = '.dx-row';
-const HEADER_ROW_CLASS = 'dx-header-row';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const CONTEXT_MENU_SORT_ASC_ICON = 'context-menu-sort-asc';
 const CONTEXT_MENU_SORT_DESC_ICON = 'context-menu-sort-desc';
@@ -197,7 +197,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     };
   }
 
-  protected _processTemplate(template, options) {
+  protected _processTemplate(template, options): ColumnViewTemplate {
     const that = this;
     let resultTemplate;
     const { column } = options;
@@ -274,7 +274,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     $row.toggleClass(COLUMN_LINES_CLASS, this.option('showColumnLines'));
 
     if (row.rowType === 'header') {
-      $row.addClass(HEADER_ROW_CLASS);
+      $row.addClass(CLASSES.headerRow);
       if (!this._isLegacyKeyboardNavigation()) {
         registerKeyboardAction('columnHeaders', this, $row, 'td', this._handleActionKeyDown.bind(this));
       }
@@ -298,11 +298,11 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       const headerFilterController = this._headerFilterController;
       const $column = $target.closest('td');
       const columnIndex = this.getColumnIndexByElement($column);
-      if (columnIndex >= 0) {
+      if (isDefined(columnIndex) && columnIndex >= 0) {
         headerFilterController.showHeaderFilterMenu(columnIndex, false);
       }
     } else {
-      const $row = $target.closest(ROW_CLASS_SELECTOR);
+      const $row = $target.closest(`.${VIEW_CLASSES.row}`);
       this._processHeaderAction(event, $row);
     }
 
@@ -312,29 +312,30 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row, virtual_column
    */
-  protected _renderCore() {
-    const that = this;
-    const $container = that.element();
-    const change = {};
-
-    if (that._tableElement && !that._dataController.isLoaded() && !that._hasRowElements) {
-      // @ts-expect-error
-      return new Deferred().resolve();
+  protected _renderCore(options?) {
+    if (this._tableElement && !this._dataController.isLoaded() && !this._hasRowElements) {
+      return Deferred().resolve();
     }
 
+    // @ts-expect-error the view is rendered here
+    const $container: dxElementWrapper = this.element();
+
     $container
-      .addClass(that.addWidgetPrefix(HEADERS_CLASS))
-      .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option('wordWrapEnabled'));
+      .addClass(this.addWidgetPrefix(HEADERS_CLASS))
+      .toggleClass(this.addWidgetPrefix(NOWRAP_CLASS), !this.option('wordWrapEnabled'));
 
-    that.setAria('role', 'presentation', $container);
+    this.setAria('role', 'presentation', $container);
 
-    const deferred = that._updateContent(that._renderTable({ change }), change);
+    const change = {};
+    const deferred = this._updateContent(this._renderTable({ change }), change);
 
-    $container.toggleClass(MULTI_ROW_HEADER_CLASS, that.getRowCount() > 1);
+    $container.toggleClass(MULTI_ROW_HEADER_CLASS, this.getRowCount() > 1);
 
-    // @ts-expect-error
-    super._renderCore.apply(that, arguments);
-    return deferred;
+    super._renderCore(options);
+
+    return deferred.done((): void => {
+      this.updateScrollLeftPosition();
+    });
   }
 
   protected _renderRows() {
@@ -383,7 +384,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row
    */
-  protected _getRows() {
+  public _getRows() {
     const result: any[] = [];
     const rowCount = this.getRowCount();
 
@@ -484,7 +485,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
   public getHeadersRowHeight() {
     const $tableElement = this.getTableElement();
-    const $headerRows = $tableElement?.find(`.${HEADER_ROW_CLASS}`);
+    const $headerRows = $tableElement?.find(`.${CLASSES.headerRow}`);
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return $headerRows?.toArray().reduce((sum, headerRow) => sum + getHeight(headerRow), 0) || 0;
@@ -513,7 +514,8 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
         }
 
         visibleColumns.forEach((column) => {
-          const rowIndex = index ?? columnsController.getRowIndex(column.index);
+          const rowIndex = index
+            ?? (isDefined(column.index) ? columnsController.getRowIndex(column.index) : 0);
           const visibleIndex = columnsController.getVisibleIndex(column.index, rowIndex);
           $cellElement = this._getCellElement(rowIndex, visibleIndex);
           if ($cellElement) {
@@ -532,7 +534,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
   private getColumnIndexByElement($cell) {
     const cellIndex = this.getCellIndex($cell);
-    const $row = $cell.closest('.dx-row');
+    const $row = $cell.closest(`.${VIEW_CLASSES.row}`);
     const { rowIndex } = $row[0];
     const column = this.getColumns(rowIndex)[cellIndex];
 

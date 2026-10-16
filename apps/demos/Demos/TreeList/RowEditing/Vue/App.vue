@@ -80,7 +80,7 @@ function allowDeleting({ row }: { row: DxTreeListTypes.Row }) {
   return row.data.ID !== 1;
 }
 </script>
-<style scoped>
+<style>
 #tree-list-demo {
   min-height: 700px;
 }

@@ -1,8 +1,8 @@
 @use "./mixins" as *;
 @use "./popover/mixins" as *;
 
-$slider-tooltip-content-height: 28px;
-$slider-tooltip-arrow-height: 7px;
+$slider-tooltip-content-height: 28px !default;
+$slider-tooltip-arrow-height: 7px !default;
 
 .dx-slider-label {
   position: absolute;

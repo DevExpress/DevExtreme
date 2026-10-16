@@ -50,8 +50,7 @@ $tabs-focused-disabled-border-color: null !default;
 $tabs-tab-hover-bg: null !default;
 $tabs-tab-active-bg: null !default;
 $tabs-tab-active-border-color: null !default;
-$tabs-tab-hover-border-color-horizontal: null !default;
-$tabs-tab-hover-border-color-vertical: null !default;
+$tabs-tab-hover-border-color-horizontal: $base-border-color !default;
 
 @if $color == "carmine" {
   $tabs-tab-selected-color: $base-text-color !default;
@@ -64,8 +63,6 @@ $tabs-tab-hover-border-color-vertical: null !default;
   $tabs-tab-hover-bg: $base-hover-bg !default;
   $tabs-tab-active-bg: color.change(color.adjust($tabs-tab-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $tabs-tab-active-border-color: color.change(color.adjust($base-border-color, $lightness: -2.55%, $space: hsl)) !default;
-  $tabs-tab-hover-border-color-horizontal: $base-border-color !default;
-  $tabs-tab-hover-border-color-vertical: color.change(color.adjust($base-accent, $lightness: 33.92%, $space: hsl)) !default;
 }
 
 @if $color == "contrast" {
@@ -79,8 +76,6 @@ $tabs-tab-hover-border-color-vertical: null !default;
   $tabs-focused-disabled-border-color: color.adjust($base-border-color, $lightness: -20%, $space: hsl) !default;
   $tabs-tab-active-bg: $base-inverted-bg !default;
   $tabs-tab-active-border-color: $base-border-color !default;
-  $tabs-tab-hover-border-color-horizontal: $base-border-color !default;
-  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "dark" {
@@ -94,8 +89,6 @@ $tabs-tab-hover-border-color-vertical: null !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(color.adjust($tabs-tab-bg, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
   $tabs-tab-active-border-color: color.change(color.adjust($tabs-tab-bg, $lightness: 12.55%, $space: hsl)) !default;
-  $tabs-tab-hover-border-color-horizontal: $base-border-color !default;
-  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "darkmoon" {
@@ -109,8 +102,6 @@ $tabs-tab-hover-border-color-vertical: null !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(color.adjust($tabs-tab-bg, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
   $tabs-tab-active-border-color: transparent !default;
-  $tabs-tab-hover-border-color-horizontal: $base-border-color !default;
-  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "darkviolet" {
@@ -124,8 +115,6 @@ $tabs-tab-hover-border-color-vertical: null !default;
   $tabs-tab-hover-bg: $base-hover-bg !default;
   $tabs-tab-active-bg: color.change(color.adjust($tabs-tab-bg, $lightness: 62.5%, $space: hsl), $alpha: 0.2) !default;
   $tabs-tab-active-border-color: color.change(color.adjust($base-bg, $lightness: 15.49%, $space: hsl)) !default;
-  $tabs-tab-hover-border-color-horizontal: $base-border-color !default;
-  $tabs-tab-hover-border-color-vertical: color.change(color.adjust($tabs-tab-bg, $lightness: 16.86%, $space: hsl)) !default;
 }
 
 @if $color == "greenmist" {
@@ -139,8 +128,6 @@ $tabs-tab-hover-border-color-vertical: null !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(color.adjust($tabs-tab-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $tabs-tab-active-border-color: color.adjust($tabs-tab-bg, $lightness: -12.16%, $space: hsl) !default;
-  $tabs-tab-hover-border-color-horizontal: $base-border-color !default;
-  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "light" {
@@ -154,8 +141,6 @@ $tabs-tab-hover-border-color-vertical: null !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(color.adjust($tabs-tab-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $tabs-tab-active-border-color: color.adjust($tabs-tab-bg, $lightness: -12.16%, $space: hsl) !default;
-  $tabs-tab-hover-border-color-horizontal: $base-border-color !default;
-  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "softblue" {
@@ -169,6 +154,4 @@ $tabs-tab-hover-border-color-vertical: null !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(color.adjust($tabs-tab-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $tabs-tab-active-border-color: color.adjust($tabs-tab-bg, $lightness: -12.16%, $space: hsl) !default;
-  $tabs-tab-hover-border-color-horizontal: $base-border-color !default;
-  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }

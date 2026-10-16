@@ -2,7 +2,7 @@ import 'fluent_blue_light.css!';
 import 'ui/data_grid';
 
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { noop as noop } from 'core/utils/common';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
@@ -105,19 +105,22 @@ QUnit.module('AdaptiveColumns', {
             if(name === 'width' || name === 'height') {
                 ++cssInvokeCounter;
             }
+            return cssFunc.apply(this, arguments);
         };
 
-        // arrange, act
-        $('.dx-datagrid').width(200);
-        setupDataGrid(this);
-        this.rowsView.render($('#container'));
-        this.resizingController.updateDimensions();
-        this.clock.tick(10);
+        try {
+            // arrange, act
+            $('.dx-datagrid').width(200);
+            setupDataGrid(this);
+            this.rowsView.render($('#container'));
+            this.resizingController.updateDimensions();
+            this.clock.tick(10);
 
-        // assert
-        assert.equal(cssInvokeCounter, 0, 'no $.css() invokes for width/height CSS properties');
-
-        renderer.fn.css = cssFunc;
+            // assert
+            assert.equal(cssInvokeCounter, 0, 'no $.css() invokes for width/height CSS properties');
+        } finally {
+            renderer.fn.css = cssFunc;
+        }
     });
 
     // T516888
@@ -4394,7 +4397,7 @@ QUnit.module('Validation', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(this.rowsView._adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
+        assert.equal(this.adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
     });
 
     QUnit.testInActiveWindow('If columns has the width property then columns width before hiding should be equal to the width of the columns', function(assert) {
@@ -4419,7 +4422,7 @@ QUnit.module('Validation', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(this.rowsView._adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
+        assert.equal(this.adaptiveColumnsController.getHiddenColumns().length, 0, 'has not hidden adaptive columns');
     });
 
     QUnit.test('The onRowValidating event is not called twice if isValid is set to \'false\'', function(assert) {

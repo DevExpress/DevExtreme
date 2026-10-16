@@ -1,19 +1,21 @@
 /* eslint-disable max-classes-per-file */
 import { extend } from '@js/core/utils/extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import {
-  data as virtualScrollingDataControllerExtender,
   dataSourceAdapterExtender as virtualScrollingDataSourceAdapterExtender,
   rowsView as virtualScrollingRowsViewExtender,
+  virtualScrollingDataControllerExtender,
+  type VirtualScrollingDataSourceAdapter,
   virtualScrollingModule,
-} from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
+} from '@ts/grids/grid_core/virtual_scrolling/index';
 
-import dataSourceAdapterProvider from './data_source_adapter/m_data_source_adapter';
-import gridCore from './m_core';
+import gridCore from './core';
+import dataSourceAdapterProvider from './data_source_adapter/data_source_adapter';
 
 const oldDefaultOptions = virtualScrollingModule.defaultOptions;
 
@@ -34,18 +36,20 @@ virtualScrollingModule.extenders.views.rowsView = (Base: ModuleType<RowsView>) =
 };
 
 virtualScrollingModule.extenders.controllers.data = (Base: ModuleType<DataController>) => class TreeListVirtualScrollingDataControllerExtender extends virtualScrollingDataControllerExtender(Base) {
+  protected declare dataSourceController: DataSourceController<VirtualScrollingDataSourceAdapter>;
+
   protected _loadOnOptionChange() {
-    const virtualScrollController = this._dataSource?._virtualScrollController;
+    const virtualScrollController = this.dataSourceController.getAdapter()?._virtualScrollController;
 
     virtualScrollController?.reset();
-    // @ts-expect-error
+    // @ts-expect-error _loadOnOptionChange() is added by the TreeList data controller
     super._loadOnOptionChange();
   }
 };
 
 const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class VirtualScrollingDataSourceAdapterExtender extends virtualScrollingDataSourceAdapterExtender(Base) {
-  protected changeRowExpand() {
-    return super.changeRowExpand.apply(this, arguments as any).done(() => {
+  public changeRowExpand(path: RowKey) {
+    return super.changeRowExpand(path)?.done(() => {
       const viewportItemIndex = this.getViewportItemIndex();
 
       viewportItemIndex >= 0 && this.setViewportItemIndex(viewportItemIndex);

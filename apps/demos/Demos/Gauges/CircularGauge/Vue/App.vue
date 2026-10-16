@@ -69,7 +69,7 @@ const subValue = computed(() => value.value ? [value.value.min, value.value.max]
 
 const customizeText = ({ valueText }: Record<string, any>) => `${valueText} °C`;
 </script>
-<style scoped>
+<style>
 #gauge-demo {
   height: 440px;
   width: 100%;

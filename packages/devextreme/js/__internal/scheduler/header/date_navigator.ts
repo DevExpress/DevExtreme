@@ -2,6 +2,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import dateUtils from '@js/core/utils/date';
 import type { ContentReadyEvent } from '@js/ui/button';
 import type { Item as ButtonGroupItem, ItemClickEvent, Properties as ButtonGroupOptions } from '@js/ui/button_group';
+import type { ToolbarItem as SchedulerToolbarItem } from '@js/ui/scheduler';
 import { current, isMaterialBased } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import { dateUtilsTs } from '@ts/core/utils/date';
@@ -167,12 +168,12 @@ export const getTodayButtonOptions = (
     icon: 'today',
     stylingMode: 'outlined',
     type: 'normal',
-    onClick() {
+    onClick(): void {
       const { indicatorTime } = header.option();
       header.updateCurrentDate(indicatorTime ?? new Date());
     },
   },
-}, item) as ToolbarItem;
+} satisfies ToolbarItem, item);
 
 export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): ToolbarItem => {
   const stylingMode = isMaterialBased(current()) ? 'text' : 'contained';
@@ -185,7 +186,7 @@ export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): To
       stylingMode,
       selectionMode: 'none',
     },
-  }, item);
+  } satisfies SchedulerToolbarItem, item);
   const options = config.options as ButtonGroupOptions;
   const { onItemClick } = options;
 

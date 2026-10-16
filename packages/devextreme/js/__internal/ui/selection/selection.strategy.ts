@@ -140,7 +140,7 @@ export default class SelectionStrategy<
     return this.selectedItemKeys(normalizedKeys, preserve, isDeselect, isSelectAll);
   }
 
-  _removeTemplateProperty(remoteFilter: RemoteFilter): RemoteFilter {
+  _removeTemplateProperty(remoteFilter: RemoteFilter | undefined): RemoteFilter | undefined {
     if (Array.isArray(remoteFilter)) {
       return remoteFilter.map((f) => this._removeTemplateProperty(f));
     }
@@ -169,7 +169,7 @@ export default class SelectionStrategy<
   }
 
   _loadFilteredData(
-    remoteFilter: SelectionFilter,
+    remoteFilter: SelectionFilter | undefined,
     localFilter?: Function | null,
     select?: SelectDescriptor<TItem> | null,
     isSelectAll?: boolean,
@@ -199,7 +199,6 @@ export default class SelectionStrategy<
           if (localFilter && !isSelectAll) {
             filteredItems = filteredItems.filter(localFilter);
           } else if (needLoadAllData) {
-            // @ts-expect-error dataQuary
             filteredItems = dataQuery(filteredItems).filter(remoteFilter).toArray();
           }
 

@@ -1,9 +1,9 @@
 import { locate, move } from '@js/common/core/animation/translator';
 import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
-import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 import type { Appointment } from '@js/ui/scheduler';
+import { FunctionTemplate } from '@ts/core/templates/function_template';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
 import type Scheduler from './scheduler';
@@ -153,7 +153,7 @@ export class CompactAppointmentsHelper {
   }
 
   private renderTemplate(template, items: AppointmentTooltipItem[], isCompact) {
-    return new (FunctionTemplate as any)((options) => template.render({
+    return new FunctionTemplate((options) => template.render({
       model: {
         appointmentCount: items.length,
         items: items.map((item) => item.appointment),
@@ -170,7 +170,7 @@ export class CompactAppointmentsHelper {
 
   private initButtonTemplate(count, isCompact) {
     this.instance._templateManager.addDefaultTemplates({
-      appointmentCollector: new (FunctionTemplate as any)((options) => this.createButtonTemplate(count, $(options.container), isCompact)),
+      appointmentCollector: new FunctionTemplate((options) => this.createButtonTemplate(count, $(options.container), isCompact)),
     });
   }
 

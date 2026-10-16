@@ -1,5 +1,5 @@
-import { componentRegistratorCallbacks } from '@ts/core/m_component_registrator_callbacks';
-import errors from '@ts/core/m_errors';
+import { componentRegistratorCallbacks } from '@ts/core/component_registrator_callbacks';
+import errors from '@ts/core/errors';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
 

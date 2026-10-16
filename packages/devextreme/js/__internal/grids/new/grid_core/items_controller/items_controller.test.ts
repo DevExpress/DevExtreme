@@ -148,4 +148,41 @@ describe('ItemsController', () => {
       expect(itemsController.items.peek()).toMatchSnapshot();
     });
   });
+
+  // `items` reads columns and highlight options non-reactively, so the subscriptions are separate.
+  // Each test changes only one of those signals, so a recompute proves the subscription.
+  describe('items dependency tracking', () => {
+    it('should recompute when a column becomes hidden', () => {
+      const { options, itemsController } = setup({
+        keyExpr: 'id',
+        dataSource: [{ id: 1, a: 'my a value', b: 'my b value' }],
+        columns: ['a', 'b'],
+      });
+
+      expect(itemsController.items.value[0].fields.map((field) => field.column.dataField))
+        .toEqual(['a', 'b']);
+
+      options.option('columns', ['a', { dataField: 'b', visible: false }]);
+
+      expect(itemsController.items.value[0].fields.map((field) => field.column.dataField))
+        .toEqual(['a']);
+    });
+
+    it('should recompute when highlighting options change', () => {
+      const { options, itemsController } = setup({
+        keyExpr: 'id',
+        dataSource: [{ id: 1, a: 'ABC' }],
+        columns: ['a'],
+        searchPanel: { text: 'abc', highlightCaseSensitive: false },
+      });
+
+      expect(itemsController.items.value[0].fields[0].highlightedText).not.toBeNull();
+
+      // Feeds highlightTextOptions only. The search filter is built from searchPanel.text,
+      // columns and searchVisibleColumnsOnly, so the data set does not change.
+      options.option('searchPanel.highlightCaseSensitive', true);
+
+      expect(itemsController.items.value[0].fields[0].highlightedText).toBeNull();
+    });
+  });
 });

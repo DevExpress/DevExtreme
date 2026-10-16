@@ -1,4 +1,4 @@
-import eventsEngine from '@ts/events/core/m_events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const CLASSES = {
   handleBottom: 'dx-resizable-handle-bottom',

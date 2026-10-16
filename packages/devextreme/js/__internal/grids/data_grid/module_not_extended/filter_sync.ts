@@ -1,5 +1,5 @@
-import { filterSyncModule } from '@ts/grids/grid_core/filter/m_filter_sync';
+import { filterSyncModule } from '@ts/grids/grid_core/filter_sync/filter_sync_module';
 
-import core from '../m_core';
+import core from '../core';
 
 core.registerModule('filterSync', filterSyncModule);

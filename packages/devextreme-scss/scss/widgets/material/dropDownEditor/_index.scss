@@ -8,17 +8,17 @@
 @use "../../base/dropDownEditor";
 @use "../../base/dropDownEditor/mixins" as *;
 
-$material-dropdowneditor-container-button-size: $material-base-icon-size;
+$material-dropdowneditor-container-button-size: $material-base-icon-size !default;
 
 $material-dropdowneditor-invalid-badge-offset:
   $material-dropdowneditor-container-button-size +
-  $material-invalid-badge-halfhorizontal-padding;
+  $material-invalid-badge-halfhorizontal-padding !default;
 
 $material-dropdowneditor-invalid-badge-with-clear-offset:
   $material-dropdowneditor-container-button-size * 2 +
-  $material-invalid-badge-halfhorizontal-padding;
+  $material-invalid-badge-halfhorizontal-padding !default;
 
-$material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $material-invalid-badge-horizontal-padding;
+$material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $material-invalid-badge-horizontal-padding !default;
 
 @mixin dx-dropdowneditor-button-icon() {
   width: $material-dropdowneditor-container-button-size;

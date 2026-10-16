@@ -13,11 +13,11 @@
 @use "../radioGroup/colors" as *;
 @use "../badge";
 
-$material-list-item-border-width: 1px;
-$material-list-border-width: 1px;
-$material-list-border: $material-list-border-width solid;
-$material-list-item-border: $material-list-item-border-width solid;
-$material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding - 2px;
+$material-list-item-border-width: 1px !default;
+$material-list-border-width: 1px !default;
+$material-list-border: $material-list-border-width solid !default;
+$material-list-item-border: $material-list-item-border-width solid !default;
+$material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding - 2px !default;
 
 .dx-list-item-chevron {
   @include dx-icon(chevronnext);

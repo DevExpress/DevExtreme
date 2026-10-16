@@ -51,6 +51,8 @@ interface BlockOptions {
   prevBlockOptions?: BlockOptions;
 }
 
+type ScreenItem = ResponsiveBoxItem<LocationItem> & { location: LocationItem };
+
 export interface GridCell {
   item: ResponsiveBoxItem;
   location: {
@@ -81,7 +83,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
 
   _layoutChangedAction?: () => void;
 
-  _screenItems?: ResponsiveBoxItem[];
+  _screenItems?: ScreenItem[];
 
   _$root?: dxElementWrapper;
 
@@ -250,10 +252,8 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   }
 
   _sizesByScreen(sizeConfigs: ResponsiveBoxItem[] | undefined): ResponsiveBoxItem[] {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return map(
       this._filterByScreen(sizeConfigs),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       (sizeConfig) => extend(this._defaultSizeConfig(), sizeConfig),
     );
   }
@@ -320,17 +320,17 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
       const location = itemInfo.location || {};
       const itemCol = location.col;
       const itemRow = location.row;
-      const row = this._grid[itemRow];
-      const itemCell = row?.[itemCol];
+      const row = itemRow === undefined ? undefined : this._grid[itemRow];
+      const itemCell = itemCol === undefined ? undefined : row?.[itemCol];
 
       this._occupyCells(itemCell, itemInfo);
     });
   }
 
-  _itemsByScreen(): Item[] {
+  _itemsByScreen(): ScreenItem[] {
     const { items = [] } = this.option();
 
-    return items.reduce<Item[]>((result: Item[], item: ResponsiveBoxItem) => {
+    return items.reduce<ScreenItem[]>((result, item: ResponsiveBoxItem) => {
       let locations = (item.location ?? {}) as ResponsiveBoxItem[];
 
       locations = isPlainObject(locations)
@@ -339,7 +339,6 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
 
       this._filterByScreen(locations).forEach((location) => {
         result.push({
-          // @ts-expect-error ts-error
           item,
           location: {
             rowspan: 1,
@@ -353,7 +352,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     }, []);
   }
 
-  _occupyCells(itemCell: GridCell, itemInfo: ResponsiveBoxItem): void {
+  _occupyCells(itemCell: GridCell | undefined, itemInfo: ResponsiveBoxItem): void {
     if (!itemCell || this._isItemCellOccupied(itemCell, itemInfo)) {
       return;
     }
@@ -463,11 +462,10 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
 
   _prepareBoxConfig(config: BoxOptions): BoxOptions {
     const { onItemStateChanged } = this.option();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(config || {}, {
       crossAlign: 'stretch',
       onItemStateChanged,
-    });
+    } satisfies BoxOptions);
   }
 
   _layoutBlock(options: BlockOptions): ResponsiveBoxItem | null {
@@ -662,8 +660,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
 
   _clearItemNodeTemplates(): void {
     const { items } = this.option();
-    each(items, function clearTemplates() {
-      // eslint-disable-next-line @typescript-eslint/no-invalid-this
+    each(items, function clearTemplates(this: Item & { node?: unknown }) {
       delete this.node;
     });
   }

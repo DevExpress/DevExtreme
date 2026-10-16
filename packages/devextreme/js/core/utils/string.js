@@ -4,4 +4,4 @@ export {
     quadToObject,
     format,
     isEmpty
-} from '../../__internal/core/utils/m_string';
+} from '../../__internal/core/utils/string';

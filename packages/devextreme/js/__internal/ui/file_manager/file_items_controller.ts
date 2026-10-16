@@ -114,6 +114,10 @@ interface FileItemsControllerOptions {
   editingEvents?: FileManagerActions['editing'];
 }
 
+type RootDirectoryInfo = ReturnType<FileItemsController['_createDirectoryInfo']> & {
+  displayName?: string;
+};
+
 export class FileItemsController {
   _options: FileItemsControllerOptions;
 
@@ -1193,13 +1197,11 @@ export class FileItemsController {
   _createDirInfoByName(name, parentDirectoryInfo) {
     const dirPathInfo = this._getPathInfo(parentDirectoryInfo);
     const fileItem = new FileSystemItem(dirPathInfo, name, true);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._createDirectoryInfo(fileItem, parentDirectoryInfo);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _createDirectoryInfo(fileItem, parentDirectoryInfo) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(this._createFileInfo(fileItem, parentDirectoryInfo), {
       icon: 'folder',
       expanded: fileItem.isRoot(),
@@ -1267,9 +1269,8 @@ export class FileItemsController {
   _createRootDirectoryInfo(text) {
     const rootDirectory = new FileSystemItem(null, '', true);
 
-    const result = this._createDirectoryInfo(rootDirectory, null);
+    const result: RootDirectoryInfo = this._createDirectoryInfo(rootDirectory, null);
     result.displayName = text || DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return result;
   }
 

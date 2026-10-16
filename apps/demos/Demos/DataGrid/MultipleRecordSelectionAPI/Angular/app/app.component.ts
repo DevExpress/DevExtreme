@@ -7,12 +7,6 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Pipe({ name: 'stringifyEmployees', standalone: true })
 export class StringifyEmployeesPipe implements PipeTransform {
   transform(employees: Employee[]) {
@@ -22,8 +16,8 @@ export class StringifyEmployeesPipe implements PipeTransform {
 
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [

@@ -1,4 +1,5 @@
-import { Ajax } from '@ts/core/utils/m_ajax';
+import { Ajax } from '@ts/core/utils/ajax';
+import { isFormData } from '@ts/core/utils/ajax_utils';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
 
@@ -10,7 +11,11 @@ if (useJQuery) {
   Ajax.inject({
     sendRequest(options) {
       if (!options.responseType && !options.upload) {
-        return jQuery.ajax(options);
+        const settings = isFormData(options.data)
+          ? { ...options, processData: false, contentType: false }
+          : options;
+
+        return jQuery.ajax(settings as JQuery.AjaxSettings);
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

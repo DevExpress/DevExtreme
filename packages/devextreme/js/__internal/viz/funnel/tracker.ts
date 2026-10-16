@@ -11,7 +11,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { isDefined } from '@js/core/utils/type';
+import { isDefined } from '@ts/core/utils/m_type';
 import { Tracker } from '@ts/viz/components/tracker';
 import Funnel from '@ts/viz/funnel/funnel';
 

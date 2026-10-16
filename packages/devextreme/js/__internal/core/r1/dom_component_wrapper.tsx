@@ -138,7 +138,7 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
     const {
       valueChange,
     } = normalizedProps;
-    const properties = extend({
+    const properties: Record<string, any> = extend({
       rtlEnabled: this.getConfig()?.rtlEnabled,
       isRenovated: true,
     }, normalizedProps);

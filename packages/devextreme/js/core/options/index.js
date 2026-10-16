@@ -1,1 +1,1 @@
-export { Options } from '../../__internal/core/options/m_index';
+export { Options } from '../../__internal/core/options/index';

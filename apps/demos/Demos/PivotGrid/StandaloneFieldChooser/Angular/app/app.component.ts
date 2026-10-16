@@ -1,37 +1,40 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
-  DxPivotGridFieldChooserModule,
-  DxRadioGroupModule,
-  DxButtonModule,
-  DxSelectBoxModule,
+  DxRadioGroupComponent,
+  DxButtonComponent,
+  DxSelectBoxComponent,
 } from 'devextreme-angular';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import { DxPivotGridModule, DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
+import {
+  DxPivotGridComponent,
+  DxoPivotGridFieldChooserComponent,
+  DxPivotGridTypes,
+} from 'devextreme-angular/ui/pivot-grid';
+import {
+  DxPivotGridFieldChooserComponent,
+  DxoPivotGridFieldChooserTextsComponent,
+} from 'devextreme-angular/ui/pivot-grid-field-chooser';
 import { Service, Layout, Sale } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [
-    DxPivotGridModule,
-    DxRadioGroupModule,
-    DxPivotGridFieldChooserModule,
-    DxSelectBoxModule,
-    DxButtonModule,
+    DxPivotGridComponent,
+    DxoPivotGridFieldChooserComponent,
+    DxRadioGroupComponent,
+    DxPivotGridFieldChooserComponent,
+    DxoPivotGridFieldChooserTextsComponent,
+    DxSelectBoxComponent,
+    DxButtonComponent,
   ],
 })
 export class AppComponent {

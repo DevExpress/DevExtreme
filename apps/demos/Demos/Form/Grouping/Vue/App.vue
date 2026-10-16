@@ -136,7 +136,7 @@ import 'devextreme-vue/text-area';
 const employee = service.getEmployee();
 
 </script>
-<style scoped>
+<style>
 #form-container {
   margin: 10px;
 }

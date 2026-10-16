@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SliderTooltip from '__internal/ui/slider/m_slider_tooltip';
+import SliderTooltip from '__internal/ui/slider/slider_tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'common/core/animation/fx';

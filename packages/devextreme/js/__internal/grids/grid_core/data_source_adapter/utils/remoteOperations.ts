@@ -1,5 +1,5 @@
 import { isObject } from '@js/core/utils/type';
-import type { Store } from '@js/data';
+import type Store from '@ts/data/abstract_store';
 
 import type { RemoteOperations, RemoteOperationsOptions } from '../types';
 import { isCustomStore, isLocalStore } from './store';

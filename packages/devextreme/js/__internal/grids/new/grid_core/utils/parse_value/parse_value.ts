@@ -3,7 +3,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import {
   isDefined, isNumeric, isString,
 } from '@js/core/utils/type';
-import { strictParseNumber } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
+import { strictParseNumber } from '@ts/grids/grid_core/columns_controller/columns_controller_utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 

@@ -14,11 +14,11 @@
 @use "../fieldset/sizes" as *;
 @use "../menu/colors" as *;
 
-$generic-diagram-toolbar-icon-size: $generic-base-icon-size;
-$diagram-toolbar-colorbutton-border-width: 3px;
-$diagram-touchbar-item-padding: 5px;
+$generic-diagram-toolbar-icon-size: $generic-base-icon-size !default;
+$diagram-toolbar-colorbutton-border-width: 3px !default;
+$diagram-touchbar-item-padding: 5px !default;
 
-$diagram-toolbox-title-size: 12px;
+$diagram-toolbox-title-size: 12px !default;
 
 .dx-diagram {
   border-color: $diagram-border-color;

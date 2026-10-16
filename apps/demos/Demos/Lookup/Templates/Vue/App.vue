@@ -51,7 +51,7 @@ const lookupValue = ref(employees[0].ID);
 
 const getDisplayExpr = ({ FirstName = '', LastName = '' } = {}) => `${FirstName} ${LastName}`.trim();
 </script>
-<style scoped>
+<style>
   .field-customization {
     min-height: 32px;
   }

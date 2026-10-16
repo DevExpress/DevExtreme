@@ -1,5 +1,5 @@
 import { compileGetter, compileSetter } from '@js/core/utils/data';
-import { wrapToArray } from '@ts/core/utils/m_array';
+import { wrapToArray } from '@ts/core/utils/array';
 
 import type {
   AppointmentResourceConfig,

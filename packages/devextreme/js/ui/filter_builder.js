@@ -1,4 +1,4 @@
-import FilterBuilder from '../__internal/filter_builder/m_filter_builder';
+import FilterBuilder from '../__internal/filter_builder/filter_builder';
 
 // STYLE filterBuilder
 

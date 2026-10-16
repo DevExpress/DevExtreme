@@ -1,10 +1,10 @@
-exports.LOCATIONS = [
+export const LOCATIONS = [
     'Brooklyn Bridge,New York,NY',
     { lat: 40.537102, lng: -73.990318 },
     [40.539102, -73.970318],
     '40.557102, -72.990318'
 ];
-exports.MARKERS = [
+export const MARKERS = [
     {
         tooltip: {
             text: 'A',
@@ -41,7 +41,7 @@ exports.MARKERS = [
         }
     }
 ];
-exports.ROUTES = [
+export const ROUTES = [
     {
         weight: 5,
         color: 'blue',

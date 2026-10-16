@@ -65,7 +65,7 @@ const expandedRowKeys = [1];
 const searchExpr = ['City', 'State'];
 const editorOptions = { placeholder: 'Search city or state' };
 </script>
-<style scoped>
+<style>
 #employees {
   max-height: 440px;
 }

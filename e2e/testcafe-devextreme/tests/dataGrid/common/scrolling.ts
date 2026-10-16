@@ -35,6 +35,17 @@ function getData(rowCount: number, colCount: number): Record<string, string>[] {
   return items;
 }
 
+function getRefreshedData(
+  rowCount: number,
+  colCount: number,
+  refreshIndex: number,
+): Record<string, string>[] {
+  return getData(rowCount, colCount).map((item) => ({
+    ...item,
+    field_0: `${item.field_0}_refresh_${refreshIndex}`,
+  }));
+}
+
 async function getTestLoadCount(): Promise<number> {
   return ClientFunction(() => (window as any).testLoadCount as number)();
 }
@@ -495,6 +506,213 @@ test('Horizontal scrolling should work correctly in RTL mode with native scrolli
   });
 }).after(async () => {
   await removeStylesheetRulesFromPage();
+});
+
+test('Column headers should keep the scroll position after resizing a column in RTL mode with native scrolling', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const rowsScrollContainer = dataGrid.getScrollContainer();
+  const headersScrollContainer = dataGrid.getHeadersScrollContainer();
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  const initialScrollLeft = await dataGrid.getScrollLeft();
+
+  await dataGrid.scrollTo(t, { x: initialScrollLeft - 100 });
+
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-100)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-100);
+
+  await dataGrid.resizeHeader(2, -30);
+
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-100)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-100);
+}).before(async () => createWidget('dxDataGrid', {
+  rtlEnabled: true,
+  width: 500,
+  dataSource: getData(5, 10),
+  columnAutoWidth: true,
+  allowColumnResizing: true,
+  columnResizingMode: 'nextColumn',
+  scrolling: {
+    useNative: true,
+  },
+}));
+
+test('Column headers should keep the scroll position after repaint in RTL mode with native scrolling', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const rowsScrollContainer = dataGrid.getScrollContainer();
+  const headersScrollContainer = dataGrid.getHeadersScrollContainer();
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  const initialScrollLeft = await dataGrid.getScrollLeft();
+
+  await dataGrid.scrollTo(t, { x: initialScrollLeft - 100 });
+
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-100)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-100);
+
+  await dataGrid.repaint();
+
+  await t
+    .expect(rowsScrollContainer.scrollLeft)
+    .eql(-100)
+    .expect(headersScrollContainer.scrollLeft)
+    .eql(-100);
+}).before(async () => createWidget('dxDataGrid', {
+  rtlEnabled: true,
+  width: 500,
+  dataSource: getData(5, 10),
+  columnAutoWidth: true,
+  scrolling: {
+    useNative: true,
+  },
+}));
+
+test('Column headers should have the correct scroll position after refreshing the data twice when RTL and virtual scrolling are enabled (T1333941)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  const initialScrollLeft = await dataGrid.getHeadersScrollLeft();
+
+  // act
+  await dataGrid.option('dataSource', getRefreshedData(30, 20, 1));
+
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.textContent)
+    .eql('val_0_0_refresh_1');
+
+  await dataGrid.option('dataSource', getRefreshedData(30, 20, 2));
+
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.textContent)
+    .eql('val_0_0_refresh_2');
+
+  // assert
+  const scrollLeft = await dataGrid.getHeadersScrollLeft();
+
+  await t
+    .expect(scrollLeft)
+    .eql(initialScrollLeft);
+}).before(async () => createWidget('dxDataGrid', {
+  width: 700,
+  height: 300,
+  rtlEnabled: true,
+  dataSource: getData(30, 20),
+  columnWidth: 100,
+  scrolling: {
+    mode: 'virtual',
+    useNative: false,
+    // @ts-expect-error private option
+    updateTimeout: 3000,
+  },
+}));
+
+test('Column headers should have the correct scroll position after refreshing the data twice when the grid is scrolled horizontally and virtual scrolling is enabled (T1333941)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await dataGrid.scrollTo(t, { x: 1000 });
+
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(1000);
+
+  const initialScrollLeft = await dataGrid.getHeadersScrollLeft();
+
+  // act
+  await dataGrid.option('dataSource', getRefreshedData(30, 20, 1));
+
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.textContent)
+    .eql('val_0_0_refresh_1');
+
+  await dataGrid.option('dataSource', getRefreshedData(30, 20, 2));
+
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.textContent)
+    .eql('val_0_0_refresh_2');
+
+  // assert
+  const scrollLeft = await dataGrid.getHeadersScrollLeft();
+
+  await t
+    .expect(scrollLeft)
+    .eql(initialScrollLeft);
+}).before(async () => createWidget('dxDataGrid', {
+  width: 700,
+  height: 300,
+  dataSource: getData(30, 20),
+  columnWidth: 100,
+  scrolling: {
+    mode: 'virtual',
+    // @ts-expect-error private option
+    updateTimeout: 3000,
+  },
+}));
+
+[false, true].forEach((useNative) => {
+  test(`Horizontal scroll position should not change during vertical scrolling when RTL and virtual scrolling are enabled (useNative = ${useNative}) (T1335898)`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    const initialScrollLeft = await dataGrid.getScrollLeft();
+
+    await dataGrid.scrollTo(t, { x: initialScrollLeft - 150 });
+
+    await t
+      .expect(dataGrid.getScrollLeft())
+      .eql(initialScrollLeft - 150);
+
+    // act
+    await dataGrid.scrollTo(t, { y: 1500 });
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.apiPageIndex())
+      .eql(1)
+      .expect(dataGrid.getDataRow(30).element.exists)
+      .ok()
+      .expect(dataGrid.getScrollLeft())
+      .eql(initialScrollLeft - 150);
+  }).before(async () => createWidget('dxDataGrid', {
+    width: 700,
+    height: 400,
+    rtlEnabled: true,
+    dataSource: getData(1000, 10),
+    columnWidth: 200,
+    scrolling: {
+      mode: 'virtual',
+      useNative,
+      // @ts-expect-error private option
+      updateTimeout: 0,
+    },
+  }));
 });
 
 test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {

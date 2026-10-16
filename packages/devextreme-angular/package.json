@@ -1,6 +1,6 @@
 {
   "name": "devextreme-angular",
-  "version": "26.1.4",
+  "version": "26.1.6",
   "description": "DevExtreme UI and Visualization Components for Angular",
   "repository": {
     "type": "git",
@@ -110,7 +110,7 @@
   ],
   "dependencies": {
     "@angular-devkit/schematics": "catalog:angular",
-    "devextreme-schematics": "^1.16.0",
+    "devextreme-schematics": "^1.18.0",
     "inferno-server": "catalog:"
   },
   "schematics": "./schematics/collection.json",

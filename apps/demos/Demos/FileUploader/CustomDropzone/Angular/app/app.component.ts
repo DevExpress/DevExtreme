@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxFileUploaderModule, DxProgressBarModule } from 'devextreme-angular';
 import 'anti-forgery';
 
@@ -7,16 +9,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxFileUploaderModule,
     DxProgressBarModule,
@@ -35,7 +31,7 @@ export class AppComponent {
 
   allowedFileExtensions: string[] = ['.jpg', '.jpeg', '.gif', '.png'];
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     this.onDropZoneEnter = this.onDropZoneEnter.bind(this);
     this.onDropZoneLeave = this.onDropZoneLeave.bind(this);
     this.onUploaded = this.onUploaded.bind(this);
@@ -69,6 +65,7 @@ export class AppComponent {
     fileReader.onload = () => {
       this.isDropZoneActive = false;
       this.imageSource = fileReader.result as string;
+      this.changeDetectorRef.detectChanges();
     };
     fileReader.readAsDataURL(file);
     this.textVisible = false;

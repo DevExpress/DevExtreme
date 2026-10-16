@@ -9,6 +9,7 @@ const checkDigit = (char: string): boolean => {
   const code = char && numberLocalization.convertDigits(char, false).charCodeAt(0);
   const zeroCode = numberLocalization.convertDigits('0', false).charCodeAt(0);
 
+  // @ts-expect-error code is '' for an empty char
   return zeroCode <= code && code < zeroCode + 10;
 };
 

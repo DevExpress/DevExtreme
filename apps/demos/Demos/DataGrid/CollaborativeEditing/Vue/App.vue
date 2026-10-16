@@ -63,7 +63,7 @@ connection.start()
   });
 </script>
 
-<style scoped>
+<style>
 .tables {
   display: flex;
 }

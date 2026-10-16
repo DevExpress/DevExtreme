@@ -4,9 +4,9 @@
 @use "../../base/mixins" as *;
 @use "../../base/progressBar";
 
-$material-bar-height: 4px;
-$material-background-width: 90%;
-$material-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95%;
+$material-bar-height: 4px !default;
+$material-background-width: 90% !default;
+$material-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $progressbar-range-indeterminate-color, transparent 95% !default;
 
 .dx-progressbar-container {
   height: $material-bar-height;

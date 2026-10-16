@@ -1,7 +1,7 @@
-import { ToastViewController } from '@ts/grids/grid_core/toast/m_toast_controller';
-import { ToastView } from '@ts/grids/grid_core/toast/m_toast_view';
+import { ToastViewController } from '@ts/grids/grid_core/toast/toast_controller';
+import { ToastView } from '@ts/grids/grid_core/toast/toast_view';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 
 gridCore.registerModule('toast', {
   defaultOptions() {

@@ -12,10 +12,10 @@ import type {
   RequestCallbacks,
   Response as SendRequestResult,
 } from '@js/common/ai-integration';
+import CustomStore from '@js/data/custom_store';
 import type { Message } from '@js/ui/chat';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
-import CustomStore from '@ts/data/m_custom_store';
 import {
   afterTest,
   beforeTest,
@@ -318,6 +318,27 @@ describe('AI Assistant error handling', () => {
   describe('schema build failure', () => {
     it('should fail when buildResponseSchema returns undefined', async () => {
       buildResponseSchemaSpy.mockReturnValue(undefined as never);
+
+      const { model } = await createDataGridWithAiAndPopup();
+
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
+      await flushAsync();
+
+      const messages = await model.loadMessages();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          status: MessageStatus.Failure,
+          errorText: 'An unexpected error occurred. Please try again.',
+        }),
+      ]);
+    });
+
+    it('should fail when buildResponseSchema throws', async () => {
+      buildResponseSchemaSpy.mockImplementation(() => {
+        throw new Error('Unsupported schema type');
+      });
 
       const { model } = await createDataGridWithAiAndPopup();
 

@@ -2,7 +2,7 @@
 @use "./mixins" as *;
 @use "sass:string" as string;
 
-$colorbox-input-left-padding: 40px;
+$colorbox-input-left-padding: 40px !default;
 
 .dx-colorbox-input-container {
   &.dx-colorbox-color-is-not-defined {

@@ -12,15 +12,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { name as wheelEvent } from '@js/common/core/events/core/wheel';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined } from '@ts/core/utils/m_type';
+import { name as wheelEvent } from '@ts/events/core/wheel';
 import {
   end as dragEventEnd,
   move as dragEventMove,
   start as dragEventStart,
-} from '@js/common/core/events/drag';
-import * as transformEvents from '@js/common/core/events/transform';
-import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
+} from '@ts/events/drag';
+import { exportNames as transformEvents } from '@ts/events/transform';
 import { getVizRangeObject, normalizeEnum } from '@ts/viz/core/utils';
 
 const EVENTS_NS = '.zoomAndPanNS';
@@ -162,7 +162,11 @@ export default {
           const translate = -offsetCalc(e, actionData, coordField, scale);
           zoom = extend(true, zoom, axis.getTranslator().zoom(translate, scale, axis.getZoomBounds()));
           // @ts-expect-error
-          const range = axis.adjustRange(getVizRangeObject([zoom.min, zoom.max]));
+          let pannedRange = getVizRangeObject([zoom.min, zoom.max]);
+          if (actionField === 'pan' && scale === 1) {
+            pannedRange = axis.adjustPannedRange(pannedRange);
+          }
+          const range = axis.adjustRange(pannedRange);
           const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome(actionField, scale, range);
 
           if (!isDefined(viewport)
@@ -231,7 +235,9 @@ export default {
         const scale = e.scale || 1;
         const getRange = (axis) => {
           const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
-          return { startValue: zoom.min, endValue: zoom.max };
+          const range = { startValue: zoom.min, endValue: zoom.max };
+
+          return actionField === 'pan' && scale === 1 ? axis.adjustPannedRange(range) : range;
         };
         const getParameters = (silent) => ({ start: true, end: silent });
         getFilteredAxes(axes).forEach((axis) => {
@@ -260,6 +266,27 @@ export default {
         zoomStarted = axes.length;
       }
       zoomStarted && chart._requestChange(['VISUAL_RANGE']);
+    }
+
+    function panArgumentAxisToThumb(e, scrollRange) {
+      const axes = getFilteredAxes(chart._argumentAxes);
+      const getRange = (axis) => {
+        const range = getVizRangeObject([scrollRange.startValue, scrollRange.endValue]);
+        const bounds = axis.getZoomBounds();
+        let anchor = axis.getTranslator().isInverted() ? 'end' : 'start';
+
+        if (range.endValue >= bounds.endValue) {
+          anchor = 'end';
+        } else if (range.startValue <= bounds.startValue) {
+          anchor = 'start';
+        }
+
+        return axis.adjustRange(axis.adjustPannedRange(range, anchor));
+      };
+
+      axes.forEach((axis) => axisZoom(axis, null, getRange, () => ({ start: true, end: true }), 'pan', 1, e));
+
+      axes.length && chart._requestChange(['VISUAL_RANGE']);
     }
 
     function prepareActionData(coords, action) {
@@ -610,10 +637,17 @@ export default {
           })
           .on(SCROLL_BAR_MOVE_EVENT_NAME, (e) => {
             preventDefaults(e);
-            axesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag, (e) => e.offset);
+            if (e.scrollRange && options.argumentAxis.pan) {
+              panArgumentAxisToThumb(e, e.scrollRange);
+            } else {
+              axesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag, (e) => e.offset);
+            }
           })
           .on(SCROLL_BAR_END_EVENT_NAME, (e) => {
             preventDefaults(e);
+            if (e.scrollRange && options.argumentAxis.pan && (e.offset.x || e.offset.y)) {
+              panArgumentAxisToThumb(e, e.scrollRange);
+            }
             finishAxesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag);
             // @ts-expect-error
             zoomAndPan.actionData = null;

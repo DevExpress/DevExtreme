@@ -1,16 +1,5 @@
 import type { PagingChanges, PagingDataSource, SyncPagingOptions } from '../types';
 
-export function resolvePaginate(
-  enabled: boolean | undefined,
-  scrollingMode: string | undefined,
-): boolean | undefined {
-  if (enabled === undefined) {
-    return undefined;
-  }
-
-  return enabled || scrollingMode === 'virtual' || scrollingMode === 'infinite';
-}
-
 export function syncPaging(
   dataSource: PagingDataSource,
   options: SyncPagingOptions,

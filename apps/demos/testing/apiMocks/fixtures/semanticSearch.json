@@ -1,0 +1,502 @@
+[
+  {
+    "ID": 1,
+    "Name": "Car",
+    "Description": "A vehicle with four wheels"
+  },
+  {
+    "ID": 2,
+    "Name": "Bus",
+    "Description": "A large vehicle for transporting passengers"
+  },
+  {
+    "ID": 3,
+    "Name": "Tea",
+    "Description": "A hot drink made from brewed leaves"
+  },
+  {
+    "ID": 4,
+    "Name": "Coffee",
+    "Description": "A hot drink made from brewed beans"
+  },
+  {
+    "ID": 5,
+    "Name": "Computer",
+    "Description": "An electronic device for processing data"
+  },
+  {
+    "ID": 6,
+    "Name": "Mouse",
+    "Description": "An input device for controlling the cursor on the screen"
+  },
+  {
+    "ID": 7,
+    "Name": "Airplane",
+    "Description": "An aircraft for transporting passengers and cargo"
+  },
+  {
+    "ID": 8,
+    "Name": "Table",
+    "Description": "Furniture for working or dining"
+  },
+  {
+    "ID": 9,
+    "Name": "Chair",
+    "Description": "A comfortable seat with armrests"
+  },
+  {
+    "ID": 10,
+    "Name": "Phone",
+    "Description": "A device for voice and text communication"
+  },
+  {
+    "ID": 11,
+    "Name": "Book",
+    "Description": "A printed publication with texts and illustrations"
+  },
+  {
+    "ID": 12,
+    "Name": "Pen",
+    "Description": "A tool for writing with ink"
+  },
+  {
+    "ID": 13,
+    "Name": "Watch",
+    "Description": "A device for measuring time"
+  },
+  {
+    "ID": 14,
+    "Name": "Television",
+    "Description": "A device for watching videos and broadcasts"
+  },
+  {
+    "ID": 15,
+    "Name": "Camera",
+    "Description": "A device for taking photographs"
+  },
+  {
+    "ID": 16,
+    "Name": "Bicycle",
+    "Description": "A two-wheeled vehicle"
+  },
+  {
+    "ID": 17,
+    "Name": "Plate",
+    "Description": "A dish for serving food"
+  },
+  {
+    "ID": 18,
+    "Name": "Cup",
+    "Description": "A container for drinking hot beverages"
+  },
+  {
+    "ID": 19,
+    "Name": "Backpack",
+    "Description": "A bag carried on the back"
+  },
+  {
+    "ID": 20,
+    "Name": "Calculator",
+    "Description": "An electronic device for calculations"
+  },
+  {
+    "ID": 21,
+    "Name": "Tablet",
+    "Description": "A mobile device with a touch screen"
+  },
+  {
+    "ID": 22,
+    "Name": "Keyboard",
+    "Description": "An input device for typing text"
+  },
+  {
+    "ID": 23,
+    "Name": "Spoon",
+    "Description": "A utensil for eating soups and cereals"
+  },
+  {
+    "ID": 24,
+    "Name": "Fork",
+    "Description": "A utensil for picking up food"
+  },
+  {
+    "ID": 25,
+    "Name": "Knife",
+    "Description": "A tool for cutting food"
+  },
+  {
+    "ID": 26,
+    "Name": "Lamp",
+    "Description": "A lighting device"
+  },
+  {
+    "ID": 27,
+    "Name": "Wardrobe",
+    "Description": "Furniture for storing clothes and things"
+  },
+  {
+    "ID": 28,
+    "Name": "Mirror",
+    "Description": "An object for reflecting images"
+  },
+  {
+    "ID": 29,
+    "Name": "Microwave",
+    "Description": "A device for quickly heating food"
+  },
+  {
+    "ID": 30,
+    "Name": "Refrigerator",
+    "Description": "A device for keeping food at low temperatures"
+  },
+  {
+    "ID": 31,
+    "Name": "Vacuum Cleaner",
+    "Description": "A device for cleaning dust and debris"
+  },
+  {
+    "ID": 32,
+    "Name": "Kettle",
+    "Description": "A container for boiling water"
+  },
+  {
+    "ID": 33,
+    "Name": "Bottle",
+    "Description": "A container for storing liquids"
+  },
+  {
+    "ID": 34,
+    "Name": "Glasses",
+    "Description": "A device for correcting vision"
+  },
+  {
+    "ID": 35,
+    "Name": "Headphones",
+    "Description": "A device for personal audio listening"
+  },
+  {
+    "ID": 36,
+    "Name": "Speaker",
+    "Description": "A device for playing sound"
+  },
+  {
+    "ID": 37,
+    "Name": "Microphone",
+    "Description": "A device for recording and transmitting sound"
+  },
+  {
+    "ID": 38,
+    "Name": "Mouse",
+    "Description": "A small rodent"
+  },
+  {
+    "ID": 39,
+    "Name": "Power Bank",
+    "Description": "A device for charging gadgets on the go"
+  },
+  {
+    "ID": 40,
+    "Name": "Monitor",
+    "Description": "A screen for displaying information from a computer"
+  },
+  {
+    "ID": 41,
+    "Name": "Notebook",
+    "Description": "A book of blank pages for writing notes"
+  },
+  {
+    "ID": 42,
+    "Name": "Pencil",
+    "Description": "A tool for writing or drawing with graphite"
+  },
+  {
+    "ID": 43,
+    "Name": "Backpack",
+    "Description": "A bag worn on the back for carrying items"
+  },
+  {
+    "ID": 44,
+    "Name": "Shoes",
+    "Description": "Footwear for protection and comfort"
+  },
+  {
+    "ID": 45,
+    "Name": "Socks",
+    "Description": "Garments worn on the feet"
+  },
+  {
+    "ID": 46,
+    "Name": "T-shirt",
+    "Description": "A short-sleeved casual top"
+  },
+  {
+    "ID": 47,
+    "Name": "Jacket",
+    "Description": "A garment for the upper body, typically having a front opening"
+  },
+  {
+    "ID": 48,
+    "Name": "Hat",
+    "Description": "A head covering for warmth or fashion"
+  },
+  {
+    "ID": 49,
+    "Name": "Scarf",
+    "Description": "A long piece of cloth worn around the neck"
+  },
+  {
+    "ID": 50,
+    "Name": "Gloves",
+    "Description": "Hand coverings for warmth or protection"
+  },
+  {
+    "ID": 51,
+    "Name": "Umbrella",
+    "Description": "A device for protection against rain or sun"
+  },
+  {
+    "ID": 52,
+    "Name": "Wallet",
+    "Description": "A small case for holding money and personal items"
+  },
+  {
+    "ID": 53,
+    "Name": "Purse",
+    "Description": "A handbag used by women to carry everyday items"
+  },
+  {
+    "ID": 54,
+    "Name": "Watch",
+    "Description": "A timepiece worn on the wrist"
+  },
+  {
+    "ID": 55,
+    "Name": "Belt",
+    "Description": "A strap worn around the waist"
+  },
+  {
+    "ID": 56,
+    "Name": "Ring",
+    "Description": "A circular band worn on the finger"
+  },
+  {
+    "ID": 57,
+    "Name": "Necklace",
+    "Description": "A piece of jewelry worn around the neck"
+  },
+  {
+    "ID": 58,
+    "Name": "Bracelet",
+    "Description": "A piece of jewelry worn around the wrist"
+  },
+  {
+    "ID": 59,
+    "Name": "Earrings",
+    "Description": "Jewelry worn on the earlobes"
+  },
+  {
+    "ID": 60,
+    "Name": "Sunglasses",
+    "Description": "Eyewear for protection against sunlight"
+  },
+  {
+    "ID": 61,
+    "Name": "Notebook",
+    "Description": "A portable computer"
+  },
+  {
+    "ID": 62,
+    "Name": "Printer",
+    "Description": "A device that produces paper copies of documents"
+  },
+  {
+    "ID": 63,
+    "Name": "Router",
+    "Description": "A device that forwards data packets between computer networks"
+  },
+  {
+    "ID": 64,
+    "Name": "Modem",
+    "Description": "A device that modulates and demodulates signals for internet access"
+  },
+  {
+    "ID": 65,
+    "Name": "Smartphone",
+    "Description": "A mobile phone with advanced features and computing capability"
+  },
+  {
+    "ID": 66,
+    "Name": "Blender",
+    "Description": "An appliance for mixing or pureeing foods and liquids"
+  },
+  {
+    "ID": 67,
+    "Name": "Toaster",
+    "Description": "A device for browning slices of bread"
+  },
+  {
+    "ID": 68,
+    "Name": "Oven",
+    "Description": "An appliance for baking or roasting food"
+  },
+  {
+    "ID": 69,
+    "Name": "Stove",
+    "Description": "An appliance for cooking food by direct heat"
+  },
+  {
+    "ID": 70,
+    "Name": "Dishwasher",
+    "Description": "An appliance for cleaning dishes"
+  },
+  {
+    "ID": 71,
+    "Name": "Washing Machine",
+    "Description": "An appliance for washing clothes"
+  },
+  {
+    "ID": 72,
+    "Name": "Dryer",
+    "Description": "An appliance for drying clothes"
+  },
+  {
+    "ID": 73,
+    "Name": "Iron",
+    "Description": "A device for smoothing wrinkles in fabric"
+  },
+  {
+    "ID": 74,
+    "Name": "Ironing Board",
+    "Description": "A flat surface for ironing clothes"
+  },
+  {
+    "ID": 75,
+    "Name": "Broom",
+    "Description": "A tool for sweeping floors"
+  },
+  {
+    "ID": 76,
+    "Name": "Dustpan",
+    "Description": "A flat scoop for collecting dust and debris"
+  },
+  {
+    "ID": 77,
+    "Name": "Mop",
+    "Description": "A tool for cleaning floors"
+  },
+  {
+    "ID": 78,
+    "Name": "Bucket",
+    "Description": "A container for carrying liquids"
+  },
+  {
+    "ID": 79,
+    "Name": "Detergent",
+    "Description": "A cleaning agent"
+  },
+  {
+    "ID": 80,
+    "Name": "Sponge",
+    "Description": "A porous material for cleaning"
+  },
+  {
+    "ID": 81,
+    "Name": "Towel",
+    "Description": "A piece of cloth for drying things"
+  },
+  {
+    "ID": 82,
+    "Name": "Toothbrush",
+    "Description": "A brush for cleaning teeth"
+  },
+  {
+    "ID": 83,
+    "Name": "Toothpaste",
+    "Description": "A paste for cleaning teeth"
+  },
+  {
+    "ID": 84,
+    "Name": "Shampoo",
+    "Description": "A liquid for washing hair"
+  },
+  {
+    "ID": 85,
+    "Name": "Conditioner",
+    "Description": "A product for making hair softer and more manageable"
+  },
+  {
+    "ID": 86,
+    "Name": "Soap",
+    "Description": "A substance for washing and cleaning"
+  },
+  {
+    "ID": 87,
+    "Name": "Body Wash",
+    "Description": "A liquid soap for cleaning the body"
+  },
+  {
+    "ID": 88,
+    "Name": "Lotion",
+    "Description": "A cream for moisturizing skin"
+  },
+  {
+    "ID": 89,
+    "Name": "Deodorant",
+    "Description": "A substance for preventing body odor"
+  },
+  {
+    "ID": 90,
+    "Name": "Perfume",
+    "Description": "A fragrant liquid for applying to the body"
+  },
+  {
+    "ID": 91,
+    "Name": "Razor",
+    "Description": "A tool for shaving hair"
+  },
+  {
+    "ID": 92,
+    "Name": "Shaving Cream",
+    "Description": "A cream for softening hair before shaving"
+  },
+  {
+    "ID": 93,
+    "Name": "Hair Dryer",
+    "Description": "A device for drying hair"
+  },
+  {
+    "ID": 94,
+    "Name": "Comb",
+    "Description": "A tool for arranging hair"
+  },
+  {
+    "ID": 95,
+    "Name": "Hairbrush",
+    "Description": "A brush for styling hair"
+  },
+  {
+    "ID": 96,
+    "Name": "Nail Clippers",
+    "Description": "A tool for trimming nails"
+  },
+  {
+    "ID": 97,
+    "Name": "Nail File",
+    "Description": "A tool for smoothing and shaping nails"
+  },
+  {
+    "ID": 98,
+    "Name": "Tweezers",
+    "Description": "A tool for plucking hair or handling small objects"
+  },
+  {
+    "ID": 99,
+    "Name": "Scissors",
+    "Description": "A tool for cutting"
+  },
+  {
+    "ID": 100,
+    "Name": "Band-Aid",
+    "Description": "A small adhesive bandage for minor cuts and scrapes"
+  }
+]

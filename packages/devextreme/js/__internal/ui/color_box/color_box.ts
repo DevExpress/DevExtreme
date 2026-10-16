@@ -42,7 +42,7 @@ export interface ColorBoxProperties extends Omit<Properties,
 | 'onEnterKey' | 'onFocusIn'
 | 'onFocusOut' | 'onInput'
 | 'onKeyDown' | 'onKeyUp' | 'onPaste'
-| 'onValueChanged' | 'validationMessagePosition'
+| 'onValueChanged' | 'validationMessagePosition' | 'dropDownOptions'
 | 'onContentReady' | 'onDisposing'
 | 'onOptionChanged' | 'onInitialized'> {
   buttonsLocation?: string;
@@ -361,9 +361,11 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
 
   _updateColorViewValue(value: string | null | undefined): void {
     if (this._colorView) {
+      const colorViewValue = value === '' ? null : value;
+
       this._colorView.option({
-        value,
-        matchValue: value,
+        value: colorViewValue,
+        matchValue: colorViewValue,
       });
     }
   }
@@ -414,7 +416,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   _valueOptionChangeHandler(): void {
     const { value } = this.option();
 
-    if (value === null) {
+    if (!value) {
       this._shouldSaveEmptyValue = true;
     }
 

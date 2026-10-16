@@ -1,6 +1,7 @@
 // deprecated
 export {
     isCrossDomain,
+    isFormData,
     getJsonpCallbackName,
     getRequestHeaders,
     getRequestOptions,
@@ -8,4 +9,4 @@ export {
     evalScript,
     evalCrossDomainScript,
     getMethod,
-} from '../../__internal/core/utils/m_ajax_utils';
+} from '../../__internal/core/utils/ajax_utils';

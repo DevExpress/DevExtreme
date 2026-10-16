@@ -1,37 +1,6 @@
-import modules from '__internal/grids/grid_core/m_modules';
+import modules from '__internal/grids/grid_core/modules/modules';
 
 QUnit.module('Modules used class', {}, () => {
-    /* const RootController = modules.Controller.inherit(
-        {
-            method: function(param) {
-                RootController.calls.push({ instance: this, param });
-                return param;
-            },
-            additionalMethod: function(param) {
-                RootController.calls.push({ instance: this, param });
-                return 'additionalMethod';
-            },
-            publicMethods: function() {
-                return ['method'];
-            }
-        }
-    );
-        const InheritedController = RootController.inherit({
-        method: function(param) {
-            this.callBase(param);
-            RootController.calls.push({ instance: this, param: param + 'override' });
-            return param;
-        },
-        newMethod: function(param) {
-            RootController.calls.push({ instance: this, param });
-            return param;
-        },
-        publicMethods: function() {
-            return [];
-        }
-    });
-    const WrongInheritance = Class.inherit({});
-    */
     class RootController extends modules.Controller {
         static calls = [];
         static constructors = [];
@@ -325,12 +294,6 @@ QUnit.module('Modules used class', {}, () => {
 
             QUnit.test('Extend extender method', function(assert) {
                 // arrange
-                /* const ExtendedExtender = {
-                extenderMethod: function() {
-                    RootController.calls.push({ instance: this, name: 'extenderMethod', type: 'extenderOfExtender' });
-                    this.callBase();
-                }
-            };*/
                 const applyExtendedExtender = (Base) =>
                     class ExtendedExtender extends Base {
                         extenderMethod() {
@@ -364,18 +327,12 @@ QUnit.module('Modules used class', {}, () => {
                 assert.deepEqual(
                     RootController.calls[1].type,
                     'extender',
-                    'check type class.inherit'
+                    'check type extender'
                 );
             });
 
             QUnit.test('sinon.spy should work', function(assert) {
                 // arrange
-                /* const ExtendedExtender = {
-                extenderMethod: function() {
-                    RootController.calls.push({ instance: this, name: 'extenderMethod', type: 'extenderOfExtender' });
-                    this.callBase();
-                }
-            };*/
                 const applyExtendedExtender = (Base) =>
                     class ExtendedExtender extends Base {
                         extenderMethod() {
@@ -418,20 +375,6 @@ QUnit.module('Modules used class', {}, () => {
                         }
                     };
                 };
-                /* const classInheritExtender = {
-                ctor: function(component) {
-                    this.callBase(component);
-                    RootController.constructors.push('class.inherit');
-                }
-            }
-
-            modules.registerModule('class.inherit', {
-                extenders: {
-                    controllers: {
-                        'root-controller': classInheritExtender
-                    }
-                }
-            });*/
                 modules.registerModule('extenderOfExtender', {
                     extenders: {
                         controllers: {
@@ -466,14 +409,6 @@ QUnit.module('Modules used class', {}, () => {
                 'Use extender method in other extender',
                 function(assert) {
                     // arrange
-                    /*
-            const ExtendedExtender = {
-                methodUsedExtender: function() {
-                    RootController.calls.push({ instance: this, name: 'methodUsedExtender', type: 'extenderOfExtender' });
-                    this.extenderMethod();
-                }
-            };
-            */
                     const applyExtendedExtender = (Base) =>
                         class ExtendedExtender extends Base {
                             methodUsedExtender() {
@@ -518,30 +453,13 @@ QUnit.module('Modules used class', {}, () => {
                     assert.deepEqual(
                         RootController.calls[1].type,
                         'extender',
-                        'check type class.inherit'
+                        'check type extender'
                     );
                 }
             );
 
             QUnit.test('override several extender', function(assert) {
                 // arrange
-                /*
-            const Extender1 = {
-                extenderMethod1: function() {
-                    RootController.calls.push({ name: 'extenderMethod1', type: 'Extender1' });
-                }
-            };
-            const ExtendedExtender = {
-                extenderMethod: function() {
-                    RootController.calls.push({ name: 'extenderMethod', type: 'extenderOfExtender' });
-                    this.callBase();
-                },
-                extenderMethod1: function() {
-                    RootController.calls.push({ name: 'extenderMethod1', type: 'extenderOfExtender' });
-                    this.callBase();
-                }
-            };
-            */
                 const applyExtender1 = (Base) =>
                     class Extender1 extends Base {
                         extenderMethod1() {
@@ -616,12 +534,6 @@ QUnit.module('Modules used class', {}, () => {
             'Check view use same approach as controller',
             function(assert) {
                 // arrange
-                /* const ExtendedExtender = {
-                extenderMethod: function() {
-                    RootView.calls.push({ instance: this, name: 'extenderMethod', type: 'extenderOfExtender' });
-                    this.callBase();
-                }
-            };*/
                 class RootView extends modules.View {
                     static calls = [];
                     extenderMethod() {
@@ -681,7 +593,7 @@ QUnit.module('Modules used class', {}, () => {
                         name: 'extenderMethod',
                         type: 'RootView',
                     },
-                    'check type class.inherit'
+                    'check type extender'
                 );
             }
         );

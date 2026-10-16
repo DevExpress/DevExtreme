@@ -105,6 +105,7 @@ import type { DxFormTypes } from 'devextreme-vue/form';
 import type { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import type { DxPopupTypes } from 'devextreme-vue/popup';
 import { query } from 'devextreme-vue/common/data';
+import themes from 'devextreme/ui/themes';
 import type { MovieResource } from './data.ts';
 import AppointmentTemplate from './AppointmentTemplate.vue';
 import AppointmentTooltipTemplate from './AppointmentTooltipTemplate.vue';
@@ -130,10 +131,9 @@ const getMovieById = (id: number | undefined): MovieResource | null => id
   ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null
   : null;
 
-const getEditorStylingMode = (): 'filled' | 'outlined' => {
-  const isMaterialOrFluent = document.querySelector('.dx-theme-fluent, .dx-theme-material');
-  return isMaterialOrFluent ? 'filled' : 'outlined';
-};
+const getEditorStylingMode = (): 'filled' | 'outlined' => (
+  themes.current().startsWith('generic') ? 'outlined' : 'filled'
+);
 
 const priceDisplayExpr = (value: number): string => `$${value}`;
 

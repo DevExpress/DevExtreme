@@ -44,13 +44,12 @@ import type {
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
 import errors from '@js/ui/widget/ui.errors';
+import type { IntegrationOptions } from '@ts/core/template_manager';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import { logger } from '@ts/core/utils/m_console';
-import type { Component } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
 import Widget, { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';
-import type { Button } from '@ts/ui/button/button';
 import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/drop_down_editor';
 import Editor from '@ts/ui/editor/editor';
 import { setLabelWidthByMaxLabelWidth } from '@ts/ui/form/components/label';
@@ -80,6 +79,7 @@ import type { ItemOptionActionType } from '@ts/ui/form/form.item_options_actions
 import tryCreateItemOptionAction from '@ts/ui/form/form.item_options_actions';
 import type {
   FormItemRuntimeInfo,
+  FormWidgetInstance,
   PreparedGroupedItem,
   PreparedItem,
   PreparedTabItem,
@@ -160,7 +160,6 @@ class Form extends Widget<FormProperties> {
 
   _groupsColCount!: number[];
 
-  // eslint-disable-next-line no-restricted-globals
   autoColCountChangedTimeoutId?: ReturnType<typeof setTimeout>;
 
   _rootLayoutManager!: LayoutManager;
@@ -1030,9 +1029,10 @@ class Form extends Widget<FormProperties> {
   _createComponent<TTComponent, IProperties = Record<string, unknown>>(
     element: string | HTMLElement | dxElementWrapper,
     component: string | (new (...args) => TTComponent),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    componentConfiguration: TTComponent extends Component<any, infer TTProperties>
-      ? TTProperties
+    componentConfiguration: TTComponent extends { _getDefaultOptions: () => infer TTProperties }
+      ? string extends keyof TTProperties
+        ? object
+        : Partial<TTProperties> & { integrationOptions?: IntegrationOptions }
       : IProperties,
   ): TTComponent {
     const { readOnly } = this.option();
@@ -1184,7 +1184,7 @@ class Form extends Widget<FormProperties> {
     const nameParts = fullName.split('.');
 
     const itemPath = this._getItemPath(nameParts);
-    const item = this.option(itemPath);
+    const item = this.option(itemPath) as Item & Record<string, unknown>;
     const optionNameWithoutPath = fullName.replace(`${itemPath}.`, '');
     const simpleOptionName = optionNameWithoutPath.split('.')[0].replace(/\[\d+]/, '');
     const itemAction = this._tryCreateItemOptionAction(
@@ -1354,7 +1354,7 @@ class Form extends Widget<FormProperties> {
     return false;
   }
 
-  _tryChangeLayoutManagerItemOptions(itemPath: string, options: unknown): boolean {
+  _tryChangeLayoutManagerItemOptions(itemPath: string, options: object): boolean {
     let result = false;
     this.beginUpdate();
 
@@ -1798,13 +1798,13 @@ class Form extends Widget<FormProperties> {
     this._updateData(data, value);
   }
 
-  getEditor(dataField: string): Editor | undefined {
+  getEditor(dataField: string): FormWidgetInstance | undefined {
     return this._itemsRunTimeInfo.findWidgetInstanceByDataField(dataField)
-      ?? this._itemsRunTimeInfo.findWidgetInstanceByName<Editor>(dataField);
+      ?? this._itemsRunTimeInfo.findWidgetInstanceByName(dataField);
   }
 
-  getButton(name: string): Button | undefined {
-    return this._itemsRunTimeInfo.findWidgetInstanceByName<Button>(name);
+  getButton(name: string): FormWidgetInstance | undefined {
+    return this._itemsRunTimeInfo.findWidgetInstanceByName(name);
   }
 
   getScrollable(): Scrollable | undefined {
@@ -1835,7 +1835,7 @@ class Form extends Widget<FormProperties> {
     id: string,
     option?: string,
     value?: Item[] | TabbedItem['tabs'] | undefined,
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+
   ): Item | void {
     const { items } = this.option();
 

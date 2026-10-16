@@ -29,7 +29,7 @@ export class Page extends BaseInfernoComponent<PagePropsInterface> {
   public refs: any = null;
 
   getLabel(): string {
-    return format(getLocalizationMessage(this.context, 'dxPagination-page'), this.getValue()) as string;
+    return format(getLocalizationMessage(this.context, 'dxPagination-page'), this.getValue());
   }
 
   getValue(): number {

@@ -28,6 +28,7 @@ import { isDefined, isFunction } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Properties as FormProperties } from '@js/ui/form';
 import type { Converter, HtmlEditorFormat, Properties } from '@js/ui/html_editor';
+import type { Properties as PopupProperties } from '@js/ui/popup';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
@@ -35,6 +36,7 @@ import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/m_co
 import { getQuill } from '@ts/ui/html_editor/m_quill_importer';
 import QuillRegistrator from '@ts/ui/html_editor/m_quill_registrator';
 import getWordMatcher from '@ts/ui/html_editor/matchers/m_wordLists';
+import type { DialogPromise } from '@ts/ui/html_editor/types';
 import FormDialog from '@ts/ui/html_editor/ui/formDialog';
 import { sanitizeHtml } from '@ts/ui/html_editor/utils/html_sanitizer';
 import { prepareScrollData } from '@ts/ui/text_box/utils.scroll';
@@ -74,7 +76,7 @@ const isIos = devices.current().platform === 'ios';
 let editorsCount = 0;
 
 class HtmlEditor extends Editor<Properties> {
-  _mentionKeyInTemplateStorage?: number;
+  _mentionKeyInTemplateStorage!: number;
 
   _formDialog!: FormDialog;
 
@@ -894,22 +896,21 @@ class HtmlEditor extends Editor<Properties> {
     this._applyQuillMethod('insertEmbed', index, type, options);
   }
 
-  showFormDialog(formConfig: FormProperties): Promise<unknown> | undefined {
-    return this._formDialog.show(formConfig);
+  showFormDialog<TResult = unknown>(
+    formConfig?: FormProperties,
+  ): DialogPromise<TResult, Event | undefined> | undefined {
+    return this._formDialog.show<TResult>(formConfig);
   }
 
-  showAIDialog(payload: AIDialogShowPayload): Promise<AIDialogResult> | undefined {
+  showAIDialog(payload: AIDialogShowPayload): DialogPromise<AIDialogResult> | undefined {
     return this._aiDialog?.show(payload);
   }
 
-  formDialogOption(
-    optionName: string,
-    optionValue: unknown,
-  ): void {
-    return this._formDialog.popupOption.apply(
-      this._formDialog,
-      [optionName, optionValue],
-    );
+  formDialogOption(options: Partial<PopupProperties> & Record<string, unknown>): void;
+  formDialogOption(optionName: string, optionValue: unknown): void;
+  formDialogOption(optionName: string | Record<string, unknown>, optionValue?: unknown): void {
+    // @ts-expect-error popupOption() is overloaded; apply() cannot pick one for a union argument
+    return this._formDialog.popupOption.apply(this._formDialog, [optionName, optionValue]);
   }
 
   focus(): void {
@@ -921,7 +922,7 @@ class HtmlEditor extends Editor<Properties> {
     this._applyQuillMethod('blur');
   }
 
-  getMentionKeyInTemplateStorage(): number | undefined {
+  getMentionKeyInTemplateStorage(): number {
     return this._mentionKeyInTemplateStorage;
   }
 }

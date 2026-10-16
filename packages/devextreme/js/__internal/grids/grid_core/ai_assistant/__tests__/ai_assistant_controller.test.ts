@@ -9,7 +9,7 @@ import type { ExecuteGridAssistantCommandResult } from '@js/common/ai-integratio
 import type { ArrayStore } from '@js/common/data';
 import type { Message } from '@js/ui/chat';
 
-import type { InternalGrid } from '../../m_types';
+import type { InternalGrid } from '../../types';
 import { AIAssistantController } from '../ai_assistant_controller';
 import { AIAssistantIntegrationController } from '../ai_assistant_integration_controller';
 import {

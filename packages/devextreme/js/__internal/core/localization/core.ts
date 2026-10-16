@@ -1,26 +1,35 @@
 import parentLocales from '@ts/core/localization/cldr-data/parent_locales';
 import getParentLocale from '@ts/core/localization/parentLocale';
-import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
+import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
 
 const DEFAULT_LOCALE = 'en';
 
+interface LocaleAccessor {
+  (): string;
+  (locale: string): void;
+}
+
 export default dependencyInjector({
-  locale: (() => {
+  locale: ((): LocaleAccessor => {
     let currentLocale = DEFAULT_LOCALE;
 
-    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type,consistent-return
-    return (locale?: string): string | void => {
+    function localeAccessor(): string;
+    function localeAccessor(locale: string): void;
+    // eslint-disable-next-line consistent-return
+    function localeAccessor(locale?: string): string | void {
       if (!locale) {
         return currentLocale;
       }
 
       currentLocale = locale;
-    };
+    }
+
+    return localeAccessor;
   })(),
 
-  getValueByClosestLocale(
-    getter: (locale: string) => string | number | undefined,
-  ): string | number | undefined {
+  getValueByClosestLocale<TValue>(
+    getter: (locale: string) => TValue | undefined,
+  ): TValue | undefined {
     let locale: string = this.locale();
     let value = getter(locale);
     let isRootLocale = false;

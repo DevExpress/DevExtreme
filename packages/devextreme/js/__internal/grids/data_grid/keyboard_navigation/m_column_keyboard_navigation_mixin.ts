@@ -1,13 +1,18 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import { isDefined } from '@js/core/utils/type';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
-import type { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/types';
 
-export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboardNavigationController>>(Base: T) => class ColumnKeyboardNavigationMixin extends Base {
-  private ungroupColumnByPressingKey(e): void {
+import type { MixinBase } from './types';
+
+/* eslint-disable-next-line
+  @typescript-eslint/explicit-module-boundary-types,
+  @typescript-eslint/explicit-function-return-type
+  -- TS can't name the class type of a generic mixin */
+export const ColumnKeyboardNavigationMixin = <T extends MixinBase>(Base: T) => class extends Base {
+  private ungroupColumnByPressingKey(e: KeyboardKeyDownEvent): void {
     const column = this.getColumnFromEvent(e);
     const rowIndex = this.getRowIndexFromEvent(e);
 
@@ -15,13 +20,15 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
     e.originalEvent?.preventDefault();
   }
 
-  protected getFocusedCellPositionByColumn(column): FocusedCellPosition | undefined {
+  protected getFocusedCellPositionByColumn(
+    column: Column | undefined,
+  ): FocusedCellPosition | undefined {
     if (!column) {
       return undefined;
     }
 
     const newRowIndex = this._columnsController
-      .getRowIndex(column.index, true);
+      .getRowIndex(column.index ?? -1, true);
 
     return {
       rowIndex: newRowIndex,
@@ -32,20 +39,25 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getRowIndexFromEvent(e): number {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
+  protected getRowIndexFromEvent(e: KeyboardKeyDownEvent): number {
     return 0;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getColumnFromEvent(e): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
+  protected getColumnFromEvent(e: KeyboardKeyDownEvent): Column | undefined {
+    return undefined;
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getNewFocusedColumnBeforeUngrouping(column, rowIndex: number): Column | undefined {
+  protected getNewFocusedColumnBeforeUngrouping(
+    column: Column,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
+    rowIndex: number,
+  ): Column | undefined {
     return column;
   }
 
-  protected keyDownHandler(e): boolean {
+  protected keyDownHandler(e: KeyboardKeyDownEvent): boolean {
     let isHandled = super.keyDownHandler(e);
 
     if (isHandled) {
@@ -63,7 +75,11 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
     return isHandled;
   }
 
-  protected changeGroupColumnIndex(groupIndex: number, column, newFocusedColumn): void {
+  protected changeGroupColumnIndex(
+    groupIndex: number,
+    column: Column,
+    newFocusedColumn: Column | undefined,
+  ): void {
     this._columnsController.beginUpdate();
     this._columnsController.columnOption(column.dataField, 'groupIndex', groupIndex);
 
@@ -73,16 +89,16 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
     this._columnsController.endUpdate();
   }
 
-  public canUngroupColumnByPressingKey(e): boolean {
+  public canUngroupColumnByPressingKey(e: KeyboardKeyDownEvent): boolean {
     return e.which === KEY_CODES.G && e.shift && isCommandKeyPressed(e.originalEvent);
   }
 
-  public canUngroupAllColumnByPressingKey(e): boolean {
+  public canUngroupAllColumnByPressingKey(e: KeyboardKeyDownEvent): boolean {
     return e.which === KEY_CODES.G && e.shift && e.alt;
   }
 
-  public ungroupColumn(column, rowIndex = 0): void {
-    if (isDefined(column?.groupIndex)) {
+  public ungroupColumn(column: Column | undefined, rowIndex = 0): void {
+    if (column && isDefined(column.groupIndex)) {
       const newFocusedColumn = this.getNewFocusedColumnBeforeUngrouping(
         column,
         rowIndex,

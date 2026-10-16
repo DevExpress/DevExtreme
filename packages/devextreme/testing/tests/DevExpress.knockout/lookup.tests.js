@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const fx = require('common/core/animation/fx');
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
-const ko = require('knockout');
+import $ from 'jquery';
+import fx from 'common/core/animation/fx';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import ko from 'knockout';
 
-require('ui/lookup');
-require('integration/knockout');
+import 'ui/lookup';
+import 'integration/knockout';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

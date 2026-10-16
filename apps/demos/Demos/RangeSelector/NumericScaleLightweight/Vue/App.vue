@@ -30,7 +30,7 @@ import {
 
 const range = ref([40000, 80000]);
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 210px;
 }

@@ -74,7 +74,9 @@ class TextArea<
 
   _createInput(): dxElementWrapper {
     const $input = $('<textarea>');
-    this._applyInputAttributes($input, this.option('inputAttr'));
+    const { inputAttr } = this.option();
+
+    this._applyInputAttributes($input, inputAttr);
     this._updateInputAutoResizeAppearance($input);
 
     return $input;

@@ -9,10 +9,6 @@ $htmleditor-filled-border-color: transparent !default;
 $htmleditor-invalid-border-color: $base-invalid-color !default;
 $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 $htmleditor-toolbar-border-color: $base-border-color !default;
-$htmleditor-normal-format-active-bg: null !default;
-$htmleditor-default-format-active-bg: null !default;
-$htmleditor-danger-format-active-bg: null !default;
-$htmleditor-success-format-active-bg: null !default;
 $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
 $htmleditor-resize-frame-border-color: $base-accent !default;
 $htmleditor-resize-handle-bg: $base-accent !default;
@@ -22,73 +18,41 @@ $htmleditor-table-border-color: $base-border-color !default;
 $htmleditor-cells-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
 
 @if $color == "carmine" {
-  $htmleditor-normal-format-active-bg: color.adjust($base-element-bg, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-default-format-active-bg: color.adjust($base-accent, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-danger-format-active-bg: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-success-format-active-bg: color.adjust($base-success, $lightness: -10%, $space: hsl) !default;
   $htmleditor-mention-bg: color.adjust($base-bg, $lightness: -9%, $space: hsl) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "contrast" {
-  $htmleditor-normal-format-active-bg: $base-bg !default;
-  $htmleditor-default-format-active-bg: $base-default !default;
-  $htmleditor-danger-format-active-bg: $base-danger !default;
-  $htmleditor-success-format-active-bg: $base-success !default;
   $htmleditor-mention-bg: extcolor.difference(#fff, $base-bg) !default;
   $htmleditor-mention-color: $base-inverted-text-color !default;
 }
 
 @if $color == "dark" {
-  $htmleditor-normal-format-active-bg: color.adjust($base-element-bg, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-default-format-active-bg: color.adjust($base-accent, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-danger-format-active-bg: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-success-format-active-bg: color.adjust($base-success, $lightness: -10%, $space: hsl) !default;
   $htmleditor-mention-bg: color.adjust($base-bg, $lightness: 13.5%, $space: hsl) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "darkmoon" {
-  $htmleditor-normal-format-active-bg: color.adjust($base-element-bg, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-default-format-active-bg: color.adjust($base-accent, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-danger-format-active-bg: color.adjust($base-danger, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-success-format-active-bg: color.adjust($base-success, $lightness: 10%, $space: hsl) !default;
   $htmleditor-mention-bg: color.adjust($base-bg, $lightness: 13.5%, $space: hsl) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "darkviolet" {
-  $htmleditor-normal-format-active-bg: color.adjust($base-element-bg, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-default-format-active-bg: color.adjust($base-accent, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-danger-format-active-bg: color.adjust($base-danger, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-success-format-active-bg: color.adjust($base-success, $lightness: 10%, $space: hsl) !default;
   $htmleditor-mention-bg: $base-select-bg !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "greenmist" {
-  $htmleditor-normal-format-active-bg: color.adjust($base-element-bg, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-default-format-active-bg: color.adjust($base-accent, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-danger-format-active-bg: color.adjust($base-danger, $lightness: 10%, $space: hsl) !default;
-  $htmleditor-success-format-active-bg: color.adjust($base-success, $lightness: 10%, $space: hsl) !default;
   $htmleditor-mention-bg: $base-accent !default;
   $htmleditor-mention-color: color.adjust($base-text-color, $lightness: 100%, $space: hsl) !default;
 }
 
 @if $color == "light" {
-  $htmleditor-normal-format-active-bg: color.adjust($base-element-bg, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-default-format-active-bg: color.adjust($base-accent, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-danger-format-active-bg: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-success-format-active-bg: color.adjust($base-success, $lightness: -10%, $space: hsl) !default;
   $htmleditor-mention-bg: color.adjust($base-bg, $lightness: -13.5%, $space: hsl) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "softblue" {
-  $htmleditor-normal-format-active-bg: color.adjust($base-element-bg, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-default-format-active-bg: color.adjust($base-accent, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-danger-format-active-bg: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
-  $htmleditor-success-format-active-bg: color.adjust($base-success, $lightness: -10%, $space: hsl) !default;
   $htmleditor-mention-bg: color.adjust($base-bg, $lightness: -13.5%, $space: hsl) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }

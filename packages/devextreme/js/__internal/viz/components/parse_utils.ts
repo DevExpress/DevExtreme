@@ -4,9 +4,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { noop } from '@js/core/utils/common';
-import dateSerialization from '@js/core/utils/date_serialization';
-import { isDefined } from '@js/core/utils/type';
+import { dateSerialization } from '@ts/core/utils/date_serialization';
+import { noop } from '@ts/core/utils/m_common';
+import { isDefined } from '@ts/core/utils/m_type';
 
 const parsers = {
   string(val) {

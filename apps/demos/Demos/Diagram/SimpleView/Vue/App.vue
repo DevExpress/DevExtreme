@@ -30,7 +30,7 @@ const dataSource = new ArrayStore({
   data: service.getEmployees(),
 });
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 600px;
     }

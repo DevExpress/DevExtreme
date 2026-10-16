@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import Class from 'core/class';
 import { DataController } from '__internal/grids/pivot_grid/data_controller/m_data_controller';
 import virtualScrolling from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 import stateStoring from '__internal/grids/grid_core/state_storing/state_storing_controller_core';
@@ -6092,18 +6091,18 @@ QUnit.module('Remote paging', {
         const that = this;
         this.loadArgs = [];
 
-        const MockStore = Class.inherit({
-            ctor: function(options) {
+        class MockStore {
+            constructor(options) {
                 this._rowCount = options.rowCount;
                 this._columnCount = options.columnCount;
-            },
-            getFields: function() {
+            }
+            getFields() {
                 return $.Deferred().resolve([]);
-            },
-            supportPaging: function() {
+            }
+            supportPaging() {
                 return true;
-            },
-            load: function(loadOptions) {
+            }
+            load(loadOptions) {
                 that.loadArgs.push(loadOptions);
                 const rowCount = loadOptions.rows.length ? this._rowCount : 0;
                 const columnCount = loadOptions.columns.length ? this._columnCount : 0;
@@ -6116,7 +6115,7 @@ QUnit.module('Remote paging', {
                     grandTotalColumnIndex: 0
                 });
             }
-        });
+        }
 
         this.component = {
             option: function(name) {
@@ -6711,15 +6710,14 @@ QUnit.module('Remote paging', {
     QUnit.test('load with CustomStore', function(assert) {
         const that = this;
 
-        const CustomPivotStore = Class.inherit({
-            ctor: function() {},
-            getFields: function() {
+        class CustomPivotStore {
+            getFields() {
                 return $.Deferred().resolve([]).promise();
-            },
-            supportPaging: function() {
+            }
+            supportPaging() {
                 return true;
-            },
-            load: function(loadOptions) {
+            }
+            load(loadOptions) {
                 that.loadArgs.push(loadOptions);
                 return $.Deferred().resolve({
                     rows: [
@@ -6732,7 +6730,7 @@ QUnit.module('Remote paging', {
                     grandTotalColumnIndex: 0
                 }).promise();
             }
-        });
+        }
 
         const dataController = that.setup({
             paginate: true,

@@ -1,7 +1,7 @@
 import type { ExecuteGridAssistantCommandParams, RequestCallbacks } from '@js/common/ai-integration';
 import type { AIAssistant } from '@js/common/grids';
 import type { Message } from '@js/ui/chat';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 import type { z, ZodObject, ZodRawShape } from 'zod';
 
 import type { MessageStatus } from './const';
@@ -44,7 +44,7 @@ export type CommandExecutor<TArgs = undefined> = (
 
 // Empty schemas (no keys) collapse args to `undefined` so the executor
 // signature becomes `() => Promise<CommandResult>` for no-arg commands.
-type CommandArgs<TSchema extends ZodObject<ZodRawShape>> = keyof z.infer<TSchema> extends never
+type CommandArgs<TSchema extends ZodObject<ZodRawShape>> = keyof TSchema['shape'] extends never
   ? undefined
   : z.infer<TSchema>;
 

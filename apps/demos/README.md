@@ -8,39 +8,25 @@ To run the demos on your machine, clone this repository, run `pnpm install`, and
 
 ### Run demos locally
 
-In `monorepo/root`
+From the monorepo root.
 
-Build all dependencies and prepare systemJS configs by executing:
+Build DevExtreme and pack the Angular/React/Vue wrappers:
+
 ```
 pnpm run demos:prepare
 ```
 
-Start webserver:
+Start the web server:
+
 ```
 pnpm run demos:start
 ```
+
 Navigate to http://localhost:8080/.
 
-You can pass additional parameter to specify port. It can be useful when you need to fast switching between one demo on different frameworks.
+You can pass a port as an extra argument. That is useful when you need to switch the same demo between frameworks quickly.
 
-
-### Bundled mode
-
-Angular, Vue, and React demos can use bundles instead of separate files from `node_modules`. With bundles, demos launch faster but become harder to debug. 
-
-In `apps/demos`
-
-Run the following command to create the bundles and replace the SystemJS configuration:
-
-```
-pnpm run prepare-bundles
-```
-
-To return to using separate files from `node_modules`, run:
-
-```
-pnpm run prepare-js
-```
+Angular, React, and Vue demos are bundled on demand when you open a page. jQuery demos load `dx.all.js` from `devextreme-dist`.
 
 ### Before Commiting Changes
 

@@ -1,11 +1,11 @@
 import { describe, expect, it } from '@jest/globals';
-import ArrayStore from '@js/common/data/array_store';
-import { CustomStore } from '@js/common/data/custom_store';
-import type { Store } from '@js/data';
+import type Store from '@ts/data/abstract_store';
+import ArrayStore from '@ts/data/array_store';
+import CustomStore from '@ts/data/custom_store';
 
 import { isCustomStore, isLocalStore } from '../store';
 
-const arrayStore = new ArrayStore([]);
+const arrayStore = new ArrayStore({ data: [] });
 const customStore = new CustomStore({ load: (): unknown[] => [] });
 const remoteStore = {} as Store;
 

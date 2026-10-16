@@ -90,7 +90,7 @@ function showDeletedToast(e: DxSchedulerTypes.AppointmentDeletedEvent) {
 }
 </script>
 
-<style scoped>
+<style>
   .options {
     padding: 20px;
     background-color: rgba(191, 191, 191, 0.15);

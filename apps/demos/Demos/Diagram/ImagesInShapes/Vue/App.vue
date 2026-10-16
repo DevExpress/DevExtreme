@@ -42,7 +42,7 @@ const orgLinksDataSource = new ArrayStore({
   data: service.getOrgLinks(),
 });
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 900px;
     }

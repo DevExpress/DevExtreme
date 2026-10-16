@@ -1,4 +1,4 @@
-import { domAdapter } from '@ts/core/m_dom_adapter';
+import { domAdapter } from '@ts/core/dom_adapter';
 
 export const isFocusLost = (): boolean => {
   const activeElement = domAdapter.getActiveElement();

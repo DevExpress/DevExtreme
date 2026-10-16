@@ -1,3 +1,3 @@
 // deprecated
-import { Action } from '../__internal/core/m_action';
+import { Action } from '../__internal/core/action';
 export default Action;

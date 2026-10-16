@@ -24,6 +24,9 @@ export default class VueBundler extends ESBundler {
         '.png': 'dataurl',
         '.svg': 'dataurl',
       },
+      alias: {
+        vue: join(__dirname, '..', '..', '..', 'node_modules', 'vue'),
+      },
       entryNames: '[dir]/bundle.[hash]',
       outdir: destinationDemoPath,
       entryPoints: this.#getEntryPoints(sourceDemoPath),

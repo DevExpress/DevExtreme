@@ -1,4 +1,4 @@
-const config = require('core/config');
+import config from 'core/config';
 
 QUnit.module('config.useJQuery');
 

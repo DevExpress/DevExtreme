@@ -126,7 +126,7 @@ function getItemProps(step: Step, fields: Fields) {
 }
 </script>
 
-<style scoped>
+<style>
 #app {
   display: flex;
   flex-direction: column;

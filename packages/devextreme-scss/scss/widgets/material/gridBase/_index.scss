@@ -28,12 +28,12 @@
 @use "../overlay";
 @use "../pagination";
 
-$material-grid-base-border-hidden: 1px solid transparent;
-$material-grid-base-row-border: 1px solid transparent;
-$material-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
-$material-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
+$material-grid-base-border-hidden: 1px solid transparent !default;
+$material-grid-base-row-border: 1px solid transparent !default;
+$material-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color !default;
+$material-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color !default;
 
-$material-grid-base-group-panel-message-line-height: $material-button-text-line-height;
+$material-grid-base-group-panel-message-line-height: $material-button-text-line-height !default;
 
 @mixin grid-base($widget-name) {
   @include material-grid-base-cell($widget-name);

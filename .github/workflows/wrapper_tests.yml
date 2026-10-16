@@ -233,7 +233,7 @@ jobs:
       - name: Download Browser
         if: matrix.framework == 'angular'
         run: |
-          PUPPETEER_CMD="browsers install chrome@150.0.7871.124"
+          PUPPETEER_CMD="browsers install chrome@155.0.8059.39"
           pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD
 
       - name: Test ${{ matrix.framework }}
@@ -243,3 +243,7 @@ jobs:
 
       - name: Pack ${{ matrix.framework }}
         run: pnpm exec nx pack devextreme-${{ matrix.framework }}
+
+      - name: Verify ${{ matrix.framework }} declarations
+        if: matrix.framework != 'angular'
+        run: pnpm exec nx verify:dts devextreme-${{ matrix.framework }}

@@ -7,16 +7,18 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { extend } from '@js/core/utils/extend';
-import { isString as _isString } from '@js/core/utils/type';
+import { extend } from '@ts/core/utils/m_extend';
+import { isString as _isString } from '@ts/core/utils/m_type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { LayoutTargetOptions } from '@ts/viz/core/layout';
+import type { AlignedLayoutRect } from '@ts/viz/core/layout_element';
 import { LayoutElement } from '@ts/viz/core/layout_element';
+import type { BBox, Bounds } from '@ts/viz/core/types';
 
 import { enumParser, patchFontOptions as _patchFontOptions } from './utils';
 
@@ -26,22 +28,29 @@ const parseVerticalAlignment = enumParser(['top', 'bottom']);
 
 const DEFAULT_MARGIN = 10;
 
-function hasText(text) {
+interface TitleParams {
+  renderer: ThemeValue;
+  cssClass?: string;
+  root?: ThemeValue;
+  incidentOccurred: (id: string) => void;
+}
+
+function hasText(text: ThemeValue): boolean {
   return !!(text && String(text).length > 0);
 }
 
-function processTitleLength(elem, text, width, options, placeholderSize) {
+function processTitleLength(elem: ThemeValue, text: ThemeValue, width: number, options: ThemeValue, placeholderSize: ThemeValue): void {
   if (elem.attr({ text }).setMaxSize(width, placeholderSize, options).textChanged) {
     elem.setTitle(text);
   }
 }
 
-function pickMarginValue(value) {
+function pickMarginValue(value: ThemeValue): number {
   return value >= 0 ? _Number(value) : DEFAULT_MARGIN;
 }
 
-function validateMargin(margin) {
-  let result;
+function validateMargin(margin: ThemeValue): Bounds {
+  let result: Bounds;
   if (margin >= 0) {
     result = {
       left: _Number(margin), top: _Number(margin), right: _Number(margin), bottom: _Number(margin),
@@ -58,70 +67,86 @@ function validateMargin(margin) {
   return result;
 }
 
-function checkRect(rect, boundingRect) {
+function checkRect(rect: number[], boundingRect: BBox): boolean {
   return rect[2] - rect[0] < boundingRect.width || rect[3] - rect[1] < boundingRect.height;
 }
-export let Title = function (params) {
-  this._params = params;
-  this._group = params.renderer.g().attr({ class: params.cssClass }).linkOn(params.root || params.renderer.root, 'title');
-  this._hasText = false;
-};
+export let Title = class Title extends LayoutElement {
+  declare _params: TitleParams;
 
-// There is no normal inheritance from LayoutElement because it is actually a container of methods rather than a class.
-extend(Title.prototype, LayoutElement.prototype, {
-  dispose() {
-    const that = this;
-    that._group.linkRemove();
-    that._group.linkOff();
-    if (that._titleElement) {
-      that._clipRect.dispose();
-      that._titleElement = that._subtitleElement = that._clipRect = null;
+  declare _group: ThemeValue;
+
+  declare _hasText: boolean;
+
+  declare _titleElement: ThemeValue;
+
+  declare _subtitleElement: ThemeValue;
+
+  declare _clipRect: ThemeValue;
+
+  declare _baseLineCorrection: number;
+
+  declare _boundingRect: AlignedLayoutRect;
+
+  declare DEBUG_getOptions?: () => ThemeValue;
+
+  constructor(params: TitleParams) {
+    super();
+    this._params = params;
+    this._group = params.renderer.g().attr({ class: params.cssClass }).linkOn(params.root || params.renderer.root, 'title');
+    this._hasText = false;
+  }
+
+  dispose(): void {
+    this._group.linkRemove();
+    this._group.linkOff();
+    if (this._titleElement) {
+      this._clipRect.dispose();
+      this._titleElement = this._subtitleElement = this._clipRect = null;
     }
-    that._params = that._group = that._options = null;
-  },
+    // @ts-expect-error dispose() drops the references
+    this._params = this._group = this._options = null;
+  }
 
-  _updateOptions(options) {
+  _updateOptions(options: ThemeValue): void {
     this._options = options;
     this._options.horizontalAlignment = parseHorizontalAlignment(options.horizontalAlignment, 'center');
     this._options.verticalAlignment = parseVerticalAlignment(options.verticalAlignment, 'top');
     this._options.margin = validateMargin(options.margin);
-  },
+  }
 
-  _updateStructure() {
-    const that = this;
-    const renderer = that._params.renderer;
-    const group = that._group;
-    const options = that._options;
+  _updateStructure(): void {
+    const renderer = this._params.renderer;
+    const group = this._group;
+    const options = this._options;
     const align = options.horizontalAlignment;
 
     // Looks like the following "laziness" is only to avoid unnecessary DOM content creation -
     // for example when widget is created without "title" option.
-    if (!that._titleElement) {
-      that._titleElement = renderer.text().append(group);
-      that._subtitleElement = renderer.text();
-      that._clipRect = renderer.clipRect();
-      group.attr({ 'clip-path': that._clipRect.id });
+    if (!this._titleElement) {
+      this._titleElement = renderer.text().append(group);
+      this._subtitleElement = renderer.text();
+      this._clipRect = renderer.clipRect();
+      group.attr({ 'clip-path': this._clipRect.id });
     }
 
-    that._titleElement.attr({ align, class: options.cssClass });
-    that._subtitleElement.attr({ align, class: options.subtitle.cssClass });
+    this._titleElement.attr({ align, class: options.cssClass });
+    this._subtitleElement.attr({ align, class: options.subtitle.cssClass });
 
     group.linkAppend();
-    hasText(options.subtitle.text) ? that._subtitleElement.append(group) : that._subtitleElement.remove();
-  },
+    hasText(options.subtitle.text) ? this._subtitleElement.append(group) : this._subtitleElement.remove();
+  }
 
-  _updateTexts() {
-    const that = this;
-    const options = that._options;
+  _updateTexts(): void {
+    const options = this._options;
     const subtitleOptions = options.subtitle;
-    const titleElement = that._titleElement;
-    const subtitleElement = that._subtitleElement;
+    const titleElement = this._titleElement;
+    const subtitleElement = this._subtitleElement;
     const testText = 'A';
     let titleBox;
 
     titleElement.attr({ text: testText, y: 0 }).css(_patchFontOptions(options.font));
     titleBox = titleElement.getBBox(); // for multiline text
-    that._baseLineCorrection = titleBox.height + titleBox.y;
+    this._baseLineCorrection = titleBox.height + titleBox.y;
 
     titleElement.attr({ text: options.text });
     titleBox = titleElement.getBBox();
@@ -132,18 +157,17 @@ extend(Title.prototype, LayoutElement.prototype, {
     if (hasText(subtitleOptions.text)) {
       subtitleElement.attr({ text: subtitleOptions.text, y: 0 }).css(_patchFontOptions(subtitleOptions.font));
     }
-  },
+  }
 
-  _shiftSubtitle() {
-    const that = this;
-    const titleBox = that._titleElement.getBBox();
-    const element = that._subtitleElement;
-    const offset = that._options.subtitle.offset;
+  _shiftSubtitle(): void {
+    const titleBox = this._titleElement.getBBox();
+    const element = this._subtitleElement;
+    const offset = this._options.subtitle.offset;
 
     element.move(0, titleBox.y + titleBox.height - element.getBBox().y - offset);
-  },
+  }
 
-  _updateBoundingRectAlignment() {
+  _updateBoundingRectAlignment(): void {
     const boundingRect = this._boundingRect;
     const options = this._options;
 
@@ -155,100 +179,94 @@ extend(Title.prototype, LayoutElement.prototype, {
       horizontal: options.horizontalAlignment,
       vertical: options.verticalAlignment,
     };
-  },
+  }
 
-  hasText() {
+  hasText(): boolean {
     return this._hasText;
-  },
+  }
 
-  update(themeOptions, userOptions) {
-    const that = this;
+  update(themeOptions: ThemeValue, userOptions?: ThemeValue): boolean {
     const options = extend(true, {}, themeOptions, processTitleOptions(userOptions));
     const _hasText = hasText(options.text);
-    const isLayoutChanged = _hasText || _hasText !== that._hasText;
+    const isLayoutChanged = _hasText || _hasText !== this._hasText;
 
-    that._baseLineCorrection = 0;
+    this._baseLineCorrection = 0;
 
-    that._updateOptions(options);
-    that._boundingRect = {};
+    this._updateOptions(options);
+    this._boundingRect = {} as AlignedLayoutRect;
     if (_hasText) {
-      that._updateStructure();
-      that._updateTexts();
+      this._updateStructure();
+      this._updateTexts();
     } else {
-      that._group.linkRemove();
+      this._group.linkRemove();
     }
-    that._updateBoundingRect();
-    that._updateBoundingRectAlignment();
-    that._hasText = _hasText;
+    this._updateBoundingRect();
+    this._updateBoundingRectAlignment();
+    this._hasText = _hasText;
     return isLayoutChanged;
-  },
+  }
 
-  draw(width, height) {
-    const that = this;
+  draw(width: number, height: number): this {
+    if (this._hasText) {
+      this._group.linkAppend();
+      this._correctTitleLength(width);
 
-    if (that._hasText) {
-      that._group.linkAppend();
-      that._correctTitleLength(width);
-
-      if (that._group.getBBox().height > height) {
+      if (this._group.getBBox().height > height) {
         this.freeSpace();
       }
     }
 
-    return that;
-  },
+    return this;
+  }
 
-  _correctTitleLength(width) {
-    const that = this;
-    const options = that._options;
+  _correctTitleLength(width: number): void {
+    const options = this._options;
     const margin = options.margin;
     const maxWidth = width - margin.left - margin.right;
 
     let placeholderSize = options.placeholderSize;
 
-    processTitleLength(that._titleElement, options.text, maxWidth, options, placeholderSize);
-    if (that._subtitleElement) {
+    processTitleLength(this._titleElement, options.text, maxWidth, options, placeholderSize);
+    if (this._subtitleElement) {
       if (_Number(placeholderSize) > 0) {
-        placeholderSize -= that._titleElement.getBBox().height;
+        placeholderSize -= this._titleElement.getBBox().height;
       }
-      processTitleLength(that._subtitleElement, options.subtitle.text, maxWidth, options.subtitle, placeholderSize);
-      that._shiftSubtitle();
+      processTitleLength(this._subtitleElement, options.subtitle.text, maxWidth, options.subtitle, placeholderSize);
+      this._shiftSubtitle();
     }
 
-    that._updateBoundingRect();
+    this._updateBoundingRect();
 
     const { x, y, height } = this.getCorrectedLayoutOptions();
     this._clipRect.attr({
       x, y, width, height,
     });
-  },
+  }
 
-  getLayoutOptions() {
+  getLayoutOptions(): AlignedLayoutRect {
     return this._boundingRect || null;
-  },
+  }
 
-  shift(x, y) {
-    const that = this;
-    const box = that.getLayoutOptions();
-    that._group.move(x - box.x, y - box.y);
+  shift(x: number, y: number): this {
+    const box = this.getLayoutOptions();
+    this._group.move(x - box.x, y - box.y);
 
-    return that;
-  },
+    return this;
+  }
 
-  _updateBoundingRect() {
-    const that = this;
-    const options = that._options;
+  _updateBoundingRect(): void {
+    const options = this._options;
     const margin = options.margin;
-    const boundingRect = that._boundingRect;
-    const box = that._hasText ? that._group.getBBox() : {
+    const boundingRect = this._boundingRect;
+    const box = this._hasText ? this._group.getBBox() : {
       width: 0, height: 0, x: 0, y: 0, isEmpty: true,
     };
 
     if (!box.isEmpty) {
-      box.height += margin.top + margin.bottom - that._baseLineCorrection;
+      box.height += margin.top + margin.bottom - this._baseLineCorrection;
       box.width += margin.left + margin.right;
       box.x -= margin.left;
-      box.y += that._baseLineCorrection - margin.top;
+      box.y += this._baseLineCorrection - margin.top;
     }
 
     if (options.placeholderSize > 0) {
@@ -259,9 +277,9 @@ extend(Title.prototype, LayoutElement.prototype, {
     boundingRect.width = box.width;
     boundingRect.x = box.x;
     boundingRect.y = box.y;
-  },
+  }
 
-  getCorrectedLayoutOptions() {
+  getCorrectedLayoutOptions(): AlignedLayoutRect {
     const srcBox = this.getLayoutOptions();
     const correction = this._baseLineCorrection;
 
@@ -269,10 +287,10 @@ extend(Title.prototype, LayoutElement.prototype, {
       y: srcBox.y - correction,
       height: srcBox.height + correction,
     });
-  },
+  }
 
   // BaseWidget_layout_implementation
-  layoutOptions() {
+  layoutOptions(): LayoutTargetOptions | null {
     if (!this._hasText) {
       return null;
     }
@@ -281,45 +299,44 @@ extend(Title.prototype, LayoutElement.prototype, {
       verticalAlignment: this._boundingRect.verticalAlignment,
       priority: 0,
     };
-  },
+  }
 
-  measure(size) {
+  measure(size: number[]): number[] {
     this.draw(size[0], size[1]);
     return [this._boundingRect.width, this._boundingRect.height];
-  },
+  }
 
-  move(rect, fitRect) {
+  move(rect: number[], fitRect: number[]): void {
     const boundingRect = this._boundingRect;
     if (checkRect(rect, boundingRect)) {
       this.shift(fitRect[0], fitRect[1]);
     } else {
       this.shift(Math.round(rect[0]), Math.round(rect[1]));
     }
-  },
+  }
 
-  freeSpace() {
-    const that = this;
-    that._params.incidentOccurred('W2103');
-    that._group.linkRemove();
-    that._boundingRect.width = that._boundingRect.height = 0;
-  },
+  freeSpace(): void {
+    this._params.incidentOccurred('W2103');
+    this._group.linkRemove();
+    this._boundingRect.width = this._boundingRect.height = 0;
+  }
 
-  getOptions() {
+  getOptions(): ThemeValue {
     return this._options;
-  },
+  }
 
-  changeLink(root) {
+  changeLink(root: ThemeValue): void {
     this._group.linkRemove();
     this._group.linkOn(root, 'title');
-  },
+  }
   // BaseWidget_layout_implementation
-});
+};
 
 /// #DEBUG
-Title.prototype.DEBUG_getOptions = function () { return this._options; };
+Title.prototype.DEBUG_getOptions = function (): ThemeValue { return this._options; };
 /// #ENDDEBUG
 
-function processTitleOptions(options) {
+function processTitleOptions(options: ThemeValue): ThemeValue {
   const newOptions = _isString(options) ? { text: options } : options || {};
   newOptions.subtitle = _isString(newOptions.subtitle) ? { text: newOptions.subtitle } : newOptions.subtitle || {};
   return newOptions;
@@ -327,7 +344,7 @@ function processTitleOptions(options) {
 
 export const plugin = {
   name: 'title',
-  init() {
+  init(): void {
     const that = this;
 
     that._title = new Title({
@@ -337,14 +354,14 @@ export const plugin = {
     });
     that._layout.add(that._title);
   },
-  dispose() {
+  dispose(): void {
     this._title.dispose();
     this._title = null;
   },
-  customize(constructor) {
+  customize(constructor: ThemeValue): void {
     constructor.addChange({
       code: 'TITLE',
-      handler() {
+      handler(): void {
         if (this._title.update(this._themeManager.theme('title'), this.option('title'))) {
           this._change(['LAYOUT']);
         }
@@ -358,7 +375,7 @@ export const plugin = {
 };
 
 /// #DEBUG
-exports.DEBUG_set_title = function (value) {
+exports.DEBUG_set_title = function (value): void {
   Title = value;
 };
 /// #ENDDEBUG

@@ -738,7 +738,7 @@ export class SimulatedStrategy<
   _createActionByOption!: (
     optionName: string,
     config?: ActionConfig,
-  ) => (event?: Record<string, unknown>) => void;
+  ) => (event?: unknown) => void;
 
   _scrollAction?: () => void;
 

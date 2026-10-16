@@ -8,4 +8,9 @@ export const CLICK_EVENT = addNamespace(pointerEvents.down, EVENT_NAMESPACE);
 export const NAV_KEYS = {
   upArrow: 'ArrowUp',
   downArrow: 'ArrowDown',
+  leftArrow: 'ArrowLeft',
+  rightArrow: 'ArrowRight',
+  home: 'Home',
+  end: 'End',
+  pageDown: 'PageDown',
 } as const;

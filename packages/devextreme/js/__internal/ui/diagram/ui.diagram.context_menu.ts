@@ -28,6 +28,8 @@ interface Properties extends ContextMenuProperties {
   commands?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  excludeCommands?: any;
 }
 
 class DiagramContextMenu extends ContextMenu {
@@ -97,8 +99,7 @@ class DiagramContextMenuWrapper extends Widget<Properties> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _onItemClickAction?: any;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onVisibilityChangingAction?: any;
+  private _onVisibilityChangingAction!: (event?: unknown) => void;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _onInternalCommandAction?: any;

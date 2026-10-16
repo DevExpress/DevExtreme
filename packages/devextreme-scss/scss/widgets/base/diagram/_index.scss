@@ -1,6 +1,6 @@
 @use "../mixins" as *;
 
-$transparent-border: 1px solid transparent;
+$transparent-border: 1px solid transparent !default;
 
 .dx-diagram {
   border: $transparent-border;

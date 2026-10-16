@@ -3,7 +3,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { StateStoringController } from '../state_storing_controller_core';
 
@@ -37,7 +37,7 @@ export const stateStoringDataControllerExtender = (
     return super.callbackNames().concat(['stateLoaded']);
   }
 
-  protected _refreshDataSource(): DeferredObj<unknown> | undefined {
+  protected resetDataSource(): DeferredObj<unknown> | undefined {
     if (this._stateStoringController.isEnabled() && !this._stateStoringController.isLoaded()) {
       clearTimeout(this._restoreStateTimeoutID ?? undefined);
 
@@ -49,7 +49,7 @@ export const stateStoringDataControllerExtender = (
             this._restoreStateTimeoutID = null;
           })
           .done(() => {
-            super._refreshDataSource();
+            super.resetDataSource();
 
             this.stateLoaded.fire();
             deferred.resolve();
@@ -67,7 +67,7 @@ export const stateStoringDataControllerExtender = (
     }
 
     if (!this.isStateLoading()) {
-      super._refreshDataSource();
+      super.resetDataSource();
     }
 
     return undefined;

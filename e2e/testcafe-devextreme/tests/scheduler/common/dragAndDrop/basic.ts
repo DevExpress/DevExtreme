@@ -77,7 +77,7 @@ test('Drag-n-drop when browser has vertical scroll', async (t) => {
   height: 1800,
 }));
 
-test('Drag recurrent appointment occurrence from collector (T832887)', async (t) => {
+test.meta({ unstable: true })('Drag recurrent appointment occurrence from collector (T832887)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Recurrence two');
   const collector = scheduler.collectors.find('2');

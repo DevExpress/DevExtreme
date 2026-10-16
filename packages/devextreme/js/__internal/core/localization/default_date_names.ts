@@ -30,7 +30,7 @@ export default {
     return QUARTERS;
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getPeriodNames(_format: Format): string[] {
+  getPeriodNames(_format?: Format): string[] {
     return PERIODS;
   },
 };

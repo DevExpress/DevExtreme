@@ -18,6 +18,8 @@ export interface dxElementWrapper {
 
   attr(attributeName: string, value: string | number | boolean | null): this;
 
+  attr(attributes: Record<string, string | number | boolean | null | undefined>): this;
+
   attr(attributeName: string): string | undefined;
 
   before(element: Element | dxElementWrapper): this;
@@ -64,7 +66,7 @@ export interface dxElementWrapper {
 
   insertBefore(element: Element | dxElementWrapper): this;
 
-  is(selector: string | dxElementWrapper): boolean;
+  is(selector: string | dxElementWrapper | Element): boolean;
 
   last(): this;
 
@@ -133,6 +135,6 @@ export interface dxElementWrapper {
   length: number;
 }
 
-declare function renderer(selector?: string | Element | Element[] | dxElementWrapper | Document | Window | null): dxElementWrapper;
+declare function renderer(selector?: string | EventTarget | EventTarget[] | dxElementWrapper | null): dxElementWrapper;
 
 export default renderer;

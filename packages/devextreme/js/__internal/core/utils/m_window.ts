@@ -4,8 +4,9 @@ import domAdapter from '@js/core/dom_adapter';
 
 let hasWindowValue = typeof window !== 'undefined';
 
-const hasWindow = () => hasWindowValue;
+const hasWindow = (): boolean => hasWindowValue;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- a stub object without a window
 let windowObject: any = hasWindow() ? window : undefined;
 
 if (!windowObject) {
@@ -13,20 +14,24 @@ if (!windowObject) {
   windowObject.window = windowObject;
 }
 
-const getWindow = () => windowObject;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use non-Window members
+const getWindow = (): any => windowObject;
 
-const setWindow = (newWindowObject, hasWindow) => {
-  if (hasWindow === undefined) {
+const setWindow = (
+  newWindowObject: Window | Record<string, unknown>,
+  newHasWindow?: boolean,
+): void => {
+  if (newHasWindow === undefined) {
     hasWindowValue = typeof window !== 'undefined' && window === newWindowObject;
   } else {
-    hasWindowValue = hasWindow;
+    hasWindowValue = newHasWindow;
   }
   windowObject = newWindowObject;
 };
 
-const hasProperty = (prop) => hasWindow() && prop in windowObject;
+const hasProperty = (prop: string): boolean => hasWindow() && prop in windowObject;
 
-const defaultScreenFactorFunc = (width) => {
+const defaultScreenFactorFunc = (width: number): 'xs' | 'sm' | 'md' | 'lg' => {
   if (width < 768) {
     return 'xs';
   } if (width < 992) {
@@ -37,14 +42,16 @@ const defaultScreenFactorFunc = (width) => {
   return 'lg';
 };
 
-const getCurrentScreenFactor = (screenFactorCallback) => {
+const getCurrentScreenFactor = (screenFactorCallback?: (width: number) => string): string => {
   const screenFactorFunc = screenFactorCallback || defaultScreenFactorFunc;
   const windowWidth = domAdapter.getDocumentElement().clientWidth;
 
   return screenFactorFunc(windowWidth);
 };
 
-const getNavigator = () => (hasWindow() ? windowObject?.navigator : { userAgent: '' });
+// @ts-expect-error without a window the stub has only the userAgent
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return -- windowObject is any
+const getNavigator = (): Navigator => (hasWindow() ? windowObject?.navigator : { userAgent: '' });
 
 export {
   defaultScreenFactorFunc,

@@ -127,7 +127,7 @@ const onRowInserted = (e: DxDataGridTypes.RowInsertedEvent) => {
   e.component.navigateToRow(e.key);
 };
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

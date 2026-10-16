@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxListModule, DxRadioGroupModule, DxToolbarModule } from 'devextreme-angular';
 import { DxDrawerModule, DxDrawerComponent } from 'devextreme-angular/ui/drawer';
 import type { DxDrawerTypes } from 'devextreme-angular/ui/drawer';
@@ -9,16 +11,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [
@@ -49,7 +45,7 @@ export class AppComponent {
 
   isDrawerOpen = true;
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.text = service.getContent();
     this.navigation = service.getNavigationList();
   }
@@ -60,7 +56,10 @@ export class AppComponent {
     options: {
       icon: 'menu',
       stylingMode: 'text',
-      onClick: () => { this.isDrawerOpen = !this.isDrawerOpen; },
+      onClick: () => {
+        this.isDrawerOpen = !this.isDrawerOpen;
+        this.changeDetectorRef.detectChanges();
+      },
     },
   }];
 }

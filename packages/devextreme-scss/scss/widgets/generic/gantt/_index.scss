@@ -8,7 +8,7 @@
 @use "../toolbar/sizes" as *;
 @use "../splitterBar";
 
-$gantt-successor-background-color: white;
+$gantt-successor-background-color: white !default;
 
 .dx-gantt {
   border: 1px solid;

@@ -1,36 +1,34 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   enableProdMode,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [DxDataGridModule],
 })
 export class AppComponent {
   employees: Employee[];
 
+  selectedEmployee: Employee | undefined;
+
   constructor(service: Service) {
     this.employees = service.getEmployees();
+  }
+
+  onSelectionChanged({ selectedRowsData }: DxDataGridTypes.SelectionChangedEvent) {
+    this.selectedEmployee = selectedRowsData[0];
   }
 }
 

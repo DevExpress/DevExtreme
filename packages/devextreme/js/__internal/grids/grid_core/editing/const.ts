@@ -1,5 +1,4 @@
 export const EDITOR_CELL_CLASS = 'dx-editor-cell';
-export const ROW_CLASS = 'dx-row';
 export const CELL_MODIFIED_CLASS = 'dx-cell-modified';
 export const ROW_SELECTED_CLASS = 'dx-selection';
 export const EDIT_FORM_CLASS = 'edit-form';
@@ -94,9 +93,7 @@ export const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
 export const FOCUS_OVERLAY_CLASS = 'focus-overlay';
 export const ADD_ROW_BUTTON_CLASS = 'addrow-button';
 export const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
-export const DATA_ROW_CLASS = 'dx-data-row';
 export const ROW_REMOVED = 'dx-row-removed';
-export const FILTER_ROW_CLASS = 'filter-row';
 
 export const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
 export const EDIT_POPUP_CLASS = 'edit-popup';

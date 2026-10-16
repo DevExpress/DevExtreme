@@ -51,7 +51,7 @@ export class SearchController {
     text: string,
   ): HighlightedTextItem[] | null => splitHighlightedText(
     text,
-    this.highlightTextOptions.peek(),
+    this.highlightTextOptions.value,
   );
 
   public readonly updateSearchText = (text: string): void => {

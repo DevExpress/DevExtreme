@@ -71,15 +71,12 @@ ajax.sendRequest = (options) => {
     };
 
     sendRequestOrig(options).then(
-      (result) => {
-        deferred.resolve(result);
-        if (result.success) {
-          deferred.resolve(result);
-        } else {
-          deferred.reject(result);
-        }
+      (...args) => {
+        deferred.resolve(...args);
       },
-      (e) => deferred.reject(e),
+      (...args) => {
+        deferred.reject(...args);
+      },
     );
   });
 

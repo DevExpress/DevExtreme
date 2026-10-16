@@ -13,9 +13,9 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isDefined as _isDefined } from '@js/core/utils/type';
+import { extend } from '@ts/core/utils/m_extend';
+import { each } from '@ts/core/utils/m_iterator';
+import { isDefined as _isDefined } from '@ts/core/utils/m_type';
 import { convertPolarToXY, extractColor } from '@ts/viz/core/utils';
 
 import { chart as areaChart } from './area_series';

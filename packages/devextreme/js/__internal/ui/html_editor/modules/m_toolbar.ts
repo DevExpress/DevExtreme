@@ -80,7 +80,6 @@ if (Quill) {
 
     return localize(value) || value;
   };
-  // @ts-expect-error
   ToolbarModule = class ToolbarModule extends BaseModule {
     quill: any;
 
@@ -103,7 +102,6 @@ if (Quill) {
     _isReset?: boolean;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       this._toolbarWidgets = new WidgetCollector();
@@ -150,7 +148,6 @@ if (Quill) {
     }
 
     _addCallbacks() {
-      // @ts-expect-error
       this.addCleanCallback(this.clean.bind(this));
       this.editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
     }

@@ -24,7 +24,7 @@ import type dxTextBox from '@js/ui/text_box';
 import type { dxTextEditorOptions } from '@js/ui/text_box/ui.text_editor.base';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
-import { focused } from '@ts/core/utils/m_selectors';
+import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorInternalProperties, ValueChangedEvent, WithValidationMessageMode } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
@@ -33,6 +33,15 @@ import ClearButton from './text_editor.clear';
 import { TextEditorLabel } from './text_editor.label';
 import type { TextEditorButtonInfo } from './texteditor_button_collection/index';
 import TextEditorButtonCollection from './texteditor_button_collection/index';
+
+export interface TextEditorInputAttributes {
+  autocomplete: string;
+
+  placeholder: string | null;
+
+  // eslint-disable-next-line spellcheck/spell-checker
+  inputmode?: string;
+}
 
 export interface TextEditorInternalProperties extends EditorInternalProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,10 +142,12 @@ class TextEditorBase<
 
   _enterKeyAction?: ((event?: Record<string, unknown>) => void);
 
-  ctor(element: Element, options: TProperties): void {
-    if (options) {
-      checkButtonsOptionType(options.buttons);
-    }
+  _init(): void {
+    super._init();
+
+    const { buttons } = this.option();
+
+    checkButtonsOptionType(buttons);
 
     this._buttonCollection = new TextEditorButtonCollection(
       this as unknown as TextEditorBase,
@@ -146,8 +157,6 @@ class TextEditorBase<
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
     this._labelContainerElement = null;
-
-    super.ctor(element, options);
   }
 
   _getDefaultOptions(): TProperties {
@@ -401,7 +410,9 @@ class TextEditorBase<
 
   _createInput(): dxElementWrapper {
     const $input = $('<input>');
-    this._applyInputAttributes($input, this.option('inputAttr'));
+    const { inputAttr } = this.option();
+
+    this._applyInputAttributes($input, inputAttr);
     return $input;
   }
 
@@ -444,12 +455,7 @@ class TextEditorBase<
     return value;
   }
 
-  _getDefaultAttributes(): {
-    autocomplete: string;
-    placeholder: string | null;
-    // eslint-disable-next-line spellcheck/spell-checker
-    inputmode?: string;
-  } {
+  _getDefaultAttributes(): TextEditorInputAttributes {
     const defaultAttributes = {
       autocomplete: 'off',
       placeholder: this._getPlaceholderAttr(),
@@ -463,7 +469,14 @@ class TextEditorBase<
   }
 
   _updateButtonsStyling(editorStylingMode?: EditorStyle): void {
-    each(this.option('buttons'), (_, { options, name: buttonName }) => {
+    const { buttons } = this.option();
+
+    each(buttons, (_, button) => {
+      if (typeof button === 'string') {
+        return;
+      }
+
+      const { options, name: buttonName } = button;
       if (options && !options.stylingMode && this.option('visible')) {
         const buttonInstance = this.getButton(buttonName);
         if (buttonInstance?.option) {
@@ -771,7 +784,7 @@ class TextEditorBase<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _keyPressHandler(e?: { originalEvent: InputEvent & KeyboardEvent }): void {
+  _keyPressHandler(e?: DxEvent): void {
     this.option('text', this._input().val());
   }
 
@@ -951,7 +964,6 @@ class TextEditorBase<
     const input = this._input()[0];
     const activeElement = domAdapter.getActiveElement(input);
 
-    // @ts-expect-error dxElementWrapper
     return this._input().is(activeElement);
   }
 
@@ -989,7 +1001,6 @@ class TextEditorBase<
       case 'placeholder':
         this._renderPlaceholder();
         this._setFieldAria(true);
-        // @ts-expect-error ts-error
         this._input().attr({ placeholder: this._getPlaceholderAttr() });
         break;
       case 'label':
@@ -1023,9 +1034,12 @@ class TextEditorBase<
         this._updateValue();
         super._optionChanged(args);
         break;
-      case 'inputAttr':
-        this._applyInputAttributes(this._input(), this.option(name));
+      case 'inputAttr': {
+        const { inputAttr } = this.option();
+
+        this._applyInputAttributes(this._input(), inputAttr);
         break;
+      }
       case 'stylingMode':
         this._renderStylingMode();
         this._updateLabelWidth();
@@ -1087,7 +1101,7 @@ class TextEditorBase<
     }
   }
 
-  getButton(name: string): dxButton | null | undefined {
+  getButton(name: string | undefined): dxButton | null | undefined {
     // @ts-expect-error TextEditorButtonCollection should use generic
     return this._buttonCollection.getButton(name);
   }

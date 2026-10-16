@@ -156,13 +156,9 @@ class ActionSheet extends CollectionWidget<Properties> {
     super._clean();
   }
 
-  _overlayConfig(): PopoverProperties | PopupProperties {
+  _overlayConfig(): PopoverProperties & PopupProperties {
     const { title } = this.option();
     return {
-      onInitialized: (args): void => {
-        // @ts-expect-error ts-error
-        this._popup = args.component;
-      },
       disabled: false,
       showTitle: true,
       title,
@@ -175,7 +171,7 @@ class ActionSheet extends CollectionWidget<Properties> {
   }
 
   _createPopover(): void {
-    this._createComponent(this._$popup, Popover, extend(this._overlayConfig(), {
+    this._popup = this._createComponent(this._$popup, Popover, extend(this._overlayConfig(), {
       width: this.option('width') || 200,
       height: this.option('height') || 'auto',
       target: this.option('target'),
@@ -187,7 +183,7 @@ class ActionSheet extends CollectionWidget<Properties> {
   }
 
   _createPopup(): void {
-    this._createComponent(this._$popup, Popup, extend(this._overlayConfig(), {
+    this._popup = this._createComponent(this._$popup, Popup, extend(this._overlayConfig(), {
       dragEnabled: false,
       width: this.option('width') || '100%',
       height: this.option('height') || 'auto',
@@ -235,7 +231,7 @@ class ActionSheet extends CollectionWidget<Properties> {
           },
         },
       },
-    }));
+    } satisfies PopupProperties));
 
     this._popup.$wrapper()?.addClass(ACTION_SHEET_POPUP_WRAPPER_CLASS);
   }
@@ -286,7 +282,6 @@ class ActionSheet extends CollectionWidget<Properties> {
             this.hide();
           }
         },
-        // @ts-expect-error
         integrationOptions: {},
       });
     }

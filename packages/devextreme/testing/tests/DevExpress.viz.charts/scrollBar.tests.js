@@ -8,6 +8,7 @@ import { ScrollBar } from 'viz/chart_components/scroll_bar';
 import translator2DModule from 'viz/translators/translator2d';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'common/core/events/drag';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const Translator = stubClass(translator2DModule.Translator2D);
 
@@ -34,7 +35,7 @@ const environment = {
 
         this.group = this.renderer.g();
 
-        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
+        stubSeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D').callsFake(function() {
             const stub = new Translator();
             stub.getScale = sinon.stub().returns(1);
             stub.stub('getCanvasVisibleArea');
@@ -562,10 +563,13 @@ QUnit.test('init scrollBar', function(assert) {
         maxVisible: null,
         min: 10,
         minVisible: null,
-        visibleCategories: null
+        visibleCategories: null,
+        breaks: null,
+        userBreaks: null
     }, canvas, {
         isHorizontal: true,
-        stick: false
+        stick: false,
+        breaksSize: 0
     }]
     );
 });
@@ -590,12 +594,33 @@ QUnit.test('init scrollBar. Rotated', function(assert) {
         maxVisible: null,
         min: 10,
         minVisible: null,
-        visibleCategories: null
+        visibleCategories: null,
+        breaks: null,
+        userBreaks: null
     }, canvas, {
         isHorizontal: false,
-        stick: false
+        stick: false,
+        breaksSize: 0
     }]
     );
+});
+
+QUnit.test('init scrollBar. Remove scale breaks', function(assert) {
+    const group = new Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
+    const rangeWithBreaks = $.extend({}, range, {
+        breaks: [{ from: 40, to: 50, cumulativeWidth: 0 }],
+        userBreaks: [{ from: 40, to: 50 }]
+    });
+    scrollBar.update(this.options).updateSize(canvas);
+
+    scrollBar.init(rangeWithBreaks, false);
+
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const { breaks, userBreaks } = scrollTranslator.update.lastCall.args[0];
+
+    assert.strictEqual(breaks, null, 'breaks are calculated for the visual range only and must not be applied to the whole-range translator');
+    assert.strictEqual(userBreaks, null, 'userBreaks are calculated for the visual range only and must not be applied to the whole-range translator');
 });
 
 QUnit.test('init scrollBar. Remove min and max ', function(assert) {
@@ -619,10 +644,13 @@ QUnit.test('init scrollBar. Remove min and max ', function(assert) {
         min: null,
         minVisible: null,
         visibleCategories: null,
+        breaks: null,
+        userBreaks: null,
         axisType: 'discrete'
     }, canvas, {
         isHorizontal: true,
-        stick: false
+        stick: false,
+        breaksSize: 0
     }]);
 });
 

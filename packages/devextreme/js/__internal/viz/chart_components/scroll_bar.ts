@@ -1,21 +1,19 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/common/core/events/drag';
-import { fireEvent } from '@js/common/core/events/utils/index';
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
+import { noop } from '@ts/core/utils/m_common';
+import { extend } from '@ts/core/utils/m_extend';
+import { isDefined } from '@ts/core/utils/m_type';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
+import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@ts/events/drag';
+import { fireEvent } from '@ts/events/utils/index';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Bounds, Canvas } from '@ts/viz/core/types';
 
 import { Translator2D } from '../translators/translator2d';
 
@@ -23,13 +21,38 @@ const _min = Math.min;
 const _max = Math.max;
 const MIN_SCROLL_BAR_SIZE = 10;
 
-export const ScrollBar = function (renderer, group) {
-  this._translator = new Translator2D({}, {}, {});
-  this._scroll = renderer.rect().append(group);
-  this._addEvents();
-};
+type ScrollBarPosition = 'left' | 'right' | 'top' | 'bottom';
 
-function _getXCoord(canvas, pos, offset, width) {
+interface ScrollBarLayoutOptions {
+  width: number;
+  offset: number;
+  vertical: boolean;
+  position: ScrollBarPosition;
+}
+
+interface ScrollBarPointerEvent extends EngineEvent {
+  offset: { x: number; y: number };
+}
+
+interface ScrollBarRange {
+  startValue: ThemeValue;
+  endValue: ThemeValue;
+}
+
+interface ScrollBarDragEvent {
+  type: string;
+  originalEvent: ScrollBarPointerEvent;
+  target: ThemeValue;
+  offset: { x: number; y: number };
+  scrollRange: ScrollBarRange | undefined;
+}
+
+function _getXCoord(
+  canvas: Canvas,
+  pos: ScrollBarPosition,
+  offset: number,
+  width: number,
+): number {
   let x = 0;
 
   if (pos === 'right') {
@@ -41,7 +64,12 @@ function _getXCoord(canvas, pos, offset, width) {
   return x;
 }
 
-function _getYCoord(canvas, pos, offset, width) {
+function _getYCoord(
+  canvas: Canvas,
+  pos: ScrollBarPosition,
+  offset: number,
+  width: number,
+): number {
   let y = 0;
 
   if (pos === 'top') {
@@ -53,12 +81,46 @@ function _getYCoord(canvas, pos, offset, width) {
   return y;
 }
 
-ScrollBar.prototype = {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let ScrollBar = class ScrollBar {
+  declare _translator: ThemeValue;
 
-  _addEvents() {
+  declare _scroll: ThemeValue;
+
+  declare _dragStartOffset?: number;
+
+  declare _offset: number;
+
+  declare _thumbLength: number;
+
+  declare _scale: number;
+
+  declare _layoutOptions: ScrollBarLayoutOptions;
+
+  declare _translateWithOffset: number;
+
+  declare _hasBreaks: boolean;
+
+  declare _canvas: Canvas;
+
+  declare pane: string;
+
+  declare hideTitle: () => void;
+
+  declare hideOuterElements: () => void;
+
+  constructor(renderer: ThemeValue, group: ThemeValue) {
+    this._translator = new Translator2D({}, {}, {});
+    this._scroll = renderer.rect().append(group);
+    this._addEvents();
+  }
+
+  _addEvents(): void {
     const scrollElement = this._scroll.element;
 
     eventsEngine.on(scrollElement, dragEventStart, (e) => {
+      this._dragStartOffset = this._offset;
+
       fireEvent({
         type: 'dxc-scroll-start',
         originalEvent: e,
@@ -66,40 +128,68 @@ ScrollBar.prototype = {
       });
     });
 
-    eventsEngine.on(scrollElement, dragEventMove, (e) => {
-      const dX = -e.offset.x * this._scale;
-      const dY = -e.offset.y * this._scale;
-      const lx = this._offset - (this._layoutOptions.vertical ? dY : dX) / this._scale;
-      this._applyPosition(lx, lx + this._translator.canvasLength / this._scale);
+    eventsEngine.on(scrollElement, dragEventMove, (e: ScrollBarPointerEvent) => {
+      const position = this._getDragPosition(e);
+      this._applyPosition(position, position + this._thumbLength);
 
-      fireEvent({
-        type: 'dxc-scroll-move',
-        originalEvent: e,
-        target: scrollElement,
-        // @ts-expect-error
-        offset: {
-          x: dX,
-          y: dY,
-        },
-      });
+      fireEvent(this._getDragEvent('dxc-scroll-move', e, scrollElement, position));
     });
 
-    eventsEngine.on(scrollElement, dragEventEnd, (e) => {
-      fireEvent({
-        type: 'dxc-scroll-end',
-        originalEvent: e,
-        target: scrollElement,
-        // @ts-expect-error
-        offset: {
-          x: -e.offset.x * this._scale,
-          y: -e.offset.y * this._scale,
-        },
-      });
+    eventsEngine.on(scrollElement, dragEventEnd, (e: ScrollBarPointerEvent) => {
+      fireEvent(this._getDragEvent('dxc-scroll-end', e, scrollElement, this._getDragPosition(e)));
     });
-  },
+  }
 
-  update(options) {
-    const that = this;
+  _getDragPosition(e: ScrollBarPointerEvent): number {
+    const offset = this._layoutOptions.vertical ? e.offset.y : e.offset.x;
+
+    return (this._dragStartOffset ?? this._offset) + offset;
+  }
+
+  _getDragEvent(
+    type: string,
+    e: ScrollBarPointerEvent,
+    target: ThemeValue,
+    position: number,
+  ): ScrollBarDragEvent {
+    return {
+      type,
+      originalEvent: e,
+      target,
+      offset: {
+        x: -e.offset.x * this._scale,
+        y: -e.offset.y * this._scale,
+      },
+      scrollRange: this._getRangeAtPosition(position),
+    };
+  }
+
+  _getBoundaryDirection(): number {
+    return this._translateWithOffset || (this._hasBreaks ? 1 : 0);
+  }
+
+  _getRangeAtPosition(position: number): ScrollBarRange | undefined {
+    const translator = this._translator;
+    const length = this._thumbLength;
+
+    if (!isFinite(position) || !isFinite(length)) {
+      return undefined;
+    }
+
+    const visibleArea = translator.getCanvasVisibleArea();
+    const lastPosition = _max(visibleArea.max - length, visibleArea.min);
+    const start = _min(_max(position, visibleArea.min), lastPosition);
+
+    const direction = this._getBoundaryDirection();
+    const from = translator.from(start, -direction);
+    const to = translator.from(start + length, direction);
+
+    return translator.isInverted()
+      ? { startValue: to, endValue: from }
+      : { startValue: from, endValue: to };
+  }
+
+  update(options: ThemeValue): this {
     let position = options.position;
     const isVertical = options.rotated;
     const defaultPosition = isVertical ? 'right' : 'top';
@@ -109,7 +199,7 @@ ScrollBar.prototype = {
       position = defaultPosition;
     }
 
-    that._scroll.attr({
+    this._scroll.attr({
       rotate: !options.rotated ? -90 : 0,
       rotateX: 0,
       rotateY: 0,
@@ -118,36 +208,38 @@ ScrollBar.prototype = {
       opacity: options.opacity,
     });
 
-    that._layoutOptions = {
+    this._layoutOptions = {
       width: options.width,
       offset: options.offset,
       vertical: isVertical,
       position,
     };
 
-    return that;
-  },
+    return this;
+  }
 
-  init(range, stick) {
-    const that = this;
+  init(range: ThemeValue, stick: boolean, wholeRangeBreaks?: ThemeValue[]): this {
     const isDiscrete = range.axisType === 'discrete';
-    that._translateWithOffset = (isDiscrete && !stick && 1) || 0;
-    that._translator.update(extend({}, range, {
+    this._translateWithOffset = (isDiscrete && !stick && 1) || 0;
+    this._hasBreaks = !!wholeRangeBreaks?.length;
+    this._translator.update(extend({}, range, {
       minVisible: null,
       maxVisible: null,
       visibleCategories: null,
+      breaks: wholeRangeBreaks?.length ? wholeRangeBreaks : null,
+      userBreaks: null,
     }, isDiscrete && {
       min: null,
       max: null,
-    } || {}), that._canvas, { isHorizontal: !that._layoutOptions.vertical, stick });
-    return that;
-  },
+    } || {}), this._canvas, { isHorizontal: !this._layoutOptions.vertical, stick, breaksSize: 0 });
+    return this;
+  }
 
-  getOptions() {
+  getOptions(): ScrollBarLayoutOptions {
     return this._layoutOptions;
-  },
+  }
 
-  setPane(panes) {
+  setPane(panes: { name: string }[]): this {
     const position = this._layoutOptions.position;
     let pane;
 
@@ -159,9 +251,9 @@ ScrollBar.prototype = {
     this.pane = pane.name;
 
     return this;
-  },
+  }
 
-  updateSize(canvas) {
+  updateSize(canvas: Canvas): void {
     this._canvas = extend({}, canvas);
 
     const options = this._layoutOptions;
@@ -173,15 +265,15 @@ ScrollBar.prototype = {
       translateX: _getXCoord(canvas, pos, offset, width),
       translateY: _getYCoord(canvas, pos, offset, width),
     });
-  },
+  }
 
-  getMultipleAxesSpacing() {
+  getMultipleAxesSpacing(): number {
     return 0;
-  },
+  }
 
-  estimateMargins() { return this.getMargins(); },
+  estimateMargins(): Bounds { return this.getMargins(); }
 
-  getMargins() {
+  getMargins(): Bounds {
     const options = this._layoutOptions;
     const margins = {
       left: 0, top: 0, right: 0, bottom: 0,
@@ -190,53 +282,48 @@ ScrollBar.prototype = {
     margins[options.position] = options.width + options.offset;
 
     return margins;
-  },
+  }
 
-  shift(margins) {
-    const that = this;
-    const options = that._layoutOptions;
+  shift(margins: Bounds): void {
+    const options = this._layoutOptions;
     const side = options.position;
     const isVertical = options.vertical;
     const attr = {
-      translateX: that._scroll.attr('translateX') ?? 0,
-      translateY: that._scroll.attr('translateY') ?? 0,
+      translateX: this._scroll.attr('translateX') ?? 0,
+      translateY: this._scroll.attr('translateY') ?? 0,
     };
     const shift = margins[side];
 
     attr[isVertical ? 'translateX' : 'translateY'] += (side === 'left' || side === 'top' ? -1 : 1) * shift;
-    that._scroll.attr(attr);
-  },
+    this._scroll.attr(attr);
+  }
 
-  // Axis like functions
-  hideTitle: noop,
+  setPosition(min: ThemeValue, max: ThemeValue): void {
+    const translator = this._translator;
+    const direction = this._getBoundaryDirection();
+    const minPoint = isDefined(min) ? translator.translate(min, -direction) : translator.translate('canvas_position_start');
+    const maxPoint = isDefined(max) ? translator.translate(max, direction) : translator.translate('canvas_position_end');
 
-  hideOuterElements: noop,
-  // Axis like functions
+    this._offset = _min(minPoint, maxPoint);
+    this._thumbLength = Math.abs(maxPoint - minPoint);
+    this._scale = this._thumbLength
+      ? translator.canvasLength / this._thumbLength
+      : translator.getScale(min, max);
 
-  setPosition(min, max) {
-    const that = this;
-    const translator = that._translator;
-    const minPoint = isDefined(min) ? translator.translate(min, -that._translateWithOffset) : translator.translate('canvas_position_start');
-    const maxPoint = isDefined(max) ? translator.translate(max, that._translateWithOffset) : translator.translate('canvas_position_end');
+    this._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
+  }
 
-    that._offset = _min(minPoint, maxPoint);
-    that._scale = translator.getScale(min, max);
-
-    that._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
-  },
-
-  customPositionIsAvailable() {
+  customPositionIsAvailable(): boolean {
     return false;
-  },
+  }
 
-  dispose() {
+  dispose(): void {
     this._scroll.dispose();
     this._scroll = this._translator = null;
-  },
+  }
 
-  _applyPosition(x1, x2) {
-    const that = this;
-    const visibleArea = that._translator.getCanvasVisibleArea();
+  _applyPosition(x1: number, x2: number): void {
+    const visibleArea = this._translator.getCanvasVisibleArea();
 
     const min = visibleArea.min;
     const max = visibleArea.max;
@@ -277,9 +364,23 @@ ScrollBar.prototype = {
 
     const height = Math.max(x2 - x1, 0);
 
-    that._scroll.attr({
+    this._scroll.attr({
       y: x1,
       height,
     });
-  },
+  }
 };
+
+Object.assign(ScrollBar.prototype, {
+  // Axis like functions
+  hideTitle: noop,
+
+  hideOuterElements: noop,
+  // Axis like functions
+});
+
+/// #DEBUG
+export function DEBUG_set_ScrollBar(value: typeof ScrollBar): void {
+  ScrollBar = value;
+}
+/// #ENDDEBUG

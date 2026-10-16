@@ -7,4 +7,4 @@ export {
     setWidth,
     styleProp,
     stylePropPrefix,
-} from '../../__internal/core/utils/m_style';
+} from '../../__internal/core/utils/style';

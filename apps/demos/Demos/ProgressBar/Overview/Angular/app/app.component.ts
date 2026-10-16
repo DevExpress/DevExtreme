@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxButtonModule, DxProgressBarModule } from 'devextreme-angular';
 
 @Pipe({ name: 'time', standalone: true })
@@ -13,16 +15,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxButtonModule,
     DxProgressBarModule,
@@ -39,6 +35,8 @@ export class AppComponent {
   maxValue = 10;
 
   intervalId: number;
+
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
 
   onButtonClick() {
     if (this.inProgress) {
@@ -63,6 +61,8 @@ export class AppComponent {
       this.inProgress = !this.inProgress;
       clearInterval(this.intervalId);
     }
+
+    this.changeDetectorRef.detectChanges();
   }
 
   format(ratio) {

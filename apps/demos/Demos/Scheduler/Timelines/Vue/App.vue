@@ -65,7 +65,7 @@ function onSnapToCellsModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 }
 </script>
 
-<style scoped>
+<style>
 .dx-scheduler-timeline-day .dx-scheduler-cell-sizes-horizontal,
 .dx-scheduler-timeline-week .dx-scheduler-cell-sizes-horizontal,
 .dx-scheduler-timeline-work-week .dx-scheduler-cell-sizes-horizontal {

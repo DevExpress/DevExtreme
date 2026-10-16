@@ -3,7 +3,7 @@ import { removeEvent } from 'common/core/events/remove';
 import {
     subscribeNodesDisposing,
     unsubscribeNodesDisposing,
-} from '__internal/events/utils/m_event_nodes_disposing';
+} from '__internal/events/utils/event_nodes_disposing';
 
 QUnit.testStart(function() {
     const markup = '<button id="test-element">Test</button>';
@@ -31,7 +31,7 @@ QUnit.test('should clean elementDataMap when using subscribeNodesDisposing and u
         ? afterSubscribeElementData[removeEvent].handleObjects.length
         : 0;
 
-    unsubscribeNodesDisposing(clickEvent, subscriptionData.callback, subscriptionData.nodes);
+    unsubscribeNodesDisposing(clickEvent, subscriptionData.onceCallback, subscriptionData.nodes);
 
     const finalElementData = eventsEngine.elementDataMap.get(document);
     const afterUnsubscribeHandleObjectsCount = finalElementData && finalElementData[removeEvent]

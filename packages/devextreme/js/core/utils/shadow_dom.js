@@ -1,2 +1,2 @@
 // deprecated
-export { addShadowDomStyles, getShadowElementsFromPoint } from '../../__internal/core/utils/m_shadow_dom';
+export { addShadowDomStyles, getShadowElementsFromPoint } from '../../__internal/core/utils/shadow_dom';

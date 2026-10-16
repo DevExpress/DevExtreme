@@ -8,7 +8,7 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import 'ui/switch';
 
 import '__internal/scheduler/scheduler';

@@ -2,7 +2,6 @@ import $ from 'jquery';
 import registerEvent from 'common/core/events/core/event_registrator';
 import eventsEngine from 'common/core/events/core/events_engine';
 import registerEventCallbacks from 'common/core/events/core/event_registrator_callbacks';
-import Class from 'core/class';
 import { isFunction } from 'core/utils/type';
 
 import eventHelper from '../../helpers/eventHelper.js';
@@ -22,8 +21,14 @@ QUnit.testStart(function() {
 
 QUnit.module('event registration', {
     beforeEach: function() {
-        const impl = Class.inherit({
-            ctor: function() {
+        class TestEventImplementer {
+            noBubble = false;
+
+            delegateType = false;
+
+            bindType = false;
+
+            constructor() {
                 const impl = this;
 
                 impl.LOG = { };
@@ -44,16 +49,10 @@ QUnit.module('event registration', {
                         };
                     };
                 });
-            },
+            }
+        }
 
-            noBubble: false,
-
-            delegateType: false,
-
-            bindType: false
-        });
-
-        this.testEventImplementer = new impl();
+        this.testEventImplementer = new TestEventImplementer();
 
         registerEvent('dxtestevent', this.testEventImplementer);
         this.element = $('#element');

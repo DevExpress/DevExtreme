@@ -7,16 +7,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  styleUrls: ['./app.component.css'],
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
+  templateUrl: './app.component.html',
   imports: [
     DxPivotGridModule,
   ],

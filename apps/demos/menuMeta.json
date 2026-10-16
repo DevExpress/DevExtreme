@@ -3974,6 +3974,7 @@
           {
             "Name": "Grouping",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Grouping by Resources",
@@ -3984,6 +3985,14 @@
                   "/Models/SampleData/Tasks.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Hierarchical Grouping",
+                "Name": "MultilevelGrouping",
+                "Widget": "Scheduler",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-hierarchical-grouping.xml"
               },
               {
                 "Title": "Grouping by Date",
@@ -4485,6 +4494,20 @@
                 "Badge": "AI",
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Tool Call Visualization",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Tool Call Visualization",
+                "Name": "ToolCallVisualization",
+                "Widget": "Chat",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-tool-call-visualization.xml"
               }
             ]
           }

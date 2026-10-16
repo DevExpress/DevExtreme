@@ -1,41 +1,68 @@
 import { isObject } from '@js/core/utils/type';
 import Quill from 'devextreme-quill';
 
+import type {
+  BlotConstructorBase,
+  ImageAttributes,
+  ImageBlotConstructor,
+  ImageFormats,
+  QuillDependent,
+} from '../types';
+
+type ExtendedImageValue = string | ImageAttributes;
+type ImageAttributeName = 'alt' | 'width' | 'height';
+
+interface ExtendedImageFormats extends ImageFormats {
+  imageSrc?: string | null;
+}
+
+/** The `extendedImage` blot class */
+interface ExtendedImageConstructor extends BlotConstructorBase {
+  create: (data: ExtendedImageValue) => HTMLElement;
+  formats: (domNode: HTMLElement) => ExtendedImageFormats;
+  value: (domNode: HTMLElement) => ImageAttributes;
+  match: (url: string) => boolean;
+  sanitize: (url: string) => string;
+}
+
 // eslint-disable-next-line import/no-mutable-exports
-let ExtImage = {};
+let ExtImageFormat: QuillDependent<ExtendedImageConstructor> = {};
 
 if (Quill) {
-  const Image = Quill.import('formats/image');
+  const Image: ImageBlotConstructor<ExtendedImageValue> = Quill.import('formats/image');
 
-  ExtImage = class ExtImage extends Image {
-    static create(data) {
-      const SRC = data && data.src || data;
+  ExtImageFormat = class ExtImage extends Image {
+    static create(data: ExtendedImageValue): HTMLElement {
+      // @ts-expect-error a string image value has no src
+      const SRC: ExtendedImageValue = data?.src || data;
       const node = super.create(SRC);
 
       if (isObject(data)) {
-        const setAttribute = (attr, value) => {
-          data[attr] && node.setAttribute(attr, value);
+        const setAttribute = (
+          attr: ImageAttributeName,
+          value: ImageAttributes[ImageAttributeName],
+        ): void => {
+          if (data[attr]) {
+            node.setAttribute(attr, String(value));
+          }
         };
-        // @ts-expect-error
         setAttribute('alt', data.alt);
-        // @ts-expect-error
         setAttribute('width', data.width);
-        // @ts-expect-error
         setAttribute('height', data.height);
       }
 
       return node;
     }
 
-    static formats(domNode) {
-      const formats = super.formats(domNode);
+    static formats(domNode: HTMLElement): ExtendedImageFormats {
+      const formats: ExtendedImageFormats = super.formats(domNode);
 
       formats.imageSrc = domNode.getAttribute('src');
 
       return formats;
     }
 
-    formats() {
+    formats(): Record<string, unknown> {
       const formats = super.formats();
       const floatValue = this.domNode.style.float;
 
@@ -46,15 +73,16 @@ if (Quill) {
       return formats;
     }
 
-    format(name, value) {
+    format(name: string, value: unknown): void {
       if (name === 'float') {
+        // @ts-expect-error format value is untyped; the CSSOM coerces it (null clears the float)
         this.domNode.style[name] = value;
       } else {
         super.format(name, value);
       }
     }
 
-    static value(domNode) {
+    static value(domNode: HTMLElement): ImageAttributes {
       return {
         src: domNode.getAttribute('src'),
         width: domNode.getAttribute('width'),
@@ -63,8 +91,7 @@ if (Quill) {
       };
     }
   };
-  // @ts-expect-error
-  ExtImage.blotName = 'extendedImage';
+  ExtImageFormat.blotName = 'extendedImage';
 }
 
-export default ExtImage;
+export default ExtImageFormat;

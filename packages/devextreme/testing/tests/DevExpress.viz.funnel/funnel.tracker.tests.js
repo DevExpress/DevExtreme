@@ -8,6 +8,7 @@ import legendModule from 'viz/components/legend';
 import { createFunnel, environment } from './commonParts/common.js';
 import labelModule from 'viz/series/points/label';
 import { stubClass } from '../../helpers/vizMocks.js';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const stubLabel = stubClass(labelModule.Label);
 const stubLegend = stubClass(legendModule.Legend);
@@ -28,7 +29,7 @@ const trackerEnvironment = $.extend({}, environment, {
         const that = this;
         environment.beforeEach.apply(this);
         this.legend = new stubLegend();
-        sinon.stub(labelModule, 'Label').callsFake(function() {
+        stubSeam(labelModule, 'Label', 'DEBUG_set_Label').callsFake(function() {
             const stub = new stubLabel();
             stub.stub('getBoundingRect').returns({
                 width: 0,

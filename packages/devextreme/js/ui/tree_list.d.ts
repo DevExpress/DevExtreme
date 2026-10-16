@@ -46,6 +46,7 @@ import {
     NewRowInfo,
     PagingBase,
     ReducedNativeEventInfo,
+    RowDragging as ComponentRowDragging,
     RowDraggingEventInfo,
     RowDraggingTemplateData,
     RowInsertedInfo,
@@ -135,6 +136,7 @@ export {
     DataChange,
     DataChangeType,
     DataRenderMode,
+    DragDropInfo,
     EnterKeyAction,
     EnterKeyDirection,
     FilterOperation,
@@ -818,25 +820,60 @@ export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTree
  */
 export type ToolbarPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ToolbarPreparingInfo;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_RowDraggingAddEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,RowDraggingEventInfo,DragDropInfo
+ */
 export type RowDraggingAddEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_RowDraggingChangeEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,RowDraggingEventInfo,DragDropInfo
+ */
 export type RowDraggingChangeEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_RowDraggingEndEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,RowDraggingEventInfo,DragDropInfo
+ */
 export type RowDraggingEndEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_RowDraggingMoveEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,RowDraggingEventInfo,DragDropInfo
+ */
 export type RowDraggingMoveEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_RowDraggingStartEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,DragStartEventInfo
+ */
 export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & DragStartEventInfo<TRowData>;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_RowDraggingRemoveEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,RowDraggingEventInfo
+ */
 export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData>;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_RowDraggingReorderEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,RowDraggingEventInfo,DragReorderInfo
+ */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
 /**
@@ -917,7 +954,7 @@ export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
     readonly column: Column<TRowData, TKey>;
 };
 
-type OverriddenKeys = 'autoExpandAll' | 'columns' | 'customizeColumns' | 'dataStructure' | 'editing' | 'expandedRowKeys' | 'expandNodesOnFiltering' | 'filterMode' | 'hasItemsExpr' | 'itemsExpr' | 'keyExpr' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'paging' | 'parentIdExpr' | 'remoteOperations' | 'rootValue' | 'scrolling' | 'selection' | 'toolbar';
+type OverriddenKeys = 'autoExpandAll' | 'columns' | 'customizeColumns' | 'dataStructure' | 'editing' | 'expandedRowKeys' | 'expandNodesOnFiltering' | 'filterMode' | 'hasItemsExpr' | 'itemsExpr' | 'keyExpr' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'paging' | 'parentIdExpr' | 'remoteOperations' | 'rootValue' | 'rowDragging' | 'scrolling' | 'selection' | 'toolbar';
 
 /**
  * @deprecated use Properties instead
@@ -1148,6 +1185,12 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     rootValue?: TKey;
     /**
      * @docid
+     * @type object
+     * @public
+     */
+    rowDragging?: RowDragging<TRowData, TKey>;
+    /**
+     * @docid
      * @public
      * @type object
      */
@@ -1257,6 +1300,45 @@ export type Paging = PagingBase & {
      * @public
      */
     enabled?: boolean;
+};
+
+/** @public */
+export type RowDragging<TRowData = any, TKey = any> = Omit<ComponentRowDragging<dxTreeList<TRowData, TKey>, TRowData, TKey>, 'onAdd' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'> & {
+    /**
+     * @docid dxTreeListOptions.rowDragging.onAdd
+     * @type_function_param1 e:{ui/tree_list:RowDraggingAddEvent}
+     */
+    onAdd?: ((e: RowDraggingAddEvent<TRowData, TKey>) => void);
+    /**
+     * @docid dxTreeListOptions.rowDragging.onDragChange
+     * @type_function_param1 e:{ui/tree_list:RowDraggingChangeEvent}
+     */
+    onDragChange?: ((e: RowDraggingChangeEvent<TRowData, TKey>) => void);
+    /**
+     * @docid dxTreeListOptions.rowDragging.onDragEnd
+     * @type_function_param1 e:{ui/tree_list:RowDraggingEndEvent}
+     */
+    onDragEnd?: ((e: RowDraggingEndEvent<TRowData, TKey>) => void);
+    /**
+     * @docid dxTreeListOptions.rowDragging.onDragMove
+     * @type_function_param1 e:{ui/tree_list:RowDraggingMoveEvent}
+     */
+    onDragMove?: ((e: RowDraggingMoveEvent<TRowData, TKey>) => void);
+    /**
+     * @docid dxTreeListOptions.rowDragging.onDragStart
+     * @type_function_param1 e:{ui/tree_list:RowDraggingStartEvent}
+     */
+    onDragStart?: ((e: RowDraggingStartEvent<TRowData, TKey>) => void);
+    /**
+     * @docid dxTreeListOptions.rowDragging.onRemove
+     * @type_function_param1 e:{ui/tree_list:RowDraggingRemoveEvent}
+     */
+    onRemove?: ((e: RowDraggingRemoveEvent<TRowData, TKey>) => void);
+    /**
+     * @docid dxTreeListOptions.rowDragging.onReorder
+     * @type_function_param1 e:{ui/tree_list:RowDraggingReorderEvent}
+     */
+    onReorder?: ((e: RowDraggingReorderEvent<TRowData, TKey>) => void);
 };
 
 /**
@@ -1868,7 +1950,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared', { rowDragging: 'onAdd' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder' }>;
 
 /**
 * @hidden

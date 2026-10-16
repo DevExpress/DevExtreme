@@ -202,7 +202,6 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
       delay: 400,
       message: refreshingText,
       position: {
-        // @ts-expect-error ts-error
         of: this.$element(),
       },
     });

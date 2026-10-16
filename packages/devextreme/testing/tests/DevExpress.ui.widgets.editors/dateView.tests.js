@@ -1,6 +1,6 @@
 import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';

@@ -12,14 +12,14 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import type { ModuleType } from '../m_types';
+import type { ModuleType } from '../types';
 import {
   ADD_ROW_BUTTON_CLASS,
   CELL_MODIFIED_CLASS,
   DATA_EDIT_DATA_REMOVE_TYPE,
-  DATA_ROW_CLASS,
   DROPDOWN_EDITOR_OVERLAY_CLASS,
   EDIT_MODE_BATCH,
   EDIT_MODE_CELL,
@@ -27,7 +27,6 @@ import {
   EDITING_EDITROWKEY_OPTION_NAME,
   EDITOR_CELL_CLASS,
   FOCUS_OVERLAY_CLASS,
-  ROW_CLASS,
   ROW_REMOVED,
   TARGET_COMPONENT_NAME,
 } from './const';
@@ -121,10 +120,10 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     const isCurrentComponentElement = !$element || !!$targetElement.closest($element).length;
 
     if (isCurrentComponentElement) {
-      const isDataRow = $targetElement.closest(`.${DATA_ROW_CLASS}`).length;
+      const isDataRow = $targetElement.closest(`.${VIEW_CLASSES.dataRow}`).length;
 
       if (isDataRow) {
-        const $targetCell = $targetElement.closest(`.${ROW_CLASS}> td`);
+        const $targetCell = $targetElement.closest(`.${VIEW_CLASSES.row}> td`);
         const rowIndex = this._rowsView.getRowIndex($targetCell.parent());
         const cellElements = this._rowsView.getCellElements(rowIndex);
 
@@ -317,8 +316,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
 
     if (isString(columnIndex)) {
-      columnIndex = columnsController.columnOption(columnIndex, 'index');
-      columnIndex = columnsController.getVisibleIndex(columnIndex);
+      const index = columnsController.columnOption(columnIndex, 'index');
+      columnIndex = columnsController.getVisibleIndex(index);
     }
 
     const column = visibleColumns[columnIndex];

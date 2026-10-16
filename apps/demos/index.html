@@ -81,7 +81,7 @@
           .filter((s) => s !== "");
 
         const selectedData = treeList?.getSelectedRowsData("leavesOnly");
-        if (selectedData?.length) {
+        if (selectedData?.length && selectedData[0].Widget) {
           pathParts[1] = selectedData[0].Widget;
           pathParts[2] = selectedData[0].Name;
         }
@@ -132,7 +132,7 @@
           item.Groups.forEach(processDataSourceItem);
         }
 
-        item.key = (!item.Widget ? Math.random() : item.Widget) + item.Name;
+        item.key = (item.TopLevel ? "TopLevel/" : "") + (!item.Widget ? Math.random() : item.Widget) + item.Name;
 
         return item;
       };

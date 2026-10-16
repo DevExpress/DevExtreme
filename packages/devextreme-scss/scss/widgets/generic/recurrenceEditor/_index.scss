@@ -3,7 +3,7 @@
 @use "../scheduler/sizes" as *;
 @use "../../base/recurrenceEditor" as *;
 
-$generic-recurrence-number-box-margin-right: 11px;
+$generic-recurrence-number-box-margin-right: 11px !default;
 
 .dx-recurrence-editor-container {
   .dx-recurrence-numberbox-interval {

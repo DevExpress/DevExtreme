@@ -5,9 +5,9 @@
 @use "../button/colors" as *;
 @use "../overlay";
 
-$generic-fa-button-size: 30px;
-$generic-fa-button-label-padding: 5px 10px;
-$generic-fa-button-label-offset: 10px;
+$generic-fa-button-size: 30px !default;
+$generic-fa-button-label-padding: 5px 10px !default;
+$generic-fa-button-label-offset: 10px !default;
 
 @include dx-fa-button-mixin(
   $generic-main-fa-button-size,

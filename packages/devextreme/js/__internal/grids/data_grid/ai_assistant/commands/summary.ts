@@ -3,7 +3,7 @@ import { defineGridCommand } from '@ts/grids/grid_core/ai_assistant/commands/def
 // eslint-disable-next-line spellcheck/spell-checker
 import { optionalNullish } from '@ts/grids/grid_core/ai_assistant/commands/utils';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import { z } from 'zod';
+import { z } from '@ts/grids/grid_core/ai_assistant/zod';
 
 import type { Column } from './types';
 
@@ -46,7 +46,7 @@ const SUMMARY_TYPE_LABELS: Record<SummaryItem['summaryType'], string> = {
 const buildItemLabel = (
   item: SummaryItem,
   location: 'total' | 'group',
-  columnsController: { columnOption: (id: string) => Column | undefined },
+  columnsController: { columnOption: (id: string) => Pick<Column, 'caption'> | undefined },
 ): string => {
   const column = columnsController.columnOption(item.column);
   const caption = column?.caption ?? item.column;
@@ -57,7 +57,7 @@ const buildItemLabel = (
 const buildDefaultMessage = (
   totalItems: SummaryItem[],
   groupItems: SummaryItem[],
-  columnsController: { columnOption: (id: string) => Column | undefined },
+  columnsController: { columnOption: (id: string) => Pick<Column, 'caption'> | undefined },
 ): string => {
   if (totalItems.length === 0 && groupItems.length === 0) {
     return 'Display data summaries.';

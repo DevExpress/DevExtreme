@@ -37,7 +37,7 @@ import type {
 } from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type {
   ClickEvent,
   HoverEvent,
@@ -786,7 +786,7 @@ class Menu extends MenuBase<MenuProperties> {
       onHidden: this._submenuOnHiddenHandler.bind(this, $menuAnchorItem, submenu),
     });
 
-    each(submenus, (_index: number, subMenu: Submenu) => {
+    each(submenus, (_index, subMenu) => {
       eventsEngine.off(subMenu, submenuMouseLeaveName);
       eventsEngine.on(
         subMenu,

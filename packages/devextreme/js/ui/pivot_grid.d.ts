@@ -34,6 +34,8 @@ import {
     StateStoreType,
 } from '../common/grids';
 
+import { LoadPanelIndicatorProperties } from './load_panel';
+
 export {
     ApplyChangesMode,
     FieldChooserLayout,
@@ -480,8 +482,13 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       /**
        * @docid
        * @default ""
+       * @deprecated dxPivotGridOptions.loadPanel.indicatorOptions
        */
       indicatorSrc?: string;
+      /**
+       * @docid
+       */
+      indicatorOptions?: LoadPanelIndicatorProperties;
       /**
        * @docid
        * @default false

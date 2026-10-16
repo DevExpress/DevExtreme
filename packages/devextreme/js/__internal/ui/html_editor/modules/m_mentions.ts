@@ -46,7 +46,6 @@ if (Quill) {
   const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
   Quill.register({ 'formats/mention': Mention }, true);
-  // @ts-expect-error
   MentionModule = class MentionModule extends PopupModule {
     quill: any;
 
@@ -75,7 +74,6 @@ if (Quill) {
     _hasSearch?: boolean;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
       this._mentions = {};
 
@@ -96,7 +94,6 @@ if (Quill) {
       });
 
       this._attachKeyboardHandlers();
-      // @ts-expect-error
       this.addCleanCallback(this.clean.bind(this));
       this.quill.on('text-change', this.onTextChange.bind(this));
     }

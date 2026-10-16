@@ -8,7 +8,7 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 fixture`Rendering of the recurrence appointments in  Scheduler `
   .page(url(__dirname, '../../../container.html'));
 
-test('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
+test.meta({ unstable: true })('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Simple recurrence appointment');

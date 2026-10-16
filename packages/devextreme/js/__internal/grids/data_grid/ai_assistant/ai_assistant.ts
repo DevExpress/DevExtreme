@@ -2,7 +2,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import { AIAssistantView } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view';
 import { AIAssistantViewController } from '@ts/grids/grid_core/ai_assistant/ai_assistant_view_controller';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 import { DataGridAIAssistantController } from './ai_assistant_controller';
 
 gridCore.registerModule('aiAssistant', {

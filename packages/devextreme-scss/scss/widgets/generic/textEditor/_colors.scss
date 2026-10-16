@@ -54,7 +54,7 @@ $texteditor-readonly-border-color: $base-border-color !default;
 $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
-  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms !default;
 
 @if $color == "carmine" {
   $texteditor-placeholder-color: $base-label-color !default;
@@ -128,7 +128,7 @@ $texteditor-label-transition:
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.1) !default;
 }
 
-$texteditor-label-color: $texteditor-placeholder-color;
+$texteditor-label-color: $texteditor-placeholder-color !default;
 
 :root {
   --dx-texteditor-color-text: #{$texteditor-color};

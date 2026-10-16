@@ -73,7 +73,7 @@ const onStateResetClick = () => {
   dataGridRef.value!.instance!.state(null);
 };
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
   margin-top: 30px;

@@ -145,7 +145,7 @@ function onCustomCommand(e: DxDiagramTypes.CustomCommandEvent) {
   }
 }
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 900px;
     }

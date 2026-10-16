@@ -2,6 +2,7 @@
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "neverConnectToCloud": true,
+  "cacheDirectory": ".nx/cache",
   "plugins": ["./packages/nx-infra-plugin/dist"],
   "namedInputs": {
     "metadataToolsCommonInputs": [

@@ -1,0 +1,82 @@
+[
+  {
+    "ID": 1,
+    "FirstName": "John",
+    "LastName": "Heart",
+    "Phone": "(213) 555-9392",
+    "Position": "CEO",
+    "Email": "jheart@dx-email.com"
+  },
+  {
+    "ID": 2,
+    "FirstName": "Olivia",
+    "LastName": "Peyton",
+    "Phone": "(310) 555-2728",
+    "Position": "Sales Assistant",
+    "Email": "oliviap@dx-email.com"
+  },
+  {
+    "ID": 3,
+    "FirstName": "Robert",
+    "LastName": "Reagan",
+    "Phone": "(818) 555-2387",
+    "Position": "CMO",
+    "Email": "robertr@dx-email.com"
+  },
+  {
+    "ID": 4,
+    "FirstName": "Greta",
+    "LastName": "Sims",
+    "Phone": "(818) 555-6546",
+    "Position": "HR Manager",
+    "Email": "gretas@dx-email.com"
+  },
+  {
+    "ID": 5,
+    "FirstName": "Brett",
+    "LastName": "Wade",
+    "Phone": "(626) 555-0358",
+    "Position": "IT Manager",
+    "Email": "brettw@dx-email.com"
+  },
+  {
+    "ID": 6,
+    "FirstName": "Sandra",
+    "LastName": "Johnson",
+    "Phone": "(562) 555-2082",
+    "Position": "Controller",
+    "Email": "sandraj@dx-email.com"
+  },
+  {
+    "ID": 7,
+    "FirstName": "Kevin",
+    "LastName": "Carter",
+    "Phone": "(213) 555-2840",
+    "Position": "Shipping Manager",
+    "Email": "kevinc@dx-email.com"
+  },
+  {
+    "ID": 8,
+    "FirstName": "Cynthia",
+    "LastName": "Stanwick",
+    "Phone": "(818) 555-6655",
+    "Position": "HR Assistant",
+    "Email": "cindys@dx-email.com"
+  },
+  {
+    "ID": 9,
+    "FirstName": "Kent",
+    "LastName": "Samuelson",
+    "Phone": "(562) 555-9282",
+    "Position": "Ombudsman",
+    "Email": "kents@dx-email.com"
+  },
+  {
+    "ID": 10,
+    "FirstName": "Taylor",
+    "LastName": "Riley",
+    "Phone": "(310) 555-7276",
+    "Position": "Network Admin",
+    "Email": "taylorr@dx-email.com"
+  }
+]

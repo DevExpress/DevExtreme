@@ -13,9 +13,9 @@
 @use "../../base/list/mixins" as *;
 @use "../badge";
 
-$generic-list-border: $generic-list-border-width solid;
-$generic-list-item-border: $generic-list-item-border-width solid;
-$generic-list-search-editor-height: math.round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
+$generic-list-border: $generic-list-border-width solid !default;
+$generic-list-item-border: $generic-list-item-border-width solid !default;
+$generic-list-search-editor-height: math.round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width !default;
 
 .dx-list-item-chevron {
   @include dx-icon(chevronnext);

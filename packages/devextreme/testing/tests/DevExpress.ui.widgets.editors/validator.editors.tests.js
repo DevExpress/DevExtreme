@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import Class from 'core/class';
 import Editor from 'ui/editor/editor';
 import DefaultAdapter from '__internal/ui/validation/default_adapter';
 import ValidationEngine from 'ui/validation_engine';
@@ -9,7 +8,7 @@ import { Deferred } from 'core/utils/deferred';
 import 'ui/validator';
 import 'ui/load_indicator';
 
-const Fixture = Class.inherit({
+class Fixture {
     createValidator(options, element) {
         this.$element = element || this.$element || $('<div/>');
         this.stubAdapter = sinon.createStubInstance(DefaultAdapter);
@@ -18,20 +17,23 @@ const Fixture = Class.inherit({
         }, options)).dxValidator('instance');
 
         return validator;
-    },
+    }
+
     createEditor(editorOptions) {
         this.$element = $('<div/>');
         return new Editor(this.$element, $.extend({}, editorOptions));
-    },
+    }
+
     createTextEditor(editorOptions) {
         this.$element = $('<div/>');
         return new TextEditorBase(this.$element, $.extend({}, editorOptions));
-    },
+    }
+
     teardown() {
         this.$element.remove();
         ValidationEngine.initGroups();
     }
-});
+}
 
 QUnit.module('Editors Standard Adapter', {
     beforeEach: function() {
