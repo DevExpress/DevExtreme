@@ -827,7 +827,7 @@ QUnit.module('dxPivotGridFieldChooser', {
         const scrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
 
         // act
-        scrollable.scrollTo({ y: 30 });
+        scrollable.scrollTo({ top: 30 });
 
         dataSource.on.withArgs('changed').lastCall.args[1]();
         // assert
@@ -865,7 +865,7 @@ QUnit.module('dxPivotGridFieldChooser', {
         const scrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
 
         // act
-        scrollable.scrollTo({ y: 30 });
+        scrollable.scrollTo({ top: 30 });
 
         $('.dx-treeview-border-visible .dx-checkbox').eq(0).trigger('dxclick');
 

@@ -18,11 +18,11 @@ test.meta({ browserSize: [800, 800] })('Fixed columns should display correctly w
   await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await dataGrid.scrollTo(t, { y: 500 });
+  await dataGrid.scrollTo(t, { top: 500 });
   await t.wait(100);
-  await dataGrid.scrollTo(t, { y: 1000 });
+  await dataGrid.scrollTo(t, { top: 1000 });
   await t.wait(100);
-  await dataGrid.scrollTo(t, { y: 1500 });
+  await dataGrid.scrollTo(t, { top: 1500 });
   await t.wait(100);
 
   await testScreenshot(t, takeScreenshot, 'fixed_columns_with_virtual_scrolling_1.png', { element: dataGrid.element });
@@ -64,7 +64,7 @@ test.meta({ browserSize: [800, 800] })('Fixed columns should display correctly w
   await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'fixed_columns_with_horizontal_scrolling.png', { element: dataGrid.element });
 
