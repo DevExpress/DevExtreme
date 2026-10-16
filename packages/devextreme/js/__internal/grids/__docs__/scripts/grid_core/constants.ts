@@ -21,6 +21,7 @@ const CORE_DIRECTORY_FEATURE_MAP: Record<string, string> = {
   data_controller: 'Data',
 
   views: 'Core',
+  grid_view: 'Core',
   editor_factory: 'Core',
   error_handling: 'Core',
   toast: 'Core',

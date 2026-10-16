@@ -8,6 +8,7 @@ import { isDefined } from '@js/core/utils/type';
 import Sortable from '@js/ui/sortable';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import { CLASSES as GRID_VIEW_CLASSES } from '@ts/grids/grid_core/grid_view/const';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
@@ -247,7 +248,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       // @ts-expect-error
       this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
       $dataGridContainer
-        .find('.dx-gridbase-container')
+        .find(`.${GRID_VIEW_CLASSES.gridBaseContainer}`)
         .children(`:not(.${this.addWidgetPrefix(VIEW_CLASSES.rowsView)})`)
         .hide();
 

@@ -15,9 +15,9 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
 import type { Column } from '../columns_controller/types';
+import type { ResizingController } from '../grid_view/grid_view';
 import type { InternalGridOptions, ModuleType, OptionChanged } from '../types';
 import { ColumnsView } from '../views/columns_view';
-import type { ResizingController } from '../views/grid_view';
 import type { ContextMenuItemsOptions } from '../views/types';
 import { CLASSES, DEFAULT_TOOLBAR_ITEM_NAMES, TOOLBAR_ARIA_LABEL } from './const';
 

@@ -14,8 +14,13 @@ import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import * as accessibility from '@js/ui/shared/accessibility';
+import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import { A11yStatusContainerComponent } from '@ts/grids/grid_core/views/a11y_status_container_component';
+import type { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { ColumnWidth, ScrollPosition, ViewDataChange } from '@ts/grids/grid_core/views/types';
+import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 
 import type { FooterView } from '../../data_grid/summary/m_summary';
 import type { AdaptiveColumnsViewController } from '../adaptivity/m_adaptivity';
@@ -31,42 +36,8 @@ import modules from '../modules/modules';
 import type {
   InternalGridOptions, OptionChanged, SelectionRange, Views,
 } from '../types';
-import type { ColumnsView } from './columns_view';
-import { CLASSES } from './const';
-import type { RowsView } from './rows_view';
-import type { ColumnWidth, ScrollPosition, ViewDataChange } from './types';
-import { isPercentWidth } from './utils';
-
-const BORDERS_CLASS = 'borders';
-const IMPORTANT_MARGIN_CLASS = 'important-margin';
-const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
-const GROUP_ROW_SELECTOR = `tr.${CLASSES.groupRow}`;
-
-const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
-
-const VIEW_NAMES = [
-  'columnsSeparatorView',
-  'blockSeparatorView',
-  'trackerView',
-  'headerPanel',
-  'columnHeadersView',
-  'rowsView',
-  'footerView',
-  'columnChooserView',
-  'filterPanelView',
-  'pagerView',
-  'draggingHeaderView',
-  'contextMenuView',
-  'headerFilterView',
-  'filterBuilderView',
-  'toastView',
-  'aiPromptEditorView',
-  'aiAssistantView',
-] as const;
-
-const E2E_ATTRIBUTES = {
-  a11yStatusContainer: 'e2e-a11y-general-status-container',
-};
+import { A11yStatusContainerComponent } from './a11y_status_container_component';
+import { CLASSES, E2E_ATTRIBUTES, VIEW_NAMES } from './const';
 
 const isPixelWidth = (width: ColumnWidth): boolean => isString(width) && width.endsWith('px');
 
@@ -242,7 +213,7 @@ export class ResizingController extends modules.ViewController {
       ? `${widgetStatusText}. ${expandableWidgetAriaLabel}`
       : widgetStatusText;
 
-    const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
+    const $ariaLabelElement = this.component.$element().children(`.${CLASSES.gridBaseContainer}`);
 
     this.component.setAria('label', labelText, $ariaLabelElement);
     if (!e?.isFirstRender) {
@@ -257,7 +228,7 @@ export class ResizingController extends modules.ViewController {
 
     if (!widths?.length) {
       const headersTableElement = columnHeadersView.getTableElement();
-      columnHeadersView.setTableElement(rowsView.getTableElement()?.children(`.${CLASSES.headerBody}`));
+      columnHeadersView.setTableElement(rowsView.getTableElement()?.children(`.${VIEW_CLASSES.headerBody}`));
       widths = columnHeadersView.getColumnWidths();
       columnHeadersView.setTableElement(headersTableElement);
     }
@@ -297,7 +268,7 @@ export class ResizingController extends modules.ViewController {
           : $rowsTable.children(`.${className}`).appendTo($viewTable);
 
         $tableBody.toggleClass(className, isBestFit);
-        $tableBody.toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
+        $tableBody.toggleClass(this.addWidgetPrefix(CLASSES.bestFit), isBestFit);
       }
     });
   }
@@ -317,14 +288,14 @@ export class ResizingController extends modules.ViewController {
     $rowsTable.children('colgroup').css('display', isBestFit ? 'none' : '');
 
     // NOTE T1156153: Hide group row column to get correct fixed column widths.
-    $rowsFixedTable.find(GROUP_ROW_SELECTOR).toArray().forEach((item) => {
+    $rowsFixedTable.find(`tr.${VIEW_CLASSES.groupRow}`).toArray().forEach((item) => {
       $(item).css('display', isBestFit ? 'none' : '');
     });
 
-    $rowsFixedTable.toggleClass(this.addWidgetPrefix(CLASSES.tableFixed), !isBestFit);
+    $rowsFixedTable.toggleClass(this.addWidgetPrefix(VIEW_CLASSES.tableFixed), !isBestFit);
 
-    this._toggleBestFitModeForView(this._columnHeadersView, CLASSES.headerBody, isBestFit);
-    this._toggleBestFitModeForView(this._footerView, CLASSES.footerBody, isBestFit);
+    this._toggleBestFitModeForView(this._columnHeadersView, VIEW_CLASSES.headerBody, isBestFit);
+    this._toggleBestFitModeForView(this._footerView, VIEW_CLASSES.footerBody, isBestFit);
 
     if (this._needStretch()) {
       ($rowsTable.get(0) as HTMLElement).style.width = isBestFit ? 'auto' : '';
@@ -668,7 +639,7 @@ export class ResizingController extends modules.ViewController {
 
   public updateSize(rootElement: dxElementWrapper): void {
     const $rootElement = $(rootElement);
-    const importantMarginClass = this.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
+    const importantMarginClass = this.addWidgetPrefix(CLASSES.importantMargin);
 
     if (this._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
       const $groupElement = $rootElement.children(`.${this.getWidgetContainerClass()}`);
@@ -965,7 +936,7 @@ export class GridView extends modules.View {
 
   public optionChanged(args: OptionChanged): void {
     if (isDefined(this._groupElement) && args.name === 'showBorders') {
-      this._groupElement.toggleClass(this.addWidgetPrefix(BORDERS_CLASS), !!args.value);
+      this._groupElement.toggleClass(this.addWidgetPrefix(CLASSES.borders), !!args.value);
       args.handled = true;
     } else {
       super.optionChanged(args);
@@ -990,8 +961,8 @@ export class GridView extends modules.View {
     const isFirstRender = !this._groupElement;
     const $groupElement = this._groupElement ?? $('<div>').addClass(this.getWidgetContainerClass());
 
-    $groupElement.addClass(GRIDBASE_CONTAINER_CLASS);
-    $groupElement.toggleClass(this.addWidgetPrefix(BORDERS_CLASS), !!this.option('showBorders'));
+    $groupElement.addClass(CLASSES.gridBaseContainer);
+    $groupElement.toggleClass(this.addWidgetPrefix(CLASSES.borders), !!this.option('showBorders'));
 
     this.setAria('role', 'presentation', $rootElement);
 
