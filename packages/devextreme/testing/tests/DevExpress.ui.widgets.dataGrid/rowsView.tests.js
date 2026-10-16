@@ -3,7 +3,7 @@ import 'fluent_blue_light.css!';
 import 'ui/data_grid';
 
 import $ from 'jquery';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import dataUtils from 'core/element_data';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';

@@ -5,7 +5,7 @@ import type {
 import { isString } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { z } from '@ts/grids/grid_core/ai_assistant/zod';
-import { isDateType } from '@ts/grids/grid_core/m_utils';
+import { isDateType } from '@ts/grids/grid_core/utils';
 
 type RowKey = string | number | Record<string, string | number>;
 

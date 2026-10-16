@@ -17,7 +17,7 @@ import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import gridCore from '../../core';
 import type { ProcessGroupItemsOptions } from '../../grouping/types';
 import { isSameContinuationState } from '../../grouping/utils';
-import { isDataColumn } from '../../m_utils';
+import { isDataColumn } from '../../utils';
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE, DATAGRID_TOTAL_FOOTER_ROW_TYPE } from '../const';
 import type { SummaryDataSourceAdapter } from '../m_summary';
 import type {

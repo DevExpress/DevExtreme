@@ -4,7 +4,7 @@ import 'ui/data_grid';
 import 'common/data/odata/store';
 
 import $ from 'jquery';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import ArrayStore from 'common/data/array_store';
 import pointerEvents from 'common/core/events/pointer';
 import clickEvent from 'common/core/events/click';

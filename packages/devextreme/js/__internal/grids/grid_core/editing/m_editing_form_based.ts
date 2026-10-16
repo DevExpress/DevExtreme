@@ -18,8 +18,8 @@ import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
-import gridCoreUtils from '../m_utils';
 import type { ModuleType } from '../types';
+import gridCoreUtils from '../utils';
 import {
   BUTTON_CLASS,
   DATA_EDIT_DATA_INSERT_TYPE,

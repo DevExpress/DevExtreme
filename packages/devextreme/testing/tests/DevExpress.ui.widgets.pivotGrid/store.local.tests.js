@@ -5,7 +5,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { LocalStore } from '__internal/grids/pivot_grid/local_store/m_local_store';
 import { sort } from '__internal/grids/pivot_grid/data_source/m_data_source_utils';
-import pivotGridUtils from '__internal/grids/grid_core/m_utils';
+import pivotGridUtils from '__internal/grids/grid_core/utils';
 import config from 'core/config';
 import formatHelper from 'format_helper';
 import ajaxMock from '../../helpers/ajaxMock.js';

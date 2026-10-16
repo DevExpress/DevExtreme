@@ -5,8 +5,8 @@
 /* eslint-disable prefer-rest-params */
 import { Deferred, when } from '@js/core/utils/deferred';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import { EDIT_MODE_BATCH, EDIT_MODE_ROW } from '../../editing/const';

@@ -1,5 +1,5 @@
 import { GanttExportHelper } from '__internal/ui/gantt/ui.gantt.export_helper';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 
 const moduleConfig = {
     beforeEach: function() {

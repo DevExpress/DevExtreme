@@ -4,7 +4,7 @@ import $ from 'jquery';
 
 import 'ui/data_grid';
 
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import devices from '__internal/core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import commonUtils from 'core/utils/common';

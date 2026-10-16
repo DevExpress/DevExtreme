@@ -17,8 +17,8 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { RowsView } from '../../grid_core/views/rows_view';
+import AggregateCalculator from '../aggregate_calculator';
 import gridCore from '../core';
-import AggregateCalculator from '../m_aggregate_calculator';
 import {
   DATAGRID_CELL_DISABLED,
   DATAGRID_FOOTER_ROW_CLASS,

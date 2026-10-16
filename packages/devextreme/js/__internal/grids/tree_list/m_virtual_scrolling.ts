@@ -3,8 +3,8 @@ import { extend } from '@js/core/utils/extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import {
   dataSourceAdapterExtender as virtualScrollingDataSourceAdapterExtender,

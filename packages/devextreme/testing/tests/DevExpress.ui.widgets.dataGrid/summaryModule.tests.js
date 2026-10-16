@@ -7,7 +7,7 @@ import { setupDataGridModules, MockDataController, MockColumnsController } from 
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import * as summaryModule from '__internal/grids/data_grid/summary/m_summary';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import { noop } from 'core/utils/common';
 
 QUnit.testStart(function() {

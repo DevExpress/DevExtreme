@@ -24,7 +24,7 @@ import Modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import {
   headerFilterMixin,
   HeaderFilterView,
