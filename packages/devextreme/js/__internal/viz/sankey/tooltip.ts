@@ -24,6 +24,7 @@ const generateCustomCallback = function (customCallback, defaultCallback) {
     let res = isFunction(customCallback) ? customCallback.call(objectInfo, objectInfo) : {};
     const hasOwnProperty = Object.prototype.hasOwnProperty.bind(res);
     if (!hasOwnProperty('html') && !hasOwnProperty('text')) {
+      // @ts-expect-error a customize callback returns an object
       res = _extend(res, defaultCallback.call(objectInfo, objectInfo));
     }
     return res;

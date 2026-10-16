@@ -1,6 +1,7 @@
 import config from '@js/core/config';
 import Guid from '@js/core/guid';
 import { toComparable } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import {
@@ -10,27 +11,50 @@ import {
 // @ts-expect-error new deferred
 export const uiLayerInitialized = new Deferred();
 
-export const ensureDefined = function (value, defaultValue) {
+export const ensureDefined = function ensureDefined<T>(
+  value: T | null | undefined,
+  defaultValue: T,
+): T {
   return isDefined(value) ? value : defaultValue;
 };
 
-export const executeAsync = function (action, context?/* , internal */) {
+type TimerFunction = (
+  callback: () => void,
+  timeout: number,
+) => ReturnType<typeof setTimeout>;
+
+interface AsyncTask {
+  promise: unknown;
+  abort: () => void;
+}
+
+const hasDone = (
+  value: unknown,
+): value is { done: unknown } => !!(value as { done?: unknown }).done;
+
+export const executeAsync = function executeAsync(
+  this: unknown,
+  action: (this: unknown) => unknown,
+  context?: unknown,
+  ...internal: [TimerFunction?]
+): AsyncTask {
   // @ts-expect-error only void function can be called with new
   const deferred = new Deferred();
   const normalizedContext = context || this;
   const task = {
     promise: deferred.promise(),
-    abort() {
+    abort(): void {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define -- set below
       clearTimeout(timerId);
       deferred.rejectWith(normalizedContext);
     },
   };
 
-  const callback = function () {
+  const callback = function callback(): void {
     const result = action.call(normalizedContext);
 
-    if (result && result.done && isFunction(result.done)) {
-      result.done(function () {
+    if (result && hasDone(result) && isFunction(result.done)) {
+      result.done(() => {
         deferred.resolveWith(normalizedContext);
       });
     } else {
@@ -38,24 +62,31 @@ export const executeAsync = function (action, context?/* , internal */) {
     }
   };
 
-  const timerId = (arguments[2] || setTimeout)(callback, typeof context === 'number' ? context : 0);
+  const timerId = (internal[0] || setTimeout)(callback, typeof context === 'number' ? context : 0);
 
   return task;
 };
 
-const delayedFuncs: any[] = [];
-const delayedNames: any[] = [];
-const delayedDeferreds: any[] = [];
-let executingName;
+type DeferredTask = () => unknown;
 
-const deferExecute = function (name, func, deferred?) {
+const delayedFuncs: DeferredTask[] = [];
+const delayedNames: string[] = [];
+const delayedDeferreds: DeferredObj<unknown>[] = [];
+let executingName = undefined as string | undefined;
+
+const deferExecute = function deferExecute(
+  this: unknown,
+  name: string,
+  func: DeferredTask,
+  deferred?: DeferredObj<unknown>,
+): unknown {
   if (executingName && executingName !== name) {
     delayedFuncs.push(func);
     delayedNames.push(name);
     // @ts-expect-error only void function can be called with new
-    deferred = deferred || new Deferred();
-    delayedDeferreds.push(deferred);
-    return deferred;
+    const delayedDeferred: DeferredObj<unknown> = deferred || new Deferred();
+    delayedDeferreds.push(delayedDeferred);
+    return delayedDeferred;
   }
   const oldExecutingName = executingName;
   const currentDelayedCount = delayedDeferreds.length;
@@ -73,40 +104,74 @@ const deferExecute = function (name, func, deferred?) {
 
   executingName = oldExecutingName;
 
-  if (deferred && result && result.done) {
+  if (deferred && result && hasDone(result)) {
+    // @ts-expect-error a task result with done is a deferred
     result.done(deferred.resolve).fail(deferred.reject);
   }
 
   if (!executingName && delayedFuncs.length) {
-    (delayedNames.shift() === 'render' ? deferRender : deferUpdate)(delayedFuncs.shift(), delayedDeferreds.shift());
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the three call each other
+    const deferFunc = delayedNames.shift() === 'render' ? deferRender : deferUpdate;
+    // @ts-expect-error the queues hold an entry here
+    deferFunc(delayedFuncs.shift(), delayedDeferreds.shift());
   }
   return result || when();
 };
 
-export const deferRender = function (func, deferred) {
+export const deferRender = function deferRender(
+  func: DeferredTask,
+  deferred?: DeferredObj<unknown>,
+): unknown {
   return deferExecute('render', func, deferred);
 };
 
-export const deferUpdate = function (func, deferred) {
+export const deferUpdate = function deferUpdate(
+  func: DeferredTask,
+  deferred?: DeferredObj<unknown>,
+): unknown {
   return deferExecute('update', func, deferred);
 };
 
-export const deferRenderer = function (func) {
-  return function () {
-    const that = this;
-    return deferExecute('render', function () {
-      return func.call(that);
-    });
+export const deferRenderer = function deferRenderer(
+  func: (this: unknown) => unknown,
+): (this: unknown) => unknown {
+  return function render(this: unknown): unknown {
+    return deferExecute('render', () => func.call(this));
   };
 };
 
-export const deferUpdater = function (func) {
-  return function () {
-    const that = this;
-    return deferExecute('update', function () {
-      return func.call(that);
-    });
+export const deferUpdater = function deferUpdater(
+  func: (this: unknown) => unknown,
+): (this: unknown) => unknown {
+  return function update(this: unknown): unknown {
+    return deferExecute('update', () => func.call(this));
   };
+};
+
+const match = function match(value: unknown, targetValue: unknown): boolean {
+  if (Array.isArray(value) && Array.isArray(targetValue)) {
+    let mismatch = false;
+
+    each(value, (index, valueItem) => {
+      if (valueItem !== targetValue[index]) {
+        mismatch = true;
+        return false;
+      }
+      return undefined;
+    });
+
+    if (mismatch) {
+      return false;
+    }
+
+    return true;
+  }
+
+  if (value === targetValue) {
+    return true;
+  }
+
+  return false;
 };
 
 type FilterMatch<TFilter> = { [TKey in keyof TFilter]?: unknown };
@@ -136,12 +201,12 @@ export function findBestMatches(
       const value = item[paramName];
 
       if (value === undefined) {
-        return;
+        return undefined;
       }
 
       if (match(value, targetValue)) {
-        matchCount++;
-        return;
+        matchCount += 1;
+        return undefined;
       }
       matchCount = -1;
       return false;
@@ -160,85 +225,78 @@ export function findBestMatches(
   return bestMatches;
 }
 
-const match = function (value, targetValue) {
-  if (Array.isArray(value) && Array.isArray(targetValue)) {
-    let mismatch = false;
+interface PairObject {
+  x?: unknown;
+  y?: unknown;
+  h?: unknown;
+  v?: unknown;
+}
 
-    // @ts-expect-error not all code paths return value
-    each(value, (index, valueItem) => {
-      if (valueItem !== targetValue[index]) {
-        mismatch = true;
-        return false;
-      }
-    });
-
-    if (mismatch) {
-      return false;
-    }
-
-    return true;
-  }
-
-  if (value === targetValue) {
-    return true;
-  }
-
-  return false;
-};
-
-export const splitPair = function (raw) {
+export const splitPair = function splitPair(raw: unknown): unknown[] | null {
   switch (type(raw)) {
     case 'string':
-      return raw.split(/\s+/, 2);
-    case 'object':
-      return [raw.x ?? raw.h, raw.y ?? raw.v];
+      return (raw as string).split(/\s+/, 2);
+    case 'object': {
+      const pair = raw as PairObject;
+      return [pair.x ?? pair.h, pair.y ?? pair.v];
+    }
     case 'number':
       return [raw];
     case 'array':
-      return raw;
+      return raw as unknown[];
     default:
       return null;
   }
 };
 
-export const normalizeKey = function (id) {
+export const normalizeKey = function normalizeKey(id: string | { toString: () => string }): string {
   let key = isString(id) ? id : id.toString();
   const arr = key.match(/[^a-zA-Z0-9_]/g);
 
-  arr && each(arr, (_, sign) => {
-    key = key.replace(sign, `__${sign.charCodeAt()}__`);
-  });
+  if (arr) {
+    each(arr, (_, sign) => {
+      key = key.replace(sign, `__${sign.charCodeAt(0)}__`);
+    });
+  }
   return key;
 };
 
-export const denormalizeKey = function (key) {
-  const arr = key.match(/__\d+__/g);
+export const denormalizeKey = function denormalizeKey(key: string): string {
+  let result = key;
+  const arr = result.match(/__\d+__/g);
 
-  arr && arr.forEach((char) => {
-    const charCode = parseInt(char.replace('__', ''));
+  if (arr) {
+    arr.forEach((char) => {
+      const charCode = parseInt(char.replace('__', ''), 10);
 
-    key = key.replace(char, String.fromCharCode(charCode));
-  });
+      result = result.replace(char, String.fromCharCode(charCode));
+    });
+  }
 
-  return key;
+  return result;
 };
 
-export const pairToObject = function (raw, preventRound) {
+export const pairToObject = function pairToObject(
+  raw: unknown,
+  preventRound?: unknown,
+): { h: number; v: number } {
   const pair = splitPair(raw);
-  let h = preventRound ? parseFloat(pair && pair[0]) : parseInt(pair && pair[0], 10);
-  let v = preventRound ? parseFloat(pair && pair[1]) : parseInt(pair && pair[1], 10);
+  // @ts-expect-error parseFloat and parseInt convert the part to a string
+  let h = preventRound ? parseFloat(pair?.[0]) : parseInt(pair?.[0], 10);
+  // @ts-expect-error parseFloat and parseInt convert the part to a string
+  let v = preventRound ? parseFloat(pair?.[1]) : parseInt(pair?.[1], 10);
 
-  if (!isFinite(h)) {
+  if (!Number.isFinite(h)) {
     h = 0;
   }
-  if (!isFinite(v)) {
+  if (!Number.isFinite(v)) {
     v = h;
   }
 
   return { h, v };
 };
 
-export const getKeyHash = function (key) {
+export const getKeyHash = function getKeyHash(key: unknown): unknown {
   if (key instanceof Guid) {
     return key.toString();
   } if (isObject(key) || Array.isArray(key)) {
@@ -253,29 +311,38 @@ export const getKeyHash = function (key) {
   return key;
 };
 
-export const escapeRegExp = function (string) {
+export const escapeRegExp = function escapeRegExp(string: string): string {
   return string.replace(/[[\]{}\-()*+?.\\^$|\s]/g, '\\$&');
 };
 
-export const applyServerDecimalSeparator = function (value) {
+export function applyServerDecimalSeparator(value: string | number): string;
+export function applyServerDecimalSeparator<T extends null | undefined>(value: T): T;
+export function applyServerDecimalSeparator(value: unknown): unknown {
   const separator = config().serverDecimalSeparator;
   if (isDefined(value)) {
-    value = value.toString().replace('.', separator);
+    // @ts-expect-error the default config sets the separator
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string -- a number or a string
+    return value.toString().replace('.', separator);
   }
   return value;
+}
+
+export const noop = function noop(): void {};
+export const asyncNoop = function asyncNoop(): unknown {
+  // @ts-expect-error only void function can be called with new
+  return new Deferred().resolve().promise();
 };
 
-export const noop = function () {};
-// @ts-expect-error only void function can be called with new
-export const asyncNoop = function () { return new Deferred().resolve().promise(); };
-
-export const grep = function (elements, checkFunction, invert?) {
-  const result: any[] = [];
-  let check;
+export const grep = function grep<T>(
+  elements: ArrayLike<T>,
+  checkFunction: (element: T, index: number) => unknown,
+  invert?: boolean,
+): T[] {
+  const result: T[] = [];
   const expectedCheck = !invert;
 
-  for (let i = 0; i < elements.length; i++) {
-    check = !!checkFunction(elements[i], i);
+  for (let i = 0; i < elements.length; i += 1) {
+    const check = !!checkFunction(elements[i], i);
 
     if (check === expectedCheck) {
       result.push(elements[i]);

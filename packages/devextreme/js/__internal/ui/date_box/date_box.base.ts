@@ -419,6 +419,7 @@ class DateBox<
     );
     const $input = this._input();
     const inputElement = $input.get(0);
+    // @ts-expect-error the longest date is formatted as text
     const $longestValueElement = createTextElementHiddenCopy($input, longestValue);
     const storedPadding = this._storedPadding ?? 0;
 
