@@ -32,9 +32,9 @@ import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { HeaderPanel } from '../header_panel/header_panel';
-import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { PagerView } from '../pager/m_pager';
+import gridCoreUtils from '../utils';
 import { CLASSES } from './const';
 import type { Coordinates, DraggingPanel } from './types';
 

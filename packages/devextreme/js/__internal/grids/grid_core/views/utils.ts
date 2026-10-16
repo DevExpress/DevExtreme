@@ -4,7 +4,7 @@ import { isString } from '@js/core/utils/type';
 import { columnHasValue } from '@ts/grids/grid_core/columns_controller/columns_controller_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 
 const INVISIBLE_CLASS = 'dx-state-invisible';
 

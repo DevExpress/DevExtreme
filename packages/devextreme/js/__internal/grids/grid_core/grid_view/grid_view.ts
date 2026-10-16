@@ -31,11 +31,11 @@ import type { Column } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
-import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type {
   InternalGridOptions, OptionChanged, SelectionRange, Views,
 } from '../types';
+import gridCoreUtils from '../utils';
 import { A11yStatusContainerComponent } from './a11y_status_container_component';
 import { CLASSES, E2E_ATTRIBUTES, VIEW_NAMES } from './const';
 

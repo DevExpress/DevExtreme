@@ -5,7 +5,7 @@ import sharedFiltering from '@js/ui/shared/filtering';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters, isColumnExcluded } from '@ts/grids/grid_core/filter/utils';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import type { EmptyDateValue, HeaderFilterGroup, HeaderFilterGroupItem } from './types';
 
