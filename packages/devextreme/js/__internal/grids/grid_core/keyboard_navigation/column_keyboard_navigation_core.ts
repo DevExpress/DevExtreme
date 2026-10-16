@@ -4,7 +4,7 @@ import type { Column, DropLocationNames } from '@ts/grids/grid_core/columns_cont
 
 import type { ColumnFocusDispatcher } from './column_focus_dispatcher';
 import { Direction } from './const';
-import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
+import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './keyboard_navigation_core';
 import type { FocusedCellPosition } from './types';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {

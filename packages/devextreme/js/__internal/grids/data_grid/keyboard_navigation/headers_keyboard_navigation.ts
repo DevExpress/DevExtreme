@@ -3,12 +3,12 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
-import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
-import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
+import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
+import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import gridCore from '../core';
-import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
+import { ColumnKeyboardNavigationMixin } from './column_keyboard_navigation_mixin';
 
 const headersKeyboardNavigation: (
   Base: ModuleType<HeadersKeyboardNavigationController>,

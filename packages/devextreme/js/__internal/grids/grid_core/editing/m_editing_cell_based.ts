@@ -30,8 +30,8 @@ import {
   ROW_REMOVED,
   TARGET_COMPONENT_NAME,
 } from './const';
+import { isEditable } from './editing_utils';
 import type { EditingController } from './m_editing';
-import { isEditable } from './m_editing_utils';
 import type { NormalizedEditCellOptions } from './types';
 
 export interface ICellBasedEditingControllerExtender {

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import positionUtils from '@js/common/core/animation/position';
-import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
@@ -24,25 +23,17 @@ import type { ValidatingController } from '@ts/grids/grid_core/validating/m_vali
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
+import { CELL_FOCUS_DISABLED_CLASS, CELL_MODIFIED_CLASS, FOCUS_OVERLAY_CLASS } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
+import { CLASSES as KEYBOARD_NAVIGATION_CLASSES } from '../keyboard_navigation/const';
 import { isDataRow } from '../keyboard_navigation/utils';
 import gridCoreUtils from '../m_utils';
 import type { ViewController } from '../modules/modules';
 import modules from '../modules/modules';
 import type { Module, ModuleType } from '../types';
+import { INVALIDATE_CLASS } from '../validating/const';
 import type { RowsView } from '../views/rows_view';
-
-const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
-const CELL_MODIFIED_CLASS = 'dx-cell-modified';
-const CELL_INVALID_CLASS = 'invalid';
-const FOCUSED_CELL_MODIFIED_CLASS = 'dx-focused-cell-modified';
-const FOCUSED_CELL_INVALID_CLASS = 'dx-focused-cell-invalid';
-const FOCUS_OVERLAY_CLASS = 'focus-overlay';
-const FOCUSED_ELEMENT_CLASS = 'dx-focused';
-const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
-const UPDATE_FOCUS_EVENTS = addNamespace([clickEventName, 'focusin'].join(' '), MODULE_NAMESPACE);
-const DX_HIDDEN = 'dx-hidden';
+import { CLASSES, MODULE_NAMESPACE, UPDATE_FOCUS_EVENTS } from './const';
 
 interface EditorFactoryMixinType {
   createEditor($container: dxElementWrapper, options: object): void;
@@ -171,7 +162,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     const isRowsView = !!rowsViewElement && $element.closest(rowsViewElement).length > 0;
     const isEditing = this._editingController.isEditing();
 
-    return $element.hasClass(EDITOR_INLINE_BLOCK) || (isRowsView && !isEditing);
+    return $element.hasClass(CLASSES.editorInlineBlock) || (isRowsView && !isEditing);
   }
 
   private _updateFocus(e: { event?: DxEvent }): void {
@@ -229,18 +220,18 @@ export class EditorFactory extends ViewControllerWithMixin {
     const $focusOverlay: dxElementWrapper = this._$focusOverlay;
 
     if (isHideBorder || isDataRow($element)) {
-      $focusOverlay.addClass(DX_HIDDEN);
+      $focusOverlay.addClass(CLASSES.hidden);
     } else if ($element.length) {
       const align = browser.mozilla ? 'right bottom' : 'left top';
-      const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
+      const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
       const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
       const $content = this.getFocusOverlayContainer($element);
       const focusOverlaySize = this.getFocusOverlaySize($element);
 
       $focusOverlay
-        .removeClass(DX_HIDDEN)
-        .toggleClass(FOCUSED_CELL_INVALID_CLASS, isFocusedCellInvalid)
-        .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, isFocusedCellModified)
+        .removeClass(CLASSES.hidden)
+        .toggleClass(CLASSES.focusedCellInvalid, isFocusedCellInvalid)
+        .toggleClass(CLASSES.focusedCellModified, isFocusedCellModified)
         .appendTo($content);
 
       setOuterHeight($focusOverlay, focusOverlaySize.height);
@@ -289,7 +280,7 @@ export class EditorFactory extends ViewControllerWithMixin {
       if (!$element.is(this._$focusedElement)) {
         // TODO: this code should be before timeout
         // else focus is not will move to adaptive form by shift + tab key
-        this._$focusedElement?.removeClass(FOCUSED_ELEMENT_CLASS);
+        this._$focusedElement?.removeClass(KEYBOARD_NAVIGATION_CLASSES.focused);
       }
       this._$focusedElement = $element;
 
@@ -299,7 +290,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
         this.renderFocusOverlay($element, isHideBorder);
 
-        $element.addClass(FOCUSED_ELEMENT_CLASS);
+        $element.addClass(KEYBOARD_NAVIGATION_CLASSES.focused);
         this.focused.fire($element);
       });
     }
@@ -325,9 +316,9 @@ export class EditorFactory extends ViewControllerWithMixin {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
   public loseFocus(skipValidator?: boolean): void {
-    this._$focusedElement?.removeClass(FOCUSED_ELEMENT_CLASS);
+    this._$focusedElement?.removeClass(KEYBOARD_NAVIGATION_CLASSES.focused);
     this._$focusedElement = null;
-    this._$focusOverlay?.addClass(DX_HIDDEN);
+    this._$focusOverlay?.addClass(CLASSES.hidden);
   }
 
   private _getContainerRoot(): Node {
@@ -361,7 +352,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   }
 
   public hasOverlayElements(): boolean {
-    return !!this._$focusOverlay?.length && !this._$focusOverlay.hasClass(DX_HIDDEN);
+    return !!this._$focusOverlay?.length && !this._$focusOverlay.hasClass(CLASSES.hidden);
   }
 }
 

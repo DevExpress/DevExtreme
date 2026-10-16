@@ -2340,7 +2340,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   /**
-   * @extended: m_adaptivity
+   * @extended: adaptivity
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isAdaptiveHiddenColumn(column: Column): boolean {

@@ -92,9 +92,6 @@ import {
   VIEWPORT_BOTTOM_NEW_ROW_POSITION,
   VIEWPORT_TOP_NEW_ROW_POSITION,
 } from './const';
-import { editingDataControllerExtender } from './extenders/editing_data_controller';
-import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
-import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
 import {
   createFailureHandler,
   generateNewRowTempKey,
@@ -103,7 +100,10 @@ import {
   getEditingTexts,
   isEditingCell,
   isEditingOrShowEditorAlwaysDataCell,
-} from './m_editing_utils';
+} from './editing_utils';
+import { editingDataControllerExtender } from './extenders/editing_data_controller';
+import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
+import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
 import type {
   AllowEditActionValue,
   EditActionOptions,
