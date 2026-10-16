@@ -21,7 +21,7 @@ import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyb
 import gridCoreUtils from '../m_utils';
 import core from '../modules/modules';
 import type { ModuleType } from '../types';
-import type { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
 import type { FocusDataSourceControllerExtension } from './extenders/focus_data_source_controller';
 import { UiGridCoreFocusUtils } from './focus_utils';

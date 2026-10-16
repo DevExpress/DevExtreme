@@ -10,7 +10,7 @@ import { isDefined, isString } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';

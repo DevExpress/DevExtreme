@@ -21,7 +21,7 @@ import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type {
   DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType } from '@ts/grids/grid_core/types';

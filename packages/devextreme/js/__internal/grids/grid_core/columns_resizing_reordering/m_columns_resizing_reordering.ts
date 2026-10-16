@@ -26,12 +26,12 @@ import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_he
 import { getDraggingPanelBoundingRects } from '@ts/grids/grid_core/columns_resizing_reordering/utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ColumnPoint, ModuleType } from '@ts/grids/grid_core/types';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
-import type { HeaderPanel } from '../header_panel/m_header_panel';
+import type { HeaderPanel } from '../header_panel/header_panel';
 import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { PagerView } from '../pager/m_pager';
