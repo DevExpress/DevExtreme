@@ -242,7 +242,7 @@ test('Column reordering should work correctly after scrolling right with fixed c
   await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   // assert
   await t

@@ -512,7 +512,7 @@ test('The scroll position should not reset when the ai.prompt changes at runtime
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await dataGrid.scrollTo(t, { x: scrollX });
+  await dataGrid.scrollTo(t, { left: scrollX });
 
   await t.expect(scrollContainer.scrollLeft).eql(scrollX);
 

@@ -157,7 +157,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             const $scrollableContainer = $(scrollable.container());
 
             // act
-            scrollable.scrollTo({ x: 50 });
+            scrollable.scrollTo({ left: 50 });
             $scrollableContainer.trigger('scroll');
             this.clock.tick(500);
 
@@ -246,7 +246,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal(scrollable.scrollLeft(), 300, 'scroll position');
 
         this.clock.restore();
-        scrollable.scrollTo({ x: 100 });
+        scrollable.scrollTo({ left: 100 });
         const scrollRight = getRightScrollOffset(scrollable);
 
 
@@ -380,7 +380,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         const scrollable = dataGrid.getScrollable();
 
-        scrollable.scrollTo({ y: 10000 });
+        scrollable.scrollTo({ top: 10000 });
 
         // assert
         assert.ok(scrollable.scrollTop() > 0, 'content is scrolled');
@@ -487,7 +487,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.up);
-        dataGrid.getScrollable().scrollTo({ y: 200 });
+        dataGrid.getScrollable().scrollTo({ top: 200 });
         dataGrid.repaintRows(0);
         this.clock.tick(10);
 
@@ -514,7 +514,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const scrollable = dataGrid.getScrollable();
 
         // act
-        scrollable.scrollTo({ x: 0, y: 50 });
+        scrollable.scrollTo({ left: 0, top: 50 });
         dataGrid.updateDimensions();
 
         assert.equal(scrollable.scrollTop(), 50, 'scrollTop');
@@ -707,7 +707,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         this.clock.restore();
 
         const scrollableInstance = dataGrid.getView('rowsView').getScrollable();
-        scrollableInstance.scrollTo({ x: 150 });
+        scrollableInstance.scrollTo({ left: 150 });
         function scrollHandler() {
             scrollableInstance.off('scroll', scrollHandler);
             // act
@@ -742,7 +742,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         });
 
         const scrollableInstance = dataGrid.getView('rowsView').getScrollable();
-        scrollableInstance.scrollTo({ x: 150 });
+        scrollableInstance.scrollTo({ left: 150 });
 
         function scrollHandler() {
             scrollableInstance.off('scroll', scrollHandler);
@@ -795,7 +795,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             });
         });
 
-        scrollableInstance.scrollTo({ x: 400 });
+        scrollableInstance.scrollTo({ left: 400 });
     });
 
     // T362355

@@ -124,7 +124,7 @@ test('DataGrid should not reset its left scroll position on window resize when c
 
   // act
   await t.resizeWindow(900, 250);
-  await dataGrid.scrollTo(t, { x: 100 });
+  await dataGrid.scrollTo(t, { left: 100 });
 
   // assert
   await t
@@ -170,7 +170,7 @@ test('DataGrid should not reset its right scroll position on window resize when 
   await t.resizeWindow(900, 250);
   const maxHorizontalPosition = await getMaxRightOffset(dataGrid);
   const scrollLeft = maxHorizontalPosition - 100;
-  await dataGrid.scrollTo(t, { x: scrollLeft });
+  await dataGrid.scrollTo(t, { left: scrollLeft });
 
   // assert
   await t
@@ -216,7 +216,7 @@ test('DataGrid should not reset its top scroll position after cell modification 
   // act
   await t
     .click(dataGrid.getDataRow(0).getCommandCell(0).element);
-  await dataGrid.scrollTo(t, { y: 220 });
+  await dataGrid.scrollTo(t, { top: 220 });
   const scrollTop = await dataGrid.getScrollTop();
   await t
     .click(dataGrid.getDataRow(1).getCommandCell(0).element)
@@ -342,7 +342,7 @@ test('Scroll position after grouping when RTL (T388508)', async (t) => {
     .eql(300);
 
   // act
-  await dataGrid.scrollTo(t, { x: 100 });
+  await dataGrid.scrollTo(t, { left: 100 });
   const scrollRight = await dataGrid.getScrollRight();
   await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
 
@@ -462,7 +462,7 @@ test('Horizontal scrolling should work correctly in RTL mode with native scrolli
   const initialScrollLeft = await dataGrid.getScrollLeft();
 
   // act: scroll to the left
-  await dataGrid.scrollTo(t, { x: initialScrollLeft - 120 });
+  await dataGrid.scrollTo(t, { left: initialScrollLeft - 120 });
 
   // assert: the headers are in sync with the content
   await t
@@ -472,7 +472,7 @@ test('Horizontal scrolling should work correctly in RTL mode with native scrolli
     .eql(-120);
 
   // act: scroll back to the right edge
-  await dataGrid.scrollTo(t, { x: initialScrollLeft });
+  await dataGrid.scrollTo(t, { left: initialScrollLeft });
 
   // assert: the content must not jump to the opposite edge
   await t
@@ -519,7 +519,7 @@ test('Column headers should keep the scroll position after resizing a column in 
 
   const initialScrollLeft = await dataGrid.getScrollLeft();
 
-  await dataGrid.scrollTo(t, { x: initialScrollLeft - 100 });
+  await dataGrid.scrollTo(t, { left: initialScrollLeft - 100 });
 
   await t
     .expect(rowsScrollContainer.scrollLeft)
@@ -557,7 +557,7 @@ test('Column headers should keep the scroll position after repaint in RTL mode w
 
   const initialScrollLeft = await dataGrid.getScrollLeft();
 
-  await dataGrid.scrollTo(t, { x: initialScrollLeft - 100 });
+  await dataGrid.scrollTo(t, { left: initialScrollLeft - 100 });
 
   await t
     .expect(rowsScrollContainer.scrollLeft)
@@ -631,7 +631,7 @@ test('Column headers should have the correct scroll position after refreshing th
     .expect(dataGrid.isReady())
     .ok();
 
-  await dataGrid.scrollTo(t, { x: 1000 });
+  await dataGrid.scrollTo(t, { left: 1000 });
 
   await t
     .expect(dataGrid.getScrollLeft())
@@ -681,14 +681,14 @@ test('Column headers should have the correct scroll position after refreshing th
 
     const initialScrollLeft = await dataGrid.getScrollLeft();
 
-    await dataGrid.scrollTo(t, { x: initialScrollLeft - 150 });
+    await dataGrid.scrollTo(t, { left: initialScrollLeft - 150 });
 
     await t
       .expect(dataGrid.getScrollLeft())
       .eql(initialScrollLeft - 150);
 
     // act
-    await dataGrid.scrollTo(t, { y: 1500 });
+    await dataGrid.scrollTo(t, { top: 1500 });
 
     // assert
     await t
@@ -735,8 +735,8 @@ test('Header container should have padding-right after expanding the master row 
     .expect(dataGrid.getDataRow(0).isExpanded).ok();
 
   // act
-  await dataGrid.scrollTo(t, { x: 180 });
-  await dataGrid.scrollTo(t, { x: 210 });
+  await dataGrid.scrollTo(t, { left: 180 });
+  await dataGrid.scrollTo(t, { left: 210 });
   const scrollBarWidth = await dataGrid.getScrollbarWidth(false);
 
   await t.resizeWindow(600, 250);
@@ -805,7 +805,7 @@ test('Header container should have padding-right if grid has max-height and scro
   // act
   const scrollBarWidth = await dataGrid.getScrollbarWidth(false);
 
-  await dataGrid.scrollBy(t, { y: 20 });
+  await dataGrid.scrollBy(t, { top: 20 });
 
   // assert
   await t
@@ -1402,7 +1402,7 @@ test('The data should display correctly after changing the dataSource and focuse
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scrollToBottom = async () => {
-    await dataGrid.scrollTo(t, { y: 100000 });
+    await dataGrid.scrollTo(t, { top: 100000 });
     await t.expect(dataGrid.isReady()).ok();
   };
 
@@ -1491,7 +1491,7 @@ test.meta({ browserSize: [800, 800] })('The page should not be changed when hidi
     .ok();
 
   // act
-  await dataGrid.scrollTo(t, { y: 500 });
+  await dataGrid.scrollTo(t, { top: 500 });
 
   // assert
   await t
@@ -1696,7 +1696,7 @@ test('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollToBottom = async () => {
-    await dataGrid.scrollTo(t, { y: 100000 });
+    await dataGrid.scrollTo(t, { top: 100000 });
     await t.expect(dataGrid.isReady()).ok();
   };
 
@@ -1706,7 +1706,7 @@ test('Scroll to the bottom after expand several group', async (t) => {
   await dataGrid.apiExpandRow(['Contoso York Store']);
   await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
   await scrollToBottom();
-  await dataGrid.scrollBy(t, { y: -1 });
+  await dataGrid.scrollBy(t, { top: -1 });
   await t.expect(dataGrid.isReady()).ok();
 
   // assert
@@ -2034,8 +2034,8 @@ test('Last group should not disappear after collapsing another subgroup with vir
     await t.expect(dataGrid.isReady()).ok();
 
     // act
-    await dataGrid.scrollTo(t, { y: 200 });
-    await dataGrid.scrollTo(t, { y: 600 });
+    await dataGrid.scrollTo(t, { top: 200 });
+    await dataGrid.scrollTo(t, { top: 600 });
     await t.expect(dataGrid.isReady()).ok();
 
     // assert
@@ -2104,8 +2104,8 @@ test('Editors should keep changes after being scrolled out of sight (T1145698)',
     .typeText(dataGrid.getDataCell(1, 0).element, 'test')
     .pressKey('enter');
 
-  await dataGrid.scrollTo(t, { y: 500 });
-  await dataGrid.scrollTo(t, { y: 0 });
+  await dataGrid.scrollTo(t, { top: 500 });
+  await dataGrid.scrollTo(t, { top: 0 });
 
   // assert
   await t.wait(300)
@@ -2233,10 +2233,10 @@ test('The row alternation should display correctly when grouping and virtual scr
     .ok();
 
   // act
-  await dataGrid.scrollTo(t, { y: 100 });
-  await dataGrid.scrollTo(t, { y: 200 });
-  await dataGrid.scrollTo(t, { y: 300 });
-  await dataGrid.scrollTo(t, { y: 400 });
+  await dataGrid.scrollTo(t, { top: 100 });
+  await dataGrid.scrollTo(t, { top: 200 });
+  await dataGrid.scrollTo(t, { top: 300 });
+  await dataGrid.scrollTo(t, { top: 400 });
 
   // assert
   await t
@@ -2318,8 +2318,8 @@ test('DataGrid - Focused cell moves to the end of the table after horizontal scr
 
   await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 
-  await dataGrid.scrollBy(t, { x: 1000 });
-  await dataGrid.scrollBy(t, { x: -1000 });
+  await dataGrid.scrollBy(t, { left: 1000 });
+  await dataGrid.scrollBy(t, { left: -1000 });
 
   await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 }).before(async () => createWidget('dxDataGrid', {
@@ -2341,15 +2341,15 @@ test('DataGrid - Focused cell moves to the end of the table after horizontal scr
 // T1277214 - Right to Left
 test('DataGrid - Scrolling position is reset to far right on an attempt to scroll left if the most right cell is focused using the keyboard', async (t) => {
   const dataGrid = new DataGrid('#container');
-  await dataGrid.scrollTo(t, { x: 1000 });
+  await dataGrid.scrollTo(t, { left: 1000 });
   await t
     .click(dataGrid.getDataCell(0, 20).element)
     .pressKey('right');
 
   await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
 
-  await dataGrid.scrollBy(t, { x: -1000 });
-  await dataGrid.scrollBy(t, { x: 1000 });
+  await dataGrid.scrollBy(t, { left: -1000 });
+  await dataGrid.scrollBy(t, { left: 1000 });
 
   await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
 }).before(async () => createWidget('dxDataGrid', {
@@ -2414,10 +2414,10 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       .click(adaptiveCell.element);
 
     await dataGrid
-      .scrollTo(t, { y: 2000 });
+      .scrollTo(t, { top: 2000 });
     await t.wait(300);
     await dataGrid
-      .scrollTo(t, { y: 1000 });
+      .scrollTo(t, { top: 1000 });
     await t.wait(300);
 
     const scrollOffsets = await t
@@ -2467,7 +2467,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       .expect(dataGrid.isReady())
       .ok();
 
-    await dataGrid.scrollBy(t, { y: 10000 });
+    await dataGrid.scrollBy(t, { top: 10000 });
 
     await testScreenshot(t, takeScreenshot, `T1270354-virtual-${useNative ? 'native' : 'simulated'}-scrolling-with-grouping-and-summary.png`, { element: '#container' });
     await t

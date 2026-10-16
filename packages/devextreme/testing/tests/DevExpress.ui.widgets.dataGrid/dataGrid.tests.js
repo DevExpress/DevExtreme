@@ -4988,7 +4988,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 3000 });
+        scrollable.scrollTo({ top: 3000 });
         $(scrollable.content()).trigger('scroll');
         this.clock.tick(50);
 

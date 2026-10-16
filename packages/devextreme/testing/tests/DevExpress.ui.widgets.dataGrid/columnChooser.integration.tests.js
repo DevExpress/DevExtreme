@@ -633,7 +633,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         dataGrid.showColumnChooser();
 
         const treeView = $('.dx-treeview').dxTreeView('instance');
-        treeView.getScrollable().scrollTo({ y: 50 });
+        treeView.getScrollable().scrollTo({ top: 50 });
 
         dataGrid.beginUpdate();
         dataGrid.columnOption(0, 'visible', false);
