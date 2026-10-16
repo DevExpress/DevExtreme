@@ -41,6 +41,7 @@ import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confir
 import { POPUP_CLASS } from '__internal/ui/popup/popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { CHAT_FILE_CLASS } from '__internal/ui/chat/file_view/file';
+import { CHAT_TOOL_CALL_NAME_CLASS } from '__internal/ui/chat/tool_call_view/tool_call_view';
 
 import MessageBubble from '__internal/ui/chat/messagebubble';
 import ChatTextArea, {
@@ -661,6 +662,21 @@ QUnit.module('Chat', () => {
 
                 assert.strictEqual(editItem, undefined, 'Edit menu item is not shown for image message');
             });
+        });
+
+        QUnit.test('should render tool calls of messages passed in items', function(assert) {
+            this.reinit({
+                items: [
+                    { text: 'question' },
+                    { text: 'answer', toolCalls: [{ name: 'getWeather' }, { name: 'getCurrentTime' }] },
+                ],
+            });
+
+            const $bubbles = this.getBubbles();
+            const toolCallNames = $bubbles.eq(1).find(`.${CHAT_TOOL_CALL_NAME_CLASS}`).map((_, element) => $(element).text()).get();
+
+            assert.strictEqual($bubbles.eq(0).find(`.${CHAT_TOOL_CALL_NAME_CLASS}`).length, 0, 'message without tool calls has none');
+            assert.deepEqual(toolCallNames, ['2 tools'], 'message with tool calls renders them');
         });
 
         QUnit.module('messageTemplate', () => {
@@ -3444,6 +3460,36 @@ QUnit.module('Chat', () => {
             this.clock.tick(timeout * 2);
 
             assert.strictEqual(this.getBubbles().eq(0).text(), 'updated text', 'message bubble text was updated');
+        });
+
+        QUnit.test('it should be possible to update tool calls of a message using push api', function(assert) {
+            const messages = [{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1' }];
+            const timeout = 100;
+
+            const store = new CustomStore({
+                key: 'id',
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([...messages]);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({
+                dataSource: store,
+                reloadOnChange: false,
+            });
+
+            this.clock.tick(timeout);
+            store.push([{ type: 'update', key: 1, data: { toolCalls: [{ name: 'getWeather' }] } }]);
+            this.clock.tick(timeout * 2);
+
+            const toolCallNames = this.getBubbles().eq(1).find(`.${CHAT_TOOL_CALL_NAME_CLASS}`).map((_, element) => $(element).text()).get();
+
+            assert.deepEqual(toolCallNames, ['getWeather'], 'tool calls are rendered in the updated bubble');
+            assert.strictEqual(this.getBubbles().eq(0).find(`.${CHAT_TOOL_CALL_NAME_CLASS}`).length, 0, 'other bubbles have no tool calls');
         });
 
         QUnit.test('it should be possible to update isEdited state of first message in group using push api', function(assert) {

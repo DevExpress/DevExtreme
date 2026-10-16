@@ -9,6 +9,21 @@ import MessageBubble, {
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import FileView, { CHAT_FILE_VIEW_CLASS } from '__internal/ui/chat/file_view/file_view';
 import { CHAT_FILE_CLASS, CHAT_FILE_NAME_CLASS, CHAT_FILE_SIZE_CLASS } from '__internal/ui/chat/file_view/file';
+import {
+    CHAT_TOOL_CALL_VIEW_CLASS,
+    CHAT_TOOL_CALL_NAME_CLASS,
+} from '__internal/ui/chat/tool_call_view/tool_call_view';
+import fx from 'common/core/animation/fx';
+
+const ACCORDION_ITEM_CLASS = 'dx-accordion-item';
+const ACCORDION_ITEM_TITLE_CLASS = 'dx-accordion-item-title';
+const ACCORDION_ITEM_OPENED_CLASS = 'dx-accordion-item-opened';
+
+const toolCalls = [{
+    name: 'getWeather',
+    arguments: { city: 'London' },
+    result: '15°C',
+}];
 
 const moduleConfig = {
     beforeEach: function() {
@@ -22,6 +37,11 @@ const moduleConfig = {
                 const $fileView = this.$getAttachments();
                 return $fileView.length ? FileView.getInstance($fileView) : null;
             };
+            this.$getToolCallView = () => this.$element.find(`.${CHAT_TOOL_CALL_VIEW_CLASS}`);
+            this.getToolCallNames = () => this.$getToolCallView()
+                .find(`.${CHAT_TOOL_CALL_NAME_CLASS}`)
+                .map((_, element) => $(element).text())
+                .get();
         };
 
         this.reinit = (options) => {
@@ -259,6 +279,87 @@ QUnit.module('MessageBubble', moduleConfig, () => {
             this.getDownloadButton().trigger('dxclick');
 
             assert.strictEqual(onAttachmentDownloadClick.callCount, 1);
+        });
+    });
+
+    QUnit.module('Tool calls', {
+        beforeEach() {
+            fx.off = true;
+        },
+        afterEach() {
+            fx.off = false;
+        },
+    }, () => {
+        QUnit.test('should render tool calls when toolCalls passed', function(assert) {
+            this.reinit({ text: 'answer', toolCalls });
+
+            assert.deepEqual(this.getToolCallNames(), ['getWeather']);
+        });
+
+        QUnit.test('should render tool calls before the message content', function(assert) {
+            this.reinit({ text: 'answer', toolCalls });
+
+            assert.strictEqual(this.$getToolCallView().next().hasClass(CHAT_MESSAGEBUBBLE_CONTENT_CLASS), true);
+        });
+
+        QUnit.test('should not render tool calls when toolCalls is empty', function(assert) {
+            this.reinit({ text: 'answer', toolCalls: [] });
+
+            assert.strictEqual(this.$getToolCallView().length, 0);
+        });
+
+        QUnit.test('should not render tool calls when isDeleted is true', function(assert) {
+            this.reinit({ isDeleted: true, toolCalls });
+
+            assert.strictEqual(this.$getToolCallView().length, 0);
+        });
+
+        QUnit.test('should render tool calls when toolCalls is set at runtime', function(assert) {
+            this.reinit({ text: 'answer' });
+
+            this.instance.option('toolCalls', toolCalls);
+
+            assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered');
+            assert.strictEqual(this.$getToolCallView().next().hasClass(CHAT_MESSAGEBUBBLE_CONTENT_CLASS), true, 'tool calls are rendered before the content');
+        });
+
+        QUnit.test('should remove tool calls when toolCalls is reset at runtime', function(assert) {
+            this.reinit({ text: 'answer', toolCalls });
+
+            this.instance.option('toolCalls', []);
+
+            assert.strictEqual(this.$getToolCallView().length, 0);
+        });
+
+        QUnit.test('should remove tool calls when isDeleted is set at runtime', function(assert) {
+            this.reinit({ text: 'answer', toolCalls });
+
+            this.instance.option('isDeleted', true);
+
+            assert.strictEqual(this.$getToolCallView().length, 0);
+        });
+
+        QUnit.test('should keep an expanded tool call expanded when the text changes at runtime', function(assert) {
+            this.reinit({ text: 'answer', toolCalls });
+
+            this.$getToolCallView().find(`.${ACCORDION_ITEM_TITLE_CLASS}`).trigger('dxclick');
+            this.instance.option('text', 'updated answer');
+
+            assert.strictEqual(this.$content.text(), 'updated answer', 'text is updated');
+            assert.strictEqual(this.$getToolCallView().find(`.${ACCORDION_ITEM_CLASS}`).hasClass(ACCORDION_ITEM_OPENED_CLASS), true, 'tool call stays expanded');
+        });
+
+        QUnit.test('should render tool calls along with the message template', function(assert) {
+            this.reinit({
+                text: 'answer',
+                toolCalls,
+                template: (data, container) => {
+                    $('<h1>').text(`template text: ${data.text}`).appendTo(container);
+                },
+            });
+
+            assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered');
+            assert.strictEqual(this.$content.text(), 'template text: answer', 'template is rendered');
         });
     });
 

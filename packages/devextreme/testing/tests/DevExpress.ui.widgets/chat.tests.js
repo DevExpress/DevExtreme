@@ -21,3 +21,4 @@ import './chatParts/editingPreview.tests.js';
 import './chatParts/chatTextArea.tests.js';
 import './chatParts/chat.tests.js';
 import './chatParts/fileView.tests.js';
+import './chatParts/toolCallView.tests.js';
