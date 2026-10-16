@@ -1,3 +1,5 @@
+import type { dxElementWrapper } from '@js/core/renderer';
+import { getOuterHeight } from '@js/core/utils/size';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
@@ -32,3 +34,20 @@ export const isSameColumnLayout = (
 export const isRowElementVisible = (rowElement: HTMLElement): boolean => (
   rowElement.style.display !== 'none' && !rowElement.classList.contains(INVISIBLE_CLASS)
 );
+
+export const keepContentHeight = (
+  $content: dxElementWrapper | undefined,
+  callback: () => void,
+): void => {
+  if (!$content) {
+    callback();
+
+    return;
+  }
+
+  const { minHeight } = ($content.get(0) as HTMLElement).style;
+
+  $content.css('minHeight', getOuterHeight($content));
+  callback();
+  $content.css('minHeight', minHeight);
+};
