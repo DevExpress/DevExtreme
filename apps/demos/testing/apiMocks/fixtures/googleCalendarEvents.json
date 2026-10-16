@@ -1,0 +1,133 @@
+{
+  "kind": "calendar#events",
+  "etag": "\"p339ofau0hmqp80o\"",
+  "summary": "Shared",
+  "description": "",
+  "updated": "2026-05-13T01:24:41.203Z",
+  "timeZone": "Europe/London",
+  "accessRole": "reader",
+  "defaultReminders": [],
+  "nextSyncToken": "CNOHq8CNtZQDEAAYASCF2fHIAyiF2fHIAw==",
+  "items": [
+    {
+      "kind": "calendar#event",
+      "etag": "\"2995719729570000\"",
+      "id": "ufltvtp2s1es4i2l4jt9bncf9c",
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=dWZsdHZ0cDJzMWVzNGkybDRqdDlibmNmOWMgZjdqbmV0bTIyZHNqYzNucGMybHUzYnV2dTRAZw",
+      "created": "2015-05-27T10:27:10.000Z",
+      "updated": "2017-06-19T08:11:04.785Z",
+      "summary": "Approve Personal Computer Upgrade Plan",
+      "creator": {
+        "email": "user4652@gmail.com",
+        "displayName": "Donald Murphy"
+      },
+      "organizer": {
+        "email": "f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com",
+        "displayName": "Shared",
+        "self": true
+      },
+      "start": {
+        "dateTime": "2017-05-23T18:00:00+01:00",
+        "timeZone": "UTC"
+      },
+      "end": {
+        "dateTime": "2017-05-23T20:00:00+01:00",
+        "timeZone": "UTC"
+      },
+      "iCalUID": "ufltvtp2s1es4i2l4jt9bncf9c@google.com",
+      "sequence": 9,
+      "eventType": "default"
+    },
+    {
+      "kind": "calendar#event",
+      "etag": "\"2995719775516000\"",
+      "id": "pjo97p26heu0i73mapivkhrheg",
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=cGpvOTdwMjZoZXUwaTczbWFwaXZraHJoZWcgZjdqbmV0bTIyZHNqYzNucGMybHUzYnV2dTRAZw",
+      "created": "2015-05-27T09:31:14.000Z",
+      "updated": "2017-06-19T08:11:27.758Z",
+      "summary": "Upgrade Server Hardware",
+      "creator": {
+        "email": "user4652@gmail.com",
+        "displayName": "Donald Murphy"
+      },
+      "organizer": {
+        "email": "f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com",
+        "displayName": "Shared",
+        "self": true
+      },
+      "start": {
+        "dateTime": "2017-05-25T16:30:00+01:00",
+        "timeZone": "UTC"
+      },
+      "end": {
+        "dateTime": "2017-05-25T20:30:00+01:00",
+        "timeZone": "UTC"
+      },
+      "iCalUID": "pjo97p26heu0i73mapivkhrheg@google.com",
+      "sequence": 15,
+      "eventType": "default"
+    },
+    {
+      "kind": "calendar#event",
+      "etag": "\"2995719814846000\"",
+      "id": "51kj06ju8297jgjscgkhqso8mo",
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NTFrajA2anU4Mjk3amdqc2Nna2hxc284bW8gZjdqbmV0bTIyZHNqYzNucGMybHUzYnV2dTRAZw",
+      "created": "2015-05-27T10:17:22.000Z",
+      "updated": "2017-06-19T08:11:47.423Z",
+      "summary": "Install New Router in Dev Room",
+      "creator": {
+        "email": "user4652@gmail.com",
+        "displayName": "Donald Murphy"
+      },
+      "organizer": {
+        "email": "f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com",
+        "displayName": "Shared",
+        "self": true
+      },
+      "start": {
+        "dateTime": "2017-05-22T23:30:00+01:00",
+        "timeZone": "UTC"
+      },
+      "end": {
+        "dateTime": "2017-05-23T00:30:00+01:00",
+        "timeZone": "UTC"
+      },
+      "iCalUID": "51kj06ju8297jgjscgkhqso8mo@google.com",
+      "sequence": 5,
+      "eventType": "default"
+    },
+    {
+      "kind": "calendar#event",
+      "etag": "\"2995719938618000\"",
+      "id": "62nu6c6mirh5ded3dfnjag4s70",
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=NjJudTZjNm1pcmg1ZGVkM2RmbmphZzRzNzAgZjdqbmV0bTIyZHNqYzNucGMybHUzYnV2dTRAZw",
+      "created": "2015-05-27T09:30:31.000Z",
+      "updated": "2017-06-19T08:12:49.309Z",
+      "summary": "Upgrade Personal Computers",
+      "creator": {
+        "email": "user4652@gmail.com",
+        "displayName": "Donald Murphy"
+      },
+      "organizer": {
+        "email": "f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com",
+        "displayName": "Shared",
+        "self": true
+      },
+      "start": {
+        "dateTime": "2017-05-24T20:15:00+01:00",
+        "timeZone": "UTC"
+      },
+      "end": {
+        "dateTime": "2017-05-24T23:30:00+01:00",
+        "timeZone": "UTC"
+      },
+      "iCalUID": "62nu6c6mirh5ded3dfnjag4s70@google.com",
+      "sequence": 8,
+      "eventType": "default"
+    }
+  ]
+}
