@@ -7,11 +7,36 @@ import {
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import { Guid } from '@ts/core/guid';
 
+export interface GetterOptions {
+  functionsAsIs?: boolean;
+  unwrapObservables?: boolean;
+  defaultValue?: unknown;
+}
+
+export interface SetterOptions {
+  functionsAsIs?: boolean;
+  unwrapObservables?: boolean;
+  merge?: boolean;
+}
+
+export type Getter = (obj: unknown, options?: GetterOptions) => unknown;
+
+export type Setter = (obj: unknown, value: unknown, options?: SetterOptions) => void;
+
+type GetterExpr = string | string[] | null | undefined;
+
+type DataOptions = GetterOptions & SetterOptions;
+
+interface ComparableOptions {
+  collatorOptions?: Intl.CollatorOptions;
+  locale?: string;
+}
+
 const unwrapVariable = variableWrapper.unwrap;
 const { isWrapped } = variableWrapper;
 const { assign } = variableWrapper;
 
-const bracketsToDots = function (expr) {
+const bracketsToDots = function bracketsToDots(expr: string): string {
   return expr
     .replace(/\[/g, '.')
     .replace(/\]/g, '');
@@ -20,21 +45,35 @@ const bracketsToDots = function (expr) {
 const UNSAFE_PATH_FRAGMENTS = new Set(['__proto__', 'constructor']);
 
 const isUnsafePathFragment = (name: string): boolean => UNSAFE_PATH_FRAGMENTS.has(name);
-const isUnsafePrototypeAccess = (obj: any, name: string): boolean => name === 'prototype' && typeof obj === 'function';
+const isUnsafePrototypeAccess = (obj: unknown, name: string): boolean => name === 'prototype' && typeof obj === 'function';
 
-export const getPathParts = function (name) {
+export const getPathParts = function getPathParts(name: string): string[] {
   return bracketsToDots(name).split('.');
 };
 
-const readPropValue = function (obj, propName, options) {
-  options = options || { };
+function unwrap(value: unknown, options: DataOptions): unknown {
+  return options.unwrapObservables ? unwrapVariable(value) : value;
+}
+
+const readPropValue = function readPropValue(
+  obj: unknown,
+  propName: string,
+  options?: DataOptions,
+): unknown {
+  const readOptions = options ?? { };
   if (propName === 'this') {
-    return unwrap(obj, options);
+    return unwrap(obj, readOptions);
   }
-  return unwrap(obj[propName], options);
+  // @ts-expect-error a property of any value is read
+  return unwrap(obj[propName], readOptions);
 };
 
-const assignPropValue = function (obj, propName, value, options) {
+const assignPropValue = function assignPropValue(
+  obj: Record<string, unknown>,
+  propName: string,
+  value: unknown,
+  options: DataOptions,
+): void {
   if (propName === 'this') {
     throw new errors.Error('E4016');
   }
@@ -47,63 +86,61 @@ const assignPropValue = function (obj, propName, value, options) {
   }
 };
 
-const prepareOptions = function (options) {
-  options = options || {};
-  options.unwrapObservables = options.unwrapObservables !== undefined ? options.unwrapObservables : true;
-  return options;
+const prepareOptions = function prepareOptions(options?: DataOptions): DataOptions {
+  const preparedOptions = options || {};
+  preparedOptions.unwrapObservables = preparedOptions.unwrapObservables !== undefined
+    ? preparedOptions.unwrapObservables
+    : true;
+  return preparedOptions;
 };
 
-function unwrap(value, options) {
-  return options.unwrapObservables ? unwrapVariable(value) : value;
-}
+export function compileGetter<TGetter extends (...args: never[]) => unknown>(
+  expr: TGetter,
+): TGetter;
+export function compileGetter(expr?: GetterExpr, ...exprs: GetterExpr[]): Getter;
+export function compileGetter(expr?: unknown, ...exprs: unknown[]): unknown {
+  const getterExpr = exprs.length > 0 ? [expr, ...exprs] : expr;
 
-export const compileGetter = function (expr) {
-  if (arguments.length > 1) {
-    expr = [].slice.call(arguments);
+  if (!getterExpr || getterExpr === 'this') {
+    return function getSelf(obj: unknown): unknown { return obj; };
   }
 
-  if (!expr || expr === 'this') {
-    return function (obj) { return obj; };
-  }
-
-  if (typeof expr === 'string') {
-    const path = getPathParts(expr);
+  if (typeof getterExpr === 'string') {
+    const path = getPathParts(getterExpr);
     const unsafeFragment = path.find(isUnsafePathFragment);
 
     if (unsafeFragment !== undefined) {
       errors.log('E0123', unsafeFragment);
-      return function () {
+      return function getNothing(): void {
         // eslint-disable-next-line no-useless-return
         return;
       };
     }
 
-    return function (obj, options) {
-      options = prepareOptions(options);
-      const functionAsIs = options.functionsAsIs;
-      const hasDefaultValue = 'defaultValue' in options;
-      let current = unwrap(obj, options);
+    return function getValue(obj: unknown, options?: GetterOptions): unknown {
+      const getterOptions = prepareOptions(options);
+      const functionAsIs = getterOptions.functionsAsIs;
+      const hasDefaultValue = 'defaultValue' in getterOptions;
+      let current = unwrap(obj, getterOptions);
 
-      for (let i = 0; i < path.length; i++) {
-        if (isUnsafePrototypeAccess(current, path[i])) {
-          errors.log('E0123', path[i]);
-          return;
+      for (const pathPart of path) {
+        if (isUnsafePrototypeAccess(current, pathPart)) {
+          errors.log('E0123', pathPart);
+          return undefined;
         }
 
         if (!current) {
           if (current == null && hasDefaultValue) {
-            return options.defaultValue;
+            return getterOptions.defaultValue;
           }
           break;
         }
 
-        const pathPart = path[i];
-
         if (hasDefaultValue && isObject(current) && !(pathPart in current)) {
-          return options.defaultValue;
+          return getterOptions.defaultValue;
         }
 
-        let next = unwrap(current[pathPart], options);
+        let next = unwrap(current[pathPart], getterOptions);
 
         if (!functionAsIs && isFunction(next)) {
           next = next.call(current);
@@ -116,41 +153,46 @@ export const compileGetter = function (expr) {
     };
   }
 
-  if (Array.isArray(expr)) {
-    return combineGetters(expr);
+  if (Array.isArray(getterExpr)) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the two call each other
+    return combineGetters(getterExpr);
   }
 
-  if (isFunction(expr)) {
-    return expr;
+  if (isFunction(getterExpr)) {
+    return getterExpr;
   }
-};
 
-function combineGetters(getters) {
-  const compiledGetters = {};
-  for (let i = 0, l = getters.length; i < l; i++) {
+  return undefined;
+}
+
+function combineGetters(getters: GetterExpr[]): Getter {
+  const compiledGetters: Record<string, Getter> = {};
+  for (let i = 0, l = getters.length; i < l; i += 1) {
     const getter = getters[i];
+    // @ts-expect-error a getter expression is the key as it is
     compiledGetters[getter] = compileGetter(getter);
   }
 
-  return function (obj, options) {
-    let result;
+  return function getValues(obj: unknown, options?: GetterOptions): unknown {
+    let result = undefined as Record<string, unknown> | undefined;
 
-    each(compiledGetters, function (name) {
+    each(compiledGetters, function setPathValue(this: Getter, name: string) {
       const value = this(obj, options);
 
       if (value === undefined) {
         return;
       }
 
-      let current = result || (result = {});
+      let current = result ?? (result = {});
       const path = name.split('.');
       const last = path.length - 1;
 
-      for (let i = 0; i < last; i++) {
+      for (let i = 0; i < last; i += 1) {
         const pathItem = path[i];
         if (!(pathItem in current)) {
           current[pathItem] = { };
         }
+        // @ts-expect-error a path step holds an object
         current = current[pathItem];
       }
 
@@ -160,15 +202,20 @@ function combineGetters(getters) {
   };
 }
 
-function toLowerCase(value, options) {
+function toLowerCase(value: string, options?: ComparableOptions): string {
   return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
 }
 
-function toUpperCase(value, options) {
+function toUpperCase(value: string, options?: ComparableOptions): string {
   return options?.locale ? value.toLocaleUpperCase(options.locale) : value.toUpperCase();
 }
 
-const ensurePropValueDefined = function (obj, propName, value, options) {
+const ensurePropValueDefined = function ensurePropValueDefined(
+  obj: Record<string, unknown>,
+  propName: string,
+  value: unknown,
+  options: DataOptions,
+): unknown {
   if (isDefined(value)) {
     return value;
   }
@@ -179,26 +226,27 @@ const ensurePropValueDefined = function (obj, propName, value, options) {
   return newValue;
 };
 
-export const compileSetter = function (expr) {
-  expr = getPathParts(expr || 'this');
-  const lastLevelIndex = expr.length - 1;
-  const unsafeFragment = expr.find(isUnsafePathFragment);
+export const compileSetter = function compileSetter(expr?: string): Setter {
+  const path = getPathParts(expr || 'this');
+  const lastLevelIndex = path.length - 1;
+  const unsafeFragment = path.find(isUnsafePathFragment);
 
   if (unsafeFragment !== undefined) {
     errors.log('E0123', unsafeFragment);
-    return function () {
+    return function setNothing(): void {
       // eslint-disable-next-line no-useless-return
       return;
     };
   }
 
-  return function (obj, value, options) {
-    options = prepareOptions(options);
+  return function setValue(obj: unknown, value: unknown, options?: SetterOptions): void {
+    const setterOptions = prepareOptions(options);
 
-    let currentValue = unwrap(obj, options);
+    // @ts-expect-error the path is walked through objects
+    let currentValue: Record<string, unknown> = unwrap(obj, setterOptions);
     let hasUnsafePrototypeAccess = false;
 
-    expr.forEach(function (propertyName, levelIndex) {
+    path.forEach((propertyName, levelIndex) => {
       if (hasUnsafePrototypeAccess) {
         return;
       }
@@ -209,57 +257,81 @@ export const compileSetter = function (expr) {
         return;
       }
 
-      let propertyValue = readPropValue(currentValue, propertyName, options);
-      const isPropertyFunc = !options.functionsAsIs && isFunction(propertyValue) && !isWrapped(propertyValue);
+      let propertyValue = readPropValue(currentValue, propertyName, setterOptions);
+      const isPropertyFunc = !setterOptions.functionsAsIs
+        && isFunction(propertyValue)
+        && !isWrapped(propertyValue);
 
       if (levelIndex === lastLevelIndex) {
-        if (options.merge && isPlainObject(value) && (!isDefined(propertyValue) || isPlainObject(propertyValue))) {
-          propertyValue = ensurePropValueDefined(currentValue, propertyName, propertyValue, options);
+        if (setterOptions.merge
+          && isPlainObject(value)
+          && (!isDefined(propertyValue) || isPlainObject(propertyValue))) {
+          propertyValue = ensurePropValueDefined(
+            currentValue,
+            propertyName,
+            propertyValue,
+            setterOptions,
+          );
           deepExtendArraySafe(propertyValue, value, false, true);
         } else if (isPropertyFunc) {
+          // @ts-expect-error a function property is called as a method
           currentValue[propertyName](value);
         } else {
-          assignPropValue(currentValue, propertyName, value, options);
+          assignPropValue(currentValue, propertyName, value, setterOptions);
         }
       } else {
-        propertyValue = ensurePropValueDefined(currentValue, propertyName, propertyValue, options);
+        propertyValue = ensurePropValueDefined(
+          currentValue,
+          propertyName,
+          propertyValue,
+          setterOptions,
+        );
         if (isPropertyFunc) {
+          // @ts-expect-error a function property is called as a method
           propertyValue = propertyValue.call(currentValue);
         }
+        // @ts-expect-error the path is walked through objects
         currentValue = propertyValue;
       }
     });
   };
 };
 
-export const toComparable = function (value, caseSensitive?, options: any = {}) {
+export const toComparable = function toComparable(
+  value: unknown,
+  caseSensitive?: boolean,
+  options: ComparableOptions = {},
+): unknown {
   if (value instanceof Date) {
     return value.getTime();
   }
 
   const collatorSensitivity = options?.collatorOptions?.sensitivity;
+  let comparable = value;
 
-  if (value instanceof Guid) {
-    value = value.valueOf();
-  } else if (typeof value === 'string' && (collatorSensitivity === 'base' || collatorSensitivity === 'case')) {
+  if (comparable instanceof Guid) {
+    comparable = comparable.valueOf();
+  } else if (typeof comparable === 'string' && (collatorSensitivity === 'base' || collatorSensitivity === 'case')) {
     const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
 
+    let text = comparable;
+
     if (collatorSensitivity === 'base') {
-      value = toLowerCase(value, options);
+      text = toLowerCase(text, options);
     }
 
-    value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
+    comparable = text.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
   }
 
   const isCaseSensitive = caseSensitive || collatorSensitivity === 'case' || collatorSensitivity === 'variant';
 
-  if (typeof value === 'string' && !isCaseSensitive) {
-    value = value.normalize('NFC');
+  if (typeof comparable === 'string' && !isCaseSensitive) {
+    const text = comparable.normalize('NFC');
     const locale = options?.locale?.toLowerCase();
     const useUpperCase = locale && !!['hy', 'el'].find((code) => locale === code || locale.startsWith(`${code}-`));
 
-    return (useUpperCase ? toUpperCase : toLowerCase)(value, options);
+    return (useUpperCase ? toUpperCase : toLowerCase)(text, options);
   }
 
-  return value;
+  return comparable;
 };

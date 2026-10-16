@@ -251,6 +251,7 @@ export let Tooltip = class Tooltip {
               onRendered: () => {
                 removeElements(htmlContainers.splice(0, htmlContainers.length - 1));
 
+                // @ts-expect-error the core renderer wraps elements as dxElementWrapper does
                 this._textHtml = replaceWith(this._textHtml, containerToTemplateRender);
 
                 state.html = this._textHtml.html();
@@ -364,6 +365,7 @@ export let Tooltip = class Tooltip {
     let customize: TooltipCustomization = {};
 
     if (isFunction(customizeTooltip)) {
+      // @ts-expect-error the next line keeps only a plain object
       customize = customizeTooltip.call(formatObject, formatObject);
       customize = isPlainObject(customize) ? customize : {};
       if ('text' in customize) {
