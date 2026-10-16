@@ -11,7 +11,7 @@
     },
     "make": {
       "executor": "nx:run-commands",
-      "dependsOn": ["install-dependencies"],
+      "dependsOn": ["install-dependencies", "devextreme-metadata:generate"],
       "options": {
         "cwd": "{projectRoot}",
         "forwardAllArgs": false,
