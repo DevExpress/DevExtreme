@@ -1,6 +1,7 @@
 $chat-disabled-opacity: null !default;
 $chat-file-name-font-weight: 600 !default;
 $chat-editing-preview-caption-font-weight: 500 !default;
+$chat-tool-call-header-font-weight: 600 !default;
 
 $chat-messagebox-border-block-start-width: 1px !default;
 $chat-messagebubble-padding-image: 4px !default;
@@ -33,3 +34,6 @@ $chat-messagebubble-max-height-image: 400px !default;
 @use "layout/chat-messagelist" as *;
 @use "layout/chat-suggestions" as *;
 @use "layout/chat-typingindicator" as *;
+@use "layout/chat-toolcallview" as * with (
+  $header-font-weight: $chat-tool-call-header-font-weight,
+);
