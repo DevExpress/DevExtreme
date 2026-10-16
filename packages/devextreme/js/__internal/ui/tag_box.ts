@@ -1510,9 +1510,7 @@ class TagBox<
 
     this._updateWidgetHeight();
 
-    const { selectedItemKeys } = this._list?.option() ?? {};
-
-    if (!equalByValue(selectedItemKeys, currentValue)) {
+    if (!equalByValue(value, currentValue)) {
       const listSelectionChangeEvent = this._list?._getSelectionChangeEvent();
       if (listSelectionChangeEvent) {
         this._saveValueChangeEvent(listSelectionChangeEvent);

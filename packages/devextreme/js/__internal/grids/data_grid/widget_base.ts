@@ -10,14 +10,20 @@ import './module_not_extended/error_handling';
 import './module_not_extended/grid_view';
 import './module_not_extended/header_panel';
 
+import type { template } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
+import type { Device } from '@js/core/devices';
+import type { UserDefinedElement } from '@js/core/element';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import $ from '@js/core/renderer';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import browser from '@js/core/utils/browser';
 import { logger } from '@js/core/utils/console';
 import { isString } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
-import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
+import type { GridCoreHelper, Module } from '@ts/grids/grid_core/types';
+import GridCoreWidget from '@ts/grids/grid_core/widget_base';
 
 import gridCore from './core';
 
@@ -65,7 +71,7 @@ gridCore.registerModulesOrder([
 ]);
 
 class DataGrid extends GridCoreWidget<Properties> {
-  private _defaultOptionsRules() {
+  private _defaultOptionsRules(): DefaultOptionsRule<Properties>[] {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super._defaultOptionsRules().concat([
@@ -76,7 +82,7 @@ class DataGrid extends GridCoreWidget<Properties> {
         },
       },
       {
-        device() {
+        device(): boolean {
           // @ts-expect-error
           return isMaterialBased();
         },
@@ -95,8 +101,8 @@ class DataGrid extends GridCoreWidget<Properties> {
         },
       },
       {
-        device() {
-          return browser.webkit;
+        device(): boolean {
+          return !!browser.webkit;
         },
         options: {
           loadingTimeout: 30, // T344031
@@ -113,7 +119,7 @@ class DataGrid extends GridCoreWidget<Properties> {
         },
       },
       {
-        device(device) {
+        device(device: Device): boolean {
           return device.deviceType !== 'desktop';
         },
         options: {
@@ -125,44 +131,42 @@ class DataGrid extends GridCoreWidget<Properties> {
     ]);
   }
 
-  protected _init() {
-    const that = this;
-
+  protected _init(): void {
     super._init();
 
     // @ts-expect-error
-    gridCore.processModules(that, gridCore as any);
+    gridCore.processModules(this, gridCore);
 
-    // @ts-expect-error the widget's _controllers and _views are private
-    gridCore.callModuleItemsMethod(that, 'init');
+    gridCore.callModuleItemsMethod(this, 'init');
   }
 
-  private _initMarkup() {
+  private _initMarkup(): void {
     // @ts-expect-error
-    super._initMarkup.apply(this, arguments);
+    super._initMarkup();
     this.getView('gridView').render(this.$element());
   }
 
-  private static registerModule(name, module) {
+  private static registerModule(name: string, module: Module): void {
     gridCore.registerModule(name, module);
   }
 
-  protected getGridCoreHelper() {
+  protected getGridCoreHelper(): GridCoreHelper {
     return gridCore;
   }
 
-  public _getTemplate(templateName) {
-    let template = templateName;
+  public _getTemplate(templateName: template): FunctionTemplate {
+    if (isString(templateName) && templateName.startsWith('#')) {
+      const $template = $(templateName);
 
-    if (isString(template) && template.startsWith('#')) {
-      template = $(templateName);
       logger.warn(DATAGRID_DEPRECATED_TEMPLATE_WARNING);
+
+      return super._getTemplate($template);
     }
 
-    return super._getTemplate(template);
+    return super._getTemplate(templateName);
   }
 
-  public focus(element?) {
+  public focus(element?: UserDefinedElement): void {
     this.getController('keyboardNavigation').focus(element);
   }
 }

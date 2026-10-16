@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { deepExtendArraySafe } from '@ts/core/utils/m_object';
+import { deepExtendArraySafe } from '@ts/core/utils/object';
 
 describe('Object utils', () => {
   // the flag set below repeats the array_utils.update() call:

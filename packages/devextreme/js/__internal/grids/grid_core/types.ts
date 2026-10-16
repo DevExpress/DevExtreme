@@ -1,16 +1,23 @@
 /* eslint-disable spellcheck/spell-checker */
 import type {
-  GridBase, GridBaseOptions, SelectionBase,
+  ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase,
 } from '@js/common/grids';
 import type { PropertyType } from '@js/core';
 import type { Component } from '@js/core/component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } from '@js/ui/data_grid';
+import type { Format } from '@js/localization';
+import type {
+  Properties as DataGridOptions,
+  Scrolling as DataGridScrolling,
+  SummaryTotalItem,
+} from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { ActionConfig } from '@ts/core/widget/component';
+import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
+import type { TemplateModel } from '@ts/grids/grid_core/columns_controller/types';
 import type { FilterValue } from '@ts/grids/grid_core/filter/types';
 import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
 
@@ -32,6 +39,68 @@ export interface SelectionRange {
   selectionStart: number;
   selectionEnd: number;
 }
+
+export interface FormatOptions {
+  format?: Format;
+  getDisplayFormat?: (valueText: string) => string;
+  customizeText?: (cellInfo: ColumnCustomizeTextArg & { valueText: string }) => string;
+  target?: string;
+  groupInterval?: string | number;
+  trueText?: string;
+  falseText?: string;
+}
+
+/** @architectureLeak data_grid/summary: core renders summary texts in group rows */
+export interface SummaryTextItem extends Pick<SummaryTotalItem, 'displayFormat' | 'valueFormat' | 'customizeText'> {
+  summaryType: string;
+  value?: unknown;
+  columnCaption?: string;
+}
+
+export interface LoadPanelPosition {
+  of: dxElementWrapper | undefined;
+  boundary?: dxElementWrapper;
+  collision?: 'fit';
+}
+
+export type WidgetElementData = Record<string, unknown> & { dxComponents?: string[] };
+
+export interface ColumnPointProps extends ColumnPoint {
+  item: Element | undefined;
+  isLeftBoundary?: boolean;
+  isRightBoundary?: boolean;
+}
+
+export interface ExpandCellTemplateOptions {
+  value?: unknown;
+  data?: { isContinuation?: boolean };
+  row: { isNewRow?: boolean };
+  component: InternalGrid;
+}
+
+export interface ExpandCellTemplate {
+  allowRenderToDetachedContainer: boolean;
+  render: (container: dxElementWrapper, model: TemplateModel) => void;
+}
+
+export type TextSelectionElement = Element & {
+  selectionStart?: number | null;
+  selectionEnd?: number | null;
+  setSelectionRange?: (start: number, end: number) => void;
+};
+
+export interface OptionsReader {
+  option: (name: string) => unknown;
+}
+
+export type WrappedLookupDataSource = NormalizedDataSourceOptions & {
+  __dataGridSourceFilter: unknown;
+  load: (loadOptions: StoreLoadOptions) => DeferredObj<unknown>;
+  key: string | undefined;
+  byKey: (key: RowKey) => Promise<unknown>;
+};
+
+export type LookupDataSource = never[] | NormalizedDataSourceOptions | WrappedLookupDataSource;
 
 type OptionsMethod<TOptions> = (() => TOptions)
   & ((options: TOptions) => void)
@@ -216,19 +285,18 @@ export interface Controllers {
   export: import('../data_grid/export/m_export').ExportController;
   filter: import('./filter/filter_controller').FilterController;
   filterSync: import('./filter_sync/filter_sync').FilterSyncController;
-  filterBuilder: import('./filter_builder/m_filter_builder').FilterBuilderController;
+  filterBuilder: import('./filter_builder/filter_builder').FilterBuilderController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
   columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/m_headers_keyboard_navigation').HeadersKeyboardNavigationController;
-  groupPanelKeyboardNavigation: import('../data_grid/keyboard_navigation/m_group_panel_keyboard_navigation').GroupPanelKeyboardNavigationController;
-  resizing: import('./views/m_grid_view').ResizingController;
+  resizing: import('./views/grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
   searchPanel: import('./search/m_search').SearchPanelViewController;
   stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
-  synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
+  synchronizeScrolling: import('./views/grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/toast_controller').ToastViewController;
   aiColumn: import('./ai_column/controllers/ai_column_controller').AIColumnController;
@@ -254,9 +322,9 @@ export interface Views {
   trackerView: import('./columns_resizing_reordering/m_columns_resizing_reordering').TrackerView;
   contextMenuView: import('./context_menu/m_context_menu').ContextMenuView;
   footerView: import('../data_grid/summary/m_summary').FooterView;
-  gridView: import('./views/m_grid_view').GridView;
-  filterBuilderView: import('./filter_builder/m_filter_builder').FilterBuilderView;
-  filterPanelView: import('./filter_panel/m_filter_panel').FilterPanelView;
+  gridView: import('./views/grid_view').GridView;
+  filterBuilderView: import('./filter_builder/filter_builder').FilterBuilderView;
+  filterPanelView: import('./filter_panel/filter_panel').FilterPanelView;
   toastView: import('./toast/toast_view').ToastView;
   aiPromptEditorView: import('./ai_column/views/ai_prompt_editor_view').AIPromptEditorView;
   aiAssistantView: import('./ai_assistant/ai_assistant_view').AIAssistantView;
@@ -293,4 +361,9 @@ export interface Module {
     views?: Partial<ViewsExtender>;
   };
   defaultOptions?: () => InternalGridOptions;
+}
+
+export interface GridCoreHelper {
+  modules: Module[];
+  callModuleItemsMethod: typeof import('./modules/modules').default.callModuleItemsMethod;
 }

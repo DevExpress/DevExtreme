@@ -1,7 +1,7 @@
 import { createRunner, scss } from './stylelint-rule';
 
 const ruleName = 'dx/no-identical-branch-declarations';
-const { lint, fix } = createRunner('no-identical-branch-declarations.mjs', ruleName);
+const { lint, fix } = createRunner('no-identical-branch-declarations.ts', ruleName);
 
 test('a variable set to one value in every @else branch is reported once, on the first branch', () => {
   const { warnings } = lint('else-chain.scss', scss(

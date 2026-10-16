@@ -46,6 +46,7 @@ Ng.makeMetadata({
 
     ...replaceTypesMutations,
 
+    removeMembers(/\/localization:FormatObject\.locale/),
     removeMembers(/\/grids:ColumnBase.ai/),
     removeMembers(/\/grids:GridBaseOptions.aiAssistant/),
     removeMembers(/\/grids:AIAssistant/),

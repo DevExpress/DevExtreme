@@ -17,6 +17,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import { paintedColor } from '@ts/core/utils/css_variables';
 import { noop as _noop } from '@ts/core/utils/m_common';
 import { extend as _extend } from '@ts/core/utils/m_extend';
@@ -1087,6 +1088,11 @@ export let Series = class Series {
     });
 
     parsedOptions.label = getLabelOptions(labelOptions, styles.labelColor);
+    parsedOptions.label.format = applyDataTypePreset(parsedOptions.label.format, this.valueType);
+    parsedOptions.label.argumentFormat = applyDataTypePreset(
+      parsedOptions.label.argumentFormat,
+      this.argumentType,
+    );
 
     if (this.areErrorBarsVisible()) {
       parsedOptions.errorBars = options.valueErrorBar;

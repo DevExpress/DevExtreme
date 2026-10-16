@@ -1,8 +1,14 @@
-import { describe, expect, it } from '@jest/globals';
+import {
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals';
 import filterUtils from '@js/ui/shared/filtering';
 
-import gridCoreUtils from '../../m_utils';
 import { getFormatOptions } from '../m_header_filter';
+import type { HeaderFilterGroupSelector } from '../types';
+import { getHeaderFilterGroupParameters } from '../utils';
 
 describe('getGroupInterval', () => {
   describe('headerFilter.groupInterval normalization', () => {
@@ -66,26 +72,30 @@ describe('getGroupInterval', () => {
   });
 });
 
+type HeaderFilterColumn = Parameters<typeof getHeaderFilterGroupParameters>[0];
+
+const asHeaderFilterColumn = (column: object): HeaderFilterColumn => column as HeaderFilterColumn;
+
 describe('getHeaderFilterGroupParameters', () => {
   it('builds one remote group parameter per level, expanding all but the last', () => {
-    const column = {
+    const column = asHeaderFilterColumn({
       dataField: 'Price', dataType: 'number', headerFilter: { groupInterval: [100, 10] },
-    };
+    });
 
-    expect(gridCoreUtils.getHeaderFilterGroupParameters(column, true)).toEqual([
+    expect(getHeaderFilterGroupParameters(column, true)).toEqual([
       { selector: 'Price', groupInterval: 100, isExpanded: true },
       { selector: 'Price', groupInterval: 10, isExpanded: false },
     ]);
   });
 
   it('supports an arbitrary number of levels', () => {
-    const column = {
+    const column = asHeaderFilterColumn({
       dataField: 'Population',
       dataType: 'number',
       headerFilter: { groupInterval: [100000, 10000, 1000] },
-    };
+    });
 
-    expect(gridCoreUtils.getHeaderFilterGroupParameters(column, true)).toEqual([
+    expect(getHeaderFilterGroupParameters(column, true)).toEqual([
       { selector: 'Population', groupInterval: 100000, isExpanded: true },
       { selector: 'Population', groupInterval: 10000, isExpanded: true },
       { selector: 'Population', groupInterval: 1000, isExpanded: false },
@@ -93,19 +103,75 @@ describe('getHeaderFilterGroupParameters', () => {
   });
 
   it('builds a local interval selector per level that buckets the cell value', () => {
-    const column = {
+    const column = asHeaderFilterColumn({
       dataField: 'Price',
       dataType: 'number',
       headerFilter: { groupInterval: [100, 10] },
-      calculateCellValue: (data) => data.Price,
-    };
+      calculateCellValue: (data: { Price: number }) => data.Price,
+    });
 
-    const params = gridCoreUtils.getHeaderFilterGroupParameters(column);
+    const params = getHeaderFilterGroupParameters(
+      column,
+    ) as HeaderFilterGroupSelector[];
 
     expect(params).toHaveLength(2);
     // 753 -> floor(753 / 100) * 100 on the outer level, floor(753 / 10) * 10 on the inner level
     expect(params[0]({ Price: 753 })).toBe(700);
     expect(params[1]({ Price: 753 })).toBe(750);
+  });
+
+  describe('when the column has no group interval', () => {
+    it('should group remotely by the data field', () => {
+      const column = asHeaderFilterColumn({ dataField: 'Name', dataType: 'string' });
+
+      expect(getHeaderFilterGroupParameters(column, true)).toEqual([
+        { selector: 'Name', isExpanded: false },
+      ]);
+    });
+
+    it('should group remotely by the column name when there is no data field', () => {
+      const column = asHeaderFilterColumn({ name: 'nameColumn', dataType: 'string' });
+
+      expect(getHeaderFilterGroupParameters(column, true)).toEqual([
+        { selector: 'nameColumn', isExpanded: false },
+      ]);
+    });
+
+    it('should return a local selector that turns empty values into null', () => {
+      const column = asHeaderFilterColumn({
+        dataField: 'Name',
+        dataType: 'string',
+        calculateCellValue: (data: { Name?: unknown }) => data.Name,
+      });
+
+      const selector = getHeaderFilterGroupParameters(
+        column,
+      ) as HeaderFilterGroupSelector;
+
+      expect(selector({ Name: 'a' })).toBe('a');
+      expect(selector({ Name: 0 })).toBe(0);
+      expect(selector({ Name: '' })).toBeNull();
+      expect(selector({})).toBeNull();
+    });
+
+    it('should pair the local selector with the bound sorting method', () => {
+      const sortingMethod = jest.fn((value1: number, value2: number) => value1 - value2);
+      const column = asHeaderFilterColumn({
+        dataField: 'Name',
+        dataType: 'string',
+        calculateCellValue: (data: { Name?: unknown }) => data.Name,
+        sortingMethod,
+      });
+
+      const [descriptor] = getHeaderFilterGroupParameters(column) as {
+        selector: HeaderFilterGroupSelector;
+        compare: (value1: unknown, value2: unknown) => number;
+      }[];
+
+      expect(descriptor.selector({ Name: '' })).toBeNull();
+      expect(descriptor.compare(3, 1)).toBe(2);
+      expect(sortingMethod.mock.contexts[0]).toBe(column);
+    });
   });
 });
 
