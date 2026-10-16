@@ -27,6 +27,7 @@ import { getTestGlobalsScriptPath } from '../utils/visual-tests/test-globals-bun
 import { knownWarnings } from './known-warnings';
 import { skippedTests } from './skipped-tests';
 import { widgetsGalleryServiceMock } from './apiMocks/widgetsGalleryServiceMock';
+import { xmlaServiceMock } from './apiMocks/xmlaServiceMock';
 
 import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
 
@@ -176,7 +177,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       }
     })
     .clientScripts(getClientScripts(approach))
-    .requestHooks(widgetsGalleryServiceMock);
+    .requestHooks(widgetsGalleryServiceMock, xmlaServiceMock);
 
   const getDemoPaths = (platform) => glob.sync('Demos/*/*')
     .map((path) => join(path, platform));

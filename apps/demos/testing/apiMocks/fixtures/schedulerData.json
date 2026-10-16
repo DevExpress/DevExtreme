@@ -1,0 +1,166 @@
+{
+  "data": [
+    {
+      "AppointmentId": 1,
+      "Text": "Website Re-Design Plan",
+      "Description": null,
+      "StartDate": "2021-04-26T16:30:00.000Z",
+      "EndDate": "2021-04-26T18:30:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 2,
+      "Text": "Book Flights to San Fran for Sales Trip",
+      "Description": null,
+      "StartDate": "2021-04-26T19:00:00.000Z",
+      "EndDate": "2021-04-26T20:00:00.000Z",
+      "AllDay": true,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 3,
+      "Text": "Install New Router in Dev Room",
+      "Description": null,
+      "StartDate": "2021-04-26T21:30:00.000Z",
+      "EndDate": "2021-04-26T22:30:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 4,
+      "Text": "Approve Personal Computer Upgrade Plan",
+      "Description": null,
+      "StartDate": "2021-04-27T17:00:00.000Z",
+      "EndDate": "2021-04-27T18:00:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 5,
+      "Text": "Final Budget Review",
+      "Description": null,
+      "StartDate": "2021-04-27T19:00:00.000Z",
+      "EndDate": "2021-04-27T20:35:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 6,
+      "Text": "New Brochures",
+      "Description": null,
+      "StartDate": "2021-04-27T21:30:00.000Z",
+      "EndDate": "2021-04-27T22:45:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 7,
+      "Text": "Install New Database",
+      "Description": null,
+      "StartDate": "2021-04-28T16:45:00.000Z",
+      "EndDate": "2021-04-28T18:15:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 8,
+      "Text": "Approve New Online Marketing Strategy",
+      "Description": null,
+      "StartDate": "2021-04-28T19:00:00.000Z",
+      "EndDate": "2021-04-28T21:00:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 9,
+      "Text": "Upgrade Personal Computers",
+      "Description": null,
+      "StartDate": "2021-04-28T22:15:00.000Z",
+      "EndDate": "2021-04-28T23:30:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 10,
+      "Text": "Customer Workshop",
+      "Description": null,
+      "StartDate": "2021-04-29T18:00:00.000Z",
+      "EndDate": "2021-04-29T19:00:00.000Z",
+      "AllDay": true,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 11,
+      "Text": "Prepare 2021 Marketing Plan",
+      "Description": null,
+      "StartDate": "2021-04-29T18:00:00.000Z",
+      "EndDate": "2021-04-29T20:30:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 12,
+      "Text": "Brochure Design Review",
+      "Description": null,
+      "StartDate": "2021-04-29T21:00:00.000Z",
+      "EndDate": "2021-04-29T22:30:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 13,
+      "Text": "Create Icons for Website",
+      "Description": null,
+      "StartDate": "2021-04-30T17:00:00.000Z",
+      "EndDate": "2021-04-30T18:30:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 14,
+      "Text": "Upgrade Server Hardware",
+      "Description": null,
+      "StartDate": "2021-04-30T21:30:00.000Z",
+      "EndDate": "2021-04-30T23:00:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 15,
+      "Text": "Submit New Website Design",
+      "Description": null,
+      "StartDate": "2021-04-30T23:30:00.000Z",
+      "EndDate": "2021-05-01T01:00:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    },
+    {
+      "AppointmentId": 16,
+      "Text": "Launch New Website",
+      "Description": null,
+      "StartDate": "2021-04-30T19:20:00.000Z",
+      "EndDate": "2021-04-30T21:00:00.000Z",
+      "AllDay": false,
+      "RecurrenceRule": null,
+      "RecurrenceException": null
+    }
+  ],
+  "totalCount": -1,
+  "groupCount": -1
+}

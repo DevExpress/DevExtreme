@@ -1,0 +1,328 @@
+{
+  "data": [
+    {
+      "key": "Audio",
+      "items": [
+        {
+          "key": "Bluetooth Headphones",
+          "items": null,
+          "count": 13482,
+          "summary": [
+            12099500.9899
+          ]
+        },
+        {
+          "key": "MP4&MP3",
+          "items": null,
+          "count": 13266,
+          "summary": [
+            19135315.8985
+          ]
+        },
+        {
+          "key": "Recording Pen",
+          "items": null,
+          "count": 5585,
+          "summary": [
+            13003192.33
+          ]
+        }
+      ],
+      "summary": [
+        44238009.2184
+      ]
+    },
+    {
+      "key": "Cameras and camcorders ",
+      "items": [
+        {
+          "key": "Camcorders",
+          "items": null,
+          "count": 44792,
+          "summary": [
+            392770682.42
+          ]
+        },
+        {
+          "key": "Cameras & Camcorders Accessories",
+          "items": null,
+          "count": 24225,
+          "summary": [
+            14925174.0842
+          ]
+        },
+        {
+          "key": "Digital Cameras",
+          "items": null,
+          "count": 44414,
+          "summary": [
+            107851324.907
+          ]
+        },
+        {
+          "key": "Digital SLR Cameras",
+          "items": null,
+          "count": 44634,
+          "summary": [
+            236563660.151
+          ]
+        }
+      ],
+      "summary": [
+        752110841.5622
+      ]
+    },
+    {
+      "key": "Cell phones",
+      "items": [
+        {
+          "key": "Cell phones Accessories",
+          "items": null,
+          "count": 10783,
+          "summary": [
+            34503229.6364
+          ]
+        },
+        {
+          "key": "Home & Office Phones",
+          "items": null,
+          "count": 40703,
+          "summary": [
+            14228059.5031
+          ]
+        },
+        {
+          "key": "Smart phones & PDAs ",
+          "items": null,
+          "count": 37838,
+          "summary": [
+            123543676.33
+          ]
+        },
+        {
+          "key": "Touch Screen Phones ",
+          "items": null,
+          "count": 26874,
+          "summary": [
+            88870734.96
+          ]
+        }
+      ],
+      "summary": [
+        261145700.4295
+      ]
+    },
+    {
+      "key": "Computers",
+      "items": [
+        {
+          "key": "Computers Accessories",
+          "items": null,
+          "count": 73726,
+          "summary": [
+            32756728.7015
+          ]
+        },
+        {
+          "key": "Desktops",
+          "items": null,
+          "count": 17750,
+          "summary": [
+            147794830.6595
+          ]
+        },
+        {
+          "key": "Laptops",
+          "items": null,
+          "count": 35643,
+          "summary": [
+            274415130.463
+          ]
+        },
+        {
+          "key": "Monitors",
+          "items": null,
+          "count": 28442,
+          "summary": [
+            78454945.38
+          ]
+        },
+        {
+          "key": "Printers, Scanners & Fax",
+          "items": null,
+          "count": 43812,
+          "summary": [
+            82413191.48
+          ]
+        },
+        {
+          "key": "Projectors & Screens",
+          "items": null,
+          "count": 40981,
+          "summary": [
+            322676908.53
+          ]
+        }
+      ],
+      "summary": [
+        938511735.214
+      ]
+    },
+    {
+      "key": "Games and Toys",
+      "items": [
+        {
+          "key": "Boxed Games",
+          "items": null,
+          "count": 18985,
+          "summary": [
+            9509754.6963
+          ]
+        },
+        {
+          "key": "Download Games",
+          "items": null,
+          "count": 41401,
+          "summary": [
+            34501163.8035
+          ]
+        }
+      ],
+      "summary": [
+        44010918.4998
+      ]
+    },
+    {
+      "key": "Home Appliances",
+      "items": [
+        {
+          "key": "Air Conditioners",
+          "items": null,
+          "count": 25085,
+          "summary": [
+            95161015.1672
+          ]
+        },
+        {
+          "key": "Coffee Machines",
+          "items": null,
+          "count": 30650,
+          "summary": [
+            122601725.6707
+          ]
+        },
+        {
+          "key": "Fans",
+          "items": null,
+          "count": 25904,
+          "summary": [
+            17772095.636
+          ]
+        },
+        {
+          "key": "Lamps",
+          "items": null,
+          "count": 67160,
+          "summary": [
+            152404781.2906
+          ]
+        },
+        {
+          "key": "Microwaves",
+          "items": null,
+          "count": 44120,
+          "summary": [
+            94680325.3918
+          ]
+        },
+        {
+          "key": "Refrigerators",
+          "items": null,
+          "count": 35179,
+          "summary": [
+            234544588.4122
+          ]
+        },
+        {
+          "key": "Washers & Dryers",
+          "items": null,
+          "count": 28012,
+          "summary": [
+            314511579.069
+          ]
+        },
+        {
+          "key": "Water Heaters",
+          "items": null,
+          "count": 13739,
+          "summary": [
+            118568719.195
+          ]
+        }
+      ],
+      "summary": [
+        1150244829.8325
+      ]
+    },
+    {
+      "key": "Music, Movies and Audio Books",
+      "items": [
+        {
+          "key": "Movie DVD",
+          "items": null,
+          "count": 38050,
+          "summary": [
+            48836547.1406
+          ]
+        }
+      ],
+      "summary": [
+        48836547.1406
+      ]
+    },
+    {
+      "key": "TV and Video",
+      "items": [
+        {
+          "key": "Car Video",
+          "items": null,
+          "count": 20936,
+          "summary": [
+            89500169.32
+          ]
+        },
+        {
+          "key": "Home Theater System",
+          "items": null,
+          "count": 37422,
+          "summary": [
+            208483807.14
+          ]
+        },
+        {
+          "key": "Televisions",
+          "items": null,
+          "count": 17279,
+          "summary": [
+            90378547.2903
+          ]
+        },
+        {
+          "key": "VCD & DVD",
+          "items": null,
+          "count": 9128,
+          "summary": [
+            10794968.863
+          ]
+        }
+      ],
+      "summary": [
+        399157492.6133
+      ]
+    }
+  ],
+  "totalCount": 1000000,
+  "summary": [
+    3638256074.5103
+  ]
+}
