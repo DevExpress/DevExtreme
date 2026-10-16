@@ -11,7 +11,7 @@ import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
-import type { DefaultToolbarItem, ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
+import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
 import type { Column } from '../columns_controller/types';
@@ -22,7 +22,7 @@ import type { ContextMenuItemsOptions } from '../views/types';
 import { CLASSES, DEFAULT_TOOLBAR_ITEM_NAMES, TOOLBAR_ARIA_LABEL } from './const';
 
 export class HeaderPanel extends ColumnsView {
-  private _toolbar?: Toolbar;
+  private _toolbar?: Toolbar<ToolbarItem>;
 
   private _toolbarOptions?: ToolbarProperties;
 
@@ -83,12 +83,12 @@ export class HeaderPanel extends ColumnsView {
       (ui) => (typeof ui === 'string' ? ui === name : ui?.name === name),
     );
 
-    if (!userItem) {
+    if (!registeredItem || !userItem) {
       return registeredItem;
     }
 
     return normalizeToolbarItems(
-      [registeredItem] as DefaultToolbarItem[],
+      [registeredItem],
       [userItem],
       DEFAULT_TOOLBAR_ITEM_NAMES,
     )[0];
@@ -126,11 +126,11 @@ export class HeaderPanel extends ColumnsView {
     return this.addWidgetPrefix(CLASSES.toolbarButton) + secondClass;
   }
 
-  private _getToolbarOptions(): ToolbarProperties<DefaultToolbarItem | ToolbarItem> {
+  private _getToolbarOptions(): ToolbarProperties<ToolbarItem> {
     const { toolbar: userToolbarOptions } = this.option();
     const sortedToolbarItems: ToolbarItem[] = this.sortToolbarItems(this._getToolbarItems());
 
-    const options: { toolbarOptions: ToolbarProperties<DefaultToolbarItem | ToolbarItem> } = {
+    const options: { toolbarOptions: ToolbarProperties<ToolbarItem> } = {
       toolbarOptions: {
         items: sortedToolbarItems,
         visible: userToolbarOptions?.visible,
@@ -147,7 +147,7 @@ export class HeaderPanel extends ColumnsView {
 
     const userItems = userToolbarOptions?.items;
     options.toolbarOptions.items = normalizeToolbarItems(
-      sortedToolbarItems as DefaultToolbarItem[],
+      sortedToolbarItems,
       userItems,
       DEFAULT_TOOLBAR_ITEM_NAMES,
     );
@@ -220,8 +220,7 @@ export class HeaderPanel extends ColumnsView {
       return;
     }
 
-    // @ts-expect-error option() returns unknown for an item path
-    const item: ToolbarItem = toolbar.option(`items[${itemIndex}]`);
+    const item = items[itemIndex];
 
     toolbar.option(`items[${itemIndex}].disabled`, disabled);
 
@@ -263,7 +262,7 @@ export class HeaderPanel extends ColumnsView {
         this._invalidate();
       } else if (isItemReplaced) {
         const normalizedItem = normalizeToolbarItems(
-          this._getToolbarItems() as DefaultToolbarItem[],
+          this._getToolbarItems(),
           // @ts-expect-error OptionChanged has no paths for toolbar items by index
           [args.value],
           DEFAULT_TOOLBAR_ITEM_NAMES,
