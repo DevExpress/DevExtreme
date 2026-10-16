@@ -1,0 +1,73 @@
+@mixin chat-toolcallview(
+  $min-width,
+  $title-gap,
+  $title-color,
+  $icon-size,
+  $badge-padding-block,
+  $badge-padding-inline,
+  $badge-border-radius,
+  $content-gap,
+  $content-padding-block,
+  $content-margin-inline-start,
+  $content-padding-inline-start,
+  $content-border-width,
+  $content-border-color,
+  $field-gap,
+  $field-font-family,
+  $error-color,
+  $error-background-color,
+) {
+  .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
+    min-width: min($min-width, 100%);
+  }
+
+  .dx-chat-tool-call-view .dx-accordion-item-title::before {
+    margin-inline: $title-gap 0;
+    color: $title-color;
+  }
+
+  .dx-chat-tool-call-title {
+    gap: $title-gap;
+    color: $title-color;
+
+    .dx-icon {
+      flex-shrink: 0;
+      font-size: $icon-size;
+    }
+  }
+
+  .dx-chat-tool-call-error-badge {
+    padding: $badge-padding-block $badge-padding-inline;
+    border-radius: $badge-border-radius;
+    color: $error-color;
+    background-color: $error-background-color;
+  }
+
+  .dx-chat-tool-call-content {
+    gap: $content-gap;
+    padding-block: $content-padding-block;
+    margin-inline-start: $content-margin-inline-start;
+    padding-inline-start: $content-padding-inline-start;
+    border-inline-start-width: $content-border-width;
+    border-inline-start-color: $content-border-color;
+  }
+
+  .dx-chat-tool-call-field {
+    gap: $field-gap;
+
+    .dx-textarea {
+      font-family: $field-font-family;
+    }
+  }
+
+  .dx-chat-tool-call-field-error {
+    .dx-texteditor.dx-editor-outlined.dx-state-readonly {
+      border-color: transparent;
+      background-color: $error-background-color;
+    }
+
+    .dx-texteditor-input {
+      color: $error-color;
+    }
+  }
+}

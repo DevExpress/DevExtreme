@@ -149,3 +149,8 @@ $chat-suggestions-box-shadow: null !default;
 $chat-messagelist-contextmenu-delete-button-color: $base-danger !default;
 $chat-messagelist-contextmenu-delete-button-focused-color: $base-danger !default;
 $chat-messagelist-contextmenu-delete-button-focused-bg: $base-hover-bg !default;
+
+$chat-tool-call-title-color: $base-icon-color !default;
+$chat-tool-call-content-border-color: $base-border-color !default;
+$chat-tool-call-error-color: $base-danger !default;
+$chat-tool-call-error-background-color: color.change($base-danger, $alpha: 0.1) !default;
