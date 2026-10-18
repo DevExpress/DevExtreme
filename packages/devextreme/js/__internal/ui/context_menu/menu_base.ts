@@ -16,7 +16,7 @@ import type {
   Item,
   SubmenuShowMode,
 } from '@js/ui/menu';
-import type { ActionArguments } from '@ts/core/m_action';
+import type { ActionArguments } from '@ts/core/action';
 import { render } from '@ts/core/utils/ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
@@ -768,10 +768,10 @@ class MenuBase<
     this._dataAdapter.toggleSelection(node.internalFields.key, value);
   }
 
-  _getElementByItem(itemData: Item): dxElementWrapper {
-    let result: dxElementWrapper = $();
+  _getElementByItem(itemData: Item): Element | dxElementWrapper {
+    let result: Element | dxElementWrapper = $();
 
-    each(this._itemElements(), (_index: number, $itemElement: dxElementWrapper) => {
+    each(this._itemElements(), (_index, $itemElement) => {
       // @ts-expect-error ts-error
       if ($($itemElement).data(this._itemDataKey()) !== itemData) {
         return true;

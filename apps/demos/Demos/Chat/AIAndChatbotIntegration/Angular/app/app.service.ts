@@ -106,11 +106,17 @@ export class AppService {
         this.messages.push({ role: 'assistant', content: aiResponse });
         this.renderAssistantMessage(aiResponse);
       }, 200);
-    } catch {
+    } catch (err: unknown) {
       this.typingUsersSubject.next([]);
       this.messages.pop();
-      this.alertLimitReached();
+      this.alertError(this.getErrorMessage(err));
     }
+  }
+
+  getErrorMessage(err: unknown): string {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
   }
 
   updateLastMessage(text = this.REGENERATION_TEXT) {
@@ -135,9 +141,9 @@ export class AppService {
     this.dataSource.store().push([{ type: 'insert', data: message }]);
   }
 
-  alertLimitReached() {
+  alertError(message: string) {
     this.setAlerts([{
-      message: 'Request limit reached, try again in a minute.',
+      message,
     }]);
 
     setTimeout(() => {
@@ -152,13 +158,14 @@ export class AppService {
 
   async regenerate() {
     try {
+      this.setAlerts([]);
       const aiResponse = await this.getAIResponse(this.messages.slice(0, -1));
 
       this.updateLastMessage(aiResponse);
       this.messages.at(-1).content = aiResponse;
-    } catch {
+    } catch (err: unknown) {
       this.updateLastMessage(this.messages.at(-1).content);
-      this.alertLimitReached();
+      this.alertError(this.getErrorMessage(err));
     }
   }
 

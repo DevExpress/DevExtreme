@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -10,10 +8,6 @@ import {
     Output,
     EventEmitter
 } from '@angular/core';
-
-
-
-
 import type { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 import type { FilterOperation, FilterType, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import type { Format } from 'devextreme/common/core/localization';
@@ -349,7 +343,6 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
         return 'columns';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -372,7 +365,6 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -46,7 +43,6 @@ import {
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxFileUploaderComponent),
@@ -54,7 +50,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 };
 /**
  * [descr:dxFileUploader]
-
  */
 @Component({
     selector: 'dx-file-uploader',
@@ -75,7 +70,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.abortUpload]
-    
      */
     @Input()
     get abortUpload(): ((file: any, uploadInfo?: UploadInfo) => any) {
@@ -85,10 +79,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('abortUpload', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.accept]
-    
      */
     @Input()
     get accept(): string {
@@ -98,10 +90,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('accept', value);
     }
 
-
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -111,10 +101,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -124,10 +112,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.allowCanceling]
-    
      */
     @Input()
     get allowCanceling(): boolean {
@@ -137,10 +123,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('allowCanceling', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.allowedFileExtensions]
-    
      */
     @Input()
     get allowedFileExtensions(): Array<string> {
@@ -150,10 +134,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('allowedFileExtensions', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.chunkSize]
-    
      */
     @Input()
     get chunkSize(): number {
@@ -163,10 +145,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('chunkSize', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.dialogTrigger]
-    
      */
     @Input()
     get dialogTrigger(): any | string | undefined {
@@ -176,10 +156,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('dialogTrigger', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -189,10 +167,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.dropZone]
-    
      */
     @Input()
     get dropZone(): any | string | undefined {
@@ -202,10 +178,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('dropZone', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -215,10 +189,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -228,10 +200,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -241,10 +211,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -254,10 +222,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -267,10 +233,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -280,10 +244,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('inputAttr', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.invalidFileExtensionMessage]
-    
      */
     @Input()
     get invalidFileExtensionMessage(): string {
@@ -293,10 +255,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('invalidFileExtensionMessage', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.invalidMaxFileSizeMessage]
-    
      */
     @Input()
     get invalidMaxFileSizeMessage(): string {
@@ -306,10 +266,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('invalidMaxFileSizeMessage', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.invalidMinFileSizeMessage]
-    
      */
     @Input()
     get invalidMinFileSizeMessage(): string {
@@ -319,10 +277,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('invalidMinFileSizeMessage', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -332,10 +288,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -345,10 +299,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.labelText]
-    
      */
     @Input()
     get labelText(): string {
@@ -358,10 +310,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('labelText', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.maxFileSize]
-    
      */
     @Input()
     get maxFileSize(): number {
@@ -371,10 +321,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('maxFileSize', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.minFileSize]
-    
      */
     @Input()
     get minFileSize(): number {
@@ -384,10 +332,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('minFileSize', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.multiple]
-    
      */
     @Input()
     get multiple(): boolean {
@@ -397,10 +343,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('multiple', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -410,10 +354,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.progress]
-    
      */
     @Input()
     get progress(): number {
@@ -423,10 +365,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('progress', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -436,10 +376,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.readyToUploadMessage]
-    
      */
     @Input()
     get readyToUploadMessage(): string {
@@ -449,10 +387,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('readyToUploadMessage', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -462,10 +398,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.selectButtonText]
-    
      */
     @Input()
     get selectButtonText(): string {
@@ -475,10 +409,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('selectButtonText', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.showFileList]
-    
      */
     @Input()
     get showFileList(): boolean {
@@ -488,10 +420,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('showFileList', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -501,10 +431,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadAbortedMessage]
-    
      */
     @Input()
     get uploadAbortedMessage(): string {
@@ -514,10 +442,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadAbortedMessage', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadButtonText]
-    
      */
     @Input()
     get uploadButtonText(): string {
@@ -527,10 +453,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadButtonText', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadChunk]
-    
      */
     @Input()
     get uploadChunk(): ((file: any, uploadInfo: UploadInfo) => any) {
@@ -540,10 +464,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadChunk', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadCustomData]
-    
      */
     @Input()
     get uploadCustomData(): any {
@@ -553,10 +475,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadCustomData', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadedMessage]
-    
      */
     @Input()
     get uploadedMessage(): string {
@@ -566,10 +486,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadedMessage', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadFailedMessage]
-    
      */
     @Input()
     get uploadFailedMessage(): string {
@@ -579,10 +497,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadFailedMessage', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadFile]
-    
      */
     @Input()
     get uploadFile(): ((file: any, progressCallback: Function) => any) {
@@ -592,10 +508,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadFile', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadHeaders]
-    
      */
     @Input()
     get uploadHeaders(): any {
@@ -605,10 +519,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadHeaders', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadMethod]
-    
      */
     @Input()
     get uploadMethod(): UploadHttpMethod {
@@ -618,10 +530,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadMethod', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadMode]
-    
      */
     @Input()
     get uploadMode(): FileUploadMode {
@@ -631,10 +541,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadMode', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadUrl]
-    
      */
     @Input()
     get uploadUrl(): string {
@@ -644,10 +552,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadUrl', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -657,10 +563,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -670,10 +574,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -683,10 +585,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.value]
-    
      */
     @Input()
     get value(): Array<any> {
@@ -696,10 +596,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -709,10 +607,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -723,479 +619,331 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     }
 
     /**
-    
      * [descr:dxFileUploaderOptions.onBeforeSend]
-    
-    
      */
     @Output() onBeforeSend: EventEmitter<BeforeSendEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onDropZoneEnter]
-    
-    
      */
     @Output() onDropZoneEnter: EventEmitter<DropZoneEnterEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onDropZoneLeave]
-    
-    
      */
     @Output() onDropZoneLeave: EventEmitter<DropZoneLeaveEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onFilesUploaded]
-    
-    
      */
     @Output() onFilesUploaded: EventEmitter<FilesUploadedEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onProgress]
-    
-    
      */
     @Output() onProgress: EventEmitter<ProgressEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onUploadAborted]
-    
-    
      */
     @Output() onUploadAborted: EventEmitter<UploadAbortedEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onUploaded]
-    
-    
      */
     @Output() onUploaded: EventEmitter<UploadedEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onUploadError]
-    
-    
      */
     @Output() onUploadError: EventEmitter<UploadErrorEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onUploadStarted]
-    
-    
      */
     @Output() onUploadStarted: EventEmitter<UploadStartedEvent>;
 
     /**
-    
      * [descr:dxFileUploaderOptions.onValueChanged]
-    
-    
      */
     @Output() onValueChanged: EventEmitter<ValueChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() abortUploadChange: EventEmitter<((file: any, uploadInfo?: UploadInfo) => any)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() acceptChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowCancelingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowedFileExtensionsChange: EventEmitter<Array<string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() chunkSizeChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dialogTriggerChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dropZoneChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() inputAttrChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() invalidFileExtensionMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() invalidMaxFileSizeMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() invalidMinFileSizeMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isDirtyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isValidChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxFileSizeChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minFileSizeChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() multipleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() progressChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readyToUploadMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectButtonTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showFileListChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadAbortedMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadButtonTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadChunkChange: EventEmitter<((file: any, uploadInfo: UploadInfo) => any)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadCustomDataChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadedMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadFailedMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadFileChange: EventEmitter<((file: any, progressCallback: Function) => any)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadHeadersChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadMethodChange: EventEmitter<UploadHttpMethod>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadModeChange: EventEmitter<FileUploadMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadUrlChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

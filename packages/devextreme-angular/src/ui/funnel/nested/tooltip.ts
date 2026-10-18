@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DashStyle, Font } from 'devextreme/common/charts';
 import type { dxFunnelItem } from 'devextreme/viz/funnel';
 import type { Format } from 'devextreme/common/core/localization';
@@ -23,7 +17,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-funnel-tooltip',
@@ -158,7 +151,6 @@ export class DxoFunnelTooltipComponent extends NestedOption implements OnDestroy
         return 'tooltip';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -174,7 +166,6 @@ export class DxoFunnelTooltipComponent extends NestedOption implements OnDestroy
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

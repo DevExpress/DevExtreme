@@ -7,10 +7,13 @@ import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
+import type {
+  VirtualDataLoaderController,
+  VirtualItemsCount,
+} from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import gridCoreUtils from '../m_utils';
-import { VirtualDataLoader } from '../virtual_data_loader/m_virtual_data_loader';
+import { VirtualDataLoader } from '../virtual_data_loader/virtual_data_loader';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -152,7 +155,10 @@ class VirtualScrollController {
     this._sizeRatio = 1;
     this._isVirtual = isVirtual;
     this.positionChanged = Callbacks();
-    this._dataLoader = new VirtualDataLoader(this, this._dataOptions);
+    this._dataLoader = new VirtualDataLoader(
+      this as unknown as VirtualDataLoaderController,
+      this._dataOptions,
+    );
   }
 
   private getItemSizes() {
@@ -173,12 +179,13 @@ class VirtualScrollController {
       const dataOptions = this._dataOptions;
       const totalItemsCount = dataOptions.totalItemsCount();
       if (this.option(LEGACY_SCROLLING_MODE) === false && totalItemsCount !== -1) {
+        const renderedItemsRange = dataOptions.renderedItemsRange?.();
         const viewportParams = this.getViewportParams();
         const loadedOffset = dataOptions.loadedOffset();
         const loadedItemCount = dataOptions.loadedItemCount();
 
-        const skip = Math.max(viewportParams.skip, loadedOffset);
-        const take = Math.min(viewportParams.take, loadedItemCount);
+        const skip = renderedItemsRange?.skip ?? Math.max(viewportParams.skip, loadedOffset);
+        const take = renderedItemsRange?.take ?? Math.min(viewportParams.take, loadedItemCount);
 
         const endItemsCount = Math.max(totalItemsCount - (skip + take), 0);
         return {
@@ -452,6 +459,7 @@ class VirtualScrollController {
   }
 
   public pageIndex(...args) {
+    // @ts-expect-error a spread argument can't match the overloads of pageIndex()
     return this._dataLoader.pageIndex(...args);
   }
 

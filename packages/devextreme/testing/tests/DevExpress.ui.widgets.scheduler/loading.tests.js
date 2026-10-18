@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const loading = require('__internal/scheduler/loading');
-const viewPort = require('core/utils/view_port').value;
-const fx = require('common/core/animation/fx');
-const LoadPanel = require('ui/load_panel');
+import $ from 'jquery';
+import * as loading from '__internal/scheduler/loading';
+import { value as viewPort } from 'core/utils/view_port';
+import fx from 'common/core/animation/fx';
+import LoadPanel from 'ui/load_panel';
 
 QUnit.module('loading tests', {
     beforeEach: function() {

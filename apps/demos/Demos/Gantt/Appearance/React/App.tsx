@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing,
 } from 'devextreme-react/gantt';
@@ -35,17 +35,19 @@ const initialGanttConfig = {
 
 function App() {
   const [ganttConfig, setGanttConfig] = useState(initialGanttConfig);
-  const updateGanttConfig = (value: Partial<typeof initialGanttConfig>) => setGanttConfig({
-    ...ganttConfig,
-    ...value,
-  });
-  const onScaleTypeChanged: ISelectBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ scaleType: value });
-  const onTaskTitlePositionChanged: ISelectBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ taskTitlePosition: value });
-  const onShowResourcesChanged: ICheckBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ showResources: value });
-  const onShowDependenciesChanged: ICheckBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ showDependencies: value });
-  const onShowCustomTaskTooltip: ICheckBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ showCustomTaskTooltip: value });
-  const onStartDateValueChanged: IDateBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ startDateRange: value });
-  const onEndDateValueChanged: IDateBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ endDateRange: value });
+  const updateGanttConfig = useCallback((value: Partial<typeof initialGanttConfig>) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
+      ...value,
+    }));
+  }, []);
+  const onScaleTypeChanged: ISelectBoxOptions['onValueChanged'] = useCallback(({ value }) => updateGanttConfig({ scaleType: value }), [updateGanttConfig]);
+  const onTaskTitlePositionChanged: ISelectBoxOptions['onValueChanged'] = useCallback(({ value }) => updateGanttConfig({ taskTitlePosition: value }), [updateGanttConfig]);
+  const onShowResourcesChanged: ICheckBoxOptions['onValueChanged'] = useCallback(({ value }) => updateGanttConfig({ showResources: value }), [updateGanttConfig]);
+  const onShowDependenciesChanged: ICheckBoxOptions['onValueChanged'] = useCallback(({ value }) => updateGanttConfig({ showDependencies: value }), [updateGanttConfig]);
+  const onShowCustomTaskTooltip: ICheckBoxOptions['onValueChanged'] = useCallback(({ value }) => updateGanttConfig({ showCustomTaskTooltip: value }), [updateGanttConfig]);
+  const onStartDateValueChanged: IDateBoxOptions['onValueChanged'] = useCallback(({ value }) => updateGanttConfig({ startDateRange: value }), [updateGanttConfig]);
+  const onEndDateValueChanged: IDateBoxOptions['onValueChanged'] = useCallback(({ value }) => updateGanttConfig({ endDateRange: value }), [updateGanttConfig]);
 
   return (
     <div id="form-demo">

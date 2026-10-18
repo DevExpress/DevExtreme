@@ -5,11 +5,12 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../button/colors" as *;
 @use "../button/sizes" as *;
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
-@use "../../base/list";
+@use "../../base/list" with (
+  $list-searchbox-margin-bottom: $generic-list-searchbox-margin-bottom,
+);
 @use "../../base/list/mixins" as *;
 @use "../badge";
 
@@ -41,10 +42,6 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
 
 .dx-list-item-icon {
   @include dx-icon-sizing($generic-base-icon-size);
-}
-
-.dx-list-search {
-  margin-bottom: $generic-list-searchbox-margin-bottom;
 }
 
 .dx-list-item-before-bag,
@@ -220,7 +217,7 @@ $generic-list-search-editor-height: math.round($generic-base-line-height * $gene
     }
 
     .dx-icon-toggle-delete {
-      background-size: 100%;
+      mask-size: 100%;
     }
 
     @include toggle-delete-icon($list-icon-color);

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 
 import DataGrid, {
   Column,
@@ -76,7 +76,7 @@ export default function App() {
     }]);
   }, []);
 
-  const chatOptions: ChatTypes.Properties = {
+  const chatOptions = useMemo<ChatTypes.Properties>(() => ({
     onInitialized: onChatInitialized,
     user: {
       id: 'user',
@@ -85,7 +85,7 @@ export default function App() {
       ...suggestions,
       onItemClick: onSuggestionItemClick,
     },
-  };
+  }), [onChatInitialized, onSuggestionItemClick]);
 
   return (
     <DataGrid

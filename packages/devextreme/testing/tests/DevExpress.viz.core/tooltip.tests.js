@@ -7,7 +7,7 @@ import {
 import tooltipModule from 'viz/core/tooltip';
 import vizUtils from 'viz/core/utils_default';
 import rendererModule from 'viz/core/renderers/renderer_default';
-import domAdapter from '__internal/core/m_dom_adapter';
+import domAdapter from '__internal/core/dom_adapter';
 import { implementationsMap } from 'core/utils/size';
 import { initializeSizeMocks, destroySizeMocks } from '../../helpers/sizeMocks.js';
 
@@ -56,11 +56,11 @@ function getInitialOptions() {
     };
 }
 
-rendererModule.Renderer = function(parameters) {
+rendererModule.DEBUG_set_Renderer(function(parameters) {
     const renderer = new Renderer(parameters);
     currentTest().renderer = renderer;
     return renderer;
-};
+});
 
 QUnit.module('Main functionality', {
     beforeEach: function() {
@@ -68,10 +68,10 @@ QUnit.module('Main functionality', {
 
         this._oldPatchFontOptions = vizUtils.patchFontOptions;
         this.patchFontOptions = sinon.spy(function() { return this._oldPatchFontOptions.apply(null, arguments); }.bind(this));
-        vizUtils.patchFontOptions = this.patchFontOptions;
+        vizUtils.DEBUG_set_patchFontOptions(this.patchFontOptions);
     },
     afterEach: function() {
-        vizUtils.patchFontOptions = this._oldPatchFontOptions;
+        vizUtils.DEBUG_set_patchFontOptions(this._oldPatchFontOptions);
     }
 });
 
@@ -436,10 +436,46 @@ QUnit.test('Update', function(assert) {
         fill: 'rgba(147,147,147,0.7)',
         fontFamily: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fontSize: '14px',
-        fontWeight: 400,
-        opacity: null
+        fontWeight: 400
     });
     // for html text ↑
+});
+
+QUnit.test('Update. The font opacity is carried by the text colour, not by the html text group', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: { event: 'trigger' } });
+
+    tooltip.update(this.options);
+
+    const textGroup = tooltip._textGroupHtml.get(0);
+
+    assert.strictEqual(textGroup.style.opacity, '', 'the html content of the tooltip is not made translucent');
+    assert.strictEqual(textGroup.style.color, 'rgba(147, 147, 147, 0.7)', 'only the colour of its text is');
+    assert.strictEqual(tooltip._textFontStyles['fill-opacity'], undefined, 'the svg text takes the opacity from the colour as well');
+});
+
+QUnit.test('Update. A published name carries the font opacity in a mix of its own', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: { event: 'trigger' } });
+    const mixed = 'color-mix(in srgb, var(--dx-viz-tooltip-content, #ffffff) 70%, transparent)';
+
+    this.options.font.color = 'var(--dx-viz-tooltip-content, #ffffff)';
+    tooltip._textGroupHtml.css = sinon.spy();
+    tooltip.update(this.options);
+
+    const htmlStyles = tooltip._textGroupHtml.css.firstCall.args[0];
+
+    assert.strictEqual(tooltip._textFontStyles.fill, mixed, 'the svg text is filled with the name mixed toward transparent');
+    assert.strictEqual(htmlStyles.color, mixed, 'the html text is coloured the same way');
+    assert.notOk('opacity' in htmlStyles, 'and the html text group keeps no opacity of its own');
+});
+
+QUnit.test('Update. A font opacity without a colour stays on the svg text only', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: { event: 'trigger' } });
+
+    this.options.font = { opacity: 0.5 };
+    tooltip.update(this.options);
+
+    assert.strictEqual(tooltip._textFontStyles['fill-opacity'], 0.5, 'the svg text keeps the opacity');
+    assert.strictEqual(tooltip._textGroupHtml.get(0).style.opacity, '', 'the html content of the tooltip is not made translucent');
 });
 
 QUnit.test('Disposing', function(assert) {

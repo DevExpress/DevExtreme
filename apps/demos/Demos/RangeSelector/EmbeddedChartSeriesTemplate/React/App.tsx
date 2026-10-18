@@ -7,9 +7,9 @@ import RangeSelector, {
 import { dataSource } from './data.ts';
 
 const App = () => {
-  const customizeSeries = (valueFromNameField: string) => (valueFromNameField === 'USA' ? {
+  const customizeSeries = React.useCallback((valueFromNameField: string) => (valueFromNameField === 'USA' ? {
     color: 'red',
-  } : {});
+  } : {}), []);
 
   return (
     <RangeSelector

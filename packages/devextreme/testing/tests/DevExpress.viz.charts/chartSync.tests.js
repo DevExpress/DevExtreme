@@ -19,6 +19,7 @@ import { CustomStore } from 'common/data/custom_store';
 import chartThemeManagerModule from 'viz/components/chart_theme_manager';
 import scrollBarModule from 'viz/chart_components/scroll_bar';
 import dxChart from 'viz/chart';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import {
     MockSeries,
     MockPoint,
@@ -37,9 +38,9 @@ const ScrollBar = scrollBarModule.ScrollBar;
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 setupSeriesFamily();
 
-rendererModule.Renderer = function(parameters) {
+rendererModule.DEBUG_set_Renderer(function(parameters) {
     return new Renderer(parameters);
-};
+});
 
 const defaultCrosshairOptions = {
     horizontalLine: {},
@@ -63,7 +64,7 @@ exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
     return new ExportMenu();
 }));
 
-legendModule.Legend = sinon.spy(function(parameters) {
+legendModule._setLegend(sinon.spy(function(parameters) {
     const legend = new Legend(parameters);
     legend.update = sinon.spy(function(params, settings) {
         legend.getPosition = sinon.stub().returns(settings.position);
@@ -82,7 +83,7 @@ legendModule.Legend = sinon.spy(function(parameters) {
         return [];
     });
     return legend;
-});
+}));
 
 function getLegendStub() {
     return legendModule.Legend.lastCall.returnValue;
@@ -118,13 +119,13 @@ const environment = {
         that.themeManager.getOptions.withArgs('resolveLabelOverlapping').returns(false);
         that.themeManager.getOptions.returns({});
 
-        titleModule.Title = sinon.spy(function(parameters) {
+        titleModule.DEBUG_set_title(sinon.spy(function(parameters) {
             const title = new Title(parameters);
             title.getLayoutOptions = sinon.stub().returns({
                 verticalAlignment: that.titleVerticalAlignment || 'bottom'
             });
             return title;
-        });
+        }));
 
         that.createChart = function(options) {
             options = $.extend(true, {
@@ -145,7 +146,7 @@ const environment = {
             return createChartInstance(options, this.$container);
         };
 
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
+        this.createThemeManager = stubSeam(chartThemeManagerModule, 'ThemeManager', 'DEBUG_set_ThemeManager').callsFake(function() {
             return that.themeManager;
         });
         this.layoutManager = new LayoutManager();
@@ -153,7 +154,7 @@ const environment = {
             arguments[2] && arguments[2]();
         });
 
-        sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
+        stubSeam(layoutManagerModule, 'LayoutManager', 'DEBUG_set_LayoutManager').callsFake(function() {
             const layoutManager = new LayoutManager();
             layoutManager
                 .stub('needMoreSpaceForPanesCanvas')
@@ -166,17 +167,17 @@ const environment = {
             return layoutManager;
         });
 
-        sinon.stub(tooltipModule, 'Tooltip').callsFake(function(parameters) {
+        stubSeam(tooltipModule, 'Tooltip', 'DEBUG_set_tooltip').callsFake(function(parameters) {
             return new StubTooltip(parameters);
         });
 
-        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes, canvas) {
+        stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
             });
         });
 
-        validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
+        validateData = stubSeam(dataValidatorModule, 'validateData', 'DEBUG_set_validateData').callsFake(function(data) {
             return { arg: data || [] };
         });
     },
@@ -219,7 +220,7 @@ const environment = {
         const spyLayoutManager = layoutManagerModule.LayoutManager;
 
         vizUtils.updatePanesCanvases.restore();
-        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+        stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
             panes[0].canvas = rect;
         });
 
@@ -674,7 +675,7 @@ const environment = {
     });
 
     QUnit.test('draw chart when scrollBar is visible', function(assert) {
-        sinon.stub(scrollBarModule, 'ScrollBar').callsFake(function() {
+        stubSeam(scrollBarModule, 'ScrollBar', 'DEBUG_set_ScrollBar').callsFake(function() {
             const stub = sinon.createStubInstance(ScrollBar);
             stub.init.returns(stub);
             stub.update.returns(stub);

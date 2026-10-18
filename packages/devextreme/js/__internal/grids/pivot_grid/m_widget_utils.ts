@@ -3,7 +3,6 @@ import ArrayStore from '@js/common/data/array_store';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import domAdapter from '@js/core/dom_adapter';
 import coreAjaxUtils from '@js/core/utils/ajax';
-import callOnce from '@js/core/utils/call_once';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -11,6 +10,7 @@ import { each, map } from '@js/core/utils/iterator';
 import { isDefined, isNumeric, type } from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { callOnce } from '@ts/core/utils/call_once';
 
 import { CLASSES } from './const';
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type * as CommonTypes from 'devextreme/common';
 import type { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 import type { FilterType, ColumnHeaderFilter } from 'devextreme/common/grids';
@@ -29,6 +23,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_validationRules,
 } from 'devextreme-angular/core/tokens';
@@ -410,7 +405,6 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption {
         return 'columns';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -432,7 +426,6 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

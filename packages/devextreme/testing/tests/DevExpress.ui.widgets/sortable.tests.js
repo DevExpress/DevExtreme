@@ -4,6 +4,7 @@ import 'ui/sortable';
 import 'ui/scroll_view';
 import fx from 'common/core/animation/fx';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import browser from 'core/utils/browser';
 import translator from 'common/core/animation/translator';
 import viewPort from 'core/utils/view_port';
@@ -2642,7 +2643,7 @@ function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
 
-            this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+            this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake((callback) => {
                 return window.setTimeout(callback, 10);
             });
 
@@ -2854,7 +2855,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
                     });
 
                     // act
-                    scrollView.scrollTo({ y: 100 });
+                    scrollView.scrollTo({ top: 100 });
                     this.clock.tick(10);
 
                     // assert
@@ -2865,7 +2866,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
                     const pointer = pointerMock(items.last()).start().down().move(0, -200);
                     this.clock.tick(10);
 
-                    scrollView.scrollTo({ y: 0 });
+                    scrollView.scrollTo({ top: 0 });
                     $(scrollView.content()).trigger('scroll');
                     this.clock.tick(10);
 
@@ -2912,7 +2913,7 @@ QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll'
                     const pointer = pointerMock(items.first()).start().down().move(0, 200);
                     this.clock.tick(10);
 
-                    scrollView.scrollTo({ y: 100 });
+                    scrollView.scrollTo({ top: 100 });
                     this.clock.tick(100);
 
                     pointer.move(0, 40);

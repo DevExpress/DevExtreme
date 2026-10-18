@@ -34,6 +34,7 @@ import {
   isString,
 } from '@js/core/utils/type';
 import type { ValidationResult } from '@js/ui/validation_group';
+import type { KoDxValidator } from '@ts/integration/knockout/validation';
 import type Validator from '@ts/ui/validator';
 
 /**
@@ -47,7 +48,7 @@ interface InternalRuleFields {
   isValid?: unknown;
   value?: unknown;
   reevaluate?: boolean;
-  validator?: Validator;
+  validator?: Validator | KoDxValidator;
   index?: number;
   // set by editors themselves (date_box, number_box, masked text editors)
   editorSpecific?: boolean;
@@ -141,7 +142,7 @@ function getValidationCallbackParams(
 ): ValidationCallbackData {
   const { validator } = rule;
   // NOTE: a Knockout validator has no `option` method
-  const dataGetter: unknown = validator && isFunction(validator.option)
+  const dataGetter: unknown = validator && 'option' in validator && isFunction(validator.option)
     ? validator.option('dataGetter')
     : undefined;
   const extraParams = isDataGetter(dataGetter) ? dataGetter() : undefined;

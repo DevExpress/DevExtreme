@@ -3,6 +3,7 @@ import { Renderer, Element } from '../../helpers/vizMocks.js';
 import translator2DModule from 'viz/translators/translator2d';
 import rangeViewModule from 'viz/range_selector/range_view';
 import { MockAxis } from '../../helpers/chartMocks.js';
+import { spySeam } from '../../helpers/moduleSeam.js';
 
 QUnit.module('RangeView', {
     beforeEach: function() {
@@ -99,7 +100,7 @@ QUnit.test('Chart view', function(assert) {
 
 QUnit.test('Chart view is not created because of seriesDataSource', function(assert) {
     const seriesDataSource = { isShowChart: function() { return false; } };
-    const Translator2D = sinon.spy(translator2DModule, 'Translator2D');
+    const Translator2D = spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
 
     try {
         this.rangeView.update({ color: 'red', image: { url: 'url' } }, { visible: true, image: { location: 'loc' } }, this.canvas, false, 'animation-enabled', seriesDataSource, 'translator');

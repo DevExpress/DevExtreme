@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,14 +8,9 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
-import type { SearchMode } from 'devextreme/common';
 import type { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
 import {
@@ -25,7 +18,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-gantt-header-filter',
@@ -35,14 +27,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoGanttHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
@@ -84,27 +68,11 @@ export class DxoGanttHeaderFilterComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get searchMode(): SearchMode {
-        return this._getOption('searchMode');
-    }
-    set searchMode(value: SearchMode) {
-        this._setOption('searchMode', value);
-    }
-
-    @Input()
     get width(): number | string | undefined {
         return this._getOption('width');
     }
     set width(value: number | string | undefined) {
         this._setOption('width', value);
-    }
-
-    @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
     }
 
     @Input()
@@ -128,7 +96,6 @@ export class DxoGanttHeaderFilterComponent extends NestedOption implements OnDes
         return 'headerFilter';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -144,7 +111,6 @@ export class DxoGanttHeaderFilterComponent extends NestedOption implements OnDes
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

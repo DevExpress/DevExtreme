@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
@@ -17,7 +19,6 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   preserveWhitespaces: true,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DxSelectBoxModule,
     DxListModule,
@@ -33,13 +34,20 @@ export class AppComponent {
 
   selectByClick = false;
 
-  constructor(service: Service) {
+  selectedItemKeys: number[] = [];
+
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.tasks = new DataSource({
       store: new ArrayStore({
         key: 'id',
         data: service.getTasks(),
       }),
     });
+  }
+
+  onSelectedItemKeysChange(keys: number[]) {
+    this.selectedItemKeys = keys;
+    this.changeDetectorRef.detectChanges();
   }
 }
 

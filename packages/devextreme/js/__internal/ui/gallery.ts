@@ -211,7 +211,6 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
 
         if (isPlainObject(data)) {
           this._prepareDefaultItemTemplate(data, $container);
-          // @ts-expect-error ts-error
           $img.attr({
             src: data.imageSrc,
             alt: data.imageAlt,

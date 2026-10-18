@@ -1,6 +1,6 @@
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
+import { z } from '@ts/grids/grid_core/ai_assistant/zod';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import { z } from 'zod';
 
 import { defineGridCommand } from './defineGridCommand';
 
@@ -33,7 +33,7 @@ export const sortingCommand = defineGridCommand({
     const column: Column | undefined = columnsController.columnOption(args.dataField);
     const defaultMessage = getSortingDefaultMessage(args, column);
 
-    if (!column || !columnsController.allowColumnSorting(column)) {
+    if (!column || !columnsController.allowColumnSorting(column) || column.index === undefined) {
       return Promise.resolve(failure(defaultMessage));
     }
 

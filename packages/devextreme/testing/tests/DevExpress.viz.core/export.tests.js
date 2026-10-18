@@ -2,7 +2,8 @@ import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
 import exportModule from '__internal/viz/core/exportModule';
 import themeModule from 'viz/themes';
-import clientExporter from 'exporter';
+import * as clientExporter from 'exporter';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import localization from 'localization';
 
 const combineMarkupsOrig = exportModule.combineMarkups;
@@ -10,6 +11,11 @@ const combineMarkupsOrig = exportModule.combineMarkups;
 themeModule.registerTheme({
     name: 'someTheme.light',
     backgroundColor: 'some_theme_color'
+});
+
+themeModule.registerTheme({
+    name: 'namedBackground.light',
+    backgroundColor: 'var(--dx-viz-bg, #0a0b0c)'
 });
 
 function createMockWidget(size, option) {
@@ -559,7 +565,7 @@ QUnit.test('Combine widgets markups (combineMarkups) in grid layout with bottom-
 
 QUnit.module('API. Export methods', {
     beforeEach: function() {
-        sinon.stub(clientExporter, 'export');
+        stubSeam(clientExporter, 'export');
         this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, 'toDataURL');
         this.toDataURLStub.returnsArg(0);
     },
@@ -704,6 +710,37 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
     }
 });
 
+QUnit.test('exportFromMarkup. Theme background named, the page declares the name', function(assert) {
+    const currentTheme = themeModule.currentTheme();
+
+    themeModule.currentTheme('namedBackground.light');
+    document.documentElement.style.setProperty('--dx-viz-bg', '#010203');
+
+    try {
+        exportModule.exportFromMarkup('testMarkup', { width: 600, height: 400 });
+
+        assert.equal(clientExporter.export.getCall(0).args[1].backgroundColor, '#010203');
+    } finally {
+        document.documentElement.style.removeProperty('--dx-viz-bg');
+        themeModule.currentTheme(currentTheme);
+    }
+});
+
+QUnit.test('exportFromMarkup. Theme background named, the page declares nothing', function(assert) {
+    const currentTheme = themeModule.currentTheme();
+
+    themeModule.currentTheme('namedBackground.light');
+
+    try {
+        exportModule.exportFromMarkup('testMarkup', { width: 600, height: 400 });
+
+        assert.strictEqual(getComputedStyle(document.documentElement).getPropertyValue('--dx-viz-bg'), '');
+        assert.equal(clientExporter.export.getCall(0).args[1].backgroundColor, '#0a0b0c');
+    } finally {
+        themeModule.currentTheme(currentTheme);
+    }
+});
+
 QUnit.test('exportWidgets method should be able export plain DOM element (T1266360)', function(assert) {
     const optionMock = () => {
         return {
@@ -828,7 +865,7 @@ QUnit.module('API', {
         this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
-        sinon.stub(clientExporter, 'export');
+        stubSeam(clientExporter, 'export');
         this.options = {
             printingEnabled: true,
             formats: ['JPEG'],
@@ -1055,7 +1092,7 @@ QUnit.module('Events', {
         this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
-        sinon.stub(clientExporter, 'export');
+        stubSeam(clientExporter, 'export');
 
         this.options = {
             enabled: true,
@@ -1365,7 +1402,7 @@ QUnit.module('Layout', {
         this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
-        sinon.stub(clientExporter, 'export');
+        stubSeam(clientExporter, 'export');
 
         this.options = {
             enabled: true,

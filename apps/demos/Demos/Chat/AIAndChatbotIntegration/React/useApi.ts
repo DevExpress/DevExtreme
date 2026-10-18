@@ -38,6 +38,12 @@ const dataItemToMessage = (item: ChatTypes.Message): AIMessage => ({
 
 const getMessageHistory = (): AIMessage[] => [...dataSource.items()].map(dataItemToMessage);
 
+const getErrorMessage = (err: unknown): string => {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+};
+
 export const useApi = () => {
   const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);
 
@@ -55,9 +61,9 @@ export const useApi = () => {
     }]);
   }, []);
 
-  const alertLimitReached = useCallback((): void => {
+  const alertError = useCallback((message: string): void => {
     setAlerts([{
-      message: 'Request limit reached, try again in a minute.',
+      message,
     }]);
 
     setTimeout(() => {
@@ -77,12 +83,13 @@ export const useApi = () => {
         author: assistant,
         text: aiResponse,
       });
-    } catch {
-      alertLimitReached();
+    } catch (err: unknown) {
+      alertError(getErrorMessage(err));
     }
-  }, [alertLimitReached, insertMessage]);
+  }, [alertError, insertMessage]);
 
   const regenerateLastAIResponse = useCallback(async (): Promise<void> => {
+    setAlerts([]);
     const messageHistory = getMessageHistory();
     updateLastMessageContent(REGENERATION_TEXT);
 
@@ -92,11 +99,11 @@ export const useApi = () => {
       if (typeof aiResponse === 'string') {
         updateLastMessageContent(aiResponse);
       }
-    } catch {
+    } catch (err: unknown) {
       updateLastMessageContent(messageHistory.at(-1)?.content as string);
-      alertLimitReached();
+      alertError(getErrorMessage(err));
     }
-  }, [alertLimitReached, updateLastMessageContent]);
+  }, [alertError, updateLastMessageContent]);
 
   return {
     alerts,

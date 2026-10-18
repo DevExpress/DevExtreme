@@ -1,8 +1,15 @@
-We expect to add AI-driven data analysis for those using our [DataGrid](/Documentation/Guide/UI_Components/DataGrid/Overview/)'s master-detail view. This new option will allow users to interrogate individual records using natural language. 
+This sample integrates AI-generated insights into the DevExtreme [DataGrid](/Documentation/Guide/UI_Components/DataGrid/Overview/) [master-detail interface](/Documentation/Guide/UI_Components/DataGrid/Master-Detail_Interface/), extending the component's built-in AI-powered data analysis features. While built-in [AI columns](/Demos/WidgetsGallery/Demo/DataGrid/AIColumns/) generate content for every row in the DataGrid, this approach generates AI-enhanced data only when users expand specific master-detail rows. By limiting AI processing to the rows that require additional context, the sample significantly reduces token consumption, improves generation performance, and provides a more efficient solution for usage scenarios wherein AI-generated content is not needed across the entire dataset.
 
-In v25.2, we added an [AI column](https://www.devexpress.com/subscriptions/new-2025-2.xml#js-grids-ai-columns) to our DataGrid. This feature helped analyze component data using an AI prompt. While valuable, certain usage scenarios do not require generated data for every row. Instead, users may need on-demand data generation for specific rows. Our new AI detail scenario will offer this capability, which can significantly reduce AI token consumption and enhance data generation performance. 
+To initiate the AI Assistant, click the **AI** icon on the left side of a row and enter a prompt.
 
 <!--split-->
-Our new AI master-detail feature will also display generated content in a format better suited to longer, more in-depth insights. This option will include a prompt-driven data analysis UI within the DataGrid’s master-detail interface, spanning the full width of the component.
 
-Within the detail row, users will be able to ask questions about the active record and receive AI-generated insights. The AI assistant will be able to summarize record data, clarify complex values, highlight notable patterns, and obtain contextual information specific to the active record.
+[note]
+
+AI services used for this demo have been rate and data limited. As such, you may experience performance-related delays when exploring the capabilities of AI-powered Detail Views.
+
+When connected to your own AI model/service without rate and data limits, AI-powered Detail Views will perform seamlessly, without artificial delays. Note that DevExtreme does not offer an AI REST API and does not ship any built-in LLMs/SLMs.
+
+[/note]
+
+To surface AI-generated insights within the DataGrid, this sample uses the [master-detail template](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/masterDetail/#template) together with DevExtreme [TextBox](/Documentation/Guide/UI_Components/TextBox/Overview/) and [Button](/Documentation/Guide/UI_Components/Button/Overview/) components. A [ButtonGroup](/Documentation/Guide/UI_Components/ButtonGroup/Getting_Started_with_ButtonGroup/) provides prompt suggestions, delivering an experience similar to the DevExtreme Chat [Suggestions](/Demos/WidgetsGallery/Demo/Chat/PromptSuggestions/) demo. When a user submits a prompt, the corresponding detail row expands and displays a [LoadPanel](/Documentation/Guide/UI_Components/LoadPanel/Overview/) while the AI processes the request. Once generation is complete, the response is rendered in a [read-only](/Documentation/ApiReference/UI_Components/dxTextArea/Configuration/#readOnly) [TextArea](/Documentation/Guide/UI_Components/TextArea/Getting_Started_with_TextArea/), allowing users to review AI-generated content directly within the DataGrid without leaving the current context.

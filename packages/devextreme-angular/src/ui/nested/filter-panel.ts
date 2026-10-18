@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -13,16 +11,11 @@ import {
     EventEmitter
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFilterPanel } from './base/filter-panel';
-
 
 @Component({
     selector: 'dxo-filter-panel',
@@ -49,7 +42,6 @@ export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy
         return 'filterPanel';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -69,7 +61,6 @@ export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

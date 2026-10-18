@@ -8,16 +8,15 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { isNumeric as _isNumber } from '@js/core/utils/type';
+import { isNumeric as _isNumber } from '@ts/core/utils/m_type';
 import consts from '@ts/viz/components/consts';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { WrapperLayoutElement } from '@ts/viz/core/layout_element';
+import type { Canvas } from '@ts/viz/core/types';
 
 const { floor, sqrt } = Math;
 const _min = Math.min;
@@ -26,8 +25,27 @@ const DEFAULT_INNER_RADIUS = 0.5;
 
 const RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
-function getNearestCoord(firstCoord, secondCoord, pointCenterCoord) {
-  let nearestCoord;
+interface PieLayout {
+  centerX: number;
+  centerY: number;
+  radiusInner: number;
+  radiusOuter: number;
+}
+
+interface LabelSizes {
+  sizes: number[];
+  rSizes: number[];
+  common: number;
+  outerLabelsCount: number;
+}
+
+interface PaneFixedSize {
+  width: boolean;
+  height: boolean;
+}
+
+function getNearestCoord(firstCoord: number, secondCoord: number, pointCenterCoord: number): number {
+  let nearestCoord: number;
   if (pointCenterCoord < firstCoord) {
     nearestCoord = firstCoord;
   } else if (secondCoord < pointCenterCoord) {
@@ -38,14 +56,14 @@ function getNearestCoord(firstCoord, secondCoord, pointCenterCoord) {
   return nearestCoord;
 }
 
-function getLabelLayout(point) {
+function getLabelLayout(point: ThemeValue): ThemeValue {
   if (point._label.isVisible() && point._label.getLayoutOptions().position !== 'inside') {
     return point._label.getBoundingRect();
   }
 }
 
-function getPieRadius(series, paneCenterX, paneCenterY, accessibleRadius, minR) {
-  series.some((singleSeries) => singleSeries.getVisiblePoints().reduce((radiusIsFound, point) => {
+function getPieRadius(series: ThemeValue[], paneCenterX: number, paneCenterY: number, accessibleRadius: number, minR: number): number {
+  series.some((singleSeries) => singleSeries.getVisiblePoints().reduce((radiusIsFound: boolean, point: ThemeValue): boolean => {
     const labelBBox = getLabelLayout(point);
     if (labelBBox) {
       const xCoords = getNearestCoord(labelBBox.x, labelBBox.x + labelBBox.width, paneCenterX);
@@ -60,9 +78,9 @@ function getPieRadius(series, paneCenterX, paneCenterY, accessibleRadius, minR) 
   return accessibleRadius;
 }
 
-function getSizeLabels(series) {
-  return series.reduce((res, singleSeries) => {
-    let maxWidth = singleSeries.getVisiblePoints().reduce((width, point) => {
+function getSizeLabels(series: ThemeValue[]): LabelSizes {
+  return series.reduce<LabelSizes>((res, singleSeries) => {
+    let maxWidth = singleSeries.getVisiblePoints().reduce((width: number, point: ThemeValue): number => {
       const labelBBox = getLabelLayout(point);
       if (labelBBox && labelBBox.width > width) {
         width = labelBBox.width;
@@ -87,7 +105,7 @@ function getSizeLabels(series) {
   });
 }
 
-function correctLabelRadius(labelSizes, radius, series, canvas, averageWidthLabels, centerX) {
+function correctLabelRadius(labelSizes: LabelSizes, radius: number, series: ThemeValue[], canvas: Canvas, averageWidthLabels: number | undefined, centerX: number): void {
   let curRadius;
   let i;
   let runningWidth = 0;
@@ -114,26 +132,23 @@ function correctLabelRadius(labelSizes, radius, series, canvas, averageWidthLabe
   }
 }
 
-function getLengthFromCenter(x, y, paneCenterX, paneCenterY) {
+function getLengthFromCenter(x: number, y: number, paneCenterX: number, paneCenterY: number): number {
   return sqrt((x - paneCenterX) * (x - paneCenterX) + (y - paneCenterY) * (y - paneCenterY));
 }
 
-function getInnerRadius({ type, innerRadius }) {
+function getInnerRadius({ type, innerRadius }: ThemeValue): number {
   return type === 'pie' ? 0 : _isNumber(innerRadius) ? Number(innerRadius) : DEFAULT_INNER_RADIUS;
 }
 
-function LayoutManager() {
-}
-
-function getAverageLabelWidth(centerX, radius, canvas, sizeLabels) {
+function getAverageLabelWidth(centerX: number, radius: number, canvas: Canvas, sizeLabels: LabelSizes): number {
   return (centerX - radius - RADIAL_LABEL_INDENT - canvas.left) / sizeLabels.outerLabelsCount;
 }
 
-function getFullRadiusWithLabels(centerX, canvas, sizeLabels) {
+function getFullRadiusWithLabels(centerX: number, canvas: Canvas, sizeLabels: LabelSizes): number {
   return centerX - canvas.left - (sizeLabels.outerLabelsCount > 0 ? sizeLabels.common + RADIAL_LABEL_INDENT : 0);
 }
 
-function correctAvailableRadius(availableRadius, canvas, series, minR, paneCenterX, paneCenterY) {
+function correctAvailableRadius(availableRadius: number, canvas: Canvas, series: ThemeValue[], minR: number, paneCenterX: number, paneCenterY: number): number {
   const sizeLabels = getSizeLabels(series);
   let averageWidthLabels;
   const fullRadiusWithLabels = getFullRadiusWithLabels(paneCenterX, canvas, sizeLabels);
@@ -149,7 +164,7 @@ function correctAvailableRadius(availableRadius, canvas, series, minR, paneCente
   return availableRadius;
 }
 
-function toLayoutElementCoords(canvas) {
+function toLayoutElementCoords(canvas: Canvas): ThemeValue {
   return new WrapperLayoutElement(null, {
     x: canvas.left,
     y: canvas.top,
@@ -158,14 +173,15 @@ function toLayoutElementCoords(canvas) {
   });
 }
 
-LayoutManager.prototype = {
-  constructor: LayoutManager,
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+let LayoutManager = class LayoutManager {
+  declare _options: ThemeValue;
 
-  setOptions(options) {
+  setOptions(options: ThemeValue): void {
     this._options = options;
-  },
+  }
 
-  applyPieChartSeriesLayout(canvas, series, hideLayoutLabels) {
+  applyPieChartSeriesLayout(canvas: Canvas, series: ThemeValue[], hideLayoutLabels: boolean): PieLayout {
     const paneSpaceHeight = canvas.height - canvas.top - canvas.bottom;
     const paneSpaceWidth = canvas.width - canvas.left - canvas.right;
     const paneCenterX = paneSpaceWidth / 2 + canvas.left;
@@ -190,9 +206,9 @@ LayoutManager.prototype = {
       radiusInner: floor(availableRadius * getInnerRadius(series[0])),
       radiusOuter: floor(availableRadius),
     };
-  },
+  }
 
-  applyEqualPieChartLayout(series, layout) {
+  applyEqualPieChartLayout(series: ThemeValue[], layout: { x: number; y: number; radius: number }): PieLayout {
     const radius = layout.radius;
 
     return {
@@ -201,9 +217,9 @@ LayoutManager.prototype = {
       radiusInner: floor(radius * getInnerRadius(series[0])),
       radiusOuter: floor(radius),
     };
-  },
+  }
 
-  correctPieLabelRadius(series, layout, canvas) {
+  correctPieLabelRadius(series: ThemeValue[], layout: PieLayout, canvas: Canvas): void {
     const sizeLabels = getSizeLabels(series);
     let averageWidthLabels;
     const radius = layout.radiusOuter + RADIAL_LABEL_INDENT;
@@ -213,9 +229,9 @@ LayoutManager.prototype = {
       averageWidthLabels = getAverageLabelWidth(layout.centerX, layout.radiusOuter, canvas, sizeLabels);
     }
     correctLabelRadius(sizeLabels, radius, series, canvas, averageWidthLabels, layout.centerX);
-  },
+  }
 
-  needMoreSpaceForPanesCanvas(panes, rotated, fixedSizeCallback) {
+  needMoreSpaceForPanesCanvas(panes: ThemeValue[], rotated: boolean, fixedSizeCallback?: (pane: ThemeValue) => PaneFixedSize): { width: number; height: number } | false {
     const options = this._options;
     const width = options.width;
     const height = options.height;
@@ -241,9 +257,9 @@ LayoutManager.prototype = {
     });
 
     return needHorizontalSpace > 0 || needVerticalSpace > 0 ? { width: needHorizontalSpace, height: needVerticalSpace } : false;
-  },
+  }
 
-  layoutInsideLegend(legend, canvas) {
+  layoutInsideLegend(legend: ThemeValue, canvas: Canvas): void {
     const inverseAlign = {
       left: 'right',
       right: 'left',
@@ -274,7 +290,13 @@ LayoutManager.prototype = {
       my,
       at: position,
     });
-  },
+  }
 };
 
 export { LayoutManager };
+
+/// #DEBUG
+export function DEBUG_set_LayoutManager(value: typeof LayoutManager): void {
+  LayoutManager = value;
+}
+/// #ENDDEBUG

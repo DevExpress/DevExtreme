@@ -13,8 +13,8 @@ import SchedulerWorkSpaceMonth from '../workspaces/work_space_month';
 import SchedulerWorkSpaceWeek from '../workspaces/work_space_week';
 import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
-jest.mock('@ts/core/m_devices', () => {
-  const originalModule: any = jest.requireActual('@ts/core/m_devices');
+jest.mock('@ts/core/devices', () => {
+  const originalModule: any = jest.requireActual('@ts/core/devices');
   const real = jest.fn().mockReturnValue({
     platform: 'mac',
     mac: true,

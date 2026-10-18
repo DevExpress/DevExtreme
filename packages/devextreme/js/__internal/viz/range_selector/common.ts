@@ -3,9 +3,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import devices from '@js/core/devices';
-import browser from '@js/core/utils/browser';
-import { isFunction } from '@js/core/utils/type';
+import devices from '@ts/core/devices';
+import { browser } from '@ts/core/utils/browser';
+import { isFunction } from '@ts/core/utils/m_type';
 import { smartFormatter as _format } from '@ts/viz/axes/smart_formatter';
 
 export const HEIGHT_COMPACT_MODE = 24;

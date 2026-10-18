@@ -78,7 +78,6 @@ $base-focus-bg: null !default;
 $base-disabled-opacity: 0.38 !default;
 $base-disabled-color: null !default;
 $base-dropdown-shadow-color: null !default;
-$scrollview-pulldown-path: null !default;
 
 @if $color == "blue" {
   $material-color-accent-modificator: "blue" !default;
@@ -137,8 +136,6 @@ $scrollview-pulldown-path: null !default;
   $base-inverted-text-color: #fff !default;
   $base-focus-bg: color.change(#000, $alpha: 0.04) !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/material/color-schemes/light/pulldown.png") !default;
 }
 
 @if $mode == "dark" {
@@ -161,8 +158,6 @@ $scrollview-pulldown-path: null !default;
   $base-inverted-text-color: rgba(0, 0, 0, 0.87) !default;
   $base-focus-bg: color.change(#fff, $alpha: 0.04) !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
-
-  $scrollview-pulldown-path: data-uri("images/widgets/material/color-schemes/dark/pulldown.png") !default;
 }
 
 /**
@@ -204,6 +199,8 @@ $typography-bg: $base-bg !default;
 $typography-color: $base-text-color !default;
 $typography-link-color: $base-link-color !default;
 
+$base-color-options-panel-bg: rgba(191, 191, 191, 0.15) !default;
+
 :root {
   --dx-component-color-bg: #{$base-bg};
   --dx-color-main-bg: #{$typography-bg};
@@ -218,4 +215,5 @@ $typography-link-color: $base-link-color !default;
   --dx-color-link: #{$base-link-color};
   --dx-color-shadow: #{$base-shadow-color};
   --dx-color-separator: #{$base-border-color};
+  --dx-color-options-panel-bg: #{$base-color-options-panel-bg};
 }

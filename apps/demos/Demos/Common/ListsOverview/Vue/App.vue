@@ -103,7 +103,7 @@ function listSelectionChanged(e: DxListTypes.SelectionChangedEvent) {
   width: 330px;
   height: 470px;
   padding: 20px;
-  background: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   margin-right: 30px;
 }
 
@@ -201,6 +201,5 @@ function listSelectionChanged(e: DxListTypes.SelectionChangedEvent) {
   font-size: 11px;
   line-height: 12px;
   padding-left: 6px;
-  color: var(--dx-texteditor-label-color);
 }
 </style>

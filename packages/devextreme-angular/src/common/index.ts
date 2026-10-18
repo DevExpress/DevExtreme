@@ -189,6 +189,7 @@ export namespace Core {
     export namespace Localization {
         export type Format = CoreLocalizationModule.Format;
         export const formatDate = CoreLocalizationModule.formatDate;
+        export type FormatLocale = CoreLocalizationModule.FormatLocale;
         export const formatMessage = CoreLocalizationModule.formatMessage;
         export const formatNumber = CoreLocalizationModule.formatNumber;
         export const loadMessages = CoreLocalizationModule.loadMessages;
@@ -306,6 +307,9 @@ export namespace Grids {
     export type DataChangeType = GridsModule.DataChangeType;
     export type DataErrorOccurredInfo = GridsModule.DataErrorOccurredInfo;
     export type DataRenderMode = GridsModule.DataRenderMode;
+    export type DragDropInfo = GridsModule.DragDropInfo;
+    export type DragReorderInfo = GridsModule.DragReorderInfo;
+    export type DragStartEventInfo<TRowData = any> = GridsModule.DragStartEventInfo<TRowData>;
     export type EditingBase<TRowData = any, TKey = any> = GridsModule.EditingBase<TRowData, TKey>;
     export type EditingTextsBase = GridsModule.EditingTextsBase;
     export type EnterKeyAction = GridsModule.EnterKeyAction;
@@ -345,6 +349,7 @@ export namespace Grids {
     export type ResponseStatus = GridsModule.ResponseStatus;
     export type ResponseStatusTexts = GridsModule.ResponseStatusTexts;
     export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = GridsModule.RowDragging<TComponent, TRowData, TKey>;
+    export type RowDraggingEventInfo<TRowData = any> = GridsModule.RowDraggingEventInfo<TRowData>;
     export type RowDraggingTemplateData<TRowData = any> = GridsModule.RowDraggingTemplateData<TRowData>;
     export type RowInsertedInfo<TRowData = any, TKey = any> = GridsModule.RowInsertedInfo<TRowData, TKey>;
     export type RowInsertingInfo<TRowData = any> = GridsModule.RowInsertingInfo<TRowData>;

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,17 +8,13 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pivot-grid-load-panel',
@@ -47,11 +41,11 @@ export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get indicatorSrc(): string {
-        return this._getOption('indicatorSrc');
+    get indicatorOptions(): LoadPanelIndicatorProperties {
+        return this._getOption('indicatorOptions');
     }
-    set indicatorSrc(value: string) {
-        this._setOption('indicatorSrc', value);
+    set indicatorOptions(value: LoadPanelIndicatorProperties) {
+        this._setOption('indicatorOptions', value);
     }
 
     @Input()
@@ -107,7 +101,6 @@ export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDe
         return 'loadPanel';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -123,7 +116,6 @@ export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDe
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

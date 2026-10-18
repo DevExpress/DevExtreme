@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -14,10 +12,7 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, AICommand, AICommandName } from 'devextreme/ui/html_editor';
 import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
@@ -236,7 +231,6 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -257,11 +251,9 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

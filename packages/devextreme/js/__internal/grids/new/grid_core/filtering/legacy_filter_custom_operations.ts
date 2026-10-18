@@ -17,7 +17,7 @@ import { extend } from '@js/core/utils/extend';
 import errors from '@js/ui/widget/ui.errors';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
-} from '@ts/filter_builder/m_utils';
+} from '@ts/filter_builder/utils';
 
 import { getHeaderItemText } from './header_filter/legacy_header_filter';
 
@@ -30,9 +30,11 @@ function baseOperation(config) {
     filterValue && filterValue.forEach((value, index) => {
       if (isCondition(value) || isGroup(value)) {
         const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
+        // @ts-expect-error getFilterExpression returns an expression, not a string
         result.push(filterExpression);
       } else {
         const filterExpression = getFilterExpression([field.dataField ?? field.name, '=', value], fields, [], 'headerFilter');
+        // @ts-expect-error getFilterExpression returns an expression, not a string
         result.push(filterExpression);
       }
       index !== lastIndex && result.push('or');

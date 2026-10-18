@@ -26,12 +26,12 @@ describe('ColumnsView scroller spacing (T1306973)', () => {
 
     columnHeadersView.setScrollerSpacing(15);
 
-    expect(columnHeadersView.element().hasClass(SCROLLER_SPACING_CLASS)).toBe(true);
-    expect(columnHeadersView.element().css('paddingInlineEnd')).toBe('15px');
+    expect(columnHeadersView.element()?.hasClass(SCROLLER_SPACING_CLASS)).toBe(true);
+    expect(columnHeadersView.element()?.css('paddingInlineEnd')).toBe('15px');
 
     columnHeadersView.setScrollerSpacing(0);
 
-    expect(columnHeadersView.element().hasClass(SCROLLER_SPACING_CLASS)).toBe(false);
+    expect(columnHeadersView.element()?.hasClass(SCROLLER_SPACING_CLASS)).toBe(false);
   });
 
   it('should toggle the scroller spacing class on the footer view', async () => {
@@ -46,10 +46,10 @@ describe('ColumnsView scroller spacing (T1306973)', () => {
 
     footerView.setScrollerSpacing(15);
 
-    expect(footerView.element().hasClass(SCROLLER_SPACING_CLASS)).toBe(true);
+    expect(footerView.element()?.hasClass(SCROLLER_SPACING_CLASS)).toBe(true);
 
     footerView.setScrollerSpacing(0);
 
-    expect(footerView.element().hasClass(SCROLLER_SPACING_CLASS)).toBe(false);
+    expect(footerView.element()?.hasClass(SCROLLER_SPACING_CLASS)).toBe(false);
   });
 });

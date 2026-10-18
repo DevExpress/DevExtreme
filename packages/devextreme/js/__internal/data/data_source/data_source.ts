@@ -688,6 +688,7 @@ export class DataSource {
       }
 
       // Process result
+      // @ts-expect-error extra is not always an object, _processStoreLoadResult makes it one
       const loadResult: LoadResult = extend(normalizeLoadResult(data, extra), loadOptions);
 
       this._eventsStrategy.fireEvent('customizeLoadResult', [loadResult]);

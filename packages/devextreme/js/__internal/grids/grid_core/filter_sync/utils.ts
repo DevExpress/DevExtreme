@@ -5,9 +5,9 @@ import {
   getDefaultOperation,
   removeFieldConditionsFromFilter,
   syncFilters,
-} from '@ts/filter_builder/m_utils';
+} from '@ts/filter_builder/utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/data_controller/types';
+import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/filter/types';
 
 import { FILTER_ROW_OPERATIONS, FILTER_TYPES_EXCLUDE, FILTER_TYPES_INCLUDE } from './const';
 import type {
@@ -34,6 +34,12 @@ export const getColumnIdentifier = (
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 ): string | undefined => column.name || column.dataField;
 
+export const parseColumnPropertyName = (fullName: string): string | null => {
+  const matched = /.*\.(.*)/.exec(fullName);
+
+  return matched ? matched[1] : null;
+};
+
 const canSyncHeaderFilterWithFilterRow = (column: FilterSyncColumn): boolean => {
   const { filterValues } = column;
   const isOnlyNullFilterValue = filterValues?.length === 1 && filterValues[0] === null;
@@ -51,7 +57,6 @@ const canSyncHeaderFilterWithFilterRow = (column: FilterSyncColumn): boolean => 
 export const checkForErrors = (columns: FilterSyncColumn[]): void => {
   columns.forEach((column) => {
     if (!isDefined(getColumnIdentifier(column)) && column.allowFiltering) {
-      // @ts-expect-error `errors.Error` is not declared as a constructor
       throw new errors.Error('E1049', column.caption);
     }
   });

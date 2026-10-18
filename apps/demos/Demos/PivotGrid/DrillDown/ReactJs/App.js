@@ -10,6 +10,8 @@ const App = () => {
   const [drillDownDataSource, setDrillDownDataSource] = useState(undefined);
   const [popupVisible, setPopupVisible] = useState(false);
   const dataGridRef = useRef(null);
+  const onPopupHiding = useCallback(() => setPopupVisible(false), []);
+  const onPopupShown = useCallback(() => dataGridRef.current?.instance().updateDimensions(), []);
   const onCellClick = useCallback((e) => {
     if (e.area === 'data' && e.cell) {
       const pivotGridDataSource = e.component.getDataSource();
@@ -39,8 +41,8 @@ const App = () => {
         width={600}
         height={400}
         title={popupTitle}
-        onHiding={() => setPopupVisible(false)}
-        onShown={() => dataGridRef.current?.instance().updateDimensions()}
+        onHiding={onPopupHiding}
+        onShown={onPopupShown}
         showCloseButton={true}
       >
         <DataGrid

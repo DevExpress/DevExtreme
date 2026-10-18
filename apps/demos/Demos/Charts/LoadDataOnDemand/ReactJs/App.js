@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { DataSource } from 'devextreme-react/common/data';
 import {
   Chart,
@@ -31,16 +31,19 @@ function App() {
     startValue: new Date(2025, 3, 1),
     endValue: new Date(2025, 3, 15),
   });
-  const handleChange = (e) => {
-    if (e.fullName === 'argumentAxis.visualRange') {
-      const stateStart = visualRange.startValue;
-      const currentStart = e.value.startValue;
-      if (stateStart.valueOf() !== currentStart.valueOf()) {
-        setVisualRange(e.value);
+  const handleChange = useCallback(
+    (e) => {
+      if (e.fullName === 'argumentAxis.visualRange') {
+        const stateStart = visualRange.startValue;
+        const currentStart = e.value.startValue;
+        if (stateStart.valueOf() !== currentStart.valueOf()) {
+          setVisualRange(e.value);
+        }
+        onVisualRangeChanged(e.value, e.component);
       }
-      onVisualRangeChanged(e.value, e.component);
-    }
-  };
+    },
+    [visualRange],
+  );
   return (
     <Chart
       id="chart"

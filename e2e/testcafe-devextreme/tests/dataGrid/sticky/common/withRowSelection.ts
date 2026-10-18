@@ -18,7 +18,7 @@ test.meta({ browserSize: [800, 800] })('The selected row should be displayed cor
 
   await testScreenshot(t, takeScreenshot, 'row_selection_with_sticky_columns_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'row_selection_with_sticky_columns_2.png', { element: dataGrid.element });
 

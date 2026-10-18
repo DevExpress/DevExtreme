@@ -6,9 +6,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import dateUtils from '@js/core/utils/date';
-import { adjust } from '@js/core/utils/math';
-import { isDefined, isNumeric as isNumber } from '@js/core/utils/type';
+import { dateUtils } from '@ts/core/utils/m_date';
+import { adjust } from '@ts/core/utils/m_math';
+import { isDefined, isNumeric as isNumber } from '@ts/core/utils/m_type';
 
 const { floor } = Math;
 

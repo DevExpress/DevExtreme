@@ -1,6 +1,10 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../../base/tooltip";
+@use "../../base/tooltip" with (
+  $tooltip-overlay-content-min-height: auto,
+  $tooltip-popup-content-padding: $fluent-tooltip-padding,
+  $tooltip-content-font-size: $fluent-tooltip-font-size,
+);
 
 .dx-tooltip-wrapper {
   .dx-overlay-content {
@@ -8,12 +12,6 @@
     color: $tooltip-color;
     border: 1px solid transparent;
     border-radius: $tooltip-border-radius;
-    min-height: auto;
-
-    .dx-popup-content {
-      padding: $fluent-tooltip-padding;
-      font-size: $fluent-tooltip-font-size;
-    }
   }
 
   &.dx-popover-wrapper .dx-popover-arrow {

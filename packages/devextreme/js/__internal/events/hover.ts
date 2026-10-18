@@ -3,7 +3,7 @@ import registerEvent from '@js/common/core/events/core/event_registrator';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, fireEvent, isTouchEvent } from '@js/common/core/events/utils/index';
 import { data as elementData, removeData } from '@js/core/element_data';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 import type { HandleObject } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';

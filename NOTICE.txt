@@ -91,8 +91,9 @@ Copyright (c) 2014, Jason Chen
 Copyright (c) 2013, salesforce.com
 https://github.com/slab/quill/blob/main/LICENSE
 
-Roboto Font (Open Source - Apache 2.0)
-https://github.com/google/roboto/blob/master/LICENSE
+Roboto Font (Open Source - OFL 1.1 License)
+Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)
+https://github.com/googlefonts/roboto-3-classic/blob/main/OFL.txt
 
 rrule (Open Source - BSD-3-Clause License)
 Copyright 2010, Jakub Roztocil (jakub@roztocil.name) and Lars Sch&ouml;ning
@@ -113,9 +114,5 @@ https://github.com/microsoft/tslib/blob/master/LICENSE.txt
 Zod (Open Source - MIT License)
 Copyright (c) 2025 Colin McDonnell
 https://github.com/colinhacks/zod/blob/main/LICENSE
-
-zod-to-json-schema (Open Source - ISC License)
-Copyright (c) 2020, Stefan Terdell
-https://github.com/StefanTerdell/zod-to-json-schema/blob/master/LICENSE
 
 The open source libraries included in this product are done so pursuant to each individual open source library license and subject to the disclaimers and limitations on liability set forth in each open source library license.

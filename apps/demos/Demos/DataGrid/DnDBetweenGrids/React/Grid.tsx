@@ -3,6 +3,9 @@ import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column, RowDragging, Scrolling, Lookup,
 } from 'devextreme-react/data-grid';
+import type {
+  DataGridTypes,
+} from 'devextreme-react/data-grid';
 
 const priorities = [{
   id: 1, text: 'Low',
@@ -26,7 +29,7 @@ const Grid = ({ tasksStore, status }: GridProps) => {
     reshapeOnPush: true,
   });
 
-  const onAdd = useCallback((e) => {
+  const onAdd = useCallback((e: DataGridTypes.RowDraggingAddEvent) => {
     const key = e.itemData.ID;
     const values = { Status: e.toData };
 

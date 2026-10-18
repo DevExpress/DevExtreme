@@ -2,49 +2,56 @@ import { errors } from '@js/common/data/errors';
 import { aggregators } from '@js/common/data/utils';
 import { compileGetter } from '@js/core/utils/data';
 import { isFunction } from '@js/core/utils/type';
+import type { GroupData } from '@js/ui/data_grid';
 
+import type { RawItemData } from '../grid_core/data_source_adapter/types';
 import type { Aggregate } from './summary/types';
 
-function depthFirstSearch(i, depth, root, callback) {
+// NOTE: only the deepest groups hold rows in items; the groups above hold groups.
+interface AggregateNode {
+  items: (AggregateNode | RawItemData)[];
+  aggregates?: unknown[];
+}
+
+interface Aggregator {
+  seed?: number | unknown[] | ((groupIndex?: number) => unknown);
+  step: (accumulator: unknown, value: unknown) => unknown;
+  finalize?: (accumulator: unknown) => unknown;
+}
+
+interface NormalizedAggregate {
+  selector: (data: RawItemData) => unknown;
+  aggregator: Aggregator;
+  skipEmptyValues: boolean | undefined;
+}
+
+const depthFirstSearch = (
+  i: number,
+  depth: number,
+  root: AggregateNode,
+  callback: (node: AggregateNode) => void,
+): void => {
   let j = 0;
   if (i < depth) {
-    for (; j < root.items.length; j++) {
-      depthFirstSearch(i + 1, depth, root.items[j], callback);
+    for (; j < root.items.length; j += 1) {
+      // NOTE: above the given depth, items are groups
+      depthFirstSearch(i + 1, depth, root.items[j] as AggregateNode, callback);
     }
   }
 
   if (i === depth) {
     callback(root);
   }
-}
+};
 
-// NOTE: https://github.com/jquery/jquery/blame/master/src/core.js#L392
-function map(array, callback) {
-  let i;
+const isEmpty = (x: unknown): boolean => Number.isNaN(x) || (x === '') || (x === null) || (x === undefined);
 
-  if ('map' in array) {
-    return array.map(callback);
-  }
+const isCount = (aggregator: Aggregator): boolean => aggregator === aggregators.count;
 
-  const result = new Array(array.length);
-  // eslint-disable-next-line guard-for-in
-  for (i in array) {
-    result[i] = callback(array[i], i);
-  }
+const normalizeAggregate = (aggregate: Aggregate): NormalizedAggregate => {
+  // @ts-expect-error badly typed compileGetter
+  const selector = compileGetter(aggregate.selector) as (data: RawItemData) => unknown;
 
-  return result;
-}
-
-function isEmpty(x) {
-  return (x !== x) || (x === '') || (x === null) || (x === undefined);
-}
-
-function isCount(aggregator) {
-  return aggregator === aggregators.count;
-}
-
-function normalizeAggregate(aggregate) {
-  const selector = compileGetter(aggregate.selector);
   const skipEmptyValues = 'skipEmptyValues' in aggregate
     ? aggregate.skipEmptyValues
     : true;
@@ -59,32 +66,33 @@ function normalizeAggregate(aggregate) {
 
   return {
     selector,
+    // @ts-expect-error aggregators[name] is untyped; local aggregates always have one
     aggregator,
     skipEmptyValues,
   };
-}
+};
 
 export default class AggregateCalculator {
-  private readonly _data: any;
+  private readonly _data: RawItemData[] | GroupData<RawItemData>[];
 
   private readonly _groupLevel: number;
 
-  private readonly _totalAggregates: Aggregate[];
+  private readonly _totalAggregates: NormalizedAggregate[];
 
-  private readonly _groupAggregates: Aggregate[];
+  private readonly _groupAggregates: NormalizedAggregate[];
 
   private _totals: unknown[];
 
   constructor(options: {
-    data: any;
+    data: RawItemData[] | GroupData<RawItemData>[];
     groupLevel: number;
     totalAggregates: Aggregate[];
     groupAggregates: Aggregate[];
   }) {
     this._data = options.data;
     this._groupLevel = options.groupLevel;
-    this._totalAggregates = map(options.totalAggregates, normalizeAggregate);
-    this._groupAggregates = map(options.groupAggregates, normalizeAggregate);
+    this._totalAggregates = options.totalAggregates.map(normalizeAggregate);
+    this._groupAggregates = options.groupAggregates.map(normalizeAggregate);
     this._totals = [];
   }
 
@@ -102,31 +110,37 @@ export default class AggregateCalculator {
     return this._totals;
   }
 
-  private _aggregate(aggregates, data, container) {
+  private _aggregate(
+    aggregates: NormalizedAggregate[],
+    data: AggregateNode,
+    container: unknown[],
+  ): void {
     const length = data.items ? data.items.length : 0;
 
-    for (let i = 0; i < aggregates.length; i++) {
+    for (let i = 0; i < aggregates.length; i += 1) {
       if (isCount(aggregates[i].aggregator)) {
-        container[i] = (container[i] || 0) + length;
+        container[i] = (container[i] as number | undefined ?? 0) + length;
+        // eslint-disable-next-line no-continue
         continue;
       }
 
-      for (let j = 0; j < length; j++) {
-        this._accumulate(i, aggregates[i], container, data.items[j]);
+      for (let j = 0; j < length; j += 1) {
+        this._accumulate(i, aggregates[i], container, data.items[j] as RawItemData);
       }
     }
   }
 
-  private _calculateTotals(level, data) {
+  private _calculateTotals(level: number, root: AggregateNode): void {
     if (level === 0) {
       this._totals = this._seed(this._totalAggregates);
     }
 
     if (level === this._groupLevel) {
-      this._aggregate(this._totalAggregates, data, this._totals);
+      this._aggregate(this._totalAggregates, root, this._totals);
     } else {
-      for (let i = 0; i < data.items.length; i++) {
-        this._calculateTotals(level + 1, data.items[i]);
+      for (const item of root.items) {
+        // NOTE: above the group level, items are groups
+        this._calculateTotals(level + 1, item as AggregateNode);
       }
     }
 
@@ -135,7 +149,7 @@ export default class AggregateCalculator {
     }
   }
 
-  private _calculateGroups(root) {
+  private _calculateGroups(root: AggregateNode): void {
     const maxLevel = this._groupLevel;
     let currentLevel = maxLevel + 1;
 
@@ -143,37 +157,46 @@ export default class AggregateCalculator {
     const stepFn = this._aggregate.bind(this, this._groupAggregates);
     const finalizeFn = this._finalize.bind(this, this._groupAggregates);
 
-    function aggregator(node) {
-      node.aggregates = seedFn(currentLevel - 1);
+    const aggregator = (node: AggregateNode): void => {
+      const aggregates = seedFn(currentLevel - 1);
+      node.aggregates = aggregates;
 
       if (currentLevel === maxLevel) {
-        stepFn(node, node.aggregates);
+        stepFn(node, aggregates);
       } else {
         depthFirstSearch(currentLevel, maxLevel, node, (innerNode) => {
-          stepFn(innerNode, node.aggregates);
+          stepFn(innerNode, aggregates);
         });
       }
 
-      node.aggregates = finalizeFn(node.aggregates);
-    }
+      node.aggregates = finalizeFn(aggregates);
+    };
 
-    while (--currentLevel > 0) {
+    currentLevel -= 1;
+    while (currentLevel > 0) {
       depthFirstSearch(0, currentLevel, root, aggregator);
+      currentLevel -= 1;
     }
   }
 
-  private _seed(aggregates, groupIndex?) {
-    return map(aggregates, (aggregate) => {
+  private _seed(aggregates: NormalizedAggregate[], groupIndex?: number): unknown[] {
+    return aggregates.map((aggregate) => {
       const { aggregator } = aggregate;
-      const seed = 'seed' in aggregator
-        ? isFunction(aggregator.seed) ? aggregator.seed(groupIndex) : aggregator.seed
-        : NaN;
 
-      return seed;
+      if (!('seed' in aggregator)) {
+        return NaN;
+      }
+
+      return isFunction(aggregator.seed) ? aggregator.seed(groupIndex) : aggregator.seed;
     });
   }
 
-  private _accumulate(aggregateIndex, aggregate, results, item) {
+  private _accumulate(
+    aggregateIndex: number,
+    aggregate: NormalizedAggregate,
+    results: unknown[],
+    item: RawItemData,
+  ): void {
     const value = aggregate.selector(item);
     const { aggregator } = aggregate;
     const { skipEmptyValues } = aggregate;
@@ -182,15 +205,15 @@ export default class AggregateCalculator {
       return;
     }
 
-    if (results[aggregateIndex] !== results[aggregateIndex]) {
+    if (Number.isNaN(results[aggregateIndex])) {
       results[aggregateIndex] = value;
     } else {
       results[aggregateIndex] = aggregator.step(results[aggregateIndex], value);
     }
   }
 
-  private _finalize(aggregates, results) {
-    return map(aggregates, (aggregate, index) => {
+  private _finalize(aggregates: NormalizedAggregate[], results: unknown[]): unknown[] {
+    return aggregates.map((aggregate, index) => {
       const fin = aggregate.aggregator.finalize;
       return fin
         ? fin(results[index])

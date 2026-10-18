@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type dxDataGrid from 'devextreme/ui/data_grid';
 import type { SummaryType } from 'devextreme/common/grids';
 import type { Format } from 'devextreme/common/core/localization';
@@ -104,7 +98,6 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
         return 'summary';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -120,7 +113,6 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

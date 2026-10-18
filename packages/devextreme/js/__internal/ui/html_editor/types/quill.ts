@@ -10,8 +10,10 @@ export interface DeltaOperation {
   attributes?: Record<string, unknown>;
 }
 
+export type DeltaConstructor = new (ops?: DeltaOperation[] | { ops: DeltaOperation[] }) => Delta;
+
 export interface Delta {
-  ops?: DeltaOperation[];
+  ops: DeltaOperation[];
   length: () => number;
   slice: (start?: number, end?: number) => Delta;
   concat: (other: Delta) => Delta;
@@ -47,9 +49,38 @@ export interface BlotConstructor {
   new (...args: unknown[]): unknown;
 }
 
+/** A table, row or cell blot of the table module */
+export interface TableBlotInstance extends FormatBlotInstance {
+  domNode: HTMLElement;
+  childFormatName: string;
+  children: { forEach: (callback: (child: TableBlotInstance) => void) => void };
+}
+
+/** devextreme-quill `modules/table`; `getTable()` yields nulls and -1 outside a table */
 export interface TableModule {
-  getTable: () => [{ domNode: HTMLElement }, unknown, { domNode: HTMLElement }] | null;
-  insertTable: (columns: number, rows: number) => void;
+  tableBlots: string[];
+  tableFormats: () => string[];
+  getTable: (range?: RangeStatic | null) =>
+  [TableBlotInstance, TableBlotInstance, TableBlotInstance, number] | [null, null, null, -1];
+  insertTable: (rows: number, columns: number) => void;
+  insertHeaderRow: () => void;
+  insertRowAbove: () => void;
+  insertRowBelow: () => void;
+  insertColumnLeft: () => void;
+  insertColumnRight: () => void;
+  deleteColumn: () => void;
+  deleteRow: () => void;
+  deleteTable: () => void;
+}
+
+/** devextreme-quill `modules/uploader` */
+export interface UploaderModule {
+  upload: (range: RangeStatic, files: File[] | FileList, force?: boolean) => void;
+}
+
+/** A leaf blot (text or embed) */
+export interface LeafBlotInstance extends BlotInstance {
+  domNode: Node;
 }
 
 export interface BlotInstance {
@@ -61,7 +92,7 @@ export interface BlotInstance {
 }
 
 export interface FormatBlotInstance extends BlotInstance {
-  format: (property: string, value: string) => void;
+  format: (property: string, value: unknown) => void;
   statics: {
     blotName: string;
   };
@@ -75,7 +106,7 @@ export interface ScrollInstance {
   formatAt: (index: number, length: number, name: string, value: unknown) => void;
   insertAt: (index: number, value: string | unknown, def?: unknown) => void;
   length: () => number;
-  descendant: (blotClass: BlotConstructor, index: number) => [unknown, number];
+  descendant: (blotClass: BlotConstructor, index: number) => [BlotInstance | null, number];
 }
 
 export interface AttributorConstructor {
@@ -148,9 +179,11 @@ export interface QuillInstance {
   once: (eventName: string, handler: (...args: unknown[]) => void) => QuillInstance;
   off: (eventName: string, handler: (...args: unknown[]) => void) => QuillInstance;
 
+  getLeaf: (index: number) => [LeafBlotInstance | null, number];
   getModule: {
     (name: 'table'): TableModule;
-    (name: string): unknown;
+    (name: 'uploader'): UploaderModule;
+    <T = unknown>(name: string): T;
   };
 
   history: {
@@ -179,13 +212,19 @@ export type BaseQuillModuleConstructor = new (
 export interface BaseQuillModuleInstance {
   quill: QuillInstance;
   options?: unknown;
-  clean?: () => void;
-  option?: (name: string, value: unknown) => void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  clean?(): void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  option?(name: string, value: unknown): void;
 }
 
 export interface QuillStatic {
   // Static methods
-  import: (path: string) => unknown;
+  import: {
+    (path: 'delta'): DeltaConstructor;
+    <T = unknown>(path: string): T;
+  };
+  MS_LIST_DATA_KEY: string;
   register: (
     modules: Record<string, unknown> | string | BlotConstructor | AttributorConstructor,
     overwrite?: boolean,

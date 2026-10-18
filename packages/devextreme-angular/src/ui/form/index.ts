@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -27,7 +24,6 @@ import type { Mode } from 'devextreme/common';
 import type { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
 
 import DxForm from 'devextreme/ui/form';
-
 
 import {
     DxComponent,
@@ -72,15 +68,14 @@ import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested'
 import { DxiFormTabPanelOptionsItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxForm]
-
  */
 @Component({
     selector: 'dx-form',
@@ -115,7 +110,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -125,10 +119,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -137,7 +129,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     
     @Input()
@@ -148,10 +139,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('aiIntegration', value);
     }
 
-
     /**
      * [descr:dxFormOptions.alignItemLabels]
-    
      */
     @Input()
     get alignItemLabels(): boolean {
@@ -161,10 +150,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('alignItemLabels', value);
     }
 
-
     /**
      * [descr:dxFormOptions.alignItemLabelsInAllGroups]
-    
      */
     @Input()
     get alignItemLabelsInAllGroups(): boolean {
@@ -174,10 +161,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('alignItemLabelsInAllGroups', value);
     }
 
-
     /**
      * [descr:dxFormOptions.colCount]
-    
      */
     @Input()
     get colCount(): Mode | number {
@@ -187,10 +172,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('colCount', value);
     }
 
-
     /**
      * [descr:dxFormOptions.colCountByScreen]
-    
      */
     @Input()
     get colCountByScreen(): { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined } {
@@ -200,10 +183,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('colCountByScreen', value);
     }
 
-
     /**
      * [descr:dxFormOptions.customizeItem]
-    
      */
     @Input()
     get customizeItem(): ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void) {
@@ -213,10 +194,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('customizeItem', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -226,10 +205,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -239,10 +216,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -252,10 +227,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFormOptions.formData]
-    
      */
     @Input()
     get formData(): any {
@@ -265,10 +238,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('formData', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -278,10 +249,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -291,10 +260,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -304,10 +271,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFormOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -317,10 +282,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:dxFormOptions.items]
-    
      */
     @Input()
     get items(): Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem> {
@@ -330,10 +293,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:dxFormOptions.labelLocation]
-    
      */
     @Input()
     get labelLocation(): LabelLocation {
@@ -343,10 +304,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('labelLocation', value);
     }
 
-
     /**
      * [descr:dxFormOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): FormLabelMode {
@@ -356,10 +315,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('labelMode', value);
     }
 
-
     /**
      * [descr:dxFormOptions.minColWidth]
-    
      */
     @Input()
     get minColWidth(): number {
@@ -369,10 +326,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('minColWidth', value);
     }
 
-
     /**
      * [descr:dxFormOptions.optionalMark]
-    
      */
     @Input()
     get optionalMark(): string {
@@ -382,10 +337,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('optionalMark', value);
     }
 
-
     /**
      * [descr:dxFormOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -395,10 +348,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:dxFormOptions.requiredMark]
-    
      */
     @Input()
     get requiredMark(): string {
@@ -408,10 +359,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('requiredMark', value);
     }
 
-
     /**
      * [descr:dxFormOptions.requiredMessage]
-    
      */
     @Input()
     get requiredMessage(): string {
@@ -421,10 +370,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('requiredMessage', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -434,10 +381,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxFormOptions.screenByWidth]
-    
      */
     @Input()
     get screenByWidth(): Function {
@@ -447,10 +392,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('screenByWidth', value);
     }
 
-
     /**
      * [descr:dxFormOptions.scrollingEnabled]
-    
      */
     @Input()
     get scrollingEnabled(): boolean {
@@ -460,10 +403,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('scrollingEnabled', value);
     }
 
-
     /**
      * [descr:dxFormOptions.showColonAfterLabel]
-    
      */
     @Input()
     get showColonAfterLabel(): boolean {
@@ -473,10 +414,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showColonAfterLabel', value);
     }
 
-
     /**
      * [descr:dxFormOptions.showOptionalMark]
-    
      */
     @Input()
     get showOptionalMark(): boolean {
@@ -486,10 +425,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showOptionalMark', value);
     }
 
-
     /**
      * [descr:dxFormOptions.showRequiredMark]
-    
      */
     @Input()
     get showRequiredMark(): boolean {
@@ -499,10 +436,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showRequiredMark', value);
     }
 
-
     /**
      * [descr:dxFormOptions.showValidationSummary]
-    
      */
     @Input()
     get showValidationSummary(): boolean {
@@ -512,10 +447,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showValidationSummary', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -525,10 +458,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxFormOptions.validationGroup]
-    
      */
     @Input()
     get validationGroup(): string | undefined {
@@ -538,10 +469,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('validationGroup', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -551,10 +480,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -565,316 +492,219 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
     /**
-    
      * [descr:dxFormOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxFormOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxFormOptions.onEditorEnterKey]
-    
-    
      */
     @Output() onEditorEnterKey: EventEmitter<EditorEnterKeyEvent>;
 
     /**
-    
      * [descr:dxFormOptions.onFieldDataChanged]
-    
-    
      */
     @Output() onFieldDataChanged: EventEmitter<FieldDataChangedEvent>;
 
     /**
-    
      * [descr:dxFormOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxFormOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSmartPasted: EventEmitter<SmartPastedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSmartPasting: EventEmitter<SmartPastingEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() aiIntegrationChange: EventEmitter<AIIntegration | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() alignItemLabelsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() alignItemLabelsInAllGroupsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() colCountChange: EventEmitter<Mode | number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() colCountByScreenChange: EventEmitter<{ lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customizeItemChange: EventEmitter<((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() formDataChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isDirtyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelLocationChange: EventEmitter<LabelLocation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelModeChange: EventEmitter<FormLabelMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minColWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() optionalMarkChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() requiredMarkChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() requiredMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() screenByWidthChange: EventEmitter<Function>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollingEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showColonAfterLabelChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showOptionalMarkChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showRequiredMarkChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showValidationSummaryChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationGroupChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

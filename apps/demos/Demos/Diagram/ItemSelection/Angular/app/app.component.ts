@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Pipe,
   PipeTransform,
@@ -25,7 +25,6 @@ export class StringifyItemsPipe implements PipeTransform {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -43,7 +42,7 @@ export class AppComponent {
 
   textExpression = 'Full_Name';
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.dataSource = new ArrayStore({
       key: 'ID',
       data: service.getEmployees(),
@@ -63,6 +62,7 @@ export class AppComponent {
 
   selectionChangedHandler(e: DxDiagramTypes.SelectionChangedEvent) {
     this.selectedItems = e.items.filter((item) => item.itemType === 'shape');
+    this.changeDetectorRef.detectChanges();
   }
 }
 

@@ -362,6 +362,38 @@ QUnit.test('links colorMode \'target\' with fixed color of nodes', function(asse
     assert.equal(this.link(1)[0].smartAttr.firstCall.args[0].fill, '#aabbcc');
 });
 
+QUnit.test('color hands out the painted colour, the link is filled with the name', function(assert) {
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
+        node: {
+            color: 'var(--probe-fill, #123456)'
+        },
+        link: {
+            colorMode: 'source'
+        }
+    });
+
+    assert.equal(sankey.getAllLinks()[0].color, '#123456');
+    assert.equal(this.link(0)[0].smartAttr.firstCall.args[0].fill, 'var(--probe-fill, #123456)');
+});
+
+QUnit.test('color written by the application is read back', function(assert) {
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
+        node: {
+            color: 'var(--probe-fill, #123456)'
+        },
+        link: {
+            colorMode: 'source'
+        }
+    });
+    const link = sankey.getAllLinks()[0];
+
+    link.color = '#abcdef';
+
+    assert.equal(link.color, '#abcdef');
+});
+
 QUnit.test('links style when adjacent node is hovered', function(assert) {
     const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }, { source: 'C', target: 'Z', weight: 1 }],

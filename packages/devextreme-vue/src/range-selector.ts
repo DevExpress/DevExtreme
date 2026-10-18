@@ -57,6 +57,10 @@ import {
  FinancialChartReductionLevel,
 } from "devextreme/viz/chart";
 import {
+ FormatLocale,
+ Format as LocalizationFormat,
+} from "devextreme/common/core/localization";
+import {
  Format,
  SliderValueChangeMode,
  HorizontalAlignment,
@@ -66,9 +70,6 @@ import {
 import {
  ChartSeries,
 } from "devextreme/viz/common";
-import {
- Format as LocalizationFormat,
-} from "devextreme/common/core/localization";
 import  * as CommonChartTypes from "devextreme/common/charts";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
@@ -283,6 +284,7 @@ const DxArgumentFormatConfig = {
     "update:hoveredElement": null,
     "update:currency": null,
     "update:formatter": null,
+    "update:locale": null,
     "update:parser": null,
     "update:precision": null,
     "update:type": null,
@@ -291,6 +293,7 @@ const DxArgumentFormatConfig = {
   props: {
     currency: String,
     formatter: Function as PropType<((value: number | Date) => string)>,
+    locale: [Function, String] as PropType<FormatLocale>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
@@ -386,7 +389,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     visible: Boolean,
     width: Number
   }
@@ -589,7 +592,7 @@ const DxCommonSeriesSettingsConfig = {
     closeValueField: String,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     fullstackedarea: {},
     fullstackedbar: {},
     fullstackedline: {},
@@ -674,7 +677,7 @@ const DxCommonSeriesSettingsHoverStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
@@ -760,7 +763,7 @@ const DxCommonSeriesSettingsSelectionStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
@@ -881,6 +884,7 @@ const DxFormatConfig = {
     "update:hoveredElement": null,
     "update:currency": null,
     "update:formatter": null,
+    "update:locale": null,
     "update:parser": null,
     "update:precision": null,
     "update:type": null,
@@ -889,6 +893,7 @@ const DxFormatConfig = {
   props: {
     currency: String,
     formatter: Function as PropType<((value: number | Date) => string)>,
+    locale: [Function, String] as PropType<FormatLocale>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
@@ -959,7 +964,7 @@ const DxHoverStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
@@ -1636,7 +1641,7 @@ const DxSelectionStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
@@ -1713,7 +1718,7 @@ const DxSeriesConfig = {
     closeValueField: String,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     highValueField: String,
     hoverMode: String as PropType<SeriesHoverMode>,
     hoverStyle: Object as PropType<Record<string, any>>,
@@ -1779,7 +1784,7 @@ const DxSeriesBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     visible: Boolean,
     width: Number
   }

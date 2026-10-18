@@ -1,14 +1,17 @@
 import localizationMessage from '@js/common/core/localization/message';
 import Quill from 'devextreme-quill';
 
+import type { QuillDependent, ThemeConstructor, ThemeOptions } from '../types';
+import type { QuillInstance } from '../types/quill';
+
 // eslint-disable-next-line import/no-mutable-exports
-let BaseTheme;
+let BasicTheme: QuillDependent<ThemeConstructor> = {};
 
 if (Quill) {
-  const Theme = Quill.import('core/theme');
+  const Theme: ThemeConstructor = Quill.import('core/theme');
 
-  BaseTheme = class BaseTheme extends Theme {
-    constructor(quill, options) {
+  BasicTheme = class BaseTheme extends Theme {
+    constructor(quill: QuillInstance, options: ThemeOptions) {
       super(quill, options);
       this.quill.root.classList.add('dx-htmleditor-content');
       this.quill.root.setAttribute('role', 'textbox');
@@ -19,8 +22,6 @@ if (Quill) {
       this.quill.root.setAttribute('aria-multiline', 'true');
     }
   };
-} else {
-  BaseTheme = {};
 }
 
-export default BaseTheme;
+export default BasicTheme;

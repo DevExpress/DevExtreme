@@ -1025,25 +1025,60 @@ export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxData
  */
 export type ToolbarPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & ToolbarPreparingInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowDraggingAddEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,RowDraggingEventInfo,DragDropInfo
+ */
 export type RowDraggingAddEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowDraggingChangeEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,RowDraggingEventInfo,DragDropInfo
+ */
 export type RowDraggingChangeEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowDraggingEndEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,RowDraggingEventInfo,DragDropInfo
+ */
 export type RowDraggingEndEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowDraggingMoveEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,RowDraggingEventInfo,DragDropInfo
+ */
 export type RowDraggingMoveEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowDraggingStartEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,DragStartEventInfo
+ */
 export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & DragStartEventInfo<TRowData>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowDraggingRemoveEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,RowDraggingEventInfo
+ */
 export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowDraggingReorderEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,RowDraggingEventInfo,DragReorderInfo
+ */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
 /**
@@ -1148,20 +1183,6 @@ export type MasterDetailTemplateData<TRowData = any, TKey = any> = {
 };
 
 /** @public */
-export type RowTemplateData<TRowData = any, TKey = any> = {
-  readonly key: TKey;
-  readonly data: TRowData;
-  readonly component: dxDataGrid<TRowData, TKey>;
-  readonly values: Array<any>;
-  readonly rowIndex: number;
-  readonly columns: Array<Column<TRowData, TKey>>;
-  readonly isSelected?: boolean;
-  readonly rowType: string;
-  readonly groupIndex?: number;
-  readonly isExpanded?: boolean;
-};
-
-/** @public */
 export type DataRowTemplateData<TRowData = any, TKey = any> = {
   readonly key: TKey;
   readonly data: TRowData;
@@ -1173,7 +1194,7 @@ export type DataRowTemplateData<TRowData = any, TKey = any> = {
   readonly isExpanded?: boolean;
 };
 
-type OverriddenKeys = 'aiAssistant' | 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowTemplate' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar';
+type OverriddenKeys = 'aiAssistant' | 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowDragging' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar';
 
 /**
  * @deprecated use Properties instead
@@ -1388,16 +1409,11 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
     } | Mode;
     /**
      * @docid
-     * @type_function_param2 rowInfo:object
-     * @type_function_param2_field key:any
-     * @type_function_param2_field data:any
-     * @type_function_param2_field values:Array<any>
-     * @type_function_param2_field columns:Array<dxDataGridColumn>
+     * @type object
      * @public
-     * @deprecated dxDataGridOptions.dataRowTemplate
      */
-    rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData<TRowData, TKey>) => any);
-        /**
+    rowDragging?: RowDragging<TRowData, TKey>;
+    /**
      * @docid
      * @type_function_param2 rowInfo:object
      * @type_function_param2_field key:any
@@ -1663,7 +1679,43 @@ export type CustomSummaryInfo<TRowData = any, TKey = any> = {
 export type Paging = ComponentPaging;
 
 /** @public */
-export type RowDragging<TRowData = any, TKey = any> = ComponentRowDragging<dxDataGrid, TRowData, TKey>;
+export type RowDragging<TRowData = any, TKey = any> = Omit<ComponentRowDragging<dxDataGrid<TRowData, TKey>, TRowData, TKey>, 'onAdd' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'> & {
+  /**
+   * @docid dxDataGridOptions.rowDragging.onAdd
+   * @type_function_param1 e:{ui/data_grid:RowDraggingAddEvent}
+   */
+  onAdd?: ((e: RowDraggingAddEvent<TRowData, TKey>) => void);
+  /**
+   * @docid dxDataGridOptions.rowDragging.onDragChange
+   * @type_function_param1 e:{ui/data_grid:RowDraggingChangeEvent}
+   */
+  onDragChange?: ((e: RowDraggingChangeEvent<TRowData, TKey>) => void);
+  /**
+   * @docid dxDataGridOptions.rowDragging.onDragEnd
+   * @type_function_param1 e:{ui/data_grid:RowDraggingEndEvent}
+   */
+  onDragEnd?: ((e: RowDraggingEndEvent<TRowData, TKey>) => void);
+  /**
+   * @docid dxDataGridOptions.rowDragging.onDragMove
+   * @type_function_param1 e:{ui/data_grid:RowDraggingMoveEvent}
+   */
+  onDragMove?: ((e: RowDraggingMoveEvent<TRowData, TKey>) => void);
+  /**
+   * @docid dxDataGridOptions.rowDragging.onDragStart
+   * @type_function_param1 e:{ui/data_grid:RowDraggingStartEvent}
+   */
+  onDragStart?: ((e: RowDraggingStartEvent<TRowData, TKey>) => void);
+  /**
+   * @docid dxDataGridOptions.rowDragging.onRemove
+   * @type_function_param1 e:{ui/data_grid:RowDraggingRemoveEvent}
+   */
+  onRemove?: ((e: RowDraggingRemoveEvent<TRowData, TKey>) => void);
+  /**
+   * @docid dxDataGridOptions.rowDragging.onReorder
+   * @type_function_param1 e:{ui/data_grid:RowDraggingReorderEvent}
+   */
+  onReorder?: ((e: RowDraggingReorderEvent<TRowData, TKey>) => void);
+};
 
 /**
  * @docid
@@ -2566,7 +2618,6 @@ export type ExplicitTypes<TRowData, TKey> = {
   RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
   RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
   RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
-  RowTemplateData: RowTemplateData<TRowData, TKey>;
   RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
   RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
   RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
@@ -2597,7 +2648,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared', { rowDragging: 'onAdd' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder' }>;
 
 /**
 * @hidden

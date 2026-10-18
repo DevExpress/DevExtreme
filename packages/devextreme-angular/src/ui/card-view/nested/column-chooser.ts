@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
 import type { PositionConfig } from 'devextreme/common/core/animation';
 import type { SortOrder } from 'devextreme/common';
@@ -24,7 +18,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxo-card-view-column-chooser',
     template: '',
@@ -33,14 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewColumnChooserComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
     @Input()
     get container(): any | string | undefined {
         return this._getOption('container');
@@ -98,14 +83,6 @@ export class DxoCardViewColumnChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
-    }
-
-    @Input()
     get selection(): ColumnChooserSelectionConfig {
         return this._getOption('selection');
     }
@@ -142,7 +119,6 @@ export class DxoCardViewColumnChooserComponent extends NestedOption implements O
         return 'columnChooser';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -158,7 +134,6 @@ export class DxoCardViewColumnChooserComponent extends NestedOption implements O
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

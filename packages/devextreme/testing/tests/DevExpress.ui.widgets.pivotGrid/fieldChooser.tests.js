@@ -7,7 +7,7 @@ QUnit.testStart(function() {
 });
 
 import { isDefined } from 'core/utils/type';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import dataUtils from 'core/element_data';
 import renderer from 'core/renderer';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
@@ -827,7 +827,7 @@ QUnit.module('dxPivotGridFieldChooser', {
         const scrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
 
         // act
-        scrollable.scrollTo({ y: 30 });
+        scrollable.scrollTo({ top: 30 });
 
         dataSource.on.withArgs('changed').lastCall.args[1]();
         // assert
@@ -865,7 +865,7 @@ QUnit.module('dxPivotGridFieldChooser', {
         const scrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
 
         // act
-        scrollable.scrollTo({ y: 30 });
+        scrollable.scrollTo({ top: 30 });
 
         $('.dx-treeview-border-visible .dx-checkbox').eq(0).trigger('dxclick');
 
@@ -2060,7 +2060,9 @@ QUnit.module('Base Field chooser', {
 
         this.setup(dataSourceOptions, {
             headerFilter: {
-                allowSearch: true
+                search: {
+                    enabled: true,
+                }
             }
         });
 

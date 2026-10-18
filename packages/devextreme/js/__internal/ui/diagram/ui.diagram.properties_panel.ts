@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import type { PositionConfig } from '@js/common/core/animation';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getOuterHeight } from '@js/core/utils/size';
+import type { EventInfo } from '@js/events';
 import type { dxPopupAnimation } from '@js/ui/popup';
+import type { OptionAction } from '@ts/core/widget/component';
 import DiagramCommandsManager from '@ts/ui/diagram/diagram.commands_manager';
-import DiagramFloatingPanel from '@ts/ui/diagram/ui.diagram.floating_panel';
+import DiagramFloatingPanel, { type DiagramFloatingPanelProperties } from '@ts/ui/diagram/ui.diagram.floating_panel';
+import type { InternalPositionConfig } from '@ts/ui/overlay/overlay';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
 import TabPanel from '@ts/ui/tab_panel/tab_panel';
@@ -19,7 +21,21 @@ const DIAGRAM_PROPERTIES_PANEL_CLASS = 'dx-diagram-properties-panel';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TITLE_CLASS = 'dx-diagram-properties-panel-group-title';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TOOLBAR_CLASS = 'dx-diagram-properties-panel-group-toolbar';
 
-class DiagramPropertiesPanel extends DiagramFloatingPanel {
+// eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
+type CreateToolbarEvent = EventInfo<DiagramPropertiesPanel> & {
+  $parent: dxElementWrapper;
+  commands: unknown;
+  toolbar?: unknown;
+};
+
+interface DiagramPropertiesPanelProperties extends DiagramFloatingPanelProperties {
+  propertyTabs?: unknown;
+  onCreateToolbar?: (e: CreateToolbarEvent) => void;
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the component of the event
+  onSelectedGroupChanged?: (e: EventInfo<DiagramPropertiesPanel>) => void;
+}
+
+class DiagramPropertiesPanel extends DiagramFloatingPanel<DiagramPropertiesPanelProperties> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _commandTabs?: any;
 
@@ -36,11 +52,9 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
 
   private _scrollViewHeight?: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onSelectedGroupChangedAction?: any;
+  private _onSelectedGroupChangedAction!: OptionAction<DiagramPropertiesPanelProperties['onSelectedGroupChanged']>;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _onCreateToolbarAction?: any;
+  private _onCreateToolbarAction!: OptionAction<DiagramPropertiesPanelProperties['onCreateToolbar']>;
 
   _init(): void {
     super._init();
@@ -75,8 +89,7 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
     return DIAGRAM_PROPERTIES_POPUP_HEIGHT;
   }
 
-  _getPopupPosition(): PositionConfig {
-    // @ts-expect-error ts-error
+  _getPopupPosition(): InternalPositionConfig {
     const { offsetParent, offsetX, offsetY } = this.option();
     if (this.isMobileView()) {
       return {

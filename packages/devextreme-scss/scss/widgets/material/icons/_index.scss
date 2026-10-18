@@ -1,5 +1,4 @@
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
 @include dx-font-icons("dxiconsmaterial", "DevExtreme Material Icons", "devextreme_material_icons", optimizeLegibility);
@@ -17,17 +16,6 @@
     background-size: 100% 100%;
     background-position: 50% 50%;
   }
-}
-
-.dx-scrollview-pulldown {
-  background-image: $scrollview-pulldown-path;
-  background-position: 0 0;
-  background-repeat: no-repeat;
-}
-
-.dx-loadindicator-image {
-  background-position: center center;
-  background-repeat: no-repeat;
 }
 
 .dx-loadindicator-image-small {

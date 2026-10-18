@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { BarGauge, Label } from 'devextreme-react/bar-gauge';
 import { SelectBox } from 'devextreme-react/select-box';
 import { colors, colorLabel } from './data.js';
@@ -11,6 +11,7 @@ function getBasicColors(value) {
 function App() {
   const [basis, setBasis] = useState(getBasicColors(colors[0].code));
   const [currentColor, setCurrentColor] = useState(colors[0].code);
+  const colorBoxStyle = useMemo(() => ({ backgroundColor: currentColor }), [currentColor]);
   const onSelectionChanged = useCallback(
     ({ selectedItem: { code } }) => {
       setCurrentColor(code);
@@ -46,7 +47,7 @@ function App() {
           />
           <div
             className="color-box"
-            style={{ backgroundColor: currentColor }}
+            style={colorBoxStyle}
           ></div>
         </div>
       </div>

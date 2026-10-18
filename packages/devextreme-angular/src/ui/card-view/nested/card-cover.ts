@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 
 import {
     DxIntegrationModule,
@@ -28,7 +23,6 @@ import {
     DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-card-cover',
@@ -84,7 +78,6 @@ export class DxoCardViewCardCoverComponent extends NestedOption implements After
         return 'cardCover';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -104,7 +97,6 @@ export class DxoCardViewCardCoverComponent extends NestedOption implements After
         extractTemplate(this, this.element, this.renderer, this.document);
     }
 
-
     ngOnInit() {
         this._addRecreatedComponent();
     }
@@ -112,7 +104,6 @@ export class DxoCardViewCardCoverComponent extends NestedOption implements After
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

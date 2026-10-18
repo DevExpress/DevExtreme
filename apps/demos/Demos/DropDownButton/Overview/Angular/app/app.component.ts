@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { enableProdMode, Component, provideZoneChangeDetection } from '@angular/core';
+import {
+  enableProdMode, ChangeDetectorRef, Component, provideZoneChangeDetection,
+} from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import { DxToolbarModule } from 'devextreme-angular';
 import { DxDropDownButtonModule, DxDropDownButtonComponent, DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
@@ -44,7 +46,7 @@ export class AppComponent {
 
   alignment = 'left';
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.colors = service.getColors();
     this.fontSizes = service.getFontSizes();
     this.downloads = service.getDownloads();
@@ -55,14 +57,17 @@ export class AppComponent {
 
   onAlignmentChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
     this.alignment = e.item.value;
+    this.changeDetectorRef.detectChanges();
   };
 
   onFontSizeChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
     this.fontSize = e.item.value;
+    this.changeDetectorRef.detectChanges();
   };
 
   onLineHeightChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
     this.lineHeight = e.item.value;
+    this.changeDetectorRef.detectChanges();
   };
 
   onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent): void {

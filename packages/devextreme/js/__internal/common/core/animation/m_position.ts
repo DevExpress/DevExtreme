@@ -206,10 +206,24 @@ const defaultPositionResult = {
   },
 };
 
+interface AxisPositionResult {
+  location: number;
+  flip: boolean;
+  fit: boolean;
+  oversize: number;
+  collisionSide?: string;
+}
+
+interface PositionResult {
+  h: AxisPositionResult;
+  v: AxisPositionResult;
+  precise?: boolean;
+}
+
 const calculatePosition = function (what, options) {
   const $what = $(what);
   const currentOffset = $what.offset();
-  const result = extend(true, {}, defaultPositionResult, {
+  const result: PositionResult = extend(true, {}, defaultPositionResult, {
     // @ts-expect-error
     h: { location: currentOffset.left },
     // @ts-expect-error

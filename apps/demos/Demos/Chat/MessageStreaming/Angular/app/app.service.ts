@@ -163,8 +163,14 @@ export class AppService {
     return id;
   }
 
-  private alertLimitReached(): void {
-    this.alertsSubject.next([{ message: 'Request limit reached, try again in a minute.' }]);
+  private getErrorMessage(err: unknown): string {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
+  }
+
+  private alertError(message: string): void {
+    this.alertsSubject.next([{ message }]);
 
     setTimeout(() => {
       this.alertsSubject.next([]);
@@ -224,9 +230,11 @@ export class AppService {
     } catch (e: unknown) {
       this.typingUsersSubject.next([]);
 
-      if ((e as Error)?.name !== 'AbortError' && assistantId !== undefined) {
-        this.updateMessageText(assistantId, '');
-        this.alertLimitReached();
+      if (!this.abortController?.signal.aborted) {
+        if (assistantId !== undefined) {
+          this.updateMessageText(assistantId, '');
+        }
+        this.alertError(this.getErrorMessage(e));
       }
     } finally {
       this.abortController = null;

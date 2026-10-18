@@ -12,7 +12,7 @@ import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, 
 import type { HorizontalAlignment, template, DataType, Format as CommonFormat, SortOrder, SearchMode, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone } from "devextreme/common";
 import type { dxTreeListColumn, dxTreeListRowObject } from "devextreme/ui/tree_list";
 import type { FilterOperation, FilterType, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from "devextreme/common/grids";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { Format as LocalizationFormat, FormatLocale } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { dxContextMenuItem } from "devextreme/ui/context_menu";
@@ -238,13 +238,11 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 // owners:
 // Column
 type IColumnHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
   height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig;
-  searchMode?: SearchMode;
   width?: number | string | undefined;
 }>
 const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
@@ -465,6 +463,7 @@ const FilterRow = Object.assign<typeof _componentFilterRow, NestedComponentMeta>
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;
@@ -486,11 +485,9 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // Gantt
 type IGanttHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;
-  searchTimeout?: number;
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
   width?: number;
@@ -538,15 +535,12 @@ const GanttHeaderFilterSearch = Object.assign<typeof _componentGanttHeaderFilter
 // Column
 // Gantt
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
   height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
-  searchMode?: SearchMode;
   width?: number | string | undefined;
-  searchTimeout?: number;
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
 }>

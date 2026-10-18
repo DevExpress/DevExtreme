@@ -18,13 +18,14 @@ import ButtonGroup from '@js/ui/button_group';
 import type { Item, Properties } from '@js/ui/drop_down_button';
 import type { ItemClickEvent } from '@js/ui/list';
 import type { PositionAlignment } from '@js/ui/popup';
+import { getPublicElement } from '@ts/core/element';
 import { Guid } from '@ts/core/guid';
 import messageLocalization from '@ts/core/localization/message';
-import { getPublicElement } from '@ts/core/m_element';
-import { FunctionTemplate } from '@ts/core/templates/m_function_template';
+import { FunctionTemplate } from '@ts/core/templates/function_template';
 import { ensureDefined } from '@ts/core/utils/m_common';
 import { isDefined, isObject, isPlainObject } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type { DataSourceType } from '@ts/data/data_controller/data_controller';
 import DataController from '@ts/data/data_controller/data_controller';
@@ -48,10 +49,10 @@ const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
 export interface DropDownButtonProperties extends Properties {
-  buttonGroupOptions?: ButtonGroupItem;
+  buttonGroupOptions?: ButtonGroupProperties;
   grouped?: boolean;
   groupTemplate?: string;
-  _cached_buttonGroupOptions?: ButtonGroupItem;
+  _cached_buttonGroupOptions?: ButtonGroupProperties;
   _cached_dropDownOptions?: PopupProperties;
 }
 
@@ -381,7 +382,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       tabIndex,
     } = this.option();
 
-    const buttonGroupOptions: ButtonGroupProperties = {
+    const buttonGroupOptions: ButtonGroupProperties & Pick<WidgetProperties, 'onKeyboardHandled'> = {
       items: this._getButtonGroupItems(),
       width: '100%',
       height: '100%',
@@ -427,7 +428,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
     const { deferRendering, opened } = this.option();
 
-    const cachedDropDownOptions: PopupProperties = this._options.cache('dropDownOptions');
+    const cachedDropDownOptions = this._options.cache('dropDownOptions');
 
     const position: PositionConfig = {
       of: this.$element() as unknown as DxElement,

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -20,7 +17,6 @@ import {
 import type { ResizeHandle, DisposingEvent, InitializedEvent, OptionChangedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent } from 'devextreme/ui/resizable';
 
 import DxResizable from 'devextreme/ui/resizable';
-
 
 import {
     DxComponent,
@@ -36,7 +32,6 @@ import {
 
 /**
  * [descr:dxResizable]
-
  */
 @Component({
     selector: 'dx-resizable',
@@ -55,7 +50,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.area]
-    
      */
     @Input()
     get area(): any | string | undefined {
@@ -65,10 +59,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('area', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -78,10 +70,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.handles]
-    
      */
     @Input()
     get handles(): ResizeHandle | string {
@@ -91,10 +81,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('handles', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -104,10 +92,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.keepAspectRatio]
-    
      */
     @Input()
     get keepAspectRatio(): boolean {
@@ -117,10 +103,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('keepAspectRatio', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.maxHeight]
-    
      */
     @Input()
     get maxHeight(): number {
@@ -130,10 +114,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('maxHeight', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.maxWidth]
-    
      */
     @Input()
     get maxWidth(): number {
@@ -143,10 +125,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('maxWidth', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.minHeight]
-    
      */
     @Input()
     get minHeight(): number {
@@ -156,10 +136,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('minHeight', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.minWidth]
-    
      */
     @Input()
     get minWidth(): number {
@@ -169,10 +147,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('minWidth', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -182,10 +158,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -196,132 +170,89 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxResizableOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onResize]
-    
-    
      */
     @Output() onResize: EventEmitter<ResizeEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onResizeEnd]
-    
-    
      */
     @Output() onResizeEnd: EventEmitter<ResizeEndEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onResizeStart]
-    
-    
      */
     @Output() onResizeStart: EventEmitter<ResizeStartEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() areaChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() handlesChange: EventEmitter<ResizeHandle | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keepAspectRatioChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxHeightChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minHeightChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

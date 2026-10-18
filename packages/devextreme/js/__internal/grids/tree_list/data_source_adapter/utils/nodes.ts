@@ -1,15 +1,17 @@
 import { isDefined } from '@js/core/utils/type';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
-import treeListCore from '../../m_core';
-import type { LoadOperation, NodeByKey, TreeNode } from '../types';
+import treeListCore from '../../core';
+import type {
+  DataGetter, LoadOperation, NodeByKey, TreeNode,
+} from '../types';
 
 export interface NodesContext {
   rootValue: unknown;
   isFullBranchFilterMode: boolean;
-  keyGetter: (data: unknown) => unknown;
-  parentIdGetter: (data: unknown) => unknown;
-  hasItemsGetter?: (data: unknown) => unknown;
+  keyGetter: DataGetter;
+  parentIdGetter: DataGetter;
+  hasItemsGetter?: DataGetter;
   isChildrenLoaded: Record<string, boolean>;
 }
 
@@ -18,7 +20,7 @@ export type ConvertContext = Pick<NodesContext, 'keyGetter' | 'parentIdGetter' |
 export type FillNodesContext = Pick<NodesContext, 'hasItemsGetter' | 'isChildrenLoaded' | 'isFullBranchFilterMode'>;
 
 export function convertItemToNode(
-  item: unknown,
+  item: RawItemData,
   nodeByKey: NodeByKey,
   context: ConvertContext,
 ): TreeNode {

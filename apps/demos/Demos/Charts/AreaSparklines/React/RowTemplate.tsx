@@ -10,6 +10,8 @@ import {
   palladiumCosts,
 } from './data.ts';
 
+const tooltipFormat = { type: 'currency', precision: 2 };
+
 interface RowTemplateProps {
   key: number;
   year: string;
@@ -28,7 +30,7 @@ export default function RowTemplate(props: RowTemplateProps) {
           valueField={props.year}
           type="area"
         >
-          <Tooltip format={{ type: 'currency', precision: 2 }} />
+          <Tooltip format={tooltipFormat} />
         </Sparkline>
       </td>
       <td>
@@ -45,7 +47,7 @@ export default function RowTemplate(props: RowTemplateProps) {
           minColor="#6babac"
           maxColor="#8076bb"
         >
-          <Tooltip format={{ type: 'currency', precision: 2 }} />
+          <Tooltip format={tooltipFormat} />
         </Sparkline>
       </td>
       <td>
@@ -61,7 +63,7 @@ export default function RowTemplate(props: RowTemplateProps) {
           pointColor="#e8c267"
           pointSymbol="polygon"
         >
-          <Tooltip format={{ type: 'currency', precision: 2 }} />
+          <Tooltip format={tooltipFormat} />
         </Sparkline>
       </td>
     </tr>

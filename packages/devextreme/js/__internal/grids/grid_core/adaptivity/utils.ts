@@ -1,6 +1,6 @@
 import { isDefined } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { RowKey } from '@ts/grids/grid_core/m_types';
+import type { RowKey } from '@ts/grids/grid_core/types';
 
 import type { AdaptiveDetailRowTarget } from './types';
 

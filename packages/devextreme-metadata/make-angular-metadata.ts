@@ -46,6 +46,7 @@ Ng.makeMetadata({
 
     ...replaceTypesMutations,
 
+    removeMembers(/\/localization:FormatObject\.locale/),
     removeMembers(/\/grids:ColumnBase.ai/),
     removeMembers(/\/grids:GridBaseOptions.aiAssistant/),
     removeMembers(/\/grids:AIAssistant/),
@@ -63,6 +64,7 @@ Ng.makeMetadata({
     removeMembers(/\/drop_down_editor\/ui.drop_down_editor:FieldAddons/),
     removeMembers(/\/load_panel:dxLoadPanelOptions.indicatorOptions/),
     removeMembers(/\/grids:LoadPanel.indicatorOptions/),
+    removeMembers(/\/pivot_grid:dxPivotGridOptions.loadPanel.indicatorOptions/),
     removeMembers(/\/popup:dxPopupOptions.tabFocusLoopEnabled/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/scheduler:dxSchedulerOptions\.editing\.form/),
@@ -74,6 +76,7 @@ Ng.makeMetadata({
     removeMembers(/\/stepper:/),
     removeMembers(/\/speech_to_text:/),
     removeMembers(/\/tree_list:dxTreeListColumnButton.onClick/),
+    removeMembers(/\/(data_grid|tree_list):.*Options\.rowDragging/),
   ],
   variables: {
     CollectionItems: [...commonSmdCollectionItems],

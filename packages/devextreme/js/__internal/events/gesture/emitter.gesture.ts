@@ -3,13 +3,13 @@ import {
   isMouseEvent, isTouchEvent, needSkipEvent,
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
-import callOnce from '@js/core/utils/call_once';
 import { noop } from '@js/core/utils/common';
 import { sign } from '@js/core/utils/math';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { styleProp } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
+import { callOnce } from '@ts/core/utils/call_once';
 import domUtils from '@ts/core/utils/m_dom';
 import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';
@@ -131,7 +131,7 @@ class GestureEmitter extends Emitter {
 
   start(e: EmitterEvent): void {
     // T1328053: macOS Ctrl+click opens the system context menu. Kept out of needSkipEvent()
-    // because importing m_devices into that low-level events util forces `new Devices()` into
+    // because importing devices into that low-level events util forces `new Devices()` into
     // early module init and breaks init order (resizeCallbacks stops firing).
     const isMacContextMenuClick = isMouseEvent(e) && Boolean(e.ctrlKey) && devices.real().mac;
 

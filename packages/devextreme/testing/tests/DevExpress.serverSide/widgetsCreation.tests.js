@@ -1,6 +1,6 @@
-const widgets = require('../../helpers/widgetsList.js').widgetsList;
+import { widgetsList as widgets } from '../../helpers/widgetsList.js';
 
-const DataSource = require('common/data/data_source');
+import DataSource from 'common/data/data_source';
 
 QUnit.module('Widget creation', {
     beforeEach: function() {

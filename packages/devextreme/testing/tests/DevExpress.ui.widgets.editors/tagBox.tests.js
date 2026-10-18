@@ -5,7 +5,7 @@ import { createTextElementHiddenCopy } from '__internal/core/utils/m_dom';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import config from 'core/config';
 import dataQuery from 'common/data/query';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import coreErrors from 'core/errors';
 import uiErrors from 'ui/widget/ui.errors';
 import { errors as dataErrors } from 'common/data/errors';

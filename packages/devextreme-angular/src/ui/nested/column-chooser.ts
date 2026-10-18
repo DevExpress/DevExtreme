@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooser } from './base/column-chooser';
-
 
 @Component({
     selector: 'dxo-column-chooser',
@@ -29,7 +22,6 @@ import { DxoColumnChooser } from './base/column-chooser';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
-        'allowSearch',
         'container',
         'emptyPanelText',
         'enabled',
@@ -37,7 +29,6 @@ import { DxoColumnChooser } from './base/column-chooser';
         'mode',
         'position',
         'search',
-        'searchTimeout',
         'selection',
         'sortOrder',
         'title',
@@ -49,7 +40,6 @@ export class DxoColumnChooserComponent extends DxoColumnChooser implements OnDes
     protected get _optionPath() {
         return 'columnChooser';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -66,7 +56,6 @@ export class DxoColumnChooserComponent extends DxoColumnChooser implements OnDes
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

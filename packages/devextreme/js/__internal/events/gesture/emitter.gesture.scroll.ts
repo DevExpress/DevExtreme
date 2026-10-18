@@ -5,7 +5,7 @@ import {
   addNamespace, eventData, eventDelta, isDxMouseWheelEvent, isMouseEvent,
 } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
 import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
 import registerEmitter from '@ts/events/core/emitter_registrator';
 import GestureEmitter from '@ts/events/gesture/emitter.gesture';

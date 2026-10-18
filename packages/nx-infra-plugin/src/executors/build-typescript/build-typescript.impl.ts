@@ -252,7 +252,7 @@ async function runWatch(config: ResolvedConfig): Promise<void> {
     formatDiagnostics([diagnostic]).forEach((message) => logger.error(message));
   };
   const reportWatchStatus = (diagnostic: ts.Diagnostic): void => {
-    logger.verbose(ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE_CHAR));
+    logger.info(ts.flattenDiagnosticMessageText(diagnostic.messageText, NEWLINE_CHAR));
   };
 
   const compilerOptions: ts.CompilerOptions = {

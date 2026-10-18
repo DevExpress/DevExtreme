@@ -4,8 +4,10 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getWidth, setWidth } from '@js/core/utils/size';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -14,19 +16,19 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
+import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/headers_keyboard_navigation';
 import {
   isAdaptiveItem,
   isGroupFooterRow,
   isGroupRow as isGroupRowElement,
 } from '../keyboard_navigation/utils';
-import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import { isDetailRow } from '../master_detail/utils';
-import type { ColumnsView } from '../views/m_columns_view';
-import type { RowsView } from '../views/m_rows_view';
-import { isGroupRow } from '../views/m_rows_view';
+import type { ModuleType } from '../types';
+import type { ColumnsView } from '../views/columns_view';
+import type { RowsView } from '../views/rows_view';
+import { isGroupRow } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
 import { CLASSES, StickyPosition } from './const';
 import { GridCoreStickyColumnsDom } from './dom';
@@ -125,7 +127,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     });
   }
 
-  protected _renderCore(options?) {
+  protected _renderCore(options?: DataChange): DeferredObj<unknown> {
     const deferred = super._renderCore(options);
     const $element = this.element();
     const hasStickyColumns = this.hasStickyColumns();
@@ -219,7 +221,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
         const visibleColumnIndex = rtlEnabled ? columns.length - columnIndex - 1 : columnIndex;
         const offset = getStickyOffset(columnsController, columns, widths, columnIndex, offsets);
 
-        if (offsets) {
+        if (offsets && column.index !== undefined) {
           offsets[column.index] = offset;
         }
 
@@ -431,8 +433,8 @@ const rowsView = (
       const styleProps = normalizeOffset(offset);
 
       const $cells = $tableElement
-        .children().children('.dx-group-row')
-        .find(`.dx-group-cell[aria-colindex='${columnIndex + 1}']`);
+        .children().children(`.${VIEW_CLASSES.groupRow}`)
+        .find(`.${VIEW_CLASSES.groupCell}[aria-colindex='${columnIndex + 1}']`);
 
       for (let i = 0; i < $cells.length; i += 1) {
         const cell = $cells.get(i) as HTMLElement;
@@ -531,7 +533,15 @@ const footerView = (
 ) => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerStickyColumnsExtender extends Base {
-  protected getSeparatorOffsetX($cell: dxElementWrapper): number {
+  private isNextCellPinned($nextCell: dxElementWrapper, $container: dxElementWrapper): boolean {
+    const addWidgetPrefix = this.addWidgetPrefix.bind(this);
+
+    return this.option('rtlEnabled')
+      ? GridCoreStickyColumnsDom.isFixedCellPinnedToLeft($nextCell, $container, addWidgetPrefix)
+      : GridCoreStickyColumnsDom.isFixedCellPinnedToRight($nextCell, $container, addWidgetPrefix);
+  }
+
+  protected getSeparatorOffsetX($cell: dxElementWrapper, $nextCell: dxElementWrapper): number {
     // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
 
@@ -547,9 +557,16 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
       if (isWidgetResizingMode && isFixedCellPinnedToRight) {
         return $cell.offset()?.left ?? 0;
       }
+
+      if (!isWidgetResizingMode && this.isNextCellPinned($nextCell, $container)) {
+        const nextCellOffsetX: number = $nextCell.offset()?.left ?? 0;
+        const nextCellWidth: number = $nextCell[0].getBoundingClientRect().width;
+
+        return this.option('rtlEnabled') ? nextCellOffsetX + nextCellWidth : nextCellOffsetX;
+      }
     }
 
-    return super.getSeparatorOffsetX($cell);
+    return super.getSeparatorOffsetX($cell, $nextCell);
   }
 
   protected _correctColumnIndexForPoint(point, correctionValue: number, columns): void {
@@ -781,12 +798,14 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
     if (!isHideBorder) {
       const isFixedCell = GridCoreStickyColumnsDom
         .isFixedCell($element, this.addWidgetPrefix.bind(this));
+      // @ts-expect-error renderFocusOverlay creates the focus overlay first
       this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, isFixedCell);
       const isGroupElement = isGroupRowElement($element);
       const isGroupFooterRowElement = isGroupFooterRow($element);
       const isAdaptiveElement = isAdaptiveItem($element);
 
       if (isFixedCell || isGroupElement || isGroupFooterRowElement || isAdaptiveElement) {
+        // @ts-expect-error renderFocusOverlay creates the focus overlay first
         this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, true);
       }
     }

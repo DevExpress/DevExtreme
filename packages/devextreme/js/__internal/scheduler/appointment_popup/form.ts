@@ -4,7 +4,7 @@ import '@js/ui/tag_box';
 import '@js/ui/switch';
 import '@js/ui/select_box';
 
-import type { DayOfWeek, TextEditorButton } from '@js/common';
+import type { DateLike, DayOfWeek, TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSourceOptions } from '@js/common/data';
 import { DataSource } from '@js/common/data';
@@ -24,7 +24,7 @@ import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import type { Properties as SwitchProperties } from '@js/ui/switch';
 import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 import { current, isFluent } from '@js/ui/themes';
-import { dateSerialization } from '@ts/core/utils/m_date_serialization';
+import { dateSerialization } from '@ts/core/utils/date_serialization';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type Popup from '@ts/ui/popup/popup';
 
@@ -208,14 +208,14 @@ export class AppointmentForm {
 
   get startDate(): Date | null {
     const { startDateExpr } = this.config.dataAccessors.expr;
-    const value = this.getFormDataField(startDateExpr);
+    const value = this.getFormDateField(startDateExpr);
 
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 
   get endDate(): Date | null {
     const { endDateExpr } = this.config.dataAccessors.expr;
-    const value = this.getFormDataField(endDateExpr);
+    const value = this.getFormDateField(endDateExpr);
 
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
@@ -233,6 +233,10 @@ export class AppointmentForm {
 
   private getFormDataField(field: string): unknown {
     return this.dxForm.option(`formData.${field}`);
+  }
+
+  private getFormDateField(field: string): DateLike | undefined {
+    return this.getFormDataField(field) as DateLike | undefined;
   }
 
   dispose(): void {

@@ -760,11 +760,6 @@ declare module DevExpress {
      */
     showIndicator?: boolean;
     /**
-     * [descr:ExportLoadPanel.indicatorSrc]
-     * @deprecated [depNote:ExportLoadPanel.indicatorSrc]
-     */
-    indicatorSrc?: string;
-    /**
      * [descr:ExportLoadPanel.indicatorOptions]
      */
     indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
@@ -1334,7 +1329,12 @@ declare module DevExpress.common {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
+  type ExternalFormat = (
+    | Intl.DateTimeFormatOptions
+    | Intl.NumberFormatOptions
+  ) & {
+    locale?: FormatLocale;
+  };
   export type FieldChooserLayout = 0 | 1 | 2;
 
   /**
@@ -1371,6 +1371,10 @@ declare module DevExpress.common {
     | 'second'
     | 'shortDateShortTime';
   /**
+   * [descr:FormatLocale]
+   */
+  export type FormatLocale = string | (() => string);
+  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface FormatObject {
@@ -1398,6 +1402,10 @@ declare module DevExpress.common {
      * [descr:Format.type]
      */
     type?: PredefinedFormat | string;
+    /**
+     * [descr:Format.locale]
+     */
+    locale?: FormatLocale;
   }
   /**
    * [descr:GlobalConfig]
@@ -2075,7 +2083,13 @@ declare module DevExpress.common.charts {
   };
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
-  export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+  /**
+   * [descr:DashStyle]
+   */
+  export type DashStyle = DevExpress.core.PermutationsWithRepetition<
+    'dash' | 'dot' | 'longDash' | 'solid',
+    5
+  >;
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
   /**
    * [descr:Font]
@@ -5008,11 +5022,6 @@ declare module DevExpress.common.grids {
    */
   export type ColumnChooser = {
     /**
-     * [descr:ColumnChooser.allowSearch]
-     * @deprecated [depNote:ColumnChooser.allowSearch]
-     */
-    allowSearch?: boolean;
-    /**
      * [descr:ColumnChooser.container]
      */
     container?: string | DevExpress.core.UserDefinedElement | undefined;
@@ -5040,11 +5049,6 @@ declare module DevExpress.common.grids {
      * [descr:ColumnChooser.search]
      */
     search?: ColumnChooserSearchConfig;
-    /**
-     * [descr:ColumnChooser.searchTimeout]
-     * @deprecated [depNote:ColumnChooser.searchTimeout]
-     */
-    searchTimeout?: number;
     /**
      * [descr:ColumnChooser.selection]
      */
@@ -5175,11 +5179,6 @@ declare module DevExpress.common.grids {
    */
   export type ColumnHeaderFilter = {
     /**
-     * [descr:ColumnHeaderFilter.allowSearch]
-     * @deprecated [depNote:ColumnHeaderFilter.allowSearch]
-     */
-    allowSearch?: boolean;
-    /**
      * [descr:ColumnHeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
@@ -5209,11 +5208,6 @@ declare module DevExpress.common.grids {
      * [descr:ColumnHeaderFilter.search]
      */
     search?: ColumnHeaderFilterSearchConfig;
-    /**
-     * [descr:ColumnHeaderFilter.searchMode]
-     * @deprecated [depNote:ColumnHeaderFilter.searchMode]
-     */
-    searchMode?: SearchMode;
     /**
      * [descr:ColumnHeaderFilter.width]
      */
@@ -5333,25 +5327,46 @@ declare module DevExpress.common.grids {
   };
   export type DataRenderMode = 'standard' | 'virtual';
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:DragDropInfo]
    */
   export type DragDropInfo = {
+    /**
+     * [descr:DragDropInfo.dropInsideItem]
+     */
     readonly dropInsideItem: boolean;
   };
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:DragReorderInfo]
    */
   export type DragReorderInfo = {
+    /**
+     * [descr:DragReorderInfo.dropInsideItem]
+     */
     readonly dropInsideItem: boolean;
+    /**
+     * [descr:DragReorderInfo.promise]
+     */
     promise?: PromiseLike<void>;
   };
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:DragStartEventInfo]
    */
   export interface DragStartEventInfo<TRowData = any> {
+    /**
+     * [descr:DragStartEventInfo.itemData]
+     */
     itemData?: TRowData;
+    /**
+     * [descr:DragStartEventInfo.itemElement]
+     */
     readonly itemElement: DevExpress.core.DxElement;
+    /**
+     * [descr:DragStartEventInfo.fromIndex]
+     */
     readonly fromIndex: number;
+    /**
+     * [descr:DragStartEventInfo.fromData]
+     */
     readonly fromData?: any;
   }
   /**
@@ -6349,11 +6364,6 @@ declare module DevExpress.common.grids {
    */
   export type HeaderFilter = {
     /**
-     * [descr:HeaderFilter.allowSearch]
-     * @deprecated [depNote:HeaderFilter.allowSearch]
-     */
-    allowSearch?: boolean;
-    /**
      * [descr:HeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
@@ -6365,11 +6375,6 @@ declare module DevExpress.common.grids {
      * [descr:HeaderFilter.search]
      */
     search?: HeaderFilterSearchConfig;
-    /**
-     * [descr:HeaderFilter.searchTimeout]
-     * @deprecated [depNote:HeaderFilter.searchTimeout]
-     */
-    searchTimeout?: number;
     /**
      * [descr:HeaderFilter.texts]
      */
@@ -6472,11 +6477,6 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.loadPanel.height]
      */
     height?: number | string;
-    /**
-     * [descr:GridBaseOptions.loadPanel.indicatorSrc]
-     * @deprecated [depNote:GridBaseOptions.loadPanel.indicatorSrc]
-     */
-    indicatorSrc?: string;
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorOptions]
      */
@@ -6719,11 +6719,6 @@ declare module DevExpress.common.grids {
      */
     dropFeedbackMode?: DragHighlight;
     /**
-     * [descr:GridBaseOptions.rowDragging.filter]
-     * @deprecated [depNote:GridBaseOptions.rowDragging.filter]
-     */
-    filter?: string;
-    /**
      * [descr:GridBaseOptions.rowDragging.group]
      */
     group?: string | undefined;
@@ -6802,16 +6797,40 @@ declare module DevExpress.common.grids {
     showDragIcons?: boolean;
   };
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   * [descr:RowDraggingEventInfo]
    */
   export interface RowDraggingEventInfo<TRowData = any> {
+    /**
+     * [descr:RowDraggingEventInfo.itemData]
+     */
     readonly itemData?: TRowData;
+    /**
+     * [descr:RowDraggingEventInfo.itemElement]
+     */
     readonly itemElement: DevExpress.core.DxElement;
+    /**
+     * [descr:RowDraggingEventInfo.fromIndex]
+     */
     readonly fromIndex: number;
+    /**
+     * [descr:RowDraggingEventInfo.toIndex]
+     */
     readonly toIndex: number;
+    /**
+     * [descr:RowDraggingEventInfo.fromComponent]
+     */
     readonly fromComponent: Sortable | Draggable;
+    /**
+     * [descr:RowDraggingEventInfo.toComponent]
+     */
     readonly toComponent: Sortable | Draggable;
+    /**
+     * [descr:RowDraggingEventInfo.fromData]
+     */
     readonly fromData?: any;
+    /**
+     * [descr:RowDraggingEventInfo.toData]
+     */
     readonly toData?: any;
   }
   export type RowDraggingTemplateData<TRowData = any> = {
@@ -7295,6 +7314,10 @@ declare module DevExpress.core {
 
     attr(attributeName: string, value: string | number | boolean | null): this;
 
+    attr(
+      attributes: Record<string, string | number | boolean | null | undefined>
+    ): this;
+
     attr(attributeName: string): string | undefined;
 
     before(element: Element | dxElementWrapper): this;
@@ -7451,12 +7474,40 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class FunctionTemplate {
-    render(template: {
-      container: unknown;
-      model?: object;
-      transclude?: boolean;
-    }): DxElement;
+    constructor(
+      render?: (options: Omit<TemplateRenderOptions, 'onRendered'>) => unknown
+    );
+
+    render(options?: TemplateRenderOptions): DxElement;
   }
+  /**
+   * IncrementalCounter[1]=2, IncrementalCounter[2]=3, IncrementalCounter[3]=4, ...
+   */
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type IncrementalCounter = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ];
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -7475,6 +7526,29 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type OmitInternal<T> = Omit<T, `${'_' | '$'}${any}`>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type PermutationsWithRepetition<
+    T extends string,
+    TMaxLength extends number
+  > = PermutationsWithRepetitionInner<T, TMaxLength, 1>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type PermutationsWithRepetitionInner<
+    T extends string,
+    TMaxLength extends number,
+    K extends number
+  > = K extends TMaxLength
+    ? T
+    :
+        | T
+        | `${T}${PermutationsWithRepetitionInner<
+            T,
+            TMaxLength,
+            IncrementalCounter[K]
+          >}`;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -7507,6 +7581,7 @@ declare module DevExpress.core {
    */
   export class Template {
     constructor(options?: dxTemplateOptions);
+    constructor(element: string | UserDefinedElement | dxElementWrapper);
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7514,6 +7589,17 @@ declare module DevExpress.core {
   export class TemplateManager {
     anonymousTemplateName: string;
     addDefaultTemplates(templates: Record<string, unknown>): void;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface TemplateRenderOptions {
+    container?: unknown;
+    model?: unknown;
+    index?: number;
+    transclude?: boolean;
+    renovated?: boolean;
+    onRendered?: () => void;
   }
   /**
    * [descr:UserDefinedElement]
@@ -7991,7 +8077,6 @@ declare module DevExpress.data {
      * [descr:PivotGridDataSourceOptions.fields.headerFilter]
      */
     headerFilter?: {
-      allowSearch?: boolean;
       /**
        * [descr:PivotGridDataSourceOptions.fields.headerFilter.allowSelectAll]
        */
@@ -13345,7 +13430,6 @@ declare module DevExpress.ui {
       RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
       RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
       RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
-      RowTemplateData: RowTemplateData<TRowData, TKey>;
       RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
       RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
       RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
@@ -13740,7 +13824,7 @@ declare module DevExpress.ui {
       | 'onRowDblClick'
       | 'onRowPrepared'
       | 'remoteOperations'
-      | 'rowTemplate'
+      | 'rowDragging'
       | 'scrolling'
       | 'selection'
       | 'selectionFilter'
@@ -13928,16 +14012,61 @@ declare module DevExpress.ui {
        */
       readonly rowElement: DevExpress.core.DxElement;
     };
-    export type RowDragging<
-      TRowData = any,
-      TKey = any
-    > = DevExpress.common.grids.RowDragging<dxDataGrid, TRowData, TKey>;
+    export type RowDragging<TRowData = any, TKey = any> = Omit<
+      DevExpress.common.grids.RowDragging<
+        dxDataGrid<TRowData, TKey>,
+        TRowData,
+        TKey
+      >,
+      | 'onAdd'
+      | 'onDragChange'
+      | 'onDragEnd'
+      | 'onDragMove'
+      | 'onDragStart'
+      | 'onRemove'
+      | 'onReorder'
+    > & {
+      /**
+       * [descr:dxDataGridOptions.rowDragging.onAdd]
+       */
+      onAdd?: (e: RowDraggingAddEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxDataGridOptions.rowDragging.onDragChange]
+       */
+      onDragChange?: (e: RowDraggingChangeEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxDataGridOptions.rowDragging.onDragEnd]
+       */
+      onDragEnd?: (e: RowDraggingEndEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxDataGridOptions.rowDragging.onDragMove]
+       */
+      onDragMove?: (e: RowDraggingMoveEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxDataGridOptions.rowDragging.onDragStart]
+       */
+      onDragStart?: (e: RowDraggingStartEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxDataGridOptions.rowDragging.onRemove]
+       */
+      onRemove?: (e: RowDraggingRemoveEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxDataGridOptions.rowDragging.onReorder]
+       */
+      onReorder?: (e: RowDraggingReorderEvent<TRowData, TKey>) => void;
+    };
+    /**
+     * [descr:_ui_data_grid_RowDraggingAddEvent]
+     */
     export type RowDraggingAddEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragDropInfo;
+    /**
+     * [descr:_ui_data_grid_RowDraggingChangeEvent]
+     */
     export type RowDraggingChangeEvent<
       TRowData = any,
       TKey = any
@@ -13945,6 +14074,9 @@ declare module DevExpress.ui {
       DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragDropInfo;
+    /**
+     * [descr:_ui_data_grid_RowDraggingEndEvent]
+     */
     export type RowDraggingEndEvent<
       TRowData = any,
       TKey = any
@@ -13952,6 +14084,9 @@ declare module DevExpress.ui {
       DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragDropInfo;
+    /**
+     * [descr:_ui_data_grid_RowDraggingMoveEvent]
+     */
     export type RowDraggingMoveEvent<
       TRowData = any,
       TKey = any
@@ -13959,17 +14094,26 @@ declare module DevExpress.ui {
       DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragDropInfo;
+    /**
+     * [descr:_ui_data_grid_RowDraggingRemoveEvent]
+     */
     export type RowDraggingRemoveEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData>;
+    /**
+     * [descr:_ui_data_grid_RowDraggingReorderEvent]
+     */
     export type RowDraggingReorderEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragReorderInfo;
+    /**
+     * [descr:_ui_data_grid_RowDraggingStartEvent]
+     */
     export type RowDraggingStartEvent<
       TRowData = any,
       TKey = any
@@ -14077,18 +14221,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.RowRemovingInfo<TRowData, TKey>;
-    export type RowTemplateData<TRowData = any, TKey = any> = {
-      readonly key: TKey;
-      readonly data: TRowData;
-      readonly component: dxDataGrid<TRowData, TKey>;
-      readonly values: Array<any>;
-      readonly rowIndex: number;
-      readonly columns: Array<Column<TRowData, TKey>>;
-      readonly isSelected?: boolean;
-      readonly rowType: string;
-      readonly groupIndex?: number;
-      readonly isExpanded?: boolean;
-    };
     /**
      * [descr:_ui_data_grid_RowUpdatedEvent]
      */
@@ -14715,15 +14847,9 @@ declare module DevExpress.ui {
         }
       | DevExpress.common.Mode;
     /**
-     * [descr:dxDataGridOptions.rowTemplate]
-     * @deprecated [depNote:dxDataGridOptions.rowTemplate]
+     * [descr:dxDataGridOptions.rowDragging]
      */
-    rowTemplate?:
-      | template
-      | ((
-          rowElement: DevExpress.core.DxElement,
-          rowInfo: DevExpress.ui.dxDataGrid.RowTemplateData<TRowData, TKey>
-        ) => any);
+    rowDragging?: DevExpress.ui.dxDataGrid.RowDragging<TRowData, TKey>;
     /**
      * [descr:dxDataGridOptions.dataRowTemplate]
      */
@@ -21041,11 +21167,6 @@ declare module DevExpress.ui {
    */
   export interface dxGanttHeaderFilter {
     /**
-     * [descr:dxGanttHeaderFilter.allowSearch]
-     * @deprecated [depNote:dxGanttHeaderFilter.allowSearch]
-     */
-    allowSearch?: boolean;
-    /**
      * [descr:dxGanttHeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
@@ -21057,11 +21178,6 @@ declare module DevExpress.ui {
      * [descr:dxGanttHeaderFilter.search]
      */
     search?: DevExpress.common.grids.HeaderFilterSearchConfig;
-    /**
-     * [descr:dxGanttHeaderFilter.searchTimeout]
-     * @deprecated [depNote:dxGanttHeaderFilter.searchTimeout]
-     */
-    searchTimeout?: number;
     /**
      * [descr:dxGanttHeaderFilter.texts]
      */
@@ -23040,11 +23156,6 @@ declare module DevExpress.ui {
      */
     height?: number | string;
     /**
-     * [descr:dxLoadPanelOptions.indicatorSrc]
-     * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
-     */
-    indicatorSrc?: string;
-    /**
      * [descr:dxLoadPanelOptions.indicatorOptions]
      */
     indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
@@ -24836,11 +24947,6 @@ declare module DevExpress.ui {
      */
     headerFilter?: {
       /**
-       * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
-       * @deprecated [depNote:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSelectAll]
        */
       allowSelectAll?: boolean;
@@ -24852,11 +24958,6 @@ declare module DevExpress.ui {
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.search]
        */
       search?: DevExpress.common.grids.HeaderFilterSearchConfig;
-      /**
-       * [descr:dxPivotGridFieldChooserOptions.headerFilter.searchTimeout]
-       * @deprecated [depNote:dxPivotGridFieldChooserOptions.headerFilter.searchTimeout]
-       */
-      searchTimeout?: number;
       /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.showRelevantValues]
        */
@@ -25097,11 +25198,6 @@ declare module DevExpress.ui {
      */
     headerFilter?: {
       /**
-       * [descr:dxPivotGridOptions.headerFilter.allowSearch]
-       * @deprecated [depNote:dxPivotGridOptions.headerFilter.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
        * [descr:dxPivotGridOptions.headerFilter.allowSelectAll]
        */
       allowSelectAll?: boolean;
@@ -25113,11 +25209,6 @@ declare module DevExpress.ui {
        * [descr:dxPivotGridOptions.headerFilter.search]
        */
       search?: DevExpress.common.grids.HeaderFilterSearchConfig;
-      /**
-       * [descr:dxPivotGridOptions.headerFilter.searchTimeout]
-       * @deprecated [depNote:dxPivotGridOptions.headerFilter.searchTimeout]
-       */
-      searchTimeout?: number;
       /**
        * [descr:dxPivotGridOptions.headerFilter.showRelevantValues]
        */
@@ -25161,9 +25252,9 @@ declare module DevExpress.ui {
        */
       height?: number;
       /**
-       * [descr:dxPivotGridOptions.loadPanel.indicatorSrc]
+       * [descr:dxPivotGridOptions.loadPanel.indicatorOptions]
        */
-      indicatorSrc?: string;
+      indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
       /**
        * [descr:dxPivotGridOptions.loadPanel.shading]
        */
@@ -32066,6 +32157,7 @@ declare module DevExpress.ui {
       | 'parentIdExpr'
       | 'remoteOperations'
       | 'rootValue'
+      | 'rowDragging'
       | 'scrolling'
       | 'selection'
       | 'toolbar';
@@ -32262,12 +32354,61 @@ declare module DevExpress.ui {
        */
       readonly rowElement: DevExpress.core.DxElement;
     };
+    export type RowDragging<TRowData = any, TKey = any> = Omit<
+      DevExpress.common.grids.RowDragging<
+        dxTreeList<TRowData, TKey>,
+        TRowData,
+        TKey
+      >,
+      | 'onAdd'
+      | 'onDragChange'
+      | 'onDragEnd'
+      | 'onDragMove'
+      | 'onDragStart'
+      | 'onRemove'
+      | 'onReorder'
+    > & {
+      /**
+       * [descr:dxTreeListOptions.rowDragging.onAdd]
+       */
+      onAdd?: (e: RowDraggingAddEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxTreeListOptions.rowDragging.onDragChange]
+       */
+      onDragChange?: (e: RowDraggingChangeEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxTreeListOptions.rowDragging.onDragEnd]
+       */
+      onDragEnd?: (e: RowDraggingEndEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxTreeListOptions.rowDragging.onDragMove]
+       */
+      onDragMove?: (e: RowDraggingMoveEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxTreeListOptions.rowDragging.onDragStart]
+       */
+      onDragStart?: (e: RowDraggingStartEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxTreeListOptions.rowDragging.onRemove]
+       */
+      onRemove?: (e: RowDraggingRemoveEvent<TRowData, TKey>) => void;
+      /**
+       * [descr:dxTreeListOptions.rowDragging.onReorder]
+       */
+      onReorder?: (e: RowDraggingReorderEvent<TRowData, TKey>) => void;
+    };
+    /**
+     * [descr:_ui_tree_list_RowDraggingAddEvent]
+     */
     export type RowDraggingAddEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragDropInfo;
+    /**
+     * [descr:_ui_tree_list_RowDraggingChangeEvent]
+     */
     export type RowDraggingChangeEvent<
       TRowData = any,
       TKey = any
@@ -32275,6 +32416,9 @@ declare module DevExpress.ui {
       DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragDropInfo;
+    /**
+     * [descr:_ui_tree_list_RowDraggingEndEvent]
+     */
     export type RowDraggingEndEvent<
       TRowData = any,
       TKey = any
@@ -32282,6 +32426,9 @@ declare module DevExpress.ui {
       DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragDropInfo;
+    /**
+     * [descr:_ui_tree_list_RowDraggingMoveEvent]
+     */
     export type RowDraggingMoveEvent<
       TRowData = any,
       TKey = any
@@ -32289,17 +32436,26 @@ declare module DevExpress.ui {
       DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragDropInfo;
+    /**
+     * [descr:_ui_tree_list_RowDraggingRemoveEvent]
+     */
     export type RowDraggingRemoveEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData>;
+    /**
+     * [descr:_ui_tree_list_RowDraggingReorderEvent]
+     */
     export type RowDraggingReorderEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData> &
       DevExpress.common.grids.DragReorderInfo;
+    /**
+     * [descr:_ui_tree_list_RowDraggingStartEvent]
+     */
     export type RowDraggingStartEvent<
       TRowData = any,
       TKey = any
@@ -32833,6 +32989,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.rootValue]
      */
     rootValue?: TKey;
+    /**
+     * [descr:dxTreeListOptions.rowDragging]
+     */
+    rowDragging?: DevExpress.ui.dxTreeList.RowDragging<TRowData, TKey>;
     /**
      * [descr:dxTreeListOptions.scrolling]
      */

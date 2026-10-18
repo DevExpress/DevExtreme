@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { SortOrder } from 'devextreme/common';
 import type { SelectedFilterOperation } from 'devextreme/common/grids';
 
@@ -186,7 +180,6 @@ export class DxiColumnComponent extends DxiDataGridColumn {
         return 'columns';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -210,7 +203,6 @@ export class DxiColumnComponent extends DxiDataGridColumn {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

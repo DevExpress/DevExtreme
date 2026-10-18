@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { default as dxTreeList, dxTreeListRowObject } from 'devextreme/ui/tree_list';
 import type { DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
 import type { dxFormOptions } from 'devextreme/ui/form';
@@ -192,7 +186,6 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
         return 'editing';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -214,7 +207,6 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

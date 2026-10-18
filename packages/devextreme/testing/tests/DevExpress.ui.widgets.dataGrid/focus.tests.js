@@ -2938,7 +2938,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         that.clock.tick(10);
 
         // act
-        scrollable.scrollBy({ y: 400 });
+        scrollable.scrollBy({ top: 400 });
         that.clock.tick(10);
         const visibleRow = that.getVisibleRows()[0];
         $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
@@ -2992,7 +2992,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         that.clock.tick(10);
 
         // act
-        scrollable.scrollBy({ y: 400 });
+        scrollable.scrollBy({ top: 400 });
         that.clock.tick(10);
         const visibleRow = that.getVisibleRows()[0];
         $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
@@ -4095,7 +4095,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
 
         // act
-        scrollTo(this, { y: 1000 });
+        scrollTo(this, { top: 1000 });
         this.clock.tick(10);
 
         // assert
@@ -4571,8 +4571,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            this.getController('data').store = function() {
-            };
+            this.getController('dataSource').disposeAdapter();
 
             this.getController('data').dataErrorOccurred.add(function(e) {
                 dataErrors.push(e);
@@ -5332,7 +5331,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             assert.equal(focusedCellChangedCount, 0, 'onFocusedCellChanged fires count');
         });
 
-        QUnit.testInActiveWindow('Should not render overlay on focused row with tabindex if useKeyboard set false', function(assert) {
+        QUnit.testInActiveWindow('Should not render overlay on focused row with tabindex if keyboardNavigation.enabled set false', function(assert) {
         // arrange
             this.data = [
                 { name: 'Alex', phone: '111111', room: 6 },
@@ -5837,7 +5836,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             this.clock.tick(10);
 
             // act
-            this.getController('data')._dataSource.operationTypes = () => undefined;
+            this.getController('dataSource').getAdapter().operationTypes = () => undefined;
             try {
                 this.option('focusedRowKey', 'Dan');
             } catch(e) {

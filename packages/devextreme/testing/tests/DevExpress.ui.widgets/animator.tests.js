@@ -1,12 +1,13 @@
 import Animator from '__internal/ui/scroll_view/animator';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const REQUEST_ANIMATION_FRAME_TIMEOUT = 10;
 
 QUnit.module('Animator', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+        this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake((callback) => {
             return window.setTimeout(callback, REQUEST_ANIMATION_FRAME_TIMEOUT);
         });
     },

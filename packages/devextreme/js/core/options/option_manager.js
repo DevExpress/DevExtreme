@@ -1,2 +1,2 @@
 // deprecated
-export { OptionManager } from '../../__internal/core/options/m_option_manager';
+export { OptionManager } from '../../__internal/core/options/option_manager';

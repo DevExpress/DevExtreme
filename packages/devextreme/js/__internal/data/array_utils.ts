@@ -10,7 +10,7 @@ import {
   isDefined, isEmptyObject, isObject, isPlainObject, isString,
 } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
-import { isCollectionLike } from '@ts/core/utils/m_object';
+import { isCollectionLike } from '@ts/core/utils/object';
 import type { StoreKey } from '@ts/data/abstract_store';
 
 export type KeyExpr = StoreKey | Function;
@@ -198,6 +198,7 @@ function createObjectWithChanges(
   changes?: unknown,
 ): Record<string, unknown> {
   const result = cloneInstanceWithChangedPaths(target, changes);
+  // @ts-expect-error the result is the clone unless the target or the changes are a collection
   const extended: Record<string, unknown> = deepExtendArraySafe(result, changes, true, true, true);
 
   return extended;

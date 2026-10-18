@@ -10,12 +10,13 @@ import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { editingDataControllerExtender } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
 import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 
-import type { RowsView } from '../../grid_core/views/m_rows_view';
-import type { TreeListDataController } from '../data_controller/m_data_controller';
-import treeListCore from '../m_core';
+import type { RowsView } from '../../grid_core/views/rows_view';
+import treeListCore from '../core';
+import type { TreeListDataController } from '../data_controller/data_controller';
+import type { TreeListDataSourceController } from '../data_source/data_source_controller';
 
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
@@ -24,6 +25,8 @@ const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 
 class EditingController extends editingModule.controllers.editing {
   protected declare _dataController: TreeListDataController;
+
+  protected declare dataSourceController: TreeListDataSourceController;
 
   protected _generateNewItem(key) {
     const item: any = super._generateNewItem(key);
@@ -43,7 +46,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _setInsertAfterOrBeforeKey(change, parentKey) {
-    const dataSourceAdapter = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const key = parentKey || dataSourceAdapter?.parentKeyOf(change.data);
 
     if (key !== undefined && key !== this.option('rootValue')) {
@@ -55,7 +58,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _getLoadedRowIndex(items, change, isProcessedItems?) {
-    const dataSourceAdapter = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const insertParentKey = this._getInternalData(change.key)?.insertInfo?.parentKey;
     const parentKey = insertParentKey !== undefined
       ? insertParentKey
@@ -108,8 +111,7 @@ class EditingController extends editingModule.controllers.editing {
     const result = super._beforeSaveEditData.apply(this, arguments);
 
     if (change && change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
-      const store = this._dataController?.store();
-      const key = store?.key();
+      const key = this.dataSourceController.store()?.key();
 
       if (!isDefined(key)) {
         throw errors.Error('E1045');
@@ -135,7 +137,7 @@ class EditingController extends editingModule.controllers.editing {
 
   protected _addRowCore(data, parentKey, oldEditRowIndex) {
     const rootValue = this.option('rootValue');
-    const dataSourceAdapter = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const parentKeyGetter = dataSourceAdapter?.createParentIdGetter();
 
     parentKey = parentKeyGetter ? parentKeyGetter(data) : parentKey;
@@ -159,7 +161,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _initNewRow(options, parentKey?) {
-    const dataSourceAdapter = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const parentIdSetter = dataSourceAdapter?.createParentIdSetter();
 
     parentIdSetter?.(options.data, parentKey);

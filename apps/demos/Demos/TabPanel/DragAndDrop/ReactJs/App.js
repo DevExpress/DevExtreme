@@ -5,6 +5,20 @@ import TabPanel from 'devextreme-react/tab-panel';
 import { employees as allEmployees } from './data.js';
 import EmployeeTemplate from './EmployeeTemplate.js';
 
+function TabTitle({ data, onClose }) {
+  const handleClose = useCallback(() => onClose(data), [onClose, data]);
+  return (
+    <>
+      <span>
+        {data.FirstName} {data.LastName}
+      </span>
+      <i
+        className="dx-icon dx-icon-close"
+        onClick={handleClose}
+      />
+    </>
+  );
+}
 function App() {
   const [employees, setEmployees] = useState(allEmployees.slice(0, 3));
   const [selectedItem, setSelectedItem] = useState(allEmployees[0]);
@@ -29,22 +43,20 @@ function App() {
     [employees],
   );
   const renderTitle = useCallback(
-    (data) => (
-      <>
-        <span>
-          {data.FirstName} {data.LastName}
-        </span>
-        {employees.length >= 2 && (
-          <i
-            className="dx-icon dx-icon-close"
-            onClick={() => {
-              closeButtonHandler(data);
-            }}
-          />
-        )}
-      </>
-    ),
-    [employees, closeButtonHandler],
+    (data) =>
+      employees.length >= 2 ? (
+        <TabTitle
+          data={data}
+          onClose={closeButtonHandler}
+        />
+      ) : (
+        <>
+          <span>
+            {data.FirstName} {data.LastName}
+          </span>
+        </>
+      ),
+    [employees.length, closeButtonHandler],
   );
   const onSelectionChanged = useCallback(
     (args) => {

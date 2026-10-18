@@ -20,8 +20,10 @@ import 'whatwg-fetch';
 
 const buttonDropDownOptions = { width: 230 };
 
-const itemTemplateRender: React.FC<{ size: number; text: string }> = (item) => (
-  <div style={{ fontSize: `${item.size}px` }}>
+const getItemTemplateStyle = (item: { size: number }) => ({ fontSize: `${item.size}px` });
+
+const ItemTemplateRender: React.FC<{ size: number; text: string }> = (item) => (
+  <div style={getItemTemplateStyle(item)}>
     {item.text}
   </div>
 );
@@ -30,6 +32,12 @@ const App = () => {
   const [color, setColor] = useState<string | null>(null);
   const [fontSize, setFontSize] = useState<number>(14);
   const [lineHeight, setLineHeight] = useState<number>(1.35);
+  const textStyle = useMemo(() => ({
+    color: color ?? undefined,
+    textAlign: alignment,
+    lineHeight,
+    fontSize: `${fontSize}px`,
+  }), [color, alignment, lineHeight, fontSize]);
 
   type ColorPicker = ReturnType<DropDownButtonRef['instance']>;
   const [colorPicker, setColorPicker] = useState<ColorPicker | undefined>(undefined);
@@ -167,16 +175,11 @@ const App = () => {
                 ))}
               </div>
             </Template>
-            <Template name="fontItem" render={itemTemplateRender}>
+            <Template name="fontItem" render={ItemTemplateRender}>
             </Template>
           </Toolbar>
         </div>
-        <div className="dx-field" style={{
-          color: color ?? undefined,
-          textAlign: alignment,
-          lineHeight,
-          fontSize: `${fontSize}px`,
-        }}>
+        <div className="dx-field" style={textStyle}>
           <p id="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         </div>
       </div>

@@ -12,10 +12,10 @@ import {
   flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
-import { ERROR_MESSAGE_CLASS, ERROR_ROW_CLASS } from '../const';
+import { CLASSES } from '../const';
 
-const ERROR_ROW_SELECTOR = `.${ERROR_ROW_CLASS}`;
-const ERROR_MESSAGE_SELECTOR = `.${ERROR_MESSAGE_CLASS}`;
+const ERROR_ROW_SELECTOR = `.${CLASSES.errorRow}`;
+const ERROR_MESSAGE_SELECTOR = `.${CLASSES.errorMessage}`;
 
 const DATA = [
   { id: 1, name: 'test1' },

@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     NgModule,
@@ -14,10 +12,7 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 
 import {
     DxIntegrationModule,
@@ -31,6 +26,7 @@ import {
 import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload-tab-item-dxi';
 
 import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_items,
     PROPERTY_TOKEN_commands,
@@ -88,7 +84,6 @@ export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements 
         return 'tabs';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -109,11 +104,9 @@ export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements 
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import 'devextreme/common/core/localization/globalize/number';
@@ -31,11 +31,14 @@ const App = () => {
   const [locale, setLocale] = useState(sessionStorage.getItem('locale') || 'en');
   const locales = service.getLocales();
   const payments = service.getPayments();
-  const changeLocale = (e) => {
-    setLocale(e.value);
-    sessionStorage.setItem('locale', e.value);
-    document.location.reload();
-  };
+  const changeLocale = useCallback(
+    (e) => {
+      setLocale(e.value);
+      sessionStorage.setItem('locale', e.value);
+      document.location.reload();
+    },
+    [setLocale],
+  );
   return (
     <div>
       <DataGrid

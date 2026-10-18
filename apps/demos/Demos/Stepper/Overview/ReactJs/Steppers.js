@@ -8,18 +8,21 @@ const stepperConfigs = [
     labelId: 'iconsLabel',
     title: 'Icons and Labels',
     fields: ['label', 'icon', 'optional'],
+    elementAttr: { 'aria-labelledby': 'iconsLabel' },
   },
   {
     id: 'numbers',
     labelId: 'numbersLabel',
     title: 'Numbers and Labels',
     fields: ['label', 'optional'],
+    elementAttr: { 'aria-labelledby': 'numbersLabel' },
   },
   {
     id: 'customText',
     labelId: 'customTextLabel',
     title: 'Custom Text',
     fields: ['text'],
+    elementAttr: { 'aria-labelledby': 'customTextLabel' },
   },
 ];
 export default function Steppers({
@@ -28,7 +31,7 @@ export default function Steppers({
   return (
     <>
       {stepperConfigs.map(({
-        id, labelId, title, fields,
+        id, labelId, title, fields, elementAttr,
       }) => (
         <div
           key={id}
@@ -42,7 +45,7 @@ export default function Steppers({
           </div>
           <Stepper
             id={id}
-            elementAttr={{ 'aria-labelledby': labelId }}
+            elementAttr={elementAttr}
             defaultSelectedIndex={2}
             orientation={orientation}
             linear={navigationMode}

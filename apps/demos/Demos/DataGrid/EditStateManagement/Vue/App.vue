@@ -39,7 +39,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <span>Edit Row Key:</span>
-        <div id="editRowKey">{{ editRowKey === null ? "null" : editRowKey.toString() }}</div>
+        <div id="editRowKey">{{ editRowKey == null ? "null" : editRowKey.toString() }}</div>
       </div>
       <div class="option">
         <span>Changes:</span>
@@ -99,7 +99,7 @@ loadOrders();
 .options {
   padding: 20px;
   margin-top: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .caption {

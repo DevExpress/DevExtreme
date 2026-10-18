@@ -11,12 +11,15 @@ import RangeSelector, {
 import { dataSource } from './data.js';
 
 const App = () => {
-  const customizeSeries = (valueFromNameField) =>
-    valueFromNameField === 'USA'
-      ? {
-        color: 'red',
-      }
-      : {};
+  const customizeSeries = React.useCallback(
+    (valueFromNameField) =>
+      valueFromNameField === 'USA'
+        ? {
+          color: 'red',
+        }
+        : {},
+    [],
+  );
   return (
     <RangeSelector
       id="range-selector"

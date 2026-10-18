@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
-import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { Service, Employee } from './app.service';
+import { DxTreeListModule, type DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { Service, type Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -30,7 +32,7 @@ export class AppComponent {
 
   expandedRowKeys: number[] = [1];
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.employees = service.getEmployees();
   }
 
@@ -72,6 +74,8 @@ export class AppComponent {
 
       const targetIndex = this.employees.indexOf(targetData) + 1;
       this.employees.splice(targetIndex, 0, sourceData);
+
+      this.changeDetectorRef.detectChanges();
     }
   };
 }

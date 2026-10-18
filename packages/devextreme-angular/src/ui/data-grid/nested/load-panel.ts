@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { Mode } from 'devextreme/common';
 import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-load-panel',
@@ -54,14 +47,6 @@ export class DxoDataGridLoadPanelComponent extends NestedOption implements OnDes
     }
     set indicatorOptions(value: LoadPanelIndicatorProperties) {
         this._setOption('indicatorOptions', value);
-    }
-
-    @Input()
-    get indicatorSrc(): string {
-        return this._getOption('indicatorSrc');
-    }
-    set indicatorSrc(value: string) {
-        this._setOption('indicatorSrc', value);
     }
 
     @Input()
@@ -117,7 +102,6 @@ export class DxoDataGridLoadPanelComponent extends NestedOption implements OnDes
         return 'loadPanel';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -133,7 +117,6 @@ export class DxoDataGridLoadPanelComponent extends NestedOption implements OnDes
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

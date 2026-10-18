@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFilterPanelTexts } from './base/filter-panel-texts';
-
 
 @Component({
     selector: 'dxo-texts',
@@ -97,7 +90,6 @@ export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy,
         return 'texts';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -113,7 +105,6 @@ export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy,
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

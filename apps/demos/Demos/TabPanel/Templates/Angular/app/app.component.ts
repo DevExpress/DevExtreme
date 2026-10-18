@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxTabPanelModule, DxCheckBoxModule } from 'devextreme-angular';
 import { Company, Service } from './app.service';
 
@@ -23,9 +25,13 @@ export class AppComponent {
 
   itemCount: number;
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.companies = service.getCompanies();
     this.itemCount = this.companies.length;
+  }
+
+  onSelectedIndexChange() {
+    this.changeDetectorRef.detectChanges();
   }
 }
 

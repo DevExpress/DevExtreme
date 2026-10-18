@@ -1,10 +1,11 @@
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
 import { WholeFileUploadStrategyBase } from '@ts/ui/file_uploader/file_upload_strategy.whole.base';
 import type { FileUploaderItem } from '@ts/ui/file_uploader/file_uploader.types';
 
 export class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
-  _uploadFile(file: FileUploaderItem): PromiseLike<unknown> {
+  _uploadFile(file: FileUploaderItem): PromiseLike<unknown> | DeferredObj<unknown> {
     file.onLoadStart.fire();
 
     const progressCallback = (loadedBytes: number): void => {
@@ -18,7 +19,6 @@ export class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
     const { uploadFile } = this.fileUploader.option();
     try {
       const result = uploadFile?.(file.value, progressCallback);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return fromPromise(result);
     } catch (error) {
       return Deferred().reject(error).promise();

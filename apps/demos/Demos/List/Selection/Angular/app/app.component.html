@@ -1,18 +1,18 @@
 <div id="list-demo">
   <div class="widget-container">
     <dx-list
-      #list
       [dataSource]="tasks"
       [height]="400"
       [selectionMode]="selectionModeValue"
       [selectAllMode]="selectAllModeValue"
       [showSelectionControls]="true"
-      [selectedItemKeys]="[]"
+      [selectedItemKeys]="selectedItemKeys"
+      (selectedItemKeysChange)="onSelectedItemKeysChange($event)"
       [selectByClick]="selectByClick"
     ></dx-list>
     <div class="selected-data">
       <span class="caption">Selected IDs: </span>
-      <span>{{ list.selectedItemKeys.join(", ") }}</span>
+      <span>{{ selectedItemKeys.join(", ") }}</span>
     </div>
   </div>
   <div class="options">

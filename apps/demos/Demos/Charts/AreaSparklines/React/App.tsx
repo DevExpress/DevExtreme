@@ -2,13 +2,14 @@ import React from 'react';
 import RowTemplate from './RowTemplate.tsx';
 
 const years = ['2021', '2022', '2023'];
+const tableStyle = { border: 1 };
 
 function App() {
   return (
     <>
       <div className="long-title"><h3>Monthly Prices of Copper, Nickel and Palladium</h3></div>
       <div id="chart-demo">
-        <table className="demo-table" style={{ border: 1 }}>
+        <table className="demo-table" style={tableStyle}>
           <tbody>
             <tr>
               <th><div className="dx-screen-reader-only">Year</div></th>

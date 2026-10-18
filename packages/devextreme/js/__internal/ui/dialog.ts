@@ -213,7 +213,7 @@ export const custom = (params: DialogParams): BaseDialog => {
         onClick: (e: ClickEvent): void => {
           const result = action.execute(e);
 
-          hide(result);
+          hide(result as boolean);
         },
       },
     };

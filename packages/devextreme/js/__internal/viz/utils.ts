@@ -12,7 +12,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { each as _each } from '@js/core/utils/iterator';
+import { each as _each } from '@ts/core/utils/m_iterator';
 import { refreshPaths } from '@ts/viz/core/renderers/renderer';
 
 const { floor } = Math;

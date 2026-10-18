@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { Orientation } from 'devextreme/common';
 import type { DataLayoutType } from 'devextreme/ui/diagram';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-auto-layout',
@@ -53,7 +46,6 @@ export class DxoAutoLayoutComponent extends NestedOption implements OnDestroy, O
         return 'autoLayout';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -69,7 +61,6 @@ export class DxoAutoLayoutComponent extends NestedOption implements OnDestroy, O
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -25,9 +25,12 @@ function getTaskColor(taskId: number) {
   return `custom-task-color-${color}`;
 }
 
+const getTaskWrapperStyle = (taskSize: TaskTemplateProps['taskSize']) => ({ width: `${taskSize.width}px` });
+const getProgressStyle = (progress: number) => ({ width: `${progress}%` });
+
 export default function TaskTemplate({ taskData, taskSize, taskResources }: TaskTemplateProps) {
   return (
-    <div className={`custom-task ${getTaskColor(taskData.id)}`} style={ { width: `${taskSize.width}px` } }>
+    <div className={`custom-task ${getTaskColor(taskData.id)}`} style={getTaskWrapperStyle(taskSize)}>
       <div className="custom-task-img-wrapper">
         <img className="custom-task-img" src={getImagePath(taskData.id)} />
       </div>
@@ -35,7 +38,7 @@ export default function TaskTemplate({ taskData, taskSize, taskResources }: Task
         <div className='custom-task-title'>{taskData.title}</div>
         <div className='custom-task-row'>{taskResources[0].text}</div>
       </div>
-      <div className='custom-task-progress' style={ { width: `${taskData.progress}%` } }></div>
+      <div className='custom-task-progress' style={getProgressStyle(taskData.progress)}></div>
     </div>
   );
 }

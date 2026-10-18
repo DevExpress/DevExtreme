@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
 import type { SchedulerPredefinedDateNavigatorItem } from 'devextreme/ui/scheduler';
 import type { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
@@ -264,7 +258,6 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
         return 'options';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -285,7 +278,6 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

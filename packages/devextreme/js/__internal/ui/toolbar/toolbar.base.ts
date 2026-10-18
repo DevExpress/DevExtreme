@@ -15,7 +15,7 @@ import {
   waitWebFont,
 } from '@js/ui/themes';
 import type { Item, Properties } from '@js/ui/toolbar';
-import { BindableTemplate } from '@ts/core/templates/m_bindable_template';
+import { BindableTemplate } from '@ts/core/templates/bindable_template';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
@@ -62,6 +62,8 @@ const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 const ANIMATION_TIMEOUT = 15;
 
 type ItemLike = string | Item;
+
+type ToolbarGroup = Item & { items?: Item[] };
 
 export interface ToolbarBaseProperties<
   TItem extends ItemLike = Item,
@@ -609,7 +611,7 @@ class ToolbarBase<
 
   _renderGroupedItems(): void {
     const { items: groups = [] } = this.option();
-    each(groups, (groupIndex, group) => {
+    each(groups, (groupIndex, group: ToolbarGroup) => {
       const groupItems = group.items;
       const $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS);
       const location = group.location ?? 'center';

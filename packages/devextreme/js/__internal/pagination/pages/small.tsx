@@ -4,12 +4,14 @@ import { InfernoComponent, InfernoEffect } from '@ts/core/r1/runtime/inferno/ind
 import type { RefObject } from 'inferno';
 import { createRef } from 'inferno';
 
+import type { EffectReturn } from '../../core/r1/utils/effect_return';
 import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import { NumberBox } from '../editors/number_box';
 import { PAGER_INFO_CLASS } from '../info';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { getLocalizationMessage } from '../utils/compatibility_utils';
 import { getElementMinWidth } from '../utils/get_element_width';
+import { onThemeReady } from '../utils/on_theme_ready';
 import { Page } from './page';
 
 const PAGER_INFO_TEXT_CLASS = `${PAGER_INFO_CLASS}  dx-info-text`;
@@ -37,6 +39,7 @@ export class PagesSmall extends InfernoComponent<PaginationSmallPropsType> {
   constructor(props) {
     super(props);
     this.updateWidth = this.updateWidth.bind(this);
+    this.subscribeToThemeReady = this.subscribeToThemeReady.bind(this);
     this.selectLastPageIndex = this.selectLastPageIndex.bind(this);
     this.valueChange = this.valueChange.bind(this);
   }
@@ -46,11 +49,22 @@ export class PagesSmall extends InfernoComponent<PaginationSmallPropsType> {
   }
 
   createEffects(): InfernoEffect[] {
-    return [new InfernoEffect(this.updateWidth, [this.state.minWidth])];
+    return [
+      new InfernoEffect(this.updateWidth, this.getEffectDependencies()),
+      new InfernoEffect(this.subscribeToThemeReady, []),
+    ];
   }
 
   updateEffects(): void {
-    this._effects[0]?.update([this.state.minWidth]);
+    this._effects[0]?.update(this.getEffectDependencies());
+  }
+
+  getEffectDependencies(): unknown[] {
+    return [this.state.minWidth, this.props.pageCount, this.props.pageIndex];
+  }
+
+  subscribeToThemeReady(): EffectReturn {
+    return onThemeReady(this.updateWidth);
   }
 
   updateWidth(): void {

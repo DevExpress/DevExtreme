@@ -96,6 +96,22 @@ describe('isItemCountableByDataSource', () => {
   it('should not count other row types', () => {
     expect(isItemCountableByDataSource(asItem({ rowType: 'groupFooter' }), dataSource)).toBe(false);
   });
+
+  it('should not count a group row when there is no data source', () => {
+    expect(isItemCountableByDataSource(asItem({ rowType: 'group', data: 'countable' }), null)).toBe(false);
+  });
+
+  it('should not count a group row when the data source cannot answer the question', () => {
+    expect(isItemCountableByDataSource(asItem({ rowType: 'group', data: 'countable' }), { store: () => undefined })).toBe(false);
+  });
+
+  it('should not count a group row when the member is not callable', () => {
+    expect(isItemCountableByDataSource(asItem({ rowType: 'group', data: 'countable' }), { isGroupItemCountable: true })).toBe(false);
+  });
+
+  it('should still count a data row when there is no data source', () => {
+    expect(isItemCountableByDataSource(asItem({ rowType: 'data', isNewRow: false }), null)).toBe(true);
+  });
 });
 
 describe('updateItemIndices', () => {

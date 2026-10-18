@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import type { ButtonGroupTypes } from 'devextreme-react/button-group';
 import type { CheckBoxTypes } from 'devextreme-react/check-box';
@@ -15,21 +15,21 @@ export default function App() {
   const [selectOnFocus, setSelectOnFocus] = useState<boolean>(true);
   const [rtlMode, setRtlMode] = useState<boolean>(false);
 
-  const onOrientationClick = (e: ButtonGroupTypes.ItemClickEvent): void => {
+  const onOrientationClick = useCallback((e: ButtonGroupTypes.ItemClickEvent): void => {
     setOrientation(e.itemData.value);
-  };
+  }, []);
 
-  const onNavigationModeClick = (e: ButtonGroupTypes.ItemClickEvent): void => {
+  const onNavigationModeClick = useCallback((e: ButtonGroupTypes.ItemClickEvent): void => {
     setNavigationMode(e.itemData.value);
-  };
+  }, []);
 
-  const onSelectOnFocusChanged = (e: CheckBoxTypes.ValueChangedEvent): void => {
+  const onSelectOnFocusChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent): void => {
     setSelectOnFocus(e.value);
-  };
+  }, []);
 
-  const onRtlModeChanged = (e: CheckBoxTypes.ValueChangedEvent): void => {
+  const onRtlModeChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent): void => {
     setRtlMode(e.value);
-  };
+  }, []);
 
   const widgetWrapperOrientationClass: string = `widget-wrapper-${orientation}`;
 

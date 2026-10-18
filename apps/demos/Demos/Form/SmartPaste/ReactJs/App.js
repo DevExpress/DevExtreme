@@ -11,6 +11,7 @@ import { TextArea } from 'devextreme-react/text-area';
 import notify from 'devextreme/ui/notify';
 import { AzureOpenAIConfig, defaultText } from './data.js';
 
+const textAreaInputAttr = { 'aria-labelledby': 'textarea-label' };
 const stylingMode = 'filled';
 const amountDueEditorOptions = { placeholder: '$0.00', stylingMode };
 const amountDueAIOptions = { instruction: 'Format as the following: $0.00' };
@@ -145,7 +146,7 @@ const App = () => {
         />
         <TextArea
           id="textarea"
-          inputAttr={{ 'aria-labelledby': 'textarea-label' }}
+          inputAttr={textAreaInputAttr}
           value={text}
           stylingMode="filled"
           height="100%"

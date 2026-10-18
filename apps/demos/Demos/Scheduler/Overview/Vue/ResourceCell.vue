@@ -86,7 +86,6 @@ withDefaults(defineProps<{
   line-height: 20px;
   font-weight: normal;
   padding: 25px 20px 25px 40px;
-  color: #707070;
 }
 
 .dx-color-scheme-contrast .info {

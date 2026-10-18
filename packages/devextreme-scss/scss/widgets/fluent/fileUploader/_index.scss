@@ -5,7 +5,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/fileUploader";
+@use "../../base/fileUploader" with (
+  $fileuploader-file-container-padding: 4px 0 4px,
+  $fileuploader-cancel-button-margin-top: 0,
+);
 
 $fluent-fileuploader-file-wrapper-border-size: 3px !default;
 $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.1) !default;
@@ -40,6 +43,9 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
 
   .dx-fileuploader-input-label {
     text-align: center;
+    padding: $fluent-fileuploader-vertical-padding * 2 $fluent-fileuploader-vertical-padding + 2px;
+    border: $fluent-fileuploader-file-wrapper-border-size dashed;
+    border-color: $fileuploader-border-color;
   }
 
   .dx-fileuploader-input-container {
@@ -57,12 +63,6 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
     padding-bottom: $fluent-fileuploader-vertical-padding * 2 + $fluent-fileuploader-file-wrapper-border-size + 1px;
     padding-left: $fluent-fileuploader-file-wrapper-border-size;
     box-sizing: content-box;
-  }
-
-  .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: $fluent-fileuploader-vertical-padding * 2 $fluent-fileuploader-vertical-padding + 2px;
-    border: $fluent-fileuploader-file-wrapper-border-size dashed;
-    border-color: $fileuploader-border-color;
   }
 }
 
@@ -190,9 +190,5 @@ $fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-sh
 
   .dx-fileuploader-button-container {
     vertical-align: middle;
-  }
-
-  .dx-fileuploader-cancel-button {
-    margin-top: 0;
   }
 }

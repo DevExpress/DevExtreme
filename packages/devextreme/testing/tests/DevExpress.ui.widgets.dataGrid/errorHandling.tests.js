@@ -245,9 +245,9 @@ QUnit.module('Error handling', {
             return that.columns.length;
         };
 
-        that.options.rowTemplate = function(container) {
+        that.options.dataRowTemplate = function(container) {
             const innerTable = '<table><tbody><tr></tr></tbody></table>';
-            $(container).append(`<tr class="dx-row"><td>${innerTable}</td></tr>`);
+            $(container).append(`<tr><td>${innerTable}</td></tr>`);
         };
 
         that.rowsView.render($testElement);
@@ -256,24 +256,22 @@ QUnit.module('Error handling', {
         const $rowsView = $testElement.find('.dx-datagrid-rowsview');
         const $table = $rowsView.find('table').first();
         assert.equal($rowsView.length, 1, 'has rows view');
-        assert.equal($table.children('tbody').children('tr').length, 4, 'count rows');
+        assert.equal($table.children('tbody.dx-row').length, 4, 'count rows');
 
         // act
         that.errorHandlingController.renderErrorRow('Test', 1);
 
         // assert
-        assert.equal($table.children('tbody').children('tr').length, 5, 'count rows');
-        $errorRow = $table.children('tbody').children('tr').eq(2);
-        assert.ok($errorRow.hasClass('dx-error-row'), 'has error row');
+        $errorRow = $table.find('.dx-error-row');
+        assert.equal($errorRow.length, 1, 'has error row');
         assert.strictEqual($errorRow.find('td').first().text(), 'Test', 'error message');
 
         // act
         that.errorHandlingController.renderErrorRow('Test', 1);
 
         // assert
-        assert.equal($table.children('tbody').children('tr').length, 5, 'count rows');
-        $errorRow = $table.children('tbody').children('tr').eq(2);
-        assert.ok($errorRow.hasClass('dx-error-row'), 'has error row');
+        $errorRow = $table.find('.dx-error-row');
+        assert.equal($errorRow.length, 1, 'error row is not duplicated');
         assert.strictEqual($errorRow.find('td').first().text(), 'Test', 'error message');
     });
 });

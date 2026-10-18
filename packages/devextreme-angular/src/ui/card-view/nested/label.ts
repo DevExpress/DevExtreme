@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { HorizontalAlignment } from 'devextreme/common';
 import type { LabelLocation } from 'devextreme/ui/form';
 
@@ -30,7 +25,6 @@ import {
     DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-label',
@@ -94,7 +88,6 @@ export class DxoCardViewLabelComponent extends NestedOption implements AfterView
         return 'label';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -114,7 +107,6 @@ export class DxoCardViewLabelComponent extends NestedOption implements AfterView
         extractTemplate(this, this.element, this.renderer, this.document);
     }
 
-
     ngOnInit() {
         this._addRecreatedComponent();
     }
@@ -122,7 +114,6 @@ export class DxoCardViewLabelComponent extends NestedOption implements AfterView
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

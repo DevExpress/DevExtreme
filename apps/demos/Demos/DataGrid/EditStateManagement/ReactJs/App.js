@@ -88,7 +88,7 @@ const App = () => {
         <div className="option">
           <span>Edit Row Key:</span>
           <div id="editRowKey">
-            {state.editRowKey === null ? 'null' : state.editRowKey.toString()}
+            {state.editRowKey == null ? 'null' : state.editRowKey.toString()}
           </div>
         </div>
         <div className="option">

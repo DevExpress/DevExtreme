@@ -73,6 +73,7 @@ import {
 } from "devextreme/common/grids";
 import {
  Format,
+ FormatLocale,
 } from "devextreme/common/core/localization";
 import {
  DataSourceOptions,
@@ -441,23 +442,19 @@ const DxColumnHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
     "update:height": null,
     "update:search": null,
-    "update:searchMode": null,
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
     height: [Number, String],
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
-    searchMode: String as PropType<SearchMode>,
     width: [Number, String]
   }
 };
@@ -696,6 +693,7 @@ const DxFormatConfig = {
     "update:hoveredElement": null,
     "update:currency": null,
     "update:formatter": null,
+    "update:locale": null,
     "update:parser": null,
     "update:precision": null,
     "update:type": null,
@@ -704,6 +702,7 @@ const DxFormatConfig = {
   props: {
     currency: String,
     formatter: Function as PropType<((value: number | Date) => string)>,
+    locale: [Function, String] as PropType<FormatLocale>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<CommonFormat | string>,
@@ -721,21 +720,17 @@ const DxGanttHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
-    "update:searchTimeout": null,
     "update:texts": null,
     "update:visible": null,
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: Number,
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
-    searchTimeout: Number,
     texts: Object as PropType<dxGanttHeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: Number
@@ -780,27 +775,21 @@ const DxHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
     "update:height": null,
     "update:search": null,
-    "update:searchMode": null,
-    "update:searchTimeout": null,
     "update:texts": null,
     "update:visible": null,
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
     height: [Number, String],
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
-    searchMode: String as PropType<SearchMode>,
-    searchTimeout: Number,
     texts: Object as PropType<dxGanttHeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: [Number, String]

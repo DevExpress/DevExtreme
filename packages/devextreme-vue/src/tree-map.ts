@@ -46,6 +46,7 @@ import {
  WordWrap,
 } from "devextreme/common/charts";
 import {
+ FormatLocale,
  Format as LocalizationFormat,
 } from "devextreme/common/core/localization";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -228,7 +229,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -328,6 +329,7 @@ const DxFormatConfig = {
     "update:hoveredElement": null,
     "update:currency": null,
     "update:formatter": null,
+    "update:locale": null,
     "update:parser": null,
     "update:precision": null,
     "update:type": null,
@@ -336,6 +338,7 @@ const DxFormatConfig = {
   props: {
     currency: String,
     formatter: Function as PropType<((value: number | Date) => string)>,
+    locale: [Function, String] as PropType<FormatLocale>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
@@ -768,7 +771,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number

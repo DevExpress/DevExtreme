@@ -17,6 +17,7 @@ import {
 
 const currentDate = new Date(2021, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['workWeek'];
+const colCountByScreen = { xs: 3 };
 
 const App = () => {
   const [currentResource, setCurrentResource] = useState(resourcesList[0]);
@@ -67,7 +68,7 @@ const App = () => {
               <Item name="dateGroup" />
               <Item name="repeatGroup" />
               <Item name="resourcesGroup">
-                <Item name="roomIdGroup" colCount={3} colCountByScreen={{ xs: 3 }}>
+                <Item name="roomIdGroup" colCount={3} colCountByScreen={colCountByScreen}>
                   <Item name="roomIdIcon" />
                   <Item name="roomIdEditor" />
                   <Item name="priorityIdEditor" />

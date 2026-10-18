@@ -3,10 +3,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/sizes" as *;
-@use "../textEditor/sizes" as *;
 @use "../button/colors" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/dropDownEditor";
+@use "../../base/dropDownEditor" with (
+  $dropdowneditor-icon-idle-opacity: 0.35,
+);
 
 $generic-dropdowneditor-container-button-size: $generic-base-inline-borderedwidget-inner-size !default;
 $generic-dropdowneditor-button-offset: $generic-base-border-width !default;

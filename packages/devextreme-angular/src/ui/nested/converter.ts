@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoConverter } from './base/converter';
-
 
 @Component({
     selector: 'dxo-converter',
@@ -39,7 +32,6 @@ export class DxoConverterComponent extends DxoConverter implements OnDestroy, On
         return 'converter';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -55,7 +47,6 @@ export class DxoConverterComponent extends DxoConverter implements OnDestroy, On
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

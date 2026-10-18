@@ -53,7 +53,6 @@ expand(proto, '_initCore', function () {
       const { target } = e;
       return (target.tagName === 'tspan' ? target.parentNode : target)[dataKey];
     },
-    getProxy,
     click(e) {
       that._eventTrigger('click', e);
     },

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
@@ -63,7 +57,6 @@ export class DxoDiagramContextMenuComponent extends NestedOption implements OnDe
         return 'contextMenu';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -79,7 +72,6 @@ export class DxoDiagramContextMenuComponent extends NestedOption implements OnDe
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

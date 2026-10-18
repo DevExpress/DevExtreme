@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
 import type { DashStyle, Font, LegendHoverMode, RelativePosition } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
@@ -24,7 +18,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-legend',
@@ -239,7 +232,6 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
         return 'legend';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -255,7 +247,6 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

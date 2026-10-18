@@ -4,7 +4,7 @@ const imageCreator = exporter.image.creator;
 import typeUtils from 'core/utils/type';
 const testingMarkupStart = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'>';
 const testingMarkupEnd = '</svg>';
-import svgUtils from '__internal/core/utils/m_svg';
+import svgUtils from '__internal/core/utils/svg';
 import { Deferred } from 'core/utils/deferred';
 import { getWindow } from 'core/utils/window';
 
@@ -1199,6 +1199,70 @@ QUnit.test('lineargradient', function(assert) {
             assert.strictEqual(this.drawnElements[2].style.fillStyle, '#aaaaaa');
             assert.strictEqual(this.drawnElements[2].type, 'fill', 'fill');
         } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('lineargradient with a published name in stop-color', function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart +
+        '<defs>' +
+
+        '<linearGradient id="testlineargradientname">' +
+        '<stop offset="0%" stop-color="var(--dx-viz-blue, #0078d4)"></stop>' +
+        '<stop offset="100%" stop-color="blue"></stop>' +
+        '</linearGradient>' +
+
+        '</defs>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradientname)"></path>' +
+        testingMarkupEnd;
+
+    document.documentElement.style.setProperty('--dx-viz-blue', 'rgb(1, 2, 3)');
+
+    const imageBlob = getData(markup);
+
+    $.when(imageBlob).done(() => {
+        try {
+            const gradient = this.drawnElements.filter((element) => element.type === 'linearGradient')[0];
+
+            assert.strictEqual(gradient.addColorStop.callCount, 2);
+            assert.deepEqual(gradient.addColorStop.getCall(0).args, [0, 'rgb(1, 2, 3)'], 'a name is exported as what the cascade resolved, not as the literal written beside it');
+            assert.deepEqual(gradient.addColorStop.getCall(1).args, [1, 'blue'], 'a literal is left as it is written');
+        } finally {
+            document.documentElement.style.removeProperty('--dx-viz-blue');
+            done();
+        }
+    });
+});
+
+QUnit.test('lineargradient with a published name in stop-color, exported from a live element', function(assert) {
+    const done = assert.async();
+    const host = $('<div>').appendTo('body');
+
+    host.html(testingMarkupStart +
+        '<defs>' +
+
+        '<linearGradient id="testlineargradientlive">' +
+        '<stop offset="0%" stop-color="var(--dx-viz-blue, #0078d4)"></stop>' +
+        '<stop offset="100%" stop-color="blue"></stop>' +
+        '</linearGradient>' +
+
+        '</defs>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradientlive)"></path>' +
+        testingMarkupEnd);
+
+    host.get(0).querySelector('#testlineargradientlive').style.setProperty('--dx-viz-blue', 'rgb(4, 5, 6)');
+
+    const imageBlob = imageCreator.getData(host.children().get(0), { width: 500, height: 250, format: 'png', margin: 10 }, true);
+
+    $.when(imageBlob).done(() => {
+        try {
+            const gradient = this.drawnElements.filter((element) => element.type === 'linearGradient')[0];
+
+            assert.deepEqual(gradient.addColorStop.getCall(0).args, [0, 'rgb(4, 5, 6)'], 'exportTo and print hand the exporter a live element, where nothing has resolved the name beforehand');
+        } finally {
+            host.remove();
             done();
         }
     });

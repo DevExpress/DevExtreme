@@ -75,9 +75,6 @@ const getIgnoredRules = (testName) => {
   }
 
   const specificRules = {
-    'DataGrid-EditStateManagement': ['aria-required-parent'],
-    'DataGrid-RemoteCRUDOperations': ['scrollable-region-focusable'],
-
     'Diagram-Adaptability': ['aria-dialog-name', 'label'],
     'Diagram-AdvancedDataBinding': ['aria-dialog-name', 'label'],
     'Diagram-Containers': ['aria-dialog-name', 'label'],
@@ -109,12 +106,6 @@ const getIgnoredRules = (testName) => {
     'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
-
-    'Localization-UsingGlobalize': ['label'],
-
-    // Icon-only tabs render no text, so they have no accessible name.
-    // Naming them needs Tabs widget support (like Button labels icon-only buttons).
-    'Tabs-Overview': ['aria-tab-name'],
   };
 
   return [

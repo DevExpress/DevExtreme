@@ -26,7 +26,7 @@ export const markup = `
         </li>
         <li>Custom formats</li>
         <li>Mail-merge placeholders (for example, %username%)</li>
-        <li>Adaptive toolbar for working images, links, and color formats</li>
+        <li>Adaptive toolbar for working with images, links, and color formats</li>
         <li>Image upload: drag-and-drop images onto the form, select files from the file system, or specify a URL.</li>
         <li>Copy-paste rich content (unsupported formats are removed)</li>
         <li>Tables support</li>

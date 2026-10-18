@@ -168,11 +168,17 @@ export class AppService {
         this.messages.push({ role: 'assistant', content: aiResponse });
         this.renderAssistantMessage(aiResponse);
       }, 200);
-    } catch {
+    } catch (err: unknown) {
       this.typingUsersSubject.next([]);
       this.messages.pop();
-      this.alertLimitReached();
+      this.alertError(this.getErrorMessage(err));
     }
+  }
+
+  getErrorMessage(err: unknown): string {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
   }
 
   renderAssistantMessage(text: string): void {
@@ -184,8 +190,8 @@ export class AppService {
     });
   }
 
-  alertLimitReached(): void {
-    this.setAlerts([{ message: 'Request limit reached, try again in a minute.' }]);
+  alertError(message: string): void {
+    this.setAlerts([{ message }]);
 
     setTimeout(() => {
       this.setAlerts([]);

@@ -55,7 +55,7 @@ export class CardViewBase extends GridCoreNew {
   protected _getDefaultOptions() {
     return {
       ...super._getDefaultOptions(),
-      ...extend(true, {}, defaultOptions) as typeof defaultOptions,
+      ...extend(true, {}, defaultOptions),
     };
   }
 }

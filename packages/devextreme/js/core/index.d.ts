@@ -63,9 +63,18 @@ export type AllPermutations<T extends string> = UnionLength<T> extends PermutedU
   [K in T]: Permutations<T> | AllPermutations<Exclude<T, K>>
 }[T] : string;
 
+export type PermutationsWithRepetition<T extends string, TMaxLength extends number> = PermutationsWithRepetitionInner<T, TMaxLength, 1>;
+type PermutationsWithRepetitionInner<T extends string, TMaxLength extends number, K extends number> = K extends TMaxLength
+  ? T
+  : T | `${T}${PermutationsWithRepetitionInner<T, TMaxLength, IncrementalCounter[K]>}`;
+
 /// #DEBUG
 
 export type EventProps<T> = Extract<keyof T, `on${any}`>;
+
+type NestedEventProps<T> = {
+  [K in keyof T]?: EventProps<NonNullable<T[K]>>
+};
 
 export type CheckedEvents<
   TProps,
@@ -77,6 +86,7 @@ export type CheckedEvents<
     [K in TExcludedEvents]?: never
   },
   TExcludedEvents extends keyof TProps = never,
+  TExcludedNestedEvents extends NestedEventProps<TProps> = {},
 > = TEvents;
 
 /// #ENDDEBUG

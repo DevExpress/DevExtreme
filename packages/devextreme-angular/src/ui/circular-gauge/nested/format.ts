@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
+import type { FormatLocale } from 'devextreme/common/core/localization';
 import type { Format } from 'devextreme/common';
 
 import {
@@ -21,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-circular-gauge-format',
@@ -45,6 +39,14 @@ export class DxoCircularGaugeFormatComponent extends NestedOption implements OnD
     }
     set formatter(value: ((value: number | Date) => string)) {
         this._setOption('formatter', value);
+    }
+
+    @Input()
+    get locale(): FormatLocale {
+        return this._getOption('locale');
+    }
+    set locale(value: FormatLocale) {
+        this._setOption('locale', value);
     }
 
     @Input()
@@ -84,7 +86,6 @@ export class DxoCircularGaugeFormatComponent extends NestedOption implements OnD
         return 'format';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -100,7 +101,6 @@ export class DxoCircularGaugeFormatComponent extends NestedOption implements OnD
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

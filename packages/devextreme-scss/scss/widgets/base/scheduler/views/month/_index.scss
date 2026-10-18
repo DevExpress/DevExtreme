@@ -1,4 +1,3 @@
-$scheduler-base-border: null !default;
 $scheduler-base-border-color: null !default;
 $scheduler-workspace-accent-color: null !default;
 $scheduler-workspace-date-table-cell-height: null !default;
@@ -8,10 +7,6 @@ $scheduler-month-date-text-padding: null !default;
 $scheduler-first-month-cell-background-color: null !default;
 
 .dx-scheduler-work-space-month {
-  .dx-scheduler-all-day-title {
-    display: none;
-  }
-
   .dx-scheduler-header-panel {
     width: 100%;
   }

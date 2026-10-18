@@ -31,7 +31,7 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_1_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_2_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -69,7 +69,7 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_1_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_2_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -93,6 +93,63 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
   }));
 });
 
+test.meta({ browserSize: [900, 800] })('The separator should have correct position when resizing fixed column on the right (rtlEnabled = false) (T1335911)', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const separator = dataGrid.getColumnsSeparator().element;
+  const fixedHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(23).element;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.resizeHeader(23, -100, false);
+
+  const fixedCellLeft = await fixedHeaderCell.getBoundingClientRectProperty('left');
+
+  await t
+    .expect(separator.getBoundingClientRectProperty('left'))
+    .within(fixedCellLeft - 1, fixedCellLeft + 1);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 25),
+  columnAutoWidth: true,
+  allowColumnResizing: true,
+  columnWidth: 200,
+  columnResizingMode: 'nextColumn',
+  customizeColumns: (columns) => {
+    columns[5].fixed = true;
+    columns[5].fixedPosition = 'right';
+    columns[6].fixed = true;
+    columns[6].fixedPosition = 'right';
+  },
+}));
+
+test.meta({ browserSize: [900, 800] })('The separator should have correct position when resizing fixed column on the left (rtlEnabled = true) (T1335911)', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const separator = dataGrid.getColumnsSeparator().element;
+  const fixedHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(23).element;
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.resizeHeader(23, -100, false, 'right');
+
+  const fixedCellRight = await fixedHeaderCell.getBoundingClientRectProperty('right');
+
+  await t
+    .expect(separator.getBoundingClientRectProperty('left'))
+    .within(fixedCellRight - 1, fixedCellRight + 1);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 25),
+  rtlEnabled: true,
+  columnAutoWidth: true,
+  allowColumnResizing: true,
+  columnWidth: 200,
+  columnResizingMode: 'nextColumn',
+  customizeColumns: (columns) => {
+    columns[5].fixed = true;
+    columns[5].fixedPosition = 'left';
+    columns[6].fixed = true;
+    columns[6].fixedPosition = 'left';
+  },
+}));
+
 fixture.disablePageReloads`Resize columns - widget mode`
   .page(url(__dirname, '../../../container.html'));
 
@@ -112,7 +169,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -150,7 +207,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -188,7 +245,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_right_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_right_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 

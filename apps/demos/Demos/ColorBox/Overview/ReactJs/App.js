@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import ColorBox from 'devextreme-react/color-box';
 
 const defaultModeLabel = { 'aria-label': 'Default mode' };
@@ -9,6 +9,7 @@ const disabledLabel = { 'aria-label': 'Disabled' };
 const eventHandlingLabel = { 'aria-label': 'Event Handling' };
 function App() {
   const [color, setColor] = useState('#f05b41');
+  const brushStyle = useMemo(() => ({ color }), [color]);
   const handleColorChange = useCallback(({ value }) => {
     setColor(value);
   }, []);
@@ -74,7 +75,7 @@ function App() {
               className="brush"
               width="360"
               height="254"
-              style={{ color }}
+              style={brushStyle}
             >
               <use href="../../../../images/Brush.svg#brush"></use>
             </svg>

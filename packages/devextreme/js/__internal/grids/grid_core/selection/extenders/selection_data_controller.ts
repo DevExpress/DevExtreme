@@ -6,8 +6,8 @@ import type {
   DataChange, GeneratedItem, ItemProcessingOptions, ProcessedItem, RefreshOptions,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { SelectionFilter } from '@ts/ui/selection/types';
 
 export const selectionDataControllerExtender = (
@@ -28,8 +28,8 @@ export const selectionDataControllerExtender = (
     }
   }
 
-  protected _loadDataSource(): DeferredObj<unknown> {
-    return super._loadDataSource().always(() => {
+  protected loadDataSourceAdapter(): DeferredObj<unknown> {
+    return super.loadDataSourceAdapter().always(() => {
       this._selectionController.refresh();
     });
   }

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
 import type { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
@@ -104,7 +98,6 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
         return 'rangeContainer';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -120,7 +113,6 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

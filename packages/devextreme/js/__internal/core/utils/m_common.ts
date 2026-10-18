@@ -4,7 +4,7 @@ import { toComparable } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import {
-  isDefined, isFunction, isObject, isString, type,
+  isDefined, isFunction, isObject, isPlainObject, isString, type,
 } from '@js/core/utils/type';
 
 // @ts-expect-error new deferred
@@ -109,12 +109,23 @@ export const deferUpdater = function (func) {
   };
 };
 
-export const findBestMatches = (
-  targetFilter: unknown,
-  items: unknown[],
-  mapFn?: (item: unknown) => unknown,
-): unknown[] => {
-  const bestMatches: unknown[] = [];
+type FilterMatch<TFilter> = { [TKey in keyof TFilter]?: unknown };
+
+export function findBestMatches<TFilter extends object, TItem>(
+  targetFilter: TFilter,
+  items: readonly TItem[],
+  mapFn: (item: TItem) => FilterMatch<TFilter>,
+): TItem[];
+export function findBestMatches<TFilter extends object, TItem extends FilterMatch<TFilter>>(
+  targetFilter: TFilter,
+  items: readonly TItem[],
+): TItem[];
+export function findBestMatches(
+  targetFilter: Readonly<Record<string, unknown>>,
+  items: readonly Readonly<Record<string, unknown>>[],
+  mapFn?: (item: Readonly<Record<string, unknown>>) => Readonly<Record<string, unknown>>,
+): Readonly<Record<string, unknown>>[] {
+  const bestMatches: Readonly<Record<string, unknown>>[] = [];
   let maxMatchCount = 0;
 
   each(items, (index, itemSrc) => {
@@ -147,7 +158,7 @@ export const findBestMatches = (
   });
 
   return bestMatches;
-};
+}
 
 const match = function (value, targetValue) {
   if (Array.isArray(value) && Array.isArray(targetValue)) {
@@ -258,7 +269,7 @@ export const noop = function () {};
 // @ts-expect-error only void function can be called with new
 export const asyncNoop = function () { return new Deferred().resolve().promise(); };
 
-export const grep = function (elements, checkFunction, invert) {
+export const grep = function (elements, checkFunction, invert?) {
   const result: any[] = [];
   let check;
   const expectedCheck = !invert;
@@ -274,18 +285,20 @@ export const grep = function (elements, checkFunction, invert) {
   return result;
 };
 
-const compareArrays = (array1, array2, depth, options) => {
+const compareArrays = (array1, array2, depth, options, comparedPairs) => {
   if (array1.length !== array2.length) {
     return false;
   }
 
+  const strictComparedPairs = options.strict ? comparedPairs : comparedPairs && new Map();
+
   return !array1.some((item, idx) => !compareByValue(item, array2[idx], depth + 1, {
     ...options,
     strict: true,
-  }));
+  }, strictComparedPairs));
 };
 
-const compareObjects = (object1, object2, depth, options) => {
+const compareObjects = (object1, object2, depth, options, comparedPairs) => {
   const keys1 = Object.keys(object1);
   const keys2 = Object.keys(object2);
 
@@ -294,15 +307,28 @@ const compareObjects = (object1, object2, depth, options) => {
   }
 
   const keys2Set = new Set(keys2);
-  return !keys1.some((key) => !keys2Set.has(key) || !compareByValue(object1[key], object2[key], depth + 1, options));
+  return !keys1.some((key) => !keys2Set.has(key)
+    || !compareByValue(object1[key], object2[key], depth + 1, options, comparedPairs));
+};
+
+const isPairCompared = (comparedPairs, value1, value2) => comparedPairs?.get(value1)?.has(value2) ?? false;
+
+const addComparedPair = (comparedPairs, value1, value2) => {
+  if (!comparedPairs) {
+    return;
+  }
+
+  const pairedValues = comparedPairs.get(value1) ?? new Set();
+  pairedValues.add(value2);
+  comparedPairs.set(value1, pairedValues);
 };
 
 const DEFAULT_EQUAL_BY_VALUE_OPTS = {
   maxDepth: 3,
   strict: true,
 };
-const compareByValue = (value1, value2, depth, options) => {
-  const { strict, maxDepth } = options;
+const compareByValue = (value1, value2, depth, options, comparedPairs) => {
+  const { strict, maxDepth, comparePlainObjectsOnly = false } = options;
   const comparable1 = toComparable(value1, true);
   const comparable2 = toComparable(value2, true);
 
@@ -314,11 +340,16 @@ const compareByValue = (value1, value2, depth, options) => {
   switch (true) {
     case comparisonResult:
     case depth >= maxDepth:
+    case isPairCompared(comparedPairs, comparable1, comparable2):
       return true;
-    case isObject(comparable1) && isObject(comparable2):
-      return compareObjects(comparable1, comparable2, depth, options);
+    case comparePlainObjectsOnly
+      ? isPlainObject(comparable1) && isPlainObject(comparable2)
+      : isObject(comparable1) && isObject(comparable2):
+      addComparedPair(comparedPairs, comparable1, comparable2);
+      return compareObjects(comparable1, comparable2, depth, options, comparedPairs);
     case Array.isArray(comparable1) && Array.isArray(comparable2):
-      return compareArrays(comparable1, comparable2, depth, options);
+      addComparedPair(comparedPairs, comparable1, comparable2);
+      return compareArrays(comparable1, comparable2, depth, options, comparedPairs);
     default:
       return false;
   }
@@ -326,7 +357,9 @@ const compareByValue = (value1, value2, depth, options) => {
 
 export const equalByValue = (value1, value2, options = DEFAULT_EQUAL_BY_VALUE_OPTS) => {
   const compareOptions = { ...DEFAULT_EQUAL_BY_VALUE_OPTS, ...options };
-  return compareByValue(value1, value2, 0, compareOptions);
+  const comparedPairs = Number.isFinite(compareOptions.maxDepth) ? undefined : new Map();
+
+  return compareByValue(value1, value2, 0, compareOptions, comparedPairs);
 };
 
 export default {

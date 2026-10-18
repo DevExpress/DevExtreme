@@ -128,7 +128,6 @@ class HierarchicalCollectionWidget<
     const linkAttributes = isObject(linkAttr) ? linkAttr : {};
     return $('<a>')
       .addClass(ITEM_URL_CLASS)
-      // @ts-expect-error ts-error
       .attr({ ...linkAttributes, href: url })
       // @ts-expect-error ts-error
       .append(iconContainer)

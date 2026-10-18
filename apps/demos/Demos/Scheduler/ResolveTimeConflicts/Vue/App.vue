@@ -240,15 +240,6 @@ const onFormInitialized = (e: DxFormTypes.InitializedEvent) => {
       form?.validate();
     }
   });
-
-  e.component!.on('contentReady', (contentReadyEvent: DxFormTypes.ContentReadyEvent) => {
-    const untilEditor = contentReadyEvent.component.getEditor('recurrenceEndUntilEditor');
-    untilEditor?.on('valueChanged', () => {
-      contentReadyEvent.component.getEditor('recurrenceRepeatEndEditor')?.option('value') !== 'until'
-      && untilEditor?.option('value', new Date(2026, 8, 3));
-    });
-    untilEditor?.option('value', new Date(2026, 8, 3));
-  });
 };
 
 const customizeItem = (item: DxFormTypes.SimpleItem) => {
@@ -279,13 +270,14 @@ const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
 </script>
 
 <style>
-.dx-scheduler-appointment {
+.dx-scheduler-appointment-title,
+.dx-scheduler-appointment-content-date {
   color: #242424;
 }
 
 .options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   margin-top: 20px;
 }
 

@@ -11,7 +11,6 @@
 @use "../common/sizes" as *;
 @use "../../base/textEditor";
 @use "../../base/textEditor/mixins" as *;
-@use "../colorBox/sizes" as *;
 
 $material-base-standard-texteditor-input-horizontal-padding: 0 !default;
 $material-texteditor-icon-container-size: $material-base-icon-size - 2px !default;
@@ -387,7 +386,7 @@ $material-editor-custom-button-margin: 5px !default;
   $texteditor-label-transition,
   $material-texteditor-font-size,
   $material-filled-texteditor-input-top-padding,
-  0,
+  $material-texteditor-label-margin-top-diff,
   $material-texteditor-label-outside-font-size,
   $material-texteditor-label-outside-height,
 );

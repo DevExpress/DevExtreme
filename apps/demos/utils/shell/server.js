@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const open = require('open');
 const rateLimit = require('express-rate-limit');
 const {
-  join, normalize, relative, isAbsolute,
+  join, normalize, relative, isAbsolute, sep,
 } = require('path');
 const {
   readFileSync, readdirSync, existsSync, statSync,
@@ -29,6 +29,28 @@ const getDemoPath = (requestPath) => requestPath.replace(/^\/apps\/demos(?=\/|$)
 function isPathWithin(parentDir, candidatePath) {
   const rel = relative(parentDir, candidatePath);
   return rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
+}
+
+function subdirectoryNames(dir) {
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+}
+
+function resolveDemoSegments(widget, name, approach) {
+  const widgetNames = subdirectoryNames(demosRoot);
+  if (!widgetNames.includes(widget)) return null;
+  const widgetDir = widgetNames.find((entry) => entry === widget);
+
+  const demoNames = subdirectoryNames(join(demosRoot, widgetDir));
+  if (!demoNames.includes(name)) return null;
+  const demoDir = demoNames.find((entry) => entry === name);
+
+  const approachNames = subdirectoryNames(join(demosRoot, widgetDir, demoDir));
+  if (!approachNames.includes(approach)) return null;
+  const approachDir = approachNames.find((entry) => entry === approach);
+
+  return { widget: widgetDir, name: demoDir, approach: approachDir };
 }
 
 // Rebuilds on-demand, only for the demo actually being viewed, rather than
@@ -86,15 +108,22 @@ const demoIndexHandler = async (request, response) => {
   const { widget, name, approach } = request.params;
 
   if (widget && name && approach) {
+    const demo = resolveDemoSegments(widget, name, approach);
+    if (!demo) {
+      response.status(404).type('text/plain').send('Unknown demo');
+      return;
+    }
+
     let result;
     try {
-      result = await ensureBundleFresh(widget, name, approach);
+      result = await ensureBundleFresh(demo.widget, demo.name, demo.approach);
     } catch (err) {
-      response.status(500).send(`Demo build failed: ${err.message}`);
+      console.error(`demo build failed for ${demo.widget}/${demo.name}/${demo.approach}:`, err);
+      response.status(500).type('text/plain').send('Demo build failed — see the server console.');
       return;
     }
     if (!result.ok) {
-      response.status(500).send(`Demo build failed: ${result.reason}`);
+      response.status(500).type('text/plain').send(`Demo build failed: ${result.reason}`);
       return;
     }
   }
@@ -108,8 +137,8 @@ const demoIndexHandler = async (request, response) => {
   }
 
   const fileSystemPath = normalize(join.apply(this, parts));
-  if (!isPathWithin(root, fileSystemPath)) {
-    response.status(403).send('Forbidden');
+  if (!fileSystemPath.startsWith(root + sep)) {
+    response.status(403).type('text/plain').send('Forbidden');
     return;
   }
   let fileContent = readFileSync(fileSystemPath).toString();

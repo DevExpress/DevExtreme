@@ -28,7 +28,7 @@ interface RequestResult {
 const beforeTest = (): void => {
   baseBeforeTest();
   jest.spyOn(errors, 'log').mockImplementation(jest.fn());
-  jest.spyOn(errors, 'Error').mockImplementation(() => ({}));
+  jest.spyOn(errors, 'Error').mockImplementation(() => ({}) as ReturnType<typeof errors.Error>);
 };
 
 describe('Options', () => {

@@ -11,21 +11,21 @@ import { getWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
+import type { ModuleType } from '@ts/grids/grid_core/types';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
-import type { ChangedEvent } from '../data_source_adapter/types';
+import type { ChangedEvent, RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../m_utils';
 import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
 import type { RowsViewScrollEvent } from '../views/types';
 import {
   BOTTOM_LOAD_PANEL_CLASS,
-  COLUMN_LINES_CLASS,
-  FREESPACE_CLASS,
-  GROUP_SPACE_CLASS,
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
   PAGING_METHOD_NAMES,
@@ -33,11 +33,14 @@ import {
   VIRTUAL_ROW_CLASS,
 } from './const';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
-import type { GroupCountableDataSource } from './utils/items';
 import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
 export type VirtualScrollingDataSourceAdapter = InstanceType<ReturnType<typeof dataSourceAdapterExtender>>;
+
+interface VirtualScrollingDataSourceController extends DataSourceController {
+  getAdapter: () => VirtualScrollingDataSourceAdapter | null;
+}
 
 export const updateLoading = function (that) {
   const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
@@ -75,7 +78,9 @@ const removeEmptyRows = function ($emptyRows, className) {
     $emptyRows = $(tBodies);
   }
 
-  const rowCount = className === FREESPACE_CLASS ? $emptyRows.length - 1 : $emptyRows.length;
+  const rowCount = className === VIEW_CLASSES.freeSpaceRow
+    ? $emptyRows.length - 1
+    : $emptyRows.length;
 
   for (let i = 0; i < rowCount; i++) {
     $emptyRows.eq(i).remove();
@@ -83,6 +88,8 @@ const removeEmptyRows = function ($emptyRows, className) {
 };
 
 export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class VirtualScrollingCoreDataSourceAdapterExtender extends Base {
+  protected declare _items: RawItemData[];
+
   private _totalCount: any;
 
   private _isLoaded: any;
@@ -193,6 +200,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
 
   protected dataChangedHandler(e?: ChangedEvent): void {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      // @ts-expect-error DataSource items are typed as unknown
       this._items = this._dataSource.items().slice();
       this._totalCount = this._dataSourceTotalCount(true);
       super.dataChangedHandler(e);
@@ -488,6 +496,8 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
 export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRowsViewExtender extends Base {
   protected _dataController!: DataController & Partial<StateStoringDataControllerExtension>;
 
+  protected dataSourceController!: VirtualScrollingDataSourceController;
+
   protected _errorHandlingController!: ErrorHandlingViewController;
 
   private _isFixedTableRendering: any;
@@ -502,6 +512,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     super.init();
 
     this._errorHandlingController = this.getController('errorHandling');
+    this.dataSourceController = this.getController('dataSource') as VirtualScrollingDataSourceController;
 
     this._dataController.pageChanged.add((pageIndex) => {
       const scrollTop = this._scrollTop;
@@ -566,7 +577,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       scrollPosition = 0;
     }
 
-    this.scrollTo({ y: scrollPosition, x: this._scrollLeft });
+    this.scrollTo({ top: scrollPosition, left: this._scrollLeft });
   }
 
   public renderDelayedTemplates() {
@@ -576,23 +587,27 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     super.renderDelayedTemplates.apply(this, arguments as any);
   }
 
-  protected _renderCore(e) {
+  protected _renderCore(e?: DataChange): DeferredObj<unknown> {
     const startRenderTime = Date.now();
 
-    const deferred = super._renderCore.apply(this, arguments as any);
+    const deferred = super._renderCore(e);
 
-    const dataSource = this._dataController._dataSource as VirtualScrollingDataSourceAdapter | null | undefined;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-    if (dataSource && e) {
+    if (dataSourceAdapter && e) {
       const itemCount = e.items ? e.items.length : 20;
       const viewportSize = this._dataController
         // @ts-expect-error
         .viewportSize() || 20;
 
-      if (gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0 && this.option(LEGACY_SCROLLING_MODE) !== false) {
-        dataSource._renderTime = (Date.now() - startRenderTime) * viewportSize / itemCount;
+      if (
+        gridCoreUtils.isVirtualRowRendering(this)
+        && itemCount > 0
+        && this.option(LEGACY_SCROLLING_MODE) !== false
+      ) {
+        dataSourceAdapter._renderTime = ((Date.now() - startRenderTime) * viewportSize) / itemCount;
       } else {
-        dataSource._renderTime = Date.now() - startRenderTime;
+        dataSourceAdapter._renderTime = Date.now() - startRenderTime;
       }
     }
     return deferred;
@@ -627,6 +642,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     const changeType = change?.changeType;
     const d: any = Deferred();
 
+    // @ts-expect-error the view is rendered here
     const contentTable = contentElement.children().first();
     if (changeType === 'append' || changeType === 'prepend') {
       this.waitAsyncTemplates().done(() => {
@@ -639,7 +655,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
         tableElement.remove();
         $freeSpaceRowElements = this._getFreeSpaceRowElements(contentTable);
-        removeEmptyRows($freeSpaceRowElements, FREESPACE_CLASS);
+        removeEmptyRows($freeSpaceRowElements, VIEW_CLASSES.freeSpaceRow);
 
         if (change.removeCount) {
           this._removeRowsElements(contentTable, change.removeCount, changeType);
@@ -667,7 +683,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
     let $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed, position);
 
-    $virtualRow = this._wrapRowIfNeed($table, $virtualRow);
+    $virtualRow = this._wrapRowIfNeed($virtualRow);
 
     this._appendEmptyRow($table, $virtualRow, location);
   }
@@ -707,7 +723,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
   private _correctRowHeights(rowHeights) {
     const dataController = this._dataController;
-    const dataSource = dataController._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const correctedRowHeights: any = [];
     const visibleRows = dataController.getVisibleRows();
     let itemSize = 0;
@@ -726,7 +742,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
           itemSize = 0;
         }
         lastLoadIndex = currentItem.loadIndex;
-      } else if (isItemCountableByDataSource(currentItem, dataSource as unknown as GroupCountableDataSource)) {
+      } else if (isItemCountableByDataSource(currentItem, dataSourceAdapter)) {
         if (firstCountableItem) {
           firstCountableItem = false;
         } else {
@@ -770,6 +786,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
       removeEmptyRows($virtualRows, VIRTUAL_ROW_CLASS);
 
+      // @ts-expect-error each() is typed for callbacks that return a boolean
       $tables.each((index, element) => {
         const isFixed = index > 0;
         const prevFixed = this._isFixedTableRendering;
@@ -782,7 +799,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   private _isTableLinesDisplaysCorrect(table) {
-    const hasColumnLines = table.find(`.${COLUMN_LINES_CLASS}`).length > 0;
+    const hasColumnLines = table.find(`.${VIEW_CLASSES.columnLines}`).length > 0;
     return hasColumnLines === this.option('showColumnLines');
   }
 
@@ -809,7 +826,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     const isExpandColumn = column.command === 'expand';
 
     cssClass && classes.push(cssClass);
-    isExpandColumn && classes.push(this.addWidgetPrefix(GROUP_SPACE_CLASS));
+    isExpandColumn && classes.push(this.addWidgetPrefix(VIEW_CLASSES.groupSpace));
 
     return classes;
   }
@@ -822,24 +839,24 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     }
   }
 
-  private _updateBottomLoading() {
-    const that = this;
-    const virtualMode = isVirtualMode(this);
-    const infiniteMode = isInfiniteMode(this);
-    const showBottomLoading = !that._dataController.hasKnownLastPage() && that._dataController.isLoaded() && (virtualMode || infiniteMode);
-    const $contentElement = that._findContentElement();
-    const bottomLoadPanelElement = that._findBottomLoadPanel($contentElement);
+  private _updateBottomLoading(): void {
+    const showBottomLoading = !this.dataSourceController.hasKnownLastPage()
+      && this._dataController.isLoaded()
+      && isVirtualPaging(this);
+    const $contentElement = this._findContentElement();
+    const bottomLoadPanelElement = this._findBottomLoadPanel($contentElement);
 
     if (showBottomLoading) {
       if (!bottomLoadPanelElement) {
         $('<div>')
-          .addClass(that.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS))
-          .append(that._createComponent($('<div>'), LoadIndicator, {
+          .addClass(this.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS))
+          .append(this._createComponent($('<div>'), LoadIndicator, {
             elementAttr: {
               role: null,
               'aria-label': null,
             },
           }).$element())
+          // @ts-expect-error the view is rendered here
           .appendTo($contentElement);
       }
     } else if (bottomLoadPanelElement) {

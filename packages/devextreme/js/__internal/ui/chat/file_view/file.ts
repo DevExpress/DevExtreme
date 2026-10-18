@@ -7,7 +7,7 @@ import type {
   Attachment,
   AttachmentDownloadClickEvent,
 } from '@js/ui/chat';
-import { getImageContainer } from '@ts/core/utils/m_icon';
+import { getImageContainer } from '@ts/core/utils/icon';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';

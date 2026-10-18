@@ -1,4 +1,3 @@
-import Class from '@js/core/class';
 import errors from '@js/core/errors';
 import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
@@ -37,7 +36,6 @@ const readPropValue = function (obj, propName, options) {
 
 const assignPropValue = function (obj, propName, value, options) {
   if (propName === 'this') {
-    // @ts-expect-error only void function can be called with new
     throw new errors.Error('E4016');
   }
 
@@ -241,7 +239,7 @@ export const toComparable = function (value, caseSensitive?, options: any = {}) 
 
   const collatorSensitivity = options?.collatorOptions?.sensitivity;
 
-  if (value && (value instanceof Class || value instanceof Guid) && value.valueOf) {
+  if (value instanceof Guid) {
     value = value.valueOf();
   } else if (typeof value === 'string' && (collatorSensitivity === 'base' || collatorSensitivity === 'case')) {
     const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;

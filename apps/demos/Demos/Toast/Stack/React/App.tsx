@@ -32,6 +32,9 @@ function App() {
     right: undefined,
   });
   const [direction, setDirection] = useState<NotifyStack['direction']>('up-push');
+  const onPredefinedChanged = useCallback((value: string): void => setIsPredefined(value === 'predefined'), []);
+  const onPredefinedPositionChanged = useCallback(({ selectedItem }: SelectBoxTypes.SelectionChangedEvent): void => setPredefinedPosition(selectedItem), []);
+  const onDirectionChanged = useCallback(({ selectedItem }: SelectBoxTypes.SelectionChangedEvent): void => setDirection(selectedItem), []);
 
   const topNumberBoxValueChanged = useCallback(
     (top: number | undefined): void => setCoordinatePosition({ ...coordinatePosition, top }),
@@ -84,12 +87,12 @@ function App() {
           layout='horizontal'
           defaultValue='predefined'
           items={radioGroupItems}
-          onValueChange={(value: string): void => setIsPredefined(value === 'predefined')} />
+          onValueChange={onPredefinedChanged} />
         <SelectBox
           items={positions}
           value={predefinedPosition}
           inputAttr={positionLabel}
-          onSelectionChanged={({ selectedItem }: SelectBoxTypes.SelectionChangedEvent): void => setPredefinedPosition(selectedItem)}
+          onSelectionChanged={onPredefinedPositionChanged}
           visible={isPredefined} />
         <div className='section'>
           <NumberBox
@@ -132,10 +135,10 @@ function App() {
           items={directions}
           inputAttr={directionLabel}
           value={direction}
-          onSelectionChanged={({ selectedItem }: SelectBoxTypes.SelectionChangedEvent): void => setDirection(selectedItem)} />
+          onSelectionChanged={onDirectionChanged} />
         <div className='section'>
           <Button text='Show' width='48%' onClick={show} />
-          <Button text='Hide all' width='48%' onClick={() => HideToasts()} />
+          <Button text='Hide all' width='48%' onClick={HideToasts} />
         </div>
       </div>
     </>

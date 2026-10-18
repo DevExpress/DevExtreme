@@ -27,7 +27,6 @@ export class GanttDataCache {
   pullDataFromCache(key, target): void {
     const data = this._getCache(key);
     if (data) {
-      // @ts-expect-error ts-error
       extendFromObject(target, data);
     }
     this._onKeyExpired(key);

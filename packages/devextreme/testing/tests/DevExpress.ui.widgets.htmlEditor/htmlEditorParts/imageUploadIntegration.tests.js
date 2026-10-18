@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import '../../../helpers/xmlHttpRequestMock.js';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import 'ui/html_editor';
 
@@ -499,6 +499,24 @@ module('Image uploading integration', {
                 .change()
                 .press('enter');
         });
+    });
+
+    test('Enter in the width editor applies the dialog and passes the key event to valueChanged', function(assert) {
+        const valueChangedSpy = sinon.spy();
+        this.createWidget({ imageUpload: { tabs: ['url'] }, onValueChanged: valueChangedSpy });
+
+        const $form = this.getFormElement([0, 0]);
+        const $srcInput = $form.find(`.${TEXTBOX_CLASS}`).eq(0).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($srcInput).type(BLACK_PIXEL).change();
+
+        const { widthEditor } = this.getSizeEditors($form);
+        const $widthInput = widthEditor.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($widthInput).type('100').change().press('enter');
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual(valueChangedSpy.callCount, 1, 'valueChanged is raised once');
+        const { event } = valueChangedSpy.firstCall.args[0];
+        assert.strictEqual(event && event.type, 'keyup', 'the Enter key event is passed to valueChanged');
     });
 
     test('check file uploading by url dimention editors default value', function(assert) {

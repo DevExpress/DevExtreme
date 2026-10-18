@@ -11,6 +11,8 @@ import NestedOption from "./core/nested-option";
 import type { CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent } from "devextreme/ui/pivot_grid";
 import type { ApplyChangesMode, HeaderFilterSearchConfig, StateStoreType } from "devextreme/common/grids";
 import type { FieldChooserLayout, ScrollMode, Mode, SearchMode } from "devextreme/common";
+import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
+import type { LoadPanelIndicatorProperties } from "devextreme/ui/load_panel";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -74,6 +76,28 @@ const PivotGrid = memo(
 
 
 // owners:
+// FieldChooser
+type IEmbeddedFieldChooserTextsProps = React.PropsWithChildren<{
+  allFields?: string;
+  columnFields?: string;
+  dataFields?: string;
+  filterFields?: string;
+  rowFields?: string;
+}>
+const _componentEmbeddedFieldChooserTexts = (props: IEmbeddedFieldChooserTextsProps) => {
+  return React.createElement(NestedOption<IEmbeddedFieldChooserTextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const EmbeddedFieldChooserTexts = Object.assign<typeof _componentEmbeddedFieldChooserTexts, NestedComponentMeta>(_componentEmbeddedFieldChooserTexts, {
+  componentType: "option",
+});
+
+// owners:
 // PivotGrid
 type IExportProps = React.PropsWithChildren<{
   enabled?: boolean;
@@ -116,7 +140,7 @@ const _componentFieldChooser = (props: IFieldChooserProps) => {
     elementDescriptor: {
       OptionName: "fieldChooser",
       ExpectedChildren: {
-        fieldChooserTexts: { optionName: "texts", isCollectionItem: false },
+        embeddedFieldChooserTexts: { optionName: "texts", isCollectionItem: false },
         texts: { optionName: "texts", isCollectionItem: false }
       },
     },
@@ -124,28 +148,6 @@ const _componentFieldChooser = (props: IFieldChooserProps) => {
 };
 
 const FieldChooser = Object.assign<typeof _componentFieldChooser, NestedComponentMeta>(_componentFieldChooser, {
-  componentType: "option",
-});
-
-// owners:
-// FieldChooser
-type IFieldChooserTextsProps = React.PropsWithChildren<{
-  allFields?: string;
-  columnFields?: string;
-  dataFields?: string;
-  filterFields?: string;
-  rowFields?: string;
-}>
-const _componentFieldChooserTexts = (props: IFieldChooserTextsProps) => {
-  return React.createElement(NestedOption<IFieldChooserTextsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "texts",
-    },
-  });
-};
-
-const FieldChooserTexts = Object.assign<typeof _componentFieldChooserTexts, NestedComponentMeta>(_componentFieldChooserTexts, {
   componentType: "option",
 });
 
@@ -206,11 +208,9 @@ const FieldPanelTexts = Object.assign<typeof _componentFieldPanelTexts, NestedCo
 // owners:
 // PivotGrid
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;
-  searchTimeout?: number;
   showRelevantValues?: boolean;
   texts?: Record<string, any> | {
     cancel?: string;
@@ -258,11 +258,32 @@ const HeaderFilterTexts = Object.assign<typeof _componentHeaderFilterTexts, Nest
 });
 
 // owners:
+// LoadPanel
+type IIndicatorOptionsProps = React.PropsWithChildren<{
+  animationType?: LoadingAnimationType;
+  height?: number | string | undefined;
+  src?: string;
+  width?: number | string | undefined;
+}>
+const _componentIndicatorOptions = (props: IIndicatorOptionsProps) => {
+  return React.createElement(NestedOption<IIndicatorOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "indicatorOptions",
+    },
+  });
+};
+
+const IndicatorOptions = Object.assign<typeof _componentIndicatorOptions, NestedComponentMeta>(_componentIndicatorOptions, {
+  componentType: "option",
+});
+
+// owners:
 // PivotGrid
 type ILoadPanelProps = React.PropsWithChildren<{
   enabled?: boolean;
   height?: number;
-  indicatorSrc?: string;
+  indicatorOptions?: LoadPanelIndicatorProperties;
   shading?: boolean;
   shadingColor?: string;
   showIndicator?: boolean;
@@ -275,6 +296,9 @@ const _componentLoadPanel = (props: ILoadPanelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "loadPanel",
+      ExpectedChildren: {
+        indicatorOptions: { optionName: "indicatorOptions", isCollectionItem: false }
+      },
     },
   });
 };
@@ -422,12 +446,12 @@ export {
   PivotGrid,
   IPivotGridOptions,
   PivotGridRef,
+  EmbeddedFieldChooserTexts,
+  IEmbeddedFieldChooserTextsProps,
   Export,
   IExportProps,
   FieldChooser,
   IFieldChooserProps,
-  FieldChooserTexts,
-  IFieldChooserTextsProps,
   FieldPanel,
   IFieldPanelProps,
   FieldPanelTexts,
@@ -436,6 +460,8 @@ export {
   IHeaderFilterProps,
   HeaderFilterTexts,
   IHeaderFilterTextsProps,
+  IndicatorOptions,
+  IIndicatorOptionsProps,
   LoadPanel,
   ILoadPanelProps,
   PivotGridTexts,

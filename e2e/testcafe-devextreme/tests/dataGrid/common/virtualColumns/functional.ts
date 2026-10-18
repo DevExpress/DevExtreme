@@ -29,11 +29,11 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
     .expect(dataGrid.getDataCell(0, 0).element.focused)
     .ok();
 
-  await dataGrid.scrollTo(t, { x: 50 });
+  await dataGrid.scrollTo(t, { left: 50 });
 
   await t.expect(dataGrid.getScrollLeft()).eql(50);
 
-  await dataGrid.scrollTo(t, { x: 100 });
+  await dataGrid.scrollTo(t, { left: 100 });
 
   await t
     .expect(dataGrid.getScrollLeft())
@@ -50,26 +50,26 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
 test('DataGrid should not scroll back to the focused cell after horizontal scrolling to the left when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await dataGrid.scrollTo(t, { x: 1500 });
+  await dataGrid.scrollTo(t, { left: 1500 });
 
   await t
     .click(dataGrid.getDataCell(0, 18).element)
     .expect(dataGrid.getDataCell(0, 18).element.focused)
     .ok();
 
-  await dataGrid.scrollTo(t, { x: 1200 });
+  await dataGrid.scrollTo(t, { left: 1200 });
 
   await t
     .expect(dataGrid.getScrollLeft())
     .eql(1200);
 
-  await dataGrid.scrollTo(t, { x: 1000 });
+  await dataGrid.scrollTo(t, { left: 1000 });
 
   await t
     .expect(dataGrid.getScrollLeft())
     .eql(1000);
 
-  await dataGrid.scrollTo(t, { x: 800 });
+  await dataGrid.scrollTo(t, { left: 800 });
 
   await t
     .wait(200)

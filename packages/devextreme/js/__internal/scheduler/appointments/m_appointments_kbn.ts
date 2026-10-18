@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import type { DxEvent } from '@js/events/events.types';
-import { getPublicElement } from '@ts/core/m_element';
+import { getPublicElement } from '@ts/core/element';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
 

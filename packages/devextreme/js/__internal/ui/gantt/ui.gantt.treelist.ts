@@ -89,7 +89,6 @@ export class GanttTreeList {
       onNodesInitialized: (): void => {
         this._onNodesInitialized();
       },
-      _disableDeprecationWarnings: true,
     });
 
     return this._treeList;

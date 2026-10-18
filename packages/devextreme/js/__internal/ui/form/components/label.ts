@@ -35,7 +35,7 @@ export type LabelOptions = SimpleItem['label'] & {
 
   markOptions: LabelMarkOptions;
   labelTemplate: FunctionTemplate;
-  labelTemplateData: SimpleItemLabelTemplateData;
+  labelTemplateData?: SimpleItemLabelTemplateData;
   onLabelTemplateRendered: () => void;
 
   labelID?: string | null;
@@ -91,7 +91,7 @@ export function renderLabel({
   // @ts-expect-error ts-error
   $labelContent.text(text);
 
-  if (labelTemplate) {
+  if (labelTemplate && labelTemplateData) {
     $labelContent = $('<div>')
       .addClass('dx-field-item-custom-label-content');
 
@@ -100,7 +100,6 @@ export function renderLabel({
     labelTemplate.render({
       container: getPublicElement($labelContent),
       model: labelTemplateData,
-      // @ts-expect-error ts-error
       onRendered() {
         onLabelTemplateRendered?.();
       },

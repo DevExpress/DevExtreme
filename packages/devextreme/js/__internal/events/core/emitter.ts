@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
 import type { DxEvent, PointerInteractionEvent } from '@js/events';
-import type { CallbackInterface } from '@ts/core/utils/m_callbacks';
+import type { CallbackInterface } from '@ts/core/utils/callbacks';
 
 export interface EmitterEventPointer {
   pageX: number;

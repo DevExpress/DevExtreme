@@ -243,7 +243,7 @@ function endTaskIndexChanged(e: DxNumberBoxTypes.ValueChangedEvent) {
   }
 
   .options {
-    background-color: rgba(191, 191, 191, 0.15);
+    background-color: var(--dx-color-options-panel-bg);
     margin-top: 20px;
     display: flex;
   }

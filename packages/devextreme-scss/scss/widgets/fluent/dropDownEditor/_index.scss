@@ -3,9 +3,10 @@
 @use "../sizes" as *;
 @use "../common/sizes" as *;
 @use "../textEditor/sizes" as *;
-@use "../button/colors" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/dropDownEditor";
+@use "../../base/dropDownEditor" with (
+  $dropdowneditor-icon-idle-opacity: 0.35,
+);
 @use "../../base/dropDownEditor/mixins" as *;
 
 $fluent-dropdowneditor-container-button-size: $fluent-base-icon-size !default;
@@ -54,7 +55,6 @@ $fluent-dropdowneditor-invalid-badge-size: $fluent-invalid-badge-size + $fluent-
 
     &.dx-state-hover,
     &.dx-state-focused,
-    &.dx-state-active &.dx-state-disabled,
     &.dx-state-readonly,
     &.dx-state-readonly.dx-state-hover,
     & {

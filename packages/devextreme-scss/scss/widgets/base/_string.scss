@@ -11,7 +11,8 @@
 }
 
 @function escape($color) {
-  $color: replace($color, "#", "%23");
+  $color: replace($color, "%", "%25");
+  $color: replace($color, "#", "%23"); // stylelint-disable-line scss/no-duplicate-dollar-variables
   $color: replace($color, "$", "%24"); // stylelint-disable-line scss/no-duplicate-dollar-variables
   $color: replace($color, "(", "%28"); // stylelint-disable-line scss/no-duplicate-dollar-variables
   $color: replace($color, ")", "%29"); // stylelint-disable-line scss/no-duplicate-dollar-variables

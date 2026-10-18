@@ -8,7 +8,7 @@ import {
 } from '@jest/globals';
 import type { Properties } from '@js/ui/data_grid';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import type { InternalGrid } from '@ts/grids/grid_core/m_types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import {
   afterTest,

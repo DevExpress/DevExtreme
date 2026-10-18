@@ -1,5 +1,5 @@
 import {
-  Component, enableProdMode, ViewChild, provideZoneChangeDetection,
+  ChangeDetectorRef, Component, enableProdMode, ViewChild, provideZoneChangeDetection,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
@@ -79,6 +79,7 @@ export class AppComponent {
     stylingMode: 'text',
     onClick: () => {
       this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
+      this.changeDetectorRef.detectChanges();
     },
   };
 
@@ -87,10 +88,11 @@ export class AppComponent {
     stylingMode: 'text',
     onClick: () => {
       this.confirmPasswordMode = this.confirmPasswordMode === 'text' ? 'password' : 'text';
+      this.changeDetectorRef.detectChanges();
     },
   };
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.maxDate = new Date(this.maxDate.setFullYear(this.maxDate.getFullYear() - 21));
     this.countries = service.getCountries();
   }

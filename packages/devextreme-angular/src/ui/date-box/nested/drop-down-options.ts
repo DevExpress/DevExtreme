@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type dxOverlay from 'devextreme/ui/overlay';
 import type DOMComponent from 'devextreme/core/dom_component';
 import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
@@ -475,7 +469,6 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
         return 'dropDownOptions';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -498,7 +491,6 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1443,7 +1443,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(9);
 
-    await dataGrid.scrollTo(t, { x: 1200 });
+    await dataGrid.scrollTo(t, { left: 1200 });
 
     await t
       .expect(dataGrid.getScrollLeft())
@@ -1516,7 +1516,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(29);
 
-    await dataGrid.scrollTo(t, { x: 2200 });
+    await dataGrid.scrollTo(t, { left: 2200 });
 
     await t
       .expect(dataGrid.getScrollLeft())

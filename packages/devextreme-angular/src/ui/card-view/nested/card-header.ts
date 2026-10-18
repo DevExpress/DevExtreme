@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -16,10 +14,7 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { CardHeaderItem, CardHeaderPredefinedItem } from 'devextreme/ui/card_view';
 
 import {
@@ -80,7 +75,6 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
         return 'cardHeader';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -100,7 +94,6 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
         extractTemplate(this, this.element, this.renderer, this.document);
     }
 
-
     ngOnInit() {
         this._addRecreatedComponent();
     }
@@ -108,7 +101,6 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

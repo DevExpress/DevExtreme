@@ -1,4 +1,4 @@
-import { setPublicElementWrapper } from '@ts/core/m_element';
+import { setPublicElementWrapper } from '@ts/core/element';
 
 import useJQueryFn from './use_jquery';
 

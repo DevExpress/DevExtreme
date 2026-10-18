@@ -22,3 +22,12 @@ export function getElementWidth(element: Element | null | undefined): number {
 export function getElementMinWidth(element: Element | null | undefined): number {
   return getElementStyle('minWidth', element);
 }
+
+export function isElementBlockLevel(element: Element | null | undefined): boolean {
+  const computedStyle = getElementComputedStyle(element);
+  if (!computedStyle) {
+    return false;
+  }
+  const cssFloat = computedStyle.getPropertyValue('float');
+  return computedStyle.getPropertyValue('display') === 'block' && (!cssFloat || cssFloat === 'none');
+}

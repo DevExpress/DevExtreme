@@ -24,7 +24,7 @@ const { BarWrapper, stubBarWrapper, restoreBarWrapper } = barGaugeModule;
 $('<div id="test-container">').appendTo('#qunit-fixture');
 let renderer;
 QUnit.begin(function() {
-    rendererModule.Renderer = sinon.spy(function() {
+    rendererModule.DEBUG_set_Renderer(sinon.spy(function() {
         const test = currentTest();
         test.renderer = renderer || new Renderer();
         test.renderer.g = sinon.spy(function() {
@@ -61,12 +61,21 @@ QUnit.begin(function() {
                         step(1);
                         that.animationStep && that.animationStep(1);
                         complete();
-                        that.animationComplete && that.animationComplete();
+                        // Drop the hook before calling it — overlapping animate()
+                        // chains (or a second completion after done()) must not
+                        // re-enter assert.async() under native ESM scheduling.
+                        const onGroupComplete = that.animationComplete;
+                        that.animationComplete = null;
+                        onGroupComplete && onGroupComplete();
                         test.renderer.animationCompleted && test.renderer.animationCompleted();
                     }
                 }
 
                 if(arguments[1] && typeof arguments[1].step === 'function') {
+                    // Real renderer replaces the in-flight animation; without this,
+                    // a second animate() leaves an orphan setTimeout chain and
+                    // animationComplete / assert.async() fire twice.
+                    this.stopAnimation();
                     that = this;
                     step = arguments[1].step;
                     complete = arguments[1].complete || noop;
@@ -77,13 +86,14 @@ QUnit.begin(function() {
             };
             group.stopAnimation = function() {
                 clearTimeout(this.__animation);
+                this.__animation = null;
                 return this;
             };
             return group;
         });
 
         return test.renderer;
-    });
+    }));
     titleModule.DEBUG_set_title(sinon.spy(function() {
         const title = new Title();
         title.getLayoutOptions = () => ({
@@ -970,7 +980,7 @@ QUnit.test('Half circle right - leave margin on left', function(assert) {
 });
 
 QUnit.module('Colors', $.extend({}, environment, {
-    checkColors: function(assert, backgroundColor, colors, lineColor, textColor) {
+    checkColors: function(assert, backgroundColor, colors, lineColor, textColor, textOpacity) {
         const elements = this.getBarsGroup().children;
         let i = 0;
         const ii = elements.length / 4;
@@ -981,6 +991,9 @@ QUnit.module('Colors', $.extend({}, environment, {
             assert.strictEqual(elements[i * 4 + 1]._stored_settings.fill, colors[i], 'bar' + message);
             assert.strictEqual(elements[i * 4 + 2]._stored_settings.stroke, lineColor || colors[i], 'line' + message);
             assert.strictEqual(elements[i * 4 + 3]._stored_styles.fill, textColor || colors[i], 'text' + message);
+            if(textOpacity !== undefined) {
+                assert.strictEqual(elements[i * 4 + 3]._stored_styles['fill-opacity'], textOpacity, 'text opacity' + message);
+            }
         }
     }
 }));
@@ -1116,7 +1129,7 @@ QUnit.test('Font color', function(assert) {
                 }
             }
         });
-        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, `rgba(0,0,255,${opacity})`);
+        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, 'blue', opacity);
     });
 
     QUnit.test('Font opacity should be set correctly at runtime change (T1238556)', function(assert) {
@@ -1132,7 +1145,7 @@ QUnit.test('Font color', function(assert) {
 
         this.$container.dxBarGauge('instance').option('label.font.opacity', opacity);
 
-        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, `rgba(0,0,255,${opacity})`);
+        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, 'blue', opacity);
     });
 });
 

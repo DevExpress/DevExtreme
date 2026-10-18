@@ -1,6 +1,7 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import Draggable from '@js/ui/draggable';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 export const DRAGGABLE_ELEMENT_ID = 'draggable';
 
@@ -8,15 +9,15 @@ export interface DraggableTest extends Draggable {
   getDragInProgress: () => boolean;
 }
 
-export interface FiredEvent {
+export type FiredEvent = EngineEvent & {
   _cancelPreventDefault?: boolean;
-  isDefaultPrevented: () => boolean;
-}
+};
 
 interface FireOptions {
   x?: number;
   y?: number;
   ctrlKey?: boolean;
+  key?: string;
   pointerType?: 'mouse' | 'touch';
 }
 
@@ -24,10 +25,9 @@ export const fire = (
   element: Element,
   type: string,
   {
-    x = 0, y = 0, ctrlKey = false, pointerType = 'touch',
+    x = 0, y = 0, ctrlKey = false, key, pointerType = 'touch',
   }: FireOptions = {},
 ): FiredEvent => {
-  // @ts-expect-error -- Event is absent from the public eventsEngine type
   const event: FiredEvent = eventsEngine.Event({
     type,
     pageX: x,
@@ -40,9 +40,9 @@ export const fire = (
     pointerId: 1,
     which: 1,
     ctrlKey,
+    key,
   });
 
-  // @ts-expect-error -- trigger is absent from the public eventsEngine type
   eventsEngine.trigger(element, event);
 
   return event;

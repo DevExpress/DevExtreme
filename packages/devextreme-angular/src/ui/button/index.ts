@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -21,7 +18,6 @@ import type { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, O
 import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxButton from 'devextreme/ui/button';
-
 
 import {
     DxComponent,
@@ -37,7 +33,6 @@ import {
 
 /**
  * [descr:dxButton]
-
  */
 @Component({
     selector: 'dx-button',
@@ -56,7 +51,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -66,10 +60,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -79,10 +71,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -92,10 +82,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -105,10 +93,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -118,10 +104,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -131,10 +115,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -144,10 +126,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -157,10 +137,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.icon]
-    
      */
     @Input()
     get icon(): string {
@@ -170,10 +148,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('icon', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -183,10 +159,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): ButtonStyle {
@@ -196,10 +170,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -209,10 +181,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.template]
-    
      */
     @Input()
     get template(): any {
@@ -222,10 +192,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('template', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -235,10 +203,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('text', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.type]
-    
      */
     @Input()
     get type(): ButtonType | string {
@@ -248,10 +214,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('type', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.useSubmitBehavior]
-    
      */
     @Input()
     get useSubmitBehavior(): boolean {
@@ -261,10 +225,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('useSubmitBehavior', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.validationGroup]
-    
      */
     @Input()
     get validationGroup(): string | undefined {
@@ -274,10 +236,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('validationGroup', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -287,10 +247,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -301,180 +259,124 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxButtonOptions.onClick]
-    
-    
      */
     @Output() onClick: EventEmitter<ClickEvent>;
 
     /**
-    
      * [descr:dxButtonOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxButtonOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxButtonOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxButtonOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() iconChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stylingModeChange: EventEmitter<ButtonStyle>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() templateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() textChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() typeChange: EventEmitter<ButtonType | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() useSubmitBehaviorChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationGroupChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

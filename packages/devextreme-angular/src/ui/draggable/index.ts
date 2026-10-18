@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -21,7 +18,6 @@ import type { DragDirection } from 'devextreme/common';
 import type { DisposingEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/draggable';
 
 import DxDraggable from 'devextreme/ui/draggable';
-
 
 import {
     DxComponent,
@@ -39,7 +35,6 @@ import { DxoDraggableCursorOffsetModule } from 'devextreme-angular/ui/draggable/
 
 /**
  * [descr:dxDraggable]
-
  */
 @Component({
     selector: 'dx-draggable',
@@ -58,7 +53,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.autoScroll]
-    
      */
     @Input()
     get autoScroll(): boolean {
@@ -68,10 +62,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('autoScroll', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.boundary]
-    
      */
     @Input()
     get boundary(): any | string | undefined {
@@ -81,10 +73,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('boundary', value);
     }
 
-
     /**
      * [descr:dxDraggableOptions.clone]
-    
      */
     @Input()
     get clone(): boolean {
@@ -94,10 +84,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('clone', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.container]
-    
      */
     @Input()
     get container(): any | string | undefined {
@@ -107,10 +95,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('container', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.cursorOffset]
-    
      */
     @Input()
     get cursorOffset(): string | { x?: number, y?: number } {
@@ -120,10 +106,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('cursorOffset', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.data]
-    
      */
     @Input()
     get data(): any | undefined {
@@ -133,10 +117,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('data', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.dragDirection]
-    
      */
     @Input()
     get dragDirection(): DragDirection {
@@ -146,10 +128,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('dragDirection', value);
     }
 
-
     /**
      * [descr:dxDraggableOptions.dragTemplate]
-    
      */
     @Input()
     get dragTemplate(): any {
@@ -159,10 +139,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('dragTemplate', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -172,10 +150,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.group]
-    
      */
     @Input()
     get group(): string | undefined {
@@ -185,10 +161,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('group', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.handle]
-    
      */
     @Input()
     get handle(): string {
@@ -198,10 +172,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('handle', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -211,10 +183,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -224,10 +194,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.scrollSensitivity]
-    
      */
     @Input()
     get scrollSensitivity(): number {
@@ -237,10 +205,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('scrollSensitivity', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.scrollSpeed]
-    
      */
     @Input()
     get scrollSpeed(): number {
@@ -250,10 +216,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('scrollSpeed', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -264,167 +228,114 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxDraggableOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onDragEnd]
-    
-    
      */
     @Output() onDragEnd: EventEmitter<DragEndEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onDragMove]
-    
-    
      */
     @Output() onDragMove: EventEmitter<DragMoveEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onDragStart]
-    
-    
      */
     @Output() onDragStart: EventEmitter<DragStartEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() autoScrollChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() boundaryChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cloneChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() containerChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cursorOffsetChange: EventEmitter<string | { x?: number, y?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataChange: EventEmitter<any | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dragDirectionChange: EventEmitter<DragDirection>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dragTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() handleChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollSensitivityChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollSpeedChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

@@ -110,7 +110,7 @@ const App = () => (
         dataField="Website"
         alignment="center"
         width={100}
-        cellRender={(e) => renderGridCell(e)}
+        cellRender={renderGridCell}
       />
 
       <Summary>

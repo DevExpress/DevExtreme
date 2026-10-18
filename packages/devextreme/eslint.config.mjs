@@ -423,6 +423,18 @@ export default [
             'spellcheck/spell-checker': 'off',
         },
     },
+    // Rules for the vector map parsers (script fragments concatenated by the vectormap executor)
+    {
+        files: ['js/viz/vector_map.utils/*.ts'],
+        languageOptions: {
+            parser: tsParser,
+            sourceType: 'script',
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/viz/vector_map.utils`,
+            },
+        },
+    },
     // Rules for js/__internal folder
     {
         files: ['js/__internal/**/*'],
@@ -514,6 +526,10 @@ export default [
     // Rules for migrated from JS files
     {
         files: ['js/__internal/**/m_*.ts', 'js/__internal/**/module*/**.ts'],
+        ignores: [
+            'js/__internal/grids/**/module_not_extended/**',
+            'js/__internal/grids/grid_core/modules/**',
+        ],
         languageOptions: {
             parser: tsParser,
             ecmaVersion: 5,

@@ -34,12 +34,6 @@ export interface ExportLoadPanel {
   showIndicator?: boolean;
   /**
    * @docid
-   * @default ""
-   * @deprecated ExportLoadPanel.indicatorOptions
-   */
-  indicatorSrc?: string;
-  /**
-   * @docid
    */
   indicatorOptions?: LoadPanelIndicatorProperties;
   /**

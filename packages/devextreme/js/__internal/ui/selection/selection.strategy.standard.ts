@@ -132,7 +132,7 @@ export default class StandardStrategy<
       return deferred;
     }
 
-    const selectionFilterCreator = new SelectionFilterCreator(keys, isSelectAll);
+    const selectionFilterCreator = new SelectionFilterCreator<TItem, TKey>(keys, isSelectAll);
     const combinedFilter = selectionFilterCreator.getCombinedFilter(
       key,
       filter,
@@ -213,7 +213,6 @@ export default class StandardStrategy<
     if (updatedKeys) {
       selectedItems = updatedKeys;
     } else {
-      // @ts-expect-error removeDuplicates
       selectedItems = removeDuplicates(keys, this.options.selectedItemKeys);
     }
 
@@ -281,15 +280,14 @@ export default class StandardStrategy<
       && !isDeselect
       && !isSelectAll
     ) {
+      // @ts-expect-error removeDuplicates keeps the widened element type of the spread array
       currentKeys = removeDuplicates(
-        // @ts-expect-error removeDuplicates
         [
           ...keys,
           ...this._lastRequestData.addedItems,
         ],
         this._lastRequestData?.removedItems,
       );
-      // @ts-expect-error getUniqueValues
       currentKeys = getUniqueValues(currentKeys);
     }
 
@@ -596,7 +594,7 @@ export default class StandardStrategy<
       return Deferred<TItem[]>().resolve([]);
     }
 
-    const selectionFilterCreator = new SelectionFilterCreator(keys);
+    const selectionFilterCreator = new SelectionFilterCreator<TItem, TKey>(keys);
     const combinedFilter = selectionFilterCreator.getCombinedFilter(keyExpr, filter, true);
 
     return this._loadFilteredData(combinedFilter);

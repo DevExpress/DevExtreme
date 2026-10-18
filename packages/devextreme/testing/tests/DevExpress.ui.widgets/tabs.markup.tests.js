@@ -1,10 +1,12 @@
 import $ from 'jquery';
 import Tabs from 'ui/tabs';
+import { DataSource } from 'common/data/data_source/data_source';
 import windowUtils from 'core/utils/window';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import {
     TABS_CLASS,
     TABS_WRAPPER_CLASS,
+    TABS_ITEM_CLASS,
     TABS_ITEM_TEXT_SPAN_CLASS,
     TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS
 } from '__internal/ui/tabs/tabs';
@@ -192,6 +194,144 @@ QUnit.module('Aria accessibility', {
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'tab' });
             });
         });
+    });
+});
+
+QUnit.module('Aria label', {
+    beforeEach: function() {
+        this.createTabs = (options) => {
+            this.$element = $('#tabs').dxTabs(options);
+            this.instance = this.$element.dxTabs('instance');
+        };
+        this.getTab = (index) => this.$element.find(`.${TABS_ITEM_CLASS}`).eq(index);
+    }
+}, () => {
+    QUnit.test('item with text and icon should not get aria-label', function(assert) {
+        this.createTabs({ items: [{ text: 'User', icon: 'user' }] });
+
+        assert.strictEqual(this.getTab(0).attr('aria-label'), undefined);
+    });
+
+    QUnit.test('item with html and icon should not get aria-label', function(assert) {
+        this.createTabs({ items: [{ html: '<b>User</b>', icon: 'user' }] });
+
+        assert.strictEqual(this.getTab(0).attr('aria-label'), undefined);
+    });
+
+    QUnit.test('string item should not get aria-label', function(assert) {
+        this.createTabs({ items: ['User'] });
+
+        assert.strictEqual(this.getTab(0).attr('aria-label'), undefined);
+    });
+
+    QUnit.test('item without text and icon should not get aria-label', function(assert) {
+        this.createTabs({ items: [{ badge: '5' }] });
+
+        assert.strictEqual(this.getTab(0).attr('aria-label'), undefined);
+    });
+
+    [
+        { icon: 'user', expected: 'user', description: 'a dxIcon without a localized message' },
+        { icon: 'close', expected: 'Close', description: 'a dxIcon with a localized message' },
+        { icon: 'fa fa-home', expected: 'fa fa-home', description: 'a font icon' },
+        { icon: '/path/file.png', expected: 'file', description: 'a path to an image' },
+        { icon: '<svg><title>Svg title</title><path d="M0 0h1v1H0z"/></svg>', expected: 'Svg title', description: 'an svg with a title' },
+    ].forEach(({ icon, expected, description }) => {
+        QUnit.test(`icon-only item should get aria-label "${expected}" for ${description}`, function(assert) {
+            this.createTabs({ items: [{ icon }] });
+
+            assert.strictEqual(this.getTab(0).attr('aria-label'), expected);
+        });
+    });
+
+    [
+        { icon: 'data:image/png;base64,qwerty', description: 'a base64 image' },
+        { icon: 'https://example.com/path/file.png', description: 'an image URL' },
+        { icon: '<svg><path d="M0 0h1v1H0z"/></svg>', description: 'an svg without a title' },
+    ].forEach(({ icon, description }) => {
+        QUnit.test(`icon-only item should not get aria-label for ${description}`, function(assert) {
+            this.createTabs({ items: [{ icon }] });
+
+            assert.strictEqual(this.getTab(0).attr('aria-label'), undefined);
+        });
+    });
+
+    QUnit.test('icon-only item with badge should get aria-label derived from icon', function(assert) {
+        this.createTabs({ items: [{ icon: 'user', badge: '5' }] });
+
+        assert.strictEqual(this.getTab(0).attr('aria-label'), 'user');
+    });
+
+    QUnit.test('only icon-only items should get aria-label', function(assert) {
+        this.createTabs({ items: [{ text: 'Users' }, { icon: 'user' }, { text: 'Find', icon: 'find' }] });
+
+        assert.strictEqual(this.getTab(0).attr('aria-label'), undefined, 'text item');
+        assert.strictEqual(this.getTab(1).attr('aria-label'), 'user', 'icon-only item');
+        assert.strictEqual(this.getTab(2).attr('aria-label'), undefined, 'text and icon item');
+    });
+
+    QUnit.test('aria-label should be derived from item data when a custom itemTemplate is used', function(assert) {
+        this.createTabs({
+            items: [{ icon: 'user' }, { icon: 'user', text: 'User' }],
+            itemTemplate: (data) => `<i class="dx-icon dx-icon-${data.icon}"></i>`,
+        });
+
+        assert.strictEqual(this.getTab(0).attr('aria-label'), 'user', 'icon-only item');
+        assert.strictEqual(this.getTab(1).attr('aria-label'), undefined, 'item with text');
+    });
+
+    [true, false].forEach((repaintChangesOnly) => {
+        QUnit.test(`aria-label should follow item text and icon changes, repaintChangesOnly: ${repaintChangesOnly}`, function(assert) {
+            this.createTabs({ items: [{ text: 'User', icon: 'user' }], repaintChangesOnly });
+
+            this.instance.option('items[0].text', '');
+            assert.strictEqual(this.getTab(0).attr('aria-label'), 'user', 'label appears when text is cleared');
+
+            this.instance.option('items[0].icon', 'close');
+            assert.strictEqual(this.getTab(0).attr('aria-label'), 'Close', 'label follows the icon');
+
+            this.instance.option('items[0].text', 'Close');
+            assert.strictEqual(this.getTab(0).attr('aria-label'), undefined, 'label is removed when text is set');
+        });
+
+        QUnit.test(`aria-label should be recalculated when items are replaced, repaintChangesOnly: ${repaintChangesOnly}`, function(assert) {
+            this.createTabs({ items: [{ icon: 'user' }], repaintChangesOnly });
+
+            this.instance.option('items', [{ text: 'User', icon: 'user' }, { icon: 'find' }]);
+
+            assert.strictEqual(this.getTab(0).attr('aria-label'), undefined, 'text and icon item');
+            assert.strictEqual(this.getTab(1).attr('aria-label'), 'find', 'icon-only item');
+        });
+    });
+
+    QUnit.test('aria-label should be recalculated when the _itemAriaLabelExpr option changes', function(assert) {
+        this.createTabs({ items: [{ icon: 'user', badge: 'New' }] });
+
+        this.instance.option('_itemAriaLabelExpr', (data) => data.badge);
+        assert.strictEqual(this.getTab(0).attr('aria-label'), 'New', 'label follows the new rule');
+
+        this.instance.option('_itemAriaLabelExpr', () => undefined);
+        assert.strictEqual(this.getTab(0).attr('aria-label'), undefined, 'label is removed when the rule returns nothing');
+    });
+
+    QUnit.test('items inserted and updated through the data source push should get aria-label', function(assert) {
+        const data = [{ id: 0, text: 'User', icon: 'user' }];
+        const dataSource = new DataSource({
+            paginate: false,
+            pushAggregationTimeout: 0,
+            load: () => data,
+            key: 'id',
+        });
+
+        this.createTabs({ dataSource, repaintChangesOnly: true });
+
+        const store = dataSource.store();
+
+        store.push([{ type: 'insert', data: { id: 1, icon: 'find' } }]);
+        assert.strictEqual(this.getTab(1).attr('aria-label'), 'find', 'inserted icon-only item');
+
+        store.push([{ type: 'update', key: 0, data: { id: 0, text: '', icon: 'user' } }]);
+        assert.strictEqual(this.getTab(0).attr('aria-label'), 'user', 'updated item without text');
     });
 });
 

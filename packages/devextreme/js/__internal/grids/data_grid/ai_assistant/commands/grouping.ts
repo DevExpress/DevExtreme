@@ -1,6 +1,6 @@
 import { defineGridCommand } from '@ts/grids/grid_core/ai_assistant/commands/defineGridCommand';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import { z } from 'zod';
+import { z } from '@ts/grids/grid_core/ai_assistant/zod';
 
 import type { Column } from './types';
 
@@ -29,7 +29,8 @@ export const groupingCommand = defineGridCommand({
   schema: groupingCommandSchema,
   execute: (component, { success, failure }) => (args): Promise<CommandResult> => {
     const columnsController = component.getController('columns');
-    const column: Column | undefined = columnsController.columnOption(args.dataField);
+    const column = columnsController.columnOption(args.dataField);
+    // @ts-expect-error GridCore and DataGrid column types are not aligned
     const defaultMessage = getGroupingDefaultMessage(args, column);
 
     if (!column || column.allowGrouping === false) {

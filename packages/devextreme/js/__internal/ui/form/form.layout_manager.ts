@@ -46,7 +46,7 @@ import {
 } from '@ts/ui/form/constants';
 import type { FormProperties } from '@ts/ui/form/form';
 import type Form from '@ts/ui/form/form';
-import type { FormItemRuntimeInfo, PreparedItem } from '@ts/ui/form/form.items_runtime_info';
+import type { FormItemRuntimeInfo, FormWidgetInstance, PreparedItem } from '@ts/ui/form/form.items_runtime_info';
 import FormItemsRunTimeInfo from '@ts/ui/form/form.items_runtime_info';
 import type { LabelMarkOptions } from '@ts/ui/form/form.layout_manager.utils';
 import { convertToRenderFieldItemOptions } from '@ts/ui/form/form.layout_manager.utils';
@@ -265,15 +265,14 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     if (isDefined(items)) {
       const processedItems: ExtendedItem[] = [];
 
-      each(items, (_index: number, item: ExtendedItem): void => {
+      each(items, (_index: number, item: Item): void => {
         if (this._isAcceptableItem(item)) {
-          // eslint-disable-next-line no-param-reassign
-          item = this._processItem(item);
+          const processedItem = this._processItem(item);
 
-          customizeItem?.(item);
+          customizeItem?.(processedItem);
 
-          if (isObject(item) && variableWrapper.unwrap(item.visible) !== false) {
-            processedItems.push(item);
+          if (isObject(processedItem) && variableWrapper.unwrap(processedItem.visible) !== false) {
+            processedItems.push(processedItem);
           }
         }
       });
@@ -302,7 +301,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       if (isObject(item) && isDefined(item.visible) && isFunction(watch)) {
         this._itemWatchers.push(
           watch(
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             () => variableWrapper.unwrap(item.visible),
             (): void => {
               const { layoutData } = this.option();
@@ -378,6 +376,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   _sortItems(): void {
+    // @ts-expect-error normalizeIndexes does not guard against undefined items
     normalizeIndexes(this._items, 'visibleIndex');
     this._sortIndexes();
   }
@@ -930,7 +929,8 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         skipImmediate: true,
       },
       /// #DEBUG
-      { createWatcherDataField: dataField },
+      // eslint-disable-next-line @stylistic/comma-dangle
+      { createWatcherDataField: dataField }
       /// #ENDDEBUG
     );
 
@@ -1267,7 +1267,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     }
   }
 
-  getEditor(field: string): Editor | undefined {
+  getEditor(field: string): FormWidgetInstance | undefined {
     return this._itemsRunTimeInfo.findWidgetInstanceByDataField(field)
       ?? this._itemsRunTimeInfo.findWidgetInstanceByName(field);
   }

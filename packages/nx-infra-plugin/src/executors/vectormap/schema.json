@@ -6,7 +6,7 @@
   "properties": {
     "sourceDir": {
       "type": "string",
-      "description": "Path to vector_map.utils source directory"
+      "description": "Path to vector_map.utils source directory. Each fragment listed in settingsFile is read from either <name>.ts (types are stripped) or <name>.js"
     },
     "settingsFile": {
       "type": "string",

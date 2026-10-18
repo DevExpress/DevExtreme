@@ -1,0 +1,168 @@
+//# ─────────────────────────────────────────────────────────────────────────────
+//# DevExtreme Vue wrapper — component file template
+//# Output: packages/devextreme-vue/src/<kebab-name>.ts
+//# How to fill it: see README.md next to this file.
+//#
+//# Every line starting with "//#" is a template directive or note — delete ALL
+//# of them in the output. Keep every other line byte-for-byte, only replacing
+//# __PLACEHOLDERS__.
+//#
+//#   //#if FLAG … //#else … //#endif   keep the branch whose FLAG holds
+//#   //#each ITEM … //#endeach         repeat the body once per ITEM (0..n times)
+//#
+//# Lists have any length; a single line in an //#each is repeated per item.
+//# Flags:  GENERIC     Properties has type params (only adds the ExplicitTypes line)
+//#         EXTENSION   component is an extension (only Validator today)
+//#         EDITOR      the widget class JSDoc has `@isEditor` (README §4)
+//#         NESTED      ≥1 nested configuration component (README §5)
+//#         SYNC_TMPL   only DxDataGrid, DxScheduler, DxTreeList
+//#       Per nested block: COLLECTION_ITEM, PREDEFINED, HAS_CHILDREN (README §5)
+//#
+//# Placeholders:
+//#   __Name__     PascalCase name without "dx" = widget default import   TabPanel
+//#   __module__   d.ts path under js/, no extension                       ui/tab_panel
+//# ─────────────────────────────────────────────────────────────────────────────
+//#if GENERIC
+export { ExplicitTypes } from "devextreme/__module__";
+//#endif
+import { PropType } from "vue";
+import { defineComponent } from "vue";
+//#if EXTENSION
+import { prepareExtensionComponentConfig } from "./core/index";
+//#else
+import { prepareComponentConfig } from "./core/index";
+//#endif
+import __Name__, { Properties } from "devextreme/__module__";
+//# README §3: one block per module, in first-use order (root props A→Z, then
+//# nested components). Default imports (e.g. DataSource) come first and have
+//# TWO spaces after `import`. One space before each name; each line ends with ",".
+//#each DEFAULT_IMPORT
+import  __DefaultType__ from "devextreme/__defaultModule__";
+//#endeach
+//#each TYPE_MODULE
+import {
+//#each TYPE   (first-use order; an aliased name is written " __Type__ as __Prefix____Type__,")
+ __Type__,
+//#endeach
+} from "devextreme/__typeModule__";
+//#endeach
+//#if NESTED
+import { prepareConfigurationComponentConfig } from "./core/index";
+//#endif
+
+type AccessibleOptions = Pick<Properties,
+//#each PROP   (README §1: every public option and event, A→Z; drop " |" on the LAST one)
+  "__prop__" |
+//#endeach
+>;
+
+interface Dx__Name__ extends AccessibleOptions {
+  readonly instance?: __Name__;
+}
+
+const componentConfig = {
+  props: {
+//#each PROP   (README §2; same order; drop the trailing comma on the LAST one)
+    __prop__: __RuntimeType__,
+//#endeach
+  },
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+//#each PROP   (same order; every line keeps its trailing comma)
+    "update:__prop__": null,
+//#endeach
+  },
+//#if EDITOR
+  model: { prop: "value", event: "update:value" },
+//#endif
+  computed: {
+    instance(): __Name__ {
+      return (this as any).$_instance;
+    }
+  },
+  beforeCreate() {
+    (this as any).$_WidgetClass = __Name__;
+//#if SYNC_TMPL
+    (this as any).$_hasAsyncTemplate = false;
+//#else
+    (this as any).$_hasAsyncTemplate = true;
+//#endif
+//#if NESTED
+    (this as any).$_expectedChildren = {
+//#each ROOT_CHILD   (README §5.4: direct children only; A→Z case-insensitive; drop the comma on the LAST one)
+      __childKey__: { isCollectionItem: __true_or_false__, optionName: "__childOption__" },
+//#endeach
+    };
+//#endif
+  }
+};
+
+//#if EXTENSION
+prepareExtensionComponentConfig(componentConfig);
+//#else
+prepareComponentConfig(componentConfig);
+//#endif
+
+const Dx__Name__ = defineComponent(componentConfig);
+
+//#if NESTED
+//# Two empty lines before the first nested block (the one above + the one
+//# below); one empty line between blocks and one after the last, before
+//# `export default`. Blocks are sorted A→Z by Dx__Nested__ name.
+//# NOTE: nested configs list `emits` BEFORE `props` (the root is the other way round).
+
+//#each NESTED_COMPONENT
+const Dx__Nested__Config = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+//#each FIELD   (README §5.3: every public field of the nested type, A→Z)
+    "update:__field__": null,
+//#endeach
+  },
+  props: {
+//#each FIELD   (README §2 mapping; drop the trailing comma on the LAST one)
+    __field__: __RuntimeType__,
+//#endeach
+  }
+};
+
+prepareConfigurationComponentConfig(Dx__Nested__Config);
+
+const Dx__Nested__ = defineComponent(Dx__Nested__Config);
+
+(Dx__Nested__ as any).$_optionName = "__optionName__";
+//#if COLLECTION_ITEM
+(Dx__Nested__ as any).$_isCollectionItem = true;
+//#endif
+//#if PREDEFINED
+(Dx__Nested__ as any).$_predefinedProps = {
+//#each PREDEFINED_PROP   (README §5.5; drop the comma on the LAST entry)
+  __discriminator__: "__value__",
+//#endeach
+};
+//#endif
+//#if HAS_CHILDREN
+(Dx__Nested__ as any).$_expectedChildren = {
+//#each CHILD   (README §5.4; drop the comma on the LAST entry)
+  __childKey__: { isCollectionItem: __true_or_false__, optionName: "__childOption__" },
+//#endeach
+};
+//#endif
+
+//#endeach
+//#endif
+export default Dx__Name__;
+export {
+//#if NESTED
+  Dx__Name__,
+//#each NESTED_COMPONENT   (same A→Z order; the very last line has no comma)
+  Dx__Nested__,
+//#endeach
+//#else
+  Dx__Name__
+//#endif
+};
+import type * as Dx__Name__Types from "devextreme/__module___types";
+export { Dx__Name__Types };

@@ -21,6 +21,9 @@ import {
   isDefined, isFunction, isPlainObject, isString,
 } from '@js/core/utils/type';
 import type { DxEvent, EventInfo, InitializedEventInfo } from '@js/events';
+import type { ActionEvent } from '@ts/core/action';
+import type { DeprecatedOptionInfo } from '@ts/core/options/index';
+import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 const getEventName = (
@@ -32,8 +35,8 @@ const isInnerOption = (
 ): boolean => optionName.indexOf('_', 0) === 0;
 
 export interface ActionConfig {
-  beforeExecute?: (e: Record<string, unknown>) => void;
-  afterExecute?: (e: Record<string, unknown>) => void;
+  beforeExecute?: (e: ActionEvent) => void;
+  afterExecute?: (e: ActionEvent) => void;
   excludeValidators?: ('disabled' | 'readOnly')[];
   element?: Element;
   validatingTargetName?: string;
@@ -52,12 +55,22 @@ export interface DefaultActionArgs<TComponent> {
   model?: unknown;
 }
 
+type OptionActionArgs<THandler> = THandler extends (event: infer TEvent) => unknown
+  ? Omit<TEvent, keyof EventInfo<unknown>>
+  : never;
+
+type OptionActionEventArgs<THandler> = OptionActionArgs<NonNullable<THandler>>;
+
+export type OptionAction<THandler> = Record<never, never> extends OptionActionEventArgs<THandler>
+  ? (event?: OptionActionEventArgs<THandler>) => void
+  : (event: OptionActionEventArgs<THandler>) => void;
+
 export interface ComponentProperties<TComponent> extends ComponentOptions<
   EventInfo<TComponent>,
   InitializedEventInfo<TComponent>,
   OptionChangedEventInfo<TComponent>
 > {
-  integrationOptions?: Record<string, unknown>;
+  integrationOptions?: IntegrationOptions;
 
   onInitializing?: ((e: [ComponentProperties<TComponent>]) => void) | undefined;
 
@@ -82,9 +95,9 @@ export class Component<
   TProperties extends ComponentProperties<TComponent> = ComponentProperties<TComponent>,
   // @ts-expect-error dxClass inheritance issue
 > extends (Class.inherit({}) as new() => {}) implements PublicComponent<TProperties> {
-  _deprecatedOptions!: Partial<TProperties>;
+  _deprecatedOptions!: Record<string, DeprecatedOptionInfo>;
 
-  _options!: Options;
+  _options!: Options<TProperties>;
 
   _optionsByReference!: Partial<TProperties>;
 
@@ -119,7 +132,7 @@ export class Component<
     this._deprecatedOptions = {};
   }
 
-  _getDeprecatedOptions(): Partial<TProperties> {
+  _getDeprecatedOptions(): Record<string, DeprecatedOptionInfo> {
     return this._deprecatedOptions;
   }
 
@@ -141,7 +154,7 @@ export class Component<
     this._options.applyRules(rules);
   }
 
-  _convertRulesToOptions(rules: DefaultOptionsRule<TProperties>[]): TProperties {
+  _convertRulesToOptions(rules: DefaultOptionsRule<TProperties>[]): Partial<TProperties> {
     return convertRulesToOptions(rules);
   }
 
@@ -200,7 +213,7 @@ export class Component<
       this._options.onStartChange(() => this.beginUpdate());
       this._options.onEndChange(() => this.endUpdate());
       this._options.addRules(this._defaultOptionsRules());
-      this._options.validateOptions((opts: TProperties) => this._validateOptions(opts));
+      this._options.validateOptions((opts) => this._validateOptions(opts));
 
       if (options && options.onInitializing) {
         // @ts-expect-error
@@ -228,13 +241,13 @@ export class Component<
 
   _logDeprecatedOptionWarning(
     option: string,
-    info: { since: string; message: string; alias?: string },
+    info: DeprecatedOptionInfo,
   ): void {
     const message = info.message || `Use the '${info.alias}' option instead`;
     errors.log('W0001', this.NAME, option, info.since, message);
   }
 
-  _logDeprecatedComponentWarning(since: 'string', alias: 'string'): void {
+  _logDeprecatedComponentWarning(since: string, alias: string): void {
     errors.log('W0000', this.NAME, since, `Use the '${alias}' widget instead`);
   }
 
@@ -366,7 +379,6 @@ export class Component<
     name: TPropertyName,
   ): TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : unknown;
   initialOption(name: string): unknown {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.initial(name);
   }
 
@@ -541,7 +553,6 @@ export class Component<
      @typescript-eslint/unified-signatures */
   option(...args: any[]): TProperties;
   option(...args: unknown[]): unknown {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.option(...args as [never, never]);
   }
 
@@ -551,7 +562,7 @@ export class Component<
     this.endUpdate();
   }
 
-  _validateOptions(options: TProperties): TProperties {
+  _validateOptions(options: Record<string, unknown>): Record<string, unknown> {
     return options;
   }
 }

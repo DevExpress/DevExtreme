@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, Employee, State } from './app.service';
 
@@ -22,7 +24,7 @@ export class AppComponent {
 
   states: State[];
 
-  constructor(private service: Service) {
+  constructor(private service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.employees = service.getEmployees();
     this.states = service.getStates();
   }
@@ -63,6 +65,8 @@ export class AppComponent {
 
     this.employees.splice(e.row.rowIndex, 0, clonedItem);
     e.event.preventDefault();
+
+    this.changeDetectorRef.detectChanges();
   };
 }
 

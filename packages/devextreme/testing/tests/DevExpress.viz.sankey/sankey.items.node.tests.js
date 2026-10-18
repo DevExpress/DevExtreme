@@ -68,6 +68,32 @@ QUnit.test('Color from options applied to all nodes', function(assert) {
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, '#aabbcc');
 });
 
+QUnit.test('color hands out the painted colour, the node is filled with the name', function(assert) {
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
+        node: {
+            color: 'var(--probe-fill, #123456)'
+        }
+    });
+
+    assert.equal(sankey.getAllNodes()[0].color, '#123456');
+    assert.deepEqual(this.nodes()[0].smartAttr.lastCall.args[0].fill, 'var(--probe-fill, #123456)');
+});
+
+QUnit.test('color written by the application is read back', function(assert) {
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
+        node: {
+            color: 'var(--probe-fill, #123456)'
+        }
+    });
+    const node = sankey.getAllNodes()[0];
+
+    node.color = '#abcdef';
+
+    assert.equal(node.color, '#abcdef');
+});
+
 QUnit.test('Normal style, border is not visible', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }],

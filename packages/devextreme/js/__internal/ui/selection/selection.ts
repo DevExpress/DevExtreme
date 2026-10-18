@@ -31,7 +31,7 @@ export default class Selection<
   constructor(options: Partial<SelectionOptions<TItem, TKey, TDeferred>>) {
     this.options = extend(this._getDefaultOptions(), options, {
       selectedItemKeys: options.selectedKeys ?? [],
-    });
+    }) as SelectionOptions<TItem, TKey, TDeferred>;
 
     this._selectionStrategy = (this.options.deferred
       ? new DeferredStrategy(this.options)

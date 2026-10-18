@@ -1,11 +1,11 @@
 import coreLocalization from '@ts/core/localization/core';
 import { defaultMessages } from '@ts/core/localization/default_messages';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
+import { humanize } from '@ts/core/utils/inflector';
 import { extend } from '@ts/core/utils/m_extend';
-import { humanize } from '@ts/core/utils/m_inflector';
-import { format as stringFormat } from '@ts/core/utils/m_string';
+import { format as stringFormat } from '@ts/core/utils/string';
 
-export type MessageFormatter = () => string;
+export type MessageFormatter = (...values: unknown[]) => string;
 export type MessageDictionary = Record<string, Record<string, string>>;
 
 const baseDictionary: MessageDictionary = extend(true, {}, defaultMessages);
@@ -97,7 +97,6 @@ const messageLocalization = dependencyInjector({
         args.unshift(message);
 
         // @ts-expect-error
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return stringFormat.apply(this, args);
       };
     }
@@ -110,7 +109,6 @@ const messageLocalization = dependencyInjector({
     // eslint-disable-next-line prefer-rest-params
     const values = Array.prototype.slice.call(arguments, 1);
 
-    // @ts-expect-error
     return formatter?.apply(this, values) || '';
   },
 });

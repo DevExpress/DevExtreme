@@ -125,6 +125,12 @@ function clickedOnFieldsArea($targetElement) {
   return $targetElement.closest(`.${FIELDS_CLASS}`).length || $targetElement.find(`.${FIELDS_CLASS}`).length;
 }
 
+type CellEventArgs = ReturnType<PivotGrid['_createCellArgs']> & { cancel?: boolean };
+
+const isCellEventArgs = (
+  args: ReturnType<PivotGrid['_createEventArgs']>,
+): args is ReturnType<PivotGrid['_createEventArgs']> & CellEventArgs => 'cell' in args;
+
 class PivotGrid extends Widget {
   _dataController: any;
 
@@ -310,15 +316,6 @@ class PivotGrid extends Widget {
     });
   }
 
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    this._deprecatedOptions = {
-      ...this._deprecatedOptions,
-      // @ts-expect-error ts-error
-      'loadPanel.indicatorSrc': { since: '25.2', alias: 'loadPanel.indicatorOptions.src' },
-    };
-  }
-
   _updateCalculatedOptions(fields) {
     const that = this;
     each(fields, (_, field) => {
@@ -399,8 +396,6 @@ class PivotGrid extends Widget {
 
     super._init();
     that._initDataController();
-
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
 
     that._scrollLeft = that._scrollTop = null;
     that._initActions();
@@ -905,6 +900,9 @@ class PivotGrid extends Widget {
   _handleCellClick(e) {
     const that = this;
     const args = that._createEventArgs(e.currentTarget, e);
+    if (!isCellEventArgs(args)) {
+      return;
+    }
     const { cell } = args;
 
     if (!cell || (!args.area && (args.rowIndex || args.columnIndex))) {
@@ -1093,6 +1091,9 @@ class PivotGrid extends Widget {
       return;
     }
     const args = this._createEventArgs(e.currentTarget, e);
+    if (!isCellEventArgs(args)) {
+      return;
+    }
     const { cell } = args;
     if (!cell || !isDefined(cell.expanded)) {
       return;

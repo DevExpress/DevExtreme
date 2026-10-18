@@ -66,7 +66,7 @@ export interface DataAccessors {
 }
 
 class DataConverter {
-  _dataStructure: (InternalNode | null)[] = [];
+  _dataStructure: InternalNode[] = [];
 
   private _itemsCount = 0;
 
@@ -246,13 +246,13 @@ class DataConverter {
     return this._getByKey(node.internalFields.parentKey);
   }
 
-  getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {
+  getByKey(data: InternalNode[], key: ItemKey): InternalNode | null {
     if (!isDefined(key)) {
       return null;
     }
 
     const findByKey = function findByKey(
-      searchData: (InternalNode | null)[],
+      searchData: InternalNode[],
       searchKey: ItemKey,
     ): InternalNode | null {
       let result: InternalNode | null = null;
@@ -314,7 +314,7 @@ class DataConverter {
     items: ItemData[],
     rootValue: ItemKey,
     dataType: DataStructure | undefined,
-  ): (InternalNode | null)[] {
+  ): InternalNode[] {
     this._itemsCount = 0;
     this._visibleItemsCount = 0;
     this._disabledItemsCount = 0;

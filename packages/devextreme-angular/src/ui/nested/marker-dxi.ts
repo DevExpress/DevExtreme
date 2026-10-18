@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -11,10 +9,6 @@ import {
     QueryList
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
@@ -22,6 +16,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_markers } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_location,
 } from 'devextreme-angular/core/tokens';
@@ -82,7 +77,6 @@ export class DxiMarkerComponent extends CollectionNestedOption {
         return 'markers';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -95,7 +89,6 @@ export class DxiMarkerComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

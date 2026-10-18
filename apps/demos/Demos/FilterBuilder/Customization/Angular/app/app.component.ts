@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule, DxButtonModule, DxTagBoxModule } from 'devextreme-angular';
 import { DxFilterBuilderModule, DxFilterBuilderComponent, DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
@@ -25,7 +27,6 @@ const TAB_SIZE = 4;
 @Component({
   selector: 'demo-app',
   providers: [Service],
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   imports: [
@@ -51,7 +52,7 @@ export class AppComponent {
 
   groupOperations = ['and', 'or'];
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.fields = service.getFields();
     this.filter = service.getFilter();
     this.categories = service.getCategories();
@@ -60,6 +61,7 @@ export class AppComponent {
   updateTexts(e: DxFilterBuilderTypes.InitializedEvent) {
     this.filterText = AppComponent.formatValue(e.component.option('value'));
     this.dataSourceText = AppComponent.formatValue(e.component.getFilterExpression());
+    this.changeDetectorRef.detectChanges();
   }
 
   private static formatValue(value: FilterBuilderValue, spaces = TAB_SIZE) {

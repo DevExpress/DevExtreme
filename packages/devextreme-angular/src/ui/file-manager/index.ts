@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -27,7 +24,6 @@ import type { dxFileManagerContextMenu, dxFileManagerDetailsColumn, FileManagerI
 import type { SingleOrMultiple } from 'devextreme/common';
 
 import DxFileManager from 'devextreme/ui/file_manager';
-
 
 import {
     DxComponent,
@@ -64,15 +60,14 @@ import { DxoFileManagerToolbarModule } from 'devextreme-angular/ui/file-manager/
 import { DxiFileManagerToolbarItemModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/nested';
 import { 
-           PROPERTY_TOKEN_columns,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_fileSelectionItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_fileSelectionItems,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxFileManager]
-
  */
 @Component({
     selector: 'dx-file-manager',
@@ -107,7 +102,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -117,10 +111,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -130,10 +122,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.allowedFileExtensions]
-    
      */
     @Input()
     get allowedFileExtensions(): Array<string> {
@@ -143,10 +133,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('allowedFileExtensions', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.contextMenu]
-    
      */
     @Input()
     get contextMenu(): dxFileManagerContextMenu {
@@ -156,10 +144,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('contextMenu', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.currentPath]
-    
      */
     @Input()
     get currentPath(): string {
@@ -169,10 +155,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('currentPath', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.currentPathKeys]
-    
      */
     @Input()
     get currentPathKeys(): Array<string> {
@@ -182,10 +166,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('currentPathKeys', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.customizeDetailColumns]
-    
      */
     @Input()
     get customizeDetailColumns(): ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>) {
@@ -195,10 +177,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('customizeDetailColumns', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.customizeThumbnail]
-    
      */
     @Input()
     get customizeThumbnail(): ((fileSystemItem: FileSystemItem) => string) {
@@ -208,10 +188,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('customizeThumbnail', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -221,10 +199,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -234,10 +210,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.fileSystemProvider]
-    
      */
     @Input()
     get fileSystemProvider(): any | null {
@@ -247,10 +221,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('fileSystemProvider', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.focusedItemKey]
-    
      */
     @Input()
     get focusedItemKey(): string | undefined {
@@ -260,10 +232,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('focusedItemKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -273,10 +243,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -286,10 +254,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -299,10 +265,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -312,10 +276,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.itemView]
-    
      */
     @Input()
     get itemView(): { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean } {
@@ -325,10 +287,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('itemView', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.notifications]
-    
      */
     @Input()
     get notifications(): { showPanel?: boolean, showPopup?: boolean } {
@@ -338,10 +298,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('notifications', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.permissions]
-    
      */
     @Input()
     get permissions(): { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean } {
@@ -351,10 +309,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('permissions', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.rootFolderName]
-    
      */
     @Input()
     get rootFolderName(): string {
@@ -364,10 +320,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('rootFolderName', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -377,10 +331,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.selectedItemKeys]
-    
      */
     @Input()
     get selectedItemKeys(): Array<string> {
@@ -390,10 +342,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('selectedItemKeys', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleOrMultiple {
@@ -403,10 +353,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -416,10 +364,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxFileManagerToolbar {
@@ -429,10 +375,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('toolbar', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.upload]
-    
      */
     @Input()
     get upload(): { chunkSize?: number, maxFileSize?: number } {
@@ -442,10 +386,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('upload', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -455,10 +397,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -469,403 +409,269 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     }
 
     /**
-    
      * [descr:dxFileManagerOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onContextMenuItemClick]
-    
-    
      */
     @Output() onContextMenuItemClick: EventEmitter<ContextMenuItemClickEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onContextMenuShowing]
-    
-    
      */
     @Output() onContextMenuShowing: EventEmitter<ContextMenuShowingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onCurrentDirectoryChanged]
-    
-    
      */
     @Output() onCurrentDirectoryChanged: EventEmitter<CurrentDirectoryChangedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onDirectoryCreated]
-    
-    
      */
     @Output() onDirectoryCreated: EventEmitter<DirectoryCreatedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onDirectoryCreating]
-    
-    
      */
     @Output() onDirectoryCreating: EventEmitter<DirectoryCreatingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onErrorOccurred]
-    
-    
      */
     @Output() onErrorOccurred: EventEmitter<ErrorOccurredEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onFileUploaded]
-    
-    
      */
     @Output() onFileUploaded: EventEmitter<FileUploadedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onFileUploading]
-    
-    
      */
     @Output() onFileUploading: EventEmitter<FileUploadingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onFocusedItemChanged]
-    
-    
      */
     @Output() onFocusedItemChanged: EventEmitter<FocusedItemChangedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemCopied]
-    
-    
      */
     @Output() onItemCopied: EventEmitter<ItemCopiedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemCopying]
-    
-    
      */
     @Output() onItemCopying: EventEmitter<ItemCopyingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemDeleted]
-    
-    
      */
     @Output() onItemDeleted: EventEmitter<ItemDeletedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemDeleting]
-    
-    
      */
     @Output() onItemDeleting: EventEmitter<ItemDeletingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemDownloading]
-    
-    
      */
     @Output() onItemDownloading: EventEmitter<ItemDownloadingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemMoved]
-    
-    
      */
     @Output() onItemMoved: EventEmitter<ItemMovedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemMoving]
-    
-    
      */
     @Output() onItemMoving: EventEmitter<ItemMovingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemRenamed]
-    
-    
      */
     @Output() onItemRenamed: EventEmitter<ItemRenamedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemRenaming]
-    
-    
      */
     @Output() onItemRenaming: EventEmitter<ItemRenamingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onSelectedFileOpened]
-    
-    
      */
     @Output() onSelectedFileOpened: EventEmitter<SelectedFileOpenedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onToolbarItemClick]
-    
-    
      */
     @Output() onToolbarItemClick: EventEmitter<ToolbarItemClickEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowedFileExtensionsChange: EventEmitter<Array<string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contextMenuChange: EventEmitter<dxFileManagerContextMenu>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() currentPathChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() currentPathKeysChange: EventEmitter<Array<string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customizeDetailColumnsChange: EventEmitter<((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customizeThumbnailChange: EventEmitter<((fileSystemItem: FileSystemItem) => string)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fileSystemProviderChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedItemKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemViewChange: EventEmitter<{ details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() notificationsChange: EventEmitter<{ showPanel?: boolean, showPopup?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() permissionsChange: EventEmitter<{ copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rootFolderNameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemKeysChange: EventEmitter<Array<string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxFileManagerToolbar>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadChange: EventEmitter<{ chunkSize?: number, maxFileSize?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

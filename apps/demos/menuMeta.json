@@ -39,6 +39,22 @@
             ]
           },
           {
+            "Name": "AI-powered Detail View",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "AI-powered Detail View",
+                "Name": "AIPoweredDetailView",
+                "Widget": "DataGrid",
+                "DemoType": "Web",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Equivalents": "AI Row Insights, Contextual AI Rows, Master-Detail Copilot, Smart Row Summary, AI-Powered Detail View, AI Master-Detail Analysis",
+                "Modules": "openai"
+              }
+            ]
+          },
+          {
             "Name": "Semantic Search",
             "Equivalents": "",
             "Demos": [
@@ -137,6 +153,26 @@
                 "TopLevel": true,
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Page-Level AI Assistant",
+            "Equivalents": "AI-Powered Assistant, Page-Level Copilot, Smart Chat Orchestrator, UI Automation Chat, Contextual AI Assistant, Page-level AI Assistant",
+            "Demos": [
+              {
+                "Title": "Page-Level AI Assistant",
+                "Name": "PageLevelAIAssistant",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Modules": "openai",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Views/Chat/PageLevelAIAssistantForm.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantGrid.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantChat.cshtml"
+                ]
               }
             ]
           }
@@ -865,8 +901,9 @@
                 "Name": "AIPoweredDetailView",
                 "Widget": "DataGrid",
                 "DemoType": "Web",
-                "Badge": "Roadmap",
-                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-ai-powered-detail-view.xml"
+                "Badge": "AI",
+                "Equivalents": "AI Row Insights, Contextual AI Rows, Master-Detail Copilot, Smart Row Summary, AI-Powered Detail View, AI Master-Detail Analysis",
+                "Modules": "openai"
               },
               {
                 "Title": "Advanced Master-Detail View",
@@ -4440,6 +4477,25 @@
                   "/Models/Chat/User.cs",
                   "/Models/Chat/Message.cs",
                   "/ViewModels/ChatViewModel.cs"
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "Page-Level AI Assistant",
+            "Equivalents": "AI-Powered Assistant, Page-Level Copilot, Smart Chat Orchestrator, UI Automation Chat, Contextual AI Assistant, Page-level AI Assistant",
+            "Demos": [
+              {
+                "Title": "Page-Level AI Assistant",
+                "Name": "PageLevelAIAssistant",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "Modules": "openai",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Views/Chat/PageLevelAIAssistantForm.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantGrid.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantChat.cshtml"
                 ]
               }
             ]

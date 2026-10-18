@@ -3,6 +3,8 @@ import React from 'react';
 const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
+const textStyle = { fontSize: 18, fill: '#494949' };
+const totalStyle = { fontWeight: 600 };
 function calculateTotal(pieChart) {
   return formatNumber(
     pieChart
@@ -35,13 +37,13 @@ export default function TooltipTemplate(pieChart) {
         textAnchor="middle"
         x="100"
         y="120"
-        style={{ fontSize: 18, fill: '#494949' }}
+        style={textStyle}
       >
         <tspan x="100">{country}</tspan>
         <tspan
           x="100"
           dy="20px"
-          style={{ fontWeight: 600 }}
+          style={totalStyle}
         >
           {calculateTotal(pieChart)}
         </tspan>

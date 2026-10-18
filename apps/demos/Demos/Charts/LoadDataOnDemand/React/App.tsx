@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { DataSource } from 'devextreme-react/common/data';
 import {
   Chart,
@@ -39,7 +39,7 @@ function App() {
     endValue: new Date(2025, 3, 15),
   });
 
-  const handleChange = (e: ChartTypes.OptionChangedEvent): void => {
+  const handleChange = useCallback((e: ChartTypes.OptionChangedEvent): void => {
     if (e.fullName === 'argumentAxis.visualRange') {
       const stateStart = visualRange.startValue;
       const currentStart = e.value.startValue;
@@ -48,7 +48,7 @@ function App() {
       }
       onVisualRangeChanged(e.value, e.component);
     }
-  };
+  }, [visualRange]);
 
   return (
     <Chart

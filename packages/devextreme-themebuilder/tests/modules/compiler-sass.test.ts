@@ -21,7 +21,7 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
         Key: '$var3', Name: '10. Select color', Type: 'color',
       },
     ],
-    material: [],
+    material: [] as MetaItem[],
   },
 }));
 

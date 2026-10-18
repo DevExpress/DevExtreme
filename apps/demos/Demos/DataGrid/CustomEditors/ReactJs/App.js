@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import DataGrid, {
   Paging,
   HeaderFilter,
@@ -49,35 +49,43 @@ function calculateFilterExpression(filterValue, selectedFilterOperation, target)
   return (rowData) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
 }
 const onRowInserted = (e) => e.component.navigateToRow(e.key);
-const statusEditorRender = (cell) => {
-  const onValueChanged = (e) => cell.setValue(e.value);
-  const itemRender = (data) => {
-    if (data) {
-      const imageSource = `images/icons/status-${data.id}.svg`;
-      return (
-        <div>
-          <img
-            src={imageSource}
-            className="status-icon middle"
-          ></img>
-          <span className="middle">{data.name}</span>
-        </div>
-      );
-    }
-    return <span>(All)</span>;
-  };
+const statusEditorRender = (cell) => <StatusEditor cell={cell} />;
+const statusItemRender = (data) => {
+  if (data) {
+    const imageSource = `images/icons/status-${data.id}.svg`;
+    return (
+      <div>
+        <img
+          src={imageSource}
+          className="status-icon middle"
+        ></img>
+        <span className="middle">{data.name}</span>
+      </div>
+    );
+  }
+  return <span>(All)</span>;
+};
+const StatusEditor = ({ cell }) => {
   const lookupDataSource = cell.column.lookup?.dataSource;
   const dataSource =
     typeof lookupDataSource === 'function'
       ? lookupDataSource({ data: cell.data, key: cell.row.key })
       : lookupDataSource;
+  const onValueChanged = useCallback(
+    (e) => {
+      cell.setValue(e.value);
+    },
+    [cell],
+  );
   return (
     <SelectBox
       defaultValue={cell.value}
       dataSource={dataSource}
+      displayExpr="name"
+      valueExpr="id"
       onValueChanged={onValueChanged}
       inputAttr={statusLabel}
-      itemRender={itemRender}
+      itemRender={statusItemRender}
     />
   );
 };

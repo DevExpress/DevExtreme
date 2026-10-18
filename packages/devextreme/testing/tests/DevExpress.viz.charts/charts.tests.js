@@ -1,11 +1,11 @@
 import testGlobalExports from '../../helpers/publicModulesHelper.js';
 import * as AdvancedChartModule from '__internal/viz/chart_components/advanced_chart';
 import * as baseChartModule from '__internal/viz/chart_components/base_chart';
-import * as CrosshairModule from 'viz/chart_components/crosshair';
-import * as LayoutManagerModule from 'viz/chart_components/layout_manager';
+import CrosshairModule from 'viz/chart_components/crosshair';
+import LayoutManagerModule from 'viz/chart_components/layout_manager';
 import multiAxesSynchronizer from '__internal/viz/chart_components/multi_axes_synchronizer';
-import * as ScrollBarModule from 'viz/chart_components/scroll_bar';
-import * as trackerModule from 'viz/chart_components/tracker';
+import ScrollBarModule from 'viz/chart_components/scroll_bar';
+import trackerModule from 'viz/chart_components/tracker';
 
 import 'viz/chart';
 import 'viz/pie_chart';

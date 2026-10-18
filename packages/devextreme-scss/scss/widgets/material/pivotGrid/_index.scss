@@ -3,22 +3,22 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../common/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../gridBase/colors" as *;
-@use "../treeView/sizes" as *;
 @use "../button/mixins" as *;
 @use "../button/colors" as *;
+$material-pivotgrid-drag-header-shadow: 0 3px 4px color.change($base-shadow-color, $alpha: 0.15) !default;
+
 @use "../../base/pivotGrid" as basePivotGrid with (
+  $pivotgrid-drag-header-border: none,
+  $pivotgrid-area-box-border: none,
+  $pivotgrid-drag-header-shadow: $material-pivotgrid-drag-header-shadow,
   $pivotgrid-drag-header-border-color: $pivotgrid-drag-header-border-color,
-  $pivotgrid-drag-header-first-shadow-color: $pivotgrid-drag-header-first-shadow-color,
-  $pivotgrid-drag-header-second-shadow-color: $pivotgrid-drag-header-second-shadow-color,
   $pivotgrid-border-color: $pivotgrid-border-color,
   $pivotgrid-common-left-right-padding: $pivotgrid-common-left-right-padding,
   $pivotgrid-area-color: $pivotgrid-area-color,
   $header-filter-color: $header-filter-color,
   $header-filter-color-empty: $header-filter-color-empty,
-  $pivotgrid-area-background: $pivotgrid-area-background,
   $pivotgrid-common-top-bottom-padding: $pivotgrid-common-top-bottom-padding,
   $pivotgrid-header-top-bottom-padding: $pivotgrid-header-top-bottom-padding,
   $pivotgrid-field-indicators-offset: $pivotgrid-field-indicators-offset,
@@ -30,29 +30,27 @@
   $pivotgrid-accent-color: $pivotgrid-accent-color,
   $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
+  $pivotgrid-fields-container-drag-opacity: 0.8,
+  $pivotgrid-area-background: $pivotgrid-field-area-box-background-color,
+  $pivotgrid-area-fields-margin-top: 8px,
 );
 
 $material-pivotgrid-headers-font-size: 12px !default;
 $material-pivotgrid-area-font-size: 13px !default;
 $material-pivotgrid-chevron-icon-size: 20px !default;
 
-$material-pivotgrid-drag-header-shadow: 0 3px 4px color.change($base-shadow-color, $alpha: 0.15) !default;
 $material-pivotgridfieldchooser-field-min-height: 36px !default;
 
 .dx-pivotgrid-fields-container {
   &.dx-drag {
     .dx-area-field.dx-area-box {
       background-color: color.change($pivotgrid-field-area-box-background-color, $alpha: 0.9);
-      border: none;
-      box-shadow: $material-pivotgrid-drag-header-shadow;
     }
   }
 
   .dx-area-field.dx-area-box {
     color: $pivotgrid-field-area-box-text-color;
-    background-color: $pivotgrid-field-area-box-background-color;
     border-radius: 16px;
-    border: none;
     font-size: $material-pivotgrid-headers-font-size;
     font-weight: 500;
 
@@ -63,6 +61,10 @@ $material-pivotgridfieldchooser-field-min-height: 36px !default;
         color: $pivotgrid-area-color;
       }
     }
+  }
+
+  .dx-position-indicator {
+    background-color: $pivotgrid-position-indicator-color;
   }
 }
 
@@ -179,10 +181,6 @@ $material-pivotgridfieldchooser-field-min-height: 36px !default;
       color: $pivotgrid-area-color;
       vertical-align: bottom;
     }
-
-    .dx-area-fields {
-      margin-top: 8px;
-    }
   }
 
   .dx-treeview-border-visible .dx-scrollable-content > .dx-treeview-node-container {
@@ -211,11 +209,5 @@ $material-pivotgridfieldchooser-field-min-height: 36px !default;
 
   .dx-treeview-toggle-item-visibility {
     height: $material-pivotgridfieldchooser-field-min-height;
-  }
-}
-
-.dx-pivotgrid-fields-container { // stylelint-disable-line no-duplicate-selectors
-  .dx-position-indicator {
-    background-color: $pivotgrid-position-indicator-color;
   }
 }

@@ -9,7 +9,7 @@ import RangeSelector, {
 } from 'devextreme-react/range-selector';
 
 const App = () => {
-  const formatText = ({ valueText }) => `${valueText} mg/L`;
+  const formatText = React.useCallback(({ valueText }) => `${valueText} mg/L`, []);
   return (
     <RangeSelector
       id="range-selector"

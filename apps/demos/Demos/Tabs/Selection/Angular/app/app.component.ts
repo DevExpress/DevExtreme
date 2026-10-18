@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   enableProdMode,
   provideZoneChangeDetection,
@@ -13,7 +12,6 @@ if (!/localhost/.test(document.location.host)) {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -27,8 +25,11 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   employees: Tab[];
 
+  selectedItem: Tab;
+
   constructor(service: Service) {
     this.employees = service.getEmployees();
+    this.selectedItem = this.employees[0];
   }
 }
 

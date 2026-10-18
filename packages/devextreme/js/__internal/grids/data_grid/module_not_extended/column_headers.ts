@@ -1,6 +1,6 @@
 import { columnHeadersModule } from '@ts/grids/grid_core/column_headers/m_column_headers';
 
-import gridCore from '../m_core';
+import gridCore from '../core';
 
 export const ColumnHeadersView = columnHeadersModule.views.columnHeadersView;
 

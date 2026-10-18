@@ -32,17 +32,27 @@ interface DropTargetHandleObj {
   selector?: string;
 }
 
-type DragStartEvent = EmitterEvent & {
+export interface DragOffset {
+  x: number;
+  y: number;
+}
+
+export interface DragStartData {
   maxLeftOffset?: number;
   maxRightOffset?: number;
   maxTopOffset?: number;
   maxBottomOffset?: number;
   targetElements?: Element | Element[] | null;
-};
+}
 
-type DragMoveEvent = EmitterEvent & {
+export interface DragMoveData {
+  offset?: DragOffset;
   _cancelPreventDefault?: boolean;
-};
+}
+
+type DragStartEvent = EmitterEvent & DragStartData;
+
+type DragMoveEvent = EmitterEvent & DragMoveData;
 
 const knownDropTargets: Element[] = [];
 const knownDropTargetSelectors: (string | undefined)[][] = [];
@@ -196,7 +206,7 @@ class DragEmitter extends GestureEmitter {
     }
   }
 
-  _calculateOffset(eventData: EventCoords): { x: number; y: number } {
+  _calculateOffset(eventData: EventCoords): DragOffset {
     return {
       x: this._calculateXOffset(eventData),
       y: this._calculateYOffset(eventData),

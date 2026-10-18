@@ -8,8 +8,8 @@ import {
   getPreviousFocusableElement,
 } from './focus';
 
-jest.mock('@ts/core/utils/m_selectors', () => ({
-  ...jest.requireActual<typeof import('@ts/core/utils/m_selectors')>('@ts/core/utils/m_selectors'),
+jest.mock('@ts/core/utils/selectors', () => ({
+  ...jest.requireActual<typeof import('@ts/core/utils/selectors')>('@ts/core/utils/selectors'),
   isElementVisible: jest.fn(() => true),
 }));
 

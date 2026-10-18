@@ -15,7 +15,8 @@ import { addShadowDomStyles } from '@js/core/utils/shadow_dom';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
-import TemplateManagerModule from '@ts/core/m_template_manager';
+import type { IntegrationOptions } from '@ts/core/template_manager';
+import TemplateManagerModule from '@ts/core/template_manager';
 import { uiLayerInitialized } from '@ts/core/utils/m_common';
 import type { ComponentProperties, DefaultActionArgs, DefaultActionConfig } from '@ts/core/widget/component';
 import { Component } from '@ts/core/widget/component';
@@ -31,7 +32,7 @@ export interface DOMComponentProperties<TComponent> extends Omit<DOMComponentOpt
 
   _ignoreFunctionValueDeprecation?: boolean;
 
-  integrationOptions?: Record<string, unknown>;
+  integrationOptions?: IntegrationOptions;
 
   nestedComponentOptions?: (context: TComponent) => void;
 
@@ -52,7 +53,7 @@ class DOMComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _customClass: any;
 
-  private _$element!: dxElementWrapper;
+  protected _$element!: dxElementWrapper;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _windowResizeCallBack: any;
@@ -76,15 +77,14 @@ class DOMComponent<
   }
 
   _getDefaultOptions(): TProperties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._getDefaultOptions(), {
-      width: undefined,
-      height: undefined,
+    return {
+      ...super._getDefaultOptions(),
       rtlEnabled: config().rtlEnabled,
       elementAttr: {},
       disabled: false,
       integrationOptions: {},
-    }, this._useTemplates() ? TemplateManagerModule.TemplateManager.createDefaultOptions() : {});
+      ...this._useTemplates() ? TemplateManagerModule.TemplateManager.createDefaultOptions() : {},
+    };
   }
 
   ctor(element: Element, options: TProperties): void {
@@ -207,10 +207,8 @@ class DOMComponent<
     const classNames = attributes.class;
 
     delete attributes.class;
-    // @ts-expect-error
     this.$element()
       .attr(attributes)
-      // @ts-expect-error
       .removeClass(this._customClass)
       .addClass(classNames);
 
@@ -343,20 +341,20 @@ class DOMComponent<
     componentConfiguration: TTComponent extends { _getDefaultOptions: () => infer TTProperties }
       ? string extends keyof TTProperties
         ? object
-        : Partial<TTProperties> & { integrationOptions?: Record<string, unknown> }
+        : Partial<TTProperties> & { integrationOptions?: IntegrationOptions }
       : IProperties,
   ): TTComponent {
     const configuration = componentConfiguration ?? {};
 
     const synchronizableOptions = this._getSynchronizableOptionsForCreateComponent()
-      .filter((value) => !(value in configuration)) as (keyof TProperties)[];
+      .filter((value) => !(value in configuration)) as (keyof TProperties & string)[];
 
     const { integrationOptions } = this.option();
     let { nestedComponentOptions } = this.option();
 
     nestedComponentOptions = nestedComponentOptions ?? noop;
 
-    const nestedComponentConfig = extend(
+    const nestedComponentConfig: Record<string, unknown> = extend(
       { integrationOptions },
       nestedComponentOptions(this as unknown as TComponent),
     );
@@ -541,9 +539,8 @@ class DOMComponent<
     }
   }
 
-  _getAnonymousTemplateName(): void {
-    // eslint-disable-next-line no-void
-    return void 0;
+  _getAnonymousTemplateName(): string | undefined {
+    return undefined;
   }
 
   _initTemplateManager(): undefined {

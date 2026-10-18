@@ -131,6 +131,9 @@ const CSP_DEMO_ALLOWLIST = {
   'DataGrid/AIColumns': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
+  'DataGrid/AIPoweredDetailView': {
+    'connect-src': DEMO_OPENAI_CONNECT_SRC,
+  },
   'Form/SmartPaste': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
@@ -138,6 +141,9 @@ const CSP_DEMO_ALLOWLIST = {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
   'Chat/AIAndChatbotIntegration': {
+    'connect-src': DEMO_OPENAI_CONNECT_SRC,
+  },
+  'Chat/PageLevelAIAssistant': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
   'Chat/MessageStreaming': {
@@ -203,6 +209,9 @@ const CSP_FRAMEWORK_ALLOWLIST = {
     'DataGrid/AIColumns': {
       'script-src': ["'unsafe-inline'"],
     },
+    'DataGrid/AIPoweredDetailView': {
+      'script-src': ["'unsafe-inline'"],
+    },
     // The OpenAI SDK additionally uses eval() in this demo.
     'Form/SmartPaste': {
       'script-src': ["'unsafe-inline'", "'unsafe-eval'"],
@@ -211,6 +220,9 @@ const CSP_FRAMEWORK_ALLOWLIST = {
       'script-src': ["'unsafe-inline'"],
     },
     'Chat/AIAndChatbotIntegration': {
+      'script-src': ["'unsafe-inline'"],
+    },
+    'Chat/PageLevelAIAssistant': {
       'script-src': ["'unsafe-inline'"],
     },
     'Chat/MessageStreaming': {

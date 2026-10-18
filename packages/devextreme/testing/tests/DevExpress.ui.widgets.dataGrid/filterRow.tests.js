@@ -8,7 +8,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { value as viewPort } from 'core/utils/view_port';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import dateLocalization from 'common/core/localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
@@ -772,7 +772,8 @@ QUnit.module('Filter Row', {
         assert.ok(!filterRow.find('.dx-editor-cell').length);
         assert.equal(filterRow.find('td').length, 4, 'count td');
         assert.equal(filterRow.find('td').last().html(), '&nbsp;', 'text column with command is empty');
-        assert.roughEqual(filterRow.outerHeight(), 18, 1, 'height filter row');
+        // jQuery measures table rows via the rounded offsetHeight since Chrome 155
+        assert.roughEqual(filterRow.get(0).getBoundingClientRect().height, 18, 1, 'height filter row');
     });
 
     // T100624

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import deMessages from 'devextreme/localization/messages/de.json';
@@ -13,9 +13,6 @@ const editPopupOptions = {
 const amountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
 };
 const selectBoxInputAttr = { id: 'selectInput' };
 locale(sessionStorage.getItem('locale') || 'en');
@@ -26,11 +23,14 @@ const App = () => {
   const [localeState, setLocaleState] = useState(sessionStorage.getItem('locale') || 'en');
   const locales = service.getLocales();
   const payments = service.getPayments();
-  const changeLocale = (e) => {
-    sessionStorage.setItem('locale', e.value);
-    setLocaleState(e.value);
-    document.location.reload();
-  };
+  const changeLocale = useCallback(
+    (e) => {
+      sessionStorage.setItem('locale', e.value);
+      setLocaleState(e.value);
+      document.location.reload();
+    },
+    [setLocaleState],
+  );
   return (
     <div>
       <DataGrid

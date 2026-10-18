@@ -757,7 +757,7 @@ class ContextMenu<
   _isIncludeOverlay($activeOverlay: dxElementWrapper, $allOverlays: dxElementWrapper): boolean {
     let isSame = false;
 
-    each($allOverlays, (_index: number, $overlay: dxElementWrapper) => {
+    each($allOverlays, (_index, $overlay) => {
       if ($activeOverlay.is($overlay) && !isSame) {
         isSame = true;
       }
@@ -772,7 +772,7 @@ class ContextMenu<
 
     if ($submenuElements.length > 0) {
       each(shownSubmenus, (index, $submenu) => {
-        const $context = this._searchActiveItem($submenu.context).parent();
+        const $context = this._searchActiveItem($submenu.get(0)).parent();
         if (
           $context.parent().is($clickedItem.parent().parent())
           && !$context.is($clickedItem.parent())

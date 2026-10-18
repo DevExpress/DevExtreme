@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -21,7 +18,6 @@ import type { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, EndEven
 import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxSpeechToText from 'devextreme/ui/speech_to_text';
-
 
 import {
     DxComponent,
@@ -62,7 +58,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('accessKey', value);
     }
 
-
     
     @Input()
     get activeStateEnabled(): boolean {
@@ -71,7 +66,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     
     @Input()
@@ -82,7 +76,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('customSpeechRecognizer', value);
     }
 
-
     
     @Input()
     get disabled(): boolean {
@@ -91,7 +84,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     
     @Input()
@@ -102,7 +94,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     
     @Input()
     get focusStateEnabled(): boolean {
@@ -111,7 +102,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     
     @Input()
@@ -122,7 +112,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     
     @Input()
     get hint(): string | undefined {
@@ -131,7 +120,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     
     @Input()
@@ -142,7 +130,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('hoverStateEnabled', value);
     }
 
-
     
     @Input()
     get rtlEnabled(): boolean {
@@ -151,7 +138,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     
     @Input()
@@ -162,7 +148,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('speechRecognitionConfig', value);
     }
 
-
     
     @Input()
     get startIcon(): string {
@@ -171,7 +156,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set startIcon(value: string) {
         this._setOption('startIcon', value);
     }
-
 
     
     @Input()
@@ -182,7 +166,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('startText', value);
     }
 
-
     
     @Input()
     get stopIcon(): string {
@@ -191,7 +174,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set stopIcon(value: string) {
         this._setOption('stopIcon', value);
     }
-
 
     
     @Input()
@@ -202,7 +184,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('stopText', value);
     }
 
-
     
     @Input()
     get stylingMode(): ButtonStyle {
@@ -211,7 +192,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set stylingMode(value: ButtonStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     
     @Input()
@@ -222,7 +202,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('tabIndex', value);
     }
 
-
     
     @Input()
     get type(): ButtonType | string {
@@ -232,7 +211,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('type', value);
     }
 
-
     
     @Input()
     get visible(): boolean {
@@ -241,7 +219,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     
     @Input()
@@ -253,219 +230,149 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onEnd: EventEmitter<EndEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onError: EventEmitter<ErrorEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onResult: EventEmitter<ResultEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onStartClick: EventEmitter<StartClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onStopClick: EventEmitter<StopClickEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customSpeechRecognizerChange: EventEmitter<CustomSpeechRecognizer>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() speechRecognitionConfigChange: EventEmitter<Record<string, any> | SpeechRecognitionConfig>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() startIconChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() startTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stopIconChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stopTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stylingModeChange: EventEmitter<ButtonStyle>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() typeChange: EventEmitter<ButtonType | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

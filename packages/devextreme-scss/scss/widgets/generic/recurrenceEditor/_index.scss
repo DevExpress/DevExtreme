@@ -1,7 +1,8 @@
 @use "colors" as *;
 @use "sizes" as *;
-@use "../scheduler/sizes" as *;
-@use "../../base/recurrenceEditor" as *;
+@use "../../base/recurrenceEditor" as * with (
+  $recurrence-interval-number-box-margin-top: $generic-recurrence-interval-number-box-margin-top,
+);
 
 $generic-recurrence-number-box-margin-right: 11px !default;
 
@@ -14,10 +15,6 @@ $generic-recurrence-number-box-margin-right: 11px !default;
       margin-left: $generic-recurrence-number-box-margin-right;
     }
   }
-}
-
-.dx-recurrence-numberbox-interval-label {
-  margin-top: $generic-recurrence-interval-number-box-margin-top;
 }
 
 .dx-recurrence-datebox-until-date {

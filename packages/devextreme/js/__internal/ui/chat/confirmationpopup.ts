@@ -2,10 +2,10 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import messageLocalization from '@js/localization/message';
 import Popup, { type Properties as PopupProperties, type ToolbarItem } from '@js/ui/popup';
 import { BUTTON_CLASS } from '@ts/ui/button/button';
+import type InternalPopup from '@ts/ui/popup/popup';
 
 export const CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS = 'dx-chat-confirmation-popup-wrapper';
 
@@ -58,7 +58,7 @@ class ConfirmationPopup {
       .text(messageLocalization.format('dxChat-editingDeleteConfirmText'))
       .attr('id', messageId);
 
-    return extend({
+    return {
       width: POPUP_WIDTH,
       height: 'auto',
       showTitle: false,
@@ -67,16 +67,19 @@ class ConfirmationPopup {
       dragEnabled: false,
       hideOnOutsideClick: true,
       toolbarItems: this._getToolbarItems(),
-      onContentReady(args) {
-        args.component.$content()
-          .append($message);
+      onContentReady(args): void {
+        const component = args.component as InternalPopup;
 
-        args.component.$overlayContent().attr('aria-labelledby', messageId);
+        component.$content()
+          ?.append($message);
+
+        component.$overlayContent().attr('aria-labelledby', messageId);
       },
-      onShown: (e) => {
-        const $firstButton = e.component
+      onShown: (e): void => {
+        const component = e.component as InternalPopup;
+        const $firstButton = component
           .bottomToolbar()
-          .find(`.${BUTTON_CLASS}`)
+          ?.find(`.${BUTTON_CLASS}`)
           .first();
         // @ts-expect-error
         eventsEngine.trigger($firstButton, 'focus');
@@ -86,10 +89,10 @@ class ConfirmationPopup {
       position: {
         my: 'center',
         at: 'center',
-        of: this._$container,
+        of: this._$container.get(0),
       },
       ...this._popupConfig,
-    }) as PopupProperties;
+    };
   }
 
   _getApplyButtonConfig(): ToolbarItem {

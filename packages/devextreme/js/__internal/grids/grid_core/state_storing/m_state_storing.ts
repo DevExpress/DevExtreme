@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
 
@@ -13,7 +13,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsVi
     super.init();
 
     this._dataController.stateLoaded.add(() => {
-      if (this._dataController.isLoaded() && !this._dataController.getDataSource()) {
+      if (this._dataController.isLoaded() && !this.dataSourceController.getDataSource()) {
         this.setLoading(false);
         this.renderNoDataText();
         // TODO getView

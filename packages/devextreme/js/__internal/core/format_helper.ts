@@ -14,10 +14,36 @@ import {
 } from '@js/core/utils/type';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
 
-import { getGlobalFormatByDataType } from './global_format_config';
+import type { FormatLocale, LocaleAwareFormatter } from './global_format_config';
+import { getGlobalFormatByDataType, withFormatLocale } from './global_format_config';
+
+type DateFormatter = (date: Date) => string;
+
+const createLocaleAwareFormatter = (
+  createFormatter: (locale?: FormatLocale) => DateFormatter,
+): LocaleAwareFormatter => {
+  const create = (locale?: FormatLocale): LocaleAwareFormatter => {
+    const formatter: LocaleAwareFormatter = createFormatter(locale);
+    formatter.withLocale = create;
+
+    return formatter;
+  };
+
+  return create();
+};
+
+const getMonthNames = (format: string, type?: string, locale?: string): string[] => (
+  dateLocalization as unknown as {
+    getMonthNames: (format: string, type?: string, locale?: string) => string[];
+  }
+).getMonthNames(format, type, locale);
+
+const resolveLocale = (locale?: FormatLocale): string | undefined => (
+  isFunction(locale) ? locale() : locale
+);
 
 export default dependencyInjector({
-  format(value, format) {
+  format(value, format?) {
     const formatIsValid = (isString(format) && format !== '')
       || isPlainObject(format) || isFunction(format);
     const valueIsValid = isNumeric(value) || (isDate(value) && !isNaN(value.getTime()));
@@ -30,7 +56,6 @@ export default dependencyInjector({
     if (!formatIsValid && isNumeric(value)) {
       const globalNumberFormat = getGlobalFormatByDataType('number');
       if (globalNumberFormat) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return numberLocalization.format(value, globalNumberFormat);
       }
     }
@@ -47,7 +72,6 @@ export default dependencyInjector({
     const resolvedFormat = isString(format) ? { type: format } : format;
 
     if (isNumeric(value)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return numberLocalization.format(value, resolvedFormat);
     }
 
@@ -72,12 +96,12 @@ export default dependencyInjector({
       return formatParts[0];
     }
 
-    return function(date): string {
-      return formatParts.map((formatPart) => dateLocalization.format(date, formatPart)).join(' ');
-    };
+    return createLocaleAwareFormatter((locale) => (date): string => formatParts
+      .map((formatPart) => dateLocalization.format(date, withFormatLocale(formatPart, locale)))
+      .join(' '));
   },
 
-  getDateFormatByDifferences(dateDifferences, intervalFormat) {
+  getDateFormatByDifferences(dateDifferences, intervalFormat?) {
     const resultFormat: Format[] = [];
     const needSpecialSecondFormatter = intervalFormat && dateDifferences.millisecond
       && !(dateDifferences.year || dateDifferences.month || dateDifferences.day);
@@ -120,10 +144,10 @@ export default dependencyInjector({
 
     if (dateDifferences.month && dateDifferences.day) {
       if (intervalFormat) {
-        const monthDayFormatter = function(date): string {
-          const monthName = dateLocalization.getMonthNames('abbreviated')[date.getMonth()];
-          return `${monthName} ${dateLocalization.format(date, 'day')}`;
-        };
+        const monthDayFormatter = createLocaleAwareFormatter((locale) => (date): string => {
+          const monthName = getMonthNames('abbreviated', undefined, resolveLocale(locale))[date.getMonth()];
+          return `${monthName} ${dateLocalization.format(date, withFormatLocale('day', locale))}`;
+        });
         resultFormat.unshift(monthDayFormatter);
       } else {
         resultFormat.unshift('monthandday');
@@ -138,10 +162,10 @@ export default dependencyInjector({
       if (intervalFormat) {
         resultFormat.unshift('day');
       } else {
-        const dayFormatter = function(date): string {
-          const dayOfWeek = dateLocalization.format(date, 'dayofweek');
-          return `${dayOfWeek}, ${dateLocalization.format(date, 'day')}`;
-        };
+        const dayFormatter = createLocaleAwareFormatter((locale) => (date): string => {
+          const dayOfWeek = dateLocalization.format(date, withFormatLocale('dayofweek', locale));
+          return `${dayOfWeek}, ${dateLocalization.format(date, withFormatLocale('day', locale))}`;
+        });
         resultFormat.unshift(dayFormatter);
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

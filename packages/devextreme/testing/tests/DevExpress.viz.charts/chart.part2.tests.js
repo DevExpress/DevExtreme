@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { environment } from './chartParts/commons.js';
-import vizUtils from 'viz/core/utils';
+import vizUtils from 'viz/core/utils_default';
 import {
     MockSeries,
     commonMethodsForTests,

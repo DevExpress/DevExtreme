@@ -2,6 +2,17 @@
 import messageLocalization from '@js/common/core/localization/message';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
 import { isFunction } from '@js/core/utils/type';
+import type { Properties } from '@js/ui/gantt';
+
+type NullDefaultKeys = 'toolbar'
+  | 'taskTooltipContentTemplate'
+  | 'taskProgressTooltipContentTemplate'
+  | 'taskTimeTooltipContentTemplate'
+  | 'taskContentTemplate';
+
+export type GanttProperties = Omit<Properties, NullDefaultKeys> & {
+  [TKey in NullDefaultKeys]?: Properties[TKey] | null;
+};
 
 export const GanttHelper = {
   prepareMapHandler(getters) {
@@ -118,8 +129,7 @@ export const GanttHelper = {
     }
   },
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  getDefaultOptions() {
+  getDefaultOptions(): GanttProperties {
     return {
       tasks: {
         dataSource: null,

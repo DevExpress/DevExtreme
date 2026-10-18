@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Gantt, {
   Tasks,
   Dependencies,
@@ -22,19 +22,19 @@ function App() {
     showSortIndexes: false,
     showSortIndexesDisabled: true,
   });
-  const onSortingModeChanged = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onSortingModeChanged = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       sortingMode: value,
       showSortIndexesDisabled: value !== 'multiple',
-    });
-  };
-  const onShowSortIndexesChanged = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+    }));
+  }, []);
+  const onShowSortIndexesChanged = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       showSortIndexes: value,
-    });
-  };
+    }));
+  }, []);
   return (
     <div id="form-demo">
       <div className="options">

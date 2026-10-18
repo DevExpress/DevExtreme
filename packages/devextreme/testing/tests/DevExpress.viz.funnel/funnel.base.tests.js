@@ -1,9 +1,10 @@
 import $ from 'jquery';
 import { createFunnel, environment, stubAlgorithm } from './commonParts/common.js';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import paletteModule from '__internal/viz/paletteModule';
 
 import themeModule from 'viz/themes';
+import { spySeam } from '../../helpers/moduleSeam.js';
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -271,7 +272,7 @@ QUnit.test('Resize', function(assert) {
 });
 
 QUnit.test('palette', function(assert) {
-    sinon.spy(paletteModule, 'createPalette');
+    spySeam(paletteModule, 'createPalette', 'DEBUG_set_createPalette');
 
     stubAlgorithm.normalizeValues.returns([1, 1]);
     stubAlgorithm.getFigures.returns([
@@ -452,7 +453,7 @@ QUnit.test('Update inverted option', function(assert) {
 });
 
 QUnit.test('Update palette', function(assert) {
-    sinon.spy(paletteModule, 'createPalette');
+    spySeam(paletteModule, 'createPalette', 'DEBUG_set_createPalette');
 
     stubAlgorithm.normalizeValues.returns([1, 1]);
     stubAlgorithm.getFigures.returns([
@@ -1082,6 +1083,28 @@ QUnit.test('getColor method', function(assert) {
 
     assert.equal(items[0].getColor(), '#987987');
     assert.equal(items[1].getColor(), '#234234');
+});
+
+QUnit.test('color and getColor hand out the painted colour, the item is filled with the name', function(assert) {
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One', color: 'var(--probe-fill, #123456)' }],
+    });
+    const item = funnel.getAllItems()[0];
+
+    assert.equal(item.color, '#123456');
+    assert.equal(item.getColor(), '#123456');
+    assert.equal(this.items()[0].smartAttr.lastCall.args[0].fill, 'var(--probe-fill, #123456)');
+});
+
+QUnit.test('color written by the application is read back', function(assert) {
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One', color: 'var(--probe-fill, #123456)' }],
+    });
+    const item = funnel.getAllItems()[0];
+
+    item.color = '#abcdef';
+
+    assert.equal(item.color, '#abcdef');
 });
 
 QUnit.test('isHovered method', function(assert) {

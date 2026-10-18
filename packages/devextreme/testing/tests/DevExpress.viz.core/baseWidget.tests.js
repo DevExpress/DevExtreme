@@ -9,9 +9,11 @@ import { logger } from 'core/utils/console';
 import resizeObserverSingleton from 'core/resize_observer';
 import { isFunction } from 'core/utils/type';
 import BaseWidget from '__internal/viz/core/base_widget';
+import { setupWidgetPrototype } from '__internal/viz/core/helpers';
 import { DEBUG_createEventTrigger, DEBUG_createResizeHandler } from '__internal/viz/core/base_widget.utils';
 import { BaseThemeManager } from 'viz/core/base_theme_manager';
 import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import { stubClass, environmentMethodInvoker, LoadingIndicator, Renderer, Title } from '../../helpers/vizMocks.js';
 import { implementationsMap } from 'core/utils/size';
 
@@ -35,13 +37,15 @@ QUnit.testStart(function() {
 QUnit.begin(function() {
     StubThemeManager = stubClass(BaseThemeManager);
     StubTitle = Title;
-    dxBaseWidgetTester = BaseWidget.inherit({
+    dxBaseWidgetTester = class extends BaseWidget {};
+
+    setupWidgetPrototype(dxBaseWidgetTester, {
         NAME: 'dxBaseWidgetTester',
         _rootClassPrefix: '_rootClassPrefix',
         _rootClass: '_rootClass',
-        _eventsMap: $.extend({}, BaseWidget.prototype._eventsMap, {
+        _eventsMap: {
             'onTestEvent': { name: 'testEvent' }
-        }),
+        },
         _getAnimationOptions: environmentMethodInvoker('onGetAnimationOptions'),
         _initCore: environmentMethodInvoker('onInitCore'),
         _disposeCore: environmentMethodInvoker('onDisposeCore'),
@@ -54,7 +58,7 @@ QUnit.begin(function() {
 
     registerComponent('dxBaseWidgetTester', dxBaseWidgetTester);
 
-    sinon.stub(rendererModule, 'Renderer').callsFake(function() {
+    stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(function() {
         return currentTest().renderer;
     });
 });

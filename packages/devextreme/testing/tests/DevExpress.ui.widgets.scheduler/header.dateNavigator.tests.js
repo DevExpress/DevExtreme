@@ -1,7 +1,7 @@
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 const { testStart, test, module } = QUnit;
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 testStart(() => initTestMarkup());
 

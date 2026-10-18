@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DashStyle, Font } from 'devextreme/common/charts';
 import type { PieChartLegendItem, PieChartLegendHoverMode } from 'devextreme/viz/pie_chart';
 import type { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
@@ -23,7 +17,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pie-chart-legend',
@@ -222,7 +215,6 @@ export class DxoPieChartLegendComponent extends NestedOption implements OnDestro
         return 'legend';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -238,7 +230,6 @@ export class DxoPieChartLegendComponent extends NestedOption implements OnDestro
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -20,7 +17,6 @@ import {
 import type { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/speed_dial_action';
 
 import DxSpeedDialAction from 'devextreme/ui/speed_dial_action';
-
 
 import {
     DxComponent,
@@ -36,7 +32,6 @@ import {
 
 /**
  * [descr:dxSpeedDialAction]
-
  */
 @Component({
     selector: 'dx-speed-dial-action',
@@ -55,7 +50,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -65,10 +59,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -78,10 +70,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -91,10 +81,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -104,10 +92,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -117,10 +103,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -130,10 +114,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxSpeedDialActionOptions.icon]
-    
      */
     @Input()
     get icon(): string {
@@ -143,10 +125,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('icon', value);
     }
 
-
     /**
      * [descr:dxSpeedDialActionOptions.index]
-    
      */
     @Input()
     get index(): number {
@@ -156,10 +136,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('index', value);
     }
 
-
     /**
      * [descr:dxSpeedDialActionOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -169,10 +147,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -182,10 +158,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -195,10 +169,8 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxSpeedDialActionOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -209,131 +181,89 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
     }
 
     /**
-    
      * [descr:dxSpeedDialActionOptions.onClick]
-    
-    
      */
     @Output() onClick: EventEmitter<ClickEvent>;
 
     /**
-    
      * [descr:dxSpeedDialActionOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxSpeedDialActionOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxSpeedDialActionOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxSpeedDialActionOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() iconChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() indexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

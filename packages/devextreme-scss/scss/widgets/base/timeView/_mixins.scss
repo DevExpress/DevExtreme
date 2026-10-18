@@ -1,46 +1,105 @@
 @use "sass:string";
 @use "../string" as *;
+@use "../mask" as *;
 
-@mixin clock-colored-image($data-uri, $accent-color, $background-color, $digit-color) {
-  $uri: replace("#{$data-uri}", escape("$accent-color"), escape("#{$accent-color}"));
-  $uri: replace($uri, escape("$background-color"), escape("#{$background-color}")); // stylelint-disable-line scss/no-duplicate-dollar-variables
-  $uri: replace($uri, escape("$digit-color"), escape("#{$digit-color}")); // stylelint-disable-line scss/no-duplicate-dollar-variables
+@function clock-shape($data-uri, $background: "%23000") {
+  $painted: replace("#{$data-uri}", escape("$accent-color"), "%23fff");
+  $digits: replace($painted, escape("$digit-color"), "%23fff");
 
-  background-image: string.unquote($uri);
+  @return string.unquote(replace($digits, escape("$background-color"), $background));
 }
 
-@mixin clock-action-icons-mixin($accent-color, $background-color, $digit-color) {
+@mixin clock-masked-image($name) {
+  mask-image: var(--dxicon-timeview-#{$name});
+  mask-mode: luminance;
+}
+
+@mixin clock-action-icons-mixin(
+  $accent-color,
+  $background-color,
+  $digit-color,
+  $clock-size: 182px,
+  $arrow-width: 10px,
+  $arrow-offset: calc($arrow-width / -2),
+  $dial-size: calc($clock-size * 85 / 91),
+  $dial-shadow: null,
+  $pivot-size: 4px,
+  $pivot-offset: 5px,
+) {
+  @at-root :root {
+    --dxicon-timeview-clock-bg: #{clock-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"))};
+    --dxicon-timeview-hour-arrow: #{clock-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), "%23fff")};
+    --dxicon-timeview-min-arrow: #{clock-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), "%23fff")};
+  }
+
   .dx-timeview-clock {
-    @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"), $accent-color, $background-color, $digit-color);
-
-    $clock-size: 182px;
-
     min-width: $clock-size;
     min-height: $clock-size;
     max-height: $clock-size;
-    background-size: $clock-size;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &::before {
+      width: $dial-size;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background-color: $background-color;
+      box-shadow: $dial-shadow;
+    }
+
+    &::after {
+      @include clock-masked-image("clock-bg");
+
+      width: $clock-size;
+      height: $clock-size;
+      mask-repeat: no-repeat;
+      mask-size: 100% 100%;
+
+      @include masked-glyph-paint($digit-color);
+    }
   }
 
   .dx-timeview-hourarrow,
   .dx-timeview-minutearrow {
     position: absolute;
     left: 50%;
-    width: 10px;
-    margin-left: -5px;
+    width: $arrow-width;
+    margin-left: $arrow-offset;
     height: 50%;
-    background-position: bottom;
-    background-repeat: no-repeat;
+    mask-position: bottom;
+    mask-repeat: no-repeat;
+
+    @include masked-glyph-paint($accent-color);
+
+    z-index: 1;
     transform-origin: 50% 100%;
     backface-visibility: hidden;
   }
 
   .dx-timeview-hourarrow {
-    @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), $accent-color, $background-color, $digit-color);
+    @include clock-masked-image("hour-arrow");
   }
 
   .dx-timeview-minutearrow {
-    @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), $accent-color, $background-color, $digit-color);
+    @include clock-masked-image("min-arrow");
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: $pivot-offset;
+      width: $pivot-size;
+      height: $pivot-size;
+      transform: translate(-50%, 50%);
+      border-radius: 50%;
+      background-color: $background-color;
+    }
   }
 }

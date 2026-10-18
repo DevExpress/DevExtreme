@@ -3,7 +3,7 @@ import { noop } from 'core/utils/common';
 import { Component } from 'core/component';
 import { PostponedOperations } from 'core/postponed_operations';
 import errors from 'core/errors';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import config from 'core/config';
 
 class TestComponent extends Component {
@@ -1211,6 +1211,21 @@ QUnit.module('defaultOptions', {
 
         devices._currentDevice = { platform: 'ios' };
         assert.equal(new TestComponent().option('test'), 'value', 'test option is configured for ios');
+    });
+
+    QUnit.test('default options for several devices are not set for other devices', function(assert) {
+        const TestComponent = this.createClass([{
+            device: [
+                { platform: 'android' },
+                { platform: 'ios' }
+            ],
+            options: {
+                test: 'value'
+            }
+        }]);
+
+        devices._currentDevice = { platform: 'generic', deviceType: 'desktop' };
+        assert.notEqual(new TestComponent().option('test'), 'value', 'test option is not configured for desktop');
     });
 
     QUnit.test('set default options for filtering device with custom function', function(assert) {

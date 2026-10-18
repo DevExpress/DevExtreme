@@ -2,7 +2,6 @@ $(() => {
   const dataGrid = $('#gridContainer').dxDataGrid({
     dataSource: orders,
     keyExpr: 'ID',
-    columnsAutoWidth: true,
     showBorders: true,
     filterRow: {
       visible: true,
@@ -61,9 +60,6 @@ $(() => {
       editorOptions: {
         format: 'currency',
         showClearButton: true,
-        inputAttr: {
-          'aria-label': 'Filter cell',
-        },
       },
       headerFilter: {
         dataSource: [{

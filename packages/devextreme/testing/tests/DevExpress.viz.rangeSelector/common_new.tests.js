@@ -7,6 +7,7 @@ import rendererModule from 'viz/core/renderers/renderer_default';
 import axisModule from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
 import '__internal/viz/range_selector/range_selector';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const StubAxis = stubClass(axisModule.Axis);
 
@@ -27,10 +28,10 @@ QUnit.module('RangeSelector', {
         const that = this;
         this.$container = $('#test-container');
         const renderer = this.renderer = new Renderer();
-        rendererModule.Renderer = function() { return renderer; };
+        rendererModule.DEBUG_set_Renderer(function() { return renderer; });
         this.axis = new StubAxis();
         this.axis.stub('getVisibleArea').returns([]);
-        sinon.stub(axisModule, 'Axis').callsFake(function() {
+        stubSeam(axisModule, 'Axis', 'DEBUG_set_Axis').callsFake(function() {
             return that.axis;
         });
 

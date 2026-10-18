@@ -1,14 +1,14 @@
-@use "sass:math";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../button/sizes" as *;
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
 @use "../textEditor/sizes" as *;
-@use "../../base/list" as *;
+@use "../../base/list" as * with (
+  $list-empty-message-min-height: 2em,
+);
 @use "../../base/list/mixins" as *;
 @use "../radioGroup/colors" as *;
 @use "../badge";
@@ -146,10 +146,6 @@ $fluent-list-item-border: $fluent-list-item-border-width solid !default;
 
     &.dx-list-with-search .dx-scrollable-wrapper {
       height: calc(100% - #{$fluent-texteditor-input-height + $fluent-list-searchbox-margin-bottom});
-    }
-
-    .dx-empty-message {
-      min-height: 2em;
     }
 
     &.dx-list-select-decorator-enabled {
@@ -355,7 +351,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid !default;
     }
 
     .dx-icon-toggle-delete {
-      background-size: 100%;
+      mask-size: 100%;
     }
 
     &.dx-list-item-ghost-reordering {
@@ -384,7 +380,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid !default;
     padding: $fluent-list-item-vertical-padding $item-horizontal-padding $fluent-list-item-vertical-padding;
   }
 
-  .dx-list .dx-empty-message { // stylelint-disable-line no-duplicate-selectors
+  .dx-list .dx-empty-message {
     padding: $fluent-list-item-vertical-padding $fluent-list-item-horizontal-padding;
   }
 

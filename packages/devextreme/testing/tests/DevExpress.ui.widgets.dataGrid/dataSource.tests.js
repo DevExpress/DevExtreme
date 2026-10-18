@@ -6,7 +6,7 @@ import { CustomStore } from 'common/data/custom_store';
 import ODataStore from 'common/data/odata/store';
 import dataQuery from 'common/data/query';
 import { queryByOptions } from 'common/data/store_helper';
-import gridCore from '__internal/grids/data_grid/m_core';
+import gridCore from '__internal/grids/data_grid/core';
 import { createOffsetFilter } from '__internal/grids/data_grid/grouping/m_grouping_core';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import { loadTotalCount, GroupingHelper as ExpandedGroupingHelper } from '__internal/grids/data_grid/grouping/m_grouping_expanded';

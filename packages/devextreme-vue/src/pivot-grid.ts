@@ -30,6 +30,12 @@ import {
  Mode,
  SearchMode,
 } from "devextreme/common";
+import {
+ LoadingAnimationType,
+} from "devextreme/ui/load_indicator";
+import {
+ LoadPanelIndicatorProperties,
+} from "devextreme/ui/load_panel";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -193,6 +199,31 @@ prepareComponentConfig(componentConfig);
 const DxPivotGrid = defineComponent(componentConfig);
 
 
+const DxEmbeddedFieldChooserTextsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allFields": null,
+    "update:columnFields": null,
+    "update:dataFields": null,
+    "update:filterFields": null,
+    "update:rowFields": null,
+  },
+  props: {
+    allFields: String,
+    columnFields: String,
+    dataFields: String,
+    filterFields: String,
+    rowFields: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxEmbeddedFieldChooserTextsConfig);
+
+const DxEmbeddedFieldChooserTexts = defineComponent(DxEmbeddedFieldChooserTextsConfig);
+
+(DxEmbeddedFieldChooserTexts as any).$_optionName = "texts";
+
 const DxExportConfig = {
   emits: {
     "update:isActive": null,
@@ -243,34 +274,9 @@ const DxFieldChooser = defineComponent(DxFieldChooserConfig);
 
 (DxFieldChooser as any).$_optionName = "fieldChooser";
 (DxFieldChooser as any).$_expectedChildren = {
-  fieldChooserTexts: { isCollectionItem: false, optionName: "texts" },
+  embeddedFieldChooserTexts: { isCollectionItem: false, optionName: "texts" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
-
-const DxFieldChooserTextsConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:allFields": null,
-    "update:columnFields": null,
-    "update:dataFields": null,
-    "update:filterFields": null,
-    "update:rowFields": null,
-  },
-  props: {
-    allFields: String,
-    columnFields: String,
-    dataFields: String,
-    filterFields: String,
-    rowFields: String
-  }
-};
-
-prepareConfigurationComponentConfig(DxFieldChooserTextsConfig);
-
-const DxFieldChooserTexts = defineComponent(DxFieldChooserTextsConfig);
-
-(DxFieldChooserTexts as any).$_optionName = "texts";
 
 const DxFieldPanelConfig = {
   emits: {
@@ -332,21 +338,17 @@ const DxHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
-    "update:searchTimeout": null,
     "update:showRelevantValues": null,
     "update:texts": null,
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: Number,
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
-    searchTimeout: Number,
     showRelevantValues: Boolean,
     texts: Object as PropType<Record<string, any>>,
     width: Number
@@ -385,13 +387,36 @@ const DxHeaderFilterTexts = defineComponent(DxHeaderFilterTextsConfig);
 
 (DxHeaderFilterTexts as any).$_optionName = "texts";
 
+const DxIndicatorOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:animationType": null,
+    "update:height": null,
+    "update:src": null,
+    "update:width": null,
+  },
+  props: {
+    animationType: String as PropType<LoadingAnimationType>,
+    height: [Number, String],
+    src: String,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxIndicatorOptionsConfig);
+
+const DxIndicatorOptions = defineComponent(DxIndicatorOptionsConfig);
+
+(DxIndicatorOptions as any).$_optionName = "indicatorOptions";
+
 const DxLoadPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:enabled": null,
     "update:height": null,
-    "update:indicatorSrc": null,
+    "update:indicatorOptions": null,
     "update:shading": null,
     "update:shadingColor": null,
     "update:showIndicator": null,
@@ -402,7 +427,7 @@ const DxLoadPanelConfig = {
   props: {
     enabled: Boolean,
     height: Number,
-    indicatorSrc: String,
+    indicatorOptions: Object as PropType<LoadPanelIndicatorProperties | Record<string, any>>,
     shading: Boolean,
     shadingColor: String,
     showIndicator: Boolean,
@@ -417,6 +442,9 @@ prepareConfigurationComponentConfig(DxLoadPanelConfig);
 const DxLoadPanel = defineComponent(DxLoadPanelConfig);
 
 (DxLoadPanel as any).$_optionName = "loadPanel";
+(DxLoadPanel as any).$_expectedChildren = {
+  indicatorOptions: { isCollectionItem: false, optionName: "indicatorOptions" }
+};
 
 const DxPivotGridTextsConfig = {
   emits: {
@@ -588,13 +616,14 @@ const DxTexts = defineComponent(DxTextsConfig);
 export default DxPivotGrid;
 export {
   DxPivotGrid,
+  DxEmbeddedFieldChooserTexts,
   DxExport,
   DxFieldChooser,
-  DxFieldChooserTexts,
   DxFieldPanel,
   DxFieldPanelTexts,
   DxHeaderFilter,
   DxHeaderFilterTexts,
+  DxIndicatorOptions,
   DxLoadPanel,
   DxPivotGridTexts,
   DxScrolling,

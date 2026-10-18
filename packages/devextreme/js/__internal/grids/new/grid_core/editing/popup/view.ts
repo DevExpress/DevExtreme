@@ -8,7 +8,7 @@ import type * as dxForm from '@js/ui/form';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { computed, signal } from '@ts/core/state_manager/index';
 import { extend } from '@ts/core/utils/m_extend';
-import { forEachFormItems } from '@ts/grids/grid_core/editing/m_editing_utils';
+import { forEachFormItems } from '@ts/grids/grid_core/editing/editing_utils';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../../columns_controller/columns_controller';
@@ -150,6 +150,11 @@ export class EditPopupView extends View<Props> {
   }
 
   private readonly customizeItems = (item: dxForm.Item): void => {
+    this.customizeItemCore(item);
+    this.options.oneWay('editing.form.customizeItem').peek()?.(item);
+  };
+
+  private customizeItemCore(item: dxForm.Item): void {
     const editingCard = this.editingController.editingCard.peek();
     const columns = this.columnsController.columns.peek();
     const customEditorItems = this.customEditorItems.peek();
@@ -222,5 +227,5 @@ export class EditPopupView extends View<Props> {
     if (simpleFormItem.editorType === 'dxDateBox') {
       simpleFormItem.editorOptions.type = column.dataType;
     }
-  };
+  }
 }

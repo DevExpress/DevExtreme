@@ -810,12 +810,11 @@ class DiagramToolbar extends DiagramPanel {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getDefaultOptions() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       isMobileView: false,
       export: {
         fileName: 'Diagram',
-      },
+      } as { fileName?: string },
       locateInMenu: 'auto',
       buttonStylingMode: 'text',
       buttonType: 'normal',

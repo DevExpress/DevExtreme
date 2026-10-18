@@ -65,9 +65,6 @@ import { orders, type Order } from './data.ts';
 const saleAmountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
 };
 
 const filterBuilderPopupPosition: PositionConfig = {

@@ -1,15 +1,14 @@
 @use "./mixins" as *;
 
+$loadpanel-content-padding: 10px !default;
+
 .dx-loadpanel-content {
-  padding: 10px;
-  border: 1px solid #ccc;
-  background: #fefefe;
+  padding: $loadpanel-content-padding;
   text-align: center;
 
   @include user-select(none);
 
   -webkit-user-drag: none;
-  border-radius: 5px;
 
   &::before {
     display: inline-block;

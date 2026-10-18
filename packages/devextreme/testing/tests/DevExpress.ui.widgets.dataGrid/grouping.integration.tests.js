@@ -1,4 +1,4 @@
-import gridCore from '__internal/grids/data_grid/m_core';
+import gridCore from '__internal/grids/data_grid/core';
 import ArrayStore from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import commonUtils from 'core/utils/common';
@@ -213,7 +213,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         this.clock.tick(300);
 
-        assert.deepEqual(dataGrid.getController('data')._dataSource.group(), [{ selector: 'field2', desc: false, isExpanded: true }], 'datasource grouping is up to date');
+        assert.deepEqual(dataGrid.getController('dataSource').getAdapter().group(), [{ selector: 'field2', desc: false, isExpanded: true }], 'datasource grouping is up to date');
         assert.equal(dataGrid.columnOption('field2', 'groupIndex'), 0, 'Group by field2');
 
         $(dataGrid.$element())
@@ -698,7 +698,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         items.eq(3).trigger('dxclick');
 
-        assert.deepEqual(dataGrid.getController('data')._dataSource.group(), [{ selector: 'field3', desc: false, isExpanded: true }], 'datasource grouping is up to date');
+        assert.deepEqual(dataGrid.getController('dataSource').getAdapter().group(), [{ selector: 'field3', desc: false, isExpanded: true }], 'datasource grouping is up to date');
         assert.equal(dataGrid.columnOption('field3', 'groupIndex'), 0, 'Group by field3');
     });
 

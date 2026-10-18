@@ -1,13 +1,13 @@
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { getOuterHeight } from 'core/utils/size';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
 import ArrayStore from 'common/data/array_store';
-import TreeList from '__internal/grids/tree_list/m_widget';
+import TreeList from '__internal/grids/tree_list/widget';
 import pointerMock from '../../helpers/pointerMock.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createEvent } from 'common/core/events/utils/index';
@@ -1248,7 +1248,7 @@ QUnit.module('Expand/Collapse rows', () => {
         const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         try {
-            scrollable.scrollTo({ y: 300 }); // scroll to the last page
+            scrollable.scrollTo({ top: 300 }); // scroll to the last page
             isNativeScrolling && $(scrollable.container()).trigger('scroll');
             clock.tick(10);
 
@@ -1286,7 +1286,7 @@ QUnit.module('Expand/Collapse rows', () => {
             dataSource: generateData(100)
         });
 
-        treeList.getScrollable().scrollTo({ y: 1000 });
+        treeList.getScrollable().scrollTo({ top: 1000 });
 
         setTimeout(function() {
             // act
@@ -1993,8 +1993,8 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         const scrollable = treeList.getScrollable();
 
         // act
-        scrollable.scrollTo({ y: 200 });
-        scrollable.scrollTo({ y: 500 });
+        scrollable.scrollTo({ top: 200 });
+        scrollable.scrollTo({ top: 500 });
 
         setTimeout(function() {
             // assert
@@ -2099,7 +2099,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         this.clock.tick(100);
 
         // act
-        treeList.getScrollable().scrollTo({ y: 10 });
+        treeList.getScrollable().scrollTo({ top: 10 });
         this.clock.tick(100);
 
         treeList.expandRow(2);

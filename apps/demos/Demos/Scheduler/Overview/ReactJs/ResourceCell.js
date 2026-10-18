@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 const ResourceCell = (props) => {
   const {
@@ -8,11 +8,13 @@ const ResourceCell = (props) => {
       data: { avatar, age, discipline },
     },
   } = props;
+  const backgroundStyle = useMemo(() => ({ background: color }), [color]);
+  const textStyle = useMemo(() => ({ color }), [color]);
   return (
     <div className="dx-template-wrapper">
       <div
         className="name"
-        style={{ background: color }}
+        style={backgroundStyle}
       >
         <h2>{text}</h2>
       </div>
@@ -27,7 +29,7 @@ const ResourceCell = (props) => {
       </div>
       <div
         className="info"
-        style={{ color }}
+        style={textStyle}
       >
         Age: {age}
         <br />

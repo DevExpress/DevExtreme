@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('integration/knockout');
-require('ui/scheduler');
-const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
+import 'integration/knockout';
+import 'ui/scheduler';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-require('fluent_blue_light.css!');
+import 'fluent_blue_light.css!';
 
 if(QUnit.urlParams['nocsp']) {
     QUnit.module('scheduler');

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import FileUploader from 'devextreme-react/file-uploader';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
@@ -16,6 +16,10 @@ export default function App() {
   const [uploadMode, setUploadMode] = useState('instantly');
   const [accept, setAccept] = useState('*');
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const contentStyle = useMemo(
+    () => ({ display: selectedFiles.length > 0 ? 'block' : 'none' }),
+    [selectedFiles.length],
+  );
   const onSelectedFilesChanged = useCallback(({ value }) => {
     if (!value) {
       return;
@@ -43,7 +47,7 @@ export default function App() {
         />
         <div
           className="content"
-          style={{ display: selectedFiles.length > 0 ? 'block' : 'none' }}
+          style={contentStyle}
         >
           <div>
             <h4>Selected Files</h4>

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -28,7 +25,6 @@ import type { default as DataSource, DataSourceOptions } from 'devextreme/data/d
 import type { Store } from 'devextreme/data/store';
 
 import DxResponsiveBox from 'devextreme/ui/responsive_box';
-
 
 import {
     DxComponent,
@@ -51,16 +47,15 @@ import { DxiResponsiveBoxItemModule } from 'devextreme-angular/ui/responsive-box
 import { DxiResponsiveBoxLocationModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiResponsiveBoxRowModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { 
-           PROPERTY_TOKEN_cols,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_location,
-           PROPERTY_TOKEN_rows,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_cols,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_location,
+    PROPERTY_TOKEN_rows,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxResponsiveBox]
-
  */
 @Component({
     selector: 'dx-responsive-box',
@@ -100,7 +95,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:dxResponsiveBoxOptions.cols]
-    
      */
     @Input()
     get cols(): { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }[] {
@@ -110,10 +104,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('cols', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxResponsiveBoxItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -123,10 +115,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -136,10 +126,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -149,10 +137,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -162,10 +148,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -175,10 +159,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -188,10 +170,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxResponsiveBoxItem | string> {
@@ -201,10 +181,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -214,10 +192,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.rows]
-    
      */
     @Input()
     get rows(): { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }[] {
@@ -227,10 +203,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('rows', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -240,10 +214,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.screenByWidth]
-    
      */
     @Input()
     get screenByWidth(): Function | undefined {
@@ -253,10 +225,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('screenByWidth', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.singleColumnScreen]
-    
      */
     @Input()
     get singleColumnScreen(): string {
@@ -266,10 +236,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('singleColumnScreen', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -279,10 +247,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -293,176 +259,119 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     }
 
     /**
-    
      * [descr:dxResponsiveBoxOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxResponsiveBoxOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxResponsiveBoxOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxResponsiveBoxOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxResponsiveBoxOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxResponsiveBoxOptions.onItemHold]
-    
-    
      */
     @Output() onItemHold: EventEmitter<ItemHoldEvent>;
 
     /**
-    
      * [descr:dxResponsiveBoxOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxResponsiveBoxOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() colsChange: EventEmitter<{ baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any | dxResponsiveBoxItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxResponsiveBoxItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rowsChange: EventEmitter<{ baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() screenByWidthChange: EventEmitter<Function | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() singleColumnScreenChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

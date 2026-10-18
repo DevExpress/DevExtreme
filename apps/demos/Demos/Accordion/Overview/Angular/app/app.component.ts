@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   enableProdMode,
   provideZoneChangeDetection,
@@ -16,7 +16,6 @@ if (!/localhost/.test(document.location.host)) {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -32,8 +31,22 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   companies: Company[];
 
-  constructor(service: Service) {
+  selectedItems: Company[];
+
+  multiple = false;
+
+  collapsible = false;
+
+  animationDuration = 300;
+
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.companies = service.getCompanies();
+    this.selectedItems = [this.companies[0]];
+  }
+
+  onSelectedItemsChange(items: Company[]) {
+    this.selectedItems = items;
+    this.changeDetectorRef.detectChanges();
   }
 }
 

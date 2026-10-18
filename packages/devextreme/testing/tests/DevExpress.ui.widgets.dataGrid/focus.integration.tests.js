@@ -688,7 +688,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 850 });
+        scrollable.scrollTo({ top: 850 });
         $(scrollable.container()).trigger('scroll');
         this.clock.tick(10);
         $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
@@ -727,7 +727,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(500);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 2020 });
+        dataGrid.getScrollable().scrollTo({ top: 2020 });
         this.clock.tick(500);
 
         // assert
@@ -1286,7 +1286,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         const rowsView = dataGrid.getView('rowsView');
         const $lastRow = rowsView.getRow(2);
-        const dataSource = dataGrid.getController('data').dataSource();
+        const dataSource = dataGrid.getController('dataSource').getAdapter();
 
         sinon.spy(dataSource, 'load');
 
@@ -1411,26 +1411,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok($(dataGrid.getRowElement(0)).find('.dx-editor-cell').eq(0).hasClass('dx-focused'), 'first editable cell is active');
-    });
-
-    QUnit.test('Test mutual influence of the useKeyboard and keyboardNavigation.enabled options', function(assert) {
-        // arrange, act
-        const dataGrid = createDataGrid();
-
-        // assert
-        assert.ok(dataGrid._deprecatedOptions.useKeyboard, 'useKeyboard deprecated');
-        assert.equal(dataGrid.option('useKeyboard'), true);
-        assert.equal(dataGrid.option('keyboardNavigation.enabled'), true);
-
-        // act
-        dataGrid.option('useKeyboard', false);
-        // assert
-        assert.equal(dataGrid.option('keyboardNavigation.enabled'), false, 'keyboardNavigation.enabled mapping');
-
-        // act
-        dataGrid.option('keyboardNavigation.enabled', true);
-        // assert
-        assert.equal(dataGrid.option('useKeyboard'), true, 'useKeyboard mapping');
     });
 
     QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady (T827960)', function(assert) {
@@ -4492,7 +4472,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         this.clock.tick(10);
-        dataGrid.getScrollable().scrollTo({ x: 0, y: 10000 });
+        dataGrid.getScrollable().scrollTo({ left: 0, top: 10000 });
 
         this.clock.tick(10);
         const rowData = dataGrid.getTopVisibleRowData();
@@ -5047,7 +5027,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
         this.clock.tick(10);
 
-        dataGrid.getScrollable().scrollTo({ y: 10 });
+        dataGrid.getScrollable().scrollTo({ top: 10 });
         this.clock.tick(10);
 
         // act

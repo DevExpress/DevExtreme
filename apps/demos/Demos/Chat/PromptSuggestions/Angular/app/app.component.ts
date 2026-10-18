@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { DxChatModule, DxSwitchModule } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
@@ -43,7 +45,10 @@ export class AppComponent {
 
   suggestions: DxChatTypes.Properties['suggestions'];
 
-  constructor(private readonly appService: AppService) {
+  constructor(
+    private readonly appService: AppService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+  ) {
     loadMessages(this.appService.getDictionary());
 
     this.dataSource = this.appService.dataSource;
@@ -117,6 +122,7 @@ export class AppComponent {
       }
     } else {
       this.inputFieldText = prompt;
+      this.changeDetectorRef.detectChanges();
     }
   }
 

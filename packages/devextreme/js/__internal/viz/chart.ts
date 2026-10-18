@@ -8,7 +8,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable consistent-return */
 /* eslint-disable max-depth */
 /* eslint-disable no-bitwise */
@@ -17,14 +16,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
 
-import registerComponent from '@js/core/component_registrator';
-import { noop } from '@js/core/utils/common';
-import { extend as _extend } from '@js/core/utils/extend';
-import { each as _each } from '@js/core/utils/iterator';
-import { getPrecision } from '@js/core/utils/math';
-import { getHeight } from '@js/core/utils/size';
-import { isDefined as _isDefined, type } from '@js/core/utils/type';
-import { hasWindow } from '@js/core/utils/window';
+import { registerComponent } from '@ts/core/component_registrator';
+import { noop } from '@ts/core/utils/m_common';
+import { extend as _extend } from '@ts/core/utils/m_extend';
+import { each as _each } from '@ts/core/utils/m_iterator';
+import { getPrecision } from '@ts/core/utils/m_math';
+import { getHeight } from '@ts/core/utils/m_size';
+import { isDefined as _isDefined, type } from '@ts/core/utils/m_type';
+import { hasWindow } from '@ts/core/utils/m_window';
 import { Crosshair, getMargins } from '@ts/viz/chart_components/crosshair';
 import { LayoutManager } from '@ts/viz/chart_components/layout_manager';
 import multiAxesSynchronizer from '@ts/viz/chart_components/multi_axes_synchronizer';
@@ -32,6 +31,8 @@ import { ScrollBar } from '@ts/viz/chart_components/scroll_bar';
 import shutterZoom from '@ts/viz/chart_components/shutter_zoom';
 import zoomAndPan from '@ts/viz/chart_components/zoom_and_pan';
 import { plugins } from '@ts/viz/core/annotations';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import {
   convertVisualRangeObject, extractColor,
   getCategoriesInfo,
@@ -49,7 +50,6 @@ import { AdvancedChart } from './chart_components/advanced_chart';
 import { overlapping } from './chart_components/base_chart';
 
 const DEFAULT_PANE_NAME = 'default';
-const VISUAL_RANGE = 'VISUAL_RANGE';
 const DEFAULT_PANES = [{
   name: DEFAULT_PANE_NAME,
   border: {},
@@ -518,28 +518,32 @@ function updateMarkersInfo(points, overloadedSeries) {
 
 // utilities used in axes rendering
 
-const dxChart = AdvancedChart.inherit({
-  _themeSection: 'chart',
+class Chart extends AdvancedChart {
+  _containerInitialHeight!: number;
 
-  _fontFields: ['crosshair.label.font'],
+  _crosshair;
 
-  _initCore() {
+  _zoomLength!: number;
+
+  paneAxis!: ThemeValue;
+
+  panesBackground!: ThemeValue[];
+
+  _initCore(): void {
     this.paneAxis = {};
-    this.callBase();
-  },
+    super._initCore();
+  }
 
-  _init() {
+  _init(): void {
     this._containerInitialHeight = hasWindow() ? getHeight(this._$element) : 0;
-    this.callBase();
-  },
+    super._init();
+  }
 
-  _correctAxes() {
+  _correctAxes(): void {
     this._correctValueAxes(true);
-  },
+  }
 
-  _getExtraOptions: noop,
-
-  _createPanes() {
+  _createPanes(): ThemeValue {
     let panes = this.option('panes');
     let panesNameCounter = 0;
     let defaultPane;
@@ -548,7 +552,7 @@ const dxChart = AdvancedChart.inherit({
       panes = DEFAULT_PANES;
     }
 
-    this.callBase();
+    super._createPanes();
 
     defaultPane = this.option('defaultPane');
     panes = _extend(true, [], isArray(panes) ? panes : [panes]);
@@ -569,29 +573,28 @@ const dxChart = AdvancedChart.inherit({
     panes = this._isRotated() ? panes.reverse() : panes;
 
     return panes;
-  },
+  }
 
-  _getAxisRenderingOptions() {
+  _getAxisRenderingOptions(): ThemeValue {
     return {
       axisType: 'xyAxes', drawingType: 'linear',
     };
-  },
+  }
 
-  _prepareAxisOptions(typeSelector, userOptions, rotated) {
+  _prepareAxisOptions(typeSelector: string, userOptions: ThemeValue, rotated: boolean): ThemeValue {
     return {
       isHorizontal: (typeSelector === 'argumentAxis') !== rotated,
       containerColor: this._themeManager.getOptions('containerBackgroundColor'),
     };
-  },
+  }
 
-  _checkPaneName(seriesTheme) {
+  _checkPaneName(seriesTheme: ThemeValue): ThemeValue {
     const paneList = _map(this.panes, (pane) => pane.name);
     seriesTheme.pane = seriesTheme.pane || this.defaultPane;
-    // @ts-expect-error
     return paneList.includes(seriesTheme.pane);
-  },
+  }
 
-  _initCustomPositioningAxes() {
+  _initCustomPositioningAxes(): void {
     const argumentAxis = this.getArgumentAxis();
     const valueAxisName = argumentAxis.getOptions().customPositionAxis;
     const valueAxis = this._valueAxes.find((v) => v.pane === argumentAxis.pane
@@ -611,23 +614,23 @@ const dxChart = AdvancedChart.inherit({
     } else if (_isDefined(argumentAxis.getOrthogonalAxis()) && !_isDefined(valueAxis)) {
       argumentAxis.getOrthogonalAxis = noop;
     }
-  },
+  }
 
-  _getAllAxes() {
+  _getAllAxes(): ThemeValue {
     return this._argumentAxes.concat(this._valueAxes);
-  },
+  }
 
-  _resetAxesAnimation(isFirstDrawing, isHorizontal) {
+  _resetAxesAnimation(isFirstDrawing: boolean, isHorizontal: boolean): void {
     let axes;
     if (_isDefined(isHorizontal)) {
-      axes = isHorizontal ^ this._isRotated() ? this._argumentAxes : this._valueAxes;
+      axes = Number(isHorizontal) ^ Number(this._isRotated()) ? this._argumentAxes : this._valueAxes;
     } else {
       axes = this._getAllAxes();
     }
     axes.forEach((a) => { a.resetApplyingAnimation(isFirstDrawing); });
-  },
+  }
 
-  _axesBoundaryPositioning() {
+  _axesBoundaryPositioning(): ThemeValue {
     const allAxes = this._getAllAxes();
     let boundaryStateChanged = false;
 
@@ -642,9 +645,9 @@ const dxChart = AdvancedChart.inherit({
     });
 
     return boundaryStateChanged;
-  },
+  }
 
-  _getCrosshairMargins() {
+  _getCrosshairMargins(): ThemeValue {
     const crosshairOptions = this._getCrosshairOptions() || {};
     const crosshairEnabled = crosshairOptions.enabled;
     const margins = getMargins();
@@ -666,9 +669,9 @@ const dxChart = AdvancedChart.inherit({
       x: crosshairEnabled && crosshairOptions.horizontalLine.visible && horizontalLabel.visible ? margins.x : 0,
       y: crosshairEnabled && crosshairOptions.verticalLine.visible && verticalLabel.visible ? margins.y : 0,
     };
-  },
+  }
 
-  _getValueAxis(paneName, axisName) {
+  _getValueAxis(paneName: string, axisName?: string): ThemeValue {
     const valueAxes = this._valueAxes;
     const valueAxisOptions = this.option('valueAxis') || {};
     const valueAxesOptions = isArray(valueAxisOptions) ? valueAxisOptions : [valueAxisOptions];
@@ -702,9 +705,9 @@ const dxChart = AdvancedChart.inherit({
     axis.setPane(paneName);
 
     return axis;
-  },
+  }
 
-  _correctValueAxes(needHideGrids) {
+  _correctValueAxes(needHideGrids: boolean): void {
     const synchronizeMultiAxes = this._themeManager.getOptions('synchronizeMultiAxes');
     const valueAxes = this._valueAxes;
     const paneWithAxis = {};
@@ -759,9 +762,9 @@ const dxChart = AdvancedChart.inherit({
         }
       }
     });
-  },
+  }
 
-  _getSeriesForPane(paneName) {
+  _getSeriesForPane(paneName: string): ThemeValue {
     const paneSeries = [];
     _each(this.series, (_, oneSeries) => {
       if (oneSeries.pane === paneName) {
@@ -769,18 +772,18 @@ const dxChart = AdvancedChart.inherit({
       }
     });
     return paneSeries;
-  },
+  }
 
-  _createPanesBorderOptions() {
+  _createPanesBorderOptions(): ThemeValue {
     const commonBorderOptions = this._themeManager.getOptions('commonPaneSettings').border;
     const panesBorderOptions = {};
     this.panes.forEach((pane) => {
       panesBorderOptions[pane.name] = _extend(true, {}, commonBorderOptions, pane.border);
     });
     return panesBorderOptions;
-  },
+  }
 
-  _createScrollBar() {
+  _createScrollBar(): void {
     const scrollBarOptions = this._themeManager.getOptions('scrollBar') || {};
     const scrollBarGroup = this._scrollBarGroup;
 
@@ -795,13 +798,13 @@ const dxChart = AdvancedChart.inherit({
       this._scrollBar?.dispose();
       this._scrollBar = null;
     }
-  },
+  }
 
-  _executeAppendAfterSeries(append) {
+  _executeAppendAfterSeries(append: ThemeValue): void {
     append();
-  },
+  }
 
-  _prepareToRender() {
+  _prepareToRender(): ThemeValue {
     const panesBorderOptions = this._createPanesBorderOptions();
 
     this._createPanesBackground();
@@ -810,9 +813,9 @@ const dxChart = AdvancedChart.inherit({
     this._adjustViewport();
 
     return panesBorderOptions;
-  },
+  }
 
-  _adjustViewport() {
+  _adjustViewport(): void {
     const adjustOnZoom = this._themeManager.getOptions('adjustOnZoom');
 
     if (!adjustOnZoom) {
@@ -820,9 +823,9 @@ const dxChart = AdvancedChart.inherit({
     }
 
     this._valueAxes.forEach((axis) => axis.adjust());
-  },
+  }
 
-  _recreateSizeDependentObjects(isCanvasChanged) {
+  _recreateSizeDependentObjects(isCanvasChanged: boolean): void {
     const series = this._getVisibleSeries();
     const useAggregation = series.some((s) => s.useAggregation());
     const zoomChanged = this._isZooming();
@@ -840,9 +843,9 @@ const dxChart = AdvancedChart.inherit({
       }
     });
     this._processSeriesFamilies();
-  },
+  }
 
-  _isZooming() {
+  _isZooming(): ThemeValue {
     const argumentAxis = this.getArgumentAxis();
 
     if (!argumentAxis?.getTranslator()) {
@@ -867,9 +870,9 @@ const dxChart = AdvancedChart.inherit({
     this._zoomLength = viewportDistance;
 
     return zoomChanged;
-  },
+  }
 
-  _handleSeriesDataUpdated() {
+  _handleSeriesDataUpdated(): void {
     const viewport = new Range();
 
     this._argumentAxes.forEach((axis) => {
@@ -890,29 +893,29 @@ const dxChart = AdvancedChart.inherit({
       axis.setBusinessRange(viewport, this._axesReinitialized);
     });
 
-    this.callBase();
-  },
+    super._handleSeriesDataUpdated();
+  }
 
-  _isLegendInside() {
+  _isLegendInside(): ThemeValue {
     return this._legend && this._legend.getPosition() === 'inside';
-  },
+  }
 
-  _isRotated() {
+  _isRotated(): ThemeValue {
     return this._themeManager.getOptions('rotated');
-  },
+  }
 
-  _getLayoutTargets() {
+  _getLayoutTargets(): ThemeValue {
     return this.panes;
-  },
+  }
 
-  _applyClipRects(panesBorderOptions) {
+  _applyClipRects(panesBorderOptions: ThemeValue): void {
     this._drawPanesBorders(panesBorderOptions);
     this._createClipRectsForPanes();
     this._applyClipRectsForAxes();
     this._fillPanesBackground();
-  },
+  }
 
-  _updateLegendPosition(drawOptions, legendHasInsidePosition) {
+  _updateLegendPosition(drawOptions: ThemeValue, legendHasInsidePosition: ThemeValue): void {
     if (drawOptions.drawLegend && this._legend && legendHasInsidePosition) {
       const { panes } = this;
       const newCanvas = _extend({}, panes[0].canvas);
@@ -925,42 +928,42 @@ const dxChart = AdvancedChart.inherit({
         newCanvas,
       );
     }
-  },
+  }
 
-  _allowLegendInsidePosition() {
+  _allowLegendInsidePosition(): ThemeValue {
     return true;
-  },
+  }
 
-  _applyExtraSettings(series) {
+  _applyExtraSettings(series: ThemeValue): void {
     const paneIndex = this._getPaneIndex(series.pane);
     const panesClipRects = this._panesClipRects;
     const wideClipRect = panesClipRects.wide[paneIndex];
     series.setClippingParams(panesClipRects.base[paneIndex].id, wideClipRect?.id, this._getPaneBorderVisibility(paneIndex));
-  },
+  }
 
-  _updatePanesCanvases(drawOptions) {
+  _updatePanesCanvases(drawOptions: ThemeValue): void {
     if (!drawOptions.recreateCanvas) {
       return;
     }
 
     updatePanesCanvases(this.panes, this._canvas, this._isRotated());
-  },
+  }
 
-  _normalizePanesHeight() {
+  _normalizePanesHeight(): void {
     normalizePanesHeight(this.panes);
-  },
+  }
 
-  _renderScaleBreaks() {
+  _renderScaleBreaks(): void {
     this._valueAxes.concat(this._argumentAxes).forEach((axis) => {
       axis.drawScaleBreaks();
     });
-  },
+  }
 
-  _getArgFilter() {
+  _getArgFilter(): ThemeValue {
     return rangeDataCalculator.getViewPortFilter(this.getArgumentAxis().visualRange() || {});
-  },
+  }
 
-  _hidePointsForSingleSeriesIfNeeded(series) {
+  _hidePointsForSingleSeriesIfNeeded(series: ThemeValue): void {
     const seriesPoints = series.getPoints();
     let overlappedPointsCount = 0;
 
@@ -974,9 +977,9 @@ const dxChart = AdvancedChart.inherit({
         break;
       }
     }
-  },
+  }
 
-  _applyAutoHidePointMarkers(filteredSeries) {
+  _applyAutoHidePointMarkers(filteredSeries: ThemeValue): void {
     let overlappingPoints = [];
 
     const overlappedPointsCalculator = (pointsCount, currentPoint) => pointsCount + isPointOverlapped(currentPoint, overlappingPoints, true);
@@ -1006,9 +1009,9 @@ const dxChart = AdvancedChart.inherit({
         }
       }
     }
-  },
+  }
 
-  _applyPointMarkersAutoHiding() {
+  _applyPointMarkersAutoHiding(): void {
     const allSeries = this.series;
 
     if (!this._themeManager.getOptions('autoHidePointMarkers')) {
@@ -1038,9 +1041,9 @@ const dxChart = AdvancedChart.inherit({
         this._applyAutoHidePointMarkers(series);
       }
     });
-  },
+  }
 
-  _renderAxes(drawOptions, panesBorderOptions) {
+  _renderAxes(drawOptions: ThemeValue, panesBorderOptions: ThemeValue): ThemeValue {
     function calculateTitlesWidth(axes): number {
       return axes.map((axis) => {
         if (!axis.getTitle) return 0;
@@ -1175,9 +1178,9 @@ const dxChart = AdvancedChart.inherit({
     verticalAxes.forEach((a) => a.resolveOverlappingForCustomPositioning(horizontalAxes));
 
     return cleanPanesCanvases;
-  },
+  }
 
-  _getExtraTemplatesItems() {
+  _getExtraTemplatesItems(): ThemeValue {
     const allAxes = (this._argumentAxes || []).concat(this._valueAxes || []);
 
     const elements = this._collectTemplatesFromItems(allAxes);
@@ -1196,13 +1199,13 @@ const dxChart = AdvancedChart.inherit({
         });
       },
     };
-  },
+  }
 
-  _estimateTickIntervals(axes, canvases) {
+  _estimateTickIntervals(axes: ThemeValue, canvases: ThemeValue): ThemeValue {
     return axes.some((axis) => axis.estimateTickInterval(canvases[axis.pane]));
-  },
+  }
 
-  checkForMoreSpaceForPanesCanvas() {
+  checkForMoreSpaceForPanesCanvas(): ThemeValue {
     const rotated = this._isRotated();
     const panesAreCustomSized = this.panes.filter((p) => p.unit).length === this.panes.length;
     let needSpace = false as any;
@@ -1246,17 +1249,17 @@ const dxChart = AdvancedChart.inherit({
     }
 
     return needSpace;
-  },
+  }
 
-  _forceResize(width, height) {
+  _forceResize(width: ThemeValue, height: ThemeValue): void {
     this._renderer.resize(width, height);
     this._updateSize(true);
     this._setContentSize();
     this._preserveOriginalCanvas();
     this._updateCanvasClipRect(this._canvas);
-  },
+  }
 
-  _shrinkAxes(sizeShortage, panesCanvases) {
+  _shrinkAxes(sizeShortage: ThemeValue, panesCanvases: ThemeValue): void {
     if (!sizeShortage || !panesCanvases) {
       return;
     }
@@ -1297,9 +1300,9 @@ const dxChart = AdvancedChart.inherit({
 
       this.panes.forEach((pane) => _extend(pane.canvas, panesCanvases[pane.name]));
     }
-  },
+  }
 
-  _isArgumentAxisBeforeScrollBar() {
+  _isArgumentAxisBeforeScrollBar(): ThemeValue {
     const argumentAxis = this.getArgumentAxis();
 
     if (this._scrollBar) {
@@ -1313,9 +1316,9 @@ const dxChart = AdvancedChart.inherit({
     }
 
     return false;
-  },
+  }
 
-  _getPanesParameters() {
+  _getPanesParameters(): ThemeValue {
     const { panes } = this;
     const params = [];
     for (let i = 0; i < panes.length; i += 1) {
@@ -1327,9 +1330,9 @@ const dxChart = AdvancedChart.inherit({
       }
     }
     return params;
-  },
+  }
 
-  _createCrosshairCursor() {
+  _createCrosshairCursor(): void {
     const options = this._themeManager.getOptions('crosshair') || {};
     const argumentAxis = this.getArgumentAxis();
     const axes = this._isRotated()
@@ -1351,9 +1354,9 @@ const dxChart = AdvancedChart.inherit({
       );
     }
     this._crosshair.render();
-  },
+  }
 
-  _getCommonCanvas() {
+  _getCommonCanvas(): ThemeValue {
     let commonCanvas;
     const { panes } = this;
 
@@ -1367,9 +1370,9 @@ const dxChart = AdvancedChart.inherit({
       }
     }
     return commonCanvas;
-  },
+  }
 
-  _createPanesBackground() {
+  _createPanesBackground(): void {
     const defaultBackgroundColor = this._themeManager.getOptions('commonPaneSettings').backgroundColor;
     const renderer = this._renderer;
     const rects = [];
@@ -1388,9 +1391,9 @@ const dxChart = AdvancedChart.inherit({
       rects.push(rect as never);
     }
     this.panesBackground = rects;
-  },
+  }
 
-  _fillPanesBackground() {
+  _fillPanesBackground(): void {
     _each(this.panes, (i, pane) => {
       const bc = pane.borderCoords;
 
@@ -1400,9 +1403,9 @@ const dxChart = AdvancedChart.inherit({
         });
       }
     });
-  },
+  }
 
-  _calcPaneBorderCoords(pane) {
+  _calcPaneBorderCoords(pane: ThemeValue): void {
     const { canvas } = pane;
     const bc = pane.borderCoords = pane.borderCoords || {};
 
@@ -1412,11 +1415,9 @@ const dxChart = AdvancedChart.inherit({
     bc.bottom = canvas.height - canvas.bottom;
     bc.width = Math.max(bc.right - bc.left, 0);
     bc.height = Math.max(bc.bottom - bc.top, 0);
-  },
+  }
 
-  _drawPanesBorders(panesBorderOptions) {
-    const rotated = this._isRotated();
-
+  _drawPanesBorders(panesBorderOptions: ThemeValue): void {
     this._panesBorderGroup.linkRemove().clear();
 
     _each(this.panes, (i, pane) => {
@@ -1430,7 +1431,7 @@ const dxChart = AdvancedChart.inherit({
         'stroke-linecap': 'square',
       };
 
-      this._calcPaneBorderCoords(pane, rotated);
+      this._calcPaneBorderCoords(pane);
 
       if (!borderOptions.visible) {
         return;
@@ -1442,9 +1443,9 @@ const dxChart = AdvancedChart.inherit({
     });
 
     this._panesBorderGroup.linkAppend();
-  },
+  }
 
-  _createClipRect(clipArray, index, left, top, width, height) {
+  _createClipRect(clipArray: ThemeValue, index: number, left: ThemeValue, top: ThemeValue, width: ThemeValue, height: ThemeValue): void {
     let clipRect = clipArray[index];
 
     if (!clipRect) {
@@ -1455,9 +1456,9 @@ const dxChart = AdvancedChart.inherit({
         x: left, y: top, width, height,
       });
     }
-  },
+  }
 
-  _createClipRectsForPanes() {
+  _createClipRectsForPanes(): void {
     const canvas = this._canvas;
 
     _each(this.panes, (i, pane) => {
@@ -1491,9 +1492,9 @@ const dxChart = AdvancedChart.inherit({
         panesClipRects.wide[i] = null;
       }
     });
-  },
+  }
 
-  _applyClipRectsForAxes() {
+  _applyClipRectsForAxes(): void {
     const axes = this._getAllAxes();
     const chartCanvasClipRectID = this._getCanvasClipRectID();
 
@@ -1501,31 +1502,31 @@ const dxChart = AdvancedChart.inherit({
       const elementsClipRectID = this._getElementsClipRectID(axes[i].pane);
       axes[i].applyClipRects(elementsClipRectID, chartCanvasClipRectID);
     }
-  },
+  }
 
-  _getPaneBorderVisibility(paneIndex) {
+  _getPaneBorderVisibility(paneIndex: number): ThemeValue {
     const commonPaneBorderVisible = this._themeManager.getOptions('commonPaneSettings').border.visible as boolean;
     const pane = this.panes[paneIndex];
     const paneVisibility = pane?.border?.visible as boolean;
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return paneVisibility === undefined ? commonPaneBorderVisible : paneVisibility;
-  },
+  }
 
-  _getCanvasForPane(paneName) {
+  _getCanvasForPane(paneName: string): ThemeValue {
     return this.panes.find((pane) => pane.name === paneName)?.canvas;
-  },
+  }
 
-  _getTrackerSettings() {
-    return _extend(this.callBase(), {
+  _getTrackerSettings(): ThemeValue {
+    return _extend(super._getTrackerSettings(), {
       chart: this,
       rotated: this._isRotated(),
       crosshair: this._getCrosshairOptions().enabled ? this._crosshair : null,
       stickyHovering: this._themeManager.getOptions('stickyHovering'),
     });
-  },
+  }
 
-  _resolveLabelOverlappingStack() {
+  _resolveLabelOverlappingStack(): void {
     const isRotated = this._isRotated();
     const shiftDirection = isRotated
       ? (box, length) => ({ x: box.x - length, y: box.y })
@@ -1561,9 +1562,9 @@ const dxChart = AdvancedChart.inherit({
         );
       });
     });
-  },
+  }
 
-  _getStackPoints() {
+  _getStackPoints(): ThemeValue {
     const stackPoints = {};
     const visibleSeries = this._getVisibleSeries();
 
@@ -1585,22 +1586,23 @@ const dxChart = AdvancedChart.inherit({
     });
 
     return stackPoints;
-  },
+  }
 
-  _getCrosshairOptions() {
+  _getCrosshairOptions(): ThemeValue {
     return this._getOption('crosshair');
-  },
+  }
 
   // API
-  zoomArgument(min, max) {
+
+  zoomArgument(min: ThemeValue, max: ThemeValue): void {
     if (!this._initialized || !_isDefined(min) && !_isDefined(max)) {
       return;
     }
 
     this.getArgumentAxis().visualRange([min, max]);
-  },
+  }
 
-  resetVisualRange() {
+  resetVisualRange(): void {
     const axes = this._argumentAxes;
     const nonVirtualArgumentAxis = this.getArgumentAxis();
 
@@ -1608,11 +1610,12 @@ const dxChart = AdvancedChart.inherit({
       axis.resetVisualRange(nonVirtualArgumentAxis !== axis);
       this._applyCustomVisualRangeOption(axis);
     });
-    this.callBase();
-  },
+    super.resetVisualRange();
+  }
 
   // T218011 for dashboards
-  getVisibleArgumentBounds() {
+
+  getVisibleArgumentBounds(): ThemeValue {
     const translator = this._argumentAxes[0].getTranslator();
     const range = translator.getBusinessRange();
     const isDiscrete = range.axisType === DISCRETE;
@@ -1622,20 +1625,13 @@ const dxChart = AdvancedChart.inherit({
       minVisible: isDiscrete ? range.minVisible || categories[0] : range.minVisible,
       maxVisible: isDiscrete ? range.maxVisible || categories[categories.length - 1] : range.maxVisible,
     };
-  },
+  }
 
-  _change_FULL_RENDER() {
-    this.callBase();
-    if (this._changes.has(VISUAL_RANGE)) {
-      this._raiseZoomEndHandlers();
-    }
-  },
-
-  _getAxesForScaling() {
+  _getAxesForScaling(): ThemeValue {
     return [this.getArgumentAxis()].concat(this._valueAxes);
-  },
+  }
 
-  _applyVisualRangeByVirtualAxes(axis, range) {
+  _applyVisualRangeByVirtualAxes(axis: ThemeValue, range: ThemeValue): ThemeValue {
     if (axis.isArgumentAxis) {
       if (axis !== this.getArgumentAxis()) {
         return true;
@@ -1643,23 +1639,23 @@ const dxChart = AdvancedChart.inherit({
       this._argumentAxes.filter((a) => a !== axis).forEach((a) => a.visualRange(range, { start: true, end: true }));
     }
     return false;
-  },
+  }
 
-  _raiseZoomEndHandlers() {
+  _raiseZoomEndHandlers(): void {
     this._argumentAxes.forEach((axis) => axis.handleZoomEnd());
-    this.callBase();
-  },
+    super._raiseZoomEndHandlers();
+  }
 
-  _setOptionsByReference() {
-    this.callBase();
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
 
     _extend(this._optionsByReference, {
       'argumentAxis.visualRange': true,
     });
-  },
+  }
 
-  option(...params) {
-    const option = this.callBase(...params);
+  option(...params: ThemeValue[]): ThemeValue {
+    const option = super.option(...params);
     const valueAxis = this._options.silent('valueAxis');
 
     if (type(valueAxis) === 'array') {
@@ -1670,9 +1666,9 @@ const dxChart = AdvancedChart.inherit({
     }
 
     return option;
-  },
+  }
 
-  _notifyVisualRange() {
+  _notifyVisualRange(): void {
     const argAxis = this._argumentAxes[0];
     const argumentVisualRange = convertVisualRangeObject(argAxis.visualRange(), !isArray(this.option('argumentAxis.visualRange')));
 
@@ -1682,14 +1678,21 @@ const dxChart = AdvancedChart.inherit({
       argAxis.skipEventRising = null;
     }
 
-    this.callBase();
-  },
+    super._notifyVisualRange();
+  }
+}
+
+setupWidgetPrototype(Chart, {
+  _themeSection: 'chart',
+
+  _fontFields: ['crosshair.label.font'],
+
+  _getExtraOptions: noop,
 });
+Chart.addPlugin(shutterZoom);
+Chart.addPlugin(zoomAndPan);
+Chart.addPlugin(plugins.core);
+Chart.addPlugin(plugins.chart);
 
-dxChart.addPlugin(shutterZoom);
-dxChart.addPlugin(zoomAndPan);
-dxChart.addPlugin(plugins.core);
-dxChart.addPlugin(plugins.chart);
-
-registerComponent('dxChart', dxChart);
-export default dxChart;
+registerComponent('dxChart', Chart);
+export default Chart;

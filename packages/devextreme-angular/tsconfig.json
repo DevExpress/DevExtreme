@@ -4,7 +4,7 @@
     "module": "ES2015",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "moduleResolution":"node",
+    "moduleResolution": "bundler",
     "noImplicitThis": false,
     "strictNullChecks": false,
     "skipLibCheck": true,

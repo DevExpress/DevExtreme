@@ -1107,6 +1107,41 @@ function() {
         assert.equal(numberBox.option('width'), Number($('.dx-page-index').css('min-width').replace('px', '')) + 40);
     });
 
+    QUnit.test('Light mode. Page index width is recalculated after the theme css is applied', function(assert) {
+        const styleSheets = Array.from(document.styleSheets);
+        styleSheets.forEach(sheet => { sheet.disabled = true; });
+
+        let $pagination;
+        try {
+            $pagination = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPagination({
+                maxPagesCount: 8,
+                pageCount: 10,
+                itemCount: 46,
+                pageIndex: 1,
+                pagesCountText: 'of',
+                displayMode: 'compact'
+            });
+        } finally {
+            styleSheets.forEach(sheet => { sheet.disabled = false; });
+        }
+
+        const pagination = $pagination.dxPagination('instance');
+        const $pageIndex = $pagination.find('.dx-page-index');
+        const numberBox = $pageIndex.dxNumberBox('instance');
+        const minWidth = Number($pageIndex.css('min-width').replace('px', ''));
+
+        assert.ok(minWidth > 10, 'the theme defines a min-width for the page index');
+        assert.equal(numberBox.option('width'), 10 + 20, 'the fallback min-width is used while the css is missing');
+
+        const done = assert.async();
+        pagination.option('pageIndex', 2);
+
+        Promise.resolve().then(() => {
+            assert.equal(numberBox.option('width'), minWidth + 20, 'the css min-width is used after the update');
+            done();
+        });
+    });
+
     QUnit.test('Light mode. Change page index', function(assert) {
         let pageIndex;
 
@@ -1277,6 +1312,69 @@ function() {
         $(pagesElement[0]).trigger('dxclick');
         _dimensionChanged(pagination);
         assert.ok($pagination.find('.dx-info').length === 1 && $pagination.find('.dx-info').css('display') !== 'none', 'info element is visible');
+    });
+
+    QUnit.test('Light mode is not applied from a measurement taken before the theme css is applied', function(assert) {
+        const styleSheets = Array.from(document.styleSheets);
+        styleSheets.forEach(sheet => { sheet.disabled = true; });
+
+        let $pagination;
+        try {
+            $pagination = $('#container').width(1000).dxPagination({
+                maxPagesCount: 8,
+                pageCount: 10,
+                allowedPageSizes: [5, 10, 20],
+                showInfo: true,
+                itemCount: 86,
+                infoText: 'Page {0} of {1} ({2} items)',
+                pagesCountText: 'of',
+                showNavigationButtons: true
+            });
+        } finally {
+            styleSheets.forEach(sheet => { sheet.disabled = false; });
+        }
+        const pagination = $pagination.dxPagination('instance');
+
+        assert.equal(isLightMode(pagination), false, 'the unstyled measurement is ignored');
+
+        resizeCallbacks.fire();
+
+        assert.equal(isLightMode(pagination), false, 'full mode after the css is applied');
+
+        $pagination.width(100);
+        resizeCallbacks.fire();
+
+        assert.equal(isLightMode(pagination), true, 'light mode is applied for a narrow pagination');
+    });
+
+    QUnit.test('Info text is not hidden from a measurement taken before the theme css is applied', function(assert) {
+        const styleSheets = Array.from(document.styleSheets);
+        styleSheets.forEach(sheet => { sheet.disabled = true; });
+
+        let $pagination;
+        try {
+            $pagination = $('#container').width(1000).dxPagination({
+                pageSize: 0,
+                pageCount: 1,
+                itemCount: 46,
+                showInfo: true,
+                showPageSizeSelector: false,
+                infoText: 'Page {0} of {1} ({2} items)'
+            });
+        } finally {
+            styleSheets.forEach(sheet => { sheet.disabled = false; });
+        }
+
+        assert.equal($pagination.find('.dx-info').length, 1, 'the unstyled measurement is ignored');
+
+        resizeCallbacks.fire();
+
+        assert.equal($pagination.find('.dx-info').length, 1, 'the info text is visible after the css is applied');
+
+        $pagination.width(50);
+        resizeCallbacks.fire();
+
+        assert.equal($pagination.find('.dx-info').length, 0, 'the info text is hidden when it does not fit');
     });
 
     QUnit.test('Apply light mode when pagination is first rendered', function(assert) {

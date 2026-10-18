@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, ContextMenu,
 } from 'devextreme-react/gantt';
@@ -16,19 +16,19 @@ function App() {
     disableContextMenu: false,
     contextMenuItems: getContextMenuItems(),
   });
-  const onCustomizeContextMenu: ICheckBoxOptions['onValueChanged'] = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onCustomizeContextMenu: ICheckBoxOptions['onValueChanged'] = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       contextMenuItems: value ? getContextMenuItems() : undefined,
-    });
-  };
+    }));
+  }, []);
 
-  const onPreventContextMenuShowing: ICheckBoxOptions['onValueChanged'] = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onPreventContextMenuShowing: ICheckBoxOptions['onValueChanged'] = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       disableContextMenu: value,
-    });
-  };
+    }));
+  }, []);
 
   return (
     <div id="form-demo">

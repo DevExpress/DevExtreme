@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import Guid from 'devextreme/core/guid';
 import { CustomStore } from 'devextreme-angular/common/data';
@@ -13,7 +15,6 @@ if (!/localhost/.test(document.location.host)) {
 type FirstArgument<T> = T extends (...args: any) => any ? Parameters<T>[0] : never;
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -38,7 +39,7 @@ export class AppComponent {
 
   scrollingModeOptions: DxDataGridTypes.DataGridScrollMode[] = ['standard', 'virtual'];
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.dataSource = service.getDataSource();
   }
 
@@ -50,6 +51,7 @@ export class AppComponent {
       insertAfterKey: row.key,
     }];
     this.editRowKey = key;
+    this.changeDetectorRef.markForCheck();
   };
 
   isAddButtonVisible({ row }: FirstArgument<DxDataGridTypes.ColumnButton['visible']>) {

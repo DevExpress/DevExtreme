@@ -3,6 +3,16 @@ import 'devextreme/ui/select_box';
 import { Form, SimpleItem } from 'devextreme-react/form';
 import { mealPlans, roomTypes } from './data.js';
 
+const roomTypeLabel = { text: 'Room Type', location: 'top' };
+const mealPlanLabel = { text: 'Meal Plan', location: 'top' };
+const roomTypeEditorOptions = {
+  items: roomTypes,
+  elementAttr: { id: 'roomType' },
+};
+const mealPlanEditorOptions = {
+  items: mealPlans,
+  elementAttr: { id: 'mealPlan' },
+};
 const RoomMealPlanForm = memo(({ formData, validationGroup }) => (
   <>
     <p>
@@ -19,21 +29,15 @@ const RoomMealPlanForm = memo(({ formData, validationGroup }) => (
         dataField="roomType"
         isRequired
         editorType="dxSelectBox"
-        label={{ text: 'Room Type', location: 'top' }}
-        editorOptions={{
-          items: roomTypes,
-          elementAttr: { id: 'roomType' },
-        }}
+        label={roomTypeLabel}
+        editorOptions={roomTypeEditorOptions}
       />
       <SimpleItem
         dataField="mealPlan"
         isRequired
         editorType="dxSelectBox"
-        label={{ text: 'Meal Plan', location: 'top' }}
-        editorOptions={{
-          items: mealPlans,
-          elementAttr: { id: 'mealPlan' },
-        }}
+        label={mealPlanLabel}
+        editorOptions={mealPlanEditorOptions}
       />
     </Form>
   </>

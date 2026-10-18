@@ -1,6 +1,6 @@
 import registerEvent from '@js/common/core/events/core/event_registrator';
 import GlobalConfig from '@js/core/config';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
 import support from '@ts/core/utils/m_support';
 import MouseStrategy from '@ts/events/pointer/mouse';
 import MouseAndTouchStrategy from '@ts/events/pointer/mouse_and_touch';

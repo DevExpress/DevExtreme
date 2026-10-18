@@ -8,6 +8,7 @@ import {
     StubRange,
 } from './rangeSelectorParts/commons.js';
 import slidersControllerModule from 'viz/range_selector/sliders_controller';
+import { spySeam } from '../../helpers/moduleSeam.js';
 import seriesDataSourceModule from 'viz/range_selector/series_data_source';
 import { DataSource } from 'common/data/data_source/data_source';
 import dateLocalization from 'common/core/localization/date';
@@ -23,7 +24,7 @@ const formatsAreEqual = function(format1, format2) {
 QUnit.module('Parsing data', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        seriesDataSourceModule.SeriesDataSource = _SeriesDataSource;
+        seriesDataSourceModule.DEBUG_set_SeriesDataSource(_SeriesDataSource);
         this.dataSource = [
             { x: '10', y1: 0, y2: 10 },
             { x: '15', y1: 6, y2: 12 },
@@ -400,7 +401,7 @@ QUnit.test('rangeSelector with scale.valueType and dataSourceField and without c
 QUnit.module('Semidiscrete scale', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        seriesDataSourceModule.SeriesDataSource = _SeriesDataSource;
+        seriesDataSourceModule.DEBUG_set_SeriesDataSource(_SeriesDataSource);
 
         this.$container.width(1000);
     }
@@ -1299,7 +1300,7 @@ QUnit.test('T214998. scale multi-line text label', function(assert) {
 });
 
 QUnit.test('range selectedRangeChanged initialization', function(assert) {
-    const spy = sinon.spy(slidersControllerModule, 'SlidersController');
+    const spy = spySeam(slidersControllerModule, 'SlidersController', 'DEBUG_set_SlidersController');
     this.createWidget();
 
     assert.strictEqual(typeof spy.lastCall.args[0].updateSelectedRange, 'function');
@@ -1320,6 +1321,23 @@ QUnit.test('Init selection format before calculate canvas for number type', func
     });
 
     assert.deepEqual(this.slidersController.update.lastCall.args[4].format, { type: 'fixedPoint', precision: 1 }, 'format');
+});
+
+QUnit.test('Init selection format with own locale-only format for number type keeps auto precision', function(assert) {
+    this.createWidget({
+        sliderMarker: {
+            format: { locale: 'de' }
+        },
+        scale: {
+            startValue: 20,
+            endValue: 180
+        },
+        behavior: {
+            snapToTicks: false
+        }
+    });
+
+    assert.deepEqual(this.slidersController.update.lastCall.args[4].format, { type: 'fixedPoint', precision: 1, locale: 'de' }, 'format');
 });
 
 QUnit.test('format for sliders', function(assert) {
@@ -1358,6 +1376,22 @@ QUnit.test('Init selection format before calculate canvas for dateTime type', fu
     };
 
     assert.ok(formatsAreEqual(options.format, expectedFormat), 'format selection for number type');
+});
+
+QUnit.test('Init selection format with own locale-only format for dateTime type applies locale to custom day formatter', function(assert) {
+    this.createWidget({
+        sliderMarker: {
+            format: { locale: 'de' }
+        },
+        scale: {
+            minorTickInterval: { days: 1 },
+            tickInterval: { weeks: 1 },
+            startValue: new Date(2010, 2, 13),
+            endValue: new Date(2010, 2, 20)
+        }
+    });
+
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format(new Date(2010, 2, 13)), 'Samstag, 13');
 });
 
 // B217786

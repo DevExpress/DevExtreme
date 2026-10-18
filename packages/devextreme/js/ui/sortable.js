@@ -1,4 +1,4 @@
-import Sortable from '../__internal/m_sortable';
+import Sortable from '../__internal/sortable';
 export default Sortable;
 
 // STYLE sortable

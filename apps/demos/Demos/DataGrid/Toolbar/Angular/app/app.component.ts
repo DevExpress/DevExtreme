@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import {
   DxDataGridModule,
   DxDataGridComponent,
@@ -57,10 +59,11 @@ export class AppComponent {
         ...this.toggleButtonOptions,
         text: this.expandAll ? 'Collapse All' : 'Expand All',
       };
+      this.changeDetectorRef.detectChanges();
     },
   };
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.orders = service.getOrders();
     this.totalCount = this.getGroupCount('CustomerStoreState');
   }

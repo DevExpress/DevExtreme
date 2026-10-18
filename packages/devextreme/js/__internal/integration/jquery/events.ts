@@ -1,5 +1,5 @@
 import registerEventCallbacks from '@js/common/core/events/core/event_registrator_callbacks';
-import domAdapter from '@ts/core/m_dom_adapter';
+import domAdapter from '@ts/core/dom_adapter';
 import type { DxEventConstructor } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 // eslint-disable-next-line import/no-extraneous-dependencies

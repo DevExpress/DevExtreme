@@ -1,14 +1,9 @@
-@use "../mixins" as *;
-@use "../../base/icon_fonts" as *;
+$treeview-disabled-opacity: null !default;
 
-$treeview-searchbox-margin-bottom: 5px !default;
+@use "../mixins" as *;
 
 .dx-treeview-loadindicator-wrapper {
   text-align: center;
-}
-
-.dx-treeview-search {
-  margin-bottom: $treeview-searchbox-margin-bottom;
 }
 
 .dx-treeview {
@@ -98,7 +93,7 @@ $treeview-searchbox-margin-bottom: 5px !default;
   }
 
   &.dx-state-disabled {
-    opacity: 0.5;
+    opacity: $treeview-disabled-opacity;
   }
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -33,7 +30,6 @@ import type { dxLoadPanelOptions } from 'devextreme/ui/load_panel';
 import type { EventInfo } from 'devextreme/common/core/events';
 
 import DxCardView from 'devextreme/ui/card_view';
-
 
 import {
     DxComponent,
@@ -125,14 +121,14 @@ import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested
 import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_changes,
-           PROPERTY_TOKEN_columns,
-           PROPERTY_TOKEN_customOperations,
-           PROPERTY_TOKEN_fields,
-           PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_changes,
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 
 
@@ -196,7 +192,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('accessKey', value);
     }
 
-
     
     @Input()
     get activeStateEnabled(): boolean {
@@ -205,7 +200,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     
     @Input()
@@ -216,7 +210,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('allowColumnReordering', value);
     }
 
-
     
     @Input()
     get cardContentTemplate(): any {
@@ -225,7 +218,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set cardContentTemplate(value: any) {
         this._setOption('cardContentTemplate', value);
     }
-
 
     
     @Input()
@@ -236,7 +228,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('cardCover', value);
     }
 
-
     
     @Input()
     get cardFooterTemplate(): any {
@@ -245,7 +236,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set cardFooterTemplate(value: any) {
         this._setOption('cardFooterTemplate', value);
     }
-
 
     
     @Input()
@@ -256,7 +246,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('cardHeader', value);
     }
 
-
     
     @Input()
     get cardMaxWidth(): number {
@@ -265,7 +254,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set cardMaxWidth(value: number) {
         this._setOption('cardMaxWidth', value);
     }
-
 
     
     @Input()
@@ -276,7 +264,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('cardMinWidth', value);
     }
 
-
     
     @Input()
     get cardsPerRow(): Mode | number {
@@ -285,7 +272,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set cardsPerRow(value: Mode | number) {
         this._setOption('cardsPerRow', value);
     }
-
 
     
     @Input()
@@ -296,7 +282,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('cardTemplate', value);
     }
 
-
     
     @Input()
     get columnChooser(): ColumnChooser {
@@ -305,7 +290,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set columnChooser(value: ColumnChooser) {
         this._setOption('columnChooser', value);
     }
-
 
     
     @Input()
@@ -316,7 +300,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('columns', value);
     }
 
-
     
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string | undefined {
@@ -325,7 +308,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set dataSource(value: Array<any> | DataSource | DataSourceOptions | Store | string | undefined) {
         this._setOption('dataSource', value);
     }
-
 
     
     @Input()
@@ -336,7 +318,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('disabled', value);
     }
 
-
     
     @Input()
     get editing(): dxCardViewEditing {
@@ -345,7 +326,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set editing(value: dxCardViewEditing) {
         this._setOption('editing', value);
     }
-
 
     
     @Input()
@@ -356,7 +336,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('elementAttr', value);
     }
 
-
     
     @Input()
     get errorRowEnabled(): boolean {
@@ -365,7 +344,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set errorRowEnabled(value: boolean) {
         this._setOption('errorRowEnabled', value);
     }
-
 
     
     @Input()
@@ -376,7 +354,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('fieldHintEnabled', value);
     }
 
-
     
     @Input()
     get filterBuilder(): dxFilterBuilderOptions {
@@ -385,7 +362,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set filterBuilder(value: dxFilterBuilderOptions) {
         this._setOption('filterBuilder', value);
     }
-
 
     
     @Input()
@@ -396,7 +372,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('filterBuilderPopup', value);
     }
 
-
     
     @Input()
     get filterPanel(): FilterPanel {
@@ -405,7 +380,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set filterPanel(value: FilterPanel) {
         this._setOption('filterPanel', value);
     }
-
 
     
     @Input()
@@ -416,7 +390,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('filterValue', value);
     }
 
-
     
     @Input()
     get focusStateEnabled(): boolean {
@@ -425,7 +398,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     
     @Input()
@@ -436,7 +408,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('headerFilter', value);
     }
 
-
     
     @Input()
     get headerPanel(): HeaderPanel {
@@ -445,7 +416,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set headerPanel(value: HeaderPanel) {
         this._setOption('headerPanel', value);
     }
-
 
     
     @Input()
@@ -456,7 +426,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('height', value);
     }
 
-
     
     @Input()
     get hint(): string | undefined {
@@ -465,7 +434,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     
     @Input()
@@ -476,7 +444,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('hoverStateEnabled', value);
     }
 
-
     
     @Input()
     get keyExpr(): Array<string> | string | undefined {
@@ -485,7 +452,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set keyExpr(value: Array<string> | string | undefined) {
         this._setOption('keyExpr', value);
     }
-
 
     
     @Input()
@@ -496,7 +462,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('loadPanel', value);
     }
 
-
     
     @Input()
     get noDataTemplate(): any {
@@ -505,7 +470,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set noDataTemplate(value: any) {
         this._setOption('noDataTemplate', value);
     }
-
 
     
     @Input()
@@ -516,7 +480,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('noDataText', value);
     }
 
-
     
     @Input()
     get pager(): Pager {
@@ -525,7 +488,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set pager(value: Pager) {
         this._setOption('pager', value);
     }
-
 
     
     @Input()
@@ -536,7 +498,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('paging', value);
     }
 
-
     
     @Input()
     get remoteOperations(): boolean | Mode | RemoteOperations {
@@ -545,7 +506,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set remoteOperations(value: boolean | Mode | RemoteOperations) {
         this._setOption('remoteOperations', value);
     }
-
 
     
     @Input()
@@ -556,7 +516,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('rtlEnabled', value);
     }
 
-
     
     @Input()
     get scrolling(): { scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode } {
@@ -565,7 +524,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set scrolling(value: { scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }) {
         this._setOption('scrolling', value);
     }
-
 
     
     @Input()
@@ -576,7 +534,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('searchPanel', value);
     }
 
-
     
     @Input()
     get selectedCardKeys(): Array<any> {
@@ -585,7 +542,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set selectedCardKeys(value: Array<any>) {
         this._setOption('selectedCardKeys', value);
     }
-
 
     
     @Input()
@@ -596,7 +552,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('selection', value);
     }
 
-
     
     @Input()
     get sorting(): Sorting {
@@ -605,7 +560,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set sorting(value: Sorting) {
         this._setOption('sorting', value);
     }
-
 
     
     @Input()
@@ -616,7 +570,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('tabIndex', value);
     }
 
-
     
     @Input()
     get toolbar(): dxCardViewToolbar {
@@ -625,7 +578,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set toolbar(value: dxCardViewToolbar) {
         this._setOption('toolbar', value);
     }
-
 
     
     @Input()
@@ -636,7 +588,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('visible', value);
     }
 
-
     
     @Input()
     get width(): number | string | undefined {
@@ -645,7 +596,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     
     @Input()
@@ -657,576 +607,389 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardClick: EventEmitter<CardClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardDblClick: EventEmitter<CardDblClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardHoverChanged: EventEmitter<CardHoverChangedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardInserted: EventEmitter<CardInsertedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardInserting: EventEmitter<CardInsertingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardPrepared: EventEmitter<CardPreparedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardRemoved: EventEmitter<CardRemovedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardRemoving: EventEmitter<CardRemovingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardUpdated: EventEmitter<CardUpdatedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardUpdating: EventEmitter<CardUpdatingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onContentReady: EventEmitter<EventInfo<any>>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onContextMenuPreparing: EventEmitter<ContextMenuPreparingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onDataErrorOccurred: EventEmitter<Object>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onEditCanceled: EventEmitter<EditCanceledEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onEditCanceling: EventEmitter<EditCancelingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onEditingStart: EventEmitter<EditingStartEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldCaptionClick: EventEmitter<FieldCaptionClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldCaptionDblClick: EventEmitter<FieldCaptionDblClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldCaptionPrepared: EventEmitter<FieldCaptionPreparedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldValueClick: EventEmitter<FieldValueClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldValueDblClick: EventEmitter<FieldValueDblClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldValuePrepared: EventEmitter<FieldValuePreparedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFocusedCardChanged: EventEmitter<FocusedCardChanged>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onInitialized: EventEmitter<Object>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onInitNewCard: EventEmitter<InitNewCardEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSaved: EventEmitter<SavedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSaving: EventEmitter<SavingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowColumnReorderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardCoverChange: EventEmitter<CardCover>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardFooterTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardHeaderChange: EventEmitter<CardHeader>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardMaxWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardMinWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardsPerRowChange: EventEmitter<Mode | number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnChooserChange: EventEmitter<ColumnChooser>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnsChange: EventEmitter<Array<ColumnProperties | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | Store | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<dxCardViewEditing>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() errorRowEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fieldHintEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterBuilderChange: EventEmitter<dxFilterBuilderOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterBuilderPopupChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterPanelChange: EventEmitter<FilterPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterValueChange: EventEmitter<Array<any> | Function | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() headerFilterChange: EventEmitter<HeaderFilter>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() headerPanelChange: EventEmitter<HeaderPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyExprChange: EventEmitter<Array<string> | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loadPanelChange: EventEmitter<dxLoadPanelOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pagerChange: EventEmitter<Pager>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pagingChange: EventEmitter<Paging>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() remoteOperationsChange: EventEmitter<boolean | Mode | RemoteOperations>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollingChange: EventEmitter<{ scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchPanelChange: EventEmitter<SearchPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedCardKeysChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionChange: EventEmitter<SelectionConfiguration>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sortingChange: EventEmitter<Sorting>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxCardViewToolbar>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

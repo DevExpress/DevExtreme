@@ -1,32 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import type { PagingDataSource } from '../../types';
-import { resolvePaginate, syncPaging } from '../paging';
-
-describe('resolvePaginate', () => {
-  it.each([
-    { enabled: true, scrollingMode: 'standard', expected: true },
-    { enabled: false, scrollingMode: 'standard', expected: false },
-    // Virtual and infinite scrolling paginate even with paging disabled.
-    { enabled: false, scrollingMode: 'virtual', expected: true },
-    { enabled: false, scrollingMode: 'infinite', expected: true },
-    { enabled: true, scrollingMode: 'virtual', expected: true },
-    { enabled: true, scrollingMode: 'infinite', expected: true },
-  ])('should be $expected for enabled=$enabled, scrolling.mode=$scrollingMode', ({
-    enabled, scrollingMode, expected,
-  }) => {
-    expect(resolvePaginate(enabled, scrollingMode)).toBe(expected);
-  });
-
-  // An undefined `paging.enabled` leaves the data source's paginate alone,
-  // even in a mode that would otherwise force it on.
-  it.each(['standard', 'virtual', 'infinite'])(
-    'should be undefined when enabled is undefined in %s mode',
-    (scrollingMode) => {
-      expect(resolvePaginate(undefined, scrollingMode)).toBeUndefined();
-    },
-  );
-});
+import { syncPaging } from '../paging';
 
 const createDataSourceMock = (
   state: { paginate: boolean; pageSize: number; pageIndex: number },

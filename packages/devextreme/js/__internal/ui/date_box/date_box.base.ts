@@ -1,3 +1,4 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import config from '@js/core/config';
@@ -13,6 +14,7 @@ import { inputType } from '@js/core/utils/support';
 import { isDate as isDateType, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent, InteractionEvent } from '@js/events';
+import type { Format } from '@js/localization';
 import type dxDateBox from '@js/ui/date_box';
 import type {
   DateBoxBaseOptions,
@@ -22,6 +24,7 @@ import type {
   Properties as dxDateBoxOptions,
 } from '@js/ui/date_box';
 import type { ToolbarItem } from '@js/ui/popup';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import type { OptionChanged, OwnLeafOptions } from '@ts/core/widget/types';
 import Calendar from '@ts/ui/date_box/date_box.strategy.calendar';
 import CalendarWithTime from '@ts/ui/date_box/date_box.strategy.calendar_with_time';
@@ -113,6 +116,8 @@ class DateBox<
   _strategy!: StrategyInstance;
 
   _pickerType?: DatePickerType;
+
+  _committedText?: string;
 
   _storedPadding?: number;
 
@@ -405,7 +410,7 @@ class DateBox<
     rightPadding: number;
   } {
     const { displayFormat } = this.option();
-    const format = this._strategy.getDisplayFormat(displayFormat);
+    const format = this._resolveDisplayFormat(displayFormat);
     const longestValue = dateLocalization.format(
       uiDateUtils.getLongestDate(
         format,
@@ -545,6 +550,7 @@ class DateBox<
   _renderValue(): DeferredObj<unknown> {
     const value = this.getDateOption('value');
 
+    this._committedText = undefined;
     this.option('text', this._getDisplayedText(value));
     this._strategy.renderValue();
 
@@ -559,14 +565,21 @@ class DateBox<
       ? dateSerialization.serializeDate(value, dateSerializationFormat)
       : uiDateUtils.toStandardDateFormat(value, submitFormat);
 
-    this._getSubmitElement().val(submitValue);
+    this._getSubmitElement().val(submitValue ?? '');
+  }
+
+  _resolveDisplayFormat(displayFormat?: Format | null): Format {
+    const { type = 'date' } = this.option();
+    const format = this._strategy.getDisplayFormat(displayFormat);
+
+    return applyDataTypePreset(format, type) ?? format;
   }
 
   _getDisplayedText(value?: DateLike): string {
     const { mode = 'text', displayFormat: displayFormatOption } = this.option();
 
     if (mode === 'text') {
-      const displayFormat = this._strategy.getDisplayFormat(displayFormatOption);
+      const displayFormat = this._resolveDisplayFormat(displayFormatOption);
       return dateLocalization.format(value, displayFormat) as string;
     }
     const format = this._getFormatByMode(mode);
@@ -583,11 +596,36 @@ class DateBox<
       : uiDateUtils.FORMATS_MAP[mode] as string | null;
   }
 
+  _focusOutHandler(e: DxEvent): void {
+    if (this._shouldCommitTextOnFocusOut()) {
+      eventsEngine.triggerHandler(this._input(), { type: 'change' });
+    }
+
+    super._focusOutHandler(e);
+  }
+
+  _shouldCommitTextOnFocusOut(): boolean {
+    const { text, valueChangeEvent } = this.option();
+    const includesChangeEvent = valueChangeEvent?.split(' ').includes('change');
+    const currentText = text ?? '';
+
+    if (!includesChangeEvent || currentText === this._committedText) {
+      return false;
+    }
+
+    const currentValue = this.getDateOption('value');
+    const displayedText = this._getDisplayedText(currentValue) ?? '';
+
+    return currentText !== displayedText;
+  }
+
   _valueChangeEventHandler(
     e: InteractionEvent,
   ): void {
     const { text, type = 'date', validationError } = this.option();
     const currentValue = this.getDateOption('value');
+
+    this._committedText = text;
 
     if (text === this._getDisplayedText(currentValue)) {
       this._recallInternalValidation(currentValue, validationError);
@@ -630,7 +668,7 @@ class DateBox<
 
   _getParsedDate(text?: string): Date | undefined {
     const { displayFormat } = this.option();
-    const strategyDisplayFormat = this._strategy.getDisplayFormat(displayFormat);
+    const strategyDisplayFormat = this._resolveDisplayFormat(displayFormat);
     const parsedText = this._strategy.getParsedText(text, strategyDisplayFormat as string);
 
     return parsedText ?? undefined;
@@ -884,6 +922,7 @@ class DateBox<
   getDateOption(optionName: 'value' | 'min' | 'max'): Date | null {
     const { [optionName]: optionValue } = this.option();
 
+    // @ts-expect-error a string that cannot be parsed and undefined are returned as is
     const deserializedDate: Date | null = dateSerialization.deserializeDate(optionValue);
 
     return deserializedDate;
@@ -895,13 +934,10 @@ class DateBox<
     this.option(optionName, serializedDate);
   }
 
-  _serializeDate(date?: DateLike): Date | string | null {
+  _serializeDate(date?: DateLike): DateLike | undefined {
     const serializationFormat = this._getSerializationFormat();
 
-    const serializedDate: Date | string | null = dateSerialization.serializeDate(
-      date,
-      serializationFormat,
-    );
+    const serializedDate = dateSerialization.serializeDate(date, serializationFormat);
 
     return serializedDate;
   }
