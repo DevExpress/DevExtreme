@@ -864,9 +864,4 @@ const isValidDate = (
   date && !isNaN(new Date(date as Date).valueOf()),
 );
 
-const dateUtilsTs = {
-  addOffsets,
-  isValidDate,
-};
-
-export { dateUtils, dateUtilsTs };
+export { addOffsets, dateUtils, isValidDate };

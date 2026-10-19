@@ -1,7 +1,7 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
-import { dateUtilsTs } from '@ts/core/utils/m_date';
+import { addOffsets } from '@ts/core/utils/m_date';
 
 import {
   HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION,
@@ -140,7 +140,7 @@ export const getValidCellDateForLocalTimeFormat = (
     viewOffset: number;
   },
 ): Date => {
-  const originDate = dateUtilsTs.addOffsets(date, -viewOffset);
+  const originDate = addOffsets(date, -viewOffset);
   const localTimeZoneChangedInOriginDate = timeZoneUtils.isTimezoneChangeInDate(originDate);
 
   if (!localTimeZoneChangedInOriginDate) {
@@ -157,7 +157,7 @@ export const getValidCellDateForLocalTimeFormat = (
   );
 
   const startViewDateOffset = getStartViewDateTimeOffset(startViewDate, startDayHour);
-  return dateUtilsTs.addOffsets(
+  return addOffsets(
     startViewDateWithoutDST,
     viewOffset,
     cellIndexShift,
