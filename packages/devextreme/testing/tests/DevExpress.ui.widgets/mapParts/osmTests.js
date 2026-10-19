@@ -3483,6 +3483,39 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
             }
         }).dxMap('instance');
     });
+    [null, 'EPSG:4326'].forEach(userProjection => {
+        [
+            [-180, 180, -180, 180],
+            [0, 360, -180, 180],
+            [-540, -180, -180, 180],
+            [-360, 360, -180, 180],
+            [-200, 200, -180, 180],
+            [170, 190, 170, -170],
+            [-179.99, 179.99, -179.99, 179.99]
+        ].forEach(([west, east, expectedWest, expectedEast]) => {
+            QUnit.test(`OpenLayers viewport bounds for ${west}..${east} with ${userProjection ? 'user' : 'view'} projection`, function(assert) {
+                openLayersMock.userProjection = userProjection;
+                const scale = userProjection ? 1 : 1000;
+                openLayersMock.viewExtent = [west * scale, -10 * scale, east * scale, 10 * scale];
+                const engine = createOpenLayersEngine(openLayersMock);
+                const engineMap = engine.createMap(document.createElement('div'));
+                const viewChange = sinon.spy();
+                engineMap.attachHandlers({
+                    click: sinon.spy(),
+                    markerSizeChange: sinon.spy(),
+                    viewChange
+                });
+
+                openLayersMock.mapInstance.trigger('moveend');
+
+                assert.deepEqual(viewChange.lastCall.args[0].bounds, {
+                    northEast: { lat: 10, lng: expectedEast },
+                    southWest: { lat: -10, lng: expectedWest }
+                }, 'full-world coverage is preserved without expanding narrower bounds');
+                engineMap.dispose();
+            });
+        });
+    });
     QUnit.test('controls option toggles the OpenLayers zoom control', function(assert) {
         const done = assert.async();
         const map = $('#map').dxMap({

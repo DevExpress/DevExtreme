@@ -620,16 +620,26 @@ class OpenLayersMap implements MapEngineMap {
     const center = view.getCenter();
     const zoom = view.getZoom();
     const extent = view.calculateExtent();
+    const projection = view.getProjection();
+    const geographicExtent = this._api.proj.transformExtent(
+      extent,
+      getCoordinateProjection(this._api, projection),
+      GEOGRAPHIC_PROJECTION,
+    );
+    const northEast = toLocation(this._api, [extent[2], extent[3]], projection);
+    const southWest = toLocation(this._api, [extent[0], extent[1]], projection);
+
+    if (geographicExtent[2] - geographicExtent[0] >= 360) {
+      northEast.lng = 180;
+      southWest.lng = -180;
+    }
 
     const result: MapEngineViewState = {
-      bounds: {
-        northEast: toLocation(this._api, [extent[2], extent[3]], view.getProjection()),
-        southWest: toLocation(this._api, [extent[0], extent[1]], view.getProjection()),
-      },
+      bounds: { northEast, southWest },
     };
 
     if (center) {
-      result.center = toLocation(this._api, center, view.getProjection());
+      result.center = toLocation(this._api, center, projection);
     }
     if (zoom !== undefined) {
       result.zoom = zoom;
