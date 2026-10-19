@@ -34,11 +34,6 @@
   background-color: var(--dx-component-color-bg);
 }
 
-.demo-container {
-  margin: 20px;
-  height: 556px;
-}
-
 .ai-chat-empty-message {
   font-size: 18px;
   font-weight: 400;
