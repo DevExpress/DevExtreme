@@ -1,3 +1,4 @@
+import type { ToolbarItemLocation } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -6,7 +7,7 @@ import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ClickEvent } from '@js/ui/button';
 import type { ValueChangedEvent } from '@js/ui/calendar';
-import type { ToolbarItem } from '@js/ui/popup';
+import type { ToolbarItem, ToolbarLocation } from '@js/ui/popup';
 import { current, isMaterial } from '@js/ui/themes';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { splitPair } from '@ts/core/utils/m_common';
@@ -159,7 +160,10 @@ class CalendarStrategy<
   _getTodayButtonConfig(): ToolbarItem {
     const { buttonsLocation } = this.dateBox.option();
     const isButtonsLocationDefault = buttonsLocation === 'default';
-    const position = isButtonsLocationDefault ? ['bottom', 'center'] : splitPair(buttonsLocation);
+    // @ts-expect-error buttonsLocation holds a toolbar and a location
+    const position: [ToolbarLocation, ToolbarItemLocation] = isButtonsLocationDefault
+      ? ['bottom', 'center']
+      : splitPair(buttonsLocation);
     const stylingMode = isMaterial(current()) ? 'text' : 'outlined';
 
     return {
