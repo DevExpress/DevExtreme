@@ -338,7 +338,7 @@ export class View extends ModuleItem {
     return true;
   }
 
-  public getTemplate(name: template): FunctionTemplate {
+  public getTemplate(name: template | undefined): FunctionTemplate {
     return this.component._getTemplate(name);
   }
 

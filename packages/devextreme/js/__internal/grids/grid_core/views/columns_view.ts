@@ -126,7 +126,7 @@ const copyAttributes = (
 };
 
 const isRenderTemplate = <TModel extends TemplateModel>(
-  template: ColumnTemplateSource<TModel>,
+  template: ColumnTemplateSource<TModel> | undefined,
 ): template is ColumnRenderTemplate<TModel> => !!template
   && !!(template as Partial<ColumnRenderTemplate<TModel>>).render
   && !isRenderer(template);
@@ -670,7 +670,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected _processTemplate<TModel extends TemplateModel>(
-    template: ColumnTemplateSource<TModel>,
+    template: ColumnTemplateSource<TModel> | undefined,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: TModel,
   ): ColumnViewTemplate<TModel> {
@@ -715,7 +715,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   public renderTemplate<TModel extends TemplateModel>(
     container: dxElementWrapper,
-    template: ColumnTemplateSource<TModel>,
+    template: ColumnTemplateSource<TModel> | undefined,
     options: TModel,
     allowRenderToDetachedContainer?: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

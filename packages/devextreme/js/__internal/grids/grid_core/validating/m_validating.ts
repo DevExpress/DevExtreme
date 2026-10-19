@@ -799,7 +799,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       changes.forEach((change) => {
         const { key } = change;
         const validationData = this._validatingController._getValidationData(key);
-        if (validationData && change.type && validationData.pageIndex === this._pageIndex && change?.pageIndex !== this._pageIndex) {
+        if (validationData && change.type && validationData.pageIndex === this._pageIndex && this._pageIndex !== undefined) {
           addInValidItem(change, validationData);
         }
       });
