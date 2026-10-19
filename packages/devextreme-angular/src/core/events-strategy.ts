@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { EventEmitter, NgZone } from '@angular/core';
 import { DxComponent } from './component';
 
