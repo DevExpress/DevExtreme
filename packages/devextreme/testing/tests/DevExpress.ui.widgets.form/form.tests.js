@@ -183,7 +183,7 @@ QUnit.test('Check field width on render form with colspan', function(assert) {
 
 QUnit.test('Items with colSpan should restore their layout when the screen grows back (T1336951)', function(assert) {
     let screen = 'lg';
-    const $form = $('#form').dxForm({
+    const form = $('#form').dxForm({
         screenByWidth: () => screen,
         colCountByScreen: { lg: 4, md: 2, sm: 1, xs: 1 },
         items: [
@@ -194,26 +194,38 @@ QUnit.test('Items with colSpan should restore their layout when the screen grows
             { dataField: 'ShipCity', colSpan: 2 },
             { dataField: 'ShipCountry', colSpan: 2 },
         ],
-    });
+    }).dxForm('instance');
 
-    const getFieldWidths = () => $form.find(`.${FIELD_ITEM_CLASS}`).map((_, element) => Math.round(getWidth($(element)))).get();
-    const initialWidths = getFieldWidths();
+    const getLocations = () => form._rootLayoutManager._responsiveBox.option('items').map(({ location }) => location);
+    const lgLocations = [
+        { row: 0, col: 0, colspan: 4 },
+        { row: 1, col: 0, colspan: 2 },
+        { row: 1, col: 2 },
+        { row: 1, col: 3 },
+        { row: 2, col: 0, colspan: 2 },
+        { row: 2, col: 2, colspan: 2 },
+    ];
 
-    assert.ok(initialWidths[0] > initialWidths[1], 'sanity: colSpan=4 item is wider than colSpan=2 item');
-    assert.ok(initialWidths[1] > initialWidths[2], 'sanity: colSpan=2 item is wider than colSpan=1 item');
+    assert.deepEqual(getLocations(), lgLocations, 'initial lg layout');
 
     screen = 'md';
     resizeCallbacks.fire();
 
-    const mdWidths = getFieldWidths();
-    assert.equal(mdWidths[0], mdWidths[1], 'md: spans that do not fit in 2 columns are dropped');
+    assert.deepEqual(getLocations(), [
+        { row: 0, col: 0 },
+        { row: 0, col: 1 },
+        { row: 1, col: 0 },
+        { row: 1, col: 1 },
+        { row: 2, col: 0, colspan: 2 },
+        { row: 3, col: 0, colspan: 2 },
+    ], 'md layout: spans that do not fit in 2 columns are dropped');
 
     screen = 'lg';
     resizeCallbacks.fire();
 
-    assert.deepEqual(getFieldWidths(), initialWidths, 'lg: field widths are restored');
+    assert.deepEqual(getLocations(), lgLocations, 'lg layout is restored');
 
-    const $fieldItems = $form.find(`.${FIELD_ITEM_CLASS}`);
+    const $fieldItems = form.$element().find(`.${FIELD_ITEM_CLASS}`);
     assert.ok($fieldItems.eq(0).hasClass(LAST_COL_CLASS), 'colSpan=4 item has dx-last-col');
     assert.notOk($fieldItems.eq(1).hasClass(LAST_COL_CLASS), 'colSpan=2 item has no dx-last-col');
     assert.ok($fieldItems.eq(3).hasClass(LAST_COL_CLASS), 'the 4th column item has dx-last-col');
@@ -221,7 +233,7 @@ QUnit.test('Items with colSpan should restore their layout when the screen grows
 
 QUnit.test('Group items with colSpan should restore their layout when the screen grows back (T1336951)', function(assert) {
     let screen = 'lg';
-    const $form = $('#form').dxForm({
+    const form = $('#form').dxForm({
         screenByWidth: () => screen,
         items: [{
             itemType: 'group',
@@ -233,19 +245,25 @@ QUnit.test('Group items with colSpan should restore their layout when the screen
                 { dataField: 'CustomerID' },
             ],
         }],
-    });
+    }).dxForm('instance');
 
-    const getFieldWidths = () => $form.find(`.${FIELD_ITEM_CLASS}`).map((_, element) => Math.round(getWidth($(element)))).get();
-    const initialWidths = getFieldWidths();
+    const groupLayoutManager = form._cachedLayoutManagers.find((layoutManager) => layoutManager !== form._rootLayoutManager);
+    const getLocations = () => groupLayoutManager._responsiveBox.option('items').map(({ location }) => location);
+    const lgLocations = [
+        { row: 0, col: 0, colspan: 4 },
+        { row: 1, col: 0, colspan: 2 },
+        { row: 1, col: 2 },
+        { row: 1, col: 3 },
+    ];
 
-    assert.ok(initialWidths[1] > initialWidths[2], 'sanity: colSpan=4 item is wider than colSpan=2 item');
+    assert.deepEqual(getLocations(), lgLocations, 'initial lg layout');
 
     screen = 'md';
     resizeCallbacks.fire();
     screen = 'lg';
     resizeCallbacks.fire();
 
-    assert.deepEqual(getFieldWidths(), initialWidths, 'lg: group field widths are restored');
+    assert.deepEqual(getLocations(), lgLocations, 'lg group layout is restored');
 });
 
 QUnit.test('Change of the formData field change value of the editor', function(assert) {
