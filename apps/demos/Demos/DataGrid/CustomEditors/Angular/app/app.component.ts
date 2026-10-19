@@ -60,9 +60,9 @@ export class AppComponent {
     });
   }
 
-  onFocusedRowChanged(e: DxDataGridTypes.FocusedRowChangedEvent, cellInfo, dropDownBoxComponent) {
-    const key = e.row?.key;
-    if (key !== undefined && key !== cellInfo.value) {
+  onRowClick(e: DxDataGridTypes.RowClickEvent, cellInfo, dropDownBoxComponent) {
+    const key = e.key;
+    if (e.rowType === 'data' && key !== undefined) {
       cellInfo.setValue(key);
       dropDownBoxComponent.close();
     }

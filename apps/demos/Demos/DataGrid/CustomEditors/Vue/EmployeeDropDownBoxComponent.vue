@@ -16,7 +16,7 @@
         :height="250"
         :hover-state-enabled="true"
         :on-context-menu-preparing="onContextMenuPreparing"
-        :on-focused-row-changed="onFocusedRowChanged"
+        :on-row-click="onRowClick"
         :focused-row-enabled="true"
         :focused-row-key="currentValue"
       >
@@ -57,9 +57,9 @@ const dropDownOptions: DxDropDownBoxTypes.Properties['dropDownOptions'] = { widt
 const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparingEvent) => {
   e.items = [];
 };
-const onFocusedRowChanged = (e: DxDataGridTypes.FocusedRowChangedEvent<unknown, number>) => {
-  const key = e.row?.key;
-  if (key !== undefined && key !== currentValue.value) {
+const onRowClick = (e: DxDataGridTypes.RowClickEvent<unknown, number>) => {
+  const key = e.key;
+  if (e.rowType === 'data' && key !== undefined) {
     currentValue.value = key;
     props.onValueChanged(key);
     dropDownBoxRef.value!.instance!.close();

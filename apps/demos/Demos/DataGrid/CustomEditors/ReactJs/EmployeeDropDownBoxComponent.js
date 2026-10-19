@@ -16,16 +16,16 @@ const EmployeeDropDownBoxComponent = ({ data }) => {
       setDropDownOpened(e.value);
     }
   }, []);
-  const onFocusedRowChanged = useCallback(
+  const onRowClick = useCallback(
     (args) => {
-      const key = args.row?.key;
-      if (key !== undefined && key !== focusedRowKey) {
+      const key = args.key;
+      if (args.rowType === 'data' && key !== undefined) {
         setFocusedRowKey(key);
         setDropDownOpened(false);
         data.setValue(key);
       }
     },
-    [data, focusedRowKey],
+    [data],
   );
   const contentRender = useCallback(
     () => (
@@ -35,7 +35,7 @@ const EmployeeDropDownBoxComponent = ({ data }) => {
         height={250}
         hoverStateEnabled={true}
         onContextMenuPreparing={clearContextMenu}
-        onFocusedRowChanged={onFocusedRowChanged}
+        onRowClick={onRowClick}
         focusedRowEnabled={true}
         focusedRowKey={focusedRowKey}
       >
@@ -49,7 +49,7 @@ const EmployeeDropDownBoxComponent = ({ data }) => {
         <Scrolling mode="virtual" />
       </DataGrid>
     ),
-    [data, focusedRowKey, onFocusedRowChanged],
+    [data, focusedRowKey, onRowClick],
   );
   return (
     <DropDownBox

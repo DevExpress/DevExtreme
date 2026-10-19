@@ -118,9 +118,9 @@ $(() => {
           onContextMenuPreparing: (e) => {
             e.items = [];
           },
-          onFocusedRowChanged(args) {
-            const key = args.row?.key;
-            if (key !== undefined && key !== cellInfo.value) {
+          onRowClick(args) {
+            const key = args.key;
+            if (args.rowType === 'data' && key !== undefined) {
               e.component.option('value', key);
               cellInfo.setValue(key);
               e.component.close();
