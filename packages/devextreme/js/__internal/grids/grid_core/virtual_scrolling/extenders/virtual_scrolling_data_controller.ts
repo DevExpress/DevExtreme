@@ -29,7 +29,7 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
-import gridCoreUtils from '../../m_utils';
+import gridCoreUtils from '../../utils';
 import {
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,

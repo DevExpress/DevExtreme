@@ -54,12 +54,12 @@ import {
   EDITOR_CELL_CLASS,
   FOCUSABLE_ELEMENT_SELECTOR,
 } from '../editing/const';
-import gridCoreUtils from '../m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import { COMMAND_SELECT_CLASS } from '../selection/const';
 import type {
   Controllers, ModuleType, RowKey, Views,
 } from '../types';
+import gridCoreUtils from '../utils';
 import {
   CLASSES,
   COLUMN_HEADERS_VIEW,

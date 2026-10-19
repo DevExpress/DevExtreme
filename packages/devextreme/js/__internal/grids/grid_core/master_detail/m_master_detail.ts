@@ -22,7 +22,7 @@ import type {
   ProcessedItem,
 } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import { CLASSES } from './const';
 import { isDetailRow } from './utils';
 

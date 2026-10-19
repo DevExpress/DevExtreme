@@ -16,5 +16,5 @@
 
 ::ng-deep .dx-scheduler-appointment-title,
 ::ng-deep .dx-scheduler-appointment-content-date {
-  color: #242424;
+  color: var(--dxds-color-content-static-light, #242424);
 }
