@@ -1114,4 +1114,40 @@ QUnit.module('MessageBox', moduleConfig, () => {
             );
         });
     });
+
+    QUnit.module('placeholder integration', () => {
+        const DEFAULT_PLACEHOLDER = 'Type a message';
+
+        QUnit.test('ChatTextArea should keep the default placeholder when placeholder is passed as undefined', function(assert) {
+            this.reinit({ placeholder: undefined });
+
+            assert.strictEqual(this.textArea.option('placeholder'), DEFAULT_PLACEHOLDER, 'default placeholder is kept');
+        });
+
+        QUnit.test('should pass placeholder to ChatTextArea on initialization', function(assert) {
+            this.reinit({ placeholder: 'Ask AI' });
+
+            assert.strictEqual(this.textArea.option('placeholder'), 'Ask AI', 'placeholder is passed to ChatTextArea');
+        });
+
+        QUnit.test('should pass an empty placeholder to ChatTextArea on initialization', function(assert) {
+            this.reinit({ placeholder: '' });
+
+            assert.strictEqual(this.textArea.option('placeholder'), '', 'empty placeholder is passed to ChatTextArea');
+        });
+
+        QUnit.test('should update placeholder in ChatTextArea at runtime', function(assert) {
+            this.instance.option('placeholder', 'Ask AI');
+
+            assert.strictEqual(this.textArea.option('placeholder'), 'Ask AI', 'placeholder is updated in ChatTextArea');
+        });
+
+        QUnit.test('should restore the default ChatTextArea placeholder when placeholder is set to undefined at runtime', function(assert) {
+            this.reinit({ placeholder: 'Ask AI' });
+
+            this.instance.option('placeholder', undefined);
+
+            assert.strictEqual(this.textArea.option('placeholder'), DEFAULT_PLACEHOLDER, 'default placeholder is restored');
+        });
+    });
 });
