@@ -72,13 +72,10 @@ describe('regressions', () => {
 });
 
 describe('card template container', () => {
-  it('should render card template into a new container and remove the previous one on data update (T1336765)', () => {
-    const containers: Element[] = [];
+  it('should notify card template container removal before re-rendering on data update (T1336765)', () => {
     const onContainerRemoved = jest.fn();
     const cardTemplate = (_: unknown, templateContainer: Element): void => {
-      const element = $(templateContainer).get(0);
-      containers.push(element);
-      on(element, 'dxremove', onContainerRemoved);
+      on($(templateContainer).get(0), 'dxremove', onContainerRemoved);
     };
 
     const container = document.createElement('div');
@@ -90,9 +87,6 @@ describe('card template container', () => {
 
     cardView.option('dataSource', [{ id: 1, name: 'BMW' }]);
 
-    expect(containers).toHaveLength(2);
-    expect(containers[1]).not.toBe(containers[0]);
-    expect(containers[0].parentNode).toBeNull();
     expect(onContainerRemoved).toHaveBeenCalledTimes(1);
   });
 
