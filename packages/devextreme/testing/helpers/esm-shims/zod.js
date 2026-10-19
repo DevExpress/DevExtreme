@@ -33,5 +33,10 @@ const z = {
     config() { return {}; },
 };
 
-export { z };
+const { enum: enumSchema, null: nullSchema } = z;
+
+export const {
+    object, string, boolean, number, union, array, toJSONSchema, config,
+} = z;
+export { enumSchema as enum, nullSchema as null, z };
 export default z;
