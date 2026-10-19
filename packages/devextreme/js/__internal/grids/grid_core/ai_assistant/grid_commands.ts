@@ -9,7 +9,7 @@ import {
   EXECUTION_ABORT_MESSAGE,
   MAX_COMMAND_ARGS_LENGTH,
 } from '@ts/grids/grid_core/ai_assistant/const';
-import { z } from '@ts/grids/grid_core/ai_assistant/zod';
+import * as z from '@ts/grids/grid_core/ai_assistant/zod';
 
 import type { InternalGrid } from '../types';
 import type {
