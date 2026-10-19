@@ -1,5 +1,5 @@
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
-import { z } from '@ts/grids/grid_core/ai_assistant/zod';
+import * as z from '@ts/grids/grid_core/ai_assistant/zod';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import { defineGridCommand } from './defineGridCommand';
