@@ -250,7 +250,6 @@ export type Attachment = {
 };
 
 /**
- * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
  */
@@ -355,7 +354,6 @@ export type TextMessage = MessageBase & {
     /**
      * @docid
      * @public
-     * @type Array<ToolCall>
      */
     toolCalls?: ToolCall[];
 

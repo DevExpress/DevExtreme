@@ -35030,9 +35030,6 @@ declare module DevExpress.ui.dxChat {
 
     [key: string]: any;
   };
-  /**
-   * [descr:ToolCallStatus]
-   */
   export type ToolCallStatus = 'success' | 'error';
   /**
    * [descr:User]
