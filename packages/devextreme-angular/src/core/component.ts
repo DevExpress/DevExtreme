@@ -90,6 +90,12 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
+  private readonly boundOptions = new Set<string>();
+
+  registerBoundOption = (name: string) => {
+    this.boundOptions.add(name.split(/[.[]/)[0]);
+  };
+
   private _updateTemplates() {
     if (this.templates.length && this.templateUpdateRequired) {
       const updatedTemplates = {};
@@ -110,7 +116,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
       this.eventHelper.fireNgEvent(`${e.name}Change`, [value]);
       this.optionChangedHandlers.emit(e);
 
-      if (!this.widgetUpdateLocked) {
+      if (!this.widgetUpdateLocked && this.boundOptions.has(e.name)) {
         this.changeDetectorRef.markForCheck();
       }
     });
@@ -186,6 +192,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   }
 
   protected _setOption(name: string, value: any) {
+    this.registerBoundOption(name);
     this.lockWidgetUpdate();
 
     if (!this._shouldOptionChange(name, value)) {

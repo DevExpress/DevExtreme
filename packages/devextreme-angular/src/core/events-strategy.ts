@@ -30,7 +30,9 @@ export class NgEventsStrategy {
       } else {
         this.zone.run(() => emitter.next(args?.[0]));
       }
-      this.changeDetectorRef?.markForCheck();
+      if (name !== 'optionChanged') {
+        this.changeDetectorRef?.markForCheck();
+      }
     }
   }
 

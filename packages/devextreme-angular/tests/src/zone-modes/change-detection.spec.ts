@@ -262,6 +262,31 @@ describe(`Change detection [${mode}]: events registered outside the Angular zone
   });
 });
 
+if (isZoneless) {
+  describe(`Change detection [${mode}]: widget-internal state`, () => {
+    it('hovering over List items does not run change detection', async () => {
+      const fixture = await render(`
+        <dx-list [items]="items" [hoverStateEnabled]="true"></dx-list>
+        <span class="out">{{ countRender() }}</span>
+      `);
+      const host = fixture.componentInstance;
+      const listItems = fixture.nativeElement.querySelectorAll('.dx-list-item');
+      const rendersBefore = host.renders;
+
+      listItems.forEach((item: Element) => {
+        mouse(item, 'mouseover', 5, 5);
+        mouse(item, 'mouseenter', 5, 5);
+      });
+      const hovered = host.list.instance.option('hoveredElement');
+      await wait(50);
+      await fixture.whenStable();
+
+      expect(hovered).toBeTruthy();
+      expect(host.renders).toBe(rendersBefore);
+    });
+  });
+}
+
 describe(`Change detection [${mode}]: dxTemplate content`, () => {
   it('re-renders when a parent signal used in the template changes', async () => {
     const fixture = await render(`
