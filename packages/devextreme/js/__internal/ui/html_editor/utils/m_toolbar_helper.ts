@@ -1,3 +1,4 @@
+import type { ValidationCallbackData, ValidationRule } from '@js/common';
 import localizationMessage from '@js/common/core/localization/message';
 import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -68,8 +69,8 @@ interface LinkFormData {
 }
 
 interface TableFormData {
-  rows: number | null;
-  columns: number | null;
+  rows: number;
+  columns: number;
 }
 
 /** A Quill format value: an array when the range holds several values (see Findings). */
@@ -451,6 +452,15 @@ function getDefaultClickHandler(module: FormatHandlersModule, name: string): For
 }
 
 function insertTableFormItems(): SimpleItem[] {
+  const validationRules: ValidationRule[] = [
+    { type: 'required' },
+    {
+      type: 'custom',
+      ignoreEmptyValue: true,
+      validationCallback: ({ value }: ValidationCallbackData): boolean => Number.isInteger(value),
+    },
+  ];
+
   return [
     {
       dataField: 'rows',
@@ -459,6 +469,7 @@ function insertTableFormItems(): SimpleItem[] {
         min: 1,
       },
       label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_ROWS) },
+      validationRules,
     },
     {
       dataField: 'columns',
@@ -467,6 +478,7 @@ function insertTableFormItems(): SimpleItem[] {
         min: 1,
       },
       label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_COLUMNS) },
+      validationRules,
     },
   ];
 }
@@ -486,6 +498,14 @@ function prepareInsertTableHandler(module: FormatHandlersModule): FormatHandlers
 
     module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
 
+    const { _formDialog: formDialog } = module.editorInstance;
+    if (formDialog) {
+      formDialog.beforeAddButtonAction = (): boolean => {
+        const { isValid } = formDialog._form.validate();
+        return isValid === true;
+      };
+    }
+
     const promise = module.editorInstance.showFormDialog<TableFormData>({
       formData,
       items: insertTableFormItems(),
@@ -500,7 +520,6 @@ function prepareInsertTableHandler(module: FormatHandlersModule): FormatHandlers
           module.saveValueChangeEvent(event);
 
           const { columns, rows } = data;
-          // @ts-expect-error a cleared NumberBox gives null (see Findings)
           table.insertTable(rows, columns);
         }
       })

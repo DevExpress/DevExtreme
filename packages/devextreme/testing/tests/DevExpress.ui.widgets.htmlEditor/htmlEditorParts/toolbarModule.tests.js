@@ -1305,6 +1305,57 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
 
         assert.notOk(isFieldsVisible, 'insertTable dialog is hidden');
     });
+
+    [
+        { rowsText: '', message: 'Required' },
+        { rowsText: '2.5', message: 'Value is invalid' },
+    ].forEach(({ rowsText, message }) => {
+        test(`insertTable dialog stays open and inserts no table when Rows is "${rowsText}"`, function(assert) {
+            this.options.items = ['insertTable'];
+            this.options.editorInstance._formDialog = this.formDialog;
+            new Toolbar(this.quillMock, this.options);
+            this.$element
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`)
+                .first()
+                .val(rowsText)
+                .change();
+
+            $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
+                .first()
+                .trigger('dxclick');
+
+            const rowsEditor = this.formDialog._form.getEditor('rows');
+
+            assert.ok(this.quillMock.table.insertTable.notCalled, 'no table is inserted');
+            assert.strictEqual(this.formDialog._popup.option('visible'), true, 'dialog stays open');
+            assert.strictEqual(rowsEditor.option('isValid'), false, 'Rows is invalid');
+            assert.strictEqual(rowsEditor.option('validationError').message, message, 'validation message');
+        });
+    });
+
+    test('insertTable dialog inserts a table when Rows and Columns are whole numbers', function(assert) {
+        this.options.items = ['insertTable'];
+        this.options.editorInstance._formDialog = this.formDialog;
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`)
+            .first()
+            .val('2')
+            .change();
+
+        $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
+            .first()
+            .trigger('dxclick');
+
+        assert.ok(this.quillMock.table.insertTable.calledOnceWithExactly(2, 1), 'table with 2 rows and 1 column is inserted');
+        assert.strictEqual(this.formDialog._popup.option('visible'), false, 'dialog is closed');
+    });
 });
 
 testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
