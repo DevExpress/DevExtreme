@@ -1,5 +1,6 @@
 import config from '@js/core/config';
 import Guid from '@js/core/guid';
+import type { EqualByValueOptions } from '@js/core/utils/common';
 import { toComparable } from '@js/core/utils/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -352,20 +353,42 @@ export const grep = function grep<T>(
   return result;
 };
 
-const compareArrays = (array1, array2, depth, options, comparedPairs) => {
+type ComparedPairs = Map<unknown, Set<unknown>>;
+
+interface CompareOptions extends EqualByValueOptions {
+  strict: boolean;
+  maxDepth: number;
+}
+
+const compareArrays = (
+  array1: unknown[],
+  array2: unknown[],
+  depth: number,
+  options: CompareOptions,
+  comparedPairs: ComparedPairs | undefined,
+): boolean => {
   if (array1.length !== array2.length) {
     return false;
   }
 
-  const strictComparedPairs = options.strict ? comparedPairs : comparedPairs && new Map();
+  const strictComparedPairs: ComparedPairs | undefined = options.strict
+    ? comparedPairs
+    : comparedPairs && new Map();
 
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the three call each other
   return !array1.some((item, idx) => !compareByValue(item, array2[idx], depth + 1, {
     ...options,
     strict: true,
   }, strictComparedPairs));
 };
 
-const compareObjects = (object1, object2, depth, options, comparedPairs) => {
+const compareObjects = (
+  object1: Record<string, unknown>,
+  object2: Record<string, unknown>,
+  depth: number,
+  options: CompareOptions,
+  comparedPairs: ComparedPairs | undefined,
+): boolean => {
   const keys1 = Object.keys(object1);
   const keys2 = Object.keys(object2);
 
@@ -375,12 +398,21 @@ const compareObjects = (object1, object2, depth, options, comparedPairs) => {
 
   const keys2Set = new Set(keys2);
   return !keys1.some((key) => !keys2Set.has(key)
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- the three call each other
     || !compareByValue(object1[key], object2[key], depth + 1, options, comparedPairs));
 };
 
-const isPairCompared = (comparedPairs, value1, value2) => comparedPairs?.get(value1)?.has(value2) ?? false;
+const isPairCompared = (
+  comparedPairs: ComparedPairs | undefined,
+  value1: unknown,
+  value2: unknown,
+): boolean => comparedPairs?.get(value1)?.has(value2) ?? false;
 
-const addComparedPair = (comparedPairs, value1, value2) => {
+const addComparedPair = (
+  comparedPairs: ComparedPairs | undefined,
+  value1: unknown,
+  value2: unknown,
+): void => {
   if (!comparedPairs) {
     return;
   }
@@ -390,14 +422,25 @@ const addComparedPair = (comparedPairs, value1, value2) => {
   comparedPairs.set(value1, pairedValues);
 };
 
-const DEFAULT_EQUAL_BY_VALUE_OPTS = {
+const isComparableObject = (
+  value: unknown,
+  plainObjectsOnly: boolean,
+): value is Record<string, unknown> => (plainObjectsOnly ? isPlainObject(value) : isObject(value));
+
+const DEFAULT_EQUAL_BY_VALUE_OPTS: CompareOptions = {
   maxDepth: 3,
   strict: true,
 };
-const compareByValue = (value1, value2, depth, options, comparedPairs) => {
+const compareByValue = (
+  value1: unknown,
+  value2: unknown,
+  depth: number,
+  options: CompareOptions,
+  comparedPairs: ComparedPairs | undefined,
+): boolean => {
   const { strict, maxDepth, comparePlainObjectsOnly = false } = options;
-  const comparable1 = toComparable(value1, true);
-  const comparable2 = toComparable(value2, true);
+  const comparable1: unknown = toComparable(value1, true);
+  const comparable2: unknown = toComparable(value2, true);
 
   const comparisonResult = strict
     ? comparable1 === comparable2
@@ -409,9 +452,8 @@ const compareByValue = (value1, value2, depth, options, comparedPairs) => {
     case depth >= maxDepth:
     case isPairCompared(comparedPairs, comparable1, comparable2):
       return true;
-    case comparePlainObjectsOnly
-      ? isPlainObject(comparable1) && isPlainObject(comparable2)
-      : isObject(comparable1) && isObject(comparable2):
+    case isComparableObject(comparable1, comparePlainObjectsOnly)
+      && isComparableObject(comparable2, comparePlainObjectsOnly):
       addComparedPair(comparedPairs, comparable1, comparable2);
       return compareObjects(comparable1, comparable2, depth, options, comparedPairs);
     case Array.isArray(comparable1) && Array.isArray(comparable2):
@@ -422,9 +464,15 @@ const compareByValue = (value1, value2, depth, options, comparedPairs) => {
   }
 };
 
-export const equalByValue = (value1, value2, options = DEFAULT_EQUAL_BY_VALUE_OPTS) => {
-  const compareOptions = { ...DEFAULT_EQUAL_BY_VALUE_OPTS, ...options };
-  const comparedPairs = Number.isFinite(compareOptions.maxDepth) ? undefined : new Map();
+export const equalByValue = (
+  value1: unknown,
+  value2: unknown,
+  options: EqualByValueOptions = DEFAULT_EQUAL_BY_VALUE_OPTS,
+): boolean => {
+  const compareOptions: CompareOptions = { ...DEFAULT_EQUAL_BY_VALUE_OPTS, ...options };
+  const comparedPairs: ComparedPairs | undefined = Number.isFinite(compareOptions.maxDepth)
+    ? undefined
+    : new Map();
 
   return compareByValue(value1, value2, 0, compareOptions, comparedPairs);
 };
