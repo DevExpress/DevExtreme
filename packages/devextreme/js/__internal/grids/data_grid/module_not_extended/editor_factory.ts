@@ -1,4 +1,4 @@
-import { editorFactoryModule } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import { editorFactoryModule } from '@ts/grids/grid_core/editor_factory/editor_factory';
 
 import gridCore from '../core';
 

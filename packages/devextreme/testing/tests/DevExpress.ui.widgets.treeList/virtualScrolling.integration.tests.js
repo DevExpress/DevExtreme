@@ -143,7 +143,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const $scrollableContainer = $(scrollable.container());
 
         // act
-        scrollable.scrollTo({ y: 10000 });
+        scrollable.scrollTo({ top: 10000 });
         $scrollableContainer.trigger('scroll');
         this.clock.tick(1000);
 
@@ -201,9 +201,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const $scrollableContainer = $(scrollable.container());
 
         // act
-        scrollable.scrollTo({ y: 350 });
-        scrollable.scrollTo({ y: 400 });
-        scrollable.scrollTo({ y: 10000 });
+        scrollable.scrollTo({ top: 350 });
+        scrollable.scrollTo({ top: 400 });
+        scrollable.scrollTo({ top: 10000 });
 
         setTimeout(() => {
             // assert

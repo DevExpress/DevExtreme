@@ -13,7 +13,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { ModuleType } from '../types';
 import {
@@ -30,8 +30,8 @@ import {
   ROW_REMOVED,
   TARGET_COMPONENT_NAME,
 } from './const';
+import { isEditable } from './editing_utils';
 import type { EditingController } from './m_editing';
-import { isEditable } from './m_editing_utils';
 import type { NormalizedEditCellOptions } from './types';
 
 export interface ICellBasedEditingControllerExtender {
@@ -694,7 +694,9 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
     const editRowIndex = rowIndex >= 0 ? rowIndex : 0;
     const columnIndex = this.getFirstEditableColumnIndex();
-    columnIndex >= 0 && this.editCell(editRowIndex, columnIndex);
+    if (columnIndex !== undefined && columnIndex >= 0) {
+      this.editCell(editRowIndex, columnIndex);
+    }
   }
 };
 

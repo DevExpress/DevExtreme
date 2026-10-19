@@ -36,7 +36,7 @@ const EXTENDER_KINDS: ExtenderKind[] = ['controllers', 'views'];
  * Key: className, Value: class info + sourceFile.
  *
  * When there are duplicate class names across files (e.g. KeyboardNavigationController
- * in both m_keyboard_navigation_core.ts and m_keyboard_navigation.ts), we keep BOTH:
+ * in both keyboard_navigation_core.ts and m_keyboard_navigation.ts), we keep BOTH:
  * - The "base" version (doesn't extend a class of the same name) goes in the main registry
  * - The "shadow" version goes in a separate list to be handled during chain building
  */

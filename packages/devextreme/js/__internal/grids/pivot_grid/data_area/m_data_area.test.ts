@@ -1,3 +1,5 @@
+import '@ts/ui/scroll_view/scrollable';
+
 import {
   afterEach,
   beforeEach,
@@ -7,10 +9,11 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 
+import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
 import { DataArea } from './m_data_area';
 
-const createComponent = (): unknown => ({
-  option: (optionName?: string) => {
+const createComponent = (options: Record<string, unknown> = {}): unknown => ({
+  option: (optionName?: string): unknown => {
     if (optionName === undefined) {
       return {};
     }
@@ -18,6 +21,7 @@ const createComponent = (): unknown => ({
     return {
       rtlEnabled: false,
       encodeHtml: false,
+      ...options,
     }[optionName];
   },
   _eventsStrategy: { hasEvent: () => false },
@@ -112,6 +116,65 @@ describe('DataArea', () => {
       area.setColumnsWidth([]);
 
       expect(getTableWidth()).toEqual('0px');
+    });
+  });
+
+  describe('scrollTo with virtual scrolling', () => {
+    const TABLE_OFFSET = 1000;
+    const CELL_SIZES = [100, 120, 300];
+    const POSITION_PAST_TABLE = TABLE_OFFSET + 520;
+
+    const renderVirtualDataArea = (rtlEnabled = false): DataArea => {
+      const area = new DataArea(createComponent({
+        rtlEnabled,
+        'scrolling.mode': 'virtual',
+        scrolling: { useNative: false },
+      }));
+      const row = [{ text: '1' }, { text: '2' }, { text: '3' }];
+
+      area.render($(container), [row, row, row]);
+      area.setVirtualContentParams({
+        left: TABLE_OFFSET, top: TABLE_OFFSET, width: 3000, height: 3000,
+      });
+      area.renderScrollable();
+      area.setGroupWidth(200);
+      area.setGroupHeight(200);
+      area.setColumnsWidth(CELL_SIZES);
+      area.setRowsHeight(CELL_SIZES);
+
+      return area;
+    };
+
+    const getFakeTable = (): HTMLElement => container.querySelector(`.${FAKE_TABLE_CLASS}`)!;
+
+    it('should show the fake table at the position scrolled past the rendered table', () => {
+      const area = renderVirtualDataArea();
+
+      area.scrollTo({ left: POSITION_PAST_TABLE, top: POSITION_PAST_TABLE });
+
+      expect(getFakeTable().style.left).toBe(`${POSITION_PAST_TABLE}px`);
+      expect(getFakeTable().style.top).toBe(`${POSITION_PAST_TABLE}px`);
+      expect(getFakeTable().classList).not.toContain('dx-hidden');
+    });
+
+    it('should hide the fake table when scrolled back to the rendered table', () => {
+      const area = renderVirtualDataArea();
+
+      area.scrollTo({ left: POSITION_PAST_TABLE, top: POSITION_PAST_TABLE });
+      area.scrollTo({ left: TABLE_OFFSET, top: TABLE_OFFSET });
+
+      expect(getFakeTable().style.left).toBe(`${TABLE_OFFSET}px`);
+      expect(getFakeTable().style.top).toBe(`${TABLE_OFFSET}px`);
+      expect(getFakeTable().classList).toContain('dx-hidden');
+    });
+
+    it('should offset the fake table from the right when rtlEnabled is true', () => {
+      const area = renderVirtualDataArea(true);
+
+      area.scrollTo({ left: POSITION_PAST_TABLE, top: TABLE_OFFSET });
+
+      expect(getFakeTable().style.right).toBe(`${POSITION_PAST_TABLE}px`);
+      expect(getFakeTable().classList).not.toContain('dx-hidden');
     });
   });
 });

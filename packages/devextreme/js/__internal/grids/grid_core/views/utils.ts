@@ -1,17 +1,21 @@
 import type { dxElementWrapper } from '@js/core/renderer';
+import { getOuterHeight } from '@js/core/utils/size';
+import { isString } from '@js/core/utils/type';
 import { columnHasValue } from '@ts/grids/grid_core/columns_controller/columns_controller_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 
 const INVISIBLE_CLASS = 'dx-state-invisible';
+
+export const isPercentWidth = (width: unknown): width is `${string}%` => isString(width) && width.endsWith('%');
 
 export const getCellText = (
   column: Column,
   displayValue: unknown,
 ): string => (
   columnHasValue(column)
-    ? gridCoreUtils.formatValue(displayValue, column) as string
+    ? gridCoreUtils.formatValue(displayValue, column)
     : ''
 );
 
@@ -49,4 +53,21 @@ export const insertRowElement = (
   } else if ($table) {
     $newRow.prependTo($newRow.is('tbody') ? $table : $table.children('tbody'));
   }
+};
+
+export const keepContentHeight = (
+  $content: dxElementWrapper | undefined,
+  callback: () => void,
+): void => {
+  if (!$content) {
+    callback();
+
+    return;
+  }
+
+  const { minHeight } = ($content.get(0) as HTMLElement).style;
+
+  $content.css('minHeight', getOuterHeight($content));
+  callback();
+  $content.css('minHeight', minHeight);
 };

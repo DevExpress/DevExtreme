@@ -4,6 +4,8 @@ import path from 'node:path';
 import { addDependencies, makeSbom } from '@devexpress/sbom-toolkit';
 import type { MakeSbomConfig } from '@devexpress/sbom-toolkit';
 
+import { addWorkspaceHashes } from './add-workspace-hashes.ts';
+
 const PACKAGE_DIR = path.resolve(import.meta.dirname, '..');
 const REPO_ROOT = path.resolve(PACKAGE_DIR, '../..');
 const DIST = path.join(PACKAGE_DIR, 'dist');
@@ -38,13 +40,43 @@ await makeSbom({
   packages: [{ fullName: 'devextreme-extra-deps' }],
   options,
 });
-await makeSbom({ targetDir: REPO_ROOT, outputDir: DIST, packages, options });
+await makeSbom({
+  targetDir: REPO_ROOT,
+  outputDir: DIST,
+  packages,
+  options: {
+    ...options,
+    publicPackages: [
+      '@devexpress/utils',
+      'devexpress-diagram',
+      'devexpress-gantt',
+      'devextreme-angular',
+      'devextreme-quill',
+      'devextreme-react',
+      'devextreme-themebuilder',
+      'devextreme-vue',
+      'devextreme',
+    ],
+    internalPackages: [
+      'devextreme-metadata',
+      'eslint-migration-utils',
+    ],
+    cpeMappings: [
+      { name: 'devextreme-cldr-data', vendor: 'devexpress' },
+      { name: 'devextreme-exceljs-fork', vendor: 'devexpress' },
+      { name: 'devextreme-internal-tools', vendor: 'devexpress' },
+      { name: 'devextreme-schematics', vendor: 'devexpress' },
+      { name: 'eslint-config-devextreme', vendor: 'devexpress' },
+    ],
+  },
+});
 
-for (const name of PACKAGES_WITH_DEVEXTREME) {
-  const sbomPath = path.join(DIST, `${name}.cdx.json`);
-  if (fs.existsSync(sbomPath)) {
+for (const { fullName } of packages) {
+  const sbomPath = path.join(DIST, `${fullName}.cdx.json`);
+  if (PACKAGES_WITH_DEVEXTREME.includes(fullName)) {
     addDependencies({ sbomPath, extraSbomPath: EXTRA_SBOM, component: 'devextreme' });
   }
+  addWorkspaceHashes({ sbomPath, repoRoot: REPO_ROOT });
 }
 fs.rmSync(EXTRA_SBOM);
 

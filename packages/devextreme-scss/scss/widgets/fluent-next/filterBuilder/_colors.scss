@@ -1,0 +1,40 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$filter-builder-bg: ds.$color-bg !default;
+
+$filter-builder-content: ds.$color-content !default;
+
+$filter-builder-text-content-focused: ds.$color-content !default;
+
+$filter-builder-plus-icon-content-disabled: ds.$color-content-disabled !default;
+$filter-builder-plus-icon: ds.$color-content-success !default;
+$filter-builder-plus-icon-content-hovered: ds.$color-content-success-hovered !default;
+$filter-builder-plus-icon-content-focused: ds.$color-content-success-active !default;
+
+$filter-builder-remove-icon-content-disabled: ds.$color-content-disabled !default;
+$filter-builder-remove-icon: ds.$color-content-danger !default;
+$filter-builder-remove-icon-content-hovered: ds.$color-content-danger-hovered !default;
+$filter-builder-remove-icon-content-focused: ds.$color-content-danger-active !default;
+
+$filter-builder-group-operation-bg-disabled: ds.$color-bg-disabled !default;
+$filter-builder-item-field-bg-disabled: ds.$color-bg-disabled !default;
+$filter-builder-group-operation-bg: ds.$color-bg-primary-subtle !default;
+$filter-builder-group-operation-bg-hovered: ds.$color-bg-primary-subtle-hovered !default;
+$filter-builder-group-operation-bg-focused: ds.$color-bg-primary-subtle-active !default;
+
+$filter-builder-item-field-bg: ds.$color-bg-warning-subtle !default;
+$filter-builder-item-field-bg-hovered: ds.$color-bg-warning-subtle-hovered !default;
+$filter-builder-item-field-bg-focused: ds.$color-bg-warning-subtle-active !default;
+
+$filter-builder-item-operator-bg: ds.$color-bg-info-subtle !default;
+$filter-builder-item-operator-bg-hovered: ds.$color-bg-info-subtle-hovered !default;
+$filter-builder-item-operator-bg-focused: ds.$color-bg-info-subtle-active !default;
+
+$filter-builder-item-value-bg: ds.$color-bg-success-subtle !default;
+$filter-builder-item-value-bg-hovered: ds.$color-bg-success-subtle-hovered !default;
+$filter-builder-item-value-bg-focused: ds.$color-bg-success-subtle-active !default;
+$filter-builder-menu-icon: ds.$color-content !default;
+
+$filter-builder-content-disabled: ds.$color-content-disabled !default;
+
+$filter-builder-range-separator-content: ds.$color-content-subtle !default;

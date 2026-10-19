@@ -54,9 +54,9 @@ import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import type { Module } from '@ts/grids/grid_core/types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
-import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import { StickyPosition } from '../sticky_columns/const';
+import gridCoreUtils from '../utils';
 import {
   addExpandColumn,
   assignColumns,
@@ -2340,7 +2340,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   /**
-   * @extended: m_adaptivity
+   * @extended: adaptivity
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isAdaptiveHiddenColumn(column: Column): boolean {

@@ -8,7 +8,7 @@ import type * as dxForm from '@js/ui/form';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { computed, signal } from '@ts/core/state_manager/index';
 import { extend } from '@ts/core/utils/m_extend';
-import { forEachFormItems } from '@ts/grids/grid_core/editing/m_editing_utils';
+import { forEachFormItems } from '@ts/grids/grid_core/editing/editing_utils';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../../columns_controller/columns_controller';

@@ -16,7 +16,7 @@ import {
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
 import type { ModuleType } from '@ts/grids/grid_core/types';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import treeListCore from '../core';
 

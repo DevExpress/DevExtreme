@@ -688,7 +688,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 850 });
+        scrollable.scrollTo({ top: 850 });
         $(scrollable.container()).trigger('scroll');
         this.clock.tick(10);
         $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
@@ -727,7 +727,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(500);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 2020 });
+        dataGrid.getScrollable().scrollTo({ top: 2020 });
         this.clock.tick(500);
 
         // assert
@@ -4472,7 +4472,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // act
         this.clock.tick(10);
-        dataGrid.getScrollable().scrollTo({ x: 0, y: 10000 });
+        dataGrid.getScrollable().scrollTo({ left: 0, top: 10000 });
 
         this.clock.tick(10);
         const rowData = dataGrid.getTopVisibleRowData();
@@ -5027,7 +5027,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
         this.clock.tick(10);
 
-        dataGrid.getScrollable().scrollTo({ y: 10 });
+        dataGrid.getScrollable().scrollTo({ top: 10 });
         this.clock.tick(10);
 
         // act

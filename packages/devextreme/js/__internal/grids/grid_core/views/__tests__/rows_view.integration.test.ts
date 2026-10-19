@@ -1,11 +1,16 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import { removeEvent } from '@js/common/core/events/remove';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { Properties as DataGridProperties } from '@js/ui/data_grid';
+import type { Properties as DataGridProperties, RowPreparedEvent } from '@js/ui/data_grid';
 
 import {
-  afterTest, beforeTest, createDataGrid,
+  afterTest,
+  beforeTest,
+  createDataGrid,
+  flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
 
 interface TemplateArgs {
@@ -94,5 +99,67 @@ describe('RowsView renderCompleted with async templates', () => {
     instance.getView('rowsView').render();
 
     expect(rowKeysOnRenderCompleted).toEqual([FIRST_PAGE_ROW_KEYS]);
+  });
+});
+
+describe('RowsView row changes', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const CONTENT_HEIGHT = 500;
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  const createGrid = async () => {
+    const dataSource = ROWS.map((row) => ({ ...row }));
+    const contentMinHeightsOnRowRemove: string[] = [];
+
+    const grid = await createDataGrid({
+      dataSource,
+      repaintChangesOnly: true,
+      onRowPrepared: ({ rowElement }: RowPreparedEvent) => {
+        eventsEngine.on(rowElement, removeEvent, () => {
+          const content = rowElement.closest<HTMLElement>('.dx-datagrid-rowsview .dx-datagrid-content');
+
+          if (content) {
+            contentMinHeightsOnRowRemove.push(content.style.minHeight);
+          }
+        });
+      },
+    });
+    const content = (grid.$container.get(0) as HTMLElement)
+      .querySelector<HTMLElement>('.dx-datagrid-rowsview .dx-datagrid-content') as HTMLElement;
+
+    content.style.height = `${CONTENT_HEIGHT}px`;
+    contentMinHeightsOnRowRemove.length = 0;
+
+    const removeFirstRow = async (): Promise<void> => {
+      dataSource.shift();
+      const refreshing = grid.instance.refresh(true);
+      await flushAsync();
+      await refreshing;
+    };
+
+    return {
+      ...grid, content, contentMinHeightsOnRowRemove, removeFirstRow,
+    };
+  };
+
+  describe('when a rendered row is removed', () => {
+    it('should keep the content height while the row is removed', async () => {
+      const { contentMinHeightsOnRowRemove, removeFirstRow } = await createGrid();
+
+      await removeFirstRow();
+
+      expect(contentMinHeightsOnRowRemove).toEqual([`${CONTENT_HEIGHT}px`]);
+    });
+
+    it('should restore the content min-height after the row is removed', async () => {
+      const { content, removeFirstRow } = await createGrid();
+      content.style.minHeight = '100px';
+
+      await removeFirstRow();
+
+      expect(content.style.minHeight).toBe('100px');
+    });
   });
 });

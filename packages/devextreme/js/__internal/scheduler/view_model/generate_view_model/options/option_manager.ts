@@ -102,6 +102,7 @@ export class OptionManager {
         cellDurationMinutes,
         isTimelineView,
         hasAllDayPanel,
+        appointmentMinHeight,
       } = this.options;
       const viewOrientation = panelName === 'allDayPanel' ? 'horizontal' : nativeViewOrientation;
       const isCompactCollector = isAdaptivityEnabled || viewOrientation === 'vertical';
@@ -120,6 +121,7 @@ export class OptionManager {
         collectorCSS,
         DOMMetaData: layoutData.getDOMElementsMetaData(),
         panelName,
+        appointmentMinHeight,
       });
 
       const {

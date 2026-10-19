@@ -17,7 +17,7 @@ import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
@@ -27,13 +27,13 @@ import type {
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { Coordinates } from '../columns_resizing_reordering/types';
+import type { ResizingController } from '../grid_view/grid_view';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import gridCoreUtils from '../m_utils';
 import type { ColumnPoint, ModuleType } from '../types';
+import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import { normalizeWidth } from '../views/columns_view';
-import type { ResizingController } from '../views/grid_view';
-import type { RowsView } from '../views/m_rows_view';
+import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
 import { CLASSES } from './const';
 

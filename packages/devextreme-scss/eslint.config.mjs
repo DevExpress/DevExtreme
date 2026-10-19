@@ -83,4 +83,14 @@ export default [
       }],
     },
   },
+
+  {
+    files: ['build/tokens/transforms.ts', 'build/tokens/build-tokens.ts'],
+    rules: {
+      'no-param-reassign': ['error', {
+        props: true,
+        ignorePropertyModificationsFor: ['token', 'node'],
+      }],
+    },
+  },
 ];

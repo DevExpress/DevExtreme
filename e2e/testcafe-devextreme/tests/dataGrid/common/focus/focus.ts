@@ -189,8 +189,8 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
       .ok();
 
     // act
-    await grid.scrollBy(t, { y: 200 });
-    await grid.scrollBy(t, { y: 200 });
+    await grid.scrollBy(t, { top: 200 });
+    await grid.scrollBy(t, { top: 200 });
     await grid.scrollTo(t, { top: 0 });
     await t.wait(300);
 

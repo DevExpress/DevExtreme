@@ -1,4 +1,4 @@
-import { rowsModule } from '@ts/grids/grid_core/views/m_rows_view';
+import { rowsModule } from '@ts/grids/grid_core/views/rows_view';
 
 import gridCore from '../core';
 

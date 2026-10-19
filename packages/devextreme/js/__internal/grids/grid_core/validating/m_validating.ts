@@ -27,17 +27,17 @@ import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
 import type { NormalizedEditCellOptions } from '../editing/types';
-import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
+import gridCoreUtils from '../utils';
 import {
   INVALIDATE_CLASS,
   VALIDATION_CANCELLED,
@@ -799,7 +799,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       changes.forEach((change) => {
         const { key } = change;
         const validationData = this._validatingController._getValidationData(key);
-        if (validationData && change.type && validationData.pageIndex === this._pageIndex && change?.pageIndex !== this._pageIndex) {
+        if (validationData && change.type && validationData.pageIndex === this._pageIndex && this._pageIndex !== undefined) {
           addInValidItem(change, validationData);
         }
       });

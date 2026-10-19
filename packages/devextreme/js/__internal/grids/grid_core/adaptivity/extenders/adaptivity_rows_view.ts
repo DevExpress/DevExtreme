@@ -8,17 +8,11 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { ModuleType } from '@ts/grids/grid_core/types';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import {
-  ADAPTIVE_COLUMN_NAME_CLASS,
-  ADAPTIVE_DETAIL_ROW_CLASS,
-  ADAPTIVE_ROW_TYPE,
-  EXPAND_ARIA_NAME,
-  HIDDEN_COLUMN_CLASS,
-  HIDDEN_COLUMNS_WIDTH,
-  LAST_DATA_CELL_CLASS,
+  ADAPTIVE_ROW_TYPE, CLASSES, EXPAND_ARIA_NAME, HIDDEN_COLUMNS_WIDTH,
 } from '../const';
 import type { AdaptivityDataController } from '../types';
 
@@ -47,7 +41,7 @@ export const adaptivityRowsViewExtender = (
     const $row = super._createRow.apply(this, arguments as any);
 
     if (row?.rowType === ADAPTIVE_ROW_TYPE && row.key === this._dataController.getAdaptiveExpandedKey()) {
-      $row.addClass(ADAPTIVE_DETAIL_ROW_CLASS);
+      $row.addClass(CLASSES.adaptiveDetailRow);
     }
     return $row;
   }
@@ -59,7 +53,7 @@ export const adaptivityRowsViewExtender = (
     const hiddenColumnsLength = this.adaptiveColumnsController.getHiddenColumns().length;
 
     if (hidingColumnsQueueLength && !hiddenColumnsLength) {
-      getDataCellElements($row).last().addClass(LAST_DATA_CELL_CLASS);
+      getDataCellElements($row).last().addClass(CLASSES.lastDataCell);
     }
 
     if (options.row.rowType === 'data') {
@@ -81,7 +75,7 @@ export const adaptivityRowsViewExtender = (
     super._cellPrepared.apply(this, arguments as any);
 
     if (options.row.rowType !== ADAPTIVE_ROW_TYPE && options.column.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
-      $cell.addClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+      $cell.addClass(this.addWidgetPrefix(CLASSES.hiddenColumn));
     }
   }
 
@@ -120,6 +114,6 @@ export const adaptivityRowsViewExtender = (
     // @ts-expect-error
     const isClickable = super.isClickableElement?.($target) ?? false;
 
-    return isClickable || !!$target.closest(`.${ADAPTIVE_COLUMN_NAME_CLASS}`).length;
+    return isClickable || !!$target.closest(`.${CLASSES.commandAdaptive}`).length;
   }
 };

@@ -70,7 +70,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling witho
   await checkAIColumnTexts(t, dataGrid, 11);
 
   // act
-  await dataGrid.scrollTo(t, { y: 1000 });
+  await dataGrid.scrollTo(t, { top: 1000 });
 
   // assert
   await t
@@ -177,7 +177,7 @@ test('DataGrid should send an AI request for rendered rows after scrolling with 
   await checkAIColumnTexts(t, dataGrid, 11);
 
   // act
-  await dataGrid.scrollTo(t, { y: 1000 });
+  await dataGrid.scrollTo(t, { top: 1000 });
 
   // assert
   await t

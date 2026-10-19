@@ -1,0 +1,10 @@
+@mixin publish {
+  --dx-chat-message-box-border: var(--dx-chat-border);
+  --dx-chat-message-editing-preview-caption-font-size: var(--dx-typography-xs-font-size);
+  --dx-chat-typing-indicator-bubble-bg: var(--dx-chat-bubble-secondary-bg);
+  --dx-chat-typing-indicator-bubble-border-radius: var(--dx-chat-bubble-border-radius);
+  --dx-chat-typing-indicator-font-size: var(--dx-chat-information-font-size);
+  --dx-chat-typing-indicator-grid-template-columns: var(--dx-chat-message-group-start-grid-template-columns);
+  --dx-chat-typing-indicator-padding: var(--dx-chat-message-group-padding);
+  --dx-chat-typing-indicator-row-gap: var(--dx-chat-message-group-gap);
+}
