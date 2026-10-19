@@ -1,3 +1,4 @@
+import { cleanDataRecursive } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/base_component';
@@ -16,14 +17,16 @@ export function TemplateWrapper<
   return class Template extends BaseInfernoComponent<TProps> {
     private readonly ref = createRef<HTMLDivElement>();
 
-    private $container?: dxElementWrapper;
+    private clearContainer(): void {
+      cleanDataRecursive(this.ref.current, true);
+      $(this.ref.current).empty();
+    }
 
     private renderTemplate(): void {
-      this.$container?.remove();
-      this.$container = $('<div>').appendTo($(this.ref.current));
+      this.clearContainer();
 
       template.render({
-        container: this.$container,
+        container: $(this.ref.current),
         model: this.props,
       });
     }
@@ -45,7 +48,7 @@ export function TemplateWrapper<
     }
 
     public componentWillUnmount(): void {
-      this.$container?.remove();
+      this.clearContainer();
     }
   };
 }
