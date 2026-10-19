@@ -524,6 +524,6 @@ QUnit.module('CSS position classes after screen size change', () => {
             { row: 1, col: 2, colspan: 2 },
         ], 'initial lg layout');
         assert.deepEqual(getLocations(), lgLocations, 'lg layout is restored after xs -> sm -> md -> sm -> xs -> lg');
-        assert.deepEqual(instance._items.filter((item) => !item.merged).map((item) => item.colSpan), [3, undefined, 2, 2], 'colSpan of items is intact');
+        assert.deepEqual(instance._items.map((item) => item.colSpan), [3, undefined, 2, 2], 'colSpan of items is intact');
     });
 });
