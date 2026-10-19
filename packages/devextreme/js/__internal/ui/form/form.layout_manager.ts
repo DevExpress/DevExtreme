@@ -610,18 +610,22 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       if (alignItemLabels || item.alignItemLabels || item.colSpan) {
         item.col = this._getColByIndex(result.length - 1, colCount);
       }
-      if (item.colSpan > 1 && (item.col + item.colSpan <= colCount)) {
+      const colSpan = this._getEffectiveColSpan(item, colCount);
+      if (colSpan > 1) {
         const itemsMergedByCol: ExtendedItem[] = [];
-        for (let j = 0; j < item.colSpan - 1; j += 1) {
+        for (let j = 0; j < colSpan - 1; j += 1) {
           itemsMergedByCol.push({ merged: true } as ExtendedItem);
         }
         result = result.concat(itemsMergedByCol);
-      } else {
-        // @ts-expect-error ts-error
-        delete item.colSpan;
       }
     }
     this._setItems(result);
+  }
+
+  _getEffectiveColSpan(item: ExtendedItem, colCount: number): number {
+    const { colSpan, col } = item;
+    const fits = colSpan > 1 && isDefined(col) && col + colSpan <= colCount;
+    return fits ? colSpan : 1;
   }
 
   _getColByIndex(index: number, colCount: number): number {
@@ -646,8 +650,9 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
           col: this._getColByIndex(i, colCount),
         };
 
-        if (isDefined(item.colSpan)) {
-          location.colspan = item.colSpan;
+        const colSpan = this._getEffectiveColSpan(item, colCount);
+        if (colSpan > 1) {
+          location.colspan = colSpan;
         }
         if (isDefined(item.rowSpan)) {
           location.rowspan = item.rowSpan;
