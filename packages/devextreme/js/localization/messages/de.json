@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Das Schließen des KI-Assistenten-Chats bricht laufende Anfragen ab. Möchten Sie den Chat schließen?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat ist leer",
         "dxDataGrid-aiChatEmptyViewPrompt": "Der KI-Assistent beantwortet gerne Ihre Fragen.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "KI-Eingabeaufforderungseditor",
         "dxDataGrid-aiPromptEditorPlaceholder": "KI auffordern, Spaltenwerte zu generieren...",
         "dxDataGrid-aiPromptEditorApplyButton": "Anwenden",

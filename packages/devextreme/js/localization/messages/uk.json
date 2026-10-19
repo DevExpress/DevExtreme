@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Закриття чату помічника ШІ перерве поточні запити. Закрити чат?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Чат порожній",
         "dxDataGrid-aiChatEmptyViewPrompt": "Помічник ШІ готовий відповісти на ваші запитання.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Редактор запитів AI",
         "dxDataGrid-aiPromptEditorPlaceholder": "Опишіть, які значення має згенерувати AI...",
         "dxDataGrid-aiPromptEditorApplyButton": "Застосувати",

@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Tekoälyavustajan chatin sulkeminen keskeyttää käynnissä olevat pyynnöt. Haluatko sulkea chatin?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat on tyhjä",
         "dxDataGrid-aiChatEmptyViewPrompt": "Tekoälyavustaja on valmis vastaamaan kysymyksiisi.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI-kehotemuokkain",
         "dxDataGrid-aiPromptEditorPlaceholder": "Pyydä AI:ta luomaan sarakkeen arvot...",
         "dxDataGrid-aiPromptEditorApplyButton": "Käytä",

@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "AI アシスタントのチャットを閉じると、進行中のリクエストが中止されます。チャットを閉じますか？",
         "dxDataGrid-aiAChatEmptyViewMessage": "チャットは空です",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI アシスタントはご質問にお答えする準備ができています。",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI プロンプト エディター",
         "dxDataGrid-aiPromptEditorPlaceholder": "AI に列の値の生成を依頼する",
         "dxDataGrid-aiPromptEditorApplyButton": "適用",
