@@ -64,10 +64,10 @@ import type {
   RowKey,
   Views,
 } from '../types';
+import gridCoreUtils from '../utils';
 import type {
   CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRowEvent,
 } from '../views/types';
-import gridCoreUtils from '../utils';
 import {
   ACTION_OPTION_NAMES,
   BUTTON_NAMES,
