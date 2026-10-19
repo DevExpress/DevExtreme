@@ -90,10 +90,16 @@ export const useApi = () => {
       alertError(getErrorMessage(err));
     }
   }, [alertError, updateLastMessageContent]);
+  const clearMessages = useCallback(() => {
+    store.length = 0;
+    setAlerts([]);
+    dataSource.reload();
+  }, []);
   return {
     alerts,
     insertMessage,
     fetchAIResponse,
     regenerateLastAIResponse,
+    clearMessages,
   };
 };

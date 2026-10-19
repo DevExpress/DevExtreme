@@ -35,10 +35,17 @@ interface DelayedRendererOptions {
 function createDelayedRenderer({ delay = 20, onRender }: DelayedRendererOptions) {
   let queue: string[] = [];
   let rendering = false;
+  let idleResolve: (() => void) | null = null;
+
+  function notifyIdle() {
+    idleResolve?.();
+    idleResolve = null;
+  }
 
   function processQueue() {
     if (!queue.length) {
       rendering = false;
+      notifyIdle();
       return;
     }
 
@@ -62,9 +69,20 @@ function createDelayedRenderer({ delay = 20, onRender }: DelayedRendererOptions)
   function stop() {
     queue = [];
     rendering = false;
+    notifyIdle();
   }
 
-  return { pushChunk, stop };
+  function waitForIdle(): Promise<void> {
+    if (!rendering) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+      idleResolve = resolve;
+    });
+  }
+
+  return { pushChunk, stop, waitForIdle };
 }
 
 @Injectable()
@@ -219,6 +237,8 @@ export class AppService {
       delayedRenderer.stop();
     };
 
+    this.abortController.signal.addEventListener('abort', delayedRenderer.stop);
+
     try {
       await this.aiService.getAIResponseStream(this.messages, {
         onAborted,
@@ -226,8 +246,11 @@ export class AppService {
         signal: this.abortController.signal,
       });
 
+      await delayedRenderer.waitForIdle();
+
       this.typingUsersSubject.next([]);
     } catch (e: unknown) {
+      delayedRenderer.stop();
       this.typingUsersSubject.next([]);
 
       if (!this.abortController?.signal.aborted) {
@@ -240,6 +263,14 @@ export class AppService {
       this.abortController = null;
       this.isStreamingSubject.next(false);
     }
+  }
+
+  clearMessages(): void {
+    this.store = [];
+    this.messages = [];
+    this.alertsSubject.next([]);
+    this.typingUsersSubject.next([]);
+    this.dataSource.reload();
   }
 
   onMessageEntered({ message }: DxChatTypes.MessageEnteredEvent): void {

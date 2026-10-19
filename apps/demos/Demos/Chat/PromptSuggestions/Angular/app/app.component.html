@@ -1,28 +1,44 @@
 <div class="demo-container">
-  <dx-chat
-    [class.chat-disabled]="isDisabled"
-    [dataSource]="dataSource"
-    [reloadOnChange]="false"
-    [showAvatar]="false"
-    [showDayHeaders]="false"
-    [user]="user"
-    height="520"
-    [typingUsers]="typingUsers$ | async"
-    [alerts]="alerts$ | async"
-    [speechToTextEnabled]="true"
-    [inputFieldText]="inputFieldText"
-    [suggestions]="suggestions"
-    (onMessageEntered)="onMessageEntered($event)"
-    (onInputFieldTextChanged)="onInputFieldTextChanged($event)"
-    messageTemplate="messageTemplate"
-  >
-    <div *dxTemplate="let data of 'messageTemplate'">
-      <div
-        class="chat-messagebubble-text"
-        [innerHTML]="convertToHtml(data.message)"
-      ></div>
-    </div>
-  </dx-chat>
+  <div class="ai-chat-card">
+    <dx-toolbar>
+      <dxi-toolbar-item
+        location="before"
+        text="AI Assistant"
+        cssClass="ai-chat-title"
+      >
+      </dxi-toolbar-item>
+      <dxi-toolbar-item
+        location="after"
+        widget="dxButton"
+        [options]="clearButtonOptions"
+      >
+      </dxi-toolbar-item>
+    </dx-toolbar>
+    <dx-chat
+      [class.chat-disabled]="isDisabled"
+      [dataSource]="dataSource"
+      [reloadOnChange]="false"
+      [showAvatar]="false"
+      [showDayHeaders]="false"
+      [user]="user"
+      height="520"
+      [typingUsers]="typingUsers$ | async"
+      [alerts]="alerts$ | async"
+      [speechToTextEnabled]="true"
+      [inputFieldText]="inputFieldText"
+      [suggestions]="suggestions"
+      (onMessageEntered)="onMessageEntered($event)"
+      (onInputFieldTextChanged)="onInputFieldTextChanged($event)"
+      messageTemplate="messageTemplate"
+    >
+      <div *dxTemplate="let data of 'messageTemplate'">
+        <div
+          class="chat-messagebubble-text"
+          [innerHTML]="convertToHtml(data.message)"
+        ></div>
+      </div>
+    </dx-chat>
+  </div>
 
   <div class="options">
     <div class="caption">Suggestion Options</div>
