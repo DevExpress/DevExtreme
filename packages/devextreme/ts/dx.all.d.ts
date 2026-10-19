@@ -38967,6 +38967,15 @@ declare module DevExpress.viz {
       totalText?: string;
     };
     /**
+     * [descr:dxChartTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxChartOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
+    /**
      * [descr:dxChartTooltip]
      */
     export type Tooltip = Omit<
@@ -39749,6 +39758,10 @@ declare module DevExpress.viz {
      * [descr:dxChartOptions.synchronizeMultiAxes]
      */
     synchronizeMultiAxes?: boolean;
+    /**
+     * [descr:dxChartOptions.title]
+     */
+    title?: DevExpress.viz.dxChart.Title | string;
     /**
      * [descr:dxChartOptions.tooltip]
      */
