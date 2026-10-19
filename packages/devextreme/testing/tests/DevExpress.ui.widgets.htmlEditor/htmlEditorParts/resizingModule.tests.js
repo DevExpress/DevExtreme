@@ -44,6 +44,7 @@ const moduleConfig = {
             editorInstance: {
                 on: () => {},
                 off: () => {},
+                addCleanCallback: () => {},
                 $element: () => this.$element,
                 _createComponent: ($element, widget, options) => new widget($element, options),
                 _getQuillContainer: () => this.$element

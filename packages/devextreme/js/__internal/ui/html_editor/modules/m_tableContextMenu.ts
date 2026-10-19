@@ -256,7 +256,7 @@ if (Quill) {
         // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
         this.enabled = value;
         if (value) {
-          this._enableContextMenu();
+          this._enableContextMenu(this.editorInstance.option('tableContextMenu')?.items);
         } else {
           this.clean();
         }
