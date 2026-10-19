@@ -101,7 +101,7 @@ export interface AIDialogResult {
 export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _abort?: () => void;
 
-  private _aiIntegration: AIIntegration;
+  private _aiIntegration?: AIIntegration;
 
   private _askAIPrompt = '';
 
@@ -584,7 +584,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     const { _currentCommand: uiCommand } = this;
     const aiCommandName = uiCommand && getAICommandName(this._commandsMap[uiCommand]?.name);
 
-    if (!(aiCommandName && this._aiIntegration[aiCommandName])) {
+    if (!(aiCommandName && this._aiIntegration?.[aiCommandName])) {
       return;
     }
 
@@ -798,13 +798,27 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     $overlayContent.attr('aria-labelledby', id);
   }
 
-  updateAIIntegration(aiIntegration: AIIntegration): void {
+  updateAIIntegration(aiIntegration?: AIIntegration): void {
     this._processCommandCompletion(this._getInitialDialogState());
     this._aiIntegration = aiIntegration;
-    this._executeAICommand();
+
+    if (!this._isOpen()) {
+      return;
+    }
+
+    if (aiIntegration) {
+      this._executeAICommand();
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
+      this._popup.hide();
+    }
   }
 
   show(payload: AIDialogShowPayload): DialogPromise<AIDialogResult> | undefined {
+    if (!this._aiIntegration) {
+      return undefined;
+    }
+
     const {
       currentCommand, currentCommandOption, commandsMap, text, prompt,
     } = payload;
