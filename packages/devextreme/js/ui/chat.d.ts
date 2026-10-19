@@ -269,6 +269,7 @@ export type ToolCall = {
     /**
      * @docid
      * @public
+     * @type object
      */
     arguments?: Record<string, any>;
     /**
