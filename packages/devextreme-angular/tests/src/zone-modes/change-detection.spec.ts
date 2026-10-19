@@ -96,7 +96,7 @@ async function render(template: string): Promise<ComponentFixture<TestHostCompon
 // Runs a widget-side change the way it arrives in a real app: in a zone app user
 // interaction runs inside the Angular zone, in a zoneless app there is no zone.
 function act<T>(fixture: ComponentFixture<TestHostComponent>, fn: () => T): T {
-  return isZoneless ? fn() : fixture.ngZone!.run(fn);
+  return isZoneless ? fn() : fixture.ngZone.run(fn);
 }
 
 function outputText(fixture: ComponentFixture<TestHostComponent>): string {
@@ -110,15 +110,6 @@ function mouse(target: EventTarget, type: string, x: number, y: number): void {
 }
 
 const wait = (ms: number) => new Promise((resolve) => { setTimeout(resolve, ms); });
-
-// Known zoneless gaps: pending in zoneless mode until the wrapper fix lands.
-function itZonelessGap(name: string, fn: () => Promise<void>): void {
-  if (isZoneless) {
-    xit(name, fn);
-  } else {
-    it(name, fn);
-  }
-}
 
 describe(`Change detection [${mode}]: environment`, () => {
   it(isZoneless ? 'runs without zone.js' : 'runs with zone.js', () => {
@@ -301,7 +292,7 @@ describe(`Change detection [${mode}]: dxTemplate content`, () => {
 });
 
 describe(`Change detection [${mode}]: state changed without a template binding`, () => {
-  itZonelessGap('output subscribed in code updates the view', async () => {
+  it('output subscribed in code updates the view', async () => {
     const fixture = await render(`
       <dx-data-grid [dataSource]="rows" keyExpr="id">
         <dxo-selection mode="multiple"></dxo-selection>
@@ -318,7 +309,7 @@ describe(`Change detection [${mode}]: state changed without a template binding`,
     expect(outputText(fixture)).toBe('2');
   });
 
-  itZonelessGap('handler attached with instance.on() updates the view', async () => {
+  it('handler attached with instance.on() updates the view', async () => {
     const fixture = await render(`
       <dx-data-grid [dataSource]="rows" keyExpr="id">
         <dxo-selection mode="multiple"></dxo-selection>
@@ -335,7 +326,7 @@ describe(`Change detection [${mode}]: state changed without a template binding`,
     expect(outputText(fixture)).toBe('2');
   });
 
-  itZonelessGap('one-way [formData] changed in place by the Form updates the view', async () => {
+  it('one-way [formData] changed in place by the Form updates the view', async () => {
     const fixture = await render(`
       <dx-form [formData]="formData"></dx-form>
       <span class="out">{{ formData.name }}</span>

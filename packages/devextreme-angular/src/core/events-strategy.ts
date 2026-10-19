@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { EventEmitter, NgZone } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, NgZone } from '@angular/core';
 import { DxComponent } from './component';
 
 interface IEventSubscription {
@@ -11,7 +11,11 @@ export class NgEventsStrategy {
 
   private events: { [key: string]: EventEmitter<any> } = {};
 
-  constructor(private readonly instance: any, private readonly zone: NgZone) { }
+  constructor(
+    private readonly instance: any,
+    private readonly zone: NgZone,
+    private readonly changeDetectorRef?: ChangeDetectorRef,
+  ) { }
 
   hasEvent(name: string) {
     return this.getEmitter(name).observers.length !== 0;
@@ -26,6 +30,7 @@ export class NgEventsStrategy {
       } else {
         this.zone.run(() => emitter.next(args?.[0]));
       }
+      this.changeDetectorRef?.markForCheck();
     }
   }
 
@@ -81,7 +86,11 @@ export class NgEventsStrategy {
 export class EmitterHelper {
   lockedValueChangeEvent = false;
 
-  constructor(private readonly zone: NgZone, private component: DxComponent) { }
+  constructor(
+    private readonly zone: NgZone,
+    private component: DxComponent,
+    private readonly changeDetectorRef?: ChangeDetectorRef,
+  ) { }
 
   fireNgEvent(eventName: string, eventArgs: any) {
     if (this.lockedValueChangeEvent && eventName === 'valueChange') {
@@ -92,6 +101,7 @@ export class EmitterHelper {
       this.zone.run(() => {
         emitter.next(eventArgs?.[0]);
       });
+      this.changeDetectorRef?.markForCheck();
     }
   }
 

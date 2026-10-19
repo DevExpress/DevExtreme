@@ -2,6 +2,7 @@
 import {
   TransferState,
   makeStateKey,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   NgZone,
@@ -87,6 +88,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   templateUpdateRequired = false;
 
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   private _updateTemplates() {
     if (this.templates.length && this.templateUpdateRequired) {
       const updatedTemplates = {};
@@ -106,6 +109,10 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
       const value = e.name === e.fullName ? e.value : e.component.option(e.name);
       this.eventHelper.fireNgEvent(`${e.name}Change`, [value]);
       this.optionChangedHandlers.emit(e);
+
+      if (!this.widgetUpdateLocked) {
+        this.changeDetectorRef.markForCheck();
+      }
     });
   }
 
@@ -123,10 +130,11 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   protected _createEventEmitters(events) {
     const zone = this.ngZone;
+    const { changeDetectorRef } = this;
     this.eventHelper.createEmitters(events);
 
     this._initialOptions.eventsStrategy = (instance) => {
-      const strategy = new NgEventsStrategy(instance, zone);
+      const strategy = new NgEventsStrategy(instance, zone, changeDetectorRef);
 
       events.filter((event) => event.subscribe).forEach((event) => {
         strategy.addEmitter(event.subscribe, this[event.emit]);
@@ -137,7 +145,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
     this._initialOptions.nestedComponentOptions = function (component) {
       return {
-        eventsStrategy: (instance) => new NgEventsStrategy(instance, zone),
+        eventsStrategy: (instance) => new NgEventsStrategy(instance, zone, changeDetectorRef),
         nestedComponentOptions: component.option('nestedComponentOptions'),
       };
     };
@@ -238,7 +246,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templates = [];
     templateHost.setHost(this);
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this));
-    this.eventHelper = new EmitterHelper(ngZone, this);
+    this.eventHelper = new EmitterHelper(ngZone, this, this.changeDetectorRef);
   }
 
   ngOnChanges(changes: SimpleChanges) {
