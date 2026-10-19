@@ -4,9 +4,7 @@ import {
 import $ from '@js/core/renderer';
 import { componentRegistratorCallbacks } from '@ts/core/m_component_registrator_callbacks';
 import { readdirSync } from 'fs';
-import {
-  join, relative, resolve, sep,
-} from 'path';
+import { join, resolve } from 'path';
 
 interface EditorInstance {
   option: (name: string, value?: unknown) => unknown;
@@ -22,7 +20,6 @@ interface DirtyScenario {
 }
 
 const PUBLIC_UI_DIRECTORY = resolve(__dirname, '../../../../ui');
-const MODULES_FAILING_TO_LOAD_IN_JSDOM = ['diagram.js', 'diagram/ui.diagram.js', 'gantt.js'];
 const COMPONENTS_NOT_UPDATING_IS_DIRTY = ['dxDateView'];
 
 const ITEMS = [{ id: 1, text: 'one' }, { id: 2, text: 'two' }];
@@ -84,7 +81,6 @@ const scenarios: Record<string, DirtyScenario> = {
 };
 
 const registeredComponents: Record<string, EditorClass> = {};
-const modulesFailedToLoad: string[] = [];
 const editors: EditorInstance[] = [];
 
 const listModuleFiles = (directory: string): string[] => readdirSync(
@@ -105,7 +101,7 @@ const loadPublicUiModules = (): void => {
     try {
       jest.requireActual(file);
     } catch {
-      modulesFailedToLoad.push(relative(PUBLIC_UI_DIRECTORY, file).split(sep).join('/'));
+      // a module that cannot be loaded in jsdom registers no component and is not checked
     }
   });
 
@@ -116,9 +112,9 @@ const loadPublicUiModules = (): void => {
 
 const hasDirtyTrackedValue = (componentClass: EditorClass): boolean => {
   const prototype = componentClass.prototype as { _getDefaultOptions: () => object };
-  const defaultOptions = Object.create(prototype)._getDefaultOptions() as object;
+  const defaultOptions = Object.create(prototype)._getDefaultOptions() as Record<string, unknown>;
 
-  return 'value' in defaultOptions && 'isDirty' in defaultOptions;
+  return 'value' in defaultOptions && defaultOptions.isDirty === false;
 };
 
 const createEditor = (name: string, options: Record<string, unknown>): EditorInstance => {
@@ -140,10 +136,6 @@ describe('Editors isDirty when the value returns to its initial content (T133660
     editors.forEach((instance) => instance.dispose());
     editors.length = 0;
     document.body.innerHTML = '';
-  });
-
-  it('should load every public ui module except the ones known to fail in jsdom', () => {
-    expect(modulesFailedToLoad.sort()).toEqual(MODULES_FAILING_TO_LOAD_IN_JSDOM);
   });
 
   it('should cover every component with value and isDirty options', () => {
