@@ -1341,6 +1341,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (isRowEditMode) {
       this._focusEditFormCell($cell);
       setTimeout(
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
         this._editingController.saveEditData.bind(this._editingController),
       );
       d.resolve();
