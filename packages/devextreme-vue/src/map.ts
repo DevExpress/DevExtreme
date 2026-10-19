@@ -16,6 +16,8 @@ import {
  MapType,
  MarkerClickEvent,
  CalculateOsmRouteInfo,
+ MapLocation,
+ OsmRouteResult,
  OsmTileServer,
  OsmTileServerConfig,
  RouteMode,
@@ -255,8 +257,8 @@ const DxProviderConfigConfig = {
     "update:useAdvancedMarkers": null,
   },
   props: {
-    calculateLocation: Function as PropType<((query: string) => any)>,
-    calculateRoute: Function as PropType<((params: CalculateOsmRouteInfo) => any)>,
+    calculateLocation: Function as PropType<((query: string) => PromiseLike<MapLocation | undefined>)>,
+    calculateRoute: Function as PropType<((params: CalculateOsmRouteInfo) => PromiseLike<OsmRouteResult>)>,
     mapId: String,
     tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType) => string | OsmTileServerConfig | undefined)) | OsmTileServerConfig | string>,
     useAdvancedMarkers: Boolean

@@ -8,7 +8,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-import type { CalculateOsmRouteInfo, OsmTileServer } from 'devextreme/ui/map';
+import type { CalculateOsmRouteInfo, MapLocation, OsmRouteResult, OsmTileServer } from 'devextreme/ui/map';
 
 import {
     DxIntegrationModule,
@@ -25,18 +25,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoMapProviderConfigComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get calculateLocation(): ((query: string) => any) {
+    get calculateLocation(): ((query: string) => PromiseLike<MapLocation | undefined>) {
         return this._getOption('calculateLocation');
     }
-    set calculateLocation(value: ((query: string) => any)) {
+    set calculateLocation(value: ((query: string) => PromiseLike<MapLocation | undefined>)) {
         this._setOption('calculateLocation', value);
     }
 
     @Input()
-    get calculateRoute(): ((params: CalculateOsmRouteInfo) => any) {
+    get calculateRoute(): ((params: CalculateOsmRouteInfo) => PromiseLike<OsmRouteResult>) {
         return this._getOption('calculateRoute');
     }
-    set calculateRoute(value: ((params: CalculateOsmRouteInfo) => any)) {
+    set calculateRoute(value: ((params: CalculateOsmRouteInfo) => PromiseLike<OsmRouteResult>)) {
         this._setOption('calculateRoute', value);
     }
 

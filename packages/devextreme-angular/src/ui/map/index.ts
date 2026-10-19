@@ -19,7 +19,7 @@ import {
 } from '@angular/core';
 
 
-import type { MarkerClickEvent, ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, CalculateOsmRouteInfo, OsmTileServer, RouteMode, MapType } from 'devextreme/ui/map';
+import type { MarkerClickEvent, ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, CalculateOsmRouteInfo, MapLocation, OsmRouteResult, OsmTileServer, RouteMode, MapType } from 'devextreme/ui/map';
 
 import DxMap from 'devextreme/ui/map';
 
@@ -266,10 +266,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * [descr:dxMapOptions.providerConfig]
      */
     @Input()
-    get providerConfig(): { calculateLocation?: ((query: string) => any), calculateRoute?: ((params: CalculateOsmRouteInfo) => any), mapId?: string, tileServer?: OsmTileServer | undefined, useAdvancedMarkers?: boolean } {
+    get providerConfig(): { calculateLocation?: ((query: string) => PromiseLike<MapLocation | undefined>), calculateRoute?: ((params: CalculateOsmRouteInfo) => PromiseLike<OsmRouteResult>), mapId?: string, tileServer?: OsmTileServer | undefined, useAdvancedMarkers?: boolean } {
         return this._getOption('providerConfig');
     }
-    set providerConfig(value: { calculateLocation?: ((query: string) => any), calculateRoute?: ((params: CalculateOsmRouteInfo) => any), mapId?: string, tileServer?: OsmTileServer | undefined, useAdvancedMarkers?: boolean }) {
+    set providerConfig(value: { calculateLocation?: ((query: string) => PromiseLike<MapLocation | undefined>), calculateRoute?: ((params: CalculateOsmRouteInfo) => PromiseLike<OsmRouteResult>), mapId?: string, tileServer?: OsmTileServer | undefined, useAdvancedMarkers?: boolean }) {
         this._setOption('providerConfig', value);
     }
 
@@ -473,7 +473,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
-    @Output() providerConfigChange: EventEmitter<{ calculateLocation?: ((query: string) => any), calculateRoute?: ((params: CalculateOsmRouteInfo) => any), mapId?: string, tileServer?: OsmTileServer | undefined, useAdvancedMarkers?: boolean }>;
+    @Output() providerConfigChange: EventEmitter<{ calculateLocation?: ((query: string) => PromiseLike<MapLocation | undefined>), calculateRoute?: ((params: CalculateOsmRouteInfo) => PromiseLike<OsmRouteResult>), mapId?: string, tileServer?: OsmTileServer | undefined, useAdvancedMarkers?: boolean }>;
 
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
