@@ -20,9 +20,9 @@ import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_he
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type DataSourceAdapter from '../data_source_adapter/data_source_adapter';
 import type { RawItemData } from '../data_source_adapter/types';
-import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
+import gridCoreUtils from '../utils';
 import type { ColumnsController } from './columns_controller';
 import {
   COLUMN_CHOOSER_LOCATION,

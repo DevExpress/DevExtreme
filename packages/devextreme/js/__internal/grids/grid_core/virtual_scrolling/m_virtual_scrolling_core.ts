@@ -12,7 +12,7 @@ import type {
   VirtualItemsCount,
 } from '@ts/grids/grid_core/virtual_data_loader/types';
 
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import { VirtualDataLoader } from '../virtual_data_loader/virtual_data_loader';
 
 const SCROLLING_MODE_INFINITE = 'infinite';

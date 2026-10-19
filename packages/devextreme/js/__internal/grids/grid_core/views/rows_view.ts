@@ -50,8 +50,8 @@ import type { ElementOffset } from '@ts/ui/scroll_view/types';
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import { isLocalStore } from '../data_source_adapter/utils/store';
 import type { EditingController } from '../editing/m_editing';
-import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
+import gridCoreUtils from '../utils';
 import { ColumnsView } from './columns_view';
 import { CLASSES as VIEW_CLASSES } from './const';
 import type {

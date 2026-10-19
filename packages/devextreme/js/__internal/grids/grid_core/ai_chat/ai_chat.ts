@@ -20,7 +20,7 @@ import ProgressBar from '@ts/ui/progress_bar';
 
 import type { AIMessage } from '../ai_assistant/types';
 import { isAIMessage } from '../ai_assistant/utils';
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import {
   CLASSES, CLEAR_CHAT_ICON,
   DEFAULT_CHAT_OPTIONS,
