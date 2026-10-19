@@ -2498,6 +2498,92 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         });
     });
 
+    [false, true].forEach(withTooltip => {
+        ['remove', 'update'].forEach(action => {
+            QUnit.test(`marker removal restores focus on ${action} (tooltip: ${withTooltip})`, async function(assert) {
+                const options = { location, ...(withTooltip ? { tooltip: 'Start' } : { onClick: sinon.spy() }) };
+                const map = await createMap({ markers: [options] });
+                positionMarker();
+                getMarker().focus();
+                assert.strictEqual(document.activeElement, getMarker(), 'marker is initially focused');
+                const target = getOpenLayersMapTarget();
+                const focus = sinon.spy(target, 'focus');
+
+                if(action === 'remove') {
+                    await map.removeMarker(options);
+                } else {
+                    map.option('markers', [{ ...options }]);
+                    await map._lastAsyncAction;
+                }
+
+                assert.strictEqual(document.activeElement, target, 'focus moves to the map');
+                assert.ok(focus.calledOnceWithExactly({ preventScroll: true }), 'focus is restored once without scrolling');
+            });
+        });
+    });
+
+    [false, true].forEach(focusOutsideMap => {
+        QUnit.test(`marker removal preserves focus elsewhere (outside map: ${focusOutsideMap})`, async function(assert) {
+            const options = { location, tooltip: 'First' };
+            const map = await createMap({ markers: [options, { location, tooltip: 'Second' }] });
+            const otherMarker = openLayersMock.addedOverlays[1].options.element;
+            positionMarker(otherMarker);
+            const focusTarget = focusOutsideMap ? $('<button>').appendTo('#qunit-fixture')[0] : otherMarker;
+            focusTarget.focus();
+            assert.strictEqual(document.activeElement, focusTarget, 'another element is initially focused');
+            const focus = sinon.spy(getOpenLayersMapTarget(), 'focus');
+
+            await map.removeMarker(options);
+
+            assert.strictEqual(document.activeElement, focusTarget, 'existing focus is preserved');
+            assert.ok(focus.notCalled, 'map does not take focus');
+        });
+    });
+
+    QUnit.test('marker removal during map disposal does not restore focus', async function(assert) {
+        const map = await createMap({ markers: [{ location, tooltip: 'Start' }] });
+        positionMarker();
+        getMarker().focus();
+        assert.strictEqual(document.activeElement, getMarker(), 'marker is initially focused');
+        const focus = sinon.spy(getOpenLayersMapTarget(), 'focus');
+
+        map.dispose();
+
+        assert.ok(focus.notCalled, 'disposing the map does not focus its container');
+    });
+
+    [false, true].forEach(restoreFocus => {
+        QUnit.test(`marker removal in Shadow DOM respects restoreFocus: ${restoreFocus}`, function(assert) {
+            const host = document.createElement('div');
+            document.getElementById('qunit-fixture').appendChild(host);
+            const shadow = host.attachShadow({ mode: 'open' });
+            const container = document.createElement('div');
+            Object.assign(container.style, { width: '600px', height: '400px' });
+            shadow.appendChild(container);
+            const engineMap = createOpenLayersEngine(openLayersMock).createMap(container, { center: location, zoom: 12 });
+            try {
+                const marker = engineMap.addMarker({ location, onClick: sinon.spy() });
+                const element = marker.originalMarker.options.element;
+                positionMarker(element);
+                element.focus();
+                assert.strictEqual(shadow.activeElement, element, 'marker is initially focused');
+                const focus = sinon.spy(container, 'focus');
+
+                marker.dispose(restoreFocus);
+
+                if(restoreFocus) {
+                    assert.strictEqual(shadow.activeElement, container, 'focus moves to the map inside Shadow DOM');
+                    assert.ok(focus.calledOnceWithExactly({ preventScroll: true }), 'focus is restored without scrolling');
+                } else {
+                    assert.ok(focus.notCalled, 'cleanup can suppress focus restoration');
+                }
+            } finally {
+                engineMap.dispose();
+                host.remove();
+            }
+        });
+    });
+
     QUnit.test('removing a focused tooltip focuses the map and detaches render synchronization', async function(assert) {
         const options = { location, tooltip: '<button>Details</button>' };
         const map = await createMap({ markers: [options] });

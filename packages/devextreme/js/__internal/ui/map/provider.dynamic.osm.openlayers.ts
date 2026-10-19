@@ -364,7 +364,8 @@ class OpenLayersMap implements MapEngineMap {
 
         disposed = true;
         if (restoreFocus && !this._disposed
-          && tooltip?.element.contains(domAdapter.getActiveElement(tooltip.element))) {
+          && (element.contains(domAdapter.getActiveElement(element))
+            || tooltip?.element.contains(domAdapter.getActiveElement(tooltip.element)))) {
           (this._container as HTMLElement).focus({ preventScroll: true });
         }
         tooltip?.dispose();
