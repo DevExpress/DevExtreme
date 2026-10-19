@@ -60,7 +60,6 @@ import WidgetCollector from './m_widget_collector';
 
 interface ToolbarModuleOptions extends BaseModuleOptions, dxHtmlEditorToolbar {}
 
-/** A toolbar item's widget (dxButton, dxSelectBox, dxMenu, ...) as the toolbar module drives it */
 interface ToolbarItemWidget {
   NAME?: string;
   $element: () => dxElementWrapper;
@@ -70,12 +69,10 @@ interface ToolbarItemWidget {
   };
 }
 
-/** The `onInitialized` argument of a toolbar item's widget; `component` is always set */
 interface ToolbarItemInitializedEvent {
   component: ToolbarItemWidget;
 }
 
-/** A node of the AI menu: the root, a command, or a command option */
 interface AIMenuItem {
   id: string;
   icon?: string;
@@ -90,7 +87,6 @@ interface AIMenuItem {
 
 type ToolbarItemTemplate = (data: unknown, index: number, element: DxElement) => void;
 
-/** What `_getDefaultItemsConfig()` holds for a predefined item name */
 interface DefaultItemConfig {
   options?: { disabled: boolean };
   template?: ToolbarItemTemplate;
@@ -143,7 +139,7 @@ if (Quill) {
       return isHeaderValue ? `${localize('heading')} ${value}` : localize('normalText');
     }
 
-    // @ts-expect-error localize() takes a string; a numeric accepted value reaches it (Findings)
+    // @ts-expect-error localize() takes a string; acceptedValues may hold numbers and booleans
     return localize(value) || value;
   };
   ToolbarModule = class extends BaseModule {
@@ -194,7 +190,7 @@ if (Quill) {
           const { _renderPopup } = toolbarMenu;
           toolbarMenu._renderPopup = (...args): void => {
             _renderPopup.apply(toolbarMenu, ...args);
-            // @ts-expect-error _renderPopup has just created _popup
+            // @ts-expect-error _popup is typed optional; the first _renderPopup() call creates it
             toolbarMenu._popup.on('showing', () => { this._updateToolbar(true); });
           };
         }
@@ -236,8 +232,7 @@ if (Quill) {
         this._markActiveFormatWidget(name, widget, formats);
       } else {
         this._resetFormatWidget(name, widget);
-        // @ts-expect-error hasOwnProperty.call() gets one argument: always false (see Findings)
-        if (Object.prototype.hasOwnProperty.call(name)) {
+        if (Object.prototype.hasOwnProperty.call(formats, name)) {
           // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete formats[name];
         }
@@ -260,7 +255,7 @@ if (Quill) {
         // @ts-expect-error NAME is typed optional (component.ts); the constructor always sets it
         addNamespace('mousedown', this.editorInstance.NAME),
         (e: DxEvent<MouseEvent>): void => {
-          // @ts-expect-error the mousedown target is the clicked element, not any EventTarget
+          // @ts-expect-error target is typed Element; focus() is declared on HTMLElement
           e.target.focus();
           e.preventDefault();
         },
@@ -346,7 +341,7 @@ if (Quill) {
       context: unknown,
       { which }: KeyboardBinding,
     ): void {
-      // @ts-expect-error the three bindings above register only the keys of FORMAT_HOTKEYS
+      // @ts-expect-error which is optional in KeyboardBinding; the bindings above set it
       const formatName = FORMAT_HOTKEYS[which];
 
       this._updateButtonState(formatName);
@@ -544,12 +539,11 @@ if (Quill) {
     }
 
     _prepareAIMenuItemConfig(item: AIToolbarItem | typeof TOOLBAR_AI_ITEM_NAME): Item {
+      const itemConfig: Partial<AIToolbarItem> = isString(item) ? {} : item;
       const {
-        // @ts-expect-error the 'ai' string has no name: the default applies
         name = TOOLBAR_AI_ITEM_NAME,
-        // @ts-expect-error the 'ai' string has no commands: the default applies
         commands = Object.keys(commandMessageKeys) as AICommandName[],
-      } = item;
+      } = itemConfig;
 
       const commandsMap = buildCommandsMap(commands);
       const menuItems = this._buildMenuItems(commands);

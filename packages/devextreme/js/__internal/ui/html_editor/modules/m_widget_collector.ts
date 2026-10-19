@@ -1,13 +1,11 @@
 import { each } from '@js/core/utils/iterator';
-import type Widget from '@ts/core/widget/widget';
 
-/** A toolbar item's widget (the `component` of its `onInitialized`), stored by the item name */
 interface CollectedWidget<TInstance> {
   name: string;
   instance: TInstance;
 }
 
-export default class WidgetCollector<TInstance = Widget> {
+export default class WidgetCollector<TInstance> {
   _collection: CollectedWidget<TInstance>[];
 
   constructor() {

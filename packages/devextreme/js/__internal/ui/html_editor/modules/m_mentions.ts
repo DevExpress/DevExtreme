@@ -25,7 +25,6 @@ import type { BaseHtmlEditorModule, BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
 import PopupModule from './m_popup';
 
-/** `_getDefaultOptions()`: the popup module's defaults plus the mention ones */
 interface MentionModuleDefaults {
   dataSource: null;
   itemTemplate: string;
@@ -37,12 +36,10 @@ interface MentionModuleDefaults {
   minSearchLength: number;
 }
 
-/** What HtmlEditor passes to the module: `mentions` is an array (see _getModuleConfigByOption) */
 interface MentionModuleOptionsInput extends BaseModuleOptions {
   mentions: dxHtmlEditorMention[];
 }
 
-/** `this.options`: the module options merged over `_getDefaultOptions()` by the popup module */
 interface MentionModuleOptions extends MentionModuleOptionsInput, MentionModuleDefaults {}
 
 type MentionModuleClass = new (
@@ -50,7 +47,6 @@ type MentionModuleClass = new (
   options: MentionModuleOptionsInput,
 ) => BaseHtmlEditorModule;
 
-/** One `mentions` item merged over `_getDefaultOptions()`, stored by its marker */
 interface MentionConfig extends Omit<dxHtmlEditorMention, 'template' | 'searchExpr'> {
   marker: string;
   itemTemplate: NonNullable<dxHtmlEditorMention['itemTemplate']>;
@@ -62,12 +58,10 @@ interface MentionConfig extends Omit<dxHtmlEditorMention, 'template' | 'searchEx
   minSearchLength: number;
 }
 
-/** A compiled `displayExpr`/`valueExpr` getter */
 type ItemGetter = (item: unknown) => unknown;
 
 type MoveDirection = 'prev' | 'next';
 
-/** The popup position over the marker; PositionConfig has no `v` offset and no "top left" order */
 interface MentionPopupPosition {
   of: DxEvent;
   offset: { v: number };
@@ -167,7 +161,6 @@ if (Quill) {
     _getDefaultOptions(): MentionModuleDefaults {
       const baseConfig = super._getDefaultOptions();
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- baseConfig is untyped
       return extend(baseConfig, {
         itemTemplate: 'item',
         valueExpr: 'this',
@@ -283,7 +276,6 @@ if (Quill) {
     _getListConfig(options: MentionModuleOptions): ListProperties {
       const baseConfig = super._getListConfig(options);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- baseConfig is untyped
       return extend(baseConfig, {
         itemTemplate: this.options.itemTemplate,
         onContentReady: () => {
@@ -372,7 +364,7 @@ if (Quill) {
       const isInsertOperation = 'insert' in operation;
       if (isInsertOperation) {
         // eslint-disable-next-line @stylistic/max-len
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string -- a typed char; an embed insert would append [object Object] (see Findings)
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string -- insert is typed string | object
         this._searchValue += operation.insert;
       } else {
         // @ts-expect-error delete is undefined for a retain op; undefined > 1 is false
@@ -401,8 +393,7 @@ if (Quill) {
         // NOTE: Fix of off-by-one error in selection index after insert on a new line.
         // See https://github.com/quilljs/quill/issues/1763.
         const isOnNewLine = caret.index && this._getCharByIndex(caret.index - 1) === '\n';
-        // @ts-expect-error PopupModule members are untyped; isOnNewLine (boolean) is added as 0/1
-        this.savePosition(caret.index + isOnNewLine);
+        this.savePosition(caret.index + Number(isOnNewLine));
         this._popup.option('position', this._popupPosition);
         this._searchValue = '';
         // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
@@ -517,7 +508,6 @@ if (Quill) {
     }
 
     _getPopupConfig(): PopupProperties {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- the base config is untyped
       return extend(super._getPopupConfig(), {
         hideOnParentScroll: false,
         onShown: () => {

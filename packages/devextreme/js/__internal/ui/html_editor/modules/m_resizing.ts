@@ -28,7 +28,6 @@ const MOUSEDOWN_EVENT = addNamespace('mousedown', MODULE_NAMESPACE);
 
 const FRAME_PADDING = 1;
 
-/** The mediaResizing option plus the editor: what HtmlEditor._getModuleConfigByOption builds */
 type ResizingModuleOptions = BaseModuleOptions & dxHtmlEditorMediaResizing;
 
 export default class ResizingModule extends BaseModule {
@@ -40,7 +39,6 @@ export default class ResizingModule extends BaseModule {
 
   _framePositionChangedHandler: () => void;
 
-  /** The clicked element itself, not a wrapper; null once the frame is hidden */
   _$target?: Element | null;
 
   resizable?: Resizable;

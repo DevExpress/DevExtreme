@@ -22,12 +22,10 @@ import BaseModule from './m_base';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorPopupModule';
 
-/** The variables module passes its dataSource; the mentions module sets the list's one itself */
 export interface ListPopupModuleOptions extends BaseModuleOptions {
   dataSource?: dxHtmlEditorVariables['dataSource'];
 }
 
-/** What `_getDefaultOptions()` returns before a subclass adds its own defaults */
 export interface ListPopupModuleDefaults {
   dataSource: null;
 }
@@ -86,7 +84,7 @@ if (Quill) {
 
       this.options = extend({}, this._getDefaultOptions(), options);
       this._popup = this.renderPopup();
-      // @ts-expect-error $wrapper() is an Overlay method that popup.d.ts does not declare
+      // @ts-expect-error $wrapper() is typed as possibly null; renderPopup() has rendered it
       this._popup.$wrapper().addClass(`${SUGGESTION_LIST_WRAPPER_CLASS} ${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
       this._renderPreventFocusOut();
     }

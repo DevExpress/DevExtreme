@@ -60,11 +60,9 @@ export type QuillInstance = any;
 type ModulesConfig = Record<string, unknown>;
 type FocusEvent = DxEvent & { relatedTarget?: Element };
 
-/** The modules HtmlEditor._moduleOptionChanged passes option changes to */
 type OptionModuleName = 'imageUpload' | 'resizing' | 'tableContextMenu' | 'tableResizing';
 type OptionModule = BaseHtmlEditorModule & Required<Pick<BaseHtmlEditorModule, 'option'>>;
 
-/** The toolbar module members HtmlEditor calls; modules/m_toolbar.ts is not typed yet */
 interface ToolbarModuleMethods {
   repaint: () => void;
   updateHistoryWidgets: () => void;

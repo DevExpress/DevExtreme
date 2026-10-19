@@ -18,23 +18,19 @@ import type { BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
 import PopupModule from './m_popup';
 
-/** `this.options`: the `variables` option merged over the popup module's `_getDefaultOptions()` */
 interface VariableModuleOptions extends BaseModuleOptions, dxHtmlEditorVariables {
   escapeChar: VariableData['escapeChar'];
 }
 
-/** `_getDefaultOptions()`: the popup module's defaults plus `escapeChar` */
 interface VariableModuleDefaults {
   dataSource: null;
   escapeChar: string;
 }
 
-/** The toolbar module (modules/m_toolbar.ts) as the variables module uses it */
 interface ToolbarModuleLike {
   addClickHandler: (name: string, handler: (e: ClickEvent) => void) => void;
 }
 
-/** The toolbar button's click event, or the range a Quill keyboard binding passes */
 type ShowPopupArgs = ClickEvent | RangeStatic;
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -76,7 +72,6 @@ if (Quill) {
     _getDefaultOptions(): VariableModuleDefaults {
       const baseConfig = super._getDefaultOptions();
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- baseConfig is untyped
       return extend(baseConfig, {
         escapeChar: '',
       });

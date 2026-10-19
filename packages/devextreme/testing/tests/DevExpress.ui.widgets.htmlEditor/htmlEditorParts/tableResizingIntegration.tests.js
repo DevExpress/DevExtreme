@@ -199,6 +199,22 @@ module('Table resizing integration', {
 
             assert.notOk(resizeCallbacks.has(resizeHandler), 'the handler is removed');
         });
+
+        test('setting the whole tableResizing option while it is enabled keeps one frame and no handler after disabling', function(assert) {
+            this.createWidget();
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.instance.option('tableResizing', { enabled: true, minColumnWidth: 50 });
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 1, 'one frame for the table');
+
+            this.instance.option('tableResizing.enabled', false);
+            this.quillInstance.insertText(0, 'a', 'user');
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 0, 'no frame is recreated after disabling');
+        });
     });
 
     module('resizing frames initialization', {}, () => {
