@@ -4,7 +4,6 @@ import {
     Component,
     NgModule,
     ElementRef,
-    NgZone,
     PLATFORM_ID,
     Inject,
     Input,
@@ -437,13 +436,13 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
-    constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
+    constructor(elementRef: ElementRef, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
 
-        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+        super(elementRef, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
             { subscribe: 'add', emit: 'onAdd' },

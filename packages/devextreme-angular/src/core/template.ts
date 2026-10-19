@@ -9,6 +9,7 @@ import {
   Renderer2,
   NgZone,
   EmbeddedViewRef,
+  inject,
 } from '@angular/core';
 
 import { one } from 'devextreme/events';
@@ -37,12 +38,13 @@ export class DxTemplateDirective {
 
   name: string;
 
+  private readonly zone = inject(NgZone);
+
   constructor(
     private readonly templateRef: TemplateRef<any>,
     private readonly viewContainerRef: ViewContainerRef,
     templateHost: DxTemplateHost,
     private readonly renderer: Renderer2,
-    private readonly zone: NgZone,
   ) {
     templateHost.setTemplate(this);
   }
