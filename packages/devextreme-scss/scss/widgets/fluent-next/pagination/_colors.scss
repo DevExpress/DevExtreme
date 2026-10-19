@@ -1,0 +1,12 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$pagination-page-content-selected: ds.$color-content-static-dark !default;
+$pagination-page-bg-hovered: ds.$color-bg-hovered !default;
+
+$pagination-page-bg-selected: ds.$color-bg-primary !default;
+
+$pagination-content-disabled: ds.$color-content-disabled !default;
+
+$pagination-page-bg-selected-disabled: ds.$color-bg-disabled !default;
+
+$pagination-info-content: ds.$color-content-subtle !default;

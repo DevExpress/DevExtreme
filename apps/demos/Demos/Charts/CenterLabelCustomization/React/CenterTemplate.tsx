@@ -4,7 +4,7 @@ import type { PieChartRef } from 'devextreme-react/pie-chart';
 const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
-const textStyle = { fontSize: 18, fill: '#494949' };
+const textStyle = { fontSize: 18, fill: 'var(--dxds-color-content-subtle, #494949)' };
 const totalStyle = { fontWeight: 600 };
 
 function calculateTotal(pieChart: ReturnType<PieChartRef['instance']>): string {

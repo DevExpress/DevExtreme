@@ -98,7 +98,7 @@ function onRadioGroupValueChanged(e: DxRadioGroupTypes.ValueChangedEvent) {
 <style>
   .dx-scheduler-appointment-title,
   .dx-scheduler-appointment-content-date {
-    color: white;
+    color: var(--dxds-color-content-on-color, white);
   }
 
   .options {

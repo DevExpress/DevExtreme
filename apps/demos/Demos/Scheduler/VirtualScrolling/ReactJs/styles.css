@@ -8,5 +8,5 @@
 
 #scheduler .dx-scheduler-appointment-title,
 #scheduler .dx-scheduler-appointment-content-date {
-  color: #242424;
+  color: var(--dxds-color-content-static-light, #242424);
 }

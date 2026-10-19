@@ -69,6 +69,10 @@ test('PivotGrid renders its areas', { tag: ['@generic.light'] }, async ({ page }
 
 Tag a test when its result does not depend on the theme, or when it has an etalon for that theme.
 
+Every folder job also runs in `fluent-next.blue.light` (the `- fluent-next` jobs). These take the
+whole folder like the default jobs do, so a screenshot test needs a `(fluent-next.blue.light)` etalon
+next to its `(fluent.blue.light)` one.
+
 A tag opts a test into a themed job; it does not change the theme of a run. To pin the theme of one
 test or one file, set the fixture option — the same way the browser size is set:
 

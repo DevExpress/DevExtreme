@@ -12,6 +12,7 @@ interface Options {
   viewOrientation: Orientation;
   isTimelineView: boolean;
   isAdaptivityEnabled: boolean;
+  appointmentMinHeight?: number;
 }
 
 const ADAPTIVITY_MIN_APPOINTMENT_COUNT = 0;
@@ -25,6 +26,7 @@ export const getMaxLevel = ({
   viewOrientation,
   isTimelineView,
   isAdaptivityEnabled,
+  appointmentMinHeight,
 }: Options): number => {
   switch (maxAppointmentsPerCell) {
     case 'auto': {
@@ -42,6 +44,7 @@ export const getMaxLevel = ({
         isTimelineView,
         isAdaptivityEnabled,
         viewOrientation,
+        appointmentMinHeight,
       });
       const minAbstractSize = getAbstractSizeByViewOrientation(
         defaultAppointmentSize,

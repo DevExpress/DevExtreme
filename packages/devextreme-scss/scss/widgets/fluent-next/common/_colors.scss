@@ -1,0 +1,41 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$surface-overlay: ds.$color-bg !default;
+$backdrop-bg: ds.$color-bg-backdrop !default;
+
+$focus-rect-outline: ds.$color-border-primary-shared !default;
+
+$palette-accent: ds.$color-bg-primary !default;
+$palette-bg: ds.$color-bg !default;
+$palette-border: ds.$color-border !default;
+
+$global-font-family: ds.$font-family-sans-serif !default;
+
+$invalid-badge-bg: ds.$color-bg-danger !default;
+$invalid-badge-content: ds.$color-content-static-dark !default;
+$valid-badge-content: ds.$color-content-success !default;
+$palette-text: ds.$color-content !default;
+$global-bg: ds.$color-bg !default;
+$global-content: ds.$color-content !default;
+
+$viz-bg: ds.$color-bg !default;
+$viz-bg-active: ds.$color-bg-active !default;
+$viz-bg-higher: ds.$color-bg-higher !default;
+$viz-bg-hovered: ds.$color-bg-hovered !default;
+$viz-border: ds.$color-border !default;
+$viz-border-active: ds.$color-border-active !default;
+$viz-border-hovered: ds.$color-border-hovered !default;
+$viz-content: ds.$color-content !default;
+$viz-content-orange: ds.$color-content-orange !default;
+$viz-content-subtle: ds.$color-content-subtle !default;
+$viz-content-subtler: ds.$color-content-subtler !default;
+$viz-crosshair: ds.$color-content-red !default;
+$viz-gray-subtle: ds.$color-bg-gray-subtle !default;
+$viz-grid: ds.$color-border-subtle !default;
+$viz-purple-subtle: ds.$color-bg-purple-subtle !default;
+$viz-tooltip-bg: ds.$color-bg-inverted !default;
+$viz-tooltip-content: ds.$color-content-inverted !default;
+
+$mention-bg: ds.$color-bg-selected !default;
+
+$global-content-disabled: ds.$color-content-disabled !default;
