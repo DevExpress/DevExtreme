@@ -50,9 +50,24 @@ const createTextBox = async (options?: Properties, state?: string): Promise<stri
 };
 
 [
-  { labelMode: 'static', expectedWidths: { generic: 82, material: 68, fluent: 74 } },
-  { labelMode: 'floating', expectedWidths: { generic: 82, material: 68, fluent: 74 } },
-  { labelMode: 'outside', expectedWidths: { generic: 'none', material: 'none', fluent: 'none' } },
+  {
+    labelMode: 'static',
+    expectedWidths: {
+      generic: 82, material: 68, fluent: 74, 'fluent-next': 74,
+    },
+  },
+  {
+    labelMode: 'floating',
+    expectedWidths: {
+      generic: 82, material: 68, fluent: 74, 'fluent-next': 74,
+    },
+  },
+  {
+    labelMode: 'outside',
+    expectedWidths: {
+      generic: 'none', material: 'none', fluent: 'none', 'fluent-next': 'none',
+    },
+  },
 ].forEach(({ labelMode, expectedWidths }) => {
   test(`Label max-width should be changed after container width was changed, labelMode is ${labelMode}`, async (t) => {
     const textBox = new TextBox('#container');

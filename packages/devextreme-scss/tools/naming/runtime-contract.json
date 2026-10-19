@@ -1,0 +1,54 @@
+{
+  "comment": "The JS -> CSS contract: --dx-* names the runtime sets with style.setProperty and base/** reads. They are not part of the component tier (tests/fluent-next-naming.test.ts excludes them from the surface checks) and their read form is fixed here: `fallback` is the exact text after the comma in var(), null means the read is bare on purpose and `whenUnset` says what happens then. tests/fallback-policy.test.ts holds base/** to this file.",
+  "variables": [
+    {
+      "name": "--dx-cardview-cardsperrow",
+      "setBy": "packages/devextreme/js/__internal/grids/new/card_view/content_view/content/content.tsx",
+      "readIn": "base/cardView/content_view/content/_index.scss",
+      "property": "grid-template-columns",
+      "fallback": null,
+      "whenUnset": "the declaration disappears; the runtime always supplies a number (default 3, 'auto' is resolved to a number in view.tsx), so a CSS fallback would only mask a runtime bug"
+    },
+    {
+      "name": "--dx-cardview-card-min-width",
+      "setBy": "packages/devextreme/js/__internal/grids/new/card_view/content_view/content/content.tsx",
+      "readIn": "base/cardView/content_view/content/card/_index.scss",
+      "property": "min-width",
+      "fallback": "$cardview-card-min-width",
+      "whenUnset": "the theme minimum applies - a card may never get narrower than the theme allows"
+    },
+    {
+      "name": "--dx-cardview-card-max-width",
+      "setBy": "packages/devextreme/js/__internal/grids/new/card_view/content_view/content/content.tsx",
+      "readIn": "base/cardView/content_view/content/card/_index.scss",
+      "property": "max-width",
+      "fallback": null,
+      "whenUnset": "the declaration disappears and max-width keeps its initial value none - an invented limit would clip cards"
+    },
+    {
+      "name": "--dx-cardview-card-cover-max-height",
+      "setBy": "packages/devextreme/js/__internal/grids/new/card_view/content_view/content/content.tsx",
+      "readIn": "base/cardView/content_view/content/card/cover/_index.scss",
+      "property": "max-height",
+      "fallback": null,
+      "defaultDeclaredIn": "base/cardView/content_view/content/_index.scss",
+      "whenUnset": "the cards container declares the theme default on itself and the runtime overrides it there"
+    },
+    {
+      "name": "--dx-cardview-card-cover-ratio",
+      "setBy": "packages/devextreme/js/__internal/grids/new/card_view/content_view/content/content.tsx",
+      "readIn": "base/cardView/content_view/content/card/cover/_index.scss",
+      "property": "aspect-ratio",
+      "fallback": null,
+      "whenUnset": "the declaration disappears and the cover keeps its natural proportions - an invented ratio distorts the image more than none"
+    },
+    {
+      "name": "--dx-scheduler-animation-top",
+      "setBy": "packages/devextreme/js/__internal/scheduler/appointment_popup/form.ts",
+      "readIn": "base/scheduler/_index.scss",
+      "property": "top",
+      "fallback": "0",
+      "whenUnset": "the appointment form animates from the top edge"
+    }
+  ]
+}

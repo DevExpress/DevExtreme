@@ -1,0 +1,63 @@
+@use "../colors" as *;
+@use "../sizes" as *;
+
+.dx-theme-marker {
+  font-family: "dx.fluent-next.#{$theme-marker-color}.#{$theme-marker-mode}#{$theme-marker-size-postfix}";
+}
+
+// stylelint-disable declaration-no-important
+.dx-theme-accent-as-text-color {
+  color: var(--dx-palette-accent) !important;
+}
+
+.dx-theme-text-color {
+  color: var(--dx-palette-text) !important;
+}
+
+.dx-theme-background-color-as-text-color {
+  color: var(--dx-palette-bg) !important;
+}
+
+.dx-theme-border-color-as-text-color {
+  color: var(--dx-palette-border) !important;
+}
+
+.dx-theme-accent-as-background-color {
+  background-color: var(--dx-palette-accent) !important;
+  fill: var(--dx-palette-accent) !important;
+}
+
+.dx-theme-text-color-as-background-color {
+  background-color: var(--dx-palette-text) !important;
+  fill: var(--dx-palette-text) !important;
+}
+
+.dx-theme-background-color {
+  background-color: var(--dx-palette-bg) !important;
+  fill: var(--dx-palette-bg) !important;
+}
+
+.dx-theme-typography-background-color {
+  background-color: var(--dx-global-bg) !important;
+}
+
+.dx-theme-border-color-as-background-color {
+  background-color: var(--dx-palette-border) !important;
+  fill: var(--dx-palette-border) !important;
+}
+
+.dx-theme-accent-as-border-color {
+  border-color: var(--dx-palette-accent) !important;
+}
+
+.dx-theme-text-color-as-border-color {
+  border-color: var(--dx-palette-text) !important;
+}
+
+.dx-theme-background-color-as-border-color {
+  border-color: var(--dx-palette-bg) !important;
+}
+
+.dx-theme-border-color {
+  border-color: var(--dx-palette-border) !important;
+}

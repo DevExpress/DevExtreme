@@ -15,8 +15,8 @@ import type { BeforePushEvent } from '@ts/data/types';
 import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/provider';
 import type { OperationTypes as BaseOperationTypes, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { RowKey } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import treeListCore from '../core';
 import type {

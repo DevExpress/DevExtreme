@@ -1,0 +1,4 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$typography-bg: ds.$color-bg-canvas !default;
+$typography-link-content: ds.$color-content-primary !default;

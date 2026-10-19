@@ -9,8 +9,8 @@ import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
-import gridCoreUtils from '../m_utils';
 import type { ModuleType } from '../types';
+import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';

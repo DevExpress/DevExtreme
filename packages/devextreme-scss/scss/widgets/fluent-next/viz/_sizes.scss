@@ -1,0 +1,7 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$viz-export-font-weight: ds.$font-weight-base-default !default;
+$viz-font-weight: ds.$font-weight-caption-default !default;
+$viz-label-font-weight: ds.$font-weight-caption-strong !default;
+$viz-legend-title-font-weight: ds.$font-weight-200 !default;
+$viz-title-font-weight: ds.$font-weight-title-default !default;

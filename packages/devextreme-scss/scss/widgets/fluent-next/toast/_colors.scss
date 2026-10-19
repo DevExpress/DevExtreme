@@ -1,0 +1,17 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$toast-bg: ds.$color-bg !default;
+
+$toast-info-content: ds.$color-content !default;
+
+$toast-warning-bg: ds.$color-bg-warning !default;
+
+$toast-warning-content: ds.$color-content-static-light !default;
+
+$toast-error-bg: ds.$color-bg-danger !default;
+
+$toast-error-content: ds.$color-content-static-dark !default;
+
+$toast-success-bg: ds.$color-bg-success !default;
+
+$toast-success-content: ds.$color-content-static-dark !default;

@@ -15,7 +15,7 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import type { WrappedLookupDataSource } from '@ts/grids/grid_core/types';
 
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 
 interface CellRect {
   left: number;
