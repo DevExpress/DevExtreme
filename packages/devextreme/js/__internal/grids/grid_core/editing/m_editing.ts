@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable @typescript-eslint/no-unused-vars, max-classes-per-file */
+/* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
@@ -7,16 +6,15 @@ import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
-import type { DataChange as EditingDataChange, GridsEditMode } from '@js/common/grids';
+import type { GridsEditMode, NewRowInfo, NewRowPosition } from '@js/common/grids';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
+import type { DxElement } from '@js/core/element';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
-// @ts-expect-error
-import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import * as iconUtils from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
@@ -24,28 +22,51 @@ import { deepExtendArraySafe } from '@js/core/utils/object';
 import {
   isDefined, isEmptyObject, isFunction, isObject,
 } from '@js/core/utils/type';
+import type { StoreChange } from '@js/data/store';
+import type { DxEvent } from '@js/events';
+import type {
+  InitializedEvent as ButtonInitializedEvent,
+  Properties as ButtonProperties,
+} from '@js/ui/button';
+import type { ColumnButton } from '@js/ui/data_grid';
 import { confirm } from '@js/ui/dialog';
+import type Form from '@js/ui/form';
+import type { HidingEvent as PopupHidingEvent } from '@js/ui/popup';
 import { current, isFluent } from '@js/ui/themes';
+import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import domUtils from '@ts/core/utils/m_dom';
 import type Store from '@ts/data/abstract_store';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- type import not used yet
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
+import type { Column, ColumnTemplateSource } from '../columns_controller/types';
 import type {
   DataChange,
   GeneratedItem,
   ItemProcessingOptions,
   ProcessedItem,
+  RefreshOptions,
 } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
 import modules from '../modules/modules';
 import type {
-  Controllers, ModuleType, RowKey, Views,
+  Controllers,
+  GridPropertyType,
+  InternalGridOptions,
+  ModuleType,
+  OptionChanged,
+  RowKey,
+  Views,
 } from '../types';
+import type {
+  CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRowEvent,
+} from '../views/types';
 import gridCoreUtils from '../utils';
 import {
   ACTION_OPTION_NAMES,
@@ -108,10 +129,26 @@ import type {
   AllowEditActionValue,
   EditActionOptions,
   EditActions,
+  EditingActionParams,
+  EditingButton,
+  EditingButtonCallback,
+  EditingButtonLocalizationNames,
+  EditingChange,
+  EditingChangeParams,
+  EditingChangesOptionChanged,
+  EditingColumn,
+  EditingModuleOptionChanged,
+  EditingModuleOptions,
+  EditingOptions,
+  EditingStartOptions,
+  EditorCellOptions,
+  EditorTemplate,
   InsertInfo,
   InternalEditData,
   NormalizedEditCellOptions,
+  OnSavingParams,
   OnSavingResult,
+  SaveResult,
 } from './types';
 
 class EditingControllerImpl extends modules.ViewController {
@@ -137,9 +174,9 @@ class EditingControllerImpl extends modules.ViewController {
 
   private _headerPanelView!: Views['headerPanel'];
 
-  private _lastOperation: any;
+  private _lastOperation?: DeferredObj<unknown> | null;
 
-  private _changes: any;
+  private _changes!: EditingChange[];
 
   /**
    * A collection of deferred objects that are awaited before other operations are executed.
@@ -147,31 +184,31 @@ class EditingControllerImpl extends modules.ViewController {
    * @see {@link this.waitForDeferredOperations}
    * @see {@link this.addDeferred}
    */
-  private _deferreds!: DeferredObj<any>[];
+  private _deferreds!: DeferredObj<unknown>[];
 
-  private _dataChangedHandler: any;
+  private _dataChangedHandler?: (args: DataChange) => void;
 
-  protected _saveEditorHandler: any;
+  protected _saveEditorHandler?: (e: unknown) => void;
 
   private _internalState!: Map<RowKey, InternalEditData>;
 
-  protected _refocusEditCell: any;
+  protected _refocusEditCell?: boolean;
 
-  protected _editCellInProgress: any;
+  protected _editCellInProgress?: boolean;
 
-  protected _needFocusEditor: any;
+  protected _needFocusEditor?: boolean;
 
-  private _beforeFocusCallback: any;
+  private _beforeFocusCallback?: (() => void) | null;
 
-  private _saving: any;
+  private _saving?: boolean;
 
-  protected _editForm: any;
+  protected _editForm?: Form | null;
 
-  protected _pageIndex: any;
+  protected _pageIndex?: number;
 
-  protected _inputFocusTimeoutID: any;
+  protected _inputFocusTimeoutID?: ReturnType<typeof setTimeout>;
 
-  public init() {
+  public init(): void {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
     this.dataSourceController = this.getController('dataSource');
@@ -184,7 +221,8 @@ class EditingControllerImpl extends modules.ViewController {
     this._rowsView = this.getView('rowsView');
     this._headerPanelView = this.getView('headerPanel');
     this._lastOperation = null;
-    // this contains the value of 'editing.changes' option, to check if it has changed in onOptionChanged
+    // this contains the value of 'editing.changes' option,
+    // to check if it has changed in onOptionChanged
     this._changes = [];
 
     if (this._deferreds) {
@@ -236,8 +274,8 @@ class EditingControllerImpl extends modules.ViewController {
     return CELL_BASED_MODES.includes(editMode);
   }
 
-  private _getDefaultEditorTemplate() {
-    return (container, options) => {
+  private _getDefaultEditorTemplate(): EditorTemplate {
+    return (container, options): void => {
       const $editor = $('<div>').appendTo(container);
 
       const editorOptions = extend({}, options.column, {
@@ -258,7 +296,7 @@ class EditingControllerImpl extends modules.ViewController {
     };
   }
 
-  private _getNewRowPosition() {
+  private _getNewRowPosition(): NewRowPosition | undefined {
     const newRowPosition = this.option('editing.newRowPosition');
     const scrollingMode = this.option('scrolling.mode');
 
@@ -276,16 +314,18 @@ class EditingControllerImpl extends modules.ViewController {
     return newRowPosition;
   }
 
-  public getChanges(): any {
+  public getChanges(): EditingChange[] {
+    // @ts-expect-error editing.changes is typed as optional, it defaults to []
     return this.option(EDITING_CHANGES_OPTION_NAME);
   }
 
-  private getInsertRowCount() {
-    const changes: any = this.option(EDITING_CHANGES_OPTION_NAME);
+  private getInsertRowCount(): number {
+    // @ts-expect-error editing.changes is typed as optional, it defaults to []
+    const changes: EditingChange[] = this.option(EDITING_CHANGES_OPTION_NAME);
     return changes.filter((change) => change.type === 'insert').length;
   }
 
-  private resetChanges() {
+  private resetChanges(): void {
     const changes = this.getChanges();
     const needReset = changes?.length;
     if (needReset) {
@@ -309,11 +349,11 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  public _getOldData(key) {
+  public _getOldData(key: RowKey): RawItemData | undefined {
     return this._getInternalData(key)?.oldData;
   }
 
-  public getUpdatedData(data) {
+  public getUpdatedData(data: RawItemData): RawItemData {
     const key = this.dataSourceController.keyOf(data);
     const changes = this.getChanges();
     const editIndex = gridCoreUtils.getIndexByKey(key, changes);
@@ -325,19 +365,20 @@ class EditingControllerImpl extends modules.ViewController {
     return data;
   }
 
-  public getInsertedData() {
+  public getInsertedData(): RawItemData[] {
     return this.getChanges()
       .filter((change) => change.data && change.type === DATA_EDIT_DATA_INSERT_TYPE)
       .map((change) => change.data);
   }
 
-  public getRemovedData() {
+  public getRemovedData(): (RawItemData | undefined)[] {
     return this.getChanges()
-      .filter((change) => this._getOldData(change.key) && change.type === DATA_EDIT_DATA_REMOVE_TYPE)
+      .filter((change) => this._getOldData(change.key)
+        && change.type === DATA_EDIT_DATA_REMOVE_TYPE)
       .map((change) => this._getOldData(change.key));
   }
 
-  private _fireDataErrorOccurred(arg) {
+  private _fireDataErrorOccurred(arg: unknown): void {
     if (arg === 'cancel') return;
     const $popupContent = this.getPopupContent();
     this._dataController.dataErrorOccurred.fire(arg, $popupContent);
@@ -346,61 +387,85 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: TreeList's editing
    */
-  protected _needToCloseEditableCell($targetElement): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _needToCloseEditableCell($targetElement: dxElementWrapper): boolean | undefined {
+    return undefined;
+  }
 
   /**
    * @extended: adaptivity
    */
-  protected _closeEditItem($targetElement): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _closeEditItem($targetElement: dxElementWrapper): void {}
 
   /**
    * @extended: validating
    */
-  protected _handleDataChanged(args): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _handleDataChanged(args: DataChange): void {}
 
-  protected _isDefaultButtonVisible(button, options) {
+  protected _isDefaultButtonVisible(button: ColumnButton, options: EditorCellOptions): boolean {
     let result = true;
 
-    // eslint-disable-next-line default-case
     switch (button.name) {
       case 'delete':
         result = this.allowDeleting(options);
         break;
       case 'undelete':
         result = false;
+        break;
+      default:
+        break;
     }
 
     return result;
   }
 
-  protected isPopupEditMode() {
+  protected isPopupEditMode(): boolean {
     const editMode = this.option('editing.mode');
     return editMode === EDIT_MODE_POPUP;
   }
 
-  private _isButtonVisible(button, options) {
-    const { visible } = button;
+  private _isButtonVisible(button: ColumnButton, options: EditorCellOptions): boolean {
+    // @ts-expect-error the button callbacks are typed with the public component, row and column
+    const { visible }: { visible?: boolean | EditingButtonCallback } = button;
 
     if (!isDefined(visible)) {
       return this._isDefaultButtonVisible(button, options);
     }
 
-    return isFunction(visible) ? visible.call(button, { component: options.component, row: options.row, column: options.column }) : visible;
+    return isFunction(visible)
+      ? visible.call(button, {
+        component: options.component,
+        row: options.row,
+        column: options.column,
+      })
+      : visible;
   }
 
-  private _isButtonDisabled(button, options) {
-    const { disabled } = button;
+  private _isButtonDisabled(button: ColumnButton, options: EditorCellOptions): boolean {
+    // @ts-expect-error the button callbacks are typed with the public component, row and column
+    const { disabled }: { disabled?: boolean | EditingButtonCallback } = button;
 
-    return isFunction(disabled) ? disabled.call(button, { component: options.component, row: options.row, column: options.column }) : !!disabled;
+    return isFunction(disabled)
+      ? disabled.call(button, {
+        component: options.component,
+        row: options.row,
+        column: options.column,
+      })
+      : !!disabled;
   }
 
-  protected _getButtonConfig(button, options) {
+  protected _getButtonConfig(button: EditingButton, options: EditorCellOptions): ColumnButton {
     const config = isObject(button) ? button : {};
-    const buttonName = getButtonName(button);
+    // @ts-expect-error a custom button can have no name, then its lookups give undefined
+    const buttonName: string = getButtonName(button);
+    // @ts-expect-error renderTemplate sets options.component
     const editingTexts = getEditingTexts(options);
     const methodName = METHOD_NAMES[buttonName];
-    const editingOptions: any = this.option('editing');
+    const editingOptions = this.option('editing');
     const actionName = ACTION_OPTION_NAMES[buttonName];
+    // @ts-expect-error the editing option has defaults
     const allowAction = actionName ? editingOptions[actionName] : true;
 
     return extend({
@@ -408,13 +473,16 @@ class EditingControllerImpl extends modules.ViewController {
       text: editingTexts[buttonName],
       cssClass: EDIT_LINK_CLASS[buttonName],
     }, {
-      onClick: methodName && ((e) => {
-        const { event } = e;
+      onClick: methodName && ((e): void => {
+        // @ts-expect-error the click action always passes the event
+        const { event }: { event: DxEvent } = e;
 
         event.stopPropagation();
         event.preventDefault();
         setTimeout(() => {
-          options.row && allowAction && this[methodName] && this[methodName](options.row.rowIndex);
+          if (options.row && allowAction && this[methodName]) {
+            this[methodName](options.row.rowIndex);
+          }
         });
       }),
     }, config);
@@ -423,10 +491,11 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: TreeList's editing
    */
-  protected _getEditingButtons(options) {
-    let buttonIndex;
+  protected _getEditingButtons(options: EditorCellOptions): ColumnButton[] {
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned for custom buttons
+    let buttonIndex: number;
     const haveCustomButtons = !!options.column.buttons;
-    let buttons = (options.column.buttons || []).slice();
+    let buttons = (options.column.buttons ?? []).slice();
 
     if (haveCustomButtons) {
       buttonIndex = getButtonIndex(buttons, 'edit');
@@ -453,7 +522,12 @@ class EditingControllerImpl extends modules.ViewController {
     return buttons.map((button) => this._getButtonConfig(button, options));
   }
 
-  private _renderEditingButtons($container, buttons, options, change?) {
+  private _renderEditingButtons(
+    $container: dxElementWrapper,
+    buttons: ColumnButton[],
+    options: EditorCellOptions,
+    change?: ViewDataChange,
+  ): void {
     buttons.forEach((button) => {
       if (this._isButtonVisible(button, options)) {
         this._createButton($container, button, options, change);
@@ -461,8 +535,8 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  private _getEditCommandCellTemplate() {
-    return (container, options, change) => {
+  private _getEditCommandCellTemplate(): EditorTemplate {
+    return (container, options, change): void => {
       const $container = $(container);
 
       if (options.rowType === 'data') {
@@ -490,29 +564,32 @@ class EditingControllerImpl extends modules.ViewController {
     };
   }
 
-  public isRowBasedEditMode() {
+  public isRowBasedEditMode(): boolean {
     const editMode = this.getEditMode();
     return ROW_BASED_MODES.includes(editMode);
   }
 
-  protected getFirstEditableColumnIndex() {
-    let columnIndex;
+  protected getFirstEditableColumnIndex(): number | undefined {
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the each callback
+    let columnIndex: number | undefined;
 
     const visibleColumns = this._columnsController.getVisibleColumns();
-    // @ts-expect-error
     each(visibleColumns, (index, column) => {
       if (column.allowEditing) {
         columnIndex = index;
         return false;
       }
+
+      return undefined;
     });
 
     return columnIndex;
   }
 
-  private getFirstEditableCellInRow(rowIndex): dxElementWrapper | undefined {
+  private getFirstEditableCellInRow(rowIndex: number): dxElementWrapper | undefined {
     const columnIndex = this.getFirstEditableColumnIndex();
 
+    // @ts-expect-error the index is undefined when no column is editable
     return this._rowsView?._getCellElement(rowIndex || 0, columnIndex);
   }
 
@@ -521,23 +598,26 @@ class EditingControllerImpl extends modules.ViewController {
    * @param rowIndex
    * @protected
    */
-  protected getFocusedCellInRow(rowIndex) {
+  protected getFocusedCellInRow(rowIndex: number): dxElementWrapper | undefined {
     return this.getFirstEditableCellInRow(rowIndex);
   }
 
   /**
    * @extended: validating
    */
-  public getIndexByKey(key, items) {
+  public getIndexByKey(key: RowKey, items: unknown[] | null | undefined): number {
     return gridCoreUtils.getIndexByKey(key, items);
   }
 
-  public hasChanges(rowIndex?): boolean {
+  public hasChanges(rowIndex?: number): boolean {
     const changes = this.getChanges();
     let result = false;
 
-    for (let i = 0; i < changes?.length; i++) {
-      if (changes[i].type && (!isDefined(rowIndex) || this._dataController.getRowIndexByKey(changes[i].key) === rowIndex)) {
+    for (let i = 0; i < changes?.length; i += 1) {
+      if (changes[i].type && (
+        !isDefined(rowIndex)
+        || this._dataController.getRowIndexByKey(changes[i].key) === rowIndex
+      )) {
         result = true;
         break;
       }
@@ -546,24 +626,28 @@ class EditingControllerImpl extends modules.ViewController {
     return result;
   }
 
-  public dispose() {
+  public dispose(): void {
     super.dispose();
     clearTimeout(this._inputFocusTimeoutID);
-    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, (this as any)._pointerUpEditorHandler);
-    eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, (this as any)._pointerDownEditorHandler);
+    // @ts-expect-error the cell-based extender sets the pointer handlers
+    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
+    // @ts-expect-error the cell-based extender sets the pointer handlers
+    eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
     eventsEngine.off(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
   }
 
-  protected _silentOption(name, value) {
+  protected _silentOption<TPropertyName extends string>(
+    name: TPropertyName,
+    value: GridPropertyType<InternalGridOptions, TPropertyName>,
+  ): void {
     if (name === 'editing.changes') {
       this._changes = deepExtendArraySafe([], value);
     }
 
-    // @ts-expect-error
     super._silentOption(name, value);
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     if (args.name === 'editing') {
       const { fullName } = args;
 
@@ -575,6 +659,7 @@ class EditingControllerImpl extends modules.ViewController {
 
         if (!isEqual) {
           this._changes = deepExtendArraySafe([], args.value);
+          // @ts-expect-error editing.changes is typed as optional, it defaults to []
           this._handleChangesChange(args);
         }
       } else if (!args.handled) {
@@ -590,10 +675,11 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  protected _handleEditRowKeyChange(args) {
+  protected _handleEditRowKeyChange(args: OptionChanged): void {
     const rowIndex = this._dataController.getRowIndexByKey(args.value);
     const oldRowIndexCorrection = this._getEditRowIndexCorrection();
-    const oldRowIndex = this._dataController.getRowIndexByKey(args.previousValue) + oldRowIndexCorrection;
+    const oldRowIndex = this._dataController.getRowIndexByKey(args.previousValue)
+      + oldRowIndexCorrection;
 
     if (isDefined(args.value)) {
       if (args.value !== args.previousValue) {
@@ -607,7 +693,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  protected _handleChangesChange(args) {
+  protected _handleChangesChange(args: EditingChangesOptionChanged): void {
     const dataController = this._dataController;
     const changes = args.value;
 
@@ -620,8 +706,12 @@ class EditingControllerImpl extends modules.ViewController {
         this._addInsertInfo(change);
       } else {
         const items = this.dataSourceController.getCachedStoreData()
-          || dataController.items()?.map((item) => item.data);
-        const rowIndex = gridCoreUtils.getIndexByKey(change.key, items, this.dataSourceController.key());
+          ?? dataController.items()?.map((item) => item.data);
+        const rowIndex = gridCoreUtils.getIndexByKey(
+          change.key,
+          items,
+          this.dataSourceController.key(),
+        );
         this._addInternalData({ key: change.key, oldData: items[rowIndex] });
       }
     });
@@ -634,32 +724,33 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  public publicMethods() {
+  public publicMethods(): string[] {
     return ['addRow', 'deleteRow', 'undeleteRow', 'editRow', 'saveEditData', 'cancelEditData', 'hasEditData'];
   }
 
-  public refresh() {
+  public refresh(params?: RefreshOptions): void {
     if (!isDefined(this._pageIndex)) {
       return;
     }
 
-    // @ts-expect-error
-    this._refreshCore.apply(this, arguments);
+    this._refreshCore(params);
   }
 
-  protected _refreshCore(params): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _refreshCore(params?: RefreshOptions): void {}
 
-  public isEditing() {
+  public isEditing(): boolean {
     const isEditRowKeyDefined = isDefined(this.option(EDITING_EDITROWKEY_OPTION_NAME));
 
     return isEditRowKeyDefined;
   }
 
-  public isEditRow(rowIndex) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  public isEditRow(rowIndex: number | undefined): boolean {
     return false;
   }
 
-  protected _setEditRowKey(value, silent?) {
+  protected _setEditRowKey(value: RowKey, silent?: boolean): void {
     if (silent) {
       this._silentOption(EDITING_EDITROWKEY_OPTION_NAME, value);
     } else {
@@ -672,54 +763,58 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  public getEditRowIndex() {
+  public getEditRowIndex(): number {
     return this._getVisibleEditRowIndex();
   }
 
-  public getEditFormRowIndex() {
+  public getEditFormRowIndex(): number {
     return -1;
   }
 
-  public isEditRowByIndex(rowIndex) {
+  public isEditRowByIndex(rowIndex: number | undefined): boolean {
+    // @ts-expect-error getKeyByRowIndex(undefined) finds no row
     const key = this._dataController.getKeyByRowIndex(rowIndex);
-    // Vitik: performance optimization equalByValue take O(1)
-    const isKeyEqual = isDefined(key) && equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key);
+    const isKeyEqual = isDefined(key)
+      && equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key);
     if (isKeyEqual) {
-      // Vitik: performance optimization _getVisibleEditRowIndex take O(n)
       return this._getVisibleEditRowIndex() === rowIndex;
     }
     return isKeyEqual;
   }
 
-  public isEditCell(visibleRowIndex, columnIndex) {
-    return this.isEditRowByIndex(visibleRowIndex) && this._getVisibleEditColumnIndex() === columnIndex;
+  public isEditCell(visibleRowIndex: number | undefined, columnIndex: number | undefined): boolean {
+    return this.isEditRowByIndex(visibleRowIndex)
+      && this._getVisibleEditColumnIndex() === columnIndex;
   }
 
-  protected getPopupContent(): any {}
+  protected getPopupContent(): dxElementWrapper | undefined {
+    return undefined;
+  }
 
   /**
    * @extended: TreeList's editing, DataGrid's grouping
    */
-  protected _isProcessedItem(item) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _isProcessedItem(item: RawItemData | ProcessedItem): boolean {
     return false;
   }
 
-  private _getInsertRowIndex(items, change, isProcessedItems) {
+  private _getInsertRowIndex(
+    items: (RawItemData | ProcessedItem)[],
+    change: Partial<EditingChange>,
+    isProcessedItems?: boolean,
+  ): number {
     let result = -1;
-    const dataController = this._dataController;
     const key = this._getInsertAfterOrBeforeKey(change);
 
     if (!isDefined(key) && items.length === 0) {
       result = 0;
     } else if (isDefined(key)) {
-      // @ts-expect-error
-      // eslint-disable-next-line array-callback-return
       items.some((item, index) => {
-        const isProcessedItem = isProcessedItems || this._isProcessedItem(item);
+        const isProcessedItem = !!isProcessedItems || this._isProcessedItem(item);
 
         if (isObject(item)) {
           if (isProcessedItem || isDefined(item[INSERT_INDEX])) {
-            // @ts-expect-error
             if (equalByValue(item.key, key)) {
               result = index;
             }
@@ -731,8 +826,12 @@ class EditingControllerImpl extends modules.ViewController {
         if (result >= 0) {
           const nextItem = items[result + 1];
 
-          if (nextItem && (nextItem.rowType === 'detail' || nextItem.rowType === 'detailAdaptive') && isDefined(change.insertAfterKey)) {
-            return;
+          if (
+            nextItem
+            && (nextItem.rowType === 'detail' || nextItem.rowType === 'detailAdaptive')
+            && isDefined(change.insertAfterKey)
+          ) {
+            return undefined;
           }
 
           if (isDefined(change.insertAfterKey)) {
@@ -740,6 +839,8 @@ class EditingControllerImpl extends modules.ViewController {
           }
           return true;
         }
+
+        return undefined;
       });
     }
 
@@ -749,8 +850,8 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: TreeList's editing
    */
-  protected _generateNewItem(key) {
-    const item = {
+  protected _generateNewItem(key: RowKey): RawItemData {
+    const item: RawItemData = {
       key,
     };
     const insertInfo = this._getInternalData(key)?.insertInfo;
@@ -765,16 +866,24 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: TreeList's editing
    */
-  protected _getLoadedRowIndex(items, change, isProcessedItems?) {
+  protected _getLoadedRowIndex(
+    items: (RawItemData | ProcessedItem)[],
+    change: Partial<EditingChange>,
+    isProcessedItems?: boolean,
+  ): number {
     let loadedRowIndex = this._getInsertRowIndex(items, change, isProcessedItems);
     const dataController = this._dataController;
 
     if (loadedRowIndex < 0) {
-      const newRowPosition: any = this._getNewRowPosition();
+      const newRowPosition = this._getNewRowPosition();
       const pageIndex = dataController.pageIndex();
       const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
-      if (newRowPosition !== LAST_NEW_ROW_POSITION && pageIndex === 0 && !isDefined(insertAfterOrBeforeKey)) {
+      if (
+        newRowPosition !== LAST_NEW_ROW_POSITION
+        && pageIndex === 0
+        && !isDefined(insertAfterOrBeforeKey)
+      ) {
         loadedRowIndex = 0;
       } else if (newRowPosition === LAST_NEW_ROW_POSITION && dataController.isLastPageLoaded()) {
         loadedRowIndex = items.length;
@@ -794,22 +903,22 @@ class EditingControllerImpl extends modules.ViewController {
 
     const changes = this.getChanges();
 
-    changes.forEach((change) => {
-      const isInsert = change.type === DATA_EDIT_DATA_INSERT_TYPE;
+    changes.forEach((editChange) => {
+      const isInsert = editChange.type === DATA_EDIT_DATA_INSERT_TYPE;
 
       if (!isInsert) {
         return;
       }
 
-      let { key } = change;
+      let { key } = editChange;
 
       const insertInfo = this._getInternalData(key)?.insertInfo;
 
       if (!isDefined(key) || !isDefined(insertInfo)) {
-        key = this._addInsertInfo(change).key;
+        key = this._addInsertInfo(editChange).key;
       }
 
-      const loadedRowIndex = this._getLoadedRowIndex(items, change);
+      const loadedRowIndex = this._getLoadedRowIndex(items, editChange);
       const item = this._generateNewItem(key);
 
       if (loadedRowIndex >= 0) {
@@ -836,7 +945,12 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  protected _processDataItemCore(item: GeneratedItem, change, key, columns) {
+  protected _processDataItemCore(
+    item: GeneratedItem,
+    change: EditingChange,
+    key: RowKey,
+    columns: Column[],
+  ): void {
     const { data, type } = change;
 
     // eslint-disable-next-line default-case
@@ -861,20 +975,22 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: TreeList's editing
    */
-  protected _initNewRow(options) {
+  protected _initNewRow(options: NewRowInfo<RawItemData>): DeferredObj<unknown> | undefined {
     this.executeAction('onInitNewRow', options);
 
     if (options.promise) {
-      // @ts-expect-error
-      const deferred = new Deferred();
+      const deferred = Deferred<unknown>();
 
       when(fromPromise(options.promise))
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
         .done(deferred.resolve)
         .fail(createFailureHandler(deferred))
         .fail((arg) => this._fireDataErrorOccurred(arg));
 
       return deferred;
     }
+
+    return undefined;
   }
 
   private _createInsertInfo(parentKey?: RowKey): InsertInfo {
@@ -885,16 +1001,14 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _addInsertInfo(
-    change: Partial<EditingDataChange>,
+    change: Partial<EditingChange>,
     parentKey?: RowKey,
   ): { insertInfo: InsertInfo; key: RowKey } {
-    let insertInfo: InsertInfo | undefined;
-
     change.key = this.getChangeKeyValue(change);
 
     const { key } = change;
 
-    insertInfo = this._getInternalData(key)?.insertInfo;
+    let insertInfo: InsertInfo | undefined = this._getInternalData(key)?.insertInfo;
 
     if (!isDefined(insertInfo)) {
       const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
@@ -911,13 +1025,14 @@ class EditingControllerImpl extends modules.ViewController {
     return { insertInfo, key };
   }
 
-  private getChangeKeyValue(change: any): unknown {
+  private getChangeKeyValue(change: Partial<EditingChange>): RowKey {
     if (isDefined(change.key)) {
       return change.key;
     }
 
     const keyExpr = this.dataSourceController.key();
-    let keyValue;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the ifs below
+    let keyValue: RowKey;
     if (change.data && keyExpr && !Array.isArray(keyExpr)) {
       keyValue = change.data[keyExpr];
     }
@@ -931,12 +1046,13 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: TreeList's editing
    */
-  protected _setInsertAfterOrBeforeKey(change, parentKey) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _setInsertAfterOrBeforeKey(change: Partial<EditingChange>, parentKey?: RowKey): void {
     // TODO getView
     const rowsView = this.getView('rowsView');
     const dataController = this._dataController;
     const allItems = dataController.items(true);
-    const newRowPosition: any = this._getNewRowPosition();
+    const newRowPosition = this._getNewRowPosition();
 
     switch (newRowPosition) {
       case FIRST_NEW_ROW_POSITION:
@@ -957,10 +1073,10 @@ class EditingControllerImpl extends modules.ViewController {
         let visibleItemIndex = isViewportBottom
           ? rowsView?.getBottomVisibleItemIndex()
           : rowsView?.getTopVisibleItemIndex();
-        const row: any = dataController.getVisibleRows()[visibleItemIndex];
+        const row = dataController.getVisibleRows()[visibleItemIndex];
 
-        if (row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
-          visibleItemIndex++;
+        if (row && ((!row.isEditing && row.rowType === 'detail') || row.rowType === 'detailAdaptive')) {
+          visibleItemIndex += 1;
         }
 
         const insertKey = dataController.getKeyByRowIndex(visibleItemIndex);
@@ -972,24 +1088,28 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _getInsertIndex() {
+  private _getInsertIndex(): number {
     let maxInsertIndex = 0;
     this.getChanges().forEach((editItem) => {
       const insertInfo = this._getInternalData(editItem.key)?.insertInfo;
 
-      if (isDefined(insertInfo) && editItem.type === DATA_EDIT_DATA_INSERT_TYPE && insertInfo[INSERT_INDEX] > maxInsertIndex) {
+      if (
+        isDefined(insertInfo)
+        && editItem.type === DATA_EDIT_DATA_INSERT_TYPE
+        && insertInfo[INSERT_INDEX] > maxInsertIndex
+      ) {
         maxInsertIndex = insertInfo[INSERT_INDEX];
       }
     });
     return maxInsertIndex + 1;
   }
 
-  private _getInsertAfterOrBeforeKey(insertChange) {
+  private _getInsertAfterOrBeforeKey(insertChange: Partial<EditingChange>): RowKey | undefined {
     return insertChange.insertAfterKey ?? insertChange.insertBeforeKey;
   }
 
-  private _getPageIndexToInsertRow() {
-    const newRowPosition: any = this._getNewRowPosition();
+  private _getPageIndexToInsertRow(): number {
+    const newRowPosition = this._getNewRowPosition();
     const dataController = this._dataController;
     const pageIndex = dataController.pageIndex();
     const lastPageIndex = this.dataSourceController.pageCount() - 1;
@@ -1006,31 +1126,33 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: keyboard_navigation
    */
-  protected addRow(parentKey) {
+  protected addRow(parentKey?: RowKey): DeferredObj<unknown> {
     const dataController = this._dataController;
     const store = this.dataSourceController.store();
 
     if (!store) {
       dataController.fireError('E1052', this.component.NAME);
-      // @ts-expect-error
-      return new Deferred().reject();
+      return Deferred<unknown>().reject();
     }
 
     return this._addRow(parentKey);
   }
 
-  protected _addRow(parentKey) {
+  protected _addRow(parentKey?: RowKey): DeferredObj<unknown> {
     const key = this.dataSourceController.store()?.key();
-    const param: any = { data: {} };
+    const param: NewRowInfo<RawItemData> = { data: {} };
     const oldEditRowIndex = this._getVisibleEditRowIndex();
-    // @ts-expect-error
-    const deferred = new Deferred();
+    const deferred = Deferred<unknown>();
 
-    // @ts-expect-error
     this.refresh({ allowCancelEditing: true });
 
     if (!this._allowRowAdding()) {
-      when(this._navigateToNewRow(oldEditRowIndex)).done(deferred.resolve).fail(deferred.reject);
+      when(this._navigateToNewRow(oldEditRowIndex))
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+        .done(deferred.resolve)
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+        .fail(deferred.reject);
+      // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
       return deferred.promise();
     }
 
@@ -1041,16 +1163,23 @@ class EditingControllerImpl extends modules.ViewController {
     // @ts-expect-error
     when(this._initNewRow(param, parentKey)).done(() => {
       if (this._allowRowAdding()) {
-        when(this._addRowCore(param.data, parentKey, oldEditRowIndex)).done(deferred.resolve).fail(deferred.reject);
+        when(this._addRowCore(param.data, parentKey, oldEditRowIndex))
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+          .done(deferred.resolve)
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+          .fail(deferred.reject);
       } else {
         deferred.reject('cancel');
       }
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(deferred.reject);
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return deferred.promise();
   }
 
-  protected _allowRowAdding(params?) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- no caller passes it
+  protected _allowRowAdding(params?: unknown): boolean {
     const insertIndex = this._getInsertIndex();
 
     if (insertIndex > 1) {
@@ -1063,8 +1192,12 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @exteded: TreeList's editing
    */
-  protected _addRowCore(data, parentKey, initialOldEditRowIndex) {
-    const change: Partial<EditingDataChange> = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
+  protected _addRowCore(
+    data: RawItemData,
+    parentKey: RowKey | undefined,
+    initialOldEditRowIndex: number,
+  ): DeferredObj<unknown> {
+    const change: Partial<EditingChange> = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
     const editRowIndex = this._getVisibleEditRowIndex();
     const insertInfo = this._addInsertInfo(change, parentKey);
     const { key } = insertInfo;
@@ -1075,30 +1208,35 @@ class EditingControllerImpl extends modules.ViewController {
     return this._navigateToNewRow(initialOldEditRowIndex, change, editRowIndex);
   }
 
-  private _navigateToNewRow(oldEditRowIndex, change?, editRowIndex?) {
-    // @ts-expect-error
-    const d = new Deferred();
+  private _navigateToNewRow(
+    oldEditRowIndex: number,
+    change?: Partial<EditingChange>,
+    editRowIndex = -1,
+  ): DeferredObj<unknown> {
+    const d = Deferred<unknown>();
     const dataController = this._dataController;
-    editRowIndex = editRowIndex ?? -1;
-    change = change ?? this.getChanges().filter((c) => c.type === DATA_EDIT_DATA_INSERT_TYPE)[0];
+    const newRowChange = change
+      ?? this.getChanges().filter((c) => c.type === DATA_EDIT_DATA_INSERT_TYPE)[0];
 
-    if (!change) {
+    if (!newRowChange) {
+      // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
       return d.reject('cancel').promise();
     }
 
     const pageIndexToInsertRow = this._getPageIndexToInsertRow();
-    let rowIndex = this._getLoadedRowIndex(dataController.items(), change, true);
-    const navigateToRowByKey = (key) => {
+    let rowIndex = this._getLoadedRowIndex(dataController.items(), newRowChange, true);
+    const navigateToRowByKey = (key: RowKey): void => {
       when(this._focusController?.navigateToRow(key)).done(() => {
-        rowIndex = dataController.getRowIndexByKey(change.key);
+        rowIndex = dataController.getRowIndexByKey(newRowChange.key);
         d.resolve();
       });
     };
-    const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
+    const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(newRowChange);
 
     if (pageIndexToInsertRow >= 0) {
       dataController.pageIndex(pageIndexToInsertRow).done(() => {
-        navigateToRowByKey(change.key);
+        navigateToRowByKey(newRowChange.key);
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       }).fail(d.reject);
     } else if (rowIndex < 0 && isDefined(insertAfterOrBeforeKey)) {
       navigateToRowByKey(insertAfterOrBeforeKey);
@@ -1108,10 +1246,10 @@ class EditingControllerImpl extends modules.ViewController {
         rowIndices: [oldEditRowIndex, editRowIndex, rowIndex],
       });
 
-      rowIndex = dataController.getRowIndexByKey(change.key);
+      rowIndex = dataController.getRowIndexByKey(newRowChange.key);
 
       if (rowIndex < 0) {
-        navigateToRowByKey(change.key);
+        navigateToRowByKey(newRowChange.key);
       } else {
         d.resolve();
       }
@@ -1120,20 +1258,22 @@ class EditingControllerImpl extends modules.ViewController {
     d.done(() => {
       this._rowsView?.waitAsyncTemplates(true).done(() => {
         this._showAddedRow(rowIndex);
-        this._afterInsertRow(change.key);
+        this._afterInsertRow(newRowChange.key);
       });
     });
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return d.promise();
   }
 
-  protected _showAddedRow(rowIndex) {
+  protected _showAddedRow(rowIndex: number): void {
     this._focusFirstEditableCellInRow(rowIndex);
   }
 
-  protected _beforeFocusElementInRow(rowIndex): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _beforeFocusElementInRow(rowIndex: number): void {}
 
-  private _focusFirstEditableCellInRow(rowIndex) {
+  private _focusFirstEditableCellInRow(rowIndex: number): void {
     const dataController = this._dataController;
     const key = dataController.getKeyByRowIndex(rowIndex);
     const $firstCell = this.getFirstEditableCellInRow(rowIndex);
@@ -1143,16 +1283,16 @@ class EditingControllerImpl extends modules.ViewController {
 
     this._editCellInProgress = true;
     this._delayedInputFocus($firstCell, () => {
-      rowIndex = dataController.getRowIndexByKey(key);
+      const focusedRowIndex = dataController.getRowIndexByKey(key);
       this._editCellInProgress = false;
-      this._beforeFocusElementInRow(rowIndex);
+      this._beforeFocusElementInRow(focusedRowIndex);
     });
   }
 
   /**
    * @extended: keyboard_navigation
    */
-  protected _isEditingStart(options) {
+  protected _isEditingStart(options: EditingStartOptions): boolean {
     this.executeAction('onEditingStart', options);
 
     return options.cancel;
@@ -1161,9 +1301,10 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: adaptivity
    */
-  protected _beforeUpdateItems(rowIndices, rowIndex): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _beforeUpdateItems(rowIndices: number[], rowIndex: number): void {}
 
-  protected _getVisibleEditColumnIndex() {
+  protected _getVisibleEditColumnIndex(): number {
     const editColumnName = this.option(EDITING_EDITCOLUMNNAME_OPTION_NAME);
 
     if (!isDefined(editColumnName)) {
@@ -1173,12 +1314,12 @@ class EditingControllerImpl extends modules.ViewController {
     return this._columnsController.getVisibleColumnIndex(editColumnName);
   }
 
-  protected _setEditColumnNameByIndex(index, silent?) {
+  protected _setEditColumnNameByIndex(index: number, silent?: boolean): void {
     const visibleColumns = this._columnsController.getVisibleColumns();
     this._setEditColumnName(visibleColumns[index]?.name, silent);
   }
 
-  private _setEditColumnName(name, silent) {
+  private _setEditColumnName(name: string | undefined, silent?: boolean): void {
     if (silent) {
       this._silentOption(EDITING_EDITCOLUMNNAME_OPTION_NAME, name);
     } else {
@@ -1186,33 +1327,36 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  protected _resetEditColumnName() {
+  protected _resetEditColumnName(): void {
     this._setEditColumnName(undefined, true);
   }
 
-  protected _getEditColumn() {
+  protected _getEditColumn(): Column | undefined {
     const editColumnName = this.option(EDITING_EDITCOLUMNNAME_OPTION_NAME);
 
     return this._getColumnByName(editColumnName);
   }
 
-  private _getColumnByName(name) {
+  private _getColumnByName(name: string | undefined): Column | undefined {
     const visibleColumns = this._columnsController.getVisibleColumns();
-    let editColumn;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the some callback
+    let editColumn: Column | undefined;
 
-    // @ts-expect-error
-    // eslint-disable-next-line array-callback-return
-    isDefined(name) && visibleColumns.some((column) => {
-      if (column.name === name) {
-        editColumn = column;
-        return true;
-      }
-    });
+    if (isDefined(name)) {
+      visibleColumns.some((column) => {
+        if (column.name === name) {
+          editColumn = column;
+          return true;
+        }
+
+        return undefined;
+      });
+    }
 
     return editColumn;
   }
 
-  protected _getVisibleEditRowIndex(columnName?) {
+  protected _getVisibleEditRowIndex(columnName?: string): number {
     const dataController = this._dataController;
     const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
     const rowIndex = dataController.getRowIndexByKey(editRowKey);
@@ -1224,19 +1368,19 @@ class EditingControllerImpl extends modules.ViewController {
     return rowIndex + this._getEditRowIndexCorrection(columnName);
   }
 
-  protected _getEditRowIndexCorrection(columnName?) {
+  protected _getEditRowIndexCorrection(columnName?: string): number {
     const editColumn = columnName ? this._getColumnByName(columnName) : this._getEditColumn();
     const isColumnHidden = editColumn?.visibleWidth === HIDDEN_COLUMNS_WIDTH;
 
     return isColumnHidden ? 1 : 0;
   }
 
-  protected _resetEditRowKey() {
+  protected _resetEditRowKey(): void {
     this._refocusEditCell = false;
     this._setEditRowKey(undefined, true);
   }
 
-  protected _resetEditIndices() {
+  protected _resetEditIndices(): void {
     this._resetEditColumnName();
     this._resetEditRowKey();
   }
@@ -1244,16 +1388,15 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: adaptivity, keyboard_navigation
    */
-  // @ts-expect-error
-  public editRow(rowIndex) {
+  public editRow(rowIndex: number): boolean | undefined {
     const dataController = this._dataController;
     const items = dataController.items();
-    const item: any = items[rowIndex];
-    const params: any = { data: item && item.data, cancel: false };
+    const item = items[rowIndex];
+    const params: EditingStartOptions = { data: item?.data, cancel: false };
     const oldRowIndex = this._getVisibleEditRowIndex();
 
     if (!item) {
-      return;
+      return undefined;
     }
 
     if (rowIndex === oldRowIndex) {
@@ -1262,7 +1405,7 @@ class EditingControllerImpl extends modules.ViewController {
 
     if (item.key === undefined) {
       this._dataController.fireError('E1043');
-      return;
+      return undefined;
     }
 
     if (!item.isNewRow) {
@@ -1270,7 +1413,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
 
     if (this._isEditingStart(params)) {
-      return;
+      return undefined;
     }
 
     this.resetChanges();
@@ -1282,9 +1425,11 @@ class EditingControllerImpl extends modules.ViewController {
       oldData: item.oldData ?? item.data,
     });
     this._setEditRowKey(item.key);
+
+    return undefined;
   }
 
-  private _editRowFromOptionChanged(rowIndex, oldRowIndex) {
+  private _editRowFromOptionChanged(rowIndex: number, oldRowIndex: number): void {
     const rowIndices = [oldRowIndex, rowIndex];
 
     // @ts-expect-error
@@ -1292,7 +1437,11 @@ class EditingControllerImpl extends modules.ViewController {
     this._editRowFromOptionChangedCore(rowIndices, rowIndex);
   }
 
-  protected _editRowFromOptionChangedCore(rowIndices, rowIndex, preventRendering?) {
+  protected _editRowFromOptionChangedCore(
+    rowIndices: number[],
+    rowIndex: number,
+    preventRendering?: boolean,
+  ): void {
     this._needFocusEditor = true;
     this._dataController.updateItems({
       changeType: 'update',
@@ -1301,25 +1450,33 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  public _focusEditorIfNeed(): any {}
+  public _focusEditorIfNeed(): void {}
 
-  protected _showEditPopup(rowIndex, repaintForm?): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _showEditPopup(rowIndex: number, repaintForm?: boolean): void {}
 
-  protected _repaintEditPopup(): any {}
+  protected _repaintEditPopup(): void {}
 
-  protected _getEditPopupHiddenHandler() {
-    return (e) => {
+  protected _getEditPopupHiddenHandler(): (e: PopupHidingEvent) => void {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- the popup passes the event
+    return (e): void => {
       if (this.isEditing()) {
         this.cancelEditData();
       }
     };
   }
 
-  protected _getPopupEditFormTemplate(rowIndex): any {}
+  protected _getPopupEditFormTemplate(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+    rowIndex: number,
+  ): ((container: DxElement) => void) | undefined {
+    return undefined;
+  }
 
-  protected _getSaveButtonConfig() {
-    const buttonConfig: any = {
+  protected _getSaveButtonConfig(): ButtonProperties {
+    const buttonConfig: ButtonProperties = {
       text: this.option('editing.texts.saveRowChanges'),
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       onClick: this.saveEditData.bind(this),
     };
 
@@ -1331,8 +1488,8 @@ class EditingControllerImpl extends modules.ViewController {
     return buttonConfig;
   }
 
-  protected _getCancelButtonConfig() {
-    const buttonConfig: any = {
+  protected _getCancelButtonConfig(): ButtonProperties {
+    const buttonConfig: ButtonProperties = {
       text: this.option('editing.texts.cancelRowChanges'),
       onClick: this.cancelEditData.bind(this),
     };
@@ -1355,7 +1512,7 @@ class EditingControllerImpl extends modules.ViewController {
     this._addInternalData({ ...internalData, key: newKey });
   }
 
-  private _updateInsertAfterOrBeforeKeys(changes, index) {
+  private _updateInsertAfterOrBeforeKeys(changes: EditingChange[], index: number): void {
     const removeChange = changes[index];
 
     changes.forEach((change) => {
@@ -1363,7 +1520,8 @@ class EditingControllerImpl extends modules.ViewController {
         const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
         if (equalByValue(insertAfterOrBeforeKey, removeChange.key)) {
-          change[isDefined(change.insertAfterKey) ? 'insertAfterKey' : 'insertBeforeKey'] = this._getInsertAfterOrBeforeKey(removeChange);
+          const keyName = isDefined(change.insertAfterKey) ? 'insertAfterKey' : 'insertBeforeKey';
+          change[keyName] = this._getInsertAfterOrBeforeKey(removeChange);
         }
       }
     });
@@ -1372,7 +1530,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: DataGrid's summary
    */
-  protected _removeChange(index) {
+  protected _removeChange(index: number): void {
     if (index >= 0) {
       const changes = [...this.getChanges()];
       const { key, type } = changes[index];
@@ -1392,8 +1550,10 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  protected executeOperation(deferred, func) {
-    this._lastOperation && this._lastOperation.reject();
+  protected executeOperation(deferred: DeferredObj<unknown>, func: () => void): void {
+    if (this._lastOperation) {
+      this._lastOperation.reject();
+    }
     this._lastOperation = deferred;
 
     this.waitForDeferredOperations().done(() => {
@@ -1408,7 +1568,7 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  public waitForDeferredOperations() {
+  public waitForDeferredOperations(): DeferredObj<unknown> {
     return when(...this._deferreds);
   }
 
@@ -1416,10 +1576,14 @@ class EditingControllerImpl extends modules.ViewController {
    * @extended: keyboard_navigation
    * @protected
    */
-  protected _processCanceledEditingCell(): any {}
+  protected _processCanceledEditingCell(): void {}
 
-  protected _repaintEditCell(column, oldColumn, oldEditRowIndex) {
-    if (!column || !column.showEditorAlways || oldColumn && !oldColumn.showEditorAlways) {
+  protected _repaintEditCell(
+    column: Column | undefined,
+    oldColumn: Column | undefined,
+    oldEditRowIndex: number,
+  ): void {
+    if (!column || !column.showEditorAlways || (oldColumn && !oldColumn.showEditorAlways)) {
       this._editCellInProgress = true;
       this._needFocusEditor = true;
 
@@ -1443,8 +1607,12 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: keyboard_navigation
    */
-  protected _delayedInputFocus($cell, beforeFocusCallback, callBeforeFocusCallbackAlways?) {
-    const inputFocus = () => {
+  protected _delayedInputFocus(
+    $cell: dxElementWrapper | undefined,
+    beforeFocusCallback?: (() => void) | null,
+    callBeforeFocusCallbackAlways?: boolean,
+  ): void {
+    const inputFocus = (): void => {
       if (beforeFocusCallback) {
         beforeFocusCallback();
       }
@@ -1472,36 +1640,41 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  public _focusEditingCell(beforeFocusCallback?, $editCell?, callBeforeFocusCallbackAlways?) {
+  public _focusEditingCell(
+    beforeFocusCallback?: (() => void) | null,
+    $editCell?: dxElementWrapper,
+    callBeforeFocusCallbackAlways?: boolean,
+  ): void {
     const editColumnIndex = this._getVisibleEditColumnIndex();
 
-    $editCell = $editCell || this._rowsView && this._rowsView._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
+    const $cellToFocus = $editCell
+      ?? this._rowsView?._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
 
-    if ($editCell) {
-      this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
+    if ($cellToFocus) {
+      this._delayedInputFocus($cellToFocus, beforeFocusCallback, callBeforeFocusCallbackAlways);
     }
   }
 
   /**
    * @extended: adaptivity
    */
-  protected deleteRow(rowIndex) {
+  protected deleteRow(rowIndex: number): void {
     this._checkAndDeleteRow(rowIndex);
   }
 
-  protected _checkAndDeleteRow(rowIndex) {
+  protected _checkAndDeleteRow(rowIndex: number): void {
     const editingOptions = this.option('editing');
     const editingTexts = editingOptions?.texts;
     const confirmDelete = editingOptions?.confirmDelete;
     const confirmDeleteMessage = editingTexts?.confirmDeleteMessage;
-    const item: any = this._dataController.items()[rowIndex];
+    const item = this._dataController.items()[rowIndex];
     const allowDeleting = !this.isEditing() || item.isNewRow; // T741746
 
     if (item && allowDeleting) {
       if (!confirmDelete || !confirmDeleteMessage) {
         this._deleteRowCore(rowIndex);
       } else {
-        const confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle;
+        const confirmDeleteTitle = editingTexts?.confirmDeleteTitle;
         const showDialogTitle = isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
         // @ts-expect-error
         confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done((confirmResult) => {
@@ -1516,10 +1689,10 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: focus
    */
-  protected _deleteRowCore(rowIndex) {
+  protected _deleteRowCore(rowIndex: number): DeferredObj<unknown> {
     const dataController = this._dataController;
     const item = dataController.items()[rowIndex];
-    const key = item && item.key;
+    const key = item?.key;
     const oldEditRowIndex = this._getVisibleEditRowIndex();
 
     this.refresh();
@@ -1539,15 +1712,16 @@ class EditingControllerImpl extends modules.ViewController {
     return this._afterDeleteRow(rowIndex, oldEditRowIndex);
   }
 
-  protected _afterDeleteRow(rowIndex, oldEditRowIndex) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _afterDeleteRow(rowIndex: number, oldEditRowIndex: number): DeferredObj<unknown> {
     return this.saveEditData();
   }
 
-  private undeleteRow(rowIndex) {
+  private undeleteRow(rowIndex: number): void {
     const dataController = this._dataController;
     const item = dataController.items()[rowIndex];
     const oldEditRowIndex = this._getVisibleEditRowIndex();
-    const key = item && item.key;
+    const key = item?.key;
     const changes = this.getChanges();
 
     if (item) {
@@ -1570,8 +1744,8 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _fireOnSaving() {
-    const onSavingParams: any = {
+  private _fireOnSaving(): DeferredObj<OnSavingResult> {
+    const onSavingParams: OnSavingParams = {
       cancel: false,
       promise: null,
       changes: [...this.getChanges()],
@@ -1589,22 +1763,26 @@ class EditingControllerImpl extends modules.ViewController {
     return d;
   }
 
-  private _executeEditingAction(actionName, params, func) {
+  private _executeEditingAction(
+    actionName: string,
+    params: EditingActionParams,
+    func: (params: EditingActionParams) => DeferredObj<unknown>,
+  ): DeferredObj<unknown> | null {
     if (this.component._disposed) {
       return null;
     }
 
-    // @ts-expect-error
-    const deferred = new Deferred();
+    const deferred = Deferred<unknown>();
 
     this.executeAction(actionName, params);
 
-    when(fromPromise(params.cancel)).done((cancel) => {
+    when(fromPromise<unknown>(params.cancel)).done((cancel) => {
       if (cancel) {
         setTimeout(() => {
           deferred.resolve('cancel');
         });
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
         func(params).done(deferred.resolve).fail(createFailureHandler(deferred));
       }
     }).fail(createFailureHandler(deferred));
@@ -1612,15 +1790,22 @@ class EditingControllerImpl extends modules.ViewController {
     return deferred;
   }
 
-  private _processChanges(deferreds, results, dataChanges, changes) {
+  private _processChanges(
+    deferreds: DeferredObj<unknown>[],
+    results: SaveResult[],
+    dataChanges: StoreChange[],
+    changes: EditingChange[],
+  ): void {
     const store = this.dataSourceController.store() as Store;
 
     each(changes, (index, change) => {
       const oldData = this._getOldData(change.key);
       const { data, type } = change;
       const changeCopy = { ...change };
-      let deferred;
-      let params;
+      // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the switch
+      let deferred: DeferredObj<unknown> | null | undefined;
+      // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the switch
+      let params: EditingActionParams;
 
       // @ts-expect-error
       if (this._beforeSaveEditData(change, index)) {
@@ -1631,55 +1816,69 @@ class EditingControllerImpl extends modules.ViewController {
       switch (type) {
         case DATA_EDIT_DATA_REMOVE_TYPE:
           params = { data: oldData, key: change.key, cancel: false };
-          deferred = this._executeEditingAction('onRowRemoving', params, () => fromPromise(store.remove(change.key)).done((key) => {
-            dataChanges.push({ type: 'remove', key });
-          }));
+          deferred = this._executeEditingAction(
+            'onRowRemoving',
+            params,
+            () => fromPromise(store.remove(change.key)).done((key) => {
+              dataChanges.push({ type: 'remove', key });
+            }),
+          );
           break;
         case DATA_EDIT_DATA_INSERT_TYPE:
           params = { data, cancel: false };
-          deferred = this._executeEditingAction('onRowInserting', params, () => fromPromise(store.insert(params.data)).done((data, key) => {
-            if (isDefined(key)) {
-              const initialKey = changeCopy.key;
+          deferred = this._executeEditingAction(
+            'onRowInserting',
+            params,
+            () => fromPromise(store.insert(params.data)).done((insertedData, key) => {
+              if (isDefined(key)) {
+                const initialKey = changeCopy.key;
 
-              changeCopy.key = key;
-              this.updateInternalDataKey(initialKey, key);
-            }
-            if (data && isObject(data) && data !== params.data) {
-              changeCopy.data = data;
-            }
-            dataChanges.push({ type: 'insert', data, index: 0 });
-          }));
+                changeCopy.key = key;
+                this.updateInternalDataKey(initialKey, key);
+              }
+              if (insertedData && isObject(insertedData) && insertedData !== params.data) {
+                changeCopy.data = insertedData;
+              }
+              dataChanges.push({ type: 'insert', data: insertedData, index: 0 });
+            }),
+          );
           break;
         case DATA_EDIT_DATA_UPDATE_TYPE:
           params = {
             newData: data, oldData, key: change.key, cancel: false,
           };
-          deferred = this._executeEditingAction('onRowUpdating', params, () => fromPromise(store.update(change.key, params.newData)).done((data, key) => {
-            if (data && isObject(data) && data !== params.newData) {
-              changeCopy.data = data;
-            }
-            dataChanges.push({ type: 'update', key, data });
-          }));
+          deferred = this._executeEditingAction(
+            'onRowUpdating',
+            params,
+            () => fromPromise(store.update(change.key, params.newData)).done((updatedData, key) => {
+              if (updatedData && isObject(updatedData) && updatedData !== params.newData) {
+                changeCopy.data = updatedData;
+              }
+              dataChanges.push({ type: 'update', key, data: updatedData });
+            }),
+          );
           break;
       }
 
       changes[index] = changeCopy;
 
       if (deferred) {
-        // @ts-expect-error
-        const doneDeferred = new Deferred();
+        const doneDeferred = Deferred<unknown>();
         deferred
-          .always((data) => {
-            results.push({ key: change.key, result: data });
+          .always((saveResult) => {
+            results.push({ key: change.key, result: saveResult });
           })
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
           .always(doneDeferred.resolve);
 
+        // eslint-disable-next-line @stylistic/max-len
+        // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
         deferreds.push(doneDeferred.promise());
       }
     });
   }
 
-  public _processRemoveIfError(changes, editIndex): any {
+  public _processRemoveIfError(changes: EditingChange[], editIndex: number): boolean {
     const change = changes[editIndex];
 
     if (change?.type === DATA_EDIT_DATA_REMOVE_TYPE) {
@@ -1691,15 +1890,26 @@ class EditingControllerImpl extends modules.ViewController {
     return true;
   }
 
-  private _processRemove(changes, editIndex, cancel) {
+  private _processRemove(
+    changes: EditingChange[],
+    editIndex: number,
+    cancel: boolean,
+  ): boolean | undefined {
     const change = changes[editIndex];
 
     if (!cancel || !change || change.type === DATA_EDIT_DATA_REMOVE_TYPE) {
       return this._processRemoveCore(changes, editIndex, !cancel || !change);
     }
+
+    return undefined;
   }
 
-  protected _processRemoveCore(changes, editIndex, processIfBatch?): any {
+  protected _processRemoveCore(
+    changes: EditingChange[],
+    editIndex: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+    processIfBatch?: boolean,
+  ): boolean {
     if (editIndex >= 0) {
       changes.splice(editIndex, 1);
     }
@@ -1707,16 +1917,16 @@ class EditingControllerImpl extends modules.ViewController {
     return true;
   }
 
-  private _processSaveEditDataResult(results) {
+  private _processSaveEditDataResult(results: SaveResult[]): boolean {
     let hasSavedData = false;
     const originalChanges = this.getChanges();
     const changes = [...originalChanges];
     const changesLength = changes.length;
 
-    for (let i = 0; i < results.length; i++) {
-      const arg = results[i].result;
+    for (const saveResult of results) {
+      const arg = saveResult.result;
       const cancel = arg === 'cancel';
-      const editIndex = gridCoreUtils.getIndexByKey(results[i].key, changes);
+      const editIndex = gridCoreUtils.getIndexByKey(saveResult.key, changes);
       const change = changes[editIndex];
       const isError = arg && arg instanceof Error;
 
@@ -1730,7 +1940,7 @@ class EditingControllerImpl extends modules.ViewController {
         }
       } else if (this._processRemove(changes, editIndex, cancel)) {
         hasSavedData = !cancel;
-        const removedChangeIndex = gridCoreUtils.getIndexByKey(results[i].key, originalChanges);
+        const removedChangeIndex = gridCoreUtils.getIndexByKey(saveResult.key, originalChanges);
 
         this._updateInsertAfterOrBeforeKeys(originalChanges, removedChangeIndex);
       }
@@ -1743,10 +1953,10 @@ class EditingControllerImpl extends modules.ViewController {
     return hasSavedData;
   }
 
-  private _fireSaveEditDataEvents(changes) {
+  private _fireSaveEditDataEvents(changes: EditingChange[]): void {
     each(changes, (_, { data, key, type }) => {
       const internalData = this._getInternalData(key);
-      const params: any = { key, data };
+      const params: { key: RowKey; data: EditingChange['data']; error?: Error } = { key, data };
 
       if (internalData?.error) {
         params.error = internalData.error;
@@ -1771,9 +1981,8 @@ class EditingControllerImpl extends modules.ViewController {
     this.executeAction('onSaved', { changes });
   }
 
-  public saveEditData() {
-    // @ts-expect-error
-    const deferred = new Deferred();
+  public saveEditData(): DeferredObj<unknown> {
+    const deferred = Deferred<unknown>();
     this.waitForDeferredOperations().done(() => {
       if (this.isSaving()) {
         this._resolveAfterSave(deferred);
@@ -1793,29 +2002,38 @@ class EditingControllerImpl extends modules.ViewController {
               this._focusEditingCell();
             }
           })
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
           .done(deferred.resolve)
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
           .fail(deferred.reject);
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       }).fail(deferred.reject);
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(deferred.reject);
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return deferred.promise();
   }
 
-  private _resolveAfterSave(deferred, { cancel = undefined, error = undefined }: { cancel?: unknown; error?: unknown } = {}) {
+  private _resolveAfterSave(
+    deferred: DeferredObj<unknown>,
+    { cancel = undefined, error = undefined }: { cancel?: unknown; error?: unknown } = {},
+  ): void {
     // @ts-expect-error
     when(this._afterSaveEditData(cancel)).done(() => {
       deferred.resolve(error);
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(deferred.reject);
   }
 
-  protected _saveEditDataInner() {
-    // @ts-expect-error
-    const result = new Deferred();
-    const results = [];
-    const deferreds = [];
-    const dataChanges = [];
+  protected _saveEditDataInner(): DeferredObj<unknown> {
+    const result = Deferred<unknown>();
+    const results: SaveResult[] = [];
+    const deferreds: DeferredObj<unknown>[] = [];
+    const dataChanges: StoreChange[] = [];
     const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     when(this._fireOnSaving())
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       .done(({ cancel, changes }) => {
         if (cancel) {
           return result.resolve().promise();
@@ -1845,17 +2063,26 @@ class EditingControllerImpl extends modules.ViewController {
         }
 
         this._cancelSaving(result);
+
+        return undefined;
       })
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       .fail(result.reject);
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return result.promise();
   }
 
-  protected _beforeEndSaving(changes) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _beforeEndSaving(changes: EditingChange[]): void {
     this._resetEditIndices();
   }
 
-  private _endSaving(dataChanges, changes, deferred) {
+  private _endSaving(
+    dataChanges: StoreChange[],
+    changes: EditingChange[],
+    deferred: DeferredObj<unknown>,
+  ): void {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     this._beforeEndSaving(changes);
@@ -1865,12 +2092,16 @@ class EditingControllerImpl extends modules.ViewController {
     this._refreshDataAfterSave(dataChanges, changes, deferred);
   }
 
-  protected _cancelSaving(result) {
+  protected _cancelSaving(result: DeferredObj<unknown>): void {
     this.executeAction('onSaved', { changes: [] });
     this._resolveAfterSave(result);
   }
 
-  private _refreshDataAfterSave(dataChanges, changes, deferred) {
+  private _refreshDataAfterSave(
+    dataChanges: StoreChange[],
+    changes: EditingChange[],
+    deferred: DeferredObj<unknown>,
+  ): void {
     const dataController = this._dataController;
     const refreshMode = this.option('editing.refreshMode');
     const isFullRefresh = refreshMode !== 'reshape' && refreshMode !== 'repaint';
@@ -1893,11 +2124,11 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  public isSaving() {
+  public isSaving(): boolean | undefined {
     return this._saving;
   }
 
-  private _updateEditColumn() {
+  private _updateEditColumn(): void {
     const isEditColumnVisible = this._isEditColumnVisible();
     const useIcons = this.option('editing.useIcons');
     const cssClass = COMMAND_EDIT_CLASS + (useIcons ? ` ${COMMAND_EDIT_WITH_ICONS_CLASS}` : '');
@@ -1919,13 +2150,14 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  protected _isEditColumnVisible() {
-    const editingOptions: any = this.option('editing');
+  protected _isEditColumnVisible(): boolean {
+    const editingOptions: EditingOptions | undefined = this.option('editing');
 
+    // @ts-expect-error the editing option has defaults, a callback shows the column
     return editingOptions.allowDeleting;
   }
 
-  private _isEditButtonDisabled() {
+  private _isEditButtonDisabled(): boolean {
     const hasChanges = this.hasChanges();
     const isEditRowDefined = isDefined(this.option('editing.editRowKey'));
 
@@ -1935,7 +2167,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: DataGrid's export
    */
-  protected _updateEditButtons() {
+  protected _updateEditButtons(): void {
     const isButtonDisabled = this._isEditButtonDisabled();
 
     if (this._headerPanelView) {
@@ -1944,19 +2176,26 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  protected _applyModified($element, options) {
-    $element && $element.addClass(CELL_MODIFIED);
+  protected _applyModified(
+    $element: dxElementWrapper | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- callers pass the cell options
+    options: EditorCellOptions,
+  ): void {
+    if ($element) {
+      $element.addClass(CELL_MODIFIED);
+    }
   }
 
   /**
    * @extended: adaptivity
    */
-  protected _beforeCloseEditCellInBatchMode(rowIndices): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _beforeCloseEditCellInBatchMode(rowIndices: number[]): void {}
 
   /**
    * @extended: DataGird's summary
    */
-  public cancelEditData() {
+  public cancelEditData(): void {
     const changes = this.getChanges();
     const params = {
       cancel: false,
@@ -1970,7 +2209,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  protected _cancelEditDataCore() {
+  protected _cancelEditDataCore(): void {
     const rowIndex = this._getVisibleEditRowIndex();
 
     this._beforeCancelEditData();
@@ -1986,7 +2225,8 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: filter_row
    */
-  protected _afterCancelEditData(rowIndex) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _afterCancelEditData(rowIndex: number): void {
     const dataController = this._dataController;
 
     dataController.updateItems({
@@ -1995,18 +2235,17 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  protected _hideEditPopup(): any {}
+  protected _hideEditPopup(): void {}
 
-  protected hasEditData() {
+  protected hasEditData(): boolean {
     return this.hasChanges();
   }
 
-  private update(changeType) {
+  private update(changeType: DataChange['changeType']): void {
     const dataController = this._dataController;
 
     if (dataController && this._pageIndex !== dataController.pageIndex()) {
       if (changeType === 'refresh') {
-        // @ts-expect-error
         this.refresh({ isPageChanged: true });
       }
       this._pageIndex = dataController.pageIndex();
@@ -2017,14 +2256,18 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: adaptivity
    */
-  protected _getRowIndicesForCascadeUpdating(row, skipCurrentRow) {
+  protected _getRowIndicesForCascadeUpdating(
+    row: ProcessedItem,
+    skipCurrentRow?: boolean,
+  ): number[] {
+    // @ts-expect-error a rendered row has its rowIndex
     return skipCurrentRow ? [] : [row.rowIndex];
   }
 
   /**
    * Adds a deferred object to be awaited before other operations are executed
    */
-  public addDeferred(deferred: DeferredObj<any>): void {
+  public addDeferred(deferred: DeferredObj<unknown>): void {
     if (!this._deferreds.includes(deferred)) {
       this._deferreds.push(deferred);
       deferred.always(() => {
@@ -2036,17 +2279,23 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  protected _prepareChange(options, value, text) {
-    const newData = {};
+  protected _prepareChange(
+    options: EditorCellOptions,
+    value: unknown,
+    text?: string,
+  ): DeferredObj<EditingChangeParams> {
+    const newData: RawItemData = {};
     const oldData = options.row?.data;
     const rowKey = options.key;
-    // @ts-expect-error
-    const deferred = new Deferred();
+    const deferred = Deferred<EditingChangeParams>();
 
     if (rowKey !== undefined) {
       options.value = value;
 
-      const setCellValueResult = fromPromise(options.column.setCellValue(newData, value, extend(true, {}, oldData), text));
+      const setCellValueResult = fromPromise(
+        // @ts-expect-error callers check setCellValue, it also gets the display text
+        options.column.setCellValue(newData, value, extend(true, {}, oldData), text),
+      );
       setCellValueResult.done(() => {
         deferred.resolve({
           data: newData,
@@ -2057,6 +2306,7 @@ class EditingControllerImpl extends modules.ViewController {
       }).fail(createFailureHandler(deferred)).fail((arg) => this._fireDataErrorOccurred(arg));
 
       if (isDefined(text) && options.column.displayValueMap) {
+        // @ts-expect-error displayValueMap is keyed by the values
         options.column.displayValueMap[value] = text;
       }
 
@@ -2068,13 +2318,14 @@ class EditingControllerImpl extends modules.ViewController {
     return deferred;
   }
 
-  private _updateRowValues(options) {
+  private _updateRowValues(options: EditorCellOptions): void {
     if (options.values) {
       const dataController = this._dataController;
       const rowIndex = dataController.getRowIndexByKey(options.key);
       const row = dataController.getVisibleRows()[rowIndex];
 
       if (row) {
+        // @ts-expect-error a data cell has a row
         options.row.values = row.values; // T1122209
         options.values = row.values;
       }
@@ -2086,10 +2337,14 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: filter_row, validating
    */
-  public updateFieldValue(options, value, text, forceUpdateRow?) {
+  public updateFieldValue(
+    options: EditorCellOptions,
+    value: unknown,
+    text?: string,
+    forceUpdateRow?: boolean,
+  ): DeferredObj<unknown> {
     const rowKey = options.key;
-    // @ts-expect-error
-    const deferred = new Deferred();
+    const deferred = Deferred<unknown>();
 
     if (rowKey === undefined) {
       this._dataController.fireError('E1043');
@@ -2105,32 +2360,40 @@ class EditingControllerImpl extends modules.ViewController {
       deferred.resolve();
     }
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return deferred.promise();
   }
 
-  // @ts-expect-error
-  private _focusPreviousEditingCellIfNeed(options) {
+  private _focusPreviousEditingCellIfNeed(options: EditorCellOptions): boolean | undefined {
     if (this.hasEditData() && !this.isEditCell(options.rowIndex, options.columnIndex)) {
       this._focusEditingCell();
+      // @ts-expect-error a data cell has a row
       this._updateEditRow(options.row, true);
       return true;
     }
+
+    return undefined;
   }
 
-  protected _needUpdateRow(column?) {
+  protected _needUpdateRow(column?: Column): boolean {
     const visibleColumns = this._columnsController.getVisibleColumns();
+    const editColumn = column ?? this._getEditColumn();
 
-    if (!column) {
-      column = this._getEditColumn();
-    }
+    const isCustomSetCellValue = editColumn
+      && editColumn.setCellValue !== editColumn.defaultSetCellValue;
+    const isCustomCalculateCellValue = visibleColumns.some(
+      (visibleColumn) => visibleColumn.calculateCellValue
+        !== visibleColumn.defaultCalculateCellValue,
+    );
 
-    const isCustomSetCellValue = column && column.setCellValue !== column.defaultSetCellValue;
-    const isCustomCalculateCellValue = visibleColumns.some((visibleColumn) => visibleColumn.calculateCellValue !== visibleColumn.defaultCalculateCellValue);
-
-    return isCustomSetCellValue || isCustomCalculateCellValue;
+    return !!isCustomSetCellValue || isCustomCalculateCellValue;
   }
 
-  protected _applyChange(options, params, forceUpdateRow) {
+  protected _applyChange(
+    options: EditorCellOptions,
+    params: EditingChangeParams,
+    forceUpdateRow?: boolean,
+  ): DeferredObj<unknown> | undefined {
     const changeOptions = { ...options, forceUpdateRow };
 
     this._addChange(params, changeOptions);
@@ -2139,7 +2402,10 @@ class EditingControllerImpl extends modules.ViewController {
     return this._applyChangeCore(options, changeOptions.forceUpdateRow);
   }
 
-  protected _applyChangeCore(options, forceUpdateRow) {
+  protected _applyChangeCore(
+    options: EditorCellOptions,
+    forceUpdateRow?: boolean,
+  ): DeferredObj<unknown> | undefined {
     const isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
 
     const { row } = options;
@@ -2150,16 +2416,27 @@ class EditingControllerImpl extends modules.ViewController {
         row.update();
       }
     }
+
+    return undefined;
   }
 
-  protected _updateEditRowCore(row, skipCurrentRow, isCustomSetCellValue) {
+  protected _updateEditRowCore(
+    row: ProcessedItem,
+    skipCurrentRow: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+    isCustomSetCellValue?: boolean,
+  ): void {
     this._dataController.updateItems({
       changeType: 'update',
       rowIndices: this._getRowIndicesForCascadeUpdating(row, skipCurrentRow),
     });
   }
 
-  protected _updateEditRow(row, forceUpdateRow, isCustomSetCellValue?) {
+  protected _updateEditRow(
+    row: ProcessedItem,
+    forceUpdateRow?: boolean,
+    isCustomSetCellValue?: boolean,
+  ): void {
     if (forceUpdateRow) {
       this._updateRowImmediately(row, forceUpdateRow, isCustomSetCellValue);
     } else {
@@ -2167,7 +2444,11 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  protected _updateRowImmediately(row, forceUpdateRow, isCustomSetCellValue) {
+  protected _updateRowImmediately(
+    row: ProcessedItem,
+    forceUpdateRow?: boolean,
+    isCustomSetCellValue?: boolean,
+  ): void {
     this._updateEditRowCore(row, !forceUpdateRow, isCustomSetCellValue);
     // @ts-expect-error
     this._validateEditFormAfterUpdate(row, isCustomSetCellValue);
@@ -2176,14 +2457,14 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _updateRowWithDelay(row, isCustomSetCellValue) {
-    // @ts-expect-error
-    const deferred = new Deferred();
+  private _updateRowWithDelay(row: ProcessedItem, isCustomSetCellValue?: boolean): void {
+    const deferred = Deferred<unknown>();
     this.addDeferred(deferred);
     setTimeout(() => {
-      // NOTE: if the editForm is enabled then we need to search for focused element in the document root
-      // otherwise we need to search for element in the shadow dom
-      const elementContainer = this._editForm?.element() || this.component.$element().get(0);
+      // NOTE: if the editForm is enabled then we need to search for focused element
+      // in the document root, otherwise we need to search for element in the shadow dom
+      const elementContainer = this._editForm?.element()
+        ?? this.component.$element().get(0) as HTMLElement;
       const $focusedElement = $(domAdapter.getActiveElement(elementContainer));
       const columnIndex = this._rowsView.getCellIndex($focusedElement, row.rowIndex);
       let focusedElement = $focusedElement.get(0);
@@ -2194,6 +2475,7 @@ class EditingControllerImpl extends modules.ViewController {
       this._validateEditFormAfterUpdate(row, isCustomSetCellValue);
 
       if (columnIndex >= 0) {
+        // @ts-expect-error a rendered row has its rowIndex
         const $focusedItem = this._rowsView._getCellElement(row.rowIndex, columnIndex);
         this._delayedInputFocus($focusedItem, () => {
           setTimeout(() => {
@@ -2212,12 +2494,15 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  protected _validateEditFormAfterUpdate(): any {}
+  protected _validateEditFormAfterUpdate(): void {}
 
   /**
    * @extended: validating
    */
-  protected _addChange(changeParams, options?) {
+  protected _addChange(
+    changeParams: EditingChangeParams,
+    options?: { row?: ProcessedItem; forceUpdateRow?: boolean },
+  ): EditingChange {
     const row = options?.row;
     const changes = [...this.getChanges()];
     let index = gridCoreUtils.getIndexByKey(changeParams.key, changes);
@@ -2232,6 +2517,7 @@ class EditingControllerImpl extends modules.ViewController {
 
       delete changeParams.oldData;
 
+      // @ts-expect-error a remove change has no data
       changes.push(changeParams);
     }
 
@@ -2265,14 +2551,20 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: adaptivity
    */
-  protected _getFormEditItemTemplate(cellOptions, column) {
+  protected _getFormEditItemTemplate(
+    cellOptions: EditorCellOptions,
+    column: EditingColumn,
+  ): ColumnTemplateSource<ViewCellOptions> | undefined {
     return column.editCellTemplate || this._getDefaultEditorTemplate();
   }
 
-  public getColumnTemplate(options) {
+  public getColumnTemplate(
+    options: EditorCellOptions,
+  ): ColumnTemplateSource<ViewCellOptions> | undefined {
     const { column, row, rowType } = options;
     const rowIndex = row?.rowIndex;
-    let template;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the branches
+    let template: ColumnTemplateSource<ViewCellOptions> | undefined;
 
     const isRowMode = this.isRowBasedEditMode();
     const isRowEditing = this.isEditRow(rowIndex);
@@ -2290,45 +2582,55 @@ class EditingControllerImpl extends modules.ViewController {
 
       if (isEditable) {
         // eslint-disable-next-line @typescript-eslint/init-declarations
-        let editingStartOptions;
+        let editingStartOptions: EditingStartOptions | undefined;
         if (column.showEditorAlways && !isRowMode) {
           editingStartOptions = {
             cancel: false,
+            // @ts-expect-error a data cell has a row
             key: row?.isNewRow ? undefined : row.key,
+            // @ts-expect-error a data cell has a row
             data: row.data,
             column,
           };
           this._isEditingStart(editingStartOptions);
         }
-        if (!editingStartOptions || !editingStartOptions.cancel) {
-          options.setValue = (value, text) => {
+        if (!editingStartOptions?.cancel) {
+          options.setValue = (value, text): void => {
             this.updateFieldValue(options, value, text);
           };
         }
       }
       template = column.editCellTemplate || this._getDefaultEditorTemplate();
     } else if (column.command === 'detail' && rowType === 'detail' && isRowEditing) {
-      template = (this as any)?.getEditFormTemplate(options);
+      // @ts-expect-error the form-based extender adds getEditFormTemplate
+      template = this?.getEditFormTemplate(options);
     }
 
     return template;
   }
 
-  private _createButton($container, button, options, change) {
-    let icon = EDIT_ICON_CLASS[button.name];
+  private _createButton(
+    $container: dxElementWrapper,
+    button: ColumnButton,
+    options: EditorCellOptions,
+    change?: ViewDataChange,
+  ): void {
+    // @ts-expect-error a custom button can have no name, then its lookups give undefined
+    const buttonName: string = button.name;
+    let icon = EDIT_ICON_CLASS[buttonName];
     const useIcons = this.option('editing.useIcons');
     const useLegacyColumnButtonTemplate = this.option('useLegacyColumnButtonTemplate');
     let $button = $('<a>')
       .attr('href', '#')
       .addClass(LINK_CLASS)
-      .addClass(button.cssClass);
+      .addClass(button.cssClass ?? '');
 
     if (button.template && useLegacyColumnButtonTemplate) {
       this._rowsView.renderTemplate($container, button.template, options, true);
     } else {
       if (button.template) {
-        $button = $('<span>').addClass(button.cssClass);
-      } else if (useIcons && icon || button.icon) {
+        $button = $('<span>').addClass(button.cssClass ?? '');
+      } else if ((useIcons && icon) || button.icon) {
         icon = button.icon || icon;
         const iconType = iconUtils.getImageSourceType(icon);
 
@@ -2336,18 +2638,20 @@ class EditingControllerImpl extends modules.ViewController {
           // @ts-expect-error
           $button = iconUtils.getImageContainer(icon).addClass(button.cssClass);
         } else {
+          // @ts-expect-error attr() is typed without undefined
           $button.addClass(`dx-icon${iconType === 'dxIcon' ? '-' : ' '}${icon}`).attr('title', button.text);
         }
 
         $button.addClass(LINK_ICON_CLASS);
         $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
 
-        const localizationName = this.getButtonLocalizationNames()[button.name];
+        const localizationName = this.getButtonLocalizationNames()[buttonName];
 
         if (localizationName) {
           this.setAria('label', messageLocalization.format(localizationName), $button);
         }
       } else {
+        // @ts-expect-error text() is typed without undefined
         $button.text(button.text);
       }
 
@@ -2359,7 +2663,7 @@ class EditingControllerImpl extends modules.ViewController {
         $button.addClass('dx-state-disabled');
         this.setAria('disabled', 'true', $button);
       } else if (!button.template || button.onClick) {
-        eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction((e) => {
+        eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction((e): void => {
           button.onClick?.call(button, extend({}, e, { row: options.row, column: options.column }));
           e.event.preventDefault();
           e.event.stopPropagation();
@@ -2378,7 +2682,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: TreeList's editing
    */
-  protected getButtonLocalizationNames() {
+  protected getButtonLocalizationNames(): EditingButtonLocalizationNames {
     return {
       edit: 'dxDataGrid-editingEditRow',
       save: 'dxDataGrid-editingSaveRowChanges',
@@ -2388,7 +2692,12 @@ class EditingControllerImpl extends modules.ViewController {
     };
   }
 
-  protected prepareButtonItem(headerPanel, name, methodName, sortIndex) {
+  protected prepareButtonItem(
+    headerPanel: HeaderPanel,
+    name: string,
+    methodName: string,
+    sortIndex: number,
+  ): ToolbarItem {
     const editingTexts = this.option('editing.texts') ?? {};
 
     const titleButtonTextByClassNames = {
@@ -2403,11 +2712,14 @@ class EditingControllerImpl extends modules.ViewController {
     };
 
     const className = classNameButtonByNames[name];
-    const onInitialized = (e) => {
-      $(e.element).addClass(headerPanel.getToolbarButtonClass(`${EDIT_BUTTON_CLASS} ${this.addWidgetPrefix(className)}-button`));
+    const onInitialized = (e: ButtonInitializedEvent): void => {
+      $(e.element).addClass(headerPanel.getToolbarButtonClass(
+        `${EDIT_BUTTON_CLASS} ${this.addWidgetPrefix(className)}-button`,
+      ));
     };
     const hintText = titleButtonTextByClassNames[name];
-    const isButtonDisabled = (className === 'save' || className === 'cancel') && this._isEditButtonDisabled();
+    const isButtonDisabled = (className === 'save' || className === 'cancel')
+      && this._isEditButtonDisabled();
 
     return {
       widget: 'dxButton',
@@ -2415,7 +2727,7 @@ class EditingControllerImpl extends modules.ViewController {
         onInitialized,
         icon: `edit-button-${className}`,
         disabled: isButtonDisabled,
-        onClick: () => {
+        onClick: (): void => {
           setTimeout(() => {
             this[methodName]();
           });
@@ -2431,9 +2743,9 @@ class EditingControllerImpl extends modules.ViewController {
     };
   }
 
-  public prepareEditButtons(headerPanel) {
-    const editingOptions: any = this.option('editing') ?? {};
-    const buttonItems: any = [];
+  public prepareEditButtons(headerPanel: HeaderPanel): ToolbarItem[] {
+    const editingOptions: EditingOptions = this.option('editing') ?? {};
+    const buttonItems: ToolbarItem[] = [];
 
     if (editingOptions.allowAdding) {
       buttonItems.push(this.prepareButtonItem(headerPanel, 'addRow', 'addRow', 20));
@@ -2445,32 +2757,39 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  public highlightDataCell($cell, params) { this.shouldHighlightCell(params) && $cell.addClass(CELL_MODIFIED); }
+  public highlightDataCell($cell: dxElementWrapper, params: EditorCellOptions): void {
+    if (this.shouldHighlightCell(params)) {
+      $cell.addClass(CELL_MODIFIED);
+    }
+  }
 
   /**
    * @extended: adaptivity
    */
-  protected _afterInsertRow(key): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected _afterInsertRow(key: RowKey): void {}
 
   /**
    * @extended: validating, TreeList's editing
    */
-  // @ts-expect-error
-  protected _beforeSaveEditData(change?) {
+  protected _beforeSaveEditData(change?: EditingChange): boolean | undefined {
     if (change && !isDefined(change.key) && isDefined(change.type)) {
       return true;
     }
+
+    return undefined;
   }
 
   /**
    * @extended: adaptivity, filter_row, validating
    */
-  protected _afterSaveEditData(): any {}
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- validating returns nothing
+  protected _afterSaveEditData(): DeferredObj<unknown> | void {}
 
   /**
    * @extended: adaptivity, validating
    */
-  protected _beforeCancelEditData(): any {}
+  protected _beforeCancelEditData(): void {}
 
   protected _allowEditAction(actionName: EditActions, options: EditActionOptions): boolean {
     const allowEditAction: AllowEditActionValue | undefined = this.option('editing')?.[actionName];
@@ -2504,7 +2823,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: validating
    */
-  public isCellModified(parameters) {
+  public isCellModified(parameters: EditorCellOptions): boolean {
     const { columnIndex } = parameters;
     let modifiedValue = parameters?.row?.modifiedValues?.[columnIndex];
 
@@ -2515,15 +2834,18 @@ class EditingControllerImpl extends modules.ViewController {
     return modifiedValue !== undefined;
   }
 
-  public isNewRowInEditMode() {
+  public isNewRowInEditMode(): boolean | undefined {
     const visibleEditRowIndex = this._getVisibleEditRowIndex();
-    const rows: any[] = this._dataController.items();
+    const rows = this._dataController.items();
 
     return visibleEditRowIndex >= 0 ? rows[visibleEditRowIndex].isNewRow : false;
   }
 
-  protected _isRowDeleteAllowed(): any {}
+  protected _isRowDeleteAllowed(): boolean | undefined {
+    return undefined;
+  }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
   protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean { return false; }
 
   /// #DEBUG
@@ -2532,12 +2854,13 @@ class EditingControllerImpl extends modules.ViewController {
   }
   /// #ENDDEBUG
 
-  public shouldHighlightCell(parameters) {
+  public shouldHighlightCell(parameters: EditorCellOptions): boolean | undefined {
     const cellModified = this.isCellModified(parameters);
     return cellModified
               && parameters.column.setCellValue
               && (
                 this.getEditMode() !== EDIT_MODE_ROW
+                  // @ts-expect-error a data cell has a row
                   || !parameters.row.isEditing
               );
   }
@@ -2547,13 +2870,15 @@ export type EditingController = EditingControllerImpl
   & ICellBasedEditingControllerExtender
   & IFormBasedEditingControllerExtender;
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender extends Base {
-  private _pointerDownTarget: any;
+const rowsView = (
+  Base: ModuleType<RowsView>,
+): ModuleType<RowsView> => class RowsViewEditingExtender extends Base {
+  private _pointerDownTarget?: EventTarget | null;
 
-  private _pointerDownTimeout: any;
+  private _pointerDownTimeout?: ReturnType<typeof setTimeout>;
 
-  public getCellIndex($cell, rowIndex?) {
-    if (!$cell.is('td') && rowIndex >= 0) {
+  public getCellIndex($cell: dxElementWrapper, rowIndex?: number): number {
+    if (!$cell.is('td') && rowIndex !== undefined && rowIndex >= 0) {
       const $cellElements = this.getCellElements(rowIndex);
       let cellIndex = -1;
 
@@ -2566,29 +2891,35 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
       return cellIndex;
     }
 
-    return super.getCellIndex.apply(this, arguments as any);
+    return super.getCellIndex($cell, rowIndex);
   }
 
-  public publicMethods() {
+  public publicMethods(): string[] {
     return super.publicMethods().concat(['cellValue']);
   }
 
-  protected _getCellTemplate(options) {
+  protected _getCellTemplate(
+    options: EditorCellOptions,
+  ): ColumnTemplateSource<ViewCellOptions> | undefined {
     const template = this._editingController.getColumnTemplate(options);
 
     return template || super._getCellTemplate(options);
   }
 
-  protected _createRow(row) {
-    const $row = super._createRow.apply(this, arguments as any);
+  protected _createRow(row?: ProcessedItem, tag?: string): dxElementWrapper {
+    const $row = super._createRow(row, tag);
 
     if (row) {
       const isRowRemoved = !!row.removed;
       const isRowInserted = !!row.isNewRow;
       const isRowModified = !!row.modified;
 
-      isRowInserted && $row.addClass(ROW_INSERTED);
-      isRowModified && $row.addClass(ROW_MODIFIED);
+      if (isRowInserted) {
+        $row.addClass(ROW_INSERTED);
+      }
+      if (isRowModified) {
+        $row.addClass(ROW_MODIFIED);
+      }
 
       if (isRowInserted || isRowRemoved) {
         $row.removeClass(ROW_SELECTED);
@@ -2597,33 +2928,35 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     return $row;
   }
 
-  private _getColumnIndexByElement($element) {
-    let $tableElement = $element.closest('table');
+  private _getColumnIndexByElement($element: dxElementWrapper): number {
+    let $cellElement = $element;
+    let $tableElement = $cellElement.closest('table');
     const $tableElements = this.getTableElements();
 
+    // @ts-expect-error filter() is typed for selectors only
     while ($tableElement.length && !$tableElements.filter($tableElement).length) {
-      $element = $tableElement.closest('td');
-      $tableElement = $element.closest('table');
+      $cellElement = $tableElement.closest('td');
+      $tableElement = $cellElement.closest('table');
     }
 
-    return this._getColumnIndexByElementCore($element);
+    return this._getColumnIndexByElementCore($cellElement);
   }
 
-  private _getColumnIndexByElementCore($element) {
+  private _getColumnIndexByElementCore($element: dxElementWrapper): number {
     const $targetElement = $element.closest(`.${VIEW_CLASSES.row}> td:not(.dx-master-detail-cell)`);
 
     return this.getCellIndex($targetElement);
   }
 
-  private _editCellByClick(e, eventName) {
+  private _editCellByClick(e: ViewRowEvent, eventName: string): boolean | undefined {
     const editingController = this._editingController;
     const $targetElement = $(e.event.target);
     const columnIndex = this._getColumnIndexByElement($targetElement);
-    const row: any = this._dataController.items()[e.rowIndex];
+    const row = this._dataController.items()[e.rowIndex];
     const allowUpdating = editingController.allowUpdating({ row }, eventName);
     const column = this._columnsController.getVisibleColumns()[columnIndex];
     const isEditedCell = editingController.isEditCell(e.rowIndex, columnIndex);
-    const allowEditing = allowUpdating && column && (column.allowEditing || isEditedCell);
+    const allowEditing = allowUpdating && column && (!!column.allowEditing || isEditedCell);
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const startEditAction = this.option('editing.startEditAction') || 'click';
     const isShowEditorAlways = column && column.showEditorAlways;
@@ -2637,54 +2970,62 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
         domUtils.resetActiveElement();
       }
 
-      return isShowEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- editCell() isn't typed yet
+      return isShowEditorAlways && allowEditing
+        && editingController.editCell(e.rowIndex, columnIndex);
     }
 
-    if (eventName === 'click' && startEditAction === 'dblClick' && this._pointerDownTarget === $targetElement.get(0)) {
+    if (
+      eventName === 'click'
+      && startEditAction === 'dblClick'
+      && this._pointerDownTarget === $targetElement.get(0)
+    ) {
       const isError = false;
       const withoutSaveEditData = row?.isNewRow;
       editingController.closeEditCell(isError, withoutSaveEditData);
     }
 
     if (allowEditing && eventName === startEditAction) {
-      return editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- editCell() isn't typed yet
+      return editingController.editCell(e.rowIndex, columnIndex)
+        || editingController.isEditRow(e.rowIndex);
     }
+
+    return undefined;
   }
 
-  protected _rowPointerDown(e) {
+  protected _rowPointerDown(e: ViewRowEvent): void {
     this._pointerDownTarget = e.event.target;
     this._pointerDownTimeout = setTimeout(() => {
       this._editCellByClick(e, 'down');
     });
   }
 
-  private _rowClickTreeListHack(e) {
-    // @ts-expect-error
-    super._rowClick.apply(this, arguments);
+  private _rowClickTreeListHack(e: ViewRowEvent): void {
+    super._rowClick(e);
   }
 
-  protected _rowClick(e) {
+  protected _rowClick(e: ViewRowEvent): void {
     const isEditForm = $(e.rowElement).hasClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
 
     e.event[TARGET_COMPONENT_NAME] = this.component;
 
     if (!this._editCellByClick(e, 'click') && !isEditForm) {
-      super._rowClick.apply(this, arguments as any);
+      super._rowClick(e);
     }
   }
 
-  private _rowDblClickTreeListHack(e) {
-    // @ts-expect-error
-    super._rowDblClick.apply(this, arguments);
+  private _rowDblClickTreeListHack(e: ViewRowEvent): void {
+    super._rowDblClick(e);
   }
 
-  protected _rowDblClick(e) {
+  protected _rowDblClick(e: ViewRowEvent): void {
     if (!this._editCellByClick(e, 'dblClick')) {
-      super._rowDblClick.apply(this, arguments as any);
+      super._rowDblClick(e);
     }
   }
 
-  public _cellPrepared($cell, parameters) {
+  public _cellPrepared($cell: dxElementWrapper, parameters: EditorCellOptions): void {
     const editingController = this._editingController;
     const isCommandCell = !!parameters.column.command;
     const isEditableCell = parameters.setValue;
@@ -2710,34 +3051,55 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
 
     const hasTemplate = !!parameters.column?.cellTemplate;
 
-    if (parameters.column && !isCommandCell && (!hasTemplate || editingController.shouldHighlightCell(parameters))) {
+    if (
+      parameters.column
+      && !isCommandCell
+      && (!hasTemplate || editingController.shouldHighlightCell(parameters))
+    ) {
       editingController.highlightDataCell($cell, parameters);
     }
-    super._cellPrepared.apply(this, arguments as any);
+    super._cellPrepared($cell, parameters);
   }
 
-  public _getCellOptions(options) {
+  public _getCellOptions(options: CellRenderOptions): ViewCellOptions {
     const cellOptions = super._getCellOptions(options);
-    const { columnIndex, row } = options;
+    // @ts-expect-error the rows view types its rows as ViewRow
+    const { columnIndex, row }: { columnIndex: number; row: ProcessedItem } = options;
 
-    cellOptions.isEditing = this._editingController.isEditCell(cellOptions.rowIndex, cellOptions.columnIndex);
+    cellOptions.isEditing = this._editingController.isEditCell(
+      cellOptions.rowIndex,
+      cellOptions.columnIndex,
+    );
     cellOptions.removed = row.removed;
 
     if (row.modified) {
+      // @ts-expect-error a modified row has its modifiedValues
       cellOptions.modified = row.modifiedValues[columnIndex] !== undefined;
     }
 
     return cellOptions;
   }
 
-  protected _setCellAriaAttributes($cell, cellOptions, options?) {
+  protected _setCellAriaAttributes(
+    $cell: dxElementWrapper,
+    cellOptions: ViewCellOptions,
+    options: CellRenderOptions,
+  ): void {
     super._setCellAriaAttributes($cell, cellOptions, options);
 
     if (cellOptions.removed) {
-      this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaDeletedCell'), $cell);
+      this.setAria(
+        'roledescription',
+        messageLocalization.format('dxDataGrid-ariaDeletedCell'),
+        $cell,
+      );
     }
     if (cellOptions.modified) {
-      this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaModifiedCell'), $cell);
+      this.setAria(
+        'roledescription',
+        messageLocalization.format('dxDataGrid-ariaModifiedCell'),
+        $cell,
+      );
     }
 
     const isEditableCell = cellOptions.column.allowEditing
@@ -2748,34 +3110,46 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
       && this._editingController.isCellBasedEditMode();
 
     if (isEditableCell) {
-      this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaEditableCell'), $cell);
+      this.setAria(
+        'roledescription',
+        messageLocalization.format('dxDataGrid-ariaEditableCell'),
+        $cell,
+      );
     }
   }
 
-  protected _createCell(options) {
+  protected _createCell(options: ViewCellOptions): dxElementWrapper {
     const $cell = super._createCell(options);
     const isEditRow = this._editingController.isEditRow(options.rowIndex);
 
-    isEditingOrShowEditorAlwaysDataCell(isEditRow, options) && $cell.addClass(EDITOR_CELL_CLASS);
+    if (isEditingOrShowEditorAlwaysDataCell(isEditRow, options)) {
+      $cell.addClass(EDITOR_CELL_CLASS);
+    }
 
     return $cell;
   }
 
-  private cellValue(rowIndex, columnIdentifier, value, text) {
+  private cellValue(
+    rowIndex: number,
+    columnIdentifier: string | number,
+    value?: unknown,
+    text?: string,
+  ): unknown {
     const cellOptions = this.getCellOptions(rowIndex, columnIdentifier);
 
     if (cellOptions) {
       if (value === undefined) {
         return cellOptions.value;
       }
+      // @ts-expect-error the rows view types its rows as ViewRow
       this._editingController.updateFieldValue(cellOptions, value, text, true);
     }
 
     return undefined;
   }
 
-  public dispose() {
-    super.dispose.apply(this, arguments as any);
+  public dispose(): void {
+    super.dispose();
     clearTimeout(this._pointerDownTimeout);
   }
 
@@ -2787,24 +3161,34 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     });
   }
 
-  private _editCellPrepared() {
+  private _editCellPrepared(): void {
 
   }
 
-  private _formItemPrepared() {
+  private _formItemPrepared(): void {
 
   }
 };
 
-const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingExtender extends Base {
-  public optionChanged(args) {
+const headerPanel = (
+  Base: ModuleType<HeaderPanel>,
+): ModuleType<HeaderPanel> => class HeaderPanelEditingExtender extends Base {
+  public optionChanged(args: EditingModuleOptionChanged): void {
     const { fullName } = args;
     switch (args.name) {
       case 'editing': {
-        const excludedOptions = [EDITING_POPUP_OPTION_NAME, EDITING_CHANGES_OPTION_NAME, EDITING_EDITCOLUMNNAME_OPTION_NAME, EDITING_EDITROWKEY_OPTION_NAME];
-        const shouldInvalidate = fullName && !excludedOptions.some((optionName) => optionName === fullName);
+        const excludedOptions = [
+          EDITING_POPUP_OPTION_NAME,
+          EDITING_CHANGES_OPTION_NAME,
+          EDITING_EDITCOLUMNNAME_OPTION_NAME,
+          EDITING_EDITROWKEY_OPTION_NAME,
+        ];
+        const shouldInvalidate = fullName
+          && !excludedOptions.some((optionName) => optionName === fullName);
 
-        shouldInvalidate && this._invalidate();
+        if (shouldInvalidate) {
+          this._invalidate();
+        }
         super.optionChanged(args);
         break;
       }
@@ -2816,7 +3200,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingE
     }
   }
 
-  protected _getToolbarItems() {
+  protected _getToolbarItems(): ToolbarItem[] {
     const items = super._getToolbarItems();
     const editButtonItems = this._editingController.prepareEditButtons(this);
 
@@ -2825,7 +3209,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingE
 };
 
 export const editingModule = {
-  defaultOptions() {
+  defaultOptions(): { editing: EditingOptions } & EditingModuleOptions {
     return {
       editing: {
         mode: 'row', // "batch"

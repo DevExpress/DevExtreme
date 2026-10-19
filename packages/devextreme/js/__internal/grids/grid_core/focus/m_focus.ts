@@ -921,6 +921,7 @@ export const focusDataControllerExtender = (
 };
 
 export const editing = (Base: ModuleType<EditingController>) => class FocusEditingControllerExtender extends Base {
+  // @ts-expect-error drops the base's Deferred of the remove, which no caller reads yet
   protected _deleteRowCore(rowIndex) {
     // @ts-expect-error
     const deferred = super._deleteRowCore.apply(this, arguments);
