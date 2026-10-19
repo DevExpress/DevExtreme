@@ -22,10 +22,10 @@ import {
   isGroupFooterRow,
   isGroupRow as isGroupRowElement,
 } from '../keyboard_navigation/utils';
-import gridCoreUtils from '../m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import { isDetailRow } from '../master_detail/utils';
 import type { ModuleType } from '../types';
+import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import { isGroupRow } from '../views/rows_view';

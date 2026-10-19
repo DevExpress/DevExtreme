@@ -1,5 +1,5 @@
 import fx from 'common/core/animation/fx';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import config from 'core/config';
 import devices from '__internal/core/devices';
 import dataUtils from 'core/element_data';
