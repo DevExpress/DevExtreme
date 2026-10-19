@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { dateUtilsTs } from '@ts/core/utils/m_date';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import type { GroupedViewData } from '../../r1/components/types';

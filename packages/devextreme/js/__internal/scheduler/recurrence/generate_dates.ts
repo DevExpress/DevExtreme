@@ -1,4 +1,4 @@
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { dateUtilsTs } from '@ts/core/utils/m_date';
 import { RRule, RRuleSet } from 'rrule';
 
 import timeZoneUtils from '../utils_time_zone';

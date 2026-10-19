@@ -58,7 +58,7 @@ import type {
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import type { Options } from '@ts/core/options/index';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { dateUtilsTs } from '@ts/core/utils/m_date';
 import { tabbable } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { focus } from '@ts/events/short';

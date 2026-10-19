@@ -5,7 +5,7 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { dateUtilsTs } from '@ts/core/utils/m_date';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { getToday } from '@ts/scheduler/r1/utils/index';
 

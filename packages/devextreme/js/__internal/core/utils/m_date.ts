@@ -849,4 +849,24 @@ const dateUtils = {
   getRangesByDates,
 };
 
-export { dateUtils };
+const addOffsets = (date: Date, ...offsets: number[]): Date => {
+  const newDateMs = offsets.reduce(
+    (result, offset) => result + offset,
+    date.getTime(),
+  );
+
+  return new Date(newDateMs);
+};
+
+const isValidDate = (
+  date: unknown,
+): date is Date | string | number => Boolean(
+  date && !isNaN(new Date(date as Date).valueOf()),
+);
+
+const dateUtilsTs = {
+  addOffsets,
+  isValidDate,
+};
+
+export { dateUtils, dateUtilsTs };

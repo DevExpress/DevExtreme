@@ -1,6 +1,5 @@
 import type { Appointment } from '@js/ui/scheduler';
-import { dateUtilsTs } from '@ts/core/utils/date';
-import { dateUtils } from '@ts/core/utils/m_date';
+import { dateUtils, dateUtilsTs } from '@ts/core/utils/m_date';
 
 import type { SafeAppointment } from '../../../types';
 import type { AppointmentDataAccessor } from '../../../utils/data_accessor/appointment_data_accessor';
