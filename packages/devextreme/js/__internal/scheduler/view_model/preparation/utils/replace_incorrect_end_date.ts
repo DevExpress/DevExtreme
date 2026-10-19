@@ -1,5 +1,5 @@
 import type { Appointment } from '@js/ui/scheduler';
-import { dateUtils, dateUtilsTs } from '@ts/core/utils/m_date';
+import { dateUtils, isValidDate } from '@ts/core/utils/m_date';
 
 import type { SafeAppointment } from '../../../types';
 import type { AppointmentDataAccessor } from '../../../utils/data_accessor/appointment_data_accessor';
@@ -20,11 +20,11 @@ export const replaceIncorrectEndDate = (
     const endDate = dataAccessors.get('endDate', rawAppointment);
 
     // NOTE: error E1032
-    if (!dateUtilsTs.isValidDate(startDate)) {
+    if (!isValidDate(startDate)) {
       return result;
     }
 
-    const isEndDateIncorrect = !dateUtilsTs.isValidDate(endDate)
+    const isEndDateIncorrect = !isValidDate(endDate)
       || startDate.getTime() > endDate.getTime();
 
     if (isEndDateIncorrect) {
