@@ -24,7 +24,7 @@ export const ColumnStateMixin = <T extends ColumnStateMixinBase>(Base: T) => cla
   protected _applyColumnState(options: ColumnStateOptions): dxElementWrapper | undefined {
     const rtlEnabled = this.option('rtlEnabled');
     const columnAlignment = this._getColumnAlignment(options.column.alignment, rtlEnabled);
-    const parameters: IndicatorOptions = extend(true, { columnAlignment }, options);
+    const parameters = extend(true, { columnAlignment }, options);
     const isGroupPanelItem = parameters.rootElement.hasClass(GROUP_PANEL_ITEM_CLASS);
     const $indicatorsContainer = this._createIndicatorContainer(parameters, isGroupPanelItem);
     const $span = $('<span>').addClass(this._getIndicatorClassName(options.name) ?? '');
@@ -33,9 +33,10 @@ export const ColumnStateMixin = <T extends ColumnStateMixinBase>(Base: T) => cla
     const indicatorAlignment = columnsController?.getHeaderContentAlignment(columnAlignment)
       ?? columnAlignment;
 
-    parameters.container = $indicatorsContainer;
-    parameters.indicator = $span;
-    this._renderIndicator(parameters);
+    this._renderIndicator(Object.assign(parameters, {
+      container: $indicatorsContainer,
+      indicator: $span,
+    }));
 
     $indicatorsContainer[(isGroupPanelItem || !options.showColumnLines) && indicatorAlignment === 'left' ? 'appendTo' : 'prependTo'](options.rootElement);
 
@@ -60,7 +61,7 @@ export const ColumnStateMixin = <T extends ColumnStateMixinBase>(Base: T) => cla
   }
 
   private _createIndicatorContainer(
-    options: IndicatorOptions,
+    options: Omit<IndicatorOptions, 'container' | 'indicator'>,
     ignoreIndicatorAlignment: boolean,
   ): dxElementWrapper {
     let $indicatorsContainer = this._getIndicatorContainer(options.rootElement);
