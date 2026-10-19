@@ -14,10 +14,9 @@
         :data-source="dataSource"
         :remote-operations="true"
         :height="250"
-        :selected-row-keys="getSelectedRowKeys(currentValue)"
         :hover-state-enabled="true"
         :on-context-menu-preparing="onContextMenuPreparing"
-        :on-selection-changed="onSelectionChanged"
+        :on-focused-row-changed="onFocusedRowChanged"
         :focused-row-enabled="true"
         :focused-row-key="currentValue"
       >
@@ -29,7 +28,6 @@
           :page-size="10"
         />
         <DxScrolling mode="virtual"/>
-        <DxSelection mode="single"/>
       </DxDataGrid>
     </template>
   </DxDropDownBox>
@@ -39,7 +37,6 @@ import { ref } from 'vue';
 import {
   DxDataGrid,
   DxPaging,
-  DxSelection,
   DxScrolling,
   DxColumn,
   type DxDataGridTypes,
@@ -57,19 +54,14 @@ const currentValue = ref(props.value);
 const dropDownBoxRef = ref<DxDropDownBox | null>(null);
 const dropDownOptions: DxDropDownBoxTypes.Properties['dropDownOptions'] = { width: 500 };
 
-function getSelectedRowKeys<T>(value: T | null): T[] {
-  return value !== null && value !== undefined ? [value] : [];
-}
-
 const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparingEvent) => {
   e.items = [];
 };
-const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent) => {
-  currentValue.value = e.selectedRowKeys[0];
-
-  props.onValueChanged(currentValue.value);
-
-  if (e.selectedRowKeys.length > 0) {
+const onFocusedRowChanged = (e: DxDataGridTypes.FocusedRowChangedEvent<unknown, number>) => {
+  const key = e.row?.key;
+  if (key !== undefined && key !== currentValue.value) {
+    currentValue.value = key;
+    props.onValueChanged(key);
     dropDownBoxRef.value!.instance!.close();
   }
 };

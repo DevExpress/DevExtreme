@@ -4,7 +4,6 @@ import DataGrid, {
   Column,
   Paging,
   Scrolling,
-  Selection,
 } from 'devextreme-react/data-grid';
 import type { DataGridTypes } from 'devextreme-react/data-grid';
 import DropDownBox, { type DropDownBoxTypes } from 'devextreme-react/drop-down-box';
@@ -17,8 +16,7 @@ const clearContextMenu = (event: DataGridTypes.ContextMenuPreparingEvent) => {
 
 const EmployeeDropDownBoxComponent = ({ data }: DataGridTypes.ColumnCellTemplateData) => {
   const { value: dataValue } = data;
-  const initialSelectedRowKeys = dataValue !== null && dataValue !== undefined ? [dataValue] : [];
-  const [selectedRowKeys, setSelectedRowKeys] = useState(initialSelectedRowKeys);
+  const [focusedRowKey, setFocusedRowKey] = useState(dataValue);
   const [isDropDownOpened, setDropDownOpened] = useState(false);
 
   const boxOptionChanged = useCallback((e: DropDownBoxTypes.OptionChangedEvent) => {
@@ -27,24 +25,26 @@ const EmployeeDropDownBoxComponent = ({ data }: DataGridTypes.ColumnCellTemplate
     }
   }, []);
 
-  const onSelectionChanged = useCallback((args: DataGridTypes.SelectionChangedEvent) => {
-    setSelectedRowKeys(args.selectedRowKeys);
-    setDropDownOpened(false);
+  const onFocusedRowChanged = useCallback((args: DataGridTypes.FocusedRowChangedEvent) => {
+    const key = args.row?.key;
+    if (key !== undefined && key !== focusedRowKey) {
+      setFocusedRowKey(key);
+      setDropDownOpened(false);
 
-    data.setValue(args.selectedRowKeys[0]);
-  }, [data]);
+      data.setValue(key);
+    }
+  }, [data, focusedRowKey]);
 
   const contentRender = useCallback(() => (
     <DataGrid
       dataSource={data.column.lookup.dataSource}
       remoteOperations={true}
       height={250}
-      selectedRowKeys={selectedRowKeys}
       hoverStateEnabled={true}
       onContextMenuPreparing={clearContextMenu}
-      onSelectionChanged={onSelectionChanged}
+      onFocusedRowChanged={onFocusedRowChanged}
       focusedRowEnabled={true}
-      defaultFocusedRowKey={selectedRowKeys[0]}
+      focusedRowKey={focusedRowKey}
     >
       <Column dataField="FullName" />
       <Column dataField="Title" />
@@ -54,9 +54,8 @@ const EmployeeDropDownBoxComponent = ({ data }: DataGridTypes.ColumnCellTemplate
         defaultPageSize={10}
       />
       <Scrolling mode="virtual" />
-      <Selection mode="single" />
     </DataGrid>
-  ), [data, onSelectionChanged, selectedRowKeys]);
+  ), [data, focusedRowKey, onFocusedRowChanged]);
 
   return (
     <DropDownBox
@@ -64,7 +63,7 @@ const EmployeeDropDownBoxComponent = ({ data }: DataGridTypes.ColumnCellTemplate
       opened={isDropDownOpened}
       dropDownOptions={dropDownOptions}
       dataSource={data.column.lookup.dataSource}
-      value={selectedRowKeys[0]}
+      value={focusedRowKey}
       displayExpr="FullName"
       valueExpr="ID"
       inputAttr={ownerLabel}

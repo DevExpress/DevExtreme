@@ -103,13 +103,12 @@
           [dataSource]="employees"
           [remoteOperations]="true"
           [height]="250"
-          [selectedRowKeys]="getSelectedRowKeys(cellInfo.value)"
           [focusedRowEnabled]="true"
           [focusedRowKey]="cellInfo.value"
           [hoverStateEnabled]="true"
           (onContextMenuPreparing)="$event.items = []"
-          (onSelectionChanged)="
-            onSelectionChanged($event.selectedRowKeys, cellInfo, e.component)
+          (onFocusedRowChanged)="
+            onFocusedRowChanged($event, cellInfo, e.component)
           "
         >
           <dxi-data-grid-column dataField="FullName"></dxi-data-grid-column>
@@ -120,7 +119,6 @@
             [pageSize]="10"
           ></dxo-data-grid-paging>
           <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
-          <dxo-data-grid-selection mode="single"></dxo-data-grid-selection>
         </dx-data-grid>
       </div>
     </dx-drop-down-box>

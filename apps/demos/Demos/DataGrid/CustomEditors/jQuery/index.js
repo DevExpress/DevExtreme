@@ -98,7 +98,6 @@ $(() => {
   });
 
   function dropDownBoxEditorTemplate(cellElement, cellInfo) {
-    const selectedRowKeys = cellInfo.value !== null && cellInfo.value !== undefined ? [cellInfo.value] : [];
     return $('<div>').dxDropDownBox({
       dropDownOptions: { width: 500 },
       dataSource: employees,
@@ -114,17 +113,16 @@ $(() => {
           hoverStateEnabled: true,
           scrolling: { mode: 'virtual' },
           height: 250,
-          selection: { mode: 'single' },
-          selectedRowKeys,
           focusedRowEnabled: true,
           focusedRowKey: cellInfo.value,
           onContextMenuPreparing: (e) => {
             e.items = [];
           },
-          onSelectionChanged(selectionChangedArgs) {
-            e.component.option('value', selectionChangedArgs.selectedRowKeys[0]);
-            cellInfo.setValue(selectionChangedArgs.selectedRowKeys[0]);
-            if (selectionChangedArgs.selectedRowKeys.length > 0) {
+          onFocusedRowChanged(args) {
+            const key = args.row?.key;
+            if (key !== undefined && key !== cellInfo.value) {
+              e.component.option('value', key);
+              cellInfo.setValue(key);
               e.component.close();
             }
           },

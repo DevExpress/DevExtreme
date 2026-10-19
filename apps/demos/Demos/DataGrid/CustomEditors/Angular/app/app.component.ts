@@ -3,6 +3,7 @@ import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/
 import {
   DxDataGridModule, DxListModule, DxDropDownBoxModule, DxTagBoxModule,
 } from 'devextreme-angular';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { createStore, CustomStore } from 'devextreme-aspnet-data-nojquery';
 import { Service, Status } from './app.service';
 import 'anti-forgery';
@@ -59,13 +60,10 @@ export class AppComponent {
     });
   }
 
-  getSelectedRowKeys<T>(value: T): T[] {
-    return value !== null && value !== undefined ? [value] : [];
-  }
-
-  onSelectionChanged(selectedRowKeys, cellInfo, dropDownBoxComponent) {
-    cellInfo.setValue(selectedRowKeys[0]);
-    if (selectedRowKeys.length > 0) {
+  onFocusedRowChanged(e: DxDataGridTypes.FocusedRowChangedEvent, cellInfo, dropDownBoxComponent) {
+    const key = e.row?.key;
+    if (key !== undefined && key !== cellInfo.value) {
+      cellInfo.setValue(key);
       dropDownBoxComponent.close();
     }
   }
