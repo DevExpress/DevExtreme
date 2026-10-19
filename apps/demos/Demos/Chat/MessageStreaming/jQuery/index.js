@@ -23,10 +23,17 @@ $(() => {
   function createDelayedRenderer({ delay = 20, onRender }) {
     let queue = [];
     let rendering = false;
+    let idleResolve = null;
+
+    function notifyIdle() {
+      idleResolve?.();
+      idleResolve = null;
+    }
 
     function processQueue() {
       if (!queue.length) {
         rendering = false;
+        notifyIdle();
 
         return;
       }
@@ -49,9 +56,20 @@ $(() => {
     function stop() {
       queue = [];
       rendering = false;
+      notifyIdle();
     }
 
-    return { pushChunk, stop };
+    function waitForIdle() {
+      if (!rendering) {
+        return Promise.resolve();
+      }
+
+      return new Promise((resolve) => {
+        idleResolve = resolve;
+      });
+    }
+
+    return { pushChunk, stop, waitForIdle };
   }
 
   async function getAIResponseStream(messages, { onAborted, onDelta, onError, signal }) {
@@ -100,6 +118,7 @@ $(() => {
   }
 
   function setMainButtonToDefault() {
+    toolbar.option('items[1].options.disabled', false);
     instance.option({
       sendButtonOptions: {
         action: 'send',
@@ -110,6 +129,7 @@ $(() => {
   }
 
   function setMainButtonToStop() {
+    toolbar.option('items[1].options.disabled', true);
     instance.option({
       sendButtonOptions: {
         action: 'custom',
@@ -156,6 +176,8 @@ $(() => {
       delayedRenderer.stop();
     };
 
+    abortController.signal.addEventListener('abort', delayedRenderer.stop);
+
     try {
       await getAIResponseStream(messages, {
         onAborted,
@@ -163,9 +185,12 @@ $(() => {
         signal: abortController.signal,
       });
 
+      await delayedRenderer.waitForIdle();
+
       instance.option({ typingUsers: [] });
       messages.push({ role: 'assistant', content: buffer });
     } catch (e) {
+      delayedRenderer.stop();
       instance.option({ typingUsers: [] });
 
       messages.pop();
@@ -255,6 +280,13 @@ $(() => {
     paginate: false,
   });
 
+  function onClearButtonClick() {
+    store.length = 0;
+    messages.length = 0;
+    instance.option({ alerts: [], typingUsers: [] });
+    dataSource.reload();
+  }
+
   function sendSuggestion(prompt) {
     const message = {
       id: Date.now(),
@@ -285,6 +317,23 @@ $(() => {
         sendSuggestion(card.prompt, e);
       });
   }
+
+  const toolbar = $('#dx-ai-chat-toolbar').dxToolbar({
+    items: [{
+      location: 'before',
+      text: 'AI Assistant',
+      cssClass: 'ai-chat-title',
+    }, {
+      location: 'after',
+      widget: 'dxButton',
+      options: {
+        icon: 'clearhistory',
+        stylingMode: 'text',
+        hint: 'Clear chat',
+        onClick: onClearButtonClick,
+      },
+    }],
+  }).dxToolbar('instance');
 
   const instance = $('#dx-ai-chat')
     .dxChat({

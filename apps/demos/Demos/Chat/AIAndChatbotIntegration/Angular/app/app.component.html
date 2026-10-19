@@ -1,48 +1,64 @@
 <div class="demo-container">
-  <dx-chat
-    [class.chat-disabled]="isDisabled"
-    [dataSource]="dataSource"
-    [reloadOnChange]="false"
-    [showAvatar]="false"
-    [showDayHeaders]="false"
-    [user]="user"
-    height="710"
-    [typingUsers]="typingUsers$ | async"
-    [alerts]="alerts$ | async"
-    (onMessageEntered)="onMessageEntered($event)"
-    messageTemplate="messageTemplate"
-    [speechToTextEnabled]="true"
-  >
-    <div *dxTemplate="let data of 'messageTemplate'">
-      @if (data.message.text === regenerationText) {
-      <ng-container>
-        <span>{{ regenerationText }}</span>
-      </ng-container>
-      } @if (data.message.text !== regenerationText) {
-      <ng-container>
-        <div
-          class="chat-messagebubble-text"
-          [innerHTML]="convertToHtml(data.message)"
-        >
-        </div>
-        <div class="bubble-button-container">
-          <dx-button
-            [icon]="copyButtonIcon"
-            stylingMode="text"
-            hint="Copy"
-            (onClick)="onCopyButtonClick(data.message)"
+  <div class="ai-chat-card">
+    <dx-toolbar>
+      <dxi-toolbar-item
+        location="before"
+        text="AI Assistant"
+        cssClass="ai-chat-title"
+      >
+      </dxi-toolbar-item>
+      <dxi-toolbar-item
+        location="after"
+        widget="dxButton"
+        [options]="clearButtonOptions"
+      >
+      </dxi-toolbar-item>
+    </dx-toolbar>
+    <dx-chat
+      [class.chat-disabled]="isDisabled"
+      [dataSource]="dataSource"
+      [reloadOnChange]="false"
+      [showAvatar]="false"
+      [showDayHeaders]="false"
+      [user]="user"
+      height="710"
+      [typingUsers]="typingUsers$ | async"
+      [alerts]="alerts$ | async"
+      (onMessageEntered)="onMessageEntered($event)"
+      messageTemplate="messageTemplate"
+      [speechToTextEnabled]="true"
+    >
+      <div *dxTemplate="let data of 'messageTemplate'">
+        @if (data.message.text === regenerationText) {
+        <ng-container>
+          <span>{{ regenerationText }}</span>
+        </ng-container>
+        } @if (data.message.text !== regenerationText) {
+        <ng-container>
+          <div
+            class="chat-messagebubble-text"
+            [innerHTML]="convertToHtml(data.message)"
           >
-          </dx-button>
-          <dx-button
-            icon="refresh"
-            stylingMode="text"
-            hint="Regenerate"
-            (onClick)="onRegenerateButtonClick()"
-          >
-          </dx-button>
-        </div>
-      </ng-container>
-      }
-    </div>
-  </dx-chat>
+          </div>
+          <div class="bubble-button-container">
+            <dx-button
+              [icon]="copyButtonIcon"
+              stylingMode="text"
+              hint="Copy"
+              (onClick)="onCopyButtonClick(data.message)"
+            >
+            </dx-button>
+            <dx-button
+              icon="refresh"
+              stylingMode="text"
+              hint="Regenerate"
+              (onClick)="onRegenerateButtonClick()"
+            >
+            </dx-button>
+          </div>
+        </ng-container>
+        }
+      </div>
+    </dx-chat>
+  </div>
 </div>
