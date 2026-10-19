@@ -1,4 +1,5 @@
 import assert from 'node:assert';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -7,7 +8,7 @@ import { addHashes } from '@devexpress/sbom-toolkit';
 import type { AddHashesEntry, CycloneDXBom, Hash } from '@devexpress/sbom-toolkit';
 
 const INTERNAL_PACKAGES: Record<string, string> = {
-  'devextreme-metadata': 'packages/devextreme-metadata/dist',
+  'devextreme-metadata': 'packages/devextreme-metadata',
   'eslint-migration-utils': 'packages/eslint-migration-utils/src',
 };
 
@@ -20,7 +21,7 @@ interface AddWorkspaceHashesConfig {
 
 export function addWorkspaceHashes({ sbomPath, repoRoot }: AddWorkspaceHashesConfig): void {
   contentHashes ??= Object.entries(INTERNAL_PACKAGES).reduce<Record<string, Hash>>(
-    (acc, [name, dir]) => ({ ...acc, [name]: contentHash(path.join(repoRoot, dir)) }),
+    (acc, [name, dir]) => ({ ...acc, [name]: contentHash(repoRoot, dir) }),
     {},
   );
   const hashes = contentHashes;
@@ -44,10 +45,10 @@ function componentName({ group, name }: CycloneDXBom['components'][number]): str
   return group ? `${group}/${name}` : name;
 }
 
-function contentHash(dir: string): Hash {
-  const files = fs.readdirSync(dir, { recursive: true, encoding: 'utf-8' })
-    .filter((file) => fs.statSync(path.join(dir, file)).isFile())
-    .map((file) => file.split(path.sep).join('/'))
+function contentHash(repoRoot: string, dir: string): Hash {
+  const files = execFileSync('git', ['ls-files', '-z', '--', dir], { cwd: repoRoot, encoding: 'utf-8' })
+    .split('\0')
+    .filter(Boolean)
     .sort();
   if (!files.length) {
     throw new Error(`No files to hash in ${dir}`);
@@ -55,8 +56,8 @@ function contentHash(dir: string): Hash {
 
   const hash = createHash('sha512');
   files.forEach((file) => {
-    const content = fs.readFileSync(path.join(dir, file));
-    hash.update(`${file}\0${content.length}\0`).update(content);
+    const content = fs.readFileSync(path.join(repoRoot, file));
+    hash.update(`${path.posix.relative(dir, file)}\0${content.length}\0`).update(content);
   });
   return { alg: 'SHA-512', content: hash.digest('hex') };
 }
