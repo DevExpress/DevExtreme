@@ -527,12 +527,12 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  protected _allowRowAdding(params) {
+  protected _allowRowAdding() {
     if (this.isBatchEditMode()) {
       return true;
     }
 
-    return super._allowRowAdding(params);
+    return super._allowRowAdding();
   }
 
   protected _afterDeleteRow(rowIndex, oldEditRowIndex) {

@@ -2758,25 +2758,25 @@ QUnit.module('Editing', {
         this.editingController.addDeferred(deferred1);
 
         // assert
-        assert.strictEqual(this.editingController._deferreds.length, 1, 'a single deferred object is added');
+        assert.strictEqual(this.editingController.pendingOperations.length, 1, 'a single deferred object is added');
 
         // act
         deferred1.resolve();
 
         // assert
-        assert.strictEqual(this.editingController._deferreds.length, 0, 'deferreds array should be empty');
+        assert.strictEqual(this.editingController.pendingOperations.length, 0, 'deferreds array should be empty');
 
         // act
         this.editingController.addDeferred(deferred2);
 
         // assert
-        assert.strictEqual(this.editingController._deferreds.length, 1, 'a deferred object is added');
+        assert.strictEqual(this.editingController.pendingOperations.length, 1, 'a deferred object is added');
 
         // act
         deferred2.reject();
 
         // assert
-        assert.strictEqual(this.editingController._deferreds.length, 0, 'deferreds array should be empty');
+        assert.strictEqual(this.editingController.pendingOperations.length, 0, 'deferreds array should be empty');
     });
 
     QUnit.test('editingController.executeOperation - only the last operation should be executed', function(assert) {
@@ -2799,7 +2799,7 @@ QUnit.module('Editing', {
 
         // assert
         assert.strictEqual(value, 1, 'value === 1');
-        assert.notOk(this.editingController._deferreds.length, 'deferreds should be empty');
+        assert.notOk(this.editingController.pendingOperations.length, 'deferreds should be empty');
     });
 
 
@@ -15097,8 +15097,8 @@ QUnit.module('Editing with validation', {
         assert.strictEqual(result.id, validationResult.id, 'result.id === validationResult.id');
         assert.strictEqual(result.complete, validationResult.complete, 'result.complete === validationResult.complete');
         assert.strictEqual(result.disabledPendingId, validationResult.id, 'result.disabledPendingId === validationResult.id');
-        assert.equal(this.editingController._deferreds.length, 1, 'deferreds should contain a single object');
-        assert.equal(this.editingController._deferreds[0], result.deferred, 'deferreds should contain result.deferred');
+        assert.equal(this.editingController.pendingOperations.length, 1, 'deferreds should contain a single object');
+        assert.equal(this.editingController.pendingOperations[0], result.deferred, 'deferreds should contain result.deferred');
 
         validationResult.status = 'valid';
         validationResult.complete = null;
@@ -15110,7 +15110,7 @@ QUnit.module('Editing with validation', {
         assert.strictEqual(result.status, validationResult.status, 'result.status === validationResult.status');
         assert.strictEqual(result.id, validationResult.id, 'result.id === validationResult.id');
         assert.notOk(result.disabledPendingId, 'result.disabledPendingId is not defined');
-        assert.equal(this.editingController._deferreds.length, 0, 'deferreds should be empty');
+        assert.equal(this.editingController.pendingOperations.length, 0, 'deferreds should be empty');
     });
 
     QUnit.test('validatingController - validation result should be cancelled', function(assert) {

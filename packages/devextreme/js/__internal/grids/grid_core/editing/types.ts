@@ -1,6 +1,7 @@
 import type { DataChange, NewRowPosition } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
-import type { Column as DataGridColumn, ColumnButton } from '@js/ui/data_grid';
+import type { DxEvent } from '@js/events';
+import type { Column as DataGridColumn, ColumnButton, ColumnButtonClickEvent } from '@js/ui/data_grid';
 import type { FormItemComponent } from '@js/ui/form';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
@@ -109,6 +110,14 @@ export type EditingButtonCallback = (options: {
   row?: ProcessedItem;
   column: Column;
 }) => boolean;
+
+export type InternalColumnButtonClickEvent = ColumnButtonClickEvent & { event: DxEvent };
+
+export type InternalColumnButton = Omit<ColumnButton, 'visible' | 'disabled' | 'onClick'> & {
+  visible?: boolean | EditingButtonCallback;
+  disabled?: boolean | EditingButtonCallback;
+  onClick?: (e: InternalColumnButtonClickEvent) => void;
+};
 
 export interface EditingChangesOptionChanged {
   name: 'editing';
