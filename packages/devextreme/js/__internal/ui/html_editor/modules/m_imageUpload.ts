@@ -19,10 +19,8 @@ const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
 
 const HIDDEN_FILE_UPLOADER_CLASS = 'dx-htmleditor-hidden-content';
 
-/** The imageUpload option plus the editor: what HtmlEditor._getModuleConfigByOption builds */
 type ImageUploadModuleOptions = BaseModuleOptions & dxHtmlEditorImageUpload;
 
-/** The native event member that holds the dropped or pasted files */
 type FilesField = 'dataTransfer' | 'clipboardData';
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -159,9 +157,13 @@ if (Quill) {
           this._handleServerUpload();
           break;
         case 'fileUploaderOptions':
+          this.options.fileUploaderOptions = extend(
+            true,
+            {},
+            this.options.fileUploaderOptions,
+            value,
+          );
           // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
-          this.options.fileUploaderOptions = value;
-          // @ts-expect-error see above
           this._fileUploader?.option(value);
       }
     }

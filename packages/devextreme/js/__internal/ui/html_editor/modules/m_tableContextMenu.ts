@@ -24,24 +24,20 @@ import { getDefaultClickHandler, getFormatHandlers, ICON_MAP } from '../utils/m_
 import type { BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
 
-/** What HtmlEditor passes to the module: the `tableContextMenu` option over the base config */
 interface TableContextMenuModuleOptions extends BaseModuleOptions, dxHtmlEditorTableContextMenu {}
 
 type ContextMenuItems = dxHtmlEditorTableContextMenu['items'];
 
-/** The format handler a predefined item name maps to */
 type PredefinedItemHandler = FormatHandlers[
   HtmlEditorPredefinedContextMenuItem & keyof FormatHandlers
 ];
 
-/** A predefined item name turned into a menu item */
 interface MenuItemConfig {
   text: string;
   icon: string;
   onClick: PredefinedItemHandler;
 }
 
-/** The ContextMenu configuration (`Properties` types `items` as plain context menu items) */
 interface TableContextMenuConfig {
   target: dxElementWrapper;
   showEvent: null;
@@ -132,13 +128,13 @@ if (Quill) {
       this._targetElement = null;
     }
 
-    _isAcceptableItem(widget: string | undefined, acceptableWidgetName: string): boolean {
+    _isAcceptableItem(widget: unknown, acceptableWidgetName: string): boolean {
       return !widget || widget === acceptableWidgetName;
     }
 
     _handleObjectItem(item: ContextMenuItem): ContextMenuItem {
-      // @ts-expect-error widget is not a ContextMenuItem property (see Findings)
-      if (item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+      const widget = 'widget' in item ? item.widget : undefined;
+      if (item.name && this._isAcceptableItem(widget, 'dxButton')) {
         const defaultButtonItemConfig = this._prepareMenuItemConfig(item.name);
         const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
@@ -231,7 +227,7 @@ if (Quill) {
 
     _setContextMenuPosition(event: DxEvent<MouseEvent>): void {
       const startPosition = this._quillContainer.get(0).getBoundingClientRect();
-      // @ts-expect-error 'fit fit' is not in CollisionResolutionCombination (see Findings)
+      // @ts-expect-error 'fit fit' is not in CollisionResolutionCombination; it resolves as 'fit'
       this._contextMenu.option({
         position: {
           my: 'left top',
@@ -250,10 +246,6 @@ if (Quill) {
       this._detachEvents();
     }
 
-    option(option: 'tableContextMenu', value: unknown): void;
-    option(option: 'enabled', value: boolean): void;
-    option(option: 'items', value: ContextMenuItems): void;
-    option(option: string, value: unknown): void;
     option(option: string, value: unknown): void {
       if (option === 'tableContextMenu') {
         this.handleOptionChangeValue(value);
@@ -261,7 +253,8 @@ if (Quill) {
       }
 
       if (option === 'enabled') {
-        this.enabled = value as boolean;
+        // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
+        this.enabled = value;
         if (value) {
           this._enableContextMenu();
         } else {
@@ -269,7 +262,8 @@ if (Quill) {
         }
       } else if (option === 'items') {
         this._contextMenu?.dispose();
-        this._contextMenu = this._createContextMenu(value as ContextMenuItems);
+        // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
+        this._contextMenu = this._createContextMenu(value);
       }
     }
 

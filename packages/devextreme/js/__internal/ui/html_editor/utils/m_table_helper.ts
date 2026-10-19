@@ -43,7 +43,6 @@ function getTableFormats(quill: QuillInstance): string[] {
   const tableModule = quill.getModule('table');
 
   // backward compatibility with an old devextreme-quill packages
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- tableFormats() is untyped
   return tableModule?.tableFormats ? tableModule.tableFormats() : TABLE_FORMATS;
 }
 

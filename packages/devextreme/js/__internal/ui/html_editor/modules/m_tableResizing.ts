@@ -16,7 +16,7 @@ import type { dxHtmlEditorTableResizing } from '@js/ui/html_editor';
 import type { DraggableProperties } from '@ts/draggable.types';
 
 import type { LineDirection } from '../types';
-import type { QuillInstance } from '../types/quill';
+import type { Delta, QuillInstance } from '../types/quill';
 import {
   getAutoSizedElements,
   getColumnElements,
@@ -31,7 +31,6 @@ interface TableResizingModuleOptions extends BaseModuleOptions, dxHtmlEditorTabl
 
 type SizeOptionName = 'minColumnWidth' | 'minRowHeight';
 
-/** A table's resize frame; `lastWidth` memoizes the table width between resizes */
 interface TableResizeFrame {
   $frame: dxElementWrapper;
   $table: dxElementWrapper;
@@ -49,11 +48,9 @@ interface DirectionInfo {
   positionCoordinateName: 'x' | 'y';
 }
 
-/** The css() argument that places a line separator: `transform` plus one position coordinate */
 type SeparatorStyle = { transform: string }
   & Partial<Record<DirectionInfo['positionCoordinate'], number>>;
 
-/** What a line separator's pointerdown handler and the drag handlers share */
 interface SeparatorData {
   lineSeparator: Element;
   index: number;
@@ -76,11 +73,7 @@ interface ColumnsWidthInfo {
   columnsSum: number;
 }
 
-type QuillTextChangeHandler = (
-  changeDelta: unknown,
-  oldDelta: unknown,
-  changeSource: unknown,
-) => void;
+type QuillTextChangeHandler = (delta: Delta, oldContent: Delta, source: string) => void;
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
 const DX_COLUMN_RESIZER_CLASS = 'dx-htmleditor-column-resizer';
@@ -181,6 +174,10 @@ export default class TableResizingModule extends BaseModule {
   }
 
   _attachEvents(): void {
+    if (this._quillTextChangeHandler) {
+      this.quill.off('text-change', this._quillTextChangeHandler);
+    }
+
     eventsEngine.on(
       this.editorInstance._getContent(),
       SCROLL_EVENT,
@@ -199,16 +196,12 @@ export default class TableResizingModule extends BaseModule {
     }
   }
 
-  _getQuillTextChangeHandler(
-    delta?: unknown, // eslint-disable-line @typescript-eslint/no-unused-vars -- never passed
-    oldContent?: unknown, // eslint-disable-line @typescript-eslint/no-unused-vars -- never passed
-    source?: unknown, // eslint-disable-line @typescript-eslint/no-unused-vars -- never passed
-  ): QuillTextChangeHandler {
-    return (changeDelta: unknown, oldDelta: unknown, changeSource: unknown): void => {
+  _getQuillTextChangeHandler(): QuillTextChangeHandler {
+    return (delta, oldContent, source): void => {
       if (this._isTableChanging()) {
         const $tables = this._findTables();
         this._removeResizeFrames();
-        if (changeSource === 'api') {
+        if (source === 'api') {
           this._fixTablesWidths($tables);
         }
 
@@ -280,7 +273,7 @@ export default class TableResizingModule extends BaseModule {
       const frame = this._getFrameForTable($table);
 
       if (!frame) {
-        // @ts-expect-error a placeholder frame that _createResizeFrames truncates (Findings)
+        // @ts-expect-error a placeholder frame; _createResizeFrames truncates the array
         this._tableResizeFrames.push({ $table });
       }
 
@@ -817,7 +810,7 @@ export default class TableResizingModule extends BaseModule {
     let frame = this._tableResizeFrames[frameIndex];
 
     if (!frame) {
-      // @ts-expect-error a placeholder; _updateFramesPositions cannot render it (see Findings)
+      // @ts-expect-error a placeholder frame; _createResizeFrames replaces it
       this._tableResizeFrames[frameIndex] = {};
     }
 
@@ -857,6 +850,9 @@ export default class TableResizingModule extends BaseModule {
       // @ts-expect-error option() gets the value as unknown (m_base.ts); enabled is the boolean
       this.enabled = value;
       if (value) {
+        if (this._resizeHandlerWithContext) {
+          this.clean();
+        }
         this._applyResizing(true);
       } else {
         this.clean();
