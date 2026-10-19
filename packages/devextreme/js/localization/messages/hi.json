@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "एआई असिस्टेंट चैट को बंद करने से प्रगति पर अनुरोध निरस्त हो जाते हैं। क्या आप चैट बंद करना चाहेंगे?",
         "dxDataGrid-aiAChatEmptyViewMessage": "चैट खाली है",
         "dxDataGrid-aiChatEmptyViewPrompt": "एआई असिस्टेंट आपके सवालों का जवाब देने के लिए तैयार है।",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "एआई प्रॉम्प्ट संपादक",
         "dxDataGrid-aiPromptEditorPlaceholder": "कॉलम मान उत्पन्न करने के लिए AI को संकेत दें...",
         "dxDataGrid-aiPromptEditorApplyButton": "लागू करें",

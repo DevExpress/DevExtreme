@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Το κλείσιμο του chat του Βοηθού AI θα διακόψει τα αιτήματα σε εξέλιξη. Θέλετε να κλείσετε το chat;",
         "dxDataGrid-aiAChatEmptyViewMessage": "Το chat είναι άδειο",
         "dxDataGrid-aiChatEmptyViewPrompt": "Ο Βοηθός AI είναι έτοιμος να απαντήσει στις ερωτήσεις σας.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Επεξεργαστής προτροπών AI",
         "dxDataGrid-aiPromptEditorPlaceholder": "Δώστε εντολή στο AI για δημιουργία τιμών στήλης...",
         "dxDataGrid-aiPromptEditorApplyButton": "Εφαρμογή",
