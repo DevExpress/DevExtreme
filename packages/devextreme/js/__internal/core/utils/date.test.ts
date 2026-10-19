@@ -1,7 +1,7 @@
 import { describe, expect } from '@jest/globals';
 import each from 'jest-each';
 
-import { dateUtilsTs } from './date';
+import { dateUtilsTs } from './m_date';
 
 const SECOND_MS = 1000;
 const MINUTE_MS = 60 * SECOND_MS;

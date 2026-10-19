@@ -22,7 +22,7 @@ import type {
   AppointmentDblClickEvent,
   AppointmentRenderedEvent,
 } from '@js/ui/scheduler';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { dateUtilsTs } from '@ts/core/utils/m_date';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 
