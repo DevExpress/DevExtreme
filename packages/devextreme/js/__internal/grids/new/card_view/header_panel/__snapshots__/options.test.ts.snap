@@ -128,12 +128,10 @@ exports[`ColumnProperties headerItemTemplate should override content of headerPa
                       tabindex="0"
                     >
                       <div>
-                        <div>
-                          <div
-                            class="my-class"
-                          >
-                            Column 1
-                          </div>
+                        <div
+                          class="my-class"
+                        >
+                          Column 1
                         </div>
                       </div>
                     </div>
@@ -281,12 +279,10 @@ exports[`Options headerPanel itemTemplate should override content of headerPanel
                       tabindex="0"
                     >
                       <div>
-                        <div>
-                          <div
-                            class="my-class"
-                          >
-                            Column 1
-                          </div>
+                        <div
+                          class="my-class"
+                        >
+                          Column 1
                         </div>
                       </div>
                     </div>
