@@ -253,6 +253,14 @@ class DropDownEditor<
     };
   }
 
+  _setOptionsByReference(): void {
+    super._setOptionsByReference();
+
+    extend(this._optionsByReference, {
+      value: true,
+    });
+  }
+
   _useTemplates(): boolean {
     return true;
   }

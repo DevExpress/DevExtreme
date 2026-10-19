@@ -5,9 +5,9 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -16,7 +16,7 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
+import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/headers_keyboard_navigation';
 import {
   isAdaptiveItem,
   isGroupFooterRow,
@@ -27,8 +27,8 @@ import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import { isDetailRow } from '../master_detail/utils';
 import type { ModuleType } from '../types';
 import type { ColumnsView } from '../views/columns_view';
-import type { RowsView } from '../views/m_rows_view';
-import { isGroupRow } from '../views/m_rows_view';
+import type { RowsView } from '../views/rows_view';
+import { isGroupRow } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
 import { CLASSES, StickyPosition } from './const';
 import { GridCoreStickyColumnsDom } from './dom';
@@ -798,12 +798,14 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
     if (!isHideBorder) {
       const isFixedCell = GridCoreStickyColumnsDom
         .isFixedCell($element, this.addWidgetPrefix.bind(this));
+      // @ts-expect-error renderFocusOverlay creates the focus overlay first
       this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, isFixedCell);
       const isGroupElement = isGroupRowElement($element);
       const isGroupFooterRowElement = isGroupFooterRow($element);
       const isAdaptiveElement = isAdaptiveItem($element);
 
       if (isFixedCell || isGroupElement || isGroupFooterRowElement || isAdaptiveElement) {
+        // @ts-expect-error renderFocusOverlay creates the focus overlay first
         this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, true);
       }
     }

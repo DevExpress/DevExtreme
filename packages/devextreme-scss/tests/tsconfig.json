@@ -1,17 +1,15 @@
 {
-    "extends": "../../../tsconfig.json",
+    "extends": "../tsconfig.json",
     "compilerOptions": {
-        "baseUrl": ".",
-        "lib": [
-            "es2019"
-        ],
+        "module": "commonjs",
+        "moduleResolution": "node10",
+        "verbatimModuleSyntax": false,
         "types": [
             "node",
             "jest"
         ]
     },
     "include": [
-        "./*.ts",
-        "../tools/**/*.ts"
+        "./*.ts"
     ]
 }

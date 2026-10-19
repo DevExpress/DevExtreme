@@ -1271,7 +1271,7 @@ QUnit.module('Fixed columns', {
         that.rowsView.scrollChanged.add(scrollChanged);
 
         // act
-        scrollableInstance.scrollTo({ y: 20 });
+        scrollableInstance.scrollTo({ top: 20 });
     });
 
     // T247366
@@ -1323,7 +1323,7 @@ QUnit.module('Fixed columns', {
         that.rowsView.resize();
 
         // act
-        scrollableInstance.scrollTo({ y: 20000 });
+        scrollableInstance.scrollTo({ top: 20000 });
     });
 
     // T1100701
@@ -1369,7 +1369,7 @@ QUnit.module('Fixed columns', {
         that.rowsView.resize();
 
         // act
-        scrollableInstance.scrollTo({ y: 20000 });
+        scrollableInstance.scrollTo({ top: 20000 });
         $(scrollableInstance.content()).trigger('scroll');
 
         // assert
@@ -3349,7 +3349,7 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         const scrollable = that.rowsView.getScrollable();
 
         // act
-        scrollable.scrollTo({ x: 10 });
+        scrollable.scrollTo({ left: 10 });
         $(scrollable.container()).trigger('scroll');
 
         // assert

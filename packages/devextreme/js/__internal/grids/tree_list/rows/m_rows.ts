@@ -3,7 +3,7 @@ import { removeEvent } from '@js/common/core/events/remove';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import { rowsModule, RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import { rowsModule, RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import treeListCore from '../core';
 
@@ -137,7 +137,7 @@ class TreeListRowsView extends RowsView {
     if (node) {
       this.setAria('level', row.level + 1, $rowElement);
       if (node.hasChildren) {
-        this.setAriaExpandedAttribute($rowElement, row);
+        this.setAriaExpandedAttribute($rowElement, row.isExpanded);
       }
     }
 
@@ -152,9 +152,8 @@ class TreeListRowsView extends RowsView {
     return !!$targetElement.closest(`.${TREELIST_EXPANDED_CLASS}, .${TREELIST_COLLAPSED_CLASS}`).length;
   }
 
-  public setAriaExpandedAttribute($row, row) {
-    const isRowExpanded = row.isExpanded;
-    this.setAria('expanded', isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
+  public setAriaExpandedAttribute($row, isExpanded) {
+    this.setAria('expanded', isDefined(isExpanded) && isExpanded.toString(), $row);
   }
 }
 

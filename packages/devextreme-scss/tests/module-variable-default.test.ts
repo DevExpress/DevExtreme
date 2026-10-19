@@ -1,7 +1,7 @@
 import { createRunner, scss } from './stylelint-rule';
 
 const ruleName = 'dx/module-variable-default';
-const { lint, fix } = createRunner('module-variable-default.mjs', ruleName);
+const { lint, fix } = createRunner('module-variable-default.ts', ruleName);
 
 test('a module-level variable without the flag is reported, at the top level and inside @if branches', () => {
   const { warnings } = lint('missing.scss', scss(

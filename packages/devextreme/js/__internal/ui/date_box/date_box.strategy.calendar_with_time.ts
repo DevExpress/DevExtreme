@@ -6,7 +6,7 @@ import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
@@ -52,7 +52,9 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
   getDisplayFormat(displayFormat?: Format | null): Format {
     const globalDateTimeFormat: Format = getGlobalFormatByDataType('datetime');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || globalDateTimeFormat || 'shortdateshorttime';
+    const format = displayFormat || globalDateTimeFormat || 'shortdateshorttime';
+
+    return applyDataTypePreset(format, 'datetime') ?? format;
   }
 
   _is24HourFormat(): boolean {

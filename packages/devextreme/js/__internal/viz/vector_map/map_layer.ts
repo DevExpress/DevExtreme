@@ -26,8 +26,8 @@
 /* eslint-disable max-classes-per-file */
 // @ts-expect-error DataHelperMixin is absent from the common/data d.ts
 import { DataHelperMixin } from '@js/common/data';
+import { Deferred, when } from '@ts/core/utils/deferred';
 import { noop } from '@ts/core/utils/m_common';
-import { Deferred, when } from '@ts/core/utils/m_deferred';
 import { extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
 import { isDefined as _isDefined, isFunction as _isFunction } from '@ts/core/utils/m_type';

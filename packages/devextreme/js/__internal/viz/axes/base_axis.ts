@@ -24,9 +24,9 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import formatHelper from '@ts/core/format_helper';
+import { Deferred, when } from '@ts/core/utils/deferred';
 import { noop as _noop } from '@ts/core/utils/m_common';
 import { dateUtils } from '@ts/core/utils/m_date';
-import { Deferred, when } from '@ts/core/utils/m_deferred';
 import { extend } from '@ts/core/utils/m_extend';
 import { adjust, multiplyInExponentialForm } from '@ts/core/utils/m_math';
 import {

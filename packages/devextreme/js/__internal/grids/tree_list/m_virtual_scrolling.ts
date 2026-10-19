@@ -5,7 +5,7 @@ import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import {
   dataSourceAdapterExtender as virtualScrollingDataSourceAdapterExtender,
   rowsView as virtualScrollingRowsViewExtender,

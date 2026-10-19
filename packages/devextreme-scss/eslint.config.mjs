@@ -47,7 +47,16 @@ export default [
     },
   },
 
-  ...typescriptFor(['build/**/*.ts', 'tests/**/*.ts', 'tools/**/*.ts'], './tests/tsconfig.json'),
+  ...typescriptFor(['build/**/*.ts', 'tools/**/*.ts'], './tsconfig.json'),
+  {
+    files: ['build/**/*.ts', 'tools/**/*.ts'],
+    rules: {
+      'import/extensions': ['error', 'ignorePackages', { ts: 'always' }],
+      'no-console': 'off',
+    },
+  },
+
+  ...typescriptFor(['tests/**/*.ts'], './tests/tsconfig.json'),
   ...jestConfig.map((config) => ({ ...config, files: ['tests/**/*.ts'] })),
 
   {
@@ -60,12 +69,13 @@ export default [
   {
     files: ['**/*.mjs'],
     rules: {
+      'import/extensions': ['error', 'ignorePackages', { mjs: 'always' }],
       'no-restricted-syntax': restrictedSyntax,
     },
   },
 
   {
-    files: ['tools/stylelint/*.mjs'],
+    files: ['tools/stylelint/*.ts'],
     rules: {
       'no-param-reassign': ['error', {
         props: true,

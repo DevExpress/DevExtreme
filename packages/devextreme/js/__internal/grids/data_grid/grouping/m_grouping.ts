@@ -13,8 +13,8 @@ import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
-import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
-import type { RowsView } from '../../grid_core/views/m_rows_view';
+import type { HeaderPanel } from '../../grid_core/header_panel/header_panel';
+import type { RowsView } from '../../grid_core/views/rows_view';
 import gridCore from '../core';
 import dataSourceAdapterProvider from '../data_source_adapter';
 import {

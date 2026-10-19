@@ -3,7 +3,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type { EventHandler } from '@ts/core/events_strategy';
 import { EventsStrategy } from '@ts/core/events_strategy';
 import { Guid } from '@ts/core/guid';
-import { Deferred } from '@ts/core/utils/m_deferred';
+import { Deferred } from '@ts/core/utils/deferred';
 import { extend } from '@ts/core/utils/m_extend';
 import { each, map } from '@ts/core/utils/m_iterator';
 import type { ValidationResultInternal, ValidationRuleInternal } from '@ts/ui/validation_engine';

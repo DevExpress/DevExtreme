@@ -18,10 +18,10 @@ import type { ColumnsController } from '../../grid_core/columns_controller/colum
 import type { DataController } from '../../grid_core/data_controller/data_controller';
 import type { DataSourceController } from '../../grid_core/data_source/data_source_controller';
 import type { EditingController } from '../../grid_core/editing/m_editing';
-import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
+import type { HeaderPanel } from '../../grid_core/header_panel/header_panel';
 import type { SelectionController } from '../../grid_core/selection/m_selection';
 import type { ModuleType } from '../../grid_core/types';
-import type { RowsView } from '../../grid_core/views/m_rows_view';
+import type { RowsView } from '../../grid_core/views/rows_view';
 import dataGridCore from '../core';
 import { isDataColumn } from '../m_utils';
 

@@ -52,7 +52,7 @@ test.meta({ browserSize: [1000, 800] })('Move right fixed column to the left', a
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(24).element, -400, 0);
 
   // TODO: issue will be fixed in the card 7Mct6tJU
-  await dataGrid.scrollTo(t, { x: 0 });
+  await dataGrid.scrollTo(t, { left: 0 });
 
   await testScreenshot(t, takeScreenshot, 'move_right_fixed_column_to_left.png', { element: dataGrid.element });
 
@@ -161,7 +161,7 @@ test.meta({ browserSize: [1000, 800] })('Move right fixed band column to the lef
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(3).element, -500, 0);
 
   // TODO: issue will be fixed in the card 7Mct6tJU
-  await dataGrid.scrollTo(t, { x: 0 });
+  await dataGrid.scrollTo(t, { left: 0 });
 
   await testScreenshot(t, takeScreenshot, 'move_right_fixed_band_column_to_left.png', { element: dataGrid.element });
 

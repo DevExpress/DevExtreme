@@ -398,13 +398,9 @@ class Scrollable<
     return this._strategy.location();
   }
 
-  _normalizeLocation(location: Partial<ScrollOffset & {
-    x?: number;
-    y?: number;
-  }> | number): Partial<ScrollOffset> {
+  _normalizeLocation(location: Partial<ScrollOffset> | number): Partial<ScrollOffset> {
     if (isPlainObject(location)) {
-      const left = ensureDefined(location.left, location.x);
-      const top = ensureDefined(location.top, location.y);
+      const { left, top } = location;
       return {
         left: isDefined(left) ? -left : undefined,
         top: isDefined(top) ? -top : undefined,

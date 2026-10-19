@@ -9,11 +9,11 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/c
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ToastViewController } from '@ts/grids/grid_core/toast/toast_controller';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import { CLASSES } from './const';
 import type { GridError } from './types';

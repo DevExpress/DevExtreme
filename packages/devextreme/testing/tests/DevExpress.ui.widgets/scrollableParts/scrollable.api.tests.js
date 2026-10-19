@@ -132,29 +132,6 @@ QUnit.test('scroll event should be triggered if scroll position changed', functi
             assert.equal(location.left, -distance, 'scroll to correctly horizontal position');
         }
     });
-
-    QUnit.test(`scrollBy with plain object: { x: value; y: value}, useNative: ${useNative}`, function(assert) {
-        assert.expect(2);
-
-        const distance = 10;
-        const $scrollable = $('#scrollable').dxScrollable({
-            useNative,
-            onEnd: function() {
-                const location = getScrollOffset($scrollable);
-                assert.equal(location.top, -distance, 'scroll to correctly vertical position');
-                assert.equal(location.left, 0, 'scroll to correctly horizontal position');
-            }
-        });
-        const scrollable = $scrollable.dxScrollable('instance');
-
-        scrollable.scrollBy({ x: distance, y: distance });
-
-        if(useNative) {
-            const location = getScrollOffset($scrollable);
-            assert.equal(location.top, -distance, 'scroll to correctly vertical position');
-            assert.equal(location.left, -distance, 'scroll to correctly horizontal position');
-        }
-    });
 });
 
 QUnit.test('scrollBy with numeric', function(assert) {

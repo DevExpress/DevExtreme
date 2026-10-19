@@ -23,10 +23,10 @@ fixture.disablePageReloads`FixedColumns - Grouping`
 
     await testScreenshot(t, takeScreenshot, `grouping-scroll-begin-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { x: rtlEnabled ? 500 : 100 });
+    await dataGrid.scrollTo(t, { left: rtlEnabled ? 500 : 100 });
     await testScreenshot(t, takeScreenshot, `grouping-scroll-center=${rtlEnabled}.png`, { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+    await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
     await testScreenshot(t, takeScreenshot, `grouping-scroll-end=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await t
@@ -93,10 +93,10 @@ test.meta({ browserSize: [900, 800] })('Sticky columns with grouping & summary (
 
   await testScreenshot(t, takeScreenshot, 'grouping-multiple-scroll-begin.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 100 });
+  await dataGrid.scrollTo(t, { left: 100 });
   await testScreenshot(t, takeScreenshot, 'grouping-multiple-scroll-center.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
   await testScreenshot(t, takeScreenshot, 'grouping-multiple-scroll-end.png', { element: dataGrid.element });
 
   await t
@@ -269,7 +269,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     .expect(dataGrid.getGroupRow(0).isExpanded)
     .notOk();
 
-  await dataGrid.scrollBy(t, { x: 1000 });
+  await dataGrid.scrollBy(t, { left: 1000 });
 
   await testScreenshot(t, takeScreenshot, 'group_row_scrolling_all_collapsed_fixed_columns.png', { element: dataGrid.element });
   await t
@@ -305,7 +305,7 @@ test.meta({
 
   await testScreenshot(t, takeScreenshot, 'grouping-focused-group-row.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 100 });
+  await dataGrid.scrollTo(t, { left: 100 });
   await testScreenshot(t, takeScreenshot, 'grouping-focused-group-row-scroll.png', { element: dataGrid.element });
 
   await t

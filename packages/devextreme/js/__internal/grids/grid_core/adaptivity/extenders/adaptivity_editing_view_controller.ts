@@ -9,11 +9,8 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
-import {
-  ADAPTIVE_ROW_TYPE,
-  EDIT_MODE_BATCH,
-  EDIT_MODE_ROW,
-} from '../const';
+import { EDIT_MODE_BATCH, EDIT_MODE_ROW } from '../../editing/const';
+import { ADAPTIVE_ROW_TYPE } from '../const';
 import type { AdaptivityDataController } from '../types';
 
 export const adaptivityEditingViewControllerExtender = (

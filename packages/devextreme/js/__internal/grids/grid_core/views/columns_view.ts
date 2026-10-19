@@ -29,17 +29,20 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
 import supportUtils from '@ts/core/utils/m_support';
-import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
+import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
-import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type {
+  Column, ColumnRenderTemplate, ColumnsChanges, ColumnTemplateSource, TemplateModel,
+} from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_handling/const';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -56,8 +59,6 @@ import type {
   CellEventOptions,
   CellPosition,
   CellRenderOptions,
-  ColumnRenderTemplate,
-  ColumnTemplateSource,
   ColumnViewTemplate,
   ColumnViewTemplateOptions,
   ColumnWidthsOptions,
@@ -69,7 +70,6 @@ import type {
   ScrollableOptions,
   ScrollPosition,
   TableRenderOptions,
-  TemplateModel,
   ViewCellOptions,
   ViewDataChange,
   ViewRow,
@@ -78,7 +78,7 @@ import type {
 } from './types';
 import { isRowElementVisible } from './utils';
 
-const HIDDEN_COLUMNS_WIDTH = '0.0001px';
+const HIDDEN_COLUMN_CSS_WIDTH = '0.0001px';
 
 const CELL_HINT_VISIBLE = 'dxCellHintVisible';
 
@@ -136,8 +136,8 @@ export const normalizeWidth = (width: string | number | undefined): string | und
     return `${width.toFixed(3)}px`;
   }
 
-  if (width === 'adaptiveHidden') {
-    return HIDDEN_COLUMNS_WIDTH;
+  if (width === HIDDEN_COLUMNS_WIDTH) {
+    return HIDDEN_COLUMN_CSS_WIDTH;
   }
 
   return width;
@@ -164,7 +164,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _dataController!: DataController;
 
-  protected adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsViewController;
 
   protected _columnChooserController!: ColumnChooserController;
 
@@ -383,7 +383,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const rowOptions: RowPreparedOptions | undefined = $row.data('options');
         const columnIndex = $cell.index();
 
-        const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
+        const cellOptions = rowOptions?.cells?.[columnIndex];
         const column: HintColumn | undefined = cellOptions
           ? cellOptions.column
           : visibleColumns[columnIndex];
@@ -425,7 +425,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       const $row = $cell.parent();
       // @ts-expect-error data(key) is typed as returning the wrapper
       const rowOptions: RowPreparedOptions | undefined = $row.data('options');
-      const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
+      const options = rowOptions?.cells?.[$cell.index()];
 
       if (!$cell.closest('table').is(event.delegateTarget)) {
         return undefined;
@@ -598,8 +598,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
     let width = column.visibleWidth || column.width;
 
-    if (width === 'adaptiveHidden') {
-      width = HIDDEN_COLUMNS_WIDTH;
+    if (width === HIDDEN_COLUMNS_WIDTH) {
+      width = HIDDEN_COLUMN_CSS_WIDTH;
     }
 
     const col = $('<col>');
@@ -1609,7 +1609,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  private getRowsCount(): number {
+  public getRowsCount(): number {
     const tableElement = this.getTableElement();
 
     if (tableElement?.length === 1) {
@@ -1620,7 +1620,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return 0;
   }
 
-  protected _getRowElementsCore(tableElement?: dxElementWrapper): dxElementWrapper {
+  protected _getRowElementsCore(tableElement?: dxElementWrapper | null): dxElementWrapper {
     const $table = tableElement ?? this.getTableElement();
 
     if ($table) {
@@ -1634,7 +1634,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $();
   }
 
-  public _getRowElements(tableElement?: dxElementWrapper): dxElementWrapper {
+  public _getRowElements(tableElement?: dxElementWrapper | null): dxElementWrapper {
     return this._getRowElementsCore(tableElement);
   }
 

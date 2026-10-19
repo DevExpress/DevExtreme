@@ -57,7 +57,7 @@ export function getSortedToolbarItems(
 }
 
 export function normalizeToolbarItems(
-  sortedDefaultItems: DefaultToolbarItem[],
+  sortedDefaultItems: ToolbarItem[],
   userItems: (ToolbarItem | string)[] | undefined,
   defaultItemNames: readonly string[],
 ): ToolbarItem[] {
@@ -68,7 +68,9 @@ export function normalizeToolbarItems(
   const defaultButtonsMap = {};
 
   sortedDefaultItems.forEach((button) => {
-    defaultButtonsMap[button.name] = button;
+    if (isDefined(button.name)) {
+      defaultButtonsMap[button.name] = button;
+    }
   });
 
   return userItems.map(
