@@ -428,7 +428,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
 
     /**
-     * [descr:BaseWidgetOptions.title]
+     * [descr:dxTreeMapOptions.title]
     
      */
     @Input()
