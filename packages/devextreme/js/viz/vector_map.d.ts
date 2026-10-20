@@ -31,6 +31,7 @@ import {
 import BaseWidget, {
     BaseWidgetMargin,
     BaseWidgetOptions,
+    BaseWidgetTitle,
     BaseWidgetTooltip,
     BaseWidgetAnnotationConfig,
     FileSavingEventInfo,
@@ -677,6 +678,12 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     projection?: VectorMapProjection | VectorMapProjectionConfig | string | any;
     /**
      * @docid
+     * @type object|string
+     * @public
+     */
+    title?: Title | string;
+    /**
+     * @docid
      * @type object
      * @public
      */
@@ -851,6 +858,21 @@ export type Legend = BaseLegend & {
        */
       layer?: string;
     };
+};
+/**
+ * @public
+ * @docid dxVectorMapTitle
+ * @type object
+ */
+export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+    /**
+     * @docid dxVectorMapOptions.title.horizontalAlignment
+     * @default 'center'
+     * @default 'left' &for(Material)
+     * @default 'left' &for(Fluent)
+     * @public
+     */
+    horizontalAlignment?: HorizontalAlignment;
 };
 /**
  * @public

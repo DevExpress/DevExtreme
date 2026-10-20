@@ -941,6 +941,22 @@ export default function() {
             });
         });
 
+        test('hotkey handler does not throw when the toolbar has no button for the format', function(assert) {
+            const $container = $('#htmlEditor').html('<p>test</p>');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['italic'] },
+                value: '<p>test</p>',
+            }).dxHtmlEditor('instance');
+
+            const quill = instance.getQuillInstance();
+            const formatHandler = quill.keyboard.bindings[66][1].handler;
+
+            instance.setSelection(4, 0);
+            formatHandler.call(quill.keyboard, null, null, { which: 66 });
+
+            assert.ok(true, 'the bold hotkey is handled without an exception');
+        });
+
         test('history buttons are inactive after processing transcluded content', function(assert) {
             const done = assert.async();
             const $container = $('#htmlEditor').html('<p>test</p>');
