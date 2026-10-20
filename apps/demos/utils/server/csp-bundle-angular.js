@@ -70,6 +70,13 @@ function resolveAngularBuildPrivate() {
   return require(require.resolve('@angular/build/private', { paths: [buildAngularDir] }));
 }
 
+// esbuild puts the underlying cause (e.g. a compiler-cli exception) into `notes`, which `err.message` omits.
+function describeBuildError(err) {
+  if (!err) return String(err);
+  const notes = (err.errors || []).flatMap((e) => (e.notes || []).map((n) => n.text)).filter(Boolean);
+  return notes.length ? `${err.message}\n${notes.join('\n')}` : err.message || String(err);
+}
+
 // ngc rejects empty files+include (TS18002), so `files` always lists the entry.
 function writeTsconfig(name, entryPaths) {
   fs.mkdirSync(GENERATED_TSCONFIG_DIR, { recursive: true });
@@ -690,7 +697,7 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
     await writeOutputFiles(result.outputFiles);
     await emitDemoResources([{ demo: prepared, destDir }], result.outputFiles);
   } catch (err) {
-    return { ok: false, reason: (err && err.message) || String(err) };
+    return { ok: false, reason: describeBuildError(err) };
   }
 
   // Drop shared chunks (already imported by bundle.js) and styles the AOT plugin listed but actually inlined.
@@ -735,7 +742,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
       result.outputFiles,
     );
   } catch (err) {
-    return { ok: false, reason: (err && err.message) || String(err) };
+    return { ok: false, reason: describeBuildError(err) };
   }
 
   for (const demo of batch) {

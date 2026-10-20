@@ -196,6 +196,7 @@ overrides:
   stylelint-config-recommended-vue>stylelint-config-html: 1.1.0
   stylelint-config-recommended-vue>stylelint-config-recommended: 16.0.0
   '@modelcontextprotocol/sdk@>=1.12.0 <1.31.0': ^1.31.0
+  '@jridgewell/sourcemap-codec@<1.6.0': ^1.6.0
   '@vue/server-renderer@<3.5.42': ^3.5.42
   axios@>=1.0.0 <1.20.0: ^1.20.0
   compression@<1.8.2: ^1.8.2
@@ -347,7 +348,7 @@ importers:
     dependencies:
       '@angular-devkit/build-angular':
         specifier: ^22.2.1
-        version: 22.2.3(797b46519848e5eabb24f1c01c5aa297)
+        version: 22.2.3(d0a4760a1284ca302c172701fe000202)
       '@angular/animations':
         specifier: ^22.2.1
         version: 22.2.3(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)(zone.js@0.16.2))
@@ -4974,9 +4975,6 @@ packages:
 
   '@jridgewell/source-map@0.3.11':
     resolution: {integrity: sha512-ZMp1V8ZFcPG5dIWnQLr3NSI1MiCU7UETdS/A0G8V/XWHvJv3ZsFqutJn1Y5RPmAPX6F3BiE397OqveU/9NCuIA==}
-
-  '@jridgewell/sourcemap-codec@1.5.5':
-    resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
 
   '@jridgewell/sourcemap-codec@1.6.0':
     resolution: {integrity: sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==}
@@ -12177,11 +12175,6 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  less@4.9.0:
-    resolution: {integrity: sha512-umRhrCH7fCi8Uj2RcwKjJdvUORTjeWqkdKx0LbcZvjIwsAVsnIAGcxHaqowPeBFBjQuWOeC/bve0AlpFzF/+SQ==}
-    engines: {node: '>=18'}
-    hasBin: true
-
   less@4.9.1:
     resolution: {integrity: sha512-orp15PfJvvNDIqJdVWzMI9Sjpjp3VTiw3sfvbB+67LlISTEn8uVT2EdYSuyl02BLvaftv6sdk9Umnxmm5rckmg==}
     engines: {node: '>=18'}
@@ -16949,13 +16942,13 @@ snapshots:
       - webpack-cli
       - yaml
 
-  '@angular-devkit/build-angular@22.2.3(797b46519848e5eabb24f1c01c5aa297)':
+  '@angular-devkit/build-angular@22.2.3(d0a4760a1284ca302c172701fe000202)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2202.3(chokidar@5.0.0)
       '@angular-devkit/build-webpack': 0.2202.3(chokidar@5.0.0)(webpack-dev-server@6.0.0(webpack@5.111.0(@swc/core@1.15.47(@swc/helpers@0.5.23))(esbuild@0.28.2)(postcss@8.5.28)))(webpack@5.111.0(@swc/core@1.15.47(@swc/helpers@0.5.23))(esbuild@0.28.2)(postcss@8.5.28))
       '@angular-devkit/core': 22.2.3(chokidar@5.0.0)
-      '@angular/build': 22.2.3(2529e0c234207dcda2a71436bf7a612c)
+      '@angular/build': 22.2.3(a6372f64f483daa8ce5857153f4c4671)
       '@angular/compiler-cli': 22.2.3(@angular/compiler@22.2.3)(typescript@6.0.3)
       '@babel/core': 8.0.5
       '@babel/generator': 8.0.5
@@ -17147,7 +17140,7 @@ snapshots:
       '@inquirer/confirm': 5.1.14(@types/node@20.11.17)
       '@vitejs/plugin-basic-ssl': 2.1.0(vite@7.3.6(@types/node@20.11.17)(jiti@2.7.0)(less@4.8.1)(lightningcss@1.33.0)(sass-embedded@1.105.1)(sass@1.90.0)(terser@5.43.1)(yaml@2.9.0))
       beasties: 0.3.5
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       esbuild: 0.28.1
       https-proxy-agent: 7.0.6
       istanbul-lib-instrument: 6.0.3
@@ -17201,7 +17194,7 @@ snapshots:
       '@inquirer/confirm': 5.1.14(@types/node@20.19.37)
       '@vitejs/plugin-basic-ssl': 2.1.0(vite@7.3.6(@types/node@20.19.37)(jiti@2.7.0)(less@4.9.1)(lightningcss@1.33.0)(sass-embedded@1.105.1)(sass@1.90.0)(terser@5.51.2)(yaml@2.9.0))
       beasties: 0.3.5
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       esbuild: 0.28.1
       https-proxy-agent: 7.0.6
       istanbul-lib-instrument: 6.0.3
@@ -17256,7 +17249,7 @@ snapshots:
       '@inquirer/confirm': 5.1.14(@types/node@20.19.37)
       '@vitejs/plugin-basic-ssl': 2.1.0(vite@7.3.6(@types/node@20.19.37)(jiti@2.7.0)(less@4.8.1)(lightningcss@1.33.0)(sass-embedded@1.105.1)(sass@1.90.0)(terser@5.43.1)(yaml@2.9.0))
       beasties: 0.3.5
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       esbuild: 0.28.1
       https-proxy-agent: 7.0.6
       istanbul-lib-instrument: 6.0.3
@@ -17298,7 +17291,7 @@ snapshots:
       - tsx
       - yaml
 
-  '@angular/build@22.2.3(2529e0c234207dcda2a71436bf7a612c)':
+  '@angular/build@22.2.3(a6372f64f483daa8ce5857153f4c4671)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2202.3(chokidar@5.0.0)
@@ -17307,12 +17300,12 @@ snapshots:
       '@babel/core': 8.0.5
       '@inquirer/confirm': 6.3.2(@types/node@20.19.37)
       '@parcel/watcher': 2.6.0
-      '@vitejs/plugin-basic-ssl': 2.3.0(vite@8.3.0(@types/node@20.19.37)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))
+      '@vitejs/plugin-basic-ssl': 2.3.0(vite@8.3.0(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.7.0)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))
       beasties: 0.5.4
       browserslist: 4.28.7
       chokidar: 5.0.0
       esbuild: 0.28.2
-      https-proxy-agent: 9.1.0
+      https-proxy-agent: 9.1.0(supports-color@7.2.0)
       jsonc-parser: 3.3.1
       listr2: 11.1.0
       magic-string: 1.4.1
@@ -17442,7 +17435,7 @@ snapshots:
     dependencies:
       '@angular/compiler': 20.3.33
       '@babel/core': 7.29.7
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
       chokidar: 4.0.3
       convert-source-map: 1.9.0
       reflect-metadata: 0.2.2
@@ -17458,7 +17451,7 @@ snapshots:
     dependencies:
       '@angular/compiler': 22.2.3
       '@babel/core': 8.0.1
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
       chokidar: 5.0.0
       convert-source-map: 1.9.0
       reflect-metadata: 0.2.2
@@ -17472,7 +17465,7 @@ snapshots:
     dependencies:
       '@angular/compiler': 22.2.3
       '@babel/core': 8.0.1
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
       chokidar: 5.0.0
       convert-source-map: 1.9.0
       reflect-metadata: 0.2.2
@@ -17647,7 +17640,7 @@ snapshots:
 
   '@babel/core@8.0.5':
     dependencies:
-      '@babel/code-frame': 8.0.0
+      '@babel/code-frame': 8.0.6
       '@babel/generator': 8.0.6
       '@babel/helper-compilation-targets': 8.0.7
       '@babel/helpers': 8.0.7
@@ -17747,7 +17740,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.7
       '@babel/helper-validator-option': 7.29.7
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -17763,7 +17756,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 8.0.5
       '@babel/helper-validator-option': 8.0.0
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       flru: 1.0.2
       verkit: 0.5.0
 
@@ -19376,9 +19369,9 @@ snapshots:
 
   '@babel/template@8.0.0':
     dependencies:
-      '@babel/code-frame': 8.0.0
-      '@babel/parser': 8.0.4
-      '@babel/types': 8.0.4
+      '@babel/code-frame': 8.0.6
+      '@babel/parser': 8.0.7
+      '@babel/types': 8.0.6
 
   '@babel/traverse@7.29.8':
     dependencies:
@@ -20712,7 +20705,7 @@ snapshots:
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
       '@jridgewell/trace-mapping': 0.3.31
 
   '@jridgewell/gen-mapping@0.4.0-beta.0':
@@ -20732,19 +20725,17 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
 
-  '@jridgewell/sourcemap-codec@1.5.5': {}
-
   '@jridgewell/sourcemap-codec@1.6.0': {}
 
   '@jridgewell/trace-mapping@0.3.31':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
 
   '@jridgewell/trace-mapping@0.3.9':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
 
   '@jsonjoy.com/base64@1.1.2(tslib@2.8.1)':
     dependencies:
@@ -22081,7 +22072,7 @@ snapshots:
       detect-libc: 2.1.2
       is-glob: 4.0.3
       node-addon-api: 7.1.1
-      picomatch: 4.0.5
+      picomatch: 4.0.7
     optionalDependencies:
       '@parcel/watcher-android-arm64': 2.6.0
       '@parcel/watcher-darwin-arm64': 2.6.0
@@ -23843,7 +23834,7 @@ snapshots:
       vite: 7.3.6(@types/node@20.19.37)(jiti@2.7.0)(less@4.9.1)(lightningcss@1.33.0)(sass-embedded@1.105.1)(sass@1.90.0)(terser@5.51.2)(yaml@2.9.0)
     optional: true
 
-  '@vitejs/plugin-basic-ssl@2.3.0(vite@8.3.0(@types/node@20.19.37)(esbuild@0.28.2)(jiti@2.7.0)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))':
+  '@vitejs/plugin-basic-ssl@2.3.0(vite@8.3.0(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.7.0)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))':
     dependencies:
       vite: 8.3.0(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.7.0)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0)
 
@@ -28688,7 +28679,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  https-proxy-agent@9.1.0:
+  https-proxy-agent@9.1.0(supports-color@7.2.0):
     dependencies:
       agent-base: 9.0.0
       debug: 4.4.3(supports-color@7.2.0)
@@ -30385,21 +30376,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  less@4.9.0:
-    dependencies:
-      copy-anything: 3.0.5
-      parse-node-version: 1.0.1
-    optionalDependencies:
-      errno: 0.1.8
-      graceful-fs: 4.2.11
-      make-dir: 5.1.0
-      mime: 1.6.0
-      needle: 3.5.0
-      probe-image-size: 7.4.0
-      source-map: 0.6.1
-    transitivePeerDependencies:
-      - supports-color
-
   less@4.9.1:
     dependencies:
       copy-anything: 3.0.5
@@ -30760,11 +30736,11 @@ snapshots:
 
   magic-string@0.30.17:
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
 
   magic-string@0.30.21:
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
 
   magic-string@1.4.1:
     dependencies:
@@ -31347,7 +31323,7 @@ snapshots:
       '@rollup/wasm-node': 4.62.4
       ajv: 8.20.0
       ansi-colors: 4.1.3
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       chokidar: 4.0.3
       commander: 14.0.3
       dependency-graph: 1.0.0
@@ -31355,7 +31331,7 @@ snapshots:
       find-cache-directory: 6.0.0
       injection-js: 2.6.1
       jsonc-parser: 3.3.1
-      less: 4.9.0
+      less: 4.9.1
       ora: 8.2.0
       piscina: 5.3.2
       postcss: 8.5.28
@@ -31377,7 +31353,7 @@ snapshots:
       '@rollup/plugin-json': 6.1.0(rollup@4.59.0)
       '@rollup/wasm-node': 4.62.4
       ajv: 8.20.0
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       chokidar: 5.0.0
       commander: 15.0.0
       dependency-graph: 1.0.0
@@ -31385,7 +31361,7 @@ snapshots:
       find-cache-directory: 6.0.0
       injection-js: 2.6.1
       jsonc-parser: 3.3.1
-      less: 4.9.0
+      less: 4.9.1
       ora: 9.4.1
       piscina: 5.3.2
       postcss: 8.5.28
@@ -31407,7 +31383,7 @@ snapshots:
       '@rollup/plugin-json': 6.1.0(rollup@4.59.0)
       '@rollup/wasm-node': 4.62.4
       ajv: 8.20.0
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       chokidar: 5.0.0
       commander: 15.0.0
       dependency-graph: 1.0.0
@@ -31415,7 +31391,7 @@ snapshots:
       find-cache-directory: 6.0.0
       injection-js: 2.6.1
       jsonc-parser: 3.3.1
-      less: 4.9.0
+      less: 4.9.1
       ora: 9.4.1
       piscina: 5.3.2
       postcss: 8.5.28
@@ -33049,7 +33025,7 @@ snapshots:
   rollup-plugin-dts@6.4.1(rollup@4.59.0)(typescript@5.8.3):
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
       convert-source-map: 2.0.0
       magic-string: 0.30.21
       rollup: 4.59.0
@@ -33060,7 +33036,7 @@ snapshots:
   rollup-plugin-dts@6.4.1(rollup@4.59.0)(typescript@5.9.3):
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
       convert-source-map: 2.0.0
       magic-string: 0.30.21
       rollup: 4.59.0
@@ -33071,7 +33047,7 @@ snapshots:
   rollup-plugin-dts@6.4.1(rollup@4.59.0)(typescript@6.0.3):
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/sourcemap-codec': 1.6.0
       convert-source-map: 2.0.0
       magic-string: 0.30.21
       rollup: 4.59.0
@@ -36043,7 +36019,7 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.26.0
       es-module-lexer: 2.3.1
@@ -36080,7 +36056,7 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
-      browserslist: 4.28.7
+      browserslist: 4.29.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.26.0
       es-module-lexer: 2.3.1
