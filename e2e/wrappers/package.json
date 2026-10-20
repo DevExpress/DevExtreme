@@ -75,7 +75,7 @@
     "karma-jasmine-html-reporter": "2.1.0",
     "testcafe": "catalog:",
     "typescript": "5.8.3",
-    "vite": "8.0.16"
+    "vite": "8.1.6"
   },
   "main": "index.js",
   "directories": {
