@@ -38,7 +38,7 @@ overrides:
   "moment@>=2.29.2 <2.31.0": ^2.31.0
   "stylelint-config-recommended-vue>stylelint-config-html": "1.1.0"
   "stylelint-config-recommended-vue>stylelint-config-recommended": "16.0.0"
-  '@modelcontextprotocol/sdk@>=1.12.0 <1.31.0': ^1.31.0
+  '@modelcontextprotocol/sdk@>=1.12.0 <1.32.0': ^1.32.0
   '@jridgewell/sourcemap-codec@<1.6.0': ^1.6.0
   '@vue/server-renderer@<3.5.42': ^3.5.42
   axios@>=1.0.0 <1.20.0: ^1.20.0
@@ -92,10 +92,10 @@ catalog:
 
 catalogs:
   angular:
-    "@angular-devkit/build-angular": ~20.3.30
-    "@angular-devkit/architect": ~0.2003.30
-    "@angular-devkit/schematics": ~20.3.30
-    "@angular/cli": ~20.3.30
+    "@angular-devkit/build-angular": ~20.3.40
+    "@angular-devkit/architect": ~0.2003.40
+    "@angular-devkit/schematics": ~20.3.40
+    "@angular/cli": ~20.3.40
     "@angular/common": ~20.3.34
     "@angular/compiler": ~20.3.34
     "@angular/compiler-cli": ~20.3.34
