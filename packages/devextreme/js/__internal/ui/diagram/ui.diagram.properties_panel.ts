@@ -190,7 +190,7 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel<DiagramPropertiesPanel
       onContentReady: (e): void => {
         this._popup?.option(
           'height',
-          getHeight(e.component.$element())
+          getHeight(e.component.$element().get(0))
           + this._getVerticalPaddingsAndBorders(),
         );
         if (this._firstScrollView) {
@@ -212,7 +212,7 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel<DiagramPropertiesPanel
     if (isSingleTab) {
       this._popup?.option(
         'height',
-        getHeight(scrollView.$element()) + this._getVerticalPaddingsAndBorders(),
+        getHeight(scrollView.$element().get(0)) + this._getVerticalPaddingsAndBorders(),
       );
     } else {
       this._firstScrollView = this._firstScrollView || scrollView;

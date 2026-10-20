@@ -228,7 +228,7 @@ export default class TableResizingModule extends BaseModule {
       each($tables, (index: number, table: Element) => {
         const $table = $(table);
         const frame = this._tableResizeFrames[index];
-        const actualTableWidth = getOuterWidth($table);
+        const actualTableWidth = getOuterWidth($table.get(0));
         const lastTableWidth = this._tableLastWidth(frame);
         // @ts-expect-error lastWidth is undefined until a resize: NaN then fails the check
         if (Math.abs(actualTableWidth - lastTableWidth) > 1) {
@@ -282,7 +282,7 @@ export default class TableResizingModule extends BaseModule {
 
         unfixTableWidth($table, { quill: this.quill });
 
-        const tableWidth = this._tableLastWidth(frame) ?? getOuterWidth($table);
+        const tableWidth = this._tableLastWidth(frame) ?? getOuterWidth($table.get(0));
 
         if (frame) {
           this._tableLastWidth(frame, Math.max(columnsSum, tableWidth));
@@ -421,7 +421,7 @@ export default class TableResizingModule extends BaseModule {
       return {
         lineResizerClass: DX_ROW_RESIZER_CLASS,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- getOuterHeight is untyped
-        sizeFunction: (x) => getOuterHeight(x),
+        sizeFunction: (x) => getOuterHeight(x.get(0)),
         positionCoordinate: 'top',
         positionStyleProperty: 'height',
         positionCoordinateName: 'y',
@@ -430,7 +430,7 @@ export default class TableResizingModule extends BaseModule {
     return {
       lineResizerClass: DX_COLUMN_RESIZER_CLASS,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- getOuterWidth is untyped
-      sizeFunction: (x) => getOuterWidth(x),
+      sizeFunction: (x) => getOuterWidth(x.get(0)),
       positionCoordinate: this.editorInstance.option('rtlEnabled') ? 'right' : 'left',
       positionStyleProperty: 'width',
       positionCoordinateName: 'x',
@@ -509,7 +509,7 @@ export default class TableResizingModule extends BaseModule {
       // @ts-expect-error parseInt is typed for strings; a number is converted the same way
       this._getSize($($determinantElements[index]), directionInfo),
     );
-    this._startTableWidth = getOuterWidth(frame.$table);
+    this._startTableWidth = getOuterWidth(frame.$table.get(0));
     // eslint-disable-next-line radix
     this._startLineSeparatorPosition = parseInt(
       // @ts-expect-error css() is typed as possibly undefined; parseInt(undefined) is NaN
@@ -544,7 +544,7 @@ export default class TableResizingModule extends BaseModule {
         : eventOffset < 0;
       const isWidthLimited = Math.abs(
         // @ts-expect-error an unset style width is undefined: NaN then means "not limited"
-        this._getWidthStyleValue($nextColumnElement) - getOuterWidth($nextColumnElement),
+        this._getWidthStyleValue($nextColumnElement) - getOuterWidth($nextColumnElement.get(0)),
       ) > ROUGH_OFFSET;
 
       return isWidthIncreased || !isWidthLimited;
@@ -564,7 +564,7 @@ export default class TableResizingModule extends BaseModule {
     const isCurrentColumnWidthEnough = currentLineNewSize >= this._minColumnWidth;
     const $lineElements = getLineElements(frame.$table, index);
     const $nextLineElements = getLineElements(frame.$table, index + 1);
-    const realWidthDiff = getOuterWidth($lineElements.eq(0)) - currentLineNewSize;
+    const realWidthDiff = getOuterWidth($lineElements.eq(0).get(0)) - currentLineNewSize;
 
     if (isCurrentColumnWidthEnough) {
       if (this._isNextColumnWidthEnough(
@@ -587,7 +587,7 @@ export default class TableResizingModule extends BaseModule {
         }
 
         // @ts-expect-error _startTableWidth is set by _dragStartHandler before any drag move
-        const isTableWidthChanged = Math.abs(this._startTableWidth - getOuterWidth(frame.$table))
+        const isTableWidthChanged = Math.abs(this._startTableWidth - getOuterWidth(frame.$table.get(0)))
           < ROUGH_OFFSET;
         const shouldRevertNewValue = Math.abs(realWidthDiff) > ROUGH_OFFSET
           || (!this._nextLineSize && isTableWidthChanged);
@@ -596,10 +596,10 @@ export default class TableResizingModule extends BaseModule {
           setLineElementsFormat(this, {
             elements: $lineElements,
             property: directionInfo.positionStyleProperty,
-            value: getOuterWidth($lineElements.eq(0)),
+            value: getOuterWidth($lineElements.eq(0).get(0)),
           });
 
-          nextColumnNewSize += currentLineNewSize - getOuterWidth($lineElements.eq(0));
+          nextColumnNewSize += currentLineNewSize - getOuterWidth($lineElements.eq(0).get(0));
 
           // eslint-disable-next-line max-depth -- the revert step nests in the width checks
           if (this._shouldSetNextColumnWidth(nextColumnNewSize)) {
@@ -633,7 +633,7 @@ export default class TableResizingModule extends BaseModule {
       value: newHeight,
     });
 
-    const rowHeightDiff = getOuterHeight($determinantElements.eq(index)) - currentLineNewSize;
+    const rowHeightDiff = getOuterHeight($determinantElements.eq(index).get(0)) - currentLineNewSize;
 
     this._$highlightedElement.css(
       directionInfo.positionCoordinate,
@@ -672,7 +672,7 @@ export default class TableResizingModule extends BaseModule {
     this._$highlightedElement?.remove();
     this._isDragging = undefined;
     this._nextColumnOffsetLimit = undefined;
-    this._tableLastWidth(options.frame, getOuterWidth(options.frame.$table));
+    this._tableLastWidth(options.frame, getOuterWidth(options.frame.$table.get(0)));
     this._updateFramesPositions();
     this._updateFramesSeparators();
   }
@@ -688,7 +688,7 @@ export default class TableResizingModule extends BaseModule {
       result.boundary = options.frame.$table;
       result.boundOffset = {
         // @ts-expect-error boundOffset is typed {h, v} only; quadToObject also takes four sides
-        bottom: hasWindow() ? -getHeight(getWindow()) : -getOuterHeight(this._quillContainer),
+        bottom: hasWindow() ? -getHeight(getWindow()) : -getOuterHeight(this._quillContainer.get(0)),
         top: 0,
         left: 0,
         right: 0,
@@ -768,7 +768,7 @@ export default class TableResizingModule extends BaseModule {
     each(columnElements, (index: number, element: Element) => {
       const $element = $(element);
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      const columnWidth = this._getWidthStyleValue($element) || getOuterWidth($element);
+      const columnWidth = this._getWidthStyleValue($element) || getOuterWidth($element.get(0));
 
       columnsWidths[index] = Math.max(columnWidth, this._minColumnWidth);
       columnsSum += columnsWidths[index];
@@ -815,7 +815,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     frame = this._tableResizeFrames[frameIndex];
-    const tableWidth = this._tableLastWidth(frame) || getOuterWidth($table);
+    const tableWidth = this._tableLastWidth(frame) || getOuterWidth($table.get(0));
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
     let ratio: number;
 

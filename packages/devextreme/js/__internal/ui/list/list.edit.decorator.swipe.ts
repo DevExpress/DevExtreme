@@ -41,7 +41,7 @@ class EditDecoratorSwipe extends EditDecorator {
   }
 
   _swipeStartHandler($itemElement: dxElementWrapper): void {
-    this._itemElementWidth = getWidth($itemElement);
+    this._itemElementWidth = getWidth($itemElement.get(0));
   }
 
   _swipeUpdateHandler($itemElement: dxElementWrapper, e: DxEvent & SwipeUpdateArgs): void {

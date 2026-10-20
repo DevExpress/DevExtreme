@@ -372,7 +372,7 @@ class TagBox<
 
     return xor(isScrollLeft, !rtlEnabled)
       ? 0
-      : scrollSign * (containerScrollWidth - getOuterWidth(this._$tagsContainer));
+      : scrollSign * (containerScrollWidth - getOuterWidth(this._$tagsContainer.get(0)));
   }
 
   _getFocusedTagPosition(direction: 'next' | 'prev'): number {
@@ -388,7 +388,8 @@ class TagBox<
     let scrollLeft = this._$tagsContainer.scrollLeft() as number;
 
     if (isScrollLeft) {
-      scrollOffset += getOuterWidth(this._$focusedTag, true) - getOuterWidth(this._$tagsContainer);
+      scrollOffset += Number(getOuterWidth(this._$focusedTag, true))
+        - getOuterWidth(this._$tagsContainer.get(0));
     }
 
     if (xor(isScrollLeft, scrollOffset < 0)) {
@@ -821,7 +822,7 @@ class TagBox<
     const value = $input.val();
     const isEmptyInput = isString(value) && value;
     const cursorWidth = 5;
-    let width = '';
+    let width: number | string = '';
     let size: string | number = '';
     const { searchEnabled, acceptCustomValue } = this.option();
     const canTypeText = searchEnabled || acceptCustomValue;
@@ -833,7 +834,7 @@ class TagBox<
       );
 
       $calculationElement.insertAfter($input);
-      width = getOuterWidth($calculationElement) + cursorWidth;
+      width = getOuterWidth($calculationElement.get(0)) + cursorWidth;
 
       $calculationElement.remove();
     } else if (!value) {
@@ -1629,11 +1630,11 @@ class TagBox<
 
   _updateWidgetHeight(): void {
     const element = this.$element();
-    const originalHeight = getHeight(element);
+    const originalHeight = getHeight(element.get(0));
 
     this._renderInputSize();
 
-    const currentHeight = getHeight(element);
+    const currentHeight = getHeight(element.get(0));
     const { opened } = this.option();
 
     if (this._popup && opened && this._isEditable() && currentHeight !== originalHeight) {

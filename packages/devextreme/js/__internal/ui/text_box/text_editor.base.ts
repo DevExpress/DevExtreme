@@ -613,12 +613,12 @@ class TextEditorBase<
   }
 
   _getLabelContainerWidth(): number {
-    return getWidth(this._getLabelContainer()) as number;
+    return getWidth(this._getLabelContainer().get(0));
   }
 
   _getLabelBeforeWidth(): number {
     const buttonsBeforeWidth = this._$beforeButtonsContainer
-      && getWidth(this._$beforeButtonsContainer) as number;
+      && getWidth(this._$beforeButtonsContainer.get(0));
 
     return buttonsBeforeWidth ?? 0;
   }

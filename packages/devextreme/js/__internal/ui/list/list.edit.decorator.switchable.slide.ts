@@ -257,8 +257,8 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     }
 
     this._$cachedContent = $itemElement.find(`.${SLIDE_MENU_CONTENT_CLASS}`);
-    this._cachedItemWidth = getOuterWidth($itemElement);
-    this._cachedButtonWidth = this._cachedButtonWidth || getOuterWidth(this._$buttons);
+    this._cachedItemWidth = getOuterWidth($itemElement.get(0));
+    this._cachedButtonWidth = this._cachedButtonWidth || getOuterWidth(this._$buttons.get(0));
     setWidth(this._$buttonsContainer, this._cachedButtonWidth);
 
     if (this._$cachedContent?.length) {

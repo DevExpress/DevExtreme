@@ -1101,8 +1101,8 @@ class Popup<
     }
 
     this._renderedDimensions = {
-      width: parseInt(getWidth(this._$content), 10),
-      height: parseInt(getHeight(this._$content), 10),
+      width: parseInt(String(getWidth(this._$content)), 10),
+      height: parseInt(String(getHeight(this._$content)), 10),
     };
   }
 
@@ -1366,7 +1366,7 @@ class Popup<
   }
 
   _renderFullscreenWidthClass(): void {
-    const isFullScreen = getOuterWidth(this.$overlayContent()) === getWidth(window);
+    const isFullScreen = getOuterWidth(this.$overlayContent().get(0)) === getWidth(window);
     this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, isFullScreen);
   }
 

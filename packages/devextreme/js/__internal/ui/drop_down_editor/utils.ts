@@ -6,7 +6,7 @@ type SizeValue = number | string | (() => number | string) | null | undefined;
 
 const getElementWidth = ($element: dxElementWrapper): number | undefined => {
   if (hasWindow()) {
-    return getOuterWidth($element) as number;
+    return getOuterWidth($element.get(0));
   }
 
   return undefined;

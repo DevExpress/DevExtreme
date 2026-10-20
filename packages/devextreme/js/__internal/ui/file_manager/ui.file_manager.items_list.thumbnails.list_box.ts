@@ -82,15 +82,15 @@ class ListBoxLayoutUtils {
       return null;
     }
 
-    const itemWidth = getOuterWidth(this._$item, true);
+    const itemWidth = getOuterWidth(this._$item.get(0), true);
     if (itemWidth === 0) {
       return null;
     }
 
-    const itemHeight = getOuterHeight(this._$item, true);
+    const itemHeight = getOuterHeight(this._$item.get(0), true);
 
-    const viewPortWidth = getInnerWidth(this._$itemContainer);
-    const viewPortHeight = getInnerHeight(this._$viewPort);
+    const viewPortWidth = getInnerWidth(this._$itemContainer.get(0));
+    const viewPortHeight = getInnerHeight(this._$viewPort.get(0));
     const viewPortScrollTop = this._scrollView.scrollTop();
     const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
 

@@ -329,19 +329,19 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
       fx.stop($item.get(0), false);
     }
 
-    const startItemHeight: number = getOuterHeight($item);
+    const startItemHeight: number = getOuterHeight($item.get(0));
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let finalItemHeight: number;
 
     if ($item.hasClass(ACCORDION_ITEM_OPENED_CLASS)) {
-      finalItemHeight = itemHeight + getOuterHeight($title);
+      finalItemHeight = Number(itemHeight) + getOuterHeight($title.get(0));
 
       if (!finalItemHeight) {
         setHeight($item, 'auto');
-        finalItemHeight = getOuterHeight($item);
+        finalItemHeight = getOuterHeight($item.get(0));
       }
     } else {
-      finalItemHeight = getOuterHeight($title);
+      finalItemHeight = getOuterHeight($title.get(0));
     }
 
     $item.css('overflow', '');
@@ -422,7 +422,7 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
       itemsHeight += getOuterHeight(title);
     });
 
-    const elementHeight: number = getHeight(this.$element());
+    const elementHeight: number = getHeight(this.$element().get(0));
 
     return elementHeight - itemsHeight;
   }

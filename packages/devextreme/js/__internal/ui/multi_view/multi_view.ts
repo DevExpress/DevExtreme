@@ -134,7 +134,7 @@ class MultiView<
       return this._itemWidthValue;
     }
 
-    return getWidth(this._$wrapper) as number;
+    return getWidth(this._$wrapper.get(0));
   }
 
   _clearItemWidthCache(): void {
@@ -438,7 +438,7 @@ class MultiView<
       this._updateItems(newIndex);
 
       // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713)
-      getWidth(this._$itemContainer);
+      getWidth(this._$itemContainer.get(0));
     });
   }
 

@@ -74,7 +74,7 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
 
   _animatePrepareDeleteReady(): Promise<void> {
     const rtl = this._isRtlEnabled();
-    const listWidth = getWidth(this._list.$element());
+    const listWidth = getWidth(this._list.$element().get(0));
     const buttonWidth = this._buttonWidth();
     const fromValue = rtl ? listWidth : -buttonWidth;
     const toValue = rtl ? listWidth - buttonWidth : 0;
@@ -91,7 +91,7 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
 
   _animateForgetDeleteReady(): Promise<void> {
     const rtl = this._isRtlEnabled();
-    const listWidth = getWidth(this._list.$element());
+    const listWidth = getWidth(this._list.$element().get(0));
     const buttonWidth = this._buttonWidth();
     const fromValue = rtl ? listWidth - buttonWidth : 0;
     const toValue = rtl ? listWidth : -buttonWidth;
@@ -108,7 +108,7 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
 
   _buttonWidth(): number {
     if (!this._buttonContainerWidth) {
-      this._buttonContainerWidth = getOuterWidth(this._$buttonContainer);
+      this._buttonContainerWidth = getOuterWidth(this._$buttonContainer.get(0));
     }
     return this._buttonContainerWidth;
   }

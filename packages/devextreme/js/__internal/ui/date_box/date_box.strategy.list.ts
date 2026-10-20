@@ -323,7 +323,7 @@ class ListStrategy extends DateBoxStrategy {
     if (dropDownOptionsHeight === undefined || dropDownOptionsHeight === 'auto') {
       this.dateBox._setPopupOption('height', 'auto');
 
-      const popupHeight = getOuterHeight(this.getWidget().$element());
+      const popupHeight = getOuterHeight(this.getWidget().$element().get(0));
       const maxHeight = getHeight(window) * 0.45;
 
       this.dateBox._setPopupOption('height', Math.min(popupHeight, maxHeight));

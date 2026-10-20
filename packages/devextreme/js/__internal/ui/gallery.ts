@@ -256,7 +256,7 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
   }
 
   _itemPercentWidth(): number {
-    const elementWidth: number = getOuterWidth(this.$element());
+    const elementWidth: number = getOuterWidth(this.$element().get(0));
     const { initialItemWidth } = this.option();
 
     if (initialItemWidth && initialItemWidth <= elementWidth) {
@@ -623,10 +623,10 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
     const { height, width } = this.option();
 
     if (!height) {
-      this.option('height', getOuterHeight($firstItem));
+      this.option('height', getOuterHeight($firstItem.get(0)));
     }
     if (!width) {
-      this.option('width', getOuterWidth($firstItem));
+      this.option('width', getOuterWidth($firstItem.get(0)));
     }
 
     this._dimensionChanged();
@@ -977,7 +977,7 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
 
   _elementWidth(): number | undefined {
     if (!this._cacheElementWidth) {
-      this._cacheElementWidth = getWidth(this.$element());
+      this._cacheElementWidth = getWidth(this.$element().get(0));
     }
 
     return this._cacheElementWidth;

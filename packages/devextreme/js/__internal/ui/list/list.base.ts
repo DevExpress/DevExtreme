@@ -222,7 +222,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _getEdgeVisibleItem(direction: Direction): dxElementWrapper {
     const scrollTop = this.scrollTop();
-    const containerHeight = getHeight(this.$element());
+    const containerHeight = getHeight(this.$element().get(0));
 
     const { focusedElement } = this.option();
     let $item = $(focusedElement);
@@ -239,7 +239,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
         break;
       }
 
-      const nextItemLocation = ($nextItem.position()?.top ?? 0) + getOuterHeight($nextItem) / 2;
+      const nextItemLocation = ($nextItem.position()?.top ?? 0)
+        + getOuterHeight($nextItem.get(0)) / 2;
       isItemVisible = nextItemLocation < containerHeight + scrollTop
         && nextItemLocation > scrollTop;
 
@@ -255,7 +256,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     if (direction === 'prev') {
       // @ts-expect-error ts-error
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return $item.position().top - getHeight(this.$element()) + getOuterHeight($item);
+      return $item.position().top
+        - getHeight(this.$element().get(0))
+        + getOuterHeight($item.get(0));
     }
 
     // @ts-expect-error ts-error
@@ -928,13 +931,13 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     }
 
     const $groupBody = $group.children(`.${LIST_GROUP_BODY_CLASS}`);
-    const startHeight = getOuterHeight($groupBody);
+    const startHeight = getOuterHeight($groupBody.get(0));
 
     let endHeight = 0;
 
     if (collapsed) {
       setHeight($groupBody, 'auto');
-      endHeight = getOuterHeight($groupBody);
+      endHeight = getOuterHeight($groupBody.get(0));
     }
 
     $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);

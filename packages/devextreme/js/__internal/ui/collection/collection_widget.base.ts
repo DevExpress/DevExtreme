@@ -1544,9 +1544,9 @@ class CollectionWidget<
     if (items) {
       each(items, (_index, item) => {
         if (dimension === 'width') {
-          result += getOuterWidth(item, includeMargin ?? false);
+          result += getOuterWidth($(item).get(0), includeMargin ?? false);
         } else if (dimension === 'height') {
-          result += getOuterHeight(item, includeMargin ?? false);
+          result += getOuterHeight($(item).get(0), includeMargin ?? false);
         }
       });
     }

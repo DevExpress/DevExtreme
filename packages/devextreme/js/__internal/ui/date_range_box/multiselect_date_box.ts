@@ -215,7 +215,7 @@ class MultiselectDateBox extends DateBox<MultiselectDateBoxProperties> {
     const { labelMode } = this.option();
 
     if (labelMode === 'outside' && $beforeButtonsContainer && this._isStartDateBox()) {
-      this._label._updateLabelTransform(getWidth($beforeButtonsContainer));
+      this._label._updateLabelTransform(getWidth($beforeButtonsContainer.get(0)));
       return;
     }
 
