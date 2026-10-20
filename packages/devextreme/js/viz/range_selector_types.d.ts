@@ -18,5 +18,6 @@ export {
   InitializedEvent,
   OptionChangedEvent,
   ValueChangedEvent,
+  Title,
   Properties,
 } from './range_selector';

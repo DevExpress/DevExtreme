@@ -1889,11 +1889,11 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 // Legend
 // LegendTitle
 // LegendTitleSubtitle
+// ChartTitle
+// ChartTitleSubtitle
 // Tooltip
 // Title
 // LoadingIndicator
-// ChartTitle
-// ChartTitleSubtitle
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -2430,8 +2430,8 @@ const LoadingIndicator = Object.assign<typeof _componentLoadingIndicator, Nested
 // owners:
 // Legend
 // LegendTitle
-// Chart
 // ChartTitle
+// Chart
 type IMarginProps = React.PropsWithChildren<{
   bottom?: number;
   left?: number;

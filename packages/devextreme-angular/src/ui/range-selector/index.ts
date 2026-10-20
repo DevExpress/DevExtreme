@@ -540,7 +540,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
 
     /**
-     * [descr:BaseWidgetOptions.title]
+     * [descr:dxRangeSelectorOptions.title]
     
      */
     @Input()
