@@ -2460,19 +2460,18 @@ QUnit.test('check horizontal alignment === center', function(assert) {
 ].forEach(function(testCase) {
     ['left', 'center', 'right'].forEach(function(horizontalAlignment) {
         QUnit.test(`The title is hidden when no legend item is visible, legend position - ${testCase.name}, title horizontal alignment - ${horizontalAlignment}`, function(assert) {
-            const options = {
+            const chart = this.createChart({
                 commonSeriesSettings: { showInLegend: false },
                 legend: $.extend({ title: { horizontalAlignment } }, testCase.legend)
-            };
-            const chartWithoutLegend = this.createChart($.extend(true, {}, options, { legend: { visible: false } }));
-            const expectedPlotCanvas = $.extend({}, chartWithoutLegend.panes[0].canvas);
-
-            chartWithoutLegend.dispose();
-
-            const chart = this.createChart(options);
+            });
 
             assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 0, 'the legend title is not drawn');
-            assert.deepEqual(chart.panes[0].canvas, expectedPlotCanvas, 'the plot canvas is the same as without the legend');
+
+            const plotCanvas = $.extend({}, chart.panes[0].canvas);
+
+            chart.option('legend.visible', false);
+
+            assert.deepEqual(plotCanvas, chart.panes[0].canvas, 'the plot canvas is the same as without the legend');
         });
     });
 });
