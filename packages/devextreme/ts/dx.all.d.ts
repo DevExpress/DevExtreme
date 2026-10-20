@@ -44854,6 +44854,15 @@ declare module DevExpress.viz {
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
     /**
+     * [descr:dxRangeSelectorTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxRangeSelectorOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
+    /**
      * [descr:_viz_range_selector_ValueChangedEvent]
      */
     export type ValueChangedEvent =
@@ -45388,6 +45397,10 @@ declare module DevExpress.viz {
        */
       visible?: boolean;
     };
+    /**
+     * [descr:dxRangeSelectorOptions.title]
+     */
+    title?: DevExpress.viz.dxRangeSelector.Title | string;
     /**
      * [descr:dxRangeSelectorOptions.tooltip]
      */
