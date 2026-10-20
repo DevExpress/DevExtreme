@@ -441,7 +441,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._prepareChange(options, value, text);
   }
 
-  protected _cancelSaving(result) {
+  protected _cancelSaving(saveDeferred) {
     const dataController = this._dataController;
 
     if (this.isCellOrBatchEditMode()) {
@@ -452,7 +452,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       dataController.updateItems();
     }
 
-    super._cancelSaving(result);
+    super._cancelSaving(saveDeferred);
   }
 
   public optionChanged(args) {
@@ -578,12 +578,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
 
     return super._isDefaultButtonVisible(button, options);
-  }
-
-  protected _isRowDeleteAllowed() {
-    const callBaseResult = super._isRowDeleteAllowed();
-
-    return callBaseResult || this.isBatchEditMode();
   }
 
   protected _beforeEndSaving(changes) {
