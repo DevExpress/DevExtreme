@@ -6,13 +6,12 @@ import type { DxEvent } from '@js/events';
 import ContextMenu from '@js/ui/context_menu';
 import { each } from '@ts/core/utils/m_iterator';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { DX_CONTEXT_MENU_CLASS } from '@ts/ui/context_menu/context_menu';
 
 import modules from '../modules/modules';
 import type { InternalGridOptions } from '../types';
 import type { GridContextMenuItem, ViewRow } from '../views/types';
 import type { ContextMenuPreparingOptions, ContextMenuViewName } from './types';
-
-const CONTEXT_MENU = 'dx-context-menu';
 
 const viewName: Record<ContextMenuViewName, GridsContextMenuTarget> = {
   columnHeadersView: 'header',
@@ -104,7 +103,7 @@ export class ContextMenuView extends modules.View {
 
   protected _renderCore(): void {
     // @ts-expect-error the view is rendered here
-    const $element = this.element().addClass(CONTEXT_MENU);
+    const $element = this.element().addClass(DX_CONTEXT_MENU_CLASS);
 
     this.setAria('role', 'presentation', $element);
 

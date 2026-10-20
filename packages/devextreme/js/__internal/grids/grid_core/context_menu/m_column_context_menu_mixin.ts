@@ -3,7 +3,7 @@ import type { ItemClickEvent } from '@js/ui/context_menu';
 
 import { Direction } from '../keyboard_navigation/const';
 import type { ContextMenuItemsOptions, GridContextMenuItem } from '../views/types';
-import { CONTEXT_MENU_MOVE_NEXT_ICON_NAME, CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME } from './const';
+import { ICONS } from './const';
 import type { MixinBase } from './types';
 
 /* eslint-disable-next-line
@@ -46,7 +46,7 @@ export const ColumnContextMenuMixin = <T extends MixinBase>(Base: T) => class ex
           Direction.Previous,
           rowIndex,
         ),
-        icon: rtlEnabled ? CONTEXT_MENU_MOVE_NEXT_ICON_NAME : CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME,
+        icon: rtlEnabled ? ICONS.moveColumnNext : ICONS.moveColumnPrevious,
         onItemClick,
       },
       {
@@ -59,7 +59,7 @@ export const ColumnContextMenuMixin = <T extends MixinBase>(Base: T) => class ex
           Direction.Next,
           rowIndex,
         ),
-        icon: rtlEnabled ? CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME : CONTEXT_MENU_MOVE_NEXT_ICON_NAME,
+        icon: rtlEnabled ? ICONS.moveColumnPrevious : ICONS.moveColumnNext,
         onItemClick,
       },
     ];
