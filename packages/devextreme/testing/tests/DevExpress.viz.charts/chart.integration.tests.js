@@ -2454,15 +2454,42 @@ QUnit.test('check horizontal alignment === center', function(assert) {
     assert.roughEqual(chart._legend._insideLegendGroup._settings.translateX, 370, 5);
 });
 
-['center', 'right'].forEach(function(horizontalAlignment) {
-    QUnit.test(`The title keeps its position when no legend item is visible, title horizontal alignment - ${horizontalAlignment}`, function(assert) {
-        const chart = this.createChart({
-            commonSeriesSettings: { showInLegend: false },
-            legend: { title: { horizontalAlignment } }
-        });
+[
+    { name: 'outside', legend: {} },
+    { name: 'inside', legend: { position: 'inside' } }
+].forEach(function(testCase) {
+    ['left', 'center', 'right'].forEach(function(horizontalAlignment) {
+        QUnit.test(`The title is hidden when no legend item is visible, legend position - ${testCase.name}, title horizontal alignment - ${horizontalAlignment}`, function(assert) {
+            const options = {
+                commonSeriesSettings: { showInLegend: false },
+                legend: $.extend({ title: { horizontalAlignment } }, testCase.legend)
+            };
+            const chartWithoutLegend = this.createChart($.extend(true, {}, options, { legend: { visible: false } }));
+            const expectedPlotCanvas = $.extend({}, chartWithoutLegend.panes[0].canvas);
 
-        assert.strictEqual(chart._legend._title._group._settings.translateX, 0);
+            chartWithoutLegend.dispose();
+
+            const chart = this.createChart(options);
+
+            assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 0, 'the legend title is not drawn');
+            assert.deepEqual(chart.panes[0].canvas, expectedPlotCanvas, 'the plot canvas is the same as without the legend');
+        });
     });
+});
+
+QUnit.test('The title is hidden when there is no series, and is drawn again when a series appears', function(assert) {
+    const chart = moduleSetup.createChart.call(this, {
+        legend: { title: { text: 'Super title', horizontalAlignment: 'center' } }
+    });
+
+    assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 0, 'the legend title is not drawn');
+
+    chart.option({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: [{ name: 'series1' }]
+    });
+
+    assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 1, 'the legend title is drawn');
 });
 
 QUnit.module('Legend title that does not fit', moduleSetup);

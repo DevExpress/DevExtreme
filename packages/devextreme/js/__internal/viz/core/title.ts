@@ -219,6 +219,12 @@ export let Title = class Title extends LayoutElement {
     return this;
   }
 
+  erase(): this {
+    this._group.linkRemove();
+
+    return this;
+  }
+
   _correctTitleLength(width: number): void {
     const options = this._options;
     const margin = options.margin;
@@ -317,7 +323,7 @@ export let Title = class Title extends LayoutElement {
 
   freeSpace(): void {
     this._params.incidentOccurred('W2103');
-    this._group.linkRemove();
+    this.erase();
     this._boundingRect.width = this._boundingRect.height = 0;
   }
 
