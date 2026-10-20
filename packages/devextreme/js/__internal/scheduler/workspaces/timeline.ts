@@ -241,7 +241,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   private getIndicationFirstViewDate(): Date {
-    return dateUtils.trimTime(new Date(this.getStartViewDate())) as Date;
+    return dateUtils.trimTime(new Date(this.getStartViewDate()));
   }
 
   protected override getIntervalBetween(currentDate: Date, allDay?: boolean): number {

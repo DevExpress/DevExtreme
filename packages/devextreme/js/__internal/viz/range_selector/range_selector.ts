@@ -269,7 +269,7 @@ function getMinorTickIntervalUnit(
 ): ThemeValue {
   let interval = dateUtils.getDateUnitInterval(minorTickInterval);
   const majorUnit = dateUtils.getDateUnitInterval(tickInterval);
-  const idx = dateUtils.dateUnitIntervals.indexOf(interval);
+  const idx = interval ? dateUtils.dateUnitIntervals.indexOf(interval) : -1;
 
   if (withCorrection && interval === majorUnit && idx > 0) {
     interval = dateUtils.dateUnitIntervals[idx - 1];
