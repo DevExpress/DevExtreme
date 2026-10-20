@@ -46,6 +46,7 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
   }
 
   _closeDropDownByEnter(): boolean {
+    // @ts-expect-error widgetOption() is untyped, the calendar of a date box holds a Date
     return dateUtils.sameDate(this._getContouredValue(), this.widgetOption('value'));
   }
 
