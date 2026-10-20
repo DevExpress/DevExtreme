@@ -1,23 +1,42 @@
+import type { SortOrder } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getHeight } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { DxEvent } from '@js/events';
+import type { ItemClickEvent } from '@js/ui/context_menu';
+import type {
+  Column, ColumnsChanges, ColumnTemplateSource, TemplateModel,
+} from '@ts/grids/grid_core/columns_controller/types';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
+import type { InternalGridOptions, OptionChanged } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { registerKeyboardAction } from '../accessibility';
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/headers_keyboard_navigation';
 import { ColumnsView } from '../views/columns_view';
-import type { ColumnViewTemplate } from '../views/types';
+import type {
+  BoundingRect,
+  CellRenderOptions,
+  ColumnViewTemplate,
+  ColumnViewTemplateOptions,
+  ContextMenuItemsOptions,
+  GridContextMenuItem,
+  RowRenderOptions,
+  TableRenderOptions,
+  ViewCellOptions,
+  ViewRow,
+} from '../views/types';
 import { CLASSES } from './const';
 
 const HEADERS_CLASS = 'headers';
@@ -35,11 +54,11 @@ const MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
 const LINK = 'dx-link';
 
 export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
-  private _isGroupingChanged: any;
+  private _isGroupingChanged?: boolean;
 
-  private _lastActionElement: any;
+  private _lastActionElement?: EventTarget | null;
 
-  private _hasRowElements: any;
+  private _hasRowElements?: boolean;
 
   private _headerPanelView!: HeaderPanel;
 
@@ -105,9 +124,8 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     this._headersKeyboardNavigation = this.getController('headersKeyboardNavigation');
   }
 
-  protected _createTable() {
-    // @ts-expect-error
-    const $table = super._createTable.apply(this, arguments);
+  protected _createTable(columns?: Column[], isAppend?: boolean): dxElementWrapper {
+    const $table = super._createTable(columns, isAppend);
 
     eventsEngine.on($table, 'mousedown selectstart', this.createAction((e) => {
       const { event } = e;
@@ -120,11 +138,11 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return $table;
   }
 
-  private _isLegacyKeyboardNavigation() {
+  private _isLegacyKeyboardNavigation(): boolean | undefined {
     return this.option('useLegacyKeyboardNavigation');
   }
 
-  protected getHeaderDefaultTemplate($container, options) {
+  protected getHeaderDefaultTemplate($container: dxElementWrapper, options: ViewCellOptions): void {
     const { column } = options;
     const { caption } = column;
     const needCellContent = !column.command || (caption && column.command !== 'expand');
@@ -134,13 +152,13 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     } else if (needCellContent) {
       const $content = this.createCellContent($container, column);
 
-      $content.text(caption);
+      $content.text(caption ?? '');
     } else if (column.command) {
       $container.html('&nbsp;');
     }
   }
 
-  private _renderEmptyMessage($container, options) {
+  private _renderEmptyMessage($container: dxElementWrapper, options: ViewCellOptions): void {
     const textEmpty = this._getEmptyHeaderText();
 
     if (!textEmpty) {
@@ -169,7 +187,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     }
   }
 
-  private _getEmptyHeaderText() {
+  private _getEmptyHeaderText(): string {
     const hasHiddenColumns = !!this._columnChooserView.hasHiddenColumns();
     const hasGroupedColumns = !!this._headerPanelView.hasGroupedColumns();
 
@@ -188,38 +206,47 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     }
   }
 
-  private _getHeaderTemplate(column) {
+  private _getHeaderTemplate(column: Column): ColumnTemplateSource<ViewCellOptions> {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back too
     return column.headerCellTemplate || {
       allowRenderToDetachedContainer: true,
       render: this.getHeaderDefaultTemplate.bind(this),
     };
   }
 
-  protected _processTemplate(template, options): ColumnViewTemplate {
-    const that = this;
-    let resultTemplate;
-    const { column } = options;
+  protected _processTemplate(
+    template: ColumnTemplateSource,
+    options?: TemplateModel,
+  ): ColumnViewTemplate {
+    // @ts-expect-error renderTemplate passes the template options
+    const { column, rowType }: TemplateModel = options;
     const renderingTemplate = super._processTemplate(template);
 
-    if (options.rowType === 'header' && renderingTemplate && column.headerCellTemplate && !column.command) {
-      resultTemplate = {
-        render(options) {
-          const $content = that.createCellContent(options.container, column);
-          renderingTemplate.render(extend({}, options, { container: $content }));
+    if (
+      rowType === 'header'
+      && renderingTemplate
+      // @ts-expect-error header cells have a column
+      && column.headerCellTemplate && !column.command
+    ) {
+      return {
+        render: (templateOptions: ColumnViewTemplateOptions): void => {
+          // @ts-expect-error header cells have a column
+          const $content = this.createCellContent(templateOptions.container, column);
+          renderingTemplate.render(extend({}, templateOptions, { container: $content }));
         },
       };
-    } else {
-      resultTemplate = renderingTemplate;
     }
 
-    return resultTemplate;
+    return renderingTemplate;
   }
 
   /**
    * @extended: filter_row, selection
    */
-  protected _handleDataChanged(e) {
-    if (e.changeType !== 'refresh') return;
+  protected _handleDataChanged(e: DataChange): void {
+    if (e.changeType !== 'refresh') {
+      return;
+    }
 
     if (this._isGroupingChanged || this._requireReady) {
       this._isGroupingChanged = false;
@@ -227,7 +254,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     }
   }
 
-  protected _renderCell($row, options) {
+  protected _renderCell($row: dxElementWrapper, options: CellRenderOptions): dxElementWrapper {
     const $cell = super._renderCell($row, options);
 
     if (options.row.rowType === 'header') {
@@ -245,13 +272,18 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return $cell;
   }
 
-  protected _setCellAriaAttributes($cell, cellOptions, options?) {
+  protected _setCellAriaAttributes(
+    $cell: dxElementWrapper,
+    cellOptions: ViewCellOptions,
+    options: CellRenderOptions,
+  ): void {
     super._setCellAriaAttributes($cell, cellOptions, options);
     if (cellOptions.rowType === 'header') {
       if (!cellOptions.column.type) {
         this.setAria('role', 'columnheader', $cell);
       }
       if (cellOptions.column && !cellOptions.column.command && !cellOptions.column.isBand) {
+        // @ts-expect-error attr() is typed without undefined
         $cell.attr('id', cellOptions.column.headerId);
         this.setAria(
           'label',
@@ -265,9 +297,8 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row
    */
-  protected _createRow(row) {
-    // @ts-expect-error
-    const $row = super._createRow.apply(this, arguments);
+  protected _createRow(row: ViewRow, tagName?: string): dxElementWrapper {
+    const $row = super._createRow(row, tagName);
 
     $row.toggleClass(VIEW_CLASSES.columnLines, this.option('showColumnLines'));
 
@@ -281,12 +312,12 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return $row;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _processHeaderAction(event, $row) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overrides use the params
+  protected _processHeaderAction(event: DxEvent, $row: dxElementWrapper): void {
 
   }
 
-  private _handleActionKeyDown(args) {
+  private _handleActionKeyDown(args: { event: DxEvent }): void {
     const { event } = args;
     const $target = $(event.target);
 
@@ -310,7 +341,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row, virtual_column
    */
-  protected _renderCore(options?) {
+  protected _renderCore(options?: DataChange): DeferredObj<unknown> {
     if (this._tableElement && !this._dataController.isLoaded() && !this._hasRowElements) {
       return Deferred().resolve();
     }
@@ -336,17 +367,14 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     });
   }
 
-  protected _renderRows() {
-    const that = this;
-
-    if (that._dataController.isLoaded() || that._hasRowElements) {
-      // @ts-expect-error
-      super._renderRows.apply(that, arguments);
-      that._hasRowElements = true;
+  protected _renderRows($table: dxElementWrapper, options: TableRenderOptions): void {
+    if (this._dataController.isLoaded() || this._hasRowElements) {
+      super._renderRows($table, options);
+      this._hasRowElements = true;
     }
   }
 
-  protected _renderRow($table, options) {
+  protected _renderRow($table: dxElementWrapper, options: RowRenderOptions): void {
     const rowIndex = this.getRowCount() === 1 ? null : options.row.rowIndex;
 
     options.columns = this.getColumns(rowIndex);
@@ -354,10 +382,9 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     super._renderRow($table, options);
   }
 
-  protected _createCell(options) {
+  protected _createCell(options: ViewCellOptions): dxElementWrapper {
     const { column } = options;
-    // @ts-expect-error
-    const $cellElement = super._createCell.apply(this, arguments);
+    const $cellElement = super._createCell(options);
 
     if (options.rowType !== 'header') {
       return $cellElement;
@@ -368,11 +395,12 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     if (isBandColumnsUsed) {
       this.toggleFirstCellClass(
         $cellElement,
+        // @ts-expect-error header cells have a row index
         this._columnsController.isFirstColumn(column, options.rowIndex),
       );
     }
 
-    if (column.rowspan > 1) {
+    if (column.rowspan !== undefined && column.rowspan > 1) {
       $cellElement.attr('rowSpan', column.rowspan);
     }
 
@@ -382,12 +410,12 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row
    */
-  public _getRows() {
-    const result: any[] = [];
+  public _getRows(): ViewRow[] {
+    const result: ViewRow[] = [];
     const rowCount = this.getRowCount();
 
     if (this.option('showColumnHeaders')) {
-      for (let i = 0; i < rowCount; i++) {
+      for (let i = 0; i < rowCount; i += 1) {
         result.push({ rowType: 'header', rowIndex: i });
       }
     }
@@ -395,16 +423,20 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return result;
   }
 
-  protected _getCellTemplate(options) {
+  protected _getCellTemplate(
+    options: ViewCellOptions,
+  ): ColumnTemplateSource<ViewCellOptions> | undefined {
     if (options.rowType === 'header') {
       return this._getHeaderTemplate(options.column);
     }
+
+    return undefined;
   }
 
   /**
    * @extended: filter_row, header_filter
    */
-  protected _columnOptionChanged(e) {
+  protected _columnOptionChanged(e: ColumnsChanges): void {
     const { changeTypes } = e;
     const { optionNames } = e;
 
@@ -425,11 +457,11 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row
    */
-  protected _isElementVisible(elementOptions) {
-    return elementOptions?.visible;
+  protected _isElementVisible(elementOptions?: { visible?: boolean }): boolean {
+    return Boolean(elementOptions?.visible);
   }
 
-  private _alignCaptionByCenter($cell) {
+  private _alignCaptionByCenter($cell: dxElementWrapper): void {
     let $indicatorsContainer = this._getIndicatorContainer($cell, true);
 
     if ($indicatorsContainer?.length) {
@@ -444,19 +476,20 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     }
   }
 
-  public _updateCell($cell, options) {
+  public _updateCell($cell: dxElementWrapper, options: ViewCellOptions): void {
     if (options.rowType === 'header' && options.column.alignment === 'center') {
       this._alignCaptionByCenter($cell);
     }
 
-    // @ts-expect-error
-    super._updateCell.apply(this, arguments);
+    super._updateCell($cell, options);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _updateIndicator($cell, column, indicatorName) {
-    // @ts-expect-error
-    const $indicatorElement = super._updateIndicator.apply(this, arguments);
+  protected _updateIndicator(
+    $cell: dxElementWrapper,
+    column: Column,
+    indicatorName: string,
+  ): dxElementWrapper | undefined {
+    const $indicatorElement = super._updateIndicator($cell, column, indicatorName);
 
     if (column.alignment === 'center') {
       this._alignCaptionByCenter($cell);
@@ -467,7 +500,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return $indicatorElement;
   }
 
-  protected _getIndicatorContainer($cell, returnAll?) {
+  protected _getIndicatorContainer($cell: dxElementWrapper, returnAll?: boolean): dxElementWrapper {
     const $indicatorsContainer = super._getIndicatorContainer($cell);
 
     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(`:not(.${VISIBILITY_HIDDEN_CLASS})`);
@@ -476,16 +509,18 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: tree_list/selection
    */
-  // eslint-disable-next-line
-  protected _isSortableElement($target?) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overrides use the param
+  protected _isSortableElement($target?: dxElementWrapper): boolean {
     return true;
   }
 
-  public getHeadersRowHeight() {
+  public getHeadersRowHeight(): number {
     const $tableElement = this.getTableElement();
     const $headerRows = $tableElement?.find(`.${CLASSES.headerRow}`);
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    /* eslint-disable-next-line
+      @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-nullish-coalescing
+      -- getHeight() isn't typed yet, NaN falls back to 0 */
     return $headerRows?.toArray().reduce((sum, headerRow) => sum + getHeight(headerRow), 0) || 0;
   }
 
@@ -495,14 +530,13 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return $columnElements?.eq(index) ?? $('');
   }
 
-  public getColumnElements(index?, bandColumnIndex?) {
-    let $cellElement;
+  public getColumnElements(index?: number, bandColumnIndex?: number): dxElementWrapper | undefined {
     const columnsController = this._columnsController;
     const rowCount = this.getRowCount();
 
     if (this.option('showColumnHeaders')) {
       if (rowCount > 1 && (!isDefined(index) || isDefined(bandColumnIndex))) {
-        const result: any[] = [];
+        const result: Element[] = [];
 
         let visibleColumns: Column[] = [];
         if (isDefined(bandColumnIndex)) {
@@ -515,7 +549,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
           const rowIndex = index
             ?? (isDefined(column.index) ? columnsController.getRowIndex(column.index) : 0);
           const visibleIndex = columnsController.getVisibleIndex(column.index, rowIndex);
-          $cellElement = this._getCellElement(rowIndex, visibleIndex);
+          const $cellElement = this._getCellElement(rowIndex, visibleIndex);
           if ($cellElement) {
             result.push($cellElement.get(0));
           }
@@ -523,6 +557,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
         return $(result);
       } if (!index || index < rowCount) {
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- NaN falls back
         return this.getCellElements(index || 0);
       }
     }
@@ -530,16 +565,16 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return undefined;
   }
 
-  private getColumnIndexByElement($cell) {
+  private getColumnIndexByElement($cell: dxElementWrapper): number | undefined {
     const cellIndex = this.getCellIndex($cell);
     const $row = $cell.closest(`.${VIEW_CLASSES.row}`);
-    const { rowIndex } = $row[0];
+    const { rowIndex }: HTMLTableRowElement = $row[0];
     const column = this.getColumns(rowIndex)[cellIndex];
 
     return column ? column.index : -1;
   }
 
-  protected getVisibleColumnIndex(columnIndex, rowIndex) {
+  protected getVisibleColumnIndex(columnIndex: number, rowIndex?: number): number {
     const column = this.getColumns()[columnIndex];
 
     return column ? this._columnsController.getVisibleIndex(column.index, rowIndex) : -1;
@@ -548,50 +583,50 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: column_fixing
    */
-  public getColumnWidths($tableElement?, rowIndex?: number) {
+  public getColumnWidths($tableElement?: dxElementWrapper, rowIndex?: number): number[] {
     const $columnElements = this.getColumnElements(rowIndex);
 
     if ($columnElements?.length) {
       return this._getWidths($columnElements);
     }
 
-    // @ts-expect-error
-    return super.getColumnWidths.apply(this, arguments);
+    return super.getColumnWidths($tableElement, rowIndex);
   }
 
   /**
    * @extended: column_chooser
    */
-  public isColumnReorderingEnabled(column): boolean {
+  public isColumnReorderingEnabled(column: Column): boolean | undefined {
     return column.allowReordering
       && (this.option('allowColumnReordering') ?? this._columnsController.isColumnOptionUsed('allowReordering'));
   }
 
-  public allowDragging(column) {
+  public allowDragging(column: Column): boolean | undefined {
+    // @ts-expect-error a grid column has an index
     const rowIndex = column && this._columnsController.getRowIndex(column.index);
     const columns = this.getColumns(rowIndex);
 
     return this.isColumnReorderingEnabled(column) && columns.length > 1;
   }
 
-  protected getBoundingRect() {
-    const that = this;
-    const $columnElements = that.getColumnElements();
+  protected getBoundingRect(): BoundingRect | null {
+    const $columnElements = this.getColumnElements();
 
     if ($columnElements?.length) {
-      const offset = that.getTableElement()!.offset();
+      // @ts-expect-error the table is rendered when its column elements exist
+      const offset: Coordinates = this.getTableElement().offset();
       return {
-        top: offset!.top,
+        top: offset.top,
       };
     }
     return null;
   }
 
-  public getName() {
+  public getName(): string {
     return 'headers';
   }
 
-  private getColumnCount() {
+  private getColumnCount(): number {
     const $columnElements = this.getColumnElements();
 
     return $columnElements ? $columnElements.length : 0;
@@ -614,18 +649,17 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row
    */
-  public isVisible() {
-    return this.option('showColumnHeaders')!;
+  public isVisible(): boolean {
+    // @ts-expect-error showColumnHeaders has a default value
+    return this.option('showColumnHeaders');
   }
 
-  public optionChanged(args) {
-    const that = this;
-
+  public optionChanged(args: OptionChanged): void {
     switch (args.name) {
       case 'showColumnHeaders':
       case 'wordWrapEnabled':
       case 'showColumnLines':
-        that._invalidate(true, true);
+        this._invalidate(true, true);
         args.handled = true;
         break;
       default:
@@ -633,23 +667,27 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     }
   }
 
-  public getHeight() {
+  public getHeight(): number {
     return this.getElementHeight();
   }
 
   /**
    * @extended: column_fixing
    */
-  public getContextMenuItems(options) {
-    let items;
+  public getContextMenuItems(
+    options: ContextMenuItemsOptions,
+  ): GridContextMenuItem[] | undefined {
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned below
+    let items: GridContextMenuItem[] | undefined;
     const { column } = options;
 
     if (options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
       const sortingOptions = this.option('sorting');
 
       if (sortingOptions && sortingOptions.mode !== 'none' && column?.allowSorting) {
-        const onItemClick = (params) => {
+        const onItemClick = (params: ItemClickEvent<GridContextMenuItem<SortOrder | 'none'>>): void => {
           setTimeout(() => {
+            // @ts-expect-error a grid column has an index and a clicked item has its data
             this._columnsController.changeSortOrder(column.index, params.itemData.value);
           });
         };
@@ -680,32 +718,37 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return items;
   }
 
-  protected getRowCount() {
+  protected getRowCount(): number {
     return this._columnsController?.getRowCount();
   }
 
-  public toggleDraggableColumnClass(columnIndex, value, rowIndex?) {
-    let i;
-    let columnElements;
+  public toggleDraggableColumnClass(columnIndex: number, value: boolean, rowIndex?: number): void {
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned by the loop below
+    let i: number;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned by the loop below
+    let columnElements: dxElementWrapper | undefined;
     const rowCount = this.getRowCount();
     const columns = this._columnsController.getColumns();
     const column = columns?.[columnIndex];
     const columnID = column?.isBand && column.index;
-    const setColumnClass = (column, index) => {
-      if (column.ownerBand === columnID) {
+    const setColumnClass = (rowColumn: Column, index: number): void => {
+      if (rowColumn.ownerBand === columnID) {
+        // @ts-expect-error the cells of the current row are found
         columnElements
           .eq(index)
           .toggleClass(this.addWidgetPrefix(REORDERING_CLASSES.draggableColumn), value);
 
-        if (column.isBand) {
-          this.toggleDraggableColumnClass(column.index, value, i + 1);
+        if (rowColumn.isBand) {
+          // @ts-expect-error a grid column has an index
+          this.toggleDraggableColumnClass(rowColumn.index, value, i + 1);
         }
       }
     };
 
     if (isDefined(columnID)) {
-      rowIndex = rowIndex || 0;
-      for (i = rowIndex; i < rowCount; i++) {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- NaN falls back
+      const startRowIndex = rowIndex || 0;
+      for (i = startRowIndex; i < rowCount; i += 1) {
         columnElements = this.getCellElements(i);
 
         if (columnElements) {
@@ -721,7 +764,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return false;
   }
 
-  public getKeyboardNavigationController() {
+  public getKeyboardNavigationController(): HeadersKeyboardNavigationController {
     return this._headersKeyboardNavigation;
   }
 
@@ -731,7 +774,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 }
 
 export const columnHeadersModule = {
-  defaultOptions() {
+  defaultOptions(): InternalGridOptions {
     return {
       showColumnHeaders: true,
       cellHintEnabled: true,

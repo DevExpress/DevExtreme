@@ -3,6 +3,7 @@ import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DxEvent } from '@js/events';
+import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
@@ -232,6 +233,12 @@ export type RowsModuleOptions = Pick<InternalGridOptions,
 | 'activeStateEnabled'
 | 'twoWayBindingEnabled'
 >;
+
+export interface GridContextMenuItem<TValue extends string = string> extends ContextMenuItem {
+  name?: string;
+  value?: TValue;
+  onItemClick?: (e: ItemClickEvent) => void;
+}
 
 export interface ContextMenuItemsOptions {
   event: DxEvent;
