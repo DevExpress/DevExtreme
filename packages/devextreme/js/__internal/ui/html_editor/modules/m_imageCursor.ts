@@ -1,7 +1,10 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
+import type { DxEvent } from '@js/events';
 import Quill from 'devextreme-quill';
 
+import type { QuillInstance } from '../types/quill';
+import type { BaseModuleOptions } from './m_base';
 import BaseModule from './m_base';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorImageCursor';
@@ -10,38 +13,36 @@ const clickEvent = addNamespace('dxclick', MODULE_NAMESPACE);
 let ImageCursorModule = BaseModule;
 
 if (Quill) {
-  ImageCursorModule = class ImageCursorModule extends BaseModule {
-    quill: any;
-
-    constructor(quill, options) {
+  ImageCursorModule = class extends BaseModule {
+    constructor(quill: QuillInstance, options: BaseModuleOptions) {
       super(quill, options);
       this.addCleanCallback(this.clean.bind(this));
       this._attachEvents();
     }
 
-    _attachEvents() {
+    _attachEvents(): void {
       eventsEngine.on(this.quill.root, clickEvent, this._clickHandler.bind(this));
     }
 
-    _detachEvents() {
+    _detachEvents(): void {
       eventsEngine.off(this.quill.root, clickEvent);
     }
 
-    _clickHandler(e) {
+    _clickHandler(e: DxEvent): void {
       if (this._isAllowedTarget(e.target)) {
         this._adjustSelection(e);
       }
     }
 
-    _isAllowedTarget(targetElement) {
+    _isAllowedTarget(targetElement: Element): boolean {
       return this._isImage(targetElement);
     }
 
-    _isImage(targetElement) {
+    _isImage(targetElement: Element): boolean {
       return targetElement.tagName.toUpperCase() === 'IMG';
     }
 
-    _adjustSelection(e) {
+    _adjustSelection(e: DxEvent): void {
       const blot = this.quill.scroll.find(e.target);
       if (blot) {
         const index = blot.offset(this.quill.scroll);
@@ -51,7 +52,7 @@ if (Quill) {
       }
     }
 
-    clean() {
+    clean(): void {
       this._detachEvents();
     }
   };

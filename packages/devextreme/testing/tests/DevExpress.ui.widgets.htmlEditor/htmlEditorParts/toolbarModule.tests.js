@@ -661,6 +661,21 @@ testModule('Active formats', simpleModuleConfig, () => {
         assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is active because there is active format');
     });
 
+    test('clear formatting is disabled after the only active format is toggled off', function(assert) {
+        this.quillMock.getFormat = () => { return { bold: true }; };
+        this.options.items = ['bold', 'clear'];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        const $clearFormat = this.$element.find(`.${CLEAR_FORMAT_CLASS}`);
+
+        toolbar.updateFormatWidgets();
+        assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is active while bold is applied');
+
+        this.$element.find(`.${BOLD_FORMAT_CLASS}`).trigger('dxclick');
+
+        assert.ok($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is disabled once bold is toggled off');
+    });
+
     test('clear formatting with a selected range greater than 1 character long [T947981]', function(assert) {
         this.quillMock.getSelection = () => { return { index: 0, length: 5 }; };
         this.quillMock.getFormat = () => {};

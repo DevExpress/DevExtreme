@@ -519,6 +519,35 @@ module('Image uploading integration', {
         assert.strictEqual(event && event.type, 'keyup', 'the Enter key event is passed to valueChanged');
     });
 
+    test('changing imageUpload.fileUploaderOptions in the base64 mode does not throw', function(assert) {
+        this.createWidget({ imageUpload: { tabs: ['file'], fileUploadMode: 'base64' } });
+
+        this.instance.option('imageUpload.fileUploaderOptions', { multiple: true });
+
+        assert.ok(true, 'the option is accepted without a file uploader');
+    });
+
+    test('a nested fileUploaderOptions change in the base64 mode keeps the other fileUploaderOptions for the server mode', function(assert) {
+        const testHandler = () => {};
+        this.createWidget({ imageUpload: {
+            tabs: ['file'],
+            fileUploadMode: 'base64',
+            uploadUrl: '/Upload/',
+            fileUploaderOptions: {
+                onBeforeSend: testHandler
+            }
+        } });
+
+        this.instance.option('imageUpload.fileUploaderOptions.multiple', true);
+        this.instance.option('imageUpload.fileUploadMode', 'server');
+        this.clock.tick(TIME_TO_WAIT);
+
+        const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+
+        assert.strictEqual(fileUploader.option('multiple'), true, 'the changed option is applied');
+        assert.strictEqual(fileUploader.option('onBeforeSend'), testHandler, 'the other options are kept');
+    });
+
     test('check file uploading by url dimention editors default value', function(assert) {
         this.createWidget({
             value: markup,
