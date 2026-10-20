@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets } from '@ts/core/utils/m_date';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import type { GroupedViewData } from '../../r1/components/types';
@@ -523,7 +523,7 @@ export default class ViewDataProvider {
     const lastEndDate = new Date(
       this.getLastViewDate().getTime() - dateUtils.dateToMilliseconds('minute'),
     );
-    return dateUtilsTs.addOffsets(lastEndDate, -this.options.viewOffset);
+    return addOffsets(lastEndDate, -this.options.viewOffset);
   }
 
   getLastViewDateByEndDayHour(endDayHour: number): Date {
