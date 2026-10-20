@@ -914,7 +914,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:BaseWidgetOptions.title]
+     * [descr:dxChartOptions.title]
     
      */
     @Input()

@@ -7,6 +7,7 @@ import {
 
 import {
     template,
+    HorizontalAlignment,
     VerticalAlignment,
 } from '../common';
 
@@ -19,6 +20,7 @@ import {
 
 import BaseWidget, {
     BaseWidgetOptions,
+    BaseWidgetTitle,
     BaseWidgetTooltip,
     FileSavingEventInfo,
     ExportInfo,
@@ -562,6 +564,12 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     targetField?: string;
     /**
      * @docid
+     * @type object|string
+     * @public
+     */
+    title?: Title | string;
+    /**
+     * @docid
      * @type object
      * @public
      */
@@ -573,6 +581,21 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      */
     weightField?: string;
 }
+/**
+ * @public
+ * @docid dxSankeyTitle
+ * @type object
+ */
+export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+    /**
+     * @docid dxSankeyOptions.title.horizontalAlignment
+     * @default 'center'
+     * @default 'left' &for(Material)
+     * @default 'left' &for(Fluent)
+     * @public
+     */
+    horizontalAlignment?: HorizontalAlignment;
+};
 /**
  * @public
  * @docid dxSankeyTooltip

@@ -387,10 +387,10 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 // Legend
 // LegendTitle
 // LegendTitleSubtitle
-// Tooltip
-// LoadingIndicator
 // VectorMapTitle
 // VectorMapTitleSubtitle
+// Tooltip
+// LoadingIndicator
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;

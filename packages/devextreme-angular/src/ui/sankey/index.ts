@@ -400,7 +400,7 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
 
     /**
-     * [descr:BaseWidgetOptions.title]
+     * [descr:dxSankeyOptions.title]
     
      */
     @Input()
