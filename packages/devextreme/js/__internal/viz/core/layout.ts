@@ -161,8 +161,10 @@ function processBackward(item: LayoutItem, rect: number[], alignmentRect: number
   const itemFitRect = processRectBackward(item, fitRect, fitRect);
 
   if (size[item.side] > 0) {
-    size[item.side] -= item.size[item.side];
-    targetRect[item.primary + item.side] = itemRect[item.primary + item.side];
+    if (item.position !== 'inside') {
+      size[item.side] -= item.size[item.side];
+      targetRect[item.primary + item.side] = itemRect[item.primary + item.side];
+    }
     item.element.freeSpace();
   } else {
     item.element.move(itemRect, itemFitRect);

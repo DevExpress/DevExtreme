@@ -2492,6 +2492,36 @@ QUnit.module('Legend title that does not fit', moduleSetup);
     });
 });
 
+QUnit.module('Legend under a space shortage', moduleSetup);
+
+QUnit.test('An inside legend does not push the panes out of the canvas when the panes lack space', function(assert) {
+    const incidentOccurred = sinon.spy();
+
+    const chart = this.createChart({
+        size: { width: 400, height: 160 },
+        dataSource: [{ arg: 'a', v1: 1, v2: 2, v3: 3 }],
+        series: [
+            { valueField: 'v1', name: 'Series 1' },
+            { valueField: 'v2', name: 'Series 2' },
+            { valueField: 'v3', name: 'Series 3' }
+        ],
+        argumentAxis: { label: { font: { size: 80 } } },
+        legend: {
+            position: 'inside',
+            verticalAlignment: 'top',
+            horizontalAlignment: 'center',
+            orientation: 'horizontal'
+        },
+        onIncidentOccurred: incidentOccurred
+    });
+
+    const incidentIds = incidentOccurred.getCalls().map(function(call) { return call.args[0].target.id; });
+    const paneTop = chart.panes[0].canvas.top;
+
+    assert.notStrictEqual(incidentIds.indexOf('W2104'), -1, 'the legend is hidden because the panes lack space');
+    assert.ok(paneTop >= 0, `the pane stays inside the canvas (top = ${paneTop})`);
+});
+
 QUnit.module('Auto hide point markers', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
