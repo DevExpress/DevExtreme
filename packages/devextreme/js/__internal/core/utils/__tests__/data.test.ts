@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { Guid } from '@ts/core/guid';
-import { toComparable } from '@ts/core/utils/m_data';
+import { toComparable } from '@ts/core/utils/data';
 
 describe('Data utils', () => {
   describe('toComparable', () => {
@@ -20,7 +20,7 @@ describe('Data utils', () => {
     });
 
     it('should return any other object as is, including one with its own valueOf', () => {
-      const withValueOf = { valueOf: () => 42 };
+      const withValueOf = { valueOf: (): number => 42 };
       const plain = { id: 1 };
 
       expect(toComparable(withValueOf)).toBe(withValueOf);
