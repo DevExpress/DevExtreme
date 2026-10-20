@@ -62,13 +62,15 @@ if (Globalize?.formatNumber) {
       }
 
       return getFormatter(
-        getEffectiveFormatLocale(formatConfig, NUMBER_DATA_TYPE),
+        getEffectiveFormatLocale(formatConfig),
         this._normalizeFormatConfig(format, formatConfig, value),
       )(value);
     },
 
     getDecimalSeparator(format?: FormatConfig | string): string {
-      const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
+      const formatLocale = format
+        ? getEffectiveFormatLocale(format)
+        : getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
 
       return getFormatter(formatLocale, {
         minimumFractionDigits: 1,
@@ -77,7 +79,9 @@ if (Globalize?.formatNumber) {
     },
 
     getThousandsSeparator(format?: FormatConfig | string): string {
-      const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
+      const formatLocale = format
+        ? getEffectiveFormatLocale(format)
+        : getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
 
       return getFormatter(formatLocale, {})(10000)[2];
     },

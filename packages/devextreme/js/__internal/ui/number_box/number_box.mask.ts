@@ -172,12 +172,22 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     return { locale: formatObject.locale };
   }
 
+  _getSeparatorFormat(): Format | undefined {
+    const explicitLocaleFormat = this._getExplicitLocaleFormat();
+
+    if (explicitLocaleFormat) {
+      return explicitLocaleFormat;
+    }
+
+    return isDefined(this.option('format')) ? this._getEffectiveFormatOption() : undefined;
+  }
+
   _getDecimalSeparator(): string {
-    return number.getDecimalSeparator(this._getExplicitLocaleFormat());
+    return number.getDecimalSeparator(this._getSeparatorFormat());
   }
 
   _getThousandsSeparator(): string {
-    return number.getThousandsSeparator(this._getExplicitLocaleFormat());
+    return number.getThousandsSeparator(this._getSeparatorFormat());
   }
 
   _invalidateFormatPatternIfIntlLocaleChanged(): void {
@@ -190,7 +200,9 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       return;
     }
 
-    const locale = getEffectiveFormatLocale(formatOption, 'number');
+    const locale = isDefined(this.option('format'))
+      ? getEffectiveFormatLocale(formatOption)
+      : getEffectiveFormatLocale(formatOption, 'number');
 
     if (locale !== this._intlFormatLocaleCache) {
       this._intlFormatLocaleCache = locale;

@@ -15,14 +15,6 @@ type GlobalFormatOptionName = 'dateFormat' | 'dateTimeFormat' | 'timeFormat' | '
 
 const hasOwn = Object.prototype.hasOwnProperty;
 
-const GLOBAL_FORMAT_DATA_TYPES = ['time', 'datetime', 'date'];
-
-const DEFAULT_IMPLICIT_PRESET_BY_DATA_TYPE = {
-  date: 'shortdate',
-  datetime: 'shortdateshorttime',
-  time: 'shorttime',
-};
-
 const DATA_TYPE_FORMAT_PRESET: Record<string, string> = {
   datetime: 'shortDateShortTime',
   time: 'shortTime',
@@ -167,30 +159,6 @@ const getFormatType = (format: Format | undefined): string | undefined => (
   isPlainObject(format) ? (format as FormatObject).type : undefined
 );
 
-const resolveDataTypeFromGlobalConfig = (presetName: string | undefined): string | undefined => {
-  if (!presetName) {
-    return undefined;
-  }
-
-  const lowerPreset = String(presetName).toLowerCase();
-
-  for (const dataType of GLOBAL_FORMAT_DATA_TYPES) {
-    const globalFormatType = getFormatType(getGlobalFormatByDataType(dataType));
-
-    if (globalFormatType?.toLowerCase() === lowerPreset) {
-      return dataType;
-    }
-  }
-
-  for (const dataType of GLOBAL_FORMAT_DATA_TYPES) {
-    if (DEFAULT_IMPLICIT_PRESET_BY_DATA_TYPE[dataType] === lowerPreset) {
-      return dataType;
-    }
-  }
-
-  return undefined;
-};
-
 const inferDataTypeFromFormatObject = (format: Format): string | undefined => {
   if (!isPlainObject(format)) {
     return undefined;
@@ -234,7 +202,6 @@ export const getFormatterOptions = (format: Format): Format => {
 export const getEffectiveFormatLocale = (
   format: Format,
   dataType?: string,
-  presetName?: string,
 ): string => {
   const ownLocale = getOwnFormatLocale(format);
 
@@ -242,9 +209,7 @@ export const getEffectiveFormatLocale = (
     return ownLocale;
   }
 
-  const resolvedDataType = dataType
-    ?? resolveDataTypeFromGlobalConfig(presetName ?? getFormatType(format))
-    ?? inferDataTypeFromFormatObject(format);
+  const resolvedDataType = dataType ?? inferDataTypeFromFormatObject(format);
 
   if (resolvedDataType) {
     const globalFormatLocale = getOwnFormatLocale(getGlobalFormatByDataType(resolvedDataType));
@@ -289,14 +254,9 @@ export const getDateFormatLocale = (
 ): string => {
   const effectiveResolved = resolvedFormat ?? resolveFormatWhenOmitted(sourceFormat);
   const localeSource = getOwnFormatLocale(sourceFormat) ? sourceFormat : effectiveResolved;
-  const sourcePresetName = isString(sourceFormat)
-    ? sourceFormat
-    : getFormatType(sourceFormat) ?? (isString(effectiveResolved) ? effectiveResolved : undefined);
 
   return getEffectiveFormatLocale(
     isPlainObject(localeSource) ? localeSource : undefined,
-    undefined,
-    sourcePresetName,
   );
 };
 

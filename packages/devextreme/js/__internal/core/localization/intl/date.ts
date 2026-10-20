@@ -149,16 +149,17 @@ const intlFormats = {
   year: { year: 'numeric' },
 };
 
-Object.defineProperty(intlFormats, 'shortdateshorttime', {
-  get() {
-    const formatLocale = getEffectiveFormatLocale(undefined, 'datetime');
-    const defaultOptions = Intl.DateTimeFormat(formatLocale).resolvedOptions();
+const getShortDateShortTimeFormat = (formatLocale: string): Intl.DateTimeFormatOptions => {
+  const defaultOptions = Intl.DateTimeFormat(formatLocale).resolvedOptions();
 
-    return {
-      year: defaultOptions.year, month: defaultOptions.month, day: defaultOptions.day, hour: 'numeric', minute: 'numeric',
-    };
-  },
-});
+  return {
+    year: defaultOptions.year,
+    month: defaultOptions.month,
+    day: defaultOptions.day,
+    hour: 'numeric',
+    minute: 'numeric',
+  };
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const getIntlFormat = (format): Intl.DateTimeFormatOptions => typeof format === 'string' && intlFormats[format.toLowerCase()];
@@ -168,7 +169,9 @@ const formatWithIntlPreset = (
   presetName: string,
   formatLocale: string,
 ): string | undefined => {
-  const intlFormat = getIntlFormat(presetName);
+  const intlFormat = presetName.toLowerCase() === 'shortdateshorttime'
+    ? getShortDateShortTimeFormat(formatLocale)
+    : getIntlFormat(presetName);
 
   if (!intlFormat) {
     return undefined;

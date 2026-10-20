@@ -984,7 +984,7 @@ QUnit.module('Format helper', () => {
             }
         });
 
-        QUnit.test('dateFormat locale overrides message locale for shortDate preset', function(assert) {
+        QUnit.test('explicit shortDate preset keeps the message locale', function(assert) {
             const saved = saveGlobalFormats();
             const savedLocale = coreLocalization.locale();
             const savedGlobalizeLocale = Globalize.locale().locale;
@@ -1004,7 +1004,49 @@ QUnit.module('Format helper', () => {
 
                 assert.strictEqual(
                     dateLocalization.format(new Date(2020, 0, 2), 'shortDate'),
+                    '1/2/2020',
+                );
+                assert.strictEqual(
+                    dateLocalization.format(new Date(2020, 0, 2), {
+                        locale: 'de-DE',
+                        type: 'shortDate',
+                    }),
                     '2.1.2020',
+                );
+
+                config({
+                    ...config(),
+                    timeFormat: {
+                        default: {
+                            locale: 'de-DE',
+                            type: 'shortTime',
+                        },
+                    },
+                    dateTimeFormat: {
+                        default: {
+                            locale: 'de-DE',
+                            type: 'shortDateShortTime',
+                        },
+                    },
+                });
+
+                const date = new Date(2020, 0, 2, 14, 5);
+
+                assert.notStrictEqual(
+                    dateLocalization.format(date, 'shortTime'),
+                    dateLocalization.format(date, { locale: 'de-DE', type: 'shortTime' }),
+                );
+                assert.strictEqual(
+                    dateLocalization.format(date, { locale: 'de-DE', type: 'shortTime' }),
+                    '14:05',
+                );
+                assert.notStrictEqual(
+                    dateLocalization.format(date, 'shortDateShortTime'),
+                    dateLocalization.format(date, { locale: 'de-DE', type: 'shortDateShortTime' }),
+                );
+                assert.strictEqual(
+                    dateLocalization.format(date, { locale: 'de-DE', type: 'shortDateShortTime' }),
+                    '2.1.2020, 14:05',
                 );
             } finally {
                 Globalize.locale(savedGlobalizeLocale);

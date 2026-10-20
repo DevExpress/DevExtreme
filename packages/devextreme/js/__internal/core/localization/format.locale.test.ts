@@ -63,7 +63,7 @@ describe('format locale integration', () => {
       expect(numberLocalization.format(1234.56)).toBe('1,234.56');
     });
 
-    it('should apply global numberFormat locale to explicit format type', () => {
+    it('should keep the message locale for an explicit fixedPoint preset', () => {
       coreLocalization.locale('de');
       config({
         ...config(),
@@ -76,7 +76,8 @@ describe('format locale integration', () => {
         },
       });
 
-      expect(numberLocalization.format(1234.56, { type: 'fixedPoint', precision: 0 })).toBe('1,235');
+      expect(numberLocalization.format(1234.56, { type: 'fixedPoint', precision: 0 })).toBe('1.235');
+      expect(numberLocalization.format(1234.56)).toBe('1,234.56');
     });
 
     it('should prefer explicit format locale over global numberFormat locale', () => {
@@ -210,10 +211,9 @@ describe('format locale integration', () => {
 
   describe('dates', () => {
     it.each([
-      { alias: 'longDate', expected: 'Donnerstag, 2. Januar 2020' },
-      { alias: { default: { type: 'longDate' } }, expected: 'Donnerstag, 2. Januar 2020' },
-      { alias: { default: { year: 'numeric', month: 'long', day: 'numeric' } }, expected: '2. Januar 2020' },
-    ])('should keep source preset locale when dateTimeFormatPresets aliases it to $alias', ({ alias, expected }) => {
+      { alias: 'longDate', expected: 'Thursday, January 2, 2020' },
+      { alias: { default: { type: 'longDate' } }, expected: 'Thursday, January 2, 2020' },
+    ])('should keep the message locale when shortDate is aliased to $alias', ({ alias, expected }) => {
       coreLocalization.locale('en');
       config({
         ...config(),
@@ -222,6 +222,19 @@ describe('format locale integration', () => {
       } as never);
 
       expect(dateLocalization.format(new Date(2020, 0, 2), 'shortDate')).toBe(expected);
+    });
+
+    it('should take dateFormat locale when shortDate is aliased to Intl date fields', () => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        dateFormat: { default: { type: 'shortDate', locale: 'de-DE' } },
+        dateTimeFormatPresets: {
+          shortDate: { default: { year: 'numeric', month: 'long', day: 'numeric' } },
+        },
+      } as never);
+
+      expect(dateLocalization.format(new Date(2020, 0, 2), 'shortDate')).toBe('2. Januar 2020');
     });
 
     it('should format implicit shortDate using global dateFormat locale', () => {
@@ -242,7 +255,7 @@ describe('format locale integration', () => {
       })).toBe('2.1.2020');
     });
 
-    it('should format implicit shortDate preset using global dateFormat locale', () => {
+    it('should keep the message locale for an explicit shortDate preset', () => {
       coreLocalization.locale('en');
       config({
         ...config(),
@@ -254,7 +267,83 @@ describe('format locale integration', () => {
         },
       });
 
-      expect(dateLocalization.format(new Date(2020, 0, 2), 'shortDate')).toBe('2.1.2020');
+      expect(dateLocalization.format(new Date(2020, 0, 2), 'shortDate')).toBe('1/2/2020');
+      expect(dateLocalization.format(new Date(2020, 0, 2), { type: 'shortDate' })).toBe('1/2/2020');
+      expect(dateLocalization.format(
+        new Date(2020, 0, 2),
+        getGlobalFormatByDataType('date'),
+      )).toBe('2.1.2020');
+    });
+
+    it('should use the dateTimeFormatPresets locale for an explicit preset', () => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        dateFormat: {
+          default: {
+            locale: 'ja',
+            type: 'shortDate',
+          },
+        },
+        dateTimeFormatPresets: {
+          shortDate: { default: { type: 'shortDate', locale: 'de-DE' } },
+        },
+      } as never);
+
+      expect(dateLocalization.format(new Date(2020, 0, 2), { type: 'shortDate' })).toBe('2.1.2020');
+    });
+
+    it('should keep the message locale for an explicit shortTime preset', () => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        timeFormat: {
+          default: {
+            locale: 'de-DE',
+            type: 'shortTime',
+          },
+        },
+      });
+      const date = new Date(2020, 0, 2, 14, 5);
+
+      expect(dateLocalization.format(date, 'shortTime')).toBe('2:05 PM');
+      expect(dateLocalization.format(date, { type: 'shortTime' })).toBe('2:05 PM');
+      expect(dateLocalization.format(date, getGlobalFormatByDataType('time'))).toBe('14:05');
+    });
+
+    it('should keep the message locale for an explicit shortDateShortTime preset', () => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        dateTimeFormat: {
+          default: {
+            locale: 'de-DE',
+            type: 'shortDateShortTime',
+          },
+        },
+      });
+      const date = new Date(2020, 0, 2, 14, 5);
+
+      expect(dateLocalization.format(date, 'shortDateShortTime')).toBe('1/2/2020, 2:05 PM');
+      expect(dateLocalization.format(date, { type: 'shortDateShortTime' })).toBe('1/2/2020, 2:05 PM');
+      expect(dateLocalization.format(date, getGlobalFormatByDataType('datetime'))).toBe('2.1.2020, 14:05');
+    });
+
+    it('should use the dateTimeFormatPresets locale for explicit time presets', () => {
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        timeFormat: { default: { locale: 'ja', type: 'shortTime' } },
+        dateTimeFormat: { default: { locale: 'ja', type: 'shortDateShortTime' } },
+        dateTimeFormatPresets: {
+          shortTime: { default: { type: 'shortTime', locale: 'de-DE' } },
+          shortDateShortTime: { default: { type: 'shortDateShortTime', locale: 'de-DE' } },
+        },
+      } as never);
+      const date = new Date(2020, 0, 2, 14, 5);
+
+      expect(dateLocalization.format(date, { type: 'shortTime' })).toBe('14:05');
+      expect(dateLocalization.format(date, { type: 'shortDateShortTime' })).toBe('2.1.2020, 14:05');
     });
 
     it('should keep time when a locale-only dateTimeFormat is applied', () => {
@@ -334,14 +423,30 @@ describe('format locale integration', () => {
       expect(parsed.getMonth()).toBe(0);
     });
 
-    it('should parse month names using global dateFormat locale', () => {
+    it('should parse an explicit longDate preset in the message locale', () => {
       coreLocalization.locale('de');
       config({
         ...config(),
         dateFormat: { default: { type: 'longDate', locale: 'en-US' } },
       });
 
-      const parsed = dateLocalization.parse('Thursday, January 2, 2020', 'longDate') as Date;
+      const text = dateLocalization.format(date, 'longDate') as string;
+
+      expect(text).toBe('Donnerstag, 2. Januar 2020');
+      expect(dateLocalization.parse(text, 'longDate')).toEqual(date);
+    });
+
+    it('should parse month names using the global dateFormat when that format is applied', () => {
+      coreLocalization.locale('de');
+      config({
+        ...config(),
+        dateFormat: { default: { type: 'longDate', locale: 'en-US' } },
+      });
+
+      const parsed = dateLocalization.parse(
+        'Thursday, January 2, 2020',
+        getGlobalFormatByDataType('date') as never,
+      ) as Date;
 
       expect(parsed).toEqual(date);
     });

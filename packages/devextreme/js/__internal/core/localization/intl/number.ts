@@ -52,13 +52,15 @@ export default {
       return this.callBase.apply(this, [value, format, formatConfig]);
     }
 
-    const formatLocale = getEffectiveFormatLocale(formatConfig, NUMBER_DATA_TYPE);
+    const formatLocale = getEffectiveFormatLocale(formatConfig);
     const normalizedConfig = this._normalizeFormatConfig(format, formatConfig, value);
 
     return getFormatter(formatLocale, normalizedConfig)(value);
   },
   getDecimalSeparator(format?: FormatConfig | string): string {
-    const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
+    const formatLocale = format
+      ? getEffectiveFormatLocale(format)
+      : getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
 
     return getFormatter(formatLocale, {
       minimumFractionDigits: 1,
@@ -66,7 +68,9 @@ export default {
     })(1.2)[1];
   },
   getThousandsSeparator(format?: FormatConfig | string): string {
-    const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
+    const formatLocale = format
+      ? getEffectiveFormatLocale(format)
+      : getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
 
     return getFormatter(formatLocale, {})(10000)[2];
   },
