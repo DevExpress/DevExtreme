@@ -60,11 +60,30 @@ export class AppComponent {
     });
   }
 
+  commitValue(key: number, cellInfo, dropDownBoxComponent) {
+    cellInfo.setValue(key);
+    dropDownBoxComponent.close();
+  }
+
   onRowClick(e: DxDataGridTypes.RowClickEvent, cellInfo, dropDownBoxComponent) {
     const key = e.key;
     if (e.rowType === 'data' && key !== undefined) {
-      cellInfo.setValue(key);
-      dropDownBoxComponent.close();
+      this.commitValue(key, cellInfo, dropDownBoxComponent);
+    }
+  }
+
+  onKeyDown(e: DxDataGridTypes.KeyDownEvent, cellInfo, dropDownBoxComponent) {
+    if (!e.event || (e.event.key !== 'Enter' && e.event.key !== ' ')) {
+      return;
+    }
+
+    const focusedRowKey = e.component.option('focusedRowKey');
+    const focusedRow = e.component.getVisibleRows().find((row) => (
+      row.rowType === 'data' && row.key === focusedRowKey
+    ));
+    if (focusedRow) {
+      e.event.preventDefault();
+      this.commitValue(focusedRow.key, cellInfo, dropDownBoxComponent);
     }
   }
 

@@ -106,6 +106,12 @@ $(() => {
       displayExpr: 'FullName',
       inputAttr: { 'aria-label': 'Owner' },
       contentTemplate(e) {
+        const commitValue = (key) => {
+          e.component.option('value', key);
+          cellInfo.setValue(key);
+          e.component.close();
+        };
+
         return $('<div>').dxDataGrid({
           dataSource: employees,
           remoteOperations: true,
@@ -121,9 +127,22 @@ $(() => {
           onRowClick(args) {
             const key = args.key;
             if (args.rowType === 'data' && key !== undefined) {
-              e.component.option('value', key);
-              cellInfo.setValue(key);
-              e.component.close();
+              commitValue(key);
+            }
+          },
+          onKeyDown(args) {
+            const { event, component } = args;
+            if (event.key !== 'Enter' && event.key !== ' ') {
+              return;
+            }
+
+            const focusedRowKey = component.option('focusedRowKey');
+            const focusedRow = component.getVisibleRows().find((row) => (
+              row.rowType === 'data' && row.key === focusedRowKey
+            ));
+            if (focusedRow) {
+              event.preventDefault();
+              commitValue(focusedRow.key);
             }
           },
         });

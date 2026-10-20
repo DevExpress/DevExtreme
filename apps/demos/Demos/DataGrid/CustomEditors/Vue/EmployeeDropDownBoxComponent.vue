@@ -17,6 +17,7 @@
         :hover-state-enabled="true"
         :on-context-menu-preparing="onContextMenuPreparing"
         :on-row-click="onRowClick"
+        :on-key-down="onKeyDown"
         :focused-row-enabled="true"
         :focused-row-key="currentValue"
       >
@@ -57,12 +58,29 @@ const dropDownOptions: DxDropDownBoxTypes.Properties['dropDownOptions'] = { widt
 const onContextMenuPreparing = (e: DxDataGridTypes.ContextMenuPreparingEvent) => {
   e.items = [];
 };
+const commitValue = (key: number) => {
+  currentValue.value = key;
+  props.onValueChanged(key);
+  dropDownBoxRef.value!.instance!.close();
+};
 const onRowClick = (e: DxDataGridTypes.RowClickEvent<unknown, number>) => {
   const key = e.key;
   if (e.rowType === 'data' && key !== undefined) {
-    currentValue.value = key;
-    props.onValueChanged(key);
-    dropDownBoxRef.value!.instance!.close();
+    commitValue(key);
+  }
+};
+const onKeyDown = (e: DxDataGridTypes.KeyDownEvent<unknown, number>) => {
+  if (!e.event || (e.event.key !== 'Enter' && e.event.key !== ' ')) {
+    return;
+  }
+
+  const focusedRowKey = e.component.option('focusedRowKey');
+  const focusedRow = e.component.getVisibleRows().find((row) => (
+    row.rowType === 'data' && row.key === focusedRowKey
+  ));
+  if (focusedRow) {
+    e.event.preventDefault();
+    commitValue(focusedRow.key);
   }
 };
 </script>

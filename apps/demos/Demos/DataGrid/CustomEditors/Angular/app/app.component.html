@@ -108,6 +108,7 @@
           [hoverStateEnabled]="true"
           (onContextMenuPreparing)="$event.items = []"
           (onRowClick)="onRowClick($event, cellInfo, e.component)"
+          (onKeyDown)="onKeyDown($event, cellInfo, e.component)"
         >
           <dxi-data-grid-column dataField="FullName"></dxi-data-grid-column>
           <dxi-data-grid-column dataField="Title"></dxi-data-grid-column>

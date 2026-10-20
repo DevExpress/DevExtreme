@@ -25,15 +25,35 @@ const EmployeeDropDownBoxComponent = ({ data }: DataGridTypes.ColumnCellTemplate
     }
   }, []);
 
+  const commitValue = useCallback((key: number) => {
+    setFocusedRowKey(key);
+    setDropDownOpened(false);
+
+    data.setValue(key);
+  }, [data]);
+
   const onRowClick = useCallback((args: DataGridTypes.RowClickEvent) => {
     const key = args.key;
     if (args.rowType === 'data' && key !== undefined) {
-      setFocusedRowKey(key);
-      setDropDownOpened(false);
-
-      data.setValue(key);
+      commitValue(key);
     }
-  }, [data]);
+  }, [commitValue]);
+
+  const onKeyDown = useCallback((args: DataGridTypes.KeyDownEvent) => {
+    const { event, component } = args;
+    if (!event || (event.key !== 'Enter' && event.key !== ' ')) {
+      return;
+    }
+
+    const focusedRowKey = component.option('focusedRowKey');
+    const focusedRow = component.getVisibleRows().find((row) => (
+      row.rowType === 'data' && row.key === focusedRowKey
+    ));
+    if (focusedRow) {
+      event.preventDefault();
+      commitValue(focusedRow.key);
+    }
+  }, [commitValue]);
 
   const contentRender = useCallback(() => (
     <DataGrid
@@ -43,6 +63,7 @@ const EmployeeDropDownBoxComponent = ({ data }: DataGridTypes.ColumnCellTemplate
       hoverStateEnabled={true}
       onContextMenuPreparing={clearContextMenu}
       onRowClick={onRowClick}
+      onKeyDown={onKeyDown}
       focusedRowEnabled={true}
       focusedRowKey={focusedRowKey}
     >
@@ -55,7 +76,7 @@ const EmployeeDropDownBoxComponent = ({ data }: DataGridTypes.ColumnCellTemplate
       />
       <Scrolling mode="virtual" />
     </DataGrid>
-  ), [data, focusedRowKey, onRowClick]);
+  ), [data, focusedRowKey, onKeyDown, onRowClick]);
 
   return (
     <DropDownBox
