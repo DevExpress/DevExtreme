@@ -4,7 +4,7 @@ import path from 'node:path';
 import { addDependencies, makeSbom } from '@devexpress/sbom-toolkit';
 import type { MakeSbomConfig } from '@devexpress/sbom-toolkit';
 
-import { addWorkspaceHashes } from './add-workspace-hashes.ts';
+import { addWorkspaceHashes, INTERNAL_PACKAGES } from './add-workspace-hashes.ts';
 
 const PACKAGE_DIR = path.resolve(import.meta.dirname, '..');
 const REPO_ROOT = path.resolve(PACKAGE_DIR, '../..');
@@ -55,10 +55,7 @@ await makeSbom({
       'devextreme-themebuilder',
       'devextreme',
     ],
-    internalPackages: [
-      'devextreme-metadata',
-      'eslint-migration-utils',
-    ],
+    internalPackages: Object.keys(INTERNAL_PACKAGES),
     cpeMappings: [
       { name: 'devextreme-angular', vendor: 'devexpress' },
       { name: 'devextreme-cldr-data', vendor: 'devexpress' },
