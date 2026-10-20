@@ -57,7 +57,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
   protected override getViewStartByOptions(): Date {
     const currentDate: Date = this.option().currentDate ?? new Date();
     const startDate: Date = this.option().startDate ?? currentDate;
-    const firstMonthDate = dateUtils.getFirstMonthDate(startDate) ?? startDate;
+    const firstMonthDate = dateUtils.getFirstMonthDate(startDate);
 
     return monthUtils.getViewStartByOptions(
       startDate,

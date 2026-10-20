@@ -3,6 +3,7 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
+import { isDate } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
@@ -46,8 +47,10 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
   }
 
   _closeDropDownByEnter(): boolean {
-    // @ts-expect-error widgetOption() is untyped, the calendar of a date box holds a Date
-    return dateUtils.sameDate(this._getContouredValue(), this.widgetOption('value'));
+    const contouredValue = this._getContouredValue();
+    const { value } = this.getWidget().option();
+
+    return isDate(value) && dateUtils.sameDate(contouredValue, value);
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {

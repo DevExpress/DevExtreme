@@ -1,8 +1,5 @@
-// TODO refactoring: Review all date utils functions and move useful
-// to __internal/core/utils/date.ts
 import type { TimeInterval, TimeIntervalConfig } from '@js/common/charts';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { camelize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
 import { adjust } from '@js/core/utils/math';
 import {
@@ -43,7 +40,6 @@ function convertDateUnitToMilliseconds(dateUnit: TimeInterval, count: number): n
   return toMilliseconds(dateUnit) * count;
 }
 
-// refactor for performance
 function getDateUnitInterval(tickInterval: DateUnitSource): TimeInterval | '' | undefined {
   let maxInterval = -1;
 
@@ -253,12 +249,23 @@ const convertMillisecondsToDateUnits = function convertMillisecondsToDateUnits(
   return result;
 };
 
+const unitByIntervalKey: Record<keyof DateInterval, TimeInterval> = {
+  milliseconds: 'millisecond',
+  seconds: 'second',
+  minutes: 'minute',
+  hours: 'hour',
+  days: 'day',
+  weeks: 'week',
+  months: 'month',
+  quarters: 'quarter',
+  years: 'year',
+};
+
 const dateToMilliseconds = function dateToMilliseconds(tickInterval: TimeIntervalConfig): number {
   let milliseconds = 0;
   if (isObject(tickInterval)) {
     each(tickInterval, (key, value) => {
-      // @ts-expect-error an interval holds counts of units with an s
-      milliseconds += convertDateUnitToMilliseconds(key.substr(0, key.length - 1), value);
+      milliseconds += convertDateUnitToMilliseconds(unitByIntervalKey[key], value);
     });
   }
   if (isString(tickInterval)) {
@@ -280,10 +287,6 @@ const tickIntervalToFormatMap: Record<TimeInterval, string> = {
   year: 'year',
 };
 
-// Because of changes in formatting (Globalize has been updated)
-// common date formatting has been changed.
-// The purpose of the following method is to preserve original dates formatting
-// in axes and range selector slider markers.
 function getDateFormatByTickInterval(tickInterval: DateUnitSource): string {
   const dateUnitInterval = getDateUnitInterval(tickInterval);
   return (dateUnitInterval && tickIntervalToFormatMap[dateUnitInterval]) ?? '';
@@ -393,12 +396,19 @@ const getDatesDifferences = function getDatesDifferences(
   return differences;
 };
 
+function toDateInterval(interval: string | number | DateInterval): DateInterval {
+  if (isString(interval)) {
+    return getDateIntervalByString(interval.toLowerCase());
+  }
+  if (isNumeric(interval)) {
+    return convertMillisecondsToDateUnits(interval);
+  }
+  return interval;
+}
+
 function addDateInterval(value: Date, interval: string | number | DateInterval, dir: number): Date {
   const result = new Date(value.getTime());
-  // eslint-disable-next-line no-nested-ternary -- a unit name, milliseconds or an interval object
-  const intervalObject = isString(interval) ? getDateIntervalByString(interval.toLowerCase())
-    : isNumeric(interval) ? convertMillisecondsToDateUnits(interval)
-      : interval;
+  const intervalObject = toDateInterval(interval);
   if (intervalObject.years) {
     result.setFullYear(result.getFullYear() + intervalObject.years * dir);
   }
@@ -448,8 +458,7 @@ function addInterval(
   const dir = isNegative ? -1 : +1;
   return isDate(value)
     ? addDateInterval(value, interval, dir)
-    // @ts-expect-error a numeric value goes with a numeric interval
-    : adjust(value + interval * dir, interval);
+    : adjust(value + Number(interval) * dir, Number(interval));
 }
 
 const getSequenceByInterval = function getSequenceByInterval(
@@ -819,15 +828,9 @@ function dateInRange(
   let maxValue = max;
 
   if (format === 'date') {
-    // @ts-expect-error the date format compares dates
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- dateUtils is set below
-    minValue = minValue && dateUtils.correctDateWithUnitBeginning(minValue, 'day');
-    // @ts-expect-error the date format compares dates
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- dateUtils is set below
-    maxValue = maxValue && dateUtils.correctDateWithUnitBeginning(maxValue, 'day');
-    // @ts-expect-error the date format compares dates
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define -- dateUtils is set below
-    dateValue = dateValue && dateUtils.correctDateWithUnitBeginning(dateValue, 'day');
+    minValue = isDate(minValue) ? trimTime(minValue) : minValue;
+    maxValue = isDate(maxValue) ? trimTime(maxValue) : maxValue;
+    dateValue = isDate(dateValue) ? trimTime(dateValue) : dateValue;
   }
 
   return normalizeDate(dateValue, minValue, maxValue) === dateValue;
@@ -889,7 +892,6 @@ const roundToHour = function roundToHour(date: Date): Date {
 };
 
 const makeDate = function makeDate(date: Date | number | string): Date {
-  // TODO: will be useful later for work with different timezones
   return new Date(date);
 };
 
@@ -950,12 +952,20 @@ const getRangesByDates = (dates: Date[]): [Date, Date?][] => {
   return ranges;
 };
 
+const sameViewFunctions: Record<
+  DateView,
+  (date1: MaybeDate, date2: MaybeDate) => boolean | null | undefined
+> = {
+  month: sameMonthAndYear,
+  year: sameYear,
+  decade: sameDecade,
+  century: sameCentury,
+};
+
 function sameView(view: DateView, date1: Date, date2: Date): boolean;
 function sameView(view: DateView, date1: MaybeDate, date2: MaybeDate): boolean | null | undefined;
 function sameView(view: DateView, date1: MaybeDate, date2: MaybeDate): boolean | null | undefined {
-  /* eslint-disable-next-line @typescript-eslint/no-use-before-define,
-    @typescript-eslint/no-unsafe-return -- dateUtils is set below; a same* function */
-  return dateUtils[camelize(`same ${view}`)](date1, date2);
+  return sameViewFunctions[view](date1, date2);
 }
 
 const dateUtils = {
