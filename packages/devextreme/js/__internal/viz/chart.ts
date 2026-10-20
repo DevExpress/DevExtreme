@@ -535,7 +535,7 @@ class Chart extends AdvancedChart {
   }
 
   _init(): void {
-    this._containerInitialHeight = hasWindow() ? getHeight(this._$element) : 0;
+    this._containerInitialHeight = hasWindow() ? getHeight(this._$element.get(0)) : 0;
     super._init();
   }
 
