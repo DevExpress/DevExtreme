@@ -160,7 +160,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
 
@@ -292,7 +292,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
 
@@ -420,7 +420,7 @@ jobs:
         name: devextreme-sources
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -608,7 +608,7 @@ jobs:
 
     - name: Use Node.js
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -697,7 +697,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -856,7 +856,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -1010,7 +1010,7 @@ jobs:
           chrome-version: '155.0.8059.39'
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
 
@@ -1215,7 +1215,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -1294,7 +1294,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -1378,7 +1378,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
 
