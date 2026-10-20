@@ -1,5 +1,7 @@
-import type { DataChange, NewRowPosition } from '@js/common/grids';
+import type { DataChange, NewRowPosition, RowInsertedInfo } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import type { StoreChange } from '@js/data/store';
 import type { DxEvent } from '@js/events';
 import type { Column as DataGridColumn, ColumnButton, ColumnButtonClickEvent } from '@js/ui/data_grid';
 import type { FormItemComponent } from '@js/ui/form';
@@ -87,6 +89,10 @@ export interface EditFormItemNode {
 
 export type EditingChange = DataChange<RawItemData, RowKey>;
 
+export type SavedRowInfo = Omit<RowInsertedInfo<EditingChange['data'], RowKey>, 'error'> & {
+  error?: Error;
+};
+
 export type EditingColumn = Column
   & Pick<DataGridColumn, 'editCellTemplate'>
   & { buttons?: EditingButton[] };
@@ -145,6 +151,12 @@ export interface EditingActionParams {
 export interface SaveResult {
   key: RowKey;
   result: unknown;
+}
+
+export interface ProcessedChanges {
+  pendingSaves: DeferredObj<unknown>[];
+  saveResults: SaveResult[];
+  dataChanges: StoreChange[];
 }
 
 export type EditingOptions = NonNullable<InternalGridOptions['editing']> & {

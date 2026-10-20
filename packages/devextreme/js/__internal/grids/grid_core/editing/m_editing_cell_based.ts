@@ -673,17 +673,17 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     super._processDataItemCore(item, change, key, columns);
   }
 
-  protected _processRemoveCore(changes, editIndex, processIfBatch): any {
+  protected _processRemoveCore(changes, editIndex, processIfBatch): boolean {
     if (this.isBatchEditMode() && !processIfBatch) {
-      return;
+      return false;
     }
 
     return super._processRemoveCore(changes, editIndex, processIfBatch);
   }
 
-  public _processRemoveIfError(changes, editIndex): any {
+  public _processRemoveIfError(changes, editIndex): boolean {
     if (this.isBatchEditMode()) {
-      return;
+      return false;
     }
 
     return super._processRemoveIfError(changes, editIndex);
