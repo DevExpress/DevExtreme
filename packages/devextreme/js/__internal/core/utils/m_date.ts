@@ -61,39 +61,20 @@ function getDateUnitInterval(tickInterval: DateUnitSource): TimeInterval | '' | 
   return '';
 }
 
+const dateIntervalByUnit: Partial<Record<string, DateInterval>> = {
+  year: { years: 1 },
+  month: { months: 1 },
+  quarter: { months: 3 },
+  week: { weeks: 1 },
+  day: { days: 1 },
+  hour: { hours: 1 },
+  minute: { minutes: 1 },
+  second: { seconds: 1 },
+  millisecond: { milliseconds: 1 },
+};
+
 function getDateIntervalByString(intervalString: string): DateInterval {
-  const result: DateInterval = {};
-  // eslint-disable-next-line default-case
-  switch (intervalString) {
-    case 'year':
-      result.years = 1;
-      break;
-    case 'month':
-      result.months = 1;
-      break;
-    case 'quarter':
-      result.months = 3;
-      break;
-    case 'week':
-      result.weeks = 1;
-      break;
-    case 'day':
-      result.days = 1;
-      break;
-    case 'hour':
-      result.hours = 1;
-      break;
-    case 'minute':
-      result.minutes = 1;
-      break;
-    case 'second':
-      result.seconds = 1;
-      break;
-    case 'millisecond':
-      result.milliseconds = 1;
-      break;
-  }
-  return result;
+  return { ...dateIntervalByUnit[intervalString] };
 }
 
 const createDateWithFullYear = function createDateWithFullYear(
