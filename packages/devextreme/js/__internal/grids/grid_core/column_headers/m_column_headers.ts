@@ -56,8 +56,6 @@ const LINK = 'dx-link';
 export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   private _isGroupingChanged?: boolean;
 
-  private _lastActionElement?: EventTarget | null;
-
   private _hasRowElements?: boolean;
 
   private _headerPanelView!: HeaderPanel;
@@ -321,8 +319,6 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const { event } = args;
     const $target = $(event.target);
 
-    this._lastActionElement = event.target;
-
     if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
       const headerFilterController = this._headerFilterController;
       const $column = $target.closest('td');
@@ -437,8 +433,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
    * @extended: filter_row, header_filter
    */
   protected _columnOptionChanged(e: ColumnsChanges): void {
-    const { changeTypes } = e;
-    const { optionNames } = e;
+    const { changeTypes, optionNames } = e;
 
     if (changeTypes.grouping || changeTypes.groupExpanding) {
       if (changeTypes.grouping) {
@@ -593,14 +588,14 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return super.getColumnWidths($tableElement, rowIndex);
   }
 
-  /**
-   * @extended: column_chooser
-   */
   public isColumnReorderingEnabled(column: Column): boolean | undefined {
     return column.allowReordering
       && (this.option('allowColumnReordering') ?? this._columnsController.isColumnOptionUsed('allowReordering'));
   }
 
+  /**
+   * @extended: column_chooser, DataGrid's grouping
+   */
   public allowDragging(column: Column): boolean | undefined {
     // @ts-expect-error a grid column has an index
     const rowIndex = column && this._columnsController.getRowIndex(column.index);

@@ -17,7 +17,7 @@ export const ColumnContextMenuMixin = <T extends MixinBase>(Base: T) => class ex
     options: ContextMenuItemsOptions,
   ): GridContextMenuItem<Direction>[] {
     const { column, rowIndex } = options;
-    const allowColumnReordering = this.isColumnReorderingEnabled?.(options?.column);
+    const allowColumnReordering = this.isColumnReorderingEnabled?.(column);
     const keyboardNavigationController = this.getKeyboardNavigationController?.();
 
     if (!column || !allowColumnReordering || !keyboardNavigationController) {
