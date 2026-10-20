@@ -4,6 +4,7 @@ import {
     Component,
     NgModule,
     ElementRef,
+    NgZone,
     PLATFORM_ID,
     Inject,
     Input,
@@ -631,14 +632,14 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
 
-    constructor(elementRef: ElementRef, templateHost: DxTemplateHost,
+    constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
             optionHost: NestedOptionHost,
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
 
-        super(elementRef, templateHost, _watcherHelper, transferState, platformId);
+        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
             { subscribe: 'cellClick', emit: 'onCellClick' },

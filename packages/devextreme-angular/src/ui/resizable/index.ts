@@ -4,6 +4,7 @@ import {
     Component,
     NgModule,
     ElementRef,
+    NgZone,
     PLATFORM_ID,
     Inject,
     Input,
@@ -253,13 +254,13 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      */
     @Output() widthChange: EventEmitter<number | string>;
 
-    constructor(elementRef: ElementRef, templateHost: DxTemplateHost,
+    constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
 
-        super(elementRef, templateHost, _watcherHelper, transferState, platformId);
+        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
             { subscribe: 'disposing', emit: 'onDisposing' },

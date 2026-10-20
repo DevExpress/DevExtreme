@@ -38,6 +38,7 @@ import {
     Component,
     NgModule,
     ElementRef,
+    NgZone,
     PLATFORM_ID,
     Inject,
     Input,
@@ -209,7 +210,7 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 //#endif
-    constructor(elementRef: ElementRef, templateHost: DxTemplateHost,
+    constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
 //#if COLL
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -219,7 +220,7 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
             optionHost: NestedOptionHost,
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
-        super(elementRef, templateHost, _watcherHelper, transferState, platformId);
+        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
 //# Same three groups and order as the outputs above. Drop the comma on the very

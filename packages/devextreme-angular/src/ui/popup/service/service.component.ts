@@ -4,6 +4,7 @@ import {
   ComponentRef,
   ElementRef,
   Inject,
+  NgZone,
   PLATFORM_ID,
   TransferState,
   Type,
@@ -36,6 +37,7 @@ export class PopupServiceComponent<T> extends DxPopupComponent implements OnInit
       @Inject('popupServiceContentComponent') private contentComponent: Type<T>,
       @Inject('popupServiceOptions') private popupOptions: DxPopupTypes.Properties,
       elementRef: ElementRef,
+      ngZone: NgZone,
       templateHost: DxTemplateHost,
       _watcherHelper: WatcherHelper,
       _idh: IterableDifferHelper,
@@ -43,7 +45,7 @@ export class PopupServiceComponent<T> extends DxPopupComponent implements OnInit
       transferState: TransferState,
       @Inject(PLATFORM_ID) platformId: any,
   ) {
-    super(elementRef, templateHost, _watcherHelper, _idh, optionHost, transferState, platformId);
+    super(elementRef, ngZone, templateHost, _watcherHelper, _idh, optionHost, transferState, platformId);
   }
 
   ngOnInit() {

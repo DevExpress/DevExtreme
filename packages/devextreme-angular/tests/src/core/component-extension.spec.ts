@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   ViewChild,
+  NgZone,
   PLATFORM_ID,
   Inject,
   TransferState,
@@ -37,12 +38,13 @@ DxTestExtension.defaultOptions({
 export class DxTestExtensionComponent extends DxComponentExtension {
   constructor(
     elementRef: ElementRef,
+    ngZone: NgZone,
     templateHost: DxTemplateHost,
     _watcherHelper: WatcherHelper,
     transferState: TransferState,
     @Inject(PLATFORM_ID) platformId: any,
   ) {
-    super(elementRef, templateHost, _watcherHelper, transferState, platformId);
+    super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
   }
 
   protected _createInstance(element, options) {

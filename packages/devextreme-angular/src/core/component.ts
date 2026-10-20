@@ -88,8 +88,6 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   templateUpdateRequired = false;
 
-  private readonly ngZone = inject(NgZone);
-
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   private readonly boundOptions = new Set<string>();
@@ -242,6 +240,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   constructor(
     protected element: ElementRef,
+    private readonly ngZone: NgZone,
     templateHost: DxTemplateHost,
     private readonly watcherHelper: WatcherHelper,
     private readonly transferState: TransferState,
@@ -254,7 +253,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templates = [];
     templateHost.setHost(this);
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this));
-    this.eventHelper = new EmitterHelper(this.ngZone, this, this.changeDetectorRef);
+    this.eventHelper = new EmitterHelper(ngZone, this, this.changeDetectorRef);
   }
 
   ngOnChanges(changes: SimpleChanges) {

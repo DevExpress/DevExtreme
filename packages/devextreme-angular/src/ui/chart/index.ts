@@ -4,6 +4,7 @@ import {
     Component,
     NgModule,
     ElementRef,
+    NgZone,
     PLATFORM_ID,
     Inject,
     Input,
@@ -1220,14 +1221,14 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      */
     @Output() zoomAndPanChange: EventEmitter<{ allowMouseWheel?: boolean, allowTouchGestures?: boolean, argumentAxis?: ChartZoomAndPanMode, dragBoxStyle?: { color?: string | undefined, opacity?: number | undefined }, dragToZoom?: boolean, panKey?: EventKeyModifier, valueAxis?: ChartZoomAndPanMode }>;
 
-    constructor(elementRef: ElementRef, templateHost: DxTemplateHost,
+    constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
             optionHost: NestedOptionHost,
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
 
-        super(elementRef, templateHost, _watcherHelper, transferState, platformId);
+        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
             { subscribe: 'argumentAxisClick', emit: 'onArgumentAxisClick' },
