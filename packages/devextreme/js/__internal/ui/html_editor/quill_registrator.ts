@@ -1,19 +1,19 @@
-import AlignStyle from './formats/m_align';
-import FontStyle from './formats/m_font';
-import Image from './formats/m_image';
-import Link from './formats/m_link';
-import SizeStyle from './formats/m_size';
-import { getQuill } from './m_quill_importer';
-import DropImage from './modules/m_dropImage';
-import ImageCursor from './modules/m_imageCursor';
-import ImageUpload from './modules/m_imageUpload';
-import MentionsModule from './modules/m_mentions';
-import Resizing from './modules/m_resizing';
-import TableContextMenu from './modules/m_tableContextMenu';
-import TableResizing from './modules/m_tableResizing';
-import Toolbar from './modules/m_toolbar';
-import Variables from './modules/m_variables';
-import BaseTheme from './themes/m_base';
+import AlignStyle from './formats/align';
+import FontStyle from './formats/font';
+import Image from './formats/image';
+import Link from './formats/link';
+import SizeStyle from './formats/size';
+import DropImage from './modules/dropImage';
+import ImageCursor from './modules/imageCursor';
+import ImageUpload from './modules/imageUpload';
+import MentionsModule from './modules/mentions';
+import Resizing from './modules/resizing';
+import TableContextMenu from './modules/tableContextMenu';
+import TableResizing from './modules/tableResizing';
+import Toolbar from './modules/toolbar';
+import Variables from './modules/variables';
+import { getQuill } from './quill_importer';
+import BaseTheme from './themes/base';
 import type { QuillInstance, QuillOptions, QuillStatic } from './types/quill';
 
 class QuillRegistrator {

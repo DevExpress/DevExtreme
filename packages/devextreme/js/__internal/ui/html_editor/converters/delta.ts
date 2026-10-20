@@ -1,4 +1,4 @@
-import ConverterController from '../m_converterController';
+import ConverterController from '../converterController';
 import type { Delta, QuillInstance } from '../types/quill';
 
 class DeltaConverter {

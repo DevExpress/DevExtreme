@@ -9,7 +9,7 @@ import type {
   QuillDependent,
 } from '../types';
 import type { ScrollInstance } from '../types/quill';
-import TemplatesStorage from '../utils/m_templates_storage';
+import TemplatesStorage from '../utils/templates_storage';
 
 /** The `mention` blot class */
 interface MentionBlotConstructor extends EmbedBlotConstructor<MentionData> {

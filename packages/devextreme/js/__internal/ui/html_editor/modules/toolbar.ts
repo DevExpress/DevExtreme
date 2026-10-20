@@ -50,13 +50,13 @@ import {
   getDefaultOptionsByCommand,
   hasInvalidCustomCommand,
 } from '../utils/ai';
-import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
+import { getTableFormats, TABLE_OPERATIONS } from '../utils/table_helper';
 import {
   applyFormat, getDefaultClickHandler, getFormatHandlers, ICON_MAP,
-} from '../utils/m_toolbar_helper';
-import type { BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
-import WidgetCollector from './m_widget_collector';
+} from '../utils/toolbar_helper';
+import type { BaseModuleOptions } from './base';
+import BaseModule from './base';
+import WidgetCollector from './widget_collector';
 
 interface ToolbarModuleOptions extends BaseModuleOptions, dxHtmlEditorToolbar {}
 

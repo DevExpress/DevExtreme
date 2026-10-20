@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Quill from 'devextreme-quill';
 
-import Resizing from '__internal/ui/html_editor/modules/m_resizing';
+import Resizing from '__internal/ui/html_editor/modules/resizing';
 import devices from '__internal/core/devices';
 import { name as clickEvent } from 'common/core/events/click';
 

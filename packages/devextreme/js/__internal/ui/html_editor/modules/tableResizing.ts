@@ -23,9 +23,9 @@ import {
   getLineElements,
   setLineElementsFormat,
   unfixTableWidth,
-} from '../utils/m_table_helper';
-import type { BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
+} from '../utils/table_helper';
+import type { BaseModuleOptions } from './base';
+import BaseModule from './base';
 
 interface TableResizingModuleOptions extends BaseModuleOptions, dxHtmlEditorTableResizing {}
 
@@ -847,7 +847,7 @@ export default class TableResizingModule extends BaseModule {
     }
 
     if (option === 'enabled') {
-      // @ts-expect-error option() gets the value as unknown (m_base.ts); enabled is the boolean
+      // @ts-expect-error option() gets the value as unknown (base.ts); enabled is the boolean
       this.enabled = value;
       if (value) {
         if (this._resizeHandlerWithContext) {
@@ -858,7 +858,7 @@ export default class TableResizingModule extends BaseModule {
         this.clean();
       }
     } else if (['minColumnWidth', 'minRowHeight'].includes(option)) {
-      // @ts-expect-error option() gets (string, unknown) (m_base.ts); includes() narrows neither
+      // @ts-expect-error option() gets (string, unknown) (base.ts); includes() narrows neither
       this[`_${option}`] = this._minSizeLimit(option, value);
     }
   }
