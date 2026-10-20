@@ -799,12 +799,12 @@ class Calendar<
     const date = this._getDate(initialDate ?? currentDate);
 
     const currentDay = date.getDate();
-    const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
+    const { zoomLevel } = this.option();
+    const difference = dateUtils.getDifferenceInMonth(zoomLevel) * offset;
 
     date.setDate(1);
     date.setMonth(date.getMonth() + difference);
 
-    // @ts-expect-error ts-error
     const lastDay = dateUtils.getLastMonthDate(date).getDate();
     date.setDate(currentDay > lastDay ? lastDay : currentDay);
 
@@ -1021,7 +1021,7 @@ class Calendar<
   }
 
   _cellClickHandler(e: CellEvent): void {
-    const zoomLevel = this.option('zoomLevel');
+    const { zoomLevel } = this.option();
     const nextView = dateUtils.getViewDown(zoomLevel);
 
     const isMaxZoomLevel = this._isMaxZoomLevel();
