@@ -5,7 +5,7 @@ import type { Item as ButtonGroupItem, ItemClickEvent, Properties as ButtonGroup
 import type { ToolbarItem as SchedulerToolbarItem } from '@js/ui/scheduler';
 import { current, isMaterialBased } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { isValidDate } from '@ts/core/utils/m_date';
 import { extend } from '@ts/core/utils/m_extend';
 import type { SchedulerHeader } from '@ts/scheduler/header/header';
 
@@ -39,7 +39,7 @@ interface DateNavigatorItem extends ButtonGroupItem {
 const isPreviousButtonDisabled = (header: SchedulerHeader): boolean => {
   const minOption = header.option().min;
 
-  if (!dateUtilsTs.isValidDate(minOption)) return false;
+  if (!isValidDate(minOption)) return false;
 
   let min = new Date(minOption);
   const caption = header.getCaption();
@@ -53,7 +53,7 @@ const isPreviousButtonDisabled = (header: SchedulerHeader): boolean => {
 const isNextButtonDisabled = (header: SchedulerHeader): boolean => {
   const maxOption = header.option().max;
 
-  if (!dateUtilsTs.isValidDate(maxOption)) return false;
+  if (!isValidDate(maxOption)) return false;
 
   const max = new Date(maxOption);
   const caption = header.getCaption();

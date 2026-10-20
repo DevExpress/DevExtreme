@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets } from '@ts/core/utils/m_date';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
@@ -592,7 +592,7 @@ export class ViewDataGenerator {
     }, rowIndex, columnIndex);
     const { viewOffset } = options;
     const startDate = dateUtils.trimTime(data.startDate);
-    const shiftedStartDate = dateUtilsTs.addOffsets(startDate, viewOffset);
+    const shiftedStartDate = addOffsets(startDate, viewOffset);
 
     return {
       ...data,

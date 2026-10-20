@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets } from '@ts/core/utils/m_date';
 import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
@@ -172,8 +172,8 @@ export class GroupedDataMapProvider {
         const cellData = isAppointmentRender
           ? {
             ...originCellData,
-            startDate: dateUtilsTs.addOffsets(cell.cellData.startDate, -viewOffset),
-            endDate: dateUtilsTs.addOffsets(cell.cellData.endDate, -viewOffset),
+            startDate: addOffsets(cell.cellData.startDate, -viewOffset),
+            endDate: addOffsets(cell.cellData.endDate, -viewOffset),
           }
           : originCellData;
 
@@ -232,7 +232,7 @@ export class GroupedDataMapProvider {
     cellStartDate: Date,
     cellEndDate: Date,
   ): number {
-    const nextHourCellStartDate = dateUtilsTs.addOffsets(cellStartDate, toMs('hour'));
+    const nextHourCellStartDate = addOffsets(cellStartDate, toMs('hour'));
     const cellTimezoneDiff = timezoneUtils.getDaylightOffset(cellStartDate, cellEndDate);
     const cellNextHourTimezoneDiff = timezoneUtils.getDaylightOffset(
       cellStartDate,
@@ -253,8 +253,8 @@ export class GroupedDataMapProvider {
     cellStartDate: Date,
     cellEndDate: Date,
   ): boolean {
-    const nextIntervalCellStartDate = dateUtilsTs.addOffsets(cellStartDate, secondIntervalOffset);
-    const nextIntervalCellEndDate = dateUtilsTs.addOffsets(cellEndDate, secondIntervalOffset);
+    const nextIntervalCellStartDate = addOffsets(cellStartDate, secondIntervalOffset);
+    const nextIntervalCellEndDate = addOffsets(cellEndDate, secondIntervalOffset);
 
     const isInOriginInterval = startDate >= cellStartDate
       && startDate < cellEndDate;
