@@ -793,9 +793,9 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 // Label
 // ScaleLabel
 // SliderMarker
-// LoadingIndicator
 // Title
 // Subtitle
+// LoadingIndicator
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -1092,8 +1092,8 @@ const LoadingIndicator = Object.assign<typeof _componentLoadingIndicator, Nested
 });
 
 // owners:
-// RangeSelector
 // Title
+// RangeSelector
 type IMarginProps = React.PropsWithChildren<{
   bottom?: number;
   left?: number;

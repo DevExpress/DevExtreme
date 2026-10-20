@@ -420,7 +420,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
 
 
     /**
-     * [descr:BaseWidgetOptions.title]
+     * [descr:dxVectorMapOptions.title]
     
      */
     @Input()
