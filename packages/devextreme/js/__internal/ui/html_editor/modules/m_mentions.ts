@@ -363,8 +363,11 @@ if (Quill) {
     _processSearchValue(operation: DeltaOperation): boolean {
       const isInsertOperation = 'insert' in operation;
       if (isInsertOperation) {
-        // eslint-disable-next-line @stylistic/max-len
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string -- insert is typed string | object
+        if (!isString(operation.insert)) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
+          this._popup.hide();
+          return false;
+        }
         this._searchValue += operation.insert;
       } else {
         // @ts-expect-error delete is undefined for a retain op; undefined > 1 is false

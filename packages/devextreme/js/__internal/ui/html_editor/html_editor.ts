@@ -686,8 +686,7 @@ class HtmlEditor extends Editor<Properties> {
     if (isDefined(this._aiDialog)) {
       const { aiIntegration } = this.option();
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this._aiDialog.updateAIIntegration(aiIntegration!);
+      this._aiDialog.updateAIIntegration(aiIntegration);
 
       return;
     }

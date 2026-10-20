@@ -118,6 +118,7 @@ const simpleModuleConfig = {
                 _saveValueChangeEvent: noop,
                 option: noop,
                 on: noop,
+                off: noop,
             }
         };
     },
@@ -1705,6 +1706,20 @@ testModule('Toolbar items state update', {
             });
         }
     }, () => {
+        test('toolbar state is updated once on each menu opening', function(assert) {
+            this.options.items = this.mapToMenuItems(['bold']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            const updateToolbarSpy = sinon.spy(toolbar, '_updateToolbar');
+
+            this.openDropDownMenu();
+            this.openDropDownMenu();
+            this.openDropDownMenu();
+            this.openDropDownMenu();
+            this.openDropDownMenu();
+
+            assert.strictEqual(updateToolbarSpy.callCount, 3, 'toolbar state is updated on each of three openings');
+        });
+
         test('table formats in menu on table focus (t1117604)', function(assert) {
             this.options.items = this.mapToMenuItems(TABLE_OPERATIONS);
             const toolbar = new Toolbar(this.quillMock, this.options);

@@ -354,11 +354,66 @@ QUnit.module('AI dialog integration', () => {
                 assert.ok(summarizeSpy1.calledOnce, 'initial summarize is not called again');
                 assert.ok(summarizeSpy2.calledOnce, 'new summarize invoked after update');
             });
+
+            QUnit.test('update aiIntegration does not execute the command while the dialog is closed', function(assert) {
+                const summarizeSpy1 = sinon.stub().returns(() => {});
+                const summarizeSpy2 = sinon.stub().returns(() => {});
+                const htmlEditor = setupHtmlEditorWithAi({ aiIntegration: { summarize: summarizeSpy1 } });
+
+                openAIDialog($('#htmlEditor'));
+                getPopup(htmlEditor).hide();
+
+                htmlEditor.option({ aiIntegration: { summarize: summarizeSpy2 } });
+
+                assert.ok(summarizeSpy1.calledOnce, 'initial summarize is not called again');
+                assert.ok(summarizeSpy2.notCalled, 'new summarize is not invoked');
+            });
+
+            QUnit.test('reset aiIntegration after the dialog is closed does not execute the command', function(assert) {
+                const summarizeSpy = sinon.stub().returns(() => {});
+                const htmlEditor = setupHtmlEditorWithAi({ aiIntegration: { summarize: summarizeSpy } });
+
+                openAIDialog($('#htmlEditor'));
+                getPopup(htmlEditor).hide();
+
+                htmlEditor.option({ aiIntegration: undefined });
+
+                assert.ok(summarizeSpy.calledOnce, 'summarize is not called again');
+            });
+
+            QUnit.test('reset aiIntegration cancels active request and closes the dialog', function(assert) {
+                const abortSpy = sinon.spy();
+                const summarizeSpy = sinon.stub().returns(abortSpy);
+                const htmlEditor = setupHtmlEditorWithAi({ aiIntegration: { summarize: summarizeSpy } });
+
+                openAIDialog($('#htmlEditor'));
+
+                htmlEditor.option({ aiIntegration: undefined });
+
+                assert.ok(abortSpy.calledOnce, 'active request aborted');
+                assert.ok(summarizeSpy.calledOnce, 'summarize is not called again');
+                assert.notOk(getPopup(htmlEditor).option('visible'), 'dialog is closed');
+            });
         });
 
         QUnit.module('aiIntegration absence', () => {
             QUnit.test('showAIDialog should return undefined when aiIntegration is omitted', function(assert) {
                 const htmlEditor = setupHtmlEditorWithAi({ aiIntegration: null });
+                const result = htmlEditor.showAIDialog({
+                    currentCommand: 'summarize',
+                    currentCommandOption: undefined,
+                    text: '',
+                    commandsMap: {},
+                });
+
+                assert.strictEqual(result, undefined, 'showAIDialog returns undefined');
+            });
+
+            QUnit.test('showAIDialog should return undefined after aiIntegration is reset', function(assert) {
+                const htmlEditor = setupHtmlEditorWithAi();
+
+                htmlEditor.option({ aiIntegration: undefined });
+
                 const result = htmlEditor.showAIDialog({
                     currentCommand: 'summarize',
                     currentCommandOption: undefined,
