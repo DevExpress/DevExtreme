@@ -23,6 +23,7 @@ export {
   MapLayerElement,
   LegendItem,
   Legend,
+  Title,
   Tooltip,
   Properties,
 } from './vector_map';

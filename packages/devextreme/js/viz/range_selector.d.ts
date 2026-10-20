@@ -21,6 +21,7 @@ import {
 
 import BaseWidget, {
     BaseWidgetOptions,
+    BaseWidgetTitle,
     BaseWidgetTooltip,
     FileSavingEventInfo,
     ExportInfo,
@@ -41,7 +42,7 @@ import {
     Font,
 } from '../common/charts';
 
-import { SliderValueChangeMode } from '../common';
+import { HorizontalAlignment, SliderValueChangeMode } from '../common';
 
 export {
     ChartsDataType,
@@ -776,6 +777,12 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     };
     /**
      * @docid
+     * @type object|string
+     * @public
+     */
+    title?: Title | string;
+    /**
+     * @docid
      * @type object
      * @hidden
      */
@@ -788,6 +795,21 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      */
     value?: Array<number | string | Date> | VisualRange;
 }
+/**
+ * @public
+ * @docid dxRangeSelectorTitle
+ * @type object
+ */
+export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+    /**
+     * @docid dxRangeSelectorOptions.title.horizontalAlignment
+     * @default 'center'
+     * @default 'left' &for(Material)
+     * @default 'left' &for(Fluent)
+     * @public
+     */
+    horizontalAlignment?: HorizontalAlignment;
+};
 /**
  * @docid
  * @inherits BaseWidget, DataHelperMixin
