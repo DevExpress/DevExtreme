@@ -184,7 +184,8 @@
       },
       "inputs": [
         "default",
-        "test"
+        "test",
+        "^default"
       ]
     }
   },
