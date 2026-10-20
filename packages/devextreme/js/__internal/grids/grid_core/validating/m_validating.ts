@@ -880,7 +880,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
   }
 
   protected _beforeSaveEditData(change) {
-    let result: any = super._beforeSaveEditData.apply(this, arguments as any);
+    let result: any = super._beforeSaveEditData(change);
     const validationData = this._validatingController._getValidationData(change?.key, true);
 
     if (change) {

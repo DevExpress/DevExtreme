@@ -465,7 +465,6 @@ class EditingControllerImpl extends modules.ViewController {
       name: buttonName,
       text: buttonText,
       cssClass: buttonCssClass,
-    }, {
       onClick: this.getEditingButtonClickHandler(buttonName, options),
     }, userButton);
   }
