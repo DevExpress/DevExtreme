@@ -1,0 +1,64 @@
+{
+  "tests": [
+    {
+      "test": "Gantt - show dependencies button should not have focus state (T1264485)",
+      "file": "tests/common/gantt/common.ts",
+      "since": "2026-10-19",
+      "reason": "flaky in 2 runs of 197 on main, 2026-10-17 - 2026-10-20; fluent-next jobs only"
+    },
+    {
+      "test": "Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled (scrolling.useNative = false)",
+      "file": "tests/dataGrid/common/keyboardNavigation/keyboardNavigation.functional.ts",
+      "since": "2026-10-19",
+      "reason": "flaky in 2 runs of 197 on main, 2026-10-17 - 2026-10-20"
+    },
+    {
+      "test": "New mode. A cell should be focused when the PageDow/Up key is pressed (T898324)",
+      "file": "tests/dataGrid/common/keyboardNavigation/keyboardNavigation.functional.ts",
+      "since": "2026-10-15",
+      "reason": "flaky in 4 runs of 197 on main, 2026-10-17 - 2026-10-20"
+    },
+    {
+      "test": "Navigate to last cell in the last row when virtual scrolling is enabled",
+      "file": "tests/dataGrid/common/keyboardNavigation/keyboardNavigation.visual.ts",
+      "since": "2026-10-19",
+      "reason": "flaky in 2 runs of 197 on main, 2026-10-17 - 2026-10-20; fluent-next jobs only"
+    },
+    {
+      "test": "Restoring focus on re-rendering should be done without unexpected scrolling to the focused element",
+      "file": "tests/dataGrid/common/scrolling.ts",
+      "since": "2026-10-19",
+      "reason": "flaky in 2 runs of 197 on main, 2026-10-17 - 2026-10-20"
+    },
+    {
+      "test": "The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end",
+      "file": "tests/dataGrid/common/scrolling.ts",
+      "since": "2026-10-15",
+      "reason": "flaky in 3 runs of 197 on main, 2026-10-17 - 2026-10-20"
+    },
+    {
+      "test": "Symbol parts in label should not be cropped",
+      "file": "tests/editors/dateBox/label.ts",
+      "since": "2026-10-15",
+      "reason": "flaky in 3 runs of 197 on main, 2026-10-17 - 2026-10-20"
+    },
+    {
+      "test": "Drag recurrent appointment occurrence from collector (T832887)",
+      "file": "tests/scheduler/common/dragAndDrop/basic.ts",
+      "since": "2026-10-15",
+      "reason": "flaky in 6 runs of 197 on main, 2026-10-17 - 2026-10-20"
+    },
+    {
+      "test": "items inside toolbar menu should stretch",
+      "file": "tests/scheduler/common/header/sizes.ts",
+      "since": "2026-10-19",
+      "reason": "flaky in 2 runs of 197 on main, 2026-10-17 - 2026-10-20; fluent-next jobs only"
+    },
+    {
+      "test": "Drag-n-drop recurrence appointment between dateTable and allDay panel",
+      "file": "tests/scheduler/common/recurrences/basic.ts",
+      "since": "2026-10-15",
+      "reason": "flaky in 9 runs of 197 on main, 2026-10-17 - 2026-10-20"
+    }
+  ]
+}
