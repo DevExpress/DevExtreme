@@ -1,6 +1,10 @@
 /* istanbul ignore file */
 
 const fs = require('fs');
+
+jest.mock('../../../testing/apiMocks/widgetsGalleryServiceMock', () => ({ widgetsGalleryServiceMock: {} }));
+jest.mock('../../../testing/apiMocks/xmlaServiceMock', () => ({ xmlaServiceMock: {} }));
+
 const helper = require('../../visual-tests/matrix-test-helper.ts');
 
 const productDemoFramework = [{ filename: 'Demos/Accordion/Overview/Angular/index.json' }];
