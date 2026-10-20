@@ -25,8 +25,8 @@ import { debug } from '@ts/core/utils/m_console';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { extend } from '@ts/core/utils/m_extend';
 import { each as _each } from '@ts/core/utils/m_iterator';
-import { sign } from '@ts/core/utils/m_math';
 import { isDefined, isNumeric } from '@ts/core/utils/m_type';
+import { sign } from '@ts/core/utils/math';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 import { map as _map, normalizeEnum as _normalizeEnum } from './utils';
