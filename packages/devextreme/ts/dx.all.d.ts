@@ -46958,6 +46958,15 @@ declare module DevExpress.viz {
         readonly target: MapLayerElement;
       };
     /**
+     * [descr:dxVectorMapTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxVectorMapOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
+    /**
      * [descr:dxVectorMapTooltip]
      */
     export type Tooltip = BaseWidgetTooltip & {
@@ -47356,6 +47365,10 @@ declare module DevExpress.viz {
      * [descr:dxVectorMapOptions.projection]
      */
     projection?: VectorMapProjection | VectorMapProjectionConfig | string | any;
+    /**
+     * [descr:dxVectorMapOptions.title]
+     */
+    title?: DevExpress.viz.dxVectorMap.Title | string;
     /**
      * [descr:dxVectorMapOptions.tooltip]
      */
