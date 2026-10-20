@@ -373,6 +373,28 @@ describe(`Change detection [${mode}]: state changed without a template binding`,
     expect(outputText(fixture)).toBe('changed');
   });
 
+  it(isZoneless
+    ? 'instance.on(\'optionChanged\') handler for an unbound option does not refresh the view (documented limitation)'
+    : 'instance.on(\'optionChanged\') handler for an unbound option updates the view', async () => {
+    const fixture = await render(`
+      <dx-text-box></dx-text-box>
+      <span class="out">{{ plain }}</span>
+    `);
+    const host = fixture.componentInstance;
+
+    host.textBox.instance.on('optionChanged', (e) => {
+      if (e.name === 'hint') {
+        host.plain = e.value;
+      }
+    });
+    act(fixture, () => host.textBox.instance.option('hint', 'changed'));
+    await wait(50);
+    await fixture.whenStable();
+
+    expect(host.plain).toBe('changed');
+    expect(outputText(fixture)).toBe(isZoneless ? '' : 'changed');
+  });
+
   it('one-way [formData] changed in place by the Form updates the view', async () => {
     const fixture = await render(`
       <dx-form [formData]="formData"></dx-form>
