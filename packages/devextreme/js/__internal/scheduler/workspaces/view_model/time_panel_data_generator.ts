@@ -1,6 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { addOffsets } from '@ts/core/utils/m_date';
-import { shiftIntegerByModule } from '@ts/core/utils/m_math';
+import { shiftIntegerByModule } from '@ts/core/utils/math';
 import {
   getDisplayedRowCount, getIsGroupedAllDayPanel, getKeyByGroup, weekUtils,
 } from '@ts/scheduler/r1/utils/index';
