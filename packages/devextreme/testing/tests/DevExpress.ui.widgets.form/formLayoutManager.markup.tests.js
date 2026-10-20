@@ -1747,6 +1747,7 @@ QUnit.module('Render multiple columns', () => {
         }, '2 item, merged');
         assert.deepEqual(items[3], {
             dataField: 'LastName',
+            colSpan: 2,
             editorType: 'dxTextBox',
             visibleIndex: 2,
             col: 3,
@@ -1799,6 +1800,7 @@ QUnit.module('Render multiple columns', () => {
         }, '12 item');
         assert.deepEqual(items[12], {
             dataField: 'Notes',
+            colSpan: 5,
             editorType: 'dxTextBox',
             visibleIndex: 8,
             col: 0,
@@ -1813,6 +1815,7 @@ QUnit.module('Render multiple columns', () => {
         }, '14 item');
         assert.deepEqual(items[14], {
             dataField: 'StateID',
+            colSpan: 3,
             editorType: 'dxNumberBox',
             visibleIndex: 10,
             col: 2,
@@ -1908,6 +1911,7 @@ QUnit.module('Render multiple columns', () => {
         }, '2 item, merged');
         assert.deepEqual(items[3], {
             dataField: 'LastName',
+            colSpan: 2,
             editorType: 'dxTextBox',
             visibleIndex: 2,
             col: 3,
@@ -1960,6 +1964,7 @@ QUnit.module('Render multiple columns', () => {
         }, '12 item');
         assert.deepEqual(items[12], {
             dataField: 'Notes',
+            colSpan: 5,
             editorType: 'dxTextBox',
             visibleIndex: 8,
             col: 0,
@@ -1974,6 +1979,7 @@ QUnit.module('Render multiple columns', () => {
         }, '14 item');
         assert.deepEqual(items[14], {
             dataField: 'StateID',
+            colSpan: 3,
             editorType: 'dxNumberBox',
             visibleIndex: 10,
             col: 2,

@@ -607,21 +607,25 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
       const { alignItemLabels } = this.option();
 
+      const col = this._getColByIndex(result.length - 1, colCount);
       if (alignItemLabels || item.alignItemLabels || item.colSpan) {
-        item.col = this._getColByIndex(result.length - 1, colCount);
+        item.col = col;
       }
-      if (item.colSpan > 1 && (item.col + item.colSpan <= colCount)) {
+      const colSpan = this._getEffectiveColSpan(item.colSpan, col, colCount);
+      if (colSpan > 1) {
         const itemsMergedByCol: ExtendedItem[] = [];
-        for (let j = 0; j < item.colSpan - 1; j += 1) {
+        for (let j = 0; j < colSpan - 1; j += 1) {
           itemsMergedByCol.push({ merged: true } as ExtendedItem);
         }
         result = result.concat(itemsMergedByCol);
-      } else {
-        // @ts-expect-error ts-error
-        delete item.colSpan;
       }
     }
     this._setItems(result);
+  }
+
+  _getEffectiveColSpan(colSpan: number | undefined, col: number, colCount: number): number {
+    const fits = isDefined(colSpan) && colSpan > 1 && col + colSpan <= colCount;
+    return fits ? colSpan : 1;
   }
 
   _getColByIndex(index: number, colCount: number): number {
@@ -641,13 +645,15 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
       if (!item.merged) {
+        const col = this._getColByIndex(i, colCount);
         const location: LocationItem = {
           row: parseInt(String(i / colCount), 10),
-          col: this._getColByIndex(i, colCount),
+          col,
         };
 
-        if (isDefined(item.colSpan)) {
-          location.colspan = item.colSpan;
+        const colSpan = this._getEffectiveColSpan(item.colSpan, col, colCount);
+        if (colSpan > 1) {
+          location.colspan = colSpan;
         }
         if (isDefined(item.rowSpan)) {
           location.rowspan = item.rowSpan;
