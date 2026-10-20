@@ -56,6 +56,9 @@ const CSP_DEMO_ALLOWLIST = {
   'Common/ListsOverview': {
     'img-src': ['data:'],
   },
+  'CardView/WebAPIService': {
+    'img-src': ['data:'],
+  },
   'DataGrid/SignalRService': {
     'connect-src': ['wss://js.devexpress.com'],
     // Country-flag glyphs are painted via a data: CSS background (all frameworks).
