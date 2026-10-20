@@ -1,33 +1,31 @@
 import messageLocalization from '@js/common/core/localization/message';
+import type { ItemClickEvent } from '@js/ui/context_menu';
 
-import type { ColumnKeyboardNavigationController } from '../keyboard_navigation/column_keyboard_navigation_core';
 import { Direction } from '../keyboard_navigation/const';
-import type { ModuleType } from '../types';
-import type { ColumnsView } from '../views/columns_view';
+import type { ContextMenuItemsOptions, GridContextMenuItem } from '../views/types';
 import { CONTEXT_MENU_MOVE_NEXT_ICON_NAME, CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME } from './const';
+import type { MixinBase } from './types';
 
-interface ColumnContextMenuMixinRequirements extends ColumnsView {
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  isColumnReorderingEnabled?(column: any): boolean;
-
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  getKeyboardNavigationController?(): ColumnKeyboardNavigationController;
-}
-
-export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMixinRequirements>>(Base: T) => class ColumnContextMenuMixin extends Base {
+/* eslint-disable-next-line
+  @typescript-eslint/explicit-module-boundary-types,
+  @typescript-eslint/explicit-function-return-type
+  -- TS can't name the class type of a generic mixin */
+export const ColumnContextMenuMixin = <T extends MixinBase>(Base: T) => class extends Base {
   protected isNeedToFocusColumn = false;
 
-  public getMoveColumnContextMenuItems(options): any {
+  public getMoveColumnContextMenuItems(
+    options: ContextMenuItemsOptions,
+  ): GridContextMenuItem<Direction>[] {
     const { column, rowIndex } = options;
     const allowColumnReordering = this.isColumnReorderingEnabled?.(options?.column);
     const keyboardNavigationController = this.getKeyboardNavigationController?.();
 
-    if (!allowColumnReordering || !keyboardNavigationController) {
+    if (!column || !allowColumnReordering || !keyboardNavigationController) {
       return [];
     }
 
     const rtlEnabled = this.option('rtlEnabled');
-    const onItemClick = (e) => {
+    const onItemClick = (e: ItemClickEvent<GridContextMenuItem<Direction>>): void => {
       this.isNeedToFocusColumn = true;
       keyboardNavigationController.moveColumn(
         column,

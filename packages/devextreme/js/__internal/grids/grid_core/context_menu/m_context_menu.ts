@@ -1,45 +1,52 @@
 /* eslint-disable max-classes-per-file */
+import type { GridsContextMenuTarget } from '@js/common/grids';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
-import { each } from '@js/core/utils/iterator';
+import type { DxEvent } from '@js/events';
 import ContextMenu from '@js/ui/context_menu';
+import { each } from '@ts/core/utils/m_iterator';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import modules from '../modules/modules';
+import type { InternalGridOptions } from '../types';
+import type { GridContextMenuItem, ViewRow } from '../views/types';
+import type { ContextMenuPreparingOptions, ContextMenuViewName } from './types';
 
 const CONTEXT_MENU = 'dx-context-menu';
 
-const viewName = {
+const viewName: Record<ContextMenuViewName, GridsContextMenuTarget> = {
   columnHeadersView: 'header',
   rowsView: 'content',
   footerView: 'footer',
   headerPanel: 'toolbar',
 };
-const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
+const VIEW_NAMES: readonly ContextMenuViewName[] = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'];
 
 export class ContextMenuController extends modules.ViewController {
-  public init() {
+  public init(): void {
     this.createAction('onContextMenuPreparing');
   }
 
-  public getContextMenuItems(dxEvent) {
+  public getContextMenuItems(dxEvent?: DxEvent): GridContextMenuItem[] | false | undefined {
     if (!dxEvent) {
       return false;
     }
 
-    const that = this;
     const $targetElement = $(dxEvent.target);
-    let menuItems;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in each callback
+    let menuItems: GridContextMenuItem[] | undefined;
 
-    each(VIEW_NAMES, function () {
-      const view = that.getView(this);
+    each(VIEW_NAMES, (index, name) => {
+      const view = this.getView(name);
 
       if (!view) {
-        return;
+        return undefined;
       }
 
       const $viewElement = view.element();
-      const isTargetElementInsideView = $viewElement?.is($targetElement) || $viewElement?.find($targetElement).length;
+      const isTargetElementInsideView = $viewElement?.is($targetElement)
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- OR of two flags
+        || $viewElement?.find($targetElement).length;
 
       if (isTargetElementInsideView) {
         const isGroupRow = $targetElement.hasClass(VIEW_CLASSES.groupRow);
@@ -48,23 +55,24 @@ export class ContextMenuController extends modules.ViewController {
           : $targetElement.closest(`.${VIEW_CLASSES.row} > td, .${VIEW_CLASSES.row} > tr`);
         const $targetRowElement = $targetCellElement.parent();
         const rowIndex = view.getRowIndex($targetRowElement);
-        const columnIndex = $targetCellElement[0]?.cellIndex;
-        const rowOptions = $targetRowElement.data('options');
-        const options: any = {
+        const columnIndex: number | undefined = $targetCellElement[0]?.cellIndex;
+        // @ts-expect-error data(key) is typed as returning the wrapper
+        const rowOptions: ViewRow | undefined = $targetRowElement.data('options');
+        const options: ContextMenuPreparingOptions = {
           event: dxEvent,
           targetElement: getPublicElement($targetElement),
-          target: viewName[this],
+          target: viewName[name],
           rowIndex,
           row: view._getRows()[rowIndex],
           columnIndex,
-          // @ts-expect-error
+          // @ts-expect-error an undefined cellIndex reads no cell
           column: rowOptions?.cells?.[columnIndex]?.column,
         };
 
         options.items = view.getContextMenuItems?.(options);
 
-        that.executeAction('onContextMenuPreparing', options);
-        that._contextMenuPrepared(options);
+        this.executeAction('onContextMenuPreparing', options);
+        this._contextMenuPrepared(options);
         menuItems = options.items;
 
         if (menuItems) {
@@ -81,20 +89,20 @@ export class ContextMenuController extends modules.ViewController {
   /**
    * @extended: selection
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _contextMenuPrepared(options) {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overrides use the param
+  protected _contextMenuPrepared(options: ContextMenuPreparingOptions): void {}
 }
 
 export class ContextMenuView extends modules.View {
   private _contextMenuController!: ContextMenuController;
 
-  public init() {
+  public init(): void {
     super.init();
 
     this._contextMenuController = this.getController('contextMenu');
   }
 
-  protected _renderCore() {
+  protected _renderCore(): void {
     // @ts-expect-error the view is rendered here
     const $element = this.element().addClass(CONTEXT_MENU);
 
@@ -111,9 +119,10 @@ export class ContextMenuView extends modules.View {
 
           if (items) {
             contextMenuInstance.option('items', items);
-            event!.stopPropagation();
+            // @ts-expect-error onPositioning is raised by a pointer event
+            event.stopPropagation();
           } else {
-            // @ts-expect-error
+            // @ts-expect-error cancel isn't declared on the positioning event
             actionArgs.cancel = true;
           }
         },
@@ -128,7 +137,7 @@ export class ContextMenuView extends modules.View {
 }
 
 export const contextMenuModule = {
-  defaultOptions() {
+  defaultOptions(): InternalGridOptions {
     return {};
   },
   controllers: {

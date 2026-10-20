@@ -64,6 +64,7 @@ import type {
   ColumnWidthsOptions,
   ContextMenuItemsOptions,
   DelayedTemplate,
+  GridContextMenuItem,
   HintColumn,
   RowPreparedOptions,
   RowRenderOptions,
@@ -1658,7 +1659,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  public getContextMenuItems?(options: ContextMenuItemsOptions): unknown;
+  public getContextMenuItems?(
+    options: ContextMenuItemsOptions,
+  ): GridContextMenuItem[] | undefined;
 
   public getName(): string | undefined {
     return undefined;
