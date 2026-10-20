@@ -1,4 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>airplane</title>
-<path d="M21 16v-2l-8-5v-5.5c0-0.83-0.67-1.5-1.5-1.5s-1.5 0.67-1.5 1.5v5.5l-8 5v2l8-2.5v5.5l-2 1.5v1.5l3.5-1 3.5 1v-1.5l-2-1.5v-5.5l8 2.5z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>airplane</title><path d="M896 -256L896 -341L555 -555L555 -789Q555 -816 536 -834.5T491 -853Q464 -853 445.5 -834.5T427 -789L427 -555L85 -341L85 -256L427 -363L427 -128L341 -64L341 0L491 -43L640 0L640 -64L555 -128L555 -363Z"/></svg>

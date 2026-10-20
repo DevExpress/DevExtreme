@@ -1,7 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-<path d="M4 11h5v-5h-5v5z"></path>
-<path d="M14 7h-4v-1h4v1z"></path>
-<path d="M16 2c0.552 0 1 0.448 1 1v11c0 0.552-0.448 1-1 1h-14c-0.552 0-1-0.448-1-1v-11c0-0.552 0.448-1 1-1h14zM15 4h-12v9h12v-9z"></path>
-<path d="M14 9h-4v-1h4v1z"></path>
-<path d="M14 11h-4v-1h4v1z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -967.111 1024 1024"><title>cardcontent</title><path d="M228 -341L512 -341L512 -626L228 -626L228 -341ZM796 -569L569 -569L569 -626L796 -626ZM910 -853Q934 -853 950.5 -836.5T967 -796L967 -171Q967 -147 950.5 -130.5T910 -114L114 -114Q90 -114 73.5 -130.5T57 -171L57 -796Q57 -820 73.5 -836.5T114 -853ZM853 -740L171 -740L171 -228L853 -228ZM796 -455L569 -455L569 -512L796 -512ZM796 -341L569 -341L569 -398L796 -398Z"/></svg>

@@ -1,4 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>coffee</title>
-<path d="M20 3h-16v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-0.9 2-2v-3c0-1.11-0.89-2-2-2zM20 8h-2v-3h2v3zM4 19h16v2h-16z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>coffee</title><path d="M853 -811L171 -811L171 -384Q171 -313 221 -263T341 -213L597 -213Q668 -213 718 -263T768 -384L768 -512L853 -512Q889 -512 914 -537T939 -597L939 -725Q939 -761 914 -786T853 -811ZM853 -597L768 -597L768 -725L853 -725ZM171 -128L853 -128L853 -43L171 -43Z"/></svg>

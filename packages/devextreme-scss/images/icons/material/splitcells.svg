@@ -1,5 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>table-split-cells</title>
-<path d="M4 2h16c1.105 0 2 0.895 2 2v2h-2v-2h-4v2h-2v-2h-4v2h-2v-2h-4v4h2v2h-2v4h2v2h-2v4h2v2h-2c-1.105 0-2-0.895-2-2v-16c0-1.105 0.895-2 2-2z"></path>
-<path d="M7 22v-15h15v15h-15zM10 19h3v-9h-3v9zM16 19h3v-9h-3v9z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>splitcells</title><path d="M171 -853L853 -853Q889 -853 914 -828T939 -768L939 -683L853 -683L853 -768L683 -768L683 -683L597 -683L597 -768L427 -768L427 -683L341 -683L341 -768L171 -768L171 -597L256 -597L256 -512L171 -512L171 -341L256 -341L256 -256L171 -256L171 -85L256 -85L256 0L171 0Q135 0 110 -25T85 -85L85 -768Q85 -803 110 -828T171 -853ZM299 0L299 -640L939 -640L939 0L299 0ZM427 -128L555 -128L555 -512L427 -512L427 -128ZM683 -128L811 -128L811 -512L683 -512Z"/></svg>

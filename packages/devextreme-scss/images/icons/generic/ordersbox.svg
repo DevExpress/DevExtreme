@@ -1,8 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-<title>orders-box</title>
-<path d="M5 6h2v2h-2v-2z"></path>
-<path d="M7 10h-2v2h2v-2z"></path>
-<path d="M9 6h4v2h-4v-2z"></path>
-<path d="M13 10h-4v2h4v-2z"></path>
-<path d="M17 1v16h-16v-16h16zM15 3h-12v12h12v-12z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -967.111 1024 1024"><title>ordersbox</title><path d="M284 -626L398 -626L398 -512L284 -512ZM398 -398L284 -398L284 -284L398 -284ZM512 -626L740 -626L740 -512L512 -512ZM740 -398L512 -398L512 -284L740 -284ZM967 -910L967 0L57 0L57 -910ZM853 -796L171 -796L171 -114L853 -114L853 -796Z"/></svg>

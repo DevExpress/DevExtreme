@@ -1,5 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-<title>table-add-column-after</title>
-<path d="M13 14h-2v-11h3v5h1v-6h-13v13h11zM6 14h-3v-3h3zM6 10h-3v-3h3zM6 6h-3v-3h3z"></path>
-<path d="M18 11h-2v-2h-2v2h-2v2h2v2h2v-2h2v-2z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -967.111 1024 1024"><title>insertcolumnright</title><path d="M740 -171L626 -171L626 -796L796 -796L796 -512L853 -512L853 -853L114 -853L114 -114L740 -114ZM341 -171L171 -171L171 -341L341 -341ZM341 -398L171 -398L171 -569L341 -569ZM341 -626L171 -626L171 -796L341 -796ZM1024 -341L910 -341L910 -455L796 -455L796 -341L683 -341L683 -228L796 -228L796 -114L910 -114L910 -228L1024 -228Z"/></svg>

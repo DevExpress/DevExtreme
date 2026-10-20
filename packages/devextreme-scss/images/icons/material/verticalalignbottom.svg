@@ -1,6 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>vert-align-bottom</title>
-<path d="M20 4v16h-16v-16h16zM20 2h-16c-1.105 0-2 0.895-2 2v16c0 1.105 0.895 2 2 2h16c1.105 0 2-0.895 2-2v-16c0-1.105-0.895-2-2-2z"></path>
-<path d="M18 12h-12v2h12v-2z"></path>
-<path d="M18 16h-12v2h12v-2z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>verticalalignbottom</title><path d="M853 -768L853 -85L171 -85L171 -768ZM853 -853L171 -853Q135 -853 110 -828T85 -768L85 -85Q85 -50 110 -25T171 0L853 0Q889 0 914 -25T939 -85L939 -768Q939 -803 914 -828T853 -853M768 -427L256 -427L256 -341L768 -341ZM768 -256L256 -256L256 -171L768 -171Z"/></svg>

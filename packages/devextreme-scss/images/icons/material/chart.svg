@@ -1,4 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>chart</title>
-<path d="M19 3h-14c-1.1 0-2 0.9-2 2v14c0 1.1 0.9 2 2 2h14c1.1 0 2-0.9 2-2v-14c0-1.1-0.9-2-2-2zM9 17h-2v-7h2v7zM13 17h-2v-10h2v10zM17 17h-2v-4h2v4z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>chart</title><path d="M384 -213L299 -213L299 -512L384 -512ZM555 -213L469 -213L469 -640L555 -640ZM725 -213L640 -213L640 -384L725 -384ZM811 -128L213 -128L213 -725L811 -725L811 -124ZM811 -811L213 -811Q178 -811 153 -786T128 -725L128 -128Q128 -93 153 -68T213 -43L811 -43Q846 -43 871 -68T896 -128L896 -725Q896 -761 871 -786T811 -811"/></svg>

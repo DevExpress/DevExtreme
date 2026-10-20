@@ -1,8 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>indent1</title>
-<path d="M10 5h12v2h-12v-2z"></path>
-<path d="M10 17h12v2h-12v-2z"></path>
-<path d="M10 11h12v2h-12v-2z"></path>
-<path d="M4 20h2v-3h2.5l-3.5-3.5-3.5 3.5h2.5z"></path>
-<path d="M6 4h-2v3h-2.5l3.5 3.5 3.5-3.5h-2.5z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>decreaselinespacing</title><path d="M427 -725L939 -725L939 -640L427 -640L427 -725ZM427 -213L939 -213L939 -128L427 -128L427 -213ZM427 -469L939 -469L939 -384L427 -384L427 -469ZM171 -85L256 -85L256 -213L363 -213L213 -363L64 -213L171 -213ZM256 -768L171 -768L171 -640L64 -640L213 -491L363 -640L256 -640Z"/></svg>

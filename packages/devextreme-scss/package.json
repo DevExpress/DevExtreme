@@ -24,11 +24,15 @@
     "stylelint-config-standard-scss": "14.0.0",
     "stylelint-scss": "6.10.0",
     "ts-jest": "29.4.12",
-    "typescript": "catalog:tools"
+    "typescript": "catalog:tools",
+    "wawoff2": "2.0.1"
   },
   "scripts": {
     "build": "pnpm --workspace-root nx build devextreme-scss",
     "check-naming-registries": "pnpm run naming:check",
+    "icon-fonts:build": "node tools/icon-fonts/build.ts",
+    "icon-fonts:check": "node tools/icon-fonts/build.ts --check",
+    "icon-fonts:extract": "node tools/icon-fonts/extract.ts",
     "lint": "pnpm run lint-css && pnpm run lint-js",
     "lint-css": "stylelint scss/widgets build",
     "lint-js": "eslint",

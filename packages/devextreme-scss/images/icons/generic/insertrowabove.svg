@@ -1,5 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-<title>table-add-row-before</title>
-<path d="M4 0v2h-2v2h2v2h2v-2h2v-2h-2v-2h-2z"></path>
-<path d="M2 5v11h13v-13h-6v1h5v3h-11v-2zM6 12v3h-3v-3zM10 12v3h-3v-3zM14 12v3h-3v-3z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -967.111 1024 1024"><title>insertrowabove</title><path d="M228 -967L228 -853L114 -853L114 -740L228 -740L228 -626L341 -626L341 -740L455 -740L455 -853L341 -853L341 -967L228 -967ZM114 -683L114 -57L853 -57L853 -796L512 -796L512 -740L796 -740L796 -569L171 -569L171 -683ZM341 -284L341 -114L171 -114L171 -284ZM569 -284L569 -114L398 -114L398 -284ZM796 -284L796 -114L626 -114L626 -284Z"/></svg>

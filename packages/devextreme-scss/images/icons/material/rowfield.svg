@@ -1,10 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>rowfield</title>
-<path d="M4 16h4v4h-4v-4z"></path>
-<path d="M16 16h4v4h-4v-4z"></path>
-<path d="M10 16h4v4h-4v-4z"></path>
-<path d="M4 4h4v4h-4v-4z"></path>
-<path d="M10 4h4v4h-4v-4z"></path>
-<path d="M16 4h4v4h-4v-4z"></path>
-<path d="M4 10h16v4h-16v-4z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>rowfield</title><path d="M171 -256L341 -256L341 -85L171 -85ZM683 -256L853 -256L853 -85L683 -85ZM427 -256L597 -256L597 -85L427 -85L427 -256ZM171 -768L341 -768L341 -597L171 -597ZM427 -768L597 -768L597 -597L427 -597L427 -768ZM683 -768L853 -768L853 -597L683 -597ZM171 -512L853 -512L853 -341L171 -341L171 -512Z"/></svg>
