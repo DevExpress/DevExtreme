@@ -10,6 +10,7 @@ import DateRangeBox from '@js/ui/date_range_box';
 
 const widgets: { dispose: () => void }[] = [];
 const value = new Date(2024, 5, 15, 14, 30);
+const presetValue = new Date(2020, 0, 2, 14, 5, 6, 7);
 
 const createDateBox = (options: Partial<Properties>): HTMLInputElement => {
   const element = document.body.appendChild(document.createElement('div'));
@@ -18,6 +19,26 @@ const createDateBox = (options: Partial<Properties>): HTMLInputElement => {
   widgets.push(instance);
 
   return element.querySelector('.dx-texteditor-input') as HTMLInputElement;
+};
+
+const expectExplicitPreset = (
+  editorType: 'date' | 'time' | 'datetime',
+  preset: string,
+  expected: string,
+): void => {
+  const stringFormatInput = createDateBox({
+    type: editorType,
+    value: presetValue,
+    displayFormat: preset,
+  });
+  const objectFormatInput = createDateBox({
+    type: editorType,
+    value: presetValue,
+    displayFormat: { type: preset },
+  });
+
+  expect([preset, stringFormatInput.value]).toEqual([preset, expected]);
+  expect([preset, objectFormatInput.value]).toEqual([preset, expected]);
 };
 
 describe('locale-only displayFormat follows the editor type', () => {
@@ -248,6 +269,123 @@ describe('locale-only displayFormat follows the editor type', () => {
         delete currentConfig.dateTimeFormatPresets;
       } else {
         currentConfig.dateTimeFormatPresets = savedPresets;
+      }
+
+      coreLocalization.locale(savedLocale);
+    }
+  });
+
+  it('keeps the message locale for an explicit date preset', () => {
+    const savedLocale = coreLocalization.locale();
+    const savedDateFormat = config().dateFormat;
+    const presets: [string, string][] = [
+      ['day', '2'],
+      ['dayOfWeek', 'Thursday'],
+      ['longDate', 'Thursday, January 2, 2020'],
+      ['month', 'January'],
+      ['monthAndDay', 'January 2'],
+      ['monthAndYear', 'January 2020'],
+      ['quarter', 'Q1'],
+      ['quarterAndYear', 'Q1 2020'],
+      ['shortDate', '1/2/2020'],
+      ['year', '2020'],
+    ];
+
+    coreLocalization.locale('en');
+    config({
+      ...config(),
+      dateFormat: {
+        default: {
+          locale: 'de-DE',
+        },
+      },
+    });
+
+    try {
+      presets.forEach(([preset, expected]) => {
+        expectExplicitPreset('date', preset, expected);
+      });
+    } finally {
+      const currentConfig = config();
+
+      if (savedDateFormat === undefined) {
+        delete currentConfig.dateFormat;
+      } else {
+        currentConfig.dateFormat = savedDateFormat;
+      }
+
+      coreLocalization.locale(savedLocale);
+    }
+  });
+
+  it('keeps the message locale for an explicit time preset', () => {
+    const savedLocale = coreLocalization.locale();
+    const savedTimeFormat = config().timeFormat;
+    const presets: [string, string][] = [
+      ['hour', '14'],
+      ['longTime', '2:05:06 PM'],
+      ['millisecond', '007'],
+      ['minute', '05'],
+      ['second', '06'],
+      ['shortTime', '2:05 PM'],
+    ];
+
+    coreLocalization.locale('en');
+    config({
+      ...config(),
+      timeFormat: {
+        default: {
+          locale: 'de-DE',
+        },
+      },
+    });
+
+    try {
+      presets.forEach(([preset, expected]) => {
+        expectExplicitPreset('time', preset, expected);
+      });
+    } finally {
+      const currentConfig = config();
+
+      if (savedTimeFormat === undefined) {
+        delete currentConfig.timeFormat;
+      } else {
+        currentConfig.timeFormat = savedTimeFormat;
+      }
+
+      coreLocalization.locale(savedLocale);
+    }
+  });
+
+  it('keeps the message locale for an explicit date-time preset', () => {
+    const savedLocale = coreLocalization.locale();
+    const savedDateTimeFormat = config().dateTimeFormat;
+    const presets: [string, string][] = [
+      ['longDateLongTime', 'Thursday, January 2, 2020 at 2:05:06 PM'],
+      ['shortDateShortTime', '1/2/2020, 2:05 PM'],
+    ];
+
+    coreLocalization.locale('en');
+    config({
+      ...config(),
+      dateTimeFormat: {
+        default: {
+          locale: 'de-DE',
+        },
+      },
+    });
+
+    try {
+      presets.forEach(([preset, expected]) => {
+        expectExplicitPreset('datetime', preset, expected);
+      });
+    } finally {
+      const currentConfig = config();
+
+      if (savedDateTimeFormat === undefined) {
+        delete currentConfig.dateTimeFormat;
+      } else {
+        currentConfig.dateTimeFormat = savedDateTimeFormat;
       }
 
       coreLocalization.locale(savedLocale);
