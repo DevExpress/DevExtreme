@@ -37,7 +37,7 @@ overrides:
   "systemjs-builder>terser": 5.46.2
   "tmp@<0.2.7": "^0.2.7"
   "uuid@<14.0.0": ~14.0.0
-  "vite@<=7.3.4": ^7.3.5
+  "vite@<=7.3.6": ^7.3.7
   "webpack-dev-server@<5.2.6": ^5.2.6
   "less@<4.8.0": ^4.8.0
   "yaml@>=2.0.0 <2.8.3": ^2.8.3
@@ -49,11 +49,12 @@ overrides:
   "engine.io@>=6.6.0 <6.6.10": ^6.6.10
   "moment@>=2.29.2 <2.31.0": ^2.31.0
   "webpack-dev-middleware@<7.4.5": ^7.4.5
-  '@modelcontextprotocol/sdk@>=1.12.0 <1.31.0': ^1.31.0
+  '@modelcontextprotocol/sdk@>=1.12.0 <1.32.0': ^1.32.0
   '@vue/server-renderer@<3.5.42': ^3.5.42
   axios@>=1.0.0 <1.20.0: ^1.20.0
   compression@<1.8.2: ^1.8.2
   dompurify@>=3.4.13 <=3.4.15: ^3.4.16
+  follow-redirects@>=1.16.0 <1.16.1: ^1.16.1
   hono@<4.13.11: ^4.13.11
   http-cache-semantics@<=4.2.0: ^4.3.0
   nx@>=14.0.0 <22.7.10: ^22.7.10
