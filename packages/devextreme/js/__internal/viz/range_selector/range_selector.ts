@@ -13,10 +13,10 @@ import {
 import { dateUtils } from '@ts/core/utils/m_date';
 import { extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
-import { adjust } from '@ts/core/utils/m_math';
 import {
   isDate, isDefined, isFunction, isNumeric, isPlainObject, type as getType,
 } from '@ts/core/utils/m_type';
+import { adjust } from '@ts/core/utils/math';
 import constants from '@ts/viz/axes/axes_constants';
 import { Axis } from '@ts/viz/axes/base_axis';
 import { tickGenerator } from '@ts/viz/axes/tick_generator';

@@ -13,4 +13,4 @@ export {
     sign,
     solveCubicEquation,
     trunc,
-} from '../../__internal/core/utils/m_math';
+} from '../../__internal/core/utils/math';

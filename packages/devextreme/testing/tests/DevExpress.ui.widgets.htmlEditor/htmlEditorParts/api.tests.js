@@ -130,6 +130,17 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), '<p>T<strong>es</strong>t 1</p><p>Test 2</p><p>Test 3</p>', 'format applied');
     });
 
+    test('format("float", false) removes the float of the selected image', function(assert) {
+        this.options.value = '<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4////fwAJ+wP93BEhJAAAAABJRU5ErkJggg=="></p>';
+        this.createEditor();
+        this.instance.setSelection(0, 1);
+        this.instance.format('float', 'left');
+
+        this.instance.format('float', false);
+
+        assert.strictEqual($('#htmlEditor').find('img').get(0).style.float, '', 'float is removed');
+    });
+
     test('formatText', function(assert) {
         this.createEditor();
         const expected = '<h1>T<strong>est 1</strong></h1><p><strong>Tes</strong>t 2</p><p>Test 3</p>';
