@@ -37,7 +37,8 @@
     "naming:publish": "node tools/naming/publish.ts",
     "naming:registries": "node tools/naming/derive-registries.ts",
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
-    "tokens:update": "node tools/tokens/update.ts",
+    "tokens:report": "node tools/tokens/bump-report.ts",
+    "tokens:snapshot": "node tools/tokens/bump-report.ts --snapshot",
     "typecheck": "tsc -p tsconfig.json && tsc -p tests/tsconfig.json",
     "watch": "pnpm --workspace-root nx run devextreme-scss --target=watch"
   },
