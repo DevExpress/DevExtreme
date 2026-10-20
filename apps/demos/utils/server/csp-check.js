@@ -74,8 +74,6 @@ function findChrome() {
 
 const CHROME_PATH = findChrome();
 
-// Must use the same shard partition as csp-bundle.js, or a demo bundled by
-// another shard has no bundle.js on disk and burns its render deadline + retry.
 const { SHARD_TOTAL, SHARD_INDEX } = readShardConfig();
 
 const DEBUG_PORT = (() => {
@@ -172,8 +170,6 @@ async function waitForDebugger(port, maxWaitMs = 15000) {
   throw new Error(`Chrome debugger did not start on port ${port}`);
 }
 
-// Same round-robin split as csp-bundle.js's applyShard(), on the same sort key,
-// so shard k checks exactly the demos shard k bundled.
 function applyShard(demos) {
   return applyShardGeneric(demos, (d) => `${d.widget}/${d.demo}`, { SHARD_TOTAL, SHARD_INDEX });
 }
