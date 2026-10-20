@@ -45520,6 +45520,15 @@ declare module DevExpress.viz {
     export type Properties = dxSankeyOptions;
     export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
     /**
+     * [descr:dxSankeyTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxSankeyOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
+    /**
      * [descr:dxSankeyTooltip]
      */
     export type Tooltip = BaseWidgetTooltip & {
@@ -45976,6 +45985,10 @@ declare module DevExpress.viz {
      * [descr:dxSankeyOptions.targetField]
      */
     targetField?: string;
+    /**
+     * [descr:dxSankeyOptions.title]
+     */
+    title?: DevExpress.viz.dxSankey.Title | string;
     /**
      * [descr:dxSankeyOptions.tooltip]
      */
