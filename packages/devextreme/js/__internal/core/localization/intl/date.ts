@@ -158,7 +158,7 @@ const getShortDateShortTimeFormat = (formatLocale: string): Intl.DateTimeFormatO
     day: defaultOptions.day,
     hour: 'numeric',
     minute: 'numeric',
-  };
+  } as Intl.DateTimeFormatOptions;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
