@@ -293,8 +293,8 @@ async function collectViolations(tab, demo, renderDeadlineMs) {
   }
   await tab.send('Page.navigate', { url });
 
-  // Matches UI widgets (.dx-widget), viz widgets (<svg>) and new-gen widgets.
-  const READY_SELECTOR = '.dx-widget, svg, .dx-cardview, .dx-pagination';
+  // Matches UI widgets (.dx-widget), viz widgets (root <svg class="dxc ...">) and new-gen widgets.
+  const READY_SELECTOR = '.dx-widget, svg[class^="dx"], .dx-cardview, .dx-pagination';
   const deadline = Date.now() + renderDeadlineMs;
   let rendered = false;
   while (Date.now() < deadline) {
