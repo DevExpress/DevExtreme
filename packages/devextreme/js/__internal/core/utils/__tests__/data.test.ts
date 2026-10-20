@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { Guid } from '@ts/core/guid';
-import { toComparable } from '@ts/core/utils/m_data';
+import { toComparable } from '@ts/core/utils/data';
 
 describe('Data utils', () => {
   describe('toComparable', () => {

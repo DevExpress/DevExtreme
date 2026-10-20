@@ -4,8 +4,8 @@ import type {
   Summary,
 } from '@js/ui/data_grid';
 import type dxDataGrid from '@js/ui/data_grid';
+import { compileGetter } from '@ts/core/utils/data';
 import { noop } from '@ts/core/utils/m_common';
-import { compileGetter } from '@ts/core/utils/m_data';
 import { isDefined } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { RawItemData, RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
