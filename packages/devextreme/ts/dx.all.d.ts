@@ -46302,6 +46302,15 @@ declare module DevExpress.viz {
     export type SelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxTreeMap> & InteractionInfo;
     /**
+     * [descr:dxTreeMapTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxTreeMapOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
+    /**
      * [descr:dxTreeMapTooltip]
      */
     export type Tooltip = BaseWidgetTooltip & {
@@ -46737,6 +46746,10 @@ declare module DevExpress.viz {
         color?: string | undefined;
       };
     };
+    /**
+     * [descr:dxTreeMapOptions.title]
+     */
+    title?: DevExpress.viz.dxTreeMap.Title | string;
     /**
      * [descr:dxTreeMapOptions.tooltip]
      */
