@@ -661,7 +661,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     let totalWidth = 0;
     const $rootElement = this.component.$element();
-    const availableWidth = getWidth($rootElement) - this._rowsView.getScrollbarWidth();
+    const availableWidth = getWidth($rootElement.get(0)) - this._rowsView.getScrollbarWidth();
     let rootElementWidth = availableWidth - this._getCommandColumnsWidth();
     const getVisibleContentColumns = (): Column[] => visibleColumns.filter(
       (item) => !item.command

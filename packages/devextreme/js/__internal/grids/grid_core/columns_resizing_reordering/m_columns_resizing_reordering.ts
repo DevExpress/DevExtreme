@@ -158,26 +158,28 @@ export class SeparatorView extends modules.View {
     this._isShown = false;
   }
 
-  private height(value) {
+  private height(value): number | undefined {
     const $element = this.element();
     if ($element) {
       if (isDefined(value)) {
         setHeight($element, value);
       } else {
-        return getHeight($element);
+        return getHeight($element.get(0));
       }
     }
+    return undefined;
   }
 
-  public width(value?) {
+  public width(value?): number | undefined {
     const $element = this.element();
     if ($element) {
       if (isDefined(value)) {
         setWidth($element, value);
       } else {
-        return getWidth($element);
+        return getWidth($element.get(0));
       }
     }
+    return undefined;
   }
 }
 
@@ -1136,7 +1138,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
       const minWidth = column?.minWidth || columnsSeparatorWidth;
       const result: any = {};
 
-      if (cellWidth >= minWidth) {
+      if (cellWidth >= Number(minWidth)) {
         result.cellWidth = cellWidth;
       } else {
         result.cellWidth = minWidth;

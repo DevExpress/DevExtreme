@@ -63,7 +63,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
         if (legacyMode && !useNativeScrolling) {
           $contentElement.css({ minHeight: gridCoreUtils.getContentHeightLimit(browser) });
         } else {
-          $contentElement.css({ minHeight: getHeight($contentElement) });
+          $contentElement.css({ minHeight: getHeight($contentElement.get(0)) });
         }
 
         const resizeCompletedHandler = (): void => {
@@ -138,7 +138,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     if (typeof width === 'number') {
       return width;
     }
-    return this._resizingController._lastWidth || getOuterWidth(this.component.$element());
+    return this._resizingController._lastWidth || getOuterWidth(this.component.$element().get(0));
   }
 
   private getEndPageIndex(position) {

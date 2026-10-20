@@ -641,18 +641,18 @@ export class ResizingController extends modules.ViewController {
     const $rootElement = $(rootElement);
     const importantMarginClass = this.addWidgetPrefix(CLASSES.importantMargin);
 
-    if (this._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
+    if (this._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement.get(0))) {
       const $groupElement = $rootElement.children(`.${this.getWidgetContainerClass()}`);
 
       if ($groupElement.length) {
         $groupElement.detach();
       }
 
-      this._hasHeight = !!getHeight($rootElement);
+      this._hasHeight = !!getHeight($rootElement.get(0));
 
-      const width = getWidth($rootElement);
+      const width = getWidth($rootElement.get(0));
       $rootElement.addClass(importantMarginClass);
-      this._hasWidth = getWidth($rootElement) === width;
+      this._hasWidth = getWidth($rootElement.get(0)) === width;
       $rootElement.removeClass(importantMarginClass);
 
       if ($groupElement.length) {
@@ -749,8 +749,8 @@ export class ResizingController extends modules.ViewController {
   private _checkSize(checkSize?: boolean): boolean {
     const $rootElement = this.component.$element();
     const isWidgetVisible = $rootElement.is(':visible');
-    const isGridSizeChanged = this._lastWidth !== getWidth($rootElement)
-          || this._lastHeight !== getHeight($rootElement)
+    const isGridSizeChanged = this._lastWidth !== getWidth($rootElement.get(0))
+          || this._lastHeight !== getHeight($rootElement.get(0))
           || this._devicePixelRatio !== getWindow().devicePixelRatio;
 
     return isWidgetVisible && (!checkSize || isGridSizeChanged);
@@ -806,7 +806,7 @@ export class ResizingController extends modules.ViewController {
     const $rootElement = this.component.$element();
     const groupElement = this._getGroupElement();
 
-    const rootElementHeight = getHeight($rootElement);
+    const rootElementHeight = getHeight($rootElement.get(0));
     const height = this.option('height') ?? ($rootElement.get(0) as HTMLElement).style.height;
     const isHeightSpecified = !!height && height !== 'auto';
 
@@ -853,8 +853,8 @@ export class ResizingController extends modules.ViewController {
   }
 
   private _updateLastSizes($rootElement: dxElementWrapper): void {
-    this._lastWidth = getWidth($rootElement);
-    this._lastHeight = getHeight($rootElement);
+    this._lastWidth = getWidth($rootElement.get(0));
+    this._lastHeight = getHeight($rootElement.get(0));
     this._devicePixelRatio = getWindow().devicePixelRatio;
   }
 

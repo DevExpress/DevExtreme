@@ -486,7 +486,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
 
       offset = {
         left: positionTransparentColumn.left,
-        right: getOuterWidth(this.element(), true) - (getOuterWidth($transparentColumn, true) + positionTransparentColumn.left),
+        right: Number(getOuterWidth(this.element(), true)) - (getOuterWidth($transparentColumn, true) + positionTransparentColumn.left),
       };
     }
 

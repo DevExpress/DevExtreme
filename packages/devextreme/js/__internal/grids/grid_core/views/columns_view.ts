@@ -1675,8 +1675,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if ($element && $tableElement) {
       return isHorizontal
-        ? getOuterWidth($tableElement) - getWidth($element) > 0
-        : getOuterHeight($tableElement) - getHeight($element) > 0;
+        ? getOuterWidth($tableElement.get(0)) - getWidth($element.get(0)) > 0
+        : getOuterHeight($tableElement.get(0)) - getHeight($element.get(0)) > 0;
     }
 
     return false;
