@@ -7,16 +7,16 @@ import type { SelectionChangedEvent } from '@js/ui/list';
 import type { ShownEvent } from '@js/ui/popup';
 import Quill from 'devextreme-quill';
 
-import Variable from '../formats/m_variable';
+import Variable from '../formats/variable';
 import type { VariableData } from '../types';
 import type {
   KeyboardModule,
   QuillInstance,
   RangeStatic,
 } from '../types/quill';
-import type { BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
-import PopupModule from './m_popup';
+import type { BaseModuleOptions } from './base';
+import BaseModule from './base';
+import PopupModule from './popup';
 
 interface VariableModuleOptions extends BaseModuleOptions, dxHtmlEditorVariables {
   escapeChar: VariableData['escapeChar'];
