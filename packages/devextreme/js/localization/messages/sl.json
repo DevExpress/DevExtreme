@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Zapiranje klepeta asistenta AI bo prekinilo zahteve v teku. Ali želite zapreti klepet?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Klepet je prazen",
         "dxDataGrid-aiChatEmptyViewPrompt": "Pomočnik UI je pripravljen odgovoriti na vaša vprašanja.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Urejevalnik pozivov AI",
         "dxDataGrid-aiPromptEditorPlaceholder": "Pošlji poziv AI za generiranje vrednosti stolpcev...",
         "dxDataGrid-aiPromptEditorApplyButton": "Uporabi",
