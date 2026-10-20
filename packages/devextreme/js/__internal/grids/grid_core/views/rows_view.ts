@@ -21,7 +21,7 @@ import type { RowPreparedEvent } from '@js/ui/data_grid';
 import type dxLoadPanel from '@js/ui/load_panel';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { ActionEvent } from '@ts/core/action';
-import { compileGetter } from '@ts/core/utils/m_data';
+import { compileGetter } from '@ts/core/utils/data';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {
@@ -50,8 +50,8 @@ import type { ElementOffset } from '@ts/ui/scroll_view/types';
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import { isLocalStore } from '../data_source_adapter/utils/store';
 import type { EditingController } from '../editing/m_editing';
-import gridCoreUtils from '../m_utils';
 import { CLASSES } from '../sticky_columns/const';
+import gridCoreUtils from '../utils';
 import { ColumnsView } from './columns_view';
 import { CLASSES as VIEW_CLASSES } from './const';
 import type {

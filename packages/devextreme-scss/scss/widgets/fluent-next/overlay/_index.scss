@@ -1,0 +1,11 @@
+@use "sizes" as *;
+@use "../common/mixins" as *;
+@use "../../base/overlay";
+
+.dx-overlay-shader {
+  background-color: var(--dx-backdrop-bg);
+}
+
+.dx-overlay-wrapper {
+  @include dx-base-typography();
+}

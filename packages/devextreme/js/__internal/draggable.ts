@@ -391,6 +391,7 @@ class Draggable<
         v: offset.y,
       };
     }
+    // @ts-expect-error the offset is a pair of numbers
     const pair = splitPair(normalizedOffset).map((value) => parseFloat(value));
 
     return {

@@ -9,6 +9,8 @@ import type { PopupControllerProperties } from '../popup_position_controller';
 import { PopupPositionController } from '../popup_position_controller';
 
 const SWATCH_CLASS = 'dx-swatch-custom';
+const MODE_CLASS = 'dx-theme-mode-dark';
+const MODE_STYLES = '.mode-dark { --dx-theme-mode: dark; }';
 
 describe('PopupPositionController drag and resize area', () => {
   let viewPortElement: HTMLElement = document.createElement('div');
@@ -31,6 +33,10 @@ describe('PopupPositionController drag and resize area', () => {
       .querySelector('.owner') as Element,
   );
 
+  const ownerInMode = (): dxElementWrapper => $(
+    appended('<div class="owner mode-dark"></div>').querySelector('.owner') as Element,
+  );
+
   const controllerFor = (
     properties: Partial<PopupControllerProperties>,
     $root: dxElementWrapper = owner(),
@@ -45,6 +51,7 @@ describe('PopupPositionController drag and resize area', () => {
   ): unknown => controllerFor(properties, $root).$dragResizeContainer?.get(0);
 
   beforeEach(() => {
+    document.head.innerHTML = `<style>${MODE_STYLES}</style>`;
     viewPortElement = appended();
     viewPortElement.className = 'dx-viewport';
     viewPort(viewPortElement);
@@ -52,6 +59,7 @@ describe('PopupPositionController drag and resize area', () => {
 
   afterEach(() => {
     viewPort(null);
+    document.head.innerHTML = '';
     document.body.innerHTML = '';
   });
 
@@ -82,18 +90,21 @@ describe('PopupPositionController drag and resize area', () => {
     expect(areaFor({ dragAndResizeArea: appended(), dragOutsideBoundary: true })).toBe(window);
   });
 
-  describe('for an element inside a swatch', () => {
+  describe.each([
+    { scope: 'a swatch', owner: ownerInSwatch, containerClass: SWATCH_CLASS },
+    { scope: 'a theme mode', owner: ownerInMode, containerClass: MODE_CLASS },
+  ])('for an element inside $scope', ({ owner: ownerInScope, containerClass }) => {
     it('is the view port, not the container the markup goes into', () => {
-      const controller = controllerFor({}, ownerInSwatch());
+      const controller = controllerFor({}, ownerInScope());
 
       expect(controller.$dragResizeContainer?.get(0)).toBe(viewPortElement);
-      expect(controller.$container?.get(0)?.classList.contains(SWATCH_CLASS)).toBe(true);
+      expect(controller.$container?.get(0)?.classList.contains(containerClass)).toBe(true);
     });
 
     it('is still the container the popup was given', () => {
       const container = appended();
 
-      expect(areaFor({ container }, ownerInSwatch())).toBe(container);
+      expect(areaFor({ container }, ownerInScope())).toBe(container);
     });
   });
 });

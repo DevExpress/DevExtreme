@@ -18,9 +18,9 @@ import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/editor_factory';
 import { combineFilters } from '../filter/utils';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import gridCoreUtils from '../m_utils';
 import core from '../modules/modules';
 import type { ModuleType } from '../types';
+import gridCoreUtils from '../utils';
 import type { RowsView } from '../views/rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
 import type { FocusDataSourceControllerExtension } from './extenders/focus_data_source_controller';
@@ -921,19 +921,20 @@ export const focusDataControllerExtender = (
 };
 
 export const editing = (Base: ModuleType<EditingController>) => class FocusEditingControllerExtender extends Base {
-  protected _deleteRowCore(rowIndex) {
-    // @ts-expect-error
-    const deferred = super._deleteRowCore.apply(this, arguments);
+  protected _deleteRowCore(rowIndex: number): DeferredObj<unknown> {
+    const deferred = super._deleteRowCore(rowIndex);
     const rowKey = this._dataController.getKeyByRowIndex(rowIndex);
 
     deferred.done(() => {
-      const rowIndex = this._dataController.getRowIndexByKey(rowKey);
+      const currentRowIndex = this._dataController.getRowIndexByKey(rowKey);
       const visibleRows = this._dataController.getVisibleRows();
 
-      if (rowIndex === -1 && !visibleRows.length) {
+      if (currentRowIndex === -1 && !visibleRows.length) {
         this._focusController._resetFocusedRow();
       }
     });
+
+    return deferred;
   }
 };
 

@@ -29,6 +29,7 @@ import { getHeight, getWidth } from '@ts/core/utils/m_size';
 import { isDefined, isFunction, isPlainObject } from '@ts/core/utils/m_type';
 import { getWindow } from '@ts/core/utils/m_window';
 import { normalizeStyleProp } from '@ts/core/utils/style';
+import swatchContainer from '@ts/core/utils/swatch_container';
 
 import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';
@@ -194,13 +195,24 @@ export let Tooltip = class Tooltip {
     this._options = this._widgetRoot = null;
   }
 
-  _getContainer(): Element {
+  _getUserContainer(): Element | undefined {
     const options = this._options;
     let container = $(this._widgetRoot).closest(options.container);
     if (container.length === 0) {
       container = $(options.container);
     }
-    return (container.length ? container : $('body')).get(0);
+    return container.get(0);
+  }
+
+  _getContainer(): Element {
+    const container = this._getUserContainer();
+    if (container) {
+      return container;
+    }
+
+    const scope = swatchContainer.getSwatchContainer(this._widgetRoot);
+
+    return scope?.length ? scope.get(0) : $('body').get(0);
   }
 
   setTemplate(contentTemplate: ThemeValue): void {
@@ -251,6 +263,7 @@ export let Tooltip = class Tooltip {
               onRendered: () => {
                 removeElements(htmlContainers.splice(0, htmlContainers.length - 1));
 
+                // @ts-expect-error the core renderer wraps elements as dxElementWrapper does
                 this._textHtml = replaceWith(this._textHtml, containerToTemplateRender);
 
                 state.html = this._textHtml.html();
@@ -364,6 +377,7 @@ export let Tooltip = class Tooltip {
     let customize: TooltipCustomization = {};
 
     if (isFunction(customizeTooltip)) {
+      // @ts-expect-error the next line keeps only a plain object
       customize = customizeTooltip.call(formatObject, formatObject);
       customize = isPlainObject(customize) ? customize : {};
       if ('text' in customize) {
@@ -489,8 +503,7 @@ export let Tooltip = class Tooltip {
   }
 
   _getCanvas(): Canvas {
-    const container = this._getContainer();
-    const containerBox = container.getBoundingClientRect();
+    const container = this._getUserContainer();
     const html = domAdapter.getDocumentElement();
     const document = domAdapter.getDocument();
     let left = window.pageXOffset || html.scrollLeft || 0;
@@ -513,7 +526,8 @@ export let Tooltip = class Tooltip {
       bottom: 0,
     };
 
-    if (container !== domAdapter.getBody()) {
+    if (container && container !== domAdapter.getBody()) {
+      const containerBox = container.getBoundingClientRect();
       left = mathMax(box.left, box.left + containerBox.left);
       top = mathMax(box.top, box.top + containerBox.top);
 

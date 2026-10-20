@@ -11,5 +11,5 @@
 
 ::ng-deep .dx-scheduler-appointment-title,
 ::ng-deep .dx-scheduler-appointment-recurrence-icon {
-  color: white;
+  color: var(--dxds-color-content-on-color, white);
 }

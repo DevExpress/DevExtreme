@@ -45,11 +45,11 @@ import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_control
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_handling/const';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import { CLASSES } from './const';
@@ -126,7 +126,7 @@ const copyAttributes = (
 };
 
 const isRenderTemplate = <TModel extends TemplateModel>(
-  template: ColumnTemplateSource<TModel>,
+  template: ColumnTemplateSource<TModel> | undefined,
 ): template is ColumnRenderTemplate<TModel> => !!template
   && !!(template as Partial<ColumnRenderTemplate<TModel>>).render
   && !isRenderer(template);
@@ -670,7 +670,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected _processTemplate<TModel extends TemplateModel>(
-    template: ColumnTemplateSource<TModel>,
+    template: ColumnTemplateSource<TModel> | undefined,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: TModel,
   ): ColumnViewTemplate<TModel> {
@@ -715,7 +715,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   public renderTemplate<TModel extends TemplateModel>(
     container: dxElementWrapper,
-    template: ColumnTemplateSource<TModel>,
+    template: ColumnTemplateSource<TModel> | undefined,
     options: TModel,
     allowRenderToDetachedContainer?: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
