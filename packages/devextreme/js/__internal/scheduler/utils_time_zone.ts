@@ -1,6 +1,6 @@
 // TODO(Refactoring): move this module to ./utils directory
 import errors from '@js/core/errors';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets, isValidDate } from '@ts/core/utils/m_date';
 import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import dateUtils from '../../core/utils/date';
@@ -161,7 +161,7 @@ const calculateTimezoneByValue = (
   }
 
   const dateObj = new Date(date);
-  if (!dateUtilsTs.isValidDate(dateObj)) {
+  if (!isValidDate(dateObj)) {
     return undefined;
   }
 
@@ -181,7 +181,7 @@ const getOffsetNamePart = (offset: string): string => {
 };
 
 const getTimezoneTitle = (timeZone: string, date = new Date()): string | undefined => {
-  if (!dateUtilsTs.isValidDate(date)) {
+  if (!isValidDate(date)) {
     return '';
   }
 
@@ -270,14 +270,14 @@ const getDiffBetweenClientTimezoneOffsets = (
 ): number => getClientTimezoneOffset(firstDate) - getClientTimezoneOffset(secondDate);
 
 const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
-  const newDate = dateUtilsTs.addOffsets(date, ...offsets);
+  const newDate = addOffsets(date, ...offsets);
   const daylightShift = getDaylightOffsetInMs(date, newDate);
 
   if (!daylightShift) {
     return newDate;
   }
 
-  const correctLocalDate = dateUtilsTs.addOffsets(newDate, -daylightShift);
+  const correctLocalDate = addOffsets(newDate, -daylightShift);
   const daylightSecondShift = getDaylightOffsetInMs(newDate, correctLocalDate);
 
   return !daylightSecondShift

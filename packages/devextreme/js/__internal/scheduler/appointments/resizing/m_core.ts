@@ -1,5 +1,4 @@
-import { dateUtilsTs } from '@ts/core/utils/date';
-import { dateUtils } from '@ts/core/utils/m_date';
+import { addOffsets, dateUtils } from '@ts/core/utils/m_date';
 
 import type { ViewCellData } from '../../types';
 import type {
@@ -32,7 +31,7 @@ const getCellData = (
   // but long appointments are not. So for all day appointments endDate === startDate,
   // for long appointments endDate = startDate + 1 day.
   if (!isAllDay) {
-    cellData.endDate = dateUtilsTs.addOffsets(cellData.startDate, toMs('day'));
+    cellData.endDate = addOffsets(cellData.startDate, toMs('day'));
   }
 
   return cellData;

@@ -524,6 +524,33 @@ QUnit.module('CSS position classes after screen size change', () => {
             { row: 1, col: 2, colspan: 2 },
         ], 'initial lg layout');
         assert.deepEqual(getLocations(), lgLocations, 'lg layout is restored after xs -> sm -> md -> sm -> xs -> lg');
-        assert.deepEqual(instance._items.filter((item) => !item.merged).map((item) => item.colSpan), [3, undefined, 2, 2], 'colSpan of items is intact');
+        assert.deepEqual(instance._items.map((item) => item.colSpan), [3, undefined, 2, 2], 'colSpan of items is intact');
+    });
+});
+
+QUnit.module('colCount: auto', () => {
+    QUnit.test('items with colSpan should keep the generated locations inside the grid', function(assert) {
+        const $container = $('#container').width(1000);
+        const instance = $container.dxLayoutManager({
+            colCount: 'auto',
+            minColWidth: 200,
+            items: [
+                { dataField: 'field0', colSpan: 2 },
+                { dataField: 'field1' },
+                { dataField: 'field2' },
+            ],
+        }).dxLayoutManager('instance');
+
+        const responsiveBox = instance._responsiveBox;
+        const locations = responsiveBox.option('items').map(({ location }) => location);
+
+        assert.strictEqual(instance._getColCount(), 3, '3 items fit into 3 columns');
+        assert.strictEqual(responsiveBox.option('cols').length, 3, 'cols ratio has 3 entries');
+        assert.strictEqual(responsiveBox.option('rows').length, 2, 'rows ratio has 2 entries');
+        assert.deepEqual(locations, [
+            { row: 0, col: 0, colspan: 2 },
+            { row: 0, col: 2 },
+            { row: 1, col: 0 },
+        ], 'locations stay inside the 3-column grid');
     });
 });

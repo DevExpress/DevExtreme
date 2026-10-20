@@ -9,7 +9,7 @@ import type {
 import errors from '@js/ui/widget/ui.errors';
 import { BaseCommand } from '@ts/core/ai_integration/commands/base';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { isValidDate } from '@ts/core/utils/m_date';
 
 export class SmartPasteCommand extends BaseCommand<
   SmartPasteCommandParams,
@@ -70,13 +70,13 @@ export class SmartPasteCommand extends BaseCommand<
         return [numbers[0], numbers[1]];
       }
       case 'date': {
-        if (!dateUtilsTs.isValidDate(single)) {
+        if (!isValidDate(single)) {
           throw errors.Error('E1064', fieldName, errorValue, 'date');
         }
         return new Date(single);
       }
       case 'dateRange': {
-        if (!arr || arr.length > 2 || !arr.every(dateUtilsTs.isValidDate)) {
+        if (!arr || arr.length > 2 || !arr.every(isValidDate)) {
           throw errors.Error('E1064', fieldName, errorValue, 'date range');
         }
         return arr.map((v) => new Date(v));

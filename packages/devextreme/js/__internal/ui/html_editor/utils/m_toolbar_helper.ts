@@ -1,3 +1,4 @@
+import type { ValidationCallbackData, ValidationRule } from '@js/common';
 import localizationMessage from '@js/common/core/localization/message';
 import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -68,8 +69,8 @@ interface LinkFormData {
 }
 
 interface TableFormData {
-  rows: number | null;
-  columns: number | null;
+  rows: number;
+  columns: number;
 }
 
 /** A Quill format value: an array when the range holds several values (see Findings). */
@@ -292,7 +293,7 @@ function getLinkRange(module: FormatHandlersModule, range: RangeStatic): RangeSt
   return result;
 }
 
-function getColorFromFormat(value: FormatValue | undefined): string | undefined {
+function getFirstFormatValue(value: FormatValue | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
@@ -451,6 +452,15 @@ function getDefaultClickHandler(module: FormatHandlersModule, name: string): For
 }
 
 function insertTableFormItems(): SimpleItem[] {
+  const validationRules: ValidationRule[] = [
+    { type: 'required' },
+    {
+      type: 'custom',
+      ignoreEmptyValue: true,
+      validationCallback: ({ value }: ValidationCallbackData): boolean => Number.isInteger(value),
+    },
+  ];
+
   return [
     {
       dataField: 'rows',
@@ -459,6 +469,7 @@ function insertTableFormItems(): SimpleItem[] {
         min: 1,
       },
       label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_ROWS) },
+      validationRules,
     },
     {
       dataField: 'columns',
@@ -467,6 +478,7 @@ function insertTableFormItems(): SimpleItem[] {
         min: 1,
       },
       label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_COLUMNS) },
+      validationRules,
     },
   ];
 }
@@ -486,6 +498,14 @@ function prepareInsertTableHandler(module: FormatHandlersModule): FormatHandlers
 
     module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
 
+    const { _formDialog: formDialog } = module.editorInstance;
+    if (formDialog) {
+      formDialog.beforeAddButtonAction = (): boolean => {
+        const { isValid } = formDialog._form.validate();
+        return isValid === true;
+      };
+    }
+
     const promise = module.editorInstance.showFormDialog<TableFormData>({
       formData,
       items: insertTableFormItems(),
@@ -500,7 +520,6 @@ function prepareInsertTableHandler(module: FormatHandlersModule): FormatHandlers
           module.saveValueChangeEvent(event);
 
           const { columns, rows } = data;
-          // @ts-expect-error a cleared NumberBox gives null (see Findings)
           table.insertTable(rows, columns);
         }
       })
@@ -538,25 +557,26 @@ function applyTableDimensionChanges(module: FormatHandlersModule, {
     }
   }
 
-  const autoHeightRows = getAutoSizedElements($table, 'vertical');
+  if (isDefined(newHeight)) {
+    const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
-  if (autoHeightRows?.length > 0) {
-    tableBlot.format('tableHeight', `${newHeight}px`);
-  } else {
-    const $rows = getRowElements($table);
-    const oldTableHeight = getOuterHeight($table);
+    if (autoHeightRows?.length > 0) {
+      tableBlot.format('tableHeight', `${newHeight}px`);
+    } else {
+      const $rows = getRowElements($table);
+      const oldTableHeight = getOuterHeight($table);
 
-    each($rows, (i: number, element: Element) => {
-      const $element = $(element);
-      // @ts-expect-error a cleared height editor gives null (see Findings)
-      const newElementHeight = (newHeight / oldTableHeight) * getOuterHeight($element);
-      const $lineElements = getLineElements($table, i, 'vertical');
-      setLineElementsFormat(module, {
-        elements: $lineElements,
-        property: 'height',
-        value: newElementHeight,
+      each($rows, (i: number, element: Element) => {
+        const $element = $(element);
+        const newElementHeight = (newHeight / oldTableHeight) * getOuterHeight($element);
+        const $lineElements = getLineElements($table, i, 'vertical');
+        setLineElementsFormat(module, {
+          elements: $lineElements,
+          property: 'height',
+          value: newElementHeight,
+        });
       });
-    });
+    }
   }
 }
 
@@ -853,17 +873,16 @@ function getCellPropertiesFormConfig(
   const defaultAlignment = rowBlot.childFormatName === 'tableHeaderCell' ? DEFAULT_TH_TEXT_ALIGNMENT : DEFAULT_TEXT_ALIGNMENT;
   const alignment = formats.cellTextAlign || defaultAlignment;
   const verticalAlignment = formats.cellVerticalAlign || DEFAULT_VERTICAL_ALIGN;
-  // @ts-expect-error a multi-value cellPadding is an array without split (see Findings)
-  const rawVerticalPadding: FormatValue | undefined = formats.cellPaddingTop ?? formats.cellPadding?.split(' ')[0];
-  // @ts-expect-error see above
-  const rawHorizontalPadding: FormatValue | undefined = formats.cellPaddingLeft ?? formats.cellPadding?.split(' ')[1];
+  const cellPadding = getFirstFormatValue(formats.cellPadding);
+  const rawVerticalPadding = formats.cellPaddingTop ?? cellPadding?.split(' ')[0];
+  const rawHorizontalPadding = formats.cellPaddingLeft ?? cellPadding?.split(' ')[1];
 
   const formData = {
     width: cellWidth,
     height: isDefined(formats.cellHeight) ? parseFloat(String(formats.cellHeight)) : null,
-    backgroundColor: getColorFromFormat(formats.cellBackgroundColor) || null,
+    backgroundColor: getFirstFormatValue(formats.cellBackgroundColor) || null,
     borderStyle: formats.cellBorderStyle || null,
-    borderColor: getColorFromFormat(formats.cellBorderColor) || null,
+    borderColor: getFirstFormatValue(formats.cellBorderColor) || null,
     borderWidth: isDefined(formats.cellBorderWidth)
       ? parseFloat(String(formats.cellBorderWidth))
       : null,

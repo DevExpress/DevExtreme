@@ -63,15 +63,19 @@ export const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 const MIN_COLUMN_WIDTH = 200;
 
 type ExtendedItem = Item & {
-  col: number;
-  row: number;
   colSpan: number;
   rowSpan: number;
   alignItemLabels?: boolean;
-  merged?: boolean;
   disabled?: boolean;
   allowIndeterminateState?: boolean;
 };
+
+interface LayoutEntry {
+  item?: ExtendedItem;
+  col: number;
+  colSpan: number;
+  merged: boolean;
+}
 
 type Location = Required<Omit<LocationItem, 'screen'>>;
 
@@ -135,6 +139,8 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   _disableEditorValueChangedHandler?: boolean;
 
   _items?: ExtendedItem[];
+
+  _layoutEntries?: LayoutEntry[];
 
   _watch?: unknown;
 
@@ -412,7 +418,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       const colCount = this._getColCount();
       const $container = $('<div>').appendTo(this.$element());
 
-      this._prepareItemsWithMerging(colCount);
+      this._layoutEntries = this._generateLayoutEntries(colCount);
 
       const layoutItems = this._generateLayoutItems();
       this._responsiveBox = super._createComponent(
@@ -528,8 +534,10 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
           itemCssClassList.push(cssItemClass);
 
-          if (isDefined(item.col)) {
-            itemCssClassList.push(`${FORM_FIELD_ITEM_COL_CLASS}${item.col}`);
+          const { alignItemLabels } = that.option();
+
+          if (alignItemLabels || item.alignItemLabels || item.colSpan) {
+            itemCssClassList.push(`${FORM_FIELD_ITEM_COL_CLASS}${location.col}`);
           }
         }
 
@@ -596,31 +604,23 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     return !!this._cachedColCount && this._getMaxColCount() !== this._cachedColCount;
   }
 
-  _prepareItemsWithMerging(colCount: number): void {
-    const items = (this._items ?? []).slice(0);
-    let result: ExtendedItem[] = [];
+  _generateLayoutEntries(colCount: number): LayoutEntry[] {
+    const entries: LayoutEntry[] = [];
 
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < items.length; i += 1) {
-      const item = items[i];
-      result.push(item);
-
-      const { alignItemLabels } = this.option();
-
-      const col = this._getColByIndex(result.length - 1, colCount);
-      if (alignItemLabels || item.alignItemLabels || item.colSpan) {
-        item.col = col;
-      }
+    (this._items ?? []).forEach((item) => {
+      const col = this._getColByIndex(entries.length, colCount);
       const colSpan = this._getEffectiveColSpan(item.colSpan, col, colCount);
-      if (colSpan > 1) {
-        const itemsMergedByCol: ExtendedItem[] = [];
-        for (let j = 0; j < colSpan - 1; j += 1) {
-          itemsMergedByCol.push({ merged: true } as ExtendedItem);
-        }
-        result = result.concat(itemsMergedByCol);
+
+      entries.push({
+        item, col, colSpan, merged: false,
+      });
+
+      for (let i = 1; i < colSpan; i += 1) {
+        entries.push({ col: col + i, colSpan: 1, merged: true });
       }
-    }
-    this._setItems(result);
+    });
+
+    return entries;
   }
 
   _getEffectiveColSpan(colSpan: number | undefined, col: number, colCount: number): number {
@@ -638,40 +638,41 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   _generateLayoutItems(): ResponsiveBoxItem[] {
-    const items = this._items ?? [];
+    const entries = this._layoutEntries ?? [];
     const colCount = this._getColCount();
     const result: ResponsiveBoxItem[] = [];
 
-    for (let i = 0; i < items.length; i += 1) {
-      const item = items[i];
-      if (!item.merged) {
-        const col = this._getColByIndex(i, colCount);
-        const location: LocationItem = {
-          row: parseInt(String(i / colCount), 10),
-          col,
-        };
-
-        const colSpan = this._getEffectiveColSpan(item.colSpan, col, colCount);
-        if (colSpan > 1) {
-          location.colspan = colSpan;
-        }
-        if (isDefined(item.rowSpan)) {
-          location.rowspan = item.rowSpan;
-        }
-
-        const generatedItem: ResponsiveBoxItem<LocationItem> = {
-          location,
-        };
-        if (isDefined(item.disabled)) {
-          generatedItem.disabled = item.disabled;
-        }
-        if (isDefined(item.visible)) {
-          generatedItem.visible = item.visible;
-        }
-
-        result.push(generatedItem);
+    entries.forEach(({
+      item, col, colSpan, merged,
+    }, index) => {
+      if (merged || !item) {
+        return;
       }
-    }
+
+      const location: LocationItem = {
+        row: Math.floor(index / colCount),
+        col,
+      };
+
+      if (colSpan > 1) {
+        location.colspan = colSpan;
+      }
+      if (isDefined(item.rowSpan)) {
+        location.rowspan = item.rowSpan;
+      }
+
+      const generatedItem: ResponsiveBoxItem<LocationItem> = {
+        location,
+      };
+      if (isDefined(item.disabled)) {
+        generatedItem.disabled = item.disabled;
+      }
+      if (isDefined(item.visible)) {
+        generatedItem.visible = item.visible;
+      }
+
+      result.push(generatedItem);
+    });
 
     return result;
   }
@@ -1000,8 +1001,8 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   _getRowsCount(): number {
-    const items = this._items ?? [];
-    return Math.ceil(items.length / this._getColCount());
+    const entries = this._layoutEntries ?? [];
+    return Math.ceil(entries.length / this._getColCount());
   }
 
   _updateReferencedOptions(newLayoutData: unknown): void {
@@ -1130,10 +1131,8 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
     this._cachedColCount = null;
 
-    this._items = (this._items ?? []).filter((item) => !item.merged);
-
     const colCount = this._getColCount();
-    this._prepareItemsWithMerging(colCount);
+    this._layoutEntries = this._generateLayoutEntries(colCount);
 
     const newLayoutItems = this._generateLayoutItems();
 
@@ -1192,7 +1191,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   _getLayoutManagerItemByLocation(location: Location): ExtendedItem | undefined {
     const colCount = this._getColCount();
     const index = location.row * colCount + location.col;
-    return this._items?.[index];
+    return this._layoutEntries?.[index]?.item;
   }
 
   _updateItemsCssClasses(): void {
