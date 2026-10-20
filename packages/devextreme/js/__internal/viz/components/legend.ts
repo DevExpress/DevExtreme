@@ -690,6 +690,8 @@ export let Legend = class Legend extends LayoutElement {
     this.erase();
 
     if (!(this.isVisible() && items && items.length)) {
+      this._title?.erase();
+
       return this;
     }
 
