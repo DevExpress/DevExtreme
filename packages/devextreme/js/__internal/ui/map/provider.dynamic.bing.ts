@@ -233,8 +233,8 @@ class BingProvider extends DynamicProvider {
     const $container = this._$container;
 
     this._map.setOptions({
-      width: getWidth($container),
-      height: getHeight($container),
+      width: getWidth($container.get(0)),
+      height: getHeight($container.get(0)),
     });
 
     return Promise.resolve();

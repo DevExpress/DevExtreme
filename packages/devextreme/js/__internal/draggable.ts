@@ -157,7 +157,7 @@ class ScrollHelper {
   isScrollable($element: dxElementWrapper): boolean {
     return ($element.css(this._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
             // @ts-expect-error prop is declared without the getter form
-            && $element.prop(this._scrollSizeProp) > Math.ceil(this._sizeAttr === 'width' ? getWidth($element) : getHeight($element));
+            && $element.prop(this._scrollSizeProp) > Math.ceil(this._sizeAttr === 'width' ? getWidth($element.get(0)) : getHeight($element.get(0)));
   }
 
   _trySetScrollable(element: Element, mousePosition: MousePosition): boolean {
@@ -660,13 +660,13 @@ class Draggable<
     if (dragDirection === 'horizontal' || dragDirection === 'both') {
       // @ts-expect-error offset can be undefined
       position.left = e.pageX - $element.offset().left
-        + locate($element).left - getWidth($element) / 2;
+        + locate($element).left - getWidth($element.get(0)) / 2;
     }
 
     if (dragDirection === 'vertical' || dragDirection === 'both') {
       // @ts-expect-error offset can be undefined
       position.top = e.pageY - $element.offset().top
-        + locate($element).top - getHeight($element) / 2;
+        + locate($element).top - getHeight($element.get(0)) / 2;
     }
 
     this._move(position, $element);
@@ -741,10 +741,10 @@ class Draggable<
     const $area = this._getArea();
     const areaOffset = this._getAreaOffset($area);
     const boundOffset = this._getBoundOffset();
-    const areaWidth = getOuterWidth($area);
-    const areaHeight = getOuterHeight($area);
-    const elementWidth = getWidth($dragElement);
-    const elementHeight = getHeight($dragElement);
+    const areaWidth = getOuterWidth($area.get(0));
+    const areaHeight = getOuterHeight($area.get(0));
+    const elementWidth = getWidth($dragElement.get(0));
+    const elementHeight = getHeight($dragElement.get(0));
 
     const startOffset = {
       // @ts-expect-error offset can be undefined

@@ -189,7 +189,7 @@ export class TextEditorLabel {
     if (this._isVisible() && this._isOutsideMode()) {
       const sign = this._props.rtlEnabled ? 1 : -1;
 
-      const labelTranslateX = sign * (getWidth(this._$before) + offset);
+      const labelTranslateX = sign * (Number(getWidth(this._$before)) + offset);
 
       this._$labelSpan.css('transform', `translateX(${labelTranslateX}px)`);
     }

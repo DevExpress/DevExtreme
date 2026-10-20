@@ -126,7 +126,7 @@ class OverlapStrategy extends DrawerStrategy {
       overlay.option('height', '100%');
       overlay.option('width', calcFromRealPanelSize ? drawer.getRealPanelWidth() : this._getPanelSize(isDrawerOpened));
     } else {
-      overlay.option('width', getWidth(drawer.getOverlayTarget()));
+      overlay.option('width', getWidth(drawer.getOverlayTarget().get(0)));
       overlay.option('height', calcFromRealPanelSize ? drawer.getRealPanelHeight() : this._getPanelSize(isDrawerOpened));
     }
   }

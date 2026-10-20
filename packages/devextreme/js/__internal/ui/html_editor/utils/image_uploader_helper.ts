@@ -310,8 +310,8 @@ class UpdateUrlStrategy extends AddUrlStrategy {
     // @ts-expect-error the leaf may be null; it is dereferenced before the guard (see Findings)
     const imgElement: Node = this.quill.getLeaf(this.selection.index)[0].domNode;
     if (imgElement) {
-      this.formData.width = this.formData.width ?? getWidth($(imgElement));
-      this.formData.height = this.formData.height ?? getHeight($(imgElement));
+      this.formData.width = this.formData.width ?? getWidth($(imgElement).get(0));
+      this.formData.height = this.formData.height ?? getHeight($(imgElement).get(0));
     }
   }
 

@@ -345,8 +345,8 @@ export function getElementSize(
 ): number {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return orientation === ORIENTATION.horizontal
-    ? getWidth($element)
-    : getHeight($element);
+    ? getWidth($element.get(0))
+    : getHeight($element.get(0));
 }
 
 export function isElementVisible(element: HTMLElement | null | undefined): boolean {

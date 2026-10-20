@@ -25,7 +25,7 @@ export const getElementMaxHeightByWindow = (
 
   // @ts-expect-error scrollTop should be typed correctly with return type
   const windowScrollTop: number = $window.scrollTop();
-  const windowHeight = getInnerHeight($window);
+  const windowHeight = getInnerHeight($window.get(0));
 
   if (isNumeric(startLocation)) {
     if (startLocation < elementOffset) {
@@ -35,7 +35,7 @@ export const getElementMaxHeightByWindow = (
     actualOffset = windowHeight - startLocation + windowScrollTop;
   } else {
     const offsetTop = elementOffset - windowScrollTop;
-    const offsetBottom = windowHeight - offsetTop - getOuterHeight($element);
+    const offsetBottom = windowHeight - offsetTop - getOuterHeight($element.get(0));
 
     actualOffset = Math.max(offsetTop, offsetBottom);
   }

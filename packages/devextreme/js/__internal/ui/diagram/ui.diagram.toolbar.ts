@@ -278,7 +278,7 @@ class DiagramToolbar extends DiagramPanel {
 
     if (!this.option('skipAdjustSize') && !isServerSide) {
       const $toolbarContent = this.$element().find('.dx-toolbar-before');
-      setWidth(this.$element(), getWidth($toolbarContent));
+      setWidth(this.$element(), getWidth($toolbarContent.get(0)));
     }
   }
 

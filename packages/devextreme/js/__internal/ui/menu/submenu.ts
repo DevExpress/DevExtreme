@@ -144,8 +144,8 @@ class Submenu extends ContextMenu<SubmenuProperties> {
 
   _getDelimiterWidth($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number {
     if (this._isMenuHorizontal()) {
-      const rootWidth: number = getWidth($rootItem);
-      const submenuWidth: number = getWidth($submenu);
+      const rootWidth: number = getWidth($rootItem.get(0));
+      const submenuWidth: number = getWidth($submenu.get(0));
 
       return rootWidth < submenuWidth ? rootWidth : submenuWidth;
     }
@@ -158,8 +158,8 @@ class Submenu extends ContextMenu<SubmenuProperties> {
       return 3;
     }
 
-    const rootHeight: number = getHeight($rootItem);
-    const submenuHeight: number = getHeight($submenu);
+    const rootHeight: number = getHeight($rootItem.get(0));
+    const submenuHeight: number = getHeight($submenu.get(0));
 
     return rootHeight < submenuHeight ? rootHeight : submenuHeight;
   }
