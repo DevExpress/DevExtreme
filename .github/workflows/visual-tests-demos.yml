@@ -1023,13 +1023,12 @@ jobs:
 
     - name: Unpack demo bundles
       run: |
-        shopt -s nullglob
-        archives=(apps/demos/.demo-bundles/*/demo-bundles.tgz)
-        if [ ${#archives[@]} -eq 0 ]; then
+        archives=$(find apps/demos/.demo-bundles -name demo-bundles.tgz 2>/dev/null || true)
+        if [ -z "$archives" ]; then
           echo "No demo bundle archives downloaded for ${{ matrix.FRAMEWORK }}" >&2
           exit 1
         fi
-        for archive in "${archives[@]}"; do
+        for archive in $archives; do
           tar -xzf "$archive" -C apps/demos
         done
         rm -rf apps/demos/.demo-bundles
