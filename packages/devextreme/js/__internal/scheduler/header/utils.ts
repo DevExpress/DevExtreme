@@ -49,7 +49,7 @@ const nextMonth = (date: Date): Date => {
 
 const getDateAfterWeek = (
   startDate: Date,
-  firstDayOfWeek: number | undefined,
+  firstDayOfWeek: number,
   skippedDays: number[],
 ): Date => {
   const weekStart = getWeekStart(startDate, firstDayOfWeek);
@@ -91,14 +91,14 @@ const getIntervalStartDate = (options: IntervalOptions): Date => {
   switch (step) {
     case 'day':
       return getFirstVisibleDate(
-        getPeriodStart(date, step, false, firstDayOfWeek) as Date,
+        getPeriodStart(date, step, false, firstDayOfWeek),
         skippedDays,
         nextDay,
       );
     case 'month':
-      return getPeriodStart(date, step, false, firstDayOfWeek) as Date;
+      return getPeriodStart(date, step, false, firstDayOfWeek);
     case 'week': {
-      const weekStart = getPeriodStart(date, 'week', false, firstDayOfWeek) as Date;
+      const weekStart = getPeriodStart(date, 'week', false, firstDayOfWeek);
       return getFirstVisibleDate(weekStart, skippedDays, nextDay);
     }
     case 'agenda':
@@ -113,7 +113,7 @@ const getPeriodEndDate = (
   step: Step,
   agendaDuration: number,
   skippedDays: number[],
-  firstDayOfWeek: number | undefined,
+  firstDayOfWeek: number,
 ): Date => {
   const calculators: Record<Step, () => Date> = {
     day: () => nextDay(currentPeriodStartDate),

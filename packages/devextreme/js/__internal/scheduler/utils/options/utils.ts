@@ -44,7 +44,7 @@ export const parseDateOption = (date?: Date | number | string): Date | undefined
 
 export const parseCurrentDate = (date: Date | number | string): Date => {
   const deserialized = parseDateOption(date) as Date;
-  return dateUtils.trimTime(deserialized) as Date;
+  return dateUtils.trimTime(deserialized);
 };
 
 const isDateOption = (

@@ -66,7 +66,7 @@ export const calculateStartViewDate = (
     startDate,
     currentDate,
     intervalCount,
-    dateUtils.getFirstMonthDate(startDate) as Date,
+    dateUtils.getFirstMonthDate(startDate),
   );
   const firstMonthDate = dateUtils.getFirstMonthDate(viewStart);
   const firstDayOfWeek = getCalculatedFirstDayOfWeek(firstDayOfWeekOption);
