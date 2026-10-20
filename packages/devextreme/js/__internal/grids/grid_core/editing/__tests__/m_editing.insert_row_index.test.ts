@@ -185,6 +185,59 @@ describe('EditingController _getInsertRowIndex', () => {
     });
   });
 
+  describe('processed rows with a row edited in form mode', () => {
+    const createGridWithEditedRow = async (
+      editedKey: number,
+      expandedKey?: number,
+    ): Promise<GridInstance> => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        editing: { mode: 'form', allowUpdating: true },
+        masterDetail: { enabled: expandedKey !== undefined },
+      });
+      await flushAsync();
+
+      if (expandedKey !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        instance.expandRow(expandedKey);
+        await flushAsync();
+      }
+
+      instance.editRow(instance.getRowIndexByKey(editedKey));
+      await flushAsync();
+
+      return instance;
+    };
+
+    it('should type the edited row as a detail row with its own key', async () => {
+      const instance = await createGridWithEditedRow(2);
+
+      expect(getRowShapes(instance)).toEqual([
+        { rowType: 'data', key: 1 },
+        { rowType: 'detail', key: 2 },
+        { rowType: 'data', key: 3 },
+      ]);
+    });
+
+    it('should return the anchor row index when the anchor row is followed by the edited row', async () => {
+      const instance = await createGridWithEditedRow(2);
+
+      expect(getInsertRowIndex(instance, getRows(instance), { insertAfterKey: 1 }, true)).toBe(0);
+    });
+
+    it('should return the last anchor row index when its detail row is followed by the edited row', async () => {
+      const instance = await createGridWithEditedRow(2, 1);
+
+      expect(getRowShapes(instance)).toEqual([
+        { rowType: 'data', key: 1 },
+        { rowType: 'detail', key: 1 },
+        { rowType: 'detail', key: 2 },
+        { rowType: 'data', key: 3 },
+      ]);
+      expect(getInsertRowIndex(instance, getRows(instance), { insertAfterKey: 1 }, true)).toBe(1);
+    });
+  });
+
   describe('raw items', () => {
     it('should find the anchor item by the store key', async () => {
       const { instance } = await createDataGrid({ dataSource: DATA });
@@ -213,6 +266,39 @@ describe('EditingController _getInsertRowIndex', () => {
       const items = [2, { key: 2, [INSERT_INDEX]: 1 }] as unknown as RawItemData[];
 
       expect(getInsertRowIndex(instance, items, { insertBeforeKey: 2 })).toBe(1);
+    });
+
+    it('should skip a null item before the anchor item', async () => {
+      const { instance } = await createDataGrid({ dataSource: DATA });
+      await flushAsync();
+
+      const items = [{ id: 1 }, null, { id: 2 }] as unknown as RawItemData[];
+
+      expect(getInsertRowIndex(instance, items, { insertAfterKey: 2 })).toBe(3);
+    });
+
+    it.each(['detail', 'detailAdaptive'])('should not treat a data field rowType: %s as a detail row', async (rowType) => {
+      const { instance } = await createDataGrid({ dataSource: DATA });
+      await flushAsync();
+
+      const items = [{ id: 1 }, { id: 2, rowType }, { id: 3 }];
+
+      expect(getInsertRowIndex(instance, items, { insertAfterKey: 1 })).toBe(1);
+    });
+
+    it('should show a new row after an anchor followed by a data field named rowType', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ id: 1 }, { id: 2, rowType: 'detailAdaptive' }, { id: 3 }],
+        editing: {
+          mode: 'batch',
+          changes: [{
+            type: 'insert', key: 'new', insertAfterKey: 1, data: {},
+          }],
+        },
+      });
+      await flushAsync();
+
+      expect(getRows(instance).map(({ key }) => key)).toEqual([1, 'new', 2, 3]);
     });
   });
 });

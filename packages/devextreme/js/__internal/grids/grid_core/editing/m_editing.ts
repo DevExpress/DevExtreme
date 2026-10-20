@@ -805,8 +805,7 @@ class EditingControllerImpl extends modules.ViewController {
       return items.length === 0 ? 0 : -1;
     }
 
-    const isInsertAfter = isDefined(change.insertAfterKey);
-    const anchorRowIndex = items.findIndex((item, index) => {
+    const isAnchorRow = (item: RawItemData | ProcessedItem): boolean => {
       if (!isObject(item)) {
         return false;
       }
@@ -816,18 +815,35 @@ class EditingControllerImpl extends modules.ViewController {
       const itemKey = hasKeyField
         ? item.key
         : this.dataSourceController.keyOf(item as RawItemData);
-      const nextRowType = items[index + 1]?.rowType;
-      const isFollowedByDetailRow = nextRowType === 'detail' || nextRowType === 'detailAdaptive';
-      const shouldInsertAfterDetailRow = isInsertAfter && isFollowedByDetailRow;
 
-      return equalByValue(itemKey, key) && !shouldInsertAfterDetailRow;
-    });
+      return equalByValue(itemKey, key);
+    };
 
-    if (anchorRowIndex < 0 || !isInsertAfter) {
-      return anchorRowIndex;
+    if (!isDefined(change.insertAfterKey)) {
+      return items.findIndex(isAnchorRow);
     }
 
-    return anchorRowIndex + 1;
+    const isFollowedByDetailRow = (index: number): boolean => {
+      const nextRowType = items[index + 1]?.rowType;
+
+      // detail rows are added after processItems; on raw items, a detail rowType is user data
+      return !!isProcessedItems && (nextRowType === 'detail' || nextRowType === 'detailAdaptive');
+    };
+    let lastAnchorRowIndex = -1;
+
+    for (let index = 0; index < items.length; index += 1) {
+      if (isAnchorRow(items[index])) {
+        if (!isFollowedByDetailRow(index)) {
+          return index + 1;
+        }
+
+        lastAnchorRowIndex = index;
+      }
+    }
+
+    // the last anchor row is followed by a row edited in form mode (typed 'detail'):
+    // return the anchor row index, as -1 would mean the anchor isn't loaded
+    return lastAnchorRowIndex;
   }
 
   /**
