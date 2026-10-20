@@ -1501,7 +1501,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getHeaderPanelHeight(): number | false {
-    return this.$headerPanel && getOuterHeight(this.$headerPanel, true) as number;
+    return this.$headerPanel && getOuterHeight(this.$headerPanel.get(0), true);
   }
 
   getTimePanelWidth(): number {
@@ -1509,7 +1509,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getGroupTableWidth(): number {
-    return this.$groupTable ? getOuterWidth(this.$groupTable) as number : 0;
+    return this.$groupTable ? getOuterWidth(this.$groupTable.get(0)) : 0;
   }
 
   getWorkSpaceLeftOffset(): number {
@@ -1994,7 +1994,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const $scrollable = this.getScrollable().$element();
     const cellHeight = this.getCellHeight();
     const scrolledCellCount = this.getScrollableScrollTop() / cellHeight;
-    const totalCellCount = scrolledCellCount + getHeight($scrollable) / cellHeight;
+    const totalCellCount = scrolledCellCount + getHeight($scrollable.get(0)) / cellHeight;
 
     const result = {
       top: {
@@ -2076,8 +2076,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       scrolledColumnCount += 1;
     }
 
-    const rowCount = Math.floor(fullScrolledRowCount + getHeight($scrollable) / cellHeight);
-    const columnCount = Math.floor(fullScrolledColumnCount + getWidth($scrollable) / cellWidth);
+    const rowCount = Math.floor(fullScrolledRowCount + getHeight($scrollable.get(0)) / cellHeight);
+    const columnCount = Math.floor(
+      fullScrolledColumnCount + getWidth($scrollable.get(0)) / cellWidth,
+    );
 
     const $cells = this.getAllCells(inAllDayRow);
     const result: dxElementWrapper[] = [];
@@ -2121,8 +2123,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const offset = this.option().rtlEnabled
       ? cellWidth
       : 0;
-    const scrollableHeight = getHeight($scrollable);
-    const scrollableWidth = getWidth($scrollable);
+    const scrollableHeight = getHeight($scrollable.get(0));
+    const scrollableWidth = getWidth($scrollable.get(0));
     const cellHeight = this.getCellHeight();
 
     const xShift = align === 'start' ? 0 : (scrollableWidth - cellWidth) / 2;
@@ -2804,8 +2806,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       isRTL: this.isRTL.bind(this),
       getSchedulerHeight: () => this.option().schedulerHeight,
       getSchedulerWidth: () => this.option().schedulerWidth,
-      getViewHeight: () => getHeight(this.$element()) as number,
-      getViewWidth: () => getWidth(this.$element()) as number,
+      getViewHeight: () => getHeight(this.$element().get(0)),
+      getViewWidth: () => getWidth(this.$element().get(0)),
       getWindowHeight: () => getWindow().innerHeight,
       getWindowWidth: () => getWindow().innerWidth,
       getScrolling: (): WorkspaceOptionsInternal['scrolling'] => this.option().scrolling,
@@ -3546,7 +3548,7 @@ const createDragBehaviorConfig = (
   };
 
   const getElementsFromPoint = (): Element[] => {
-    const appointmentWidth = getWidth(state.dragElement);
+    const appointmentWidth = Number(getWidth(state.dragElement));
     const cellWidth = getCellWidthCallback();
     const isWideAppointment = appointmentWidth > cellWidth;
     const isNarrowAppointment = appointmentWidth <= DRAGGING_MOUSE_FAULT;
@@ -3630,8 +3632,8 @@ const createDragBehaviorConfig = (
     ? (): TranslateVector => {
       const $dragElement = $(state.dragElement);
       return {
-        x: getWidth($dragElement) / 2,
-        y: getHeight($dragElement) / 2,
+        x: getWidth($dragElement.get(0)) / 2,
+        y: getHeight($dragElement.get(0)) / 2,
       };
     }
     : undefined;
