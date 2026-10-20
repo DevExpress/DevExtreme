@@ -1265,7 +1265,7 @@ class PivotGrid extends Widget {
     const testElement: any = $(DIV);
     setHeight(testElement, TEST_HEIGHT);
     element.append(testElement);
-    that._hasHeight = getHeight(element) !== TEST_HEIGHT;
+    that._hasHeight = getHeight(element.get(0)) !== TEST_HEIGHT;
     that._pivotGridContainer.removeClass('dx-hidden');
     testElement.remove();
   }
@@ -1650,18 +1650,18 @@ class PivotGrid extends Widget {
       let filterAreaHeight = 0;
       let dataAreaHeight = 0;
       if (that._hasHeight) {
-        filterAreaHeight = getHeight(filterHeaderCell);
+        filterAreaHeight = getHeight(filterHeaderCell.get(0));
 
         const $dataHeader = tableElement.find('.dx-data-header');
-        const dataHeaderHeight = getHeight($dataHeader);
+        const dataHeaderHeight = getHeight($dataHeader.get(0));
 
         bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
         dataAreaHeight = getHeight(
-          that.$element(),
+          that.$element().get(0),
         ) - filterAreaHeight - dataHeaderHeight
           - (Math.max(
             dataAreaHeadHeight,
-            getHeight(columnAreaCell),
+            getHeight(columnAreaCell.get(0)),
             descriptionCellHeight,
           )
             + bordersWidth
@@ -1711,7 +1711,7 @@ class PivotGrid extends Widget {
 
       rowsAreaWidth = getArraySum(rowsAreaColumnWidths);
 
-      const elementWidth = getWidth(that.$element());
+      const elementWidth = getWidth(that.$element().get(0));
 
       bordersWidth = getCommonBorderWidth([rowAreaCell, dataAreaCell, tableElement], 'width');
       groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
@@ -1773,8 +1773,8 @@ class PivotGrid extends Widget {
         rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
 
         // T317921
-        if (!that._hasHeight && (elementWidth !== getWidth(that.$element()))) {
-          const diff = elementWidth - getWidth(that.$element());
+        if (!that._hasHeight && (elementWidth !== getWidth(that.$element().get(0)))) {
+          const diff = elementWidth - getWidth(that.$element().get(0));
           if (!hasColumnsScroll) {
             adjustSizeArray(resultWidths, diff);
             that._columnsArea.setColumnsWidth(resultWidths);
@@ -1786,8 +1786,8 @@ class PivotGrid extends Widget {
         }
 
         if (that._hasHeight && that._filterFields.isVisible()
-          && getHeight(filterHeaderCell) !== filterAreaHeight) {
-          const diff = getHeight(filterHeaderCell) - filterAreaHeight;
+          && getHeight(filterHeaderCell.get(0)) !== filterAreaHeight) {
+          const diff = getHeight(filterHeaderCell.get(0)) - filterAreaHeight;
           if (diff > 0) {
             hasRowsScroll = calculateHasScroll(dataAreaHeight - diff, totalHeight);
             const groupHeight = calculateGroupHeight(

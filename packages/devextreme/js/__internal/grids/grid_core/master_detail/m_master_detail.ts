@@ -308,8 +308,8 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
     const d = Deferred();
     const $rows = $(masterDataGrid.getRowElement(masterRowIndex));
     const $tables = $(masterDataGrid.getView('rowsView').getTableElements());
-    const rowsNotEqual = $rows?.length === 2 && getHeight($rows.eq(0)) !== getHeight($rows.eq(1));
-    const tablesNotEqual = $tables?.length === 2 && getHeight($tables.eq(0)) !== getHeight($tables.eq(1));
+    const rowsNotEqual = $rows?.length === 2 && getHeight($rows.eq(0).get(0)) !== getHeight($rows.eq(1).get(0));
+    const tablesNotEqual = $tables?.length === 2 && getHeight($tables.eq(0).get(0)) !== getHeight($tables.eq(1).get(0));
 
     if (rowsNotEqual || tablesNotEqual) {
       const detailElementWidth = getWidth($detailElement);

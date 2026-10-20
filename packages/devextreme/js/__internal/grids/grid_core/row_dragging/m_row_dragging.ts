@@ -240,7 +240,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     return (options) => {
       const $rootElement = this.component.$element();
       const $dataGridContainer = $('<div>');
-      setWidth($dataGridContainer, getWidth($rootElement));
+      setWidth($dataGridContainer, getWidth($rootElement.get(0)));
       const items = this._dataController.items();
       const row = items && items[options.fromIndex];
       const gridOptions = this._getDraggableGridOptions(row);
