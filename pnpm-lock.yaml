@@ -212,6 +212,7 @@ overrides:
   follow-redirects@>=1.16.0 <1.16.1: ^1.16.1
   hono@<4.13.11: ^4.13.11
   http-cache-semantics@<=4.2.0: ^4.3.0
+  launch-editor@<2.14.2: ^2.14.2
   nx@>=14.0.0 <22.7.10: ^22.7.10
   pbkdf2@<=3.1.6: ^3.1.7
   piscina@>=5.0.0 <5.3.2: ^5.3.2
