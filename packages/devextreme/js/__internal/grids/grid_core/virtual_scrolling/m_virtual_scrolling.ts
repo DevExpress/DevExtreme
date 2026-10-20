@@ -874,6 +874,11 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
     if (hasScrolled && isValidScrollTarget && this._rowHeight) {
       this._scrollTop = e.scrollOffset.top;
+
+      if (isScrollTopChanged) {
+        this._saveHorizontalScrollPosition(e.scrollOffset.left);
+      }
+
       const isVirtualRowRendering = isVirtualMode(this) || this.option('scrolling.rowRenderingMode') !== 'standard';
 
       if (isVirtualRowRendering && this.option(LEGACY_SCROLLING_MODE) === false) {
