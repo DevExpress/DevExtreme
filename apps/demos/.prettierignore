@@ -7,5 +7,7 @@
 *.md
 *.json
 .github
+publish-demos
 coverage
 testing/artifacts
+utils/**/template.html

@@ -85,6 +85,7 @@
         "{projectRoot}/**/*.vue",
         "!{projectRoot}/node_modules/**/*",
         "!{projectRoot}/coverage/**/*",
+        "!{projectRoot}/publish-demos/**/*",
         "!{projectRoot}/testing/artifacts/**/*",
         "{projectRoot}/.stylelintrc.json",
         "{projectRoot}/.stylelintignore"
@@ -99,6 +100,7 @@
         "{projectRoot}/**/*",
         "!{projectRoot}/node_modules/**/*",
         "!{projectRoot}/coverage/**/*",
+        "!{projectRoot}/publish-demos/**/*",
         "!{projectRoot}/testing/artifacts/**/*"
       ]
     },
