@@ -243,7 +243,7 @@ const calculatePosition = function (what, options) {
   const boundaryOffset = normalizeOffset(options.boundaryOffset, options.precise);
 
   const h: any = {
-    mySize: getOuterWidth($what),
+    mySize: getOuterWidth($what.get(0)),
     myAlign: my.h,
     atAlign: at.h,
     offset: offset.h,
@@ -252,7 +252,7 @@ const calculatePosition = function (what, options) {
   };
 
   const v: any = {
-    mySize: getOuterHeight($what),
+    mySize: getOuterHeight($what.get(0)),
     myAlign: my.v,
     atAlign: at.v,
     offset: offset.v,
@@ -303,8 +303,8 @@ const calculatePosition = function (what, options) {
 
   const bounds = (function () {
     const win = $(window);
-    const windowWidth = getWidth(win);
-    const windowHeight = getHeight(win);
+    const windowWidth = getWidth(win.get(0));
+    const windowHeight = getHeight(win.get(0));
     let left = win.scrollLeft();
     let top = win.scrollTop();
     const documentElement = domAdapter.getDocumentElement();
@@ -326,8 +326,8 @@ const calculatePosition = function (what, options) {
       // @ts-expect-error
       top = boundaryPosition.top;
 
-      boundaryWidth = getWidth($boundary);
-      boundaryHeight = getHeight($boundary);
+      boundaryWidth = getWidth($boundary.get(0));
+      boundaryHeight = getHeight($boundary.get(0));
     }
 
     return {

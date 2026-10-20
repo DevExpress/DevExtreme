@@ -415,7 +415,7 @@ class Devices {
 
   _changeOrientation(): void {
     const $window = $(this._window);
-    const orientation: Orientation = getHeight($window) > getWidth($window) ? 'portrait' : 'landscape';
+    const orientation: Orientation = getHeight($window.get(0)) > getWidth($window.get(0)) ? 'portrait' : 'landscape';
 
     if (this._currentOrientation === orientation) {
       return;

@@ -39,7 +39,7 @@ interface SwipeStrategy {
 
 const HorizontalStrategy: SwipeStrategy = {
   defaultItemSizeFunc() {
-    const width: number = getWidth(this.getElement());
+    const width: number = getWidth(this.getElement().get(0));
 
     return width;
   },
@@ -67,7 +67,7 @@ const HorizontalStrategy: SwipeStrategy = {
 
 const VerticalStrategy: SwipeStrategy = {
   defaultItemSizeFunc() {
-    const height: number = getHeight(this.getElement());
+    const height: number = getHeight(this.getElement().get(0));
 
     return height;
   },
