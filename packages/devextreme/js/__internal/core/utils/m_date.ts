@@ -142,7 +142,7 @@ function getFirstDateInYear(year: number): Date {
   return new Date(year, 0, 1);
 }
 
-function fixTimezoneGap(oldDate: Date | null | undefined, newDate: Date): void {
+function fixTimezoneGap(oldDate: MaybeDate, newDate: Date): void {
   // NOTE: T182866
   if (!isDefined(oldDate)) {
     return;
@@ -688,8 +688,8 @@ const getShortDateFormat = function getShortDateFormat(): string {
 };
 
 function getFirstMonthDate(date: Date, offset?: number): Date;
-function getFirstMonthDate(date: Date | null | undefined, offset?: number): Date | undefined;
-function getFirstMonthDate(date: Date | null | undefined, offset = 0): Date | undefined {
+function getFirstMonthDate(date: MaybeDate, offset?: number): Date | undefined;
+function getFirstMonthDate(date: MaybeDate, offset = 0): Date | undefined {
   if (!isDefined(date)) {
     return undefined;
   }
@@ -702,8 +702,8 @@ function getFirstMonthDate(date: Date | null | undefined, offset = 0): Date | un
 }
 
 function getLastMonthDate(date: Date, offset?: number): Date;
-function getLastMonthDate(date: Date | null | undefined, offset?: number): Date | undefined;
-function getLastMonthDate(date: Date | null | undefined, offset = 0): Date | undefined {
+function getLastMonthDate(date: MaybeDate, offset?: number): Date | undefined;
+function getLastMonthDate(date: MaybeDate, offset = 0): Date | undefined {
   if (!isDefined(date)) {
     return undefined;
   }
@@ -950,11 +950,13 @@ const getRangesByDates = (dates: Date[]): [Date, Date?][] => {
   return ranges;
 };
 
-const sameView = function sameView(view: DateView, date1: Date, date2: Date): boolean {
+function sameView(view: DateView, date1: Date, date2: Date): boolean;
+function sameView(view: DateView, date1: MaybeDate, date2: MaybeDate): boolean | null | undefined;
+function sameView(view: DateView, date1: MaybeDate, date2: MaybeDate): boolean | null | undefined {
   /* eslint-disable-next-line @typescript-eslint/no-use-before-define,
     @typescript-eslint/no-unsafe-return -- dateUtils is set below; a same* function */
   return dateUtils[camelize(`same ${view}`)](date1, date2);
-};
+}
 
 const dateUtils = {
   dateUnitIntervals,
