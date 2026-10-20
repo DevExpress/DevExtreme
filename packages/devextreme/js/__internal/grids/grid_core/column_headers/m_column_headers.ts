@@ -1,4 +1,3 @@
-import type { SortOrder } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
@@ -39,6 +38,7 @@ import type {
   ViewRow,
 } from '../views/types';
 import { CLASSES, ICONS } from './const';
+import type { ElementVisibilityOptions, KeyboardActionArgs, SortMenuItem } from './types';
 
 const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
 const HEADER_FILTER_INDICATOR_CLASS = 'dx-header-filter-indicator';
@@ -77,8 +77,8 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     $content
       .toggleClass(CLASSES.textContentAlignmentPrefix + columnAlignment, indicatorCount > 0)
       .toggleClass(CLASSES.textContentAlignmentPrefix + (columnAlignment === 'left' ? 'right' : 'left'), indicatorCount > 0 && column.alignment === 'center')
-      .toggleClass(CLASSES.sortIndicator, !!$sortIndicator.length)
-      .toggleClass(CLASSES.sortIndexIndicator, !!$sortIndexIndicator.length)
+      .toggleClass(CLASSES.sortIndicator, Boolean($sortIndicator.length))
+      .toggleClass(CLASSES.sortIndexIndicator, Boolean($sortIndexIndicator.length))
       .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter(`.${this._getIndicatorClassName('headerFilter')}`).length);
   }
 
@@ -176,8 +176,8 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   }
 
   private _getEmptyHeaderText(): string {
-    const hasHiddenColumns = !!this._columnChooserView.hasHiddenColumns();
-    const hasGroupedColumns = !!this._headerPanelView.hasGroupedColumns();
+    const hasHiddenColumns = Boolean(this._columnChooserView.hasHiddenColumns());
+    const hasGroupedColumns = Boolean(this._headerPanelView.hasGroupedColumns());
 
     switch (true) {
       case hasHiddenColumns && hasGroupedColumns:
@@ -195,8 +195,11 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   }
 
   private _getHeaderTemplate(column: Column): ColumnTemplateSource<ViewCellOptions> {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back too
-    return column.headerCellTemplate || {
+    if (column.headerCellTemplate) {
+      return column.headerCellTemplate;
+    }
+
+    return {
       allowRenderToDetachedContainer: true,
       render: this.getHeaderDefaultTemplate.bind(this),
     };
@@ -266,19 +269,25 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     options: CellRenderOptions,
   ): void {
     super._setCellAriaAttributes($cell, cellOptions, options);
-    if (cellOptions.rowType === 'header') {
-      if (!cellOptions.column.type) {
-        this.setAria('role', 'columnheader', $cell);
-      }
-      if (cellOptions.column && !cellOptions.column.command && !cellOptions.column.isBand) {
-        // @ts-expect-error attr() is typed without undefined
-        $cell.attr('id', cellOptions.column.headerId);
-        this.setAria(
-          'label',
-          `${messageLocalization.format('dxDataGrid-ariaColumn')} ${cellOptions.column.caption}`,
-          $cell,
-        );
-      }
+
+    if (cellOptions.rowType !== 'header') {
+      return;
+    }
+
+    const { column } = cellOptions;
+
+    if (!column.type) {
+      this.setAria('role', 'columnheader', $cell);
+    }
+
+    if (column && !column.command && !column.isBand) {
+      // @ts-expect-error attr() is typed without undefined
+      $cell.attr('id', column.headerId);
+      this.setAria(
+        'label',
+        `${messageLocalization.format('dxDataGrid-ariaColumn')} ${column.caption}`,
+        $cell,
+      );
     }
   }
 
@@ -305,7 +314,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
   }
 
-  private _handleActionKeyDown(args: { event: DxEvent }): void {
+  private _handleActionKeyDown(args: KeyboardActionArgs): void {
     const { event } = args;
     const $target = $(event.target);
 
@@ -442,7 +451,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   /**
    * @extended: filter_row
    */
-  protected _isElementVisible(elementOptions?: { visible?: boolean }): boolean {
+  protected _isElementVisible(elementOptions?: ElementVisibilityOptions): boolean {
     return Boolean(elementOptions?.visible);
   }
 
@@ -541,9 +550,12 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
         });
 
         return $(result);
-      } if (!index || index < rowCount) {
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- NaN falls back
-        return this.getCellElements(index || 0);
+      }
+      if (!index) {
+        return this.getCellElements(0);
+      }
+      if (index < rowCount) {
+        return this.getCellElements(index);
       }
     }
 
@@ -583,9 +595,6 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       && (this.option('allowColumnReordering') ?? this._columnsController.isColumnOptionUsed('allowReordering'));
   }
 
-  /**
-   * @extended: column_chooser, DataGrid's grouping
-   */
   public allowDragging(column: Column): boolean | undefined {
     // @ts-expect-error a grid column has an index
     const rowIndex = column && this._columnsController.getRowIndex(column.index);
@@ -635,8 +644,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
    * @extended: filter_row
    */
   public isVisible(): boolean {
-    // @ts-expect-error showColumnHeaders has a default value
-    return this.option('showColumnHeaders');
+    return Boolean(this.option('showColumnHeaders'));
   }
 
   public optionChanged(args: OptionChanged): void {
@@ -662,89 +670,89 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   public getContextMenuItems(
     options: ContextMenuItemsOptions,
   ): GridContextMenuItem[] | undefined {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned below
-    let items: GridContextMenuItem[] | undefined;
+    const items: GridContextMenuItem[] = [];
     const { column } = options;
 
     if (options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
       const sortingOptions = this.option('sorting');
 
       if (sortingOptions && sortingOptions.mode !== 'none' && column?.allowSorting) {
-        const onItemClick = (params: ItemClickEvent<GridContextMenuItem<SortOrder | 'none'>>): void => {
+        const onItemClick = (params: ItemClickEvent<SortMenuItem>): void => {
           setTimeout(() => {
             // @ts-expect-error a grid column has an index and a clicked item has its data
             this._columnsController.changeSortOrder(column.index, params.itemData.value);
           });
         };
 
-        items = [
+        items.push(
           {
-            text: sortingOptions.ascendingText, value: 'asc', disabled: column.sortOrder === 'asc', icon: ICONS.contextMenuSortAsc, onItemClick,
+            text: sortingOptions.ascendingText,
+            value: 'asc',
+            disabled: column.sortOrder === 'asc',
+            icon: ICONS.contextMenuSortAsc,
+            onItemClick,
           },
           {
-            text: sortingOptions.descendingText, value: 'desc', disabled: column.sortOrder === 'desc', icon: ICONS.contextMenuSortDesc, onItemClick,
+            text: sortingOptions.descendingText,
+            value: 'desc',
+            disabled: column.sortOrder === 'desc',
+            icon: ICONS.contextMenuSortDesc,
+            onItemClick,
           },
           {
-            name: 'clearSorting', text: sortingOptions.clearText, value: 'none', disabled: !column.sortOrder, icon: ICONS.contextMenuSortNone, onItemClick,
+            name: 'clearSorting',
+            text: sortingOptions.clearText,
+            value: 'none',
+            disabled: !column.sortOrder,
+            icon: ICONS.contextMenuSortNone,
+            onItemClick,
           },
-        ];
+        );
       }
 
       if (options.row.rowType === 'header') {
-        const moveColumnItems = this.getMoveColumnContextMenuItems(options);
-
-        if (moveColumnItems?.length) {
-          items = items ?? [];
-          items.push(...moveColumnItems);
-        }
+        items.push(...this.getMoveColumnContextMenuItems(options));
       }
     }
 
-    return items;
+    return items.length ? items : undefined;
   }
 
   protected getRowCount(): number {
     return this._columnsController?.getRowCount();
   }
 
-  public toggleDraggableColumnClass(columnIndex: number, value: boolean, rowIndex?: number): void {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned by the loop below
-    let i: number;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned by the loop below
-    let columnElements: dxElementWrapper | undefined;
+  public toggleDraggableColumnClass(columnIndex: number, value: boolean, rowIndex = 0): void {
     const rowCount = this.getRowCount();
     const columns = this._columnsController.getColumns();
     const column = columns?.[columnIndex];
     const columnID = column?.isBand && column.index;
-    const setColumnClass = (rowColumn: Column, index: number): void => {
-      if (rowColumn.ownerBand === columnID) {
-        // @ts-expect-error the cells of the current row are found
-        columnElements
-          .eq(index)
-          .toggleClass(this.addWidgetPrefix(REORDERING_CLASSES.draggableColumn), value);
 
-        if (rowColumn.isBand) {
-          // @ts-expect-error a grid column has an index
-          this.toggleDraggableColumnClass(rowColumn.index, value, i + 1);
-        }
-      }
-    };
+    if (!isDefined(columnID)) {
+      return;
+    }
 
-    if (isDefined(columnID)) {
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- NaN falls back
-      const startRowIndex = rowIndex || 0;
-      for (i = startRowIndex; i < rowCount; i += 1) {
-        columnElements = this.getCellElements(i);
+    for (let i = rowIndex; i < rowCount; i += 1) {
+      const columnElements = this.getCellElements(i);
 
-        if (columnElements) {
-          const rowColumns = this.getColumns(i);
-          rowColumns.forEach(setColumnClass);
-        }
+      if (columnElements) {
+        this.getColumns(i).forEach((rowColumn, index) => {
+          if (rowColumn.ownerBand === columnID) {
+            columnElements
+              .eq(index)
+              .toggleClass(this.addWidgetPrefix(REORDERING_CLASSES.draggableColumn), value);
+
+            if (rowColumn.isBand) {
+              // @ts-expect-error a grid column has an index
+              this.toggleDraggableColumnClass(rowColumn.index, value, i + 1);
+            }
+          }
+        });
       }
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overrides use the param
   public isFilterRowCell($cell: dxElementWrapper): boolean {
     return false;
   }
