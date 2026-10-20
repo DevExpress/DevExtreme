@@ -4,7 +4,6 @@ import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import ContextMenu from '@js/ui/context_menu';
-import { each } from '@ts/core/utils/m_iterator';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import { DX_CONTEXT_MENU_CLASS } from '@ts/ui/context_menu/context_menu';
 
@@ -32,20 +31,12 @@ export class ContextMenuController extends modules.ViewController {
     }
 
     const $targetElement = $(dxEvent.target);
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in each callback
-    let menuItems: GridContextMenuItem[] | undefined;
 
-    each(VIEW_NAMES, (index, name) => {
+    for (const name of VIEW_NAMES) {
       const view = this.getView(name);
-
-      if (!view) {
-        return undefined;
-      }
-
-      const $viewElement = view.element();
-      const isTargetElementInsideView = $viewElement?.is($targetElement)
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- OR of two flags
-        || $viewElement?.find($targetElement).length;
+      const $viewElement = view?.element();
+      const isTargetElementInsideView = $viewElement !== undefined
+        && ($viewElement.is($targetElement) || $viewElement.find($targetElement).length > 0);
 
       if (isTargetElementInsideView) {
         const isGroupRow = $targetElement.hasClass(VIEW_CLASSES.groupRow);
@@ -64,25 +55,21 @@ export class ContextMenuController extends modules.ViewController {
           rowIndex,
           row: view._getRows()[rowIndex],
           columnIndex,
-          // @ts-expect-error an undefined cellIndex reads no cell
-          column: rowOptions?.cells?.[columnIndex]?.column,
+          column: columnIndex !== undefined ? rowOptions?.cells?.[columnIndex]?.column : undefined,
         };
 
         options.items = view.getContextMenuItems?.(options);
 
         this.executeAction('onContextMenuPreparing', options);
         this._contextMenuPrepared(options);
-        menuItems = options.items;
 
-        if (menuItems) {
-          return false;
+        if (options.items) {
+          return options.items;
         }
       }
+    }
 
-      return undefined;
-    });
-
-    return menuItems;
+    return undefined;
   }
 
   /**

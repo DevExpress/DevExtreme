@@ -2,20 +2,17 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { ItemClickEvent } from '@js/ui/context_menu';
 
 import { Direction } from '../keyboard_navigation/const';
-import type { ContextMenuItemsOptions, GridContextMenuItem } from '../views/types';
+import type { ModuleType } from '../types';
+import type { ContextMenuItemsOptions } from '../views/types';
 import { ICONS } from './const';
-import type { MixinBase } from './types';
+import type { ColumnContextMenu, MixinBase, MoveColumnMenuItem } from './types';
 
-/* eslint-disable-next-line
-  @typescript-eslint/explicit-module-boundary-types,
-  @typescript-eslint/explicit-function-return-type
-  -- TS can't name the class type of a generic mixin */
-export const ColumnContextMenuMixin = <T extends MixinBase>(Base: T) => class extends Base {
+export const ColumnContextMenuMixin = <T extends MixinBase>(
+  Base: T,
+): T & ModuleType<ColumnContextMenu> => class extends Base {
   protected isNeedToFocusColumn = false;
 
-  public getMoveColumnContextMenuItems(
-    options: ContextMenuItemsOptions,
-  ): GridContextMenuItem<Direction>[] {
+  public getMoveColumnContextMenuItems(options: ContextMenuItemsOptions): MoveColumnMenuItem[] {
     const { column, rowIndex } = options;
     const allowColumnReordering = this.isColumnReorderingEnabled?.(column);
     const keyboardNavigationController = this.getKeyboardNavigationController?.();
@@ -25,7 +22,7 @@ export const ColumnContextMenuMixin = <T extends MixinBase>(Base: T) => class ex
     }
 
     const rtlEnabled = this.option('rtlEnabled');
-    const onItemClick = (e: ItemClickEvent<GridContextMenuItem<Direction>>): void => {
+    const onItemClick = (e: ItemClickEvent<MoveColumnMenuItem>): void => {
       this.isNeedToFocusColumn = true;
       keyboardNavigationController.moveColumn(
         column,

@@ -234,9 +234,9 @@ export type RowsModuleOptions = Pick<InternalGridOptions,
 | 'twoWayBindingEnabled'
 >;
 
-export interface GridContextMenuItem<TValue extends string = string> extends ContextMenuItem {
+export interface GridContextMenuItem extends ContextMenuItem {
   name?: string;
-  value?: TValue;
+  value?: string;
   onItemClick?: (e: ItemClickEvent) => void;
 }
 
