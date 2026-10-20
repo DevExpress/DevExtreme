@@ -1,24 +1,57 @@
-import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import {
   isNumeric, isRenderer, isString, isWindow,
 } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import domAdapter from '@ts/core/dom_adapter';
+
+type Dimension = 'width' | 'height';
+type SizeProperty = Dimension | 'outerWidth' | 'outerHeight' | 'innerWidth' | 'innerHeight';
+type Side = 'Left' | 'Right' | 'Top' | 'Bottom';
+type BoxStyle = `padding${Side}` | `margin${Side}` | `border${Side}Width`;
+type SizedElement = Element & {
+  offsetWidth?: number;
+  offsetHeight?: number;
+  style?: CSSStyleDeclaration;
+};
+type MeasuredElement = Element | Window | Document;
+type SizeTarget = MeasuredElement | dxElementWrapper;
+type SizeValue = number | string;
+
+interface ElementBoxParams {
+  padding: number;
+  border: number;
+  margin: number;
+}
+
+interface Offset {
+  top: number;
+  left: number;
+}
 
 const window = getWindow();
 
-const SPECIAL_HEIGHT_VALUES = ['auto', 'none', 'inherit', 'initial'];
+const isWindowTarget = (target: unknown): target is Window => isWindow(target);
 
-const getSizeByStyles = function (elementStyles, styles) {
+const SPECIAL_HEIGHT_VALUES: readonly SizeValue[] = ['auto', 'none', 'inherit', 'initial'];
+
+const getSizeByStyles = function getSizeByStyles(
+  elementStyles: CSSStyleDeclaration,
+  styles: BoxStyle[],
+): number {
   let result = 0;
 
-  styles.forEach(function (style) {
+  styles.forEach((style) => {
     result += parseFloat(elementStyles[style]) || 0;
   });
 
   return result;
 };
 
-export const getElementBoxParams = function (name, elementStyles) {
+export const getElementBoxParams = function getElementBoxParams(
+  name: string,
+  elementStyles: CSSStyleDeclaration,
+): ElementBoxParams {
   const beforeName = name === 'width' ? 'Left' : 'Top';
   const afterName = name === 'width' ? 'Right' : 'Bottom';
 
@@ -29,15 +62,34 @@ export const getElementBoxParams = function (name, elementStyles) {
   };
 };
 
-const getElementComputedStyle = function (element) {
-  const view = element?.ownerDocument?.defaultView || window;
+const getElementComputedStyle = function getElementComputedStyle(
+  element: Element,
+): CSSStyleDeclaration | undefined {
+  const view: Window = element?.ownerDocument?.defaultView ?? window;
   return view.getComputedStyle && view.getComputedStyle(element);
 };
-const getCSSProperty = function (element, styles, name, defaultValue?) {
+function getCSSProperty(
+  element: SizedElement,
+  styles: CSSStyleDeclaration | undefined,
+  name: string,
+): string | undefined;
+function getCSSProperty(
+  element: SizedElement,
+  styles: CSSStyleDeclaration | undefined,
+  name: string,
+  defaultValue: string,
+): string;
+function getCSSProperty(
+  element: SizedElement,
+  styles: CSSStyleDeclaration | undefined,
+  name: string,
+  defaultValue?: string,
+): string | undefined {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- a style is read by its CSS name
   return styles?.[name] || element.style?.[name] || defaultValue;
-};
+}
 
-const boxIndices = {
+const boxIndices: Partial<Record<string, number>> = {
   content: 0,
   padding: 1,
   border: 2,
@@ -49,22 +101,33 @@ const dimensionComponents = {
   width: ['left', 'right'],
   height: ['top', 'bottom'],
 };
-function getComponentThickness(elem, dimension, component, styles) {
-  const get = (elem, styles, field) => parseFloat(getCSSProperty(elem, styles, field, '0')) || 0;
+function getComponentThickness(
+  elem: SizedElement,
+  dimension: Dimension,
+  component: string,
+  styles: CSSStyleDeclaration | undefined,
+): number {
+  const get = (
+    element: SizedElement,
+    elementStyles: CSSStyleDeclaration | undefined,
+    field: string,
+  ): number => parseFloat(getCSSProperty(element, elementStyles, field, '0')) || 0;
   const suffix = component === 'border' ? '-width' : '';
   return get(elem, styles, `${component}-${dimensionComponents[dimension][0]}${suffix}`)
         + get(elem, styles, `${component}-${dimensionComponents[dimension][1]}${suffix}`);
 }
 
-export const getSize = function (element, dimension, box) {
+export const getSize = function getSize(
+  element: SizedElement,
+  dimension: Dimension,
+  box?: string,
+): number {
   const offsetFieldName = dimension === 'width' ? 'offsetWidth' : 'offsetHeight';
 
   const styles = getElementComputedStyle(element);
-  let result = getCSSProperty(element, styles, dimension);
-  if (result === '' || result === 'auto') {
-    result = element[offsetFieldName];
-  }
-  result = parseFloat(result) || 0;
+  const cssSize = getCSSProperty(element, styles, dimension);
+  const rawSize = cssSize === '' || cssSize === 'auto' ? element[offsetFieldName] : cssSize;
+  const result = parseFloat(String(rawSize)) || 0;
 
   const currentBox = getCSSProperty(element, styles, 'boxSizing', 'content-box');
   const targetBox = box || currentBox;
@@ -81,10 +144,10 @@ export const getSize = function (element, dimension, box) {
   }
 
   const coeff = Math.sign(targetBoxIndex - currentBoxIndex);
-  let padding: number | boolean = false;
-  let border: number | boolean = false;
-  let margin: number | boolean = false;
-  let scrollThickness: number | boolean = false;
+  let padding: number | false = false;
+  let border: number | false = false;
+  let margin: number | false = false;
+  let scrollThickness: number | false = false;
 
   if (coeff === 1) {
     targetBoxIndex += 1;
@@ -109,40 +172,57 @@ export const getSize = function (element, dimension, box) {
   }
 
   if (padding || border) {
-    const paddingAndBorder = (padding === false ? coeff * getComponentThickness(element, dimension, 'padding', styles) : padding)
+    const paddingAndBorder = (padding === false
+      ? coeff * getComponentThickness(element, dimension, 'padding', styles)
+      : padding)
             + (border === false ? coeff * getComponentThickness(element, dimension, 'border', styles) : border);
 
-    scrollThickness = coeff * Math.max(0, Math.floor(
-      element[offsetFieldName]
+    scrollThickness = (coeff * Math.max(0, Math.floor(
+      Number(element[offsetFieldName])
             - result
             - (coeff * paddingAndBorder),
-    )) || 0;
+    ))) || 0;
   }
 
-  return result + margin + padding + border + scrollThickness;
+  return result + Number(margin) + Number(padding) + Number(border) + Number(scrollThickness);
 };
 
-const getContainerHeight = function (container) {
-  return isWindow(container) ? container.innerHeight : container.offsetHeight;
+const getContainerHeight = function getContainerHeight(container: SizedElement | Window): number {
+  return isWindowTarget(container) ? container.innerHeight : Number(container.offsetHeight);
 };
 
-export const parseHeight = function (value, container, element?) {
+export const parseHeight = function parseHeight(
+  value: string,
+  container: SizedElement | Window,
+  element?: Element,
+): SizeValue {
+  let result: SizeValue = value;
+
   if (value.indexOf('px') > 0) {
-    value = parseInt(value.replace('px', ''));
+    // eslint-disable-next-line radix -- a radix of 10 would read a 0x prefix differently
+    result = parseInt(value.replace('px', ''));
   } else if (value.indexOf('%') > 0) {
-    value = parseInt(value.replace('%', '')) * getContainerHeight(container) / 100;
+    // eslint-disable-next-line radix -- a radix of 10 would read a 0x prefix differently
+    result = (parseInt(value.replace('%', '')) * getContainerHeight(container)) / 100;
+    // @ts-expect-error the check converts any value to a number
   } else if (!isNaN(value)) {
-    value = parseInt(value);
+    // eslint-disable-next-line radix -- a radix of 10 would read a 0x prefix differently
+    result = parseInt(value);
   } else if (value.indexOf('vh') > 0) {
-    value = window.innerHeight / 100 * parseInt(value.replace('vh', ''));
+    // eslint-disable-next-line radix -- a radix of 10 would read a 0x prefix differently
+    result = (window.innerHeight / 100) * parseInt(value.replace('vh', ''));
   } else if (element && value.indexOf('em') > 0) {
-    value = parseFloat(value.replace('em', '')) * parseFloat(window.getComputedStyle(element).fontSize);
+    result = parseFloat(value.replace('em', '')) * parseFloat(window.getComputedStyle(element).fontSize);
   }
 
-  return value;
+  return result;
 };
 
-const getHeightWithOffset = function (value, offset, container) {
+const getHeightWithOffset = function getHeightWithOffset(
+  value: SizeValue | null | undefined,
+  offset: number,
+  container: SizedElement | Window,
+): SizeValue | null {
   if (!value) {
     return null;
   }
@@ -151,30 +231,39 @@ const getHeightWithOffset = function (value, offset, container) {
     return offset ? null : value;
   }
 
-  if (isString(value)) {
-    value = parseHeight(value, container);
-  }
+  const height = isString(value) ? parseHeight(value, container) : value;
 
-  if (isNumeric(value)) {
-    return Math.max(0, value + offset);
+  if (isNumeric(height)) {
+    return Math.max(0, height + offset);
   }
 
   const operationString = offset < 0 ? ' - ' : ' ';
 
-  return `calc(${value}${operationString}${Math.abs(offset)}px)`;
+  return `calc(${height}${operationString}${Math.abs(offset)}px)`;
 };
 
-export const addOffsetToMaxHeight = function (value, offset, container) {
+export const addOffsetToMaxHeight = function addOffsetToMaxHeight(
+  value: SizeValue | null | undefined,
+  offset: number,
+  container: SizedElement | Window,
+): SizeValue {
   const maxHeight = getHeightWithOffset(value, offset, container);
-  return maxHeight !== null ? maxHeight : 'none';
+  return maxHeight ?? 'none';
 };
 
-export const addOffsetToMinHeight = function (value, offset, container) {
+export const addOffsetToMinHeight = function addOffsetToMinHeight(
+  value: SizeValue | null | undefined,
+  offset: number,
+  container: SizedElement | Window,
+): SizeValue {
   const minHeight = getHeightWithOffset(value, offset, container);
-  return minHeight !== null ? minHeight : 0;
+  return minHeight ?? 0;
 };
 
-export const getVerticalOffsets = function (element, withMargins) {
+export const getVerticalOffsets = function getVerticalOffsets(
+  element: Element | null | undefined,
+  withMargins?: boolean,
+): number {
   if (!element) {
     return 0;
   }
@@ -186,7 +275,9 @@ export const getVerticalOffsets = function (element, withMargins) {
         + (withMargins ? boxParams.margin : 0);
 };
 
-export const getVisibleHeight = function (element) {
+export const getVisibleHeight = function getVisibleHeight(
+  element: Element | null | undefined,
+): number {
   if (element) {
     const boundingClientRect = element.getBoundingClientRect?.();
 
@@ -198,63 +289,58 @@ export const getVisibleHeight = function (element) {
   return 0;
 };
 
-// TODO: remove when we'll start mocking named exports
-export const implementationsMap = {
-  getWidth: (...args) => elementSizeHelper('width', ...args as [any, any]),
-  setWidth: (...args) => elementSizeHelper('width', ...args as [any, any]),
-  getHeight: (...args) => elementSizeHelper('height', ...args as [any, any]),
-  setHeight: (...args) => elementSizeHelper('height', ...args as [any, any]),
-  getOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args as [any, any]),
-  setOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args as [any, any]),
-  getOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args as [any, any]),
-  setOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args as [any, any]),
-  getInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args as [any, any]),
-  setInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args as [any, any]),
-  getInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args as [any, any]),
-  setInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args as [any, any]),
-};
-function elementSizeHelper(sizeProperty, el, value) {
-  return arguments.length === 2 ? elementSize(el, sizeProperty) : elementSize(el, sizeProperty, value);
-}
+const isWrapper = (
+  target: SizeTarget | null | undefined,
+): target is dxElementWrapper => isRenderer(target);
 
-export const getWidth = (el) => implementationsMap.getWidth(el);
-export const setWidth = (el, value) => implementationsMap.setWidth(el, value);
-export const getHeight = (el) => implementationsMap.getHeight(el);
-export const setHeight = (el, value) => implementationsMap.setHeight(el, value);
-export const getOuterWidth = (el, includeMargin?) => implementationsMap.getOuterWidth(el, includeMargin || false);
-export const setOuterWidth = (el, value) => implementationsMap.setOuterWidth(el, value);
-export const getOuterHeight = (el, includeMargin?) => implementationsMap.getOuterHeight(el, includeMargin || false);
-export const setOuterHeight = (el, value) => implementationsMap.setOuterHeight(el, value);
-export const getInnerWidth = (el) => implementationsMap.getInnerWidth(el);
-export const setInnerWidth = (el, value) => implementationsMap.setInnerWidth(el, value);
-export const getInnerHeight = (el) => implementationsMap.getInnerHeight(el);
-export const setInnerHeight = (el, value) => implementationsMap.setInnerHeight(el, value);
+const isDocument = (target: MeasuredElement): target is Document => domAdapter.isDocument(target);
 
-const elementSize = function (el, sizeProperty, value?) {
-  const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
-  const propName = partialName.toLowerCase();
-  const isOuter = sizeProperty.indexOf('outer') === 0;
-  const isInner = sizeProperty.indexOf('inner') === 0;
+function elementSize(
+  el: SizeTarget | null | undefined,
+  sizeProperty: SizeProperty,
+): number | undefined;
+function elementSize(
+  el: SizeTarget | null | undefined,
+  sizeProperty: SizeProperty,
+  // eslint-disable-next-line @typescript-eslint/unified-signatures -- a getter passes no value
+  includeMargin: boolean,
+): number | undefined;
+function elementSize(
+  el: SizeTarget | null | undefined,
+  sizeProperty: SizeProperty,
+  value: SizeValue | boolean | null | undefined,
+): number | null | undefined;
+function elementSize(
+  el: SizeTarget | null | undefined,
+  sizeProperty: SizeProperty,
+  value?: SizeValue | boolean | null,
+): number | null | undefined {
+  const partialName = sizeProperty.toLowerCase().includes('width') ? 'Width' : 'Height';
+  const propName = partialName === 'Width' ? 'width' : 'height';
+  const isOuter = sizeProperty.startsWith('outer');
+  const isInner = sizeProperty.startsWith('inner');
   const isGetter = arguments.length === 2 || typeof value === 'boolean';
+  let element: SizeTarget | null | undefined = el;
 
-  if (isRenderer(el)) {
-    if (el.length > 1 && !isGetter) {
-      for (let i = 0; i < el.length; i++) {
-        elementSize(el[i], sizeProperty, value);
+  if (isWrapper(element)) {
+    if (element.length > 1 && !isGetter) {
+      for (let i = 0; i < element.length; i += 1) {
+        elementSize(element.get(i), sizeProperty, value);
       }
-      return;
+      return undefined;
     }
-    // eslint-disable-next-line prefer-destructuring
-    el = el[0];
+    element = element.get(0);
   }
 
-  if (!el) return;
-
-  if (isWindow(el)) {
-    return isOuter ? el[`inner${partialName}`] : domAdapter.getDocumentElement()[`client${partialName}`];
+  if (!element) {
+    return undefined;
   }
 
-  if (domAdapter.isDocument(el)) {
+  if (isWindowTarget(element)) {
+    return isOuter ? element[`inner${partialName}`] : domAdapter.getDocumentElement()[`client${partialName}`];
+  }
+
+  if (isDocument(element)) {
     const documentElement = domAdapter.getDocumentElement();
     const body = domAdapter.getBody();
 
@@ -267,6 +353,8 @@ const elementSize = function (el, sizeProperty, value?) {
     );
   }
 
+  const sizedElement: SizedElement = element;
+
   if (isGetter) {
     let box = 'content';
     if (isOuter) {
@@ -276,33 +364,203 @@ const elementSize = function (el, sizeProperty, value?) {
       box = 'padding';
     }
 
-    return getSize(el, propName, box);
+    return getSize(sizedElement, propName, box);
   }
 
-  if (isNumeric(value)) {
-    const elementStyles = getElementComputedStyle(el);
+  let styleValue = value;
+
+  if (isNumeric(styleValue)) {
+    const elementStyles = getElementComputedStyle(sizedElement);
+    // @ts-expect-error a size is set only where the DOM computes styles
     const sizeAdjustment = getElementBoxParams(propName, elementStyles);
+    // @ts-expect-error a size is set only where the DOM computes styles
     const isBorderBox = elementStyles.boxSizing === 'border-box';
-    value = Number(value);
+    styleValue = Number(styleValue);
 
     if (isOuter) {
-      value -= isBorderBox ? 0 : sizeAdjustment.border + sizeAdjustment.padding;
+      styleValue -= isBorderBox ? 0 : sizeAdjustment.border + sizeAdjustment.padding;
     } else if (isInner) {
-      value += isBorderBox ? sizeAdjustment.border : -sizeAdjustment.padding;
+      styleValue += isBorderBox ? sizeAdjustment.border : -sizeAdjustment.padding;
     } else if (isBorderBox) {
-      value += sizeAdjustment.border + sizeAdjustment.padding;
+      styleValue += sizeAdjustment.border + sizeAdjustment.padding;
     }
   }
-  value += isNumeric(value) ? 'px' : '';
+  styleValue += isNumeric(styleValue) ? 'px' : '';
 
-  domAdapter.setStyle(el, propName, value);
+  // @ts-expect-error setStyle sets the style of any element, the adapter types an HTMLElement
+  domAdapter.setStyle(sizedElement, propName, styleValue);
 
   return null;
+}
+
+function elementSizeHelper(
+  sizeProperty: SizeProperty,
+  el: SizeTarget | null | undefined,
+): number | undefined;
+function elementSizeHelper(
+  sizeProperty: SizeProperty,
+  el: SizeTarget | null | undefined,
+  // eslint-disable-next-line @typescript-eslint/unified-signatures -- a getter passes no value
+  includeMargin: boolean,
+): number | undefined;
+function elementSizeHelper(
+  sizeProperty: SizeProperty,
+  el: SizeTarget | null | undefined,
+  value: SizeValue | null | undefined,
+): number | null | undefined;
+function elementSizeHelper(
+  sizeProperty: SizeProperty,
+  el: SizeTarget | null | undefined,
+  value?: SizeValue | boolean | null,
+): number | null | undefined {
+  return arguments.length === 2
+    ? elementSize(el, sizeProperty)
+    : elementSize(el, sizeProperty, value);
+}
+
+type SizeGetterArgs = [el: SizeTarget | null | undefined];
+type OuterSizeGetterArgs = [el: SizeTarget | null | undefined, includeMargin: boolean];
+type SizeSetterArgs = [el: SizeTarget | null | undefined, value: SizeValue | null | undefined];
+
+// TODO: remove when we'll start mocking named exports
+export const implementationsMap = {
+  getWidth: (...args: SizeGetterArgs): number | undefined => elementSizeHelper(
+    'width',
+    ...args,
+  ),
+  setWidth: (...args: SizeSetterArgs): number | null | undefined => elementSizeHelper(
+    'width',
+    ...args,
+  ),
+  getHeight: (...args: SizeGetterArgs): number | undefined => elementSizeHelper(
+    'height',
+    ...args,
+  ),
+  setHeight: (...args: SizeSetterArgs): number | null | undefined => elementSizeHelper(
+    'height',
+    ...args,
+  ),
+  getOuterWidth: (...args: OuterSizeGetterArgs): number | undefined => elementSizeHelper(
+    'outerWidth',
+    ...args,
+  ),
+  setOuterWidth: (...args: SizeSetterArgs): number | null | undefined => elementSizeHelper(
+    'outerWidth',
+    ...args,
+  ),
+  getOuterHeight: (...args: OuterSizeGetterArgs): number | undefined => elementSizeHelper(
+    'outerHeight',
+    ...args,
+  ),
+  setOuterHeight: (...args: SizeSetterArgs): number | null | undefined => elementSizeHelper(
+    'outerHeight',
+    ...args,
+  ),
+  getInnerWidth: (...args: SizeGetterArgs): number | undefined => elementSizeHelper(
+    'innerWidth',
+    ...args,
+  ),
+  setInnerWidth: (...args: SizeSetterArgs): number | null | undefined => elementSizeHelper(
+    'innerWidth',
+    ...args,
+  ),
+  getInnerHeight: (...args: SizeGetterArgs): number | undefined => elementSizeHelper(
+    'innerHeight',
+    ...args,
+  ),
+  setInnerHeight: (...args: SizeSetterArgs): number | null | undefined => elementSizeHelper(
+    'innerHeight',
+    ...args,
+  ),
 };
 
-export const getWindowByElement = (el) => (isWindow(el) ? el : el.defaultView);
+export function getWidth(el: MeasuredElement): number;
+export function getWidth(el: SizeTarget | null | undefined): number | undefined;
+export function getWidth(el: SizeTarget | null | undefined): number | undefined {
+  return implementationsMap.getWidth(el);
+}
+export function setWidth(
+  el: SizeTarget | null | undefined,
+  value: SizeValue | null | undefined,
+): number | null | undefined {
+  return implementationsMap.setWidth(el, value);
+}
+export function getHeight(el: MeasuredElement): number;
+export function getHeight(el: SizeTarget | null | undefined): number | undefined;
+export function getHeight(el: SizeTarget | null | undefined): number | undefined {
+  return implementationsMap.getHeight(el);
+}
+export function setHeight(
+  el: SizeTarget | null | undefined,
+  value: SizeValue | null | undefined,
+): number | null | undefined {
+  return implementationsMap.setHeight(el, value);
+}
+export function getOuterWidth(el: MeasuredElement, includeMargin?: boolean): number;
+export function getOuterWidth(
+  el: SizeTarget | null | undefined,
+  includeMargin?: boolean,
+): number | undefined;
+export function getOuterWidth(
+  el: SizeTarget | null | undefined,
+  includeMargin?: boolean,
+): number | undefined {
+  return implementationsMap.getOuterWidth(el, includeMargin || false);
+}
+export function setOuterWidth(
+  el: SizeTarget | null | undefined,
+  value: SizeValue | null | undefined,
+): number | null | undefined {
+  return implementationsMap.setOuterWidth(el, value);
+}
+export function getOuterHeight(el: MeasuredElement, includeMargin?: boolean): number;
+export function getOuterHeight(
+  el: SizeTarget | null | undefined,
+  includeMargin?: boolean,
+): number | undefined;
+export function getOuterHeight(
+  el: SizeTarget | null | undefined,
+  includeMargin?: boolean,
+): number | undefined {
+  return implementationsMap.getOuterHeight(el, includeMargin || false);
+}
+export function setOuterHeight(
+  el: SizeTarget | null | undefined,
+  value: SizeValue | null | undefined,
+): number | null | undefined {
+  return implementationsMap.setOuterHeight(el, value);
+}
+export function getInnerWidth(el: MeasuredElement): number;
+export function getInnerWidth(el: SizeTarget | null | undefined): number | undefined;
+export function getInnerWidth(el: SizeTarget | null | undefined): number | undefined {
+  return implementationsMap.getInnerWidth(el);
+}
+export function setInnerWidth(
+  el: SizeTarget | null | undefined,
+  value: SizeValue | null | undefined,
+): number | null | undefined {
+  return implementationsMap.setInnerWidth(el, value);
+}
+export function getInnerHeight(el: MeasuredElement): number;
+export function getInnerHeight(el: SizeTarget | null | undefined): number | undefined;
+export function getInnerHeight(el: SizeTarget | null | undefined): number | undefined {
+  return implementationsMap.getInnerHeight(el);
+}
+export function setInnerHeight(
+  el: SizeTarget | null | undefined,
+  value: SizeValue | null | undefined,
+): number | null | undefined {
+  return implementationsMap.setInnerHeight(el, value);
+}
 
-export const getOffset = (el) => {
+export const getWindowByElement = (el: MeasuredElement): Window | null | undefined => {
+  if (isWindowTarget(el)) {
+    return el;
+  }
+  return 'defaultView' in el ? el.defaultView : undefined;
+};
+
+export const getOffset = (el: Element): Offset => {
   if (!el.getClientRects().length) {
     return {
       top: 0,
@@ -315,7 +573,9 @@ export const getOffset = (el) => {
   const docElem = el.ownerDocument.documentElement;
 
   return {
+    // @ts-expect-error an element with client rects is in a document with a window
     top: rect.top + win.pageYOffset - docElem.clientTop,
+    // @ts-expect-error an element with client rects is in a document with a window
     left: rect.left + win.pageXOffset - docElem.clientLeft,
   };
 };
