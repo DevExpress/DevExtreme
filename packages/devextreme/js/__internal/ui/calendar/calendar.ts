@@ -23,7 +23,7 @@ import {
   isNumeric,
   isString,
 } from '@js/core/utils/type';
-import { hasProperty, hasWindow } from '@js/core/utils/window';
+import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
 import type {
@@ -548,10 +548,6 @@ class Calendar<
   }
 
   _init(): void {
-    if (hasProperty('__karma__')) {
-      throw new Error('Temporary nx cache check, must be reverted');
-    }
-
     super._init();
 
     this._initSelectionStrategy();
