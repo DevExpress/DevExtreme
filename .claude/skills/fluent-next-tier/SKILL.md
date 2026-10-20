@@ -48,6 +48,8 @@ does every --dx-* actually reach the elements that read it?
 `nx naming:check devextreme-scss` (step "Check naming registries"). `naming:check` depends on
 `build:themes`, so reachability always sees a fresh bundle there. Locally, rebuild the themes first
 (`pnpm nx build:themes devextreme-scss`) — reachability silently skips when no bundle exists.
+`tokens:snapshot` and `tokens:report` are not part of CI — [tokens-report.md](tokens-report.md) says what
+CI catches instead.
 
 ## A failure, and where to look
 

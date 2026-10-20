@@ -46,6 +46,17 @@ next `tokens:snapshot`, so the report can be re-run after rebuilding.
 - Approving the Renovate pull request and re-recording etalons stay manual on purpose: the etalons
   are pixels, and a value change has to be looked at.
 
+## In CI
+
+Neither command runs in CI, and no workflow needs them: they tell before the bump what CI would
+report after it, one failure at a time.
+
+- `build:tokens` is a `dependsOn` of `build:themes` and of the tests (`project.json`): a theme read
+  the new package no longer has refuses the token build, so every job that builds the themes goes red.
+- `styles.yml` runs `nx naming:check devextreme-scss` after the tests: stale registries and moved
+  public names fail there (see "In CI" in [SKILL.md](SKILL.md)).
+- Moved values surface as etalon differences in the visual tests.
+
 ## After a bump
 
 1. `pnpm nx build:themes devextreme-scss`.
