@@ -23,6 +23,7 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { registerKeyboardAction } from '../accessibility';
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
+import { CELL_FOCUS_DISABLED_CLASS, LINK_CLASS } from '../editing/const';
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/headers_keyboard_navigation';
 import { ColumnsView } from '../views/columns_view';
 import type {
@@ -37,21 +38,10 @@ import type {
   ViewCellOptions,
   ViewRow,
 } from '../views/types';
-import { CLASSES } from './const';
+import { CLASSES, ICONS } from './const';
 
-const HEADERS_CLASS = 'headers';
-const CONTEXT_MENU_SORT_ASC_ICON = 'context-menu-sort-asc';
-const CONTEXT_MENU_SORT_DESC_ICON = 'context-menu-sort-desc';
-const CONTEXT_MENU_SORT_NONE_ICON = 'context-menu-sort-none';
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
-const VISIBILITY_HIDDEN_CLASS = 'dx-visibility-hidden';
-const TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX = 'dx-text-content-alignment-';
-const SORT_INDICATOR_CLASS = 'dx-sort-indicator';
-const SORT_INDEX_INDICATOR_CLASS = 'dx-sort-index-indicator';
 const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
 const HEADER_FILTER_INDICATOR_CLASS = 'dx-header-filter-indicator';
-const MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
-const LINK = 'dx-link';
 
 export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   private _isGroupingChanged?: boolean;
@@ -85,10 +75,10 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       ?? $cell.children(`.${this.addWidgetPrefix(CLASSES.cellContent)}`);
 
     $content
-      .toggleClass(TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX + columnAlignment, indicatorCount > 0)
-      .toggleClass(TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX + (columnAlignment === 'left' ? 'right' : 'left'), indicatorCount > 0 && column.alignment === 'center')
-      .toggleClass(SORT_INDICATOR_CLASS, !!$sortIndicator.length)
-      .toggleClass(SORT_INDEX_INDICATOR_CLASS, !!$sortIndexIndicator.length)
+      .toggleClass(CLASSES.textContentAlignmentPrefix + columnAlignment, indicatorCount > 0)
+      .toggleClass(CLASSES.textContentAlignmentPrefix + (columnAlignment === 'left' ? 'right' : 'left'), indicatorCount > 0 && column.alignment === 'center')
+      .toggleClass(CLASSES.sortIndicator, !!$sortIndicator.length)
+      .toggleClass(CLASSES.sortIndexIndicator, !!$sortIndexIndicator.length)
       .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter(`.${this._getIndicatorClassName('headerFilter')}`).length);
   }
 
@@ -172,7 +162,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
 
       const columnChooserView = this._columnChooserView;
-      const $link = $('<a>').text(columnChooserTitle).addClass(LINK);
+      const $link = $('<a>').text(columnChooserTitle).addClass(LINK_CLASS);
 
       eventsEngine.on($link, 'click', this.createAction(() => columnChooserView.showColumnChooser()));
 
@@ -346,7 +336,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const $container: dxElementWrapper = this.element();
 
     $container
-      .addClass(this.addWidgetPrefix(HEADERS_CLASS))
+      .addClass(this.addWidgetPrefix(CLASSES.headers))
       .toggleClass(this.addWidgetPrefix(VIEW_CLASSES.noWrap), !this.option('wordWrapEnabled'));
 
     this.setAria('role', 'presentation', $container);
@@ -354,7 +344,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const change = {};
     const deferred = this._updateContent(this._renderTable({ change }), change);
 
-    $container.toggleClass(MULTI_ROW_HEADER_CLASS, this.getRowCount() > 1);
+    $container.toggleClass(CLASSES.multiRowHeader, this.getRowCount() > 1);
 
     super._renderCore(options);
 
@@ -460,12 +450,12 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     let $indicatorsContainer = this._getIndicatorContainer($cell, true);
 
     if ($indicatorsContainer?.length) {
-      $indicatorsContainer.filter(`.${VISIBILITY_HIDDEN_CLASS}`).remove();
+      $indicatorsContainer.filter(`.${CLASSES.visibilityHidden}`).remove();
       $indicatorsContainer = this._getIndicatorContainer($cell);
 
       $indicatorsContainer
         .clone()
-        .addClass(VISIBILITY_HIDDEN_CLASS)
+        .addClass(CLASSES.visibilityHidden)
         .css('float', '')
         .insertBefore($cell.children(`.${this.addWidgetPrefix(CLASSES.cellContent)}`));
     }
@@ -498,7 +488,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   protected _getIndicatorContainer($cell: dxElementWrapper, returnAll?: boolean): dxElementWrapper {
     const $indicatorsContainer = super._getIndicatorContainer($cell);
 
-    return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(`:not(.${VISIBILITY_HIDDEN_CLASS})`);
+    return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(`:not(.${CLASSES.visibilityHidden})`);
   }
 
   /**
@@ -689,13 +679,13 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
         items = [
           {
-            text: sortingOptions.ascendingText, value: 'asc', disabled: column.sortOrder === 'asc', icon: CONTEXT_MENU_SORT_ASC_ICON, onItemClick,
+            text: sortingOptions.ascendingText, value: 'asc', disabled: column.sortOrder === 'asc', icon: ICONS.contextMenuSortAsc, onItemClick,
           },
           {
-            text: sortingOptions.descendingText, value: 'desc', disabled: column.sortOrder === 'desc', icon: CONTEXT_MENU_SORT_DESC_ICON, onItemClick,
+            text: sortingOptions.descendingText, value: 'desc', disabled: column.sortOrder === 'desc', icon: ICONS.contextMenuSortDesc, onItemClick,
           },
           {
-            name: 'clearSorting', text: sortingOptions.clearText, value: 'none', disabled: !column.sortOrder, icon: CONTEXT_MENU_SORT_NONE_ICON, onItemClick,
+            name: 'clearSorting', text: sortingOptions.clearText, value: 'none', disabled: !column.sortOrder, icon: ICONS.contextMenuSortNone, onItemClick,
           },
         ];
       }
