@@ -172,14 +172,24 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     return { locale: formatObject.locale };
   }
 
-  _getSeparatorFormat(): Format | undefined {
+  _getSeparatorFormat(): FormatObject | string | undefined {
     const explicitLocaleFormat = this._getExplicitLocaleFormat();
 
     if (explicitLocaleFormat) {
       return explicitLocaleFormat;
     }
 
-    return isDefined(this.option('format')) ? this._getEffectiveFormatOption() : undefined;
+    if (!isDefined(this.option('format'))) {
+      return undefined;
+    }
+
+    const formatOption = this._getEffectiveFormatOption();
+
+    if (isString(formatOption)) {
+      return formatOption;
+    }
+
+    return asFormatObject(formatOption);
   }
 
   _getDecimalSeparator(): string {
