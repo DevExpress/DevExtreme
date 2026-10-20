@@ -14,8 +14,8 @@
 
 import { debug } from '@ts/core/utils/m_console';
 import { each } from '@ts/core/utils/m_iterator';
-import { adjust } from '@ts/core/utils/m_math';
 import { isDefined, isNumeric } from '@ts/core/utils/m_type';
+import { adjust } from '@ts/core/utils/math';
 import { getLogExt, raiseToExt } from '@ts/viz/core/utils';
 
 const _math = Math;

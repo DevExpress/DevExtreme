@@ -1,6 +1,6 @@
 import type { FormatterConfig, NumberFormatter } from '@ts/core/localization/number';
 import { toFixed } from '@ts/core/localization/utils';
-import { fitIntoRange, multiplyInExponentialForm } from '@ts/core/utils/m_math';
+import { fitIntoRange, multiplyInExponentialForm } from '@ts/core/utils/math';
 
 const DEFAULT_CONFIG = { thousandsSeparator: ',', decimalSeparator: '.' };
 const ESCAPING_CHAR = '\'';
