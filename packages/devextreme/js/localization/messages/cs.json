@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Uzavřením chatu Asistenta AI se přeruší probíhající požadavky. Chcete chat zavřít?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat je prázdný",
         "dxDataGrid-aiChatEmptyViewPrompt": "Asistent AI je připraven odpovídat na vaše dotazy.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Editor výzev AI",
         "dxDataGrid-aiPromptEditorPlaceholder": "Vyzvěte AI k vygenerování hodnot sloupců...",
         "dxDataGrid-aiPromptEditorApplyButton": "Použít",

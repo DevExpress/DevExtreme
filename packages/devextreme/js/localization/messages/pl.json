@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Zamknięcie czatu Asystenta AI spowoduje przerwanie trwających żądań. Czy chcesz zamknąć czat?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Czat jest pusty",
         "dxDataGrid-aiChatEmptyViewPrompt": "Asystent AI jest gotowy do odpowiadania na Twoje pytania.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Edytor promptu AI",
         "dxDataGrid-aiPromptEditorPlaceholder": "Wpisz prompt, aby AI wygenerowała wartości kolumny...",
         "dxDataGrid-aiPromptEditorApplyButton": "Zastosuj",

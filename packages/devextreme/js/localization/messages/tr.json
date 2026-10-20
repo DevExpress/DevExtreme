@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Yapay Zeka Asistanı sohbetini kapatmak devam eden istekleri iptal eder. Sohbeti kapatmak istiyor musunuz?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Sohbet boş",
         "dxDataGrid-aiChatEmptyViewPrompt": "Yapay Zeka Asistanı sorularınızı yanıtlamaya hazır.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Yapay Zeka İstek Düzenleyicisi",
         "dxDataGrid-aiPromptEditorPlaceholder": "Sütun değerlerini oluşturmak için yapay zekaya istek gönderin...",
         "dxDataGrid-aiPromptEditorApplyButton": "Uygula",
