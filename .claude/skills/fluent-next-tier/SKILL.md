@@ -1,6 +1,6 @@
 ---
 name: fluent-next-tier
-description: How the fluent-next public `--dx-*` component tier is generated and guarded in packages/devextreme-scss — derive-registries, publish, reachability and tokens:update. Use whenever work touches `registries.json`, `OVERRIDES`/`rootSelectors`, a generated `_public.scss` / `_public-tier.scss`, `_public-links.scss`, `nested-scopes.json`, `unread-tier.json`, a renamed or new fluent-next SCSS variable, a retired `--dx-*` name or `public-renames.json`, a design-token package bump (`@devexpress/design-tokens-internal`, Renovate), or when CI fails in "Check naming registries" / `naming:check` with "stale", "has no rootSelectors", "scope outside the roots", "portal", "declared and never read", "cross-scope duplicate" or "read and never declared" — even if the user names only the symptom.
+description: How the fluent-next public `--dx-*` component tier is generated and guarded in packages/devextreme-scss — derive-registries, publish, reachability and tokens:report. Use whenever work touches `registries.json`, `OVERRIDES`/`rootSelectors`, a generated `_public.scss` / `_public-tier.scss`, `_public-links.scss`, `nested-scopes.json`, `unread-tier.json`, a renamed or new fluent-next SCSS variable, a retired `--dx-*` name or `public-renames.json`, a design-token package bump (`@devexpress/design-tokens-internal`, Renovate), or when CI fails in "Check naming registries" / `naming:check` with "stale", "has no rootSelectors", "scope outside the roots", "portal", "declared and never read", "cross-scope duplicate" or "read and never declared" — even if the user names only the symptom.
 ---
 
 # fluent-next component tier
@@ -29,7 +29,7 @@ devextreme/artifacts/css/dx.fluent-next.blue.light.css
 does every --dx-* actually reach the elements that read it?
 ```
 
-`tokens:update` sits beside this: it bumps the token package and reports what moved.
+`tokens:report` sits beside this: the token package is bumped by hand, and it reports what moved.
 
 ## Commands
 
@@ -38,7 +38,7 @@ does every --dx-* actually reach the elements that read it?
 | `pnpm run naming:registries` | regenerate `registries.json` (needs built themes) | [derive-registries.md](derive-registries.md) |
 | `pnpm run naming:publish` | regenerate every `_public.scss` and `_public-tier.scss` | [publish.md](publish.md) |
 | `node tools/review/reachability.ts [--report] [--update-scopes] [--update-unread]` | check the built bundle | [reachability.md](reachability.md) |
-| `pnpm run tokens:update [<version>] [--report]` | bump the token package and report | [tokens-update.md](tokens-update.md) |
+| `pnpm run tokens:snapshot`, then `pnpm run tokens:report` | report what a token package bump changed | [tokens-report.md](tokens-report.md) |
 | `pnpm run naming:check` | what CI runs: `derive-registries --check` → `publish --check` → `reachability` | — |
 | `pnpm run naming:baseline` | rewrite `tests/fluent-next-naming.baseline.json` | — |
 
@@ -59,7 +59,7 @@ does every --dx-* actually reach the elements that read it?
 | `… is stale … run pnpm naming:publish` | [publish.md](publish.md) |
 | `X publishes from folder/ but has no rootSelectors` | [publish.md](publish.md) |
 | `read and never declared`, `cross-scope duplicate`, `scope outside the roots`, `portal:`, `declared and never read`, `pinned name(s) are read now` | [reachability.md](reachability.md) |
-| a token bump turned something red | [tokens-update.md](tokens-update.md) |
+| a token bump turned something red | [tokens-report.md](tokens-report.md) |
 
 ## Rules that hold everywhere
 
@@ -70,7 +70,7 @@ does every --dx-* actually reach the elements that read it?
 - Renaming a fluent-next SCSS variable retires its public `--dx-*` name. Record the old name in
   `tools/naming/public-renames.json` in the same PR; `tests/public-renames.test.ts` stops it from
   coming back. Only names that shipped in a release are journaled — see the journal section of
-  [tokens-update.md](tokens-update.md) for when an entry is due and how to write it.
+  [tokens-report.md](tokens-report.md) for when an entry is due and how to write it.
 - `tests/fluent-next-naming.test.ts` reads the same rules as `publish.ts` (both import `tier.ts`):
   the tier composition, links, the collector and the name grammar for new variables. Its baseline
   sections fail on any change; after a deliberate one run `pnpm run naming:baseline` and review the

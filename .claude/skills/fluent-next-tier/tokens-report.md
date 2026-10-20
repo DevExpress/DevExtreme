@@ -1,29 +1,42 @@
-# tokens:update
+# tokens:report
 
-`tools/tokens/update.ts` is one command for a design-token package bump
-(`@devexpress/design-tokens-internal`) and the report that goes with it.
+`tools/tokens/bump-report.ts` reports what a design-token package bump
+(`@devexpress/design-tokens-internal`) did to the theme. The bump itself is manual, like any other
+dependency; the tool only looks before and after.
 
 ```
-pnpm run tokens:update 262.24.0   # bump, reinstall, rebuild the token layer, check, report
-pnpm run tokens:update            # report the installed package, change nothing
-pnpm run tokens:update --report   # the same, stated explicitly
+pnpm run tokens:snapshot          # before the bump: build the token layer, save what the installed package gives
+# bump by hand, see below
+pnpm run tokens:report            # after it: rebuild the token layer, check, report against the snapshot
 ```
 
-## What it does
+`tokens:report` without a snapshot reports the installed package alone (counts, lost reads) and says so.
 
-- Edits the dependency and its `minimumReleaseAgeExclude` entry (pnpm refuses a release younger than
-  `minimumReleaseAge`, so the bump carries its own exclusion), reinstalls and rebuilds the token layer
-  (`build/tokens/build-tokens.ts` → `scss/_design-system/`).
-- Runs `derive-registries.ts --check` read-only and prints the report. The diffing and the markdown
-  live in `tools/tokens/report.ts`, covered by `tests/tokens-report.test.ts`.
+## The bump, by hand
+
+1. `packages/devextreme-scss/package.json`: the `devDependencies` entry of the package.
+2. `pnpm-workspace.yaml`: its line in `minimumReleaseAgeExclude` (pnpm refuses a release younger than
+   `minimumReleaseAge`, so the bump carries its own exclusion).
+3. `pnpm install` from the repository root. It moves the pinned dependency in `pnpm-lock.yaml` and
+   normalises the rest of the lockfile on the way: anything in the lock diff beyond this package is
+   housekeeping, not the bump.
+
+A Renovate pull request does the same three edits; `tokens:snapshot` on the base branch and
+`tokens:report` on its branch give the report for it.
+
+## What the report says
 
 The report answers the expensive question — what the new package did:
-- names the theme reads that the package no longer has (the build refuses those);
+- names the theme reads that the package no longer has (the build refuses those; the report then has
+  no value diff and exits 1 — fix the reads, then run it again);
 - every generated value that moved, per file, old and new side by side. This is the list that costs
   etalon screenshots.
 
-A failed bump puts back what it touched — `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml` and
-the generated token layer — so the tree is where it was, short of `node_modules`.
+It also runs `derive-registries.ts --check` read-only and says when the registries are stale. The
+diffing and the markdown live in `tools/tokens/report.ts`, covered by `tests/tokens-report.test.ts`.
+
+The snapshot is `packages/devextreme-scss/.tokens-snapshot.json` (ignored by git); it stays until the
+next `tokens:snapshot`, so the report can be re-run after rebuilding.
 
 ## What it does not do
 
@@ -41,10 +54,7 @@ the generated token layer — so the tree is where it was, short of `node_module
    [derive-registries.md](derive-registries.md)).
 3. `pnpm run naming:check`, then the jest suite.
 4. Ask user to re-record the etalons the moved values touch.
-5. Read the `pnpm-lock.yaml` diff before committing: the install runs with `--no-frozen-lockfile`
-   (the only way to move a pinned dependency) and pnpm normalises the rest of the lockfile on the
-   way; anything beyond this package is housekeeping, not the bump.
-6. If adapting the theme to the new package renamed or removed a published `--dx-*` name, record it
+5. If adapting the theme to the new package renamed or removed a published `--dx-*` name, record it
    in the journal — see below.
 
 ## The public-name journal (`tools/naming/public-renames.json`)
