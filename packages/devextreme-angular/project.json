@@ -348,7 +348,9 @@
         "environments": [
           "client",
           "server",
-          "hydration"
+          "hydration",
+          "zone",
+          "zoneless"
         ]
       },
       "dependsOn": [
@@ -495,7 +497,9 @@
         "environments": [
           "client",
           "server",
-          "hydration"
+          "hydration",
+          "zone",
+          "zoneless"
         ]
       },
       "dependsOn": [

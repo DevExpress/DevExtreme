@@ -222,13 +222,16 @@ describe(`Change detection [${mode}]: events registered outside the Angular zone
     const handle = fixture.nativeElement.querySelector('.drag-handle');
 
     mouse(handle, 'mousedown', 10, 10);
+    await fixture.whenStable();
+
     mouse(document, 'mousemove', 40, 40);
     mouse(document, 'mousemove', 60, 60);
-    mouse(document, 'mouseup', 60, 60);
     await fixture.whenStable();
 
     expect(fixture.componentInstance.dragMoves).toBeGreaterThan(0);
     expect(outputText(fixture)).toBe('true');
+
+    mouse(document, 'mouseup', 60, 60);
   });
 
   it('mouse movement over a widget without handlers does not run change detection', async () => {
@@ -349,6 +352,25 @@ describe(`Change detection [${mode}]: state changed without a template binding`,
 
     expect(host.plain).toBe('2');
     expect(outputText(fixture)).toBe('2');
+  });
+
+  it('onOptionChanged subscribed in code updates the view for an unbound option', async () => {
+    const fixture = await render(`
+      <dx-text-box></dx-text-box>
+      <span class="out">{{ plain }}</span>
+    `);
+    const host = fixture.componentInstance;
+
+    host.textBox.onOptionChanged.subscribe((e) => {
+      if (e.name === 'hint') {
+        host.plain = e.value;
+      }
+    });
+    act(fixture, () => host.textBox.instance.option('hint', 'changed'));
+    await fixture.whenStable();
+
+    expect(host.plain).toBe('changed');
+    expect(outputText(fixture)).toBe('changed');
   });
 
   it('one-way [formData] changed in place by the Form updates the view', async () => {
