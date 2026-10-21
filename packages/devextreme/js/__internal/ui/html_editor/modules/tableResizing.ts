@@ -631,7 +631,8 @@ export default class TableResizingModule extends BaseModule {
       value: newHeight,
     });
 
-    const rowHeightDiff = Number(getOuterHeight($determinantElements.eq(index))) - currentLineNewSize;
+    const rowHeightDiff = Number(getOuterHeight($determinantElements.eq(index)))
+      - currentLineNewSize;
 
     this._$highlightedElement.css(
       directionInfo.positionCoordinate,
