@@ -350,7 +350,11 @@ if (Globalize?.formatDate) {
       }
 
       if (typeof format === 'function') {
-        const parsedValue: Date | null | undefined = this.callBase(text, format);
+        const dateParts = bindDatePartsToLocale(
+          this,
+          getDateFormatLocale(format as unknown as LocalizationFormat),
+        );
+        const parsedValue: Date | null | undefined = this.callBase(text, format, dateParts);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return parsedValue ?? Globalize.parseDate(text);

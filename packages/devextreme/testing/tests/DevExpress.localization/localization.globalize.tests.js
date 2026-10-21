@@ -1155,6 +1155,37 @@ QUnit.module('Format helper', () => {
             }
         });
 
+        QUnit.test('parse with a function format does not take the time separator from timeFormat', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+                config({
+                    ...config(),
+                    timeFormat: {
+                        default: {
+                            locale: 'da',
+                            type: 'shortTime',
+                        },
+                    },
+                });
+
+                const format = (date) => dateLocalization.format(date, 'HH:mm');
+                const parsed = dateLocalization.parse('14:05', format);
+
+                assert.ok(parsed instanceof Date, 'parsed');
+                assert.strictEqual(parsed.getHours(), 14, 'hours');
+                assert.strictEqual(parsed.getMinutes(), 5, 'minutes');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
         QUnit.test('locale map selects entry by message locale and applies format locale', function(assert) {
             const saved = saveGlobalFormats();
             const savedLocale = coreLocalization.locale();

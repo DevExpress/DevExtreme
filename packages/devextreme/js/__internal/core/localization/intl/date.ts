@@ -348,8 +348,6 @@ export default {
         return intlPresetResult;
       }
 
-      // NOTE: date parts are always bound to the format locale, so that the time separator
-      // does not come from the global timeFormat locale.
       const dateParts = bindDatePartsToLocale(this, formatLocale);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
