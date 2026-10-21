@@ -48,6 +48,8 @@ const createDefaultMarkerElement = (
   const center = ownerDocument.createElementNS(SVG_NAMESPACE, 'path');
 
   element.className = `${MARKER_CLASS} ${DEFAULT_MARKER_CLASS}`;
+  element.setAttribute('role', 'img');
+  element.setAttribute('aria-label', messageLocalization.format('dxMap-markerAriaLabel'));
   svg.setAttribute('class', DEFAULT_MARKER_ICON_CLASS);
   svg.setAttribute('viewBox', DEFAULT_MARKER_VIEW_BOX);
   svg.setAttribute('width', `${DEFAULT_MARKER_WIDTH}`);

@@ -1251,10 +1251,14 @@ QUnit.module('OSM: markers', moduleConfig, () => {
                 assert.strictEqual(overlay.options.positioning, 'bottom-center', 'marker tip is anchored to its location');
                 assert.strictEqual(overlay.options.stopEvent, false, 'map interactions remain available over the marker');
                 assert.ok(element.classList.contains('dx-map-marker-default'), 'default marker is rendered');
+                assert.strictEqual(element.getAttribute('role'), 'img', 'non-interactive marker has image semantics');
+                assert.strictEqual(element.getAttribute('aria-label'), 'Map marker', 'non-interactive marker has an accessible name');
+                assert.notOk(element.hasAttribute('tabindex'), 'non-interactive marker is not added to the tab order');
                 assert.strictEqual(getComputedStyle(element).width, '44px', 'default marker keeps a sufficiently large hit area');
                 assert.strictEqual(getComputedStyle(element).height, '44px', 'default marker keeps a sufficiently large hit area');
                 const markerSvg = element.querySelector('.dx-map-marker-default-icon');
                 assert.ok(markerSvg, 'default marker SVG is rendered');
+                assert.strictEqual(markerSvg.getAttribute('aria-hidden'), 'true', 'the decorative SVG is not announced separately');
                 assert.strictEqual(markerSvg.getAttribute('viewBox'), '5 2 14 20', 'existing pinmap geometry is fitted to the marker');
                 assert.strictEqual(markerSvg.getAttribute('width'), '24.5', 'default marker width matches the standard marker size');
                 assert.strictEqual(markerSvg.getAttribute('height'), '36.5', 'default marker height matches the standard marker size');
@@ -1310,6 +1314,25 @@ QUnit.module('OSM: markers', moduleConfig, () => {
 
         assert.strictEqual(map.eventHandlers['change:view'].length, 0, 'view replacement listener is removed on dispose');
         assert.strictEqual(replacementView.eventHandlers['change:center'].length, 0, 'replacement view listener is removed on dispose');
+    });
+    QUnit.test('default marker accessible names are localized', function(assert) {
+        const defaultLocale = localization.locale();
+        const markerAriaLabel = 'Localized map marker';
+        localization.loadMessages({ test: { 'dxMap-markerAriaLabel': markerAriaLabel } });
+        localization.locale('test');
+        const engineMap = createOpenLayersEngine(openLayersMock).createMap(document.createElement('div'));
+        try {
+            [undefined, () => {}].forEach(onClick => {
+                engineMap.addMarker({ location: { lat: 40.74, lng: -73.98 }, onClick });
+                const element = openLayersMock.addedOverlays.at(-1).options.element;
+                assert.strictEqual(element.getAttribute('aria-label'), markerAriaLabel, 'the existing localized label is used');
+                assert.strictEqual(element.getAttribute('role'), onClick ? 'button' : 'img', 'the role reflects marker interactivity');
+                assert.strictEqual(element.getAttribute('tabindex'), onClick ? '0' : null, 'only interactive markers join the tab order');
+            });
+        } finally {
+            engineMap.dispose();
+            localization.locale(defaultLocale);
+        }
     });
     QUnit.test('marker iconSrc takes priority over markerIconSrc', function(assert) {
         const done = assert.async();
