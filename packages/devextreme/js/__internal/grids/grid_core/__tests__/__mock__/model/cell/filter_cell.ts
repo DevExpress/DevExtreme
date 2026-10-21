@@ -5,6 +5,8 @@ const SELECTORS = {
   menuItem: 'dx-menu-item',
   filterMenu: 'dx-filter-menu',
   contextMenu: 'dx-context-menu',
+  rangeStartEditorContainer: 'dx-datagrid-filter-range-start',
+  rangeEndEditorContainer: 'dx-datagrid-filter-range-end',
 };
 
 export class FilterCellModel {
@@ -29,5 +31,15 @@ export class FilterCellModel {
     );
 
     return Array.from(menuItems).find((item) => item.textContent === text) as HTMLElement;
+  }
+
+  public getRangeStartEditor<T>(EditorModel: new (element: HTMLElement) => T): T {
+    const editorElement = document.querySelector(`.${SELECTORS.rangeStartEditorContainer} .${SELECTORS.widget}`) as HTMLElement;
+    return new EditorModel(editorElement);
+  }
+
+  public getRangeEndEditor<T>(EditorModel: new (element: HTMLElement) => T): T {
+    const editorElement = document.querySelector(`.${SELECTORS.rangeEndEditorContainer} .${SELECTORS.widget}`) as HTMLElement;
+    return new EditorModel(editorElement);
   }
 }

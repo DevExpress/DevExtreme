@@ -875,12 +875,13 @@ export class ApplyFilterViewController extends modules.ViewController {
     this._columnsController.beginUpdate();
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i];
-      if (column.bufferedFilterValue !== undefined) {
-        this._columnsController.columnOption(i, 'filterValue', column.bufferedFilterValue);
+      const { bufferedFilterValue, bufferedSelectedFilterOperation } = column;
+      if (bufferedFilterValue !== undefined) {
+        this._columnsController.columnOption(i, 'filterValue', bufferedFilterValue);
         column.bufferedFilterValue = undefined;
       }
-      if (column.bufferedSelectedFilterOperation !== undefined) {
-        this._columnsController.columnOption(i, 'selectedFilterOperation', column.bufferedSelectedFilterOperation);
+      if (bufferedSelectedFilterOperation !== undefined) {
+        this._columnsController.columnOption(i, 'selectedFilterOperation', bufferedSelectedFilterOperation);
         column.bufferedSelectedFilterOperation = undefined;
       }
     }

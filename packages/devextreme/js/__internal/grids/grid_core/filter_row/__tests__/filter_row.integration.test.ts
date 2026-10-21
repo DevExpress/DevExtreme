@@ -260,6 +260,77 @@ describe('FilterRow', () => {
     });
   });
 
+  describe('applying the operation when applyFilter is onClick and the filter panel is visible', () => {
+    const createGrid = (column: Column): ReturnType<typeof createDataGrid> => createDataGrid({
+      dataSource: [
+        { id: 1, date: new Date(2026, 9, 13) },
+        { id: 2, date: new Date(2026, 9, 14) },
+        { id: 3, date: new Date(2026, 9, 20) },
+      ],
+      filterRow: { visible: true, applyFilter: 'onClick' },
+      filterPanel: { visible: true },
+      columns: [{ dataField: 'date', dataType: 'date', ...column }],
+    });
+
+    it('should apply the operation selected instead of between', async () => {
+      // arrange
+      const { component, instance } = await createGrid({
+        selectedFilterOperation: 'between',
+        filterValue: [new Date(2026, 9, 13), new Date(2026, 9, 15)],
+      });
+
+      await flushAsync();
+
+      const filterCell = component.getFilterRow().getFilterCell(0);
+      filterCell.getMenuButton().click();
+      filterCell.getMenuItemByText('Equals').click();
+
+      await flushAsync();
+
+      filterCell.getEditor(DateBoxModel).getInstance().option('value', new Date(2026, 9, 20));
+
+      await flushAsync();
+
+      // act
+      component.getApplyFilterButton().click();
+
+      await flushAsync();
+
+      // assert
+      expect(instance.columnOption('date', 'selectedFilterOperation')).toBe('=');
+      expect(instance.option('filterValue')).toEqual(['date', '=', new Date(2026, 9, 20)]);
+    });
+
+    it('should apply between with the entered range', async () => {
+      // arrange
+      const { component, instance } = await createGrid({ selectedFilterOperation: '=' });
+
+      await flushAsync();
+
+      const filterCell = component.getFilterRow().getFilterCell(0);
+      filterCell.getMenuButton().click();
+      filterCell.getMenuItemByText('Between').click();
+
+      await flushAsync();
+
+      filterCell.getRangeStartEditor(DateBoxModel).getInstance().option('value', new Date(2026, 9, 13));
+      filterCell.getRangeEndEditor(DateBoxModel).getInstance().option('value', new Date(2026, 9, 15));
+
+      await flushAsync();
+
+      // act
+      component.getApplyFilterButton().click();
+
+      await flushAsync();
+
+      // assert
+      const range = [new Date(2026, 9, 13), new Date(2026, 9, 15)];
+
+      expect(instance.columnOption('date', 'selectedFilterOperation')).toBe('between');
+      expect(instance.option('filterValue')).toEqual(['date', 'between', range]);
+    });
+  });
+
   describe('when the column has editorOptions', () => {
     it('should keep the default aria attributes of the filter editor input', async () => {
       const { component } = await createDataGrid({
