@@ -113,7 +113,6 @@ import type {
   EditActions,
   EditingActionParams,
   EditingButton,
-  EditingButtonLocalizationNames,
   EditingCellRenderOptions,
   EditingChange,
   EditingChangeParams,
@@ -2646,7 +2645,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * @extended: TreeList's editing
    */
-  protected getButtonLocalizationNames(): EditingButtonLocalizationNames {
+  protected getButtonLocalizationNames(): Partial<Record<string, string>> {
     return {
       edit: 'dxDataGrid-editingEditRow',
       save: 'dxDataGrid-editingSaveRowChanges',

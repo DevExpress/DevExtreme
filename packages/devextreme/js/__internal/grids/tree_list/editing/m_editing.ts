@@ -179,7 +179,6 @@ class EditingController extends editingModule.controllers.editing {
 
   protected getButtonLocalizationNames() {
     const names = super.getButtonLocalizationNames.apply(this);
-    // @ts-expect-error
     names.add = 'dxTreeList-editingAddRowToNode';
 
     return names;

@@ -182,11 +182,6 @@ export type EditingOptions = EditingBase<RawItemData, RowKey> & {
 
 export type EditingChangeParams = Partial<EditingChange> & { oldData?: RawItemData };
 
-export type EditingButtonLocalizationNames = Record<
-'edit' | 'save' | 'delete' | 'undelete' | 'cancel',
-string
->;
-
 export interface EditingModuleOptions {
   useLegacyColumnButtonTemplate?: boolean;
 }
