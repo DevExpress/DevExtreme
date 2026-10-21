@@ -76,6 +76,104 @@ const getElementsPositionAndSize = function($popover, $target) {
     };
 };
 
+QUnit.module('Map marker tooltip internal contract', {
+    beforeEach() {
+        fixtures.customBoundary.create();
+        this.$target = $('#where').css({ width: 24, height: 36, left: 140, top: 150 });
+        this.instance = new Popover($('#what'), {
+            target: this.$target,
+            container: '#boundary',
+            width: 180,
+            height: 120,
+            animation: null,
+            visible: true,
+            showTitle: false,
+            showCloseButton: false,
+            hideOnOutsideClick: false,
+            hideOnParentScroll: false,
+            contentTemplate: () => $('<div>').html('First line<br>Second line'),
+            position: {
+                my: 'bottom center',
+                at: 'top center',
+                of: this.$target,
+                collision: 'flip',
+                boundary: '#boundary'
+            }
+        });
+    },
+    afterEach() {
+        fixtures.customBoundary.drop();
+    }
+}, () => {
+    QUnit.test('_renderPosition(false) follows the target and flips without shrinking content', function(assert) {
+        const $content = this.instance.$overlayContent();
+        const initialWidth = getOuterWidth($content);
+        const initialHeight = getOuterHeight($content);
+
+        this.$target.css('top', 0);
+        this.instance._renderPosition(false);
+
+        assert.ok($content.offset().top >= this.$target.offset().top + getOuterHeight(this.$target), 'flips below the target');
+
+        this.$target.css('top', -140);
+        this.instance._renderPosition(false);
+
+        assert.strictEqual(getOuterWidth($content), initialWidth, 'width is preserved');
+        assert.strictEqual(getOuterHeight($content), initialHeight, 'height is preserved');
+        assert.ok($content.offset().top < $('#boundary').offset().top, 'popover can follow the target outside the boundary');
+    });
+
+    [120, 'auto'].forEach(height => {
+        QUnit.test(`_renderDimensions and _setContentHeight(true) restore size after boundary adjustment (height: ${height})`, function(assert) {
+            this.instance.option('height', height);
+            const $content = this.instance.$overlayContent();
+            const initialWidth = getOuterWidth($content);
+            const initialHeight = getOuterHeight($content);
+            const initialContentHeight = getHeight(this.instance.content());
+
+            this.$target.css('top', -getOuterHeight(this.$target) - initialHeight / 2);
+            this.instance._renderPosition();
+
+            assert.ok(getOuterHeight($content) < initialHeight, 'normal positioning reduces the height at the boundary');
+
+            this.instance._renderDimensions();
+            this.instance._setContentHeight(true);
+            this.instance._renderPosition(false);
+
+            assert.strictEqual(getOuterWidth($content), initialWidth, 'configured width is restored');
+            assert.strictEqual(getOuterHeight($content), initialHeight, 'configured height is restored');
+            assert.strictEqual(getHeight(this.instance.content()), initialContentHeight, 'inner content height is restored');
+        });
+    });
+
+    QUnit.test('effective role and _preventDialogContainerFocus support tooltip customization', function(assert) {
+        const instance = this.instance;
+        assert.strictEqual(instance._getEffectiveAriaRole(), 'tooltip', 'default role is available to the map');
+
+        instance.option({
+            _preventDialogContainerFocus: true,
+            focusStateEnabled: false,
+            tabFocusLoopEnabled: false,
+            showTitle: true,
+            showCloseButton: true
+        });
+
+        assert.strictEqual(instance._getEffectiveAriaRole(), 'dialog', 'title and Close button switch the effective role');
+        assert.strictEqual(instance.option('focusStateEnabled'), false, 'role change does not enable focus handling');
+        assert.strictEqual(instance.option('tabFocusLoopEnabled'), false, 'role change does not enable the focus loop');
+
+        instance.hide();
+        this.$target.attr('tabindex', 0).trigger('focus');
+        instance.show();
+
+        assert.strictEqual(document.activeElement, this.$target.get(0), 'showing the dialog does not steal focus');
+
+        instance.option('_popoverContentRole', 'tooltip');
+
+        assert.strictEqual(instance._getEffectiveAriaRole(), 'tooltip', 'an explicit role overrides the dialog configuration');
+    });
+});
+
 QUnit.module('render', () => {
     QUnit.test('render', function(assert) {
         fixtures.simple.create();
