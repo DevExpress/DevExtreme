@@ -501,7 +501,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
     const { itemMargin = 0 } = this.option();
     // @ts-expect-error ts-error
     const itemPosition = $itemElement.position()[config.mainPosition];
-    const itemDimension = outerMainGetter($itemElement.get(0));
+    const itemDimension = Number(outerMainGetter($itemElement));
     const itemTail = itemPosition + itemDimension;
     const scrollPosition = this.scrollPosition();
     const clientWidth = outerMainGetter(this.$element().get(0));

@@ -111,7 +111,7 @@ class GoogleStaticProvider extends Provider {
 
     const requestOptions = [
       'sensor=false',
-      `size=${Math.round(getWidth($container.get(0)))}x${Math.round(getHeight($container.get(0)))}`,
+      `size=${Math.round(Number(getWidth($container)))}x${Math.round(Number(getHeight($container)))}`,
 
       `maptype=${this._option('type')}`,
       `center=${this._locationToString(this._option('center'))}`,

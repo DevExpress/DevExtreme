@@ -441,7 +441,7 @@ export class Scroller {
     // @ts-expect-error ts-error
     const mouseLocation = e[`page${this._axis.toUpperCase()}`] - this._$element.offset()[this._prop];
     const location = this._location
-      + mouseLocation / this._containerToContentRatio() - getHeight(this._$container.get(0)) / 2;
+      + mouseLocation / this._containerToContentRatio() - Number(getHeight(this._$container)) / 2;
 
     this._scrollStep(-Math.round(location));
   }

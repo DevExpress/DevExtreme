@@ -1239,7 +1239,7 @@ export class RowsView extends ColumnsView {
         deferUpdate(() => {
           const scrollbarWidth = this.getScrollbarWidth(true);
           const elementHeightWithoutScrollbar = Number(getHeight(this.element())) - scrollbarWidth;
-          const contentHeight = getOuterHeight(contentElement.get(0));
+          const contentHeight = Number(getOuterHeight(contentElement));
           const showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0;
           const rowsHeight = this._getRowsHeight(contentElement.children().first());
           const $tableElement = $table ?? this.getTableElements();
@@ -1450,7 +1450,7 @@ export class RowsView extends ColumnsView {
 
     if (arguments.length === 0) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- getOuterHeight returns any
-      return $element ? getOuterHeight($element.get(0), true) : 0;
+      return $element ? getOuterHeight($element, true) : 0;
     }
 
     if (isDefined(height) && $element) {
@@ -1571,7 +1571,7 @@ export class RowsView extends ColumnsView {
       const rowOffset = $rowElement.offset();
 
       if (rowOffset) {
-        offset = (isTop ? rowOffset.top : rowOffset.top + getOuterHeight($rowElement.get(0)))
+        offset = (isTop ? rowOffset.top : rowOffset.top + Number(getOuterHeight($rowElement)))
           - contentElementOffset.top;
 
         if (offset > viewportBoundary) {

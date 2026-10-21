@@ -623,10 +623,10 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
     const { height, width } = this.option();
 
     if (!height) {
-      this.option('height', getOuterHeight($firstItem.get(0)));
+      this.option('height', getOuterHeight($firstItem));
     }
     if (!width) {
-      this.option('width', getOuterWidth($firstItem.get(0)));
+      this.option('width', getOuterWidth($firstItem));
     }
 
     this._dimensionChanged();

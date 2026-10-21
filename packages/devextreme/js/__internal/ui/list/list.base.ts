@@ -240,7 +240,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       }
 
       const nextItemLocation = ($nextItem.position()?.top ?? 0)
-        + getOuterHeight($nextItem.get(0)) / 2;
+        + Number(getOuterHeight($nextItem)) / 2;
       isItemVisible = nextItemLocation < containerHeight + scrollTop
         && nextItemLocation > scrollTop;
 
@@ -258,7 +258,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return $item.position().top
         - getHeight(this.$element().get(0))
-        + getOuterHeight($item.get(0));
+        + Number(getOuterHeight($item));
     }
 
     // @ts-expect-error ts-error
@@ -931,13 +931,13 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     }
 
     const $groupBody = $group.children(`.${LIST_GROUP_BODY_CLASS}`);
-    const startHeight = getOuterHeight($groupBody.get(0));
+    const startHeight = getOuterHeight($groupBody);
 
-    let endHeight = 0;
+    let endHeight: number | undefined = 0;
 
     if (collapsed) {
       setHeight($groupBody, 'auto');
-      endHeight = getOuterHeight($groupBody.get(0));
+      endHeight = getOuterHeight($groupBody);
     }
 
     $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);

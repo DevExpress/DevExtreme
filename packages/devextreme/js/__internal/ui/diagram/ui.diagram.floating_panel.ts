@@ -107,12 +107,12 @@ class DiagramFloatingPanel<
 
   _getVerticalPaddingsAndBorders(): number {
     const $content = $(this._getPopupContent());
-    return getOuterHeight($content.get(0)) - getHeight($content.get(0));
+    return Number(getOuterHeight($content)) - Number(getHeight($content));
   }
 
   _getHorizontalPaddingsAndBorders(): number {
     const $content = $(this._getPopupContent());
-    return getOuterWidth($content.get(0)) - getWidth($content.get(0));
+    return Number(getOuterWidth($content)) - Number(getWidth($content));
   }
 
   _getPopupClass(): string {

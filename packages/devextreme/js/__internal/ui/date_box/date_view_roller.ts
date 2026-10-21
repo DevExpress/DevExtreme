@@ -297,7 +297,7 @@ class DateViewRoller extends Scrollable<DateViewRollerProperties> {
   _itemHeight(): number {
     const $item = this._$items.first();
 
-    return getHeight($item.get(0));
+    return Number(getHeight($item));
   }
 
   _toggleActive(state: boolean): void {

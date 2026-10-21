@@ -641,18 +641,18 @@ export class ResizingController extends modules.ViewController {
     const $rootElement = $(rootElement);
     const importantMarginClass = this.addWidgetPrefix(CLASSES.importantMargin);
 
-    if (this._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement.get(0))) {
+    if (this._hasHeight === undefined && $rootElement && $rootElement.is(':visible') && getWidth($rootElement)) {
       const $groupElement = $rootElement.children(`.${this.getWidgetContainerClass()}`);
 
       if ($groupElement.length) {
         $groupElement.detach();
       }
 
-      this._hasHeight = !!getHeight($rootElement.get(0));
+      this._hasHeight = !!getHeight($rootElement);
 
-      const width = getWidth($rootElement.get(0));
+      const width = getWidth($rootElement);
       $rootElement.addClass(importantMarginClass);
-      this._hasWidth = getWidth($rootElement.get(0)) === width;
+      this._hasWidth = getWidth($rootElement) === width;
       $rootElement.removeClass(importantMarginClass);
 
       if ($groupElement.length) {
@@ -853,8 +853,8 @@ export class ResizingController extends modules.ViewController {
   }
 
   private _updateLastSizes($rootElement: dxElementWrapper): void {
-    this._lastWidth = getWidth($rootElement.get(0));
-    this._lastHeight = getHeight($rootElement.get(0));
+    this._lastWidth = getWidth($rootElement);
+    this._lastHeight = getHeight($rootElement);
     this._devicePixelRatio = getWindow().devicePixelRatio;
   }
 

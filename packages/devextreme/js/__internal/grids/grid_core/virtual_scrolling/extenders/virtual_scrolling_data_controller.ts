@@ -131,7 +131,7 @@ export const virtualScrollingDataControllerExtender = (
           let top = $rowElement?.position()?.top;
           const allowedTopOffset = browser.mozilla || browser.chrome ? 1 : 0; // T884308
           if ($rowElement && top && top > allowedTopOffset) {
-            top = Math.round(top + getOuterHeight($rowElement.get(0)) * (itemIndex % 1));
+            top = Math.round(top + Number(getOuterHeight($rowElement)) * (itemIndex % 1));
             scrollable.scrollTo({ top });
           }
         }

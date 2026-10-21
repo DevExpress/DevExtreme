@@ -373,7 +373,7 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
       }
 
       const { $visualContainer } = this._positionController;
-      const containerHeight: number = $visualContainer ? getHeight($visualContainer.get(0)) : 0;
+      const containerHeight: number = $visualContainer ? Number(getHeight($visualContainer)) : 0;
       const offsetBottom = containerHeight - contentHeight - offsetTop;
 
       return offsetTop >= offsetBottom ? -directionIndex : directionIndex;

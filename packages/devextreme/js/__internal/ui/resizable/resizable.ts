@@ -289,8 +289,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     }
 
     const $handle = $(e.target).closest(`.${RESIZABLE_HANDLE_CLASS}`);
-    const handleWidth = getOuterWidth($handle.get(0));
-    const handleHeight = getOuterHeight($handle.get(0));
+    const handleWidth = Number(getOuterWidth($handle));
+    const handleHeight = Number(getOuterHeight($handle));
     const handleOffset: Offset = $handle.offset() ?? { left: 0, top: 0 };
     const areaOffset = area.offset;
     const scrollOffset = this._getAreaScrollOffset();

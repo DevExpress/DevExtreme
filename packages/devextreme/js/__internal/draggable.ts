@@ -157,7 +157,7 @@ class ScrollHelper {
   isScrollable($element: dxElementWrapper): boolean {
     return ($element.css(this._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
             // @ts-expect-error prop is declared without the getter form
-            && $element.prop(this._scrollSizeProp) > Math.ceil(this._sizeAttr === 'width' ? getWidth($element.get(0)) : getHeight($element.get(0)));
+            && $element.prop(this._scrollSizeProp) > Math.ceil(this._sizeAttr === 'width' ? getWidth($element) : getHeight($element));
   }
 
   _trySetScrollable(element: Element, mousePosition: MousePosition): boolean {
@@ -741,10 +741,10 @@ class Draggable<
     const $area = this._getArea();
     const areaOffset = this._getAreaOffset($area);
     const boundOffset = this._getBoundOffset();
-    const areaWidth = getOuterWidth($area.get(0));
-    const areaHeight = getOuterHeight($area.get(0));
-    const elementWidth = getWidth($dragElement.get(0));
-    const elementHeight = getHeight($dragElement.get(0));
+    const areaWidth = Number(getOuterWidth($area));
+    const areaHeight = Number(getOuterHeight($area));
+    const elementWidth = Number(getWidth($dragElement));
+    const elementHeight = Number(getHeight($dragElement));
 
     const startOffset = {
       // @ts-expect-error offset can be undefined

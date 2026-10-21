@@ -265,7 +265,7 @@ export class ScrollViewScroller extends Scroller {
   }
 
   _considerTopPocketChange(): void {
-    this._location -= getHeight(this._$topPocket.get(0)) || -this._topPocketSize;
+    this._location -= getHeight(this._$topPocket) || -this._topPocketSize;
     this._maxOffset = 0;
     this._move();
   }

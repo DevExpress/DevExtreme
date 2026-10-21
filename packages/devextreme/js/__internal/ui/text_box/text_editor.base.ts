@@ -612,13 +612,13 @@ class TextEditorBase<
     return this._input();
   }
 
-  _getLabelContainerWidth(): number {
-    return getWidth(this._getLabelContainer().get(0));
+  _getLabelContainerWidth(): number | undefined {
+    return getWidth(this._getLabelContainer());
   }
 
   _getLabelBeforeWidth(): number {
     const buttonsBeforeWidth = this._$beforeButtonsContainer
-      && getWidth(this._$beforeButtonsContainer.get(0));
+      && getWidth(this._$beforeButtonsContainer);
 
     return buttonsBeforeWidth ?? 0;
   }
@@ -666,7 +666,7 @@ class TextEditorBase<
       mark: labelMark,
       mode: labelMode,
       containsButtonsBefore: !!this._$beforeButtonsContainer,
-      getContainerWidth: (): number => this._getLabelContainerWidth(),
+      getContainerWidth: (): number | undefined => this._getLabelContainerWidth(),
       getBeforeWidth: (): number => this._getLabelBeforeWidth(),
       onActiveHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
       onClickHandler: (): void => { this.focus(); },

@@ -1696,21 +1696,21 @@ class PivotGrid extends Widget {
         + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
 
       const dataAreaHeadHeight = getHeight(that._dataArea.headElement());
-      let filterAreaHeight = 0;
+      let filterAreaHeight: number | undefined = 0;
       let dataAreaHeight = 0;
       if (that._hasHeight) {
-        filterAreaHeight = getHeight(filterHeaderCell.get(0));
+        filterAreaHeight = getHeight(filterHeaderCell);
 
         const $dataHeader = tableElement.find('.dx-data-header');
-        const dataHeaderHeight = getHeight($dataHeader.get(0));
+        const dataHeaderHeight = Number(getHeight($dataHeader));
 
         bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
         dataAreaHeight = getHeight(
           that.$element().get(0),
-        ) - filterAreaHeight - dataHeaderHeight
+        ) - Number(filterAreaHeight) - dataHeaderHeight
           - (Math.max(
             dataAreaHeadHeight,
-            getHeight(columnAreaCell.get(0)),
+            Number(getHeight(columnAreaCell)),
             descriptionCellHeight,
           )
             + bordersWidth
@@ -1835,8 +1835,8 @@ class PivotGrid extends Widget {
         }
 
         if (that._hasHeight && that._filterFields.isVisible()
-          && getHeight(filterHeaderCell.get(0)) !== filterAreaHeight) {
-          const diff = getHeight(filterHeaderCell.get(0)) - filterAreaHeight;
+          && getHeight(filterHeaderCell) !== filterAreaHeight) {
+          const diff = Number(getHeight(filterHeaderCell)) - Number(filterAreaHeight);
           if (diff > 0) {
             hasRowsScroll = calculateHasScroll(dataAreaHeight - diff, totalHeight);
             const groupHeight = calculateGroupHeight(

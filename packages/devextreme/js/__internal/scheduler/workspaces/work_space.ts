@@ -1938,7 +1938,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     return {
       left: dateTableOffset.left,
-      right: dateTableOffset.left + getOuterWidth($dateTable.get(0)),
+      right: dateTableOffset.left + Number(getOuterWidth($dateTable)),
       top: dateTableOffset.top + top,
       bottom: dateTableOffset.top + top + height,
     };
@@ -3603,8 +3603,8 @@ const createDragBehaviorConfig = (
     ? (): TranslateVector => {
       const $dragElement = $(state.dragElement);
       return {
-        x: getWidth($dragElement.get(0)) / 2,
-        y: getHeight($dragElement.get(0)) / 2,
+        x: Number(getWidth($dragElement)) / 2,
+        y: Number(getHeight($dragElement)) / 2,
       };
     }
     : undefined;

@@ -372,7 +372,7 @@ class TagBox<
 
     return xor(isScrollLeft, !rtlEnabled)
       ? 0
-      : scrollSign * (containerScrollWidth - getOuterWidth(this._$tagsContainer.get(0)));
+      : scrollSign * (containerScrollWidth - Number(getOuterWidth(this._$tagsContainer)));
   }
 
   _getFocusedTagPosition(direction: 'next' | 'prev'): number {
@@ -389,7 +389,7 @@ class TagBox<
 
     if (isScrollLeft) {
       scrollOffset += Number(getOuterWidth(this._$focusedTag, true))
-        - getOuterWidth(this._$tagsContainer.get(0));
+        - Number(getOuterWidth(this._$tagsContainer));
     }
 
     if (xor(isScrollLeft, scrollOffset < 0)) {
