@@ -8,7 +8,9 @@ import type { ColumnsView } from '../views/columns_view';
 
 export type MixinBase = ModuleType<ColumnsView>;
 
-export type SortingColumn = Column & { isGrouped?: boolean };
+export interface SortingColumn extends Column {
+  isGrouped?: boolean;
+}
 
 export interface SortingColumnStateOptions extends ColumnStateOptions {
   column: SortingColumn;
@@ -22,3 +24,5 @@ export interface RenderedIndicatorOptions extends IndicatorOptions {
 export type AriaSortState = 'ascending' | 'descending';
 
 export type HeaderActionEvent = DxEvent<MouseEvent | KeyboardEvent>;
+
+export type SortKeyName = 'shift' | 'ctrl' | null;

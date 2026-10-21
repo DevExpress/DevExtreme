@@ -14,8 +14,12 @@ import type {
 } from './types';
 
 // TODO getController
-const sortingMixin = <T extends MixinBase>(Base: T): T => class SortingMixin extends Base {
-  protected _applyColumnState(options: SortingColumnStateOptions): dxElementWrapper | undefined {
+const sortingMixin = <T extends MixinBase>(
+  Base: T,
+): T => class SortingMixin extends Base {
+  protected _applyColumnState(
+    options: SortingColumnStateOptions,
+  ): dxElementWrapper | undefined {
     if (options.name !== 'sort') {
       return super._applyColumnState(options);
     }
@@ -66,7 +70,7 @@ const sortingMixin = <T extends MixinBase>(Base: T): T => class SortingMixin ext
     }
 
     if (isSortingAllowed) {
-      options.rootElement.addClass(this.addWidgetPrefix(CLASSES.action));
+      rootElement.addClass(this.addWidgetPrefix(CLASSES.action));
     }
 
     this._setAriaSortAttribute(column, ariaSortState, rootElement, hasSeveralSortIndexes);
@@ -121,9 +125,7 @@ const sortingMixin = <T extends MixinBase>(Base: T): T => class SortingMixin ext
   }
 
   protected _renderIndicator(options: RenderedIndicatorOptions): void {
-    const { column } = options;
-    const $container = options.container;
-    const $indicator = options.indicator;
+    const { column, container: $container, indicator: $indicator } = options;
 
     if (options.name === 'sort') {
       const rtlEnabled = this.option('rtlEnabled');
