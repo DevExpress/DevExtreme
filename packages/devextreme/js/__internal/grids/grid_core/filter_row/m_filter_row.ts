@@ -135,7 +135,12 @@ const getColumnSelectedFilterOperation = function (that, column) {
 
 const hasMultiselectEditor = function ($editorContainer: dxElementWrapper): boolean {
   const editor = getEditorInstance($editorContainer);
-  return !editor || MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+
+  if (editor) {
+    return MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+  }
+
+  return !$editorContainer.find(`.${FILTER_RANGE_CONTENT_CLASS}`).length;
 };
 
 const isValidFilterValue = function (
@@ -652,12 +657,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         }
 
         if (selectedFilterOperation) {
-          options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = selectedFilterOperation;
-
           if (selectedFilterOperation === 'between' || columnSelectedFilterOperation === 'between') {
             notFocusEditor = selectedFilterOperation === 'between';
             options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
           }
+
+          options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = selectedFilterOperation;
         } else {
           options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
           options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = column.defaultSelectedFilterOperation || null;
