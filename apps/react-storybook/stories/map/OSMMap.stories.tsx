@@ -3,21 +3,59 @@ import { useArgs } from 'storybook/preview-api';
 import { fn } from 'storybook/test';
 
 import Attribution from 'ol/control/Attribution.js';
+import Polyline from 'ol/format/Polyline.js';
+import type LineString from 'ol/geom/LineString.js';
 import type OpenLayersMap from 'ol/Map.js';
 import 'ol/ol.css';
 import React from 'react';
 import Button from 'devextreme-react/button';
-import Map, { type MapRef } from 'devextreme-react/map';
+import MapComponent, { type MapRef } from 'devextreme-react/map';
 import type {
     CalculateOsmRouteInfo,
     MapLocation,
     MapType,
     ReadyEvent,
-    OsmRouteResult,
+    OsmGeoJsonLineString,
 } from 'devextreme/ui/map';
 import 'devextreme/ui/map/openlayers';
 
-import { ROUTE_PATHS } from './routes';
+const routeCache = new Map<string, OsmGeoJsonLineString>();
+
+async function calculateRoute({ locations, mode }: CalculateOsmRouteInfo): Promise<OsmGeoJsonLineString> {
+    const body = JSON.stringify({
+        locations: locations.map(({ lat, lng }) => ({ lat, lon: lng })),
+        costing: mode === 'walking' ? 'pedestrian' : 'auto',
+        directions_type: 'none',
+    });
+    const cachedRoute = routeCache.get(body);
+    if (cachedRoute) {
+        return cachedRoute;
+    }
+
+    const response = await fetch('https://api-eu.stadiamaps.com/route/v1', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        referrerPolicy: 'strict-origin-when-cross-origin',
+        body,
+    });
+    if (!response.ok) {
+        throw new Error(`Stadia Maps routing failed: HTTP ${response.status}`);
+    }
+
+    const { trip } = await response.json();
+    if (!trip?.legs?.length) {
+        throw new Error('Stadia Maps returned no route.');
+    }
+    const format = new Polyline({ factor: 1e6 });
+    const route: OsmGeoJsonLineString = {
+        type: 'LineString',
+        coordinates: trip.legs.flatMap((leg: { shape: string }) => (
+            (format.readGeometry(leg.shape) as LineString).getCoordinates()
+        )),
+    };
+    routeCache.set(body, route);
+    return route;
+}
 
 const CENTRAL_PARK_CENTER = { lat: 40.7829, lng: -73.9654 };
 // Demo only: tiles are served under Developer Express Inc's Stadia Maps subscription via domain-based authentication.
@@ -40,8 +78,6 @@ const MARKER_LOCATIONS: Record<string, MapLocation> = {
 const ROUTE_PRESETS = {
     centralParkRun: {
         mode: 'walking',
-        title: 'Central Park Run — approx. 10.1 km',
-        markerDescription: 'Blue: Columbus Circle start / finish. Red: Dana Discovery Center.',
         center: { lat: 40.7827, lng: -73.9666 },
         zoom: 14,
         locations: [
@@ -63,8 +99,6 @@ const ROUTE_PRESETS = {
     },
     manhattanDrive: {
         mode: 'driving',
-        title: 'Manhattan Drive — official Routes demo waypoints, approx. 11 km',
-        markerDescription: 'Four markers: coordinate string, arrays and an object. Red: custom icon.',
         center: { lat: 40.75, lng: -73.986 },
         zoom: 14,
         locations: [
@@ -90,11 +124,7 @@ const PROVIDER_CONFIG = {
     calculateLocation: (query: string): Promise<MapLocation | undefined> => (
         Promise.resolve(MARKER_LOCATIONS[query])
     ),
-    calculateRoute: ({ mode }: CalculateOsmRouteInfo): Promise<OsmRouteResult> => (
-        Promise.resolve(mode === 'walking'
-            ? ROUTE_PATHS.walking
-            : ROUTE_PATHS.driving.coordinates.map(([lng, lat]) => [lat, lng]))
-    ),
+    calculateRoute,
     tileServer: () => TILE_SERVER,
 };
 const handleMarkerClick = fn();
@@ -220,7 +250,6 @@ const OsmMapStory = ({
 
     return (
         <div style={STORY_STYLE}>
-            <div>{preset.title}. {preset.markerDescription}</div>
             <div style={TOOLBAR_STYLE}>
                 <Button
                     text="Add Marker"
@@ -234,7 +263,7 @@ const OsmMapStory = ({
                     onClick={removeMarker}
                 />
             </div>
-            <Map
+            <MapComponent
                 ref={mapRef}
                 provider="osm"
                 providerConfig={PROVIDER_CONFIG}
@@ -310,8 +339,8 @@ const meta: Meta<OsmStoryArgs> = {
                 labels: { manhattanDrive: 'Manhattan Drive', centralParkRun: 'Central Park Run' },
             },
             options: ['manhattanDrive', 'centralParkRun'],
-            description: 'Saved OSRM routes: official Routes demo waypoints or an independently calculated Central Park loop. '
-                + 'Driving returns coordinate tuples; walking returns a GeoJSON LineString. No routing service is called.',
+            description: 'Stadia Maps calculates driving or walking routes between predefined waypoints. '
+                + 'Results are cached so appearance changes do not repeat routing requests.',
         },
         routeOpacity: { control: { type: 'range', min: 0, max: 1, step: 0.1 } },
         routeWeight: { control: { type: 'number', min: 0, max: 20 } },
