@@ -55,13 +55,13 @@ import {
   getDefaultOptionsByCommand,
   hasInvalidCustomCommand,
 } from '../utils/ai';
-import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
+import { getTableFormats, TABLE_OPERATIONS } from '../utils/table_helper';
 import {
   applyFormat, getDefaultClickHandler, getFormatHandlers, ICON_MAP,
-} from '../utils/m_toolbar_helper';
-import type { BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
-import WidgetCollector from './m_widget_collector';
+} from '../utils/toolbar_helper';
+import type { BaseModuleOptions } from './base';
+import BaseModule from './base';
+import WidgetCollector from './widget_collector';
 
 interface ToolbarModuleOptions extends BaseModuleOptions, dxHtmlEditorToolbar {}
 
@@ -164,6 +164,8 @@ if (Quill) {
 
     _isReset?: boolean;
 
+    editorOptionChangedHandler?: (e: OptionChangedEvent) => void;
+
     constructor(quill: QuillInstance, options: ToolbarModuleOptions) {
       super(quill, options);
 
@@ -193,10 +195,13 @@ if (Quill) {
         if (toolbarMenu) {
           // eslint-disable-next-line @typescript-eslint/naming-convention
           const { _renderPopup } = toolbarMenu;
-          toolbarMenu._renderPopup = (...args): void => {
-            _renderPopup.apply(toolbarMenu, ...args);
-            // @ts-expect-error _popup is typed optional; the first _renderPopup() call creates it
-            toolbarMenu._popup.on('showing', () => { this._updateToolbar(true); });
+          toolbarMenu._renderPopup = (): void => {
+            const previousPopup = toolbarMenu._popup;
+            _renderPopup.call(toolbarMenu);
+            const popup = toolbarMenu._popup;
+            if (popup && popup !== previousPopup) {
+              popup.on('showing', () => { this._updateToolbar(true); });
+            }
           };
         }
 
@@ -281,12 +286,13 @@ if (Quill) {
         this.toolbarConfig,
       );
 
-      this.editorInstance.on('optionChanged', ({ name }: OptionChangedEvent): void => {
+      this.editorOptionChangedHandler = ({ name }: OptionChangedEvent): void => {
         if (name === 'readOnly' || name === 'disabled') {
           // @ts-expect-error toolbarInstance is set by _renderToolbar, which precedes this call
           this.toolbarInstance.option('disabled', this.isInteractionDisabled);
         }
-      });
+      };
+      this.editorInstance.on('optionChanged', this.editorOptionChangedHandler);
     }
 
     get toolbarConfig(): Partial<ToolbarProperties> {
@@ -314,6 +320,10 @@ if (Quill) {
         this._$toolbarContainer
           .empty()
           .removeClass(TOOLBAR_WRAPPER_CLASS);
+      }
+
+      if (this.editorOptionChangedHandler) {
+        this.editorInstance.off('optionChanged', this.editorOptionChangedHandler);
       }
     }
 

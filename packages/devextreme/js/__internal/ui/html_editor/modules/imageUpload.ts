@@ -11,9 +11,9 @@ import type { dxHtmlEditorImageUpload } from '@js/ui/html_editor';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance, UploaderModule } from '../types/quill';
-import { getFileUploaderBaseOptions, serverUpload } from '../utils/m_image_uploader_helper';
-import type { BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
+import { getFileUploaderBaseOptions, serverUpload } from '../utils/image_uploader_helper';
+import type { BaseModuleOptions } from './base';
+import BaseModule from './base';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
 
@@ -65,10 +65,11 @@ if (Quill) {
     _disableDragAndDropUploading(): void {
       this._getUploaderModule().preventImageUploading(false);
       this._detachEvents();
-      this._fileUploader?.dispose();
+      this.removeFileUploader();
     }
 
     _enableDragAndDropUploading(): void {
+      this.removeFileUploader();
       this._initFileUploader();
       this._getUploaderModule().preventImageUploading(true);
       this._attachEvents();
@@ -93,18 +94,24 @@ if (Quill) {
       return $container;
     }
 
+    removeFileUploader(): void {
+      this._fileUploader?.$element().remove();
+      this._fileUploader = undefined;
+    }
+
     _onUploaded(data: UploadedEvent): void {
       const { index: pasteIndex } = this.quill.getSelection() ?? { index: this.quill.getLength() };
       serverUpload(this.options.uploadDirectory, data.file.name, this.quill, pasteIndex);
     }
 
     _attachEvents(): void {
+      eventsEngine.off(this.quill.root, `.${MODULE_NAMESPACE}`);
       eventsEngine.on(this.quill.root, addNamespace('drop', MODULE_NAMESPACE), this._dropHandler.bind(this));
       eventsEngine.on(this.quill.root, addNamespace('paste', MODULE_NAMESPACE), this._pasteHandler.bind(this));
     }
 
     _detachEvents(): void {
-      eventsEngine.off(this.quill.root, MODULE_NAMESPACE);
+      eventsEngine.off(this.quill.root, `.${MODULE_NAMESPACE}`);
     }
 
     _dropHandler(e: DxEvent<DragEvent>): void {
@@ -155,6 +162,10 @@ if (Quill) {
           // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
           this.options.fileUploadMode = value;
           this._handleServerUpload();
+          break;
+        case 'uploadDirectory':
+          // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
+          this.options.uploadDirectory = value;
           break;
         case 'fileUploaderOptions':
           this.options.fileUploaderOptions = extend(

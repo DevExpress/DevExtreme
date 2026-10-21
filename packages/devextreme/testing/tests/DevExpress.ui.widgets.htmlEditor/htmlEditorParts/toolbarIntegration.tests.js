@@ -422,6 +422,20 @@ export default function() {
             assert.ok($toolbar.hasClass(STATE_DISABLED_CLASS));
         });
 
+        test('Toolbar of a previous render should not be updated on the readOnly option change after repaint', function(assert) {
+            const editor = $('#htmlEditor').dxHtmlEditor({
+                toolbar: { items: ['bold'] }
+            }).dxHtmlEditor('instance');
+            const previousToolbar = editor.getModule('toolbar').toolbarInstance;
+
+            editor.repaint();
+            const previousToolbarOptionSpy = sinon.spy(previousToolbar, 'option');
+            editor.option('readOnly', true);
+
+            assert.ok($(`.${TOOLBAR_CLASS}`).hasClass(STATE_DISABLED_CLASS), 'current toolbar is disabled');
+            assert.ok(previousToolbarOptionSpy.notCalled, 'toolbar of the previous render is not updated');
+        });
+
         test('SelectBox should keep selected value after format applying', function(assert) {
             $('#htmlEditor').dxHtmlEditor({
                 toolbar: { items: [{ name: 'size', acceptedValues: ['10px', '11px'] }] }

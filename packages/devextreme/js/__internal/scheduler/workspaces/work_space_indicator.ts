@@ -5,7 +5,7 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets } from '@ts/core/utils/m_date';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { getToday } from '@ts/scheduler/r1/utils/index';
 
@@ -25,7 +25,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   protected getToday(): Date {
     const { viewOffset, indicatorTime } = this.option();
     const today = getToday(indicatorTime, this.timeZoneCalculator);
-    return dateUtilsTs.addOffsets(today, -viewOffset);
+    return addOffsets(today, -viewOffset);
   }
 
   isIndicationOnView(): boolean {

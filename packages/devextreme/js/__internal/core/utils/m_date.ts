@@ -1,28 +1,191 @@
-// TODO refactoring: Review all date utils functions and move useful to __internal/core/utils/date.ts
+import type { TimeInterval, TimeIntervalConfig } from '@js/common/charts';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { camelize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
 import { adjust } from '@js/core/utils/math';
 import {
   isDate, isDefined, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
+import type { WeekNumberRule } from '@js/ui/calendar';
 import { toMilliseconds } from '@ts/utils/toMilliseconds';
+
+type DateInterval = Exclude<TimeIntervalConfig, number | string | undefined>;
+
+type DateView = 'month' | 'year' | 'decade' | 'century';
+
+type DateUnitSource = TimeIntervalConfig | Partial<Record<TimeInterval, unknown>>;
+
+interface DatesDifferences {
+  year: boolean;
+  month: boolean;
+  day: boolean;
+  hour: boolean;
+  minute: boolean;
+  second: boolean;
+  millisecond: boolean;
+  count: number;
+}
+
+type MaybeDate = Date | null | undefined;
 
 const DAYS_IN_WEEK = 7;
 const THURSDAY_WEEK_NUMBER = 4;
 const SUNDAY_WEEK_NUMBER = 7;
 const USUAL_WEEK_COUNT_IN_YEAR = 52;
 
-const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
+const dateUnitIntervals: TimeInterval[] = [
+  'millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year',
+];
 
-const getDatesInterval = function (startDate, endDate, intervalUnit) {
+function convertDateUnitToMilliseconds(dateUnit: TimeInterval, count: number): number {
+  return toMilliseconds(dateUnit) * count;
+}
+
+function getDateUnitInterval(tickInterval: DateUnitSource): TimeInterval | '' | undefined {
+  let maxInterval = -1;
+
+  if (isString(tickInterval)) {
+    return tickInterval;
+  }
+
+  if (isObject(tickInterval)) {
+    each(tickInterval, (key: string, value: unknown) => {
+      for (let i = 0; i < dateUnitIntervals.length; i += 1) {
+        if (value && (key === `${dateUnitIntervals[i]}s` || key === dateUnitIntervals[i]) && maxInterval < i) {
+          maxInterval = i;
+        }
+      }
+    });
+
+    return dateUnitIntervals[maxInterval];
+  }
+  return '';
+}
+
+const dateIntervalByUnit: Partial<Record<string, DateInterval>> = {
+  year: { years: 1 },
+  month: { months: 1 },
+  quarter: { months: 3 },
+  week: { weeks: 1 },
+  day: { days: 1 },
+  hour: { hours: 1 },
+  minute: { minutes: 1 },
+  second: { seconds: 1 },
+  millisecond: { milliseconds: 1 },
+};
+
+function getDateIntervalByString(intervalString: string): DateInterval {
+  return { ...dateIntervalByUnit[intervalString] };
+}
+
+const createDateWithFullYear = function createDateWithFullYear(
+  year: number,
+  ...args: [
+    monthIndex: number, date?: number, hours?: number,
+    minutes?: number, seconds?: number, ms?: number,
+  ]
+): Date {
+  const result = new Date(year, ...args);
+  result.setFullYear(year);
+  return result;
+};
+
+function getLastMonthDay(date: Date): number {
+  const resultDate = createDateWithFullYear(date.getFullYear(), date.getMonth() + 1, 0);
+  return resultDate.getDate();
+}
+
+function getFirstDecadeInCentury(date: Date): number;
+function getFirstDecadeInCentury(date: MaybeDate): number | null | undefined;
+function getFirstDecadeInCentury(date: MaybeDate): number | null | undefined {
+  return date && date.getFullYear() - (date.getFullYear() % 100);
+}
+
+function getFirstYearInDecade(date: Date): number;
+function getFirstYearInDecade(date: MaybeDate): number | null | undefined;
+function getFirstYearInDecade(date: MaybeDate): number | null | undefined {
+  return date && date.getFullYear() - (date.getFullYear() % 10);
+}
+
+function getFirstWeekDate(date: Date, firstDayOfWeek: number): Date {
+  const delta = (date.getDay() - firstDayOfWeek + DAYS_IN_WEEK) % DAYS_IN_WEEK;
+
+  const result = new Date(date);
+  result.setDate(date.getDate() - delta);
+
+  return result;
+}
+
+function getFirstDateInYear(year: number): Date {
+  return new Date(year, 0, 1);
+}
+
+function fixTimezoneGap(oldDate: MaybeDate, newDate: Date): void {
+  // NOTE: T182866
+  if (!isDefined(oldDate)) {
+    return;
+  }
+
+  const diff = newDate.getHours() - oldDate.getHours();
+
+  if (diff === 0) {
+    return;
+  }
+
+  const sign = diff === 1 || diff === -23 ? -1 : 1;
+  const trial = new Date(newDate.getTime() + sign * 3600000);
+
+  if (sign > 0 || trial.getDate() === newDate.getDate()) {
+    newDate.setTime(trial.getTime());
+  }
+}
+
+function getTimezonesDifference(min: Date, max: Date): number {
+  return (max.getTimezoneOffset() - min.getTimezoneOffset()) * 60 * 1000;
+}
+
+function normalizeDate<T extends Date | number>(date: T, min?: T | null, max?: T | null): T;
+function normalizeDate<T extends Date | number>(
+  date: T | null | undefined,
+  min?: T | null,
+  max?: T | null,
+): T | null | undefined;
+function normalizeDate(
+  date: Date | number | null | undefined,
+  min?: Date | number | null,
+  max?: Date | number | null,
+): Date | number | null | undefined {
+  let normalizedDate = date;
+
+  if (!isDefined(date)) {
+    return date;
+  }
+
+  if (isDefined(min) && date < min) {
+    normalizedDate = min;
+  }
+
+  if (isDefined(max) && date > max) {
+    normalizedDate = max;
+  }
+
+  return normalizedDate;
+}
+
+const getDatesInterval = function getDatesInterval(
+  startDate: Date,
+  endDate: Date,
+  intervalUnit: TimeInterval,
+): number {
   const delta = endDate.getTime() - startDate.getTime();
   const millisecondCount = toMilliseconds(intervalUnit) || 1;
 
   return Math.floor(delta / millisecondCount);
 };
 
-const getNextDateUnit = function (unit, withWeeks) {
+const getNextDateUnit = function getNextDateUnit(
+  unit: DateUnitSource,
+  withWeeks?: boolean,
+): TimeInterval | 0 {
   const interval = getDateUnitInterval(unit);
 
   switch (interval) {
@@ -49,29 +212,41 @@ const getNextDateUnit = function (unit, withWeeks) {
   }
 };
 
-const convertMillisecondsToDateUnits = function (value) {
-  let i;
-  let dateUnitCount;
-  let dateUnitInterval;
-  const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
-  const result = {};
+const convertMillisecondsToDateUnits = function convertMillisecondsToDateUnits(
+  value: number,
+): DateInterval {
+  const units = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'] as const;
+  const result: DateInterval = {};
+  let rest = value;
 
-  for (i = dateUnitIntervals.length - 1; i >= 0; i--) {
-    dateUnitInterval = dateUnitIntervals[i];
-    dateUnitCount = Math.floor(value / toMilliseconds(dateUnitInterval));
+  for (let i = units.length - 1; i >= 0; i -= 1) {
+    const dateUnitInterval = units[i];
+    const dateUnitCount = Math.floor(rest / toMilliseconds(dateUnitInterval));
     if (dateUnitCount > 0) {
       result[`${dateUnitInterval}s`] = dateUnitCount;
-      value -= convertDateUnitToMilliseconds(dateUnitInterval, dateUnitCount);
+      rest -= convertDateUnitToMilliseconds(dateUnitInterval, dateUnitCount);
     }
   }
   return result;
 };
 
-const dateToMilliseconds = function (tickInterval) {
+const unitByIntervalKey: Record<keyof DateInterval, TimeInterval> = {
+  milliseconds: 'millisecond',
+  seconds: 'second',
+  minutes: 'minute',
+  hours: 'hour',
+  days: 'day',
+  weeks: 'week',
+  months: 'month',
+  quarters: 'quarter',
+  years: 'year',
+};
+
+const dateToMilliseconds = function dateToMilliseconds(tickInterval: TimeIntervalConfig): number {
   let milliseconds = 0;
   if (isObject(tickInterval)) {
-    each(tickInterval, function (key, value) {
-      milliseconds += convertDateUnitToMilliseconds(key.substr(0, key.length - 1), value);
+    each(tickInterval, (key, value) => {
+      milliseconds += convertDateUnitToMilliseconds(unitByIntervalKey[key], value);
     });
   }
   if (isString(tickInterval)) {
@@ -80,35 +255,8 @@ const dateToMilliseconds = function (tickInterval) {
   return milliseconds;
 };
 
-function convertDateUnitToMilliseconds(dateUnit, count) {
-  return toMilliseconds(dateUnit) * count;
-}
-
-// refactor for performance
-function getDateUnitInterval(tickInterval) {
-  let maxInterval = -1;
-  let i;
-
-  if (isString(tickInterval)) {
-    return tickInterval;
-  }
-
-  if (isObject(tickInterval)) {
-    each(tickInterval, function (key, value) {
-      for (i = 0; i < dateUnitIntervals.length; i++) {
-        if (value && (key === `${dateUnitIntervals[i]}s` || key === dateUnitIntervals[i]) && maxInterval < i) {
-          maxInterval = i;
-        }
-      }
-    });
-
-    return dateUnitIntervals[maxInterval];
-  }
-  return '';
-}
-
 // T375972
-const tickIntervalToFormatMap = {
+const tickIntervalToFormatMap: Record<TimeInterval, string> = {
   millisecond: 'millisecond',
   second: 'longtime',
   minute: 'shorttime',
@@ -120,84 +268,91 @@ const tickIntervalToFormatMap = {
   year: 'year',
 };
 
-// Because of changes in formatting (Globalize has been updated) common date formatting has been changed.
-// The purpose of the following method is to preserve original dates formatting in axes and range selector slider markers.
-function getDateFormatByTickInterval(tickInterval) {
-  return tickIntervalToFormatMap[getDateUnitInterval(tickInterval)] || '';
+function getDateFormatByTickInterval(tickInterval: DateUnitSource): string {
+  const dateUnitInterval = getDateUnitInterval(tickInterval);
+  return (dateUnitInterval && tickIntervalToFormatMap[dateUnitInterval]) ?? '';
 }
 
-const getQuarter = function (month) {
+const getQuarter = function getQuarter(month: number): number {
   return Math.floor(month / 3);
 };
 
-const getFirstQuarterMonth = function (month) {
+const getFirstQuarterMonth = function getFirstQuarterMonth(month: number): number {
   return getQuarter(month) * 3;
 };
 
-function correctDateWithUnitBeginning(date, dateInterval, withCorrection?, firstDayOfWeek?) {
-  date = new Date(date.getTime());
+function correctDateWithUnitBeginning(
+  date: Date,
+  dateInterval: DateUnitSource,
+  withCorrection?: boolean | null,
+  firstDayOfWeek?: number,
+): Date {
+  let result = new Date(date.getTime());
   const oldDate = new Date(date.getTime());
-  let firstQuarterMonth;
-  let month;
   const dateUnitInterval = getDateUnitInterval(dateInterval);
 
-  // eslint-disable-next-line default-case
   switch (dateUnitInterval) {
     case 'second':
-      date = new Date(Math.floor(oldDate.getTime() / 1000) * 1000);
+      result = new Date(Math.floor(oldDate.getTime() / 1000) * 1000);
       break;
     case 'minute':
-      date = new Date(Math.floor(oldDate.getTime() / 60000) * 60000);
+      result = new Date(Math.floor(oldDate.getTime() / 60000) * 60000);
       break;
     case 'hour':
-      date = new Date(Math.floor(oldDate.getTime() / 3600000) * 3600000);
+      result = new Date(Math.floor(oldDate.getTime() / 3600000) * 3600000);
       break;
     case 'year':
-      date.setMonth(0);
+      result.setMonth(0);
       /* falls through */
     case 'month':
-      date.setDate(1);
+      result.setDate(1);
       /* falls through */
     case 'day':
-      date.setHours(0, 0, 0, 0);
+      result.setHours(0, 0, 0, 0);
       break;
     case 'week':
-      date = getFirstWeekDate(date, firstDayOfWeek || 0);
-      date.setHours(0, 0, 0, 0);
+      result = getFirstWeekDate(result, firstDayOfWeek || 0);
+      result.setHours(0, 0, 0, 0);
       break;
-    case 'quarter':
-      firstQuarterMonth = getFirstQuarterMonth(date.getMonth());
-      month = date.getMonth();
+    case 'quarter': {
+      const firstQuarterMonth = getFirstQuarterMonth(result.getMonth());
+      const month = result.getMonth();
 
-      date.setDate(1);
-      date.setHours(0, 0, 0, 0);
+      result.setDate(1);
+      result.setHours(0, 0, 0, 0);
       if (month !== firstQuarterMonth) {
-        date.setMonth(firstQuarterMonth);
+        result.setMonth(firstQuarterMonth);
       }
+      break;
+    }
+    default:
       break;
   }
 
   if (withCorrection && dateUnitInterval !== 'hour' && dateUnitInterval !== 'minute' && dateUnitInterval !== 'second') {
-    fixTimezoneGap(oldDate, date);
+    fixTimezoneGap(oldDate, result);
   }
-  return date;
+  return result;
 }
 
-function trimTime(date) {
+function trimTime(date: Date): Date {
   return correctDateWithUnitBeginning(date, 'day');
 }
 
-const setToDayEnd = function (date) {
+const setToDayEnd = function setToDayEnd(date: Date): Date {
   const result = trimTime(date);
 
   result.setDate(result.getDate() + 1);
   return new Date(result.getTime() - 1);
 };
 
-const getDatesDifferences = function (date1, date2) {
+const getDatesDifferences = function getDatesDifferences(
+  date1: Date,
+  date2: Date,
+): DatesDifferences {
   let counter = 0;
 
-  const differences: any = {
+  const differences: DatesDifferences = {
     year: date1.getFullYear() !== date2.getFullYear(),
     month: date1.getMonth() !== date2.getMonth(),
     day: date1.getDate() !== date2.getDate(),
@@ -205,27 +360,36 @@ const getDatesDifferences = function (date1, date2) {
     minute: date1.getMinutes() !== date2.getMinutes(),
     second: date1.getSeconds() !== date2.getSeconds(),
     millisecond: date1.getMilliseconds() !== date2.getMilliseconds(),
+    count: 0,
   };
 
-  each(differences, function (key, value) {
+  each(differences, (key, value) => {
     if (value) {
-      counter++;
+      counter += 1;
     }
   });
   if (counter === 0 && getTimezonesDifference(date1, date2) !== 0) {
     differences.hour = true;
-    counter++;
+    counter += 1;
   }
 
   differences.count = counter;
   return differences;
 };
 
-function addDateInterval(value, interval, dir) {
+function toDateInterval(interval: string | number | DateInterval): DateInterval {
+  if (isString(interval)) {
+    return getDateIntervalByString(interval.toLowerCase());
+  }
+  if (isNumeric(interval)) {
+    return convertMillisecondsToDateUnits(interval);
+  }
+  return interval;
+}
+
+function addDateInterval(value: Date, interval: string | number | DateInterval, dir: number): Date {
   const result = new Date(value.getTime());
-  const intervalObject = isString(interval) ? getDateIntervalByString(interval.toLowerCase())
-    : isNumeric(interval) ? convertMillisecondsToDateUnits(interval)
-      : interval;
+  const intervalObject = toDateInterval(interval);
   if (intervalObject.years) {
     result.setFullYear(result.getFullYear() + intervalObject.years * dir);
   }
@@ -256,17 +420,37 @@ function addDateInterval(value, interval, dir) {
   return result;
 }
 
-const addInterval = function (value, interval, isNegative?: boolean) {
+function addInterval(
+  value: Date,
+  interval: string | number | DateInterval,
+  isNegative?: boolean,
+): Date;
+function addInterval(value: number, interval: number, isNegative?: boolean): number;
+function addInterval(
+  value: Date | number,
+  interval: string | number | DateInterval,
+  isNegative?: boolean,
+): Date | number;
+function addInterval(
+  value: Date | number,
+  interval: string | number | DateInterval,
+  isNegative?: boolean,
+): Date | number {
   const dir = isNegative ? -1 : +1;
-  return isDate(value) ? addDateInterval(value, interval, dir) : adjust(value + interval * dir, interval);
-};
+  return isDate(value)
+    ? addDateInterval(value, interval, dir)
+    : adjust(value + Number(interval) * dir, Number(interval));
+}
 
-const getSequenceByInterval = function (min, max, interval) {
-  const intervals: any[] = [];
-  let cur;
+const getSequenceByInterval = function getSequenceByInterval(
+  min: Date | number,
+  max: Date | number,
+  interval: string | number | DateInterval,
+): (Date | number)[] {
+  const intervals: (Date | number)[] = [];
+  let cur = min;
 
   intervals.push(isDate(min) ? new Date(min.getTime()) : min);
-  cur = min;
   while (cur < max) {
     cur = addInterval(cur, interval);
     intervals.push(cur);
@@ -274,23 +458,46 @@ const getSequenceByInterval = function (min, max, interval) {
   return intervals;
 };
 
-// @ts-expect-error not all code paths return value
-const getViewFirstCellDate = function (viewType, date) {
+const getViewFirstCellDate = function getViewFirstCellDate(
+  viewType: string | undefined,
+  date: Date,
+): Date | undefined {
   if (viewType === 'month') { return createDateWithFullYear(date.getFullYear(), date.getMonth(), 1); }
   if (viewType === 'year') { return createDateWithFullYear(date.getFullYear(), 0, date.getDate()); }
-  if (viewType === 'decade') { return createDateWithFullYear(getFirstYearInDecade(date), date.getMonth(), date.getDate()); }
-  if (viewType === 'century') { return createDateWithFullYear(getFirstDecadeInCentury(date), date.getMonth(), date.getDate()); }
+  if (viewType === 'decade') {
+    return createDateWithFullYear(getFirstYearInDecade(date), date.getMonth(), date.getDate());
+  }
+  if (viewType === 'century') {
+    return createDateWithFullYear(getFirstDecadeInCentury(date), date.getMonth(), date.getDate());
+  }
+  return undefined;
 };
 
-// @ts-expect-error not all code paths return value
-const getViewLastCellDate = function (viewType, date) {
-  if (viewType === 'month') { return createDateWithFullYear(date.getFullYear(), date.getMonth(), getLastMonthDay(date)); }
+const getViewLastCellDate = function getViewLastCellDate(
+  viewType: string | undefined,
+  date: Date,
+): Date | undefined {
+  if (viewType === 'month') {
+    return createDateWithFullYear(date.getFullYear(), date.getMonth(), getLastMonthDay(date));
+  }
   if (viewType === 'year') { return createDateWithFullYear(date.getFullYear(), 11, date.getDate()); }
-  if (viewType === 'decade') { return createDateWithFullYear(getFirstYearInDecade(date) + 9, date.getMonth(), date.getDate()); }
-  if (viewType === 'century') { return createDateWithFullYear(getFirstDecadeInCentury(date) + 90, date.getMonth(), date.getDate()); }
+  if (viewType === 'decade') {
+    return createDateWithFullYear(getFirstYearInDecade(date) + 9, date.getMonth(), date.getDate());
+  }
+  if (viewType === 'century') {
+    return createDateWithFullYear(
+      getFirstDecadeInCentury(date) + 90,
+      date.getMonth(),
+      date.getDate(),
+    );
+  }
+  return undefined;
 };
 
-const getViewMinBoundaryDate = function (viewType, date) {
+const getViewMinBoundaryDate = function getViewMinBoundaryDate(
+  viewType: string | undefined,
+  date: Date,
+): Date {
   const resultDate = createDateWithFullYear(date.getFullYear(), date.getMonth(), 1);
 
   if (viewType === 'month') {
@@ -314,7 +521,10 @@ const getViewMinBoundaryDate = function (viewType, date) {
   return resultDate;
 };
 
-const getViewMaxBoundaryDate = function (viewType, date) {
+const getViewMaxBoundaryDate = function getViewMaxBoundaryDate(
+  viewType: string | undefined,
+  date: Date,
+): Date {
   const resultDate = new Date(date);
   resultDate.setDate(getLastMonthDay(date));
 
@@ -340,12 +550,7 @@ const getViewMaxBoundaryDate = function (viewType, date) {
   return resultDate;
 };
 
-function getLastMonthDay(date) {
-  const resultDate = createDateWithFullYear(date.getFullYear(), date.getMonth() + 1, 0);
-  return resultDate.getDate();
-}
-// @ts-expect-error not all code paths return value
-const getViewUp = function (typeView) {
+const getViewUp = function getViewUp(typeView: string | undefined): DateView | undefined {
   switch (typeView) {
     case 'month':
       return 'year';
@@ -356,9 +561,10 @@ const getViewUp = function (typeView) {
     default:
       break;
   }
+  return undefined;
 };
-// @ts-expect-error not all code paths return value
-const getViewDown = function (typeView) {
+
+const getViewDown = function getViewDown(typeView: string | undefined): DateView | undefined {
   switch (typeView) {
     case 'century':
       return 'decade';
@@ -369,9 +575,10 @@ const getViewDown = function (typeView) {
     default:
       break;
   }
+  return undefined;
 };
 
-const getDifferenceInMonth = function (typeView) {
+const getDifferenceInMonth = function getDifferenceInMonth(typeView: string | undefined): number {
   let difference = 1;
 
   if (typeView === 'year') { difference = 12; }
@@ -381,7 +588,9 @@ const getDifferenceInMonth = function (typeView) {
   return difference;
 };
 
-const getDifferenceInMonthForCells = function (typeView) {
+const getDifferenceInMonthForCells = function getDifferenceInMonthForCells(
+  typeView: string | undefined,
+): number {
   let difference = 1;
 
   if (typeView === 'decade') { difference = 12; }
@@ -390,75 +599,56 @@ const getDifferenceInMonthForCells = function (typeView) {
   return difference;
 };
 
-function getDateIntervalByString(intervalString) {
-  const result: any = {};
-  // eslint-disable-next-line default-case
-  switch (intervalString) {
-    case 'year':
-      result.years = 1;
-      break;
-    case 'month':
-      result.months = 1;
-      break;
-    case 'quarter':
-      result.months = 3;
-      break;
-    case 'week':
-      result.weeks = 1;
-      break;
-    case 'day':
-      result.days = 1;
-      break;
-    case 'hour':
-      result.hours = 1;
-      break;
-    case 'minute':
-      result.minutes = 1;
-      break;
-    case 'second':
-      result.seconds = 1;
-      break;
-    case 'millisecond':
-      result.milliseconds = 1;
-      break;
-  }
-  return result;
-}
-
-function sameDate(date1, date2): boolean {
-  return sameMonthAndYear(date1, date2) && date1.getDate() === date2.getDate();
-}
-
-function sameMonthAndYear(date1, date2): boolean {
-  return sameYear(date1, date2) && date1.getMonth() === date2.getMonth();
-}
-
-function sameYear(date1, date2): boolean {
+function sameYear(date1: Date, date2: Date): boolean;
+function sameYear(date1: MaybeDate, date2: MaybeDate): boolean | null | undefined;
+function sameYear(date1: MaybeDate, date2: MaybeDate): boolean | null | undefined {
   return date1 && date2 && date1.getFullYear() === date2.getFullYear();
 }
 
-function sameHoursAndMinutes(date1, date2): boolean {
-  return date1 && date2 && date1.getHours() === date2.getHours() && date1.getMinutes() === date2.getMinutes();
+function sameMonthAndYear(date1: Date, date2: Date): boolean;
+function sameMonthAndYear(date1: MaybeDate, date2: MaybeDate): boolean | null | undefined;
+function sameMonthAndYear(date1: MaybeDate, date2: MaybeDate): boolean | null | undefined {
+  return date1 && date2 && sameYear(date1, date2) && date1.getMonth() === date2.getMonth();
 }
 
-const sameDecade = function (date1, date2): boolean {
+function sameDate(date1: Date, date2: Date): boolean;
+function sameDate(date1: MaybeDate, date2: MaybeDate): boolean | null | undefined;
+function sameDate(date1: MaybeDate, date2: MaybeDate): boolean | null | undefined {
+  return date1 && date2 && sameMonthAndYear(date1, date2) && date1.getDate() === date2.getDate();
+}
+
+function sameHoursAndMinutes(date1: Date, date2: Date): boolean;
+function sameHoursAndMinutes(
+  date1: MaybeDate,
+  date2: MaybeDate,
+): boolean | null | undefined;
+function sameHoursAndMinutes(
+  date1: MaybeDate,
+  date2: MaybeDate,
+): boolean | null | undefined {
+  return date1 && date2
+    && date1.getHours() === date2.getHours()
+    && date1.getMinutes() === date2.getMinutes();
+}
+
+const sameDecade = function sameDecade(date1: MaybeDate, date2: MaybeDate): boolean {
   if (!isDefined(date1) || !isDefined(date2)) {
     return false;
   }
 
-  const startDecadeDate1 = date1.getFullYear() - date1.getFullYear() % 10;
-  const startDecadeDate2 = date2.getFullYear() - date2.getFullYear() % 10;
+  const startDecadeDate1 = date1.getFullYear() - (date1.getFullYear() % 10);
+  const startDecadeDate2 = date2.getFullYear() - (date2.getFullYear() % 10);
 
   return date1 && date2 && startDecadeDate1 === startDecadeDate2;
 };
 
-const sameCentury = function (date1, date2): boolean {
+const sameCentury = function sameCentury(date1: MaybeDate, date2: MaybeDate): boolean {
   if (!isDefined(date1) || !isDefined(date2)) {
     return false;
   }
 
-  const startCenturyDate1 = date1.getFullYear() - date1.getFullYear() % 100;
-  const startCenturyDate2 = date2.getFullYear() - date2.getFullYear() % 100;
+  const startCenturyDate1 = date1.getFullYear() - (date1.getFullYear() % 100);
+  const startCenturyDate2 = date2.getFullYear() - (date2.getFullYear() % 100);
 
   return date1 && date2 && startCenturyDate1 === startCenturyDate2;
 };
@@ -483,66 +673,53 @@ const sameDatesArrays = (arr1: Date[], arr2: Date[]): boolean => {
   });
 };
 
-function getFirstDecadeInCentury(date) {
-  return date && date.getFullYear() - date.getFullYear() % 100;
-}
-
-function getFirstYearInDecade(date) {
-  return date && date.getFullYear() - date.getFullYear() % 10;
-}
-
-const getShortDateFormat = function () {
+const getShortDateFormat = function getShortDateFormat(): string {
   return 'yyyy/MM/dd';
 };
 
-const getFirstMonthDate = function (date, offset = 0) {
-  if (!isDefined(date)) return;
+function getFirstMonthDate(date: Date, offset?: number): Date;
+function getFirstMonthDate(date: MaybeDate, offset?: number): Date | undefined;
+function getFirstMonthDate(date: MaybeDate, offset = 0): Date | undefined {
+  if (!isDefined(date)) {
+    return undefined;
+  }
 
   const currentDate = new Date(date.getTime());
   const month = currentDate.getMonth() + offset;
   currentDate.setMonth(month);
 
   return createDateWithFullYear(currentDate.getFullYear(), month, 1);
-};
+}
 
-const getLastMonthDate = function (date, offset = 0) {
-  if (!isDefined(date)) return;
+function getLastMonthDate(date: Date, offset?: number): Date;
+function getLastMonthDate(date: MaybeDate, offset?: number): Date | undefined;
+function getLastMonthDate(date: MaybeDate, offset = 0): Date | undefined {
+  if (!isDefined(date)) {
+    return undefined;
+  }
 
   const currentDate = new Date(date.getTime());
   const month = currentDate.getMonth() + offset;
   currentDate.setMonth(month);
 
   return createDateWithFullYear(currentDate.getFullYear(), month + 1, 0);
-};
-
-function getFirstWeekDate(date, firstDayOfWeek) {
-  const delta = (date.getDay() - firstDayOfWeek + DAYS_IN_WEEK) % DAYS_IN_WEEK;
-
-  const result = new Date(date);
-  result.setDate(date.getDate() - delta);
-
-  return result;
 }
 
-function getUTCTime(date) {
+function getUTCTime(date: Date): number {
   return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-function getDayNumber(date) {
+function getDayNumber(date: Date): number {
   const ms = getUTCTime(date) - getUTCTime(getFirstDateInYear(date.getFullYear()));
 
   return 1 + Math.floor(ms / toMilliseconds('day'));
 }
 
-function getFirstDateInYear(year) {
-  return new Date(year, 0, 1);
-}
-
-function getLastDateInYear(year) {
+function getLastDateInYear(year: number): Date {
   return new Date(year, 11, 31);
 }
 
-function getDayWeekNumber(date, firstDayOfWeek) {
+function getDayWeekNumber(date: Date, firstDayOfWeek: number): number {
   let day = date.getDay() - firstDayOfWeek + 1;
   if (day <= 0) {
     day += DAYS_IN_WEEK;
@@ -551,7 +728,7 @@ function getDayWeekNumber(date, firstDayOfWeek) {
   return day;
 }
 
-function getWeekNumber(date, firstDayOfWeek, rule): number {
+function getWeekNumber(date: Date, firstDayOfWeek: number, rule: WeekNumberRule): number {
   const firstWeekDayInYear = getDayWeekNumber(
     getFirstDateInYear(date.getFullYear()),
     firstDayOfWeek,
@@ -607,7 +784,8 @@ function getWeekNumber(date, firstDayOfWeek, rule): number {
   }
 }
 
-const normalizeDateByWeek = function (date, currentDate) {
+const normalizeDateByWeek = function normalizeDateByWeek(date: Date, currentDate: Date): Date {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- dateUtils is set below
   const differenceInDays = dateUtils.getDatesInterval(date, currentDate, 'day');
   let resultDate = new Date(date);
 
@@ -618,17 +796,33 @@ const normalizeDateByWeek = function (date, currentDate) {
   return resultDate;
 };
 
-const dateInRange = function (date, min, max, format?) {
+function dateInRange(date: Date, min?: Date | null, max?: Date | null, format?: string): boolean;
+function dateInRange(date: number, min?: number | null, max?: number | null): boolean;
+function dateInRange(
+  date: Date | number,
+  min?: Date | number | null,
+  max?: Date | number | null,
+  format?: string,
+): boolean {
+  let dateValue = date;
+  let minValue = min;
+  let maxValue = max;
+
   if (format === 'date') {
-    min = min && dateUtils.correctDateWithUnitBeginning(min, 'day');
-    max = max && dateUtils.correctDateWithUnitBeginning(max, 'day');
-    date = date && dateUtils.correctDateWithUnitBeginning(date, 'day');
+    minValue = isDate(minValue) ? trimTime(minValue) : minValue;
+    maxValue = isDate(maxValue) ? trimTime(maxValue) : maxValue;
+    dateValue = isDate(dateValue) ? trimTime(dateValue) : dateValue;
   }
 
-  return normalizeDate(date, min, max) === date;
-};
+  return normalizeDate(dateValue, minValue, maxValue) === dateValue;
+}
 
-const intervalsOverlap = function (options) {
+const intervalsOverlap = function intervalsOverlap(options: {
+  firstMin: Date | number;
+  firstMax: Date | number;
+  secondMin: Date | number;
+  secondMax: Date | number;
+}): boolean {
   const {
     firstMin,
     firstMax,
@@ -641,7 +835,9 @@ const intervalsOverlap = function (options) {
         || (firstMin < secondMax && firstMax > secondMax);
 };
 
-const dateTimeFromDecimal = function (number) {
+const dateTimeFromDecimal = function dateTimeFromDecimal(
+  number: number,
+): { hours: number; minutes: number } {
   const hours = Math.floor(number);
   const minutes = Math.round((number % 1) * 60);
 
@@ -651,56 +847,23 @@ const dateTimeFromDecimal = function (number) {
   };
 };
 
-const roundDateByStartDayHour = function (date, startDayHour) {
+const roundDateByStartDayHour = function roundDateByStartDayHour(
+  this: { dateTimeFromDecimal: typeof dateTimeFromDecimal },
+  date: Date,
+  startDayHour: number,
+): Date {
   const startTime = this.dateTimeFromDecimal(startDayHour);
   const result = new Date(date);
 
-  if (date.getHours() === startTime.hours && date.getMinutes() < startTime.minutes || date.getHours() < startTime.hours) {
+  if ((date.getHours() === startTime.hours && date.getMinutes() < startTime.minutes)
+    || date.getHours() < startTime.hours) {
     result.setHours(startTime.hours, startTime.minutes, 0, 0);
   }
 
   return result;
 };
 
-function normalizeDate(date, min?, max?) {
-  let normalizedDate = date;
-
-  if (!isDefined(date)) {
-    return date;
-  }
-
-  if (isDefined(min) && date < min) {
-    normalizedDate = min;
-  }
-
-  if (isDefined(max) && date > max) {
-    normalizedDate = max;
-  }
-
-  return normalizedDate;
-}
-
-function fixTimezoneGap(oldDate, newDate) {
-  // NOTE: T182866
-  if (!isDefined(oldDate)) {
-    return;
-  }
-
-  const diff = newDate.getHours() - oldDate.getHours();
-
-  if (diff === 0) {
-    return;
-  }
-
-  const sign = diff === 1 || diff === -23 ? -1 : 1;
-  const trial = new Date(newDate.getTime() + sign * 3600000);
-
-  if (sign > 0 || trial.getDate() === newDate.getDate()) {
-    newDate.setTime(trial.getTime());
-  }
-}
-
-const roundToHour = function (date) {
+const roundToHour = function roundToHour(date: Date): Date {
   const result = new Date(date.getTime());
 
   result.setHours(result.getHours() + 1);
@@ -709,16 +872,16 @@ const roundToHour = function (date) {
   return result;
 };
 
-function getTimezonesDifference(min, max) {
-  return (max.getTimezoneOffset() - min.getTimezoneOffset()) * 60 * 1000;
-}
-
-const makeDate = function (date) {
-  // TODO: will be useful later for work with different timezones
+const makeDate = function makeDate(date: Date | number | string): Date {
   return new Date(date);
 };
 
-const getDatesOfInterval = function (startDate, endDate, step) {
+const getDatesOfInterval = function getDatesOfInterval(
+  this: { addInterval: typeof addInterval },
+  startDate: Date,
+  endDate: Date,
+  step: string | number | DateInterval,
+): Date[] {
   const result: Date[] = [];
   let currentDate = new Date(startDate.getTime());
 
@@ -731,41 +894,35 @@ const getDatesOfInterval = function (startDate, endDate, step) {
   return result;
 };
 
-const createDateWithFullYear = function (year, ...args) {
-  // @ts-expect-error spread should have tuple type
-  const result = new Date(year, ...args);
-  result.setFullYear(year);
-  return result;
-};
-
-const getMachineTimezoneName = () => {
+const getMachineTimezoneName = (): string | null => {
   const hasIntl = typeof Intl !== 'undefined';
   return hasIntl
     ? Intl.DateTimeFormat().resolvedOptions().timeZone
     : null;
 };
 
-const getRangesByDates = (dates) => {
+const getRangesByDates = (dates: Date[]): [Date, Date?][] => {
   const datesInMilliseconds = dates.map((value) => correctDateWithUnitBeginning(value, 'day').getTime());
   const sortedDates = datesInMilliseconds.sort((a, b) => a - b);
 
   const msInDay = toMilliseconds('day');
-  const ranges: any[] = [];
+  const ranges: [Date, Date?][] = [];
 
   let startDate = sortedDates[0];
 
-  for (let i = 1; i <= sortedDates.length; ++i) {
+  for (let i = 1; i <= sortedDates.length; i += 1) {
     const nextDate = sortedDates[i];
     const currentDate = sortedDates[i - 1];
 
     const isNewRange = nextDate - currentDate > msInDay;
 
     if (isNewRange || i === sortedDates.length) {
-      const range = startDate === sortedDates[i - 1]
-        ? [startDate]
-        : [startDate, sortedDates[i - 1]];
-
-      const serializedRange = range.map((value) => dateSerialization.deserializeDate(value));
+      const serializedRange: [Date, Date?] = startDate === sortedDates[i - 1]
+        ? [dateSerialization.deserializeDate(startDate)]
+        : [
+          dateSerialization.deserializeDate(startDate),
+          dateSerialization.deserializeDate(sortedDates[i - 1]),
+        ];
 
       ranges.push(serializedRange);
 
@@ -776,9 +933,21 @@ const getRangesByDates = (dates) => {
   return ranges;
 };
 
-const sameView = function (view, date1, date2) {
-  return dateUtils[camelize(`same ${view}`)](date1, date2);
+const sameViewFunctions: Record<
+  DateView,
+  (date1: MaybeDate, date2: MaybeDate) => boolean | null | undefined
+> = {
+  month: sameMonthAndYear,
+  year: sameYear,
+  decade: sameDecade,
+  century: sameCentury,
 };
+
+function sameView(view: DateView, date1: Date, date2: Date): boolean;
+function sameView(view: DateView, date1: MaybeDate, date2: MaybeDate): boolean | null | undefined;
+function sameView(view: DateView, date1: MaybeDate, date2: MaybeDate): boolean | null | undefined {
+  return sameViewFunctions[view](date1, date2);
+}
 
 const dateUtils = {
   dateUnitIntervals,
@@ -849,4 +1018,19 @@ const dateUtils = {
   getRangesByDates,
 };
 
-export { dateUtils };
+const addOffsets = (date: Date, ...offsets: number[]): Date => {
+  const newDateMs = offsets.reduce(
+    (result, offset) => result + offset,
+    date.getTime(),
+  );
+
+  return new Date(newDateMs);
+};
+
+const isValidDate = (
+  date: unknown,
+): date is Date | string | number => Boolean(
+  date && !isNaN(new Date(date as Date).valueOf()),
+);
+
+export { addOffsets, dateUtils, isValidDate };
