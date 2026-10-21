@@ -631,4 +631,41 @@ describe('format locale integration', () => {
       })).toBe(expectedFor(enLocaleFormat));
     });
   });
+
+  describe('date export', () => {
+    const toExcel = (format: unknown): string | undefined => Export
+      .tryConvertToExcelNumberFormat(format, 'date');
+    const exportInLocale = (locale: string, format: string): string | undefined => {
+      const savedLocale = coreLocalization.locale();
+
+      coreLocalization.locale(locale);
+      try {
+        return toExcel(format);
+      } finally {
+        coreLocalization.locale(savedLocale);
+      }
+    };
+
+    it.each(['shortDate', 'longDate', 'monthAndYear'])('should export a %s format with its own locale', (type) => {
+      const expected = exportInLocale('de-DE', type);
+
+      coreLocalization.locale('en');
+
+      expect(expected?.startsWith('[$-407]')).toBe(true);
+      expect(toExcel({ type, locale: 'de-DE' })).toBe(expected);
+      expect(toExcel(type)).not.toBe(expected);
+    });
+
+    it('should export a column with the global dateFormat in the dateFormat locale', () => {
+      const expected = exportInLocale('de-DE', 'shortDate');
+
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        dateFormat: { default: { type: 'shortDate', locale: 'de-DE' } },
+      });
+
+      expect(toExcel(getGlobalFormatByDataType('date'))).toBe(expected);
+    });
+  });
 });
