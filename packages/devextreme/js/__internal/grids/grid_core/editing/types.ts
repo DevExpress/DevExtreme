@@ -1,4 +1,6 @@
-import type { DataChange, NewRowPosition, RowInsertedInfo } from '@js/common/grids';
+import type {
+  DataChange, EditingBase, NewRowPosition, RowInsertedInfo,
+} from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { StoreChange } from '@js/data/store';
@@ -10,7 +12,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ProcessedItem } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
 import type {
-  InternalGrid, InternalGridOptions, OptionChanged, OptionChangedFor, RowKey,
+  InternalGrid, OptionChanged, OptionChangedFor, RowKey,
 } from '../types';
 import type {
   CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRow,
@@ -171,7 +173,7 @@ export interface ProcessedChanges {
   dataChanges: StoreChange[];
 }
 
-export type EditingOptions = NonNullable<InternalGridOptions['editing']> & {
+export type EditingOptions = EditingBase<RawItemData, RowKey> & {
   allowAdding?: AllowEditActionValue;
   allowUpdating?: AllowEditActionValue;
   allowDeleting?: AllowEditActionValue;

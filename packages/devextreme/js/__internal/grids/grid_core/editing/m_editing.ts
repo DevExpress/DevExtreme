@@ -297,13 +297,12 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   public getChanges(): EditingChange[] {
-    // @ts-expect-error editing.changes is typed as optional, it defaults to []
-    return this.option(EDITING_CHANGES_OPTION_NAME);
+    return this.option(EDITING_CHANGES_OPTION_NAME) ?? [];
   }
 
   private resetChanges(): void {
     const changes = this.getChanges();
-    const needReset = changes?.length;
+    const needReset = changes.length;
     if (needReset) {
       this._silentOption(EDITING_CHANGES_OPTION_NAME, []);
       this._internalState.clear();
@@ -471,8 +470,8 @@ class EditingControllerImpl extends modules.ViewController {
       e.event.stopPropagation();
       e.event.preventDefault();
 
-      // @ts-expect-error the editing option has defaults
-      const allowAction = actionName ? this.option('editing')[actionName] : true;
+      const editingOptions = this.option('editing');
+      const allowAction = actionName ? editingOptions?.[actionName] : true;
 
       if (!allowAction || !this[methodName]) {
         return;
@@ -595,7 +594,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   public hasChanges(rowIndex?: number): boolean {
-    return this.getChanges()?.some((change) => {
+    return this.getChanges().some((change) => {
       const isChangeInRow = !isDefined(rowIndex)
         || this._dataController.getRowIndexByKey(change.key) === rowIndex;
 
@@ -634,8 +633,11 @@ class EditingControllerImpl extends modules.ViewController {
 
         if (!isEqual) {
           this._changes = deepExtendArraySafe([], args.value);
-          // @ts-expect-error editing.changes is typed as optional, it defaults to []
-          this._handleChangesChange(args);
+          this._handleChangesChange({
+            ...args,
+            value: args.value ?? [],
+            previousValue: args.previousValue ?? [],
+          });
         }
       } else if (!args.handled) {
         this._columnsController.reinit();
@@ -669,7 +671,6 @@ class EditingControllerImpl extends modules.ViewController {
    * @extended: validating
    */
   protected _handleChangesChange(args: EditingChangesOptionChanged): void {
-    const dataController = this._dataController;
     const changes = args.value;
 
     if (!args.value.length && !args.previousValue.length) {
@@ -681,7 +682,7 @@ class EditingControllerImpl extends modules.ViewController {
         this._addInsertInfo(change);
       } else {
         const items = this.dataSourceController.getCachedStoreData()
-          ?? dataController.items()?.map((item) => item.data);
+          ?? this._dataController.items()?.map((item) => item.data);
         const rowIndex = gridCoreUtils.getIndexByKey(
           change.key,
           items,
@@ -691,7 +692,7 @@ class EditingControllerImpl extends modules.ViewController {
       }
     });
 
-    dataController.updateItems({
+    this._dataController.updateItems({
       changeType: 'refresh',
       repaintChangesOnly: true,
       isLiveUpdate: false,
@@ -2135,10 +2136,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected _isEditColumnVisible(): boolean {
-    const editingOptions: EditingOptions | undefined = this.option('editing');
-
-    // @ts-expect-error the editing option has defaults, a callback shows the column
-    return editingOptions.allowDeleting;
+    return !!this.option('editing')?.allowDeleting;
   }
 
   private _isEditButtonDisabled(): boolean {
@@ -2240,8 +2238,11 @@ class EditingControllerImpl extends modules.ViewController {
     row: ProcessedItem,
     skipCurrentRow?: boolean,
   ): number[] {
-    // @ts-expect-error a rendered row has its rowIndex
-    return skipCurrentRow ? [] : [row.rowIndex];
+    if (skipCurrentRow || !isDefined(row.rowIndex)) {
+      return [];
+    }
+
+    return [row.rowIndex];
   }
 
   /**
@@ -2273,7 +2274,7 @@ class EditingControllerImpl extends modules.ViewController {
       options.value = value;
 
       const setCellValueResult = fromPromise(
-        // @ts-expect-error callers check setCellValue, it also gets the display text
+        // @ts-expect-error updateFieldValue checks setCellValue; the display text arg is untyped
         options.column.setCellValue(newData, value, extend(true, {}, oldData), text),
       );
       setCellValueResult
@@ -2308,8 +2309,9 @@ class EditingControllerImpl extends modules.ViewController {
       const row = this._dataController.getVisibleRows()[rowIndex];
 
       if (row) {
-        // @ts-expect-error a data cell has a row
-        options.row.values = row.values; // T1122209
+        if (options.row) {
+          options.row.values = row.values; // T1122209
+        }
         options.values = row.values;
       }
 
@@ -2518,7 +2520,7 @@ class EditingControllerImpl extends modules.ViewController {
     this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
 
     // T1043517
-    if (options && change !== this.getChanges()?.[index]) {
+    if (options && change !== this.getChanges()[index]) {
       options.forceUpdateRow = true;
     }
 
@@ -2578,12 +2580,6 @@ class EditingControllerImpl extends modules.ViewController {
       return column.editCellTemplate || this._getDefaultEditorTemplate();
     }
 
-    if (column.command === 'detail' && rowType === 'detail' && isRowEditing) {
-      // @ts-expect-error the form-based extender adds getEditFormTemplate
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- form-based extender adds it
-      return this?.getEditFormTemplate(options);
-    }
-
     return undefined;
   }
 
@@ -2593,9 +2589,8 @@ class EditingControllerImpl extends modules.ViewController {
     options: EditorCellOptions,
     change?: ViewDataChange,
   ): void {
-    // @ts-expect-error a custom button can have no name, then its lookups give undefined
-    const buttonName: string = button.name;
-    let icon = EDIT_ICON_CLASS[buttonName];
+    const buttonName = button.name;
+    let icon = isDefined(buttonName) ? EDIT_ICON_CLASS[buttonName] : undefined;
     const useIcons = this.option('editing.useIcons');
     const useLegacyColumnButtonTemplate = this.option('useLegacyColumnButtonTemplate');
     let $button = $('<a>')
@@ -2624,7 +2619,9 @@ class EditingControllerImpl extends modules.ViewController {
         $button.addClass(CLASSES.linkIcon);
         $container.addClass(CLASSES.commandEditWithIcons);
 
-        const localizationName = this.getButtonLocalizationNames()[buttonName];
+        const localizationName = isDefined(buttonName)
+          ? this.getButtonLocalizationNames()[buttonName]
+          : undefined;
 
         if (localizationName) {
           this.setAria('label', messageLocalization.format(localizationName), $button);

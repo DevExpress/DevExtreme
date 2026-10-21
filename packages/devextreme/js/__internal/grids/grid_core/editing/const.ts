@@ -1,5 +1,7 @@
 import type { DataChangeType, GridsEditMode, NewRowPosition } from '@js/common/grids';
 
+import type { EditActions } from './types';
+
 export const CLASSES = {
   editRow: 'dx-edit-row',
   rowInserted: 'dx-row-inserted',
@@ -30,7 +32,7 @@ export const CLASSES = {
   focusableElement: 'dx-scrollable-container',
   dropDownEditorOverlay: 'dx-dropdowneditor-overlay',
 };
-export const EDIT_LINK_CLASS = {
+export const EDIT_LINK_CLASS: Partial<Record<string, string>> = {
   save: 'dx-link-save',
   cancel: 'dx-link-cancel',
   edit: 'dx-link-edit',
@@ -38,7 +40,7 @@ export const EDIT_LINK_CLASS = {
   delete: 'dx-link-delete',
   add: 'dx-link-add',
 };
-export const EDIT_ICON_CLASS = {
+export const EDIT_ICON_CLASS: Partial<Record<string, string>> = {
   save: 'save',
   cancel: 'revert',
   edit: 'edit',
@@ -100,7 +102,7 @@ export const METHOD_NAMES = {
   cancel: 'cancelEditData',
   add: 'addRowByRowIndex',
 };
-export const ACTION_OPTION_NAMES = {
+export const ACTION_OPTION_NAMES: Partial<Record<string, EditActions>> = {
   add: 'allowAdding',
   edit: 'allowUpdating',
   delete: 'allowDeleting',

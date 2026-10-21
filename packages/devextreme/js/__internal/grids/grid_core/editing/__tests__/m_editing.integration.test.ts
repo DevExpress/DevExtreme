@@ -368,4 +368,127 @@ describe('DataGrid editing', () => {
       expect(dataSourceWithTasks[0].Tasks).toBe(tasks);
     });
   });
+
+  describe('Changes option set to null', () => {
+    const createGridWithNullChanges = (): ReturnType<typeof createDataGrid> => createDataGrid({
+      keyExpr: 'ID',
+      dataSource,
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+        // @ts-expect-error null is outside the option's type
+        changes: null,
+      },
+    });
+
+    it('should report no edit data', async () => {
+      const { instance } = await createGridWithNullChanges();
+
+      expect(instance.hasEditData()).toBe(false);
+    });
+
+    it('should record a cell change', async () => {
+      const { instance } = await createGridWithNullChanges();
+
+      instance.cellValue(0, 'FirstName', 'Updated');
+
+      expect(instance.option('editing.changes')).toEqual([
+        expect.objectContaining({ type: 'update', key: 1 }),
+      ]);
+    });
+  });
+
+  describe('Changes option set to undefined', () => {
+    const createBatchGrid = (): ReturnType<typeof createDataGrid> => createDataGrid({
+      keyExpr: 'ID',
+      dataSource,
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+    });
+
+    it('should drop the pending changes', async () => {
+      const { instance } = await createBatchGrid();
+      instance.cellValue(0, 'FirstName', 'Updated');
+
+      instance.option('editing.changes', undefined);
+      await flushAsync();
+
+      expect(instance.hasEditData()).toBe(false);
+      expect(instance.cellValue(0, 'FirstName')).toBe('John');
+    });
+
+    it('should keep the grid without changes', async () => {
+      const { instance } = await createBatchGrid();
+
+      instance.option('editing.changes', undefined);
+      await flushAsync();
+
+      expect(instance.hasEditData()).toBe(false);
+    });
+  });
+
+  describe('Edit column visibility with an allowDeleting callback', () => {
+    it('should be a boolean', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'row',
+          allowDeleting: (): boolean => true,
+        },
+      });
+
+      expect(instance.columnOption('command:edit', 'visible')).toBe(true);
+    });
+  });
+
+  describe('Edit form in form mode', () => {
+    it('should render the form in the edited row', async () => {
+      const { $container, instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        columns: ['FirstName', 'LastName'],
+        editing: {
+          mode: 'form',
+          allowUpdating: true,
+        },
+      });
+
+      instance.editRow(0);
+      await flushAsync();
+
+      expect($container.find('.dx-datagrid-edit-form .dx-form')).toHaveLength(1);
+    });
+  });
+
+  describe('Data source replaced while there are changes', () => {
+    it('should drop the changes of removed rows and keep the others', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+          allowAdding: true,
+        },
+      });
+
+      instance.cellValue(0, 'FirstName', 'Updated 1');
+      instance.cellValue(1, 'FirstName', 'Updated 2');
+      await instance.addRow();
+      await flushAsync();
+
+      instance.option('dataSource', dataSource.slice(1));
+      await flushAsync();
+
+      const changes = instance.option('editing.changes');
+      expect(changes).toHaveLength(2);
+      expect(changes).toEqual(expect.arrayContaining([
+        expect.objectContaining({ type: 'update', key: 2 }),
+        expect.objectContaining({ type: 'insert' }),
+      ]));
+    });
+  });
 });
