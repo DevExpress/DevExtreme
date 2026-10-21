@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { MARKERS, ROUTES } from './utils.js';
 import Map from 'ui/map';
+import { logger } from 'core/utils/console';
 import Provider from '__internal/ui/map/provider';
 import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import ajaxMock from '../../../helpers/ajaxMock.js';
@@ -781,6 +782,7 @@ QUnit.test('routes option change should not render incorrect routes', function(a
 
 QUnit.module('Change provider', {
     beforeEach: function() {
+        this.logError = sinon.stub(logger, 'error');
         const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
@@ -791,6 +793,7 @@ QUnit.module('Change provider', {
         });
     },
     afterEach: function() {
+        this.logError.restore();
         ajaxMock.clear();
     }
 });
@@ -831,6 +834,76 @@ QUnit.test('change provider and async options', function(assert) {
     });
 });
 
+['reject', 'throw'].forEach(failure => {
+    [false, true].forEach(queuedBeforeFailure => {
+        QUnit.test(`async queue continues after ${failure} (next action already queued: ${queuedBeforeFailure})`, async function(assert) {
+            const reason = new Error('Provider operation failed');
+            const provider = {
+                updateZoom: sinon.stub().callsFake(() => {
+                    if(failure === 'throw') {
+                        throw reason;
+                    }
+                    return Promise.reject(reason);
+                }),
+                updateCenter: sinon.stub().returns(Promise.resolve())
+            };
+            const map = {
+                _provider: provider,
+                _lastAsyncAction: Promise.resolve(),
+                _triggerReadyAction: sinon.spy(),
+                _triggerUpdateAction: sinon.spy()
+            };
+            const failedAction = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+            let nextAction;
+            if(queuedBeforeFailure) {
+                nextAction = Map.prototype._queueAsyncAction.call(map, 'updateCenter');
+                nextAction.catch(() => {});
+            }
+
+            await assert.rejects(failedAction, reason, 'the failed action keeps its original error');
+            if(!queuedBeforeFailure) {
+                nextAction = Map.prototype._queueAsyncAction.call(map, 'updateCenter');
+            }
+            await nextAction;
+
+            assert.ok(provider.updateZoom.calledOnce, 'failed action is not retried');
+            assert.ok(provider.updateCenter.calledOnce, 'the next action is executed');
+            assert.ok(map._triggerReadyAction.notCalled, 'no ready event is raised');
+            assert.ok(map._triggerUpdateAction.calledOnce, 'only the successful action raises an update');
+            assert.ok(this.logError.calledOnceWithExactly(reason), 'the original error is logged once');
+        });
+    });
+    QUnit.test(`failed render skips queued provider updates after ${failure}`, async function(assert) {
+        const reason = new Error('Provider initialization failed');
+        const provider = {
+            render: sinon.stub().callsFake(() => {
+                if(failure === 'throw') {
+                    throw reason;
+                }
+                return Promise.reject(reason);
+            }),
+            updateZoom: sinon.stub().returns(Promise.resolve())
+        };
+        const map = {
+            _provider: provider,
+            _lastAsyncAction: Promise.resolve(),
+            _triggerReadyAction: sinon.spy(),
+            _triggerUpdateAction: sinon.spy()
+        };
+        const render = Map.prototype._queueAsyncAction.call(map, 'render');
+        const update = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+        update.catch(() => {});
+
+        await assert.rejects(render, reason, 'render keeps its original error');
+        await update;
+
+        assert.ok(provider.updateZoom.notCalled, 'an uninitialized provider is not updated');
+        assert.ok(map._triggerReadyAction.notCalled, 'failed render does not raise ready');
+        assert.ok(map._triggerUpdateAction.notCalled, 'skipped update does not raise updated');
+        assert.ok(this.logError.calledOnceWithExactly(reason), 'skipped updates do not log the render error again');
+    });
+});
+
 ['resolve', 'reject'].forEach((completion) => {
     QUnit.test(`async ${completion} from a replaced provider is ignored`, function(assert) {
         let completeAction;
@@ -857,8 +930,29 @@ QUnit.test('change provider and async options', function(assert) {
         }).then(() => {
             assert.ok(map._triggerReadyAction.notCalled, 'stale action does not raise onReady');
             assert.ok(map._triggerUpdateAction.notCalled, 'stale action does not raise onUpdated');
+            assert.ok(this.logError.notCalled, 'a replaced provider does not log stale errors');
         });
     });
+});
+
+QUnit.test('a rejection after disposal is not logged', async function(assert) {
+    let rejectAction;
+    const provider = {
+        updateZoom: () => new Promise((_resolve, reject) => {
+            rejectAction = reject;
+        })
+    };
+    const map = {
+        _provider: provider,
+        _lastAsyncAction: Promise.resolve()
+    };
+    const action = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+    await Promise.resolve();
+    map._disposed = true;
+    rejectAction(new Error('Disposed provider'));
+    await action;
+
+    assert.ok(this.logError.notCalled, 'a disposed map does not log stale errors');
 });
 
 QUnit.test('queued action is not started after its provider is replaced', function(assert) {

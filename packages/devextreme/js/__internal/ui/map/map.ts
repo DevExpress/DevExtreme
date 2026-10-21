@@ -7,6 +7,7 @@ import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { wrapToArray } from '@js/core/utils/array';
+import { logger } from '@js/core/utils/console';
 import { extend } from '@js/core/utils/extend';
 import { titleize } from '@js/core/utils/inflector';
 import { isNumeric } from '@js/core/utils/type';
@@ -57,6 +58,8 @@ class Map extends Widget<MapProperties> {
   _lastAsyncAction!: Promise<void>;
 
   _provider!: azure | googleStatic | google | bing | osm;
+
+  private _providerRenderFailed = false;
 
   _asyncActionSuppressed?: boolean;
 
@@ -218,6 +221,7 @@ class Map extends Widget<MapProperties> {
     const Provider = PROVIDERS[provider];
 
     this._provider = new Provider(this, this._$container);
+    this._providerRenderFailed = false;
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._queueAsyncAction('render', this._rendered.markers, this._rendered.routes);
@@ -369,42 +373,52 @@ class Map extends Widget<MapProperties> {
     const isActionSuppressed = this._suppressAsyncAction;
     const provider = this._provider;
 
-    this._lastAsyncAction = this._lastAsyncAction.then(() => {
-      if (!provider || provider !== this._provider || isActionSuppressed) {
+    const executeAction = async (): Promise<void> => {
+      if (!provider || provider !== this._provider || isActionSuppressed
+        || this._providerRenderFailed) {
         /// #DEBUG
         this._asyncActionSuppressed = true;
         /// #ENDDEBUG
-        return Promise.resolve();
+        return undefined;
       }
 
+      let result = null;
+      try {
+        result = await provider[name](...markerAndRoutes);
+      } catch (error) {
+        if (provider !== this._provider || this._disposed) {
+          return undefined;
+        }
+
+        if (name === 'render') {
+          this._providerRenderFailed = true;
+        }
+
+        throw error;
+      }
+
+      if (provider !== this._provider || this._disposed) {
+        return undefined;
+      }
+
+      const arrayResult = wrapToArray(result);
+      const mapRefreshed = arrayResult[0];
+      if (mapRefreshed) {
+        this._triggerReadyAction();
+      }
+      /// #DEBUG
+      if (!mapRefreshed && name !== 'clean') {
+        this._triggerUpdateAction();
+      }
+      /// #ENDDEBUG
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return provider[name](...markerAndRoutes).then((result) => {
-        if (provider !== this._provider || this._disposed) {
-          return undefined;
-        }
+      return arrayResult[1];
+    };
 
-        const arrayResult = wrapToArray(result);
-
-        const mapRefreshed = arrayResult[0];
-        if (mapRefreshed && !this._disposed) {
-          this._triggerReadyAction();
-        }
-        /// #DEBUG
-        if (!mapRefreshed && name !== 'clean' && !this._disposed) {
-          this._triggerUpdateAction();
-        }
-        /// #ENDDEBUG
-
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return arrayResult[1];
-      }, (error) => {
-        if (provider !== this._provider || this._disposed) {
-          return undefined;
-        }
-
-        return Promise.reject(error);
-      });
-    });
+    this._lastAsyncAction = this._lastAsyncAction.then(executeAction, executeAction);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._lastAsyncAction.catch((error) => { logger.error(error); });
 
     return this._lastAsyncAction;
   }

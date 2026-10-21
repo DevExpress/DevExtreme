@@ -5,6 +5,7 @@ import { setRegisteredMapEngine } from '__internal/ui/map/provider.dynamic.osm.e
 import { createOpenLayersEngine } from '__internal/ui/map/provider.dynamic.osm.openlayers';
 import coreErrors from 'core/errors';
 import resizeObserverSingleton from 'core/resize_observer';
+import { logger } from 'core/utils/console';
 import localization from 'localization';
 import Popover from 'ui/popover';
 import SelectBox from 'ui/select_box';
@@ -327,6 +328,102 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
                 done();
             });
         });
+    });
+    QUnit.test('failed initialization skips queued updates until repaint', async function(assert) {
+        delete window.ol;
+        const onReady = sinon.spy();
+        const onUpdated = sinon.spy();
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            providerConfig: {
+                tileServer: {
+                    url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                    attribution: 'Example attribution'
+                }
+            },
+            onReady,
+            onUpdated
+        }).dxMap('instance');
+        const render = map._lastAsyncAction;
+        const updateZoom = sinon.spy(map._provider, 'updateZoom');
+        map.option('zoom', 5);
+
+        await assert.rejects(render, /E1069/, 'initialization keeps its diagnostic error');
+        await map._lastAsyncAction;
+        assert.ok(updateZoom.notCalled, 'queued update does not use an uninitialized provider');
+        assert.ok(onReady.notCalled, 'failed render does not raise ready');
+        assert.ok(onUpdated.notCalled, 'skipped update does not raise updated');
+
+        window.ol = openLayersMock;
+        map.repaint();
+        await map._lastAsyncAction;
+        assert.ok(onReady.calledOnce, 'repaint initializes a new provider');
+        assert.strictEqual(openLayersMock.viewZoom, 5, 'the latest option is applied on repaint');
+
+        map.option('zoom', 6);
+        await map._lastAsyncAction;
+        assert.strictEqual(openLayersMock.viewZoom, 6, 'the new provider processes later updates');
+    });
+    QUnit.test('missing OpenLayers is logged once without observing the render promise', async function(assert) {
+        const logError = sinon.stub(logger, 'error');
+        const unhandledRejection = sinon.spy();
+        window.addEventListener('unhandledrejection', unhandledRejection);
+        delete window.ol;
+
+        try {
+            const map = $('#map').dxMap({ provider: 'osm' }).dxMap('instance');
+            await new Promise(resolve => setTimeout(resolve, 50));
+
+            assert.ok(logError.calledOnce, 'initialization logs one error without a promise observer');
+            const error = logError.firstCall?.args[0];
+            assert.ok(error instanceof Error, 'the diagnostic is an Error object');
+            assert.strictEqual(error?.message, errors.Error('E1069').message, 'E1069 retains its message and documentation link');
+            assert.ok(unhandledRejection.notCalled, 'the browser does not report the same error as unhandled');
+
+            map.option('zoom', 5);
+            await map._lastAsyncAction;
+            map.option('zoom', 6);
+            await map._lastAsyncAction;
+
+            assert.ok(logError.calledOnce, 'subsequent updates do not repeat the initialization error');
+        } finally {
+            window.removeEventListener('unhandledrejection', unhandledRejection);
+            logError.restore();
+        }
+    });
+    QUnit.test('a throwing tileServer callback does not block later option updates', async function(assert) {
+        const reason = new Error('Tile configuration failed');
+        const onUpdated = sinon.spy();
+        const map = await new Promise(resolve => {
+            $('#map').dxMap({
+                provider: 'osm',
+                providerConfig: {
+                    tileServer: type => {
+                        if(type === 'satellite') {
+                            throw reason;
+                        }
+                        return {
+                            url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                            attribution: 'Example attribution'
+                        };
+                    }
+                },
+                onReady: ({ component }) => resolve(component),
+                onUpdated
+            });
+        });
+        const originalSource = openLayersMock.tileLayer.source;
+        onUpdated.resetHistory();
+        map.option('type', 'satellite');
+        const failedAction = map._lastAsyncAction;
+        map.option('zoom', 8);
+
+        await assert.rejects(failedAction, reason, 'the callback error remains available');
+        await map._lastAsyncAction;
+
+        assert.strictEqual(openLayersMock.tileLayer.source, originalSource, 'the existing tiles are preserved');
+        assert.strictEqual(openLayersMock.viewZoom, 8, 'the queued zoom change is applied');
+        assert.ok(onUpdated.calledOnce, 'only the successful update raises updated');
     });
     QUnit.test('load rejects with E1069 when the OpenLayers ImageTile API is missing', function(assert) {
         const done = assert.async();
