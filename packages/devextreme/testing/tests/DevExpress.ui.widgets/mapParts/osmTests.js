@@ -600,6 +600,68 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
             }
         });
     });
+    [false, true].forEach(initialAttribution => {
+        QUnit.test(`missing attribution logs W1032 once across map types (initial attribution: ${initialAttribution})`, async function(assert) {
+            const log = sinon.stub(errors, 'log');
+            try {
+                const map = await new Promise(resolve => {
+                    $('#map').dxMap({
+                        provider: 'osm',
+                        providerConfig: {
+                            tileServer: type => ({
+                                url: `https://${type}.example.com/{z}/{x}/{y}.png`,
+                                attribution: initialAttribution && type === 'roadmap' ? 'Example attribution' : undefined
+                            })
+                        },
+                        onReady: ({ component }) => resolve(component)
+                    });
+                });
+                assert.strictEqual(log.callCount, initialAttribution ? 0 : 1, 'initial warning depends on attribution');
+
+                const types = ['satellite', 'hybrid', 'roadmap', 'satellite'];
+                for(let index = 0; index < types.length; index++) {
+                    const type = types[index];
+                    map.option('type', type);
+                    await map._lastAsyncAction;
+
+                    assert.ok(log.calledOnceWithExactly('W1032'), 'missing attribution is reported only once');
+                    assert.strictEqual(openLayersMock.tileSourceOptions.url, `https://${type}.example.com/{z}/{x}/{y}.png`, 'tile source is still updated');
+                }
+            } finally {
+                log.restore();
+            }
+        });
+    });
+    QUnit.test('missing attribution logs W1032 again for a new provider', async function(assert) {
+        const log = sinon.stub(errors, 'log');
+        try {
+            const map = await new Promise(resolve => {
+                $('#map').dxMap({
+                    provider: 'osm',
+                    providerConfig: {
+                        tileServer: 'https://first.example.com/{z}/{x}/{y}.png'
+                    },
+                    onReady: ({ component }) => resolve(component)
+                });
+            });
+            assert.ok(log.calledOnceWithExactly('W1032'), 'initial provider reports missing attribution');
+            const originalProvider = map._provider;
+
+            await new Promise(resolve => {
+                map.option('onReady', resolve);
+                map.option('providerConfig', {
+                    tileServer: 'https://second.example.com/{z}/{x}/{y}.png'
+                });
+            });
+
+            assert.notStrictEqual(map._provider, originalProvider, 'provider is recreated');
+            assert.ok(log.calledTwice, 'new provider has its own warning');
+            assert.ok(log.alwaysCalledWithExactly('W1032'), 'only missing attribution is reported');
+            assert.strictEqual(openLayersMock.tileSourceOptions.url, 'https://second.example.com/{z}/{x}/{y}.png', 'new tile server is used');
+        } finally {
+            log.restore();
+        }
+    });
     QUnit.test('changing type replaces the tile source returned by the callback', function(assert) {
         const done = assert.async();
         const initialized = $.Deferred();

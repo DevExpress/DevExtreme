@@ -154,6 +154,8 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
 
   _boundLocations: MapLocation[] = [];
 
+  _attributionWarningLogged = false;
+
   _calculateLocationWarningLogged = false;
 
   _calculateRouteWarningLogged = false;
@@ -218,8 +220,9 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
       return undefined;
     }
 
-    if (!config.attribution) {
+    if (!config.attribution && !this._attributionWarningLogged) {
       errors.log('W1032');
+      this._attributionWarningLogged = true;
     }
 
     const result: MapEngineTileLayerOptions = {
