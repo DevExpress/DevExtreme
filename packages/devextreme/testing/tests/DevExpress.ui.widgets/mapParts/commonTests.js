@@ -3,6 +3,7 @@ import { MARKERS, ROUTES } from './utils.js';
 import Map from 'ui/map';
 import { logger } from 'core/utils/console';
 import Provider from '__internal/ui/map/provider';
+import DynamicProvider from '__internal/ui/map/provider.dynamic';
 import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 
@@ -779,6 +780,71 @@ QUnit.test('routes option change should not render incorrect routes', function(a
     map.option('routes', routes);
 });
 
+
+QUnit.module('Dynamic provider batch errors', () => {
+    ['Markers', 'Routes'].forEach(failedItems => {
+        QUnit.test(`render waits for both collections after add${failedItems} fails`, async function(assert) {
+            const reason = new Error('Collection failed');
+            let finishPending;
+            const pending = new Promise(resolve => { finishPending = resolve; });
+            const provider = {
+                _renderImpl: () => Promise.resolve(),
+                _waitForAll: Provider.prototype._waitForAll,
+                _applyFunctionIfNeeded: Provider.prototype._applyFunctionIfNeeded,
+                addMarkers: () => failedItems === 'Markers' ? Promise.reject(reason) : pending,
+                addRoutes: () => failedItems === 'Routes' ? Promise.reject(reason) : pending
+            };
+            let settled = false;
+            const render = Provider.prototype.render.call(provider, [{}], [{}]);
+            const rejection = assert.rejects(render, reason, 'render preserves the collection error');
+            render.then(() => { settled = true; }, () => { settled = true; });
+
+            await new Promise(resolve => setTimeout(resolve));
+
+            assert.notOk(settled, 'render waits for the other collection');
+            finishPending();
+            await rejection;
+        });
+    });
+
+    ['Markers', 'Routes'].forEach(items => {
+        ['reject', 'throw'].forEach(failure => {
+            QUnit.test(`add${items} waits for pending items after ${failure}`, async function(assert) {
+                const reason = new Error('First item failed');
+                const laterReason = new Error('Second item failed');
+                let rejectPending;
+                const pending = new Promise((_resolve, reject) => { rejectPending = reject; });
+                pending.catch(() => {});
+                const addItem = sinon.stub().callsFake(options => {
+                    if(options.first) {
+                        if(failure === 'throw') {
+                            throw reason;
+                        }
+                        return Promise.reject(reason);
+                    }
+                    return pending;
+                });
+                const provider = {
+                    [`_add${items === 'Markers' ? 'Marker' : 'Route'}`]: addItem,
+                    _waitForAll: Provider.prototype._waitForAll,
+                    _fitBounds: sinon.spy()
+                };
+                let settled = false;
+                const batch = Promise.resolve().then(() => DynamicProvider.prototype[`add${items}`].call(provider, [{ first: true }, {}]));
+                const rejection = assert.rejects(batch, reason, 'the first error is preserved');
+                batch.then(() => { settled = true; }, () => { settled = true; });
+
+                await new Promise(resolve => setTimeout(resolve));
+
+                assert.ok(addItem.calledTwice, 'both items are processed');
+                assert.notOk(settled, 'the batch waits for the pending item');
+                rejectPending(laterReason);
+                await rejection;
+                assert.ok(provider._fitBounds.notCalled, 'a failed batch does not adjust the viewport');
+            });
+        });
+    });
+});
 
 QUnit.module('Change provider', {
     beforeEach: function() {

@@ -36,11 +36,20 @@ abstract class Provider {
     return '#0000FF';
   }
 
+  protected async _waitForAll<T>(promises: Promise<T>[]): Promise<T[]> {
+    try {
+      return await Promise.all(promises);
+    } catch (error) {
+      await Promise.allSettled(promises);
+      throw error;
+    }
+  }
+
   render(
     markerOptions: MarkerOptions[],
     routeOptions: RouteOptions[],
   ): Promise<unknown> {
-    return this._renderImpl().then(() => Promise.all([
+    return this._renderImpl().then(() => this._waitForAll([
       this._applyFunctionIfNeeded('addMarkers', markerOptions),
       this._applyFunctionIfNeeded('addRoutes', routeOptions),
     ]).then(() => true));

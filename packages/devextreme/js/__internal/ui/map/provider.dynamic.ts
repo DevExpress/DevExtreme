@@ -107,7 +107,7 @@ abstract class DynamicProvider<
   }
 
   _renderImpl(): Promise<void> {
-    return this._load().then(() => this._init()).then(() => Promise.all([
+    return this._load().then(() => this._init()).then(() => this._waitForAll([
       this.updateMapType(),
       this._areBoundsSet() ? this.updateBounds() : this.updateCenter(),
     ])).then(() => {
@@ -146,8 +146,7 @@ abstract class DynamicProvider<
   abstract _attachHandlers(): void;
 
   addMarkers(markers: MarkerOptions[]): Promise<[boolean, unknown[]]> {
-    return Promise
-      .all(markers.map((options) => this._addMarker(options)))
+    return this._waitForAll(markers.map(async (options) => this._addMarker(options)))
       .then((markerObjects: MarkerObject[]) => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._fitBounds();
@@ -225,12 +224,13 @@ abstract class DynamicProvider<
   }
 
   addRoutes(routes: RouteOptions[]): Promise<[boolean, unknown[]]> {
-    return Promise.all(routes.map((options) => this._addRoute(options))).then((routeObjects) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this._fitBounds();
+    return this._waitForAll(routes.map(async (options) => this._addRoute(options)))
+      .then((routeObjects) => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this._fitBounds();
 
-      return [false, routeObjects.map((routeObject) => routeObject.instance)];
-    });
+        return [false, routeObjects.map((routeObject) => routeObject.instance)];
+      });
   }
 
   _addRoute(options: RouteOptions): Promise<RouteObject> {

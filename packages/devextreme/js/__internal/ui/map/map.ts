@@ -329,7 +329,7 @@ class Map extends Widget<MapProperties> {
           if (changeBag) {
             changeBag.resolve(result);
           }
-        });
+        }, () => {});
         break;
       }
       case 'markerIconSrc':

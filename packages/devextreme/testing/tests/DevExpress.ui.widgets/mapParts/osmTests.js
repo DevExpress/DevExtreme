@@ -490,6 +490,83 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
         }).dxMap('instance');
     });
 });
+QUnit.module('OSM: async batch recovery', moduleConfig, () => {
+    ['markers', 'routes'].forEach(collection => {
+        QUnit.test(`clearing ${collection} waits for a failed batch to finish`, async function(assert) {
+            const reason = new Error('Added callback failed');
+            const logError = sinon.stub(logger, 'error');
+            const onUpdated = sinon.spy();
+            const onRemoved = sinon.spy();
+            let firstAdded;
+            const added = new Promise(resolve => { firstAdded = resolve; });
+            let resolvePending;
+            const pending = new Promise(resolve => { resolvePending = resolve; });
+            const isMarkers = collection === 'markers';
+            const first = isMarkers
+                ? { location: [10, 20] }
+                : { locations: [[10, 20], [11, 21]] };
+            const second = isMarkers
+                ? { location: 'Pending location' }
+                : { locations: [[30, 40], [31, 41]] };
+            const onAdded = sinon.spy(({ options }) => {
+                if(options === first) {
+                    firstAdded();
+                    throw reason;
+                }
+            });
+            try {
+                const map = $('#map').dxMap({
+                    provider: 'osm',
+                    autoAdjust: false,
+                    providerConfig: {
+                        tileServer: { url: 'https://tiles.example.com/{z}/{x}/{y}.png', attribution: 'Example attribution' },
+                        calculateLocation: () => pending,
+                        calculateRoute: ({ locations }) => locations[0].lat === 10
+                            ? Promise.resolve([[10, 20], [11, 21]])
+                            : pending
+                    },
+                    [isMarkers ? 'onMarkerAdded' : 'onRouteAdded']: onAdded,
+                    [isMarkers ? 'onMarkerRemoved' : 'onRouteRemoved']: onRemoved,
+                    onUpdated
+                }).dxMap('instance');
+                await map._lastAsyncAction;
+                onUpdated.resetHistory();
+
+                map.option(collection, [first, second]);
+                const batch = map._lastAsyncAction;
+                const rejection = assert.rejects(batch, reason, 'the original callback error is preserved');
+                await added;
+                map.option(collection, []);
+                const clear = map._lastAsyncAction;
+                let cleared = false;
+                clear.then(() => { cleared = true; });
+
+                await new Promise(resolve => setTimeout(resolve));
+
+                assert.notOk(cleared, 'the next operation waits for the whole batch');
+                assert.ok(onRemoved.notCalled, 'removal does not overlap with pending additions');
+                resolvePending(isMarkers ? { lat: 30, lng: 40 } : [[30, 40], [31, 41]]);
+                await rejection;
+                await clear;
+                await new Promise(resolve => setTimeout(resolve));
+
+                assert.strictEqual(map.option(collection).length, 0, 'the collection option is empty');
+                assert.strictEqual(map._provider[`_${collection}`].length, 0, 'no items remain in the provider');
+                if(isMarkers) {
+                    assert.strictEqual(openLayersMock.addedOverlays.length, openLayersMock.removedOverlays.length, 'all marker overlays are removed');
+                } else {
+                    assert.strictEqual(openLayersMock.addedVectorLayers[0].getSource().getFeatures().length, 0, 'all route features are removed');
+                }
+                assert.ok(onAdded.calledTwice, 'both additions finish before removal');
+                assert.ok(onRemoved.calledTwice, 'both items are removed');
+                assert.ok(onUpdated.calledOnce, 'only the successful clear raises updated');
+                assert.ok(logError.calledOnceWithExactly(reason), 'the callback error is logged once');
+            } finally {
+                logError.restore();
+            }
+        });
+    });
+});
 QUnit.module('OSM: tile server', moduleConfig, () => {
     QUnit.test('string tileServer creates a tile layer with defaults', function(assert) {
         const done = assert.async();
