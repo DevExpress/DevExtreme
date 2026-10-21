@@ -13,9 +13,21 @@ import type { InternalGridOptions, ModuleType, OptionChanged } from '@ts/grids/g
 import type { Column, ColumnsChanges } from '../columns_controller/types';
 import type { CellRenderOptions, ViewCellOptions, ViewRow } from '../views/types';
 import sortingMixin from './m_sorting_mixin';
-import type { HeaderActionEvent, SortingColumn } from './types';
+import type { HeaderActionEvent, SortingColumn, SortKeyName } from './types';
 
 const COLUMN_HEADERS_VIEW_NAMESPACE = 'dxDataGridColumnHeadersView';
+
+const getSortKeyName = (event: HeaderActionEvent): SortKeyName => {
+  if (event.shiftKey) {
+    return 'shift';
+  }
+
+  if (isCommandKeyPressed(event)) {
+    return 'ctrl';
+  }
+
+  return null;
+};
 
 // TODO getController
 const columnHeadersView = (
@@ -49,36 +61,35 @@ const columnHeadersView = (
     event: HeaderActionEvent,
     $row: dxElementWrapper,
   ): void {
-    if ($(event.currentTarget).parent().get(0) !== $row.get(0)) {
+    const $cell = $(event.currentTarget);
+
+    if ($cell.parent().get(0) !== $row.get(0)) {
       return;
     }
-    let keyName: 'shift' | 'ctrl' | null = null;
-    const $cellElementFromEvent = $(event.currentTarget);
-    const rowIndex = $cellElementFromEvent.parent().index();
+
+    const rowIndex = $cell.parent().index();
     const cellElements: Element[] = [].slice.call(this.getCellElements(rowIndex));
-    const columnIndex = cellElements.indexOf($cellElementFromEvent.get(0));
-    const visibleColumns = this._columnsController.getVisibleColumns(rowIndex);
-    const column = visibleColumns[columnIndex];
-    const editingController = this.getController('editing');
+    const columnIndex = cellElements.indexOf($cell.get(0));
+    const column = this._columnsController.getVisibleColumns(rowIndex)[columnIndex];
     const editingMode = this.option('editing.mode');
-    const isCellEditing = editingController?.isEditing() && (editingMode === 'batch' || editingMode === 'cell');
+    const isCellEditing = this.getController('editing')?.isEditing()
+      && (editingMode === 'batch' || editingMode === 'cell');
 
     if (isCellEditing || !this._isSortableElement($(event.target))) {
       return;
     }
 
-    if (column && !isDefined(column.groupIndex) && !column.command) {
-      if (event.shiftKey) {
-        keyName = 'shift';
-      } else if (isCommandKeyPressed(event)) {
-        keyName = 'ctrl';
-      }
-      setTimeout(() => {
-        if (isDefined(column.index)) {
-          this._columnsController.changeSortOrder(column.index, keyName);
-        }
-      });
+    if (!column || isDefined(column.groupIndex) || column.command) {
+      return;
     }
+
+    const keyName = getSortKeyName(event);
+
+    setTimeout(() => {
+      if (isDefined(column.index)) {
+        this._columnsController.changeSortOrder(column.index, keyName);
+      }
+    });
   }
 
   protected _renderCellContent(
@@ -114,7 +125,8 @@ const columnHeadersView = (
 
 const headerPanel = (
   Base: ModuleType<HeaderPanel>,
-): ModuleType<HeaderPanel> => class HeaderPanelSortingExtender extends sortingMixin(Base) {
+): ModuleType<HeaderPanel> => class HeaderPanelSortingExtender
+  extends sortingMixin(Base) {
   public optionChanged(args: OptionChanged): void {
     switch (args.name) {
       case 'sorting':
