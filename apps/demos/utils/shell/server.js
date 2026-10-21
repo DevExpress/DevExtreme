@@ -64,7 +64,7 @@ function newestSourceMtimeMs(dir) {
   let newest = 0;
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const isGenerated = GENERATED_ENTRY_NAMES.has(entry.name)
-      || entry.name.startsWith('.csp-bundle-angular-patched.');
+      || entry.name.startsWith('.demo-bundle-angular-patched.');
     if (!isGenerated) {
       const fullPath = join(dir, entry.name);
       const mtimeMs = entry.isDirectory()
