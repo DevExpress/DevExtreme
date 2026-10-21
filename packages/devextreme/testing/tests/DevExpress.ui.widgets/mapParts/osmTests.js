@@ -3358,6 +3358,7 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
         const map = $('#map').dxMap({
             provider: 'osm',
             focusStateEnabled: false,
+            controls: true,
             tabIndex: 5,
             markers: [{
                 location: [40.74, -73.98],
@@ -3377,6 +3378,9 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                 const target = getOpenLayersKeyboardTarget();
                 const markerElement = openLayersMock.addedOverlays[0].options.element;
                 const customButton = openLayersMock.addedOverlays[1].options.element.querySelector('button');
+                const controls = Array.from(target.querySelectorAll('.ol-control button, .ol-control a'));
+                assert.strictEqual(controls.length, 4, 'zoom and attribution controls are rendered');
+                assert.ok(controls.every(element => element.tabIndex === -1), 'controls are excluded on initialization');
                 assert.strictEqual(target.getAttribute('tabindex'), null, 'focus is disabled on initialization');
                 assert.strictEqual(markerElement.getAttribute('tabindex'), '-1', 'marker is removed from the tab order on initialization');
                 assert.strictEqual(customButton.getAttribute('tabindex'), '-1', 'custom interactive content is removed from the tab order');
@@ -3384,12 +3388,14 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                     assert.strictEqual(target.getAttribute('tabindex'), '5', 'configured tabIndex is applied');
                     assert.strictEqual(markerElement.getAttribute('tabindex'), '0', 'marker focus is enabled');
                     assert.strictEqual(customButton.getAttribute('tabindex'), null, 'custom interactive content returns to the tab order');
+                    assert.ok(controls.every(element => element.getAttribute('tabindex') === null), 'native control tab indexes are restored');
                     map.option('onUpdated', () => {
                         assert.strictEqual(target.getAttribute('tabindex'), '-1', 'runtime tabIndex is applied');
                         map.option('onUpdated', () => {
                             assert.strictEqual(target.getAttribute('tabindex'), null, 'runtime focus disabling is applied');
                             assert.strictEqual(markerElement.getAttribute('tabindex'), '-1', 'marker is removed from the tab order at runtime');
                             assert.strictEqual(customButton.getAttribute('tabindex'), '-1', 'custom interactive content leaves the tab order');
+                            assert.ok(controls.every(element => element.tabIndex === -1), 'controls leave the tab order at runtime');
                             done();
                         });
                         map.option('focusStateEnabled', false);
@@ -3624,6 +3630,94 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                 engineMap.dispose();
             });
         });
+    });
+    [false, true].forEach(inShadowDom => {
+        QUnit.test(`control focus preserves tab indexes and pointer access (Shadow DOM: ${inShadowDom})`, function(assert) {
+            const host = document.createElement('div');
+            const root = inShadowDom ? host.attachShadow({ mode: 'open' }) : host;
+            const container = document.createElement('div');
+            const sibling = document.createElement('button');
+            root.append(container, sibling);
+            const engineMap = createOpenLayersEngine(openLayersMock).createMap(container);
+            engineMap.setControls(true);
+            const buttons = container.querySelectorAll('.ol-zoom button');
+            const attributionButton = container.querySelector('.ol-attribution button');
+            const attributionLink = container.querySelector('.ol-attribution a');
+            buttons[0].setAttribute('tabindex', '3');
+            buttons[1].setAttribute('tabindex', '-2');
+            attributionLink.setAttribute('tabindex', '0');
+            const onClick = sinon.spy();
+            buttons[0].addEventListener('click', onClick);
+
+            engineMap.setFocus(false, 5);
+            engineMap.setFocus(false, 5);
+            assert.strictEqual(buttons[0].tabIndex, -1, 'zoom is excluded from the tab order');
+            assert.strictEqual(buttons[1].tabIndex, -2, 'an existing negative tab index is preserved');
+            assert.strictEqual(attributionButton.tabIndex, -1, 'the attribution button is excluded');
+            assert.strictEqual(attributionLink.tabIndex, -1, 'the attribution link is excluded');
+            assert.notOk(container.hasAttribute('inert'), 'pointer access is not disabled');
+            buttons[0].click();
+            assert.ok(onClick.calledOnce, 'control clicks are still handled');
+            assert.strictEqual(sibling.getAttribute('tabindex'), null, 'elements outside the map are unchanged');
+
+            engineMap.setFocus(true, 5);
+            assert.strictEqual(buttons[0].getAttribute('tabindex'), '3', 'the explicit tab index is restored');
+            assert.strictEqual(buttons[1].getAttribute('tabindex'), '-2', 'the original negative tab index is unchanged');
+            assert.strictEqual(attributionButton.getAttribute('tabindex'), null, 'the native tab index is restored');
+            assert.strictEqual(attributionLink.getAttribute('tabindex'), '0', 'an explicit zero is preserved');
+            engineMap.dispose();
+        });
+    });
+    QUnit.test('control focus follows new controls and attribution content', async function(assert) {
+        const container = document.createElement('div');
+        const engineMap = createOpenLayersEngine(openLayersMock).createMap(container);
+        engineMap.setFocus(false, 0);
+        engineMap.setControls(true);
+        const zoomButton = container.querySelector('.ol-zoom button');
+        assert.strictEqual(zoomButton.tabIndex, -1, 'zoom added after disabling focus is excluded immediately');
+        engineMap.setControls(false);
+        assert.strictEqual(zoomButton.getAttribute('tabindex'), null, 'removing the control restores its original tab index');
+        engineMap.setControls(true);
+        assert.strictEqual(zoomButton.tabIndex, -1, 're-added zoom is excluded again');
+
+        const attribution = container.querySelector('.ol-attribution');
+        const oldLink = attribution.querySelector('a');
+        const newLink = document.createElement('a');
+        newLink.href = '#updated-credits';
+        oldLink.replaceWith(newLink);
+        await Promise.resolve();
+        assert.strictEqual(newLink.tabIndex, -1, 'asynchronously updated attribution is excluded');
+        assert.strictEqual(oldLink.getAttribute('tabindex'), null, 'detached attribution is restored');
+
+        const overlayButton = document.createElement('button');
+        openLayersMock.overlayContainerStopEvent.appendChild(overlayButton);
+        await Promise.resolve();
+        assert.strictEqual(overlayButton.getAttribute('tabindex'), null, 'unrelated overlay content is not changed');
+
+        engineMap.dispose();
+        assert.strictEqual(newLink.getAttribute('tabindex'), null, 'dispose restores modified controls');
+        const lateLink = document.createElement('a');
+        lateLink.href = '#late-credits';
+        attribution.appendChild(lateLink);
+        await Promise.resolve();
+        assert.strictEqual(lateLink.getAttribute('tabindex'), null, 'dispose stops observing control content');
+    });
+    QUnit.test('control focus is synchronized after the disabled state changes', function(assert) {
+        const container = document.createElement('div');
+        const engineMap = createOpenLayersEngine(openLayersMock).createMap(container);
+        engineMap.setDisabled(true);
+        engineMap.setFocus(false, 0);
+        engineMap.setControls(true);
+        const zoomButton = container.querySelector('.ol-zoom button');
+        engineMap.setDisabled(false);
+        assert.strictEqual(zoomButton.tabIndex, -1, 'enabling the map keeps control focus disabled');
+
+        engineMap.setDisabled(true);
+        engineMap.setFocus(true, 0);
+        assert.ok(container.hasAttribute('inert'), 'enabling focus does not enable a disabled map');
+        engineMap.setDisabled(false);
+        assert.strictEqual(zoomButton.getAttribute('tabindex'), null, 'enabling the map restores native control focus');
+        engineMap.dispose();
     });
     QUnit.test('controls option toggles the OpenLayers zoom control', function(assert) {
         const done = assert.async();

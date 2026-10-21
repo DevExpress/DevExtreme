@@ -61,6 +61,7 @@ interface MapBrowserEventLike {
 }
 
 const KEY_RELEASE_EVENT = 'keyup';
+const CONTROL_SELECTOR = '.ol-control';
 
 interface MarkerFocusTarget {
   element: HTMLElement;
@@ -93,6 +94,10 @@ class OpenLayersMap implements MapEngineMap {
   private _tabIndex = 0;
 
   private readonly _zoomControl: ControlLike;
+
+  private readonly _controlFocusObserver: MutationObserver;
+
+  private readonly _controlTabIndexes = new Map<HTMLElement, string | null>();
 
   private _controlsVisible = false;
 
@@ -132,7 +137,6 @@ class OpenLayersMap implements MapEngineMap {
     view: MapEngineSetViewOptions = {},
   ) {
     this._container = container;
-    this._syncKeyboardTabIndex();
 
     this.originalMap = new _api.Map({
       controls: _api.control.defaults.defaults({ attribution: true, rotate: false, zoom: false }),
@@ -160,6 +164,8 @@ class OpenLayersMap implements MapEngineMap {
     this._subscribedView.on('change:center', this._viewCenterChangeHandler);
     this.originalMap.on('change:view', this._viewChangeHandler);
     this._zoomControl = new _api.control.Zoom();
+    this._controlFocusObserver = new MutationObserver(this._syncControlTabIndexes);
+    this._syncKeyboardTabIndex();
   }
 
   private readonly _viewCenterChangeHandler = (): void => {
@@ -655,6 +661,8 @@ class OpenLayersMap implements MapEngineMap {
     }
 
     this._disposed = true;
+    this._controlFocusObserver.disconnect();
+    this._syncControlTabIndexes();
     this._detachHandlers();
     this.originalMap.un('change:view', this._viewChangeHandler);
     this._subscribedView.un('change:center', this._viewCenterChangeHandler);
@@ -739,6 +747,7 @@ class OpenLayersMap implements MapEngineMap {
     } else {
       this.originalMap.removeControl(this._zoomControl);
     }
+    this._syncControlTabIndexes();
   }
 
   setDisabled(disabled: boolean): void {
@@ -791,8 +800,42 @@ class OpenLayersMap implements MapEngineMap {
   setFocus(enabled: boolean, tabIndex: number): void {
     this._focusEnabled = enabled;
     this._tabIndex = tabIndex;
+    this._controlFocusObserver.disconnect();
+    if (!enabled) {
+      this._controlFocusObserver.observe(this.originalMap.getOverlayContainerStopEvent(), {
+        childList: true,
+        subtree: true,
+      });
+    }
     this._syncKeyboardTabIndex();
   }
+
+  private readonly _syncControlTabIndexes = (): void => {
+    const container = this.originalMap.getOverlayContainerStopEvent();
+    const restore = this._focusEnabled || this._disposed;
+    this._controlTabIndexes.forEach((tabIndex, element) => {
+      if (restore || !container.contains(element)) {
+        if (tabIndex === null) {
+          element.removeAttribute('tabindex');
+        } else {
+          element.setAttribute('tabindex', tabIndex);
+        }
+        this._controlTabIndexes.delete(element);
+      }
+    });
+    if (restore) {
+      return;
+    }
+
+    container.querySelectorAll(CONTROL_SELECTOR).forEach((control) => {
+      control.querySelectorAll<HTMLElement>(ALL_FOCUSABLE_ELEMENTS_SELECTOR).forEach((element) => {
+        if (!this._controlTabIndexes.has(element)) {
+          this._controlTabIndexes.set(element, element.getAttribute('tabindex'));
+        }
+        element.setAttribute('tabindex', '-1');
+      });
+    });
+  };
 
   private _syncKeyboardTabIndex(): void {
     if (this._focusEnabled && !this._disabled) {
@@ -801,6 +844,7 @@ class OpenLayersMap implements MapEngineMap {
       this._container.removeAttribute('tabindex');
     }
     this._markers.forEach((marker) => this._syncMarkerTabIndex(marker));
+    this._syncControlTabIndexes();
   }
 
   setView(options: MapEngineSetViewOptions): void {

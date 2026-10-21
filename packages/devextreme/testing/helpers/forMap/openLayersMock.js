@@ -55,6 +55,16 @@
     class MockZoom {
         constructor() {
             api.zoomControlCreatedCount += 1;
+            this.element = document.createElement('div');
+            this.element.className = 'ol-zoom ol-control';
+            this.element.innerHTML = '<button type="button">+</button><button type="button">-</button>';
+        }
+    }
+    class MockAttribution {
+        constructor() {
+            this.element = document.createElement('div');
+            this.element.className = 'ol-attribution ol-control';
+            this.element.innerHTML = '<button type="button">Attributions</button><ul><li><a href="#credits">Credits</a></li></ul>';
         }
     }
     class MockOverlay {
@@ -146,6 +156,7 @@
             });
             this.overlayContainerStopEvent = document.createElement('div');
             options.target.append(this.overlayContainer, this.overlayContainerStopEvent);
+            options.controls.forEach(control => this.overlayContainerStopEvent.appendChild(control.element));
             api.mapCreated = true;
             api.mapInstance = this;
             api.mapOptions = options;
@@ -154,6 +165,7 @@
         }
         addControl(control) {
             api.addedControls.push(control);
+            this.overlayContainerStopEvent.appendChild(control.element);
         }
 
         addLayer(layer) {
@@ -195,6 +207,7 @@
 
         removeControl(control) {
             api.removedControls.push(control);
+            control.element.remove();
         }
 
         removeLayer(layer) {
@@ -326,7 +339,7 @@
             defaults: {
                 defaults(options) {
                     api.controlOptions = options;
-                    return new MockCollection([]);
+                    return new MockCollection(options.attribution ? [new MockAttribution()] : []);
                 }
             }
         },
