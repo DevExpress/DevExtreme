@@ -19,7 +19,6 @@ import {
  MapLocation,
  OsmRouteResult,
  OsmTileServer,
- OsmTileServerConfig,
  RouteMode,
 } from "devextreme/ui/map";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -260,7 +259,7 @@ const DxProviderConfigConfig = {
     calculateLocation: Function as PropType<((query: string) => PromiseLike<MapLocation | undefined>)>,
     calculateRoute: Function as PropType<((params: CalculateOsmRouteInfo) => PromiseLike<OsmRouteResult>)>,
     mapId: String,
-    tileServer: [Object, Function, String] as PropType<OsmTileServer | (((type: MapType) => string | OsmTileServerConfig | undefined)) | OsmTileServerConfig | string>,
+    tileServer: [Object, Function, String] as PropType<OsmTileServer>,
     useAdvancedMarkers: Boolean
   }
 };
