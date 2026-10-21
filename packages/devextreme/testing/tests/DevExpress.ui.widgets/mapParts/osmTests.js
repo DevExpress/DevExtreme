@@ -2492,6 +2492,24 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         assert.ok(repaint.notCalled, 'no full repaint');
     });
 
+    QUnit.test('postrender checks tooltip focus once after positioning', async function(assert) {
+        await createMap({ markers: [{ location, tooltip: '<button>Details</button>' }] });
+        positionMarker();
+        getMarker().click();
+        await Promise.resolve();
+        const tooltip = getTooltip();
+        const popup = getContent(tooltip).parentElement;
+        const focusTargets = sinon.spy(popup, 'querySelectorAll');
+        const queriesDuringPositioning = [];
+        tooltip.on('positioned', () => queriesDuringPositioning.push(focusTargets.callCount));
+
+        openLayersMock.mapInstance.trigger('postrender');
+
+        assert.ok(queriesDuringPositioning.length, 'positioned events are raised');
+        assert.ok(queriesDuringPositioning.every(count => count === 0), 'focus is not checked during positioning');
+        assert.strictEqual(focusTargets.callCount, 1, 'focus is checked once after positioning');
+    });
+
     QUnit.test('tooltip position follows a resized image marker', async function(assert) {
         await createMap({ markers: [{
             location,

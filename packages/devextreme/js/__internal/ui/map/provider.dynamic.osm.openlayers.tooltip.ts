@@ -156,6 +156,10 @@ export class OpenLayersMarkerTooltip {
   };
 
   private readonly _syncFocusState = (): void => {
+    if (this._positioning) {
+      return;
+    }
+
     this._inertElements.forEach((element) => { element.inert = false; });
     this._inertElements.clear();
     if (this._focusEnabled) {
