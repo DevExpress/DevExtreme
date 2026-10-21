@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "关闭 AI 助手对话将中止正在进行的请求。是否关闭对话？",
         "dxDataGrid-aiAChatEmptyViewMessage": "对话为空",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI 助手已准备好回答您的问题。",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI 提示编辑器",
         "dxDataGrid-aiPromptEditorPlaceholder": "提示 AI 生成列值...",
         "dxDataGrid-aiPromptEditorApplyButton": "应用",

@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Đóng hội thoại Trợ lý AI sẽ hủy các yêu cầu đang xử lý. Bạn có muốn đóng hội thoại không?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Cuộc trò chuyện trống",
         "dxDataGrid-aiChatEmptyViewPrompt": "Trợ lý AI đã sẵn sàng trả lời câu hỏi của bạn.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Trình soạn thảo AI Prompt",
         "dxDataGrid-aiPromptEditorPlaceholder": "Nhắc AI tạo giá trị cho các cột...",
         "dxDataGrid-aiPromptEditorApplyButton": "Áp dụng",

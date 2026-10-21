@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Om du stänger AI-assistentens chatt avbryts pågående begäranden. Vill du stänga chatten?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chatten är tom",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI-assistenten är redo att svara på dina frågor.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI-promptredigerare",
         "dxDataGrid-aiPromptEditorPlaceholder": "Be AI generera kolumnens värden",
         "dxDataGrid-aiPromptEditorApplyButton": "Tillämpa",

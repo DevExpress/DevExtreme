@@ -422,6 +422,20 @@ export default function() {
             assert.ok($toolbar.hasClass(STATE_DISABLED_CLASS));
         });
 
+        test('Toolbar of a previous render should not be updated on the readOnly option change after repaint', function(assert) {
+            const editor = $('#htmlEditor').dxHtmlEditor({
+                toolbar: { items: ['bold'] }
+            }).dxHtmlEditor('instance');
+            const previousToolbar = editor.getModule('toolbar').toolbarInstance;
+
+            editor.repaint();
+            const previousToolbarOptionSpy = sinon.spy(previousToolbar, 'option');
+            editor.option('readOnly', true);
+
+            assert.ok($(`.${TOOLBAR_CLASS}`).hasClass(STATE_DISABLED_CLASS), 'current toolbar is disabled');
+            assert.ok(previousToolbarOptionSpy.notCalled, 'toolbar of the previous render is not updated');
+        });
+
         test('SelectBox should keep selected value after format applying', function(assert) {
             $('#htmlEditor').dxHtmlEditor({
                 toolbar: { items: [{ name: 'size', acceptedValues: ['10px', '11px'] }] }
@@ -939,6 +953,22 @@ export default function() {
                 assert.strictEqual($activeFormats.length, 2, 'other toolbar items are not changed');
                 assert.notOk($activeFormats.eq(0).hasClass(`dx-${format}-format`), 'toolbar item state is changed');
             });
+        });
+
+        test('hotkey handler does not throw when the toolbar has no button for the format', function(assert) {
+            const $container = $('#htmlEditor').html('<p>test</p>');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['italic'] },
+                value: '<p>test</p>',
+            }).dxHtmlEditor('instance');
+
+            const quill = instance.getQuillInstance();
+            const formatHandler = quill.keyboard.bindings[66][1].handler;
+
+            instance.setSelection(4, 0);
+            formatHandler.call(quill.keyboard, null, null, { which: 66 });
+
+            assert.ok(true, 'the bold hotkey is handled without an exception');
         });
 
         test('history buttons are inactive after processing transcluded content', function(assert) {

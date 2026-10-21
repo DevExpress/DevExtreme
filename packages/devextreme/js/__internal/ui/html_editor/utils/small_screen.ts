@@ -1,9 +1,5 @@
 import devices from '@js/core/devices';
-import {
-  // @ts-expect-error
-  getCurrentScreenFactor,
-  hasWindow,
-} from '@js/core/utils/window';
+import { getCurrentScreenFactor, hasWindow } from '@ts/core/utils/m_window';
 
 export const isSmallScreen = (): boolean => {
   const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;

@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Aizverot AI asistenta tērzēšanu, tiks pārtraukti notiekošie pieprasījumi. Vai vēlaties aizvērt tērzēšanu?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Tērzēšana ir tukša",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI asistents ir gatavs atbildēt uz jūsu jautājumiem.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI uzvedņu redaktors",
         "dxDataGrid-aiPromptEditorPlaceholder": "Palūdzīt AI ģenerēt kolonnas vērtības...",
         "dxDataGrid-aiPromptEditorApplyButton": "Lietot",

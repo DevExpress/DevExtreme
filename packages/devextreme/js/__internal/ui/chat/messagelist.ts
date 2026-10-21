@@ -111,7 +111,7 @@ export interface Properties extends WidgetOptions<MessageList> {
 }
 
 class MessageList extends Widget<Properties> {
-  private _lastMessageDate?: string | number | Date | null;
+  private _lastMessageDate?: Date | null;
 
   private _containerClientHeight!: number;
 
@@ -431,6 +431,11 @@ class MessageList extends Widget<Properties> {
 
   _createDayHeader(timestamp: string | number | Date | undefined): void {
     const deserializedDate = dateSerialization.deserializeDate(timestamp);
+
+    if (!isDate(deserializedDate)) {
+      return;
+    }
+
     const today = new Date();
     const yesterday = new Date(new Date().setDate(today.getDate() - 1));
     const { dayHeaderFormat } = this.option();

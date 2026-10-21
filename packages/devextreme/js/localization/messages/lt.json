@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Uždarius DI asistento pokalbį, bus nutrauktos vykdomos užklausos. Ar norite uždaryti pokalbį?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Pokalbis tuščias",
         "dxDataGrid-aiChatEmptyViewPrompt": "DI asistentas yra pasiruošęs atsakyti į jūsų klausimus.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI užklausų redaktorius",
         "dxDataGrid-aiPromptEditorPlaceholder": "Įveskite užklausą AI, kad sugeneruotų stulpelių reikšmes...",
         "dxDataGrid-aiPromptEditorApplyButton": "Taikyti",

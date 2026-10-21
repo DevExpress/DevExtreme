@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "關閉 AI 助理對話將中止進行中的請求。是否關閉對話？",
         "dxDataGrid-aiAChatEmptyViewMessage": "對話為空",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI 助理已準備好回答您的問題。",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI 提示編輯器",
         "dxDataGrid-aiPromptEditorPlaceholder": "請輸入提示以讓 AI 生成此欄位的值",
         "dxDataGrid-aiPromptEditorApplyButton": "應用",

@@ -23,10 +23,10 @@ import {
   withFormatLocale,
 } from '@ts/core/global_format_config';
 import { dateUtils } from '@ts/core/utils/m_date';
-import { adjust, getExponent, getPrecision } from '@ts/core/utils/m_math';
 import {
   isDefined, isExponential, isFunction, isObject,
 } from '@ts/core/utils/m_type';
+import { adjust, getExponent, getPrecision } from '@ts/core/utils/math';
 import { getAdjustedLog10 as log10 } from '@ts/viz/core/utils';
 
 const _format = formatHelper.format;
@@ -279,10 +279,12 @@ function formatDateRange(startValue, endValue, tickInterval) {
 
 function processDateInterval(interval) {
   if (isObject(interval)) {
-    const dateUnits = Object.keys(interval);
-    const sum = dateUnits.reduce((sum, k) => interval[k] + sum, 0);
+    // @ts-expect-error an interval object holds numbers
+    const units: Record<string, number> = interval;
+    const dateUnits = Object.keys(units);
+    const sum = dateUnits.reduce((sum, k) => units[k] + sum, 0);
     if (sum === 1) {
-      const dateUnit = dateUnits.filter((k) => interval[k] === 1)[0];
+      const dateUnit = dateUnits.filter((k) => units[k] === 1)[0];
       return dateUnit.slice(0, dateUnit.length - 1);
     }
   }

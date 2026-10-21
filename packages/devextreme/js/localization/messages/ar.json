@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "سيؤدي إغلاق محادثة مساعد الذكاء الاصطناعي إلى إلغاء الطلبات قيد التشغيل. هل تريد إغلاق المحادثة؟",
         "dxDataGrid-aiAChatEmptyViewMessage": "المحادثة فارغة",
         "dxDataGrid-aiChatEmptyViewPrompt": "مساعد الذكاء الاصطناعي جاهز للإجابة على أسئلتك.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "محرر موجهات AI",
         "dxDataGrid-aiPromptEditorPlaceholder": "أطلب من AI إنشاء قيم الأعمدة...",
         "dxDataGrid-aiPromptEditorApplyButton": "تطبيق",

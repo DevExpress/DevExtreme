@@ -1,7 +1,7 @@
 import { describe, expect } from '@jest/globals';
 import each from 'jest-each';
 
-import { dateUtilsTs } from './date';
+import { addOffsets } from './m_date';
 
 const SECOND_MS = 1000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -26,7 +26,7 @@ describe('Date utils', () => {
       }: { offsets: number[]; expectedResult: Date }) => {
         const date = new Date('2023-09-05T00:00:00Z');
 
-        const result = dateUtilsTs.addOffsets(date, ...offsets);
+        const result = addOffsets(date, ...offsets);
 
         expect(result).toEqual(expectedResult);
       });
