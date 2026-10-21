@@ -87,7 +87,6 @@ describe('explicit number preset keeps the message locale', () => {
       const instance = new NumberBox(element, {
         value: 1234.5,
         format: format as Properties['format'],
-        useMaskBehavior: true,
       });
 
       widgets.push(instance);

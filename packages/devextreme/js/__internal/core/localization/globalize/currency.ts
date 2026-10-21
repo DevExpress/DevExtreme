@@ -108,7 +108,7 @@ if (Globalize?.formatCurrency) {
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return this.callBase.apply(this, [value, normalizedFormat]);
+      return this.callBase.apply(this, [value, format ? normalizedFormat : format]);
     },
     getCurrencySymbol(currency?: string, locale?: string): { symbol: string } {
       if (!currency) {

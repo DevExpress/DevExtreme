@@ -24,7 +24,10 @@ interface DateArgs {
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
 const NARROW_NO_BREAK_SPACE_REGEX = /[\u202F]/g;
 
+const DEFAULT_TIME_SEPARATOR = ':';
+
 const formattersCache: Record<string, DateFormatter> = {};
+const timeSeparatorsCache: Record<string, string> = {};
 const getFormatter = (
   format: Intl.DateTimeFormatOptions,
   formatLocale = localizationCoreUtils.locale(),
@@ -464,14 +467,23 @@ export default {
   },
   getTimeSeparator(locale?: string): string {
     const formatLocale = locale ?? getEffectiveFormatLocale(undefined, 'time');
-    const formatOptions: Intl.DateTimeFormatOptions = {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false,
-    };
-    return normalizeNumerals(
-      formatDateTime(new Date(2001, 1, 1, 11, 11), formatOptions, formatLocale),
-    ).replace(/\d/g, '');
+
+    if (!timeSeparatorsCache[formatLocale]) {
+      const parts = new Intl.DateTimeFormat(formatLocale, {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: false,
+      }).formatToParts(new Date(2001, 1, 1, 11, 11));
+      const hourIndex = parts.findIndex(({ type }) => type === 'hour');
+      const separatorPart = parts[hourIndex + 1];
+      const separator = separatorPart?.type === 'literal'
+        ? separatorPart.value.replace(SYMBOLS_TO_REMOVE_REGEX, '')
+        : '';
+
+      timeSeparatorsCache[formatLocale] = separator || DEFAULT_TIME_SEPARATOR;
+    }
+
+    return timeSeparatorsCache[formatLocale];
   },
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

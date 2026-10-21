@@ -131,7 +131,8 @@ const dateLocalization = dependencyInjector({
   getPeriodNames(format?: Format, type?: string): string[] {
     return defaultDateNames.getPeriodNames(format);
   },
-  getTimeSeparator(): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getTimeSeparator(locale?: string): string {
     return ':';
   },
 

@@ -43,8 +43,10 @@ describe('CardView column format with global date formats', () => {
     coreLocalization.locale(savedLocale);
   });
 
-  const formatByColumn = (column: Parameters<typeof normalizeColumn>[0]): string => {
-    const { format } = normalizeColumn(column);
+  const formatByColumn = (
+    column: Omit<Parameters<typeof normalizeColumn>[0], 'visibleIndex'>,
+  ): string => {
+    const { format } = normalizeColumn({ ...column, visibleIndex: 0 });
 
     return formatHelper.format(date, format);
   };

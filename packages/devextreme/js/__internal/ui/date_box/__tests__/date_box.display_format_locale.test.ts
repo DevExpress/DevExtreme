@@ -7,7 +7,13 @@ import config from '@js/core/config';
 import type { Properties } from '@js/ui/date_box';
 import DateBox from '@js/ui/date_box';
 import DateRangeBox from '@js/ui/date_range_box';
+import type { TimeViewProperties } from '@ts/ui/date_box/time_view';
 import TimeView from '@ts/ui/date_box/time_view';
+
+const TimeViewWidget = TimeView as unknown as new (
+  element: Element,
+  options: Partial<TimeViewProperties>,
+) => TimeView;
 
 const widgets: { dispose: () => void }[] = [];
 const value = new Date(2024, 5, 15, 14, 30);
@@ -490,7 +496,7 @@ describe('locale-only displayFormat follows the editor type', () => {
 
     const getTimeViewSeparator = (formatLocale?: string): string => {
       const element = document.body.appendChild(document.createElement('div'));
-      const instance = new TimeView(element, {
+      const instance = new TimeViewWidget(element, {
         value,
         _formatLocale: formatLocale,
       });

@@ -6,6 +6,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import numberLocalization from '@js/common/core/localization/number';
 import config from '@js/core/config';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import internalDateLocalization from '@ts/core/localization/date';
 import { Export } from '@ts/exporter/exceljs/export';
 
 const GLOBAL_FORMAT_KEYS = ['dateFormat', 'timeFormat', 'dateTimeFormat', 'numberFormat', 'dateTimeFormatPresets'] as const;
@@ -554,6 +555,17 @@ describe('format locale integration', () => {
       expect(dateLocalization.parse('14.05', 'HH:mm')).toBeFalsy();
       expect((dateLocalization.parse('14.05', { type: 'HH:mm', locale: 'fi' } as never) as Date)
         .getHours()).toBe(14);
+    });
+
+    it.each([
+      { locale: 'ar-EG', separator: ':' },
+      { locale: 'fa', separator: ':' },
+      { locale: 'da', separator: '.' },
+      { locale: 'en', separator: ':' },
+    ])('should return only the time separator of the $locale locale', ({ locale, separator }) => {
+      coreLocalization.locale('en');
+
+      expect(internalDateLocalization.getTimeSeparator(locale)).toBe(separator);
     });
 
     it('should parse an LDML pattern using the format locale month names', () => {
