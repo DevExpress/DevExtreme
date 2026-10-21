@@ -1,63 +1,89 @@
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import type { ModuleType } from '@ts/grids/grid_core/types';
 
-const SORT_CLASS = 'dx-sort';
-const SORT_NONE_CLASS = 'dx-sort-none';
-const SORTUP_CLASS = 'dx-sort-up';
-const SORTDOWN_CLASS = 'dx-sort-down';
-const SORT_INDEX_CLASS = 'dx-sort-index';
-const SORT_INDEX_ICON_CLASS = 'dx-sort-index-icon';
-const HEADERS_ACTION_CLASS = 'action';
+import type { Column } from '../columns_controller/types';
+import { CLASSES } from './const';
+import type {
+  AriaSortState,
+  MixinBase,
+  RenderedIndicatorOptions,
+  SortingColumn,
+  SortingColumnStateOptions,
+} from './types';
 
-// TODO improve types of this mixin
-//  Now all members - protected by default (it may be wrong)
 // TODO getController
-const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base {
-  protected _applyColumnState(options) {
-    const that = this;
-    let ariaSortState;
-    let $sortIndicator;
-    const sortingMode = that.option('sorting.mode');
-    const { rootElement } = options;
-    const { column } = options;
-    const $indicatorsContainer = that._getIndicatorContainer(rootElement);
-
-    if (options.name === 'sort') {
-      rootElement.find(`.${SORT_CLASS}`).remove();
-      !$indicatorsContainer.children().length && $indicatorsContainer.remove();
-
-      const isSortingAllowed = sortingMode !== 'none' && column.allowSorting;
-      const hasSeveralSortIndexes = that.getController && !!that.getController('columns').columnOption('sortIndex:1');
-
-      if (!isDefined(column.groupIndex) && (isSortingAllowed || isDefined(column.sortOrder))) {
-        ariaSortState = column.sortOrder === 'asc' ? 'ascending' : 'descending';
-        $sortIndicator = super._applyColumnState(options)
-          .toggleClass(SORTUP_CLASS, column.sortOrder === 'asc')
-          .toggleClass(SORTDOWN_CLASS, column.sortOrder === 'desc');
-
-        if (hasSeveralSortIndexes && that.option('sorting.showSortIndexes') && column.sortIndex >= 0) {
-          $('<span>')
-            .addClass(SORT_INDEX_ICON_CLASS)
-            .text(column.sortIndex + 1)
-            .appendTo($sortIndicator);
-          $sortIndicator.addClass(SORT_INDEX_CLASS);
-        }
-
-        if (isSortingAllowed) {
-          options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
-        }
-      }
-
-      this._setAriaSortAttribute(column, ariaSortState, rootElement, hasSeveralSortIndexes);
-
-      return $sortIndicator;
+const sortingMixin = <T extends MixinBase>(
+  Base: T,
+): T => class SortingMixin extends Base {
+  protected _applyColumnState(
+    options: SortingColumnStateOptions,
+  ): dxElementWrapper | undefined {
+    if (options.name !== 'sort') {
+      return super._applyColumnState(options);
     }
-    return super._applyColumnState(options);
+
+    const sortingMode = this.option('sorting.mode');
+    const { rootElement, column } = options;
+    const $indicatorsContainer = this._getIndicatorContainer(rootElement);
+
+    rootElement.find(`.${CLASSES.sort}`).remove();
+    if (!$indicatorsContainer.children().length) {
+      $indicatorsContainer.remove();
+    }
+
+    const isSortingAllowed = sortingMode !== 'none' && Boolean(column.allowSorting);
+    const hasSeveralSortIndexes = this.getController
+      && Boolean(this.getController('columns').columnOption('sortIndex:1'));
+    const isSortIndicatorVisible = !isDefined(column.groupIndex)
+      && (isSortingAllowed || isDefined(column.sortOrder));
+
+    if (!isSortIndicatorVisible) {
+      this._setAriaSortAttribute(column, undefined, rootElement, hasSeveralSortIndexes);
+
+      return undefined;
+    }
+
+    const ariaSortState = column.sortOrder === 'asc' ? 'ascending' : 'descending';
+    const $sortIndicator = super._applyColumnState(options);
+
+    if (!$sortIndicator) {
+      return undefined;
+    }
+
+    $sortIndicator
+      .toggleClass(CLASSES.sortUp, column.sortOrder === 'asc')
+      .toggleClass(CLASSES.sortDown, column.sortOrder === 'desc');
+
+    if (
+      hasSeveralSortIndexes
+      && this.option('sorting.showSortIndexes')
+      && column.sortIndex !== undefined
+      && column.sortIndex >= 0
+    ) {
+      $('<span>')
+        .addClass(CLASSES.sortIndexIcon)
+        .text(column.sortIndex + 1)
+        .appendTo($sortIndicator);
+      $sortIndicator.addClass(CLASSES.sortIndex);
+    }
+
+    if (isSortingAllowed) {
+      rootElement.addClass(this.addWidgetPrefix(CLASSES.action));
+    }
+
+    this._setAriaSortAttribute(column, ariaSortState, rootElement, hasSeveralSortIndexes);
+
+    return $sortIndicator;
   }
 
-  protected _setAriaSortAttribute(column, ariaSortState, $rootElement, hasSeveralSortIndexes) {
+  protected _setAriaSortAttribute(
+    column: SortingColumn,
+    ariaSortState: AriaSortState | undefined,
+    $rootElement: dxElementWrapper,
+    hasSeveralSortIndexes: boolean,
+  ): void {
     $rootElement.removeAttr('aria-roledescription');
 
     if (column.isGrouped) {
@@ -73,11 +99,11 @@ const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base 
     } else {
       this.setAria('sort', ariaSortState, $rootElement);
 
-      if (hasSeveralSortIndexes && column.sortIndex >= 0) {
+      if (hasSeveralSortIndexes && column.sortIndex !== undefined && column.sortIndex >= 0) {
         const ariaColumnHeader = messageLocalization.format('dxDataGrid-ariaColumnHeader');
         const ariaSortIndex = messageLocalization.format(
           'dxDataGrid-ariaSortIndex',
-          // @ts-expect-error
+          // @ts-expect-error format() is typed without placeholder values
           column.sortIndex + 1,
         );
         const description = `${ariaColumnHeader}, ${ariaSortIndex}`;
@@ -86,28 +112,32 @@ const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base 
     }
   }
 
-  protected _getIndicatorClassName(name) {
+  protected _getIndicatorClassName(name: string): string | undefined {
     if (name === 'sort') {
-      return SORT_CLASS;
-    } if (name === 'sortIndex') {
-      return SORT_INDEX_ICON_CLASS;
+      return CLASSES.sort;
     }
+
+    if (name === 'sortIndex') {
+      return CLASSES.sortIndexIcon;
+    }
+
     return super._getIndicatorClassName(name);
   }
 
-  protected _renderIndicator(options) {
-    const { column } = options;
-    const $container = options.container;
-    const $indicator = options.indicator;
+  protected _renderIndicator(options: RenderedIndicatorOptions): void {
+    const { column, container: $container, indicator: $indicator } = options;
 
     if (options.name === 'sort') {
       const rtlEnabled = this.option('rtlEnabled');
 
       if (!isDefined(column.sortOrder)) {
-        $indicator && $indicator.addClass(SORT_NONE_CLASS);
+        $indicator.addClass(CLASSES.sortNone);
       }
 
-      if ($container.children().length && (!rtlEnabled && options.columnAlignment === 'left' || rtlEnabled && options.columnAlignment === 'right')) {
+      const isIndicatorFirst = (!rtlEnabled && options.columnAlignment === 'left')
+        || (rtlEnabled && options.columnAlignment === 'right');
+
+      if ($container.children().length && isIndicatorFirst) {
         $container.prepend($indicator);
         return;
       }
@@ -116,18 +146,22 @@ const sortingMixin = (Base: ModuleType<any>) => class SortingMixin extends Base 
     super._renderIndicator(options);
   }
 
-  protected _updateIndicator($cell, column, indicatorName) {
+  protected _updateIndicator(
+    $cell: dxElementWrapper,
+    column: Column,
+    indicatorName: string,
+  ): dxElementWrapper | undefined {
     if (indicatorName === 'sort' && isDefined(column.groupIndex)) {
-      return;
+      return undefined;
     }
 
-    return super._updateIndicator.apply(this, arguments as any);
+    return super._updateIndicator($cell, column, indicatorName);
   }
 
-  protected _getIndicatorElements($cell, returnAll) {
+  protected _getIndicatorElements($cell: dxElementWrapper, returnAll?: boolean): dxElementWrapper {
     const $indicatorElements = super._getIndicatorElements($cell);
 
-    return returnAll ? $indicatorElements : $indicatorElements && $indicatorElements.not(`.${SORT_NONE_CLASS}`);
+    return returnAll ? $indicatorElements : $indicatorElements.not(`.${CLASSES.sortNone}`);
   }
 };
 
