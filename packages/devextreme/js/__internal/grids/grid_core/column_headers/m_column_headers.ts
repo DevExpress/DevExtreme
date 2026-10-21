@@ -1,7 +1,7 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
-import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
@@ -209,19 +209,13 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     template: ColumnTemplateSource,
     options?: TemplateModel,
   ): ColumnViewTemplate {
-    // @ts-expect-error renderTemplate passes the template options
-    const { column, rowType }: TemplateModel = options;
+    const { column, rowType }: TemplateModel = options ?? {};
     const renderingTemplate = super._processTemplate(template);
+    const hasHeaderCellTemplate = column?.headerCellTemplate && !column.command;
 
-    if (
-      rowType === 'header'
-      && renderingTemplate
-      // @ts-expect-error header cells have a column
-      && column.headerCellTemplate && !column.command
-    ) {
+    if (rowType === 'header' && renderingTemplate && column && hasHeaderCellTemplate) {
       return {
         render: (templateOptions: ColumnViewTemplateOptions): void => {
-          // @ts-expect-error header cells have a column
           const $content = this.createCellContent(templateOptions.container, column);
           renderingTemplate.render(extend({}, templateOptions, { container: $content }));
         },
@@ -387,10 +381,9 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
     const isBandColumnsUsed = this._columnsController.isBandColumnsUsed();
 
-    if (isBandColumnsUsed) {
+    if (isBandColumnsUsed && options.rowIndex !== undefined) {
       this.toggleFirstCellClass(
         $cellElement,
-        // @ts-expect-error header cells have a row index
         this._columnsController.isFirstColumn(column, options.rowIndex),
       );
     }
@@ -596,8 +589,9 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   }
 
   public allowDragging(column: Column): boolean | undefined {
-    // @ts-expect-error a grid column has an index
-    const rowIndex = column && this._columnsController.getRowIndex(column.index);
+    const rowIndex = column && isDefined(column.index)
+      ? this._columnsController.getRowIndex(column.index)
+      : undefined;
     const columns = this.getColumns(rowIndex);
 
     return this.isColumnReorderingEnabled(column) && columns.length > 1;
@@ -606,14 +600,13 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   protected getBoundingRect(): BoundingRect | null {
     const $columnElements = this.getColumnElements();
 
-    if ($columnElements?.length) {
-      // @ts-expect-error the table is rendered when its column elements exist
-      const offset: Coordinates = this.getTableElement().offset();
-      return {
-        top: offset.top,
-      };
+    if (!$columnElements?.length) {
+      return null;
     }
-    return null;
+
+    const offset = this.getTableElement()?.offset();
+
+    return offset ? { top: offset.top } : null;
   }
 
   public getName(): string {
@@ -677,10 +670,11 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       const sortingOptions = this.option('sorting');
 
       if (sortingOptions && sortingOptions.mode !== 'none' && column?.allowSorting) {
-        const onItemClick = (params: ItemClickEvent<SortMenuItem>): void => {
+        const onItemClick = ({ itemData }: ItemClickEvent<SortMenuItem>): void => {
           setTimeout(() => {
-            // @ts-expect-error a grid column has an index and a clicked item has its data
-            this._columnsController.changeSortOrder(column.index, params.itemData.value);
+            if (isDefined(column.index) && itemData) {
+              this._columnsController.changeSortOrder(column.index, itemData.value);
+            }
           });
         };
 

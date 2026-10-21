@@ -1,8 +1,10 @@
 /* eslint-disable max-classes-per-file */
+import type { Cancelable } from '@js/common/core/events';
 import type { GridsContextMenuTarget } from '@js/common/grids';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
+import type { PositioningEvent } from '@js/ui/context_menu';
 import ContextMenu from '@js/ui/context_menu';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import { DX_CONTEXT_MENU_CLASS } from '@ts/ui/context_menu/context_menu';
@@ -25,9 +27,9 @@ export class ContextMenuController extends modules.ViewController {
     this.createAction('onContextMenuPreparing');
   }
 
-  public getContextMenuItems(dxEvent?: DxEvent): GridContextMenuItem[] | false | undefined {
+  public getContextMenuItems(dxEvent?: DxEvent): GridContextMenuItem[] | undefined {
     if (!dxEvent) {
-      return false;
+      return undefined;
     }
 
     const $targetElement = $(dxEvent.target);
@@ -98,17 +100,15 @@ export class ContextMenuView extends modules.View {
       $element,
       ContextMenu,
       {
-        onPositioning: (actionArgs) => {
+        onPositioning: (actionArgs: PositioningEvent & Cancelable) => {
           const { event } = actionArgs;
           const contextMenuInstance = actionArgs.component;
           const items = this._contextMenuController.getContextMenuItems(event);
 
           if (items) {
             contextMenuInstance.option('items', items);
-            // @ts-expect-error onPositioning is raised by a pointer event
-            event.stopPropagation();
+            event?.stopPropagation();
           } else {
-            // @ts-expect-error cancel isn't declared on the positioning event
             actionArgs.cancel = true;
           }
         },
