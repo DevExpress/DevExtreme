@@ -6,7 +6,7 @@ import 'ui/select_box';
 import '__internal/ui/color_box/color_view';
 import 'ui/drop_down_button';
 
-import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
+import Toolbar from '__internal/ui/html_editor/modules/toolbar';
 import FormDialog from '__internal/ui/html_editor/ui/formDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';

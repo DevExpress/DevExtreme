@@ -7,8 +7,8 @@ import type { DxEvent } from '@js/events';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance } from '../types/quill';
-import type { BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
+import type { BaseModuleOptions } from './base';
+import BaseModule from './base';
 
 // eslint-disable-next-line import/no-mutable-exports
 let DropImageModule = BaseModule;

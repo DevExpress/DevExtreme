@@ -1,9 +1,9 @@
 import $ from 'jquery';
 
 import QuillRegistrator from 'ui/html_editor/quill_registrator';
-import Image from '__internal/ui/html_editor/formats/m_image';
-import Font from '__internal/ui/html_editor/formats/m_font';
-import Size from '__internal/ui/html_editor/formats/m_size';
+import Image from '__internal/ui/html_editor/formats/image';
+import Font from '__internal/ui/html_editor/formats/font';
+import Size from '__internal/ui/html_editor/formats/size';
 
 const { test } = QUnit;
 

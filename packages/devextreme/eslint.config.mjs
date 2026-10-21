@@ -529,6 +529,7 @@ export default [
         ignores: [
             'js/__internal/grids/**/module_not_extended/**',
             'js/__internal/grids/grid_core/modules/**',
+            'js/__internal/ui/html_editor/modules/**',
         ],
         languageOptions: {
             parser: tsParser,

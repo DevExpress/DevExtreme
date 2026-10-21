@@ -24,8 +24,8 @@ import type { Properties as PopupProperties } from '@js/ui/popup';
 import ScrollView from '@js/ui/scroll_view';
 
 import type HtmlEditor from '../html_editor';
-import { getQuill } from '../m_quill_importer';
-import type { BaseHtmlEditorModule } from '../modules/m_base';
+import type { BaseHtmlEditorModule } from '../modules/base';
+import { getQuill } from '../quill_importer';
 import type {
   AITextTransformOptions,
   FormatHandler,
@@ -39,7 +39,7 @@ import type {
   RangeStatic,
 } from '../types/quill';
 import type { AIDialogResult, AIDialogShowPayload } from '../ui/aiDialog';
-import { ImageUploader } from './m_image_uploader_helper';
+import { ImageUploader } from './image_uploader_helper';
 import {
   getAutoSizedElements,
   getColumnElements,
@@ -49,9 +49,9 @@ import {
   hasEmbedContent,
   setLineElementsFormat,
   unfixTableWidth,
-} from './m_table_helper';
+} from './table_helper';
 
-/** The toolbar module (modules/m_toolbar.ts) as the format handlers use it. */
+/** The toolbar module (modules/toolbar.ts) as the format handlers use it. */
 interface ToolbarModuleInstance {
   _updateFormatWidget: (name: string, isApplied: boolean, formats: Record<string, unknown>) => void;
   updateFormatWidgets: (isResetRequired?: boolean) => void;
