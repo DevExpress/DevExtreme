@@ -7,7 +7,6 @@ export const CLASSES = {
   rowInserted: 'dx-row-inserted',
   rowModified: 'dx-row-modified',
   rowRemoved: 'dx-row-removed',
-  rowSelected: 'dx-selection',
 
   editorCell: 'dx-editor-cell',
   cellModified: 'dx-cell-modified',

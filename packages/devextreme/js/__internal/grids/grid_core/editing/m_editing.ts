@@ -54,6 +54,7 @@ import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel'
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
+import { ROW_SELECTION_CLASS } from '@ts/grids/grid_core/selection/const';
 import type {
   GridPropertyType,
   InternalGridOptions,
@@ -2872,7 +2873,7 @@ const rowsView = (
       }
 
       if (isRowInserted || isRowRemoved) {
-        $row.removeClass(CLASSES.rowSelected);
+        $row.removeClass(ROW_SELECTION_CLASS);
       }
     }
     return $row;

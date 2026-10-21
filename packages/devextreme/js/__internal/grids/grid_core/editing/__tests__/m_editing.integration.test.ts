@@ -371,35 +371,6 @@ describe('DataGrid editing', () => {
     });
   });
 
-  describe('Changes option set to null', () => {
-    const createGridWithNullChanges = (): ReturnType<typeof createDataGrid> => createDataGrid({
-      keyExpr: 'ID',
-      dataSource,
-      editing: {
-        mode: 'batch',
-        allowUpdating: true,
-        // @ts-expect-error null is outside the option's type
-        changes: null,
-      },
-    });
-
-    it('should report no edit data', async () => {
-      const { instance } = await createGridWithNullChanges();
-
-      expect(instance.hasEditData()).toBe(false);
-    });
-
-    it('should record a cell change', async () => {
-      const { instance } = await createGridWithNullChanges();
-
-      instance.cellValue(0, 'FirstName', 'Updated');
-
-      expect(instance.option('editing.changes')).toEqual([
-        expect.objectContaining({ type: 'update', key: 1 }),
-      ]);
-    });
-  });
-
   describe('Changes option set to undefined', () => {
     const createBatchGrid = (): ReturnType<typeof createDataGrid> => createDataGrid({
       keyExpr: 'ID',

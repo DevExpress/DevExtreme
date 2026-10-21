@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { equalByValue } from '@js/core/utils/common';
+import { ROW_SELECTION_CLASS } from '@ts/grids/grid_core/selection/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { ModuleType } from '../types';
@@ -115,7 +116,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingRowBasedEx
 
       if (isEditRow) {
         $row.addClass(CLASSES.editRow);
-        $row.removeClass(CLASSES.rowSelected);
+        $row.removeClass(ROW_SELECTION_CLASS);
 
         if (row.rowType === 'detail') {
           $row.addClass(this.addWidgetPrefix(CLASSES.editForm));

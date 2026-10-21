@@ -704,6 +704,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 };
 
+export type CellBasedEditingController = InstanceType<ReturnType<typeof editingControllerExtender>>;
+
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedExtender extends Base {
   protected _createTable() {
     const $table = super._createTable.apply(this, arguments as any);
