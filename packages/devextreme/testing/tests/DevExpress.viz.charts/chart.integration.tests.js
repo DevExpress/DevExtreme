@@ -2502,18 +2502,16 @@ QUnit.test('An inside legend does not push the panes out of the canvas when the 
     try {
         const chart = this.createChart({
             size: { width: 400, height: 160 },
-            dataSource: [{ arg: 'a', v1: 1, v2: 2, v3: 3 }],
-            series: [
-                { valueField: 'v1', name: 'Series 1' },
-                { valueField: 'v2', name: 'Series 2' },
-                { valueField: 'v3', name: 'Series 3' }
-            ],
+            dataSource: [{ arg: 'a', val: 1 }],
+            series: [{ name: 'Series 1' }],
             argumentAxis: { label: { font: { size: 80 } } },
             legend: {
                 position: 'inside',
                 verticalAlignment: 'top',
                 horizontalAlignment: 'center',
-                orientation: 'horizontal'
+                orientation: 'horizontal',
+                margin: 0,
+                paddingTopBottom: 0
             },
             onIncidentOccurred: incidentOccurred
         });
