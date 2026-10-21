@@ -9,6 +9,7 @@ import dxChart from 'viz/chart';
 import dxPieChart from 'viz/pie_chart';
 import dxPolarChart from 'viz/polar_chart';
 import { overlapping } from '__internal/viz/chart_components/base_chart';
+import Layout from '__internal/viz/core/layout';
 import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -2516,6 +2517,45 @@ QUnit.module('Legend title that does not fit', moduleSetup);
         assert.notStrictEqual(incidentIds.indexOf('W2103'), -1, 'W2103 is raised');
         assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 0, 'the legend title is not drawn');
     });
+});
+
+QUnit.module('Legend under a space shortage', moduleSetup);
+
+QUnit.test('An inside legend does not push the panes out of the canvas when the panes lack space', function(assert) {
+    const incidentOccurred = sinon.spy();
+    const backward = sinon.spy(Layout.prototype, 'backward');
+
+    try {
+        const chart = this.createChart({
+            size: { width: 400, height: 160 },
+            dataSource: [{ arg: 'a', v1: 1, v2: 2, v3: 3 }],
+            series: [
+                { valueField: 'v1', name: 'Series 1' },
+                { valueField: 'v2', name: 'Series 2' },
+                { valueField: 'v3', name: 'Series 3' }
+            ],
+            argumentAxis: { label: { font: { size: 80 } } },
+            legend: {
+                position: 'inside',
+                verticalAlignment: 'top',
+                horizontalAlignment: 'center',
+                orientation: 'horizontal'
+            },
+            onIncidentOccurred: incidentOccurred
+        });
+
+        const incidentIds = incidentOccurred.getCalls().map(function(call) { return call.args[0].target.id; });
+        const shortageCall = backward.getCalls().find(function(call) { return call.returnValue[1] !== 0; });
+        const paneTop = chart.panes[0].canvas.top;
+
+        assert.ok(shortageCall, 'the panes lacked space');
+        assert.ok(shortageCall.thisValue._cache.some(function(item) { return item.position === 'inside'; }), 'the legend passed the minimal-size check');
+        assert.ok(shortageCall.returnValue[1] > 0, 'the legend gave no space back');
+        assert.notStrictEqual(incidentIds.indexOf('W2104'), -1, 'the legend is hidden because the panes lack space');
+        assert.ok(paneTop >= 0, `the pane stays inside the canvas (top = ${paneTop})`);
+    } finally {
+        backward.restore();
+    }
 });
 
 QUnit.module('Auto hide point markers', $.extend({}, moduleSetup, {
