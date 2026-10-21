@@ -1,62 +1,35 @@
-export const EDITOR_CELL_CLASS = 'dx-editor-cell';
-export const CELL_MODIFIED_CLASS = 'dx-cell-modified';
-export const ROW_SELECTED_CLASS = 'dx-selection';
-export const EDIT_FORM_CLASS = 'edit-form';
+import type { DataChangeType, GridsEditMode, NewRowPosition } from '@js/common/grids';
 
-export const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
-export const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
+export const CLASSES = {
+  editRow: 'dx-edit-row',
+  rowInserted: 'dx-row-inserted',
+  rowModified: 'dx-row-modified',
+  rowRemoved: 'dx-row-removed',
+  rowSelected: 'dx-selection',
 
-export const EDITING_POPUP_OPTION_NAME = 'editing.popup';
-export const EDITING_FORM_OPTION_NAME = 'editing.form';
-export const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
-export const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
+  editorCell: 'dx-editor-cell',
+  cellModified: 'dx-cell-modified',
+  cellFocusDisabled: 'dx-cell-focus-disabled',
+  readonly: 'readonly',
 
-export const TARGET_COMPONENT_NAME = 'targetComponent';
+  commandEdit: 'dx-command-edit',
+  commandEditWithIcons: 'dx-command-edit-with-icons',
+  editButton: 'dx-edit-button',
+  link: 'dx-link',
+  linkIcon: 'dx-link-icon',
+  addRowButton: 'addrow-button',
+  button: 'dx-button',
 
-export const EDITORS_TEXTAREA_SELECTOR = 'textarea:not([hidden])';
-export const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
-export const FOCUSABLE_ELEMENT_SELECTOR = `[tabindex]:not([disabled]), ${EDITORS_INPUT_SELECTOR}:not([disabled]), ${EDITORS_TEXTAREA_SELECTOR}:not([disabled])`;
+  editForm: 'edit-form',
+  editFormItem: 'edit-form-item',
+  editPopup: 'edit-popup',
+  editPopupForm: 'edit-popup-form',
+  formButtonsContainer: 'form-buttons-container',
 
-export const EDIT_MODE_BATCH = 'batch';
-export const EDIT_MODE_ROW = 'row';
-export const EDIT_MODE_CELL = 'cell';
-export const EDIT_MODE_FORM = 'form';
-export const EDIT_MODE_POPUP = 'popup';
-
-export const FIRST_NEW_ROW_POSITION = 'first';
-export const LAST_NEW_ROW_POSITION = 'last';
-export const PAGE_BOTTOM_NEW_ROW_POSITION = 'pageBottom';
-export const PAGE_TOP_NEW_ROW_POSITION = 'pageTop';
-export const VIEWPORT_BOTTOM_NEW_ROW_POSITION = 'viewportBottom';
-export const VIEWPORT_TOP_NEW_ROW_POSITION = 'viewportTop';
-
-// eslint-disable-next-line @stylistic/max-len
-export const EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP];
-export const ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP];
-export const CELL_BASED_MODES = [EDIT_MODE_BATCH, EDIT_MODE_CELL];
-export const REQUIRED_EDITOR_LABELLEDBY_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL];
-export const MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
-
-export const READONLY_CLASS = 'readonly';
-export const LINK_CLASS = 'dx-link';
-export const LINK_ICON_CLASS = 'dx-link-icon';
-export const ROW_SELECTED = 'dx-selection';
-export const EDIT_BUTTON_CLASS = 'dx-edit-button';
-export const COMMAND_EDIT_CLASS = 'dx-command-edit';
-export const COMMAND_EDIT_WITH_ICONS_CLASS = `${COMMAND_EDIT_CLASS}-with-icons`;
-
-export const INSERT_INDEX = '__DX_INSERT_INDEX__';
-export const ROW_INSERTED = 'dx-row-inserted';
-export const ROW_MODIFIED = 'dx-row-modified';
-export const CELL_MODIFIED = 'dx-cell-modified';
-export const EDITING_NAMESPACE = 'dxDataGridEditing';
-
-export const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
-
-export const DATA_EDIT_DATA_UPDATE_TYPE = 'update';
-
-export const DEFAULT_START_EDIT_ACTION = 'click';
-
+  focusOverlay: 'focus-overlay',
+  focusableElement: 'dx-scrollable-container',
+  dropDownEditorOverlay: 'dx-dropdowneditor-overlay',
+};
 export const EDIT_LINK_CLASS = {
   save: 'dx-link-save',
   cancel: 'dx-link-cancel',
@@ -73,6 +46,52 @@ export const EDIT_ICON_CLASS = {
   delete: 'trash',
   add: 'add',
 };
+
+export const DATA_CHANGE_TYPE = {
+  insert: 'insert',
+  update: 'update',
+  remove: 'remove',
+} as const satisfies Record<string, DataChangeType>;
+
+export const EDITING_POPUP_OPTION_NAME = 'editing.popup';
+export const EDITING_FORM_OPTION_NAME = 'editing.form';
+export const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
+export const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
+export const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
+
+export const TARGET_COMPONENT_NAME = 'targetComponent';
+
+export const EDITORS_TEXTAREA_SELECTOR = 'textarea:not([hidden])';
+export const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
+export const FOCUSABLE_ELEMENT_SELECTOR = `[tabindex]:not([disabled]), ${EDITORS_INPUT_SELECTOR}:not([disabled]), ${EDITORS_TEXTAREA_SELECTOR}:not([disabled])`;
+
+export const EDIT_MODE = {
+  batch: 'batch',
+  row: 'row',
+  cell: 'cell',
+  form: 'form',
+  popup: 'popup',
+} as const satisfies Record<string, GridsEditMode>;
+
+export const NEW_ROW_POSITION = {
+  first: 'first',
+  last: 'last',
+  pageBottom: 'pageBottom',
+  pageTop: 'pageTop',
+  viewportBottom: 'viewportBottom',
+  viewportTop: 'viewportTop',
+} as const satisfies Record<string, NewRowPosition>;
+
+export const EDIT_MODES: GridsEditMode[] = [
+  EDIT_MODE.batch, EDIT_MODE.row, EDIT_MODE.cell, EDIT_MODE.form, EDIT_MODE.popup,
+];
+export const ROW_BASED_MODES: GridsEditMode[] = [EDIT_MODE.row, EDIT_MODE.form, EDIT_MODE.popup];
+export const CELL_BASED_MODES: GridsEditMode[] = [EDIT_MODE.batch, EDIT_MODE.cell];
+export const REQUIRED_EDITOR_LABELLEDBY_MODES: GridsEditMode[] = [
+  EDIT_MODE.batch, EDIT_MODE.row, EDIT_MODE.cell,
+];
+export const MODES_WITH_DELAYED_FOCUS: GridsEditMode[] = [EDIT_MODE.row, EDIT_MODE.form];
+
 export const METHOD_NAMES = {
   edit: 'editRow',
   delete: 'deleteRow',
@@ -88,22 +107,9 @@ export const ACTION_OPTION_NAMES = {
 };
 export const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
 
-export const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
-
-export const FOCUS_OVERLAY_CLASS = 'focus-overlay';
-export const ADD_ROW_BUTTON_CLASS = 'addrow-button';
-export const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
-export const ROW_REMOVED = 'dx-row-removed';
-
-export const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
-export const EDIT_POPUP_CLASS = 'edit-popup';
-export const EDIT_POPUP_FORM_CLASS = 'edit-popup-form';
-export const FOCUSABLE_ELEMENT_CLASS = 'dx-scrollable-container';
-export const BUTTON_CLASS = 'dx-button';
-
-export const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
-
-export const EDIT_ROW = 'dx-edit-row';
-
 export const NEW_ROW_TEMP_KEY_PREFIX = '_DX_KEY_';
 export const GUID_LENGTH = 36;
+export const INSERT_INDEX = '__DX_INSERT_INDEX__';
+export const EDITING_NAMESPACE = 'dxDataGridEditing';
+
+export const DEFAULT_START_EDIT_ACTION = 'click';

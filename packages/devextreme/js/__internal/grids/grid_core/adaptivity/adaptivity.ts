@@ -24,7 +24,7 @@ import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ProcessedItem } from '../data_controller/types';
-import { EDIT_MODE_FORM, EDIT_MODE_POPUP, EDIT_MODE_ROW } from '../editing/const';
+import { EDIT_MODE } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
@@ -151,7 +151,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
   private _isRowEditMode(): boolean {
     const editMode = this._getEditMode();
-    return editMode === EDIT_MODE_ROW;
+    return editMode === EDIT_MODE.row;
   }
 
   private _isItemModified(
@@ -644,7 +644,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
   public isFormOrPopupEditMode(): boolean {
     const editMode = this._getEditMode();
 
-    return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
+    return editMode === EDIT_MODE.form || editMode === EDIT_MODE.popup;
   }
 
   public hideRedundantColumns(

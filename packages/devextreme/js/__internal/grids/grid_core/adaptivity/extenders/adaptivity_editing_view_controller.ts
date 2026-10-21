@@ -9,7 +9,7 @@ import type { ModuleType } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
-import { EDIT_MODE_BATCH, EDIT_MODE_ROW } from '../../editing/const';
+import { EDIT_MODE } from '../../editing/const';
 import { ADAPTIVE_ROW_TYPE } from '../const';
 import type { AdaptivityDataController } from '../types';
 
@@ -21,11 +21,11 @@ export const adaptivityEditingViewControllerExtender = (
   private _isForceRowAdaptiveExpand?: boolean;
 
   private _isRowEditMode() {
-    return this.getEditMode() === EDIT_MODE_ROW;
+    return this.getEditMode() === EDIT_MODE.row;
   }
 
   protected _getFormEditItemTemplate(cellOptions, column) {
-    if (this.getEditMode() !== EDIT_MODE_ROW && cellOptions.rowType === 'detailAdaptive') {
+    if (this.getEditMode() !== EDIT_MODE.row && cellOptions.rowType === 'detailAdaptive') {
       cellOptions.columnIndex = this._columnsController.getVisibleIndex(column.index);
       return this.getColumnTemplate(cellOptions);
     }
@@ -138,7 +138,7 @@ export const adaptivityEditingViewControllerExtender = (
   protected deleteRow(rowIndex) {
     const rowKey = this._dataController.getKeyByRowIndex(rowIndex);
 
-    if (this.getEditMode() === EDIT_MODE_BATCH && this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(rowKey)) {
+    if (this.getEditMode() === EDIT_MODE.batch && this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(rowKey)) {
       this.adaptiveColumnsController.collapseAdaptiveDetailRow();
     }
 

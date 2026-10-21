@@ -12,7 +12,9 @@ import type { RawItemData } from '../data_source_adapter/types';
 import type {
   InternalGrid, InternalGridOptions, OptionChanged, OptionChangedFor, RowKey,
 } from '../types';
-import type { ViewCellOptions, ViewDataChange } from '../views/types';
+import type {
+  CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRow,
+} from '../views/types';
 import type { EDITING_CHANGES_OPTION_NAME, INSERT_INDEX } from './const';
 
 export interface NormalizedEditCellOptions {
@@ -96,6 +98,16 @@ export type SavedRowInfo = Omit<RowInsertedInfo<EditingChange['data'], RowKey>, 
 export type EditingColumn = Column
   & Pick<DataGridColumn, 'editCellTemplate'>
   & { buttons?: EditingButton[] };
+
+export interface EditingViewRow extends ViewRow {
+  removed?: boolean;
+  modified?: boolean;
+  modifiedValues?: unknown[];
+}
+
+export interface EditingCellRenderOptions extends CellRenderOptions {
+  row: EditingViewRow;
+}
 
 export interface EditorCellOptions extends ViewCellOptions {
   column: EditingColumn;

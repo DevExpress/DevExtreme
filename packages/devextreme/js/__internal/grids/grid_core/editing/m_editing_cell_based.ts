@@ -17,17 +17,11 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { ModuleType } from '../types';
 import {
-  ADD_ROW_BUTTON_CLASS,
-  CELL_MODIFIED_CLASS,
-  DATA_EDIT_DATA_REMOVE_TYPE,
-  DROPDOWN_EDITOR_OVERLAY_CLASS,
-  EDIT_MODE_BATCH,
-  EDIT_MODE_CELL,
+  CLASSES,
+  DATA_CHANGE_TYPE,
+  EDIT_MODE,
   EDITING_EDITCOLUMNNAME_OPTION_NAME,
   EDITING_EDITROWKEY_OPTION_NAME,
-  EDITOR_CELL_CLASS,
-  FOCUS_OVERLAY_CLASS,
-  ROW_REMOVED,
   TARGET_COMPONENT_NAME,
 } from './const';
 import { isEditable } from './editing_utils';
@@ -76,7 +70,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
           if (!$element) {
             return false;
           }
-          const $dropDownEditorOverlay = $element.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`);
+          const $dropDownEditorOverlay = $element.closest(`.${CLASSES.dropDownEditorOverlay}`);
           const $componentElement = component.$element();
           return $dropDownEditorOverlay.length > 0 && $componentElement.closest($dropDownEditorOverlay).length === 0;
         }
@@ -84,8 +78,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         if (this.isCellOrBatchEditMode() && !this._editCellInProgress) {
           const isEditorPopup = checkEditorPopup($target) || checkEditorPopup(targetComponent?.$element());
           const isAnotherComponent = targetComponent && !targetComponent._disposed && targetComponent !== this.component;
-          const isAddRowButton = !!$target.closest(`.${this.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
-          const isFocusOverlay = $target.hasClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+          const isAddRowButton = !!$target.closest(`.${this.addWidgetPrefix(CLASSES.addRowButton)}`).length;
+          const isFocusOverlay = $target.hasClass(this.addWidgetPrefix(CLASSES.focusOverlay));
           const isCellEditMode = this.isCellEditMode();
           if (!isResizing && !isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && this.isEditing()) && (isElementInDom($target) || isAnotherComponent)) {
             this._closeEditItem.bind(this)($target);
@@ -100,11 +94,11 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   private isCellEditMode() {
-    return this.option('editing.mode') === EDIT_MODE_CELL;
+    return this.option('editing.mode') === EDIT_MODE.cell;
   }
 
   private isBatchEditMode() {
-    return this.option('editing.mode') === EDIT_MODE_BATCH;
+    return this.option('editing.mode') === EDIT_MODE.batch;
   }
 
   /**
@@ -425,7 +419,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         const rowIndex = this._dataController.getRowIndexByKey(key);
         for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
           const cellElement = this._rowsView._getCellElement(rowIndex, columnIndex);
-          cellElement?.removeClass(CELL_MODIFIED_CLASS);
+          cellElement?.removeClass(CLASSES.cellModified);
         }
       });
     }
@@ -660,7 +654,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   protected _processDataItemCore(item, change, key, columns) {
     const { data, type } = change;
 
-    if (this.isBatchEditMode() && type === DATA_EDIT_DATA_REMOVE_TYPE) {
+    if (this.isBatchEditMode() && type === DATA_CHANGE_TYPE.remove) {
       item.data = createObjectWithChanges(item.data, data);
     }
 
@@ -700,7 +694,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedE
     const editingController = this._editingController;
 
     if (editingController.isCellOrBatchEditMode() && this.option('editing.allowUpdating')) {
-      eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `td:not(.${EDITOR_CELL_CLASS})`, this.createAction(() => {
+      eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `td:not(.${CLASSES.editorCell})`, this.createAction(() => {
         if (editingController.isEditing()) {
           editingController.closeEditCell();
         }
@@ -719,7 +713,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedE
 
       // @ts-expect-error
       if (editingController.isBatchEditMode()) {
-        isRowRemoved && $row.addClass(ROW_REMOVED);
+        isRowRemoved && $row.addClass(CLASSES.rowRemoved);
       }
     }
     return $row;
