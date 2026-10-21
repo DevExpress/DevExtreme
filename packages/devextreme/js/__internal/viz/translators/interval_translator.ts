@@ -7,8 +7,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { dateUtils } from '@ts/core/utils/m_date';
-import { adjust } from '@ts/core/utils/m_math';
 import { isDefined, isNumeric as isNumber } from '@ts/core/utils/m_type';
+import { adjust } from '@ts/core/utils/math';
 
 const { floor } = Math;
 

@@ -51,6 +51,7 @@ export default class ResizingModule extends BaseModule {
     this.enabled = !!options.enabled;
     this._hideFrameWithContext = this.hideFrame.bind(this);
     this._framePositionChangedHandler = this._prepareFramePositionChangedHandler();
+    this.addCleanCallback(this.clean.bind(this));
 
     if (this.enabled) {
       this._attachEvents();
@@ -238,5 +239,7 @@ export default class ResizingModule extends BaseModule {
     this._detachEvents();
     this._$resizeFrame?.remove();
     this._$resizeFrame = undefined;
+    this._$target = null;
+    this.enabled = false;
   }
 }

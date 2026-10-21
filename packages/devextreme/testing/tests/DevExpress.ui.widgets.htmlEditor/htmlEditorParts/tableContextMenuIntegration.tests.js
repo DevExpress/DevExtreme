@@ -490,6 +490,41 @@ module('Table context menu integration', {
             assert.strictEqual($menuItems.eq(1).text(), 'Table Properties', 'second item is correct');
         });
 
+        test('array of predefined strings if the tableContextMenu option is changed at runtime with items before enabled', function(assert) {
+            this.createWidget();
+
+            this.instance.option('tableContextMenu', {
+                items: ['insertTable', 'tableProperties'],
+                enabled: true
+            });
+
+            const $contextMenu = this.getContextMenu();
+            const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
+
+            assert.strictEqual($menuItems.length, 2, 'all items are rendered');
+            assert.strictEqual($menuItems.eq(0).text(), 'Insert Table', 'first item is correct');
+            assert.strictEqual($menuItems.eq(1).text(), 'Table Properties', 'second item is correct');
+        });
+
+        test('custom items are kept after the context menu is disabled and enabled at runtime', function(assert) {
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: ['insertTable', 'tableProperties']
+                }
+            });
+
+            this.instance.option('tableContextMenu.enabled', false);
+            this.instance.option('tableContextMenu.enabled', true);
+
+            const $contextMenu = this.getContextMenu();
+            const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
+
+            assert.strictEqual($menuItems.length, 2, 'all items are rendered');
+            assert.strictEqual($menuItems.eq(0).text(), 'Insert Table', 'first item is correct');
+            assert.strictEqual($menuItems.eq(1).text(), 'Table Properties', 'second item is correct');
+        });
+
         test('Context menu custom items should be reseted to defaults after the option is set to null', function(assert) {
             this.createWidget({
                 tableContextMenu: {

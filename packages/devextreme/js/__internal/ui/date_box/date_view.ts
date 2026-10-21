@@ -317,7 +317,7 @@ class DateView extends Editor<DateViewProperties> {
     const curDate = this._valueOption();
     const { minDate, maxDate } = this.option();
 
-    return dateUtils.normalizeDate(curDate, minDate, maxDate) as Date;
+    return dateUtils.normalizeDate(curDate, minDate, maxDate);
   }
 
   _calculateRollerConfigValueRange(
