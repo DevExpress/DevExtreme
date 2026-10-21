@@ -109,6 +109,10 @@ class OpenLayersMap implements MapEngineMap {
 
   private readonly _markers = new Set<OpenLayersMarker>();
 
+  private _worldWidth?: number;
+
+  private _worldWidthProjection: unknown;
+
   private _eventHandlers?: {
     click: (event: unknown) => void;
     markerSizeChange: () => void;
@@ -439,7 +443,7 @@ class OpenLayersMap implements MapEngineMap {
 
   private _getMarkerPosition(location: MapEngineMarkerOptions['location']): Coordinate {
     const view = this.originalMap.getView();
-    const projection = view.getProjection();
+    const projection = getCoordinateProjection(this._api, view.getProjection());
     const coordinate = toCoordinate(this._api, location, projection);
     const center = view.getCenter();
 
@@ -447,9 +451,13 @@ class OpenLayersMap implements MapEngineMap {
       return coordinate;
     }
 
-    const west = toCoordinate(this._api, { lat: 0, lng: -180 }, projection)[0];
-    const east = toCoordinate(this._api, { lat: 0, lng: 180 }, projection)[0];
-    const worldWidth = Math.abs(east - west);
+    if (this._worldWidth === undefined || this._worldWidthProjection !== projection) {
+      const west = toCoordinate(this._api, { lat: 0, lng: -180 }, projection)[0];
+      const east = toCoordinate(this._api, { lat: 0, lng: 180 }, projection)[0];
+      this._worldWidth = Math.abs(east - west);
+      this._worldWidthProjection = projection;
+    }
+    const worldWidth = this._worldWidth;
 
     if (Number.isFinite(worldWidth) && worldWidth > 0) {
       coordinate[0] += Math.round((center[0] - coordinate[0]) / worldWidth) * worldWidth;

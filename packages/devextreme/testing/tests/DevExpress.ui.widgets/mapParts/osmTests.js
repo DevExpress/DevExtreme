@@ -1377,6 +1377,71 @@ QUnit.module('OSM: markers', moduleConfig, () => {
         assert.strictEqual(map.eventHandlers['change:view'].length, 0, 'view replacement listener is removed on dispose');
         assert.strictEqual(replacementView.eventHandlers['change:center'].length, 0, 'replacement view listener is removed on dispose');
     });
+    [null, 'EPSG:4326'].forEach(userProjection => {
+        QUnit.test(`marker world width is reused with ${userProjection ? 'user' : 'view'} projection`, function(assert) {
+            openLayersMock.userProjection = userProjection;
+            const scale = userProjection ? 1 : 1000;
+            const engineMap = createOpenLayersEngine(openLayersMock).createMap(document.createElement('div'));
+            const map = openLayersMock.mapInstance;
+            const worldTransforms = () => openLayersMock.transformedCoordinates.filter(({ coordinate }) => Math.abs(coordinate[0]) === 180 && coordinate[1] === 0);
+            try {
+                engineMap.addMarker({ location: { lat: 10, lng: -179 } });
+                engineMap.addMarker({ location: { lat: 20, lng: 179 } });
+                assert.strictEqual(worldTransforms().length, 2, 'world edges are transformed once for multiple markers');
+
+                [179, -179, 539].forEach(longitude => map.getView().setCenter([longitude * scale, 0]));
+                assert.strictEqual(worldTransforms().length, 2, 'panning reuses the world width');
+                assert.deepEqual(openLayersMock.addedOverlays.map(overlay => overlay.getPosition()), [[541 * scale, 10 * scale], [539 * scale, 20 * scale]], 'markers follow the nearest world');
+
+                engineMap.addMarker({ location: { lat: 30, lng: -178 } });
+                assert.strictEqual(worldTransforms().length, 2, 'new markers reuse the world width');
+
+                map.setView(new openLayersMock.View({
+                    center: [-179 * scale, 0],
+                    projection: userProjection || 'EPSG:3857',
+                    zoom: 1
+                }));
+                assert.strictEqual(worldTransforms().length, 2, 'view replacement with the same effective projection reuses the world width');
+                assert.deepEqual(openLayersMock.addedOverlays.map(overlay => overlay.getPosition()), [[-179 * scale, 10 * scale], [-181 * scale, 20 * scale], [-178 * scale, 30 * scale]], 'replacement view updates marker positions');
+            } finally {
+                engineMap.dispose();
+            }
+        });
+    });
+    ['view', 'user'].forEach(projectionSource => {
+        QUnit.test(`marker world width is updated when the ${projectionSource} projection changes`, function(assert) {
+            const engineMap = createOpenLayersEngine(openLayersMock).createMap(document.createElement('div'), { center: { lat: 0, lng: 179 } });
+            const map = openLayersMock.mapInstance;
+            const worldTransforms = () => openLayersMock.transformedCoordinates.filter(({ coordinate }) => Math.abs(coordinate[0]) === 180 && coordinate[1] === 0);
+            const setProjection = (projection, center) => {
+                if(projectionSource === 'user') {
+                    openLayersMock.userProjection = projection === 'EPSG:4326' ? projection : null;
+                    map.getView().setCenter(center);
+                } else {
+                    map.setView(new openLayersMock.View({ center, projection, zoom: 1 }));
+                }
+            };
+            try {
+                engineMap.addMarker({ location: { lat: 10, lng: -179 } });
+                engineMap.addMarker({ location: { lat: 20, lng: 179 } });
+                assert.deepEqual(openLayersMock.addedOverlays.map(overlay => overlay.getPosition()), [[181000, 10000], [179000, 20000]], 'initial positions use the view projection');
+
+                setProjection('EPSG:4326', [179, 0]);
+                assert.strictEqual(worldTransforms().length, 4, 'world edges are transformed once for the new projection');
+                assert.deepEqual(openLayersMock.addedOverlays.map(overlay => overlay.getPosition()), [[181, 10], [179, 20]], 'markers wrap using the new world width');
+
+                map.getView().setCenter([539, 0]);
+                assert.strictEqual(worldTransforms().length, 4, 'panning reuses the updated world width');
+                assert.deepEqual(openLayersMock.addedOverlays.map(overlay => overlay.getPosition()), [[541, 10], [539, 20]], 'markers follow the new projection into an adjacent world');
+
+                setProjection('EPSG:3857', [-179000, 0]);
+                assert.strictEqual(worldTransforms().length, 6, 'restoring the projection recalculates the world width once');
+                assert.deepEqual(openLayersMock.addedOverlays.map(overlay => overlay.getPosition()), [[-179000, 10000], [-181000, 20000]], 'restored projection does not reuse the geographic world width');
+            } finally {
+                engineMap.dispose();
+            }
+        });
+    });
     QUnit.test('default marker accessible names are localized', function(assert) {
         const defaultLocale = localization.locale();
         const markerAriaLabel = 'Localized map marker';
