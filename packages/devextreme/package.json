@@ -125,7 +125,7 @@
     "ts-jest": "29.1.2",
     "typescript": "catalog:tools",
     "typescript-min": "npm:typescript@4.9.5",
-    "vite": "8.0.16",
+    "vite": "8.1.6",
     "webpack": "5.105.4"
   },
   "scripts": {
