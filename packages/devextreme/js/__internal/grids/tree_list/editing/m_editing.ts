@@ -107,8 +107,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _beforeSaveEditData(change) {
-    // @ts-expect-error
-    const result = super._beforeSaveEditData.apply(this, arguments);
+    const result = super._beforeSaveEditData(change);
 
     if (change && change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
       const key = this.dataSourceController.store()?.key();
