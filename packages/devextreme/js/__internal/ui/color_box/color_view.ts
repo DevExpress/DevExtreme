@@ -873,7 +873,7 @@ class ColorView extends Editor<ColorViewProperties> {
 
     this._alphaChannelHandleWidth = getWidth(this._$alphaChannelHandle.get(0));
 
-    this._alphaChannelScaleWorkWidth = getWidth($parent.get(0)) - this._alphaChannelHandleWidth;
+    this._alphaChannelScaleWorkWidth = Number(getWidth($parent)) - this._alphaChannelHandleWidth;
 
     this._placeAlphaChannelHandle();
   }

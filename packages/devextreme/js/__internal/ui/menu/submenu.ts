@@ -142,26 +142,26 @@ class Submenu extends ContextMenu<SubmenuProperties> {
     });
   }
 
-  _getDelimiterWidth($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number {
+  _getDelimiterWidth($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number | undefined {
     if (this._isMenuHorizontal()) {
-      const rootWidth: number = getWidth($rootItem.get(0));
-      const submenuWidth: number = getWidth($submenu.get(0));
+      const rootWidth = getWidth($rootItem);
+      const submenuWidth = getWidth($submenu);
 
-      return rootWidth < submenuWidth ? rootWidth : submenuWidth;
+      return Number(rootWidth) < Number(submenuWidth) ? rootWidth : submenuWidth;
     }
 
     return 3;
   }
 
-  _getDelimiterHeight($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number {
+  _getDelimiterHeight($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number | undefined {
     if (this._isMenuHorizontal()) {
       return 3;
     }
 
-    const rootHeight: number = getHeight($rootItem.get(0));
-    const submenuHeight: number = getHeight($submenu.get(0));
+    const rootHeight = getHeight($rootItem);
+    const submenuHeight = getHeight($submenu);
 
-    return rootHeight < submenuHeight ? rootHeight : submenuHeight;
+    return Number(rootHeight) < Number(submenuHeight) ? rootHeight : submenuHeight;
   }
 
   // TODO: try to simplify it

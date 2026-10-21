@@ -164,7 +164,7 @@ export class SeparatorView extends modules.View {
       if (isDefined(value)) {
         setHeight($element, value);
       } else {
-        return getHeight($element.get(0));
+        return getHeight($element);
       }
     }
     return undefined;
@@ -176,7 +176,7 @@ export class SeparatorView extends modules.View {
       if (isDefined(value)) {
         setWidth($element, value);
       } else {
-        return getWidth($element.get(0));
+        return getWidth($element);
       }
     }
     return undefined;

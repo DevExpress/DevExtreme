@@ -204,7 +204,7 @@ class DiagramToolbox extends DiagramFloatingPanel<DiagramToolboxProperties> {
     let maxHeight = 6;
     if (this._popup) {
       const $title = this._getPopupTitle();
-      maxHeight += getOuterHeight($title.get(0));
+      maxHeight += Number(getOuterHeight($title));
     }
     if (this._accordion) {
       maxHeight += getOuterHeight(this._accordion.$element().get(0));

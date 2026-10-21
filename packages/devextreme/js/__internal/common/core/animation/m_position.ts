@@ -243,7 +243,7 @@ const calculatePosition = function (what, options) {
   const boundaryOffset = normalizeOffset(options.boundaryOffset, options.precise);
 
   const h: any = {
-    mySize: getOuterWidth($what.get(0)),
+    mySize: getOuterWidth($what),
     myAlign: my.h,
     atAlign: at.h,
     offset: offset.h,
@@ -252,7 +252,7 @@ const calculatePosition = function (what, options) {
   };
 
   const v: any = {
-    mySize: getOuterHeight($what.get(0)),
+    mySize: getOuterHeight($what),
     myAlign: my.v,
     atAlign: at.v,
     offset: offset.v,
@@ -326,8 +326,8 @@ const calculatePosition = function (what, options) {
       // @ts-expect-error
       top = boundaryPosition.top;
 
-      boundaryWidth = getWidth($boundary.get(0));
-      boundaryHeight = getHeight($boundary.get(0));
+      boundaryWidth = Number(getWidth($boundary));
+      boundaryHeight = Number(getHeight($boundary));
     }
 
     return {

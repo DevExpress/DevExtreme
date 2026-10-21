@@ -116,11 +116,11 @@ class TextBox<
     this._$searchIcon = $searchIcon;
   }
 
-  _getLabelContainerWidth(): number {
+  _getLabelContainerWidth(): number | undefined {
     if (this._$searchIcon) {
       const $inputContainer = this._input().parent();
 
-      return getWidth($inputContainer.get(0)) - this._getLabelBeforeWidth();
+      return Number(getWidth($inputContainer)) - this._getLabelBeforeWidth();
     }
 
     return super._getLabelContainerWidth();

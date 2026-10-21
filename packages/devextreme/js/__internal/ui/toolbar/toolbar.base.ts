@@ -260,7 +260,7 @@ class ToolbarBase<
         this._alignSection(this._$beforeSection, sectionMaxWidth);
       }
     } else {
-      const labelPaddings = getOuterWidth($label.get(0)) - getWidth($label.get(0));
+      const labelPaddings = Number(getOuterWidth($label)) - Number(getWidth($label));
       $label.css('maxWidth', sectionMaxWidth - labelPaddings);
     }
   }

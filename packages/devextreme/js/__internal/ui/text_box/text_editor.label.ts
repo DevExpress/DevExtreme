@@ -29,7 +29,7 @@ export interface TextEditorLabelProperties {
   containsButtonsBefore?: boolean;
   beforeWidth?: number;
   containerWidth?: number;
-  getContainerWidth: () => number;
+  getContainerWidth: () => number | undefined;
   getBeforeWidth: () => number;
   onClickHandler: () => void;
   onHoverHandler: (e: MouseEvent | PointerEvent) => void;
@@ -248,7 +248,7 @@ export class TextEditorLabel {
     this._updateBeforeWidth();
   }
 
-  updateMaxWidth(containerWidth: number): void {
+  updateMaxWidth(containerWidth: number | undefined): void {
     this._props.containerWidth = containerWidth;
     this._updateMaxWidth();
   }

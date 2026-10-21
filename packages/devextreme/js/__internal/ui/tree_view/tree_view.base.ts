@@ -1442,7 +1442,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     // NOTE: The height of node container is should be used when the container is shown (T606878)
     $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
 
-    const nodeHeight = getHeight($nodeContainer.get(0));
+    const nodeHeight = getHeight($nodeContainer);
     const { animationEnabled } = this.option();
 
     fx.stop($nodeContainer.get(0), true);

@@ -751,7 +751,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           && this.dataSourceController.hasAdapter()
           && !this.dataSourceController.isLoading()
         ) {
-          const rowHeight = getOuterHeight($row.get(0));
+          const rowHeight = Number(getOuterHeight($row));
           const rowIndex = this._focusedCellPosition.rowIndex - 1;
           this._scrollBy(0, -rowHeight, rowIndex, $event);
         }

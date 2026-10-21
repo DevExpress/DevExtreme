@@ -200,7 +200,7 @@ class RangeSlider extends Slider<RangeSliderProperties> {
   _startHandler(args: { event: SliderPointerEvent }): void {
     const e = args.event;
     const $range = this._$range;
-    const rangeWidth = getWidth($range.get(0));
+    const rangeWidth = Number(getWidth($range));
     const eventOffsetX = eventData(e).x - (this._$bar.offset()?.left ?? 0);
     const startHandleX = $range.position()?.left ?? 0;
     const endHandleX = ($range.position()?.left ?? 0) + rangeWidth;

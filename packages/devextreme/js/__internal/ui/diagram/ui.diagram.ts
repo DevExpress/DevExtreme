@@ -622,7 +622,7 @@ class Diagram extends Widget<Properties> {
       offsetX: DIAGRAM_FLOATING_PANEL_OFFSET,
       offsetY: DIAGRAM_FLOATING_PANEL_OFFSET,
       height: !isServerSide
-        ? getHeight($parent.get(0)) - 2 * DIAGRAM_FLOATING_PANEL_OFFSET
+        ? Number(getHeight($parent)) - 2 * DIAGRAM_FLOATING_PANEL_OFFSET
         : 0,
     };
     if (this._historyToolbar && !isServerSide) {

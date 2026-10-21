@@ -10,7 +10,7 @@ function getTreeViewItem($sourceItem: dxElementWrapper): dxElementWrapper {
   return $sourceItem
     .clone()
     .addClass(CLASSES.area.box)
-    .css('width', parseFloat(String(getOuterWidth($sourceItem.get(0)))));
+    .css('width', parseFloat(String(getOuterWidth($sourceItem))));
 }
 
 function getAreaBoxItemArray($sourceItem: dxElementWrapper, target: string): dxElementWrapper {

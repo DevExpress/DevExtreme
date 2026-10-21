@@ -801,7 +801,7 @@ class ContextMenu<
     $anchor: ContextMenuTarget,
   ): void {
     const $itemsContainer = $submenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
-    const contentHeight = getOuterHeight($itemsContainer.get(0));
+    const contentHeight = Number(getOuterHeight($itemsContainer));
     const maxHeight = this._getMaxHeight($anchor, false);
     const menuHeight = Math.min(contentHeight, maxHeight);
 
@@ -840,7 +840,7 @@ class ContextMenu<
     this._overlay?.option({
       maxHeight: () => {
         const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
-        const outerHeight: number = getOuterHeight($content.get(0));
+        const outerHeight = Number(getOuterHeight($content));
         const borderWidth = this._getSubmenuBorderWidth();
 
         return outerHeight + borderWidth * 2;

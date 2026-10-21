@@ -1552,12 +1552,12 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
         && $rowElements.length === 1
         && (
           !$freeSpaceRowElement.is(':visible')
-          || getOuterHeight($tooltipContent.get(0)) > getOuterHeight($freeSpaceRowElement)
+          || Number(getOuterHeight($tooltipContent)) > getOuterHeight($freeSpaceRowElement)
         )
         && rowElementsHasFocusInside
       ) {
         $freeSpaceRowElements.show();
-        setHeight($freeSpaceRowElements, getOuterHeight($tooltipContent.get(0)));
+        setHeight($freeSpaceRowElements, getOuterHeight($tooltipContent));
         return true;
       }
     }

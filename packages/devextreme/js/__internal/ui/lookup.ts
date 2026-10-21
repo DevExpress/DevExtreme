@@ -483,7 +483,7 @@ class Lookup extends DropDownList<LookupProperties> {
     const selectedListItem = $(this._list?.element()).find(`.${LIST_ITEM_SELECTED_CLASS}`);
     const selectedIndex = this._listItemElements().index(selectedListItem);
     const differenceOfHeights = (
-      getHeight(selectedListItem.get(0)) - getHeight(this.element())
+      Number(getHeight(selectedListItem)) - getHeight(this.element())
     ) / 2;
 
     const lookupOffset = $(this._list?.element()).offset()?.top ?? 0;
@@ -501,7 +501,7 @@ class Lookup extends DropDownList<LookupProperties> {
         this._scrollToSelectedItem();
 
         const differenceOffset = this._getDifferenceOffsets(selectedListItem);
-        const scrollOffsetTop = (popupHeight - getHeight(selectedListItem.get(0))) / 2
+        const scrollOffsetTop = (popupHeight - Number(getHeight(selectedListItem))) / 2
           - differenceOffset;
         // @ts-expect-error fix on List level
         this._list.scrollTo(
@@ -631,8 +631,8 @@ class Lookup extends DropDownList<LookupProperties> {
     return (
       this._calculateListHeight(grouped)
       + (this._$searchWrapper ? getOuterHeight(this._$searchWrapper.get(0)) : 0)
-      + (bottomToolbar ? getOuterHeight(bottomToolbar.get(0)) : 0)
-      + (topToolbar ? getOuterHeight(topToolbar.get(0)) : 0)
+      + (bottomToolbar ? Number(getOuterHeight(bottomToolbar)) : 0)
+      + (topToolbar ? Number(getOuterHeight(topToolbar)) : 0)
     );
   }
 

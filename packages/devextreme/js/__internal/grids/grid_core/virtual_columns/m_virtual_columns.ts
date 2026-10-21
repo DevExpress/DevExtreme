@@ -63,7 +63,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
         if (legacyMode && !useNativeScrolling) {
           $contentElement.css({ minHeight: gridCoreUtils.getContentHeightLimit(browser) });
         } else {
-          $contentElement.css({ minHeight: getHeight($contentElement.get(0)) });
+          $contentElement.css({ minHeight: getHeight($contentElement) });
         }
 
         const resizeCompletedHandler = (): void => {

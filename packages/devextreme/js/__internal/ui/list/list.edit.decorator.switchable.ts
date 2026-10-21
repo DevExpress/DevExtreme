@@ -108,7 +108,7 @@ abstract class SwitchableEditDecorator extends EditDecorator {
     const listTopOffset = $list.offset()?.top ?? 0;
     const listHeight = getOuterHeight($list.get(0));
     const itemTopOffset = $itemElement.offset()?.top ?? 0;
-    const itemHeight = getOuterHeight($itemElement.get(0));
+    const itemHeight = Number(getOuterHeight($itemElement));
 
     const dirtyTopShieldHeight = itemTopOffset - listTopOffset;
     const dirtyBottomShieldHeight = listHeight - itemHeight - dirtyTopShieldHeight;
