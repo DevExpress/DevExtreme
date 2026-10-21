@@ -159,35 +159,6 @@ const getFormatType = (format: Format | undefined): string | undefined => (
   isPlainObject(format) ? (format as FormatObject).type : undefined
 );
 
-const inferDataTypeFromFormatObject = (format: Format): string | undefined => {
-  if (!isPlainObject(format)) {
-    return undefined;
-  }
-
-  const {
-    hour, minute, second, year, month, day, weekday,
-  } = format as Intl.DateTimeFormatOptions;
-  const hasTime = hour !== undefined || minute !== undefined || second !== undefined;
-  const hasDate = year !== undefined
-    || month !== undefined
-    || day !== undefined
-    || weekday !== undefined;
-
-  if (hasTime && hasDate) {
-    return 'datetime';
-  }
-
-  if (hasTime) {
-    return 'time';
-  }
-
-  if (hasDate) {
-    return 'date';
-  }
-
-  return undefined;
-};
-
 export const getFormatterOptions = (format: Format): Format => {
   if (!isPlainObject(format) || !Object.hasOwnProperty.call(format, 'locale')) {
     return format;
@@ -209,10 +180,11 @@ export const getEffectiveFormatLocale = (
     return ownLocale;
   }
 
-  const resolvedDataType = dataType ?? inferDataTypeFromFormatObject(format);
-
-  if (resolvedDataType) {
-    const globalFormatLocale = getOwnFormatLocale(getGlobalFormatByDataType(resolvedDataType));
+  // NOTE: the global format locale is used only when the caller asks for it explicitly
+  // by dataType (the format itself is omitted). A format that a component sets explicitly
+  // is never matched against dateFormat/timeFormat/dateTimeFormat by its fields.
+  if (dataType) {
+    const globalFormatLocale = getOwnFormatLocale(getGlobalFormatByDataType(dataType));
 
     if (globalFormatLocale) {
       return globalFormatLocale;
@@ -221,6 +193,12 @@ export const getEffectiveFormatLocale = (
 
   return coreLocalization.locale();
 };
+
+export const getNumberFormatLocale = (format?: Format | null): string => (
+  format
+    ? getEffectiveFormatLocale(format)
+    : getEffectiveFormatLocale(undefined, 'number')
+);
 
 export const resolvePresetOverride = (presetName: string): Format | undefined => {
   const { dateTimeFormatPresets: presets } = config();
@@ -253,17 +231,17 @@ export const getDateFormatLocale = (
   resolvedFormat?: Format,
 ): string => {
   const effectiveResolved = resolvedFormat ?? resolveFormatWhenOmitted(sourceFormat);
-  const localeSource = getOwnFormatLocale(sourceFormat) ? sourceFormat : effectiveResolved;
 
-  return getEffectiveFormatLocale(
-    isPlainObject(localeSource) ? localeSource : undefined,
-  );
+  return getOwnFormatLocale(sourceFormat)
+    ?? getOwnFormatLocale(effectiveResolved)
+    ?? coreLocalization.locale();
 };
 
 export default {
   getGlobalFormatByDataType,
   resolvePresetOverride,
   getEffectiveFormatLocale,
+  getNumberFormatLocale,
   getDateFormatLocale,
   getFormatterOptions,
 };

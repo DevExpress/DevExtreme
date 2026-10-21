@@ -38,6 +38,7 @@ describe('column format locale override', () => {
     const currentConfig = config();
     delete currentConfig.numberFormat;
     delete currentConfig.dateTimeFormat;
+    delete currentConfig.dateFormat;
   });
 
   it('should keep the global format pattern and apply the column locale', async () => {
@@ -63,5 +64,38 @@ describe('column format locale override', () => {
     expect(cellText(1)).toBe('12.345,68');
     expect(cellText(2)).toBe('6/15/2024, 2:30 PM');
     expect(cellText(3)).toBe('15.6.2024, 14:30');
+  });
+
+  it('should not apply global date format locales to an explicit column format', async () => {
+    config({
+      ...config(),
+      dateFormat: { default: { locale: 'de-DE', type: 'monthAndYear' } },
+    });
+
+    const shippedAt = new Date(2024, 5, 15, 14, 30);
+    const { instance } = await createDataGrid({
+      dataSource: [{ id: 1, shippedAt }],
+      columns: [
+        { dataField: 'shippedAt', dataType: 'date', format: { year: 'numeric', month: 'long', day: 'numeric' } },
+        { dataField: 'shippedAt', dataType: 'date', format: 'dd MMMM yyyy' },
+        {
+          dataField: 'shippedAt',
+          dataType: 'datetime',
+          format: {
+            year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric',
+          },
+        },
+        { dataField: 'shippedAt', dataType: 'date' },
+      ],
+    });
+
+    const cellText = (columnIndex: number): string => (
+      (instance.getCellElement(0, columnIndex) as HTMLElement).textContent ?? ''
+    );
+
+    expect(cellText(0)).toBe('June 15, 2024');
+    expect(cellText(1)).toBe('15 June 2024');
+    expect(cellText(2)).toBe('6/15/2024, 2:30 PM');
+    expect(cellText(3)).toBe('Juni 2024');
   });
 });

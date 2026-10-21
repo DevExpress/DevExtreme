@@ -1,5 +1,5 @@
 import {
-  afterEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
 import coreLocalization from '@js/common/core/localization/core';
 import dateLocalization from '@js/common/core/localization/date';
@@ -7,6 +7,7 @@ import config from '@js/core/config';
 import type { Properties } from '@js/ui/date_box';
 import DateBox from '@js/ui/date_box';
 import DateRangeBox from '@js/ui/date_range_box';
+import TimeView from '@ts/ui/date_box/time_view';
 
 const widgets: { dispose: () => void }[] = [];
 const value = new Date(2024, 5, 15, 14, 30);
@@ -390,5 +391,163 @@ describe('locale-only displayFormat follows the editor type', () => {
 
       coreLocalization.locale(savedLocale);
     }
+  });
+
+  it.each([
+    {
+      type: 'date' as const,
+      pickerType: 'calendar' as const,
+      displayFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+      expected: 'June 15, 2024',
+    },
+    {
+      type: 'date' as const,
+      pickerType: 'calendar' as const,
+      displayFormat: 'dd MMMM yyyy',
+      expected: '15 June 2024',
+    },
+    {
+      type: 'time' as const,
+      pickerType: 'list' as const,
+      displayFormat: { hour: 'numeric', minute: 'numeric' },
+      expected: '2:30 PM',
+    },
+    {
+      type: 'datetime' as const,
+      pickerType: 'calendar' as const,
+      displayFormat: {
+        year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric',
+      },
+      expected: '6/15/2024, 2:30 PM',
+    },
+  ])('ignores global format locales for an explicit $type displayFormat %#', ({
+    type, pickerType, displayFormat, expected,
+  }) => {
+    const savedLocale = coreLocalization.locale();
+    const { dateFormat, timeFormat, dateTimeFormat } = config();
+
+    coreLocalization.locale('en');
+    config({
+      ...config(),
+      dateFormat: { default: { type: 'longDate', locale: 'de-DE' } },
+      timeFormat: { default: { type: 'longTime', locale: 'de-DE' } },
+      dateTimeFormat: { default: { type: 'longDateLongTime', locale: 'de-DE' } },
+    });
+
+    try {
+      const input = createDateBox({
+        type,
+        pickerType,
+        value,
+        displayFormat: displayFormat as Properties['displayFormat'],
+      });
+      const maskInput = createDateBox({
+        type,
+        pickerType,
+        useMaskBehavior: true,
+        value,
+        displayFormat: displayFormat as Properties['displayFormat'],
+      });
+
+      expect(input.value).toBe(expected);
+      expect(maskInput.value).toBe(expected);
+    } finally {
+      const currentConfig = config();
+
+      currentConfig.dateFormat = dateFormat;
+      currentConfig.timeFormat = timeFormat;
+      currentConfig.dateTimeFormat = dateTimeFormat;
+      if (dateFormat === undefined) delete currentConfig.dateFormat;
+      if (timeFormat === undefined) delete currentConfig.timeFormat;
+      if (dateTimeFormat === undefined) delete currentConfig.dateTimeFormat;
+
+      coreLocalization.locale(savedLocale);
+    }
+  });
+
+  describe('time separator', () => {
+    let savedLocale = '';
+    let savedTimeFormat = config().timeFormat;
+    let savedDateTimeFormat = config().dateTimeFormat;
+
+    beforeEach(() => {
+      savedLocale = coreLocalization.locale();
+      savedTimeFormat = config().timeFormat;
+      savedDateTimeFormat = config().dateTimeFormat;
+      coreLocalization.locale('en');
+    });
+
+    afterEach(() => {
+      const currentConfig = config();
+
+      currentConfig.timeFormat = savedTimeFormat;
+      currentConfig.dateTimeFormat = savedDateTimeFormat;
+      if (savedTimeFormat === undefined) delete currentConfig.timeFormat;
+      if (savedDateTimeFormat === undefined) delete currentConfig.dateTimeFormat;
+
+      coreLocalization.locale(savedLocale);
+    });
+
+    const getTimeViewSeparator = (formatLocale?: string): string => {
+      const element = document.body.appendChild(document.createElement('div'));
+      const instance = new TimeView(element, {
+        value,
+        _formatLocale: formatLocale,
+      });
+
+      widgets.push(instance);
+
+      return element.querySelector('.dx-timeview-time-separator')?.textContent ?? '';
+    };
+
+    it('uses the format locale passed by the DateBox instead of timeFormat', () => {
+      config({ ...config(), timeFormat: { default: { locale: 'fi' } } });
+
+      expect(getTimeViewSeparator('en')).toBe(':');
+      expect(getTimeViewSeparator('fi')).toBe('.');
+    });
+
+    it('passes the explicit displayFormat locale to the time view', () => {
+      config({
+        ...config(),
+        timeFormat: { default: { locale: 'fi' } },
+        dateTimeFormat: { default: { locale: 'fi' } },
+      });
+
+      const element = document.body.appendChild(document.createElement('div'));
+      const instance = new DateBox(element, {
+        type: 'datetime',
+        pickerType: 'calendar',
+        value,
+        displayFormat: 'dd/MM/yyyy HH:mm',
+      });
+
+      widgets.push(instance);
+
+      const strategy = (instance as unknown as {
+        _strategy: { _getFormatLocale: () => string };
+      })._strategy;
+
+      expect(strategy._getFormatLocale()).toBe('en');
+    });
+
+    it('passes the dateTimeFormat locale to the time view when displayFormat is not set', () => {
+      config({ ...config(), dateTimeFormat: { default: { locale: 'fi' } } });
+
+      const element = document.body.appendChild(document.createElement('div'));
+      const instance = new DateBox(element, {
+        type: 'datetime',
+        pickerType: 'calendar',
+        value,
+      });
+
+      widgets.push(instance);
+
+      const strategy = (instance as unknown as {
+        _strategy: { _getFormatLocale: () => string };
+      })._strategy;
+
+      expect(strategy._getFormatLocale()).toBe('fi');
+    });
   });
 });

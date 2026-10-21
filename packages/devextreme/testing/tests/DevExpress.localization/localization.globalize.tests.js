@@ -984,6 +984,50 @@ QUnit.module('Format helper', () => {
             }
         });
 
+        QUnit.test('explicit number formats without a locale keep the message locale', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('de');
+                coreLocalization.locale('de');
+                config({
+                    ...config(),
+                    numberFormat: {
+                        default: {
+                            locale: 'en',
+                        },
+                    },
+                });
+
+                [
+                    '#,##0.00',
+                    { type: '#,##0.00' },
+                    { type: 'fixedPoint', precision: 2 },
+                ].forEach((format) => {
+                    const text = numberLocalization.format(1234.5, format);
+
+                    assert.strictEqual(text, '1.234,50', `format ${JSON.stringify(format)}`);
+                    assert.strictEqual(numberLocalization.parse(text, format), 1234.5, `parse ${JSON.stringify(format)}`);
+                });
+
+                const currencyFormat = { type: 'currency', precision: 2 };
+                const currencyText = numberLocalization.format(1234.5, currencyFormat);
+
+                assert.strictEqual(currencyText, `1.234,50${NBSP}$`, 'format currency');
+                assert.strictEqual(numberLocalization.parse(currencyText, currencyFormat), 1234.5, 'parse currency');
+                assert.strictEqual(numberLocalization.getDecimalSeparator(currencyFormat), ',', 'currency decimal separator');
+
+                assert.strictEqual(numberLocalization.format(1234.5, { type: '#,##0.00', locale: 'en' }), '1,234.50');
+                assert.strictEqual(numberLocalization.getDecimalSeparator(), '.');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
         QUnit.test('explicit shortDate preset keeps the message locale', function(assert) {
             const saved = saveGlobalFormats();
             const savedLocale = coreLocalization.locale();
@@ -1032,22 +1076,78 @@ QUnit.module('Format helper', () => {
 
                 const date = new Date(2020, 0, 2, 14, 5);
 
-                assert.notStrictEqual(
+                assert.strictEqual(
                     dateLocalization.format(date, 'shortTime'),
-                    dateLocalization.format(date, { locale: 'de-DE', type: 'shortTime' }),
+                    dateLocalization.format(date, { locale: 'en', type: 'shortTime' }),
                 );
                 assert.strictEqual(
                     dateLocalization.format(date, { locale: 'de-DE', type: 'shortTime' }),
                     '14:05',
                 );
-                assert.notStrictEqual(
+                assert.strictEqual(
                     dateLocalization.format(date, 'shortDateShortTime'),
-                    dateLocalization.format(date, { locale: 'de-DE', type: 'shortDateShortTime' }),
+                    dateLocalization.format(date, { locale: 'en', type: 'shortDateShortTime' }),
                 );
                 assert.strictEqual(
                     dateLocalization.format(date, { locale: 'de-DE', type: 'shortDateShortTime' }),
                     '2.1.2020, 14:05',
                 );
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('getTimeSeparator uses the passed locale', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+                config({
+                    ...config(),
+                    timeFormat: {
+                        default: {
+                            locale: 'en',
+                            type: 'shortTime',
+                        },
+                    },
+                });
+
+                assert.strictEqual(dateLocalization.getTimeSeparator('da'), '.');
+                assert.strictEqual(dateLocalization.getTimeSeparator('en'), ':');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('getTimeSeparator without a locale uses the timeFormat locale', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+
+                assert.strictEqual(dateLocalization.getTimeSeparator(), ':');
+
+                config({
+                    ...config(),
+                    timeFormat: {
+                        default: {
+                            locale: 'da',
+                            type: 'shortTime',
+                        },
+                    },
+                });
+
+                assert.strictEqual(dateLocalization.getTimeSeparator(), '.');
             } finally {
                 Globalize.locale(savedGlobalizeLocale);
                 coreLocalization.locale(savedLocale);

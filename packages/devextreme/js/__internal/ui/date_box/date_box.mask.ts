@@ -1,6 +1,5 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
-import coreLocalization from '@js/common/core/localization/core';
 import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
 import numberLocalization from '@js/common/core/localization/number';
@@ -513,9 +512,10 @@ class DateBoxMask<
     const { displayFormat } = this.option();
     const format = this._resolveDisplayFormat(displayFormat);
     const formatLocale = getDateFormatLocale(format);
-    const dateParts = formatLocale === coreLocalization.locale()
-      ? dateLocalization
-      : bindDatePartsToLocale(dateLocalization as LocaleAwareDateLocalization, formatLocale);
+    const dateParts = bindDatePartsToLocale(
+      dateLocalization as LocaleAwareDateLocalization,
+      formatLocale,
+    );
 
     this._formatDateParts = dateParts;
     this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateParts);

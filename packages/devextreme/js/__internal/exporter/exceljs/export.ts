@@ -12,6 +12,7 @@ import {
   isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import { getEffectiveFormatLocale } from '@ts/core/global_format_config';
 
 import { ExportLoadPanel } from '../common/export_load_panel';
 import { ExportFormat } from './export_format';
@@ -78,11 +79,13 @@ export const Export = {
   tryConvertToExcelNumberFormat(format, dataType) {
     const newFormat = ExportFormat.formatObjectConverter(format, dataType);
     const { currency } = newFormat;
+    // NOTE: the column format locale (or the message locale), never the numberFormat locale
+    const formatLocale = getEffectiveFormatLocale(format);
 
     format = newFormat.format;
     dataType = newFormat.dataType;
 
-    return ExportFormat.convertFormat(format, newFormat.precision, dataType, currency);
+    return ExportFormat.convertFormat(format, newFormat.precision, dataType, currency, formatLocale);
   },
 
   setAlignment(excelCell, wrapText, horizontalAlignment) {

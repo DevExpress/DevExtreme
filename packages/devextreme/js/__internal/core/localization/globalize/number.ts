@@ -3,9 +3,9 @@ import 'globalize/number';
 
 import errors from '@js/core/errors';
 import {
-  getEffectiveFormatLocale,
   getFormatterOptions,
   getGlobalFormatByDataType,
+  getNumberFormatLocale,
 } from '@ts/core/global_format_config';
 import numberLocalization, {
   type FormatConfig,
@@ -62,15 +62,13 @@ if (Globalize?.formatNumber) {
       }
 
       return getFormatter(
-        getEffectiveFormatLocale(formatConfig),
+        getNumberFormatLocale(formatConfig),
         this._normalizeFormatConfig(format, formatConfig, value),
       )(value);
     },
 
     getDecimalSeparator(format?: FormatConfig | string): string {
-      const formatLocale = format
-        ? getEffectiveFormatLocale(format)
-        : getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
+      const formatLocale = getNumberFormatLocale(format);
 
       return getFormatter(formatLocale, {
         minimumFractionDigits: 1,
@@ -79,9 +77,7 @@ if (Globalize?.formatNumber) {
     },
 
     getThousandsSeparator(format?: FormatConfig | string): string {
-      const formatLocale = format
-        ? getEffectiveFormatLocale(format)
-        : getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
+      const formatLocale = getNumberFormatLocale(format);
 
       return getFormatter(formatLocale, {})(10000)[2];
     },
@@ -152,7 +148,7 @@ if (Globalize?.formatNumber) {
 
       // eslint-disable-next-line @stylistic/no-mixed-operators
       if (!format || typeof format !== 'function' && !(format as FormatConfig).type && !(format as FormatConfig).formatter) {
-        const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
+        const formatLocale = getNumberFormatLocale(format);
         const formatterOptions = getFormatterOptions(format) as NormalizedConfig;
 
         return getFormatter(formatLocale, formatterOptions)(value);
@@ -182,7 +178,7 @@ if (Globalize?.formatNumber) {
       }
 
       let result: number = Globalize(
-        getEffectiveFormatLocale(format, NUMBER_DATA_TYPE),
+        getNumberFormatLocale(format),
       ).parseNumber(text);
 
       if (isNaN(result)) {

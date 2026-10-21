@@ -6,7 +6,11 @@ import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
-import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import {
+  applyDataTypePreset,
+  getDateFormatLocale,
+  getGlobalFormatByDataType,
+} from '@ts/core/global_format_config';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
@@ -63,6 +67,12 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
     return dateLocalization.is24HourFormat(this.getDisplayFormat(displayFormat)) as boolean;
   }
 
+  _getFormatLocale(): string {
+    const { displayFormat } = this.dateBox.option();
+
+    return getDateFormatLocale(this.getDisplayFormat(displayFormat));
+  }
+
   _getContouredValue(): Date {
     const viewDate = super._getContouredValue();
     return this._updateDateTime(viewDate as Date);
@@ -76,6 +86,7 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
       value: this.dateBoxValue() as Date,
       _showClock: !this._isShrinkView(),
       use24HourFormat: this._is24HourFormat(),
+      _formatLocale: this._getFormatLocale(),
       onValueChanged: this._valueChangedHandler.bind(this),
       stylingMode,
     });
@@ -123,7 +134,10 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
       if (date) {
         this._timeView.option('value', date);
       }
-      this._timeView.option('use24HourFormat', this._is24HourFormat());
+      this._timeView.option({
+        use24HourFormat: this._is24HourFormat(),
+        _formatLocale: this._getFormatLocale(),
+      });
     }
   }
 

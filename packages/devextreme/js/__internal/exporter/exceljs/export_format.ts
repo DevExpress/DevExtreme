@@ -118,12 +118,12 @@ function _convertDateFormatToOpenXml(format) {
     .join('');
 }
 
-function _convertNumberFormat(format, precision, currency) {
+function _convertNumberFormat(format, precision, currency, locale?: string) {
   let result;
   let excelFormat;
 
   if (format === 'currency') {
-    excelFormat = numberFormatter.getOpenXmlCurrencyFormat(currency);
+    excelFormat = numberFormatter.getOpenXmlCurrencyFormat(currency, locale);
   } else {
     excelFormat = DEFINED_NUMBER_FORMTATS[format.toLowerCase()];
   }
@@ -196,13 +196,13 @@ export const ExportFormat = {
     return result;
   },
 
-  convertFormat(format, precision, type, currency) {
+  convertFormat(format, precision, type, currency, locale?: string) {
     if (isDefined(format)) {
       if (type === 'date') {
         return _convertDateFormat(format);
       }
       if (isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
-        return _convertNumberFormat(format, precision, currency);
+        return _convertNumberFormat(format, precision, currency, locale);
       }
     }
   },

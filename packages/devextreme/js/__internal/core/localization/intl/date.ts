@@ -345,9 +345,9 @@ export default {
         return intlPresetResult;
       }
 
-      const dateParts = formatLocale === localizationCoreUtils.locale()
-        ? this
-        : bindDatePartsToLocale(this, formatLocale);
+      // NOTE: date parts are always bound to the format locale, so that the time separator
+      // does not come from the global timeFormat locale.
+      const dateParts = bindDatePartsToLocale(this, formatLocale);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return this.callBase(date, resolvedFormat, dateParts);
@@ -372,10 +372,8 @@ export default {
     }
 
     const formatLocale = format ? getDateFormatLocale(format) : localizationCoreUtils.locale();
-    const dateParts = formatLocale === localizationCoreUtils.locale()
-      ? this
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      : bindDatePartsToLocale(this, formatLocale);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const dateParts = bindDatePartsToLocale(this, formatLocale);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.callBase(dateString, formatter ?? format, dateParts);
@@ -464,8 +462,8 @@ export default {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.callBase.apply(this, [format]);
   },
-  getTimeSeparator(): string {
-    const formatLocale = getEffectiveFormatLocale(undefined, 'time');
+  getTimeSeparator(locale?: string): string {
+    const formatLocale = locale ?? getEffectiveFormatLocale(undefined, 'time');
     const formatOptions: Intl.DateTimeFormatOptions = {
       hour: 'numeric',
       minute: 'numeric',

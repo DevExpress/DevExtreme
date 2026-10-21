@@ -317,21 +317,20 @@ describe('global_format_config', () => {
       expect(getEffectiveFormatLocale(getGlobalFormatByDataType('datetime'))).toBe('ja');
     });
 
-    it('should infer dataType from Intl format object options', () => {
+    it('should not take a global format locale from Intl format object fields', () => {
       config({
         ...config(),
-        timeFormat: {
-          default: {
-            locale: 'de-DE',
-          },
-        },
+        dateFormat: { default: { locale: 'de-DE' } },
+        timeFormat: { default: { locale: 'fr' } },
+        dateTimeFormat: { default: { locale: 'ja' } },
       });
       coreLocalization.locale('en');
 
+      expect(getEffectiveFormatLocale({ year: 'numeric', month: 'long' })).toBe('en');
+      expect(getEffectiveFormatLocale({ hour: 'numeric', minute: 'numeric' })).toBe('en');
       expect(getEffectiveFormatLocale({
-        hour: 'numeric',
-        minute: 'numeric',
-      })).toBe('de-DE');
+        year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric',
+      })).toBe('en');
     });
 
     it('should use explicit dataType with getGlobalFormatByDataType', () => {
@@ -402,8 +401,56 @@ describe('global_format_config', () => {
       expect(getDateFormatLocale('shortDate', 'longDate')).toBe('en');
     });
 
-    it('should take dateFormat locale from date fields of an Intl format', () => {
-      expect(getDateFormatLocale('shortDate', { weekday: 'long' })).toBe('de-DE');
+    it('should keep the message locale when a preset is aliased to Intl fields', () => {
+      config({
+        ...config(),
+        timeFormat: { default: { type: 'shortTime', locale: 'fr' } },
+        dateTimeFormat: { default: { type: 'shortDateShortTime', locale: 'ja' } },
+      });
+
+      expect(getDateFormatLocale('shortDate', { weekday: 'long' })).toBe('en');
+      expect(getDateFormatLocale(
+        { type: 'shortDate' },
+        { year: 'numeric', month: 'long', day: 'numeric' },
+      )).toBe('en');
+      expect(getDateFormatLocale('shortTime', { hour: 'numeric', minute: 'numeric' })).toBe('en');
+      expect(getDateFormatLocale('shortDateShortTime', {
+        year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric',
+      })).toBe('en');
+    });
+
+    it('should not take a global format locale for explicit Intl fields', () => {
+      config({
+        ...config(),
+        timeFormat: { default: { type: 'shortTime', locale: 'fr' } },
+        dateTimeFormat: { default: { type: 'shortDateShortTime', locale: 'ja' } },
+      });
+
+      expect(getDateFormatLocale({ weekday: 'long' })).toBe('en');
+      expect(getDateFormatLocale({ year: 'numeric', month: 'long', day: 'numeric' })).toBe('en');
+      expect(getDateFormatLocale({ hour: 'numeric', minute: 'numeric' })).toBe('en');
+      expect(getDateFormatLocale({
+        year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric',
+      })).toBe('en');
+    });
+
+    it('should not take a global format locale for an explicit LDML pattern', () => {
+      expect(getDateFormatLocale('dd MMMM yyyy')).toBe('en');
+      expect(getDateFormatLocale({ type: 'dd MMMM yyyy' })).toBe('en');
+    });
+
+    it('should use own locale of explicit Intl fields', () => {
+      expect(getDateFormatLocale({ weekday: 'long', locale: 'fr' })).toBe('fr');
+    });
+
+    it('should use an Intl alias locale when the preset has none', () => {
+      expect(getDateFormatLocale('longDate', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        locale: 'fr',
+      })).toBe('fr');
     });
 
     it('should prefer source format own locale over aliased format locale', () => {

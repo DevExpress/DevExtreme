@@ -6,6 +6,7 @@ import 'globalize/date';
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
 import {
   getDateFormatLocale,
+  getEffectiveFormatLocale,
   getFormatterOptions,
   resolvePresetOverride,
 } from '@ts/core/global_format_config';
@@ -244,9 +245,10 @@ if (Globalize?.formatDate) {
       return iteratorUtils.map(days, (day: string): string => day);
     },
 
-    getTimeSeparator(): string {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return Globalize.locale().main('numbers/symbols-numberSystem-latn/timeSeparator');
+    getTimeSeparator(locale?: string): string {
+      const formatLocale = locale ?? getEffectiveFormatLocale(undefined, 'time');
+
+      return getCldrMain<string>('numbers/symbols-numberSystem-latn/timeSeparator', formatLocale);
     },
 
     removeRtlMarks(text: string): string {

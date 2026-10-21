@@ -15,7 +15,7 @@ import type { DxEvent, NativeEventInfo } from '@js/events';
 import type { Format, FormatObject } from '@js/localization';
 import type { Properties } from '@js/ui/number_box';
 import {
-  getEffectiveFormatLocale, getFormatterOptions, getGlobalFormatByDataType,
+  getFormatterOptions, getGlobalFormatByDataType, getNumberFormatLocale,
 } from '@ts/core/global_format_config';
 import { getFormat as getLDMLFormat } from '@ts/core/localization/ldml/number';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -210,9 +210,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       return;
     }
 
-    const locale = isDefined(this.option('format'))
-      ? getEffectiveFormatLocale(formatOption)
-      : getEffectiveFormatLocale(formatOption, 'number');
+    const locale = getNumberFormatLocale(formatOption);
 
     if (locale !== this._intlFormatLocaleCache) {
       this._intlFormatLocaleCache = locale;
@@ -895,7 +893,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
     if (this._usesIntlFormatOption(formatOption) && typeof Intl !== 'undefined') {
       const formatObject = asFormatObject(formatOption) ?? {};
-      const locale = getEffectiveFormatLocale(formatOption, 'number');
+      const locale = getNumberFormatLocale(formatOption);
       const {
         minimumFractionDigits,
         maximumFractionDigits,
