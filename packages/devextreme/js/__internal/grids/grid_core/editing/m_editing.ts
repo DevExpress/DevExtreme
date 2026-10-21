@@ -201,10 +201,11 @@ class EditingControllerImpl extends modules.ViewController {
     // a copy of editing.changes, compared in optionChanged
     this._changes = [];
 
-    if (this.pendingOperations) {
-      this.pendingOperations.forEach((d) => { d.reject('cancel'); });
-    }
+    const canceledOperations = this.pendingOperations;
     this.pendingOperations = [];
+    if (canceledOperations) {
+      canceledOperations.forEach((d) => { d.reject('cancel'); });
+    }
 
     if (!this._dataChangedHandler) {
       this._dataChangedHandler = this._handleDataChanged.bind(this);
@@ -799,26 +800,20 @@ class EditingControllerImpl extends modules.ViewController {
     }
 
     const isFollowedByDetailRow = (index: number): boolean => {
-      const nextRowType = items[index + 1]?.rowType;
+      const nextItem = items[index + 1];
+      const nextRowType = nextItem?.rowType;
 
-      // detail rows are added after processItems; on raw items, a detail rowType is user data
-      return !!isProcessedItems && (nextRowType === 'detail' || nextRowType === 'detailAdaptive');
+      // detail rows are added after processItems; on raw items, a detail rowType is user data.
+      // A row edited in form mode is typed 'detail' too, but it is another row
+      return !!isProcessedItems
+        && !nextItem?.isEditing
+        && (nextRowType === 'detail' || nextRowType === 'detailAdaptive');
     };
-    let lastAnchorRowIndex = -1;
+    const lastAnchorRowIndex = items.findIndex(
+      (item, index) => isAnchorRow(item) && !isFollowedByDetailRow(index),
+    );
 
-    for (let index = 0; index < items.length; index += 1) {
-      if (isAnchorRow(items[index])) {
-        if (!isFollowedByDetailRow(index)) {
-          return index + 1;
-        }
-
-        lastAnchorRowIndex = index;
-      }
-    }
-
-    // the last anchor row is followed by a row edited in form mode (typed 'detail'):
-    // return the anchor row index, as -1 would mean the anchor isn't loaded
-    return lastAnchorRowIndex;
+    return lastAnchorRowIndex < 0 ? -1 : lastAnchorRowIndex + 1;
   }
 
   /**
@@ -1633,9 +1628,9 @@ class EditingControllerImpl extends modules.ViewController {
     const { texts, confirmDelete } = this.option('editing') ?? {};
     const { confirmDeleteMessage, confirmDeleteTitle } = texts ?? {};
     const item = this._dataController.items()[rowIndex];
-    const allowDeleting = !this.isEditing() || item.isNewRow; // T741746
+    const allowDeleting = !!item && (!this.isEditing() || item.isNewRow); // T741746
 
-    if (!item || !allowDeleting) {
+    if (!allowDeleting) {
       return;
     }
 

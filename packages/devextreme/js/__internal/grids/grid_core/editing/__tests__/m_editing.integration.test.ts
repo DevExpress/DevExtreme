@@ -2,6 +2,7 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import CustomStore from '@js/data/custom_store';
+import { Deferred } from '@ts/core/utils/deferred';
 import eventsEngine from '@ts/events/core/events_engine';
 
 import {
@@ -538,6 +539,81 @@ describe('DataGrid editing', () => {
       eventsEngine.trigger(document, 'dxclick');
 
       expect(isCellOrBatchEditMode).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Deleting a row with an index out of range', () => {
+    it('should do nothing while a row is being edited', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'row',
+          allowUpdating: true,
+          allowDeleting: true,
+        },
+      });
+      instance.editRow(0);
+      await flushAsync();
+
+      expect(() => { instance.deleteRow(dataSource.length); }).not.toThrow();
+      expect(instance.option('editing.changes')).toEqual([]);
+      expect(instance.option('editing.editRowKey')).toBe(1);
+    });
+  });
+
+  describe('Pending operations when the editing controller re-inits', () => {
+    it('should reject each pending operation with "cancel"', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+      });
+      const editingController = instance.getController('editing');
+      const operations = [Deferred<unknown>(), Deferred<unknown>(), Deferred<unknown>()];
+      const onFail = jest.fn();
+      operations.forEach((operation) => {
+        editingController.addDeferred(operation);
+        operation.fail(onFail);
+      });
+
+      instance.cancelEditData();
+
+      expect(operations.map((operation) => operation.state())).toEqual(['rejected', 'rejected', 'rejected']);
+      expect(onFail.mock.calls).toEqual([['cancel'], ['cancel'], ['cancel']]);
+    });
+
+    it('should not apply an async cell value that resolves after cancelEditData', async () => {
+      const setCellValueResults = [Deferred<undefined>(), Deferred<undefined>()];
+      let setCellValueCallCount = 0;
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        columns: [{
+          dataField: 'FirstName',
+          setCellValue(newData, value): PromiseLike<void> {
+            newData.FirstName = value;
+            const result = setCellValueResults[setCellValueCallCount];
+            setCellValueCallCount += 1;
+            return result.promise();
+          },
+        }],
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+      });
+
+      instance.cellValue(0, 'FirstName', 'Updated 1');
+      instance.cellValue(1, 'FirstName', 'Updated 2');
+      instance.cancelEditData();
+      setCellValueResults.forEach((result) => { result.resolve(); });
+      await flushAsync();
+
+      expect(instance.option('editing.changes')).toEqual([]);
     });
   });
 });
