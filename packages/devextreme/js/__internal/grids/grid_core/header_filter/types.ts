@@ -6,11 +6,19 @@ import type {
   HeaderFilter,
   HeaderFilterTexts,
 } from '@js/common/grids';
-import type { DataSourceLike } from '@js/data/data_source';
+import type { dxElementWrapper } from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import type { DataSourceLike, DataSourceOptionsStub } from '@js/data/data_source';
 import type { ShowingEvent } from '@js/ui/popup';
+import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 export type EmptyDateValue = '' | false;
+
+export type DateIntervalFormat = (value: number) => string;
+
+export type HeaderFilterColumn = Column & Required<Pick<Column, 'calculateCellValue'>>;
 
 export type HeaderFilterGroupSelector = (data: unknown) => unknown;
 
@@ -34,6 +42,42 @@ export interface HeaderFilterItem {
   items?: HeaderFilterItem[];
 }
 
+export interface ProcessGroupItemsOptions {
+  level: number;
+  column: Column;
+  headerFilterOptions?: HeaderFilter;
+}
+
+export interface NormalizeGroupItemOptions
+  extends Pick<ProcessGroupItemsOptions, 'column' | 'headerFilterOptions'> {
+  path: unknown[];
+  valueSelector?: HeaderFilterGroupSelector;
+  displaySelector?: HeaderFilterGroupSelector;
+}
+
+export interface HeaderFilterMenuOptions
+  extends Pick<
+    HeaderFilterViewOptions,
+    'apply' | 'onHidden' | 'isFilterBuilder' | 'dataSource' | 'dataField'
+  > {
+  columnElement: dxElementWrapper;
+  column?: HeaderFilterColumn;
+  applyFilter?: boolean;
+}
+
+export interface HeaderFilterDataSourceOptions
+  extends Omit<DataSourceOptionsStub, 'group' | 'store'> {
+  group?: DataSourceOptionsStub['group'] | HeaderFilterGroup;
+  store?: DataSourceOptionsStub['store'] | NormalizedDataSourceOptions['store'];
+  useDefaultSearch?: boolean;
+  load?: (loadOptions: StoreLoadOptions) => DeferredObj<unknown>;
+}
+
+export interface HeaderFilterDataSourceArgs {
+  component: InternalGrid;
+  dataSource?: HeaderFilterDataSourceOptions;
+}
+
 export type HeaderFilterValues = unknown[];
 
 export type HeaderFilterOptions = HeaderFilter
@@ -52,7 +96,7 @@ export interface HeaderFilterViewOptions {
   filterType?: FilterType;
   filterValues?: HeaderFilterValues | null;
   headerFilter?: Partial<HeaderFilterOptions>;
-  dataSource?: DataSourceLike<unknown>;
+  dataSource?: DataSourceLike<unknown> | HeaderFilterDataSourceOptions;
   lookup?: Column['lookup'];
   dataField?: string;
   selector?: Column['selector'];

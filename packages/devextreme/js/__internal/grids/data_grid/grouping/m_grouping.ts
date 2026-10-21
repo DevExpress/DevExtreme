@@ -277,6 +277,7 @@ export const GroupingHeaderPanelExtender = (
     const columnIndex = column && column.index;
 
     if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
+      // @ts-expect-error updateColumnIndexes sets the index of every column
       this._headerFilterController.showHeaderFilterMenu(columnIndex, true);
     } else {
       // @ts-expect-error
