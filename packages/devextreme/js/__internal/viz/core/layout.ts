@@ -56,7 +56,7 @@ interface LayoutItemElement {
   freeSpace: () => void;
 }
 
-interface LayoutTarget extends LayoutItemElement {
+export interface LayoutTarget extends LayoutItemElement {
   layoutOptions: () => LayoutTargetOptions | false | null | undefined;
 }
 
