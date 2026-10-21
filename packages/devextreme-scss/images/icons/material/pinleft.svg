@@ -1,5 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>pinleft</title>
-<path d="M19 3h-14c-1.105 0-2 0.895-2 2v0 14c0 1.105 0.895 2 2 2v0h14c1.105 0 2-0.895 2-2v0-14c0-1.105-0.895-2-2-2v0zM19 19h-14v-14h14z"></path>
-<path d="M6 6h6v12h-6v-12z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>pinleft</title><path d="M811 -811L213 -811Q178 -811 153 -786T128 -725L128 -725L128 -128Q128 -93 153 -68T213 -43L213 -43L811 -43Q846 -43 871 -68T896 -128L896 -128L896 -725Q896 -761 871 -786T811 -811ZM811 -128L213 -128L213 -725L811 -725ZM256 -683L512 -683L512 -171L256 -171Z"/></svg>

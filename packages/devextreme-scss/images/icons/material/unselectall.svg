@@ -1,5 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-<title>unselectall</title>
-<path d="M3 5h-2v16c0 1.105 0.895 2 2 2v0h16v-2h-16z"></path>
-<path d="M21 1h-14c-1.105 0-2 0.895-2 2v0 14c0 1.105 0.895 2 2 2v0h14c1.105 0 2-0.895 2-2v0-14c0-1.105-0.895-2-2-2v0zM21 17h-14v-14h14z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>unselectall</title><path d="M128 -725L43 -725L43 -43Q43 -7 68 18T128 43L128 43L811 43L811 -43L128 -43ZM896 -896L299 -896Q263 -896 238 -871T213 -811L213 -811L213 -213Q213 -178 238 -153T299 -128L299 -128L896 -128Q931 -128 956 -153T981 -213L981 -213L981 -811Q981 -846 956 -871T896 -896ZM896 -213L299 -213L299 -811L896 -811Z"/></svg>

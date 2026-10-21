@@ -1,7 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-<title>fullscreen</title>
-<path d="M4 4h3v-2h-5v5h2v-3z"></path>
-<path d="M11 2v2h3v3h2v-5h-5z"></path>
-<path d="M14 11v3h-3v2h5v-5h-2z"></path>
-<path d="M4 14v-3h-2v5h5v-2h-3z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -967.111 1024 1024"><title>fullscreen</title><path d="M228 -740L398 -740L398 -853L114 -853L114 -569L228 -569L228 -740ZM626 -853L626 -740L796 -740L796 -569L910 -569L910 -853L626 -853ZM796 -341L796 -171L626 -171L626 -57L910 -57L910 -341L796 -341ZM228 -171L228 -341L114 -341L114 -57L398 -57L398 -171L228 -171Z"/></svg>

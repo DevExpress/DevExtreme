@@ -1,4 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
-<title>square</title>
-<path d="M3 6c0-1.657 1.343-3 3-3h8c1.657 0 3 1.343 3 3v8c0 1.657-1.343 3-3 3h-8c-1.657 0-3-1.343-3-3v-8z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 -972.8 1024 1024"><title>square</title><path d="M154 -666Q154 -729 199 -774T307 -819L717 -819Q780 -819 825 -774T870 -666L870 -256Q870 -192 825 -147T717 -102L307 -102Q244 -102 199 -147T154 -256L154 -666Z"/></svg>

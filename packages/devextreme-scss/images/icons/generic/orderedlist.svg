@@ -1,9 +1,1 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-<title>orderedlist</title>
-<path d="M7 10v-2h9v2h-9z"></path>
-<path d="M7 5v-2h9v2h-9z"></path>
-<path d="M7 15v-2h9v2h-9z"></path>
-<path d="M3 7v1h2l-2 1.45v0.55c0 0.552 0.448 1 1 1v0h2v-1h-2l2-1.51v-0.49c0-0.552-0.448-1-1-1v0z"></path>
-<path d="M3 2v1h1v3h1v-4h-2z"></path>
-<path d="M3 12v1h2v0.5h-1v1h1v0.5h-2v1h3v-4h-3z"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -967.111 1024 1024"><title>orderedlist</title><path d="M398 -398L398 -512L910 -512L910 -398ZM398 -683L398 -796L910 -796L910 -683ZM398 -114L398 -228L910 -228L910 -114ZM171 -569L171 -512L284 -512L171 -430L171 -398Q171 -375 187.5 -358T228 -341L228 -341L341 -341L341 -398L228 -398L341 -484L341 -512Q341 -536 324.5 -552.5T284 -569L284 -569ZM171 -853L171 -796L228 -796L228 -626L284 -626L284 -853L171 -853ZM171 -284L171 -228L284 -228L284 -199L228 -199L228 -142L284 -142L284 -114L171 -114L171 -57L341 -57L341 -284L171 -284Z"/></svg>
