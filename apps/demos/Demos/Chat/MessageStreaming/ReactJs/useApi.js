@@ -32,9 +32,15 @@ const getMessageHistory = () => [...dataSource.items()].map(dataItemToMessage);
 function createDelayedRenderer({ delay = 20, onRender }) {
   let queue = [];
   let rendering = false;
+  let idleResolve = null;
+  function notifyIdle() {
+    idleResolve?.();
+    idleResolve = null;
+  }
   function processQueue() {
     if (!queue.length) {
       rendering = false;
+      notifyIdle();
       return;
     }
     rendering = true;
@@ -53,8 +59,17 @@ function createDelayedRenderer({ delay = 20, onRender }) {
   function stop() {
     queue = [];
     rendering = false;
+    notifyIdle();
   }
-  return { pushChunk, stop };
+  function waitForIdle() {
+    if (!rendering) {
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      idleResolve = resolve;
+    });
+  }
+  return { pushChunk, stop, waitForIdle };
 }
 export const useApi = () => {
   const [alerts, setAlerts] = useState([]);
@@ -128,14 +143,17 @@ export const useApi = () => {
       const onAborted = () => {
         delayedRenderer.stop();
       };
+      abortControllerRef.current.signal.addEventListener('abort', delayedRenderer.stop);
       try {
         await getAIResponseStream(messages, {
           onAborted,
           onDelta: delayedRenderer.pushChunk,
           signal: abortControllerRef.current.signal,
         });
+        await delayedRenderer.waitForIdle();
         setTypingUsers([]);
       } catch (e) {
+        delayedRenderer.stop();
         setTypingUsers([]);
         if (e?.name !== 'AbortError' && assistantId !== undefined) {
           updateMessageText(assistantId, '');
@@ -148,6 +166,12 @@ export const useApi = () => {
     },
     [alertLimitReached, insertAssistantPlaceholder, updateMessageText],
   );
+  const clearMessages = useCallback(() => {
+    store.length = 0;
+    setAlerts([]);
+    setTypingUsers([]);
+    dataSource.reload();
+  }, []);
   return {
     alerts,
     typingUsers,
@@ -155,5 +179,6 @@ export const useApi = () => {
     insertMessage,
     fetchAIResponse,
     stopStreaming,
+    clearMessages,
   };
 };

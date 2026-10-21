@@ -84,10 +84,16 @@ export const useApi = () => {
       alertLimitReached();
     }
   }, [alertLimitReached, updateLastMessageContent]);
+  const clearMessages = useCallback(() => {
+    store.length = 0;
+    setAlerts([]);
+    dataSource.reload();
+  }, []);
   return {
     alerts,
     insertMessage,
     fetchAIResponse,
     regenerateLastAIResponse,
+    clearMessages,
   };
 };

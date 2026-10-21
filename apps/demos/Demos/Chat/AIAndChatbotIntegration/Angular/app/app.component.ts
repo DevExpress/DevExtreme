@@ -3,8 +3,9 @@ import {
   ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
 } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { DxChatModule, DxButtonModule } from 'devextreme-angular';
+import { DxChatModule, DxButtonModule, DxToolbarModule } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { Observable } from 'rxjs';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -22,6 +23,7 @@ if (!/localhost/.test(document.location.host)) {
   imports: [
     DxChatModule,
     DxButtonModule,
+    DxToolbarModule,
     AsyncPipe,
   ],
 })
@@ -40,6 +42,8 @@ export class AppComponent {
 
   isDisabled: boolean;
 
+  clearButtonOptions: DxButtonTypes.Properties;
+
   constructor(
     private readonly appService: AppService,
     private readonly changeDetectorRef: ChangeDetectorRef,
@@ -53,6 +57,12 @@ export class AppComponent {
     this.regenerationText = this.appService.REGENERATION_TEXT;
     this.copyButtonIcon = 'copy';
     this.isDisabled = false;
+    this.clearButtonOptions = {
+      icon: 'clearhistory',
+      stylingMode: 'text',
+      hint: 'Clear chat',
+      onClick: () => this.appService.clearMessages(),
+    };
   }
 
   convertToHtml(message: DxChatTypes.Message): string {
@@ -61,6 +71,7 @@ export class AppComponent {
 
   toggleDisabledState(disabled: boolean, event = undefined) {
     this.isDisabled = disabled;
+    this.clearButtonOptions = { ...this.clearButtonOptions, disabled };
 
     if (disabled) {
       event?.target.blur();

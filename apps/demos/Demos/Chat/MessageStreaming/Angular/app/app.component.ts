@@ -1,8 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { DxChatModule } from 'devextreme-angular';
+import { DxChatModule, DxToolbarModule } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { Observable, map } from 'rxjs';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -19,6 +20,7 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['./app.component.css'],
   imports: [
     DxChatModule,
+    DxToolbarModule,
     AsyncPipe,
   ],
 })
@@ -32,6 +34,8 @@ export class AppComponent {
   alerts$: Observable<DxChatTypes.Alert[]>;
 
   sendButtonOptions$: Observable<DxChatTypes.SendButtonProperties>;
+
+  clearButtonOptions$: Observable<DxButtonTypes.Properties>;
 
   readonly suggestionCards = suggestionCards;
 
@@ -52,6 +56,16 @@ export class AppComponent {
         action: 'send' as const,
         icon: 'arrowright',
         onClick: () => {},
+      })),
+    );
+
+    this.clearButtonOptions$ = this.appService.isStreaming$.pipe(
+      map((isStreaming) => ({
+        icon: 'clearhistory',
+        stylingMode: 'text' as const,
+        hint: 'Clear chat',
+        disabled: isStreaming,
+        onClick: () => this.appService.clearMessages(),
       })),
     );
   }
