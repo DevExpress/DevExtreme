@@ -2521,26 +2521,30 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         });
     });
 
-    [false, true].forEach(withTooltip => {
-        ['remove', 'update'].forEach(action => {
-            QUnit.test(`marker removal restores focus on ${action} (tooltip: ${withTooltip})`, async function(assert) {
-                const options = { location, ...(withTooltip ? { tooltip: 'Start' } : { onClick: sinon.spy() }) };
-                const map = await createMap({ markers: [options] });
-                positionMarker();
-                getMarker().focus();
-                assert.strictEqual(document.activeElement, getMarker(), 'marker is initially focused');
-                const target = getOpenLayersMapTarget();
-                const focus = sinon.spy(target, 'focus');
+    [false, true].forEach(focusStateEnabled => {
+        [false, true].forEach(withTooltip => {
+            ['remove', 'update'].forEach(action => {
+                QUnit.test(`marker removal restores focus on ${action} (tooltip: ${withTooltip}, focusStateEnabled: ${focusStateEnabled})`, async function(assert) {
+                    const options = { location, ...(withTooltip ? { tooltip: 'Start' } : { onClick: sinon.spy() }) };
+                    const map = await createMap({ focusStateEnabled, tabIndex: 5, markers: [options] });
+                    positionMarker();
+                    getMarker().focus();
+                    assert.strictEqual(document.activeElement, getMarker(), 'marker is initially focused');
+                    const target = getOpenLayersMapTarget();
+                    assert.strictEqual(target.getAttribute('tabindex'), focusStateEnabled ? '5' : null, 'initial container tab index respects the focus setting');
+                    const focus = sinon.spy(target, 'focus');
 
-                if(action === 'remove') {
-                    await map.removeMarker(options);
-                } else {
-                    map.option('markers', [{ ...options }]);
-                    await map._lastAsyncAction;
-                }
+                    if(action === 'remove') {
+                        await map.removeMarker(options);
+                    } else {
+                        map.option('markers', [{ ...options }]);
+                        await map._lastAsyncAction;
+                    }
 
-                assert.strictEqual(document.activeElement, target, 'focus moves to the map');
-                assert.ok(focus.calledOnceWithExactly({ preventScroll: true }), 'focus is restored once without scrolling');
+                    assert.strictEqual(document.activeElement, target, 'focus moves to the map');
+                    assert.strictEqual(target.getAttribute('tabindex'), focusStateEnabled ? '5' : '-1', 'restoring focus preserves the configured tab order');
+                    assert.ok(focus.calledOnceWithExactly({ preventScroll: true }), 'focus is restored once without scrolling');
+                });
             });
         });
     });
@@ -2576,7 +2580,7 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
     });
 
     [false, true].forEach(restoreFocus => {
-        QUnit.test(`marker removal in Shadow DOM respects restoreFocus: ${restoreFocus}`, function(assert) {
+        QUnit.test(`marker removal in Shadow DOM with disabled focus respects restoreFocus: ${restoreFocus}`, function(assert) {
             const host = document.createElement('div');
             document.getElementById('qunit-fixture').appendChild(host);
             const shadow = host.attachShadow({ mode: 'open' });
@@ -2584,6 +2588,7 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
             Object.assign(container.style, { width: '600px', height: '400px' });
             shadow.appendChild(container);
             const engineMap = createOpenLayersEngine(openLayersMock).createMap(container, { center: location, zoom: 12 });
+            engineMap.setFocus(false, 0);
             try {
                 const marker = engineMap.addMarker({ location, onClick: sinon.spy() });
                 const element = marker.originalMarker.options.element;
@@ -2596,9 +2601,11 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
 
                 if(restoreFocus) {
                     assert.strictEqual(shadow.activeElement, container, 'focus moves to the map inside Shadow DOM');
+                    assert.strictEqual(container.getAttribute('tabindex'), '-1', 'the container stays outside the tab order');
                     assert.ok(focus.calledOnceWithExactly({ preventScroll: true }), 'focus is restored without scrolling');
                 } else {
                     assert.ok(focus.notCalled, 'cleanup can suppress focus restoration');
+                    assert.notOk(container.hasAttribute('tabindex'), 'cleanup does not change container focusability');
                 }
             } finally {
                 engineMap.dispose();

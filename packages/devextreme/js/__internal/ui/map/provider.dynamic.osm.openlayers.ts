@@ -372,7 +372,11 @@ class OpenLayersMap implements MapEngineMap {
         if (restoreFocus && !this._disposed
           && (element.contains(domAdapter.getActiveElement(element))
             || tooltip?.element.contains(domAdapter.getActiveElement(tooltip.element)))) {
-          (this._container as HTMLElement).focus({ preventScroll: true });
+          const container = this._container as HTMLElement;
+          if (!container.hasAttribute('tabindex')) {
+            container.setAttribute('tabindex', '-1');
+          }
+          container.focus({ preventScroll: true });
         }
         tooltip?.dispose();
         markerElementBinding.detach();
