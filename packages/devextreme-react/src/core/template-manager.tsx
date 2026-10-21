@@ -89,6 +89,11 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     };
 
     const hostWidgetId = widgetId.current;
+    const replacedModel = collection.get(key);
+
+    if (replacedModel) {
+      unsubscribeOnRemoval(containerElement, replacedModel.onContainerRemoved);
+    }
 
     collection.set(key, {
       templateKey,
@@ -104,6 +109,8 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
       onRemoved,
       onContainerRemoved,
     });
+
+    subscribeOnRemoval(containerElement, onContainerRemoved);
 
     setInstantiationModels({ collection });
 
@@ -193,10 +200,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
           componentKey,
           onRendered,
           onRemoved,
-          onContainerRemoved,
         }]) => {
-          subscribeOnRemoval(container, onContainerRemoved);
-
           const factory = templateFactories.current[templateKey];
 
           if (factory) {

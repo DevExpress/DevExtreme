@@ -9,7 +9,7 @@ const {
   cleanupPatchedTsFiles,
   cleanupEntryShims,
   bundleDemo,
-} = require('../server/csp-bundle-angular');
+} = require('../server/demo-bundle-angular');
 
 let createCompilerPluginPromise = null;
 function getCreateCompilerPlugin() {
