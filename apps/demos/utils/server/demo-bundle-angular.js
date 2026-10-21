@@ -1,6 +1,6 @@
 /* eslint-disable global-require, import/no-dynamic-require */
 
-// Bundles every Angular demo via AOT; csp-bundle.js delegates here for --framework=Angular.
+// Bundles every Angular demo via AOT; demo-bundle.js delegates here for --framework=Angular.
 
 const path = require('path');
 const fs = require('fs');
@@ -15,18 +15,18 @@ const DEMOS_APP_ROOT = path.resolve(__dirname, '..', '..');
 const REPO_ROOT = path.resolve(DEMOS_APP_ROOT, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
 
-const IS_GENERATE_MANIFESTS = process.env.CSP_BUNDLE_GENERATE_MANIFESTS === '1';
+const IS_GENERATE_MANIFESTS = process.env.DEMO_BUNDLE_GENERATE_MANIFESTS === '1';
 const NODE_MODULES = path.join(DEMOS_APP_ROOT, 'node_modules');
 const FRAMEWORK = 'Angular';
 
 const CONCURRENCY = (() => {
-  const fromEnv = parseInt(process.env.CSP_BUNDLE_CONCURRENCY, 10);
+  const fromEnv = parseInt(process.env.DEMO_BUNDLE_CONCURRENCY, 10);
   if (fromEnv > 0) return fromEnv;
   return Math.max(2, (os.cpus() || []).length - 1);
 })();
 
 const RETRY_CONCURRENCY = (() => {
-  const fromEnv = parseInt(process.env.CSP_BUNDLE_RETRY_CONCURRENCY, 10);
+  const fromEnv = parseInt(process.env.DEMO_BUNDLE_RETRY_CONCURRENCY, 10);
   if (fromEnv > 0) return fromEnv;
   return 2;
 })();
@@ -34,18 +34,18 @@ const RETRY_CONCURRENCY = (() => {
 // Infinity so one global batch always covers the current demo count, sharing the most code.
 const DEFAULT_SAFE_BATCH_SIZE = Infinity;
 const BATCH_SIZE = (() => {
-  const fromEnv = parseInt(process.env.CSP_BUNDLE_BATCH_SIZE, 10);
+  const fromEnv = parseInt(process.env.DEMO_BUNDLE_BATCH_SIZE, 10);
   if (fromEnv > 0) return fromEnv;
   return DEFAULT_SAFE_BATCH_SIZE;
 })();
 
 const BATCH_CONCURRENCY = (() => {
-  const fromEnv = parseInt(process.env.CSP_BUNDLE_BATCH_CONCURRENCY, 10);
+  const fromEnv = parseInt(process.env.DEMO_BUNDLE_BATCH_CONCURRENCY, 10);
   if (fromEnv > 0) return fromEnv;
   return 1;
 })();
 
-const FILTER = (process.env.CSP_BUNDLE_FILTER || '').trim();
+const FILTER = (process.env.DEMO_BUNDLE_FILTER || '').trim();
 
 const { SHARD_TOTAL, SHARD_INDEX } = readShardConfig();
 
@@ -53,10 +53,10 @@ function applyShard(demos) {
   return applyShardGeneric(demos, (d) => `${d.widget}/${d.name}`, { SHARD_TOTAL, SHARD_INDEX });
 }
 
-const SHARED_TSCONFIG_TEMPLATE = path.join(__dirname, 'tsconfig.csp-bundle-angular.json');
-const GENERATED_TSCONFIG_DIR = path.join(__dirname, '.csp-bundle-angular-tsconfigs');
+const SHARED_TSCONFIG_TEMPLATE = path.join(__dirname, 'tsconfig.demo-bundle-angular.json');
+const GENERATED_TSCONFIG_DIR = path.join(__dirname, '.demo-bundle-angular-tsconfigs');
 // Under apps/demos so the shim's bare devextreme import resolves through node_modules.
-const GENERATED_SHIM_DIR = path.join(__dirname, '.csp-bundle-angular-shims');
+const GENERATED_SHIM_DIR = path.join(__dirname, '.demo-bundle-angular-shims');
 const ANGULAR_ZONE_SCRIPT = '../../../../node_modules/zone.js/bundles/zone.umd.js';
 // esbuild's code-splitting output (shared chunks across a batch) — wiped and regenerated each run.
 const CHUNKS_DIRNAME = '_chunks';
@@ -303,7 +303,7 @@ function removeShims(installed) {
 }
 
 // Demo components use SystemJS-era templateUrl/styleUrls paths that resolve wrong under AOT; patch to `./<basename>.<ext>` and feed the copy via fileReplacements.
-const PATCHED_TS_PREFIX = '.csp-bundle-angular-patched.';
+const PATCHED_TS_PREFIX = '.demo-bundle-angular-patched.';
 const TEMPLATE_URL_RE = /templateUrl\s*:\s*([`'"])([^`'"]+)\1/g;
 const STYLE_URLS_INLINE_RE = /styleUrls\s*:\s*\[\s*([`'"])([^`'"]+)\1\s*\]/g;
 const allPatchedTsFiles = new Set();
@@ -386,7 +386,7 @@ function findDemoTsFiles(rootDir) {
 
 const ANTI_FORGERY_PATH = path.join(DEMOS_APP_ROOT, 'shared', 'anti-forgery', 'fetch-override.js');
 const antiForgeryPlugin = {
-  name: 'csp-bundle-angular:anti-forgery',
+  name: 'demo-bundle-angular:anti-forgery',
   setup(build) {
     build.onResolve({ filter: /^anti-forgery$/ }, () => ({ path: ANTI_FORGERY_PATH }));
   },
@@ -394,7 +394,7 @@ const antiForgeryPlugin = {
 
 // Resolves every @angular/* from a single base so the bundle shares one copy — otherwise two DI systems can end up bundled (NG0203/NG05100/NG0300).
 const angularSingleCopyPlugin = {
-  name: 'csp-bundle-angular:single-angular-copy',
+  name: 'demo-bundle-angular:single-angular-copy',
   setup(build) {
     build.onResolve({ filter: /^@angular\// }, async (args) => {
       if (args.pluginData && args.pluginData.ngDeduped) return null;
@@ -423,7 +423,7 @@ const DEVEXTREME_ESM_ROOT = path.join(
   REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'transpiled-esm-npm', 'esm',
 );
 const devextremeRedirectPlugin = {
-  name: 'csp-bundle-angular:devextreme-esm-redirect',
+  name: 'demo-bundle-angular:devextreme-esm-redirect',
   setup(build) {
     build.onResolve({ filter: /^devextreme(\/.*)?$/ }, (args) => {
       const sub = args.path === 'devextreme' ? '' : args.path.slice('devextreme/'.length);
@@ -447,7 +447,7 @@ const devextremeRedirectPlugin = {
 
 // Re-resolves snake_case devextreme-angular/ui/* imports (e.g. html_editor) to the kebab-case form the npm dist actually ships.
 const devextremeAngularSnakeCasePlugin = {
-  name: 'csp-bundle-angular:devextreme-angular-snake-case',
+  name: 'demo-bundle-angular:devextreme-angular-snake-case',
   setup(build) {
     build.onResolve({ filter: /^devextreme-angular\/ui\/[^/]+(\/.*)?$/ }, (args) => {
       const rest = args.path.slice('devextreme-angular/ui/'.length);
@@ -467,7 +467,7 @@ const devextremeAngularSnakeCasePlugin = {
 // devextreme-dist/js is near-empty — redirect VectorMap data to the real artifacts/js files.
 const DEVEXTREME_ARTIFACTS_JS = path.join(REPO_ROOT, 'packages', 'devextreme', 'artifacts', 'js');
 const devextremeDistRedirectPlugin = {
-  name: 'csp-bundle-angular:devextreme-dist-redirect',
+  name: 'demo-bundle-angular:devextreme-dist-redirect',
   setup(build) {
     build.onResolve({ filter: /^devextreme-dist\/js\/.+$/ }, (args) => {
       const sub = args.path.slice('devextreme-dist/js/'.length);
@@ -488,7 +488,7 @@ const devextremeDistRedirectPlugin = {
 // Resolve `globalize/<sub>` to the dist browser build.
 const GLOBALIZE_BASE = path.join(REPO_ROOT, 'node_modules', 'globalize', 'dist', 'globalize');
 const globalizePlugin = {
-  name: 'csp-bundle-angular:globalize',
+  name: 'demo-bundle-angular:globalize',
   setup(build) {
     build.onResolve({ filter: /^globalize\/[^/]+$/ }, (args) => {
       const sub = args.path.slice('globalize/'.length);
@@ -908,7 +908,7 @@ if (require.main === module) {
   main().then(() => {
     process.exit(process.exitCode || 0);
   }).catch((err) => {
-    console.error('csp-bundle-angular failed:', err);
+    console.error('demo-bundle-angular failed:', err);
     process.exit(1);
   });
 }

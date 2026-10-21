@@ -412,9 +412,9 @@ jobs:
       - name: Build demo bundles
         working-directory: apps/demos
         env:
-          CSP_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
-          CSP_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
-        run: node utils/server/csp-bundle.js --framework=${{ matrix.FRAMEWORK }}
+          DEMO_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
+          DEMO_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
+        run: node utils/server/demo-bundle.js --framework=${{ matrix.FRAMEWORK }}
 
       - name: Demos - Run tsc
         if: matrix.FRAMEWORK == 'React' && matrix.SHARD_INDEX == 1 # global check, only needs to run once
@@ -1387,17 +1387,15 @@ jobs:
 
   csp-check-frameworks:
     name: ${{ matrix.SHARD_TOTAL == 1 && format('CSP check ({0})', matrix.FRAMEWORK) || format('CSP check ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
-    needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
+    needs: [check-should-run, determine-framework-tests-scope, build-demos, build-vendor-bundles]
     if: |
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.determine-framework-tests-scope.result == 'success' &&
       needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
-      needs.build-devextreme.result == 'success'
+      needs.build-demos.result == 'success'
     strategy:
       fail-fast: false
-      # Angular AOT bundling is slow, so it is split into parallel shards
-      # (CSP_SHARD_*, round-robin in csp-bundle-angular.js). React/Vue stay light.
       matrix:
         include:
           - { FRAMEWORK: React,   SHARD_INDEX: 1, SHARD_TOTAL: 2 }
@@ -1452,13 +1450,30 @@ jobs:
       working-directory: apps/demos
       run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
-    # Rebuilt independently rather than depending on build-demos, to keep timing decoupled.
-    - name: Bundle demos for CSP check
-      working-directory: apps/demos
-      env:
-        CSP_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
-        CSP_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
-      run: node utils/server/csp-bundle.js --framework=${{ matrix.FRAMEWORK }}
+    - name: Download demo bundles
+      uses: actions/download-artifact@v8
+      with:
+        pattern: devextreme-bundles-${{ matrix.FRAMEWORK }}*
+        path: apps/demos/.demo-bundles
+
+    - name: Download vendor bundles
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-vendor-bundles
+        path: apps/demos/bundles/vendor
+
+    - name: Unpack demo bundles
+      run: |
+        archives=$(find apps/demos/.demo-bundles -name demo-bundles.tgz 2>/dev/null || true)
+        if [ -z "$archives" ]; then
+          echo "No demo bundle archives downloaded for ${{ matrix.FRAMEWORK }}" >&2
+          exit 1
+        fi
+        for archive in $archives; do
+          tar -xzf "$archive" -C apps/demos
+        done
+        rm -rf apps/demos/.demo-bundles
+        echo "Unpacked $(find apps/demos/Demos -name 'bundle.js' | wc -l) demo bundle(s)"
 
     - name: Start CSP Server
       run: node apps/demos/utils/server/csp-server.js 8080 &
@@ -1468,8 +1483,8 @@ jobs:
       env:
         CSP_FRAMEWORKS: ${{ matrix.FRAMEWORK }}
         CHROME_PATH: google-chrome-stable
-        CSP_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
-        CSP_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
+        DEMO_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
+        DEMO_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
       run: node utils/server/csp-check.js
 
     - name: Upload CSP report
