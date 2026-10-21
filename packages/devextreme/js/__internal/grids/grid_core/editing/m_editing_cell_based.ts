@@ -12,6 +12,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
@@ -43,6 +44,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   private _pointerUpEditorHandler: any;
 
   private _pointerDownEditorHandler: any;
+
+  private _saveEditorHandler?: (e: DxEvent) => void;
 
   public init() {
     const needCreateHandlers = !this._saveEditorHandler;
@@ -91,6 +94,13 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       eventsEngine.on(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
       eventsEngine.on(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
     }
+  }
+
+  public dispose(): void {
+    super.dispose();
+    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
+    eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
+    eventsEngine.off(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
   }
 
   private isCellEditMode() {
@@ -375,6 +385,12 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return result.promise();
   }
 
+  /**
+   * @extended: adaptivity
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  protected beforeCloseEditCell(rowIndices: number[]): void {}
+
   private _closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData) {
     const dataController = this._dataController;
     // @ts-expect-error
@@ -398,7 +414,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
       if (oldEditRowIndex >= 0) {
         const rowIndices = [oldEditRowIndex];
-        this._beforeCloseEditCellInBatchMode(rowIndices);
+        this.beforeCloseEditCell(rowIndices);
         if (!isError) {
           dataController.updateItems({
             changeType: 'update',

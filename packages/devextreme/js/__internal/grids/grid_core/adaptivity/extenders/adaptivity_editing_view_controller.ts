@@ -116,7 +116,7 @@ export const adaptivityEditingViewControllerExtender = (
     return rowIndices;
   }
 
-  protected _beforeCloseEditCellInBatchMode(rowIndices) {
+  protected beforeCloseEditCell(rowIndices: number[]): void {
     const expandedKey = this._dataController.getAdaptiveExpandedKey();
 
     if (expandedKey) {

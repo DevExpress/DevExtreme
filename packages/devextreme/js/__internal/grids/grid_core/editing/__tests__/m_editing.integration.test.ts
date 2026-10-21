@@ -1,7 +1,8 @@
 import {
-  afterEach, beforeEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import CustomStore from '@js/data/custom_store';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import {
   afterTest,
@@ -489,6 +490,54 @@ describe('DataGrid editing', () => {
         expect.objectContaining({ type: 'update', key: 2 }),
         expect.objectContaining({ type: 'insert' }),
       ]));
+    });
+  });
+
+  describe('Event handlers after the editing controller re-inits', () => {
+    it('should call each handler once', async () => {
+      const onEditCanceled = jest.fn();
+      const onInitNewRow = jest.fn();
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'row',
+          allowUpdating: true,
+          allowAdding: true,
+        },
+        onEditCanceled,
+        onInitNewRow,
+      });
+
+      instance.editRow(0);
+      instance.cancelEditData();
+      await instance.addRow();
+      await flushAsync();
+
+      expect(onEditCanceled).toHaveBeenCalledTimes(1);
+      expect(onInitNewRow).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Document handlers after dispose', () => {
+    it('should not handle a document click', async () => {
+      const { $container, instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'cell',
+          allowUpdating: true,
+        },
+      });
+      const editingController = instance.getController('editing');
+      const isCellOrBatchEditMode = jest.spyOn(editingController, 'isCellOrBatchEditMode');
+
+      instance.dispose();
+      $container.remove();
+      eventsEngine.trigger(document, 'dxpointerdown');
+      eventsEngine.trigger(document, 'dxclick');
+
+      expect(isCellOrBatchEditMode).not.toHaveBeenCalled();
     });
   });
 });

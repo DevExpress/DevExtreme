@@ -1,7 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import pointerEvents from '@js/common/core/events/pointer';
 import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
@@ -23,7 +21,6 @@ import {
   isDefined, isEmptyObject, isFunction, isObject,
 } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
-import type { DxEvent } from '@js/events';
 import type {
   InitializedEvent as ButtonInitializedEvent,
   Properties as ButtonProperties,
@@ -171,8 +168,6 @@ class EditingControllerImpl extends modules.ViewController {
 
   private _dataChangedHandler?: (args: DataChange) => void;
 
-  protected _saveEditorHandler?: (e: DxEvent) => void;
-
   private _internalState!: Map<RowKey, InternalEditData>;
 
   protected _refocusEditCell?: boolean;
@@ -217,19 +212,8 @@ class EditingControllerImpl extends modules.ViewController {
       this._dataController.changed.add(this._dataChangedHandler);
     }
 
-    if (!this._saveEditorHandler) {
-      this.createAction('onInitNewRow', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onRowInserting', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onRowInserted', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onEditingStart', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onRowUpdating', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onRowUpdated', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onRowRemoving', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onRowRemoved', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onSaved', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onSaving', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onEditCanceling', { excludeValidators: ['disabled', 'readOnly'] });
-      this.createAction('onEditCanceled', { excludeValidators: ['disabled', 'readOnly'] });
+    if (!('onInitNewRow' in this._actions)) {
+      this.createEditingActions();
     }
     this._updateEditColumn();
     this._updateEditButtons();
@@ -240,6 +224,21 @@ class EditingControllerImpl extends modules.ViewController {
 
     this.component._optionsByReference[EDITING_EDITROWKEY_OPTION_NAME] = true;
     this.component._optionsByReference[EDITING_CHANGES_OPTION_NAME] = true;
+  }
+
+  private createEditingActions(): void {
+    this.createAction('onInitNewRow', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onRowInserting', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onRowInserted', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onEditingStart', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onRowUpdating', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onRowUpdated', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onRowRemoving', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onRowRemoved', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onSaved', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onSaving', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onEditCanceling', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onEditCanceled', { excludeValidators: ['disabled', 'readOnly'] });
   }
 
   public getEditMode(): GridsEditMode {
@@ -605,11 +604,6 @@ class EditingControllerImpl extends modules.ViewController {
   public dispose(): void {
     super.dispose();
     clearTimeout(this._inputFocusTimeoutID);
-    // @ts-expect-error the cell-based extender sets the pointer handlers
-    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
-    // @ts-expect-error the cell-based extender sets the pointer handlers
-    eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
-    eventsEngine.off(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
   }
 
   protected _silentOption<TPropertyName extends string>(
@@ -2167,12 +2161,6 @@ class EditingControllerImpl extends modules.ViewController {
       $element.addClass(CLASSES.cellModified);
     }
   }
-
-  /**
-   * @extended: adaptivity
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
-  protected _beforeCloseEditCellInBatchMode(rowIndices: number[]): void {}
 
   /**
    * @extended: DataGird's summary
