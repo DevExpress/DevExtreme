@@ -1,3 +1,4 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -7,11 +8,12 @@ import { isDefined } from '@js/core/utils/type';
 import Sortable from '@js/ui/sortable';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import { CLASSES as GRID_VIEW_CLASSES } from '@ts/grids/grid_core/grid_view/const';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import { ATTRIBUTES, CLASSES } from './const';
 import { GridCoreRowDraggingDom } from './dom';
 
@@ -62,7 +64,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
   protected _renderContent() {
     const rowDragging: any = this.option('rowDragging');
     const allowReordering = this._allowReordering();
-    const $content = super._renderContent.apply(this, arguments as any);
+    // @ts-expect-error the view is rendered here
+    const $content: dxElementWrapper = super._renderContent.apply(this, arguments as any);
     // @ts-expect-error
     const isFixedTableRendering = this._isFixedTableRendering;
     const sortableName = '_sortable';
@@ -230,7 +233,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
   private _synchronizeScrollLeftPosition(gridInstance) {
     const scrollable = gridInstance?.getScrollable();
 
-    scrollable?.scrollTo({ x: this._scrollLeft });
+    scrollable?.scrollTo({ left: this._scrollLeft });
   }
 
   private _getDraggableRowTemplate() {
@@ -245,8 +248,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       // @ts-expect-error
       this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
       $dataGridContainer
-        .find('.dx-gridbase-container')
-        .children(`:not(.${this.addWidgetPrefix(CLASSES.rowsView)})`)
+        .find(`.${GRID_VIEW_CLASSES.gridBaseContainer}`)
+        .children(`:not(.${this.addWidgetPrefix(VIEW_CLASSES.rowsView)})`)
         .hide();
 
       $dataGridContainer.addClass(this.addWidgetPrefix(CLASSES.dragView));

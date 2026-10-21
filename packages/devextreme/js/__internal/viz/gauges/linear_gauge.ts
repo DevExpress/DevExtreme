@@ -1,7 +1,7 @@
 import { registerComponent } from '@ts/core/component_registrator';
 import { extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
-import { clone } from '@ts/core/utils/m_object';
+import { clone } from '@ts/core/utils/object';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import type { Bounds } from '@ts/viz/core/types';

@@ -19,8 +19,8 @@
 
 import { extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
-import { solveCubicEquation, trunc } from '@ts/core/utils/m_math';
-import { clone } from '@ts/core/utils/m_object';
+import { solveCubicEquation, trunc } from '@ts/core/utils/math';
+import { clone } from '@ts/core/utils/object';
 import {
   extractColor,
   getCosAndSin,

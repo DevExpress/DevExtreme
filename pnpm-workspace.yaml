@@ -17,6 +17,7 @@ minimumReleaseAge: 1440 # ⚠️ Do NOT modify this.
 
 minimumReleaseAgeExclude:
   - "devextreme-internal-tools@22.1.0"
+  - "@devexpress/design-tokens-internal@262.26.0"
 
 overrides:
   "js-yaml@<4.3.2": "^4.3.2"
@@ -43,11 +44,15 @@ overrides:
   webpack-dev-middleware@<7.4.6: ^7.4.6
   webpack-dev-middleware@>=8.0.0 <8.3.0: ^8.3.0
   '@modelcontextprotocol/sdk@>=1.12.0 <1.31.0': ^1.31.0
+  '@jridgewell/sourcemap-codec@<1.6.0': ^1.6.0
   '@vue/server-renderer@<3.5.42': ^3.5.42
   axios@>=1.0.0 <1.20.0: ^1.20.0
   compression@<1.8.2: ^1.8.2
   dompurify@>=3.4.13 <=3.4.15: ^3.4.16
+  follow-redirects@>=1.16.0 <1.16.1: ^1.16.1
+  hono@<4.13.11: ^4.13.11
   http-cache-semantics@<=4.2.0: ^4.3.0
+  launch-editor@<2.14.2: ^2.14.2
   pbkdf2@<=3.1.6: ^3.1.7
   piscina@>=5.0.0 <5.3.2: ^5.3.2
   postcss-selector-parser@<7.1.6: ^7.1.6
@@ -56,6 +61,8 @@ overrides:
   shell-quote@>=1.8.4 <1.11.0: ^1.11.0
   smol-toml@<=1.8.0: ^1.8.1
   source-map-js@>=1.0.0 <1.2.2: ^1.2.2
+  "vite@>=7.0.0 <=7.3.6": ^7.3.7
+  "vite@>=8.3.0 <=8.3.2": ^8.3.3
 catalog:
   axe-core: 4.13.0
   inferno: ^8.2.3
@@ -81,8 +88,7 @@ catalog:
   jquery: 4.0.0
   stylelint: 16.22.0
   testcafe: 3.7.5
-  zod: 3.24.4
-  zod-to-json-schema: 3.24.6
+  zod: 4.6.7
   "@babel/eslint-parser": 7.29.7
   "@playwright/test": 1.62.1
   "@eslint-stylistic/metadata": ^2.13.0

@@ -1,6 +1,6 @@
 // NOTE: Order of imports important here and shouldn't be changed.
 /* eslint-disable simple-import-sort/imports */
-import DataGrid from './m_widget_base';
+import DataGrid from './widget_base';
 
 import './module_not_extended/state_storing';
 import './module_not_extended/ai_column';
@@ -24,7 +24,7 @@ import './module_not_extended/pager';
 import './module_not_extended/columns_resizing_reordering';
 import './module_not_extended/keyboard_navigation';
 import './keyboard_navigation/headers_keyboard_navigation';
-import './keyboard_navigation/m_group_panel_keyboard_navigation';
+import './keyboard_navigation/group_panel_keyboard_navigation';
 import './summary/summary_module';
 import './module_not_extended/sticky_columns';
 import './module_not_extended/column_fixing';

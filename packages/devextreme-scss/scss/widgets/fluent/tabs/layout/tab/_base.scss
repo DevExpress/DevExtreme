@@ -1,12 +1,8 @@
-@use "sass:string" as string;
 @use "../../../sizes" as *;
-@use "../../../button/colors" as *;
-@use "../../../button/mixins" as *;
 @use "../../../../base/icon_fonts" as *;
 @use "../../../../base/tabs";
 @use "../../variables/colors" as *;
 @use "../../variables/sizes" as *;
-@use "../../mixins" as *;
 @use "../../../common/sizes" as *;
 @use "../../../scrollable";
 @use "../../../badge";

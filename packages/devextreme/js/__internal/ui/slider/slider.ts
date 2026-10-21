@@ -655,6 +655,7 @@ class Slider<
 
     const value = this._getActualValue();
 
+    // @ts-expect-error the value of a slider is a number
     this._getSubmitElement().val(applyServerDecimalSeparator(value));
     SliderHandle.getInstance<SliderHandle>(this._activeHandle()).option('value', value);
   }

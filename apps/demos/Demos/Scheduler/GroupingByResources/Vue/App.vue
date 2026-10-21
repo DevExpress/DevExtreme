@@ -46,4 +46,9 @@ const dataSource = data;
 .dx-scheduler-cell-sizes-horizontal {
   width: 100px;
 }
+
+.dx-scheduler-appointment-title,
+.dx-scheduler-appointment-content-date {
+  color: var(--dxds-color-content-on-color, white);
+}
 </style>

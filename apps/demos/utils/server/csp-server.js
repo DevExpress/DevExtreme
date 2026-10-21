@@ -56,6 +56,9 @@ const CSP_DEMO_ALLOWLIST = {
   'Common/ListsOverview': {
     'img-src': ['data:'],
   },
+  'CardView/WebAPIService': {
+    'img-src': ['data:'],
+  },
   'DataGrid/SignalRService': {
     'connect-src': ['wss://js.devexpress.com'],
     // Country-flag glyphs are painted via a data: CSS background (all frameworks).
@@ -143,6 +146,9 @@ const CSP_DEMO_ALLOWLIST = {
   'Chat/AIAndChatbotIntegration': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
+  'Chat/PageLevelAIAssistant': {
+    'connect-src': DEMO_OPENAI_CONNECT_SRC,
+  },
   'Chat/MessageStreaming': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
@@ -217,6 +223,9 @@ const CSP_FRAMEWORK_ALLOWLIST = {
       'script-src': ["'unsafe-inline'"],
     },
     'Chat/AIAndChatbotIntegration': {
+      'script-src': ["'unsafe-inline'"],
+    },
+    'Chat/PageLevelAIAssistant': {
       'script-src': ["'unsafe-inline'"],
     },
     'Chat/MessageStreaming': {

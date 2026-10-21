@@ -6,6 +6,9 @@
 @use "../gridBase" as *;
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
+@use "../../base/gridBase/variables" with (
+  $grid-column-chooser-item-margin-block-end: $generic-grid-base-column-chooser-item-margin,
+);
 @use "../../base/dataGrid" as baseGrid with (
   $datagrid-border: $datagrid-border,
   $datagrid-border-color: $datagrid-border-color,

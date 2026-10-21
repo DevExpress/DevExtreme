@@ -8,16 +8,12 @@
 @use "../../base/icon_fonts" as *;
 @use "../../base/checkBox/mixins" as *;
 @use "../../base/button/mixins" as *;
-@use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../common/mixins" as *;
-@use "../popup/colors" as *;
 @use "../menu/colors" as *;
-@use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
-@use "../validation/colors" as *;
 @use "variables" as *;
 @forward "variables";
 @use "layout/cell" as *;
@@ -355,7 +351,6 @@ $generic-grid-base-cell-input-height: math.round($generic-base-line-height * $ge
 
       .dx-popup-content {
         .dx-column-chooser-item {
-          margin-bottom: $generic-grid-base-column-chooser-item-margin;
           background-color: $datagrid-columnchooser-item-bg;
           color: $datagrid-columnchooser-item-color;
           font-weight: $datagrid-columnchooser-font-weight;

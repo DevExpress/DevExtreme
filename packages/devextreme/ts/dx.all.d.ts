@@ -1329,7 +1329,12 @@ declare module DevExpress.common {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
+  type ExternalFormat = (
+    | Intl.DateTimeFormatOptions
+    | Intl.NumberFormatOptions
+  ) & {
+    locale?: FormatLocale;
+  };
   export type FieldChooserLayout = 0 | 1 | 2;
 
   /**
@@ -1366,6 +1371,10 @@ declare module DevExpress.common {
     | 'second'
     | 'shortDateShortTime';
   /**
+   * [descr:FormatLocale]
+   */
+  export type FormatLocale = string | (() => string);
+  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface FormatObject {
@@ -1393,6 +1402,10 @@ declare module DevExpress.common {
      * [descr:Format.type]
      */
     type?: PredefinedFormat | string;
+    /**
+     * [descr:Format.locale]
+     */
+    locale?: FormatLocale;
   }
   /**
    * [descr:GlobalConfig]
@@ -2145,7 +2158,8 @@ declare module DevExpress.common.charts {
     | 'Green Mist'
     | 'Soft Blue'
     | 'Material'
-    | 'Office';
+    | 'Office'
+    | 'Fluent Next';
   export type PaletteColorSet = 'simpleSet' | 'indicatingSet' | 'gradientSet';
   export type PaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
   export type PointInteractionMode =
@@ -34249,6 +34263,22 @@ declare module DevExpress.ui {
      * [descr:ui.themes.initialized(callback)]
      */
     static initialized(callback: Function): void;
+    /**
+     * [descr:ui.themes.mode(element)]
+     */
+    static mode(element: DevExpress.core.UserDefinedElement): 'light' | 'dark';
+    /**
+     * [descr:ui.themes.refreshMode()]
+     */
+    static refreshMode(): void;
+    /**
+     * [descr:ui.themes.customAccentColor()]
+     */
+    static customAccentColor(): string;
+    /**
+     * [descr:ui.themes.customAccentColor(color)]
+     */
+    static customAccentColor(color: string | null): void;
   }
   /**
    * [descr:Widget]
@@ -38937,6 +38967,15 @@ declare module DevExpress.viz {
       totalText?: string;
     };
     /**
+     * [descr:dxChartTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxChartOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
+    /**
      * [descr:dxChartTooltip]
      */
     export type Tooltip = Omit<
@@ -39719,6 +39758,10 @@ declare module DevExpress.viz {
      * [descr:dxChartOptions.synchronizeMultiAxes]
      */
     synchronizeMultiAxes?: boolean;
+    /**
+     * [descr:dxChartOptions.title]
+     */
+    title?: DevExpress.viz.dxChart.Title | string;
     /**
      * [descr:dxChartOptions.tooltip]
      */
@@ -44811,6 +44854,15 @@ declare module DevExpress.viz {
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
     /**
+     * [descr:dxRangeSelectorTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxRangeSelectorOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
+    /**
      * [descr:_viz_range_selector_ValueChangedEvent]
      */
     export type ValueChangedEvent =
@@ -45346,6 +45398,10 @@ declare module DevExpress.viz {
       visible?: boolean;
     };
     /**
+     * [descr:dxRangeSelectorOptions.title]
+     */
+    title?: DevExpress.viz.dxRangeSelector.Title | string;
+    /**
      * [descr:dxRangeSelectorOptions.tooltip]
      */
     tooltip?: BaseWidgetTooltip;
@@ -45463,6 +45519,15 @@ declare module DevExpress.viz {
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxSankeyOptions;
     export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
+    /**
+     * [descr:dxSankeyTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxSankeyOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
     /**
      * [descr:dxSankeyTooltip]
      */
@@ -45921,6 +45986,10 @@ declare module DevExpress.viz {
      */
     targetField?: string;
     /**
+     * [descr:dxSankeyOptions.title]
+     */
+    title?: DevExpress.viz.dxSankey.Title | string;
+    /**
      * [descr:dxSankeyOptions.tooltip]
      */
     tooltip?: DevExpress.viz.dxSankey.Tooltip;
@@ -46232,6 +46301,15 @@ declare module DevExpress.viz {
      */
     export type SelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxTreeMap> & InteractionInfo;
+    /**
+     * [descr:dxTreeMapTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxTreeMapOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
     /**
      * [descr:dxTreeMapTooltip]
      */
@@ -46669,6 +46747,10 @@ declare module DevExpress.viz {
       };
     };
     /**
+     * [descr:dxTreeMapOptions.title]
+     */
+    title?: DevExpress.viz.dxTreeMap.Title | string;
+    /**
      * [descr:dxTreeMapOptions.tooltip]
      */
     tooltip?: DevExpress.viz.dxTreeMap.Tooltip;
@@ -46875,6 +46957,15 @@ declare module DevExpress.viz {
          */
         readonly target: MapLayerElement;
       };
+    /**
+     * [descr:dxVectorMapTitle]
+     */
+    export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+      /**
+       * [descr:dxVectorMapOptions.title.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+    };
     /**
      * [descr:dxVectorMapTooltip]
      */
@@ -47274,6 +47365,10 @@ declare module DevExpress.viz {
      * [descr:dxVectorMapOptions.projection]
      */
     projection?: VectorMapProjection | VectorMapProjectionConfig | string | any;
+    /**
+     * [descr:dxVectorMapOptions.title]
+     */
+    title?: DevExpress.viz.dxVectorMap.Title | string;
     /**
      * [descr:dxVectorMapOptions.tooltip]
      */

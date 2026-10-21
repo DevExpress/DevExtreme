@@ -178,7 +178,8 @@ class DropDownBox<
 
   _loadItem(value: unknown): DeferredObj<unknown> {
     const deferred = Deferred();
-    const selectedItem = grep(
+    const selectedItem = grep<unknown>(
+      // @ts-expect-error the items option is an array
       this.option('items') || [],
       // @ts-expect-error DataExpressionMixin must be typed
       (item) => this._isValueEquals(this._valueGetter(item), value) as boolean,

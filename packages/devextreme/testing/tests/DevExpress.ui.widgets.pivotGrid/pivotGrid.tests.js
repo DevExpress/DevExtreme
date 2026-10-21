@@ -5191,7 +5191,7 @@ QUnit.module('Tests with real timer', {}, () => {
 
         pivotGrid.on('contentReady', function(e) {
             e.component.off('contentReady');
-            pivotGrid._dataArea.scrollTo({ x: 600, y: 4000 });
+            pivotGrid._dataArea.scrollTo({ left: 600, top: 4000 });
 
             let contentReadyCount = 0;
 
@@ -6133,7 +6133,7 @@ QUnit.module('headersArea', {
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
-            area.scrollTo(scrollPos);
+            area.scrollTo({ left: scrollPos });
             const fakeTable = $('#pivotGrid').find('.dx-virtual-content > table').first();
 
             assert.strictEqual(fakeTable.css('left'), expectedOffset + 'px', 'fake table offset when scroll position is ' + scrollPos);
@@ -6258,7 +6258,7 @@ QUnit.module('Vertical headers', {
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
-            area.scrollTo(scrollPos);
+            area.scrollTo({ top: scrollPos });
             const fakeTable = $('#pivotGrid').find('.dx-virtual-content > table').first();
 
             assert.strictEqual(fakeTable.css('top'), expectedOffset + 'px', 'fake table offset when scroll position is ' + scrollPos);
@@ -7529,7 +7529,7 @@ QUnit.module('Data area', () => {
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
-            area.scrollTo({ x: scrollPos, y: 0 });
+            area.scrollTo({ left: scrollPos, top: 0 });
             const fakeTable = $('#pivotGrid').find('.dx-virtual-content > table').first();
 
             assert.strictEqual(fakeTable.css('left'), expectedOffset + 'px', 'fake table offset when scroll position is ' + scrollPos);
@@ -7603,7 +7603,7 @@ QUnit.module('Data area', () => {
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
-            area.scrollTo({ x: scrollPos, y: 0 });
+            area.scrollTo({ left: scrollPos, top: 0 });
             const fakeTable = $('#pivotGrid').find('.dx-virtual-content > table').first();
 
             assert.strictEqual(parseFloat(fakeTable[0].style.left), expectedOffset, 'fake table offset when scroll position is ' + scrollPos);
@@ -7679,7 +7679,7 @@ QUnit.module('Data area', () => {
         area._getScrollable().update();
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
-            area.scrollTo({ x: 0, y: scrollPos });
+            area.scrollTo({ left: 0, top: scrollPos });
             const fakeTable = $('#pivotGrid').find('.dx-virtual-content > table').first();
 
             assert.strictEqual(fakeTable.css('top'), expectedOffset + 'px', 'fake table offset when scroll position is ' + scrollPos);
@@ -7755,7 +7755,7 @@ QUnit.module('Data area', () => {
         area.updateScrollableOptions({ direction: 'vertical' });
 
         function assertFakeTable(scrollPos, expectedOffset, expectedVisibility) {
-            area.scrollTo({ x: 0, y: scrollPos });
+            area.scrollTo({ left: 0, top: scrollPos });
             const fakeTable = $('#pivotGrid').find('.dx-virtual-content > table').first();
 
             assert.strictEqual(parseFloat(fakeTable[0].style.top), expectedOffset, 'fake table offset when scroll position is ' + scrollPos);

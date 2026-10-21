@@ -31,8 +31,8 @@ import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/draggable';
 import { domAdapter } from '@ts/core/dom_adapter';
+import { fromPromise } from '@ts/core/utils/deferred';
 import { splitPair } from '@ts/core/utils/m_common';
-import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { Quad } from '@ts/core/utils/string';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import DOMComponent from '@ts/core/widget/dom_component';
@@ -391,6 +391,7 @@ class Draggable<
         v: offset.y,
       };
     }
+    // @ts-expect-error the offset is a pair of numbers
     const pair = splitPair(normalizedOffset).map((value) => parseFloat(value));
 
     return {

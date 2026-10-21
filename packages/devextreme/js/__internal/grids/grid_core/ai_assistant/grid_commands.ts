@@ -7,8 +7,9 @@ import {
   DEFAULT_FAILURE_MESSAGE,
   DEFAULT_SUCCESS_MESSAGE,
   EXECUTION_ABORT_MESSAGE,
+  MAX_COMMAND_ARGS_LENGTH,
 } from '@ts/grids/grid_core/ai_assistant/const';
-import { zodToJsonSchema } from 'zod-to-json-schema';
+import * as z from '@ts/grids/grid_core/ai_assistant/zod';
 
 import type { InternalGrid } from '../types';
 import type {
@@ -19,7 +20,7 @@ import type {
   JsonSchema,
   ResponseSchemaBranch,
 } from './types';
-import { expandTypeArraysToAnyOf, hoistSchemaRefs } from './utils';
+import { expandTypeArraysToAnyOf, hoistSchemaRefs, makeOpenAICompatible } from './utils';
 
 export class GridCommands {
   private readonly component: InternalGrid;
@@ -56,6 +57,14 @@ export class GridCommands {
     };
   }
 
+  private static getArgsJsonLength(args: unknown): number | undefined {
+    try {
+      return JSON.stringify(args).length;
+    } catch {
+      return undefined;
+    }
+  }
+
   private static applyCustomizedResponseText(
     result: CommandResult,
     command: CommandInfo,
@@ -85,7 +94,10 @@ export class GridCommands {
     const commands = [...this.commands.values()];
 
     return commands.map((command) => {
-      const argsSchema = zodToJsonSchema(command.schema, { target: 'openAi' }) as JsonSchema;
+      const argsSchema = z.toJSONSchema(command.schema, {
+        io: 'input',
+        override: makeOpenAICompatible,
+      }) as JsonSchema;
 
       // Remove $schema from nested schemas since it's only necessary at root
       delete argsSchema.$schema;
@@ -162,6 +174,17 @@ export class GridCommands {
       const command = this.commands.get(action.name);
 
       if (!command || !isDefined(action.args) || !isObject(action.args)) {
+        return null;
+      }
+
+      const argsLength = GridCommands.getArgsJsonLength(action.args);
+
+      if (!isDefined(argsLength)) {
+        return null;
+      }
+
+      if (argsLength > MAX_COMMAND_ARGS_LENGTH) {
+        logger.warn(`Arguments of the "${action.name}" command are ${argsLength} characters long as JSON and exceed the ${MAX_COMMAND_ARGS_LENGTH}-character limit`);
         return null;
       }
 

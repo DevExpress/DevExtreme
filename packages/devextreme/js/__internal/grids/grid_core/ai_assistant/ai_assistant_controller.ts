@@ -9,7 +9,8 @@ import Guid from '@js/core/guid';
 import { captionize } from '@js/core/utils/inflector';
 import { isFunction, isString } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
+import { logger } from '@ts/core/utils/m_console';
 
 import { Controller } from '../modules/modules';
 import { AIAssistantIntegrationController } from './ai_assistant_integration_controller';
@@ -20,6 +21,7 @@ import type {
   AIMessage,
   CommandResult,
   GridCommand,
+  JsonSchema,
 } from './types';
 import { getMessageStatus, isAIMessage } from './utils';
 
@@ -176,9 +178,18 @@ export class AIAssistantController extends Controller {
     });
   }
 
+  private buildResponseSchema(): JsonSchema | undefined {
+    try {
+      return this.gridCommands?.buildResponseSchema();
+    } catch (error: unknown) {
+      logger.error('Error building the AI Assistant response schema:', error);
+      return undefined;
+    }
+  }
+
   private sendRequestToAICore(aiMessage: AIMessage): Promise<void> {
     return this.withProcessing(new Promise<void>((resolve, reject) => {
-      const responseSchema = this.gridCommands?.buildResponseSchema();
+      const responseSchema = this.buildResponseSchema();
 
       if (!responseSchema) {
         const localizedErrorMsg = messageLocalization.format('dxDataGrid-aiAssistantUnexpectedErrorMessage');
@@ -201,7 +212,7 @@ export class AIAssistantController extends Controller {
                 this.completeAIMessage(aiMessage.id, commands, commandNames);
                 resolve();
               })
-              .fail((errorMessage) => {
+              .fail((errorMessage: unknown) => {
                 const error = errorMessage instanceof Error
                   ? errorMessage
                   : new Error(String(errorMessage));

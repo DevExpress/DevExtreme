@@ -22,3 +22,7 @@ export enum MessageStatus {
 export const DEFAULT_SUCCESS_MESSAGE = 'dxDataGrid-aiAssistantSuccessMessage';
 export const DEFAULT_FAILURE_MESSAGE = 'dxDataGrid-aiAssistantErrorMessage';
 export const EXECUTION_ABORT_MESSAGE = 'dxDataGrid-aiAssistantExecutionAbortMessage';
+
+// CVE-2023-54404: zod creates an issue per invalid array item, so huge args can exhaust memory.
+// Checked on all command args as JSON before parsing; remove once zod fixes arrays without .max().
+export const MAX_COMMAND_ARGS_LENGTH = 128 * 1024;

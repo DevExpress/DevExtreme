@@ -104,3 +104,6 @@ export const BUTTON_CLASS = 'dx-button';
 export const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
 
 export const EDIT_ROW = 'dx-edit-row';
+
+export const NEW_ROW_TEMP_KEY_PREFIX = '_DX_KEY_';
+export const GUID_LENGTH = 36;

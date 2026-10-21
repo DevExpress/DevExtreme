@@ -1,6 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets } from '@ts/core/utils/m_date';
 
 import type {
   DateType, PathTimeZoneConversion, TimeZoneCalculatorOptions, TimeZoneOffsetsType,
@@ -102,7 +102,7 @@ export class TimeZoneCalculator {
     const targetOffsetName = appointmentTimezone ? 'appointment' : 'common';
     const direction = isBack ? -1 : 1;
 
-    return dateUtilsTs.addOffsets(
+    return addOffsets(
       newDate,
       direction * toMs('hour') * offsets[targetOffsetName],
       -direction * toMs('hour') * offsets.client,

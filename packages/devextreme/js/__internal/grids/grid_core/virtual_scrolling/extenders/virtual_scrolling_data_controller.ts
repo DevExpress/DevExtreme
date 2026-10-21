@@ -29,7 +29,7 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
-import gridCoreUtils from '../../m_utils';
+import gridCoreUtils from '../../utils';
 import {
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
@@ -129,11 +129,10 @@ export const virtualScrollingDataControllerExtender = (
           const rowElement = component.getRowElement(rowIndex);
           const $rowElement = rowElement?.[0] && $(rowElement[0]);
           let top = $rowElement?.position()?.top;
-          const isChromeLatest = browser.chrome && Number(browser.version ?? 0) >= 91;
-          const allowedTopOffset = browser.mozilla || isChromeLatest ? 1 : 0; // T884308
+          const allowedTopOffset = browser.mozilla || browser.chrome ? 1 : 0; // T884308
           if (top && top > allowedTopOffset) {
             top = Math.round(top + getOuterHeight($rowElement) * (itemIndex % 1));
-            scrollable.scrollTo({ y: top });
+            scrollable.scrollTo({ top });
           }
         }
       }
@@ -198,6 +197,9 @@ export const virtualScrollingDataControllerExtender = (
       },
       loadedItemCount() {
         return that._itemCount;
+      },
+      renderedItemsRange() {
+        return that.getRenderedItemsRange();
       },
       totalItemsCount() {
         if (isVirtualPaging(that)) {
@@ -364,6 +366,26 @@ export const virtualScrollingDataControllerExtender = (
       viewportParams.skip += pageOffset;
     }
     this._loadViewportParams = viewportParams;
+  }
+
+  private getRenderedItemsRange(): { skip: number; take: number } | undefined {
+    const renderedItems = this._items;
+    const loadedItems: ProcessedItem[] | null = this._allItems;
+
+    if (!renderedItems.length || !loadedItems?.length) {
+      return undefined;
+    }
+
+    const loadedItemIndex = loadedItems[0].loadIndex ?? 0;
+    const renderedItemIndex = renderedItems[0].loadIndex ?? 0;
+    const pageStartItemIndex = isVirtualPaging(this) ? 0 : loadedItemIndex;
+    const firstItemIndex = renderedItemIndex - pageStartItemIndex;
+    const lastItemIndex = (renderedItems[renderedItems.length - 1].loadIndex ?? 0) - pageStartItemIndex;
+
+    return {
+      skip: firstItemIndex,
+      take: lastItemIndex - firstItemIndex + 1,
+    };
   }
 
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {

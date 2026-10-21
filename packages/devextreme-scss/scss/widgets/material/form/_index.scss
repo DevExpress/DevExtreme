@@ -2,7 +2,10 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/form";
+@use "../../base/form" with (
+  $form-group-content-padding-top: $material-form-group-caption-bottom-padding,
+  $form-group-content-margin-top: $material-form-group-caption-bottom-margin,
+);
 @use "../../base/icon_fonts" as *;
 @use "../textEditor/sizes" as *;
 @use "../scrollable";
@@ -11,13 +14,11 @@
   font-size: $material-form-group-caption-font-size;
 }
 
-.dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
+.dx-form-group-with-caption {
   & > .dx-form-group-content {
     border-top: 1px solid;
     border-top-color: $form-group-border-color;
     padding-bottom: $material-form-group-content-padding-bottom;
-    padding-top: $material-form-group-caption-bottom-padding;
-    margin-top: $material-form-group-caption-bottom-margin;
   }
 }
 

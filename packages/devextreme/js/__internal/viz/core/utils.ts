@@ -22,10 +22,10 @@ import { noop } from '@ts/core/utils/m_common';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
-import { adjust, sign } from '@ts/core/utils/m_math';
 import {
   isDefined, isExponential, isFunction, isNumeric, isString,
 } from '@ts/core/utils/m_type';
+import { adjust, sign } from '@ts/core/utils/math';
 
 const {
   PI,

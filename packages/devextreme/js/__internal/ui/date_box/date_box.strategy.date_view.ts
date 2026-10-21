@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import { inputType } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
 import type { Format } from '@js/localization';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import DateBoxStrategy from '@ts/ui/date_box/date_box.strategy';
 import dateUtils from '@ts/ui/date_box/date_utils';
@@ -38,7 +38,9 @@ class DateViewStrategy extends DateBoxStrategy {
       : undefined;
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || globalFormat || dateUtils.FORMATS_MAP[type];
+    const format = displayFormat || globalFormat || dateUtils.FORMATS_MAP[type];
+
+    return applyDataTypePreset(format, type) ?? format;
   }
 
   popupConfig(config: PopupProperties): PopupProperties {

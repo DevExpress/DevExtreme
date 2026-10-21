@@ -256,7 +256,8 @@ export default class MaskStrategy {
 
     this.editor._maskKeyHandler(
       event,
-      () => (getClipboardText(event, selectedText)) as Promise<string>,
+      // @ts-expect-error with a text, clipboardText sets the data and returns nothing
+      () => getClipboardText(event, selectedText),
     );
   }
 

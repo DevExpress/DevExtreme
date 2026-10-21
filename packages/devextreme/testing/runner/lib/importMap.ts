@@ -317,6 +317,7 @@ export function buildQunitImportMap({
       ?? `${NODE_MODULES}/fflate/esm/browser.js`,
     knockout: `${SHIMS}/knockout.js`,
     rrule: `${NODE_MODULES}/rrule/dist/esm/index.js`,
+    zod: `${NODE_MODULES}/zod/index.js`,
     // eslint-disable-next-line spellcheck/spell-checker
     tslib: resolveVirtualStorePackageUrl('tslib', 'tslib.es6.mjs') ?? `${SHIMS}/tslib.js`,
     jspdf: `${NODE_MODULES}/jspdf/dist/jspdf.es.min.js`,
@@ -349,10 +350,6 @@ export function buildQunitImportMap({
     // Hand-written shim: theme composition is custom.
     'ui/themes': `${SHIMS}/themes.js`,
     '__internal/ui/themes': `${SHIMS}/themes.js`,
-
-    // Stubs
-    zod: `${SHIMS}/zod.js`,
-    'zod-to-json-schema': `${SHIMS}/zod-to-json-schema.js`,
 
     // Suite-specific missing-dependency overrides
     ...collectSuiteImportOverrides(suiteFilePath),

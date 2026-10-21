@@ -9,7 +9,7 @@ import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ItemClickEvent } from '@js/ui/list';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import DateBoxStrategy from '@ts/ui/date_box/date_box.strategy';
 import dateUtils from '@ts/ui/date_box/date_utils';
@@ -55,7 +55,9 @@ class ListStrategy extends DateBoxStrategy {
   getDisplayFormat(displayFormat?: Format | null): Format {
     const globalTimeFormat: Format = getGlobalFormatByDataType('time');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || globalTimeFormat || 'shorttime';
+    const format = displayFormat || globalTimeFormat || 'shorttime';
+
+    return applyDataTypePreset(format, 'time') ?? format;
   }
 
   popupConfig(popupConfig: PopupProperties): PopupProperties {

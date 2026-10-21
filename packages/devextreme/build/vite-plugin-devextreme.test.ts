@@ -3,6 +3,7 @@ import { transformSync } from '@babel/core';
 import {
   moveFieldInitializersToConstructor,
   removeUninitializedClassFields,
+  stripDebugBlocks,
 } from './vite-plugin-devextreme';
 
 function transform(code: string, plugin: unknown): string {
@@ -157,5 +158,32 @@ describe('removeUninitializedClassFields', () => {
     expect(out).toMatch(/b\s*=\s*false/);
     expect(out).toMatch(/c\s*=\s*null/);
     expect(out).toMatch(/d\s*=\s*''/);
+  });
+});
+
+describe('stripDebugBlocks', () => {
+  test('removes every #DEBUG...#ENDDEBUG block and keeps the rest', () => {
+    const input = [
+      'export const a = 1;',
+      '/// #DEBUG',
+      'exports.resetA = function () {};',
+      '/// #ENDDEBUG',
+      'export const b = 2;',
+      '// #DEBUG',
+      'exports.resetB = function () {};',
+      '// #ENDDEBUG',
+    ].join('\n');
+
+    const output = stripDebugBlocks(input);
+
+    expect(output).not.toContain('exports.');
+    expect(output).toContain('export const a = 1;');
+    expect(output).toContain('export const b = 2;');
+  });
+
+  test('returns code without debug blocks unchanged', () => {
+    const input = 'export const a = 1;';
+
+    expect(stripDebugBlocks(input)).toBe(input);
   });
 });

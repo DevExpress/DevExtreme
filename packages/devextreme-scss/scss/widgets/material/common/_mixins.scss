@@ -5,7 +5,11 @@
 @use "../sizes" as *;
 @use "../common/sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/validation" as *;
+@use "../validation/sizes" as *;
+@use "../../base/validation" as * with (
+  $validation-message-content-padding: $material-validation-message-vertical-padding $material-validation-message-horizontal-padding,
+  $validation-message-font-size: $material-validation-message-font-size,
+);
 @use "../list/sizes" as *;
 
 $badge-invalid-bg: $base-invalid-color !default;

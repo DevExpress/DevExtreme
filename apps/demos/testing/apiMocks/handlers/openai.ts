@@ -2,18 +2,25 @@ import type { MockHandler, MockRequest } from '../types';
 
 // POST https://public-api.devexpress.com/demo-openai/.../chat/completions
 
-// The AI-column demo posts a chat-completion request whose body embeds the
-// demo-authored prompt verbatim. The column parses choices[0].message.content
-// as a JSON string of the shape { "<rowKey>": "<value>", ... }.
+// The AI demos post a chat-completion request whose body embeds the
+// demo-authored prompt or the user's message verbatim. An AI column parses
+// choices[0].message.content as a JSON string of the shape
+// { "<rowKey>": "<value>", ... }; a chat shows the content as the reply.
 
-interface AIColumnCase {
-  // A distinctive fragment of the demo's own prompt, used to identify it.
+interface AICase {
+  // A distinctive fragment of the request body, used to identify it.
   promptIncludes: string;
-  // Answers keyed by row key (the grid keyExpr value).
-  answers: Record<string, string>;
+  // AI column: answers keyed by row key (the grid keyExpr value).
+  answers?: Record<string, string>;
+  // Chat: the assistant's reply.
+  reply?: string;
 }
 
-const cases: AIColumnCase[] = [
+export const CHAT_QUESTION = 'What is DevExtreme?';
+
+export const CHAT_ANSWER = 'DevExtreme is a suite of UI components for web apps.';
+
+const cases: AICase[] = [
   {
     // apps/demos/Demos/DataGrid/AIColumns — the AI column asks for the
     // manufacturing country; answers cover the first rendered page (IDs 1-10).
@@ -57,11 +64,17 @@ const cases: AIColumnCase[] = [
       51: 'Engineering',
     },
   },
+  {
+    // apps/demos/Demos/Chat/AIAndChatbotIntegration — the visual test types
+    // CHAT_QUESTION and expects CHAT_ANSWER in the assistant's bubble.
+    promptIncludes: CHAT_QUESTION,
+    reply: CHAT_ANSWER,
+  },
 ];
 
 const isOpenAIUrl = (url: string): boolean => /demo-openai\b/i.test(url);
 
-const findCase = (req: MockRequest): AIColumnCase | undefined => {
+const findCase = (req: MockRequest): AICase | undefined => {
   const body = typeof req.body === 'string'
     ? req.body
     : req.body?.toString() ?? '';
@@ -92,6 +105,7 @@ export const openAIHandler: MockHandler = {
     if (req.method.toLowerCase() === 'options') {
       return {};
     }
-    return completion(JSON.stringify(findCase(req)?.answers ?? {}));
+    const aiCase = findCase(req);
+    return completion(aiCase?.reply ?? JSON.stringify(aiCase?.answers ?? {}));
   },
 };

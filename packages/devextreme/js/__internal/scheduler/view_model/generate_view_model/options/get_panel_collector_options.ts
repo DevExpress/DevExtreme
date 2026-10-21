@@ -22,6 +22,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   collectorCSS,
   DOMMetaData,
   panelName,
+  appointmentMinHeight,
 }: {
   DOMMetaData: DOMMetaData;
   alwaysReserveSpaceForCollector: boolean;
@@ -30,6 +31,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   isAdaptivityEnabled: boolean;
   collectorCSS: CollectorCSS;
   panelName: PanelName;
+  appointmentMinHeight?: number;
 }): {
   allDayPanelCellSize: RealSize;
   cellSize: RealSize;
@@ -69,6 +71,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
     viewOrientation,
     isTimelineView,
     isAdaptivityEnabled,
+    appointmentMinHeight,
   };
   const maxLevel = getMaxLevel(maxLevelOptions);
   const minLevel = viewOrientation === 'vertical' ? MIN_LEVEL_VERTICAL_VIEW : getMaxLevel({

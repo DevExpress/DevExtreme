@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Az MI-asszisztens csevegő bezárása megszakítja a folyamatban lévő kéréseket. Szeretné bezárni a csevegőt?",
         "dxDataGrid-aiAChatEmptyViewMessage": "A csevegő üres",
         "dxDataGrid-aiChatEmptyViewPrompt": "Az MI-asszisztens készen áll a kérdések megválaszolására.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "MI-prompt-szerkesztő",
         "dxDataGrid-aiPromptEditorPlaceholder": "Kérje az AI-t az oszlopértékek generálásához...",
         "dxDataGrid-aiPromptEditorApplyButton": "Alkalmazás",

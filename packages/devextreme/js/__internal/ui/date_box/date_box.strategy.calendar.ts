@@ -1,3 +1,4 @@
+import type { ToolbarItemLocation } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -6,9 +7,9 @@ import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ClickEvent } from '@js/ui/button';
 import type { ValueChangedEvent } from '@js/ui/calendar';
-import type { ToolbarItem } from '@js/ui/popup';
+import type { ToolbarItem, ToolbarLocation } from '@js/ui/popup';
 import { current, isMaterial } from '@js/ui/themes';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { splitPair } from '@ts/core/utils/m_common';
 import Calendar from '@ts/ui/calendar/calendar';
 import type { CellEvent } from '@ts/ui/calendar/calendar.base_view';
@@ -94,9 +95,12 @@ class CalendarStrategy<
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
+    const { type = 'date' } = this.dateBox.option();
     const globalDateFormat: Format = getGlobalFormatByDataType('date');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || globalDateFormat || 'shortdate';
+    const format = displayFormat || globalDateFormat || 'shortdate';
+
+    return applyDataTypePreset(format, type) ?? format;
   }
 
   _closeDropDownByEnter(): boolean {
@@ -159,7 +163,10 @@ class CalendarStrategy<
   _getTodayButtonConfig(): ToolbarItem {
     const { buttonsLocation } = this.dateBox.option();
     const isButtonsLocationDefault = buttonsLocation === 'default';
-    const position = isButtonsLocationDefault ? ['bottom', 'center'] : splitPair(buttonsLocation);
+    // @ts-expect-error buttonsLocation holds a toolbar and a location
+    const position: [ToolbarLocation, ToolbarItemLocation] = isButtonsLocationDefault
+      ? ['bottom', 'center']
+      : splitPair(buttonsLocation);
     const stylingMode = isMaterial(current()) ? 'text' : 'outlined';
 
     return {

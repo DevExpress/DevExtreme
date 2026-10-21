@@ -3,7 +3,7 @@ import type { ArrayStore } from '@js/common/data';
 import type { Callback } from '@js/core/utils/callbacks';
 import type { Message, Properties as ChatProperties } from '@js/ui/chat';
 import type { HidingEvent, Properties as PopupProperties } from '@js/ui/popup';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
@@ -97,7 +97,7 @@ export class AIAssistantView extends View {
             popupOptions: {
               elementAttr: { class: this.addWidgetPrefix(CLASSES.aiAssistantConfirmDialog) },
             },
-          });
+          }, this.element());
 
           // @ts-expect-error
           confirmDialog.show().done((confirmResult) => {

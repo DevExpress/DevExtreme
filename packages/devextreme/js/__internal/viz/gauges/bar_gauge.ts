@@ -3,8 +3,8 @@
 import { registerComponent } from '@ts/core/component_registrator';
 import { paintedColor } from '@ts/core/utils/css_variables';
 import { extend } from '@ts/core/utils/m_extend';
-import { roundFloatPart } from '@ts/core/utils/m_math';
-import { clone } from '@ts/core/utils/m_object';
+import { roundFloatPart } from '@ts/core/utils/math';
+import { clone } from '@ts/core/utils/object';
 import { overlapping } from '@ts/viz/chart_components/base_chart';
 import { plugin as pluginLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

@@ -21,10 +21,10 @@ import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type {
   DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';

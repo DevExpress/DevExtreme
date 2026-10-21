@@ -4,13 +4,19 @@
 import type { VisualRange } from '@js/common/charts';
 import { registerComponent } from '@ts/core/component_registrator';
 import formatHelper from '@ts/core/format_helper';
+import {
+  applyDataTypePreset,
+  getRawGlobalFormatByDataType,
+  isLocaleOnlyFormat,
+  withFormatLocale,
+} from '@ts/core/global_format_config';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { extend } from '@ts/core/utils/m_extend';
 import { each } from '@ts/core/utils/m_iterator';
-import { adjust } from '@ts/core/utils/m_math';
 import {
   isDate, isDefined, isFunction, isNumeric, isPlainObject, type as getType,
 } from '@ts/core/utils/m_type';
+import { adjust } from '@ts/core/utils/math';
 import constants from '@ts/viz/axes/axes_constants';
 import { Axis } from '@ts/viz/axes/base_axis';
 import { tickGenerator } from '@ts/viz/axes/tick_generator';
@@ -269,7 +275,7 @@ function getMinorTickIntervalUnit(
 ): ThemeValue {
   let interval = dateUtils.getDateUnitInterval(minorTickInterval);
   const majorUnit = dateUtils.getDateUnitInterval(tickInterval);
-  const idx = dateUtils.dateUnitIntervals.indexOf(interval);
+  const idx = interval ? dateUtils.dateUnitIntervals.indexOf(interval) : -1;
 
   if (withCorrection && interval === majorUnit && idx > 0) {
     interval = dateUtils.dateUnitIntervals[idx - 1];
@@ -1460,6 +1466,15 @@ class RangeSelector extends BaseWidget {
 
     sliderMarkerOptions.borderColor = this._getOption(CONTAINER_BACKGROUND_COLOR, true);
 
+    const valueDataType = isValueTypeDatetime ? DATETIME : 'number';
+    const ownOrGlobalFormat = sliderMarkerOptions.format
+      ?? getRawGlobalFormatByDataType(valueDataType);
+    const localeOnlyFormat = isLocaleOnlyFormat(ownOrGlobalFormat) ? ownOrGlobalFormat : undefined;
+
+    if (localeOnlyFormat) {
+      sliderMarkerOptions.format = undefined;
+    }
+
     if (!sliderMarkerOptions.format && !argRange.isEmpty()) {
       if (doNotSnap && isNumeric(scaleOptions.startValue)) {
         sliderMarkerOptions.format = {
@@ -1487,6 +1502,13 @@ class RangeSelector extends BaseWidget {
         sliderMarkerOptions.format = formatHelper.getDateFormatByTicks(tickIntervalsInfo.ticks);
       }
     }
+
+    if (localeOnlyFormat) {
+      sliderMarkerOptions.format = isDefined(sliderMarkerOptions.format)
+        ? withFormatLocale(sliderMarkerOptions.format, localeOnlyFormat.locale)
+        : applyDataTypePreset(localeOnlyFormat, valueDataType);
+    }
+
     return sliderMarkerOptions;
   }
 

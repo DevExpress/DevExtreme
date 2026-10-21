@@ -791,8 +791,8 @@ test('Scroll should not change focused row if focus method is called inside onCo
     .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
 
   // act
-  await dataGrid.scrollTo(t, { y: 200 });
-  await dataGrid.scrollTo(t, { y: 0 });
+  await dataGrid.scrollTo(t, { top: 200 });
+  await dataGrid.scrollTo(t, { top: 0 });
 
   // assert
   await t

@@ -100,6 +100,6 @@ import {
 }
 
 .description {
-  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.16));
+  filter: drop-shadow(0 2px 2px rgb(from var(--dxds-color-bg-static-dark, #000) r g b / var(--dxds-opacity-15, 0.15)));
 }
 </style>

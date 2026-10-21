@@ -13,7 +13,7 @@ import { isNumeric } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
@@ -475,7 +475,7 @@ class Map extends Widget<MapProperties> {
     removingValues: MapProperties['markers'] | MapProperties['routes'],
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<void> | Promise<any> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    // @ts-expect-error fromPromise returns a Deferred, not a Promise
     return fromPromise(new Promise((resolve) => {
       this._optionChangeBag = {
         resolve,

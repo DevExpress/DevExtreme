@@ -41,7 +41,10 @@ function loadThemeCss(themeId: string): Promise<void> {
   });
 }
 
-export function setupThemeSelector(containerId: string): Promise<void> {
+export function setupThemeSelector(
+  containerId: string,
+  onThemeChanged?: (themeId: string) => void,
+): Promise<void> {
   const select = document.querySelector<HTMLSelectElement>(`#${containerId}`);
   if (!select) return Promise.resolve();
 
@@ -65,7 +68,9 @@ export function setupThemeSelector(containerId: string): Promise<void> {
   select.addEventListener('change', () => {
     const newTheme = select.value;
     window.localStorage.setItem(themeKey, newTheme);
-    loadThemeCss(newTheme).catch((err) => console.error(err));
+    loadThemeCss(newTheme)
+      .then(() => onThemeChanged?.(newTheme))
+      .catch((err) => console.error(err));
   });
 
   return loadThemeCss(savedTheme);

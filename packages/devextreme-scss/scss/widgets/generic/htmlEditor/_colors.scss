@@ -1,6 +1,5 @@
 @use "sass:color";
 @use "../colors" as *;
-@use "../button/colors" as *;
 @use "../color" as extcolor;
 
 $htmleditor-border-color: $base-border-color !default;

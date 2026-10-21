@@ -1,5 +1,5 @@
 import type { Appointment } from '@js/ui/scheduler';
-import { deepExtendArraySafe } from '@ts/core/utils/m_object';
+import { deepExtendArraySafe } from '@ts/core/utils/object';
 import type { PathTimeZoneConversion, TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 
 import type { AppointmentDataAccessor } from '../data_accessor/appointment_data_accessor';

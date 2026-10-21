@@ -4,6 +4,7 @@ import '@ts/core/localization/currency';
 import 'globalize/currency';
 
 import config from '@js/core/config';
+import { getEffectiveFormatLocale, getFormatterOptions } from '@ts/core/global_format_config';
 import type { FormatConfig, LocalizationFormat, NormalizedConfig } from '@ts/core/localization/number';
 import numberLocalization from '@ts/core/localization/number';
 import openXmlCurrencyFormat from '@ts/core/localization/open_xml_currency_format';
@@ -11,6 +12,7 @@ import openXmlCurrencyFormat from '@ts/core/localization/open_xml_currency_forma
 import Globalize from 'globalize';
 
 const CURRENCY_STYLES = ['symbol', 'accounting'];
+const NUMBER_DATA_TYPE = 'number';
 
 type Formatter = (value: number) => string;
 
@@ -22,6 +24,7 @@ if (Globalize?.formatCurrency) {
   const formattersCache: Record<string, Formatter> = {};
 
   const getFormatter = (
+    formatLocale: string,
     currency: string | undefined,
     format: string | FormatConfig | undefined,
   ): Formatter => {
@@ -31,13 +34,13 @@ if (Globalize?.formatCurrency) {
     let formatCacheKey: string;
 
     if (typeof format === 'object') {
-      formatCacheKey = `${Globalize.locale().locale}:${currency}:${JSON.stringify(format)}`;
+      formatCacheKey = `${formatLocale}:${currency}:${JSON.stringify(format)}`;
     } else {
-      formatCacheKey = `${Globalize.locale().locale}:${currency}:${format}`;
+      formatCacheKey = `${formatLocale}:${currency}:${format}`;
     }
     formatter = formattersCache[formatCacheKey];
     if (!formatter) {
-      formatter = Globalize.currencyFormatter(currency, format);
+      formatter = Globalize(formatLocale).currencyFormatter(currency, format);
       formattersCache[formatCacheKey] = formatter;
     }
 
@@ -50,6 +53,7 @@ if (Globalize?.formatCurrency) {
         const currency = formatConfig?.currency ?? config().defaultCurrency;
 
         return getFormatter(
+          getEffectiveFormatLocale(formatConfig, NUMBER_DATA_TYPE),
           currency,
           this._normalizeFormatConfig(format, formatConfig, value),
         )(value);
@@ -96,7 +100,11 @@ if (Globalize?.formatCurrency) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return this._formatNumber(value, this._parseNumberFormatString('currency'), normalizedFormat);
         } if (!normalizedFormat.type && normalizedFormat.currency) {
-          return getFormatter(normalizedFormat.currency, normalizedFormat)(value);
+          return getFormatter(
+            getEffectiveFormatLocale(normalizedFormat, NUMBER_DATA_TYPE),
+            normalizedFormat.currency,
+            getFormatterOptions(normalizedFormat) as FormatConfig,
+          )(value);
         }
       }
 
@@ -109,12 +117,15 @@ if (Globalize?.formatCurrency) {
         currency = config().defaultCurrency;
       }
 
+      const formatLocale = getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return Globalize.cldr.main(`numbers/currencies/${currency}`);
+      return Globalize(formatLocale).cldr.main(`numbers/currencies/${currency}`);
     },
     getOpenXmlCurrencyFormat(currency?: string): string | undefined {
       const currencySymbol = this.getCurrencySymbol(currency).symbol;
-      const accountingFormat = Globalize.cldr.main('numbers/currencyFormats-numberSystem-latn').accounting;
+      const formatLocale = getEffectiveFormatLocale(undefined, NUMBER_DATA_TYPE);
+      const accountingFormat = Globalize(formatLocale).cldr.main('numbers/currencyFormats-numberSystem-latn').accounting;
 
       return openXmlCurrencyFormat(currencySymbol, accountingFormat);
     },

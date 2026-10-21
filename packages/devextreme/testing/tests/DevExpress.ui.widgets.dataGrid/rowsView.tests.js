@@ -3,7 +3,7 @@ import 'fluent_blue_light.css!';
 import 'ui/data_grid';
 
 import $ from 'jquery';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import dataUtils from 'core/element_data';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
@@ -4268,7 +4268,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         this.rowsView.height(50);
         this.rowsView.resize();
 
-        this.rowsView.scrollTo({ y: 10, x: 0 });
+        this.rowsView.scrollTo({ top: 10, left: 0 });
 
 
         this.rowsView.scrollChanged.add(function(e) {
@@ -4390,7 +4390,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         });
 
         // act
-        this.rowsView.scrollTo({ y: 150 });
+        this.rowsView.scrollTo({ top: 150 });
         this.clock.runAll();
     });
 
@@ -4439,7 +4439,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         });
 
         // act
-        this.rowsView.scrollTo({ y: 150 });
+        this.rowsView.scrollTo({ top: 150 });
         this.clock.runAll();
     });
 
@@ -4482,7 +4482,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         });
 
         // act
-        this.rowsView.scrollTo({ y: 100 });
+        this.rowsView.scrollTo({ top: 100 });
         this.clock.runAll();
     });
 
@@ -5536,7 +5536,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         this.rowsView.resize();
 
         const scrollable = this.rowsView._scrollable;
-        scrollable.scrollTo({ y: 2500 });
+        scrollable.scrollTo({ top: 2500 });
         $(scrollable.container()).trigger('scroll');
         this.clock.tick(500);
 
@@ -5893,7 +5893,7 @@ QUnit.module('Virtual scrolling', {
             done();
         };
 
-        rowsView.scrollTo({ y: rowHeight * 6 });
+        rowsView.scrollTo({ top: rowHeight * 6 });
     });
 
     QUnit.test('setViewportItemIndex for virtual scrolling when rowsView height defined and scrolling.timeout is defined', function(assert) {
@@ -5937,8 +5937,8 @@ QUnit.module('Virtual scrolling', {
         this.clock = sinon.useFakeTimers();
 
         // act
-        rowsView.scrollTo({ y: rowHeight * 5 });
-        rowsView.scrollTo({ y: rowHeight * 6 });
+        rowsView.scrollTo({ top: rowHeight * 5 });
+        rowsView.scrollTo({ top: rowHeight * 6 });
 
         this.clock.tick(5);
 
@@ -5993,7 +5993,7 @@ QUnit.module('Virtual scrolling', {
         // act
         const itemSizes = dataController.getItemSizes();
         const definedItemSizes = Object.keys(itemSizes).map(function(key) { return itemSizes[key]; });
-        rowsView.scrollTo({ y: rowHeight * heightRatio * (9000000 - definedItemSizes.length) + definedItemSizes[0] * definedItemSizes.length });
+        rowsView.scrollTo({ top: rowHeight * heightRatio * (9000000 - definedItemSizes.length) + definedItemSizes[0] * definedItemSizes.length });
     });
 
     // T154003
@@ -6039,7 +6039,7 @@ QUnit.module('Virtual scrolling', {
         };
 
         // act
-        rowsView.scrollTo({ y: rowHeight * heightRatio * 7000000 + rowHeight * 3 });
+        rowsView.scrollTo({ top: rowHeight * heightRatio * 7000000 + rowHeight * 3 });
     });
 
     QUnit.test('setViewportItemIndex for virtual scrolling when rowsView height auto and browser scroll used', function(assert) {

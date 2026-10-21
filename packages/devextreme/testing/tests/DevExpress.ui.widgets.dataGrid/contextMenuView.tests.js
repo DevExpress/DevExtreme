@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'ui/data_grid';
 
 import dataGridMocks from '../../helpers/dataGridMocks.js';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const MockDataController = dataGridMocks.MockDataController;

@@ -1,11 +1,13 @@
-const types = {
+type AnyFunction = (...args: unknown[]) => unknown;
+
+const types: Record<string, string | undefined> = {
   '[object Array]': 'array',
   '[object Date]': 'date',
   '[object Object]': 'object',
   '[object String]': 'string',
 };
 
-const type = function (object) {
+const type = function type(object: unknown): string {
   if (object === null) {
     return 'null';
   }
@@ -13,57 +15,61 @@ const type = function (object) {
   const typeOfObject = Object.prototype.toString.call(object);
 
   return typeof object === 'object'
-    ? types[typeOfObject] || 'object' : typeof object;
+    ? types[typeOfObject] ?? 'object' : typeof object;
 };
 
-const isBoolean = function (object) {
+const isBoolean = function isBoolean(object: unknown): object is boolean {
   return typeof object === 'boolean';
 };
 
-const isExponential = function (value) {
+const isNumeric = function isNumeric(object: unknown): boolean {
+  return ((typeof object === 'number') && isFinite(object))
+    // @ts-expect-error the check converts any value to a number
+    || !isNaN(object - parseFloat(object));
+};
+
+const isExponential = function isExponential(value: unknown): boolean {
+  // @ts-expect-error a numeric value is neither null nor undefined
   return isNumeric(value) && value.toString().indexOf('e') !== -1;
 };
 
-const isDate = function (object) {
+const isDate = function isDate(object: unknown): object is Date {
   return type(object) === 'date';
 };
 
-const isDefined = function <T>(object: T | null | undefined): object is T {
+const isDefined = function isDefined<T>(object: T | null | undefined): object is T {
   return (object !== null) && (object !== undefined);
 };
 
-const isFunction = function (object) {
+const isFunction = function isFunction(object: unknown): object is AnyFunction {
   return typeof object === 'function';
 };
 
-const isString = function (object) {
+const isString = function isString(object: unknown): object is string {
   return typeof object === 'string';
 };
 
-const isNumeric = function (object) {
-  return (typeof object === 'number') && isFinite(object) || !isNaN(object - parseFloat(object));
-};
-
-const isObject = function (object) {
+const isObject = function isObject(object: unknown): object is Record<string, unknown> {
   return type(object) === 'object';
 };
 
-const isEmptyObject = function (object) {
-  let property;
-
-  // eslint-disable-next-line no-unreachable-loop
-  for (property in object) {
+const isEmptyObject = function isEmptyObject(object: unknown): boolean {
+  // @ts-expect-error for...in reads the keys of any value
+  // eslint-disable-next-line no-restricted-syntax, guard-for-in, no-unreachable-loop -- any key
+  for (const property in object) {
     return false;
   }
 
   return true;
 };
 
-const isPlainObject = function (object) {
+const isPlainObject = function isPlainObject(
+  object: unknown,
+): object is Record<string, unknown> {
   if (!object || type(object) !== 'object') {
     return false;
   }
-  const proto = Object.getPrototypeOf(object);
+  const proto: { constructor?: unknown } | null = Object.getPrototypeOf(object);
 
   if (!proto) {
     return true;
@@ -75,28 +81,30 @@ const isPlainObject = function (object) {
       && Object.toString.call(ctor) === Object.toString.call(Object);
 };
 
-const isPrimitive = function (value) {
+const isPrimitive = function isPrimitive(value: unknown): boolean {
   return !['object', 'array', 'function'].includes(type(value));
 };
 
-const isWindow = function (object) {
-  return object != null && object === object.window;
+const isWindow = function isWindow(object: unknown): boolean {
+  return object != null && object === (object as { window?: unknown }).window;
 };
 
-const isRenderer = function (object) {
-  return !!object && !!(object.jquery || object.dxRenderer);
+const isRenderer = function isRenderer(object: unknown): boolean {
+  const wrapper = object as { jquery?: unknown; dxRenderer?: unknown } | null | undefined;
+  return !!wrapper && !!(wrapper.jquery || wrapper.dxRenderer);
 };
 
-const isPromise = function (object) {
-  return !!object && isFunction(object.then);
+const isPromise = function isPromise(object: unknown): object is PromiseLike<unknown> {
+  return !!object && isFunction((object as { then?: unknown }).then);
 };
 
-const isDeferred = function (object) {
-  return !!object && isFunction(object.done) && isFunction(object.fail);
+const isDeferred = function isDeferred(object: unknown): boolean {
+  return !!object && isFunction((object as { done?: unknown }).done)
+    && isFunction((object as { fail?: unknown }).fail);
 };
 
-const isEvent = function (object) {
-  return !!(object && object.preventDefault);
+const isEvent = function isEvent(object: unknown): boolean {
+  return !!(object && (object as { preventDefault?: unknown }).preventDefault);
 };
 
 export {

@@ -1,5 +1,4 @@
 import type { ScrollDirection as Direction } from '@js/common';
-import { ensureDefined } from '@js/core/utils/common';
 import {
   isDefined,
   isPlainObject,
@@ -13,12 +12,11 @@ import {
 } from './scroll_direction';
 
 export function convertToLocation(
-  location: number | Partial<{ x: number; y: number; top: number; left: number }>,
+  location: number | Partial<ScrollOffset>,
   direction: Direction,
 ): Partial<ScrollOffset> {
   if (isPlainObject(location)) {
-    const left = ensureDefined(location.left, location.x);
-    const top = ensureDefined(location.top, location.y);
+    const { left, top } = location;
     return {
       left: isDefined(left) ? left : undefined,
       top: isDefined(top) ? top : undefined,

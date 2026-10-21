@@ -123,10 +123,8 @@ function getStripVerticalAlignmentPosition(alignment) {
 }
 
 function getMarkerInterval(tickInterval) {
-  // @ts-expect-error
   let markerInterval = getNextDateUnit(tickInterval);
   if (markerInterval === 'quarter') {
-    // @ts-expect-error
     markerInterval = getNextDateUnit(markerInterval);
   }
   return markerInterval;

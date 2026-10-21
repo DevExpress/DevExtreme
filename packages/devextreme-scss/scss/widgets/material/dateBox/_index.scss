@@ -1,14 +1,11 @@
-@use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/icon_fonts" as *;
 @use "../dropDownEditor" as *;
 @use "../../base/dropDownEditor/mixins" as *;
 @use "../textEditor" as *;
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
-@use "../calendar/sizes" as *;
 @use "../../base/dateBox";
 @use "mixins" as *;
 @use "../timeView";
