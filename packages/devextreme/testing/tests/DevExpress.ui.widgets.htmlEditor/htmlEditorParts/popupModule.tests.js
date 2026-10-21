@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import PopupModule from '__internal/ui/html_editor/modules/m_popup';
+import PopupModule from '__internal/ui/html_editor/modules/popup';
 import windowUtils from '__internal/core/utils/m_window';
 
 const POPUP_CLASS = 'dx-popup';

@@ -11,9 +11,9 @@ import type { dxHtmlEditorImageUpload } from '@js/ui/html_editor';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance, UploaderModule } from '../types/quill';
-import { getFileUploaderBaseOptions, serverUpload } from '../utils/m_image_uploader_helper';
-import type { BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
+import { getFileUploaderBaseOptions, serverUpload } from '../utils/image_uploader_helper';
+import type { BaseModuleOptions } from './base';
+import BaseModule from './base';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorImageUpload';
 

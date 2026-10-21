@@ -15,8 +15,8 @@ import Resizable from '@js/ui/resizable';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance } from '../types/quill';
-import type { BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
+import type { BaseModuleOptions } from './base';
+import BaseModule from './base';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
 const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';

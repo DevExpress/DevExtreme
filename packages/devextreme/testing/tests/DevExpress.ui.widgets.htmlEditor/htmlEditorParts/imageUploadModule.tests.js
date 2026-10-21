@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import ImageUpload from '__internal/ui/html_editor/modules/m_imageUpload';
+import ImageUpload from '__internal/ui/html_editor/modules/imageUpload';
 
 const moduleConfig = {
     beforeEach: function() {
