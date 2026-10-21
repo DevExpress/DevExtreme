@@ -1938,7 +1938,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     return {
       left: dateTableOffset.left,
-      right: dateTableOffset.left + (getOuterWidth($dateTable.get(0))),
+      right: dateTableOffset.left + getOuterWidth($dateTable.get(0)),
       top: dateTableOffset.top + top,
       bottom: dateTableOffset.top + top + height,
     };

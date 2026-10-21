@@ -557,7 +557,8 @@ export const getWindowByElement = (el: MeasuredElement): Window | null | undefin
   if (isWindowTarget(el)) {
     return el;
   }
-  return 'defaultView' in el ? el.defaultView : undefined;
+  const target: { defaultView?: Window | null; nodeType?: number } = el;
+  return target.defaultView;
 };
 
 export const getOffset = (el: Element): Offset => {
