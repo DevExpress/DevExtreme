@@ -464,9 +464,19 @@ export class RowsView extends ColumnsView {
     const { top, left } = e.scrollOffset;
     const rtlEnabled = this.option('rtlEnabled');
     const isNativeScrolling = e.component.option('useNative');
-    const isHorizontalScrollbarVisible = this.isScrollbarVisible(true);
 
     this._scrollTop = top;
+    this._saveHorizontalScrollPosition(left);
+
+    const scrollLeft = rtlEnabled && isNativeScrolling ? -this._scrollRight : left;
+
+    this.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, this.name);
+  }
+
+  protected _saveHorizontalScrollPosition(left: number): void {
+    const rtlEnabled = this.option('rtlEnabled');
+    const isHorizontalScrollbarVisible = this.isScrollbarVisible(true);
+
     this._scrollLeft = rtlEnabled && !isHorizontalScrollbarVisible ? -1 : left;
 
     if (rtlEnabled) {
@@ -476,10 +486,6 @@ export class RowsView extends ColumnsView {
 
       this._scrollRight = maxHorizontalScrollOffset - left;
     }
-
-    const scrollLeft = rtlEnabled && isNativeScrolling ? -this._scrollRight : left;
-
-    this.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, this.name);
   }
 
   private _renderScrollableCore($element: dxElementWrapper): void {
