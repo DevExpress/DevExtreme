@@ -65,6 +65,11 @@ export const dataSource = new DataSource({
   paginate: false,
 });
 
+export function clearMessages() {
+  store.length = 0;
+  dataSource.reload();
+}
+
 export function convertToHtml(value: string): string {
   return unified()
     .use(remarkParse)

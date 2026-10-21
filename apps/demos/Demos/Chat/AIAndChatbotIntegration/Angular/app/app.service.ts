@@ -101,11 +101,13 @@ export class AppService {
     try {
       const aiResponse = await this.getAIResponse(this.messages);
 
-      setTimeout(() => {
-        this.typingUsersSubject.next([]);
-        this.messages.push({ role: 'assistant', content: aiResponse });
-        this.renderAssistantMessage(aiResponse);
-      }, 200);
+      await new Promise((resolve) => {
+        setTimeout(resolve, 200);
+      });
+
+      this.typingUsersSubject.next([]);
+      this.messages.push({ role: 'assistant', content: aiResponse });
+      this.renderAssistantMessage(aiResponse);
     } catch (err: unknown) {
       this.typingUsersSubject.next([]);
       this.messages.pop();
@@ -179,6 +181,14 @@ export class AppService {
       .toString();
 
     return result;
+  }
+
+  clearMessages() {
+    this.store = [];
+    this.messages = [];
+    this.setAlerts([]);
+    this.typingUsersSubject.next([]);
+    this.dataSource.reload();
   }
 
   async onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent) {
