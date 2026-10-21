@@ -154,6 +154,8 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
 
   _boundLocations: MapLocation[] = [];
 
+  private readonly _tileServerWarningTypes = new Set<MapType>();
+
   _attributionWarningLogged = false;
 
   _calculateLocationWarningLogged = false;
@@ -216,7 +218,11 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
     const config = this._resolveTileConfig(type);
 
     if (!config?.url) {
-      errors.log('W1030');
+      if (!this._tileServerWarningTypes.has(type)) {
+        errors.log('W1030');
+        this._tileServerWarningTypes.add(type);
+      }
+
       return undefined;
     }
 

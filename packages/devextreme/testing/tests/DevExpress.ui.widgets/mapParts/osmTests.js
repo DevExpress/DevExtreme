@@ -707,30 +707,94 @@ QUnit.module('OSM: tile server', moduleConfig, () => {
             map.option('type', 'satellite');
         });
     });
-    QUnit.test('missing config for a new type preserves the current tile source', function(assert) {
-        const done = assert.async();
-        const initialized = $.Deferred();
+    QUnit.test('missing tile config logs W1030 once per type and preserves the current source', async function(assert) {
         const log = sinon.stub(errors, 'log');
-        const map = $('#map').dxMap({
-            provider: 'osm',
-            providerConfig: {
-                tileServer: type => type === 'roadmap' ? {
-                    url: 'https://roadmap.example.com/{z}/{x}/{y}.png',
-                    attribution: 'Example attribution'
-                } : undefined
-            },
-            onReady: () => initialized.resolve()
-        }).dxMap('instance');
-        initialized.done(() => {
-            const originalSource = openLayersMock.tileLayer.source;
-            map.option('onUpdated', () => {
-                assert.strictEqual(openLayersMock.tileLayer.source, originalSource, 'current source is preserved');
-                assert.ok(log.calledWith('W1030'), 'W1030 is logged');
-                log.restore();
-                done();
+        try {
+            const map = await new Promise(resolve => {
+                $('#map').dxMap({
+                    provider: 'osm',
+                    providerConfig: {
+                        tileServer: type => type === 'roadmap' ? {
+                            url: 'https://roadmap.example.com/{z}/{x}/{y}.png',
+                            attribution: 'Example attribution'
+                        } : undefined
+                    },
+                    onReady: ({ component }) => resolve(component)
+                });
             });
-            map.option('type', 'satellite');
-        });
+            const originalSource = openLayersMock.tileLayer.source;
+            const changes = [['satellite', 1], ['hybrid', 2], ['roadmap', 2], ['satellite', 2], ['hybrid', 2]];
+
+            for(let index = 0; index < changes.length; index++) {
+                const [type, warningCount] = changes[index];
+                map.option('type', type);
+                await map._lastAsyncAction;
+
+                assert.strictEqual(openLayersMock.tileLayer.source, originalSource, 'current source is preserved');
+                assert.strictEqual(log.callCount, warningCount, `missing config is reported once for ${type}`);
+                assert.ok(log.alwaysCalledWithExactly('W1030'), 'only missing tile config is reported');
+            }
+        } finally {
+            log.restore();
+        }
+    });
+    QUnit.test('missing tile config can be resolved again without repeating W1030', async function(assert) {
+        const log = sinon.stub(errors, 'log');
+        let config;
+        const tileServer = sinon.spy(() => config);
+        try {
+            const map = await new Promise(resolve => {
+                $('#map').dxMap({
+                    provider: 'osm',
+                    type: 'satellite',
+                    providerConfig: { tileServer },
+                    onReady: ({ component }) => resolve(component)
+                });
+            });
+            assert.strictEqual(openLayersMock.addedTileLayers.length, 0, 'initial missing config leaves the map without tiles');
+
+            await map._provider.updateMapType();
+            assert.ok(tileServer.calledTwice, 'an unresolved map type is checked again');
+            assert.ok(log.calledOnceWithExactly('W1030'), 'the repeated lookup does not repeat the warning');
+
+            config = {
+                url: 'https://satellite.example.com/{z}/{x}/{y}.png',
+                attribution: 'Example attribution'
+            };
+            await map._provider.updateMapType();
+
+            assert.strictEqual(tileServer.callCount, 3, 'the callback is still evaluated');
+            assert.strictEqual(openLayersMock.addedTileLayers.length, 1, 'available config creates the tile layer');
+            assert.strictEqual(openLayersMock.tileSourceOptions.url, config.url, 'the new source is applied');
+            assert.ok(log.calledOnceWithExactly('W1030'), 'no additional warning is logged');
+        } finally {
+            log.restore();
+        }
+    });
+    QUnit.test('missing tile config logs W1030 again for a new provider', async function(assert) {
+        const log = sinon.stub(errors, 'log');
+        try {
+            const map = await new Promise(resolve => {
+                $('#map').dxMap({
+                    provider: 'osm',
+                    providerConfig: { tileServer: () => undefined },
+                    onReady: ({ component }) => resolve(component)
+                });
+            });
+            assert.ok(log.calledOnceWithExactly('W1030'), 'initial provider reports missing tile config');
+            const originalProvider = map._provider;
+
+            await new Promise(resolve => {
+                map.option('onReady', resolve);
+                map.option('providerConfig', { tileServer: () => undefined });
+            });
+
+            assert.notStrictEqual(map._provider, originalProvider, 'provider is recreated');
+            assert.ok(log.calledTwice, 'new provider has its own warning');
+            assert.ok(log.alwaysCalledWithExactly('W1030'), 'only missing tile config is reported');
+        } finally {
+            log.restore();
+        }
     });
     QUnit.test('tile source creation failure preserves the current source', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
