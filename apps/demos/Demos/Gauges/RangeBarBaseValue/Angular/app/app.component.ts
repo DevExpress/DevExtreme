@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { DxCircularGaugeModule, DxCircularGaugeTypes } from 'devextreme-angular/ui/circular-gauge';
 import { DxLinearGaugeModule, DxLinearGaugeTypes } from 'devextreme-angular/ui/linear-gauge';
 
@@ -22,8 +22,4 @@ export class AppComponent {
   customizeText: ScaleLabel['customizeText'] = ({ valueText }) => `${valueText}°`;
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
