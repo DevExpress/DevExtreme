@@ -711,7 +711,6 @@ class CollectionWidget<
   ): void {
     const itemData = this._getItemData($item);
     const index = $item.data(this._itemIndexKey());
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
   }
@@ -1528,7 +1527,7 @@ class CollectionWidget<
   }
 
   _getItemData(itemElement: Element | dxElementWrapper): TItem {
-    return $(itemElement).data(this._itemDataKey()) as TItem;
+    return $(itemElement).data<TItem>(this._itemDataKey());
   }
 
   _getSummaryItemsSize(

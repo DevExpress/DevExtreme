@@ -558,8 +558,7 @@ class MenuBase<
       return;
     }
 
-    // @ts-expect-error ts-error
-    const index: number = $item.data(this._itemIndexKey());
+    const index = $item.data<number>(this._itemIndexKey());
     const $nodeContainer = $item.closest('ul');
     const $nodeElement = $item.closest('li');
 
@@ -771,7 +770,6 @@ class MenuBase<
     let result: Element | dxElementWrapper = $();
 
     each(this._itemElements(), (_index, $itemElement) => {
-      // @ts-expect-error ts-error
       if ($($itemElement).data(this._itemDataKey()) !== itemData) {
         return true;
       }

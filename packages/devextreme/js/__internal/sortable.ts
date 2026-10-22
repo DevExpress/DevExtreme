@@ -251,8 +251,9 @@ class Sortable extends Draggable<SortableProperties> {
           $lastItem.css('marginBottom', sourceElementSize - freeSize);
 
           const $sortable = $lastItem.closest('.dx-sortable');
-          // @ts-expect-error data is declared without the getter form
-          const sortable: { update: () => void } | undefined = $sortable.data('dxScrollable') || $sortable.data('dxScrollView');
+          type SortableScrollable = { update: () => void } | undefined;
+          const sortable = $sortable.data<SortableScrollable>('dxScrollable')
+            || $sortable.data<SortableScrollable>('dxScrollView');
 
           sortable?.update();
         }

@@ -183,8 +183,7 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
   }
 
   _getItemData(target: Element | dxElementWrapper): Item {
-    // @ts-expect-error ts-error
-    const itemData = $(target).parent().data(this._itemDataKey()) as Item | undefined;
+    const itemData = $(target).parent().data<Item | undefined>(this._itemDataKey());
 
     return itemData ?? super._getItemData(target);
   }

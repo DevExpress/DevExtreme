@@ -2580,8 +2580,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     const getItemSettings = (
       $itemElement: dxElementWrapper,
-    ): AppointmentViewModelPlain => (
-      $itemElement.data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain);
+    ): AppointmentViewModelPlain => $itemElement
+      .data<AppointmentViewModelPlain>(APPOINTMENT_SETTINGS_KEY);
 
     const options = {
       getItemData,

@@ -10,9 +10,7 @@ const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const TOOLBAR_ITEMS = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
 const getItemInstance = ($element: dxElementWrapper): Widget => {
-  // @ts-expect-error ts-error
   const itemData = $element?.data();
-  // @ts-expect-error ts-error
   const dxComponents = itemData?.dxComponents;
   const widgetName = dxComponents?.[0];
 

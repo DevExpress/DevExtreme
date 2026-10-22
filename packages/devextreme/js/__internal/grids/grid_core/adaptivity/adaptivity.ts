@@ -750,8 +750,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     for (let i = 0; i < $itemContents.length; i += 1) {
       const $itemContent = $itemContents.eq(i);
-      // @ts-expect-error data(key) is typed as returning the wrapper
-      const item: AdaptiveFormItem | undefined = $itemContent.data('dx-form-item');
+      const item = $itemContent.data<AdaptiveFormItem | undefined>('dx-form-item');
       if (
         item?.column
         && this._columnsController.getVisibleIndex(item.column.index) === visibleColumnIndex

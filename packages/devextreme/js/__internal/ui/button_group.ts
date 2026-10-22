@@ -97,8 +97,7 @@ class ButtonCollection extends CollectionWidgetEdit<ButtonCollectionProperties> 
   }
 
   _prepareItemStyles($item: dxElementWrapper): void {
-    // @ts-expect-error ts-error
-    const itemIndex: number = $item.data('dxItemIndex');
+    const itemIndex = $item.data<number>('dxItemIndex');
     if (itemIndex === 0) {
       $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
     }

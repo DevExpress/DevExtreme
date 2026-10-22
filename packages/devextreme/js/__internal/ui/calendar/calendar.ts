@@ -1070,8 +1070,7 @@ class Calendar<
     let newCurrentDate = contouredDate ?? date;
 
     if (cell) {
-      // @ts-expect-error ts-error
-      newCurrentDate = $(cell).data(CALENDAR_DATE_VALUE_KEY);
+      newCurrentDate = $(cell).data<Date>(CALENDAR_DATE_VALUE_KEY);
     }
 
     this._isOtherViewCellClicked = true;
