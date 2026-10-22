@@ -175,7 +175,6 @@ class TaskEditDialogInfo extends DialogInfoBase {
             type: 'required',
             message: messageLocalization.format(
               'validation-required-formatted',
-              // @ts-expect-error ts-error
               messageLocalization.format('dxGantt-dialogStartTitle'),
             ),
           },
@@ -216,7 +215,6 @@ class TaskEditDialogInfo extends DialogInfoBase {
             type: 'required',
             message: messageLocalization.format(
               'validation-required-formatted',
-              // @ts-expect-error ts-error
               messageLocalization.format('dxGantt-dialogEndTitle'),
             ),
           },
@@ -321,13 +319,11 @@ class TaskEditDialogInfo extends DialogInfoBase {
     if (isStartDependencies) {
       return messageLocalization.format(
         'dxGantt-dialogStartDateValidation',
-        // @ts-expect-error ts-error
         this._getFormattedDateText(correctDate),
       );
     }
     return messageLocalization.format(
       'dxGantt-dialogEndDateValidation',
-      // @ts-expect-error ts-error
       this._getFormattedDateText(correctDate),
     );
   }
@@ -473,7 +469,6 @@ class ConfirmDialogInfo extends DialogInfoBase {
       case 2:
         return messageLocalization.format(
           'dxGantt-dialogResourcesDeleteConfirmation',
-          // @ts-expect-error ts-error
           this._parameters.message,
         );
       default:
