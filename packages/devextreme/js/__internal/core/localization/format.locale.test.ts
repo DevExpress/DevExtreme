@@ -683,5 +683,18 @@ describe('format locale integration', () => {
 
       expect(toExcel(getGlobalFormatByDataType('date'))).toBe(expected);
     });
+
+    it('should export a preset in the dateTimeFormatPresets locale', () => {
+      const expected = exportInLocale('de-DE', 'shortDate');
+
+      coreLocalization.locale('en');
+      config({
+        ...config(),
+        dateTimeFormatPresets: { shortDate: { default: { type: 'shortDate', locale: 'de-DE' } } },
+      });
+
+      expect(expected).toBe('[$-407]d.M.yyyy');
+      expect(toExcel('shortDate')).toBe(expected);
+    });
   });
 });

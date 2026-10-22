@@ -277,8 +277,6 @@ const numberLocalizationBase = {
     return this.format(1.2, { type: 'fixedPoint', precision: 1 })[1] as string;
   },
 
-  // NOTE: the digits are probed in the locale of the format being formatted or parsed
-  // (e.g. 'ar-EG' digits with an 'en' message locale); without a locale, in the message locale
   convertDigits<TValue extends string | number | Date | null | undefined>(
     value: TValue,
     toStandard?: boolean,
