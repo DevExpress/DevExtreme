@@ -91,7 +91,7 @@ const TEXT_COLOR_LUMINANCE_THRESHOLD = Math.sqrt(1.05 * 0.05) - 0.05;
 export const getContrastTextColor = (backgroundColor: string): string | undefined => {
   const color = new Color(backgroundColor);
 
-  if (color.colorIsInvalid) {
+  if (color.colorIsInvalid || color.a < 1) {
     return undefined;
   }
 
