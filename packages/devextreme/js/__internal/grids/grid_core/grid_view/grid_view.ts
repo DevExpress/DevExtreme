@@ -204,7 +204,6 @@ export class ResizingController extends modules.ViewController {
     const totalItemsCount = Math.max(0, this.dataSourceController.totalItemsCount());
     const widgetAriaLabel = this._getWidgetAriaLabel();
     const widgetStatusText = messageLocalization
-      // @ts-expect-error Badly typed format method
       .format(widgetAriaLabel, totalItemsCount, columnCount);
 
     // @ts-expect-error Treelist Variable

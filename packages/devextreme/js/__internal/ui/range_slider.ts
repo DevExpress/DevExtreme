@@ -214,8 +214,8 @@ class RangeSlider extends Slider<RangeSliderProperties> {
   }
 
   _updateHandleAriaLabels(): void {
-    const ariaFromFormatter: (value?: unknown) => string = messageLocalization.getFormatter('dxRangeSlider-ariaFrom');
-    const ariaTillFormatter: (value?: unknown) => string = messageLocalization.getFormatter('dxRangeSlider-ariaTill');
+    const ariaFromFormatter = messageLocalization.getFormatter('dxRangeSlider-ariaFrom');
+    const ariaTillFormatter = messageLocalization.getFormatter('dxRangeSlider-ariaTill');
 
     this.setAria('label', ariaFromFormatter(this.option('dxRangeSlider-ariaFrom')), this._$handleStart);
     this.setAria('label', ariaTillFormatter(this.option('dxRangeSlider-ariaTill')), this._$handleEnd);

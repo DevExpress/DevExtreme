@@ -1021,7 +1021,6 @@ class Lookup extends DropDownList<LookupProperties> {
     let placeholder = searchPlaceholder;
 
     if (minSearchLength && placeholder === messageLocalization.format('Search')) {
-      // @ts-expect-error getFormatter return type does not accept a numeric argument
       placeholder = messageLocalization.getFormatter('dxLookup-searchPlaceholder')(minSearchLength);
     }
 
