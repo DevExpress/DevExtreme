@@ -56,6 +56,7 @@ const monthRegExpGenerator = (count: number, dateParts: LdlmDateLocalization): s
 const PATTERN_REGEXPS = {
   ':': (count: number, dateParts: LdlmDateLocalization): string => {
     const countSuffix = count > 1 ? `{${count}}` : '';
+    // @ts-expect-error the localization defines getTimeSeparator
     let timeSeparator: string = escapeRegExp(dateParts.getTimeSeparator?.());
     if (timeSeparator !== ':') {
       timeSeparator = `${timeSeparator}|:`;

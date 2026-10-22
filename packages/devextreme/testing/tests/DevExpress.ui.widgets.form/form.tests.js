@@ -181,6 +181,91 @@ QUnit.test('Check field width on render form with colspan', function(assert) {
     assert.ok(fieldWidths.ID > fieldWidths.FirstName, 'field with colspan 2 is wider than field without colspan');
 });
 
+QUnit.test('Items with colSpan should restore their layout when the screen grows back (T1336951)', function(assert) {
+    let screen = 'lg';
+    const form = $('#form').dxForm({
+        screenByWidth: () => screen,
+        colCountByScreen: { lg: 4, md: 2, sm: 1, xs: 1 },
+        items: [
+            { dataField: 'OrderID', colSpan: 4 },
+            { dataField: 'OrderDate', colSpan: 2 },
+            { dataField: 'CustomerName', colSpan: 1 },
+            { dataField: 'CustomerID', colSpan: 1 },
+            { dataField: 'ShipCity', colSpan: 2 },
+            { dataField: 'ShipCountry', colSpan: 2 },
+        ],
+    }).dxForm('instance');
+
+    const getLocations = () => form._rootLayoutManager._responsiveBox.option('items').map(({ location }) => location);
+    const lgLocations = [
+        { row: 0, col: 0, colspan: 4 },
+        { row: 1, col: 0, colspan: 2 },
+        { row: 1, col: 2 },
+        { row: 1, col: 3 },
+        { row: 2, col: 0, colspan: 2 },
+        { row: 2, col: 2, colspan: 2 },
+    ];
+
+    assert.deepEqual(getLocations(), lgLocations, 'initial lg layout');
+
+    screen = 'md';
+    resizeCallbacks.fire();
+
+    assert.deepEqual(getLocations(), [
+        { row: 0, col: 0 },
+        { row: 0, col: 1 },
+        { row: 1, col: 0 },
+        { row: 1, col: 1 },
+        { row: 2, col: 0, colspan: 2 },
+        { row: 3, col: 0, colspan: 2 },
+    ], 'md layout: spans that do not fit in 2 columns are dropped');
+
+    screen = 'lg';
+    resizeCallbacks.fire();
+
+    assert.deepEqual(getLocations(), lgLocations, 'lg layout is restored');
+
+    const $fieldItems = form.$element().find(`.${FIELD_ITEM_CLASS}`);
+    assert.ok($fieldItems.eq(0).hasClass(LAST_COL_CLASS), 'colSpan=4 item has dx-last-col');
+    assert.notOk($fieldItems.eq(1).hasClass(LAST_COL_CLASS), 'colSpan=2 item has no dx-last-col');
+    assert.ok($fieldItems.eq(3).hasClass(LAST_COL_CLASS), 'the 4th column item has dx-last-col');
+});
+
+QUnit.test('Group items with colSpan should restore their layout when the screen grows back (T1336951)', function(assert) {
+    let screen = 'lg';
+    const form = $('#form').dxForm({
+        screenByWidth: () => screen,
+        items: [{
+            itemType: 'group',
+            colCountByScreen: { lg: 4, md: 2, sm: 1, xs: 1 },
+            items: [
+                { dataField: 'OrderID', colSpan: 4 },
+                { dataField: 'OrderDate', colSpan: 2 },
+                { dataField: 'CustomerName' },
+                { dataField: 'CustomerID' },
+            ],
+        }],
+    }).dxForm('instance');
+
+    const groupLayoutManager = form._cachedLayoutManagers.find((layoutManager) => layoutManager !== form._rootLayoutManager);
+    const getLocations = () => groupLayoutManager._responsiveBox.option('items').map(({ location }) => location);
+    const lgLocations = [
+        { row: 0, col: 0, colspan: 4 },
+        { row: 1, col: 0, colspan: 2 },
+        { row: 1, col: 2 },
+        { row: 1, col: 3 },
+    ];
+
+    assert.deepEqual(getLocations(), lgLocations, 'initial lg layout');
+
+    screen = 'md';
+    resizeCallbacks.fire();
+    screen = 'lg';
+    resizeCallbacks.fire();
+
+    assert.deepEqual(getLocations(), lgLocations, 'lg group layout is restored');
+});
+
 QUnit.test('Change of the formData field change value of the editor', function(assert) {
     const $testContainer = $('#form');
 

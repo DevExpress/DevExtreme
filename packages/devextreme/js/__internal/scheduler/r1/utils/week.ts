@@ -40,7 +40,7 @@ export const getIntervalDuration = (
 
 export const getValidStartDate = (
   startDate: Date | undefined,
-  firstDayOfWeek?: number,
+  firstDayOfWeek: number,
 ): Date | undefined => (startDate
   ? dateUtils.getFirstWeekDate(startDate, firstDayOfWeek)
   : undefined);

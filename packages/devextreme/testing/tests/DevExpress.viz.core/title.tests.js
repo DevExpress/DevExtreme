@@ -550,6 +550,19 @@ QUnit.test('freeSpace', function(assert) {
     this.rendererElementsIsDispose(assert);
 });
 
+QUnit.test('erase', function(assert) {
+    this.title.update(this.options);
+    this.title.draw(400, 300);
+    const layoutOptions = $.extend({}, this.title.getLayoutOptions());
+
+    const result = this.title.erase();
+
+    assert.strictEqual(result, this.title, 'chainable');
+    assert.strictEqual(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1, 'root is removed from container');
+    assert.strictEqual(this.incidentOccurred.callCount, 0, 'no incident is raised');
+    assert.deepEqual(this.title.getLayoutOptions(), layoutOptions, 'layout is kept');
+});
+
 QUnit.test('getCorrectedLayoutOptions', function(assert) {
     this.title.update(this.options);
 

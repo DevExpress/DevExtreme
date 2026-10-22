@@ -18,8 +18,8 @@
 
 import { dateUtils } from '@ts/core/utils/m_date';
 import { extend } from '@ts/core/utils/m_extend';
-import { adjust, sign } from '@ts/core/utils/m_math';
 import { isDefined, isString } from '@ts/core/utils/m_type';
+import { adjust, sign } from '@ts/core/utils/math';
 import {
   getCategoriesInfo,
   getLog as mathLog,

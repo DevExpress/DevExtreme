@@ -182,7 +182,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         .addClass(editPopupClass);
 
       this._editPopup = this._createComponent($popupContainer, Popup);
-      this._editPopup.on('hiding', this._getEditPopupHiddenHandler());
+      this._editPopup.on('hiding', this.getEditPopupHidingHandler());
       this._editPopup.on('shown', (e) => {
         (eventsEngine as any).trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not(`.${FOCUSABLE_ELEMENT_CLASS}`).first(), 'focus');
 

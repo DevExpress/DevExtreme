@@ -9,7 +9,7 @@ import {
 } from '@ts/core/utils/m_dom';
 
 describe('DOM utils', () => {
-  let element: HTMLElement;
+  let element = document.createElement('div');
 
   beforeEach(() => {
     element = document.createElement('div');

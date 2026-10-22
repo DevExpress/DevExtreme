@@ -21,7 +21,7 @@ import type { RowPreparedEvent } from '@js/ui/data_grid';
 import type dxLoadPanel from '@js/ui/load_panel';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { ActionEvent } from '@ts/core/action';
-import { compileGetter } from '@ts/core/utils/m_data';
+import { compileGetter } from '@ts/core/utils/data';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {
@@ -464,9 +464,19 @@ export class RowsView extends ColumnsView {
     const { top, left } = e.scrollOffset;
     const rtlEnabled = this.option('rtlEnabled');
     const isNativeScrolling = e.component.option('useNative');
-    const isHorizontalScrollbarVisible = this.isScrollbarVisible(true);
 
     this._scrollTop = top;
+    this._saveHorizontalScrollPosition(left);
+
+    const scrollLeft = rtlEnabled && isNativeScrolling ? -this._scrollRight : left;
+
+    this.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, this.name);
+  }
+
+  protected _saveHorizontalScrollPosition(left: number): void {
+    const rtlEnabled = this.option('rtlEnabled');
+    const isHorizontalScrollbarVisible = this.isScrollbarVisible(true);
+
     this._scrollLeft = rtlEnabled && !isHorizontalScrollbarVisible ? -1 : left;
 
     if (rtlEnabled) {
@@ -476,10 +486,6 @@ export class RowsView extends ColumnsView {
 
       this._scrollRight = maxHorizontalScrollOffset - left;
     }
-
-    const scrollLeft = rtlEnabled && isNativeScrolling ? -this._scrollRight : left;
-
-    this.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, this.name);
   }
 
   private _renderScrollableCore($element: dxElementWrapper): void {

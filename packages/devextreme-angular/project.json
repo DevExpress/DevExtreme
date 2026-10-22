@@ -338,7 +338,9 @@
         "cwd": "packages/devextreme-angular"
       },
       "inputs": [
-        "test"
+        "default",
+        "test",
+        "^default"
       ]
     },
     "test:all": {

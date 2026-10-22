@@ -58,7 +58,7 @@ import type {
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import type { Options } from '@ts/core/options/index';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets, isValidDate } from '@ts/core/utils/m_date';
 import { tabbable } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { focus } from '@ts/events/short';
@@ -2039,7 +2039,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       }
 
       const result = this.timeZoneCalculator.createDate(date, 'fromGrid');
-      return dateUtilsTs.addOffsets(result, -viewOffset);
+      return addOffsets(result, -viewOffset);
     };
 
     const targetCell = $cell
@@ -2054,30 +2054,30 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const cellEndDate = getConvertedFromGrid(targetCell.endDate);
 
     let appointmentStartDate = new Date(appointment.startDate);
-    appointmentStartDate = dateUtilsTs.addOffsets(appointmentStartDate, -viewOffset);
+    appointmentStartDate = addOffsets(appointmentStartDate, -viewOffset);
     let appointmentEndDate = new Date(appointment.endDate);
-    appointmentEndDate = dateUtilsTs.addOffsets(appointmentEndDate, -viewOffset);
+    appointmentEndDate = addOffsets(appointmentEndDate, -viewOffset);
     let resultedStartDate = cellStartDate ?? appointmentStartDate;
 
-    if (!dateUtilsTs.isValidDate(appointmentStartDate)) {
+    if (!isValidDate(appointmentStartDate)) {
       appointmentStartDate = resultedStartDate;
     }
 
-    if (!dateUtilsTs.isValidDate(appointmentEndDate) && cellEndDate) {
+    if (!isValidDate(appointmentEndDate) && cellEndDate) {
       appointmentEndDate = cellEndDate;
     }
 
     const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
 
     const isKeepAppointmentHours = this._workSpace.keepOriginalHours()
-      && dateUtilsTs.isValidDate(appointment.startDate)
-      && dateUtilsTs.isValidDate(cellStartDate);
+      && isValidDate(appointment.startDate)
+      && isValidDate(cellStartDate);
 
     if (isKeepAppointmentHours) {
       const startDate = this.timeZoneCalculator.createDate(appointmentStartDate, 'toGrid');
       const timeInMs = startDate.getTime() - dateUtils.trimTime(startDate).getTime();
 
-      const targetCellStartDate = dateUtilsTs.addOffsets(targetCell.startDate, -viewOffset);
+      const targetCellStartDate = addOffsets(targetCell.startDate, -viewOffset);
       resultedStartDate = new Date(dateUtils.trimTime(targetCellStartDate).getTime() + timeInMs);
       resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, 'fromGrid');
     }
@@ -2117,8 +2117,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       }
     }
 
-    result.startDate = dateUtilsTs.addOffsets(result.startDate, viewOffset);
-    result.endDate = dateUtilsTs.addOffsets(resultedEndDate, viewOffset);
+    result.startDate = addOffsets(result.startDate, viewOffset);
+    result.endDate = addOffsets(resultedEndDate, viewOffset);
     const rawResult = result.source;
 
     setAppointmentGroupValues(rawResult, this.resourceManager.resourceById, targetCell.groups);

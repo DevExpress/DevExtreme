@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets } from '@ts/core/utils/m_date';
 import { shiftIntegerByModule } from '@ts/core/utils/math';
 import {
   getDisplayedRowCount, getIsGroupedAllDayPanel, getKeyByGroup, weekUtils,
@@ -230,10 +230,10 @@ export class TimePanelDataGenerator {
   ): boolean {
     // NOTE: today date value shifted by -viewOffset for the render purposes.
     // Therefore, we roll-backing here this shift.
-    const realToday = dateUtilsTs.addOffsets(today, viewOffset);
+    const realToday = addOffsets(today, viewOffset);
     // NOTE: start view date value calculated from the render options and hasn't viewOffset.
     // So, we must shift it by viewOffset to get the real start view date here.
-    const realStartViewDate = dateUtilsTs.addOffsets(startViewDate, viewOffset);
+    const realStartViewDate = addOffsets(startViewDate, viewOffset);
 
     if (
       !showCurrentTimeIndicator

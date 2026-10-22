@@ -1,4 +1,4 @@
-const { bundleDemo } = require('../server/csp-bundle');
+const { bundleDemo } = require('../server/demo-bundle');
 
 async function buildReactVueDemoInPlace(framework, widget, name, srcDir) {
   return bundleDemo({ widget, name, srcDir }, { destDir: srcDir, framework });

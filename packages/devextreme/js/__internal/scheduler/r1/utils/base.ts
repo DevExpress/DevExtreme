@@ -1,7 +1,7 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets } from '@ts/core/utils/m_date';
 
 import {
   HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION,
@@ -40,8 +40,8 @@ const getDurationInHours = (
 ): number => Math.floor((endDate.getTime() - startDate.getTime()) / toMs('hour'));
 
 export const getDatesWithoutTime = (min: Date | number, max: Date | number): [Date, Date] => {
-  const newMin = dateUtils.trimTime(new Date(min)) as Date;
-  const newMax = dateUtils.trimTime(new Date(max)) as Date;
+  const newMin = dateUtils.trimTime(new Date(min));
+  const newMax = dateUtils.trimTime(new Date(max));
 
   newMax.setDate(newMax.getDate() + 1);
 
@@ -140,7 +140,7 @@ export const getValidCellDateForLocalTimeFormat = (
     viewOffset: number;
   },
 ): Date => {
-  const originDate = dateUtilsTs.addOffsets(date, -viewOffset);
+  const originDate = addOffsets(date, -viewOffset);
   const localTimeZoneChangedInOriginDate = timeZoneUtils.isTimezoneChangeInDate(originDate);
 
   if (!localTimeZoneChangedInOriginDate) {
@@ -157,7 +157,7 @@ export const getValidCellDateForLocalTimeFormat = (
   );
 
   const startViewDateOffset = getStartViewDateTimeOffset(startViewDate, startDayHour);
-  return dateUtilsTs.addOffsets(
+  return addOffsets(
     startViewDateWithoutDST,
     viewOffset,
     cellIndexShift,
@@ -246,10 +246,10 @@ export const getViewStartByOptions = (
   intervalDuration: number,
   startViewDate: Date | undefined,
 ): Date => {
-  if (!startDate) {
+  if (!startDate || !startViewDate) {
     return new Date(currentDate);
   }
-  let currentStartDate = dateUtils.trimTime(startViewDate) as Date;
+  let currentStartDate = dateUtils.trimTime(startViewDate);
   const diff = currentStartDate.getTime() <= currentDate.getTime() ? 1 : -1;
   let endDate = new Date(currentStartDate.getTime() + intervalDuration * diff);
 

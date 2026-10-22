@@ -4,6 +4,8 @@ import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 import { getTestGlobalsScriptPath } from './test-globals-bundle';
+import { widgetsGalleryServiceMock } from '../../testing/apiMocks/widgetsGalleryServiceMock';
+import { xmlaServiceMock } from '../../testing/apiMocks/xmlaServiceMock';
 
 export const FRAMEWORKS = {
   jquery: 'jQuery',
@@ -337,6 +339,7 @@ export function runManualTestCore(
   ];
 
   const test = testObject.clientScripts(clientScripts)
+    .requestHooks(widgetsGalleryServiceMock, xmlaServiceMock)
     .page(testURL);
 
   test.before?.(async (t) => {
