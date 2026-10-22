@@ -347,7 +347,6 @@ class MultiView<
       roledescription: messageLocalization.format('dxMultiView-itemAriaRoleDescription'),
       label: messageLocalization.format(
         'dxMultiView-itemAriaLabel',
-        // @ts-expect-error ts-error
         itemIndex + 1,
         itemsCount,
       ),

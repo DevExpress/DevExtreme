@@ -177,7 +177,7 @@ export class CompactAppointmentsHelper {
   private createButtonTemplate(appointmentCount, element, isCompact) {
     const text = isCompact
       ? appointmentCount
-      : (messageLocalization.getFormatter('dxScheduler-moreAppointments') as any)(appointmentCount);
+      : messageLocalization.getFormatter('dxScheduler-moreAppointments')(appointmentCount);
 
     return element
       .append($('<span>').text(text))

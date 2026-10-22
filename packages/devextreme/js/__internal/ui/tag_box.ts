@@ -457,11 +457,9 @@ class TagBox<
     const { length: selectedCount } = this._getValue();
     const { showMultiTagOnly, maxDisplayedTags } = this.option();
 
-    if (!showMultiTagOnly) {
-      // @ts-expect-error getFormatter return type not typed as callable
+    if (!showMultiTagOnly && isDefined(maxDisplayedTags)) {
       args.text = messageLocalization.getFormatter('dxTagBox-moreSelected')(selectedCount - maxDisplayedTags + 1);
     } else {
-      // @ts-expect-error getFormatter return type not typed as callable
       args.text = messageLocalization.getFormatter('dxTagBox-selected')(selectedCount);
     }
   }
