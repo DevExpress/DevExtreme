@@ -108,7 +108,7 @@ export interface Renderer {
   is: (this: Renderer, selector: RendererFilter) => boolean;
   children: (this: Renderer, selector?: RendererFilter) => Renderer;
   siblings: (this: Renderer) => Renderer;
-  each: (this: Renderer, callback: ElementCallback) => void;
+  each: (this: Renderer, callback: ElementCallback) => Renderer;
   index: (this: Renderer, element?: RendererSelector) => number;
   get: (this: Renderer, index: number) => RendererElement;
   eq: (this: Renderer, index: number) => Renderer;
@@ -137,7 +137,7 @@ export interface Renderer {
   };
   data: {
     (this: Renderer, key?: string): unknown;
-    (this: Renderer, key: string, value: unknown): Renderer | undefined;
+    (this: Renderer, key: string, value: unknown): Renderer;
   };
   removeData: (this: Renderer, key?: string) => Renderer;
 }
@@ -825,12 +825,14 @@ InitRender.prototype.siblings = function (this: Renderer): Renderer {
   return renderer(result);
 };
 
-InitRender.prototype.each = function (this: Renderer, callback: ElementCallback): void {
+InitRender.prototype.each = function (this: Renderer, callback: ElementCallback): Renderer {
   for (let i = 0; i < this.length; i += 1) {
     if (callback.call(this[i], i, this[i]) === false) {
       break;
     }
   }
+
+  return this;
 };
 
 InitRender.prototype.index = function (this: Renderer, element?: RendererSelector): number {
@@ -1079,15 +1081,18 @@ function scrollTop(this: Renderer, value?: number): Renderer | number | undefine
 InitRender.prototype.scrollTop = scrollTop;
 
 function data(this: Renderer, key?: string): unknown;
-function data(this: Renderer, key: string, value: unknown): Renderer | undefined;
+function data(this: Renderer, key: string, value: unknown): Renderer;
 function data(this: Renderer, ...args: [key?: string, value?: unknown]): unknown {
-  if (!this[0]) return undefined;
-
   const [key, value] = args;
+
   if (args.length < 2) {
-    return elementData.call(renderer, this[0], key);
+    return this[0] ? elementData.call(renderer, this[0], key) : undefined;
   }
-  elementData.call(renderer, this[0], key, value);
+
+  if (this[0]) {
+    elementData.call(renderer, this[0], key, value);
+  }
+
   return this;
 }
 InitRender.prototype.data = data;
