@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import { getOuterHeight } from 'core/utils/size';
-import { createNoScriptFrame } from '__internal/ui/html_editor/utils/html_sanitizer';
+import { createNoScriptFrame, sanitizeHtml } from '__internal/ui/html_editor/utils/html_sanitizer';
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
 import Quill from 'devextreme-quill';
 
@@ -398,6 +398,7 @@ export default function() {
 
             this.htmlWithScript = '<script>window._isScriptExecuted = true;</script>';
             this.htmlWithInlineHandler = '<img src="undefined" onerror="window._isInlineHandlerExecuted = true;"/>';
+            this.htmlWithAdjacentInlineHandlers = '<img src="undefined" onmouseover="window._isInlineHandlerExecuted = true;" onerror="window._isInlineHandlerExecuted = true;"/>';
         },
         afterEach: function() {
             delete window._isScriptExecuted;
@@ -434,6 +435,25 @@ export default function() {
                 assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
                 done();
             }, 100);
+        });
+
+        test('adjacent inline handlers embedded in html value should not be executed on init', function(assert) {
+            const done = assert.async();
+
+            $('#htmlEditor').dxHtmlEditor({
+                value: this.htmlWithAdjacentInlineHandlers
+            });
+
+            setTimeout(() => {
+                assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
+                done();
+            }, 100);
+        });
+
+        test('sanitizeHtml should remove all adjacent inline handlers', function(assert) {
+            const sanitizedHtml = sanitizeHtml(Quill, this.htmlWithAdjacentInlineHandlers);
+
+            assert.strictEqual(sanitizedHtml, '<img src="undefined">', 'inline handlers are removed');
         });
 
         test('value change to html with embedded script should not execute the script', function(assert) {
