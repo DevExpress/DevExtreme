@@ -527,6 +527,10 @@ function makeCompilerPlugin(createCompilerPlugin, tsconfig, fileReplacements) {
   );
 }
 
+function demoUsesZone(demo) {
+  return /\bprovideZoneChangeDetection\b/.test(fs.readFileSync(demo.entry, 'utf8'));
+}
+
 function prepareDemo(demo) {
   const fileReplacements = {};
   for (const tsFile of findDemoTsFiles(path.join(demo.srcDir, 'app'))) {
@@ -536,16 +540,17 @@ function prepareDemo(demo) {
   const effectiveEntry = fileReplacements[demo.entry] || demo.entry;
   const shimEntry = writeEntryShim(demo, effectiveEntry);
   return {
-    ...demo, effectiveEntry, shimEntry, fileReplacements,
+    ...demo, effectiveEntry, shimEntry, fileReplacements, usesZone: demoUsesZone(demo),
   };
 }
 
-const ANGULAR_IMPLICIT_PACKAGES = ['zone.js', 'reflect-metadata', 'devextreme-dist'];
+const ANGULAR_IMPLICIT_PACKAGES = ['reflect-metadata', 'devextreme-dist'];
 function writeDemoManifest(demo, destDir) {
   const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
   const packages = resolvePackageVersions([
     ...discoverDemoSpecifiers(demo.srcDir),
     ...ANGULAR_IMPLICIT_PACKAGES,
+    ...(demo.usesZone ? ['zone.js'] : []),
   ]);
   fs.writeFileSync(
     path.join(destDir, 'demo.manifest.json'),
@@ -675,6 +680,10 @@ async function emitDemoResources(demoDestDirs, outputFiles) {
   }));
 }
 
+function demoJsFiles(demo, localJsFiles) {
+  return demo.usesZone ? [ANGULAR_ZONE_SCRIPT, ...localJsFiles] : localJsFiles;
+}
+
 async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const prepared = demo.effectiveEntry ? demo : prepareDemo(demo);
   const destDir = destDirOverride || path.join(SRC_DEMOS_DIR, prepared.widget, prepared.name, FRAMEWORK);
@@ -707,10 +716,7 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const localJsFiles = sortJsFiles(outputs.filter((o) => o.endsWith('.js')).map((o) => path.basename(o)));
   if (localJsFiles.length === 0) return { ok: false, reason: 'no JS output produced' };
 
-  const jsFiles = [
-    ANGULAR_ZONE_SCRIPT,
-    ...localJsFiles,
-  ];
+  const jsFiles = demoJsFiles(prepared, localJsFiles);
   const cssFiles = outputs.filter((o) => o.endsWith('.css')).map((o) => path.basename(o));
 
   fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: prepared.srcDir }));
@@ -754,8 +760,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
     }
 
     const jsFiles = [
-      ANGULAR_ZONE_SCRIPT,
-      ...localJsFiles,
+      ...demoJsFiles(demo, localJsFiles),
     ];
     fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: demo.srcDir }));
     if (IS_GENERATE_MANIFESTS) writeDemoManifest(demo, destDir);
