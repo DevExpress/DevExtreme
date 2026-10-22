@@ -116,18 +116,13 @@ const overlayStyles = createImportantStyles({
   'justify-content': 'center',
   'z-index': OVERLAY_Z_INDEX,
   'background-color': 'rgba(255, 255, 255, 0.9)',
-  margin: '0px',
   padding: '1rem',
   'padding-bottom': 'min(400px, 40vh)',
-  'box-sizing': 'border-box',
 });
 const overlayContentStyles = createImportantStyles({
   ...commonStyles,
   display: 'block',
-  position: 'static',
   'max-width': '60rem',
-  margin: '0px',
-  padding: '0px',
   'text-align': 'center',
 });
 const overlayTextStyles = {
@@ -333,27 +328,18 @@ class DxLicense extends SafeHTMLElement {
     this._reassignComponent();
   }
 
-  private _createTrialExpiredTitle(): HTMLSpanElement {
-    const version = this.getAttribute(attributeNames.version);
-    const title = setStyles(
-      this._createSpan(`Your 30-day trial has expired (v${version}).`),
-      overlayTitleStyles,
-    );
-
-    title.setAttribute('role', 'heading');
-    title.setAttribute('aria-level', '2');
-
-    return title;
-  }
-
   private _createTrialExpiredContent(): HTMLElement {
     const licensingDoc = this.getAttribute(attributeNames.licensingDoc) as string;
     const buyNow = this.getAttribute(attributeNames.buyNow) as string;
+    const version = this.getAttribute(attributeNames.version);
     const content = setStyles(document.createElement('div'), overlayContentStyles);
 
     content.append(
       createWarningIcon(),
-      this._createTrialExpiredTitle(),
+      setStyles(
+        this._createSpan(`Your 30-day trial has expired (v${version}).`),
+        overlayTitleStyles,
+      ),
       setStyles(this._createSpan('Use and Redistribution prohibited. Please '), overlaySpanStyles),
       setStyles(this._createLink('register', licensingDoc), overlayLinkStyles),
       setStyles(this._createSpan(' a valid license or '), overlaySpanStyles),
