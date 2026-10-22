@@ -57,7 +57,7 @@
       vertical-alignment="bottom"
       horizontal-alignment="center"
     />
-    <DxArgumentAxis>
+    <DxArgumentAxis :min-visual-range-length="{ days: 3 }">
       <DxVisualRange
         v-model:start-value="startValue"
         v-model:end-value="endValue"
@@ -116,8 +116,8 @@ const panStepFraction = 0.25;
 const zoomFactor = 0.75;
 const minVisibleSpanMs = 3 * dayMs;
 
-const initialStart = new Date(1994, 3, 15);
-const initialEnd = new Date(1994, 3, 29);
+const initialStart = new Date(1994, 3, 14, 12);
+const initialEnd = new Date(1994, 3, 29, 12);
 
 const dataMin = dataSource[0].date.getTime();
 const dataMax = dataSource[dataSource.length - 1].date.getTime();
@@ -189,13 +189,15 @@ const resetZoomButtonOptions: DxButtonTypes.Properties = {
 };
 
 const customizeTooltip = (pointInfo: DxChartTypes.PointInfo) => {
-  const info = pointInfo as DxChartTypes.PointInfo & Record<string, unknown>;
+  if (!('openValue' in pointInfo)) {
+    return { text: '' };
+  }
 
   return {
-    text: `Open: $${info.openValue}<br/>
-         Close: $${info.closeValue}<br/>
-         High: $${info.highValue}<br/>
-         Low: $${info.lowValue}<br/>`,
+    text: `Open: $${pointInfo.openValue}<br/>
+         Close: $${pointInfo.closeValue}<br/>
+         High: $${pointInfo.highValue}<br/>
+         Low: $${pointInfo.lowValue}<br/>`,
   };
 };
 </script>

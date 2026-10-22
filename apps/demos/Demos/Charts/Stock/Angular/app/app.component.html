@@ -62,7 +62,10 @@
       <dxo-chart-format type="currency" [precision]="0"> </dxo-chart-format>
     </dxo-chart-label>
   </dxi-chart-value-axis>
-  <dxo-chart-argument-axis [(visualRange)]="visualRange">
+  <dxo-chart-argument-axis
+    [(visualRange)]="visualRange"
+    [minVisualRangeLength]="{ days: 3 }"
+  >
     <dxo-chart-label
       format="MMM dd"
       overlappingBehavior="rotate"
