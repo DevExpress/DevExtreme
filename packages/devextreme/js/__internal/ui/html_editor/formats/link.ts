@@ -75,7 +75,7 @@ if (Quill) {
           this.domNode.removeAttribute('target');
         }
         // @ts-expect-error the format value is untyped; isObject narrows it only to `object`
-        this.domNode.setAttribute('href', value.href);
+        this.domNode.setAttribute('href', ExtLink.sanitize(value.href));
       } else {
         super.format(name, value);
       }
