@@ -497,7 +497,7 @@ class Slider<
     e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
     e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 
-    this._itemWidthRatio = getWidth(this.$element()) / swipePixelRatio;
+    this._itemWidthRatio = getWidth(this.$element().get(0)) / swipePixelRatio;
 
     this._needPreventAnimation = true;
   }
@@ -640,7 +640,8 @@ class Slider<
     const e = args.event;
     const { rtlEnabled } = this.option();
 
-    this._currentRatio = (eventData(e).x - (this._$bar.offset()?.left ?? 0)) / getWidth(this._$bar);
+    this._currentRatio = (eventData(e).x - (this._$bar.offset()?.left ?? 0))
+      / Number(getWidth(this._$bar));
 
     if (rtlEnabled) {
       this._currentRatio = 1 - this._currentRatio;

@@ -791,18 +791,19 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     const cancelButtonsCount = allowCanceling && uploadMode !== 'useForm' ? 1 : 0;
     const uploadButtonsCount = uploadMode === 'useButtons' ? 1 : 0;
-    const filesContainerWidth = getWidth(
+    const filesContainerWidth = Number(getWidth(
       this._$filesContainer?.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).first(),
-    ) || getWidth(this._$filesContainer);
+    ) || getWidth(this._$filesContainer));
     const $buttonContainer = this._$filesContainer?.find(`.${FILEUPLOADER_BUTTON_CONTAINER_CLASS}`).eq(0);
-    const buttonsWidth = getWidth($buttonContainer) * (cancelButtonsCount + uploadButtonsCount);
+    const buttonsWidth = Number(getWidth($buttonContainer))
+      * (cancelButtonsCount + uploadButtonsCount);
     const $fileSize = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_SIZE_CLASS}`).eq(0);
     const $icon = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`).eq(0);
-    const iconWidth = _showFileIcon ? getOuterWidth($icon) : 0;
+    const iconWidth = _showFileIcon ? Number(getOuterWidth($icon)) : 0;
 
     const prevFileSize = $fileSize?.text();
     $fileSize?.text('1000 Mb');
-    const fileSizeWidth = getWidth($fileSize);
+    const fileSizeWidth = Number(getWidth($fileSize));
     $fileSize?.text(prevFileSize ?? '');
 
     const maxWidth = filesContainerWidth - buttonsWidth - fileSizeWidth - iconWidth;

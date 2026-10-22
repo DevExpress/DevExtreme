@@ -291,7 +291,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   }
 
   public getHeight(): number {
-    return parseInt(getOuterHeight(this.$element()), 10);
+    return parseInt(String(getOuterHeight(this.$element().get(0))), 10);
   }
 
   public updateDateByDirection(direction: Direction): void {
