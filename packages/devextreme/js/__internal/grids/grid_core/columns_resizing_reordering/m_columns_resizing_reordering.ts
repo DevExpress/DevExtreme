@@ -50,6 +50,7 @@ import type {
   CellWidths,
   Coordinates,
   DraggingPanel,
+  DraggingPanelBoundingRect,
   DraggingPointCreatedOptions,
   DraggingPointsOptions,
   DragHeaderOptions,
@@ -390,8 +391,7 @@ export class BlockSeparatorView extends SeparatorView {
     if ($element && !this._isShown) {
       switch (targetLocation) {
         case 'group':
-          // @ts-expect-error the view is rendered here
-          this.element().css('display', 'block');
+          $element.css('display', 'block');
           break;
         case 'columnChooser':
           startAnimate({ width: '100%', display: 'block' });
@@ -422,20 +422,16 @@ export class DraggingHeaderView extends modules.View {
 
   private _testPointsByColumns?: ColumnPoint[];
 
-  private getSourceDraggingPanel(): DraggingPanel {
-    // @ts-expect-error the drag options are set while dragging
-    const { sourceLocation, draggingPanels }: DragOptions = this._dragOptions;
-
+  private getSourceDraggingPanel({ sourceLocation, draggingPanels }: DragOptions): DraggingPanel {
     return draggingPanels
       .find(
         (draggingPanel: DraggingPanel) => draggingPanel.getName() === sourceLocation,
       ) as DraggingPanel;
   }
 
-  private updateDragElement(): void {
-    // @ts-expect-error the drag options are set while dragging
-    const { columnElement, sourceColumn }: DragOptions = this._dragOptions;
-    const sourceDraggingPanel = this.getSourceDraggingPanel();
+  private updateDragElement(dragOptions: DragOptions): void {
+    const { columnElement, sourceColumn } = dragOptions;
+    const sourceDraggingPanel = this.getSourceDraggingPanel(dragOptions);
     // @ts-expect-error the view is rendered here
     const dragElement: dxElementWrapper = this.element();
 
@@ -474,27 +470,15 @@ export class DraggingHeaderView extends modules.View {
     return this._isDragging;
   }
 
-  private _getDraggingPanelByPos(pos: Coordinates): DraggingPanel | undefined {
-    /* eslint-disable-next-line @typescript-eslint/init-declarations
-      -- assigned in the each callback */
-    let result: DraggingPanel | undefined;
-
-    // @ts-expect-error the drag options are set while dragging
-    each(this._dragOptions.draggingPanelBoundingRects, (_, { draggingPanel, boundingRect }) => {
-      if (boundingRect
-        && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom)
-        && (boundingRect.top === undefined || pos.y > boundingRect.top)
-        && (boundingRect.left === undefined || pos.x > boundingRect.left)
-        && (boundingRect.right === undefined || pos.x < boundingRect.right)
-      ) {
-        result = draggingPanel;
-        return false;
-      }
-
-      return undefined;
-    });
-
-    return result;
+  private _getDraggingPanelByPos(
+    pos: Coordinates,
+    draggingPanelBoundingRects: DraggingPanelBoundingRect[] | null,
+  ): DraggingPanel | undefined {
+    return draggingPanelBoundingRects?.find(({ boundingRect }) => boundingRect
+      && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom)
+      && (boundingRect.top === undefined || pos.y > boundingRect.top)
+      && (boundingRect.left === undefined || pos.x > boundingRect.left)
+      && (boundingRect.right === undefined || pos.x < boundingRect.right))?.draggingPanel;
   }
 
   protected _renderCore(): void {
@@ -504,10 +488,7 @@ export class DraggingHeaderView extends modules.View {
       .hide();
   }
 
-  private _resetTargetColumnOptions(): void {
-    // @ts-expect-error the drag options are set while dragging
-    const params: DropOptions = this._dropOptions;
-
+  private _resetTargetColumnOptions(params: DropOptions): void {
     params.targetColumnIndex = -1;
     delete params.targetColumnElement;
     delete params.isLast;
@@ -567,7 +548,7 @@ export class DraggingHeaderView extends modules.View {
     document.onselectstart = (): boolean => false;
 
     this._controller.drag(this._dropOptions);
-    this.updateDragElement();
+    this.updateDragElement(dragOptions);
 
     // @ts-expect-error the view is rendered here
     this.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
@@ -606,7 +587,12 @@ export class DraggingHeaderView extends modules.View {
   }
 
   public dockHeader(eventData: Coordinates): void {
-    const targetDraggingPanel = this._getDraggingPanelByPos(eventData);
+    // @ts-expect-error the drag options are set while dragging
+    const dragOptions: DragOptions = this._dragOptions;
+    const targetDraggingPanel = this._getDraggingPanelByPos(
+      eventData,
+      dragOptions.draggingPanelBoundingRects,
+    );
 
     if (!targetDraggingPanel) {
       return;
@@ -615,8 +601,6 @@ export class DraggingHeaderView extends modules.View {
     const controller = this._controller;
     // @ts-expect-error the drag options are set while dragging
     const params: DropOptions = this._dropOptions;
-    // @ts-expect-error the drag options are set while dragging
-    const dragOptions: DragOptions = this._dragOptions;
     const rtlEnabled = this.option('rtlEnabled');
     const isVerticalOrientation = targetDraggingPanel.getName() === 'columnChooser';
     const axisName = isVerticalOrientation ? 'y' : 'x';
@@ -676,7 +660,7 @@ export class DraggingHeaderView extends modules.View {
         }
       }
     } else {
-      this._resetTargetColumnOptions();
+      this._resetTargetColumnOptions(params);
       controller.dock(params);
     }
   }
@@ -908,7 +892,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
         parentOffsetLeft <= eventData.x || (!isNextColumnMode && isRtlParentStyle)
       ) && (!isNextColumnMode || eventData.x <= parentOffsetRight);
 
-      if (isInsideParent && that._updateColumnsWidthIfNeeded(eventData.x)) {
+      if (isInsideParent && that._updateColumnsWidthIfNeeded(eventData.x, that._resizingInfo)) {
         // @ts-expect-error the view is rendered here
         const $cells: dxElementWrapper = that._columnHeadersView.getColumnElements();
         const $cell = $cells.eq(that._resizingInfo.currentColumnIndex);
@@ -1188,10 +1172,8 @@ export class ColumnsResizerViewController extends modules.ViewController {
     );
   }
 
-  private _updateColumnsWidthIfNeeded(posX: number): boolean {
+  private _updateColumnsWidthIfNeeded(posX: number, resizingInfo: ResizingInfo): boolean {
     let contentWidth = this._rowsView.contentWidth();
-    // @ts-expect-error the resizing info is set while resizing
-    const resizingInfo: ResizingInfo = this._resizingInfo;
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
     // @ts-expect-error the view is rendered here
@@ -1483,8 +1465,7 @@ export class TablePositionViewController extends modules.ViewController {
     const draggingHeaderView = this.component.getView('draggingHeaderView');
     const params: TablePosition = { height: columnsHeadersHeight };
 
-    const isDraggingOrResizing = this._columnsResizerController.isResizing()
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- OR of two flags
+    const isDraggingOrResizing = Boolean(this._columnsResizerController.isResizing())
       || draggingHeaderView.isDragging();
 
     if (isDraggingOrResizing) {
@@ -1657,13 +1638,14 @@ export class DraggingHeaderViewController extends modules.ViewController {
   ): void {
     each(draggingPanels, (_, draggingPanel) => {
       if (draggingPanel) {
-        /* eslint-disable-next-line @typescript-eslint/init-declarations
-          -- assigned per header row before subscribing */
-        let columns: Column[];
         const rowCount = 'getRowCount' in draggingPanel ? draggingPanel.getRowCount() : 1;
         // @ts-expect-error the dragging panels are named by their drop locations
         const nameDraggingPanel: DropLocationNames = draggingPanel.getName();
-        const subscribeToEvents = (index: number, columnElement: Element): void => {
+        const subscribeToEvents = (
+          columns: Column[],
+          index: number,
+          columnElement: Element,
+        ): void => {
           if (!columnElement) {
             return;
           }
@@ -1679,14 +1661,14 @@ export class DraggingHeaderViewController extends modules.ViewController {
               this.createAction((args: PointerEventArgs): void => {
                 const e = args.event;
                 const eventData = getEventData(e);
+                // @ts-expect-error offset() is typed as possibly undefined
+                const columnElementOffset: Offset = $(e.currentTarget).offset();
                 // @ts-expect-error a grid column has an index
                 const sourceIndex: number = column.index;
 
                 draggingHeader.dragHeader({
-                  // @ts-expect-error offset() is typed as possibly undefined
-                  deltaX: eventData.x - $(e.currentTarget).offset().left,
-                  // @ts-expect-error offset() is typed as possibly undefined
-                  deltaY: eventData.y - $(e.currentTarget).offset().top,
+                  deltaX: eventData.x - columnElementOffset.left,
+                  deltaY: eventData.y - columnElementOffset.top,
                   sourceColumn: column,
                   index: sourceIndex,
                   columnIndex: index,
@@ -1715,8 +1697,11 @@ export class DraggingHeaderViewController extends modules.ViewController {
         for (let i = 0; i < rowCount; i += 1) {
           const columnElements = draggingPanel.getColumnElements(i) ?? [];
           if (columnElements.length) {
-            columns = draggingPanel.getColumns(i) || [];
-            each(columnElements, subscribeToEvents);
+            const columns = draggingPanel.getColumns(i) || [];
+
+            each(columnElements, (index, columnElement) => {
+              subscribeToEvents(columns, index, columnElement);
+            });
           }
         }
       }
