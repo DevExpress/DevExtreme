@@ -69,7 +69,10 @@
   ],
   "pnpm": {
     "overrides": {
-      "@devexpress/callsite-record@^4.1.6": "4.1.6"
+      "@devexpress/callsite-record@^4.1.6": "4.1.6",
+      "dompurify@<=3.4.16": "^3.4.17",
+      "ip-address@<10.7.4": "^10.7.4",
+      "socks@<2.8.7": "^2.8.10"
     }
   },
   "packageManager": "pnpm@9.14.2"
