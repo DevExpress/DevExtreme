@@ -185,7 +185,7 @@ overrides:
   uuid@<14.0.0: ~14.0.0
   postcss@<8.5.23: ^8.5.23
   webpack-dev-server@<5.2.6: ^5.2.6
-  ip-address@<10.7.1: ~10.7.1
+  ip-address@<10.7.4: ~10.7.4
   http-proxy-middleware@>=0.16.0 <3.0.7: ^3.0.7
   brace-expansion@<3.0.0: ^2.1.7
   brace-expansion@>=3.0.0 <5.0.12: ^5.0.12
@@ -200,7 +200,7 @@ overrides:
   '@vue/server-renderer@<3.5.42': ^3.5.42
   axios@>=1.0.0 <1.20.0: ^1.20.0
   compression@<1.8.2: ^1.8.2
-  dompurify@>=3.4.13 <=3.4.15: ^3.4.16
+  dompurify@<=3.4.16: ^3.4.17
   follow-redirects@>=1.16.0 <1.16.1: ^1.16.1
   hono@<4.13.11: ^4.13.11
   http-cache-semantics@<=4.2.0: ^4.3.0
@@ -835,7 +835,7 @@ importers:
         version: 4.0.3(@swc/helpers@0.5.21)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(postcss@8.5.25))
       '@storybook/react-webpack5':
         specifier: 10.6.3
-        version: 10.6.3(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(typescript@5.9.3)
+        version: 10.6.3(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(supports-color@7.2.0)(typescript@5.9.3)
       '@types/react':
         specifier: 18.3.28
         version: 18.3.28
@@ -10692,8 +10692,8 @@ packages:
     resolution: {integrity: sha512-gYzvtM72ZtxQO0T048kd6HWSbbGCNOUwcnfQ01cqIJ4X2IYKFFHZ5mKvrQETcFXxsRObZulDaKmy//R7TPtsBg==}
     engines: {node: '>=20.19.0'}
 
-  dompurify@3.4.16:
-    resolution: {integrity: sha512-sqo+pNp3qRhCIpbgRi1y8Tgk27Bo2Ry7w0dC1NBeNTdZChWjz9Xb/KOoZbRP/R6pQZ80Qw8YhXw13hWWBbMRnQ==}
+  dompurify@3.4.17:
+    resolution: {integrity: sha512-B/pSlYVHQ58kqISD/yDjuJ1yfzI34m1gF4lAod2bwSRhiN4K5Cl3H8Af7hqB2PmTL911tdEudnnXn5FnhRoz0w==}
 
   domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
@@ -12284,8 +12284,8 @@ packages:
   iobuffer@5.4.0:
     resolution: {integrity: sha512-DRebOWuqDvxunfkNJAlc3IzWIPD5xVxwUNbHr7xKB8E6aLJxIPfNX3CoMJghcFjpv6RWQsrcJbghtEwSPoJqMA==}
 
-  ip-address@10.7.2:
-    resolution: {integrity: sha512-7H/2gFSIitxc0hG3nOI1glS8QLo/EHBFFLk8vEUjXY/xu0AdL8jZ9U1IzO2PUm0d2D/ofQcAifb0g6OBkt8U7w==}
+  ip-address@10.7.4:
+    resolution: {integrity: sha512-DWBMKyeM25D70nrIiTkgQth59/G+naKOTep6huF9j+GmeK3DMD60Zvxg5d5qQnz+38AHgou6ean2LECX+lrKDg==}
     engines: {node: '>= 12'}
 
   ipaddr.js@1.9.1:
@@ -24365,10 +24365,10 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  '@storybook/preset-react-webpack@10.6.3(@swc/core@1.15.30(@swc/helpers@0.5.21))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(typescript@5.9.3)':
+  '@storybook/preset-react-webpack@10.6.3(@swc/core@1.15.30(@swc/helpers@0.5.21))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
       '@storybook/core-webpack': 10.6.3(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))
-      '@storybook/react-docgen-typescript-plugin': 1.0.6--canary.9.0c3f3b7.0(typescript@5.9.3)(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21)))
+      '@storybook/react-docgen-typescript-plugin': 1.0.6--canary.9.0c3f3b7.0(supports-color@7.2.0)(typescript@5.9.3)(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21)))
       '@types/semver': 7.7.1
       magic-string: 1.4.1
       react: 18.3.1
@@ -24388,7 +24388,7 @@ snapshots:
       - uglify-js
       - webpack-cli
 
-  '@storybook/react-docgen-typescript-plugin@1.0.6--canary.9.0c3f3b7.0(typescript@5.9.3)(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21)))':
+  '@storybook/react-docgen-typescript-plugin@1.0.6--canary.9.0c3f3b7.0(supports-color@7.2.0)(typescript@5.9.3)(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21)))':
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       endent: 2.1.0
@@ -24411,10 +24411,10 @@ snapshots:
       '@types/react': 18.3.28
       '@types/react-dom': 18.3.7(@types/react@18.3.28)
 
-  '@storybook/react-webpack5@10.6.3(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(typescript@5.9.3)':
+  '@storybook/react-webpack5@10.6.3(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
       '@storybook/builder-webpack5': 10.6.3(@swc/core@1.15.30(@swc/helpers@0.5.21))(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(typescript@5.9.3)
-      '@storybook/preset-react-webpack': 10.6.3(@swc/core@1.15.30(@swc/helpers@0.5.21))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(typescript@5.9.3)
+      '@storybook/preset-react-webpack': 10.6.3(@swc/core@1.15.30(@swc/helpers@0.5.21))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(supports-color@7.2.0)(typescript@5.9.3)
       '@storybook/react': 10.6.3(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))(typescript@5.9.3)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -28195,7 +28195,7 @@ snapshots:
     dependencies:
       domelementtype: 3.0.0
 
-  dompurify@3.4.16:
+  dompurify@3.4.17:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
     optional: true
@@ -29373,12 +29373,12 @@ snapshots:
   express-rate-limit@8.3.2(express@4.22.1):
     dependencies:
       express: 4.22.1
-      ip-address: 10.7.2
+      ip-address: 10.7.4
 
   express-rate-limit@8.3.2(express@5.2.1):
     dependencies:
       express: 5.2.1(supports-color@7.2.0)
-      ip-address: 10.7.2
+      ip-address: 10.7.4
 
   express@4.22.1:
     dependencies:
@@ -30601,7 +30601,7 @@ snapshots:
 
   iobuffer@5.4.0: {}
 
-  ip-address@10.7.2: {}
+  ip-address@10.7.4: {}
 
   ipaddr.js@1.9.1: {}
 
@@ -31731,7 +31731,7 @@ snapshots:
     optionalDependencies:
       canvg: 3.0.11
       core-js: 3.49.0
-      dompurify: 3.4.16
+      dompurify: 3.4.17
       html2canvas: 1.4.1
 
   jsx-ast-utils@3.3.5:
@@ -35359,7 +35359,7 @@ snapshots:
 
   socks@2.8.7:
     dependencies:
-      ip-address: 10.7.2
+      ip-address: 10.7.4
       smart-buffer: 4.2.0
 
   source-map-js@1.2.2: {}
