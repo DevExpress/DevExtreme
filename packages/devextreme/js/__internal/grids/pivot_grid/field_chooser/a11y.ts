@@ -41,7 +41,6 @@ export const getFieldItemA11yLabel = (
   caption: string,
   { sortOrder, hasHeaderFilterValue }: FieldItemA11yOptions,
 ): string => [
-  // @ts-expect-error format typing does not accept substitution args
   messageLocalization.format(I18N_KEYS.fieldLabel, caption),
   hasHeaderFilterValue ? messageLocalization.format(I18N_KEYS.hasHeaderFilter) : null,
   getSortingLabel(sortOrder),

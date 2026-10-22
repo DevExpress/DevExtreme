@@ -874,7 +874,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          // @ts-expect-error format params should be extended
           'aria-label': messageLocalization.format('dxFileUploader-removeFileButtonLabel', file?.value?.name ?? ''),
         },
       },
@@ -907,7 +906,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          // @ts-expect-error format params should be extended
           'aria-label': messageLocalization.format('dxFileUploader-uploadFileButtonLabel', file?.value?.name ?? ''),
         },
       },

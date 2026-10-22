@@ -10,25 +10,21 @@ export const FileManagerMessages = {
       case ErrorCode.FileExists:
         return messageLocalization.format(
           'dxFileManager-errorFileExistsFormat',
-          // @ts-expect-error ts-error
           args,
         );
       case ErrorCode.FileNotFound:
         return messageLocalization.format(
           'dxFileManager-errorFileNotFoundFormat',
-          // @ts-expect-error ts-error
           args,
         );
       case ErrorCode.DirectoryExists:
         return messageLocalization.format(
           'dxFileManager-errorDirectoryExistsFormat',
-          // @ts-expect-error ts-error
           args,
         );
       case ErrorCode.DirectoryNotFound:
         return messageLocalization.format(
           'dxFileManager-errorDirectoryNotFoundFormat',
-          // @ts-expect-error ts-error
           args,
         );
       case ErrorCode.WrongFileExtension:
