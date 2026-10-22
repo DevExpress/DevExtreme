@@ -10,7 +10,7 @@ import { getOuterHeight } from '@js/core/utils/size';
 import { changeCallback, originalViewPort, value as viewPortValue } from '@js/core/utils/view_port';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
-import { uiLayerInitialized } from '@ts/core/utils/m_common';
+import { uiLayerInitialized } from '@ts/core/utils/common';
 import { themeReadyCallback } from '@ts/ui/m_themes_callback';
 
 const window = getWindow();

@@ -18,12 +18,12 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable array-callback-return */
 
-import { noop } from '@ts/core/utils/m_common';
+import { noop } from '@ts/core/utils/common';
 /// #DEBUG
-import { debug } from '@ts/core/utils/m_console';
+import { debug } from '@ts/core/utils/console';
 /// #ENDDEBUG
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
 import { extractColor, map, normalizeAngle } from '@ts/viz/core/utils';
 
 import { chart as barChart } from './bar_series';

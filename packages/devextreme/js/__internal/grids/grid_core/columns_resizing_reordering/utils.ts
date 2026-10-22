@@ -1,4 +1,4 @@
-import { each } from '@ts/core/utils/m_iterator';
+import { each } from '@ts/core/utils/iterator';
 import type { View } from '@ts/grids/grid_core/modules/modules';
 import type { BoundingRect } from '@ts/grids/grid_core/views/types';
 

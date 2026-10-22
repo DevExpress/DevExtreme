@@ -18,8 +18,8 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { Color } from '@ts/color';
-import { extend } from '@ts/core/utils/m_extend';
-import { isString } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isString } from '@ts/core/utils/type';
 import { normalizeEnum } from '@ts/viz/core/utils';
 
 const HIGHLIGHTING_STEP = 50;

@@ -7,8 +7,8 @@ import type { Format as LocalizationFormat, FormatObject } from '@js/localizatio
 import { resolvePresetOverride } from '@ts/core/global_format_config';
 import type { DateFormatter, DateParser, Format } from '@ts/core/localization/date';
 import dateLocalization from '@ts/core/localization/date';
-import * as iteratorUtils from '@ts/core/utils/m_iterator';
-import { isObject } from '@ts/core/utils/m_type';
+import * as iteratorUtils from '@ts/core/utils/iterator';
+import { isObject } from '@ts/core/utils/type';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Globalize from 'globalize';
 

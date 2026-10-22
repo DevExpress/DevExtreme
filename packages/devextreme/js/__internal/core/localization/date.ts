@@ -11,8 +11,8 @@ import { getFormatter as getLDMLDateFormatter } from '@ts/core/localization/ldml
 import { getParser as getLDMLDateParser } from '@ts/core/localization/ldml/date.parser';
 import numberLocalization from '@ts/core/localization/number';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
-import { each } from '@ts/core/utils/m_iterator';
-import { isString } from '@ts/core/utils/m_type';
+import { each } from '@ts/core/utils/iterator';
+import { isString } from '@ts/core/utils/type';
 
 export type BaseFormat = 'abbreviated' | 'short' | 'narrow';
 export type Format = BaseFormat | 'wide';

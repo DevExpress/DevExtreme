@@ -15,7 +15,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import filteringUtils from '@js/ui/shared/filtering';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import { normalizeDataSourceOptions as oldNormalizeDataSourceOptions } from '@ts/data/data_source/utils';
 import {
   convertDataFromUTCToLocal,

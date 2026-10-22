@@ -3,7 +3,7 @@ import type { Format as LocalizationFormat, FormatObject } from '@js/localizatio
 import { resolvePresetOverride } from '@ts/core/global_format_config';
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { DateFormatter, Format } from '@ts/core/localization/date';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 
 interface DateArgs {
   year: number;

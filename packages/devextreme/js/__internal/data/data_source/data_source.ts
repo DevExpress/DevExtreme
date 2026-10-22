@@ -19,7 +19,7 @@ import {
   isBoolean, isDefined, isEmptyObject, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
-import commonUtils from '@ts/core/utils/m_common';
+import commonUtils from '@ts/core/utils/common';
 import type Store from '@ts/data/abstract_store';
 import type { StoreKey } from '@ts/data/abstract_store';
 import CustomStore from '@ts/data/custom_store';
