@@ -1,0 +1,61 @@
+name: pnpm store cache
+
+concurrency:
+  group: wf-${{github.ref}}-${{github.workflow}}
+  cancel-in-progress: false
+
+# Pull request jobs only restore the pnpm store. They can read caches of their base branch,
+# so every push to 26_1 makes sure the store of the current lockfile is saved in the 26_1 scope.
+on:
+  push:
+    branches:
+      - 26_1
+  workflow_dispatch:
+
+jobs:
+  save:
+    name: Save pnpm store (${{ matrix.runner }})
+    strategy:
+      fail-fast: false
+      matrix:
+        # The store path differs between self-hosted and GitHub-hosted runners, and the path is part of the cache version.
+        runner: [devextreme-shr2, ubuntu-latest]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v6
+
+    - name: Use Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@v6
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - name: Lookup pnpm cache
+      id: lookup-pnpm-cache
+      uses: actions/cache/restore@v5
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        lookup-only: true
+
+    - name: Install dependencies
+      if: steps.lookup-pnpm-cache.outputs.cache-hit != 'true'
+      run: pnpm install --frozen-lockfile
+
+    - name: Save pnpm cache
+      if: steps.lookup-pnpm-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
