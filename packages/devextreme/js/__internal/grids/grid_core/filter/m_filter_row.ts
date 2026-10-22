@@ -129,7 +129,12 @@ const getColumnSelectedFilterOperation = function (that, column) {
 
 const hasMultiselectEditor = function ($editorContainer: dxElementWrapper): boolean {
   const editor = getEditorInstance($editorContainer);
-  return !editor || MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+
+  if (editor) {
+    return MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+  }
+
+  return !$editorContainer.find(`.${FILTER_RANGE_CONTENT_CLASS}`).length;
 };
 
 const isValidFilterValue = function (
@@ -639,12 +644,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         }
 
         if (selectedFilterOperation) {
-          options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = selectedFilterOperation;
-
           if (selectedFilterOperation === 'between' || columnSelectedFilterOperation === 'between') {
             notFocusEditor = selectedFilterOperation === 'between';
             options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
           }
+
+          options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = selectedFilterOperation;
         } else {
           options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
           options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = column.defaultSelectedFilterOperation || null;
@@ -871,12 +876,13 @@ export class ApplyFilterViewController extends modules.ViewController {
     this._columnsController.beginUpdate();
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i];
-      if (column.bufferedFilterValue !== undefined) {
-        this._columnsController.columnOption(i, 'filterValue', column.bufferedFilterValue);
+      const { bufferedFilterValue, bufferedSelectedFilterOperation } = column;
+      if (bufferedFilterValue !== undefined) {
+        this._columnsController.columnOption(i, 'filterValue', bufferedFilterValue);
         column.bufferedFilterValue = undefined;
       }
-      if (column.bufferedSelectedFilterOperation !== undefined) {
-        this._columnsController.columnOption(i, 'selectedFilterOperation', column.bufferedSelectedFilterOperation);
+      if (bufferedSelectedFilterOperation !== undefined) {
+        this._columnsController.columnOption(i, 'selectedFilterOperation', bufferedSelectedFilterOperation);
         column.bufferedSelectedFilterOperation = undefined;
       }
     }
