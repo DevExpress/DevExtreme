@@ -103,7 +103,6 @@ const sortingMixin = <T extends MixinBase>(
         const ariaColumnHeader = messageLocalization.format('dxDataGrid-ariaColumnHeader');
         const ariaSortIndex = messageLocalization.format(
           'dxDataGrid-ariaSortIndex',
-          // @ts-expect-error format() is typed without placeholder values
           column.sortIndex + 1,
         );
         const description = `${ariaColumnHeader}, ${ariaSortIndex}`;
