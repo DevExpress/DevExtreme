@@ -5,8 +5,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @stylistic/max-len */
 
-import { extend } from '@ts/core/utils/m_extend';
-import { isDate, isDefined, isFunction } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isDate, isDefined, isFunction } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { unique } from '@ts/viz/core/utils';
 

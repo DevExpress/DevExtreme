@@ -5,7 +5,7 @@
 
 import devices from '@ts/core/devices';
 import { browser } from '@ts/core/utils/browser';
-import { isFunction } from '@ts/core/utils/m_type';
+import { isFunction } from '@ts/core/utils/type';
 import { smartFormatter as _format } from '@ts/viz/axes/smart_formatter';
 
 export const HEIGHT_COMPACT_MODE = 24;
