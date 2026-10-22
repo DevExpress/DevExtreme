@@ -928,7 +928,6 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
       const validator = $cell && $cell.data('dxValidator');
       const rowOptions = $cell && $cell.closest(`.${VIEW_CLASSES.row}`).data('options');
-      // @ts-expect-error
       const value = validator && validator.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
         // @ts-expect-error

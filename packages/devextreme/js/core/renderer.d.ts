@@ -36,7 +36,9 @@ export interface dxElementWrapper {
   css(properties: Record<string, any>): this;
   css(propertyName: string): string | undefined;
 
-  data(key: string, value?: any): this;
+  data(key: string, value: any): this;
+
+  data<T = any>(key?: string): T;
 
   detach(): this;
 
