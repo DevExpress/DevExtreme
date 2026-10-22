@@ -15,28 +15,26 @@ import Button from '@js/ui/button';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import type { ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { ViewCellOptions } from '@ts/grids/grid_core/views/types';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import type { ModuleType } from '../types';
 import gridCoreUtils from '../utils';
 import {
-  BUTTON_CLASS,
-  DATA_EDIT_DATA_INSERT_TYPE,
-  EDIT_FORM_ITEM_CLASS,
-  EDIT_MODE_FORM,
-  EDIT_POPUP_CLASS,
-  EDIT_POPUP_FORM_CLASS,
+  CLASSES,
+  DATA_CHANGE_TYPE,
+  EDIT_MODE,
   EDITING_EDITROWKEY_OPTION_NAME,
   EDITING_FORM_OPTION_NAME,
   EDITING_POPUP_OPTION_NAME,
-  FOCUSABLE_ELEMENT_CLASS,
   FOCUSABLE_ELEMENT_SELECTOR,
-  FORM_BUTTONS_CONTAINER_CLASS,
 } from './const';
 import { forEachFormItems, getEditorType } from './editing_utils';
 import { editingFormBasedDataControllerExtender } from './extenders/editing_form_based_data_controller';
 import type { EditingController } from './m_editing';
+import type { EditorCellOptions } from './types';
 
 export interface IFormBasedEditingControllerExtender {
   // eslint-disable-next-line @typescript-eslint/method-signature-style
@@ -69,7 +67,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   private isFormEditMode() {
     const editMode = this.option('editing.mode');
-    return editMode === EDIT_MODE_FORM;
+    return editMode === EDIT_MODE.form;
   }
 
   protected getFirstEditableColumnIndex() {
@@ -157,7 +155,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   protected _showEditPopup(rowIndex, repaintForm?) {
     const isMobileDevice = devices.current().deviceType !== 'desktop';
-    const editPopupClass = this.addWidgetPrefix(EDIT_POPUP_CLASS);
+    const editPopupClass = this.addWidgetPrefix(CLASSES.editPopup);
     const popupOptions = extend(
       {
         showTitle: false,
@@ -184,7 +182,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       this._editPopup = this._createComponent($popupContainer, Popup);
       this._editPopup.on('hiding', this.getEditPopupHidingHandler());
       this._editPopup.on('shown', (e) => {
-        (eventsEngine as any).trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not(`.${FOCUSABLE_ELEMENT_CLASS}`).first(), 'focus');
+        (eventsEngine as any).trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not(`.${CLASSES.focusableElement}`).first(), 'focus');
 
         if (repaintForm) {
           this._editForm?.repaint();
@@ -365,7 +363,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   private getEditFormOptions(detailOptions) {
     const editFormOptions = (this as any)._getValidationGroupsInForm?.(detailOptions);
     const userCustomizeItem = this.option('editing.form.customizeItem');
-    const editFormItemClass = this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS);
+    const editFormItemClass = this.addWidgetPrefix(CLASSES.editFormItem);
     let items: any = this.option('editing.form.items');
     const isCustomEditorType = {};
 
@@ -432,6 +430,18 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     });
   }
 
+  public getColumnTemplate(
+    options: EditorCellOptions,
+  ): ColumnTemplateSource<ViewCellOptions> | undefined {
+    const { column, row, rowType } = options;
+
+    if (column.command === 'detail' && rowType === 'detail' && this.isEditRow(row?.rowIndex)) {
+      return this.getEditFormTemplate();
+    }
+
+    return super.getColumnTemplate(options);
+  }
+
   private getEditFormTemplate() {
     return ($container, detailOptions, options) => {
       const editFormOptions = this.option(EDITING_FORM_OPTION_NAME);
@@ -442,12 +452,12 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       this._firstFormItem = undefined;
 
       if (isPopupForm) {
-        $formContainer.addClass(this.addWidgetPrefix(EDIT_POPUP_FORM_CLASS));
+        $formContainer.addClass(this.addWidgetPrefix(CLASSES.editPopupForm));
       }
       this._editForm = this._createComponent($formContainer, Form, extend({}, editFormOptions, baseEditFormOptions));
 
       if (!isPopupForm) {
-        const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(FORM_BUTTONS_CONTAINER_CLASS)).appendTo($container);
+        const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(CLASSES.formButtonsContainer)).appendTo($container);
         this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
         this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getCancelButtonConfig());
       }
@@ -478,7 +488,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   protected _processDataItemCore(item, change, key, columns) {
     const { type } = change;
 
-    if (this.isPopupEditMode() && type === DATA_EDIT_DATA_INSERT_TYPE) {
+    if (this.isPopupEditMode() && type === DATA_CHANGE_TYPE.insert) {
       item.visible = false;
     }
 
@@ -514,7 +524,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
     const editFormRowIndex = editingController.getEditFormRowIndex();
 
     if (editFormRowIndex === rowIndex && $cellElements && editForm) {
-      return editForm.$element().find(`.${this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS)}, .${BUTTON_CLASS}`);
+      return editForm.$element().find(`.${this.addWidgetPrefix(CLASSES.editFormItem)}, .${CLASSES.button}`);
     }
 
     return $cellElements;

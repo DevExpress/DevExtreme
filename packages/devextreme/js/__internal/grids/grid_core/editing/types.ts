@@ -1,4 +1,6 @@
-import type { DataChange, NewRowPosition, RowInsertedInfo } from '@js/common/grids';
+import type {
+  DataChange, EditingBase, NewRowPosition, RowInsertedInfo,
+} from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { StoreChange } from '@js/data/store';
@@ -10,9 +12,11 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ProcessedItem } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
 import type {
-  InternalGrid, InternalGridOptions, OptionChanged, OptionChangedFor, RowKey,
+  InternalGrid, OptionChanged, OptionChangedFor, RowKey,
 } from '../types';
-import type { ViewCellOptions, ViewDataChange } from '../views/types';
+import type {
+  CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRow,
+} from '../views/types';
 import type { EDITING_CHANGES_OPTION_NAME, INSERT_INDEX } from './const';
 
 export interface NormalizedEditCellOptions {
@@ -97,6 +101,16 @@ export type EditingColumn = Column
   & Pick<DataGridColumn, 'editCellTemplate'>
   & { buttons?: EditingButton[] };
 
+export interface EditingViewRow extends ViewRow {
+  removed?: boolean;
+  modified?: boolean;
+  modifiedValues?: unknown[];
+}
+
+export interface EditingCellRenderOptions extends CellRenderOptions {
+  row: EditingViewRow;
+}
+
 export interface EditorCellOptions extends ViewCellOptions {
   column: EditingColumn;
   row?: ProcessedItem;
@@ -159,7 +173,7 @@ export interface ProcessedChanges {
   dataChanges: StoreChange[];
 }
 
-export type EditingOptions = NonNullable<InternalGridOptions['editing']> & {
+export type EditingOptions = EditingBase<RawItemData, RowKey> & {
   allowAdding?: AllowEditActionValue;
   allowUpdating?: AllowEditActionValue;
   allowDeleting?: AllowEditActionValue;
@@ -167,11 +181,6 @@ export type EditingOptions = NonNullable<InternalGridOptions['editing']> & {
 };
 
 export type EditingChangeParams = Partial<EditingChange> & { oldData?: RawItemData };
-
-export type EditingButtonLocalizationNames = Record<
-'edit' | 'save' | 'delete' | 'undelete' | 'cancel',
-string
->;
 
 export interface EditingModuleOptions {
   useLegacyColumnButtonTemplate?: boolean;
