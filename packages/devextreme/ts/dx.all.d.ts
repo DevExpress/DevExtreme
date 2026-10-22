@@ -35000,9 +35000,44 @@ declare module DevExpress.ui.dxChat {
      * [descr:TextMessage.isEdited]
      */
     isEdited?: boolean;
+    /**
+     * [descr:TextMessage.toolCalls]
+     */
+    toolCalls?: ToolCall[];
 
     [key: string]: any;
   };
+  /**
+   * [descr:ToolCall]
+   */
+  export type ToolCall = {
+    /**
+     * [descr:ToolCall.name]
+     */
+    name: string;
+    /**
+     * [descr:ToolCall.arguments]
+     */
+    arguments?: Record<string, any>;
+    /**
+     * [descr:ToolCall.result]
+     */
+    result?: string | object;
+    /**
+     * [descr:ToolCall.status]
+     */
+    status?: ToolCallStatus;
+    /**
+     * [descr:ToolCall.expanded]
+     */
+    expanded?: boolean;
+
+    [key: string]: any;
+  };
+  /**
+   * [descr:ToolCallStatus]
+   */
+  export type ToolCallStatus = 'success' | 'error';
   /**
    * [descr:User]
    */
