@@ -275,6 +275,7 @@ if (Globalize?.formatDate) {
 
       const sourceFormat = format;
       let resolvedFormat: LocalizationFormat = (format as FormatObject).type ?? format;
+      let localeSourceFormat: LocalizationFormat = resolvedFormat;
 
       if (typeof resolvedFormat === 'string') {
         const presetOverride = resolvePresetOverride(resolvedFormat);
@@ -284,7 +285,11 @@ if (Globalize?.formatDate) {
             return (presetOverride as DateFormatter)(date);
           }
 
-          resolvedFormat = presetOverride as LocalizationFormat;
+          localeSourceFormat = presetOverride as LocalizationFormat;
+
+          if (!this._isUnsupportedPresetOverride(presetOverride)) {
+            resolvedFormat = presetOverride as LocalizationFormat;
+          }
         }
       }
 
@@ -292,7 +297,7 @@ if (Globalize?.formatDate) {
       let formatter: DateFormatter;
       // eslint-disable-next-line @typescript-eslint/init-declarations
       let formatCacheKey: string;
-      const formatLocale = getDateFormatLocale(sourceFormat, resolvedFormat);
+      const formatLocale = getDateFormatLocale(sourceFormat, localeSourceFormat);
 
       if (typeof resolvedFormat === 'string') {
         const resolvedLocale = resolveGlobalizeLocale(formatLocale);
@@ -405,6 +410,22 @@ if (Globalize?.formatDate) {
       }
 
       return false;
+    },
+
+    _isUnsupportedPresetOverride(presetOverride: unknown): boolean {
+      if (!isObject(presetOverride)) {
+        return false;
+      }
+
+      const formatObject = presetOverride as FormatObject;
+
+      if (typeof formatObject.type === 'string') {
+        return false;
+      }
+
+      const strippedOptions = getFormatterOptions(formatObject) as FormatObject;
+
+      return !this._isAcceptableFormat(strippedOptions) && hasDefinedOption(strippedOptions);
     },
 
     firstDayOfWeekIndex(): number {

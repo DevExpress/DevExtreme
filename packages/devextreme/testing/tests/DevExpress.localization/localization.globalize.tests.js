@@ -984,6 +984,42 @@ QUnit.module('Format helper', () => {
             }
         });
 
+        QUnit.test('preset override that Globalize does not support keeps the preset', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+            const date = new Date(2020, 0, 2, 14, 5);
+            const setShortDateOverride = (override) => {
+                config({
+                    ...config(),
+                    dateTimeFormatPresets: { shortDate: { default: override } },
+                });
+            };
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+
+                const expected = dateLocalization.format(date, 'shortDate');
+
+                setShortDateOverride({ year: 'numeric', month: 'long' });
+                assert.strictEqual(dateLocalization.format(date, 'shortDate'), expected, 'Intl options');
+
+                setShortDateOverride({ year: 'numeric', month: 'long', locale: 'de' });
+                assert.strictEqual(dateLocalization.format(date, 'shortDate'), '2.1.2020', 'Intl options with a locale');
+
+                setShortDateOverride({ skeleton: 'yMMM' });
+                assert.strictEqual(dateLocalization.format(date, 'shortDate'), 'Jan 2020', 'skeleton');
+
+                setShortDateOverride({ type: 'longDate' });
+                assert.strictEqual(dateLocalization.format(date, 'shortDate'), dateLocalization.format(date, 'longDate'), 'typed preset');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
         QUnit.test('explicit number formats without a locale keep the message locale', function(assert) {
             const saved = saveGlobalFormats();
             const savedLocale = coreLocalization.locale();
