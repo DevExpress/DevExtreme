@@ -726,14 +726,15 @@ class Popover<
       && this._isHorizontalSide()
       && !containerLocation.h.fit
     ) {
-      const newContainerWidth = getWidth(this.$overlayContent()) - containerLocation.h.oversize;
+      const newContainerWidth = getWidth(this.$overlayContent().get(0))
+        - containerLocation.h.oversize;
 
       setWidth(this.$overlayContent(), newContainerWidth);
     }
 
     if ((containerLocation.v.oversize > 0) && this._isVerticalSide() && !containerLocation.v.fit) {
-      const overlayContentHeight = getHeight(this.$overlayContent());
-      const contentHeight = getHeight(this.$content());
+      const overlayContentHeight = getHeight(this.$overlayContent().get(0));
+      const contentHeight = Number(getHeight(this.$content()));
 
       const newOverlayContentHeight = overlayContentHeight - containerLocation.v.oversize;
       const newPopupContentHeight = contentHeight - containerLocation.v.oversize;

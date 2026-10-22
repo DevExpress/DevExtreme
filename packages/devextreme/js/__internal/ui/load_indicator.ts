@@ -206,8 +206,8 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     const { width, height } = this.option();
 
     if (width || height) {
-      const elementWidth = getWidth(this.$element());
-      const elementHeight = getHeight(this.$element());
+      const elementWidth = getWidth(this.$element().get(0));
+      const elementHeight = getHeight(this.$element().get(0));
 
       const minDimension = Math.min(elementHeight, elementWidth);
 

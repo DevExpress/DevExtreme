@@ -1050,7 +1050,7 @@ const scroll = function (
     return undefined;
   }
 
-  const elementWindow: Window | undefined = getWindowByElement(this[0]);
+  const elementWindow: Window | null | undefined = getWindowByElement(this[0]);
 
   if (value === undefined) {
     return elementWindow ? elementWindow[strategy.offsetProp] : this[0][strategy.propName];

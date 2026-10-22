@@ -138,7 +138,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     if (typeof width === 'number') {
       return width;
     }
-    return this._resizingController._lastWidth || getOuterWidth(this.component.$element());
+    return this._resizingController._lastWidth || getOuterWidth(this.component.$element().get(0));
   }
 
   private getEndPageIndex(position) {
