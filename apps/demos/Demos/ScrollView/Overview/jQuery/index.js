@@ -38,14 +38,24 @@ $(() => {
     value: 'never',
   }];
 
-  $('#show-scrollbar-mode').dxSelectBox({
+  const showScrollbarSelectBox = $('#show-scrollbar-mode').dxSelectBox({
     items: showScrollbarModes,
     value: showScrollbarModes[0].value,
+    disabled: scrollViewWidget.option('useNative'),
     inputAttr: { 'aria-label': 'Show Scrollbar Mode' },
     valueExpr: 'value',
     displayExpr: 'text',
     onValueChanged(data) {
       scrollViewWidget.option('showScrollbar', data.value);
+    },
+  }).dxSelectBox('instance');
+
+  $('#use-native').dxCheckBox({
+    value: scrollViewWidget.option('useNative'),
+    text: 'Use native',
+    onValueChanged(data) {
+      scrollViewWidget.option('useNative', data.value);
+      showScrollbarSelectBox.option('disabled', data.value);
     },
   });
 

@@ -1,4 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 
 import CheckBox from 'devextreme-react/check-box';
 import type { CheckBoxTypes } from 'devextreme-react/check-box';
@@ -16,6 +18,7 @@ let updateContentTimer: ReturnType<typeof setTimeout>;
 
 const App = () => {
   const [showScrollBarMode, setShowScrollBarMode] = useState<ScrollViewTypes.Properties['showScrollbar']>('onScroll');
+  const [useNative, setUseNative] = useState<CheckBoxValue>();
   const [pullDown, setPullDown] = useState<CheckBoxValue>(false);
   const [scrollByContent, setScrollByContent] = useState<CheckBoxValue>(true);
   const [scrollByThumb, setScrollByThumb] = useState<CheckBoxValue>(true);
@@ -42,6 +45,15 @@ const App = () => {
   const updateBottomContent = useCallback((args: ScrollViewTypes.ReachBottomEvent) => {
     updateContent(args, 'ReachBottom');
   }, [updateContent]);
+
+  useEffect(() => {
+    setUseNative(scrollViewRef.current?.instance().option('useNative'));
+  }, []);
+
+  const useNativeValueChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
+    setUseNative(args.value);
+    scrollViewRef.current?.instance().option('useNative', args.value);
+  }, []);
 
   const pullDownValueChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
     setPullDown(args.value);
@@ -76,7 +88,15 @@ const App = () => {
             inputAttr={showScrollBarModeLabel}
             displayExpr="text"
             value={showScrollBarMode}
+            disabled={!!useNative}
             onValueChange={setShowScrollBarMode}
+          />
+        </div>
+        <div className="option">
+          <CheckBox
+            text="Use native"
+            value={useNative}
+            onValueChanged={useNativeValueChanged}
           />
         </div>
         <div className="option">
