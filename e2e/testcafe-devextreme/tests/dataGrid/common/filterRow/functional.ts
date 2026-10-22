@@ -1,6 +1,7 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import TextBox from 'devextreme-testcafe-models/textBox';
 import SelectBox from 'devextreme-testcafe-models/selectBox';
+import DateBox from 'devextreme-testcafe-models/dateBox';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
@@ -355,5 +356,52 @@ test('DataGrid – `between` filter dropdown should be closed when columns are r
     dataField: 'field2',
   }, {
     dataField: 'field3',
+  }],
+}));
+
+test('Date filter should be reset without errors after switching the operation from `between` when the filter panel is visible (T1336947)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const filterCell = dataGrid.getFilterCell(0);
+  const filterEditor = dataGrid.getFilterEditor(0, DateBox);
+  const filterPanelText = dataGrid.getFilterPanel().getFilterText();
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataGrid.dataRows.count)
+    .eql(2);
+
+  // act
+  await t
+    .click(filterCell.menuButton)
+    .click(filterCell.menu.getItemByText('Equals'));
+
+  // assert
+  await t
+    .expect(filterEditor.element.exists)
+    .ok()
+    .expect(filterEditor.option('value'))
+    .eql(null)
+    .expect(filterPanelText.element.textContent)
+    .eql('Create Filter')
+    .expect(dataGrid.dataRows.count)
+    .eql(3);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { ID: 1, OrderDate: new Date(2026, 9, 13) },
+    { ID: 2, OrderDate: new Date(2026, 9, 14) },
+    { ID: 3, OrderDate: new Date(2026, 9, 20) },
+  ],
+  keyExpr: 'ID',
+  showBorders: true,
+  filterRow: { visible: true },
+  filterPanel: { visible: true },
+  columns: [{
+    dataField: 'OrderDate',
+    dataType: 'date',
+    selectedFilterOperation: 'between',
+    filterValue: [new Date(2026, 9, 13), new Date(2026, 9, 15)],
   }],
 }));
