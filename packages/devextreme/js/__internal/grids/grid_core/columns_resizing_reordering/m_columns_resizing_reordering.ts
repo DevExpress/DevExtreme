@@ -24,6 +24,7 @@ import {
 import { isDefined, isObject } from '@js/core/utils/type';
 import type { GroupPanel } from '@js/ui/data_grid';
 import swatchContainer from '@ts/core/utils/swatch_container';
+import { WIDGET_CLASS } from '@ts/core/widget/widget';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { getDraggingPanelBoundingRects } from '@ts/grids/grid_core/columns_resizing_reordering/utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
@@ -58,15 +59,6 @@ import type {
   ResizingInfo,
   TablePosition,
 } from './types';
-
-const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
-const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
-const DRAGGING_HEADER_CLASS = 'drag-header';
-const HEADERS_DRAG_ACTION_CLASS = 'drag-action';
-const TRACKER_CLASS = 'tracker';
-const HEADERS_DROP_HIGHLIGHT_CLASS = 'drop-highlight';
-const BLOCK_SEPARATOR_CLASS = 'dx-block-separator';
-const WIDGET_CLASS = 'dx-widget';
 
 const MODULE_NAMESPACE = 'dxDataGridResizingReordering';
 
@@ -118,7 +110,7 @@ export class TrackerView extends modules.View {
   protected _renderCore(): DeferredObj<unknown> | void {
     const deferred = super._renderCore();
     // @ts-expect-error the view is rendered here
-    this.element().addClass(this.addWidgetPrefix(TRACKER_CLASS));
+    this.element().addClass(this.addWidgetPrefix(CLASSES.tracker));
     this.hide();
     return deferred;
   }
@@ -132,7 +124,7 @@ export class TrackerView extends modules.View {
   private _subscribeToCallback(): void {
     this._positionChanged = (position: TablePosition): void => {
       const $element = this.element();
-      if ($element?.hasClass(this.addWidgetPrefix(TRACKER_CLASS))) {
+      if ($element?.hasClass(this.addWidgetPrefix(CLASSES.tracker))) {
         $element.css({ top: position.top });
         setHeight($element, position.height);
       }
@@ -248,7 +240,7 @@ export class ColumnsSeparatorView extends SeparatorView {
 
     const $element = this.element();
     // @ts-expect-error the view is rendered here
-    $element.addClass(this.addWidgetPrefix(COLUMNS_SEPARATOR_CLASS));
+    $element.addClass(this.addWidgetPrefix(CLASSES.columnsSeparator));
   }
 
   private _subscribeToCallback(): void {
@@ -284,7 +276,7 @@ export class ColumnsSeparatorView extends SeparatorView {
 
     if ($element && !this._isShown) {
       if (this._isTransparent) {
-        $element.removeClass(this.addWidgetPrefix(COLUMNS_SEPARATOR_TRANSPARENT));
+        $element.removeClass(this.addWidgetPrefix(CLASSES.columnsSeparatorTransparent));
       } else {
         $element.show();
       }
@@ -294,7 +286,7 @@ export class ColumnsSeparatorView extends SeparatorView {
 
   public hide(force?: boolean): void {
     const $element = this.element();
-    const columnsSeparatorTransparent = this.addWidgetPrefix(COLUMNS_SEPARATOR_TRANSPARENT);
+    const columnsSeparatorTransparent = this.addWidgetPrefix(CLASSES.columnsSeparatorTransparent);
 
     if ($element && (this._isShown || force)) {
       if (this._isTransparent) {
@@ -349,7 +341,7 @@ export class BlockSeparatorView extends SeparatorView {
   protected _renderSeparator(): void {
     super._renderSeparator();
     // @ts-expect-error the view is rendered here
-    this.element().addClass(BLOCK_SEPARATOR_CLASS).html('&nbsp;');
+    this.element().addClass(CLASSES.blockSeparator).html('&nbsp;');
   }
 
   public hide(): void {
@@ -360,7 +352,7 @@ export class BlockSeparatorView extends SeparatorView {
       $element.css('display', 'none');
     }
 
-    if ($parent && !$parent.children(`.${BLOCK_SEPARATOR_CLASS}`).length) {
+    if ($parent && !$parent.children(`.${CLASSES.blockSeparator}`).length) {
       // @ts-expect-error the view is rendered here
       $parent.prepend(this.element());
     }
@@ -455,7 +447,7 @@ export class DraggingHeaderView extends modules.View {
         width: columnElement && getWidth(columnElement),
         whiteSpace: columnElement?.css('whiteSpace'),
       })
-      .addClass(this.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
+      .addClass(this.addWidgetPrefix(CLASSES.dragAction));
 
     sourceDraggingPanel.renderDragCellContent(dragElement, sourceColumn);
   }
@@ -508,7 +500,7 @@ export class DraggingHeaderView extends modules.View {
   protected _renderCore(): void {
     // @ts-expect-error the view is rendered here
     this.element()
-      .addClass(`${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)} ${this.addWidgetPrefix(COLUMN_HEADERS_CLASSES.cellContent)} ${WIDGET_CLASS}`)
+      .addClass(`${this.addWidgetPrefix(CLASSES.dragHeader)} ${this.addWidgetPrefix(COLUMN_HEADERS_CLASSES.cellContent)} ${WIDGET_CLASS}`)
       .hide();
   }
 
@@ -538,7 +530,7 @@ export class DraggingHeaderView extends modules.View {
     const element = this.element();
 
     this._dragOptions = null;
-    element?.parent().find(`.${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)}`).remove();
+    element?.parent().find(`.${this.addWidgetPrefix(CLASSES.dragHeader)}`).remove();
     super.dispose();
   }
 
@@ -1680,7 +1672,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
           const column = columns[index];
 
           if (column && draggingPanel.allowDragging(column)) {
-            $columnElement.addClass(this.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
+            $columnElement.addClass(this.addWidgetPrefix(CLASSES.dragAction));
             eventsEngine.on(
               $columnElement,
               addNamespace(dragEventStart, MODULE_NAMESPACE),
@@ -1744,7 +1736,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
           eventsEngine.off($columnElement, addNamespace(dragEventStart, MODULE_NAMESPACE));
           eventsEngine.off($columnElement, addNamespace(dragEventMove, MODULE_NAMESPACE));
           eventsEngine.off($columnElement, addNamespace(dragEventEnd, MODULE_NAMESPACE));
-          $columnElement.removeClass(this.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
+          $columnElement.removeClass(this.addWidgetPrefix(CLASSES.dragAction));
         });
       }
     });
@@ -1812,7 +1804,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     };
 
     // @ts-expect-error the view is rendered here
-    this._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).toggleClass(this.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS), sourceLocation !== 'headers' && targetLocation === 'headers' && !hasTargetVisibleIndex);
+    this._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).toggleClass(this.addWidgetPrefix(CLASSES.dropHighlight), sourceLocation !== 'headers' && targetLocation === 'headers' && !hasTargetVisibleIndex);
 
     if (separator) {
       if (this.allowDrop(parameters) && hasTargetVisibleIndex) {
@@ -1839,7 +1831,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
       this._columnHeadersView.toggleDraggableColumnClass(parameters.sourceIndex, false);
       this._rowsView.toggleDraggableColumnClass(parameters.sourceIndex, false);
       // @ts-expect-error the view is rendered here
-      this._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).removeClass(this.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS));
+      this._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).removeClass(this.addWidgetPrefix(CLASSES.dropHighlight));
     }
 
     if (this.allowDrop(parameters)) {
