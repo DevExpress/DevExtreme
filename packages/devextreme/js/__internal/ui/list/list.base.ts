@@ -427,8 +427,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       const $elements = this._getItemAndHeaderElements();
 
       return $elements
-        // @ts-expect-error ts-error
-        .filter((_index: number, element: dxElementWrapper): boolean => {
+        .filter((_index: number, element: Element): boolean => {
           if ($(element).hasClass(LIST_GROUP_HEADER_CLASS)) {
             return true;
           }

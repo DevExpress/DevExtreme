@@ -1459,7 +1459,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const $headerFocusable = this.header?.$element()
       .find('*')
       .not('.dx-state-invisible, .dx-state-invisible *')
-      // @ts-expect-error filter callback overload should be added on dxElementWrapper level
       .filter(tabbable)
       .first();
 

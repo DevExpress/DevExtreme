@@ -91,7 +91,6 @@ export const extractTemplateMarkup = (element: Element | dxElementWrapper): stri
   const $element = $(element);
 
   const templateTag = $element.length
-    // @ts-expect-error filter() is typed for selectors only
     && $element.filter(function isNotExecutableScript(this: Element) {
       const $node = $(this);
       // @ts-expect-error
