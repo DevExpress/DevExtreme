@@ -1,7 +1,7 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
 import { isDefined, isObject } from '@js/core/utils/type';
-import { addOffsets } from '@ts/core/utils/m_date';
+import { addOffsets } from '@ts/core/utils/date';
 
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../classes';
 import {

@@ -14,8 +14,8 @@ import type {
   DxEvent,
   PointerInteractionEvent,
 } from '@js/events';
-import windowUtils from '@ts/core/utils/m_window';
 import swatch from '@ts/core/utils/swatch_container';
+import windowUtils from '@ts/core/utils/window';
 import type {
   OverlayActions,
   OverlayProperties,

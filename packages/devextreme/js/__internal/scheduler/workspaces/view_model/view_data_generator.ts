@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { addOffsets } from '@ts/core/utils/m_date';
+import { addOffsets } from '@ts/core/utils/date';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';

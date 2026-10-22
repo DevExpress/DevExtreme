@@ -2,7 +2,7 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 import { z } from 'zod';
 
 import type { InternalGrid } from '../../types';

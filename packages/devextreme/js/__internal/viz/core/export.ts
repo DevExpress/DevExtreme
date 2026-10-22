@@ -20,12 +20,12 @@ import {
 } from '@js/exporter';
 import messageLocalization from '@ts/core/localization/message';
 import { renderer as $ } from '@ts/core/renderer';
-import { logger } from '@ts/core/utils/m_console';
-import { extend } from '@ts/core/utils/m_extend';
-import { getWidth } from '@ts/core/utils/m_size';
-import { isDefined } from '@ts/core/utils/m_type';
-import { getWindow } from '@ts/core/utils/m_window';
+import { logger } from '@ts/core/utils/console';
+import { extend } from '@ts/core/utils/extend';
+import { getWidth } from '@ts/core/utils/size';
 import { HIDDEN_FOR_EXPORT } from '@ts/core/utils/svg';
+import { isDefined } from '@ts/core/utils/type';
+import { getWindow } from '@ts/core/utils/window';
 import { end as hoverEventEnd, start as hoverEventStart } from '@ts/events/hover';
 import pointerEvents from '@ts/events/pointer';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

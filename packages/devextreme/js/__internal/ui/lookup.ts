@@ -32,7 +32,7 @@ import Popover from '@js/ui/popover/ui.popover';
 import type { ToolbarItem } from '@js/ui/popup';
 import type { TextBoxType } from '@js/ui/text_box';
 import { current, isMaterial } from '@js/ui/themes';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';

@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { registerComponent } from '@ts/core/component_registrator';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import { roundFloatPart } from '@ts/core/utils/math';
 import { clone } from '@ts/core/utils/object';
 import { overlapping } from '@ts/viz/chart_components/base_chart';

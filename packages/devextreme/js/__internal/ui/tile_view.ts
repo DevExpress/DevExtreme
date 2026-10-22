@@ -25,7 +25,7 @@ import type {
 } from '@ts/ui/scroll_view/scroll_view';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
 
-import supportUtils from '../core/utils/m_support';
+import supportUtils from '../core/utils/support';
 
 const TILEVIEW_CLASS = 'dx-tileview';
 const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';

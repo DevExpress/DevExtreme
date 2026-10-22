@@ -20,10 +20,10 @@
 /* eslint-disable prefer-spread */
 
 import trackerModule from '@js/viz/chart_components/tracker';
-import { grep, noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
-import { reverseEach as _reverseEach } from '@ts/core/utils/m_iterator';
-import { isDefined as _isDefined, isFunction } from '@ts/core/utils/m_type';
+import { grep, noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
+import { reverseEach as _reverseEach } from '@ts/core/utils/iterator';
+import { isDefined as _isDefined, isFunction } from '@ts/core/utils/type';
 import eventsEngine from '@ts/events/core/events_engine';
 import { isPointerEvent, isTouchEvent } from '@ts/events/utils/index';
 import { LayoutManager } from '@ts/viz/chart_components/layout_manager';
