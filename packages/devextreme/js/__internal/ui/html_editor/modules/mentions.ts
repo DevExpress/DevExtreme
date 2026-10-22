@@ -13,7 +13,7 @@ import type { Properties as PopupProperties } from '@js/ui/popup';
 import type List from '@ts/ui/list/list.edit.search';
 import Quill from 'devextreme-quill';
 
-import Mention from '../formats/m_mention';
+import Mention from '../formats/mention';
 import type {
   Delta,
   DeltaConstructor,
@@ -21,9 +21,9 @@ import type {
   KeyboardModule,
   QuillInstance,
 } from '../types/quill';
-import type { BaseHtmlEditorModule, BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
-import PopupModule from './m_popup';
+import type { BaseHtmlEditorModule, BaseModuleOptions } from './base';
+import BaseModule from './base';
+import PopupModule from './popup';
 
 interface MentionModuleDefaults {
   dataSource: null;
@@ -363,8 +363,11 @@ if (Quill) {
     _processSearchValue(operation: DeltaOperation): boolean {
       const isInsertOperation = 'insert' in operation;
       if (isInsertOperation) {
-        // eslint-disable-next-line @stylistic/max-len
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string -- insert is typed string | object
+        if (!isString(operation.insert)) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
+          this._popup.hide();
+          return false;
+        }
         this._searchValue += operation.insert;
       } else {
         // @ts-expect-error delete is undefined for a retain op; undefined > 1 is false

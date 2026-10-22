@@ -190,7 +190,6 @@ class BaseView<
     const localizedWidgetName = this._getLocalizedWidgetName();
     const formattedDate = dateLocalization
       .format(value as Date | undefined, ARIA_LABEL_DATE_FORMAT);
-    // @ts-expect-error ts-error
     const selectedDatesText = messageLocalization.format('dxCalendar-selectedDate', formattedDate);
 
     const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
@@ -208,9 +207,7 @@ class BaseView<
     const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
 
     const selectedDatesText = startDate && endDate
-      // @ts-expect-error ts-error
       ? messageLocalization.format('dxCalendar-selectedDateRange', formattedStartDate, formattedEndDate)
-      // @ts-expect-error ts-error
       : messageLocalization.format('dxCalendar-selectedDate', formattedStartDate ?? formattedEndDate);
 
     const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
@@ -233,7 +230,6 @@ class BaseView<
     const ranges = coreDateUtils.getRangesByDates(rangeValue.map((date) => new Date(date)));
 
     if (ranges.length > 2) {
-      // @ts-expect-error ts-error
       const dateRangeCountText = messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length);
 
       return dateRangeCountText;
@@ -249,14 +245,13 @@ class BaseView<
     return result;
   }
 
-  _getRangeText(range: [Date | undefined, Date | undefined]): string {
+  _getRangeText(range: [Date, Date?]): string {
     const [startDate, endDate] = range;
 
     const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
     const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
 
     const selectedDatesText = startDate && endDate
-      // @ts-expect-error ts-error
       ? messageLocalization.format('dxCalendar-selectedMultipleDateRange', formattedStartDate, formattedEndDate)
       : formattedStartDate;
 
@@ -481,6 +476,7 @@ class BaseView<
         const firstDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).first().data(CALENDAR_DATE_VALUE_KEY);
         const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data(CALENDAR_DATE_VALUE_KEY);
         const rowDates = [
+          // @ts-expect-error renderer.d.ts types data(key) as the wrapper, not the stored value
           ...coreDateUtils.getDatesOfInterval(firstDateInRow, lastDateInRow, DAY_INTERVAL),
           lastDateInRow,
         ];
@@ -715,7 +711,7 @@ class BaseView<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isBoundary(date?: Date): boolean {
+  isBoundary(date?: Date): boolean | null | undefined {
     return false;
   }
 

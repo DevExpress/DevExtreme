@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
-import MentionFormat from '__internal/ui/html_editor/formats/m_mention';
-import Mentions from '__internal/ui/html_editor/modules/m_mentions';
+import MentionFormat from '__internal/ui/html_editor/formats/mention';
+import Mentions from '__internal/ui/html_editor/modules/mentions';
 
 import { noop } from 'core/utils/common';
 import { Event as dxEvent } from 'common/core/events';
@@ -355,6 +355,23 @@ QUnit.module('Mentions module', moduleConfig, () => {
         mention.onTextChange(removeWord, {}, 'user');
         this.clock.tick(10);
         assert.ok(hidePopupSpy.calledOnce);
+    });
+
+    test('Should hide popup and not filter the list after an embed is inserted', function(assert) {
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
+        const hidePopupSpy = sinon.spy(mention._popup, 'hide');
+        const filterListSpy = sinon.spy(mention, '_filterList');
+
+        const addMarker = { ops: [{ insert: '@' }] };
+        const insertImage = { ops: [{ retain: 1 }, { insert: { extendedImage: { src: 'image.png' } } }] };
+
+        mention.onTextChange(addMarker, {}, 'user');
+        this.clock.tick(10);
+        mention.onTextChange(insertImage, {}, 'user');
+        this.clock.tick(10);
+
+        assert.ok(hidePopupSpy.calledOnce, 'popup is hidden');
+        assert.ok(filterListSpy.notCalled, 'list is not filtered');
     });
 
     test('Module should not filter the list after quickly removing the marker (T894506)', function(assert) {

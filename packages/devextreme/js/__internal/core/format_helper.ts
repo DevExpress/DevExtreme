@@ -287,7 +287,9 @@ export default dependencyInjector({
     const dateUnitInterval = dateUtils.getDateUnitInterval(normalizedTickInterval || 'second');
     correctDateDifferences(dateDifferences, dateUnitInterval, false);
 
-    dateDifferences[dateDifferencesConverter[dateUnitInterval] || dateUnitInterval] = true;
+    if (dateUnitInterval) {
+      dateDifferences[dateDifferencesConverter[dateUnitInterval] || dateUnitInterval] = true;
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.getDateFormatByDifferences(dateDifferences);

@@ -3,7 +3,7 @@ import 'ui/html_editor';
 import localization from 'localization';
 import { getWindow } from 'core/utils/window';
 
-import { getFormatHandlers } from '__internal/ui/html_editor/utils/m_toolbar_helper';
+import { getFormatHandlers } from '__internal/ui/html_editor/utils/toolbar_helper';
 
 const FORM_CLASS = 'dx-formdialog-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
@@ -651,6 +651,33 @@ module('Table properties forms', {
             assert.strictEqual(reopenedVerticalAlignmentEditor.option('selectedItemKeys')[0], 'top', 'vertical alignment editor shows updated value');
         });
 
+        test('Cell Properties form shows the paddings of the first selected cell when the selected cells have different paddings (TableLite)', function(assert) {
+            this.createWidget({
+                value: '<table><tr><td style="padding: 5px 10px;">0_0</td><td style="padding: 2px 4px;">0_1</td></tr></table><br>',
+                onInitialized: ({ component }) => {
+                    const liteTableModule = component.get('tableModules/lite');
+                    component.register({ 'modules/table': liteTableModule });
+                },
+                onDisposing: ({ component }) => {
+                    const mainTableModule = component.get('tableModules/main');
+                    component.register({ 'modules/table': mainTableModule });
+                }
+            });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(0);
+
+            this.quillInstance.setSelection(0, 7);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(10);
+
+            const formInstance = this.getFormInstance();
+
+            assert.strictEqual(formInstance.getEditor('verticalPadding').option('value'), 5, 'vertical padding of the first cell');
+            assert.strictEqual(formInstance.getEditor('horizontalPadding').option('value'), 10, 'horizontal padding of the first cell');
+        });
+
         test('Check cell width and height editor options', function(assert) {
             this.createWidget();
 
@@ -1194,6 +1221,44 @@ module('Table properties forms', {
             assert.roughEqual(parseInt($verticalCells.eq(0).get(0).style.height), 10, 2, 'first row cell height style is applied');
             assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 24, 2, 'second row cell height style is applied');
             assert.roughEqual(parseInt($verticalCells.eq(1).get(0).style.height), 20, 2, 'second row cell height style is applied');
+        });
+
+        test('Applying the table form without a height keeps the fixed row heights', function(assert) {
+            this.createWidget({ value: tableWithFixedDimensionsMarkup });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            this.quillInstance.setSelection(5, 1);
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(10);
+
+            this.applyFormChanges();
+
+            const $verticalCells = $tableElement.find('td:nth-child(1)');
+
+            assert.strictEqual($verticalCells.eq(0).get(0).style.height, '24px', 'first row cell height is kept');
+            assert.strictEqual($verticalCells.eq(1).get(0).style.height, '48px', 'second row cell height is kept');
+        });
+
+        test('Clearing the height in the table form keeps the fixed row heights', function(assert) {
+            this.createWidget({ value: tableWithFixedDimensionsMarkup.replace('<table>', '<table style="height: 120px;">') });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            this.quillInstance.setSelection(5, 1);
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(10);
+            const formInstance = this.getFormInstance();
+
+            const heightEditor = formInstance.getEditor('height');
+            heightEditor.option('value', null);
+
+            this.applyFormChanges();
+
+            const $verticalCells = $tableElement.find('td:nth-child(1)');
+
+            assert.strictEqual($verticalCells.eq(0).get(0).style.height, '24px', 'first row cell height is kept');
+            assert.strictEqual($verticalCells.eq(1).get(0).style.height, '48px', 'second row cell height is kept');
         });
     });
 

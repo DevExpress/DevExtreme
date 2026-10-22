@@ -32,7 +32,7 @@ import TextBox from '@js/ui/text_box';
 import { isFluent } from '@js/ui/themes';
 
 import type HtmlEditor from '../html_editor';
-import type { BaseHtmlEditorModule } from '../modules/m_base';
+import type { BaseHtmlEditorModule } from '../modules/base';
 import type { QuillInstance, RangeStatic } from '../types/quill';
 
 /** The image dialog form data: the extendedImage formats plus the fields the user edits. */

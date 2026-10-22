@@ -1,4 +1,4 @@
-import '@ts/ui/html_editor/converters/m_delta';
+import '@ts/ui/html_editor/converters/delta';
 
 // @ts-expect-error events.d.ts does not declare Event
 import { Event as dxEvent } from '@js/common/core/events';
@@ -33,16 +33,16 @@ import type { Properties as PopupProperties } from '@js/ui/popup';
 import { getNextFocusableElement, getPreviousFocusableElement } from '@ts/core/utils/focus';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Editor from '@ts/ui/editor/editor';
-import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/m_converterController';
-import { getQuill } from '@ts/ui/html_editor/m_quill_importer';
-import QuillRegistrator from '@ts/ui/html_editor/m_quill_registrator';
-import getWordMatcher from '@ts/ui/html_editor/matchers/m_wordLists';
+import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/converterController';
+import getWordMatcher from '@ts/ui/html_editor/matchers/wordLists';
+import { getQuill } from '@ts/ui/html_editor/quill_importer';
+import QuillRegistrator from '@ts/ui/html_editor/quill_registrator';
 import type { DialogPromise } from '@ts/ui/html_editor/types';
 import FormDialog from '@ts/ui/html_editor/ui/formDialog';
 import { sanitizeHtml } from '@ts/ui/html_editor/utils/html_sanitizer';
 import { prepareScrollData } from '@ts/ui/text_box/utils.scroll';
 
-import type { BaseHtmlEditorModule } from './modules/m_base';
+import type { BaseHtmlEditorModule } from './modules/base';
 import type { TableModule, UploaderModule } from './types/quill';
 import type { AIDialogResult, AIDialogShowPayload } from './ui/aiDialog';
 import AIDialog from './ui/aiDialog';
@@ -686,8 +686,7 @@ class HtmlEditor extends Editor<Properties> {
     if (isDefined(this._aiDialog)) {
       const { aiIntegration } = this.option();
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this._aiDialog.updateAIIntegration(aiIntegration!);
+      this._aiDialog.updateAIIntegration(aiIntegration);
 
       return;
     }

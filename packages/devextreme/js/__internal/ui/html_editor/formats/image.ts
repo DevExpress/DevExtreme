@@ -1,4 +1,4 @@
-import { isObject } from '@js/core/utils/type';
+import { isObject, isString } from '@js/core/utils/type';
 import Quill from 'devextreme-quill';
 
 import type {
@@ -75,8 +75,7 @@ if (Quill) {
 
     format(name: string, value: unknown): void {
       if (name === 'float') {
-        // @ts-expect-error format value is untyped; the CSSOM coerces it (null clears the float)
-        this.domNode.style[name] = value;
+        this.domNode.style.float = isString(value) ? value : '';
       } else {
         super.format(name, value);
       }

@@ -17,8 +17,8 @@ import Popup from '@ts/ui/popup/popup.full';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance } from '../types/quill';
-import type { BaseHtmlEditorModule, BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
+import type { BaseHtmlEditorModule, BaseModuleOptions } from './base';
+import BaseModule from './base';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorPopupModule';
 

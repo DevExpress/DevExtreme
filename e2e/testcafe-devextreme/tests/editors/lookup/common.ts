@@ -126,13 +126,7 @@ test.meta({ browserSize: [300, 400] })('Check popup height in loading state', as
 
   return createWidget('dxLookup', {
     dataSource: {
-      load() {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve([1, 2, 3]);
-          }, 5000);
-        });
-      },
+      load: () => new Promise(() => {}),
     },
     valueExpr: 'id',
     displayExpr: 'text',

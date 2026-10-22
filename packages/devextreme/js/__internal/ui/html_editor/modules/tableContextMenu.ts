@@ -19,10 +19,10 @@ import Quill from 'devextreme-quill';
 
 import type { FormatHandlers } from '../types';
 import type { QuillInstance } from '../types/quill';
-import { getTableFormats } from '../utils/m_table_helper';
-import { getDefaultClickHandler, getFormatHandlers, ICON_MAP } from '../utils/m_toolbar_helper';
-import type { BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
+import { getTableFormats } from '../utils/table_helper';
+import { getDefaultClickHandler, getFormatHandlers, ICON_MAP } from '../utils/toolbar_helper';
+import type { BaseModuleOptions } from './base';
+import BaseModule from './base';
 
 interface TableContextMenuModuleOptions extends BaseModuleOptions, dxHtmlEditorTableContextMenu {}
 
@@ -256,7 +256,7 @@ if (Quill) {
         // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
         this.enabled = value;
         if (value) {
-          this._enableContextMenu();
+          this._enableContextMenu(this.editorInstance.option('tableContextMenu')?.items);
         } else {
           this.clean();
         }
