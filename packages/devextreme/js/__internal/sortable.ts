@@ -770,7 +770,6 @@ class Sortable extends Draggable<SortableProperties> {
     if ($element.css('overflow') !== 'hidden') {
       scrollContainer = $element.get(0);
     } else {
-      // @ts-expect-error each is declared with a callback that returns boolean
       $element.parents().each((_, element) => {
         if ($(element).css('overflow') !== 'visible') {
           scrollContainer = element;
