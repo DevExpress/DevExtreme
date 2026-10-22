@@ -1,22 +1,21 @@
 /* eslint-disable max-classes-per-file */
 import { equalByValue } from '@js/core/utils/common';
+import { ROW_SELECTION_CLASS } from '@ts/grids/grid_core/selection/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { ModuleType } from '../types';
 import {
-  EDIT_FORM_CLASS,
-  EDIT_MODE_ROW,
-  EDIT_ROW,
+  CLASSES,
+  EDIT_MODE,
   EDITING_EDITROWKEY_OPTION_NAME,
   MODES_WITH_DELAYED_FOCUS,
-  ROW_SELECTED_CLASS,
 } from './const';
 import { editingRowBasedDataControllerExtender } from './extenders/editing_row_based_data_controller';
 import type { EditingController } from './m_editing';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class RowBasedEditingControllerExtender extends Base {
   private isRowEditMode() {
-    return this.getEditMode() === EDIT_MODE_ROW;
+    return this.getEditMode() === EDIT_MODE.row;
   }
 
   protected _afterCancelEditData(rowIndex) {
@@ -116,11 +115,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingRowBasedEx
       const isEditRow = editingController.isEditRow(row.rowIndex);
 
       if (isEditRow) {
-        $row.addClass(EDIT_ROW);
-        $row.removeClass(ROW_SELECTED_CLASS);
+        $row.addClass(CLASSES.editRow);
+        $row.removeClass(ROW_SELECTION_CLASS);
 
         if (row.rowType === 'detail') {
-          $row.addClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
+          $row.addClass(this.addWidgetPrefix(CLASSES.editForm));
         }
       }
     }

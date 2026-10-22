@@ -37,7 +37,6 @@ import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
 import { CLASSES } from './const';
 
-const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
 const FIRST_CELL_CLASS = 'dx-first-cell';
 const LAST_CELL_CLASS = 'dx-last-cell';
 const HOVER_STATE_CLASS = 'dx-state-hover';
@@ -402,7 +401,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
 
           if (fixedColumn) {
             if (fixedColumn.command === COMMAND_TRANSPARENT) {
-              if (fixedCellElements.eq(columnIndex).hasClass(MASTER_DETAIL_CELL_CLASS)) {
+              if (fixedCellElements.eq(columnIndex).hasClass(MASTER_DETAIL_CLASSES.detailCell)) {
                 cellElements[columnIndex] = cell || cellElements[columnIndex];
               }
             } else {

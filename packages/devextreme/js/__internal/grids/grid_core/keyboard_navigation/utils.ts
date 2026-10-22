@@ -7,7 +7,7 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { CLASSES as ADAPTIVITY_CLASSES } from '../adaptivity/const';
 import type { Column } from '../columns_controller/types';
-import { EDIT_FORM_CLASS, EDIT_ROW, EDITOR_CELL_CLASS } from '../editing/const';
+import { CLASSES as EDITING_CLASSES } from '../editing/const';
 import { COMMAND_SELECT_CLASS } from '../selection/const';
 import { VIRTUAL_ROW_CLASS } from '../virtual_scrolling/const';
 import { INTERACTIVE_ELEMENTS_SELECTOR } from './const';
@@ -34,11 +34,14 @@ export const isAdaptiveItem = (
   $element: dxElementWrapper,
 ): boolean => $element?.hasClass(ADAPTIVITY_CLASSES.adaptiveItemText);
 
-export const isEditRow = ($row: dxElementWrapper): boolean => $row?.hasClass(EDIT_ROW);
+export const isEditRow = (
+  $row: dxElementWrapper,
+): boolean => $row?.hasClass(EDITING_CLASSES.editRow);
 
 export const isEditForm = (
   $row: dxElementWrapper,
-): boolean => $row?.hasClass(MASTER_DETAIL_CLASSES.detailRow) && $row.hasClass(EDIT_FORM_CLASS);
+): boolean => $row?.hasClass(MASTER_DETAIL_CLASSES.detailRow)
+  && $row.hasClass(EDITING_CLASSES.editForm);
 
 // TODO remove null and undefined from types
 export const isDataRow = (
@@ -54,7 +57,7 @@ export const isEditorCell = (
   $cell: dxElementWrapper,
 ): boolean => !that.isRowEditMode()
   && $cell && !$cell.hasClass(COMMAND_SELECT_CLASS)
-  && $cell.hasClass(EDITOR_CELL_CLASS);
+  && $cell.hasClass(EDITING_CLASSES.editorCell);
 
 // TODO remove null and undefined from types
 export const isElementDefined = (
