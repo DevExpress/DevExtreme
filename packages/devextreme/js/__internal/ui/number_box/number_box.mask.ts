@@ -129,6 +129,10 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       : getGlobalFormatByDataType('number');
   }
 
+  _getFormatLocale(): string {
+    return getNumberFormatLocale(this._getEffectiveFormatOption());
+  }
+
   _usesIntlFormatOption(formatOption: Format | undefined): boolean {
     const formatObject = asFormatObject(formatOption);
 
@@ -361,7 +365,11 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _getInputVal(): string {
-    const inputValue: string = number.convertDigits(this._input().val(), true);
+    const inputValue: string = number.convertDigits(
+      this._input().val(),
+      true,
+      this._getFormatLocale(),
+    );
 
     return inputValue;
   }
@@ -369,7 +377,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   _keyboardHandler(e: KeyboardKeyDownEvent): boolean {
     this.clearCaretTimeout();
 
-    this._lastKey = number.convertDigits(getChar(e), true);
+    this._lastKey = number.convertDigits(getChar(e), true, this._getFormatLocale());
     this._lastKeyName = normalizeKeyName(e);
 
     if (!this._shouldHandleKey(e.originalEvent)) {
@@ -556,7 +564,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       ? format
       : getLDMLFormat((value: number): string => {
         const text = this._format(value, format) ?? '';
-        const convertedText: string = number.convertDigits(text, true);
+        const convertedText: string = number.convertDigits(text, true, this._getFormatLocale());
 
         return convertedText;
       });
@@ -733,7 +741,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _setInputText(text: string): void {
-    const normalizedText: string = number.convertDigits(text, true);
+    const normalizedText: string = number.convertDigits(text, true, this._getFormatLocale());
     const caret = this._caret();
     const newCaret = caret && getCaretAfterFormat(
       this._getInputVal(),
@@ -1002,7 +1010,11 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       return;
     }
 
-    const formattedValue: string | undefined = number.convertDigits(this._formattedValue, true);
+    const formattedValue: string | undefined = number.convertDigits(
+      this._formattedValue,
+      true,
+      this._getFormatLocale(),
+    );
     const textWasChanged = formattedValue !== normalizedText;
 
     if (textWasChanged) {

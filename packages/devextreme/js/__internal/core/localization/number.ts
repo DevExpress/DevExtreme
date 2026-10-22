@@ -2,7 +2,7 @@
 import type { Format, FormatObject as PublicFormatConfig } from '@js/common/core/localization';
 import config from '@js/core/config';
 import errors from '@js/core/errors';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import { getGlobalFormatByDataType, getNumberFormatLocale } from '@ts/core/global_format_config';
 import currencyLocalization from '@ts/core/localization/currency';
 import intlNumberLocalization from '@ts/core/localization/intl/number';
 import { getFormatter } from '@ts/core/localization/ldml/number';
@@ -277,11 +277,14 @@ const numberLocalizationBase = {
     return this.format(1.2, { type: 'fixedPoint', precision: 1 })[1] as string;
   },
 
+  // NOTE: the digits are probed in the locale of the format being formatted or parsed
+  // (e.g. 'ar-EG' digits with an 'en' message locale); without a locale, in the message locale
   convertDigits<TValue extends string | number | Date | null | undefined>(
     value: TValue,
     toStandard?: boolean,
+    locale?: string,
   ): TValue {
-    const digits: string = this.format(90, 'decimal');
+    const digits: string = this.format(90, locale ? { type: 'decimal', locale } : 'decimal');
 
     if (typeof value !== 'string' || digits[1] === '0') {
       return value;
@@ -364,7 +367,11 @@ const numberLocalizationBase = {
       // @ts-expect-error
       const formattedValue = getFormatter((format as FormatConfig).type, formatterConfig)(value);
 
-      return this.convertDigits(formattedValue) as string | number;
+      return this.convertDigits(
+        formattedValue,
+        false,
+        getNumberFormatLocale(format as FormatConfig),
+      ) as string | number;
     }
 
     return this._formatNumber(value, numberConfig, format) as string;
@@ -379,7 +386,7 @@ const numberLocalizationBase = {
       return format.parser(text) as number;
     }
 
-    text = this.convertDigits(text, true);
+    text = this.convertDigits(text, true, getNumberFormatLocale(format));
 
     if (format && typeof format !== 'string' && !isLdmlPatternFormat(format)) {
       // Current parser functionality provided as-is and

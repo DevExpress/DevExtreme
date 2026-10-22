@@ -217,6 +217,22 @@ describe('format locale integration', () => {
       expect(numberLocalization.parse(formatted, format as never)).toBe(1234.5);
     });
 
+    it.each([
+      { name: 'global numberFormat locale', globalLocale: 'ar-EG', format: undefined },
+      { name: 'explicit format locale', globalLocale: undefined, format: { maximumFractionDigits: 2, locale: 'ar-EG' } },
+      { name: 'explicit LDML format locale', globalLocale: undefined, format: { type: '#,##0.0', locale: 'ar-EG' } },
+    ])('should parse back non-Latin digits of the $name', ({ globalLocale, format }) => {
+      coreLocalization.locale('en');
+      if (globalLocale) {
+        config({ ...config(), numberFormat: { default: { locale: globalLocale } } });
+      }
+
+      const formatted = numberLocalization.format(1234.5, format as never);
+
+      expect(formatted).toBe('١٬٢٣٤٫٥');
+      expect(numberLocalization.parse(formatted, format as never)).toBe(1234.5);
+    });
+
     it('should not apply numberFormat locale to explicit Intl options without a locale', () => {
       coreLocalization.locale('de');
       config({

@@ -180,9 +180,6 @@ export const getEffectiveFormatLocale = (
     return ownLocale;
   }
 
-  // NOTE: the global format locale is used only when the caller asks for it explicitly
-  // by dataType (the format itself is omitted). A format that a component sets explicitly
-  // is never matched against dateFormat/timeFormat/dateTimeFormat by its fields.
   if (dataType) {
     const globalFormatLocale = getOwnFormatLocale(getGlobalFormatByDataType(dataType));
 

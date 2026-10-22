@@ -79,7 +79,6 @@ export const Export = {
   tryConvertToExcelNumberFormat(format, dataType) {
     const newFormat = ExportFormat.formatObjectConverter(format, dataType);
     const { currency } = newFormat;
-    // NOTE: the column format locale (or the message locale), never the numberFormat locale
     const formatLocale = getEffectiveFormatLocale(format);
 
     format = newFormat.format;
