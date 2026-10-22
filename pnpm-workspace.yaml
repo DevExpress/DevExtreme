@@ -43,7 +43,7 @@ overrides:
   "yaml@>=2.0.0 <2.8.3": ^2.8.3
   "@hono/node-server@<2.0.12": ^2.0.12
   "fast-uri@>=3.0.0 <3.1.8": ^3.1.8
-  "ip-address@<10.7.1": ^10.7.1
+  "ip-address@<10.7.4": ^10.7.4
   "undici@>=6.25.0 <6.28.1": ^6.28.1
   "undici@>=7.28.0 <7.29.1": ^7.29.1
   "engine.io@>=6.6.0 <6.6.10": ^6.6.10
@@ -53,7 +53,7 @@ overrides:
   '@vue/server-renderer@<3.5.42': ^3.5.42
   axios@>=1.0.0 <1.20.0: ^1.20.0
   compression@<1.8.2: ^1.8.2
-  dompurify@>=3.4.13 <=3.4.15: ^3.4.16
+  dompurify@<=3.4.16: ^3.4.17
   follow-redirects@>=1.16.0 <1.16.1: ^1.16.1
   hono@<4.13.11: ^4.13.11
   http-cache-semantics@<=4.2.0: ^4.3.0
