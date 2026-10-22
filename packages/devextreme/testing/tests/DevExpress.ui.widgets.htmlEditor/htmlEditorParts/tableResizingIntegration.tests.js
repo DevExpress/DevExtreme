@@ -176,6 +176,47 @@ module('Table resizing integration', {
         this.clock.restore();
     }
 }, () => {
+    module('module cleanup', {}, () => {
+        test('disabling tableResizing keeps the other text-change subscribers of Quill', function(assert) {
+            this.createWidget();
+            const textChangeSpy = sinon.spy();
+            this.quillInstance.on('text-change', textChangeSpy);
+
+            this.instance.option('tableResizing.enabled', false);
+            this.quillInstance.insertText(0, 'a', 'user');
+
+            assert.strictEqual(textChangeSpy.callCount, 1, 'the foreign text-change handler is still subscribed');
+        });
+
+        test('disabling tableResizing removes its window resize handler', function(assert) {
+            this.createWidget();
+            const tableResizingModule = this.quillInstance.getModule('tableResizing');
+            const resizeHandler = tableResizingModule._resizeHandlerWithContext;
+
+            assert.ok(resizeCallbacks.has(resizeHandler), 'the handler is subscribed while resizing is enabled');
+
+            this.instance.option('tableResizing.enabled', false);
+
+            assert.notOk(resizeCallbacks.has(resizeHandler), 'the handler is removed');
+        });
+
+        test('setting the whole tableResizing option while it is enabled keeps one frame and no handler after disabling', function(assert) {
+            this.createWidget();
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.instance.option('tableResizing', { enabled: true, minColumnWidth: 50 });
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 1, 'one frame for the table');
+
+            this.instance.option('tableResizing.enabled', false);
+            this.quillInstance.insertText(0, 'a', 'user');
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`).length, 0, 'no frame is recreated after disabling');
+        });
+    });
+
     module('resizing frames initialization', {}, () => {
         test('Frame is created for table by default if the tableResizing option is enabled', function(assert) {
             this.createWidget();

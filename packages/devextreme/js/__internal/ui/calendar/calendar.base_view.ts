@@ -249,7 +249,7 @@ class BaseView<
     return result;
   }
 
-  _getRangeText(range: [Date | undefined, Date | undefined]): string {
+  _getRangeText(range: [Date, Date?]): string {
     const [startDate, endDate] = range;
 
     const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
@@ -481,6 +481,7 @@ class BaseView<
         const firstDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).first().data(CALENDAR_DATE_VALUE_KEY);
         const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data(CALENDAR_DATE_VALUE_KEY);
         const rowDates = [
+          // @ts-expect-error renderer.d.ts types data(key) as the wrapper, not the stored value
           ...coreDateUtils.getDatesOfInterval(firstDateInRow, lastDateInRow, DAY_INTERVAL),
           lastDateInRow,
         ];
@@ -715,7 +716,7 @@ class BaseView<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isBoundary(date?: Date): boolean {
+  isBoundary(date?: Date): boolean | null | undefined {
     return false;
   }
 

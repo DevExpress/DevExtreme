@@ -814,34 +814,29 @@ QUnit.module('Layout manager', () => {
             dataField: 'name',
             editorType: 'dxTextBox',
             itemType: 'simple',
-            visibleIndex: 0,
-            col: 0
+            visibleIndex: 0
         }, {
             dataField: 'active',
             editorType: 'dxCheckBox',
             allowIndeterminateState: true,
             itemType: 'simple',
-            visibleIndex: 1,
-            col: 0
+            visibleIndex: 1
         }, {
             dataField: 'price',
             editorType: 'dxNumberBox',
             itemType: 'simple',
-            visibleIndex: 2,
-            col: 0
+            visibleIndex: 2
         }, {
             dataField: 'birthDate',
             editorType: 'dxDateBox',
             itemType: 'simple',
-            visibleIndex: 3,
-            col: 0
+            visibleIndex: 3
         },
         {
             dataField: 'vacation',
             editorType: 'dxTextBox',
             itemType: 'simple',
-            visibleIndex: 4,
-            col: 0
+            visibleIndex: 4
         }]);
     });
 
@@ -857,8 +852,7 @@ QUnit.module('Layout manager', () => {
             dataField: 'name',
             editorType: 'dxTextBox',
             itemType: 'simple',
-            visibleIndex: 0,
-            col: 0
+            visibleIndex: 0
         }]);
     });
 
@@ -883,14 +877,12 @@ QUnit.module('Layout manager', () => {
             dataField: 'active',
             editorType: 'dxSwitch',
             itemType: 'simple',
-            visibleIndex: 0,
-            col: 0
+            visibleIndex: 0
         }, {
             dataField: 'secondName',
             editorType: 'dxTextArea',
             itemType: 'simple',
-            visibleIndex: 1,
-            col: 0
+            visibleIndex: 1
         }]);
 
         assert.deepEqual(
@@ -989,26 +981,22 @@ QUnit.module('Layout manager', () => {
             dataField: 'title',
             editorType: 'dxTextBox',
             itemType: 'simple',
-            visibleIndex: 0,
-            col: 0
+            visibleIndex: 0
         }, {
             dataField: 'room',
             editorType: 'dxNumberBox',
             itemType: 'simple',
-            visibleIndex: 1,
-            col: 0
+            visibleIndex: 1
         }, {
             dataField: 'startDate',
             editorType: 'dxDateBox',
             itemType: 'simple',
-            visibleIndex: 2,
-            col: 0
+            visibleIndex: 2
         }, {
             dataField: 'vacation',
             editorType: 'dxTextBox',
             itemType: 'simple',
-            visibleIndex: 3,
-            col: 0
+            visibleIndex: 3
         }]);
     });
 
@@ -1724,100 +1712,42 @@ QUnit.module('Render multiple columns', () => {
             }
         }).dxLayoutManager('instance');
         const items = layoutManager._items;
+        const entries = layoutManager._layoutEntries;
 
+        assert.deepEqual(items.map((item) => [item.dataField, item.colSpan]), [
+            ['ID', undefined],
+            ['FirstName', 2],
+            ['LastName', 2],
+            ['Prefix', 4],
+            ['Position', undefined],
+            ['Picture', undefined],
+            ['BirthDate', undefined],
+            ['HireDate', undefined],
+            ['Notes', 5],
+            ['Address', undefined],
+            ['StateID', 3],
+        ], 'items keep their colSpan and contain no placeholders');
+        assert.deepEqual(items.map((item) => item.visibleIndex), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'visibleIndex');
+        assert.notOk(items.some((item) => 'col' in item || 'merged' in item), 'no layout state is written into items');
 
-        assert.equal(items.length, 15, 'items count');
-        assert.deepEqual(items[0], {
-            dataField: 'ID',
-            editorType: 'dxNumberBox',
-            visibleIndex: 0,
-            col: 0,
-            itemType: 'simple'
-        }, '0 item');
-        assert.deepEqual(items[1], {
-            dataField: 'FirstName',
-            colSpan: 2,
-            editorType: 'dxTextBox',
-            visibleIndex: 1,
-            col: 1,
-            itemType: 'simple'
-        }, '1 item');
-        assert.deepEqual(items[2], {
-            merged: true
-        }, '2 item, merged');
-        assert.deepEqual(items[3], {
-            dataField: 'LastName',
-            editorType: 'dxTextBox',
-            visibleIndex: 2,
-            col: 3,
-            itemType: 'simple'
-        }, '3 item');
-        assert.deepEqual(items[4], {
-            dataField: 'Prefix',
-            colSpan: 4,
-            editorType: 'dxTextBox',
-            visibleIndex: 3,
-            col: 0,
-            itemType: 'simple'
-        }, '5 item');
-        assert.deepEqual(items[5], {
-            merged: true
-        }, '6 item, merged');
-        assert.deepEqual(items[6], {
-            merged: true
-        }, '7 item, merged');
-        assert.deepEqual(items[7], {
-            merged: true
-        }, '8 item, merged');
-        assert.deepEqual(items[8], {
-            dataField: 'Position',
-            editorType: 'dxTextBox',
-            visibleIndex: 4,
-            col: 0,
-            itemType: 'simple'
-        }, '9 item');
-        assert.deepEqual(items[9], {
-            dataField: 'Picture',
-            editorType: 'dxTextBox',
-            visibleIndex: 5,
-            col: 1,
-            itemType: 'simple'
-        }, '10 item');
-        assert.deepEqual(items[10], {
-            dataField: 'BirthDate',
-            editorType: 'dxTextBox',
-            visibleIndex: 6,
-            col: 2,
-            itemType: 'simple'
-        }, '11 item');
-        assert.deepEqual(items[11], {
-            dataField: 'HireDate',
-            editorType: 'dxTextBox',
-            visibleIndex: 7,
-            col: 3,
-            itemType: 'simple'
-        }, '12 item');
-        assert.deepEqual(items[12], {
-            dataField: 'Notes',
-            editorType: 'dxTextBox',
-            visibleIndex: 8,
-            col: 0,
-            itemType: 'simple'
-        }, '13 item');
-        assert.deepEqual(items[13], {
-            dataField: 'Address',
-            editorType: 'dxTextBox',
-            visibleIndex: 9,
-            col: 1,
-            itemType: 'simple'
-        }, '14 item');
-        assert.deepEqual(items[14], {
-            dataField: 'StateID',
-            editorType: 'dxNumberBox',
-            visibleIndex: 10,
-            col: 2,
-            itemType: 'simple'
-        }, '15 item');
+        assert.deepEqual(entries.map((entry) => (entry.merged ? 'merged' : [entry.item.dataField, entry.col, entry.colSpan])), [
+            ['ID', 0, 1],
+            ['FirstName', 1, 2],
+            'merged',
+            ['LastName', 3, 1],
+            ['Prefix', 0, 4],
+            'merged',
+            'merged',
+            'merged',
+            ['Position', 0, 1],
+            ['Picture', 1, 1],
+            ['BirthDate', 2, 1],
+            ['HireDate', 3, 1],
+            ['Notes', 0, 1],
+            ['Address', 1, 1],
+            ['StateID', 2, 1],
+        ], 'layout entries: spans that fit produce merged placeholders, the others get an effective span of 1');
+        assert.deepEqual(entries.filter((entry) => entry.merged).map((entry) => entry.col), [2, 1, 2, 3], 'placeholder columns');
     });
 
     test('Generate layout items for col span', function(assert) {
@@ -1885,100 +1815,42 @@ QUnit.module('Render multiple columns', () => {
             }
         }).dxLayoutManager('instance');
         const items = layoutManager._items;
+        const entries = layoutManager._layoutEntries;
 
+        assert.deepEqual(items.map((item) => [item.dataField, item.colSpan]), [
+            ['ID', undefined],
+            ['FirstName', 2],
+            ['LastName', 2],
+            ['Prefix', 4],
+            ['Position', undefined],
+            ['Picture', undefined],
+            ['BirthDate', undefined],
+            ['HireDate', undefined],
+            ['Notes', 5],
+            ['Address', undefined],
+            ['StateID', 3],
+        ], 'items keep their colSpan and contain no placeholders');
+        assert.deepEqual(items.map((item) => item.visibleIndex), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 'visibleIndex');
+        assert.notOk(items.some((item) => 'col' in item || 'merged' in item), 'no layout state is written into items');
 
-        assert.equal(items.length, 15, 'items count');
-        assert.deepEqual(items[0], {
-            dataField: 'ID',
-            editorType: 'dxNumberBox',
-            visibleIndex: 0,
-            col: 0,
-            itemType: 'simple'
-        }, '0 item');
-        assert.deepEqual(items[1], {
-            dataField: 'FirstName',
-            colSpan: 2,
-            editorType: 'dxTextBox',
-            visibleIndex: 1,
-            col: 1,
-            itemType: 'simple'
-        }, '1 item');
-        assert.deepEqual(items[2], {
-            merged: true
-        }, '2 item, merged');
-        assert.deepEqual(items[3], {
-            dataField: 'LastName',
-            editorType: 'dxTextBox',
-            visibleIndex: 2,
-            col: 3,
-            itemType: 'simple'
-        }, '3 item');
-        assert.deepEqual(items[4], {
-            dataField: 'Prefix',
-            colSpan: 4,
-            editorType: 'dxTextBox',
-            visibleIndex: 3,
-            col: 0,
-            itemType: 'simple'
-        }, '5 item');
-        assert.deepEqual(items[5], {
-            merged: true
-        }, '6 item, merged');
-        assert.deepEqual(items[6], {
-            merged: true
-        }, '7 item, merged');
-        assert.deepEqual(items[7], {
-            merged: true
-        }, '8 item, merged');
-        assert.deepEqual(items[8], {
-            dataField: 'Position',
-            editorType: 'dxTextBox',
-            visibleIndex: 4,
-            col: 0,
-            itemType: 'simple'
-        }, '9 item');
-        assert.deepEqual(items[9], {
-            dataField: 'Picture',
-            editorType: 'dxTextBox',
-            visibleIndex: 5,
-            col: 1,
-            itemType: 'simple'
-        }, '10 item');
-        assert.deepEqual(items[10], {
-            dataField: 'BirthDate',
-            editorType: 'dxTextBox',
-            visibleIndex: 6,
-            col: 2,
-            itemType: 'simple'
-        }, '11 item');
-        assert.deepEqual(items[11], {
-            dataField: 'HireDate',
-            editorType: 'dxTextBox',
-            visibleIndex: 7,
-            col: 3,
-            itemType: 'simple'
-        }, '12 item');
-        assert.deepEqual(items[12], {
-            dataField: 'Notes',
-            editorType: 'dxTextBox',
-            visibleIndex: 8,
-            col: 0,
-            itemType: 'simple'
-        }, '13 item');
-        assert.deepEqual(items[13], {
-            dataField: 'Address',
-            editorType: 'dxTextBox',
-            visibleIndex: 9,
-            col: 1,
-            itemType: 'simple'
-        }, '14 item');
-        assert.deepEqual(items[14], {
-            dataField: 'StateID',
-            editorType: 'dxNumberBox',
-            visibleIndex: 10,
-            col: 2,
-            itemType: 'simple'
-        }, '15 item');
+        assert.deepEqual(entries.map((entry) => (entry.merged ? 'merged' : [entry.item.dataField, entry.col, entry.colSpan])), [
+            ['ID', 0, 1],
+            ['FirstName', 1, 2],
+            'merged',
+            ['LastName', 3, 1],
+            ['Prefix', 0, 4],
+            'merged',
+            'merged',
+            'merged',
+            ['Position', 0, 1],
+            ['Picture', 1, 1],
+            ['BirthDate', 2, 1],
+            ['HireDate', 3, 1],
+            ['Notes', 0, 1],
+            ['Address', 1, 1],
+            ['StateID', 2, 1],
+        ], 'layout entries: spans that fit produce merged placeholders, the others get an effective span of 1');
+        assert.deepEqual(entries.filter((entry) => entry.merged).map((entry) => entry.col), [2, 1, 2, 3], 'placeholder columns');
     });
 
     test('Generate rows ratio for col span', function(assert) {

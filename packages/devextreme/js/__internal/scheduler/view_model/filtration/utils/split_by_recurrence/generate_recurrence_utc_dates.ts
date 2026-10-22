@@ -1,4 +1,4 @@
-import { dateUtilsTs } from '@ts/core/utils/date';
+import { addOffsets } from '@ts/core/utils/m_date';
 import { RRule, RRuleSet } from 'rrule';
 
 import { parseRecurrenceRule } from '../../../../recurrence/base';
@@ -53,7 +53,7 @@ export const generateRecurrenceUTCDates = <
 
   if (rule.until) {
     const untilOffset = getDateOffsetMs(rule.until.getTime(), timeZone);
-    ruleOptions.until = dateUtilsTs.addOffsets(rule.until, untilOffset);
+    ruleOptions.until = addOffsets(rule.until, untilOffset);
   }
 
   const rRuleSet = new RRuleSet();

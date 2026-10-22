@@ -56,7 +56,7 @@ const SOURCE_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx', '.vue']);
 const IMPORT_SPECIFIER_RE = /(?:^|\r?\n)\s*(?:import|export)(?:[^'";]*?from)?\s*['"]([^'"]+)['"]|require\(\s*['"]([^'"]+)['"]\s*\)|import\(\s*['"]([^'"]+)['"]\s*\)/g;
 
 const GENERATED_DIR_NAMES = new Set(['_chunks']);
-const GENERATED_FILE_RE = /^bundle(\.[0-9a-f]+)?\.(js|css)$|^\.csp-bundle-angular-patched\./;
+const GENERATED_FILE_RE = /^bundle(\.[0-9a-f]+)?\.(js|css)$|^\.demo-bundle-angular-patched\./;
 
 function walk(dir, out) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {

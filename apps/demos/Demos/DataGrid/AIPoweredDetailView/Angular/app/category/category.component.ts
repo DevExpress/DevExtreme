@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'category',
-  templateUrl: 'app/category/category.component.html',
-  styleUrls: ['app/category/category.component.css'],
+  templateUrl: './category.component.html',
+  styleUrls: ['./category.component.css'],
 })
 export class Category {
   @Input() id!: number;

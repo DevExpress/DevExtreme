@@ -3,9 +3,10 @@ import {
   ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
 } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { DxChatModule, DxSwitchModule } from 'devextreme-angular';
+import { DxChatModule, DxSwitchModule, DxToolbarModule } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import type { DxSwitchTypes } from 'devextreme-angular/ui/switch';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { Observable } from 'rxjs';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -23,6 +24,7 @@ if (!/localhost/.test(document.location.host)) {
   imports: [
     DxChatModule,
     DxSwitchModule,
+    DxToolbarModule,
     AsyncPipe,
   ],
 })
@@ -45,6 +47,10 @@ export class AppComponent {
 
   suggestions: DxChatTypes.Properties['suggestions'];
 
+  readonly defaultSuggestions: DxChatTypes.Properties['suggestions'];
+
+  clearButtonOptions: DxButtonTypes.Properties;
+
   constructor(
     private readonly appService: AppService,
     private readonly changeDetectorRef: ChangeDetectorRef,
@@ -55,9 +61,16 @@ export class AppComponent {
     this.user = this.appService.user;
     this.alerts$ = this.appService.alerts$;
     this.typingUsers$ = this.appService.typingUsers$;
-    this.suggestions = {
+    this.defaultSuggestions = {
       items: this.appService.suggestionItems,
       onItemClick: this.onSuggestionItemClick.bind(this),
+    };
+    this.suggestions = this.defaultSuggestions;
+    this.clearButtonOptions = {
+      icon: 'clearhistory',
+      stylingMode: 'text',
+      hint: 'Clear chat',
+      onClick: () => this.onClearButtonClick(),
     };
   }
 
@@ -68,6 +81,7 @@ export class AppComponent {
   toggleDisabledState(disabled: boolean, event = undefined) {
     this.isDisabled = disabled;
     this.suggestions = { ...this.suggestions, disabled };
+    this.clearButtonOptions = { ...this.clearButtonOptions, disabled };
 
     if (disabled) {
       event?.target.blur();
@@ -96,8 +110,8 @@ export class AppComponent {
     if (this.hideAfterUse) {
       const currentItems = (this.suggestions?.items ?? []) as { text: string; prompt: string }[];
       this.suggestions = {
+        ...this.defaultSuggestions,
         items: currentItems.filter((item) => item.text !== text),
-        onItemClick: this.onSuggestionItemClick.bind(this),
       };
     }
 
@@ -124,6 +138,11 @@ export class AppComponent {
       this.inputFieldText = prompt;
       this.changeDetectorRef.detectChanges();
     }
+  }
+
+  onClearButtonClick(): void {
+    this.appService.clearMessages();
+    this.suggestions = this.defaultSuggestions;
   }
 
   onInputFieldTextChanged(e: DxChatTypes.InputFieldTextChangedEvent): void {

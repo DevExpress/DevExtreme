@@ -42,16 +42,8 @@ import { memoize } from '@ts/utils/memoize';
 
 import { CLASSES as ADAPTIVITY_CLASSES } from '../adaptivity/const';
 import {
-  CELL_FOCUS_DISABLED_CLASS,
-  COMMAND_EDIT_CLASS,
-  DROPDOWN_EDITOR_OVERLAY_CLASS,
-  EDIT_FORM_CLASS,
-  EDIT_FORM_ITEM_CLASS,
-  EDIT_MODE_BATCH,
-  EDIT_MODE_CELL,
-  EDIT_MODE_FORM,
-  EDIT_MODE_ROW,
-  EDITOR_CELL_CLASS,
+  CLASSES as EDITING_CLASSES,
+  EDIT_MODE,
   FOCUSABLE_ELEMENT_SELECTOR,
 } from '../editing/const';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
@@ -366,7 +358,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
       const tableSelector = `.${this.addWidgetPrefix(VIEW_CLASSES.table)}`;
       const rowsViewSelector = `.${this.addWidgetPrefix(VIEW_CLASSES.rowsView)}`;
-      const editorOverlaySelector = `.${DROPDOWN_EDITOR_OVERLAY_CLASS}`;
+      const editorOverlaySelector = `.${EDITING_CLASSES.dropDownEditorOverlay}`;
 
       // if click was on the datagrid table, but the target element is no more presented in the DOM
       const needKeepFocus = !!$target.closest(tableSelector).length && !isElementInDom($target);
@@ -1288,7 +1280,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       if ($cell.is(':focus')) {
         this.focusFirstInteractiveElementInside($cell);
       }
-    } else if (!$cell?.hasClass(COMMAND_EDIT_CLASS)) {
+    } else if (!$cell?.hasClass(EDITING_CLASSES.commandEdit)) {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
     }
   }
@@ -1678,7 +1670,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         const skipFocusEvent = $target && $target.not($cell).is(NON_FOCUSABLE_ELEMENTS_SELECTOR);
         const isEditCell = !column?.command
           && isEditing
-          && $cell.hasClass(EDITOR_CELL_CLASS);
+          && $cell.hasClass(EDITING_CLASSES.editorCell);
 
         const isDisabled = !isEditCell
           && (!args.isHighlighted || skipFocusEvent);
@@ -1829,7 +1821,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           // @ts-expect-error filter() is typed for selectors only
           .filter((i, node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
           .not($focusElement)
-          .removeClass(CELL_FOCUS_DISABLED_CLASS)
+          .removeClass(EDITING_CLASSES.cellFocusDisabled)
           .removeClass(CLASSES.focused)
           .removeAttr('tabindex');
       }
@@ -1837,7 +1829,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       eventsEngine.one($focusElement, 'blur', (e) => {
         if (e.relatedTarget) {
           $focusElement
-            .removeClass(CELL_FOCUS_DISABLED_CLASS)
+            .removeClass(EDITING_CLASSES.cellFocusDisabled)
             .removeClass(CLASSES.focused);
         }
       });
@@ -1851,9 +1843,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         }
       }
       if (disableFocus) {
-        $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
+        $focusElement.addClass(EDITING_CLASSES.cellFocusDisabled);
         if (isRowFocus) {
-          $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
+          $cell.addClass(EDITING_CLASSES.cellFocusDisabled);
         }
       } else {
         this._editorFactory.focus($focusElement);
@@ -1881,7 +1873,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         if ($cell && isElementDefined($cell)) {
           if (
             $cell.is('td')
-            || $cell.hasClass(this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))
+            || $cell.hasClass(this.addWidgetPrefix(EDITING_CLASSES.editFormItem))
           ) {
             const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
             const $focusedElementInsideCell = $cell.find(':focus');
@@ -1920,8 +1912,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private _needFocusEditingCell() {
-    const isCellEditMode = this._editingController.getEditMode() === EDIT_MODE_CELL;
-    const isBatchEditMode = this._editingController.getEditMode() === EDIT_MODE_BATCH;
+    const isCellEditMode = this._editingController.getEditMode() === EDIT_MODE.cell;
+    const isBatchEditMode = this._editingController.getEditMode() === EDIT_MODE.batch;
 
     const cellEditModeHasChanges = isCellEditMode && this._editingController.hasChanges();
     const isNewRowBatchEditMode = isBatchEditMode && this._editingController.isNewRowInEditMode();
@@ -1966,7 +1958,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   public _resetFocusedCell(preventScroll?) {
     const $cell = this._getFocusedCell();
 
-    isElementDefined($cell) && $cell.removeAttr('tabindex').removeClass(CELL_FOCUS_DISABLED_CLASS);
+    isElementDefined($cell) && $cell.removeAttr('tabindex').removeClass(EDITING_CLASSES.cellFocusDisabled);
     this._isNeedFocus = false;
     this._isNeedScroll = false;
     this._focusedCellPosition = {};
@@ -2693,7 +2685,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _isCellEditMode() {
     const editMode = this._editingController.getEditMode();
-    return editMode === EDIT_MODE_CELL || editMode === EDIT_MODE_BATCH;
+    return editMode === EDIT_MODE.cell || editMode === EDIT_MODE.batch;
   }
 
   private _isFastEditingAllowed() {
@@ -2823,7 +2815,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   protected _isInsideEditForm(element) {
     const $editForm = $(element).closest(
-      `.${this.addWidgetPrefix(EDIT_FORM_CLASS)}`,
+      `.${this.addWidgetPrefix(EDITING_CLASSES.editForm)}`,
     );
 
     return $editForm.length && this.elementIsInsideGrid($editForm);
@@ -2946,7 +2938,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   public isRowEditMode(): boolean {
     const editMode = this._editingController.getEditMode();
-    return editMode === EDIT_MODE_ROW || editMode === EDIT_MODE_FORM;
+    return editMode === EDIT_MODE.row || editMode === EDIT_MODE.form;
   }
 
   public getRowIndex(): number {
@@ -3164,7 +3156,7 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
     const visibleColumnIndex = this._keyboardNavigationController.getVisibleColumnIndex();
     const column = this._columnsController.getVisibleColumns()[visibleColumnIndex];
 
-    if (column && column.type || this.option('editing.mode') === EDIT_MODE_FORM) {
+    if (column && column.type || this.option('editing.mode') === EDIT_MODE.form) {
       this._keyboardNavigationController._resetFocusedCell();
     }
     super.editRow(rowIndex);
@@ -3187,7 +3179,7 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
 
     if (this._keyboardNavigationController.isKeyboardEnabled() && focusedRowIndex === rowIndex) {
       const $focusedCell = this._keyboardNavigationController._getFocusedCell();
-      if (isElementDefined($focusedCell) && !$focusedCell.hasClass(COMMAND_EDIT_CLASS)) {
+      if (isElementDefined($focusedCell) && !$focusedCell.hasClass(EDITING_CLASSES.commandEdit)) {
         $cell = $focusedCell;
       }
     }

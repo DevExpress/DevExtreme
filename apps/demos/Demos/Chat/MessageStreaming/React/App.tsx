@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import Chat from 'devextreme-react/chat';
 import type { ChatTypes } from 'devextreme-react/chat';
+import Toolbar, { Item } from 'devextreme-react/toolbar';
+import type { ButtonTypes } from 'devextreme-react/button';
 import { loadMessages } from 'devextreme-react/common/core/localization';
 import {
   user,
@@ -25,6 +27,7 @@ export default function App() {
     insertMessage,
     fetchAIResponse,
     stopStreaming,
+    clearMessages,
   } = useApi();
 
   const onMessageEntered = useCallback(async ({ message }: ChatTypes.MessageEnteredEvent): Promise<void> => {
@@ -66,21 +69,43 @@ export default function App() {
     onClick: () => {},
   }), [isStreaming, stopStreaming]);
 
+  const clearButtonOptions = useMemo((): ButtonTypes.Properties => ({
+    icon: 'clearhistory',
+    stylingMode: 'text',
+    hint: 'Clear chat',
+    disabled: isStreaming,
+    onClick: clearMessages,
+  }), [isStreaming, clearMessages]);
+
   return (
-    <Chat
-      dataSource={dataSource}
-      reloadOnChange={false}
-      showAvatar={false}
-      showDayHeaders={false}
-      user={user}
-      height={710}
-      onMessageEntered={onMessageEntered}
-      alerts={alerts}
-      typingUsers={typingUsers}
-      messageRender={messageRender}
-      emptyViewRender={emptyViewRender}
-      sendButtonOptions={sendButtonOptions}
-      speechToTextEnabled={true}
-    />
+    <div className="ai-chat-card">
+      <Toolbar>
+        <Item
+          location="before"
+          text="AI Assistant"
+          cssClass="ai-chat-title"
+        />
+        <Item
+          location="after"
+          widget="dxButton"
+          options={clearButtonOptions}
+        />
+      </Toolbar>
+      <Chat
+        dataSource={dataSource}
+        reloadOnChange={false}
+        showAvatar={false}
+        showDayHeaders={false}
+        user={user}
+        height={710}
+        onMessageEntered={onMessageEntered}
+        alerts={alerts}
+        typingUsers={typingUsers}
+        messageRender={messageRender}
+        emptyViewRender={emptyViewRender}
+        sendButtonOptions={sendButtonOptions}
+        speechToTextEnabled={true}
+      />
+    </div>
   );
 }

@@ -42,6 +42,7 @@ import {
     FileSavingEventInfo,
     ExportInfo,
     IncidentInfo,
+    BaseWidgetTitle,
 } from './core/base_widget';
 
 import {
@@ -1519,6 +1520,12 @@ export interface dxChartOptions extends BaseChartOptions<dxChart, chartPointObje
     synchronizeMultiAxes?: boolean;
     /**
      * @docid
+     * @type object|string
+     * @public
+     */
+    title?: Title | string;
+    /**
+     * @docid
      * @type object
      * @public
      */
@@ -2682,6 +2689,22 @@ export type Panes = CommonPaneSettings & {
      * @public
      */
     name?: string | undefined;
+};
+
+/**
+ * @public
+ * @docid dxChartTitle
+ * @type object
+ */
+export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+    /**
+     * @docid dxChartOptions.title.horizontalAlignment
+     * @default 'center'
+     * @default 'left' &for(Material)
+     * @default 'left' &for(Fluent)
+     * @public
+     */
+    horizontalAlignment?: HorizontalAlignment;
 };
 
 /**
