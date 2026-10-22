@@ -254,6 +254,48 @@ export type Attachment = {
  * @namespace DevExpress.ui.dxChat
  * @public
  */
+export type ToolCallStatus = 'success' | 'error';
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type ToolCall = {
+    /**
+     * @docid
+     * @public
+     */
+    name: string;
+    /**
+     * @docid
+     * @public
+     */
+    arguments?: Record<string, any>;
+    /**
+     * @docid
+     * @public
+     */
+    result?: string | object;
+    /**
+     * @docid
+     * @public
+     */
+    status?: ToolCallStatus;
+    /**
+     * @docid
+     * @public
+     */
+    expanded?: boolean;
+
+    [key: string]: any;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
 export type MessageType = 'text' | 'image';
 
 /**
@@ -315,6 +357,12 @@ export type TextMessage = MessageBase & {
      * @public
      */
     isEdited?: boolean;
+    /**
+     * @docid
+     * @public
+     * @type Array<ToolCall>
+     */
+    toolCalls?: ToolCall[];
 
     [key: string]: any;
 };
