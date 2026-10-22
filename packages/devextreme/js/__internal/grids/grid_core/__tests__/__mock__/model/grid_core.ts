@@ -34,6 +34,7 @@ const SELECTORS = {
   headerCellIndicators: 'dx-column-indicators',
   headerCellFilter: 'dx-header-filter',
   revertButton: 'dx-revert-button',
+  applyFilterButton: 'dx-apply-button',
 };
 
 export abstract class GridCoreModel<TInstance = GridBase | CardView> {
@@ -148,6 +149,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
 
   public getRevertButton(): HTMLElement {
     return document.body.querySelector(`.${SELECTORS.revertButton}`) as HTMLElement;
+  }
+
+  public getApplyFilterButton(): HTMLElement {
+    return this.root.querySelector(`.${SELECTORS.applyFilterButton}`) as HTMLElement;
   }
 
   public addWidgetPrefix(classNames: string): string {
