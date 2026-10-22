@@ -157,3 +157,13 @@ export const hasHorizontalScroll = ClientFunction((selector) => {
 
   return element.scrollWidth > element.clientWidth;
 });
+
+export const hasVisibleScrollbarThumb = ClientFunction((selector: string) => Array
+  .from(document.querySelectorAll(`${selector} .dx-scrollable-scroll`))
+  .some((thumb) => {
+    const content = thumb.querySelector('.dx-scrollable-scroll-content');
+
+    // a hoverable scrollbar keeps the thumb opaque and fades the thumb content out
+    return window.getComputedStyle(thumb).opacity !== '0'
+      && (!content || window.getComputedStyle(content).backgroundColor !== 'rgba(0, 0, 0, 0)');
+  }));

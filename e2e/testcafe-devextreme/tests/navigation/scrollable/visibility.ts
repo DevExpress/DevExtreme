@@ -4,7 +4,7 @@ import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollabl
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo } from '../../../helpers/domUtils';
+import { appendElementTo, hasVisibleScrollbarThumb } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Scrollable_visibility_integration`
   .page(url(__dirname, '../../container.html'));
@@ -22,6 +22,10 @@ type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
 
           const expectedScrollOffsetValue = { left: 10, top: 20 };
           await t.expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
+
+          if (useNative && useSimulatedScrollbar) {
+            await t.expect(hasVisibleScrollbarThumb('#scrollable')).notOk();
+          }
 
           await testScreenshot(t, takeScreenshot, `Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, { element: Selector('#scrollable') });
 
