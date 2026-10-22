@@ -257,8 +257,7 @@ if (Quill) {
 
       eventsEngine.on(
         this._$toolbarContainer,
-        // @ts-expect-error NAME is typed optional (component.ts); the constructor always sets it
-        addNamespace('mousedown', this.editorInstance.NAME),
+        this._getContainerMouseDownEvent(),
         (e: DxEvent<MouseEvent>): void => {
           // @ts-expect-error target is typed Element; focus() is declared on HTMLElement
           e.target.focus();
@@ -283,6 +282,11 @@ if (Quill) {
       this.editorInstance.on('optionChanged', this.editorOptionChangedHandler);
     }
 
+    _getContainerMouseDownEvent(): string {
+      // @ts-expect-error NAME is typed optional (component.ts); the constructor always sets it
+      return addNamespace('mousedown', this.editorInstance.NAME);
+    }
+
     get toolbarConfig(): Partial<ToolbarProperties> {
       return {
         dataSource: this._prepareToolbarItems(),
@@ -305,6 +309,7 @@ if (Quill) {
       this._toolbarWidgets.clear();
 
       if (this._$toolbarContainer) {
+        eventsEngine.off(this._$toolbarContainer, this._getContainerMouseDownEvent());
         this._$toolbarContainer
           .empty()
           .removeClass(TOOLBAR_WRAPPER_CLASS);
