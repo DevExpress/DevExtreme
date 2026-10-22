@@ -85,12 +85,12 @@ export default class ResizingModule extends BaseModule {
       this._$target = e.target;
       const $target = $(this._$target);
       const minWidth = Math.max(
-        getOuterWidth($target) - getWidth($target),
+        getOuterWidth($target.get(0)) - getWidth($target.get(0)),
         // @ts-expect-error resizable exists while enabled; minWidth is typed as optional
         this.resizable.option('minWidth'),
       );
       const minHeight = Math.max(
-        getOuterHeight($target) - getHeight($target),
+        getOuterHeight($target.get(0)) - getHeight($target.get(0)),
         // @ts-expect-error resizable exists while enabled; minHeight is typed as optional
         this.resizable.option('minHeight'),
       );

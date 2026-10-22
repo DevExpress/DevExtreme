@@ -305,7 +305,7 @@ export default {
 
   calculateLoadPanelPosition($element: dxElementWrapper | undefined): LoadPanelPosition {
     const $window = $(getWindow());
-    if (getHeight($element) > getHeight($window)) {
+    if (Number(getHeight($element)) > getHeight($window.get(0))) {
       return {
         of: $window,
         boundary: $element,
@@ -796,7 +796,7 @@ export default {
     $rowsViewElement: dxElementWrapper | undefined,
   ): number {
     const borderWidth = that.option('showBorders')
-      ? Math.ceil(getOuterWidth($rowsViewElement) - getInnerWidth($rowsViewElement))
+      ? Math.ceil(Number(getOuterWidth($rowsViewElement)) - Number(getInnerWidth($rowsViewElement)))
       : 0;
 
     return borderWidth;

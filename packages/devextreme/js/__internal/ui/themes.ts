@@ -279,7 +279,7 @@ function _attachCssClasses(element, themeName?: string): void {
     const $tester = $('<div>');
     $tester.css('border', '.5px solid transparent');
     $('body').append($tester);
-    if (getOuterHeight($tester) === 1) {
+    if (getOuterHeight($tester.get(0)) === 1) {
       $(element).addClass(DX_HAIRLINES_CLASS);
       themeClasses += ` ${DX_HAIRLINES_CLASS}`;
     }

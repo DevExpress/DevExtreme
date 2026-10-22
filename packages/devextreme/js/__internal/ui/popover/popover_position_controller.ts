@@ -147,7 +147,7 @@ export class PopoverPositionController<
 
       const sign = (isPopoverInside ? -1 : 1) * weightOfSide;
 
-      const arrowSize = isVerticalSide ? getHeight(this._$arrow) : getWidth(this._$arrow);
+      const arrowSize = Number(isVerticalSide ? getHeight(this._$arrow) : getWidth(this._$arrow));
       const arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
       const arrowOffset = sign * (arrowSize - arrowSizeCorrection);
 

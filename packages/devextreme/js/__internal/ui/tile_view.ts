@@ -233,7 +233,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
     let crossDimensionValue;
     // @ts-expect-error ts-error
     if (hasWindow) {
-      crossDimensionValue = (config.crossDimension === 'width' ? getWidth : getHeight)(this.$element());
+      crossDimensionValue = (config.crossDimension === 'width' ? getWidth : getHeight)(this.$element().get(0));
     } else {
       crossDimensionValue = parseInt(this.$element()[0].style[config.crossDimension], 10);
     }
@@ -262,7 +262,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
     if (hasWindow()) {
       const actualContentSize = this._cells.length * (this.option()[baseItemMainDimension] ?? 0)
         + (this._cells.length + 1) * itemMargin;
-      const elementSize = (mainDimension === 'width' ? getWidth : getHeight)(this.$element());
+      const elementSize = (mainDimension === 'width' ? getWidth : getHeight)(this.$element().get(0));
 
       (mainDimension === 'width' ? setWidth : setHeight)(this._$container, Math.max(actualContentSize, elementSize));
     }
@@ -399,7 +399,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
       + (itemPositionCross + 1) * itemMargin;
 
     if (rtlEnabled) {
-      const offsetCorrection = getWidth(this._$container);
+      const offsetCorrection = getWidth(this._$container.get(0));
       const { baseItemWidth = 0 } = this.option();
       const itemPositionX = itemPosition.left;
       const offsetPosition = itemPositionX * baseItemWidth;
@@ -501,10 +501,10 @@ class TileView extends CollectionWidget<TileViewProperties> {
     const { itemMargin = 0 } = this.option();
     // @ts-expect-error ts-error
     const itemPosition = $itemElement.position()[config.mainPosition];
-    const itemDimension = outerMainGetter($itemElement);
+    const itemDimension = Number(outerMainGetter($itemElement));
     const itemTail = itemPosition + itemDimension;
     const scrollPosition = this.scrollPosition();
-    const clientWidth = outerMainGetter(this.$element());
+    const clientWidth = outerMainGetter(this.$element().get(0));
 
     if (scrollPosition <= itemPosition && itemTail <= scrollPosition + clientWidth) {
       return;
