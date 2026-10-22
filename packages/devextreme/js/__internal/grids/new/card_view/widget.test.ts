@@ -4,6 +4,8 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
+import { on } from '@js/events/index';
+import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import { rerender } from 'inferno';
 
 import type { Options as CardViewOptions } from './options';
@@ -66,6 +68,49 @@ describe('regressions', () => {
       dataSource: [{ a: 'a' }],
     });
     expect(cardView.option('pager.showPageSizeSelector')).toBe(false);
+  });
+});
+
+describe('card template container', () => {
+  it('should notify card template container removal before re-rendering on data update (T1336765)', () => {
+    const onContainerRemoved = jest.fn();
+    const cardTemplate = (_: unknown, templateContainer: Element): void => {
+      on($(templateContainer).get(0), 'dxremove', onContainerRemoved);
+    };
+
+    const container = document.createElement('div');
+    const cardView = new CardView(container, {
+      keyExpr: 'id',
+      dataSource: [{ id: 1, name: 'Audi' }],
+      cardTemplate,
+    } as CardViewOptions);
+
+    cardView.option('dataSource', [{ id: 1, name: 'BMW' }]);
+
+    expect(onContainerRemoved).toHaveBeenCalledTimes(1);
+  });
+
+  it('should remove card template container when the card is removed (T1336765)', () => {
+    const removedCardKeys: unknown[] = [];
+    const cardTemplate = (model: unknown, templateContainer: Element): void => {
+      const { card } = model as { card: CardInfo };
+
+      on($(templateContainer).get(0), 'dxremove', () => {
+        removedCardKeys.push(card.key);
+      });
+    };
+
+    const container = document.createElement('div');
+    const dataSource = [{ id: 1, name: 'Audi' }, { id: 2, name: 'BMW' }];
+    const cardView = new CardView(container, {
+      keyExpr: 'id',
+      dataSource,
+      cardTemplate,
+    } as CardViewOptions);
+
+    cardView.option('dataSource', [dataSource[0]]);
+
+    expect(removedCardKeys).toContain(2);
   });
 });
 
@@ -149,6 +194,23 @@ describe('absence of multiple re-render', () => {
       cardView.searchByText('');
 
       expect(cardTemplate).toHaveBeenCalledTimes(calledTimes);
+    });
+
+    it('should not render card template when integration templates are re-set (T1336765)', () => {
+      const cardTemplate = jest.fn();
+
+      const container = document.createElement('div');
+      const cardView = new CardView(container, {
+        keyExpr: 'id',
+        dataSource,
+        columns,
+        cardTemplate,
+      } as CardViewOptions);
+
+      cardTemplate.mockClear();
+      cardView.option('integrationOptions.templates', {});
+
+      expect(cardTemplate).not.toHaveBeenCalled();
     });
   });
 
