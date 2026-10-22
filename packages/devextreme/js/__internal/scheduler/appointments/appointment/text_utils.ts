@@ -66,7 +66,6 @@ const getGroupText = (options: AppointmentProperties): string => {
   }
 
   const groupText = options.groupTexts.join(', ');
-  // @ts-ignore @ts-expect-error
   return messageLocalization.format('dxScheduler-appointmentAriaDescription-group', groupText);
 };
 
