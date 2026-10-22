@@ -324,7 +324,6 @@ class DiagramToolbox extends DiagramFloatingPanel<DiagramToolboxProperties> {
       `[data-toggle="${DIAGRAM_TOOLTIP_DATATOGGLE}"]`,
     );
     const $container = this.$element();
-    // @ts-expect-error ts-error
     targets.each((_: number, element: Element) => {
       const $target = $(element);
       const title = $target.attr('title');

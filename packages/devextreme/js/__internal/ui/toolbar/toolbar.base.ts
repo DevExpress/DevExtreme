@@ -247,7 +247,6 @@ class ToolbarBase<
     const widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterWidth;
     let elemsAtSectionWidth = 0;
 
-    // @ts-expect-error ts error
     $section.children().not(`.${TOOLBAR_LABEL_CLASS}`).each((_, element) => {
       elemsAtSectionWidth += getOuterWidth(element);
     });

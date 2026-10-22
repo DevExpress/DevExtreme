@@ -40,7 +40,7 @@ export interface dxElementWrapper {
 
   detach(): this;
 
-  each(func: (this: Element, index: number, element: Element) => boolean): this;
+  each(func: (this: Element, index: number, element: Element) => unknown): this;
 
   empty(): this;
 

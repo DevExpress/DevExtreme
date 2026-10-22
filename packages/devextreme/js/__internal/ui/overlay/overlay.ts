@@ -1239,7 +1239,6 @@ class Overlay<
 
     let isHidden = false;
 
-    // @ts-expect-error add should can get dxElementWrapper
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
 

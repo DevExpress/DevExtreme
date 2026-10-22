@@ -7371,7 +7371,7 @@ declare module DevExpress.core {
     detach(): this;
 
     each(
-      func: (this: Element, index: number, element: Element) => boolean
+      func: (this: Element, index: number, element: Element) => unknown
     ): this;
 
     empty(): this;

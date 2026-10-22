@@ -150,7 +150,6 @@ function processMarkup(): void {
   // @ts-expect-error ts-error
   $activeThemeLink = $(parseHTML('<link rel=stylesheet>'), context);
 
-  // @ts-expect-error ts-error
   $allThemeLinks.each(function (): void {
     // @ts-expect-error ts-error
     const link = $(this, context);
