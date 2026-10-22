@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { extend, extendFromObject } from '@ts/core/utils/m_extend';
+import { extend, extendFromObject } from '@ts/core/utils/extend';
 
 describe('Extend utils', () => {
   describe('extend', () => {

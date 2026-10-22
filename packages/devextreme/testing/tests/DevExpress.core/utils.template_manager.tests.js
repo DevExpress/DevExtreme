@@ -1,5 +1,5 @@
-import domUtils from '__internal/core/utils/m_dom';
-import type from '__internal/core/utils/m_type';
+import domUtils from '__internal/core/utils/dom';
+import type from '__internal/core/utils/type';
 import renderer from '__internal/core/renderer';
 import {
     findTemplates, suitableTemplatesByName, addOneRenderedCall, templateKey,

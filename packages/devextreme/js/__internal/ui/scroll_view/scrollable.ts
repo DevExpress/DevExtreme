@@ -19,7 +19,7 @@ import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import type { dxScrollableOptions } from '@js/ui/scroll_view/ui.scrollable';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';

@@ -1,6 +1,6 @@
 import type { Callback } from '@js/core/utils/callbacks';
 import type { StoreChange } from '@js/data/store';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 import type Store from '@ts/data/abstract_store';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 

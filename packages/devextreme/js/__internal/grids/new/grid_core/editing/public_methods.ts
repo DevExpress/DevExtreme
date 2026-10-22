@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 
 import { ItemsController } from '../items_controller/items_controller';
 import type { Constructor } from '../types';

@@ -24,7 +24,7 @@ import type { DxEvent, PointerInteractionEvent } from '@js/events';
 import type { dxPopoverAnimation, Properties } from '@js/ui/popover';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
-import { addAriaDescriptionId, removeAriaDescriptionId } from '@ts/core/utils/m_dom';
+import { addAriaDescriptionId, removeAriaDescriptionId } from '@ts/core/utils/dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { InternalPositionConfig, OverlayInternalProperties } from '@ts/ui/overlay/overlay';
 import type {

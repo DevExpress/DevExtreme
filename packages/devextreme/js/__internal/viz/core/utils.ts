@@ -18,14 +18,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-plusplus */
 
-import { noop } from '@ts/core/utils/m_common';
-import { dateUtils } from '@ts/core/utils/m_date';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { noop } from '@ts/core/utils/common';
+import { dateUtils } from '@ts/core/utils/date';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
+import { adjust, sign } from '@ts/core/utils/math';
 import {
   isDefined, isExponential, isFunction, isNumeric, isString,
-} from '@ts/core/utils/m_type';
-import { adjust, sign } from '@ts/core/utils/math';
+} from '@ts/core/utils/type';
 
 const {
   PI,
