@@ -34,9 +34,9 @@ function clamp(value: number, min: number, max: number): number {
 export class AppComponent {
   stockPrices: StockPrice[];
 
-  initialStart = new Date(1994, 3, 15);
+  initialStart = new Date(1994, 3, 14, 12);
 
-  initialEnd = new Date(1994, 3, 29);
+  initialEnd = new Date(1994, 3, 29, 12);
 
   visualRange: VisualRange = {
     startValue: this.initialStart,

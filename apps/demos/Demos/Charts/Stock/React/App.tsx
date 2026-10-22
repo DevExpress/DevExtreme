@@ -24,9 +24,10 @@ const dayMs = 24 * 60 * 60 * 1000;
 const panStepFraction = 0.25;
 const zoomFactor = 0.75;
 const minVisibleSpanMs = 3 * dayMs;
+const minVisualRangeLength = { days: 3 };
 
-const initialStart = new Date(1994, 3, 15);
-const initialEnd = new Date(1994, 3, 29);
+const initialStart = new Date(1994, 3, 14, 12);
+const initialEnd = new Date(1994, 3, 29, 12);
 
 const dataMin = dataSource[0].date.getTime();
 const dataMax = dataSource[dataSource.length - 1].date.getTime();
@@ -60,6 +61,10 @@ function App() {
     startValue: initialStart,
     endValue: initialEnd,
   });
+
+  const onVisualRangeChange = useCallback((range: VisualRange | (Date | number | string)[]) => {
+    setVisualRange(range as VisualRange);
+  }, []);
 
   const setRange = useCallback((start: number, end: number) => {
     const span = clamp(end - start, minVisibleSpanMs, dataMax - dataMin);
@@ -152,6 +157,8 @@ function App() {
         <Legend verticalAlignment="bottom" horizontalAlignment="center" />
         <ArgumentAxis
           visualRange={visualRange}
+          onVisualRangeChange={onVisualRangeChange}
+          minVisualRangeLength={minVisualRangeLength}
         >
           <Label
             format="MMM dd"

@@ -21,8 +21,9 @@ const dayMs = 24 * 60 * 60 * 1000;
 const panStepFraction = 0.25;
 const zoomFactor = 0.75;
 const minVisibleSpanMs = 3 * dayMs;
-const initialStart = new Date(1994, 3, 15);
-const initialEnd = new Date(1994, 3, 29);
+const minVisualRangeLength = { days: 3 };
+const initialStart = new Date(1994, 3, 14, 12);
+const initialEnd = new Date(1994, 3, 29, 12);
 const dataMin = dataSource[0].date.getTime();
 const dataMax = dataSource[dataSource.length - 1].date.getTime();
 function clamp(value, min, max) {
@@ -50,6 +51,9 @@ function App() {
     startValue: initialStart,
     endValue: initialEnd,
   });
+  const onVisualRangeChange = useCallback((range) => {
+    setVisualRange(range);
+  }, []);
   const setRange = useCallback((start, end) => {
     const span = clamp(end - start, minVisibleSpanMs, dataMax - dataMin);
     const center = (start + end) / 2;
@@ -179,7 +183,11 @@ function App() {
           verticalAlignment="bottom"
           horizontalAlignment="center"
         />
-        <ArgumentAxis visualRange={visualRange}>
+        <ArgumentAxis
+          visualRange={visualRange}
+          onVisualRangeChange={onVisualRangeChange}
+          minVisualRangeLength={minVisualRangeLength}
+        >
           <Label
             format="MMM dd"
             overlappingBehavior="rotate"

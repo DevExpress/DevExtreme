@@ -5,8 +5,8 @@ $(() => {
   const zoomFactor = 0.75;
   const minVisibleSpanMs = 3 * dayMs;
 
-  const initialStart = new Date(1994, 3, 15);
-  const initialEnd = new Date(1994, 3, 29);
+  const initialStart = new Date(1994, 3, 14, 12);
+  const initialEnd = new Date(1994, 3, 29, 12);
 
   const data = generateStockData(new Date(1994, 3, 1), 65);
   const dataMin = data[0].date.getTime();
@@ -38,7 +38,7 @@ $(() => {
       label: { format: { type: 'currency', precision: 0 } },
     },
     argumentAxis: {
-      workdaysOnly: false,
+      minVisualRangeLength: { days: 3 },
       visualRange: { startValue: initialStart, endValue: initialEnd },
       label: {
         format: 'MMM dd',
