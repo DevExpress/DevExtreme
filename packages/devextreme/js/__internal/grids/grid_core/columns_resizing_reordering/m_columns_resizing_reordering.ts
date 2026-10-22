@@ -21,7 +21,7 @@ import {
   getHeight, getWidth,
   setHeight, setWidth,
 } from '@js/core/utils/size';
-import { isDefined, isObject, isString } from '@js/core/utils/type';
+import { isDefined, isObject } from '@js/core/utils/type';
 import type { GroupPanel } from '@js/ui/data_grid';
 import swatchContainer from '@ts/core/utils/swatch_container';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
@@ -32,6 +32,7 @@ import type {
 } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ScrollPosition } from '@ts/grids/grid_core/views/types';
+import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
@@ -41,7 +42,6 @@ import type { Column, ColumnIndex, DropLocationNames } from '../columns_controll
 import type { HeaderPanel } from '../header_panel/header_panel';
 import type { ModuleItem } from '../modules/modules';
 import modules from '../modules/modules';
-import type { PagerView } from '../pager/m_pager';
 import gridCoreUtils from '../utils';
 import { CLASSES } from './const';
 import type {
@@ -151,10 +151,6 @@ export class TrackerView extends modules.View {
 
   public hide(): void {
     this.element()?.hide();
-  }
-
-  private setHeight(value: number): void {
-    setHeight(this.element(), value);
   }
 }
 
@@ -543,6 +539,7 @@ export class DraggingHeaderView extends modules.View {
 
     this._dragOptions = null;
     element?.parent().find(`.${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)}`).remove();
+    super.dispose();
   }
 
   public isVisible(): boolean {
@@ -774,6 +771,8 @@ export class ColumnsResizerViewController extends modules.ViewController {
   }
 
   public init(): void {
+    super.init();
+
     this._subscribesToCallbacks = [];
 
     if (allowResizing(this)) {
@@ -969,9 +968,6 @@ export class ColumnsResizerViewController extends modules.ViewController {
     }
   }
 
-  /**
-   * @extended: filter_row
-   */
   protected _endResizing(args: PointerEventArgs<ColumnsResizerViewController>): void {
     const e = args.event;
     const that = e.data;
@@ -1216,8 +1212,6 @@ export class ColumnsResizerViewController extends modules.ViewController {
     const column = visibleColumns[resizingInfo.currentColumnIndex];
     const nextColumn = visibleColumns[resizingInfo.nextColumnIndex];
     const { needToInvertResizing } = resizingInfo;
-
-    const isPercentWidth = (width: unknown): width is string => isString(width) && width.endsWith('%');
 
     const setColumnWidth = (
       targetColumn: Column | undefined,
@@ -1464,8 +1458,6 @@ export class TablePositionViewController extends modules.ViewController {
 
   public readonly positionChanged: Callback<[TablePosition]>;
 
-  private _pagerView!: PagerView;
-
   constructor(component: InternalGrid) {
     super(component);
     this.positionChanged = Callbacks();
@@ -1477,7 +1469,6 @@ export class TablePositionViewController extends modules.ViewController {
     this._columnsResizerController = this.getController('columnsResizer');
     this._columnHeadersView = this.getView('columnHeadersView');
     this._rowsView = this.getView('rowsView');
-    this._pagerView = this.getView('pagerView');
 
     this._rowsView.resizeCompleted.add(() => {
       if (this.option('allowColumnResizing')) {
@@ -1554,11 +1545,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
 
     const subscribeToEvents = (): void => {
       if (this._draggingHeaderView) {
-        const draggingPanels = [
-          this._columnChooserView,
-          this._columnHeadersView,
-          this._headerPanelView,
-        ];
+        const draggingPanels = this.getDraggingPanels();
 
         this._unsubscribeFromEvents(this._draggingHeaderView, draggingPanels);
         this._subscribeToEvents(this._draggingHeaderView, draggingPanels);
@@ -1572,11 +1559,13 @@ export class DraggingHeaderViewController extends modules.ViewController {
 
   public dispose(): void {
     if (this._draggingHeaderView) {
-      this._unsubscribeFromEvents(
-        this._draggingHeaderView,
-        [this._columnChooserView, this._columnHeadersView, this._headerPanelView],
-      );
+      this._unsubscribeFromEvents(this._draggingHeaderView, this.getDraggingPanels());
     }
+    super.dispose();
+  }
+
+  private getDraggingPanels(): DraggingPanel[] {
+    return [this._columnChooserView, this._columnHeadersView, this._headerPanelView];
   }
 
   /**
@@ -1589,7 +1578,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const cells = this._columnHeadersView.getColumnElements();
     this.isCustomGroupColumnPosition = this.checkIsCustomGroupColumnPosition(options);
 
-    const points = gridCoreUtils.getPointsByColumns(
+    return gridCoreUtils.getPointsByColumns(
       options.columnElements,
       (point) => this._pointCreated({
         point,
@@ -1602,8 +1591,6 @@ export class DraggingHeaderViewController extends modules.ViewController {
       options.startColumnIndex,
       needToCheckPrevPoint,
     );
-
-    return points;
   }
 
   private checkIsCustomGroupColumnPosition(options: DraggingPointsOptions): boolean {
@@ -1791,9 +1778,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
   }
 
   public drag(parameters: DropOptions): void {
-    const { sourceIndex } = parameters;
-    const { sourceLocation } = parameters;
-    const { sourceColumnElement } = parameters;
+    const { sourceIndex, sourceLocation, sourceColumnElement } = parameters;
     const headersView = this._columnHeadersView;
     const rowsView = this._rowsView;
 
@@ -1811,8 +1796,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     const targetColumnIndex = isObject(parameters.targetColumnIndex)
       ? parameters.targetColumnIndex.columnIndex
       : parameters.targetColumnIndex;
-    const { sourceLocation } = parameters;
-    const { targetLocation } = parameters;
+    const { sourceLocation, targetLocation } = parameters;
     const separator = this._getSeparator(targetLocation);
     const hasTargetVisibleIndex = isDefined(targetColumnIndex) && targetColumnIndex >= 0;
 
