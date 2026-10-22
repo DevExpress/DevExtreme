@@ -39,8 +39,8 @@ export class MultiLineStrategy {
       return;
     }
 
-    const elementWidth = getWidth(this._toolbar.$element());
-    const labelPaddings = getOuterWidth($label) - getWidth($label);
+    const elementWidth = getWidth(this._toolbar.$element().get(0));
+    const labelPaddings = Number(getOuterWidth($label)) - Number(getWidth($label));
     $label.css('maxWidth', elementWidth - labelPaddings);
   }
 

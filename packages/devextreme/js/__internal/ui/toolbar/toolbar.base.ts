@@ -223,7 +223,7 @@ class ToolbarBase<
   }
 
   _arrangeItems(width?: number): void {
-    const elementWidth = width ?? getWidth(this.$element());
+    const elementWidth = width ?? getWidth(this.$element().get(0));
 
     this._$centerSection?.css({
       margin: '0 auto',
@@ -260,7 +260,7 @@ class ToolbarBase<
         this._alignSection(this._$beforeSection, sectionMaxWidth);
       }
     } else {
-      const labelPaddings = getOuterWidth($label) - getWidth($label);
+      const labelPaddings = Number(getOuterWidth($label)) - Number(getWidth($label));
       $label.css('maxWidth', sectionMaxWidth - labelPaddings);
     }
   }
@@ -355,7 +355,7 @@ class ToolbarBase<
     const $element = $(this.element());
     $element.removeClass(TOOLBAR_COMPACT_CLASS);
 
-    if (this.option('compactMode') && this._getSummaryItemsSize('width', this._itemElements(), true) > getWidth($element)) {
+    if (this.option('compactMode') && this._getSummaryItemsSize('width', this._itemElements(), true) > getWidth($element.get(0))) {
       $element.addClass(TOOLBAR_COMPACT_CLASS);
     }
   }
@@ -471,7 +471,7 @@ class ToolbarBase<
   }
 
   _isVisible(): boolean {
-    return getWidth(this.$element()) > 0 && getHeight(this.$element()) > 0;
+    return getWidth(this.$element().get(0)) > 0 && getHeight(this.$element().get(0)) > 0;
   }
 
   _getIndexByItem(item: Item): number {

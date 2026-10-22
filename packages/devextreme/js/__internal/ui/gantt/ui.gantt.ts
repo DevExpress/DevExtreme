@@ -1357,7 +1357,7 @@ class Gantt extends Widget<GanttProperties> {
         break;
       case 'height':
         super._optionChanged(args);
-        this._sizeHelper?.setGanttHeight(getHeight(this.$element()));
+        this._sizeHelper?.setGanttHeight(getHeight(this.$element().get(0)));
         break;
       case 'sorting':
         this._ganttTreeList?.setOption('sorting', this.option(name));

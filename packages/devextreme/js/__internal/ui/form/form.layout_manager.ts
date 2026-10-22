@@ -581,7 +581,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     }
 
     const { minColWidth = MIN_COLUMN_WIDTH } = this.option();
-    const width = getWidth(this.$element());
+    const width = getWidth(this.$element().get(0));
     // @ts-expect-error ts-error
     const itemsCount = this._items.length;
 

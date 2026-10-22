@@ -539,12 +539,12 @@ function applyTableDimensionChanges(module: FormatHandlersModule, {
       module.editorInstance.format('tableWidth', `${newWidth}px`);
     } else {
       const $columns = getColumnElements($table);
-      const oldTableWidth = getOuterWidth($table);
+      const oldTableWidth = Number(getOuterWidth($table));
       unfixTableWidth($table, { tableBlot });
 
       each($columns, (i: number, element: Element) => {
         const $element = $(element);
-        const newElementWidth = (newWidth / oldTableWidth) * getOuterWidth($element);
+        const newElementWidth = (newWidth / oldTableWidth) * getOuterWidth($element.get(0));
 
         const $lineElements = getLineElements($table, $element.index(), 'horizontal');
 
@@ -564,11 +564,11 @@ function applyTableDimensionChanges(module: FormatHandlersModule, {
       tableBlot.format('tableHeight', `${newHeight}px`);
     } else {
       const $rows = getRowElements($table);
-      const oldTableHeight = getOuterHeight($table);
+      const oldTableHeight = Number(getOuterHeight($table));
 
       each($rows, (i: number, element: Element) => {
         const $element = $(element);
-        const newElementHeight = (newHeight / oldTableHeight) * getOuterHeight($element);
+        const newElementHeight = (newHeight / oldTableHeight) * getOuterHeight($element.get(0));
         const $lineElements = getLineElements($table, i, 'vertical');
         setLineElementsFormat(module, {
           elements: $lineElements,
@@ -588,8 +588,8 @@ function applyCellDimensionChanges(module: FormatHandlersModule, {
     const index = $($cell).index();
     let $verticalCells = getLineElements($table, index);
 
-    const widthDiff = newWidth - getOuterWidth($cell);
-    const tableWidth = getOuterWidth($table);
+    const widthDiff = newWidth - Number(getOuterWidth($cell));
+    const tableWidth = Number(getOuterWidth($table));
 
     if (newWidth > tableWidth) {
       unfixTableWidth($table, { tableBlot });
@@ -608,7 +608,7 @@ function applyCellDimensionChanges(module: FormatHandlersModule, {
       unfixTableWidth($table, { tableBlot });
       if ($nextColumnCell.length === 1) {
         $verticalCells = getLineElements($table, index + 1);
-        const nextColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
+        const nextColumnWidth = Number(getOuterWidth($verticalCells.eq(0))) - widthDiff;
         setLineElementsFormat(module, {
           elements: $verticalCells,
           property: 'width',
@@ -616,7 +616,7 @@ function applyCellDimensionChanges(module: FormatHandlersModule, {
         });
       } else if ($cell.prev().length === 1) {
         $verticalCells = getLineElements($table, index - 1);
-        const prevColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
+        const prevColumnWidth = Number(getOuterWidth($verticalCells.eq(0))) - widthDiff;
         setLineElementsFormat(module, {
           elements: $verticalCells,
           property: 'width',

@@ -1240,8 +1240,8 @@ export class RowsView extends ColumnsView {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
         deferUpdate(() => {
           const scrollbarWidth = this.getScrollbarWidth(true);
-          const elementHeightWithoutScrollbar = getHeight(this.element()) - scrollbarWidth;
-          const contentHeight = getOuterHeight(contentElement);
+          const elementHeightWithoutScrollbar = Number(getHeight(this.element())) - scrollbarWidth;
+          const contentHeight = Number(getOuterHeight(contentElement));
           const showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0;
           const rowsHeight = this._getRowsHeight(contentElement.children().first());
           const $tableElement = $table ?? this.getTableElements();
@@ -1319,7 +1319,7 @@ export class RowsView extends ColumnsView {
   }
 
   public contentWidth(): number {
-    return getWidth(this.element()) - this.getScrollbarWidth();
+    return Number(getWidth(this.element())) - this.getScrollbarWidth();
   }
 
   public getScrollbarWidth(isHorizontal?: boolean): number {
@@ -1562,7 +1562,7 @@ export class RowsView extends ColumnsView {
     let viewportBoundary = this._scrollTop;
 
     if (!isTop) {
-      const height = getOuterHeight(this._hasHeight ? this.element() : getWindow());
+      const height = Number(getOuterHeight(this._hasHeight ? this.element() : getWindow()));
 
       viewportBoundary += height;
     }
@@ -1573,7 +1573,7 @@ export class RowsView extends ColumnsView {
       const rowOffset = $rowElement.offset();
 
       if (rowOffset) {
-        offset = (isTop ? rowOffset.top : rowOffset.top + getOuterHeight($rowElement))
+        offset = (isTop ? rowOffset.top : rowOffset.top + Number(getOuterHeight($rowElement)))
           - contentElementOffset.top;
 
         if (offset > viewportBoundary) {
@@ -1727,7 +1727,9 @@ export class RowsView extends ColumnsView {
     const scrollable = this.getScrollable();
 
     if (this.option('rtlEnabled') && scrollable) {
-      return getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - scrollLeft;
+      return getWidth(scrollable.$content().get(0))
+        - getWidth(scrollable.$element().get(0))
+        - scrollLeft;
     }
 
     return scrollLeft;

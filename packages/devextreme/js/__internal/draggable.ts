@@ -660,13 +660,13 @@ class Draggable<
     if (dragDirection === 'horizontal' || dragDirection === 'both') {
       // @ts-expect-error offset can be undefined
       position.left = e.pageX - $element.offset().left
-        + locate($element).left - getWidth($element) / 2;
+        + locate($element).left - getWidth($element.get(0)) / 2;
     }
 
     if (dragDirection === 'vertical' || dragDirection === 'both') {
       // @ts-expect-error offset can be undefined
       position.top = e.pageY - $element.offset().top
-        + locate($element).top - getHeight($element) / 2;
+        + locate($element).top - getHeight($element.get(0)) / 2;
     }
 
     this._move(position, $element);
@@ -741,10 +741,10 @@ class Draggable<
     const $area = this._getArea();
     const areaOffset = this._getAreaOffset($area);
     const boundOffset = this._getBoundOffset();
-    const areaWidth = getOuterWidth($area);
-    const areaHeight = getOuterHeight($area);
-    const elementWidth = getWidth($dragElement);
-    const elementHeight = getHeight($dragElement);
+    const areaWidth = Number(getOuterWidth($area));
+    const areaHeight = Number(getOuterHeight($area));
+    const elementWidth = Number(getWidth($dragElement));
+    const elementHeight = Number(getHeight($dragElement));
 
     const startOffset = {
       // @ts-expect-error offset can be undefined

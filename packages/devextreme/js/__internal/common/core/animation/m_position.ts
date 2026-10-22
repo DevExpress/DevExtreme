@@ -303,8 +303,8 @@ const calculatePosition = function (what, options) {
 
   const bounds = (function () {
     const win = $(window);
-    const windowWidth = getWidth(win);
-    const windowHeight = getHeight(win);
+    const windowWidth = getWidth(win.get(0));
+    const windowHeight = getHeight(win.get(0));
     let left = win.scrollLeft();
     let top = win.scrollTop();
     const documentElement = domAdapter.getDocumentElement();
@@ -326,8 +326,8 @@ const calculatePosition = function (what, options) {
       // @ts-expect-error
       top = boundaryPosition.top;
 
-      boundaryWidth = getWidth($boundary);
-      boundaryHeight = getHeight($boundary);
+      boundaryWidth = Number(getWidth($boundary));
+      boundaryHeight = Number(getHeight($boundary));
     }
 
     return {

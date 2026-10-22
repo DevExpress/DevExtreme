@@ -191,11 +191,11 @@ export class EditorFactory extends ViewControllerWithMixin {
     const location = positionUtils.calculate($element, extend({ collision: 'fit' }, position));
 
     if (location.h.oversize > 0) {
-      setOuterWidth($element, getOuterWidth($element) - location.h.oversize);
+      setOuterWidth($element, Number(getOuterWidth($element)) - location.h.oversize);
     }
 
     if (location.v.oversize > 0) {
-      setOuterHeight($element, getOuterHeight($element) - location.v.oversize);
+      setOuterHeight($element, Number(getOuterHeight($element)) - location.v.oversize);
     }
 
     $element.show();

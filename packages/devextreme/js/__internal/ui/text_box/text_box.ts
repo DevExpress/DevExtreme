@@ -116,11 +116,11 @@ class TextBox<
     this._$searchIcon = $searchIcon;
   }
 
-  _getLabelContainerWidth(): number {
+  _getLabelContainerWidth(): number | undefined {
     if (this._$searchIcon) {
       const $inputContainer = this._input().parent();
 
-      return getWidth($inputContainer) - this._getLabelBeforeWidth();
+      return Number(getWidth($inputContainer)) - this._getLabelBeforeWidth();
     }
 
     return super._getLabelContainerWidth();
@@ -130,7 +130,7 @@ class TextBox<
     let labelBeforeWidth = super._getLabelBeforeWidth();
 
     if (this._$searchIcon) {
-      labelBeforeWidth += getOuterWidth(this._$searchIcon);
+      labelBeforeWidth += getOuterWidth(this._$searchIcon.get(0));
     }
 
     return labelBeforeWidth;

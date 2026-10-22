@@ -202,7 +202,7 @@ export class SingleLineStrategy {
     });
     this._restoreItems = [];
 
-    const elementWidth: number = getWidth(this._toolbar.$element());
+    const elementWidth: number = getWidth(this._toolbar.$element().get(0));
     this._hideOverflowItems(elementWidth);
 
     return elementWidth;
@@ -215,7 +215,7 @@ export class SingleLineStrategy {
       return;
     }
 
-    const elementWidth = width ?? getWidth(this._toolbar.$element());
+    const elementWidth = width ?? getWidth(this._toolbar.$element().get(0));
     $(overflowItems).removeClass(TOOLBAR_HIDDEN_ITEM);
 
     let itemsWidth = this._getItemsWidth();
