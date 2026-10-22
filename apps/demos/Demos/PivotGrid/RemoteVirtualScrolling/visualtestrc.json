@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../testing/visualtestrc-schema.json",
+  "comment": "jQuery material sometimes renders a second layout state, byte-identical on 15.10 and 22.10.2026: the CY 2024 and Grand Total text lands on another sub-pixel offset, 1041 pixels along glyph edges. It passes from tolerance 27. Only jQuery runs material, and material runs without --disable-font-subpixel-positioning.",
+  "jquery": {
+    "comparison-options": {
+      "looksSameComparisonOptions": {
+        "tolerance": 30,
+        "antialiasingTolerance": 30
+      }
+    }
+  }
+}
