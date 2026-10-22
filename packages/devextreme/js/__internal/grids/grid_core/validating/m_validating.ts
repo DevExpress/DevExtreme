@@ -37,7 +37,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import {
   EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
 } from '../editing/const';
-import type { EditingController } from '../editing/m_editing';
+import type { EditingController } from '../editing/editing';
 import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
