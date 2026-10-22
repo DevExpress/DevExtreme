@@ -8,6 +8,7 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import { DATA_CHANGE_TYPE } from '@ts/grids/grid_core/editing/const';
 import { editingDataControllerExtender } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
 import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
 import type { ModuleType } from '@ts/grids/grid_core/types';
@@ -20,8 +21,6 @@ import type { TreeListDataSourceController } from '../data_source/data_source_co
 
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
-
-const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 
 class EditingController extends editingModule.controllers.editing {
   protected declare _dataController: TreeListDataController;
@@ -109,7 +108,7 @@ class EditingController extends editingModule.controllers.editing {
   protected _beforeSaveEditData(change) {
     const result = super._beforeSaveEditData(change);
 
-    if (change && change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
+    if (change && change.type !== DATA_CHANGE_TYPE.insert) {
       const key = this.dataSourceController.store()?.key();
 
       if (!isDefined(key)) {
@@ -180,7 +179,6 @@ class EditingController extends editingModule.controllers.editing {
 
   protected getButtonLocalizationNames() {
     const names = super.getButtonLocalizationNames.apply(this);
-    // @ts-expect-error
     names.add = 'dxTreeList-editingAddRowToNode';
 
     return names;
