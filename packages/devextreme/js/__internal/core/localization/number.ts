@@ -3,6 +3,7 @@ import type { Format, FormatObject as PublicFormatConfig } from '@js/common/core
 import config from '@js/core/config';
 import errors from '@js/core/errors';
 import { getGlobalFormatByDataType, getNumberFormatLocale } from '@ts/core/global_format_config';
+import localizationCore from '@ts/core/localization/core';
 import currencyLocalization from '@ts/core/localization/currency';
 import intlNumberLocalization from '@ts/core/localization/intl/number';
 import { getFormatter } from '@ts/core/localization/ldml/number';
@@ -282,7 +283,9 @@ const numberLocalizationBase = {
     toStandard?: boolean,
     locale?: string,
   ): TValue {
-    const digits: string = this.format(90, locale ? { type: 'decimal', locale } : 'decimal');
+    const digits: string = locale && locale !== localizationCore.locale()
+      ? this.format(90, { type: 'decimal', locale })
+      : this.format(90, 'decimal');
 
     if (typeof value !== 'string' || digits[1] === '0') {
       return value;
