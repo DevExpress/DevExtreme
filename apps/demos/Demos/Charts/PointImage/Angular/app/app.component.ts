@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
 import { Service, IceHockeyStatistics } from './app.service';
 
@@ -45,8 +45,4 @@ export class AppComponent {
   }[valueText] || `${valueText}th place`);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
