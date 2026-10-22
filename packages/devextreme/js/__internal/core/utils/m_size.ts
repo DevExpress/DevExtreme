@@ -144,10 +144,12 @@ export const getSize = function getSize(
   }
 
   const coeff = Math.sign(targetBoxIndex - currentBoxIndex);
-  let padding: number | false = false;
-  let border: number | false = false;
-  let margin: number | false = false;
-  let scrollThickness: number | false = false;
+  /* eslint-disable @typescript-eslint/init-declarations */
+  let padding: number | undefined;
+  let border: number | undefined;
+  /* eslint-enable @typescript-eslint/init-declarations */
+  let margin = 0;
+  let scrollThickness = 0;
 
   if (coeff === 1) {
     targetBoxIndex += 1;
@@ -172,10 +174,8 @@ export const getSize = function getSize(
   }
 
   if (padding || border) {
-    const paddingAndBorder = (padding === false
-      ? coeff * getComponentThickness(element, dimension, 'padding', styles)
-      : padding)
-            + (border === false ? coeff * getComponentThickness(element, dimension, 'border', styles) : border);
+    const paddingAndBorder = (padding ?? coeff * getComponentThickness(element, dimension, 'padding', styles))
+      + (border ?? coeff * getComponentThickness(element, dimension, 'border', styles));
 
     scrollThickness = (coeff * Math.max(0, Math.floor(
       Number(element[offsetFieldName])
@@ -184,7 +184,7 @@ export const getSize = function getSize(
     ))) || 0;
   }
 
-  return result + Number(margin) + Number(padding) + Number(border) + Number(scrollThickness);
+  return result + margin + (padding ?? 0) + (border ?? 0) + scrollThickness;
 };
 
 const getContainerHeight = function getContainerHeight(container: SizedElement | Window): number {
@@ -196,26 +196,28 @@ export const parseHeight = function parseHeight(
   container: SizedElement | Window,
   element?: Element,
 ): SizeValue {
-  let result: SizeValue = value;
-
   if (value.indexOf('px') > 0) {
     // eslint-disable-next-line radix -- a radix of 10 would read a 0x prefix differently
-    result = parseInt(value.replace('px', ''));
-  } else if (value.indexOf('%') > 0) {
+    return parseInt(value.replace('px', ''));
+  }
+  if (value.indexOf('%') > 0) {
     // eslint-disable-next-line radix -- a radix of 10 would read a 0x prefix differently
-    result = (parseInt(value.replace('%', '')) * getContainerHeight(container)) / 100;
-    // @ts-expect-error the check converts any value to a number
-  } else if (!isNaN(value)) {
+    return (parseInt(value.replace('%', '')) * getContainerHeight(container)) / 100;
+  }
+  // @ts-expect-error the check converts any value to a number
+  if (!isNaN(value)) {
     // eslint-disable-next-line radix -- a radix of 10 would read a 0x prefix differently
-    result = parseInt(value);
-  } else if (value.indexOf('vh') > 0) {
+    return parseInt(value);
+  }
+  if (value.indexOf('vh') > 0) {
     // eslint-disable-next-line radix -- a radix of 10 would read a 0x prefix differently
-    result = (window.innerHeight / 100) * parseInt(value.replace('vh', ''));
-  } else if (element && value.indexOf('em') > 0) {
-    result = parseFloat(value.replace('em', '')) * parseFloat(window.getComputedStyle(element).fontSize);
+    return (window.innerHeight / 100) * parseInt(value.replace('vh', ''));
+  }
+  if (element && value.indexOf('em') > 0) {
+    return parseFloat(value.replace('em', '')) * parseFloat(window.getComputedStyle(element).fontSize);
   }
 
-  return result;
+  return value;
 };
 
 const getHeightWithOffset = function getHeightWithOffset(
@@ -295,21 +297,6 @@ const isWrapper = (
 
 const isDocument = (target: MeasuredElement): target is Document => domAdapter.isDocument(target);
 
-function elementSize(
-  el: SizeTarget | null | undefined,
-  sizeProperty: SizeProperty,
-): number | undefined;
-function elementSize(
-  el: SizeTarget | null | undefined,
-  sizeProperty: SizeProperty,
-  // eslint-disable-next-line @typescript-eslint/unified-signatures -- a getter passes no value
-  includeMargin: boolean,
-): number | undefined;
-function elementSize(
-  el: SizeTarget | null | undefined,
-  sizeProperty: SizeProperty,
-  value: SizeValue | boolean | null | undefined,
-): number | null | undefined;
 function elementSize(
   el: SizeTarget | null | undefined,
   sizeProperty: SizeProperty,
