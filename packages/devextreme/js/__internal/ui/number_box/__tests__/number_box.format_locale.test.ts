@@ -2,6 +2,7 @@ import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
 import coreLocalization from '@js/common/core/localization/core';
+import numberLocalization from '@js/common/core/localization/number';
 import config from '@js/core/config';
 import type { Properties } from '@js/ui/number_box';
 import NumberBox from '@js/ui/number_box';
@@ -141,6 +142,52 @@ describe('explicit number preset keeps the message locale', () => {
 
       expect(input.value).toBe('١٬٢٣٤٫٥');
       expect(editor._getParsedValue(input.value, editor._getFormatPattern())).toBe(1234.5);
+    } finally {
+      const currentConfig = config();
+
+      if (savedNumberFormat === undefined) {
+        delete currentConfig.numberFormat;
+      } else {
+        currentConfig.numberFormat = savedNumberFormat;
+      }
+
+      coreLocalization.locale(savedLocale);
+    }
+  });
+
+  it.each([
+    { name: 'function', getFormat: (formatter: (value: number) => string): unknown => formatter },
+    { name: 'formatter object', getFormat: (formatter: (value: number) => string): unknown => ({ formatter }) },
+  ])('uses the message locale separators for an explicit $name format', ({ getFormat }) => {
+    const savedLocale = coreLocalization.locale();
+    const savedNumberFormat = config().numberFormat;
+
+    coreLocalization.locale('de');
+    config({
+      ...config(),
+      numberFormat: { default: { locale: 'en-US' } },
+    });
+
+    try {
+      const formatter = (value: number): string => numberLocalization
+        .format(value, { type: 'fixedPoint', precision: 2 });
+      const element = document.body.appendChild(document.createElement('div'));
+      const instance = new NumberBox(element, {
+        value: 1234.5,
+        format: getFormat(formatter) as Properties['format'],
+      });
+
+      widgets.push(instance);
+
+      const input = element.querySelector('.dx-texteditor-input') as HTMLInputElement;
+      const editor = instance as NumberBox & {
+        _getDecimalSeparator: () => string;
+        _getThousandsSeparator: () => string;
+      };
+
+      expect(input.value).toBe('1.234,50');
+      expect(editor._getDecimalSeparator()).toBe(',');
+      expect(editor._getThousandsSeparator()).toBe('.');
     } finally {
       const currentConfig = config();
 

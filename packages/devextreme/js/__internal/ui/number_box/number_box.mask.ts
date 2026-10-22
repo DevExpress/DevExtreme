@@ -193,7 +193,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       return formatOption;
     }
 
-    return asFormatObject(formatOption);
+    return asFormatObject(formatOption) ?? {};
   }
 
   _getDecimalSeparator(): string {
