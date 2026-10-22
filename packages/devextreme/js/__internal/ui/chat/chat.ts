@@ -239,6 +239,8 @@ class Chat extends Widget<Properties> {
       allowDeleting: (message: Message): boolean => this._allowDeleteAction(message),
       isEditActionDisabled: (message) => this._messageToEdit === message,
       messageTemplate: this._getMessageTemplate(),
+      // @ts-expect-error SPIKE: the option is not in the public types yet
+      renderToolsInMessageTemplate: this.option().renderToolsInMessageTemplate,
       emptyViewTemplate: this._getEmptyViewTemplate(),
       showDayHeaders,
       showAvatar,
@@ -813,6 +815,10 @@ class Chat extends Widget<Properties> {
         break;
       case 'messageTemplate':
         this._messageList.option(name, this._getMessageTemplate());
+        break;
+      // @ts-expect-error SPIKE: the option is not in the public types yet
+      case 'renderToolsInMessageTemplate':
+        this._messageList.option(name, !!value);
         break;
       case 'emptyViewTemplate':
         this._messageList.option(name, this._getEmptyViewTemplate());
