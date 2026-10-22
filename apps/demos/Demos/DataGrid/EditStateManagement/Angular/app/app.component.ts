@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, OnInit, OnDestroy, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, enableProdMode, inject } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AsyncPipe } from '@angular/common';
 import { DxLoadPanelModule } from 'devextreme-angular';
@@ -24,6 +24,8 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent implements OnInit, OnDestroy {
+  changeDetectorRef = inject(ChangeDetectorRef);
+
   ordersSubscription: Subscription;
 
   orders$: Observable<Order[]>;
@@ -73,6 +75,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.changes = [];
     } finally {
       this.isLoading = false;
+      this.changeDetectorRef.markForCheck();
     }
   }
 
@@ -83,7 +86,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

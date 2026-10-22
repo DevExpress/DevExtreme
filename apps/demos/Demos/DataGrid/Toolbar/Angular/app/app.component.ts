@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+  ChangeDetectorRef, Component, ViewChild, enableProdMode,
 } from '@angular/core';
 import {
   DxDataGridModule,
@@ -85,8 +85,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

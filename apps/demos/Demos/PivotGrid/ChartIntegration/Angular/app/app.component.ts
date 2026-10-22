@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, AfterViewInit, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, enableProdMode } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import {
   DxPivotGridModule,
@@ -87,8 +87,4 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
