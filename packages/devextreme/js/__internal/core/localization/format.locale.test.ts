@@ -696,5 +696,17 @@ describe('format locale integration', () => {
       expect(expected).toBe('[$-407]d.M.yyyy');
       expect(toExcel('shortDate')).toBe(expected);
     });
+
+    it.each([
+      { type: 'shortDate', expected: '[$-2010c01]d\\/M\\/yyyy' },
+      { type: 'longDate', expected: '[$-2010c01]dddd، d MMMM yyyy' },
+      { type: 'shortTime', expected: '[$-2010c01]H:mm AM/PM' },
+    ])('should export $type with non-Latin digits of the format locale', ({ type, expected }) => {
+      expect(exportInLocale('ar-EG', type)).toBe(expected);
+
+      coreLocalization.locale('en');
+
+      expect(toExcel({ type, locale: 'ar-EG' })).toBe(expected);
+    });
   });
 });
