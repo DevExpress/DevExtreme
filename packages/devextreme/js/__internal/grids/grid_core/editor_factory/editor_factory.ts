@@ -280,7 +280,6 @@ export class EditorFactory extends ViewControllerWithMixin {
       return this._$focusedElement;
     } if ($element) {
       // To prevent overlay flicking
-      // @ts-expect-error is() is typed without null and undefined
       if (!$element.is(this._$focusedElement)) {
         // TODO: this code should be before timeout
         // else focus is not will move to adaptive form by shift + tab key

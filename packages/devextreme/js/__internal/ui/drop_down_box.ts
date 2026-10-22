@@ -70,7 +70,6 @@ class DropDownBox<
   }
 
   _getTabbableElements(): dxElementWrapper {
-    // @ts-expect-error filter callback overload should be added on dxElementWrapper level
     return this._getElements().filter(tabbable);
   }
 

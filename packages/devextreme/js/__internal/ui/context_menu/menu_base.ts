@@ -388,7 +388,6 @@ class MenuBase<
 
   _getAvailableItems($itemElements?: dxElementWrapper): dxElementWrapper {
     return super._getAvailableItems($itemElements).filter(
-      // @ts-expect-error ts-error
       (_index: number, item: Element) => $(item).css('visibility') !== 'hidden',
     );
   }

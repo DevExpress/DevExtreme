@@ -695,7 +695,6 @@ class CollectionWidget<
 
   _resetItemFocus($item: dxElementWrapper): void {
     const { focusedElement } = this.option();
-    // @ts-expect-error ts-error
     if ($item.is(focusedElement)) {
       this._resetFocusedElement();
     }
@@ -1065,7 +1064,6 @@ class CollectionWidget<
   _closestFocusable(
     $target: dxElementWrapper,
   ): dxElementWrapper | undefined {
-    // @ts-expect-error ts-error
     if ($target.is(focusable)) {
       return $target;
     }
@@ -1074,7 +1072,6 @@ class CollectionWidget<
         && !domAdapter.isDocument($nextTarget.get(0))
         && !domAdapter.isDocumentFragment($nextTarget.get(0))
     ) {
-      // @ts-expect-error ts-error
       if ($nextTarget.is(focusable)) {
         return $nextTarget;
       }

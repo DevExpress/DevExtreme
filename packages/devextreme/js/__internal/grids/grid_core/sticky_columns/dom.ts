@@ -121,19 +121,16 @@ const isFixedCell = (
       || $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
 
 const getLeftFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
-  // @ts-expect-error
-  .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft)));
+  .filter((_, cell: Element) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft)));
 
 const getRightFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
-  // @ts-expect-error
-  .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnRight)));
+  .filter((_, cell: Element) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnRight)));
 
 const getNonFixedAndStickyCells = (
   $cells: dxElementWrapper,
   addWidgetPrefix,
 ): dxElementWrapper => $cells
-  // @ts-expect-error
-  .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumn))
+  .filter((_, cell: Element) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumn))
       || !isFixedCell($(cell), addWidgetPrefix));
 
 const getLastLeftFixedCell = (
