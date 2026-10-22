@@ -57,6 +57,29 @@ export const getServerStateKey = () => {
   return serverStateKey;
 };
 
+const publicOptionsCache = new WeakMap<object, Set<string>>();
+
+const getPublicOptions = (componentPrototype: object): Set<string> => {
+  let options = publicOptionsCache.get(componentPrototype);
+
+  if (!options) {
+    const names = new Set<string>();
+
+    for (let proto = componentPrototype; proto && proto !== Object.prototype; proto = Object.getPrototypeOf(proto)) {
+      Object.entries(Object.getOwnPropertyDescriptors(proto)).forEach(([name, descriptor]) => {
+        if (descriptor.get && descriptor.set) {
+          names.add(name);
+        }
+      });
+    }
+
+    options = names;
+    publicOptionsCache.set(componentPrototype, options);
+  }
+
+  return options;
+};
+
 @Component({
   template: '',
 })
@@ -90,12 +113,6 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  private readonly boundOptions = new Set<string>();
-
-  registerBoundOption = (name: string) => {
-    this.boundOptions.add(name.split(/[.[]/)[0]);
-  };
-
   private _updateTemplates() {
     if (this.templates.length && this.templateUpdateRequired) {
       const updatedTemplates = {};
@@ -116,7 +133,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
       this.eventHelper.fireNgEvent(`${e.name}Change`, [value]);
       this.optionChangedHandlers.emit(e);
 
-      if (!this.widgetUpdateLocked && this.boundOptions.has(e.name)) {
+      if (!this.widgetUpdateLocked && getPublicOptions(Object.getPrototypeOf(this)).has(e.name)) {
         this.changeDetectorRef.markForCheck();
       }
     });
@@ -192,7 +209,6 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   }
 
   protected _setOption(name: string, value: any) {
-    this.registerBoundOption(name);
     this.lockWidgetUpdate();
 
     if (!this._shouldOptionChange(name, value)) {

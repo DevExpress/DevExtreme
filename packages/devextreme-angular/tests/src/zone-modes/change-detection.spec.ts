@@ -373,9 +373,7 @@ describe(`Change detection [${mode}]: state changed without a template binding`,
     expect(outputText(fixture)).toBe('changed');
   });
 
-  it(isZoneless
-    ? 'instance.on(\'optionChanged\') handler for an unbound option does not refresh the view (documented limitation)'
-    : 'instance.on(\'optionChanged\') handler for an unbound option updates the view', async () => {
+  it('instance.on(\'optionChanged\') handler for an unbound public option updates the view', async () => {
     const fixture = await render(`
       <dx-text-box></dx-text-box>
       <span class="out">{{ plain }}</span>
@@ -392,7 +390,23 @@ describe(`Change detection [${mode}]: state changed without a template binding`,
     await fixture.whenStable();
 
     expect(host.plain).toBe('changed');
-    expect(outputText(fixture)).toBe(isZoneless ? '' : 'changed');
+    expect(outputText(fixture)).toBe('changed');
+  });
+
+  it('template reading an unbound component option updates the view', async () => {
+    const fixture = await render(`
+      <dx-data-grid #gridRef [dataSource]="rows" keyExpr="id">
+        <dxo-selection mode="multiple"></dxo-selection>
+      </dx-data-grid>
+      <span class="out">{{ gridRef.selectedRowKeys.length }}</span>
+    `);
+
+    expect(outputText(fixture)).toBe('0');
+
+    await act(fixture, () => fixture.componentInstance.grid.instance.selectRows([2], false));
+    await fixture.whenStable();
+
+    expect(outputText(fixture)).toBe('1');
   });
 
   it('one-way [formData] changed in place by the Form updates the view', async () => {

@@ -20,7 +20,6 @@ export interface INestedOptionContainer {
   recreatedNestedComponents: any[];
   resetOptions: (collectionName?: string) => void;
   isRecreated: (name: string) => boolean;
-  registerBoundOption?: (name: string) => void;
 }
 
 export type IOptionPathGetter = () => string;
@@ -71,8 +70,6 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
   }
 
   protected _setOption(name: string, value: any) {
-    this.registerBoundOption?.(this._fullOptionPath() + name);
-
     if (this.isLinked) {
       const fullPath = this._fullOptionPath() + name;
       this.instance.option(fullPath, value);
@@ -128,10 +125,6 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
 
   get isRecreated() {
     return this._host && this._host.isRecreated;
-  }
-
-  get registerBoundOption() {
-    return this._host?.registerBoundOption;
   }
 
   get removedNestedComponents() {
