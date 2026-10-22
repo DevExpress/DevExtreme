@@ -112,7 +112,6 @@ type AccessibleOptions = Pick<Properties,
   "dropDownOptions" |
   "elementAttr" |
   "fieldAddons" |
-  "fieldTemplate" |
   "focusStateEnabled" |
   "grouped" |
   "groupTemplate" |
@@ -208,7 +207,6 @@ const componentConfig = {
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
     fieldAddons: Object as PropType<FieldAddons | null | Record<string, any>>,
-    fieldTemplate: {},
     focusStateEnabled: Boolean,
     grouped: Boolean,
     groupTemplate: {},
@@ -300,7 +298,6 @@ const componentConfig = {
     "update:dropDownOptions": null,
     "update:elementAttr": null,
     "update:fieldAddons": null,
-    "update:fieldTemplate": null,
     "update:focusStateEnabled": null,
     "update:grouped": null,
     "update:groupTemplate": null,

@@ -271,19 +271,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     }
 
     /**
-     * [descr:dxColorBoxOptions.fieldTemplate]
-     * @deprecated [depNote:dxColorBoxOptions.fieldTemplate]
-    
-     */
-    @Input()
-    get fieldTemplate(): any {
-        return this._getOption('fieldTemplate');
-    }
-    set fieldTemplate(value: any) {
-        this._setOption('fieldTemplate', value);
-    }
-
-    /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
     @Input()
@@ -755,11 +742,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
-    @Output() fieldTemplateChange: EventEmitter<any>;
-
-    /**
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -949,7 +931,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
             { emit: 'editAlphaChannelChange' },
             { emit: 'elementAttrChange' },
             { emit: 'fieldAddonsChange' },
-            { emit: 'fieldTemplateChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },

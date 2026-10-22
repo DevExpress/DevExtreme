@@ -69,8 +69,6 @@ const TAGBOX_SINGLE_LINE_CLASS = 'dx-tagbox-single-line';
 const TAGBOX_POPUP_WRAPPER_CLASS = 'dx-tagbox-popup-wrapper';
 const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
-const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
-const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -552,6 +550,7 @@ class TagBox<
 
     this.$element()
       .addClass(TAGBOX_CLASS)
+      .addClass(TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS)
       .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(searchEnabled || acceptCustomValue))
       .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
 
@@ -611,17 +610,6 @@ class TagBox<
 
   _initTagTemplate(): void {
     this._tagTemplate = this._getTemplateByOption('tagTemplate');
-  }
-
-  _renderField(): void {
-    const { fieldTemplate } = this.option();
-    const isDefaultFieldTemplate = !isDefined(fieldTemplate);
-
-    this.$element()
-      .toggleClass(TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS, isDefaultFieldTemplate)
-      .toggleClass(TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS, !isDefaultFieldTemplate);
-
-    super._renderField();
   }
 
   _renderTagRemoveAction(): void {
@@ -1140,11 +1128,8 @@ class TagBox<
       this.option('selectedItems', this._selectedItems?.slice());
     }
 
-    const fieldTemplate = this._getFieldTemplate();
-    if (!fieldTemplate) {
-      this._cleanTags();
-      this._renderTagsCore();
-    }
+    this._cleanTags();
+    this._renderTagsCore();
   }
 
   _shouldGetItemsFromPlain(values: unknown[]): boolean {
@@ -1236,16 +1221,6 @@ class TagBox<
     this._isDataSourceOptionChanged = true;
 
     super._processDataSourceChanging();
-  }
-
-  _integrateInput(): void {
-    super._integrateInput();
-
-    const tagsContainer = this.$element().find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
-
-    this._updateTagsContainer(tagsContainer);
-    this._renderTagRemoveAction();
-    this._renderTagsCore();
   }
 
   _renderTagsCore(): void {

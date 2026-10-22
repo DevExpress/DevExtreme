@@ -71,6 +71,8 @@ const WINDOW_RATIO = 0.8;
 
 export interface LookupProperties extends Omit<Properties, 'onItemClick' | 'onSelectionChanged' | 'dropDownOptions' | 'fieldTemplate'>,
   DropDownEditorInternalProperties {
+  fieldTemplate?: string | Element | Function | null;
+
   _scrollToSelectedItemEnabled?: boolean;
 }
 
@@ -146,6 +148,7 @@ class Lookup extends DropDownList<LookupProperties> {
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
       grouped: false,
       groupTemplate: 'group',
+      fieldTemplate: null,
       usePopover: false,
       openOnFieldClick: true,
       showDropDownButton: false,
@@ -1204,6 +1207,7 @@ class Lookup extends DropDownList<LookupProperties> {
         break;
       case 'usePopover':
       case 'placeholder':
+      case 'fieldTemplate':
         this._invalidate();
         break;
       case 'focusStateEnabled':
