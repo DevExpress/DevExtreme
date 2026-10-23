@@ -257,7 +257,6 @@ export type Attachment = {
 export type ToolCallStatus = 'success' | 'error';
 
 /**
- * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
  */
@@ -270,6 +269,7 @@ export type ToolCall = {
     /**
      * @docid
      * @public
+     * @type object
      */
     arguments?: Record<string, any>;
     /**
@@ -380,7 +380,6 @@ export type TextMessage = MessageBase & {
     /**
      * @docid
      * @public
-     * @type Array<ToolCall>
      */
     toolCalls?: ToolCall[];
 
