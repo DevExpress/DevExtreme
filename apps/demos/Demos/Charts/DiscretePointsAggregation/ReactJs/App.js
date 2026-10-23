@@ -5,29 +5,38 @@ import Chart, {
   CommonSeriesSettings,
   SeriesTemplate,
   Aggregation,
+  Tooltip,
+  Format,
 } from 'devextreme-react/chart';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
-import { oilProductionData } from './data.js';
+import { MAX_SUFFIX, oilProductionData } from './data.js';
 
 const aggregationFunctions = [
   { displayName: 'Average', func: 'avg' },
-  { displayName: 'Maximum', func: 'max' },
+  { displayName: 'Sum', func: 'sum' },
   { displayName: 'Minimum', func: 'min' },
 ];
 const methodInputAttr = { 'aria-label': 'Method' };
-const ghostBarColor = '#d3d3d3';
+const maxSeriesColor = '#d3d3d3';
 const customizeSeries = (seriesName) => {
-  const isGhost = seriesName.endsWith(' (max)');
-  const year = isGhost ? seriesName.slice(0, -6) : seriesName;
+  const isMaxSeries = seriesName.endsWith(MAX_SUFFIX);
+  const year = isMaxSeries ? seriesName.slice(0, -MAX_SUFFIX.length) : seriesName;
   return {
     barOverlapGroup: year,
-    ...(isGhost && {
+    ...(isMaxSeries && {
       aggregation: { enabled: true, method: 'max' },
-      color: ghostBarColor,
-      name: `${year} max`,
+      color: maxSeriesColor,
       showInLegend: false,
     }),
+  };
+};
+const customizeTooltip = ({
+  argumentText, seriesName, valueText, point,
+}) => {
+  const month = point?.data?.month;
+  return {
+    text: `<b>${argumentText}</b><br/>${seriesName}${month ? ` (${month})` : ''}: ${valueText}`,
   };
 };
 function App() {
@@ -63,9 +72,18 @@ function App() {
           ></Aggregation>
         </CommonSeriesSettings>
         <SeriesTemplate
-          nameField="year"
+          nameField="series"
           customizeSeries={customizeSeries}
         ></SeriesTemplate>
+        <Tooltip
+          enabled={true}
+          customizeTooltip={customizeTooltip}
+        >
+          <Format
+            type="millions"
+            precision={1}
+          />
+        </Tooltip>
       </Chart>
       <div className="options">
         <div className="caption">Options</div>
@@ -81,6 +99,7 @@ function App() {
           <SelectBox
             dataSource={aggregationFunctions}
             value={currentFunction}
+            disabled={!useAggregation}
             onValueChanged={updateMethod}
             displayExpr="displayName"
             valueExpr="func"

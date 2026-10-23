@@ -18,9 +18,18 @@
         />
       </DxCommonSeriesSettings>
       <DxSeriesTemplate
-        name-field="year"
+        name-field="series"
         :customize-series="customizeSeries"
       />
+      <DxTooltip
+        :enabled="true"
+        :customize-tooltip="customizeTooltip"
+      >
+        <DxFormat
+          type="millions"
+          :precision="1"
+        />
+      </DxTooltip>
     </DxChart>
     <div class="options">
       <div class="caption">Options</div>
@@ -35,6 +44,7 @@
         <DxSelectBox
           :data-source="aggregationFunctions"
           v-model:value="currentFunction"
+          :disabled="!useAggregation"
           :input-attr="{ 'aria-label': 'Method' }"
           display-expr="displayName"
           value-expr="func"
@@ -51,32 +61,42 @@ import DxChart, {
   DxCommonSeriesSettings,
   DxAggregation,
   DxSeriesTemplate,
+  DxTooltip,
+  DxFormat,
   type DxChartTypes,
 } from 'devextreme-vue/chart';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { oilProductionData } from './data.ts';
+import { MAX_SUFFIX, oilProductionData } from './data.ts';
 
 const dataSource = oilProductionData;
 const useAggregation = ref(true);
 const currentFunction = ref<DxChartTypes.ChartSeriesAggregationMethod>('avg');
 const aggregationFunctions = [
   { displayName: 'Average', func: 'avg' },
-  { displayName: 'Maximum', func: 'max' },
+  { displayName: 'Sum', func: 'sum' },
   { displayName: 'Minimum', func: 'min' },
 ];
 const customizeSeries = (seriesName: string) => {
-  const isGhost = seriesName.endsWith(' (max)');
-  const year = isGhost ? seriesName.slice(0, -6) : seriesName;
+  const isMaxSeries = seriesName.endsWith(MAX_SUFFIX);
+  const year = isMaxSeries ? seriesName.slice(0, -MAX_SUFFIX.length) : seriesName;
 
   return {
     barOverlapGroup: year,
-    ...(isGhost && {
+    ...(isMaxSeries && {
       aggregation: { enabled: true, method: 'max' as DxChartTypes.ChartSeriesAggregationMethod },
       color: '#d3d3d3',
-      name: `${year} max`,
       showInLegend: false,
     }),
+  };
+};
+const customizeTooltip = ({
+  argumentText, seriesName, valueText, point,
+}: DxChartTypes.CommonPointInfo) => {
+  const month: string | undefined = point?.data?.month;
+
+  return {
+    text: `<b>${argumentText}</b><br/>${seriesName}${month ? ` (${month})` : ''}: ${valueText}`,
   };
 };
 </script>

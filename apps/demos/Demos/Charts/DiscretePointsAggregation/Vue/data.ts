@@ -1,3 +1,5 @@
+export const MAX_SUFFIX = ' max';
+
 const rawOilProductionData = [
   { state: 'Alaska', month: 'Jan', year: '2022', value: 8300000 },
   { state: 'Alaska', month: 'Feb', year: '2022', value: 8900000 },
@@ -234,9 +236,7 @@ const rawOilProductionData = [
   { state: 'Texas', month: 'Dec', year: '2024', value: 233600000 },
 ];
 
-const ghostData = rawOilProductionData.map((item) => ({
-  ...item,
-  year: `${item.year} (max)`,
-}));
-
-export const oilProductionData = [...ghostData, ...rawOilProductionData];
+export const oilProductionData = [
+  ...rawOilProductionData.map((item) => ({ ...item, series: `${item.year}${MAX_SUFFIX}` })),
+  ...rawOilProductionData.map((item) => ({ ...item, series: item.year })),
+];

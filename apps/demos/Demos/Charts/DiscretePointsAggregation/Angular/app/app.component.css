@@ -1,5 +1,10 @@
 ::ng-deep #chart {
   height: 440px;
+  margin: 0 0 15px;
+}
+
+::ng-deep #chart-demo {
+  height: 620px;
 }
 
 .options {
@@ -23,7 +28,7 @@
   margin-right: 10px;
 }
 
-.option > dx-select-box {
+::ng-deep .option > .dx-selectbox {
   display: inline-block;
   vertical-align: middle;
 }

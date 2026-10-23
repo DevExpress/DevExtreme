@@ -15,19 +15,34 @@ $(() => {
       type: 'bar',
     },
     seriesTemplate: {
-      nameField: 'year',
+      nameField: 'series',
       customizeSeries(seriesName) {
-        const isGhost = seriesName.endsWith(' (max)');
-        const year = isGhost ? seriesName.slice(0, -6) : seriesName;
+        const isMaxSeries = seriesName.endsWith(MAX_SUFFIX);
+        const year = isMaxSeries ? seriesName.slice(0, -MAX_SUFFIX.length) : seriesName;
 
         return {
           barOverlapGroup: year,
-          ...(isGhost && {
+          ...(isMaxSeries && {
             aggregation: { enabled: true, method: 'max' },
             color: '#d3d3d3',
-            name: `${year} max`,
             showInLegend: false,
           }),
+        };
+      },
+    },
+    tooltip: {
+      enabled: true,
+      format: {
+        type: 'millions',
+        precision: 1,
+      },
+      customizeTooltip({
+        argumentText, seriesName, valueText, point,
+      }) {
+        const { month } = point.data;
+
+        return {
+          text: `<b>${argumentText}</b><br/>${seriesName}${month ? ` (${month})` : ''}: ${valueText}`,
         };
       },
     },
@@ -35,7 +50,7 @@ $(() => {
 
   const aggregationFunctions = [
     { displayName: 'Average', func: 'avg' },
-    { displayName: 'Maximum', func: 'max' },
+    { displayName: 'Sum', func: 'sum' },
     { displayName: 'Minimum', func: 'min' },
   ];
 
@@ -44,10 +59,11 @@ $(() => {
     value: true,
     onValueChanged({ value }) {
       chart.option('commonSeriesSettings.aggregation.enabled', value);
+      methodSelector.option('disabled', !value);
     },
   });
 
-  $('#aggregateFunctionSelector').dxSelectBox({
+  const methodSelector = $('#aggregateFunctionSelector').dxSelectBox({
     items: aggregationFunctions,
     value: 'avg',
     valueExpr: 'func',
@@ -56,5 +72,5 @@ $(() => {
     onValueChanged({ value }) {
       chart.option('commonSeriesSettings.aggregation.method', value);
     },
-  });
+  }).dxSelectBox('instance');
 });

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+export const MAX_SUFFIX = ' max';
+
 export class OilProductionItem {
   state: string;
 
@@ -7,10 +9,12 @@ export class OilProductionItem {
 
   year: string;
 
+  series: string;
+
   value: number;
 }
 
-const oilProductionData: OilProductionItem[] = [
+const oilProductionData: Omit<OilProductionItem, 'series'>[] = [
   { state: 'Alaska', month: 'Jan', year: '2022', value: 8300000 },
   { state: 'Alaska', month: 'Feb', year: '2022', value: 8900000 },
   { state: 'Alaska', month: 'Mar', year: '2022', value: 12200000 },
@@ -249,11 +253,9 @@ const oilProductionData: OilProductionItem[] = [
 @Injectable()
 export class Service {
   getOilProductionData(): OilProductionItem[] {
-    const ghostData = oilProductionData.map((item) => ({
-      ...item,
-      year: `${item.year} (max)`,
-    }));
-
-    return [...ghostData, ...oilProductionData];
+    return [
+      ...oilProductionData.map((item) => ({ ...item, series: `${item.year}${MAX_SUFFIX}` })),
+      ...oilProductionData.map((item) => ({ ...item, series: item.year })),
+    ];
   }
 }
