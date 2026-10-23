@@ -7,6 +7,7 @@ import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { wrapToArray } from '@js/core/utils/array';
+import { logger } from '@js/core/utils/console';
 import { extend } from '@js/core/utils/extend';
 import { titleize } from '@js/core/utils/inflector';
 import { isNumeric } from '@js/core/utils/type';
@@ -21,6 +22,7 @@ import type { LocationOption } from './provider.dynamic';
 import azure from './provider.dynamic.azure';
 import bing from './provider.dynamic.bing';
 import google from './provider.dynamic.google';
+import osm from './provider.dynamic.osm';
 // NOTE external urls must have protocol explicitly specified
 // (because inside Cordova package the protocol is "file:")
 import googleStatic from './provider.google_static';
@@ -30,6 +32,7 @@ const PROVIDERS = {
   googleStatic,
   google,
   bing,
+  osm,
 };
 
 const MAP_CLASS = 'dx-map';
@@ -54,7 +57,9 @@ class Map extends Widget<MapProperties> {
 
   _lastAsyncAction!: Promise<void>;
 
-  _provider!: azure | googleStatic | google | bing;
+  _provider!: azure | googleStatic | google | bing | osm;
+
+  private _providerRenderFailed = false;
 
   _asyncActionSuppressed?: boolean;
 
@@ -216,6 +221,7 @@ class Map extends Widget<MapProperties> {
     const Provider = PROVIDERS[provider];
 
     this._provider = new Provider(this, this._$container);
+    this._providerRenderFailed = false;
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._queueAsyncAction('render', this._rendered.markers, this._rendered.routes);
@@ -262,6 +268,12 @@ class Map extends Widget<MapProperties> {
         super._optionChanged(args);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateDisabled');
+        break;
+      case 'focusStateEnabled':
+      case 'tabIndex':
+        super._optionChanged(args);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this._queueAsyncAction('updateFocus');
         break;
       case 'width':
       case 'height':
@@ -317,7 +329,7 @@ class Map extends Widget<MapProperties> {
           if (changeBag) {
             changeBag.resolve(result);
           }
-        });
+        }, () => {});
         break;
       }
       case 'markerIconSrc':
@@ -359,33 +371,54 @@ class Map extends Widget<MapProperties> {
   ): Promise<void> {
     const markerAndRoutes = [markers, routes].filter(Boolean);
     const isActionSuppressed = this._suppressAsyncAction;
+    const provider = this._provider;
 
-    this._lastAsyncAction = this._lastAsyncAction.then(() => {
-      if (!this._provider || isActionSuppressed) {
+    const executeAction = async (): Promise<void> => {
+      if (!provider || provider !== this._provider || isActionSuppressed
+        || this._providerRenderFailed) {
         /// #DEBUG
         this._asyncActionSuppressed = true;
         /// #ENDDEBUG
-        return Promise.resolve();
+        return undefined;
       }
 
+      let result = null;
+      try {
+        result = await provider[name](...markerAndRoutes);
+      } catch (error) {
+        if (provider !== this._provider || this._disposed) {
+          return undefined;
+        }
+
+        if (name === 'render') {
+          this._providerRenderFailed = true;
+        }
+
+        throw error;
+      }
+
+      if (provider !== this._provider || this._disposed) {
+        return undefined;
+      }
+
+      const arrayResult = wrapToArray(result);
+      const mapRefreshed = arrayResult[0];
+      if (mapRefreshed) {
+        this._triggerReadyAction();
+      }
+      /// #DEBUG
+      if (!mapRefreshed && name !== 'clean') {
+        this._triggerUpdateAction();
+      }
+      /// #ENDDEBUG
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return this._provider[name](...markerAndRoutes).then((result) => {
-        const arrayResult = wrapToArray(result);
+      return arrayResult[1];
+    };
 
-        const mapRefreshed = arrayResult[0];
-        if (mapRefreshed && !this._disposed) {
-          this._triggerReadyAction();
-        }
-        /// #DEBUG
-        if (!mapRefreshed && name !== 'clean' && !this._disposed) {
-          this._triggerUpdateAction();
-        }
-        /// #ENDDEBUG
-
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return arrayResult[1];
-      });
-    });
+    this._lastAsyncAction = this._lastAsyncAction.then(executeAction, executeAction);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._lastAsyncAction.catch((error) => { logger.error(error); });
 
     return this._lastAsyncAction;
   }
