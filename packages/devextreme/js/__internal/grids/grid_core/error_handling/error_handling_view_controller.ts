@@ -8,7 +8,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ToastViewController } from '@ts/grids/grid_core/toast/toast_controller';

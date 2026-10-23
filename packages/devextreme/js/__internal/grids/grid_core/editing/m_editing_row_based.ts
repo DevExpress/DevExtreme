@@ -10,8 +10,8 @@ import {
   EDITING_EDITROWKEY_OPTION_NAME,
   MODES_WITH_DELAYED_FOCUS,
 } from './const';
+import type { EditingController } from './editing';
 import { editingRowBasedDataControllerExtender } from './extenders/editing_row_based_data_controller';
-import type { EditingController } from './m_editing';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class RowBasedEditingControllerExtender extends Base {
   private isRowEditMode() {

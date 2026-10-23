@@ -15,7 +15,7 @@ import type { ModuleType } from '@ts/grids/grid_core/types';
 import { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
-import type { EditingController } from '../../grid_core/editing/m_editing';
+import type { EditingController } from '../../grid_core/editing/editing';
 import type { RowsView } from '../../grid_core/views/rows_view';
 import AggregateCalculator from '../aggregate_calculator';
 import gridCore from '../core';

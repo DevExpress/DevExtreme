@@ -1,5 +1,5 @@
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { GroupItem } from '../types';
