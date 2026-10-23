@@ -44,6 +44,8 @@ Ng.makeMetadata({
       ['ui/popup:dxPopupOptions', 'ui/card_view:Editing.popup'],
     ].map((pair) => replaceTypes(pair[1], ['*'], [types.uidRef(pair[0], true)])),
 
+    replaceTypes('ui/map:dxMapOptions.markers.onClick', ['*'], ['object']),
+
     ...replaceTypesMutations,
 
     removeMembers(/\/localization:FormatObject\.locale/),
@@ -63,6 +65,9 @@ Ng.makeMetadata({
     removeMembers(/\/form:FormPredefinedButtonItem/),
     removeMembers(/\/drop_down_editor\/ui.drop_down_editor:FieldAddons/),
     removeMembers(/\/load_panel:dxLoadPanelOptions.indicatorOptions/),
+    removeMembers(
+      /\/map:dxMapOptions.providerConfig\.(calculateLocation|calculateRoute|tileServer)/,
+    ),
     removeMembers(/\/grids:LoadPanel.indicatorOptions/),
     removeMembers(/\/pivot_grid:dxPivotGridOptions.loadPanel.indicatorOptions/),
     removeMembers(/\/popup:dxPopupOptions.tabFocusLoopEnabled/),
