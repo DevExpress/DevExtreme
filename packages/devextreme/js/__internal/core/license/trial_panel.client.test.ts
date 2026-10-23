@@ -175,6 +175,13 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
       expect(hasCloseButton(getPanel())).toBe(false);
     });
 
+    it('should scroll and center the content so that tall content is not cut off at the top', () => {
+      addTrigger({ 'trial-expired': 'true' });
+
+      expect(getPanel().style.getPropertyValue('overflow')).toBe('auto');
+      expect((getPanel().firstElementChild as HTMLElement).style.getPropertyValue('margin')).toBe('auto');
+    });
+
     it('should show the title and the links', () => {
       addTrigger({ 'trial-expired': 'true' });
 

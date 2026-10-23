@@ -112,8 +112,7 @@ const overlayStyles = createImportantStyles({
   right: '0px',
   bottom: '0px',
   display: 'flex',
-  'align-items': 'center',
-  'justify-content': 'center',
+  overflow: 'auto',
   'z-index': OVERLAY_Z_INDEX,
   'background-color': 'rgba(255, 255, 255, 0.9)',
   padding: '1rem',
@@ -122,6 +121,7 @@ const overlayStyles = createImportantStyles({
 const overlayContentStyles = createImportantStyles({
   ...commonStyles,
   display: 'block',
+  margin: 'auto',
   'max-width': '60rem',
   'text-align': 'center',
 });
