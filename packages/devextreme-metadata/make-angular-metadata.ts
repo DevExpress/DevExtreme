@@ -55,6 +55,7 @@ Ng.makeMetadata({
     removeMembers(/\/chat:MessageType/),
     removeMembers(/\/chat:MessageBase.type/),
     removeMembers(/\/chat:TextMessage.attachments/),
+    removeMembers(/\/chat:TextMessage.toolCalls/),
     removeMembers(
       /\/chat:dxChatOptions\.(fileUploaderOptions|inputFieldText|sendButtonOptions|speechToTextOptions|suggestions|onAttachmentDownloadClick)/,
     ),
