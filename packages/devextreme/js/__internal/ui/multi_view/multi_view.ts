@@ -327,7 +327,6 @@ class MultiView<
     const $itemElements = this._itemElements();
     const itemsCount = this._itemsCount();
 
-    // @ts-expect-error ts-error
     $itemElements.each((itemIndex, item) => {
       const aria = this._getItemAria({ itemIndex, itemsCount });
 
@@ -387,7 +386,6 @@ class MultiView<
   _updateItemsVisibility(selectedIndex: number, newIndex?: number): void {
     const $itemElements = this._itemElements();
 
-    // @ts-expect-error ts-error
     $itemElements.each((itemIndex, item) => {
       const $item = $(item);
       const isHidden = itemIndex !== selectedIndex && itemIndex !== newIndex;

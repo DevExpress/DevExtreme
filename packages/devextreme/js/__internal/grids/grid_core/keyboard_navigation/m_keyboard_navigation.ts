@@ -1818,7 +1818,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       if ($focusViewElement) {
         $focusViewElement
           .find(`.${VIEW_CLASSES.row}[tabindex], .${VIEW_CLASSES.row} > td[tabindex]`)
-          // @ts-expect-error filter() is typed for selectors only
           .filter((i, node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
           .not($focusElement)
           .removeClass(EDITING_CLASSES.cellFocusDisabled)

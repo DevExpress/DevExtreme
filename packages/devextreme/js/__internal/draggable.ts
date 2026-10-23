@@ -217,8 +217,9 @@ class ScrollHelper {
     if (this._$scrollableAtPointer && this._scrollSpeed) {
       if (this._$scrollableAtPointer.hasClass('dx-scrollable-container')) {
         const $scrollable = this._$scrollableAtPointer.closest('.dx-scrollable');
-        // @ts-expect-error data is declared without the getter form
-        const scrollableInstance: Pick<Scrollable, 'scrollOffset' | 'scrollTo'> | undefined = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
+        type ScrollableAtPointer = Pick<Scrollable, 'scrollOffset' | 'scrollTo'> | undefined;
+        const scrollableInstance = $scrollable.data<ScrollableAtPointer>('dxScrollable')
+          || $scrollable.data<ScrollableAtPointer>('dxScrollView');
 
         if (scrollableInstance) {
           const nextScrollPosition = scrollableInstance

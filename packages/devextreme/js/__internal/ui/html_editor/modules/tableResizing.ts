@@ -294,7 +294,6 @@ export default class TableResizingModule extends BaseModule {
   _createResizeFrames($tables: dxElementWrapper): void {
     this._framesForTables = new Map();
 
-    // @ts-expect-error each() is typed for callbacks that return a boolean
     $tables.each((index, table) => {
       const $table = $(table);
       const $lastTable = this._tableResizeFrames[index]?.$table;
@@ -357,7 +356,6 @@ export default class TableResizingModule extends BaseModule {
   }
 
   _detachSeparatorEvents($lineSeparators: dxElementWrapper): void {
-    // @ts-expect-error each() is typed for callbacks that return a boolean
     $lineSeparators.each((i, $lineSeparator) => {
       eventsEngine.off($lineSeparator, POINTERDOWN_EVENT);
     });
