@@ -4,6 +4,7 @@ import '@ts/ui/list/modules/selection';
 
 import type { ChangedOptionInfo, NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -12,13 +13,24 @@ import type dxCheckBox from '@js/ui/check_box';
 import type { ValueChangedInfo } from '@js/ui/editor/editor';
 import type dxList from '@js/ui/list';
 import Popup from '@js/ui/popup/ui.popup';
+import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
+import type { ColumnStateOptions, IndicatorOptions } from '@ts/grids/grid_core/column_state_mixin/types';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import Modules from '@ts/grids/grid_core/modules/modules';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
+import type { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import List from '@ts/ui/list/list.edit.search';
 import type { TreeViewBaseProperties } from '@ts/ui/tree_view/tree_view.base';
 import TreeView from '@ts/ui/tree_view/tree_view.search';
 
 import gridCoreUtils from '../utils';
+import type {
+  HeaderFilterGroup,
+  HeaderFilterItem,
+  HeaderFilterOptions,
+  HeaderFilterValues,
+  HeaderFilterViewOptions,
+} from './types';
 import { allowHeaderFiltering } from './utils';
 
 type CheckBoxValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;
@@ -30,18 +42,25 @@ const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
 const DEFAULT_SEARCH_EXPRESSION = 'text';
 const HANDLER_DECORATED_KEY = Symbol('HANDLER_DECORATED_KEY');
 
-function resetChildrenItemSelection(items) {
-  items = items || [];
-  for (let i = 0; i < items.length; i++) {
-    items[i].selected = false;
-    resetChildrenItemSelection(items[i].items);
+function resetChildrenItemSelection(items: HeaderFilterItem[] | null | undefined): void {
+  if (!items) {
+    return;
+  }
+
+  for (const item of items) {
+    item.selected = false;
+    resetChildrenItemSelection(item.items);
   }
 }
 
-function getSelectAllCheckBox(listComponent): dxCheckBox {
+function getSelectAllCheckBox(
+  listComponent: Pick<List | TreeView, 'NAME' | '$element'>,
+): dxCheckBox | undefined {
   const selector = listComponent.NAME === 'dxTreeView' ? '.dx-treeview-select-all-item' : '.dx-list-select-all-checkbox';
+  // @ts-expect-error dxCheckBox is added to the renderer at runtime
+  const selectAllCheckBox: dxCheckBox | undefined = listComponent.$element().find(selector).dxCheckBox('instance');
 
-  return listComponent.$element().find(selector).dxCheckBox('instance');
+  return selectAllCheckBox;
 }
 
 function getListSelectAllValueChangedHandler(
@@ -94,7 +113,7 @@ function decorateListSelectAllValueChanged(
 
 function updateListSelectAllState(
   listComponent: dxList,
-  filterValues: any[],
+  filterValues: HeaderFilterValues | null | undefined,
 ): void {
   if (listComponent.option('searchValue')) {
     return;
@@ -107,60 +126,74 @@ function updateListSelectAllState(
   }
 }
 
-export function updateHeaderFilterItemSelectionState(item, filterValuesMatch, isExcludeFilter) {
-  if (filterValuesMatch ^ isExcludeFilter) {
-    item.selected = true;
+export function updateHeaderFilterItemSelectionState(
+  item: HeaderFilterItem,
+  filterValuesMatch: boolean,
+  isExcludeFilter: boolean,
+): void {
+  if (filterValuesMatch === isExcludeFilter) {
+    if (isExcludeFilter || item.selected) {
+      item.selected = false;
+      resetChildrenItemSelection(item.items);
+    }
 
-    if (isExcludeFilter && item.items) {
-      for (let j = 0; j < item.items.length; j++) {
-        if (!item.items[j].selected) {
-          item.selected = undefined;
-          break;
-        }
+    return;
+  }
+
+  item.selected = true;
+
+  if (isExcludeFilter && item.items) {
+    for (const childItem of item.items) {
+      if (!childItem.selected) {
+        item.selected = undefined;
+        break;
       }
     }
-  } else if (isExcludeFilter || item.selected) {
-    item.selected = false;
-    resetChildrenItemSelection(item.items);
   }
 }
 
 export class HeaderFilterView extends Modules.View {
-  private _popupContainer: any;
+  private _popupContainer?: Popup;
 
-  private _listComponent: any;
+  private _listComponent?: List | TreeView;
 
-  private getPopupContainer() {
+  private getPopupContainer(): Popup | undefined {
     return this._popupContainer;
   }
 
-  private getListComponent() {
+  private getListComponent(): List | TreeView | undefined {
     return this._listComponent;
   }
 
-  private applyHeaderFilter(options) {
-    const that = this;
-    const list = that.getListComponent();
-    const searchValue = list.option('searchValue');
+  private applyHeaderFilter(options: HeaderFilterViewOptions): void {
+    // @ts-expect-error the list is created here
+    const list: List | TreeView = this.getListComponent();
+    const searchValue = (list as List).option('searchValue');
     const selectAllCheckBox = getSelectAllCheckBox(list);
     const isAllSelected = !searchValue && !options.isFilterBuilder && selectAllCheckBox?.option('value');
-    const filterValues = [];
+    const filterValues: HeaderFilterValues = [];
 
-    const fillSelectedItemKeys = function (filterValues, items, isExclude) {
+    const fillSelectedItemKeys = (
+      selectedValues: HeaderFilterValues,
+      items: HeaderFilterItem[] | undefined,
+      isExclude: boolean,
+    ): void => {
       each(items, (_, item) => {
-        if (item.selected !== undefined && (!!item.selected as any) ^ isExclude) {
-          const node = list._getNode(item);
-          const hasChildren = list._hasChildren(node);
-          const hasChildrenWithSelection = hasChildren && item.items && item.items.some((item) => item.selected);
+        if (item.selected !== undefined && !!item.selected !== isExclude) {
+          const node = (list as TreeView)._getNode(item);
+          // @ts-expect-error every item of the tree has a node
+          const hasChildren = (list as TreeView)._hasChildren(node);
+          const hasChildrenWithSelection = hasChildren
+            && item.items?.some((childItem) => childItem.selected);
 
           if (!searchValue || !hasChildrenWithSelection) {
-            filterValues.push(item.value);
+            selectedValues.push(item.value);
             return;
           }
         }
 
-        if (item.items && item.items.length) {
-          fillSelectedItemKeys(filterValues, item.items, isExclude);
+        if (item.items?.length) {
+          fillSelectedItemKeys(selectedValues, item.items, isExclude);
         }
       });
     };
@@ -171,7 +204,7 @@ export class HeaderFilterView extends Modules.View {
           options.filterType = 'include';
         }
 
-        fillSelectedItemKeys(filterValues, list.option('items'), false);
+        fillSelectedItemKeys(filterValues, (list as TreeView).option('items'), false);
         options.filterValues = filterValues;
       }
     } else {
@@ -190,43 +223,46 @@ export class HeaderFilterView extends Modules.View {
 
     options.apply();
 
-    that.hideHeaderFilterMenu();
+    this.hideHeaderFilterMenu();
   }
 
-  public showHeaderFilterMenu($columnElement, options) {
-    const that = this;
-
+  public showHeaderFilterMenu(
+    $columnElement: dxElementWrapper,
+    options: HeaderFilterViewOptions,
+  ): void {
     if (options) {
-      that._initializePopupContainer(options);
+      this._initializePopupContainer(options);
 
-      const popupContainer = that.getPopupContainer();
+      // @ts-expect-error the popup is created here
+      const popupContainer: Popup = this.getPopupContainer();
 
-      that.hideHeaderFilterMenu();
-      that.updatePopup($columnElement, options);
+      this.hideHeaderFilterMenu();
+      this.updatePopup($columnElement, options);
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
       popupContainer.show();
     }
   }
 
-  public hideHeaderFilterMenu() {
+  public hideHeaderFilterMenu(): void {
     const headerFilterMenu = this.getPopupContainer();
 
-    headerFilterMenu && headerFilterMenu.hide();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+    headerFilterMenu?.hide();
   }
 
-  private updatePopup($element, options) {
-    const that = this;
+  private updatePopup($element: dxElementWrapper, options: HeaderFilterViewOptions): void {
     const showColumnLines = this.option('showColumnLines');
-    const alignment = ((options.alignment === 'right') as any) ^ (!showColumnLines as any) ? 'left' : 'right';
+    const alignment = (options.alignment === 'right') !== !showColumnLines ? 'left' : 'right';
 
-    that._popupContainer.setAria({
-      role: 'dialog',
-      label: messageLocalization.format('dxDataGrid-headerFilterLabel'),
-    });
+    if (this._popupContainer) {
+      this._popupContainer.setAria({
+        role: 'dialog',
+        label: messageLocalization.format('dxDataGrid-headerFilterLabel'),
+      });
 
-    if (that._popupContainer) {
-      that._cleanPopupContent();
-      that._popupContainer.option('position', {
+      this._cleanPopupContent();
+      this._popupContainer.option('position', {
         my: `${alignment} top`,
         at: `${alignment} bottom`,
         of: $element,
@@ -235,7 +271,10 @@ export class HeaderFilterView extends Modules.View {
     }
   }
 
-  protected _getSearchExpr(options, headerFilterOptions) {
+  protected _getSearchExpr(
+    options: HeaderFilterViewOptions,
+    headerFilterOptions: HeaderFilterOptions,
+  ): SearchBoxMixinOptions['searchExpr'] {
     const { lookup } = options;
     const { useDefaultSearchExpr } = options;
 
@@ -246,7 +285,10 @@ export class HeaderFilterView extends Modules.View {
       return filterSearchExpr;
     }
 
-    if (useDefaultSearchExpr || isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
+    if (
+      useDefaultSearchExpr
+      || (isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource))
+    ) {
       return DEFAULT_SEARCH_EXPRESSION;
     }
 
@@ -255,7 +297,8 @@ export class HeaderFilterView extends Modules.View {
     }
 
     if (options.dataSource) {
-      const { group } = options.dataSource;
+      // @ts-expect-error only the header filter's own data source reaches this line
+      const { group }: { group: HeaderFilterGroup } = options.dataSource;
       if (Array.isArray(group) && group.length > 0) {
         return group[0].selector;
       } if (isFunction(group) && !options.remoteFiltering) {
@@ -266,13 +309,12 @@ export class HeaderFilterView extends Modules.View {
     return options.dataField || options.selector;
   }
 
-  private _cleanPopupContent() {
-    this._popupContainer && this._popupContainer.$content().empty();
+  private _cleanPopupContent(): void {
+    this._popupContainer?.$content()?.empty();
   }
 
-  private _initializePopupContainer(options) {
-    const that = this;
-    const $element = that.element();
+  private _initializePopupContainer(options: HeaderFilterViewOptions): void {
+    const $element = this.element();
 
     const headerFilterOptions = this._normalizeHeaderFilterOptions(options);
     const { hidePopupCallback } = options;
@@ -298,8 +340,8 @@ export class HeaderFilterView extends Modules.View {
           options: {
             text: headerFilterOptions.texts.ok
               ?? messageLocalization.format('dxDataGrid-headerFilterOK'),
-            onClick() {
-              that.applyHeaderFilter(options);
+            onClick: (): void => {
+              this.applyHeaderFilter(options);
             },
           },
         },
@@ -310,24 +352,25 @@ export class HeaderFilterView extends Modules.View {
           options: {
             text: headerFilterOptions.texts.cancel
               ?? messageLocalization.format('dxDataGrid-headerFilterCancel'),
-            onClick() {
-              that.hideHeaderFilterMenu();
+            onClick: (): void => {
+              this.hideHeaderFilterMenu();
               hidePopupCallback?.();
             },
           },
         },
       ],
       resizeEnabled: true,
-      onShowing(e) {
+      onShowing: (e): void => {
         e.component.$content().parent().addClass('dx-dropdowneditor-overlay');
-        that._initializeListContainer(options, headerFilterOptions);
-        options.onShowing && options.onShowing(e);
+        this._initializeListContainer(options, headerFilterOptions);
+        options.onShowing?.(e);
       },
-      onShown() {
-        that.getListComponent().focus();
+      onShown: (): void => {
+        // @ts-expect-error the list is created here
+        this.getListComponent().focus();
       },
       onHidden: options.onHidden,
-      onInitialized(e) {
+      onInitialized(e): void {
         const { component } = e;
         // T321243
         component.option('animation', component._getDefaultOptions().animation);
@@ -335,28 +378,31 @@ export class HeaderFilterView extends Modules.View {
       tabFocusLoopEnabled: true,
     };
 
-    if (!isDefined(that._popupContainer)) {
+    if (!isDefined(this._popupContainer)) {
       // @ts-expect-error the view is rendered here
-      that._popupContainer = that._createComponent($element, Popup, dxPopupOptions);
+      this._popupContainer = this._createComponent($element, Popup, dxPopupOptions);
     } else {
-      that._popupContainer.option(dxPopupOptions);
+      this._popupContainer.option(dxPopupOptions);
     }
   }
 
-  private _initializeListContainer(options, headerFilterOptions) {
-    const that = this;
-    const $content = that._popupContainer.$content();
-    const needShowSelectAllCheckbox = !options.isFilterBuilder && headerFilterOptions.allowSelectAll;
+  private _initializeListContainer(
+    options: HeaderFilterViewOptions,
+    headerFilterOptions: HeaderFilterOptions,
+  ): void {
+    const $content: dxElementWrapper = $(this._popupContainer?.content());
+    const needShowSelectAllCheckbox = !options.isFilterBuilder
+      && headerFilterOptions.allowSelectAll;
     const widgetOptions = {
       searchEnabled: headerFilterOptions.search.enabled,
       searchTimeout: headerFilterOptions.search.timeout,
       searchEditorOptions: headerFilterOptions.search.editorOptions,
-      searchMode: headerFilterOptions.search.mode || '',
+      searchMode: headerFilterOptions.search.mode ?? '',
       dataSource: options.dataSource,
-      onContentReady() {
-        that.renderCompleted.fire();
+      onContentReady: (): void => {
+        this.renderCompleted.fire();
       },
-      itemTemplate(data, _, element) {
+      itemTemplate(data, _, element): dxElementWrapper {
         const $element = $(element);
         if (options.encodeHtml !== false) {
           return $element.text(data.text);
@@ -366,8 +412,10 @@ export class HeaderFilterView extends Modules.View {
       },
     };
 
-    const shouldChangeSelectAllCheckBoxVisibility = (): boolean => needShowSelectAllCheckbox
-      && that.option('headerFilter.hideSelectAllOnSearch') !== false;
+    const shouldChangeSelectAllCheckBoxVisibility = (): boolean | undefined => (
+      needShowSelectAllCheckbox
+      && this.option('headerFilter.hideSelectAllOnSearch') !== false
+    );
 
     const onTreeViewOptionChanged = (
       event: ChangedOptionInfo & {
@@ -411,22 +459,24 @@ export class HeaderFilterView extends Modules.View {
         'showCheckBoxesMode' | 'onOptionChanged' | 'keyExpr'
       > = {
         showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
-        // @ts-expect-error the handler takes the internal TreeView, the option declares the public one
+        // @ts-expect-error the handler takes the internal TreeView, not the public one
         onOptionChanged: onTreeViewOptionChanged,
         keyExpr: 'id',
       };
 
-      that._listComponent = that._createComponent(
+      this._listComponent = this._createComponent(
         $('<div>').appendTo($content),
         TreeView,
+        // @ts-expect-error the data source loads header filter items, an unset searchMode is ''
         extend(widgetOptions, treeViewOptions),
       );
     } else {
-      that._listComponent = that._createComponent(
+      this._listComponent = this._createComponent(
         $('<div>').appendTo($content),
         List,
+        // @ts-expect-error the data source loads header filter items, an unset searchMode is ''
         extend(widgetOptions, {
-          searchExpr: that._getSearchExpr(options, headerFilterOptions),
+          searchExpr: this._getSearchExpr(options, headerFilterOptions),
           pageLoadMode: 'scrollBottom' as const,
           showSelectionControls: true,
           selectionMode: needShowSelectAllCheckbox ? 'all' as const : 'multiple' as const,
@@ -437,9 +487,16 @@ export class HeaderFilterView extends Modules.View {
             const selectedItems = listComponent.option('selectedItems');
 
             if (!listComponent._selectedItemsUpdating && !listComponent.option('searchValue') && !options.isFilterBuilder) {
-              const filterValues = options.filterValues || [];
+              const filterValues = options.filterValues ?? [];
               const isExclude = options.filterType === 'exclude';
-              if (selectedItems.length === 0 && items.length && (filterValues.length <= 1 || isExclude && filterValues.length === items.length - 1)) {
+              if (
+                selectedItems.length === 0
+                && items.length
+                && (
+                  filterValues.length <= 1
+                  || (isExclude && filterValues.length === items.length - 1)
+                )
+              ) {
                 options.filterType = 'include';
                 options.filterValues = [];
               } else if (selectedItems.length === items.length) {
@@ -449,20 +506,25 @@ export class HeaderFilterView extends Modules.View {
             }
 
             each(items, (index, item) => {
-              const selected: any = gridCoreUtils.getIndexByKey(item, selectedItems, null) >= 0;
+              const selected = gridCoreUtils.getIndexByKey(item, selectedItems, null) >= 0;
               const oldSelected = !!item.selected;
 
               if (oldSelected !== selected) {
                 item.selected = selected;
-                options.filterValues = options.filterValues || [];
-                const filterValueIndex = gridCoreUtils.getIndexByKey(item.value, options.filterValues, null);
+                options.filterValues ??= [];
+                const filterValueIndex = gridCoreUtils.getIndexByKey(
+                  item.value,
+                  options.filterValues,
+                  null,
+                );
 
                 if (filterValueIndex >= 0) {
                   options.filterValues.splice(filterValueIndex, 1);
                 }
 
-                const isExcludeFilterType: any = options.filterType === 'exclude';
-                if (selected ^ isExcludeFilterType) {
+                const isExcludeFilterType = options.filterType === 'exclude';
+
+                if (selected !== isExcludeFilterType) {
                   options.filterValues.push(item.value);
                 }
               }
@@ -473,11 +535,11 @@ export class HeaderFilterView extends Modules.View {
           onContentReady(e) {
             const { component: listComponent } = e;
             const items = listComponent.option('items');
-            const selectedItems: any = [];
+            const selectedItems: HeaderFilterItem[] = [];
 
-            each(items, function () {
-              if (this.selected) {
-                selectedItems.push(this);
+            each(items, (_, item) => {
+              if (item.selected) {
+                selectedItems.push(item);
               }
             });
 
@@ -493,27 +555,33 @@ export class HeaderFilterView extends Modules.View {
     }
   }
 
-  private _normalizeHeaderFilterOptions(options) {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const generalHeaderFilter = this.option('headerFilter') || {};
-    const specificHeaderFilter = options.headerFilter || {};
+  private _normalizeHeaderFilterOptions(options: HeaderFilterViewOptions): HeaderFilterOptions {
+    const generalHeaderFilter = this.option('headerFilter') ?? {};
+    const specificHeaderFilter = options.headerFilter ?? {};
 
-    const headerFilterOptions = extend(true, {}, generalHeaderFilter, specificHeaderFilter);
+    // @ts-expect-error search is set below, the default options provide texts
+    const headerFilterOptions: HeaderFilterOptions = extend(
+      true,
+      {},
+      generalHeaderFilter,
+      specificHeaderFilter,
+    );
 
     headerFilterOptions.search ??= {};
 
     return headerFilterOptions;
   }
 
-  protected _renderCore() {
+  protected _renderCore(): void {
     // @ts-expect-error the view is rendered here
     this.element().addClass(HEADER_FILTER_MENU_CLASS);
   }
 }
 
-// TODO Fix types of this mixin
-export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class HeaderFilterMixin extends Base {
-  public optionChanged(args) {
+export const headerFilterMixin = <T extends ModuleType<ColumnsView>>(
+  Base: T,
+): T => class HeaderFilterMixin extends Base {
+  public optionChanged(args: OptionChanged): void {
     if (args.name === 'headerFilter') {
       const requireReady = this.name === 'columnHeadersView';
       this._invalidate(requireReady, requireReady);
@@ -523,26 +591,30 @@ export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class H
     }
   }
 
-  protected _applyColumnState(options) {
-    let $headerFilterIndicator;
+  protected _applyColumnState(options: ColumnStateOptions): dxElementWrapper | undefined {
     const { rootElement } = options;
     const { column } = options;
 
     if (options.name === 'headerFilter') {
       rootElement.find(`.${HEADER_FILTER_CLASS}`).remove();
 
-      if (allowHeaderFiltering(column)) {
-        $headerFilterIndicator = super._applyColumnState(options).toggleClass('dx-header-filter-empty', this._isHeaderFilterEmpty(column));
-        if (!this.option('useLegacyKeyboardNavigation')) {
-          $headerFilterIndicator.attr('tabindex', this.option('tabindex') || 0);
-        }
-
-        const indicatorLabel = (messageLocalization.format as any)('dxDataGrid-headerFilterIndicatorLabel', column.caption);
-
-        this.setAria('label', indicatorLabel, $headerFilterIndicator);
-        this.setAria('haspopup', 'dialog', $headerFilterIndicator);
-        this.setAria('role', 'button', $headerFilterIndicator);
+      if (!allowHeaderFiltering(column)) {
+        return undefined;
       }
+
+      // @ts-expect-error the base _applyColumnState always returns the indicator
+      const $headerFilterIndicator: dxElementWrapper = super._applyColumnState(options);
+
+      $headerFilterIndicator.toggleClass('dx-header-filter-empty', this._isHeaderFilterEmpty(column));
+      if (!this.option('useLegacyKeyboardNavigation')) {
+        $headerFilterIndicator.attr('tabindex', this.option('tabindex') || 0);
+      }
+
+      const indicatorLabel = messageLocalization.format('dxDataGrid-headerFilterIndicatorLabel', column.caption);
+
+      this.setAria('label', indicatorLabel, $headerFilterIndicator);
+      this.setAria('haspopup', 'dialog', $headerFilterIndicator);
+      this.setAria('role', 'button', $headerFilterIndicator);
 
       return $headerFilterIndicator;
     }
@@ -550,24 +622,25 @@ export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class H
     return super._applyColumnState(options);
   }
 
-  private _isHeaderFilterEmpty(column) {
-    return !column.filterValues || !column.filterValues.length;
+  private _isHeaderFilterEmpty(column: Column): boolean {
+    return !column.filterValues?.length;
   }
 
-  protected _getIndicatorClassName(name) {
+  protected _getIndicatorClassName(name: string): string | undefined {
     if (name === 'headerFilter') {
       return HEADER_FILTER_CLASS;
     }
     return super._getIndicatorClassName(name);
   }
 
-  protected _renderIndicator(options) {
+  protected _renderIndicator(options: IndicatorOptions): void {
     const $container = options.container;
     const $indicator = options.indicator;
 
     if (options.name === 'headerFilter') {
-      const rtlEnabled = this.option('rtlEnabled');
-      if ($container.children().length && (!rtlEnabled && options.columnAlignment === 'right' || rtlEnabled && options.columnAlignment === 'left')) {
+      const endAlignment = this.option('rtlEnabled') ? 'left' : 'right';
+
+      if ($container.children().length && options.columnAlignment === endAlignment) {
         $container.prepend($indicator);
         return;
       }
