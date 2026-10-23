@@ -41,7 +41,7 @@ export class DxiChatChatItemComponent extends CollectionNestedOption {
     set _attachmentsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('attachments', value);
     }
-
+    
     @ContentChildren(PROPERTY_TOKEN_toolCalls)
     set _toolCallsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('toolCalls', value);
