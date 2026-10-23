@@ -1812,8 +1812,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       return this._getTemplate(this.currentView[optionName]);
     }
 
-    // @ts-expect-error
-    return this._getTemplateByOption(optionName) as FunctionTemplate;
+    return this._getTemplate(this.option(optionName));
   }
 
   private updateOption<T>(viewName: 'workSpace' | 'header', optionName: string, value: T): void {
