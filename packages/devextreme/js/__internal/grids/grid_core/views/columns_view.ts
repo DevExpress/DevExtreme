@@ -1652,7 +1652,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this._getRowElements().index($row);
   }
 
-  protected getBoundingRect(): BoundingRect | null | undefined {
+  public getBoundingRect(): BoundingRect | null | undefined {
     return undefined;
   }
 
