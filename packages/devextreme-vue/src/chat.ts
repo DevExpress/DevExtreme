@@ -23,6 +23,7 @@ import {
  TypingEndEvent,
  TypingStartEvent,
  SendButtonProperties,
+ ToolCallOptions,
  User,
  Attachment,
  ToolCall,
@@ -127,7 +128,6 @@ type AccessibleOptions = Pick<Properties,
   "onTypingEnd" |
   "onTypingStart" |
   "reloadOnChange" |
-  "renderToolsInMessageTemplate" |
   "rtlEnabled" |
   "sendButtonOptions" |
   "showAvatar" |
@@ -137,6 +137,7 @@ type AccessibleOptions = Pick<Properties,
   "speechToTextEnabled" |
   "speechToTextOptions" |
   "suggestions" |
+  "toolCallOptions" |
   "typingUsers" |
   "user" |
   "visible" |
@@ -182,7 +183,6 @@ const componentConfig = {
     onTypingEnd: Function as PropType<((e: TypingEndEvent) => void)>,
     onTypingStart: Function as PropType<((e: TypingStartEvent) => void)>,
     reloadOnChange: Boolean,
-    renderToolsInMessageTemplate: Boolean,
     rtlEnabled: Boolean,
     sendButtonOptions: Object as PropType<SendButtonProperties | Record<string, any>>,
     showAvatar: Boolean,
@@ -192,6 +192,7 @@ const componentConfig = {
     speechToTextEnabled: Boolean,
     speechToTextOptions: Object as PropType<dxSpeechToTextOptions | Record<string, any>>,
     suggestions: Object as PropType<dxButtonGroupOptions | Record<string, any>>,
+    toolCallOptions: Object as PropType<ToolCallOptions | Record<string, any>>,
     typingUsers: Array as PropType<Array<User>>,
     user: Object as PropType<User | Record<string, any>>,
     visible: Boolean,
@@ -233,7 +234,6 @@ const componentConfig = {
     "update:onTypingEnd": null,
     "update:onTypingStart": null,
     "update:reloadOnChange": null,
-    "update:renderToolsInMessageTemplate": null,
     "update:rtlEnabled": null,
     "update:sendButtonOptions": null,
     "update:showAvatar": null,
@@ -243,6 +243,7 @@ const componentConfig = {
     "update:speechToTextEnabled": null,
     "update:speechToTextOptions": null,
     "update:suggestions": null,
+    "update:toolCallOptions": null,
     "update:typingUsers": null,
     "update:user": null,
     "update:visible": null,
@@ -267,6 +268,7 @@ const componentConfig = {
       sendButtonOptions: { isCollectionItem: false, optionName: "sendButtonOptions" },
       speechToTextOptions: { isCollectionItem: false, optionName: "speechToTextOptions" },
       suggestions: { isCollectionItem: false, optionName: "suggestions" },
+      toolCallOptions: { isCollectionItem: false, optionName: "toolCallOptions" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
     };
@@ -928,6 +930,25 @@ const DxToolCall = defineComponent(DxToolCallConfig);
 (DxToolCall as any).$_optionName = "toolCalls";
 (DxToolCall as any).$_isCollectionItem = true;
 
+const DxToolCallOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:expandAll": null,
+    "update:showInMessageTemplate": null,
+  },
+  props: {
+    expandAll: Boolean,
+    showInMessageTemplate: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxToolCallOptionsConfig);
+
+const DxToolCallOptions = defineComponent(DxToolCallOptionsConfig);
+
+(DxToolCallOptions as any).$_optionName = "toolCallOptions";
+
 const DxTypingUserConfig = {
   emits: {
     "update:isActive": null,
@@ -994,6 +1015,7 @@ export {
   DxSuggestions,
   DxSuggestionsItem,
   DxToolCall,
+  DxToolCallOptions,
   DxTypingUser,
   DxUser
 };
