@@ -19,7 +19,7 @@ import {
 } from '@angular/core';
 
 
-import type { default as dxChat, Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, SendButtonProperties, User } from 'devextreme/ui/chat';
+import type { default as dxChat, Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, SendButtonProperties, ToolCallOptions, User } from 'devextreme/ui/chat';
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { Format } from 'devextreme/common/core/localization';
@@ -65,6 +65,7 @@ import { DxoChatSpeechToTextOptionsModule } from 'devextreme-angular/ui/chat/nes
 import { DxoChatSuggestionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatSuggestionsItemModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatToolCallModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatToolCallOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 import { 
@@ -326,17 +327,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
     /**
-     * [descr:dxChatOptions.renderToolsInMessageTemplate]
-     */
-    @Input()
-    get renderToolsInMessageTemplate(): boolean {
-        return this._getOption('renderToolsInMessageTemplate');
-    }
-    set renderToolsInMessageTemplate(value: boolean) {
-        this._setOption('renderToolsInMessageTemplate', value);
-    }
-
-    /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
     @Input()
@@ -427,6 +417,15 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set suggestions(value: dxButtonGroupOptions) {
         this._setOption('suggestions', value);
+    }
+
+    
+    @Input()
+    get toolCallOptions(): ToolCallOptions {
+        return this._getOption('toolCallOptions');
+    }
+    set toolCallOptions(value: ToolCallOptions) {
+        this._setOption('toolCallOptions', value);
     }
 
     /**
@@ -641,11 +640,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
-    @Output() renderToolsInMessageTemplateChange: EventEmitter<boolean>;
-
-    /**
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -687,6 +681,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() suggestionsChange: EventEmitter<dxButtonGroupOptions>;
+
+    /**
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+     */
+    @Output() toolCallOptionsChange: EventEmitter<ToolCallOptions>;
 
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
@@ -751,7 +750,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'messageTemplateChange' },
             { emit: 'messageTimestampFormatChange' },
             { emit: 'reloadOnChangeChange' },
-            { emit: 'renderToolsInMessageTemplateChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'sendButtonOptionsChange' },
             { emit: 'showAvatarChange' },
@@ -761,6 +759,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'speechToTextEnabledChange' },
             { emit: 'speechToTextOptionsChange' },
             { emit: 'suggestionsChange' },
+            { emit: 'toolCallOptionsChange' },
             { emit: 'typingUsersChange' },
             { emit: 'userChange' },
             { emit: 'visibleChange' },
@@ -842,6 +841,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatSuggestionsModule,
     DxiChatSuggestionsItemModule,
     DxiChatToolCallModule,
+    DxoChatToolCallOptionsModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxIntegrationModule,
@@ -873,6 +873,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatSuggestionsModule,
     DxiChatSuggestionsItemModule,
     DxiChatToolCallModule,
+    DxoChatToolCallOptionsModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxTemplateModule
