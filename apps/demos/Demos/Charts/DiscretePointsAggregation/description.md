@@ -15,8 +15,11 @@ You can enable data aggregation for the following series:
 
 Individual series aggregation settings have priority over common aggregation settings in the component. For example, you can enable aggregation for all series and disable it for a specific series.
 
-In this demo, data aggregation is enabled for all series.
+In this demo, data aggregation is enabled for all series. Use the **Aggregation enabled** checkbox to toggle it.
 
 2. Specify an aggregation [method](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/aggregation/#method) (optional).    
-In this demo, the `sum` method is used.
+In this demo, you can choose between the `avg`, `sum`, and `min` methods. The default method is `avg`.
 
+Each year also has a gray max series that always uses the `max` method. These series override the common aggregation settings and use the [barOverlapGroup](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#barOverlapGroup) property to overlap the corresponding colored bars. This allows you to compare the aggregated value with the highest monthly value in each category. Hover over a bar to see its value in a tooltip.
+
+The data keeps each row's `year` unchanged and uses a separate `series` field for series names. The `MAX_SUFFIX` constant identifies max series and is removed to determine the year used by `barOverlapGroup`.

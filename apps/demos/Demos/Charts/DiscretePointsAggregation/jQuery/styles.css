@@ -1,3 +1,34 @@
 #chart {
   height: 440px;
+  margin: 0 0 15px;
+}
+
+#chart-demo {
+  height: 620px;
+}
+
+.options {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: var(--dx-color-options-panel-bg);
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.option {
+  margin-top: 10px;
+}
+
+.option > span {
+  width: 50px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.option > .dx-selectbox {
+  display: inline-block;
+  vertical-align: middle;
 }
