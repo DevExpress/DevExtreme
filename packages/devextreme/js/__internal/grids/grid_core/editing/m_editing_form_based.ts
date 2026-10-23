@@ -659,7 +659,6 @@ const rowsView = (
     column: Column | undefined,
   ): number {
     return $cells?.toArray().findIndex((cellElement) => {
-      // @ts-expect-error data(key) is typed as returning the wrapper
       const item: EditFormItem | undefined = $(cellElement).find(`.${FIELD_ITEM_CONTENT_CLASS}`).data('dx-form-item');
 
       return Boolean(item?.column && column && item.column.index === column.index);
