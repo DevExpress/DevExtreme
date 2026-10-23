@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { DxSchedulerModule, DxSelectBoxModule } from 'devextreme-angular';
 import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
@@ -45,8 +45,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
