@@ -8,10 +8,10 @@ import currencyLocalization from '@ts/core/localization/currency';
 import intlNumberLocalization from '@ts/core/localization/intl/number';
 import { getFormatter } from '@ts/core/localization/ldml/number';
 import { toFixed } from '@ts/core/localization/utils';
+import { escapeRegExp } from '@ts/core/utils/common';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
-import { escapeRegExp } from '@ts/core/utils/m_common';
-import { each } from '@ts/core/utils/m_iterator';
-import { isPlainObject } from '@ts/core/utils/m_type';
+import { each } from '@ts/core/utils/iterator';
+import { isPlainObject } from '@ts/core/utils/type';
 
 const hasIntl = typeof Intl !== 'undefined';
 const MAX_LARGE_NUMBER_POWER = 4;

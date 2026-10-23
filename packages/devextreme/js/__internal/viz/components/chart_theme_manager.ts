@@ -1,11 +1,11 @@
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
+import { noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
 import {
   isDefined,
   isNumeric,
   isPlainObject,
   isString,
-} from '@ts/core/utils/m_type';
+} from '@ts/core/utils/type';
 import type { BaseThemeManagerOptions, Palette, ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { BaseThemeManager } from '@ts/viz/core/base_theme_manager';
 import { extractColor, normalizeEnum } from '@ts/viz/core/utils';

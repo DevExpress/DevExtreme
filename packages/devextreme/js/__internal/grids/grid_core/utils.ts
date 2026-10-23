@@ -24,7 +24,7 @@ import formatHelper from '@js/format_helper';
 import type { Format } from '@js/localization';
 import LoadPanel from '@js/ui/load_panel';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
-import { isNumeric } from '@ts/core/utils/m_type';
+import { isNumeric } from '@ts/core/utils/type';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo } from '@ts/data/utils';
 import type {

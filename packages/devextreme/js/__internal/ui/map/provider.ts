@@ -3,7 +3,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import { isNumeric, isPlainObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { MapProvider } from '@js/ui/map';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 
 import type Map from './map';
 import type { MapProperties } from './map';

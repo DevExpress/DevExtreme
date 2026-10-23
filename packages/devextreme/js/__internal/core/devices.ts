@@ -15,7 +15,7 @@ import { isPlainObject } from '@js/core/utils/type';
 import { changeCallback, value as viewPort } from '@js/core/utils/view_port';
 import { getNavigator, getWindow, hasWindow } from '@js/core/utils/window';
 import type { EventHandler, EventHandlers } from '@ts/core/events_strategy';
-import { uiLayerInitialized } from '@ts/core/utils/m_common';
+import { uiLayerInitialized } from '@ts/core/utils/common';
 
 export type DeviceType = 'phone' | 'tablet' | 'desktop';
 

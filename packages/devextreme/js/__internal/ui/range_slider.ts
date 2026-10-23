@@ -7,7 +7,7 @@ import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/range_slider';
-import { applyServerDecimalSeparator } from '@ts/core/utils/m_common';
+import { applyServerDecimalSeparator } from '@ts/core/utils/common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { SwipeUpdateEvent } from '@ts/events/swipe';

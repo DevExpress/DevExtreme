@@ -16,7 +16,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { domAdapter } from '@ts/core/dom_adapter';
-import { getNavigator, hasProperty } from '@ts/core/utils/m_window';
+import { getNavigator, hasProperty } from '@ts/core/utils/window';
 import eventsEngine from '@ts/events/core/events_engine';
 import { name as wheelEventName } from '@ts/events/core/wheel';
 import { addNamespace } from '@ts/events/utils/index';
