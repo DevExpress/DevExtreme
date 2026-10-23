@@ -20,9 +20,9 @@ export interface EditingDataControllerExtension {
   _editingController: EditingController;
 }
 
-export const editingDataControllerExtender = (
-  Base: ModuleType<DataController>,
-): ModuleType<
+export const editingDataControllerExtender = <TBase extends ModuleType<DataController>>(
+  Base: TBase,
+): TBase & ModuleType<
   DataController & EditingDataControllerExtension
 > => class EditingDataControllerExtender extends Base {
   public _editingController!: EditingController;
