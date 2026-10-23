@@ -220,4 +220,6 @@ export interface EditingModuleOptions {
   useLegacyColumnButtonTemplate?: boolean;
 }
 
+export type EditingDefaultOptions = { editing: EditingOptions } & EditingModuleOptions;
+
 export type EditingModuleOptionChanged = OptionChanged | OptionChangedFor<EditingModuleOptions>;

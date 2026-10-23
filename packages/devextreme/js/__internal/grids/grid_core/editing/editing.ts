@@ -119,8 +119,8 @@ import type {
   EditingChangeParams,
   EditingChangesOptionChanged,
   EditingColumn,
+  EditingDefaultOptions,
   EditingModuleOptionChanged,
-  EditingModuleOptions,
   EditingOptions,
   EditingStartOptions,
   EditorCellOptions,
@@ -2817,9 +2817,9 @@ export class EditingController extends modules.ViewController {
   }
 }
 
-const rowsView = (
-  Base: ModuleType<RowsView>,
-): ModuleType<RowsView> => class RowsViewEditingExtender extends Base {
+const rowsView = <TBase extends ModuleType<RowsView>>(
+  Base: TBase,
+): TBase => class RowsViewEditingExtender extends Base {
   /** @architectureLeak editingCellBased: a click on a cell starts and closes cell editing */
   public _editingController!: EditingController & CellBasedEditingControllerExtension;
 
@@ -3150,7 +3150,7 @@ const headerPanel = (
 };
 
 export const editingModule = {
-  defaultOptions(): { editing: EditingOptions } & EditingModuleOptions {
+  defaultOptions(): EditingDefaultOptions {
     return {
       editing: {
         mode: 'row', // "batch"
