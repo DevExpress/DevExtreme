@@ -1,0 +1,88 @@
+@use "sass:map";
+@use "../../../mixins" as *;
+@use "../../../icon_fonts" as *;
+
+.dx-chat-messagegroup-alignment-start .dx-chat-messagegroup-content:has(.dx-chat-tool-call-view) {
+  justify-self: stretch;
+}
+
+.dx-chat-tool-call-view {
+  .dx-accordion {
+    margin: 0;
+    background-color: transparent;
+  }
+
+  .dx-accordion-item {
+    margin-block: 0;
+    box-shadow: none;
+    background-color: transparent;
+  }
+
+  .dx-accordion-item:not(.dx-state-focused) {
+    border-color: transparent;
+  }
+
+  .dx-accordion-item-title {
+    justify-content: flex-start;
+    font-size: inherit;
+    background-color: transparent;
+
+    &::before {
+      position: static;
+      order: 1;
+    }
+  }
+
+  .dx-accordion-item-closed > .dx-accordion-item-title::before {
+    content: map.get($icons, "chevronright");
+  }
+
+  .dx-accordion-item-opened > .dx-accordion-item-title::before {
+    content: map.get($icons, "chevrondown");
+  }
+
+  .dx-accordion-item-body {
+    padding: 0;
+  }
+}
+
+.dx-rtl .dx-chat-tool-call-view .dx-accordion-item-closed > .dx-accordion-item-title::before {
+  content: map.get($icons, "chevronleft");
+}
+
+.dx-chat-tool-call-title {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.dx-chat-tool-call-name {
+  min-width: 0;
+
+  @include dx-overflow();
+}
+
+.dx-chat-tool-call-error-badge {
+  flex-shrink: 0;
+}
+
+.dx-chat-tool-call-content {
+  display: flex;
+  flex-direction: column;
+  border-inline-start-style: solid;
+}
+
+.dx-chat-tool-call-field {
+  display: flex;
+  flex-direction: column;
+
+  .dx-textarea,
+  .dx-texteditor-input,
+  .dx-button {
+    cursor: copy;
+  }
+
+  .dx-button.dx-button-mode-text:not(:focus-visible) {
+    background-color: transparent;
+  }
+}

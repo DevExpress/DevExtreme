@@ -65,6 +65,25 @@
   $chat-bubble-delete-icon-size,
   $chat-bubble-gap,
 );
+@include chat-toolcallview(
+  $chat-tool-call-min-width,
+  $chat-tool-call-title-gap,
+  $chat-tool-call-title-color,
+  $chat-tool-call-icon-size,
+  $chat-tool-call-badge-padding-block,
+  $chat-tool-call-badge-padding-inline,
+  $chat-tool-call-badge-border-radius,
+  $chat-tool-call-content-gap,
+  $chat-tool-call-content-padding-block,
+  $chat-tool-call-content-margin-inline-start,
+  $chat-tool-call-content-padding-inline-start,
+  $chat-tool-call-content-border-width,
+  $chat-tool-call-content-border-color,
+  $chat-tool-call-field-gap,
+  $chat-tool-call-field-font-family,
+  $chat-tool-call-error-color,
+  $chat-tool-call-error-background-color,
+);
 @include chat-messagegroup(
   $chat-messagegroup-gap,
   $chat-messagegroup-alignment-start-template,
