@@ -4,12 +4,20 @@ import {
 import DataGrid from '@js/ui/data_grid';
 import eventsEngine from '@ts/events/core/events_engine';
 
+import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
   afterTest,
   beforeTest,
   createDataGrid,
   flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
+import type { EditingController } from '../editing';
+import type { CellBasedEditingControllerExtension } from '../m_editing_cell_based';
+
+const getEditingController = (
+  instance: DataGridInstance,
+): EditingController & CellBasedEditingControllerExtension => instance
+  .getController('editing') as EditingController & CellBasedEditingControllerExtension;
 
 describe('DataGrid cell-based editing', () => {
   const dataSource = [
@@ -36,7 +44,7 @@ describe('DataGrid cell-based editing', () => {
           allowUpdating: true,
         },
       });
-      const editingController = instance.getController('editing');
+      const editingController = getEditingController(instance);
       const isCellOrBatchEditMode = jest.spyOn(editingController, 'isCellOrBatchEditMode');
 
       instance.dispose();
@@ -227,7 +235,7 @@ describe('DataGrid cell-based editing', () => {
       });
       instance.editRow(0);
       await flushAsync();
-      const closeEditCell = jest.spyOn(instance.getController('editing'), 'closeEditCell');
+      const closeEditCell = jest.spyOn(getEditingController(instance), 'closeEditCell');
 
       eventsEngine.trigger(document.body, 'dxclick');
       await flushAsync();
@@ -402,7 +410,7 @@ describe('DataGrid cell-based editing', () => {
 
     it('should not close a cell on a click outside the grid when no cell is edited', async () => {
       const { instance } = await createGridWithReadOnlyColumn();
-      const closeEditCell = jest.spyOn(instance.getController('editing'), 'closeEditCell');
+      const closeEditCell = jest.spyOn(getEditingController(instance), 'closeEditCell');
 
       clickElement(document.body);
       await flushAsync();

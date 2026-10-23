@@ -5,7 +5,7 @@
 /* eslint-disable prefer-rest-params */
 import { Deferred, when } from '@js/core/utils/deferred';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
-import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/m_editing_cell_based';
+import type { CellBasedEditingControllerExtension } from '@ts/grids/grid_core/editing/m_editing_cell_based';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
@@ -15,7 +15,7 @@ import { ADAPTIVE_ROW_TYPE } from '../const';
 import type { AdaptivityDataController } from '../types';
 
 export const adaptivityEditingViewControllerExtender = (
-  Base: ModuleType<CellBasedEditingController>,
+  Base: ModuleType<EditingController & CellBasedEditingControllerExtension>,
 ): ModuleType<EditingController> => class AdaptivityEditingViewControllerExtender extends Base {
   protected _dataController!: AdaptivityDataController;
 
@@ -117,7 +117,7 @@ export const adaptivityEditingViewControllerExtender = (
     return rowIndices;
   }
 
-  protected override beforeCloseEditCell(rowIndices: number[]): void {
+  public override beforeCloseEditCell(rowIndices: number[]): void {
     const expandedKey = this._dataController.getAdaptiveExpandedKey();
 
     if (expandedKey) {

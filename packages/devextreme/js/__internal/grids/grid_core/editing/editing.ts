@@ -106,8 +106,7 @@ import {
   isEditingOrShowEditorAlwaysDataCell,
 } from './editing_utils';
 import { editingDataControllerExtender } from './extenders/editing_data_controller';
-import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
-import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
+import type { CellBasedEditingControllerExtension } from './m_editing_cell_based';
 import type {
   AllowEditActionValue,
   EditActionOptions,
@@ -138,7 +137,7 @@ import type {
   SaveResult,
 } from './types';
 
-class EditingControllerImpl extends modules.ViewController {
+export class EditingController extends modules.ViewController {
   protected _columnsController!: ColumnsController;
 
   protected _dataController!: DataController;
@@ -2818,13 +2817,12 @@ class EditingControllerImpl extends modules.ViewController {
   }
 }
 
-export type EditingController = EditingControllerImpl
-  & ICellBasedEditingControllerExtender
-  & IFormBasedEditingControllerExtender;
-
 const rowsView = (
   Base: ModuleType<RowsView>,
 ): ModuleType<RowsView> => class RowsViewEditingExtender extends Base {
+  /** @architectureLeak editingCellBased: a click on a cell starts and closes cell editing */
+  public _editingController!: EditingController & CellBasedEditingControllerExtension;
+
   private _pointerDownTarget?: EventTarget | null;
 
   private _pointerDownTimeout?: ReturnType<typeof setTimeout>;
@@ -3189,7 +3187,7 @@ export const editingModule = {
     };
   },
   controllers: {
-    editing: EditingControllerImpl,
+    editing: EditingController,
   },
   extenders: {
     controllers: {

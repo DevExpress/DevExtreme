@@ -6,7 +6,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type { StoreChange } from '@js/data/store';
 import type { DxEvent } from '@js/events';
 import type { Column as DataGridColumn, ColumnButton, ColumnButtonClickEvent } from '@js/ui/data_grid';
-import type { FormItemComponent } from '@js/ui/form';
+import type { FormItemComponent, Item as FormItem, SimpleItem } from '@js/ui/form';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ProcessedItem } from '../data_controller/types';
@@ -87,8 +87,25 @@ export interface EditingButtonTexts {
 
 export interface EditFormColumnItem {
   column: Column;
+  name?: string;
+  dataField?: string;
   editorType?: FormItemComponent;
+  editorOptions?: object;
   isCustomEditorType?: boolean;
+}
+
+export type EditFormItem = SimpleItem & {
+  column?: Column;
+  isCustomEditorType?: boolean;
+};
+
+export type EditFormDetailOptions = Partial<ViewCellOptions> & Pick<ViewCellOptions, 'rowType'>;
+
+export interface EditFormOptions {
+  validationGroup?: unknown;
+  items: (FormItem | EditFormItem)[];
+  formID: string;
+  customizeItem: (item: EditFormItem) => void;
 }
 
 export interface OnSavingParams {
@@ -132,6 +149,7 @@ export interface EditorCellOptions extends ViewCellOptions {
   row?: ProcessedItem;
   setValue?: (value: unknown, text?: string) => void;
   isOnForm?: boolean;
+  item?: EditFormColumnItem;
   id?: string;
 }
 

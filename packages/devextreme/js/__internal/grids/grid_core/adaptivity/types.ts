@@ -2,6 +2,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 
 import type { Column } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
+import type { EditingController } from '../editing/editing';
+import type { CellBasedEditingControllerExtension } from '../editing/m_editing_cell_based';
+import type { FormBasedEditingControllerExtension } from '../editing/m_editing_form_based';
 import type { RowKey } from '../types';
 import type { ColumnsView } from '../views/columns_view';
 import type { ViewCellOptions, ViewRow } from '../views/types';
@@ -11,6 +14,10 @@ export interface AdaptivityDataController extends DataController {
   setAdaptiveExpandedKey: (key: RowKey) => void;
   toggleExpandAdaptiveDetailRow: (key?: RowKey, alwaysExpanded?: boolean) => void;
 }
+
+export type AdaptivityEditingController = EditingController
+  & CellBasedEditingControllerExtension
+  & FormBasedEditingControllerExtension;
 
 export interface AdaptiveDetailRowTarget {
   key: RowKey | undefined;

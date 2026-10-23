@@ -50,7 +50,7 @@ import type {
   NormalizedEditCellOptions,
 } from './types';
 
-export interface ICellBasedEditingControllerExtender {
+export interface CellBasedEditingControllerExtension {
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   isCellOrBatchEditMode(): boolean;
 
@@ -59,14 +59,16 @@ export interface ICellBasedEditingControllerExtender {
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   editCell(rowIndex: number, columnIndex: number | string): EditCellResult;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  beforeCloseEditCell(rowIndices: number[]): void;
 }
 
 const editingControllerExtender = (
   Base: ModuleType<EditingController>,
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type -- CellBasedEditingController is inferred from this class
-) => class CellBasedEditingControllerExtender extends Base
-  implements ICellBasedEditingControllerExtender {
+): ModuleType<
+  EditingController & CellBasedEditingControllerExtension
+> => class CellBasedEditingControllerExtender extends Base {
   private _pointerUpEditorHandler?: () => void;
 
   private _pointerDownEditorHandler?: (e: DxEvent) => void;
@@ -449,7 +451,7 @@ const editingControllerExtender = (
    * @extended: adaptivity
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
-  protected beforeCloseEditCell(rowIndices: number[]): void {}
+  public beforeCloseEditCell(rowIndices: number[]): void {}
 
   private _closeEditCellCore(
     isError: boolean | null | undefined,
@@ -810,11 +812,11 @@ const editingControllerExtender = (
   }
 };
 
-export type CellBasedEditingController = InstanceType<ReturnType<typeof editingControllerExtender>>;
-
 const rowsView = (
   Base: ModuleType<RowsView>,
 ): ModuleType<RowsView> => class RowsViewEditingCellBasedExtender extends Base {
+  public _editingController!: EditingController & CellBasedEditingControllerExtension;
+
   protected _createTable(columns?: Column[], isAppend?: boolean): dxElementWrapper {
     const $table = super._createTable(columns, isAppend);
     const isCellOrBatchEditMode = this._editingController.isCellOrBatchEditMode();
