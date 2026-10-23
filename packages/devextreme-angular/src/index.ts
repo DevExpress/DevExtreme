@@ -272,6 +272,7 @@ export namespace Common {
         export namespace Localization {
             export type Format = import('devextreme/common/core/localization').Format;
             export const formatDate = (CoreLocalizationModule as any).formatDate as typeof import('devextreme/common/core/localization').formatDate;
+            export type FormatLocale = import('devextreme/common/core/localization').FormatLocale;
             export const formatMessage = (CoreLocalizationModule as any).formatMessage as typeof import('devextreme/common/core/localization').formatMessage;
             export const formatNumber = (CoreLocalizationModule as any).formatNumber as typeof import('devextreme/common/core/localization').formatNumber;
             export const loadMessages = (CoreLocalizationModule as any).loadMessages as typeof import('devextreme/common/core/localization').loadMessages;

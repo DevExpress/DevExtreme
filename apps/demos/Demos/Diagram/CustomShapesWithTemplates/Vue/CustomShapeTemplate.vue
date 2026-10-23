@@ -50,7 +50,7 @@ function showEmployeeInfo() {
     #diagram .template .template-button {
       cursor: pointer;
       font-size: 8pt;
-      fill: navy;
+      fill: var(--dxds-color-content-blue, navy);
     }
 
     #diagram .template .template-button:hover {

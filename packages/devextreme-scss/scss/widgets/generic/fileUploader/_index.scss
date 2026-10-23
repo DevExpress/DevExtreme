@@ -4,7 +4,9 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/fileUploader";
+@use "../../base/fileUploader" with (
+  $fileuploader-file-container-padding: 4px 0 4px,
+);
 
 $generic-fileuploader-file-wrapper-border-size: 3px !default;
 
@@ -38,6 +40,9 @@ $generic-fileuploader-file-wrapper-border-size: 3px !default;
 
   .dx-fileuploader-input-label {
     text-align: center;
+    padding: $generic-fileuploader-vertical-padding * 2 $generic-fileuploader-vertical-padding + 2px;
+    border: $generic-fileuploader-file-wrapper-border-size dashed;
+    border-color: $fileuploader-border-color;
   }
 
   .dx-fileuploader-input-container {
@@ -55,12 +60,6 @@ $generic-fileuploader-file-wrapper-border-size: 3px !default;
     padding-bottom: $generic-fileuploader-vertical-padding * 2 + $generic-fileuploader-file-wrapper-border-size + 1px;
     padding-left: $generic-fileuploader-file-wrapper-border-size;
     box-sizing: content-box;
-  }
-
-  .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: $generic-fileuploader-vertical-padding * 2 $generic-fileuploader-vertical-padding + 2px;
-    border: $generic-fileuploader-file-wrapper-border-size dashed;
-    border-color: $fileuploader-border-color;
   }
 }
 

@@ -2,7 +2,7 @@
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { ModuleType } from '@ts/grids/grid_core/types';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
 

@@ -6,13 +6,13 @@ import { getHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
-import gridCoreUtils from '../m_utils';
 import type { ModuleType } from '../types';
-import type { ColumnsView } from '../views/m_columns_view';
-import type { RowsView } from '../views/m_rows_view';
+import gridCoreUtils from '../utils';
+import type { ColumnsView } from '../views/columns_view';
+import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
 import { createColumnsInfo } from './m_virtual_columns_core';
 
@@ -138,7 +138,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     if (typeof width === 'number') {
       return width;
     }
-    return this._resizingController._lastWidth || getOuterWidth(this.component.$element());
+    return this._resizingController._lastWidth || getOuterWidth(this.component.$element().get(0));
   }
 
   private getEndPageIndex(position) {

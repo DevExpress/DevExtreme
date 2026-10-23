@@ -1,11 +1,14 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { ResponseStatus } from '@js/common/grids';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { isObject } from '@js/core/utils/type';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Message } from '@js/ui/chat';
 import { custom } from '@js/ui/dialog';
 import { current, isCompact, isFluent } from '@js/ui/themes';
+import { themeLength } from '@ts/core/utils/theme_length';
 import type { BaseDialog, DialogParams } from '@ts/ui/dialog';
+import type { z } from 'zod';
 
 import {
   AI_ASSISTANT_AUTHOR_ID,
@@ -49,6 +52,20 @@ export const getMessageStatus = (commands: CommandResult[]): ResponseStatus => {
   }
 
   return 'success';
+};
+
+export const makeOpenAICompatible = (
+  { jsonSchema }: { jsonSchema: z.core.JSONSchema.BaseSchema },
+): void => {
+  if (jsonSchema.type === 'object' && jsonSchema.properties) {
+    const propertyNames = Object.keys(jsonSchema.properties);
+
+    if (propertyNames.length > 0) {
+      jsonSchema.required = propertyNames;
+    }
+
+    jsonSchema.additionalProperties ??= false;
+  }
 };
 
 /**
@@ -109,29 +126,6 @@ export const expandTypeArraysToAnyOf = (
   return result;
 };
 
-/** Resolves a JSON Pointer (e.g. `#/properties/expr/anyOf/0`) within a schema. */
-const resolveJsonPointer = (
-  schema: JsonSchema,
-  pointer: string,
-): unknown => {
-  if (!pointer.startsWith('#/')) {
-    return undefined;
-  }
-
-  const segments = pointer.slice(2).split('/');
-  let currentNode: unknown = schema;
-
-  for (const segment of segments) {
-    if (!currentNode || typeof currentNode !== 'object') {
-      return undefined;
-    }
-
-    currentNode = (currentNode as Record<string, unknown>)[segment];
-  }
-
-  return currentNode;
-};
-
 /** Recursively collects all `$ref` string values from a schema node. */
 const collectAllRefs = (node: unknown, refs: Set<string>): void => {
   if (!node || typeof node !== 'object') {
@@ -188,27 +182,9 @@ const rewriteRefs = (
 };
 
 /**
- * Derives a definition name from a `$ref` path.
- *
- * `#/$defs/MyType` → `"MyType"`,
- * `#/properties/expression/anyOf/0` → `"properties_expression_anyOf_0"`
- */
-const defNameFromRef = (ref: string): string => {
-  if (ref.startsWith('#/$defs/')) {
-    return ref.slice(8);
-  }
-
-  return ref.slice(2).replace(/\//g, '_');
-};
-
-/**
  * Extracts all `$ref` targets from each sub-schema, moves them into a
  * merged top-level `$defs` map, and rewrites every `$ref` to point to
  * `#/$defs/<prefix>_<name>`.
- *
- * Handles both `$defs`-based (`$ref: "#/$defs/Foo"`) and inline-path
- * (`$ref: "#/properties/expression/anyOf/0"`) references that
- * `zodToJsonSchema` may produce.
  *
  * OpenAI Structured Outputs requires every `$ref` to resolve against
  * `$defs` at the **root** of the schema. This utility rewrites local
@@ -233,15 +209,13 @@ export const hoistSchemaRefs = (
     const refMap = new Map<string, string>();
 
     for (const ref of refs) {
-      const baseName = defNameFromRef(ref);
+      const baseName = ref.slice('#/$defs/'.length);
       const prefixedName = `${prefix}_${baseName}`;
       const newRef = `#/$defs/${prefixedName}`;
 
       refMap.set(ref, newRef);
 
-      const resolved = ref.startsWith('#/$defs/')
-        ? (schema.$defs as JsonSchema | undefined)?.[baseName]
-        : resolveJsonPointer(schema, ref);
+      const resolved = (schema.$defs as JsonSchema | undefined)?.[baseName];
 
       if (resolved && typeof resolved === 'object') {
         mergedDefs[prefixedName] = JSON.parse(
@@ -287,7 +261,12 @@ const getCancelButtonConfig = (): ButtonProperties => {
   return {};
 };
 
-const getConfirmDialogWidth = (): number => {
+const getConfirmDialogWidth = (gridElement?: Element | dxElementWrapper): number => {
+  const fromTheme = themeLength(gridElement, '--dx-grid-ai-confirm-dialog-width');
+
+  if (fromTheme !== undefined) {
+    return fromTheme;
+  }
   if (isCompact(current())) {
     return AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH;
   }
@@ -295,11 +274,14 @@ const getConfirmDialogWidth = (): number => {
   return AI_ASSISTANT_CONFIRM_DIALOG_WIDTH;
 };
 
-export const createConfirmDialog = (options?: DialogParams): BaseDialog => custom({
+export const createConfirmDialog = (
+  options?: DialogParams,
+  gridElement?: Element | dxElementWrapper,
+): BaseDialog => custom({
   messageHtml: messageLocalization.format('dxDataGrid-aiAssistantAbortConfirmText'),
   showTitle: false,
   dragEnabled: false,
-  width: getConfirmDialogWidth(),
+  width: getConfirmDialogWidth(gridElement),
   buttons: [
     {
       text: messageLocalization.format('No'),

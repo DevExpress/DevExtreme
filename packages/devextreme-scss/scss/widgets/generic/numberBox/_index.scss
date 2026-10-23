@@ -2,10 +2,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
-@use "../../base/numberBox";
-@use "../textEditor" as *;
+@use "../../base/numberBox" with (
+  $numberbox-spin-idle-opacity: 0.2,
+);
 
 .dx-numberbox-spin-container {
   overflow: hidden;

@@ -4,6 +4,7 @@ import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilt
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 import { sales } from './data';
 
 fixture.disablePageReloads`pivotGrid_headerFilter`
@@ -92,5 +93,86 @@ test('[T1284200] Should handle dxList "selectAll" when has unselected items on t
   allowFiltering: true,
   fieldPanel: {
     visible: true,
+  },
+}));
+
+test.meta({ runInTheme: Themes.genericLight })('[T1336516] Field indicators align with the field caption in every area', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+
+  await t
+    .expect(pivotGrid.getFilterHeaderArea().getHeaderFilterIcon().element.exists)
+    .ok()
+    .expect(pivotGrid.getColumnHeaderArea().getHeaderFilterIcon().element.exists)
+    .ok()
+    .expect(pivotGrid.getRowHeaderArea().getHeaderFilterIcon().element.exists)
+    .ok();
+
+  await testScreenshot(t, takeScreenshot, 'headerFilter - icon alignment.png', {
+    element: pivotGrid.element,
+    shouldTestInCompact: true,
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxPivotGrid', {
+  width: 1000,
+  allowFiltering: true,
+  allowSorting: true,
+  showBorders: true,
+  fieldChooser: {
+    enabled: false,
+  },
+  fieldPanel: {
+    showColumnFields: true,
+    showDataFields: true,
+    showFilterFields: true,
+    showRowFields: true,
+    allowFieldDragging: false,
+    visible: true,
+  },
+  dataSource: {
+    fields: [{
+      caption: 'City',
+      dataField: 'city',
+      area: 'filter',
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }, {
+      groupName: 'date',
+      groupInterval: 'year',
+      expanded: true,
+    }, {
+      groupName: 'date',
+      groupInterval: 'quarter',
+      expanded: true,
+    }, {
+      groupName: 'date',
+      groupInterval: 'month',
+    }, {
+      caption: 'Region',
+      dataField: 'region',
+      area: 'row',
+    }, {
+      caption: 'Sales',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      area: 'data',
+    }],
+    store: [{
+      region: 'Africa',
+      city: 'Cairo',
+      amount: 500,
+      date: '2015-05-26',
+    }, {
+      region: 'South America',
+      city: 'Lima',
+      amount: 780,
+      date: '2015-05-07',
+    }],
   },
 }));

@@ -6,14 +6,13 @@
 @use "../sizes" as *;
 @use "../../base/diagram";
 @use "../../base/diagram/mixins" as *;
+@use "../../base/mask" as *;
 @use "../button/colors" as *;
 @use "../overlay/colors" as *;
-@use "../accordion/colors" as *;
 @use "../popup/colors" as *;
 @use "../speedDialAction/sizes" as *;
 @use "../fieldset/sizes" as *;
 @use "../fieldset/sizes" as *;
-@use "../menu/colors" as *;
 
 $fluent-diagram-toolbar-icon-size: $fluent-base-icon-size !default;
 $diagram-toolbar-colorbutton-border-width: 3px !default;
@@ -465,12 +464,14 @@ $diagram-toolbox-title-size: 18px !default;
 @include diagram-action-icons-mixin($base-text-color, $base-text-color, $fluent-diagram-toolbar-icon-size, $diagram-toolbar-colorbutton-border-width);
 
 .dx-diagram-toolbox-popup .dx-button-has-icon .dx-icon.dx-icon-diagram-toolbox-drag {
-  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-drag.svg"), $popup-title-color, $diagram-toolbox-title-size, $diagram-toolbox-title-size);
+  @include diagram-icon-masked("toolbox-drag", $diagram-toolbox-title-size, $diagram-toolbox-title-size);
+  @include masked-glyph-paint($popup-title-color);
 
   line-height: $diagram-toolbox-title-size;
   background-size: $diagram-toolbox-title-size $diagram-toolbox-title-size;
 }
 
 .dx-diagram-i-button-properties-panel-open {
-  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/properties-panel-open.svg"), $button-default-color, $fluent-diagram-toolbar-icon-size, $fluent-diagram-toolbar-icon-size);
+  @include diagram-icon-masked("properties-panel-open", $fluent-diagram-toolbar-icon-size, $fluent-diagram-toolbar-icon-size);
+  @include masked-glyph-paint($button-default-color);
 }

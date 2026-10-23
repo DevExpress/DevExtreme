@@ -14,7 +14,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
@@ -22,7 +22,7 @@ import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_c
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
 
@@ -30,8 +30,8 @@ import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
 import { isEditRow } from '../keyboard_navigation/utils';
-import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
+import gridCoreUtils from '../utils';
 import {
   CHECKBOXES_HIDDEN_CLASS,
   COMMAND_SELECT_CLASS,

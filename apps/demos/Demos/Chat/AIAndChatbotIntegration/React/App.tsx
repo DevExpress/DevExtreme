@@ -1,6 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Chat from 'devextreme-react/chat';
 import type { ChatTypes } from 'devextreme-react/chat';
+import Toolbar, { Item } from 'devextreme-react/toolbar';
+import type { ButtonTypes } from 'devextreme-react/button';
 import { loadMessages } from 'devextreme-react/common/core/localization';
 import {
   user,
@@ -24,6 +26,7 @@ export default function App() {
     insertMessage,
     fetchAIResponse,
     regenerateLastAIResponse,
+    clearMessages,
   } = useApi();
 
   const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
@@ -59,22 +62,47 @@ export default function App() {
     setIsProcessing(false);
   }, [regenerateLastAIResponse]);
 
+  const clearButtonOptions = useMemo((): ButtonTypes.Properties => ({
+    icon: 'clearhistory',
+    stylingMode: 'text',
+    hint: 'Clear chat',
+    disabled: isProcessing,
+    onClick: () => {
+      setTypingUsers([]);
+      clearMessages();
+    },
+  }), [isProcessing, clearMessages]);
+
   const messageRender = useCallback(({ message }: { message: ChatTypes.Message }) => <Message text={message.text} onRegenerateButtonClick={onRegenerateButtonClick} />, [onRegenerateButtonClick]);
 
   return (
-    <Chat
-      className={isProcessing ? CHAT_DISABLED_CLASS : ''}
-      dataSource={dataSource}
-      reloadOnChange={false}
-      showAvatar={false}
-      showDayHeaders={false}
-      user={user}
-      height={710}
-      onMessageEntered={onMessageEntered}
-      alerts={alerts}
-      typingUsers={typingUsers}
-      messageRender={messageRender}
-      speechToTextEnabled={true}
-    />
+    <div className="ai-chat-card">
+      <Toolbar>
+        <Item
+          location="before"
+          text="AI Assistant"
+          cssClass="ai-chat-title"
+        />
+        <Item
+          location="after"
+          widget="dxButton"
+          options={clearButtonOptions}
+        />
+      </Toolbar>
+      <Chat
+        className={isProcessing ? CHAT_DISABLED_CLASS : ''}
+        dataSource={dataSource}
+        reloadOnChange={false}
+        showAvatar={false}
+        showDayHeaders={false}
+        user={user}
+        height={710}
+        onMessageEntered={onMessageEntered}
+        alerts={alerts}
+        typingUsers={typingUsers}
+        messageRender={messageRender}
+        speechToTextEnabled={true}
+      />
+    </div>
   );
 }

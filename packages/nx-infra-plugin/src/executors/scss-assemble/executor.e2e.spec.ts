@@ -34,6 +34,11 @@ describe('ScssAssembleExecutor E2E', () => {
     fs.mkdirSync(path.join(scssPackageDir, 'scss'), { recursive: true });
     fs.mkdirSync(path.join(scssPackageDir, 'fonts'), { recursive: true });
     fs.mkdirSync(path.join(scssPackageDir, 'icons', 'material'), { recursive: true });
+    fs.mkdirSync(path.join(scssPackageDir, 'build'), { recursive: true });
+    fs.writeFileSync(
+      path.join(scssPackageDir, 'build', 'internal-scss-paths.json'),
+      JSON.stringify(['widgets/dropped/', 'bundles/dx.dropped.']),
+    );
   });
 
   afterEach(() => {
@@ -82,5 +87,64 @@ describe('ScssAssembleExecutor E2E', () => {
 
     expect(content).toContain(expectedSvg);
     expect(content).toContain(expectedPng);
+  });
+
+  it('should keep the paths listed as internal by the scss package out of the package', async () => {
+    await writeFileText(
+      path.join(scssPackageDir, 'scss', 'widgets', 'kept', '_index.scss'),
+      '.a {}',
+    );
+    await writeFileText(
+      path.join(scssPackageDir, 'scss', 'widgets', 'dropped', 'nested', '_index.scss'),
+      '.b {}',
+    );
+    await writeFileText(path.join(scssPackageDir, 'scss', 'bundles', 'dx.kept.scss'), '.c {}');
+    await writeFileText(
+      path.join(scssPackageDir, 'scss', 'bundles', 'dx.dropped.blue.light.scss'),
+      '.d {}',
+    );
+
+    const context = createMockContext({ root: tempDir });
+    const result = await executor(OPTIONS, context);
+
+    expect(result.success).toBe(true);
+    expect(fs.existsSync(path.join(outputDir, 'widgets', 'kept', '_index.scss'))).toBe(true);
+    expect(fs.existsSync(path.join(outputDir, 'bundles', 'dx.kept.scss'))).toBe(true);
+    expect(fs.existsSync(path.join(outputDir, 'widgets', 'dropped'))).toBe(false);
+    expect(fs.existsSync(path.join(outputDir, 'bundles', 'dx.dropped.blue.light.scss'))).toBe(
+      false,
+    );
+  });
+
+  it('should fail instead of publishing everything when the internal path list is missing', async () => {
+    await writeFileText(path.join(outputDir, 'widgets', 'kept', '_index.scss'), '.a {}');
+    await writeFileText(path.join(scssPackageDir, 'scss', 'placeholder.scss'), '.a {}');
+    fs.rmSync(path.join(scssPackageDir, 'build', 'internal-scss-paths.json'));
+
+    const context = createMockContext({ root: tempDir });
+    const result = await executor(OPTIONS, context);
+
+    expect(result.success).toBe(false);
+    expect(fs.existsSync(path.join(outputDir, 'placeholder.scss'))).toBe(false);
+    expect(await readFileText(path.join(outputDir, 'widgets', 'kept', '_index.scss'))).toBe(
+      '.a {}',
+    );
+  });
+
+  it('should drop files an earlier run left in the output directory', async () => {
+    await writeFileText(path.join(outputDir, 'widgets', 'renamed-away', '_index.scss'), '.old {}');
+    await writeFileText(
+      path.join(scssPackageDir, 'scss', 'widgets', 'kept', '_index.scss'),
+      '.new {}',
+    );
+
+    const context = createMockContext({ root: tempDir });
+    const result = await executor(OPTIONS, context);
+
+    expect(result.success).toBe(true);
+    expect(fs.existsSync(path.join(outputDir, 'widgets', 'renamed-away'))).toBe(false);
+    expect(await readFileText(path.join(outputDir, 'widgets', 'kept', '_index.scss'))).toBe(
+      '.new {}',
+    );
   });
 });

@@ -11,10 +11,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
-import { isDefined as _isDefined } from '@ts/core/utils/m_type';
+import { noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
+import { isDefined as _isDefined } from '@ts/core/utils/type';
 import { Label } from '@ts/viz/series/points/label';
 import symbolPoint from '@ts/viz/series/points/symbol_point';
 
@@ -494,12 +494,12 @@ export default _extend({}, symbolPoint, {
     const initialMinValue = that.initialMinValue;
     const initialValue = that.initialValue;
     const initialArgument = that.initialArgument;
-    const minValue = tooltip.formatValue(initialMinValue);
-    const value = tooltip.formatValue(initialValue);
+    const minValue = tooltip.formatValue(initialMinValue, undefined, that.series.valueType);
+    const value = tooltip.formatValue(initialValue, undefined, that.series.valueType);
 
     return {
       argument: initialArgument,
-      argumentText: tooltip.formatValue(initialArgument, 'argument'),
+      argumentText: tooltip.formatValue(initialArgument, 'argument', that.series.argumentType),
       valueText: `${minValue} - ${value}`,
       rangeValue1Text: minValue,
       rangeValue2Text: value,

@@ -115,8 +115,4 @@ Zod (Open Source - MIT License)
 Copyright (c) 2025 Colin McDonnell
 https://github.com/colinhacks/zod/blob/main/LICENSE
 
-zod-to-json-schema (Open Source - ISC License)
-Copyright (c) 2020, Stefan Terdell
-https://github.com/StefanTerdell/zod-to-json-schema/blob/master/LICENSE
-
 The open source libraries included in this product are done so pursuant to each individual open source library license and subject to the disclaimers and limitations on liability set forth in each open source library license.

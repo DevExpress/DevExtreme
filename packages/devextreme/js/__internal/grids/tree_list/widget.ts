@@ -1,6 +1,6 @@
 // NOTE: Order of imports important here and shouldn't be changed.
 /* eslint-disable simple-import-sort/imports */
-import TreeList from './m_widget_base';
+import TreeList from './widget_base';
 
 import './state_storing';
 import './module_not_extended/ai_column';

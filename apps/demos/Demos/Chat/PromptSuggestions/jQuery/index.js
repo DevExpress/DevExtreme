@@ -28,16 +28,22 @@ $(() => {
       temperature: 0.7,
     };
 
-    const response = await chatService.chat.completions.create(params);
+    const response = await chatService.chat.completions.create(params, { maxRetries: 0 });
     const data = { choices: response.choices };
 
     return data.choices[0].message?.content;
   }
 
-  function alertLimitReached() {
+  function getErrorMessage(err) {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
+  }
+
+  function alertError(message) {
     instance.option({
       alerts: [{
-        message: 'Request limit reached, try again in a minute.',
+        message,
       }],
     });
 
@@ -50,6 +56,7 @@ $(() => {
     isDisabled = disabled;
     instance.option({ suggestions: { disabled } });
     instance.element().toggleClass(CHAT_DISABLED_CLASS, disabled);
+    toolbar.option('items[1].options.disabled', disabled);
 
     if (disabled) {
       event?.target.blur();
@@ -67,17 +74,19 @@ $(() => {
     try {
       const aiResponse = await getAIResponse(messages);
 
-      setTimeout(() => {
-        instance.option({ typingUsers: [] });
+      await new Promise((resolve) => {
+        setTimeout(resolve, 200);
+      });
 
-        messages.push({ role: 'assistant', content: aiResponse });
+      instance.option({ typingUsers: [] });
 
-        renderAssistantMessage(aiResponse);
-      }, 200);
-    } catch {
+      messages.push({ role: 'assistant', content: aiResponse });
+
+      renderAssistantMessage(aiResponse);
+    } catch (err) {
       instance.option({ typingUsers: [] });
       messages.pop();
-      alertLimitReached();
+      alertError(getErrorMessage(err));
     } finally {
       toggleDisabledState(false, event);
     }
@@ -168,6 +177,31 @@ $(() => {
       }
     },
   };
+
+  function onClearButtonClick() {
+    store.length = 0;
+    messages.length = 1;
+    instance.option({ alerts: [], typingUsers: [] });
+    instance.option('suggestions', suggestions);
+    dataSource.reload();
+  }
+
+  const toolbar = $('#dx-ai-chat-toolbar').dxToolbar({
+    items: [{
+      location: 'before',
+      text: 'AI Assistant',
+      cssClass: 'ai-chat-title',
+    }, {
+      location: 'after',
+      widget: 'dxButton',
+      options: {
+        icon: 'clearhistory',
+        stylingMode: 'text',
+        hint: 'Clear chat',
+        onClick: onClearButtonClick,
+      },
+    }],
+  }).dxToolbar('instance');
 
   const instance = $('#dx-ai-chat').dxChat({
     user,

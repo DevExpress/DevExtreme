@@ -1,6 +1,7 @@
 $grid-cell-padding: 7px !default;
 $grid-texteditor-input-padding: 32px !default;
-$grid-total-footer-paddings: 7px !default;
+
+$grid-total-footer-padding-block: 14px !default;
 $grid-command-select-column-width: 70px !default;
 $grid-command-edit-column-width: 100px !default;
 $grid-command-edit-column-with-icons-width: 80px !default;
@@ -11,3 +12,34 @@ $grid-text-content-margin: 3px !default;
 $grid-sort-index-width: 12px !default;
 $grid-sort-index-offset: 3px !default;
 $grid-ai-assistant-confirm-dialog-button-width: 50px !default;
+
+$grid-context-menu-item-padding-block: 7px !default;
+$grid-context-menu-item-padding-inline-start: 5px !default;
+$grid-context-menu-item-padding-inline-end: 30px !default;
+$grid-context-menu-overlay-item-padding: 5px !default;
+$grid-context-menu-overlay-item-padding-inline-end: 30px !default;
+$grid-menu-bar-item-padding: 8px 5px 7px 5px !default;
+$grid-menu-caption-padding-inline-start: 6px !default;
+$grid-column-chooser-title-font-size: 16px !default;
+$grid-column-chooser-title-label-font-size: $grid-column-chooser-title-font-size !default;
+$grid-column-chooser-content-padding: 0 20px 20px 20px !default;
+$grid-column-chooser-item-margin-block-end: 10px !default;
+$grid-column-chooser-tree-view-item-padding-inline-start: 4px !default;
+$grid-column-separator-width: 3px !default;
+$grid-toolbar-button-margin-inline-start: 10px !default;
+$grid-search-panel-margin-inline-start: 15px !default;
+$grid-rowsview-empty-height: 100px !default;
+$grid-bottom-load-panel-padding: 10px !default;
+$grid-filter-panel-padding: 10px !default;
+$grid-filter-panel-checkbox-padding-inline-end: 10px !default;
+$grid-filter-panel-icon-margin-inline-end: 7px !default;
+
+@function grid-header-text-max-width($indicators, $margins, $sort-indexes: 0) {
+  $sum: calc($indicators * $grid-column-header-indicator-width + $margins * $grid-text-content-margin);
+
+  @if $sort-indexes > 0 {
+    $sum: calc($sum + $sort-indexes * $grid-sort-index-width);
+  }
+
+  @return calc(100% - $sum);
+}

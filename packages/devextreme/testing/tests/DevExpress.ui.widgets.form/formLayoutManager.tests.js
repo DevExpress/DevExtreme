@@ -434,4 +434,123 @@ QUnit.module('CSS position classes after screen size change', () => {
         instance.updateResponsiveBoxLayout();
         assertClasses(1);
     });
+
+    QUnit.test('items with colSpan should restore their layout when resizing back to a larger screen (T1336951)', function(assert) {
+        const colCountByScreen = { xs: 1, sm: 1, md: 2, lg: 4 };
+        let screen = 'lg';
+
+        const $container = $('#container');
+        const instance = $container.dxLayoutManager({
+            items: [
+                { dataField: 'field0', colSpan: 4 },
+                { dataField: 'field1', colSpan: 2 },
+                { dataField: 'field2', colSpan: 1 },
+                { dataField: 'field3', colSpan: 1 },
+                { dataField: 'field4', colSpan: 2 },
+                { dataField: 'field5', colSpan: 2 },
+            ],
+            colCount: 4,
+            colCountByScreen,
+            screenByWidth: () => screen,
+        }).dxLayoutManager('instance');
+
+        const getLocations = () => instance._responsiveBox.option('items').map(({ location }) => location);
+        const lgLocations = [
+            { row: 0, col: 0, colspan: 4 },
+            { row: 1, col: 0, colspan: 2 },
+            { row: 1, col: 2 },
+            { row: 1, col: 3 },
+            { row: 2, col: 0, colspan: 2 },
+            { row: 2, col: 2, colspan: 2 },
+        ];
+        const mdLocations = [
+            { row: 0, col: 0 },
+            { row: 0, col: 1 },
+            { row: 1, col: 0 },
+            { row: 1, col: 1 },
+            { row: 2, col: 0, colspan: 2 },
+            { row: 3, col: 0, colspan: 2 },
+        ];
+
+        assert.deepEqual(getLocations(), lgLocations, 'initial lg layout');
+
+        screen = 'md';
+        instance.updateResponsiveBoxLayout();
+        assert.deepEqual(getLocations(), mdLocations, 'md layout: spans that do not fit are dropped');
+
+        screen = 'lg';
+        instance.updateResponsiveBoxLayout();
+        assert.deepEqual(getLocations(), lgLocations, 'lg layout is restored');
+
+        const $fieldItems = $container.find(`.${FIELD_ITEM_CLASS}`);
+        assert.ok($fieldItems.eq(0).hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), 'colSpan=4 item: has dx-first-col');
+        assert.ok($fieldItems.eq(0).hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'colSpan=4 item: has dx-last-col');
+        assert.ok($fieldItems.eq(1).hasClass(`${FORM_FIELD_ITEM_COL_CLASS}0`), 'colSpan=2 item: has dx-col-0');
+        assert.notOk($fieldItems.eq(1).hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'colSpan=2 item: no dx-last-col');
+        assert.ok($fieldItems.eq(3).hasClass(`${FORM_FIELD_ITEM_COL_CLASS}3`), 'item after spans: has dx-col-3');
+        assert.ok($fieldItems.eq(3).hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'item after spans: has dx-last-col');
+        assert.ok($fieldItems.eq(5).hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'last colSpan=2 item: has dx-last-col');
+    });
+
+    QUnit.test('colSpan should survive multiple screen size transitions (T1336951)', function(assert) {
+        const colCountByScreen = { xs: 1, sm: 2, md: 3, lg: 4 };
+        let screen = 'lg';
+
+        const $container = $('#container');
+        const instance = $container.dxLayoutManager({
+            items: [
+                { dataField: 'field0', colSpan: 3 },
+                { dataField: 'field1' },
+                { dataField: 'field2', colSpan: 2 },
+                { dataField: 'field3', colSpan: 2 },
+            ],
+            colCount: 4,
+            colCountByScreen,
+            screenByWidth: () => screen,
+        }).dxLayoutManager('instance');
+
+        const getLocations = () => instance._responsiveBox.option('items').map(({ location }) => location);
+        const lgLocations = getLocations();
+
+        ['xs', 'sm', 'md', 'sm', 'xs', 'lg'].forEach((targetScreen) => {
+            screen = targetScreen;
+            instance.updateResponsiveBoxLayout();
+        });
+
+        assert.deepEqual(lgLocations, [
+            { row: 0, col: 0, colspan: 3 },
+            { row: 0, col: 3 },
+            { row: 1, col: 0, colspan: 2 },
+            { row: 1, col: 2, colspan: 2 },
+        ], 'initial lg layout');
+        assert.deepEqual(getLocations(), lgLocations, 'lg layout is restored after xs -> sm -> md -> sm -> xs -> lg');
+        assert.deepEqual(instance._items.map((item) => item.colSpan), [3, undefined, 2, 2], 'colSpan of items is intact');
+    });
+});
+
+QUnit.module('colCount: auto', () => {
+    QUnit.test('items with colSpan should keep the generated locations inside the grid', function(assert) {
+        const $container = $('#container').width(1000);
+        const instance = $container.dxLayoutManager({
+            colCount: 'auto',
+            minColWidth: 200,
+            items: [
+                { dataField: 'field0', colSpan: 2 },
+                { dataField: 'field1' },
+                { dataField: 'field2' },
+            ],
+        }).dxLayoutManager('instance');
+
+        const responsiveBox = instance._responsiveBox;
+        const locations = responsiveBox.option('items').map(({ location }) => location);
+
+        assert.strictEqual(instance._getColCount(), 3, '3 items fit into 3 columns');
+        assert.strictEqual(responsiveBox.option('cols').length, 3, 'cols ratio has 3 entries');
+        assert.strictEqual(responsiveBox.option('rows').length, 2, 'rows ratio has 2 entries');
+        assert.deepEqual(locations, [
+            { row: 0, col: 0, colspan: 2 },
+            { row: 0, col: 2 },
+            { row: 1, col: 0 },
+        ], 'locations stay inside the 3-column grid');
+    });
 });

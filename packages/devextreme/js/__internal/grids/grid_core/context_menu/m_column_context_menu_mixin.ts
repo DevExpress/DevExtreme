@@ -1,33 +1,28 @@
 import messageLocalization from '@js/common/core/localization/message';
+import type { ItemClickEvent } from '@js/ui/context_menu';
 
 import { Direction } from '../keyboard_navigation/const';
-import type { ColumnKeyboardNavigationController } from '../keyboard_navigation/m_column_keyboard_navigation_core';
 import type { ModuleType } from '../types';
-import type { ColumnsView } from '../views/m_columns_view';
-import { CONTEXT_MENU_MOVE_NEXT_ICON_NAME, CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME } from './const';
+import type { ContextMenuItemsOptions } from '../views/types';
+import { ICONS } from './const';
+import type { ColumnContextMenu, MixinBase, MoveColumnMenuItem } from './types';
 
-interface ColumnContextMenuMixinRequirements extends ColumnsView {
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  isColumnReorderingEnabled?(column: any): boolean;
-
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  getKeyboardNavigationController?(): ColumnKeyboardNavigationController;
-}
-
-export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMixinRequirements>>(Base: T) => class ColumnContextMenuMixin extends Base {
+export const ColumnContextMenuMixin = <T extends MixinBase>(
+  Base: T,
+): T & ModuleType<ColumnContextMenu> => class extends Base {
   protected isNeedToFocusColumn = false;
 
-  public getMoveColumnContextMenuItems(options): any {
+  public getMoveColumnContextMenuItems(options: ContextMenuItemsOptions): MoveColumnMenuItem[] {
     const { column, rowIndex } = options;
-    const allowColumnReordering = this.isColumnReorderingEnabled?.(options?.column);
+    const allowColumnReordering = this.isColumnReorderingEnabled?.(column);
     const keyboardNavigationController = this.getKeyboardNavigationController?.();
 
-    if (!allowColumnReordering || !keyboardNavigationController) {
+    if (!column || !allowColumnReordering || !keyboardNavigationController) {
       return [];
     }
 
     const rtlEnabled = this.option('rtlEnabled');
-    const onItemClick = (e) => {
+    const onItemClick = (e: ItemClickEvent<MoveColumnMenuItem>): void => {
       this.isNeedToFocusColumn = true;
       keyboardNavigationController.moveColumn(
         column,
@@ -48,7 +43,7 @@ export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMix
           Direction.Previous,
           rowIndex,
         ),
-        icon: rtlEnabled ? CONTEXT_MENU_MOVE_NEXT_ICON_NAME : CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME,
+        icon: rtlEnabled ? ICONS.moveColumnNext : ICONS.moveColumnPrevious,
         onItemClick,
       },
       {
@@ -61,7 +56,7 @@ export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMix
           Direction.Next,
           rowIndex,
         ),
-        icon: rtlEnabled ? CONTEXT_MENU_MOVE_PREVIOUS_ICON_NAME : CONTEXT_MENU_MOVE_NEXT_ICON_NAME,
+        icon: rtlEnabled ? ICONS.moveColumnPrevious : ICONS.moveColumnNext,
         onItemClick,
       },
     ];

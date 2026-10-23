@@ -50,23 +50,23 @@ function getCurrentTraining(date: number, employeeID: number) {
 }
 
 .dx-scheduler-appointment {
-  color: rgba(255, 255, 255, 1);
+  color: var(--dxds-color-content-on-color, #fff);
 }
 
 .employee-1 {
-  background-color: rgba(55, 126, 58, 0.08);
+  background-color: rgb(from var(--person-color-1, #377e3a) r g b / var(--dxds-opacity-10, 0.1));
 }
 
 .employee-2 {
-  background-color: rgba(194, 81, 0, 0.08);
+  background-color: rgb(from var(--person-color-2, #c25100) r g b / var(--dxds-opacity-10, 0.1));
 }
 
 .employee-weekend-1 {
-  background-color: rgba(55, 126, 58, 0.12);
+  background-color: rgb(from var(--person-color-1, #377e3a) r g b / var(--dxds-opacity-15, 0.15));
 }
 
 .employee-weekend-2 {
-  background-color: rgba(194, 81, 0, 0.12);
+  background-color: rgb(from var(--person-color-2, #c25100) r g b / var(--dxds-opacity-15, 0.15));
 }
 
 .training-background-0 {

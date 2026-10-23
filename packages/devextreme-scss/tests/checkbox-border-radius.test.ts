@@ -6,7 +6,7 @@ const scssRoot = path.resolve(__dirname, '..', 'scss');
 const probeSelector = '.probe';
 
 const extractBorderRadius = (css: string): string | null => {
-  const match = css.match(/\.probe\s*\{\s*border-radius:\s*([^;}]+)/);
+  const match = /\.probe\s*\{\s*border-radius:\s*([^;}]+)/.exec(css);
   return match ? match[1].trim() : null;
 };
 
@@ -62,7 +62,7 @@ describe('CheckBox border-radius capping (T1330300)', () => {
     test('large base-border-radius is capped at 2px', async () => {
       const css = await compile(genericSource('12px'));
       expect(extractBorderRadius(css)).toBe('2px');
-    })
+    });
 
     test('intermediate base-border-radius is not over-clamped', async () => {
       const css = await compile(genericSource('3px'));
@@ -99,4 +99,3 @@ describe('CheckBox border-radius capping (T1330300)', () => {
     });
   });
 });
-

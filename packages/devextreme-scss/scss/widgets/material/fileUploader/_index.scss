@@ -4,7 +4,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
-@use "../../base/fileUploader";
+@use "../../base/fileUploader" with (
+  $fileuploader-file-container-padding: 4px 0 4px,
+  $fileuploader-cancel-button-margin-top: 0,
+);
 
 $material-fileuploader-file-wrapper-border-size: 3px !default;
 
@@ -38,6 +41,9 @@ $material-fileuploader-file-wrapper-border-size: 3px !default;
 
   .dx-fileuploader-input-label {
     text-align: center;
+    padding: $material-fileuploader-vertical-padding * 2 $material-fileuploader-vertical-padding + 2px;
+    border: $material-fileuploader-file-wrapper-border-size dashed;
+    border-color: $fileuploader-border-color;
   }
 
   .dx-fileuploader-input-container {
@@ -55,12 +61,6 @@ $material-fileuploader-file-wrapper-border-size: 3px !default;
     padding-bottom: $material-fileuploader-vertical-padding * 2 + $material-fileuploader-file-wrapper-border-size + 1px;
     padding-left: $material-fileuploader-file-wrapper-border-size;
     box-sizing: content-box;
-  }
-
-  .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: $material-fileuploader-vertical-padding * 2 $material-fileuploader-vertical-padding + 2px;
-    border: $material-fileuploader-file-wrapper-border-size dashed;
-    border-color: $fileuploader-border-color;
   }
 }
 
@@ -173,9 +173,5 @@ $material-fileuploader-file-wrapper-border-size: 3px !default;
 
   .dx-fileuploader-button-container {
     vertical-align: middle;
-  }
-
-  .dx-fileuploader-cancel-button {
-    margin-top: 0;
   }
 }

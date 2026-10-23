@@ -6,6 +6,12 @@
 @use "../gridBase" as *;
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
+@use "../typography/sizes" as *;
+@use "../../base/gridBase/variables" with (
+  $grid-column-chooser-title-label-font-size: $material-m-font-size,
+  $grid-filter-panel-padding: 18px $material-grid-base-cell-horizontal-padding,
+  $grid-command-adaptive-column-width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size,
+);
 @use "../../base/dataGrid" as baseGrid with (
   $datagrid-border: $datagrid-border,
   $datagrid-border-color: $datagrid-border-color,
@@ -18,7 +24,8 @@
   $header-filter-color: $header-filter-color,
   $header-filter-color-empty: $header-filter-color-empty,
   $base-focus-color: $base-focus-color,
-  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-text-stub-mask-image: $datagrid-text-stub-mask-image,
+  $datagrid-text-stub-bg: $datagrid-text-stub-bg,
 );
 @use "layout/cell";
 @include grid-base(datagrid);

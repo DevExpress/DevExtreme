@@ -1,5 +1,5 @@
 import { Imd, addMetadata, replaceTypes, removeMembers } from 'devextreme-internal-tools/metadata';
-import { cleanArtifacts } from './common';
+import { cleanArtifacts, types } from './common';
 import { IMD_FILE, PATHS } from './common/paths';
 
 cleanArtifacts(IMD_FILE, 'IntegrationDataGenerator.cfg.json');
@@ -9,6 +9,15 @@ Imd.makeMetadata({
     artifacts: PATHS.artifactsDir,
   },
   mutations: [
+    // Normalize all DashStyle references: MemberRef -> UidRef
+    replaceTypes(/\.dashStyle/, ['*'], [types.uidRef('common/charts:DashStyle')]),
+    // Restore explicit undefined where declared
+    replaceTypes(
+      /^(?:common\/charts:SeriesLabel\.border|viz\/chart:dxChartSeriesTypesCommonSeries(?:HoverStyle|SelectionStyle)?Border|viz\/(?:pie_chart|polar_chart):.+\.border)\.dashStyle$/,
+      ['*'],
+      [types.uidRef('common/charts:DashStyle'), 'undefined'],
+    ),
+
     replaceTypes('common/grids:AIAssistant.chat', ['*'], ['object']),
     replaceTypes('common/grids:ColumnAIOptions.popup', ['*'], ['object']),
     replaceTypes('ui/card_view:dxCardViewOptions.filterBuilderPopup', ['*'], ['object']),

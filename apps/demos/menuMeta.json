@@ -155,6 +155,26 @@
                 "DemoType": "Web"
               }
             ]
+          },
+          {
+            "Name": "Page-Level AI Assistant",
+            "Equivalents": "AI-Powered Assistant, Page-Level Copilot, Smart Chat Orchestrator, UI Automation Chat, Contextual AI Assistant, Page-level AI Assistant",
+            "Demos": [
+              {
+                "Title": "Page-Level AI Assistant",
+                "Name": "PageLevelAIAssistant",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Modules": "openai",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Views/Chat/PageLevelAIAssistantForm.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantGrid.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantChat.cshtml"
+                ]
+              }
+            ]
           }
         ]
       },
@@ -4457,6 +4477,25 @@
                   "/Models/Chat/User.cs",
                   "/Models/Chat/Message.cs",
                   "/ViewModels/ChatViewModel.cs"
+                ]
+              }
+            ]
+          },
+          {
+            "Name": "Page-Level AI Assistant",
+            "Equivalents": "AI-Powered Assistant, Page-Level Copilot, Smart Chat Orchestrator, UI Automation Chat, Contextual AI Assistant, Page-level AI Assistant",
+            "Demos": [
+              {
+                "Title": "Page-Level AI Assistant",
+                "Name": "PageLevelAIAssistant",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "Modules": "openai",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Views/Chat/PageLevelAIAssistantForm.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantGrid.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantChat.cshtml"
                 ]
               }
             ]

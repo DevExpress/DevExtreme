@@ -2,7 +2,9 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/fileManager";
+@use "../../base/fileManager" with (
+  $filemanager-button-content-padding: $filemanager-file-actions-button-top-bottom-padding 6px,
+);
 @use "../../base/fileManager/mixins" as *;
 @use "../splitterBar";
 
@@ -244,10 +246,6 @@
   .dx-button {
     min-width: $filemanager-file-actions-button-size;
     height: $filemanager-file-actions-button-size;
-
-    .dx-button-content {
-      padding: $filemanager-file-actions-button-top-bottom-padding 6px;
-    }
   }
 }
 

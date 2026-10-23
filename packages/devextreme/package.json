@@ -63,8 +63,7 @@
     "inferno-create-element": "catalog:",
     "jszip": "^3.10.1",
     "rrule": "^2.7.1",
-    "zod": "catalog:",
-    "zod-to-json-schema": "catalog:"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "7.29.7",
@@ -126,7 +125,7 @@
     "ts-jest": "29.4.12",
     "typescript": "catalog:tools",
     "typescript-min": "npm:typescript@4.9.5",
-    "vite": "8.0.16",
+    "vite": "8.1.6",
     "webpack": "5.105.4"
   },
   "scripts": {

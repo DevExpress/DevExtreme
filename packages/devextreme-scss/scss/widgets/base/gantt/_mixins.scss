@@ -1,76 +1,98 @@
-@use "sass:string";
-@use "../string" as *;
+@use "../mask" as *;
 
-@mixin gantt-icon-colored($data-uri, $color) {
-  $uri: replace("#{$data-uri}", "currentColor", escape("#{$color}"));
-
-  background-image: string.unquote($uri);
+@mixin gantt-icon-masked($name) {
+  mask-image: var(--dxicon-gantt-#{$name});
 }
 
-@mixin gantt-icons-mixin($color) {
+@mixin gantt-icons-mixin($color: null) {
+  @at-root :root {
+    --dxicon-gantt-add: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add.svg"))};
+    --dxicon-gantt-add-sub-task: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add-sub-task.svg"))};
+    --dxicon-gantt-add-task: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add-task.svg"))};
+    --dxicon-gantt-collapse: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/collapse.svg"))};
+    --dxicon-gantt-delete: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/delete.svg"))};
+    --dxicon-gantt-delete-dependency: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/delete-dependency.svg"))};
+    --dxicon-gantt-expand: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/expand.svg"))};
+    --dxicon-gantt-full-screen: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/full-screen.svg"))};
+    --dxicon-gantt-redo: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/redo.svg"))};
+    --dxicon-gantt-task-details: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/task-details.svg"))};
+    --dxicon-gantt-undo: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/undo.svg"))};
+    --dxicon-gantt-zoom-in: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/zoom-in.svg"))};
+    --dxicon-gantt-zoom-out: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/zoom-out.svg"))};
+    --dxicon-gantt-resource-manager: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/resource-manager.svg"))};
+    --dxicon-gantt-toggle-resources: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/toggle-resources.svg"))};
+    --dxicon-gantt-toggle-dependencies: #{mask-shape(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/toggle-dependencies.svg"))};
+  }
+
   .dx-gantt-i {
+    mask-position: 50% 50%;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+
+    @include masked-glyph-paint($color or currentColor);
+
     &.dx-gantt-i-add {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add.svg"), $color);
+      @include gantt-icon-masked("add");
     }
 
     &.dx-gantt-i-add-sub-task {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add-sub-task.svg"), $color);
+      @include gantt-icon-masked("add-sub-task");
     }
 
     &.dx-gantt-i-add-task {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add-task.svg"), $color);
+      @include gantt-icon-masked("add-task");
     }
 
     &.dx-gantt-i-collapse {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/collapse.svg"), $color);
+      @include gantt-icon-masked("collapse");
     }
 
     &.dx-gantt-i-delete {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/delete.svg"), $color);
+      @include gantt-icon-masked("delete");
     }
 
     &.dx-gantt-i-delete-dependency {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/delete-dependency.svg"), $color);
+      @include gantt-icon-masked("delete-dependency");
     }
 
     &.dx-gantt-i-expand {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/expand.svg"), $color);
+      @include gantt-icon-masked("expand");
     }
 
     &.dx-gantt-i-full-screen {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/full-screen.svg"), $color);
+      @include gantt-icon-masked("full-screen");
     }
 
     &.dx-gantt-i-redo {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/redo.svg"), $color);
+      @include gantt-icon-masked("redo");
     }
 
     &.dx-gantt-i-task-details {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/task-details.svg"), $color);
+      @include gantt-icon-masked("task-details");
     }
 
     &.dx-gantt-i-undo {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/undo.svg"), $color);
+      @include gantt-icon-masked("undo");
     }
 
     &.dx-gantt-i-zoom-in {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/zoom-in.svg"), $color);
+      @include gantt-icon-masked("zoom-in");
     }
 
     &.dx-gantt-i-zoom-out {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/zoom-out.svg"), $color);
+      @include gantt-icon-masked("zoom-out");
     }
 
     &.dx-gantt-i-resource-manager {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/resource-manager.svg"), $color);
+      @include gantt-icon-masked("resource-manager");
     }
 
     &.dx-gantt-i-toggle-resources {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/toggle-resources.svg"), $color);
+      @include gantt-icon-masked("toggle-resources");
     }
 
     &.dx-gantt-i-toggle-dependencies {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/toggle-dependencies.svg"), $color);
+      @include gantt-icon-masked("toggle-dependencies");
     }
   }
 }

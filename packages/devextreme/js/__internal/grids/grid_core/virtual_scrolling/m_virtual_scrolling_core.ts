@@ -12,8 +12,8 @@ import type {
   VirtualItemsCount,
 } from '@ts/grids/grid_core/virtual_data_loader/types';
 
-import gridCoreUtils from '../m_utils';
-import { VirtualDataLoader } from '../virtual_data_loader/m_virtual_data_loader';
+import gridCoreUtils from '../utils';
+import { VirtualDataLoader } from '../virtual_data_loader/virtual_data_loader';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -179,12 +179,13 @@ class VirtualScrollController {
       const dataOptions = this._dataOptions;
       const totalItemsCount = dataOptions.totalItemsCount();
       if (this.option(LEGACY_SCROLLING_MODE) === false && totalItemsCount !== -1) {
+        const renderedItemsRange = dataOptions.renderedItemsRange?.();
         const viewportParams = this.getViewportParams();
         const loadedOffset = dataOptions.loadedOffset();
         const loadedItemCount = dataOptions.loadedItemCount();
 
-        const skip = Math.max(viewportParams.skip, loadedOffset);
-        const take = Math.min(viewportParams.take, loadedItemCount);
+        const skip = renderedItemsRange?.skip ?? Math.max(viewportParams.skip, loadedOffset);
+        const take = renderedItemsRange?.take ?? Math.min(viewportParams.take, loadedItemCount);
 
         const endItemsCount = Math.max(totalItemsCount - (skip + take), 0);
         return {

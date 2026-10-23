@@ -34,8 +34,8 @@ const DATA_GRID_FEATURE_MAP: Record<string, string> = {
   data_source_adapter: 'Data',
   core: 'Core',
   widget: 'Core',
-  m_widget_base: 'Core',
-  m_utils: 'Core',
+  widget_base: 'Core',
+  utils: 'Core',
   m_editing: 'Editing',
   grouping: 'Grouping',
   summary: 'Summary',
@@ -43,7 +43,7 @@ const DATA_GRID_FEATURE_MAP: Record<string, string> = {
   keyboard_navigation: 'Navigation',
   focus: 'Navigation',
   columns_controller: 'Columns',
-  m_aggregate_calculator: 'Data',
+  aggregate_calculator: 'Data',
   module_not_extended: 'Passthrough',
 };
 
@@ -104,4 +104,4 @@ export function getFeatureAreaFromPath(relPath: string): string {
   return 'Other';
 }
 
-export const WIDGET_BASE_FILE = path.resolve(DATA_GRID_ROOT, 'm_widget_base.ts');
+export const WIDGET_BASE_FILE = path.resolve(DATA_GRID_ROOT, 'widget_base.ts');

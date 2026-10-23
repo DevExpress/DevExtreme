@@ -5,6 +5,7 @@ import { createRequire } from 'module';
 import { glob } from 'glob';
 import { createExecutor } from '../../utils/create-executor';
 import { normalizeGlobPathForWindows } from '../../utils/path-resolver';
+import { watchWithChokidar } from '../../utils/watch';
 import { ensureDir, exists, readFileText, writeFileText } from '../../utils/file-operations';
 import { encodeDataUriContent } from '../../utils/scss-data-uri';
 import { DEFAULT_EULA_URL } from '../add-license-headers/defaults';
@@ -13,6 +14,12 @@ import { ScssBuildExecutorSchema } from './schema';
 
 const DEFAULT_BUNDLES_DIR = './scss/bundles';
 const DEFAULT_CSS_OUTPUT_DIR = '../devextreme/artifacts/css';
+const ACCENT_SOURCES_DIR = './scss/_design-system/fluent/accents';
+const ACCENT_OUTPUT_DIR_NAME = 'accents';
+const LEADING_COMMENT_REGEX = /^\s*\/\*[\s\S]*?\*\/\s*/;
+const GENERATOR_BANNER_MARKER = 'auto-generated';
+const TOKENS_PACKAGE = '@devexpress/design-tokens-internal';
+const TOKEN_BUILT_BUNDLE_PREFIX = 'dx.fluent-next.';
 const DEFAULT_DEV_BUNDLE_NAMES = [
   'light',
   'light.compact',
@@ -26,6 +33,9 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
   'fluent.blue.dark',
   'fluent.saas.light',
   'fluent.saas.dark',
+  'fluent-next.blue.light',
+  'fluent-next.blue.light.compact',
+  'fluent-next.blue.dark',
 ];
 
 interface BuildDependencies {
@@ -37,6 +47,7 @@ interface BuildDependencies {
   cleanCssSanitizeOptions: unknown;
   cleanCssDevOptions: unknown;
   devextremeVersion: string;
+  tokensVersion: string | null;
 }
 
 type MinifyProfile = 'all' | 'ci';
@@ -52,11 +63,16 @@ function readFileDataUri(filePath: string, svgEncoding?: string): string {
   return encodeDataUriContent(buffer, filePath, svgEncoding);
 }
 
-function createStarLicenseHeader(fileName: string, version: string): string {
+function createStarLicenseHeader(
+  fileName: string,
+  version: string,
+  tokensVersion?: string | null,
+): string {
   return [
     '/**',
     `* DevExtreme (${fileName.replace(/\\/g, '/')})`,
     `* Version: ${version}`,
+    ...(tokensVersion ? [`* Design tokens: ${TOKENS_PACKAGE} ${tokensVersion}`] : []),
     `* Build date: ${new Date().toDateString()}`,
     '*',
     `* Copyright (c) 2012 - ${new Date().getFullYear()} Developer Express Inc. ALL RIGHTS RESERVED`,
@@ -74,7 +90,7 @@ function prependLicenseAndMoveCharsetFirst(minifiedCss: string, license: string)
 function generateBundleName(theme: string, size: string, color: string, mode?: string): string {
   return (
     'dx'
-    + (theme === 'material' || theme === 'fluent' ? `.${theme}` : '')
+    + (theme === 'material' || theme === 'fluent' || theme === 'fluent-next' ? `.${theme}` : '')
     + `.${color}`
     + (mode ? `.${mode}` : '')
     + (size === 'default' ? '' : '.compact')
@@ -109,6 +125,14 @@ async function generateScssBundles(
   await writeFileText(path.join(resolvedBundlesDir, 'dx.common.scss'), commonTemplate);
 }
 
+function readTokensVersion(projectRequire: NodeRequire): string | null {
+  try {
+    return projectRequire(`${TOKENS_PACKAGE}/package.json`).version ?? null;
+  } catch {
+    return null;
+  }
+}
+
 function loadDependencies(projectRoot: string): BuildDependencies {
   const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
 
@@ -117,7 +141,7 @@ function loadDependencies(projectRoot: string): BuildDependencies {
     postcss: projectRequire('postcss'),
     autoprefixer: projectRequire('autoprefixer'),
     CleanCss: projectRequire('clean-css'),
-    themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.cjs')) as {
+    themeOptions: projectRequire(path.resolve(projectRoot, 'build/theme-options.ts')) as {
       getThemes: () => Array<[string, string, string, string?]>;
     },
     cleanCssSanitizeOptions: projectRequire(
@@ -128,6 +152,7 @@ function loadDependencies(projectRoot: string): BuildDependencies {
     ),
     devextremeVersion: projectRequire(path.resolve(projectRoot, '../devextreme/package.json'))
       .version,
+    tokensVersion: readTokensVersion(projectRequire),
   };
 }
 
@@ -199,9 +224,46 @@ async function compileFile(
   const minified = minifier.minify(prefixed.css).styles;
 
   const outFileName = path.basename(sourceFile, '.scss') + '.css';
-  const license = createStarLicenseHeader(outFileName, deps.devextremeVersion);
+  const license = createStarLicenseHeader(
+    outFileName,
+    deps.devextremeVersion,
+    outFileName.startsWith(TOKEN_BUILT_BUNDLE_PREFIX) ? deps.tokensVersion : null,
+  );
   const withHeader = prependLicenseAndMoveCharsetFirst(minified, license);
   await writeFileText(path.join(outputDir, outFileName), withHeader);
+}
+
+async function compileAccentOverrides(
+  projectRoot: string,
+  cssOutputDir: string,
+  deps: BuildDependencies,
+): Promise<void> {
+  const accentSourcesDir = path.resolve(projectRoot, ACCENT_SOURCES_DIR);
+  const pattern = normalizeGlobPathForWindows(path.join(accentSourcesDir, '*.scss'));
+  const accentSources = await glob(pattern, { nodir: true });
+
+  if (accentSources.length === 0) {
+    throw new Error(`No accent palettes to compile in ${accentSourcesDir}`);
+  }
+
+  const accentOutputDir = path.join(cssOutputDir, ACCENT_OUTPUT_DIR_NAME);
+
+  for (const source of accentSources) {
+    logger.verbose(`Compiling accent ${source}`);
+    const compiled = deps.sass.compile(source);
+    const outFileName = `${path.basename(source, '.scss')}.css`;
+    const license = createStarLicenseHeader(
+      outFileName,
+      deps.devextremeVersion,
+      deps.tokensVersion,
+    );
+    const leadingComment = LEADING_COMMENT_REGEX.exec(compiled.css)?.[0] ?? '';
+    const css = leadingComment.includes(GENERATOR_BANNER_MARKER)
+      ? compiled.css.slice(leadingComment.length)
+      : compiled.css;
+    const withHeader = prependLicenseAndMoveCharsetFirst(css, license);
+    await writeFileText(path.join(accentOutputDir, outFileName), withHeader);
+  }
 }
 
 async function copyThemeAssets(projectRoot: string, cssOutputDir: string): Promise<void> {
@@ -277,19 +339,8 @@ async function runSingleBuild(
     logger.verbose(`Compiling ${source}`);
     await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
   }
-}
 
-function loadChokidar(projectRoot: string): {
-  watch: (
-    paths: string | string[],
-    options?: Record<string, unknown>,
-  ) => {
-    on: (event: string, handler: (...args: any[]) => void) => unknown;
-    close: () => Promise<void> | void;
-  };
-} {
-  const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
-  return projectRequire('chokidar');
+  await compileAccentOverrides(projectRoot, cssOutputDir, deps);
 }
 
 async function runWatchBuild(
@@ -300,6 +351,9 @@ async function runWatchBuild(
   const bundlesDir = options.bundlesDir || DEFAULT_BUNDLES_DIR;
   const cssOutputDir = path.resolve(projectRoot, options.cssOutputDir || DEFAULT_CSS_OUTPUT_DIR);
   const watchDir = path.resolve(projectRoot, 'scss');
+  const generatedBundlesDir = path.resolve(projectRoot, bundlesDir) + path.sep;
+  const isSourceChange = (filePath: string): boolean =>
+    filePath.endsWith('.scss') && !filePath.startsWith(generatedBundlesDir);
   const watchBundleNames = getWatchBundleNames(options);
   const minifyProfile: MinifyProfile = options.mode === 'ci' ? 'ci' : 'all';
 
@@ -316,65 +370,18 @@ async function runWatchBuild(
       await compileFile(source, cssOutputDir, minifyProfile, deps, projectRoot);
     }
 
+    await compileAccentOverrides(projectRoot, cssOutputDir, deps);
     await copyThemeAssets(projectRoot, cssOutputDir);
   };
 
   await rebuild();
-  logger.info('scss-build watch mode is watching for changes...');
 
-  await new Promise<void>((resolve) => {
-    let timer: NodeJS.Timeout | undefined;
-    let busy = false;
-    let pending = false;
-
-    const runRebuild = async (): Promise<void> => {
-      if (busy) {
-        pending = true;
-        return;
-      }
-
-      busy = true;
-      try {
-        await rebuild();
-        logger.info('scss-build watch: rebuild complete');
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        logger.error(`scss-build watch rebuild failed: ${message}`);
-      } finally {
-        busy = false;
-        if (pending) {
-          pending = false;
-          void runRebuild();
-        }
-      }
-    };
-
-    const scheduleRebuild = () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      timer = setTimeout(() => {
-        void runRebuild();
-      }, 200);
-    };
-
-    const chokidar = loadChokidar(projectRoot);
-    const watcher = chokidar.watch(path.join(watchDir, '**/*.scss'), {
-      ignoreInitial: true,
-    });
-    watcher.on('all', scheduleRebuild);
-
-    const stopWatcher = () => {
-      void watcher.close();
-      if (timer) {
-        clearTimeout(timer);
-      }
-      resolve();
-    };
-
-    process.once('SIGINT', stopWatcher);
-    process.once('SIGTERM', stopWatcher);
+  await watchWithChokidar({
+    projectRoot,
+    watchTargets: watchDir,
+    label: 'scss-build watch',
+    eventFilter: (_event, filePath) => isSourceChange(filePath),
+    onRebuild: rebuild,
   });
 }
 

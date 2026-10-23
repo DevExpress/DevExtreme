@@ -236,12 +236,12 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     const $element = this.$element();
     return $element.css('boxSizing') === 'border-box'
       ? {
-        width: getOuterWidth($element),
-        height: getOuterHeight($element),
+        width: getOuterWidth($element.get(0)),
+        height: getOuterHeight($element.get(0)),
       }
       : {
-        width: getWidth($element),
-        height: getHeight($element),
+        width: getWidth($element.get(0)),
+        height: getHeight($element.get(0)),
       };
   }
 
@@ -289,8 +289,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     }
 
     const $handle = $(e.target).closest(`.${RESIZABLE_HANDLE_CLASS}`);
-    const handleWidth = getOuterWidth($handle);
-    const handleHeight = getOuterHeight($handle);
+    const handleWidth = Number(getOuterWidth($handle));
+    const handleHeight = Number(getOuterHeight($handle));
     const handleOffset: Offset = $handle.offset() ?? { left: 0, top: 0 };
     const areaOffset = area.offset;
     const scrollOffset = this._getAreaScrollOffset();
@@ -661,8 +661,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     }
 
     const result: AreaResult = {
-      width: getInnerWidth($area),
-      height: getInnerHeight($area),
+      width: getInnerWidth($area.get(0)),
+      height: getInnerHeight($area.get(0)),
       offset: extend({
         top: 0,
         left: 0,
@@ -681,8 +681,9 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     result.offset.left += areaBorderLeft + this._getBorderWidth(this.$element(), 'left');
     result.offset.top += areaBorderTop + this._getBorderWidth(this.$element(), 'top');
 
-    result.width -= getOuterWidth(this.$element()) - getInnerWidth(this.$element());
-    result.height -= getOuterHeight(this.$element()) - getInnerHeight(this.$element());
+    result.width -= getOuterWidth(this.$element().get(0)) - getInnerWidth(this.$element().get(0));
+    result.height -= getOuterHeight(this.$element().get(0))
+      - getInnerHeight(this.$element().get(0));
   }
 
   _dragEndHandler(e: DxEvent): void {
@@ -690,8 +691,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
 
     this._resizeEndAction?.({
       event: e,
-      width: getOuterWidth($element),
-      height: getOuterHeight($element),
+      width: getOuterWidth($element.get(0)),
+      height: getOuterHeight($element.get(0)),
       handles: this._movingSides,
     });
 
@@ -761,13 +762,13 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       case 'minWidth':
       case 'maxWidth':
         if (hasWindow()) {
-          this._renderWidth(getOuterWidth(this.$element()));
+          this._renderWidth(getOuterWidth(this.$element().get(0)));
         }
         break;
       case 'minHeight':
       case 'maxHeight':
         if (hasWindow()) {
-          this._renderHeight(getOuterHeight(this.$element()));
+          this._renderHeight(getOuterHeight(this.$element().get(0)));
         }
         break;
       case 'onResize':

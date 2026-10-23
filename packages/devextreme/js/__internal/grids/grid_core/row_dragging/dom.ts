@@ -4,7 +4,7 @@
 import $ from '@js/core/renderer';
 
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports,
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import { CLASSES } from './const';
 
 const createHandleTemplateFunc = (addWidgetPrefix) => (container, options) => {

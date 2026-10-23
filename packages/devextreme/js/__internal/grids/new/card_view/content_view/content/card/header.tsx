@@ -2,7 +2,7 @@ import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import type { ValueChangedEvent } from '@js/ui/check_box';
 import type * as dxToolbar from '@js/ui/toolbar';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 import type { SelectCardOptions } from '@ts/grids/new/card_view/content_view/types';
 import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Toolbar } from '@ts/grids/new/grid_core/inferno_wrappers/toolbar';

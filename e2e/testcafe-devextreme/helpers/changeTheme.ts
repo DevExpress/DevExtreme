@@ -1,10 +1,17 @@
 import { ClientFunction } from 'testcafe';
 
-export const changeTheme = async (themeName: string):
+export const changeTheme = async (t: TestController, themeName: string):
 Promise<any> => ClientFunction(
   () => new Promise((resolve) => {
-    (window as any).DevExpress.ui.themes.ready(resolve);
-    (window as any).DevExpress.ui.themes.current(themeName);
+    const dxUi = (window as any).DevExpress?.ui;
+
+    if (!dxUi) {
+      resolve(undefined);
+      return;
+    }
+
+    dxUi.themes.ready(resolve);
+    dxUi.themes.current(themeName);
   }),
   { dependencies: { themeName } },
-)();
+).with({ boundTestRun: t })();

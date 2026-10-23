@@ -23,6 +23,7 @@
     $filterbuilder-remove-icon-hover-color: $filterbuilder-remove-icon-hover-color,
     $filterbuilder-remove-icon-focus-color: $filterbuilder-remove-icon-focus-color,
     $filterbuilder-menu-icon-color: $filterbuilder-menu-icon-color,
+  $filterbuilder-range-separator-opacity: 0.3,
 );
 @use "../textEditor/colors" as *;
 

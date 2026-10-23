@@ -7,11 +7,8 @@
 @use "../../base/icon_fonts" as *;
 @use "../common/sizes" as *;
 @use "../common/mixins" as *;
-@use "../button/sizes" as *;
-@use "../button/mixins" as *;
 @use "../../base/textEditor";
 @use "../../base/textEditor/mixins" as *;
-@use "../colorBox/sizes" as *;
 
 $generic-texteditor-border-width: $generic-base-border-width !default;
 $generic-texteditor-input-padding:

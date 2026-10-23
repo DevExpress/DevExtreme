@@ -13,13 +13,11 @@
 @use "../popup/colors" as *;
 @use "../popup/sizes" as *;
 @use "../menu/colors" as *;
-@use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
 @use "../button/sizes" as *;
 @use "../../base/button/mixins" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
-@use "../typography/sizes" as *;
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
@@ -294,7 +292,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
-      background-position-y: 49px;
+      mask-position: 0 49px;
     }
 
     .dx-command-drag {
@@ -517,10 +515,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         background-color: transparent;
         border-bottom: 1px solid;
         border-bottom-color: $popup-title-border-color;
-
-        .dx-toolbar-label {
-          font-size: $fluent-m-font-size;
-        }
       }
 
       .dx-popup-content {
@@ -1000,7 +994,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
   .dx-#{$widget-name}-filter-panel {
     background-color: $datagrid-base-background-color;
-    padding: 18px $fluent-grid-base-cell-horizontal-padding;
 
     .dx-#{$widget-name}-filter-panel-text,
     .dx-#{$widget-name}-filter-panel-clear-filter {

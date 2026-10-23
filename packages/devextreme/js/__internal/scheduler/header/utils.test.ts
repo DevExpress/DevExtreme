@@ -10,6 +10,7 @@ describe('agenda hiddenWeekDays support in header utils', () => {
     intervalCount: 1,
     agendaDuration: 3,
     skippedDays,
+    firstDayOfWeek: 0,
   };
 
   it('should build caption interval by calendar days', () => {
@@ -35,6 +36,7 @@ describe('day hiddenWeekDays support in header utils', () => {
       step: 'day',
       intervalCount: 1,
       skippedDays: [0, 6],
+      firstDayOfWeek: 0,
     })).toEqual({
       startDate: new Date(2026, 3, 13),
       endDate: new Date(2026, 3, 13, 23, 59, 59, 999),
@@ -47,6 +49,7 @@ describe('day hiddenWeekDays support in header utils', () => {
       step: 'day',
       intervalCount: 3,
       skippedDays: [0, 6],
+      firstDayOfWeek: 0,
     }, 1)).toEqual(new Date(2026, 3, 15));
   });
 
@@ -56,6 +59,7 @@ describe('day hiddenWeekDays support in header utils', () => {
       step: 'day',
       intervalCount: 1,
       skippedDays: [0, 6],
+      firstDayOfWeek: 0,
     }, 1)).toEqual(new Date(2026, 3, 14));
   });
 });

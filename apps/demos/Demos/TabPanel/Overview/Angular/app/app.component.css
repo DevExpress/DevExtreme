@@ -16,7 +16,7 @@
 }
 
 ::ng-deep .dx-theme-material .widget-container {
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 ::ng-deep .dx-tabpanel-tabs-position-left .dx-tabpanel-container,
@@ -40,7 +40,7 @@
   box-sizing: border-box;
   width: 272px;
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .caption {
@@ -68,7 +68,7 @@
   height: 50px;
   padding: 8px 12px 8px 8px;
   border-radius: 4px;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: var(--dxds-box-shadow-xs, 0 1px 4px 0 rgba(0, 0, 0, 0.15));
 }
 
 ::ng-deep .task-item::before {
@@ -82,15 +82,15 @@
 }
 
 ::ng-deep .task-item-priority-high::before {
-  background-color: #e1bee7;
+  background-color: var(--dxds-color-bg-red, #e1bee7);
 }
 
 ::ng-deep .task-item-priority-medium::before {
-  background-color: #ffe0b2;
+  background-color: var(--dxds-color-bg-yellow, #ffe0b2);
 }
 
 ::ng-deep .task-item-priority-low::before {
-  background-color: #c8e6c9;
+  background-color: var(--dxds-color-bg-green, #c8e6c9);
 }
 
 ::ng-deep .task-item-text,
@@ -118,9 +118,9 @@
 }
 
 ::ng-deep .dx-color-scheme-contrast .task-item {
-  border: 1px solid #fff;
+  border: 1px solid var(--dxds-color-border-on-color-shared, #fff);
 }
 
 ::ng-deep .dx-theme-fluent.dx-color-scheme-blue-dark .task-item {
-  background-color: #1f1f1f;
+  background-color: var(--dxds-color-bg-red, #1f1f1f);
 }

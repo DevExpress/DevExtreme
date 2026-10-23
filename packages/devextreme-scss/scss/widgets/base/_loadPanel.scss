@@ -1,7 +1,9 @@
 @use "./mixins" as *;
 
+$loadpanel-content-padding: 10px !default;
+
 .dx-loadpanel-content {
-  padding: 10px;
+  padding: $loadpanel-content-padding;
   text-align: center;
 
   @include user-select(none);

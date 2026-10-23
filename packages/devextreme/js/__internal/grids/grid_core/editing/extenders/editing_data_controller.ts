@@ -1,4 +1,3 @@
-import type { DataChange as EditingDataChange } from '@js/common/grids';
 import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -10,12 +9,12 @@ import type {
   UpdateChange,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
-import type { EditingController } from '../m_editing';
-import { isCellModified } from '../m_editing_utils';
+import type { EditingController } from '../editing';
+import { isCellModified } from '../editing_utils';
 
 export interface EditingDataControllerExtension {
   _editingController: EditingController;
@@ -173,7 +172,7 @@ export const editingDataControllerExtender = (
   }
 
   private _dropEditingStateForRemovedItems(dataSource: RawItemData[]): void {
-    const changes = this.option('editing.changes') as EditingDataChange[];
+    const changes = this._editingController.getChanges();
     if (!changes.length) {
       return;
     }

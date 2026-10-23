@@ -1,0 +1,19 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$gallery-indicator-size: ds.$spacing-80 !default;
+$gallery-indicator-size-selected: ds.$spacing-120 !default;
+$gallery-nav-button-inset-inline: ds.$spacing-80 !default;
+
+$gallery-nav-icon-font-size: ds.$spacing-320 !default;
+$gallery-nav-button-width: ds.$spacing-320 !default;
+$gallery-nav-button-height: ds.$spacing-320 !default;
+$gallery-nav-button-margin-block-start: calc(#{$gallery-nav-button-height} / -2) !default;
+$gallery-indicator-item-border-width: ds.$border-width-10 !default;
+$gallery-indicator-item-border-selected: ds.$border-width-20 solid !default;
+
+$gallery-border-width: ds.$border-width-10 !default;
+$gallery-indicator-inset-block-end: ds.$spacing-100 !default;
+$gallery-indicator-height: ds.$spacing-100 !default;
+
+$gallery-indicator-item-margin: calc((#{$gallery-indicator-height} - #{$gallery-indicator-size}) / 2) ds.$spacing-60 !default;
+$gallery-indicator-item-margin-selected: calc((#{$gallery-indicator-height} - #{$gallery-indicator-size-selected}) / 2) ds.$spacing-60 !default;

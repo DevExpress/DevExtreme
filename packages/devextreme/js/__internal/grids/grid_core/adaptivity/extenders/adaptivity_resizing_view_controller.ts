@@ -4,19 +4,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable prefer-rest-params */
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { ModuleType } from '@ts/grids/grid_core/types';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { COLUMN_VIEWS } from '../const';
 
 export const adaptivityResizingViewControllerExtender = (
   Base: ModuleType<ResizingController>,
 ): ModuleType<ResizingController> => class AdaptivityResizingViewControllerExtender extends Base {
-  public dispose() {
-    super.dispose.apply(this, arguments as any);
-    clearTimeout(this._updateScrollableTimeoutID);
-  }
-
   private isHiddenColumnsChanged(
     oldHiddenColumns: Column[],
     hiddenColumns: Column[],

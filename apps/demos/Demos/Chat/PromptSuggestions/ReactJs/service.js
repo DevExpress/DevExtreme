@@ -19,7 +19,7 @@ export async function getAIResponse(messages, delay) {
     max_completion_tokens: 1000,
     temperature: 0.7,
   };
-  const response = await chatService.chat.completions.create(params);
+  const response = await chatService.chat.completions.create(params, { maxRetries: 0 });
   const data = { choices: response.choices };
   if (delay) {
     await wait(delay);

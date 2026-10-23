@@ -4,9 +4,11 @@
 @use "../sizes" as *;
 @use "../scrollable/colors" as *;
 @use "../scrollable";
-@use "../../base/scrollView";
-
 $scrollview-loading-indicator-size: 42px !default;
+
+@use "../../base/scrollView" with (
+  $scrollview-pull-down-indicator-width: $scrollview-loading-indicator-size,
+);
 
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {

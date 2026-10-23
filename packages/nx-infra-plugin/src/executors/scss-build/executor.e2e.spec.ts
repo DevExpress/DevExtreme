@@ -5,6 +5,24 @@ import { ScssBuildExecutorSchema } from './schema';
 import { createMockContext, createTempDir, cleanupTempDir } from '../../utils/test-utils';
 import { writeFileText, writeJson, readFileText } from '../../utils';
 
+type WatchHandler = (event: string, filePath: string) => void;
+
+interface ChokidarMockState {
+  __scssWatchTargets?: string | string[];
+  __scssWatchHandler?: WatchHandler;
+}
+
+const chokidarMockState = globalThis as unknown as ChokidarMockState;
+
+async function waitFor(predicate: () => boolean, timeoutMs = 3000): Promise<void> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    if (predicate()) return;
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+  throw new Error('waitFor timed out');
+}
+
 function writeMockPackage(nodeModulesDir: string, packageName: string, mainFile: string): void {
   const packageDir = path.join(nodeModulesDir, packageName);
   fs.mkdirSync(packageDir, { recursive: true });
@@ -29,7 +47,9 @@ function createMockModules(projectRoot: string): void {
       '}',
       'module.exports = {',
       '  SassString,',
-      '  compile: () => ({ css: \'@charset "UTF-8"; .a{display:flex}\' })',
+      "  compile: (source) => ({ css: source.includes('unbannered')",
+      "    ? '/* not the banner */\\n:root{--first-declaration:1}\\n/* mentions auto-generated */\\n:root{--last-declaration:2}'",
+      '    : \'/**\\n * Do not edit directly, this file was auto-generated.\\n */\\n@charset "UTF-8"; .a{display:flex}\' })',
       '};',
       '',
     ].join('\n'),
@@ -77,9 +97,10 @@ function createMockModules(projectRoot: string): void {
     path.join(projectNodeModules, 'chokidar', 'index.js'),
     [
       'module.exports = {',
-      '  watch: function watch() {',
+      '  watch: function watch(paths) {',
+      '    globalThis.__scssWatchTargets = paths;',
       '    return {',
-      '      on: function on() { return this; },',
+      '      on: function on(event, handler) { globalThis.__scssWatchHandler = handler; return this; },',
       '      close: function close() { return Promise.resolve(); },',
       '    };',
       '  },',
@@ -124,15 +145,8 @@ async function setupProjectStructure(workspaceRoot: string): Promise<string> {
   await writeJson(path.join(devextremeDir, 'package.json'), { version: '26.1.0-test' });
 
   await writeFileText(
-    path.join(buildDir, 'theme-options.cjs'),
-    [
-      'module.exports = {',
-      '  getThemes: () => [',
-      "    ['generic', 'default', 'light'],",
-      '  ],',
-      '};',
-      '',
-    ].join('\n'),
+    path.join(buildDir, 'theme-options.ts'),
+    ['export const getThemes = () => [', "  ['generic', 'default', 'light'],", '];', ''].join('\n'),
   );
 
   await writeFileText(
@@ -142,6 +156,11 @@ async function setupProjectStructure(workspaceRoot: string): Promise<string> {
   await writeFileText(
     path.join(buildDir, 'bundle-template.generic.scss'),
     '.generic-$COLOR { color: red; }',
+  );
+
+  await writeFileText(
+    path.join(projectRoot, 'scss', '_design-system', 'fluent', 'accents', 'blue.scss'),
+    ':root { --dxds-primary-100: #0f6cbd; }',
   );
 
   createMockModules(projectRoot);
@@ -189,6 +208,56 @@ describe('ScssBuildExecutor E2E', () => {
     expect(commonCss).toContain('DevExtreme (dx.common.css)');
   });
 
+  it('compiles design-system accent sources into the accents subfolder without minification', async () => {
+    const projectRoot = await setupProjectStructure(tempDir);
+    await writeFileText(
+      path.join(projectRoot, 'scss', '_design-system', 'fluent', 'accents', 'storm.scss'),
+      ':root { --dxds-primary-100: #6d6a68; }',
+    );
+
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+
+    const options: ScssBuildExecutorSchema = { mode: 'all', cssOutputDir: './artifacts/css' };
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(true);
+
+    const stormCss = await readFileText(
+      path.join(projectRoot, 'artifacts', 'css', 'accents', 'storm.css'),
+    );
+    expect(stormCss).toContain('DevExtreme (storm.css)');
+    expect(stormCss).not.toContain('/*min:');
+    expect(stormCss).not.toContain('/*prefixed*/');
+    expect(stormCss).not.toContain('auto-generated');
+  });
+
+  it('strips only a leading generator banner, keeping css that merely mentions auto-generated', async () => {
+    const projectRoot = await setupProjectStructure(tempDir);
+    await writeFileText(
+      path.join(projectRoot, 'scss', '_design-system', 'fluent', 'accents', 'unbannered.scss'),
+      ':root { --dxds-primary-100: #6d6a68; }',
+    );
+
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+
+    await executor({ mode: 'all', cssOutputDir: './artifacts/css' }, context);
+
+    const unbanneredCss = await readFileText(
+      path.join(projectRoot, 'artifacts', 'css', 'accents', 'unbannered.css'),
+    );
+    expect(unbanneredCss).toContain('/* not the banner */');
+    expect(unbanneredCss).toContain('--first-declaration');
+    expect(unbanneredCss).toContain('--last-declaration');
+  });
+
   it('builds ci mode only for selected dev bundles and uses ci profile', async () => {
     const projectRoot = await setupProjectStructure(tempDir);
     const context = createMockContext({
@@ -219,6 +288,22 @@ describe('ScssBuildExecutor E2E', () => {
     expect(fs.existsSync(path.join(projectRoot, 'scss', 'bundles', 'dx.common.scss'))).toBe(true);
   });
 
+  it('fails when the design-system produced no accent palettes', async () => {
+    const projectRoot = await setupProjectStructure(tempDir);
+    fs.rmSync(path.join(projectRoot, 'scss', '_design-system'), { recursive: true });
+
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+
+    const options: ScssBuildExecutorSchema = { mode: 'all', cssOutputDir: './artifacts/css' };
+    const result = await executor(options, context);
+
+    expect(result.success).toBe(false);
+  });
+
   it('fails in ci mode when a configured bundle source is missing', async () => {
     await setupProjectStructure(tempDir);
     const context = createMockContext({
@@ -235,5 +320,71 @@ describe('ScssBuildExecutor E2E', () => {
     const result = await executor(options, context);
 
     expect(result.success).toBe(false);
+  });
+
+  it('watch mode watches the scss directory and rebuilds on source changes only', async () => {
+    const projectRoot = await setupProjectStructure(tempDir);
+    const context = createMockContext({
+      root: tempDir,
+      projectName: 'devextreme-scss',
+      projectRoot: 'packages/devextreme-scss',
+    });
+    const options: ScssBuildExecutorSchema = {
+      mode: 'all',
+      devBundles: ['light'],
+      cssOutputDir: './artifacts/css',
+      watch: true,
+    };
+    const lightCssPath = path.join(projectRoot, 'artifacts', 'css', 'dx.light.css');
+
+    const originalOnce = process.once;
+    let stopWatch: (() => void) | undefined;
+    let run: Promise<{ success: boolean }> | undefined;
+
+    (process as unknown as { once: typeof process.once }).once = ((
+      event: string,
+      handler: () => void,
+    ) => {
+      if (event === 'SIGINT' || event === 'SIGTERM') {
+        stopWatch = handler;
+        return process;
+      }
+      return originalOnce.call(process, event, handler as never);
+    }) as typeof process.once;
+
+    try {
+      run = executor(options, context);
+
+      await waitFor(() => typeof chokidarMockState.__scssWatchHandler === 'function');
+      expect(chokidarMockState.__scssWatchTargets).toBe(path.join(projectRoot, 'scss'));
+      fs.rmSync(lightCssPath);
+
+      chokidarMockState.__scssWatchHandler?.(
+        'change',
+        path.join(projectRoot, 'scss', 'bundles', 'dx.light.scss'),
+      );
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      expect(fs.existsSync(lightCssPath)).toBe(false);
+
+      chokidarMockState.__scssWatchHandler?.(
+        'change',
+        path.join(projectRoot, 'scss', 'widgets', '_button.scss'),
+      );
+      await waitFor(() => fs.existsSync(lightCssPath));
+
+      stopWatch?.();
+      stopWatch = undefined;
+
+      expect((await run).success).toBe(true);
+      run = undefined;
+    } finally {
+      stopWatch?.();
+      if (run) {
+        await run;
+      }
+      (process as unknown as { once: typeof process.once }).once = originalOnce;
+      delete chokidarMockState.__scssWatchTargets;
+      delete chokidarMockState.__scssWatchHandler;
+    }
   });
 });

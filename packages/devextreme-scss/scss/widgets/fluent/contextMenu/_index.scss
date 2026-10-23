@@ -4,11 +4,12 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../button/sizes" as *;
 @use "../menuBase/sizes" as *;
 @use "../menu/colors" as *;
 @use "../menu/sizes" as *;
-@use "../../base/contextMenu";
+@use "../../base/contextMenu" with (
+  $contextmenu-menu-items-container-padding: $fluent-context-menu-items-container-padding,
+);
 @use "../overlay";
 @use "../menuBase" as *;
 
@@ -18,7 +19,6 @@
   .dx-menu-items-container {
     display: flex;
     flex-direction: column;
-    padding: $fluent-context-menu-items-container-padding;
     gap: $fluent-context-menu-items-container-gap;
   }
 

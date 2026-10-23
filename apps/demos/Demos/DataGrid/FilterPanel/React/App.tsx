@@ -15,9 +15,6 @@ import type { Order, OrderFilter } from './data.ts';
 const saleAmountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
 };
 const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
 

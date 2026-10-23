@@ -106,8 +106,6 @@ const getIgnoredRules = (testName) => {
     'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
-
-    'Localization-UsingGlobalize': ['label'],
   };
 
   return [
@@ -226,6 +224,12 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       return;
     }
 
+    if (process.env.STRATEGY === 'accessibility'
+      && process.env.THEME?.startsWith('fluent-next')
+      && getIgnoredRules(testName).includes('color-contrast')) {
+      return;
+    }
+
     runTestAtPage(
       test,
       pageURL
@@ -250,9 +254,14 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
         if (process.env.STRATEGY === 'accessibility') {
           const ignoredRules = getIgnoredRules(testName);
-          const options = { rules: {} };
+          const isDesignSystemFluent = process.env.THEME?.startsWith('fluent-next');
+          const colorContrastIgnored = ignoredRules.includes('color-contrast');
+          const options = isDesignSystemFluent
+            ? { runOnly: { type: 'rule' as const, values: colorContrastIgnored ? [] : ['color-contrast'] }, rules: {} }
+            : { rules: {} };
 
           ignoredRules.forEach((ruleName) => {
+            if (isDesignSystemFluent && ruleName === 'color-contrast') return;
             options.rules[ruleName] = { enabled: false };
           });
 

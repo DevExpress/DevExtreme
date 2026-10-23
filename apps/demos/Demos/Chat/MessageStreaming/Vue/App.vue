@@ -1,58 +1,75 @@
 <template>
   <div class="chat-container">
-    <DxChat
-      :height="710"
-      :data-source="dataSource"
-      :reload-on-change="false"
-      :show-avatar="false"
-      :show-day-headers="false"
-      :user="user"
-      :speech-to-text-enabled="true"
-      :typing-users="typingUsers"
-      :alerts="alerts"
-      :send-button-options="sendButtonOptions"
-      message-template="message"
-      empty-view-template="emptyView"
-      @message-entered="onMessageEntered($event)"
-    >
-      <template #message="{ data }">
-        <div
-          v-html="convertToHtml(data.message.text)"
-          class="chat-messagebubble-text"
+    <div class="ai-chat-card">
+      <DxToolbar>
+        <DxItem
+          location="before"
+          text="AI Assistant"
+          css-class="ai-chat-title"
         />
-      </template>
+        <DxItem
+          location="after"
+          widget="dxButton"
+          :options="clearButtonOptions"
+        />
+      </DxToolbar>
+      <DxChat
+        :height="710"
+        :data-source="dataSource"
+        :reload-on-change="false"
+        :show-avatar="false"
+        :show-day-headers="false"
+        :user="user"
+        :speech-to-text-enabled="true"
+        :typing-users="typingUsers"
+        :alerts="alerts"
+        :send-button-options="sendButtonOptions"
+        message-template="message"
+        empty-view-template="emptyView"
+        @message-entered="onMessageEntered($event)"
+      >
+        <template #message="{ data }">
+          <div
+            v-html="convertToHtml(data.message.text)"
+            class="chat-messagebubble-text"
+          />
+        </template>
 
-      <template #emptyView="{ data }">
-        <div>
-          <div class="dx-chat-messagelist-empty-message">{{ data.texts.message }}</div>
-          <div class="dx-chat-messagelist-empty-prompt">{{ data.texts.prompt }}</div>
-          <div class="chat-suggestion-cards">
-            <button
-              v-for="card in suggestionCards"
-              :key="card.title"
-              type="button"
-              class="chat-suggestion-card"
-              @click="sendSuggestion(card.prompt)"
-            >
-              <div class="chat-suggestion-card-title">{{ card.title }}</div>
-              <div class="chat-suggestion-card-prompt">{{ card.description }}</div>
-            </button>
+        <template #emptyView="{ data }">
+          <div>
+            <div class="dx-chat-messagelist-empty-message">{{ data.texts.message }}</div>
+            <div class="dx-chat-messagelist-empty-prompt">{{ data.texts.prompt }}</div>
+            <div class="chat-suggestion-cards">
+              <button
+                v-for="card in suggestionCards"
+                :key="card.title"
+                type="button"
+                class="chat-suggestion-card"
+                @click="sendSuggestion(card.prompt)"
+              >
+                <div class="chat-suggestion-card-title">{{ card.title }}</div>
+                <div class="chat-suggestion-card-prompt">{{ card.description }}</div>
+              </button>
+            </div>
           </div>
-        </div>
-      </template>
-    </DxChat>
+        </template>
+      </DxChat>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onBeforeMount } from 'vue';
 import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
+import { type DxButtonTypes } from 'devextreme-vue/button';
+import DxToolbar, { DxItem } from 'devextreme-vue/toolbar';
 import { loadMessages } from 'devextreme-vue/common/core/localization';
 import {
   dictionary,
   user,
   assistant,
   dataSource,
+  clearMessages,
   convertToHtml,
   ALERT_TIMEOUT,
   suggestionCards,
@@ -75,6 +92,20 @@ const sendButtonOptions = computed<DxChatTypes.SendButtonProperties>(() => (
     : { action: 'send', icon: 'arrowright', onClick: () => {} }
 ));
 
+const clearButtonOptions = computed<DxButtonTypes.Properties>(() => ({
+  icon: 'clearhistory',
+  stylingMode: 'text',
+  hint: 'Clear chat',
+  disabled: isStreaming.value,
+  onClick: onClearButtonClick,
+}));
+
+function onClearButtonClick(): void {
+  alerts.value = [];
+  typingUsers.value = [];
+  clearMessages();
+}
+
 function insertMessage(data: DxChatTypes.Message): void {
   dataSource.store().push([{ type: 'insert', data }]);
 }
@@ -92,17 +123,29 @@ function insertAssistantPlaceholder(): number {
   return id;
 }
 
-function alertLimitReached(): void {
-  alerts.value = [{ message: 'Request limit reached, try again in a minute.' }];
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+}
+
+function alertError(message: string): void {
+  alerts.value = [{ message }];
   setTimeout(() => { alerts.value = []; }, ALERT_TIMEOUT);
 }
 
 function createDelayedRenderer(onRender: (chunk: string) => void, delay = 20) {
   let queue: string[] = [];
   let rendering = false;
+  let idleResolve: (() => void) | null = null;
+
+  function notifyIdle() {
+    idleResolve?.();
+    idleResolve = null;
+  }
 
   function processQueue() {
-    if (!queue.length) { rendering = false; return; }
+    if (!queue.length) { rendering = false; notifyIdle(); return; }
     rendering = true;
     const chunk = queue.shift();
     if (chunk !== undefined) { onRender(chunk); }
@@ -114,7 +157,11 @@ function createDelayedRenderer(onRender: (chunk: string) => void, delay = 20) {
       queue.push(chunk);
       if (!rendering) { processQueue(); }
     },
-    stop() { queue = []; rendering = false; },
+    stop() { queue = []; rendering = false; notifyIdle(); },
+    waitForIdle(): Promise<void> {
+      if (!rendering) { return Promise.resolve(); }
+      return new Promise((resolve) => { idleResolve = resolve; });
+    },
   };
 }
 
@@ -153,18 +200,24 @@ async function fetchAIResponse(message: DxChatTypes.Message): Promise<void> {
     updateMessageText(assistantId, buffer);
   });
 
+  abortController.signal.addEventListener('abort', () => renderer.stop());
+
   try {
     await getAIResponseStream(messages, {
       onAborted: () => renderer.stop(),
       onDelta: renderer.pushChunk,
       signal: abortController.signal,
     });
+    await renderer.waitForIdle();
     typingUsers.value = [];
   } catch (e: unknown) {
+    renderer.stop();
     typingUsers.value = [];
-    if ((e as Error)?.name !== 'AbortError' && assistantId !== undefined) {
-      updateMessageText(assistantId, '');
-      alertLimitReached();
+    if (!abortController?.signal.aborted) {
+      if (assistantId !== undefined) {
+        updateMessageText(assistantId, '');
+      }
+      alertError(getErrorMessage(e));
     }
   } finally {
     abortController = null;
@@ -201,8 +254,31 @@ function sendSuggestion(prompt: string): void {
   justify-content: center;
 }
 
-.dx-chat {
+.ai-chat-card {
+  position: relative;
+  width: 100%;
   max-width: 900px;
+}
+
+.ai-chat-card > .dx-toolbar {
+  position: absolute;
+  height: var(--dxds-spacing-480, 48px);
+  padding-inline: var(--dxds-spacing-240, 24px);
+  border-bottom: var(--dx-border-width) solid var(--dx-color-border);
+  background-color: transparent;
+}
+
+.ai-chat-card > .dx-toolbar .dx-toolbar-items-container {
+  height: 100%;
+}
+
+.ai-chat-title .dx-toolbar-item-content {
+  font-size: var(--dxds-font-size-title-md, 20px);
+  font-weight: var(--dxds-font-weight-title-default, 600);
+}
+
+.ai-chat-card > .dx-chat {
+  padding-top: var(--dxds-spacing-480, 48px);
 }
 
 .dx-chat-messagelist-empty-image {
@@ -254,8 +330,8 @@ function sendSuggestion(prompt: string): void {
 .chat-suggestion-card {
   border-radius: 12px;
   padding: 16px;
-  border: 1px solid #EBEBEB;
-  background: #FAFAFA;
+  border: 1px solid var(--dxds-color-border-subtler, #EBEBEB);
+  background: var(--dxds-color-bg-canvas, #FAFAFA);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -269,20 +345,20 @@ function sendSuggestion(prompt: string): void {
 }
 
 .chat-suggestion-card:hover {
-  border: 1px solid #E0E0E0;
-  background: #F5F5F5;
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--dxds-color-border-subtle, #E0E0E0);
+  background: var(--dxds-color-bg-low, #F5F5F5);
+  box-shadow: var(--dxds-box-shadow-md, 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 4px 24px 0 rgba(0, 0, 0, 0.02));
 }
 
 .chat-suggestion-card-title {
-  color: #242424;
+  color: var(--dxds-color-content, #242424);
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
 }
 
 .chat-suggestion-card-prompt {
-  color: #616161;
+  color: var(--dxds-color-content-subtle, #616161);
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;

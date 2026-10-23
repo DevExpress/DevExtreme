@@ -15,7 +15,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import filteringUtils from '@js/ui/shared/filtering';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import { normalizeDataSourceOptions as oldNormalizeDataSourceOptions } from '@ts/data/data_source/utils';
 import {
   convertDataFromUTCToLocal,
@@ -23,7 +23,8 @@ import {
   isUTCFormat,
 } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header_filter/m_header_filter_core';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import { getHeaderFilterGroupParameters } from '@ts/grids/grid_core/header_filter/utils';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
 import type { HeaderFilterListType } from './types';
@@ -153,7 +154,7 @@ export const getDataSourceOptions = (
 
   const { grouping: localGrouping } = storeLoadAdapter.getLocalLoadOperations();
   const remoteGrouping = !localGrouping;
-  const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
+  const group = getHeaderFilterGroupParameters(column, remoteGrouping);
   const headerFilterDataSource = column.headerFilter?.dataSource;
   const options: any = {};
 

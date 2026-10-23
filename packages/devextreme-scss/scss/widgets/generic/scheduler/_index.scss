@@ -1,4 +1,3 @@
-@use "sass:math";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -6,9 +5,14 @@
 @use "../list/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../../base/scheduler/layout/header" as *;
-@use "../../base/mixins" as *;
-@use "../../base/icon_fonts" as *;
+@use "../typography/sizes" as *;
+$generic-scheduler-month-date-text-size: $generic-h5-font-size !default;
+
+$generic-scheduler-header-panel-table-cell-height: $generic-scheduler-workspace-date-table-cell-height !default;
+
 @use "../../base/scheduler" as baseScheduler with (
+  $scheduler-header-panel-table-cell-height: $generic-scheduler-header-panel-table-cell-height,
+  $scheduler-workspace-info-font-size: $generic-scheduler-workspace-info-text-size,
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
   $scheduler-tooltip-list-focused-bg: $list-item-hover-bg,
@@ -41,12 +45,13 @@
 
   $scheduler-appointment-popup-icon-margin-top: $generic-scheduler-appointment-popup-icon-margin-top,
   $scheduler-appointment-popup-repeat-end-item-height: $generic-scheduler-appointment-popup-repeat-end-item-height,
-  $scheduler-appointment-popup-repeat-end-item-vertical-margin: $generic-scheduler-appointment-popup-repeat-end-radio-margin-top
+  $scheduler-appointment-popup-repeat-end-item-vertical-margin: $generic-scheduler-appointment-popup-repeat-end-radio-margin-top,
+  $scheduler-tooltip-date-opacity: 0.8,
+  $scheduler-appointment-date-opacity: 0.7,
+  $agenda-appointment-details-opacity: 0.7,
+  $scheduler-month-date-text-size: $generic-scheduler-month-date-text-size,
 );
-@use "../button/colors" as *;
-@use "../tooltip/colors" as *;
-@use "../typography/sizes" as *;
-@use "../recurrenceEditor" as *;
+@use "../recurrenceEditor";
 @use "../scrollable";
 
 $generic-scheduler-appointment-reduced-content-padding: 40px !default;
@@ -54,11 +59,8 @@ $generic-scheduler-appointment-empty-transparent-border: 1px solid transparent !
 
 $generic-scheduler-all-day-table-cell-height: $generic-scheduler-workspace-date-table-cell-height * 1.5 !default;
 $generic-scheduler-collapsed-all-day-table-cell-height: $generic-scheduler-workspace-date-table-cell-height * 0.5 !default;
-$generic-scheduler-header-panel-table-cell-height: $generic-scheduler-workspace-date-table-cell-height !default;
 
 $generic-scheduler-current-time-cell-border-size: 2px !default;
-
-$generic-scheduler-month-date-text-size: $generic-h5-font-size !default;
 
 $scheduler-first-of-month-border: 1px solid !default;
 
@@ -105,11 +107,8 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 }
 
 .dx-scheduler-header-panel-cell {
-  height: $generic-scheduler-header-panel-table-cell-height;
-
   &.dx-scheduler-header-panel-current-time-cell {
     &::before {
-      top: $generic-scheduler-header-panel-table-cell-height - $generic-scheduler-current-time-cell-border-size - 1;
       height: $generic-scheduler-current-time-cell-border-size;
     }
   }
@@ -186,7 +185,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   background-color: $scheduler-alldaypanel-bg;
 }
 
-.dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
+.dx-scheduler-work-space {
   &.dx-scheduler-work-space-grouped {
     .dx-scheduler-all-day-title {
       border-top: baseScheduler.$scheduler-base-border;
@@ -315,12 +314,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   }
 }
 
-.dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
-  font-size: $generic-scheduler-month-date-text-size;
-}
-
-.dx-scheduler-header-panel,
-.dx-scheduler-time-panel,
 .dx-scheduler-group-header {
   font-size: $generic-scheduler-workspace-info-text-size;
 }
@@ -556,10 +549,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       }
     }
   }
-}
-
-.dx-scheduler-agenda-nodata {
-  font-size: $generic-scheduler-workspace-info-text-size;
 }
 
 .dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content .dx-popup-content .dx-list-item {

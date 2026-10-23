@@ -21,8 +21,8 @@ const test = (description, callback) => {
     return testFunc(description, callback);
 };
 const printOffset = offset => [
-    offset.x >= 0 ? `offset.x: ${offset.x}` : '',
-    offset.y >= 0 ? `offset.y: ${offset.y}` : ''
+    offset.left >= 0 ? `offset.left: ${offset.left}` : '',
+    offset.top >= 0 ? `offset.top: ${offset.top}` : ''
 ].join(',');
 
 testStart(() => initTestMarkup());
@@ -62,11 +62,11 @@ module('Virtual scrolling timelines', () => {
                 return asyncWrapper(assert, promise => {
                     [
                         {
-                            offset: { x: 0 },
+                            offset: { left: 0 },
                             expectedRects: []
                         },
                         {
-                            offset: { x: 2200 },
+                            offset: { left: 2200 },
                             expectedRects: [{
                                 left: -9099,
                                 top: -9833,
@@ -74,7 +74,7 @@ module('Virtual scrolling timelines', () => {
                             }]
                         },
                         {
-                            offset: { x: 3200 },
+                            offset: { left: 3200 },
                             expectedRects: [{
                                 left: -10099,
                                 top: -9833,
@@ -82,7 +82,7 @@ module('Virtual scrolling timelines', () => {
                             }]
                         },
                         {
-                            offset: { x: 4200 },
+                            offset: { left: 4200 },
                             expectedRects: [{
                                 left: -10399,
                                 top: -9833,
@@ -90,7 +90,7 @@ module('Virtual scrolling timelines', () => {
                             }]
                         },
                         {
-                            offset: { x: 5200 },
+                            offset: { left: 5200 },
                             expectedRects: [{
                                 left: -10399,
                                 top: -9833,
@@ -98,7 +98,7 @@ module('Virtual scrolling timelines', () => {
                             }]
                         },
                         {
-                            offset: { x: 6200 },
+                            offset: { left: 6200 },
                             expectedRects: []
                         },
                     ].forEach(({ offset, expectedRects }) => {
@@ -203,11 +203,11 @@ module('Virtual scrolling timelines', () => {
                     return asyncWrapper(assert, promise => {
                         [
                             {
-                                offset: { x: 0 },
+                                offset: { left: 0 },
                                 expectedRects: []
                             },
                             {
-                                offset: { x: 5200 },
+                                offset: { left: 5200 },
                                 expectedRects: [{
                                     left: -9099,
                                     top: -9525,
@@ -215,7 +215,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 6200 },
+                                offset: { left: 6200 },
                                 expectedRects: [{
                                     left: -8899,
                                     top: -9679,
@@ -227,7 +227,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 7200 },
+                                offset: { left: 7200 },
                                 expectedRects: [{
                                     left: -9899,
                                     top: -9679,
@@ -239,7 +239,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 8200 },
+                                offset: { left: 8200 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9679,
@@ -247,7 +247,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 9200 },
+                                offset: { left: 9200 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9679,
@@ -259,7 +259,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 10200 },
+                                offset: { left: 10200 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9525,
@@ -267,7 +267,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 12000 },
+                                offset: { left: 12000 },
                                 expectedRects: [{
                                     left: -9899,
                                     top: -9833,
@@ -283,7 +283,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 13000 },
+                                offset: { left: 13000 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9833,
@@ -299,7 +299,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 14000 },
+                                offset: { left: 14000 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9833,
@@ -315,7 +315,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 15000 },
+                                offset: { left: 15000 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9833,
@@ -331,7 +331,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 17000 },
+                                offset: { left: 17000 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9833,
@@ -347,7 +347,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 17500 },
+                                offset: { left: 17500 },
                                 expectedRects: [{
                                     left: -10399,
                                     top: -9833,
@@ -363,7 +363,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 18000 },
+                                offset: { left: 18000 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9833,
@@ -379,7 +379,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 19000 },
+                                offset: { left: 19000 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9525,
@@ -387,7 +387,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 20000 },
+                                offset: { left: 20000 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9525,
@@ -395,7 +395,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 20500 },
+                                offset: { left: 20500 },
                                 expectedRects: [{
                                     left: -10399,
                                     top: -9525,
@@ -403,7 +403,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 20800 },
+                                offset: { left: 20800 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9525,
@@ -411,7 +411,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 21200 },
+                                offset: { left: 21200 },
                                 expectedRects: []
                             }
                         ].forEach(({ offset, expectedRects }) => {
@@ -484,7 +484,7 @@ module('Virtual scrolling timelines', () => {
                     return asyncWrapper(assert, promise => {
                         [
                             {
-                                offset: { x: 0 },
+                                offset: { left: 0 },
                                 expectedRects: [{
                                     left: -9899,
                                     top: -9609,
@@ -492,7 +492,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 10000 },
+                                offset: { left: 10000 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9609,
@@ -500,7 +500,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 20000 },
+                                offset: { left: 20000 },
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9609,
@@ -508,7 +508,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 21700 },
+                                offset: { left: 21700 },
                                 expectedRects: [{
                                     left: -10399,
                                     top: -9609,
@@ -516,7 +516,7 @@ module('Virtual scrolling timelines', () => {
                                 }]
                             },
                             {
-                                offset: { x: 23000 },
+                                offset: { left: 23000 },
                                 expectedRects: []
                             }
                         ].forEach(({ offset, expectedRects }) => {

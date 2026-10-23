@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "AI 어시스턴트 채팅을 닫으면 진행 중인 요청이 중단됩니다. 채팅을 닫겠습니까?",
         "dxDataGrid-aiAChatEmptyViewMessage": "채팅이 비어 있습니다",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI 어시스턴트가 질문에 답변할 준비가 되어 있습니다.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI 프롬프트 편집기",
         "dxDataGrid-aiPromptEditorPlaceholder": "AI에게 열 값 생성을 요청하세요...",
         "dxDataGrid-aiPromptEditorApplyButton": "적용",

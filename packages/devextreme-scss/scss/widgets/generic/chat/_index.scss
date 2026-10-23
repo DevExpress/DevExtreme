@@ -1,8 +1,9 @@
-@use "../../base/chat";
+@use "../../base/chat" with (
+  $chat-disabled-opacity: 0.5,
+);
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/chat/mixins" as *;
-@use "../popup/sizes" as *;
 @use "../common/mixins" as *;
 @include chat(
   $chat-background-color,

@@ -1,6 +1,12 @@
 import { transformAsync } from '@babel/core';
 import type { PluginOption } from 'vite';
 
+const DEBUG_BLOCK_REGEX = /\/{2,}\s{0,}#DEBUG[\s\S]*?\/{2,}\s{0,}#ENDDEBUG/g;
+
+export function stripDebugBlocks(code: string): string {
+  return code.replace(DEBUG_BLOCK_REGEX, '');
+}
+
 export function removeUninitializedClassFields(): unknown {
   return {
     visitor: {
@@ -150,7 +156,7 @@ export default function devextremeVitePlugin(): PluginOption {
         'babel-plugin-inferno',
       );
 
-      const result = await transformAsync(code, {
+      const result = await transformAsync(stripDebugBlocks(code), {
         filename: cleanId,
         plugins,
         sourceMaps: true,

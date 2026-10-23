@@ -2,8 +2,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../typography/sizes" as *;
-@use "../../base/calendar/calendar" as *;
+@use "../../base/calendar/calendar";
 @use "../../base/calendar/mixins" as *;
 @include dx-calendar-mixin(
   $calendar-bg,

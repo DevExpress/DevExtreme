@@ -13,21 +13,19 @@ import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { ChangedEvent, RawItemData } from '../data_source_adapter/types';
-import gridCoreUtils from '../m_utils';
 import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
+import gridCoreUtils from '../utils';
 import type { RowsViewScrollEvent } from '../views/types';
 import {
   BOTTOM_LOAD_PANEL_CLASS,
-  COLUMN_LINES_CLASS,
-  FREESPACE_CLASS,
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
   PAGING_METHOD_NAMES,
@@ -80,7 +78,9 @@ const removeEmptyRows = function ($emptyRows, className) {
     $emptyRows = $(tBodies);
   }
 
-  const rowCount = className === FREESPACE_CLASS ? $emptyRows.length - 1 : $emptyRows.length;
+  const rowCount = className === VIEW_CLASSES.freeSpaceRow
+    ? $emptyRows.length - 1
+    : $emptyRows.length;
 
   for (let i = 0; i < rowCount; i++) {
     $emptyRows.eq(i).remove();
@@ -577,7 +577,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       scrollPosition = 0;
     }
 
-    this.scrollTo({ y: scrollPosition, x: this._scrollLeft });
+    this.scrollTo({ top: scrollPosition, left: this._scrollLeft });
   }
 
   public renderDelayedTemplates() {
@@ -642,6 +642,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     const changeType = change?.changeType;
     const d: any = Deferred();
 
+    // @ts-expect-error the view is rendered here
     const contentTable = contentElement.children().first();
     if (changeType === 'append' || changeType === 'prepend') {
       this.waitAsyncTemplates().done(() => {
@@ -654,7 +655,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
         tableElement.remove();
         $freeSpaceRowElements = this._getFreeSpaceRowElements(contentTable);
-        removeEmptyRows($freeSpaceRowElements, FREESPACE_CLASS);
+        removeEmptyRows($freeSpaceRowElements, VIEW_CLASSES.freeSpaceRow);
 
         if (change.removeCount) {
           this._removeRowsElements(contentTable, change.removeCount, changeType);
@@ -798,7 +799,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   private _isTableLinesDisplaysCorrect(table) {
-    const hasColumnLines = table.find(`.${COLUMN_LINES_CLASS}`).length > 0;
+    const hasColumnLines = table.find(`.${VIEW_CLASSES.columnLines}`).length > 0;
     return hasColumnLines === this.option('showColumnLines');
   }
 
@@ -855,6 +856,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
               'aria-label': null,
             },
           }).$element())
+          // @ts-expect-error the view is rendered here
           .appendTo($contentElement);
       }
     } else if (bottomLoadPanelElement) {
@@ -872,6 +874,11 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
     if (hasScrolled && isValidScrollTarget && this._rowHeight) {
       this._scrollTop = e.scrollOffset.top;
+
+      if (isScrollTopChanged) {
+        this._saveHorizontalScrollPosition(e.scrollOffset.left);
+      }
+
       const isVirtualRowRendering = isVirtualMode(this) || this.option('scrolling.rowRenderingMode') !== 'standard';
 
       if (isVirtualRowRendering && this.option(LEGACY_SCROLLING_MODE) === false) {

@@ -1,8 +1,12 @@
 @use "sass:selector";
 @use "./mixins" as *;
 
+$popup-dialog-shader-color: #444 !default;
+
+$popup-title-padding: 10px !default;
+
 .dx-popup-title {
-  padding: 10px;
+  padding: $popup-title-padding;
   -webkit-user-drag: none;
 
   @include user-select(none);
@@ -92,7 +96,7 @@
 
 .dx-dialog-root {
   .dx-overlay-shader {
-    background-color: #444;
+    background-color: $popup-dialog-shader-color;
   }
 }
 

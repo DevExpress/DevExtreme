@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import pointerEvents from 'common/core/events/pointer';
@@ -443,7 +443,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
         const scrollable = $('.dx-scrollable').dxScrollable('instance');
 
-        scrollable.scrollTo({ y: 5 });
+        scrollable.scrollTo({ top: 5 });
         this.clock.tick(10);
 
         // act
@@ -470,7 +470,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
         const scrollable = $('.dx-scrollable').dxScrollable('instance');
 
-        scrollable.scrollTo({ y: 10 });
+        scrollable.scrollTo({ top: 10 });
         this.clock.tick(10);
 
         // act
@@ -1047,7 +1047,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             // act
             dataGrid.deleteRow(firstDataRowIndex);
             dataGrid.deleteRow(firstDataRowIndex);
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            dataGrid.getScrollable().scrollTo({ top: 10000 });
 
             // assert
             let rows = dataGrid.getVisibleRows();
@@ -1102,16 +1102,16 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }).dxDataGrid('instance');
 
             // act
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 0 });
+            dataGrid.getScrollable().scrollTo({ top: 10000 });
+            dataGrid.getScrollable().scrollTo({ top: 0 });
             dataGrid.deleteRow(0);
             dataGrid.deleteRow(0);
             dataGrid.deleteRow(0);
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
+            dataGrid.getScrollable().scrollTo({ top: 10000 });
             this.clock.tick(10);
 
             for(let i = 0; i < 25; i++) {
-                dataGrid.getScrollable().scrollTo({ y: 10000 });
+                dataGrid.getScrollable().scrollTo({ top: 10000 });
             }
 
             // assert
@@ -1150,7 +1150,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             this.clock.tick(10);
 
             for(let i = 0; i < 5; i++) {
-                dataGrid.getScrollable().scrollTo({ y: 10000 });
+                dataGrid.getScrollable().scrollTo({ top: 10000 });
                 this.clock.tick(10);
             }
 
@@ -1191,12 +1191,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }).dxDataGrid('instance');
 
             // act
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 0 });
+            dataGrid.getScrollable().scrollTo({ top: 10000 });
+            dataGrid.getScrollable().scrollTo({ top: 0 });
             dataGrid.addRow();
             dataGrid.saveEditData();
             for(let i = 0; i < 25; i++) {
-                dataGrid.getScrollable().scrollTo({ y: 10000 });
+                dataGrid.getScrollable().scrollTo({ top: 10000 });
                 this.clock.tick(10);
             }
 
@@ -1235,12 +1235,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }).dxDataGrid('instance');
 
             // act
-            dataGrid.getScrollable().scrollTo({ y: 10000 });
-            dataGrid.getScrollable().scrollTo({ y: 0 });
+            dataGrid.getScrollable().scrollTo({ top: 10000 });
+            dataGrid.getScrollable().scrollTo({ top: 0 });
             dataGrid.getDataSource().store().push([{ type: 'insert', data: { id: 987654321 }, index: 0 }]);
             this.clock.tick(10);
             for(let i = 0; i < 20; i++) {
-                dataGrid.getScrollable().scrollTo({ y: 10000 });
+                dataGrid.getScrollable().scrollTo({ top: 10000 });
             }
 
             // assert
@@ -1330,7 +1330,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 3000 });
+        dataGrid.getScrollable().scrollTo({ top: 3000 });
         $(dataGrid.getScrollable().content()).trigger('scroll');
 
         dataGrid.editCell(dataGrid.getRowIndexByKey(38), 0);
@@ -1371,7 +1371,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         dataGrid.editCell(8, 0);
 
-        dataGrid.getScrollable().scrollTo({ y: 1000 });
+        dataGrid.getScrollable().scrollTo({ top: 1000 });
 
         dataGrid.editCell(5, 0);
 
@@ -1428,7 +1428,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }).dxDataGrid('instance');
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 3000 });
+        dataGrid.getScrollable().scrollTo({ top: 3000 });
 
         dataGrid.editCell(1, 0);
 
@@ -2067,7 +2067,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
             };
 
             // act
-            dataGrid.getScrollable().scrollBy({ y: 400 });
+            dataGrid.getScrollable().scrollBy({ top: 400 });
             $(dataGrid.getCellElement(5, 1))
                 .trigger(CLICK_EVENT)
                 .trigger('dxclick');
@@ -4245,7 +4245,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 1000 });
+        scrollable.scrollTo({ top: 1000 });
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $firstCell.trigger('dxclick');
@@ -4254,7 +4254,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
 
         // act
-        scrollable.scrollTo({ y: 0 });
+        scrollable.scrollTo({ top: 0 });
         this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -4301,7 +4301,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 1000 });
+        scrollable.scrollTo({ top: 1000 });
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $firstCell.trigger('dxclick');
@@ -4310,7 +4310,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
 
         // act
-        scrollable.scrollTo({ y: 0 });
+        scrollable.scrollTo({ top: 0 });
         this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -4363,7 +4363,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 1000 });
+        scrollable.scrollTo({ top: 1000 });
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
         $firstCell.trigger('dxclick');
@@ -4372,7 +4372,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
 
         // act
-        scrollable.scrollTo({ y: 0 });
+        scrollable.scrollTo({ top: 0 });
         this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -4428,7 +4428,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 1000 });
+        scrollable.scrollTo({ top: 1000 });
 
         const $saveButton = $('.dx-datagrid-save-button');
         $saveButton.trigger('dxclick');
@@ -4439,7 +4439,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.notOk($saveButton.hasClass('dx-state-disabled'), 'save button is not disabled');
 
         // act
-        scrollable.scrollTo({ y: 0 });
+        scrollable.scrollTo({ top: 0 });
         this.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -4499,7 +4499,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 1000 });
+        scrollable.scrollTo({ top: 1000 });
         that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -4511,7 +4511,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
 
         // act
-        scrollable.scrollTo({ y: 0 });
+        scrollable.scrollTo({ top: 0 });
         that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -4602,7 +4602,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         // act
         const scrollable = dataGrid.getScrollable();
-        scrollable.scrollTo({ y: 1000 });
+        scrollable.scrollTo({ top: 1000 });
         that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -4614,7 +4614,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.notOk(dataGrid.$element().find('dx-datagrid-invalid').length, 'no invalid cells');
 
         // act
-        scrollable.scrollTo({ y: 0 });
+        scrollable.scrollTo({ top: 0 });
         that.clock.tick(10);
 
         $firstCell = $(dataGrid.getCellElement(0, 0));

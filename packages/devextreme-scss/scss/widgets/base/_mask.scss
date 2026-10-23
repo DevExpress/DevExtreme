@@ -1,0 +1,10 @@
+@use "sass:string";
+@use "./string" as *;
+
+@function mask-shape($data-uri, $placeholder: "currentColor") {
+  @return string.unquote(replace("#{$data-uri}", $placeholder, "%23000"));
+}
+
+@mixin masked-glyph-paint($color: currentColor) {
+  background-color: $color;
+}

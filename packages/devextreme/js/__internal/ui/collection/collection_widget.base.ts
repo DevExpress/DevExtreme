@@ -364,7 +364,6 @@ class CollectionWidget<
     }
 
     const items = rawItems.map(({ element, options }) => {
-      // @ts-expect-error ts-error
       const isTemplateRequired = /\S/.test(element.innerHTML) && !options.template;
 
       if (isTemplateRequired) {
@@ -373,7 +372,6 @@ class CollectionWidget<
         $(element).remove();
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return options;
     });
 
@@ -1546,9 +1544,9 @@ class CollectionWidget<
     if (items) {
       each(items, (_index, item) => {
         if (dimension === 'width') {
-          result += getOuterWidth(item, includeMargin ?? false);
+          result += Number(getOuterWidth($(item), includeMargin ?? false));
         } else if (dimension === 'height') {
-          result += getOuterHeight(item, includeMargin ?? false);
+          result += Number(getOuterHeight($(item), includeMargin ?? false));
         }
       });
     }

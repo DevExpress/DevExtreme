@@ -1,4 +1,5 @@
-import { gridViewModule, ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
+import { CLASSES as GRID_VIEW_CLASSES } from '@ts/grids/grid_core/grid_view/const';
+import { gridViewModule, ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 
 import treeListCore from './core';
 
@@ -16,7 +17,7 @@ class TreeListResizingController extends ResizingController {
 
     const $rowsTable = this._rowsView.getTableElement();
 
-    $rowsTable?.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
+    $rowsTable?.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix(GRID_VIEW_CLASSES.bestFit), isBestFit);
   }
 }
 

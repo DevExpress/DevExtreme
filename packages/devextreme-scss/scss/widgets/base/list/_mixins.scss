@@ -1,14 +1,15 @@
-@use "sass:string";
-@use "../string" as *;
+@use "../mask" as *;
 
-@mixin list-icon-colored($data-uri, $current-color) {
-  $uri: replace("#{$data-uri}", "currentColor", escape("#{$current-color}"));
+@mixin list-icon-masked($name, $color: null) {
+  mask-image: var(--dxicon-list-#{$name});
+  mask-position: 50% 50%;
+  mask-repeat: no-repeat;
 
-  background-image: string.unquote($uri);
+  @include masked-glyph-paint($color or currentColor);
 }
 
-@mixin toggle-delete-icon($color) {
+@mixin toggle-delete-icon($color: null) {
   .dx-icon-toggle-delete {
-    @include list-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/list/toggle-delete.svg"), $color);
+    @include list-icon-masked("toggle-delete", $color);
   }
 }

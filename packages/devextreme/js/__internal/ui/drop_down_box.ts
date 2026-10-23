@@ -14,7 +14,7 @@ import { map } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/drop_down_box';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
-import { grep } from '@ts/core/utils/m_common';
+import { grep } from '@ts/core/utils/common';
 import { tabbable } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor, { type DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
@@ -178,7 +178,8 @@ class DropDownBox<
 
   _loadItem(value: unknown): DeferredObj<unknown> {
     const deferred = Deferred();
-    const selectedItem = grep(
+    const selectedItem = grep<unknown>(
+      // @ts-expect-error the items option is an array
       this.option('items') || [],
       // @ts-expect-error DataExpressionMixin must be typed
       (item) => this._isValueEquals(this._valueGetter(item), value) as boolean,

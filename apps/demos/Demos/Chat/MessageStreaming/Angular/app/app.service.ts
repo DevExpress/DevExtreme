@@ -35,10 +35,17 @@ interface DelayedRendererOptions {
 function createDelayedRenderer({ delay = 20, onRender }: DelayedRendererOptions) {
   let queue: string[] = [];
   let rendering = false;
+  let idleResolve: (() => void) | null = null;
+
+  function notifyIdle() {
+    idleResolve?.();
+    idleResolve = null;
+  }
 
   function processQueue() {
     if (!queue.length) {
       rendering = false;
+      notifyIdle();
       return;
     }
 
@@ -62,9 +69,20 @@ function createDelayedRenderer({ delay = 20, onRender }: DelayedRendererOptions)
   function stop() {
     queue = [];
     rendering = false;
+    notifyIdle();
   }
 
-  return { pushChunk, stop };
+  function waitForIdle(): Promise<void> {
+    if (!rendering) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+      idleResolve = resolve;
+    });
+  }
+
+  return { pushChunk, stop, waitForIdle };
 }
 
 @Injectable()
@@ -163,8 +181,14 @@ export class AppService {
     return id;
   }
 
-  private alertLimitReached(): void {
-    this.alertsSubject.next([{ message: 'Request limit reached, try again in a minute.' }]);
+  private getErrorMessage(err: unknown): string {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
+  }
+
+  private alertError(message: string): void {
+    this.alertsSubject.next([{ message }]);
 
     setTimeout(() => {
       this.alertsSubject.next([]);
@@ -213,6 +237,8 @@ export class AppService {
       delayedRenderer.stop();
     };
 
+    this.abortController.signal.addEventListener('abort', delayedRenderer.stop);
+
     try {
       await this.aiService.getAIResponseStream(this.messages, {
         onAborted,
@@ -220,18 +246,31 @@ export class AppService {
         signal: this.abortController.signal,
       });
 
+      await delayedRenderer.waitForIdle();
+
       this.typingUsersSubject.next([]);
     } catch (e: unknown) {
+      delayedRenderer.stop();
       this.typingUsersSubject.next([]);
 
-      if ((e as Error)?.name !== 'AbortError' && assistantId !== undefined) {
-        this.updateMessageText(assistantId, '');
-        this.alertLimitReached();
+      if (!this.abortController?.signal.aborted) {
+        if (assistantId !== undefined) {
+          this.updateMessageText(assistantId, '');
+        }
+        this.alertError(this.getErrorMessage(e));
       }
     } finally {
       this.abortController = null;
       this.isStreamingSubject.next(false);
     }
+  }
+
+  clearMessages(): void {
+    this.store = [];
+    this.messages = [];
+    this.alertsSubject.next([]);
+    this.typingUsersSubject.next([]);
+    this.dataSource.reload();
   }
 
   onMessageEntered({ message }: DxChatTypes.MessageEnteredEvent): void {

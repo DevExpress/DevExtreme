@@ -1,11 +1,14 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../scheduler/sizes" as *;
-@use "../../base/recurrenceEditor" as *;
+$material-recurrence-button-group-padding: 6px !default;
+
+@use "../../base/recurrenceEditor" as * with (
+  $recurrence-interval-number-box-margin-top: $material-recurrence-interval-number-box-margin-top,
+  $recurrence-button-group-item-padding: $material-recurrence-button-group-padding,
+);
 
 $material-recurrence-number-box-margin: 11px !default;
-$material-recurrence-button-group-padding: 6px !default;
 $material-recurrence-radio-group-margin: 15px !default;
 
 .dx-recurrence-numberbox-interval {
@@ -14,14 +17,9 @@ $material-recurrence-radio-group-margin: 15px !default;
 
 .dx-recurrence-numberbox-interval-label {
   font-size: $material-base-font-size;
-  margin-top: $material-recurrence-interval-number-box-margin-top;
 }
 
 .dx-recurrence-button-group {
-  .dx-button-content {
-    padding: $material-recurrence-button-group-padding;
-  }
-
   .dx-buttongroup-wrapper > div {
     min-width: 0;
   }

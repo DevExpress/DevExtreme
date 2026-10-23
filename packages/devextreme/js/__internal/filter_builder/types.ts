@@ -1,6 +1,7 @@
 import type { PositionConfig } from '@js/common/core/animation';
 import type Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type {
   CustomOperation, Field, FieldInfo, Properties as FilterBuilderOptions,
 } from '@js/ui/filter_builder';
@@ -73,7 +74,10 @@ export interface FilterBuilderItem extends FilterBuilderField {
 
 export interface FilterCustomOperation extends Omit<CustomOperation, 'name' | 'calculateFilterExpression' | 'customizeText'> {
   name: string;
-  customizeText?: (fieldInfo: FieldInfo, options?: { values: FieldValue[] }) => string;
+  customizeText?: (
+    fieldInfo: FieldInfo,
+    options?: { values: FieldValue[] },
+  ) => string | DeferredObj<string>;
   notForLookup?: boolean;
   valueSeparator?: string;
   calculateFilterExpression?: (

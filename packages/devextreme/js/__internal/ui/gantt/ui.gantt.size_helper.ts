@@ -24,7 +24,7 @@ export class GanttSizeHelper {
     setter(this._gantt._$treeListWrapper, value);
     this._gantt._ganttTreeList?.setOption(
       dimension,
-      getter(this._gantt._$treeListWrapper),
+      getter(this._gantt._$treeListWrapper.get(0)),
     );
   }
 
@@ -32,11 +32,11 @@ export class GanttSizeHelper {
     const setter = dimension === 'width' ? setWidth : setHeight;
     const getter = dimension === 'width' ? getWidth : getHeight;
     setter(this._gantt._$ganttView, value);
-    this._gantt._setGanttViewOption(dimension, getter(this._gantt._$ganttView));
+    this._gantt._setGanttViewOption(dimension, getter(this._gantt._$ganttView.get(0)));
   }
 
   _getPanelsWidthByOption(): ApplyPanelSizeEvent {
-    const ganttWidth = getWidth(this._gantt.$element());
+    const ganttWidth = getWidth(this._gantt.$element().get(0));
     const { taskListWidth: leftPanelWidth } = this._gantt.option();
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let rightPanelWidth;
@@ -58,7 +58,7 @@ export class GanttSizeHelper {
   }
 
   onAdjustControl(): void {
-    const elementHeight = getHeight(this._gantt.$element());
+    const elementHeight = getHeight(this._gantt.$element().get(0));
     this.updateGanttWidth();
     this.setGanttHeight(elementHeight);
   }

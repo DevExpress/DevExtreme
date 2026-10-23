@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
 
 fixture`Ai Assistant.Visual`
   .page(url(__dirname, '../../../container-ai-integration.html'));
@@ -64,7 +65,11 @@ test('AI Assistant popup - pending state', async (t) => {
 
   await t.expect(aiChat.getPendingMessages().exists).ok();
 
+  await insertStylesheetRulesToPage('.dx-progressbar-animating-container { animation: none !important; background-position-x: 0 !important; }');
+
   await testScreenshot(t, takeScreenshot, 'datagrid-ai-assistant-pending-state.png', { element: aiChat.content });
+
+  await removeStylesheetRulesFromPage();
 
   await t
     .expect(compareResults.isValid())

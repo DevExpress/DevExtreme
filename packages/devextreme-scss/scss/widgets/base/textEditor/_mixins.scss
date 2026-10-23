@@ -1,5 +1,3 @@
-@use "sass:math";
-
 @mixin dx-editor-content-wrapper() {
   display: flex;
   flex-grow: 1;
@@ -17,7 +15,7 @@
     border-top-width: 0;
 
     span {
-      transform: translate(0, -$label-offset-y);
+      transform: translate(0, calc(-1 * $label-offset-y));
       font-size: $label-font-size;
       margin-top: 0;
       top: 0;
@@ -156,31 +154,36 @@
   $label-margin-top-diff,
   $texteditor-label-outside-font-size,
   $texteditor-label-outside-height,
+  $label-padding-inline: 2px,
+  $label-border-radius: 1px,
+  $label-backdrop-height: 3px,
 ) {
+  $label-margin-inline: calc(-1 * $label-padding-inline);
+
   .dx-editor-outlined {
     .dx-texteditor-label {
       inset: 0;
     }
 
     .dx-label {
-      padding: 0 2px;
+      padding: 0 $label-padding-inline;
       border-top-width: 0;
       border-bottom-width: $label-border-width;
       border-inline-width: 0;
       border-style: solid;
       border-top-color: $texteditor-border-color;
       border-bottom-color: $texteditor-border-bottom-color;
-      margin-left: -2px;
-      margin-right: -2px;
-      border-radius: 1px;
-      clip-path: inset(-$texteditor-label-font-size 1px -1px 1px);
+      margin-left: $label-margin-inline;
+      margin-right: $label-margin-inline;
+      border-radius: $label-border-radius;
+      clip-path: inset(#{calc(-1 * $texteditor-label-font-size)} 1px -1px 1px);
 
       span {
         position: relative;
         font-size: $texteditor-label-font-size;
         top: 0;
         margin-top: 0;
-        transform: translate(0, -$label-offset-y);
+        transform: translate(0, calc(-1 * $label-offset-y));
         height: $label-active-height;
         line-height: normal;
       }
@@ -235,9 +238,9 @@
             content: "";
             width: 100%;
             position: absolute;
-            height: 3px;
-            top: -$label-backdrop-offset-y;
-            margin-inline-start: -2px;
+            height: $label-backdrop-height;
+            top: calc(-1 * $label-backdrop-offset-y);
+            margin-inline-start: $label-margin-inline;
             background-color: $label-backdrop-bg;
           }
         }
@@ -299,8 +302,8 @@
         clip-path: none;
         border-top-width: $label-border-width;
         border-radius: 0;
-        border-start-end-radius: 1px;
-        border-end-end-radius: 1px;
+        border-start-end-radius: $label-border-radius;
+        border-end-end-radius: $label-border-radius;
         margin-inline-start: 0;
         padding: 0;
 
@@ -311,9 +314,9 @@
           pointer-events: auto;
           font-size: $texteditor-label-outside-font-size;
           margin-top: 0;
-          top: -$label-offset-y-outside;
-          height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
-          line-height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
+          top: calc(-1 * $label-offset-y-outside);
+          height: $texteditor-label-outside-height;
+          line-height: $texteditor-label-outside-height;
         }
       }
     }
@@ -330,7 +333,7 @@
         }
       }
 
-      $label-empty-margin-top: math.div(-$label-empty-height, 2) + $label-margin-top-diff;
+      $label-empty-margin-top: calc($label-empty-height / -2 + $label-margin-top-diff);
 
       &.dx-texteditor-empty {
         @include dx-state-empty(
@@ -433,7 +436,7 @@
         height: $texteditor-label-outside-height;
         line-height: $texteditor-label-outside-height;
         margin-top: 0;
-        top: -$texteditor-label-outside-top-offset;
+        top: calc(-1 * $texteditor-label-outside-top-offset);
       }
 
       .dx-label {
@@ -461,7 +464,7 @@
           height: $texteditor-empty-label-height;
           line-height: $texteditor-empty-label-line-height;
           top: 50%;
-          margin-top: math.div(-$texteditor-empty-label-height, 2);
+          margin-top: calc($texteditor-empty-label-height / -2);
         }
 
         &.dx-textarea {
@@ -548,7 +551,7 @@
         font-size: $texteditor-label-outside-font-size;
         height: $texteditor-label-outside-height;
         line-height: $texteditor-label-outside-height;
-        top: -$texteditor-label-outside-top-offset;
+        top: calc(-1 * $texteditor-label-outside-top-offset);
         margin-top: 0;
       }
 
@@ -578,7 +581,7 @@
           height: $texteditor-empty-label-height;
           line-height: $texteditor-empty-label-line-height;
           top: 50%;
-          margin-top: math.div(-$texteditor-empty-label-height, 2);
+          margin-top: calc($texteditor-empty-label-height / -2);
         }
 
         &.dx-textarea {
@@ -688,6 +691,11 @@
   $material-filled-texteditor-spin-button-horizontal-padding,
   $last-button-horizontal-padding,
   $material-button-vertical-padding,
+  $button-margin-block-start: 1px,
+  $button-margin-block-end: 3px,
+  $button-icon-margin-block-start: 1px,
+  $button-icon-margin-block-start-with-text: 3px,
+  $button-icononly-padding: 2px,
 ) {
   .dx-texteditor {
     .dx-texteditor-buttons-container {
@@ -745,25 +753,25 @@
         .dx-texteditor-buttons-container {
           > .dx-button.dx-button-mode-text {
             height: $material-underlined-editor-button-height;
-            margin-top: 1px;
-            margin-bottom: 3px;
+            margin-top: $button-margin-block-start;
+            margin-bottom: $button-margin-block-end;
             margin-inline-end: $material-editor-custom-button-margin;
             margin-inline-start: $material-editor-custom-button-margin;
 
             .dx-button-content {
               display: flex;
               justify-content: center;
-              padding-top: $material-button-vertical-padding - 1px;
+              padding-top: calc($material-button-vertical-padding - 1px);
 
               .dx-icon {
                 align-self: center;
-                margin-top: 1px;
+                margin-top: $button-icon-margin-block-start;
               }
             }
 
             &.dx-button-has-text {
               .dx-button-content .dx-icon {
-                margin-top: 3px;
+                margin-top: $button-icon-margin-block-start-with-text;
               }
             }
 
@@ -771,7 +779,7 @@
               min-width: $material-underlined-editor-button-height;
 
               .dx-button-content {
-                padding: 2px;
+                padding: $button-icononly-padding;
               }
             }
           }
@@ -799,25 +807,25 @@
       .dx-texteditor-buttons-container {
         > .dx-button.dx-button-mode-text {
           height: $material-underlined-editor-button-height;
-          margin-top: 1px;
-          margin-bottom: 3px;
+          margin-top: $button-margin-block-start;
+          margin-bottom: $button-margin-block-end;
           margin-inline-end: $material-editor-custom-button-margin;
           margin-inline-start: $material-editor-custom-button-margin;
 
           .dx-button-content {
             display: flex;
             justify-content: center;
-            padding-top: $material-button-vertical-padding - 1px;
+            padding-top: calc($material-button-vertical-padding - 1px);
 
             .dx-icon {
               align-self: center;
-              margin-top: 1px;
+              margin-top: $button-icon-margin-block-start;
             }
           }
 
           &.dx-button-has-text {
             .dx-button-content .dx-icon {
-              margin-top: 3px;
+              margin-top: $button-icon-margin-block-start-with-text;
             }
           }
 
@@ -825,7 +833,7 @@
             min-width: $material-underlined-editor-button-height;
 
             .dx-button-content {
-              padding: 2px;
+              padding: $button-icononly-padding;
             }
           }
         }

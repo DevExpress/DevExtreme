@@ -1,0 +1,324 @@
+[
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "margin-left",
+    "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "margin-left",
+    "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-bottom",
+    "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+    "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-right",
+    "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-right",
+    "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-top",
+    "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+    "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/gridBase/layout/cell.scss",
+    "property": "padding",
+    "selector": ".dx-cell-modified, .dx-datagrid-invalid",
+    "paintedOverBy": "scss/widgets/fluent-next/gridBase/layout/cell.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/gridBase/layout/cell.scss",
+    "property": "padding",
+    "selector": ".dx-cell-modified, .dx-treelist-invalid",
+    "paintedOverBy": "scss/widgets/fluent-next/gridBase/layout/cell.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/pivotGrid/_index.scss",
+    "property": "padding",
+    "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
+    "paintedOverBy": "scss/widgets/fluent-next/pivotGrid/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/scheduler/_index.scss",
+    "property": "padding",
+    "selector": ".dx-scheduler-work-space-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-work-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-day .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content",
+    "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment",
+    "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment.dx-state-active, .dx-scheduler-appointment.dx-resizable-resizing",
+    "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment.dx-state-hover",
+    "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment.dx-state-hover.dx-resizable",
+    "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent-next",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment",
+    "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "margin-left",
+    "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "margin-left",
+    "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-bottom",
+    "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+    "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-right",
+    "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-right",
+    "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-top",
+    "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+    "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/gridBase/layout/cell.scss",
+    "property": "padding",
+    "selector": ".dx-cell-modified, .dx-datagrid-invalid",
+    "paintedOverBy": "scss/widgets/fluent/gridBase/layout/cell.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/gridBase/layout/cell.scss",
+    "property": "padding",
+    "selector": ".dx-cell-modified, .dx-treelist-invalid",
+    "paintedOverBy": "scss/widgets/fluent/gridBase/layout/cell.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/pivotGrid/_index.scss",
+    "property": "padding",
+    "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
+    "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/scheduler/_index.scss",
+    "property": "padding",
+    "selector": ".dx-scheduler-work-space-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-work-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-day .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content",
+    "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment",
+    "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment.dx-state-active, .dx-scheduler-appointment.dx-resizable-resizing",
+    "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment.dx-state-hover",
+    "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment.dx-state-hover.dx-resizable",
+    "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+  },
+  {
+    "theme": "fluent",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment",
+    "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+  },
+  {
+    "theme": "generic",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-bottom",
+    "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+    "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
+  },
+  {
+    "theme": "generic",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-top",
+    "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+    "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
+  },
+  {
+    "theme": "generic",
+    "file": "scss/widgets/base/gridBase/layout/cell.scss",
+    "property": "padding",
+    "selector": ".dx-cell-modified, .dx-datagrid-invalid",
+    "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
+  },
+  {
+    "theme": "generic",
+    "file": "scss/widgets/base/gridBase/layout/cell.scss",
+    "property": "padding",
+    "selector": ".dx-cell-modified, .dx-treelist-invalid",
+    "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
+  },
+  {
+    "theme": "generic",
+    "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
+    "property": "width",
+    "selector": ".dx-scheduler-agenda .dx-scheduler-group-header-content",
+    "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "margin-left",
+    "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "margin-left",
+    "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-right",
+    "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/gridBase/_index.scss",
+    "property": "padding-right",
+    "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+    "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/pivotGrid/_index.scss",
+    "property": "padding",
+    "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
+    "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/scheduler/_index.scss",
+    "property": "padding",
+    "selector": ".dx-scheduler-work-space-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-work-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-day .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content",
+    "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment",
+    "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment.dx-state-active, .dx-scheduler-appointment.dx-resizable-resizing",
+    "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment.dx-state-hover",
+    "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-appointment.dx-state-hover.dx-resizable",
+    "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+  },
+  {
+    "theme": "material",
+    "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+    "property": "box-shadow",
+    "selector": ".dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment",
+    "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+  }
+]

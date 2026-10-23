@@ -166,7 +166,7 @@ watch(scrollByContent, enforceWidthConstraint);
   flex-direction: column;
   flex-shrink: 0;
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .caption {
@@ -191,11 +191,11 @@ watch(scrollByContent, enforceWidthConstraint);
 }
 
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-horizontal {
-  border-block-end: 1px solid rgb(225, 225, 225, 0.4);
+  border-block-end: 1px solid var(--dxds-color-border-subtle, rgb(225, 225, 225, 0.4));
 }
 
 .dx-viewport:not(.dx-theme-generic) .dx-tabs-vertical {
   height: 232px;
-  border-inline-end: 1px solid rgb(225, 225, 225, 0.4);
+  border-inline-end: 1px solid var(--dxds-color-border-subtle, rgb(225, 225, 225, 0.4));
 }
 </style>

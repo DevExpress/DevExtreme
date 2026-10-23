@@ -657,7 +657,7 @@ module('Integration: Appointment editing', {
                         text: 'text',
                     };
                     const workSpace = scheduler.instance.getWorkSpace();
-                    workSpace.getScrollable().scrollTo({ x: scrollLeft, y: scrollTop });
+                    workSpace.getScrollable().scrollTo({ left: scrollLeft, top: scrollTop });
 
                     await checkThatScrollToWasCalled(assert, scheduler, appointment);
                 });

@@ -10,9 +10,10 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
-import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type {
   DataChange,
@@ -21,7 +22,7 @@ import type {
   ProcessedItem,
 } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import { CLASSES } from './const';
 import { isDetailRow } from './utils';
 
@@ -317,6 +318,8 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
         const isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailElementWidth !== getWidth($detailElement);
 
         if (isDetailHorizontalScrollCanBeShown && isDetailGridWidthChanged) {
+          // @ts-expect-error updateDimensions() returns undefined only for an invisible grid
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
           this.updateDimensions().done(() => d.resolve(true));
         } else {
           d.resolve(true);
@@ -376,7 +379,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
 
       $row
         .addClass(CLASSES.detailRow)
-        .toggleClass(CLASSES.rowLines, showRowLines);
+        .toggleClass(VIEW_CLASSES.rowLines, showRowLines);
 
       if (isDefined(row.visible)) {
         $row.toggle(row.visible);

@@ -3,12 +3,12 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import errors from '@js/ui/widget/ui.errors';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import dataGridCore from '../core';
-import { createGroupFilter } from '../m_utils';
+import { createGroupFilter } from '../utils';
 import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 
 function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {

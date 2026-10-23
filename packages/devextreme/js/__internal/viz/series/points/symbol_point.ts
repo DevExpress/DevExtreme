@@ -16,11 +16,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
-import { isDefined as _isDefined } from '@ts/core/utils/m_type';
-import { getWindow, hasProperty } from '@ts/core/utils/m_window';
+import { noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
+import { isDefined as _isDefined } from '@ts/core/utils/type';
+import { getWindow, hasProperty } from '@ts/core/utils/window';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 import { Label } from '@ts/viz/series/points/label';
 
@@ -705,8 +705,8 @@ export default {
       {},
       labelFormatObject,
       {
-        argumentText: tooltip.formatValue(that.initialArgument, 'argument'),
-        valueText: tooltip.formatValue(that.initialValue),
+        argumentText: tooltip.formatValue(that.initialArgument, 'argument', that.series.argumentType),
+        valueText: tooltip.formatValue(that.initialValue, undefined, that.series.valueType),
       },
       _isDefined(labelFormatObject.percent) ? { percentText: tooltip.formatValue(labelFormatObject.percent, 'percent') } : {},
       _isDefined(labelFormatObject.total) ? { totalText: tooltip.formatValue(labelFormatObject.total) } : {},

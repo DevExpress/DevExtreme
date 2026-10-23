@@ -1,7 +1,7 @@
 import { isObject } from '@js/core/utils/type';
+import { dateUtils } from '@ts/core/utils/date';
 import { dateSerialization } from '@ts/core/utils/date_serialization';
-import { dateUtils } from '@ts/core/utils/m_date';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 
 import { DEFAULT_VIEW_OPTIONS, VIEW_TYPES } from './constants_view';
 import type {
@@ -44,7 +44,7 @@ export const parseDateOption = (date?: Date | number | string): Date | undefined
 
 export const parseCurrentDate = (date: Date | number | string): Date => {
   const deserialized = parseDateOption(date) as Date;
-  return dateUtils.trimTime(deserialized) as Date;
+  return dateUtils.trimTime(deserialized);
 };
 
 const isDateOption = (

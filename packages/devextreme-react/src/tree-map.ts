@@ -11,7 +11,7 @@ import NestedOption from "./core/nested-option";
 import type { ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, TreeMapColorizerType, dxTreeMapNode } from "devextreme/viz/tree_map";
 import type { DashStyle, Palette, PaletteExtensionMode, Font as ChartsFont, TextOverflow, WordWrap } from "devextreme/common/charts";
 import type { ExportFormat, Format as CommonFormat, HorizontalAlignment, VerticalEdge, template } from "devextreme/common";
-import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { FormatLocale, Format as LocalizationFormat } from "devextreme/common/core/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -192,6 +192,7 @@ const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componen
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
   formatter?: ((value: number | Date) => string);
+  locale?: FormatLocale;
   parser?: ((value: string) => number | Date);
   precision?: number;
   type?: CommonFormat | string;

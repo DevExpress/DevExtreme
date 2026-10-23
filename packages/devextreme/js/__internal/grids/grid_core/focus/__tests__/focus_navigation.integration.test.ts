@@ -116,4 +116,29 @@ describe('Focus — navigating to the focused row', () => {
       expect(instance.getVisibleRows().some((row) => row.key === 10)).toBe(true);
     });
   });
+
+  describe('virtual scrolling', () => {
+    it('drops the pending focus when the focused row is reset before the row is rendered', async () => {
+      const rows = Array.from({ length: 100 }, (_, i) => ({ id: i, value: `row ${i}` }));
+      const { instance } = await createDataGrid({
+        dataSource: rows,
+        height: 250,
+        width: 200,
+        columnWidth: 100,
+        focusedRowEnabled: true,
+        focusedRowIndex: 99,
+        scrolling: { mode: 'virtual' },
+      });
+
+      // The last row is not rendered yet, so focusing it waits for the next contentReady.
+      expect(instance.option('focusedRowKey')).toBe(99);
+      expect(instance.getRowIndexByKey(99)).toBe(-1);
+
+      instance.option({ focusedRowIndex: -1, dataSource: [...rows] });
+      await flushAsync();
+
+      expect(instance.option('focusedRowKey')).toBeNull();
+      expect(instance.option('focusedRowIndex')).toBe(-1);
+    });
+  });
 });

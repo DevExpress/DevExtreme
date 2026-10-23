@@ -6,21 +6,21 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/array_compare';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type {
   ChangedEvent, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type {
   Controllers, Module, ModuleItemCallbackFlags, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import type { CustomLoadResult } from '../data_source_adapter/custom_loader';
 import type {

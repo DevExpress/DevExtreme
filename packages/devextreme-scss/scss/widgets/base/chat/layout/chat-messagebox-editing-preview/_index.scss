@@ -1,4 +1,4 @@
-@use "../chat" as *;
+$editing-preview-caption-font-weight: null !default;
 
 .dx-chat-editing-preview {
   display: flex;
@@ -27,7 +27,7 @@
 }
 
 .dx-chat-editing-preview-caption {
-  font-weight: 500;
+  font-weight: $editing-preview-caption-font-weight;
 }
 
 .dx-chat-editing-preview-text {

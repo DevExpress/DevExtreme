@@ -6,15 +6,15 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
+import { registerKeyboardAction } from '@ts/grids/grid_core/accessibility';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
-import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
-import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
-import type { RowsView } from '../../grid_core/views/m_rows_view';
+import type { HeaderPanel } from '../../grid_core/header_panel/header_panel';
+import type { RowsView } from '../../grid_core/views/rows_view';
 import gridCore from '../core';
 import dataSourceAdapterProvider from '../data_source_adapter';
 import {
@@ -562,7 +562,7 @@ export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) =
     return items;
   }
 
-  public allowDragging(column): boolean {
+  public allowDragging(column): boolean | undefined {
     const groupPanelOptions = this.option('groupPanel');
 
     return allowDragging(groupPanelOptions, column) || super.allowDragging(column);

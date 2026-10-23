@@ -8,7 +8,9 @@
 @use "../button/sizes" as *;
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
-@use "../../base/list" as *;
+@use "../../base/list" as * with (
+  $list-empty-message-button-padding: 0,
+);
 @use "../../base/list/mixins" as *;
 @use "../radioGroup/colors" as *;
 @use "../badge";
@@ -281,7 +283,7 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
     }
 
     .dx-icon-toggle-delete {
-      background-size: 100%;
+      mask-size: 100%;
     }
 
     &.dx-list-item-ghost-reordering {
@@ -314,7 +316,7 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
     padding: $material-list-item-vertical-padding $item-horizontal-padding $material-list-item-vertical-padding - 1px;
   }
 
-  .dx-list .dx-empty-message { // stylelint-disable-line no-duplicate-selectors
+  .dx-list .dx-empty-message {
     padding: math.div($material-list-item-vertical-padding, 2) + 1px $item-horizontal-padding math.div($material-list-item-vertical-padding, 2);
     color: color.change($list-normal-color, $alpha: 0.6);
     font-size: 12px;
@@ -322,7 +324,6 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
 
   .dx-list-next-button .dx-button {
     margin-top: 20px;
-    padding: 0;
 
     @include dx-button-withtext-sizing();
 

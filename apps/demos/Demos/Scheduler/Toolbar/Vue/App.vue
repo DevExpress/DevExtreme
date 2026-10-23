@@ -38,17 +38,19 @@
       />
     </DxToolbar>
     <template #assigneesTemplate>
-      <DxSelectBox
-        placeholder="Select Employee"
-        :items="assignees"
-        :show-clear-button="true"
-        display-expr="text"
-        value-expr="id"
-        :input-attr="{ 'aria-label': 'Select Employee' }"
-        :width="200"
-        :value="assigneesFilterValue"
-        @value-changed="onAssigneesFilterChange"
-      />
+      <div>
+        <DxSelectBox
+          placeholder="Select Employee"
+          :items="assignees"
+          :show-clear-button="true"
+          display-expr="text"
+          value-expr="id"
+          :input-attr="{ 'aria-label': 'Select Employee' }"
+          :width="200"
+          :value="assigneesFilterValue"
+          @value-changed="onAssigneesFilterChange"
+        />
+      </div>
     </template>
   </DxScheduler>
 </template>

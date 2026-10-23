@@ -163,16 +163,24 @@ export class AppService {
     try {
       const aiResponse = await this.aiService.getAIResponse(this.messages) as string;
 
-      setTimeout(() => {
-        this.typingUsersSubject.next([]);
-        this.messages.push({ role: 'assistant', content: aiResponse });
-        this.renderAssistantMessage(aiResponse);
-      }, 200);
-    } catch {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 200);
+      });
+
+      this.typingUsersSubject.next([]);
+      this.messages.push({ role: 'assistant', content: aiResponse });
+      this.renderAssistantMessage(aiResponse);
+    } catch (err: unknown) {
       this.typingUsersSubject.next([]);
       this.messages.pop();
-      this.alertLimitReached();
+      this.alertError(this.getErrorMessage(err));
     }
+  }
+
+  getErrorMessage(err: unknown): string {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
   }
 
   renderAssistantMessage(text: string): void {
@@ -184,8 +192,8 @@ export class AppService {
     });
   }
 
-  alertLimitReached(): void {
-    this.setAlerts([{ message: 'Request limit reached, try again in a minute.' }]);
+  alertError(message: string): void {
+    this.setAlerts([{ message }]);
 
     setTimeout(() => {
       this.setAlerts([]);
@@ -195,6 +203,14 @@ export class AppService {
   setAlerts(alerts: DxChatTypes.Alert[]): void {
     this.alerts = alerts;
     this.alertsSubject.next(alerts);
+  }
+
+  clearMessages(): void {
+    this.store = [];
+    this.messages = [{ role: 'system', content: SYSTEM_PROMPT }];
+    this.setAlerts([]);
+    this.typingUsersSubject.next([]);
+    this.dataSource.reload();
   }
 
   async onMessageEntered({ message }: DxChatTypes.MessageEnteredEvent): Promise<void> {

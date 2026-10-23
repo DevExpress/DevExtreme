@@ -9,7 +9,7 @@ import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
 import Callbacks from '@ts/core/utils/callbacks';
 import type { Lock } from '@ts/core/utils/locker';
 import { Locker } from '@ts/core/utils/locker';
-import { isPlainObject } from '@ts/core/utils/m_type';
+import { isPlainObject } from '@ts/core/utils/type';
 import Draggable from '@ts/draggable';
 import Editor from '@ts/ui/editor/editor';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';

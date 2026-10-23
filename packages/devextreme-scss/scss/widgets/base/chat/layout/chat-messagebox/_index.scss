@@ -1,7 +1,9 @@
+$messagebox-border-block-start-width: null !default;
+
 .dx-chat-messagebox {
   display: flex;
   flex-direction: column;
-  border-top-width: 1px;
+  border-top-width: $messagebox-border-block-start-width;
   border-top-style: solid;
 }
 

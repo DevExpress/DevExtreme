@@ -1,34 +1,39 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/colorView/mixins" as *;
-@use "../../base/colorView";
-@include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
-
 $material-colorview-alpha-width: $material-colorview-palette-width + 4 !default;
 $material-colorview-hue-scale-height: $material-colorview-palette-height !default;
 
-.dx-colorview-container {
-  width: $material-colorview-container-width;
+@use "../../base/colorView" with (
+  $color-view-container-width: $material-colorview-container-width,
+  $color-view-alpha-label-width: $material-colorview-container-alpha-label-width,
+  $color-view-textbox-width: $material-colorview-container-textbox-width,
+  $color-view-alpha-row-margin-block-start: $material-colorview-alpha-margin,
+  $color-view-hue-scale-width: $material-colorview-hue-scale-width,
+  $color-view-hue-scale-height: $material-colorview-hue-scale-height,
+  $color-view-hue-scale-wrapper-height: $material-colorview-hue-scale-height + 2,
+  $color-view-palette-width: $material-colorview-palette-width,
+  $color-view-palette-height: $material-colorview-palette-height,
+  $color-view-alpha-cell-width: $material-colorview-alpha-width,
+  $color-view-controls-width: $material-colorview-controls-container-width,
+  $color-view-color-preview-height: $material-colorview-color-preview-height,
+  $color-view-label-hex-margin: $material-colorview-container-hex-margin,
+  $color-view-textbox-margin: $material-colorview-container-textbox-margin,
+  $color-view-color-preview-width: 100%,
+);
+@include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
 
+.dx-colorview-container {
   label {
     line-height: $material-colorview-container-line-height;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-
-    &.dx-colorview-label-hex {
-      margin: $material-colorview-container-hex-margin;
-    }
+    color: $colorview-label-color;
 
     &.dx-colorview-alpha-channel-label {
       margin: 0;
       margin-inline-start: $material-colorview-container-alpha-label-margin;
-      width: $material-colorview-container-alpha-label-width;
-    }
-
-    .dx-texteditor {
-      width: $material-colorview-container-textbox-width;
-      margin: $material-colorview-container-textbox-margin;
     }
   }
 }
@@ -37,46 +42,13 @@ $material-colorview-hue-scale-height: $material-colorview-palette-height !defaul
   margin-inline-start: $material-colorview-hue-scale-margin;
 }
 
-.dx-colorview-palette {
-  width: $material-colorview-palette-width;
-  height: $material-colorview-palette-height;
-}
-
-.dx-colorview-alpha-channel-scale {
-  width: $material-colorview-palette-width;
-}
-
 .dx-colorview-container-row.dx-colorview-alpha-channel-row {
-  margin-top: $material-colorview-alpha-margin;
   display: flex;
   align-items: center;
 }
 
-.dx-colorview-hue-scale {
-  width: $material-colorview-hue-scale-width;
-  height: $material-colorview-hue-scale-height;
-}
-
-.dx-colorview-alpha-channel-cell {
-  width: $material-colorview-alpha-width;
-}
-
-.dx-colorview-hue-scale-wrapper {
-  height: $material-colorview-hue-scale-height + 2;
-}
-
-.dx-colorview-color-preview {
-  width: 100%;
-  height: $material-colorview-color-preview-height;
-}
-
 .dx-colorview-controls-container {
-  width: $material-colorview-controls-container-width;
   margin-inline-start: $material-colorview-controls-container-margin;
-}
-
-.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
-  color: $colorview-label-color;
 }
 
 .dx-colorview-palette-cell,

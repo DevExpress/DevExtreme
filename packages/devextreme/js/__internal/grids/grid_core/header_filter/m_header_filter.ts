@@ -19,18 +19,22 @@ import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_
 import type {
   DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import Modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import {
   headerFilterMixin,
   HeaderFilterView,
   updateHeaderFilterItemSelectionState,
 } from './m_header_filter_core';
-import { allowHeaderFiltering, createHeaderFilterExpressions } from './utils';
+import {
+  allowHeaderFiltering,
+  createHeaderFilterExpressions,
+  getHeaderFilterGroupParameters,
+} from './utils';
 
 const DATE_INTERVAL_FORMATS = {
   year(value) {
@@ -83,7 +87,7 @@ function ungroupUTCDates(items, dateParts?, dates?) {
 export function convertDataFromUTCToLocal(data, column) {
   const dates = ungroupUTCDates(data);
   const query = dataQuery(dates);
-  const group = gridCoreUtils.getHeaderFilterGroupParameters({
+  const group = getHeaderFilterGroupParameters({
     ...column,
     calculateCellValue: (date) => date,
   });
@@ -248,10 +252,10 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private getDataSource(column) {
+  public getDataSource(column) {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const remoteGrouping = this.dataSourceController.remoteOperations().grouping;
-    const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
+    const group = getHeaderFilterGroupParameters(column, remoteGrouping);
     const headerFilterDataSource = column.headerFilter?.dataSource;
     const headerFilterOptions = this.option('headerFilter');
     let isLookup = false;
@@ -364,7 +368,7 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private showHeaderFilterMenuBase(options) {
+  public showHeaderFilterMenuBase(options) {
     const that = this;
     const { column } = options;
 
@@ -406,7 +410,7 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private hideHeaderFilterMenu() {
+  public hideHeaderFilterMenu() {
     this._headerFilterView.hideHeaderFilterMenu();
   }
 }

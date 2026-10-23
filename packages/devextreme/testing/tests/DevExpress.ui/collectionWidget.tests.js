@@ -7,7 +7,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import Store from 'data/abstract_store';
 import ArrayStore from 'common/data/array_store';
 import { setTemplateEngine } from 'core/templates/template_engine_registry';
-import support from '__internal/core/utils/m_support';
+import support from '__internal/core/utils/support';
 import pointerEvents from 'common/core/events/pointer';
 import holdEvent from 'common/core/events/hold';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';

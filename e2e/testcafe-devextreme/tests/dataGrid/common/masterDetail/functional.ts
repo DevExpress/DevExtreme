@@ -41,7 +41,7 @@ test('Detail grid should not reload data when the collapsed master row reenters 
     .eql(1);
 
   // act
-  await dataGrid.scrollTo(t, { y: 10000 });
+  await dataGrid.scrollTo(t, { top: 10000 });
 
   // assert
   await t
@@ -51,7 +51,7 @@ test('Detail grid should not reload data when the collapsed master row reenters 
     .ok();
 
   // act
-  await dataGrid.scrollTo(t, { y: 0 });
+  await dataGrid.scrollTo(t, { top: 0 });
 
   detailGrid = dataGrid.getMasterRow(0).getDataGrid();
 

@@ -1,4 +1,5 @@
 import { HorizontalAlignment } from '../common';
+import { PermutationsWithRepetition } from '../core';
 import { Format } from '../localization';
 import { BaseLegendItem } from '../viz/common';
 import { baseSeriesObject } from '../viz/chart';
@@ -46,10 +47,12 @@ export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
 export type ChartsDataType = 'datetime' | 'numeric' | 'string';
 
 /**
+ * @docid
  * @public
+ * @type object
  * @namespace DevExpress.common.charts
  */
-export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+export type DashStyle = PermutationsWithRepetition<'dash' | 'dot' | 'longDash' | 'solid', 5>;
 
 /**
  * @public
@@ -97,7 +100,7 @@ export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type Palette = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+export type Palette = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | 'Fluent Next';
 
 /**
  * @public

@@ -64,7 +64,7 @@ function onSubmenuShowing(e: DxMenuTypes.SubmenuShowingEvent<ProductType>) {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
 }
 
 .caption {

@@ -17,14 +17,14 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/c
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type {
   DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
-import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
@@ -135,7 +135,12 @@ const getColumnSelectedFilterOperation = function (that, column) {
 
 const hasMultiselectEditor = function ($editorContainer: dxElementWrapper): boolean {
   const editor = getEditorInstance($editorContainer);
-  return !editor || MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+
+  if (editor) {
+    return MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+  }
+
+  return !$editorContainer.find(`.${FILTER_RANGE_CONTENT_CLASS}`).length;
 };
 
 const isValidFilterValue = function (
@@ -652,12 +657,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         }
 
         if (selectedFilterOperation) {
-          options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = selectedFilterOperation;
-
           if (selectedFilterOperation === 'between' || columnSelectedFilterOperation === 'between') {
             notFocusEditor = selectedFilterOperation === 'between';
             options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
           }
+
+          options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = selectedFilterOperation;
         } else {
           options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
           options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = column.defaultSelectedFilterOperation || null;
@@ -870,12 +875,13 @@ export class ApplyFilterViewController extends modules.ViewController {
     this._columnsController.beginUpdate();
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i];
-      if (column.bufferedFilterValue !== undefined) {
-        this._columnsController.columnOption(i, 'filterValue', column.bufferedFilterValue);
+      const { bufferedFilterValue, bufferedSelectedFilterOperation } = column;
+      if (bufferedFilterValue !== undefined) {
+        this._columnsController.columnOption(i, 'filterValue', bufferedFilterValue);
         column.bufferedFilterValue = undefined;
       }
-      if (column.bufferedSelectedFilterOperation !== undefined) {
-        this._columnsController.columnOption(i, 'selectedFilterOperation', column.bufferedSelectedFilterOperation);
+      if (bufferedSelectedFilterOperation !== undefined) {
+        this._columnsController.columnOption(i, 'selectedFilterOperation', bufferedSelectedFilterOperation);
         column.bufferedSelectedFilterOperation = undefined;
       }
     }

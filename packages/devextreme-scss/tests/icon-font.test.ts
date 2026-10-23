@@ -28,7 +28,7 @@ describe('Equals svg to font', () => {
 
       try {
         files = readdirSync(dir);
-      } catch (e) {
+      } catch {
         return;
       }
 

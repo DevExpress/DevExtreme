@@ -1,6 +1,5 @@
 @use "../../base/icon_fonts" as *;
 @use "../dropDownEditor" as *;
-@use "../textEditor" as *;
 
 @mixin dx-dropdowneditor-button-icon-styling($icon) {
   .dx-dropdowneditor-icon {

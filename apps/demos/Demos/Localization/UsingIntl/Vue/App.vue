@@ -77,9 +77,6 @@ const editPopupOptions = { width: 700, height: 345 };
 const amountEditorOptions = {
   format: 'currency',
   showClearButton: true,
-  inputAttr: {
-    'aria-label': 'Filter cell',
-  },
 };
 const selectBoxInputAttr = { id: 'selectInput' };
 const formatMessage = ref((msg: string) => msg);
@@ -111,7 +108,7 @@ function changeLocale({ value }: DxSelectBoxTypes.ValueChangedEvent) {
 
 .options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   margin-top: 20px;
 }
 

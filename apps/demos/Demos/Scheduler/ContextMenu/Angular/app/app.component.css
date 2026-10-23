@@ -2,10 +2,14 @@
   text-align: center;
   float: left;
   margin-right: 12px;
-  color: white;
   width: 18px;
   height: 18px;
   font-size: 19.5px;
   border-radius: 18px;
   margin-top: 2px;
+}
+
+::ng-deep .dx-scheduler-appointment-title,
+::ng-deep .dx-scheduler-appointment-recurrence-icon {
+  color: var(--dxds-color-content-on-color, white);
 }

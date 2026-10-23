@@ -1,8 +1,9 @@
-@use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/checkBox";
+@use "../../base/checkBox" with (
+  $checkbox-text-padding-inline-start: $fluent-checkbox-text-padding-start,
+);
 @use "../../base/checkBox/mixins" as *;
 
 .dx-checkbox-icon {
@@ -21,7 +22,6 @@
 }
 
 .dx-checkbox-text {
-  padding-inline-start: $fluent-checkbox-text-padding-start;
   padding-inline-end: $fluent-checkbox-text-padding-end;
 }
 

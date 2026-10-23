@@ -1,6 +1,6 @@
 import { isDefined } from '@js/core/utils/type';
 import { ColumnsController, columnsControllerModule } from '@ts/grids/grid_core/columns_controller/columns_controller';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import treeListCore from './core';

@@ -4,8 +4,9 @@ import dateLocalization from '@js/common/core/localization/date';
 import numberLocalization from '@js/common/core/localization/number';
 import { isDate, isDefined, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type TreeList from '@ts/grids/tree_list/m_widget_base';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
+import type TreeList from '@ts/grids/tree_list/widget_base';
 import type Gantt from '@ts/ui/gantt/ui.gantt';
 
 const window = getWindow();
@@ -48,7 +49,7 @@ export class GanttExportHelper {
 
   getTreeListColCount(): number {
     const headerView = this._getHeaderView();
-    const widths: number[] = headerView.getColumnWidths().filter((w) => w > 0);
+    const widths: number[] = headerView?.getColumnWidths().filter((w) => w > 0) ?? [];
 
     return widths.length;
   }
@@ -175,14 +176,11 @@ export class GanttExportHelper {
   }
 
   _getHeaderElement(index) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this._getHeaderView().getHeaderElement(index).get(0);
+    return this._getHeaderView()?.getHeaderElement(index).get(0);
   }
 
-  _getHeaderView() {
-    // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this._treeList?._views.columnHeadersView;
+  _getHeaderView(): ColumnHeadersView | undefined {
+    return this._treeList?.getView('columnHeadersView');
   }
 
   _getDisplayText(key, colIndex) {
@@ -192,14 +190,13 @@ export class GanttExportHelper {
   }
 
   _getGridDisplayText(colIndex, data) {
-    // @ts-expect-error ts-error
-    const columns = this._treeList?.getController('columns').getVisibleColumns();
+    const columns = this._treeList?.getController('columns').getVisibleColumns() ?? [];
     const column = columns[colIndex];
     const field = column?.dataField;
     const format = column?.format;
     const value = gridCoreUtils.getDisplayValue(
       column,
-      data[field],
+      data[String(field)],
       data,
       'data',
     );
@@ -209,7 +206,6 @@ export class GanttExportHelper {
         return dateLocalization.format(date, format);
       }
       if (isNumeric(value)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return numberLocalization.format(value, format);
       }
     }

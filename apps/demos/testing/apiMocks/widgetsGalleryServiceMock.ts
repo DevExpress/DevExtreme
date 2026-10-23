@@ -68,7 +68,7 @@ const handlers: MockHandler[] = [
   salesOrdersHandler,
   // GET /api/orders
   ordersHandler,
-  // POST demo-openai chat completions (AI column)
+  // POST demo-openai chat completions (AI columns, AI chat)
   openAIHandler,
   // GET /api/DiagramEmployees/Employees
   diagramEmployeesHandler,
