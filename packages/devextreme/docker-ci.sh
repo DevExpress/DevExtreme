@@ -75,7 +75,7 @@ function run_test_impl {
 
     if [ "$LOCAL" != "true" ]; then
         if [ "$GITHUBACTION" != "true" ]; then
-        pnpm i
+        pnpm install --frozen-lockfile
         pnpm run build
         fi
 
