@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, ChangeDetectorRef, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ViewChild, ChangeDetectorRef } from '@angular/core';
 import {
   DxGanttComponent,
   DxGanttModule,
@@ -137,8 +137,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
