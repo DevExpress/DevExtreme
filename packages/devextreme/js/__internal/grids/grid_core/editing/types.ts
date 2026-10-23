@@ -6,7 +6,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type { StoreChange } from '@js/data/store';
 import type { DxEvent } from '@js/events';
 import type { Column as DataGridColumn, ColumnButton, ColumnButtonClickEvent } from '@js/ui/data_grid';
-import type { FormItemComponent } from '@js/ui/form';
+import type { FormItemComponent, Item as FormItem, SimpleItem } from '@js/ui/form';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ProcessedItem } from '../data_controller/types';
@@ -17,16 +17,32 @@ import type {
 import type {
   CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRow,
 } from '../views/types';
-import type { EDITING_CHANGES_OPTION_NAME, INSERT_INDEX } from './const';
+import type {
+  EDITING_CHANGES_OPTION_NAME, EDITING_EDITCOLUMNNAME_OPTION_NAME, INSERT_INDEX,
+} from './const';
+
+export interface EditCellOptions {
+  rowIndex: number;
+  columnIndex: number | string;
+  oldColumnIndex?: number;
+  oldRowIndex?: number;
+}
+
+export type EditCellResult = boolean | DeferredObj<unknown>;
 
 export interface NormalizedEditCellOptions {
   item: ProcessedItem;
-  oldColumn: Column;
+  oldColumn?: Column;
   column: Column;
   columnIndex: number;
   oldRowIndex: number;
   rowIndex: number;
 }
+
+export type EditColumnNameOptionChanged = Extract<
+  OptionChanged,
+  { fullName: typeof EDITING_EDITCOLUMNNAME_OPTION_NAME }
+>;
 
 export interface InsertInfo {
   [INSERT_INDEX]: number;
@@ -71,8 +87,25 @@ export interface EditingButtonTexts {
 
 export interface EditFormColumnItem {
   column: Column;
+  name?: string;
+  dataField?: string;
   editorType?: FormItemComponent;
+  editorOptions?: object;
   isCustomEditorType?: boolean;
+}
+
+export type EditFormItem = SimpleItem & {
+  column?: Column;
+  isCustomEditorType?: boolean;
+};
+
+export type EditFormDetailOptions = Partial<ViewCellOptions> & Pick<ViewCellOptions, 'rowType'>;
+
+export interface EditFormOptions {
+  validationGroup?: unknown;
+  items: (FormItem | EditFormItem)[];
+  formID: string;
+  customizeItem: (item: EditFormItem) => void;
 }
 
 export interface OnSavingParams {
@@ -116,6 +149,7 @@ export interface EditorCellOptions extends ViewCellOptions {
   row?: ProcessedItem;
   setValue?: (value: unknown, text?: string) => void;
   isOnForm?: boolean;
+  item?: EditFormColumnItem;
   id?: string;
 }
 
@@ -185,5 +219,7 @@ export type EditingChangeParams = Partial<EditingChange> & { oldData?: RawItemDa
 export interface EditingModuleOptions {
   useLegacyColumnButtonTemplate?: boolean;
 }
+
+export type EditingDefaultOptions = { editing: EditingOptions } & EditingModuleOptions;
 
 export type EditingModuleOptionChanged = OptionChanged | OptionChangedFor<EditingModuleOptions>;

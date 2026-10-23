@@ -38,6 +38,7 @@ import {
   EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
 } from '../editing/const';
 import type { EditingController } from '../editing/editing';
+import type { CellBasedEditingController } from '../editing/m_editing_cell_based';
 import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
@@ -77,7 +78,7 @@ export class ValidatingController extends modules.Controller {
 
   private _disableApplyValidationResults = false;
 
-  private _editingController!: EditingController;
+  private _editingController!: CellBasedEditingController;
 
   private _editorFactoryController!: EditorFactory;
 
@@ -90,7 +91,7 @@ export class ValidatingController extends modules.Controller {
   private _currentCellValidator: any;
 
   public init() {
-    this._editingController = this.getController('editing');
+    this._editingController = this.getController('editing') as CellBasedEditingController;
     this._editorFactoryController = this.getController('editorFactory');
     this._columnsController = this.getController('columns');
     this.createAction('onRowValidating');

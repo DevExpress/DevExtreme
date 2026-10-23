@@ -18,6 +18,7 @@ import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { TemplateModel } from '@ts/grids/grid_core/columns_controller/types';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { EditingOptions } from '@ts/grids/grid_core/editing/types';
 import type { FilterValue } from '@ts/grids/grid_core/filter/types';
 import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
@@ -173,6 +174,8 @@ export interface InternalGrid extends GridBaseType {
 
   _createActionByOption: (optionName: string, config?: ActionConfig) => ModuleItemAction;
   isReady: () => boolean;
+
+  getVisibleRows: () => ProcessedItem[];
 
   _setOptionWithoutOptionChange: (name: string, value: unknown) => void;
 }

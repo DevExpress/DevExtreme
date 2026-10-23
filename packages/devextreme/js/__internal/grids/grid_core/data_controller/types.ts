@@ -54,6 +54,7 @@ export interface GeneratedItem {
   oldData?: RawItemData;
   modifiedValues?: unknown[];
   removed?: boolean;
+  visible?: boolean;
 }
 
 export interface ProcessedItem extends GeneratedItem {
@@ -61,7 +62,6 @@ export interface ProcessedItem extends GeneratedItem {
   oldValues?: unknown[];
   dataIndex?: number;
   isSelected?: boolean;
-  visible?: boolean;
   isExpanded?: boolean;
   loadIndex?: number;
   rowIndex?: number;
