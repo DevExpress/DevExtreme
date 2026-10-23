@@ -296,6 +296,26 @@ export type ToolCall = {
  * @namespace DevExpress.ui.dxChat
  * @public
  */
+export type ToolCallOptions = {
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    showInMessageTemplate?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    expandAll?: boolean;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
 export type MessageType = 'text' | 'image';
 
 /**
@@ -547,12 +567,6 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     reloadOnChange?: boolean;
     /**
      * @docid
-     * @default false
-     * @public
-     */
-    renderToolsInMessageTemplate?: boolean;
-    /**
-     * @docid
      * @public
      */
     sendButtonOptions?: SendButtonProperties;
@@ -598,6 +612,11 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     suggestions?: Omit<ButtonGroupProperties, 'selectionMode' | 'selectedItemKeys' | 'selectedItems' | 'onSelectionChanged'>;
+    /**
+     * @docid
+     * @public
+     */
+    toolCallOptions?: ToolCallOptions;
     /**
      * @docid
      * @default []
