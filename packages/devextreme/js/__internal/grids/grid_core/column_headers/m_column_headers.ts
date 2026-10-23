@@ -597,7 +597,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return this.isColumnReorderingEnabled(column) && columns.length > 1;
   }
 
-  protected getBoundingRect(): BoundingRect | null {
+  public getBoundingRect(): BoundingRect | null {
     const $columnElements = this.getColumnElements();
 
     if (!$columnElements?.length) {
@@ -712,7 +712,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return items.length ? items : undefined;
   }
 
-  protected getRowCount(): number {
+  public getRowCount(): number {
     return this._columnsController?.getRowCount();
   }
 
