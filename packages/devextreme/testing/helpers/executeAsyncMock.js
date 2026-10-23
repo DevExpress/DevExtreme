@@ -1,4 +1,4 @@
-import commonUtils from '__internal/core/utils/m_common';
+import commonUtils from '__internal/core/utils/common';
 
 const originalExecuteAsync = commonUtils.executeAsync;
 

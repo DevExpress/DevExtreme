@@ -9,7 +9,7 @@ import { current, isGeneric, isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import supportUtils from '../core/utils/m_support';
+import supportUtils from '../core/utils/support';
 
 export const LOADINDICATOR_CLASS = 'dx-loadindicator';
 export const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';

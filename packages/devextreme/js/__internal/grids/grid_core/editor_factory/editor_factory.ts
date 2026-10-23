@@ -24,7 +24,7 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import { CLASSES as EDITING_CLASSES } from '../editing/const';
-import type { EditingController } from '../editing/m_editing';
+import type { EditingController } from '../editing/editing';
 import { CLASSES as KEYBOARD_NAVIGATION_CLASSES } from '../keyboard_navigation/const';
 import { isDataRow } from '../keyboard_navigation/utils';
 import type { ViewController } from '../modules/modules';

@@ -12,7 +12,7 @@ import { setStyle } from '@js/core/utils/style';
 import { touch } from '@js/core/utils/support';
 import { isDefined, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import { pairToObject, splitPair } from '@ts/core/utils/m_common';
+import { pairToObject, splitPair } from '@ts/core/utils/common';
 
 const window = getWindow();
 

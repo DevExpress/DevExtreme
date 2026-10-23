@@ -30,7 +30,7 @@ import {
   getEasing,
 } from '@ts/common/core/animation/easing';
 import type { TranslateVector } from '@ts/common/core/animation/translator';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 
 const window = getWindow();
 const removeEventName = addNamespace(removeEvent, 'dxFX');

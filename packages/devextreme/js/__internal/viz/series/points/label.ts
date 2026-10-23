@@ -11,8 +11,8 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import formatHelper from '@ts/core/format_helper';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { BBox, Coords } from '@ts/viz/core/types';
 import {

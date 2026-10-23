@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { paintedColor } from '@ts/core/utils/css_variables';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { BBox } from '@ts/viz/core/types';
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from '@ts/viz/sankey/constants';

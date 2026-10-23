@@ -10,7 +10,7 @@ import type { ValueChangedEvent } from '@js/ui/calendar';
 import type { ToolbarItem, ToolbarLocation } from '@js/ui/popup';
 import { current, isMaterial } from '@js/ui/themes';
 import { applyDataTypePreset, getGlobalFormatByDataType } from '@ts/core/global_format_config';
-import { splitPair } from '@ts/core/utils/m_common';
+import { splitPair } from '@ts/core/utils/common';
 import Calendar from '@ts/ui/calendar/calendar';
 import type { CellEvent } from '@ts/ui/calendar/calendar.base_view';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';

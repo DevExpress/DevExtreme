@@ -49,7 +49,7 @@ import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import { isLocalStore } from '../data_source_adapter/utils/store';
-import type { EditingController } from '../editing/m_editing';
+import type { EditingController } from '../editing/editing';
 import { CLASSES } from '../sticky_columns/const';
 import gridCoreUtils from '../utils';
 import { ColumnsView } from './columns_view';

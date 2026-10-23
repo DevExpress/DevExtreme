@@ -9,7 +9,7 @@ import {
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { DateFormatter, Format } from '@ts/core/localization/date';
 import { bindDatePartsToLocale } from '@ts/core/localization/ldml/date.parser';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 
 interface DateArgs {
   year: number;
