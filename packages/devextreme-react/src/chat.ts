@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser, MessageType, SendButtonAction, SendButtonClickEvent } from "devextreme/ui/chat";
+import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser, MessageType, SendButtonAction, SendButtonClickEvent, ToolCall as ChatToolCall, ToolCallStatus } from "devextreme/ui/chat";
 import type { DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, BeforeSendEvent, ContentReadyEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from "devextreme/ui/file_uploader";
 import type { DisposingEvent as SpeechToTextDisposingEvent, InitializedEvent as SpeechToTextInitializedEvent, ContentReadyEvent as SpeechToTextContentReadyEvent, OptionChangedEvent as SpeechToTextOptionChangedEvent, CustomSpeechRecognizer as SpeechToTextCustomSpeechRecognizer, EndEvent, ErrorEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig as SpeechToTextSpeechRecognitionConfig } from "devextreme/ui/speech_to_text";
 import type { DisposingEvent as ButtonGroupDisposingEvent, InitializedEvent as ButtonGroupInitializedEvent, ContentReadyEvent as ButtonGroupContentReadyEvent, OptionChangedEvent as ButtonGroupOptionChangedEvent, dxButtonGroupItem, ItemClickEvent, SelectionChangedEvent } from "devextreme/ui/button_group";
@@ -188,6 +188,7 @@ type IChatItemProps = React.PropsWithChildren<{
   src?: string;
   text?: string;
   timestamp?: Date | number | string;
+  toolCalls?: Array<ChatToolCall>;
   type?: MessageType;
 }>
 const _componentChatItem = (props: IChatItemProps) => {
@@ -198,7 +199,8 @@ const _componentChatItem = (props: IChatItemProps) => {
       IsCollectionItem: true,
       ExpectedChildren: {
         attachment: { optionName: "attachments", isCollectionItem: true },
-        author: { optionName: "author", isCollectionItem: false }
+        author: { optionName: "author", isCollectionItem: false },
+        toolCall: { optionName: "toolCalls", isCollectionItem: true }
       },
     },
   });
@@ -369,6 +371,7 @@ type IItemProps = React.PropsWithChildren<{
   src?: string;
   text?: string;
   timestamp?: Date | number | string;
+  toolCalls?: Array<ChatToolCall>;
   type?: MessageType | ButtonType | string;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
@@ -387,7 +390,8 @@ const _componentItem = (props: IItemProps) => {
       IsCollectionItem: true,
       ExpectedChildren: {
         attachment: { optionName: "attachments", isCollectionItem: true },
-        author: { optionName: "author", isCollectionItem: false }
+        author: { optionName: "author", isCollectionItem: false },
+        toolCall: { optionName: "toolCalls", isCollectionItem: true }
       },
       TemplateProps: [{
         tmplOption: "template",
@@ -612,6 +616,27 @@ const SuggestionsItem = Object.assign<typeof _componentSuggestionsItem, NestedCo
   componentType: "option",
 });
 
+type IToolCallProps = React.PropsWithChildren<{
+  arguments?: Record<string, any>;
+  expanded?: boolean;
+  name?: string;
+  result?: Record<string, any> | string;
+  status?: ToolCallStatus;
+}>
+const _componentToolCall = (props: IToolCallProps) => {
+  return React.createElement(NestedOption<IToolCallProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "toolCalls",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const ToolCall = Object.assign<typeof _componentToolCall, NestedComponentMeta>(_componentToolCall, {
+  componentType: "option",
+});
+
 // owners:
 // Chat
 type ITypingUserProps = React.PropsWithChildren<{
@@ -690,6 +715,8 @@ export {
   ISuggestionsProps,
   SuggestionsItem,
   ISuggestionsItemProps,
+  ToolCall,
+  IToolCallProps,
   TypingUser,
   ITypingUserProps,
   User,
