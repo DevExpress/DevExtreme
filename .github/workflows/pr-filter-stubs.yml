@@ -34,7 +34,7 @@ jobs:
       - name: Prepare required check stubs
         run: echo "Required check stubs are available for apps/**/*.md PRs."
 
-  # build_all.yml, demos_visual_tests.yml, packages_publishing.yml, playgrounds_tests.yml, qunit_tests.yml, testcafe_tests.yml, wrapper_tests.yml
+  # build_all.yml, playgrounds_tests.yml, wrapper_tests.yml
   build1:
     name: 'build'
     needs: [ stubChecksReady ]
@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  #default_workflow.yml
+  # default_workflow.yml
   default_workflow1:
     name: 'main'
     needs: [ stubChecksReady ]
@@ -80,13 +80,6 @@ jobs:
     steps:
       - run: exit 1
   # lint.yml
-  lint1:
-    name: 'Renovation'
-    needs: [ stubChecksReady ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
   lint2:
     name: 'TS'
     needs: [ stubChecksReady ]
@@ -96,13 +89,6 @@ jobs:
       - run: exit 1
   lint3:
     name: 'JS'
-    needs: [ stubChecksReady ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  lint4:
-    name: 'CSS'
     needs: [ stubChecksReady ]
     if: false
     runs-on: ubuntu-latest
@@ -124,14 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  # qunit_tests
-  qunit_tests1:
-    name: 'Constel export'
-    needs: [ stubChecksReady ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
+  # qunit_tests.yml
   qunit_tests2:
     name: 'Constel misc'
     needs: [ stubChecksReady ]
@@ -223,7 +202,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  # demos_visual_tests.yml
+  # visual-tests-demos.yml
   demos_visual_tests1:
     name: 'jquery(1/3)-screenshots-material.blue.light'
     needs: [ stubChecksReady ]
