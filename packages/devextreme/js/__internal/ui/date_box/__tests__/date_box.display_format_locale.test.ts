@@ -236,6 +236,52 @@ describe('locale-only displayFormat follows the editor type', () => {
     expect(input.value).toContain('Juli');
   });
 
+  it.each([
+    { type: 'shortDate', locale: 'ar-EG' },
+    { type: 'dd.MM.yyyy', locale: 'ar-EG' },
+  ])('edits and pastes into a mask whose format locale uses other digits %j', (displayFormat) => {
+    const element = document.body.appendChild(document.createElement('div'));
+    const instance = new DateBox(element, {
+      type: 'date',
+      pickerType: 'calendar',
+      useMaskBehavior: true,
+      value,
+      displayFormat,
+    });
+
+    widgets.push(instance);
+
+    const input = element.querySelector('.dx-texteditor-input') as HTMLInputElement;
+    const editor = instance as DateBox & {
+      _upDownArrowHandler: (step: number) => void;
+      _maskPasteHandler: (e: {
+        originalEvent: { clipboardData: { getData: () => string } };
+        preventDefault: () => void;
+      }) => void;
+      _maskValue?: Date | null;
+    };
+    const textBeforeEdit = input.value;
+
+    expect(textBeforeEdit).not.toMatch(/[0-9]/);
+    expect(() => editor._upDownArrowHandler(1)).not.toThrow();
+    expect(input.value).not.toBe(textBeforeEdit);
+    expect(input.value).not.toMatch(/[0-9]/);
+
+    const pastedDate = new Date(2024, 6, 20);
+    const pastedText = dateLocalization.format(pastedDate, displayFormat as never) as string;
+
+    input.setSelectionRange(0, input.value.length);
+    editor._maskPasteHandler({
+      originalEvent: { clipboardData: { getData: () => pastedText } },
+      preventDefault: () => {},
+    });
+
+    expect(editor._maskValue?.getFullYear()).toBe(2024);
+    expect(editor._maskValue?.getMonth()).toBe(6);
+    expect(editor._maskValue?.getDate()).toBe(20);
+    expect(input.value).toBe(pastedText);
+  });
+
   it('edits a longDate mask whose locale comes from a preset override', () => {
     const savedLocale = coreLocalization.locale();
     const savedPresets = config().dateTimeFormatPresets;

@@ -410,8 +410,14 @@ class DateBoxMask<
     if (isLDMLPattern) {
       this._formatPattern = format;
     } else {
+      const formatLocale = getDateFormatLocale(format);
+
       this._formatPattern = getFormat(
-        (value) => dateLocalization.format(value, format) as string,
+        (value) => numberLocalization.convertDigits(
+          dateLocalization.format(value, format) as string,
+          true,
+          formatLocale,
+        ),
       ) as string;
     }
 
@@ -459,7 +465,11 @@ class DateBoxMask<
 
   _searchString(char: string): void {
     const text = this._getActivePartProp('text');
-    const convertedText = numberLocalization.convertDigits(text, true);
+    const convertedText = numberLocalization.convertDigits(
+      text,
+      true,
+      this._formatDateParts?.formatLocale,
+    );
 
     if (!isNaN(parseInt(convertedText, 10))) {
       return;
@@ -528,7 +538,7 @@ class DateBoxMask<
       .split(quantifierRegexp)
       .map((sourcePart) => (quantifierRegexp.test(sourcePart)
         ? sourcePart
-        : numberLocalization.convertDigits(sourcePart, false)))
+        : numberLocalization.convertDigits(sourcePart, false, formatLocale)))
       .join('');
     this._regExpInfo.regexp = new RegExp(convertedSource, flags);
   }
@@ -817,7 +827,11 @@ class DateBoxMask<
     const { text } = this.option();
     // @ts-expect-error text
     const newText = this._replaceSelectedText(text, this._caret(), clipboardText(e));
-    const textToParse = numberLocalization.convertDigits(newText, true);
+    const textToParse = numberLocalization.convertDigits(
+      newText,
+      true,
+      this._formatDateParts?.formatLocale,
+    );
     const date = getLDMLDateParser(
       this._getFormatPattern(),
       this._formatDateParts ?? dateLocalization,

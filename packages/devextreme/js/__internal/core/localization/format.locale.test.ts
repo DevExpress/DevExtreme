@@ -627,6 +627,53 @@ describe('format locale integration', () => {
 
       expect(dateLocalization.parse(text, 'longDate')).toEqual(date);
     });
+
+    it.each([
+      { type: 'shortDate', locale: 'ar-EG' },
+      { type: 'longDate', locale: 'ar-EG' },
+      { type: 'monthAndYear', locale: 'ar-EG' },
+      { type: 'shortDate', locale: 'bn' },
+      { type: 'dd.MM.yyyy', locale: 'ar-EG' },
+    ])('should parse text with non-Latin digits of the format locale %j', (format) => {
+      coreLocalization.locale('en');
+
+      const text = dateLocalization.format(date, format as never) as string;
+      const parsed = dateLocalization.parse(text, format as never) as Date;
+
+      expect(text).not.toMatch(/[0-9]/);
+      expect(parsed.getFullYear()).toBe(2020);
+      expect(parsed.getMonth()).toBe(0);
+    });
+
+    it('should parse a time with non-Latin digits of the format locale', () => {
+      coreLocalization.locale('en');
+      const format = { type: 'shortTime', locale: 'ar-EG' };
+      const time = new Date(2020, 0, 2, 14, 5);
+
+      const text = dateLocalization.format(time, format as never) as string;
+      const parsed = dateLocalization.parse(text, format as never) as Date;
+
+      expect(text).not.toMatch(/[0-9]/);
+      expect([parsed.getHours(), parsed.getMinutes()]).toEqual([14, 5]);
+    });
+
+    it('should format an LDML pattern with the digits of the format locale', () => {
+      coreLocalization.locale('en');
+
+      expect(dateLocalization.format(date, { type: 'dd.MM.yyyy', locale: 'ar-EG' } as never))
+        .toBe('٠٢.٠١.٢٠٢٠');
+      expect(dateLocalization.format(date, 'dd.MM.yyyy')).toBe('02.01.2020');
+    });
+
+    it('should parse Latin digits of the format locale when the message locale uses other digits', () => {
+      coreLocalization.locale('ar-EG');
+      const format = { type: 'dd.MM.yyyy', locale: 'en' };
+
+      const text = dateLocalization.format(date, format as never) as string;
+
+      expect(text).toBe('02.01.2020');
+      expect(dateLocalization.parse(text, format as never)).toEqual(date);
+    });
   });
 
   describe('currency', () => {

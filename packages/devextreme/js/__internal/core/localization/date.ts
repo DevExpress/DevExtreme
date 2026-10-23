@@ -89,6 +89,8 @@ const dateLocalization = dependencyInjector({
 
       return numberLocalization.convertDigits(
         getLDMLDateFormatter(pattern, dateParts)(date),
+        false,
+        dateParts.formatLocale,
       );
     }
 
@@ -185,7 +187,11 @@ const dateLocalization = dependencyInjector({
         // eslint-disable-next-line no-param-reassign
         format = (FORMATS_TO_PATTERN_MAP[format.toLowerCase()] || format) as string;
 
-        return numberLocalization.convertDigits(getLDMLDateFormatter(format, dateParts)(date));
+        return numberLocalization.convertDigits(
+          getLDMLDateFormatter(format, dateParts)(date),
+          false,
+          dateParts.formatLocale,
+        );
       }
     }
 
@@ -229,7 +235,7 @@ const dateLocalization = dependencyInjector({
         // eslint-disable-next-line @typescript-eslint/no-shadow
         const text: string = that.format(value, format);
 
-        return numberLocalization.convertDigits(text, true);
+        return numberLocalization.convertDigits(text, true, dateParts.formatLocale);
       };
       try {
         ldmlFormat = getLDMLDateFormat(formatter);
@@ -239,7 +245,7 @@ const dateLocalization = dependencyInjector({
 
     if (ldmlFormat) {
       // eslint-disable-next-line no-param-reassign
-      text = numberLocalization.convertDigits(text, true);
+      text = numberLocalization.convertDigits(text, true, dateParts.formatLocale);
       return getLDMLDateParser(ldmlFormat, dateParts)(text);
     }
 
