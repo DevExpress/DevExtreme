@@ -651,6 +651,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   private _closeEditCell() {
     const d = Deferred();
     setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       this._editingController.closeEditCell().always(d.resolve);
     });
     return d;

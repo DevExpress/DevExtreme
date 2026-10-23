@@ -17,16 +17,32 @@ import type {
 import type {
   CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRow,
 } from '../views/types';
-import type { EDITING_CHANGES_OPTION_NAME, INSERT_INDEX } from './const';
+import type {
+  EDITING_CHANGES_OPTION_NAME, EDITING_EDITCOLUMNNAME_OPTION_NAME, INSERT_INDEX,
+} from './const';
+
+export interface EditCellOptions {
+  rowIndex: number;
+  columnIndex: number | string;
+  oldColumnIndex?: number;
+  oldRowIndex?: number;
+}
+
+export type EditCellResult = boolean | DeferredObj<unknown>;
 
 export interface NormalizedEditCellOptions {
   item: ProcessedItem;
-  oldColumn: Column;
+  oldColumn?: Column;
   column: Column;
   columnIndex: number;
   oldRowIndex: number;
   rowIndex: number;
 }
+
+export type EditColumnNameOptionChanged = Extract<
+  OptionChanged,
+  { fullName: typeof EDITING_EDITCOLUMNNAME_OPTION_NAME }
+>;
 
 export interface InsertInfo {
   [INSERT_INDEX]: number;

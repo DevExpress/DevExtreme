@@ -112,6 +112,7 @@ import type {
   AllowEditActionValue,
   EditActionOptions,
   EditActions,
+  EditCellResult,
   EditingActionParams,
   EditingButton,
   EditingCellRenderOptions,
@@ -2900,7 +2901,7 @@ const rowsView = (
     return this.getCellIndex($targetElement);
   }
 
-  private _editCellByClick(e: ViewRowEvent, eventName: string): boolean | undefined {
+  private _editCellByClick(e: ViewRowEvent, eventName: string): EditCellResult | undefined {
     const $targetElement = $(e.event.target);
     const columnIndex = this._getColumnIndexByElement($targetElement);
     const row = this._dataController.items()[e.rowIndex];
@@ -2920,7 +2921,6 @@ const rowsView = (
         domUtils.resetActiveElement();
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- editCell() isn't typed yet
       return isShowEditorAlways && allowEditing
         && this._editingController.editCell(e.rowIndex, columnIndex);
     }
@@ -2936,9 +2936,7 @@ const rowsView = (
     }
 
     if (allowEditing && eventName === startEditAction) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- editCell() isn't typed yet
       return this._editingController.editCell(e.rowIndex, columnIndex)
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- false falls back
         || this._editingController.isEditRow(e.rowIndex);
     }
 
