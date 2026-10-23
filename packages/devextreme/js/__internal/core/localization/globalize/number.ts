@@ -6,6 +6,7 @@ import {
   getFormatterOptions,
   getGlobalFormatByDataType,
   getNumberFormatLocale,
+  isLocaleOnlyFormat,
 } from '@ts/core/global_format_config';
 import numberLocalization, {
   type FormatConfig,
@@ -171,7 +172,7 @@ if (Globalize?.formatNumber) {
         return this.callBase.apply(this, [text, format]);
       }
 
-      if (format) {
+      if (format && !isLocaleOnlyFormat(format)) {
         // Current parser functionality provided as-is and
         // is independent of the most of capabilities of formatter.
         errors.log('W0011');

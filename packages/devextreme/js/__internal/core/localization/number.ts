@@ -2,7 +2,11 @@
 import type { Format, FormatObject as PublicFormatConfig } from '@js/common/core/localization';
 import config from '@js/core/config';
 import errors from '@js/core/errors';
-import { getGlobalFormatByDataType, getNumberFormatLocale } from '@ts/core/global_format_config';
+import {
+  getGlobalFormatByDataType,
+  getNumberFormatLocale,
+  isLocaleOnlyFormat,
+} from '@ts/core/global_format_config';
 import localizationCore from '@ts/core/localization/core';
 import currencyLocalization from '@ts/core/localization/currency';
 import intlNumberLocalization from '@ts/core/localization/intl/number';
@@ -389,7 +393,12 @@ const numberLocalizationBase = {
 
     text = this.convertDigits(text, true, getNumberFormatLocale(format));
 
-    if (format && typeof format !== 'string' && !isLdmlPatternFormat(format)) {
+    if (
+      format
+      && typeof format !== 'string'
+      && !isLdmlPatternFormat(format)
+      && !isLocaleOnlyFormat(format)
+    ) {
       // Current parser functionality provided as-is and
       // is independent of the most of capabilities of formatter.
       // An LDML pattern object is the string pattern plus locale, which this parser does apply.
