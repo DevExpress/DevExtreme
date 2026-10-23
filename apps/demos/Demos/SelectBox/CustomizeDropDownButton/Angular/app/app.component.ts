@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  ChangeDetectorRef, Component, enableProdMode,
 } from '@angular/core';
 import {
   DxSelectBoxModule,
@@ -36,6 +36,7 @@ export class AppComponent {
     loadMode: 'raw',
     load: () => {
       this.isLoaded = false;
+      this.changeDetectorRef.markForCheck();
       const promise = new Promise((resolve) => {
         setTimeout(() => {
           resolve(this.simpleProducts);
@@ -55,8 +56,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
