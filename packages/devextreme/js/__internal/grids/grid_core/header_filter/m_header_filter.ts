@@ -485,6 +485,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelHeaderFilterExtender extends headerFilterMixin(Base) {
   private _createGroupPanelItem($rootElement, groupColumn) {
     const that = this;
+    // @ts-expect-error DataGrid's method
     const $item = super._createGroupPanelItem.apply(that, arguments);
     let $headerFilterIndicator;
 
