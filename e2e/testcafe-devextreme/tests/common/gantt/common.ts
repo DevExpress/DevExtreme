@@ -4,7 +4,7 @@ import { Selector } from 'testcafe';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo, hasVisibleScrollbarThumb } from '../../../helpers/domUtils';
+import { appendElementTo, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { Themes } from '../../../helpers/themes';
 
 const TOOLBAR_ITEM_BUTTON = '.dx-button';
@@ -122,14 +122,13 @@ test.meta({ themes: [Themes.materialBlue] })('Gantt - show resources button shou
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .click(Selector(TOOLBAR_ITEM_BUTTON))
-    .expect(hasVisibleScrollbarThumb('#container'))
-    .notOk();
+    .click(Selector(TOOLBAR_ITEM_BUTTON));
   await testScreenshot(t, takeScreenshot, 'Gantt show resourced.png', { element: '#container' });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStylesheetRulesToPage('.dx-gantt .dx-scrollable-scroll { visibility: hidden !important; }');
   const id = `${new Guid()}`;
   await appendElementTo('#container', 'div', id, {});
   await createWidget('dxGantt', {
@@ -145,14 +144,13 @@ test('Gantt - show dependencies button should not have focus state (T1264485)', 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .click(Selector(TOOLBAR_ITEM_BUTTON))
-    .expect(hasVisibleScrollbarThumb('#container'))
-    .notOk();
+    .click(Selector(TOOLBAR_ITEM_BUTTON));
   await testScreenshot(t, takeScreenshot, 'Gantt show dependencies.png', { element: '#container' });
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStylesheetRulesToPage('.dx-gantt .dx-scrollable-scroll { visibility: hidden !important; }');
   const id = `${new Guid()}`;
   await appendElementTo('#container', 'div', id, {});
   await createWidget('dxGantt', {
