@@ -13,8 +13,8 @@ import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
+import type { EditingController } from '../editing';
 import { isCellModified } from '../editing_utils';
-import type { EditingController } from '../m_editing';
 
 export interface EditingDataControllerExtension {
   _editingController: EditingController;

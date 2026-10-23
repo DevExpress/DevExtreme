@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-rest-params */
 import { Deferred, when } from '@js/core/utils/deferred';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/m_editing_cell_based';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';

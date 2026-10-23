@@ -25,8 +25,8 @@ import {
   EDITING_EDITROWKEY_OPTION_NAME,
   TARGET_COMPONENT_NAME,
 } from './const';
+import type { EditingController } from './editing';
 import { isEditable } from './editing_utils';
-import type { EditingController } from './m_editing';
 import type { NormalizedEditCellOptions } from './types';
 
 export interface ICellBasedEditingControllerExtender {

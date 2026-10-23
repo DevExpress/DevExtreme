@@ -31,7 +31,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange, RowIndexCorrection } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';

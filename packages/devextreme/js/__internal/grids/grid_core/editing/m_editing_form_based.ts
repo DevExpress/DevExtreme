@@ -31,9 +31,9 @@ import {
   EDITING_POPUP_OPTION_NAME,
   FOCUSABLE_ELEMENT_SELECTOR,
 } from './const';
+import type { EditingController } from './editing';
 import { forEachFormItems, getEditorType } from './editing_utils';
 import { editingFormBasedDataControllerExtender } from './extenders/editing_form_based_data_controller';
-import type { EditingController } from './m_editing';
 import type { EditorCellOptions } from './types';
 
 export interface IFormBasedEditingControllerExtender {
