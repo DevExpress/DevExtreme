@@ -286,10 +286,12 @@ export class FocusController extends core.ViewController {
         }
         this.component.off('contentReady', triggerUpdateFocusedRow);
 
-        if (needFocusRow) {
+        if (!needFocusRow) {
+          deferred.resolve(focusedRowIndex);
+        } else if (this.isRowFocused(key)) {
           this._triggerUpdateFocusedRow(key, deferred);
         } else {
-          deferred.resolve(focusedRowIndex);
+          deferred.reject();
         }
       };
       this.component.on('contentReady', triggerUpdateFocusedRow);
