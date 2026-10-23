@@ -2,7 +2,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
-import type { EditingController } from '../m_editing';
+import type { EditingController } from '../editing';
 
 interface FormBasedEditingControllerExtension {
   isFormEditMode: () => boolean;
