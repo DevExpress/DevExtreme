@@ -4,7 +4,6 @@ import {
   ViewChild,
   enableProdMode,
   AfterViewInit,
-  provideZoneChangeDetection,
 } from '@angular/core';
 import {
   DxFormModule,
@@ -87,8 +86,4 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

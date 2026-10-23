@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+  Component, ViewChild, enableProdMode,
 } from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
 import { DxVectorMapModule, DxVectorMapComponent, DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
@@ -55,8 +55,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
