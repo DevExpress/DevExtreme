@@ -928,7 +928,6 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
       const validator = $cell && $cell.data('dxValidator');
       const rowOptions = $cell && $cell.closest(`.${VIEW_CLASSES.row}`).data('options');
-      // @ts-expect-error
       const value = validator && validator.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
         // @ts-expect-error
@@ -1587,7 +1586,6 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
   }
 
   protected _restoreErrorRow(contentTable?) {
-    // @ts-expect-error each() is typed for callbacks that return a boolean
     this._editingController && this._editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
       const rowOptions = $(item).data('options');
       if (rowOptions) {

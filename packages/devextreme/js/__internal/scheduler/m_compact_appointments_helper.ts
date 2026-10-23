@@ -48,8 +48,7 @@ export class CompactAppointmentsHelper {
     const $button = $(e.element);
     this.instance.showAppointmentTooltipCore(
       $button,
-      // @ts-expect-error
-      $button.data('items'),
+      $button.data<AppointmentTooltipItem[]>('items'),
       this.getExtraOptionsForTooltip(options, $button),
     );
   }

@@ -129,7 +129,7 @@ if (ko) {
 
         // eslint-disable-next-line func-names
         const applyModelValueToOption = function (optionName: string, modelValue, unwrap): void {
-          const locks = $element.data(LOCKS_DATA_KEY) as unknown as Lock;
+          const locks = $element.data<Lock>(LOCKS_DATA_KEY);
           const optionValue = unwrap ? ko.unwrap(modelValue) : modelValue;
 
           if (ko.isWriteableObservable(modelValue)) {
@@ -167,7 +167,7 @@ if (ko) {
 
           // eslint-disable-next-line @typescript-eslint/no-shadow
           const $element = this._$element as unknown as dxElementWrapper;
-          const locks = $element.data(LOCKS_DATA_KEY) as unknown as Lock;
+          const locks = $element.data<Lock>(LOCKS_DATA_KEY);
 
           if (locks.locked(optionName)) {
             return;

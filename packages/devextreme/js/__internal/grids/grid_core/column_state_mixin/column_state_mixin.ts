@@ -117,8 +117,7 @@ export const ColumnStateMixin = <T extends ColumnStateMixinBase>(Base: T) => cla
       const $cell = $cells.eq(i);
       this._updateIndicator($cell, columns[i], indicatorName);
 
-      // @ts-expect-error data(key) is typed as returning the wrapper
-      const rowOptions: IndicatorRowOptions | undefined = $cell.parent().data('options');
+      const rowOptions = $cell.parent().data<IndicatorRowOptions | undefined>('options');
 
       if (rowOptions?.cells) {
         rowOptions.cells[$cell.index()].column = columns[i];

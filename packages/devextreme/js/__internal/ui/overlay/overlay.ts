@@ -1047,12 +1047,12 @@ class Overlay<
       const $currentElement = $elements?.eq(i) ?? null;
       const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
 
-      // @ts-expect-error is should can get function as callback
+      // @ts-expect-error the loop runs only when $elements has items, so eq() returns a wrapper
       if (!$first && $currentElement.is(selectors.tabbable)) {
         $first = $currentElement;
       }
 
-      // @ts-expect-error is should can get function as callback
+      // @ts-expect-error the loop runs only when $elements has items, so eq() returns a wrapper
       if (!$last && $reverseElement.is(selectors.tabbable)) {
         $last = $reverseElement;
       }
@@ -1239,7 +1239,6 @@ class Overlay<
 
     let isHidden = false;
 
-    // @ts-expect-error add should can get dxElementWrapper
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
 

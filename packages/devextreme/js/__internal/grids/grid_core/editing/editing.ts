@@ -2883,7 +2883,6 @@ const rowsView = (
     let $tableElement = $cellElement.closest('table');
     const $tableElements = this.getTableElements();
 
-    // @ts-expect-error filter() is typed for selectors only
     while ($tableElement.length && !$tableElements.filter($tableElement).length) {
       $cellElement = $tableElement.closest('td');
       $tableElement = $cellElement.closest('table');
