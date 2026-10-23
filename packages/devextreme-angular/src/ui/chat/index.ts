@@ -64,12 +64,14 @@ import { DxoChatSpeechRecognitionConfigModule } from 'devextreme-angular/ui/chat
 import { DxoChatSpeechToTextOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatSuggestionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatSuggestionsItemModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatToolCallModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 import { 
     PROPERTY_TOKEN_alerts,
     PROPERTY_TOKEN_attachments,
     PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_toolCalls,
     PROPERTY_TOKEN_typingUsers,
 } from 'devextreme-angular/core/tokens';
 
@@ -104,6 +106,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolCalls)
+    set _toolCallsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolCalls', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_typingUsers)
@@ -316,6 +323,17 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set reloadOnChange(value: boolean) {
         this._setOption('reloadOnChange', value);
+    }
+
+    /**
+     * [descr:dxChatOptions.renderToolsInMessageTemplate]
+     */
+    @Input()
+    get renderToolsInMessageTemplate(): boolean {
+        return this._getOption('renderToolsInMessageTemplate');
+    }
+    set renderToolsInMessageTemplate(value: boolean) {
+        this._setOption('renderToolsInMessageTemplate', value);
     }
 
     /**
@@ -623,6 +641,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
+    @Output() renderToolsInMessageTemplateChange: EventEmitter<boolean>;
+
+    /**
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -728,6 +751,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'messageTemplateChange' },
             { emit: 'messageTimestampFormatChange' },
             { emit: 'reloadOnChangeChange' },
+            { emit: 'renderToolsInMessageTemplateChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'sendButtonOptionsChange' },
             { emit: 'showAvatarChange' },
@@ -817,6 +841,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatSpeechToTextOptionsModule,
     DxoChatSuggestionsModule,
     DxiChatSuggestionsItemModule,
+    DxiChatToolCallModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxIntegrationModule,
@@ -847,6 +872,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatSpeechToTextOptionsModule,
     DxoChatSuggestionsModule,
     DxiChatSuggestionsItemModule,
+    DxiChatToolCallModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxTemplateModule
