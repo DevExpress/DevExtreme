@@ -1,4 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import ScrollView from 'devextreme-react/scroll-view';
 import SelectBox from 'devextreme-react/select-box';
@@ -8,6 +10,7 @@ const showScrollBarModeLabel = { 'aria-label': 'Show Scrollbar Mode' };
 let updateContentTimer;
 const App = () => {
   const [showScrollBarMode, setShowScrollBarMode] = useState('onScroll');
+  const [useNative, setUseNative] = useState();
   const [pullDown, setPullDown] = useState(false);
   const [scrollByContent, setScrollByContent] = useState(true);
   const [scrollByThumb, setScrollByThumb] = useState(true);
@@ -41,6 +44,13 @@ const App = () => {
     },
     [updateContent],
   );
+  useEffect(() => {
+    setUseNative(scrollViewRef.current?.instance().option('useNative'));
+  }, []);
+  const useNativeValueChanged = useCallback((args) => {
+    setUseNative(args.value);
+    scrollViewRef.current?.instance().option('useNative', args.value);
+  }, []);
   const pullDownValueChanged = useCallback((args) => {
     setPullDown(args.value);
   }, []);
@@ -72,7 +82,15 @@ const App = () => {
             inputAttr={showScrollBarModeLabel}
             displayExpr="text"
             value={showScrollBarMode}
+            disabled={!!useNative}
             onValueChange={setShowScrollBarMode}
+          />
+        </div>
+        <div className="option">
+          <CheckBox
+            text="Use native"
+            value={useNative}
+            onValueChanged={useNativeValueChanged}
           />
         </div>
         <div className="option">
