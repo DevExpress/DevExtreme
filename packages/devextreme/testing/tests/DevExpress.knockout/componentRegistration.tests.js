@@ -11,6 +11,8 @@ import * as dataUtils from 'core/element_data';
 
 import 'ui/select_box';
 import 'ui/lookup';
+import 'ui/draggable';
+import 'ui/scroll_view';
 import 'integration/knockout';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
@@ -1623,5 +1625,55 @@ moduleWithoutCsp('predicate for manual option binding control', {
         const markup = $('<div></div>').attr('data-bind', 'dxTest: $data').appendTo(FIXTURE_ELEMENT);
         ko.applyBindings(undefined, markup[0]);
         assert.ok(markup.dxTest('instance'), 'widget is created');
+    });
+});
+
+moduleWithoutCsp('descendant bindings', {
+    beforeEach: function() {
+        registerComponent('dxTestWidget', class extends Widget {
+            _useTemplates() {
+                return false;
+            }
+        });
+    },
+    afterEach: function() {
+        cleanComponentRegistrations('dxTestWidget');
+    }
+}, function() {
+    QUnit.test('Widget controls descendant bindings', function(assert) {
+        const markup = $(
+            '<div data-bind=\'dxTestWidget: { }\'>' +
+            '   <ul data-bind=\'foreach: items\'>' +
+            '       <li data-bind=\'text: $data\'></li>' +
+            '   </ul>' +
+            '</div>'
+        ).appendTo(FIXTURE_ELEMENT);
+
+        ko.applyBindings({ items: ko.observableArray([1, 2, 3]) }, markup[0]);
+
+        assert.strictEqual(markup.find('li').length, 1, 'the foreach binding inside the widget is not applied');
+        assert.strictEqual(markup.find('li').text(), '', 'the text binding inside the widget is not applied');
+
+        markup.remove();
+    });
+
+    QUnit.test('Draggable content bindings are applied once, by its content template', function(assert) {
+        const markup = $('<div data-bind=\'dxDraggable: { }\'><span data-bind=\'text: text\'></span></div>').appendTo(FIXTURE_ELEMENT);
+
+        ko.applyBindings({ text: 'bound' }, markup[0]);
+
+        assert.strictEqual(markup.find('span').text(), 'bound', 'the text binding inside the draggable is applied');
+
+        markup.remove();
+    });
+
+    QUnit.test('ScrollView does not control descendant bindings', function(assert) {
+        const markup = $('<div data-bind=\'dxScrollView: { }\'><span data-bind=\'text: text\'></span></div>').appendTo(FIXTURE_ELEMENT);
+
+        ko.applyBindings({ text: 'bound' }, markup[0]);
+
+        assert.strictEqual(markup.find('span').text(), 'bound', 'the text binding inside the scroll view is applied');
+
+        markup.remove();
     });
 });
