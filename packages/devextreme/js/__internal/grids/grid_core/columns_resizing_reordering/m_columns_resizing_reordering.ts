@@ -13,7 +13,6 @@ import type { Coordinates as Offset, dxElementWrapper } from '@js/core/renderer'
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
-import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -107,14 +106,11 @@ export class TrackerView extends modules.View {
     super.optionChanged(args);
   }
 
-  /* eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-    -- a view that renders synchronously returns nothing */
-  protected _renderCore(): DeferredObj<unknown> | void {
-    const deferred = super._renderCore();
+  protected _renderCore(): void {
+    super._renderCore();
     // @ts-expect-error the view is rendered here
     this.element().addClass(this.addWidgetPrefix(CLASSES.tracker));
     this.hide();
-    return deferred;
   }
 
   private _unsubscribeFromCallback(): void {
@@ -153,14 +149,11 @@ export class SeparatorView extends modules.View {
 
   protected _renderSeparator(): void { }
 
-  /* eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-    -- a view that renders synchronously returns nothing */
-  protected _renderCore(options?: unknown): DeferredObj<unknown> | void {
-    const deferred = super._renderCore(options);
+  protected _renderCore(options?: unknown): void {
+    super._renderCore(options);
     this._isShown = true;
     this._renderSeparator();
     this.hide();
-    return deferred;
   }
 
   public show(): void {
@@ -790,9 +783,19 @@ export class ColumnsResizerViewController extends modules.ViewController {
   }
 
   private _isRtlParentStyle(): boolean {
-    const rtlEnabled = this.option('rtlEnabled') as boolean;
+    const rtlEnabled = Boolean(this.option('rtlEnabled'));
 
     return rtlEnabled && this._$parentContainer?.parent().css('direction') === 'rtl';
+  }
+
+  private getColumnsSeparatorWidth(): number {
+    // @ts-expect-error the view is rendered here
+    return this._columnsSeparatorView.width();
+  }
+
+  private getScrollable(): Scrollable | undefined {
+    // @ts-expect-error the public Scrollable type has no $content() and container()
+    return this.component.getScrollable();
   }
 
   protected _correctColumnIndexForPoint(
@@ -876,8 +879,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
   private _moveSeparator(args: PointerEventArgs<ColumnsResizerViewController>): void {
     const e = args.event;
     const that = e.data;
-    // @ts-expect-error the view is rendered here
-    const columnsSeparatorWidth: number = that._columnsSeparatorView.width();
+    const columnsSeparatorWidth = that.getColumnsSeparatorWidth();
     const isNextColumnMode = isNextColumnResizingMode(that);
     const deltaX = columnsSeparatorWidth / 2;
     // @ts-expect-error offset() is typed as possibly undefined
@@ -1004,8 +1006,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
           COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH,
         );
         if (that._targetPoint) {
-          // @ts-expect-error the view is rendered here
-          const columnsSeparatorWidth: number = that._columnsSeparatorView.width();
+          const columnsSeparatorWidth = that.getColumnsSeparatorWidth();
 
           that._columnsSeparatorView.moveByX(that._targetPoint.x - columnsSeparatorWidth / 2);
           that._isReadyResizing = true;
@@ -1030,8 +1031,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
       that._tablePositionController.update(that._targetPoint.y);
       that._columnsSeparatorView.show();
       that._trackerView.show();
-      // @ts-expect-error the public Scrollable type has no $content() and container()
-      const scrollable: Scrollable | undefined = that.component.getScrollable();
+      const scrollable = that.getScrollable();
 
       if (scrollable && that._isRtlParentStyle()) {
         that._scrollRight = Number(getWidth(scrollable.$content()))
@@ -1106,7 +1106,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overrides use the param
   protected _needToInvertResizing($cell: dxElementWrapper): boolean {
-    const rtlEnabled = this.option('rtlEnabled') as boolean;
+    const rtlEnabled = Boolean(this.option('rtlEnabled'));
     const isRtlParentStyle = this._isRtlParentStyle();
     const isNextColumnMode = isNextColumnResizingMode(this);
 
@@ -1177,8 +1177,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     let contentWidth = this._rowsView.contentWidth();
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
-    // @ts-expect-error the view is rendered here
-    const columnsSeparatorWidth: number = this._columnsSeparatorView.width();
+    const columnsSeparatorWidth = this.getColumnsSeparatorWidth();
     const isNextColumnMode = isNextColumnResizingMode(this);
     const adaptColumnWidthByRatio = isNextColumnMode
       && Boolean(this.option('adaptColumnWidthByRatio'))
@@ -1307,8 +1306,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     if (!isNextColumnMode) {
       this.component.updateDimensions();
 
-      // @ts-expect-error the public Scrollable type has no $content() and container()
-      const scrollable: Scrollable | undefined = this.component.getScrollable();
+      const scrollable = this.getScrollable();
       if (scrollable && isRtlParentStyle) {
         const left = Number(getWidth(scrollable.$content()))
           - Number(getWidth(scrollable.container()))
