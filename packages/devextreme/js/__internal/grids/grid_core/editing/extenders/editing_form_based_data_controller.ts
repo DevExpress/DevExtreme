@@ -2,19 +2,15 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
-import type { EditingController } from '../editing';
-
-interface FormBasedEditingControllerExtension {
-  isFormEditMode: () => boolean;
-}
+import type { FormBasedEditingController } from '../m_editing_form_based';
 
 export const editingFormBasedDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class EditingFormBasedDataControllerExtender extends Base {
-  protected _editingController!: EditingController & FormBasedEditingControllerExtension;
+  protected _editingController!: FormBasedEditingController;
 
   public init(): void {
-    this._editingController = this.getController('editing') as EditingController & FormBasedEditingControllerExtension;
+    this._editingController = this.getController('editing') as FormBasedEditingController;
     super.init();
   }
 

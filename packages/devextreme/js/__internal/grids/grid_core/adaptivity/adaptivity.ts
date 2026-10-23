@@ -25,7 +25,6 @@ import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ProcessedItem } from '../data_controller/types';
 import { EDIT_MODE } from '../editing/const';
-import type { EditingController } from '../editing/editing';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import modules from '../modules/modules';
@@ -48,6 +47,7 @@ import type {
   AdaptiveDetailCellOptions,
   AdaptiveFormItem,
   AdaptivityDataController,
+  AdaptivityEditingController,
   HiddenCellInViewOptions,
   HiddenCellsInViewOptions,
   HideVisibleColumnInViewOptions,
@@ -84,7 +84,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
   private _dataController!: AdaptivityDataController;
 
-  private _editingController!: EditingController;
+  private _editingController!: AdaptivityEditingController;
 
   protected _rowsView!: RowsView;
 
@@ -101,7 +101,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
   public init(): void {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data') as AdaptivityDataController;
-    this._editingController = this.getController('editing');
+    this._editingController = this.getController('editing') as AdaptivityEditingController;
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._rowsView = this.getView('rowsView');
 
