@@ -13,7 +13,7 @@ import {
     QueryList
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import type { Attachment, User, MessageType } from 'devextreme/ui/chat';
+import type { Attachment, User, ToolCall, MessageType } from 'devextreme/ui/chat';
 import type { ButtonType } from 'devextreme/common';
 
 import {
@@ -30,6 +30,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 import {
     PROPERTY_TOKEN_attachments,
+    PROPERTY_TOKEN_toolCalls,
 } from 'devextreme-angular/core/tokens';
 
 @Component({
@@ -51,6 +52,11 @@ export class DxiChatItemComponent extends CollectionNestedOption implements Afte
     @ContentChildren(PROPERTY_TOKEN_attachments)
     set _attachmentsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('attachments', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolCalls)
+    set _toolCallsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolCalls', value);
     }
     
     @Input()
@@ -123,6 +129,14 @@ export class DxiChatItemComponent extends CollectionNestedOption implements Afte
     }
     set timestamp(value: Date | number | string) {
         this._setOption('timestamp', value);
+    }
+
+    @Input()
+    get toolCalls(): Array<ToolCall> {
+        return this._getOption('toolCalls');
+    }
+    set toolCalls(value: Array<ToolCall>) {
+        this._setOption('toolCalls', value);
     }
 
     @Input()
