@@ -309,7 +309,11 @@ const numberLocalizationBase = {
     const digitalRegExp = new RegExp(`[0-9${escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator)}]+`, 'g');
     const specialCharacters = ['\\', '(', ')', '[', ']', '*', '+', '$', '^', '?', '|', '{', '}'];
 
-    let negativeEtalon = this.format(-1, format).replace(digitalRegExp, '1');
+    let negativeEtalon = this.convertDigits(
+      this.format(-1, format),
+      true,
+      getNumberFormatLocale(format as FormatConfig),
+    ).replace(digitalRegExp, '1');
     specialCharacters.forEach((char) => {
       negativeEtalon = negativeEtalon.replace(new RegExp(`\\${char}`, 'g'), `\\${char}`);
     });

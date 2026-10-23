@@ -233,6 +233,33 @@ describe('format locale integration', () => {
       expect(numberLocalization.parse(formatted, format as never)).toBe(1234.5);
     });
 
+    it.each([
+      {
+        name: 'global numberFormat locale', messageLocale: 'en', globalLocale: 'ar-EG', format: undefined,
+      },
+      {
+        name: 'explicit fixedPoint format locale', messageLocale: 'en', globalLocale: undefined, format: { type: 'fixedPoint', precision: 1, locale: 'ar-EG' },
+      },
+      {
+        name: 'explicit Intl format locale', messageLocale: 'en', globalLocale: undefined, format: { maximumFractionDigits: 2, locale: 'ar-EG' },
+      },
+      {
+        name: 'explicit LDML format locale', messageLocale: 'en', globalLocale: undefined, format: { type: '#,##0.0', locale: 'ar-EG' },
+      },
+      {
+        name: 'message locale', messageLocale: 'ar-EG', globalLocale: undefined, format: { type: 'fixedPoint', precision: 1 },
+      },
+    ])('should keep the sign of a negative value with non-Latin digits of the $name', ({ messageLocale, globalLocale, format }) => {
+      coreLocalization.locale(messageLocale);
+      if (globalLocale) {
+        config({ ...config(), numberFormat: { default: { locale: globalLocale } } });
+      }
+
+      const formatted = numberLocalization.format(-1234.5, format as never);
+
+      expect(numberLocalization.parse(formatted, format as never)).toBe(-1234.5);
+    });
+
     it('should not apply numberFormat locale to explicit Intl options without a locale', () => {
       coreLocalization.locale('de');
       config({

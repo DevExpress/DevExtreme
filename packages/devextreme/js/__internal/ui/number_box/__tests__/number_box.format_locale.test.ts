@@ -200,4 +200,46 @@ describe('explicit number preset keeps the message locale', () => {
       coreLocalization.locale(savedLocale);
     }
   });
+
+  it.each([
+    { name: 'the global numberFormat locale', globalLocale: 'ar-EG', format: undefined },
+    { name: 'an explicit fixedPoint format locale', globalLocale: undefined, format: { type: 'fixedPoint', precision: 1, locale: 'ar-EG' } },
+    { name: 'an explicit Intl format locale', globalLocale: undefined, format: { maximumFractionDigits: 2, locale: 'ar-EG' } },
+  ])('keeps the sign of a negative value with non-Latin digits of $name', ({ globalLocale, format }) => {
+    const savedLocale = coreLocalization.locale();
+    const savedNumberFormat = config().numberFormat;
+
+    coreLocalization.locale('en');
+    if (globalLocale) {
+      config({ ...config(), numberFormat: { default: { locale: globalLocale } } });
+    }
+
+    try {
+      const element = document.body.appendChild(document.createElement('div'));
+      const instance = new NumberBox(element, {
+        value: -1234.5,
+        format: format as Properties['format'],
+      });
+
+      widgets.push(instance);
+
+      const input = element.querySelector('.dx-texteditor-input') as HTMLInputElement;
+      const editor = instance as NumberBox & {
+        _getParsedValue: (text: string, format: unknown) => number | undefined;
+        _getFormatPattern: () => unknown;
+      };
+
+      expect(editor._getParsedValue(input.value, editor._getFormatPattern())).toBe(-1234.5);
+    } finally {
+      const currentConfig = config();
+
+      if (savedNumberFormat === undefined) {
+        delete currentConfig.numberFormat;
+      } else {
+        currentConfig.numberFormat = savedNumberFormat;
+      }
+
+      coreLocalization.locale(savedLocale);
+    }
+  });
 });
