@@ -18,7 +18,11 @@
 import { Color } from '@ts/color';
 import { domAdapter } from '@ts/core/dom_adapter';
 import formatHelper from '@ts/core/format_helper';
-import { applyDataTypePreset } from '@ts/core/global_format_config';
+import {
+  applyDataTypePreset,
+  getNumberFormatLocale,
+  withFormatLocale,
+} from '@ts/core/global_format_config';
 import { renderer as $ } from '@ts/core/renderer';
 import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
 import { isCssVariableReference } from '@ts/core/utils/css_variables';
@@ -116,7 +120,12 @@ function getSpecialFormatOptions(options: ThemeValue, specialFormat: string): Th
       result = { format: options.argumentFormat };
       break;
     case 'percent':
-      result = { format: { type: 'percent', precision: options.format && options.format.percentPrecision } };
+      result = {
+        format: withFormatLocale(
+          { type: 'percent', precision: options.format && options.format.percentPrecision },
+          getNumberFormatLocale(options.format),
+        ),
+      };
       break;
   }
   return result;
