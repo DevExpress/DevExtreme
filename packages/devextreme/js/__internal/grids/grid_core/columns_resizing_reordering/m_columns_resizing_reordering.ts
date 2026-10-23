@@ -49,6 +49,7 @@ import type {
   CallbackSubscription,
   CellWidths,
   Coordinates,
+  DraggingHeaderEventArgs,
   DraggingPanel,
   DraggingPanelBoundingRect,
   DraggingPointCreatedOptions,
@@ -554,7 +555,7 @@ export class DraggingHeaderView extends modules.View {
     this.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
   }
 
-  public moveHeader(args: PointerEventArgs<{ that: DraggingHeaderView }>): void {
+  public moveHeader(args: DraggingHeaderEventArgs): void {
     const e = args.event;
     const { that } = e.data;
     const eventData = getEventData(e);
@@ -665,7 +666,7 @@ export class DraggingHeaderView extends modules.View {
     }
   }
 
-  public dropHeader(args: PointerEventArgs<{ that: DraggingHeaderView }>): void {
+  public dropHeader(args: DraggingHeaderEventArgs): void {
     const e = args.event;
     const { that } = e.data;
     const controller = that._controller;
@@ -1788,8 +1789,12 @@ export class DraggingHeaderViewController extends modules.ViewController {
       }
     };
 
+    const needHeadersDropHighlight = sourceLocation !== 'headers'
+      && targetLocation === 'headers'
+      && !hasTargetVisibleIndex;
+
     // @ts-expect-error the view is rendered here
-    this._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).toggleClass(this.addWidgetPrefix(CLASSES.dropHighlight), sourceLocation !== 'headers' && targetLocation === 'headers' && !hasTargetVisibleIndex);
+    this._columnHeadersView.element().find(`.${COLUMN_HEADERS_CLASSES.headerRow}`).toggleClass(this.addWidgetPrefix(CLASSES.dropHighlight), needHeadersDropHighlight);
 
     if (separator) {
       if (this.allowDrop(parameters) && hasTargetVisibleIndex) {
@@ -1798,7 +1803,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
         } else {
           this.hideSeparators('block');
           this._tablePositionController.update(parameters.posY);
-          // @ts-expect-error a docked headers target has the columns separator and a point
+          // @ts-expect-error a docked headers target has the rendered columns separator and a point
           separator.moveByX(parameters.posX - separator.width());
           separator.show();
         }
@@ -1844,7 +1849,7 @@ const rowsView = (
     const isResizing = this._columnsResizerController.isResizing();
 
     return Boolean(super._needUpdateRowHeight(itemCount))
-      || (itemCount > 0 && !!wordWrapEnabled && !!isResizing);
+      || (itemCount > 0 && Boolean(wordWrapEnabled) && Boolean(isResizing));
   }
 };
 

@@ -8,6 +8,7 @@ import type { Column, ColumnIndex, DropLocationNames } from '../columns_controll
 import type { HeaderPanel } from '../header_panel/header_panel';
 import type { ColumnPoint } from '../types';
 import type { BoundingRect } from '../views/types';
+import type { DraggingHeaderView } from './m_columns_resizing_reordering';
 
 export type DraggingPanel = ColumnHeadersView | ColumnChooserView | HeaderPanel;
 
@@ -35,6 +36,8 @@ export type PointerEventWithData<TData> = Omit<DxEvent<PointerInteractionEvent>,
 export interface PointerEventArgs<TData = undefined> {
   event: PointerEventWithData<TData>;
 }
+
+export type DraggingHeaderEventArgs = PointerEventArgs<{ that: DraggingHeaderView }>;
 
 export interface CallbackSubscription {
   callback: Callback;
