@@ -8,10 +8,9 @@ const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="dropDownEditorWithFieldTemplate" data-bind="dxDropDownEditor: { fieldTemplate: \'field\', value: \'test\'}">\
+        '<div id="dropDownEditorWithFieldAddons" data-bind="dxDropDownEditor: { fieldAddons: { beforeTemplate: \'field\' }, value: \'test\'}">\
             <div data-options="dxTemplate: { name: \'field\' }">\
                 <span id="customField" data-bind="text: $data"></span>\
-                <div data-bind="dxTextBox: {}"></div>\
             </div>\
         </div>\
         <div id="dropDownEditorWithButtonTemplate" data-bind="dxDropDownEditor: { dropDownButtonTemplate: \'buttonTpl\' }">\
@@ -25,12 +24,12 @@ QUnit.testStart(function() {
 
 moduleWithoutCsp('Templates');
 
-QUnit.test('fieldTemplate', function(assert) {
+QUnit.test('fieldAddons.beforeTemplate', function(assert) {
     const vm = {};
-    const $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
+    const $dropDownEditor = $('#dropDownEditorWithFieldAddons');
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
-    assert.equal($dropDownEditor.text().trim(), 'test', 'template rendered');
+    assert.equal($dropDownEditor.find('#customField').text(), 'test', 'template rendered');
 });
 
 QUnit.test('drop button template', function(assert) {
@@ -43,20 +42,20 @@ QUnit.test('drop button template', function(assert) {
     assert.equal($('.dx-button-content').text().trim(), 'V', 'template was rendered');
 });
 
-QUnit.test('fieldTemplate is rendered after changing value', function(assert) {
+QUnit.test('fieldAddons.beforeTemplate is rendered after changing value', function(assert) {
     const vm = {};
-    const $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
+    const $dropDownEditor = $('#dropDownEditorWithFieldAddons');
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
     $dropDownEditor.dxDropDownEditor('option', 'value', 'newtest');
-    assert.equal($dropDownEditor.text().trim(), 'newtest', 'template rendered');
+    assert.equal($dropDownEditor.find('#customField').text(), 'newtest', 'template rendered');
 });
 
 
 moduleWithoutCsp('options');
 
 QUnit.test('openOnFieldClick option with custom template', function(assert) {
-    const $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
+    const $dropDownEditor = $('#dropDownEditorWithFieldAddons');
     ko.applyBindings({}, $dropDownEditor.get(0));
 
     const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');

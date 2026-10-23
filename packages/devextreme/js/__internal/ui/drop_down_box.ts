@@ -336,10 +336,6 @@ class DropDownBox<
 
   _setCollectionWidgetOption(): void {}
 
-  _shouldLogFieldTemplateDeprecationWarning(): boolean {
-    return true;
-  }
-
   _optionChanged(args: OptionChanged<TProperties>): void {
     // @ts-expect-error DataExpressionMixin must be typed
     this._dataExpressionOptionChanged(args);

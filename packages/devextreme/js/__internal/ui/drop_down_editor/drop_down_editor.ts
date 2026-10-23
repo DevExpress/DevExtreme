@@ -12,7 +12,6 @@ import Guid from '@js/core/guid';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import browser from '@js/core/utils/browser';
 import {
   // @ts-expect-error fix on core/utils level
   splitPair,
@@ -32,7 +31,6 @@ import type { dxDropDownEditorOptions, Properties } from '@js/ui/drop_down_edito
 import type dxPopup from '@js/ui/popup';
 import type { InitializedEvent as PopupInitializedEvent, ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
-import errors from '@js/ui/widget/ui.errors';
 import { FunctionTemplate } from '@ts/core/templates/function_template';
 import { getComponentInstance } from '@ts/core/utils/public_component';
 import { focused } from '@ts/core/utils/selectors';
@@ -56,7 +54,6 @@ const DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay';
 const DROP_DOWN_EDITOR_OVERLAY_FLIPPED = 'dx-dropdowneditor-overlay-flipped';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
-const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 export const DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON = 'dx-dropdowneditor-field-before-template-wrapper';
 export const DROP_DOWN_EDITOR_AFTER_FIELD_ADDON = 'dx-dropdowneditor-field-after-template-wrapper';
 
@@ -64,19 +61,10 @@ const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
 const isIOs = devices.current().platform === 'ios';
 
-export const DROP_DOWN_EDITOR_DEPRECATED_OPTIONS = {
-  fieldTemplate: {
-    since: '25.2',
-    message: 'Use the \'fieldAddons\' option instead',
-  },
-};
-
 export interface DropDownEditorInternalProperties extends TextEditorInternalProperties {
   buttonsLocation?: string;
 
   dropDownOptions?: InternalPopupProperties | InternalPopoverProperties;
-
-  fieldTemplate?: string | Element | Function | null;
 
   popupPosition?: PositionConfig;
 
@@ -98,7 +86,6 @@ export interface DropDownEditorProperties<
 interface TemplateRenderPayload {
   model: Properties['value'];
   container: Element;
-  onRendered?: () => void;
 }
 
 export interface FieldTemplate {
@@ -112,10 +99,6 @@ interface FieldAddonsTemplates {
 
 type PopupToolbarItemConfig = ToolbarItem & { shortcut?: string };
 
-function createTemplateWrapperElement(): dxElementWrapper {
-  return $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER);
-}
-
 class DropDownEditor<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TProperties extends DropDownEditorProperties<any> = DropDownEditorProperties,
@@ -128,8 +111,6 @@ class DropDownEditor<
 
   _popup?: Popup | Popover;
 
-  _$templateWrapper?: dxElementWrapper;
-
   _$beforeFieldAddon?: dxElementWrapper | null;
 
   _$afterFieldAddon?: dxElementWrapper | null;
@@ -139,8 +120,6 @@ class DropDownEditor<
   _closeAction!: (event?: Record<string, unknown>) => void;
 
   _openOnFieldClickAction?: (event?: Record<string, unknown>) => void;
-
-  _activeRenderContext?: symbol;
 
   _popupInitializedAction!: (event?: EventInfo<DropDownEditor> & {
     popup?: Popup;
@@ -235,7 +214,6 @@ class DropDownEditor<
       deferRendering: true,
       activeStateEnabled: true,
       dropDownButtonTemplate: 'dropDownButton',
-      fieldTemplate: null,
       fieldAddons: null,
       openOnFieldClick: false,
       showDropDownButton: true,
@@ -361,7 +339,6 @@ class DropDownEditor<
 
   _renderInput(): void {
     super._renderInput();
-    this._renderTemplateWrapper();
     this._renderFieldAddons();
 
     this._wrapInput();
@@ -399,57 +376,11 @@ class DropDownEditor<
     return !this._isEditable() || super._readOnlyPropValue();
   }
 
-  _cleanFocusState(): void {
-    super._cleanFocusState();
-    const { fieldTemplate } = this.option();
-
-    if (fieldTemplate) {
-      this._detachFocusEvents();
-    }
-  }
-
-  _getFieldTemplate(): FieldTemplate | undefined {
-    const { fieldTemplate } = this.option();
-
-    if (!fieldTemplate) {
-      return;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, consistent-return
-    return this._getTemplate(fieldTemplate);
-  }
-
-  _renderMask(): void {
-    const { fieldTemplate } = this.option();
-
-    if (fieldTemplate) {
-      return;
-    }
-
-    super._renderMask();
-  }
-
   _renderField(): void {
     const fieldAddonsTemplates = this._getFieldAddonsTemplates();
 
     if (fieldAddonsTemplates) {
       this._renderFieldAddonsContent(fieldAddonsTemplates);
-
-      return;
-    }
-
-    const fieldTemplate = this._getFieldTemplate();
-
-    if (fieldTemplate) {
-      this._renderTemplatedField(fieldTemplate, this._fieldRenderData());
-    }
-  }
-
-  _renderPlaceholder(): void {
-    const hasFieldTemplate = !!this._getFieldTemplate();
-
-    if (!hasFieldTemplate) {
-      super._renderPlaceholder();
     }
   }
 
@@ -462,12 +393,6 @@ class DropDownEditor<
     const promise = super._renderValue();
 
     return promise.always(this._renderField.bind(this));
-  }
-
-  _getButtonsContainer(): dxElementWrapper | null | undefined {
-    const fieldTemplate = this._getFieldTemplate();
-
-    return fieldTemplate ? this._$container : this._$textEditorContainer;
   }
 
   _renderBeforeFieldAddon(): void {
@@ -501,64 +426,6 @@ class DropDownEditor<
 
     this._renderBeforeFieldAddon();
     this._renderAfterFieldAddon();
-  }
-
-  _renderTemplateWrapper(): void {
-    const fieldTemplate = this._getFieldTemplate();
-
-    if (!fieldTemplate) {
-      return;
-    }
-
-    this._$templateWrapper ??= createTemplateWrapperElement()
-      .prependTo(this.$element());
-  }
-
-  _renderTemplatedField(fieldTemplate: FieldTemplate, data: TemplateRenderPayload): void {
-    const isFocused = focused(this._input());
-
-    this._detachKeyboardEvents();
-    this._detachFocusEvents();
-
-    this._$textEditorContainer?.remove();
-
-    const $newTemplateWrapper = createTemplateWrapperElement();
-    this._$templateWrapper?.replaceWith($newTemplateWrapper);
-    this._$templateWrapper = $newTemplateWrapper;
-
-    const currentRenderContext = Symbol('renderContext');
-    this._activeRenderContext = currentRenderContext;
-
-    fieldTemplate.render({
-      model: data,
-      container: getPublicElement(this._$templateWrapper),
-      onRendered: () => {
-        if (this._activeRenderContext !== currentRenderContext) {
-          return;
-        }
-
-        const $input = this._input();
-
-        if (!$input.length) {
-          throw errors.Error('E1010');
-        }
-
-        this._integrateInput();
-
-        if (!isFocused) {
-          return;
-        }
-
-        // T1259996
-        if (browser.mozilla) {
-          const inputElement = $input.get(0) as HTMLInputElement;
-          inputElement.focus({ preventScroll: true });
-        } else {
-          // @ts-expect-error should be added on EventsEngine level
-          eventsEngine.trigger($input, 'focus');
-        }
-      },
-    });
   }
 
   _getFieldAddonsTemplates(): FieldAddonsTemplates | null {
@@ -618,27 +485,6 @@ class DropDownEditor<
 
     this._renderBeforeFieldAddonContent(beforeTemplate);
     this._renderAfterFieldAddonContent(afterTemplate);
-  }
-
-  _integrateInput(): void {
-    const { isValid } = this.option();
-
-    this._renderFocusState();
-    this._refreshValueChangeEvent();
-    this._refreshEvents();
-    this._refreshEmptinessEvent();
-    this._setDefaultAria();
-    this._setFieldAria();
-    this._toggleValidationClasses(!isValid);
-
-    const { _onMarkupRendered: markupRendered } = this.option();
-
-    markupRendered?.();
-  }
-
-  _refreshEmptinessEvent(): void {
-    eventsEngine.off(this._input(), 'input blur', this._toggleEmptinessEventHandler);
-    this._renderEmptinessEvent();
   }
 
   _fieldRenderData(): Properties['value'] {
@@ -1034,7 +880,6 @@ class DropDownEditor<
     this._$popup?.remove();
 
     this._openOnFieldClickAction = undefined;
-    this._$templateWrapper = undefined;
     this._popup = undefined;
     this._$popup = undefined;
 
@@ -1162,18 +1007,6 @@ class DropDownEditor<
     return super._getSubmitElement();
   }
 
-  _shouldLogFieldTemplateDeprecationWarning(): boolean {
-    return false;
-  }
-
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-
-    if (this._shouldLogFieldTemplateDeprecationWarning()) {
-      extend(this._deprecatedOptions, DROP_DOWN_EDITOR_DEPRECATED_OPTIONS);
-    }
-  }
-
   _dispose(): void {
     this._detachFocusOutEvents();
     super._dispose();
@@ -1200,7 +1033,6 @@ class DropDownEditor<
         this._initPopupInitializedAction();
         break;
       case 'fieldAddons':
-      case 'fieldTemplate':
       case 'acceptCustomValue':
       case 'openOnFieldClick':
         this._invalidate();

@@ -45,7 +45,7 @@ interface SelectBoxProperties extends Omit<Properties,
 | 'onOpened' | 'onClosed'
 | 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
 | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'
-| 'dropDownOptions' | 'fieldTemplate'>, DropDownEditorInternalProperties {
+| 'dropDownOptions'>, DropDownEditorInternalProperties {
   onValueChanged?: (e: ValueChangedEvent) => void;
 
   selectionMode?: SingleOrMultiple;
@@ -216,7 +216,6 @@ class SelectBox<
     return {
       ...super._getDefaultOptions(),
       placeholder: messageLocalization.format('Select'),
-      fieldTemplate: null,
       customItemCreateEvent: 'change',
       acceptCustomValue: false,
       onCustomItemCreating(e): void {
@@ -460,19 +459,11 @@ class SelectBox<
   }
 
   _updateField(item: unknown): void {
-    const { fieldTemplate: fieldTemplateOption } = this.option();
-    const fieldTemplate = this._getTemplate(fieldTemplateOption);
+    // @ts-expect-error DataExpressionMixin must be typed
+    const text = this._displayGetter(item);
 
-    if (!(fieldTemplate && fieldTemplateOption)) {
-      // @ts-expect-error DataExpressionMixin must be typed
-      const text = this._displayGetter(item);
-
-      this.option('text', text);
-      this._renderDisplayText(text);
-      return;
-    }
-
-    this._renderField();
+    this.option('text', text);
+    this._renderDisplayText(text);
   }
 
   _getSelectionChangeHandler(): ((e: SelectionChangedEvent<Item>) => void) | typeof noop {
@@ -995,10 +986,6 @@ class SelectBox<
     const displayValue = this._displayGetter(item).toString();
     inputElement.value = displayValue;
     this._caret({ start: valueLength, end: displayValue.length });
-  }
-
-  _shouldLogFieldTemplateDeprecationWarning(): boolean {
-    return true;
   }
 
   _dispose(): void {

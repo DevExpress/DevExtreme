@@ -10,10 +10,10 @@ beforeEach(() => {
 });
 
 describe('template rendering', () => {
-  it('field template rendered', () => {
+  it('field addons template rendered', () => {
     const vm = defineComponent({
       template:
-                `<dx-select-box :data-source="dataSource" field-template="field" id="component">
+                `<dx-select-box :data-source="dataSource" :field-addons="{ beforeTemplate: 'field' }" id="component">
                     <template #field="">
                         <dx-text-box value="text" />
                     </template>
@@ -29,6 +29,6 @@ describe('template rendering', () => {
       },
     });
     const wrapper = mount(vm);
-    expect(wrapper.getComponent('#component').vm.$el.children).toHaveLength(1);
+    expect(wrapper.findAll('.dx-dropdowneditor-field-before-template-wrapper .dx-textbox')).toHaveLength(1);
   });
 });
