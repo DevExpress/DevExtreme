@@ -274,14 +274,13 @@ export const GroupingHeaderPanelExtender = (
     const $target = $(event.target);
     const groupColumnIndex = $target.closest(`.${CLASSES.groupPanelItem}`).index();
     const column = this._columnsController.getGroupColumns()[groupColumnIndex];
-    const columnIndex = column && column.index;
+    const columnIndex = column?.index;
 
-    if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-      // @ts-expect-error updateColumnIndexes sets the index of every column
-      this._headerFilterController.showHeaderFilterMenu(columnIndex, true);
-    } else {
+    if (!$target.is(HEADER_FILTER_CLASS_SELECTOR)) {
       // @ts-expect-error
       this._processGroupItemAction(columnIndex);
+    } else if (isDefined(columnIndex)) {
+      this._headerFilterController.showHeaderFilterMenu(columnIndex, true);
     }
 
     event.preventDefault();

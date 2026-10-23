@@ -257,8 +257,7 @@ export class HeaderFilterController extends Modules.ViewController {
     );
 
     if (!text) {
-      // @ts-expect-error the default options provide texts
-      text = headerFilterOptions.texts.emptyValue;
+      text = headerFilterOptions?.texts?.emptyValue ?? '';
     }
 
     return text;
@@ -275,10 +274,10 @@ export class HeaderFilterController extends Modules.ViewController {
     const { level } = options;
     const itemsPath = path ?? [];
     const itemsLevel = currentLevel ?? 0;
-    const displaySelector: HeaderFilterGroupSelector | undefined = lookup
-      // @ts-expect-error compileGetter() is overloaded and cannot pick one for a union argument
-      ? compileGetter<HeaderFilterGroupSelector>(lookup.displayExpr)
-      : undefined;
+    const displayExpr = lookup?.displayExpr;
+    const displaySelector: HeaderFilterGroupSelector | undefined = isFunction(displayExpr)
+      ? displayExpr
+      : lookup && compileGetter(displayExpr);
     const valueSelector: HeaderFilterGroupSelector | undefined = lookup
       ? compileGetter(lookup.valueExpr)
       : undefined;
@@ -365,9 +364,7 @@ export class HeaderFilterController extends Modules.ViewController {
               headerFilterOptions,
             });
             d.resolve(groupItems);
-          // eslint-disable-next-line @stylistic/max-len
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- fail ignores the result
-          }).fail(d.reject);
+          }).fail(d.reject as (...args: unknown[]) => void);
 
           return d;
         },
@@ -403,7 +400,7 @@ export class HeaderFilterController extends Modules.ViewController {
         });
       }
 
-      items = origPostProcess?.call(this, items) ?? items;
+      items = origPostProcess?.call(this, items) || items;
       // @ts-expect-error postProcess gets untyped items, but they are header filter items here
       that._updateSelectedState(items, column);
       return items;
@@ -415,10 +412,6 @@ export class HeaderFilterController extends Modules.ViewController {
   public showHeaderFilterMenu(columnIndex: number, isGroupPanel: boolean): void {
     const columnsController = this._columnsController;
     const column: Column = extend(true, {}, this._columnsController.getColumns()[columnIndex]);
-
-    if (!column) {
-      return;
-    }
 
     const visibleIndex = columnsController.getVisibleIndex(columnIndex);
     // TODO getView
@@ -530,8 +523,10 @@ const columnHeadersView = (
       eventsEngine.on($indicator, clickEventName, this.createAction((e) => {
         e.event.stopPropagation();
         saveFocusedElementInfo($indicator, this);
-        // @ts-expect-error updateColumnIndexes sets the index of every column
-        this._headerFilterController.showHeaderFilterMenu(column.index, false);
+
+        if (isDefined(column.index)) {
+          this._headerFilterController.showHeaderFilterMenu(column.index, false);
+        }
       }));
     }
   }
@@ -583,11 +578,11 @@ const headerPanel = (
   Base: ModuleType<HeaderPanel>,
 ): ModuleType<HeaderPanel> => class HeaderPanelHeaderFilterExtender
   extends headerFilterMixin(Base) {
-  private _createGroupPanelItem(
+  protected _createGroupPanelItem(
     $rootElement: dxElementWrapper,
     groupColumn: Column,
   ): dxElementWrapper {
-    // @ts-expect-error DataGrid's method
+    // @ts-expect-error _createGroupPanelItem is defined by DataGrid grouping
     const $item: dxElementWrapper = super._createGroupPanelItem($rootElement, groupColumn);
 
     if (!groupColumn.command && allowHeaderFiltering(groupColumn) && this.option('headerFilter.visible')) {
@@ -608,8 +603,10 @@ const headerPanel = (
           const { event } = e;
 
           event.stopPropagation();
-          // @ts-expect-error updateColumnIndexes sets the index of every column
-          this._headerFilterController.showHeaderFilterMenu(groupColumn.index, true);
+
+          if (isDefined(groupColumn.index)) {
+            this._headerFilterController.showHeaderFilterMenu(groupColumn.index, true);
+          }
         }));
       }
     }

@@ -48,8 +48,9 @@ export interface ProcessGroupItemsOptions {
   headerFilterOptions?: HeaderFilter;
 }
 
-export interface NormalizeGroupItemOptions
-  extends Pick<ProcessGroupItemsOptions, 'column' | 'headerFilterOptions'> {
+export interface NormalizeGroupItemOptions {
+  column: Column;
+  headerFilterOptions?: HeaderFilter;
   path: unknown[];
   valueSelector?: HeaderFilterGroupSelector;
   displaySelector?: HeaderFilterGroupSelector;
