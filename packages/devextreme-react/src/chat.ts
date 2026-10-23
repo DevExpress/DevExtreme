@@ -81,6 +81,7 @@ const Chat = memo(
         sendButtonOptions: { optionName: "sendButtonOptions", isCollectionItem: false },
         speechToTextOptions: { optionName: "speechToTextOptions", isCollectionItem: false },
         suggestions: { optionName: "suggestions", isCollectionItem: false },
+        toolCallOptions: { optionName: "toolCallOptions", isCollectionItem: false },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
       }), []);
@@ -639,6 +640,25 @@ const ToolCall = Object.assign<typeof _componentToolCall, NestedComponentMeta>(_
 
 // owners:
 // Chat
+type IToolCallOptionsProps = React.PropsWithChildren<{
+  expandAll?: boolean;
+  showInMessageTemplate?: boolean;
+}>
+const _componentToolCallOptions = (props: IToolCallOptionsProps) => {
+  return React.createElement(NestedOption<IToolCallOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "toolCallOptions",
+    },
+  });
+};
+
+const ToolCallOptions = Object.assign<typeof _componentToolCallOptions, NestedComponentMeta>(_componentToolCallOptions, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
 type ITypingUserProps = React.PropsWithChildren<{
   avatarAlt?: string;
   avatarUrl?: string;
@@ -717,6 +737,8 @@ export {
   ISuggestionsItemProps,
   ToolCall,
   IToolCallProps,
+  ToolCallOptions,
+  IToolCallOptionsProps,
   TypingUser,
   ITypingUserProps,
   User,
