@@ -106,7 +106,7 @@ import {
   isEditingOrShowEditorAlwaysDataCell,
 } from './editing_utils';
 import { editingDataControllerExtender } from './extenders/editing_data_controller';
-import type { CellBasedEditingControllerExtension } from './m_editing_cell_based';
+import type { CellBasedEditingController } from './m_editing_cell_based';
 import type {
   AllowEditActionValue,
   EditActionOptions,
@@ -397,7 +397,7 @@ export class EditingController extends modules.ViewController {
     return true;
   }
 
-  protected isPopupEditMode(): boolean {
+  public isPopupEditMode(): boolean {
     const editMode = this.option('editing.mode');
     return editMode === EDIT_MODE.popup;
   }
@@ -2821,7 +2821,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
   Base: TBase,
 ): TBase => class RowsViewEditingExtender extends Base {
   /** @architectureLeak editingCellBased: a click on a cell starts and closes cell editing */
-  public _editingController!: EditingController & CellBasedEditingControllerExtension;
+  public _editingController!: CellBasedEditingController;
 
   private _pointerDownTarget?: EventTarget | null;
 

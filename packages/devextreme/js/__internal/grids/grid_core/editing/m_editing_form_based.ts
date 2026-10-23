@@ -61,6 +61,8 @@ export interface FormBasedEditingControllerExtension {
   getEditForm: () => Form | null | undefined;
 }
 
+export type FormBasedEditingController = EditingController & FormBasedEditingControllerExtension;
+
 type EditFormTemplate = (
   $container: DxElement | dxElementWrapper,
   detailOptions: EditFormDetailOptions,
@@ -69,9 +71,7 @@ type EditFormTemplate = (
 
 const editingControllerExtender = (
   Base: ModuleType<EditingController>,
-): ModuleType<
-  EditingController & FormBasedEditingControllerExtension
-> => class FormBasedEditingControllerExtender extends Base {
+): ModuleType<FormBasedEditingController> => class FormBasedEditingControllerExtender extends Base {
   protected _rowsView!: RowsView & EditingFormBasedRowsViewExtension;
 
   private _updateEditFormDeferred?: DeferredObj<unknown> | null;
@@ -609,7 +609,7 @@ const rowsView = (
 ): ModuleType<
   RowsView & EditingFormBasedRowsViewExtension
 > => class RowsViewEditingFormBasedExtender extends Base {
-  public _editingController!: EditingController & FormBasedEditingControllerExtension;
+  public _editingController!: FormBasedEditingController;
 
   protected _renderCellContent(
     $cell: dxElementWrapper,
@@ -618,7 +618,6 @@ const rowsView = (
   ): void {
     if (
       options.rowType === 'data'
-      // @ts-expect-error isPopupEditMode() is protected
       && this._editingController.isPopupEditMode()
       && options.row?.visible === false
     ) {
@@ -669,7 +668,6 @@ const rowsView = (
 
   private _isFormItem(parameters: EditorCellOptions): EditFormColumnItem | false | undefined {
     const isDetailRow = parameters.rowType === 'detail' || parameters.rowType === 'detailAdaptive';
-    // @ts-expect-error isPopupEditMode() is protected
     const isPopupEditing = parameters.rowType === 'data' && this._editingController.isPopupEditMode();
 
     return (isDetailRow || isPopupEditing) && parameters.item;

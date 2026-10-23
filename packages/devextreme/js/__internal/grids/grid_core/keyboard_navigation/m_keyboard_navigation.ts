@@ -31,8 +31,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange, RowIndexCorrection } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type { EditingController } from '@ts/grids/grid_core/editing/editing';
-import type { CellBasedEditingControllerExtension } from '@ts/grids/grid_core/editing/m_editing_cell_based';
+import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/m_editing_cell_based';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
@@ -124,7 +123,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _selectionController!: Controllers['selection'];
 
-  protected _editingController!: Controllers['editing'] & CellBasedEditingControllerExtension;
+  protected _editingController!: CellBasedEditingController;
 
   protected _rowsView!: Views['rowsView'];
 
@@ -145,7 +144,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this._dataController = this.getController('data');
     this.dataSourceController = this.getController('dataSource');
     this._selectionController = this.getController('selection');
-    this._editingController = this.getController('editing') as Controllers['editing'] & CellBasedEditingControllerExtension;
+    this._editingController = this.getController('editing') as CellBasedEditingController;
     this._editorFactory = this.getController('editorFactory');
     this._focusController = this.getController('focus');
     this.adaptiveColumnsController = this.getController('adaptiveColumns');
@@ -3135,7 +3134,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
 };
 
 const editing = (
-  Base: ModuleType<EditingController & CellBasedEditingControllerExtension>,
+  Base: ModuleType<CellBasedEditingController>,
 ) => class EditingControllerKeyboardExtender extends Base {
   /**
    * interface override

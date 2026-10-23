@@ -11,13 +11,12 @@ import {
   createDataGrid,
   flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
-import type { EditingController } from '../editing';
-import type { CellBasedEditingControllerExtension } from '../m_editing_cell_based';
+import type { CellBasedEditingController } from '../m_editing_cell_based';
 
 const getEditingController = (
   instance: DataGridInstance,
-): EditingController & CellBasedEditingControllerExtension => instance
-  .getController('editing') as EditingController & CellBasedEditingControllerExtension;
+): CellBasedEditingController => instance
+  .getController('editing') as CellBasedEditingController;
 
 describe('DataGrid cell-based editing', () => {
   const dataSource = [

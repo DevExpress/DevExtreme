@@ -709,7 +709,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
   private _getRowHeights() {
     const isPopupEditMode = this._editingController
-      // @ts-expect-error
       ?.isPopupEditMode?.();
 
     let rowElements = this._getRowElements(this._tableElement).toArray();

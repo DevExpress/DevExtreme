@@ -51,24 +51,23 @@ import type {
 } from './types';
 
 export interface CellBasedEditingControllerExtension {
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  isCellOrBatchEditMode(): boolean;
+  isCellOrBatchEditMode: () => boolean;
 
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   closeEditCell(isError?: boolean | null, withoutSaveEditData?: boolean): DeferredObj<unknown>;
 
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   editCell(rowIndex: number, columnIndex: number | string): EditCellResult;
 
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   beforeCloseEditCell(rowIndices: number[]): void;
 }
 
+export type CellBasedEditingController = EditingController & CellBasedEditingControllerExtension;
+
 const editingControllerExtender = (
   Base: ModuleType<EditingController>,
-): ModuleType<
-  EditingController & CellBasedEditingControllerExtension
-> => class CellBasedEditingControllerExtender extends Base {
+): ModuleType<CellBasedEditingController> => class CellBasedEditingControllerExtender extends Base {
   private _pointerUpEditorHandler?: () => void;
 
   private _pointerDownEditorHandler?: (e: DxEvent) => void;
@@ -815,7 +814,7 @@ const editingControllerExtender = (
 const rowsView = (
   Base: ModuleType<RowsView>,
 ): ModuleType<RowsView> => class RowsViewEditingCellBasedExtender extends Base {
-  public _editingController!: EditingController & CellBasedEditingControllerExtension;
+  public _editingController!: CellBasedEditingController;
 
   protected _createTable(columns?: Column[], isAppend?: boolean): dxElementWrapper {
     const $table = super._createTable(columns, isAppend);
