@@ -85,7 +85,7 @@ export interface ResizableProperties extends Properties {
 
   disabled?: boolean;
 
-  step?: string;
+  step?: number | string;
 
   roundStepValue?: boolean;
 
