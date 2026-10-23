@@ -11,14 +11,14 @@ import type {
   SelectionChangedEvent as ListSelectionChangedEvent,
 } from '@js/ui/list';
 import type { Properties as PopupProperties } from '@js/ui/popup';
-import windowUtils from '@ts/core/utils/m_window';
+import windowUtils from '@ts/core/utils/window';
 import List from '@ts/ui/list/list.edit.search';
 import Popup from '@ts/ui/popup/popup.full';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance } from '../types/quill';
-import type { BaseHtmlEditorModule, BaseModuleOptions } from './m_base';
-import BaseModule from './m_base';
+import type { BaseHtmlEditorModule, BaseModuleOptions } from './base';
+import BaseModule from './base';
 
 const MODULE_NAMESPACE = 'dxHtmlEditorPopupModule';
 

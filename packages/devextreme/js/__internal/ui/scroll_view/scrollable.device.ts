@@ -1,7 +1,7 @@
 import type { Device } from '@js/core/devices';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 
 type DeviceDependentOptions = Pick<ScrollableProperties, 'useNative' | 'bounceEnabled' | 'scrollByThumb' | 'scrollByContent' | 'showScrollbar'>;

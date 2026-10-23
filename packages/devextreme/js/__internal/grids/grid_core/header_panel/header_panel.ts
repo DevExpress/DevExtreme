@@ -18,7 +18,7 @@ import type { Column } from '../columns_controller/types';
 import type { ResizingController } from '../grid_view/grid_view';
 import type { InternalGridOptions, ModuleType, OptionChanged } from '../types';
 import { ColumnsView } from '../views/columns_view';
-import type { ContextMenuItemsOptions } from '../views/types';
+import type { ContextMenuItemsOptions, GridContextMenuItem } from '../views/types';
 import { CLASSES, DEFAULT_TOOLBAR_ITEM_NAMES, TOOLBAR_ARIA_LABEL } from './const';
 
 export class HeaderPanel extends ColumnsView {
@@ -296,8 +296,8 @@ export class HeaderPanel extends ColumnsView {
     return undefined;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getContextMenuItems(options: ContextMenuItemsOptions): unknown {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overrides use the param
+  public getContextMenuItems(options: ContextMenuItemsOptions): GridContextMenuItem[] | undefined {
     return undefined;
   }
 }

@@ -10,7 +10,7 @@ import { getOuterHeight } from '@js/core/utils/size';
 import { changeCallback, originalViewPort, value as viewPortValue } from '@js/core/utils/view_port';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
-import { uiLayerInitialized } from '@ts/core/utils/m_common';
+import { uiLayerInitialized } from '@ts/core/utils/common';
 import { resolvedThemeMode } from '@ts/core/utils/theme_mode';
 import { themeModeChangedCallback, themeReadyCallback } from '@ts/ui/m_themes_callback';
 
@@ -279,7 +279,7 @@ function _attachCssClasses(element, themeName?: string): void {
     const $tester = $('<div>');
     $tester.css('border', '.5px solid transparent');
     $('body').append($tester);
-    if (getOuterHeight($tester) === 1) {
+    if (getOuterHeight($tester.get(0)) === 1) {
       $(element).addClass(DX_HAIRLINES_CLASS);
       themeClasses += ` ${DX_HAIRLINES_CLASS}`;
     }

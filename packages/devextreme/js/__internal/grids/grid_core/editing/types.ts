@@ -1,15 +1,22 @@
-import type { DataChange, NewRowPosition } from '@js/common/grids';
+import type {
+  DataChange, EditingBase, NewRowPosition, RowInsertedInfo,
+} from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
-import type { Column as DataGridColumn, ColumnButton } from '@js/ui/data_grid';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import type { StoreChange } from '@js/data/store';
+import type { DxEvent } from '@js/events';
+import type { Column as DataGridColumn, ColumnButton, ColumnButtonClickEvent } from '@js/ui/data_grid';
 import type { FormItemComponent } from '@js/ui/form';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ProcessedItem } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
 import type {
-  InternalGrid, InternalGridOptions, OptionChanged, OptionChangedFor, RowKey,
+  InternalGrid, OptionChanged, OptionChangedFor, RowKey,
 } from '../types';
-import type { ViewCellOptions, ViewDataChange } from '../views/types';
+import type {
+  CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRow,
+} from '../views/types';
 import type { EDITING_CHANGES_OPTION_NAME, INSERT_INDEX } from './const';
 
 export interface NormalizedEditCellOptions {
@@ -86,9 +93,23 @@ export interface EditFormItemNode {
 
 export type EditingChange = DataChange<RawItemData, RowKey>;
 
+export type SavedRowInfo = Omit<RowInsertedInfo<EditingChange['data'], RowKey>, 'error'> & {
+  error?: Error;
+};
+
 export type EditingColumn = Column
   & Pick<DataGridColumn, 'editCellTemplate'>
   & { buttons?: EditingButton[] };
+
+export interface EditingViewRow extends ViewRow {
+  removed?: boolean;
+  modified?: boolean;
+  modifiedValues?: unknown[];
+}
+
+export interface EditingCellRenderOptions extends CellRenderOptions {
+  row: EditingViewRow;
+}
 
 export interface EditorCellOptions extends ViewCellOptions {
   column: EditingColumn;
@@ -109,6 +130,14 @@ export type EditingButtonCallback = (options: {
   row?: ProcessedItem;
   column: Column;
 }) => boolean;
+
+export type InternalColumnButtonClickEvent = ColumnButtonClickEvent & { event: DxEvent };
+
+export type InternalColumnButton = Omit<ColumnButton, 'visible' | 'disabled' | 'onClick'> & {
+  visible?: boolean | EditingButtonCallback;
+  disabled?: boolean | EditingButtonCallback;
+  onClick?: (e: InternalColumnButtonClickEvent) => void;
+};
 
 export interface EditingChangesOptionChanged {
   name: 'editing';
@@ -138,7 +167,13 @@ export interface SaveResult {
   result: unknown;
 }
 
-export type EditingOptions = NonNullable<InternalGridOptions['editing']> & {
+export interface ProcessedChanges {
+  pendingSaves: DeferredObj<unknown>[];
+  saveResults: SaveResult[];
+  dataChanges: StoreChange[];
+}
+
+export type EditingOptions = EditingBase<RawItemData, RowKey> & {
   allowAdding?: AllowEditActionValue;
   allowUpdating?: AllowEditActionValue;
   allowDeleting?: AllowEditActionValue;
@@ -146,11 +181,6 @@ export type EditingOptions = NonNullable<InternalGridOptions['editing']> & {
 };
 
 export type EditingChangeParams = Partial<EditingChange> & { oldData?: RawItemData };
-
-export type EditingButtonLocalizationNames = Record<
-'edit' | 'save' | 'delete' | 'undelete' | 'cancel',
-string
->;
 
 export interface EditingModuleOptions {
   useLegacyColumnButtonTemplate?: boolean;

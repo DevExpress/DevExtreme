@@ -1,4 +1,4 @@
-// Bundles React/Vue demos with esbuild. Angular is delegated to csp-bundle-angular.js.
+// Bundles React/Vue demos with esbuild. Angular is delegated to demo-bundle-angular.js.
 
 const path = require('path');
 const fs = require('fs');
@@ -9,24 +9,24 @@ const { virtualEntryPath, virtualEntryPlugin } = require('./demo-render-signal')
 const { readShardConfig, applyShard: applyShardGeneric } = require('./shard');
 
 const FRAMEWORK_ARG = (process.argv.find((a) => a.startsWith('--framework=')) || '').split('=')[1];
-const FRAMEWORK = FRAMEWORK_ARG || process.env.CSP_FRAMEWORKS || 'React';
+const FRAMEWORK = FRAMEWORK_ARG || 'React';
 
 const SUPPORTED = ['React', 'ReactJs', 'Vue', 'Angular'];
 if (!SUPPORTED.includes(FRAMEWORK)) {
-  console.log(`csp-bundle: framework ${FRAMEWORK} is not supported (only ${SUPPORTED.join(', ')}). Nothing to do.`);
+  console.log(`demo-bundle: framework ${FRAMEWORK} is not supported (only ${SUPPORTED.join(', ')}). Nothing to do.`);
   process.exit(0);
 }
 
 const IS_ANGULAR = FRAMEWORK === 'Angular';
 
-const IS_GENERATE_MANIFESTS = process.env.CSP_BUNDLE_GENERATE_MANIFESTS === '1';
+const IS_GENERATE_MANIFESTS = process.env.DEMO_BUNDLE_GENERATE_MANIFESTS === '1';
 
 const DEMOS_APP_ROOT = path.join(__dirname, '..', '..');
 const SRC_DEMOS_DIR = path.join(DEMOS_APP_ROOT, 'Demos');
 const NODE_MODULES = path.join(DEMOS_APP_ROOT, 'node_modules');
 
 const CONCURRENCY = (() => {
-  const fromEnv = parseInt(process.env.CSP_BUNDLE_CONCURRENCY, 10);
+  const fromEnv = parseInt(process.env.DEMO_BUNDLE_CONCURRENCY, 10);
   if (fromEnv > 0) return fromEnv;
   return Math.max(4, (os.cpus() || []).length - 1);
 })();
@@ -41,7 +41,7 @@ function findDemos() {
   const out = [];
   if (!fs.existsSync(SRC_DEMOS_DIR)) return out;
 
-  const filter = (process.env.CSP_BUNDLE_FILTER || '').trim();
+  const filter = (process.env.DEMO_BUNDLE_FILTER || '').trim();
 
   const widgets = fs.readdirSync(SRC_DEMOS_DIR, { withFileTypes: true })
     .filter((w) => w.isDirectory());
@@ -69,16 +69,16 @@ function findEntry(srcDir) {
 }
 
 const ignoreMissingCssPlugin = {
-  name: 'csp-bundle:ignore-missing-css',
+  name: 'demo-bundle:ignore-missing-css',
   setup(build) {
     build.onResolve({ filter: /\.css$/ }, (args) => {
       const fullPath = path.resolve(args.resolveDir, args.path);
       if (!fs.existsSync(fullPath)) {
-        return { path: fullPath, namespace: 'csp-bundle-empty-css' };
+        return { path: fullPath, namespace: 'demo-bundle-empty-css' };
       }
       return null;
     });
-    build.onLoad({ filter: /.*/, namespace: 'csp-bundle-empty-css' }, () => ({
+    build.onLoad({ filter: /.*/, namespace: 'demo-bundle-empty-css' }, () => ({
       contents: '',
       loader: 'css',
     }));
@@ -89,7 +89,7 @@ const ANTI_FORGERY_PATH = path.join(DEMOS_APP_ROOT, 'shared', 'anti-forgery', 'f
 const GLOBALIZE_BASE = path.join(NODE_MODULES, 'globalize', 'dist', 'globalize');
 
 const demoAliasesPlugin = {
-  name: 'csp-bundle:demo-aliases',
+  name: 'demo-bundle:demo-aliases',
   setup(build) {
     build.onResolve({ filter: /^anti-forgery$/ }, () => ({ path: ANTI_FORGERY_PATH }));
 
@@ -107,7 +107,7 @@ const demoAliasesPlugin = {
 const DX_CJS_SEG = `${path.sep}devextreme${path.sep}cjs${path.sep}`;
 const DX_ESM_SEG = `${path.sep}devextreme${path.sep}esm${path.sep}`;
 const devextremeDedupePlugin = {
-  name: 'csp-bundle:devextreme-single-copy',
+  name: 'demo-bundle:devextreme-single-copy',
   setup(build) {
     build.onResolve({ filter: /^devextreme(\/.*)?$/ }, async (args) => {
       if (args.pluginData && args.pluginData.dxDeduped) return null;
@@ -344,12 +344,12 @@ async function main() {
 
 if (require.main === module) {
   // eslint-disable-next-line global-require
-  const entrypoint = IS_ANGULAR ? require('./csp-bundle-angular').main : main;
+  const entrypoint = IS_ANGULAR ? require('./demo-bundle-angular').main : main;
 
   entrypoint().then(() => {
     process.exit(process.exitCode || 0);
   }).catch((err) => {
-    console.error('csp-bundle failed:', err);
+    console.error('demo-bundle failed:', err);
     process.exit(1);
   });
 }

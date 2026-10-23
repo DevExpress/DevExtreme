@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 
 import { registerComponent } from '@ts/core/component_registrator';
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
-import { isDefined } from '@ts/core/utils/m_type';
+import { noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
+import { isDefined } from '@ts/core/utils/type';
 import { plugins } from '@ts/viz/core/annotations';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';

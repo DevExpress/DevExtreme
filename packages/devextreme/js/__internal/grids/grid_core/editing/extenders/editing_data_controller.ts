@@ -1,4 +1,3 @@
-import type { DataChange as EditingDataChange } from '@js/common/grids';
 import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -173,7 +172,7 @@ export const editingDataControllerExtender = (
   }
 
   private _dropEditingStateForRemovedItems(dataSource: RawItemData[]): void {
-    const changes = this.option('editing.changes') as EditingDataChange[];
+    const changes = this._editingController.getChanges();
     if (!changes.length) {
       return;
     }

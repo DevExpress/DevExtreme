@@ -12,7 +12,6 @@ interface ColumnOptions {
 
 export const getCommonA11yLabel = (
   columnName: string,
-  // @ts-expect-error bad i18n types
 ): string => messageLocalization.format(I18N_KEYS.common, columnName);
 
 export const getHeaderFilterA11yLabel = (
@@ -38,7 +37,6 @@ export const getSortIndexA11yLabel = (
   sortOrder?: SortOrder,
   sortIndex?: number,
 ): string | null => (sortOrder && isDefined(sortIndex)
-  // @ts-expect-error bad i18n types
   ? messageLocalization.format(I18N_KEYS.sortIndex, sortIndex + 1)
   : null);
 

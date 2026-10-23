@@ -59,7 +59,7 @@ function getScrollableBoundary($scrollable: dxElementWrapper): Quad {
   const paddingTop = parseFloat(style.paddingTop) || 0;
   // use clientWidth, because vertical scrollbar reduces content width
   const width = ($scrollable[0] as HTMLElement).clientWidth - (paddingLeft + paddingRight);
-  const height = getHeight($scrollable);
+  const height = Number(getHeight($scrollable));
   // @ts-expect-error offset can be undefined
   const left = offset.left + paddingLeft;
   // @ts-expect-error offset can be undefined
@@ -230,9 +230,9 @@ class Sortable extends Draggable<SortableProperties> {
         const $element = this.$element();
         const $sourceElement = this._getSourceElement();
         const isVertical = this._isVerticalOrientation();
-        const sourceElementSize = isVertical
+        const sourceElementSize = Number(isVertical
           ? getOuterHeight($sourceElement, true)
-          : getOuterWidth($sourceElement, true);
+          : getOuterWidth($sourceElement, true));
         const scrollSize = $element.get(0)[isVertical ? 'scrollHeight' : 'scrollWidth'];
         const scrollPosition = $element.get(0)[isVertical ? 'scrollTop' : 'scrollLeft'];
         const positionProp = isVertical ? 'top' : 'left';
@@ -446,7 +446,6 @@ class Sortable extends Draggable<SortableProperties> {
   _getItemPoints(): ItemPoint[] {
     let result: ItemPoint[] = [];
     /* eslint-disable @typescript-eslint/init-declarations */
-    let $item: dxElementWrapper | undefined;
     let offset: Coordinates | undefined;
     let itemWidth: number | undefined;
     /* eslint-enable @typescript-eslint/init-declarations */
@@ -459,6 +458,8 @@ class Sortable extends Draggable<SortableProperties> {
     const draggableVisibleIndex = visibleItemElements.indexOf($draggableItem.get(0));
 
     if (visibleItemCount) {
+      let $item = $(visibleItemElements[0]);
+
       for (let i = 0; i <= visibleItemCount; i += 1) {
         const needCorrectLeftPosition = !isVertical
           && Boolean(rtlEnabled) !== (i === visibleItemCount);
@@ -476,12 +477,10 @@ class Sortable extends Draggable<SortableProperties> {
           left: offset.left + (needCorrectLeftPosition ? itemWidth : 0),
           // @ts-expect-error offset can be undefined
           top: offset.top + (needCorrectTopPosition ? result[i - 1].height : 0),
-          // @ts-expect-error $item is assigned in the loop
           index: i === visibleItemCount ? itemElements.length : itemElements.indexOf($item.get(0)),
-          // @ts-expect-error $item is assigned in the loop
           $item,
-          width: getOuterWidth($item),
-          height: getOuterHeight($item),
+          width: getOuterWidth($item.get(0)),
+          height: getOuterHeight($item.get(0)),
           isValid: this._isValidPoint(i, draggableVisibleIndex),
         });
       }
@@ -604,14 +603,17 @@ class Sortable extends Draggable<SortableProperties> {
     this._updateItemPoints();
   }
 
-  _makeWidthCorrection($item: dxElementWrapper, width: number | string): number | string {
+  _makeWidthCorrection(
+    $item: dxElementWrapper,
+    width: number | string | undefined,
+  ): number | string | undefined {
     this._$scrollable = this._getScrollable($item);
     let correctedWidth = width;
     if (this._$scrollable) {
-      const scrollableWidth = getWidth(this._$scrollable);
+      const scrollableWidth = Number(getWidth(this._$scrollable));
       // @ts-expect-error offset can be undefined
       const overflowLeft = this._$scrollable.offset().left - $item.offset().left;
-      const overflowRight = getOuterWidth($item) - overflowLeft - scrollableWidth;
+      const overflowRight = Number(getOuterWidth($item)) - overflowLeft - scrollableWidth;
 
       if (overflowLeft > 0) {
         // @ts-expect-error width is an empty string when it was not measured
@@ -633,8 +635,8 @@ class Sortable extends Draggable<SortableProperties> {
   ): void {
     const dropInsideItem = this.option('dropInsideItem');
     const isVertical = this._isVerticalOrientation();
-    let width: number | string = '';
-    let height: number | string = '';
+    let width: number | string | undefined = '';
+    let height: number | string | undefined = '';
 
     $placeholderElement.toggleClass(this._addWidgetPrefix('placeholder-inside'), dropInsideItem);
 
@@ -874,7 +876,7 @@ class Sortable extends Draggable<SortableProperties> {
 
       if (!isVerticalOrientation && rtlEnabled && !dropInsideItem) {
         // @ts-expect-error offset can be undefined
-        position.left += getOuterWidth($itemElement, true);
+        position.left += getOuterWidth($itemElement.get(0), true);
       }
     } else {
       itemElement = this._getPrevVisibleItem(items, toIndex);
@@ -901,7 +903,7 @@ class Sortable extends Draggable<SortableProperties> {
 
     if (position) {
       const isLastVerticalPosition = isVerticalOrientation && toIndex === items.length;
-      const outerPlaceholderHeight = getOuterHeight($placeholderElement);
+      const outerPlaceholderHeight = Number(getOuterHeight($placeholderElement));
 
       position.left = this._makeLeftCorrection(position.left);
       position.top = isLastVerticalPosition && position.top >= outerPlaceholderHeight
@@ -959,8 +961,9 @@ class Sortable extends Draggable<SortableProperties> {
     let size = this.option('draggableElementSize');
     if (!size) {
       size = isVerticalOrientation
-        ? (getOuterHeight($draggableItem) + getOuterHeight($draggableItem, true)) / 2
-        : (getOuterWidth($draggableItem) + getOuterWidth($draggableItem, true)) / 2;
+        ? (Number(getOuterHeight($draggableItem))
+          + Number(getOuterHeight($draggableItem, true))) / 2
+        : (Number(getOuterWidth($draggableItem)) + Number(getOuterWidth($draggableItem, true))) / 2;
 
       if (!this.option('autoUpdate')) {
         this.option('draggableElementSize', size);

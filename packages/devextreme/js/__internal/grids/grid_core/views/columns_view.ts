@@ -28,7 +28,7 @@ import {
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
@@ -64,6 +64,7 @@ import type {
   ColumnWidthsOptions,
   ContextMenuItemsOptions,
   DelayedTemplate,
+  GridContextMenuItem,
   HintColumn,
   RowPreparedOptions,
   RowRenderOptions,
@@ -1649,7 +1650,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  public getContextMenuItems?(options: ContextMenuItemsOptions): unknown;
+  public getContextMenuItems?(
+    options: ContextMenuItemsOptions,
+  ): GridContextMenuItem[] | undefined;
 
   public getName(): string | undefined {
     return undefined;
@@ -1672,8 +1675,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if ($element && $tableElement) {
       return isHorizontal
-        ? getOuterWidth($tableElement) - getWidth($element) > 0
-        : getOuterHeight($tableElement) - getHeight($element) > 0;
+        ? Number(getOuterWidth($tableElement)) - Number(getWidth($element)) > 0
+        : Number(getOuterHeight($tableElement)) - Number(getHeight($element)) > 0;
     }
 
     return false;

@@ -2,7 +2,7 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable prefer-destructuring */
 
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { formatValue, isFirefoxOnAndroid, utils } from '@ts/viz/range_selector/common';
 import SliderMarker from '@ts/viz/range_selector/slider_marker';

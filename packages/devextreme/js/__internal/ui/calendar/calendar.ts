@@ -1242,7 +1242,7 @@ class Calendar<
     if (!this._viewWidthValue) {
       const { viewsCount } = this.option();
 
-      this._viewWidthValue = getWidth(this.$element()) / viewsCount;
+      this._viewWidthValue = getWidth(this.$element().get(0)) / viewsCount;
     }
 
     return this._viewWidthValue;

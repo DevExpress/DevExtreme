@@ -19,7 +19,7 @@ import TextArea from '@js/ui/text_area';
 import { current, isCompact, isMaterial } from '@js/ui/themes';
 import { themeLength } from '@ts/core/utils/theme_length';
 import type { DialogPromise } from '@ts/ui/html_editor/types';
-import BaseDialog from '@ts/ui/html_editor/ui/m_baseDialog';
+import BaseDialog from '@ts/ui/html_editor/ui/baseDialog';
 import type {
   AICommandExecutor,
   AICommandParamsMap,

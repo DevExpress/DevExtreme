@@ -18,6 +18,7 @@ import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { TemplateModel } from '@ts/grids/grid_core/columns_controller/types';
+import type { EditingOptions } from '@ts/grids/grid_core/editing/types';
 import type { FilterValue } from '@ts/grids/grid_core/filter/types';
 import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
 
@@ -219,6 +220,8 @@ export interface InternalGridOptions extends
   loadItemsOnExportingSelectedItems?: boolean | undefined;
 
   selection?: InternalSelection;
+
+  editing?: EditingOptions;
 
   scrolling?: DataGridScrolling | TreeListScrolling;
 

@@ -11,9 +11,9 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
-import { noop } from '@ts/core/utils/m_common';
-import { isDefined, isNumeric } from '@ts/core/utils/m_type';
+import { noop } from '@ts/core/utils/common';
 import { adjust } from '@ts/core/utils/math';
+import { isDefined, isNumeric } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { adjustVisualRange, normalizeEnum as _normalizeEnum, rangesAreEqual } from '@ts/viz/core/utils';
 import { consts, isFirefoxOnAndroid, utils } from '@ts/viz/range_selector/common';

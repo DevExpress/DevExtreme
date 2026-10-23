@@ -8,7 +8,7 @@ import type { ReadonlySignal, Signal } from '@ts/core/state_manager/index';
 import {
   computed, effect, signal, track,
 } from '@ts/core/state_manager/index';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import type { ComponentType } from 'inferno';
 
 import { TemplateWrapper } from '../inferno_wrappers/template_wrapper';

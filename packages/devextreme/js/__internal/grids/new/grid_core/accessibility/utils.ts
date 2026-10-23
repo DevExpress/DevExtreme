@@ -6,7 +6,6 @@ export const getCardRoleDescription = (
   isEditable?: boolean,
 ): string => (isEditable ? messageLocalization.format('dxCardView-ariaEditableCard') : messageLocalization.format('dxCardView-ariaCard'));
 
-// @ts-expect-error ts-error
 const getPositionDescription = (position?: Position): string => (position ? messageLocalization.format('dxCardView-ariaCardPosition', position.rowIndex + 1, position.columnIndex + 1) : '');
 
 export const getCardStateDescription = (

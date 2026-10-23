@@ -19,10 +19,10 @@
     "openai": "4.73.1"
   },
   "devDependencies": {
-    "@storybook/addon-docs": "10.2.10",
-    "@storybook/addon-links": "10.2.10",
+    "@storybook/addon-docs": "10.6.3",
+    "@storybook/addon-links": "10.6.3",
     "@storybook/addon-webpack5-compiler-swc": "4.0.3",
-    "@storybook/react-webpack5": "10.2.10",
+    "@storybook/react-webpack5": "10.6.3",
     "@types/react": "18.3.28",
     "@types/react-dom": "18.3.7",
     "http-server": "14.1.1",
@@ -30,7 +30,7 @@
     "prop-types": "15.8.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "storybook": "10.2.10",
+    "storybook": "10.6.3",
     "typescript": "5.9.3"
   }
 }
