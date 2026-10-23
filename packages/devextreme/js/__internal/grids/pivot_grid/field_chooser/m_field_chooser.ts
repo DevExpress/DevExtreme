@@ -306,7 +306,7 @@ export class FieldChooser extends FieldChooserBase {
     let area;
 
     if (targetFieldElement.length) {
-      const fieldCopy = targetFieldElement.data('field');
+      const fieldCopy = targetFieldElement.data<{ index: number } | undefined>('field');
       if (fieldCopy) {
         field = this.getDataSource().field(fieldCopy.index) || fieldCopy;
       }

@@ -48,8 +48,7 @@ export class ContextMenuController extends modules.ViewController {
         const $targetRowElement = $targetCellElement.parent();
         const rowIndex = view.getRowIndex($targetRowElement);
         const columnIndex: number | undefined = $targetCellElement[0]?.cellIndex;
-        // @ts-expect-error data(key) is typed as returning the wrapper
-        const rowOptions: ViewRow | undefined = $targetRowElement.data('options');
+        const rowOptions = $targetRowElement.data<ViewRow | undefined>('options');
         const options: ContextMenuPreparingOptions = {
           event: dxEvent,
           targetElement: getPublicElement($targetElement),
