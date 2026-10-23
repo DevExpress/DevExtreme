@@ -35011,9 +35011,6 @@ declare module DevExpress.ui.dxChat {
 
     [key: string]: any;
   };
-  /**
-   * [descr:ToolCall]
-   */
   export type ToolCall = {
     /**
      * [descr:ToolCall.name]
