@@ -384,6 +384,31 @@ export default function() {
             assert.equal($toolbarContainer.find(`.${TOOLBAR_CLASS}`).length, 1, 'Toolbar container contains the htmlEditor\'s toolbar');
         });
 
+        test('a custom toolbar container keeps one mousedown handler after repaint and none after dispose', function(assert) {
+            const $toolbarContainer = $('<div>').addClass('external-container');
+            $('#qunit-fixture').append($toolbarContainer);
+            const focusSpy = sinon.spy($toolbarContainer.get(0), 'focus');
+
+            const editor = $('#htmlEditor').dxHtmlEditor({
+                toolbar: {
+                    container: $toolbarContainer,
+                    items: ['bold']
+                }
+            }).dxHtmlEditor('instance');
+
+            editor.repaint();
+            editor.repaint();
+            $toolbarContainer.trigger('mousedown');
+
+            assert.strictEqual(focusSpy.callCount, 1, 'one handler after two repaints');
+
+            editor.dispose();
+            focusSpy.resetHistory();
+            $toolbarContainer.trigger('mousedown');
+
+            assert.strictEqual(focusSpy.callCount, 0, 'no handler after dispose');
+        });
+
         test('Toolbar should be disabled once editor is read only', function(assert) {
             $('#htmlEditor').dxHtmlEditor({
                 readOnly: true,
