@@ -195,6 +195,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
 
     delete this._list;
     delete this._popup;
+    delete this._$popup;
   }
 
   _renderButton(): void {
