@@ -19,6 +19,7 @@ export {
   Attachment,
   ToolCallStatus,
   ToolCall,
+  ToolCallOptions,
   MessageType,
   TextMessage,
   ImageMessage,

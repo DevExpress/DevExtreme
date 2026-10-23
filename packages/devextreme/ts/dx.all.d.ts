@@ -11861,10 +11861,6 @@ declare module DevExpress.ui {
      */
     reloadOnChange?: boolean;
     /**
-     * [descr:dxChatOptions.renderToolsInMessageTemplate]
-     */
-    renderToolsInMessageTemplate?: boolean;
-    /**
      * [descr:dxChatOptions.sendButtonOptions]
      */
     sendButtonOptions?: DevExpress.ui.dxChat.SendButtonProperties;
@@ -11905,6 +11901,10 @@ declare module DevExpress.ui {
       | 'selectedItems'
       | 'onSelectionChanged'
     >;
+    /**
+     * [descr:dxChatOptions.toolCallOptions]
+     */
+    toolCallOptions?: DevExpress.ui.dxChat.ToolCallOptions;
     /**
      * [descr:dxChatOptions.typingUsers]
      */
@@ -35037,6 +35037,19 @@ declare module DevExpress.ui.dxChat {
     expanded?: boolean;
 
     [key: string]: any;
+  };
+  /**
+   * [descr:ToolCallOptions]
+   */
+  export type ToolCallOptions = {
+    /**
+     * [descr:ToolCallOptions.showInMessageTemplate]
+     */
+    showInMessageTemplate?: boolean;
+    /**
+     * [descr:ToolCallOptions.expandAll]
+     */
+    expandAll?: boolean;
   };
   /**
    * [descr:ToolCallStatus]
