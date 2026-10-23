@@ -32,7 +32,7 @@ import Popover from '@js/ui/popover/ui.popover';
 import type { ToolbarItem } from '@js/ui/popup';
 import type { TextBoxType } from '@js/ui/text_box';
 import { current, isMaterial } from '@js/ui/themes';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
@@ -482,7 +482,9 @@ class Lookup extends DropDownList<LookupProperties> {
 
     const selectedListItem = $(this._list?.element()).find(`.${LIST_ITEM_SELECTED_CLASS}`);
     const selectedIndex = this._listItemElements().index(selectedListItem);
-    const differenceOfHeights = (getHeight(selectedListItem) - getHeight(this.element())) / 2;
+    const differenceOfHeights = (
+      Number(getHeight(selectedListItem)) - getHeight(this.element())
+    ) / 2;
 
     const lookupOffset = $(this._list?.element()).offset()?.top ?? 0;
     const { dropDownOptions: { height: dropDownHeightOption } = {} } = this.option();
@@ -499,7 +501,8 @@ class Lookup extends DropDownList<LookupProperties> {
         this._scrollToSelectedItem();
 
         const differenceOffset = this._getDifferenceOffsets(selectedListItem);
-        const scrollOffsetTop = (popupHeight - getHeight(selectedListItem)) / 2 - differenceOffset;
+        const scrollOffsetTop = (popupHeight - Number(getHeight(selectedListItem))) / 2
+          - differenceOffset;
         // @ts-expect-error fix on List level
         this._list.scrollTo(
           // @ts-expect-error fix on List level
@@ -627,10 +630,10 @@ class Lookup extends DropDownList<LookupProperties> {
 
     return (
       this._calculateListHeight(grouped)
-      + (this._$searchWrapper ? getOuterHeight(this._$searchWrapper) : 0)
-      + (bottomToolbar ? getOuterHeight(bottomToolbar) : 0)
-      + (topToolbar ? getOuterHeight(topToolbar) : 0)
-    ) as number;
+      + (this._$searchWrapper ? getOuterHeight(this._$searchWrapper.get(0)) : 0)
+      + (bottomToolbar ? Number(getOuterHeight(bottomToolbar)) : 0)
+      + (topToolbar ? Number(getOuterHeight(topToolbar)) : 0)
+    );
   }
 
   _allowSelectItemByTab(): boolean {
@@ -686,7 +689,7 @@ class Lookup extends DropDownList<LookupProperties> {
         _popoverContentRole: 'dialog',
         _preventDialogContainerFocus: true,
         width: this._isInitialOptionValue('dropDownOptions.width')
-          ? (): number => getOuterWidth(this.$element()) as number
+          ? (): number => getOuterWidth(this.$element().get(0))
           : popupConfig.width,
       },
     );
@@ -892,7 +895,7 @@ class Lookup extends DropDownList<LookupProperties> {
   _dimensionChanged(): void {
     const { usePopover, dropDownOptions: { width: dropDownWidth } = {} } = this.option();
     if (usePopover && !dropDownWidth) {
-      this.option('dropDownOptions.width', getWidth(this.$element()));
+      this.option('dropDownOptions.width', getWidth(this.$element().get(0)));
     }
 
     this._updateListDimensions();

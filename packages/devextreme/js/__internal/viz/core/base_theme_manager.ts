@@ -1,7 +1,7 @@
 import type { Font } from '@js/common/charts';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
-import { isString } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
+import { isString } from '@ts/core/utils/type';
 import { parseScalar } from '@ts/viz/core/utils';
 import {
   createPalette as getPalette,

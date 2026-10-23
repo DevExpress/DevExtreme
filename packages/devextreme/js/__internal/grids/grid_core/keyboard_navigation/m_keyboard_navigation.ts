@@ -22,7 +22,7 @@ import {
 } from '@js/core/utils/size';
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import * as accessibility from '@js/ui/shared/accessibility';
-import { isElementInDom } from '@ts/core/utils/m_dom';
+import { isElementInDom } from '@ts/core/utils/dom';
 import { focused } from '@ts/core/utils/selectors';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
@@ -743,7 +743,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           && this.dataSourceController.hasAdapter()
           && !this.dataSourceController.isLoading()
         ) {
-          const rowHeight = getOuterHeight($row);
+          const rowHeight = Number(getOuterHeight($row));
           const rowIndex = this._focusedCellPosition.rowIndex - 1;
           this._scrollBy(0, -rowHeight, rowIndex, $event);
         }
@@ -771,7 +771,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       }
     } else if (
       scrollable
-      && getHeight(scrollable.container()) < getHeight(scrollable.$content())
+      && getHeight(scrollable.container()) < getHeight(scrollable.$content().get(0))
     ) {
       this._scrollBy(0, getHeight(scrollable.container()) * pageStep);
       eventArgs.originalEvent.preventDefault();
@@ -913,7 +913,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const scrollable = this.component.getScrollable();
 
     return scrollable
-      ? scrollable.scrollHeight() - getHeight(this._rowsView.element())
+      ? scrollable.scrollHeight() - Number(getHeight(this._rowsView.element()))
       : 0;
   }
 
@@ -921,7 +921,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const scrollable = this.component.getScrollable();
 
     return scrollable
-      ? scrollable.scrollWidth() - getWidth(this._rowsView.element())
+      ? scrollable.scrollWidth() - Number(getWidth(this._rowsView.element()))
       : 0;
   }
 

@@ -26,14 +26,14 @@
 import formatHelper from '@ts/core/format_helper';
 import { getNumberFormatLocale, withFormatLocale } from '@ts/core/global_format_config';
 import localizationCore from '@ts/core/localization/core';
+import { noop as _noop } from '@ts/core/utils/common';
+import { dateUtils } from '@ts/core/utils/date';
 import { Deferred, when } from '@ts/core/utils/deferred';
-import { noop as _noop } from '@ts/core/utils/m_common';
-import { dateUtils } from '@ts/core/utils/m_date';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
+import { adjust, multiplyInExponentialForm } from '@ts/core/utils/math';
 import {
   isDate, isDefined, isFunction, isPlainObject, type,
-} from '@ts/core/utils/m_type';
-import { adjust, multiplyInExponentialForm } from '@ts/core/utils/math';
+} from '@ts/core/utils/type';
 import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import createConstantLine from '@ts/viz/axes/constant_line';

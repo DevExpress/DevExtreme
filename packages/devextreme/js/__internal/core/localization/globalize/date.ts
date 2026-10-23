@@ -13,8 +13,8 @@ import {
 import type { DateFormatter, DateParser, Format } from '@ts/core/localization/date';
 import dateLocalization from '@ts/core/localization/date';
 import { bindDatePartsToLocale } from '@ts/core/localization/ldml/date.parser';
-import * as iteratorUtils from '@ts/core/utils/m_iterator';
-import { isObject } from '@ts/core/utils/m_type';
+import * as iteratorUtils from '@ts/core/utils/iterator';
+import { isObject } from '@ts/core/utils/type';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Globalize from 'globalize';
 

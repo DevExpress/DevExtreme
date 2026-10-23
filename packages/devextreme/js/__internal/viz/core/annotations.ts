@@ -15,8 +15,8 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { domAdapter } from '@ts/core/dom_adapter';
-import { extend } from '@ts/core/utils/m_extend';
-import { isDefined, isFunction } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isDefined, isFunction } from '@ts/core/utils/type';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@ts/events/drag';

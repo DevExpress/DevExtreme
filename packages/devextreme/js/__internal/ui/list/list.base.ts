@@ -42,7 +42,7 @@ import type dxList from '@js/ui/list';
 import type { ReachBottomEvent, ScrollEvent } from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@ts/core/utils/ink_ripple';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
@@ -222,7 +222,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _getEdgeVisibleItem(direction: Direction): dxElementWrapper {
     const scrollTop = this.scrollTop();
-    const containerHeight = getHeight(this.$element());
+    const containerHeight = getHeight(this.$element().get(0));
 
     const { focusedElement } = this.option();
     let $item = $(focusedElement);
@@ -239,7 +239,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
         break;
       }
 
-      const nextItemLocation = ($nextItem.position()?.top ?? 0) + getOuterHeight($nextItem) / 2;
+      const nextItemLocation = ($nextItem.position()?.top ?? 0)
+        + Number(getOuterHeight($nextItem)) / 2;
       isItemVisible = nextItemLocation < containerHeight + scrollTop
         && nextItemLocation > scrollTop;
 
@@ -255,7 +256,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     if (direction === 'prev') {
       // @ts-expect-error ts-error
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return $item.position().top - getHeight(this.$element()) + getOuterHeight($item);
+      return $item.position().top
+        - getHeight(this.$element().get(0))
+        + Number(getOuterHeight($item));
     }
 
     // @ts-expect-error ts-error
@@ -930,7 +933,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const $groupBody = $group.children(`.${LIST_GROUP_BODY_CLASS}`);
     const startHeight = getOuterHeight($groupBody);
 
-    let endHeight = 0;
+    let endHeight: number | undefined = 0;
 
     if (collapsed) {
       setHeight($groupBody, 'auto');

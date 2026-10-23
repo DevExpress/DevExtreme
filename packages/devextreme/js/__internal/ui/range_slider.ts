@@ -7,7 +7,7 @@ import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/range_slider';
-import { applyServerDecimalSeparator } from '@ts/core/utils/m_common';
+import { applyServerDecimalSeparator } from '@ts/core/utils/common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { SwipeUpdateEvent } from '@ts/events/swipe';
@@ -200,7 +200,7 @@ class RangeSlider extends Slider<RangeSliderProperties> {
   _startHandler(args: { event: SliderPointerEvent }): void {
     const e = args.event;
     const $range = this._$range;
-    const rangeWidth = getWidth($range);
+    const rangeWidth = Number(getWidth($range));
     const eventOffsetX = eventData(e).x - (this._$bar.offset()?.left ?? 0);
     const startHandleX = $range.position()?.left ?? 0;
     const endHandleX = ($range.position()?.left ?? 0) + rangeWidth;

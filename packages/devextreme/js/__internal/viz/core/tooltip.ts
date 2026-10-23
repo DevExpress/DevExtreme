@@ -26,14 +26,14 @@ import {
 import { renderer as $ } from '@ts/core/renderer';
 import type { Renderer as CoreRenderer } from '@ts/core/renderer_base';
 import { isCssVariableReference } from '@ts/core/utils/css_variables';
+import { replaceWith } from '@ts/core/utils/dom';
+import { extend } from '@ts/core/utils/extend';
 import { camelize } from '@ts/core/utils/inflector';
-import { replaceWith } from '@ts/core/utils/m_dom';
-import { extend } from '@ts/core/utils/m_extend';
-import { getHeight, getWidth } from '@ts/core/utils/m_size';
-import { isDefined, isFunction, isPlainObject } from '@ts/core/utils/m_type';
-import { getWindow } from '@ts/core/utils/m_window';
+import { getHeight, getWidth } from '@ts/core/utils/size';
 import { normalizeStyleProp } from '@ts/core/utils/style';
 import swatchContainer from '@ts/core/utils/swatch_container';
+import { isDefined, isFunction, isPlainObject } from '@ts/core/utils/type';
+import { getWindow } from '@ts/core/utils/window';
 
 import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';

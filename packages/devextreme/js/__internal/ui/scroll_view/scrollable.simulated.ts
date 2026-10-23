@@ -29,7 +29,7 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 import type { ActionConfig } from '@ts/core/widget/component';
 import Animator from '@ts/ui/scroll_view/animator';
 import type { ScrollViewScroller } from '@ts/ui/scroll_view/scroll_view.simulated';
@@ -441,7 +441,7 @@ export class Scroller {
     // @ts-expect-error ts-error
     const mouseLocation = e[`page${this._axis.toUpperCase()}`] - this._$element.offset()[this._prop];
     const location = this._location
-      + mouseLocation / this._containerToContentRatio() - getHeight(this._$container) / 2;
+      + mouseLocation / this._containerToContentRatio() - Number(getHeight(this._$container)) / 2;
 
     this._scrollStep(-Math.round(location));
   }
@@ -1043,7 +1043,7 @@ export class SimulatedStrategy<
 
     const distance = {};
     const getter = dimension === 'width' ? getWidth : getHeight;
-    distance[prop] = page * -getter(this._$container);
+    distance[prop] = page * -getter(this._$container.get(0));
     this.scrollBy(distance);
   }
 
@@ -1069,7 +1069,7 @@ export class SimulatedStrategy<
 
     const distance = {};
     const getter = dimension === 'width' ? getWidth : getHeight;
-    distance[prop] = getter(this._$content) - getter(this._$container);
+    distance[prop] = getter(this._$content.get(0)) - getter(this._$container.get(0));
     this._component.scrollTo(distance);
   }
 

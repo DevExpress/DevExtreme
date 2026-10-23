@@ -40,9 +40,9 @@ import type {
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
 import documentSizeCallbacks from '@ts/core/utils/document_size_callbacks';
-import domUtils from '@ts/core/utils/m_dom';
-import windowUtils from '@ts/core/utils/m_window';
+import domUtils from '@ts/core/utils/dom';
 import selectors from '@ts/core/utils/selectors';
+import windowUtils from '@ts/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';

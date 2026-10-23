@@ -7,7 +7,7 @@ import messageLocalization from '@js/localization/message';
 import type * as dxForm from '@js/ui/form';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { computed, signal } from '@ts/core/state_manager/index';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import { forEachFormItems } from '@ts/grids/grid_core/editing/editing_utils';
 import { createRef } from 'inferno';
 

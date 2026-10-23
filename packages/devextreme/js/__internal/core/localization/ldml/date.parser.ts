@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Format } from '@ts/core/localization/date';
-import { escapeRegExp } from '@ts/core/utils/m_common';
-import { logger } from '@ts/core/utils/m_console';
+import { escapeRegExp } from '@ts/core/utils/common';
+import { logger } from '@ts/core/utils/console';
 
 export interface LdlmDateLocalization {
   getTimeSeparator?: (locale?: string) => string;

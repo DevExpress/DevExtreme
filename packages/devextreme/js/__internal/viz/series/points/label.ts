@@ -12,8 +12,8 @@
 
 import formatHelper from '@ts/core/format_helper';
 import { getNumberFormatLocale, withFormatLocale } from '@ts/core/global_format_config';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { BBox, Coords } from '@ts/viz/core/types';
 import {
