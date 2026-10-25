@@ -1,7 +1,7 @@
 import { findChanges } from 'core/utils/array_compare';
 import { extend } from 'core/utils/extend';
 import { applyBatch } from 'common/data/array_utils';
-import { logger } from '__internal/core/utils/m_console';
+import { logger } from '__internal/core/utils/console';
 import errors from 'ui/widget/ui.errors';
 
 const ITEMS_ARRAY_LENGTH = 4;

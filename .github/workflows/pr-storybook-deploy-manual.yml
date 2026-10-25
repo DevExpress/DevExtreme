@@ -51,7 +51,7 @@ jobs:
 
       - name: Use Node.js
         if: inputs.action == 'deploy'
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
 

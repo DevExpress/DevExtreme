@@ -1,6 +1,6 @@
 // TODO(Refactoring): move this module to ./utils directory
 import errors from '@js/core/errors';
-import { addOffsets, isValidDate } from '@ts/core/utils/m_date';
+import { addOffsets, isValidDate } from '@ts/core/utils/date';
 import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import dateUtils from '../../core/utils/date';

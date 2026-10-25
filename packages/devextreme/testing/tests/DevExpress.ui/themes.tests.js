@@ -3,7 +3,7 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import viewPortUtils from 'core/utils/view_port';
-import { uiLayerInitialized } from '__internal/core/utils/m_common';
+import { uiLayerInitialized } from '__internal/core/utils/common';
 
 const viewPortChanged = viewPortUtils.changeCallback;
 

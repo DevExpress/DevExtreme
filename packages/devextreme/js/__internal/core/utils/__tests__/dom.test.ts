@@ -6,7 +6,7 @@ import {
   getAriaDescriptionIds,
   removeAriaDescriptionId,
   setAriaDescriptionIds,
-} from '@ts/core/utils/m_dom';
+} from '@ts/core/utils/dom';
 
 describe('DOM utils', () => {
   let element = document.createElement('div');

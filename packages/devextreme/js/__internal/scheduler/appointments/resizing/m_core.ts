@@ -1,4 +1,4 @@
-import { addOffsets, dateUtils } from '@ts/core/utils/m_date';
+import { addOffsets, dateUtils } from '@ts/core/utils/date';
 
 import type { ViewCellData } from '../../types';
 import type {

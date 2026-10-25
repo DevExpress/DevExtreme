@@ -24,7 +24,7 @@ import formatHelper from '@js/format_helper';
 import type { Format } from '@js/localization';
 import LoadPanel from '@js/ui/load_panel';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
-import { isNumeric } from '@ts/core/utils/m_type';
+import { isNumeric } from '@ts/core/utils/type';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo } from '@ts/data/utils';
 import type {
@@ -305,7 +305,7 @@ export default {
 
   calculateLoadPanelPosition($element: dxElementWrapper | undefined): LoadPanelPosition {
     const $window = $(getWindow());
-    if (getHeight($element) > getHeight($window)) {
+    if (Number(getHeight($element)) > getHeight($window.get(0))) {
       return {
         of: $window,
         boundary: $element,
@@ -796,7 +796,7 @@ export default {
     $rowsViewElement: dxElementWrapper | undefined,
   ): number {
     const borderWidth = that.option('showBorders')
-      ? Math.ceil(getOuterWidth($rowsViewElement) - getInnerWidth($rowsViewElement))
+      ? Math.ceil(Number(getOuterWidth($rowsViewElement)) - Number(getInnerWidth($rowsViewElement)))
       : 0;
 
     return borderWidth;

@@ -24,8 +24,7 @@ import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ProcessedItem } from '../data_controller/types';
-import { EDIT_MODE_FORM, EDIT_MODE_POPUP, EDIT_MODE_ROW } from '../editing/const';
-import type { EditingController } from '../editing/m_editing';
+import { EDIT_MODE } from '../editing/const';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import modules from '../modules/modules';
@@ -48,6 +47,7 @@ import type {
   AdaptiveDetailCellOptions,
   AdaptiveFormItem,
   AdaptivityDataController,
+  AdaptivityEditingController,
   HiddenCellInViewOptions,
   HiddenCellsInViewOptions,
   HideVisibleColumnInViewOptions,
@@ -84,7 +84,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
   private _dataController!: AdaptivityDataController;
 
-  private _editingController!: EditingController;
+  private _editingController!: AdaptivityEditingController;
 
   protected _rowsView!: RowsView;
 
@@ -101,7 +101,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
   public init(): void {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data') as AdaptivityDataController;
-    this._editingController = this.getController('editing');
+    this._editingController = this.getController('editing') as AdaptivityEditingController;
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._rowsView = this.getView('rowsView');
 
@@ -151,7 +151,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
   private _isRowEditMode(): boolean {
     const editMode = this._getEditMode();
-    return editMode === EDIT_MODE_ROW;
+    return editMode === EDIT_MODE.row;
   }
 
   private _isItemModified(
@@ -644,7 +644,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
   public isFormOrPopupEditMode(): boolean {
     const editMode = this._getEditMode();
 
-    return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
+    return editMode === EDIT_MODE.form || editMode === EDIT_MODE.popup;
   }
 
   public hideRedundantColumns(
@@ -661,7 +661,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     let totalWidth = 0;
     const $rootElement = this.component.$element();
-    const availableWidth = getWidth($rootElement) - this._rowsView.getScrollbarWidth();
+    const availableWidth = getWidth($rootElement.get(0)) - this._rowsView.getScrollbarWidth();
     let rootElementWidth = availableWidth - this._getCommandColumnsWidth();
     const getVisibleContentColumns = (): Column[] => visibleColumns.filter(
       (item) => !item.command
@@ -750,8 +750,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     for (let i = 0; i < $itemContents.length; i += 1) {
       const $itemContent = $itemContents.eq(i);
-      // @ts-expect-error data(key) is typed as returning the wrapper
-      const item: AdaptiveFormItem | undefined = $itemContent.data('dx-form-item');
+      const item = $itemContent.data<AdaptiveFormItem | undefined>('dx-form-item');
       if (
         item?.column
         && this._columnsController.getVisibleIndex(item.column.index) === visibleColumnIndex

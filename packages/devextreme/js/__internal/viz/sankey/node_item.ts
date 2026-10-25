@@ -7,7 +7,7 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { paintedColor } from '@ts/core/utils/css_variables';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import type Link from '@ts/viz/sankey/link_item';

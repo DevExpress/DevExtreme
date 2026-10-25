@@ -48,8 +48,7 @@ export class CompactAppointmentsHelper {
     const $button = $(e.element);
     this.instance.showAppointmentTooltipCore(
       $button,
-      // @ts-expect-error
-      $button.data('items'),
+      $button.data<AppointmentTooltipItem[]>('items'),
       this.getExtraOptionsForTooltip(options, $button),
     );
   }
@@ -177,7 +176,7 @@ export class CompactAppointmentsHelper {
   private createButtonTemplate(appointmentCount, element, isCompact) {
     const text = isCompact
       ? appointmentCount
-      : (messageLocalization.getFormatter('dxScheduler-moreAppointments') as any)(appointmentCount);
+      : messageLocalization.getFormatter('dxScheduler-moreAppointments')(appointmentCount);
 
     return element
       .append($('<span>').text(text))

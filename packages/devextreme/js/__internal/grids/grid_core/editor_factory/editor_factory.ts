@@ -23,8 +23,8 @@ import type { ValidatingController } from '@ts/grids/grid_core/validating/m_vali
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
-import { CELL_FOCUS_DISABLED_CLASS, CELL_MODIFIED_CLASS, FOCUS_OVERLAY_CLASS } from '../editing/const';
-import type { EditingController } from '../editing/m_editing';
+import { CLASSES as EDITING_CLASSES } from '../editing/const';
+import type { EditingController } from '../editing/editing';
 import { CLASSES as KEYBOARD_NAVIGATION_CLASSES } from '../keyboard_navigation/const';
 import { isDataRow } from '../keyboard_navigation/utils';
 import type { ViewController } from '../modules/modules';
@@ -136,8 +136,11 @@ export class EditorFactory extends ViewControllerWithMixin {
       // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the nested if
       let isHideBorder: boolean | undefined;
 
-      if (!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(VIEW_CLASSES.row)) {
-        const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${CELL_FOCUS_DISABLED_CLASS}`);
+      if (
+        !$focus.hasClass(EDITING_CLASSES.cellFocusDisabled)
+        && !$focus.hasClass(VIEW_CLASSES.row)
+      ) {
+        const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${EDITING_CLASSES.cellFocusDisabled}`);
 
         if ($focusCell.get(0) !== $focus.get(0)) {
           isHideBorder = this._needHideBorder($focusCell);
@@ -145,7 +148,7 @@ export class EditorFactory extends ViewControllerWithMixin {
         }
       }
 
-      if ($focus.length && !$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
+      if ($focus.length && !$focus.hasClass(EDITING_CLASSES.cellFocusDisabled)) {
         this.focus($focus, isHideBorder);
         return;
       }
@@ -167,7 +170,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _updateFocus(e: { event?: DxEvent }): void {
     const isFocusOverlay = e?.event
-      && $(e.event.target).hasClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+      && $(e.event.target).hasClass(this.addWidgetPrefix(EDITING_CLASSES.focusOverlay));
 
     this._isFocusOverlay = !!this._isFocusOverlay || isFocusOverlay;
 
@@ -188,11 +191,11 @@ export class EditorFactory extends ViewControllerWithMixin {
     const location = positionUtils.calculate($element, extend({ collision: 'fit' }, position));
 
     if (location.h.oversize > 0) {
-      setOuterWidth($element, getOuterWidth($element) - location.h.oversize);
+      setOuterWidth($element, Number(getOuterWidth($element)) - location.h.oversize);
     }
 
     if (location.v.oversize > 0) {
-      setOuterHeight($element, getOuterHeight($element) - location.v.oversize);
+      setOuterHeight($element, Number(getOuterHeight($element)) - location.v.oversize);
     }
 
     $element.show();
@@ -224,7 +227,8 @@ export class EditorFactory extends ViewControllerWithMixin {
     } else if ($element.length) {
       const align = browser.mozilla ? 'right bottom' : 'left top';
       const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
-      const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
+      const isFocusedCellModified = $element.hasClass(EDITING_CLASSES.cellModified)
+        && !isFocusedCellInvalid;
       const $content = this.getFocusOverlayContainer($element);
       const focusOverlaySize = this.getFocusOverlaySize($element);
 
@@ -260,7 +264,7 @@ export class EditorFactory extends ViewControllerWithMixin {
       return;
     }
 
-    this._$focusOverlay ??= $('<div>').addClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+    this._$focusOverlay ??= $('<div>').addClass(this.addWidgetPrefix(EDITING_CLASSES.focusOverlay));
 
     this.updateFocusOverlay($element, isHideBorder);
   }
@@ -276,7 +280,6 @@ export class EditorFactory extends ViewControllerWithMixin {
       return this._$focusedElement;
     } if ($element) {
       // To prevent overlay flicking
-      // @ts-expect-error is() is typed without null and undefined
       if (!$element.is(this._$focusedElement)) {
         // TODO: this code should be before timeout
         // else focus is not will move to adaptive form by shift + tab key

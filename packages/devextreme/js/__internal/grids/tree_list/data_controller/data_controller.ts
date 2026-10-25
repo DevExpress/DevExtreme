@@ -107,7 +107,7 @@ export class TreeListDataController extends DataController {
     return super.needUpdateDimensions(operationTypes) || Boolean(operationTypes?.nodeExpanding);
   }
 
-  private changeRowExpand(key: RowKey): DeferredObj<unknown> {
+  public changeRowExpand(key: RowKey): DeferredObj<unknown> {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     if (dataSourceAdapter) {
@@ -128,11 +128,11 @@ export class TreeListDataController extends DataController {
     return Deferred<unknown>().resolve();
   }
 
-  private isRowExpanded(key: RowKey, cache?: ExpandedKeysCache): boolean | undefined {
+  public isRowExpanded(key: RowKey, cache?: ExpandedKeysCache): boolean | undefined {
     return this.dataSourceController.getAdapter()?.isRowExpanded(key, cache);
   }
 
-  private expandRow(key: RowKey): DeferredObj<unknown> {
+  public expandRow(key: RowKey): DeferredObj<unknown> {
     if (!this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }

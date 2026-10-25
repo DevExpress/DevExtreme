@@ -14,11 +14,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @stylistic/max-len */
 
-import { dateUtils } from '@ts/core/utils/m_date';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
-import { isDate, isDefined } from '@ts/core/utils/m_type';
+import { dateUtils } from '@ts/core/utils/date';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
 import { adjust } from '@ts/core/utils/math';
+import { isDate, isDefined } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import {
   getCategoriesInfo,

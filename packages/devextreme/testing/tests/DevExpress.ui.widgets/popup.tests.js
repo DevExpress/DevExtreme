@@ -19,7 +19,7 @@ import { isRenderer, isWindow } from 'core/utils/type';
 import browser from 'core/utils/browser';
 import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import windowUtils from '__internal/core/utils/m_window';
+import windowUtils from '__internal/core/utils/window';
 import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';

@@ -488,6 +488,34 @@ export default function() {
             $okDialogButton.trigger('dxclick');
         });
 
+        test('link dialog should sanitize the href of an image that is already a link', function(assert) {
+            const done = assert.async();
+            const $container = $('#htmlEditor');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['link'] },
+                value: `<a href="http://test.test"><img src=${BLACK_PIXEL}></a>`,
+                onValueChanged: () => {
+                    assert.strictEqual($container.find('a').attr('href'), 'about:blank', 'unsafe href is replaced');
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+            instance.setSelection(0, 1);
+
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger('dxclick');
+
+            const $urlInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
+            const $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
+
+            $urlInput
+                .val('javascript:void(0)')
+                .change();
+
+            $okDialogButton.trigger('dxclick');
+        });
+
         test('link should be correctly added for a third', function(assert) {
             const done = assert.async();
             const $container = $('#htmlEditor');

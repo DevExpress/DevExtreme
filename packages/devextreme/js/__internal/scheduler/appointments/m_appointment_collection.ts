@@ -22,7 +22,7 @@ import type {
   AppointmentDblClickEvent,
   AppointmentRenderedEvent,
 } from '@js/ui/scheduler';
-import { addOffsets } from '@ts/core/utils/m_date';
+import { addOffsets } from '@ts/core/utils/date';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 
@@ -195,7 +195,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   public getAppointmentSettings($item: dxElementWrapper): AppointmentViewModelPlain {
-    return $($item).data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain;
+    return $($item).data<AppointmentViewModelPlain>(APPOINTMENT_SETTINGS_KEY);
   }
 
   _moveFocus() {}
@@ -836,7 +836,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
   _resizeEndHandler(e) {
     const $element = $(e.element);
 
-    const { allDay, info } = $element.data(APPOINTMENT_SETTINGS_KEY) as any;
+    const { allDay, info } = $element.data<AppointmentItemViewModel>(APPOINTMENT_SETTINGS_KEY);
     const sourceAppointment = (this as any)._getItemData($element);
     const viewOffset = this.invoke('getViewOffsetMs');
     let dateRange: { startDate: Date; endDate: Date };
@@ -868,7 +868,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
     return getAppointmentDateRange({
       handles: e.handles,
-      appointmentSettings: $element.data(APPOINTMENT_SETTINGS_KEY) as any,
+      appointmentSettings: $element.data<AppointmentItemViewModel>(APPOINTMENT_SETTINGS_KEY),
       isVerticalGroupedWorkSpace: this.option('isVerticalGroupedWorkSpace')(),
       appointmentRect: getBoundingRect($element[0]),
       parentAppointmentRect: getBoundingRect($element.parent()[0]),

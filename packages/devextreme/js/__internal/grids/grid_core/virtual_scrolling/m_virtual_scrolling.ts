@@ -709,7 +709,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
   private _getRowHeights() {
     const isPopupEditMode = this._editingController
-      // @ts-expect-error
       ?.isPopupEditMode?.();
 
     let rowElements = this._getRowElements(this._tableElement).toArray();
@@ -786,7 +785,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
       removeEmptyRows($virtualRows, VIRTUAL_ROW_CLASS);
 
-      // @ts-expect-error each() is typed for callbacks that return a boolean
       $tables.each((index, element) => {
         const isFixed = index > 0;
         const prevFixed = this._isFixedTableRendering;

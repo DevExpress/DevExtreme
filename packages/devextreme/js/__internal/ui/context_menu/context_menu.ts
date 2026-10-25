@@ -97,6 +97,10 @@ const BORDER_WIDTH = 1;
 const window = getWindow();
 
 type ContextMenuTarget = string | dxElementWrapper | Element | Window | undefined;
+
+const isRendererTarget = (
+  target: ContextMenuTarget,
+): target is dxElementWrapper => isRenderer(target);
 type ContextMenuNode = InternalNode & Item;
 
 type ShowContextMenuEvent = EventInfo<ContextMenu> & {
@@ -797,7 +801,7 @@ class ContextMenu<
     $anchor: ContextMenuTarget,
   ): void {
     const $itemsContainer = $submenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
-    const contentHeight = getOuterHeight($itemsContainer);
+    const contentHeight = Number(getOuterHeight($itemsContainer));
     const maxHeight = this._getMaxHeight($anchor, false);
     const menuHeight = Math.min(contentHeight, maxHeight);
 
@@ -811,7 +815,7 @@ class ContextMenu<
 
   _getMaxHeight($anchor: ContextMenuTarget, considerAnchorHeight = true): number {
     const windowHeight: number = getOuterHeight(window);
-    const isAnchorRenderer = isRenderer($anchor);
+    const isAnchorRenderer = isRendererTarget($anchor);
     const document = domAdapter.getDocument();
     const isAnchorDocument = isObject($anchor) && 'length' in $anchor && $anchor.length && $anchor[0] === document;
 
@@ -820,7 +824,7 @@ class ContextMenu<
     }
 
     const offsetTop = $anchor?.[0].getBoundingClientRect().top;
-    const anchorHeight = getOuterHeight($anchor);
+    const anchorHeight = getOuterHeight($anchor.get(0));
     const availableHeight = considerAnchorHeight
       ? this._getMaxUsableSpace(offsetTop, windowHeight, anchorHeight)
       : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
@@ -836,7 +840,7 @@ class ContextMenu<
     this._overlay?.option({
       maxHeight: () => {
         const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
-        const outerHeight: number = getOuterHeight($content);
+        const outerHeight = Number(getOuterHeight($content));
         const borderWidth = this._getSubmenuBorderWidth();
 
         return outerHeight + borderWidth * 2;

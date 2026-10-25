@@ -1,7 +1,8 @@
 import {
-  afterEach, beforeEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import CustomStore from '@js/data/custom_store';
+import { Deferred } from '@ts/core/utils/deferred';
 
 import {
   afterTest,
@@ -146,6 +147,7 @@ describe('DataGrid editing', () => {
       expect(editingController.getInternalStateSize()).toBe(1);
 
       // Save changes
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -164,6 +166,7 @@ describe('DataGrid editing', () => {
       });
 
       // Add new row
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.addRow();
       await flushAsync();
 
@@ -171,6 +174,7 @@ describe('DataGrid editing', () => {
       expect(editingController.getInternalStateSize()).toBe(1);
 
       // Save changes
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -195,6 +199,7 @@ describe('DataGrid editing', () => {
       expect(editingController.getInternalStateSize()).toBe(1);
 
       // Save changes
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -217,6 +222,7 @@ describe('DataGrid editing', () => {
       // Multiple operations
       instance.cellValue(0, 'FirstName', 'Updated');
       instance.deleteRow(1);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.addRow();
       await flushAsync();
 
@@ -224,6 +230,7 @@ describe('DataGrid editing', () => {
       expect(editingController.getInternalStateSize()).toBe(3);
 
       // Save all changes
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -244,6 +251,7 @@ describe('DataGrid editing', () => {
 
       // Make some changes
       instance.cellValue(0, 'FirstName', 'Updated');
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.addRow();
       await flushAsync();
 
@@ -261,8 +269,8 @@ describe('DataGrid editing', () => {
     it('should preserve internal state when save fails', async () => {
       const failingDataSource = new CustomStore({
         key: 'ID',
-        load: () => Promise.resolve([...dataSource]),
-        update: () => Promise.reject(new Error('Save failed')),
+        load: (): Promise<Record<string, string | number>[]> => Promise.resolve([...dataSource]),
+        update: (): Promise<never> => Promise.reject(new Error('Save failed')),
       });
 
       const { instance } = await createDataGrid({
@@ -280,6 +288,7 @@ describe('DataGrid editing', () => {
 
       expect(editingController.getInternalStateSize()).toBe(1);
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -366,6 +375,201 @@ describe('DataGrid editing', () => {
       expect(component.getDataCell(0, 0).getText()).toBe('Updated');
       expect(component.apiGetVisibleRows()[0].data.Tasks).toBe(tasks);
       expect(dataSourceWithTasks[0].Tasks).toBe(tasks);
+    });
+  });
+
+  describe('Changes option set to undefined', () => {
+    const createBatchGrid = (): ReturnType<typeof createDataGrid> => createDataGrid({
+      keyExpr: 'ID',
+      dataSource,
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+    });
+
+    it('should drop the pending changes', async () => {
+      const { instance } = await createBatchGrid();
+      instance.cellValue(0, 'FirstName', 'Updated');
+
+      instance.option('editing.changes', undefined);
+      await flushAsync();
+
+      expect(instance.hasEditData()).toBe(false);
+      expect(instance.cellValue(0, 'FirstName')).toBe('John');
+    });
+
+    it('should keep the grid without changes', async () => {
+      const { instance } = await createBatchGrid();
+
+      instance.option('editing.changes', undefined);
+      await flushAsync();
+
+      expect(instance.hasEditData()).toBe(false);
+    });
+  });
+
+  describe('Edit column visibility with an allowDeleting callback', () => {
+    it('should be a boolean', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'row',
+          allowDeleting: (): boolean => true,
+        },
+      });
+
+      expect(instance.columnOption('command:edit', 'visible')).toBe(true);
+    });
+  });
+
+  describe('Edit form in form mode', () => {
+    it('should render the form in the edited row', async () => {
+      const { $container, instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        columns: ['FirstName', 'LastName'],
+        editing: {
+          mode: 'form',
+          allowUpdating: true,
+        },
+      });
+
+      instance.editRow(0);
+      await flushAsync();
+
+      expect($container.find('.dx-datagrid-edit-form .dx-form')).toHaveLength(1);
+    });
+  });
+
+  describe('Data source replaced while there are changes', () => {
+    it('should drop the changes of removed rows and keep the others', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+          allowAdding: true,
+        },
+      });
+
+      instance.cellValue(0, 'FirstName', 'Updated 1');
+      instance.cellValue(1, 'FirstName', 'Updated 2');
+      await instance.addRow();
+      await flushAsync();
+
+      instance.option('dataSource', dataSource.slice(1));
+      await flushAsync();
+
+      const changes = instance.option('editing.changes');
+      expect(changes).toHaveLength(2);
+      expect(changes).toEqual(expect.arrayContaining([
+        expect.objectContaining({ type: 'update', key: 2 }),
+        expect.objectContaining({ type: 'insert' }),
+      ]));
+    });
+  });
+
+  describe('Event handlers after the editing controller re-inits', () => {
+    it('should call each handler once', async () => {
+      const onEditCanceled = jest.fn();
+      const onInitNewRow = jest.fn();
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'row',
+          allowUpdating: true,
+          allowAdding: true,
+        },
+        onEditCanceled,
+        onInitNewRow,
+      });
+
+      instance.editRow(0);
+      instance.cancelEditData();
+      await instance.addRow();
+      await flushAsync();
+
+      expect(onEditCanceled).toHaveBeenCalledTimes(1);
+      expect(onInitNewRow).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Deleting a row with an index out of range', () => {
+    it('should do nothing while a row is being edited', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'row',
+          allowUpdating: true,
+          allowDeleting: true,
+        },
+      });
+      instance.editRow(0);
+      await flushAsync();
+
+      expect(() => { instance.deleteRow(dataSource.length); }).not.toThrow();
+      expect(instance.option('editing.changes')).toEqual([]);
+      expect(instance.option('editing.editRowKey')).toBe(1);
+    });
+  });
+
+  describe('Pending operations when the editing controller re-inits', () => {
+    it('should reject each pending operation with "cancel"', async () => {
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+      });
+      const editingController = instance.getController('editing');
+      const operations = [Deferred<unknown>(), Deferred<unknown>(), Deferred<unknown>()];
+      const onFail = jest.fn();
+      operations.forEach((operation) => {
+        editingController.addDeferred(operation);
+        operation.fail(onFail);
+      });
+
+      instance.cancelEditData();
+
+      expect(operations.map((operation) => operation.state())).toEqual(['rejected', 'rejected', 'rejected']);
+      expect(onFail.mock.calls).toEqual([['cancel'], ['cancel'], ['cancel']]);
+    });
+
+    it('should not apply an async cell value that resolves after cancelEditData', async () => {
+      const setCellValueResults = [Deferred<undefined>(), Deferred<undefined>()];
+      let setCellValueCallCount = 0;
+      const { instance } = await createDataGrid({
+        keyExpr: 'ID',
+        dataSource,
+        columns: [{
+          dataField: 'FirstName',
+          setCellValue(newData, value): PromiseLike<void> {
+            newData.FirstName = value;
+            const result = setCellValueResults[setCellValueCallCount];
+            setCellValueCallCount += 1;
+            return result.promise();
+          },
+        }],
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+      });
+
+      instance.cellValue(0, 'FirstName', 'Updated 1');
+      instance.cellValue(1, 'FirstName', 'Updated 2');
+      instance.cancelEditData();
+      setCellValueResults.forEach((result) => { result.resolve(); });
+      await flushAsync();
+
+      expect(instance.option('editing.changes')).toEqual([]);
     });
   });
 });

@@ -2,71 +2,85 @@
 import '../module_not_extended/editor_factory';
 
 import messageLocalization from '@js/common/core/localization/message';
+import type { NewRowInfo } from '@js/common/grids';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import { DATA_CHANGE_TYPE } from '@ts/grids/grid_core/editing/const';
+import { editingModule } from '@ts/grids/grid_core/editing/editing';
+import type { EditingDataControllerExtension } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
 import { editingDataControllerExtender } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
-import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type {
+  EditActionOptions,
+  EditingChange,
+  EditorCellOptions,
+  InternalColumnButton,
+} from '@ts/grids/grid_core/editing/types';
+import { SELECT_CHECKBOX_CLASS } from '@ts/grids/grid_core/selection/const';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
+import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
+import { CLASSES as ROWS_CLASSES } from '@ts/grids/tree_list/rows/const';
+import type { TreeListRowsView } from '@ts/grids/tree_list/rows/m_rows';
 
-import type { RowsView } from '../../grid_core/views/rows_view';
 import treeListCore from '../core';
 import type { TreeListDataController } from '../data_controller/data_controller';
 import type { TreeListDataSourceController } from '../data_source/data_source_controller';
-
-const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
-const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
-
-const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
+import type { TreeListEditingDefaultOptions } from './types';
 
 class EditingController extends editingModule.controllers.editing {
   protected declare _dataController: TreeListDataController;
 
   protected declare dataSourceController: TreeListDataSourceController;
 
-  protected _generateNewItem(key) {
-    const item: any = super._generateNewItem(key);
-
-    item.data = {
-      key,
+  protected _generateNewItem(key: RowKey): RawItemData {
+    return {
+      ...super._generateNewItem(key),
+      data: { key },
+      children: [],
+      level: 0,
+      parentKey: this.option('rootValue'),
     };
-    item.children = [];
-    item.level = 0;
-    item.parentKey = this.option('rootValue');
-
-    return item;
   }
 
-  protected _isProcessedItem() {
+  protected _isProcessedItem(): boolean {
     return true;
   }
 
-  protected _setInsertAfterOrBeforeKey(change, parentKey) {
+  private isRootParentKey(parentKey: RowKey): boolean {
+    return parentKey === undefined || parentKey === this.option('rootValue');
+  }
+
+  protected _setInsertAfterOrBeforeKey(change: Partial<EditingChange>, parentKey?: RowKey): void {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const key = parentKey || dataSourceAdapter?.parentKeyOf(change.data);
 
-    if (key !== undefined && key !== this.option('rootValue')) {
+    if (!this.isRootParentKey(key)) {
       change.insertAfterKey = key;
     } else {
-      // @ts-expect-error
-      super._setInsertAfterOrBeforeKey.apply(this, arguments);
+      super._setInsertAfterOrBeforeKey(change, parentKey);
     }
   }
 
-  protected _getLoadedRowIndex(items, change, isProcessedItems?) {
+  protected _getLoadedRowIndex(
+    items: (RawItemData | ProcessedItem)[],
+    change: Partial<EditingChange>,
+    isProcessedItems?: boolean,
+  ): number {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const insertParentKey = this._getInternalData(change.key)?.insertInfo?.parentKey;
     const parentKey = insertParentKey !== undefined
       ? insertParentKey
       : dataSourceAdapter?.parentKeyOf(change.data);
 
-    if (parentKey !== undefined && parentKey !== this.option('rootValue')) {
+    if (!this.isRootParentKey(parentKey)) {
       const rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
-      // @ts-expect-error
       if (!(rowIndex >= 0 && this._dataController.isRowExpanded(parentKey))) {
         return -1;
       }
@@ -75,29 +89,33 @@ class EditingController extends editingModule.controllers.editing {
     return super._getLoadedRowIndex(items, change, isProcessedItems);
   }
 
-  protected _isEditColumnVisible() {
-    // @ts-expect-error
-    const result = super._isEditColumnVisible.apply(this, arguments);
-    const editingOptions: any = this.option('editing');
+  protected _isEditColumnVisible(): boolean {
+    const result = super._isEditColumnVisible();
+    const editingOptions = this.option('editing');
 
-    return result || editingOptions.allowAdding;
+    return result || !!editingOptions?.allowAdding;
   }
 
-  protected _isDefaultButtonVisible(button, options) {
-    // @ts-expect-error
-    const result = super._isDefaultButtonVisible.apply(this, arguments);
+  protected _isDefaultButtonVisible(
+    button: InternalColumnButton,
+    options: EditorCellOptions,
+  ): boolean {
+    const result = super._isDefaultButtonVisible(button, options);
     const { row } = options;
 
     if (button.name === 'add') {
-      return this.allowAdding(options) && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.isNewRow);
+      return this.allowAdding(options)
+        && !!row
+        && row.rowIndex !== this._getVisibleEditRowIndex()
+        && !row.removed
+        && !row.isNewRow;
     }
 
     return result;
   }
 
-  protected _getEditingButtons(options) {
-    // @ts-expect-error
-    const buttons = super._getEditingButtons.apply(this, arguments);
+  protected _getEditingButtons(options: EditorCellOptions): InternalColumnButton[] {
+    const buttons = super._getEditingButtons(options);
 
     if (!options.column.buttons) {
       buttons.unshift(this._getButtonConfig('add', options));
@@ -106,10 +124,10 @@ class EditingController extends editingModule.controllers.editing {
     return buttons;
   }
 
-  protected _beforeSaveEditData(change) {
+  protected _beforeSaveEditData(change?: EditingChange): boolean {
     const result = super._beforeSaveEditData(change);
 
-    if (change && change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
+    if (change && change.type !== DATA_CHANGE_TYPE.insert) {
       const key = this.dataSourceController.store()?.key();
 
       if (!isDefined(key)) {
@@ -120,88 +138,99 @@ class EditingController extends editingModule.controllers.editing {
     return result;
   }
 
-  private addRowByRowIndex(rowIndex) {
+  // the add button's click handler calls it via METHOD_NAMES[buttonName]
+  private addRowByRowIndex(rowIndex: number): DeferredObj<unknown> {
     const row = this._dataController.getVisibleRows()[rowIndex];
 
     return this.addRow(row ? row.key : undefined);
   }
 
-  protected addRow(key) {
-    if (key === undefined) {
-      key = this.option('rootValue');
-    }
-
-    return super.addRow.call(this, key);
+  protected addRow(key: RowKey = this.option('rootValue')): DeferredObj<unknown> {
+    return super.addRow(key);
   }
 
-  protected _addRowCore(data, parentKey, oldEditRowIndex) {
-    const rootValue = this.option('rootValue');
+  protected _addRowCore(
+    data: RawItemData,
+    parentKey: RowKey | undefined,
+    oldEditRowIndex: number,
+  ): DeferredObj<unknown> {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const parentKeyGetter = dataSourceAdapter?.createParentIdGetter();
+    const newRowParentKey = parentKeyGetter ? parentKeyGetter(data) : parentKey;
 
-    parentKey = parentKeyGetter ? parentKeyGetter(data) : parentKey;
+    if (!this.isRootParentKey(newRowParentKey)
+      && !this._dataController.isRowExpanded(newRowParentKey)) {
+      const deferred = Deferred<unknown>();
 
-    // @ts-expect-error
-    if (parentKey !== undefined && parentKey !== rootValue && !this._dataController.isRowExpanded(parentKey)) {
-      // @ts-expect-error
-      const deferred = new Deferred();
-
-      // @ts-expect-error
-      this._dataController.expandRow(parentKey).done(() => {
+      this._dataController.expandRow(newRowParentKey).done(() => {
         setTimeout(() => {
-          super._addRowCore.call(this, data, parentKey, oldEditRowIndex).done(deferred.resolve).fail(deferred.reject);
+          super._addRowCore(data, newRowParentKey, oldEditRowIndex)
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+            .done(deferred.resolve)
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+            .fail(deferred.reject);
         });
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       }).fail(deferred.reject);
 
+      // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
       return deferred.promise();
     }
 
-    return super._addRowCore.call(this, data, parentKey, oldEditRowIndex);
+    return super._addRowCore(data, newRowParentKey, oldEditRowIndex);
   }
 
-  protected _initNewRow(options, parentKey?) {
+  protected _initNewRow(
+    options: NewRowInfo<RawItemData>,
+    parentKey?: RowKey,
+  ): DeferredObj<unknown> | undefined {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const parentIdSetter = dataSourceAdapter?.createParentIdSetter();
 
     parentIdSetter?.(options.data, parentKey);
 
-    // @ts-expect-error
-    return super._initNewRow.apply(this, arguments);
+    return super._initNewRow(options, parentKey);
   }
 
-  private allowAdding(options) {
+  private allowAdding(options: EditActionOptions): boolean {
     return this._allowEditAction('allowAdding', options);
   }
 
-  protected _needToCloseEditableCell($targetElement) {
-    // @ts-expect-error
-    return super._needToCloseEditableCell.apply(this, arguments) || $targetElement.closest(`.${TREELIST_EXPAND_ICON_CONTAINER_CLASS}`).length && this.isEditing();
+  protected _needToCloseEditableCell($targetElement: dxElementWrapper): boolean | undefined {
+    const isExpandIconTarget = !!$targetElement.closest(`.${ROWS_CLASSES.expandIconContainer}`).length;
+
+    return !!super._needToCloseEditableCell($targetElement)
+      || (isExpandIconTarget && this.isEditing());
   }
 
-  protected getButtonLocalizationNames() {
-    const names = super.getButtonLocalizationNames.apply(this);
-    // @ts-expect-error
-    names.add = 'dxTreeList-editingAddRowToNode';
-
-    return names;
+  protected getButtonLocalizationNames(): Partial<Record<string, string>> {
+    return {
+      ...super.getButtonLocalizationNames(),
+      add: 'dxTreeList-editingAddRowToNode',
+    };
   }
 }
 
-const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewExtender extends editingModule.extenders.views.rowsView(Base) {
-  private _renderCellCommandContent($container, options) {
+const rowsView = (
+  Base: ModuleType<TreeListRowsView>,
+): ModuleType<TreeListRowsView> => class TreeListEditingRowsViewExtender
+  extends editingModule.extenders.views.rowsView(Base) {
+  protected _renderCellCommandContent(
+    $container: dxElementWrapper,
+    options: EditorCellOptions,
+  ): boolean {
     const editingController = this._editingController;
     const isEditRow = options.row && editingController.isEditRow(options.row.rowIndex);
-    const isEditing = options.isEditing || isEditRow;
+    const isEditing = !!options.isEditing || isEditRow;
 
     if (!options.isOnForm && !isEditing) {
-      // @ts-expect-error
-      return super._renderCellCommandContent.apply(this, arguments);
+      return super._renderCellCommandContent($container, options);
     }
 
     return false;
   }
 
-  private validateClick(e) {
+  private validateClick(e: ViewRowEvent): boolean {
     const $targetElement = $(e.event.target);
     const originalClickHandler = e.event.type === 'dxdblclick' ? super._rowDblClick : super._rowClick;
 
@@ -212,10 +241,13 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
     return !this.needToCallOriginalClickHandler(e, originalClickHandler);
   }
 
-  private needToCallOriginalClickHandler(e, originalClickHandler) {
+  private needToCallOriginalClickHandler(
+    e: ViewRowEvent,
+    originalClickHandler: (e: ViewRowEvent) => void,
+  ): boolean {
     const $targetElement = $(e.event.target);
 
-    if (!$targetElement.closest(`.${TREELIST_EXPAND_ICON_CONTAINER_CLASS}`).length) {
+    if (!$targetElement.closest(`.${ROWS_CLASSES.expandIconContainer}`).length) {
       originalClickHandler.call(this, e);
       return true;
     }
@@ -223,31 +255,35 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
     return false;
   }
 
-  protected _rowClick(e) {
+  protected _rowClick(e: ViewRowEvent): void {
     if (this.validateClick(e)) {
-      // @ts-expect-error
-      super._rowClickTreeListHack.apply(this, arguments);
+      // @ts-expect-error _rowClickTreeListHack() is added by the editing rows view extender
+      super._rowClickTreeListHack(e);
     }
   }
 
-  protected _rowDblClick(e) {
+  protected _rowDblClick(e: ViewRowEvent): void {
     if (this.validateClick(e)) {
-      // @ts-expect-error
-      super._rowDblClickTreeListHack.apply(this, arguments);
+      // @ts-expect-error _rowDblClickTreeListHack() is added by the editing rows view extender
+      super._rowDblClickTreeListHack(e);
     }
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class TreeListEditingDataControllerExtender extends editingDataControllerExtender(Base) {
-  private changeRowExpand() {
+const data = (
+  Base: ModuleType<TreeListDataController>,
+): ModuleType<
+  TreeListDataController & EditingDataControllerExtension
+> => class TreeListEditingDataControllerExtender extends editingDataControllerExtender(Base) {
+  public changeRowExpand(key: RowKey): DeferredObj<unknown> {
     this._editingController.refresh();
-    // @ts-expect-error
-    return super.changeRowExpand.apply(this, arguments);
+
+    return super.changeRowExpand(key);
   }
 };
 
 treeListCore.registerModule('editing', {
-  defaultOptions() {
+  defaultOptions(): TreeListEditingDefaultOptions {
     return extend(true, editingModule.defaultOptions(), {
       editing: {
         texts: {
