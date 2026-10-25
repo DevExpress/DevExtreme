@@ -83,7 +83,6 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
     panel.querySelector(closeButtonSelector) != null
   );
 
-  // jsdom does not implement innerText: it is a plain property, so textContent is empty
   const getText = (panel: HTMLElement): string => Array.from(panel.querySelectorAll('span, a'))
     .map((element) => (element as HTMLElement).innerText)
     .join('');
@@ -110,14 +109,11 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
   const closeBanner = async (): Promise<void> => {
     const closeButtonIcon = getPanel().querySelector(closeButtonSelector);
     (closeButtonIcon?.parentElement as HTMLElement).click();
-    // the observer reacts to the closing before anything else happens
     await flushObserver();
   };
 
   beforeEach(() => {
     registerCustomComponents();
-    // A removed panel is returned to the page (an expired one always, a trial one unless it was
-    // closed), so the panel of the previous test is downgraded and closed before the cleanup.
     document.querySelectorAll('dx-license').forEach((panel) => {
       (panel as unknown as { _expired: boolean })._expired = false;
     });
