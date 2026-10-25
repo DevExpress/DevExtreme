@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import {
-  beforeEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
 
 import { showTrialPanel } from './trial_panel';
@@ -112,15 +112,29 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
     await flushObserver();
   };
 
-  beforeEach(() => {
-    registerCustomComponents();
+  interface PanelInternals {
+    _expired: boolean;
+    _observer: MutationObserver | null;
+  }
+
+  const cleanup = (): void => {
     document.querySelectorAll('dx-license').forEach((panel) => {
-      (panel as unknown as { _expired: boolean })._expired = false;
+      const internals = panel as unknown as PanelInternals;
+
+      internals._expired = false;
+      internals._observer?.disconnect();
     });
     setClosed(true);
     document.body.innerHTML = '';
     setClosed(false);
+  };
+
+  beforeEach(() => {
+    registerCustomComponents();
+    cleanup();
   });
+
+  afterEach(cleanup);
 
   describe('contract', () => {
     it.each([
