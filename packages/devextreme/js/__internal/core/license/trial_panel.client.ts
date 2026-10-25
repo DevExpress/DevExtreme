@@ -317,14 +317,18 @@ class DxLicense extends SafeHTMLElement {
     return button;
   }
 
-  public setTrialExpired(libraries?: string | null): void {
-    const newLibraries = !this.getAttribute(attributeNames.libraries) && libraries;
-    if (isTrialExpired(this) && !newLibraries) return;
+  public setTrialExpired(trigger: Element): void {
+    if (isTrialExpired(this)) return;
 
-    this.setAttribute(attributeNames.trialExpired, 'true');
-    if (newLibraries) {
-      this.setAttribute(attributeNames.libraries, newLibraries);
-    }
+    Object.values(attributeNames).forEach((attrName) => {
+      const attrValue = trigger.getAttribute(attrName);
+
+      if (attrValue) {
+        this.setAttribute(attrName, attrValue);
+      } else {
+        this.removeAttribute(attrName);
+      }
+    });
     this._reassignComponent();
   }
 
@@ -445,13 +449,12 @@ class DxLicenseTrigger extends SafeHTMLElement {
 
       document.body.prepend(license);
     } else {
-      const subscriptions = this.getAttribute(attributeNames.subscriptions) as string;
-      (licensePanel[0] as DxLicense).updateSubscriptions(subscriptions);
+      const panel = licensePanel[0] as DxLicense;
 
       if (trialExpired) {
-        (licensePanel[0] as DxLicense).setTrialExpired(
-          this.getAttribute(attributeNames.libraries),
-        );
+        panel.setTrialExpired(this);
+      } else if (!isTrialExpired(panel)) {
+        panel.updateSubscriptions(this.getAttribute(attributeNames.subscriptions) as string);
       }
     }
   }

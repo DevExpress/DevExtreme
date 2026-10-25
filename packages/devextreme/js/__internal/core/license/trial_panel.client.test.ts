@@ -275,6 +275,43 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
       expect(getText(getPanel())).toContain('libraries: DevExtreme - Included in Subscriptions: Universal.');
     });
 
+    it('should take all the data of the overlay from the trigger that shows it', () => {
+      addTrigger({
+        'buy-now': 'https://buy/A',
+        'licensing-doc': 'https://doc/A',
+        version: '26.2.0',
+        subscriptions: 'Universal, BannerOnly',
+        libraries: 'InTrial',
+      });
+
+      addTrigger({
+        'trial-expired': 'true',
+        'buy-now': 'https://buy/B',
+        'licensing-doc': 'https://doc/B',
+        version: '26.2.1',
+        subscriptions: 'Universal, Reporting',
+        libraries: 'Expired',
+      });
+
+      const text = getText(getPanel());
+      expect(text).toContain('(v26.2.1)');
+      expect(text).toContain('libraries: Expired - Included in Subscriptions: Universal, Reporting.');
+      expect(text).not.toContain('InTrial');
+      expect(text).not.toContain('BannerOnly');
+      expect(getPanel().querySelector('a[href="https://doc/B"]')).not.toBeNull();
+      expect(getPanel().querySelector('a[href="https://buy/B"]')).not.toBeNull();
+      expect(getPanel().querySelector('a[href="https://doc/A"]')).toBeNull();
+    });
+
+    it('should not keep the libraries of the banner when the expired trigger has none', () => {
+      addTrigger({ libraries: 'InTrial' });
+
+      addTrigger({ 'trial-expired': 'true' });
+
+      expect(getText(getPanel())).toContain('use of DevExpress product libraries.');
+      expect(getText(getPanel())).not.toContain('InTrial');
+    });
+
     it('should keep the libraries of the first expired trigger', () => {
       addTrigger({ 'trial-expired': 'true', libraries: 'First' });
 
@@ -284,12 +321,13 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
       expect(getText(getPanel())).not.toContain('Second');
     });
 
-    it('should add the subscriptions of a later trigger to the text', () => {
-      addTrigger({ 'trial-expired': 'true', libraries: 'DevExtreme' });
+    it('should not change the overlay by later triggers', () => {
+      addTrigger({ 'trial-expired': 'true', libraries: 'First', subscriptions: 'Universal, DXperience' });
 
       addTrigger({ subscriptions: 'Universal' });
+      addTrigger({ 'trial-expired': 'true', libraries: 'Second', subscriptions: 'Other' });
 
-      expect(getText(getPanel())).toContain('libraries: DevExtreme - Included in Subscriptions: Universal.');
+      expect(getText(getPanel())).toContain('libraries: First - Included in Subscriptions: Universal, DXperience.');
     });
   });
 });
