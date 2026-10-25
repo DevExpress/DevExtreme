@@ -118,7 +118,9 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
     registerCustomComponents();
     // A removed panel is returned to the page (an expired one always, a trial one unless it was
     // closed), so the panel of the previous test is downgraded and closed before the cleanup.
-    document.querySelectorAll('dx-license').forEach((panel) => panel.removeAttribute('trial-expired'));
+    document.querySelectorAll('dx-license').forEach((panel) => {
+      (panel as unknown as { _expired: boolean })._expired = false;
+    });
     setClosed(true);
     document.body.innerHTML = '';
     setClosed(false);
@@ -180,6 +182,16 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
 
       expect(getPanel().style.getPropertyValue('overflow')).toBe('auto');
       expect((getPanel().firstElementChild as HTMLElement).style.getPropertyValue('margin')).toBe('auto');
+    });
+
+    it('should stay an overlay when the trial-expired attribute of the panel is removed', async () => {
+      addTrigger({ 'trial-expired': 'true' });
+
+      getPanel().removeAttribute('trial-expired');
+      await flushObserver();
+
+      expect(hasCloseButton(getPanel())).toBe(false);
+      expect(getPanel().style.getPropertyValue('position')).toBe('fixed');
     });
 
     it('should show the title and the links', () => {

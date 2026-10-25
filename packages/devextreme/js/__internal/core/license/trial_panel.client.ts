@@ -173,6 +173,8 @@ class DxLicense extends SafeHTMLElement {
 
   private _inReassign = false;
 
+  private _expired = false;
+
   private readonly _spanStyles: string;
 
   private readonly _linkStyles: string;
@@ -205,6 +207,10 @@ class DxLicense extends SafeHTMLElement {
       buttonStyles,
       DxLicense.customStyles?.contentStyles,
     );
+  }
+
+  public get isExpired(): boolean {
+    return this._expired;
   }
 
   private _getSubscriptionsArray(subscriptions: string | null): string[] {
@@ -243,7 +249,7 @@ class DxLicense extends SafeHTMLElement {
       this.setAttribute(attributeNames.subscriptions, subscriptions);
     }
 
-    if (isTrialExpired(this)) {
+    if (this._expired) {
       this._subscriptionsSpan.innerText = this._getTrialExpiredEnding(subscriptions);
     } else if (subscriptions) {
       this._subscriptionsSpan.innerText = ` Included in Subscriptions: ${subscriptions}`;
@@ -318,8 +324,9 @@ class DxLicense extends SafeHTMLElement {
   }
 
   public setTrialExpired(trigger: Element): void {
-    if (isTrialExpired(this)) return;
+    if (this._expired) return;
 
+    this._expired = true;
     Object.values(attributeNames).forEach((attrName) => {
       const attrValue = trigger.getAttribute(attrName);
 
@@ -372,7 +379,7 @@ class DxLicense extends SafeHTMLElement {
   private _reassignComponent(): void {
     this.innerHTML = '';
 
-    if (isTrialExpired(this)) {
+    if (this._expired) {
       this.style.cssText = overlayStyles;
       this.append(this._createTrialExpiredContent());
       return;
@@ -386,10 +393,11 @@ class DxLicense extends SafeHTMLElement {
   }
 
   public connectedCallback(): void {
+    this._expired = this._expired || isTrialExpired(this);
     this._reassignComponent();
     if (!this._observer) {
       this._observer = new MutationObserver(() => {
-        if (DxLicense.closed && !isTrialExpired(this)) {
+        if (DxLicense.closed && !this._expired) {
           return;
         }
         if (this._inReassign) {
@@ -408,7 +416,7 @@ class DxLicense extends SafeHTMLElement {
   }
 
   public disconnectedCallback(): void {
-    if (DxLicense.closed && !isTrialExpired(this)) {
+    if (DxLicense.closed && !this._expired) {
       return;
     }
 
@@ -453,7 +461,7 @@ class DxLicenseTrigger extends SafeHTMLElement {
 
       if (trialExpired) {
         panel.setTrialExpired(this);
-      } else if (!isTrialExpired(panel)) {
+      } else if (!panel.isExpired) {
         panel.updateSubscriptions(this.getAttribute(attributeNames.subscriptions) as string);
       }
     }
