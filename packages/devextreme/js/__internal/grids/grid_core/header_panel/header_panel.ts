@@ -9,7 +9,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { ToolbarItem as DataGridToolbarItem } from '@js/ui/data_grid';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';

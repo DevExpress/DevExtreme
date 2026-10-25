@@ -380,8 +380,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const $cell = $(e.currentTarget);
         const $row = $cell.parent();
         const visibleColumns = this._columnsController.getVisibleColumns();
-        // @ts-expect-error data(key) is typed as returning the wrapper
-        const rowOptions: RowPreparedOptions | undefined = $row.data('options');
+        const rowOptions = $row.data<RowPreparedOptions | undefined>('options');
         const columnIndex = $cell.index();
 
         const cellOptions = rowOptions?.cells?.[columnIndex];
@@ -424,8 +423,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       const $cell = $(event.currentTarget);
       const $fieldItemContent = $(event.target).closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
       const $row = $cell.parent();
-      // @ts-expect-error data(key) is typed as returning the wrapper
-      const rowOptions: RowPreparedOptions | undefined = $row.data('options');
+      const rowOptions = $row.data<RowPreparedOptions | undefined>('options');
       const options = rowOptions?.cells?.[$cell.index()];
 
       if (!$cell.closest('table').is(event.delegateTarget)) {
@@ -441,8 +439,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       resultOptions.rowIndex = this.getRowIndex($row);
 
       if ($fieldItemContent.length) {
-        // @ts-expect-error data(key) is typed as returning the wrapper
-        const formItemOptions: { column?: Column } = $fieldItemContent.data('dx-form-item');
+        const formItemOptions = $fieldItemContent.data<{ column?: Column }>('dx-form-item');
         if (formItemOptions.column) {
           resultOptions.column = formItemOptions.column;
           resultOptions.columnIndex = this._columnsController
@@ -1646,7 +1643,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this._getRowElements().index($row);
   }
 
-  protected getBoundingRect(): BoundingRect | null | undefined {
+  public getBoundingRect(): BoundingRect | null | undefined {
     return undefined;
   }
 

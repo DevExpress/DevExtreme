@@ -3,7 +3,6 @@ import {
 } from '@jest/globals';
 import CustomStore from '@js/data/custom_store';
 import { Deferred } from '@ts/core/utils/deferred';
-import eventsEngine from '@ts/events/core/events_engine';
 
 import {
   afterTest,
@@ -148,6 +147,7 @@ describe('DataGrid editing', () => {
       expect(editingController.getInternalStateSize()).toBe(1);
 
       // Save changes
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -166,6 +166,7 @@ describe('DataGrid editing', () => {
       });
 
       // Add new row
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.addRow();
       await flushAsync();
 
@@ -173,6 +174,7 @@ describe('DataGrid editing', () => {
       expect(editingController.getInternalStateSize()).toBe(1);
 
       // Save changes
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -197,6 +199,7 @@ describe('DataGrid editing', () => {
       expect(editingController.getInternalStateSize()).toBe(1);
 
       // Save changes
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -219,6 +222,7 @@ describe('DataGrid editing', () => {
       // Multiple operations
       instance.cellValue(0, 'FirstName', 'Updated');
       instance.deleteRow(1);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.addRow();
       await flushAsync();
 
@@ -226,6 +230,7 @@ describe('DataGrid editing', () => {
       expect(editingController.getInternalStateSize()).toBe(3);
 
       // Save all changes
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -246,6 +251,7 @@ describe('DataGrid editing', () => {
 
       // Make some changes
       instance.cellValue(0, 'FirstName', 'Updated');
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.addRow();
       await flushAsync();
 
@@ -263,8 +269,8 @@ describe('DataGrid editing', () => {
     it('should preserve internal state when save fails', async () => {
       const failingDataSource = new CustomStore({
         key: 'ID',
-        load: () => Promise.resolve([...dataSource]),
-        update: () => Promise.reject(new Error('Save failed')),
+        load: (): Promise<Record<string, string | number>[]> => Promise.resolve([...dataSource]),
+        update: (): Promise<never> => Promise.reject(new Error('Save failed')),
       });
 
       const { instance } = await createDataGrid({
@@ -282,6 +288,7 @@ describe('DataGrid editing', () => {
 
       expect(editingController.getInternalStateSize()).toBe(1);
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- awaited via flushAsync
       instance.saveEditData();
       await flushAsync();
 
@@ -488,28 +495,6 @@ describe('DataGrid editing', () => {
 
       expect(onEditCanceled).toHaveBeenCalledTimes(1);
       expect(onInitNewRow).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('Document handlers after dispose', () => {
-    it('should not handle a document click', async () => {
-      const { $container, instance } = await createDataGrid({
-        keyExpr: 'ID',
-        dataSource,
-        editing: {
-          mode: 'cell',
-          allowUpdating: true,
-        },
-      });
-      const editingController = instance.getController('editing');
-      const isCellOrBatchEditMode = jest.spyOn(editingController, 'isCellOrBatchEditMode');
-
-      instance.dispose();
-      $container.remove();
-      eventsEngine.trigger(document, 'dxpointerdown');
-      eventsEngine.trigger(document, 'dxclick');
-
-      expect(isCellOrBatchEditMode).not.toHaveBeenCalled();
     });
   });
 

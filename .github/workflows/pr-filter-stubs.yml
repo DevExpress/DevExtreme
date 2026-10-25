@@ -34,7 +34,7 @@ jobs:
       - name: Prepare required check stubs
         run: echo "Required check stubs are available for apps/**/*.md PRs."
 
-  # build_all.yml, demos_visual_tests.yml, packages_publishing.yml, playgrounds_tests.yml, qunit_tests.yml, testcafe_tests.yml, wrapper_tests.yml
+  # build_all.yml, playgrounds_tests.yml, wrapper_tests.yml
   build1:
     name: 'build'
     needs: [ stubChecksReady ]
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  #default_workflow.yml
+  # default_workflow.yml
   default_workflow1:
     name: 'main'
     needs: [ stubChecksReady ]
@@ -73,13 +73,6 @@ jobs:
     steps:
       - run: exit 1
   # lint.yml
-  lint1:
-    name: 'Renovation'
-    needs: [ stubChecksReady ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
   lint2:
     name: 'TS'
     needs: [ stubChecksReady ]
@@ -94,8 +87,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  lint4:
-    name: 'CSS'
+  lint5:
+    name: 'component_exports'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  lint6:
+    name: 'texts'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  lint7:
+    name: 'wrappers'
     needs: [ stubChecksReady ]
     if: false
     runs-on: ubuntu-latest
@@ -117,14 +124,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  # qunit_tests
-  qunit_tests1:
-    name: 'Constel export'
-    needs: [ stubChecksReady ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
+  # qunit_tests.yml
   qunit_tests2:
     name: 'Constel misc'
     needs: [ stubChecksReady ]
@@ -216,7 +216,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  # demos_visual_tests.yml
+  qunit_tests15:
+    name: 'Build'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # visual-tests-demos.yml
   demos_visual_tests1:
     name: 'jquery(1/3)-screenshots-material.blue.light'
     needs: [ stubChecksReady ]
@@ -266,7 +273,105 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  # testcafe_tests.yml
+  demos_visual_tests8:
+    name: 'CSP check (Angular 1/3)'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests9:
+    name: 'CSP check (Angular 2/3)'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests10:
+    name: 'CSP check (Angular 3/3)'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests11:
+    name: 'CSP check (React 1/2)'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests12:
+    name: 'CSP check (React 2/2)'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests13:
+    name: 'CSP check (Vue 1/2)'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests14:
+    name: 'CSP check (Vue 2/2)'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests15:
+    name: 'CSP check (jQuery)'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests16:
+    name: 'jquery-accessibility-fluent.blue.dark'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests17:
+    name: 'jquery-accessibility-material.blue.dark'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests18:
+    name: 'jquery-accessibility-material.blue.light'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests19:
+    name: 'react(1/3)-screenshots-fluent.blue.light'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests20:
+    name: 'react(2/3)-screenshots-fluent.blue.light'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests21:
+    name: 'react(3/3)-screenshots-fluent.blue.light'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # playwright_tests.yml, testcafe_tests.yml
   testcafe_tests1:
     name: 'accessibility - fluent'
     needs: [ stubChecksReady ]
@@ -395,6 +500,112 @@ jobs:
       - run: exit 1
   testcafe_tests19:
     name: 'scheduler / timezones (America/Los_Angeles) - fluent'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # playwright_tests.yml, testcafe_tests.yml, visual-tests-demos.yml
+  build_devextreme1:
+    name: 'Build DevExtreme'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # wrapper_tests_e2e.yml
+  wrapper_tests_e2e1:
+    name: 'Build DevExtreme and Wrappers'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  wrapper_tests_e2e2:
+    name: 'Test angular'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  wrapper_tests_e2e3:
+    name: 'Test react19'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  wrapper_tests_e2e4:
+    name: 'Test vue3'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # demos_unit_tests.yml
+  demos_unit_tests1:
+    name: 'Run unit tests'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # playgrounds_tests.yml
+  playgrounds_tests1:
+    name: 'angular'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  playgrounds_tests2:
+    name: 'react'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  playgrounds_tests3:
+    name: 'vue'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # ts_declarations.yml
+  ts_declarations1:
+    name: 'check-ts-bundle'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  ts_declarations2:
+    name: 'validate-declarations'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # build_all.yml
+  build_all1:
+    name: 'custom_bundles'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # testcafe_tests.yml
+  testcafe_tests20:
+    name: 'quarantine'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # themebuilder_tests.yml
+  themebuilder_tests1:
+    name: 'test'
     needs: [ stubChecksReady ]
     if: false
     runs-on: ubuntu-latest
