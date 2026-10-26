@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
+import type { Coordinates as Offset } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -15,6 +16,7 @@ import type { Item } from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { BoundingRect } from '@ts/grids/grid_core/views/types';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
@@ -126,13 +128,13 @@ export class ColumnChooserController extends modules.ViewController {
 }
 
 export class ColumnChooserView extends ColumnsView {
-  private _popupContainer: any;
+  private _popupContainer?: Popup;
 
-  private _columnChooserList: any;
+  private _columnChooserList?: TreeView;
 
-  private _isUpdatingColumnVisibility: any;
+  private _isUpdatingColumnVisibility?: boolean;
 
-  private _isPopupContainerShown: any;
+  private _isPopupContainerShown?: boolean;
 
   public optionChanged(args) {
     switch (args.name) {
@@ -154,12 +156,11 @@ export class ColumnChooserView extends ColumnsView {
 
   }
 
-  private _initializePopupContainer() {
-    const that = this;
-    const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
+  private _initializePopupContainer(): Popup {
+    const columnChooserClass = this.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
     // @ts-expect-error the view is rendered here
-    const $element = that.element().addClass(columnChooserClass);
-    const columnChooserOptions = that.option('columnChooser')!;
+    const $element = this.element().addClass(columnChooserClass);
+    const columnChooserOptions = this.option('columnChooser')!;
     const popupPosition = this._columnChooserController.getPosition();
 
     const dxPopupOptions = {
@@ -175,18 +176,18 @@ export class ColumnChooserView extends ColumnsView {
       position: popupPosition,
       width: columnChooserOptions.width,
       height: columnChooserOptions.height,
-      rtlEnabled: that.option('rtlEnabled'),
+      rtlEnabled: this.option('rtlEnabled'),
       container: columnChooserOptions.container,
       tabFocusLoopEnabled: true,
       _ignoreCloseOnChildEscape: true,
     } as PopupProperties;
 
     if (!isDefined(this._popupContainer)) {
-      that._popupContainer = that._createComponent($element, Popup, dxPopupOptions);
+      this._popupContainer = this._createComponent($element, Popup, dxPopupOptions);
 
-      that._popupContainer.on('optionChanged', (args) => {
+      this._popupContainer.on('optionChanged', (args) => {
         if (args.name === 'visible') {
-          that.renderCompleted.fire();
+          this.renderCompleted.fire();
         }
       });
     } else {
@@ -194,25 +195,33 @@ export class ColumnChooserView extends ColumnsView {
     }
 
     this.setPopupAttributes();
+
+    return this._popupContainer;
   }
 
-  private setPopupAttributes() {
+  private setPopupAttributes(): void {
+    const popupContainer = this._popupContainer;
+
+    if (!popupContainer) {
+      return;
+    }
+
     const isSelectMode = this.isSelectMode();
     const isBandColumnsUsed = this._columnsController.isBandColumnsUsed();
 
-    this._popupContainer.setAria({
+    popupContainer.setAria({
       role: 'dialog',
       label: messageLocalization.format('dxDataGrid-columnChooserTitle'),
     });
 
-    this._popupContainer.$wrapper()
-      .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
+    popupContainer.$wrapper()
+      ?.toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
       .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
 
-    this._popupContainer.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
+    popupContainer.$content()?.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
 
     if (isSelectMode && !isBandColumnsUsed) {
-      this._popupContainer.$content().addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
+      popupContainer.$content()?.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
     }
   }
 
@@ -232,7 +241,11 @@ export class ColumnChooserView extends ColumnsView {
 
   private _renderTreeView() {
     const that = this;
-    const $container = this._popupContainer.$content();
+    const $container = this._popupContainer?.$content();
+
+    if (!$container) {
+      return;
+    }
 
     const columnChooser = this.option('columnChooser')!;
     const isSelectMode = this.isSelectMode();
@@ -370,26 +383,32 @@ export class ColumnChooserView extends ColumnsView {
     };
   }
 
-  private _updateItems() {
+  private _updateItems(): void {
     const isSelectMode = this.isSelectMode();
     const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
     const items = processItems(this, chooserColumns);
 
-    this._columnChooserList.option('items', items);
+    this._columnChooserList?.option('items', items);
   }
 
   private _updateItemsSelection(columnIndices) {
+    const columnChooserList = this._columnChooserList;
+
+    if (!columnChooserList) {
+      return;
+    }
+
     const changedColumns = columnIndices?.map((columnIndex) => this._columnsController.columnOption(columnIndex));
 
-    this._columnChooserList.beginUpdate();
+    columnChooserList.beginUpdate();
     changedColumns?.forEach(({ visible, index }) => {
       if (visible) {
-        this._columnChooserList.selectItem(index);
+        columnChooserList.selectItem(index);
       } else {
-        this._columnChooserList.unselectItem(index);
+        columnChooserList.unselectItem(index);
       }
     });
-    this._columnChooserList.endUpdate();
+    columnChooserList.endUpdate();
   }
 
   protected _columnOptionChanged(changes): void {
@@ -467,38 +486,42 @@ export class ColumnChooserView extends ColumnsView {
     return this.isColumnChooserVisible() && isParentColumnVisible && isColumnHidden;
   }
 
-  public getBoundingRect() {
-    const that = this;
-    const container = that._popupContainer?.$overlayContent();
+  public getBoundingRect(): BoundingRect | null {
+    const container = this._popupContainer?.$overlayContent();
 
     if (container?.is(':visible')) {
-      const offset = container.offset();
+      // @ts-expect-error offset() is typed as possibly undefined
+      const offset: Offset = container.offset();
 
       return {
         left: offset.left,
         top: offset.top,
-        right: offset.left + getOuterWidth(container),
-        bottom: offset.top + getOuterHeight(container),
+        right: offset.left + Number(getOuterWidth(container)),
+        bottom: offset.top + Number(getOuterHeight(container)),
       };
     }
 
     return null;
   }
 
-  public showColumnChooser() {
+  public showColumnChooser(): void {
     /// #DEBUG
     this._isPopupContainerShown = true;
     /// #ENDDEBUG
-    if (!this._popupContainer) {
-      this._initializePopupContainer();
+    let popupContainer = this._popupContainer;
+
+    if (!popupContainer) {
+      popupContainer = this._initializePopupContainer();
 
       this.render();
     }
-    this._popupContainer.show();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+    popupContainer.show();
   }
 
-  private hideColumnChooser() {
+  private hideColumnChooser(): void {
     if (this._popupContainer) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
       this._popupContainer.hide();
 
       /// #DEBUG
@@ -507,7 +530,7 @@ export class ColumnChooserView extends ColumnsView {
     }
   }
 
-  public isColumnChooserVisible() {
+  public isColumnChooserVisible(): boolean | undefined {
     const popupContainer = this._popupContainer;
 
     return popupContainer?.option('visible');
