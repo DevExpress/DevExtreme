@@ -99,12 +99,6 @@ export default class AppointmentDragBehavior {
     this.appointments.notifyObserver('hideAppointmentTooltip');
   }
 
-  onDragMove(e: AppointmentDraggingMoveEvent): void {
-    if (e.fromComponent !== e.toComponent) {
-      this.appointments.notifyObserver('removeDroppableCellClass');
-    }
-  }
-
   getAppointmentElement(e: AppointmentDraggingEndEvent): dxElementWrapper {
     // @ts-expect-error the event of a drag end always carries the original event
     const itemElement = e.event.data?.itemElement || e.itemElement;
@@ -130,10 +124,6 @@ export default class AppointmentDragBehavior {
       isDropToTheSameCell: $targetCell.is($dragCell),
       isDropToSelfScheduler: $targetCell.length > 0,
     });
-  }
-
-  onDragCancel(): void {
-    this.removeDroppableClasses();
   }
 
   getItemData(appointmentElement: Element | dxElementWrapper): SafeAppointment | undefined {
@@ -256,10 +246,6 @@ export default class AppointmentDragBehavior {
       contentTemplate: null,
       filter: `.${APPOINTMENT_ITEM_CLASS}`,
       immediate: false,
-      onDragStart: this.onDragStart.bind(this),
-      onDragMove: this.onDragMove.bind(this),
-      onDragEnd: this.onDragEnd.bind(this),
-      onDragCancel: this.onDragCancel.bind(this),
     }, config);
 
     this.appointments._createComponent(container, Draggable, extend(

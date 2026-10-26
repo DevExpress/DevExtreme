@@ -37,7 +37,7 @@ import type { DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
 import type { CustomDialogOptions } from '@js/ui/dialog';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { ItemContextMenuEvent } from '@js/ui/list';
+import type { ItemClickEvent, ItemContextMenuEvent } from '@js/ui/list';
 import type {
   Appointment,
   AppointmentAddingEvent,
@@ -244,7 +244,10 @@ interface SchedulerWorkSpaceLike {
   positionHelper: PositionHelper;
   virtualScrollingDispatcher: VirtualScrollingDispatcherLike;
   viewDataProvider: ViewDataProvider;
-  option: (name: string | Record<string, unknown>, value?: unknown) => unknown;
+  option: {
+    <K extends keyof WorkspaceOptionsInternal>(name: K): WorkspaceOptionsInternal[K];
+    (name: string | Record<string, unknown>, value?: unknown): unknown;
+  };
   getDateRange: () => Date[];
   getCellFromDragTarget: ($dragTarget: dxElementWrapper) => dxElementWrapper | null;
   getCellFromPoint: (x: number, y: number) => dxElementWrapper | null;
@@ -1431,7 +1434,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _createEventArgs(
-    e: ItemContextMenuEvent<AppointmentTooltipItem>,
+    e: ItemContextMenuEvent<AppointmentTooltipItem> | ItemClickEvent<AppointmentTooltipItem>,
   ): AppointmentTooltipContextMenuEventArgs {
     const itemData = e.itemData?.appointment;
     if (!itemData) {
@@ -1587,8 +1590,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointmentTooltip: this.appointmentTooltip,
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
+      // @ts-expect-error the collection passes its item event, mapped by mapAppointmentFields
       onItemRendered: this.getAppointmentRenderedAction(),
+      // @ts-expect-error the collection passes its item event, mapped by mapAppointmentFields
       onItemClick: this.createSchedulerAction('onAppointmentClick'),
+      // @ts-expect-error the collection passes its item event, mapped by mapAppointmentFields
       onItemContextMenu: this.createSchedulerAction('onAppointmentContextMenu'),
       onAppointmentDblClick: this.createSchedulerAction('onAppointmentDblClick'),
       tabIndex: this.option('tabIndex') ?? 0,
@@ -1807,8 +1813,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       return this._getTemplate(this.currentView[optionName]);
     }
 
-    // @ts-expect-error
-    return this._getTemplateByOption(optionName) as FunctionTemplate;
+    return this._getTemplate(this.option(optionName));
   }
 
   private updateOption<T>(viewName: 'workSpace' | 'header', optionName: string, value: T): void {
@@ -1874,7 +1879,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     singleAppointment: SafeAppointment,
     exceptionDate: Date,
     callback: () => void,
-    isDeleted: boolean,
+    isDeleted?: boolean,
     isPopupEditing?: boolean,
     dragEvent?: SchedulerDragEvent | null,
     recurrenceEditMode?: RecurrenceEditMode,
@@ -1933,7 +1938,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     rawAppointment: SafeAppointment,
     newRawAppointment: SafeAppointment,
     exceptionDate: Date,
-    isDeleted: boolean,
+    isDeleted: boolean | undefined,
     isPopupEditing: boolean,
     dragEvent?: SchedulerDragEvent | null,
   ): void {
@@ -2005,7 +2010,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return dateSerialization.serializeDate(date, UTC_FULL_DATE_FORMAT) as string;
   }
 
-  private showRecurrenceChangeConfirm(isDeleted: boolean): DeferredObj<string> {
+  private showRecurrenceChangeConfirm(isDeleted?: boolean): DeferredObj<string> {
     const title = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteTitle' : 'dxScheduler-confirmRecurrenceEditTitle');
     const message = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteMessage' : 'dxScheduler-confirmRecurrenceEditMessage');
     const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
