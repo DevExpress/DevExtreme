@@ -2,13 +2,12 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { ColumnChooser } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
-import type { Coordinates as Offset, dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { InitializedEvent as ButtonInitializedEvent } from '@js/ui/button';
@@ -46,39 +45,36 @@ const COLUMN_CHOOSER_SELECT_CLASS = 'column-chooser-mode-select';
 const COLUMN_CHOOSER_ICON_NAME = 'column-chooser';
 const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
-const COLUMN_OPTIONS_USED_IN_ITEMS = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
+const COLUMN_OPTIONS_USED_IN_ITEMS: (keyof Column)[] = [
+  'showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand',
+];
 
 const processItems = (
   that: ColumnChooserView,
   chooserColumns: Column[],
 ): ColumnChooserItem[] => {
-  const items: ColumnChooserItem[] = [];
   const isSelectMode = that.isSelectMode();
   const isRecursive = that.option('columnChooser.selection.recursive');
 
-  if (chooserColumns.length) {
-    each(chooserColumns, (index, column) => {
-      const item: ColumnChooserItem = {
-        text: column.caption,
-        cssClass: column.cssClass,
-        allowHiding: column.allowHiding,
-        expanded: true,
-        id: column.index,
-        disabled: column.allowHiding === false,
-        parentId: isDefined(column.ownerBand) ? column.ownerBand : null,
-      };
+  return chooserColumns.map((column) => {
+    const item: ColumnChooserItem = {
+      text: column.caption,
+      cssClass: column.cssClass,
+      allowHiding: column.allowHiding,
+      expanded: true,
+      id: column.index,
+      disabled: column.allowHiding === false,
+      parentId: column.ownerBand ?? null,
+    };
 
-      const isRecursiveWithColumns = isRecursive && column.hasColumns;
+    const isRecursiveWithColumns = isRecursive && column.hasColumns;
 
-      if (isSelectMode && !isRecursiveWithColumns) {
-        item.selected = column.visible;
-      }
+    if (isSelectMode && !isRecursiveWithColumns) {
+      item.selected = column.visible;
+    }
 
-      items.push(item);
-    });
-  }
-
-  return items;
+    return item;
+  });
 };
 
 export class ColumnChooserController extends modules.ViewController {
@@ -120,7 +116,7 @@ export class ColumnChooserController extends modules.ViewController {
   public getPosition(): InternalPositionConfig {
     const position = this.option('columnChooser.position');
 
-    return isDefined(position) ? position : {
+    return position ?? {
       my: 'right bottom',
       at: 'right bottom',
       of: this._rowsView?.element(),
@@ -498,15 +494,16 @@ export class ColumnChooserView extends ColumnsView {
     const container = this._popupContainer?.$overlayContent();
 
     if (container?.is(':visible')) {
-      // @ts-expect-error offset() is typed as possibly undefined
-      const offset: Offset = container.offset();
+      const offset = container.offset();
 
-      return {
-        left: offset.left,
-        top: offset.top,
-        right: offset.left + Number(getOuterWidth(container)),
-        bottom: offset.top + Number(getOuterHeight(container)),
-      };
+      if (offset) {
+        return {
+          left: offset.left,
+          top: offset.top,
+          right: offset.left + Number(getOuterWidth(container)),
+          bottom: offset.top + Number(getOuterHeight(container)),
+        };
+      }
     }
 
     return null;
