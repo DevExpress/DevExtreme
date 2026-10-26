@@ -40,7 +40,8 @@ import {
   EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
 } from '../editing/const';
 import type { CellBasedEditingController } from '../editing/m_editing_cell_based';
-import type { PrepareEditCellOptions } from '../editing/types';
+import type { FormBasedEditingControllerExtension } from '../editing/m_editing_form_based';
+import type { EditFormDetailOptions, EditFormOptions, PrepareEditCellOptions } from '../editing/types';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
 import gridCoreUtils from '../utils';
@@ -670,7 +671,9 @@ export class ValidatingController extends modules.Controller {
   }
 }
 
-export const validatingEditingExtender = (Base: ModuleType<CellBasedEditingController>) => class ValidateEditingControllerExtender extends Base {
+export const validatingEditingExtender = (
+  Base: ModuleType<CellBasedEditingController & FormBasedEditingControllerExtension>,
+) => class ValidateEditingControllerExtender extends Base {
   protected _errorHandlingController!: ErrorHandlingViewController;
 
   public init(): void {
@@ -728,11 +731,10 @@ export const validatingEditingExtender = (Base: ModuleType<CellBasedEditingContr
     });
   }
 
-  private _getValidationGroupsInForm(detailOptions) {
-    const validationData = this._validatingController._getValidationData(detailOptions.key, true);
-
+  public override getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions {
     return {
-      validationGroup: validationData,
+      validationGroup: this._validatingController._getValidationData(detailOptions.key, true),
+      ...super.getEditFormOptions(detailOptions),
     };
   }
 

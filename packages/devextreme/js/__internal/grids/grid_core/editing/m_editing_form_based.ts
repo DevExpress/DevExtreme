@@ -63,6 +63,9 @@ export interface FormBasedEditingControllerExtension {
     isReadOnly?: boolean,
   ) => EditorCellOptions;
   getEditForm: () => Form | null | undefined;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions;
 }
 
 export type FormBasedEditingController = EditingController & FormBasedEditingControllerExtension;
@@ -438,11 +441,7 @@ const editingControllerExtender = (
     };
   }
 
-  private getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions {
-    // @ts-expect-error _getValidationGroupsInForm is declared on the validating extender
-    const editFormOptions: Partial<EditFormOptions> | undefined = this._getValidationGroupsInForm?.(
-      detailOptions,
-    );
+  public getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions {
     const userCustomizeItem = this.option('editing.form.customizeItem');
     const editFormItemClass = this.addWidgetPrefix(CLASSES.editFormItem);
     let items = this.option('editing.form.items');
@@ -466,7 +465,7 @@ const editingControllerExtender = (
       });
     }
 
-    return extend({}, editFormOptions, {
+    return {
       items,
       formID: `dx-${new Guid()}`,
       customizeItem: (item: EditFormItem): void => {
@@ -505,7 +504,7 @@ const editingControllerExtender = (
         userCustomizeItem?.call(this, item);
         item.cssClass = isString(item.cssClass) ? `${item.cssClass} ${editFormItemClass}` : editFormItemClass;
       },
-    });
+    };
   }
 
   public getColumnTemplate(

@@ -2,10 +2,13 @@
 import { validatingModule } from '@ts/grids/grid_core/validating/validating_module';
 
 import type { CellBasedEditingController } from '../grid_core/editing/m_editing_cell_based';
+import type { FormBasedEditingControllerExtension } from '../grid_core/editing/m_editing_form_based';
 import type { ModuleType } from '../grid_core/types';
 import treeListCore from './core';
 
-const editingControllerExtender = (Base: ModuleType<CellBasedEditingController>) => class TreeListEditingControllerExtender extends validatingModule.extenders.controllers.editing(Base) {
+const editingControllerExtender = (
+  Base: ModuleType<CellBasedEditingController & FormBasedEditingControllerExtension>,
+) => class TreeListEditingControllerExtender extends validatingModule.extenders.controllers.editing(Base) {
   public processDataItem(item) {
     super.processDataItemTreeListHack.apply(this, arguments as any);
   }
