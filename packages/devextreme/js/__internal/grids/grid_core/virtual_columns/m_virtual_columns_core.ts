@@ -2,6 +2,9 @@ import { extend } from '@js/core/utils/extend';
 
 import type { ColumnInfoCallback, ColumnInfoCell } from './types';
 
+// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
+const getSpan = (span?: number): number => span || 1;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PivotGrid passes untyped cells
 export function foreachColumnInfo<T extends ColumnInfoCell = any>(
   info: T[][],
@@ -25,14 +28,12 @@ export function foreachColumnInfo<T extends ColumnInfoCell = any>(
   for (; colIndex < row.length; colIndex += 1) {
     const cell = row[colIndex];
     const visibleIndex = colIndex + offsets[rowIndex];
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
-    const colspan = cell.colspan || 1;
+    const colspan = getSpan(cell.colspan);
 
     foreachColumnInfo(
       info,
       callback,
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
-      rowIndex + (cell.rowspan || 1),
+      rowIndex + getSpan(cell.rowspan),
       offsets,
       colspan,
       lastProcessedIndexes,
@@ -45,8 +46,7 @@ export function foreachColumnInfo<T extends ColumnInfoCell = any>(
     if (cell.rowspan) {
       for (let i = rowIndex + 1; i < rowIndex + cell.rowspan; i += 1) {
         offsets[i] = offsets[i] || 0;
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
-        offsets[i] += cell.colspan || 1;
+        offsets[i] += getSpan(cell.colspan);
       }
     }
 
@@ -70,8 +70,7 @@ export function createColumnsInfo<T extends ColumnInfoCell>(
 
   foreachColumnInfo(info, (columnInfo, visibleIndex, rowIndex) => {
     let cell = columnInfo;
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
-    const cellColspan = cell.colspan || 1;
+    const cellColspan = getSpan(cell.colspan);
     const isVisible = visibleIndex + cellColspan - 1 >= startIndex && visibleIndex < endIndex;
 
     newInfo[rowIndex] = newInfo[rowIndex] || [];
