@@ -88,6 +88,7 @@ export const EDIT_MODES: GridsEditMode[] = [
 ];
 export const ROW_BASED_MODES: GridsEditMode[] = [EDIT_MODE.row, EDIT_MODE.form, EDIT_MODE.popup];
 export const CELL_BASED_MODES: GridsEditMode[] = [EDIT_MODE.batch, EDIT_MODE.cell];
+export const FORM_BASED_MODES: GridsEditMode[] = [EDIT_MODE.popup, EDIT_MODE.form];
 export const REQUIRED_EDITOR_LABELLEDBY_MODES: GridsEditMode[] = [
   EDIT_MODE.batch, EDIT_MODE.row, EDIT_MODE.cell,
 ];

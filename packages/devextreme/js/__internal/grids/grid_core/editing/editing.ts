@@ -74,7 +74,6 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import {
   ACTION_OPTION_NAMES,
   BUTTON_NAMES,
-  CELL_BASED_MODES,
   CLASSES,
   DATA_CHANGE_TYPE,
   DEFAULT_START_EDIT_ACTION,
@@ -93,7 +92,6 @@ import {
   METHOD_NAMES,
   NEW_ROW_POSITION,
   REQUIRED_EDITOR_LABELLEDBY_MODES,
-  ROW_BASED_MODES,
   TARGET_COMPONENT_NAME,
 } from './const';
 import {
@@ -102,8 +100,10 @@ import {
   getButtonIndex,
   getButtonName,
   getEditingTexts,
+  isCellBasedEditMode,
   isEditingCell,
   isEditingOrShowEditorAlwaysDataCell,
+  isRowBasedEditMode,
 } from './editing_utils';
 import { editingDataControllerExtender } from './extenders/editing_data_controller';
 import type { CellBasedEditingController } from './m_editing_cell_based';
@@ -251,11 +251,6 @@ export class EditingController extends modules.ViewController {
     return EDIT_MODE.row;
   }
 
-  public isCellBasedEditMode(): boolean {
-    const editMode: GridsEditMode = this.getEditMode();
-    return CELL_BASED_MODES.includes(editMode);
-  }
-
   private _getDefaultEditorTemplate(): EditorTemplate {
     return (container, options): void => {
       const $editor = $('<div>').appendTo(container);
@@ -395,11 +390,6 @@ export class EditingController extends modules.ViewController {
     }
 
     return true;
-  }
-
-  public isPopupEditMode(): boolean {
-    const editMode = this.option('editing.mode');
-    return editMode === EDIT_MODE.popup;
   }
 
   private _isButtonVisible(button: InternalColumnButton, options: EditorCellOptions): boolean {
@@ -555,11 +545,6 @@ export class EditingController extends modules.ViewController {
         gridCoreUtils.setEmptyText($container);
       }
     };
-  }
-
-  public isRowBasedEditMode(): boolean {
-    const editMode = this.getEditMode();
-    return ROW_BASED_MODES.includes(editMode);
   }
 
   protected getFirstEditableColumnIndex(): number | undefined {
@@ -2527,7 +2512,7 @@ export class EditingController extends modules.ViewController {
     const { column, row, rowType } = options;
     const rowIndex = row?.rowIndex;
 
-    const isRowMode = this.isRowBasedEditMode();
+    const isRowMode = isRowBasedEditMode(this.getEditMode());
     const isRowEditing = this.isEditRow(rowIndex);
     const isCellEditing = this.isEditCell(rowIndex, options.columnIndex);
 
@@ -3066,7 +3051,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
       && !cellOptions.modified
       && cellOptions.rowType === 'data'
       && cellOptions.column.calculateCellValue === cellOptions.column.defaultCalculateCellValue
-      && this._editingController.isCellBasedEditMode();
+      && isCellBasedEditMode(this._editingController.getEditMode());
 
     if (isEditableCell) {
       this.setAria(

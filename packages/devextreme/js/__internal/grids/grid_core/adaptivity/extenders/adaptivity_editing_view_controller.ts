@@ -5,6 +5,7 @@
 /* eslint-disable prefer-rest-params */
 import { Deferred, when } from '@js/core/utils/deferred';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
+import { isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/m_editing_cell_based';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
@@ -20,10 +21,6 @@ export const adaptivityEditingViewControllerExtender = (
   protected _dataController!: AdaptivityDataController;
 
   private _isForceRowAdaptiveExpand?: boolean;
-
-  private _isRowEditMode() {
-    return this.getEditMode() === EDIT_MODE.row;
-  }
 
   protected _getFormEditItemTemplate(cellOptions, column) {
     if (this.getEditMode() !== EDIT_MODE.row && cellOptions.rowType === 'detailAdaptive') {
@@ -46,7 +43,7 @@ export const adaptivityEditingViewControllerExtender = (
   }
 
   protected _beforeUpdateItems(rowIndices, rowIndex) {
-    if (!this.adaptiveColumnsController.isFormOrPopupEditMode() && this.adaptiveColumnsController.hasHiddenColumns()) {
+    if (!isFormBasedEditMode(this.getEditMode()) && this.adaptiveColumnsController.hasHiddenColumns()) {
       const items = this._dataController.items();
       const item = items[rowIndex];
       const oldExpandRowIndex = gridCoreUtils.getIndexByKey(this._dataController.getAdaptiveExpandedKey(), items);
@@ -66,14 +63,13 @@ export const adaptivityEditingViewControllerExtender = (
     super._afterInsertRow.apply(this, arguments as any);
 
     if (this.adaptiveColumnsController.hasHiddenColumns()) {
-      // @ts-expect-error
-      this.adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key, this.isRowEditMode());
+      this.adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key, this.getEditMode() === EDIT_MODE.row);
       this._isForceRowAdaptiveExpand = true;
     }
   }
 
   private _collapseAdaptiveDetailRow() {
-    if (this._isRowEditMode() && this._isForceRowAdaptiveExpand) {
+    if (this.getEditMode() === EDIT_MODE.row && this._isForceRowAdaptiveExpand) {
       this.adaptiveColumnsController.collapseAdaptiveDetailRow();
       this._isForceRowAdaptiveExpand = false;
     }
@@ -89,7 +85,7 @@ export const adaptivityEditingViewControllerExtender = (
     super._afterSaveEditData.apply(this, arguments as any);
     // @ts-expect-error
     const deferred = new Deferred();
-    if (this._isRowEditMode() && this.adaptiveColumnsController.hasHiddenColumns()) {
+    if (this.getEditMode() === EDIT_MODE.row && this.adaptiveColumnsController.hasHiddenColumns()) {
       when(this._validatingController.validate(true)).done((isValid) => {
         if (isValid) {
           this._cancelEditAdaptiveDetailRow();
@@ -129,7 +125,7 @@ export const adaptivityEditingViewControllerExtender = (
   }
 
   public editRow(rowIndex) {
-    if (this.adaptiveColumnsController.isFormOrPopupEditMode()) {
+    if (isFormBasedEditMode(this.getEditMode())) {
       this.adaptiveColumnsController.collapseAdaptiveDetailRow();
     }
 
