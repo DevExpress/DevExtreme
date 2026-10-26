@@ -40,7 +40,7 @@ import {
   EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
 } from '../editing/const';
 import type { CellBasedEditingController } from '../editing/m_editing_cell_based';
-import type { NormalizedEditCellOptions } from '../editing/types';
+import type { PrepareEditCellOptions } from '../editing/types';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
 import gridCoreUtils from '../utils';
@@ -745,7 +745,7 @@ export const validatingEditingExtender = (Base: ModuleType<CellBasedEditingContr
     super._validateEditFormAfterUpdate.apply(this, arguments as any);
   }
 
-  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean {
+  protected _prepareEditCell(parameters: PrepareEditCellOptions): boolean {
     const { column, item } = parameters;
     const isNotCanceled: boolean = super._prepareEditCell(parameters);
     const key = !item.isNewRow ? item.key : undefined;

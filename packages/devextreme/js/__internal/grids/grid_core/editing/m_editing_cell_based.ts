@@ -48,6 +48,7 @@ import type {
   EditorCellOptions,
   InternalColumnButton,
   NormalizedEditCellOptions,
+  PrepareEditCellOptions,
 } from './types';
 
 export interface CellBasedEditingControllerExtension {
@@ -324,7 +325,7 @@ const editingControllerExtender = (
           return;
         }
 
-        if (!this._prepareEditCell(editCellOptions)) {
+        if (!this._prepareEditCell({ ...editCellOptions, column })) {
           this._processCanceledEditingCell();
         }
       });
@@ -394,7 +395,7 @@ const editingControllerExtender = (
     oldColumn,
     columnIndex,
     oldRowIndex,
-  }: NormalizedEditCellOptions): boolean {
+  }: PrepareEditCellOptions): boolean {
     const editingStartParams = {
       data: item?.data,
       cancel: false,

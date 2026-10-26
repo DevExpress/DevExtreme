@@ -33,11 +33,14 @@ export type EditCellResult = boolean | DeferredObj<unknown>;
 export interface NormalizedEditCellOptions {
   item: ProcessedItem;
   oldColumn?: Column;
-  column: Column;
+  column?: Column;
   columnIndex: number;
   oldRowIndex: number;
   rowIndex: number;
 }
+
+export type PrepareEditCellOptions = NormalizedEditCellOptions
+  & Required<Pick<NormalizedEditCellOptions, 'column'>>;
 
 export type EditColumnNameOptionChanged = Extract<
   OptionChanged,

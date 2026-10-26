@@ -129,9 +129,9 @@ import type {
   InternalColumnButton,
   InternalColumnButtonClickEvent,
   InternalEditData,
-  NormalizedEditCellOptions,
   OnSavingParams,
   OnSavingResult,
+  PrepareEditCellOptions,
   ProcessedChanges,
   SavedRowInfo,
   SaveResult,
@@ -2784,7 +2784,7 @@ export class EditingController extends modules.ViewController {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
-  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean {
+  protected _prepareEditCell(parameters: PrepareEditCellOptions): boolean {
     return false;
   }
 
