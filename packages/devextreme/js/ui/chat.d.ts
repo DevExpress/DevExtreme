@@ -250,13 +250,13 @@ export type Attachment = {
 };
 
 /**
- * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
  */
 export type ToolCallStatus = 'success' | 'error';
 
 /**
+ * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
  */
@@ -280,6 +280,7 @@ export type ToolCall = {
     /**
      * @docid
      * @public
+     * @default 'success'
      */
     status?: ToolCallStatus;
     /**
