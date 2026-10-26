@@ -1,6 +1,7 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isObject } from '@js/core/utils/type';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type {
   DataChange, GeneratedItem, ItemProcessingOptions, ProcessedItem, RefreshOptions,
@@ -9,6 +10,9 @@ import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { SelectionFilter } from '@ts/ui/selection/types';
+
+const getSelectColumnIndex = (columns: Column[]): number => columns
+  .findIndex((column) => column.command === 'select');
 
 export const selectionDataControllerExtender = (
   Base: ModuleType<DataController>,
@@ -47,11 +51,10 @@ export const selectionDataControllerExtender = (
     );
 
     if (hasSelectColumn && processedItem.values) {
-      for (let i = 0; i < options.visibleColumns.length; i += 1) {
-        if (options.visibleColumns[i].command === 'select') {
-          processedItem.values[i] = processedItem.isSelected;
-          break;
-        }
+      const selectColumnIndex = getSelectColumnIndex(options.visibleColumns);
+
+      if (selectColumnIndex >= 0) {
+        processedItem.values[selectColumnIndex] = processedItem.isSelected;
       }
     }
 
@@ -87,14 +90,13 @@ export const selectionDataControllerExtender = (
 
   protected _applyChange(change: DataChange): void {
     if (change?.changeType === 'updateSelection') {
-      const selectColumnIndex = this._columnsController.getVisibleColumns()
-        .findIndex((column) => column.command === 'select');
+      const selectColumnIndex = getSelectColumnIndex(this._columnsController.getVisibleColumns());
 
-      change.items?.forEach((item, index) => {
+      change.items?.forEach((newItem, index) => {
         const currentItem = this._items[index];
         if (currentItem) {
-          currentItem.isSelected = item.isSelected;
-          this.updateSelectCellValue(currentItem, item, selectColumnIndex);
+          currentItem.isSelected = newItem.isSelected;
+          this.updateSelectCellValue(currentItem, newItem, selectColumnIndex);
         }
       });
       return;
@@ -105,14 +107,14 @@ export const selectionDataControllerExtender = (
 
   private updateSelectCellValue(
     currentItem: ProcessedItem,
-    item: ProcessedItem,
+    newItem: ProcessedItem,
     selectColumnIndex: number,
   ): void {
     if (selectColumnIndex < 0) {
       return;
     }
 
-    const selectCellValue = item.values[selectColumnIndex];
+    const selectCellValue = newItem.values[selectColumnIndex];
 
     if (currentItem.values[selectColumnIndex] === selectCellValue) {
       return;
