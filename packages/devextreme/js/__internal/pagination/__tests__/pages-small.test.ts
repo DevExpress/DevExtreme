@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import NumberBox from '@js/ui/number_box';
 import SelectBox from '@js/ui/select_box';
-import { themeReadyCallback } from '@ts/ui/m_themes_callback';
+import { themeReadyCallback } from '@ts/ui/themes_callback';
 
 import Pagination from '../wrappers/pagination';
 
