@@ -78,9 +78,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Setup nx cache
-      id: setup-nx-cache
-      uses: actions/cache@v5
+    - name: Restore nx cache
+      id: restore-nx-cache
+      uses: actions/cache/restore@v5
       with:
         path: |
           .nx/cache
@@ -115,6 +115,17 @@ jobs:
       env:
         DEBUG: eslint:cli-engine
       run: pnpm exec nx lint
+
+    - name: Save nx cache
+      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      uses: actions/cache/save@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
 
   JS:
     runs-on: devextreme-shr2
@@ -179,9 +190,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Setup nx cache
-      id: setup-nx-cache
-      uses: actions/cache@v5
+    - name: Restore nx cache
+      id: restore-nx-cache
+      uses: actions/cache/restore@v5
       with:
         path: |
           .nx/cache
@@ -203,6 +214,17 @@ jobs:
       env:
         DEBUG: eslint:cli-engine
       run: pnpm exec nx lint-js
+
+    - name: Save nx cache
+      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      uses: actions/cache/save@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
 
   texts:
     runs-on: devextreme-shr2
@@ -267,9 +289,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Setup nx cache
-      id: setup-nx-cache
-      uses: actions/cache@v5
+    - name: Restore nx cache
+      id: restore-nx-cache
+      uses: actions/cache/restore@v5
       with:
         path: |
           .nx/cache
@@ -285,6 +307,17 @@ jobs:
     - name: Check texts
       working-directory: ./packages/devextreme
       run: pnpm exec nx lint-texts
+
+    - name: Save nx cache
+      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      uses: actions/cache/save@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
 
   component_exports:
     runs-on: ubuntu-latest
@@ -396,9 +429,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Setup nx cache
-      id: setup-nx-cache
-      uses: actions/cache@v5
+    - name: Restore nx cache
+      id: restore-nx-cache
+      uses: actions/cache/restore@v5
       with:
         path: |
           .nx/cache
@@ -413,6 +446,17 @@ jobs:
 
     - name: Lint wrappers
       run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
+
+    - name: Save nx cache
+      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      uses: actions/cache/save@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
 
   notify:
     runs-on: ubuntu-latest
