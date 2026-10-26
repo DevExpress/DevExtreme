@@ -46,26 +46,24 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
   domAdapter.inject({
     _document: document,
 
-    listen(this: { callBase: (...args: any[]) => any }, ...args) {
-      const eventName = args[1];
-      if (outsideZoneEvents.includes(eventName)) {
-        const handler = args[2];
-        args[2] = function (...handlerArgs) {
+    listen(this: { callBase: (...args: any[]) => any }, element, event: string, callback, options) {
+      if (outsideZoneEvents.includes(event)) {
+        const trackedCallback = function (this: unknown, e: Event) {
           outsideZoneHandlerDepth += 1;
           try {
-            return handler.apply(this, handlerArgs);
+            return callback.call(this, e);
           } finally {
             outsideZoneHandlerDepth -= 1;
           }
         };
-        return ngZone.runOutsideAngular(() => this.callBase.apply(this, args));
+        return ngZone.runOutsideAngular(() => this.callBase(element, event, trackedCallback, options));
       }
 
-      if (ngZone.isStable && insideZoneEvents.includes(eventName)) {
-        return ngZone.run(() => this.callBase.apply(this, args));
+      if (ngZone.isStable && insideZoneEvents.includes(event)) {
+        return ngZone.run(() => this.callBase(element, event, callback, options));
       }
 
-      return this.callBase.apply(this, args);
+      return this.callBase(element, event, callback, options);
     },
 
     isElementNode(element) {
