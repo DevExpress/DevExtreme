@@ -138,7 +138,12 @@ class MessageGroup extends Widget<Properties> {
       options.alt = (message as ImageMessage).alt;
       options.src = (message as ImageMessage).src;
     } else {
-      options.text = (message as TextMessage).text;
+      const { text, toolCalls } = message as TextMessage;
+
+      options.text = text;
+      options.toolCalls = toolCalls;
+      // the built-in block is drawn when there is no messageTemplate
+      options.showToolCalls = !messageTemplate;
     }
 
     if (messageTemplate) {
