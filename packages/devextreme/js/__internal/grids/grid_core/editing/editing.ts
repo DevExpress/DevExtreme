@@ -51,6 +51,7 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
+import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
@@ -69,7 +70,6 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
   CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import {
   ACTION_OPTION_NAMES,

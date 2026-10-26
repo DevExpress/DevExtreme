@@ -7,7 +7,6 @@ import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ColumnDataSourceParameter } from '../columns_controller/types';
@@ -19,7 +18,7 @@ import type { EditorFactory } from '../editor_factory/editor_factory';
 import { combineFilters } from '../filter/utils';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import core from '../modules/modules';
-import type { ModuleType } from '../types';
+import type { ModuleType, RowKey } from '../types';
 import gridCoreUtils from '../utils';
 import type { RowsView } from '../views/rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
@@ -280,7 +279,7 @@ export class FocusController extends core.ViewController {
   }
 
   private _focusRowByKey(
-    key: Key,
+    key: RowKey,
   ): DeferredObj<number | unknown> {
     if (!isDefined(key)) {
       this._resetFocusedRow();
@@ -324,7 +323,7 @@ export class FocusController extends core.ViewController {
   }
 
   public _navigateToRow(
-    key: Key,
+    key: RowKey,
     needFocusRow: boolean,
   ): DeferredObj<number> {
     const that = this;

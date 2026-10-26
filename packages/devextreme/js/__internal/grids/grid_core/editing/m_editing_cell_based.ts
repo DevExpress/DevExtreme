@@ -21,9 +21,9 @@ import type {
   RefreshOptions,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
+import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import type {
   InternalGrid, ModuleType, OptionChanged, RowKey,

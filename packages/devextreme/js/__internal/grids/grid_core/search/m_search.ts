@@ -17,7 +17,7 @@ import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel'
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
+import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 
 import { CLASSES, FILTERING_TIMEOUT, SEARCH_PANEL_ITEM_NAME } from './const';
 import type {
