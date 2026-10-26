@@ -67,7 +67,6 @@
   },
   "devDependencies": {
     "@babel/core": "7.29.7",
-    "@babel/eslint-parser": "catalog:",
     "@babel/plugin-proposal-decorators": "7.29.7",
     "@babel/plugin-transform-modules-commonjs": "7.29.7",
     "@babel/plugin-transform-nullish-coalescing-operator": "7.29.7",

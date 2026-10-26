@@ -36,7 +36,6 @@
     "@angular/platform-browser": "catalog:angular",
     "@angular/platform-browser-dynamic": "catalog:angular",
     "@angular/platform-server": "catalog:angular",
-    "@babel/eslint-parser": "catalog:",
     "@eslint/eslintrc": "catalog:",
     "@eslint-stylistic/metadata": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",

@@ -519,20 +519,17 @@ export class ResizingController extends modules.ViewController {
       const scrollbarWidth = this._rowsView.getScrollbarWidth();
       const totalWidth = this._getTotalWidth(resultWidths, contentWidth);
 
-      if (totalWidth < contentWidth) {
-        const lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(
-          visibleColumns,
-          resultWidths,
-        );
+      const lastColumnIndex = totalWidth < contentWidth
+        ? gridCoreUtils.getLastResizableColumnIndex(visibleColumns, resultWidths)
+        : -1;
 
-        if (lastColumnIndex >= 0) {
-          resultWidths[lastColumnIndex] = 'auto';
-          isColumnWidthsCorrected = true;
-          if (hasWidth === false && !hasPercentWidth) {
-            const borderWidth = gridCoreUtils.getComponentBorderWidth(this, $rowsViewElement);
+      if (lastColumnIndex >= 0) {
+        resultWidths[lastColumnIndex] = 'auto';
+        isColumnWidthsCorrected = true;
+        if (hasWidth === false && !hasPercentWidth) {
+          const borderWidth = gridCoreUtils.getComponentBorderWidth(this, $rowsViewElement);
 
-            this.setMaxWidth(totalWidth + scrollbarWidth + borderWidth);
-          }
+          this.setMaxWidth(totalWidth + scrollbarWidth + borderWidth);
         }
       }
     }

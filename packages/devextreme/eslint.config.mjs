@@ -1,7 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import i18N from 'eslint-plugin-i18n';
-import babelParser from '@babel/eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -79,10 +78,6 @@ export default [
                 require: true,
                 module: true,
                 exports: true,
-            },
-            parser: babelParser,
-            parserOptions: {
-                requireConfigFile: false,
             },
         },
         rules: {
@@ -556,7 +551,7 @@ export default [
             'array-callback-return': 'warn',
             'class-methods-use-this': 'warn',
             '@typescript-eslint/explicit-function-return-type': 'warn',
-            '@typescript-eslint/init-declarations': 'warn',
+            '@typescript-eslint/init-declarations': ['warn', 'always'],
             '@typescript-eslint/no-unsafe-return': 'warn',
             '@typescript-eslint/no-invalid-this': 'warn',
             '@typescript-eslint/no-explicit-any': 'warn',
