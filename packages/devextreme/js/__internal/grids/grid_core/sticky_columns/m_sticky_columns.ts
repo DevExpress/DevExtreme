@@ -9,6 +9,7 @@ import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/column_headers';
@@ -31,11 +32,14 @@ import type { ColumnsView } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import { isGroupRow } from '../views/rows_view';
 import type {
+  CellRenderOptions,
   ColumnWidthsOptions,
   ContextMenuItemsOptions,
   GridContextMenuItem,
+  RowRenderOptions,
   RowsViewScrollEvent,
   ViewCellOptions,
+  ViewRow,
 } from '../views/types';
 import { CLASSES, StickyPosition } from './const';
 import { GridCoreStickyColumnsDom } from './dom';
@@ -43,6 +47,7 @@ import type {
   StickyColumnHeadersView,
   StickyColumnsColumnsViewExtension,
   StickyOffsets,
+  StickyRowsView,
 } from './types';
 import {
   getColumnFixedPosition,
@@ -395,7 +400,8 @@ const columnHeadersView = (
 
 const rowsView = (
   Base: ModuleType<RowsView>,
-) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {
+): ModuleType<StickyRowsView> => class RowsViewStickyColumnsExtender
+  extends baseStickyColumns(Base) {
   private _getMasterDetailWidth(): number {
     const componentWidth = getWidth(this.component.$element().get(0)) ?? 0;
     const borderWidth = gridCoreUtils.getComponentBorderWidth(this, this._$element);
@@ -403,7 +409,11 @@ const rowsView = (
     return componentWidth - borderWidth - this.getScrollbarWidth();
   }
 
-  protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
+  protected _renderMasterDetailCell(
+    $row: dxElementWrapper,
+    row: ViewRow,
+    options: RowRenderOptions,
+  ): dxElementWrapper {
     // @ts-expect-error
     const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
 
@@ -419,7 +429,7 @@ const rowsView = (
     return $detailCell;
   }
 
-  private _updateMasterDetailWidths() {
+  private _updateMasterDetailWidths(): void {
     const $detailContainers = this._getRowElements()
       .children(`.${MASTER_DETAIL_CLASSES.detailCell}`)
       .children(`.${this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer)}`);
@@ -437,7 +447,7 @@ const rowsView = (
     this.setStickyOffsetsForGroupCells();
   }
 
-  private setStickyOffsetsForGroupCells() {
+  private setStickyOffsetsForGroupCells(): void {
     const groupColumns = this._columnsController.getGroupColumns();
     let columns = this.getColumns();
     let widths = this.getColumnWidths();
@@ -450,7 +460,8 @@ const rowsView = (
       widths = rtlEnabled ? [...widths].reverse() : widths;
     }
 
-    const $tableElement = this.getTableElement()!;
+    // @ts-expect-error the view is rendered here
+    const $tableElement: dxElementWrapper = this.getTableElement();
 
     groupColumns.forEach((column) => {
       const columnIndex = columnsCountBeforeGroups + column.groupIndex + 1;
@@ -471,17 +482,21 @@ const rowsView = (
     });
   }
 
-  protected _resizeCore() {
+  protected _resizeCore(): void {
     const hasStickyColumns = this.hasStickyColumns();
 
-    super._resizeCore.apply(this, arguments as any);
+    super._resizeCore();
 
     if (hasStickyColumns) {
       this._updateMasterDetailWidths();
     }
   }
 
-  protected _renderCellContent($cell, options, renderOptions) {
+  protected _renderCellContent(
+    $cell: dxElementWrapper,
+    options: ViewCellOptions,
+    renderOptions: CellRenderOptions,
+  ): void {
     const hasStickyColumns = this.hasStickyColumns();
     const isGroupRowResult = isGroupRow(options);
     const isDetailRowResult = isDetailRow(options);
@@ -499,9 +514,19 @@ const rowsView = (
     return super._renderCellContent($container, options, renderOptions);
   }
 
-  protected _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
+  protected _renderGroupSummaryCellsCore(
+    $groupCell: dxElementWrapper,
+    options: RowRenderOptions,
+    groupCellColSpan: number,
+    alignByColumnCellCount: number,
+  ): void {
     // @ts-expect-error
-    super._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+    super._renderGroupSummaryCellsCore(
+      $groupCell,
+      options,
+      groupCellColSpan,
+      alignByColumnCellCount,
+    );
     const stickySummarySelector = `.${this.addWidgetPrefix(CLASSES.stickyColumn)}`;
 
     if (
@@ -530,7 +555,7 @@ const rowsView = (
     }
   }
 
-  public _scrollToElement($element, offset?) {
+  public _scrollToElement($element: dxElementWrapper, offset?: ElementOffset): void {
     let scrollOffset = offset;
     const scrollable = this.getScrollable();
     const hasStickyColumns = this.hasStickyColumns();
