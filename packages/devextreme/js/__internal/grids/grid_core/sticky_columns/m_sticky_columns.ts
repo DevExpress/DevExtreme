@@ -5,9 +5,15 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import type { ItemClickEvent } from '@js/ui/context_menu';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
+import type {
+  DraggingPointCreatedOptions,
+  DraggingPointsOptions,
+} from '@ts/grids/grid_core/columns_resizing_reordering/types';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
+import type { HorizontalBounds } from '@ts/grids/grid_core/keyboard_navigation/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
@@ -26,7 +32,7 @@ import {
 } from '../keyboard_navigation/utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import { isDetailRow } from '../master_detail/utils';
-import type { ModuleType } from '../types';
+import type { ColumnPoint, ColumnPointProps, ModuleType } from '../types';
 import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
@@ -583,7 +589,12 @@ const footerView = <T extends ModuleType<ColumnsView>>(
   Base: T,
 ): T => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
 
-const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerStickyColumnsExtender extends Base {
+const columnsResizer = (
+  Base: ModuleType<ColumnsResizerViewController>,
+): ModuleType<ColumnsResizerViewController> => class ColumnResizerStickyColumnsExtender
+  extends Base {
+  protected declare _columnHeadersView: StickyColumnHeadersView;
+
   private isNextCellPinned($nextCell: dxElementWrapper, $container: dxElementWrapper): boolean {
     const addWidgetPrefix = this.addWidgetPrefix.bind(this);
 
@@ -593,7 +604,6 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
   }
 
   protected getSeparatorOffsetX($cell: dxElementWrapper, $nextCell: dxElementWrapper): number {
-    // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
 
     if (hasStickyColumns) {
@@ -620,7 +630,11 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     return super.getSeparatorOffsetX($cell, $nextCell);
   }
 
-  protected _correctColumnIndexForPoint(point, correctionValue: number, columns): void {
+  protected _correctColumnIndexForPoint(
+    point: ColumnPointProps,
+    correctionValue: number,
+    columns: Column[],
+  ): void {
     const rtlEnabled = this.option('rtlEnabled');
     const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
     const columnIndex = Math.max(point.index - 1, 0);
@@ -664,14 +678,16 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
   }
 
   protected _generatePointsByColumns(): void {
-    // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
 
     super._generatePointsByColumns(hasStickyColumns);
   }
 
-  protected _pointCreated(point, columns, cells?: dxElementWrapper) {
-    // @ts-expect-error
+  protected _pointCreated(
+    point: ColumnPointProps,
+    columns: Column[],
+    cells?: dxElementWrapper,
+  ): boolean {
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
     const result = super._pointCreated(point, columns, cells);
     const cellsLength = cells?.length ?? columns.length;
@@ -698,9 +714,13 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
   }
 };
 
-const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class DraggingHeaderStickyColumnsExtender extends Base {
-  public _generatePointsByColumns(options): any[] {
-    // @ts-expect-error
+const draggingHeader = (
+  Base: ModuleType<DraggingHeaderViewController>,
+): ModuleType<DraggingHeaderViewController> => class DraggingHeaderStickyColumnsExtender
+  extends Base {
+  protected declare _columnHeadersView: StickyColumnHeadersView;
+
+  public _generatePointsByColumns(options: DraggingPointsOptions): ColumnPoint[] {
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
     const { sourceLocation, sourceColumn, targetDraggingPanel } = options;
     const isDraggingBetweenHeaders = sourceLocation === 'headers' && targetDraggingPanel?.getName() === 'headers';
@@ -737,11 +757,10 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
 
   protected _pointCreated({
     point, columns, location, sourceColumn, cells,
-  }) {
-    // @ts-expect-error
+  }: DraggingPointCreatedOptions): boolean {
     const hasStickyColumns = this._columnHeadersView.hasStickyColumns();
     const needToCheckPoint = hasStickyColumns && location === 'headers' && cells?.length
-        && (!sourceColumn.fixed || sourceColumn.fixedPosition === StickyPosition.Sticky);
+        && (!sourceColumn?.fixed || sourceColumn.fixedPosition === StickyPosition.Sticky);
     const result = super._pointCreated({
       point, columns, location, sourceColumn,
     });
@@ -759,9 +778,12 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
   }
 };
 
-const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryStickyColumnsExtender extends Base {
+const editorFactory = (
+  Base: ModuleType<EditorFactory>,
+): ModuleType<EditorFactory> => class EditorFactoryStickyColumnsExtender extends Base {
+  protected declare _rowsView: StickyRowsView;
+
   private getOverlayContainerIfNeeded($cell: dxElementWrapper): dxElementWrapper | undefined {
-    // @ts-expect-error
     const hasFixedColumns = this._rowsView.hasStickyColumns();
     const isFixedCell = GridCoreStickyColumnsDom.isFixedCell(
       $cell,
@@ -775,8 +797,7 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
     return undefined;
   }
 
-  protected updateFocusOverlaySize($element, position): void {
-    // @ts-expect-error
+  protected updateFocusOverlaySize($element: dxElementWrapper, position: object): void {
     const hasFixedColumns = this._rowsView.hasStickyColumns();
 
     if (!hasFixedColumns) {
@@ -785,7 +806,6 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
   }
 
   protected getFocusOverlaySize($element: dxElementWrapper): { width: number; height: number } {
-    // @ts-expect-error
     const hasFixedColumns = this._rowsView.hasStickyColumns();
 
     if (hasFixedColumns) {
@@ -819,8 +839,7 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
   }
 
   protected overlayPositionedHandler(e, isOverlayVisible: boolean): void {
-    const columnHeaders = this.getView('columnHeadersView');
-    // @ts-expect-error
+    const columnHeaders = this.getView('columnHeadersView') as StickyColumnHeadersView;
     const hasStickyColumns = columnHeaders.hasStickyColumns();
     // @ts-expect-error
     super.overlayPositionedHandler(e, isOverlayVisible);
@@ -865,15 +884,19 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactorySt
   }
 };
 
-const resizing = (Base: ModuleType<ResizingController>) => class ResizingStickyColumnsExtender extends Base {
+const resizing = (
+  Base: ModuleType<ResizingController>,
+): ModuleType<ResizingController> => class ResizingStickyColumnsExtender extends Base {
+  protected declare _columnHeadersView: StickyColumnHeadersView;
+
+  protected declare _rowsView: StickyRowsView;
+
   public resize(): DeferredObj<unknown> {
     const result = super.resize();
-    // @ts-expect-error ColumnHeadersView's method
     const hasStickyColumns = this._columnHeadersView.hasStickyColumns();
 
     // @ts-expect-error Resizing's method
     if (hasStickyColumns && this?.hasResizeTimeout()) {
-      // @ts-expect-error RowsView's method
       this._rowsView.setStickyOffsets();
     }
 
@@ -881,9 +904,14 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingStickyC
   }
 };
 
-const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationController>) => class HeadersKeyboardNavigationStickyColumnsExtender extends Base {
-  protected getContainerBoundingRect($container: dxElementWrapper) {
-    // @ts-expect-error columnHeadersView's method
+const headersKeyboardNavigation = (
+  Base: ModuleType<HeadersKeyboardNavigationController>,
+): ModuleType<
+  HeadersKeyboardNavigationController
+> => class HeadersKeyboardNavigationStickyColumnsExtender extends Base {
+  protected declare _columnHeadersView: StickyColumnHeadersView;
+
+  protected getContainerBoundingRect($container: dxElementWrapper): HorizontalBounds {
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
 
     if (hasStickyColumns) {
@@ -903,8 +931,7 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
   // for headers after we implement sticky headers (pqKdLLL1).
   // Perhaps the headers will be rendered in the same table with data cells.
   // And this code will no longer be needed.
-  protected tabKeyHandler({ originalEvent, shift }) {
-    // @ts-expect-error columnHeadersView's method
+  protected tabKeyHandler({ originalEvent, shift }: KeyboardKeyDownEvent): void {
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
     const scrollable = this.getView('rowsView')?.getScrollable();
 
