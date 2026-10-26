@@ -12,6 +12,8 @@ import {
 
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
+import eventsEngine from 'devextreme/common/core/events/core/events_engine';
+
 import {
   DxTextBoxModule,
   DxTextBoxComponent,
@@ -75,6 +77,8 @@ class TestHostComponent {
   points = [{ arg: 1, val: 1 }, { arg: 2, val: 3 }, { arg: 3, val: 2 }];
 
   items = ['a', 'b'];
+
+  itemObjects = [{ text: 'a', disabled: false }, { text: 'b', disabled: false }];
 
   formData = { name: 'initial' };
 
@@ -268,6 +272,36 @@ describe(`Change detection [${mode}]: events registered outside the Angular zone
 
       expect(host.renders).toBeGreaterThan(rendersBefore);
     }
+  });
+
+  it('public option changed by the widget during mousemove does not run change detection', async () => {
+    const fixture = await render(`
+      <dx-data-grid [dataSource]="rows" keyExpr="id"></dx-data-grid>
+      <span class="out">{{ countRender() }}</span>
+    `);
+    await wait(50);
+    await fixture.whenStable();
+    const host = fixture.componentInstance;
+    let width = 100;
+    const resize = () => {
+      width += 10;
+      host.grid.instance.columnOption(0, 'width', width);
+    };
+    eventsEngine.on(document, 'mousemove', resize);
+    const rendersBefore = host.renders;
+
+    try {
+      for (let i = 0; i < 5; i += 1) {
+        mouse(document, 'mousemove', 10 + i * 5, 10);
+      }
+      await wait(50);
+      await fixture.whenStable();
+    } finally {
+      eventsEngine.off(document, 'mousemove', resize);
+    }
+
+    expect(host.grid.instance.columnOption(0, 'width')).toBe(150);
+    expect(host.renders).toBe(rendersBefore);
   });
 });
 
@@ -526,5 +560,20 @@ describe(`Change detection [${mode}]: state changed without a template binding`,
     await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelectorAll('.dx-list-item').length).toBe(isZoneless ? 2 : 3);
+  });
+
+  it(isZoneless
+    ? 'item field changed in a timer does not reach the widget (documented limitation)'
+    : 'item field changed in a timer reaches the widget', async () => {
+    const fixture = await render(`
+      <dx-list [items]="itemObjects"></dx-list>
+    `);
+
+    act(fixture, () => setTimeout(() => { fixture.componentInstance.itemObjects[0].disabled = true; }));
+    await wait(50);
+    await fixture.whenStable();
+
+    const firstItem = fixture.nativeElement.querySelector('.dx-list-item');
+    expect(firstItem.classList.contains('dx-state-disabled')).toBe(!isZoneless);
   });
 });

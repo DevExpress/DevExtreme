@@ -12,6 +12,10 @@ import eventsEngine from 'devextreme/common/core/events/core/events_engine';
 const outsideZoneEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideZoneEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
 
+let outsideZoneHandlerDepth = 0;
+
+export const isInOutsideZoneHandler = () => outsideZoneHandlerDepth > 0;
+
 type ReadyCallback = () => void;
 type ReadyCallbackAdd = (callback: ReadyCallback) => void;
 interface ReadyCallbackAddContext {
@@ -45,6 +49,15 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
     listen(this: { callBase: (...args: any[]) => any }, ...args) {
       const eventName = args[1];
       if (outsideZoneEvents.includes(eventName)) {
+        const handler = args[2];
+        args[2] = function (...handlerArgs) {
+          outsideZoneHandlerDepth += 1;
+          try {
+            return handler.apply(this, handlerArgs);
+          } finally {
+            outsideZoneHandlerDepth -= 1;
+          }
+        };
         return ngZone.runOutsideAngular(() => this.callBase.apply(this, args));
       }
 
@@ -56,15 +69,15 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
     },
 
     isElementNode(element) {
-      return element && element.nodeType === 1;
+      return element?.nodeType === 1;
     },
 
     isTextNode(element) {
-      return element && element.nodeType === 3;
+      return element?.nodeType === 3;
     },
 
     isDocument(element) {
-      return element && element.nodeType === 9;
+      return element?.nodeType === 9;
     },
   });
 
