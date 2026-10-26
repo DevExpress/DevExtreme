@@ -1043,6 +1043,42 @@ QUnit.test('queued action is not started after its provider is replaced', functi
     });
 });
 
+[
+    ['addMarker', 'markers', MARKERS[0], 'onMarkerAdded'],
+    ['removeMarker', 'markers', MARKERS[0], 'onMarkerRemoved'],
+    ['addRoute', 'routes', ROUTES[0], 'onRouteAdded'],
+    ['removeRoute', 'routes', ROUTES[0], 'onRouteRemoved']
+].forEach(([method, option, item, event]) => {
+    QUnit.test(`${method} rejects its public promise when ${event} throws`, async function(assert) {
+        const reason = new Error('Item handler failed');
+        const map = await new Promise(resolve => {
+            new Map($('#map'), {
+                provider: 'googleStatic',
+                [option]: method.startsWith('remove') ? [item] : [],
+                onReady: ({ component }) => resolve(component)
+            });
+        });
+        map.option(event, () => { throw reason; });
+        const onResolved = sinon.spy();
+        const onRejected = sinon.spy();
+        const updateZoom = sinon.spy(map._provider, 'updateZoom');
+        const operation = map[method](item);
+        operation.done(onResolved).fail(onRejected);
+        const batch = map._lastAsyncAction;
+        map.option('zoom', 8);
+
+        await assert.rejects(batch, reason, 'the batch retains the original error');
+        await map._lastAsyncAction;
+
+        assert.strictEqual(operation.state(), 'rejected', 'the public promise does not remain pending');
+        assert.ok(onRejected.calledOnceWithExactly(reason), 'the public promise rejects with the same error');
+        assert.strictEqual(onRejected.firstCall?.thisValue, map, 'the rejection retains the component context');
+        assert.ok(onResolved.notCalled, 'a failed operation does not resolve');
+        assert.ok(updateZoom.calledOnce, 'the next queued update is executed');
+        assert.ok(this.logError.calledOnceWithExactly(reason), 'the original error is logged once');
+    });
+});
+
 QUnit.module('disposed widget', {
     beforeEach: function() {
         const fakeURL = '/fakeGoogleUrl?';

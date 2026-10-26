@@ -51,6 +51,7 @@ export interface MapProperties extends Properties {
 class Map extends Widget<MapProperties> {
   _optionChangeBag?: {
     resolve: (value?: unknown) => void;
+    reject: (reason?: unknown) => void;
     added: MapProperties['markers'] | MapProperties['routes'];
     removed: MapProperties['markers'] | MapProperties['routes'];
   } | null;
@@ -329,7 +330,9 @@ class Map extends Widget<MapProperties> {
           if (changeBag) {
             changeBag.resolve(result);
           }
-        }, () => {});
+        }, (error) => {
+          changeBag?.reject(error);
+        });
         break;
       }
       case 'markerIconSrc':
@@ -512,9 +515,10 @@ class Map extends Widget<MapProperties> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<void> | Promise<any> {
     // @ts-expect-error fromPromise returns a Deferred, not a Promise
-    return fromPromise(new Promise((resolve) => {
+    return fromPromise(new Promise((resolve, reject) => {
       this._optionChangeBag = {
         resolve,
+        reject,
         added: addingValues,
         removed: removingValues,
       };
