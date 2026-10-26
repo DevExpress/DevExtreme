@@ -7,20 +7,19 @@ export enum DateFormatType {
   DATE = 'DATE',
 }
 
-export const createFormattedDateText = (options) => {
-  const {
-    startDate,
-    endDate,
-    allDay,
-    format,
-  } = options;
+interface FormattedDateTextOptions {
+  startDate: Date;
+  endDate: Date;
+  allDay?: boolean;
+  format?: DateFormatType;
+}
 
-  const formatType = format || getFormatType(startDate, endDate, allDay);
-
-  return formatDates(startDate, endDate, formatType);
-};
-
-export const getFormatType = (startDate, endDate, isAllDay, isDateAndTimeView?) => {
+export const getFormatType = (
+  startDate: Date,
+  endDate: Date,
+  isAllDay?: boolean,
+  isDateAndTimeView?: boolean,
+): DateFormatType => {
   if (isAllDay) {
     return DateFormatType.DATE;
   }
@@ -30,7 +29,11 @@ export const getFormatType = (startDate, endDate, isAllDay, isDateAndTimeView?) 
   return DateFormatType.DATETIME;
 };
 
-export const formatDates = (startDate, endDate, formatType) => {
+export const formatDates = (
+  startDate: Date,
+  endDate: Date,
+  formatType: DateFormatType,
+): string | undefined => {
   const dateFormat = 'monthandday';
   const timeFormat = 'shorttime';
   const isSameDate = startDate.getDate() === endDate.getDate();
@@ -52,4 +55,17 @@ export const formatDates = (startDate, endDate, formatType) => {
     default:
       return undefined;
   }
+};
+
+export const createFormattedDateText = (options: FormattedDateTextOptions): string | undefined => {
+  const {
+    startDate,
+    endDate,
+    allDay,
+    format,
+  } = options;
+
+  const formatType = format || getFormatType(startDate, endDate, allDay);
+
+  return formatDates(startDate, endDate, formatType);
 };
