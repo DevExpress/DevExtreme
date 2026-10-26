@@ -59,6 +59,13 @@ export interface CellBasedEditingControllerExtension {
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   beforeCloseEditCell(rowIndices: number[]): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  _beforeEditCell(
+    rowIndex: number,
+    columnIndex: number,
+    item: ProcessedItem,
+  ): DeferredObj<boolean> | boolean;
 }
 
 export type CellBasedEditingController = EditingController & CellBasedEditingControllerExtension;
@@ -329,7 +336,7 @@ const editingControllerExtender = (
    * @extended: validating
    * @returns whether to cancel cell editing
    */
-  protected _beforeEditCell(
+  public _beforeEditCell(
     rowIndex: number,
     columnIndex: number,
     item: ProcessedItem,

@@ -28,6 +28,7 @@ import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
@@ -38,7 +39,6 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import {
   EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
 } from '../editing/const';
-import type { EditingController } from '../editing/editing';
 import type { CellBasedEditingController } from '../editing/m_editing_cell_based';
 import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../modules/modules';
@@ -670,7 +670,7 @@ export class ValidatingController extends modules.Controller {
   }
 }
 
-export const validatingEditingExtender = (Base: ModuleType<EditingController>) => class ValidateEditingControllerExtender extends Base {
+export const validatingEditingExtender = (Base: ModuleType<CellBasedEditingController>) => class ValidateEditingControllerExtender extends Base {
   protected _errorHandlingController!: ErrorHandlingViewController;
 
   public init(): void {
@@ -922,8 +922,11 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
    * @param item Data item
    * @returns A deferred object that resolves to a boolean or just a boolean to determine whether to cancel cell editing
    */
-  private _beforeEditCell(rowIndex: number, columnIndex: number, item: any): DeferredObj<boolean> | boolean {
-    // @ts-expect-error
+  public override _beforeEditCell(
+    rowIndex: number,
+    columnIndex: number,
+    item: ProcessedItem,
+  ): DeferredObj<boolean> | boolean {
     const result = super._beforeEditCell(rowIndex, columnIndex, item);
 
     if (this.getEditMode() === EDIT_MODE.cell) {
