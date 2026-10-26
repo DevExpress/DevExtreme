@@ -327,7 +327,7 @@ const columnHeadersView = (
     const columnFixingOptions = this.option('columnFixing');
     let items = super.getContextMenuItems(options);
 
-    if (options.row && options.row.rowType === 'header') {
+    if (options.row?.rowType === 'header') {
       if (columnFixingOptions?.enabled === true && column && column.allowFixing) {
         const onItemClick = (params: ItemClickEvent): void => {
           // eslint-disable-next-line default-case
@@ -382,7 +382,7 @@ const columnHeadersView = (
           });
         }
 
-        items = items || [];
+        items ??= [];
         items.push(
           {
             text: columnFixingOptions.texts?.fix,
