@@ -17,6 +17,8 @@ abstract class Provider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _map?: any;
 
+  _isInitialized = false;
+
   _$container!: dxElementWrapper;
 
   constructor(map: Map, $container: dxElementWrapper) {
@@ -49,10 +51,14 @@ abstract class Provider {
     markerOptions: MarkerOptions[],
     routeOptions: RouteOptions[],
   ): Promise<unknown> {
-    return this._renderImpl().then(() => this._waitForAll([
-      this._applyFunctionIfNeeded('addMarkers', markerOptions),
-      this._applyFunctionIfNeeded('addRoutes', routeOptions),
-    ]).then(() => true));
+    this._isInitialized = false;
+    return this._renderImpl().then(() => {
+      this._isInitialized = true;
+      return this._waitForAll([
+        this._applyFunctionIfNeeded('addMarkers', markerOptions),
+        this._applyFunctionIfNeeded('addRoutes', routeOptions),
+      ]).then(() => true);
+    });
   }
 
   _renderImpl(): Promise<unknown> {

@@ -391,7 +391,10 @@ class Map extends Widget<MapProperties> {
         }
 
         if (name === 'render') {
-          this._providerRenderFailed = true;
+          this._providerRenderFailed = !provider._isInitialized;
+          if (provider._isInitialized) {
+            this._triggerReadyAction();
+          }
         }
 
         throw error;

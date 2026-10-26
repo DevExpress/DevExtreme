@@ -364,6 +364,80 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
         await map._lastAsyncAction;
         assert.strictEqual(openLayersMock.viewZoom, 6, 'the new provider processes later updates');
     });
+    ['Marker', 'Route'].forEach(item => {
+        [false, true].forEach(queuedBeforeFailure => {
+            QUnit.test(`initial on${item}Added error does not block updates (already queued: ${queuedBeforeFailure})`, async function(assert) {
+                const reason = new Error('Initial item handler failed');
+                const logError = sinon.stub(logger, 'error');
+                const onReady = sinon.spy();
+                const onUpdated = sinon.spy();
+
+                try {
+                    const map = $('#map').dxMap({
+                        provider: 'osm',
+                        providerConfig: {
+                            tileServer: {
+                                url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+                                attribution: 'Example attribution'
+                            },
+                            calculateRoute: () => Promise.resolve([[10, 20], [30, 40]])
+                        },
+                        markers: [{ location: [10, 20] }],
+                        routes: [{ locations: [[10, 20], [30, 40]] }],
+                        [`on${item}Added`]: () => { throw reason; },
+                        onReady,
+                        onUpdated
+                    }).dxMap('instance');
+                    const render = map._lastAsyncAction;
+                    if(queuedBeforeFailure) {
+                        map.option('zoom', 8);
+                    }
+
+                    await assert.rejects(render, reason, 'render preserves the handler error');
+                    if(!queuedBeforeFailure) {
+                        map.option('zoom', 8);
+                    }
+                    await map._lastAsyncAction;
+
+                    assert.strictEqual(openLayersMock.viewZoom, 8, 'the zoom update is applied');
+                    assert.ok(onReady.calledOnce, 'the initialized map raises ready once');
+                    assert.strictEqual(onReady.firstCall?.args[0].originalMap, openLayersMock.mapInstance, 'ready exposes the initialized map');
+                    assert.ok(onUpdated.calledOnce, 'the successful update raises updated');
+                    assert.ok(logError.calledOnceWithExactly(reason), 'the handler error is logged once');
+                } finally {
+                    logError.restore();
+                }
+            });
+        });
+    });
+    QUnit.test('an initial tileServer error blocks updates even after the map object is created', async function(assert) {
+        const reason = new Error('Initial tile configuration failed');
+        const logError = sinon.stub(logger, 'error');
+        const onReady = sinon.spy();
+
+        try {
+            const map = $('#map').dxMap({
+                provider: 'osm',
+                providerConfig: {
+                    tileServer: () => { throw reason; }
+                },
+                onReady
+            }).dxMap('instance');
+            const render = map._lastAsyncAction;
+            const updateZoom = sinon.spy(map._provider, 'updateZoom');
+            map.option('zoom', 8);
+
+            await assert.rejects(render, reason, 'render preserves the initialization error');
+            await map._lastAsyncAction;
+
+            assert.ok(map._provider.map(), 'the map object exists before initialization completes');
+            assert.ok(updateZoom.notCalled, 'the partially initialized provider is not updated');
+            assert.ok(onReady.notCalled, 'failed initialization does not raise ready');
+            assert.ok(logError.calledOnceWithExactly(reason), 'the initialization error is logged once');
+        } finally {
+            logError.restore();
+        }
+    });
     QUnit.test('missing OpenLayers is logged once without observing the render promise', async function(assert) {
         const logError = sinon.stub(logger, 'error');
         const unhandledRejection = sinon.spy();
