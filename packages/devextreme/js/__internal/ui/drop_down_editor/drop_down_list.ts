@@ -29,7 +29,7 @@ import type { Item, ItemClickEvent } from '@js/ui/list';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
-import type DataController from '@ts/ui/collection/m_data_controller';
+import type DataController from '@ts/ui/collection/data_controller';
 import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
