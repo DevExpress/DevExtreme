@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
-import type { Coordinates as Offset } from '@js/core/renderer';
+import type { Coordinates as Offset, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -10,12 +10,13 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Button from '@js/ui/button';
-import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import TreeView from '@js/ui/tree_view';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { BoundingRect } from '@ts/grids/grid_core/views/types';
+import type { InternalPositionConfig } from '@ts/ui/overlay/overlay';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
@@ -79,26 +80,24 @@ export class ColumnChooserController extends modules.ViewController {
     this._rowsView = this.getView('rowsView');
   }
 
-  private renderShowColumnChooserButton($element) {
-    const that = this;
-    const columnChooserButtonClass = that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS);
-    const columnChooserEnabled = that.option('columnChooser.enabled');
+  private renderShowColumnChooserButton($element: dxElementWrapper): void {
+    const columnChooserButtonClass = this.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS);
+    const columnChooserEnabled = this.option('columnChooser.enabled');
     const $showColumnChooserButton = $element.find(`.${columnChooserButtonClass}`);
-    let $columnChooserButton;
 
     if (columnChooserEnabled) {
       if (!$showColumnChooserButton.length) {
-        $columnChooserButton = $('<div>')
+        const $columnChooserButton = $('<div>')
           .addClass(columnChooserButtonClass)
           .appendTo($element);
 
-        that._createComponent($columnChooserButton, Button, {
+        this._createComponent($columnChooserButton, Button, {
           icon: COLUMN_CHOOSER_ICON_NAME,
-          onClick() {
+          onClick: (): void => {
             // TODO getView
-            that.getView('columnChooserView').showColumnChooser();
+            this.getView('columnChooserView').showColumnChooser();
           },
-          hint: that.option('columnChooser.title'),
+          hint: this.option('columnChooser.title'),
           integrationOptions: {},
         });
       } else {
@@ -109,7 +108,7 @@ export class ColumnChooserController extends modules.ViewController {
     }
   }
 
-  public getPosition() {
+  public getPosition(): InternalPositionConfig {
     const position = this.option('columnChooser.position');
 
     return isDefined(position) ? position : {
@@ -159,7 +158,7 @@ export class ColumnChooserView extends ColumnsView {
     const columnChooserOptions = this.option('columnChooser')!;
     const popupPosition = this._columnChooserController.getPosition();
 
-    const dxPopupOptions = {
+    const dxPopupOptions: PopupProperties = {
       visible: false,
       shading: false,
       showCloseButton: true,
@@ -176,7 +175,7 @@ export class ColumnChooserView extends ColumnsView {
       container: columnChooserOptions.container,
       tabFocusLoopEnabled: true,
       _ignoreCloseOnChildEscape: true,
-    } as PopupProperties;
+    };
 
     if (!isDefined(this._popupContainer)) {
       this._popupContainer = this._createComponent($element, Popup, dxPopupOptions);
