@@ -549,10 +549,10 @@ export class ColumnChooserView extends ColumnsView {
   }
 
   public hasHiddenColumns(): boolean {
-    const isEnabled = this.option('columnChooser.enabled');
+    const isEnabled = !!this.option('columnChooser.enabled');
     const hiddenColumns = this.getColumns().filter((column) => !column.visible);
 
-    return Boolean(isEnabled) && hiddenColumns.length > 0;
+    return isEnabled && hiddenColumns.length > 0;
   }
 }
 
@@ -637,9 +637,9 @@ const columnHeadersView = (
 ): ModuleType<ColumnHeadersView> => class ColumnChooserColumnHeadersExtender extends Base {
   public allowDragging(column: Column): boolean | undefined {
     const isDragMode = !this._columnChooserView.isSelectMode();
-    const isColumnChooserVisible = this._columnChooserView.isColumnChooserVisible();
+    const isColumnChooserVisible = !!this._columnChooserView.isColumnChooserVisible();
 
-    return (isDragMode && isColumnChooserVisible && column.allowHiding)
+    return (isDragMode && isColumnChooserVisible && !!column.allowHiding)
       || super.allowDragging(column);
   }
 };
