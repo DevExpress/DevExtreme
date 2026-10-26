@@ -56,7 +56,7 @@ const rowsView = (
 
   protected _renderCore(e?: DataChange): DeferredObj<unknown> {
     if (e && 'virtualColumnsScrolling' in e && e.virtualColumnsScrolling) {
-      // @ts-expect-error _findContentElement() is typed as possibly undefined
+      // @ts-expect-error the view is rendered here
       const $contentElement: dxElementWrapper = this._findContentElement();
       const fixedColumns = this._columnsController?.getFixedColumns();
       const useNativeScrolling = this._scrollable?.option('useNative');
