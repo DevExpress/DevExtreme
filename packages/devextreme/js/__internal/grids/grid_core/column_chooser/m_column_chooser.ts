@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
+import type { ColumnChooser } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import type { Coordinates as Offset, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -10,6 +11,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import type { InitializedEvent as ButtonInitializedEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import Popup from '@js/ui/popup/ui.popup';
 import type {
@@ -19,12 +21,15 @@ import TreeView from '@js/ui/tree_view';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { BoundingRect } from '@ts/grids/grid_core/views/types';
+import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import type { InternalPositionConfig } from '@ts/ui/overlay/overlay';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
-import type { Column, ColumnsChanges, DropLocationNames } from '../columns_controller/types';
+import type {
+  Column, ColumnIndex, ColumnsChanges, DropLocationNames,
+} from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/header_panel';
 import modules from '../modules/modules';
 import type { ModuleType, OptionChanged } from '../types';
@@ -551,27 +556,30 @@ export class ColumnChooserView extends ColumnsView {
   }
 }
 
-const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeaderPanelExtender extends Base {
-  protected _getToolbarItems() {
+const headerPanel = (
+  Base: ModuleType<HeaderPanel>,
+): ModuleType<HeaderPanel> => class ColumnChooserHeaderPanelExtender extends Base {
+  protected _getToolbarItems(): ToolbarItem[] {
     const items = super._getToolbarItems();
 
     return this._appendColumnChooserItem(items);
   }
 
-  private _appendColumnChooserItem(items) {
-    const that = this;
-    const columnChooserEnabled = that.option('columnChooser.enabled');
+  private _appendColumnChooserItem(items: ToolbarItem[]): ToolbarItem[] {
+    const columnChooserEnabled = this.option('columnChooser.enabled');
 
     if (columnChooserEnabled) {
-      const onClickHandler = function () {
+      const onClickHandler = (): void => {
         // TODO getView
-        that.component.getView('columnChooserView').showColumnChooser();
+        this.component.getView('columnChooserView').showColumnChooser();
       };
-      const onInitialized = function (e) {
-        $(e.element).addClass(that.getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
+      const onInitialized = (e: ButtonInitializedEvent): void => {
+        $(e.element).addClass(this.getToolbarButtonClass(
+          this.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS),
+        ));
       };
-      const hintText = that.option('columnChooser.title');
-      const toolbarItem = {
+      const hintText = this.option('columnChooser.title');
+      const toolbarItem: ToolbarItem = {
         widget: 'dxButton',
         options: {
           icon: COLUMN_CHOOSER_ICON_NAME,
@@ -594,7 +602,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
     return items;
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     switch (args.name) {
       case 'columnChooser':
         this._invalidate();
@@ -606,31 +614,38 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
   }
 };
 
-const columns = (Base: ModuleType<ColumnsController>) => class ColumnsChooserColumnsControllerExtender extends Base {
+const columns = (
+  Base: ModuleType<ColumnsController>,
+): ModuleType<ColumnsController> => class ColumnsChooserColumnsControllerExtender extends Base {
   public allowMoveColumn(
-    fromVisibleIndex,
-    toVisibleIndex,
+    fromVisibleIndex: ColumnIndex,
+    toVisibleIndex: ColumnIndex,
     sourceLocation: DropLocationNames,
     targetLocation: DropLocationNames,
-  ) {
+  ): boolean | undefined {
     const isSelectMode = this.option('columnChooser.mode') === 'select';
     const isMoveColumnDisallowed = isSelectMode && targetLocation === 'columnChooser';
 
-    return isMoveColumnDisallowed ? false : super.allowMoveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation);
+    return isMoveColumnDisallowed
+      ? false
+      : super.allowMoveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation);
   }
 };
 
-const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnChooserColumnHeadersExtender extends Base {
-  public allowDragging(column) {
+const columnHeadersView = (
+  Base: ModuleType<ColumnHeadersView>,
+): ModuleType<ColumnHeadersView> => class ColumnChooserColumnHeadersExtender extends Base {
+  public allowDragging(column: Column): boolean | undefined {
     const isDragMode = !this._columnChooserView.isSelectMode();
     const isColumnChooserVisible = this._columnChooserView.isColumnChooserVisible();
 
-    return (isDragMode && isColumnChooserVisible && column.allowHiding) || super.allowDragging(column);
+    return (isDragMode && isColumnChooserVisible && column.allowHiding)
+      || super.allowDragging(column);
   }
 };
 
 export const columnChooserModule = {
-  defaultOptions() {
+  defaultOptions(): { columnChooser: ColumnChooser } {
     return defaultOptions;
   },
   controllers: {
