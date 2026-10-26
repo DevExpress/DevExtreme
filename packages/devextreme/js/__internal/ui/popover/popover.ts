@@ -688,6 +688,10 @@ class Popover<
     const contentPosition = this._getContainerPosition();
     const resultLocation = positionUtils.setup(this.$overlayContent(), contentPosition);
 
+    if (!resultLocation) {
+      return;
+    }
+
     const positionSide = this._getSideByLocation(resultLocation);
 
     this._togglePositionClass(`dx-position-${positionSide}`);
@@ -803,7 +807,7 @@ class Popover<
     const contentOffset = positionUtils.offset(this.$overlayContent());
 
     const arrowSize = arrowRect[sizeProperty];
-    const contentLocation = contentOffset?.[axis];
+    const contentLocation = contentOffset?.[axis] ?? NaN;
     const contentSize = getBoundingRect(this.$overlayContent().get(0))[sizeProperty];
     const targetLocation = targetOffset[axis];
     const targetElement = $target.get(0);

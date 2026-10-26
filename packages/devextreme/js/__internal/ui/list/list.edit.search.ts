@@ -24,7 +24,6 @@ class ListSearch extends ListEdit {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _getCombinedFilter() {
     const dataController = this._dataController;
-    // @ts-expect-error ts-error
     const storeLoadOptions = { filter: dataController.filter() };
     dataController.addSearchFilter(storeLoadOptions);
     const { filter } = storeLoadOptions;
