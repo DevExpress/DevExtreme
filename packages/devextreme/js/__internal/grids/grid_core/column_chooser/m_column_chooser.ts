@@ -24,10 +24,10 @@ import type { PopupProperties } from '@ts/ui/popup/popup';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
-import type { Column, DropLocationNames } from '../columns_controller/types';
+import type { Column, ColumnsChanges, DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/header_panel';
 import modules from '../modules/modules';
-import type { ModuleType } from '../types';
+import type { ModuleType, OptionChanged } from '../types';
 import { ColumnsView } from '../views/columns_view';
 import { defaultOptions } from './const';
 import type { ColumnChooserItem, NodeInternal } from './types';
@@ -135,7 +135,7 @@ export class ColumnChooserView extends ColumnsView {
 
   private _isPopupContainerShown?: boolean;
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     switch (args.name) {
       case 'columnChooser':
         this._initializePopupContainer();
@@ -147,11 +147,11 @@ export class ColumnChooserView extends ColumnsView {
     }
   }
 
-  public publicMethods() {
+  public publicMethods(): string[] {
     return ['showColumnChooser', 'hideColumnChooser'];
   }
 
-  protected _resizeCore() {
+  protected _resizeCore(): void {
 
   }
 
@@ -396,14 +396,16 @@ export class ColumnChooserView extends ColumnsView {
     this._columnChooserList?.option('items', items);
   }
 
-  private _updateItemsSelection(columnIndices) {
+  private _updateItemsSelection(columnIndices: number[] | undefined): void {
     const columnChooserList = this._columnChooserList;
 
     if (!columnChooserList) {
       return;
     }
 
-    const changedColumns = columnIndices?.map((columnIndex) => this._columnsController.columnOption(columnIndex));
+    // @ts-expect-error the changed columns exist
+    const changedColumns: Column[] | undefined = columnIndices
+      ?.map((columnIndex) => this._columnsController.columnOption(columnIndex));
 
     columnChooserList.beginUpdate();
     changedColumns?.forEach(({ visible, index }) => {
@@ -416,7 +418,7 @@ export class ColumnChooserView extends ColumnsView {
     columnChooserList.endUpdate();
   }
 
-  protected _columnOptionChanged(changes): void {
+  protected _columnOptionChanged(changes: ColumnsChanges): void {
     super._columnOptionChanged(changes);
 
     const { optionNames } = changes;
@@ -434,7 +436,7 @@ export class ColumnChooserView extends ColumnsView {
       : changes.columnIndices;
     const hasItemsOptionNames = COLUMN_OPTIONS_USED_IN_ITEMS
       .some((optionName) => optionNames[optionName]);
-    const needUpdate: boolean = hasItemsOptionNames
+    const needUpdate: boolean | undefined = hasItemsOptionNames
       || (changes.changeTypes.columns && optionNames.all);
 
     if (!needUpdate) {
@@ -457,34 +459,30 @@ export class ColumnChooserView extends ColumnsView {
     return optionKeys.length === 1 && optionKeys[0] === 'visible';
   }
 
-  public getColumnElements() {
-    const result: any = [];
-
+  public getColumnElements(): dxElementWrapper {
     const isSelectMode = this.isSelectMode();
     const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
     const $content = this._popupContainer?.$content();
     const $nodes = $content?.find('.dx-treeview-node');
 
-    if ($nodes) {
-      chooserColumns.forEach((column) => {
-        const $node = $nodes.filter(`[data-item-id = '${column.index}']`);
-        const item = $node.length ? $node.children(`.${COLUMN_CHOOSER_ITEM_CLASS}`).get(0) : null;
-        result.push(item);
-      });
+    if (!$nodes) {
+      return $([]);
     }
 
-    return $(result);
+    return $(chooserColumns.map((column) => $nodes
+      .filter(`[data-item-id = '${column.index}']`)
+      .children(`.${COLUMN_CHOOSER_ITEM_CLASS}`).get(0)));
   }
 
-  public getName() {
+  public getName(): string {
     return 'columnChooser';
   }
 
-  public getColumns() {
+  public getColumns(): Column[] {
     return this._columnsController.getChooserColumns();
   }
 
-  public allowDragging(column) {
+  public allowDragging(column: Column): boolean | undefined {
     const isParentColumnVisible = this._columnsController.isParentColumnVisible(column.index);
     const isColumnHidden = !column.visible && column.allowHiding;
 
@@ -541,15 +539,15 @@ export class ColumnChooserView extends ColumnsView {
     return popupContainer?.option('visible');
   }
 
-  public isSelectMode() {
+  public isSelectMode(): boolean {
     return this.option('columnChooser.mode') === 'select';
   }
 
-  public hasHiddenColumns() {
+  public hasHiddenColumns(): boolean {
     const isEnabled = this.option('columnChooser.enabled');
     const hiddenColumns = this.getColumns().filter((column) => !column.visible);
 
-    return isEnabled && hiddenColumns.length;
+    return Boolean(isEnabled) && hiddenColumns.length > 0;
   }
 }
 
