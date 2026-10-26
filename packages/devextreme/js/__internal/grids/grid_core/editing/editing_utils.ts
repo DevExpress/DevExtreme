@@ -4,6 +4,9 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { isObject } from '@js/core/utils/type';
 import type { FormItemComponent } from '@js/ui/form';
 import type { EditingTexts } from '@js/ui/tree_list';
+import { data } from '@ts/core/element_data';
+import { WIDGET_CLASS } from '@ts/core/widget/widget';
+import type Validator from '@ts/ui/validator';
 
 import type { ProcessedItem } from '../data_controller/types';
 import type { InternalGrid, RowKey } from '../types';
@@ -80,6 +83,12 @@ export function isEditable($element: dxElementWrapper | undefined): boolean {
 
   return $element.is('input') || $element.is('textarea');
 }
+
+export const getEditorValidator = ($container: dxElementWrapper): Validator | undefined => {
+  const editorElement = $container.find(`.${WIDGET_CLASS}`).get(0);
+
+  return editorElement ? data<Validator | undefined>(editorElement, 'dxValidator') : undefined;
+};
 
 export const getEditorType = (item: EditFormColumnItem): FormItemComponent | undefined => {
   const { column } = item;
