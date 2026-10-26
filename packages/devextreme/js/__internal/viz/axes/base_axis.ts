@@ -24,6 +24,8 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import formatHelper from '@ts/core/format_helper';
+import { getNumberFormatLocale, withFormatLocale } from '@ts/core/global_format_config';
+import localizationCore from '@ts/core/localization/core';
 import { noop as _noop } from '@ts/core/utils/common';
 import { dateUtils } from '@ts/core/utils/date';
 import { Deferred, when } from '@ts/core/utils/deferred';
@@ -1897,7 +1899,11 @@ export let Axis = class Axis {
 
   setPercentLabelFormat(): void {
     if (!this._hasLabelFormat) {
-      this._options.label.format = 'percent';
+      const numberFormatLocale = getNumberFormatLocale();
+
+      this._options.label.format = numberFormatLocale === localizationCore.locale()
+        ? 'percent'
+        : withFormatLocale('percent', numberFormatLocale);
     }
   }
 
