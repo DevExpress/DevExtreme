@@ -10,6 +10,8 @@ import {
   ComponentFixture,
 } from '@angular/core/testing';
 
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+
 import {
   DxTextBoxModule,
   DxTextBoxComponent,
@@ -33,7 +35,7 @@ const mode = isZoneless ? 'zoneless' : 'zone';
   selector: 'test-host',
   imports: [
     DxTextBoxModule, DxDataGridModule, DxPopupModule, DxFormModule, DxListModule,
-    DxTemplateModule, DxDraggableModule, DxChartModule,
+    DxTemplateModule, DxDraggableModule, DxChartModule, ReactiveFormsModule,
   ],
   template: '',
 })
@@ -75,6 +77,8 @@ class TestHostComponent {
   items = ['a', 'b'];
 
   formData = { name: 'initial' };
+
+  control = new FormControl('');
 
   countRender(): string {
     this.renders += 1;
@@ -449,6 +453,65 @@ describe(`Change detection [${mode}]: state changed without a template binding`,
 
     expect(fixture.componentInstance.formData.name).toBe('changed');
     expect(outputText(fixture)).toBe('changed');
+  });
+
+  it('FormControl.setValue() in a timer reaches the widget and releases the update lock', async () => {
+    const fixture = await render(`
+      <dx-text-box [formControl]="control"></dx-text-box>
+    `);
+    const host = fixture.componentInstance;
+
+    act(fixture, () => setTimeout(() => host.control.setValue('changed')));
+    await wait(50);
+    await fixture.whenStable();
+
+    expect(host.textBox.instance.option('value')).toBe('changed');
+    expect(host.textBox.widgetUpdateLocked).toBe(false);
+  });
+
+  it('FormControl.setValue() in a (click) handler reaches the widget and releases the update lock', async () => {
+    const fixture = await render(`
+      <dx-text-box [formControl]="control"></dx-text-box>
+      <button class="set" (click)="control.setValue('clicked')"></button>
+    `);
+    const host = fixture.componentInstance;
+
+    fixture.nativeElement.querySelector('.set').click();
+    await fixture.whenStable();
+
+    expect(host.textBox.instance.option('value')).toBe('clicked');
+    expect(host.textBox.widgetUpdateLocked).toBe(false);
+  });
+
+  it('component property set in a timer releases the update lock', async () => {
+    const fixture = await render(`
+      <dx-text-box></dx-text-box>
+    `);
+    const host = fixture.componentInstance;
+
+    act(fixture, () => setTimeout(() => { host.textBox.hint = 'changed'; }));
+    await wait(50);
+    await fixture.whenStable();
+
+    expect(host.textBox.instance.option('hint')).toBe('changed');
+    expect(host.textBox.widgetUpdateLocked).toBe(false);
+  });
+
+  it('bound input change runs a single change detection pass', async () => {
+    const fixture = await render(`
+      <dx-text-box [value]="text()"></dx-text-box>
+      <span class="out">{{ countRender() }}</span>
+    `);
+    const host = fixture.componentInstance;
+    const rendersBefore = host.renders;
+
+    act(fixture, () => host.text.set('changed'));
+    await wait(50);
+    await fixture.whenStable();
+
+    expect(host.textBox.instance.option('value')).toBe('changed');
+    // one pass plus the dev-mode checkNoChanges pass
+    expect(host.renders - rendersBefore).toBe(2);
   });
 
   it(isZoneless
