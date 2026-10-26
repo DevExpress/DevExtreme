@@ -142,7 +142,7 @@ export const RATE_LIMIT_RETRY_DELAY_MS = 30000;
 
 export const EMPTY_VIEW_MESSAGE = 'AI Assistant is ready to help you';
 
-export const EMPTY_VIEW_PROMPT = 'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
+export const EMPTY_VIEW_PROMPT = 'Update employee information in the <b>Form</b>.\nChange task presentation in the <b>DataGrid</b>: filter and sort data, change column visibility.';
 
 export const SMART_PASTE_TIMEOUT_MS = 30000;
 export const MAX_USER_MESSAGE_LENGTH = 2000;
@@ -229,8 +229,8 @@ export const tasks: Task[] = [
 ];
 
 export const chatSuggestions = [
-  { text: 'Show Completed Tasks', prompt: 'Show Completed Tasks' },
   { text: 'Change State to Texas', prompt: 'Change State to Texas' },
+  { text: 'Review Completed Tasks', prompt: 'Review Completed Tasks' },
 ];
 
 export const formFieldsConfig: DxFormTypes.SimpleItem[] = [

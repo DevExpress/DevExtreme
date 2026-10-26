@@ -1,11 +1,11 @@
-This demo uses the DevExtreme [Chat](/Documentation/ApiReference/UI_Components/dxChat/) component as a page-level AI assistant. Users type requests using natural language, and the assistant updates [Form](/Documentation/ApiReference/UI_Components/dxForm/) and [DataGrid](/Documentation/ApiReference/UI_Components/dxDataGrid/) components on the page. The demo uses [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) as the AI service.
+This demo uses the DevExtreme [Chat](/Documentation/ApiReference/UI_Components/dxChat/) component as a page-level AI assistant. Users enter requests using natural language and the assistant updates [Form](/Documentation/ApiReference/UI_Components/dxForm/) and [DataGrid](/Documentation/ApiReference/UI_Components/dxDataGrid/) components on the page. The demo uses [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) as the AI service.
 
-Click the floating **AI Assistant** button to open the Chat. Try prompts such as "Change State to Texas", "Show completed tasks", or "Sort by due date descending".
+Click the floating **AI Assistant** button to open the Chat. Try prompts such as "Change State to Texas", "Review completed tasks", or "Sort by due date descending".
 <!--split-->
 
 ## Chat in a Popup
 
-In this demo a [SpeedDialAction](/Documentation/ApiReference/UI_Components/dxSpeedDialAction/) button opens displays a [Popup](/Documentation/ApiReference/UI_Components/dxPopup/) that contains the Chat component. The popup is draggable and resizable, so users can keep the Form and DataGrid visible while they work with the assistant. A toolbar button within the popup header allows you to clear the conversation.
+In this demo a [SpeedDialAction](/Documentation/ApiReference/UI_Components/dxSpeedDialAction/) button opens displays a [Popup](/Documentation/ApiReference/UI_Components/dxPopup/) that contains our Chat component. The popup is draggable and resizable, so users can keep the Form and DataGrid visible while working with the assistant. A toolbar button within the popup header allows you to clear the conversation.
 
 The Chat also leverages the following features:
 
@@ -19,14 +19,14 @@ The [onMessageEntered](/Documentation/ApiReference/UI_Components/dxChat/Configur
 
 ## Form Updates (Smart Paste)
 
-The Form uses the [Smart Paste](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#aiIntegration) feature to fill editors based on free-form text. The Chat calls the Form's [smartPaste(text)](/Documentation/ApiReference/UI_Components/dxForm/Methods/#smartPastetext) method and handles the [smartPasted](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#onSmartPasted) event to indicate which fields the AI updated. The assistant can also clear a single field or reset the entire Form.
+The Form uses the [Smart Paste](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#aiIntegration) feature to populate editors based on free-form text. The Chat calls the Form's [smartPaste(text)](/Documentation/ApiReference/UI_Components/dxForm/Methods/#smartPastetext) method and handles the [smartPasted](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#onSmartPasted) event to indicate which fields the AI updated. The assistant can also clear a single field or reset the entire Form.
 
 ## DataGrid Commands
 
 The AI service translates grid-related requests into a list of structured commands that the demo executes using DataGrid APIs:
 
-- **Filtering** - sets [filterValue](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#filterValue) for a column, or calls [clearFilter()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#clearFilter) to remove filters.
-- **Sorting** - sets a column's `sortOrder`, or calls [clearSorting()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#clearSorting).
+- **Filtering** - sets [filterValue](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#filterValue) for a column or calls [clearFilter()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#clearFilter) to remove filters.
+- **Sorting** - sets a column's `sortOrder` or calls [clearSorting()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#clearSorting).
 - **Column visibility** - displays/hides a column.
 
-The `gridCommands` object in the demo code defines the available commands and their parameters. Add a new command to this object to extend the assistant. A single request can include multiple commands (for example, "Show completed tasks and sort by priority"). 
+The `gridCommands` object in the demo code defines the available commands and associated parameters. Add a new command to this object to extend the assistant. A single request can include multiple commands (for example, "Show completed tasks and sort by priority"). 
