@@ -2,16 +2,23 @@ import messageLocalization from '@js/common/core/localization/message';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Attachment, AttachmentDownloadClickEvent, Message } from '@js/ui/chat';
+import type {
+  Attachment, AttachmentDownloadClickEvent, Message, ToolCall,
+} from '@js/ui/chat';
+import type { SimpleItem } from '@js/ui/form';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import Accordion from '@ts/ui/accordion';
 import FileView from '@ts/ui/chat/file_view/file_view';
+import Form from '@ts/ui/form/form';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
 export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
+export const CHAT_MESSAGEBUBBLE_TOOLCALLS_CLASS = 'dx-chat-messagebubble-toolcalls';
+export const CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_CLASS = 'dx-chat-messagebubble-toolcall-error';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
 export const CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS = 'dx-has-image';
 export const CHAT_MESSAGEBUBBLE_IMAGE_CLASS = 'dx-chat-messagebubble-image';
@@ -26,12 +33,16 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   src?: string;
   alt?: string;
   attachments?: Attachment[];
+  toolCalls?: ToolCall[];
+  showToolCalls?: boolean;
   onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
   template?: ((message: Message, container: Element) => void) | null;
 }
 
 class MessageBubble extends Widget<Properties> {
   _$content!: dxElementWrapper;
+
+  _$toolCalls?: dxElementWrapper;
 
   _$attachments?: dxElementWrapper;
 
@@ -42,6 +53,7 @@ class MessageBubble extends Widget<Properties> {
       isEdited: false,
       text: '',
       template: null,
+      showToolCalls: true,
     };
   }
 
@@ -52,11 +64,94 @@ class MessageBubble extends Widget<Properties> {
 
     super._initMarkup();
 
+    this._renderToolCallsElement();
     this._renderContentContainer();
     this._renderAttachmentsElement();
 
+    this._renderToolCalls();
     this._updateContent();
     this._renderAttachments();
+  }
+
+  _renderToolCallsElement(): void {
+    const { toolCalls, isDeleted, showToolCalls } = this.option();
+
+    this._$toolCalls?.remove();
+    this._$toolCalls = undefined;
+
+    if (toolCalls?.length && !isDeleted && showToolCalls) {
+      this._$toolCalls = $('<div>')
+        .addClass(CHAT_MESSAGEBUBBLE_TOOLCALLS_CLASS)
+        .prependTo(this.$element());
+    }
+  }
+
+  _renderToolCalls(): void {
+    const { toolCalls } = this.option();
+
+    if (!this._$toolCalls || !toolCalls) {
+      return;
+    }
+
+    const items = toolCalls.map((call) => ({ title: call.name, call }));
+
+    this._createComponent($('<div>').appendTo(this._$toolCalls), Accordion, {
+      dataSource: items,
+      collapsible: true,
+      multiple: true,
+      selectedItems: items.filter(({ call }) => call.expanded),
+      itemTemplate: ({ call }: { call: ToolCall }, _: number, element: Element): void => {
+        this._renderToolCallBody(call, element);
+      },
+    });
+  }
+
+  _renderToolCallBody(call: ToolCall, container: Element): void {
+    const hasArguments = !!call.arguments && Object.keys(call.arguments).length > 0;
+    const hasResult = call.result !== undefined;
+    const isError = call.status === 'error';
+    const editorOptions = {
+      autoResizeEnabled: true,
+      focusStateEnabled: false,
+      hoverStateEnabled: false,
+    };
+    const items: SimpleItem[] = [];
+
+    if (hasArguments) {
+      items.push({
+        dataField: 'arguments',
+        label: { text: messageLocalization.format('dxChat-toolCallArgumentsLabel') },
+        editorType: 'dxTextArea',
+        editorOptions,
+      });
+    }
+
+    if (hasResult) {
+      items.push({
+        dataField: 'result',
+        label: { text: messageLocalization.format('dxChat-toolCallResultLabel') },
+        editorType: 'dxTextArea',
+        editorOptions: isError
+          ? { ...editorOptions, elementAttr: { class: CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_CLASS } }
+          : editorOptions,
+      });
+    }
+
+    this._createComponent($('<div>').appendTo(container), Form, {
+      formData: {
+        arguments: hasArguments ? this._stringifyToolCallValue(call.arguments) : '',
+        result: hasResult ? this._stringifyToolCallValue(call.result) : '',
+      },
+      labelLocation: 'top',
+      readOnly: true,
+      items,
+    });
+  }
+
+  _stringifyToolCallValue(value: unknown): string {
+    return typeof value === 'string'
+      ? value
+      : JSON.stringify(value, null, 2);
   }
 
   _renderContentContainer(): void {
@@ -168,6 +263,12 @@ class MessageBubble extends Widget<Properties> {
       case 'alt':
       case 'isDeleted':
         this._updateMessageData(name, value);
+
+        if (name === 'isDeleted') {
+          this._renderToolCallsElement();
+          this._renderToolCalls();
+        }
+
         this._updateContent();
         this._renderAttachmentsElement();
         this._renderAttachments();
@@ -179,6 +280,11 @@ class MessageBubble extends Widget<Properties> {
         break;
       case 'template':
         this._updateContent();
+        break;
+      case 'toolCalls':
+      case 'showToolCalls':
+        this._renderToolCallsElement();
+        this._renderToolCalls();
         break;
       case 'isEdited':
         this._updateMessageData(name, value);
