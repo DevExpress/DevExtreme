@@ -800,6 +800,16 @@ QUnit.module('opened option', moduleConfig, () => {
 
         assert.ok(this.instance.option('opened'), 'option opened change to true');
     });
+
+    QUnit.test('menu should open after repaint', function(assert) {
+        this.instance.option({ items: [{ text: 'item' }], opened: true });
+        this.instance.option('opened', false);
+
+        this.instance.repaint();
+        this.instance.option('opened', true);
+
+        assert.strictEqual(this.overflowMenu.popup()?.option('visible'), true, 'popup is visible');
+    });
 });
 
 QUnit.module('aria accessibility', moduleConfig, () => {
