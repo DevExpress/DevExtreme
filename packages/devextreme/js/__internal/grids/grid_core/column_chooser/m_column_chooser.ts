@@ -12,7 +12,6 @@ import { isDefined } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
-import type { Item } from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
@@ -20,12 +19,13 @@ import type { BoundingRect } from '@ts/grids/grid_core/views/types';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
-import type { DropLocationNames } from '../columns_controller/types';
+import type { Column, DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/header_panel';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
 import { ColumnsView } from '../views/columns_view';
 import { defaultOptions } from './const';
+import type { ColumnChooserItem, NodeInternal } from './types';
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';
 const COLUMN_CHOOSER_BUTTON_CLASS = 'column-chooser-button';
@@ -38,21 +38,17 @@ const COLUMN_CHOOSER_ITEM_CLASS = 'dx-column-chooser-item';
 
 const COLUMN_OPTIONS_USED_IN_ITEMS = ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'];
 
-type NodeInternal = Item & {
-  itemData: {
-    id: number;
-  };
-  children: NodeInternal[];
-};
-
-const processItems = function (that: ColumnChooserView, chooserColumns) {
-  const items: any = [];
+const processItems = (
+  that: ColumnChooserView,
+  chooserColumns: Column[],
+): ColumnChooserItem[] => {
+  const items: ColumnChooserItem[] = [];
   const isSelectMode = that.isSelectMode();
   const isRecursive = that.option('columnChooser.selection.recursive');
 
   if (chooserColumns.length) {
     each(chooserColumns, (index, column) => {
-      const item: any = {
+      const item: ColumnChooserItem = {
         text: column.caption,
         cssClass: column.cssClass,
         allowHiding: column.allowHiding,
