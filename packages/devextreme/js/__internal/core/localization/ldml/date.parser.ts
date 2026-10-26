@@ -4,7 +4,8 @@ import { escapeRegExp } from '@ts/core/utils/common';
 import { logger } from '@ts/core/utils/console';
 
 export interface LdlmDateLocalization {
-  getTimeSeparator?: () => string;
+  formatLocale?: string;
+  getTimeSeparator?: (locale?: string) => string;
   getMonthNames: (format: Format, type?: string) => string[];
   getQuarterNames: (format: Format, type?: string) => string[];
   getPeriodNames: (format: Format, type?: string) => string[];
@@ -25,12 +26,19 @@ export const bindDatePartsToLocale = (
 ): LdlmDateLocalization => {
   const result = Object.create(dateParts) as LdlmDateLocalization;
 
+  result.formatLocale = locale;
   result.getMonthNames = (format, type): string[] => dateParts
     .getMonthNames(format, type, locale);
   result.getPeriodNames = (format, type): string[] => dateParts
     .getPeriodNames(format, type, locale);
   result.getDayNames = (format, type): string[] => dateParts
     .getDayNames(format, type, locale);
+
+  if (dateParts.getTimeSeparator) {
+    const timeSeparatorSource = dateParts as Required<Pick<LdlmDateLocalization, 'getTimeSeparator'>>;
+
+    result.getTimeSeparator = (): string => timeSeparatorSource.getTimeSeparator(locale);
+  }
 
   return result;
 };

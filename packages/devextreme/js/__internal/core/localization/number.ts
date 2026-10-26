@@ -2,7 +2,12 @@
 import type { Format, FormatObject as PublicFormatConfig } from '@js/common/core/localization';
 import config from '@js/core/config';
 import errors from '@js/core/errors';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import {
+  getGlobalFormatByDataType,
+  getNumberFormatLocale,
+  isLocaleOnlyFormat,
+} from '@ts/core/global_format_config';
+import localizationCore from '@ts/core/localization/core';
 import currencyLocalization from '@ts/core/localization/currency';
 import intlNumberLocalization from '@ts/core/localization/intl/number';
 import { getFormatter } from '@ts/core/localization/ldml/number';
@@ -280,8 +285,11 @@ const numberLocalizationBase = {
   convertDigits<TValue extends string | number | Date | null | undefined>(
     value: TValue,
     toStandard?: boolean,
+    locale?: string,
   ): TValue {
-    const digits: string = this.format(90, 'decimal');
+    const digits: string = locale && locale !== localizationCore.locale()
+      ? this.format(90, { type: 'decimal', locale })
+      : this.format(90, 'decimal');
 
     if (typeof value !== 'string' || digits[1] === '0') {
       return value;
@@ -301,7 +309,11 @@ const numberLocalizationBase = {
     const digitalRegExp = new RegExp(`[0-9${escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator)}]+`, 'g');
     const specialCharacters = ['\\', '(', ')', '[', ']', '*', '+', '$', '^', '?', '|', '{', '}'];
 
-    let negativeEtalon = this.format(-1, format).replace(digitalRegExp, '1');
+    let negativeEtalon = this.convertDigits(
+      this.format(-1, format),
+      true,
+      getNumberFormatLocale(format as FormatConfig),
+    ).replace(digitalRegExp, '1');
     specialCharacters.forEach((char) => {
       negativeEtalon = negativeEtalon.replace(new RegExp(`\\${char}`, 'g'), `\\${char}`);
     });
@@ -364,7 +376,11 @@ const numberLocalizationBase = {
       // @ts-expect-error
       const formattedValue = getFormatter((format as FormatConfig).type, formatterConfig)(value);
 
-      return this.convertDigits(formattedValue) as string | number;
+      return this.convertDigits(
+        formattedValue,
+        false,
+        getNumberFormatLocale(format as FormatConfig),
+      ) as string | number;
     }
 
     return this._formatNumber(value, numberConfig, format) as string;
@@ -379,9 +395,14 @@ const numberLocalizationBase = {
       return format.parser(text) as number;
     }
 
-    text = this.convertDigits(text, true);
+    text = this.convertDigits(text, true, getNumberFormatLocale(format));
 
-    if (format && typeof format !== 'string' && !isLdmlPatternFormat(format)) {
+    if (
+      format
+      && typeof format !== 'string'
+      && !isLdmlPatternFormat(format)
+      && !isLocaleOnlyFormat(format)
+    ) {
       // Current parser functionality provided as-is and
       // is independent of the most of capabilities of formatter.
       // An LDML pattern object is the string pattern plus locale, which this parser does apply.
