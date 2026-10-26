@@ -72,7 +72,6 @@ const subscribes = {
       .getAppointmentSettings(options.$appointment) as AppointmentItemViewModel;
     const { startDate } = info.sourceAppointment;
 
-    // @ts-expect-error isDeleted: omitted, treated as false
     this.checkRecurringAppointment(options.target, options.data, startDate, () => {
       // eslint-disable-next-line no-void
       void this.updateAppointmentCore(options.target, options.data, function () {
@@ -119,7 +118,6 @@ const subscribes = {
           // eslint-disable-next-line no-void
           void this.updateAppointmentCore(rawAppointment, targetedRawAppointment, onCancel, event);
         },
-        // @ts-expect-error isDeleted: undefined is treated as false
         undefined,
         undefined,
         event,
@@ -144,7 +142,7 @@ const subscribes = {
     this: Scheduler,
     appointment: AppointmentTooltipItem['appointment'],
     targetedAppointmentRaw: TargetedAppointment,
-    format?: string,
+    format?: DateFormatType,
   ) {
     const targetedAppointment = {
       ...appointment,
@@ -160,7 +158,7 @@ const subscribes = {
 
     return {
       text: adapter.text || messageLocalization.format('dxScheduler-noSubject'),
-      formatDate: getDateText(startDate, endDate, formatType as DateFormatType),
+      formatDate: getDateText(startDate, endDate, formatType),
     };
   },
 
@@ -216,7 +214,6 @@ const subscribes = {
         width: this.getWorkSpace().getCellWidth(),
         height: this.getWorkSpace().getCellHeight(),
       },
-      // @ts-expect-error SchedulerWorkSpaceLike.option() is untyped
       cellDurationInMinutes: this.getWorkSpace().option('cellDuration'),
       resizableStep: this.getWorkSpace().positionHelper.getResizableStep(),
       isAllDayPanel: isAllDay(this, itemData),
@@ -307,21 +304,15 @@ const subscribes = {
     return this.getEndViewDate();
   },
 
-  forceMaxAppointmentPerCell(this: Scheduler): unknown {
-    // @ts-expect-error Scheduler has no forceMaxAppointmentPerCell method
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.forceMaxAppointmentPerCell();
-  },
-
   getTargetedAppointmentData(this: Scheduler, appointment, element) {
     return this.getTargetedAppointment(appointment, element);
   },
 
-  getEndDayHour(this: Scheduler) {
+  getEndDayHour(this: Scheduler): number {
     return this._workSpace.option('endDayHour') || this.option('endDayHour');
   },
 
-  getStartDayHour(this: Scheduler) {
+  getStartDayHour(this: Scheduler): number {
     return this._workSpace.option('startDayHour') || this.option('startDayHour');
   },
 
