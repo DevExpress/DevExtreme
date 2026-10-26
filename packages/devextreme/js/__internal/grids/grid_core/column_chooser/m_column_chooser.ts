@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
+import type { DxElement } from '@js/core/element';
 import type { Coordinates as Offset, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
@@ -11,6 +12,9 @@ import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import Popup from '@js/ui/popup/ui.popup';
+import type {
+  ContentReadyEvent, OptionChangedEvent, Properties as TreeViewProperties, SelectionChangedEvent,
+} from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
@@ -234,8 +238,7 @@ export class ColumnChooserView extends ColumnsView {
     return Deferred<unknown>().resolve();
   }
 
-  private _renderTreeView() {
-    const that = this;
+  private _renderTreeView(): void {
     const $container = this._popupContainer?.$content();
 
     if (!$container) {
@@ -245,7 +248,7 @@ export class ColumnChooserView extends ColumnsView {
     const columnChooser = this.option('columnChooser')!;
     const isSelectMode = this.isSelectMode();
 
-    const treeViewConfig: any = {
+    const treeViewConfig: TreeViewProperties = {
       dataStructure: 'plain',
       activeStateEnabled: true,
       focusStateEnabled: true,
@@ -258,7 +261,10 @@ export class ColumnChooserView extends ColumnsView {
       searchEditorOptions: columnChooser.search?.editorOptions,
     };
 
-    extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
+    extend(
+      treeViewConfig,
+      isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig(),
+    );
 
     if (this._columnChooserList) {
       if (!treeViewConfig.searchEnabled) {
@@ -266,43 +272,46 @@ export class ColumnChooserView extends ColumnsView {
       }
 
       this._columnChooserList.option(treeViewConfig);
-      // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
+      // we need to set items after setting selectNodesRecursive,
+      // so they will be processed correctly inside TreeView
       this._updateItems();
     } else {
       this._columnChooserList = this._createComponent($container, TreeView, treeViewConfig);
-      // we need to set items after setting selectNodesRecursive, so they will be processed correctly inside TreeView
+      // we need to set items after setting selectNodesRecursive,
+      // so they will be processed correctly inside TreeView
       this._updateItems();
 
       let scrollTop = 0;
 
-      this._columnChooserList.on('optionChanged', (e) => {
+      this._columnChooserList.on('optionChanged', (e: OptionChangedEvent) => {
         const scrollable = e.component.getScrollable();
         scrollTop = scrollable.scrollTop();
       });
 
-      this._columnChooserList.on('contentReady', (e) => {
+      this._columnChooserList.on('contentReady', (e: ContentReadyEvent) => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
         deferUpdate(() => {
           const scrollable = e.component.getScrollable();
           scrollable.scrollTo({ top: scrollTop });
 
-          that.renderCompleted.fire();
+          this.renderCompleted.fire();
         });
       });
     }
   }
 
-  private _prepareDragModeConfig() {
+  private _prepareDragModeConfig(): TreeViewProperties {
     const columnChooserOptions = this.option('columnChooser')!;
 
     return {
       noDataText: columnChooserOptions.emptyPanelText,
       activeStateEnabled: false,
       hoverStateEnabled: false,
-      itemTemplate(data, index, item) {
+      itemTemplate(data: ColumnChooserItem, index: number, item: DxElement): void {
         $(item)
-          .text(data.text)
+          .text(data.text ?? '')
           .parent()
-          .addClass(data.cssClass)
+          .addClass(data.cssClass ?? '')
           .addClass(COLUMN_CHOOSER_ITEM_CLASS);
       },
     };
@@ -355,9 +364,10 @@ export class ColumnChooserView extends ColumnsView {
     return getFlattenedNodesRecursive(nodes, []).reverse();
   }
 
-  private _prepareSelectModeConfig() {
+  private _prepareSelectModeConfig(): TreeViewProperties {
     const selectionOptions = this.option('columnChooser.selection') ?? {};
-    const selectionChangedHandler = (e) => {
+    const selectionChangedHandler = (e: SelectionChangedEvent): void => {
+      // @ts-expect-error getNodes() is typed with optional children and itemData
       const nodes = this._getOrderedFlatNodes(e.component.getNodes());
 
       this.component.beginUpdate();
