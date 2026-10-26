@@ -119,6 +119,10 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
 
   const cleanup = (): void => {
     document.querySelectorAll('dx-license').forEach((panel) => {
+      if (!('_expired' in panel) || !('_observer' in panel)) {
+        throw new Error('The private fields of the panel were renamed: update PanelInternals');
+      }
+
       const internals = panel as unknown as PanelInternals;
 
       internals._expired = false;
@@ -145,6 +149,15 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
 
       expect(document.querySelector('dx-license-trigger')?.hasAttribute('trial-expired')).toBe(false);
       expect(getPanel().hasAttribute('trial-expired')).toBe(false);
+      expect(hasCloseButton(getPanel())).toBe(true);
+    });
+
+    it.each(['false', '0', 'true', 'yes', 1, 0])('should not make the overlay by the JS option trialExpired: %p (only true does)', (value) => {
+      renderTrialPanel(buyNow, licensingDoc, version, 'Universal', undefined, {
+        trialExpired: value as unknown as boolean,
+      });
+
+      expect(document.querySelector('dx-license-trigger')?.hasAttribute('trial-expired')).toBe(false);
       expect(hasCloseButton(getPanel())).toBe(true);
     });
 
@@ -224,6 +237,27 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
 
       expect(hasCloseButton(getPanel())).toBe(false);
       expect(getPanel().style.getPropertyValue('position')).toBe('fixed');
+    });
+
+    it('should keep the layout of the overlay against the styles of the page', () => {
+      addTrigger({ 'trial-expired': 'true' });
+
+      const { style } = getPanel();
+      const pinned: Record<string, string> = {
+        position: 'fixed',
+        width: 'auto',
+        height: 'auto',
+        'max-width': 'none',
+        'max-height': 'none',
+        'z-index': '99999',
+        transform: 'none',
+        margin: '0px',
+        'box-sizing': 'border-box',
+      };
+      Object.entries(pinned).forEach(([property, value]) => {
+        expect(style.getPropertyValue(property)).toBe(value);
+        expect(style.getPropertyPriority(property)).toBe('important');
+      });
     });
 
     it('should show the title and the links', () => {

@@ -117,6 +117,14 @@ const overlayStyles = createImportantStyles({
   right: '0px',
   bottom: '0px',
   display: 'flex',
+  width: 'auto',
+  height: 'auto',
+  'max-width': 'none',
+  'max-height': 'none',
+  margin: '0px',
+  transform: 'none',
+  border: 'none',
+  'box-sizing': 'border-box',
   overflow: 'auto',
   'z-index': OVERLAY_Z_INDEX,
   'background-color': 'rgba(255, 255, 255, 0.9)',
@@ -519,7 +527,7 @@ export function renderTrialPanel(
   trialPanelTrigger.setAttribute(attributeNames.version, version);
   trialPanelTrigger.setAttribute(attributeNames.subscriptions, subscriptions ?? '');
 
-  if (options?.trialExpired) {
+  if (options?.trialExpired === true) {
     trialPanelTrigger.setAttribute(attributeNames.trialExpired, 'true');
   }
 
