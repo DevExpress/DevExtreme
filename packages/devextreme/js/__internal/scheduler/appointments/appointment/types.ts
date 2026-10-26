@@ -6,7 +6,7 @@ import type { SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
 import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
 
-import type { Appointment } from './m_appointment';
+import type { Appointment } from './appointment';
 
 export type AppointmentReducedPart = 'head' | 'body' | 'tail';
 
