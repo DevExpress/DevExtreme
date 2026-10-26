@@ -175,13 +175,12 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(
   }
 
   protected _createCell(options: ViewCellOptions): dxElementWrapper {
-    const { column } = options;
-    const { rowType } = options;
+    const { column, rowType } = options;
     const $cell = super._createCell(options);
     const hasStickyColumns = this.hasStickyColumns();
     const rowIndex = rowType === 'header' ? options.rowIndex ?? null : null;
     const isSummary = rowType === 'groupFooter' || rowType === 'totalFooter' || rowType === 'group';
-    const isExpandColumn = column.command && column.command === 'expand';
+    const isExpandColumn = column.command === 'expand';
 
     if (!hasStickyColumns || needToDisableStickyColumn(this._columnsController, column)) {
       return $cell;
@@ -245,8 +244,8 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(
     columns = processFixedColumns(this._columnsController, columns);
 
     if (rtlEnabled) {
-      columns = rtlEnabled ? [...columns].reverse() : columns;
-      widths = rtlEnabled ? [...widths].reverse() : widths;
+      columns = [...columns].reverse();
+      widths = [...widths].reverse();
     }
 
     columns.forEach((column, columnIndex) => {
@@ -282,7 +281,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(
     const hasHidingColumnsQueue = !!this.adaptiveColumnsController
       ?.getHidingColumnsQueue()?.length;
 
-    super._resizeCore.apply(this);
+    super._resizeCore();
 
     if (!hasStickyColumns) {
       return;
@@ -462,8 +461,8 @@ const rowsView = (
     const rtlEnabled = this.option('rtlEnabled');
 
     if (rtlEnabled) {
-      columns = rtlEnabled ? [...columns].reverse() : columns;
-      widths = rtlEnabled ? [...widths].reverse() : widths;
+      columns = [...columns].reverse();
+      widths = [...widths].reverse();
     }
 
     // @ts-expect-error the view is rendered here
@@ -861,7 +860,7 @@ const editorFactory = (
           );
 
         // @ts-expect-error getOverlayBaseZIndex is declared on the validating extender
-        $wrapper.css('zIndex', isOutsideVisibleArea ? 1 : this?.getOverlayBaseZIndex() ?? 0);
+        $wrapper.css('zIndex', isOutsideVisibleArea ? 1 : this.getOverlayBaseZIndex() ?? 0);
       }
     }
   }
@@ -896,7 +895,7 @@ const resizing = (
     const hasStickyColumns = this._columnHeadersView.hasStickyColumns();
 
     // @ts-expect-error hasResizeTimeout is declared on the virtual scrolling extender
-    if (hasStickyColumns && this?.hasResizeTimeout()) {
+    if (hasStickyColumns && this.hasResizeTimeout()) {
       this._rowsView.setStickyOffsets();
     }
 
