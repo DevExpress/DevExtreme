@@ -1,7 +1,7 @@
 import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
-import { CustomStore } from '@js/common/data';
+import { ArrayStore, CustomStore, DataSource } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
@@ -101,6 +101,39 @@ describe('GridCore selection', () => {
 
         expect(instance.getSelectedRowKeys()).toEqual([1]);
         expect(selectionChangedCount).toBe(1);
+      });
+    });
+  });
+
+  describe('store push', () => {
+    [true, false].forEach((reshapeOnPush) => {
+      it(`updated cells are rendered when pushed changes remove a selected row with repaintChangesOnly and reshapeOnPush=${reshapeOnPush} (T1337202)`, async () => {
+        const store = new ArrayStore({
+          key: 'id',
+          data: [
+            { id: 1, name: 'Anna', load: 3 },
+            { id: 2, name: 'Berta', load: 3 },
+            { id: 3, name: 'Carl', load: 3 },
+          ],
+        });
+        const { instance } = await createDataGrid({
+          dataSource: new DataSource({ store, reshapeOnPush }),
+          repaintChangesOnly: true,
+          columns: ['name', 'load'],
+          selection: { mode: 'multiple' },
+          selectedRowKeys: [2],
+        });
+
+        const contentReady = new Promise((resolve) => { instance.on('contentReady', resolve); });
+        store.push([
+          { type: 'update', key: 1, data: { load: 4.5 } },
+          { type: 'update', key: 3, data: { load: 4.5 } },
+          { type: 'remove', key: 2 },
+        ]);
+        await contentReady;
+
+        expect($(instance.getCellElement(0, 'load')).text()).toBe('4.5');
+        expect($(instance.getCellElement(1, 'load')).text()).toBe('4.5');
       });
     });
   });
