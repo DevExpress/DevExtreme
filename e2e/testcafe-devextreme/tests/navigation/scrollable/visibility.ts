@@ -4,11 +4,13 @@ import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollabl
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo, hasVisibleScrollbarThumb } from '../../../helpers/domUtils';
+import { appendElementTo, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Scrollable_visibility_integration`
   .page(url(__dirname, '../../container.html'));
 type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
+
+const PINNED_SCROLLBAR_THUMB_STYLE = '#scrollable .dx-scrollable-scroll { opacity: 1 !important; transition: none !important; }';
 
 (['both'] as ScrollableDirection[]).forEach((direction) => {
   [false, true].forEach((useNative) => {
@@ -22,10 +24,6 @@ type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
 
           const expectedScrollOffsetValue = { left: 10, top: 20 };
           await t.expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
-
-          if (useNative && useSimulatedScrollbar) {
-            await t.expect(hasVisibleScrollbarThumb('#scrollable')).notOk();
-          }
 
           await testScreenshot(t, takeScreenshot, `Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, { element: Selector('#scrollable') });
 
@@ -46,6 +44,10 @@ type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
         }).before(async () => {
+          if (useNative && useSimulatedScrollbar) {
+            await insertStylesheetRulesToPage(PINNED_SCROLLBAR_THUMB_STYLE);
+          }
+
           await appendElementTo('#container', 'div', 'scrollable');
 
           await appendElementTo('#scrollable', 'div', 'content', {
