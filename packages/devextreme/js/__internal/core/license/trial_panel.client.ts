@@ -17,6 +17,8 @@ export interface CustomTrialPanelStyles {
 export interface TrialPanelOptions {
   trialExpired?: boolean;
   libraries?: string | null;
+  licenseId?: string | null;
+  licenseSource?: string | null;
 }
 
 export const isClient = (): boolean => typeof HTMLElement !== 'undefined' && typeof customElements !== 'undefined';
@@ -39,6 +41,8 @@ const attributeNames = {
   subscriptions: 'subscriptions',
   trialExpired: 'trial-expired',
   libraries: 'libraries',
+  licenseId: 'license-id',
+  licenseSource: 'license-source',
 };
 
 const BRAND_COLOR = '#FF7200';
@@ -91,6 +95,7 @@ const textStyles = {
   'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
   'font-size': '0.875rem',
   'font-weight': '600',
+  'overflow-wrap': 'anywhere',
 };
 
 function createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMap): string {
@@ -161,7 +166,7 @@ function setStyles<T extends HTMLElement>(element: T, styles: string): T {
 }
 
 function isTrialExpired(element: Element): boolean {
-  return element.getAttribute(attributeNames.trialExpired) === 'true';
+  return element.getAttribute(attributeNames.trialExpired)?.trim().toLowerCase() === 'true';
 }
 
 class DxLicense extends SafeHTMLElement {
@@ -250,10 +255,25 @@ class DxLicense extends SafeHTMLElement {
     }
 
     if (this._expired) {
-      this._subscriptionsSpan.innerText = this._getTrialExpiredEnding(subscriptions);
-    } else if (subscriptions) {
-      this._subscriptionsSpan.innerText = ` Included in Subscriptions: ${subscriptions}`;
+      this._subscriptionsSpan.innerText = this._getTrialExpiredEnding(subscriptions)
+        + this._getLicenseText();
+      return;
     }
+
+    const subscriptionsText = subscriptions ? ` Included in Subscriptions: ${subscriptions}` : '';
+    const licenseText = this._getLicenseText();
+    if (subscriptionsText || licenseText) {
+      this._subscriptionsSpan.innerText = licenseText && subscriptionsText
+        ? `${subscriptionsText}.${licenseText}`
+        : `${subscriptionsText}${licenseText}`;
+    }
+  }
+
+  private _getLicenseText(): string {
+    const licenseId = this.getAttribute(attributeNames.licenseId);
+    const licenseSource = this.getAttribute(attributeNames.licenseSource);
+
+    return `${licenseId ? ` License ID: ${licenseId}.` : ''}${licenseSource ? ` License Source: ${licenseSource}` : ''}`;
   }
 
   private _getTrialExpiredEnding(subscriptions: string | null): string {
@@ -501,6 +521,14 @@ export function renderTrialPanel(
 
   if (options?.trialExpired) {
     trialPanelTrigger.setAttribute(attributeNames.trialExpired, 'true');
+  }
+
+  if (options?.licenseId) {
+    trialPanelTrigger.setAttribute(attributeNames.licenseId, options.licenseId);
+  }
+
+  if (options?.licenseSource) {
+    trialPanelTrigger.setAttribute(attributeNames.licenseSource, options.licenseSource);
   }
 
   if (options?.libraries) {
