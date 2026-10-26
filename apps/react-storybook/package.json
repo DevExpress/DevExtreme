@@ -16,7 +16,7 @@
     "devextreme-react": "workspace:*",
     "html-react-parser": "^5.2.2",
     "inferno": "catalog:",
-    "openai": "4.73.1"
+    "openai": "7.5.0"
   },
   "devDependencies": {
     "@storybook/addon-docs": "10.6.3",
