@@ -733,6 +733,7 @@ function getTablePropertiesFormConfig(
       items: [
         {
           dataField: 'width',
+          editorType: 'dxNumberBox',
           label: {
             text: localizationMessage.format('dxHtmlEditor-width'),
           },
@@ -743,6 +744,7 @@ function getTablePropertiesFormConfig(
         },
         {
           dataField: 'height',
+          editorType: 'dxNumberBox',
           label: {
             text: localizationMessage.format('dxHtmlEditor-height'),
           },
@@ -873,9 +875,9 @@ function getCellPropertiesFormConfig(
   const defaultAlignment = rowBlot.childFormatName === 'tableHeaderCell' ? DEFAULT_TH_TEXT_ALIGNMENT : DEFAULT_TEXT_ALIGNMENT;
   const alignment = formats.cellTextAlign || defaultAlignment;
   const verticalAlignment = formats.cellVerticalAlign || DEFAULT_VERTICAL_ALIGN;
-  const cellPadding = getFirstFormatValue(formats.cellPadding);
-  const rawVerticalPadding = formats.cellPaddingTop ?? cellPadding?.split(' ')[0];
-  const rawHorizontalPadding = formats.cellPaddingLeft ?? cellPadding?.split(' ')[1];
+  const [paddingTop, paddingRight = paddingTop] = getFirstFormatValue(formats.cellPadding)?.split(' ') ?? [];
+  const rawVerticalPadding = formats.cellPaddingTop ?? paddingTop;
+  const rawHorizontalPadding = formats.cellPaddingLeft ?? paddingRight;
 
   const formData = {
     width: cellWidth,
