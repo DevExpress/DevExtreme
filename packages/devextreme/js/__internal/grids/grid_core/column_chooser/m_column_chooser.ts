@@ -164,7 +164,7 @@ export class ColumnChooserView extends ColumnsView {
     const columnChooserClass = this.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
     // @ts-expect-error the view is rendered here
     const $element = this.element().addClass(columnChooserClass);
-    const columnChooserOptions = this.option('columnChooser')!;
+    const columnChooserOptions = this.option('columnChooser');
     const popupPosition = this._columnChooserController.getPosition();
 
     const dxPopupOptions: PopupProperties = {
@@ -175,13 +175,13 @@ export class ColumnChooserView extends ColumnsView {
       resizeEnabled: true,
       wrapperAttr: { class: columnChooserClass },
       toolbarItems: [
-        { text: columnChooserOptions.title, toolbar: 'top', location: 'before' },
+        { text: columnChooserOptions?.title, toolbar: 'top', location: 'before' },
       ],
       position: popupPosition,
-      width: columnChooserOptions.width,
-      height: columnChooserOptions.height,
+      width: columnChooserOptions?.width,
+      height: columnChooserOptions?.height,
       rtlEnabled: this.option('rtlEnabled'),
-      container: columnChooserOptions.container,
+      container: columnChooserOptions?.container,
       tabFocusLoopEnabled: true,
       _ignoreCloseOnChildEscape: true,
     };
@@ -250,7 +250,7 @@ export class ColumnChooserView extends ColumnsView {
       return;
     }
 
-    const columnChooser = this.option('columnChooser')!;
+    const columnChooser = this.option('columnChooser');
     const isSelectMode = this.isSelectMode();
 
     const treeViewConfig: TreeViewProperties = {
@@ -261,9 +261,9 @@ export class ColumnChooserView extends ColumnsView {
       itemTemplate: 'item',
       showCheckBoxesMode: 'none',
       rootValue: null,
-      searchEnabled: columnChooser.search?.enabled,
-      searchTimeout: columnChooser.search?.timeout,
-      searchEditorOptions: columnChooser.search?.editorOptions,
+      searchEnabled: columnChooser?.search?.enabled,
+      searchTimeout: columnChooser?.search?.timeout,
+      searchEditorOptions: columnChooser?.search?.editorOptions,
     };
 
     extend(
@@ -306,10 +306,10 @@ export class ColumnChooserView extends ColumnsView {
   }
 
   private _prepareDragModeConfig(): TreeViewProperties {
-    const columnChooserOptions = this.option('columnChooser')!;
+    const columnChooserOptions = this.option('columnChooser');
 
     return {
-      noDataText: columnChooserOptions.emptyPanelText,
+      noDataText: columnChooserOptions?.emptyPanelText,
       activeStateEnabled: false,
       hoverStateEnabled: false,
       itemTemplate(data: ColumnChooserItem, index: number, item: DxElement): void {
