@@ -87,17 +87,39 @@ export const selectionDataControllerExtender = (
 
   protected _applyChange(change: DataChange): void {
     if (change?.changeType === 'updateSelection') {
+      const selectColumnIndex = this._columnsController.getVisibleColumns()
+        .findIndex((column) => column.command === 'select');
+
       change.items?.forEach((item, index) => {
         const currentItem = this._items[index];
         if (currentItem) {
           currentItem.isSelected = item.isSelected;
-          currentItem.values = item.values;
+          this.updateSelectCellValue(currentItem, item, selectColumnIndex);
         }
       });
       return;
     }
 
     super._applyChange(change);
+  }
+
+  private updateSelectCellValue(
+    currentItem: ProcessedItem,
+    item: ProcessedItem,
+    selectColumnIndex: number,
+  ): void {
+    if (selectColumnIndex < 0) {
+      return;
+    }
+
+    const selectCellValue = item.values[selectColumnIndex];
+
+    if (currentItem.values[selectColumnIndex] === selectCellValue) {
+      return;
+    }
+
+    currentItem.values = currentItem.values.slice();
+    currentItem.values[selectColumnIndex] = selectCellValue;
   }
 
   protected _endUpdateCore(): void {
