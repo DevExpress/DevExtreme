@@ -1,1 +1,11 @@
+@use "colors" as *;
 @use "../../base/map";
+
+.dx-map-marker-default-body {
+  fill: $map-marker-color;
+  stroke: $map-marker-accent-color;
+}
+
+.dx-map-marker-default-center {
+  fill: $map-marker-accent-color;
+}
