@@ -68,6 +68,8 @@ class TestHostComponent {
 
   rows = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
+  manyRows = Array.from({ length: 200 }, (_, i) => ({ id: i + 1 }));
+
   points = [{ arg: 1, val: 1 }, { arg: 2, val: 3 }, { arg: 3, val: 2 }];
 
   items = ['a', 'b'];
@@ -285,6 +287,33 @@ if (isZoneless) {
       await fixture.whenStable();
 
       expect(hovered).toBeTruthy();
+      expect(host.renders).toBe(rendersBefore);
+    });
+
+    it('scrolling a DataGrid without handlers does not run change detection', async () => {
+      const fixture = await render(`
+        <dx-data-grid [dataSource]="manyRows" keyExpr="id" [height]="200">
+          <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
+        </dx-data-grid>
+        <span class="out">{{ countRender() }}</span>
+      `);
+      await wait(50);
+      await fixture.whenStable();
+      const host = fixture.componentInstance;
+      const scrollable = host.grid.instance.getScrollable();
+      const scrolled = jasmine.createSpy('scrolled');
+      scrollable.on('scroll', scrolled);
+      const rendersBefore = host.renders;
+
+      const container = fixture.nativeElement.querySelector('.dx-datagrid-rowsview .dx-scrollable-container');
+
+      for (let i = 0; i < 5; i += 1) {
+        container.dispatchEvent(new Event('scroll'));
+      }
+      await wait(50);
+      await fixture.whenStable();
+
+      expect(scrolled).toHaveBeenCalled();
       expect(host.renders).toBe(rendersBefore);
     });
   });

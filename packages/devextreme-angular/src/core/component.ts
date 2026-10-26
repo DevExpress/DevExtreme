@@ -168,7 +168,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
     this._initialOptions.nestedComponentOptions = function (component) {
       return {
-        eventsStrategy: (instance) => new NgEventsStrategy(instance, zone, changeDetectorRef),
+        eventsStrategy: (instance) => new NgEventsStrategy(instance, zone),
         nestedComponentOptions: component.option('nestedComponentOptions'),
       };
     };
