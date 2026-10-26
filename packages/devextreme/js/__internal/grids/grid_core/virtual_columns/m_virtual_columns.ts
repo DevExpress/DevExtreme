@@ -86,9 +86,9 @@ const rowsView = (
 const columns = (
   Base: ModuleType<ColumnsController>,
 ): ModuleType<VirtualColumnsController> => class VirtualColumnsControllerExtender extends Base {
-  private _beginPageIndex?: number | null;
+  private _beginPageIndex!: number | null;
 
-  private _endPageIndex?: number | null;
+  private _endPageIndex!: number | null;
 
   private _position!: number;
 
@@ -100,8 +100,8 @@ const columns = (
 
   private _resizingController!: ResizingController;
 
-  public init(...args: Parameters<ColumnsController['init']>): void {
-    super.init(...args);
+  public init(isApplyingUserState?: boolean): void {
+    super.init(isApplyingUserState);
 
     this._resizingController = this.getController('resizing');
 
