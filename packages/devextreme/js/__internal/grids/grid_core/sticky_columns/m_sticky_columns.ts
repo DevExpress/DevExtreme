@@ -4,6 +4,7 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getWidth, setWidth } from '@js/core/utils/size';
+import type { ItemClickEvent } from '@js/ui/context_menu';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
@@ -29,10 +30,20 @@ import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import { isGroupRow } from '../views/rows_view';
-import type { ColumnWidthsOptions, RowsViewScrollEvent, ViewCellOptions } from '../views/types';
+import type {
+  ColumnWidthsOptions,
+  ContextMenuItemsOptions,
+  GridContextMenuItem,
+  RowsViewScrollEvent,
+  ViewCellOptions,
+} from '../views/types';
 import { CLASSES, StickyPosition } from './const';
 import { GridCoreStickyColumnsDom } from './dom';
-import type { StickyColumnsColumnsViewExtension, StickyOffsets } from './types';
+import type {
+  StickyColumnHeadersView,
+  StickyColumnsColumnsViewExtension,
+  StickyOffsets,
+} from './types';
 import {
   getColumnFixedPosition,
   getStickyOffset,
@@ -284,27 +295,30 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(
 
 const columnHeadersView = (
   Base: ModuleType<ColumnHeadersView>,
-) => class ColumnHeadersViewStickyColumnsExtender extends baseStickyColumns(Base) {
+): ModuleType<StickyColumnHeadersView> => class ColumnHeadersViewStickyColumnsExtender
+  extends baseStickyColumns(Base) {
   public setStickyOffsets(): void {
     const offsets: StickyOffsets = {};
     const rows = this._getRows();
 
-    for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
       const isFilterRow = rows?.[rowIndex]?.rowType === 'filter';
 
       super.setStickyOffsets(rowIndex, isFilterRow ? undefined : offsets);
     }
   }
 
-  public getContextMenuItems(options) {
+  public getContextMenuItems(
+    options: ContextMenuItemsOptions,
+  ): GridContextMenuItem[] | undefined {
     const { column } = options;
     const columnsController = this._columnsController;
-    const columnFixingOptions: any = this.option('columnFixing');
-    let items: any = super.getContextMenuItems(options);
+    const columnFixingOptions = this.option('columnFixing');
+    let items = super.getContextMenuItems(options);
 
     if (options.row && options.row.rowType === 'header') {
-      if (columnFixingOptions.enabled === true && column && column.allowFixing) {
-        const onItemClick = (params) => {
+      if (columnFixingOptions?.enabled === true && column && column.allowFixing) {
+        const onItemClick = (params: ItemClickEvent): void => {
           // eslint-disable-next-line default-case
           switch (params.itemData.value) {
             case 'none':
@@ -330,17 +344,17 @@ const columnHeadersView = (
               break;
           }
         };
-        const fixedPositionItems = [
+        const fixedPositionItems: GridContextMenuItem[] = [
           {
-            text: columnFixingOptions.texts.leftPosition,
-            icon: columnFixingOptions.icons.leftPosition,
+            text: columnFixingOptions.texts?.leftPosition,
+            icon: columnFixingOptions.icons?.leftPosition,
             value: 'left',
             disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'),
             onItemClick,
           },
           {
-            text: columnFixingOptions.texts.rightPosition,
-            icon: columnFixingOptions.icons.rightPosition,
+            text: columnFixingOptions.texts?.rightPosition,
+            icon: columnFixingOptions.icons?.rightPosition,
             value: 'right',
             disabled: column.fixed && column.fixedPosition === 'right',
             onItemClick,
@@ -349,8 +363,8 @@ const columnHeadersView = (
 
         if (this.option('columnFixing.legacyMode') !== true && !columnsController.isVirtualMode()) {
           fixedPositionItems.push({
-            text: columnFixingOptions.texts.stickyPosition,
-            icon: columnFixingOptions.icons.stickyPosition,
+            text: columnFixingOptions.texts?.stickyPosition,
+            icon: columnFixingOptions.icons?.stickyPosition,
             value: 'sticky',
             disabled: column.fixed && column.fixedPosition === StickyPosition.Sticky,
             onItemClick,
@@ -360,14 +374,14 @@ const columnHeadersView = (
         items = items || [];
         items.push(
           {
-            text: columnFixingOptions.texts.fix,
-            icon: columnFixingOptions.icons.fix,
+            text: columnFixingOptions.texts?.fix,
+            icon: columnFixingOptions.icons?.fix,
             beginGroup: true,
             items: fixedPositionItems,
           },
           {
-            text: columnFixingOptions.texts.unfix,
-            icon: columnFixingOptions.icons.unfix,
+            text: columnFixingOptions.texts?.unfix,
+            icon: columnFixingOptions.icons?.unfix,
             value: 'none',
             disabled: !column.fixed,
             onItemClick,
