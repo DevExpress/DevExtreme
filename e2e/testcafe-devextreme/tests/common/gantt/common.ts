@@ -8,6 +8,7 @@ import { appendElementTo, insertStylesheetRulesToPage } from '../../../helpers/d
 import { Themes } from '../../../helpers/themes';
 
 const TOOLBAR_ITEM_BUTTON = '.dx-button';
+const HIDDEN_SCROLLBAR_THUMB_STYLE = '.dx-gantt .dx-scrollable-scroll { visibility: hidden !important; }';
 
 fixture`Gantt`
   .page(url(__dirname, '../../container-extended.html'));
@@ -128,7 +129,7 @@ test.meta({ themes: [Themes.materialBlue] })('Gantt - show resources button shou
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRulesToPage('.dx-gantt .dx-scrollable-scroll { visibility: hidden !important; }');
+  await insertStylesheetRulesToPage(HIDDEN_SCROLLBAR_THUMB_STYLE);
   const id = `${new Guid()}`;
   await appendElementTo('#container', 'div', id, {});
   await createWidget('dxGantt', {
@@ -150,7 +151,7 @@ test('Gantt - show dependencies button should not have focus state (T1264485)', 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRulesToPage('.dx-gantt .dx-scrollable-scroll { visibility: hidden !important; }');
+  await insertStylesheetRulesToPage(HIDDEN_SCROLLBAR_THUMB_STYLE);
   const id = `${new Guid()}`;
   await appendElementTo('#container', 'div', id, {});
   await createWidget('dxGantt', {
