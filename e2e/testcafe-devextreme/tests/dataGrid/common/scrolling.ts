@@ -2036,7 +2036,15 @@ test('Last group should not disappear after collapsing another subgroup with vir
     // act
     await dataGrid.scrollTo(t, { y: 200 });
     await dataGrid.scrollTo(t, { y: 600 });
-    await t.expect(dataGrid.isReady()).ok();
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.isVirtualRowIntersectViewport())
+      .notOk()
+      .expect(dataGrid.getFixedDataCell(12, 0).element.textContent)
+      .eql('12')
+      .expect(dataGrid.getFixedDataCell(19, 0).element.textContent)
+      .eql('19');
 
     // assert
     await testScreenshot(t, takeScreenshot, `grid-${scrollingMode}-scrolling-T1152498.png`, { element: '#container' });
