@@ -813,7 +813,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
 
     /**
-     * [descr:BaseWidgetOptions.title]
+     * [descr:dxChartOptions.title]
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
