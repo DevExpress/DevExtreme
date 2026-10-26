@@ -420,7 +420,7 @@ const rowsView = (
     row: ViewRow,
     options: RowRenderOptions,
   ): dxElementWrapper {
-    // @ts-expect-error
+    // @ts-expect-error _renderMasterDetailCell is declared on the master detail extender
     const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
 
     if (this.hasStickyColumns()) {
@@ -526,7 +526,7 @@ const rowsView = (
     groupCellColSpan: number,
     alignByColumnCellCount: number,
   ): void {
-    // @ts-expect-error
+    // @ts-expect-error _renderGroupSummaryCellsCore is defined by DataGrid summary
     super._renderGroupSummaryCellsCore(
       $groupCell,
       options,
@@ -815,9 +815,9 @@ const editorFactory = (
         $element,
         this.addWidgetPrefix.bind(this),
       );
-      const isGroupRow = isGroupRowElement($element);
+      const isGroupElement = isGroupRowElement($element);
       const isGroupFooter = isGroupFooterRow($element);
-      const noExtraWidth = isLastCell || isFixedCell || isGroupRow || isGroupFooter;
+      const noExtraWidth = isLastCell || isFixedCell || isGroupElement || isGroupFooter;
 
       return {
         width: elementRect.right - elementRect.left + (noExtraWidth ? 0 : 1),
@@ -829,19 +829,21 @@ const editorFactory = (
   }
 
   protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
-    // @ts-expect-error
+    // @ts-expect-error getValidationMessageContainer is declared on the validating extender
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- validating extender adds it
     return this.getOverlayContainerIfNeeded($cell) ?? super.getValidationMessageContainer($cell);
   }
 
   protected getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
-    // @ts-expect-error
+    // @ts-expect-error getRevertButtonContainer is declared on the validating extender
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- validating extender adds it
     return this.getOverlayContainerIfNeeded($cell) ?? super.getRevertButtonContainer($cell);
   }
 
   protected overlayPositionedHandler(e, isOverlayVisible: boolean): void {
     const columnHeaders = this.getView('columnHeadersView') as StickyColumnHeadersView;
     const hasStickyColumns = columnHeaders.hasStickyColumns();
-    // @ts-expect-error
+    // @ts-expect-error overlayPositionedHandler is declared on the validating extender
     super.overlayPositionedHandler(e, isOverlayVisible);
 
     if (hasStickyColumns) {
@@ -858,7 +860,7 @@ const editorFactory = (
             this.addWidgetPrefix.bind(this),
           );
 
-        // @ts-expect-error
+        // @ts-expect-error getOverlayBaseZIndex is declared on the validating extender
         $wrapper.css('zIndex', isOutsideVisibleArea ? 1 : this?.getOverlayBaseZIndex() ?? 0);
       }
     }
@@ -868,15 +870,13 @@ const editorFactory = (
     if (!isHideBorder) {
       const isFixedCell = GridCoreStickyColumnsDom
         .isFixedCell($element, this.addWidgetPrefix.bind(this));
-      // @ts-expect-error renderFocusOverlay creates the focus overlay first
-      this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, isFixedCell);
+      this._$focusOverlay?.toggleClass(CLASSES.focusedFixedElement, isFixedCell);
       const isGroupElement = isGroupRowElement($element);
       const isGroupFooterRowElement = isGroupFooterRow($element);
       const isAdaptiveElement = isAdaptiveItem($element);
 
       if (isFixedCell || isGroupElement || isGroupFooterRowElement || isAdaptiveElement) {
-        // @ts-expect-error renderFocusOverlay creates the focus overlay first
-        this._$focusOverlay.toggleClass(CLASSES.focusedFixedElement, true);
+        this._$focusOverlay?.toggleClass(CLASSES.focusedFixedElement, true);
       }
     }
 
@@ -895,7 +895,7 @@ const resizing = (
     const result = super.resize();
     const hasStickyColumns = this._columnHeadersView.hasStickyColumns();
 
-    // @ts-expect-error Resizing's method
+    // @ts-expect-error hasResizeTimeout is declared on the virtual scrolling extender
     if (hasStickyColumns && this?.hasResizeTimeout()) {
       this._rowsView.setStickyOffsets();
     }
