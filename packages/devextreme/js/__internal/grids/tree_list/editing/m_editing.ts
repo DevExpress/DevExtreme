@@ -13,6 +13,7 @@ import errors from '@js/ui/widget/ui.errors';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { DATA_CHANGE_TYPE } from '@ts/grids/grid_core/editing/const';
+import type { EditingRowsViewExtension } from '@ts/grids/grid_core/editing/editing';
 import { editingModule } from '@ts/grids/grid_core/editing/editing';
 import type { EditingDataControllerExtension } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
 import { editingDataControllerExtender } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
@@ -33,6 +34,12 @@ import treeListCore from '../core';
 import type { TreeListDataController } from '../data_controller/data_controller';
 import type { TreeListDataSourceController } from '../data_source/data_source_controller';
 import type { TreeListEditingDefaultOptions } from './types';
+
+const isExpandIconTarget = ($target: dxElementWrapper): boolean => !!$target
+  .closest(`.${ROWS_CLASSES.expandIconContainer}`).length;
+
+const isSelectCheckboxTarget = ($target: dxElementWrapper): boolean => !!$target
+  .closest(`.${SELECT_CHECKBOX_CLASS}`).length;
 
 class EditingController extends editingModule.controllers.editing {
   protected declare _dataController: TreeListDataController;
@@ -197,10 +204,8 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _needToCloseEditableCell($targetElement: dxElementWrapper): boolean | undefined {
-    const isExpandIconTarget = !!$targetElement.closest(`.${ROWS_CLASSES.expandIconContainer}`).length;
-
     return !!super._needToCloseEditableCell($targetElement)
-      || (isExpandIconTarget && this.isEditing());
+      || (isExpandIconTarget($targetElement) && this.isEditing());
   }
 
   protected getButtonLocalizationNames(): Partial<Record<string, string>> {
@@ -213,7 +218,9 @@ class EditingController extends editingModule.controllers.editing {
 
 const rowsView = (
   Base: ModuleType<TreeListRowsView>,
-): ModuleType<TreeListRowsView> => class TreeListEditingRowsViewExtender
+): ModuleType<
+  TreeListRowsView & EditingRowsViewExtension
+> => class TreeListEditingRowsViewExtender
   extends editingModule.extenders.views.rowsView(Base) {
   protected _renderCellCommandContent(
     $container: dxElementWrapper,
@@ -230,42 +237,23 @@ const rowsView = (
     return false;
   }
 
-  private validateClick(e: ViewRowEvent): boolean {
-    const $targetElement = $(e.event.target);
-    const originalClickHandler = e.event.type === 'dxdblclick' ? super._rowDblClick : super._rowClick;
-
-    if ($targetElement.closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
-      return false;
-    }
-
-    return !this.needToCallOriginalClickHandler(e, originalClickHandler);
+  public handleRowClickByEditing(e: ViewRowEvent): boolean {
+    return !isExpandIconTarget($(e.event.target)) && super.handleRowClickByEditing(e);
   }
 
-  private needToCallOriginalClickHandler(
-    e: ViewRowEvent,
-    originalClickHandler: (e: ViewRowEvent) => void,
-  ): boolean {
-    const $targetElement = $(e.event.target);
-
-    if (!$targetElement.closest(`.${ROWS_CLASSES.expandIconContainer}`).length) {
-      originalClickHandler.call(this, e);
-      return true;
-    }
-
-    return false;
+  public handleRowDblClickByEditing(e: ViewRowEvent): boolean {
+    return !isExpandIconTarget($(e.event.target)) && super.handleRowDblClickByEditing(e);
   }
 
   protected _rowClick(e: ViewRowEvent): void {
-    if (this.validateClick(e)) {
-      // @ts-expect-error _rowClickTreeListHack() is added by the editing rows view extender
-      super._rowClickTreeListHack(e);
+    if (!isSelectCheckboxTarget($(e.event.target))) {
+      super._rowClick(e);
     }
   }
 
   protected _rowDblClick(e: ViewRowEvent): void {
-    if (this.validateClick(e)) {
-      // @ts-expect-error _rowDblClickTreeListHack() is added by the editing rows view extender
-      super._rowDblClickTreeListHack(e);
+    if (!isSelectCheckboxTarget($(e.event.target))) {
+      super._rowDblClick(e);
     }
   }
 };

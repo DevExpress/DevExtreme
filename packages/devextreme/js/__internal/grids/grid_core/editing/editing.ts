@@ -2817,9 +2817,19 @@ export class EditingController extends modules.ViewController {
   }
 }
 
+export interface EditingRowsViewExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  handleRowClickByEditing(e: ViewRowEvent): boolean;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  handleRowDblClickByEditing(e: ViewRowEvent): boolean;
+}
+
 const rowsView = <TBase extends ModuleType<RowsView>>(
   Base: TBase,
-): TBase => class RowsViewEditingExtender extends Base {
+): TBase & ModuleType<
+  RowsView & EditingRowsViewExtension
+> => class RowsViewEditingExtender extends Base {
   /** @architectureLeak editingCellBased: a click on a cell starts and closes cell editing */
   public _editingController!: CellBasedEditingController;
 
@@ -2949,26 +2959,32 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
     });
   }
 
-  private _rowClickTreeListHack(e: ViewRowEvent): void {
-    super._rowClick(e);
-  }
-
-  protected _rowClick(e: ViewRowEvent): void {
+  /**
+   * @extended: TreeList's editing
+   */
+  public handleRowClickByEditing(e: ViewRowEvent): boolean {
     const isEditForm = $(e.rowElement).hasClass(this.addWidgetPrefix(CLASSES.editForm));
 
     e.event[TARGET_COMPONENT_NAME] = this.component;
 
-    if (!this._editCellByClick(e, 'click') && !isEditForm) {
+    return !!this._editCellByClick(e, 'click') || isEditForm;
+  }
+
+  protected _rowClick(e: ViewRowEvent): void {
+    if (!this.handleRowClickByEditing(e)) {
       super._rowClick(e);
     }
   }
 
-  private _rowDblClickTreeListHack(e: ViewRowEvent): void {
-    super._rowDblClick(e);
+  /**
+   * @extended: TreeList's editing
+   */
+  public handleRowDblClickByEditing(e: ViewRowEvent): boolean {
+    return !!this._editCellByClick(e, 'dblClick');
   }
 
   protected _rowDblClick(e: ViewRowEvent): void {
-    if (!this._editCellByClick(e, 'dblClick')) {
+    if (!this.handleRowDblClickByEditing(e)) {
       super._rowDblClick(e);
     }
   }
