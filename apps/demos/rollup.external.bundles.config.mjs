@@ -21,7 +21,7 @@ const plugins = [
 
 export default [
   {
-    input: NG_BASE_DIR + `openai/index.js`,
+    input: NG_BASE_DIR + `openai/index.mjs`,
     output: {
       file: OUTPUT_DIR + `openai.bundle.js`,
       format: 'umd',
