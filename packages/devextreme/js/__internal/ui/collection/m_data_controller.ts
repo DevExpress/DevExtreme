@@ -1,11 +1,16 @@
 import { noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
+import type Store from '@ts/data/abstract_store';
+import type { StoreKey } from '@ts/data/abstract_store';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { DataSourceEventName, StoreLoadOptions } from '@ts/data/data_source/types';
 
 const DataControllerMock = {
-  load: () => Deferred().reject(),
-  loadSingle: () => Deferred().reject(),
-  loadFromStore: () => Deferred().reject(),
-  loadNextPage: () => Deferred().reject(),
+  load: (): DeferredObj<unknown> => Deferred().reject(),
+  loadSingle: (): DeferredObj<unknown> => Deferred().reject(),
+  loadFromStore: (): DeferredObj<unknown> => Deferred().reject(),
+  loadNextPage: (): DeferredObj<unknown> => Deferred().reject(),
   loadOptions: noop,
   userData: noop,
   cancel: noop,
@@ -37,104 +42,113 @@ const DataControllerMock = {
 };
 
 class DataController {
-  _dataSource: any;
+  private readonly _dataSource!: DataSource;
 
-  constructor(dataSource) {
+  constructor(dataSource: DataSource | null | undefined) {
     if (!dataSource) {
-      // @ts-expect-error
+      // @ts-expect-error the mock has the same methods, all of them no-ops
       // eslint-disable-next-line no-constructor-return
       return DataControllerMock;
     }
     this._dataSource = dataSource;
   }
 
-  load() {
+  load(): DeferredObj<unknown> {
     return this._dataSource.load();
   }
 
-  loadSingle(propName, propValue) {
+  loadSingle(propName: unknown, propValue?: unknown): DeferredObj<unknown> {
     if (arguments.length < 2) {
-      propValue = propName;
-      propName = this.key();
+      return this._dataSource.loadSingle(this.key(), propName);
     }
 
     return this._dataSource.loadSingle(propName, propValue);
   }
 
-  loadFromStore(loadOptions) {
+  loadFromStore(loadOptions?: StoreLoadOptions): DeferredObj<unknown[]> {
     return this.store().load(loadOptions);
   }
 
-  loadNextPage() {
+  loadNextPage(): DeferredObj<unknown> {
     this.pageIndex(1 + this.pageIndex());
 
     return this.load();
   }
 
-  loadOptions() {
+  loadOptions(): StoreLoadOptions {
     return this._dataSource.loadOptions();
   }
 
-  userData() {
+  userData(): Record<string, unknown> {
     return this._dataSource._userData;
   }
 
-  cancel(operationId) {
+  cancel(operationId: number): void {
     this._dataSource.cancel(operationId);
   }
 
-  cancelAll() {
+  cancelAll(): void {
     this._dataSource.cancelAll();
   }
 
-  filter(filter) {
+  filter(filter?: undefined): StoreLoadOptions['filter'];
+  filter(filter: NonNullable<StoreLoadOptions['filter']>): void;
+  filter(filter?: StoreLoadOptions['filter']): StoreLoadOptions['filter'] {
     return this._dataSource.filter(filter);
   }
 
-  addSearchFilter(storeLoadOptions) {
+  addSearchFilter(storeLoadOptions: StoreLoadOptions): void {
     this._dataSource._addSearchFilter(storeLoadOptions);
   }
 
-  group(group?) {
+  group(group?: undefined): StoreLoadOptions['group'];
+  group(group: NonNullable<StoreLoadOptions['group']>): void;
+  group(group?: StoreLoadOptions['group']): StoreLoadOptions['group'] {
+    // @ts-expect-error DataSource accessors are typed without the undefined getter argument
     return this._dataSource.group(group);
   }
 
-  paginate() {
+  paginate(): boolean | undefined {
     return this._dataSource.paginate();
   }
 
-  pageSize() {
+  pageSize(): number {
     return this._dataSource._pageSize;
   }
 
-  pageIndex(pageIndex?: number) {
+  pageIndex(): number;
+  pageIndex(pageIndex: number): void;
+  pageIndex(pageIndex?: number): number | undefined {
+    // @ts-expect-error DataSource accessors are typed without the undefined getter argument
     return this._dataSource.pageIndex(pageIndex);
   }
 
-  resetDataSourcePageIndex() {
+  resetDataSourcePageIndex(): void {
     if (this.pageIndex()) {
       this.pageIndex(0);
       this.load();
     }
   }
 
-  totalCount() {
+  totalCount(): number {
     return this._dataSource.totalCount();
   }
 
-  isLastPage() {
+  isLastPage(): boolean {
     return this._dataSource.isLastPage() || !this._dataSource._pageSize;
   }
 
-  isLoading() {
+  isLoading(): boolean {
     return this._dataSource.isLoading();
   }
 
-  isLoaded() {
+  isLoaded(): boolean {
     return this._dataSource.isLoaded();
   }
 
-  searchValue(value) {
+  searchValue(): StoreLoadOptions['searchValue'];
+  searchValue(value: StoreLoadOptions['searchValue']): void;
+  searchValue(value?: StoreLoadOptions['searchValue']): StoreLoadOptions['searchValue'] {
     if (!arguments.length) {
       return this._dataSource.searchValue();
     }
@@ -142,55 +156,61 @@ class DataController {
     return this._dataSource.searchValue(value);
   }
 
-  searchOperation(operation) {
+  searchOperation(operation?: unknown): StoreLoadOptions['searchOperation'] {
+    // @ts-expect-error DataSource.searchOperation() treats a non-string argument as the getter
     return this._dataSource.searchOperation(operation);
   }
 
-  searchExpr(expr) {
+  searchExpr(): StoreLoadOptions['searchExpr'];
+  searchExpr(expr: NonNullable<StoreLoadOptions['searchExpr']>): void;
+  searchExpr(expr?: StoreLoadOptions['searchExpr']): StoreLoadOptions['searchExpr'] {
     if (!arguments.length) {
       return this._dataSource.searchExpr();
     }
 
+    // @ts-expect-error DataSource.searchExpr() is typed without an array or undefined argument
     return this._dataSource.searchExpr(expr);
   }
 
-  select() {
-    return this._dataSource.select(...arguments);
+  select(): StoreLoadOptions['select'];
+  select(...selectExpr: NonNullable<StoreLoadOptions['select']>[]): void;
+  select(...selectExpr: NonNullable<StoreLoadOptions['select']>[]): unknown {
+    return this._dataSource.select(...selectExpr);
   }
 
-  key() {
+  key(): StoreKey | undefined {
     return this._dataSource.key();
   }
 
-  keyOf(item) {
+  keyOf(item: unknown): unknown {
     return this.store().keyOf(item);
   }
 
-  store() {
+  store(): Store {
     return this._dataSource.store();
   }
 
-  items() {
+  items(): unknown[] {
     return this._dataSource.items();
   }
 
-  applyMapFunction(data) {
+  applyMapFunction(data: unknown[]): unknown[] {
     return this._dataSource._applyMapFunction(data);
   }
 
-  getDataSource() {
+  getDataSource(): DataSource | null {
     return this._dataSource || null;
   }
 
-  reload() {
+  reload(): DeferredObj<unknown> {
     return this._dataSource.reload();
   }
 
-  on(event, handler): void {
+  on(event: DataSourceEventName, handler: Function): void {
     this._dataSource.on(event, handler);
   }
 
-  off(event, handler): void {
+  off(event: DataSourceEventName, handler?: Function): void {
     this._dataSource.off(event, handler);
   }
 }
