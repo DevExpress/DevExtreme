@@ -19,6 +19,10 @@ export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
 export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 export const CHAT_MESSAGEBUBBLE_TOOLCALLS_CLASS = 'dx-chat-messagebubble-toolcalls';
 export const CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_CLASS = 'dx-chat-messagebubble-toolcall-error';
+export const CHAT_MESSAGEBUBBLE_TOOLCALLS_TITLE_CLASS = 'dx-chat-messagebubble-toolcalls-title';
+export const CHAT_MESSAGEBUBBLE_TOOLCALL_ICON_CLASS = 'dx-chat-messagebubble-toolcall-icon';
+export const CHAT_MESSAGEBUBBLE_TOOLCALL_NAME_CLASS = 'dx-chat-messagebubble-toolcall-name';
+export const CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_TAG_CLASS = 'dx-chat-messagebubble-toolcall-error-tag';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
 export const CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS = 'dx-has-image';
 export const CHAT_MESSAGEBUBBLE_IMAGE_CLASS = 'dx-chat-messagebubble-image';
@@ -93,6 +97,10 @@ class MessageBubble extends Widget<Properties> {
       return;
     }
 
+    if (toolCalls.length > 1) {
+      this._renderToolCallsTitle(toolCalls, this._$toolCalls);
+    }
+
     const items = toolCalls.map((call) => ({ title: call.name, call }));
 
     this._createComponent($('<div>').appendTo(this._$toolCalls), Accordion, {
@@ -100,10 +108,56 @@ class MessageBubble extends Widget<Properties> {
       collapsible: true,
       multiple: true,
       selectedItems: items.filter(({ call }) => call.expanded),
+      itemTitleTemplate: ({ call }: { call: ToolCall }, _: number, element: Element): void => {
+        this._renderToolCallTitle(call, element);
+      },
       itemTemplate: ({ call }: { call: ToolCall }, _: number, element: Element): void => {
         this._renderToolCallBody(call, element);
       },
     });
+  }
+
+  _renderToolCallsTitle(toolCalls: ToolCall[], $container: dxElementWrapper): void {
+    const errorCount = toolCalls.filter(({ status }) => status === 'error').length;
+    const $title = $('<div>')
+      .addClass(CHAT_MESSAGEBUBBLE_TOOLCALLS_TITLE_CLASS)
+      .appendTo($container);
+
+    $('<span>')
+      .text(messageLocalization.format('dxChat-toolCallsTitle', toolCalls.length))
+      .appendTo($title);
+
+    if (errorCount) {
+      const errorKey = errorCount === 1
+        ? 'dxChat-toolCallsErrorSingle'
+        : 'dxChat-toolCallsErrorMultiple';
+
+      this._renderToolCallErrorTag(messageLocalization.format(errorKey, errorCount), $title);
+    }
+  }
+
+  _renderToolCallTitle(call: ToolCall, container: Element): void {
+    const $container = $(container);
+
+    $('<span>')
+      .addClass(CHAT_MESSAGEBUBBLE_TOOLCALL_ICON_CLASS)
+      .appendTo($container);
+
+    $('<span>')
+      .addClass(CHAT_MESSAGEBUBBLE_TOOLCALL_NAME_CLASS)
+      .text(call.name)
+      .appendTo($container);
+
+    if (call.status === 'error') {
+      this._renderToolCallErrorTag(messageLocalization.format('dxChat-toolCallError'), $container);
+    }
+  }
+
+  _renderToolCallErrorTag(text: string, $container: dxElementWrapper): void {
+    $('<span>')
+      .addClass(CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_TAG_CLASS)
+      .text(text)
+      .appendTo($container);
   }
 
   _renderToolCallBody(call: ToolCall, container: Element): void {
