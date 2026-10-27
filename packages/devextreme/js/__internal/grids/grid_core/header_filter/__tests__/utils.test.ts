@@ -5,9 +5,10 @@ import {
   jest,
 } from '@jest/globals';
 import filterUtils from '@js/ui/shared/filtering';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import { getFormatOptions } from '../m_header_filter';
-import type { HeaderFilterGroupSelector } from '../types';
+import type { DateIntervalFormat, HeaderFilterGroupSelector } from '../types';
 import { getHeaderFilterGroupParameters } from '../utils';
 
 describe('getGroupInterval', () => {
@@ -177,21 +178,21 @@ describe('getHeaderFilterGroupParameters', () => {
 
 describe('getFormatOptions', () => {
   it('selects the interval of the requested level for a number[]', () => {
-    const column = { dataType: 'number', headerFilter: { groupInterval: [100, 10] } };
+    const column: Column = { dataType: 'number', headerFilter: { groupInterval: [100, 10] } };
 
     expect(getFormatOptions(700, column, 0).groupInterval).toBe(100);
     expect(getFormatOptions(750, column, 1).groupInterval).toBe(10);
   });
 
   it('formats a numeric bucket as a "<value> - <value + interval>" range', () => {
-    const column = { dataType: 'number', headerFilter: { groupInterval: [100, 10] } };
+    const column: Column = { dataType: 'number', headerFilter: { groupInterval: [100, 10] } };
 
-    expect(getFormatOptions(700, column, 0).getDisplayFormat()).toBe('700 - 800');
-    expect(getFormatOptions(750, column, 1).getDisplayFormat()).toBe('750 - 760');
+    expect(getFormatOptions(700, column, 0).getDisplayFormat?.('')).toBe('700 - 800');
+    expect(getFormatOptions(750, column, 1).getDisplayFormat?.('')).toBe('750 - 760');
   });
 
   it('selects the hierarchy level name for a string[]', () => {
-    const column = { dataType: 'string', headerFilter: { groupInterval: ['Country', 'State', 'City'] } };
+    const column: Column = { dataType: 'string', headerFilter: { groupInterval: ['Country', 'State', 'City'] } };
 
     expect(getFormatOptions('USA', column, 0).groupInterval).toBe('Country');
     expect(getFormatOptions('Arkansas', column, 1).groupInterval).toBe('State');
@@ -199,24 +200,24 @@ describe('getFormatOptions', () => {
   });
 
   it('selects the date interval and its format per level for a date column', () => {
-    const column = { dataType: 'date', headerFilter: { groupInterval: 'month' } };
+    const column: Column = { dataType: 'date', headerFilter: { groupInterval: 'month' } };
 
     const yearLevel = getFormatOptions(2024, column, 0);
     expect(yearLevel.groupInterval).toBe('year');
-    expect(yearLevel.format(2024)).toBe('2024');
+    expect((yearLevel.format as DateIntervalFormat)(2024)).toBe('2024');
 
     const monthLevel = getFormatOptions(3, column, 1);
     expect(monthLevel.groupInterval).toBe('month');
-    expect(monthLevel.format(3)).toBe('March');
+    expect((monthLevel.format as DateIntervalFormat)(3)).toBe('March');
   });
 
   it('selects the date interval and its format per level for a datetime column', () => {
-    const column = { dataType: 'datetime', headerFilter: { groupInterval: 'hour' } };
+    const column: Column = { dataType: 'datetime', headerFilter: { groupInterval: 'hour' } };
 
     expect(getFormatOptions(2024, column, 0).groupInterval).toBe('year');
 
     const hourLevel = getFormatOptions(14, column, 3);
     expect(hourLevel.groupInterval).toBe('hour');
-    expect(hourLevel.format(14)).toBe('14');
+    expect((hourLevel.format as DateIntervalFormat)(14)).toBe('14');
   });
 });

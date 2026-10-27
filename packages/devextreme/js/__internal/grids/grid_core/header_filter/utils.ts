@@ -7,7 +7,9 @@ import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters, isColumnExcluded } from '@ts/grids/grid_core/filter/utils';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 
-import type { EmptyDateValue, HeaderFilterGroup, HeaderFilterGroupItem } from './types';
+import type {
+  EmptyDateValue, HeaderFilterColumn, HeaderFilterGroup, HeaderFilterGroupItem,
+} from './types';
 
 export const allowHeaderFiltering = (
   column: Column,
@@ -94,7 +96,7 @@ const DATE_INTERVAL_SELECTORS = {
 };
 
 const getIntervalSelector = function getIntervalSelector(
-  this: Column & Required<Pick<Column, 'calculateCellValue'>>,
+  this: HeaderFilterColumn,
   interval: HeaderFilterGroupInterval | number,
   data: unknown,
 ): number | EmptyDateValue | null | undefined {
@@ -117,7 +119,7 @@ const getIntervalSelector = function getIntervalSelector(
 };
 
 export function getHeaderFilterGroupParameters(
-  column: Column & Required<Pick<Column, 'calculateCellValue'>>,
+  column: HeaderFilterColumn,
   remoteGrouping?: boolean,
 ): HeaderFilterGroup {
   const dataField = column.dataField || column.name;
