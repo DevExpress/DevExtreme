@@ -7,6 +7,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, setStyleAttribute, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
+  hasHorizontalScroll,
 } from '../../../helpers/domUtils';
 
 const DATEBOX_CLASS = 'dx-datebox';
@@ -19,6 +20,10 @@ fixture.disablePageReloads`DateBox_Label`
 
 test('Symbol parts in label should not be cropped', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .expect(hasHorizontalScroll(Selector('#container')))
+    .notOk();
 
   await testScreenshot(t, takeScreenshot, 'Datebox label symbols.png', { element: '#container' });
 
