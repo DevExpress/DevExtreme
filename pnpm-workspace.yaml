@@ -139,6 +139,7 @@ allowBuilds:
 
 patchedDependencies:
   testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
+  testcafe@3.7.5: patches/testcafe@3.7.5.patch
 
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
