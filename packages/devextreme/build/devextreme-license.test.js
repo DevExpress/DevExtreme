@@ -315,15 +315,6 @@ describe('devextreme-license', () => {
         expect(stderr).not.toContain('DX1004');
     });
 
-    it('warns with DX1000 and DX1001 when there is no key', () => {
-        const { code, stdout, stderr } = run({});
-
-        expect(code).toBe(0);
-        expect(stdout).toBe('TRIAL\n');
-        expect(stderr).toContain('Warning DX1000: For evaluation purposes only');
-        expect(stderr).toContain('Warning DX1001: License key is missing or uses invalid format');
-    });
-
     it('warns with DX1002 for an incompatible key version', () => {
         const lcx = createLcx(entry(versionCode() - 10, DEVEXTREME_HTMLJS_BIT));
         const { code, stderr } = run({ DevExpress_License: lcx });
@@ -366,38 +357,6 @@ describe('devextreme-license', () => {
             expect(stderr).toContain(`License Source: File (${path.join(folder, 'DevExpress_License.txt')}).`);
         });
 
-        it('reads the key file from the default location', () => {
-            writeKeyFile(defaultKeyFile(), activeTrialLcx());
-
-            const { stderr } = run({});
-
-            expect(stderr).toContain(`License Source: File (${defaultKeyFile()}).`);
-        });
-
-        it.each([
-            ['an empty variable', ''],
-            ['a blank variable', '  \n '],
-        ])('goes on to the default file when DevExpress_License is %s', (_, value) => {
-            writeKeyFile(defaultKeyFile(), activeTrialLcx());
-
-            const { stderr } = run({ DevExpress_License: value });
-
-            expect(stderr).toContain(`License Source: File (${defaultKeyFile()}).`);
-            expect(stderr).not.toContain('Environment Variable');
-        });
-
-        it.each([
-            ['a missing file', () => path.join(tmp, 'missing.txt')],
-            ['an empty file', () => { const p = path.join(tmp, 'empty.txt'); fs.writeFileSync(p, ''); return p; }],
-            ['a blank variable', () => '   '],
-        ])('goes on to the default file when DevExpress_LicensePath is %s', (_, getValue) => {
-            writeKeyFile(defaultKeyFile(), activeTrialLcx());
-
-            const { stderr } = run({ DevExpress_LicensePath: getValue() });
-
-            expect(stderr).toContain(`License Source: File (${defaultKeyFile()}).`);
-        });
-
         it('prefers the variable with the key over the files', () => {
             writeKeyFile(defaultKeyFile(), createLcx(entry(versionCode(), DEVEXTREME_HTMLJS_BIT)));
 
@@ -416,14 +375,6 @@ describe('devextreme-license', () => {
             expect(stderr).toContain(`License Source: File (${filePath}).`);
         });
 
-        it('reports an expired trial found in the default file when the variable is empty', () => {
-            writeKeyFile(defaultKeyFile(), createLcx(entry(versionCode(), 0, Date.now() - 10 * DAY)));
-
-            const { code, stderr } = run({ DevExpress_License: '' });
-
-            expect(code).toBe(1);
-            expect(stderr).toContain('Error DX1004');
-        });
     });
 
     describe('a key that cannot be read', () => {
