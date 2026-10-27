@@ -43,14 +43,10 @@ function App() {
   const [useAggregation, setUseAggregation] = useState(true);
   const [currentFunction, setCurrentFunction] = useState('avg');
   const updateAggregationUsage = useCallback(({ value }) => {
-    if (value !== undefined) {
-      setUseAggregation(value);
-    }
+    setUseAggregation((previous) => value ?? previous);
   }, []);
   const updateMethod = useCallback(({ value }) => {
-    if (value !== undefined) {
-      setCurrentFunction(value);
-    }
+    setCurrentFunction((previous) => value ?? previous);
   }, []);
   return (
     <div id="chart-demo">

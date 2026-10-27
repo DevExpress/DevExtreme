@@ -49,14 +49,10 @@ function App() {
   const [useAggregation, setUseAggregation] = useState(true);
   const [currentFunction, setCurrentFunction] = useState<ChartTypes.ChartSeriesAggregationMethod>('avg');
   const updateAggregationUsage = useCallback(({ value }: { value?: boolean }) => {
-    if (value !== undefined) {
-      setUseAggregation(value);
-    }
+    setUseAggregation((previous) => value ?? previous);
   }, []);
   const updateMethod = useCallback(({ value }: { value?: ChartTypes.ChartSeriesAggregationMethod }) => {
-    if (value !== undefined) {
-      setCurrentFunction(value);
-    }
+    setCurrentFunction((previous) => value ?? previous);
   }, []);
 
   return (

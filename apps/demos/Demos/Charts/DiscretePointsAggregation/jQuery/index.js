@@ -59,11 +59,11 @@ $(() => {
     value: true,
     onValueChanged({ value }) {
       chart.option('commonSeriesSettings.aggregation.enabled', value);
-      methodSelector.option('disabled', !value);
+      aggregationMethodSelectBox.option('disabled', !value);
     },
   });
 
-  const methodSelector = $('#aggregateFunctionSelector').dxSelectBox({
+  const aggregationMethodSelectBox = $('#aggregateFunctionSelector').dxSelectBox({
     items: aggregationFunctions,
     value: 'avg',
     valueExpr: 'func',
