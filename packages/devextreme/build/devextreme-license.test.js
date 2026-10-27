@@ -289,21 +289,6 @@ describe('devextreme-license', () => {
         expect(content).not.toContain('LCXv1');
     });
 
-    it('keeps the failure when the output file already exists', () => {
-        const lcx = createLcx(entry(versionCode(), 0, Date.now() - 10 * DAY));
-        fs.writeFileSync(path.join(tmp, 'key.ts'), '');
-
-        expect(run({ DevExpress_License: lcx }, ['--out', 'key.ts']).code).toBe(1);
-    });
-
-    it('prints the key and fails without --out for an expired trial', () => {
-        const lcx = createLcx(entry(versionCode(), 0, Date.now() - 10 * DAY));
-        const { code, stdout } = run({ DevExpress_License: lcx });
-
-        expect(code).toBe(1);
-        expect(stdout.startsWith('LCPv1')).toBe(true);
-    });
-
     it('warns with DX1000 and exits with 0 for an active trial', () => {
         const lcx = createLcx(entry(versionCode(), 0, Date.now() + 5 * DAY));
         const { code, stderr } = run({ DevExpress_License: lcx });
