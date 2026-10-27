@@ -19,6 +19,7 @@ jobs:
   check-should-run:
     name: Check if tests should run
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
       styles-changed: ${{ steps.changes.outputs.styles }}
@@ -46,7 +47,7 @@ jobs:
     if: needs.check-should-run.outputs.should-run == 'true'
 
     runs-on: devextreme-shr2
-    timeout-minutes: 15
+    timeout-minutes: 14
 
     steps:
     - name: Get sources
@@ -113,6 +114,7 @@ jobs:
 
   determine-playwright-matrix:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     name: Determine Playwright matrix
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
@@ -196,7 +198,7 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-playwright-matrix.outputs.matrix) }}
     runs-on: devextreme-shr2
-    timeout-minutes: 45
+    timeout-minutes: 10
 
     steps:
     - name: Get sources
@@ -282,6 +284,7 @@ jobs:
 
   merge-artifacts:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     needs: [playwright]
     if: ${{ always() }}
 
