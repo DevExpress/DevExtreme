@@ -20,6 +20,9 @@ const POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title';
 const POPOVER_TITLE_CLASS = 'dx-popup-title';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const POPUP_CLOSE_BUTTON_CLASS = 'dx-closebutton';
+const TOOLBAR_CLASS = 'dx-toolbar';
+const BUTTON_CLASS = 'dx-button';
 
 const positionAtWindowCenter = function(element) {
     positionUtils.setup(element, {
@@ -3316,9 +3319,6 @@ QUnit.module('accessibility', {
     });
 
     QUnit.module('shown popover with focusable toolbar elements', () => {
-        const POPUP_CLOSE_BUTTON_CLASS = 'dx-closebutton';
-        const TOOLBAR_BUTTON_SELECTOR = '.dx-toolbar .dx-button';
-
         const createShownPopover = (options) => new Popover($('#what'), $.extend({
             target: '#where',
             visible: true,
@@ -3350,7 +3350,7 @@ QUnit.module('accessibility', {
 
             popover.option('toolbarItems', [{ widget: 'dxButton', options: { text: 'OK' } }]);
 
-            const $button = popover.$overlayContent().find(TOOLBAR_BUTTON_SELECTOR);
+            const $button = popover.$overlayContent().find(`.${TOOLBAR_CLASS} .${BUTTON_CLASS}`);
 
             assert.strictEqual(popover.$overlayContent().attr('role'), 'dialog', 'overlay content role is dialog');
             assert.strictEqual($button.length, 1, 'toolbar button is rendered');
