@@ -14,7 +14,7 @@ index 9b9f577..591cb7c 100644
      isNativeAutomation ? ['--disable-popup-blocking'] : [], platformArgs ? [platformArgs] : [], defaultArgs)
          .join(' ');
 diff --git a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js
-index a20320b..70ebef7 100644
+index a20320b..1230ab5 100644
 --- a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js
 +++ b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js
 @@ -14,6 +14,7 @@ const pretty_hrtime_1 = __importDefault(require("pretty-hrtime"));
@@ -33,7 +33,7 @@ index a20320b..70ebef7 100644
  const SCREENCAST_OPTIONS = {
      format: 'jpeg',
      everyNthFrame: 1,
-@@ -56,8 +58,34 @@ class BrowserClient {
+@@ -56,13 +58,55 @@ class BrowserClient {
              this._runtimeInfo.providerMethods.reportWarning(warning_message_1.default.browserProviderDropOfPerformance, this._runtimeInfo.browserName);
          }
      }
@@ -52,9 +52,23 @@ index a20320b..70ebef7 100644
 +                });
 +        };
 +    }
++    async _describePageState() {
++        try {
++            const target = await (0, utils_1.getActiveTab)(this._port, this._runtimeInfo.activeWindowId);
++            const probe = await (0, chrome_remote_interface_1.default)({ target, port: this._port });
++            const expression = '[document.visibilityState, document.hidden, document.hasFocus(), innerWidth + "x" + innerHeight, document.readyState, location.href.slice(0, 120)].join(" ")';
++            const result = await (0, time_limit_promise_1.default)(probe.Runtime.evaluate({ expression, returnByValue: true }), 5000, { rejectWith: new Error('probe timed out') });
++            await probe.close();
++            return result.result.value;
++        }
++        catch (error) {
++            return `page state unavailable: ${error.message}`;
++        }
++    }
 +    _dropClient(client, cacheKey, reason) {
 +        console.warn(`[testcafe] ${reason}; the CDP client is dropped and will be reconnected on the next call`);
 +        this.debugLogger(reason);
++        this._describePageState().then(state => console.warn(`[testcafe] page state after the timeout (browser ${this._runtimeInfo.browserId}): ${state}`));
 +        const info = this._clients[cacheKey];
 +        if (info && info.client === client)
 +            delete this._clients[cacheKey];
@@ -68,6 +82,13 @@ index a20320b..70ebef7 100644
          const { Page, Network, Runtime } = client;
          this._clients[cacheKey] = new ProtocolApiInfo(client);
          await (0, guard_time_execution_1.default)(async () => await Page.enable(), elapsedTime => this._checkDropOfPerformance(elapsed_upperbounds_1.CheckedCDPMethod.PageEnable, elapsedTime));
+         await Network.enable({});
+         await Runtime.enable();
++        // A tab that is not in the foreground produces no frames, and Page.captureScreenshot then never answers.
++        await Page.bringToFront();
+         return client;
+     }
+     async _setupClient(client) {
 diff --git a/lib/browser/provider/built-in/dedicated/chrome/index.js b/lib/browser/provider/built-in/dedicated/chrome/index.js
 index b12bb9e..fc4e63a 100644
 --- a/lib/browser/provider/built-in/dedicated/chrome/index.js
