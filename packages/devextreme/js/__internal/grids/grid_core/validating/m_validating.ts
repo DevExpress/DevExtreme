@@ -924,12 +924,12 @@ export const validatingEditingExtender = (
    * @param item Data item
    * @returns A deferred object that resolves to a boolean or just a boolean to determine whether to cancel cell editing
    */
-  public override _beforeEditCell(
+  public override beforeEditCell(
     rowIndex: number,
     columnIndex: number,
     item: ProcessedItem,
   ): DeferredObj<boolean> | boolean {
-    const result = super._beforeEditCell(rowIndex, columnIndex, item);
+    const result = super.beforeEditCell(rowIndex, columnIndex, item);
 
     if (this.getEditMode() === EDIT_MODE.cell) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);

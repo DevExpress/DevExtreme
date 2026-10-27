@@ -122,6 +122,7 @@ import type {
   EditingDefaultOptions,
   EditingModuleOptionChanged,
   EditingOptions,
+  EditingRowsViewExtension,
   EditingStartOptions,
   EditorCellOptions,
   EditorTemplate,
@@ -2800,14 +2801,6 @@ export class EditingController extends modules.ViewController {
 
     return cellModified && parameters.column.setCellValue && !isEditedInRowMode;
   }
-}
-
-export interface EditingRowsViewExtension {
-  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  handleRowClickByEditing(e: ViewRowEvent): boolean;
-
-  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  handleRowDblClickByEditing(e: ViewRowEvent): boolean;
 }
 
 const rowsView = <TBase extends ModuleType<RowsView>>(

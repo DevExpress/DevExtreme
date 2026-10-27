@@ -62,7 +62,7 @@ export interface CellBasedEditingControllerExtension {
   beforeCloseEditCell(rowIndices: number[]): void;
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  _beforeEditCell(
+  beforeEditCell(
     rowIndex: number,
     columnIndex: number,
     item: ProcessedItem,
@@ -320,7 +320,7 @@ const editingControllerExtender = (
         return true;
       }
 
-      return when(this._beforeEditCell(rowIndex, columnIndex, item)).done((cancel) => {
+      return when(this.beforeEditCell(rowIndex, columnIndex, item)).done((cancel) => {
         if (cancel) {
           return;
         }
@@ -337,7 +337,7 @@ const editingControllerExtender = (
    * @extended: validating
    * @returns whether to cancel cell editing
    */
-  public _beforeEditCell(
+  public beforeEditCell(
     rowIndex: number,
     columnIndex: number,
     item: ProcessedItem,

@@ -13,13 +13,13 @@ import errors from '@js/ui/widget/ui.errors';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { DATA_CHANGE_TYPE } from '@ts/grids/grid_core/editing/const';
-import type { EditingRowsViewExtension } from '@ts/grids/grid_core/editing/editing';
 import { editingModule } from '@ts/grids/grid_core/editing/editing';
 import type { EditingDataControllerExtension } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
 import { editingDataControllerExtender } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
 import type {
   EditActionOptions,
   EditingChange,
+  EditingRowsViewExtension,
   EditorCellOptions,
   InternalColumnButton,
 } from '@ts/grids/grid_core/editing/types';

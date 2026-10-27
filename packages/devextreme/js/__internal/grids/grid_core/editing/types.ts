@@ -15,7 +15,7 @@ import type {
   InternalGrid, OptionChanged, OptionChangedFor, RowKey,
 } from '../types';
 import type {
-  CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRow,
+  CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRow, ViewRowEvent,
 } from '../views/types';
 import type {
   EDITING_CHANGES_OPTION_NAME, EDITING_EDITCOLUMNNAME_OPTION_NAME, INSERT_INDEX,
@@ -226,3 +226,11 @@ export interface EditingModuleOptions {
 export type EditingDefaultOptions = { editing: EditingOptions } & EditingModuleOptions;
 
 export type EditingModuleOptionChanged = OptionChanged | OptionChangedFor<EditingModuleOptions>;
+
+export interface EditingRowsViewExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  handleRowClickByEditing(e: ViewRowEvent): boolean;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  handleRowDblClickByEditing(e: ViewRowEvent): boolean;
+}
