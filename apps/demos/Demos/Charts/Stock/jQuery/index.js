@@ -3,14 +3,17 @@ $(() => {
 
   const panStepFraction = 0.25;
   const zoomFactor = 0.75;
-  const minVisibleSpanMs = 3 * dayMs;
+  const minVisualRangeLength = { days: 3 };
+  const minVisibleSpanMs = minVisualRangeLength.days * dayMs;
 
-  const initialStart = new Date(1994, 3, 14, 12);
   const initialEnd = new Date(1994, 3, 29, 12);
 
   const data = generateStockData(new Date(1994, 3, 1), 65);
   const dataMin = data[0].date.getTime();
   const dataMax = data[data.length - 1].date.getTime();
+  const rangeMin = dataMin - dayMs / 2;
+  const rangeMax = dataMax + dayMs / 2;
+  const initialStart = new Date(rangeMin);
 
   const chart = $('#chart').dxChart({
     title: 'Stock Price',
@@ -38,7 +41,7 @@ $(() => {
       label: { format: { type: 'currency', precision: 0 } },
     },
     argumentAxis: {
-      minVisualRangeLength: { days: 3 },
+      minVisualRangeLength,
       visualRange: { startValue: initialStart, endValue: initialEnd },
       label: {
         format: 'MMM dd',
@@ -50,15 +53,16 @@ $(() => {
     tooltip: {
       enabled: true,
       location: 'edge',
+      format: { type: 'currency', precision: 2 },
       customizeTooltip({
-        openValue, closeValue, highValue, lowValue,
+        openValueText, closeValueText, highValueText, lowValueText,
       }) {
         return {
           text: [
-            `Open: $${openValue}`,
-            `Close: $${closeValue}`,
-            `High: $${highValue}`,
-            `Low: $${lowValue}`,
+            `Open: ${openValueText}`,
+            `Close: ${closeValueText}`,
+            `High: ${highValueText}`,
+            `Low: ${lowValueText}`,
           ].join('<br/>'),
         };
       },
@@ -75,9 +79,9 @@ $(() => {
   }
 
   function setRange(start, end) {
-    const span = clamp(end - start, minVisibleSpanMs, dataMax - dataMin);
+    const span = clamp(end - start, minVisibleSpanMs, rangeMax - rangeMin);
     const center = (start + end) / 2;
-    const newStart = clamp(center - span / 2, dataMin, dataMax - span);
+    const newStart = clamp(center - span / 2, rangeMin, rangeMax - span);
 
     chart.getArgumentAxis().visualRange({
       startValue: new Date(newStart),
@@ -110,6 +114,7 @@ $(() => {
         options: {
           icon: 'chevronleft',
           hint: 'Pan Left',
+          elementAttr: { 'aria-label': 'Pan Left' },
           onClick: () => pan(-1),
         },
       },
@@ -119,6 +124,7 @@ $(() => {
         options: {
           icon: 'chevronright',
           hint: 'Pan Right',
+          elementAttr: { 'aria-label': 'Pan Right' },
           onClick: () => pan(1),
         },
       },
@@ -128,6 +134,7 @@ $(() => {
         options: {
           icon: 'plus',
           hint: 'Zoom In',
+          elementAttr: { 'aria-label': 'Zoom In' },
           onClick: () => zoom(zoomFactor),
         },
       },
@@ -137,6 +144,7 @@ $(() => {
         options: {
           icon: 'minus',
           hint: 'Zoom Out',
+          elementAttr: { 'aria-label': 'Zoom Out' },
           onClick: () => zoom(1 / zoomFactor),
         },
       },
@@ -146,6 +154,7 @@ $(() => {
         options: {
           icon: 'refresh',
           hint: 'Reset Zoom',
+          elementAttr: { 'aria-label': 'Reset Zoom' },
           onClick: resetZoom,
         },
       },

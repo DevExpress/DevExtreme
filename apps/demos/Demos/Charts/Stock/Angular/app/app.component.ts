@@ -15,7 +15,8 @@ if (!/localhost/.test(document.location.host)) {
 const dayMs = 24 * 60 * 60 * 1000;
 const panStepFraction = 0.25;
 const zoomFactor = 0.75;
-const minVisibleSpanMs = 3 * dayMs;
+const minVisualRangeLength = { days: 3 };
+const minVisibleSpanMs = minVisualRangeLength.days * dayMs;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -32,48 +33,56 @@ function clamp(value: number, min: number, max: number): number {
   ],
 })
 export class AppComponent {
+  minVisualRange = minVisualRangeLength;
+
   stockPrices: StockPrice[];
 
-  initialStart = new Date(1994, 3, 14, 12);
+  initialStart: Date;
 
   initialEnd = new Date(1994, 3, 29, 12);
 
-  visualRange: VisualRange = {
-    startValue: this.initialStart,
-    endValue: this.initialEnd,
-  };
+  visualRange: VisualRange;
 
   dataMin: number;
 
   dataMax: number;
 
+  rangeMin: number;
+
+  rangeMax: number;
+
   panLeftButtonOptions: DxButtonTypes.Properties = {
     icon: 'chevronleft',
     hint: 'Pan Left',
+    elementAttr: { 'aria-label': 'Pan Left' },
     onClick: () => this.pan(-1),
   };
 
   panRightButtonOptions: DxButtonTypes.Properties = {
     icon: 'chevronright',
     hint: 'Pan Right',
+    elementAttr: { 'aria-label': 'Pan Right' },
     onClick: () => this.pan(1),
   };
 
   zoomInButtonOptions: DxButtonTypes.Properties = {
     icon: 'plus',
     hint: 'Zoom In',
+    elementAttr: { 'aria-label': 'Zoom In' },
     onClick: () => this.zoom(zoomFactor),
   };
 
   zoomOutButtonOptions: DxButtonTypes.Properties = {
     icon: 'minus',
     hint: 'Zoom Out',
+    elementAttr: { 'aria-label': 'Zoom Out' },
     onClick: () => this.zoom(1 / zoomFactor),
   };
 
   resetZoomButtonOptions: DxButtonTypes.Properties = {
     icon: 'refresh',
     hint: 'Reset Zoom',
+    elementAttr: { 'aria-label': 'Reset Zoom' },
     onClick: () => this.resetZoom(),
   };
 
@@ -81,6 +90,13 @@ export class AppComponent {
     this.stockPrices = service.getStockPrices();
     this.dataMin = this.stockPrices[0].date.getTime();
     this.dataMax = this.stockPrices[this.stockPrices.length - 1].date.getTime();
+    this.rangeMin = this.dataMin - dayMs / 2;
+    this.rangeMax = this.dataMax + dayMs / 2;
+    this.initialStart = new Date(this.rangeMin);
+    this.visualRange = {
+      startValue: this.initialStart,
+      endValue: this.initialEnd,
+    };
   }
 
   getRange() {
@@ -91,9 +107,9 @@ export class AppComponent {
   }
 
   setRange(start: number, end: number) {
-    const span = clamp(end - start, minVisibleSpanMs, this.dataMax - this.dataMin);
+    const span = clamp(end - start, minVisibleSpanMs, this.rangeMax - this.rangeMin);
     const center = (start + end) / 2;
-    const newStart = clamp(center - span / 2, this.dataMin, this.dataMax - span);
+    const newStart = clamp(center - span / 2, this.rangeMin, this.rangeMax - span);
 
     this.visualRange = {
       startValue: new Date(newStart),
@@ -124,10 +140,10 @@ export class AppComponent {
       return { text: '' };
     }
     return {
-      text: `Open: $${arg.openValue}<br/>`
-                + `Close: $${arg.closeValue}<br/>`
-                + `High: $${arg.highValue}<br/>`
-                + `Low: $${arg.lowValue}<br/>`,
+      text: `Open: ${arg.openValueText}<br/>`
+                + `Close: ${arg.closeValueText}<br/>`
+                + `High: ${arg.highValueText}<br/>`
+                + `Low: ${arg.lowValueText}<br/>`,
     };
   }
 }

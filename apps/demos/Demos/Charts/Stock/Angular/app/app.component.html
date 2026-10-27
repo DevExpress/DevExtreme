@@ -64,7 +64,7 @@
   </dxi-chart-value-axis>
   <dxo-chart-argument-axis
     [(visualRange)]="visualRange"
-    [minVisualRangeLength]="{ days: 3 }"
+    [minVisualRangeLength]="minVisualRange"
   >
     <dxo-chart-label
       format="MMM dd"
@@ -75,6 +75,7 @@
   <dxo-chart-export [enabled]="true"></dxo-chart-export>
   <dxo-chart-tooltip
     [enabled]="true"
+    [format]="{ type: 'currency', precision: 2 }"
     location="edge"
     [customizeTooltip]="customizeTooltip"
   >

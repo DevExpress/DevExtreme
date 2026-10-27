@@ -57,7 +57,7 @@
       vertical-alignment="bottom"
       horizontal-alignment="center"
     />
-    <DxArgumentAxis :min-visual-range-length="{ days: 3 }">
+    <DxArgumentAxis :min-visual-range-length="minVisualRangeLength">
       <DxVisualRange
         v-model:start-value="startValue"
         v-model:end-value="endValue"
@@ -83,6 +83,7 @@
     <DxExport :enabled="true"/>
     <DxTooltip
       :enabled="true"
+      :format="{ type: 'currency', precision: 2 }"
       :customize-tooltip="customizeTooltip"
       location="edge"
     />
@@ -114,13 +115,16 @@ import { dataSource } from './data.ts';
 const dayMs = 24 * 60 * 60 * 1000;
 const panStepFraction = 0.25;
 const zoomFactor = 0.75;
-const minVisibleSpanMs = 3 * dayMs;
+const minVisualRangeLength = { days: 3 };
+const minVisibleSpanMs = minVisualRangeLength.days * dayMs;
 
-const initialStart = new Date(1994, 3, 14, 12);
 const initialEnd = new Date(1994, 3, 29, 12);
 
 const dataMin = dataSource[0].date.getTime();
 const dataMax = dataSource[dataSource.length - 1].date.getTime();
+const rangeMin = dataMin - dayMs / 2;
+const rangeMax = dataMax + dayMs / 2;
+const initialStart = new Date(rangeMin);
 
 const startValue = ref(initialStart);
 const endValue = ref(initialEnd);
@@ -133,9 +137,9 @@ const getRange = () => ({
 });
 
 const setRange = (start: number, end: number) => {
-  const span = clamp(end - start, minVisibleSpanMs, dataMax - dataMin);
+  const span = clamp(end - start, minVisibleSpanMs, rangeMax - rangeMin);
   const center = (start + end) / 2;
-  const newStart = clamp(center - span / 2, dataMin, dataMax - span);
+  const newStart = clamp(center - span / 2, rangeMin, rangeMax - span);
 
   startValue.value = new Date(newStart);
   endValue.value = new Date(newStart + span);
@@ -161,30 +165,35 @@ const resetZoom = () => {
 const panLeftButtonOptions: DxButtonTypes.Properties = {
   icon: 'chevronleft',
   hint: 'Pan Left',
+  elementAttr: { 'aria-label': 'Pan Left' },
   onClick: () => pan(-1),
 };
 
 const panRightButtonOptions: DxButtonTypes.Properties = {
   icon: 'chevronright',
   hint: 'Pan Right',
+  elementAttr: { 'aria-label': 'Pan Right' },
   onClick: () => pan(1),
 };
 
 const zoomInButtonOptions: DxButtonTypes.Properties = {
   icon: 'plus',
   hint: 'Zoom In',
+  elementAttr: { 'aria-label': 'Zoom In' },
   onClick: () => zoom(zoomFactor),
 };
 
 const zoomOutButtonOptions: DxButtonTypes.Properties = {
   icon: 'minus',
   hint: 'Zoom Out',
+  elementAttr: { 'aria-label': 'Zoom Out' },
   onClick: () => zoom(1 / zoomFactor),
 };
 
 const resetZoomButtonOptions: DxButtonTypes.Properties = {
   icon: 'refresh',
   hint: 'Reset Zoom',
+  elementAttr: { 'aria-label': 'Reset Zoom' },
   onClick: resetZoom,
 };
 
@@ -194,10 +203,12 @@ const customizeTooltip = (pointInfo: DxChartTypes.PointInfo) => {
   }
 
   return {
-    text: `Open: $${pointInfo.openValue}<br/>
-         Close: $${pointInfo.closeValue}<br/>
-         High: $${pointInfo.highValue}<br/>
-         Low: $${pointInfo.lowValue}<br/>`,
+    text: [
+      `Open: ${pointInfo.openValueText}`,
+      `Close: ${pointInfo.closeValueText}`,
+      `High: ${pointInfo.highValueText}`,
+      `Low: ${pointInfo.lowValueText}`,
+    ].join('<br/>'),
   };
 };
 </script>
