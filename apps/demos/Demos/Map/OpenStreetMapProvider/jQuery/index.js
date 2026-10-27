@@ -53,6 +53,7 @@ $(() => {
     width: '100%',
     controls: true,
     onReady({ originalMap }) {
+      // Ensure attribution is visible to comply with the Stadia Maps Terms of Service.
       const attribution = originalMap.getControls().getArray()
         .find((control) => control instanceof ol.control.Attribution);
       originalMap.removeControl(attribution);
