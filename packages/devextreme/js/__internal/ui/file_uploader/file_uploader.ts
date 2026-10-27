@@ -795,7 +795,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
       this._$filesContainer?.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).first(),
     ) || getWidth(this._$filesContainer));
     const $buttonContainer = this._$filesContainer?.find(`.${FILEUPLOADER_BUTTON_CONTAINER_CLASS}`).eq(0);
-    const buttonsWidth = Number(getWidth($buttonContainer))
+    const buttonsWidth = (getWidth($buttonContainer) ?? 0)
       * (cancelButtonsCount + uploadButtonsCount);
     const $fileSize = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_SIZE_CLASS}`).eq(0);
     const $icon = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`).eq(0);
