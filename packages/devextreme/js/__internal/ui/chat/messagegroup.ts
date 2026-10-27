@@ -143,8 +143,7 @@ class MessageGroup extends Widget<Properties> {
 
       options.text = text;
       options.toolCalls = toolCalls;
-      // the built-in block is drawn when there is no messageTemplate
-      options.showToolCalls = !messageTemplate;
+      options.showToolCalls = !messageTemplate || !!toolCallOptions?.showInMessageTemplate;
       options.expandAllToolCalls = toolCallOptions?.expandAll;
     }
 
