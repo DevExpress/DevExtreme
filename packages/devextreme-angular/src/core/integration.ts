@@ -12,9 +12,9 @@ import eventsEngine from 'devextreme/common/core/events/core/events_engine';
 const outsideAngularEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideAngularEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
 
-let outsideAngularHandlerDepth = 0;
+let inOutsideAngularHandler = false;
 
-export const isInOutsideAngularHandler = () => outsideAngularHandlerDepth > 0;
+export const isInOutsideAngularHandler = () => inOutsideAngularHandler;
 
 type ReadyCallback = () => void;
 type ReadyCallbackAdd = (callback: ReadyCallback) => void;
@@ -49,11 +49,12 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
     listen(this: { callBase: (...args: any[]) => any }, element, event: string, callback, options) {
       if (outsideAngularEvents.includes(event)) {
         const trackedCallback = function (this: unknown, e: Event) {
-          outsideAngularHandlerDepth += 1;
+          const prevInOutsideAngularHandler = inOutsideAngularHandler;
+          inOutsideAngularHandler = true;
           try {
             return callback.call(this, e);
           } finally {
-            outsideAngularHandlerDepth -= 1;
+            inOutsideAngularHandler = prevInOutsideAngularHandler;
           }
         };
         return ngZone.runOutsideAngular(() => this.callBase(element, event, trackedCallback, options));
