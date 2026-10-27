@@ -20,6 +20,7 @@ jobs:
   check-should-run:
     name: Check if tests should run
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
       styles-changed: ${{ steps.changes.outputs.styles }}
@@ -201,6 +202,7 @@ jobs:
 
   determine-testcafe-matrix:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     name: Determine TestCafe matrix
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
@@ -275,7 +277,7 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-testcafe-matrix.outputs.matrix) }}
     runs-on: devextreme-shr2
-    timeout-minutes: 45
+    timeout-minutes: 16
 
     steps:
     - name: Set machine timezone
@@ -333,6 +335,9 @@ jobs:
         echo "Disk: $(df -h)"
 
     - name: Run TestCafe tests
+
+      timeout-minutes: 13
+      timeout-minutes: 9
       working-directory: ./e2e/testcafe-devextreme
       env:
         NODE_OPTIONS: --max-old-space-size=8192
@@ -404,7 +409,7 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build.result == 'success'
     runs-on: devextreme-shr2
-    timeout-minutes: 45
+    timeout-minutes: 10
 
     steps:
     - name: Set machine timezone
@@ -623,6 +628,7 @@ jobs:
 
   merge-artifacts:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     needs: [testcafe, testcafe-quarantine]
     if: ${{ always() }}
 

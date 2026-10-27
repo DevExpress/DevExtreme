@@ -20,6 +20,7 @@ jobs:
   check-should-run:
     name: Check if tests should run
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -153,7 +154,7 @@ jobs:
       needs.determine-framework-tests-scope.result == 'success'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
-    timeout-minutes: 30
+    timeout-minutes: 14
 
     steps:
       - name: Get sources
@@ -276,7 +277,7 @@ jobs:
   build-demos:
     name: Build demos
     runs-on: devextreme-shr2
-    timeout-minutes: 30
+    timeout-minutes: 10
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
     if: |
       !cancelled() &&
@@ -400,7 +401,7 @@ jobs:
       needs.build-devextreme.result == 'success'
 
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 19
 
     steps:
     - name: Get sources
@@ -675,7 +676,7 @@ jobs:
 
     runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
-    timeout-minutes: 30
+    timeout-minutes: 15
 
     steps:
     - name: Get sources
@@ -769,6 +770,9 @@ jobs:
         echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Run TestCafe tests (jQuery)
+
+      timeout-minutes: 12
+      timeout-minutes: 12
       shell: bash
       working-directory: apps/demos
       env:
@@ -844,7 +848,7 @@ jobs:
 
     runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
-    timeout-minutes: 60
+    timeout-minutes: 18
 
     steps:
     - name: Get sources
@@ -955,6 +959,9 @@ jobs:
         fi
 
     - name: Run TestCafe tests
+
+      timeout-minutes: 15
+      timeout-minutes: 15
       shell: bash
       working-directory: apps/demos
       env:
@@ -1136,6 +1143,7 @@ jobs:
 
   merge-artifacts:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     needs: [testcafe-jquery, testcafe-frameworks-all, testcafe-frameworks-changed]
     if: ${{ !cancelled() && (needs.testcafe-jquery.result == 'failure' || needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure') }}
 
@@ -1193,7 +1201,7 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build-devextreme.result == 'success'
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 20
 
     steps:
     - name: Get sources
@@ -1277,7 +1285,7 @@ jobs:
           - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
           - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 16
 
     steps:
     - name: Get sources
@@ -1371,7 +1379,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check-should-run, csp-check-jquery, csp-check-frameworks]
     if: ${{ !cancelled() && needs.check-should-run.outputs.should-run == 'true' }}
-    timeout-minutes: 5
+    timeout-minutes: 6
 
     steps:
       - name: Get sources

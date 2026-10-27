@@ -19,7 +19,7 @@ jobs:
     runs-on: devextreme-shr2
     env:
       NODE_OPTIONS: --max-old-space-size=8192
-    timeout-minutes: 30
+    timeout-minutes: 9
 
     steps:
     - name: Get sources

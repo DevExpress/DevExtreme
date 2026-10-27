@@ -17,7 +17,7 @@ env:
 jobs:
   build:
     runs-on: devextreme-shr2
-    timeout-minutes: 30
+    timeout-minutes: 11
 
     steps:
       - name: Get sources
@@ -146,7 +146,7 @@ jobs:
           fi
 
   test:
-    timeout-minutes: 30
+    timeout-minutes: 22
     needs: build
     runs-on: devextreme-shr2
     strategy:

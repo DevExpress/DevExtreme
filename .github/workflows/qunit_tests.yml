@@ -20,6 +20,7 @@ jobs:
   check-should-run-all:
     name: Check if all tests should run
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -30,7 +31,7 @@ jobs:
   build:
     runs-on: devextreme-shr2
     name: Build
-    timeout-minutes: 60
+    timeout-minutes: 9
 
     steps:
     - name: Get sources
@@ -130,7 +131,7 @@ jobs:
     needs: build
     runs-on: devextreme-shr2
     name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
-    timeout-minutes: 25
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -184,7 +185,7 @@ jobs:
     if: needs.check-should-run-all.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-shadow-dom
-    timeout-minutes: 25
+    timeout-minutes: 18
     strategy:
       fail-fast: false
       matrix:
