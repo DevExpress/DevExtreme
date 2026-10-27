@@ -41,7 +41,7 @@ import {
   CollectionNestedOptionContainerImpl,
 } from './nested-option';
 
-import { DxIntegrationModule, isInOutsideZoneHandler } from './integration';
+import { DxIntegrationModule, isInOutsideAngularHandler } from './integration';
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
@@ -112,7 +112,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
       if (
         !this.widgetUpdateLocked
-        && !isInOutsideZoneHandler()
+        && !isInOutsideAngularHandler()
+        && this[`${e.name}Change`]
       ) {
         this.changeDetectorRef.markForCheck();
       }

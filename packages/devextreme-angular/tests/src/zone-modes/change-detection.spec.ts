@@ -328,6 +328,23 @@ if (isZoneless) {
       expect(host.renders).toBe(rendersBefore);
     });
 
+    it('internal option changed by the widget in a timer does not run change detection', async () => {
+      const fixture = await render(`
+        <dx-list [items]="items" [focusStateEnabled]="true"></dx-list>
+        <span class="out">{{ countRender() }}</span>
+      `);
+      const host = fixture.componentInstance;
+      const lastItem = fixture.nativeElement.querySelectorAll('.dx-list-item')[1];
+      const rendersBefore = host.renders;
+
+      setTimeout(() => host.list.instance.option('focusedElement', lastItem));
+      await wait(50);
+      await fixture.whenStable();
+
+      expect(host.list.instance.option('focusedElement')).toBe(lastItem);
+      expect(host.renders).toBe(rendersBefore);
+    });
+
     it('scrolling a DataGrid without handlers does not run change detection', async () => {
       const fixture = await render(`
         <dx-data-grid [dataSource]="manyRows" keyExpr="id" [height]="200">
