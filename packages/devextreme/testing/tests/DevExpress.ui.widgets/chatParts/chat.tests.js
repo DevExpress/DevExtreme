@@ -41,6 +41,16 @@ import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confir
 import { POPUP_CLASS } from '__internal/ui/popup/popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { CHAT_FILE_CLASS } from '__internal/ui/chat/file_view/file';
+import {
+    CHAT_TOOL_CALL_ERROR_BADGE_CLASS,
+    CHAT_TOOL_CALL_FIELD_CLASS,
+    CHAT_TOOL_CALL_FIELD_ERROR_CLASS,
+    CHAT_TOOL_CALL_FIELD_LABEL_CLASS,
+    CHAT_TOOL_CALL_HEADER_CLASS,
+    CHAT_TOOL_CALL_HEADER_TEXT_CLASS,
+    CHAT_TOOL_CALL_NAME_CLASS,
+    CHAT_TOOL_CALL_VIEW_CLASS,
+} from '__internal/ui/chat/tool_call_view/tool_call_view';
 
 import MessageBubble from '__internal/ui/chat/messagebubble';
 import ChatTextArea, {
@@ -67,6 +77,10 @@ const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-last-messagegroup-
 const CHAT_LAST_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-last-messagegroup-alignment-end';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const ACCORDION_CLASS = 'dx-accordion';
+const ACCORDION_ITEM_CLASS = 'dx-accordion-item';
+const ACCORDION_ITEM_OPENED_CLASS = 'dx-accordion-item-opened';
+const ACCORDION_ITEM_TITLE_CLASS = 'dx-accordion-item-title';
 
 const RTL_CLASS = 'dx-rtl';
 const ANIMATION_TIMEOUT = 250;
@@ -157,6 +171,26 @@ const moduleConfig = {
         this.getSuggestionsElement = () => this.instance._suggestions._$element;
         this.getSuggestionItems = () => this.$element.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
         this.getSuggestionButtonGroup = () => this.instance._suggestions._buttonGroup;
+        this.getToolCallView = () => this.$element.find(`.${CHAT_TOOL_CALL_VIEW_CLASS}`);
+        this.getToolCallNames = () => this.$element
+            .find(`.${CHAT_TOOL_CALL_NAME_CLASS}`)
+            .map((_, element) => $(element).text())
+            .get();
+        this.getToolCallTitles = () => this.$element.find(`.${CHAT_TOOL_CALL_VIEW_CLASS} .${ACCORDION_ITEM_TITLE_CLASS}`);
+        this.getOpenedToolCallIndexes = () => this.$element
+            .find(`.${CHAT_TOOL_CALL_VIEW_CLASS} .${ACCORDION_ITEM_CLASS}`)
+            .map((index, element) => ($(element).hasClass(ACCORDION_ITEM_OPENED_CLASS) ? index : null))
+            .get();
+        this.getToolCallHeaderText = () => this.$element.find(`.${CHAT_TOOL_CALL_HEADER_TEXT_CLASS}`).text();
+        this.getToolCallHeaderBadgeText = () => this.$element.find(`.${CHAT_TOOL_CALL_HEADER_CLASS} .${CHAT_TOOL_CALL_ERROR_BADGE_CLASS}`).text();
+        this.getToolCallFields = () => this.$element.find(`.${CHAT_TOOL_CALL_FIELD_CLASS}`);
+        this.getToolCallFieldLabels = () => this.getToolCallFields()
+            .find(`.${CHAT_TOOL_CALL_FIELD_LABEL_CLASS}`)
+            .map((_, element) => $(element).text())
+            .get();
+        this.getToolCallField = (label) => this.getToolCallFields()
+            .filter((_, element) => $(element).find(`.${CHAT_TOOL_CALL_FIELD_LABEL_CLASS}`).text() === label);
+        this.getToolCallFieldValue = (label) => this.getToolCallField(label).find(`.${TEXTEDITOR_INPUT_CLASS}`).val();
 
         init();
     },
@@ -660,6 +694,346 @@ QUnit.module('Chat', () => {
                 const editItem = contextMenuItems.find((item) => item.text === 'Edit');
 
                 assert.strictEqual(editItem, undefined, 'Edit menu item is not shown for image message');
+            });
+        });
+
+        QUnit.module('Tool calls', () => {
+            const weatherCall = { name: 'getWeather', arguments: { city: 'London' }, result: '15°C', status: 'success' };
+            const currentTimeCall = { name: 'getCurrentTime', arguments: { locations: ['Barcelona'] }, result: '10:18' };
+            const stockPriceCall = { name: 'getStockPrice', arguments: { symbol: 'CNTS' }, result: 'Failed to execute the tool', status: 'error' };
+            const renderTemplate = (data, container) => {
+                $('<h1>').text(`text: ${data.message.text}`).appendTo(container);
+            };
+
+            QUnit.module('Rendering', () => {
+                QUnit.test('should render tool calls of messages passed in items', function(assert) {
+                    this.reinit({
+                        items: [
+                            { text: 'question' },
+                            { text: 'answer', toolCalls: [weatherCall, currentTimeCall] },
+                        ],
+                    });
+
+                    const $bubbles = this.getBubbles();
+
+                    assert.strictEqual($bubbles.eq(0).find(`.${CHAT_TOOL_CALL_VIEW_CLASS}`).length, 0, 'message without tool calls has none');
+                    assert.deepEqual(this.getToolCallNames(), ['getWeather', 'getCurrentTime'], 'message with tool calls renders them');
+                });
+
+                QUnit.test('should render tool calls of a message added with renderMessage', function(assert) {
+                    this.reinit({ items: [{ text: 'question' }] });
+
+                    this.instance.renderMessage({ text: 'answer', toolCalls: [weatherCall] });
+
+                    assert.deepEqual(this.getToolCallNames(), ['getWeather']);
+                });
+
+                QUnit.test('should render the header with the tool call count for several tool calls', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [weatherCall, currentTimeCall, stockPriceCall] }] });
+
+                    assert.strictEqual(this.getToolCallHeaderText(), '3 tools');
+                });
+
+                QUnit.test('should not render tool calls for an empty toolCalls array', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [] }] });
+
+                    assert.strictEqual(this.getBubblesContents().text(), 'answer', 'message is rendered');
+                    assert.strictEqual(this.getToolCallView().length, 0, 'tool calls are not rendered');
+                });
+
+                QUnit.test('should not render tool calls of a deleted message', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', isDeleted: true, toolCalls: [weatherCall] }] });
+
+                    assert.strictEqual(this.getBubblesContents().text(), 'This message was deleted', 'deleted message is rendered');
+                    assert.strictEqual(this.getToolCallView().length, 0, 'tool calls are not rendered');
+                });
+
+                QUnit.test('should render tool calls of messages that replace the items at runtime', function(assert) {
+                    this.reinit({ items: [{ text: 'question' }] });
+
+                    this.instance.option('items', [{ text: 'answer', toolCalls: [weatherCall] }]);
+
+                    assert.strictEqual(this.getBubblesContents().text(), 'answer', 'items are replaced');
+                    assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered');
+                });
+            });
+
+            QUnit.module('Content', () => {
+                QUnit.test('should render the arguments and the result of a tool call', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [{ ...weatherCall, expanded: true }] }] });
+
+                    assert.strictEqual(this.getToolCallFieldValue('Arguments'), 'city: "London"', 'arguments are rendered');
+                    assert.strictEqual(this.getToolCallFieldValue('Result'), '15°C', 'result is rendered');
+                });
+
+                QUnit.test('should render only the result of a tool call without arguments', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [{ name: 'getCurrentUtcTime', result: '09:18', expanded: true }] }] });
+
+                    assert.deepEqual(this.getToolCallFieldLabels(), ['Result']);
+                });
+
+                QUnit.test('should render only the arguments of a tool call without a result', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [{ name: 'getWeather', arguments: { city: 'London' }, expanded: true }] }] });
+
+                    assert.deepEqual(this.getToolCallFieldLabels(), ['Arguments']);
+                });
+
+                QUnit.test('should render an object result as indented JSON', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [{ name: 'getExchangeRate', result: { base: 'USD', rate: 0.92 }, expanded: true }] }] });
+
+                    assert.strictEqual(this.getToolCallFieldValue('Result'), '{\n  "base": "USD",\n  "rate": 0.92\n}');
+                });
+
+                QUnit.test('should render the name, the arguments and the result as text', function(assert) {
+                    const name = '<img src="x">';
+
+                    this.reinit({
+                        items: [{
+                            text: 'answer',
+                            toolCalls: [{ name, arguments: { query: '<b>London</b>' }, result: '<u>15°C</u>', expanded: true }],
+                        }],
+                    });
+
+                    assert.deepEqual(this.getToolCallNames(), [name], 'name is rendered as text');
+                    assert.strictEqual(this.getToolCallFieldValue('Arguments'), 'query: "<b>London</b>"', 'arguments are rendered as text');
+                    assert.strictEqual(this.getToolCallFieldValue('Result'), '<u>15°C</u>', 'result is rendered as text');
+                    assert.strictEqual(this.getToolCallView().find('img, b, u').length, 0, 'values are not parsed as markup');
+                });
+            });
+
+            QUnit.module('Status', () => {
+                QUnit.test('should mark a failed tool call with the error tag and the highlighted result', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [{ ...stockPriceCall, expanded: true }] }] });
+
+                    assert.strictEqual(this.getToolCallTitles().find(`.${CHAT_TOOL_CALL_ERROR_BADGE_CLASS}`).text(), 'Error', 'title has the error tag');
+                    assert.strictEqual(this.getToolCallField('Result').hasClass(CHAT_TOOL_CALL_FIELD_ERROR_CLASS), true, 'result is highlighted');
+                });
+
+                QUnit.test('should not mark tool calls with the success status or without a status', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [{ ...weatherCall, expanded: true }, { ...currentTimeCall, expanded: true }] }] });
+
+                    assert.strictEqual(this.getToolCallField('Result').length, 2, 'results are rendered');
+                    assert.strictEqual(this.getToolCallView().find(`.${CHAT_TOOL_CALL_ERROR_BADGE_CLASS}`).length, 0, 'no error tags');
+                    assert.strictEqual(this.getToolCallView().find(`.${CHAT_TOOL_CALL_FIELD_ERROR_CLASS}`).length, 0, 'no highlighted results');
+                });
+
+                QUnit.test('should render the count of one failed tool call in the header', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [weatherCall, stockPriceCall] }] });
+
+                    assert.strictEqual(this.getToolCallHeaderBadgeText(), '1 Error');
+                });
+
+                QUnit.test('should render the count of several failed tool calls in the header', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [stockPriceCall, weatherCall, { ...stockPriceCall, name: 'getExchangeRate' }] }] });
+
+                    assert.strictEqual(this.getToolCallHeaderBadgeText(), '2 Errors');
+                });
+            });
+
+            QUnit.module('Expanded state', () => {
+                QUnit.test('should render collapsed tool calls by default', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [weatherCall, currentTimeCall] }] });
+
+                    assert.strictEqual(this.getToolCallTitles().length, 2, 'tool calls are rendered');
+                    assert.deepEqual(this.getOpenedToolCallIndexes(), [], 'tool calls are collapsed');
+                });
+
+                QUnit.test('should expand a tool call with expanded set to true', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [weatherCall, { ...currentTimeCall, expanded: true }] }] });
+
+                    assert.deepEqual(this.getOpenedToolCallIndexes(), [1]);
+                });
+
+                QUnit.test('should keep several tool calls expanded by the user at once', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [weatherCall, currentTimeCall] }] });
+
+                    this.getToolCallTitles().eq(0).trigger('dxclick');
+                    this.getToolCallTitles().eq(1).trigger('dxclick');
+
+                    assert.deepEqual(this.getOpenedToolCallIndexes(), [0, 1]);
+                });
+
+                QUnit.test('should keep a tool call with expanded set to false collapsed when toolCallOptions.expandAll is true', function(assert) {
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls: [{ ...weatherCall, expanded: false }, currentTimeCall, stockPriceCall] }],
+                        toolCallOptions: { expandAll: true },
+                    });
+
+                    assert.deepEqual(this.getOpenedToolCallIndexes(), [1, 2]);
+                });
+
+                QUnit.test('should expand only a tool call with expanded set to true when toolCallOptions.expandAll is false', function(assert) {
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls: [weatherCall, { ...currentTimeCall, expanded: true }, stockPriceCall] }],
+                        toolCallOptions: { expandAll: false },
+                    });
+
+                    assert.deepEqual(this.getOpenedToolCallIndexes(), [1]);
+                });
+
+                QUnit.test('should keep a tool call with expanded set to false collapsed after toolCallOptions.expandAll is set to true at runtime', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [{ ...weatherCall, expanded: false }, currentTimeCall, stockPriceCall] }] });
+
+                    this.instance.option('toolCallOptions.expandAll', true);
+
+                    assert.deepEqual(this.getOpenedToolCallIndexes(), [1, 2]);
+                });
+
+                QUnit.test('should keep a tool call with expanded set to true expanded after toolCallOptions.expandAll is set to false at runtime', function(assert) {
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls: [weatherCall, { ...currentTimeCall, expanded: true }, stockPriceCall] }],
+                        toolCallOptions: { expandAll: true },
+                    });
+
+                    this.instance.option('toolCallOptions.expandAll', false);
+
+                    assert.deepEqual(this.getOpenedToolCallIndexes(), [1]);
+                });
+
+                QUnit.test('should expand the tool calls after toolCallOptions is replaced at runtime', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [weatherCall, currentTimeCall] }] });
+
+                    assert.strictEqual(this.getToolCallTitles().length, 2, 'tool calls are rendered');
+                    assert.deepEqual(this.getOpenedToolCallIndexes(), [], 'tool calls are collapsed');
+
+                    this.instance.option('toolCallOptions', { expandAll: true });
+
+                    assert.deepEqual(this.getOpenedToolCallIndexes(), [0, 1], 'tool calls are expanded');
+                });
+            });
+
+            QUnit.module('toolCallOptions', () => {
+                QUnit.test('should have both flags set to false by default', function(assert) {
+                    assert.deepEqual(this.instance.option('toolCallOptions'), { showInMessageTemplate: false, expandAll: false });
+                });
+
+                QUnit.test('should keep showInMessageTemplate false when toolCallOptions is set partially', function(assert) {
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls: [weatherCall] }],
+                        messageTemplate: renderTemplate,
+                        toolCallOptions: { expandAll: true },
+                    });
+
+                    assert.strictEqual(this.instance.option('toolCallOptions.showInMessageTemplate'), false, 'showInMessageTemplate keeps its default');
+                    assert.strictEqual(this.getBubblesContents().text(), 'text: answer', 'template is rendered');
+                    assert.strictEqual(this.getToolCallView().length, 0, 'tool calls are not rendered with the template');
+                });
+
+                QUnit.test('should render tool calls as usual when showInMessageTemplate is true and there is no messageTemplate', function(assert) {
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls: [weatherCall] }],
+                        toolCallOptions: { showInMessageTemplate: true },
+                    });
+
+                    assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered');
+                    assert.strictEqual(this.getBubblesContents().text(), 'answer', 'text is rendered');
+                });
+            });
+
+            QUnit.module('messageTemplate', () => {
+                QUnit.test('should pass tool calls with their own fields to messageTemplate instead of rendering them', function(assert) {
+                    const messageTemplate = sinon.stub();
+                    const toolCalls = [{ ...weatherCall, id: 'call_abc123' }];
+
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls }],
+                        messageTemplate,
+                    });
+
+                    assert.deepEqual(messageTemplate.lastCall.args[0].message.toolCalls, toolCalls, 'template gets the tool calls');
+                    assert.strictEqual(this.getToolCallView().length, 0, 'tool calls are not rendered');
+                });
+
+                QUnit.test('should render tool calls above the template content when toolCallOptions.showInMessageTemplate is true', function(assert) {
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls: [weatherCall] }],
+                        messageTemplate: renderTemplate,
+                        toolCallOptions: { showInMessageTemplate: true },
+                    });
+
+                    assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered');
+                    assert.strictEqual(this.getToolCallView().next().hasClass(CHAT_MESSAGEBUBBLE_CONTENT_CLASS), true, 'tool calls are above the content');
+                    assert.strictEqual(this.getBubblesContents().text(), 'text: answer', 'template is rendered');
+                });
+
+                QUnit.test('should render tool calls when toolCallOptions.showInMessageTemplate is set to true at runtime', function(assert) {
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls: [weatherCall] }],
+                        messageTemplate: renderTemplate,
+                    });
+
+                    this.instance.option('toolCallOptions.showInMessageTemplate', true);
+
+                    assert.deepEqual(this.getToolCallNames(), ['getWeather']);
+                });
+
+                QUnit.test('should remove tool calls when toolCallOptions.showInMessageTemplate is set to false at runtime', function(assert) {
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls: [weatherCall] }],
+                        messageTemplate: renderTemplate,
+                        toolCallOptions: { showInMessageTemplate: true },
+                    });
+
+                    this.instance.option('toolCallOptions.showInMessageTemplate', false);
+
+                    assert.strictEqual(this.getBubblesContents().text(), 'text: answer', 'template is rendered');
+                    assert.strictEqual(this.getToolCallView().length, 0, 'tool calls are removed');
+                });
+
+                QUnit.test('should remove tool calls when messageTemplate is set at runtime', function(assert) {
+                    this.reinit({ items: [{ text: 'answer', toolCalls: [weatherCall] }] });
+
+                    assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered');
+
+                    this.instance.option('messageTemplate', renderTemplate);
+
+                    assert.strictEqual(this.getBubblesContents().text(), 'text: answer', 'template is rendered');
+                    assert.strictEqual(this.getToolCallView().length, 0, 'tool calls are removed');
+                });
+
+                QUnit.test('should render tool calls again when messageTemplate is reset at runtime', function(assert) {
+                    this.reinit({
+                        items: [{ text: 'answer', toolCalls: [weatherCall] }],
+                        messageTemplate: renderTemplate,
+                    });
+
+                    assert.strictEqual(this.getBubblesContents().text(), 'text: answer', 'template is rendered');
+
+                    this.instance.option('messageTemplate', null);
+
+                    assert.strictEqual(this.getBubblesContents().text(), 'answer', 'text is rendered without the template');
+                    assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered');
+                });
+            });
+
+            QUnit.module('Localization', () => {
+                QUnit.test('should render the texts overridden with loadMessages', function(assert) {
+                    const defaultLocale = localization.locale();
+
+                    try {
+                        localization.loadMessages({
+                            'ee': {
+                                'dxChat-toolCallsTitle': '{0} tööriista',
+                                'dxChat-toolCallsSingleErrorText': '1 viga',
+                                'dxChat-toolCallArgumentsLabel': 'Argumendid',
+                                'dxChat-toolCallResultLabel': 'Tulemus',
+                                'dxChat-toolCallErrorText': 'Viga',
+                                'dxChat-copyButtonLabel': 'Kopeeri',
+                            },
+                        });
+                        localization.locale('ee');
+
+                        this.reinit({ items: [{ text: 'answer', toolCalls: [weatherCall, { ...stockPriceCall, expanded: true }] }] });
+
+                        assert.strictEqual(this.getToolCallHeaderText(), '2 tööriista', 'header is localized');
+                        assert.strictEqual(this.getToolCallHeaderBadgeText(), '1 viga', 'error count is localized');
+                        assert.strictEqual(this.getToolCallTitles().eq(1).find(`.${CHAT_TOOL_CALL_ERROR_BADGE_CLASS}`).text(), 'Viga', 'error tag is localized');
+                        assert.deepEqual(this.getToolCallFieldLabels(), ['Argumendid', 'Tulemus'], 'field labels are localized');
+                        assert.strictEqual(this.getToolCallField('Tulemus').find(`.${BUTTON_CLASS}`).attr('aria-label'), 'Kopeeri', 'copy button label is localized');
+                    } finally {
+                        localization.locale(defaultLocale);
+                    }
+                });
             });
         });
 
@@ -3472,6 +3846,133 @@ QUnit.module('Chat', () => {
             this.clock.tick(timeout * 2);
 
             assert.strictEqual(this.getBubbles().eq(0).text(), 'updated text', 'message bubble text was updated');
+        });
+
+        QUnit.module('Tool calls', {
+            beforeEach() {
+                const timeout = 100;
+
+                this.loadFromRemoteStore = (messages, options = {}) => {
+                    const store = new CustomStore({
+                        key: 'id',
+                        load: function() {
+                            const d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve([...messages]);
+                            }, timeout);
+                            return d.promise();
+                        },
+                    });
+
+                    this.reinit({
+                        dataSource: store,
+                        reloadOnChange: false,
+                        ...options,
+                    });
+                    this.clock.tick(timeout);
+
+                    return store;
+                };
+
+                this.pushUpdate = (store, key, data) => {
+                    store.push([{ type: 'update', key, data }]);
+                    this.clock.tick(timeout * 2);
+                };
+            },
+        }, () => {
+            const weatherCall = { name: 'getWeather', arguments: { city: 'London' }, result: '15°C' };
+            const currentTimeCall = { name: 'getCurrentTime', arguments: { locations: ['Barcelona'] }, result: '10:18' };
+
+            QUnit.test('should render tool calls of messages loaded from a remote store', function(assert) {
+                this.loadFromRemoteStore([{ id: 0, text: 'question' }, { id: 1, text: 'answer', toolCalls: [weatherCall] }]);
+
+                assert.deepEqual(this.getToolCallNames(), ['getWeather']);
+            });
+
+            QUnit.test('it should be possible to update tool calls of a message using push api', function(assert) {
+                const store = this.loadFromRemoteStore([{ id: 0, text: 'message_0' }, { id: 1, text: 'message_1' }]);
+
+                this.pushUpdate(store, 1, { toolCalls: [weatherCall] });
+
+                assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered in the updated bubble');
+                assert.strictEqual(this.getBubbles().eq(0).find(`.${CHAT_TOOL_CALL_VIEW_CLASS}`).length, 0, 'other bubbles have no tool calls');
+            });
+
+            QUnit.test('it should be possible to remove tool calls of a message using push api', function(assert) {
+                const store = this.loadFromRemoteStore([{ id: 0, text: 'answer', toolCalls: [weatherCall] }]);
+
+                this.pushUpdate(store, 0, { toolCalls: [] });
+
+                assert.strictEqual(this.getBubblesContents().text(), 'answer', 'message is rendered');
+                assert.strictEqual(this.getToolCallView().length, 0, 'tool calls are removed');
+            });
+
+            QUnit.test('should apply expanded of tool calls updated using push api', function(assert) {
+                const store = this.loadFromRemoteStore([{ id: 0, text: 'answer', toolCalls: [weatherCall, currentTimeCall] }]);
+
+                this.pushUpdate(store, 0, { toolCalls: [weatherCall, { ...currentTimeCall, expanded: true }] });
+
+                assert.deepEqual(this.getOpenedToolCallIndexes(), [1]);
+            });
+
+            QUnit.test('should render the tool calls block again when the same tool calls are pushed', function(assert) {
+                const toolCalls = [weatherCall];
+                const store = this.loadFromRemoteStore([{ id: 0, text: 'answer', toolCalls }]);
+                const toolCallViewBeforePush = this.getToolCallView().get(0);
+
+                assert.strictEqual(this.getToolCallView().length, 1, 'block is rendered before the push');
+
+                this.pushUpdate(store, 0, { toolCalls });
+
+                assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered');
+                assert.notStrictEqual(this.getToolCallView().get(0), toolCallViewBeforePush, 'block is rendered again');
+            });
+
+            QUnit.test('should keep the tool calls block and the items expanded by the user when only the text is pushed', function(assert) {
+                const store = this.loadFromRemoteStore([{ id: 0, text: 'answer', toolCalls: [weatherCall, currentTimeCall] }]);
+                const toolCallView = this.getToolCallView().get(0);
+                const accordion = this.getToolCallView().find(`.${ACCORDION_CLASS}`).get(0);
+
+                this.getToolCallTitles().eq(1).trigger('dxclick');
+                this.pushUpdate(store, 0, { text: 'updated answer' });
+
+                assert.strictEqual(this.getBubblesContents().text(), 'updated answer', 'text is updated');
+                assert.strictEqual(this.getToolCallView().get(0), toolCallView, 'block is the same element');
+                assert.strictEqual(this.getToolCallView().find(`.${ACCORDION_CLASS}`).get(0), accordion, 'accordion is the same element');
+                assert.deepEqual(this.getOpenedToolCallIndexes(), [1], 'item expanded by the user stays expanded');
+            });
+
+            QUnit.test('should keep the tool calls block of a templated message while the text is streamed', function(assert) {
+                const store = this.loadFromRemoteStore([{ id: 0, text: '', toolCalls: [weatherCall] }], {
+                    messageTemplate: (data, container) => {
+                        $('<div>').text(data.message.text).appendTo(container);
+                    },
+                    toolCallOptions: { showInMessageTemplate: true },
+                });
+                const toolCallView = this.getToolCallView().get(0);
+                const accordion = this.getToolCallView().find(`.${ACCORDION_CLASS}`).get(0);
+
+                this.getToolCallTitles().eq(0).trigger('dxclick');
+                ['The', 'The weather', 'The weather in London is 15°C.'].forEach((text) => {
+                    this.pushUpdate(store, 0, { text });
+                });
+
+                assert.strictEqual(this.getBubblesContents().text(), 'The weather in London is 15°C.', 'template renders the last chunk');
+                assert.strictEqual(this.getToolCallView().get(0), toolCallView, 'block is the same element');
+                assert.strictEqual(this.getToolCallView().find(`.${ACCORDION_CLASS}`).get(0), accordion, 'accordion is the same element');
+                assert.deepEqual(this.getOpenedToolCallIndexes(), [0], 'item expanded by the user stays expanded');
+            });
+
+            QUnit.test('should remove tool calls of a message deleted using push api', function(assert) {
+                const store = this.loadFromRemoteStore([{ id: 0, text: 'answer', toolCalls: [weatherCall] }]);
+
+                assert.deepEqual(this.getToolCallNames(), ['getWeather'], 'tool calls are rendered');
+
+                this.pushUpdate(store, 0, { isDeleted: true });
+
+                assert.strictEqual(this.getBubblesContents().text(), 'This message was deleted', 'deleted message is rendered');
+                assert.strictEqual(this.getToolCallView().length, 0, 'tool calls are removed');
+            });
         });
 
         QUnit.test('it should be possible to update isEdited state of first message in group using push api', function(assert) {
