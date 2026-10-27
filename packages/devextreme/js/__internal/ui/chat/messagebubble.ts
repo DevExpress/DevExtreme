@@ -39,6 +39,7 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   attachments?: Attachment[];
   toolCalls?: ToolCall[];
   showToolCalls?: boolean;
+  expandAllToolCalls?: boolean;
   onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
   template?: ((message: Message, container: Element) => void) | null;
 }
@@ -91,7 +92,7 @@ class MessageBubble extends Widget<Properties> {
   }
 
   _renderToolCalls(): void {
-    const { toolCalls } = this.option();
+    const { toolCalls, expandAllToolCalls } = this.option();
 
     if (!this._$toolCalls || !toolCalls) {
       return;
@@ -107,7 +108,7 @@ class MessageBubble extends Widget<Properties> {
       dataSource: items,
       collapsible: true,
       multiple: true,
-      selectedItems: items.filter(({ call }) => call.expanded),
+      selectedItems: items.filter(({ call }) => call.expanded ?? expandAllToolCalls),
       itemTitleTemplate: ({ call }: { call: ToolCall }, _: number, element: Element): void => {
         this._renderToolCallTitle(call, element);
       },
@@ -337,6 +338,7 @@ class MessageBubble extends Widget<Properties> {
         break;
       case 'toolCalls':
       case 'showToolCalls':
+      case 'expandAllToolCalls':
         this._renderToolCallsElement();
         this._renderToolCalls();
         break;
