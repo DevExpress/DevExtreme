@@ -187,10 +187,7 @@ function productsFromString(encodedString) {
 function isTrialExpired(products, versionCode, now = Date.now()) {
     if(!Array.isArray(products) || products.length === 0 || !Number.isFinite(versionCode)) return false;
 
-    const maxVersion = Math.max(...products.map(p => p.version));
-    const applicable = maxVersion === versionCode
-        ? products.filter(p => p.version === versionCode)
-        : products.filter(p => p.version >= versionCode);
+    const applicable = products.filter(p => p.version >= versionCode);
 
     const licensed = applicable.some(p => (p.products & (DEVEXTREME_HTMLJS_BIT | DEVEXTREME_ASPNET_BIT)) !== 0n);
     if(licensed) return false;
