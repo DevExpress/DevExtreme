@@ -83,6 +83,7 @@ export default [
         module: true,
         exports: true,
       },
+      ecmaVersion: 'latest',
     },
      plugins: {
       '@stylistic': stylistic,
