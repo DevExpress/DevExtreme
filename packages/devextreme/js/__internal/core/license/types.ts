@@ -1,6 +1,6 @@
 export interface License {
   readonly [k: string]: unknown;
-  readonly customerId: string;
+  readonly licenseId: string;
   readonly maxVersionAllowed: number;
 }
 
@@ -11,7 +11,8 @@ export enum TokenKind {
 
 export interface ErrorToken {
   readonly kind: TokenKind.corrupted;
-  readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version' | 'product-kind';
+  readonly error: 'general' | 'verification' | 'decoding' | 'deserialization' | 'payload' | 'version' | 'product-kind' | 'trial-expired';
+  readonly licenseId?: string;
 }
 
 export interface VerifiedToken {
@@ -21,7 +22,7 @@ export interface VerifiedToken {
 
 export type Token = ErrorToken | VerifiedToken;
 
-type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0023';
+type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0023' | 'DX1004';
 
 export const GENERAL_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'general' };
 export const VERIFICATION_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'verification' };
@@ -30,17 +31,20 @@ export const DESERIALIZATION_ERROR: ErrorToken = { kind: TokenKind.corrupted, er
 export const PAYLOAD_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'payload' };
 export const VERSION_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'version' };
 export const PRODUCT_KIND_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'product-kind' };
+export const TRIAL_EXPIRED_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'trial-expired' };
 
 export type LicenseWarningType = 'no-key'
   | 'invalid-key'
   | 'lcx-used'
   | 'old-devextreme-key'
   | 'version-mismatch'
-  | 'no-devextreme-license';
+  | 'no-devextreme-license'
+  | 'trial-expired';
 
 export interface LicenseCheckParams {
   preview: boolean;
   error: LicenseVerifyResult | undefined;
   warningType?: LicenseWarningType;
   maxVersionAllowed?: number;
+  licenseId?: string;
 }

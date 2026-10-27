@@ -1,24 +1,26 @@
+import { LIBRARIES, NBSP, SUBSCRIPTION_NAMES } from './const';
 import type { LicenseWarningType } from './types';
 
+const SUBSCRIPTIONS = SUBSCRIPTION_NAMES.split(NBSP).join(' ');
+const BUY_LINK = 'https://devexpress.com/BUY';
+
+export interface LicenseDetails {
+  licenseId: string;
+  licenseKey: string;
+}
+
+const getContinueUseText = (docCode: string): string => `Please register a valid license (https://devexpress.com/${docCode}) or purchase a new license (${BUY_LINK}) to continue use of the following DevExpress product libraries: ${LIBRARIES} - Included in Subscriptions: ${SUBSCRIPTIONS}.`;
+
 export const TEMPLATES = Object.freeze({
-  warningPrefix: (code: string | number): string => {
-    let warningDescription = '';
-    switch (code) {
-      case 'W0019':
-        warningDescription = 'DevExtreme: You are using a trial (evaluation) version.';
-        break;
-      case 'W0020':
-        warningDescription = 'DevExtreme: License Key Has Expired.';
-        break;
-      case 'W0021':
-        warningDescription = 'DevExtreme: License Key Verification Has Failed.';
-        break;
-      default:
-        warningDescription = 'DevExtreme: For evaluation purposes only. Redistribution prohibited.';
-        break;
-    }
-    return `${code} - ${warningDescription}`;
-  },
+  licenseDetails: (details?: LicenseDetails): string => (details
+    ? ` License ID: ${details.licenseId}. License Source: Public Key (${details.licenseKey}).`
+    : ''),
+
+  purchaseLicense: (version: string): string => `For evaluation purposes only (v${version}). Redistribution prohibited. ${getContinueUseText('DX1000')}`,
+
+  trialExpired: (version: string): string => `Your 30-day trial has expired (v${version}). Use and Redistribution prohibited. ${getContinueUseText('DX1004')}`,
+
+  warningPrefix: (code: string | number): string => `${code} -`,
 
   keyNotFound: 'A devextreme-license generated key has not been specified in the GlobalConfig.',
 
@@ -38,15 +40,13 @@ export const TEMPLATES = Object.freeze({
   keyVerificationFailed: (type?: string, keyVersion?: string, requiredVersion?: string): string => {
     switch (type) {
       case 'incompatibleVersion':
-        return `Incompatible DevExpress license key version (v${keyVersion}). Download and register an updated DevExpress license key (v${requiredVersion}+). Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002).`;
+        return `Incompatible DevExpress license key version (v${keyVersion}). Use and Redistribution prohibited. Download and register an updated DevExpress license key (v${requiredVersion}+). Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002).`;
       default:
         return '';
     }
   },
 
-  purchaseLicense: 'Please register an existing license (https://devexpress.com/DX1000) or purchase a new license (https://devexpress.com/Buy/) to continue use of the following DevExpress product libraries: DevExtreme - Included in Subscriptions: Universal, DXperience, ASP.NET and Blazor, DevExtreme Complete.',
-
-  installationInstructions: 'If you own a licensed/registered version or if you are using a 30-day trial version of DevExpress product libraries on a development machine, download your personal license key and verify it with the devextreme-license tool (https://devexpress.com/DX1001).',
+  installationInstructions: (version: string): string => `License key is missing or uses invalid format (v${version}). Use and Redistribution prohibited. If you own a licensed/registered version or if you are using a 30-day trial version of DevExpress product libraries on a development machine, download your personal license key (https://devexpress.com/DX1001) and verify it with the devextreme-license tool.`,
 
   // eslint-disable-next-line spellcheck/spell-checker
   lcxUsedInsteadOfLcp: 'A DevExpress license key has been specified instead of a key generated using devextreme-license.',
@@ -60,11 +60,18 @@ export function logLicenseWarning(
   warningType: LicenseWarningType,
   version: string,
   versionInfo?: { keyVersion: string; requiredVersion: string },
+  details?: LicenseDetails,
 ): void {
   const T = TEMPLATES;
 
-  const purchaseLine = `${T.warningPrefix('W0019')} ${T.purchaseLicense}`;
-  const installLine = `${T.warningPrefix('W0021')} ${T.installationInstructions}`;
+  if (warningType === 'trial-expired') {
+    console.error(`DX1004 - ${T.trialExpired(version)}${T.licenseDetails(details)}`);
+    return;
+  }
+
+  const purchaseDetails = warningType === 'version-mismatch' ? '' : T.licenseDetails(details);
+  const purchaseLine = `${T.warningPrefix('W0019')} ${T.purchaseLicense(version)}${purchaseDetails}`;
+  const installLine = `${T.warningPrefix('W0021')} ${T.installationInstructions(version)}`;
 
   const warnings: string[][] = [[purchaseLine]];
 
@@ -102,7 +109,7 @@ export function logLicenseWarning(
       break;
 
     case 'version-mismatch': {
-      const incompatibleLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('incompatibleVersion', versionInfo?.keyVersion, versionInfo?.requiredVersion)}`;
+      const incompatibleLine = `${T.warningPrefix('W0020')} ${T.keyVerificationFailed('incompatibleVersion', versionInfo?.keyVersion, versionInfo?.requiredVersion)}${T.licenseDetails(details)}`;
       pushToLastGroup(T.keyVerificationFailed());
       warnings.push([incompatibleLine]);
       break;
