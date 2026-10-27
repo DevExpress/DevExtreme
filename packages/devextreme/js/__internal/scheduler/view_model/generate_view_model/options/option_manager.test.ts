@@ -43,10 +43,13 @@ const schedulerOptions = new Map<string, unknown>([
   ['rtlEnabled', false],
 ]);
 
-const createSchedulerStore = (workspace: unknown): Scheduler => ({
+const createSchedulerStore = (
+  workspace: unknown,
+  { groupOrientation = 'vertical', isVirtualScrolling = false } = {},
+): Scheduler => ({
   currentView: {
     type: 'day',
-    groupOrientation: 'vertical',
+    groupOrientation,
   },
   resourceManager: {
     groupCount: () => 2,
@@ -54,7 +57,7 @@ const createSchedulerStore = (workspace: unknown): Scheduler => ({
   getViewOffsetMs: () => 0,
   getViewOption: (name: string) => viewOptions.get(name),
   option: (name: string) => schedulerOptions.get(name),
-  isVirtualScrolling: () => false,
+  isVirtualScrolling: () => isVirtualScrolling,
   getWorkSpace: () => workspace,
 }) as unknown as Scheduler;
 
@@ -97,5 +100,62 @@ describe('OptionManager', () => {
     expect(result.cellSize).toEqual({ width: 120, height: 50 });
     expect(result.collectorSize).toEqual({ width: 20, height: 20 });
     expect(result.groupHeights).toBeUndefined();
+  });
+
+  describe('getVirtualCropOptions', () => {
+    const createVirtualWorkspace = (): unknown => ({
+      getDateRange: (): Date[] => [new Date(2025, 0, 1), new Date(2025, 0, 2)],
+      getPanelDOMSize: (): RealSize => ({ width: 1000, height: 600 }),
+      getCollectorDimension: (): CollectorCSS => createCollectorCSS(),
+      getDOMElementsMetaData: (): DOMMetaData => createDOMMetaData(100, 50),
+      positionHelper: {
+        getHorizontalMax: (): number => 800,
+        getVerticalMax: (): number => 1500,
+      },
+      virtualScrollingDispatcher: {
+        cellCountInsideLeftVirtualCell: 2,
+        cellCountInsideRightVirtualCell: 0,
+        cellCountInsideTopVirtualRow: 20,
+      },
+    });
+
+    it('should not limit all-day panel screen vertically', () => {
+      const optionManager = new OptionManager(createSchedulerStore(
+        createVirtualWorkspace(),
+        { groupOrientation: 'horizontal', isVirtualScrolling: true },
+      ));
+
+      const screen = optionManager.getVirtualCropOptions('allDayPanel').getVirtualScreen(0);
+
+      expect(screen).toEqual({
+        left: 200, right: 800, top: -Infinity, bottom: Infinity,
+      });
+    });
+
+    it('should limit regular panel screen vertically', () => {
+      const optionManager = new OptionManager(createSchedulerStore(
+        createVirtualWorkspace(),
+        { groupOrientation: 'horizontal', isVirtualScrolling: true },
+      ));
+
+      const screen = optionManager.getVirtualCropOptions('regularPanel').getVirtualScreen(0);
+
+      expect(screen).toEqual({
+        left: 200, right: 800, top: 1000, bottom: 1500,
+      });
+    });
+
+    it('should limit all-day panel screen vertically for vertical grouping', () => {
+      const optionManager = new OptionManager(createSchedulerStore(
+        createVirtualWorkspace(),
+        { groupOrientation: 'vertical', isVirtualScrolling: true },
+      ));
+
+      const screen = optionManager.getVirtualCropOptions('allDayPanel').getVirtualScreen(0);
+
+      expect(screen).toEqual({
+        left: 200, right: 800, top: 1000, bottom: 1500,
+      });
+    });
   });
 });
