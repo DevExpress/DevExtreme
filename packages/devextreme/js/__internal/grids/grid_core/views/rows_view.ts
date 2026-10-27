@@ -23,7 +23,7 @@ import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { ActionEvent } from '@ts/core/action';
 import { compileGetter } from '@ts/core/utils/data';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
   Column, ColumnRenderTemplate, ColumnsChanges, ColumnTemplateSource,
 } from '@ts/grids/grid_core/columns_controller/types';
