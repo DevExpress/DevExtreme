@@ -125,6 +125,10 @@ class Chat extends Widget<Properties> {
         onClick: undefined,
       },
       suggestions: undefined,
+      toolCallOptions: {
+        showInMessageTemplate: false,
+        expandAll: false,
+      },
       onMessageDeleted: undefined,
       onMessageDeleting: undefined,
       onMessageEditCanceled: undefined,
@@ -224,6 +228,7 @@ class Chat extends Widget<Properties> {
       showMessageTimestamp = false,
       dayHeaderFormat,
       messageTimestampFormat,
+      toolCallOptions,
       typingUsers = [],
     } = this.option();
 
@@ -246,6 +251,7 @@ class Chat extends Widget<Properties> {
       showMessageTimestamp,
       dayHeaderFormat,
       messageTimestampFormat,
+      toolCallOptions,
       typingUsers,
       isLoading,
       onMessageEditingStart: (e) => {
@@ -816,6 +822,9 @@ class Chat extends Widget<Properties> {
         break;
       case 'emptyViewTemplate':
         this._messageList.option(name, this._getEmptyViewTemplate());
+        break;
+      case 'toolCallOptions':
+        this._messageList.option(name, this.option(name));
         break;
       case 'reloadOnChange':
         break;

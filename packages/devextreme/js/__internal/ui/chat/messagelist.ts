@@ -14,7 +14,7 @@ import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type {
-  AttachmentDownloadClickEvent, Message, TextMessage, User,
+  AttachmentDownloadClickEvent, Message, TextMessage, ToolCallOptions, User,
 } from '@js/ui/chat';
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type dxContextMenu from '@js/ui/context_menu';
@@ -96,6 +96,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
+  toolCallOptions?: ToolCallOptions;
   emptyViewTemplate?: EmptyViewTemplate;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
@@ -278,6 +279,7 @@ class MessageList extends Widget<Properties> {
       showMessageTimestamp,
       messageTimestampFormat,
       messageTemplate,
+      toolCallOptions,
       onAttachmentDownloadClick,
     } = this.option();
 
@@ -291,6 +293,7 @@ class MessageList extends Widget<Properties> {
       showMessageTimestamp,
       messageTimestampFormat,
       messageTemplate,
+      toolCallOptions,
       onAttachmentDownloadClick,
     });
   }
@@ -847,6 +850,7 @@ class MessageList extends Widget<Properties> {
       case 'showUserName':
       case 'showMessageTimestamp':
       case 'messageTemplate':
+      case 'toolCallOptions':
       case 'emptyViewTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
