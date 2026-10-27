@@ -15,8 +15,8 @@ import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/column_stat
 import {
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
-} from '@ts/grids/grid_core/header_filter/m_header_filter_core';
-import sortingMixin from '@ts/grids/grid_core/sorting/m_sorting_mixin';
+} from '@ts/grids/grid_core/header_filter/header_filter_core';
+import sortingMixin from '@ts/grids/grid_core/sorting/sorting_mixin';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 

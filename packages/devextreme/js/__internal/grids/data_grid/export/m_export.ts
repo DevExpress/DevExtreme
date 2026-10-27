@@ -13,7 +13,7 @@ import errors from '@js/ui/widget/ui.errors';
 import { prepareItems } from '@ts/grids/grid_core/export';
 import List from '@ts/ui/list/list.edit.search';
 
-import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../../grid_core/column_headers/column_headers';
 import type { ColumnsController } from '../../grid_core/columns_controller/columns_controller';
 import type { DataController } from '../../grid_core/data_controller/data_controller';
 import type { DataSourceController } from '../../grid_core/data_source/data_source_controller';
