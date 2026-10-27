@@ -198,7 +198,7 @@ export class OptionManager {
     return this.getPanelOptions(panelName).geometryOptions;
   }
 
-  getVirtualCropOptions(): VirtualCropOptions {
+  getVirtualCropOptions(panelName: PanelName): VirtualCropOptions {
     const { cellSize, panelSize } = this.getPanelOptions('regularPanel').geometryOptions;
     const { positionHelper, virtualScrollingDispatcher } = this.schedulerStore.getWorkSpace();
     const {
@@ -218,10 +218,11 @@ export class OptionManager {
       : cellCountInsideLeftVirtualCell;
     const isVerticalGrouping = groupCount > 0 && groupOrientation === 'vertical';
     const isGroupedAllDayPanel = isVerticalGrouping && hasAllDayPanel;
+    const isOutsideVerticalScroll = panelName === 'allDayPanel' && !isVerticalGrouping;
 
     return {
       isVirtualScrolling,
-      getVirtualScreen: (groupIndex: number) => this.cache.memo(`virtualScreen${groupIndex}`, () => {
+      getVirtualScreen: (groupIndex: number) => this.cache.memo(`virtualScreen${panelName}${groupIndex}`, () => {
         const left = hVirtualItemsCount * cellSize.width;
         const top = cellCountInsideTopVirtualRow * cellSize.height;
         const right = Math.round(positionHelper.getHorizontalMax(groupIndex)) || Infinity;
@@ -237,8 +238,8 @@ export class OptionManager {
         return {
           left: isRTLEnabled ? panelSize.width - right : left,
           right: isRTLEnabled ? panelSize.width - left : right,
-          top,
-          bottom,
+          top: isOutsideVerticalScroll ? -Infinity : top,
+          bottom: isOutsideVerticalScroll ? Infinity : bottom,
         };
       }),
     };
