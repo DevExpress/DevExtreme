@@ -20,7 +20,7 @@ jobs:
   build-packages:
     runs-on: devextreme-shr2
     name: Build DevExtreme and Wrappers
-    timeout-minutes: 40
+    timeout-minutes: 15
 
     steps:
       - name: Get sources
@@ -120,7 +120,7 @@ jobs:
     needs: build-packages
     runs-on: devextreme-shr2
     name: Test ${{ matrix.framework }}
-    timeout-minutes: 30
+    timeout-minutes: 8
     strategy:
       fail-fast: false
       matrix:

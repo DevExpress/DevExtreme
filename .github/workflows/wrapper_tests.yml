@@ -16,7 +16,7 @@ env:
 jobs:
   build:
     runs-on: devextreme-shr2
-    timeout-minutes: 30
+    timeout-minutes: 11
 
     steps:
       - name: Get sources
@@ -97,7 +97,7 @@ jobs:
         run: pnpm exec nx build devextreme -c testing
 
   test:
-    timeout-minutes: 30
+    timeout-minutes: 15
     needs: build
     runs-on: devextreme-shr2
     strategy:

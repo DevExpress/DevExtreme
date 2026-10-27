@@ -16,7 +16,7 @@ env:
 jobs:
   TS:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 13
     steps:
     - name: Get sources
       uses: actions/checkout@v6
@@ -127,7 +127,7 @@ jobs:
 
   JS:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 12
     steps:
     - name: Get sources
       uses: actions/checkout@v6
@@ -215,7 +215,7 @@ jobs:
 
   texts:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 7
     steps:
     - name: Get sources
       uses: actions/checkout@v6
@@ -297,7 +297,7 @@ jobs:
 
   component_exports:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 7
     steps:
     - name: Get sources
       uses: actions/checkout@v6
@@ -343,7 +343,7 @@ jobs:
 
   wrappers:
     runs-on: devextreme-shr2
-    timeout-minutes: 10
+    timeout-minutes: 7
 
     steps:
     - name: Get sources
