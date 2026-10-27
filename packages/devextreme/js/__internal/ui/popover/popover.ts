@@ -288,10 +288,6 @@ class Popover<
   // uses in Popup and do not need here.
   _renderFocusTarget(): void {}
 
-  _getAriaTarget(): dxElementWrapper {
-    return this.$overlayContent();
-  }
-
   _getFocusTarget(): dxElementWrapper | null | undefined {
     const $firstFocusableTarget = this._findTabbableBounds().$first;
     if ($firstFocusableTarget?.length) {
