@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type {
-  AttachmentDownloadClickEvent, ImageMessage, Message, TextMessage,
+  AttachmentDownloadClickEvent, ImageMessage, Message, TextMessage, ToolCallOptions,
 } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -42,6 +42,7 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showMessageTimestamp: boolean;
   messageTimestampFormat?: Format;
   messageTemplate?: MessageTemplate;
+  toolCallOptions?: ToolCallOptions;
   onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
 }
 
@@ -123,7 +124,7 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
-    const { messageTemplate, onAttachmentDownloadClick } = this.option();
+    const { messageTemplate, toolCallOptions, onAttachmentDownloadClick } = this.option();
 
     const { isDeleted, type, attachments } = message;
 
@@ -144,6 +145,7 @@ class MessageGroup extends Widget<Properties> {
       options.toolCalls = toolCalls;
       // the built-in block is drawn when there is no messageTemplate
       options.showToolCalls = !messageTemplate;
+      options.expandAllToolCalls = toolCallOptions?.expandAll;
     }
 
     if (messageTemplate) {
@@ -317,6 +319,7 @@ class MessageGroup extends Widget<Properties> {
       case 'showUserName':
       case 'showMessageTimestamp':
       case 'messageTemplate':
+      case 'toolCallOptions':
       case 'messageTimestampFormat':
       case 'onAttachmentDownloadClick':
         this._invalidate();
