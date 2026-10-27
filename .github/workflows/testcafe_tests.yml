@@ -343,7 +343,6 @@ jobs:
         echo "Disk: $(df -h)"
 
     - name: Run TestCafe tests
-
       timeout-minutes: 9
       working-directory: ./e2e/testcafe-devextreme
       env:
