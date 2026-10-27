@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { ChangeDetectorRef, EventEmitter, NgZone } from '@angular/core';
 import { DxComponent } from './component';
+import { canMarkForCheck } from './integration';
 
 interface IEventSubscription {
   handler: any;
@@ -27,11 +28,14 @@ export class NgEventsStrategy {
       const internalSubs = this.subscriptions[name] || [];
       if (internalSubs.length === emitter.observers.length) {
         emitter.next(args?.[0]);
+        if (name !== 'optionChanged' && canMarkForCheck(this.zone)) {
+          this.changeDetectorRef?.markForCheck();
+        }
       } else {
-        this.zone.run(() => emitter.next(args?.[0]));
-      }
-      if (name !== 'optionChanged' || emitter.observers.length > internalSubs.length) {
-        this.changeDetectorRef?.markForCheck();
+        this.zone.run(() => {
+          emitter.next(args?.[0]);
+          this.changeDetectorRef?.markForCheck();
+        });
       }
     }
   }
@@ -102,8 +106,8 @@ export class EmitterHelper {
     if (emitter?.observers.length) {
       this.zone.run(() => {
         emitter.next(eventArgs?.[0]);
+        this.changeDetectorRef?.markForCheck();
       });
-      this.changeDetectorRef?.markForCheck();
     }
   }
 

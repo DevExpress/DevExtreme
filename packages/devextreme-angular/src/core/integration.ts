@@ -16,6 +16,9 @@ let inOutsideAngularHandler = false;
 
 export const isInOutsideAngularHandler = () => inOutsideAngularHandler;
 
+export const isZoneless = (ngZone: NgZone) => !(ngZone instanceof NgZone);
+export const canMarkForCheck = (ngZone: NgZone) => isZoneless(ngZone) || NgZone.isInAngularZone();
+
 type ReadyCallback = () => void;
 type ReadyCallbackAdd = (callback: ReadyCallback) => void;
 interface ReadyCallbackAddContext {

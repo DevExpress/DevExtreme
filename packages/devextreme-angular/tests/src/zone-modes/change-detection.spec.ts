@@ -303,6 +303,84 @@ describe(`Change detection [${mode}]: events registered outside the Angular zone
     expect(host.grid.instance.columnOption(0, 'width')).toBe(150);
     expect(host.renders).toBe(rendersBefore);
   });
+
+  it(isZoneless
+    ? 'instance.on() handler for an event fired during mousemove updates the view'
+    : 'instance.on() handler for an event fired during mousemove does not run change detection', async () => {
+    const fixture = await render(`
+      <dx-list [items]="items" selectionMode="single"></dx-list>
+      <span class="out">{{ plain }}{{ countRender() }}</span>
+    `);
+    const host = fixture.componentInstance;
+    let moves = 0;
+    const change = () => {
+      moves += 1;
+      host.list.instance.selectItem(moves % 2);
+    };
+    host.list.instance.on('selectionChanged', (e) => { [host.plain] = e.addedItems; });
+    eventsEngine.on(document, 'mousemove', change);
+    const rendersBefore = host.renders;
+
+    try {
+      for (let i = 0; i < 3; i += 1) {
+        mouse(document, 'mousemove', 10 + i * 5, 10);
+      }
+      await wait(50);
+      await fixture.whenStable();
+    } finally {
+      eventsEngine.off(document, 'mousemove', change);
+    }
+
+    expect(host.plain).toBe('b');
+
+    if (isZoneless) {
+      expect(outputText(fixture)).toBe('b');
+    } else {
+      expect(host.renders).toBe(rendersBefore);
+    }
+  });
+
+  it('template-bound handler for an event fired during mousemove runs a single change detection pass', async () => {
+    const fixture = await render(`
+      <dx-list [items]="items" selectionMode="single" (onSelectionChanged)="plain = $event.addedItems[0]"></dx-list>
+      <span class="out">{{ plain }}{{ countRender() }}</span>
+    `);
+    const host = fixture.componentInstance;
+    const change = () => host.list.instance.selectItem(1);
+    eventsEngine.on(document, 'mousemove', change);
+    const rendersBefore = host.renders;
+
+    try {
+      mouse(document, 'mousemove', 10, 10);
+      await wait(50);
+      await fixture.whenStable();
+    } finally {
+      eventsEngine.off(document, 'mousemove', change);
+    }
+
+    expect(outputText(fixture)).toBe('b');
+    // one pass plus the dev-mode checkNoChanges pass
+    expect(host.renders - rendersBefore).toBe(2);
+  });
+
+  if (!isZoneless) {
+    it('widget events fired in a timer outside the Angular zone do not run change detection', async () => {
+      const fixture = await render(`
+        <dx-list [items]="items" selectionMode="single"></dx-list>
+        <span class="out">{{ countRender() }}</span>
+      `);
+      const host = fixture.componentInstance;
+      host.list.instance.on('selectionChanged', (e) => { [host.plain] = e.addedItems; });
+      const rendersBefore = host.renders;
+
+      fixture.ngZone.runOutsideAngular(() => setTimeout(() => host.list.instance.selectItem(1)));
+      await wait(50);
+      await fixture.whenStable();
+
+      expect(host.plain).toBe('b');
+      expect(host.renders).toBe(rendersBefore);
+    });
+  }
 });
 
 if (isZoneless) {
