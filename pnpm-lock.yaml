@@ -503,6 +503,9 @@ importers:
       mustache:
         specifier: 4.2.0
         version: 4.2.0
+      ol:
+        specifier: 10.10.0
+        version: 10.10.0
       openai:
         specifier: 7.5.0
         version: 7.5.0(ws@8.21.1)(zod@4.6.7)

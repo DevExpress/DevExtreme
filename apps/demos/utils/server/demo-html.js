@@ -9,7 +9,7 @@ const TEMPLATE_TAGS = [
 
 const LOCAL_SRC_RE = /src=["'](?!https?:|\/|\.\.\/)[\w.-]+\.js["']/i;
 
-const HEAD_TAG_RE = /<link\b[^>]*?>|<script\b[\s\S]*?<\/script\b[^>]*>/gi;
+const HEAD_TAG_RE = /<link\b[^>]*?>|<script\b[\s\S]*?<\/script\b[^>]*>|<meta\b(?=[^>]*\bname\s*=\s*["']referrer["'])[^>]*?>/gi;
 
 const COMMENT_RE = /<!--[\s\S]*?-->/g;
 
@@ -29,7 +29,7 @@ function stripUntilStable(value, pattern) {
 
 function normalizeTag(tag) {
   const collapsed = tag.replace(/\s+/g, ' ').trim();
-  if (!/^<link\b/i.test(collapsed)) return collapsed;
+  if (!/^<(link|meta)\b/i.test(collapsed)) return collapsed;
   return collapsed.replace(/\s*\/?>$/, ' />');
 }
 
@@ -51,13 +51,13 @@ function extractHeadExtras(html, context) {
   const seen = new Set();
 
   for (const tag of tags) {
-    const url = (tag.match(/(?:href|src)=["']([^"']+)["']/i) || [])[1];
-    if (!url) {
+    const key = /^<meta\b/i.test(tag) ? 'meta:referrer' : (tag.match(/(?:href|src)=["']([^"']+)["']/i) || [])[1];
+    if (!key) {
       warnDroppedInline(tag, context);
-    } else if (!seen.has(url)
+    } else if (!seen.has(key)
       && !LOCAL_SRC_RE.test(tag)
       && !TEMPLATE_TAGS.some((re) => re.test(tag))) {
-      seen.add(url);
+      seen.add(key);
       extras.push(normalizeTag(tag));
     }
   }
