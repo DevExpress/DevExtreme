@@ -215,8 +215,10 @@ function main() {
         } else if(warning) {
             const lines = [];
 
+            const purchaseLicense = TEMPLATES.purchaseLicense(fullVersion);
+
             lines.push(
-                prefixed(`${TEMPLATES.warningPrefix(1000)} ${withDetails(TEMPLATES.purchaseLicense(fullVersion), licenseId)}`),
+                prefixed(`${TEMPLATES.warningPrefix(1000)} ${warning.type === 'incompatibleVersion' ? purchaseLicense : withDetails(purchaseLicense, licenseId)}`),
             );
 
             if(warning.type !== 'trial') {

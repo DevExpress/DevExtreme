@@ -349,6 +349,17 @@ describe('devextreme-license', () => {
 
         expect(stderr).toContain(`Warning DX1002: Incompatible DevExpress license key version (${keyVersion}). Use and Redistribution prohibited. Download and register an updated DevExpress license key (v${major}.${minor}+). Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002).`);
     });
+    it('prints the license ID and the source once for an incompatible key version', () => {
+        const lcx = createLcx(entry(versionCode() - 10, DEVEXTREME_HTMLJS_BIT));
+        const { stderr } = run({ DevExpress_License: lcx });
+
+        expect(stderr).toContain('Warning DX1000:');
+        expect(stderr).toContain('Warning DX1002:');
+        expect(stderr.match(/License ID: /g)).toHaveLength(1);
+        expect(stderr.match(/License Source: /g)).toHaveLength(1);
+        expect(stderr.indexOf('License ID: ')).toBeGreaterThan(stderr.indexOf('Warning DX1002:'));
+    });
+
     describe('where the key comes from', () => {
         it('reports the file of DevExpress_LicensePath as a file', () => {
             const filePath = path.join(tmp, 'license', 'key.txt');
