@@ -335,9 +335,7 @@ jobs:
         echo "Disk: $(df -h)"
 
     - name: Run TestCafe tests
-
       timeout-minutes: 13
-      timeout-minutes: 9
       working-directory: ./e2e/testcafe-devextreme
       env:
         NODE_OPTIONS: --max-old-space-size=8192

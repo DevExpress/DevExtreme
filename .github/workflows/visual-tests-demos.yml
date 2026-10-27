@@ -770,8 +770,6 @@ jobs:
         echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Run TestCafe tests (jQuery)
-
-      timeout-minutes: 12
       timeout-minutes: 12
       shell: bash
       working-directory: apps/demos
@@ -959,8 +957,6 @@ jobs:
         fi
 
     - name: Run TestCafe tests
-
-      timeout-minutes: 15
       timeout-minutes: 15
       shell: bash
       working-directory: apps/demos
