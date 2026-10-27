@@ -41,9 +41,9 @@ $(() => {
       // This configuration will not work on your domain. Configure your own tile provider here.
       tileServer: {
         url: 'https://tiles-eu.stadiamaps.com/tiles/alidade_bright/{z}/{x}/{y}.png',
-        attribution: '&copy; <a href="https://stadiamaps.com/attribution/">Stadia Maps</a> '
-          + '&copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> '
-          + '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+        attribution: '&copy; <a href="https://stadiamaps.com/attribution/" target="_blank" rel="noopener">Stadia Maps</a> '
+          + '&copy; <a href="https://openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> '
+          + '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>',
         maxZoom: 20,
       },
       calculateRoute,
