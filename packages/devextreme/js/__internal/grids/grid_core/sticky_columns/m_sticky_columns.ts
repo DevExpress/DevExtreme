@@ -14,7 +14,10 @@ import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { HorizontalBounds } from '@ts/grids/grid_core/keyboard_navigation/types';
+import type { MasterDetailRowsViewExtension } from '@ts/grids/grid_core/master_detail/types';
+import type { ValidatingEditorFactoryExtension } from '@ts/grids/grid_core/validating/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type { VirtualScrollingResizingControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/types';
 import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
@@ -44,6 +47,7 @@ import type {
   GridContextMenuItem,
   RowRenderOptions,
   RowsViewScrollEvent,
+  SummaryRowsViewExtension,
   ViewCellOptions,
   ViewRow,
 } from '../views/types';
@@ -404,7 +408,7 @@ const columnHeadersView = (
 };
 
 const rowsView = (
-  Base: ModuleType<RowsView>,
+  Base: ModuleType<RowsView & MasterDetailRowsViewExtension & SummaryRowsViewExtension>,
 ): ModuleType<StickyRowsView> => class RowsViewStickyColumnsExtender
   extends baseStickyColumns(Base) {
   private _getMasterDetailWidth(): number {
@@ -414,13 +418,12 @@ const rowsView = (
     return componentWidth - borderWidth - this.getScrollbarWidth();
   }
 
-  protected _renderMasterDetailCell(
+  public renderMasterDetailCell(
     $row: dxElementWrapper,
     row: ViewRow,
     options: RowRenderOptions,
   ): dxElementWrapper {
-    // @ts-expect-error _renderMasterDetailCell is declared on the master detail extender
-    const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
+    const $detailCell = super.renderMasterDetailCell($row, row, options);
 
     if (this.hasStickyColumns()) {
       const detailContainerSelector = `.${this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer)}`;
@@ -465,8 +468,11 @@ const rowsView = (
       widths = [...widths].reverse();
     }
 
-    // @ts-expect-error the view is rendered here
-    const $tableElement: dxElementWrapper = this.getTableElement();
+    const $tableElement = this.getTableElement();
+
+    if (!$tableElement?.length) {
+      return;
+    }
 
     groupColumns.forEach((column) => {
       const columnIndex = columnsCountBeforeGroups + column.groupIndex + 1;
@@ -519,14 +525,13 @@ const rowsView = (
     return super._renderCellContent($container, options, renderOptions);
   }
 
-  protected _renderGroupSummaryCellsCore(
+  public renderGroupSummaryCellsCore(
     $groupCell: dxElementWrapper,
     options: RowRenderOptions,
     groupCellColSpan: number,
     alignByColumnCellCount: number,
   ): void {
-    // @ts-expect-error _renderGroupSummaryCellsCore is defined by DataGrid summary
-    super._renderGroupSummaryCellsCore(
+    super.renderGroupSummaryCellsCore(
       $groupCell,
       options,
       groupCellColSpan,
@@ -778,7 +783,7 @@ const draggingHeader = (
 };
 
 const editorFactory = (
-  Base: ModuleType<EditorFactory>,
+  Base: ModuleType<EditorFactory & ValidatingEditorFactoryExtension>,
 ): ModuleType<EditorFactory> => class EditorFactoryStickyColumnsExtender extends Base {
   protected declare _rowsView: StickyRowsView;
 
@@ -827,22 +832,17 @@ const editorFactory = (
     return super.getFocusOverlaySize($element);
   }
 
-  protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
-    // @ts-expect-error getValidationMessageContainer is declared on the validating extender
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- validating extender adds it
+  public getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
     return this.getOverlayContainerIfNeeded($cell) ?? super.getValidationMessageContainer($cell);
   }
 
-  protected getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
-    // @ts-expect-error getRevertButtonContainer is declared on the validating extender
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- validating extender adds it
+  public getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
     return this.getOverlayContainerIfNeeded($cell) ?? super.getRevertButtonContainer($cell);
   }
 
-  protected overlayPositionedHandler(e, isOverlayVisible: boolean): void {
+  public overlayPositionedHandler(e, isOverlayVisible: boolean): void {
     const columnHeaders = this.getView('columnHeadersView') as StickyColumnHeadersView;
     const hasStickyColumns = columnHeaders.hasStickyColumns();
-    // @ts-expect-error overlayPositionedHandler is declared on the validating extender
     super.overlayPositionedHandler(e, isOverlayVisible);
 
     if (hasStickyColumns) {
@@ -859,7 +859,6 @@ const editorFactory = (
             this.addWidgetPrefix.bind(this),
           );
 
-        // @ts-expect-error getOverlayBaseZIndex is declared on the validating extender
         $wrapper.css('zIndex', isOutsideVisibleArea ? 1 : this.getOverlayBaseZIndex() ?? 0);
       }
     }
@@ -884,7 +883,7 @@ const editorFactory = (
 };
 
 const resizing = (
-  Base: ModuleType<ResizingController>,
+  Base: ModuleType<ResizingController & VirtualScrollingResizingControllerExtension>,
 ): ModuleType<ResizingController> => class ResizingStickyColumnsExtender extends Base {
   protected declare _columnHeadersView: StickyColumnHeadersView;
 
@@ -894,7 +893,6 @@ const resizing = (
     const result = super.resize();
     const hasStickyColumns = this._columnHeadersView.hasStickyColumns();
 
-    // @ts-expect-error hasResizeTimeout is declared on the virtual scrolling extender
     if (hasStickyColumns && this.hasResizeTimeout()) {
       this._rowsView.setStickyOffsets();
     }
