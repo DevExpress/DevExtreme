@@ -10,7 +10,7 @@ const showScrollBarModeLabel = { 'aria-label': 'Show Scrollbar Mode' };
 let updateContentTimer;
 const App = () => {
   const [showScrollBarMode, setShowScrollBarMode] = useState('onScroll');
-  const [useNative, setUseNative] = useState();
+  const [useNative, setUseNative] = useState(false);
   const [pullDown, setPullDown] = useState(false);
   const [scrollByContent, setScrollByContent] = useState(true);
   const [scrollByThumb, setScrollByThumb] = useState(true);
@@ -50,6 +50,9 @@ const App = () => {
   const useNativeValueChanged = useCallback((args) => {
     setUseNative(args.value);
     scrollViewRef.current?.instance().option('useNative', args.value);
+    if (args.value) {
+      setShowScrollBarMode((mode) => (mode === 'never' ? 'onScroll' : mode));
+    }
   }, []);
   const pullDownValueChanged = useCallback((args) => {
     setPullDown(args.value);
@@ -88,7 +91,7 @@ const App = () => {
         </div>
         <div className="option">
           <CheckBox
-            text="Use native"
+            text="Use browser scrolling logic"
             value={useNative}
             onValueChanged={useNativeValueChanged}
           />
@@ -111,6 +114,7 @@ const App = () => {
           <CheckBox
             text="Scroll by content"
             value={scrollByContent}
+            disabled={!!useNative}
             onValueChange={setScrollByContent}
           />
         </div>
@@ -118,6 +122,7 @@ const App = () => {
           <CheckBox
             text="Scroll by thumb"
             value={scrollByThumb}
+            disabled={!!useNative}
             onValueChange={setScrollByThumb}
           />
         </div>

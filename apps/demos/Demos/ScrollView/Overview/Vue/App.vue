@@ -35,7 +35,7 @@
           <DxCheckBox
             id="use-native"
             v-model:value="useNative"
-            text="Use native"
+            text="Use browser scrolling logic"
             @value-changed="onUseNativeChanged"
           />
         </div>
@@ -57,12 +57,14 @@
         <div class="option">
           <DxCheckBox
             v-model:value="scrollByContent"
+            :disabled="useNative"
             text="Scroll by content"
           />
         </div>
         <div class="option">
           <DxCheckBox
             v-model:value="scrollByThumb"
+            :disabled="useNative"
             text="Scroll by thumb"
           />
         </div>
@@ -78,7 +80,7 @@ import { DxCheckBox, type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import { longText } from './data.ts';
 
 const content = ref(longText);
-const useNative = ref<boolean>();
+const useNative = ref<boolean>(false);
 const pullDown = ref(false);
 const showScrollbarModes = ref([
   {
@@ -134,6 +136,9 @@ function onValueChanged(args: DxCheckBoxTypes.ValueChangedEvent) {
 }
 function onUseNativeChanged(args: DxCheckBoxTypes.ValueChangedEvent) {
   scrollViewWidget.value.instance.option('useNative', args.value);
+  if (args.value && showScrollbar.value === 'never') {
+    showScrollbar.value = 'onScroll';
+  }
 }
 </script>
 <style>

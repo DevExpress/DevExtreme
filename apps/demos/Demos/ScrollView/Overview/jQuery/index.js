@@ -50,12 +50,35 @@ $(() => {
     },
   }).dxSelectBox('instance');
 
+  const scrollByContentCheckBox = $('#scroll-by-content').dxCheckBox({
+    value: true,
+    text: 'Scroll by content',
+    disabled: scrollViewWidget.option('useNative'),
+    onValueChanged(data) {
+      scrollViewWidget.option('scrollByContent', data.value);
+    },
+  }).dxCheckBox('instance');
+
+  const scrollByThumbCheckBox = $('#scroll-by-thumb').dxCheckBox({
+    value: true,
+    text: 'Scroll by thumb',
+    disabled: scrollViewWidget.option('useNative'),
+    onValueChanged(data) {
+      scrollViewWidget.option('scrollByThumb', data.value);
+    },
+  }).dxCheckBox('instance');
+
   $('#use-native').dxCheckBox({
     value: scrollViewWidget.option('useNative'),
-    text: 'Use native',
+    text: 'Use browser scrolling logic',
     onValueChanged(data) {
       scrollViewWidget.option('useNative', data.value);
       showScrollbarSelectBox.option('disabled', data.value);
+      scrollByContentCheckBox.option('disabled', data.value);
+      scrollByThumbCheckBox.option('disabled', data.value);
+      if (data.value && showScrollbarSelectBox.option('value') === 'never') {
+        showScrollbarSelectBox.option('value', 'onScroll');
+      }
     },
   });
 
@@ -73,22 +96,6 @@ $(() => {
     onValueChanged(data) {
       scrollViewWidget.option('onPullDown', data.value ? updateTopContent : null);
       scrollViewWidget.option('bounceEnabled', data.value);
-    },
-  });
-
-  $('#scroll-by-content').dxCheckBox({
-    value: true,
-    text: 'Scroll by content',
-    onValueChanged(data) {
-      scrollViewWidget.option('scrollByContent', data.value);
-    },
-  });
-
-  $('#scroll-by-thumb').dxCheckBox({
-    value: true,
-    text: 'Scroll by thumb',
-    onValueChanged(data) {
-      scrollViewWidget.option('scrollByThumb', data.value);
     },
   });
 });

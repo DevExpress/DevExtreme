@@ -30,7 +30,7 @@
     <div class="option">
       <dx-check-box
         id="use-native"
-        text="Use native"
+        text="Use browser scrolling logic"
         [(value)]="useNative"
         (onValueChanged)="useNativeChanged($event)"
       >
@@ -52,11 +52,19 @@
       </dx-check-box>
     </div>
     <div class="option">
-      <dx-check-box text="Scroll by content" [(value)]="scrollByContent">
+      <dx-check-box
+        text="Scroll by content"
+        [(value)]="scrollByContent"
+        [disabled]="useNative"
+      >
       </dx-check-box>
     </div>
     <div class="option">
-      <dx-check-box text="Scroll by thumb" [(value)]="scrollByThumb">
+      <dx-check-box
+        text="Scroll by thumb"
+        [(value)]="scrollByThumb"
+        [disabled]="useNative"
+      >
       </dx-check-box>
     </div>
   </div>

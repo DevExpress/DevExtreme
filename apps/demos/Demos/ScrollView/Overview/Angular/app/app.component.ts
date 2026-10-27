@@ -74,6 +74,9 @@ export class AppComponent implements AfterViewInit {
 
   useNativeChanged = (data: DxCheckBoxTypes.ValueChangedEvent) => {
     this.scrollView.instance.option('useNative', data.value);
+    if (data.value && this.scrollbarMode === 'never') {
+      this.scrollbarMode = 'onScroll';
+    }
   };
 
   valueChanged = (data: DxCheckBoxTypes.ValueChangedEvent) => {

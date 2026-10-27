@@ -18,7 +18,7 @@ let updateContentTimer: ReturnType<typeof setTimeout>;
 
 const App = () => {
   const [showScrollBarMode, setShowScrollBarMode] = useState<ScrollViewTypes.Properties['showScrollbar']>('onScroll');
-  const [useNative, setUseNative] = useState<CheckBoxValue>();
+  const [useNative, setUseNative] = useState<CheckBoxValue>(false);
   const [pullDown, setPullDown] = useState<CheckBoxValue>(false);
   const [scrollByContent, setScrollByContent] = useState<CheckBoxValue>(true);
   const [scrollByThumb, setScrollByThumb] = useState<CheckBoxValue>(true);
@@ -53,6 +53,9 @@ const App = () => {
   const useNativeValueChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
     setUseNative(args.value);
     scrollViewRef.current?.instance().option('useNative', args.value);
+    if (args.value) {
+      setShowScrollBarMode((mode) => (mode === 'never' ? 'onScroll' : mode));
+    }
   }, []);
 
   const pullDownValueChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
@@ -94,7 +97,7 @@ const App = () => {
         </div>
         <div className="option">
           <CheckBox
-            text="Use native"
+            text="Use browser scrolling logic"
             value={useNative}
             onValueChanged={useNativeValueChanged}
           />
@@ -117,6 +120,7 @@ const App = () => {
           <CheckBox
             text="Scroll by content"
             value={scrollByContent}
+            disabled={!!useNative}
             onValueChange={setScrollByContent}
           />
         </div>
@@ -124,6 +128,7 @@ const App = () => {
           <CheckBox
             text="Scroll by thumb"
             value={scrollByThumb}
+            disabled={!!useNative}
             onValueChange={setScrollByThumb}
           />
         </div>
