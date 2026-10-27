@@ -377,6 +377,10 @@
     "dx-lookup-popup-search",
     "dx-lookup-search-wrapper"
   ],
+  "map": [
+    "dx-map-marker-default-body",
+    "dx-map-marker-default-center"
+  ],
   "menu": [
     "dx-context-menu",
     "dx-datagrid-filter-row",

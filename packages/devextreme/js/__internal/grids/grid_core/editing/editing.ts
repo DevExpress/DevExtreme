@@ -30,7 +30,7 @@ import type Form from '@js/ui/form';
 import type { HidingEvent as PopupHidingEvent } from '@js/ui/popup';
 import { current, isFluent } from '@js/ui/themes';
 import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
-import domUtils from '@ts/core/utils/m_dom';
+import domUtils from '@ts/core/utils/dom';
 import type Store from '@ts/data/abstract_store';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
@@ -106,12 +106,12 @@ import {
   isEditingOrShowEditorAlwaysDataCell,
 } from './editing_utils';
 import { editingDataControllerExtender } from './extenders/editing_data_controller';
-import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
-import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
+import type { CellBasedEditingController } from './m_editing_cell_based';
 import type {
   AllowEditActionValue,
   EditActionOptions,
   EditActions,
+  EditCellResult,
   EditingActionParams,
   EditingButton,
   EditingCellRenderOptions,
@@ -119,8 +119,8 @@ import type {
   EditingChangeParams,
   EditingChangesOptionChanged,
   EditingColumn,
+  EditingDefaultOptions,
   EditingModuleOptionChanged,
-  EditingModuleOptions,
   EditingOptions,
   EditingStartOptions,
   EditorCellOptions,
@@ -137,7 +137,7 @@ import type {
   SaveResult,
 } from './types';
 
-class EditingControllerImpl extends modules.ViewController {
+export class EditingController extends modules.ViewController {
   protected _columnsController!: ColumnsController;
 
   protected _dataController!: DataController;
@@ -397,7 +397,7 @@ class EditingControllerImpl extends modules.ViewController {
     return true;
   }
 
-  protected isPopupEditMode(): boolean {
+  public isPopupEditMode(): boolean {
     const editMode = this.option('editing.mode');
     return editMode === EDIT_MODE.popup;
   }
@@ -2817,13 +2817,12 @@ class EditingControllerImpl extends modules.ViewController {
   }
 }
 
-export type EditingController = EditingControllerImpl
-  & ICellBasedEditingControllerExtender
-  & IFormBasedEditingControllerExtender;
+const rowsView = <TBase extends ModuleType<RowsView>>(
+  Base: TBase,
+): TBase => class RowsViewEditingExtender extends Base {
+  /** @architectureLeak editingCellBased: a click on a cell starts and closes cell editing */
+  public _editingController!: CellBasedEditingController;
 
-const rowsView = (
-  Base: ModuleType<RowsView>,
-): ModuleType<RowsView> => class RowsViewEditingExtender extends Base {
   private _pointerDownTarget?: EventTarget | null;
 
   private _pointerDownTimeout?: ReturnType<typeof setTimeout>;
@@ -2884,7 +2883,6 @@ const rowsView = (
     let $tableElement = $cellElement.closest('table');
     const $tableElements = this.getTableElements();
 
-    // @ts-expect-error filter() is typed for selectors only
     while ($tableElement.length && !$tableElements.filter($tableElement).length) {
       $cellElement = $tableElement.closest('td');
       $tableElement = $cellElement.closest('table');
@@ -2901,7 +2899,7 @@ const rowsView = (
     return this.getCellIndex($targetElement);
   }
 
-  private _editCellByClick(e: ViewRowEvent, eventName: string): boolean | undefined {
+  private _editCellByClick(e: ViewRowEvent, eventName: string): EditCellResult | undefined {
     const $targetElement = $(e.event.target);
     const columnIndex = this._getColumnIndexByElement($targetElement);
     const row = this._dataController.items()[e.rowIndex];
@@ -2921,7 +2919,6 @@ const rowsView = (
         domUtils.resetActiveElement();
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- editCell() isn't typed yet
       return isShowEditorAlways && allowEditing
         && this._editingController.editCell(e.rowIndex, columnIndex);
     }
@@ -2937,9 +2934,7 @@ const rowsView = (
     }
 
     if (allowEditing && eventName === startEditAction) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- editCell() isn't typed yet
       return this._editingController.editCell(e.rowIndex, columnIndex)
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- false falls back
         || this._editingController.isEditRow(e.rowIndex);
     }
 
@@ -3155,7 +3150,7 @@ const headerPanel = (
 };
 
 export const editingModule = {
-  defaultOptions(): { editing: EditingOptions } & EditingModuleOptions {
+  defaultOptions(): EditingDefaultOptions {
     return {
       editing: {
         mode: 'row', // "batch"
@@ -3192,7 +3187,7 @@ export const editingModule = {
     };
   },
   controllers: {
-    editing: EditingControllerImpl,
+    editing: EditingController,
   },
   extenders: {
     controllers: {

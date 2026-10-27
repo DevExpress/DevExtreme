@@ -39,7 +39,7 @@ import type {
   TreeViewCheckBoxMode,
   TreeViewExpandEvent,
 } from '@js/ui/tree_view';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import CheckBox from '@ts/ui/check_box/index';

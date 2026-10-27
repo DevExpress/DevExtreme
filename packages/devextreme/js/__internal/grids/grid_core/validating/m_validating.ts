@@ -37,7 +37,8 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import {
   EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
 } from '../editing/const';
-import type { EditingController } from '../editing/m_editing';
+import type { EditingController } from '../editing/editing';
+import type { CellBasedEditingController } from '../editing/m_editing_cell_based';
 import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
@@ -77,7 +78,7 @@ export class ValidatingController extends modules.Controller {
 
   private _disableApplyValidationResults = false;
 
-  private _editingController!: EditingController;
+  private _editingController!: CellBasedEditingController;
 
   private _editorFactoryController!: EditorFactory;
 
@@ -90,7 +91,7 @@ export class ValidatingController extends modules.Controller {
   private _currentCellValidator: any;
 
   public init() {
-    this._editingController = this.getController('editing');
+    this._editingController = this.getController('editing') as CellBasedEditingController;
     this._editorFactoryController = this.getController('editorFactory');
     this._columnsController = this.getController('columns');
     this.createAction('onRowValidating');
@@ -928,7 +929,6 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
       const validator = $cell && $cell.data('dxValidator');
       const rowOptions = $cell && $cell.closest(`.${VIEW_CLASSES.row}`).data('options');
-      // @ts-expect-error
       const value = validator && validator.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
         // @ts-expect-error
@@ -1550,7 +1550,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
         && $rowElements.length === 1
         && (
           !$freeSpaceRowElement.is(':visible')
-          || getOuterHeight($tooltipContent) > getOuterHeight($freeSpaceRowElement)
+          || Number(getOuterHeight($tooltipContent)) > getOuterHeight($freeSpaceRowElement)
         )
         && rowElementsHasFocusInside
       ) {
@@ -1587,7 +1587,6 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
   }
 
   protected _restoreErrorRow(contentTable?) {
-    // @ts-expect-error each() is typed for callbacks that return a boolean
     this._editingController && this._editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
       const rowOptions = $(item).data('options');
       if (rowOptions) {

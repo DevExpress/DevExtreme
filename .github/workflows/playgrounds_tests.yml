@@ -27,7 +27,7 @@ jobs:
       uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -40,8 +40,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -136,7 +136,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -159,64 +159,16 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-cache
 
-    - name: Lookup nx cache
-      id: lookup-nx-cache
-      uses: actions/cache/restore@v5
-      with:
-        path: |
-          .nx/cache
-          .nx/workspace-data/*.db
-          .nx/workspace-data/*.db-wal
-          .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.sha }}-
-          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-
-          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-
-
-        lookup-only: true
-
-    - name: Show nx cache status
-      shell: bash
-      run: |
-        echo "Nx cache lookup exact hit: ${{ steps.lookup-nx-cache.outputs.cache-hit }}"
-        echo "Nx cache primary key: ${{ steps.lookup-nx-cache.outputs.cache-primary-key }}"
-        echo "Nx cache matched key: ${{ steps.lookup-nx-cache.outputs.cache-matched-key }}"
-        if [ -z "${{ steps.lookup-nx-cache.outputs.cache-matched-key }}" ]; then
-          echo "Nx cache lookup: miss"
-        elif [ "${{ steps.lookup-nx-cache.outputs.cache-hit }}" = "true" ]; then
-          echo "Nx cache lookup: exact hit"
-        else
-          echo "Nx cache lookup: partial hit via restore-keys"
-        fi
-
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Setup nx cache
-      id: setup-nx-cache
-      uses: actions/cache@v5
-      with:
-        path: |
-          .nx/cache
-          .nx/workspace-data/*.db
-          .nx/workspace-data/*.db-wal
-          .nx/workspace-data/*.db-shm
-        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-${{ github.sha }}-
-          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ matrix.ARGS.platform }}-
-          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-          ${{ runner.os }}-nx-v2-
 
     - name: Build
       working-directory: ./packages/devextreme-${{ matrix.ARGS.platform }}

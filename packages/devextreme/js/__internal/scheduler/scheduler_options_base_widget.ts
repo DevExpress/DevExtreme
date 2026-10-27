@@ -1,5 +1,5 @@
 import Widget from '@js/ui/widget/ui.widget';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 import {

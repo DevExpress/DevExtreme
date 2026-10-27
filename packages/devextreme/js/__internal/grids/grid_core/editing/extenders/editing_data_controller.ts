@@ -13,16 +13,16 @@ import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
+import type { EditingController } from '../editing';
 import { isCellModified } from '../editing_utils';
-import type { EditingController } from '../m_editing';
 
 export interface EditingDataControllerExtension {
   _editingController: EditingController;
 }
 
-export const editingDataControllerExtender = (
-  Base: ModuleType<DataController>,
-): ModuleType<
+export const editingDataControllerExtender = <TBase extends ModuleType<DataController>>(
+  Base: TBase,
+): TBase & ModuleType<
   DataController & EditingDataControllerExtension
 > => class EditingDataControllerExtender extends Base {
   public _editingController!: EditingController;

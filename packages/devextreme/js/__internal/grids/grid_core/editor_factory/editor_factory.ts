@@ -24,7 +24,7 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import { CLASSES as EDITING_CLASSES } from '../editing/const';
-import type { EditingController } from '../editing/m_editing';
+import type { EditingController } from '../editing/editing';
 import { CLASSES as KEYBOARD_NAVIGATION_CLASSES } from '../keyboard_navigation/const';
 import { isDataRow } from '../keyboard_navigation/utils';
 import type { ViewController } from '../modules/modules';
@@ -191,11 +191,11 @@ export class EditorFactory extends ViewControllerWithMixin {
     const location = positionUtils.calculate($element, extend({ collision: 'fit' }, position));
 
     if (location.h.oversize > 0) {
-      setOuterWidth($element, getOuterWidth($element) - location.h.oversize);
+      setOuterWidth($element, Number(getOuterWidth($element)) - location.h.oversize);
     }
 
     if (location.v.oversize > 0) {
-      setOuterHeight($element, getOuterHeight($element) - location.v.oversize);
+      setOuterHeight($element, Number(getOuterHeight($element)) - location.v.oversize);
     }
 
     $element.show();
@@ -280,7 +280,6 @@ export class EditorFactory extends ViewControllerWithMixin {
       return this._$focusedElement;
     } if ($element) {
       // To prevent overlay flicking
-      // @ts-expect-error is() is typed without null and undefined
       if (!$element.is(this._$focusedElement)) {
         // TODO: this code should be before timeout
         // else focus is not will move to adaptive form by shift + tab key

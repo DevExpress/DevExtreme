@@ -67,7 +67,7 @@ export const keepContentHeight = (
 
   const { minHeight } = ($content.get(0) as HTMLElement).style;
 
-  $content.css('minHeight', getOuterHeight($content));
+  $content.css('minHeight', getOuterHeight($content.get(0)));
   callback();
   $content.css('minHeight', minHeight);
 };

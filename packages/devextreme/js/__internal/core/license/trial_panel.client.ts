@@ -14,6 +14,13 @@ export interface CustomTrialPanelStyles {
   buttonStyles?: StylesMap;
 }
 
+export interface TrialPanelOptions {
+  trialExpired?: boolean;
+  libraries?: string | null;
+  licenseId?: string | null;
+  licenseSource?: string | null;
+}
+
 export const isClient = (): boolean => typeof HTMLElement !== 'undefined' && typeof customElements !== 'undefined';
 
 const SafeHTMLElement = isClient()
@@ -32,7 +39,15 @@ const attributeNames = {
   licensingDoc: 'licensing-doc',
   version: 'version',
   subscriptions: 'subscriptions',
+  trialExpired: 'trial-expired',
+  libraries: 'libraries',
+  licenseId: 'license-id',
+  licenseSource: 'license-source',
 };
+
+const BRAND_COLOR = '#FF7200';
+const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
+
 const commonStyles = {
   opacity: '1',
   visibility: 'visible',
@@ -48,7 +63,7 @@ const contentStyles = {
   'z-index': `${BASE_Z_INDEX}`,
   position: 'static',
   transform: 'translate(0px, 0px)',
-  'background-color': '#FF7200',
+  'background-color': BRAND_COLOR,
   border: 'none',
   margin: 'auto',
   'box-sizing': 'border-box',
@@ -80,6 +95,7 @@ const textStyles = {
   'font-family': '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
   'font-size': '0.875rem',
   'font-weight': '600',
+  'overflow-wrap': 'anywhere',
 };
 
 function createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMap): string {
@@ -92,6 +108,75 @@ function createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMa
     );
 }
 
+const OVERLAY_Z_INDEX = '99999';
+const overlayStyles = createImportantStyles({
+  ...commonStyles,
+  position: 'fixed',
+  top: '0px',
+  left: '0px',
+  right: '0px',
+  bottom: '0px',
+  display: 'flex',
+  width: 'auto',
+  height: 'auto',
+  'max-width': 'none',
+  'max-height': 'none',
+  margin: '0px',
+  transform: 'none',
+  border: 'none',
+  'box-sizing': 'border-box',
+  overflow: 'auto',
+  'z-index': OVERLAY_Z_INDEX,
+  'background-color': 'rgba(255, 255, 255, 0.9)',
+  padding: '1rem',
+  'padding-bottom': 'min(400px, 40vh)',
+});
+const overlayContentStyles = createImportantStyles({
+  ...commonStyles,
+  display: 'block',
+  margin: 'auto',
+  'max-width': '60rem',
+  'text-align': 'center',
+});
+const overlayTextStyles = {
+  ...textStyles,
+  color: 'black',
+  'font-size': '1rem',
+  'font-weight': '400',
+  'line-height': '2',
+};
+const overlaySpanStyles = createImportantStyles(overlayTextStyles);
+const overlayTitleStyles = createImportantStyles(overlayTextStyles, { display: 'block', 'font-weight': '700' });
+const overlayLinkStyles = createImportantStyles(overlayTextStyles, { 'text-decoration': 'underline' });
+
+function createWarningIcon(): SVGSVGElement {
+  const icon = document.createElementNS(SVG_NAMESPACE, 'svg');
+  const path = document.createElementNS(SVG_NAMESPACE, 'path');
+
+  icon.setAttribute('viewBox', '0 0 24 24');
+  icon.setAttribute('aria-hidden', 'true');
+  icon.style.cssText = createImportantStyles({
+    display: 'block',
+    width: '96px',
+    height: '96px',
+    margin: '0px auto 2rem auto',
+  });
+  path.setAttribute('d', 'M12,0C5.4,0,0,5.4,0,12s5.4,12,12,12,12-5.4,12-12S18.6,0,12,0ZM12,22c-5.5,0-10-4.5-10-10S6.5,2,12,2s10,4.5,10,10-4.5,10-10,10ZM13,6v8c0,.6-.4,1-1,1s-1-.4-1-1V6c0-.6.4-1,1-1s1,.4,1,1ZM13,18c0,.5-.4,1-1,1s-1-.5-1-1,.4-1,1-1,1,.5,1,1Z');
+  path.style.cssText = createImportantStyles({ fill: BRAND_COLOR });
+  icon.appendChild(path);
+
+  return icon;
+}
+
+function setStyles<T extends HTMLElement>(element: T, styles: string): T {
+  element.style.cssText = styles;
+  return element;
+}
+
+function isTrialExpired(element: Element): boolean {
+  return element.getAttribute(attributeNames.trialExpired)?.trim().toLowerCase() === 'true';
+}
+
 class DxLicense extends SafeHTMLElement {
   public static customStyles: CustomTrialPanelStyles | undefined = undefined;
 
@@ -100,6 +185,8 @@ class DxLicense extends SafeHTMLElement {
   private _observer: MutationObserver | null = null;
 
   private _inReassign = false;
+
+  private _expired = false;
 
   private readonly _spanStyles: string;
 
@@ -135,6 +222,10 @@ class DxLicense extends SafeHTMLElement {
     );
   }
 
+  public get isExpired(): boolean {
+    return this._expired;
+  }
+
   private _getSubscriptionsArray(subscriptions: string | null): string[] {
     return subscriptions?.split(',').map((x) => x.trim()) ?? [];
   }
@@ -165,10 +256,43 @@ class DxLicense extends SafeHTMLElement {
   }
 
   private _updateSubscriptionsText(subscriptions: string | null): void {
-    if (subscriptions && this._subscriptionsSpan) {
+    if (!this._subscriptionsSpan) return;
+
+    if (subscriptions) {
       this.setAttribute(attributeNames.subscriptions, subscriptions);
-      this._subscriptionsSpan.innerText = ` Included in Subscriptions: ${subscriptions}`;
     }
+
+    if (this._expired) {
+      this._subscriptionsSpan.innerText = this._getTrialExpiredEnding(subscriptions)
+        + this._getLicenseText();
+      return;
+    }
+
+    const subscriptionsText = subscriptions ? ` Included in Subscriptions: ${subscriptions}` : '';
+    const licenseText = this._getLicenseText();
+    if (subscriptionsText || licenseText) {
+      this._subscriptionsSpan.innerText = licenseText && subscriptionsText
+        ? `${subscriptionsText}.${licenseText}`
+        : `${subscriptionsText}${licenseText}`;
+    }
+  }
+
+  private _getLicenseText(): string {
+    const licenseId = this.getAttribute(attributeNames.licenseId);
+    const licenseSource = this.getAttribute(attributeNames.licenseSource);
+
+    return `${licenseId ? ` License ID: ${licenseId}.` : ''}${licenseSource ? ` License Source: ${licenseSource}` : ''}`;
+  }
+
+  private _getTrialExpiredEnding(subscriptions: string | null): string {
+    const libraries = this.getAttribute(attributeNames.libraries);
+    const subscriptionsText = `Included in Subscriptions: ${subscriptions}.`;
+
+    if (libraries) {
+      return ` to continue use of the following DevExpress product libraries: ${libraries}${subscriptions ? ` - ${subscriptionsText}` : '.'}`;
+    }
+
+    return ` to continue use of DevExpress product libraries.${subscriptions ? ` ${subscriptionsText}` : ''}`;
   }
 
   private _createSubscriptionsSpan(): HTMLSpanElement {
@@ -197,8 +321,8 @@ class DxLicense extends SafeHTMLElement {
     const button = document.createElement('div');
     button.style.cssText = this._buttonStyles;
 
-    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const polygon = document.createElementNS(SVG_NAMESPACE, 'polygon');
+    const svg = document.createElementNS(SVG_NAMESPACE, 'svg');
 
     polygon.setAttribute('points', '13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7');
     polygon.style.cssText = createImportantStyles({
@@ -227,6 +351,44 @@ class DxLicense extends SafeHTMLElement {
     return button;
   }
 
+  public setTrialExpired(trigger: Element): void {
+    if (this._expired) return;
+
+    this._expired = true;
+    Object.values(attributeNames).forEach((attrName) => {
+      const attrValue = trigger.getAttribute(attrName);
+
+      if (attrValue) {
+        this.setAttribute(attrName, attrValue);
+      } else {
+        this.removeAttribute(attrName);
+      }
+    });
+    this._reassignComponent();
+  }
+
+  private _createTrialExpiredContent(): HTMLElement {
+    const licensingDoc = this.getAttribute(attributeNames.licensingDoc) as string;
+    const buyNow = this.getAttribute(attributeNames.buyNow) as string;
+    const version = this.getAttribute(attributeNames.version);
+    const content = setStyles(document.createElement('div'), overlayContentStyles);
+
+    content.append(
+      createWarningIcon(),
+      setStyles(
+        this._createSpan(`Your 30-day trial has expired (v${version}).`),
+        overlayTitleStyles,
+      ),
+      setStyles(this._createSpan('Use and Redistribution prohibited. Please '), overlaySpanStyles),
+      setStyles(this._createLink('register', licensingDoc), overlayLinkStyles),
+      setStyles(this._createSpan(' a valid license or '), overlaySpanStyles),
+      setStyles(this._createLink('purchase a new license', buyNow), overlayLinkStyles),
+      setStyles(this._createSubscriptionsSpan(), overlaySpanStyles),
+    );
+
+    return content;
+  }
+
   private _createContentContainer(): HTMLElement {
     const contentContainer = document.createElement('div');
     contentContainer.style.cssText = this._contentStyles;
@@ -244,6 +406,13 @@ class DxLicense extends SafeHTMLElement {
 
   private _reassignComponent(): void {
     this.innerHTML = '';
+
+    if (this._expired) {
+      this.style.cssText = overlayStyles;
+      this.append(this._createTrialExpiredContent());
+      return;
+    }
+
     this.style.cssText = this._containerStyles;
     this.append(
       this._createContentContainer(),
@@ -252,11 +421,11 @@ class DxLicense extends SafeHTMLElement {
   }
 
   public connectedCallback(): void {
+    this._expired = this._expired || isTrialExpired(this);
     this._reassignComponent();
     if (!this._observer) {
       this._observer = new MutationObserver(() => {
-        if (DxLicense.closed) {
-          this._observer?.disconnect();
+        if (DxLicense.closed && !this._expired) {
           return;
         }
         if (this._inReassign) {
@@ -275,7 +444,7 @@ class DxLicense extends SafeHTMLElement {
   }
 
   public disconnectedCallback(): void {
-    if (DxLicense.closed) {
+    if (DxLicense.closed && !this._expired) {
       return;
     }
 
@@ -299,7 +468,8 @@ class DxLicenseTrigger extends SafeHTMLElement {
     });
 
     const licensePanel = document.getElementsByTagName(componentNames.panel);
-    if (DxLicense.closed) return;
+    const trialExpired = isTrialExpired(this);
+    if (DxLicense.closed && !trialExpired) return;
     if (!licensePanel.length) {
       const license = document.createElement(componentNames.panel);
 
@@ -315,8 +485,13 @@ class DxLicenseTrigger extends SafeHTMLElement {
 
       document.body.prepend(license);
     } else {
-      const subscriptions = this.getAttribute(attributeNames.subscriptions) as string;
-      (licensePanel[0] as DxLicense).updateSubscriptions(subscriptions);
+      const panel = licensePanel[0] as DxLicense;
+
+      if (trialExpired) {
+        panel.setTrialExpired(this);
+      } else if (!panel.isExpired) {
+        panel.updateSubscriptions(this.getAttribute(attributeNames.subscriptions) as string);
+      }
     }
   }
 }
@@ -341,6 +516,7 @@ export function renderTrialPanel(
   version: string,
   subscriptions: string | null | undefined,
   customStyles?: CustomTrialPanelStyles,
+  options?: TrialPanelOptions,
 ): void {
   registerCustomComponents(customStyles);
 
@@ -350,6 +526,22 @@ export function renderTrialPanel(
   trialPanelTrigger.setAttribute(attributeNames.licensingDoc, licensingDocUrl);
   trialPanelTrigger.setAttribute(attributeNames.version, version);
   trialPanelTrigger.setAttribute(attributeNames.subscriptions, subscriptions ?? '');
+
+  if (options?.trialExpired === true) {
+    trialPanelTrigger.setAttribute(attributeNames.trialExpired, 'true');
+  }
+
+  if (options?.licenseId) {
+    trialPanelTrigger.setAttribute(attributeNames.licenseId, options.licenseId);
+  }
+
+  if (options?.licenseSource) {
+    trialPanelTrigger.setAttribute(attributeNames.licenseSource, options.licenseSource);
+  }
+
+  if (options?.libraries) {
+    trialPanelTrigger.setAttribute(attributeNames.libraries, options.libraries);
+  }
 
   document.body.appendChild(trialPanelTrigger);
 }

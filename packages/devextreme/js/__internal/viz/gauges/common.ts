@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
-import { isDefined, isNumeric } from '@ts/core/utils/m_type';
+import { noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
+import { isDefined, isNumeric } from '@ts/core/utils/type';
 import { Axis } from '@ts/viz/axes/base_axis';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';

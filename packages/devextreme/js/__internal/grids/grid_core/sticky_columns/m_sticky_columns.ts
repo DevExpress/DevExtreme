@@ -371,7 +371,7 @@ const rowsView = (
   Base: ModuleType<RowsView>,
 ) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {
   private _getMasterDetailWidth(): number {
-    const componentWidth = getWidth(this.component.$element()) ?? 0;
+    const componentWidth = getWidth(this.component.$element().get(0)) ?? 0;
     const borderWidth = gridCoreUtils.getComponentBorderWidth(this, this._$element);
 
     return componentWidth - borderWidth - this.getScrollbarWidth();

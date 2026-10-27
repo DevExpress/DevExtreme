@@ -159,10 +159,10 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 
 // owners:
 // Label
-// Tooltip
-// LoadingIndicator
 // Title
 // Subtitle
+// Tooltip
+// LoadingIndicator
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;
@@ -382,8 +382,8 @@ const LoadingIndicator = Object.assign<typeof _componentLoadingIndicator, Nested
 });
 
 // owners:
-// Sankey
 // Title
+// Sankey
 type IMarginProps = React.PropsWithChildren<{
   bottom?: number;
   left?: number;

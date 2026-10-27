@@ -1,6 +1,5 @@
 import type { Orientation } from '@js/common';
 import { toFixed } from '@js/common/core/localization/utils';
-import type { dxElementWrapper } from '@js/core/renderer';
 import {
   getHeight,
   getWidth,
@@ -340,13 +339,12 @@ export function getVisibleItemsCount(items: Item[]): number {
 }
 
 export function getElementSize(
-  $element: dxElementWrapper,
+  element: Element,
   orientation: Orientation | undefined,
 ): number {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return orientation === ORIENTATION.horizontal
-    ? getWidth($element)
-    : getHeight($element);
+    ? getWidth(element)
+    : getHeight(element);
 }
 
 export function isElementVisible(element: HTMLElement | null | undefined): boolean {

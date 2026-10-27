@@ -615,7 +615,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _getMessageData(message: Element): Message {
-    return $(message).data(MESSAGE_DATA_KEY);
+    return $(message).data<Message>(MESSAGE_DATA_KEY);
   }
 
   _findMessageElementByKey(key: string | number): dxElementWrapper {
