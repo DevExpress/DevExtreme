@@ -9,7 +9,7 @@ import eventsEngine from '@ts/events/core/events_engine';
 import { isFocusLost } from '../utils/is_focus_lost';
 import { getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { SortedEntity } from '../view_model/types';
-import type SchedulerAppointments from './m_appointment_collection';
+import type SchedulerAppointments from './appointment_collection';
 
 export class AppointmentsKeyboardNavigation {
   private readonly _collection: SchedulerAppointments;
