@@ -10,7 +10,7 @@ import typeUtils from 'core/utils/type';
 import { getHeight, setHeight, setWidth, getOuterHeight, getWidth } from 'core/utils/size';
 import devices from '__internal/core/devices';
 import config from 'core/config';
-import support from '__internal/core/utils/m_support';
+import support from '__internal/core/utils/support';
 import browser from 'core/utils/browser';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -6358,6 +6358,7 @@ QUnit.module('Virtual scrolling', {
     // B254821
     QUnit.test('Selection with virtual scrolling after scroll to second page', function(assert) {
         // arrange
+        this.clock = sinon.useFakeTimers();
         const options = {
             items: [
                 { rowType: 'data', values: [1] },
@@ -6401,6 +6402,8 @@ QUnit.module('Virtual scrolling', {
         assert.equal(selectCheckboxes.length, 6);
         assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1);
         assert.deepEqual(this.selectionOptions.changeItemSelectionArgs, [4]);
+
+        this.clock.restore();
     });
 
     QUnit.test('rowHeight/viewportSize calculation during Render rows with viewport', function(assert) {

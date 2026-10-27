@@ -22,7 +22,7 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { registerKeyboardAction } from '../accessibility';
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
-import { CELL_FOCUS_DISABLED_CLASS, LINK_CLASS } from '../editing/const';
+import { CLASSES as EDITING_CLASSES } from '../editing/const';
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/headers_keyboard_navigation';
 import { ColumnsView } from '../views/columns_view';
 import type {
@@ -162,7 +162,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
 
       const columnChooserView = this._columnChooserView;
-      const $link = $('<a>').text(columnChooserTitle).addClass(LINK_CLASS);
+      const $link = $('<a>').text(columnChooserTitle).addClass(EDITING_CLASSES.link);
 
       eventsEngine.on($link, 'click', this.createAction(() => columnChooserView.showColumnChooser()));
 
@@ -243,7 +243,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const $cell = super._renderCell($row, options);
 
     if (options.row.rowType === 'header') {
-      $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
+      $cell.addClass(EDITING_CLASSES.cellFocusDisabled);
       if (!this._isLegacyKeyboardNavigation()) {
         const { column } = options;
         const isCustomCommandColumn = this._columnsController.isCustomCommandColumn(column);
@@ -597,7 +597,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return this.isColumnReorderingEnabled(column) && columns.length > 1;
   }
 
-  protected getBoundingRect(): BoundingRect | null {
+  public getBoundingRect(): BoundingRect | null {
     const $columnElements = this.getColumnElements();
 
     if (!$columnElements?.length) {
@@ -712,7 +712,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return items.length ? items : undefined;
   }
 
-  protected getRowCount(): number {
+  public getRowCount(): number {
     return this._columnsController?.getRowCount();
   }
 

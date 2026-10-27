@@ -19,7 +19,7 @@ import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import type { dxScrollableOptions } from '@js/ui/scroll_view/ui.scrollable';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -488,22 +488,22 @@ class Scrollable<
 
   clientHeight(): number {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return getHeight(this._$container);
+    return getHeight(this._$container.get(0));
   }
 
   scrollHeight(): number {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return getOuterHeight(this.$content());
+    return getOuterHeight(this.$content().get(0));
   }
 
   clientWidth(): number {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return getWidth(this._$container);
+    return getWidth(this._$container.get(0));
   }
 
   scrollWidth(): number {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return getOuterWidth(this.$content());
+    return getOuterWidth(this.$content().get(0));
   }
 
   update(): DeferredObj<unknown> {

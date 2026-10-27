@@ -6,7 +6,7 @@ import {
 import { CustomStore } from '@js/common/data';
 import ArrayStore from '@js/data/array_store';
 import DataSource from '@js/data/data_source';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';

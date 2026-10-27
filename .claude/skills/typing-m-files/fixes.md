@@ -45,7 +45,7 @@ What TypeScript infers at these places today, measured on a sample:
   +  return undefined;
    }
   ```
-  The override is usually in another file, so ask the developer first. `X | void` with a `no-invalid-void-type` disable is the fallback when they don't want those files touched, as with `_renderCore()` (grids.md).
+  The override is usually in another file. In an `m_` file that's a compile-only fix and needs no OK; in an already typed file, ask first (SKILL.md, Scope). `X | void` with a `no-invalid-void-type` disable is the fallback when those files shouldn't be touched, as with `_renderCore()` (grids.md).
 
 ## Missing param type: 14%
 
@@ -87,7 +87,7 @@ A value from a source that isn't typed yet gets a directive, not a cast. A cast 
 
 ## `@stylistic/max-len`: 5%
 
-The limit is 100. Comments count, strings and template literals don't. Put one param per line, and start a wrapped condition with `&&`/`||`. If a disable comment itself is too long, disable max-len for it:
+The limit is 100. Comments count, strings and template literals don't. Put one param per line, and start a wrapped condition with `&&`/`||`. If a disable comment itself is too long, shorten its reason first. If it's still too long, disable max-len for it:
 ```ts
 // eslint-disable-next-line @stylistic/max-len
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/explicit-module-boundary-types
@@ -108,8 +108,8 @@ Move the first assignment into the declaration, when nothing reads the variable 
 
 Use `this` instead of `that`, but only inside arrow callbacks. Inside a `function` callback, `this` is something else.
 ```ts
--      when(that._columnsController.applyDataSource(dataSource)).done(() => {
-+      when(this._columnsController.applyDataSource(dataSource)).done(() => {
+-      when(that._columnsController.applyDataSourceAdapter(dataSourceAdapter)).done(() => {
++      when(this._columnsController.applyDataSourceAdapter(dataSourceAdapter)).done(() => {
 ```
 `function (isLoading) { … }.bind(this)` becomes `(isLoading: boolean): void => { … }`, if the body doesn't use `arguments`.
 
@@ -127,7 +127,7 @@ Call `super` with named params, when the method declares exactly those params an
 - Forwarding: `result.resolve.apply(result, arguments)` becomes `.done((...args: unknown[]) => { result.resolve(...args); })`.
 - `arguments.length` is not flagged. If the code depends on it (a getter/setter overload), keep the `function` and its `arguments.length` check.
 - `const callBase = super.x.bind(this);` is fine.
-- Spreading an array (`unknown[]`, or a union of tuples) into a function without a rest parameter fails with TS2556, overloaded or not. A tuple works if it fits one signature entirely. With overloads, a tuple whose optional element spans two overloads fails too (TS2345). When the target is fixed-param overloads, either keep a reasoned `// @ts-expect-error <why>`, or call through a typed reference: its type has a rest parameter, and TypeScript checks the assignment, so it isn't a cast:
+- Spreading an array (`unknown[]`, or a union of tuples) into a function without a rest parameter fails with TS2556, overloaded or not. A tuple works if it fits one signature entirely. With overloads, a tuple whose optional element spans two overloads fails too (TS2345). When the target is fixed-param overloads, either keep a reasoned directive (`grid_core/modules/modules.ts` has `// @ts-expect-error a spread argument can't match the overloads of off()`), or call through a typed reference: its type has a rest parameter, and TypeScript checks the assignment, so it isn't a cast:
   ```ts
   const componentOff: (...offArgs: [eventName: string, eventHandler?: Function]) => unknown = this.component.off;
   return componentOff.call(this.component, ...args);
@@ -145,7 +145,7 @@ Call `super` with named params, when the method declares exactly those params an
 | `no-shadow` | rename the inner name: `(column) =>` becomes `(commandColumn) =>` |
 | `max-depth` (3) | at function level: early `return` guards, or merging nested `if`s with `&&`, where the flow stays the same. Inside a loop there is no such fix, because `no-continue` is a strict rule too. Then ask the developer: an agreed refactor (a helper, a loop rewrite), or a line disable with a reason |
 | `consistent-return` | an explicit `return undefined;` at the end, and `default: return undefined;` in a switch: the function already returned `undefined` there. Not `return false;`, which changes the value |
-| `prefer-for-of` | `for (const column of this._columns)`, when the index is only used to read the item and the loop doesn't add or remove items |
+| `prefer-for-of` | `for (const column of this._columns)`, when the index is only used to read the item and the loop doesn't add or remove items. The rule doesn't report a loop whose bound has `?.` (`i < changes?.length`); leave such a loop as it is |
 | `no-use-before-define` | move the declaration above its first use, when that doesn't change evaluation order |
 | `no-multi-assign` | two statements; `x = o.x = o.x === undefined ? d : o.x` becomes `o.x ??= d;` then `x = o.x`, only if `o.x` can't be `null` |
 | `no-non-null-assertion` | a narrowing TypeScript can see, when the value provably isn't `null` or `undefined` there. If it can be, the old code threw or read a key named `'undefined'`, so a check with a new fallback (`oldItem ? map[getRowKey(oldItem)] : undefined`) changes behaviour. Ask, or keep a line disable with a reason |
@@ -160,7 +160,7 @@ Fields typed as `any` (part 1 of a file, or a whole file):
 - Assigned in `init()`: definite assignment, `public _columns!: Column[];`.
 - Lazy or cached: optional, `private _visibleColumns?: Column[][];`. Write `?: boolean`, not `: boolean | undefined`. The same goes for a field that is set only later in the lifecycle (in `render()`, not in `init()`).
 - Callbacks: a typed tuple, `public pageChanged!: Callback<[number?]>;`.
-- A narrower type for an inherited field in a subclass: `public declare _dataSource?: GroupingDataSourceAdapter | null;`.
+- A narrower type for an inherited field in a subclass: `protected declare dataSourceController: DataSourceController<GroupingDataSourceAdapter>;`.
 - Drop `readonly` when utils assign the field. A field that is overridden becomes `protected`, not `private`.
 - Once a field is typed, remove the casts of it (`(this._columns as Column[])`).
 
@@ -185,7 +185,7 @@ Fields typed as `any` (part 1 of a file, or a whole file):
 
 ## Untyped sources
 
-- Import a helper from `@ts/core/utils/m_<name>` instead of the `@js/core/utils/<name>.js` re-export that needs `@ts-expect-error` on the import. It's the same function. Its untyped params then count as required (TS2554): pass the default explicitly only when that's provably the same (`grep(items, check, false)`, because `grep` reads only `!invert`).
+- Import a core helper from `@ts/core/utils/<name>`, which is typed, instead of its `@js/core/utils/<name>` re-export.
 - A type-only import can use the directory form (`import type { PropertyType } from '@js/core';`). It's erased from the built JS, so the QUnit loader never sees it. `@js/core` has only `index.d.ts`, so it can't be imported as a value anyway.
 
 ## `renderer.d.ts` gaps
@@ -216,7 +216,7 @@ Fields typed as `any` (part 1 of a file, or a whole file):
 |---|---|
 | `Deferred` is declared as a function, so `new Deferred()` needs a directive | `Deferred<unknown>()` (with the value type), and no directive. `Deferred()` returns `new DeferredObj()`, so `new` changes nothing |
 | `promise()` returns `Promise<T>`, but the object has `done`, `fail`, `always` and `state` | `// @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime` (`js/__internal/data` uses `DeferredObj typings: promise() is declared as a plain Promise`). When the code calls a member of the result, put the directive on a typed declaration, `const promise: DeferredObj<unknown> = deferred.promise();`. Otherwise `promise().always(…)` is `any` and `no-unsafe-return` reports the return |
-| `fail(deferred.reject)` is reported by `no-misused-promises`, because `reject` returns a thenable | `// eslint-disable-next-line @typescript-eslint/no-misused-promises -- fail ignores the result`. Keep the method reference: a forwarding arrow changes the handler's `this` under the jQuery strategy |
+| `done(deferred.resolve)`, `fail(deferred.reject)`, and a method that returns a Deferred passed as a callback (`onClick: this.saveEditData.bind(this)`) are reported by `no-misused-promises`, because the handler returns a thenable | `// eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result`, the reason the grids already use. Keep the method reference: a forwarding arrow changes the handler's `this` under the jQuery strategy |
 
 ## Warnings (best effort)
 

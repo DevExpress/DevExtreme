@@ -18,6 +18,8 @@ import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { TemplateModel } from '@ts/grids/grid_core/columns_controller/types';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import type { EditingOptions } from '@ts/grids/grid_core/editing/types';
 import type { FilterValue } from '@ts/grids/grid_core/filter/types';
 import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
 
@@ -173,6 +175,8 @@ export interface InternalGrid extends GridBaseType {
   _createActionByOption: (optionName: string, config?: ActionConfig) => ModuleItemAction;
   isReady: () => boolean;
 
+  getVisibleRows: () => ProcessedItem[];
+
   _setOptionWithoutOptionChange: (name: string, value: unknown) => void;
 }
 
@@ -219,6 +223,8 @@ export interface InternalGridOptions extends
   loadItemsOnExportingSelectedItems?: boolean | undefined;
 
   selection?: InternalSelection;
+
+  editing?: EditingOptions;
 
   scrolling?: DataGridScrolling | TreeListScrolling;
 
@@ -278,7 +284,7 @@ export interface Controllers {
   data: import('./data_controller/data_controller').DataController;
   dataSource: import('./data_source/data_source_controller').DataSourceController;
   draggingHeader: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderViewController;
-  editing: import('./editing/m_editing').EditingController;
+  editing: import('./editing/editing').EditingController;
   editorFactory: import('./editor_factory/editor_factory').EditorFactory;
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   // todo: export is dataGrid-only controller

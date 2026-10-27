@@ -1,7 +1,7 @@
 import { describe, expect } from '@jest/globals';
 import each from 'jest-each';
 
-import { addOffsets } from './m_date';
+import { addOffsets } from './date';
 
 const SECOND_MS = 1000;
 const MINUTE_MS = 60 * SECOND_MS;

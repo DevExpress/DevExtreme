@@ -40,7 +40,7 @@ export const dependencies: FlatStylesDependencies = {
   htmleditor: ['validation', 'button', 'loadindicator', 'loadpanel', 'scrollview', 'popup', 'toolbar', 'textbox', 'list', 'checkbox', 'selectbox', 'numberbox', 'multiview', 'tabs', 'tabpanel', 'box', 'responsivebox', 'calendar', 'datebox', 'form', 'buttongroup', 'colorbox', 'progressbar', 'fileuploader', 'contextmenu', 'textarea', 'menu', 'dropdownbutton', 'treeview', 'informer'],
   sortable: [],
   lookup: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'loadpanel', 'scrollview', 'list', 'popover'],
-  map: [],
+  map: ['button', 'loadindicator', 'loadpanel', 'popover', 'popup', 'scrollview', 'toolbar', 'validation'],
   radiogroup: ['validation'],
   tooltip: ['validation', 'button', 'popup', 'popover'],
   slider: ['validation', 'button', 'popup', 'popover', 'tooltip'],

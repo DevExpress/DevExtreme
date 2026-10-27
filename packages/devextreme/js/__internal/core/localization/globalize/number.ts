@@ -3,9 +3,10 @@ import 'globalize/number';
 
 import errors from '@js/core/errors';
 import {
-  getEffectiveFormatLocale,
   getFormatterOptions,
   getGlobalFormatByDataType,
+  getNumberFormatLocale,
+  isLocaleOnlyFormat,
 } from '@ts/core/global_format_config';
 import numberLocalization, {
   type FormatConfig,
@@ -62,13 +63,13 @@ if (Globalize?.formatNumber) {
       }
 
       return getFormatter(
-        getEffectiveFormatLocale(formatConfig, NUMBER_DATA_TYPE),
+        getNumberFormatLocale(formatConfig),
         this._normalizeFormatConfig(format, formatConfig, value),
       )(value);
     },
 
     getDecimalSeparator(format?: FormatConfig | string): string {
-      const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
+      const formatLocale = getNumberFormatLocale(format);
 
       return getFormatter(formatLocale, {
         minimumFractionDigits: 1,
@@ -77,7 +78,7 @@ if (Globalize?.formatNumber) {
     },
 
     getThousandsSeparator(format?: FormatConfig | string): string {
-      const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
+      const formatLocale = getNumberFormatLocale(format);
 
       return getFormatter(formatLocale, {})(10000)[2];
     },
@@ -148,7 +149,7 @@ if (Globalize?.formatNumber) {
 
       // eslint-disable-next-line @stylistic/no-mixed-operators
       if (!format || typeof format !== 'function' && !(format as FormatConfig).type && !(format as FormatConfig).formatter) {
-        const formatLocale = getEffectiveFormatLocale(format, NUMBER_DATA_TYPE);
+        const formatLocale = getNumberFormatLocale(format);
         const formatterOptions = getFormatterOptions(format) as NormalizedConfig;
 
         return getFormatter(formatLocale, formatterOptions)(value);
@@ -171,14 +172,14 @@ if (Globalize?.formatNumber) {
         return this.callBase.apply(this, [text, format]);
       }
 
-      if (format) {
+      if (format && !isLocaleOnlyFormat(format)) {
         // Current parser functionality provided as-is and
         // is independent of the most of capabilities of formatter.
         errors.log('W0011');
       }
 
       let result: number = Globalize(
-        getEffectiveFormatLocale(format, NUMBER_DATA_TYPE),
+        getNumberFormatLocale(format),
       ).parseNumber(text);
 
       if (isNaN(result)) {

@@ -1,6 +1,6 @@
 import domAdapter from '@js/core/dom_adapter';
 import { Callbacks } from '@ts/core/utils/callbacks';
-import windowUtils from '@ts/core/utils/m_window';
+import windowUtils from '@ts/core/utils/window';
 
 interface Size {
   width: number;

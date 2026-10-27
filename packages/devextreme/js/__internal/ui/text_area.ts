@@ -205,7 +205,7 @@ class TextArea<
     }
 
     this._resetDimensions();
-    this.$element().css('height', getOuterHeight(this.$element()));
+    this.$element().css('height', getOuterHeight(this.$element().get(0)));
     $input.css('height', 0);
 
     const heightDifference = this._getHeightDifference($input);
@@ -247,17 +247,17 @@ class TextArea<
     return this._getBoundaryHeight('maxHeight');
   }
 
-  _getBoundaryHeight(optionName: string): number | undefined {
-    const boundaryValue = this.option(optionName);
+  _getBoundaryHeight(optionName: 'minHeight' | 'maxHeight'): number | undefined {
+    const { [optionName]: boundaryValue } = this.option();
 
     if (isDefined(boundaryValue)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return typeof boundaryValue === 'number'
-        ? boundaryValue : parseHeight(
+        ? boundaryValue : Number(parseHeight(
           boundaryValue,
+          // @ts-expect-error no parent when detached; read only for a percentage, as before
           this.$element().get(0).parentElement,
           this.$element().get(0),
-        );
+        ));
     }
 
     return undefined;

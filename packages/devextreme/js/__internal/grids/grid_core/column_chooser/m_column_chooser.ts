@@ -460,14 +460,14 @@ export class ColumnChooserView extends ColumnsView {
     return this._columnsController.getChooserColumns();
   }
 
-  private allowDragging(column) {
+  public allowDragging(column) {
     const isParentColumnVisible = this._columnsController.isParentColumnVisible(column.index);
     const isColumnHidden = !column.visible && column.allowHiding;
 
     return this.isColumnChooserVisible() && isParentColumnVisible && isColumnHidden;
   }
 
-  protected getBoundingRect() {
+  public getBoundingRect() {
     const that = this;
     const container = that._popupContainer?.$overlayContent();
 

@@ -16,7 +16,7 @@ import type {
   DragTemplateData,
   ReorderEvent,
 } from '@js/ui/sortable';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 import Sortable from '@ts/sortable';
 import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
 import EditDecorator from '@ts/ui/list/list.edit.decorator';

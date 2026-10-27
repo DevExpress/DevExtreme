@@ -40,9 +40,9 @@ import type {
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
 import documentSizeCallbacks from '@ts/core/utils/document_size_callbacks';
-import domUtils from '@ts/core/utils/m_dom';
-import windowUtils from '@ts/core/utils/m_window';
+import domUtils from '@ts/core/utils/dom';
 import selectors from '@ts/core/utils/selectors';
+import windowUtils from '@ts/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
@@ -1089,7 +1089,6 @@ class Overlay<
       const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
 
       if (!$first && $currentElement) {
-        // @ts-expect-error is should can get function as callback
         const isTabbableAndNotOverlay = $currentElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $first = $currentElement;
@@ -1097,7 +1096,6 @@ class Overlay<
       }
 
       if (!$last && $reverseElement) {
-        // @ts-expect-error is should can get function as callback
         const isTabbableAndNotOverlay = $reverseElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $last = $reverseElement;
@@ -1286,7 +1284,6 @@ class Overlay<
 
     let isHidden = false;
 
-    // @ts-expect-error add should can get dxElementWrapper
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
 

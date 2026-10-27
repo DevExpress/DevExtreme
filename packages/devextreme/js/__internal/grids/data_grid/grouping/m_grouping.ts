@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
@@ -9,7 +10,7 @@ import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
 import { registerKeyboardAction } from '@ts/grids/grid_core/accessibility';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
@@ -32,6 +33,7 @@ const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
 export interface GroupingDataControllerExtension {
   isRowExpanded(key): boolean;
   changeRowExpand(key, isRowClick?): any;
+  changeRowExpandCore(key: RowKey): DeferredObj<unknown>;
 }
 
 export type GroupingDataSourceAdapter = InstanceType<ReturnType<typeof dataSourceAdapterExtender>>;
@@ -274,13 +276,13 @@ export const GroupingHeaderPanelExtender = (
     const $target = $(event.target);
     const groupColumnIndex = $target.closest(`.${CLASSES.groupPanelItem}`).index();
     const column = this._columnsController.getGroupColumns()[groupColumnIndex];
-    const columnIndex = column && column.index;
+    const columnIndex = column?.index;
 
-    if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-      this._headerFilterController.showHeaderFilterMenu(columnIndex, true);
-    } else {
+    if (!$target.is(HEADER_FILTER_CLASS_SELECTOR)) {
       // @ts-expect-error
       this._processGroupItemAction(columnIndex);
+    } else if (isDefined(columnIndex)) {
+      this._headerFilterController.showHeaderFilterMenu(columnIndex, true);
     }
 
     event.preventDefault();
@@ -387,7 +389,7 @@ export const GroupingHeaderPanelExtender = (
     return this._columnsController.getGroupColumns();
   }
 
-  protected getBoundingRect() {
+  public getBoundingRect() {
     const that = this;
     const $element = that.element();
 

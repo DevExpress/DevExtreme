@@ -204,7 +204,6 @@ export class ResizingController extends modules.ViewController {
     const totalItemsCount = Math.max(0, this.dataSourceController.totalItemsCount());
     const widgetAriaLabel = this._getWidgetAriaLabel();
     const widgetStatusText = messageLocalization
-      // @ts-expect-error Badly typed format method
       .format(widgetAriaLabel, totalItemsCount, columnCount);
 
     // @ts-expect-error Treelist Variable
@@ -749,8 +748,8 @@ export class ResizingController extends modules.ViewController {
   private _checkSize(checkSize?: boolean): boolean {
     const $rootElement = this.component.$element();
     const isWidgetVisible = $rootElement.is(':visible');
-    const isGridSizeChanged = this._lastWidth !== getWidth($rootElement)
-          || this._lastHeight !== getHeight($rootElement)
+    const isGridSizeChanged = this._lastWidth !== getWidth($rootElement.get(0))
+          || this._lastHeight !== getHeight($rootElement.get(0))
           || this._devicePixelRatio !== getWindow().devicePixelRatio;
 
     return isWidgetVisible && (!checkSize || isGridSizeChanged);
@@ -806,7 +805,7 @@ export class ResizingController extends modules.ViewController {
     const $rootElement = this.component.$element();
     const groupElement = this._getGroupElement();
 
-    const rootElementHeight = getHeight($rootElement);
+    const rootElementHeight = getHeight($rootElement.get(0));
     const height = this.option('height') ?? ($rootElement.get(0) as HTMLElement).style.height;
     const isHeightSpecified = !!height && height !== 'auto';
 

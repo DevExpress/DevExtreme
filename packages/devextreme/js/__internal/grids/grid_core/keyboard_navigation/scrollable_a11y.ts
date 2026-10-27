@@ -47,7 +47,6 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     const $firstCell: dxElementWrapper = this._rowsView.getCell({ rowIndex: 0, columnIndex: 0 });
     const firstCellHasTabIndex = !!$firstCell.attr('tabindex');
 
-    // @ts-expect-error dxElementWrapper doesn't have overload for 'is' method
     const notFixedCellIsTarget = $target.is(this._$firstNotFixedCell);
 
     if (firstCellHasTabIndex && notFixedCellIsTarget) {

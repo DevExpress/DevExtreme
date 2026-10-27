@@ -1,7 +1,7 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import { each, map, reverseEach } from '@ts/core/utils/m_iterator';
+import { each, map, reverseEach } from '@ts/core/utils/iterator';
 
 describe('Iterator utils', () => {
   describe('each', () => {
