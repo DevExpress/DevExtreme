@@ -17,7 +17,7 @@ env:
 jobs:
   Tests:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 9
     steps:
     - name: Get sources
       uses: actions/checkout@v6
