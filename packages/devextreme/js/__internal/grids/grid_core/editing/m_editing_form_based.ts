@@ -51,24 +51,10 @@ import type {
   EditFormItem,
   EditFormOptions,
   EditingChange,
+  EditingFormBasedRowsViewExtension,
   EditorCellOptions,
+  FormBasedEditingController,
 } from './types';
-
-export interface FormBasedEditingControllerExtension {
-  renderFormEditorTemplate: (
-    detailCellOptions: EditFormDetailOptions,
-    item: EditFormColumnItem,
-    formTemplateOptions: SimpleItemTemplateData,
-    container: dxElementWrapper,
-    isReadOnly?: boolean,
-  ) => EditorCellOptions;
-  getEditForm: () => Form | null | undefined;
-
-  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions;
-}
-
-export type FormBasedEditingController = EditingController & FormBasedEditingControllerExtension;
 
 type EditFormTemplate = (
   $container: DxElement | dxElementWrapper,
@@ -592,13 +578,6 @@ const editingControllerExtender = (
     }
   }
 };
-
-export interface EditingFormBasedRowsViewExtension {
-  _getEditFormEditorVisibleIndex: (
-    $cells: dxElementWrapper | undefined,
-    column: Column | undefined,
-  ) => number;
-}
 
 const rowsView = (
   Base: ModuleType<RowsView>,

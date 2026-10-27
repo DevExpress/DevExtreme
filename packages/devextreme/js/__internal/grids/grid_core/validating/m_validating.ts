@@ -39,9 +39,13 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import {
   EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
 } from '../editing/const';
-import type { CellBasedEditingController } from '../editing/m_editing_cell_based';
-import type { FormBasedEditingControllerExtension } from '../editing/m_editing_form_based';
-import type { EditFormDetailOptions, EditFormOptions, PrepareEditCellOptions } from '../editing/types';
+import type {
+  CellBasedEditingController,
+  EditFormDetailOptions,
+  EditFormOptions,
+  FormBasedEditingControllerExtension,
+  PrepareEditCellOptions,
+} from '../editing/types';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
 import gridCoreUtils from '../utils';

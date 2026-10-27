@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { validatingModule } from '@ts/grids/grid_core/validating/validating_module';
 
-import type { CellBasedEditingController } from '../grid_core/editing/m_editing_cell_based';
-import type { FormBasedEditingControllerExtension } from '../grid_core/editing/m_editing_form_based';
+import type { CellBasedEditingController, FormBasedEditingControllerExtension } from '../grid_core/editing/types';
 import type { ModuleType } from '../grid_core/types';
 import treeListCore from './core';
 

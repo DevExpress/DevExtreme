@@ -6,7 +6,7 @@
 import { Deferred, when } from '@js/core/utils/deferred';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import { isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
-import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/m_editing_cell_based';
+import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';

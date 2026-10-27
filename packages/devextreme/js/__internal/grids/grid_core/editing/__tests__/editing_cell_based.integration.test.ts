@@ -11,7 +11,7 @@ import {
   createDataGrid,
   flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
-import type { CellBasedEditingController } from '../m_editing_cell_based';
+import type { CellBasedEditingController } from '../types';
 
 const getEditingController = (
   instance: DataGridInstance,

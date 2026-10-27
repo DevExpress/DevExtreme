@@ -39,6 +39,7 @@ import {
 import type { EditingController } from './editing';
 import { isCellBasedEditMode, isEditable } from './editing_utils';
 import type {
+  CellBasedEditingController,
   EditCellOptions,
   EditCellResult,
   EditColumnNameOptionChanged,
@@ -50,26 +51,6 @@ import type {
   NormalizedEditCellOptions,
   PrepareEditCellOptions,
 } from './types';
-
-export interface CellBasedEditingControllerExtension {
-  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  closeEditCell(isError?: boolean | null, withoutSaveEditData?: boolean): DeferredObj<unknown>;
-
-  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  editCell(rowIndex: number, columnIndex: number | string): EditCellResult;
-
-  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  beforeCloseEditCell(rowIndices: number[]): void;
-
-  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  beforeEditCell(
-    rowIndex: number,
-    columnIndex: number,
-    item: ProcessedItem,
-  ): DeferredObj<boolean> | boolean;
-}
-
-export type CellBasedEditingController = EditingController & CellBasedEditingControllerExtension;
 
 const editingControllerExtender = (
   Base: ModuleType<EditingController>,

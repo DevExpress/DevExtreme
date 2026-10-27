@@ -106,9 +106,9 @@ import {
   isRowBasedEditMode,
 } from './editing_utils';
 import { editingDataControllerExtender } from './extenders/editing_data_controller';
-import type { CellBasedEditingController } from './m_editing_cell_based';
 import type {
   AllowEditActionValue,
+  CellBasedEditingController,
   EditActionOptions,
   EditActions,
   EditCellResult,

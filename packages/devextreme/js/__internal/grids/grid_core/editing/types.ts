@@ -2,11 +2,15 @@ import type {
   DataChange, EditingBase, NewRowPosition, RowInsertedInfo,
 } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { StoreChange } from '@js/data/store';
 import type { DxEvent } from '@js/events';
 import type { Column as DataGridColumn, ColumnButton, ColumnButtonClickEvent } from '@js/ui/data_grid';
-import type { FormItemComponent, Item as FormItem, SimpleItem } from '@js/ui/form';
+import type Form from '@js/ui/form';
+import type {
+  FormItemComponent, Item as FormItem, SimpleItem, SimpleItemTemplateData,
+} from '@js/ui/form';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ProcessedItem } from '../data_controller/types';
@@ -20,6 +24,7 @@ import type {
 import type {
   EDITING_CHANGES_OPTION_NAME, EDITING_EDITCOLUMNNAME_OPTION_NAME, INSERT_INDEX,
 } from './const';
+import type { EditingController } from './editing';
 
 export interface EditCellOptions {
   rowIndex: number;
@@ -233,4 +238,51 @@ export interface EditingRowsViewExtension {
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   handleRowDblClickByEditing(e: ViewRowEvent): boolean;
+}
+
+export interface EditingDataControllerExtension {
+  _editingController: EditingController;
+}
+
+export interface CellBasedEditingControllerExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  closeEditCell(isError?: boolean | null, withoutSaveEditData?: boolean): DeferredObj<unknown>;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  editCell(rowIndex: number, columnIndex: number | string): EditCellResult;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  beforeCloseEditCell(rowIndices: number[]): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  beforeEditCell(
+    rowIndex: number,
+    columnIndex: number,
+    item: ProcessedItem,
+  ): DeferredObj<boolean> | boolean;
+}
+
+export type CellBasedEditingController = EditingController & CellBasedEditingControllerExtension;
+
+export interface FormBasedEditingControllerExtension {
+  renderFormEditorTemplate: (
+    detailCellOptions: EditFormDetailOptions,
+    item: EditFormColumnItem,
+    formTemplateOptions: SimpleItemTemplateData,
+    container: dxElementWrapper,
+    isReadOnly?: boolean,
+  ) => EditorCellOptions;
+  getEditForm: () => Form | null | undefined;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions;
+}
+
+export type FormBasedEditingController = EditingController & FormBasedEditingControllerExtension;
+
+export interface EditingFormBasedRowsViewExtension {
+  _getEditFormEditorVisibleIndex: (
+    $cells: dxElementWrapper | undefined,
+    column: Column | undefined,
+  ) => number;
 }
