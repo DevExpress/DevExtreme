@@ -17,6 +17,7 @@ env:
 jobs:
   build:
     runs-on: devextreme-shr2
+    timeout-minutes: 16
 
     steps:
       - name: Get sources
@@ -106,6 +107,7 @@ jobs:
 
   custom_bundles:
     runs-on: devextreme-shr2
+    timeout-minutes: 7
     needs: build
 
     steps:
