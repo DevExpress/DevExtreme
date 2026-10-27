@@ -482,11 +482,18 @@ describe(`Change detection [${mode}]: state changed without a template binding`,
       <span class="out">{{ formData.name }}</span>
     `);
 
-    act(fixture, () => fixture.componentInstance.form.instance.getEditor('name').option('value', 'changed'));
+    const editor = fixture.componentInstance.form.instance.getEditor('name');
+
+    act(fixture, () => editor.option('value', 'first'));
     await fixture.whenStable();
 
-    expect(fixture.componentInstance.formData.name).toBe('changed');
-    expect(outputText(fixture)).toBe('changed');
+    expect(outputText(fixture)).toBe('first');
+
+    act(fixture, () => editor.option('value', 'second'));
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.formData.name).toBe('second');
+    expect(outputText(fixture)).toBe('second');
   });
 
   it('FormControl.setValue() in a timer reaches the widget and releases the update lock', async () => {

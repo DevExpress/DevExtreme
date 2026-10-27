@@ -1,6 +1,7 @@
 /* tslint:disable:max-line-length */
 import {
     TransferState,
+    ChangeDetectorRef,
     Component,
     NgModule,
     ElementRef,
@@ -15,7 +16,8 @@ import {
     DoCheck,
     SimpleChanges,
     ContentChildren,
-    QueryList
+    QueryList,
+    inject
 } from '@angular/core';
 
 
@@ -706,6 +708,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
+    private readonly _changeDetectorRef = inject(ChangeDetectorRef);
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -770,6 +774,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         return new DxForm(element, options);
     }
 
+    _createWidget(element: any) {
+        super._createWidget(element);
+        this.instance.on('fieldDataChanged', () => this._changeDetectorRef.markForCheck());
+    }
 
     ngOnDestroy() {
         this._destroyWidget();

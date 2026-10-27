@@ -57,29 +57,6 @@ export const getServerStateKey = () => {
   return serverStateKey;
 };
 
-const publicOptionsCache = new WeakMap<object, Set<string>>();
-
-const getPublicOptions = (componentPrototype: object): Set<string> => {
-  let options = publicOptionsCache.get(componentPrototype);
-
-  if (!options) {
-    const names = new Set<string>();
-
-    for (let proto = componentPrototype; proto && proto !== Object.prototype; proto = Object.getPrototypeOf(proto)) {
-      Object.entries(Object.getOwnPropertyDescriptors(proto)).forEach(([name, descriptor]) => {
-        if (descriptor.get && descriptor.set) {
-          names.add(name);
-        }
-      });
-    }
-
-    options = names;
-    publicOptionsCache.set(componentPrototype, options);
-  }
-
-  return options;
-};
-
 @Component({
   template: '',
 })
@@ -136,7 +113,6 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
       if (
         !this.widgetUpdateLocked
         && !isInOutsideZoneHandler()
-        && getPublicOptions(Object.getPrototypeOf(this)).has(e.name)
       ) {
         this.changeDetectorRef.markForCheck();
       }
