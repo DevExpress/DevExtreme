@@ -1,3 +1,6 @@
+// ThemeBuilder reads the `// STYLE sortable` comment from the public module
+import '@js/ui/sortable';
+
 import type { ChangedOptionInfo } from '@js/common/core/events';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -11,7 +14,7 @@ import { WIDGET_CLASS } from '@ts/core/widget/widget';
 import type { DragElementShownArgs, DragEventArgs, ElementOffsetOptions } from '@ts/draggable.types';
 /** @architectureLeak data_grid/summary: footer rows are not draggable */
 import { DATAGRID_FOOTER_ROW_CLASS } from '@ts/grids/data_grid/summary/const';
-import type { ColumnFixingRowsViewExtension } from '@ts/grids/grid_core/column_fixing/types';
+import type { ColumnFixingRowsView } from '@ts/grids/grid_core/column_fixing/types';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import { CLASSES as GRID_VIEW_CLASSES } from '@ts/grids/grid_core/grid_view/const';
@@ -23,7 +26,6 @@ import type {
 } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import { VIRTUAL_ROW_CLASS } from '@ts/grids/grid_core/virtual_scrolling/const';
 import Sortable from '@ts/sortable';
 import { SCROLLABLE_CONTAINER_CLASS } from '@ts/ui/scroll_view/consts';
@@ -40,10 +42,8 @@ import type {
 } from './types';
 
 const rowsView = (
-  Base: ModuleType<RowsView & ColumnFixingRowsViewExtension>,
-): ModuleType<
-  RowsView & ColumnFixingRowsViewExtension
-> => class RowsViewRowDraggingExtender extends Base {
+  Base: ModuleType<ColumnFixingRowsView>,
+): ModuleType<ColumnFixingRowsView> => class RowsViewRowDraggingExtender extends Base {
   private _sortable?: Sortable;
 
   private _sortableFixed?: Sortable;
@@ -281,7 +281,7 @@ const rowsView = (
       })),
       isDragging: true,
       onRowPrepared: (e): void => {
-        const draggableRowsView = e.component.getView('rowsView') as RowsView & ColumnFixingRowsViewExtension;
+        const draggableRowsView = e.component.getView('rowsView') as ColumnFixingRowsView;
         const tableIndex = draggableRowsView._isFixedTableRendering ? 1 : 0;
 
         $(e.rowElement).replaceWith($rowElement.eq(tableIndex).clone());

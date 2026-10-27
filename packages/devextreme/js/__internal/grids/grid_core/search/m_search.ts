@@ -23,16 +23,13 @@ import { CLASSES, FILTERING_TIMEOUT, SEARCH_PANEL_ITEM_NAME } from './const';
 import type {
   SearchCellOptions,
   SearchDataController,
-  SearchDataControllerExtension,
   SearchHighlightParams,
 } from './types';
 import { allowSearch, createSearchExpression, getFormattedSearchText } from './utils';
 
 const dataController = (
   base: ModuleType<DataController>,
-): ModuleType<
-  DataController & SearchDataControllerExtension
-> => class SearchDataControllerExtender extends base {
+): ModuleType<SearchDataController> => class SearchDataControllerExtender extends base {
   public optionChanged(args: OptionChanged): void {
     switch (args.fullName) {
       case 'searchPanel.text':
