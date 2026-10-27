@@ -223,6 +223,7 @@ overrides:
 
 patchedDependencies:
   testcafe-hammerhead@31.7.8: 8655c07786177d3b611a05abf6b0ea87d32796eb2601f92a800ef041095f264c
+  testcafe@3.7.5: 1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921
 
 importers:
 
@@ -610,7 +611,7 @@ importers:
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1)(supports-color@7.2.0))
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5)
+        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))
       '@types/eslint':
         specifier: 8.56.12
         version: 8.56.12
@@ -658,7 +659,7 @@ importers:
         version: 7.0.3
       devextreme-screenshot-comparer:
         specifier: 2.0.17
-        version: 2.0.17(testcafe@3.7.5)
+        version: 2.0.17(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))
       eslint:
         specifier: 'catalog:'
         version: 9.39.4(jiti@2.6.1)(supports-color@7.2.0)
@@ -748,7 +749,7 @@ importers:
         version: 38.0.0(stylelint@16.22.0(typescript@6.0.3))
       testcafe:
         specifier: 'catalog:'
-        version: 3.7.5(supports-color@7.2.0)
+        version: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
       testcafe-reporter-spec-time:
         specifier: 4.0.0
         version: 4.0.0
@@ -1138,7 +1139,7 @@ importers:
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5)
+        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))
       '@types/jquery':
         specifier: 'catalog:'
         version: 4.0.1
@@ -1156,7 +1157,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-screenshot-comparer:
         specifier: 2.0.17
-        version: 2.0.17(testcafe@3.7.5)
+        version: 2.0.17(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))
       devextreme-testcafe-models:
         specifier: workspace:*
         version: link:../../packages/testcafe-models
@@ -1192,7 +1193,7 @@ importers:
         version: 0.12.1
       testcafe:
         specifier: 'catalog:'
-        version: 3.7.5(supports-color@7.2.0)
+        version: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
       testcafe-reporter-spec-time:
         specifier: 4.0.0
         version: 4.0.0
@@ -2212,7 +2213,7 @@ importers:
         version: link:../devextreme/artifacts/npm/devextreme
       testcafe:
         specifier: 'catalog:'
-        version: 3.7.5(supports-color@7.2.0)
+        version: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
 
   tools/flaky-test-reporter:
     dependencies:
@@ -24574,11 +24575,11 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@testcafe-community/axe@3.5.0(axe-core@4.13.0)(testcafe@3.7.5)':
+  '@testcafe-community/axe@3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))':
     dependencies:
       axe-core: 4.13.0
       chalk: 2.4.2
-      testcafe: 3.7.5(supports-color@7.2.0)
+      testcafe: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
 
   '@testing-library/dom@10.4.1':
     dependencies:
@@ -28130,12 +28131,12 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  devextreme-screenshot-comparer@2.0.17(testcafe@3.7.5):
+  devextreme-screenshot-comparer@2.0.17(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)):
     dependencies:
       color-diff: 1.3.0
       looks-same: 7.3.0
       pngjs: 6.0.0
-      testcafe: 3.7.5(supports-color@7.2.0)
+      testcafe: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
       tslib: 2.8.1
 
   device-specs@1.0.1: {}
@@ -36295,7 +36296,7 @@ snapshots:
 
   testcafe-selector-generator@0.1.0: {}
 
-  testcafe@3.7.5(supports-color@7.2.0):
+  testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0):
     dependencies:
       '@babel/core': 7.29.7
       '@babel/plugin-proposal-decorators': 7.29.7(@babel/core@7.29.7)
