@@ -31,7 +31,7 @@ import type {
   HeaderFilterValues,
   HeaderFilterViewOptions,
 } from './types';
-import { allowHeaderFiltering } from './utils';
+import { allowHeaderFiltering, fillSelectedItemKeys } from './utils';
 
 type CheckBoxValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;
 type CheckBoxValueChangedHandler = (event: CheckBoxValueChangedEvent) => void;
@@ -166,45 +166,24 @@ export class HeaderFilterView extends Modules.View {
   }
 
   private applyHeaderFilter(options: HeaderFilterViewOptions): void {
-    // @ts-expect-error the list is created here
-    const list: List | TreeView = this.getListComponent();
-    const searchValue = (list as List).option('searchValue');
+    const list = this.getListComponent();
+
+    if (!list) {
+      return;
+    }
+
+    const searchValue = list.option('searchValue');
     const selectAllCheckBox = getSelectAllCheckBox(list);
     const isAllSelected = !searchValue && !options.isFilterBuilder && selectAllCheckBox?.option('value');
     const filterValues: HeaderFilterValues = [];
 
-    const fillSelectedItemKeys = (
-      selectedValues: HeaderFilterValues,
-      items: HeaderFilterItem[] | undefined,
-      isExclude: boolean,
-    ): void => {
-      each(items, (_, item) => {
-        if (item.selected !== undefined && !!item.selected !== isExclude) {
-          const node = (list as TreeView)._getNode(item);
-          // @ts-expect-error every item of the tree has a node
-          const hasChildren = (list as TreeView)._hasChildren(node);
-          const hasChildrenWithSelection = hasChildren
-            && item.items?.some((childItem) => childItem.selected);
-
-          if (!searchValue || !hasChildrenWithSelection) {
-            selectedValues.push(item.value);
-            return;
-          }
-        }
-
-        if (item.items?.length) {
-          fillSelectedItemKeys(selectedValues, item.items, isExclude);
-        }
-      });
-    };
-
     if (!isAllSelected) {
-      if (options.type === 'tree') {
+      if (list instanceof TreeView) {
         if (options.filterType) {
           options.filterType = 'include';
         }
 
-        fillSelectedItemKeys(filterValues, (list as TreeView).option('items'), false);
+        fillSelectedItemKeys(list, searchValue as TreeViewBaseProperties, filterValues, list.option('items'), false);
         options.filterValues = filterValues;
       }
     } else {
@@ -231,10 +210,7 @@ export class HeaderFilterView extends Modules.View {
     options: HeaderFilterViewOptions,
   ): void {
     if (options) {
-      this._initializePopupContainer(options);
-
-      // @ts-expect-error the popup is created here
-      const popupContainer: Popup = this.getPopupContainer();
+      const popupContainer = this._initializePopupContainer(options);
 
       this.hideHeaderFilterMenu();
       this.updatePopup($columnElement, options);
@@ -313,7 +289,7 @@ export class HeaderFilterView extends Modules.View {
     this._popupContainer?.$content()?.empty();
   }
 
-  private _initializePopupContainer(options: HeaderFilterViewOptions): void {
+  private _initializePopupContainer(options: HeaderFilterViewOptions): Popup {
     const $element = this.element();
 
     const headerFilterOptions = this._normalizeHeaderFilterOptions(options);
@@ -366,8 +342,7 @@ export class HeaderFilterView extends Modules.View {
         options.onShowing?.(e);
       },
       onShown: (): void => {
-        // @ts-expect-error the list is created here
-        this.getListComponent().focus();
+        this.getListComponent()?.focus();
       },
       onHidden: options.onHidden,
       onInitialized(e): void {
@@ -384,6 +359,8 @@ export class HeaderFilterView extends Modules.View {
     } else {
       this._popupContainer.option(dxPopupOptions);
     }
+
+    return this._popupContainer;
   }
 
   private _initializeListContainer(
@@ -535,13 +512,7 @@ export class HeaderFilterView extends Modules.View {
           onContentReady(e) {
             const { component: listComponent } = e;
             const items = listComponent.option('items');
-            const selectedItems: HeaderFilterItem[] = [];
-
-            each(items, (_, item) => {
-              if (item.selected) {
-                selectedItems.push(item);
-              }
-            });
+            const selectedItems: HeaderFilterItem[] = items.filter((item) => !!item.selected);
 
             listComponent._selectedItemsUpdating = true;
             listComponent.option('selectedItems', selectedItems);
