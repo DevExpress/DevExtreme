@@ -1,0 +1,127 @@
+diff --git a/lib/browser/provider/built-in/dedicated/chrome/build-chrome-args.js b/lib/browser/provider/built-in/dedicated/chrome/build-chrome-args.js
+index 9b9f577..591cb7c 100644
+--- a/lib/browser/provider/built-in/dedicated/chrome/build-chrome-args.js
++++ b/lib/browser/provider/built-in/dedicated/chrome/build-chrome-args.js
+@@ -27,8 +27,9 @@ function buildChromeArgs({ config, cdpPort, platformArgs, tempProfileDir, isCont
+         '--metrics-recording-only',
+         '--no-first-run',
+     ];
++    const hasCdpPort = cdpPort === 0 || !!cdpPort;
+     let chromeArgs = []
+-        .concat(cdpPort ? [`--remote-debugging-port=${cdpPort}`] : [], !config.userProfile ? [`--user-data-dir=${tempProfileDir.path}`] : [], config.headless ? [headlessMode] : [], config.userArgs ? [config.userArgs] : [], 
++        .concat(hasCdpPort ? [`--remote-debugging-port=${cdpPort}`] : [], !config.userProfile ? [`--user-data-dir=${tempProfileDir.path}`] : [], config.headless ? [headlessMode] : [], config.userArgs ? [config.userArgs] : [], 
+     // NOTE: we need to prevent new window blocking for multiple windows in Native Automation
+     isNativeAutomation ? ['--disable-popup-blocking'] : [], platformArgs ? [platformArgs] : [], defaultArgs)
+         .join(' ');
+diff --git a/lib/browser/provider/built-in/dedicated/chrome/index.js b/lib/browser/provider/built-in/dedicated/chrome/index.js
+index b12bb9e..fc4e63a 100644
+--- a/lib/browser/provider/built-in/dedicated/chrome/index.js
++++ b/lib/browser/provider/built-in/dedicated/chrome/index.js
+@@ -49,9 +49,8 @@ exports.default = Object.assign(Object.assign({}, base_1.default), { getConfig(n
+     },
+     async _startChrome(startOptions, pageUrl) {
+         if (startOptions.isContainerized)
+-            await (0, local_chrome_1.startOnDocker)(pageUrl, startOptions);
+-        else
+-            await (0, local_chrome_1.start)(pageUrl, startOptions);
++            return (0, local_chrome_1.startOnDocker)(pageUrl, startOptions);
++        return (0, local_chrome_1.start)(pageUrl, startOptions);
+     },
+     async openBrowser(browserId, pageUrl, config, additionalOptions) {
+         var _a;
+@@ -64,7 +63,7 @@ exports.default = Object.assign(Object.assign({}, base_1.default), { getConfig(n
+             reportWarning: (...args) => this.reportWarning(browserId, ...args),
+         };
+         //NOTE: A not-working tab is opened when the browser start in the docker so we should create a new tab.
+-        await this._startChrome(Object.assign({ isNativeAutomation: additionalOptions.nativeAutomation }, runtimeInfo), pageUrl);
++        runtimeInfo.cdpPort = await this._startChrome(Object.assign({ isNativeAutomation: additionalOptions.nativeAutomation }, runtimeInfo), pageUrl);
+         await this.waitForConnectionReady(browserId);
+         runtimeInfo.viewportSize = await this.runInitScript(browserId, client_functions_1.GET_WINDOW_DIMENSIONS_INFO_SCRIPT);
+         runtimeInfo.activeWindowId = null;
+diff --git a/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js b/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js
+index 4f22b00..714a195 100644
+--- a/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js
++++ b/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js
+@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.stop = exports.startOnDocker = exports.start = void 0;
++const fs_1 = require("fs");
++const path_1 = require("path");
+ const testcafe_browser_tools_1 = __importDefault(require("testcafe-browser-tools"));
+ const process_1 = require("../../../../../utils/process");
+ const browser_starter_1 = __importDefault(require("../../../utils/browser-starter"));
+@@ -14,11 +16,33 @@ const delay_1 = __importDefault(require("../../../../../utils/delay"));
+ const browserStarter = new browser_starter_1.default();
+ const LIST_TABS_TIMEOUT = 10000;
+ const LIST_TABS_DELAY = 500;
++const DEVTOOLS_ACTIVE_PORT_FILE = 'DevToolsActivePort';
++const DEVTOOLS_ACTIVE_PORT_TIMEOUT = 30000;
++const DEVTOOLS_ACTIVE_PORT_DELAY = 100;
++async function readDevToolsActivePort(tempProfileDir) {
++    const filePath = path_1.join(tempProfileDir.path, DEVTOOLS_ACTIVE_PORT_FILE);
++    const timer = new timer_1.default(DEVTOOLS_ACTIVE_PORT_TIMEOUT);
++    while (!timer.expired) {
++        try {
++            const port = parseInt(fs_1.readFileSync(filePath, 'utf8'), 10);
++            if (port > 0)
++                return port;
++        }
++        catch (error) {
++            // The file appears once Chrome has bound its DevTools port.
++        }
++        await (0, delay_1.default)(DEVTOOLS_ACTIVE_PORT_DELAY);
++    }
++    throw new Error(`Chrome did not write ${filePath} within ${DEVTOOLS_ACTIVE_PORT_TIMEOUT} ms`);
++}
+ async function start(pageUrl, { browserName, config, cdpPort, tempProfileDir, isContainerized, isNativeAutomation }) {
+     const chromeInfo = await testcafe_browser_tools_1.default.getBrowserInfo(config.path || browserName);
+     const chromeOpenParameters = Object.assign({}, chromeInfo);
+     chromeOpenParameters.cmd = (0, build_chrome_args_1.buildChromeArgs)({ config, cdpPort, platformArgs: chromeOpenParameters.cmd, tempProfileDir, isContainerized, isNativeAutomation, browserName });
+     await browserStarter.startBrowser(chromeOpenParameters, pageUrl);
++    if (cdpPort === 0 && tempProfileDir)
++        return readDevToolsActivePort(tempProfileDir);
++    return cdpPort;
+ }
+ exports.start = start;
+ async function tryListTabs(cdpPort) {
+@@ -30,7 +54,7 @@ async function tryListTabs(cdpPort) {
+     }
+ }
+ async function startOnDocker(pageUrl, { browserName, config, cdpPort, tempProfileDir, isContainerized }) {
+-    await start('', { browserName, config, cdpPort, tempProfileDir, isContainerized });
++    cdpPort = await start('', { browserName, config, cdpPort, tempProfileDir, isContainerized });
+     let { tabs, error } = await tryListTabs(cdpPort);
+     const timer = new timer_1.default(LIST_TABS_TIMEOUT);
+     //NOTE: We should repeat getting 'List' after a while because we can get an error if the browser isn't ready.
+@@ -44,6 +68,7 @@ async function startOnDocker(pageUrl, { browserName, config, cdpPort, tempProfil
+     const { Target } = await (0, chrome_remote_interface_1.default)({ target, port: cdpPort });
+     await Target.createTarget({ url: pageUrl });
+     await chrome_remote_interface_1.default.Close({ id: target.id, port: cdpPort });
++    return cdpPort;
+ }
+ exports.startOnDocker = startOnDocker;
+ async function stop({ browserId }) {
+diff --git a/lib/browser/provider/built-in/dedicated/chrome/runtime-info.js b/lib/browser/provider/built-in/dedicated/chrome/runtime-info.js
+index 0de3fac..9f9852e 100644
+--- a/lib/browser/provider/built-in/dedicated/chrome/runtime-info.js
++++ b/lib/browser/provider/built-in/dedicated/chrome/runtime-info.js
+@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const endpoint_utils_1 = require("../../../../../utils/endpoint-utils");
+ const create_temp_profile_1 = __importDefault(require("./create-temp-profile"));
+ const is_docker_1 = __importDefault(require("is-docker"));
+ const is_podman_1 = __importDefault(require("is-podman"));
+@@ -21,8 +20,9 @@ class ChromeRuntimeInfo {
+         const runtimeInfo = new this(config);
+         if (!runtimeInfo.config.userProfile)
+             runtimeInfo.tempProfileDir = await runtimeInfo.createTempProfile(proxyHostName, disableMultipleWindows);
++        // Port 0 lets Chrome choose a free port; `start` reads the real one from DevToolsActivePort.
+         if (!runtimeInfo.cdpPort && !runtimeInfo.config.userProfile)
+-            runtimeInfo.cdpPort = await (0, endpoint_utils_1.getFreePort)();
++            runtimeInfo.cdpPort = 0;
+         return runtimeInfo;
+     }
+ }
