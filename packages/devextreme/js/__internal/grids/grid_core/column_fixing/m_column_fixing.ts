@@ -36,6 +36,7 @@ import { normalizeWidth } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
 import { CLASSES } from './const';
+import type { ColumnFixingRowsViewExtension } from './types';
 
 const FIRST_CELL_CLASS = 'dx-first-cell';
 const LAST_CELL_CLASS = 'dx-last-cell';
@@ -91,7 +92,7 @@ const normalizeColumnWidths = function (fixedColumns, widths: number[], fixedWid
 
 // View
 const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseFixedColumnsExtender extends Base {
-  protected _isFixedTableRendering!: boolean;
+  public _isFixedTableRendering!: boolean;
 
   protected _isFixedColumns!: boolean;
 
@@ -681,7 +682,11 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
+const rowsView = (
+  Base: ModuleType<RowsView>,
+): ModuleType<
+  RowsView & ColumnFixingRowsViewExtension
+> => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
   protected _fixedScrollTimeout: any;
 
   public dispose() {
