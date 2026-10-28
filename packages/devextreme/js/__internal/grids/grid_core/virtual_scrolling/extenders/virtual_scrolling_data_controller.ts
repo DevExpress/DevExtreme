@@ -120,6 +120,7 @@ export const virtualScrollingDataControllerExtender = (
     return result?.done(() => {
       if (isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
         const rowIndexOffset = this.getRowIndexOffset();
+        // @ts-expect-error the data controller extender is not typed yet
         const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
         const { component } = this;
         const scrollable = component.getScrollable && component.getScrollable();
@@ -131,6 +132,7 @@ export const virtualScrollingDataControllerExtender = (
           let top = $rowElement?.position()?.top;
           const allowedTopOffset = browser.mozilla || browser.chrome ? 1 : 0; // T884308
           if ($rowElement && top && top > allowedTopOffset) {
+            // @ts-expect-error the data controller extender is not typed yet
             top = Math.round(top + Number(getOuterHeight($rowElement)) * (itemIndex % 1));
             scrollable.scrollTo({ top });
           }
@@ -630,6 +632,7 @@ export const virtualScrollingDataControllerExtender = (
 
     const viewportSize = this.viewportSize();
 
+    // @ts-expect-error the data controller extender is not typed yet
     return preloadEnabled ? 2 * viewportSize : viewportSize;
   }
 
@@ -644,6 +647,7 @@ export const virtualScrollingDataControllerExtender = (
     const topPreloadCount = isScrollingBack ? this.getPreloadedRowCount() : 0;
     const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadedRowCount();
     const totalCountCorrection = this.dataSourceController.getAdapter()?.totalCountCorrection() || 0;
+    // @ts-expect-error the data controller extender is not typed yet
     const skipWithPreload = Math.max(0, viewportParams.skip - topPreloadCount);
     const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(pageSize ? skipWithPreload / pageSize : 0);
     const pageOffset = pageIndex * pageSize;
@@ -837,6 +841,7 @@ export const virtualScrollingDataControllerExtender = (
   private updateViewport() {
     const viewportSize = this.viewportSize();
     const itemCount = this.items().length;
+    // @ts-expect-error the data controller extender is not typed yet
     const viewportIsNotFilled = viewportSize > itemCount;
     const currentTake = this._loadViewportParams?.take ?? 0;
     const newTake = this._rowsScrollController?.getViewportParams().take ?? 0;
@@ -922,7 +927,7 @@ export const virtualScrollingDataControllerExtender = (
       return rowsScrollController.virtualItemsCount();
     }
 
-    return this.dataSourceController.getAdapter()?.virtualItemsCount() as VirtualItemsCount | undefined;
+    return this.dataSourceController.getAdapter()?.virtualItemsCount();
   }
 
   public pageIndex(): number;
