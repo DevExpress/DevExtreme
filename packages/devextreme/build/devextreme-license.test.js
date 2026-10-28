@@ -269,7 +269,7 @@ describe('devextreme-license', () => {
         expect(code).toBe(1);
         expect(stderr).toContain(`Error DX1004: Your 30-day trial has expired (v${pkg.version}). Use and Redistribution prohibited. Please register a valid license (https://devexpress.com/DX1004) or purchase a new license (https://devexpress.com/BUY)`);
         expect(stderr).toContain('License ID: TESTLICENSEID. License Source: Environment Variable (DevExpress_License).');
-        expect(fs.readFileSync(path.join(tmp, 'key.ts'), 'utf8')).toContain("export const licenseKey = 'LCPv1");
+        expect(fs.readFileSync(path.join(tmp, 'key.ts'), 'utf8')).toContain('export const licenseKey = \'LCPv1');
     });
 
     it('writes nothing but the key and comments to the generated file', () => {
@@ -429,7 +429,7 @@ describe('devextreme-license', () => {
             const { code } = run({ DevExpress_License: expiredLcx() }, ['--out', 'key.ts', '--force']);
 
             expect(code).toBe(1);
-            expect(fs.readFileSync(path.join(tmp, 'key.ts'), 'utf8')).toContain("export const licenseKey = 'LCPv1");
+            expect(fs.readFileSync(path.join(tmp, 'key.ts'), 'utf8')).toContain('export const licenseKey = \'LCPv1');
         });
 
         it('is created in a folder that does not exist', () => {

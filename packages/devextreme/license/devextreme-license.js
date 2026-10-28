@@ -61,43 +61,45 @@ function parseArgs(argv) {
     for(let i = 0; i < args.length; i++) {
         const a = args[i];
 
-        if(a === '-h' || a === '--help') out.help = true;
-        else if(a === '--out') {
+        if(a === '-h' || a === '--help') {
+            out.help = true;
+        } else if(a === '--out') {
             const next = args[i + 1];
             if(!next || next.startsWith('-')) {
                 logStderr(prefixed('Warning: --out requires a path argument but none was provided. Ignoring --out.'));
             } else {
                 out.outPath = args[++i];
             }
-        }
-        else if(a.startsWith('--out=')) {
+        } else if(a.startsWith('--out=')) {
             const val = a.slice('--out='.length);
             if(!val) {
                 logStderr(prefixed('Warning: --out requires a path argument but none was provided. Ignoring --out.'));
             } else {
                 out.outPath = val;
             }
-        }
-        else if(a === '--non-modular') out.nonModular = true;
-        else if(a === '--no-gitignore') out.gitignore = false;
-        else if(a === '--force') out.force = true;
-        else if(a === '--cwd') {
+        } else if(a === '--non-modular') {
+            out.nonModular = true;
+        } else if(a === '--no-gitignore') {
+            out.gitignore = false;
+        } else if(a === '--force') {
+            out.force = true;
+        } else if(a === '--cwd') {
             const next = args[i + 1];
             if(!next || next.startsWith('-')) {
                 logStderr(prefixed('Warning: --cwd requires a path argument but none was provided. Ignoring --cwd.'));
             } else {
                 out.cwd = args[++i];
             }
-        }
-        else if(a.startsWith('--cwd=')) {
+        } else if(a.startsWith('--cwd=')) {
             const val = a.slice('--cwd='.length);
             if(!val) {
                 logStderr(prefixed('Warning: --cwd requires a path argument but none was provided. Ignoring --cwd.'));
             } else {
                 out.cwd = val;
             }
+        } else {
+            fail(`Unknown argument: ${a}\nRun devextreme-license --help`);
         }
-        else fail(`Unknown argument: ${a}\nRun devextreme-license --help`);
     }
 
     return out;

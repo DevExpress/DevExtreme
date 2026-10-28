@@ -18,7 +18,7 @@ function readTextFileIfExists(filePath) {
         if(!stat.isFile()) return null;
         const raw = fs.readFileSync(filePath, 'utf8');
         return isNonEmptyString(raw) ? raw : null;
-    } catch {
+    } catch{
         return null;
     }
 }
@@ -74,7 +74,7 @@ function resolveFromLicensePathEnv(licensePathValue) {
             if(stat.isFile()) return p;
             if(stat.isDirectory()) return path.join(p, LICENSE_FILE);
         }
-    } catch {}
+    } catch{}
 
     if(p.toLowerCase().endsWith('.txt')) return p;
     return path.join(p, LICENSE_FILE);
@@ -104,8 +104,8 @@ function readFullVersion() {
     return '';
 }
 
-function buildVersionString(devExtremeVersion){
-    const { major, minor, code: currentCode } = devExtremeVersion;
+function buildVersionString(devExtremeVersion) {
+    const { major, minor } = devExtremeVersion;
     return `${major}.${minor}`;
 }
 

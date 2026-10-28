@@ -1,4 +1,3 @@
-
 const LCX_SIGNATURE = 'LCXv1';
 const LCP_SIGNATURE = 'LCPv1';
 const SIGN_LENGTH = 68 * 2; // 136 chars
@@ -158,8 +157,8 @@ function readDevExtremeVersion() {
     return null;
 }
 
-function buildVersionString(devExtremeVersion){
-    const { major, minor, code: currentCode } = devExtremeVersion;
+function buildVersionString(devExtremeVersion) {
+    const { major, minor } = devExtremeVersion;
     return `${major}.${minor}`;
 }
 
@@ -231,8 +230,8 @@ function parseLCP(lcpString, versionCode) {
 
         const maxVersionAllowed = findLatestDevExtremeVersion(products);
 
-        if(!maxVersionAllowed) { 
-            return { ...PRODUCT_KIND_ERROR, licenseId }; 
+        if(!maxVersionAllowed) {
+            return { ...PRODUCT_KIND_ERROR, licenseId };
         }
 
         return {
@@ -280,9 +279,9 @@ function getLCPInfo(lcpString) {
             const { maxVersionAllowed } = token.payload;
             if(maxVersionAllowed < devExtremeVersion.code) {
                 warning = {
-                    type:'incompatibleVersion', 
-                    keyVersion: formatVersionCode(maxVersionAllowed), 
-                    currentVersion 
+                    type: 'incompatibleVersion',
+                    keyVersion: formatVersionCode(maxVersionAllowed),
+                    currentVersion
                 };
             }
         }
