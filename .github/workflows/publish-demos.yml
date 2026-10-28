@@ -79,6 +79,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - uses: pnpm/action-setup@v6
       with:
         run_install: false
@@ -102,10 +105,6 @@ jobs:
       run: |
         corepack enable
         pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
     - name: Prepare configs
       working-directory: apps/demos
@@ -180,6 +179,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - uses: pnpm/action-setup@v6
       with:
         run_install: false
@@ -203,10 +205,6 @@ jobs:
       run: |
         corepack enable
         pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
     - name: Prepare configs
       working-directory: apps/demos
