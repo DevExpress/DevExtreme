@@ -631,7 +631,7 @@ export const summaryRowsViewExtender = (
     );
   }
 
-  private renderGroupSummaryCellsCore(
+  public renderGroupSummaryCellsCore(
     $groupCell: dxElementWrapper,
     options: GroupSummaryRenderOptions,
     groupCellColSpan: number,
