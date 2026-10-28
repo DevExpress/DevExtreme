@@ -19,7 +19,7 @@ import filterUtils from '@js/ui/shared/filtering';
 import { compileGetter } from '@ts/core/utils/data';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
@@ -37,7 +37,7 @@ import {
   headerFilterMixin,
   HeaderFilterView,
   updateHeaderFilterItemSelectionState,
-} from './m_header_filter_core';
+} from './header_filter_core';
 import type {
   DateIntervalFormat,
   HeaderFilterColumn,

@@ -6,13 +6,13 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type { InternalGridOptions, ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 
 import type { Column, ColumnsChanges } from '../columns_controller/types';
 import type { CellRenderOptions, ViewCellOptions, ViewRow } from '../views/types';
-import sortingMixin from './m_sorting_mixin';
+import sortingMixin from './sorting_mixin';
 import type { HeaderActionEvent, SortingColumn, SortKeyName } from './types';
 
 const COLUMN_HEADERS_VIEW_NAMESPACE = 'dxDataGridColumnHeadersView';
