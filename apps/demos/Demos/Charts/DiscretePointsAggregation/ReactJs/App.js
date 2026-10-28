@@ -91,7 +91,7 @@ function App() {
           />
         </div>
         <div className="option">
-          <span>Method:</span>&nbsp;
+          <span>Method:</span>
           <SelectBox
             dataSource={aggregationFunctions}
             value={currentFunction}

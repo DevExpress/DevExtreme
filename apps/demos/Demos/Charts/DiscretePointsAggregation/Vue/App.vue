@@ -122,6 +122,8 @@ const customizeTooltip = ({
 }
 
 .option {
+  display: flex;
+  align-items: center;
   margin-top: 10px;
 }
 
