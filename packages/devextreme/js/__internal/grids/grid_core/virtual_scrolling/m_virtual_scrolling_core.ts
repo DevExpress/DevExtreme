@@ -1,74 +1,106 @@
 import positionUtils from '@js/common/core/animation/position';
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import type {
-  VirtualDataLoaderController,
+  GridPropertyType,
+  InternalGrid,
+  InternalGridOptions,
+} from '@ts/grids/grid_core/types';
+import type {
+  ChangedCallback,
   VirtualItemsCount,
 } from '@ts/grids/grid_core/virtual_data_loader/types';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import gridCoreUtils from '../utils';
 import { VirtualDataLoader } from '../virtual_data_loader/virtual_data_loader';
+import type {
+  ExternalScrollable,
+  ExternalScrollers,
+  ScrollEventsStrategy,
+  ViewportParams,
+  VirtualScrollDataOptions,
+} from './types';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
-const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
-const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
+const isVirtualMode = (that: VirtualScrollController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that.isVirtual();
+const isAppendMode = (that: VirtualScrollController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that.isVirtual();
 
-function subscribeToExternalScrollers($element, scrollChangedHandler, $targetElement?) {
-  let $scrollElement;
-  const scrollableArray: any = [];
-  const scrollToArray: any = [];
-  const disposeArray: any = [];
-  $targetElement = $targetElement || $element;
+function subscribeToExternalScrollers(
+  $element: dxElementWrapper,
+  scrollChangedHandler: (scrollTop: number) => void,
+  $targetElement?: dxElementWrapper,
+): ExternalScrollers {
+  const scrollableArray: ExternalScrollable[] = [];
+  const scrollToArray: ((position: number) => void)[] = [];
+  const disposeArray: (() => void)[] = [];
+  const $target = $targetElement ?? $element;
 
-  function getElementOffset(scrollable) {
-    const $scrollableElement = scrollable.element ? scrollable.$element() : scrollable;
+  function getElementOffset(scrollable: ExternalScrollable): number {
+    const $scrollableElement = 'element' in scrollable ? scrollable.$element() : scrollable;
     const scrollableOffset = positionUtils.offset($scrollableElement);
 
     if (!scrollableOffset) {
+      // @ts-expect-error offset() is typed as possibly undefined
       return $element.offset().top;
     }
 
-    return scrollable.scrollTop() - (scrollableOffset.top - $element.offset().top);
+    // @ts-expect-error scrollTop() is typed as a setter only
+    const scrollTop: number = scrollable.scrollTop();
+
+    // @ts-expect-error offset() is typed as possibly undefined
+    return scrollTop - (scrollableOffset.top - $element.offset().top);
   }
 
-  function createWindowScrollHandler(scrollable) {
-    return function () {
-      let scrollTop = scrollable.scrollTop() - getElementOffset(scrollable);
+  function createWindowScrollHandler(scrollable: ExternalScrollable): () => void {
+    return function windowScrollHandler(): void {
+      // @ts-expect-error scrollTop() is typed as a setter only
+      const scrollableScrollTop: number = scrollable.scrollTop();
+      let scrollTop = scrollableScrollTop - getElementOffset(scrollable);
 
       scrollTop = scrollTop > 0 ? scrollTop : 0;
       scrollChangedHandler(scrollTop);
     };
   }
 
-  const widgetScrollStrategy = {
+  const widgetScrollStrategy: ScrollEventsStrategy = {
     on(scrollable, eventName, handler) {
+      // @ts-expect-error the widget strategy gets only a Scrollable
       scrollable.on('scroll', handler);
     },
     off(scrollable, eventName, handler) {
+      // @ts-expect-error the widget strategy gets only a Scrollable
       scrollable.off('scroll', handler);
     },
   };
 
-  function subscribeToScrollEvents($scrollElement) {
-    const isDocument = $scrollElement.get(0).nodeName === '#document';
-    // @ts-expect-error
-    const isElement = $scrollElement.get(0).nodeType === getWindow().Node.ELEMENT_NODE;
-    let scrollable = $scrollElement.data('dxScrollable');
+  function subscribeToScrollEvents($parentElement: dxElementWrapper): void {
+    const isDocument = $parentElement.get(0).nodeName === '#document';
+    // @ts-expect-error the Window type has no Node
+    const isElement = $parentElement.get(0).nodeType === getWindow().Node.ELEMENT_NODE;
+    let scrollable: ExternalScrollable | false | undefined = $parentElement.data<Scrollable | undefined>('dxScrollable');
     let eventsStrategy = widgetScrollStrategy;
 
     if (!scrollable) {
-      scrollable = isDocument && $(getWindow() as any) || isElement && $scrollElement.css('overflowY') === 'auto' && $scrollElement;
+      scrollable = (isDocument && $(getWindow()))
+        || (isElement && $parentElement.css('overflowY') === 'auto' && $parentElement);
       eventsStrategy = eventsEngine;
-      if (!scrollable) return;
+      if (!scrollable) {
+        return;
+      }
     }
 
     const handler = createWindowScrollHandler(scrollable);
@@ -76,7 +108,7 @@ function subscribeToExternalScrollers($element, scrollChangedHandler, $targetEle
 
     scrollToArray.push((pos) => {
       const topOffset = getElementOffset(scrollable);
-      const scrollMethod = scrollable.scrollTo ? 'scrollTo' : 'scrollTop';
+      const scrollMethod = 'scrollTo' in scrollable ? 'scrollTo' : 'scrollTop';
 
       if (pos - topOffset >= 0) {
         scrollable[scrollMethod](pos + topOffset);
@@ -90,20 +122,27 @@ function subscribeToExternalScrollers($element, scrollChangedHandler, $targetEle
     });
   }
 
-  const getScrollElementParent = ($element) => $($element.get(0).parentNode ?? $element.get(0).host);
+  const getScrollElementParent = ($child: dxElementWrapper): dxElementWrapper => $(
+    // @ts-expect-error get() is typed as Element, but a shadow root has host
+    $child.get(0).parentNode ?? $child.get(0).host,
+  );
 
-  for ($scrollElement = $targetElement.parent(); $scrollElement.length; $scrollElement = getScrollElementParent($scrollElement)) {
+  for (
+    let $scrollElement = $target.parent();
+    $scrollElement.length;
+    $scrollElement = getScrollElementParent($scrollElement)
+  ) {
     subscribeToScrollEvents($scrollElement);
   }
 
   return {
-    scrollTo(pos) {
+    scrollTo(pos): void {
       each(scrollToArray, (_, scrollTo) => {
         scrollTo(pos);
       });
     },
 
-    dispose() {
+    dispose(): void {
       each(disposeArray, (_, dispose) => {
         dispose();
       });
@@ -111,10 +150,12 @@ function subscribeToExternalScrollers($element, scrollChangedHandler, $targetEle
   };
 }
 
-class VirtualScrollController {
-  private readonly _dataOptions: any;
+class VirtualScrollController<
+  TDataOptions extends VirtualScrollDataOptions = VirtualScrollDataOptions,
+> {
+  private readonly _dataOptions: TDataOptions;
 
-  private readonly component: any;
+  private readonly component: InternalGrid;
 
   private _viewportSize: number;
 
@@ -126,23 +167,23 @@ class VirtualScrollController {
 
   private _isScrollingBack: boolean;
 
-  private _itemSizes: any;
+  private _itemSizes: Record<number, number>;
 
-  private readonly _isVirtual: any;
+  private readonly _isVirtual: boolean;
 
   private _contentSize: number;
 
   private _sizeRatio: number;
 
-  public positionChanged: any;
+  public positionChanged: Callback;
 
   private readonly _dataLoader: VirtualDataLoader;
 
-  private _scrollTimeoutID: any;
+  private _scrollTimeoutID?: ReturnType<typeof setTimeout>;
 
-  private _windowScroll: any;
+  private _windowScroll?: ExternalScrollers | null;
 
-  constructor(component, dataOptions, isVirtual?) {
+  constructor(component: InternalGrid, dataOptions: TDataOptions, isVirtual = false) {
     this._dataOptions = dataOptions;
     this.component = component;
     this._viewportSize = component.option(LEGACY_SCROLLING_MODE) === false ? 15 : 0;
@@ -155,22 +196,20 @@ class VirtualScrollController {
     this._sizeRatio = 1;
     this._isVirtual = isVirtual;
     this.positionChanged = Callbacks();
-    this._dataLoader = new VirtualDataLoader(
-      this as unknown as VirtualDataLoaderController,
-      this._dataOptions,
-    );
+    this._dataLoader = new VirtualDataLoader(this, this._dataOptions);
   }
 
-  private getItemSizes() {
+  public getItemSizes(): Record<number, number> {
     return this._itemSizes;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private option(name, value?) {
-    return this.component.option.apply(this.component, arguments);
+  public option<TPropertyName extends string>(
+    name: TPropertyName,
+  ): GridPropertyType<InternalGridOptions, TPropertyName> {
+    return this.component.option(name);
   }
 
-  private isVirtual() {
+  public isVirtual(): boolean {
     return this._isVirtual;
   }
 
@@ -181,8 +220,10 @@ class VirtualScrollController {
       if (this.option(LEGACY_SCROLLING_MODE) === false && totalItemsCount !== -1) {
         const renderedItemsRange = dataOptions.renderedItemsRange?.();
         const viewportParams = this.getViewportParams();
-        const loadedOffset = dataOptions.loadedOffset();
-        const loadedItemCount = dataOptions.loadedItemCount();
+        // @ts-expect-error only the new rendering mode reaches here
+        const loadedOffset: number = dataOptions.loadedOffset();
+        // @ts-expect-error only the new rendering mode reaches here
+        const loadedItemCount: number = dataOptions.loadedItemCount();
 
         const skip = renderedItemsRange?.skip ?? Math.max(viewportParams.skip, loadedOffset);
         const take = renderedItemsRange?.take ?? Math.min(viewportParams.take, loadedItemCount);
@@ -200,7 +241,7 @@ class VirtualScrollController {
     return undefined;
   }
 
-  private getScrollingTimeout() {
+  private getScrollingTimeout(): number {
     const renderAsync = this.option('scrolling.renderAsync');
     let scrollingTimeout = 0;
 
@@ -217,9 +258,8 @@ class VirtualScrollController {
     return scrollingTimeout;
   }
 
-  private setViewportPosition(position) {
-    // @ts-expect-error
-    const result = new Deferred();
+  public setViewportPosition(position: number): DeferredObj<unknown> {
+    const result = Deferred<unknown>();
     const scrollingTimeout = this.getScrollingTimeout();
 
     clearTimeout(this._scrollTimeoutID);
@@ -232,29 +272,33 @@ class VirtualScrollController {
       this._setViewportPositionCore(position);
       result.resolve();
     }
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return result.promise();
   }
 
-  private getViewportPosition() {
+  public getViewportPosition(): number {
     return this._position;
   }
 
-  public getItemIndexByPosition(position?, viewportItemIndex?, height?) {
-    position = position ?? this._position;
+  public getItemIndexByPosition(
+    position?: number,
+    viewportItemIndex?: number,
+    height?: number,
+  ): number {
+    const targetPosition = position ?? this._position;
     const defaultItemSize = this.getItemSize();
     let offset = 0;
     let itemOffset = 0;
 
-    const itemOffsetsWithSize = (Object.keys(this._itemSizes) as any).concat(-1);
-    for (let i = 0; i < itemOffsetsWithSize.length && offset < position; i++) {
-      // eslint-disable-next-line radix
-      const itemOffsetWithSize = parseInt(itemOffsetsWithSize[i]);
-      let itemOffsetDiff = (position - offset) / defaultItemSize;
+    const itemOffsetsWithSize = [...Object.keys(this._itemSizes), -1];
+    for (let i = 0; i < itemOffsetsWithSize.length && offset < targetPosition; i += 1) {
+      const itemOffsetWithSize = parseInt(String(itemOffsetsWithSize[i]), 10);
+      let itemOffsetDiff = (targetPosition - offset) / defaultItemSize;
       if (itemOffsetWithSize < 0 || itemOffset + itemOffsetDiff < itemOffsetWithSize) {
         itemOffset += itemOffsetDiff;
 
         if (this._sizeRatio < 1 && isDefined(viewportItemIndex)) {
-          itemOffset = viewportItemIndex + (height / this._viewportItemSize);
+          itemOffset = viewportItemIndex + (Number(height) / this._viewportItemSize);
         }
         break;
       } else {
@@ -264,16 +308,16 @@ class VirtualScrollController {
       }
       const itemSize = this._itemSizes[itemOffsetWithSize];
       offset += itemSize;
-      itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
+      itemOffset += offset < targetPosition ? 1 : (targetPosition - offset + itemSize) / itemSize;
     }
     return Math.round(itemOffset * 50) / 50;
   }
 
-  public isScrollingBack() {
+  public isScrollingBack(): boolean {
     return this._isScrollingBack;
   }
 
-  private _setViewportPositionCore(position) {
+  public _setViewportPositionCore(position: number): DeferredObj<unknown> | undefined {
     const prevPosition = this._position || 0;
     this._position = position;
 
@@ -287,7 +331,7 @@ class VirtualScrollController {
     return result;
   }
 
-  public setContentItemSizes(sizes) {
+  public setContentItemSizes(sizes: number[]): void {
     const virtualItemsCount = this.virtualItemsCount();
 
     this._contentSize = sizes.reduce((a, b) => a + b, 0);
@@ -297,7 +341,8 @@ class VirtualScrollController {
         this._itemSizes[virtualItemsCount.begin + index] = size;
       });
 
-      const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + this.itemsCount()) * this._viewportItemSize;
+      const virtualItemCount = virtualItemsCount.begin + virtualItemsCount.end + this.itemsCount();
+      const virtualContentSize = virtualItemCount * this._viewportItemSize;
       const contentHeightLimit = gridCoreUtils.getContentHeightLimit(browser);
       if (virtualContentSize > contentHeightLimit) {
         this._sizeRatio = contentHeightLimit / virtualContentSize;
@@ -307,11 +352,11 @@ class VirtualScrollController {
     }
   }
 
-  private getItemSize() {
+  public getItemSize(): number {
     return this._viewportItemSize * this._sizeRatio;
   }
 
-  public getItemOffset(itemIndex, isEnd?) {
+  public getItemOffset(itemIndex: number, isEnd?: boolean): number {
     const virtualItemsCount = this.virtualItemsCount();
     let itemCount = itemIndex;
 
@@ -320,18 +365,19 @@ class VirtualScrollController {
     let offset = 0;
     const totalItemsCount = this._dataOptions.totalItemsCount();
 
-    Object.keys(this._itemSizes).forEach((currentItemIndex: any) => {
+    Object.keys(this._itemSizes).forEach((currentItemKey) => {
+      const currentItemIndex = Number(currentItemKey);
       if (!itemCount) return;
       if (isEnd ? currentItemIndex >= totalItemsCount - itemIndex : currentItemIndex < itemIndex) {
         offset += this._itemSizes[currentItemIndex];
-        itemCount--;
+        itemCount -= 1;
       }
     });
 
     return offset + itemCount * this._viewportItemSize * this._sizeRatio;
   }
 
-  private getContentOffset(type) {
+  public getContentOffset(type?: 'begin' | 'end'): number {
     const isEnd = type === 'end';
     const virtualItemsCount = this.virtualItemsCount();
 
@@ -340,41 +386,40 @@ class VirtualScrollController {
     return this.getItemOffset(isEnd ? virtualItemsCount.end : virtualItemsCount.begin, isEnd);
   }
 
-  private getVirtualContentSize() {
+  public getVirtualContentSize(): number {
     const virtualItemsCount = this.virtualItemsCount();
 
     return virtualItemsCount ? this.getContentOffset('begin') + this.getContentOffset('end') + this._contentSize : 0;
   }
 
-  public getViewportItemIndex() {
+  public getViewportItemIndex(): number {
     return this._viewportItemIndex;
   }
 
-  private setViewportItemIndex(itemIndex) {
+  public setViewportItemIndex(itemIndex: number): DeferredObj<unknown> | undefined {
     this._viewportItemIndex = itemIndex;
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
-      return;
+      return undefined;
     }
 
-    // @ts-expect-error
-    return this._dataLoader.viewportItemIndexChanged.apply(this._dataLoader, arguments);
+    return this._dataLoader.viewportItemIndexChanged(itemIndex);
   }
 
-  private viewportItemSize(size?) {
+  public viewportItemSize(size?: number): number {
     if (size !== undefined) {
       this._viewportItemSize = size;
     }
     return this._viewportItemSize;
   }
 
-  private viewportSize(size) {
+  public viewportSize(size?: number): number {
     if (size !== undefined) {
       this._viewportSize = size;
     }
     return this._viewportSize;
   }
 
-  public viewportHeight(height, scrollTop) {
+  public viewportHeight(height: number, scrollTop?: number): void {
     const position = scrollTop ?? this._position;
     const begin = this.getItemIndexByPosition(position);
     const end = this.getItemIndexByPosition(position + height, begin, height);
@@ -386,45 +431,49 @@ class VirtualScrollController {
     }
   }
 
-  public reset(isRefresh?) {
+  public reset(isRefresh?: boolean): void {
     this._dataLoader.reset();
     if (!isRefresh) {
       this._itemSizes = {};
     }
   }
 
-  private subscribeToWindowScrollEvents($element) {
-    this._windowScroll = this._windowScroll || subscribeToExternalScrollers($element, (scrollTop) => {
-      if (this.viewportItemSize()) {
-        this.setViewportPosition(scrollTop);
-      }
-    });
+  public subscribeToWindowScrollEvents($element: dxElementWrapper): void {
+    this._windowScroll = this._windowScroll ?? subscribeToExternalScrollers(
+      $element,
+      (scrollTop) => {
+        if (this.viewportItemSize()) {
+          this.setViewportPosition(scrollTop);
+        }
+      },
+    );
   }
 
-  public dispose() {
+  public dispose(): void {
     clearTimeout(this._scrollTimeoutID);
-    this._windowScroll && this._windowScroll.dispose();
+    this._windowScroll?.dispose();
     this._windowScroll = null;
   }
 
-  private scrollTo(pos) {
-    this._windowScroll && this._windowScroll.scrollTo(pos);
+  public scrollTo(pos: number): void {
+    this._windowScroll?.scrollTo(pos);
   }
 
-  private isVirtualMode() {
+  public isVirtualMode(): boolean {
     return isVirtualMode(this);
   }
 
-  private isAppendMode() {
+  public isAppendMode(): boolean {
     return isAppendMode(this);
   }
 
-  // new mode
-  public getViewportParams() {
+  public getViewportParams(): ViewportParams {
     const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
     const totalItemsCount = this._dataOptions.totalItemsCount();
     const hasKnownLastPage = this._dataOptions.hasKnownLastPage();
-    const topIndex = hasKnownLastPage && this._viewportItemIndex > totalItemsCount ? totalItemsCount : this._viewportItemIndex;
+    const topIndex = hasKnownLastPage && this._viewportItemIndex > totalItemsCount
+      ? totalItemsCount
+      : this._viewportItemIndex;
     const bottomIndex = this._viewportSize + topIndex;
     const maxGap = this.option('scrolling.prerenderedRowChunkSize') || 1;
     const isScrollingBack = this.isScrollingBack();
@@ -445,12 +494,11 @@ class VirtualScrollController {
     };
   }
 
-  public itemsCount() {
+  public itemsCount(isBase?: boolean): number {
     let result = 0;
 
     if (this.option(LEGACY_SCROLLING_MODE)) {
-      // @ts-expect-error
-      result = this._dataLoader.itemsCount.apply(this._dataLoader, arguments);
+      result = this._dataLoader.itemsCount(isBase);
     } else {
       result = this._dataOptions.itemsCount();
     }
@@ -458,42 +506,38 @@ class VirtualScrollController {
     return result;
   }
 
-  public pageIndex(...args) {
+  public pageIndex(): number;
+  public pageIndex(pageIndex: number): number | undefined;
+  public pageIndex(...args: [] | [number]): number | undefined {
     // @ts-expect-error a spread argument can't match the overloads of pageIndex()
     return this._dataLoader.pageIndex(...args);
   }
 
-  public beginPageIndex(...args) {
-    // @ts-expect-error
-    return this._dataLoader.beginPageIndex(...args);
+  public beginPageIndex(defaultPageIndex?: number): number {
+    return this._dataLoader.beginPageIndex(defaultPageIndex);
   }
 
-  private endPageIndex(...args) {
-    // @ts-expect-error
-    return this._dataLoader.endPageIndex(...args);
+  public endPageIndex(): number {
+    return this._dataLoader.endPageIndex();
   }
 
-  public pageSize(...args) {
-    // @ts-expect-error
-    return this._dataLoader.pageSize(...args);
+  public pageSize(): number {
+    return this._dataLoader.pageSize();
   }
 
-  public load(...args) {
-    // @ts-expect-error
-    return this._dataLoader.load(...args);
+  public load(): DeferredObj<unknown> {
+    return this._dataLoader.load();
   }
 
-  public loadIfNeed(...args) {
-    // @ts-expect-error
-    return this._dataLoader.loadIfNeed(...args);
+  public loadIfNeed(): void {
+    this._dataLoader.loadIfNeed();
   }
 
-  public handleDataChanged(...args) {
-    // @ts-expect-error
-    return this._dataLoader.handleDataChanged(...args);
+  public handleDataChanged(callBase: ChangedCallback, e?: ChangedEvent): void {
+    this._dataLoader.handleDataChanged(callBase, e);
   }
 
-  public getDelayDeferred() {
+  public getDelayDeferred(): DeferredObj<unknown> | undefined {
     return this._dataLoader.getDelayDeferred();
   }
 }
