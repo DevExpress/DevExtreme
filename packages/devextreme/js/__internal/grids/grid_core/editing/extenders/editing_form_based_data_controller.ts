@@ -2,20 +2,21 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
-import type { FormBasedEditingController } from '../m_editing_form_based';
+import { EDIT_MODE } from '../const';
+import type { EditingController } from '../editing';
 
 export const editingFormBasedDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class EditingFormBasedDataControllerExtender extends Base {
-  protected _editingController!: FormBasedEditingController;
+  protected _editingController!: EditingController;
 
   public init(): void {
-    this._editingController = this.getController('editing') as FormBasedEditingController;
+    this._editingController = this.getController('editing');
     super.init();
   }
 
   private _updateEditItem(item: ProcessedItem): void {
-    if (this._editingController.isFormEditMode()) {
+    if (this._editingController.getEditMode() === EDIT_MODE.form) {
       item.rowType = 'detail';
     }
   }
@@ -26,7 +27,9 @@ export const editingFormBasedDataControllerExtender = (
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
   ): number[] | undefined {
-    if (isLiveUpdate === false && newItem.isEditing && this._editingController.isFormEditMode()) {
+    const isFormEditMode = this._editingController.getEditMode() === EDIT_MODE.form;
+
+    if (isLiveUpdate === false && newItem.isEditing && isFormEditMode) {
       return undefined;
     }
 

@@ -15,10 +15,7 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
 import type { EditingController } from '../editing';
 import { isCellModified } from '../editing_utils';
-
-export interface EditingDataControllerExtension {
-  _editingController: EditingController;
-}
+import type { EditingDataControllerExtension } from '../types';
 
 export const editingDataControllerExtender = <TBase extends ModuleType<DataController>>(
   Base: TBase,

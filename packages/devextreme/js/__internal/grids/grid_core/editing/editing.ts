@@ -51,6 +51,7 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
+import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
@@ -69,12 +70,10 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
   CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import {
   ACTION_OPTION_NAMES,
   BUTTON_NAMES,
-  CELL_BASED_MODES,
   CLASSES,
   DATA_CHANGE_TYPE,
   DEFAULT_START_EDIT_ACTION,
@@ -93,7 +92,6 @@ import {
   METHOD_NAMES,
   NEW_ROW_POSITION,
   REQUIRED_EDITOR_LABELLEDBY_MODES,
-  ROW_BASED_MODES,
   TARGET_COMPONENT_NAME,
 } from './const';
 import {
@@ -102,13 +100,15 @@ import {
   getButtonIndex,
   getButtonName,
   getEditingTexts,
+  isCellBasedEditMode,
   isEditingCell,
   isEditingOrShowEditorAlwaysDataCell,
+  isRowBasedEditMode,
 } from './editing_utils';
 import { editingDataControllerExtender } from './extenders/editing_data_controller';
-import type { CellBasedEditingController } from './m_editing_cell_based';
 import type {
   AllowEditActionValue,
+  CellBasedEditingController,
   EditActionOptions,
   EditActions,
   EditCellResult,
@@ -122,6 +122,7 @@ import type {
   EditingDefaultOptions,
   EditingModuleOptionChanged,
   EditingOptions,
+  EditingRowsViewExtension,
   EditingStartOptions,
   EditorCellOptions,
   EditorTemplate,
@@ -129,9 +130,9 @@ import type {
   InternalColumnButton,
   InternalColumnButtonClickEvent,
   InternalEditData,
-  NormalizedEditCellOptions,
   OnSavingParams,
   OnSavingResult,
+  PrepareEditCellOptions,
   ProcessedChanges,
   SavedRowInfo,
   SaveResult,
@@ -249,11 +250,6 @@ export class EditingController extends modules.ViewController {
     }
 
     return EDIT_MODE.row;
-  }
-
-  public isCellBasedEditMode(): boolean {
-    const editMode: GridsEditMode = this.getEditMode();
-    return CELL_BASED_MODES.includes(editMode);
   }
 
   private _getDefaultEditorTemplate(): EditorTemplate {
@@ -395,11 +391,6 @@ export class EditingController extends modules.ViewController {
     }
 
     return true;
-  }
-
-  public isPopupEditMode(): boolean {
-    const editMode = this.option('editing.mode');
-    return editMode === EDIT_MODE.popup;
   }
 
   private _isButtonVisible(button: InternalColumnButton, options: EditorCellOptions): boolean {
@@ -555,11 +546,6 @@ export class EditingController extends modules.ViewController {
         gridCoreUtils.setEmptyText($container);
       }
     };
-  }
-
-  public isRowBasedEditMode(): boolean {
-    const editMode = this.getEditMode();
-    return ROW_BASED_MODES.includes(editMode);
   }
 
   protected getFirstEditableColumnIndex(): number | undefined {
@@ -2527,7 +2513,7 @@ export class EditingController extends modules.ViewController {
     const { column, row, rowType } = options;
     const rowIndex = row?.rowIndex;
 
-    const isRowMode = this.isRowBasedEditMode();
+    const isRowMode = isRowBasedEditMode(this.getEditMode());
     const isRowEditing = this.isEditRow(rowIndex);
     const isCellEditing = this.isEditCell(rowIndex, options.columnIndex);
 
@@ -2798,7 +2784,7 @@ export class EditingController extends modules.ViewController {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
-  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean {
+  protected _prepareEditCell(parameters: PrepareEditCellOptions): boolean {
     return false;
   }
 
@@ -2818,7 +2804,9 @@ export class EditingController extends modules.ViewController {
 
 const rowsView = <TBase extends ModuleType<RowsView>>(
   Base: TBase,
-): TBase => class RowsViewEditingExtender extends Base {
+): TBase & ModuleType<
+  RowsView & EditingRowsViewExtension
+> => class RowsViewEditingExtender extends Base {
   /** @architectureLeak editingCellBased: a click on a cell starts and closes cell editing */
   public _editingController!: CellBasedEditingController;
 
@@ -2948,26 +2936,32 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
     });
   }
 
-  private _rowClickTreeListHack(e: ViewRowEvent): void {
-    super._rowClick(e);
-  }
-
-  protected _rowClick(e: ViewRowEvent): void {
+  /**
+   * @extended: TreeList's editing
+   */
+  public handleRowClickByEditing(e: ViewRowEvent): boolean {
     const isEditForm = $(e.rowElement).hasClass(this.addWidgetPrefix(CLASSES.editForm));
 
     e.event[TARGET_COMPONENT_NAME] = this.component;
 
-    if (!this._editCellByClick(e, 'click') && !isEditForm) {
+    return !!this._editCellByClick(e, 'click') || isEditForm;
+  }
+
+  protected _rowClick(e: ViewRowEvent): void {
+    if (!this.handleRowClickByEditing(e)) {
       super._rowClick(e);
     }
   }
 
-  private _rowDblClickTreeListHack(e: ViewRowEvent): void {
-    super._rowDblClick(e);
+  /**
+   * @extended: TreeList's editing
+   */
+  public handleRowDblClickByEditing(e: ViewRowEvent): boolean {
+    return !!this._editCellByClick(e, 'dblClick');
   }
 
   protected _rowDblClick(e: ViewRowEvent): void {
-    if (!this._editCellByClick(e, 'dblClick')) {
+    if (!this.handleRowDblClickByEditing(e)) {
       super._rowDblClick(e);
     }
   }
@@ -3049,7 +3043,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
       && !cellOptions.modified
       && cellOptions.rowType === 'data'
       && cellOptions.column.calculateCellValue === cellOptions.column.defaultCalculateCellValue
-      && this._editingController.isCellBasedEditMode();
+      && isCellBasedEditMode(this._editingController.getEditMode());
 
     if (isEditableCell) {
       this.setAria(
