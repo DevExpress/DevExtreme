@@ -1,0 +1,21 @@
+name: Unpack npm packages
+description: >-
+  Unpacks the packed devextreme*.tgz from the workspace root into the directories
+  the workspace links to (publishConfig.directory of each package), so that
+  pnpm install --frozen-lockfile serves the packed build with lock-pinned dependencies.
+
+runs:
+  using: composite
+  steps:
+    - name: Unpack packages into their publish directories
+      shell: bash
+      run: |
+        unpack() {
+          mkdir -p "$2"
+          tar -xzf "$1" -C "$2" --strip-components=1
+        }
+        unpack devextreme-installer.tgz packages/devextreme/artifacts/npm/devextreme
+        unpack devextreme-dist-installer.tgz packages/devextreme/artifacts/npm/devextreme-dist
+        unpack devextreme-angular-installer.tgz packages/devextreme-angular/npm/dist
+        unpack devextreme-react-installer.tgz packages/devextreme-react/npm
+        unpack devextreme-vue-installer.tgz packages/devextreme-vue/npm
