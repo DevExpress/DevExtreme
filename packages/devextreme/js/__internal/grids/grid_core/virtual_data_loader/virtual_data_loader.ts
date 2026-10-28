@@ -258,7 +258,7 @@ export class VirtualDataLoader {
     return this._controller.option(name);
   }
 
-  private viewportItemIndexChanged(itemIndex: number): DeferredObj<unknown> | undefined {
+  public viewportItemIndexChanged(itemIndex: number): DeferredObj<unknown> | undefined {
     const pageSize = this._dataOptions.pageSize();
     const pageCount = this._dataOptions.pageCount();
     const virtualMode = this._controller.isVirtualMode();
@@ -308,7 +308,7 @@ export class VirtualDataLoader {
       : this._dataOptions.pageIndex(pageIndex);
   }
 
-  private beginPageIndex(defaultPageIndex?: number): number {
+  public beginPageIndex(defaultPageIndex?: number): number {
     let index = getBeginPageIndex(this);
     if (index < 0) {
       index = defaultPageIndex ?? this.pageIndex();
@@ -316,17 +316,17 @@ export class VirtualDataLoader {
     return index;
   }
 
-  private endPageIndex(): number {
+  public endPageIndex(): number {
     const endPageIndex = getEndPageIndex(this);
 
     return endPageIndex > 0 ? endPageIndex : this._lastPageIndex;
   }
 
-  private pageSize(): number {
+  public pageSize(): number {
     return this._dataOptions.pageSize();
   }
 
-  private load(): DeferredObj<unknown> {
+  public load(): DeferredObj<unknown> {
     const dataOptions = this._dataOptions;
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
     let result: DeferredObj<unknown> | undefined;
@@ -367,7 +367,7 @@ export class VirtualDataLoader {
     return result ?? Deferred<unknown>().resolve();
   }
 
-  private loadIfNeed(): void {
+  public loadIfNeed(): void {
     const isVirtualMode = this._controller.isVirtualMode();
     const isAppendMode = this._controller.isAppendMode();
 
@@ -382,7 +382,7 @@ export class VirtualDataLoader {
     }
   }
 
-  private handleDataChanged(callBase: ChangedCallback, e?: ChangedEvent): void {
+  public handleDataChanged(callBase: ChangedCallback, e?: ChangedEvent): void {
     const dataOptions = this._dataOptions;
     let lastCacheLength = this._cache.length;
     const isVirtualMode = this._controller.isVirtualMode();
@@ -460,7 +460,7 @@ export class VirtualDataLoader {
     return this._delayDeferred;
   }
 
-  private itemsCount(isBase?: boolean): number {
+  public itemsCount(isBase?: boolean): number {
     let count = 0;
     const isVirtualMode = this._controller.isVirtualMode();
 

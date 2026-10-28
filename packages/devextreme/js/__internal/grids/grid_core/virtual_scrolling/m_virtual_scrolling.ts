@@ -113,6 +113,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     this._isLoaded = true;
     this._loadPageCount = 1;
 
+    // @ts-expect-error _getVirtualScrollDataOptions() is not typed yet
     this._virtualScrollController = new VirtualScrollController(this.component, this._getVirtualScrollDataOptions());
   }
 
@@ -211,6 +212,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
 
     const callBase = super.dataChangedHandler.bind(this);
 
+    // @ts-expect-error ChangedEvent lacks the legacy virtual scrolling change types
     this._virtualScrollController.handleDataChanged(callBase, e);
   }
 
@@ -979,6 +981,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     this.throwHeightWarningIfNeed();
 
     if (that.component.$element() && !that._windowScroll && isElementInDom($element)) {
+      // @ts-expect-error the view is rendered here
       that._windowScroll = subscribeToExternalScrollers($element, (scrollPos) => {
         if (!that._hasHeight && that._rowHeight) {
           that._dataController
