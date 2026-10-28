@@ -26,6 +26,7 @@ import { current, isFluent } from '@js/ui/themes';
 import ValidationEngine from '@js/ui/validation_engine';
 import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
+import { getData } from '@ts/core/element_data';
 import { focused } from '@ts/core/utils/selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
@@ -33,7 +34,7 @@ import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/ed
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import {
@@ -939,7 +940,7 @@ export const validatingEditingExtender = (
     if (this.getEditMode() === EDIT_MODE.cell) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
       const validator = $cell && $cell.data('dxValidator');
-      const rowOptions = $cell && $cell.closest(`.${VIEW_CLASSES.row}`).data('options');
+      const rowOptions = $cell && getData($cell.closest(`.${VIEW_CLASSES.row}`), ROW_OPTIONS_KEY);
       const value = validator && validator.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
         // @ts-expect-error
@@ -1221,9 +1222,9 @@ export const validatingEditorFactoryExtender = (
     const isFixedColumns = this._rowsView?.isFixedColumns?.();
 
     if (isFixedColumns && !isFormBasedEditMode(this._editingController.getEditMode())) {
-      const nextRowOptions = $cell.closest(`.${VIEW_CLASSES.row}`).next().data('options');
+      const nextRowOptions = getData($cell.closest(`.${VIEW_CLASSES.row}`).next(), ROW_OPTIONS_KEY);
 
-      if (nextRowOptions && nextRowOptions.rowType === 'group') {
+      if (nextRowOptions && nextRowOptions.rowType === 'group' && isDefined(nextRowOptions.rowIndex)) {
         $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();
         $groupCellElement = $nextFixedRowElement.find(`.${VIEW_CLASSES.groupCell}`);
 
@@ -1409,7 +1410,7 @@ export const validatingEditorFactoryExtender = (
   private updateCellState($element, validationResult, isHideBorder) {
     const $focus = $element?.closest(this._getFocusCellSelector());
     const $cell = $focus?.is('td') ? $focus : null;
-    const rowOptions = $focus?.closest(`.${VIEW_CLASSES.row}`).data('options');
+    const rowOptions = getData($focus?.closest(`.${VIEW_CLASSES.row}`), ROW_OPTIONS_KEY);
     // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     const column = $cell && this._columnsController.getVisibleColumns()[$cell.index()];
@@ -1482,7 +1483,7 @@ export const validatingEditorFactoryExtender = (
 
     const $focus = $element?.closest(this._getFocusCellSelector());
     const validator = $focus && ($focus.data('dxValidator') || $element.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
-    const rowOptions = $focus && $focus.closest(`.${VIEW_CLASSES.row}`).data('options');
+    const rowOptions = $focus && getData($focus.closest(`.${VIEW_CLASSES.row}`), ROW_OPTIONS_KEY);
     // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     let validationResult;
@@ -1600,7 +1601,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
 
   protected _restoreErrorRow(contentTable?) {
     this._editingController && this._editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
-      const rowOptions = $(item).data('options');
+      const rowOptions = getData(item, ROW_OPTIONS_KEY);
       if (rowOptions) {
         // @ts-expect-error
         const change = this._editingController.getChangeByKey(rowOptions.key);

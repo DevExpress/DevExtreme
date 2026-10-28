@@ -6,9 +6,11 @@ import type {
   RowIndexByKey, RowOperation, UpdateChange, UpdateItemChange,
 } from '../types';
 
+type ComparedItem = Pick<ProcessedItem, 'isEditing'> & { key?: unknown; rowType: string };
+
 export function isSameItem(
-  item1?: ProcessedItem,
-  item2?: ProcessedItem,
+  item1?: ComparedItem,
+  item2?: ComparedItem,
   strict?: boolean,
 ): boolean {
   if (!item1 || !item2 || !equalByValue(item1.key, item2.key)) {

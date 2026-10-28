@@ -5,7 +5,6 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { removeEvent } from '@js/common/core/events/remove';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
-import { data as elementData } from '@js/core/element_data';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -28,6 +27,7 @@ import {
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
+import { getData, setData } from '@ts/core/element_data';
 import supportUtils from '@ts/core/utils/support';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
@@ -42,6 +42,7 @@ import type {
 } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import type { EditFormItem } from '@ts/grids/grid_core/editing/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_handling/const';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
@@ -50,9 +51,9 @@ import modules from '@ts/grids/grid_core/modules/modules';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
-import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
+import { FIELD_ITEM_CONTENT_CLASS, FIELD_ITEM_DATA_KEY } from '@ts/ui/form/constants';
 
-import { CLASSES } from './const';
+import { CLASSES, ROW_OPTIONS_KEY } from './const';
 import type {
   AppendRowTemplate,
   BoundingRect,
@@ -380,7 +381,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const $cell = $(e.currentTarget);
         const $row = $cell.parent();
         const visibleColumns = this._columnsController.getVisibleColumns();
-        const rowOptions = $row.data<RowPreparedOptions | undefined>('options');
+        const rowOptions = getData($row, ROW_OPTIONS_KEY);
         const columnIndex = $cell.index();
 
         const cellOptions = rowOptions?.cells?.[columnIndex];
@@ -423,7 +424,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       const $cell = $(event.currentTarget);
       const $fieldItemContent = $(event.target).closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
       const $row = $cell.parent();
-      const rowOptions = $row.data<RowPreparedOptions | undefined>('options');
+      const rowOptions = getData($row, ROW_OPTIONS_KEY);
       const options = rowOptions?.cells?.[$cell.index()];
 
       if (!$cell.closest('table').is(event.delegateTarget)) {
@@ -439,8 +440,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       resultOptions.rowIndex = this.getRowIndex($row);
 
       if ($fieldItemContent.length) {
-        const formItemOptions = $fieldItemContent.data<{ column?: Column }>('dx-form-item');
-        if (formItemOptions.column) {
+        const formItemOptions: EditFormItem | undefined = getData(
+          $fieldItemContent,
+          FIELD_ITEM_DATA_KEY,
+        );
+        if (formItemOptions?.column) {
           resultOptions.column = formItemOptions.column;
           resultOptions.columnIndex = this._columnsController
             .getVisibleIndex(resultOptions.column.index);
@@ -1128,7 +1132,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _rowPrepared($row: dxElementWrapper, options: RowPreparedOptions, row?: ViewRow): void {
-    elementData($row.get(0), 'options', options);
+    setData($row, ROW_OPTIONS_KEY, options);
 
     options.rowElement = getPublicElement($row);
     this.executeAction('onRowPrepared', options);

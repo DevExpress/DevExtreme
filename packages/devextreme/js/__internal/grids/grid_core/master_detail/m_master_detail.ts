@@ -8,11 +8,12 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import { getData } from '@ts/core/element_data';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type {
@@ -270,7 +271,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _updateMasterDataGrid($masterDetailRow, $detailElement) {
-    const masterRowOptions = $($masterDetailRow).data('options');
+    const masterRowOptions = getData($($masterDetailRow), ROW_OPTIONS_KEY);
     const masterDataGrid = $($masterDetailRow).closest(`.${this.getWidgetContainerClass()}`).parent().data('dxDataGrid');
 
     if (masterRowOptions && masterDataGrid) {

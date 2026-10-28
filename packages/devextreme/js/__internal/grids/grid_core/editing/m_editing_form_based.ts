@@ -17,6 +17,7 @@ import type { SimpleItemTemplateData } from '@js/ui/form';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import { getData } from '@ts/core/element_data';
 import { WIDGET_CLASS } from '@ts/core/widget/widget';
 import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
 import type { GeneratedItem, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
@@ -24,7 +25,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
   CellRenderOptions, ViewCellOptions, ViewDataChange,
 } from '@ts/grids/grid_core/views/types';
-import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
+import { FIELD_ITEM_CONTENT_CLASS, FIELD_ITEM_DATA_KEY } from '@ts/ui/form/constants';
 
 import type { ModuleType, OptionChanged, RowKey } from '../types';
 import gridCoreUtils from '../utils';
@@ -634,7 +635,10 @@ const rowsView = (
     column: Column | undefined,
   ): number {
     return $cells?.toArray().findIndex((cellElement) => {
-      const item: EditFormItem | undefined = $(cellElement).find(`.${FIELD_ITEM_CONTENT_CLASS}`).data('dx-form-item');
+      const item: EditFormItem | undefined = getData(
+        $(cellElement).find(`.${FIELD_ITEM_CONTENT_CLASS}`),
+        FIELD_ITEM_DATA_KEY,
+      );
 
       return Boolean(item?.column && column && item.column.index === column.index);
     }) ?? -1;

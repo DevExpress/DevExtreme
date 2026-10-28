@@ -22,6 +22,7 @@ import {
 } from '@js/core/utils/size';
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import * as accessibility from '@js/ui/shared/accessibility';
+import { getData } from '@ts/core/element_data';
 import { isElementInDom } from '@ts/core/utils/dom';
 import { focused } from '@ts/core/utils/selectors';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
@@ -34,7 +35,7 @@ import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_
 import { isCellBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/types';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';
 import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/index';
@@ -2583,7 +2584,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   public _fireFocusedCellChanged($cell: dxElementWrapper | undefined): void {
     // @ts-expect-error getCellIndex() requires a cell
     const columnIndex = this._rowsView.getCellIndex($cell);
-    const rowOptions: any = $cell?.parent().data('options');
+    const rowOptions = getData($cell?.parent(), ROW_OPTIONS_KEY);
     const focusedRowKey = rowOptions?.key;
 
     this._memoFireFocusedCellChanged(focusedRowKey, columnIndex);

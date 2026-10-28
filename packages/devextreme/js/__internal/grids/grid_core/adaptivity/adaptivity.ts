@@ -16,10 +16,12 @@ import { isDefined } from '@js/core/utils/type';
 import type { Properties as FormProperties, SimpleItemTemplateData } from '@js/ui/form';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
+import { getData } from '@ts/core/element_data';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
+import type { EditFormItem } from '@ts/grids/grid_core/editing/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
+import { FIELD_ITEM_CONTENT_CLASS, FIELD_ITEM_DATA_KEY } from '@ts/ui/form/constants';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
@@ -737,7 +739,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     for (let i = 0; i < $itemContents.length; i += 1) {
       const $itemContent = $itemContents.eq(i);
-      const item = $itemContent.data<AdaptiveFormItem | undefined>('dx-form-item');
+      const item: EditFormItem | undefined = getData($itemContent, FIELD_ITEM_DATA_KEY);
       if (
         item?.column
         && this._columnsController.getVisibleIndex(item.column.index) === visibleColumnIndex
