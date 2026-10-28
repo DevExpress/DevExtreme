@@ -3,7 +3,7 @@ import type { Callback } from '@js/core/utils/callbacks';
 import type { DxEvent, PointerInteractionEvent } from '@js/events';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { Column, ColumnIndex, DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/header_panel';
 import type { ColumnPoint } from '../types';

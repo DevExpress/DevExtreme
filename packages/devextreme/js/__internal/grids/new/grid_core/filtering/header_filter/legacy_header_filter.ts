@@ -21,8 +21,8 @@ import {
   convertDataFromUTCToLocal,
   getFormatOptions,
   isUTCFormat,
-} from '@ts/grids/grid_core/header_filter/m_header_filter';
-import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header_filter/m_header_filter_core';
+} from '@ts/grids/grid_core/header_filter/header_filter';
+import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header_filter/header_filter_core';
 import { getHeaderFilterGroupParameters } from '@ts/grids/grid_core/header_filter/utils';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';

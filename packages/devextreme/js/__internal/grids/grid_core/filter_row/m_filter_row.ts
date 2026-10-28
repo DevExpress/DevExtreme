@@ -12,7 +12,7 @@ import { isDefined } from '@js/core/utils/type';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
@@ -22,10 +22,10 @@ import type {
   DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
+import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
 
