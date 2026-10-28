@@ -297,7 +297,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     const scrollLeft = this._rowsView?.getScrollable()?.scrollLeft() ?? 0;
 
-    if (!this._columnsController.isNeedToRenderVirtualColumns(scrollLeft)) {
+    const isColumnRenderPending = this._columnsController.isNeedToRenderVirtualColumns(scrollLeft);
+
+    if (!isColumnRenderPending && !this.isFocusedRowRenderPending()) {
       this.needToRestoreFocus = false;
       this.focusFirstOrLastCell();
     }
@@ -1585,9 +1587,21 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (scrollLeft >= 0) {
       this.needToRestoreFocus = true;
       this.scrollTo({ left: scrollLeft });
+    } else if (this.isFocusedRowRenderPending()) {
+      this.needToRestoreFocus = true;
     } else {
       this.focusFirstOrLastCell(e);
     }
+  }
+
+  private isFocusedRowRenderPending(): boolean {
+    const rowIndex = this._focusedCellPosition?.rowIndex ?? -1;
+
+    if (rowIndex < 0 || rowIndex > this.getFirstOrLastRowIndex(false)) {
+      return false;
+    }
+
+    return !this._rowsView.getRow(this.getVisibleRowIndex())?.length;
   }
 
   public isQuickNavigationToFirstCell(): boolean {
