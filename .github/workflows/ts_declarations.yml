@@ -13,7 +13,7 @@ on:
 jobs:
   check-ts-bundle:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 7
     steps:
     - name: Get sources
       uses: actions/checkout@v6
@@ -62,7 +62,7 @@ jobs:
 
   validate-declarations:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 7
     steps:
     - name: Get sources
       uses: actions/checkout@v6

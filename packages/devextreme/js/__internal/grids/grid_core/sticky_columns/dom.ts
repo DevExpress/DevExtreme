@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import { CLASSES, StickyPosition } from './const';
 import { isFixedEdge } from './utils';
 

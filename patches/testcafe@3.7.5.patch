@@ -13,6 +13,110 @@ index 9b9f577..591cb7c 100644
      // NOTE: we need to prevent new window blocking for multiple windows in Native Automation
      isNativeAutomation ? ['--disable-popup-blocking'] : [], platformArgs ? [platformArgs] : [], defaultArgs)
          .join(' ');
+diff --git a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js
+index a20320b..51d30ed 100644
+--- a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js
++++ b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js
+@@ -14,6 +14,7 @@ const pretty_hrtime_1 = __importDefault(require("pretty-hrtime"));
+ const elapsed_upperbounds_1 = require("../elapsed-upperbounds");
+ const guard_time_execution_1 = __importDefault(require("../../../../../../utils/guard-time-execution"));
+ const delay_1 = __importDefault(require("../../../../../../utils/delay"));
++const time_limit_promise_1 = __importDefault(require("time-limit-promise"));
+ const native_automation_1 = require("../../../../../../native-automation");
+ const utils_1 = require("./utils");
+ const DEBUG_SCOPE = (id) => `testcafe:browser:provider:built-in:chrome:browser-client:${id}`;
+@@ -25,6 +26,7 @@ class ProtocolApiInfo {
+         this.inactive = false;
+     }
+ }
++const CDP_COMMAND_TIMEOUT = 30000;
+ const SCREENCAST_OPTIONS = {
+     format: 'jpeg',
+     everyNthFrame: 1,
+@@ -56,13 +58,60 @@ class BrowserClient {
+             this._runtimeInfo.providerMethods.reportWarning(warning_message_1.default.browserProviderDropOfPerformance, this._runtimeInfo.browserName);
+         }
+     }
++    _limitCommandTime(client, cacheKey) {
++        const send = client.send.bind(client);
++        client.send = (method, ...args) => {
++            const result = send(method, ...args);
++            if (!result || typeof result.then !== 'function')
++                return result;
++            const timeoutError = new Error(`CDP command ${method} did not respond within ${CDP_COMMAND_TIMEOUT} ms (browser ${this._runtimeInfo.browserId})`);
++            return (0, time_limit_promise_1.default)(result, CDP_COMMAND_TIMEOUT, { rejectWith: timeoutError })
++                .catch(error => {
++                    if (error === timeoutError)
++                        this._dropClient(client, cacheKey, timeoutError.message);
++                    throw error;
++                });
++        };
++    }
++    async _describePageState() {
++        try {
++            const target = await (0, utils_1.getActiveTab)(this._port, this._runtimeInfo.activeWindowId);
++            const limited0 = (promise, what) => (0, time_limit_promise_1.default)(promise, 5000, { rejectWith: new Error(`${what} timed out`) });
++            const probe = await limited0((0, chrome_remote_interface_1.default)({ target, port: this._port }), 'probe connection');
++            const limited = (promise, what) => (0, time_limit_promise_1.default)(promise, 5000, { rejectWith: new Error(`${what} timed out`) });
++            const expression = '[document.visibilityState, document.hidden, document.hasFocus(), innerWidth + "x" + innerHeight, document.readyState, location.href.slice(0, 120)].join(" ")';
++            const state = await limited(probe.Runtime.evaluate({ expression, returnByValue: true }), 'state probe');
++            const rafExpression = 'new Promise(resolve => { const started = performance.now(); requestAnimationFrame(() => resolve("raf after " + Math.round(performance.now() - started) + " ms")); setTimeout(() => resolve("no raf within 3000 ms"), 3000); })';
++            const raf = await limited(probe.Runtime.evaluate({ expression: rafExpression, awaitPromise: true, returnByValue: true }), 'raf probe');
++            const screenshot = await limited(probe.Page.captureScreenshot({ format: 'png' }), 'fresh-session screenshot').then(() => 'fresh-session screenshot ok', error => error.message);
++            await probe.close();
++            return `${state.result.value}; ${raf.result.value}; ${screenshot}`;
++        }
++        catch (error) {
++            return `page state unavailable: ${error.message}`;
++        }
++    }
++    _dropClient(client, cacheKey, reason) {
++        console.warn(`[testcafe] ${reason}; the CDP client is dropped and will be reconnected on the next call`);
++        this.debugLogger(reason);
++        this._describePageState().then(state => console.warn(`[testcafe] page state after the timeout (browser ${this._runtimeInfo.browserId}): ${state}`));
++        const info = this._clients[cacheKey];
++        if (info && info.client === client)
++            delete this._clients[cacheKey];
++        const closing = client.close();
++        if (closing && typeof closing.catch === 'function')
++            closing.catch(() => { });
++    }
+     async _createClient(target, cacheKey = this._clientKey) {
+-        const client = await (0, chrome_remote_interface_1.default)({ target, port: this._port });
++        const client = await (0, time_limit_promise_1.default)((0, chrome_remote_interface_1.default)({ target, port: this._port }), CDP_COMMAND_TIMEOUT, { rejectWith: new Error(`CDP connection to the page did not open within ${CDP_COMMAND_TIMEOUT} ms (browser ${this._runtimeInfo.browserId})`) });
++        this._limitCommandTime(client, cacheKey);
+         const { Page, Network, Runtime } = client;
+         this._clients[cacheKey] = new ProtocolApiInfo(client);
+         await (0, guard_time_execution_1.default)(async () => await Page.enable(), elapsedTime => this._checkDropOfPerformance(elapsed_upperbounds_1.CheckedCDPMethod.PageEnable, elapsedTime));
+         await Network.enable({});
+         await Runtime.enable();
++        // A tab that is not in the foreground produces no frames, and Page.captureScreenshot then never answers.
++        await Page.bringToFront();
+         return client;
+     }
+     async _setupClient(client) {
+diff --git a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/utils.js b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/utils.js
+index 31266d6..f9b1059 100644
+--- a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/utils.js
++++ b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/utils.js
+@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.getActiveTab = exports.getFirstTab = exports.getTabById = exports.getTabs = void 0;
+ const chrome_remote_interface_1 = __importDefault(require("chrome-remote-interface"));
++const time_limit_promise_1 = __importDefault(require("time-limit-promise"));
++const LIST_TABS_TIMEOUT = 10000;
+ const DEVTOOLS_TAB_URL_REGEX = /^devtools:\/\/devtools/;
+ // NOTE: Github issue: https://github.com/DevExpress/testcafe/issues/8286
+ const CHROME_EXTENSION_TAB_URL_REGEX = /^chrome-extension:\/\//;
+@@ -12,7 +14,7 @@ function isInternalUrl(url) {
+     return DEVTOOLS_TAB_URL_REGEX.test(url) || CHROME_EXTENSION_TAB_URL_REGEX.test(url);
+ }
+ async function getTabs(port) {
+-    const tabs = await chrome_remote_interface_1.default.List({ port });
++    const tabs = await (0, time_limit_promise_1.default)(chrome_remote_interface_1.default.List({ port }), LIST_TABS_TIMEOUT, { rejectWith: new Error(`Chrome did not list its tabs within ${LIST_TABS_TIMEOUT} ms`) });
+     return tabs.filter(t => t.type === 'page' && !isInternalUrl(t.url));
+ }
+ exports.getTabs = getTabs;
 diff --git a/lib/browser/provider/built-in/dedicated/chrome/index.js b/lib/browser/provider/built-in/dedicated/chrome/index.js
 index b12bb9e..fc4e63a 100644
 --- a/lib/browser/provider/built-in/dedicated/chrome/index.js
@@ -39,23 +143,32 @@ index b12bb9e..fc4e63a 100644
          runtimeInfo.viewportSize = await this.runInitScript(browserId, client_functions_1.GET_WINDOW_DIMENSIONS_INFO_SCRIPT);
          runtimeInfo.activeWindowId = null;
 diff --git a/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js b/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js
-index 4f22b00..714a195 100644
+index 4f22b00..a6e1480 100644
 --- a/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js
 +++ b/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js
-@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+@@ -4,6 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
  };
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.stop = exports.startOnDocker = exports.start = void 0;
 +const fs_1 = require("fs");
++const os_1 = require("os");
 +const path_1 = require("path");
  const testcafe_browser_tools_1 = __importDefault(require("testcafe-browser-tools"));
  const process_1 = require("../../../../../utils/process");
  const browser_starter_1 = __importDefault(require("../../../utils/browser-starter"));
-@@ -14,11 +16,33 @@ const delay_1 = __importDefault(require("../../../../../utils/delay"));
+@@ -11,14 +14,41 @@ const build_chrome_args_1 = require("./build-chrome-args");
+ const chrome_remote_interface_1 = __importDefault(require("chrome-remote-interface"));
+ const timer_1 = __importDefault(require("../../../../../utils/timer"));
+ const delay_1 = __importDefault(require("../../../../../utils/delay"));
++const time_limit_promise_1 = __importDefault(require("time-limit-promise"));
  const browserStarter = new browser_starter_1.default();
  const LIST_TABS_TIMEOUT = 10000;
  const LIST_TABS_DELAY = 500;
 +const DEVTOOLS_ACTIVE_PORT_FILE = 'DevToolsActivePort';
++const RENDER_CHECK_TIMEOUT = 10000;
++const RENDER_CHECK_VIEWPORT = { width: 777, height: 555 };
++const BROWSER_EXIT_TIMEOUT = 10000;
++const MAX_BROWSER_LAUNCH_ATTEMPTS = 3;
 +const DEVTOOLS_ACTIVE_PORT_TIMEOUT = 30000;
 +const DEVTOOLS_ACTIVE_PORT_DELAY = 100;
 +async function readDevToolsActivePort(tempProfileDir) {
@@ -85,20 +198,131 @@ index 4f22b00..714a195 100644
  }
  exports.start = start;
  async function tryListTabs(cdpPort) {
-@@ -30,7 +54,7 @@ async function tryListTabs(cdpPort) {
+@@ -29,8 +59,7 @@ async function tryListTabs(cdpPort) {
+         return { error };
      }
  }
- async function startOnDocker(pageUrl, { browserName, config, cdpPort, tempProfileDir, isContainerized }) {
+-async function startOnDocker(pageUrl, { browserName, config, cdpPort, tempProfileDir, isContainerized }) {
 -    await start('', { browserName, config, cdpPort, tempProfileDir, isContainerized });
-+    cdpPort = await start('', { browserName, config, cdpPort, tempProfileDir, isContainerized });
++async function waitForFirstTab(cdpPort) {
      let { tabs, error } = await tryListTabs(cdpPort);
      const timer = new timer_1.default(LIST_TABS_TIMEOUT);
      //NOTE: We should repeat getting 'List' after a while because we can get an error if the browser isn't ready.
-@@ -44,6 +68,7 @@ async function startOnDocker(pageUrl, { browserName, config, cdpPort, tempProfil
-     const { Target } = await (0, chrome_remote_interface_1.default)({ target, port: cdpPort });
-     await Target.createTarget({ url: pageUrl });
-     await chrome_remote_interface_1.default.Close({ id: target.id, port: cdpPort });
-+    return cdpPort;
+@@ -40,10 +69,113 @@ async function startOnDocker(pageUrl, { browserName, config, cdpPort, tempProfil
+     }
+     if (error)
+         throw error;
+-    const target = tabs.filter(t => t.type === 'page')[0];
+-    const { Target } = await (0, chrome_remote_interface_1.default)({ target, port: cdpPort });
+-    await Target.createTarget({ url: pageUrl });
+-    await chrome_remote_interface_1.default.Close({ id: target.id, port: cdpPort });
++    return tabs.filter(t => t.type === 'page')[0];
++}
++async function connectToTarget(cdpPort, targetId) {
++    const timer = new timer_1.default(LIST_TABS_TIMEOUT);
++    for (;;) {
++        try {
++            return await (0, time_limit_promise_1.default)((0, chrome_remote_interface_1.default)({ target: targetId, port: cdpPort }), LIST_TABS_TIMEOUT, { rejectWith: new Error(`CDP connection to the new tab did not open within ${LIST_TABS_TIMEOUT} ms`) });
++        }
++        catch (error) {
++            if (timer.expired)
++                throw error;
++            await (0, delay_1.default)(LIST_TABS_DELAY);
++        }
++    }
++}
++// Chrome 155 headless sometimes starts a browser whose page never produces a compositor frame:
++// viewport emulation is not applied and Page.captureScreenshot never answers. Such a browser is
++// replaced before TestCafe connects to it.
++async function checkRendering(cdpPort, targetId) {
++    const limited = (promise, what) => (0, time_limit_promise_1.default)(promise, RENDER_CHECK_TIMEOUT, { rejectWith: new Error(`${what} did not respond within ${RENDER_CHECK_TIMEOUT} ms`) });
++    const expectedViewport = `${RENDER_CHECK_VIEWPORT.width}x${RENDER_CHECK_VIEWPORT.height}`;
++    let client = null;
++    try {
++        client = await connectToTarget(cdpPort, targetId);
++        await limited(client.Page.enable(), 'Page.enable');
++        await limited(client.Emulation.setDeviceMetricsOverride(Object.assign({ deviceScaleFactor: 1, mobile: false }, RENDER_CHECK_VIEWPORT)), 'Emulation.setDeviceMetricsOverride');
++        const timer = new timer_1.default(RENDER_CHECK_TIMEOUT);
++        let viewport = '';
++        while (viewport !== expectedViewport && !timer.expired) {
++            const { result } = await limited(client.Runtime.evaluate({ expression: 'innerWidth + "x" + innerHeight', returnByValue: true }), 'Runtime.evaluate');
++            viewport = result.value;
++            if (viewport !== expectedViewport)
++                await (0, delay_1.default)(100);
++        }
++        if (viewport !== expectedViewport)
++            return `viewport emulation did not apply (viewport stayed ${viewport})`;
++        await limited(client.Page.captureScreenshot({ format: 'png' }), 'Page.captureScreenshot');
++        await limited(client.Emulation.clearDeviceMetricsOverride(), 'Emulation.clearDeviceMetricsOverride');
++        return null;
++    }
++    catch (error) {
++        return error.message;
++    }
++    finally {
++        if (client)
++            await client.close().catch(() => { });
++    }
++}
++async function describeMachine(cdpPort) {
++    const cpu = (os_1.cpus()[0] || {}).model || 'unknown cpu';
++    try {
++        const { webSocketDebuggerUrl } = await chrome_remote_interface_1.default.Version({ port: cdpPort });
++        const client = await (0, chrome_remote_interface_1.default)({ target: webSocketDebuggerUrl, port: cdpPort });
++        const info = await (0, time_limit_promise_1.default)(client.SystemInfo.getInfo(), 5000, { rejectWith: new Error('SystemInfo.getInfo timed out') });
++        await client.close().catch(() => { });
++        const gpu = info.gpu || {};
++        const features = Object.entries(gpu.featureStatus || {}).map(([name, status]) => `${name}=${status}`).join(',');
++        const device = (gpu.devices || []).map(d => `${d.vendorString || ''} ${d.deviceString || ''}`.trim()).join('/') || 'no gpu device';
++        return `cpu "${cpu}"; gpu ${device}; features ${features}`;
++    }
++    catch (error) {
++        return `cpu "${cpu}"; gpu info unavailable: ${error.message}`;
++    }
++}
++async function shutDownBrowser(cdpPort, targetId, tempProfileDir) {
++    try {
++        const client = await connectToTarget(cdpPort, targetId);
++        client.Browser.close().catch(() => { });
++        await (0, delay_1.default)(100);
++        await client.close().catch(() => { });
++    }
++    catch (error) {
++        // The browser may already be gone.
++    }
++    const timer = new timer_1.default(BROWSER_EXIT_TIMEOUT);
++    while (!timer.expired) {
++        const { error } = await tryListTabs(cdpPort);
++        if (error)
++            break;
++        await (0, delay_1.default)(LIST_TABS_DELAY);
++    }
++    try {
++        fs_1.unlinkSync(path_1.join(tempProfileDir.path, DEVTOOLS_ACTIVE_PORT_FILE));
++    }
++    catch (error) {
++        // Chrome removes the file on a clean exit.
++    }
++}
++async function startOnDocker(pageUrl, { browserName, browserId, config, cdpPort, tempProfileDir, isContainerized }) {
++    for (let attempt = 1;; attempt++) {
++        const port = await start('', { browserName, config, cdpPort, tempProfileDir, isContainerized });
++        const initialTab = await waitForFirstTab(port);
++        const { Target } = await (0, chrome_remote_interface_1.default)({ target: initialTab, port });
++        const { targetId } = await Target.createTarget({ url: 'about:blank' });
++        await chrome_remote_interface_1.default.Close({ id: initialTab.id, port });
++        const problem = await checkRendering(port, targetId);
++        if (!problem) {
++            const client = await connectToTarget(port, targetId);
++            await client.Page.navigate({ url: pageUrl });
++            await client.close().catch(() => { });
++            return port;
++        }
++        console.warn(`[testcafe] browser ${browserId} failed the rendering check: ${problem}; ${attempt < MAX_BROWSER_LAUNCH_ATTEMPTS ? `relaunching Chrome (attempt ${attempt + 1} of ${MAX_BROWSER_LAUNCH_ATTEMPTS})` : 'giving up'}; ${await describeMachine(port)}`);
++        await shutDownBrowser(port, targetId, tempProfileDir);
++        if (attempt >= MAX_BROWSER_LAUNCH_ATTEMPTS)
++            throw new Error(`Chrome failed the rendering check ${MAX_BROWSER_LAUNCH_ATTEMPTS} times: ${problem}`);
++    }
  }
  exports.startOnDocker = startOnDocker;
  async function stop({ browserId }) {

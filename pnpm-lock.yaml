@@ -86,11 +86,11 @@ catalogs:
       specifier: 4.13.0
       version: 4.13.0
     devexpress-diagram:
-      specifier: 2.2.31
-      version: 2.2.31
+      specifier: 2.2.32
+      version: 2.2.32
     devexpress-gantt:
-      specifier: 4.1.71
-      version: 4.1.71
+      specifier: 4.1.72
+      version: 4.1.72
     devextreme-exceljs-fork:
       specifier: 4.4.13
       version: 4.4.13
@@ -223,7 +223,7 @@ overrides:
 
 patchedDependencies:
   testcafe-hammerhead@31.7.8: 8655c07786177d3b611a05abf6b0ea87d32796eb2601f92a800ef041095f264c
-  testcafe@3.7.5: 1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921
+  testcafe@3.7.5: 721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3
 
 importers:
 
@@ -421,10 +421,10 @@ importers:
         version: 2.6.12
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.31
+        version: 2.2.32
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.71
+        version: 4.1.72
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -611,7 +611,7 @@ importers:
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1)(supports-color@7.2.0))
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))
+        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
       '@types/eslint':
         specifier: 8.56.12
         version: 8.56.12
@@ -659,7 +659,7 @@ importers:
         version: 7.0.3
       devextreme-screenshot-comparer:
         specifier: 2.0.17
-        version: 2.0.17(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))
+        version: 2.0.17(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
       eslint:
         specifier: 'catalog:'
         version: 9.39.4(jiti@2.6.1)(supports-color@7.2.0)
@@ -749,7 +749,7 @@ importers:
         version: 38.0.0(stylelint@16.22.0(typescript@6.0.3))
       testcafe:
         specifier: 'catalog:'
-        version: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
+        version: 3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0)
       testcafe-reporter-spec-time:
         specifier: 4.0.0
         version: 4.0.0
@@ -1139,7 +1139,7 @@ importers:
         version: 5.10.0(eslint@9.39.4(jiti@2.6.1))
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))
+        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
       '@types/jquery':
         specifier: 'catalog:'
         version: 4.0.1
@@ -1157,7 +1157,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-screenshot-comparer:
         specifier: 2.0.17
-        version: 2.0.17(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))
+        version: 2.0.17(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
       devextreme-testcafe-models:
         specifier: workspace:*
         version: link:../../packages/testcafe-models
@@ -1193,7 +1193,7 @@ importers:
         version: 0.12.1
       testcafe:
         specifier: 'catalog:'
-        version: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
+        version: 3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0)
       testcafe-reporter-spec-time:
         specifier: 4.0.0
         version: 4.0.0
@@ -1232,10 +1232,10 @@ importers:
         version: 1.14.1
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.31
+        version: 2.2.32
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.71
+        version: 4.1.72
       devextreme:
         specifier: workspace:~
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -1380,10 +1380,10 @@ importers:
         version: 1.14.1
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.31
+        version: 2.2.32
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.71
+        version: 4.1.72
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.8.0
@@ -2213,7 +2213,7 @@ importers:
         version: link:../devextreme/artifacts/npm/devextreme
       testcafe:
         specifier: 'catalog:'
-        version: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
+        version: 3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0)
 
   tools/flaky-test-reporter:
     dependencies:
@@ -4574,8 +4574,8 @@ packages:
   '@devexpress/design-tokens-internal@262.26.0':
     resolution: {integrity: sha512-01quVuRR+y1QzxCsW5u5DICs07T3kzdtXukqJIRxjxTtknrpUIca7gpnrxJz4nPLR2V95nYrsWWIOCJV8Yy6Yw==}
 
-  '@devexpress/utils@2.1.1':
-    resolution: {integrity: sha512-hlemXR3L0yDPsMdhTQl9EtjiEYxIHklH7I4RKPkOhfrF5+jb4f3kkfvbKT7nA9aoFEHPPF0/hll43gOBpUpY0g==}
+  '@devexpress/utils@2.1.4':
+    resolution: {integrity: sha512-8s3iGkrQOMAkVnZWGFpoiJt4H7sIVxowxpMGQhiHgdbWg90LXXNj5GlIxO6wnZST17pVbXV0VpZA0lKv8Du+Bg==}
 
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -10582,11 +10582,11 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  devexpress-diagram@2.2.31:
-    resolution: {integrity: sha512-SqMv6+Ak1RmUDhrzdKGguswAWxNfnT9re+fJuOP6igU1TVcAUZvwe13SuVsG/W9IUV3oKYCU9UvdNTwAFiGcdw==}
+  devexpress-diagram@2.2.32:
+    resolution: {integrity: sha512-r4OPIiMDyhLcfCH2zH3oUYxTOqmk9us8BAPON/CuaI2MCwvX0unQzA3R052jI+Z4Rzf+b7Ru52gWmhPtBX8uGQ==}
 
-  devexpress-gantt@4.1.71:
-    resolution: {integrity: sha512-1tiZ6HFfS4pjOWPFrCcSuQedBOYur8UvKafzCn+AtlAJ+B4dzCuL3fnSxkc9wWV2JXowreItm13/v9OGuUQ1pA==}
+  devexpress-gantt@4.1.72:
+    resolution: {integrity: sha512-tMIHymmtUCzaTJzAqHOFP2+XZC+QF8PlYj6iA+GLkE4Gnh0TFwnxqsyZLcxkJqVNNspMk2Xm3Z5sfM3p8/RtmQ==}
 
   devextreme-aspnet-data-nojquery@5.1.0:
     resolution: {integrity: sha512-YJ7HxOLJTzz6bmpp1uOjXdhUL71THR6IidVONjJRF1R1loTyNVesa6s86gU+mUeNN044UnJKQhtCADc0+TmARQ==}
@@ -21001,7 +21001,7 @@ snapshots:
 
   '@devexpress/design-tokens-internal@262.26.0': {}
 
-  '@devexpress/utils@2.1.1':
+  '@devexpress/utils@2.1.4':
     dependencies:
       tslib: 2.3.1
 
@@ -24575,11 +24575,11 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@testcafe-community/axe@3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921))':
+  '@testcafe-community/axe@3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))':
     dependencies:
       axe-core: 4.13.0
       chalk: 2.4.2
-      testcafe: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
+      testcafe: 3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0)
 
   '@testing-library/dom@10.4.1':
     dependencies:
@@ -28066,14 +28066,14 @@ snapshots:
       defined: 1.0.1
       minimist: 1.2.8
 
-  devexpress-diagram@2.2.31:
+  devexpress-diagram@2.2.32:
     dependencies:
-      '@devexpress/utils': 2.1.1
+      '@devexpress/utils': 2.1.4
       es6-object-assign: 1.1.0
 
-  devexpress-gantt@4.1.71:
+  devexpress-gantt@4.1.72:
     dependencies:
-      '@devexpress/utils': 2.1.1
+      '@devexpress/utils': 2.1.4
       tslib: 2.3.1
 
   devextreme-aspnet-data-nojquery@5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
@@ -28131,12 +28131,12 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  devextreme-screenshot-comparer@2.0.17(testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)):
+  devextreme-screenshot-comparer@2.0.17(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)):
     dependencies:
       color-diff: 1.3.0
       looks-same: 7.3.0
       pngjs: 6.0.0
-      testcafe: 3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0)
+      testcafe: 3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0)
       tslib: 2.8.1
 
   device-specs@1.0.1: {}
@@ -36296,7 +36296,7 @@ snapshots:
 
   testcafe-selector-generator@0.1.0: {}
 
-  testcafe@3.7.5(patch_hash=1f6217b64591e208454404583c8f1f020156d76fd9f7fc131827d5f22c9fc921)(supports-color@7.2.0):
+  testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0):
     dependencies:
       '@babel/core': 7.29.7
       '@babel/plugin-proposal-decorators': 7.29.7(@babel/core@7.29.7)
