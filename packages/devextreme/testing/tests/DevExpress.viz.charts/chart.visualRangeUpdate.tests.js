@@ -4461,6 +4461,64 @@ QUnit.test('Value Axis. Reset visualRange with null option', function(assert) {
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [20, 40], 'Case 8');
 });
 
+[
+    { name: 'null', reset: (chart, path) => chart.option(path, null) },
+    { name: 'undefined', reset: (chart, path) => chart.option(path, undefined) },
+    { name: 'resetOption', reset: (chart, path) => chart.resetOption(path) }
+].forEach(({ name, reset }) => {
+    QUnit.test(`Argument Axis. Reset visualRange with ${name}`, function(assert) {
+        const [chart, onOptionChanged] = this.createChart({
+            dataSource: [
+                { arg: 1, val: 10 },
+                { arg: 2, val: 20 },
+                { arg: 3, val: 30 },
+                { arg: 4, val: 40 },
+                { arg: 5, val: 50 }
+            ],
+            argumentAxis: { visualRange: [2, 4] },
+            valueAxis: { visualRange: [10, 30] }
+        });
+        onOptionChanged.resetHistory();
+
+        reset(chart, 'argumentAxis.visualRange');
+
+        assert.deepEqual(chart.option('argumentAxis.visualRange'), { startValue: 1, endValue: 5 });
+        assert.deepEqual(chart.option('valueAxis.visualRange'), [10, 30]);
+        assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 5 });
+        assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 10, endValue: 30 });
+        assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, 'argumentAxis.visualRange');
+        assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 1, endValue: 5 });
+        assert.deepEqual(onOptionChanged.getCall(2).args[0].fullName, 'valueAxis.visualRange');
+        assert.deepEqual(onOptionChanged.getCall(2).args[0].value, [10, 30]);
+    });
+
+    QUnit.test(`Value Axis. Reset visualRange with ${name}`, function(assert) {
+        const [chart, onOptionChanged] = this.createChart({
+            dataSource: [
+                { arg: 1, val: 10 },
+                { arg: 2, val: 20 },
+                { arg: 3, val: 30 },
+                { arg: 4, val: 40 },
+                { arg: 5, val: 50 }
+            ],
+            argumentAxis: { visualRange: [2, 4] },
+            valueAxis: { visualRange: [10, 30] }
+        });
+        onOptionChanged.resetHistory();
+
+        reset(chart, 'valueAxis.visualRange');
+
+        assert.deepEqual(chart.option('argumentAxis.visualRange'), [2, 4]);
+        assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 20, endValue: 40 });
+        assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 2, endValue: 4 });
+        assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 20, endValue: 40 });
+        assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, 'argumentAxis.visualRange');
+        assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [2, 4]);
+        assert.deepEqual(onOptionChanged.getCall(2).args[0].fullName, 'valueAxis.visualRange');
+        assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 20, endValue: 40 });
+    });
+});
+
 QUnit.test('Value Axis without visualRange. Hide and show series - update visual range', function(assert) {
     const dataSource = [
         { arg: 1, val: 10, val1: 110 },
