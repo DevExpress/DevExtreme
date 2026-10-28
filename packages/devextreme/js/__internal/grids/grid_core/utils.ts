@@ -25,6 +25,7 @@ import type { Format } from '@js/localization';
 import LoadPanel from '@js/ui/load_panel';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { isNumeric } from '@ts/core/utils/type';
+import type Widget from '@ts/core/widget/widget';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo } from '@ts/data/utils';
 import type {
@@ -51,6 +52,7 @@ import type {
   WidgetElementData,
   WrappedLookupDataSource,
 } from '@ts/grids/grid_core/types';
+import type SelectBox from '@ts/ui/select_box';
 
 import { HIDDEN_COLUMNS_WIDTH } from './adaptivity/const';
 import { AI_COLUMN_NAME } from './ai_column/const';
@@ -160,14 +162,15 @@ const getSummaryText = (
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use their editor's API
-const getWidgetInstance = ($element: dxElementWrapper | undefined): any => {
+const getWidgetInstance = <TWidget = Widget>(
+  $element: dxElementWrapper | undefined,
+): TWidget | undefined => {
   const element = $element?.get(0);
   const editorData: WidgetElementData | undefined = element && elementData(element);
   const dxComponents = editorData?.dxComponents;
   const widgetName = dxComponents?.[0];
 
-  return widgetName && editorData?.[widgetName];
+  return (widgetName && editorData?.[widgetName]) as TWidget | undefined;
 };
 
 const createPoint = <T extends ColumnPoint>(options: T): ColumnPoint => ({
@@ -604,7 +607,7 @@ export default {
 
     if (!isFocused && isSelectTextOnEditingStart && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
       const element = $element.get(0) as HTMLInputElement | HTMLTextAreaElement;
-      const editor = getWidgetInstance($element.closest('.dx-texteditor'));
+      const editor = getWidgetInstance<SelectBox>($element.closest('.dx-texteditor'));
 
       when(editor && editor._loadItemDeferred).done(() => {
         element.select();
