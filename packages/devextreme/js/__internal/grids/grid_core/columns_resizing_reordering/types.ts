@@ -2,13 +2,13 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import type { DxEvent, PointerInteractionEvent } from '@js/events';
 
-import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
+import type { ColumnChooserView } from '../column_chooser/column_chooser';
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { Column, ColumnIndex, DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/header_panel';
 import type { ColumnPoint } from '../types';
 import type { BoundingRect } from '../views/types';
-import type { DraggingHeaderView } from './m_columns_resizing_reordering';
+import type { DraggingHeaderView } from './columns_resizing_reordering';
 
 export type DraggingPanel = ColumnHeadersView | ColumnChooserView | HeaderPanel;
 
