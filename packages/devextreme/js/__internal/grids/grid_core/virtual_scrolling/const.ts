@@ -1,6 +1,7 @@
-export const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
-export const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
-export const ROW_INSERTED = 'dx-row-inserted';
+export const CLASSES = {
+  bottomLoadPanel: 'bottom-load-panel',
+  virtualRow: 'dx-virtual-row',
+};
 
 export const SCROLLING_MODE_INFINITE = 'infinite';
 export const SCROLLING_MODE_VIRTUAL = 'virtual';

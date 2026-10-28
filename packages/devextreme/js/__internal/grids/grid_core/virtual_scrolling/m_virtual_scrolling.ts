@@ -15,7 +15,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
-import { EDIT_MODE } from '@ts/grids/grid_core/editing/const';
+import { CLASSES as EDITING_CLASSES, EDIT_MODE } from '@ts/grids/grid_core/editing/const';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { InternalGrid, ModuleType, RowKey } from '@ts/grids/grid_core/types';
@@ -34,11 +34,9 @@ import type { StateStoringDataControllerExtension } from '../state_storing/exten
 import gridCoreUtils from '../utils';
 import type { RowsViewScrollEvent } from '../views/types';
 import {
-  BOTTOM_LOAD_PANEL_CLASS,
+  CLASSES,
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
-  ROW_INSERTED,
-  VIRTUAL_ROW_CLASS,
 } from './const';
 import type { VirtualScrollingDataControllerExtension } from './extenders/virtual_scrolling_data_controller';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
@@ -666,7 +664,7 @@ export const rowsView = (
   public _getRowElements(tableElement?: dxElementWrapper | null): dxElementWrapper {
     const $rows = super._getRowElements(tableElement);
 
-    return $rows?.not(`.${VIRTUAL_ROW_CLASS}`);
+    return $rows?.not(`.${CLASSES.virtualRow}`);
   }
 
   private _removeRowsElements(
@@ -751,7 +749,7 @@ export const rowsView = (
       return;
     }
 
-    let $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed, position);
+    let $virtualRow = this._createEmptyRow(CLASSES.virtualRow, isFixed, position);
 
     $virtualRow = this._wrapRowIfNeed($virtualRow);
 
@@ -785,7 +783,7 @@ export const rowsView = (
     let rowElements = this._getRowElements(this._tableElement).toArray();
 
     if (isPopupEditMode) {
-      rowElements = rowElements.filter((row) => !$(row).hasClass(ROW_INSERTED));
+      rowElements = rowElements.filter((row) => !$(row).hasClass(EDITING_CLASSES.rowInserted));
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- getBoundingRect() returns any
@@ -851,9 +849,9 @@ export const rowsView = (
 
       const bottom = this._dataController.getContentOffset('end');
       const $tables = this.getTableElements();
-      const $virtualRows = $tables.children('tbody').children(`.${VIRTUAL_ROW_CLASS}`);
+      const $virtualRows = $tables.children('tbody').children(`.${CLASSES.virtualRow}`);
 
-      removeEmptyRows($virtualRows, VIRTUAL_ROW_CLASS);
+      removeEmptyRows($virtualRows, CLASSES.virtualRow);
 
       $tables.each((index, element) => {
         const isFixed = index > 0;
@@ -868,7 +866,7 @@ export const rowsView = (
 
   private _findBottomLoadPanel($contentElement?: dxElementWrapper): dxElementWrapper | undefined {
     const $element = $contentElement ?? this.element();
-    const $bottomLoadPanel = $element?.find(`.${this.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS)}`);
+    const $bottomLoadPanel = $element?.find(`.${this.addWidgetPrefix(CLASSES.bottomLoadPanel)}`);
     if ($bottomLoadPanel?.length) {
       return $bottomLoadPanel;
     }
@@ -886,7 +884,7 @@ export const rowsView = (
     if (showBottomLoading) {
       if (!bottomLoadPanelElement) {
         $('<div>')
-          .addClass(this.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS))
+          .addClass(this.addWidgetPrefix(CLASSES.bottomLoadPanel))
           .append(this._createComponent($('<div>'), LoadIndicator, {
             elementAttr: {
               role: null,
