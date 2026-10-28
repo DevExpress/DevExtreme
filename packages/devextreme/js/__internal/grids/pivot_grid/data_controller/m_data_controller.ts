@@ -13,6 +13,7 @@ import { PivotGridDataSource } from '../data_source/m_data_source';
 import {
   createPath, findField, foreachTree, foreachTreeAsync, formatValue,
 } from '../m_widget_utils';
+import type { PivotGridColumnInfo } from './types';
 
 const math = Math;
 const GRAND_TOTAL_TYPE = 'GT';
@@ -622,13 +623,16 @@ class DataController {
           : data.grandTotalRowIndex
       ] || [];
 
-      rowInfo.isLast && foreachColumnInfo(columnsInfo, (columnInfo, columnIndex) => {
+      rowInfo.isLast && foreachColumnInfo(columnsInfo, (
+        columnInfo: PivotGridColumnInfo,
+        columnIndex: number,
+      ) => {
         const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
         const dataField = dataFields[dataIndex];
 
         if (columnInfo.isLast && dataField && dataField.visible !== false) {
           let cell = dataRow[
-            columnInfo.dataSourceIndex >= 0
+            Number(columnInfo.dataSourceIndex) >= 0
               ? columnInfo.dataSourceIndex
               : data.grandTotalColumnIndex
           ];
@@ -832,7 +836,7 @@ class DataController {
     const skipByPath = {};
     const takeByPath = {};
 
-    foreachColumnInfo(this._columnsInfo, (columnInfo, columnIndex) => {
+    foreachColumnInfo(this._columnsInfo, (columnInfo: PivotGridColumnInfo, columnIndex: number) => {
       if (columnInfo.type === 'D' && columnInfo.path && columnInfo.dataIndex === undefined) {
         const colspan = columnInfo.colspan || 1;
         const path = columnInfo.path.slice(0, -1).toString();
