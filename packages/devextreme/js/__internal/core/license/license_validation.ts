@@ -105,7 +105,7 @@ function getLicenseCheckParams({
     if (license.kind === TokenKind.corrupted) {
       if (license.error === 'trial-expired') {
         return {
-          preview, error: 'DX1004', warningType: 'trial-expired', licenseId: license.licenseId,
+          preview, error: 'E0124', warningType: 'trial-expired', licenseId: license.licenseId,
         };
       }
       if (license.error === 'product-kind') {

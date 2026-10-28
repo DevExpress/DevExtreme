@@ -22,7 +22,7 @@ export interface VerifiedToken {
 
 export type Token = ErrorToken | VerifiedToken;
 
-type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0023' | 'DX1004';
+type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0023' | 'E0124';
 
 export const GENERAL_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'general' };
 export const VERIFICATION_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'verification' };

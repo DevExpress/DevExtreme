@@ -1,7 +1,9 @@
+import errors from '@js/core/errors';
+
 import { LIBRARIES, NBSP, SUBSCRIPTION_NAMES } from './const';
 import type { LicenseWarningType } from './types';
 
-const SUBSCRIPTIONS = SUBSCRIPTION_NAMES.split(NBSP).join(' ');
+export const SUBSCRIPTIONS = SUBSCRIPTION_NAMES.split(NBSP).join(' ');
 const BUY_LINK = 'https://devexpress.com/BUY';
 
 export interface LicenseDetails {
@@ -17,8 +19,6 @@ export const TEMPLATES = Object.freeze({
     : ''),
 
   purchaseLicense: (version: string): string => `For evaluation purposes only (v${version}). Redistribution prohibited. ${getContinueUseText('DX1000')}`,
-
-  trialExpired: (version: string): string => `Your 30-day trial has expired (v${version}). Use and Redistribution prohibited. ${getContinueUseText('DX1004')}`,
 
   warningPrefix: (code: string | number): string => `${code} -`,
 
@@ -65,7 +65,7 @@ export function logLicenseWarning(
   const T = TEMPLATES;
 
   if (warningType === 'trial-expired') {
-    console.error(`DX1004 - ${T.trialExpired(version)}${T.licenseDetails(details)}`);
+    errors.log('E0124', version, LIBRARIES, SUBSCRIPTIONS, T.licenseDetails(details));
     return;
   }
 

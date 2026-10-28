@@ -11,6 +11,7 @@ import {
   assertedVersionsCompatible,
   clearAssertedVersions,
 } from '../../utils/version';
+import { logger } from '../utils/console';
 import { LICENSE_KEY_PLACEHOLDER, SUBSCRIPTION_NAMES } from './const';
 import * as productKeyValidator from './lcp_key_validation/lcp_key_validator';
 import {
@@ -708,13 +709,12 @@ describe('trial expired', () => {
   const LCP_LICENSE = 'LCPv1mock-license';
   const LICENSE_ID = '0123456789ABCDEF0123456789ABCDEF';
   let consoleWarnSpy = jest.spyOn(console, 'warn');
-  let consoleErrorSpy = jest.spyOn(console, 'error');
+  let loggerErrorSpy = jest.spyOn(logger, 'error');
   let trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
 
   beforeEach(() => {
-    jest.spyOn(errors, 'log').mockImplementation(() => {});
     consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    loggerErrorSpy = jest.spyOn(logger, 'error').mockImplementation(() => {});
     trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel').mockImplementation(() => {});
     setLicenseCheckSkipCondition(false);
   });
@@ -733,10 +733,10 @@ describe('trial expired', () => {
 
     expect(trialPanelSpy).toHaveBeenCalledTimes(1);
     expect(trialPanelSpy.mock.calls[0][5]).toEqual({ trialExpired: true, libraries: 'DevExtreme' });
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'DX1004 - Your 30-day trial has expired (v26.2.0). Use and Redistribution prohibited. Please register a valid license (https://devexpress.com/DX1004) or purchase a new license (https://devexpress.com/BUY) to continue use of the following DevExpress product libraries: DevExtreme - Included in Subscriptions: Universal, DXperience, ASP.NET and Blazor, DevExtreme Complete.',
-    );
+    expect(loggerErrorSpy).toHaveBeenCalledTimes(1);
+    const message = loggerErrorSpy.mock.calls[0][0] as string;
+    expect(message).toContain('E0124 - Your 30-day trial has expired (v26.2.0). Use and Redistribution prohibited. Please register a valid license (https://devexpress.com/DX1004) or purchase a new license (https://devexpress.com/BUY) to continue use of the following DevExpress product libraries: DevExtreme - Included in Subscriptions: Universal, DXperience, ASP.NET and Blazor, DevExtreme Complete.');
+    expect(message).toMatch(/\n\nFor additional information on this error message, see: https:\/\/js\.devexpress\.com\/error\/\d+_\d+\/E0124$/);
     expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
@@ -760,7 +760,7 @@ describe('trial expired', () => {
     validateLicense(LCP_LICENSE, '26.2.0');
 
     expect(trialPanelSpy.mock.calls[0][5]).toEqual({ trialExpired: false, libraries: 'DevExtreme' });
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(loggerErrorSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -785,7 +785,7 @@ describe('trial expired', () => {
 
       expect(trialPanelSpy.mock.calls[0][3]).toBe(SUBSCRIPTION_NAMES);
       expect(trialPanelSpy.mock.calls[0][5]).toEqual({ trialExpired: true, libraries: 'DevExtreme', licenseId: LICENSE_ID });
-      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringMatching(new RegExp(`DevExtreme Complete\\. License ID: ${LICENSE_ID}\\. License Source: Public Key \\(${LCP_LICENSE}\\)\\.$`)));
+      expect(loggerErrorSpy).toHaveBeenCalledWith(expect.stringMatching(new RegExp(`DevExtreme Complete\\. License ID: ${LICENSE_ID}\\. License Source: Public Key \\(${LCP_LICENSE}\\)\\.\\n\\nFor additional information`)));
     });
 
     it('does not pass the license source to the panel', () => {
@@ -841,7 +841,7 @@ describe('trial expired', () => {
     it.each(['', 'str@nge in.put'])('does not add a license id without a license (%j)', (key) => {
       validateLicense(key, '26.2.0');
 
-      expect(consoleErrorSpy).not.toHaveBeenCalled();
+      expect(loggerErrorSpy).not.toHaveBeenCalled();
       expect(trialPanelSpy.mock.calls[0][5]).toEqual({ trialExpired: false, libraries: 'DevExtreme' });
     });
   });

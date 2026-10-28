@@ -1,6 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
+import errors from '@js/core/errors';
+import { format } from '@js/core/utils/string';
 
-import { TEMPLATES } from './license_warnings';
+import { LIBRARIES } from './const';
+import { SUBSCRIPTIONS, TEMPLATES } from './license_warnings';
 
 interface CliTemplates {
   purchaseLicense: (version: string) => string;
@@ -33,6 +36,7 @@ describe('texts of the console and of the devextreme-license CLI', () => {
   });
 
   it('should be the same for DX1004', () => {
-    expect(TEMPLATES.trialExpired(version)).toBe(CLI_TEMPLATES.trialExpired(version));
+    expect(format(errors.ERROR_MESSAGES.E0124, version, LIBRARIES, SUBSCRIPTIONS, ''))
+      .toBe(CLI_TEMPLATES.trialExpired(version));
   });
 });
