@@ -35,7 +35,7 @@ import type { ScrollPosition } from '@ts/grids/grid_core/views/types';
 import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
-import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
+import type { ColumnChooserView } from '../column_chooser/column_chooser';
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { Column, ColumnIndex, DropLocationNames } from '../columns_controller/types';
