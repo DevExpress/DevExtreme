@@ -55,6 +55,7 @@ import {
   VALIDATION_STATUS,
   validationResultIsValid,
 } from './const';
+import type { ValidatingEditorFactoryExtension } from './types';
 
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
@@ -1141,7 +1142,11 @@ const getBoundaryNonFixedColumnsInfo = function (fixedColumns) {
   };
 };
 
-export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>) => class ValidatingEditorFactoryExtender extends Base {
+export const validatingEditorFactoryExtender = (
+  Base: ModuleType<EditorFactory>,
+): ModuleType<
+  EditorFactory & ValidatingEditorFactoryExtension
+> => class ValidatingEditorFactoryExtender extends Base {
   private _revertTooltip: any;
 
   private _showRevertButton($container) {
@@ -1361,11 +1366,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     }
   }
 
-  protected getOverlayBaseZIndex(): number {
+  public getOverlayBaseZIndex(): number {
     return Overlay.baseZIndex();
   }
 
-  protected overlayPositionedHandler(e, isOverlayVisible) {
+  public overlayPositionedHandler(e, isOverlayVisible) {
     if (!e.component.__skipPositionProcessing) {
       const isRevertButton = $(e.element).hasClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
       const needRepaint = !isRevertButton && this._rowsView.updateFreeSpaceRowHeight();
@@ -1519,11 +1524,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     return gridCoreUtils.getWidgetInstance($editor);
   }
 
-  protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
+  public getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
     return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`);
   }
 
-  protected getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
+  public getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
     return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`).parent();
   }
 
