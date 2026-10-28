@@ -50,7 +50,7 @@ import type {
 import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
-export const updateLoading = (that: VirtualScrollingDataSourceAdapter): void => {
+const updateLoading = (that: VirtualScrollingDataSourceAdapter): void => {
   const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
 
   if (isVirtualMode(that)) {
@@ -485,7 +485,7 @@ export const resizing = (
     clearTimeout(this._resizeTimeout ?? undefined);
   }
 
-  private _updateMasterDataGridCore(
+  public _updateMasterDataGridCore(
     masterDataGrid: InternalGrid,
     masterRowOptions: unknown,
   ): DeferredObj<unknown> {
