@@ -2195,14 +2195,24 @@ test.meta({ browserSize: [800, 200] })('Editing buttons should rerender correctl
 });
 
 // T1181439
+type ContentReadyWindow = typeof window & { contentReadyFired?: boolean };
+
 test('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const resetContentReadyFlag = ClientFunction(() => {
+    (window as ContentReadyWindow).contentReadyFired = false;
+  });
+  const isContentReadyFired = ClientFunction(
+    () => (window as ContentReadyWindow).contentReadyFired,
+  );
 
   await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.scrollBy(t, { left: 1000 });
 
+  await resetContentReadyFlag();
   await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
+  await t.expect(isContentReadyFired()).ok();
 
   await dataGrid.scrollBy(t, { left: -1000 });
   await dataGrid.scrollBy(t, { top: 50 });
@@ -2226,8 +2236,13 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
       width: 75,
     })),
     masterDetail: { enabled: true },
+    onContentReady: () => {
+      (window as ContentReadyWindow).contentReadyFired = true;
+    },
   });
-});
+}).after(async (t) => t.eval(() => {
+  delete (window as ContentReadyWindow).contentReadyFired;
+}));
 
 // T1194796
 test('The row alternation should display correctly when grouping and virtual scrolling are enabled', async (t) => {
