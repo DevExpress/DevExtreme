@@ -8,6 +8,10 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 fixture`Rendering of the recurrence appointments in  Scheduler `
   .page(url(__dirname, '../../../container.html'));
 
+// the drop cell is resolved 10px below the top edge of the dragged appointment,
+// a grab at the vertical center leaves that point above the all-day panel
+const DRAG_OFFSET_Y = 15;
+
 test.meta({ unstable: true })('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
@@ -16,7 +20,11 @@ test.meta({ unstable: true })('Drag-n-drop recurrence appointment between dateTa
   await testScreenshot(t, takeScreenshot, 'basic-recurrence-appointment-init.png');
 
   await t
-    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(0), { speed: 0.5 })
+    .dragToElement(
+      draggableAppointment.element,
+      scheduler.getAllDayTableCell(0),
+      { speed: 0.5, offsetY: DRAG_OFFSET_Y },
+    )
     .wait(300)
     .expect(scheduler.getAppointmentCount()).eql(7)
     .wait(500);
