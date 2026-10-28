@@ -264,6 +264,7 @@ class VirtualScrollController<
 
     clearTimeout(this._scrollTimeoutID);
     if (scrollingTimeout > 0) {
+      // eslint-disable-next-line no-restricted-globals -- delays rendering by scrolling.timeout
       this._scrollTimeoutID = setTimeout(() => {
         this._setViewportPositionCore(position);
         result.resolve();

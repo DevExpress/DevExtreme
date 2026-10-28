@@ -35,9 +35,8 @@ import {
   LOAD_TIMEOUT,
   VISIBLE_PAGE_INDEX,
 } from '../const';
-import type { VirtualScrollingDataSourceAdapter } from '../m_virtual_scrolling';
 import { VirtualScrollController } from '../m_virtual_scrolling_core';
-import type { ChangedLoadParams } from '../types';
+import type { ChangedLoadParams, VirtualScrollingDataSourceAdapter } from '../types';
 import {
   correctCount,
   isItemCountableByDataSource,
@@ -53,6 +52,16 @@ export interface VirtualScrollingDataControllerExtension {
   virtualItemsCount: () => VirtualItemsCount | undefined;
   // TODO public controller
   _rowsScrollController?: VirtualScrollController | null;
+  viewportSize: (size?: number) => number | undefined;
+  viewportHeight: (height: number, scrollTop?: number) => void;
+  viewportItemSize: (size?: number) => number | undefined;
+  setViewportPosition: (position: number) => void;
+  setContentItemSizes: (sizes: number[]) => void;
+  getItemSize: () => number | undefined;
+  getItemSizes: () => Record<number, number> | undefined;
+  getContentOffset: (type?: 'begin' | 'end') => number | undefined;
+  updateViewport: () => void;
+  loadIfNeed: () => void;
 }
 
 export const virtualScrollingDataControllerExtender = (
@@ -570,7 +579,7 @@ export const virtualScrollingDataControllerExtender = (
     return isDefined(lastVisibleItem?.dataIndex) ? lastVisibleItem.dataIndex + 1 : 0;
   }
 
-  private viewportSize(size?) {
+  public viewportSize(size?) {
     const rowsScrollController = this._rowsScrollController;
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const result = rowsScrollController?.viewportSize(size);
@@ -582,11 +591,11 @@ export const virtualScrollingDataControllerExtender = (
     return dataSourceAdapter?.viewportSize(size);
   }
 
-  private viewportHeight(height, scrollTop) {
+  public viewportHeight(height, scrollTop) {
     this._rowsScrollController?.viewportHeight(height, scrollTop);
   }
 
-  private viewportItemSize(size?) {
+  public viewportItemSize(size?) {
     const rowsScrollController = this._rowsScrollController;
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const result = rowsScrollController?.viewportItemSize(size);
@@ -598,7 +607,7 @@ export const virtualScrollingDataControllerExtender = (
     return dataSourceAdapter?.viewportItemSize(size);
   }
 
-  private setViewportPosition(position?) {
+  public setViewportPosition(position?) {
     const rowsScrollController = this._rowsScrollController;
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     this._isPaging = false;
@@ -610,7 +619,7 @@ export const virtualScrollingDataControllerExtender = (
     }
   }
 
-  private setContentItemSizes(sizes) {
+  public setContentItemSizes(sizes) {
     const rowsScrollController = this._rowsScrollController;
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const result = rowsScrollController?.setContentItemSizes(sizes);
@@ -838,7 +847,7 @@ export const virtualScrollingDataControllerExtender = (
     }
   }
 
-  private updateViewport() {
+  public updateViewport() {
     const viewportSize = this.viewportSize();
     const itemCount = this.items().length;
     // @ts-expect-error the data controller extender is not typed yet
@@ -856,7 +865,7 @@ export const virtualScrollingDataControllerExtender = (
     }
   }
 
-  private loadIfNeed() {
+  public loadIfNeed() {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
       return;
     }
@@ -868,7 +877,7 @@ export const virtualScrollingDataControllerExtender = (
     return dataSourceAdapter?.loadIfNeed();
   }
 
-  private getItemSize() {
+  public getItemSize() {
     const rowsScrollController = this._rowsScrollController;
 
     if (rowsScrollController) {
@@ -879,7 +888,7 @@ export const virtualScrollingDataControllerExtender = (
     return dataSourceAdapter?.getItemSize();
   }
 
-  private getItemSizes() {
+  public getItemSizes() {
     const rowsScrollController = this._rowsScrollController;
 
     if (rowsScrollController) {
@@ -890,7 +899,7 @@ export const virtualScrollingDataControllerExtender = (
     return dataSourceAdapter?.getItemSizes();
   }
 
-  private getContentOffset(type?) {
+  public getContentOffset(type?) {
     const rowsScrollController = this._rowsScrollController;
 
     if (rowsScrollController) {
