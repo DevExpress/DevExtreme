@@ -46,7 +46,6 @@ import windowUtils from '@ts/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
-import { themeModeChangedCallback } from '@ts/ui/m_themes_callback';
 import type {
   BaseControllerProperties,
   ControllerOverlayElements,
@@ -58,6 +57,7 @@ import {
   OverlayPositionController,
 } from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
+import { themeModeChangedCallback } from '@ts/ui/themes_callback';
 
 const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();

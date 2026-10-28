@@ -1,6 +1,7 @@
 import { move, resetPosition } from '@js/common/core/animation/translator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -14,6 +15,15 @@ import { isDefined, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import { pairToObject, splitPair } from '@ts/core/utils/common';
 
+import type {
+  AxisBounds,
+  AxisPositionData,
+  CollisionSide,
+  PositionOptions,
+  PositionResult,
+  PositionTarget,
+} from './types';
+
 const window = getWindow();
 
 const horzRe = /left|right/;
@@ -21,7 +31,7 @@ const vertRe = /top|bottom/;
 const collisionRe = /fit|flip|none/;
 const scaleRe = /scale\(.+?\)/;
 
-const normalizeAlign = function (raw) {
+const normalizeAlign = function normalizeAlign(raw: unknown): { h: string; v: string } {
   const result = {
     h: 'center',
     v: 'center',
@@ -30,7 +40,7 @@ const normalizeAlign = function (raw) {
   const pair = splitPair(raw);
 
   if (pair) {
-    each(pair, function () {
+    each(pair, function normalizeAlignPart(this: unknown) {
       const w = String(this).toLowerCase();
       if (horzRe.test(w)) {
         result.h = w;
@@ -43,11 +53,14 @@ const normalizeAlign = function (raw) {
   return result;
 };
 
-const normalizeOffset = function (raw, preventRound) {
+const normalizeOffset = function normalizeOffset(
+  raw: unknown,
+  preventRound?: boolean,
+): { h: number; v: number } {
   return pairToObject(raw, preventRound);
 };
 
-const normalizeCollision = function (raw) {
+const normalizeCollision = function normalizeCollision(raw: unknown): { h: string; v: string } {
   const pair = splitPair(raw);
   let h = String(pair && pair[0]).toLowerCase();
   let v = String(pair && pair[1]).toLowerCase();
@@ -59,10 +72,10 @@ const normalizeCollision = function (raw) {
     v = h;
   }
 
-  return { h: h, v: v };
+  return { h, v };
 };
 
-const getAlignFactor = function (align) {
+const getAlignFactor = function getAlignFactor(align: string): number {
   switch (align) {
     case 'center':
       return 0.5;
@@ -74,7 +87,7 @@ const getAlignFactor = function (align) {
   }
 };
 
-const inverseAlign = function (align) {
+const inverseAlign = function inverseAlign(align: string): string {
   switch (align) {
     case 'left':
       return 'right';
@@ -89,7 +102,10 @@ const inverseAlign = function (align) {
   }
 };
 
-const calculateOversize = function (data, bounds) {
+const calculateOversize = function calculateOversize(
+  data: AxisPositionData,
+  bounds: AxisBounds,
+): number {
   let oversize = 0;
 
   if (data.myLocation < bounds.min) {
@@ -103,7 +119,11 @@ const calculateOversize = function (data, bounds) {
   return oversize;
 };
 
-const collisionSide = function (direction, data, bounds) {
+const collisionSide = function collisionSide(
+  direction: 'h' | 'v',
+  data: AxisPositionData,
+  bounds: AxisBounds,
+): CollisionSide {
   if (data.myLocation < bounds.min) {
     return direction === 'h' ? 'left' : 'top';
   }
@@ -114,16 +134,24 @@ const collisionSide = function (direction, data, bounds) {
 };
 
 // TODO: rename?
-const initMyLocation = function (data) {
+const initMyLocation = function initMyLocation(data: AxisPositionData): void {
   data.myLocation = data.atLocation
         + getAlignFactor(data.atAlign) * data.atSize
         - getAlignFactor(data.myAlign) * data.mySize
         + data.offset;
 };
 
-const collisionResolvers = {
+interface CollisionResolvers {
+  fit: (data: AxisPositionData, bounds: AxisBounds) => void;
+  flip: (data: AxisPositionData, bounds: AxisBounds) => void;
+  // eslint-disable-next-line spellcheck/spell-checker
+  flipfit: (data: AxisPositionData, bounds: AxisBounds) => void;
+  none: (data: AxisPositionData) => void;
+}
 
-  fit: function (data, bounds) {
+const collisionResolvers: CollisionResolvers = {
+
+  fit(data, bounds) {
     let result = false;
     if (data.myLocation > bounds.max) {
       data.myLocation = bounds.max;
@@ -137,7 +165,7 @@ const collisionResolvers = {
     data.fit = result;
   },
 
-  flip: function (data, bounds) {
+  flip(data, bounds) {
     data.flip = false;
 
     if (data.myAlign === 'center' && data.atAlign === 'center') {
@@ -154,7 +182,10 @@ const collisionResolvers = {
       initMyLocation(inverseData);
       inverseData.oversize = calculateOversize(inverseData, bounds);
 
-      if ((inverseData.myLocation >= bounds.min && inverseData.myLocation <= bounds.max) || data.oversize > inverseData.oversize) {
+      if (
+        (inverseData.myLocation >= bounds.min && inverseData.myLocation <= bounds.max)
+        || data.oversize > inverseData.oversize
+      ) {
         data.myLocation = inverseData.myLocation;
         data.oversize = inverseData.oversize;
         data.flip = true;
@@ -163,19 +194,20 @@ const collisionResolvers = {
   },
 
   // eslint-disable-next-line spellcheck/spell-checker
-  flipfit: function (data, bounds) {
+  flipfit(data, bounds) {
     this.flip(data, bounds);
     this.fit(data, bounds);
   },
 
-  none: function (data) {
+  none(data) {
     data.oversize = 0;
   },
 };
 
-let scrollbarWidth;
+// eslint-disable-next-line @typescript-eslint/init-declarations -- set by calculateScrollbarWidth
+let scrollbarWidth: number | undefined;
 
-const calculateScrollbarWidth = function () {
+const calculateScrollbarWidth = function calculateScrollbarWidth(): void {
   const $scrollDiv = $('<div>').css({
     width: 100,
     height: 100,
@@ -183,7 +215,7 @@ const calculateScrollbarWidth = function () {
     position: 'absolute',
     top: -9999,
   }).appendTo($('body'));
-  // @ts-expect-error
+  // @ts-expect-error get(0) is typed as Element
   const result = $scrollDiv.get(0).offsetWidth - $scrollDiv.get(0).clientWidth;
 
   $scrollDiv.remove();
@@ -206,27 +238,63 @@ const defaultPositionResult = {
   },
 };
 
-interface AxisPositionResult {
-  location: number;
-  flip: boolean;
-  fit: boolean;
-  oversize: number;
-  collisionSide?: string;
-}
+// NOTE: Setting the 'element.style' requires creating attributeNode when both of the conditions
+//       met:
+//       - a form contains an input with the name property set to "style";
+//       - a form contains a dx-validator (or other popup widget).
+//       T941581
+const setScaleProperty = function setScaleProperty(
+  element: Element & { style?: unknown },
+  scale: string,
+  styleAttr: string,
+  isEmpty: boolean,
+): void {
+  const stylePropIsValid = isDefined(element.style) && !domAdapter.isNode(element.style);
+  const newStyleValue = isEmpty ? styleAttr.replace(scale, '') : styleAttr;
 
-interface PositionResult {
-  h: AxisPositionResult;
-  v: AxisPositionResult;
-  precise?: boolean;
-}
+  if (stylePropIsValid) {
+    setStyle(element, newStyleValue, false);
+  } else {
+    const styleAttributeNode = domAdapter.createAttribute('style');
+    styleAttributeNode.value = newStyleValue;
+    element.setAttributeNode(styleAttributeNode);
+  }
+};
 
-const calculatePosition = function (what, options) {
+const getOffsetWithoutScale = function getOffsetWithoutScale(
+  $startElement: dxElementWrapper,
+  $currentElement: dxElementWrapper = $startElement,
+): Coordinates | undefined {
+  const currentElement = $currentElement.get(0);
+  if (!currentElement) {
+    return $startElement.offset();
+  }
+
+  const style = currentElement.getAttribute?.('style') ?? '';
+  const scale = scaleRe.exec(style)?.[0];
+  // eslint-disable-next-line @typescript-eslint/init-declarations -- set in both branches
+  let offset: Coordinates | undefined;
+
+  if (scale) {
+    setScaleProperty(currentElement, scale, style, true);
+    offset = getOffsetWithoutScale($startElement, $currentElement.parent());
+    setScaleProperty(currentElement, scale, style, false);
+  } else {
+    offset = getOffsetWithoutScale($startElement, $currentElement.parent());
+  }
+
+  return offset;
+};
+
+const calculatePosition = function calculatePosition(
+  what: PositionTarget,
+  options?: PositionOptions,
+): PositionResult {
   const $what = $(what);
-  const currentOffset = $what.offset();
+  // @ts-expect-error offset() is typed as possibly undefined
+  const currentOffset: Coordinates = $what.offset();
   const result: PositionResult = extend(true, {}, defaultPositionResult, {
-    // @ts-expect-error
     h: { location: currentOffset.left },
-    // @ts-expect-error
     v: { location: currentOffset.top },
   });
 
@@ -236,13 +304,16 @@ const calculatePosition = function (what, options) {
 
   const my = normalizeAlign(options.my);
   const at = normalizeAlign(options.at);
-  let of = ($(options.of).length && options.of) || window;
+  // @ts-expect-error renderer() is typed without event objects
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- element, selector, window, event
+  let of: any = ($(options.of).length && options.of) || window;
   const offset = normalizeOffset(options.offset, options.precise);
   const collision = normalizeCollision(options.collision);
   const { boundary } = options;
   const boundaryOffset = normalizeOffset(options.boundaryOffset, options.precise);
 
-  const h: any = {
+  const h: AxisPositionData = {
+    // @ts-expect-error getOuterWidth() can be undefined; the location fields are set below
     mySize: getOuterWidth($what),
     myAlign: my.h,
     atAlign: at.h,
@@ -251,7 +322,8 @@ const calculatePosition = function (what, options) {
     boundaryOffset: boundaryOffset.h,
   };
 
-  const v: any = {
+  const v: AxisPositionData = {
+    // @ts-expect-error getOuterHeight() can be undefined; the location fields are set below
     mySize: getOuterHeight($what),
     myAlign: my.v,
     atAlign: at.v,
@@ -290,7 +362,8 @@ const calculatePosition = function (what, options) {
       v.atSize = getHeight(of);
     } else {
       const ofRect = getBoundingRect(of.get(0));
-      const o = getOffsetWithoutScale(of);
+      // @ts-expect-error offset() is typed as possibly undefined
+      const o: Coordinates = getOffsetWithoutScale(of);
       h.atLocation = o.left;
       v.atLocation = o.top;
       h.atSize = Math.max(ofRect.width, getOuterWidth(of));
@@ -301,12 +374,14 @@ const calculatePosition = function (what, options) {
   initMyLocation(h);
   initMyLocation(v);
 
-  const bounds = (function () {
+  const bounds = (function calculateBounds(): { h: AxisBounds; v: AxisBounds } {
     const win = $(window);
     const windowWidth = getWidth(win.get(0));
     const windowHeight = getHeight(win.get(0));
-    let left = win.scrollLeft();
-    let top = win.scrollTop();
+    // @ts-expect-error scrollLeft() is typed as a setter only
+    let left: number = win.scrollLeft();
+    // @ts-expect-error scrollTop() is typed as a setter only
+    let top: number = win.scrollTop();
     const documentElement = domAdapter.getDocumentElement();
     const hZoomLevel = touch ? documentElement.clientWidth / windowWidth : 1;
     const vZoomLevel = touch ? documentElement.clientHeight / windowHeight : 1;
@@ -320,10 +395,9 @@ const calculatePosition = function (what, options) {
 
     if (boundary && !isWindow(boundary)) {
       const $boundary = $(boundary);
-      const boundaryPosition = $boundary.offset();
-      // @ts-expect-error
+      // @ts-expect-error offset() is typed as possibly undefined
+      const boundaryPosition: Coordinates = $boundary.offset();
       left = boundaryPosition.left;
-      // @ts-expect-error
       top = boundaryPosition.top;
 
       boundaryWidth = Number(getWidth($boundary));
@@ -333,16 +407,14 @@ const calculatePosition = function (what, options) {
     return {
       h: {
         min: left + h.boundaryOffset,
-        // @ts-expect-error
         max: left + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset,
       },
       v: {
         min: top + v.boundaryOffset,
-        // @ts-expect-error
         max: top + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset,
       },
     };
-  })();
+  }());
 
   h.oversize = calculateOversize(h, bounds.h);
   v.oversize = calculateOversize(v, bounds.v);
@@ -358,61 +430,44 @@ const calculatePosition = function (what, options) {
     collisionResolvers[v.collision](v, bounds.v);
   }
 
-  const preciser = function (number) {
+  const preciser = function preciser(number: number): number {
     return options.precise ? number : Math.round(number);
   };
 
   extend(true, result, {
     h: {
-      location: preciser(h.myLocation), oversize: preciser(h.oversize), fit: h.fit, flip: h.flip, collisionSide: h.collisionSide,
+      location: preciser(h.myLocation),
+      oversize: preciser(h.oversize),
+      fit: h.fit,
+      flip: h.flip,
+      collisionSide: h.collisionSide,
     },
     v: {
-      location: preciser(v.myLocation), oversize: preciser(v.oversize), fit: v.fit, flip: v.flip, collisionSide: v.collisionSide,
+      location: preciser(v.myLocation),
+      oversize: preciser(v.oversize),
+      fit: v.fit,
+      flip: v.flip,
+      collisionSide: v.collisionSide,
     },
     precise: options.precise,
   });
 
   return result;
 };
-// NOTE: Setting the 'element.style' requires creating attributeNode when both of the conditions met:
-//       - a form contains an input with the name property set to "style";
-//       - a form contains a dx-validator (or other popup widget).
-//       T941581
-const setScaleProperty = function (element, scale, styleAttr, isEmpty) {
-  const stylePropIsValid = isDefined(element.style) && !domAdapter.isNode(element.style);
-  const newStyleValue = isEmpty ? styleAttr.replace(scale, '') : styleAttr;
 
-  if (stylePropIsValid) {
-    setStyle(element, newStyleValue, false);
-  } else {
-    const styleAttributeNode = domAdapter.createAttribute('style');
-    styleAttributeNode.value = newStyleValue;
-    element.setAttributeNode(styleAttributeNode);
-  }
-};
-
-const getOffsetWithoutScale = function ($startElement, $currentElement = $startElement) {
-  const currentElement = $currentElement.get(0);
-  if (!currentElement) {
-    return $startElement.offset();
-  }
-
-  const style = currentElement.getAttribute?.('style') || '';
-  const scale = style.match(scaleRe)?.[0];
-  let offset;
-
-  if (scale) {
-    setScaleProperty(currentElement, scale, style, true);
-    offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-    setScaleProperty(currentElement, scale, style, false);
-  } else {
-    offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-  }
-
-  return offset;
-};
-
-const position = function (what, options?) {
+function position(what: PositionTarget): Coordinates | undefined;
+function position(
+  what: PositionTarget,
+  options: PositionOptions | PositionResult,
+): PositionResult | undefined;
+function position(
+  what: PositionTarget,
+  options?: PositionOptions | PositionResult,
+): Coordinates | PositionResult | undefined;
+function position(
+  what: PositionTarget,
+  options?: PositionOptions | PositionResult,
+): Coordinates | PositionResult | undefined {
   const $what = $(what);
 
   if (!$what.length) {
@@ -425,10 +480,13 @@ const position = function (what, options?) {
 
   resetPosition($what, true);
 
-  const offset = getOffsetWithoutScale($what);
-  const targetPosition = options.h && options.v ? options : calculatePosition($what, options);
+  // @ts-expect-error offset() is typed as possibly undefined
+  const offset: Coordinates = getOffsetWithoutScale($what);
+  const targetPosition = options.h && options.v
+    ? options
+    : calculatePosition($what, options);
 
-  const preciser = function (number) {
+  const preciser = function preciser(number: number): number {
     return options.precise ? number : Math.round(number);
   };
 
@@ -438,30 +496,34 @@ const position = function (what, options?) {
   });
 
   return targetPosition;
-} as any;
+}
 
-const offset = function (element) {
-  element = $(element).get(0);
-  if (isWindow(element)) {
+const offset = function offset(element: PositionOptions['of']): Coordinates | null | undefined {
+  // @ts-expect-error renderer() is typed without event objects
+  const domElement = $(element).get(0);
+  if (isWindow(domElement)) {
     return null;
-  } if (element && 'pageY' in element && 'pageX' in element) {
-    return { top: element.pageY, left: element.pageX };
+  } if (domElement && 'pageY' in domElement && 'pageX' in domElement) {
+    // @ts-expect-error get(0) is typed as Element, but an event has pageX and pageY
+    return { top: domElement.pageY, left: domElement.pageX };
   }
 
-  return $(element).offset();
+  return $(domElement).offset();
 };
 
+// @ts-expect-error inverseAlign is assigned right below
 if (!position.inverseAlign) {
   position.inverseAlign = inverseAlign;
 }
 
+// @ts-expect-error normalizeAlign is assigned right below
 if (!position.normalizeAlign) {
   position.normalizeAlign = normalizeAlign;
 }
 
 export default {
-  calculateScrollbarWidth: calculateScrollbarWidth,
+  calculateScrollbarWidth,
   calculate: calculatePosition,
   setup: position,
-  offset: offset,
+  offset,
 };

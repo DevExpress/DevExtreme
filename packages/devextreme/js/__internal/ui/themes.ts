@@ -12,7 +12,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
 import { uiLayerInitialized } from '@ts/core/utils/common';
 import { resolvedThemeMode } from '@ts/core/utils/theme_mode';
-import { themeModeChangedCallback, themeReadyCallback } from '@ts/ui/m_themes_callback';
+import { themeModeChangedCallback, themeReadyCallback } from '@ts/ui/themes_callback';
 
 const window = getWindow();
 const ready = readyCallbacks.add;
