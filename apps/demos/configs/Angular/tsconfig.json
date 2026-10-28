@@ -10,5 +10,5 @@
       "@angular/*": [ "../../../../node_modules/@angular/*"]
     },
   },
-  "include": ["**/*", "../../../../utils/create-bundles/Angular/polyfill.ts"]
+  "include": ["**/*"]
 }
