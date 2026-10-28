@@ -779,12 +779,18 @@ jobs:
           delete-merged: true
 
   csp-check-jquery:
-    name: CSP check (jQuery)
+    name: CSP check (jQuery ${{ matrix.SHARD_INDEX }}/${{ matrix.SHARD_TOTAL }})
     needs: [check-should-run, build-devextreme]
     if: |
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { SHARD_INDEX: 1, SHARD_TOTAL: 2 }
+          - { SHARD_INDEX: 2, SHARD_TOTAL: 2 }
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 20
 
@@ -839,13 +845,15 @@ jobs:
       env:
         CSP_FRAMEWORKS: jQuery
         CHROME_PATH: google-chrome-stable
+        DEMO_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
+        DEMO_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
       run: node utils/server/csp-check.js
 
     - name: Upload CSP report
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: csp-violations-jquery
+        name: csp-violations-jquery-shard${{ matrix.SHARD_INDEX }}
         path: apps/demos/csp-reports/
         if-no-files-found: ignore
 
