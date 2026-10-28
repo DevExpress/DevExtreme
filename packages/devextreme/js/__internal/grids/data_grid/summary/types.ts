@@ -5,6 +5,7 @@ import type {
 import type { Column } from '@ts/grids/data_grid/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
+import type { RowRenderOptions, ViewRow } from '@ts/grids/grid_core/views/types';
 
 import type { GroupItem } from '../grouping/types';
 
@@ -65,4 +66,21 @@ export interface SummaryOptions {
 
 export interface EditingControllerRequired {
   editingController: EditingController;
+}
+
+export interface SummaryDataControllerExtension {
+  footerItems: () => FooterItem[];
+}
+
+export interface SummaryDataSourceAdapterExtension {
+  totalAggregates: () => unknown[];
+}
+
+export interface GroupSummaryRenderOptions extends RowRenderOptions {
+  row: ViewRow & { summaryCells: unknown[][] };
+}
+
+export interface SummaryCellOptions {
+  totalItem: ViewRow;
+  summaryItems: unknown[];
 }

@@ -2,20 +2,38 @@
 import dataQuery from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { normalizeSortingInfo } from '@js/common/data/utils';
+import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import type { GroupData } from '@js/ui/data_grid';
+import type { GroupData, SummaryTexts } from '@js/ui/data_grid';
 import type { DataSource } from '@ts/data/data_source/data_source';
+import type { SortingInfo } from '@ts/data/utils';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import type { Column, ColumnsChanges, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
-import type { RawItemData, RemoteOperationsOptions } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type {
+  LoadOperation,
+  OperationTypes, RawItemData, RemoteOperationsOptions,
+} from '@ts/grids/grid_core/data_source_adapter/types';
+import type { EditingChange, EditingChangeParams } from '@ts/grids/grid_core/editing/types';
+import type { ModuleType, SummaryTextItem } from '@ts/grids/grid_core/types';
 import { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowRenderOptions, SummaryRowsViewExtension } from '@ts/grids/grid_core/views/types';
+import type {
+  CellRenderOptions,
+  RowRenderOptions,
+  SummaryRowsViewExtension,
+  ViewCellOptions,
+  ViewDataChange,
+  ViewRow,
+  ViewRowEvent,
+} from '@ts/grids/grid_core/views/types';
 
 import type { EditingController } from '../../grid_core/editing/editing';
 import type { RowsView } from '../../grid_core/views/rows_view';
@@ -33,25 +51,45 @@ import {
   DATAGRID_TOTAL_FOOTER_CLASS,
   DATAGRID_TOTAL_FOOTER_ROW_TYPE,
 } from './const';
-import type { Aggregate, EditingControllerRequired, SummaryOptions } from './types';
+import type {
+  Aggregate,
+  EditingControllerRequired,
+  FooterItem,
+  GroupSummaryRenderOptions,
+  SortByGroups,
+  SummaryCellItem,
+  SummaryCellOptions,
+  SummaryDataControllerExtension,
+  SummaryDataSourceAdapterExtension,
+  SummaryOptions,
+} from './types';
 import { getSummaryOptions } from './utils/get_summary_options';
 
-export type SummaryDataSourceAdapter = InstanceType<ReturnType<typeof summaryDataSourceAdapterExtender>>;
+export type SummaryDataSourceAdapter = InstanceType<
+  ReturnType<typeof summaryDataSourceAdapterExtender>
+>;
 
-export const renderSummaryCell = function (cell, options, setAria) {
-  const $cell = $(cell);
-  const { column } = options;
-  const { summaryItems } = options;
-  const $summaryItems: any = [];
+export const renderSummaryCell = (
+  $cell: dxElementWrapper,
+  options: ViewCellOptions,
+  summaryTexts: SummaryTexts,
+  setAria: ColumnsView['setAria'],
+): void => {
+  const { column, summaryItems } = options;
+  const $summaryItems: dxElementWrapper[] = [];
 
   if (!column.command && summaryItems) {
-    for (const summaryItem of summaryItems) {
-      const text = gridCore.getSummaryText(summaryItem, options.summaryTexts);
+    // @ts-expect-error summaryItems is typed as unknown[] in ViewCellOptions
+    const summaryCellItems: (SummaryCellItem & SummaryTextItem)[] = summaryItems;
+
+    for (const summaryItem of summaryCellItems) {
+      const text = gridCore.getSummaryText(summaryItem, summaryTexts);
       const $summaryItemElement = $('<div>')
+        // @ts-expect-error css() is typed without undefined
         .css('textAlign', summaryItem.alignment || column.alignment)
         .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
         .addClass(DATAGRID_TEXT_CONTENT_CLASS)
-        .addClass(summaryItem.cssClass)
+        .addClass(summaryItem.cssClass ?? '')
         .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
         .text(text);
 
@@ -62,120 +100,146 @@ export const renderSummaryCell = function (cell, options, setAria) {
   }
 };
 
-const getSummaryCellOptions = function (that, options) {
-  const summaryTexts = that.option('summary.texts') || {};
+const getSummaryCellOptions = (
+  options: CellRenderOptions,
+): SummaryCellOptions => ({
+  totalItem: options.row,
+  // @ts-expect-error summaryCells is set for rows that render summary cells
+  summaryItems: options.row.summaryCells[options.columnIndex],
+});
 
-  return {
-    totalItem: options.row,
-    summaryItems: options.row.summaryCells[options.columnIndex],
-    summaryTexts,
-  };
-};
-
-const forEachGroup = function (groups, groupCount, callback, path?) {
-  path = path || [];
-  for (let i = 0; i < groups.length; i++) {
-    path.push(groups[i].key);
+const forEachGroup = (
+  groups: GroupData<RawItemData>[],
+  groupCount: number,
+  callback: (path: unknown[], items: GroupData<RawItemData>['items']) => void,
+  path: unknown[] = [],
+): void => {
+  for (const group of groups) {
+    path.push(group.key);
     if (groupCount === 1) {
-      callback(path, groups[i].items);
+      callback(path, group.items);
     } else {
-      forEachGroup(groups[i].items, groupCount - 1, callback, path);
+      // @ts-expect-error groups above the last group level hold groups
+      forEachGroup(group.items, groupCount - 1, callback, path);
     }
     path.pop();
   }
 };
 
-const applyAddedData = function (data, insertedData, groupLevel?) {
+const applyAddedData = (
+  data: RawItemData[],
+  insertedData: RawItemData[],
+  groupLevel?: number,
+): RawItemData[] => {
   if (groupLevel) {
-    return applyAddedData(data, insertedData.map((item) => ({ items: [item] }), groupLevel - 1));
+    const mappedInsertedData = insertedData.map((item) => ({ items: [item] }));
+    return applyAddedData(data, mappedInsertedData, groupLevel - 1);
   }
 
   return data.concat(insertedData);
 };
 
-const applyRemovedData = function (data, removedData, groupLevel) {
+const applyRemovedData = (
+  data: RawItemData[],
+  removedData: (RawItemData | undefined)[],
+  groupLevel: number,
+): RawItemData[] => {
   if (groupLevel) {
-    return data.map((data) => {
+    return data.map((group) => {
       const updatedData = {};
-      const updatedItems = applyRemovedData(data.items || [], removedData, groupLevel - 1);
+      // @ts-expect-error groups above the last group level hold groups
+      const updatedItems = applyRemovedData(group.items ?? [], removedData, groupLevel - 1);
 
       Object.defineProperty(updatedData, 'aggregates', {
-        get: () => data.aggregates,
+        get: () => group.aggregates,
         set: (value) => {
-          data.aggregates = value;
+          group.aggregates = value;
         },
       });
 
-      return extend(updatedData, data, { items: updatedItems });
+      return extend(updatedData, group, { items: updatedItems });
     });
   }
 
-  return data.filter((data) => removedData.indexOf(data) < 0);
+  return data.filter((item) => !removedData.includes(item));
 };
 
-const sortGroupsBySummaryCore = function (items, groups, sortByGroups) {
+const sortGroupsBySummaryCore = (
+  items: RawItemData[] | null | undefined,
+  groups: SortingInfo[],
+  sortByGroups: SortByGroups,
+): RawItemData[] | null | undefined => {
   if (!items || !groups.length) return items;
 
   const group = groups[0];
   const sorts = sortByGroups[0];
-  let query;
+  let sortedItems = items;
 
-  if (group && sorts && sorts.length) {
-    query = dataQuery(items);
-    each(sorts, function (index) {
+  if (group && sorts?.length) {
+    let query = dataQuery(items);
+    sorts.forEach((sortInfo, index) => {
       if (index === 0) {
-        query = query.sortBy(this.selector, this.desc);
+        query = query.sortBy(sortInfo.selector, sortInfo.desc);
       } else {
-        query = query.thenBy(this.selector, this.desc);
+        query = query.thenBy(sortInfo.selector, sortInfo.desc);
       }
     });
-    query.enumerate().done((sortedItems) => {
-      items = sortedItems;
+    query.enumerate().done((result) => {
+      // @ts-expect-error enumerate() is typed as resolving with unknown
+      sortedItems = result;
     });
   }
 
-  groups = groups.slice(1);
-  sortByGroups = sortByGroups.slice(1);
-  if (groups.length && sortByGroups.length) {
-    each(items, function () {
-      this.items = sortGroupsBySummaryCore(this.items, groups, sortByGroups);
+  const nextGroups = groups.slice(1);
+  const nextSortByGroups = sortByGroups.slice(1);
+  if (nextGroups.length && nextSortByGroups.length) {
+    each(sortedItems, function sortGroupItems(this: RawItemData) {
+      // @ts-expect-error groups above the last group level hold groups
+      this.items = sortGroupsBySummaryCore(this.items, nextGroups, nextSortByGroups);
     });
   }
 
-  return items;
+  return sortedItems;
 };
 
-const sortGroupsBySummary = function (data, group, summary) {
-  const sortByGroups = summary && summary.sortByGroups && summary.sortByGroups();
+const sortGroupsBySummary = (
+  data: RawItemData[] | null | undefined,
+  group: SortingInfo[],
+  summary: SummaryOptions | undefined,
+): RawItemData[] | null | undefined => {
+  const sortByGroups = summary?.sortByGroups?.();
 
-  if (sortByGroups && sortByGroups.length) {
+  if (sortByGroups?.length) {
     return sortGroupsBySummaryCore(data, group, sortByGroups);
   }
   return data;
 };
 
 export class FooterView extends ColumnsView {
-  public _getRows() {
-    // @ts-expect-error
+  protected declare _dataController: DataController & SummaryDataControllerExtension;
+
+  public _getRows(): FooterItem[] {
     return this._dataController.footerItems();
   }
 
-  protected _getCellOptions(options) {
-    return extend(super._getCellOptions(options), getSummaryCellOptions(this, options));
+  protected _getCellOptions(options: CellRenderOptions): ViewCellOptions {
+    return extend(super._getCellOptions(options), getSummaryCellOptions(options));
   }
 
-  protected _renderCellContent($cell, options) {
-    renderSummaryCell($cell, options, this.setAria.bind(this));
-    // @ts-expect-error
-    super._renderCellContent.apply(this, arguments);
+  protected _renderCellContent(
+    $cell: dxElementWrapper,
+    options: ViewCellOptions,
+    renderOptions: CellRenderOptions,
+  ): void {
+    renderSummaryCell($cell, options, this.option('summary.texts') ?? {}, this.setAria.bind(this));
+    super._renderCellContent($cell, options, renderOptions);
   }
 
-  protected _renderCore(change) {
+  protected _renderCore(change?: ViewDataChange): DeferredObj<unknown> {
     let needUpdateScrollLeft = false;
-    // @ts-expect-error
     const totalItem = this._dataController.footerItems()[0];
 
-    if (!change || !change.columnIndices) {
+    if (!change?.columnIndices) {
       // @ts-expect-error the view is rendered here
       this.element()
         .empty()
@@ -185,35 +249,41 @@ export class FooterView extends ColumnsView {
       needUpdateScrollLeft = true;
     }
 
-    if (totalItem && totalItem.summaryCells && totalItem.summaryCells.length) {
+    if (totalItem?.summaryCells?.length) {
       this._updateContent(this._renderTable({ change }), change);
-      needUpdateScrollLeft && this.updateScrollLeftPosition();
+      if (needUpdateScrollLeft) {
+        this.updateScrollLeftPosition();
+      }
     }
 
     return super._renderCore(change);
   }
 
-  protected _updateContent($newTable, change) {
-    if (change && change.changeType === 'update' && change.columnIndices) {
+  protected _updateContent(
+    $newTable: dxElementWrapper,
+    change?: ViewDataChange,
+    isFixedTableRendering?: boolean,
+  ): DeferredObj<unknown> {
+    if (change?.changeType === 'update' && change.columnIndices) {
       return this.waitAsyncTemplates().done(() => {
-        const $row = this.getTableElement()!.find(`.${VIEW_CLASSES.row}`);
+        // @ts-expect-error the view is rendered here
+        const $row = this.getTableElement().find(`.${VIEW_CLASSES.row}`);
         const $newRow = $newTable.find(`.${VIEW_CLASSES.row}`);
 
+        // @ts-expect-error the footer has one row, so columnIndices[0] is set
         this._updateCells($row, $newRow, change.columnIndices[0]);
       });
     }
 
-    // @ts-expect-error
-    return super._updateContent.apply(this, arguments);
+    return super._updateContent($newTable, change, isFixedTableRendering);
   }
 
-  protected _rowClick(e?) {
-    // @ts-expect-error
-    const item = this._dataController.footerItems()[e.rowIndex] || {};
+  protected _rowClick(e: ViewRowEvent): void {
+    const item = this._dataController.footerItems()[e.rowIndex] ?? {};
     this.executeAction('onRowClick', extend({}, e, item));
   }
 
-  protected _columnOptionChanged(e) {
+  protected _columnOptionChanged(e: ColumnsChanges): void {
     const { optionNames } = e;
 
     if (e.changeTypes.grouping) return;
@@ -223,7 +293,7 @@ export class FooterView extends ColumnsView {
     }
   }
 
-  protected _handleDataChanged(e) {
+  protected _handleDataChanged(e: DataChange): void {
     const { changeType } = e;
 
     if (e.changeType === 'update' && e.repaintChangesOnly) {
@@ -237,9 +307,8 @@ export class FooterView extends ColumnsView {
     }
   }
 
-  protected _createRow(row) {
-    // @ts-expect-error
-    const $row = super._createRow.apply(this, arguments);
+  protected _createRow(row: ViewRow, tagName?: string): dxElementWrapper {
+    const $row = super._createRow(row, tagName);
 
     if (row.rowType === DATAGRID_TOTAL_FOOTER_ROW_TYPE) {
       $row.addClass(DATAGRID_FOOTER_ROW_CLASS);
@@ -250,19 +319,20 @@ export class FooterView extends ColumnsView {
     return $row;
   }
 
-  private getHeight() {
+  private getHeight(): number {
     return this.getElementHeight();
   }
 
-  public isVisible() {
-    // @ts-expect-error
+  public isVisible(): boolean {
     return !!this._dataController.footerItems().length;
   }
 }
 
 export const summaryDataSourceAdapterExtender = (
   Base: ModuleType<DataSourceAdapter>,
-) => class SummaryDataSourceAdapterExtender
+): ModuleType<
+  DataSourceAdapter & SummaryDataSourceAdapterExtension
+> => class SummaryDataSourceAdapterExtender
   extends Base
   implements EditingControllerRequired {
   private _totalAggregates!: unknown[];
@@ -293,7 +363,8 @@ export const summaryDataSourceAdapterExtender = (
       getUpdatedItemData: (data) => this.editingController.getUpdatedData(data),
       columnOption: (id) => this.columnsController.columnOption(id),
       groupColumns: this.columnsController.getGroupColumns(),
-      component: this.component as any,
+      // @ts-expect-error InternalGrid is not typed as dxDataGrid
+      component: this.component,
     });
 
     return result;
@@ -303,21 +374,26 @@ export const summaryDataSourceAdapterExtender = (
     return this._totalAggregates;
   }
 
-  private isLastLevelGroupItemsPagingLocal() {
+  public isLastLevelGroupItemsPagingLocal(): number | undefined {
     const summary = this.getSummary();
     const sortByGroupsInfo = summary?.sortByGroups();
 
     return sortByGroupsInfo?.length;
   }
 
-  private sortLastLevelGroupItems(items, groups, paths) {
+  public sortLastLevelGroupItems(
+    items: RawItemData[],
+    groups: SortingInfo[],
+    paths: unknown[][],
+  ): unknown[] {
     const groupedItems = storeHelper.multiLevelGroup(dataQuery(items), groups).toArray();
-    let result = [];
+    let result: unknown[] = [];
 
     paths.forEach((path) => {
-      forEachGroup(groupedItems, groups.length, (itemsPath, items) => {
+      // @ts-expect-error multiLevelGroup is typed as returning unknown[]
+      forEachGroup(groupedItems, groups.length, (itemsPath, groupItems) => {
         if (path.toString() === itemsPath.toString()) {
-          result = result.concat(items);
+          result = result.concat(groupItems);
         }
       });
     });
@@ -325,28 +401,37 @@ export const summaryDataSourceAdapterExtender = (
     return result;
   }
 
-  protected _customizeRemoteOperations(options) {
+  protected _customizeRemoteOperations(
+    options: LoadOperation,
+    operationTypes: OperationTypes,
+  ): void {
     const summary = this.getSummary();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- set before load
+    const remoteOperations = options.remoteOperations!;
 
-    if (summary) {
-      if (options.remoteOperations.summary) {
-        if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
-          if (options.storeLoadOptions.group) {
-            if (options.remoteOperations.grouping) {
-              options.storeLoadOptions.groupSummary = summary.groupAggregates;
-            } else if (summary.groupAggregates.length) {
-              options.remoteOperations.paging = false;
-            }
-          }
-          options.storeLoadOptions.totalSummary = summary.totalAggregates;
+    if (summary && remoteOperations.summary) {
+      if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
+        if (options.storeLoadOptions.group && remoteOperations.grouping) {
+          options.storeLoadOptions.groupSummary = summary.groupAggregates;
+        } else if (options.storeLoadOptions.group && summary.groupAggregates.length) {
+          remoteOperations.paging = false;
         }
-      } else if (summary.totalAggregates.length || (summary.groupAggregates.length && options.storeLoadOptions.group)) {
-        options.remoteOperations.paging = false;
+        options.storeLoadOptions.totalSummary = summary.totalAggregates;
       }
+    } else if (
+      summary
+      && (
+        summary.totalAggregates.length
+        || (summary.groupAggregates.length && options.storeLoadOptions.group)
+      )
+    ) {
+      remoteOperations.paging = false;
     }
-    super._customizeRemoteOperations.apply(this, arguments as any);
+    super._customizeRemoteOperations(options, operationTypes);
 
-    const cachedExtra = options.cachedData.extra;
+    // eslint-disable-next-line @stylistic/max-len
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- cachedData is set by the base method
+    const cachedExtra = options.cachedData!.extra;
 
     if (cachedExtra?.summary && !options.isCustomLoading) {
       options.storeLoadOptions.totalSummary = undefined;
@@ -446,7 +531,7 @@ export const summaryDataSourceAdapterExtender = (
 export const summaryEditingControllerExtender = (
   Base: ModuleType<EditingController>,
 ): ModuleType<EditingController> => class SummaryEditingController extends Base {
-  private _refreshSummary() {
+  private _refreshSummary(): void {
     if (this.option('summary.recalculateWhileEditing') && !this.isSaving()) {
       this._dataController.refresh({
         load: true,
@@ -455,9 +540,11 @@ export const summaryEditingControllerExtender = (
     }
   }
 
-  protected _addChange(params) {
-    // @ts-expect-error
-    const result = super._addChange.apply(this, arguments);
+  protected _addChange(
+    params: EditingChangeParams,
+    options?: { row?: ProcessedItem; forceUpdateRow?: boolean },
+  ): EditingChange {
+    const result = super._addChange(params, options);
 
     if (params.type) {
       this._refreshSummary();
@@ -466,46 +553,44 @@ export const summaryEditingControllerExtender = (
     return result;
   }
 
-  protected _removeChange() {
-    // @ts-expect-error
-    const result = super._removeChange.apply(this, arguments);
+  protected _removeChange(index: number): void {
+    super._removeChange(index);
 
     this._refreshSummary();
-
-    return result;
   }
 
-  public cancelEditData() {
-    // @ts-expect-error
-    const result = super.cancelEditData.apply(this, arguments);
+  public cancelEditData(): void {
+    super.cancelEditData();
 
     this._refreshSummary();
-
-    return result;
   }
 };
 
 export const summaryRowsViewExtender = (
   Base: ModuleType<RowsView>,
 ): ModuleType<RowsView & SummaryRowsViewExtension> => class SummaryRowsViewExtender extends Base {
-  protected _createRow(row) {
-    // @ts-expect-error
-    const $row = super._createRow.apply(this, arguments);
+  protected _createRow(row?: ViewRow, tag?: string): dxElementWrapper {
+    const $row = super._createRow(row, tag);
 
-    row && $row.addClass(row.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE ? DATAGRID_GROUP_FOOTER_CLASS : '');
+    if (row) {
+      $row.addClass(row.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE ? DATAGRID_GROUP_FOOTER_CLASS : '');
+    }
     return $row;
   }
 
-  protected _renderCells($row, options) {
-    // @ts-expect-error
-    super._renderCells.apply(this, arguments);
+  protected _renderCells($row: dxElementWrapper, options: RowRenderOptions): void {
+    super._renderCells($row, options);
 
-    if (options.row.rowType === 'group' && options.row.summaryCells && options.row.summaryCells.length) {
+    if (options.row.rowType === 'group' && options.row.summaryCells?.length) {
+      // @ts-expect-error summaryCells is set for rows that render summary cells
       this._renderGroupSummaryCells($row, options);
     }
   }
 
-  private _hasAlignByColumnSummaryItems(columnIndex, options): boolean {
+  private _hasAlignByColumnSummaryItems(
+    columnIndex: number,
+    options: GroupSummaryRenderOptions,
+  ): boolean {
     const column = options.columns[columnIndex];
     const isGrouped = isDefined(column.groupIndex);
     const isVirtual = column.command === 'virtual';
@@ -513,10 +598,13 @@ export const summaryRowsViewExtender = (
     return !isGrouped && (isVirtual || hasSummaryCells);
   }
 
-  private _getAlignByColumnCellCount(groupCellColSpan, options) {
+  private _getAlignByColumnCellCount(
+    groupCellColSpan,
+    options: GroupSummaryRenderOptions,
+  ): number {
     let alignByColumnCellCount = 0;
 
-    for (let i = 1; i < groupCellColSpan; i++) {
+    for (let i = 1; i < groupCellColSpan; i += 1) {
       const columnIndex = options.row.summaryCells.length - i;
       const hasAlignBySummary = this._hasAlignByColumnSummaryItems(columnIndex, options);
       if (hasAlignBySummary) {
@@ -527,49 +615,70 @@ export const summaryRowsViewExtender = (
     return alignByColumnCellCount;
   }
 
-  private _renderGroupSummaryCells($row, options) {
+  private _renderGroupSummaryCells(
+    $row: dxElementWrapper,
+    options: GroupSummaryRenderOptions,
+  ): void {
     const $groupCell = $row.children().last();
     const groupCellColSpan = Number($groupCell.attr('colSpan')) || 1;
     const alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
 
-    this.renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+    this.renderGroupSummaryCellsCore(
+      $groupCell,
+      options,
+      groupCellColSpan,
+      alignByColumnCellCount,
+    );
   }
 
-  public renderGroupSummaryCellsCore(
+  private renderGroupSummaryCellsCore(
     $groupCell: dxElementWrapper,
-    options: RowRenderOptions,
+    options: GroupSummaryRenderOptions,
     groupCellColSpan: number,
     alignByColumnCellCount: number,
   ): void {
     if (alignByColumnCellCount > 0) {
       $groupCell.attr('colSpan', groupCellColSpan - alignByColumnCellCount);
 
-      for (let i = 0; i < alignByColumnCellCount; i++) {
+      for (let i = 0; i < alignByColumnCellCount; i += 1) {
         const columnIndex = options.columns.length - alignByColumnCellCount + i;
 
-        this._renderCell($groupCell.parent(), extend({ column: options.columns[columnIndex], columnIndex: this._getSummaryCellIndex(columnIndex, options.columns) }, options));
+        this._renderCell($groupCell.parent(), extend({
+          column: options.columns[columnIndex],
+          columnIndex: this._getSummaryCellIndex(columnIndex, options.columns),
+        }, options));
       }
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _getSummaryCellIndex(columnIndex, columns) {
+  private _getSummaryCellIndex(columnIndex: number, columns: Column[]): number {
     return columnIndex;
   }
 
-  protected _getCellTemplate(options) {
-    if (!options.column.command && !isDefined(options.column.groupIndex) && options.summaryItems && options.summaryItems.length) {
-      return (cell, options) => renderSummaryCell(cell, options, this.setAria.bind(this));
+  protected _getCellTemplate(
+    options: ViewCellOptions,
+  ): ColumnTemplateSource<ViewCellOptions> | undefined {
+    if (
+      !options.column.command
+      && !isDefined(options.column.groupIndex)
+      && options.summaryItems?.length
+    ) {
+      return (cell: DxElement, cellOptions: ViewCellOptions) => renderSummaryCell(
+        $(cell),
+        cellOptions,
+        this.option('summary.texts') ?? {},
+        this.setAria.bind(this),
+      );
     }
     return super._getCellTemplate(options);
   }
 
-  protected _getCellOptions(options) {
-    const that = this;
+  protected _getCellOptions(options: CellRenderOptions): ViewCellOptions {
     const parameters = super._getCellOptions(options);
 
     if (options.row.summaryCells) {
-      return extend(parameters, getSummaryCellOptions(that, options));
+      return extend(parameters, getSummaryCellOptions(options));
     }
     return parameters;
   }
