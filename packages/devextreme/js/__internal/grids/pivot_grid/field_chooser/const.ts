@@ -1,3 +1,13 @@
+import type { CellClickEvent } from '@js/ui/pivot_grid';
+import type { DataKey } from '@ts/core/element_data';
+
+// The public Field type lives in ui/pivot_grid/data_source, which internal code does not import
+type Field = NonNullable<CellClickEvent['columnFields']>[number];
+
+export type FieldChooserField = Field & { index: number };
+
+export const FIELD_DATA_KEY: DataKey<FieldChooserField> = 'field';
+
 export const ATTRIBUTES = {
   treeViewItem: 'tree-view-item',
   allowScrolling: 'allow-scrolling',

@@ -31,6 +31,8 @@ import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/draggable';
 import { domAdapter } from '@ts/core/dom_adapter';
+import type { DataKey } from '@ts/core/element_data';
+import { getData } from '@ts/core/element_data';
 import { splitPair } from '@ts/core/utils/common';
 import { fromPromise } from '@ts/core/utils/deferred';
 import type { Quad } from '@ts/core/utils/string';
@@ -69,11 +71,18 @@ let activeSourceDraggable: AnyDraggable | null = null;
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
+// Registered names: importing the classes would add ScrollView to the Draggable dependencies
+const SCROLLABLE_INSTANCE_KEY: DataKey<Scrollable> = 'dxScrollable';
+const SCROLL_VIEW_INSTANCE_KEY: DataKey<Scrollable> = 'dxScrollView';
+
+export const getScrollableInstance = (
+  $element: dxElementWrapper,
+): Scrollable | undefined => getData($element, SCROLLABLE_INSTANCE_KEY)
+  ?? getData($element, SCROLL_VIEW_INSTANCE_KEY);
+
 const getMousePosition = (event: Pick<DragEvent, 'pageX' | 'pageY'>): MousePosition => ({
-  // @ts-expect-error scrollLeft is declared to return the wrapper
-  x: event.pageX - $(window).scrollLeft(),
-  // @ts-expect-error scrollTop is declared to return the wrapper
-  y: event.pageY - $(window).scrollTop(),
+  x: event.pageX - $(window).scrollLeft<number>(),
+  y: event.pageY - $(window).scrollTop<number>(),
 });
 
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
@@ -217,9 +226,7 @@ class ScrollHelper {
     if (this._$scrollableAtPointer && this._scrollSpeed) {
       if (this._$scrollableAtPointer.hasClass('dx-scrollable-container')) {
         const $scrollable = this._$scrollableAtPointer.closest('.dx-scrollable');
-        type ScrollableAtPointer = Pick<Scrollable, 'scrollOffset' | 'scrollTo'> | undefined;
-        const scrollableInstance = $scrollable.data<ScrollableAtPointer>('dxScrollable')
-          || $scrollable.data<ScrollableAtPointer>('dxScrollView');
+        const scrollableInstance = getScrollableInstance($scrollable);
 
         if (scrollableInstance) {
           const nextScrollPosition = scrollableInstance
@@ -228,9 +235,7 @@ class ScrollHelper {
           scrollableInstance.scrollTo({ [this._limitProps.start]: nextScrollPosition });
         }
       } else {
-        // @ts-expect-error scrollTop and scrollLeft are declared to return the wrapper
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        const nextScrollPosition = this._$scrollableAtPointer[this._scrollValue]()
+        const nextScrollPosition = this._$scrollableAtPointer[this._scrollValue]<number>()
           + this._scrollSpeed;
 
         this._$scrollableAtPointer[this._scrollValue](nextScrollPosition);
@@ -922,13 +927,11 @@ class Draggable<
   }
 
   _getScrollableScrollTop(): number {
-    // @ts-expect-error scrollTop is declared to return the wrapper
-    return this._getScrollable($(this.element()))?.scrollTop() ?? 0;
+    return this._getScrollable($(this.element()))?.scrollTop<number | undefined>() ?? 0;
   }
 
   _getScrollableScrollLeft(): number {
-    // @ts-expect-error scrollLeft is declared to return the wrapper
-    return this._getScrollable($(this.element()))?.scrollLeft() ?? 0;
+    return this._getScrollable($(this.element()))?.scrollLeft<number | undefined>() ?? 0;
   }
 
   _defaultActionArgs(): DefaultActionArgs<unknown> {

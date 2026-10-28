@@ -2,14 +2,15 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getDefaultAlignment } from '@js/core/utils/position';
+import { getData } from '@ts/core/element_data';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import { ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 
 import type {
   ColumnStateMixinBase,
   ColumnStateOptions,
   IndicatorColumnsSource,
   IndicatorOptions,
-  IndicatorRowOptions,
 } from './types';
 
 const COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
@@ -118,7 +119,7 @@ export const ColumnStateMixin = <T extends ColumnStateMixinBase>(Base: T) => cla
       const $cell = $cells.eq(i);
       this._updateIndicator($cell, columns[i], indicatorName);
 
-      const rowOptions = $cell.parent().data<IndicatorRowOptions | undefined>('options');
+      const rowOptions = getData($cell.parent(), ROW_OPTIONS_KEY);
 
       if (rowOptions?.cells) {
         rowOptions.cells[$cell.index()].column = columns[i];

@@ -152,7 +152,7 @@ export interface CellEventOptions extends Partial<ViewCellOptions> {
 }
 
 export interface RowPreparedOptions extends ViewRow {
-  columns?: Column[];
+  columns: Column[];
   rowElement?: DxElement<Element>;
 }
 

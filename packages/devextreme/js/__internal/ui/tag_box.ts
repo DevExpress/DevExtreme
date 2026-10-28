@@ -345,7 +345,6 @@ class TagBox<
     }
 
     const scrollPosition = this._getScrollPosition(direction);
-    // @ts-expect-error fix on renderer level
     this._$tagsContainer.scrollLeft(scrollPosition);
   }
 
@@ -384,8 +383,7 @@ class TagBox<
     const isScrollLeft = xor(direction === 'next', Boolean(rtlEnabled));
 
     let { left: scrollOffset = 0 } = this._$focusedTag?.position() || { };
-    // @ts-expect-error fix on renderer level
-    let scrollLeft = this._$tagsContainer.scrollLeft() as number;
+    let scrollLeft = this._$tagsContainer.scrollLeft<number>();
 
     if (isScrollLeft) {
       scrollOffset += Number(getOuterWidth(this._$focusedTag, true))
@@ -659,12 +657,10 @@ class TagBox<
       return undefined;
     }
 
-    const scrollLeft = this._$tagsContainer.scrollLeft();
+    const scrollLeft = this._$tagsContainer.scrollLeft<number>();
     const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
     if (!isCommandKeyPressed(e) && allowScroll(this._$tagsContainer, delta, true)) {
-      // @ts-expect-error scrollLeft with argument not typed in renderer.d.ts
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       this._$tagsContainer.scrollLeft(scrollLeft + delta);
       return false;
     }

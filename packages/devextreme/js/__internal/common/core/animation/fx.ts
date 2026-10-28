@@ -935,14 +935,12 @@ function setupPosition($element: dxElementWrapper, config): void {
 
   // @ts-expect-error
   if (currentPosition.top > offset.top) {
-    // @ts-expect-error
-    top = win.scrollTop();
+    top = win.scrollTop<number>();
   }
 
   // @ts-expect-error
   if (currentPosition.left > offset.left) {
-    // @ts-expect-error
-    left = win.scrollLeft();
+    left = win.scrollLeft<number>();
   }
 
   extend(config, {

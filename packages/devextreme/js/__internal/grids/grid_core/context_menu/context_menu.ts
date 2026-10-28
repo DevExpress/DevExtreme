@@ -6,12 +6,13 @@ import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import type { PositioningEvent } from '@js/ui/context_menu';
 import ContextMenu from '@js/ui/context_menu';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { getData } from '@ts/core/element_data';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import { DX_CONTEXT_MENU_CLASS } from '@ts/ui/context_menu/context_menu';
 
 import modules from '../modules/modules';
 import type { InternalGridOptions } from '../types';
-import type { GridContextMenuItem, ViewRow } from '../views/types';
+import type { GridContextMenuItem } from '../views/types';
 import type { ContextMenuPreparingOptions, ContextMenuViewName } from './types';
 
 const viewName: Record<ContextMenuViewName, GridsContextMenuTarget> = {
@@ -48,7 +49,7 @@ export class ContextMenuController extends modules.ViewController {
         const $targetRowElement = $targetCellElement.parent();
         const rowIndex = view.getRowIndex($targetRowElement);
         const columnIndex: number | undefined = $targetCellElement[0]?.cellIndex;
-        const rowOptions = $targetRowElement.data<ViewRow | undefined>('options');
+        const rowOptions = getData($targetRowElement, ROW_OPTIONS_KEY);
         const options: ContextMenuPreparingOptions = {
           event: dxEvent,
           targetElement: getPublicElement($targetElement),

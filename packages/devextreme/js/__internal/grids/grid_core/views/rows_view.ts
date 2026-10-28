@@ -1,7 +1,6 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import messageLocalization from '@js/common/core/localization/message';
-import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -21,6 +20,7 @@ import type { RowPreparedEvent } from '@js/ui/data_grid';
 import type dxLoadPanel from '@js/ui/load_panel';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { ActionEvent } from '@ts/core/action';
+import { getData } from '@ts/core/element_data';
 import { compileGetter } from '@ts/core/utils/data';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
@@ -53,7 +53,7 @@ import type { EditingController } from '../editing/editing';
 import { CLASSES } from '../sticky_columns/const';
 import gridCoreUtils from '../utils';
 import { ColumnsView } from './columns_view';
-import { CLASSES as VIEW_CLASSES } from './const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from './const';
 import type {
   CellRenderOptions,
   FocusStateParams,
@@ -528,19 +528,21 @@ export class RowsView extends ColumnsView {
   private isRenderedLayoutCurrent(): boolean {
     const items = this._dataController.items();
     const rowElements = this._getRowElements().toArray() as HTMLElement[];
-    const renderedRows: (ProcessedItem & { columns: Column[] })[] = rowElements.map(
-      (rowElement) => elementData(rowElement, 'options'),
-    );
+    const renderedRows = rowElements.map((rowElement) => getData(rowElement, ROW_OPTIONS_KEY));
+    const [firstRenderedRow] = renderedRows;
 
     const isSameRows = renderedRows.length === items.length
       && renderedRows.every((renderedRow, index) => isSameItem(renderedRow, items[index], true)
         && isRowElementVisible(rowElements[index]) === (items[index].visible !== false));
 
-    if (!isSameRows || !renderedRows.length) {
+    if (!isSameRows || !firstRenderedRow) {
       return isSameRows;
     }
 
-    return isSameColumnLayout(renderedRows[0].columns, this._columnsController.getVisibleColumns());
+    return isSameColumnLayout(
+      firstRenderedRow.columns,
+      this._columnsController.getVisibleColumns(),
+    );
   }
 
   /**

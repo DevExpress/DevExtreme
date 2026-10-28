@@ -2,18 +2,24 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import domAdapter from '@js/core/dom_adapter';
 import MemorizedCallbacks from '@js/core/memorized_callbacks';
+import type { dxElementWrapper } from '@js/core/renderer';
 
-type DataKey = string;
+declare const valueType: unique symbol;
 
-type ElementData = Record<DataKey, unknown>;
+// A data key that carries the type of the stored value, so the writer and the readers share it
+export type DataKey<T> = string & { readonly [valueType]?: T };
 
-type DataArgs = [element?: Node | null, key?: DataKey, value?: unknown];
+type DataTarget = Node | dxElementWrapper | null | undefined;
+
+type ElementData = Record<string, unknown>;
+
+type DataArgs = [element?: Node | null, key?: string, value?: unknown];
 
 type CleanDataHook = (nodes: ArrayLike<Node>) => void;
 
 export interface DataStrategy {
   data: (...args: DataArgs) => unknown;
-  removeData: (element: Node, key?: DataKey) => void;
+  removeData: (element: Node, key?: string) => void;
   cleanData: (nodes: ArrayLike<Node>) => unknown;
 }
 
@@ -50,7 +56,7 @@ const defaultStrategy: DataStrategy = {
     return value;
   },
 
-  removeData: function (element: Node, key?: DataKey): void {
+  removeData: function (element: Node, key?: string): void {
     if (!element) return;
     if (key === undefined) {
       dataMap.delete(element);
@@ -105,6 +111,28 @@ export function data<TValue = unknown>(...args: DataArgs): TValue {
   return strategy.data.apply(this, args) as TValue;
 }
 
+// A wrapper goes through its own data(): a jQuery object passed without the jQuery integration
+// keeps its data apart from the element data
+export function getData<T>(target: DataTarget, key: DataKey<T>): T | undefined {
+  if (!target) {
+    return undefined;
+  }
+
+  return 'nodeType' in target ? data<T | undefined>(target, key) : target.data<T | undefined>(key);
+}
+
+export function setData<T>(target: DataTarget, key: DataKey<T>, value: NoInfer<T>): void {
+  if (!target) {
+    return;
+  }
+
+  if ('nodeType' in target) {
+    data(target, key, value);
+  } else {
+    target.data(key, value);
+  }
+}
+
 export function beforeCleanData(callback: CleanDataHook): void {
   beforeCleanDataFunc = callback;
 }
@@ -117,7 +145,7 @@ export function cleanData(nodes: ArrayLike<Node>): unknown {
   return strategy.cleanData.call(this, nodes);
 }
 
-export function removeData(element: Node, key?: DataKey): void {
+export function removeData(element: Node, key?: string): void {
   return strategy.removeData.call(this, element, key);
 }
 

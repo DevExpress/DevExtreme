@@ -8,7 +8,9 @@ import type * as dxForm from '@js/ui/form';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { computed, signal } from '@ts/core/state_manager/index';
 import { extend } from '@ts/core/utils/extend';
+import { findInstanceByElement } from '@ts/core/utils/public_component';
 import { forEachFormItems } from '@ts/grids/grid_core/editing/editing_utils';
+import Validator from '@ts/ui/validator';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../../columns_controller/columns_controller';
@@ -214,7 +216,7 @@ export class EditPopupView extends View<Props> {
       onContentReady: (e): void => {
         // TODO: refactor
         setTimeout(() => {
-          $(e.element).data('dxValidator')?.option('dataGetter', () => ({
+          findInstanceByElement($(e.element), Validator)?.option('dataGetter', () => ({
             data: this.editingController.editingCard.peek()?.data,
             column,
           }));
