@@ -32,17 +32,17 @@ const createPopup = async (options: Partial<PopupProperties>): Promise<PopupMode
 
 const vh = (count: number): number => (window.innerHeight / 100) * count;
 
+const CALC_SCENARIOS: HeightLimitScenario[] = [
+  { option: 'maxHeight', value: 'calc(100vh - 20px)' },
+  { option: 'maxHeight', value: 'calc(100% - 20px)' },
+  { option: 'minHeight', value: 'calc(10vh + 50px)' },
+];
+
 describe('Popup content height limits with auto height', () => {
   let $style: dxElementWrapper = $('<style>');
 
   beforeAll(() => {
     fx.off = true;
-  });
-
-  beforeEach(() => {
-    $style = $('<style>')
-      .text(`.dx-overlay-content { padding: ${OVERLAY_CONTENT_PADDING}px; }`)
-      .appendTo(document.head);
   });
 
   afterEach(() => {
@@ -52,22 +52,34 @@ describe('Popup content height limits with auto height', () => {
     $style.remove();
   });
 
-  it.each<HeightLimitScenario>([
-    { option: 'maxHeight', value: 'calc(100vh - 20px)' },
-    { option: 'maxHeight', value: 'calc(100% - 20px)' },
-    { option: 'minHeight', value: 'calc(10vh + 50px)' },
-  ])('keeps $option: $value in the content limit', async ({ option, value }) => {
-    const model = await createPopup({ height: 'auto', [option]: value });
+  describe('when the overlay content has vertical offsets', () => {
+    beforeEach(() => {
+      $style = $('<style>')
+        .text(`.dx-overlay-content { padding: ${OVERLAY_CONTENT_PADDING}px; }`)
+        .appendTo(document.head);
+    });
 
-    expect(model.getContent().style[option]).toBe(`calc(${value} - ${OFFSET}px)`);
+    it.each(CALC_SCENARIOS)('keeps $option: $value in the content limit', async ({ option, value }) => {
+      const model = await createPopup({ height: 'auto', [option]: value });
+
+      expect(model.getContent().style[option]).toBe(`calc(${value} - ${OFFSET}px)`);
+    });
+
+    it.each<HeightLimitScenario & { expected: number }>([
+      { option: 'maxHeight', value: '80vh', expected: vh(80) - OFFSET },
+      { option: 'minHeight', value: '20vh', expected: vh(20) - OFFSET },
+    ])('converts $option: $value to pixels in the content limit', async ({ option, value, expected }) => {
+      const model = await createPopup({ height: 'auto', [option]: value });
+
+      expect(parseFloat(model.getContent().style[option])).toBeCloseTo(expected);
+    });
   });
 
-  it.each<HeightLimitScenario & { expected: number }>([
-    { option: 'maxHeight', value: '80vh', expected: vh(80) - OFFSET },
-    { option: 'minHeight', value: '20vh', expected: vh(20) - OFFSET },
-  ])('converts $option: $value to pixels in the content limit', async ({ option, value, expected }) => {
-    const model = await createPopup({ height: 'auto', [option]: value });
+  describe('when the toolbars and offsets take no height', () => {
+    it.each(CALC_SCENARIOS)('keeps $option: $value in the content limit', async ({ option, value }) => {
+      const model = await createPopup({ height: 'auto', [option]: value });
 
-    expect(parseFloat(model.getContent().style[option])).toBeCloseTo(expected);
+      expect(model.getContent().style[option]).toBe(`calc(${value} + 0px)`);
+    });
   });
 });
