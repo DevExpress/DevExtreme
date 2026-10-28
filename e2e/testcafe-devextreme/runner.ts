@@ -13,6 +13,7 @@ import {
   loadShadowDomExtension,
 } from './helpers/testPageUtils';
 import { getCurrentTheme } from './helpers/themeUtils';
+import { PROBE_SCRIPT } from './probeScript';
 
 const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
@@ -240,6 +241,8 @@ async function main() {
         .browsers(browsers)
         .reporter(reporter)
         .src([`./tests/${componentFolder}/${file}.ts`]);
+
+      runner.clientScripts({ content: PROBE_SCRIPT });
 
       runner.compilerOptions({
         typescript: {
