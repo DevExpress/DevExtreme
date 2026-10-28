@@ -241,7 +241,7 @@ const getHeightWithOffset = function getHeightWithOffset(
 
   const operationString = offset < 0 ? ' - ' : ' ';
 
-  return `calc(${height}${operationString}${Math.abs(offset)}px)`;
+  return `calc(${value}${operationString}${Math.abs(offset)}px)`;
 };
 
 export const addOffsetToMaxHeight = function addOffsetToMaxHeight(
