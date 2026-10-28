@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
-import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { getHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 
@@ -56,13 +56,12 @@ const rowsView = (
 
   protected _renderCore(e?: DataChange): DeferredObj<unknown> {
     if (e && 'virtualColumnsScrolling' in e && e.virtualColumnsScrolling) {
-      // @ts-expect-error the view is rendered here
-      const $contentElement: dxElementWrapper = this._findContentElement();
+      const $contentElement = this._findContentElement();
       const fixedColumns = this._columnsController?.getFixedColumns();
       const useNativeScrolling = this._scrollable?.option('useNative');
       const legacyMode = this.option('columnFixing.legacyMode');
 
-      if (fixedColumns?.length) {
+      if ($contentElement && fixedColumns?.length) {
         // TODO: remove the condition when legacyMode is removed
         if (legacyMode && !useNativeScrolling) {
           $contentElement.css({ minHeight: gridCoreUtils.getContentHeightLimit(browser) });
@@ -165,7 +164,7 @@ const columns = (
     return this.option('scrolling.columnPageSize');
   }
 
-  private _fireColumnsChanged(event?: unknown): void {
+  private _fireColumnsChanged(event?: DxEvent): void {
     const date = new Date();
     this.columnsChanged.fire({
       optionNames: { all: true, length: 1 },
@@ -192,7 +191,7 @@ const columns = (
     this._setScrollPositionCore(this._position);
   }
 
-  private _setScrollPositionCore(position: number, event?: unknown): void {
+  private _setScrollPositionCore(position: number, event?: DxEvent): void {
     const needColumnsChanged = this.isNeedToRenderVirtualColumns(position);
 
     if (needColumnsChanged) {
@@ -328,7 +327,7 @@ const columns = (
     return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
   }
 
-  public setScrollPosition(position: number, event?: unknown): void {
+  public setScrollPosition(position: number, event?: DxEvent): void {
     const scrollingTimeout = this.getScrollingTimeout();
 
     if (scrollingTimeout > 0) {

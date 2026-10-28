@@ -1,4 +1,5 @@
 import type { DataRenderMode } from '@js/common/grids';
+import type { DxEvent } from '@js/events';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
 
@@ -16,7 +17,7 @@ export type ColumnInfoCallback<T extends ColumnInfoCell> = (
 
 export interface VirtualColumnsControllerExtension {
   resize: () => void;
-  setScrollPosition: (position: number, event?: unknown) => void;
+  setScrollPosition: (position: number, event?: DxEvent) => void;
 }
 
 export type VirtualColumnsController = ColumnsController & VirtualColumnsControllerExtension;
