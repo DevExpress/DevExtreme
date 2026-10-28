@@ -10,7 +10,7 @@ import type { ToolbarItem as DataGridToolbarItem } from '@js/ui/data_grid';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
-import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
+import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/header_filter';
 
 import type { Column } from '../columns_controller/types';
 import type { ResizingController } from '../grid_view/grid_view';
@@ -111,7 +111,6 @@ export class HeaderPanel extends ColumnsView {
     return Array.from(this.registeredToolbarItems.values());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   private sortToolbarItems(items: ToolbarItem[]): ToolbarItem[] {
     return [...items].sort((a, b) => (a.sortIndex ?? 0) - (b.sortIndex ?? 0));
   }
