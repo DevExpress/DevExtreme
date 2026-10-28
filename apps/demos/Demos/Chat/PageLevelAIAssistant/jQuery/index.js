@@ -154,7 +154,7 @@ $(() => {
                 text: 'Change State to Texas',
                 prompt: 'Change State to Texas',
               },
-              { text: 'Review Completed Tasks', prompt: 'Review Completed Tasks' },
+              { text: 'Filter Completed Tasks', prompt: 'Filter Completed Tasks' },
             ],
             onItemClick(e) {
               const { prompt } = e.itemData;

@@ -11,7 +11,7 @@ import type { AiAssistantProps, PushMessage } from './data.ts';
 
 const chatSuggestionItems = [
   { text: 'Change State to Texas', prompt: 'Change State to Texas' },
-  { text: 'Review Completed Tasks', prompt: 'Review Completed Tasks' },
+  { text: 'Filter Completed Tasks', prompt: 'Filter Completed Tasks' },
 ];
 const chatUser = { id: 'user' };
 const popupWrapperAttr: PopupTypes.Properties['wrapperAttr'] = { class: 'chat-popup' };

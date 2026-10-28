@@ -1,11 +1,11 @@
 This demo uses the DevExtreme [Chat](/Documentation/ApiReference/UI_Components/dxChat/) component as a page-level AI assistant. Users enter requests using natural language and the assistant updates [Form](/Documentation/ApiReference/UI_Components/dxForm/) and [DataGrid](/Documentation/ApiReference/UI_Components/dxDataGrid/) components on the page. The demo uses [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) as the AI service.
 
-Click the floating **AI Assistant** button to open the Chat. Try prompts such as "Change State to Texas", "Review completed tasks", or "Sort by due date descending".
+Click the floating **AI Assistant** button to open the Chat. Try prompts such as "Change State to Texas", "Filter completed tasks", or "Sort by due date descending".
 <!--split-->
 
 ## Chat in a Popup
 
-In this demo a [SpeedDialAction](/Documentation/ApiReference/UI_Components/dxSpeedDialAction/) button opens displays a [Popup](/Documentation/ApiReference/UI_Components/dxPopup/) that contains our Chat component. The popup is draggable and resizable, so users can keep the Form and DataGrid visible while working with the assistant. A toolbar button within the popup header allows you to clear the conversation.
+In this demo a [SpeedDialAction](/Documentation/ApiReference/UI_Components/dxSpeedDialAction/) button displays a [Popup](/Documentation/ApiReference/UI_Components/dxPopup/) that contains our Chat component. The popup is draggable and resizable, so users can keep the Form and DataGrid visible while working with the assistant. A toolbar button within the popup header allows you to clear the conversation.
 
 The Chat also leverages the following features:
 
