@@ -9,11 +9,13 @@ import { format } from '@js/core/utils/string';
 import type { SimpleItem } from '@js/ui/form';
 import { current, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
+import { setData } from '@ts/core/element_data';
 import type Editor from '@ts/ui/editor/editor';
 import type { SimpleItemLabelTemplateData } from '@ts/ui/form/components/label';
 import { renderLabel } from '@ts/ui/form/components/label';
 import {
   FIELD_ITEM_CONTENT_CLASS,
+  FIELD_ITEM_DATA_KEY,
 } from '@ts/ui/form/constants';
 import type Form from '@ts/ui/form/form';
 import type LayoutManager from '@ts/ui/form/form.layout_manager';
@@ -138,7 +140,7 @@ export function renderFieldItem({
   //
 
   const $fieldEditorContainer = $('<div>');
-  $fieldEditorContainer.data('dx-form-item', item);
+  setData($fieldEditorContainer, FIELD_ITEM_DATA_KEY, item);
   const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
   $fieldEditorContainer
     .addClass(FIELD_ITEM_CONTENT_CLASS)

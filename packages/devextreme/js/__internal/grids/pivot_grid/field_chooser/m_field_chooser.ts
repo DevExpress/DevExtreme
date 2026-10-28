@@ -10,10 +10,13 @@ import { isDefined } from '@js/core/utils/type';
 import { hasWindow as hasWindowFn } from '@js/core/utils/window';
 import ContextMenu from '@js/ui/context_menu';
 import TreeView from '@js/ui/tree_view';
+import { getData, setData } from '@ts/core/element_data';
 
 import { foreachDataLevel, getCompareFunction } from '../m_widget_utils';
 import { getFieldsHotkeysA11yLabel } from './a11y';
-import { ATTRIBUTES, CLASSES, ICONS } from './const';
+import {
+  ATTRIBUTES, CLASSES, FIELD_DATA_KEY, ICONS,
+} from './const';
 import { FieldChooserBase } from './m_field_chooser_base';
 
 const DIV = '<div>';
@@ -306,7 +309,7 @@ export class FieldChooser extends FieldChooserBase {
     let area;
 
     if (targetFieldElement.length) {
-      const fieldCopy = targetFieldElement.data<{ index: number } | undefined>('field');
+      const fieldCopy = getData(targetFieldElement, FIELD_DATA_KEY);
       if (fieldCopy) {
         field = this.getDataSource().field(fieldCopy.index) || fieldCopy;
       }
@@ -453,8 +456,8 @@ export class FieldChooser extends FieldChooserBase {
         const $item = ($('<div>') as any)
           .toggleClass(CLASSES.area.field, !itemData.items)
           .attr(ATTRIBUTES.treeViewItem, true)
-          .data('field', itemData.field)
           .appendTo(itemElement);
+        setData($item, FIELD_DATA_KEY, itemData.field);
 
         if (itemData.icon) {
           getImageContainer(itemData.icon)?.appendTo($item);

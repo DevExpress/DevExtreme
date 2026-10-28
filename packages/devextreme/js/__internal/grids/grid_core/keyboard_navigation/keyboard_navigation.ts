@@ -24,6 +24,7 @@ import {
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import * as accessibility from '@js/ui/shared/accessibility';
+import { getData } from '@ts/core/element_data';
 import { isElementInDom } from '@ts/core/utils/dom';
 import { focused } from '@ts/core/utils/selectors';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
@@ -61,10 +62,10 @@ import { COMMAND_SELECT_CLASS } from '@ts/grids/grid_core/selection/const';
 import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { Module, ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
-  CellPosition, FocusStateParams, RowPreparedOptions, RowsViewScrollEvent, ViewRowEvent,
+  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
@@ -2689,7 +2690,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   protected _fireFocusedCellChanged($cell: dxElementWrapper): void {
     const columnIndex = this._rowsView.getCellIndex($cell);
-    const rowOptions: RowPreparedOptions | undefined = $cell.parent().data('options');
+    const rowOptions = getData($cell.parent(), ROW_OPTIONS_KEY);
     const focusedRowKey = rowOptions?.key;
 
     this._memoFireFocusedCellChanged(focusedRowKey, columnIndex);

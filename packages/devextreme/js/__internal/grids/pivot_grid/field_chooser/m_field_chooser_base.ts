@@ -11,6 +11,7 @@ import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
+import { getData, setData } from '@ts/core/element_data';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
 import {
   HeaderFilterView as HeaderFilterViewBase,
@@ -25,7 +26,7 @@ import { createPath, foreachTree } from '../m_widget_utils';
 import SortableModule from '../sortable/m_sortable';
 import { getFieldItemA11yLabel } from './a11y';
 import type { SortOrderType } from './const';
-import { ATTRIBUTES, CLASSES } from './const';
+import { ATTRIBUTES, CLASSES, FIELD_DATA_KEY } from './const';
 import { dragAndDropItemRender } from './dom';
 import { reverseSortOrder, shouldCancelDragging } from './utils';
 
@@ -225,8 +226,8 @@ export class FieldChooserBase extends mixinWidget {
       .addClass(CLASSES.area.field)
       .addClass(CLASSES.area.box)
       .attr('tabIndex', 0)
-      .data('field', field)
       .append($fieldContent);
+    setData($fieldElement, FIELD_DATA_KEY, field);
 
     if (field.area !== 'data') {
       if (field.allowSorting) {
@@ -302,13 +303,13 @@ export class FieldChooserBase extends mixinWidget {
       },
       itemRender: dragAndDropItemRender,
       onDragging(e) {
-        const field = e.sourceElement.data('field');
+        const field = getData(e.sourceElement, FIELD_DATA_KEY);
         const { targetGroup } = e;
         e.cancel = shouldCancelDragging(field, targetGroup);
       },
       useIndicator: true,
       onChanged(e) {
-        const field = e.sourceElement.data('field');
+        const field = getData(e.sourceElement, FIELD_DATA_KEY);
 
         e.removeSourceElement = !!e.sourceGroup;
 
@@ -404,7 +405,7 @@ export class FieldChooserBase extends mixinWidget {
     const targetElement = element ?? this.$element();
 
     const handler = (e) => {
-      const field: any = $(e.currentTarget).data('field');
+      const field = getData($(e.currentTarget), FIELD_DATA_KEY);
 
       if (!field) {
         return;
@@ -447,7 +448,7 @@ export class FieldChooserBase extends mixinWidget {
 
     const focusInHandler = (e) => {
       const $field = $(e.currentTarget);
-      const field: any = $field.data('field');
+      const field = getData($field, FIELD_DATA_KEY);
 
       if (!field) {
         return;
@@ -527,7 +528,7 @@ export class FieldChooserBase extends mixinWidget {
   // field.index identifies the same logical field when fields are reordered,
   // added or removed, so the tab stop does not drift to another field.
   private _getFieldElementId(fieldElement: HTMLElement): string | undefined {
-    const field: any = $(fieldElement).data('field');
+    const field = getData($(fieldElement), FIELD_DATA_KEY);
 
     return isDefined(field?.index) ? String(field.index) : undefined;
   }
@@ -712,9 +713,9 @@ export class FieldChooserBase extends mixinWidget {
       .get();
 
     fieldElements?.forEach((fieldElement) => {
-      const field: any = $(fieldElement).data('field');
+      const field = getData($(fieldElement), FIELD_DATA_KEY);
 
-      if (field.index === fieldIndex) {
+      if (field?.index === fieldIndex) {
         fieldElement.focus();
       }
     });

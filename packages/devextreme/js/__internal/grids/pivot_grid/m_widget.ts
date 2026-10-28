@@ -25,6 +25,7 @@ import type { ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import { current, isGeneric } from '@js/ui/themes';
+import { getData } from '@ts/core/element_data';
 import Widget from '@ts/core/widget/widget';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 
@@ -33,6 +34,7 @@ import DataAreaImport from './data_area/m_data_area';
 import DataControllerImport from './data_controller/m_data_controller';
 import { ExportController } from './export/m_export';
 import { getFieldsHotkeysA11yLabel } from './field_chooser/a11y';
+import { FIELD_DATA_KEY } from './field_chooser/const';
 import { FieldChooser } from './field_chooser/m_field_chooser';
 import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
 import { FieldsArea } from './fields_area/m_fields_area';
@@ -873,7 +875,7 @@ class PivotGrid extends Widget {
   }
 
   _createFieldArgs(targetElement) {
-    const field = $(targetElement).children().data('field');
+    const field = getData($(targetElement).children(), FIELD_DATA_KEY);
     const args = {
       field,
     };
