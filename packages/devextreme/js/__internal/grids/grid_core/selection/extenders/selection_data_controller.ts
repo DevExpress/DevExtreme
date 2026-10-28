@@ -1,7 +1,6 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isObject } from '@js/core/utils/type';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type {
   DataChange, GeneratedItem, ItemProcessingOptions, ProcessedItem, RefreshOptions,
@@ -9,10 +8,8 @@ import type {
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import { getSelectColumnIndex, updateSelectCellValue } from '@ts/grids/grid_core/selection/utils';
 import type { SelectionFilter } from '@ts/ui/selection/types';
-
-const getSelectColumnIndex = (columns: Column[]): number => columns
-  .findIndex((column) => column.command === 'select');
 
 export const selectionDataControllerExtender = (
   Base: ModuleType<DataController>,
@@ -96,32 +93,13 @@ export const selectionDataControllerExtender = (
         const currentItem = this._items[index];
         if (currentItem) {
           currentItem.isSelected = newItem.isSelected;
-          this.updateSelectCellValue(currentItem, newItem, selectColumnIndex);
+          updateSelectCellValue(currentItem, newItem, selectColumnIndex);
         }
       });
       return;
     }
 
     super._applyChange(change);
-  }
-
-  private updateSelectCellValue(
-    currentItem: ProcessedItem,
-    newItem: ProcessedItem,
-    selectColumnIndex: number,
-  ): void {
-    if (selectColumnIndex < 0) {
-      return;
-    }
-
-    const selectCellValue = newItem.values[selectColumnIndex];
-
-    if (currentItem.values[selectColumnIndex] === selectCellValue) {
-      return;
-    }
-
-    currentItem.values = currentItem.values.slice();
-    currentItem.values[selectColumnIndex] = selectCellValue;
   }
 
   protected _endUpdateCore(): void {
