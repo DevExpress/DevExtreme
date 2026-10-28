@@ -1097,6 +1097,9 @@ importers:
 
   e2e/devextreme-bundler:
     dependencies:
+      devextreme:
+        specifier: workspace:*
+        version: link:../../packages/devextreme/artifacts/npm/devextreme
       terser-webpack-plugin:
         specifier: 5.3.9
         version: 5.3.9(@swc/core@1.15.46(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.46(@swc/helpers@0.5.23)))
