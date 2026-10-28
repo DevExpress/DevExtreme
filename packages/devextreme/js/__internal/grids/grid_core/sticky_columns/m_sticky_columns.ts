@@ -10,7 +10,7 @@ import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { Column } from '../columns_controller/types';
 import type {
   ColumnsResizerViewController,

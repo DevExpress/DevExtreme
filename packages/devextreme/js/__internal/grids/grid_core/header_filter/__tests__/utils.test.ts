@@ -7,7 +7,7 @@ import {
 import filterUtils from '@js/ui/shared/filtering';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import { getFormatOptions } from '../m_header_filter';
+import { getFormatOptions } from '../header_filter';
 import type { DateIntervalFormat, HeaderFilterGroupSelector } from '../types';
 import { getHeaderFilterGroupParameters } from '../utils';
 
