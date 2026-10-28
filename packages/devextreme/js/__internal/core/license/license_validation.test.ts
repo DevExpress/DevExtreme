@@ -764,6 +764,15 @@ describe('trial expired', () => {
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('shows the texts of DX1000 and DX1001 for a missing key', () => {
+    validateLicense('', '26.2.0');
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
+    expect(consoleWarnSpy.mock.calls[0][0]).toMatch(/^W0019 - For evaluation purposes only \(v26\.2\.0\)\. Redistribution prohibited\. Please register a valid license \(https:\/\/devexpress\.com\/DX1000\) or purchase a new license \(https:\/\/devexpress\.com\/BUY\) to continue use of the following DevExpress product libraries: DevExtreme - Included in Subscriptions: /);
+    expect(consoleWarnSpy.mock.calls[0][0]).not.toContain('License ID');
+    expect(consoleWarnSpy.mock.calls[1][0]).toMatch(/^W0021 - License key is missing or uses invalid format \(v26\.2\.0\)\. Use and Redistribution prohibited\. .*\(https:\/\/devexpress\.com\/DX1001\)/);
+  });
+
   describe('license id', () => {
     it('passes the license id to the overlay and adds the license id and the key to the error', () => {
       jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
@@ -827,15 +836,6 @@ describe('trial expired', () => {
       expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
       expect(consoleWarnSpy.mock.calls[0][0]).not.toContain('License ID');
       expect(consoleWarnSpy.mock.calls[1][0]).toBe(`W0020 - Incompatible DevExpress license key version (v25.1). Use and Redistribution prohibited. Download and register an updated DevExpress license key (v26.2+). Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002). License ID: ${LICENSE_ID}. License Source: Public Key (${LCP_LICENSE}).`);
-    });
-
-    it('shows the texts of DX1000 and DX1001 for a missing key', () => {
-      validateLicense('', '26.2.0');
-
-      expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
-      expect(consoleWarnSpy.mock.calls[0][0]).toMatch(/^W0019 - For evaluation purposes only \(v26\.2\.0\)\. Redistribution prohibited\. Please register a valid license \(https:\/\/devexpress\.com\/DX1000\) or purchase a new license \(https:\/\/devexpress\.com\/BUY\) to continue use of the following DevExpress product libraries: DevExtreme - Included in Subscriptions: /);
-      expect(consoleWarnSpy.mock.calls[0][0]).not.toContain('License ID');
-      expect(consoleWarnSpy.mock.calls[1][0]).toMatch(/^W0021 - License key is missing or uses invalid format \(v26\.2\.0\)\. Use and Redistribution prohibited\. .*\(https:\/\/devexpress\.com\/DX1001\)/);
     });
 
     it.each(['', 'str@nge in.put'])('does not add a license id without a license (%j)', (key) => {
