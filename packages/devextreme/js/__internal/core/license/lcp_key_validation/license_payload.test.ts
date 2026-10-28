@@ -11,8 +11,8 @@ import { describe, expect, it } from '@jest/globals';
 import { version as currentVersion } from '@js/core/version';
 
 import { parseVersion } from '../../../utils/version';
-import { findLatestDevExtremeVersion, isLicenseValid } from './license_info';
-import { createProductInfo, isProduct } from './product_info';
+import { findLatestDevExtremeVersion, isLicenseValid, isTrialExpired } from './license_info';
+import { createProductInfo, isProduct, type ProductInfo } from './product_info';
 import { ProductKind } from './types';
 
 // ---------------------------------------------------------------------------
@@ -306,5 +306,80 @@ describe('Multi-version license scenarios', () => {
       ],
     };
     expect(findLatestDevExtremeVersion(lic)).toBeUndefined();
+  });
+});
+
+describe('isTrialExpired', () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const now = Date.UTC(2026, 10, 15);
+  const kinds = [ProductKind.DevExtremeHtmlJs];
+  const entry = (
+    version: number,
+    products: bigint,
+    expiration = Infinity,
+  ): ProductInfo => createProductInfo(
+    version,
+    products,
+    expiration,
+  );
+
+  it.each([
+    { name: 'trial ended 4 days ago', products: [entry(262, 0n, now - 4 * DAY)], expected: true },
+    { name: 'trial ended 2 days ago (tolerance)', products: [entry(262, 0n, now - 2 * DAY)], expected: false },
+    { name: 'trial ends in the future', products: [entry(262, 0n, now + DAY)], expected: false },
+    { name: 'no Expiration in the key', products: [entry(262, 0n)], expected: false },
+    {
+      name: 'licensed DevExtreme with an old trial date',
+      products: [entry(262, ProductKind.DevExtremeHtmlJs, now - 100 * DAY)],
+      expected: false,
+    },
+    {
+      name: 'another product licensed, expired trial for DevExtreme',
+      products: [entry(262, ProductKind.DXperienceWin, now - 100 * DAY)],
+      expected: true,
+    },
+    {
+      name: 'DevExtreme licensed for an older version only, expired trial entry for 262',
+      products: [entry(252, ProductKind.DevExtremeHtmlJs), entry(262, 0n, now - 100 * DAY)],
+      expected: true,
+    },
+    {
+      name: 'a later entry covers the build (applicable entries have version >= build)',
+      products: [entry(262, 0n, now - 100 * DAY), entry(271, ProductKind.DevExtremeHtmlJs)],
+      expected: false,
+    },
+    {
+      name: 'the key has no entry for the build version',
+      products: [entry(261, 0n, now - 100 * DAY)],
+      expected: false,
+    },
+    {
+      name: 'the maximum Expiration wins',
+      products: [entry(262, 0n, now - 100 * DAY), entry(262, ProductKind.DXperienceWin, now + DAY)],
+      expected: false,
+    },
+    {
+      name: 'Infinity Expiration in one entry never expires',
+      products: [entry(262, 0n, now - 100 * DAY), entry(262, ProductKind.DXperienceWin, Infinity)],
+      expected: false,
+    },
+  ])('$name -> $expected', ({ products, expected }) => {
+    expect(isTrialExpired({ products }, 262, kinds, now)).toBe(expected);
+  });
+
+  it('an AspNet-only license counts as licensed only with the AspNet entitlement', () => {
+    const products = [entry(262, ProductKind.DevExtremeAspNet, now - 100 * DAY)];
+
+    expect(isTrialExpired({ products }, 262, [ProductKind.DevExtremeHtmlJs], now)).toBe(true);
+    expect(isTrialExpired(
+      { products },
+      262,
+      [ProductKind.DevExtremeHtmlJs, ProductKind.DevExtremeAspNet],
+      now,
+    )).toBe(false);
+  });
+
+  it('an empty license is not an expired trial', () => {
+    expect(isTrialExpired({ products: [] }, 262, kinds, now)).toBe(false);
   });
 });
