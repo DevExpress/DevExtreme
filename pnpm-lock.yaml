@@ -25,6 +25,8 @@ overrides:
   ip-address@<10.7.4: ^10.7.4
   socks@<2.8.7: ^2.8.10
 
+packageExtensionsChecksum: 0bb3c2bcee286a06934494d6d7551ef3
+
 importers:
 
   .:
@@ -22169,6 +22171,7 @@ snapshots:
 
   '@devextreme-generator/declarations@3.0.12':
     dependencies:
+      '@types/react': 17.0.2
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
 
