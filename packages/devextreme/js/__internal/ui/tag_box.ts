@@ -897,7 +897,6 @@ class TagBox<
   }
 
   _getFilter(creator: FilterCreator): unknown[] | undefined {
-    // @ts-expect-error fix argument type in m_data_controller.ts
     const dataSourceFilter: unknown[] | null = this._dataController.filter();
     const { valueExpr, maxFilterQueryLength } = this.option();
     const filterExpr = creator.getCombinedFilter(valueExpr, dataSourceFilter);
@@ -955,6 +954,7 @@ class TagBox<
         const mappedItems = dataController.applyMapFunction(items);
         d.resolve(mappedItems.filter(clientFilterFunction as (item: unknown) => boolean));
       })
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       .fail(d.reject);
 
     this._loadFilteredItemsPromise = d;

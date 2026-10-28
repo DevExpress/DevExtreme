@@ -11,7 +11,7 @@ import { changeCallback, originalViewPort, value as viewPortValue } from '@js/co
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
 import { uiLayerInitialized } from '@ts/core/utils/common';
-import { themeReadyCallback } from '@ts/ui/m_themes_callback';
+import { themeReadyCallback } from '@ts/ui/themes_callback';
 
 const window = getWindow();
 const ready = readyCallbacks.add;

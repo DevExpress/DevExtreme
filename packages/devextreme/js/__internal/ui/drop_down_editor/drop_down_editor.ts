@@ -1001,12 +1001,15 @@ class DropDownEditor<
     let positionSide = 'bottom';
 
     if (this._popup?.option('visible')) {
-      const { top: myTop } = animationPosition.setup(this.$element());
+      const myOffset = animationPosition.setup(this.$element());
 
-      const { top: popupTop } = animationPosition.setup(this._popup.$content());
-      const { popupPosition } = this.option();
-      // @ts-expect-error Should be updated on PositionConfig level
-      positionSide = (myTop + popupPosition.offset.v) > popupTop ? 'bottom' : 'top';
+      const popupOffset = animationPosition.setup(this._popup.$content());
+
+      if (myOffset && popupOffset) {
+        const { popupPosition } = this.option();
+        // @ts-expect-error Should be updated on PositionConfig level
+        positionSide = (myOffset.top + popupPosition.offset.v) > popupOffset.top ? 'bottom' : 'top';
+      }
     }
 
     return positionSide;
