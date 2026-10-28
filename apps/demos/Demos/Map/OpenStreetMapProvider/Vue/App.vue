@@ -55,7 +55,6 @@ async function calculateRoute(
   { locations, mode }: DxMapTypes.CalculateOsmRouteInfo,
 ): Promise<DxMapTypes.OsmGeoJsonLineString> {
   const body = JSON.stringify({
-    // eslint-disable-next-line spellcheck/spell-checker
     locations: locations.map(({ lat, lng }) => ({ lat, lon: lng })),
     costing: mode === 'walking' ? 'pedestrian' : 'auto',
     directions_type: 'none',

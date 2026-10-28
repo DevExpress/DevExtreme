@@ -12,7 +12,7 @@ const routeCache = new Map<string, MapTypes.OsmGeoJsonLineString>();
 
 async function calculateRoute({ locations, mode }: MapTypes.CalculateOsmRouteInfo): Promise<MapTypes.OsmGeoJsonLineString> {
   const body = JSON.stringify({
-    locations: locations.map(({ lat, lng }) => ({ lat, lon: lng })), // eslint-disable-line spellcheck/spell-checker
+    locations: locations.map(({ lat, lng }) => ({ lat, lon: lng })),
     costing: mode === 'walking' ? 'pedestrian' : 'auto',
     directions_type: 'none',
   });

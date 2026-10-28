@@ -9,7 +9,7 @@ import { markersData, routesData } from './data.js';
 const routeCache = new Map();
 async function calculateRoute({ locations, mode }) {
   const body = JSON.stringify({
-    locations: locations.map(({ lat, lng }) => ({ lat, lon: lng })), // eslint-disable-line spellcheck/spell-checker
+    locations: locations.map(({ lat, lng }) => ({ lat, lon: lng })),
     costing: mode === 'walking' ? 'pedestrian' : 'auto',
     directions_type: 'none',
   });
