@@ -3,7 +3,7 @@ import { extend } from '@js/core/utils/extend';
 import type { ColumnInfoCallback, ColumnInfoCell } from './types';
 
 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
-const getSpan = (span?: number): number => span || 1;
+const normalizeSpan = (span?: number): number => span || 1;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- PivotGrid passes untyped cells
 export function foreachColumnInfo<T extends ColumnInfoCell = any>(
@@ -28,12 +28,12 @@ export function foreachColumnInfo<T extends ColumnInfoCell = any>(
   for (; colIndex < row.length; colIndex += 1) {
     const cell = row[colIndex];
     const visibleIndex = colIndex + offsets[rowIndex];
-    const colspan = getSpan(cell.colspan);
+    const colspan = normalizeSpan(cell.colspan);
 
     foreachColumnInfo(
       info,
       callback,
-      rowIndex + getSpan(cell.rowspan),
+      rowIndex + normalizeSpan(cell.rowspan),
       offsets,
       colspan,
       lastProcessedIndexes,
@@ -46,7 +46,7 @@ export function foreachColumnInfo<T extends ColumnInfoCell = any>(
     if (cell.rowspan) {
       for (let i = rowIndex + 1; i < rowIndex + cell.rowspan; i += 1) {
         offsets[i] = offsets[i] || 0;
-        offsets[i] += getSpan(cell.colspan);
+        offsets[i] += normalizeSpan(cell.colspan);
       }
     }
 
@@ -70,7 +70,7 @@ export function createColumnsInfo<T extends ColumnInfoCell>(
 
   foreachColumnInfo(info, (columnInfo, visibleIndex, rowIndex) => {
     let cell = columnInfo;
-    const cellColspan = getSpan(cell.colspan);
+    const cellColspan = normalizeSpan(cell.colspan);
     const isVisible = visibleIndex + cellColspan - 1 >= startIndex && visibleIndex < endIndex;
 
     newInfo[rowIndex] = newInfo[rowIndex] || [];
