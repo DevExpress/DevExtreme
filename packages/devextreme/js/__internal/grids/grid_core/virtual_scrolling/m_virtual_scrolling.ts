@@ -3,7 +3,6 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
-import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
@@ -513,8 +512,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
   private _windowScroll: any;
 
-  private readonly _scrollTimeoutID: any;
-
   public init(): void {
     super.init();
 
@@ -542,11 +539,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     });
 
     this._scrollToCurrentPageOnResize();
-  }
-
-  public dispose() {
-    clearTimeout(this._scrollTimeoutID);
-    super.dispose();
   }
 
   private _scrollToCurrentPageOnResize() {
@@ -800,39 +792,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
         this._isFixedTableRendering = prevFixed;
       });
     }
-  }
-
-  private _isTableLinesDisplaysCorrect(table) {
-    const hasColumnLines = table.find(`.${VIEW_CLASSES.columnLines}`).length > 0;
-    return hasColumnLines === this.option('showColumnLines');
-  }
-
-  private _isColumnElementsEqual($columns, $virtualColumns) {
-    let result = $columns.length === $virtualColumns.length;
-
-    if (result) {
-      each($columns, (index, element) => {
-        if (element.style.width !== $virtualColumns[index].style.width) {
-          result = false;
-          return result;
-        }
-
-        return undefined;
-      });
-    }
-
-    return result;
-  }
-
-  private _getCellClasses(column) {
-    const classes: any = [];
-    const { cssClass } = column;
-    const isExpandColumn = column.command === 'expand';
-
-    cssClass && classes.push(cssClass);
-    isExpandColumn && classes.push(this.addWidgetPrefix(VIEW_CLASSES.groupSpace));
-
-    return classes;
   }
 
   private _findBottomLoadPanel($contentElement?) {
