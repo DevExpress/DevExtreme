@@ -1,5 +1,3 @@
-@import url('../../../../node_modules/ol/ol.css');
-
 .options {
   padding: 20px;
   background-color: var(--dx-color-options-panel-bg);
