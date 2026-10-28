@@ -14,7 +14,7 @@ index 9b9f577..591cb7c 100644
      isNativeAutomation ? ['--disable-popup-blocking'] : [], platformArgs ? [platformArgs] : [], defaultArgs)
          .join(' ');
 diff --git a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js
-index a20320b..c3c8794 100644
+index a20320b..51d30ed 100644
 --- a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js
 +++ b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/index.js
 @@ -14,6 +14,7 @@ const pretty_hrtime_1 = __importDefault(require("pretty-hrtime"));
@@ -33,7 +33,7 @@ index a20320b..c3c8794 100644
  const SCREENCAST_OPTIONS = {
      format: 'jpeg',
      everyNthFrame: 1,
-@@ -56,13 +58,59 @@ class BrowserClient {
+@@ -56,13 +58,60 @@ class BrowserClient {
              this._runtimeInfo.providerMethods.reportWarning(warning_message_1.default.browserProviderDropOfPerformance, this._runtimeInfo.browserName);
          }
      }
@@ -55,7 +55,8 @@ index a20320b..c3c8794 100644
 +    async _describePageState() {
 +        try {
 +            const target = await (0, utils_1.getActiveTab)(this._port, this._runtimeInfo.activeWindowId);
-+            const probe = await (0, chrome_remote_interface_1.default)({ target, port: this._port });
++            const limited0 = (promise, what) => (0, time_limit_promise_1.default)(promise, 5000, { rejectWith: new Error(`${what} timed out`) });
++            const probe = await limited0((0, chrome_remote_interface_1.default)({ target, port: this._port }), 'probe connection');
 +            const limited = (promise, what) => (0, time_limit_promise_1.default)(promise, 5000, { rejectWith: new Error(`${what} timed out`) });
 +            const expression = '[document.visibilityState, document.hidden, document.hasFocus(), innerWidth + "x" + innerHeight, document.readyState, location.href.slice(0, 120)].join(" ")';
 +            const state = await limited(probe.Runtime.evaluate({ expression, returnByValue: true }), 'state probe');
@@ -81,7 +82,8 @@ index a20320b..c3c8794 100644
 +            closing.catch(() => { });
 +    }
      async _createClient(target, cacheKey = this._clientKey) {
-         const client = await (0, chrome_remote_interface_1.default)({ target, port: this._port });
+-        const client = await (0, chrome_remote_interface_1.default)({ target, port: this._port });
++        const client = await (0, time_limit_promise_1.default)((0, chrome_remote_interface_1.default)({ target, port: this._port }), CDP_COMMAND_TIMEOUT, { rejectWith: new Error(`CDP connection to the page did not open within ${CDP_COMMAND_TIMEOUT} ms (browser ${this._runtimeInfo.browserId})`) });
 +        this._limitCommandTime(client, cacheKey);
          const { Page, Network, Runtime } = client;
          this._clients[cacheKey] = new ProtocolApiInfo(client);
@@ -93,6 +95,28 @@ index a20320b..c3c8794 100644
          return client;
      }
      async _setupClient(client) {
+diff --git a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/utils.js b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/utils.js
+index 31266d6..f9b1059 100644
+--- a/lib/browser/provider/built-in/dedicated/chrome/cdp-client/utils.js
++++ b/lib/browser/provider/built-in/dedicated/chrome/cdp-client/utils.js
+@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.getActiveTab = exports.getFirstTab = exports.getTabById = exports.getTabs = void 0;
+ const chrome_remote_interface_1 = __importDefault(require("chrome-remote-interface"));
++const time_limit_promise_1 = __importDefault(require("time-limit-promise"));
++const LIST_TABS_TIMEOUT = 10000;
+ const DEVTOOLS_TAB_URL_REGEX = /^devtools:\/\/devtools/;
+ // NOTE: Github issue: https://github.com/DevExpress/testcafe/issues/8286
+ const CHROME_EXTENSION_TAB_URL_REGEX = /^chrome-extension:\/\//;
+@@ -12,7 +14,7 @@ function isInternalUrl(url) {
+     return DEVTOOLS_TAB_URL_REGEX.test(url) || CHROME_EXTENSION_TAB_URL_REGEX.test(url);
+ }
+ async function getTabs(port) {
+-    const tabs = await chrome_remote_interface_1.default.List({ port });
++    const tabs = await (0, time_limit_promise_1.default)(chrome_remote_interface_1.default.List({ port }), LIST_TABS_TIMEOUT, { rejectWith: new Error(`Chrome did not list its tabs within ${LIST_TABS_TIMEOUT} ms`) });
+     return tabs.filter(t => t.type === 'page' && !isInternalUrl(t.url));
+ }
+ exports.getTabs = getTabs;
 diff --git a/lib/browser/provider/built-in/dedicated/chrome/index.js b/lib/browser/provider/built-in/dedicated/chrome/index.js
 index b12bb9e..fc4e63a 100644
 --- a/lib/browser/provider/built-in/dedicated/chrome/index.js
@@ -119,7 +143,7 @@ index b12bb9e..fc4e63a 100644
          runtimeInfo.viewportSize = await this.runInitScript(browserId, client_functions_1.GET_WINDOW_DIMENSIONS_INFO_SCRIPT);
          runtimeInfo.activeWindowId = null;
 diff --git a/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js b/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js
-index 4f22b00..16c6f3b 100644
+index 4f22b00..a6e1480 100644
 --- a/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js
 +++ b/lib/browser/provider/built-in/dedicated/chrome/local-chrome.js
 @@ -4,6 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -198,7 +222,7 @@ index 4f22b00..16c6f3b 100644
 +    const timer = new timer_1.default(LIST_TABS_TIMEOUT);
 +    for (;;) {
 +        try {
-+            return await (0, chrome_remote_interface_1.default)({ target: targetId, port: cdpPort });
++            return await (0, time_limit_promise_1.default)((0, chrome_remote_interface_1.default)({ target: targetId, port: cdpPort }), LIST_TABS_TIMEOUT, { rejectWith: new Error(`CDP connection to the new tab did not open within ${LIST_TABS_TIMEOUT} ms`) });
 +        }
 +        catch (error) {
 +            if (timer.expired)
