@@ -25,6 +25,8 @@ overrides:
   ip-address@<10.7.4: ^10.7.4
   socks@<2.8.7: ^2.8.10
 
+packageExtensionsChecksum: 0bb3c2bcee286a06934494d6d7551ef3
+
 importers:
 
   .:
@@ -802,6 +804,9 @@ importers:
 
   e2e/devextreme-bundler:
     dependencies:
+      devextreme:
+        specifier: workspace:*
+        version: link:../../packages/devextreme/artifacts/npm/devextreme
       terser-webpack-plugin:
         specifier: 5.3.10
         version: 5.3.10(@swc/core@1.9.2(@swc/helpers@0.5.15))(webpack@5.104.1(@swc/core@1.9.2(@swc/helpers@0.5.15)))
@@ -22166,6 +22171,7 @@ snapshots:
 
   '@devextreme-generator/declarations@3.0.12':
     dependencies:
+      '@types/react': 17.0.2
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
 

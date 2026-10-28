@@ -112,6 +112,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - uses: pnpm/action-setup@v3
       with:
         version: 9
@@ -134,10 +137,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
     - name: Prepare bundles
       working-directory: apps/demos
@@ -197,6 +196,9 @@ jobs:
         with:
           name: devextreme-sources
 
+      - name: Unpack npm packages
+        uses: ./.github/actions/unpack-npm-packages
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -224,9 +226,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Install tgz
-        run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
       - name: Run check TS for Vue
         working-directory: apps/demos
@@ -280,6 +279,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
@@ -307,9 +309,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -384,12 +383,11 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -402,7 +400,7 @@ jobs:
 
         git add ./Demos -N
 
-        if git diff --exit-code . ':!package.json' ; then
+        if git diff --exit-code . ; then
           echo "Generated JS demos are up-to-date"
         else
             echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
@@ -442,6 +440,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Download artifacts
       if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
       uses: actions/download-artifact@v4
@@ -471,10 +472,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
 #    - name: Build wrappers
 #      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
