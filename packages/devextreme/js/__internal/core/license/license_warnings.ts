@@ -24,19 +24,6 @@ export const TEMPLATES = Object.freeze({
 
   keyNotFound: 'A devextreme-license generated key has not been specified in the GlobalConfig.',
 
-  keyWasFound: (type: string, path?: string): string => {
-    switch (type) {
-      case 'envVariable':
-        return 'The DevExpress license key was retrieved from the \'DevExpress_License\' environment variable.';
-      case 'envPath':
-        return 'The DevExpress license key was retrieved from the \'DevExpress_LicensePath\' environment variable.';
-      case 'file':
-        return `The DevExpress license key was retrieved from file: "${path}".`;
-      default:
-        return 'The DevExpress license key was retrieved.';
-    }
-  },
-
   keyVerificationFailed: (type?: string, keyVersion?: string, requiredVersion?: string): string => {
     switch (type) {
       case 'incompatibleVersion':
@@ -52,8 +39,6 @@ export const TEMPLATES = Object.freeze({
   lcxUsedInsteadOfLcp: 'A DevExpress license key has been specified instead of a key generated using devextreme-license.',
 
   oldDevExtremeKey: 'A DevExtreme key (v25.2 or earlier) has been detected in the GlobalConfig. Generate a key with devextreme-license instead.',
-
-  licenseId: (id: string): string => `License ID: ${id}`,
 });
 
 export function logLicenseWarning(

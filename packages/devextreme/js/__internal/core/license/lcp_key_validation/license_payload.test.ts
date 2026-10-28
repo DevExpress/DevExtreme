@@ -363,6 +363,36 @@ describe('isTrialExpired', () => {
       products: [entry(262, 0n, now - 100 * DAY), entry(262, ProductKind.DXperienceWin, Infinity)],
       expected: false,
     },
+    {
+      name: 'exactly 3 days ago (the boundary is not expired)',
+      products: [entry(262, 0n, now - 3 * DAY)],
+      expected: false,
+    },
+    { name: '3 days and 1 ms ago', products: [entry(262, 0n, now - 3 * DAY - 1)], expected: true },
+    { name: '3 days minus 1 ms ago', products: [entry(262, 0n, now - 3 * DAY + 1)], expected: false },
+    {
+      name: 'an expired entry and a later entry with an active trial',
+      products: [entry(262, 0n, now - 100 * DAY), entry(271, 0n, now + DAY)],
+      expected: false,
+    },
+    {
+      name: 'an old DevExtreme license and a newer entry of another product with an ended trial',
+      products: [
+        entry(252, ProductKind.DevExtremeHtmlJs),
+        entry(271, ProductKind.DXperienceWin, now - 100 * DAY),
+      ],
+      expected: true,
+    },
+    {
+      name: 'a zero Expiration (no trial information) is ignored, the other entry decides',
+      products: [entry(262, 0n, 0), entry(262, 0n, now - 100 * DAY)],
+      expected: true,
+    },
+    {
+      name: 'only a zero Expiration: there is no trial to expire',
+      products: [entry(262, 0n, 0)],
+      expected: false,
+    },
   ])('$name -> $expected', ({ products, expected }) => {
     expect(isTrialExpired({ products }, 262, kinds, now)).toBe(expected);
   });
