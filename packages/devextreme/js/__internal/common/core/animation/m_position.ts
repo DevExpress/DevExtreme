@@ -305,8 +305,8 @@ const calculatePosition = function (what, options) {
     const win = $(window);
     const windowWidth = getWidth(win.get(0));
     const windowHeight = getHeight(win.get(0));
-    let left = win.scrollLeft();
-    let top = win.scrollTop();
+    let left = win.scrollLeft<number>();
+    let top = win.scrollTop<number>();
     const documentElement = domAdapter.getDocumentElement();
     const hZoomLevel = touch ? documentElement.clientWidth / windowWidth : 1;
     const vZoomLevel = touch ? documentElement.clientHeight / windowHeight : 1;
@@ -333,12 +333,10 @@ const calculatePosition = function (what, options) {
     return {
       h: {
         min: left + h.boundaryOffset,
-        // @ts-expect-error
         max: left + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset,
       },
       v: {
         min: top + v.boundaryOffset,
-        // @ts-expect-error
         max: top + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset,
       },
     };

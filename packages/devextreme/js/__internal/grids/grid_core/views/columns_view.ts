@@ -1216,7 +1216,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if (isDefined(pos) && isDefined(pos.left) && this._scrollLeft !== pos.left) {
       this._scrollLeft = pos.left;
-      // @ts-expect-error scrollLeft() is typed for string values
       $scrollContainer?.scrollLeft(pos.left);
     }
   }
@@ -1238,8 +1237,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected handleScroll(e: DxEvent): void {
-    // @ts-expect-error scrollLeft() is typed as a setter only
-    const scrollLeft: number = $(e.target).scrollLeft();
+    const scrollLeft = $(e.target).scrollLeft<number>();
 
     if (scrollLeft !== this._scrollLeft) {
       this.scrollChanged.fire({ left: scrollLeft }, this.name);

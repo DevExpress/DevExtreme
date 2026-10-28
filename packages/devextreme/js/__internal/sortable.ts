@@ -176,10 +176,8 @@ class Sortable extends Draggable<SortableProperties> {
     if ($scrollable) {
       this._sourceScrollableInfo = {
         element: $scrollable,
-        // @ts-expect-error scrollLeft is declared to return the wrapper
-        scrollLeft: $scrollable.scrollLeft(),
-        // @ts-expect-error scrollTop is declared to return the wrapper
-        scrollTop: $scrollable.scrollTop(),
+        scrollLeft: $scrollable.scrollLeft<number>(),
+        scrollTop: $scrollable.scrollTop<number>(),
       };
 
       eventsEngine.off($scrollable, 'scroll', this._sourceScrollHandler);
