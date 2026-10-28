@@ -13,9 +13,9 @@ import type { ItemClickEvent } from '@js/ui/context_menu';
 import type {
   Column, ColumnsChanges, ColumnTemplateSource, TemplateModel,
 } from '@ts/grids/grid_core/columns_controller/types';
-import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
+import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/column_context_menu_mixin';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
-import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
+import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/header_filter';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type { InternalGridOptions, OptionChanged } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
@@ -176,7 +176,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   }
 
   private _getEmptyHeaderText(): string {
-    const hasHiddenColumns = Boolean(this._columnChooserView.hasHiddenColumns());
+    const hasHiddenColumns = this._columnChooserView.hasHiddenColumns();
     const hasGroupedColumns = Boolean(this._headerPanelView.hasGroupedColumns());
 
     switch (true) {

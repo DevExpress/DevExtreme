@@ -10,8 +10,8 @@ import { emptyViewMessage } from './data.ts';
 import type { AiAssistantProps, PushMessage } from './data.ts';
 
 const chatSuggestionItems = [
-  { text: 'Show Completed Tasks', prompt: 'Show Completed Tasks' },
   { text: 'Change State to Texas', prompt: 'Change State to Texas' },
+  { text: 'Filter Completed Tasks', prompt: 'Filter Completed Tasks' },
 ];
 const chatUser = { id: 'user' };
 const popupWrapperAttr: PopupTypes.Properties['wrapperAttr'] = { class: 'chat-popup' };
@@ -22,8 +22,8 @@ function EmptyView(): React.JSX.Element {
       <div className="dx-chat-messagelist-empty-image dx-ai-chat__empty-image" />
       <div className="ai-chat-empty-message">{emptyViewMessage}</div>
       <div className="ai-chat-empty-prompt">
-        <div>Update employee <b>Form</b> fields.</div>
-        <div>Filter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.</div>
+        <div>Update employee information in the <b>Form</b>.</div>
+        <div>Change task presentation in the <b>DataGrid</b>: filter and sort data, change column visibility.</div>
       </div>
     </>
   );

@@ -28,7 +28,7 @@ import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_he
 import { getDraggingPanelBoundingRects } from '@ts/grids/grid_core/columns_resizing_reordering/utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type {
-  ColumnPoint, InternalGrid, ModuleType, OptionChanged,
+  ColumnPoint, ColumnPointProps, InternalGrid, ModuleType, OptionChanged,
 } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ScrollPosition } from '@ts/grids/grid_core/views/types';
@@ -36,7 +36,7 @@ import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { Column, ColumnIndex, DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/header_panel';
@@ -799,7 +799,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
   }
 
   protected _correctColumnIndexForPoint(
-    point: ColumnPoint,
+    point: ColumnPointProps,
     correctionValue: number,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overrides use the param
     columns: Column[],
@@ -811,7 +811,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
    * @extended: adaptivity
    */
   protected _pointCreated(
-    point: ColumnPoint,
+    point: ColumnPointProps,
     columns: Column[],
     cells?: dxElementWrapper,
   ): boolean {
@@ -1082,7 +1082,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     const topYMap = this._generateColumnsTopYIndex(needToCheckPrevPoint);
     const columns = this._columnsController ? this._columnsController.getVisibleColumns() : [];
     const cells = this._columnHeadersView.getColumnElements();
-    const correctColumnY = (point: ColumnPoint): ColumnPoint => {
+    const correctColumnY = (point: ColumnPointProps): ColumnPointProps => {
       const x = Math.ceil(point.x);
 
       if (topYMap[x]) {

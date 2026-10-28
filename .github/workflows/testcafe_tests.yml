@@ -46,7 +46,7 @@ jobs:
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
 
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 15
 
     steps:
@@ -109,9 +109,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Setup nx cache
-      id: setup-nx-cache
-      uses: actions/cache@v5
+    - name: Restore nx cache
+      id: restore-nx-cache
+      uses: actions/cache/restore@v5
       with:
         path: |
           .nx/cache
@@ -199,6 +199,17 @@ jobs:
         path: ./packages/devextreme/artifacts.zip
         retention-days: 1
 
+    - name: Save nx cache
+      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      uses: actions/cache/save@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
+
   determine-testcafe-matrix:
     runs-on: ubuntu-latest
     timeout-minutes: 6
@@ -284,7 +295,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-testcafe-matrix.outputs.matrix) }}
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 12
 
     steps:
@@ -414,7 +425,7 @@ jobs:
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build.result == 'success'
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 8
 
     steps:

@@ -9,7 +9,7 @@ const apiKey = 'DEMO';
 
 const emptyViewMessage = 'AI Assistant is ready to help you';
 const emptyViewPrompt =
-  'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
+  'Update employee information in the <b>Form</b>.\nChange task presentation in the <b>DataGrid</b>: filter and sort data, change column visibility.';
 
 const SMART_PASTE_TIMEOUT_MS = 30000;
 const MAX_USER_MESSAGE_LENGTH = 2000;

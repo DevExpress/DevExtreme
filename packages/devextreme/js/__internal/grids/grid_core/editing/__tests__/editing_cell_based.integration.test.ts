@@ -11,7 +11,7 @@ import {
   createDataGrid,
   flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
-import type { CellBasedEditingController } from '../m_editing_cell_based';
+import type { CellBasedEditingController } from '../types';
 
 const getEditingController = (
   instance: DataGridInstance,
@@ -44,14 +44,15 @@ describe('DataGrid cell-based editing', () => {
         },
       });
       const editingController = getEditingController(instance);
-      const isCellOrBatchEditMode = jest.spyOn(editingController, 'isCellOrBatchEditMode');
 
       instance.dispose();
       $container.remove();
+
+      const getEditMode = jest.spyOn(editingController, 'getEditMode');
       eventsEngine.trigger(document, 'dxpointerdown');
       eventsEngine.trigger(document, 'dxclick');
 
-      expect(isCellOrBatchEditMode).not.toHaveBeenCalled();
+      expect(getEditMode).not.toHaveBeenCalled();
     });
   });
 

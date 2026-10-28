@@ -28,6 +28,8 @@ import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
@@ -37,9 +39,13 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import {
   EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
 } from '../editing/const';
-import type { EditingController } from '../editing/editing';
-import type { CellBasedEditingController } from '../editing/m_editing_cell_based';
-import type { NormalizedEditCellOptions } from '../editing/types';
+import type {
+  CellBasedEditingController,
+  EditFormDetailOptions,
+  EditFormOptions,
+  FormBasedEditingControllerExtension,
+  PrepareEditCellOptions,
+} from '../editing/types';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
 import gridCoreUtils from '../utils';
@@ -49,6 +55,7 @@ import {
   VALIDATION_STATUS,
   validationResultIsValid,
 } from './const';
+import type { ValidatingEditorFactoryExtension } from './types';
 
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
@@ -62,7 +69,6 @@ const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
 const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
 
 const PADDING_BETWEEN_TOOLTIPS = 2;
-const FORM_BASED_MODES: GridsEditMode[] = [EDIT_MODE.popup, EDIT_MODE.form];
 
 const COMMAND_TRANSPARENT = 'transparent';
 
@@ -294,7 +300,7 @@ export class ValidatingController extends modules.Controller {
     const { key } = change;
     const validationData = this._getValidationData(key, true);
 
-    if (!FORM_BASED_MODES.includes(editMode)) {
+    if (!isFormBasedEditMode(editMode)) {
       if (change.type === EDIT_DATA_INSERT_TYPE && !this.isRowDataModified(change)) {
         validationData.isValid = true;
         return;
@@ -454,7 +460,8 @@ export class ValidatingController extends modules.Controller {
       }
 
       const isEditRow = equalByValue(this.option('editing.editRowKey'), parameters.key);
-      const isCellOrBatchEditingAllowed = editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row });
+      const isCellOrBatchEditingAllowed = isCellBasedEditMode(editingController.getEditMode())
+        && editingController.allowUpdating({ row: parameters.row });
 
       needCreateValidator = isEditRow || isCellOrBatchEditingAllowed && showEditorAlways;
 
@@ -669,7 +676,9 @@ export class ValidatingController extends modules.Controller {
   }
 }
 
-export const validatingEditingExtender = (Base: ModuleType<EditingController>) => class ValidateEditingControllerExtender extends Base {
+export const validatingEditingExtender = (
+  Base: ModuleType<CellBasedEditingController & FormBasedEditingControllerExtension>,
+) => class ValidateEditingControllerExtender extends Base {
   protected _errorHandlingController!: ErrorHandlingViewController;
 
   public init(): void {
@@ -727,11 +736,10 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     });
   }
 
-  private _getValidationGroupsInForm(detailOptions) {
-    const validationData = this._validatingController._getValidationData(detailOptions.key, true);
-
+  public override getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions {
     return {
-      validationGroup: validationData,
+      validationGroup: this._validatingController._getValidationData(detailOptions.key, true),
+      ...super.getEditFormOptions(detailOptions),
     };
   }
 
@@ -744,7 +752,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     super._validateEditFormAfterUpdate.apply(this, arguments as any);
   }
 
-  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean {
+  protected _prepareEditCell(parameters: PrepareEditCellOptions): boolean {
     const { column, item } = parameters;
     const isNotCanceled: boolean = super._prepareEditCell(parameters);
     const key = !item.isNewRow ? item.key : undefined;
@@ -839,7 +847,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
 
     invisibleColumns.push(...groupColumns);
 
-    if (!FORM_BASED_MODES.includes(this.getEditMode())) {
+    if (!isFormBasedEditMode(this.getEditMode())) {
       each(columns, (_, column) => {
         changes.forEach((change) => {
           let data;
@@ -921,9 +929,12 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
    * @param item Data item
    * @returns A deferred object that resolves to a boolean or just a boolean to determine whether to cancel cell editing
    */
-  private _beforeEditCell(rowIndex: number, columnIndex: number, item: any): DeferredObj<boolean> | boolean {
-    // @ts-expect-error
-    const result = super._beforeEditCell(rowIndex, columnIndex, item);
+  public override beforeEditCell(
+    rowIndex: number,
+    columnIndex: number,
+    item: ProcessedItem,
+  ): DeferredObj<boolean> | boolean {
+    const result = super.beforeEditCell(rowIndex, columnIndex, item);
 
     if (this.getEditMode() === EDIT_MODE.cell) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
@@ -1131,7 +1142,11 @@ const getBoundaryNonFixedColumnsInfo = function (fixedColumns) {
   };
 };
 
-export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>) => class ValidatingEditorFactoryExtender extends Base {
+export const validatingEditorFactoryExtender = (
+  Base: ModuleType<EditorFactory>,
+): ModuleType<
+  EditorFactory & ValidatingEditorFactoryExtension
+> => class ValidatingEditorFactoryExtender extends Base {
   private _revertTooltip: any;
 
   private _showRevertButton($container) {
@@ -1204,10 +1219,8 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     let $groupCellElement;
     // @ts-expect-error
     const isFixedColumns = this._rowsView?.isFixedColumns?.();
-    // @ts-expect-error
-    const isFormOrPopupEditMode = this._editingController.isFormOrPopupEditMode();
 
-    if (isFixedColumns && !isFormOrPopupEditMode) {
+    if (isFixedColumns && !isFormBasedEditMode(this._editingController.getEditMode())) {
       const nextRowOptions = $cell.closest(`.${VIEW_CLASSES.row}`).next().data('options');
 
       if (nextRowOptions && nextRowOptions.rowType === 'group') {
@@ -1353,11 +1366,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     }
   }
 
-  protected getOverlayBaseZIndex(): number {
+  public getOverlayBaseZIndex(): number {
     return Overlay.baseZIndex();
   }
 
-  protected overlayPositionedHandler(e, isOverlayVisible) {
+  public overlayPositionedHandler(e, isOverlayVisible) {
     if (!e.component.__skipPositionProcessing) {
       const isRevertButton = $(e.element).hasClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
       const needRepaint = !isRevertButton && this._rowsView.updateFreeSpaceRowHeight();
@@ -1511,11 +1524,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     return gridCoreUtils.getWidgetInstance($editor);
   }
 
-  protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
+  public getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
     return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`);
   }
 
-  protected getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
+  public getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
     return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`).parent();
   }
 
@@ -1578,8 +1591,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
   }
 
   public _cellPrepared($cell, parameters) {
-    // @ts-expect-error
-    if (!this._editingController.isFormOrPopupEditMode()) {
+    if (!isFormBasedEditMode(this._editingController.getEditMode())) {
       this._validatingController.createValidator(parameters, $cell);
     }
 
