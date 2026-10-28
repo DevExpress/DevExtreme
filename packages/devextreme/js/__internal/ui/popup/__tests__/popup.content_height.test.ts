@@ -17,19 +17,17 @@ interface HeightLimitScenario {
 const OVERLAY_CONTENT_PADDING = 10;
 const OFFSET = 2 * OVERLAY_CONTENT_PADDING;
 
-const popups: PopupModel[] = [];
+const popups: Popup[] = [];
 
 const createPopup = async (options: Partial<PopupProperties>): Promise<PopupModel> => {
   const $element = $('<div>').appendTo(document.body);
   // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
   const instance = new Popup($element, options);
+  popups.push(instance);
 
   await instance.show();
 
-  const model = new PopupModel();
-  popups.push(model);
-
-  return model;
+  return new PopupModel();
 };
 
 const vh = (count: number): number => (window.innerHeight / 100) * count;
@@ -48,7 +46,7 @@ describe('Popup content height limits with auto height', () => {
   });
 
   afterEach(() => {
-    popups.forEach((model) => model.getInstance().dispose());
+    popups.forEach((popup) => popup.dispose());
     popups.length = 0;
     document.body.innerHTML = '';
     $style.remove();
