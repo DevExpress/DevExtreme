@@ -25,6 +25,7 @@ import type { ValidationResult as GroupValidationResult } from '@js/ui/validatio
 import type { InitializedEvent } from '@js/ui/validator';
 import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
+import { getData } from '@ts/core/element_data';
 import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import { focused } from '@ts/core/utils/selectors';
 import type Widget from '@ts/core/widget/widget';
@@ -59,7 +60,7 @@ import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_det
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import type { ValidationResultInternal } from '@ts/ui/validation_engine';
@@ -106,7 +107,7 @@ const COMMAND_TRANSPARENT = 'transparent';
 
 const cellValueShouldBeValidated = (
   value: unknown,
-  rowOptions: ProcessedItem | undefined,
+  rowOptions: Pick<ProcessedItem, 'isNewRow'> | undefined,
 ): boolean => value !== undefined || (!!rowOptions && !rowOptions.isNewRow);
 
 const getValidationGroup = (validator: InternalValidator): ValidationData => {
@@ -1032,7 +1033,7 @@ export const validatingEditingExtender = (
     if (this.getEditMode() === EDIT_MODE.cell) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
       const validator = $cell?.data('dxValidator');
-      const rowOptions = $cell?.closest(`.${VIEW_CLASSES.row}`).data('options');
+      const rowOptions = getData($cell?.closest(`.${VIEW_CLASSES.row}`), ROW_OPTIONS_KEY);
       const value = validator?.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
         const deferred = Deferred<boolean>();
@@ -1327,10 +1328,12 @@ export const validatingEditorFactoryExtender = (
     const isFixedColumns = this._rowsView?.isFixedColumns?.();
 
     if (isFixedColumns && !isFormBasedEditMode(this._editingController.getEditMode())) {
-      const nextRowOptions = $cell.closest(`.${VIEW_CLASSES.row}`).next().data('options');
+      const nextRowOptions = getData($cell.closest(`.${VIEW_CLASSES.row}`).next(), ROW_OPTIONS_KEY);
 
       if (nextRowOptions?.rowType === 'group') {
-        const $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex))
+        // a rendered group row always has rowIndex
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex!))
           .last();
         const $groupCellElement = $nextFixedRowElement.find(`.${VIEW_CLASSES.groupCell}`);
 
@@ -1563,7 +1566,7 @@ export const validatingEditorFactoryExtender = (
   ): void {
     const $focus = $element?.closest(this._getFocusCellSelector());
     const $cell = $focus?.is('td') ? $focus : null;
-    const rowOptions = $focus?.closest(`.${VIEW_CLASSES.row}`).data('options');
+    const rowOptions = getData($focus?.closest(`.${VIEW_CLASSES.row}`), ROW_OPTIONS_KEY);
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     const column = $cell && this._columnsController.getVisibleColumns()[$cell.index()];
     // @ts-expect-error a column without a name reads the undefined key
@@ -1648,7 +1651,7 @@ export const validatingEditorFactoryExtender = (
 
     const $focus = $element?.closest(this._getFocusCellSelector());
     const validator = $focus && ($focus.data('dxValidator') || $element?.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
-    const rowOptions = $focus && $focus.closest(`.${VIEW_CLASSES.row}`).data('options');
+    const rowOptions = $focus && getData($focus.closest(`.${VIEW_CLASSES.row}`), ROW_OPTIONS_KEY);
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in a callback below
     let validationResult: ValidationResultInternal | undefined;
@@ -1784,7 +1787,7 @@ export const validatingRowsViewExtender = (
   protected _restoreErrorRow(contentTable?: dxElementWrapper): void {
     if (this._editingController?.hasChanges()) {
       this._getRowElements(contentTable).each((_, item) => {
-        const rowOptions = $(item).data('options');
+        const rowOptions = getData(item, ROW_OPTIONS_KEY);
         if (rowOptions) {
           const change = this._editingController.getChangeByKey(rowOptions.key);
           if (change) {
