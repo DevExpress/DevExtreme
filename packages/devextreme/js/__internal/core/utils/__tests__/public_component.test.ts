@@ -3,9 +3,15 @@ import { data as elementData } from '@js/core/element_data';
 import $ from '@js/core/renderer';
 import {
   attachInstanceToElement,
+  findInstanceByElement,
   getInstanceByElement,
   name as getComponentName,
 } from '@ts/core/utils/public_component';
+import Overlay from '@ts/ui/overlay/overlay';
+import Popup from '@ts/ui/popup/popup';
+import ScrollView from '@ts/ui/scroll_view/scroll_view';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
+import Validator from '@ts/ui/validator';
 
 const ANONYMOUS_NAME = /^dxPrivateComponent(\d+)$/;
 
@@ -129,6 +135,43 @@ describe('Public component utils', () => {
       $(element).remove();
 
       expect(receivers).toEqual([instance]);
+    });
+  });
+
+  describe('findInstanceByElement', () => {
+    it('should return the instance attached to an element by its class', () => {
+      const Widget = createComponentClass();
+      const element = document.createElement('div');
+      const instance = new Widget();
+
+      attachInstanceToElement($(element), instance);
+
+      expect(findInstanceByElement($(element), Widget)).toBe(instance);
+      expect(findInstanceByElement(element, Widget)).toBe(instance);
+    });
+
+    it('should return undefined for an element without the instance', () => {
+      const Widget = createComponentClass();
+
+      expect(findInstanceByElement($(document.createElement('div')), Widget)).toBeUndefined();
+    });
+
+    it('should return undefined for an empty set or no element', () => {
+      const Widget = createComponentClass();
+
+      expect(findInstanceByElement($(), Widget)).toBeUndefined();
+      expect(findInstanceByElement(null, Widget)).toBeUndefined();
+      expect(findInstanceByElement(undefined, Widget)).toBeUndefined();
+    });
+
+    it.each([
+      ['dxValidator', Validator],
+      ['dxPopup', Popup],
+      ['dxOverlay', Overlay],
+      ['dxScrollable', Scrollable],
+      ['dxScrollView', ScrollView],
+    ])('should look up the class imported by grids and drag-and-drop under %s', (registeredName, componentClass) => {
+      expect(getComponentName(componentClass)).toBe(registeredName);
     });
   });
 });

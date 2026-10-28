@@ -27,6 +27,7 @@ import ValidationEngine from '@js/ui/validation_engine';
 import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
 import { getData } from '@ts/core/element_data';
+import { findInstanceByElement } from '@ts/core/utils/public_component';
 import { focused } from '@ts/core/utils/selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
@@ -36,6 +37,7 @@ import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_hand
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import Popup from '@ts/ui/popup/popup';
 
 import {
   EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
@@ -1091,7 +1093,7 @@ export const validatingEditingExtender = (
     const isValidated = isDefined(parameters.validationStatus);
     const needValidation = (cellModified && parameters.column.setCellValue) || (isEditableCell && !cellModified && !(parameters.row.isNewRow || !isValidated));
     if (needValidation) {
-      const validator = $cell.data('dxValidator');
+      const validator = findInstanceByElement($cell, Validator);
       if (validator) {
         when(this._validatingController.validateCell(validator)).done(() => {
           this._validatingController.setCellValidationStatus(parameters);
@@ -1240,7 +1242,7 @@ export const validatingEditorFactoryExtender = (
   }
 
   private _showValidationMessage($cell, messages, alignment) {
-    const editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup');
+    const editorPopup = findInstanceByElement($cell.find('.dx-dropdowneditor-overlay'), Popup);
     const isOverlayVisible = editorPopup && editorPopup.option('visible');
     const myPosition = isOverlayVisible ? 'top right' : `top ${alignment}`;
     const atPosition = isOverlayVisible ? 'top left' : `bottom ${alignment}`;
@@ -1482,7 +1484,7 @@ export const validatingEditorFactoryExtender = (
     }
 
     const $focus = $element?.closest(this._getFocusCellSelector());
-    const validator = $focus && ($focus.data('dxValidator') || $element.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
+    const validator = $focus && (findInstanceByElement($focus, Validator) ?? findInstanceByElement($element.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0), Validator));
     const rowOptions = $focus && getData($focus.closest(`.${VIEW_CLASSES.row}`), ROW_OPTIONS_KEY);
     // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;

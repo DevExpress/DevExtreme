@@ -3,6 +3,7 @@ import { removeEvent } from '@js/common/core/events/remove';
 import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
+import { getData } from '@ts/core/element_data';
 
 const COMPONENT_NAMES_DATA_KEY = 'dxComponents';
 
@@ -59,6 +60,16 @@ export function getInstanceByElement<T = any>(
   const name = getName(componentClass);
 
   return elementData<T>($element.get(0), name);
+}
+
+// Unlike getInstanceByElement, accepts an empty set or no element and returns undefined for them
+export function findInstanceByElement<T>(
+  target: Node | dxElementWrapper | null | undefined,
+  componentClass: abstract new (...args: never[]) => T,
+): T | undefined {
+  const name = getName(componentClass);
+
+  return name === undefined ? undefined : getData<T>(target, name);
 }
 
 export function getComponentInstance<T = unknown>($element: dxElementWrapper): T | undefined {

@@ -14,7 +14,7 @@ import { getWindow } from '@js/core/utils/window';
 import fx from '@ts/common/core/animation/fx';
 import type { Quad } from '@ts/core/utils/string';
 import type { OptionChanged } from '@ts/core/widget/types';
-import Draggable from '@ts/draggable';
+import Draggable, { getScrollableInstance } from '@ts/draggable';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 
@@ -249,9 +249,7 @@ class Sortable extends Draggable<SortableProperties> {
           $lastItem.css('marginBottom', sourceElementSize - freeSize);
 
           const $sortable = $lastItem.closest('.dx-sortable');
-          type SortableScrollable = { update: () => void } | undefined;
-          const sortable = $sortable.data<SortableScrollable>('dxScrollable')
-            || $sortable.data<SortableScrollable>('dxScrollView');
+          const sortable = getScrollableInstance($sortable);
 
           sortable?.update();
         }
