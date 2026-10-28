@@ -313,6 +313,9 @@ jobs:
         with:
           name: devextreme-sources
 
+      - name: Unpack npm packages
+        uses: ./.github/actions/unpack-npm-packages
+
       - uses: pnpm/action-setup@v6
         with:
           run_install: false
@@ -332,10 +335,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Install tgz
-        working-directory: apps/demos
-        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
       - name: Build vendor bundles
         working-directory: apps/demos
@@ -431,6 +430,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Use Node.js
       uses: actions/setup-node@v7
       with:
@@ -455,10 +457,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Demos - Check Vue TS
       id: ts_vue
@@ -527,7 +525,7 @@ jobs:
 
         git add ./Demos -N
 
-        if git diff --exit-code . ':!package.json' ; then
+        if git diff --exit-code . ; then
           echo "Generated JS demos are up-to-date"
         else
           echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js' and commit changes."
@@ -630,6 +628,10 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Get pnpm store directory
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       shell: bash
@@ -649,11 +651,6 @@ jobs:
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       run: pnpm install --frozen-lockfile
 
-    - name: Install tgz
-      if: steps.changed-react-demos.outputs.has-react-demos == 'true'
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
-
     - name: Check generated JS demos
       if: steps.changed-react-demos.outputs.has-react-demos == 'true'
       working-directory: apps/demos
@@ -663,7 +660,7 @@ jobs:
 
         git add ./Demos -N
 
-        if git diff --exit-code . ':!package.json' ; then
+        if git diff --exit-code . ; then
           echo "Generated JS demos are up-to-date"
         else
           echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
@@ -878,6 +875,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - uses: pnpm/action-setup@v6
       with:
         run_install: false
@@ -897,10 +897,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Download demo bundles (React)
       if: startsWith(matrix.CONSTEL, 'react')
@@ -1033,6 +1029,9 @@ jobs:
         with:
           name: devextreme-sources
 
+      - name: Unpack npm packages
+        uses: ./.github/actions/unpack-npm-packages
+
       - name: Download changed demos
         uses: actions/download-artifact@v8
         with:
@@ -1059,10 +1058,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Install tgz
-        working-directory: apps/demos
-        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
       - name: Download demo bundles (React)
         if: matrix.CONSTEL == 'react'
@@ -1303,6 +1298,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
@@ -1331,10 +1329,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Download demo bundles
       uses: actions/download-artifact@v8
