@@ -79,7 +79,6 @@
     "typescript": "catalog:tools",
     "typescript-min": "npm:typescript@4.9.5",
     "eslint": "catalog:",
-    "@babel/eslint-parser": "catalog:",
     "@eslint/eslintrc": "catalog:",
     "@eslint/js": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
