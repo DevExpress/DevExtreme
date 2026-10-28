@@ -19,6 +19,7 @@ jobs:
   check-should-run:
     name: Check if tests should run
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
       styles-changed: ${{ steps.changes.outputs.styles }}
@@ -46,14 +47,14 @@ jobs:
     if: needs.check-should-run.outputs.should-run == 'true'
 
     runs-on: devextreme-shr2
-    timeout-minutes: 15
+    timeout-minutes: 14
 
     steps:
     - name: Get sources
       uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -66,8 +67,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -113,6 +114,7 @@ jobs:
 
   determine-playwright-matrix:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     name: Determine Playwright matrix
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
@@ -196,7 +198,7 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-playwright-matrix.outputs.matrix) }}
     runs-on: devextreme-shr2
-    timeout-minutes: 45
+    timeout-minutes: 10
 
     steps:
     - name: Get sources
@@ -218,7 +220,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -282,6 +284,7 @@ jobs:
 
   merge-artifacts:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     needs: [playwright]
     if: ${{ always() }}
 
@@ -318,7 +321,7 @@ jobs:
 
     - name: Use Node.js
       if: steps.mergeable-artifacts.outputs.blobs == 'true'
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 

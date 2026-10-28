@@ -403,7 +403,7 @@ class SimulatedScrollViewStrategy<
 
   location(): ScrollOffset {
     const location = super.location();
-    location.top += getHeight(this._$topPocket);
+    location.top += Number(getHeight(this._$topPocket));
     return location;
   }
 

@@ -12,8 +12,8 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { paintedColor } from '@ts/core/utils/css_variables';
-import { extend } from '@ts/core/utils/m_extend';
-import { isDefined as _isDefined } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isDefined as _isDefined } from '@ts/core/utils/type';
 import consts from '@ts/viz/components/consts';
 import { getCosAndSin as _getCosAndSin, getVerticallyShiftedAngularCoords, normalizeAngle as _normalizeAngle } from '@ts/viz/core/utils';
 import symbolPoint from '@ts/viz/series/points/symbol_point';

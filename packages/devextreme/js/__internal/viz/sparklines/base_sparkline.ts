@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import { domAdapter } from '@ts/core/dom_adapter';
 import { renderer as $ } from '@ts/core/renderer';
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
-import { isFunction } from '@ts/core/utils/m_type';
+import { noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
+import { isFunction } from '@ts/core/utils/type';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 import pointerEvents from '@ts/events/pointer';

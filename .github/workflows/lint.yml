@@ -16,13 +16,13 @@ env:
 jobs:
   TS:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 13
     steps:
     - name: Get sources
       uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -35,8 +35,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -127,13 +127,13 @@ jobs:
 
   JS:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 12
     steps:
     - name: Get sources
       uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -146,8 +146,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -215,13 +215,13 @@ jobs:
 
   texts:
     runs-on: devextreme-shr2
-    timeout-minutes: 60
+    timeout-minutes: 7
     steps:
     - name: Get sources
       uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -234,8 +234,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -297,13 +297,13 @@ jobs:
 
   component_exports:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 7
     steps:
     - name: Get sources
       uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -316,8 +316,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -343,14 +343,14 @@ jobs:
 
   wrappers:
     runs-on: devextreme-shr2
-    timeout-minutes: 10
+    timeout-minutes: 7
 
     steps:
     - name: Get sources
       uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -363,8 +363,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}

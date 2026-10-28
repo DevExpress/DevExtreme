@@ -103,7 +103,6 @@ function baseOperation(grid: InternalGrid): HeaderFilterOperation {
         0,
         grid.option('headerFilter'),
       );
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- untyped getHeaderItemText
       return text;
     }
 
@@ -113,6 +112,7 @@ function baseOperation(grid: InternalGrid): HeaderFilterOperation {
     if (!textOptions.items) {
       column = extend({}, column, { filterType: 'include', filterValues: values });
       const dataSourceOptions = headerFilterController.getDataSource(column);
+      // @ts-expect-error getDataSource() returns undefined only for a grid without a data source
       dataSourceOptions.paginate = false;
       const dataSource = new DataSource(dataSourceOptions);
       const key = dataSource.store().key();

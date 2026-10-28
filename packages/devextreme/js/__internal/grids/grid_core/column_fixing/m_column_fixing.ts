@@ -21,7 +21,7 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_fa
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
@@ -485,7 +485,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
 
       offset = {
         left: positionTransparentColumn.left,
-        right: getOuterWidth(this.element(), true) - (getOuterWidth($transparentColumn, true) + positionTransparentColumn.left),
+        right: Number(getOuterWidth(this.element(), true)) - (getOuterWidth($transparentColumn, true) + positionTransparentColumn.left),
       };
     }
 

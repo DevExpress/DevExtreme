@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import { CLASSES, StickyPosition } from './const';
 import { isFixedEdge } from './utils';
 
@@ -121,19 +121,16 @@ const isFixedCell = (
       || $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
 
 const getLeftFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
-  // @ts-expect-error
-  .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft)));
+  .filter((_, cell: Element) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft)));
 
 const getRightFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
-  // @ts-expect-error
-  .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnRight)));
+  .filter((_, cell: Element) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnRight)));
 
 const getNonFixedAndStickyCells = (
   $cells: dxElementWrapper,
   addWidgetPrefix,
 ): dxElementWrapper => $cells
-  // @ts-expect-error
-  .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumn))
+  .filter((_, cell: Element) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumn))
       || !isFixedCell($(cell), addWidgetPrefix));
 
 const getLastLeftFixedCell = (

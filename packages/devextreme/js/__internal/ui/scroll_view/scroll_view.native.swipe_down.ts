@@ -182,11 +182,11 @@ class SwipeDownNativeScrollViewStrategy<
   }
 
   _getPullDownHeight(): number {
-    return Math.round(getOuterHeight(this._$element) * 0.05);
+    return Math.round(Number(getOuterHeight(this._$element)) * 0.05);
   }
 
   _getPullDownStartPosition(): number {
-    return -Math.round(getOuterHeight(this._$pullDown) * 1.5);
+    return -Math.round(getOuterHeight(this._$pullDown.get(0)) * 1.5);
   }
 
   handleEnd(): void {

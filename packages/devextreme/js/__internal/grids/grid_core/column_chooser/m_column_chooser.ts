@@ -16,7 +16,7 @@ import TreeView from '@js/ui/tree_view';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/header_panel';
@@ -460,14 +460,14 @@ export class ColumnChooserView extends ColumnsView {
     return this._columnsController.getChooserColumns();
   }
 
-  private allowDragging(column) {
+  public allowDragging(column) {
     const isParentColumnVisible = this._columnsController.isParentColumnVisible(column.index);
     const isColumnHidden = !column.visible && column.allowHiding;
 
     return this.isColumnChooserVisible() && isParentColumnVisible && isColumnHidden;
   }
 
-  protected getBoundingRect() {
+  public getBoundingRect() {
     const that = this;
     const container = that._popupContainer?.$overlayContent();
 

@@ -24,7 +24,7 @@ import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 
 import type { FooterView } from '../../data_grid/summary/m_summary';
 import type { AdaptiveColumnsViewController } from '../adaptivity/adaptivity';
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import { GROUP_COMMAND_COLUMN_NAME } from '../columns_controller/const';
 import type { Column } from '../columns_controller/types';
@@ -204,7 +204,6 @@ export class ResizingController extends modules.ViewController {
     const totalItemsCount = Math.max(0, this.dataSourceController.totalItemsCount());
     const widgetAriaLabel = this._getWidgetAriaLabel();
     const widgetStatusText = messageLocalization
-      // @ts-expect-error Badly typed format method
       .format(widgetAriaLabel, totalItemsCount, columnCount);
 
     // @ts-expect-error Treelist Variable
@@ -749,8 +748,8 @@ export class ResizingController extends modules.ViewController {
   private _checkSize(checkSize?: boolean): boolean {
     const $rootElement = this.component.$element();
     const isWidgetVisible = $rootElement.is(':visible');
-    const isGridSizeChanged = this._lastWidth !== getWidth($rootElement)
-          || this._lastHeight !== getHeight($rootElement)
+    const isGridSizeChanged = this._lastWidth !== getWidth($rootElement.get(0))
+          || this._lastHeight !== getHeight($rootElement.get(0))
           || this._devicePixelRatio !== getWindow().devicePixelRatio;
 
     return isWidgetVisible && (!checkSize || isGridSizeChanged);
@@ -806,7 +805,7 @@ export class ResizingController extends modules.ViewController {
     const $rootElement = this.component.$element();
     const groupElement = this._getGroupElement();
 
-    const rootElementHeight = getHeight($rootElement);
+    const rootElementHeight = getHeight($rootElement.get(0));
     const height = this.option('height') ?? ($rootElement.get(0) as HTMLElement).style.height;
     const isHeightSpecified = !!height && height !== 'auto';
 
