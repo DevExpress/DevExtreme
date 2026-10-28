@@ -7370,7 +7370,8 @@ declare module DevExpress.core {
 
     hide(): this;
 
-    html(value?: string): this;
+    html<T = any>(): T;
+    html(value: string | number | undefined): this;
 
     index(element?: Element | dxElementWrapper): number;
 
@@ -7421,6 +7422,7 @@ declare module DevExpress.core {
     prev(): this;
 
     prop(propertyName: string, value: string | number | boolean): this;
+    prop<T = any>(propertyName: string, value?: string | number | boolean): T;
 
     remove(element?: Element | dxElementWrapper): this;
 
@@ -7432,9 +7434,11 @@ declare module DevExpress.core {
 
     replaceWith(element: Element | dxElementWrapper): this;
 
-    scrollLeft(value?: string | undefined): this;
+    scrollLeft<T = any>(): T;
+    scrollLeft(value: string | number | undefined): this;
 
-    scrollTop(value?: string): this;
+    scrollTop<T = any>(): T;
+    scrollTop(value: string | number | undefined): this;
 
     show(): this;
 
