@@ -86,11 +86,11 @@ catalogs:
       specifier: 4.13.0
       version: 4.13.0
     devexpress-diagram:
-      specifier: 2.2.31
-      version: 2.2.31
+      specifier: 2.2.32
+      version: 2.2.32
     devexpress-gantt:
-      specifier: 4.1.71
-      version: 4.1.71
+      specifier: 4.1.72
+      version: 4.1.72
     devextreme-exceljs-fork:
       specifier: 4.4.13
       version: 4.4.13
@@ -421,10 +421,10 @@ importers:
         version: 2.6.12
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.31
+        version: 2.2.32
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.71
+        version: 4.1.72
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -1232,10 +1232,10 @@ importers:
         version: 1.14.1
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.31
+        version: 2.2.32
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.71
+        version: 4.1.72
       devextreme:
         specifier: workspace:~
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -1380,10 +1380,10 @@ importers:
         version: 1.14.1
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.31
+        version: 2.2.32
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.71
+        version: 4.1.72
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.8.0
@@ -4574,8 +4574,8 @@ packages:
   '@devexpress/design-tokens-internal@262.26.0':
     resolution: {integrity: sha512-01quVuRR+y1QzxCsW5u5DICs07T3kzdtXukqJIRxjxTtknrpUIca7gpnrxJz4nPLR2V95nYrsWWIOCJV8Yy6Yw==}
 
-  '@devexpress/utils@2.1.1':
-    resolution: {integrity: sha512-hlemXR3L0yDPsMdhTQl9EtjiEYxIHklH7I4RKPkOhfrF5+jb4f3kkfvbKT7nA9aoFEHPPF0/hll43gOBpUpY0g==}
+  '@devexpress/utils@2.1.4':
+    resolution: {integrity: sha512-8s3iGkrQOMAkVnZWGFpoiJt4H7sIVxowxpMGQhiHgdbWg90LXXNj5GlIxO6wnZST17pVbXV0VpZA0lKv8Du+Bg==}
 
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -10582,11 +10582,11 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  devexpress-diagram@2.2.31:
-    resolution: {integrity: sha512-SqMv6+Ak1RmUDhrzdKGguswAWxNfnT9re+fJuOP6igU1TVcAUZvwe13SuVsG/W9IUV3oKYCU9UvdNTwAFiGcdw==}
+  devexpress-diagram@2.2.32:
+    resolution: {integrity: sha512-r4OPIiMDyhLcfCH2zH3oUYxTOqmk9us8BAPON/CuaI2MCwvX0unQzA3R052jI+Z4Rzf+b7Ru52gWmhPtBX8uGQ==}
 
-  devexpress-gantt@4.1.71:
-    resolution: {integrity: sha512-1tiZ6HFfS4pjOWPFrCcSuQedBOYur8UvKafzCn+AtlAJ+B4dzCuL3fnSxkc9wWV2JXowreItm13/v9OGuUQ1pA==}
+  devexpress-gantt@4.1.72:
+    resolution: {integrity: sha512-tMIHymmtUCzaTJzAqHOFP2+XZC+QF8PlYj6iA+GLkE4Gnh0TFwnxqsyZLcxkJqVNNspMk2Xm3Z5sfM3p8/RtmQ==}
 
   devextreme-aspnet-data-nojquery@5.1.0:
     resolution: {integrity: sha512-YJ7HxOLJTzz6bmpp1uOjXdhUL71THR6IidVONjJRF1R1loTyNVesa6s86gU+mUeNN044UnJKQhtCADc0+TmARQ==}
@@ -21001,7 +21001,7 @@ snapshots:
 
   '@devexpress/design-tokens-internal@262.26.0': {}
 
-  '@devexpress/utils@2.1.1':
+  '@devexpress/utils@2.1.4':
     dependencies:
       tslib: 2.3.1
 
@@ -28066,14 +28066,14 @@ snapshots:
       defined: 1.0.1
       minimist: 1.2.8
 
-  devexpress-diagram@2.2.31:
+  devexpress-diagram@2.2.32:
     dependencies:
-      '@devexpress/utils': 2.1.1
+      '@devexpress/utils': 2.1.4
       es6-object-assign: 1.1.0
 
-  devexpress-gantt@4.1.71:
+  devexpress-gantt@4.1.72:
     dependencies:
-      '@devexpress/utils': 2.1.1
+      '@devexpress/utils': 2.1.4
       tslib: 2.3.1
 
   devextreme-aspnet-data-nojquery@5.1.0(devextreme@packages+devextreme+artifacts+npm+devextreme):
