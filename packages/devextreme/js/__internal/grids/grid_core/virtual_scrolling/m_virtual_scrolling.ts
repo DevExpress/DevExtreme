@@ -20,6 +20,7 @@ import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import type { ChangedEvent, RawItemData } from '../data_source_adapter/types';
 import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
@@ -29,7 +30,6 @@ import {
   BOTTOM_LOAD_PANEL_CLASS,
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
-  PAGING_METHOD_NAMES,
   ROW_INSERTED,
   VIRTUAL_ROW_CLASS,
 } from './const';
@@ -59,17 +59,6 @@ export const updateLoading = function (that) {
       that.loadingChanged.fire(false);
     }
   }
-};
-
-const proxyDataSourceAdapterMethod = function (that, methodName, args) {
-  if (that.option(LEGACY_SCROLLING_MODE) === false && PAGING_METHOD_NAMES.includes(methodName)) {
-    const dataSource = that._dataSource;
-
-    return dataSource.pageIndex.apply(dataSource, args);
-  }
-
-  const virtualScrollController = that._virtualScrollController;
-  return virtualScrollController[methodName].apply(virtualScrollController, args);
 };
 
 const removeEmptyRows = function ($emptyRows, className) {
@@ -360,75 +349,85 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return super._loadPageSize.apply(this, arguments as any) * this.loadPageCount();
   }
 
-  public beginPageIndex(): number {
-    return proxyDataSourceAdapterMethod(this, 'beginPageIndex', [...arguments]);
+  public beginPageIndex(...args: [] | [number]): number {
+    if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      // @ts-expect-error a spread argument can't match the overloads of pageIndex()
+      return this._dataSource.pageIndex(...args);
+    }
+
+    return this._virtualScrollController.beginPageIndex(...args);
   }
 
-  private endPageIndex(): any {
-    return proxyDataSourceAdapterMethod(this, 'endPageIndex', [...arguments]);
+  private endPageIndex(): number {
+    if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      return this._dataSource.pageIndex();
+    }
+
+    return this._virtualScrollController.endPageIndex();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public pageIndex(pageIndex?): any {
-    return proxyDataSourceAdapterMethod(this, 'pageIndex', [...arguments]);
+  public pageIndex(): number;
+  public pageIndex(pageIndex: number): void;
+  public pageIndex(...args: [] | [number]): number | void {
+    if (this.option(LEGACY_SCROLLING_MODE) === false) {
+      // @ts-expect-error a spread argument can't match the overloads of pageIndex()
+      return this._dataSource.pageIndex(...args);
+    }
+
+    // @ts-expect-error a spread argument can't match the overloads of pageIndex()
+    return this._virtualScrollController.pageIndex(...args);
   }
 
-  public virtualItemsCount(): any {
-    return proxyDataSourceAdapterMethod(this, 'virtualItemsCount', [...arguments]);
+  public virtualItemsCount(): VirtualItemsCount | undefined {
+    return this._virtualScrollController.virtualItemsCount();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getContentOffset(type?): any {
-    return proxyDataSourceAdapterMethod(this, 'getContentOffset', [...arguments]);
+  public getContentOffset(type?: 'begin' | 'end'): number {
+    return this._virtualScrollController.getContentOffset(type);
   }
 
-  public getVirtualContentSize(): any {
-    return proxyDataSourceAdapterMethod(this, 'getVirtualContentSize', [...arguments]);
+  public getVirtualContentSize(): number {
+    return this._virtualScrollController.getVirtualContentSize();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public setContentItemSizes(sizes?): any {
-    return proxyDataSourceAdapterMethod(this, 'setContentItemSizes', [...arguments]);
+  public setContentItemSizes(sizes: number[]): void {
+    return this._virtualScrollController.setContentItemSizes(sizes);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public setViewportPosition(position?): any {
-    return proxyDataSourceAdapterMethod(this, 'setViewportPosition', [...arguments]);
+  public setViewportPosition(position: number): DeferredObj<unknown> {
+    return this._virtualScrollController.setViewportPosition(position);
   }
 
-  public getViewportItemIndex(): any {
-    return proxyDataSourceAdapterMethod(this, 'getViewportItemIndex', [...arguments]);
+  public getViewportItemIndex(): number {
+    return this._virtualScrollController.getViewportItemIndex();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public setViewportItemIndex(viewportItemIndex?): any {
-    return proxyDataSourceAdapterMethod(this, 'setViewportItemIndex', [...arguments]);
+  public setViewportItemIndex(viewportItemIndex: number): DeferredObj<unknown> | undefined {
+    return this._virtualScrollController.setViewportItemIndex(viewportItemIndex);
   }
 
-  public getItemIndexByPosition(): any {
-    return proxyDataSourceAdapterMethod(this, 'getItemIndexByPosition', [...arguments]);
+  public getItemIndexByPosition(): number {
+    return this._virtualScrollController.getItemIndexByPosition();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public viewportSize(size?): any {
-    return proxyDataSourceAdapterMethod(this, 'viewportSize', [...arguments]);
+  public viewportSize(size?: number): number {
+    return this._virtualScrollController.viewportSize(size);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public viewportItemSize(size?): any {
-    return proxyDataSourceAdapterMethod(this, 'viewportItemSize', [...arguments]);
+  public viewportItemSize(size?: number): number {
+    return this._virtualScrollController.viewportItemSize(size);
   }
 
-  public getItemSize(): any {
-    return proxyDataSourceAdapterMethod(this, 'getItemSize', [...arguments]);
+  public getItemSize(): number {
+    return this._virtualScrollController.getItemSize();
   }
 
-  public getItemSizes(): any {
-    return proxyDataSourceAdapterMethod(this, 'getItemSizes', [...arguments]);
+  public getItemSizes(): Record<number, number> {
+    return this._virtualScrollController.getItemSizes();
   }
 
-  public loadIfNeed(): any {
-    return proxyDataSourceAdapterMethod(this, 'loadIfNeed', [...arguments]);
+  public loadIfNeed(): void {
+    return this._virtualScrollController.loadIfNeed();
   }
 };
 
