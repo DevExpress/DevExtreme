@@ -8,6 +8,13 @@ type Container = Parameters<typeof addOffsetToMaxHeight>[2];
 const container = { offsetHeight: 200 } as unknown as Container;
 const vh = (count: number): number => (window.innerHeight / 100) * count;
 
+const CALC_VALUES = [
+  'calc(100vh - 20px)',
+  'calc(100% - 20px)',
+  'calc(10vh + 50px)',
+  'max(100px, 50vh)',
+];
+
 describe('addOffsetToMaxHeight', () => {
   it.each([
     { value: 300, offset: 0, expected: 300 },
@@ -23,20 +30,21 @@ describe('addOffsetToMaxHeight', () => {
     { value: 'auto', offset: 0, expected: 'auto' },
     { value: null, offset: -50, expected: 'none' },
     { value: '10em', offset: -50, expected: 'calc(10em - 50px)' },
+    { value: '10em', offset: 0, expected: 'calc(10em + 0px)' },
+    { value: '10em', offset: 20, expected: 'calc(10em + 20px)' },
   ])('returns $expected for $value with the $offset offset', ({ value, offset, expected }) => {
     expect(addOffsetToMaxHeight(value, offset, container)).toBe(expected);
   });
 
-  it.each([
-    'calc(100vh - 20px)',
-    'calc(100% - 20px)',
-    'calc(10vh + 50px)',
-    'max(100px, 50vh)',
-  ])('keeps %s in the generated calc()', (value) => {
+  it.each(CALC_VALUES)('keeps %s in the generated calc()', (value) => {
     const maxHeight = addOffsetToMaxHeight(value, -51, container);
 
     expect(maxHeight).toBe(`calc(${value} - 51px)`);
     expect(maxHeight).not.toContain('NaN');
+  });
+
+  it.each(CALC_VALUES)('keeps %s in the generated calc() with a zero offset', (value) => {
+    expect(addOffsetToMaxHeight(value, -0, container)).toBe(`calc(${value} + 0px)`);
   });
 });
 
@@ -55,19 +63,20 @@ describe('addOffsetToMinHeight', () => {
     { value: 'auto', offset: 0, expected: 'auto' },
     { value: null, offset: -50, expected: 0 },
     { value: '10em', offset: -50, expected: 'calc(10em - 50px)' },
+    { value: '10em', offset: 0, expected: 'calc(10em + 0px)' },
+    { value: '10em', offset: 20, expected: 'calc(10em + 20px)' },
   ])('returns $expected for $value with the $offset offset', ({ value, offset, expected }) => {
     expect(addOffsetToMinHeight(value, offset, container)).toBe(expected);
   });
 
-  it.each([
-    'calc(100vh - 20px)',
-    'calc(100% - 20px)',
-    'calc(10vh + 50px)',
-    'max(100px, 50vh)',
-  ])('keeps %s in the generated calc()', (value) => {
+  it.each(CALC_VALUES)('keeps %s in the generated calc()', (value) => {
     const minHeight = addOffsetToMinHeight(value, -51, container);
 
     expect(minHeight).toBe(`calc(${value} - 51px)`);
     expect(minHeight).not.toContain('NaN');
+  });
+
+  it.each(CALC_VALUES)('keeps %s in the generated calc() with a zero offset', (value) => {
+    expect(addOffsetToMinHeight(value, -0, container)).toBe(`calc(${value} + 0px)`);
   });
 });
