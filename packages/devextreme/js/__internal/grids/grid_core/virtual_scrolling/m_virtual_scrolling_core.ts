@@ -24,6 +24,11 @@ import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import gridCoreUtils from '../utils';
 import { VirtualDataLoader } from '../virtual_data_loader/virtual_data_loader';
+import {
+  LEGACY_SCROLLING_MODE,
+  SCROLLING_MODE_INFINITE,
+  SCROLLING_MODE_VIRTUAL,
+} from './const';
 import type {
   ExternalScrollable,
   ExternalScrollers,
@@ -31,10 +36,6 @@ import type {
   ViewportParams,
   VirtualScrollDataOptions,
 } from './types';
-
-const SCROLLING_MODE_INFINITE = 'infinite';
-const SCROLLING_MODE_VIRTUAL = 'virtual';
-const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 const isVirtualMode = (that: VirtualScrollController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that.isVirtual();
 const isAppendMode = (that: VirtualScrollController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that.isVirtual();
