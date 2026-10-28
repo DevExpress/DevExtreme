@@ -1,12 +1,9 @@
-import { extend } from '@js/core/utils/extend';
-
 import type { ColumnInfoCallback, ColumnInfoCell } from './types';
 
 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
 const normalizeSpan = (span?: number): number => span || 1;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- PivotGrid passes untyped cells
-export function foreachColumnInfo<T extends ColumnInfoCell = any>(
+export function foreachColumnInfo<T extends ColumnInfoCell>(
   info: T[][],
   callback: ColumnInfoCallback<T>,
   rowIndex = 0,
@@ -89,10 +86,7 @@ export function createColumnsInfo<T extends ColumnInfoCell>(
       }
 
       if (colspan !== cellColspan) {
-        // @ts-expect-error extend() can't keep the generic cell type
-        cell = extend({}, cell, {
-          colspan,
-        });
+        cell = { ...cell, colspan };
       }
 
       newInfo[rowIndex].push(cell);
