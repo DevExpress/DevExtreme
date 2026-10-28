@@ -18,11 +18,14 @@ minimumReleaseAge: 1440 # ⚠️ Do NOT modify this.
 minimumReleaseAgeExclude:
   - "devextreme-internal-tools@22.1.0"
   - "@devexpress/design-tokens-internal@262.26.0"
+  - "devexpress-diagram"
+  - "devexpress-gantt"
+  - "@devexpress/utils"
 
 overrides:
   "js-yaml@<4.3.2": "^4.3.2"
   "rollup@<4.59.0": "^4.59.0"
-  qs: ">=6.16.0"
+  qs: ">=6.16.1"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
   "micromatch@<4.0.8": ^4.0.8
   "esbuild@<0.28.1": ^0.28.1
@@ -73,8 +76,8 @@ catalog:
   inferno: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
-  devexpress-diagram: 2.2.31
-  devexpress-gantt: 4.1.71
+  devexpress-diagram: 2.2.32
+  devexpress-gantt: 4.1.72
   devextreme-exceljs-fork: 4.4.13
   devextreme-quill: 1.8.0
   "@eslint/js": 9.39.4

@@ -14,6 +14,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
+import { EDIT_MODE } from '@ts/grids/grid_core/editing/const';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { ModuleType } from '@ts/grids/grid_core/types';
@@ -708,8 +709,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   private _getRowHeights() {
-    const isPopupEditMode = this._editingController
-      ?.isPopupEditMode?.();
+    const isPopupEditMode = this._editingController?.getEditMode() === EDIT_MODE.popup;
 
     let rowElements = this._getRowElements(this._tableElement).toArray();
 
