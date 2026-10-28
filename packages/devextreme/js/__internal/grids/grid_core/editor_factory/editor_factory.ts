@@ -15,7 +15,7 @@ import {
 } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';

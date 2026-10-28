@@ -21,7 +21,7 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_fa
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,

@@ -24,7 +24,7 @@ import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 
 import type { FooterView } from '../../data_grid/summary/m_summary';
 import type { AdaptiveColumnsViewController } from '../adaptivity/adaptivity';
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import { GROUP_COMMAND_COLUMN_NAME } from '../columns_controller/const';
 import type { Column } from '../columns_controller/types';
