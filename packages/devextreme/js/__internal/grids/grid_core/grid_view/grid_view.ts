@@ -63,7 +63,7 @@ export class ResizingController extends modules.ViewController {
 
   protected _rowsView!: RowsView;
 
-  private _columnHeadersView!: ColumnHeadersView;
+  protected _columnHeadersView!: ColumnHeadersView;
 
   public _columnsController!: ColumnsController;
 

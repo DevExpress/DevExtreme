@@ -34,6 +34,7 @@ import {
   VIRTUAL_ROW_CLASS,
 } from './const';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
+import type { VirtualScrollingResizingControllerExtension } from './types';
 import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
@@ -429,7 +430,11 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
   }
 };
 
-export const resizing = (Base: ModuleType<ResizingController>) => class VirtualScrollingResizingControllerExtender extends Base {
+export const resizing = (
+  Base: ModuleType<ResizingController>,
+): ModuleType<
+  ResizingController & VirtualScrollingResizingControllerExtension
+> => class VirtualScrollingResizingControllerExtender extends Base {
   private _resizeTimeout: any;
 
   private _lastTime: any;
@@ -454,7 +459,7 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
     });
   }
 
-  private hasResizeTimeout() {
+  public hasResizeTimeout(): boolean {
     return isDefined(this._resizeTimeout);
   }
 
