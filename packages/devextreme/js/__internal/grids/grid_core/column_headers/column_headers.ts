@@ -176,7 +176,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   }
 
   private _getEmptyHeaderText(): string {
-    const hasHiddenColumns = Boolean(this._columnChooserView.hasHiddenColumns());
+    const hasHiddenColumns = this._columnChooserView.hasHiddenColumns();
     const hasGroupedColumns = Boolean(this._headerPanelView.hasGroupedColumns());
 
     switch (true) {
